@@ -1,0 +1,17 @@
+release notes benerator 0.8.3
+=============================
+
+
+Summary
+-------
+
+ 
+
+Enhancements
+------------
+
+
+
+Bug Fixes
+---------
+- Recursive JavaBeans generation fails if the same property name is used in different classes 

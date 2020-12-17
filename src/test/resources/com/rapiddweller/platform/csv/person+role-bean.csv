@@ -1,0 +1,6 @@
+databene:type,name,age
+Person,Alice,23
+Role,Admin
+Person,Bob,34
+Role,User
+Person,Charly,45

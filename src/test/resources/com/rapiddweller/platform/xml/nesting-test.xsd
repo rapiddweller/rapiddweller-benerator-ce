@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--DOCTYPE xs:schema PUBLIC "-//W3C//DTD XMLSCHEMA 200102//EN" "XMLSchema.dtd"-->
+<xs:schema 
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:ben="https://www.benerator.de/schema/1.0.0"
+		targetNamespace="xsdtest.xsd"
+		xmlns="xsdtest.xsd"
+		elementFormDefault="qualified">
+
+	<xs:simpleType name="number-regex">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{1,3}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="root">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="c1" minOccurs="2" maxOccurs="2"/>
+				<xs:element name="number" type="number-regex" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="c2" maxOccurs="unbounded">
+					<xs:annotation><xs:appinfo>
+						<ben:part minCount="3" maxCount="5"/>
+					</xs:appinfo></xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="rootAtt1" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="c1">
+		<xs:complexType>
+			<xs:attribute name="c1att2" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="c2">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="number" type="number-regex" minOccurs="1" maxOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

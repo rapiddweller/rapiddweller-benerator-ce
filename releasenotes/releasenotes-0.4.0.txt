@@ -1,0 +1,71 @@
+Release Notes benerator 0.4.0
+=============================
+
+Summary
+-------
+benerator now incorporates mature and comfortable 
+generation capabilities for relational data, providing convenient database configuration 
+and primary key generation, script support in generators and all import file formats, 
+as well as a staging concept. Especially the script feature is a great improvement in 
+generating randomized data with multi-field constraints.
+  
+Furthermore, central concepts were extended for generation of hierarchical data, like dependent 
+data in databases or nested data structures like XML. After having left behind all open source 
+alternatives with release 0.3, benerator competes with all commercial generation products.
+
+Changes
+-------
+- nullable database columns are generated as null by default
+- Processor replaced with Consumer
+- Consumers are closed when the setup file is processed completely, not after the first <create-entities>
+- System replaced with StorageSystem
+- Task uses the Context interface instead of TaskContext and has new method wantsToRun()
+- renamed PhoneNumber properties
+
+New Features
+------------
+- New IdProvider interface, special IdGenerator life cycle, managed externally by an IdProviderFactory
+- ScriptGenerator class
+- unix support
+- *ix shell files for benerator and snapshot tool
+- RunSqlScriptTask.commentsIgnored for faster schema creation
+- introduced 'batch' property in DBSystem class for easier debugging (SQL error message in batch mode are not helpful)
+- Recommend 'purge recyclebin;' on occurrence of BIN$ tables in Oracle databases
+- new class PhoneNumberFormat
+- Script support in
+  - benerator files
+  - DbUnit XML files
+  - properties files
+  - CSV files
+  - flat files
+- Staging mechanism: <include uri="my.{${stage}}.properties"/>
+- Enabled export of different entities to arbitrary exporters (e.g. DbUnitEntityExporter)
+- global properties
+- CSVEntityExporter can be initialized by EntityDescriptor 
+- New class AbstractProcessor
+- New benerator file elements:
+  - <include uri="...properties"/>
+  - <database url="..." driver="..." user="..." password="..." batch="..."/>
+  - recursive invocation of create-entities
+  - <key type="seqhilo|sequence|query" param=""/>
+  - <echo message="..."/>
+  - <attribute ... script="..."/>
+- Configurable global defaults:
+  - defaultEncoding: file encoding
+  - defaultNull: generate nullable attributes as null
+  - defaultPagesize: number of entities to store in one tx
+  - defaultScript: Template engine to choose
+  - database dialects
+- New class PhoneNumberFormat
+  
+Bug fixes
+---------
+- clean up of EntityGenerators
+- resource leaks: After a generation run all heavy-weight JavaBeans in the context are closed
+- bug fix in default file encoding of DbUnitEntityExporter
+- improved Connection handling in sequence usage
+- empty generation loops
+- NullPinterException in UniqueStringGenerator
+- NullPointerException in CharacterGenerator
+- FeatureDescriptor/EntityDescriptor: constraint handling and object identity
+- AttributeDescriptor: default values

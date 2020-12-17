@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+
+<!-- DbUnit file that demonstrates how to use a template for repetitively creating
+     sub data structures. This template is applied to db_orders (see shop.ben.xml) -->
+<dataset>
+    <db_order_item order_id="{${db_order.id}}" number_of_items="2" product_ean_code="8076800195057" total_price="2.40"/>
+    <db_order_item order_id="{${db_order.id}}" number_of_items="1" product_ean_code="8006550301040" total_price="8.70"/>
+</dataset>

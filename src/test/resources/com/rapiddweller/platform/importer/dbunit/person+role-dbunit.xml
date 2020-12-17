@@ -1,0 +1,34 @@
+
+
+<!--DOCTYPE dataset SYSTEM "dataset.dtd"-->
+<dataset>
+    <table name="PERSON">
+        <column>name</column>
+        <column>age</column>
+        <row>
+            <value>Alice</value>
+            <value>23</value>
+        </row>
+        <row>
+            <value>Bob</value>
+            <value>34</value>
+        </row>
+        <row>
+            <value>Charly</value>
+            <value>45</value>
+        </row>
+    </table>
+    <table name="ROLE">
+        <column>name</column>
+        <row>
+            <value>Admin</value>
+        </row>
+        <row>
+            <value>User</value>
+        </row>
+    </table>
+    <table name="EMPTY1">
+        <column>name</column>
+    </table>
+    <table name="EMPTY2" />
+</dataset>

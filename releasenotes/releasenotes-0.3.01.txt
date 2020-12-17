@@ -1,0 +1,20 @@
+Release Notes benerator 0.3.01
+------------------------------
+
+Fixes
+- Closing statement and connection in RunSqlScripTask
+- Bug fix in JDBC metadata parsing
+
+Enhancements
+- RunSqlScriptTask
+  - Improved error logging
+  - new property 'haltOnError'
+- Improved database metadata import
+- Database support for
+  - DB2
+  - MS SQL Server
+  - PostgreSQL
+  - HSQL
+  - Derby
+- New property: DBSystem.schema
+- new 'processor' attribute in 'create-entities' element

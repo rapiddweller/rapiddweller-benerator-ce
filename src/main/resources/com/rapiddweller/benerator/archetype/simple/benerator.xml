@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<setup
+<setup xmlns="https://www.benerator.de/schema/${version.version}"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/${version.version} benerator-${version.version}.xsd">
+
+    <comment>
+        Simple project
+    </comment>
+
+    <import domains="person, address"/>
+
+    <echo message="Starting test data generation..."/>
+
+    <comment>Dummy entity</comment>
+    <generate type="sample" count="100" consumer="ConsoleExporter">
+        <id name="id" type="long"/>
+        <attribute name="name" values="'Alice','Bob','Charly'"/>
+        <attribute name="phone" pattern="[1-9][0-9]{2}\-[0-9]{6}"/>
+    </generate>
+
+</setup>

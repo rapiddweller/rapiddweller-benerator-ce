@@ -1,0 +1,7 @@
+release notes benerator 0.9.6
+=============================
+
+
+Enhancements
+------------
+- Trimming feature names in Excel header rows

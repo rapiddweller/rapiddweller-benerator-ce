@@ -1,0 +1,34 @@
+release notes benerator 0.8.1
+=============================
+
+
+Summary
+-------
+Release 0.8.1 provides fixes for several severe bugs introduced in 0.8.0, 
+and some older minor bugs. In addition, the PersonGenerator has been 
+extended to support Belgium, China, South Korea, Ukraine and Slovakia.
+ 
+
+Enhancements
+------------
+- PersonGenerator:
+  - Supporting Belgium
+  - Supporting China
+  - Supporting South Korea
+  - Supporting Ukraine
+  - Supporting Slovakia
+  - Extended set of italian person names
+  - Extended set of irish person names
+  - Extended set of Dutch family names
+
+
+Bug Fixes
+---------
+- generated <variable> value not visible in nested sub loops
+- Benerator does not cancel on errors
+- multiple exception stack traces
+- ClassCastException on <import platforms="xls"/>
+- Benerator hangs when finished
+- Windows issue: ConfigurationError: Resource not found: org\databene\commons\time\timeUnits.properties
+- if minCount is not set, <generate> does not try to generate maxCount elements
+- Missing female form of Czech family names

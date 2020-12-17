@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<setup>
+
+  	<database id="s" url="jdbc:hsqldb:mem:s" driver="org.hsqldb.jdbcDriver" schema="PUBLIC" user="sa" />
+
+  	<database id="t" url="jdbc:hsqldb:mem:t" driver="org.hsqldb.jdbcDriver" schema="PUBLIC" user="sa" />
+
+	<execute uri="createTables.sql" target="s" />
+	<execute uri="createTables.sql" target="t" />
+	
+	<execute target="s">
+		insert into COUNTRY values (10, 'United States');
+		insert into COUNTRY values (20, 'Germany');
+		insert into STATE   values (110, 10, 'California');
+		insert into STATE   values (120, 10, 'Florida');
+		insert into STATE   values (210, 20, 'Bayern');
+		insert into STATE   values (220, 20, 'Hamburg');
+		insert into CITY    values (2110, 210, 'München');
+		insert into CITY    values (2120, 210, 'Ingolstadt');
+	</execute>
+	
+	<bean id="idGen" class="IncrementalIdGenerator" />
+	
+	<transcodingTask defaultSource="s" target="t" identity="Transcoding-identity.xml">
+
+		<transcode table="country" selector="id = 20">
+			<id name="id" generator="idGen" />
+			<cascade ref="state(country_fk)">
+				<id name="id" generator="idGen" />
+				<cascade ref="city(state_fk)">
+					<id name="id" generator="idGen" />
+				</cascade>
+			</cascade>
+		</transcode>
+
+
+	</transcodingTask>
+	
+	<echo>Countries:</echo>
+	<iterate source="t" type="country" consumer="ConsoleExporter"/>
+	<echo>States:</echo>
+	<iterate source="t" type="state"   consumer="ConsoleExporter"/>
+	<echo>Cities:</echo>
+	<iterate source="t" type="city"   consumer="ConsoleExporter"/>
+	
+</setup>

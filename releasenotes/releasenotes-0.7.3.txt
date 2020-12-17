@@ -1,0 +1,7 @@
+release notes benerator 0.7.3
+=============================
+
+summary
+-------
+This is a technical release which fixes some bugs by using the newest databene libraries, 
+improves performance of Oracle meta data retrieval and provides new features for Feed4JUnit 1.1.1.

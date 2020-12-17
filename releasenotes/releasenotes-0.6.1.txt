@@ -1,0 +1,43 @@
+release notes benerator 0.6.1
+=============================
+
+
+
+summary
+-------
+Release 0.6.1 mainly is a bug fix release and improves user convenience in several details.
+Descriptive array generation has been introduced for simplifying programmatic access to
+Benerator for test data generation in other programs, e.g. feed4testng.
+
+
+enhancements
+------------
+- <property> now can mutate public attributes of an object
+- Supporting inclusion of XML Schema files: <include uri="myschema.xsd" />
+- Supporting array generation, e.g.
+  <generate count="5">
+    <value type="string" pattern="[A-Z]{5}" />
+    <value type="int" min="1" max="42" />
+  </generate>
+- Allowing for white space in import lists like <import domains="person, address" />
+- Supporting the use of Java annotations for defining constraints on method parameters
+- DescriptorBasedGenerator now takes over the minCount/maxCount/count settings from the descriptor files
+- Added benerator-project-wizard.sh/bat
+- Added ArrayTypeDescriptor and descriptor file syntax for array generation
+- JavaInvoker supports arrays as input data
+
+
+Changes (Find the feature request tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057389)
+-----------------------------------------------------------------------------------------------------------
+- Redesigned ComponentBuilder concept
+- Using GA version of bean validation API
+- removed benerator-gui.sh/bat and replaced it with benerator-wizard.sh/bat
+
+
+bug fixes (Find the bug tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057386)
+-------------------------------------------------------------------------------------------------
+- 2986956 DBSequenceGenerator does not work
+- 2996463 DateTimeGenerator is broken
+- 2996467 Demo files outdated
+- 2996469 Shop demo and shop archetype do not work with MySQL
+- If a consumer implements Consumer and StorageSystem, the Consumer interface should be used

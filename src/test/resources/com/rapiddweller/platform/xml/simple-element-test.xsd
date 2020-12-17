@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--DOCTYPE xs:schema PUBLIC "-//W3C//DTD XMLSCHEMA 200102//EN" "XMLSchema.dtd"-->
+<xs:schema 
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:ben="https://www.benerator.de/schema/1.0.0"
+		targetNamespace="annotation-test.xsd"
+		xmlns="annotation-test.xsd"
+		elementFormDefault="qualified">
+
+	<xs:element name="root">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="inline">
+					<xs:simpleType>
+						<xs:restriction base="xs:string"/>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element ref="external"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="external" type="xs:string"/>
+
+</xs:schema>

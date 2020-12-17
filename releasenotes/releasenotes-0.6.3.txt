@@ -1,0 +1,78 @@
+release notes benerator 0.6.3
+=============================
+
+summary
+-------
+Release 0.6.3 introduces several convenience features like monitoring Benerator execution via JMX,
+support for new literal forms of distributions, acceptance of unknown database column types, new 
+helper classes for defining custom generators, more convenient cache size handling and exporting 
+data to different database tables. Several bugs have been fixed.
+
+
+changes
+-------
+- Removed the restriction on the number of elements that distributions can cache in RAM
+- Renamed class MavenProjectWizard to NewProjectWizard
+- Changed constructor parameter order in SQLEntityExporter from (uri, encoding, lineSeparator, dialect) to 
+  (uri, dialect, lineSeparator, encoding)
+
+
+enhancements
+------------
+- New 'WeightedNumbers' sequence with short number weight literal
+  use e.g. distribution="new WeightedNumbers('1^70,3^30')" for generating 70% '1' values and 30% '3' values
+- new 'LiteralSequence' sequence for defining a number sequence with a comma-separated list
+  use e.g. distribution="new LiteralSequence('2,3,5,7,11')" for generating the numbers 2, 3, 5, 7, 11 consecutively 
+- using newest JDBC drivers for all supported databases
+- Feature Request #3018319: Accept unknown database column types
+  use <setup ... acceptUnknownSimpleTypes="true"> or <database ... acceptUnknownColumnTypes="true"/>
+- improved messaging in cases when not enough data instances could have been generated
+- Defined EntityRenamer class for feature request #3027213: Support easy transfer between tables w/ different names
+- Added support for limiting the number of total steps in StepSequence
+- PersonGenerator now has the properties minAgeYears and maxAgeYears
+- Defined HeadSequence (default distribution="head") which provides the first n (default 1) available values of 
+  another generator
+- Introduced BeneratorMonitor MBean for monitoring Benerator
+- Defined helper generator classes
+  - WeightedLiteralGenerator
+  - CompositeStringGenerator
+  - TokenCombinator
+- Added 'unique' property to CompositeArrayGenerator
+- If the cache size limit is reached (default: 100,000 data sets), Benerator does not cancel with an exception 
+  any more, but prints an error message and cuts of remaining data. The cache size can be configured by the VM
+  argument -Dbenerator.cacheSize=nnn
+- new BlacklistValidator
+- Command line option --version which prints Benerator and Java version information
+- New Method DBSystem.inserter(tableName) for inserting entities to tables with a different name than the entity type 
+
+
+bug fixes (Find the bug tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057386)
+-------------------------------------------------------------------------------------------------
+3016016 Property CSVEntityExporter.timestampPattern is ignored
+3016287 Benerator scans all catalogs on SQL Server
+3016288 NullPointerException in SQLEntityExporter w/o dialect
+3017727 ArrayIndexOutOfBoundsException if parameter is missing
+3025805 IllegalGeneratorStateException for reference with distribution
+3027200 Exception when leaving out encoding in wizard
+3027204 <evaluate id="..." /> works but is not schema-valid
+3027206 AbstractWeightFunction is broken
+3027209 Scripts are not evaluated in <execute>
+3028496 NullPointerException when nesting <generate> under <if>
+3028976 IllegalArgumentException on enum comparison
+3028979 PersonGenerator ignores dataset after Bean construction
+3029298 Default Id generation limited to 127 elements
+3029926 Benerator does not validate descriptor files
+3029944 Benerator does not build on Windows
+3032513 <variables> are not calculated in the specified order
+3032515 <variable>s cannot access each other
+3032520 bug when invoking methods on entity attributes
+3032524 Bug on dynamic database selectors with BeneratorScript
+3032528 DB queries for entities fail when using SQL join
+3032533 Entity DB queries fail in <variable>s
+3032535 dynamic DB queries are not reissued on distr. and cyclic
+3032990 sub <generate> elements are not reset on new parent
+3034849 <attribute> ignores 'converter' when using 'script'
+3035221 Oracle fails when setting NVARHCHAR2 column to null
+3037404 InvalidGeneratorSetupException when using min w/o max
+3037947 Wrong handling of zero-based date calculation
+3038221 DescriptorBasedGenerator does not evaluate <include>

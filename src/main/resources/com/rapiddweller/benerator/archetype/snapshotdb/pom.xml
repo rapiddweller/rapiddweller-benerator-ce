@@ -1,0 +1,182 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>${setup.groupId}</groupId>
+    <artifactId>${setup.projectName}</artifactId>
+    <version>${setup.version}</version>
+
+    <packaging>jar</packaging>
+    <name>${setup.projectName} data generation project</name>
+    <description>Start database snapshot creation by typing 'mvn benerator:dbsnapshot' on the command line.
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>databene-benerator</artifactId>
+            <version>${version.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>dbsanity</artifactId>
+            <version>${version.dependencies.dbsanity}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>jdbacl</artifactId>
+            <version>${version.dependencies.jdbacl}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>databene-webdecs</artifactId>
+            <version>${version.dependencies.webdecs}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>databene-commons</artifactId>
+            <version>${version.dependencies.commons}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>contiperf</artifactId>
+            <version>1.07</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.databene</groupId>
+                <artifactId>maven-benerator-plugin</artifactId>
+                <version>${version.version}</version>
+                <configuration>
+                    <encoding>${setup.encoding}</encoding>
+
+                    <dbUrl>${setup.dbUrl}</dbUrl>
+                    <dbDriver>${setup.dbDriver}</dbDriver>
+                    <dbSchema>${setup.dbSchema}</dbSchema>
+                    <dbUser>${setup.dbUser}</dbUser>
+                    <dbPassword>${setup.dbPassword}</dbPassword>
+
+                    <snapshotFilename></snapshotFilename>
+
+                    <!--  supported settings: dbunit, sql, xls -->
+                    <snapshotFormat>${setup.dbSnapshot}</snapshotFormat>
+
+                    <!-- supported database dialects: oracle, db2, postgres, hsql, h2, firebird.
+                         If left blank, the database's own dialect is used. -->
+                    <snapshotDialect></snapshotDialect>
+
+                </configuration>
+
+                <dependencies>
+                    <!-- Since Oracle's drivers are proprietary, you need to install them yourself.
+                    You can download these at http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html
+                    <dependency>
+                        <groupId>com.oracle</groupId>
+                        <artifactId>ojdbc6</artifactId>
+                        <version>11.1.0.7</version>
+                        <scope>provided</scope>
+                    </dependency> -->
+
+                    <!-- Since the DB2 driver is proprietary, you need to install it yourself.
+                    You can download it at http://www-306.ibm.com/software/data/db2/java
+                    <dependency>
+                        <groupId>com.ibm</groupId>
+                        <artifactId>db2jcc</artifactId>
+                        <version>3.50.152</version>
+                        <scope>provided</scope>
+                    </dependency> -->
+
+                    <dependency>
+                        <groupId>net.sourceforge.jtds</groupId> <!-- MS SQL server and Sybase -->
+                        <artifactId>jtds</artifactId>
+                        <version>1.2.2</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.6</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>hsqldb</groupId>
+                        <artifactId>hsqldb</artifactId>
+                        <version>1.8.0.7</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>1.2.132</version>
+                        <scope>provided</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.derby</groupId>
+                        <artifactId>derbyclient</artifactId>
+                        <version>10.4.2.0</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>net.sf.squirrel-sql.thirdparty-non-maven</groupId>
+                        <artifactId>jaybird</artifactId>
+                        <version>2.1.6</version>
+                        <scope>provided</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>8.3-603.jdbc4</version>
+                        <scope>runtime</scope>
+                    </dependency>
+
+                    <!--  Excel(TM) document creation -->
+                    <dependency>
+                        <groupId>org.apache.poi</groupId>
+                        <artifactId>poi</artifactId>
+                        <version>3.8</version>
+                        <scope>runtime</scope>
+                    </dependency>
+
+                    <!-- logging -->
+                    <dependency>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                        <version>1.6.4</version>
+                        <scope>provided</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                        <version>1.6.4</version>
+                        <scope>provided</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                        <version>1.2.16</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
+
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

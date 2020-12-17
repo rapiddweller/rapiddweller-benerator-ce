@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<setup xmlns="https://www.benerator.de/schema/${version.version}"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.benerator.de/schema/${version.version} benerator-${version.version}.xsd">
+
+    <comment>
+        Hello World example
+    </comment>
+
+    <import domains="person"/>
+
+    <echo message="running the 'Hello World' example..."/>
+
+    <comment>first greet the planet</comment>
+    <generate name="greeting" count="5" consumer="ConsoleExporter">
+        <attribute name="salutation" values="'Hello','Howdy','Hi'"/>
+        <attribute name="name" values="'World','Earth','Planet'"/>
+    </generate>
+
+    <comment>now greet the planet's inhabitants</comment>
+    <generate name="message" count="10" consumer="ConsoleExporter">
+        <variable name="person" generator="PersonGenerator"/>
+        <variable name="salutation" values="'Hello','Howdy','Hi'"/>
+        <attribute name="text" script="{ftl:${salutation} ${person.givenName}!}"/>
+    </generate>
+
+</setup>

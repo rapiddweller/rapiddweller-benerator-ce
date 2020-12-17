@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<setup>
+
+	<bean id="in" class="CSVEntitySource">
+		<property name="uri" value="headless-in.csv" />
+		<property name="separator" value="," />
+		<property name="encoding" value="UTF-8" />
+		<property name="columns" value="name, age" />
+	</bean>
+	
+	<bean id="out" class="CSVEntityExporter">
+		<property name="uri" value="target/headless-out.csv" />
+		<property name="separator" value="," />
+		<property name="lineSeparator" value="\r\n" />
+		<property name="encoding" value="UTF-8" />
+		<property name="columns" value="name, age, check" />
+		<property name="headless" value="true" />
+	</bean>
+	
+	<iterate source="in" type="person" name="p" consumer="out">
+		<attribute name="name" script="p.name" converter="ToUpperCaseConverter"/>
+		<attribute name="age" script="p.age + 1"/>
+		<attribute name="check" script="p.name.charAt(0)"/>
+	</iterate>
+	
+</setup>

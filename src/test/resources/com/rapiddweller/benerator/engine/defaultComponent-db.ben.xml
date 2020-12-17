@@ -1,0 +1,19 @@
+
+
+<setup>
+	<defaultComponents>
+		<attribute name="created_at" generator="CurrentDateTimeGenerator"/>
+		<attribute name="created_by" constant="Bob"/>
+	</defaultComponents>
+	
+	<database id="db" environment="hsqlmem" />
+	
+	<execute target="db">
+		create table the_table (
+			created_at date not null,
+			created_by varchar(10)
+		);
+	</execute>
+	
+	<generate type="the_table" count="3" consumer="db,cons" />
+</setup>

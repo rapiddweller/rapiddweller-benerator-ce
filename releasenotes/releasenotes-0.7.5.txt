@@ -1,0 +1,35 @@
+release notes benerator 0.7.5
+=============================
+
+summary
+-------
+Benerator 0.7.5 provides major bug fixes and some minor improvements in fallback strategies, 
+error handling and database metadata access performance.
+
+
+changes
+-------
+- Address.state resolves to a state object instead of the state id string. 
+  Use address.state.name and address.state.id to access state details
+- dataset based generators support a fallback to other datasets belonging to the same superset 
+
+
+enhancements
+------------
+- new ConsoleExporter{ flat = false }
+
+
+bug fixes
+---------
+- variable causes NPE in empty loop
+- WeightedLongGenerator always generates 0
+- AddressGenerator always uses the same city 
+- US cities do not have a state assigned
+- Brazil cities do not have a state assigned
+- Swiss addresses do not have a street name that matches the canton's language - all are German
+- Some French street names in Switzerland have typos
+- No error message if an update fails because of non-existent PK
+- #3483733: PhoneNumberGenerator produces NPE
+- #3483708: benerator fails to parse benerator.xml out of the box
+- #3483739: Suffix .ben.xml is not respected
+- #3429438: Wrong lineSeparator using SQLEntityExporter

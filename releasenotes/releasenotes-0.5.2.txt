@@ -1,0 +1,36 @@
+release notes benerator 0.5.2
+=============================
+
+summary
+-------
+This release fixes all known bugs and improves XML file generation performance by 100%, 
+DB snapshot creation by 20%. Weaknesses in rendering time related values have been removed.
+A new Distribution type 'IndividualWeight' allows for individual weighting of imported values.
+Existing generators have been improved and extended by a DomainGenerator. 
+
+changes
+-------
+- Renamed EMailGenerator to EMailAddressGenerator
+
+enhancements
+------------
+- Performance tuning
+  - XML file generation +100%
+  - DB snapshot extraction +20%
+- Added/improved rendering of timestamps in all exporters (console, csv, flat fiel, XML) 
+- New distribution type: IndividualWeight
+- New DomainGenerator
+- Improved EMailGenerator and CompanyNameGenerator
+
+bug fixes
+---------
+Find the tracker at http://sourceforge.net/tracker/?group_id=222964&atid=1057386
+1939131 NullPointerException in ConsoleExporter
+1939137 Generator properties are not set (e.g. dataset)
+1940622 CompanyNameGenerator raises a NullPointerException
+1943620 Support uniqueness in importing generators
+1944627 Type of foreign key columns is not set
+1944661 RuntimeException in DBSnapshotTool
+1950317 Lifecycle of GeneratorProxy children is broken
+1953523 entity/complexType attributes ignored in schema annotation
+1953534 SequencedSampleGenerator.reset() does not work

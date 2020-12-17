@@ -1,0 +1,13 @@
+release notes benerator 0.9.5
+=============================
+
+
+Enhancements
+------------
+- Defined collection mapping in Excel sheets
+- Supporting Java collections in JavaBean properties
+
+
+Changes
+-------
+- Applying XML anonymization only on non-empty fields

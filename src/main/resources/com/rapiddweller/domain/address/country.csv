@@ -1,0 +1,247 @@
+AD,,376,,Andorra,0
+AE,,971,5[05],United Arab Emirates,8000000
+AF,,91,75,Afghanistan,31000000
+AG,,,,Antigua and Barbuda,0
+AI,,,,Anguilla,0
+AL,,355,6[0-9],Albania,3000000
+AM,,,,Armenia,3000000
+AN,,,,Netherlands Antilles,0
+AO,,,,Angola,19000000
+AQ,,,,Antarctica,0
+AR,es_AR,54,,Argentina,40000000,province,department
+AS,,,,American Samoa,0
+AT,de_AT,43,(650|660|664|676|680|681|688|699),Austria,8000000,Bundesland,Bezirk,Gemeinde
+AU,en_AU,61,4,Australia,22000000,state,shire
+AW,,,,Aruba,0
+AX,,,,Åland Islands,0
+AZ,,,,Azerbaijan,9000000
+BA,,387,6[1235],Bosnia and Herzegovina,3000000
+BB,,,,Barbados,0
+BD,,,,Bangladesh,150000000
+BE,fr_BE,32,4[7-9],Belgium,11000000,region,province
+BF,,,,Burkina Faso,15000000
+BG,bg_BG,359,(8[789]|48),Bulgaria,7000000
+BH,,973,3,Bahrain,0
+BI,,,,Burundi,8000000
+BJ,,,,Benin,8000000
+BL,,,,Saint Barthélemy,0
+BM,,,,Bermuda,0
+BN,,,,Brunei Darussalam,0
+BO,,,,Bolivia,10000000
+BR,pt_BR,55,[7-9],Brazil,190000000,região,estado,município
+BS,en_BS,1242,[3-5]5[0-9],Bahamas,0,district,,city
+BT,,,,Bhutan,0
+BV,,,,Bouvet Island,0
+BW,,,,Botswana,0
+BY,,375,,Belarus,900000
+BZ,,,,Belize,0
+CA,en_CA,1,,Canada,34000000,province,county
+CC,,,,Cocos (Keeling) Islands,0
+CD,,,,"Congo, The Democratic Republic of the",4000000
+CF,,,,Central African Republic,4000000
+CG,,,,Congo,66000000
+CH,de_CH,41,7[46-9],Switzerland,7000000
+CI,,,,Côte d'Ivoire,19000000
+CK,,,,Cook Islands,0
+CL,es_CL,56,9[89],Chile,17000000
+CM,,,,Cameroon,19000000
+CN,zh_CN,86,1[35][0-9],China,1339000000
+CO,,,,Colombia,46000000
+CR,,,,Costa Rica,4000000
+CU,,,,Cuba,11000000
+CV,,,,Cape Verde,0
+CX,,,,Christmas Island,0
+CY,el_CY,357,9[679],Cyprus,0
+CZ,cs_CZ,420,(60|7[237]),Czech Republic,10000000
+DE,de_DE,49,1[5-7][0-9],Germany,81000000,Bundesland,Kreis,Gemeinde
+DJ,,,,Djibouti,0
+DK,da_DK,45,[34]0,Denmark,5000000
+DM,,,,Dominica,0
+DO,,,,Dominican Republic,9000000
+DZ,,213,,Algeria,36000000
+EC,es_EC,593,[89],Ecuador,14000000
+EE,et_EE,372,5[0-9],Estonia,0
+EG,,20,1[0-9],Egypt,80000000
+EH,,,,Western Sahara,0
+ER,,,,Eritrea,5000000
+ES,es_ES,34,6,Spain,46000000,comunidad autónoma,provincia,municipio
+ET,,,,Ethiopia,82000000
+FI,fi_FI,358,(4[0-9]|50),Finland,5000000,maakunta,seutukunta,kunta
+FJ,,,,Fiji,0
+FK,,,,Falkland Islands (Malvinas),0 
+FM,,,,"Micronesia, Federated States of",0
+FO,,,,Faroe Islands,0
+FR,fr_FR,33,6[0-9],France,65000000,région,département,commune
+GA,,,,Gabon,0
+GB,en_GB,44,7[57-9],United Kingdom,62000000,county,district,city
+GD,,,,Grenada,0
+GE,,,,Georgia,4000000
+GF,,,,French Guiana,0
+GG,,,,Guernsey,0
+GH,,233,28,Ghana,24000000
+GI,,,,Gibraltar,0
+GL,,,,Greenland,0
+GM,,,,Gambia,0
+GN,,,,Guinea,10000000
+GP,,,,Guadeloupe,0
+GQ,,,,Equatorial Guinea,0
+GR,el_GR,30,69[3479],Greece,10000000
+GS,,,,South Georgia and the South Sandwich Islands,0
+GT,,,,Guatemala,14000000
+GU,,,,Guam,0
+GW,,,,Guinea-Bissau,0
+GY,,,,Guyana,0
+HK,,,,Hong Kong,7000000
+HM,,,,Heard Island and McDonald Islands,0 
+HN,,,,Honduras,8000000
+HR,hr_HR,385,9[0-9],Croatia,4000000
+HT,,,,Haiti,10000000
+HU,hu_HU,36,[237]0,Hungary,10000000
+ID,,62,8,Indonesia,237000000
+IE,en_IE,353,8[0-9],Ireland,4000000
+IL,he_IL,972,5[0-9],Israel,7000000,district,subdistrict
+IM,,,,Isle of Man,0
+IN,hi_IN,91,9[2-47-9],India,1200000000,state,district
+IO,,,,British Indian Ocean Territory,0 
+IQ,,964,,Iraq,31000000
+IR,,98,9[0-9][0-9],"Iran, Islamic Republic of ",75000000
+IS,is_IS,354,[68],Iceland,0
+IT,it_IT,39,3[0-9][0-9],Italy,60000000,regione,provincia,comune
+JE,,,,Jersey,0
+JM,,,,Jamaica,2000000
+JO,,962,7,Jordan,6000000
+JP,ja_JP,81,[7-9]0[0-9],Japan,127000000,prefecture,county
+KE,,254,7[0-9],Kenya,38000000
+KG,,,,Kyrgyzstan,5000000
+KH,,,,Cambodia,113000000
+KI,,,,Kiribati,0
+KM,,,,Comoros,0
+KN,,,,Saint Kitts and Nevis,0
+KP,,850,,"Korea, Democratic People's Republic of",24000000
+KR,ko_KR,82,1[016-9],"Korea, Republic of",49000000,province,county
+KW,,,,Kuwait,2000000
+KY,,,,Cayman Islands,0
+KZ,,7,(300|333|70[0-9]|777),Kazakhstan,16000000
+LA,,,,Lao People's Democratic Republic,6000000
+LB,,,,Lebanon,4000000
+LC,,,,Saint Lucia,0
+LI,de_LI,423,7,Liechtenstein,0,,,Gemeinde
+LK,,,,Sri Lanka,20000000
+LR,,,,Liberia,4000000
+LS,,,,Lesotho,2000000
+LT,lt_LT,370,6[0-9][0-9],Lithuania,3000000
+LU,fr_LU,352,6[269][18],Luxembourg,0,district,canton,commune
+LV,lv_LV,371,,Latvia,2000000,district
+LY,,377,[46],Libyan Arab Jamahiriya,6000000
+MA,,,,Morocco,32000000
+MC,fr_MC,,,Monaco,0
+MD,,,,Moldovia,3000000
+ME,,,,Montenegro,0
+MF,,,,Saint Martin,0
+MG,,,,Madagascar,21000000
+MH,,,,Marshall Islands,0
+MK,,,,"Macedonia, The former Yugoslav Republic of",2000000
+ML,,,,Mali,14000000
+MM,,,,Myanmar,48000000
+MN,,,,Mongolia,2000000
+MO,,,,Macao,0
+MP,,,,Northern Mariana Islands,0
+MQ,,,,Martinique,0
+MR,,,,Mauritania,3000000
+MS,,,,Montserrat,0
+MT,mt_MT,[79]9,,Malta,0
+MU,,,,Mauritius,0
+MV,,,,Maldives,0
+MW,,,,Malawi,15000000
+MX,es_MX,52,1,Mexico,112000000
+MY,,60,1[0-9],Malaysia,27000000
+MZ,,,,Mozambique,20000000
+NA,,,,Namibia,2000000
+NC,,,,New Caledonia,0
+NE,,,,Niger,15000000
+NF,,,,Norfolk Island,0
+NG,,,,Nigeria,158000000
+NI,,,,Nicaragua,5000000
+NL,nl_NL,31,6[0-9],Netherlands,16000000,provincie,,gemeente
+NO,no_NO,47,[49],Norway,5000000
+NP,,,,Nepal,28000000
+NR,,,,Nauru,0
+NU,,,,Niue,0
+NZ,en_NZ,64,2[01457-9],New Zealand,4000000
+OM,,,,Oman,2000000
+PA,,,,Panama,3000000
+PE,,,,Peru,29000000
+PF,,,,French Polynesia,0
+PG,,,,Papua New Guinea,6000000
+PH,,,,Philippines,94000000
+PK,,92,3[0-6],Pakistan,177000000
+PL,pl_PL,48,(5[01][0-9]|6[069][0-9]|7[289][0-9]|88[0-9]),Poland,38000000,województwo,powiat
+PM,,,,Saint Pierre and Miquelon,0
+PN,,,,Pitcairn,0
+PR,,,,Puerto Rico,3000000
+PS,,,,"Palestinian Territory, Occupied",4000000
+PT,pt_PT,351,9,Portugal,10000000
+PW,,,,Palau,0
+PY,,,,Paraguay,6000000
+QA,,974,[56],Qatar,0
+RE,,,,Réunion,0
+RO,ro_RO,40,7[0-9][0-9],Romania,21000000
+RS,,,,Serbia,7000000
+RU,ru_RU,7,9[0-9][0-9],Russian Federation,152000000
+RW,,,,Rwanda,10000000
+SA,,966,5[04-6],Saudi Arabia,27000000
+SB,,,,Solomon Islands,0
+SC,,,,Seychelles,0
+SD,,,,Sudan,30000000
+SE,sv_SE,46,7[0-9],Sweden,9000000,län,,kommun
+SG,,65,[89],Singapore,500000
+SH,,,,Saint Helena,0
+SI,sl_SI,386,,Slovenia,2000000
+SJ,,,,Svalbard and Jan Mayen,0
+SK,,,,Slovakia,5000000
+SL,,,,Sierra Leone,5000000
+SM,it_SM,378,66,San Marino,0
+SN,,,,Senegal,12000000
+SO,,,,Somalia,9000000
+SR,,,,Suriname,0
+SS,,,,South Sudan,8000000
+ST,,,,Sao Tome and Principe,0
+SV,,,,El Salvador,5000000
+SY,,,,Syrian Arab Republic,23000000
+SZ,,,,Swaziland,0
+TC,,,,Turks and Caicos Islands,0
+TD,,,,Chad,11000000
+TF,,,,French Southern Territories,0
+TG,,,,Togo,6000000
+TH,th_TH_TH,66,[19],Thailand,67000000
+TJ,,,,Tajikistan,6000000
+TK,,,,Tokelau,0
+TL,,,,Timor-Leste,0
+TM,,,,Turkmenistan,5000000
+TN,,,,Tunisia,10000000
+TO,,,,Tonga,0
+TR,tr_TR,90,5[0-9][0-9],Turkey,73000000
+TT,,,,Trinidad and Tobago,0
+TV,,,,Tuvalu,0
+TW,zh_TW,886,9,"Taiwan, Province of China",23000000
+TZ,,,,"Tanzania, United Republic of",43000000
+UA,,380,(39|50|6[3678]|97),Ukraine,45000000
+UG,,,,Uganda,31000000
+UM,,,,United States Minor Outlying Islands,0
+US,en_US,1,,United States,312000000
+UY,,,,Uruguay,3000000
+UZ,,,,Uzbekistan,27000000
+VA,,,,Vatican City State,0
+VC,,,,Saint Vincent and the Grenadines,0
+VE,,,,Venezuela,29000000
+VG,,,,"Virgin Islands, British ",0
+VI,,,,"Virgin Islands, U.S. ",0
+VN,vi_VN,84,9[0-9],Viet Nam,87000000
+VU,,,,Vanuatu,0
+WF,,,,Wallis and Futuna,0
+WS,,,,Samoa,0
+YE,,,,Yemen,22000000
+YT,,,,Mayotte,0
+ZA,en_ZA,27,[78][0-9],South Africa,50000000
+ZM,,,,Zambia,13000000
+ZW,,,,Zimbabwe,12000000

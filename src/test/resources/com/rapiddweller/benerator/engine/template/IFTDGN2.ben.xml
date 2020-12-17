@@ -1,0 +1,51 @@
+
+
+<setup>
+	<bean id="ediEscape" class="com.rapiddweller.platform.edi.EdiEscapeFreeMarkerMethod" />
+	
+	<bean id="con" class="TemplateFileEntityExporter">
+		<property name="uri" value="target/IFTDGN2.edi" />
+		<property name="templateUri" value="com/rapiddweller/benerator/engine/template/IFTDGN.ftl" />
+		<property name="recordType" value="com.rapiddweller.platform.edi.EdiTemplateRecord" />
+	</bean>
+	
+	<generate type="iftdgns" count="1" consumer="con">
+		<variable name="vessel" source="com/rapiddweller/benerator/engine/template/vessel.ent.csv" />
+		<attribute name="message_ref_no_E_0062_1_01" constant="M130821145902B" />
+		<attribute name="message_function_code_E_1225_2_03" type="string" nullQuota="1" />
+		<attribute name="response_type_code_E_4343_2_04" constant="9" />
+		<attribute name="vessel_voy_dir_vn_E_8028_10_02" values="'333','401'" />
+		<attribute name="vessel_voy_dir_d_E_8028_10_02" constant="N" />
+		<attribute name="vessel_id_E_8213_10_08_01" script="vessel.id" />
+		<attribute name="vessel_name_E_8213_10_08_04" script="vessel.name" />
+		<attribute name="ref_C_C506_12_01" constant="VM:A8RH6" />
+		<attribute name="pol_ot_C_C517_14_02" constant="EGALY" />
+		<attribute name="npoc_ot_C_C517_14_02" constant="LBBEY" />
+		<attribute name="baseSegmentCount" constant="12" />
+		<generate type="equipment" minCount="2" maxCount="99" consumer="NoConsumer">
+			<variable name="equipmentNumber" pattern="SUDU[0-9]{7}" unique="true"/>
+			<generate type="equipmentDetails_L_EQD_22" count="1" consumer="con">
+				<attribute name="equBbkRorItem_ot_C_C237_22_02" script="equipmentNumber" />
+				<attribute name="equipment_size_and_type_C_C224_22_03" values="'44G0','45G0','45G1'" />
+				<attribute name="baseSegmentCount" constant="2" />
+			</generate>
+			<generate type="consignmentInformations_L_CNI_25" count="1" consumer="con">
+				<attribute name="bookingNo_ot_C_C503_25_02" pattern="[0-9][A-Z]{5}[0-9]{4}" unique="true"/>
+				<attribute name="pol_ot_C_C517_28_02" constant="EGALY" />
+				<attribute name="pod_ot_C_C517_28_02" constant="SYLTK" />
+				<attribute name="baseSegmentCount" constant="4" />
+				<generate type="goodsItemDetails_L_GID_42" count="1" consumer="con">
+					<attribute name="itemNumber_E_1496_42_01" generator="IncrementGenerator" scope="iftdgns"/>
+					<attribute name="no_and_type_of_packages_C_C213_42_02" constant="0" />
+					<attribute name="dgrNo_ot_C_C506_53_01" script="this.bookingNo_ot_C_C503_25_02 + '1234'" />
+					<attribute name="baseSegmentCount" constant="6" />
+					<generate type="splitGoodsPlacements_L_SGP_55" minCount="1" maxCount="2" consumer="con">
+						<attribute name="equBbkRorItem_ot_C_C237_55_01" script="equipmentNumber" />
+						<attribute name="stowagePosition_ot_C_C517_56_02" type="int" min="100000" max="999999" />
+						<attribute name="baseSegmentCount" constant="4" />
+					</generate>
+				</generate>
+			</generate>
+		</generate>
+	</generate>
+</setup>

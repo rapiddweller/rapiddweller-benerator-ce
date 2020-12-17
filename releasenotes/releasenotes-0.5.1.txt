@@ -1,0 +1,34 @@
+release notes benerator 0.5.1
+=============================
+
+summary
+-------
+release 0.5.1 fixes some major bugs and adds domain support for the United States in 
+generating US addresses and company names. From now on, benerator will be available 
+on the public maven repository (groupId 'org.databene', artifactId 'databene-benerator'. 
+Users please note the new tracking on sourceforge.net: 
+http://sourceforge.net/tracker/?group_id=222964&atid=1057386.
+
+changes
+-------
+- major redesign of address handling and generation
+- city_XY.csv: Using regex for mobile phone area codes
+- Renamed MobilePhoneCodeGenerator to MobilePhoneNumberGenerator
+
+enhancements
+------------
+- Domain package for US addresses
+- New class AddressFormat
+- New class CSVEntityIterator
+- Address: supporting state info and rendering via AddressFormat
+- Supporting states
+- Added datePattern property to ConsoleExporter, CSVExporter and FlatFileExporter 
+  according to Request 1937356 'have datePattern in exporters'
+
+bug fixes
+---------
+- bug fix in shop demo
+- 1937344 pattern is ignored when converting date variables to string
+- 1937341 FreeMarker is missing on the classpath
+- 1936931 LiteralParser parses 01234 as number, should be string
+- 1937404 IOUtil.readProperties does not support \n \r \t

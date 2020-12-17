@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!--DOCTYPE xs:schema PUBLIC "-//W3C//DTD XMLSCHEMA 200102//EN" "XMLSchema.dtd"-->
+<xs:schema 
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:ben="https://www.benerator.de/schema/1.0.0"
+		targetNamespace="annotation-test.xsd"
+		xmlns="annotation-test.xsd"
+		elementFormDefault="qualified">
+
+	<xs:element name="root">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice>
+					<xs:element name="a" type="xs:string"/>
+					<xs:element name="b" type="xs:string"/>
+				</xs:choice>
+				<xs:choice minOccurs="0" maxOccurs="2">
+					<xs:element name="x" type="xs:integer"/>
+					<xs:element name="y" type="xs:integer"/>
+					<xs:element name="z" type="xs:integer"/>
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

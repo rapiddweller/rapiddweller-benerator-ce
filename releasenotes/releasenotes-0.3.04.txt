@@ -1,0 +1,57 @@
+Release Notes benerator 0.3.04
+==============================
+
+Summary: JDBC performance was optimized for bulk operation and LAN access: 
+Oracle performance on dev hardware now is 15,000 rows/sec (for local access) or 
+5,000 rows/sec (via LAN). A new tool allows for creating a database snapshot in 
+(DbUnit) XML format. With adding support for CLOB, BLOB and Oracle timezone 
+types, all common SQL column types are available. New DB key generator classes 
+provide for efficient multi-client-data generation.
+
+-------------------------------------------------------------------------------
+
+D E T A I L S
+
+Changed
+- Renamed DBUnit... classes to DbUnit...
+
+New Features
+- DBSnapshotTool
+- improved dependency checking
+- Support for further SQL types:
+  - CLOB
+  - BLOB (except PostgreSQL)
+  - Oracle TIMESTAMP, TIMESTAMPTZ, TIMESTAMPLTZ
+- new generators
+  - org.databene.benerator.primitive.HiLoGenerator
+  - org.databene.benerator.primitive.IncrementGenerator
+  - org.databene.benerator.wrapper.ByteArrayGenerator
+  - org.databene.benerator.db.DBSequenceHiLoGenerator
+  - org.databene.benerator.db.SQLQueryGenerator
+- new Exporter:
+  - DbUnitEntityExporter
+- other new classes
+  - PooledConnection
+  - ResultSetEntityIterator
+- benerator.bat
+- snapshot.bat
+- extended and improved shop demo files
+  
+Deprecated features:
+- ResultSet2EntityConverter (replaced by ResultSetEntityIterator)
+
+Performance
+- bulk fetching
+- batch insert
+- leaving out parsing of index metadata
+
+Bug fixes/debugging
+- Inserting null values into DB columns
+- life cycle handling of EntityGenerators
+- fixed resource leaks
+- task exception handling
+- case handling of database element
+- added log categories 
+  - org.databene.benerator.STATE
+  - org.databene.benerator.SQL
+  - org.databene.benerator.JDBC

@@ -1,0 +1,66 @@
+release notes benerator 0.6.6
+=============================
+
+
+summary
+-------
+Improved performance and fixed bugs. A memstore utility provides database-like features for tracking intermediary data. 
+Simplified the transcoding of data graphs. Many smaller improvements from feature requests of Benerator users, e.g. 
+extended formatting features for CSV-/FlatFile-/ScriptedEntityExporter. PersonGenerator and AddressGenerator can now 
+be applied to composite regions like 'europe'. A new dependy checker verifies consistency of deployments. New DB Sanity 
+features are supported.
+
+
+changes
+-------
+- changed StorageSystem interface to use HeavyweightTypedIterable
+- database meta data cache file location was changed to the subdirectory databene/cache/ of the user's home directory
+
+
+enhancements
+------------
+- Performance improvement in BeneratorScript
+- CSVEntityExporter, FlatFileEntityExporter and ScriptedEntityExporter support dateCapitalization and timestampCapitalization
+- endWithNewLine property lets CSVEntityExporter-generated files optionally end with a 'new line'
+- new in-memory storage system: <memstore>
+- Added family names for Ireland and New Zealand
+- PersonGenerator and AddressGenerator can now be applied to regions like 'europe', not only countries. 
+  For a single country, specify its two-letter-iso-code
+- Added demos
+- New method TimeUtil.firstDayOfMonth() and TimeUtil.lastDayOfMonth()
+- RandomUtil.randomFromWeightLiteral(this.weights)
+- generic version configuration and dependency verification
+- Benerator now provides its build number
+- Improved database meta data invalidation algorithm, allowed override with <execute invalidate='false' />
+- Database resource monitoring
+- new properties in Benerator MBean: OpenConnectionCount, OpenResultSetCount, OpenStatementCount, OpenPreparedStatementCount
+- improved read-only database checking
+- new class DecimalQuantizer
+- Supporting transcoding to non-empty tables as long as transcoded data is not yet present in the target system
+- transcode feature supports cascade with mutation
+- Supporting 'separator' attribute in <execute> and <evaluate>
+- DB Sanity version and tag support, for example: <dbsanity ... appVersion="1.1.2" tags="migration"/>
+- supporting parameterized selector in SequenceTableGenerator, e.g. "user_id = ? and module_name = ?"
+- Feature Request #3341290: Add property CSVEntityExporter.quoteEmpty
+
+bug fixes (Find the bug tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057386)
+-------------------------------------------------------------------------------------------------
+- #3329989: Connecting SQL server with NTLM causes NPE
+- #3176350: CSVEntityExporter append
+- #3201098: Exception when using metaCache="true"
+- #3201108: <evaluate> invalidates meta data cache
+- #3216713: xls with empty partly cells raises exception
+- #3240662: <evaluate> does not unescape BeneratorScript expressions correctly
+- #3273855: Catalog 'null' not found in database
+- #3291330: <setup defaultSeparator=";"> ignored by CSVEntityExporter
+- #3316871: 'condition' is ignored
+- #3317166: Benerator Wizard ignores textual project folder spec
+- Generation of Turkish names fails
+- Using deprecated property Address.zipCode in AddressFormat
+- FemaleFamilyNameConverter can be applied to Composite datasets
+- Some BeneratorScript syntax errors are ignored and lead to wrong results
+- resource leak in database resource management
+- resource leak in SequenceTableGenerator
+- script is not recognized if white space follows the closing curly brace
+- Access of static Java methods in BeneratorScript
+- <defaultComponents> are ignored

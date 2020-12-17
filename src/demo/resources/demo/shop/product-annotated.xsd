@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:ben="https://www.benerator.de/schema/benerator-1.0.0.xsd"
+        targetNamespace="demo/shop/product.xsd"
+        xmlns="demo/shop/product.xsd"
+        elementFormDefault="qualified">
+
+    <xs:simpleType name="ean13-type">
+        <xs:annotation>
+            <xs:appinfo>
+                <ben:type generator="com.rapiddweller.domain.product.EAN13Generator"/>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{13}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="price-type">
+        <xs:annotation>
+            <xs:appinfo>
+                <ben:type min="0.49" max="99.99" granularity="0.10" distribution="cumulated"/>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="0"/>
+            <xs:totalDigits value="8"/>
+            <xs:fractionDigits value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="product">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="xs:string">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <ben:type values="'Apples','Bananas','Cherries'"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="ean_code" type="ean13-type" use="required"/>
+            <xs:attribute name="price" type="price-type" use="required"/>
+            <xs:attribute name="manufacturer" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <ben:attribute pattern="[BDFGH][aeiou][lr][tpmn] (Inc\.|Corp\.)"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

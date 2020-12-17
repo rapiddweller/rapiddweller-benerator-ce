@@ -1,0 +1,151 @@
+<!--
+<!DOCTYPE setup PUBLIC
+    "-//databene/benerator setup DTD 0.3.01//EN"
+    "http://databene.org/benerator-0.3.01.dtd">
+-->
+
+        <!-- The document root, it can list beans, create-entities and run-tasks in arbitrary order. -->
+        <!ELEMENT setup ((bean|create-entities|run-task)*)>
+
+        <!-- Instantiates a JavaBean of the given class.
+             If the 'id' is set, the bean is put into the context with that name.
+             If the JavaBean itself has a property named 'id', this one is set to the value specified here. -->
+        <!ELEMENT bean (property*)>
+        <!ATTLIST bean
+                id    CDATA #IMPLIED
+                class CDATA #REQUIRED
+                >
+
+        <!-- Declares a JavaBean to be used as processor, either by referencing an object from the context (ref)
+             or by instantiating a JavaBean like with the &lt;bean&gt; tag. -->
+        <!ELEMENT processor (property*)>
+        <!ATTLIST processor
+                id    CDATA #IMPLIED
+                class CDATA #IMPLIED
+                ref   CDATA #IMPLIED
+                >
+
+        <!-- Sets a JavaBean's property to the simple property specified as 'value' attribute
+             or to the object stored in the context with the 'ref'. -->
+        <!ELEMENT property ((bean|idref)*)>
+        <!ATTLIST property
+                name  CDATA #REQUIRED
+                value CDATA #IMPLIED
+                ref   CDATA #IMPLIED
+                >
+
+        <!-- Represents a reference to a JavaBean (of the name specified by the 'bean' attribute) from the context. -->
+        <!ELEMENT idref EMPTY>
+        <!ATTLIST idref
+                bean  CDATA #REQUIRED
+                >
+
+        <!-- Instantiates and executes a JavaBean that implements the Task interface.
+             Properties are handled like in the &lt;bean&gt; tag.
+             The task is executed 'count' times in a number of 'threads' parallel threads.
+             Invocations are executed in groups of size 'pagesize'. -->
+        <!ELEMENT run-task (property*)>
+        <!ATTLIST run-task
+                class    CDATA #REQUIRED
+                count    CDATA #IMPLIED
+                pagesize CDATA #IMPLIED
+                threads  CDATA #IMPLIED
+                pager    CDATA #IMPLIED
+                >
+
+        <!-- Creates entities. If a 'count' is provided the corresponding number of entities is created.
+             If no count is provided, entities are created as long as each involved generator is available. -->
+        <!ELEMENT create-entities ( (variable|attribute|processor)* )>
+
+        <!ATTLIST create-entities
+                name      CDATA #IMPLIED
+                count     CDATA #IMPLIED
+                pagesize  CDATA #IMPLIED
+                source    CDATA #IMPLIED
+                encoding  CDATA #IMPLIED
+                processor CDATA #IMPLIED
+                >
+
+        <!-- Defines a variable that is recreated by a generator on each entity creation -->
+        <!ELEMENT variable EMPTY>
+        <!ATTLIST variable
+                name         CDATA #REQUIRED
+                type         CDATA #IMPLIED
+
+                generator    CDATA #IMPLIED
+                values       CDATA #IMPLIED
+
+                source       CDATA #IMPLIED
+                encoding     CDATA #IMPLIED
+                selector     CDATA #IMPLIED
+
+                pattern      CDATA #IMPLIED
+                generator    CDATA #IMPLIED
+                values       CDATA #IMPLIED
+                nullQuota    CDATA #IMPLIED
+                converter    CDATA #IMPLIED
+                region       CDATA #IMPLIED
+                locale       CDATA #IMPLIED
+                unique (true|false) "false"
+
+                distribution CDATA #IMPLIED
+                variation1   CDATA #IMPLIED
+                variation2   CDATA #IMPLIED
+
+                cyclic       (true|false)  #IMPLIED
+                proxy        (skip|repeat) #IMPLIED
+                proxy-param1 CDATA #IMPLIED
+                proxy-param2 CDATA #IMPLIED
+                >
+
+        <!-- Specifies creation of one attribute of an entity. -->
+        <!ELEMENT attribute EMPTY>
+        <!-- attribute definition -->
+        <!ATTLIST attribute
+                name         CDATA #REQUIRED
+                type         CDATA #IMPLIED
+                nullable     CDATA #IMPLIED
+                mode (normal|ignored|secret) #IMPLIED
+                >
+        <!-- mostly used generator setup -->
+        <!ATTLIST attribute
+                pattern      CDATA #IMPLIED
+                generator    CDATA #IMPLIED
+                values       CDATA #IMPLIED
+                nullQuota    CDATA #IMPLIED
+                converter    CDATA #IMPLIED
+                region       CDATA #IMPLIED
+                locale       CDATA #IMPLIED
+                unique (true|false) "false"
+                >
+        <!-- import setup -->
+        <!ATTLIST attribute
+                source       CDATA #IMPLIED
+                encoding     CDATA #IMPLIED
+                selector     CDATA #IMPLIED
+                >
+        <!-- boolean generator setup -->
+        <!ATTLIST attribute
+                trueQuota    CDATA #IMPLIED
+                >
+        <!-- number generator setup -->
+        <!ATTLIST attribute
+                min          CDATA #IMPLIED
+                max          CDATA #IMPLIED
+                precision    CDATA #IMPLIED
+                distribution CDATA #IMPLIED
+                variation1   CDATA #IMPLIED
+                variation2   CDATA #IMPLIED
+                >
+        <!-- String generator setup -->
+        <!ATTLIST attribute
+                minLength    CDATA #IMPLIED
+                maxLength    CDATA #IMPLIED
+                >
+        <!-- proxy setup -->
+        <!ATTLIST attribute
+                cyclic       (true|false) #IMPLIED
+                proxy        (skip|repeat) #IMPLIED
+                proxy-param1 CDATA #IMPLIED
+                proxy-param2 CDATA #IMPLIED
+                >

@@ -1,0 +1,24 @@
+release notes benerator 0.5.9
+=============================
+
+summary
+-------
+This mainly is a bug fix release for the broken MySQL support and a bug in iterating JDBC result sets.
+It adds several minor convenience features.
+
+
+enhancements (Find the feature request tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057389)
+----------------------------------------------------------------------------------------------------------------
+- Added shell scripts for starting HSQL DB and HSQL Database Manager
+- Added com.rapiddweller.commons.converter to the default imports
+- Now script expressions can be used for all XML attributes in a descriptor file
+- Included Jaybird (Firebird JDBC driver) in the distribution
+- new shell script files hsqldb, hsql-manager and test-shop
+
+bug fixes (Find the bug tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057386)
+-------------------------------------------------------------------------------------------------
+2711562 US addresses generation fails in other countries
+2711464 Null Pointer Exception at Generator Reset
+2702433 Exception in the NumberFormatConverter
+2702428 Exception in the shop example for MySQL
+2699593 values="-" creates NULL

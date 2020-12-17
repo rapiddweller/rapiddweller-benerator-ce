@@ -1,0 +1,28 @@
+release notes benerator 0.6.2
+=============================
+
+summary
+-------
+Release 0.6.2 primarily is a bug fix release. A small enhancement is the support of Oracle's NVARCHAR and NCHAR types.
+
+enhancements
+------------
+- Added support for Oracle NVARCHAR and NCHAR
+- Added <setup defaultOneToOne="true/false" />
+
+Changes (Find the feature request tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057389)
+-----------------------------------------------------------------------------------------------------------
+- supporting Java annotations from the Bean Validation API (JSR 303) and Java 7
+- removed Java annotations which overlap annotation semantic in the Bean Validation API (JSR 303) and Java 7
+
+
+bug fixes (Find the bug tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057386)
+-------------------------------------------------------------------------------------------------
+- 2999746 Date generation goes wrong when using precision
+- 3006883 Read-only database accepts 'SELECT INTO'
+- 3006874 PersonGenerator.femaleQuota is broken
+- 3006753 Reference generation defaults to unique="true"
+- 3005625 Local Phone Numbers being generated with 6 digits for US
+- 3001667 maven-project-wizard.bat calls wrong file
+- 3006905 script expression is not resolved in <iterate source="...">
+- 3006925 Bug when configuring a foreign key as <attribute>

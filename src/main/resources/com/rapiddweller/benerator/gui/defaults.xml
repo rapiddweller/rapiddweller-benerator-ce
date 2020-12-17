@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+
+<defaults>
+    <id name="ID" strategy="increment"/>
+    <id name="UUID" strategy="uuid"/>
+
+    <attribute name="VERSION" constant="1"/>
+
+    <attribute name="CREATEDDATE" generator="com.rapiddweller.benerator.primitive.datetime.CurrentDateGenerator"/>
+    <attribute name="CREATEDBY" script="{${user.name}}"/>
+    <attribute name="LASTUPDATED" nullQuota="1"/>
+    <attribute name="LASTUPDATEDBY" nullQuota="1"/>
+</defaults>

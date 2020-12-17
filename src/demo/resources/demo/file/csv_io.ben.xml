@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+
+<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.benerator.de/schema/1.0.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
+
+    <!-- read comma-sparated csv and output to semicolon separated csv -->
+    <iterate type="db_product" source="demo/file/products.import.csv" encoding="ISO-8859-1">
+        <consumer class="CSVEntityExporter">
+            <property name="uri" value="p1.csv"/>
+            <property name="columns" value="ean_code,name"/>
+            <property name="separator" value=";"/>
+        </consumer>
+    </iterate>
+
+    <!-- read pipe-sparated csv and output to comma separated csv -->
+    <bean id="csv_semicolon_reader" class="CSVEntitySource">
+        <property name="uri" value="demo/file/products.pipe.csv"/>
+        <property name="separator" value="|"/>
+        <property name="encoding" value="ISO-8859-1"/>
+    </bean>
+
+    <iterate type="db_product" source="csv_semicolon_reader">
+        <consumer class="CSVEntityExporter">
+            <property name="uri" value="p2.csv"/>
+            <property name="encoding" value="UTF-8"/>
+            <property name="columns" value="ean_code,name"/>
+        </consumer>
+    </iterate>
+
+</setup>

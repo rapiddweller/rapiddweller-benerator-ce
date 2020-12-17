@@ -1,0 +1,49 @@
+
+
+<setup>
+	<bean id="ediEscape" class="com.rapiddweller.platform.edi.EdiEscapeFreeMarkerMethod" />
+	
+	<bean id="con" class="TemplateFileEntityExporter">
+		<property name="uri" value="target/IFTDGN1.edi" />
+		<property name="templateUri" value="com/rapiddweller/benerator/engine/template/IFTDGN.ftl" />
+		<property name="recordType" value="com.rapiddweller.platform.edi.EdiTemplateRecord" />
+	</bean>
+	
+	<generate type="iftdgns" count="1" consumer="con">
+		<attribute name="message_ref_no_E_0062_1_01" constant="M130821145902B" />
+		<attribute name="message_function_code_E_1225_2_03" type="string" nullQuota="1" />
+		<attribute name="response_type_code_E_4343_2_04" constant="9" />
+		<attribute name="vessel_voy_dir_vn_E_8028_10_02" constant="333" />
+		<attribute name="vessel_voy_dir_d_E_8028_10_02" constant="N" />
+		<attribute name="vessel_id_E_8213_10_08_01" constant="9439498" />
+		<attribute name="vessel_name_E_8213_10_08_04" constant="USS ENTERPRISE" />
+		<attribute name="ref_C_C506_12_01" constant="VM:A8RH6" />
+		<attribute name="pol_ot_C_C517_14_02" constant="EGALY" />
+		<attribute name="npoc_ot_C_C517_14_02" constant="LBBEY" />
+		<attribute name="baseSegmentCount" constant="12" />
+		
+		<generate type="equipmentDetails_L_EQD_22" count="1" consumer="con">
+			<attribute name="equBbkRorItem_ot_C_C237_22_02" constant="SUDU8631948" />
+			<attribute name="equipment_size_and_type_C_C224_22_03" constant="44G0" />
+			<attribute name="baseSegmentCount" constant="2" />
+		</generate>
+		
+		<generate type="consignmentInformations_L_CNI_25" count="1" consumer="con">
+			<attribute name="bookingNo_ot_C_C503_25_02" constant="3ALYSA0390" />
+			<attribute name="pol_ot_C_C517_28_02" constant="EGALY" />
+			<attribute name="pod_ot_C_C517_28_02" constant="SYLTK" />
+			<attribute name="baseSegmentCount" constant="4" />
+			<generate type="goodsItemDetails_L_GID_42" count="1" consumer="con">
+				<attribute name="itemNumber_E_1496_42_01" constant="1" />
+				<attribute name="no_and_type_of_packages_C_C213_42_02" constant="0" />
+				<attribute name="dgrNo_ot_C_C506_53_01" constant="3ALYSA03901234" />
+				<attribute name="baseSegmentCount" constant="6" />
+				<generate type="splitGoodsPlacements_L_SGP_55" count="1" consumer="con">
+					<attribute name="equBbkRorItem_ot_C_C237_55_01" constant="SUDU8631948" />
+					<attribute name="stowagePosition_ot_C_C517_56_02" constant="420482" />
+					<attribute name="baseSegmentCount" constant="4" />
+				</generate>
+			</generate>
+		</generate>
+	</generate>
+</setup>

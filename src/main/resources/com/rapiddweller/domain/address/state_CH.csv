@@ -1,0 +1,28 @@
+id,name,population,defaultLanguage
+ZH,Zürich,1351297,de
+BE,Bern,974235,de
+LU,Luzern,372964,de
+UR,Uri,35335,de
+SZ,Schwyz,144686,de
+OW,Obwalden,35032,de
+NW,Nidwalden,40794,de
+GL,Glarus,38479,de
+ZG,Zug,110890,de
+FG,Fribourg,273159,fr
+SO,Solothurn,252748,de
+BS,Basel-Stadt,187898,de
+BL,Basel-Landschaft,272815,de
+SH,Schaffhausen,75657,de
+AR,Appenzell Ausserrhoden,53043,de
+AI,Appenzell Innerrhoden,15681,de
+SG,St. Gallen,474676,de
+GR,Graubünden,191861,de
+AG,Aargau,600040,de
+TG,Thurgau,244805,de
+TI,Ticino,335720,it
+VD,Vaud,701526,fr
+VS,Valais,307392,fr
+NE,Neuchâtel,171647,fr
+GE,Genève,453292,fr
+JU,Jura,70134,fr
+

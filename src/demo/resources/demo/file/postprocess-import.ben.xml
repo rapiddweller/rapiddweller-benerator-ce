@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+
+<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.benerator.de/schema/1.0.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
+
+    <iterate type="TX" source="tx.ent.csv" consumer="ConsoleExporter">
+        <id name="ID" type="long" generator="new IncrementGenerator(1000)"/>
+        <attribute name="CARD" type="string" script="TX.CARD == 'Y' ? 1 : 0"/>
+        <attribute name="PRODUCT" type="string" script="TX.PRODUCT" converter="CaseConverter"/>
+    </iterate>
+
+</setup>

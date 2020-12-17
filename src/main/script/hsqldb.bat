@@ -1,0 +1,1 @@
+java -cp "%BENERATOR_HOME%/lib/*" org.hsqldb.Server

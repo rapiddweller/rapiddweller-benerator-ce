@@ -1,0 +1,32 @@
+release notes benerator 0.5.3
+=============================
+
+summary
+-------
+Bug fix release.
+
+changes
+-------
+replaced logger category org.databene.benerator.SQL with org.databene.SQL
+
+enhancements
+------------
+- New Excel sheet exporter: org.databene.platform.xls.XLSEntityExporter
+
+QA
+--
+- Strongly increased test coverage for all methods with a cyclomatic complexity of 5 or greater.
+- Added shop test for in-memory HSQLDQ
+
+bug fixes
+---------
+(Find the tracker at http://sourceforge.net/tracker/?group_id=222964&atid=1057386)
+- DataModel: handling getTypeDescriptor(null)
+- Database: case sensitivity handling
+- 1956682 Database snapshot creates invalid XML if a cell contains &
+- Bug fix in CityManager.parseCityName(null)
+- InvalidGeneratorSetupException, PropertyMessage: message formatting
+- LineShuffler: progress logging
+- ComponentGeneratorFactory: Bug fix in minCount/maxCount handling
+- ComponentGenerator: component type of generated array
+- ComplexTypeGeneratorFactory: component types of entities that are imported from file

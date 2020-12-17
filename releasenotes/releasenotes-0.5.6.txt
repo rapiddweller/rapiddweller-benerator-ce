@@ -1,0 +1,46 @@
+release notes benerator 0.5.6
+=============================
+
+summary
+-------
+Strongly improved convenience and productivity by adding a GUI wizard for 
+benerator project creation and having import features used like in Java.
+Entities may now be updated after creation, simplifying generation of 
+redundant data. Shell invocations now may contain script expressions. 
+Many bugs have been fixed.
+
+changes
+-------
+- Renamed ...EntityIterable to ...EntitySource
+- new interface method StorageSystem.update()
+
+enhancements
+------------
+- wrote extensive documentation (>120 pages)
+- more convenient installation by automatic detection of all jar files in the lib directory
+- introduced 'optimize script" flag: <execute ... optimize="true">
+- benerator descriptor files are validated by default
+- validation of descriptor files and data models can be turned off by VM param: -Dbenerator.validate=false
+- new classes SSNGenerator_US and SSNValidator_US in 'person' domain
+- import features:
+    <import class="com.my.Class"/> imports a class
+    <import class="com.my.*"/> imports all classes of a package
+    <import domain="person"/> imports the databene 'person' domains
+    <import domain="com.my.domain"/> imports a custom domain
+- improved compatibility between nested entity creation and database batch
+- supporting script resolution in shell invocations, e.g. <execute type="shell">{ls ${lsparams}}</execute>
+- Extended set of American names to generate 600,000 unique weighted names
+- sources included on maven repository
+- added GUI wizard for creating a benerator maven project
+- supporting <update-entities/>
+
+bug fixes
+---------
+(Find the tracker at http://sourceforge.net/tracker/?group_id=222964&atid=1057386)
+2282784 Id scope is ignored
+2094506 descriptor files are not validated
+2094504 'batch' property of database has no effect
+2094476 With default settings only 9 entities are creates
+component name capitalization
+FlatFileEntitySource returns wrong type in getType()
+Several bug fixes in the life cycle and configuration of predefined sequences

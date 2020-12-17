@@ -1,0 +1,17 @@
+state.country.isoCode;state.id;name;postalCode;areaCode;language;population
+CH;ZH;Zürich;8000;44
+CH;BE;Bern;3000;4161
+CH;LU;Luzern;6000;41
+CH;ZG;Zug;6300;41
+CH;BS;Basel;4000;61
+CH;TG;St. Gallen;9000;71
+CH;VD;Lausanne;1000;21
+CH;GE;Genève;1200;22
+CH;VD;Montreux;1820;21
+CH;VD;Yverdon-les-Bains;1400;21
+CH;NE;Neuchâtel;2000;32
+CH;TI;Ascona;6612;91
+CH;TI;Locarno;6600;91
+CH;TI;Lugano;6900;91
+CH;TI;Bellinzona;6500;91
+CH;TI;Chiasso;6830;91

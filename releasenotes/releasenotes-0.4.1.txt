@@ -1,0 +1,14 @@
+Release Notes benerator 0.4.1
+=============================
+
+Summary
+-------
+benerator 0.4.1 is a pure bug fix release. 
+It addresses bugs in the shell files and documentation that 
+prevented proper evaluation and use of benerator 0.4.0.
+
+Bug fixes
+---------
+- Fixed library version numbering in shell files
+- Fixed documentation pages
+- Added and improved tests

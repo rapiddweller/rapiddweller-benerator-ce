@@ -1,0 +1,51 @@
+release notes benerator 0.5.4
+=============================
+
+summary
+-------
+With release 0.5.4 all known bugs are fixed and convenience is improved
+with the new <reference> descriptor, configurable CSV separators, improved 
+distribution support and a new 'finance' domain with generators and validators for 
+bank account numbers with IBANs. The descriptor syntax and semantic has been 
+clarified and unified (see http://databene.org/databene-benerator/file_format.html).
+Some more XML Schema features are supported, but there is still work to do.
+
+changes
+-------
+replaced ComponentFactory concept with ComponentBuilder concept
+
+enhancements
+------------
+- new reference configuration: <reference name="ref" type="long" targetType="USER" source="db" distribution="random"/>
+- created a maven-benerator-plugin
+- feature requests:
+  - 2016573 Export data as SQL files
+  - 2005649 Support other CSV separators than commas (syntax: <create-entities source="my.csv" separator="|")
+- definition of a default CSV separator as benerator property
+  - property file syntax: benerator.defaultSeparator=|
+  - benerator file syntax: <property name="benerator.defaultSeparator" value="|" />
+- reference configuration (syntax: <reference name="country_id" type="long" targetType="country" source="db" distribution="random"/>)
+- improved namespace support
+- new method GeneratorUtil.commonTargetTypeOf()
+- improved support for distributions
+- New financial generators: BankGenerator, BankAccountGenerator
+- new finance package with
+  - BankAccountGenerator (including IBAN)
+  - BankAccontValidator
+  - IBANValidator
+
+bug fixes
+---------
+(Find the tracker at http://sourceforge.net/tracker/?group_id=222964&atid=1057386)
+- using entities without descriptor
+- type handling in AlternativeGenerator
+- XMLCreator: Assuring resources are closed in case of an exception
+- TypeGeneratorFactory: createTypeGenerator() ignored uniqueness parameter
+- 2016560 RunSQLScriptTask always uses system file encoding
+- 2016526 Unparseable date: "0.000001" on Oracle Timestamps
+- 2014302 Wrong date/time format in DbUnit export
+- 2005653 file encoding is igored when using CSVs with datasets
+- 2004099 benerator.encoding is ignored
+- configuration of XML elements that wrap simple types
+- Type handling in ConstantGenerator
+- Character mapping on Mac/Linux/Unix systems

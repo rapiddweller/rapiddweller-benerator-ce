@@ -1,0 +1,12 @@
+release notes benerator 0.9.7
+=============================
+
+
+Enhancements
+------------
+- Ignoring trailing empty headers in XLS files
+
+
+Bug Fixes
+---------
+- Entity2JavaConverter: Ignoring Entity components in Java mapping if no Java bean property of attribute of the same name is present

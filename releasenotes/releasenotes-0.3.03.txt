@@ -1,0 +1,18 @@
+Release Notes benerator 0.3.03
+==============================
+
+Summary:
+--------
+
+Enhancements
+- Multithreaded execution of create-entites elements
+- DTD: 'create-entities' element now supports 'threads' attribute for multithreaded execution
+ 
+Bug fixes
+- EANGenerator: unique creation
+- GeneratorFactory.getUniqueRegexStringGenerator()
+- ResultSetIterator: Bug fix in ResultSet management
+
+QA
+- added and improved unique generation tests
+

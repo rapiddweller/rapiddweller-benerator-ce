@@ -1,0 +1,59 @@
+release notes benerator 0.5.8
+=============================
+
+summary
+-------
+This release provides many enhancements requested by the community, e.g. importing Excel(TM) sheets, 
+support for the Firebird database, custom decimal separators like ',', female family names (in slavic languages), 
+Russian names, project wizard support for non-database projects and a series of improvements in user convenience.
+All known bugs are fixed.
+
+
+enhancements (Find the feature request tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057389)
+----------------------------------------------------------------------------------------------------------------
+- feature request 2687543 Support the Firebird database
+- feature request 2545178 Import Excel sheets: new class XLSEntitySource that reads entity data from an Excel sheet
+- feature request 2544995 improve generated pom.xml: Configuring Java 5 compilation and benerator library dependencies in generated pom.xml
+- feature request 2539807 include test scope artifacts in plugin classpath
+- feature request 2551503 Support ',' as decimal separator
+  - The properties decimalSeparator and decimalPattern are now supported by 
+    ConsoleExporter, CSVEntityExporter and FlatFileEntityExporter 
+- Person package:
+  - Added salutations in different languages (thanks to Horst Frank)
+  - Added Russian names
+  - Supporting female family names for
+    - Russia
+    - Czech Republic
+- New common interface FileExporter for all Consumers that write to a file
+- improved TextFileExporter: useable standalone, added preClosePrinter() callback
+- <comment> element and logger category org.databene.COMMENT
+- logger category org.databene.CONFIG
+- missing validator attribute in schema file
+- XLS improvements:
+  - XLS and CSV-Exporter now work without explicitly setting the table headers
+  - XLS formulas are resolved
+- Improved maven project wizard:
+  - generating non-DB projects
+  - testing db connection
+  - improved pom.xml
+- supporting bean construction syntax like <bean id="gen" spec="com.my.Gen(34,'test')" />
+- Made TextFileExporter useable standalone and for other data types than 'Entity'
+- Including all supported open source database drivers in distribution
+
+changes
+-------
+- Removed generics from TypeDescriptor class
+- Renamed benerator-gui.sh/bat to maven-project-wizard.sh/bat
+- Using POI 3.5-beta5
+
+bug fixes
+---------
+(Find the bug tracker at http://sourceforge.net/tracker/?group_id=222964&atid=1057386)
+- 2668915 Shop demo causes NullPointerException for Derby
+- 2668760 Column not found in Firebird
+- 2537975 seqhilo IdProvider does not require a sequence name
+- 2528604 exception when setting oracle-custom-typed columns to null
+- 2504916 Oracle throws SQLException 'Invalid SQL Type'
+- 2687567 Error in non-latin language support
+- Turkish male name generation
+- Fixed missing attribute declarations

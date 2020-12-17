@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+
+<setup 	xmlns="https://www.benerator.de/schema/1.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
+
+	<bean id="adder" spec="new AddingConsumer('txn_amount', 'long')" />
+	
+    <generate type="deb_transactions" count="100" consumer="ConsoleExporter, adder">
+        <attribute name="txn_amount" type="long" min="1" max="100" distribution="step" />
+    </generate> 
+
+	<generate type="trailer_record" count="1" consumer="ConsoleExporter">
+	    <attribute name="total" script="adder.sum" />
+	</generate>
+
+	<evaluate assert="result=5050">adder.sum</evaluate>
+	
+</setup>

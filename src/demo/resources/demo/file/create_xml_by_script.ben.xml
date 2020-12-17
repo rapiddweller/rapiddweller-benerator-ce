@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+
+<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.benerator.de/schema/1.0.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
+
+    <generate type="transaction" count="10">
+        <variable name="product" type="entity" source="demo/file/products.import.csv" distribution="random"/>
+        <attribute name="id" type="long"/>
+        <attribute name="ean_code" script="product.ean_code"/>
+        <attribute name="price" script="product.price"/>
+        <attribute name="items" type="short" min="1" max="27"/>
+        <consumer class="com.rapiddweller.platform.script.ScriptedEntityExporter">
+            <property name="uri" value="transactions.xml"/>
+            <property name="headerScript" value="demo/file/transaction_xml_header.ftl"/>
+            <property name="partScript" value="demo/file/transaction_xml_part.ftl"/>
+            <property name="footerScript" value="demo/file/transaction_xml_footer.ftl"/>
+        </consumer>
+    </generate>
+
+</setup>

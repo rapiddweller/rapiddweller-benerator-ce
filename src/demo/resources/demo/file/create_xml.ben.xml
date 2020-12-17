@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+
+<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.benerator.de/schema/1.0.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
+
+    <import domains="person"/>
+
+    <bean id="xml" class="com.rapiddweller.platform.xml.XMLEntityExporter">
+        <property name="uri" value="customers.xml"/>
+    </bean>
+
+    <generate type="customers" count="1" consumer="xml">
+        <generate type="customer" count="10" consumer="xml">
+            <variable name="person" generator="PersonGenerator"/>
+            <attribute name="id" generator="IncrementGenerator"/>
+            <attribute name="email" pattern="[a-z]{5,8}[0-9]{0,2}@[a-z]{8,12}\.(de|at|ch|com|org)"/>
+            <attribute name="password" pattern="[A-Za-z0-9]{8,12}"/>
+            <attribute name="role_id" constant="customer"/>
+            <attribute name="category" values="'A','B','C'"/>
+            <attribute name="salutation" script="person.salutation"/>
+            <attribute name="first_name" script="person.givenName"/>
+            <attribute name="last_name" script="person.familyName"/>
+            <attribute name="birth_date" type="date" nullable="false"/>
+            <generate type="addresses" count="1" consumer="xml">
+                <generate type="address" count="2" consumer="xml">
+                    <variable name="addr" generator="com.rapiddweller.domain.address.AddressGenerator"/>
+                    <attribute name="line1" script="ftl:${addr.street} ${addr.houseNumber}"/>
+                    <attribute name="line2" script="ftl:${addr.zipCode} ${addr.city}"/>
+                    <attribute name="line3" script="addr.country"/>
+                </generate>
+            </generate>
+        </generate>
+    </generate>
+
+</setup>

@@ -1,0 +1,71 @@
+release notes benerator 0.5.0
+=============================
+
+summary
+-------
+benerator now can generate XML files directly from XML schema files. 
+Custom generator configuration can be added in XML schema annotations.
+The region concept has been finally abstracted to a dataset concept.
+The core data model has been completely redesigned for supporting a 
+type definition concept. With improved QA, several bugs were found and fixed. 
+New generator classes and name packages have been added for India, Brazil, 
+Canada, Spain, Australia, Austria, Japan, Slovenia and Israel.
+
+migration
+---------
+- in benerator files, replace attributes region=".." with dataSet=".."
+- rename class references from org.databene.region.* to org.databene.domain.address.*
+
+changes
+-------
+- changed from DTD to XML schema for benerator setup file validation
+- upgraded to newest versions of commons and webdecs
+- complete redesign of metadata concept
+- moved IncrementIdGenerator provision from DatabaseSystem to GlobalIdProviderFactory
+- replaced Region with DataSet
+- moved classes from org.databene.region to org.databene.domain.address
+- moved IncrementIdProvider support from DatabaseSystem to GlobalIdProviderFactory
+- changed property names in DBColumn
+- moved CSVCellIterable and CSVCellIterator to org.databene.platform.csv
+- org.databene.benerator was redesigned to be an 'interface package'. 
+  Classes inappropriate as interface were moved to the sub packages org.databene.benerator.util/wrapper
+- moved DateGenerator from org.databene.benerator.primitive to org.databene.benerator.primitive.datetime
+- Changed Sequence structure and handling (not for the last time)
+- Added max property to IncrementGenerator
+- moved UnknownDialect up one package level
+- moved distribution classes to org.databene.model.function
+
+enhancements
+------------
+- support for XML schema constraints and benerator annotations
+- new DataSet concept for nested sets
+- new class XMLEntityExporter for exporting entities to XML files 
+- new validators: EAN8Validator and EAN13Validator
+- new method IdStrategy.getInstance()
+- new generators:
+  - CompanyNameGenerator
+  - DateTimeGenerator
+  - CardinalGenerator
+  - XMLFileGenerator
+- person domain: names added for
+  - India
+  - Brazil
+  - Canada
+  - Spain
+  - Australia
+  - Austria
+  - Japan
+  - Slovenia
+  - Israel 
+- Country: added more country codes
+  
+bug fixes
+---------
+- order of attribute generation
+- special character handling in person domain
+- Fixed bug in nesting more than two levels of create-entities elements
+- domains: file encodings default to UTF-8
+- SequencedSampleCSVGenerator: bug fix in CSV iteration
+- FormatFormatGenerator: Generic target parameter T has been replaced with String
+- AlternativeGenerator: Bug fix in life cycle
+- DBSystem: Bug fix in selector clause evaluation

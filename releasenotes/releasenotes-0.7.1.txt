@@ -1,0 +1,13 @@
+release notes benerator 0.7.1
+=============================
+
+
+summary
+-------
+This is a pure bug fix release
+
+
+bug fixes (Find the bug tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057386)
+-------------------------------------------------------------------------------------------------
+- #3409969: Bad Maven dependency to ContiPerf snapshot
+- Feed4JUnit bug #3409819: null values left out

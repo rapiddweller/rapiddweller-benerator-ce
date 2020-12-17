@@ -1,0 +1,82 @@
+release notes benerator 0.7.0
+=============================
+
+
+summary
+-------
+Benerator core has been redesigned in central parts to be more user convenient, avoid frequent mistakes and evolve 
+the extension interfaces towards a future-proof form. Core topic was improvement of support for programmatic clients 
+in functional testing like Feed4JUnit and Feed4TestNG.
+
+
+changes
+-------
+- moved default values from Descriptor classes to GeneratorFactory
+- removed number min/maxExlusive, replaced with boolean min/maxInclusive
+- Added property 'quoteEmpty' to CSVEntityExporter, true by default
+- <setup defaultOneToOne="false"> by default
+- removed predefined "benerator" variable from context (use "context" now)
+- removed hexadecimal syntax for decimal number literals in BeneratorScript
+- removed property 'db' from SequenceTableGenerator (replaced with property 'database')
+- renamed Entity2BeanConverter to Entity2JavaConverter
+- merged OfflineSequenceGenerator into DBSequenceGenerator with property 'cached'
+- replaced Iterable and Iterator with DataSource and DataIterator
+- Changed signature of generate() method in Generator interface
+- Renamed SimpleConverter to UnsafeConverter and SimpleGenerator to UnsafeGenerator
+- New convenience methods in GeneratorUtil
+- New helper class GeneratingConverter
+- Renamed ValidatingGenerator.generateImpl() to doGenerate()
+- Renamed all 'precision' properties to 'granularity'
+- Removed 'name' property from Sequence
+- Renamed @DescriptorBased to @Descriptor
+- Removed totalDigits and fractionDigits features
+- Moved Consumer interface to org.databene.benerator, moved general implementations to org.databene.consumer
+- Replaced generic parameter in Consumer interface with ProductWrapper
+- Moved StorageSystem interface to org.databene.benerator, moved implementations to org.databene.storage
+- removed generic parameter from StorageSystem.queryEntityIds() and StorageSystem.query()
+- Renamed platform 'flat' to 'fixedwidth' and classes 'FlatFile...' to 'FixedColumnWidth...'
+- <import defaults="true" /> is not necessary any longer: defaults are imported automatically, 
+  they are only left out when using <setup ... defaultImports="false"> in the root element
+- Replaced global <property> with <setting>
+- Deleted MappedWeightSampleGenerator
+- Renamed IndividualWeightGenerator to IndividualWeightSampleGenerator
+- Renamed DistributingSampleGeneratorProxy to IndexBasedSampleGeneratorProxy
+- renamed 'source' property to 'database' in DBSequenceGenerator and DBSeqHiLoGenerator
+- cleaned up generator hierarchies for arrays
+- changed Statement interface
+- removed multithreading support for <generate> and <iterate> - anyway it never worked satisfactory
+- dropped variable support in XML Schema-based file generation
+- DbUnitEntityExporter uses UTF-8 by default
+
+
+enhancements
+------------
+- Definition and execution of variables, ids, attributes and references in arbitrary order
+- supporting different types of GeneratorFactories
+- Defined VolumeGeneratorFactory, EquivalenceGeneratorFactory, CoverageGeneratorFactory and SerialGeneratorFactory 
+- Added configurable generatorFactory and defaultsProvider properties to BeneratorContext
+- new annotation @DecimalGranularity
+- New Converter class NumberQuantizer
+- Defined SimpleMethodParamsGenerator as abstract parent class for Generators that create method parameters as Object arrays.
+- Defined AsStringGenerator for wrapping an arbitrary Generator and return String representations of products
+- CompositeStringGenerator supports uniqueness
+- Direct DB Sanity integration by <dbsanity database="..." ... />
+- Added TimeUtil.addDays(), addMonths(), addYears(), midnightOf()
+- Introduced generatorFactory attribute in <setup>
+- Added generic 'offset' feature
+- Added 'cached' feature to DBSequenceGenerator, removed OfflineSequenceGenerator
+- New Generator class 'StringGenerator'
+- MemStore supports queries for ids, e.g. as issued by <reference>
+- Generating multinational data weighted by country population
+- Executing elements in the order in which they are specified
+- Defined empty consumer class NoConsumer
+- Defined basic swiss address generation
+
+
+bug fixes (Find the bug tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057386)
+-------------------------------------------------------------------------------------------------
+- Bug fix in UniqueCompositeArrayGenerator
+- Bug fix in evaluation of dynamic selectors that make use of an entity attribute
+- OutOfMemoryError when using CompanyNameGenerator for region 'world'
+- Argument type mismatch in BeanUtil.invoke()
+- Resources closed in wrong order

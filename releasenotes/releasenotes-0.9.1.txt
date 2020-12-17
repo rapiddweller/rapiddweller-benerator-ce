@@ -1,0 +1,13 @@
+release notes benerator 0.9.1
+=============================
+
+
+Enhancements
+------------
+- 
+
+
+Bug Fixes
+---------
+- OutOfMemoryError when using @Offset
+- 'segment' not supported in <iterate>

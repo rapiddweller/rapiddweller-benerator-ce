@@ -1,0 +1,96 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>${setup.groupId}</groupId>
+    <artifactId>${setup.projectName}</artifactId>
+    <version>${setup.version}</version>
+
+    <packaging>jar</packaging>
+    <name>${setup.projectName} data generation project</name>
+    <description>Start generating transactions by typing 'mvn benerator:generate' on the command line.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>databene-benerator</artifactId>
+            <version>${version.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>dbsanity</artifactId>
+            <version>${version.dependencies.dbsanity}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>jdbacl</artifactId>
+            <version>${version.dependencies.jdbacl}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>databene-webdecs</artifactId>
+            <version>${version.dependencies.webdecs}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>databene-commons</artifactId>
+            <version>${version.dependencies.commons}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>contiperf</artifactId>
+            <version>1.07</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.databene</groupId>
+                <artifactId>maven-benerator-plugin</artifactId>
+                <version>${version.version}</version>
+                <configuration>
+                    <descriptor>benerator.xml</descriptor>
+                    <encoding>${setup.encoding}</encoding>
+                    <validate>true</validate>
+                </configuration>
+
+                <dependencies>
+                    <!-- logging -->
+                    <dependency>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                        <version>1.6.4</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                        <version>1.6.4</version>
+                        <scope>provided</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                        <version>1.2.16</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

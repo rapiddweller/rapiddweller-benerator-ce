@@ -1,0 +1,62 @@
+release notes benerator 0.5.7
+=============================
+
+summary
+-------
+benerator 0.5.7 fixes some major bugs that occur when running on Windows.
+Main improvements are
+- an assertion facility
+- improved script support
+- more concise JavaBean construction syntax 
+
+changes
+-------
+- deprecated RunSQLScriptTask
+- changed Converter interface and abstract implementations
+
+enhancements
+------------
+- localized GUI wizard for English, German
+- improved GUI convenience
+- printing System and debugging information on startup
+- auto-recognition of Mac OS X setup problems
+- supporting JSR 223 scripts in attributes like script="{js:currentDate()}" 
+- benerator GUI: VM param -Dbenerator.locale="DE"
+- added database.readOnly attribute for security against unintended production database changes
+- added evaluation and assertion facility: 
+    <evaluate assert="{js: result >= 5}" id="product_count" target="db">
+        select count(*) from product
+    </evaluate>
+- supporting constructor calls and property-based construction for generators, validators, 
+  converters, consumers, sequences, weight functions, id providers,
+  e.g. constructor call: consumer="com.my.Consumer('out.txt')" 
+       or property-based: consumer="com.my.Consumer[filename='out.txt']"
+  - The attributes proxy-param1/2, variation1/2, idProvider.param have become obsolete
+- supporting character escaping in XML attributes: \r, \n, \t, \', \", \\
+- Supporting tabs as CSV separator, e.g.
+    <attribute name="x" source="data.csv" separator="\t"/>
+    <create-entities name="Test" source="dara.csv" separator="\t" />
+  - new benerator properties:
+    - defaultLineSeparator
+    - defaultLocale
+    - defaultDataset
+    - maxCount for quickly setting a global maximum for all entity counts and component cardinalities 
+- supporting arbitrary separator characters in 'values' specification, e.g. 
+  <attribute name="rank" values="A|B|C" separator="|"/>
+- supporting arbitrary line separator characters in all text file exporters
+- All text file exporters (CSV, Flat File, SQL, Scripted) now support the properties
+  - lineSeparator: may be set to e.g. '\n' or '\r\n' for generating text files for other operating systems
+  - append: when set to true, benerator does not overwrite existing files but appends new output to them
+- DateGenerator and DateTimeGenerator now support an improved time resolution specification, e.g. 0000-00-01 
+  replacing the former annoying format 1970-01-02 for a one-day resolution
+
+bug fixes
+---------
+(Find the tracker at http://sourceforge.net/tracker/?group_id=222964&atid=1057386)
+- 2431421 Benerator GUI throws exception for HSQLDB
+- 2476637 wrong varchar2 column sizes for Oracle
+- 2489739 benerator GUI call prints error message under Windows
+- 2494201 Property file inclusion fails under windows
+- 2496003 maven plugin does not find custom generators
+- 2499121 Wrong time resolution in Singapore
+

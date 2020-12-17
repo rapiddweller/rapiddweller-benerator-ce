@@ -1,0 +1,22 @@
+release notes benerator 0.7.2
+=============================
+
+
+summary
+-------
+
+
+changes
+-------
+
+
+enhancements
+------------
+- DbUnitEntitySource can handle arbitrarily large files
+- Supporting enums in Java platform
+- SQLEntityExporter is able to suport different versions of a database with different SQL dialects
+- Supporting column-based CSV iteration <... source="..." rowBased="false">
+
+
+bug fixes (Find the bug tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057386)
+-------------------------------------------------------------------------------------------------

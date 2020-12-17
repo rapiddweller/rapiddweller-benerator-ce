@@ -1,0 +1,23 @@
+release notes benerator 0.5.9-SR1
+=================================
+
+summary
+-------
+This release resolves several issues about database data generation (composite key handling, DB2 bigint data type), 
+date generation and JavaBean handling.
+
+
+enhancements (Find the feature request tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057389)
+----------------------------------------------------------------------------------------------------------------
+- Added org.databene.benerator.primitive to default imports
+
+
+bug fixes (Find the bug tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057386)
+-------------------------------------------------------------------------------------------------
+- 2805329 DateTimeGenerator doesn't stop at maxDate
+- 2805327 Time generation of DateTimeGenerator
+- 2805254 milliseconds setting ignored in DateTimeGenerator
+- 2797001 Bug in parsing composite foreign keys
+- 2803686 <bean spec=""/> not available in Context
+- 2805574 BIGINT generation fails for DB2
+- Fixed Country data of Côte d'Ivoire, Guinea, Libya, Monaco, Montserrat, Virgin Islands and Viet Nam

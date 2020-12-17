@@ -1,0 +1,215 @@
+release notes benerator 0.6.0
+=============================
+
+
+summary
+-------
+
+
+Changes (Find the feature request tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057389)
+-----------------------------------------------------------------------------------------------------------
+- Descriptor file syntax
+  - Introduced Benerator Expression Language
+  - elements:
+    - <if> <then> <else>
+    - <while>
+    - <wait>
+  - new constant attribute definition, e.g. <attribute ... constant="0" />
+  - in script="..." curly braces are not necessary any more
+  - supporting source attribute in property element, e.g. <property name="number" source="new LocalSequenceGenerator('filenum')"/>
+  - new separator attribute in <create-entities>, <update-entities>, <attribute>, <reference>, <id>
+  - new 'tableFilter' property <database ... tableFilter="my_.*" />
+  - mapping attribute values, e.g. <attribute ... map="true->'Y',false->'N'" />
+  - referencing the current entity by 'this', e.g. <attribute name="mail" script="{someone@${this.inetDomain}}"  />
+  - value lists require literal syntax and support weights, e.g. values="'A'^1, 42^4", dropped support for custom separators
+  - removed IdProvider concept (IdProvider, IdProviderFactory), replaced with specific generators.
+    - strategy 'increment' (provider IncrementIdProvider) -> IncrementGenerator
+    - strategy 'uuid' (provider UUIDProvider) -> HexUUIDGenerator
+    - strategy 'seqhilo' (provider SeqHiLoIdProvider) -> DBSeqHiLoGenerator
+    - QueryIdProvider -> QueryGenerator
+    - LongQueryIdGenerator -> QueryLongGenerator
+    - new Generator DBSequenceGenerator
+  - changed <id/> syntax:
+    - removed attributes: strategy, param, scope
+    - using same syntax like <attribute/>
+    - user needs to replace 'strategy' spec with 'generator' class config, 
+      e.g. <id name="id" strategy="sequence" source="db" /> 
+      needs to be migrated to <id name="id" generator="DBSequenceGenerator" source="db" />
+  - <setup default-script="" default-null=""> -> <setup defaultScript="" defaultNull="">
+  - <create-entities name="typeAndVarName"/> -> <generate name="varName" type="typeName"/>
+  - renamed pagesize to pageSize
+  - renamed defaultPagesize to defaultPageSize
+  - create-/update-entities may have (almost) arbitrary child elements, e.g. <execute> or <run-task>
+  - removed descriptor attributes and merged them with the distribution concept: 
+    proxy, proxy-param1, proxy-param2, variation1, variation2
+  - 'run-task' element supports 'spec' and 'id' attributes like the bean element
+  - Supporting <echo>Message text</echo>
+  - introduced shutdown hook that closes resources on regular and forced shutdowns
+  - Introduced FlatLineParser for easier composition of multi-type flat file parsers
+  - Evaluating shell output in <evaluate/>
+  - new ComponentMapper and MappingEntityConsumer for converting component names after generation
+  - Introduced variable definition and assignment syntax in Benerator Script, e.g.
+    - variable definition: <execute>x = 3</execute>
+    - assignment: <execute>x = x + 1</execute>
+  - DescriptorBasedGenerator for easy programmatic access to generators defined in an XML descriptor file
+  - Introduced FlatFileEntitySource.lineFilter
+  - Defined generators that check through directories and provide random
+    - java.io.File objects: FileGenerator
+    - file names: FileNameGenerator
+    - text file contents (as String): TextFileGenerator
+    - binary file contents (as byte[]): BinaryFileGenerator
+  - removed <create-entities> and <update-entities>, introducing <generate> and <iterate> with different semantics
+  - <update-entities name="tableName" source="db"> is replaced with <iterate type="tableName" source="db" consumer="db.updater()" />
+  - supporting sub invocation of descriptor files: <include uri="included.ben.xml" />
+  - removed TreePathGenerator
+  - <reference> and <id> may now use similar settings like <attribute>
+  - AddingConsumer{type='long' feature='amount'}
+
+- clarified license conditions
+  
+- Supporting the H2 database
+
+- Performance measurement
+  - <run-task stats="true" />
+  - proxy class PerfTrackingConsumer for measuring the execution time of Consumer.startConsuming()
+    use e.g. like <consumer spec='new org.databene.platform.contiperf.PerfTrackingConsumer(realConsumer)'/>" +
+  
+- Distributions
+  - Completely redesigned the Distribution concept
+  - Supporting the efficient generation of non-uniformly distributed numbers 
+    based on cumulative distribution functions
+
+- Benerator Script
+  - new default script language
+  - Date arithmetics, e.g. new Date() + 24*60*60*1000
+  - Bean instantiation based on properties, e.g. new Person{name='Alice', age=23}  
+  
+- Domains
+  - new 'math' domain:
+    - Fibonacci Sequence
+    - Padovan Sequence
+  - organization:
+    - new DepartmentNameGenerator
+  - New 'lang' domain:
+    - NounFactory
+    - NounGenerator
+  - person domain
+    - Added property 'femaleQuota' to 'GenderGenerator' and 'PersonGenerator'
+    - Added Person property : secondGivenName
+    - extended set of German names to more than 6,000,000 million possible unique and weighted combinations
+    - added consistent 'email' property generation
+  - address (thanks to Eric Chaves for his contributions!):
+    - Generation of Brazilian postal addresses
+    - 'Brazilian style' mobile phone numbers, depending on city area codes
+  - removed tax domain
+    - renamed SSN classes and moved them to the new 'US' domain
+    - renamed TaxId* classes to TIN* and moved to person domain
+  - created us domain
+     - SSNGenerator
+     - SSNValidator
+  - brazil domain (thanks to Eric Chaves for his contributions!):
+    - CPF number generation and validation
+    - CPNJ number generation and validation
+  
+- Platforms
+  - created naming platform
+    - Convenient JNDI support: org.databene.platform.jndi.InitialContext
+  - db
+    - new OfflineSequenceGenerator that mimics a real db sequence and saves db round trips
+    - logging database, driver and JDBC version info on first connect
+    - supporting access to arbitrary schema
+    - Added support for sequences on the Firebird database
+    - DBSystem.inserter() and DBSystem.updater()
+    - improved SQL log for strings and characters to that it can be c&p'ed to a DB console
+  - xls
+    - Supporting Import and export of multiple entity types from and to one Excel(TM) document
+  - java (renamed from 'bean'):
+    - JavaInvoker
+    
+- New generators:
+  - StateGenerator
+  - StateTransitionGenerator
+  - LocalSequenceGenerator
+  - SeedGenerator
+  - SeedWordGenerator
+  - SeedSentenceGenerator
+  - LuhnGenerator
+
+- New Distributions:
+  - 'expand' sequence
+  - supporting distribution='random' unique='true'
+  
+- new Converters:
+  - URLEncodeConverter
+  - URLDecodeConverter
+  - PrintfConverter
+  - ToHexConverter
+  - RegexReplacer
+  - SubstringExtractor
+  - FloatingPointQuantizer, IntegralQuantizer
+  
+- new Validators:
+  - Supporting JSR 303 Bean Validation
+  - UnluckyNumberValidator
+  - DayOfWeekValidator
+  - RegexValidator
+  - LuhnValidator
+
+- new Tasks:
+  - FileJoiner
+  - FileDeleter
+
+- New database snapshots export formats:
+  - Excel(TM) document
+  - SQL
+
+- Maven Project Wizard
+  - Providing 12 predefined project archetypes for different generation tasks
+  - Easier database configuration
+
+- Internals:
+  - new class 'Version'
+  - Improved JDK integration by supporting java.io.Closeable and java.io.Flushable
+  - replaced Heavyweight interface with java.io.Closeable
+  - Made LightweightGenerator more lightweight and moved the 'generatedType' attribute to TypedLightweightGenerator
+  - new class 'Version' which provides the benerator version number
+  - improved timing for long-term execution time prediction, leaving out initial initialization times
+  - LiteralParser supports time strings
+  - ValueMapper
+  - Programmatic access to Generators defined in descriptor file
+  - automatic minus to camel-case name mapping: default-script -> defaultScript
+  - Improved parsing framework for clarity, separation of concerns and customizability
+  - new methods TimeUtil.month() ...dayOfMonth()
+  - DBSystem class
+    - new method incrementSequenceValue(sequenceName, amount)
+  - Removed all deprecated elements
+  - Redesigned distribution concept
+  - Removed the 'generatedType' property implementation from 'LightweightGenerator' 
+    and moved it to the new 'TypedLightweightGenerator'.
+    When migrating older generator implementations that extended LightweightGenerator, 
+    make the extend TypedLightweightGenerator now.
+  - Class Entity
+    - renamed getName() to type()
+    - new method removeComponent(String componentName) 
+	- new copy constructor
+  - Task interface:
+    - replaced destroy() with close() (from java.io.Closeable)
+    - replaced run() with execute(Context, ErrorHandler) method
+    - new pageFinished() method
+  - Migrated from commons-logging to slf4j
+  - Upgraded to JUnit 4.7
+  - removed QuickScript support
+  - Restructured, abstracted and unified descriptor parsers
+  - supporting relative URIs in all file based entity sources
+  - the default HTTP schema URL now is bypassed with the schema that distributed with Benerator
+  
+
+bug fixes (Find the bug tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057386)
+-------------------------------------------------------------------------------------------------
+- parsing comma-separated object lists (e.g. consumers, validators)
+- removed Entity's 'name' property: getName() -> name()
+- 2879250 Error processing C:\\temp
+- avoiding duplicate SQL logs
+- 2892420 DbUnitEntityExporter generates nested elements
+- 2892888 Thread count is too low
+- Made TextFileExporter thread-safe (and indirectly CSVEntityExporter and FlatFileEntityExporter)

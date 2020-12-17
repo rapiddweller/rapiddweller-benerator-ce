@@ -1,0 +1,22 @@
+release notes benerator 0.7.4
+=============================
+
+summary
+-------
+
+
+changes
+-------
+- removed dependencies to gui library
+- removed dependencies to DB Sanity (now available by dbsanity4benerator)
+
+
+enhancements
+------------
+- supporting column-wise iteration of CSV files and Excel sheets
+- introduced 'emptyMarker' setting
+- introduced platform descriptor concept
+
+bug fixes
+---------
+- Empty cell support for Excel Sheets (')

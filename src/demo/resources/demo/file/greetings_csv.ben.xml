@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+
+<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.benerator.de/schema/1.0.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
+
+    <import platforms="csv"/>
+
+    <generate type="greeting" count="10">
+        <attribute name="salutation" values="'Hello','Hi','Howdy'"/>
+        <attribute name="name" values="'Alice','Bob','Charly'"/>
+        <consumer class="CSVEntityExporter">
+            <property name="uri" value="greetings.csv"/>
+            <property name="columns" value="salutation,name"/>
+        </consumer>
+    </generate>
+
+</setup>

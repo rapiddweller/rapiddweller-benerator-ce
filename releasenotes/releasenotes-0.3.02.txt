@@ -1,0 +1,61 @@
+Release Notes benerator 0.3.02
+==============================
+
+Summary:
+--------
+benerator 0.3.02 delivers
+- new Generators, Sequences and support for generating unique data
+- several bug fixes
+- Current time generators
+- Support for file encodings for all file I/O
+- Support for generator chaining
+- Established support forum
+
+Site
+----
+- Support Forums
+- Mailing List
+- RSS Feed
+
+New features
+------------
+- supporting new MessageConverter
+- Easier Sequence definition: Sequences based on integer numbers can be used to generate doubles
+- Supporting uniqueness:
+  - HexUUIDGenerator
+  - RegexStringGenerator
+  - Generating unique numbers/characters by setup file
+  - EANGenerator
+- New Sequence implementations for creating unique numbers:
+  - wedge
+  - bitreverse
+- New generators:
+  - CurrentDateGenerator
+  - CurrentTimeGenerator
+  - CurrentMilliTimeGenerator
+  - CurrentNanoTimeGenerator
+  - SequenceGenerator
+- supporting custom separator in CSVEntityIterable
+- supporting file encodings in all file I/O
+- Supporting Generator chaining in setup files
+
+Bug Fixes
+---------
+- DTD: Added 'pagesize' attribute to 'create-entities'
+- life cycle fixes in various available(), reset() and close() implementations
+
+Enhancements
+------------
+- Descriptors: added literate construction helper methods of name 'with...()' or 'of...()'
+  They now can be used like 'new AttributeDescriptor("ranking").ofType("char").withValues("A,B,C")'
+- Improved logging and error messaging
+- applying regex string generation if only a pattern is specified for an attribute
+- Added support for file encoding to
+  - DTD (attribute of the elements 'create-entities', 'attribute' and 'variable')
+  - CSVEntityExporter, CSVEntityIterable
+  - FeatureDescriptor
+- LightweightGenerator now implements getTargetType(), type must be submitted in constructor, default: Object.class
+
+Changes
+-------
+- MessageConverter is deprecated, replace usages by the new MessageFormat (of databene-commons 0.2.02)

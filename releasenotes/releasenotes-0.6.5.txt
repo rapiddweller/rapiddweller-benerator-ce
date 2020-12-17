@@ -1,0 +1,22 @@
+release notes benerator 0.6.5
+=============================
+
+summary
+-------
+Release 0.6.5 is a maintenance release which fixes critical bugs for Windows systems, MySQL and PostgreSQL.
+
+
+enhancements
+------------
+- CSVEntitySource: 'columns' property. When set, no header row is expected in the input file
+- CSVEntityExporter: 'headless' property. When set to 'true', the generated CSV file has no header row
+
+
+bug fixes (Find the bug tracker at http://sourceforge.net/tracker2/?group_id=222964&atid=1057386)
+-------------------------------------------------------------------------------------------------
+- #3171838: AddressGenerator fails on Windows
+- #3172807: <null/> cells are ignored in DBUnit import
+- #3172811: '#' not supported in regular expressions
+- #3172816: NullPointerException on MySQL
+- #3172871: NullPointerException on PostgreSQL
+- #3174270: Escape characters not supported in <bean> property

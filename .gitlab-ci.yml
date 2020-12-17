@@ -1,0 +1,358 @@
+stages:
+  - setup
+  - build
+  - distribution
+  - E2ET
+  - quality
+  - upload
+  - release
+
+# common vars for multiple stages/jobs
+variables:
+  ARTIFACT_ID: "rapiddweller-benerator-ce"
+  ARTIFACT_VERSION_BASE: "1.0.0" # should be updated with the final release (tag release version)
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/releases/${CI_COMMIT_TAG}"
+
+###################### Setup ######################
+
+setup:jdk-8:
+  stage: setup
+  image:
+    name: alpine/git:latest
+    entrypoint: [""]
+  script:
+    - export RD_PROJECT_LATEST_TAG=$(git describe --abbrev=0 --tags)
+    - echo "RD_PROJECT_LATEST_TAG=$RD_PROJECT_LATEST_TAG" >> build.env
+    - export JAVA_JDKVERSION_TAG="jdk-8"
+    - echo "JAVA_JDKVERSION_TAG=$JAVA_JDKVERSION_TAG" >> build.env
+    - |
+      if [ -z "$CI_COMMIT_TAG" ];
+      then
+        export ARTIFACT_VERSION=$ARTIFACT_VERSION_BASE-$CI_PIPELINE_ID+$JAVA_JDKVERSION_TAG
+        echo "ARTIFACT_VERSION=$ARTIFACT_VERSION" >> build.env
+      else
+        export ARTIFACT_VERSION=$CI_COMMIT_TAG+$JAVA_JDKVERSION_TAG
+        echo "ARTIFACT_VERSION=$ARTIFACT_VERSION" >> build.env
+      fi
+    - export ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION
+    - echo "ARTIFACT_FULLNAME=$ARTIFACT_FULLNAME" >> build.env
+    - export
+  artifacts:
+    reports:
+      dotenv: build.env
+
+
+setup:jdk-11:
+  stage: setup
+  image:
+    name: alpine/git:latest
+    entrypoint: [""]
+  script:
+    - export RD_PROJECT_LATEST_TAG=$(git describe --abbrev=0 --tags)
+    - echo "RD_PROJECT_LATEST_TAG=$RD_PROJECT_LATEST_TAG" >> build.env
+    - export JAVA_JDKVERSION_TAG="jdk-11"
+    - echo "JAVA_JDKVERSION_TAG=$JAVA_JDKVERSION_TAG" >> build.env
+    - |
+      if [ -z "$CI_COMMIT_TAG" ];
+      then
+        export ARTIFACT_VERSION=$ARTIFACT_VERSION_BASE-$CI_PIPELINE_ID+$JAVA_JDKVERSION_TAG
+        echo "ARTIFACT_VERSION=$ARTIFACT_VERSION" >> build.env
+      else
+        export ARTIFACT_VERSION=$CI_COMMIT_TAG+$JAVA_JDKVERSION_TAG
+        echo "ARTIFACT_VERSION=$ARTIFACT_VERSION" >> build.env
+      fi
+    - export ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION
+    - echo "ARTIFACT_FULLNAME=$ARTIFACT_FULLNAME" >> build.env
+    - export
+  artifacts:
+    reports:
+      dotenv: build.env
+
+
+###################### Test / Build ######################
+
+.update-mvn-project: &update-mvn-project
+  before_script:
+    - sed -i 's/--project-version--/'$ARTIFACT_VERSION'/g' pom.xml
+    - |
+      if [ $JAVA_JDKVERSION_TAG = "jdk-11" ];
+      then
+        sed -i 's#<java_source_version>1.8</java_source_version>#<java_source_version>11</java_source_version>#' pom.xml
+        sed -i 's#<java_target_version>1.8</java_target_version>#<java_target_version>11</java_target_version>#' pom.xml
+      fi
+
+build:jdk-8:
+  <<: *update-mvn-project
+  image: maven:3-adoptopenjdk-8
+  needs:
+    - job: setup:jdk-8
+      artifacts: true
+  stage: build
+  artifacts:
+    paths:
+      - target/*.jar
+      - target/surefire-reports
+  script:
+    - mvn -version
+    - mvn $MAVEN_CLI_OPTS clean package
+
+build:jdk-11:
+  <<: *update-mvn-project
+  image: maven:3-adoptopenjdk-11
+  needs:
+    - job: setup:jdk-11
+      artifacts: true
+  stage: build
+  artifacts:
+    paths:
+      - target/*.jar
+      - target/surefire-reports
+  script:
+    - mvn $MAVEN_CLI_OPTS clean package
+
+###################### Assembly and Deploy ######################
+
+assembly:jdk-8:
+  <<: *update-mvn-project
+  needs:
+    - job: setup:jdk-8
+      artifacts: true
+    - job: build:jdk-8
+      artifacts: true
+  image: maven:3.6.3-adoptopenjdk-8
+  stage: distribution
+  artifacts:
+    paths:
+      - target/*.tar.gz
+      - target/*.zip
+  script:
+    - mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
+
+assembly:jdk-11:
+  <<: *update-mvn-project
+  needs:
+    - job: setup:jdk-11
+      artifacts: true
+    - job: build:jdk-11
+      artifacts: true
+  image: maven:3-adoptopenjdk-11
+  stage: distribution
+  artifacts:
+    paths:
+      - target/*.tar.gz
+      - target/*.zip
+      - target/site/
+  script:
+    - mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
+
+deploy:jdk-8:
+  <<: *update-mvn-project
+  needs:
+    - job: setup:jdk-8
+      artifacts: true
+    - job: build:jdk-8
+      artifacts: true
+  image: maven:3.6.3-adoptopenjdk-8
+  stage: distribution
+  script:
+    - mvn $MAVEN_CLI_OPTS clean install deploy -Dmaven.test.skip=true
+
+###################### E2ET ######################
+
+.e2et-preparation: &e2et-preparation
+  <<: *update-mvn-project
+  needs:
+    - job: setup:jdk-8
+      artifacts: true
+    - job: assembly:jdk-8
+      artifacts: true
+  before_script:
+    - tar -xzf target/$ARTIFACT_FULLNAME-dist.tar.gz
+    - export SHELL=/bin/bash
+    - export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
+    - export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
+    - chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
+    - benerator --version
+
+E2ET:db:
+  stage: E2ET
+  image: maven:3.6.3-adoptopenjdk-8
+  <<: *e2et-preparation
+  script:
+    - cd $ARTIFACT_FULLNAME/demo/db
+    - benerator user.ben.xml
+
+E2ET:files:
+  stage: E2ET
+  image: maven:3.6.3-adoptopenjdk-8
+  <<: *e2et-preparation
+  script:
+    - cd $ARTIFACT_FULLNAME/demo/file
+    - benerator create_csv.ben.xml
+    - benerator create_dates.ben.xml
+    - benerator create_fixed_width.ben.xml
+    - benerator create_xls.ben.xml
+    - benerator create_xml.ben.xml
+    - benerator create_xml_by_script.ben.xml
+    - benerator csv_io.ben.xml
+    - benerator greetings_csv.ben.xml
+    - benerator import_fixed_width.ben.xml
+    - benerator postprocess-import.ben.xml
+
+E2ET:shop:hsqlmem:
+  stage: E2ET
+  image: maven:3.6.3-adoptopenjdk-8
+  <<: *e2et-preparation
+  script:
+    - cd $ARTIFACT_FULLNAME/demo/shop
+    - benerator shop-hsqlmem.ben.xml
+
+
+E2ET:shop:mysql:
+  stage: E2ET
+  image: maven:3.6.3-adoptopenjdk-8
+  variables:
+    DB_HOST: "mysql"
+    DB_PORT: "3306"
+    DB_CONNECTION: "mysql"
+    # mysql
+    MYSQL_ROOT_USER: "root"
+    MYSQL_ROOT_PASSWORD: "bentest!"
+    MYSQL_DATABASE: "e2etmysql"
+  services:
+    - name: mysql:8.0.22
+      alias: mysql
+  <<: *e2et-preparation
+  script:
+    - sleep 60s
+    - |
+      echo "
+      dbUrl=jdbc:mysql://$DB_HOST:$DB_PORT/$MYSQL_DATABASE
+      dbDriver=com.mysql.cj.jdbc.Driver
+      dbCatalog=$MYSQL_DATABASE
+      dbUser=$MYSQL_ROOT_USER
+      dbPassword=$MYSQL_ROOT_PASSWORD
+      idStrategy=increment
+      idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
+    - echo 'shop.mysql.properties:'
+    - cat $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
+    - cd $ARTIFACT_FULLNAME/demo/shop
+    - benerator shop-mysql.ben.xml
+    - apt update && apt-get install -y mysql-client
+    - mysql --user=$MYSQL_ROOT_USER --password=$MYSQL_ROOT_PASSWORD --database=$MYSQL_DATABASE --host=$DB_HOST --execute="SELECT * FROM db_customer"
+    - mysql --user=$MYSQL_ROOT_USER --password=$MYSQL_ROOT_PASSWORD --database=$MYSQL_DATABASE --host=$DB_HOST --execute="SELECT count(*) FROM db_order"
+    - mysql --user=$MYSQL_ROOT_USER --password=$MYSQL_ROOT_PASSWORD --database=$MYSQL_DATABASE --host=$DB_HOST --execute="SELECT count(*) FROM db_order_item"
+    - mysql --user=$MYSQL_ROOT_USER --password=$MYSQL_ROOT_PASSWORD --database=$MYSQL_DATABASE --host=$DB_HOST --execute="SELECT count(*) FROM db_product"
+
+E2ET:shop:postgres:
+  stage: E2ET
+  image: maven:3.6.3-adoptopenjdk-8
+  variables:
+    DB_HOST: postgres
+    DB_PORT: "5432"
+    DB_CONNECTION: "postgres"
+    # postgres
+    POSTGRES_DB: "e2etpostgres"
+    POSTGRES_USER: "root"
+    POSTGRES_PASSWORD: "bentest!"
+    POSTGRES_HOST_AUTH_METHOD: trust
+  services:
+    - name: postgres:12.2-alpine
+      alias: postgres
+  <<: *e2et-preparation
+  script:
+    - sleep 30s
+    - |
+      echo "
+      dbUrl=jdbc:postgresql://$DB_HOST:$DB_PORT/$POSTGRES_DB
+      dbDriver=org.postgresql.Driver
+      dbUser=$POSTGRES_USER
+      dbPassword=$POSTGRES_PASSWORD
+      dbCatalog=$POSTGRES_DB
+      dbSchema=public
+      idStrategy=increment
+      idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
+    - echo 'shop.postgresql.properties:'
+    - cat $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
+    - cd $ARTIFACT_FULLNAME/demo/shop
+    - benerator shop-postgres.ben.xml
+    - apt update && apt-get install -y postgresql-client
+    - export PGPASSWORD=$POSTGRES_PASSWORD
+    - psql -h "$DB_HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
+    - psql -h "$DB_HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT * FROM db_customer;"
+    - psql -h "$DB_HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT count(*) FROM db_order;"
+    - psql -h "$DB_HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT count(*) FROM db_order_item;"
+    - psql -h "$DB_HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT count(*) FROM db_product;"
+
+###################### Sonarqube ######################
+
+
+###################### Upload Binaries ######################
+
+upload:jdk-8:
+  stage: upload
+  image: curlimages/curl:latest
+  needs:
+    - job: setup:jdk-8
+      artifacts: true
+    - job: assembly:jdk-8
+      artifacts: true
+  artifacts:
+    reports:
+      dotenv: build.env
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - export UPLOAD_DIST_ZIP_JDK8_NAME=$ARTIFACT_FULLNAME-dist.zip
+    - echo "UPLOAD_DIST_ZIP_JDK8_NAME=$UPLOAD_DIST_ZIP_JDK8_NAME" >> build.env
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file target/$UPLOAD_DIST_ZIP_JDK8_NAME ${PACKAGE_REGISTRY_URL}/$UPLOAD_DIST_ZIP_JDK8_NAME
+    - export UPLOAD_DIST_TARGZ_JDK8_NAME=$ARTIFACT_FULLNAME-dist.tar.gz
+    - echo "UPLOAD_DIST_TARGZ_JDK8_NAME=$UPLOAD_DIST_TARGZ_JDK8_NAME" >> build.env
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file target/$UPLOAD_DIST_TARGZ_JDK8_NAME ${PACKAGE_REGISTRY_URL}/$UPLOAD_DIST_TARGZ_JDK8_NAME
+
+upload:jdk-11:
+  stage: upload
+  image: curlimages/curl:latest
+  needs:
+    - job: setup:jdk-11
+      artifacts: true
+    - job: assembly:jdk-11
+      artifacts: true
+  artifacts:
+    reports:
+      dotenv: build.env
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - export UPLOAD_DIST_ZIP_JDK11_NAME=$ARTIFACT_FULLNAME-dist.zip
+    - echo "UPLOAD_DIST_ZIP_JDK11_NAME=$UPLOAD_DIST_ZIP_JDK11_NAME" >> build.env
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file target/$UPLOAD_DIST_ZIP_JDK11_NAME ${PACKAGE_REGISTRY_URL}/$UPLOAD_DIST_ZIP_JDK11_NAME
+    - export UPLOAD_DIST_TARGZ_JDK11_NAME=$ARTIFACT_FULLNAME-dist.tar.gz
+    - echo "UPLOAD_DIST_TARGZ_JDK11_NAME=$UPLOAD_DIST_TARGZ_JDK11_NAME" >> build.env
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file target/$UPLOAD_DIST_TARGZ_JDK11_NAME ${PACKAGE_REGISTRY_URL}/$UPLOAD_DIST_TARGZ_JDK11_NAME
+
+###################### Release ######################
+
+release:dist:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs:
+    - job: upload:jdk-8
+      artifacts: true
+    - job: upload:jdk-11
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - |
+      release-cli create --name "Release $CI_COMMIT_TAG" --tag-name $CI_COMMIT_TAG \
+        --assets-link "{\"name\":\"${UPLOAD_DIST_ZIP_JDK8_NAME}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${UPLOAD_DIST_ZIP_JDK8_NAME}\"}" \
+        --assets-link "{\"name\":\"${UPLOAD_DIST_TARGZ_JDK8_NAME}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${UPLOAD_DIST_TARGZ_JDK8_NAME}\"}" \
+        --assets-link "{\"name\":\"${UPLOAD_DIST_ZIP_JDK11_NAME}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${UPLOAD_DIST_ZIP_JDK11_NAME}\"}" \
+        --assets-link "{\"name\":\"${UPLOAD_DIST_TARGZ_JDK11_NAME}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${UPLOAD_DIST_TARGZ_JDK11_NAME}\"}"
