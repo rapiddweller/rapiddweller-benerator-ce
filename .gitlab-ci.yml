@@ -10,10 +10,14 @@ stages:
 # common vars for multiple stages/jobs
 variables:
   ARTIFACT_ID: "rapiddweller-benerator-ce"
-  ARTIFACT_VERSION_BASE: "1.0.0" # should be updated with the final release (tag release version)
+  ARTIFACT_VERSION_BASE: "1.0.1" # should be updated with the final release (tag release version)
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
   PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/releases/${CI_COMMIT_TAG}"
+
+cache:
+  paths:
+    - .m2/repository/
 
 ###################### Setup ######################
 
@@ -163,6 +167,8 @@ deploy:jdk-8:
 
 .e2et-preparation: &e2et-preparation
   <<: *update-mvn-project
+  stage: E2ET
+  image: springci/graalvm-ce:20.3-dev-java11
   needs:
     - job: setup:jdk-8
       artifacts: true
@@ -177,16 +183,13 @@ deploy:jdk-8:
     - benerator --version
 
 E2ET:db:
-  stage: E2ET
-  image: maven:3.6.3-adoptopenjdk-8
   <<: *e2et-preparation
   script:
     - cd $ARTIFACT_FULLNAME/demo/db
     - benerator user.ben.xml
+    - benerator compositekey.ben.xml
 
 E2ET:files:
-  stage: E2ET
-  image: maven:3.6.3-adoptopenjdk-8
   <<: *e2et-preparation
   script:
     - cd $ARTIFACT_FULLNAME/demo/file
@@ -202,8 +205,6 @@ E2ET:files:
     - benerator postprocess-import.ben.xml
 
 E2ET:shop:hsqlmem:
-  stage: E2ET
-  image: maven:3.6.3-adoptopenjdk-8
   <<: *e2et-preparation
   script:
     - cd $ARTIFACT_FULLNAME/demo/shop
@@ -211,8 +212,6 @@ E2ET:shop:hsqlmem:
 
 
 E2ET:shop:mysql:
-  stage: E2ET
-  image: maven:3.6.3-adoptopenjdk-8
   variables:
     DB_HOST: "mysql"
     DB_PORT: "3306"
@@ -247,8 +246,6 @@ E2ET:shop:mysql:
     - mysql --user=$MYSQL_ROOT_USER --password=$MYSQL_ROOT_PASSWORD --database=$MYSQL_DATABASE --host=$DB_HOST --execute="SELECT count(*) FROM db_product"
 
 E2ET:shop:postgres:
-  stage: E2ET
-  image: maven:3.6.3-adoptopenjdk-8
   variables:
     DB_HOST: postgres
     DB_PORT: "5432"
@@ -288,6 +285,64 @@ E2ET:shop:postgres:
 
 ###################### Sonarqube ######################
 
+.sonar-template: &sonar
+  <<: *update-mvn-project
+  stage: quality
+  when: manual
+  allow_failure: true
+  variables:
+    SONAR_ANALYSIS_MODE: publish
+    GIT_DEPTH: "0"
+  only:
+    - master
+
+quality:sonarqube-jdk-8:
+  <<: *sonar
+  image: maven:3-adoptopenjdk-8
+  needs:
+    - job: setup:jdk-8
+      artifacts: true
+    - job: build:jdk-8
+      artifacts: true
+  script:
+    - mvn $MAVEN_CLI_OPTS verify sonar:sonar
+      -Dsonar.projectKey=$CI_PROJECT_PATH+$JAVA_JDKVERSION_TAG
+      -Dsonar.projectName=$CI_PROJECT_NAMESPACE/$ARTIFACT_ID+$JAVA_JDKVERSION_TAG
+      -Dsonar.projectVersion=$ARTIFACT_VERSION
+      -Dsonar.java.binaries=target
+      -Dsonar.sourceEncoding=UTF-8
+      -Dsonar.sources=src/main/java
+      -Dsonar.tests=src/test/java
+      -Dsonar.junit.reportPaths=target/surefire-reports
+      -Dsonar.language=java
+      -Dsonar.host.url=$SONARQUBE_HOST
+      -Dsonar.login=$SONARQUBE_TOKEN
+      -Dsonar.scm.disabled=true
+      -Dsonar.ws.timeout=120
+
+quality:sonarqube-jdk-11:
+  <<: *sonar
+  image: maven:3-adoptopenjdk-11
+  needs:
+    - job: setup:jdk-11
+      artifacts: true
+    - job: build:jdk-11
+      artifacts: true
+  script:
+    - mvn $MAVEN_CLI_OPTS verify sonar:sonar
+      -Dsonar.projectKey=$CI_PROJECT_PATH+$JAVA_JDKVERSION_TAG
+      -Dsonar.projectName=$CI_PROJECT_NAMESPACE/$ARTIFACT_ID+$JAVA_JDKVERSION_TAG
+      -Dsonar.projectVersion=$ARTIFACT_VERSION
+      -Dsonar.java.binaries=target
+      -Dsonar.sourceEncoding=UTF-8
+      -Dsonar.sources=src/main/java
+      -Dsonar.tests=src/test/java
+      -Dsonar.junit.reportPaths=target/surefire-reports
+      -Dsonar.language=java
+      -Dsonar.host.url=$SONARQUBE_HOST
+      -Dsonar.login=$SONARQUBE_TOKEN
+      -Dsonar.scm.disabled=true
+      -Dsonar.ws.timeout=120
 
 ###################### Upload Binaries ######################
 

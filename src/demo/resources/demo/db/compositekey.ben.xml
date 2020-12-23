@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.benerator.de/schema/1.0.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
+
+    <!-- define a database that will be referred by the id 'db' later -->
+    <database id="db" url="jdbc:hsqldb:hsql" driver="org.hsqldb.jdbcDriver" user="sa" tableFilter="db_.*"/>
+
+    <execute target="db" onError="warn">
+        DROP TABLE playlist;
+        DROP TABLE track;
+        DROP TABLE playlist_track;
+    </execute>
+
+    <execute target="db">
+        CREATE TABLE playlist (
+        PlaylistId int NOT NULL,
+        name varchar(16) NOT NULL,
+        PRIMARY KEY (PlaylistId)
+        );
+
+        CREATE TABLE track (
+        TrackId int NOT NULL,
+        name varchar(16) NOT NULL,
+        PRIMARY KEY (TrackId)
+        );
+
+        CREATE TABLE playlist_track (
+        PlaylistId int NOT NULL,
+        TrackId int NOT NULL,
+        name varchar(16) NOT NULL,
+        unique (PlaylistId, TrackId)
+        );
+    </execute>
+
+    <generate type="playlist" count="20" consumer="db">
+        <id name="PlaylistId" generator="IncrementGenerator"/>
+    </generate>
+
+    <generate type="track" count="20" consumer="db">
+        <id name="TrackId" generator="IncrementGenerator"/>
+    </generate>
+
+    <generate type="playlist_track" count="20" consumer="db">
+        <reference name="PlaylistId" source="db" targetType="Playlist" unique="True"/>
+        <reference name="TrackId" source="db" targetType="Track" unique="True"/>    
+    </generate>
+
+    <iterate type="playlist" source="db" consumer="ConsoleExporter"/>
+    <iterate type="track" source="db" consumer="ConsoleExporter"/>
+    <iterate type="playlist_track" source="db" consumer="ConsoleExporter"/>
+
+</setup>
+
