@@ -60,7 +60,7 @@ public class ResultSetEntityIterator implements DataIterator<Entity> {
     @Override
     public DataContainer<Entity> next(DataContainer<Entity> container) {
         try {
-            DataContainer<ResultSet> feed = source.next(new DataContainer<ResultSet>());
+            DataContainer<ResultSet> feed = source.next(new DataContainer<>());
             if (feed == null)
                 return null;
             ResultSet resultSet = feed.getData();

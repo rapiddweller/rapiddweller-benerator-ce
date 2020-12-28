@@ -57,9 +57,9 @@ public class WeightedDatasetCSVGenerator<E> extends AbstractDatasetGenerator<E> 
     private static final Logger LOGGER = LogManager.getLogger(WeightedDatasetCSVGenerator.class);
 
     protected String filenamePattern;
-    protected String encoding;
-    protected char separator;
-    protected Converter<String, E> converter;
+    protected final String encoding;
+    protected final char separator;
+    protected final Converter<String, E> converter;
 
 
     // constructors ----------------------------------------------------------------------------------------------------
@@ -104,11 +104,11 @@ public class WeightedDatasetCSVGenerator<E> extends AbstractDatasetGenerator<E> 
         LOGGER.debug("Creating weighted data set CSV generator for file {}", filename);
         if (IOUtil.isURIAvailable(filename)) {
             List<WeightedSample<E>> samples = CSVGeneratorUtil.parseFile(filename, separator, encoding, converter);
-            AttachedWeightSampleGenerator<E> generator = new AttachedWeightSampleGenerator<E>(generatedType);
+            AttachedWeightSampleGenerator<E> generator = new AttachedWeightSampleGenerator<>(generatedType);
             for (WeightedSample<E> sample : samples)
                 generator.addSample(sample.getValue(), sample.getWeight());
             if (samples.size() > 0)
-                return new AtomicDatasetGenerator<E>(generator, filename, dataset.getName());
+                return new AtomicDatasetGenerator<>(generator, filename, dataset.getName());
         }
         return null;
     }

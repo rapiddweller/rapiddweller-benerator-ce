@@ -43,9 +43,9 @@ import com.rapiddweller.script.math.ArithmeticEngine;
  */
 public class NumberQuantizer<E extends Number> extends ThreadSafeConverter<Number, E> {
 
-	private E min;
-	private E granularity;
-	private Class<E> numberType;
+	private final E min;
+	private final E granularity;
+	private final Class<E> numberType;
 
 	public NumberQuantizer(@Nullable E min, @Nullable E granularity, @NotNull Class<E> numberType) {
 	    super(Number.class, numberType);

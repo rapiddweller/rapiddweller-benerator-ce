@@ -39,9 +39,9 @@ import com.rapiddweller.benerator.Generator;
  */
 public class NullInjectingGeneratorProxy<E> extends GeneratorProxy<E> {
 	
-	private float nullQuota;
+	private final float nullQuota;
 	
-	private Random random;
+	private final Random random;
 	boolean closed;
 
     public NullInjectingGeneratorProxy(Generator<E> source, double nullQuota) {

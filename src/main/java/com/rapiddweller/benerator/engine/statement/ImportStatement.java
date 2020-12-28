@@ -42,10 +42,10 @@ import com.rapiddweller.benerator.engine.Statement;
 
 public class ImportStatement implements Statement {
 	
-	private boolean defaultImports;
-	private String[] classImports;
-	private String[] domainImports;
-	private List<PlatformDescriptor> platformImports;
+	private final boolean defaultImports;
+	private final String[] classImports;
+	private final String[] domainImports;
+	private final List<PlatformDescriptor> platformImports;
 
     public ImportStatement(boolean defaultImports, String[] classImports, String[] domainImports,
     		List<PlatformDescriptor> platformImports) {

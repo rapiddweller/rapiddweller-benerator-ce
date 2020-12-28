@@ -38,8 +38,8 @@ import java.util.List;
 
 public class AnonymizationSetup {
 	
-	List<String> files;
-	List<Anonymization> anonymizations;
+	final List<String> files;
+	final List<Anonymization> anonymizations;
 	
 	public AnonymizationSetup(List<String> files, List<Anonymization> anonymizations) {
 		this.files = files;

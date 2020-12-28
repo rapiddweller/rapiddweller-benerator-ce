@@ -41,8 +41,8 @@ import com.rapiddweller.commons.converter.ThreadSafeConverter;
  */
 public class DecimalQuantizer extends ThreadSafeConverter<Number, BigDecimal> {
 	
-	private BigDecimal min;
-	private BigDecimal granularity;
+	private final BigDecimal min;
+	private final BigDecimal granularity;
 
 	public DecimalQuantizer(BigDecimal min, BigDecimal granularity) {
 	    super(Number.class, BigDecimal.class);

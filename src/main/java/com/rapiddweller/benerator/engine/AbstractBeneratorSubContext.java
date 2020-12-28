@@ -49,9 +49,9 @@ import com.rapiddweller.model.data.TypeDescriptor;
  */
 public abstract class AbstractBeneratorSubContext implements BeneratorSubContext {
 
-	protected BeneratorContext parent;
-	protected String currentProductName;
-	private Context localContext;
+	protected final BeneratorContext parent;
+	protected final String currentProductName;
+	private final Context localContext;
 	
 	public AbstractBeneratorSubContext(String productName, BeneratorContext parent) {
 		this.currentProductName = productName;
@@ -351,14 +351,14 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
 	
 	@Override
 	public Set<String> keySet() {
-        Set<String> keySet = new HashSet<String>(parent.keySet());
+        Set<String> keySet = new HashSet<>(parent.keySet());
         keySet.addAll(localContext.keySet());
         return keySet;
 	}
 
 	@Override
 	public Set<Entry<String, Object>> entrySet() {
-		Set<Entry<String, Object>> entrySet = new HashSet<Entry<String,Object>>(parent.entrySet());
+		Set<Entry<String, Object>> entrySet = new HashSet<>(parent.entrySet());
 		entrySet.addAll(localContext.entrySet());
 		return entrySet;
 	}

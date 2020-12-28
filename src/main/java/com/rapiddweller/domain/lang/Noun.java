@@ -64,10 +64,10 @@ public class Noun {
 
     public static Collection<Noun> getInstances(Locale locale) throws IOException {
         Language language = Language.getInstance(locale);
-        Set<Noun> nouns = new HashSet<Noun>(500);
+        Set<Noun> nouns = new HashSet<>(500);
         String url = LocaleUtil.availableLocaleUrl("/com/rapiddweller/domain/lang/noun", locale, ".csv");
         CSVLineIterator iterator = new CSVLineIterator(url, ',', true);
-        DataContainer<String[]> container = new DataContainer<String[]>();
+        DataContainer<String[]> container = new DataContainer<>();
         while ((container = iterator.next(container)) != null) {
             String[] line = container.getData();
             String singular = (StringUtil.isEmpty(line[0]) ? null : line[0].trim());

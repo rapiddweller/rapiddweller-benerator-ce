@@ -62,7 +62,7 @@ public class TokenCombiner extends GeneratorProxy<String> implements NonNullGene
 	protected String encoding = Encodings.UTF_8;
 	protected boolean excludeSeed = false;
 	
-	protected Set<String> seed = new HashSet<String>();
+	protected final Set<String> seed = new HashSet<>();
 	
 	public TokenCombiner(String uri) {
 	    this(uri, false);
@@ -101,12 +101,11 @@ public class TokenCombiner extends GeneratorProxy<String> implements NonNullGene
     	this.excludeSeed = excludeSeed;
     }
 	
-	@SuppressWarnings("resource")
 	@Override
 	public synchronized void init(GeneratorContext context) {
 		Generator<String> source = new SimpleTokenCombinator(unique);
 		if (excludeSeed) { 
-			BlacklistValidator<String> validator = new BlacklistValidator<String>(seed);
+			BlacklistValidator<String> validator = new BlacklistValidator<>(seed);
 			source = WrapperFactory.applyValidator(validator, source);
 		}
 		super.setSource(source);
@@ -122,7 +121,6 @@ public class TokenCombiner extends GeneratorProxy<String> implements NonNullGene
 	
 	protected class SimpleTokenCombinator extends CompositeStringGenerator {
 		
-		@SuppressWarnings("unchecked")
 		SimpleTokenCombinator(boolean unique) {
 	        super(unique);
         }
@@ -135,14 +133,14 @@ public class TokenCombiner extends GeneratorProxy<String> implements NonNullGene
 				String absoluteUri = context.resolveRelativeUri(uri);
 		        CSVLineIterator iterator = new CSVLineIterator(absoluteUri, separator, true, encoding);
 		        int tokenCount = -1;
-		        DataContainer<String[]> container = new DataContainer<String[]>();
+		        DataContainer<String[]> container = new DataContainer<>();
 		        while ((container = iterator.next(container)) != null) {
 			        String[] tokens = container.getData();
 		        	if (sources == null) {
 		        		tokenCount = tokens.length;
 		        		sources = new NonNullSampleGenerator[tokenCount];
 		        		for (int i = 0; i < tokenCount; i++) {
-		        			sources[i] = new NonNullSampleGenerator<String>(String.class);
+		        			sources[i] = new NonNullSampleGenerator<>(String.class);
 		        			sources[i].setUnique(unique);
 		        		}
 		        	}

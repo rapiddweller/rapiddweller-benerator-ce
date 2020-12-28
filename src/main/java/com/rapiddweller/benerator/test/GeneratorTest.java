@@ -73,7 +73,7 @@ public abstract class GeneratorTest extends ModelTest {
     }
     
     public void setCurrentProduct(Object product, String productName) {
-    	((DefaultBeneratorContext) context).setCurrentProduct(new ProductWrapper<Object>(product), productName);
+    	((DefaultBeneratorContext) context).setCurrentProduct(new ProductWrapper<>(product), productName);
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -89,8 +89,8 @@ public abstract class GeneratorTest extends ModelTest {
     }
     
     public static <T> Map<T, AtomicInteger> countProducts(Generator<T> generator, int n) {
-    	ObjectCounter<T> counter = new ObjectCounter<T>(Math.min(n, 1000));
-    	ProductWrapper<T> wrapper = new ProductWrapper<T>();
+    	ObjectCounter<T> counter = new ObjectCounter<>(Math.min(n, 1000));
+    	ProductWrapper<T> wrapper = new ProductWrapper<>();
     	for (int i = 0; i < n; i++) {
     		wrapper = generator.generate(wrapper);
     		if (wrapper == null)
@@ -107,6 +107,7 @@ public abstract class GeneratorTest extends ModelTest {
 			ArrayUtil.equals(expected, actual));
 	}
 
+    @SafeVarargs
     protected static <T> Helper expectGeneratedSequence(Generator<T> generator, T ... products) {
         expectGeneratedSequenceOnce(generator, products);
         generator.reset();
@@ -114,14 +115,16 @@ public abstract class GeneratorTest extends ModelTest {
         return new Helper(generator);
     }
 
-    protected <T> Helper expectGeneratedSet(Generator<T> generator, int invocations, T ... products) {
+    @SafeVarargs
+    protected final <T> Helper expectGeneratedSet(Generator<T> generator, int invocations, T... products) {
         expectGeneratedSetOnce(generator, invocations, products);
         generator.reset();
         expectGeneratedSetOnce(generator, invocations, products);
         return new Helper(generator);
     }
 
-    protected <T> Helper expectUniquelyGeneratedSet(Generator<T> generator, T ... products) {
+    @SafeVarargs
+    protected final <T> Helper expectUniquelyGeneratedSet(Generator<T> generator, T... products) {
         expectUniquelyGeneratedSetOnce(generator, products);
         generator.reset();
         expectUniquelyGeneratedSetOnce(generator, products);
@@ -181,6 +184,7 @@ public abstract class GeneratorTest extends ModelTest {
 
     // Number generator tests ------------------------------------------------------------------------------------------
 
+    @SafeVarargs
     public static <T extends Number> void checkEqualDistribution(
             Class<? extends AbstractNonNullNumberGenerator<T>> generatorClass, T min, T max, T granularity,
             int iterations, double tolerance, T ... expectedValues) {
@@ -201,8 +205,8 @@ public abstract class GeneratorTest extends ModelTest {
         generator.setMin(min);
         generator.setMax(max);
         generator.setGranularity(granularity);
-        ObjectCounter<T> counter = new ObjectCounter<T>(expectedSet != null ? expectedSet.size() : 10);
-        ProductWrapper<T> wrapper = new ProductWrapper<T>();
+        ObjectCounter<T> counter = new ObjectCounter<>(expectedSet != null ? expectedSet.size() : 10);
+        ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (int i = 0; i < iterations; i++)
             counter.count(generator.generate(wrapper).unwrap());
         checkDistribution(counter, equalDistribution, tolerance, expectedSet);
@@ -221,8 +225,8 @@ public abstract class GeneratorTest extends ModelTest {
 
     private static <T> void checkDistribution(Generator<T> generator,
             int iterations, boolean equalDistribution, double tolerance, Set<T> expectedSet) {
-        ObjectCounter<T> counter = new ObjectCounter<T>(expectedSet != null ? expectedSet.size() : 10);
-        ProductWrapper<T> wrapper = new ProductWrapper<T>();
+        ObjectCounter<T> counter = new ObjectCounter<>(expectedSet != null ? expectedSet.size() : 10);
+        ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (int i = 0; i < iterations; i++)
             counter.count(generator.generate(wrapper).unwrap());
         checkDistribution(counter, equalDistribution, tolerance, expectedSet);
@@ -230,7 +234,7 @@ public abstract class GeneratorTest extends ModelTest {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	protected static void expectRelativeWeights(Generator<?> generator, int iterations, Object... expectedValueWeightPairs) {
-	    ObjectCounter<Object> counter = new ObjectCounter<Object>(expectedValueWeightPairs.length / 2);
+	    ObjectCounter<Object> counter = new ObjectCounter<>(expectedValueWeightPairs.length / 2);
         ProductWrapper wrapper = new ProductWrapper();
 	    for (int i = 0; i < iterations; i++) {
 	    	wrapper = generator.generate(wrapper);
@@ -265,7 +269,7 @@ public abstract class GeneratorTest extends ModelTest {
 
     private static <E> void checkDistribution(Collection<E> collection,
                                               boolean equalDistribution, double tolerance, Set<E> expectedSet) {
-        ObjectCounter<E> counter = new ObjectCounter<E>(expectedSet != null ? expectedSet.size() : 10);
+        ObjectCounter<E> counter = new ObjectCounter<>(expectedSet != null ? expectedSet.size() : 10);
         for (E object : collection)
             counter.count(object);
         checkDistribution(counter, equalDistribution, tolerance, expectedSet);
@@ -287,7 +291,7 @@ public abstract class GeneratorTest extends ModelTest {
     }
 
     public static class Helper {
-        private Generator<?> generator;
+        private final Generator<?> generator;
 
         public Helper(Generator<?> generator) {
             this.generator = generator;
@@ -308,9 +312,10 @@ public abstract class GeneratorTest extends ModelTest {
 
     // private helpers -------------------------------------------------------------------------------------------------
 
+    @SafeVarargs
     protected static <T> void expectGeneratedSequenceOnce(Generator<T> generator, T... products) {
     	int count = 0;
-        ProductWrapper<T> wrapper = new ProductWrapper<T>();
+        ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (T expectedProduct : products) {
             wrapper = generator.generate(wrapper);
             assertNotNull("Generator is unavailable after generating " + count + " of " + products.length + " products: " + generator, wrapper);
@@ -323,10 +328,11 @@ public abstract class GeneratorTest extends ModelTest {
         }
     }
 
-    private <T> void expectGeneratedSetOnce(Generator<T> generator, int invocations, T... expectedProducts) {
+    @SafeVarargs
+    private final <T> void expectGeneratedSetOnce(Generator<T> generator, int invocations, T... expectedProducts) {
         Set<T> expectedSet = CollectionUtil.toSet(expectedProducts);
-        Set<T> observedSet = new HashSet<T>(expectedProducts.length);
-        ProductWrapper<T> wrapper = new ProductWrapper<T>();
+        Set<T> observedSet = new HashSet<>(expectedProducts.length);
+        ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (int i = 0; i < invocations; i++) {
         	wrapper = generator.generate(wrapper);
             assertNotNull("Generator has gone unavailable. " +
@@ -341,10 +347,11 @@ public abstract class GeneratorTest extends ModelTest {
         assertEquals(expectedSet, observedSet);
     }
 
-    private <T>void expectUniquelyGeneratedSetOnce(Generator<T> generator, T... expectedProducts) {
+    @SafeVarargs
+    private final <T>void expectUniquelyGeneratedSetOnce(Generator<T> generator, T... expectedProducts) {
         Set<T> expectedSet = CollectionUtil.toSet(expectedProducts);
-        UniqueValidator<Object> validator = new UniqueValidator<Object>();
-        ProductWrapper<T> wrapper = new ProductWrapper<T>();
+        UniqueValidator<Object> validator = new UniqueValidator<>();
+        ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (int i = 0; i < expectedProducts.length; i++) {
         	wrapper = generator.generate(wrapper);
             assertNotNull("Generator has gone unavailable after " + i + " products, " +
@@ -358,8 +365,8 @@ public abstract class GeneratorTest extends ModelTest {
     }
 
     private <T>void expectUniqueProductsOnce(Generator<T> generator, int n) {
-        UniqueValidator<T> validator = new UniqueValidator<T>();
-        ProductWrapper<T> wrapper = new ProductWrapper<T>();
+        UniqueValidator<T> validator = new UniqueValidator<>();
+        ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (int i = 0; i < n; i++) {
         	wrapper = generator.generate(wrapper);
             assertNotNull("Generator is not available: " + generator, wrapper);
@@ -369,8 +376,9 @@ public abstract class GeneratorTest extends ModelTest {
         }
     }
 
-    private <T> void expectGenerationsOnce(Generator<T> generator, int n, Validator<T> ... validators) {
-        ProductWrapper<T> wrapper = new ProductWrapper<T>();
+    @SafeVarargs
+    private final <T> void expectGenerationsOnce(Generator<T> generator, int n, Validator<T>... validators) {
+        ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (int i = 0; i < n; i++) {
         	wrapper = generator.generate(wrapper);
             assertNotNull("Generator has gone unavailable before creating the required number of products, " +
@@ -386,9 +394,10 @@ public abstract class GeneratorTest extends ModelTest {
         }
     }
 
-    private <T> void expectUniqueGenerationsOnce(Generator<T> generator, int n, Validator<T> ... validators) {
-        UniqueValidator<T> validator = new UniqueValidator<T>();
-        ProductWrapper<T> wrapper = new ProductWrapper<T>();
+    @SafeVarargs
+    private final <T> void expectUniqueGenerationsOnce(Generator<T> generator, int n, Validator<T>... validators) {
+        UniqueValidator<T> validator = new UniqueValidator<>();
+        ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (int i = 0; i < n; i++) {
         	wrapper = generator.generate(wrapper);
             assertNotNull("Generator has gone unavailable before creating the required number of products ",
@@ -401,7 +410,7 @@ public abstract class GeneratorTest extends ModelTest {
     }
 
     protected <T extends Comparable<T>> void expectRangeOnce(Generator<T> generator, int n, T min, T max) {
-        ProductWrapper<T> wrapper = new ProductWrapper<T>();
+        ProductWrapper<T> wrapper = new ProductWrapper<>();
 	    for (int i = 0; i < n; i++) {
         	wrapper = generator.generate(wrapper);
     		assertNotNull(wrapper);

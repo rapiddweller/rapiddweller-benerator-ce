@@ -64,8 +64,8 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
 		assertAtLeastOneAttributeIsSet(element, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS, ATT_CLASS);
 		
 		// prepare parsing
-		ArrayBuilder<String> classImports = new ArrayBuilder<String>(String.class); 
-		ArrayBuilder<String> domainImports = new ArrayBuilder<String>(String.class); 
+		ArrayBuilder<String> classImports = new ArrayBuilder<>(String.class);
+		ArrayBuilder<String> domainImports = new ArrayBuilder<>(String.class);
 		
 		// defaults import
 		boolean defaults = ("true".equals(element.getAttribute("defaults")));
@@ -91,7 +91,7 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
 	}
 
 	private static List<PlatformDescriptor> importPlatforms(String[] platformNames, BeneratorParseContext context) {
-		List<PlatformDescriptor> platforms = new ArrayList<PlatformDescriptor>(platformNames.length);
+		List<PlatformDescriptor> platforms = new ArrayList<>(platformNames.length);
 		for (String platformName : platformNames) {
 			PlatformDescriptor platformDescriptor = createPlatformDescriptor(platformName);
 			List<XMLElementParser<Statement>> parsers = platformDescriptor.getParsers();
@@ -111,8 +111,7 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
 			return (PlatformDescriptor) BeanUtil.newInstance(descriptorClassName);
 		} catch (RuntimeException e) {
 			if (ExceptionUtil.getRootCause(e) instanceof ClassNotFoundException) { // TODO test
-				DefaultPlatformDescriptor descriptor = new DefaultPlatformDescriptor(platformPackage);
-				return descriptor;
+                return new DefaultPlatformDescriptor(platformPackage);
 			} else
 				throw e;
 		}

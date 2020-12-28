@@ -63,8 +63,7 @@ public class ProductWrapper<E> {
 	}
 	
 	public E unwrap() {
-		E result = this.product;
-		return result;
+        return this.product;
 	}
 	
 	public String getTag(String key) {
@@ -73,7 +72,7 @@ public class ProductWrapper<E> {
 	
 	public ProductWrapper<E> setTag(String key, String value) {
 		if (tags == null)
-			tags = new HashMap<String, String>();
+			tags = new HashMap<>();
 		tags.put(key, value);
 		return this;
 	}

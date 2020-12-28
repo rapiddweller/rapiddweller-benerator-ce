@@ -76,24 +76,24 @@ public class StochasticGeneratorFactory extends GeneratorFactory {
 	public <T> Generator<T> createAlternativeGenerator(Class<T> targetType, Generator<T>[] sources, 
 			Uniqueness uniqueness) {
 		if (uniqueness == Uniqueness.ORDERED)
-			return new GeneratorChain<T>(targetType, uniqueness.isUnique(), sources);
+			return new GeneratorChain<>(targetType, uniqueness.isUnique(), sources);
 		else
-			return new AlternativeGenerator<T>(targetType, sources);
+			return new AlternativeGenerator<>(targetType, sources);
 	}
 
 	@Override
 	public <T> Generator<T[]> createCompositeArrayGenerator(
 			Class<T> componentType, Generator<T>[] sources, Uniqueness uniqueness) {
         if (uniqueness.isUnique())
-        	return new UniqueMultiSourceArrayGenerator<T>(componentType, sources);
+        	return new UniqueMultiSourceArrayGenerator<>(componentType, sources);
         else
-        	return new SimpleMultiSourceArrayGenerator<T>(componentType, sources);
+        	return new SimpleMultiSourceArrayGenerator<>(componentType, sources);
 	}
 
 	@Override
 	public <T> Generator<T> createSampleGenerator(Collection<T> values,
 			Class<T> generatedType, boolean unique) {
-        SampleGenerator<T> generator = new SampleGenerator<T>(generatedType, values);
+        SampleGenerator<T> generator = new SampleGenerator<>(generatedType, values);
         generator.setUnique(unique);
 		return generator;
 	}
@@ -104,14 +104,13 @@ public class StochasticGeneratorFactory extends GeneratorFactory {
             Distribution distribution, boolean unique) {
 	    WeightedSample<T>[] samples = (WeightedSample<T>[]) DatabeneScriptParser.parseWeightedLiteralList(valueSpec);
 	    if (distribution == null && !unique && weightsUsed(samples)) {
-	    	AttachedWeightSampleGenerator<T> generator = new AttachedWeightSampleGenerator<T>(targetType);
-	    	for (int i = 0; i < samples.length; i++) {
-	    		WeightedSample<T> sample = samples[i];
-	    		if (sample.getValue() == null)
-	    			throw new ConfigurationError("null is not supported in values='...', drop it from the list and " +
-	    					"use a nullQuota instead");
-	    		generator.addSample(sample.getValue(), sample.getWeight());
-	    	}
+	    	AttachedWeightSampleGenerator<T> generator = new AttachedWeightSampleGenerator<>(targetType);
+			for (WeightedSample<T> sample : samples) {
+				if (sample.getValue() == null)
+					throw new ConfigurationError("null is not supported in values='...', drop it from the list and " +
+							"use a nullQuota instead");
+				generator.addSample(sample.getValue(), sample.getWeight());
+			}
 	    	return generator;
 	    } else {
 	    	String[] values = new String[samples.length];
@@ -120,8 +119,8 @@ public class StochasticGeneratorFactory extends GeneratorFactory {
 				String value = ToStringConverter.convert(rawValue, null);
 	    		values[i] = value;
 	    	}
-	        IteratingGenerator<String> source = new IteratingGenerator<String>(
-	        		new ArrayIterable<String>(values, String.class));
+	        IteratingGenerator<String> source = new IteratingGenerator<>(
+                    new ArrayIterable<>(values, String.class));
 	        if (distribution == null)
 	        	distribution = SequenceManager.RANDOM_SEQUENCE;
 	        Generator<T> gen = WrapperFactory.applyConverter(source, ConverterManager.getInstance().createConverter(
@@ -168,9 +167,9 @@ public class StochasticGeneratorFactory extends GeneratorFactory {
     @Override
 	public <T> Generator<T> createSingleValueGenerator(T value, boolean unique) {
     	if (unique)
-    		return new OneShotGenerator<T>(value);
+    		return new OneShotGenerator<>(value);
     	else
-    		return new ConstantGenerator<T>(value);
+    		return new ConstantGenerator<>(value);
     }
     
     @Override
@@ -208,14 +207,14 @@ public class StochasticGeneratorFactory extends GeneratorFactory {
 
 	@Override
 	public <T> Generator<T> createNullGenerator(Class<T> generatedType) {
-		return new ConstantGenerator<T>(null, generatedType);
+		return new ConstantGenerator<>(null, generatedType);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public NonNullGenerator<String> createCompositeStringGenerator(
 			GeneratorProvider<?> partGeneratorProvider, int minParts, int maxParts, Uniqueness uniqueness) {
-		AlternativeGenerator<String> result = new AlternativeGenerator<String>(String.class);
+		AlternativeGenerator<String> result = new AlternativeGenerator<>(String.class);
 		for (int partCount = minParts; partCount <= maxParts; partCount++) {
 			Generator<String>[] sources = new Generator[partCount];
 			for (int i = 0; i < partCount; i++)

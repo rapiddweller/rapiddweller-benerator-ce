@@ -47,10 +47,10 @@ import com.rapiddweller.commons.mutator.AnyMutator;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class DefaultEntryConverter extends AbstractConverter<Map.Entry, Map.Entry> {
     
-    private BeneratorContext context;
-    private Converter<?, ?> preprocessor;
-    private LiteralParser stringParser;
-    private boolean putEntriesToContext;
+    private final BeneratorContext context;
+    private final Converter<?, ?> preprocessor;
+    private final LiteralParser stringParser;
+    private final boolean putEntriesToContext;
 
     public DefaultEntryConverter(BeneratorContext context) {
         this(new NoOpConverter(), context, false);
@@ -76,7 +76,7 @@ public class DefaultEntryConverter extends AbstractConverter<Map.Entry, Map.Entr
     		else
     			context.setGlobal(key, result);
         }
-        return new MapEntry<String, Object>(key, result);
+        return new MapEntry<>(key, result);
     }
 
 	@Override

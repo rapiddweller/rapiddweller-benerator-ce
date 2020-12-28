@@ -66,13 +66,12 @@ public class GenderGenerator extends NonNullGeneratorProxy<Gender> {
         return Gender.class;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public synchronized void init(GeneratorContext context) {
         assertNotInitialized();
         List<WeightedSample<Gender>> samples = CollectionUtil.toList(
-                new WeightedSample<Gender>(Gender.FEMALE, femaleQuota),
-                new WeightedSample<Gender>(Gender.MALE, 1 - femaleQuota)
+                new WeightedSample<>(Gender.FEMALE, femaleQuota),
+                new WeightedSample<>(Gender.MALE, 1 - femaleQuota)
         );
         Generator<Gender> source = context.getGeneratorFactory().createWeightedSampleGenerator(samples, Gender.class);
         setSource(WrapperFactory.asNonNullGenerator(source));

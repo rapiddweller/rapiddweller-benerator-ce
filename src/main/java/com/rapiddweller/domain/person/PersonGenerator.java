@@ -91,7 +91,7 @@ public class PersonGenerator extends CompositeGenerator<Person>
         this.locale = locale;
         genderGen = registerComponent(new GenderGenerator(0.5));
         birthDateGenerator = registerComponent(new BirthDateGenerator(15, 105));
-        this.femaleFamilyNameConverters = new HashMap<String, Converter<String, String>>();
+        this.femaleFamilyNameConverters = new HashMap<>();
     }
 
     // properties ------------------------------------------------------------------------------------------------------
@@ -222,7 +222,7 @@ public class PersonGenerator extends CompositeGenerator<Person>
     // private helpers -------------------------------------------------------------------------------------------------
 
     private String randomDataset() {
-        return maleGivenNameGen.generate(new ProductWrapper<String>()).getTag(DatasetUtil.REGION_NESTING);
+        return maleGivenNameGen.generate(new ProductWrapper<>()).getTag(DatasetUtil.REGION_NESTING);
     }
 
     private Converter<String, String> getFemaleFamilyNameConverter(String usedDataset) {

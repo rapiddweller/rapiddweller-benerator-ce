@@ -50,7 +50,7 @@ public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String> impl
 
     // default instance management -------------------------------------------------------------------------------------
 
-    private static final Map<String, Generator<String>> defaultInstances = new HashMap<String, Generator<String>>();
+    private static final Map<String, Generator<String>> defaultInstances = new HashMap<>();
 
     public GivenNameGenerator() {
         this(Locale.getDefault().getCountry(), Gender.MALE);
@@ -74,7 +74,7 @@ public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String> impl
         String key = datasetName + '-' + gender;
         Generator<String> instance = defaultInstances.get(key);
         if (instance == null) {
-            instance = new SharedGenerator<String>(new GivenNameGenerator(datasetName, gender));
+            instance = new SharedGenerator<>(new GivenNameGenerator(datasetName, gender));
             defaultInstances.put(key, instance);
         }
         return instance;

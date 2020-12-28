@@ -39,7 +39,7 @@ import com.rapiddweller.benerator.distribution.CumulativeDistributionFunction;
  */
 public class ExponentialDensityIntegral extends CumulativeDistributionFunction {
 
-	private double a;
+	private final double a;
 	
 	public ExponentialDensityIntegral(double a) {
 		if (a <= 0)

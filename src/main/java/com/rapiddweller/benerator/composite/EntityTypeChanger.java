@@ -40,7 +40,7 @@ import com.rapiddweller.model.data.Entity;
  */
 public class EntityTypeChanger extends ThreadSafeConverter<Entity, Entity> {
 	
-	private ComplexTypeDescriptor targetType;
+	private final ComplexTypeDescriptor targetType;
 	
 	public EntityTypeChanger(ComplexTypeDescriptor targetType) {
 	    super(Entity.class, Entity.class);

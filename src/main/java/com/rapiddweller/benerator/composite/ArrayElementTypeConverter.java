@@ -43,7 +43,7 @@ import com.rapiddweller.script.PrimitiveType;
  */
 public class ArrayElementTypeConverter extends AbstractConverter<Object[], Object[]>{
 
-	private ArrayTypeDescriptor type;
+	private final ArrayTypeDescriptor type;
 
 	public ArrayElementTypeConverter(ArrayTypeDescriptor type) {
 		super(Object[].class, Object[].class);

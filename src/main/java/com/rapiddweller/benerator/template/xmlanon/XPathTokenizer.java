@@ -39,7 +39,7 @@ import java.util.List;
 public class XPathTokenizer {
 	
 	public static List<String> tokenize(String path) {
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<>();
 		int depth = 0;
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < path.length(); i++) {

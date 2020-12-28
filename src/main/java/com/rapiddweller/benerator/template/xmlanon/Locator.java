@@ -36,11 +36,11 @@ package com.rapiddweller.benerator.template.xmlanon;
 
 public class Locator {
 	
-	private String file;
-	private String path;
-	private String entityPath;
-	private String entity;
-	private String attribute;
+	private final String file;
+	private final String path;
+	private final String entityPath;
+	private final String entity;
+	private final String attribute;
 	
 	public Locator(String file, String path, String entityPath, String entity, String attribute) {
 		this.file = file;

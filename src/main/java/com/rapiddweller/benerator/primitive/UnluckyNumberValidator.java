@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.primitive;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -156,9 +157,8 @@ public class UnluckyNumberValidator extends AbstractConstraintValidator<UnluckyN
 
     private static Set<String> parseNumberSpec(String spec) {
 	    String[] tokens = StringUtil.tokenize(spec, ',');
-	    Set<String> set = new HashSet<String>();
-	    for (String token: tokens)
-	    	set.add(token);
+	    Set<String> set = new HashSet<>();
+        set.addAll(Arrays.asList(tokens));
 	    return set;
     }
 

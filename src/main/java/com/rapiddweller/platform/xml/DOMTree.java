@@ -145,13 +145,13 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
         try {
             NodeList nodes = XPathUtil.queryNodes(document, selector);
             LOGGER.debug("queryEntities() found {} results", nodes.getLength());
-            List<Entity> list = new ArrayList<Entity>(nodes.getLength());
+            List<Entity> list = new ArrayList<>(nodes.getLength());
             for (int i = 0; i < nodes.getLength(); i++) {
                 Element element = (Element) nodes.item(i);
                 Entity entity = XMLPlatformUtil.convertElement2Entity(element, this);
                 list.add(entity);
             }
-            return new DataSourceFromIterable<Entity>(list, Entity.class);
+            return new DataSourceFromIterable<>(list, Entity.class);
         } catch (XPathExpressionException e) {
             throw new RuntimeException("Error querying " + (type != null ? type : "") + " elements with xpath: " + selector, e);
         }
@@ -169,12 +169,12 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
         try {
             NodeList nodes = XPathUtil.queryNodes(document, selector);
             LOGGER.debug("query() found {} results", nodes.getLength());
-            List<Object> list = new ArrayList<Object>(nodes.getLength());
+            List<Object> list = new ArrayList<>(nodes.getLength());
             for (int i = 0; i < nodes.getLength(); i++) {
                 Node node = nodes.item(i);
                 list.add(node.getTextContent());
             }
-            return new DataSourceFromIterable<Object>(list, Object.class);
+            return new DataSourceFromIterable<>(list, Object.class);
         } catch (XPathExpressionException e) {
             throw new RuntimeException("Error querying items with xpath: " + selector, e);
         }

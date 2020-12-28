@@ -47,7 +47,7 @@ public class ArrayTypeDescriptor extends TypeDescriptor {
 
     public ArrayTypeDescriptor(String name, DescriptorProvider provider, ArrayTypeDescriptor parent) {
         super(name, provider, parent);
-        this.elements = new TreeMap<Integer, ArrayElementDescriptor>();
+        this.elements = new TreeMap<>();
     }
 
     // element handling ------------------------------------------------------------------------------------------------

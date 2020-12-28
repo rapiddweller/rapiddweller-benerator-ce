@@ -76,7 +76,7 @@ public class AllSheetsXLSEntityIterator implements DataIterator<Entity>, Context
     // constructors ----------------------------------------------------------------------------------------------------
 
     public AllSheetsXLSEntityIterator(String uri) throws IOException, InvalidFormatException {
-        this(uri, new NoOpConverter<String>(), null, false);
+        this(uri, new NoOpConverter<>(), null, false);
     }
 
     public AllSheetsXLSEntityIterator(String uri, Converter<String, ?> preprocessor, ComplexTypeDescriptor entityDescriptor, boolean formatted)
@@ -95,10 +95,10 @@ public class AllSheetsXLSEntityIterator implements DataIterator<Entity>, Context
 
     public static List<Entity> parseAll(String uri, Converter<String, ?> preprocessor, boolean formatted)
             throws IOException, InvalidFormatException {
-        List<Entity> list = new ArrayList<Entity>();
+        List<Entity> list = new ArrayList<>();
         AllSheetsXLSEntityIterator iterator = new AllSheetsXLSEntityIterator(uri, preprocessor, null, formatted);
         iterator.setContext(new DefaultBeneratorContext());
-        DataContainer<Entity> container = new DataContainer<Entity>();
+        DataContainer<Entity> container = new DataContainer<>();
         while ((container = iterator.next(container)) != null)
             list.add(container.getData());
         return list;

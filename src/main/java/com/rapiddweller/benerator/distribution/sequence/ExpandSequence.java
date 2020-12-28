@@ -46,9 +46,9 @@ import static com.rapiddweller.commons.NumberUtil.*;
  */
 public class ExpandSequence extends Sequence {
 
-	private Integer cacheSize;
-	private Integer bucketSize;
-	private Float duplicationQuota;
+	private final Integer cacheSize;
+	private final Integer bucketSize;
+	private final Float duplicationQuota;
 	
 	// construction ----------------------------------------------------------------------------------------------------
 	
@@ -80,13 +80,13 @@ public class ExpandSequence extends Sequence {
 		NonNullGenerator<T> source = SequenceManager.STEP_SEQUENCE.createNumberGenerator(numberType, min, max, granularity, unique);
 		int cacheSize = cacheSize(min, max, granularity);
 		return WrapperFactory.asNonNullGenerator(
-				new ExpandGeneratorProxy<T>(source, duplicationQuota(unique), cacheSize, bucketSize(cacheSize)));
+				new ExpandGeneratorProxy<>(source, duplicationQuota(unique), cacheSize, bucketSize(cacheSize)));
 	}
 
 	@Override
 	public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
 	    int cacheSize = cacheSize();
-		return new ExpandGeneratorProxy<T>(source, duplicationQuota(unique), cacheSize, bucketSize(cacheSize));
+		return new ExpandGeneratorProxy<>(source, duplicationQuota(unique), cacheSize, bucketSize(cacheSize));
 	}
 	
 	// helpers ---------------------------------------------------------------------------------------------------------

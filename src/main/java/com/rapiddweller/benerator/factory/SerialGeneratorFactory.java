@@ -72,18 +72,18 @@ public class SerialGeneratorFactory extends GeneratorFactory {
 	@Override
 	public <T> Generator<T> createAlternativeGenerator(
 			Class<T> targetType, Generator<T>[] sources, Uniqueness uniqueness) {
-		return new GeneratorChain<T>(targetType, uniqueness.isUnique(), sources);
+		return new GeneratorChain<>(targetType, uniqueness.isUnique(), sources);
 	}
 	
 	@Override
 	public <T> Generator<T[]> createCompositeArrayGenerator(
 			Class<T> componentType, Generator<T>[] sources, Uniqueness uniqueness) {
-    	return new SimpleMultiSourceArrayGenerator<T>(componentType, sources);
+    	return new SimpleMultiSourceArrayGenerator<>(componentType, sources);
 	}
 
 	@Override
 	public <T> Generator<T> createSampleGenerator(Collection<T> values, Class<T> generatedType, boolean unique) {
-        return new SequenceGenerator<T>(generatedType, values);
+        return new SequenceGenerator<>(generatedType, values);
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class SerialGeneratorFactory extends GeneratorFactory {
             Distribution distribution, boolean unique) {
 	    List<WeightedSample<?>> samples = CollectionUtil.toList(DatabeneScriptParser.parseWeightedLiteralList(valueSpec));
     	List<?> values = FactoryUtil.extractValues((List) samples);
-	    Converter<?, T> typeConverter = new AnyConverter<T>(targetType);
+	    Converter<?, T> typeConverter = new AnyConverter<>(targetType);
 	    Collection<T> convertedValues = ConverterManager.convertAll((List) values, typeConverter);
 	    return createSampleGenerator(convertedValues, targetType, true);
     }
@@ -135,15 +135,15 @@ public class SerialGeneratorFactory extends GeneratorFactory {
 		Generator<Character> charGenerator = createCharacterGenerator(chars);
 		Set<Integer> counts = defaultCounts(minLength, maxLength, lengthGranularity);
 		NonNullGenerator<Integer> lengthGenerator = WrapperFactory.asNonNullGenerator(
-				new SequenceGenerator<Integer>(Integer.class, counts));
-		return new EquivalenceStringGenerator<Character>(charGenerator, lengthGenerator);
+				new SequenceGenerator<>(Integer.class, counts));
+		return new EquivalenceStringGenerator<>(charGenerator, lengthGenerator);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public NonNullGenerator<String> createCompositeStringGenerator(
 			GeneratorProvider<?> partGeneratorProvider, int minParts, int maxParts, Uniqueness uniqueness) {
-		GeneratorChain<String> result = new GeneratorChain<String>(String.class, true);
+		GeneratorChain<String> result = new GeneratorChain<>(String.class, true);
 		Set<Integer> partCounts = defaultCounts(minParts, maxParts, 1);
 		for (int partCount : partCounts) {
 			Generator<String>[] sources = new Generator[partCount];
@@ -162,11 +162,11 @@ public class SerialGeneratorFactory extends GeneratorFactory {
     @Override
 	public NonNullGenerator<Character> createCharacterGenerator(Set<Character> characters) {
         return WrapperFactory.asNonNullGenerator(
-        		new SequenceGenerator<Character>(Character.class, characters));
+				new SequenceGenerator<>(Character.class, characters));
     }
 
 	protected Set<Integer> defaultCounts(int minCount, int maxCount, int countPrecision) {
-		Set<Integer> result = new TreeSet<Integer>();
+		Set<Integer> result = new TreeSet<>();
 		for (int i = minCount; i <= maxCount; i += countPrecision)
 			result.add(i);
 		return result;
@@ -174,12 +174,12 @@ public class SerialGeneratorFactory extends GeneratorFactory {
 
     @Override
 	public <T> Generator<T> createSingleValueGenerator(T value, boolean unique) {
-		return new OneShotGenerator<T>(value);
+		return new OneShotGenerator<>(value);
     }
 
 	@Override
 	public <T> Generator<T> createNullGenerator(Class<T> generatedType) {
-		return new OneShotGenerator<T>(null, generatedType);
+		return new OneShotGenerator<>(null, generatedType);
 	}
 
     @Override

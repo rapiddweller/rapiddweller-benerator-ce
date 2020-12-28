@@ -62,7 +62,7 @@ public class SeedWordGenerator extends NonNullGeneratorWrapper<Character[], Stri
 	private static SeedGenerator<Character> createSource(Iterator<String> seed, int depth) {
 		if (seed == null)
 			seed = defaultNounIterator();
-		SeedGenerator<Character> result = new SeedGenerator<Character>(Character.class, depth);
+		SeedGenerator<Character> result = new SeedGenerator<>(Character.class, depth);
 	    while (seed.hasNext()) {
 			char[] charArray = seed.next().toCharArray();
 			Character[] objectSample = new Character[charArray.length];
@@ -107,7 +107,7 @@ public class SeedWordGenerator extends NonNullGeneratorWrapper<Character[], Stri
 
     private static Iterator<String> getNounIterator(Locale locale) throws IOException {
     	Collection<Noun> nouns = Noun.getInstances(locale);
-    	Set<String> words = new HashSet<String>(nouns.size() * 2);
+    	Set<String> words = new HashSet<>(nouns.size() * 2);
     	for (Noun noun : nouns) {
     		if (noun.getSingular() != null)
     			words.add(noun.getSingular());

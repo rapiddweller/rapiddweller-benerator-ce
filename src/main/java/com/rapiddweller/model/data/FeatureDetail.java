@@ -55,7 +55,7 @@ public class FeatureDetail<E> {
     // constructors ----------------------------------------------------------------------------------------------------
 
     public FeatureDetail(String name, Class<E> type, boolean constraint) {
-        this(name, type, constraint, new FirstArgSelector<E>());
+        this(name, type, constraint, new FirstArgSelector<>());
     }
 
     public FeatureDetail(String name, Class<E> type, boolean constraint, Operation<E, E> combinator) {

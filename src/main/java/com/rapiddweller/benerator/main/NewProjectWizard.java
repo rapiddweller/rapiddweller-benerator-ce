@@ -54,8 +54,8 @@ public class NewProjectWizard extends JFrame {
 	
 	private static final long serialVersionUID = -359209516189875124L;
 
-	I18NSupport i18n;
-	CreateProjectPanel mainPanel;
+	final I18NSupport i18n;
+	final CreateProjectPanel mainPanel;
 
 	public NewProjectWizard() {
 		setIcons("com/rapiddweller/benerator/gui/benerator{0}.png", 16, 32, 64, 128);
@@ -80,7 +80,7 @@ public class NewProjectWizard extends JFrame {
 	}
 
 	private void setIcons(String pattern, int... sizes) {
-		List<Image> images = new ArrayList<Image>();
+		List<Image> images = new ArrayList<>();
 		for (int size : sizes) {
 			String name = MessageFormat.format(pattern, size);
 			images.add(new ImageIcon(name).getImage());

@@ -60,9 +60,9 @@ public class DefaultComponentParser extends AbstractBeneratorDescriptorParser {
 		return new XMLDefaultComponentsStatement(element);
 	}
 
-	class XMLDefaultComponentsStatement implements Statement {
+	static class XMLDefaultComponentsStatement implements Statement {
 		
-		private Element element;
+		private final Element element;
 
 	    public XMLDefaultComponentsStatement(Element element) {
 	    	this.element = element;

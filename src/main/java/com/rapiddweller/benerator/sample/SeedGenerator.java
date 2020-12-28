@@ -103,8 +103,7 @@ public class SeedGenerator<E> extends UnsafeNonNullGenerator<E[]>{
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
-	public E[] generate() {
+    public E[] generate() {
 		assertInitialized();
 	    List<E> tmp = CollectionUtil.toList((E) null);
 	    do {

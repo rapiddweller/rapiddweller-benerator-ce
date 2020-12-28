@@ -71,7 +71,7 @@ public class XmlAnonInputReader implements TemplateInputReader {
 		
 		// parse header information
 		int varnameColumnIndex = -1;
-		ArrayList<String> files = new ArrayList<String>();
+		ArrayList<String> files = new ArrayList<>();
 		Row headerRow = sheet.getRow(0);
 		Assert.notNull(headerRow, "header row");
 		for (int i = 0; i <= headerRow.getLastCellNum(); i++) {
@@ -91,7 +91,7 @@ public class XmlAnonInputReader implements TemplateInputReader {
 			throw new ConfigurationError("No files specified in Excel document " + xlsUri);
 		
 		// parse anonymization rows
-		List<Anonymization> anonymizations = new ArrayList<Anonymization>();
+		List<Anonymization> anonymizations = new ArrayList<>();
 		for (int rownum = 1; rownum <= sheet.getLastRowNum(); rownum++) {
 			Row row = sheet.getRow(rownum);
 			if (XLSUtil.isEmpty(row))

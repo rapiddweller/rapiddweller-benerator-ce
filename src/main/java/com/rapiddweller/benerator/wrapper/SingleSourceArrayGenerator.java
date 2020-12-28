@@ -43,8 +43,8 @@ import com.rapiddweller.commons.ArrayUtil;
  */
 public class SingleSourceArrayGenerator<S, P> extends CardinalGenerator<S, P> implements NonNullGenerator<P> {
 
-    private Class<S> componentType;
-    private Class<P> generatedType;
+    private final Class<S> componentType;
+    private final Class<P> generatedType;
 
     @SuppressWarnings("unchecked")
 	public SingleSourceArrayGenerator(Generator<S> source, Class<S> componentType,  
@@ -81,7 +81,7 @@ public class SingleSourceArrayGenerator<S, P> extends CardinalGenerator<S, P> im
     		return null;
     	// the following works for primitive types as well as for objects
         @SuppressWarnings("unchecked")
-		P array = (P) ArrayUtil.newInstance(componentType, size.intValue());
+		P array = (P) ArrayUtil.newInstance(componentType, size);
         for (int i = 0; i < size; i++) {
             ProductWrapper<S> component = generateFromSource();
             if (component == null)

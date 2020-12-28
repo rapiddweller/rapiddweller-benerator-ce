@@ -39,7 +39,7 @@ public class BeneratorShutdownHook extends Thread {
 
 	private static final Logger logger = LogManager.getLogger(BeneratorShutdownHook.class);
 	
-	private ResourceManager resourceManager;
+	private final ResourceManager resourceManager;
 	
 	public BeneratorShutdownHook(ResourceManager resourceManager) {
 	    this.resourceManager = resourceManager;

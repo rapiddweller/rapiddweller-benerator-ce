@@ -70,7 +70,6 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
 
     private String uri;
     private HSSFWorkbook workbook;
-    private HSSFCellStyle dateCellStyle;
 
     // constructors ----------------------------------------------------------------------------------------------------
 
@@ -154,10 +153,10 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
 
     private void createWorkbook() {
         this.workbook = new HSSFWorkbook();
-        this.dateCellStyle = workbook.createCellStyle();
+        HSSFCellStyle dateCellStyle = workbook.createCellStyle();
         HSSFDataFormat format = workbook.createDataFormat();
         short dateFormat = format.getFormat(getDatePattern());
-        this.dateCellStyle.setDataFormat(dateFormat);
+        dateCellStyle.setDataFormat(dateFormat);
     }
 
     private void writeHeaderRow(Entity entity, HSSFSheet sheet) {

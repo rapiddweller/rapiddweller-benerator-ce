@@ -58,7 +58,7 @@ public class State {
 
     public State(String id) {
         this.id = id;
-        this.cities = new OrderedMap<CityId, City>();
+        this.cities = new OrderedMap<>();
     }
 
     // properties ------------------------------------------------------------------------------------------------------

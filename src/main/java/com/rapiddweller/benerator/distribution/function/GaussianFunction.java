@@ -36,13 +36,13 @@ import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
 public class GaussianFunction extends AbstractWeightFunction {
 
     /** the average value */
-    private double average;
+    private final double average;
 
     /** the deviation */
-    private double deviation;
+    private final double deviation;
 
     /** a constant scale factor of the function */
-    private double scale;
+    private final double scale;
 
     // constructors ----------------------------------------------------------------------------------------------------
 

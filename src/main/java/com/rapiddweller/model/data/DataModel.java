@@ -52,7 +52,7 @@ public class DataModel {
 
     public DataModel() {
         this.acceptUnknownPrimitives = false;
-        this.providers = new HashMap<String, DescriptorProvider>();
+        this.providers = new HashMap<>();
         new PrimitiveDescriptorProvider(this);
         new BeanDescriptorProvider(this);
     }

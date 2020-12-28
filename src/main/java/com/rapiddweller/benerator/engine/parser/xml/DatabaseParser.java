@@ -69,7 +69,6 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
     }
 
 	@Override
-	@SuppressWarnings("unchecked")
     public DefineDatabaseStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
 		// check preconditions
 		assertAtLeastOneAttributeIsSet(element, ATT_ENVIRONMENT, ATT_DRIVER);
@@ -93,9 +92,9 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
 			Expression<Integer> fetchSize     = parseIntAttribute(ATT_FETCH_SIZE,                element, 100);
 			Expression<Boolean> readOnly      = parseBooleanExpressionAttribute(ATT_READ_ONLY,   element, false);
 			Expression<Boolean> lazy          = parseBooleanExpressionAttribute(ATT_LAZY,        element, true);
-			Expression<Boolean> acceptUnknownColumnTypes = new FallbackExpression<Boolean>(
-					parseBooleanExpressionAttribute(ATT_ACC_UNK_COL_TYPES, element), 
-					new GlobalAcceptUnknownSimpleTypeExpression());
+			Expression<Boolean> acceptUnknownColumnTypes = new FallbackExpression<>(
+                    parseBooleanExpressionAttribute(ATT_ACC_UNK_COL_TYPES, element),
+                    new GlobalAcceptUnknownSimpleTypeExpression());
 			return createDatabaseStatement(id, environment, url, driver, user,
 					password, catalog, schema, tableFilter, includeTables,
 					excludeTables, metaCache, batch, fetchSize, readOnly, lazy,

@@ -86,7 +86,7 @@ public abstract class GeneratorFactory {
      * @return a Boolean generator of the desired characteristics
      */
 	public Generator<Boolean> createBooleanGenerator(Double trueQuota) {
-    	SequenceGenerator<Boolean> generator = new SequenceGenerator<Boolean>(Boolean.class);
+    	SequenceGenerator<Boolean> generator = new SequenceGenerator<>(Boolean.class);
     	if (trueQuota == null || trueQuota < 1)
     		generator.addValue(false);
     	if (trueQuota == null || trueQuota > 0)
@@ -111,7 +111,7 @@ public abstract class GeneratorFactory {
             Distribution distribution, Uniqueness uniqueness) {
         Assert.notNull(numberType, "numberType");
         if (min != null && min.equals(max))
-            return WrapperFactory.asNonNullGenerator(new ConstantGenerator<T>(min));
+            return WrapperFactory.asNonNullGenerator(new ConstantGenerator<>(min));
         if (min == null)
         	min = defaultsProvider.defaultMin(numberType);
         if (granularity == null)
@@ -139,7 +139,7 @@ public abstract class GeneratorFactory {
      * @return a generator of the desired characteristics
      */
     public <T> Generator<T> createWeightedSampleGenerator(Collection<WeightedSample<T>> samples, Class<T> targetType) {
-    	AttachedWeightSampleGenerator<T> generator = new AttachedWeightSampleGenerator<T>(targetType);
+    	AttachedWeightSampleGenerator<T> generator = new AttachedWeightSampleGenerator<>(targetType);
         for (WeightedSample<T> sample : samples)
         	generator.addSample(sample.getValue(), sample.getWeight());
         return generator;
@@ -183,7 +183,7 @@ public abstract class GeneratorFactory {
     public Generator<Character> createCharacterGenerator(String pattern, Locale locale, boolean unique) {
         Set<Character> chars = FactoryUtil.fullLocaleCharSet(pattern, locale);
     	if (unique)
-	        return new SequenceGenerator<Character>(Character.class, chars);
+	        return new SequenceGenerator<>(Character.class, chars);
     	else
             return new CharacterGenerator(chars);
     }

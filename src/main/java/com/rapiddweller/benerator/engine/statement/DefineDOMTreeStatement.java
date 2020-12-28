@@ -46,14 +46,14 @@ import org.apache.logging.log4j.LogManager;
 
 public class DefineDOMTreeStatement implements Statement {
 	
-	private static Logger logger = LogManager.getLogger(DefineDOMTreeStatement.class);
+	private static final Logger logger = LogManager.getLogger(DefineDOMTreeStatement.class);
 	
-	private ResourceManager resourceManager;
+	private final ResourceManager resourceManager;
 	
-	private Expression<String>  id;
-	private Expression<String>  inputUri;
-	private Expression<String>  outputUri;
-	private Expression<Boolean> namespaceAware;
+	private final Expression<String>  id;
+	private final Expression<String>  inputUri;
+	private final Expression<String>  outputUri;
+	private final Expression<Boolean> namespaceAware;
 	
 	public DefineDOMTreeStatement(Expression<String> id, Expression<String> inputUri, 
 			Expression<String> outputUri, Expression<Boolean> namespaceAware, ResourceManager resourceManager) {

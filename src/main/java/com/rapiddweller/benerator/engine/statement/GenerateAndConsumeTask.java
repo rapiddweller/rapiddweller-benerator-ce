@@ -61,26 +61,26 @@ import com.rapiddweller.task.TaskResult;
  */
 public class GenerateAndConsumeTask implements Task, PageListener, ResourceManager, MessageHolder {
 
-	private String taskName;
+	private final String taskName;
     private BeneratorContext context;
-    private ResourceManager resourceManager;
+    private final ResourceManager resourceManager;
     
-    protected List<Statement> statements;
-    private List<ScopedLifeCycleHolder> scopeds;
+    protected final List<Statement> statements;
+    private final List<ScopedLifeCycleHolder> scopeds;
     private Expression<Consumer> consumerExpr;
 
-    private volatile AtomicBoolean initialized;
+    private final AtomicBoolean initialized;
     private Consumer consumer;
     private String message;
-	private String productName;
+	private final String productName;
     
     public GenerateAndConsumeTask(String taskName, String productName) {
     	this.taskName = taskName;
     	this.productName = productName;
         this.resourceManager = new ResourceManagerSupport();
         this.initialized = new AtomicBoolean(false);
-    	this.statements = new ArrayList<Statement>();
-    	this.scopeds = new ArrayList<ScopedLifeCycleHolder>();
+    	this.statements = new ArrayList<>();
+    	this.scopeds = new ArrayList<>();
     }
 
     // interface -------------------------------------------------------------------------------------------------------
@@ -183,8 +183,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
 		for (Statement statement : statements) {
 			statement = StatementUtil.getRealStatement(statement, context);
 		    if (statement instanceof ScopedLifeCycleHolder) {
-		    	@SuppressWarnings("resource")
-				ScopedLifeCycleHolder holder = (ScopedLifeCycleHolder) statement;
+		    	ScopedLifeCycleHolder holder = (ScopedLifeCycleHolder) statement;
 				holder.resetIfNeeded();
 		    } else if (statement instanceof Resettable) {
 		    	((Resettable) statement).reset();
@@ -289,8 +288,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
 		    	if (scope == null || productName.equals(scope))
 		    		scopeds.add(holder);
 		    } else if (statement instanceof GenerateOrIterateStatement) {
-		    	@SuppressWarnings("resource")
-				GenerateOrIterateStatement subGenerate = (GenerateOrIterateStatement) statement;
+		    	GenerateOrIterateStatement subGenerate = (GenerateOrIterateStatement) statement;
 		    	checkScopes(subGenerate.getTask().statements, subGenerate.getChildContext());
 		    }
 		}

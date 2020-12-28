@@ -41,8 +41,8 @@ import com.rapiddweller.script.expression.DynamicExpression;
  */
 public class ScriptExpression<E> extends DynamicExpression<E> {
 
-	private Script script;
-	private Expression<E> defaultValueExpression;
+	private final Script script;
+	private final Expression<E> defaultValueExpression;
 
     public ScriptExpression(String script) {
     	this(ScriptUtil.parseScriptText(script), (E) null);
@@ -53,7 +53,7 @@ public class ScriptExpression<E> extends DynamicExpression<E> {
     }
 
     public ScriptExpression(Script script, E defaultValue) {
-    	this(script, (defaultValue != null ? new ConstantExpression<E>(defaultValue) : null));
+    	this(script, (defaultValue != null ? new ConstantExpression<>(defaultValue) : null));
     }
 
     private ScriptExpression(Script script, Expression<E> defaultValueExpression) {
@@ -63,7 +63,7 @@ public class ScriptExpression<E> extends DynamicExpression<E> {
     
     public static <T> Expression<T> createWithDefaultExpression(
     		Script script, Expression<T> defaultValueExpression) {
-    	return new ScriptExpression<T>(script, defaultValueExpression);
+    	return new ScriptExpression<>(script, defaultValueExpression);
     }
 
 	@Override

@@ -60,14 +60,14 @@ public class HeadSequence extends Sequence {
 	
 	@Override
 	public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-	    return new NShotGeneratorProxy<T>(source, size);
+	    return new NShotGeneratorProxy<>(source, size);
 	}
 	
     @Override
 	public <T extends Number> NonNullGenerator<T> createNumberGenerator(
     		Class<T> numberType, T min, T max, T granularity, boolean unique) {
     	Generator<T> source = STEP_SEQ.createNumberGenerator(numberType, min, max, granularity, unique);
-		return WrapperFactory.asNonNullGenerator(new NShotGeneratorProxy<T>(source, size));
+		return WrapperFactory.asNonNullGenerator(new NShotGeneratorProxy<>(source, size));
 	}
 
 }

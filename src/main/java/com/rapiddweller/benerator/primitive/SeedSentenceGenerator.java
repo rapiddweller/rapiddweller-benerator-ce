@@ -51,7 +51,7 @@ public class SeedSentenceGenerator extends NonNullGeneratorWrapper<String[], Str
 	}
 
     public SeedSentenceGenerator(String seedUri, int depth) throws IOException {
-		super(new SeedGenerator<String>(String.class, depth));
+		super(new SeedGenerator<>(String.class, depth));
 		ReaderLineIterator iterator = new ReaderLineIterator(IOUtil.getReaderForURI(seedUri));
 		while (iterator.hasNext()) {
 			String line = iterator.next();

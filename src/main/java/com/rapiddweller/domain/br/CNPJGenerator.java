@@ -98,15 +98,14 @@ public class CNPJGenerator extends WeightedCSVSampleGenerator<String> implements
     private String generateCNPJ(String sufix) {
 
         StringBuilder buf = new StringBuilder();
-        ArrayList<Integer> digits = new ArrayList<Integer>();
+        ArrayList<Integer> digits = new ArrayList<>();
         for (int i = 0; i < 8; i++)
             digits.add(random.nextInt(9));
         for (int i = 0; i < 4; i++)
             digits.add(Integer.parseInt(sufix.substring(i, i + 1)));
         addDigits(digits);
 
-        for (int i = 0; i < digits.size(); i++)
-            buf.append(digits.get(i));
+        for (Integer digit : digits) buf.append(digit);
         if (this.formatted) {
             buf.insert(2, '.');
             buf.insert(6, '.');

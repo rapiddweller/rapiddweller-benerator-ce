@@ -43,9 +43,9 @@ import com.rapiddweller.benerator.wrapper.GeneratorProxy;
  */
 public class IndexBasedSampleGeneratorProxy<E> extends GeneratorProxy<E> {
 	
-	private Generator<E> dataProvider;
-	private Distribution distribution;
-	private boolean unique;
+	private final Generator<E> dataProvider;
+	private final Distribution distribution;
+	private final boolean unique;
 
 	public IndexBasedSampleGeneratorProxy(Generator<E> dataProvider, Distribution distribution, boolean unique) {
 		super(dataProvider.getGeneratedType());
@@ -77,7 +77,7 @@ public class IndexBasedSampleGeneratorProxy<E> extends GeneratorProxy<E> {
 
 	private void initMembers(GeneratorContext context) {
 		List<E> products = GeneratorUtil.allProducts(dataProvider);
-		SampleGenerator<E> sampleGen = new SampleGenerator<E>(
+		SampleGenerator<E> sampleGen = new SampleGenerator<>(
 				dataProvider.getGeneratedType(), distribution, unique, products);
 		sampleGen.init(context);
 		setSource(sampleGen);

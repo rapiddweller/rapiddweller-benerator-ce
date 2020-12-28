@@ -46,7 +46,7 @@ public class DefaultDescriptorProvider implements DescriptorProvider {
     private static final Logger logger = LogManager.getLogger(DefaultDescriptorProvider.class);
 
     protected DataModel dataModel;
-    protected Map<String, TypeDescriptor> typeMap;
+    protected final Map<String, TypeDescriptor> typeMap;
     protected String id;
     private final boolean redefinable;
 
@@ -55,7 +55,7 @@ public class DefaultDescriptorProvider implements DescriptorProvider {
     }
 
     public DefaultDescriptorProvider(String id, DataModel dataModel, boolean redefinable) {
-        this.typeMap = new OrderedNameMap<TypeDescriptor>();
+        this.typeMap = new OrderedNameMap<>();
         this.id = id;
         this.redefinable = redefinable;
         if (dataModel != null)

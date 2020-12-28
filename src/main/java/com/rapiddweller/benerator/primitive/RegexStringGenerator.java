@@ -57,7 +57,7 @@ public class RegexStringGenerator extends NonNullGeneratorProxy<String> {
 
     private int minLength;
 
-    private int maxLength;
+    private final int maxLength;
 
     // constructors ----------------------------------------------------------------------------------------------------
 

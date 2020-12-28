@@ -140,10 +140,9 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 	// private helpers -------------------------------------------------------------------------------------------------
 
 	private static List<String> createProfilerPath(Statement[] parentPath, Statement currentElement) {
-		List<String> path = new ArrayList<String>(parentPath != null ? parentPath.length + 1 : 1);
+		List<String> path = new ArrayList<>(parentPath != null ? parentPath.length + 1 : 1);
 		if (parentPath != null)
-			for (int i = 0; i < parentPath.length; i++)
-				path.add(parentPath[i].toString());
+			for (Statement statement : parentPath) path.add(statement.toString());
 		path.add(currentElement.toString());
 		return path;
 	}
@@ -201,7 +200,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 		String productName = getNameOrType(element);
 		
 		// calculate statements
-		List<Statement> statements = new ArrayList<Statement>();
+		List<Statement> statements = new ArrayList<>();
 		
 		// create base generator
     	Generator<?> base = MetaGeneratorFactory.createRootGenerator(descriptor, Uniqueness.NONE, context);
@@ -212,9 +211,8 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 		TypeDescriptor type = descriptor.getTypeDescriptor();
 		int arrayIndex = 0;
 		Element[] childElements = XMLUtil.getChildElements(element);
-		Set<String> handledMembers = new HashSet<String>();
-		for (int i = 0; i < childElements.length; i++) {
-			Element child = childElements[i];
+		Set<String> handledMembers = new HashSet<>();
+		for (Element child : childElements) {
 			String childName = XMLUtil.localName(child);
 			// handle configured member/variable elements
 			InstanceDescriptor componentDescriptor = null;
@@ -302,7 +300,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 	}
 
 	private static Expression<Consumer> parseConsumers(Element entityElement, boolean consumersExpected, ResourceManager resourceManager) {
-		return new CachedExpression<Consumer>(new XMLConsumerExpression(entityElement, consumersExpected, resourceManager));
+		return new CachedExpression<>(new XMLConsumerExpression(entityElement, consumersExpected, resourceManager));
 	}
 
 	private static InstanceDescriptor mapDescriptorElement(Element element, BeneratorContext context) { 

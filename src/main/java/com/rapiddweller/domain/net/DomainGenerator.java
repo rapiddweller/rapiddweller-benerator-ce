@@ -44,7 +44,6 @@ public class DomainGenerator extends AlternativeGenerator<String> implements Non
         this(Country.getDefault().getIsoCode());
     }
 
-    @SuppressWarnings("unchecked")
     public DomainGenerator(String datasetName) {
         super(String.class,
                 new RandomDomainGenerator(),

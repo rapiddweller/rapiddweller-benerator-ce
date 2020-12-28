@@ -53,9 +53,8 @@ public class XmlCreator {
 
     /**
      * @param args
-     * @throws IOException 
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         if (args.length < 3) {
             printHelp();
             System.exit(BeneratorConstants.EXIT_CODE_ERROR);
@@ -79,7 +78,7 @@ public class XmlCreator {
         fileGenerator.init(context);
         try {
 	        for (long i = 0; i < fileCount; i++) {
-	        	ProductWrapper<File> file = fileGenerator.generate(new ProductWrapper<File>());
+	        	ProductWrapper<File> file = fileGenerator.generate(new ProductWrapper<>());
 	            if (file == null)
 	            	throw new RuntimeException("Unable to create the expected number of files. " +
 	            			"Created " + i + " of " + fileCount + " files");

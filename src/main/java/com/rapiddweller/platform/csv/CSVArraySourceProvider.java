@@ -62,8 +62,8 @@ public class CSVArraySourceProvider implements DataSourceProvider<Object[]> {
         DataSource<String[]> source;
         source = new CSVSource(uri, separator, encoding, true, rowBased);
         Converter<String[], Object[]> converter = new ArrayConverter(String.class, Object.class, preprocessor);
-        DataSource<Object[]> result = new ConvertingDataSource<String[], Object[]>(source, converter);
-        result = new OffsetDataSource<Object[]>(result, 1); // offset = 1 in order to skip header row
+        DataSource<Object[]> result = new ConvertingDataSource<>(source, converter);
+        result = new OffsetDataSource<>(result, 1); // offset = 1 in order to skip header row
         return result;
     }
 

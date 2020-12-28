@@ -12,20 +12,6 @@ N/A
 
 N/A
 
-# 1.0.1
-
-## Release Highlights
-
-Fix logging (log4j config)
-
-## Important Notes
-
-src/main/resources/log4j.xml changed to src/main/resources/log4j2.xml
-
-## Breaking Changes
-
-N/A
-
 # 1.0.0
 
 Adoption of rapiddweller-benerator-ce by [rapiddweller](https://rapiddweller.com).

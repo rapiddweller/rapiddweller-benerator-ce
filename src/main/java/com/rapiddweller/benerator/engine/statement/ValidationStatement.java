@@ -39,7 +39,7 @@ import com.rapiddweller.commons.Validator;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ValidationStatement implements Statement {
 
-	private Validator validator;
+	private final Validator validator;
 	
 	public ValidationStatement(Validator validator) {
 		this.validator = validator;

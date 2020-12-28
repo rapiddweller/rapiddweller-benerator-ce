@@ -195,7 +195,7 @@ public class BeanDescriptorProvider extends DefaultDescriptorProvider {
         }
         PartDescriptor pd = new PartDescriptor(propertyDescriptor.getName(), this, propertyTypeDescriptor);
         if (java.util.Collection.class.isAssignableFrom(propertyType) || propertyType.isArray()) {
-            pd.setMinCount(new ConstantExpression<Long>(0L));
+            pd.setMinCount(new ConstantExpression<>(0L));
             pd.setMaxCount(null);
         }
         td.addComponent(pd);

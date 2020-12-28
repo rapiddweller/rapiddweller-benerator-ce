@@ -44,7 +44,6 @@ public class AddressGenerator extends CompositeGenerator<Address> implements Non
 
     RandomVarLengthStringGenerator localPhoneNumberGenerator;
     private String dataset;
-    private CountryGenerator countryGenerator;
     private CityGenerator cityGenerator;
     private StreetNameGenerator streetNameGenerator;
 
@@ -121,7 +120,7 @@ public class AddressGenerator extends CompositeGenerator<Address> implements Non
     // private helpers -------------------------------------------------------------------------------------------------
 
     private void initMembers(GeneratorContext context) {
-        countryGenerator = registerComponent(new CountryGenerator(dataset));
+        CountryGenerator countryGenerator = registerComponent(new CountryGenerator(dataset));
         countryGenerator.init(context);
         cityGenerator = registerComponent(new CityGenerator(dataset));
         cityGenerator.init(context);

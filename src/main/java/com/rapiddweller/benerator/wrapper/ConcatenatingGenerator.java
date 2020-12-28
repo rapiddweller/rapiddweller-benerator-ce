@@ -39,7 +39,7 @@ import com.rapiddweller.benerator.Generator;
 
 public class ConcatenatingGenerator extends GeneratorWrapper<String[], String> {
 
-	private String separator;
+	private final String separator;
 	
     public ConcatenatingGenerator(Generator<String[]> source) {
 	    this(source, "");

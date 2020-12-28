@@ -54,7 +54,7 @@ public class PlainEntityComponentBuilder extends AbstractComponentBuilder<Entity
 	
 	private static class Mutator_ implements Mutator {
 		
-		String name;
+		final String name;
 		
 		public Mutator_(String name) {
 	        this.name = name;

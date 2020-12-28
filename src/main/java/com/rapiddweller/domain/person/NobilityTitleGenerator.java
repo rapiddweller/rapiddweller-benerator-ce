@@ -67,7 +67,7 @@ public class NobilityTitleGenerator extends GeneratorProxy<String> {
     // properties ------------------------------------------------------------------------------------------------------
 
     private static LocalCSVGenerator<String> createCSVGenerator(Gender gender, Locale locale) {
-        return new LocalCSVGenerator<String>(String.class, baseName(gender), locale, ".csv", Encodings.UTF_8);
+        return new LocalCSVGenerator<>(String.class, baseName(gender), locale, ".csv", Encodings.UTF_8);
     }
 
     private static String baseName(Gender gender) {

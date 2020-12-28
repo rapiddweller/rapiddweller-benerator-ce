@@ -46,7 +46,7 @@ public class UniqueScrambledStringGenerator extends MultiGeneratorWrapper<String
 
     private int minLength;
     private int maxLength;
-    private Set<Character> chars;
+    private final Set<Character> chars;
 
     // constructors ----------------------------------------------------------------------------------------------------
 
@@ -54,8 +54,7 @@ public class UniqueScrambledStringGenerator extends MultiGeneratorWrapper<String
         this(new CharSet('A', 'Z').getSet(), 4, 8);
     }
 
-    @SuppressWarnings("unchecked")
-	public UniqueScrambledStringGenerator(Set<Character> chars, int minLength, int maxLength) {
+    public UniqueScrambledStringGenerator(Set<Character> chars, int minLength, int maxLength) {
     	super(String.class);
         this.minLength = minLength;
         this.maxLength = maxLength;
@@ -86,7 +85,7 @@ public class UniqueScrambledStringGenerator extends MultiGeneratorWrapper<String
     public void init(GeneratorContext context) {
     	assertNotInitialized();
     	// create sub generators
-        List<Generator<? extends String>> subGens = new ArrayList<Generator<? extends String>>(maxLength - minLength + 1);
+        List<Generator<? extends String>> subGens = new ArrayList<>(maxLength - minLength + 1);
         for (int i = minLength; i <= maxLength; i++)
             subGens.add(new UniqueFixedLengthStringGenerator(chars, i, false));
         setSources(subGens);

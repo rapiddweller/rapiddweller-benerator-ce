@@ -27,7 +27,6 @@
 package com.rapiddweller.benerator.factory;
 
 import static com.rapiddweller.model.data.SimpleTypeDescriptor.*;
-import static com.rapiddweller.model.data.TypeDescriptor.PATTERN;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -253,7 +252,7 @@ public class DescriptorUtil {
 		if (result != null) {
 			Expression<Long> globalMaxCount = getGlobalMaxCount();
 			if (globalMaxCount != null)
-				result = new MinExpression<Long>(result, globalMaxCount);
+				result = new MinExpression<>(result, globalMaxCount);
 		}
         return result;
 	}
@@ -270,12 +269,12 @@ public class DescriptorUtil {
 		else if (descriptor.getMinCount() != null)
         	result = descriptor.getMinCount();
 		else if (defaultMin != null)
-			result = new ConstantExpression<Long>(defaultMin);
+			result = new ConstantExpression<>(defaultMin);
 		else
-			return new ConstantExpression<Long>(null);
+			return new ConstantExpression<>(null);
 		Expression<Long> globalMaxCount = getGlobalMaxCount();
 		if (!ExpressionUtil.isNull(globalMaxCount))
-			result = new MinExpression<Long>(result, globalMaxCount);
+			result = new MinExpression<>(result, globalMaxCount);
         return result;
 	}
 
@@ -287,12 +286,12 @@ public class DescriptorUtil {
 		else if (descriptor.getMaxCount() != null)
         	result = descriptor.getMaxCount();
 		else if (descriptor instanceof ComponentDescriptor && defaultMax != null)			
-			result = new ConstantExpression<Long>(defaultMax);
+			result = new ConstantExpression<>(defaultMax);
 		else
 			return getGlobalMaxCount();
 		Expression<Long> globalMaxCount = getGlobalMaxCount();
 		if (!ExpressionUtil.isNull(globalMaxCount))
-			result = new MinExpression<Long>(result, globalMaxCount);
+			result = new MinExpression<>(result, globalMaxCount);
         return result;
 	}
 
@@ -302,23 +301,22 @@ public class DescriptorUtil {
 
 	public static Expression<Long> getCountGranularity(InstanceDescriptor descriptor) {
 		return (descriptor.getCountGranularity() != null ? 
-					descriptor.getCountGranularity() : 
-					new ConstantExpression<Long>(1L));
+					descriptor.getCountGranularity() :
+                new ConstantExpression<>(1L));
 	}
 
 	public static Converter<String, String> createStringScriptConverter(BeneratorContext context) {
-		Converter<String, String> scriptConverter = new ConverterChain<String, String>(
-				new ScriptConverterForStrings(context),
-				new ToStringConverter(null)
-			);
-		return scriptConverter;
+		return new ConverterChain<>(
+                new ScriptConverterForStrings(context),
+                new ToStringConverter(null)
+        );
 	}
 
 	public static Generator<Long> createDynamicCountGenerator(final InstanceDescriptor descriptor, 
 			Long defaultMin, Long defaultMax, boolean resetToMin, BeneratorContext context) {
     	Expression<Long> count = DescriptorUtil.getCount(descriptor);
     	if (count != null)
-    		return new ExpressionBasedGenerator<Long>(count, Long.class);
+    		return new ExpressionBasedGenerator<>(count, Long.class);
     	else {
 			final Expression<Long> minCount = DescriptorUtil.getMinCount(descriptor, defaultMin);
 			final Expression<Long> maxCount = DescriptorUtil.getMaxCount(descriptor, defaultMax);
@@ -330,11 +328,11 @@ public class DescriptorUtil {
 					Long minCountValue = minCount.evaluate(context);
 					Long maxCountValue = maxCount.evaluate(context);
 					if (NullSafeComparator.equals(minCountValue, maxCountValue))
-						return new ConstantGenerator<Long>(minCountValue);
+						return new ConstantGenerator<>(minCountValue);
 				} else {
 					// if there is only a maxCount specified, then assume that 
 					// the user actually wants to generate maxCount items but accepts less
-					return new ExpressionBasedGenerator<Long>(maxCount, Long.class);
+					return new ExpressionBasedGenerator<>(maxCount, Long.class);
 				}
 			}
 			// if no simplification was found yet, then create a fully featured distributed count generator
@@ -348,7 +346,7 @@ public class DescriptorUtil {
     public static <T extends Number> T getNumberDetail(SimpleTypeDescriptor descriptor, String detailName, Class<T> targetType) {
         try {
             String detailValue = (String) descriptor.getDetailValue(detailName);
-            return (detailValue != null ? new String2NumberConverter<T>(targetType).convert(detailValue) : null);
+            return (detailValue != null ? new String2NumberConverter<>(targetType).convert(detailValue) : null);
         } catch (ConversionException e) {
             throw new ConfigurationError(e);
         }
@@ -389,11 +387,11 @@ public class DescriptorUtil {
 			InstanceDescriptor descriptor, BeneratorContext context) {
 		// nullQuota == 1?
         Double nullQuota = descriptor.getNullQuota();
-		if (nullQuota != null && nullQuota.doubleValue() == 1.)
+		if (nullQuota != null && nullQuota == 1.)
 			return true;
 		// nullable?
 		Boolean nullable = descriptor.isNullable();
-		if (nullable != null && nullable == false) // nullable defaults to true
+		if (nullable != null && !nullable) // nullable defaults to true
 			return false;
 		if (context.getDefaultsProvider().defaultNullQuota() < 1) 
 			return false; // if the factory requires nullification, it overrides the context setting
@@ -410,7 +408,7 @@ public class DescriptorUtil {
 
 	public static <T> Generator<T> processCyclic(Generator<T> generator,
 			TypeDescriptor descriptor) {
-		boolean cyclic = descriptor.isCyclic() != null && descriptor.isCyclic().booleanValue();
+		boolean cyclic = descriptor.isCyclic() != null && descriptor.isCyclic();
 		if (cyclic)
 			generator = WrapperFactory.applyCycler(generator);
 		return generator;
@@ -462,7 +460,7 @@ public class DescriptorUtil {
 	public static Generator<?> createNullQuotaOneGenerator(InstanceDescriptor descriptor, BeneratorContext context) {
 		// check if nullQuota is 1
         Double nullQuota = descriptor.getNullQuota();
-        if (nullQuota != null && nullQuota.doubleValue() == 1.)
+        if (nullQuota != null && nullQuota == 1.)
             return MetaGeneratorFactory.createNullGenerator(descriptor.getTypeDescriptor(), context);
         else
         	return null;

@@ -40,10 +40,10 @@ import com.rapiddweller.commons.converter.AnyConverter;
  */
 public class FeatureWeight extends IndividualWeight<Object> {
 
-	private String feature;
+	private final String feature;
 	
-    private FeatureAccessor<Object, Double> accessor;
-	private Converter<Object, Double> converter;
+    private final FeatureAccessor<Object, Double> accessor;
+	private final Converter<Object, Double> converter;
 
 	// constructors ----------------------------------------------------------------------------------------------------
 	
@@ -53,8 +53,8 @@ public class FeatureWeight extends IndividualWeight<Object> {
 
 	public FeatureWeight(String feature) {
 		this.feature = feature;
-		this.accessor = new FeatureAccessor<Object, Double>(feature);
-		this.converter = new AnyConverter<Double>(Double.class);
+		this.accessor = new FeatureAccessor<>(feature);
+		this.converter = new AnyConverter<>(Double.class);
 	}
 	
 	// interface -------------------------------------------------------------------------------------------------------

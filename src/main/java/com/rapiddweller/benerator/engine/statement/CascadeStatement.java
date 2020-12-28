@@ -73,10 +73,10 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
 	
 	private static final String REF_SYNTAX_MESSAGE = "Expected Syntax: table(column1, column2, ...)";
 
-	private CascadeParent parent;
-	private Reference ref;
+	private final CascadeParent parent;
+	private final Reference ref;
 	private Entity currentEntity;
-	MutatingTypeExpression typeExpression;
+	final MutatingTypeExpression typeExpression;
 	ComplexTypeDescriptor type;
 
 	public CascadeStatement(String ref, MutatingTypeExpression typeExpression, CascadeParent parent) {
@@ -97,12 +97,12 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
 		// iterate rows
     	List<GeneratorComponent<Entity>> generatorComponents = 
     		ComplexTypeGeneratorFactory.createMutatingGeneratorComponents(type, Uniqueness.NONE, context);
-        ComponentAndVariableSupport<Entity> cavs = new ComponentAndVariableSupport<Entity>(tableName, 
-        		generatorComponents, context);
+        ComponentAndVariableSupport<Entity> cavs = new ComponentAndVariableSupport<>(tableName,
+				generatorComponents, context);
         cavs.init(context);
 
         DataIterator<Entity> iterator = ref.resolveReferences(parent.currentEntity(), source, context);
-        DataContainer<Entity> container = new DataContainer<Entity>();
+        DataContainer<Entity> container = new DataContainer<>();
 		while ((container = iterator.next(container)) != null)
 			mutateAndTranscodeEntity(container.getData(), identity, cavs, context);
 		IOUtil.close(iterator);
@@ -216,8 +216,8 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
 
 	public static class Reference {
 
-		private String refererTableName;
-		private String[] columnNames;
+		private final String refererTableName;
+		private final String[] columnNames;
 		
 		private DBForeignKeyConstraint fk;
 		private Database database;
@@ -302,7 +302,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
 				// parse column names
 				if ((token = tokenizer.nextToken()) != '(')
 					throw new SyntaxError(REF_SYNTAX_MESSAGE, refSpec);
-				ArrayBuilder<String> columnNames = new ArrayBuilder<String>(String.class);
+				ArrayBuilder<String> columnNames = new ArrayBuilder<>(String.class);
 				do {
 					if ((token = tokenizer.nextToken()) != TT_WORD)
 						throw new SyntaxError(REF_SYNTAX_MESSAGE, refSpec);

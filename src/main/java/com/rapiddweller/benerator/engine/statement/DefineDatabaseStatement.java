@@ -48,26 +48,26 @@ import org.apache.logging.log4j.LogManager;
 
 public class DefineDatabaseStatement implements Statement {
 	
-	private static Logger logger = LogManager.getLogger(DefineDatabaseStatement.class);
+	private static final Logger logger = LogManager.getLogger(DefineDatabaseStatement.class);
 	
-	private Expression<String>  id;
-	private Expression<String>  environment;
-	private Expression<String>  url;
-	private Expression<String>  driver;
-	private Expression<String>  user;
-	private Expression<String>  password;
-	private Expression<String>  catalog;
-	private Expression<String>  schema;
-	private Expression<Boolean> metaCache;
-	private Expression<String>  tableFilter;
-	private Expression<String>  includeTables;
-	private Expression<String>  excludeTables;
-	private Expression<Boolean> batch;
-	private Expression<Integer> fetchSize;
-	private Expression<Boolean> readOnly;
-	private Expression<Boolean> lazy;
-	private Expression<Boolean> acceptUnknownColumnTypes;
-	private ResourceManager     resourceManager;
+	private final Expression<String>  id;
+	private final Expression<String>  environment;
+	private final Expression<String>  url;
+	private final Expression<String>  driver;
+	private final Expression<String>  user;
+	private final Expression<String>  password;
+	private final Expression<String>  catalog;
+	private final Expression<String>  schema;
+	private final Expression<Boolean> metaCache;
+	private final Expression<String>  tableFilter;
+	private final Expression<String>  includeTables;
+	private final Expression<String>  excludeTables;
+	private final Expression<Boolean> batch;
+	private final Expression<Integer> fetchSize;
+	private final Expression<Boolean> readOnly;
+	private final Expression<Boolean> lazy;
+	private final Expression<Boolean> acceptUnknownColumnTypes;
+	private final ResourceManager     resourceManager;
 	
 	public DefineDatabaseStatement(Expression<String> id, Expression<String> environment, 
 			Expression<String> url, Expression<String> driver, Expression<String> user, Expression<String> password, 

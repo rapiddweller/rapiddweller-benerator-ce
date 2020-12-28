@@ -45,9 +45,9 @@ public class ConsoleExporter extends FormattingConsumer {
 	private Long limit;
 	private String indent;
 	
-	private CompositeFormatter compositeFormatter;
+	private final CompositeFormatter compositeFormatter;
 	private PrintStream out = System.out;
-	private Map<String, AtomicLong> counters;
+	private final Map<String, AtomicLong> counters;
 	
 	// Constructors ----------------------------------------------------------------------------------------------------
 	
@@ -62,7 +62,7 @@ public class ConsoleExporter extends FormattingConsumer {
 	public ConsoleExporter(Long limit, String indent) {
 		this.limit = limit;
 		this.indent = indent;
-		this.counters = new HashMap<String, AtomicLong>();
+		this.counters = new HashMap<>();
 		this.compositeFormatter = new CompositeFormatter(true, true);
 		this.compositeFormatter.setDatePattern(getDatePattern());
 		this.compositeFormatter.setTimestampPattern(getTimestampPattern());

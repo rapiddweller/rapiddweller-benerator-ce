@@ -116,7 +116,8 @@ public class BeneratorMonitor implements BeneratorMonitorMBean {
 		public void run() {
 		    try {
             	latestTimeStamp = System.nanoTime();
-	            while (true) {
+				//noinspection InfiniteLoopStatement
+				while (true) {
 	            	Thread.sleep(500);
 	            	update();
 	            }

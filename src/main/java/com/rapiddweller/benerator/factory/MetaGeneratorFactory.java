@@ -44,7 +44,7 @@ import com.rapiddweller.model.data.Uniqueness;
  */
 public class MetaGeneratorFactory {
 
-    private static ArrayTypeGeneratorFactory arrayTypeGeneratorFactory = new ArrayTypeGeneratorFactory();
+    private static final ArrayTypeGeneratorFactory arrayTypeGeneratorFactory = new ArrayTypeGeneratorFactory();
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Generator<?> createRootGenerator(

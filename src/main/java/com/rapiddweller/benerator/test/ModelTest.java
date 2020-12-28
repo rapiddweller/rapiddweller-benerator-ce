@@ -59,7 +59,7 @@ public abstract class ModelTest {
 	protected DefaultDescriptorProvider testDescriptorProvider;
 
     @Before
-    public void setUpContextAndDescriptorProvider() throws Exception {
+    public void setUpContextAndDescriptorProvider() {
     	this.context = BeneratorFactory.getInstance().createContext(".");
         this.context.importDefaults();
         this.dataModel = context.getDataModel();

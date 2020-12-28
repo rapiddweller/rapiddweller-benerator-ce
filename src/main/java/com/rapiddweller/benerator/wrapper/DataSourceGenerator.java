@@ -48,7 +48,7 @@ public class DataSourceGenerator<E> extends AbstractGenerator<E> {
 
     private DataSource<E> source;
     private DataIterator<E> iterator;
-    private ThreadLocalDataContainer<E> container = new ThreadLocalDataContainer<E>();
+    private final ThreadLocalDataContainer<E> container = new ThreadLocalDataContainer<>();
 
     // constructors ----------------------------------------------------------------------------------------------------
 

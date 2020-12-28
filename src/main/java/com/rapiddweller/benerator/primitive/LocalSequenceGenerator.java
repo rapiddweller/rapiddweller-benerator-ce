@@ -51,7 +51,7 @@ public class LocalSequenceGenerator extends NonNullGeneratorProxy<Long> {
     static final String FILENAME = LocalSequenceGenerator.class.getSimpleName() + ".properties";
     
 	private static final Map<String, IncrementalIdGenerator> MAP 
-		= new HashMap<String, IncrementalIdGenerator>();
+		= new HashMap<>();
 	
 	private boolean cached;
 	
@@ -124,7 +124,7 @@ public class LocalSequenceGenerator extends NonNullGeneratorProxy<Long> {
 	}
 	
     public static void persist() {
-    	Map<String, String> values = new HashMap<String, String>();
+    	Map<String, String> values = new HashMap<>();
     	for (Map.Entry<String, IncrementalIdGenerator> entry : MAP.entrySet())
     		values.put(entry.getKey(), String.valueOf(entry.getValue().getCursor()));
 		try {

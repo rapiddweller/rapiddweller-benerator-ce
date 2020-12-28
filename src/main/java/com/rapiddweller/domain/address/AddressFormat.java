@@ -50,7 +50,7 @@ import java.util.Map.Entry;
  */
 public class AddressFormat {
 
-    static final Map<String, AddressFormat> instances = new HashMap<String, AddressFormat>();
+    static final Map<String, AddressFormat> instances = new HashMap<>();
     private static final String CONFIG_FILE = "/com/rapiddweller/domain/address/addressFormat.properties";
     public static final AddressFormat US = getInstance("US");
     public static final AddressFormat AU = getInstance("AU");

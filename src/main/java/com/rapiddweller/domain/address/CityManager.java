@@ -53,7 +53,7 @@ public class CityManager {
     public static void readCities(Country country) {
         String filename = "/com/rapiddweller/domain/address/city_" + country.getIsoCode() + ".csv";
         if (IOUtil.isURIAvailable(filename))
-            readCities(country, filename, new HashMap<String, String>());
+            readCities(country, filename, new HashMap<>());
         else
             LOGGER.warn("File not found: " + filename);
     }
@@ -71,7 +71,7 @@ public class CityManager {
     private static int parseCityFile(Country country, String filename, Map<String, String> defaults) throws IOException {
         LOGGER.debug("Parsing city definitions in file {}", filename);
         CSVLineIterator iterator = new CSVLineIterator(filename, ';', Encodings.UTF_8);
-        DataContainer<String[]> container = new DataContainer<String[]>();
+        DataContainer<String[]> container = new DataContainer<>();
         String[] header = iterator.next(container).getData();
         AtomicInteger warnCount = new AtomicInteger();
         while ((container = iterator.next(container)) != null) {
@@ -82,7 +82,7 @@ public class CityManager {
                 LOGGER.debug(ArrayFormat.format(";", cells));
             if (cells.length == 1)
                 continue;
-            Map<String, String> instance = new HashMap<String, String>();
+            Map<String, String> instance = new HashMap<>();
             for (int i = 0; i < cells.length; i++)
                 instance.put(header[i], cells[i]);
             LOGGER.debug("{}", instance);
@@ -149,7 +149,7 @@ public class CityManager {
 
     public static void persistCities(Country country, String filename) throws IOException {
         // persist city data in standard format
-        BeanCSVWriter<City> writer = new BeanCSVWriter<City>(new FileWriter(filename), ';',
+        BeanCSVWriter<City> writer = new BeanCSVWriter<>(new FileWriter(filename), ';',
                 "state.country.isoCode", "state.id", "name", "nameExtension",
                 "zipCode", "areaCode", "language");
         for (State state : country.getStates()) {

@@ -77,7 +77,6 @@ public class EdiEscapeFreeMarkerMethod implements TemplateMethodModelEx {
         this.segmentSeparator = segmentSeparator;
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
     public Object exec(List args) {
         StringBuilder builder = new StringBuilder();

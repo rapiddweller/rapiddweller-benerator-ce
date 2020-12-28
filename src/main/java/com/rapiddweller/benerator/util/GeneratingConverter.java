@@ -44,12 +44,12 @@ public abstract class GeneratingConverter<S, G, T> extends ThreadSafeConverter<S
 	
 	protected Generator<G> generator;
 	protected GeneratorContext context;
-	private WrapperProvider<G> wrapperProvider;
+	private final WrapperProvider<G> wrapperProvider;
 	private boolean initialized;
 	
 	public GeneratingConverter(Class<S> sourceType, Class<T> targetType, Generator<G> generator) {
 		super(sourceType, targetType);
-		this.wrapperProvider = new WrapperProvider<G>();
+		this.wrapperProvider = new WrapperProvider<>();
 	    this.generator = generator;
 	    this.initialized = false;
     }

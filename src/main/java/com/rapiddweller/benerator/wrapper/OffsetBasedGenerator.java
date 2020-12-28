@@ -37,7 +37,7 @@ import com.rapiddweller.benerator.GeneratorContext;
  */
 public class OffsetBasedGenerator<E> extends GeneratorProxy<E> {
 
-	private int offset;
+	private final int offset;
 
 	public OffsetBasedGenerator() {
 		this(null, 0);

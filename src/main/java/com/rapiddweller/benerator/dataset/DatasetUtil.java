@@ -56,7 +56,7 @@ public class DatasetUtil {
 	private static String defaultRegionName;
 	private static Dataset defaultRegion;
 	
-    protected static final Map<String, Map<String, Dataset>> types = new HashMap<String, Map<String, Dataset>>();
+    protected static final Map<String, Map<String, Dataset>> types = new HashMap<>();
 
 	public static Dataset defaultRegion() {
 		if (defaultRegion == null)
@@ -83,7 +83,7 @@ public class DatasetUtil {
     
     public static String[] getDataFiles(String filenamePattern, String datasetName, String nesting) {
         Dataset dataset = getDataset(nesting, datasetName);
-        ArrayBuilder<String> builder = new ArrayBuilder<String>(String.class);
+        ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
         if (dataset.allAtomicSubSets().size() == 0) {
             String filename = filenameOfDataset(datasetName, filenamePattern);
             if (IOUtil.isURIAvailable(filename))
@@ -143,7 +143,7 @@ public class DatasetUtil {
 
     private synchronized static Map<String, Dataset> parseDatasetTypeConfig(String nesting) {
         try {
-            Map<String, Dataset> sets = new HashMap<String, Dataset>();
+            Map<String, Dataset> sets = new HashMap<>();
             Map<String, String> properties = IOUtil.readProperties(nesting + ".set.properties");
             for (Map.Entry<String, String> entry : properties.entrySet()) {
                 String name = entry.getKey();

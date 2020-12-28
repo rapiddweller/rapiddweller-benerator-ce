@@ -40,9 +40,9 @@ import java.lang.reflect.Method;
 
 public class MethodDescriptor {
 	
-	private Method method;
+	private final Method method;
 	private Annotation[] annotations;
-	private Annotation[][] parameterAnnotations;
+	private final Annotation[][] parameterAnnotations;
 
 	public MethodDescriptor(Method method) {
 		this.method = method;

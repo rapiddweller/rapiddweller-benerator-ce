@@ -39,15 +39,15 @@ import com.rapiddweller.commons.converter.ThreadSafeConverter;
  */
 public class IntegralQuantizer<E extends Number> extends ThreadSafeConverter<E, E> {
 	
-	private long min;
-	private long granularity;
-	private NumberToNumberConverter<Long, E> converter;
+	private final long min;
+	private final long granularity;
+	private final NumberToNumberConverter<Long, E> converter;
 
 	public IntegralQuantizer(Class<E> numberType, Long min, long granularity) {
 	    super(numberType, numberType);
 	    this.min = (min != null ? min : 0L);
 	    this.granularity = granularity;
-	    this.converter = new NumberToNumberConverter<Long, E>(Long.class, numberType);
+	    this.converter = new NumberToNumberConverter<>(Long.class, numberType);
     }
 
 	@Override

@@ -39,7 +39,7 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 public class IncrementalIdGenerator extends ThreadSafeNonNullGenerator<Long> {
 	
 	private long increment;
-	private volatile AtomicLong cursor = new AtomicLong();
+	private final AtomicLong cursor = new AtomicLong();
 	
 	// constructors ----------------------------------------------------------------------------------------------------
 

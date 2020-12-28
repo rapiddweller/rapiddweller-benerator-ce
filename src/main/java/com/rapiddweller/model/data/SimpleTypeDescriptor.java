@@ -77,8 +77,8 @@ public class SimpleTypeDescriptor extends TypeDescriptor {
         // boolean setup
         addConfig(TRUE_QUOTA, Double.class);
         // string setup
-        addConstraint(MIN_LENGTH, Integer.class, new MaxOperation<Integer>());
-        addConstraint(MAX_LENGTH, Integer.class, new MinOperation<Integer>());
+        addConstraint(MIN_LENGTH, Integer.class, new MaxOperation<>());
+        addConstraint(MAX_LENGTH, Integer.class, new MinOperation<>());
         addConfig(LENGTH_DISTRIBUTION, String.class);
         // other config
         addConfig(VALUES, String.class);

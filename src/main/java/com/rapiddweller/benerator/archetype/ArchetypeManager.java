@@ -57,13 +57,13 @@ public class ArchetypeManager {
         }
 	}
 	
-    private Archetype[] archetypes;
+    private final Archetype[] archetypes;
 	
     private ArchetypeManager() {
     	try {
 	        // read archetypes in the order specified in the file 'archetypes.txt'
 	        ReaderLineIterator iterator = new ReaderLineIterator(IOUtil.getReaderForURI(ARCHETYPES_INDEX));
-	        ArrayBuilder<Archetype> builder = new ArrayBuilder<Archetype>(Archetype.class);
+	        ArrayBuilder<Archetype> builder = new ArrayBuilder<>(Archetype.class);
 	        while (iterator.hasNext()) {
 	        	String name = iterator.next();
 	        	URL archUrl = new URL(ARCHETYPE_FOLDER_URL.toString() + "/" + name);

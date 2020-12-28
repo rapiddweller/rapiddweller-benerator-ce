@@ -43,7 +43,7 @@ import com.rapiddweller.script.WeightedTransition;
 
 public class StateTransitionGenerator<E> extends GeneratorWrapper<E, Transition> {
 	
-	private Class<E> stateType;
+	private final Class<E> stateType;
 	private E currentState;
 	private boolean done;
 	
@@ -52,7 +52,7 @@ public class StateTransitionGenerator<E> extends GeneratorWrapper<E, Transition>
     }
 
     public StateTransitionGenerator(Class<E> stateType, String transitionSpec) {
-	    super(new StateGenerator<E>(stateType));
+	    super(new StateGenerator<>(stateType));
 	    this.stateType = stateType;
 	    if (transitionSpec != null) {
 	    	WeightedTransition[] transitions = DatabeneScriptParser.parseTransitionList(transitionSpec);

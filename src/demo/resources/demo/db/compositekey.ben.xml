@@ -44,7 +44,7 @@
 
     <generate type="playlist_track" count="20" consumer="db">
         <reference name="PlaylistId" source="db" targetType="Playlist" unique="True"/>
-        <reference name="TrackId" source="db" targetType="Track" unique="True"/>    
+        <reference name="TrackId" source="db" targetType="Track" unique="True"/>
     </generate>
 
     <iterate type="playlist" source="db" consumer="ConsoleExporter"/>
@@ -52,4 +52,3 @@
     <iterate type="playlist_track" source="db" consumer="ConsoleExporter"/>
 
 </setup>
-

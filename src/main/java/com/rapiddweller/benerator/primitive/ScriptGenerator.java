@@ -43,7 +43,7 @@ public class ScriptGenerator extends ThreadSafeGenerator<Object> {
     
     private static final Logger LOGGER = LogManager.getLogger(ScriptGenerator.class);
 
-    private Script script;
+    private final Script script;
     
     public ScriptGenerator(Script script) {
         this.script = script;

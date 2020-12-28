@@ -44,8 +44,8 @@ public class LuhnGenerator extends NonNullGeneratorProxy<String> {
 	protected String prefix;
 	protected int minLength;
 	protected int maxLength;
-	protected int lengthGranularity;
-	protected Distribution lengthDistribution;
+	protected final int lengthGranularity;
+	protected final Distribution lengthDistribution;
 	
 	public LuhnGenerator() {
 	    this("", 16);

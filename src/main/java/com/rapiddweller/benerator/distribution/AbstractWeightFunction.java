@@ -57,7 +57,7 @@ public abstract class AbstractWeightFunction implements WeightFunction {
 
     @Override
 	public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-	    return new IndexBasedSampleGeneratorProxy<T>(source, this, unique);
+	    return new IndexBasedSampleGeneratorProxy<>(source, this, unique);
     }
     
     // helper methods --------------------------------------------------------------------------------------------------

@@ -62,7 +62,7 @@ public class SequencedCSVSampleGenerator<E> extends GeneratorProxy<E> {
     private String uri;
 
     /** The converter to create instances from the CSV cell strings */
-    private Converter<String, E> converter;
+    private final Converter<String, E> converter;
 
     // constructors ----------------------------------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ public class SequencedCSVSampleGenerator<E> extends GeneratorProxy<E> {
     }
 
     public SequencedCSVSampleGenerator(String uri, Converter<String, E> converter) {
-        super(new SampleGenerator<E>(converter.getTargetType()));
+        super(new SampleGenerator<>(converter.getTargetType()));
         this.converter = converter;
         if (uri != null && uri.trim().length() > 0)
             setUri(uri);
@@ -110,8 +110,8 @@ public class SequencedCSVSampleGenerator<E> extends GeneratorProxy<E> {
         	if (uri == null)
         		throw new InvalidGeneratorSetupException("uri is not set");
             CSVLineIterator parser = new CSVLineIterator(uri);
-            List<E> samples = new ArrayList<E>();
-            DataContainer<String[]> container = new DataContainer<String[]>();
+            List<E> samples = new ArrayList<>();
+            DataContainer<String[]> container = new DataContainer<>();
             while ((container = parser.next(container)) != null) {
             	String[] tokens = container.getData();
                 if (tokens.length > 0)

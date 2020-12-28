@@ -38,15 +38,15 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  */
 public class CurrentProductGeneration implements Statement, LifeCycleHolder {
 	
-	private String instanceName;
-	private Generator<Object> source;
-	private WrapperProvider<Object> provider;
+	private final String instanceName;
+	private final Generator<Object> source;
+	private final WrapperProvider<Object> provider;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public CurrentProductGeneration(String instanceName, Generator<?> source) {
 		this.instanceName = instanceName;
 		this.source = (Generator) source;
-		this.provider = new WrapperProvider<Object>();
+		this.provider = new WrapperProvider<>();
 	}
 
 	@Override

@@ -40,7 +40,7 @@ import com.rapiddweller.script.Expression;
  */
 public class FilteringGenerator<E> extends GeneratorProxy<E> {
 	
-	private Expression<Boolean> filter;
+	private final Expression<Boolean> filter;
 
 	public FilteringGenerator(Generator<E> source, Expression<Boolean> filter) {
 	    super(source);

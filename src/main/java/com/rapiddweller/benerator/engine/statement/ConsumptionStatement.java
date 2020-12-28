@@ -40,9 +40,9 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  */
 public class ConsumptionStatement implements Statement {
 	
-	private Consumer consumer;
-	private boolean start;
-	private boolean finish;
+	private final Consumer consumer;
+	private final boolean start;
+	private final boolean finish;
 	
 	public ConsumptionStatement(Consumer consumer, boolean start, boolean finish) {
 		this.consumer = consumer;

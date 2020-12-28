@@ -47,9 +47,9 @@ public class RandomBigIntegerGenerator extends ThreadSafeNonNullGenerator<BigInt
 	private static final BigInteger DEFAULT_MAX = BigInteger.valueOf(Long.MAX_VALUE);
 	private static final BigInteger DEFAULT_GRNULARITY = BigInteger.valueOf(1);
 
-    private BigInteger min;
-    private BigInteger max;
-    private BigInteger granularity;
+    private final BigInteger min;
+    private final BigInteger max;
+    private final BigInteger granularity;
     
     // constructors ----------------------------------------------------------------------------------------------------
 

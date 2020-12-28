@@ -51,7 +51,7 @@ public abstract class BeneratorIntegrationTest extends GeneratorTest {
 	protected ResourceManagerSupport resourceManager;
 	
 	@Before
-	public void setUpEnvironment() throws Exception {
+	public void setUpEnvironment() {
 		System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, ",");
 		this.resourceManager = new ResourceManagerSupport();
 	}

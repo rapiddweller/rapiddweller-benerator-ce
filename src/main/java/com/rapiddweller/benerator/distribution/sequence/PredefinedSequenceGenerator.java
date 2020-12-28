@@ -40,9 +40,9 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  */
 public class PredefinedSequenceGenerator<E extends Number> extends ThreadSafeGenerator<E> { // compare with SequenceGenerator
 
-	private Class<E> numberType;
-	private E[] numbers;
-	private AtomicInteger cursor;
+	private final Class<E> numberType;
+	private final E[] numbers;
+	private final AtomicInteger cursor;
 	
 	@SuppressWarnings("unchecked")
     public PredefinedSequenceGenerator(E... numbers) {

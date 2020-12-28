@@ -101,7 +101,7 @@ public class ScriptedEntityExporter extends TextFileExporter {
     @Override
     protected void postInitPrinter(Object object) {
         try {
-            docWriter = new ScriptedDocumentWriter<Entity>(printer, headerScript, partScript, footerScript);
+            docWriter = new ScriptedDocumentWriter<>(printer, headerScript, partScript, footerScript);
             if (append)
                 docWriter.setWriteHeader(false);
         } catch (IOException e) {

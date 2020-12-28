@@ -42,7 +42,7 @@ import org.junit.Test;
 public abstract class GeneratorClassTest extends GeneratorTest {
 
     @SuppressWarnings("rawtypes")
-	protected Class<? extends Generator> generatorClass;
+	protected final Class<? extends Generator> generatorClass;
 
     @SuppressWarnings("rawtypes")
 	public GeneratorClassTest(Class<? extends Generator> generatorClass) {

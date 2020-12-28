@@ -67,7 +67,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     private static final TypeDescriptor[] EMPTY_TYPE_DESCRIPTOR_ARRAY = new TypeDescriptor[0];
 
     // constants -------------------------------------------------------------------------------------------------------
-    protected Logger logger = LogManager.getLogger(getClass());
+    protected final Logger logger = LogManager.getLogger(getClass());
 
     // attributes ------------------------------------------------------------------------------------------------------
     protected boolean batch;
@@ -530,7 +530,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
 
     public void parseMetaData() {
-        this.tables = new HashMap<String, DBTable>();
+        this.tables = new HashMap<>();
         this.typeDescriptors = OrderedNameMap.createCaseIgnorantMap();
         //this.tableColumnIndexes = new HashMap<String, Map<String, Integer>>();
         getDialect(); // make sure dialect is initialized
@@ -610,9 +610,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
 
     private JDBCDBImporter createJDBCImporter() {
-        JDBCDBImporter importer = JDBCMetaDataUtil.getJDBCDBImporter(getConnection(), user, schemaName,
+        return JDBCMetaDataUtil.getJDBCDBImporter(getConnection(), user, schemaName,
                 true, false, false, false, includeTables, excludeTables);
-        return importer;
     }
 
     private QueryDataSource createQuery(String query, Context context, Connection connection) {
@@ -665,8 +664,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
                         targetTable.getName(),
                         constraint.getRefereeColumnNames()[0]);
                 descriptor.getLocalType(false).setSource(id);
-                descriptor.setMinCount(new ConstantExpression<Long>(1L));
-                descriptor.setMaxCount(new ConstantExpression<Long>(1L));
+                descriptor.setMinCount(new ConstantExpression<>(1L));
+                descriptor.setMaxCount(new ConstantExpression<>(1L));
                 boolean nullable = fkColumn.isNullable();
                 descriptor.setNullable(nullable);
                 complexType.setComponent(descriptor); // overwrite possible id descriptor for foreign keys
@@ -704,8 +703,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
                 //typeDescriptors.put(typeDescriptor.getName(), typeDescriptor);
                 PartDescriptor descriptor = new PartDescriptor(columnName, this);
                 descriptor.setLocalType(typeDescriptor);
-                descriptor.setMinCount(new ConstantExpression<Long>(1L));
-                descriptor.setMaxCount(new ConstantExpression<Long>(1L));
+                descriptor.setMinCount(new ConstantExpression<>(1L));
+                descriptor.setMaxCount(new ConstantExpression<>(1L));
                 descriptor.setNullable(column.getNotNullConstraint() == null);
                 List<DBUniqueConstraint> ukConstraints = column.getUkConstraints();
                 for (DBUniqueConstraint constraint : ukConstraints) {
@@ -731,8 +730,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
         List<String> pkColumnNames = CollectionUtil.toList(table.getPKColumnNames());
         ComplexTypeDescriptor typeDescriptor = (ComplexTypeDescriptor) getTypeDescriptor(tableName);
         Collection<ComponentDescriptor> componentDescriptors = typeDescriptor.getComponents();
-        List<ColumnInfo> pkInfos = new ArrayList<ColumnInfo>(componentDescriptors.size());
-        List<ColumnInfo> normalInfos = new ArrayList<ColumnInfo>(componentDescriptors.size());
+        List<ColumnInfo> pkInfos = new ArrayList<>(componentDescriptors.size());
+        List<ColumnInfo> normalInfos = new ArrayList<>(componentDescriptors.size());
         ComplexTypeDescriptor entityDescriptor = entity.descriptor();
         for (ComponentDescriptor dbCompDescriptor : componentDescriptors) {
             ComponentDescriptor enCompDescriptor = entityDescriptor.getComponent(dbCompDescriptor.getName());
@@ -805,8 +804,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
             throw new ConfigurationError("Catalog '" + catalogName + "' not found in database '" + id + "'");
         DBSchema dbSchema = catalog.getSchema(schemaName);
         if (dbSchema != null) {
-            DBTable table = dbSchema.getTable(tableName);
-            return table;
+            return dbSchema.getTable(tableName);
         }
         return null;
     }
@@ -819,8 +817,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
             PreparedStatement statement = getStatement(entity.descriptor(), insert, writeColumnInfos);
             for (int i = 0; i < writeColumnInfos.size(); i++) {
                 ColumnInfo info = writeColumnInfos.get(i);
-                Object componentValue = entity.getComponent(info.name);
-                Object jdbcValue = componentValue;
+                Object jdbcValue = entity.getComponent(info.name);
                 if (info.type != null)
                     jdbcValue = AnyConverter.convert(jdbcValue, info.type);
                 try {

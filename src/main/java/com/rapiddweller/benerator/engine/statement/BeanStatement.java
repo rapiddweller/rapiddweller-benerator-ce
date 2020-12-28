@@ -50,9 +50,9 @@ import com.rapiddweller.task.Task;
 
 public class BeanStatement extends SequentialStatement {
 	
-	private String id;
-    private Expression<?> constructionExpression;
-    private ResourceManager resourceManager;
+	private final String id;
+    private final Expression<?> constructionExpression;
+    private final ResourceManager resourceManager;
 
     public BeanStatement(String id, Expression<?> constructionExpression, ResourceManager resourceManager) {
     	this.id = id;

@@ -61,11 +61,11 @@ import com.rapiddweller.platform.xml.XMLSchemaDescriptorProvider;
  */
 public class XMLFileGenerator extends UnsafeGenerator<File> {
 	
-	private String schemaUri;
-    private String encoding;
-    private String root;
-    private String[] propertiesFiles;
-    private String filenamePattern;
+	private final String schemaUri;
+    private final String encoding;
+    private final String root;
+    private final String[] propertiesFiles;
+    private final String filenamePattern;
     private Generator<String> fileNameGenerator;
     private Generator<?> contentGenerator;
     
@@ -119,7 +119,7 @@ public class XMLFileGenerator extends UnsafeGenerator<File> {
     }
 
     private File persistContent(Object content) {
-        File file = new File(fileNameGenerator.generate(new ProductWrapper<String>()).unwrap());
+        File file = new File(fileNameGenerator.generate(new ProductWrapper<>()).unwrap());
         if (content instanceof Entity)
             persistRootEntity((Entity) content, file);
         else
@@ -130,13 +130,8 @@ public class XMLFileGenerator extends UnsafeGenerator<File> {
     private void persistRootEntity(Entity entity, File file) {
         //entity.setComponentValue("xmlns", "http://databene.org/shop-0.5.1.xsd");
         entity.setComponent("elementFormDefault", "unqualified");
-        XMLEntityExporter exporter = null;
-        try {
-            exporter = new XMLEntityExporter(file.getAbsolutePath(), encoding);
+        try (XMLEntityExporter exporter = new XMLEntityExporter(file.getAbsolutePath(), encoding)) {
             process(entity, exporter);
-        } finally {
-            if (exporter != null)
-                exporter.close();
         }
     }
 
@@ -162,9 +157,7 @@ public class XMLFileGenerator extends UnsafeGenerator<File> {
         try {
             printer = XMLUtil.createXMLFile(file.getAbsolutePath(), encoding);
             printer.println("<" + root + ">" + content + "</" + root + ">");
-        } catch (FileNotFoundException e) {
-            throw new ConfigurationError(e);
-        } catch (UnsupportedEncodingException e) {
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
             throw new ConfigurationError(e);
         } finally {
             IOUtil.close(printer);

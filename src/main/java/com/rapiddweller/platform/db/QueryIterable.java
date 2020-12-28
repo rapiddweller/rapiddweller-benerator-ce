@@ -65,7 +65,7 @@ public class QueryIterable implements HeavyweightIterable<ResultSet> {
         if (context != null)
             this.queryPreprocessor = new ScriptConverterForStrings(context);
         else
-            this.queryPreprocessor = new NoOpConverter<String>();
+            this.queryPreprocessor = new NoOpConverter<>();
         if (logger.isDebugEnabled())
             logger.debug("Constructed QueryIterable: " + query);
     }

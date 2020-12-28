@@ -45,7 +45,7 @@ public abstract class Sequence implements Distribution {
 	public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
     	if (source == null)
     		throw new ConfigurationError("No source provided");
-	    return new IndexBasedSampleGeneratorProxy<T>(source, this, unique);
+	    return new IndexBasedSampleGeneratorProxy<>(source, this, unique);
     }
     
     // java.lang.Object overrides --------------------------------------------------------------------------------------

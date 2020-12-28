@@ -50,9 +50,9 @@ import com.rapiddweller.commons.Assert;
 public class IndividualWeightSampleGenerator<E> extends AbstractSampleGenerator<E> implements WeightedGenerator<E> {
 	
     /** Keeps the Sample information */
-    List<E> samples = new ArrayList<E>();
+    final List<E> samples = new ArrayList<>();
     
-    IndividualWeight<E> individualWeight;
+    final IndividualWeight<E> individualWeight;
     
 	private double totalWeight;
 
@@ -62,6 +62,7 @@ public class IndividualWeightSampleGenerator<E> extends AbstractSampleGenerator<
     // constructors ----------------------------------------------------------------------------------------------------
 
     /** Initializes the generator to an unweighted sample list */
+    @SafeVarargs
     public IndividualWeightSampleGenerator(Class<E> generatedType, IndividualWeight<E> individualWeight, E ... values) {
     	super(generatedType);
     	Assert.notNull(individualWeight, "individualWeight");
@@ -80,7 +81,8 @@ public class IndividualWeightSampleGenerator<E> extends AbstractSampleGenerator<
     // samples property ------------------------------------------------------------------------------------------------
 
     /** Sets the sample list to the specified weighted values */
-    public void setSamples(E ... samples) {
+    @SafeVarargs
+    public final void setSamples(E... samples) {
         this.samples.clear();
         for (E sample : samples)
             addValue(sample);

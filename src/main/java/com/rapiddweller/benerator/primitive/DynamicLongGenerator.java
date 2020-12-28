@@ -45,10 +45,10 @@ import com.rapiddweller.script.expression.ExpressionUtil;
  */
 public class DynamicLongGenerator extends GeneratorProxy<Long> {
 
-    protected Expression<Long> min;
-    protected Expression<Long> max;
-    protected Expression<Long> granularity;
-    protected Expression<? extends Distribution> distribution;
+    protected final Expression<Long> min;
+    protected final Expression<Long> max;
+    protected final Expression<Long> granularity;
+    protected final Expression<? extends Distribution> distribution;
 
     // constructors ----------------------------------------------------------------------------------------------------
 

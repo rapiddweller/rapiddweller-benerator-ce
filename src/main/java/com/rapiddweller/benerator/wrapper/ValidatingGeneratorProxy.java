@@ -40,7 +40,7 @@ import com.rapiddweller.commons.Validator;
 public class ValidatingGeneratorProxy<E> extends ValidatingGenerator<E> {
 
     /** The source generator to use */
-    private Generator<E> source;
+    private final Generator<E> source;
 
     /** Constructor with the source generator and the validator to use */
     public ValidatingGeneratorProxy(Generator<E> source, Validator<E> validator) {

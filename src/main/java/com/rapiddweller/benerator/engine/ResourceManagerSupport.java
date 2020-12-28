@@ -47,7 +47,7 @@ public class ResourceManagerSupport implements ResourceManager{
 
 	private static final Logger LOGGER = LogManager.getLogger(ResourceManagerSupport.class);
 	
-	private List<Closeable> resources = new ArrayList<Closeable>();
+	private final List<Closeable> resources = new ArrayList<>();
 
 	@Override
 	public boolean addResource(Closeable resource) {

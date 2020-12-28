@@ -44,8 +44,8 @@ public abstract class AbstractComponentBuilder<E> extends AbstractGeneratorCompo
 	
 	private final Logger logger = LogManager.getLogger(getClass());
 	
-	protected Mutator mutator;
-	private WrapperProvider<Object> wrapperProvider = new WrapperProvider<Object>();
+	protected final Mutator mutator;
+	private final WrapperProvider<Object> wrapperProvider = new WrapperProvider<>();
 	
     public AbstractComponentBuilder(Generator<?> source, Mutator mutator, String scope) {
 		super(source, scope);

@@ -54,7 +54,7 @@ public class IncrementalStringGenerator extends GeneratorChain<String> implement
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Generator<? extends String>[] createSources(Set<Character> chars, int minLength, int maxLength, 
 			int lengthGranularity) {
-		ArrayBuilder<Generator> builder = new ArrayBuilder<Generator>(Generator.class);
+		ArrayBuilder<Generator> builder = new ArrayBuilder<>(Generator.class);
 		for (int i = minLength; i <= maxLength; i += lengthGranularity)
 			builder.add(new UniqueFixedLengthStringGenerator(chars, i, true));
 		return builder.toArray();

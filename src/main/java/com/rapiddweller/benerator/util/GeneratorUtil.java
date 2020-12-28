@@ -48,7 +48,7 @@ import org.apache.logging.log4j.LogManager;
  */
 public class GeneratorUtil {
 	
-	private static Logger LOGGER = LogManager.getLogger(GeneratorUtil.class);
+	private static final Logger LOGGER = LogManager.getLogger(GeneratorUtil.class);
 	
     public static void init(Generator<?> generator) {
     	init(generator, BeneratorFactory.getInstance().createContext("."));
@@ -89,11 +89,11 @@ public class GeneratorUtil {
     }
 
 	protected static <T> ProductWrapper<T> getWrapper() {
-		return new ProductWrapper<T>();
+		return new ProductWrapper<>();
 	}
 
 	public static <T> List<T> allProducts(Generator<T> generator) {
-		List<T> list = new ArrayList<T>();
+		List<T> list = new ArrayList<>();
 		int count = 0;
 		int cacheSize = BeneratorOpts.getCacheSize();
 		ProductWrapper<T> wrapper = GeneratorUtil.<T>getWrapper();

@@ -39,7 +39,7 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  */
 public class BadDataConsumer extends ConsumerProxy {
 	
-	Consumer badDataTarget;
+	final Consumer badDataTarget;
 	
 	public BadDataConsumer(Consumer badDataTarget, Consumer realTarget) {
 		super(realTarget);

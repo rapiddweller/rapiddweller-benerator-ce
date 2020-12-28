@@ -40,7 +40,7 @@ import java.lang.reflect.Array;
  */
 public class SimpleMultiSourceArrayGenerator<S> extends MultiGeneratorWrapper<S, S[]> {
 
-    private Class<S> componentType;
+    private final Class<S> componentType;
     private boolean available;
 
     // constructors ----------------------------------------------------------------------------------------------------

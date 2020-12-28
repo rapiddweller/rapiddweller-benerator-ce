@@ -45,7 +45,7 @@ import com.rapiddweller.commons.Converter;
 public class ConvertingGenerator<S, T> extends GeneratorWrapper<S, T> {
 
     /** The converter to apply to the source's products */
-    protected Converter<?, ?>[] converters;
+    protected final Converter<?, ?>[] converters;
 
     /** Initializes all attributes */
     public ConvertingGenerator(Generator<S> source, Converter<?, ?>... converters) {

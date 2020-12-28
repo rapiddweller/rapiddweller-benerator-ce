@@ -60,7 +60,7 @@ public class RandomWalkSequence extends Sequence {
 	private BigDecimal initial;
 	private BigDecimal minStep;
 	private BigDecimal maxStep;
-	private boolean buffered;
+	private final boolean buffered;
 	
 	// constructors ----------------------------------------------------------------------------------------------------
 
@@ -123,7 +123,7 @@ public class RandomWalkSequence extends Sequence {
 		int minStepI = toInteger(minStep);
 		if (unique && minStepI <= 0)
 			throw new ConfigurationError("Cannot generate unique values when minStep=" + minStep);
-	    return new SkipGeneratorProxy<T>(source, minStepI, toInteger(maxStep));
+	    return new SkipGeneratorProxy<>(source, minStepI, toInteger(maxStep));
     }
     
     // helper methods --------------------------------------------------------------------------------------------------

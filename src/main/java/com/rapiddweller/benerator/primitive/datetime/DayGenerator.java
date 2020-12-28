@@ -60,7 +60,7 @@ public class DayGenerator extends ThreadSafeNonNullGenerator<Date> {
 	
 	private Calendar minCalendar;
 	private Generator<Integer> multiplierGenerator;
-	private WrapperProvider<Integer> intWrapper = new WrapperProvider<Integer>();
+	private final WrapperProvider<Integer> intWrapper = new WrapperProvider<>();
 
 	public DayGenerator() {
 		this(TimeUtil.date(TimeUtil.currentYear() - 5, 0, 1),

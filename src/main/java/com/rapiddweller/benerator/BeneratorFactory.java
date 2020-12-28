@@ -53,7 +53,7 @@ public abstract class BeneratorFactory {
 
 	private static BeneratorFactory instance;
 
-	public static final BeneratorFactory getInstance() {
+	public static BeneratorFactory getInstance() {
 		if (instance == null) {
 			String configuredClass = System.getProperty(BENERATOR_FACTORY_PROPERTY);
 			if (StringUtil.isEmpty(configuredClass))

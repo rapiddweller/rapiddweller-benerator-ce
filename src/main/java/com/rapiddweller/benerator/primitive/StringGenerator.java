@@ -190,12 +190,7 @@ public class StringGenerator extends NonNullGeneratorProxy<String> {
 		Set<Character> chars = new RegexParser(locale).parseSingleChar(charSet).getCharSet().getSet();
 		GeneratorFactory factory = context.getGeneratorFactory();
 		if (minInitial != null) {
-			Filter<Character> initialFilter = new Filter<Character>() {
-				@Override
-				public boolean accept(Character candidate) {
-					return (candidate >= minInitial);
-				}
-			};
+			Filter<Character> initialFilter = candidate -> (candidate >= minInitial);
 			Set<Character> initialSet = new HashSet<>(FilterUtil.filter(new ArrayList<>(chars), initialFilter));
 			this.minInitialGenerator = factory.createCharacterGenerator(initialSet);
 			this.minInitialGenerator.init(context);

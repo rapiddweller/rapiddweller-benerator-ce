@@ -45,7 +45,6 @@ import java.util.List;
 public class NowMethod implements TemplateMethodModelEx {
 
     @Override
-    @SuppressWarnings("rawtypes")
     public TemplateModel exec(List args) {
         return new SimpleDate(new Date(System.currentTimeMillis()));
     }

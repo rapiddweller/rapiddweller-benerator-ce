@@ -37,8 +37,8 @@ import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
  */
 public class ExponentialFunction extends AbstractWeightFunction {
 
-    private double scale;
-    private double frequency;
+    private final double scale;
+    private final double frequency;
 
     public ExponentialFunction(double frequency) {
         this(1, frequency);

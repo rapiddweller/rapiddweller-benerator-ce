@@ -49,7 +49,7 @@ import java.util.Collection;
 public class AttachedWeightSampleGenerator<E> extends AbstractSampleGenerator<E> implements WeightedGenerator<E> { 
 	
     /** Keeps the Sample information */
-    List<WeightedSample<? extends E>> samples = new ArrayList<>();
+    final List<WeightedSample<? extends E>> samples = new ArrayList<>();
     
     /** Generator for choosing a List index of the sample list */
     private final WeightedLongGenerator indexGenerator = new WeightedLongGenerator(0, 0, 1, new SampleWeightFunction());

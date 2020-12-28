@@ -44,8 +44,8 @@ public class TypeMapper {
      * @param typeMappings name-class pairs that list the mappings to be defined
      */
     public TypeMapper(Object... typeMappings) {
-        this.abstractToConcrete = new HashMap<String, Class<?>>();
-        this.concreteToAbstract = new HashMap<Class<?>, String>();
+        this.abstractToConcrete = new HashMap<>();
+        this.concreteToAbstract = new HashMap<>();
         for (int i = 0; i < typeMappings.length; i += 2) {
             String abstractType = (String) typeMappings[i];
             Object concreteType = typeMappings[i + 1];

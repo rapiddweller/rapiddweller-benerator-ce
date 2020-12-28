@@ -84,18 +84,18 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
 	@Override
 	public <T> Generator<T> createAlternativeGenerator(
 			Class<T> targetType, Generator<T>[] sources, Uniqueness uniqueness) {
-		return new GeneratorChain<T>(targetType, true, sources);
+		return new GeneratorChain<>(targetType, true, sources);
 	}
 	
 	@Override
 	public <T> Generator<T[]> createCompositeArrayGenerator(
 			Class<T> componentType, Generator<T>[] sources, Uniqueness uniqueness) {
-    	return new UniqueMultiSourceArrayGenerator<T>(componentType, sources);
+    	return new UniqueMultiSourceArrayGenerator<>(componentType, sources);
 	}
 
 	@Override
 	public <T> Generator<T> createSampleGenerator(Collection<T> values, Class<T> generatedType, boolean unique) {
-        return new SequenceGenerator<T>(generatedType, values);
+        return new SequenceGenerator<>(generatedType, values);
 	}
 
 	@Override
@@ -103,8 +103,8 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
 	public <T> Generator<T> createFromWeightedLiteralList(String valueSpec, Class<T> targetType,
             Distribution distribution, boolean unique) {
 	    List<WeightedSample<?>> samples = CollectionUtil.toList(DatabeneScriptParser.parseWeightedLiteralList(valueSpec));
-		List<?> values = FactoryUtil.extractValues((List) samples);
-	    Converter<?, T> typeConverter = new AnyConverter<T>(targetType);
+		List<T> values = FactoryUtil.extractValues((List) samples);
+	    Converter<?, T> typeConverter = new AnyConverter<>(targetType);
 	    Collection<T> convertedValues = ConverterManager.convertAll((List) values, typeConverter);
 	    return createSampleGenerator(convertedValues, targetType, true);
     }
@@ -122,11 +122,11 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
     		min = defaultsProvider.defaultMinDate();
     	if (max == null)
     		max = defaultsProvider.defaultMaxDate();
-    	TreeSet<Date> values = new TreeSet<Date>();
+    	TreeSet<Date> values = new TreeSet<>();
     	values.add(min);
     	values.add(midDate(min, max, granularity));
     	values.add(max);
-    	return new SequenceGenerator<Date>(Date.class, values);
+    	return new SequenceGenerator<>(Date.class, values);
     }
 
     Date midDate(Date min, Date max, long granularity) {
@@ -162,15 +162,15 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
         	granularity = defaultsProvider.defaultGranularity(numberType);
         }
         if (((Comparable<T>) min).compareTo(max) == 0) // if min==max then return min once
-            return WrapperFactory.asNonNullGenerator(new OneShotGenerator<T>(min));
+            return WrapperFactory.asNonNullGenerator(new OneShotGenerator<>(min));
         if (minInclusive == null)
         	minInclusive = true;
         if (maxInclusive == null)
         	maxInclusive = true;
 
-        NumberToNumberConverter<Number, T> converter = new NumberToNumberConverter<Number, T>(Number.class, numberType);
+        NumberToNumberConverter<Number, T> converter = new NumberToNumberConverter<>(Number.class, numberType);
         ArithmeticEngine engine = ArithmeticEngine.defaultInstance();
-        ValueSet<T> values = new ValueSet<T>(min, minInclusive, max, maxInclusive, (quantization ? granularity : null), numberType);
+        ValueSet<T> values = new ValueSet<>(min, minInclusive, max, maxInclusive, (quantization ? granularity : null), numberType);
 
         // values to be tested for any range, duplicated are sieved out by ValueSet
         values.addIfViable(min);
@@ -211,7 +211,7 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
         	// 0 is not contained in the range (or it is a border value), so add a value in the middle of the range
         	values.addIfViable((Number) engine.divide(engine.add(min, max), 2));
         }
-		return WrapperFactory.asNonNullGenerator(new SequenceGenerator<T>(numberType, values.getAll()));
+		return WrapperFactory.asNonNullGenerator(new SequenceGenerator<>(numberType, values.getAll()));
     }
     
 	@Override
@@ -223,15 +223,15 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
 			maxLength = defaultsProvider.defaultMaxLength();
 		Set<Integer> counts = defaultCounts(minLength, maxLength, lengthGranularity);
 		NonNullGenerator<Integer> lengthGenerator = WrapperFactory.asNonNullGenerator(
-				new SequenceGenerator<Integer>(Integer.class, counts));
-		return new EquivalenceStringGenerator<Character>(charGenerator, lengthGenerator);
+				new SequenceGenerator<>(Integer.class, counts));
+		return new EquivalenceStringGenerator<>(charGenerator, lengthGenerator);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public NonNullGenerator<String> createCompositeStringGenerator(
 			GeneratorProvider<?> partGeneratorProvider, int minParts, int maxParts, Uniqueness uniqueness) {
-		AlternativeGenerator<String> result = new AlternativeGenerator<String>(String.class);
+		AlternativeGenerator<String> result = new AlternativeGenerator<>(String.class);
 		Set<Integer> partCounts = defaultCounts(minParts, maxParts, 1);
 		for (int partCount : partCounts) {
 			Generator<String>[] sources = new Generator[partCount];
@@ -245,17 +245,17 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
     @Override
 	public Generator<Character> createCharacterGenerator(String pattern, Locale locale, boolean unique) {
         Character[] chars = CollectionUtil.toArray(defaultSubSet(FactoryUtil.fullLocaleCharSet(pattern, locale)), Character.class);
-        return new SequenceGenerator<Character>(Character.class, chars);
+        return new SequenceGenerator<>(Character.class, chars);
     }
 
     @Override
 	public NonNullGenerator<Character> createCharacterGenerator(Set<Character> characters) {
         return WrapperFactory.asNonNullGenerator(
-        		new SequenceGenerator<Character>(Character.class, defaultSubSet(characters)));
+				new SequenceGenerator<>(Character.class, defaultSubSet(characters)));
     }
 
 	protected Set<Integer> defaultCounts(int minParts, int maxParts, int lengthGranularity) {
-		Set<Integer> lengths = new TreeSet<Integer>();
+		Set<Integer> lengths = new TreeSet<>();
 		lengths.add(minParts); 
 		lengths.add(((minParts + maxParts) / 2 - minParts) / lengthGranularity * lengthGranularity + minParts); 
 		lengths.add(maxParts);
@@ -268,21 +268,21 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
 
     @Override
 	public <T> Generator<T> createSingleValueGenerator(T value, boolean unique) {
-		return new OneShotGenerator<T>(value);
+		return new OneShotGenerator<>(value);
     }
 
 	@Override
 	public <T> Generator<T> createNullGenerator(Class<T> generatedType) {
-		return new OneShotGenerator<T>(null, generatedType);
+		return new OneShotGenerator<>(null, generatedType);
 	}
 
     @Override
 	public Set<Character> defaultSubSet(Set<Character> characters) {
-    	Set<Character> uppers = new TreeSet<Character>();
-    	Set<Character> lowers = new TreeSet<Character>();
-    	Set<Character> digits = new TreeSet<Character>();
-    	Set<Character> spaces = new TreeSet<Character>();
-    	Set<Character> others = new TreeSet<Character>();
+    	Set<Character> uppers = new TreeSet<>();
+    	Set<Character> lowers = new TreeSet<>();
+    	Set<Character> digits = new TreeSet<>();
+    	Set<Character> spaces = new TreeSet<>();
+    	Set<Character> others = new TreeSet<>();
     	for (char c : characters) {
     		if (Character.isUpperCase(c))
     			uppers.add(c);
@@ -295,14 +295,12 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
     		else
     			others.add(c);
     	}
-    	Set<Character> result = new OrderedSet<Character>();
+    	Set<Character> result = new OrderedSet<>();
         addSelection(uppers, result);
         addSelection(lowers, result);
         addSelection(digits, result);
-        for (Character c : spaces)
-        	result.add(c);
-        for (Character c : others)
-        	result.add(c);
+		result.addAll(spaces);
+		result.addAll(others);
         return result;
     }
 
@@ -332,6 +330,7 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
     	return (required ? SequenceManager.STEP_SEQUENCE : null);
 	}
 
+	@SuppressWarnings("SwitchStatementWithTooFewBranches")
 	@Override
 	public Distribution defaultDistribution(Uniqueness uniqueness) {
     	switch (uniqueness) {
@@ -347,14 +346,14 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
 
 	static class ValueSet<T extends Number> {
 		
-		Interval<T> numberRange;
-		T granularity;
-		Class<T> numberType;
-		private TreeSet<T> set;
+		final Interval<T> numberRange;
+		final T granularity;
+		final Class<T> numberType;
+		private final TreeSet<T> set;
 		
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public ValueSet(T min, boolean minInclusive, T max, boolean maxInclusive, T granularity, Class<T> numberType) {
-			this.set = new TreeSet<T>();
+			this.set = new TreeSet<>();
 	        this.numberRange = new Interval<T>(min, minInclusive, max, maxInclusive, new ComparableComparator());
 	        this.granularity = granularity;
 	        this.numberType = numberType;

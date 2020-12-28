@@ -61,7 +61,7 @@ public class FeatureDescriptor implements Named {
             throw new IllegalArgumentException("provider is null");
         if (provider.getDataModel() == null)
             throw new IllegalArgumentException("provider's data model is null");
-        this.details = new OrderedNameMap<FeatureDetail<?>>();
+        this.details = new OrderedNameMap<>();
         this.provider = provider;
         this.addConstraint(NAME, String.class, null);
         this.setName(name);
@@ -186,7 +186,7 @@ public class FeatureDescriptor implements Named {
 
     protected <T> void addDetail(String detailName, Class<T> detailType, boolean constraint,
                                  boolean deprecated, Operation<T, T> combinator) {
-        this.details.put(detailName, new FeatureDetail<T>(detailName, detailType, constraint, combinator));
+        this.details.put(detailName, new FeatureDetail<>(detailName, detailType, constraint, combinator));
     }
 
     // generic property access -----------------------------------------------------------------------------------------

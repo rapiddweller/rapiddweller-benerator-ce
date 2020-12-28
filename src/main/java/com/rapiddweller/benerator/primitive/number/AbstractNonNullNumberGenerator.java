@@ -42,7 +42,7 @@ import com.rapiddweller.commons.converter.NumberToNumberConverter;
  */
 public abstract class AbstractNonNullNumberGenerator<E extends Number> extends AbstractNonNullGenerator<E> {
 
-	protected Class<E> generatedType;
+	protected final Class<E> generatedType;
 
 	protected E min;
     protected E max;

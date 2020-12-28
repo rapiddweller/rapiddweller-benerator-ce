@@ -40,9 +40,9 @@ import com.rapiddweller.benerator.wrapper.GeneratorProxy;
  */
 public class DistributingGenerator<E> extends GeneratorProxy<E> {
 	
-	private Generator<E> dataProvider;
-	private Distribution distribution;
-	private boolean unique;
+	private final Generator<E> dataProvider;
+	private final Distribution distribution;
+	private final boolean unique;
 
 	public DistributingGenerator(Generator<E> dataProvider, Distribution distribution, boolean unique) {
 		super(dataProvider.getGeneratedType());

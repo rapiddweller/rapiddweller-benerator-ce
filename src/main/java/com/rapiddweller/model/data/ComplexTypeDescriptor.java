@@ -121,7 +121,7 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
     }
 
     public List<ComponentDescriptor> getComponents() {
-        List<ComponentDescriptor> result = new ArrayList<ComponentDescriptor>();
+        List<ComponentDescriptor> result = new ArrayList<>();
         for (InstanceDescriptor instance : getParts())
             if (instance instanceof ComponentDescriptor)
                 result.add((ComponentDescriptor) instance);
@@ -129,9 +129,8 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
     }
 
     public Collection<InstanceDescriptor> getDeclaredParts() {
-        Set<InstanceDescriptor> declaredDescriptors = new ListBasedSet<InstanceDescriptor>(parts.size());
-        for (InstanceDescriptor d : parts.values())
-            declaredDescriptors.add(d);
+        Set<InstanceDescriptor> declaredDescriptors = new ListBasedSet<>(parts.size());
+        declaredDescriptors.addAll(parts.values());
         return declaredDescriptors;
     }
 
@@ -140,7 +139,7 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
     }
 
     public String[] getIdComponentNames() {
-        ArrayBuilder<String> builder = new ArrayBuilder<String>(String.class);
+        ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
         for (ComponentDescriptor descriptor : getComponents())
             if (descriptor instanceof IdDescriptor)
                 builder.add(descriptor.getName());
@@ -166,7 +165,7 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
     @Override
     protected void init() {
         super.init();
-        this.parts = new NamedValueList<InstanceDescriptor>(NamedValueList.INSENSITIVE);
+        this.parts = new NamedValueList<>(NamedValueList.INSENSITIVE);
     }
 
     // java.lang.Object overrides --------------------------------------------------------------------------------------

@@ -98,8 +98,8 @@ public class CreateProjectPanel extends JPanel {
 
 	private static final int WIDE = 30;
 	
-	Setup setup;
-	I18NSupport i18n;
+	final Setup setup;
+	final I18NSupport i18n;
 	PropertyFileField folderField;
 	JButton createButton;
 	JComboBox archetypeField;

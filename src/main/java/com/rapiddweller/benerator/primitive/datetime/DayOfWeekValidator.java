@@ -53,7 +53,7 @@ public class DayOfWeekValidator extends AbstractConstraintValidator<DayOfWeek, D
 	/** 
 	 * holds a flag for each weekday that tells if it is accepted. 
 	 */
-	private boolean daysOfWeekAccepted[];
+	private final boolean[] daysOfWeekAccepted;
 	
     public DayOfWeekValidator() {
     	this.daysOfWeekAccepted = new boolean[7];

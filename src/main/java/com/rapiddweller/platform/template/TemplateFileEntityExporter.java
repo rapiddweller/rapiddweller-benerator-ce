@@ -88,7 +88,7 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
     private static void updateFeature(String featureName, TemplateRecord parent, TemplateRecord product) {
         Object previousObject = FeatureAccessor.getValue(parent, featureName, false);
         if (previousObject == null) {
-            List<TemplateRecord> list = new ArrayList<TemplateRecord>();
+            List<TemplateRecord> list = new ArrayList<>();
             list.add(product);
             AnyMutator.setValue(parent, featureName, list);
             //parentMap.put(product.type(), entityMap);
@@ -199,7 +199,7 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
 
     private void init() {
         this.root = BeanUtil.newInstance(recordType);
-        this.stack = new Stack<TemplateRecord>();
+        this.stack = new Stack<>();
         this.stack.push(root);
     }
 

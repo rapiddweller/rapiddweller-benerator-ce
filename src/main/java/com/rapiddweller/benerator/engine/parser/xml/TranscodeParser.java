@@ -88,27 +88,24 @@ public class TranscodeParser extends AbstractTranscodeParser {
 		return parseScriptableStringAttribute("selector", element);
 	}
 
-	@SuppressWarnings("unchecked")
-    private Expression<Long> parsePageSize(Element element, Statement parent) {
+	private Expression<Long> parsePageSize(Element element, Statement parent) {
 	    Expression<Long> result = super.parsePageSize(element);
 	    if (parent instanceof TranscodingTaskStatement)
-			result = new FallbackExpression<Long>(result, ((TranscodingTaskStatement) parent).getPageSizeEx());
+			result = new FallbackExpression<>(result, ((TranscodingTaskStatement) parent).getPageSizeEx());
 	    return result;
     }
 
-	@SuppressWarnings("unchecked")
-    private Expression<DBSystem> parseSource(Element element, Statement parent) {
+	private Expression<DBSystem> parseSource(Element element, Statement parent) {
 	    Expression<DBSystem> result = super.parseSource(element);
 	    if (parent instanceof TranscodingTaskStatement)
-			result = new FallbackExpression<DBSystem>(result, ((TranscodingTaskStatement) parent).getSourceEx());
+			result = new FallbackExpression<>(result, ((TranscodingTaskStatement) parent).getSourceEx());
 	    return result;
     }
 
-	@SuppressWarnings("unchecked")
-    private Expression<DBSystem> parseTarget(Element element, Statement parent) {
+	private Expression<DBSystem> parseTarget(Element element, Statement parent) {
 	    Expression<DBSystem> result = super.parseTarget(element);
 	    if (parent instanceof TranscodingTaskStatement)
-			result = new FallbackExpression<DBSystem>(result, ((TranscodingTaskStatement) parent).getTargetEx());
+			result = new FallbackExpression<>(result, ((TranscodingTaskStatement) parent).getTargetEx());
 	    return result;
     }
 

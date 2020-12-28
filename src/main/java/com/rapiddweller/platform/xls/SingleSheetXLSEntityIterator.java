@@ -68,7 +68,7 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
     private final Converter<String, ?> preprocessor;
     private Array2EntityConverter converter;
     private Object[] buffer;
-    private final ThreadLocalDataContainer<Object[]> sourceContainer = new ThreadLocalDataContainer<Object[]>();
+    private final ThreadLocalDataContainer<Object[]> sourceContainer = new ThreadLocalDataContainer<>();
     private ComplexTypeDescriptor entityDescriptor;
     private final BeneratorContext context;
     private String[] headers;
@@ -139,9 +139,9 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
 
     public static List<Entity> parseAll(Sheet sheet, Converter<String, ?> preprocessor, ComplexTypeDescriptor type,
                                         BeneratorContext context, boolean rowBased, boolean formatted, String emptyMarker) {
-        List<Entity> list = new ArrayList<Entity>();
+        List<Entity> list = new ArrayList<>();
         SingleSheetXLSEntityIterator iterator = new SingleSheetXLSEntityIterator(sheet, preprocessor, type, context, rowBased, formatted, emptyMarker);
-        DataContainer<Entity> container = new DataContainer<Entity>();
+        DataContainer<Entity> container = new DataContainer<>();
         while ((container = iterator.next(container)) != null)
             list.add(container.getData());
         return list;
@@ -211,7 +211,7 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
         if (emptyMarker != null)
             iterator.setEmptyMarker(emptyMarker);
         if (!rowBased)
-            return new OrthogonalArrayIterator<Object>(iterator);
+            return new OrthogonalArrayIterator<>(iterator);
         return iterator;
     }
 

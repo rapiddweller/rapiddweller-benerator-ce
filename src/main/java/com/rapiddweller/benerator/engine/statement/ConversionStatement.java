@@ -40,7 +40,7 @@ import com.rapiddweller.commons.Converter;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ConversionStatement implements Statement {
 	
-	Converter converter;
+	final Converter converter;
 	
 	public ConversionStatement(Converter converter) {
 		this.converter = converter;

@@ -67,15 +67,14 @@ public class CPFGenerator extends ThreadSafeNonNullGenerator<String> {
     @Override
     public String generate() {
         StringBuilder buf = new StringBuilder();
-        ArrayList<Integer> digits = new ArrayList<Integer>();
+        ArrayList<Integer> digits = new ArrayList<>();
 
         for (int i = 0; i < 9; i++)
             digits.add(random.nextInt(9));
         addDigit(digits);
         addDigit(digits);
 
-        for (int i = 0; i < digits.size(); i++)
-            buf.append(digits.get(i));
+        for (Integer digit : digits) buf.append(digit);
         if (this.formatted) {
             buf.insert(3, '.');
             buf.insert(7, '.');

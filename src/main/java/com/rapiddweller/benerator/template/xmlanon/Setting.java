@@ -35,8 +35,8 @@ package com.rapiddweller.benerator.template.xmlanon;
 
 public class Setting {
 	
-	private String key;
-	private String value;
+	private final String key;
+	private final String value;
 	
 	Setting(String key, String value) {
 		this.key = key;

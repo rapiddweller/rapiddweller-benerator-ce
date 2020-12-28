@@ -34,9 +34,9 @@ package com.rapiddweller.benerator;
  */
 public interface BeneratorConstants {
 	
-    public static final String STATE_LOGGER = "com.rapiddweller.benerator.STATE";
+    String STATE_LOGGER = "com.rapiddweller.benerator.STATE";
 
-    public static final int EXIT_CODE_NORMAL = 0;
-    public static final int EXIT_CODE_ERROR  = -1;
+    int EXIT_CODE_NORMAL = 0;
+    int EXIT_CODE_ERROR  = -1;
     
 }

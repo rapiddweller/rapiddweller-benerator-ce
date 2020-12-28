@@ -36,7 +36,7 @@ import com.rapiddweller.benerator.Generator;
  */
 public class NShotGeneratorProxy<E> extends GeneratorProxy<E> {
 
-    private long shots;
+    private final long shots;
 
     private long remainingShots;
 

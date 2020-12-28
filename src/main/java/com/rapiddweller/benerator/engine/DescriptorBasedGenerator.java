@@ -41,7 +41,7 @@ import com.rapiddweller.commons.converter.ConverterManager;
  */
 public class DescriptorBasedGenerator extends GeneratorProxy<Object> {
 	
-	private DescriptorRunner descriptorRunner;
+	private final DescriptorRunner descriptorRunner;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
     public DescriptorBasedGenerator(String uri, String generatorName, BeneratorContext context) throws IOException {

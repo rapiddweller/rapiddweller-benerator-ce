@@ -44,8 +44,8 @@ import com.rapiddweller.script.expression.ExpressionUtil;
 
 public class ErrorHandlerExpression extends DynamicExpression<ErrorHandler> {
 	
-	private String category;
-	private Expression<String> levelExpr;
+	private final String category;
+	private final Expression<String> levelExpr;
 
     public ErrorHandlerExpression(String category, Expression<String> levelExpr) {
 	    this.levelExpr = levelExpr;

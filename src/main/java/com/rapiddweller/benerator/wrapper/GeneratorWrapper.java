@@ -47,7 +47,7 @@ import com.rapiddweller.commons.NullSafeComparator;
 public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
 
     private Generator<S> source;
-    private WrapperProvider<S> sourceWrapperProvider = new WrapperProvider<S>();
+    private final WrapperProvider<S> sourceWrapperProvider = new WrapperProvider<>();
 
     public GeneratorWrapper(Generator<S> source) {
         this.source = source;

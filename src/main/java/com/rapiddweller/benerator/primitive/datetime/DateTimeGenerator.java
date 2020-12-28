@@ -61,7 +61,7 @@ public class DateTimeGenerator extends CompositeGenerator<Date> implements NonNu
     long maxTime;
     long timeGranularity;
     Distribution timeDistribution;
-	private WrapperProvider<Long> timeWrapperProvider = new WrapperProvider<Long>();
+	private final WrapperProvider<Long> timeWrapperProvider = new WrapperProvider<>();
     
     public DateTimeGenerator() {
         this(

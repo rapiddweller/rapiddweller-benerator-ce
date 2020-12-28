@@ -45,7 +45,7 @@ public class StringScriptExpression extends StringExpression {
     }
     
     public StringScriptExpression(String script, String defaultValue) {
-	    super(new ScriptExpression<String>(ScriptUtil.parseScriptText(script), defaultValue));
+	    super(new ScriptExpression<>(ScriptUtil.parseScriptText(script), defaultValue));
     }
 
 }

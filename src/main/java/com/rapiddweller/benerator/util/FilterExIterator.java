@@ -42,8 +42,8 @@ import com.rapiddweller.script.Expression;
  */
 public class FilterExIterator<E> extends DataIteratorProxy<E> {
 	
-	Expression<Boolean> filterEx;
-	Context context;
+	final Expression<Boolean> filterEx;
+	final Context context;
 
 	public FilterExIterator(DataIterator<E> source, Expression<Boolean> filterEx, Context context) {
 		super(source);

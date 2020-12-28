@@ -46,10 +46,8 @@ import com.rapiddweller.script.math.ArithmeticEngine;
 public class AddingConsumer extends AbstractConsumer {
 
 	private Accessor<Object, Number> accessor;
-	
-	private Class<? extends Number> numberType;
-	
-    private Converter<Number, ? extends Number> converter;
+
+	private Converter<Number, ? extends Number> converter;
 	
 	private Number sum;
 	
@@ -63,14 +61,14 @@ public class AddingConsumer extends AbstractConsumer {
     }
 
 	public void setFeature(String feature) {
-		this.accessor = (feature != null ? new FeatureAccessor<Object, Number>(feature, true) : null);
+		this.accessor = (feature != null ? new FeatureAccessor<>(feature, true) : null);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
     public void setType(String typeName) {
 		if (StringUtil.isEmpty(typeName))
 			typeName = "double";
-		this.numberType = (Class<? extends Number>) PrimitiveType.getInstance(typeName).getJavaType();
+		Class<? extends Number> numberType = (Class<? extends Number>) PrimitiveType.getInstance(typeName).getJavaType();
 		this.converter = new NumberToNumberConverter(Number.class, numberType);
 		this.sum = converter.convert(0);
 	}

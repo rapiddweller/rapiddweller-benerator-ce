@@ -43,17 +43,17 @@ import org.apache.logging.log4j.LogManager;
  */
 public abstract class AbstractGenerator<E> implements Generator<E> {
 
-	protected Logger logger = LogManager.getLogger(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	protected GeneratorState state;
 
 	protected GeneratorContext context;
 	
-	private WrapperProvider<E> resultWrapperProvider;
+	private final WrapperProvider<E> resultWrapperProvider;
 
 	public AbstractGenerator() {
 	    this.state = GeneratorState.CREATED;
-	    this.resultWrapperProvider = new WrapperProvider<E>();
+	    this.resultWrapperProvider = new WrapperProvider<>();
     }
 
 	@Override

@@ -76,10 +76,10 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
 
     private static final String ORG = "/com/rapiddweller/domain/organization/";
 
-    protected static Map<String, Generator<String>> locationGenerators =
-            new HashMap<String, Generator<String>>();
+    protected static final Map<String, Generator<String>> locationGenerators =
+            new HashMap<>();
 
-    protected String datasetName;
+    protected final String datasetName;
     protected boolean sector;
     protected boolean location;
     protected boolean legalForm;
@@ -235,9 +235,8 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
 
         // private helpers -------------------------------------------------------------------------------------------------
 
-        @SuppressWarnings("unchecked")
         private void createAndInitShortNameGenerator(String datasetToUse, GeneratorContext context) {
-            shortNameGenerator = new AlternativeGenerator<String>(String.class);
+            shortNameGenerator = new AlternativeGenerator<>(String.class);
             shortNameGenerator.addSource(createInitialsNameGenerator());
             addSourceIfNotNull(createPersonNameGenerator(datasetToUse), shortNameGenerator);
             addSourceIfNotNull(createArtificialNameGenerator(), shortNameGenerator);
@@ -315,7 +314,6 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
             }
         }
 
-        @SuppressWarnings("unchecked")
         private void createAndInitLocationGenerator(String datasetName) {
             locationGenerator = locationGenerators.get(datasetName);
             if (locationGenerator == null) {
@@ -329,18 +327,18 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
                                 new PropertyAccessConverter("name"),
                                 new NameNormalizer());
                         if (DatasetUtil.getDataset(DatasetUtil.REGION_NESTING, datasetName).isAtomic()) {
-                            locationBaseGen = new AlternativeGenerator<String>(String.class,
-                                    new ConstantGenerator<String>(country.getLocalName()),
+                            locationBaseGen = new AlternativeGenerator<>(String.class,
+                                    new ConstantGenerator<>(country.getLocalName()),
                                     cityGen);
                         } else {
                             locationBaseGen = cityGen;
                         }
                     } catch (Exception e) {
                         LOGGER.info("Cannot create location generator: " + e.getMessage());
-                        locationBaseGen = new ConstantGenerator<String>(null);
+                        locationBaseGen = new ConstantGenerator<>(null);
                     }
                 } else
-                    locationBaseGen = new ConstantGenerator<String>(null);
+                    locationBaseGen = new ConstantGenerator<>(null);
                 locationGenerator = WrapperFactory.injectNulls(locationBaseGen, nullQuota);
                 locationGenerator.init(context);
                 locationGenerators.put(datasetName, locationGenerator);

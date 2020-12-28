@@ -38,7 +38,7 @@ import com.rapiddweller.benerator.WeightedGenerator;
  */
 public class WeighingGeneratorWrapper<E> extends GeneratorProxy<E> implements WeightedGenerator<E> {
 	
-	private double weight;
+	private final double weight;
 
 	public WeighingGeneratorWrapper(Class<E> generatedType, double weight) {
 		super(generatedType);

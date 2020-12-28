@@ -82,7 +82,7 @@ import static com.rapiddweller.model.data.SimpleTypeDescriptor.*;
  */
 public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeDescriptor> {
 	
-	private static SimpleTypeGeneratorFactory INSTANCE = new SimpleTypeGeneratorFactory();
+	private static final SimpleTypeGeneratorFactory INSTANCE = new SimpleTypeGeneratorFactory();
 	
 	public static SimpleTypeGeneratorFactory getInstance() {
 		return INSTANCE;
@@ -122,7 +122,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
 		if (valueSpec == null)
 			return null;
 		if ("".equals(valueSpec))
-			return new ConstantGenerator<String>("");
+			return new ConstantGenerator<>("");
         try {
 			Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
 			return context.getGeneratorFactory().createFromWeightedLiteralList(valueSpec, targetType, distribution, uniqueness.isUnique());
@@ -147,7 +147,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
         // check for constant
         String constant = descriptor.getConstant();
         if ("".equals(constant))
-        	generator = new ConstantGenerator<String>("");
+        	generator = new ConstantGenerator<>("");
         else if (constant != null) {
         	Object value = LiteralParser.parse(constant);
             generator = new ConstantGenerator(value);
@@ -165,7 +165,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
 	}
 
     @Override
-	@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
+	@SuppressWarnings({ "unchecked", "rawtypes"})
     protected Generator<?> createSourceGenerator(
     		SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
         String source = descriptor.getSource();
@@ -211,7 +211,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     	return generator;
     }
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
+	@SuppressWarnings({ "unchecked", "rawtypes"})
     private static Generator<?> createSourceGeneratorFromObject(SimpleTypeDescriptor descriptor,
             BeneratorContext context, BeanSpec sourceSpec) {
 		Object sourceObject = sourceSpec.getBean();
@@ -261,9 +261,9 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
         			Object.class, sourceUri, encoding, new ScriptConverterForStrings(context));
         } else {
     		Generator<String[]> src = SourceFactory.createCSVGenerator(sourceUri, separator, encoding, true, rowBased);
-    		Converter<String[], Object> converterChain = new ConverterChain<String[], Object>(
-    				new ArrayElementExtractor<String>(String.class, 0), 
-    				new ScriptConverterForStrings(context));
+    		Converter<String[], Object> converterChain = new ConverterChain<>(
+                    new ArrayElementExtractor<>(String.class, 0),
+                    new ScriptConverterForStrings(context));
     		generator = WrapperFactory.applyConverter(src, converterChain);
             if (distribution != null)
             	generator = distribution.applyTo(generator, uniqueness.isUnique());
@@ -277,15 +277,10 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
 		Generator<?> generator;
         Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
 		Generator<Object[]> src = SourceFactory.createXLSLineGenerator(sourceName);
-		Converter<Object[], Object> converterChain = new ConverterChain<Object[], Object>(
-				new ArrayElementExtractor<Object>(Object.class, 0),
-				new ConditionalConverter(new Condition<Object>() {
-					@Override
-					public boolean evaluate(Object argument) {
-						return (argument instanceof String);
-					}
-				},
-				new ScriptConverterForStrings(context)));
+		Converter<Object[], Object> converterChain = new ConverterChain<>(
+                new ArrayElementExtractor<>(Object.class, 0),
+                new ConditionalConverter(argument -> (argument instanceof String),
+                        new ScriptConverterForStrings(context)));
 		generator = WrapperFactory.applyConverter(src, converterChain);
         if (distribution != null)
         	generator = distribution.applyTo(generator, uniqueness.isUnique());
@@ -342,7 +337,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     }
     
     private static Generator<?> createByteArrayGenerator(SimpleTypeDescriptor descriptor, BeneratorContext context) {
-        Generator<Byte> byteGenerator = new AsByteGeneratorWrapper<Integer>(new RandomIntegerGenerator(-128, 127, 1));
+        Generator<Byte> byteGenerator = new AsByteGeneratorWrapper<>(new RandomIntegerGenerator(-128, 127, 1));
         return new ByteArrayGenerator(byteGenerator, 
         		DescriptorUtil.getMinLength(descriptor), DescriptorUtil.getMaxLength(descriptor, context.getDefaultsProvider()));
     }
@@ -350,7 +345,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private Generator<Timestamp> createTimestampGenerator(SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
         Generator<Date> source = createDateGenerator(descriptor, uniqueness, context);
-        Converter<Date, Timestamp> converter = (Converter) new AnyConverter<Timestamp>(Timestamp.class);
+        Converter<Date, Timestamp> converter = (Converter) new AnyConverter<>(Timestamp.class);
 		return WrapperFactory.applyConverter(source, converter);
     }
 

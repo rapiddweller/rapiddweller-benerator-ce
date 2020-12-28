@@ -38,7 +38,7 @@ public class WrapperProvider<E> extends ThreadLocal<ProductWrapper<E>> {
 
 	@Override
 	protected ProductWrapper<E> initialValue() {
-	    return new ProductWrapper<E>();
+	    return new ProductWrapper<>();
 	}
 	
 	@Override

@@ -38,7 +38,7 @@ public class BlankArrayGenerator extends ThreadSafeNonNullGenerator<Object[]> {
 
     private static final Class<Object[]> GENERATED_TYPE = Object[].class;
 
-    private int length;
+    private final int length;
 
     public BlankArrayGenerator(int length) {
         this.length = length;

@@ -66,7 +66,7 @@ public class WaitParser extends AbstractBeneratorDescriptorParser {
 		// check for constant value
 		Expression<Long> duration  = parseLongAttribute(ATT_DURATION, element, null);
 		if (duration != null) {
-			ExpressionBasedGenerator<Long> base = new ExpressionBasedGenerator<Long>(duration, Long.class);
+			ExpressionBasedGenerator<Long> base = new ExpressionBasedGenerator<>(duration, Long.class);
 			return new WaitStatement(WrapperFactory.asNonNullGenerator(base));
 		}
 		

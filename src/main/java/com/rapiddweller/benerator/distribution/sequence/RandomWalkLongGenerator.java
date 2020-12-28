@@ -41,9 +41,9 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
  */
 public class RandomWalkLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
-    long minIncrement;
-    long maxIncrement;
-    Distribution incrementDistribution;
+    final long minIncrement;
+    final long maxIncrement;
+    final Distribution incrementDistribution;
     
     private long initial;
     private long next;

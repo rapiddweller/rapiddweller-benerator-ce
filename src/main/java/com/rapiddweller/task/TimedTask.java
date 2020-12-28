@@ -59,7 +59,7 @@ public class TimedTask<E extends Task> extends TaskProxy<E> {
 
     @Override
     public Object clone() {
-        return new TimedTask<E>(BeanUtil.clone(realTask));
+        return new TimedTask<>(BeanUtil.clone(realTask));
     }
 
 }

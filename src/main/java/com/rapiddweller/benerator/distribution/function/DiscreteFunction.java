@@ -38,7 +38,7 @@ import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
  */
 public class DiscreteFunction extends AbstractWeightFunction {
 
-    private double[] values;
+    private final double[] values;
 
     public DiscreteFunction(double ... weights) {
         this.values = weights;

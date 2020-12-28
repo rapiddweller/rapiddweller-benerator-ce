@@ -265,13 +265,13 @@ public class InstanceDescriptor extends FeatureDescriptor {
             if (detail == null)
                 throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support detail type: " + detailName);
             if (detailValue instanceof Expression)
-                detail.setValue(new TypeConvertingExpression<Long>((Expression<?>) detailValue, Long.class));
+                detail.setValue(new TypeConvertingExpression<>((Expression<?>) detailValue, Long.class));
             else if (detailValue == null)
                 detail.setValue(null);
             else if (detailValue instanceof String)
-                detail.setValue(new TypeConvertingExpression<Long>(new ScriptExpression<Object>((String) detailValue), Long.class));
+                detail.setValue(new TypeConvertingExpression<>(new ScriptExpression<>((String) detailValue), Long.class));
             else
-                detail.setValue(new TypeConvertingExpression<Long>(new ConstantExpression<Object>(detailValue), Long.class));
+                detail.setValue(new TypeConvertingExpression<>(new ConstantExpression<>(detailValue), Long.class));
         } else
             super.setDetailValue(detailName, detailValue);
     }
@@ -279,17 +279,17 @@ public class InstanceDescriptor extends FeatureDescriptor {
     // convenience 'with...' methods -----------------------------------------------------------------------------------
 
     public InstanceDescriptor withCount(long count) {
-        setCount(new ConstantExpression<Long>(count));
+        setCount(new ConstantExpression<>(count));
         return this;
     }
 
     public InstanceDescriptor withMinCount(long minCount) {
-        setMinCount(new ConstantExpression<Long>(minCount));
+        setMinCount(new ConstantExpression<>(minCount));
         return this;
     }
 
     public InstanceDescriptor withMaxCount(long maxCount) {
-        setMaxCount(new ConstantExpression<Long>(maxCount));
+        setMaxCount(new ConstantExpression<>(maxCount));
         return this;
     }
 

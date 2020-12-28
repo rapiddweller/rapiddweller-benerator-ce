@@ -40,7 +40,7 @@ import com.rapiddweller.model.data.Entity;
  */
 public class StorageSystemInserter extends StorageSystemConsumer {
 
-    private ComplexTypeDescriptor targetType;
+    private final ComplexTypeDescriptor targetType;
 
     public StorageSystemInserter(StorageSystem system) {
         this(system, null);

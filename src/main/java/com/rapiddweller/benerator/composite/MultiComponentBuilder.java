@@ -42,7 +42,7 @@ import com.rapiddweller.commons.CollectionUtil;
  */
 public abstract class MultiComponentBuilder<E> extends AbstractScopedLifeCycleHolder implements ComponentBuilder<E> {
 	
-	protected ComponentBuilder<E>[] builders;
+	protected final ComponentBuilder<E>[] builders;
 	private List<ComponentBuilder<E>> availableBuilders;
 	protected String message;
 

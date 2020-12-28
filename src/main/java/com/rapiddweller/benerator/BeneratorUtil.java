@@ -28,9 +28,6 @@ package com.rapiddweller.benerator;
 
 import java.io.File;
 
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-
 import com.rapiddweller.commons.LogCategories;
 import com.rapiddweller.commons.StringUtil;
 import com.rapiddweller.commons.SystemInfo;
@@ -86,15 +83,7 @@ public class BeneratorUtil {
 			"JVM " + VMInfo.getJavaVmName() + " " + VMInfo.getJavaVmVersion() + " (" + VMInfo.getJavaVmVendor() + ")",
 			"OS " + SystemInfo.getOsName() + " " + SystemInfo.getOsVersion() + " (" + SystemInfo.getOsArchitecture() + ")"
 		);
-        listScriptEngines(printer);
     }
-
-	private static void listScriptEngines(InfoPrinter printer) {
-    	printer.printLines("Installed JSR 223 Script Engines:");
-        for (ScriptEngineFactory engine : new ScriptEngineManager().getEngineFactories()) {
-			printer.printLines("- " + engine.getEngineName() + engine.getNames());
-        }
-	}
 
 	public static void logConfig(String config) {
 		CONFIG_LOGGER.info(config);

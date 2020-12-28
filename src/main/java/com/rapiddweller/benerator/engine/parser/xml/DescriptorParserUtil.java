@@ -85,17 +85,17 @@ public class DescriptorParserUtil {
 	    String attribute = getAttribute(name, element);
 		if (attribute == null)
 			return null;
-		Expression<String> rawEx = new TypeConvertingExpression<String>(
-				new ScriptableExpression(attribute, null), String.class);
-		return new ConvertingExpression<String, String[]>(rawEx, new SplitStringConverter(','));
+		Expression<String> rawEx = new TypeConvertingExpression<>(
+                new ScriptableExpression(attribute, null), String.class);
+		return new ConvertingExpression<>(rawEx, new SplitStringConverter(','));
     }
 
 	public static Expression<Integer> parseIntAttribute(String name, Element element) {
-	    return new TypedScriptExpression<Integer>(getAttribute(name, element), Integer.class);
+	    return new TypedScriptExpression<>(getAttribute(name, element), Integer.class);
     }
 
 	public static Expression<Integer> parseIntAttribute(String name, Element element, int defaultValue) {
-	    return parseIntAttribute(name, element, new ConstantExpression<Integer>(defaultValue));
+	    return parseIntAttribute(name, element, new ConstantExpression<>(defaultValue));
     }
 
 	public static Expression<Integer> parseIntAttribute(String name, Element element, Expression<Integer> defaultValue) {
@@ -103,11 +103,11 @@ public class DescriptorParserUtil {
 	    if (StringUtil.isEmpty(attribute))
 	    	return defaultValue;
 	    else
-	    	return new TypedScriptExpression<Integer>(attribute, Integer.class);
+	    	return new TypedScriptExpression<>(attribute, Integer.class);
     }
 
 	public static Expression<Long> parseLongAttribute(String name, Element element, long defaultValue) {
-	    return parseLongAttribute(name, element, new ConstantExpression<Long>(defaultValue));
+	    return parseLongAttribute(name, element, new ConstantExpression<>(defaultValue));
     }
 
 	public static Expression<Long> parseLongAttribute(String name, Element element, Expression<Long> defaultValue) {
@@ -115,7 +115,7 @@ public class DescriptorParserUtil {
 	    if (StringUtil.isEmpty(attribute))
 	    	return defaultValue;
 	    else
-	    	return new TypedScriptExpression<Long>(attribute, Long.class);
+	    	return new TypedScriptExpression<>(attribute, Long.class);
     }
 
 	public static Expression<Boolean> parseBooleanExpressionAttribute(String name, Element element) {
@@ -125,14 +125,14 @@ public class DescriptorParserUtil {
 	public static Expression<Boolean> parseBooleanExpressionAttribute(String name, Element element, Boolean defaultValue) {
 	    String attribute = getAttribute(name, element);
 	    if (StringUtil.isEmpty(attribute))
-	    	return new ConstantExpression<Boolean>(defaultValue);
+	    	return new ConstantExpression<>(defaultValue);
 	    else
-	    	return new TypedScriptExpression<Boolean>(attribute, Boolean.class);
+	    	return new TypedScriptExpression<>(attribute, Boolean.class);
     }
 
 	public static ConstantExpression<String> parseAttribute(String name, Element element) {
 		String attribute = getAttribute(name, element);
-		return (attribute != null ? new ConstantExpression<String>(attribute) : null);
+		return (attribute != null ? new ConstantExpression<>(attribute) : null);
     }
 
 	public static Expression<?> parseScriptAttribute(String name, Element element) {
@@ -140,7 +140,7 @@ public class DescriptorParserUtil {
 		if (StringUtil.isEmpty(rawAttribute))
 			return null;
 		else
-			return new ScriptExpression<Object>(rawAttribute);
+			return new ScriptExpression<>(rawAttribute);
 	}
 	
 }

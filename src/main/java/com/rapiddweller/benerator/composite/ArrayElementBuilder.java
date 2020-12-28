@@ -44,7 +44,7 @@ public class ArrayElementBuilder extends AbstractComponentBuilder<Object[]> {
 
 	private static class Mutator_ implements Mutator {
 		
-		int index;
+		final int index;
 		
 		public Mutator_(int index) {
 	        this.index = index;

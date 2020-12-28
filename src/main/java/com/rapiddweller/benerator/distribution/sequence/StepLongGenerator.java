@@ -38,7 +38,7 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
 public class StepLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
 	private long increment;
-	private long initial;
+	private final long initial;
 	
     private long next;
 

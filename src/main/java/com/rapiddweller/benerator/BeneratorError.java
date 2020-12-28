@@ -36,7 +36,7 @@ public class BeneratorError extends RuntimeException {
 
 	private static final long serialVersionUID = 4922982624810176934L;
 	
-	protected int code;
+	protected final int code;
 
 	public BeneratorError(String s, Throwable throwable, int code) {
 		super(s, throwable);

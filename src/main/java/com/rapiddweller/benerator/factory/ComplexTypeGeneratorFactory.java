@@ -121,7 +121,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
         else {
         	String segment = descriptor.getSegment();
         	if (DataFileUtil.isXmlDocument(sourceSpec))
-	            generator = new DataSourceGenerator<Entity>(new DbUnitEntitySource(sourceSpec, context));
+	            generator = new DataSourceGenerator<>(new DbUnitEntitySource(sourceSpec, context));
 	        else if (DataFileUtil.isCsvDocument(sourceSpec))
 	            generator = createCSVSourceGenerator(descriptor, context, sourceSpec);
 	        else if (DataFileUtil.isFixedColumnWidthFile(sourceSpec))
@@ -144,12 +144,12 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
         	generator = new SimpleTypeEntityGenerator(generator, descriptor);
         if (descriptor.getFilter() != null) {
         	Expression<Boolean> filter 
-        		= new ScriptExpression<Boolean>(ScriptUtil.parseScriptText(descriptor.getFilter()));
-        	generator = new FilteringGenerator<Entity>(generator, filter);
+        		= new ScriptExpression<>(ScriptUtil.parseScriptText(descriptor.getFilter()));
+        	generator = new FilteringGenerator<>(generator, filter);
         }
     	Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
         if (distribution != null)
-        	generator = new DistributingGenerator<Entity>(generator, distribution, uniqueness.isUnique());
+        	generator = new DistributingGenerator<>(generator, distribution, uniqueness.isUnique());
     	return generator;
     }
 
@@ -178,7 +178,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     		Uniqueness ownerUniqueness, BeneratorContext context, Generator<?> source) {
     	List<GeneratorComponent<Entity>> generatorComponent = 
     		createMutatingGeneratorComponents(descriptor, ownerUniqueness, context);
-        return new SourceAwareGenerator<Entity>(name, (Generator<Entity>) source, generatorComponent, context);
+        return new SourceAwareGenerator<>(name, (Generator<Entity>) source, generatorComponent, context);
     }
 
     // private helpers -------------------------------------------------------------------------------------------------
@@ -193,13 +193,13 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
 	        String subSelector = descriptor.getSubSelector();
 	        if (!StringUtil.isEmpty(subSelector)) {
 				DataSource<Entity> dataSource = storage.queryEntities(descriptor.getName(), subSelector, context);
-				generator = WrapperFactory.applyHeadCycler(new DataSourceGenerator<Entity>(dataSource));
+				generator = WrapperFactory.applyHeadCycler(new DataSourceGenerator<>(dataSource));
 			} else 
-	        	generator = new DataSourceGenerator<Entity>(storage.queryEntities(descriptor.getName(), selector, context));
+	        	generator = new DataSourceGenerator<>(storage.queryEntities(descriptor.getName(), selector, context));
 	    } else if (sourceObject instanceof Generator) {
 	        generator = (Generator<Entity>) sourceObject;
 	    } else if (sourceObject instanceof EntitySource) {
-	        generator = new DataSourceGenerator<Entity>((EntitySource) sourceObject);
+	        generator = new DataSourceGenerator<>((EntitySource) sourceObject);
 	    } else if (sourceObject instanceof DataSource) {
 	        DataSource dataSource = (DataSource) sourceObject;
 	        if (!Entity.class.isAssignableFrom(dataSource.getType()))
@@ -226,7 +226,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
 			Converter<String, String> scriptConverter = DescriptorUtil.createStringScriptConverter(context);
 			FixedWidthEntitySource iterable = new FixedWidthEntitySource(sourceName, descriptor, scriptConverter, encoding, null, ffcd);
 			iterable.setContext(context);
-			generator = new DataSourceGenerator<Entity>(iterable);
+			generator = new DataSourceGenerator<>(iterable);
 			return generator;
 		} catch (ParseException e) {
 			throw new ConfigurationError("Error parsing fixed-width pattern: " + pattern, e);
@@ -264,7 +264,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
 	@SuppressWarnings("unchecked")
 	public static List<GeneratorComponent<Entity>> createMutatingGeneratorComponents(ComplexTypeDescriptor descriptor,
             Uniqueness ownerUniqueness, BeneratorContext context) {
-	    List<GeneratorComponent<Entity>> generatorComponents = new ArrayList<GeneratorComponent<Entity>>();
+	    List<GeneratorComponent<Entity>> generatorComponents = new ArrayList<>();
         for (InstanceDescriptor part : descriptor.getDeclaredParts())
             if (!(part instanceof ComponentDescriptor) || ((ComponentDescriptor) part).getMode() != Mode.ignored && !ComplexTypeDescriptor.__SIMPLE_CONTENT.equals(part.getName())) {
             	try {

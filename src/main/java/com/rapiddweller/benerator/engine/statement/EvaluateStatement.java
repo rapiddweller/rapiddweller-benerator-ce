@@ -193,9 +193,7 @@ public class EvaluateStatement implements Statement {
 			if (idValue != null)
 				context.setGlobal(idValue, result);
 	    	return true;
-		} catch (ConversionException e) {
-			throw new ConfigurationError(e);
-		} catch (IOException e) {
+		} catch (ConversionException | IOException e) {
 			throw new ConfigurationError(e);
 		}
     }
@@ -209,8 +207,7 @@ public class EvaluateStatement implements Statement {
     }
 
 	private ErrorHandler getErrorHandler(String level) {
-	    ErrorHandler errorHandler = new ErrorHandler(getClass().getName(), Level.valueOf(level));
-	    return errorHandler;
+        return new ErrorHandler(getClass().getName(), Level.valueOf(level));
     }
 
 	private Object runScript(String text, String type, String onError, Context context) {

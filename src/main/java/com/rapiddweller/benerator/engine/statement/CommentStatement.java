@@ -44,7 +44,7 @@ public class CommentStatement implements Statement {
 	
 	private static final Logger commentLogger = LogManager.getLogger(LogCategories.COMMENT);
 
-	private String comment;
+	private final String comment;
 	
     public CommentStatement(String comment) {
 	    this.comment = comment;

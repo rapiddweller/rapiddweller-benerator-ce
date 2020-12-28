@@ -54,8 +54,8 @@ public class ConsumerInvoker implements Invoker {
     }
 
     @Override
-    public Object invoke(Object[] args) throws Exception {
-        consumer.startConsuming(new ProductWrapper<Object>().wrap(args));
+    public Object invoke(Object[] args) {
+        consumer.startConsuming(new ProductWrapper<>().wrap(args));
         return null;
     }
 

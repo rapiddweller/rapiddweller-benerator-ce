@@ -61,8 +61,8 @@ public class FWRecordFormatter {
             this.converters = new Converter[descriptors.length];
             for (int i = 0; i < descriptors.length; i++) {
                 FixedWidthColumnDescriptor descriptor = descriptors[i];
-                ConverterChain<Entity, String> chain = new ConverterChain<Entity, String>();
-                chain.addComponent(new AccessingConverter<Entity, Object>(Entity.class, Object.class, new ComponentAccessor(descriptor.getName())));
+                ConverterChain<Entity, String> chain = new ConverterChain<>();
+                chain.addComponent(new AccessingConverter<>(Entity.class, Object.class, new ComponentAccessor(descriptor.getName())));
                 chain.addComponent(new FormatFormatConverter(String.class, descriptor.getFormat(), true));
                 this.converters[i] = chain;
             }

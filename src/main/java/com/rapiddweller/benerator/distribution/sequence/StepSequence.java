@@ -51,8 +51,8 @@ import static com.rapiddweller.commons.NumberUtil.*;
 public class StepSequence extends Sequence {
 
     private BigDecimal delta;
-	private BigDecimal initial;
-	private BigDecimal limit;
+	private final BigDecimal initial;
+	private final BigDecimal limit;
 	
 	public StepSequence() {
 	    this(null); // when using null, the granularity parameter will be used to set the increment in createGenerator
@@ -95,7 +95,7 @@ public class StepSequence extends Sequence {
 		if (delta != null && delta.longValue() < 0)
 			return super.applyTo(source, unique);
 		else
-			return new SkipGeneratorProxy<T>(source, deltaToUse, deltaToUse, 
+			return new SkipGeneratorProxy<>(source, deltaToUse, deltaToUse,
 					SequenceManager.RANDOM_SEQUENCE, toInteger(limit));
 	}
 	

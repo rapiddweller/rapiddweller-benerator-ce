@@ -38,8 +38,8 @@ import com.rapiddweller.script.Expression;
  */
 public class ExpressionBasedGenerator<E> extends ThreadSafeGenerator<E> {
 
-	private Expression<E> expression;
-	private Class<E> generatedType;
+	private final Expression<E> expression;
+	private final Class<E> generatedType;
 	
 	public ExpressionBasedGenerator(Expression<E> expression, Class<E> generatedType) {
 	    this.expression = expression;

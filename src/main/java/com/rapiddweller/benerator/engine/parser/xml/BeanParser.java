@@ -118,7 +118,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
         	}
         } else if (!StringUtil.isEmpty(beanClass)) {
 	        logger.debug("Instantiating bean of class " + beanClass + " (id=" + id + ")");
-	        instantiation = new DefaultConstruction<Object>(beanClass);
+	        instantiation = new DefaultConstruction<>(beanClass);
         } else
         	throw new ConfigurationError("Syntax error in definition of bean " + id);
         Element[] propertyElements = XMLUtil.getChildElements(element);

@@ -40,7 +40,7 @@ import com.rapiddweller.model.data.Entity;
  */
 public class BlankEntityGenerator extends ThreadSafeGenerator<Entity> {
 
-    private ComplexTypeDescriptor descriptor;
+    private final ComplexTypeDescriptor descriptor;
 
     public BlankEntityGenerator(ComplexTypeDescriptor descriptor) {
     	Assert.notNull(descriptor, "descriptor");

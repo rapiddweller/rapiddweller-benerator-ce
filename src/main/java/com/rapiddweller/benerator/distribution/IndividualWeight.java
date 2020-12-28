@@ -54,8 +54,8 @@ public abstract class IndividualWeight<E> implements Weight {
     public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
     	if (unique)
     		throw new ConfigurationError("Uniqueness is not supported by " + getClass());
-    	return new IndividualWeightSampleGenerator<T>(source.getGeneratedType(), (IndividualWeight<T>) this, 
-    			GeneratorUtil.allProducts(source));
+    	return new IndividualWeightSampleGenerator<>(source.getGeneratedType(), (IndividualWeight<T>) this,
+                GeneratorUtil.allProducts(source));
     }
 
 }

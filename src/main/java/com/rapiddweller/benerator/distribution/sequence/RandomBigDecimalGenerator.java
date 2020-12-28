@@ -48,10 +48,10 @@ public class RandomBigDecimalGenerator extends ThreadSafeNonNullGenerator<BigDec
 	private static final BigDecimal DEFAULT_MAX = BigDecimal.valueOf(Double.MAX_VALUE);
 	private static final BigDecimal DEFAULT_GRANULARITY = BigDecimal.valueOf(1);
 	
-	private BigDecimal min;
-	private BigDecimal max;
-	private BigDecimal granularity;
-	private BigDecimal range;
+	private final BigDecimal min;
+	private final BigDecimal max;
+	private final BigDecimal granularity;
+	private final BigDecimal range;
 
     public RandomBigDecimalGenerator() {
         this(DEFAULT_MIN, DEFAULT_MAX);

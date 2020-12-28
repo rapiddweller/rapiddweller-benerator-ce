@@ -37,7 +37,7 @@ import com.rapiddweller.commons.converter.ToStringConverter;
  */
 public abstract class FormattingConsumer extends AbstractConsumer {
 
-	protected ToStringConverter plainConverter = new ToStringConverter();
+	protected final ToStringConverter plainConverter = new ToStringConverter();
 
 	public String getNullString() {
 		return plainConverter.getNullString();

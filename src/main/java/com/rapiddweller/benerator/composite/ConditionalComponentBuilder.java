@@ -38,7 +38,7 @@ import com.rapiddweller.script.Expression;
  */
 public class ConditionalComponentBuilder<E> extends ComponentBuilderProxy<E> {
 
-	private Expression<?> condition;
+	private final Expression<?> condition;
 	
 	public ConditionalComponentBuilder(ComponentBuilder<E> source, Expression<?> condition) {
 	    super(source);

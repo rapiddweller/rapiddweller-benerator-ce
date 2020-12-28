@@ -44,8 +44,8 @@ import java.util.Random;
  */
 public class WeightedDoubleGenerator extends AbstractNonNullNumberGenerator<Double> {
 
-    private WeightFunction function;
-    private Random random;
+    private final WeightFunction function;
+    private final Random random;
 
     private double[] value;
     private double[] probSum;

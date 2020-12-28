@@ -109,8 +109,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
         return result;
     }
 
-    @SuppressWarnings("resource")
-	protected static ComponentBuilder<?> createScriptBuilder(ComponentDescriptor component, BeneratorContext context) {
+    protected static ComponentBuilder<?> createScriptBuilder(ComponentDescriptor component, BeneratorContext context) {
     	TypeDescriptor type = component.getTypeDescriptor();
         if (type == null)
         	return null;
@@ -186,8 +185,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 	            throw new ConfigurationError("'source' is not set for " + descriptor);
 	        Object sourceObject = context.get(sourceName);
 	        if (sourceObject instanceof StorageSystem) {
-	            @SuppressWarnings("resource")
-				StorageSystem sourceSystem = (StorageSystem) sourceObject;
+	            StorageSystem sourceSystem = (StorageSystem) sourceObject;
 	            String selector = typeDescriptor.getSelector();
 	            String subSelector = typeDescriptor.getSubSelector();
 	            boolean subSelect = !StringUtil.isEmpty(subSelector);
@@ -257,7 +255,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     		return builder;
     	String conditionText = typeDescriptor.getCondition();
     	if (!StringUtil.isEmpty(conditionText)) {
-		    Expression<Boolean> condition = new ScriptExpression<Boolean>(conditionText);
+		    Expression<Boolean> condition = new ScriptExpression<>(conditionText);
 		    return new ConditionalComponentBuilder(builder, condition);
     	} else
     		return builder;
@@ -307,14 +305,16 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
         	longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, 1L, 1L, true, context);
     	NonNullGenerator<Integer> countGenerator = WrapperFactory.asNonNullGenerator(
     			new AsIntegerGeneratorWrapper<Number>((Generator) longCountGenerator));
-    	if ("array".equals(container))
-    		return new SingleSourceArrayGenerator(generator, generator.getGeneratedType(), countGenerator);
-    	else if ("list".equals(container))
-    		return new SingleSourceCollectionGenerator(generator, ArrayList.class, countGenerator);
-    	else if ("set".equals(container))
-    		return new SingleSourceCollectionGenerator(generator, HashSet.class, countGenerator);
-    	else
-    		throw new SyntaxError("Not a supported container", container);
+		switch (container) {
+			case "array":
+				return new SingleSourceArrayGenerator(generator, generator.getGeneratedType(), countGenerator);
+			case "list":
+				return new SingleSourceCollectionGenerator(generator, ArrayList.class, countGenerator);
+			case "set":
+				return new SingleSourceCollectionGenerator(generator, HashSet.class, countGenerator);
+			default:
+				throw new SyntaxError("Not a supported container", container);
+		}
     }
 
 }

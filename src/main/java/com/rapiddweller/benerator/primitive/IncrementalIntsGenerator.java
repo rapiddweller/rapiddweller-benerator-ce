@@ -39,8 +39,8 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
  */
 public class IncrementalIntsGenerator extends ThreadSafeNonNullGenerator<int[]> {
 
-	private int radix;
-    private int[] digits;
+	private final int radix;
+    private final int[] digits;
     private boolean overrun;
 
     // constructors ----------------------------------------------------------------------------------------------------

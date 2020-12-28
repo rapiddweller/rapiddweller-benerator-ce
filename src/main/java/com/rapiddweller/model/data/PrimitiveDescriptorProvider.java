@@ -46,7 +46,7 @@ public class PrimitiveDescriptorProvider extends DefaultDescriptorProvider {
         addTypeDescriptor(new ComplexTypeDescriptor("entity", this));
     }
 
-    public SimpleTypeDescriptor getPrimitiveTypeDescriptor(Class<? extends Object> javaType) {
+    public SimpleTypeDescriptor getPrimitiveTypeDescriptor(Class<?> javaType) {
         PrimitiveType type = PrimitiveType.findByJavaType(javaType);
         if (type != null)
             return (SimpleTypeDescriptor) getTypeDescriptor(type.getName());

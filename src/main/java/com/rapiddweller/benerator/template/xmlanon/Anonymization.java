@@ -38,18 +38,18 @@ import java.util.List;
 
 public class Anonymization {
 	
-	private String varname;
+	private final String varname;
 	
 	/** Characterizes the files and their data nodes to which to apply the anonymization. */
-	private List<Locator> locators;
+	private final List<Locator> locators;
 	
 	/** Key-value pairs of Benerator anonymization settings as they would appear in a descriptor file. */
-	private List<Setting> settings;
+	private final List<Setting> settings;
 	
 	public Anonymization(String varname) {
 		this.varname = varname;
-		this.locators = new ArrayList<Locator>();
-		this.settings = new ArrayList<Setting>();
+		this.locators = new ArrayList<>();
+		this.settings = new ArrayList<>();
 	}
 	
 	public String getVarname() {

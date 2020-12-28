@@ -41,7 +41,7 @@ public class ConstantGenerator<E> extends ThreadSafeGenerator<E> {
     /** The value to return */
     private E value;
     
-    private Class<E> generatedType;
+    private final Class<E> generatedType;
 
     // constructors ----------------------------------------------------------------------------------------------------
 

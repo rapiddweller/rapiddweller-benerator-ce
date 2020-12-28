@@ -62,7 +62,7 @@ public class Setup implements ObservableBean {
 
 	private static final String DEFAULT_DB_DRIVER = "oracle.jdbc.driver.OracleDriver";
 
-	private PropertyChangeSupport changeSupport;
+	private final PropertyChangeSupport changeSupport;
 	
 	private String  projectName;
 	private String  groupId;

@@ -40,9 +40,9 @@ import com.rapiddweller.commons.ErrorHandler;
  */
 public class TaskBasedGenerator implements Generator<Object> {
 	
-	private GenerateAndConsumeTask task;
+	private final GenerateAndConsumeTask task;
 	private GeneratorContext context;
-	private ErrorHandler errorHandler;
+	private final ErrorHandler errorHandler;
 	private boolean initialized;
 
 	public TaskBasedGenerator(GenerateAndConsumeTask task) {
@@ -83,7 +83,7 @@ public class TaskBasedGenerator implements Generator<Object> {
 		ProductWrapper<?> currentProduct = task.getRecentProduct();
 		if (currentProduct == null)
 			return null;
-		return new ProductWrapper<Object>().wrap(currentProduct.unwrap());
+		return new ProductWrapper<>().wrap(currentProduct.unwrap());
 	}
 
 	@Override

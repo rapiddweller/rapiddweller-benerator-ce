@@ -79,7 +79,7 @@ public class BeneratorGUI {
 	
 	public static class BeneratorGUIFrame extends JFrame implements JavaApplication {
 		
-		JTextArea text;
+		final JTextArea text;
 		
 		public BeneratorGUIFrame() throws IOException {
 		    super("Benerator GUI");
@@ -121,13 +121,14 @@ public class BeneratorGUI {
 		    JMenuItem urlDecodeItem = editMenu.add(new RunAction());
 		    urlDecodeItem.setAccelerator(
 		    		KeyStroke.getKeyStroke('R',
-							Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(),
+                            Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
 		    	    false));
 		    urlDecodeItem.setMnemonic('R');
 	    }
-		
+
 		@Override
 		public void exit() {
+			//noinspection finally
 			try {
 		        String content = text.getText();
 				IOUtil.writeTextFile(BUFFER_FILE.getAbsolutePath(), content);

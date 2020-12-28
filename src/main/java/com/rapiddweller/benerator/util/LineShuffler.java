@@ -84,7 +84,7 @@ public class LineShuffler {
     // private helpers -------------------------------------------------------------------------------------------------
 
     private static List<String> read(int bufferSize, ReaderLineIterator iterator) {
-        List<String> lines = new ArrayList<String>(Math.max(100000, bufferSize));
+        List<String> lines = new ArrayList<>(Math.max(100000, bufferSize));
         int lineCount = 0;
         while (iterator.hasNext() && lineCount < bufferSize) {
             String line = iterator.next();

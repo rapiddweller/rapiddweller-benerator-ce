@@ -50,10 +50,10 @@ public class SourceAwareGenerator<E> extends GeneratorProxy<E> implements Messag
     private static final Logger LOGGER = LogManager.getLogger(SourceAwareGenerator.class);
     private static final Logger STATE_LOGGER = LogManager.getLogger(BeneratorConstants.STATE_LOGGER);
     
-    private String instanceName;
+    private final String instanceName;
     private E currentInstance;
 	private String message;
-	private ComponentAndVariableSupport<E> support;
+	private final ComponentAndVariableSupport<E> support;
 	
 	/**
      * @param source another Generator of entities that serves as Entity builder. 
@@ -64,7 +64,7 @@ public class SourceAwareGenerator<E> extends GeneratorProxy<E> implements Messag
 			List<GeneratorComponent<E>> components, BeneratorContext context) {
         super(source);
         this.instanceName = instanceName;
-        this.support = new ComponentAndVariableSupport<E>(instanceName, components, context);
+        this.support = new ComponentAndVariableSupport<>(instanceName, components, context);
 		this.context = context;
 	}
 	

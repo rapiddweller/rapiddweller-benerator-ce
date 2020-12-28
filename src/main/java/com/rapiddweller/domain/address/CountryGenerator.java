@@ -73,10 +73,10 @@ public class CountryGenerator extends AbstractDatasetGenerator<Country> implemen
     }
 
     protected WeightedDatasetGenerator<Country> createGeneratorForCountry(Country country) {
-        ConstantGenerator<Country> coreGenerator = new ConstantGenerator<Country>(country);
-        WeightedGenerator<Country> generator = new WeighingGeneratorWrapper<Country>(coreGenerator, country.getPopulation());
+        ConstantGenerator<Country> coreGenerator = new ConstantGenerator<>(country);
+        WeightedGenerator<Country> generator = new WeighingGeneratorWrapper<>(coreGenerator, country.getPopulation());
         totalWeight += generator.getWeight();
-        return new AtomicDatasetGenerator<Country>(generator, nesting, country.getIsoCode());
+        return new AtomicDatasetGenerator<>(generator, nesting, country.getIsoCode());
     }
 
     @Override

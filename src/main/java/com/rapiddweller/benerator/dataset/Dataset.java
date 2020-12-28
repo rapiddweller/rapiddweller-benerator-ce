@@ -43,11 +43,11 @@ public class Dataset implements Named {
 	
 	// attributes ------------------------------------------------------------------------------------------------------
 	
-    private String id;
-    private String type;
-    private String name;
-    private Set<Dataset> parents;
-    private List<Dataset> subSets;
+    private final String id;
+    private final String type;
+    private final String name;
+    private final Set<Dataset> parents;
+    private final List<Dataset> subSets;
     
     // constructor -----------------------------------------------------------------------------------------------------
 
@@ -59,8 +59,8 @@ public class Dataset implements Named {
         this.id = type + ':' + name;
         this.type = type;
         this.name = name;
-        this.parents = new HashSet<Dataset>();
-        this.subSets = new ArrayList<Dataset>();
+        this.parents = new HashSet<>();
+        this.subSets = new ArrayList<>();
     }
     
     // interface -------------------------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ public class Dataset implements Named {
     }
     
     public List<Dataset> allAtomicSubSets() {
-    	List<Dataset> atomicSubSets = new ArrayList<Dataset>();
+    	List<Dataset> atomicSubSets = new ArrayList<>();
         for (Dataset subSet : subSets) {
             if (subSet.getSubSets().size() == 0)
                 atomicSubSets.add(subSet);

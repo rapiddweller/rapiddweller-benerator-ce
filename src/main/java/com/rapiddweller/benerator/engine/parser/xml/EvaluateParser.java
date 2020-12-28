@@ -79,13 +79,13 @@ public class EvaluateParser extends AbstractBeneratorDescriptorParser {
 		Expression<String> text         = new StringExpression(parseScriptableElementText(element, false));
 		Expression<String> uri          = parseScriptableStringAttribute(ATT_URI, element);
 		Expression<String> type         = parseAttribute(ATT_TYPE, element);
-		Expression<?> targetObject      = new FeatureAccessExpression<Object>(element.getAttribute(ATT_TARGET));
-		Expression<Character> separator = new ConvertingExpression<String, Character>(parseScriptableStringAttribute(ATT_SEPARATOR, element), new String2CharConverter());
+		Expression<?> targetObject      = new FeatureAccessExpression<>(element.getAttribute(ATT_TARGET));
+		Expression<Character> separator = new ConvertingExpression<>(parseScriptableStringAttribute(ATT_SEPARATOR, element), new String2CharConverter());
 		Expression<String> onError      = parseScriptableStringAttribute(ATT_ON_ERROR, element);
 		Expression<String> encoding     = parseScriptableStringAttribute(ATT_ENCODING, element);
 		Expression<Boolean> optimize    = parseBooleanExpressionAttribute(ATT_OPTIMIZE, element, false);
 		Expression<Boolean> invalidate  = parseBooleanExpressionAttribute(ATT_INVALIDATE, element, null);
-		Expression<?> assertion         = new ScriptExpression<Object>(element.getAttribute(ATT_ASSERT));
+		Expression<?> assertion         = new ScriptExpression<>(element.getAttribute(ATT_ASSERT));
 		return new EvaluateStatement(evaluate, id, text, uri, type, targetObject, separator, onError, encoding, optimize, invalidate, assertion);
 	}
 

@@ -72,8 +72,8 @@ public class ModelParser {
 	
     private static final Set<String> SIMPLE_TYPE_COMPONENTS = CollectionUtil.toSet(EL_ATTRIBUTE, EL_REFERENCE, EL_ID);
     
-	private BeneratorContext context;
-    private DescriptorProvider descriptorProvider;
+	private final BeneratorContext context;
+    private final DescriptorProvider descriptorProvider;
 	
     public ModelParser(BeneratorContext context) {
 		this.context = context;
@@ -180,9 +180,9 @@ public class ModelParser {
 
 	public void applyDefaultCounts(PartDescriptor descriptor) {
 		if (descriptor.getDeclaredDetailValue("minCount") == null)
-            descriptor.setMinCount(new ConstantExpression<Long>(1L));
+            descriptor.setMinCount(new ConstantExpression<>(1L));
         if (descriptor.getDeclaredDetailValue("maxCount") == null)
-            descriptor.setMaxCount(new ConstantExpression<Long>(1L));
+            descriptor.setMaxCount(new ConstantExpression<>(1L));
 	}
 
     public SimpleTypeDescriptor parseSimpleType(Element element) {

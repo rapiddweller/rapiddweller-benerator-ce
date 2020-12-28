@@ -48,9 +48,9 @@ import com.rapiddweller.model.data.EntitySource;
  */
 public class EntityPartSource extends AbstractDataSource<Entity> implements EntitySource {
 	
-	protected String productName;
-	protected String partName;
-	protected BeneratorContext context;
+	protected final String productName;
+	protected final String partName;
+	protected final BeneratorContext context;
 	
 	public EntityPartSource(String productName, String partName, BeneratorContext context) {
 		super(Entity.class);
@@ -66,7 +66,7 @@ public class EntityPartSource extends AbstractDataSource<Entity> implements Enti
 
 	public class EntityPartIterator extends AbstractDataIterator<Entity> {
 		
-		private Iterator<Entity> source;
+		private final Iterator<Entity> source;
 		
 		@SuppressWarnings("unchecked")
 		public EntityPartIterator() {

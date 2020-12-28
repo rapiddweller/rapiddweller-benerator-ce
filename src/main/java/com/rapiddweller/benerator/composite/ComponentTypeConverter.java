@@ -50,7 +50,7 @@ import com.rapiddweller.model.data.TypeDescriptor;
  */
 public class ComponentTypeConverter extends AbstractConverter<Entity, Entity> {
 
-	private ComplexTypeDescriptor type;
+	private final ComplexTypeDescriptor type;
 
 	public ComponentTypeConverter(ComplexTypeDescriptor type) {
 		super(Entity.class, Entity.class);
@@ -94,7 +94,7 @@ public class ComponentTypeConverter extends AbstractConverter<Entity, Entity> {
 			        components.put(componentName, convert((Entity) componentValue, (ComplexTypeDescriptor) componentType));
 				} else if (componentValue.getClass().isArray()) {
 					int n = Array.getLength(componentValue);
-					ArrayBuilder<Entity> builder = new ArrayBuilder<Entity>(Entity.class, n);
+					ArrayBuilder<Entity> builder = new ArrayBuilder<>(Entity.class, n);
 					for (int i = 0; i < n; i++) {
 						Entity item = (Entity) Array.get(componentValue, i);
 						builder.add(convert(item, (ComplexTypeDescriptor) componentType));

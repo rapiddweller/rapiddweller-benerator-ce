@@ -50,7 +50,7 @@ public class FamilyNameGenerator extends WeightedDatasetCSVGenerator<String> imp
 
     // default instance management -------------------------------------------------------------------------------------
 
-    private static final Map<String, Generator<String>> defaultInstances = new HashMap<String, Generator<String>>();
+    private static final Map<String, Generator<String>> defaultInstances = new HashMap<>();
 
     public FamilyNameGenerator() {
         this(Locale.getDefault().getCountry());
@@ -70,11 +70,10 @@ public class FamilyNameGenerator extends WeightedDatasetCSVGenerator<String> imp
     }
 
     public static Generator<String> sharedInstance(String datasetName) {
-        String key = datasetName;
-        Generator<String> instance = defaultInstances.get(key);
+        Generator<String> instance = defaultInstances.get(datasetName);
         if (instance == null) {
-            instance = new SharedGenerator<String>(new FamilyNameGenerator(datasetName));
-            defaultInstances.put(key, instance);
+            instance = new SharedGenerator<>(new FamilyNameGenerator(datasetName));
+            defaultInstances.put(datasetName, instance);
         }
         return instance;
     }

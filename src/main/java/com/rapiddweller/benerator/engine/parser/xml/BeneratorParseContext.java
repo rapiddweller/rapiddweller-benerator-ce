@@ -38,7 +38,7 @@ import com.rapiddweller.formats.xml.ParseContext;
  */
 public class BeneratorParseContext extends ParseContext<Statement> {
 
-	ResourceManager resourceManager;
+	final ResourceManager resourceManager;
 
 	public BeneratorParseContext(ResourceManager resourceManager) {
 		super(Statement.class);

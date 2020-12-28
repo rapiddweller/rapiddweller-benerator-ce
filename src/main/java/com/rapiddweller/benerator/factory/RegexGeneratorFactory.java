@@ -107,7 +107,7 @@ public class RegexGeneratorFactory {
         	return WrapperFactory.asNonNullGenerator(factory.createSingleValueGenerator(
         			((RegexString) object).getString(), uniqueness.isUnique()));
         else if (object == null)
-        	return WrapperFactory.asNonNullGenerator(new ConstantGenerator<String>(null, String.class));
+        	return WrapperFactory.asNonNullGenerator(new ConstantGenerator<>(null, String.class));
         else
             throw new UnsupportedOperationException("Unsupported regex part type: " + object.getClass().getName());
     }
@@ -150,13 +150,10 @@ public class RegexGeneratorFactory {
             final Choice choice, final int minCount, final int maxCount, final int minLength, final Integer maxLength, 
             final Uniqueness uniqueness, final GeneratorFactory factory) {
     	final RegexPart[] alternatives = choice.getAlternatives();
-    	GeneratorProvider<String> generatorProvider = new GeneratorProvider<String>() {
-			@Override
-			public Generator<String> create() {
-		    	final Generator[] altGens = createComponentGenerators(
-		    			alternatives, maxLength, null, uniqueness, factory);
-				return new AlternativeGenerator<String>(String.class, altGens);
-			}
+    	GeneratorProvider<String> generatorProvider = () -> {
+			final Generator[] altGens = createComponentGenerators(
+					alternatives, maxLength, null, uniqueness, factory);
+			return new AlternativeGenerator<String>(String.class, altGens);
 		};
     	return factory.createCompositeStringGenerator(generatorProvider, minCount, maxCount, uniqueness);
     }
@@ -165,13 +162,7 @@ public class RegexGeneratorFactory {
             final Group group, final int minCount, final Integer maxCount, 
             final int minLength, final Integer maxLength, 
             final Uniqueness uniqueness, final GeneratorFactory factory) {
-		GeneratorProvider<String> partGeneratorProvider = new GeneratorProvider<String>() {
-			
-			@Override
-			public Generator<String> create() {
-				return createFromObject(group.getRegex(), minLength, maxLength, uniqueness, factory);
-			}
-		};
+		GeneratorProvider<String> partGeneratorProvider = () -> createFromObject(group.getRegex(), minLength, maxLength, uniqueness, factory);
 		return factory.createCompositeStringGenerator(partGeneratorProvider, minCount, maxCount, uniqueness);
     }
 

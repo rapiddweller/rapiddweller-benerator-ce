@@ -41,7 +41,7 @@ import com.rapiddweller.commons.BeanUtil;
  */
 public class SingleSourceCollectionGenerator<I, C extends Collection<I>> extends CardinalGenerator<I, C> implements NonNullGenerator<C> {
 
-    private Class<C> collectionType;
+    private final Class<C> collectionType;
 
 	public SingleSourceCollectionGenerator(Generator<I> source, Class<C> collectionType, 
 			NonNullGenerator<Integer> lengthGenerator) {
@@ -70,7 +70,7 @@ public class SingleSourceCollectionGenerator<I, C extends Collection<I>> extends
     	// the following works for primitive types as well as for objects
 		C collection;
 		if (size != null)
-			collection = BeanUtil.newInstance(collectionType, new Object[] { size.intValue() });
+			collection = BeanUtil.newInstance(collectionType, new Object[] {size});
 		else
 			collection = BeanUtil.newInstance(collectionType);
         for (int i = 0; size == null || i < size; i++) {

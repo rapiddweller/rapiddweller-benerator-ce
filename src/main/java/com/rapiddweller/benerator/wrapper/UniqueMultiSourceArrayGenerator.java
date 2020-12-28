@@ -48,7 +48,7 @@ public class UniqueMultiSourceArrayGenerator<S> extends MultiGeneratorWrapper<S,
 
     private static final Logger logger = LogManager.getLogger(UniqueMultiSourceArrayGenerator.class);
 
-    private Class<S> componentType;
+    private final Class<S> componentType;
     private Object[] buffer;
 
     // constructors ----------------------------------------------------------------------------------------------------

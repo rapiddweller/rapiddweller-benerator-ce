@@ -77,7 +77,7 @@ public class EquivalenceStringGenerator<E> extends CardinalGenerator<E, String> 
 			getSource().reset();                            // ...and reset character selection
 			part = generateFromSource();
 		}
-		String result = createString(part.unwrap(), currentLength.intValue());
+		String result = createString(part.unwrap(), currentLength);
 		if (currentLength == 0) 
 			while (generateFromSource() != null) {
 				// for length 0, any character repetition is "", 

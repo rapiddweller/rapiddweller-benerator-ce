@@ -39,7 +39,7 @@ public class RandomWalkDoubleGenerator extends AbstractNonNullNumberGenerator<Do
 
     private double next;
 
-    private RandomDoubleGenerator incrementGenerator;
+    private final RandomDoubleGenerator incrementGenerator;
 
     public RandomWalkDoubleGenerator() {
         this(Double.MIN_VALUE, Double.MAX_VALUE);

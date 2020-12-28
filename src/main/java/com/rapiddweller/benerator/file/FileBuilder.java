@@ -43,7 +43,7 @@ public class FileBuilder {
 
     public static <T> void build(Generator<T> generator, int length, DocumentWriter<T> writer) throws IOException {
         writer.setVariable("part_count", length);
-        ProductWrapper<T> wrapper = new ProductWrapper<T>();
+        ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (int i = 0; i < length && wrapper != null; i++) {
             writer.setVariable("part_index", i);
             wrapper = generator.generate(wrapper);

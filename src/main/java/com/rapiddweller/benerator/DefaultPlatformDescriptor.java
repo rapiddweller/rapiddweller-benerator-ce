@@ -41,12 +41,12 @@ import com.rapiddweller.formats.xml.XMLElementParser;
  */
 public class DefaultPlatformDescriptor implements PlatformDescriptor {
 	
-	private String rootPackage;
-	private List<XMLElementParser<Statement>> parsers;
+	private final String rootPackage;
+	private final List<XMLElementParser<Statement>> parsers;
 
 	public DefaultPlatformDescriptor(String rootPackage) {
 		this.rootPackage = rootPackage;
-		this.parsers = new ArrayList<XMLElementParser<Statement>>();
+		this.parsers = new ArrayList<>();
 	}
 
 	@Override

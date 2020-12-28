@@ -52,7 +52,7 @@ public class TaskInvoker implements Invoker {
     }
 
     @Override
-    public Object invoke(Object[] args) throws Exception {
+    public Object invoke(Object[] args) {
         return target.execute((Context) args[0], (ErrorHandler) args[1]);
     }
 

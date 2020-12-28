@@ -46,14 +46,14 @@ import com.rapiddweller.task.Task;
  */
 public class RunTaskStatement extends AbstractStatement implements Closeable {
 	
-	protected Expression<? extends Task> taskProvider;
+	protected final Expression<? extends Task> taskProvider;
 	protected Task task;
-	protected Expression<Long> count;
-	protected Expression<Long> pageSize;
-	protected Expression<Integer> threads;
-	protected Expression<PageListener> pageListener;
-	protected Expression<Boolean> stats;
-	protected boolean infoLog;
+	protected final Expression<Long> count;
+	protected final Expression<Long> pageSize;
+	protected final Expression<Integer> threads;
+	protected final Expression<PageListener> pageListener;
+	protected final Expression<Boolean> stats;
+	protected final boolean infoLog;
 
 	public RunTaskStatement(Expression<? extends Task> taskProvider, 
 			Expression<Long> count, Expression<Long> pageSize, 
@@ -113,7 +113,7 @@ public class RunTaskStatement extends AbstractStatement implements Closeable {
 	}
 	
 	private List<PageListener> getPageListeners(BeneratorContext context) {
-		List<PageListener> listeners = new ArrayList<PageListener>();
+		List<PageListener> listeners = new ArrayList<>();
 	    if (pageListener != null)
 	    	listeners.add(pageListener.evaluate(context));
 	    return listeners;

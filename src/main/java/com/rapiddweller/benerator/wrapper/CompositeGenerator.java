@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.wrapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.rapiddweller.benerator.Generator;
@@ -45,12 +46,12 @@ import com.rapiddweller.commons.context.ContextAware;
  */
 public abstract class CompositeGenerator<E> extends AbstractGenerator<E> {
 	
-	protected Class<E> generatedType;
-	protected List<ThreadAware> components;
+	protected final Class<E> generatedType;
+	protected final List<ThreadAware> components;
 	
 	protected CompositeGenerator(Class<E> generatedType) {
 		this.generatedType = generatedType;
-		this.components = new ArrayList<ThreadAware>();
+		this.components = new ArrayList<>();
 	}
 	
 	
@@ -67,8 +68,7 @@ public abstract class CompositeGenerator<E> extends AbstractGenerator<E> {
 	}
 
 	protected void registerComponents(ThreadAware[] components) {
-		for (ThreadAware component : components)
-			this.components.add(component);
+		this.components.addAll(Arrays.asList(components));
 	}
 
 	

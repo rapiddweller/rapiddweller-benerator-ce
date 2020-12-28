@@ -38,7 +38,7 @@ import com.rapiddweller.benerator.Generator;
  */
 public class LastFlagGenerator extends GeneratorProxy<Object[]> {
 	
-	private int indexOfLastFlag;
+	private final int indexOfLastFlag;
 
 	public LastFlagGenerator(Generator<Object[]> source, int indexOfLastFlag) {
 		super(source);

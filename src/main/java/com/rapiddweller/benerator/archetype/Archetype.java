@@ -118,12 +118,7 @@ public class Archetype implements Serializable {
     }
 
 	private void copyNonSourceFilesTo(File targetFolder) throws IOException {
-		IOUtil.copyDirectory(url, targetFolder, new Filter<String>() {
-			@Override
-			public boolean accept(String candidate) {
-	            return !candidate.contains("ARCHETYPE-INF") && !candidate.contains("/src/");
-            }
-		});
+		IOUtil.copyDirectory(url, targetFolder, candidate -> !candidate.contains("ARCHETYPE-INF") && !candidate.contains("/src/"));
 		copySchemaTo(targetFolder);
     }
 
@@ -135,7 +130,7 @@ public class Archetype implements Serializable {
 		copySchemaTo(targetFolder);
     }
 
-	private void copySourceDirectory(File targetFolder, String subFolder, FolderLayout layout) throws IOException, MalformedURLException {
+	private void copySourceDirectory(File targetFolder, String subFolder, FolderLayout layout) throws IOException {
 	    URL srcUrl = new URL(url.toString() + '/' + subFolder);
 	    targetFolder = new File(targetFolder, layout.mapSubFolder(subFolder));
 	    targetFolder.mkdir();
@@ -143,7 +138,7 @@ public class Archetype implements Serializable {
 	    	IOUtil.copyDirectory(srcUrl, targetFolder, null);
     }
 
-	private void copySchemaTo(File targetFolder) throws IOException, FileNotFoundException {
+	private void copySchemaTo(File targetFolder) throws IOException {
 		String xmlSchemaPath = BeneratorFactory.getSchemaPathForCurrentVersion();
 	    URL schemaUrl = getClass().getClassLoader().getResource(xmlSchemaPath);
 	    if (schemaUrl == null)

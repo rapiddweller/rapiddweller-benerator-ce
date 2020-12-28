@@ -36,7 +36,7 @@ import com.rapiddweller.benerator.Generator;
  */
 public class CompositeStringGenerator extends GeneratorWrapper<String[], String> {
 	
-	protected boolean unique;
+	protected final boolean unique;
 
     // constructors ----------------------------------------------------------------------------------------------------
 

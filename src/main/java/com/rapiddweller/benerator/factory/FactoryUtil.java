@@ -176,10 +176,8 @@ public class FactoryUtil {
 	}
 
 	public static <T> List<T> extractValues(Collection<WeightedSample<T>> samples) {
-		List<T> values = new ArrayList<T>(samples.size());
-		Iterator<WeightedSample<T>> iterator = samples.iterator();
-    	while (iterator.hasNext())
-    		values.add(iterator.next().getValue());
+		List<T> values = new ArrayList<>(samples.size());
+        for (WeightedSample<T> sample : samples) values.add(sample.getValue());
 		return values;
 	}
 

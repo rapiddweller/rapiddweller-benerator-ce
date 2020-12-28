@@ -42,9 +42,9 @@ import com.rapiddweller.benerator.Consumer;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ListConsumer extends AbstractConsumer {
 	
-	private static int DEFAULT_CAPACITY = 10;
+	private static final int DEFAULT_CAPACITY = 10;
 	
-	private List consumedData;
+	private final List consumedData;
 
 	public ListConsumer() {
 		this(DEFAULT_CAPACITY);

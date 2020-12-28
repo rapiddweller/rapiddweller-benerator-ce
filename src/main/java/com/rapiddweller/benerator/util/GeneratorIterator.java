@@ -42,9 +42,9 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
 public class GeneratorIterator<E> implements Iterator<E>, Closeable {
 	
-	private Generator<E> source;
+	private final Generator<E> source;
 	private E next;
-	private WrapperProvider<E> wrapperProvider = new WrapperProvider<E>();
+	private final WrapperProvider<E> wrapperProvider = new WrapperProvider<>();
 	
 	public GeneratorIterator(Generator<E> source) {
 		this.source = source;

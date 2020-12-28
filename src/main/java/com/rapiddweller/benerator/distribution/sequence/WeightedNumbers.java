@@ -66,11 +66,11 @@ public class WeightedNumbers<E> extends Sequence {
             boolean unique) {
 		if (unique)
 			throw new ConfigurationError(getClass().getSimpleName() + " is not designed to generate unique values");
-		AttachedWeightSampleGenerator<T> generator = new AttachedWeightSampleGenerator<T>(numberType);
-		for (int i = 0; i < samples.length; i++)
+		AttachedWeightSampleGenerator<T> generator = new AttachedWeightSampleGenerator<>(numberType);
+		for (WeightedSample<?> sample : samples)
 			generator.addSample(
-					NumberToNumberConverter.convert((Number) samples[i].getValue(), numberType), 
-					samples[i].getWeight());
+					NumberToNumberConverter.convert((Number) sample.getValue(), numberType),
+					sample.getWeight());
 		return WrapperFactory.asNonNullGenerator(generator);
     }
 

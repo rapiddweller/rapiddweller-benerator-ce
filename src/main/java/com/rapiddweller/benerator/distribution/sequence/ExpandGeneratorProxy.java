@@ -86,7 +86,7 @@ public class ExpandGeneratorProxy<E> extends GeneratorProxy<E> {
     }
 	
 	public static <T> ExpandGeneratorProxy<T> uniqueProxy(Generator<T> source, int cacheSize, int bucketSize) {
-		return new ExpandGeneratorProxy<T>(source, 0, cacheSize, bucketSize);
+		return new ExpandGeneratorProxy<>(source, 0, cacheSize, bucketSize);
 	}
 	
 	public static int defaultBucketSize(int cacheSize) {
@@ -165,10 +165,10 @@ public class ExpandGeneratorProxy<E> extends GeneratorProxy<E> {
 	
 	private void createBuckets() {
 		int bucketCount = (cacheSize + bucketSize - 1) / bucketSize;
-		ArrayList<ValueBucket<E>> infantry = new ArrayList<ValueBucket<E>>(bucketCount);
-		buckets = new ArrayList<ValueBucket<E>>(bucketCount);
+		ArrayList<ValueBucket<E>> infantry = new ArrayList<>(bucketCount);
+		buckets = new ArrayList<>(bucketCount);
 		for (int i = 0; i < bucketCount; i++)
-			infantry.add(new ValueBucket<E>(bucketSize));
+			infantry.add(new ValueBucket<>(bucketSize));
 		ProductWrapper<E> wrapper;
 		for (int i = 0; i < cacheSize && (wrapper = generateFromSource()) != null; i++) {
 			int bucketIndex = RandomUtil.randomIndex(infantry);

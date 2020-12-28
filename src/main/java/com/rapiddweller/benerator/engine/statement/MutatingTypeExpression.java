@@ -42,7 +42,7 @@ import org.w3c.dom.Element;
  */
 public class MutatingTypeExpression implements Expression<ComplexTypeDescriptor> {
 
-	private Element element;
+	private final Element element;
 	private String typeName;
 
 	public MutatingTypeExpression(Element element, String typeName) {

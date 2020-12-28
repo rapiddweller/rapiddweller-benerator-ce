@@ -43,8 +43,8 @@ import com.rapiddweller.script.expression.DynamicExpression;
 
 public class GeneratorExpression<E> extends DynamicExpression<E> {
 
-	private Generator<E> generator;
-	private WrapperProvider<E> wrapperProvider = new WrapperProvider<E>();
+	private final Generator<E> generator;
+	private final WrapperProvider<E> wrapperProvider = new WrapperProvider<>();
 	
     public GeneratorExpression(Generator<E> generator) {
 	    this.generator = generator;

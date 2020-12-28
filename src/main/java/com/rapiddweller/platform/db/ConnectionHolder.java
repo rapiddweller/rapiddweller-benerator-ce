@@ -52,16 +52,16 @@ import java.util.Map;
 public class ConnectionHolder implements Closeable {
 
     private static final Logger JDBC_LOGGER = LogManager.getLogger(LogCategories.JDBC);
-    public Map<ComplexTypeDescriptor, PreparedStatement> insertStatements;
-    public Map<ComplexTypeDescriptor, PreparedStatement> updateStatements;
-    public Map<ComplexTypeDescriptor, PreparedStatement> selectByPKStatements;
+    public final Map<ComplexTypeDescriptor, PreparedStatement> insertStatements;
+    public final Map<ComplexTypeDescriptor, PreparedStatement> updateStatements;
+    public final Map<ComplexTypeDescriptor, PreparedStatement> selectByPKStatements;
     private final DBSystem db;
     private Connection connection;
 
     public ConnectionHolder(DBSystem db) {
-        this.insertStatements = new OrderedMap<ComplexTypeDescriptor, PreparedStatement>();
-        this.updateStatements = new OrderedMap<ComplexTypeDescriptor, PreparedStatement>();
-        this.selectByPKStatements = new OrderedMap<ComplexTypeDescriptor, PreparedStatement>();
+        this.insertStatements = new OrderedMap<>();
+        this.updateStatements = new OrderedMap<>();
+        this.selectByPKStatements = new OrderedMap<>();
         this.db = db;
         this.connection = null; // lazily initialized
     }

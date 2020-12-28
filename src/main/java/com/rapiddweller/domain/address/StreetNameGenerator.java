@@ -74,7 +74,7 @@ public class StreetNameGenerator extends GeneratorProxy<String> implements Datas
     // DatasetBasedGenerator interface implementation ------------------------------------------------------------------
 
     private static Generator<String> createSource(String datasetName) {
-        return new WeightedDatasetCSVGenerator<String>(String.class, FILENAME_PATTERN, datasetName, REGION_NESTING, true, Encodings.UTF_8);
+        return new WeightedDatasetCSVGenerator<>(String.class, FILENAME_PATTERN, datasetName, REGION_NESTING, true, Encodings.UTF_8);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class StreetNameGenerator extends GeneratorProxy<String> implements Datas
 
     @Override
     public synchronized void init(GeneratorContext context) {
-        Stack<String> datasetOptions = new Stack<String>();
+        Stack<String> datasetOptions = new Stack<>();
         datasetOptions.push(DatasetUtil.fallbackRegionName());
         datasetOptions.push(DatasetUtil.defaultRegionName());
         if (!StringUtil.isEmpty(datasetName))

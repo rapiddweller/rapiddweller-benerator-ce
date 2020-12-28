@@ -43,14 +43,14 @@ import com.rapiddweller.commons.Visitor;
  */
 public abstract class CompositeStatement extends AbstractStatement implements Closeable, Element<Statement> {
 	
-	protected List<Statement> subStatements = new ArrayList<Statement>();
+	protected List<Statement> subStatements = new ArrayList<>();
 
 	public CompositeStatement() {
 		this(null);
     }
 
 	public CompositeStatement(List<Statement> subStatements) {
-		this.subStatements = (subStatements != null ? subStatements : new ArrayList<Statement>());
+		this.subStatements = (subStatements != null ? subStatements : new ArrayList<>());
     }
 
 	public List<Statement> getSubStatements() {

@@ -76,7 +76,7 @@ public class FixedWidthEntitySource extends FileBasedEntitySource {
 
     public FixedWidthEntitySource(String uri, ComplexTypeDescriptor entityDescriptor,
                                   String encoding, String lineFilter, FixedWidthColumnDescriptor... descriptors) {
-        this(uri, entityDescriptor, new NoOpConverter<String>(), encoding, lineFilter, descriptors);
+        this(uri, entityDescriptor, new NoOpConverter<>(), encoding, lineFilter, descriptors);
     }
 
     public FixedWidthEntitySource(String uri, ComplexTypeDescriptor entityDescriptor,
@@ -145,7 +145,7 @@ public class FixedWidthEntitySource extends FileBasedEntitySource {
     public DataIterator<Entity> iterator() {
         if (!initialized)
             init();
-        return new ConvertingDataIterator<String[], Entity>(this.source.iterator(), converter);
+        return new ConvertingDataIterator<>(this.source.iterator(), converter);
     }
 
     // private helpers -------------------------------------------------------------------------------------------------
@@ -169,9 +169,8 @@ public class FixedWidthEntitySource extends FileBasedEntitySource {
     private Converter<String[], Entity> createConverter() {
         String[] featureNames = ArrayPropertyExtractor.convert(descriptors, "name", String.class);
         Array2EntityConverter a2eConverter = new Array2EntityConverter(entityDescriptor, featureNames, true);
-        Converter<String[], String[]> aConv = new ArrayConverter<String, String>(String.class, String.class, preprocessor);
-        Converter<String[], Entity> converter = new ConverterChain<String[], Entity>(aConv, a2eConverter);
-        return converter;
+        Converter<String[], String[]> aConv = new ArrayConverter<>(String.class, String.class, preprocessor);
+        return new ConverterChain<>(aConv, a2eConverter);
     }
 
 }

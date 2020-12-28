@@ -41,7 +41,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
  */
 public abstract class AbstractGeneratorComponent<E> extends AbstractScopedLifeCycleHolder implements GeneratorComponent<E> {
 
-	protected Generator<?> source;
+	protected final Generator<?> source;
 	protected GeneratorContext context;
 	protected String message;
 

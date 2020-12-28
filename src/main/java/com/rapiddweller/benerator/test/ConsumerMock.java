@@ -51,23 +51,23 @@ public class ConsumerMock extends AbstractConsumer {
 	public static final String FLUSH = "fl";
 	public static final String CLOSE = "cl";
 
-	public static Map<Integer, ConsumerMock> instances = new HashMap<Integer, ConsumerMock>();
+	public static final Map<Integer, ConsumerMock> instances = new HashMap<>();
 	
-	private int id;
+	private final int id;
 	private final int minDelay;
 	private final int delayDelta;
 	
 	private final boolean storeProducts;
 	public List<Object> products;
-	public List<String> invocations;
+	public final List<String> invocations;
 
-	public volatile AtomicInteger startConsumingCount = new AtomicInteger();
-	public volatile AtomicInteger finishConsumingCount = new AtomicInteger();
-	public volatile AtomicInteger flushCount = new AtomicInteger();
-	public volatile AtomicInteger closeCount = new AtomicInteger();
+	public final AtomicInteger startConsumingCount = new AtomicInteger();
+	public final AtomicInteger finishConsumingCount = new AtomicInteger();
+	public final AtomicInteger flushCount = new AtomicInteger();
+	public final AtomicInteger closeCount = new AtomicInteger();
 
 	private Random random;
-	private Set<String> threadNames;
+	private final Set<String> threadNames;
 	
 	public ConsumerMock(boolean storeProducts) {
 	    this(storeProducts, 0, 0, 0);
@@ -87,10 +87,10 @@ public class ConsumerMock extends AbstractConsumer {
 	    } else
 	    	this.delayDelta = 0;
 	    if (storeProducts)
-	    	products = new ArrayList<Object>();
-	    this.invocations = new ArrayList<String>();
+	    	products = new ArrayList<>();
+	    this.invocations = new ArrayList<>();
 	    instances.put(id, this);
-		threadNames = new HashSet<String>();
+		threadNames = new HashSet<>();
     }
 	
 	public List<?> getProducts() {

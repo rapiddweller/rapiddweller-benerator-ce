@@ -42,7 +42,7 @@ import org.apache.logging.log4j.LogManager;
 public abstract class ValidatingGenerator<P> extends AbstractGenerator<P> {
 
     /** The Logger */
-    private static Logger logger = LogManager.getLogger(ValidatingGenerator.class);
+    private static final Logger logger = LogManager.getLogger(ValidatingGenerator.class);
 
     /** The number of invalid consecutive generations that causes a warning */
     public static final int WARNING_THRESHOLD = 100;
@@ -51,7 +51,7 @@ public abstract class ValidatingGenerator<P> extends AbstractGenerator<P> {
     public static final int ERROR_THRESHOLD   = 1000;
 
     /** The validator used for validation */
-    protected Validator<P> validator;
+    protected final Validator<P> validator;
 
     /** Constructor that takes the validator */
     public ValidatingGenerator(Validator<P> validator) {

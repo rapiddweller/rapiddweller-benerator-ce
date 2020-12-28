@@ -72,7 +72,7 @@ public abstract class AbstractStatement implements Statement {
     }
     
     protected static <T> Expression<T> cache(Expression<T> expression) {
-		return (expression != null ? new CachedExpression<T>(expression) : null);
+		return (expression != null ? new CachedExpression<>(expression) : null);
 	}
 
     @Override

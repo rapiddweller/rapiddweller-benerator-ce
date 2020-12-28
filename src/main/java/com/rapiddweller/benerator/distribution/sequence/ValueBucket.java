@@ -47,10 +47,10 @@ import com.rapiddweller.benerator.util.RandomUtil;
  */
 class ValueBucket<E> {
 	
-	private ArrayList<E> buffer;
+	private final ArrayList<E> buffer;
 	
 	public ValueBucket(int capacity) {
-		buffer = new ArrayList<E>();
+		buffer = new ArrayList<>();
 	}
 	
 	// interface -------------------------------------------------------------------------------------------------------

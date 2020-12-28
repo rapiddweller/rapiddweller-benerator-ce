@@ -48,15 +48,15 @@ import com.rapiddweller.task.TaskExecutor;
 public class GenerateOrIterateStatement extends AbstractStatement implements Closeable, PageListener {
 
 	protected GenerateAndConsumeTask task;
-	protected Generator<Long> countGenerator;
-	protected Expression<Long> minCount;
-	protected Expression<Long> pageSize;
-	protected Expression<PageListener> pageListenerEx;
+	protected final Generator<Long> countGenerator;
+	protected final Expression<Long> minCount;
+	protected final Expression<Long> pageSize;
+	protected final Expression<PageListener> pageListenerEx;
 	protected PageListener pageListener;
-	protected boolean infoLog;
-	protected boolean isSubCreator;
-	protected BeneratorContext context;
-	protected BeneratorContext childContext;
+	protected final boolean infoLog;
+	protected final boolean isSubCreator;
+	protected final BeneratorContext context;
+	protected final BeneratorContext childContext;
 	
 	public GenerateOrIterateStatement(String productName, Generator<Long> countGenerator, Expression<Long> minCount, 
 			Expression<Long> pageSize, Expression<PageListener> pageListenerEx,  
@@ -105,7 +105,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
 
 	public Long generateCount(BeneratorContext context) {
 		beInitialized(context);
-	    ProductWrapper<Long> count = countGenerator.generate(new ProductWrapper<Long>());
+	    ProductWrapper<Long> count = countGenerator.generate(new ProductWrapper<>());
 	    return (count != null ? count.unwrap() : null);
     }
 
@@ -133,7 +133,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
 	// internal helpers ------------------------------------------------------------------------------------------------
 
 	protected List<PageListener> evaluatePageListeners(Context context) {
-		List<PageListener> listeners = new ArrayList<PageListener>();
+		List<PageListener> listeners = new ArrayList<>();
 		if (pageListener != null) {
 	        pageListener = pageListenerEx.evaluate(context);
 	        if (pageListener != null)

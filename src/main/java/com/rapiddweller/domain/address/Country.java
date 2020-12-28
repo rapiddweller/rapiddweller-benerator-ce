@@ -60,16 +60,16 @@ import java.io.IOException;
  */
 public class Country {
 
-    private String isoCode;
-    private String name;
-    private String phoneCode;
-	private boolean mobilePhoneCityRelated;
-	private RegexStringGenerator mobilePrefixGenerator;
-    private RandomVarLengthStringGenerator localNumberGenerator;
-    private Locale countryLocale;
-    private Locale defaultLanguageLocale;
+    private final String isoCode;
+    private final String name;
+    private final String phoneCode;
+	private final boolean mobilePhoneCityRelated;
+	private final RegexStringGenerator mobilePrefixGenerator;
+    private final RandomVarLengthStringGenerator localNumberGenerator;
+    private final Locale countryLocale;
+    private final Locale defaultLanguageLocale;
     private Map<String, State> states;
-    private int population;
+    private final int population;
 
 	private CityGenerator cityGenerator;
 
@@ -92,7 +92,7 @@ public class Country {
     }
 
     private void importStates() {
-        this.states = new OrderedNameMap<State>();
+        this.states = new OrderedNameMap<>();
         String filename = "/com/rapiddweller/domain/address/state_" + isoCode + ".csv";
         if (!IOUtil.isURIAvailable(filename)) {
         	LOGGER.debug("No states defined for {}", this);
@@ -102,7 +102,7 @@ public class Country {
 		CSVEntitySource source = new CSVEntitySource(filename, stateDescriptor, Encodings.UTF_8);
 		source.setContext(new DefaultBeneratorContext());
         DataIterator<Entity> iterator = source.iterator();
-        DataContainer<Entity> container = new DataContainer<Entity>();
+        DataContainer<Entity> container = new DataContainer<>();
         while ((container = iterator.next(container)) != null) {
         	Entity entity = container.getData();
         	State state = new State();
@@ -171,10 +171,9 @@ public class Country {
     }
     
     public List<City> getCities() {
-    	List<City> cities = new ArrayList<City>();
+    	List<City> cities = new ArrayList<>();
     	for (State state : states.values())
-    		for (City city : state.getCities())
-    			cities.add(city);
+            cities.addAll(state.getCities());
     	return cities;
     }
     
@@ -296,9 +295,7 @@ public class Country {
 
 	private static final String DEFAULT_MOBILE_PHONE_PATTERN = "[1-9][0-9][0-9]";
 
-    private static String FILE_NAME = "/com/rapiddweller/domain/address/country.csv";
-
-    private static Map<String, Country> instances = new HashMap<String, Country>(250);
+    private static final Map<String, Country> instances = new HashMap<>(250);
 
     static {
         parseConfigFile();
@@ -422,9 +419,10 @@ public class Country {
     private static void parseConfigFile() {
         CSVLineIterator iterator = null;
         try {
+            String FILE_NAME = "/com/rapiddweller/domain/address/country.csv";
             iterator = new CSVLineIterator(FILE_NAME, ',', true);
             LOGGER.debug("Parsing country setup file {}", FILE_NAME);
-            DataContainer<String[]> container = new DataContainer<String[]>();
+            DataContainer<String[]> container = new DataContainer<>();
             while ((container = iterator.next(container)) != null) {
                 String[] cells = container.getData();
                 String isoCode = cells[0];

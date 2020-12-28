@@ -40,8 +40,8 @@ import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
 public class UniqueIntsGenerator extends NonNullGeneratorProxy<int[]> {
 
     private int[] digits;
-    private int[] displayColumn;
-    private int[] digitOffsets;
+    private final int[] displayColumn;
+    private final int[] digitOffsets;
     private int cycleCounter;
 
     public UniqueIntsGenerator(int radix, int length) {

@@ -70,7 +70,7 @@ public class Entity implements Composite {
 
     public Entity(Entity prototype) {
         this.descriptor = prototype.descriptor;
-        this.components = new OrderedNameMap<Object>(prototype.components);
+        this.components = new OrderedNameMap<>(prototype.components);
     }
 
     // interface -------------------------------------------------------------------------------------------------------

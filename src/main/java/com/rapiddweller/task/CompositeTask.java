@@ -43,7 +43,7 @@ import java.util.List;
 
 public abstract class CompositeTask extends AbstractTask {
 
-    protected List<Task> subTasks;
+    protected final List<Task> subTasks;
 
     public CompositeTask(Task... subTasks) {
         super(); // parent class default constructor chooses name

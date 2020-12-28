@@ -40,7 +40,7 @@ import com.rapiddweller.script.WeightedSample;
 public class SampleGeneratorUtil {
 
 	public static <T> List<T> extractValues(List<WeightedSample<T>> weightedSamples) {
-	    List<T> result = new ArrayList<T>(weightedSamples.size());
+	    List<T> result = new ArrayList<>(weightedSamples.size());
         for (WeightedSample<T> sample : weightedSamples)
         	result.add(sample.getValue());
         return result;

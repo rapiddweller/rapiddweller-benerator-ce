@@ -40,7 +40,7 @@ public class InvalidGeneratorSetupException extends ConfigurationError {
 
 	private static final long serialVersionUID = 7613352958748575041L;
 	
-	private List<PropertyMessage> propertyMessages;
+	private final List<PropertyMessage> propertyMessages;
 
     // constructors ----------------------------------------------------------------------------------------------------
 

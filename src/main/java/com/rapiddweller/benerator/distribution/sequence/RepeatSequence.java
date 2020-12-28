@@ -45,10 +45,10 @@ import com.rapiddweller.commons.ConfigurationError;
 
 public class RepeatSequence extends Sequence {
 
-    private int minRepetitions;
-    private int maxRepetitions;
-    private int repetitionGranularity;
-    private Distribution repetitionDistribution;
+    private final int minRepetitions;
+    private final int maxRepetitions;
+    private final int repetitionGranularity;
+    private final Distribution repetitionDistribution;
 
 	private final static Distribution stepSequence = new StepSequence();
 
@@ -83,8 +83,8 @@ public class RepeatSequence extends Sequence {
 	
     @Override
 	public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-	    return new RepeatGeneratorProxy<T>(source, minRepetitions, maxRepetitions, 
-	    		repetitionGranularity, repetitionDistribution);
+	    return new RepeatGeneratorProxy<>(source, minRepetitions, maxRepetitions,
+				repetitionGranularity, repetitionDistribution);
 	}
 	
 }

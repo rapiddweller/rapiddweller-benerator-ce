@@ -57,7 +57,7 @@ public class FemaleFamilyNameConverter extends ThreadSafeConverter<String, Strin
 
     public FemaleFamilyNameConverter(String datasetName) {
         super(String.class, String.class);
-        ArrayBuilder<String[]> builder = new ArrayBuilder<String[]>(String[].class);
+        ArrayBuilder<String[]> builder = new ArrayBuilder<>(String[].class);
         try {
             if (datasetName != null) {
                 String dataFileName = DatasetUtil.filenameOfDataset(datasetName,

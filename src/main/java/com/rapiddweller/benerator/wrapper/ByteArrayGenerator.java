@@ -56,7 +56,7 @@ public class ByteArrayGenerator extends SingleSourceArrayGenerator<Byte, byte[]>
         Integer length = generateCardinal();
         if (length == null)
         	return null;
-        byte[] array = new byte[length.intValue()];
+        byte[] array = new byte[length];
         for (int i = 0; i < length; i++)
             array[i] = generateFromSource().unwrap();
         return wrapper.wrap(array);

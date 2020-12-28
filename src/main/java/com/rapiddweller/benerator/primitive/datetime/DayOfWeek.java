@@ -50,13 +50,13 @@ import javax.validation.Constraint;
 @Retention(RUNTIME)
 public @interface DayOfWeek {
 	
-	public static final int MONDAY    = Calendar.MONDAY;
-	public static final int TUESDAY   = Calendar.TUESDAY;
-	public static final int WEDNESDAY = Calendar.WEDNESDAY;
-	public static final int THURSDAY  = Calendar.THURSDAY;
-	public static final int FRIDAY    = Calendar.FRIDAY;
-	public static final int SATURDAY  = Calendar.SATURDAY;
-	public static final int SUNDAY    = Calendar.SUNDAY;
+	int MONDAY    = Calendar.MONDAY;
+	int TUESDAY   = Calendar.TUESDAY;
+	int WEDNESDAY = Calendar.WEDNESDAY;
+	int THURSDAY  = Calendar.THURSDAY;
+	int FRIDAY    = Calendar.FRIDAY;
+	int SATURDAY  = Calendar.SATURDAY;
+	int SUNDAY    = Calendar.SUNDAY;
 	
 	int[] daysOfWeekAccepted() default { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY};
 }

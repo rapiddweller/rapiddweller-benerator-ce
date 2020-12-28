@@ -38,7 +38,7 @@ import com.rapiddweller.commons.ArrayUtil;
  */
 public class MultiSourceArrayGenerator<S> extends GeneratorProxy<S[]> {
 
-	private Class<S> componentType;
+	private final Class<S> componentType;
     private boolean unique;
     private Generator<? extends S>[] sources;
     
@@ -65,9 +65,9 @@ public class MultiSourceArrayGenerator<S> extends GeneratorProxy<S[]> {
     @Override
     public synchronized void init(GeneratorContext context) {
 		if (unique)
-			super.setSource(new UniqueMultiSourceArrayGenerator<S>(componentType, sources));
+			super.setSource(new UniqueMultiSourceArrayGenerator<>(componentType, sources));
 		else
-			super.setSource(new SimpleMultiSourceArrayGenerator<S>(componentType, sources));
+			super.setSource(new SimpleMultiSourceArrayGenerator<>(componentType, sources));
 	    super.init(context);
     }
     

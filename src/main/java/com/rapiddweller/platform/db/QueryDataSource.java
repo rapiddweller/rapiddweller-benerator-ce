@@ -72,7 +72,7 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> {
         if (context != null)
             this.queryPreprocessor = new ScriptConverterForStrings(context);
         else
-            this.queryPreprocessor = new NoOpConverter<String>();
+            this.queryPreprocessor = new NoOpConverter<>();
         LOGGER.debug("Constructed QueryIterable: {}", query);
     }
 

@@ -44,7 +44,7 @@ public class IBANUtil {
 
     public static int checksum(String iban) {
         String tmp = (iban.substring(4) + iban.substring(0, 4)).toUpperCase();
-        StringBuffer digits = new StringBuffer();
+        StringBuilder digits = new StringBuilder();
         for (int i = 0; i < tmp.length(); i++) {
             char c = tmp.charAt(i);
             if (c >= '0' && c <= '9')
@@ -57,8 +57,7 @@ public class IBANUtil {
                 return -1;
         }
         BigDecimal n = new BigDecimal(digits.toString());
-        int remainder = n.remainder(NINETYSEVEN).intValue();
-        return remainder;
+        return n.remainder(NINETYSEVEN).intValue();
     }
 
     public static String fixChecksum(String ibanTemplate) {

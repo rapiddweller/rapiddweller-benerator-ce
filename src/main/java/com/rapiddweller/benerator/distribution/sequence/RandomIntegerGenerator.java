@@ -47,7 +47,7 @@ public class RandomIntegerGenerator extends AbstractNonNullNumberGenerator<Integ
 	private static final int DEFAULT_MAX = Integer.MAX_VALUE / 2 - 1;
 	private static final int DEFAULT_GRANULARITY = 1;
 
-	private static Random random = new Random();
+	private static final Random random = new Random();
 
     // constructors ----------------------------------------------------------------------------------------------------
 

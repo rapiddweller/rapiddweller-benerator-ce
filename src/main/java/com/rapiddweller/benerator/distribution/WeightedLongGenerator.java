@@ -46,7 +46,7 @@ public class WeightedLongGenerator extends AbstractNonNullNumberGenerator<Long> 
 
     private WeightFunction function;
 
-    private Random randomizer;
+    private final Random randomizer;
     private float[] probSum;
 
     // constructors ----------------------------------------------------------------------------------------------------

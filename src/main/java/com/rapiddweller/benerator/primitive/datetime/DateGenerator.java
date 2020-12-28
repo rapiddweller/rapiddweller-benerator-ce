@@ -47,13 +47,13 @@ import java.util.GregorianCalendar;
  */
 public class DateGenerator extends NonNullGeneratorWrapper<Long, Date> {
     
-    private DateString2DurationConverter dateConverter = new DateString2DurationConverter();
+    private final DateString2DurationConverter dateConverter = new DateString2DurationConverter();
 
     private long min;
     private long max;
     private long granularity;
     private Distribution distribution;
-    private boolean unique;
+    private final boolean unique;
     
     // constructors ----------------------------------------------------------------------------------------------------
 

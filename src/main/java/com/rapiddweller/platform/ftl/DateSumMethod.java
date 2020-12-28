@@ -46,7 +46,6 @@ import java.util.List;
 public class DateSumMethod implements TemplateMethodModelEx {
 
     @Override
-    @SuppressWarnings("rawtypes")
     public TemplateModel exec(List args) {
         long sum = 0;
         for (Object arg : args) {

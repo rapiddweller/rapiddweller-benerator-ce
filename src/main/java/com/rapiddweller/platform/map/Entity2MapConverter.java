@@ -47,7 +47,7 @@ public class Entity2MapConverter extends ThreadSafeConverter<Entity, Map> {
     }
 
     public static Map<String, Object> convertEntity(Entity sourceValue) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         for (Map.Entry<String, Object> entry : sourceValue.getComponents().entrySet())
             map.put(entry.getKey(), entry.getValue());
         return map;

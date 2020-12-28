@@ -40,7 +40,7 @@ public class BooleanGenerator extends ThreadSafeNonNullGenerator<Boolean> {
     /** The quota of true values to create */
     private double trueQuota;
     
-    private Random random;
+    private final Random random;
 
     // constructors ----------------------------------------------------------------------------------------------------
 

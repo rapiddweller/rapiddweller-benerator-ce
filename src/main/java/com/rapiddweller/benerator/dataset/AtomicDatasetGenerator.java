@@ -39,9 +39,9 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  */
 public class AtomicDatasetGenerator<E> extends GeneratorProxy<E> implements WeightedDatasetGenerator<E> {
 
-	private String nesting;
-	private String dataset;
-	private double weight;
+	private final String nesting;
+	private final String dataset;
+	private final double weight;
 	
 	public AtomicDatasetGenerator(WeightedGenerator<E> source, String nesting, String dataset) {
 		this(source, nesting, dataset, source.getWeight());

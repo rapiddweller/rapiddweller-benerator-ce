@@ -52,14 +52,14 @@ public class ComponentAndVariableSupport<E> implements ThreadAware, MessageHolde
     private static final Logger LOGGER = LogManager.getLogger(ComponentAndVariableSupport.class);
     private static final Logger STATE_LOGGER = LogManager.getLogger(BeneratorConstants.STATE_LOGGER);
     
-    private String instanceName;
-    private List<GeneratorComponent<E>> components;
+    private final String instanceName;
+    private final List<GeneratorComponent<E>> components;
 	private String message;
 	
 	public ComponentAndVariableSupport(String instanceName, List<GeneratorComponent<E>> components, 
 			GeneratorContext context) {
 		this.instanceName = instanceName;
-        this.components = (components != null ? components : new ArrayList<GeneratorComponent<E>>());
+        this.components = (components != null ? components : new ArrayList<>());
 	}
 	
     public void init(BeneratorContext context) {
@@ -69,7 +69,7 @@ public class ComponentAndVariableSupport<E> implements ThreadAware, MessageHolde
 
     public boolean apply(E target, BeneratorContext context) {
     	BeneratorContext subContext = context.createSubContext(instanceName);
-    	subContext.setCurrentProduct(new ProductWrapper<E>(target));
+    	subContext.setCurrentProduct(new ProductWrapper<>(target));
     	for (GeneratorComponent<E> component : components) {
             try {
                 if (!component.execute(subContext)) {

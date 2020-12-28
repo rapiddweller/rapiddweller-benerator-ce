@@ -45,7 +45,7 @@ public class WhileStatement extends ConditionStatement {
 	private SequentialStatement statements;
 
 	public WhileStatement(Expression<Boolean> condition) {
-	    this(condition, new ArrayList<Statement>());
+	    this(condition, new ArrayList<>());
     }
 
 	public WhileStatement(Expression<Boolean> condition, List<Statement> statements) {

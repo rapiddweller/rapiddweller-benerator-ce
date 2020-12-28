@@ -72,10 +72,10 @@ public class LiteralSequence extends Sequence {
     public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity,
             boolean unique) {
 		Number[] ts = new Number[numbers.length];
-		NumberToNumberConverter<Number, T> converter = new NumberToNumberConverter<Number, T>(Number.class, numberType);
+		NumberToNumberConverter<Number, T> converter = new NumberToNumberConverter<>(Number.class, numberType);
 		for (int i = 0; i < numbers.length; i++)
 			ts[i] = converter.convert(numbers[i]);
-	    return WrapperFactory.asNonNullGenerator(new PredefinedSequenceGenerator<T>((T[]) ts));
+	    return WrapperFactory.asNonNullGenerator(new PredefinedSequenceGenerator<>((T[]) ts));
     }
 
 }

@@ -62,9 +62,9 @@ public class XLSArraySourceProvider implements DataSourceProvider<Object[]> {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public DataSource<Object[]> create(String uri, BeneratorContext context) {
         DataSource<Object[]> source = new XLSSource(uri, formatted, emptyMarker, nullMarker, rowBased);
-        source = new OffsetDataSource<Object[]>(source, 1); // skip header row
+        source = new OffsetDataSource<>(source, 1); // skip header row
         Converter<Object[], Object[]> converter = new ArrayConverter(Object.class, Object.class, scriptConverter);
-        return new ConvertingDataSource<Object[], Object[]>(source, converter);
+        return new ConvertingDataSource<>(source, converter);
     }
 
 }

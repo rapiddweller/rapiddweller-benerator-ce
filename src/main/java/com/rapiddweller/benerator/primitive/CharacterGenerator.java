@@ -80,7 +80,7 @@ public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
 	    super(Character.class);
         this.pattern = pattern;
         this.locale = locale;
-        this.values = new HashSet<Character>();
+        this.values = new HashSet<>();
     }
 
     /**
@@ -91,7 +91,7 @@ public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
 	    super(Character.class);
         this.pattern = null;
         this.locale = LocaleUtil.getFallbackLocale();
-        this.values = new HashSet<Character>(values);
+        this.values = new HashSet<>(values);
     }
 
     // config properties -----------------------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
         try {
             if (pattern != null)
                 values = new RegexParser(locale).parseSingleChar(pattern).getCharSet().getSet();
-            setSource(new NonNullSampleGenerator<Character>(Character.class, values));
+            setSource(new NonNullSampleGenerator<>(Character.class, values));
             super.init(context);
         } catch (SyntaxError e) {
             throw new IllegalGeneratorStateException(e);

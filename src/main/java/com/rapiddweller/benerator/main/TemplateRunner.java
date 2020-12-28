@@ -77,7 +77,7 @@ public class TemplateRunner {
 	}
 	
 	private static List<String> processCmdLineArgs(String[] args) {
-		List<String> params = new ArrayList<String>();
+		List<String> params = new ArrayList<>();
 		for (String arg : args) {
 			if (arg.startsWith("-D")) {
 				String[] tokens = StringUtil.splitOnFirstSeparator(arg.substring(2), '=');

@@ -40,7 +40,7 @@ import com.rapiddweller.script.Expression;
  */
 public class LazyStatement extends StatementProxy { // TODO v0.8 remove this class
 
-	private Expression<Statement> statementExpression;
+	private final Expression<Statement> statementExpression;
 
     public LazyStatement(Expression<Statement> statementExpression) {
     	super(null);

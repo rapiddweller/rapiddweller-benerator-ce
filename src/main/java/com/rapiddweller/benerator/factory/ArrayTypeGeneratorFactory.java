@@ -76,7 +76,7 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
         Generator<Object[]> generator = null;
         Object contextSourceObject = context.get(sourceName);
         if (contextSourceObject != null)
-            generator = createSourceGeneratorFromObject(descriptor, context, generator, contextSourceObject);
+            generator = createSourceGeneratorFromObject(descriptor, context, contextSourceObject);
         else {
 	        if (DataFileUtil.isCsvDocument(sourceName))
 	            generator = createCSVSourceGenerator(descriptor, context, sourceName);
@@ -88,7 +88,7 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
 		        	Object sourceObject = sourceBeanSpec.getBean();
 		        	if (!sourceBeanSpec.isReference() && sourceObject instanceof ContextAware)
 		        		((ContextAware) sourceObject).setContext(context);
-		        	generator = createSourceGeneratorFromObject(descriptor, context, generator, sourceObject);
+		        	generator = createSourceGeneratorFromObject(descriptor, context, sourceObject);
 		        	if (sourceBeanSpec.isReference())
 		        		generator = WrapperFactory.preventClosing(generator);
 		        	return generator;
@@ -99,12 +99,12 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
         }
         if (descriptor.getFilter() != null) {
         	Expression<Boolean> filter 
-        		= new ScriptExpression<Boolean>(ScriptUtil.parseScriptText(descriptor.getFilter()));
-        	generator = new FilteringGenerator<Object[]>(generator, filter);
+        		= new ScriptExpression<>(ScriptUtil.parseScriptText(descriptor.getFilter()));
+        	generator = new FilteringGenerator<>(generator, filter);
         }
     	Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
         if (distribution != null)
-        	generator = new DistributingGenerator<Object[]>(generator, distribution, uniqueness.isUnique());
+        	generator = new DistributingGenerator<>(generator, distribution, uniqueness.isUnique());
     	return generator;
     }
 
@@ -173,8 +173,9 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
     private static Generator<Object[]> createSourceGeneratorFromObject(ArrayTypeDescriptor descriptor,
-            BeneratorContext context, Generator<Object[]> generator, Object sourceObject) {
-	    if (sourceObject instanceof StorageSystem) {
+																	   BeneratorContext context, Object sourceObject) {
+		Generator<Object[]> generator;
+		if (sourceObject instanceof StorageSystem) {
 	        StorageSystem storage = (StorageSystem) sourceObject;
 	        String selector = descriptor.getSelector();
 	        String subSelector = descriptor.getSubSelector();
@@ -183,7 +184,7 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
 	        else
 	        	generator = new DataSourceGenerator(storage.query(selector, false, context));
 	    } else if (sourceObject instanceof EntitySource) {
-	    	DataSourceGenerator<Entity> entityGenerator = new DataSourceGenerator<Entity>((EntitySource) sourceObject);
+	    	DataSourceGenerator<Entity> entityGenerator = new DataSourceGenerator<>((EntitySource) sourceObject);
 			generator = WrapperFactory.applyConverter(entityGenerator, new Entity2ArrayConverter());
 	    } else if (sourceObject instanceof Generator) {
 	        generator = (Generator<Object[]>) sourceObject;

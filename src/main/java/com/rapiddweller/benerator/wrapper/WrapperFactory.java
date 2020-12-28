@@ -81,7 +81,7 @@ public class WrapperFactory {
 		if (source instanceof AsNonNullGenerator)
 			return (NonNullGenerator<T>) source;
 		else
-			return new AsNonNullGenerator<T>(source);
+			return new AsNonNullGenerator<>(source);
 	}
 
     // formatting generators -------------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ public class WrapperFactory {
      */
     @SuppressWarnings("rawtypes")
 	public static <S, T> Generator<T> applyConverter(Generator<S> source, Converter... converter) {
-        return new ConvertingGenerator<S, T>(source, converter);
+        return new ConvertingGenerator<>(source, converter);
     }
 
     /**
@@ -110,7 +110,7 @@ public class WrapperFactory {
      * @return a generator of the desired characteristics
      * @see java.text.MessageFormat
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"rawtypes" })
     public static Generator<String> createMessageGenerator(
             String pattern, int minLength, int maxLength, Generator ... sources) {
         SimpleMultiSourceArrayGenerator<Object> source = new SimpleMultiSourceArrayGenerator<Object>(
@@ -138,38 +138,38 @@ public class WrapperFactory {
 	}
 
     public static <T> OffsetBasedGenerator<T> applyOffset(Generator<T> generator, int offset) {
-		return new OffsetBasedGenerator<T>(generator, offset);
+		return new OffsetBasedGenerator<>(generator, offset);
 	}
 
 	public static <T> Generator<T> preventClosing(Generator<T> generator) {
-		return new NonClosingGeneratorProxy<T>(generator);
+		return new NonClosingGeneratorProxy<>(generator);
 	}
 
 	public static <T> Generator<T> applyValidator(Validator<T> validator, Generator<T> generator) {
-		return new ValidatingGeneratorProxy<T>(generator, validator);
+		return new ValidatingGeneratorProxy<>(generator, validator);
 	}
 
 	public static <T> Generator<T> applyCycler(Generator<T> generator) {
-		return new CyclicGeneratorProxy<T>(generator);
+		return new CyclicGeneratorProxy<>(generator);
 	}
 
 	public static <T> Generator<T> applyHeadCycler(Generator<T> source) {
-		return new CyclicGeneratorProxy<T>(new NShotGeneratorProxy<T>(source, 1));
+		return new CyclicGeneratorProxy<>(new NShotGeneratorProxy<>(source, 1));
 	}
 
 	public static <T> Generator<T> prependNull(Generator<T> source) {
-		return new NullStartingGenerator<T>(source);
+		return new NullStartingGenerator<>(source);
 	}
 
 	public static <T> Generator<T> injectNulls(Generator<T> source, double nullQuota) {
 		if (nullQuota == 0.)
 			return source;
 		else
-			return new NullInjectingGeneratorProxy<T>(source, nullQuota);
+			return new NullInjectingGeneratorProxy<>(source, nullQuota);
 	}
 
 	public static <T> Generator<T> applyLastProductDetector(Generator<T> generator) {
-		return new LastProductDetector<T>(generator);
+		return new LastProductDetector<>(generator);
 	}
 
 }

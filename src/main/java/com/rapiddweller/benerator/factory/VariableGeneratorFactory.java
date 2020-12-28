@@ -113,7 +113,7 @@ public class VariableGeneratorFactory {
     }
 
     public static <T> Generator<T> wrapWithProxy(Generator<T> generator, TypeDescriptor descriptor) {
-		boolean cyclic = descriptor.isCyclic() != null && descriptor.isCyclic().booleanValue();
+		boolean cyclic = descriptor.isCyclic() != null && descriptor.isCyclic();
 		return wrapWithProxy(generator, cyclic);
     }
 

@@ -114,7 +114,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     public XMLSchemaDescriptorProvider(String schemaUri, BeneratorContext context) {
         super(schemaUri, context.getDataModel(), true);
         new XMLNativeTypeDescriptorProvider(SCHEMA_NAMESPACE, dataModel);
-        this.namespaces = new HashMap<String, String>();
+        this.namespaces = new HashMap<>();
         parser = new ModelParser(context);
         setContext(context);
         setSchemaUri(schemaUri);
@@ -242,9 +242,11 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
                 String typeName = element.getAttribute("type");
                 if (!StringUtil.isEmpty(typeName)) {
                     TypeDescriptor elementType = dataModel.getTypeDescriptor(typeName);
+                    //noinspection DuplicateCondition
                     if (elementType instanceof SimpleTypeDescriptor)
                         addTypeDescriptor(new SimpleTypeDescriptor(nameAttribute, this));
-                    else if (elementType instanceof SimpleTypeDescriptor)
+                    else //noinspection DuplicateCondition
+                        if (elementType instanceof SimpleTypeDescriptor)
                         addTypeDescriptor(new ComplexTypeDescriptor(nameAttribute, this));
                     else
                         addTypeDescriptor(new UnresolvedTypeDescriptor(nameAttribute, this, typeName));
@@ -450,7 +452,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
         Assert.notNull(base, "base type");
         if (base instanceof SimpleTypeDescriptor) {
             complexType.addComponent(new PartDescriptor(ComplexTypeDescriptor.__SIMPLE_CONTENT, this, baseName, null,
-                    new ConstantExpression<Long>(1L), new ConstantExpression<Long>(1L)));
+                    new ConstantExpression<>(1L), new ConstantExpression<>(1L)));
         } else if (base instanceof ComplexTypeDescriptor)
             complexType.setParentName(baseName);
         else
@@ -680,8 +682,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
         String nsAlias = typeName.substring(0, sep);
         String namespace = getNamespaceForAlias(nsAlias);
         String typeInNs = typeName.substring(sep + 1);
-        TypeDescriptor type = dataModel.getTypeDescriptor(namespace, typeInNs);
-        return type;
+        return dataModel.getTypeDescriptor(namespace, typeInNs);
     }
 
     private String getNamespaceForAlias(String nsAlias) {
@@ -736,7 +737,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
             if (!StringUtil.isEmpty(defaultValue))
                 ((SimpleTypeDescriptor) descriptor.getLocalType(false)).setValues(defaultValue);
         }
-        descriptor.setCount(new ConstantExpression<Long>(1L));
+        descriptor.setCount(new ConstantExpression<>(1L));
         if ("prohibited".equals(attributeElement.getAttribute("use")))
             descriptor.setMode(Mode.ignored);
         owner.addComponent(descriptor);

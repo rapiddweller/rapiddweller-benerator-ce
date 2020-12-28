@@ -76,8 +76,7 @@ public class TranscodingTaskParser extends AbstractTranscodeParser {
 
 	@SuppressWarnings("unchecked")
     protected Expression<DBSystem> parseDefaultSource(Element element) {
-	    Expression<DBSystem> sourceEx = (Expression<DBSystem>) parseScriptAttribute("defaultSource", element);
-	    return sourceEx;
+        return (Expression<DBSystem>) parseScriptAttribute("defaultSource", element);
     }
 
 }

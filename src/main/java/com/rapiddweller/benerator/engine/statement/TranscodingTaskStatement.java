@@ -64,14 +64,14 @@ import org.w3c.dom.Element;
  */
 public class TranscodingTaskStatement extends SequentialStatement {
 	
-    Expression<DBSystem> sourceEx; 
-    Expression<DBSystem> targetEx;
-    Expression<String> identityEx;
-	Expression<Long> pageSizeEx;
-    Expression<ErrorHandler> errorHandlerExpression;
-    IdentityProvider identityProvider;
+    final Expression<DBSystem> sourceEx;
+    final Expression<DBSystem> targetEx;
+    final Expression<String> identityEx;
+	final Expression<Long> pageSizeEx;
+    final Expression<ErrorHandler> errorHandlerExpression;
+    final IdentityProvider identityProvider;
     KeyMapper mapper;
-	Map<String, Boolean> tableNkRequirements = OrderedNameMap.createCaseIgnorantMap();
+	final Map<String, Boolean> tableNkRequirements = OrderedNameMap.createCaseIgnorantMap();
     
 	public TranscodingTaskStatement(Expression<DBSystem> sourceEx, Expression<DBSystem> targetEx, Expression<String> identityEx, 
     		Expression<Long> pageSizeEx, Expression<ErrorHandler> errorHandlerExpression) {

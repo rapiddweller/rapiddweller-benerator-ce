@@ -47,7 +47,7 @@ import com.rapiddweller.model.data.Uniqueness;
  */
 public class CoverageGeneratorFactory extends EquivalenceGeneratorFactory {
 	
-	private SerialGeneratorFactory serialFactory;
+	private final SerialGeneratorFactory serialFactory;
 	
 	public CoverageGeneratorFactory() {
 		this.serialFactory = new SerialGeneratorFactory();
@@ -55,30 +55,27 @@ public class CoverageGeneratorFactory extends EquivalenceGeneratorFactory {
 	
 	// generator factory method ----------------------------------------------------------------------------------------
 	
-    @SuppressWarnings("unchecked")
-	@Override
+    @Override
 	public Generator<Date> createDateGenerator(
             Date min, Date max, long granularity, Distribution distribution) {
-    	return new GeneratorChain<Date>(Date.class, true, 
-    		super.createDateGenerator(min, max, granularity, distribution),
-    		serialFactory.createDateGenerator(min, max, granularity, distribution)
+    	return new GeneratorChain<>(Date.class, true,
+				super.createDateGenerator(min, max, granularity, distribution),
+				serialFactory.createDateGenerator(min, max, granularity, distribution)
 		);
     }
 
-    @SuppressWarnings("unchecked")
-	@Override
+    @Override
 	public <T extends Number> NonNullGenerator<T> createNumberGenerator(
             Class<T> numberType, T min, Boolean minInclusive, T max, Boolean maxInclusive, 
             T granularity, Distribution distribution, Uniqueness uniqueness) {
-    	return WrapperFactory.asNonNullGenerator(new GeneratorChain<T>(numberType, true, 
-    		super.createNumberGenerator(numberType, min, minInclusive, max, maxInclusive, 
-    				granularity, distribution, uniqueness),
-    		serialFactory.createNumberGenerator(numberType, min, minInclusive, max, maxInclusive, 
-    				granularity, distribution, uniqueness)
+    	return WrapperFactory.asNonNullGenerator(new GeneratorChain<>(numberType, true,
+				super.createNumberGenerator(numberType, min, minInclusive, max, maxInclusive,
+						granularity, distribution, uniqueness),
+				serialFactory.createNumberGenerator(numberType, min, minInclusive, max, maxInclusive,
+						granularity, distribution, uniqueness)
 		));
     }
     
-	@SuppressWarnings("unchecked")
 	@Override
 	public NonNullGenerator<String> createStringGenerator(Set<Character> chars,
 			Integer minLength, Integer maxLength, int lengthGranularity, Distribution lengthDistribution, 
@@ -87,7 +84,7 @@ public class CoverageGeneratorFactory extends EquivalenceGeneratorFactory {
     			chars, minLength, maxLength, lengthGranularity, lengthDistribution, uniqueness);
 		NonNullGenerator<String> serialGenerator = serialFactory.createStringGenerator(
 				chars, minLength, maxLength, lengthGranularity, lengthDistribution, uniqueness);
-		return WrapperFactory.asNonNullGenerator(new GeneratorChain<String>(
+		return WrapperFactory.asNonNullGenerator(new GeneratorChain<>(
 				String.class, true, eqGenerator, serialGenerator));
 	}
 	
@@ -102,7 +99,7 @@ public class CoverageGeneratorFactory extends EquivalenceGeneratorFactory {
 
 	@Override
 	protected Set<Integer> defaultCounts(int minParts, int maxParts, int partsGranularity) {
-		TreeSet<Integer> counts = new TreeSet<Integer>();
+		TreeSet<Integer> counts = new TreeSet<>();
 		for (int i = minParts; i <= maxParts; i += partsGranularity)
 			counts.add(i);
 		return counts;

@@ -92,9 +92,9 @@ public abstract class TypeDescriptor extends FeatureDescriptor {
 
     protected void init() {
         // constraints
-        addConstraint(VALIDATOR, String.class, new FirstNonNullSelector<String>());
-        addConstraint(FILTER, String.class, new FirstNonNullSelector<String>());
-        addConstraint(CONDITION, String.class, new FirstNonNullSelector<String>());
+        addConstraint(VALIDATOR, String.class, new FirstNonNullSelector<>());
+        addConstraint(FILTER, String.class, new FirstNonNullSelector<>());
+        addConstraint(CONDITION, String.class, new FirstNonNullSelector<>());
 
         // config
         addConfig(GENERATOR, String.class);

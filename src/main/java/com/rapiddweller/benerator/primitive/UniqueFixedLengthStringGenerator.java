@@ -48,9 +48,9 @@ public class UniqueFixedLengthStringGenerator extends NonNullGeneratorWrapper<in
     private static final int DEFAULT_LENGTH = 4;
     private static final boolean DEFAULT_ORDERED = false;
 
-    private char[] digitSymbols;
-    private int length;
-    private boolean ordered;
+    private final char[] digitSymbols;
+    private final int length;
+    private final boolean ordered;
     
     public UniqueFixedLengthStringGenerator() {
         this(DEFAULT_CHAR_SET, DEFAULT_LENGTH, DEFAULT_ORDERED);
@@ -58,7 +58,7 @@ public class UniqueFixedLengthStringGenerator extends NonNullGeneratorWrapper<in
 
     public UniqueFixedLengthStringGenerator(Set<Character> chars, int length, boolean ordered) {
     	super(null);
-        this.digitSymbols = CollectionUtil.toCharArray(new TreeSet<Character>(chars));
+        this.digitSymbols = CollectionUtil.toCharArray(new TreeSet<>(chars));
         this.length = length;
         this.ordered = ordered;
     }

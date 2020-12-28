@@ -40,12 +40,12 @@ import com.rapiddweller.script.expression.DynamicExpression;
  */
 public class ScriptableExpression extends DynamicExpression<Object> {
 
-	private String scriptOrText;
-	private Expression<?> defaultValueExpression;
-	private boolean isScript;
+	private final String scriptOrText;
+	private final Expression<?> defaultValueExpression;
+	private final boolean isScript;
 
     public ScriptableExpression(String scriptOrText, Object defaultValue) {
-    	this(scriptOrText, (defaultValue != null ? new ConstantExpression<Object>(defaultValue) : null));
+    	this(scriptOrText, (defaultValue != null ? new ConstantExpression<>(defaultValue) : null));
     }
 
     private ScriptableExpression(String scriptOrText, Expression<?> defaultValueExpression) {

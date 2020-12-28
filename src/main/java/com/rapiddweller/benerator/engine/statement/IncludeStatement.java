@@ -51,7 +51,7 @@ import org.apache.logging.log4j.LogManager;
 
 public class IncludeStatement implements Statement {
 	
-	private static Logger logger = LogManager.getLogger(IncludeStatement.class);
+	private static final Logger logger = LogManager.getLogger(IncludeStatement.class);
 
 	private Expression<String> uriEx;
 	

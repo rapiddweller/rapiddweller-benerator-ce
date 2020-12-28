@@ -60,13 +60,12 @@ public abstract class AbstractTranscodeParser extends AbstractBeneratorDescripto
 
 	@SuppressWarnings("unchecked")
     protected Expression<DBSystem> parseSource(Element element) {
-	    Expression<DBSystem> sourceEx = (Expression<DBSystem>) parseScriptAttribute("source", element);
-	    return sourceEx;
+        return (Expression<DBSystem>) parseScriptAttribute("source", element);
     }
 
 	protected Expression<String[]> parseIrrelevantColumns(Element element) {
-	    return new ConvertingExpression<String, String[]>(
-	    		parseAttribute("irrelevantColumns", element), new SplitStringConverter(','));
+	    return new ConvertingExpression<>(
+                parseAttribute("irrelevantColumns", element), new SplitStringConverter(','));
     }
 
 }

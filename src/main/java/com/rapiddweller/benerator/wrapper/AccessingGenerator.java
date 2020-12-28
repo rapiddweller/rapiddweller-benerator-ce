@@ -37,9 +37,9 @@ import com.rapiddweller.commons.Accessor;
  */
 public class AccessingGenerator<S, P> extends UnsafeGenerator<P> {
 
-	private Class<P> targetType;
-    private Accessor<S, P> accessor;
-    private S provider;
+	private final Class<P> targetType;
+    private final Accessor<S, P> accessor;
+    private final S provider;
 
     public AccessingGenerator(Class<P> targetType, Accessor<S, P> accessor, S provider) {
         this.targetType = targetType;

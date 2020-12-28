@@ -37,7 +37,7 @@ import com.rapiddweller.script.expression.DynamicExpression;
  */
 public class ContextReference extends DynamicExpression<Object> {
 
-	private String ref;
+	private final String ref;
 	
 	public ContextReference(String ref) {
 	    this.ref = ref;

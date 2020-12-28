@@ -39,15 +39,15 @@ import com.rapiddweller.commons.converter.ThreadSafeConverter;
  */
 public class FloatingPointQuantizer<E extends Number> extends ThreadSafeConverter<E, E> {
 	
-	private Double min;
-	private double granularity;
-	private NumberToNumberConverter<Double, E> converter;
+	private final Double min;
+	private final double granularity;
+	private final NumberToNumberConverter<Double, E> converter;
 
 	public FloatingPointQuantizer(Class<E> numberType, Double min, double granularity) {
 	    super(numberType, numberType);
 	    this.min = (min != null ? min : 0.);
 	    this.granularity = granularity;
-	    this.converter = new NumberToNumberConverter<Double, E>(Double.class, numberType);
+	    this.converter = new NumberToNumberConverter<>(Double.class, numberType);
     }
 
 	@Override

@@ -61,7 +61,7 @@ import static com.rapiddweller.model.data.TypeDescriptor.*;
  */
 public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
 	
-	protected Logger logger = LogManager.getLogger(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
     
 	public Generator<?> createGenerator(E descriptor, String instanceName, 
 			boolean nullable, Uniqueness uniqueness, BeneratorContext context) {
@@ -200,20 +200,20 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
             if (descriptor.getPattern() != null) {
                 // We can use the SimpleDateFormat with a pattern
                 String pattern = descriptor.getPattern();
-                converter = new ParseFormatConverter<Date>(Date.class, new SimpleDateFormat(pattern), false);
+                converter = new ParseFormatConverter<>(Date.class, new SimpleDateFormat(pattern), false);
             } else {
                 // we need to expect the standard date format
-                converter = new String2DateConverter<Date>();
+                converter = new String2DateConverter<>();
             }
         } else if (String.class.equals(targetType) && sourceType == Date.class) {
             // String needs to be converted to Date
             if (descriptor.getPattern() != null) {
                 // We can use the SimpleDateFormat with a pattern
                 String pattern = descriptor.getPattern();
-                converter = new FormatFormatConverter<Date>(Date.class, new SimpleDateFormat(pattern), false);
+                converter = new FormatFormatConverter<>(Date.class, new SimpleDateFormat(pattern), false);
             } else {
                 // we need to expect the standard date format
-                converter = new FormatFormatConverter<Date>(Date.class, TimeUtil.createDefaultDateFormat(), false);
+                converter = new FormatFormatConverter<>(Date.class, TimeUtil.createDefaultDateFormat(), false);
             }
         } else if (targetType != sourceType) {
         	converter = new AnyConverter(targetType, descriptor.getPattern());

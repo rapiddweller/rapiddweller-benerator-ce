@@ -40,10 +40,10 @@ import java.util.Set;
 
 public class DefaultTemplateRecord implements TemplateRecord {
 
-    protected Map<String, Object> components;
+    protected final Map<String, Object> components;
 
     public DefaultTemplateRecord() {
-        this.components = new HashMap<String, Object>();
+        this.components = new HashMap<>();
     }
 
     @Override

@@ -38,7 +38,7 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  */
 public class Variable<E> extends AbstractGeneratorComponent<E> {
 	
-	private String name;
+	private final String name;
 	
 	public Variable(String name, Generator<?> source, String scope) {
 		super(source, scope);

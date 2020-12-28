@@ -92,19 +92,19 @@ public class ProjectBuilder implements Runnable {
 
 	
     private final static Set<String> DB_CONSTRAINT_NAMES = CollectionUtil.toSet("nullable", "maxLength", "type");
-    private static ToStringConverter toStringConverter = new ToStringConverter("");
+    private static final ToStringConverter toStringConverter = new ToStringConverter("");
 
-	protected Setup setup;
+	protected final Setup setup;
 	protected TypeDescriptor[]  descriptors;
 	protected DBSystem db;
-    private List<Exception> errors;
-    private ProgressMonitor monitor;
-    private FolderLayout folderLayout;
-    private DataModel dataModel;
+    private final List<Exception> errors;
+    private final ProgressMonitor monitor;
+    private final FolderLayout folderLayout;
+    private final DataModel dataModel;
 	
 	public ProjectBuilder(Setup setup, FolderLayout folderLayout, ProgressMonitor monitor) {
 		this.setup = setup;
-		this.errors = new ArrayList<Exception>();
+		this.errors = new ArrayList<>();
 		this.monitor = monitor;
 		this.descriptors = new TypeDescriptor[0];
 		this.folderLayout = folderLayout;
@@ -300,7 +300,7 @@ public class ProjectBuilder implements Runnable {
 
     private void processToken(Setup setup, 
     		DefaultHTMLTokenizer tokenizer, LFNormalizingStringBuilder writer) 
-    			throws FileNotFoundException, IOException, ParseException {
+    			throws IOException, ParseException {
 
     	switch (tokenizer.tokenType()) {
     		case HTMLTokenizer.START_TAG: {
@@ -406,7 +406,7 @@ public class ProjectBuilder implements Runnable {
 	    }
     }
 
-	private static void copyToProject(File srcFile, File projectFolder) throws FileNotFoundException, IOException {
+	private static void copyToProject(File srcFile, File projectFolder) throws IOException {
         File dstFile = new File(projectFolder, srcFile.getName());
     	FileUtil.copy(srcFile, dstFile, true);
     }
@@ -459,8 +459,8 @@ public class ProjectBuilder implements Runnable {
 	
     private void generateTable(InstanceDescriptor descriptor, LFNormalizingStringBuilder writer) {
         ComplexTypeDescriptor type = (ComplexTypeDescriptor) descriptor.getTypeDescriptor();
-        Map<String, String> attributes = new OrderedMap<String, String>();
-        for (FeatureDetail<? extends Object> detail : descriptor.getDetails()) {
+        Map<String, String> attributes = new OrderedMap<>();
+        for (FeatureDetail<?> detail : descriptor.getDetails()) {
             Object value = detail.getValue();
             if (value != null && !isDefaultValue(value, detail.getName())) {
             	if (value instanceof Expression)
@@ -511,16 +511,16 @@ public class ProjectBuilder implements Runnable {
             throw new UnsupportedOperationException("Component descriptor type not supported: " + 
                     component.getClass().getSimpleName());
         
-        Map<String, String> attributes = new OrderedMap<String, String>();
+        Map<String, String> attributes = new OrderedMap<>();
         attributes.put(ATT_NAME, component.getName());
         SimpleTypeDescriptor type = (SimpleTypeDescriptor) (component.getType() != null ? 
         		dataModel.getTypeDescriptor(component.getType()) : 
         		component.getLocalType());
         if (type != null) {
-			for (FeatureDetail<? extends Object> detail : type.getDetails())
+			for (FeatureDetail<?> detail : type.getDetails())
 	            format(detail, attributes);
 	    }
-        for (FeatureDetail<? extends Object> detail : component.getDetails())
+        for (FeatureDetail<?> detail : component.getDetails())
             format(detail, attributes);
         if (nullable)
         	attributes.put("nullQuota", "1");
@@ -532,7 +532,7 @@ public class ProjectBuilder implements Runnable {
     	writer.append('\n');
     }
     
-	private static void format(FeatureDetail<? extends Object> detail, Map<String, String> attributes) {
+	private static void format(FeatureDetail<?> detail, Map<String, String> attributes) {
 		if (!ATT_NAME.equals(detail.getName()) && detail.getValue() != null && !isDbConstraint(detail.getName()))
 		    attributes.put(detail.getName(), toStringConverter.convert(detail.getValue()));
 	}

@@ -46,14 +46,14 @@ import com.rapiddweller.commons.Weighted;
  */
 public class WeightedGeneratorGenerator<E> extends MultiGeneratorWrapper<E, Generator<E>> implements Weighted {
 	
-	private List<Double> sourceWeights;
+	private final List<Double> sourceWeights;
 	private AttachedWeightSampleGenerator<Integer> indexGenerator;
 	private double totalWeight;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public WeightedGeneratorGenerator() {
 		super((Class) Generator.class);
-		this.sourceWeights = new ArrayList<Double>();
+		this.sourceWeights = new ArrayList<>();
 		this.totalWeight = 0;
 	}
 	
@@ -80,7 +80,7 @@ public class WeightedGeneratorGenerator<E> extends MultiGeneratorWrapper<E, Gene
 	}
 	
 	private void createAndInitIndexGenerator() {
-		indexGenerator = new AttachedWeightSampleGenerator<Integer>(Integer.class);
+		indexGenerator = new AttachedWeightSampleGenerator<>(Integer.class);
 		for (int i = 0; i < sourceWeights.size(); i++)
 			indexGenerator.addSample(i, sourceWeights.get(i));
 		indexGenerator.init(context);

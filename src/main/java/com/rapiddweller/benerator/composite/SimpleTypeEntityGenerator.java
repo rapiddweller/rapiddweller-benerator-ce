@@ -40,7 +40,7 @@ import com.rapiddweller.model.data.Entity;
  */
 public class SimpleTypeEntityGenerator extends GeneratorWrapper<Object, Entity> {
 	
-	private ComplexTypeDescriptor complexType;
+	private final ComplexTypeDescriptor complexType;
 
 	@SuppressWarnings("unchecked")
     public SimpleTypeEntityGenerator(Generator<?> source, ComplexTypeDescriptor complexType) {

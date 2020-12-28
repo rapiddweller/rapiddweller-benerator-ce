@@ -56,12 +56,12 @@ public class SourceFactory {
      * @return a generator of the desired characteristics
      */
     public static Generator<String> createCSVCellGenerator(String uri, char separator, String encoding) {
-        return new DataSourceGenerator<String>(new CSVCellSource(uri, separator));
+        return new DataSourceGenerator<>(new CSVCellSource(uri, separator));
     }
 
     public static Generator<String[]> createCSVGenerator(String uri, char separator, String encoding, 
     		boolean ignoreEmptyLines, boolean rowBased) {
-        return new DataSourceGenerator<String[]>(new CSVSource(uri, separator, encoding, ignoreEmptyLines, rowBased));
+        return new DataSourceGenerator<>(new CSVSource(uri, separator, encoding, ignoreEmptyLines, rowBased));
     }
 
     /**
@@ -75,7 +75,7 @@ public class SourceFactory {
      */
     public static Generator<String[]> createCSVLineGenerator(String uri, char separator, String encoding, 
     		boolean ignoreEmptyLines) {
-        return new DataSourceGenerator<String[]>(new CSVSource(uri, separator, encoding, ignoreEmptyLines, true));
+        return new DataSourceGenerator<>(new CSVSource(uri, separator, encoding, ignoreEmptyLines, true));
     }
 
     /**
@@ -84,7 +84,7 @@ public class SourceFactory {
      * @return a generator of the desired characteristics
      */
     public static Generator<Object[]> createXLSLineGenerator(String uri) {
-        return new DataSourceGenerator<Object[]>(new XLSLineSource(uri));
+        return new DataSourceGenerator<>(new XLSLineSource(uri));
     }
 
     /**
@@ -93,7 +93,7 @@ public class SourceFactory {
      * @return a generator of the desired characteristics
      */
     public static Generator<String> createTextLineGenerator(String uri) {
-        return new IteratingGenerator<String>(new TextLineIterable(uri));
+        return new IteratingGenerator<>(new TextLineIterable(uri));
     }
 
     @SuppressWarnings("unchecked")
@@ -105,13 +105,13 @@ public class SourceFactory {
             Generator<T>[] sources = new Generator[uris.length];
             for (int i = 0; i < uris.length; i++) {
             	DataSource<T> source = factory.create(uris[i], context);
-                sources[i] = new DataSourceGenerator<T>(source);
+                sources[i] = new DataSourceGenerator<>(source);
             }
 			generator = context.getGeneratorFactory().createAlternativeGenerator(generatedType, sources, Uniqueness.NONE);
 		} else {
 		    // iterate over (possibly large) data file
 			DataSource<T> source = factory.create(sourceName, context);
-		    generator = new DataSourceGenerator<T>(source);
+		    generator = new DataSourceGenerator<>(source);
 		}
 		return generator;
     }

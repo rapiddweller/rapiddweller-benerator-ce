@@ -53,8 +53,8 @@ public abstract class MultiGeneratorWrapper<S, P> extends AbstractGenerator<P> {
 	
 	private static final Logger LOGGER = LogManager.getLogger(MultiGeneratorWrapper.class);
 
-	protected Class<P> generatedType;
-    protected List<Generator<? extends S>> sources;
+	protected final Class<P> generatedType;
+    protected final List<Generator<? extends S>> sources;
     private final List<Generator<? extends S>> availableSources;
 	private final WrapperProvider<S> sourceWrapperProvider;
     

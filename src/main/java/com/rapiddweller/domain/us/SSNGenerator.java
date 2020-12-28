@@ -73,10 +73,9 @@ public class SSNGenerator extends CompositeGenerator<String> implements NonNullG
         do {
             area = areaNumberGenerator.generate();
         } while (area == 666 || (area >= 734 && area <= 749));
-        String ssn = StringUtil.padLeft(String.valueOf(area), 3, '0') + '-' +
+        return StringUtil.padLeft(String.valueOf(area), 3, '0') + '-' +
                 StringUtil.padLeft(String.valueOf(groupNumberGenerator.generate()), 2, '0') + '-' +
                 StringUtil.padLeft(String.valueOf(serialNumberGenerator.generate()), 4, '0');
-        return ssn;
     }
 
     public void setMaxAreaCode(int maxAreaCode) {

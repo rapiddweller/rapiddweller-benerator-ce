@@ -54,9 +54,9 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
     
     protected String nesting;
     protected String datasetName;
-    protected Set<String> supportedDatasets;
+    protected final Set<String> supportedDatasets;
     protected double totalWeight;
-    protected boolean fallback;
+    protected final boolean fallback;
     
     // constructor -----------------------------------------------------------------------------------------------------
     
@@ -65,7 +65,7 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
         this.nesting = nesting;
         this.datasetName = datasetName;
         this.fallback = fallback;
-        this.supportedDatasets = new HashSet<String>();
+        this.supportedDatasets = new HashSet<>();
         this.supportedDatasets.add(datasetName);
         this.totalWeight = 0;
     }
@@ -145,7 +145,7 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
 	}
 
     protected CompositeDatasetGenerator<E> createCompositeDatasetGenerator(Dataset dataset, boolean fallback) {
-		CompositeDatasetGenerator<E> generator = new CompositeDatasetGenerator<E>(nesting, dataset.getName(), fallback);
+		CompositeDatasetGenerator<E> generator = new CompositeDatasetGenerator<>(nesting, dataset.getName(), fallback);
 		for (Dataset subSet : dataset.getSubSets()) {
 			WeightedDatasetGenerator<E> subGenerator = createDatasetGenerator(subSet, false, fallback);
 			if (subGenerator != null)
@@ -161,7 +161,7 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
 		WeightedGenerator<E> generator = createGeneratorForAtomicDataset(dataset);
 		if (generator != null) {
 	    	totalWeight += generator.getWeight();
-			return new AtomicDatasetGenerator<E>(generator, nesting, dataset.getName());
+			return new AtomicDatasetGenerator<>(generator, nesting, dataset.getName());
 		}
 		if (required)
 			throw new InvalidGeneratorSetupException("Unable to create generator for atomic dataset: " + dataset.getName());

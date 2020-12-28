@@ -63,14 +63,14 @@ public class DescriptorRunner implements ResourceManager {
 
 	// attributes ------------------------------------------------------------------------------------------------------
 
-	private String uri;
+	private final String uri;
 
-	private BeneratorContext context;
+	private final BeneratorContext context;
 
-	BeneratorFactory factory;
+	final BeneratorFactory factory;
 	private List<String> generatedFiles;
 	
-	private ResourceManagerSupport resourceManager = new ResourceManagerSupport();
+	private final ResourceManagerSupport resourceManager = new ResourceManagerSupport();
 	long startTime = 0;
 
 	
@@ -80,7 +80,7 @@ public class DescriptorRunner implements ResourceManager {
 		this.uri = uri;
 		this.context = context;
 		this.factory = BeneratorFactory.getInstance();
-		this.generatedFiles = new ArrayList<String>();
+		this.generatedFiles = new ArrayList<>();
 		ConverterManager.getInstance().setContext(context);
 	}
 	
@@ -115,7 +115,7 @@ public class DescriptorRunner implements ResourceManager {
 	    BeneratorParseContext parsingContext = factory.createParseContext(resourceManager);
 	    BeneratorRootStatement statement = (BeneratorRootStatement) parsingContext.parseElement(root, null);
 		// prepare system
-		generatedFiles = new ArrayList<String>();
+		generatedFiles = new ArrayList<>();
 		context.setContextUri(IOUtil.getParentUri(uri));
 	    return statement;
     }

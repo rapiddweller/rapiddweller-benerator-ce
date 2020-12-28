@@ -109,7 +109,6 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
 	private static final Package BENERATOR_ANNO_PACKAGE = Unique.class.getPackage();
 	private static final Package BEANVAL_ANNO_PACKAGE = Max.class.getPackage();
 	
-	@SuppressWarnings("unchecked")
 	private static final Set<Class<? extends Annotation>> EXPLICITLY_MAPPED_ANNOTATIONS = CollectionUtil.toSet(
 			Bean.class, 
 			Database.class, 
@@ -120,15 +119,15 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
 			ThreadPoolSize.class);
 
 	static {
-		STANDARD_METHODS = new HashSet<String>();
+		STANDARD_METHODS = new HashSet<>();
 		for (Method method : Annotation.class.getMethods())
 			STANDARD_METHODS.add(method.getName());
 	}
 
-	private DataModel dataModel;
-	private PathResolver pathResolver;
+	private final DataModel dataModel;
+	private final PathResolver pathResolver;
 
-	private ArrayTypeGeneratorFactory arrayTypeGeneratorFactory;
+	private final ArrayTypeGeneratorFactory arrayTypeGeneratorFactory;
 	
 	public AnnotationMapper(DataModel dataModel, PathResolver pathResolver) {
 		super("anno", dataModel);
@@ -375,7 +374,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
 		// evaluate @TestFeed annotation
 		InvocationCount testCount = testMethod.getAnnotation(InvocationCount.class);
 		if (testCount != null)
-			generator = new NShotGeneratorProxy<Object[]>(generator, testCount.value());
+			generator = new NShotGeneratorProxy<>(generator, testCount.value());
 		
 		// apply LastInstanceDetector
 		generator = WrapperFactory.applyLastProductDetector(generator);
@@ -540,7 +539,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
 	    	setDetail("pattern", pattern.regexp(), instanceDescriptor);
     }
 
-	private void mapSourceAnnotation(Source source, InstanceDescriptor instanceDescriptor, Class<?> testClass) throws Exception {
+	private void mapSourceAnnotation(Source source, InstanceDescriptor instanceDescriptor, Class<?> testClass) {
 		mapSourceUriOrValue(source.value(),  instanceDescriptor, testClass);
 		mapSourceUriOrValue(source.uri(),    instanceDescriptor, testClass);
 		mapSourceSetting(source.segment(),   "segment",   instanceDescriptor);
@@ -588,19 +587,19 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
 		((SimpleTypeDescriptor) instanceDescriptor.getLocalType(false)).setValues(builder.toString());
     }
 
-	private static void mapOffsetAnnotation(Offset annotation, InstanceDescriptor instanceDescriptor) throws Exception {
+	private static void mapOffsetAnnotation(Offset annotation, InstanceDescriptor instanceDescriptor) {
 		if (annotation.value() != 0)
 			instanceDescriptor.getLocalType().setOffset(annotation.value());
     }
 
-	private static void mapMinDateAnnotation(MinDate annotation, InstanceDescriptor instanceDescriptor) throws Exception {
+	private static void mapMinDateAnnotation(MinDate annotation, InstanceDescriptor instanceDescriptor) {
 		TypeDescriptor localType = instanceDescriptor.getLocalType();
 		if (!(localType instanceof SimpleTypeDescriptor))
 			throw new ConfigurationError("@MinDate can only be applied to Date types");
 		((SimpleTypeDescriptor) localType).setMin(annotation.value());
     }
 
-	private static void mapMaxDateAnnotation(MaxDate annotation, InstanceDescriptor instanceDescriptor) throws Exception {
+	private static void mapMaxDateAnnotation(MaxDate annotation, InstanceDescriptor instanceDescriptor) {
 		TypeDescriptor localType = instanceDescriptor.getLocalType();
 		if (!(localType instanceof SimpleTypeDescriptor))
 			throw new ConfigurationError("@MaxDate can only be applied to Date types");
@@ -642,7 +641,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     	} else if (annotation instanceof Past)
 	        typeDescriptor.setMax(new SimpleDateFormat("yyyy-MM-dd").format(TimeUtil.yesterday()));
         else if (annotation instanceof Pattern)
-    		typeDescriptor.setPattern(String.valueOf(((Pattern) annotation).regexp()));
+    		typeDescriptor.setPattern(((Pattern) annotation).regexp());
     	else if (annotation instanceof Size) {
     		Size size = (Size) annotation;
     		typeDescriptor.setMinLength(size.min());

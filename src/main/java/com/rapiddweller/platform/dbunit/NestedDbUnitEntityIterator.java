@@ -128,7 +128,7 @@ public class NestedDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
 
     private Row parseValues() throws XMLStreamException {
         String value;
-        ArrayBuilder<String> builder = new ArrayBuilder<String>(String.class);
+        ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
         while ((value = parseValue()) != null)
             builder.add(value);
         return new Row(currentTable.name, currentTable.getColumnNames(), builder.toArray());
@@ -149,7 +149,7 @@ public class NestedDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
     }
 
     private static class Table {
-        protected String name;
+        protected final String name;
         private String[] columnNames;
 
         public Table(String name) {

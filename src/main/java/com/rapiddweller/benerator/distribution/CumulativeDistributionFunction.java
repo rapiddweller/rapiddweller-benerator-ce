@@ -59,8 +59,8 @@ public abstract class CumulativeDistributionFunction implements Distribution {
 			throw new IllegalArgumentException(this + " cannot generate unique values");
 	    List<T> allProducts = GeneratorUtil.allProducts(source);
 	    if (allProducts.size() == 1)
-	    	return new ConstantGenerator<T>(allProducts.get(0));
-	    return new SampleGenerator<T>(source.getGeneratedType(), this, unique, allProducts);
+	    	return new ConstantGenerator<>(allProducts.get(0));
+	    return new SampleGenerator<>(source.getGeneratedType(), this, unique, allProducts);
     }
 
 	@Override
@@ -68,7 +68,7 @@ public abstract class CumulativeDistributionFunction implements Distribution {
 			Class<T> numberType, T min, T max, T granularity, boolean unique) {
 		if (unique)
 			throw new IllegalArgumentException(this + " cannot generate unique values");
-	    return new IPINumberGenerator<T>(this, numberType, min, max, granularity);
+	    return new IPINumberGenerator<>(this, numberType, min, max, granularity);
     }
 	
 	@Override
@@ -84,14 +84,14 @@ public abstract class CumulativeDistributionFunction implements Distribution {
      */
     public static class IPINumberGenerator<E extends Number> extends AbstractNonNullNumberGenerator<E> {
     	
-    	private CumulativeDistributionFunction fcn;
-    	private Random random = new Random();
-		private Converter<Double, E> converter;
-		private double minProb;
-		private double probScale;
-		private double minD;
+    	private final CumulativeDistributionFunction fcn;
+    	private final Random random = new Random();
+		private final Converter<Double, E> converter;
+		private final double minProb;
+		private final double probScale;
+		private final double minD;
 		private double maxD;
-		private double granularityD;
+		private final double granularityD;
     	
 		public IPINumberGenerator(CumulativeDistributionFunction fcn, Class<E> targetType, E min, E max, E granularity) {
 			super(targetType, min, max, granularity);

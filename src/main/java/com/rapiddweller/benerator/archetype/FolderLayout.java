@@ -33,5 +33,5 @@ package com.rapiddweller.benerator.archetype;
  * @author Volker Bergmann
  */
 public interface FolderLayout {
-	public String mapSubFolder(String path);
+	String mapSubFolder(String path);
 }

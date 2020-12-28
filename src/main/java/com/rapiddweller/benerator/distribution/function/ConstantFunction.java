@@ -35,7 +35,7 @@ import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
  */
 public class ConstantFunction extends AbstractWeightFunction {
 
-    private double value;
+    private final double value;
 
     public ConstantFunction() {
         this(1);

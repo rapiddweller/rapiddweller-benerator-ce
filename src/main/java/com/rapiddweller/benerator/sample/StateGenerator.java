@@ -51,8 +51,8 @@ import com.rapiddweller.script.WeightedTransition;
 
 public class StateGenerator<E> extends UnsafeNonNullGenerator<E> {
 	
-	private Class<E> generatedType;
-	private Map<E, AttachedWeightSampleGenerator<E>> transitionsGenerators;
+	private final Class<E> generatedType;
+	private final Map<E, AttachedWeightSampleGenerator<E>> transitionsGenerators;
 	private E nextState;
 	
 	// initialization --------------------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ public class StateGenerator<E> extends UnsafeNonNullGenerator<E> {
     
     public StateGenerator(Class<E> generatedType) {
 	    this.generatedType = generatedType;
-	    this.transitionsGenerators = new HashMap<E, AttachedWeightSampleGenerator<E>>();
+	    this.transitionsGenerators = new HashMap<>();
 	    this.nextState = null;
     }
     
@@ -91,7 +91,7 @@ public class StateGenerator<E> extends UnsafeNonNullGenerator<E> {
     public void addTransition(E from, E to, double weight) {
     	AttachedWeightSampleGenerator<E> subGenerator = transitionsGenerators.get(from);
     	if (subGenerator == null) {
-    		subGenerator = new AttachedWeightSampleGenerator<E>(generatedType);
+    		subGenerator = new AttachedWeightSampleGenerator<>(generatedType);
     		transitionsGenerators.put(from, subGenerator);
     	}
     	subGenerator.addSample(to, weight);

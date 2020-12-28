@@ -51,8 +51,6 @@ import java.util.Locale;
  */
 public class EMailAddressBuilder implements ThreadAware {
 
-    private final Logger logger = LogManager.getLogger(getClass()); // Logger is not static in order to adopt sub classes
-
     private final DomainGenerator domainGenerator;
     private final CaseConverter caseConverter;
     private final Converter<String, String> nameConverter;
@@ -61,17 +59,19 @@ public class EMailAddressBuilder implements ThreadAware {
     // constructor -----------------------------------------------------------------------------------------------------
 
     public EMailAddressBuilder(String dataset) {
+        // Logger is not static in order to adopt sub classes
+        Logger logger = LogManager.getLogger(getClass());
         logger.debug("Creating instance of {} for dataset {}", getClass(), dataset);
         this.domainGenerator = new DomainGenerator(dataset);
         this.caseConverter = new CaseConverter(false);
         try {
-            this.nameConverter = new ConverterChain<String, String>(
+            this.nameConverter = new ConverterChain<>(
                     new DelocalizingConverter(),
                     caseConverter);
         } catch (IOException e) {
             throw new ConfigurationError("Error in Converter setup", e);
         }
-        this.joinGenerator = new NonNullSampleGenerator<Character>(Character.class, '_', '.', '0', '1');
+        this.joinGenerator = new NonNullSampleGenerator<>(Character.class, '_', '.', '0', '1');
     }
 
     // properties ------------------------------------------------------------------------------------------------------

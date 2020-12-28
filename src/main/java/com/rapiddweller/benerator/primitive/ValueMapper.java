@@ -63,7 +63,7 @@ public class ValueMapper implements Converter {
 	}
 
 	private void init(String mappingSpec, boolean lenient) {
-	    this.mappings = new HashMap<Object, Object>();
+	    this.mappings = new HashMap<>();
 		setMappings(mappingSpec);
 		this.lenient = lenient;
     }

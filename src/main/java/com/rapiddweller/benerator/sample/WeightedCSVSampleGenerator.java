@@ -66,7 +66,7 @@ public class WeightedCSVSampleGenerator<E> extends GeneratorProxy<E> {
     private String encoding;
 
     /** The converter to create instances from the CSV cell strings */
-    private Converter<String, E> converter;
+    private final Converter<String, E> converter;
     
     
     
@@ -83,7 +83,7 @@ public class WeightedCSVSampleGenerator<E> extends GeneratorProxy<E> {
 
 	public WeightedCSVSampleGenerator(Class<E> targetType, String uri, String encoding, Converter<String, E> converter) {
     	super(targetType);
-        setSource(new AttachedWeightSampleGenerator<E>(targetType));
+        setSource(new AttachedWeightSampleGenerator<>(targetType));
         this.converter = converter;
         this.encoding = encoding;
         this.separator = ',';

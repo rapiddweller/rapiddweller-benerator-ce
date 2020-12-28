@@ -53,7 +53,7 @@ import java.sql.Statement;
  */
 public class SequenceTableGenerator<E extends Number> extends UnsafeNonNullGenerator<E> {
 
-    protected Long increment = 1L;
+    protected final Long increment = 1L;
     private String table;
     private String column;
     private DBSystem database;

@@ -63,7 +63,7 @@ public class TaskExecutor {
             target = new PerfTrackingTaskProxy(target);
             this.tracker = ((PerfTrackingTaskProxy) target).getOrCreateTracker();
         }
-        this.target = new StateTrackingTaskProxy<Task>(target);
+        this.target = new StateTrackingTaskProxy<>(target);
         this.pageListeners = pageListeners;
         this.pageSize = pageSize;
         this.infoLog = infoLog;
@@ -166,7 +166,6 @@ public class TaskExecutor {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private boolean workPending(Long maxInvocationCount, long queuedInvocations) {
         if (!((StateTrackingTaskProxy<? extends Task>) target).isAvailable())
             return false;

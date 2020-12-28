@@ -39,13 +39,13 @@ import com.rapiddweller.benerator.wrapper.WeightedGeneratorGenerator;
  */
 public class CompositeDatasetGenerator<E> extends GeneratorWrapper<Generator<E>, E> implements WeightedDatasetGenerator<E> {
 
-	private String nesting;
-	private String datasetName;
-	private boolean performFallback;
+	private final String nesting;
+	private final String datasetName;
+	private final boolean performFallback;
 	private DatasetBasedGenerator<E> fallbackGenerator;
 	
 	public CompositeDatasetGenerator(String nesting, String datasetName, boolean fallback) {
-		super(new WeightedGeneratorGenerator<E>());
+		super(new WeightedGeneratorGenerator<>());
 		this.nesting = nesting;
 		this.datasetName = datasetName;
 		this.performFallback = fallback;
@@ -112,7 +112,7 @@ public class CompositeDatasetGenerator<E> extends GeneratorWrapper<Generator<E>,
 	// helper methods --------------------------------------------------------------------------------------------------
 	
 	private DatasetBasedGenerator<E> randomGenerator() {
-		return (DatasetBasedGenerator<E>) getSource().generate(new ProductWrapper<Generator<E>>()).unwrap();
+		return (DatasetBasedGenerator<E>) getSource().generate(new ProductWrapper<>()).unwrap();
 	}
 
 	private DatasetBasedGenerator<E> randomAtomicGenerator() {

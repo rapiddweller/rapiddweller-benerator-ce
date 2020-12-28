@@ -77,7 +77,7 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
 	private static final Set<String> OPTIONAL_ATTRIBUTES;
 	
 	static {
-		OPTIONAL_ATTRIBUTES = new HashSet<String>(BENERATOR_PROPERTIES);
+		OPTIONAL_ATTRIBUTES = new HashSet<>(BENERATOR_PROPERTIES);
 		OPTIONAL_ATTRIBUTES.addAll(XML_ATTRIBUTES);
 	}
 	

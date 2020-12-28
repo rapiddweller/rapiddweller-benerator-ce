@@ -38,7 +38,7 @@ import com.rapiddweller.benerator.engine.Statement;
  */
 public class WaitStatement implements Statement {
 	
-	private NonNullGenerator<Long> durationGenerator;
+	private final NonNullGenerator<Long> durationGenerator;
 	private boolean generatorInitialized = false;
 
 	public WaitStatement(NonNullGenerator<Long> durationGenerator) {

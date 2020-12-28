@@ -45,10 +45,10 @@ public class HibUUIDGenerator extends ThreadSafeNonNullGenerator<String> {
     private static final String IP_ADDRESS;
     private static final String JVM_ID = NumberUtil.formatHex((int) (System.currentTimeMillis() >>> 8), 8);
 
-    private static volatile AtomicInteger counter = new AtomicInteger();
+    private static final AtomicInteger counter = new AtomicInteger();
 
-    private String ipJvm;
-    private String separator;
+    private final String ipJvm;
+    private final String separator;
 
     // construction ----------------------------------------------------------------------------------------------------
 

@@ -86,9 +86,9 @@ public class CSVEntityIterator implements DataIterator<Entity>, Tabular {
 
     public static List<Entity> parseAll(String uri, char separator, String encoding, ComplexTypeDescriptor descriptor,
                                         Converter<String, String> preprocessor, Patterns patterns) throws FileNotFoundException {
-        List<Entity> list = new ArrayList<Entity>();
+        List<Entity> list = new ArrayList<>();
         CSVEntityIterator iterator = new CSVEntityIterator(uri, descriptor, preprocessor, separator, encoding);
-        DataContainer<Entity> container = new DataContainer<Entity>();
+        DataContainer<Entity> container = new DataContainer<>();
         while ((container = iterator.next(container)) != null)
             list.add(container.getData());
         return list;
@@ -162,13 +162,13 @@ public class CSVEntityIterator implements DataIterator<Entity>, Tabular {
             DataIterator<String[]> cellIterator;
             cellIterator = new CSVLineIterator(uri, separator, true, encoding);
             if (!rowBased)
-                cellIterator = new OrthogonalArrayIterator<String>(cellIterator);
+                cellIterator = new OrthogonalArrayIterator<>(cellIterator);
             if (expectingHeader)
-                setColumns(cellIterator.next(new DataContainer<String[]>()).getData());
+                setColumns(cellIterator.next(new DataContainer<>()).getData());
             Converter<String[], Object[]> arrayConverter = new ArrayConverter(String.class, Object.class, preprocessor);
             Array2EntityConverter a2eConverter = new Array2EntityConverter(entityDescriptor, columns, true);
-            Converter<String[], Entity> converter = new ConverterChain<String[], Entity>(arrayConverter, a2eConverter);
-            this.source = new ConvertingDataIterator<String[], Entity>(cellIterator, converter);
+            Converter<String[], Entity> converter = new ConverterChain<>(arrayConverter, a2eConverter);
+            this.source = new ConvertingDataIterator<>(cellIterator, converter);
         } catch (IOException e) {
             throw new RuntimeException("Error in processing " + uri, e);
         }

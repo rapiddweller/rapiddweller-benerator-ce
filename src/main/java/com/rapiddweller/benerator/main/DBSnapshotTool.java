@@ -121,7 +121,6 @@ public class DBSnapshotTool {
 				format, dialect, null);
 	}
 	
-	@SuppressWarnings("resource")
 	public static void export(String dbUrl, String dbDriver, String dbSchema,
 			String dbUser, String dbPassword, String filename, String encoding, String format, String dialect, 
 			ProgressMonitor monitor) {
@@ -131,26 +130,24 @@ public class DBSnapshotTool {
 		long startTime = System.currentTimeMillis();
 
 		Consumer exporter = null;
-        DefaultDBSystem db = null;
         int count = 0;
-        try {
-        	// connect DB
-            db = new DefaultDBSystem("db", dbUrl, dbDriver, dbUser, dbPassword, new DataModel());
+        try (DefaultDBSystem db = new DefaultDBSystem("db", dbUrl, dbDriver, dbUser, dbPassword, new DataModel())) {
+            // connect DB
             if (dbSchema != null)
                 db.setSchema(dbSchema);
             db.setDynamicQuerySupported(false);
 
             // create exporter
             if (DBUNIT_FORMAT.equals(format.toLowerCase()))
-            	exporter = new DbUnitEntityExporter(filename, encoding);
+                exporter = new DbUnitEntityExporter(filename, encoding);
             else if (XLS_FORMAT.equals(format))
-            	exporter = new XLSEntityExporter(filename);
+                exporter = new XLSEntityExporter(filename);
             else if (SQL_FORMAT.equals(format)) {
-            	if (dialect == null)
-            		dialect = db.getDialect().getSystem();
-            	exporter = new SQLEntityExporter(filename, encoding, lineSeparator, dialect);
+                if (dialect == null)
+                    dialect = db.getDialect().getSystem();
+                exporter = new SQLEntityExporter(filename, encoding, lineSeparator, dialect);
             } else
-            	throw new IllegalArgumentException("Unknown format: " + format);
+                throw new IllegalArgumentException("Unknown format: " + format);
 
             // export data
             List<TypeDescriptor> descriptors = Arrays.asList(db.getTypeDescriptors());
@@ -158,37 +155,35 @@ public class DBSnapshotTool {
             for (TypeDescriptor descriptor : descriptors) {
                 String note = "Exporting table " + descriptor.getName();
                 if (monitor != null) {
-                	monitor.setNote(note);
-                	if (monitor.isCanceled())
-                		throw new RuntimeException("Export cancelled");
+                    monitor.setNote(note);
+                    if (monitor.isCanceled())
+                        throw new RuntimeException("Export cancelled");
                 }
-				logger.info(note);
-				Thread.yield();
+                logger.info(note);
+                Thread.yield();
                 DataIterator<Entity> source = db.queryEntities(descriptor.getName(), null, null).iterator();
-                DataContainer<Entity> container = new DataContainer<Entity>();
-                ProductWrapper<Entity> wrapper = new ProductWrapper<Entity>();
-				while ((container = source.next(container)) != null) {
-					Entity entity = container.getData();
-					wrapper.wrap(entity);
+                DataContainer<Entity> container = new DataContainer<>();
+                ProductWrapper<Entity> wrapper = new ProductWrapper<>();
+                while ((container = source.next(container)) != null) {
+                    Entity entity = container.getData();
+                    wrapper.wrap(entity);
                     exporter.startConsuming(wrapper);
-					wrapper.wrap(entity);
+                    wrapper.wrap(entity);
                     exporter.finishConsuming(wrapper);
                     count++;
                 }
                 if (monitor != null)
-                	monitor.advance();
+                    monitor.advance();
             }
             long duration = System.currentTimeMillis() - startTime;
             if (count == 0)
-            	logger.warn("No entities found for snapshot.");
+                logger.warn("No entities found for snapshot.");
             else
-            	logger.info("Exported " + NumberUtil.format(count, 0) + " entities in " + 
-            			RoundedNumberFormat.format(duration, 0) + " ms " +
-            			"(" + RoundedNumberFormat.format(count * 3600000L / duration, 0) + " p.h.)");
+                logger.info("Exported " + NumberUtil.format(count, 0) + " entities in " +
+                        RoundedNumberFormat.format(duration, 0) + " ms " +
+                        "(" + RoundedNumberFormat.format(count * 3600000L / duration, 0) + " p.h.)");
         } finally {
             IOUtil.close(exporter);
-            if (db != null)
-                db.close();
         }
 	}
 	

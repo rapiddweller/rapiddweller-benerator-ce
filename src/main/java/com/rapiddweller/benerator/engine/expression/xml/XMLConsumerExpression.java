@@ -57,11 +57,11 @@ import org.w3c.dom.Element;
 
 public class XMLConsumerExpression extends DynamicExpression<Consumer> {
 	
-	private Escalator escalator;
+	private final Escalator escalator;
 
-	private Element entityElement;
-	private boolean consumersExpected;
-	private ResourceManager resourceManager;
+	private final Element entityElement;
+	private final boolean consumersExpected;
+	private final ResourceManager resourceManager;
 
     public XMLConsumerExpression(Element entityElement, boolean consumersExpected, ResourceManager resourceManager) {
     	this.entityElement = entityElement;
@@ -86,8 +86,7 @@ public class XMLConsumerExpression extends DynamicExpression<Consumer> {
 		
 		// parse consumer sub elements
 		Element[] consumerElements = XMLUtil.getChildElements(entityElement, true, EL_CONSUMER);
-		for (int i = 0; i < consumerElements.length; i++) {
-			Element consumerElement = consumerElements[i];
+		for (Element consumerElement : consumerElements) {
 			BeanSpec beanSpec;
 			if (consumerElement.hasAttribute(ATT_REF)) {
 				String ref = parseStringAttribute(consumerElement, ATT_REF, context);
@@ -109,8 +108,7 @@ public class XMLConsumerExpression extends DynamicExpression<Consumer> {
 		return (consumerChain.componentCount() == 1 ? consumerChain.getComponent(0) : consumerChain);
 	}
 
-    @SuppressWarnings("resource")
-	public static void addConsumer(BeanSpec beanSpec, BeneratorContext context, ConsumerChain chain) {
+    public static void addConsumer(BeanSpec beanSpec, BeneratorContext context, ConsumerChain chain) {
     	Consumer consumer;
     	Object bean = beanSpec.getBean();
     	// check consumer type

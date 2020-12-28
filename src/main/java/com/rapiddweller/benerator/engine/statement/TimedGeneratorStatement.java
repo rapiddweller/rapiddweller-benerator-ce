@@ -50,10 +50,10 @@ public class TimedGeneratorStatement extends StatementProxy {
 	
 	private static final Logger logger = LogManager.getLogger(TimedGeneratorStatement.class);
 
-	private String name;
-	List<String> profilerPath;
-	private boolean logging;
-	private ElapsedTimeFormatter elapsedTimeFormatter;
+	private final String name;
+	final List<String> profilerPath;
+	private final boolean logging;
+	private final ElapsedTimeFormatter elapsedTimeFormatter;
 	
     public TimedGeneratorStatement(String name, Statement realStatement, List<String> profilerPath, boolean logging) {
     	super(realStatement);

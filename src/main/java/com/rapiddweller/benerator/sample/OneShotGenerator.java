@@ -42,7 +42,7 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 public class OneShotGenerator<E> extends ThreadSafeGenerator<E> {
 
 	private E value;
-	private Class<E> generatedType;
+	private final Class<E> generatedType;
 	private boolean used;
 	
     @SuppressWarnings("unchecked")

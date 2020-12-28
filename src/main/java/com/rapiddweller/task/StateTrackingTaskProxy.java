@@ -62,7 +62,7 @@ public class StateTrackingTaskProxy<E extends Task> extends TaskProxy<E> {
 
     @Override
     public StateTrackingTaskProxy<E> clone() {
-        return new StateTrackingTaskProxy<E>(BeanUtil.clone(realTask));
+        return new StateTrackingTaskProxy<>(BeanUtil.clone(realTask));
     }
 
     @Override

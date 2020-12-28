@@ -83,9 +83,9 @@ public class DefaultBeneratorContext implements BeneratorContext {
  	// attributes -------------------------------------------------------------------------------------------------------
  	
 	private GeneratorFactory generatorFactory;
-    private DefaultContext settings;
-	private ClassCache classCache;
-	private ContextStack contextStack;
+    private final DefaultContext settings;
+	private final ClassCache classCache;
+	private final ContextStack contextStack;
 	
     protected String  defaultEncoding      = SystemInfo.getFileEncoding();
     protected String  defaultDataset       = LocaleUtil.getDefaultCountryCode();
@@ -104,7 +104,7 @@ public class DefaultBeneratorContext implements BeneratorContext {
 	private ProductWrapper<?> currentProduct;
 
 	private DataModel dataModel;
-	private DefaultDescriptorProvider localDescriptorProvider;
+	private final DefaultDescriptorProvider localDescriptorProvider;
 	
 	protected String currentProductName;
 	

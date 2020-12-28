@@ -47,10 +47,10 @@ public class SkipGeneratorProxy<E> extends CardinalGenerator<E, E> {
 	public static final int DEFAULT_MIN_INCREMENT = 1;
 	public static final int DEFAULT_MAX_INCREMENT = 1;
 
-	private int minIncrement;
-	private int maxIncrement;
+	private final int minIncrement;
+	private final int maxIncrement;
     private int count;
-    private Integer limit;
+    private final Integer limit;
 
     // constructors ----------------------------------------------------------------------------------------------------
 

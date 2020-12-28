@@ -42,8 +42,8 @@ import com.rapiddweller.script.Expression;
 
 public class BeneratorScript extends AbstractScript {
 	
-	private Expression<?> expression;
-	private String text;
+	private final Expression<?> expression;
+	private final String text;
 	
     public BeneratorScript(Expression<?> expression, String text) {
 	    this.expression = expression;

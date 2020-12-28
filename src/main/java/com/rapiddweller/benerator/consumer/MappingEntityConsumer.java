@@ -41,8 +41,8 @@ import com.rapiddweller.model.data.Entity;
  */
 public class MappingEntityConsumer extends ConsumerProxy {
 	
-	private ComponentNameMapper mapper;
-	private Stack<Entity> stack;
+	private final ComponentNameMapper mapper;
+	private final Stack<Entity> stack;
 
 	public MappingEntityConsumer() {
 	    this(null, null);
@@ -51,7 +51,7 @@ public class MappingEntityConsumer extends ConsumerProxy {
 	public MappingEntityConsumer(Consumer target, String mappingSpec) {
 		super(target);
 	    this.mapper = new ComponentNameMapper(mappingSpec);
-	    stack = new Stack<Entity>();
+	    stack = new Stack<>();
     }
 
 	public void setMappings(String mappingSpec) {

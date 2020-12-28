@@ -43,13 +43,13 @@ public abstract class CardinalGenerator<S, P> extends GeneratorWrapper<S, P> {
 
     /** Generator that determines the cardinality of generation */
     protected NonNullGenerator<Integer> cardinalGenerator;
-    boolean resettingCardinal;
+    final boolean resettingCardinal;
     
     int minCardinal;
     int maxCardinal;
     int cardinalGranularity;
     Distribution cardinalDistribution;
-    WrapperProvider<Integer> cardinalWrapperProvider = new WrapperProvider<Integer>();
+    final WrapperProvider<Integer> cardinalWrapperProvider = new WrapperProvider<>();
 
     // constructors ----------------------------------------------------------------------------------------------------
 

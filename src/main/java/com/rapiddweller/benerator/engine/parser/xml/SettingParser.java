@@ -127,7 +127,7 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
      */
     public static class SourceExpression<E> extends DynamicExpression<E> {
     	
-    	Expression<Generator<E>> source;
+    	final Expression<Generator<E>> source;
     	
 		public SourceExpression(Expression<Generator<E>> source) {
 	        this.source = source;
@@ -136,7 +136,7 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
         @Override
 		public E evaluate(Context context) {
 			Generator<E> generator = source.evaluate(context);
-			ProductWrapper<E> wrapper = generator.generate(new ProductWrapper<E>());
+			ProductWrapper<E> wrapper = generator.generate(new ProductWrapper<>());
 			if (wrapper == null)
 				throw new ConfigurationError("Generator not available: " + generator);
 			return wrapper.unwrap();

@@ -54,10 +54,10 @@ import com.rapiddweller.script.DatabeneScriptParser;
  */
 public class BeneratorRootStatement extends SequentialStatement {
 
-	private Map<String, String> attributes;
+	private final Map<String, String> attributes;
 	
     public BeneratorRootStatement(Map<String, String> attributes) {
-    	this.attributes = new HashMap<String, String>(attributes);
+    	this.attributes = new HashMap<>(attributes);
 	}
 
     @Override
@@ -98,10 +98,10 @@ public class BeneratorRootStatement extends SequentialStatement {
     	}
 	}
     
-	class BeneratorVisitor implements Visitor<Statement> {
+	static class BeneratorVisitor implements Visitor<Statement> {
 		
-		private String name;
-		private BeneratorContext context;
+		private final String name;
+		private final BeneratorContext context;
 		private GenerateOrIterateStatement result;
 		
 		public BeneratorVisitor(String name, BeneratorContext context) {
@@ -132,8 +132,7 @@ public class BeneratorRootStatement extends SequentialStatement {
             } else if (statement instanceof IncludeStatement) {
                 String uri = ((IncludeStatement) statement).getUri().evaluate(context);
                 if (uri != null && uri.toLowerCase().endsWith(".xml")) {
-	                @SuppressWarnings("resource")
-					DescriptorRunner descriptorRunner = new DescriptorRunner(context.resolveRelativeUri(uri), context);
+	                DescriptorRunner descriptorRunner = new DescriptorRunner(context.resolveRelativeUri(uri), context);
 	            	try {
 		                BeneratorRootStatement rootStatement = descriptorRunner.parseDescriptorFile();
 		                result = rootStatement.getGeneratorStatement(name, context);

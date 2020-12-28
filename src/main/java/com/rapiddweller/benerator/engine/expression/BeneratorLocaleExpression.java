@@ -41,7 +41,7 @@ import com.rapiddweller.script.expression.ExpressionUtil;
  */
 public class BeneratorLocaleExpression implements Expression<Locale> {
 
-	private Expression<String> provider;
+	private final Expression<String> provider;
 
 	public BeneratorLocaleExpression(Expression<String> codeProvider) {
 		this.provider = codeProvider;

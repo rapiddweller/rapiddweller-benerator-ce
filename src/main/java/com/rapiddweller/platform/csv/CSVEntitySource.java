@@ -59,7 +59,7 @@ public class CSVEntitySource extends FileBasedEntitySource implements Tabular {
     }
 
     public CSVEntitySource(String uri, ComplexTypeDescriptor entityType, String encoding) {
-        this(uri, entityType, encoding, new NoOpConverter<String>(), ',');
+        this(uri, entityType, encoding, new NoOpConverter<>(), ',');
     }
 
     public CSVEntitySource(String uri, ComplexTypeDescriptor entityType, String encoding,

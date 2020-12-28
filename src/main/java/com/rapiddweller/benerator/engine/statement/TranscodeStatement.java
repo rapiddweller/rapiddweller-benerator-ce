@@ -66,13 +66,13 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
 	
 	private static final Logger LOGGER = LogManager.getLogger(TranscodeStatement.class);
 	
-	Expression<ComplexTypeDescriptor> typeExpression;
-	Expression<DBSystem> sourceEx;
-	Expression<String> selectorEx;
-	Expression<DBSystem> targetEx;
-	Expression<Long> pageSizeEx;
-	Expression<ErrorHandler> errorHandlerEx;
-	TranscodingTaskStatement parent;
+	final Expression<ComplexTypeDescriptor> typeExpression;
+	final Expression<DBSystem> sourceEx;
+	final Expression<String> selectorEx;
+	final Expression<DBSystem> targetEx;
+	final Expression<Long> pageSizeEx;
+	final Expression<ErrorHandler> errorHandlerEx;
+	final TranscodingTaskStatement parent;
 
 	DBSystem source;
 	private DBSystem target;
@@ -155,14 +155,14 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
 		DataSource<Entity> iterable = source.queryEntities(tableName, selector, context);
     	List<GeneratorComponent<Entity>> generatorComponents = 
     		ComplexTypeGeneratorFactory.createMutatingGeneratorComponents(type, Uniqueness.NONE, context);
-        ComponentAndVariableSupport<Entity> cavs = new ComponentAndVariableSupport<Entity>(
-        		tableName, generatorComponents, context);
+        ComponentAndVariableSupport<Entity> cavs = new ComponentAndVariableSupport<>(
+                tableName, generatorComponents, context);
         try {
 	        cavs.init(context);
 	        DataIterator<Entity> iterator = iterable.iterator();
 			mapper.registerSource(source.getId(), source.getConnection());
 			long rowCount = 0;
-			DataContainer<Entity> container = new DataContainer<Entity>();
+			DataContainer<Entity> container = new DataContainer<>();
 		    while ((container = iterator.next(container)) != null) {
 				Entity sourceEntity = container.getData();
 		    	Object sourcePK = sourceEntity.idComponentValues();

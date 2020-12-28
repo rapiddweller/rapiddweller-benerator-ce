@@ -43,9 +43,9 @@ import org.apache.logging.log4j.LogManager;
  */
 public class MemStoreStatement implements Statement {
 	
-	private static Logger logger = LogManager.getLogger(DefineDatabaseStatement.class);
+	private static final Logger logger = LogManager.getLogger(DefineDatabaseStatement.class);
 	
-	private String id;
+	private final String id;
 	ResourceManager resourceManager;
 	
 	public MemStoreStatement(String id, ResourceManager resourceManager) {
