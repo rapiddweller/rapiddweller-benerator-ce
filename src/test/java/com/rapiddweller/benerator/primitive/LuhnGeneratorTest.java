@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.util.LuhnValidator;
-import com.rapiddweller.commons.validator.RegexValidator;
+import com.rapiddweller.common.validator.RegexValidator;
 import org.junit.Test;
 
 /**

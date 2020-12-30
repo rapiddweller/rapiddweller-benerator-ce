@@ -29,8 +29,8 @@ package shop;
 
 import java.util.Date;
 
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.Validator;
 import com.rapiddweller.model.data.Entity;
 
 /**

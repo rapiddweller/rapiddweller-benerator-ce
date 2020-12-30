@@ -26,7 +26,7 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.script.PrimitiveType;
 
 import java.util.ArrayList;

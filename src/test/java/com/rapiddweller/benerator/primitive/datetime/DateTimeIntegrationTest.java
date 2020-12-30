@@ -34,7 +34,7 @@ import java.util.List;
 
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.TimeUtil;
 import org.junit.Before;
 import org.junit.Test;
 

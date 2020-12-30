@@ -34,9 +34,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ReaderLineIterator;
-import com.rapiddweller.commons.SystemInfo;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ReaderLineIterator;
+import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;

@@ -27,11 +27,11 @@
 package com.rapiddweller.model.data;
 
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
-import com.rapiddweller.commons.Composite;
-import com.rapiddweller.commons.CompositeFormatter;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.collection.OrderedNameMap;
-import com.rapiddweller.commons.converter.AnyConverter;
+import com.rapiddweller.common.Composite;
+import com.rapiddweller.common.CompositeFormatter;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.collection.OrderedNameMap;
+import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.script.PrimitiveType;
 
 /**

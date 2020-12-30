@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.file;
 import java.io.IOException;
 
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 
 /**
  * Provides file contents as byte arrays.<br/><br/>

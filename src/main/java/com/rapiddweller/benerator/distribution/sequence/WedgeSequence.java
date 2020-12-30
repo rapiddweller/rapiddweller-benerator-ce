@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.NumberUtil;
-import static com.rapiddweller.commons.NumberUtil.*;
+import com.rapiddweller.common.NumberUtil;
+import static com.rapiddweller.common.NumberUtil.*;
 
 /**
  * {@link Sequence} implementation that creates Number {@link Generator} with a wedge distribution.

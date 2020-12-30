@@ -31,11 +31,11 @@ import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
 import com.rapiddweller.benerator.factory.SimpleTypeGeneratorFactory;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.Validator;
-import com.rapiddweller.commons.context.CaseInsensitiveContext;
-import com.rapiddweller.commons.context.ContextAware;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.context.CaseInsensitiveContext;
+import com.rapiddweller.common.context.ContextAware;
 
 /**
  * Default implementation of the abstract {@link BeneratorFactory} class.<br/><br/>

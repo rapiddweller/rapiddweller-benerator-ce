@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.distribution;
 
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import static com.rapiddweller.commons.NumberUtil.*;
+import static com.rapiddweller.common.NumberUtil.*;
 
 /**
  * Helper class that serves as parent for individual {@link Sequence} implementations 

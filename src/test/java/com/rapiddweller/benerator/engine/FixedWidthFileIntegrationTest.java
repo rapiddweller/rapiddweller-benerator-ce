@@ -29,8 +29,8 @@ package com.rapiddweller.benerator.engine;
 import static org.junit.Assert.assertEquals;
 
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.SystemInfo;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.platform.fixedwidth.FixedWidthEntityExporter;
 import org.junit.Test;
 

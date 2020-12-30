@@ -34,8 +34,8 @@ import com.rapiddweller.benerator.factory.ConsumerMock;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.SysUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.SysUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 

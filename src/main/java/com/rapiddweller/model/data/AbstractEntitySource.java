@@ -27,9 +27,9 @@
 package com.rapiddweller.model.data;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.context.ContextAware;
-import com.rapiddweller.formats.util.AbstractDataSource;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.context.ContextAware;
+import com.rapiddweller.format.util.AbstractDataSource;
 
 /**
  * Abstract implementation of {@link EntitySource}

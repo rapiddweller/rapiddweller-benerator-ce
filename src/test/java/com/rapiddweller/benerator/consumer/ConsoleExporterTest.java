@@ -33,9 +33,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.commons.Patterns;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.converter.TimestampFormatter;
+import com.rapiddweller.common.Patterns;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.converter.TimestampFormatter;
 import com.rapiddweller.model.data.Entity;
 
 import org.junit.Test;

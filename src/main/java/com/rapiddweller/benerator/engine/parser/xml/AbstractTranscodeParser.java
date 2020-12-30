@@ -31,7 +31,7 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 
 import java.util.Set;
 
-import com.rapiddweller.formats.text.SplitStringConverter;
+import com.rapiddweller.format.text.SplitStringConverter;
 import com.rapiddweller.platform.db.DBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ConvertingExpression;

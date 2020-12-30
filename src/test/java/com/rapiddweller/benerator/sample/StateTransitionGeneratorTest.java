@@ -31,7 +31,7 @@ import java.util.List;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.script.Transition;
 import org.junit.Test;
 import static org.junit.Assert.*;

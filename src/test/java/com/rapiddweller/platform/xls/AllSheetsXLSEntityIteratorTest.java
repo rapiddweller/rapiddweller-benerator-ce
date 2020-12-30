@@ -30,9 +30,9 @@ import java.util.List;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
-import com.rapiddweller.commons.converter.NoOpConverter;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.util.DataUtil;
+import com.rapiddweller.common.converter.NoOpConverter;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.util.DataUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.DefaultDescriptorProvider;

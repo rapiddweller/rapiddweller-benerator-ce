@@ -29,8 +29,8 @@ package com.rapiddweller.benerator;
 import java.io.Closeable;
 
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Resettable;
-import com.rapiddweller.commons.ThreadAware;
+import com.rapiddweller.common.Resettable;
+import com.rapiddweller.common.ThreadAware;
 
 /**
  * This is the basic Generator interface, the mother of all generators.<br/>

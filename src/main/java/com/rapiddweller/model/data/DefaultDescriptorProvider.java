@@ -26,10 +26,10 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.collection.OrderedNameMap;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.collection.OrderedNameMap;
+import com.rapiddweller.common.xml.XMLUtil;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

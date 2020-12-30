@@ -29,7 +29,7 @@ package com.rapiddweller.platform.ftl;
 import freemarker.template.SimpleDate;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModel;
-import com.rapiddweller.commons.converter.LiteralParser;
+import com.rapiddweller.common.converter.LiteralParser;
 
 import java.sql.Timestamp;
 import java.util.Date;

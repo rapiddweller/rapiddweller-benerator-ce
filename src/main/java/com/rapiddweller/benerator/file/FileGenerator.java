@@ -31,10 +31,10 @@ import java.io.File;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.sample.NonNullSampleGenerator;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.IOUtil;
 
 /**
  * Generates {@link File} objects which represent files and/or directories in a parent directory.<br/><br/>

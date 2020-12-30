@@ -30,10 +30,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.rapiddweller.commons.ArrayBuilder;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ReaderLineIterator;
+import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ReaderLineIterator;
 
 /**
  * Looks up and manages Benerator archetypes.<br/><br/>

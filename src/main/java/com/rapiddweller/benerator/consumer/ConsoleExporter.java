@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.rapiddweller.commons.CompositeFormatter;
+import com.rapiddweller.common.CompositeFormatter;
 import com.rapiddweller.model.data.Entity;
 
 /**

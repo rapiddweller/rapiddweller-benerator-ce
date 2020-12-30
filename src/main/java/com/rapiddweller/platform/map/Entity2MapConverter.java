@@ -27,7 +27,7 @@
 package com.rapiddweller.platform.map;
 
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 import java.util.HashMap;
 import java.util.Map;

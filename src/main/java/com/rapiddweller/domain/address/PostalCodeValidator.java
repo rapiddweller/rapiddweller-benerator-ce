@@ -26,11 +26,11 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.Validator;
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 import javax.validation.ConstraintValidatorContext;
 import java.io.IOException;

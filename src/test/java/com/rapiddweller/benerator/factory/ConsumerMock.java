@@ -31,8 +31,8 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.context.ContextAware;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.model.data.Entity;
 
 public class ConsumerMock extends AbstractConsumer implements ContextAware {

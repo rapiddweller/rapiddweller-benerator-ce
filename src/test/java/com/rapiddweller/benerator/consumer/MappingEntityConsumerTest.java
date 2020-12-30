@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 import com.rapiddweller.benerator.factory.ConsumerMock;
 import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 

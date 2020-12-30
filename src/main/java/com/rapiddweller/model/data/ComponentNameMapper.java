@@ -27,8 +27,8 @@
 package com.rapiddweller.model.data;
 
 import com.rapiddweller.benerator.primitive.ValueMapper;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 import java.util.Map;
 

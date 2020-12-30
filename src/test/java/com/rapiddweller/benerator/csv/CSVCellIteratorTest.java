@@ -31,9 +31,9 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.csv.CSVCellIterator;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.csv.CSVCellIterator;
 
 /**
  * Tests the {@link CSVCellIterator}.<br/><br/>

@@ -27,10 +27,10 @@
 package com.rapiddweller.benerator.csv;
 
 import com.rapiddweller.benerator.dataset.DatasetUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.csv.CSVLineIterator;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.csv.CSVLineIterator;
 import com.rapiddweller.script.WeightedSample;
 
 import java.io.IOException;

@@ -37,7 +37,7 @@ import java.util.Set;
 
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
 

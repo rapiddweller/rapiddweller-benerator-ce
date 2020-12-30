@@ -35,7 +35,7 @@ import com.rapiddweller.benerator.consumer.NonClosingConsumerProxy;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManagerSupport;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.Test;
 import org.w3c.dom.Document;
 

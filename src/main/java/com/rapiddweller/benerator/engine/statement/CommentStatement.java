@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.LogCategories;
+import com.rapiddweller.common.LogCategories;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

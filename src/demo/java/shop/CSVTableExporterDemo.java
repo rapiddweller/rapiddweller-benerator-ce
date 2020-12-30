@@ -29,8 +29,8 @@ package shop;
 import java.io.IOException;
 
 import com.rapiddweller.benerator.StorageSystem;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ReaderLineIterator;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ReaderLineIterator;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.csv.CSVEntityExporter;

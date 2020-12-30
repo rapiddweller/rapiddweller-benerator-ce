@@ -41,7 +41,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import com.rapiddweller.benerator.gui.CreateProjectPanel;
-import com.rapiddweller.commons.ui.I18NSupport;
+import com.rapiddweller.common.ui.I18NSupport;
 
 /**
  * Main class for the benerator GUI.<br/>

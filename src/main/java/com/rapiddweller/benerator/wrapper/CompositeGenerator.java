@@ -32,10 +32,10 @@ import java.util.List;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.util.AbstractGenerator;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.ThreadAware;
-import com.rapiddweller.commons.ThreadUtil;
-import com.rapiddweller.commons.context.ContextAware;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.ThreadAware;
+import com.rapiddweller.common.ThreadUtil;
+import com.rapiddweller.common.context.ContextAware;
 
 /**
  * {@link Generator} implementation that makes use of other {@link ContextAware}

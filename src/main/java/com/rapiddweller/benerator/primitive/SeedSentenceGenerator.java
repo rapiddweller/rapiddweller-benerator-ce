@@ -30,9 +30,9 @@ import java.io.IOException;
 
 import com.rapiddweller.benerator.sample.SeedGenerator;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ReaderLineIterator;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ReaderLineIterator;
+import com.rapiddweller.common.StringUtil;
 
 /**
  * Generates sentences based on a seed sentence set.<br/>

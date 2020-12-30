@@ -63,7 +63,7 @@ public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTes
 	public void testIterateThis() {
 		parseAndExecute(
 				"<iterate type='referer' source='pit' consumer='cons'>" +
-				"	<variable name='_n' script='this.name' converter='com.rapiddweller.commons.converter.ToUpperCaseConverter' />" +
+				"	<variable name='_n' script='this.name' converter='com.rapiddweller.common.converter.ToUpperCaseConverter' />" +
 				"	<attribute name='name' script='_n' />" +
 				"</iterate>");
 		List<Entity> products = (List<Entity>) consumer.getProducts();

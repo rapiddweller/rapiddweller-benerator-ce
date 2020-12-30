@@ -32,8 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.Element;
-import com.rapiddweller.commons.Visitor;
+import com.rapiddweller.common.Element;
+import com.rapiddweller.common.Visitor;
 
 /**
  * Combines other statements to a composite statement.<br/><br/>

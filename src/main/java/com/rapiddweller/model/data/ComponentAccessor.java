@@ -26,7 +26,7 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.Accessor;
+import com.rapiddweller.common.Accessor;
 
 /**
  * Accesses a component of an entity specified by the component name.<br/>

@@ -29,8 +29,8 @@ package com.rapiddweller.benerator.wrapper;
 import com.rapiddweller.benerator.ConstantTestGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

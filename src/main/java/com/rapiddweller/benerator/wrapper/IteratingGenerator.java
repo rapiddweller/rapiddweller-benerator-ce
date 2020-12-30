@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.AbstractGenerator;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.TypedIterable;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.TypedIterable;
 
 import java.io.Closeable;
 import java.util.Iterator;

@@ -32,7 +32,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.file.XMLFileGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.AlternativeGroupDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;

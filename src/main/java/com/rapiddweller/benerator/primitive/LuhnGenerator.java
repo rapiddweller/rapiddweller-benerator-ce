@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.util.LuhnUtil;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.StringUtil;
 
 /**
  * Generates numbers that pass a Luhn test.<br/><br/>

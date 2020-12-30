@@ -26,8 +26,8 @@
 
 package com.rapiddweller.platform.db;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.jdbacl.model.DBDataType;
 import com.rapiddweller.script.PrimitiveType;
 

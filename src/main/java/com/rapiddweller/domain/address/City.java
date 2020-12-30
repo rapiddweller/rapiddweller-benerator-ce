@@ -27,7 +27,7 @@
 package com.rapiddweller.domain.address;
 
 import com.rapiddweller.benerator.primitive.RandomVarLengthStringGenerator;
-import com.rapiddweller.commons.*;
+import com.rapiddweller.common.*;
 
 import java.util.Locale;
 

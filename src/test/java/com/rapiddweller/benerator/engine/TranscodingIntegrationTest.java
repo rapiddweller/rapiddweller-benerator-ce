@@ -33,11 +33,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
-import com.rapiddweller.commons.ConnectFailedException;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.DataSource;
+import com.rapiddweller.common.ConnectFailedException;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.DataSource;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import com.rapiddweller.model.data.Entity;

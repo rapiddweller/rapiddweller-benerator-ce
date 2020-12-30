@@ -28,7 +28,7 @@ package com.rapiddweller.platform.db;
 
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.DataModel;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.jdbacl.ColumnInfo;
 
 import java.sql.Connection;

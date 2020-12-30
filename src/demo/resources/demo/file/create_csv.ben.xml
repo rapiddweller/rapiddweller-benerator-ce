@@ -17,7 +17,7 @@
     </generate>
 
     <echo>Generated data:</echo>
-    <if test="com.rapiddweller.commons.SystemInfo.isWindows()">
+    <if test="com.rapiddweller.common.SystemInfo.isWindows()">
         <then>
             <execute type="shell">cmd /C type export.csv</execute>
         </then>

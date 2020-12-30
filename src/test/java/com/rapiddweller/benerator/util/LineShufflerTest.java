@@ -31,9 +31,9 @@ import java.io.IOException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ReaderLineIterator;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ReaderLineIterator;
 
 /**
  * Tests the LineShuffler.<br/><br/>

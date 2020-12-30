@@ -32,7 +32,7 @@ import java.io.PrintWriter;
 
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.stat.LatencyCounter;
 import org.junit.Test;
 

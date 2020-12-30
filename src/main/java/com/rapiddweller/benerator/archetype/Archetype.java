@@ -40,9 +40,9 @@ import java.util.Locale;
 import java.util.Properties;
 
 import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Filter;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Filter;
+import com.rapiddweller.common.IOUtil;
 
 /**
  * Represents a Benerator project archetype.<br/><br/>

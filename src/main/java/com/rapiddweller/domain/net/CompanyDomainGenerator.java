@@ -31,11 +31,11 @@ import com.rapiddweller.benerator.util.AbstractNonNullGenerator;
 import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.domain.organization.CompanyName;
 import com.rapiddweller.domain.organization.CompanyNameGenerator;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
-import com.rapiddweller.formats.text.DelocalizingConverter;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
+import com.rapiddweller.format.text.DelocalizingConverter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

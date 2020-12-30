@@ -38,9 +38,9 @@ import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.factory.EquivalenceGeneratorFactory;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 

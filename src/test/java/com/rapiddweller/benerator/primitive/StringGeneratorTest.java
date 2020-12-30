@@ -33,12 +33,12 @@ import java.util.Set;
 
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.Validator;
-import com.rapiddweller.commons.validator.PrefixValidator;
-import com.rapiddweller.commons.validator.RegexValidator;
-import com.rapiddweller.commons.validator.StringLengthValidator;
-import com.rapiddweller.commons.validator.SuffixValidator;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.validator.PrefixValidator;
+import com.rapiddweller.common.validator.RegexValidator;
+import com.rapiddweller.common.validator.StringLengthValidator;
+import com.rapiddweller.common.validator.SuffixValidator;
 import org.junit.Test;
 
 /**

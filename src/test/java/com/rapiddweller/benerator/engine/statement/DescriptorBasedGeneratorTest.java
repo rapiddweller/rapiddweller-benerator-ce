@@ -33,7 +33,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.DescriptorBasedGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.SystemInfo;
+import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 

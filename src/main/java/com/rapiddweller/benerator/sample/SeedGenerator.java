@@ -31,8 +31,8 @@ import java.util.List;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.UnsafeNonNullGenerator;
-import com.rapiddweller.commons.ArrayUtil;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.CollectionUtil;
 
 /**
  * Generates value sequences derived from seed sequences.<br/>

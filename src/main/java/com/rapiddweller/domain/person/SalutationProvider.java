@@ -26,7 +26,7 @@
 
 package com.rapiddweller.domain.person;
 
-import com.rapiddweller.commons.converter.PropertyResourceBundleConverter;
+import com.rapiddweller.common.converter.PropertyResourceBundleConverter;
 
 import java.util.Locale;
 

@@ -26,8 +26,8 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.task.AbstractTask;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;

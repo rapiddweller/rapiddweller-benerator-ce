@@ -31,9 +31,9 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.EchoStatement;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.script.Expression;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.StringUtil;
 import org.w3c.dom.Element;
 
 /**

@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
-import com.rapiddweller.commons.SyntaxError;
+import com.rapiddweller.common.SyntaxError;
 import org.junit.Test;
 
 /**

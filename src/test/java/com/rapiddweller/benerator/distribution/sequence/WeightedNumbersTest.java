@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.distribution.sequence;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.ConfigurationError;
 import org.junit.Test;
 
 /**

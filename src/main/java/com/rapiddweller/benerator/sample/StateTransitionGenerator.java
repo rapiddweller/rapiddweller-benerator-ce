@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.sample;
 
 import com.rapiddweller.benerator.wrapper.GeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.converter.AnyConverter;
+import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.Transition;
 import com.rapiddweller.script.WeightedTransition;

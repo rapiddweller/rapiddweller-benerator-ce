@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator;
 
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.ArrayFormat;
+import com.rapiddweller.common.ArrayFormat;
 
 /**
  * Helper class for testing.<br/><br/>

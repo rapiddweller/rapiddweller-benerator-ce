@@ -29,13 +29,13 @@ package com.rapiddweller.benerator.parser;
 import java.util.Map;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.collection.MapEntry;
-import com.rapiddweller.commons.converter.AbstractConverter;
-import com.rapiddweller.commons.converter.LiteralParser;
-import com.rapiddweller.commons.converter.NoOpConverter;
-import com.rapiddweller.commons.mutator.AnyMutator;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.collection.MapEntry;
+import com.rapiddweller.common.converter.AbstractConverter;
+import com.rapiddweller.common.converter.LiteralParser;
+import com.rapiddweller.common.converter.NoOpConverter;
+import com.rapiddweller.common.mutator.AnyMutator;
 
 /**
  * Converts Map entries by first applying a preprocessor to the value, 

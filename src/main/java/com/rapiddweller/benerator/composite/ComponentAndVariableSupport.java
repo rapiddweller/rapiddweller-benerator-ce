@@ -34,10 +34,10 @@ import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.MessageHolder;
-import com.rapiddweller.commons.Resettable;
-import com.rapiddweller.commons.ThreadAware;
-import com.rapiddweller.commons.ThreadUtil;
+import com.rapiddweller.common.MessageHolder;
+import com.rapiddweller.common.Resettable;
+import com.rapiddweller.common.ThreadAware;
+import com.rapiddweller.common.ThreadUtil;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

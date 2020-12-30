@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 import org.junit.Test;
 
 

@@ -30,11 +30,11 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.util.AbstractDataIterator;
-import com.rapiddweller.formats.util.AbstractDataSource;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.util.AbstractDataIterator;
+import com.rapiddweller.format.util.AbstractDataSource;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntitySource;
 

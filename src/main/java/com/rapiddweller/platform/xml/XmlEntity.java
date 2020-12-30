@@ -29,7 +29,7 @@ package com.rapiddweller.platform.xml;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.commons.anno.Nullable;
+import com.rapiddweller.common.anno.Nullable;
 import org.w3c.dom.Element;
 
 /**

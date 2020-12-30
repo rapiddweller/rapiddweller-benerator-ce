@@ -34,9 +34,9 @@ import java.util.Map;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.IOUtil;
 
 /**
  * Local implementation of an increment {@link Generator} that behaves like a database sequence.<br/>

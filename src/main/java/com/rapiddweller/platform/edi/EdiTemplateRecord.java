@@ -27,7 +27,7 @@
 package com.rapiddweller.platform.edi;
 
 import com.rapiddweller.platform.template.DefaultTemplateRecord;
-import com.rapiddweller.commons.converter.AnyConverter;
+import com.rapiddweller.common.converter.AnyConverter;
 
 import java.util.List;
 import java.util.Map;

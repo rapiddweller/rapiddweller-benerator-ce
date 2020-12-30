@@ -27,8 +27,8 @@
 package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.commons.Mutator;
-import com.rapiddweller.commons.UpdateFailedException;
+import com.rapiddweller.common.Mutator;
+import com.rapiddweller.common.UpdateFailedException;
 import com.rapiddweller.model.data.Entity;
 
 /**

@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.domain.address.Country;
-import com.rapiddweller.commons.LocaleUtil;
+import com.rapiddweller.common.LocaleUtil;
 
 import java.util.Locale;
 

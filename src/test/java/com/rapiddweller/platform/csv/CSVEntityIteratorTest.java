@@ -29,8 +29,8 @@ package com.rapiddweller.platform.csv;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.commons.converter.NoOpConverter;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.platform.AbstractEntityIteratorTest;

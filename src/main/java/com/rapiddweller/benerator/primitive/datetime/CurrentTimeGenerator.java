@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.primitive.datetime;
 
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.TimeUtil;
 
 import java.util.Date;
 

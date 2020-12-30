@@ -90,14 +90,17 @@ deploy:jdk-11:
 
 ###################### E2ET ######################
 
-.e2et-preparation: &e2et-preparation
+.e2et-preparation-common: &e2et-preparation-common
   stage: E2ET
-  image: oracle/graalvm-ce:20.3.0-java11
   needs:
     - job: setup:jdk-11
       artifacts: true
     - job: assembly:jdk-11
       artifacts: true
+
+.e2et-preparation-graalvm11: &e2et-preparation-graalvm11
+  <<: *e2et-preparation-common
+  image: oracle/graalvm-ce:20.3.0-java11
   before_script:
     - gu install python
     - gu install ruby
@@ -108,22 +111,40 @@ deploy:jdk-11:
     - chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
     - benerator --version
 
-E2ET:script:
-  <<: *e2et-preparation
+.e2et-preparation-openjdk11: &e2et-preparation-openjdk11
+  <<: *e2et-preparation-common
+  image: maven:3.6.3-adoptopenjdk-11
+  before_script:
+    - tar -xzf target/$ARTIFACT_FULLNAME-dist.tar.gz
+    - export SHELL=/bin/bash
+    - export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
+    - export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
+    - chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
+    - benerator --version
+
+E2ET:script-graalvm11:
+  <<: *e2et-preparation-graalvm11
   script:
     - cd $ARTIFACT_FULLNAME/demo/script
     - benerator scriptcode.ben.xml
     - benerator scriptfile.ben.xml
 
-E2ET:db:
-  <<: *e2et-preparation
+E2ET:script-openjdk11:
+  <<: *e2et-preparation-openjdk11
+  script:
+    - cd $ARTIFACT_FULLNAME/demo/script
+    - benerator scriptcode.ben.xml
+    - benerator scriptfile.ben.xml
+
+E2ET:db-graalvm11:
+  <<: *e2et-preparation-graalvm11
   script:
     - cd $ARTIFACT_FULLNAME/demo/db
     - benerator user.ben.xml
     - benerator compositekey.ben.xml
 
-E2ET:files:
-  <<: *e2et-preparation
+E2ET:files-graalvm11:
+  <<: *e2et-preparation-graalvm11
   script:
     - cd $ARTIFACT_FULLNAME/demo/file
     - benerator create_csv.ben.xml
@@ -137,14 +158,14 @@ E2ET:files:
     - benerator import_fixed_width.ben.xml
     - benerator postprocess-import.ben.xml
 
-E2ET:shop:hsqlmem:
-  <<: *e2et-preparation
+E2ET:shop:hsqlmem-graalvm11:
+  <<: *e2et-preparation-graalvm11
   script:
     - cd $ARTIFACT_FULLNAME/demo/shop
     - benerator shop-hsqlmem.ben.xml
 
 
-E2ET:shop:mysql:
+E2ET:shop:mysql-graalvm11:
   variables:
     DB_HOST: "mysql"
     DB_PORT: "3306"
@@ -156,7 +177,7 @@ E2ET:shop:mysql:
   services:
     - name: mysql:8.0.22
       alias: mysql
-  <<: *e2et-preparation
+  <<: *e2et-preparation-graalvm11
   script:
     - sleep 60s
     - |
@@ -173,7 +194,7 @@ E2ET:shop:mysql:
     - cd $ARTIFACT_FULLNAME/demo/shop
     - benerator shop-mysql.ben.xml
 
-E2ET:shop:postgres:
+E2ET:shop:postgres-graalvm11:
   variables:
     DB_HOST: postgres
     DB_PORT: "5432"
@@ -186,7 +207,7 @@ E2ET:shop:postgres:
   services:
     - name: postgres:12.2-alpine
       alias: postgres
-  <<: *e2et-preparation
+  <<: *e2et-preparation-graalvm11
   script:
     - sleep 30s
     - |

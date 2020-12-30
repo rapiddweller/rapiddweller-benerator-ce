@@ -41,23 +41,23 @@ import com.rapiddweller.benerator.factory.GeneratorFactory;
 import com.rapiddweller.benerator.factory.StochasticGeneratorFactory;
 import com.rapiddweller.benerator.script.BeneratorScriptFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.Level;
-import com.rapiddweller.commons.LocaleUtil;
-import com.rapiddweller.commons.NullSafeComparator;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.bean.ClassCache;
-import com.rapiddweller.commons.context.ContextStack;
-import com.rapiddweller.commons.context.DefaultContext;
-import com.rapiddweller.commons.context.SimpleContextStack;
-import com.rapiddweller.commons.converter.ConverterManager;
-import com.rapiddweller.commons.file.FileSuffixFilter;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.Level;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.bean.ClassCache;
+import com.rapiddweller.common.context.ContextStack;
+import com.rapiddweller.common.context.DefaultContext;
+import com.rapiddweller.common.context.SimpleContextStack;
+import com.rapiddweller.common.converter.ConverterManager;
+import com.rapiddweller.common.file.FileSuffixFilter;
 import com.rapiddweller.domain.address.Country;
-import com.rapiddweller.formats.script.ScriptUtil;
+import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.DataModel;
@@ -442,10 +442,10 @@ public class DefaultBeneratorContext implements BeneratorContext {
 		importPackage("com.rapiddweller.benerator.sample");
 		// import ConsoleExporter and LoggingConsumer
 		importPackage("com.rapiddweller.model.consumer");
-		// import formats, converters and validators from commons
-		importPackage("com.rapiddweller.commons.converter");
-		importPackage("com.rapiddweller.commons.format");
-		importPackage("com.rapiddweller.commons.validator");
+		// import format, converters and validators from common
+		importPackage("com.rapiddweller.common.converter");
+		importPackage("com.rapiddweller.common.format");
+		importPackage("com.rapiddweller.common.validator");
 		// import standard platforms
 		importPackage("com.rapiddweller.platform.fixedwidth");
 		importPackage("com.rapiddweller.platform.csv");

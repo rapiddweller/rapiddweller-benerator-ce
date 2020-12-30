@@ -35,8 +35,8 @@ import java.util.Set;
 
 import com.rapiddweller.benerator.sample.SeedGenerator;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.LocaleUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.domain.lang.Noun;
 
 /**

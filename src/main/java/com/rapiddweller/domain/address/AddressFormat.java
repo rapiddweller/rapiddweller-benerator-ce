@@ -26,14 +26,14 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.context.DefaultContext;
-import com.rapiddweller.commons.converter.UnsafeConverter;
-import com.rapiddweller.formats.script.Script;
-import com.rapiddweller.formats.script.ScriptException;
-import com.rapiddweller.formats.script.freemarker.FreeMarkerScriptFactory;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.context.DefaultContext;
+import com.rapiddweller.common.converter.UnsafeConverter;
+import com.rapiddweller.format.script.Script;
+import com.rapiddweller.format.script.ScriptException;
+import com.rapiddweller.format.script.freemarker.FreeMarkerScriptFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;

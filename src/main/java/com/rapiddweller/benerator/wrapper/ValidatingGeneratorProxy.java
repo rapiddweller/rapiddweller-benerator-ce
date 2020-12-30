@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.wrapper;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.util.ValidatingGenerator;
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.Validator;
 
 /**
  * Generator proxy that uses another generator for creating values and filters out invalid ones.

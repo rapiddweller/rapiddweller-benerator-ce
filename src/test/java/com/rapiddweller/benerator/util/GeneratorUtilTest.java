@@ -35,7 +35,7 @@ import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.engine.BeneratorOpts;
 import com.rapiddweller.benerator.primitive.IncrementGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.SysUtil;
+import com.rapiddweller.common.SysUtil;
 import org.junit.Test;
 
 /**

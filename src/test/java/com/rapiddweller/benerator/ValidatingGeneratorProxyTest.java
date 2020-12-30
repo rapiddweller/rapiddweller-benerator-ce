@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.wrapper.ValidatingGeneratorProxy;
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.Validator;
 
 /**
  * Tests the {@link ValidatingGeneratorProxy}.<br/><br/>

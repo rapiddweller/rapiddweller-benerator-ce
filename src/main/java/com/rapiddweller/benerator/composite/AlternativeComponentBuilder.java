@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.commons.ThreadUtil;
+import com.rapiddweller.common.ThreadUtil;
 
 /**
  * Creates one component from an arbitrary choice of different available ones.<br/><br/>

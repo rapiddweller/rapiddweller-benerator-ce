@@ -35,9 +35,9 @@ import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.UnsafeNonNullGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.ParseException;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.ParseException;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.WeightedTransition;
 

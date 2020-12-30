@@ -31,11 +31,11 @@ import com.rapiddweller.benerator.dataset.DatasetUtil;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.IteratingGenerator;
-import com.rapiddweller.commons.iterator.TextLineIterable;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.csv.CSVCellSource;
-import com.rapiddweller.formats.csv.CSVSource;
-import com.rapiddweller.formats.xls.XLSLineSource;
+import com.rapiddweller.common.iterator.TextLineIterable;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.csv.CSVCellSource;
+import com.rapiddweller.format.csv.CSVSource;
+import com.rapiddweller.format.xls.XLSLineSource;
 import com.rapiddweller.model.data.Uniqueness;
 
 /**

@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.consumer;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.ThreadAware;
+import com.rapiddweller.common.ThreadAware;
 
 /**
  * Parent class for {@link Consumer}s that serve as proxy to other Consumers.<br/><br/>

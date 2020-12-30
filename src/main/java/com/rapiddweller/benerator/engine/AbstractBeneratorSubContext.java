@@ -35,7 +35,7 @@ import java.util.concurrent.ExecutorService;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.factory.DefaultsProvider;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
-import com.rapiddweller.commons.Context;
+import com.rapiddweller.common.Context;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.DescriptorProvider;

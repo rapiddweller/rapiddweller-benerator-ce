@@ -26,8 +26,8 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.context.ContextHolder;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.context.ContextHolder;
 
 /**
  * JavaBean Mock class for testing.<br/><br/>

@@ -32,7 +32,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.wrapper.GeneratorChain;
-import com.rapiddweller.commons.ArrayBuilder;
+import com.rapiddweller.common.ArrayBuilder;
 
 /**
  * Creates Strings in an incremental manner.<br/><br/>

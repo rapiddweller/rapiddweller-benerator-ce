@@ -37,13 +37,13 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import com.rapiddweller.benerator.template.TemplateInputReader;
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ParseException;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.formats.xls.XLSUtil;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ParseException;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.format.xls.XLSUtil;
 
 /**
  * Reads XLS documents for a multi-file XML anonymization.<br/><br/>

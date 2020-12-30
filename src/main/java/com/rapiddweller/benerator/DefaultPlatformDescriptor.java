@@ -31,7 +31,7 @@ import java.util.List;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.formats.xml.XMLElementParser;
+import com.rapiddweller.format.xml.XMLElementParser;
 
 /**
  * Default implementation of the {@link PlatformDescriptor} interface.<br/><br/>

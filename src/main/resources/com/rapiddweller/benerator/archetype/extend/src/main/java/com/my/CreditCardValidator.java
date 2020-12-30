@@ -1,6 +1,6 @@
 package com.my;
 
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.Validator;
 
 public class CreditCardValidator implements Validator<String> {
 

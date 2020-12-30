@@ -26,10 +26,10 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.commons.*;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.csv.BeanCSVWriter;
-import com.rapiddweller.formats.csv.CSVLineIterator;
+import com.rapiddweller.common.*;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.csv.BeanCSVWriter;
+import com.rapiddweller.format.csv.CSVLineIterator;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

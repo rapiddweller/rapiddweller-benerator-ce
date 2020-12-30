@@ -37,10 +37,10 @@ import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.primitive.CharacterGenerator;
 import com.rapiddweller.benerator.primitive.datetime.DateGenerator;
-import com.rapiddweller.commons.*;
-import com.rapiddweller.commons.validator.StringLengthValidator;
-import com.rapiddweller.formats.regex.RegexParser;
-import com.rapiddweller.formats.regex.RegexPart;
+import com.rapiddweller.common.*;
+import com.rapiddweller.common.validator.StringLengthValidator;
+import com.rapiddweller.format.regex.RegexParser;
+import com.rapiddweller.format.regex.RegexPart;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.WeightedSample;
 

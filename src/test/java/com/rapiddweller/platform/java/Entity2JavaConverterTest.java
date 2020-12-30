@@ -32,7 +32,7 @@ import com.rapiddweller.platform.PersonBean;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.rapiddweller.commons.ArrayFormat;
+import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 

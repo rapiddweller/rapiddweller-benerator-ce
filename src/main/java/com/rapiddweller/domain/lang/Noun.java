@@ -26,11 +26,11 @@
 
 package com.rapiddweller.domain.lang;
 
-import com.rapiddweller.commons.LocaleUtil;
-import com.rapiddweller.commons.NullSafeComparator;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.csv.CSVLineIterator;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.csv.CSVLineIterator;
 
 import java.io.IOException;
 import java.util.Collection;

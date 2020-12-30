@@ -29,9 +29,9 @@ package com.rapiddweller.task.test;
 import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.task.Task;
 import com.rapiddweller.task.TaskResult;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.Level;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.Level;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;

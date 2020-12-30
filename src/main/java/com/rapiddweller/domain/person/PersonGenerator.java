@@ -35,7 +35,7 @@ import com.rapiddweller.benerator.primitive.BooleanGenerator;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.domain.address.Country;
-import com.rapiddweller.commons.Converter;
+import com.rapiddweller.common.Converter;
 
 import java.util.HashMap;
 import java.util.Locale;

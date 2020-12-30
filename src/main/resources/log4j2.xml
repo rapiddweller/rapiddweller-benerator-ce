@@ -57,7 +57,7 @@
             <appender-ref ref="fileLogger" level="info" />
         </Logger>
 
-        <Logger name="com.rapiddweller.commons.converter" level="info" additivity="true">
+        <Logger name="com.rapiddweller.common.converter" level="info" additivity="true">
             <appender-ref ref="fileLogger" level="info" />
         </Logger>
 
@@ -73,7 +73,7 @@
             <appender-ref ref="fileLogger" level="info" />
         </Logger>
 
-        <Logger name="com.rapiddweller.commons" level="info" additivity="true">
+        <Logger name="com.rapiddweller.common" level="info" additivity="true">
             <appender-ref ref="fileLogger" level="info" />
         </Logger>
 

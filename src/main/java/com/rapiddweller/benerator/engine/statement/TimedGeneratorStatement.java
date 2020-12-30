@@ -32,7 +32,7 @@ import java.util.Locale;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.time.ElapsedTimeFormatter;
+import com.rapiddweller.common.time.ElapsedTimeFormatter;
 import com.rapiddweller.profile.Profiler;
 import com.rapiddweller.profile.Profiling;
 import org.apache.logging.log4j.Logger;

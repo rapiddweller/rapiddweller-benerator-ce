@@ -31,9 +31,9 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.commons.converter.ParseFormatConverter;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.converter.ParseFormatConverter;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import org.junit.Test;

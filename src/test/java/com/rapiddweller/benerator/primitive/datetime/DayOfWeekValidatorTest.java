@@ -32,8 +32,8 @@ import java.util.GregorianCalendar;
 
 import javax.validation.Constraint;
 
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.Validator;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

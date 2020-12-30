@@ -2,8 +2,8 @@ package com.my;
 
 import java.text.DecimalFormat;
 
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.SimpleConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.SimpleConverter;
 
 public class NumberConverter extends SimpleConverter<Long, String> {
 

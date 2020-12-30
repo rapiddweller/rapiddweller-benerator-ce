@@ -31,7 +31,7 @@ import java.util.concurrent.ExecutorService;
 
 import com.rapiddweller.benerator.factory.GeneratorFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Context;
+import com.rapiddweller.common.Context;
 
 /**
  * Provides configuration and variable space for {@link Generator}s.<br/><br/>

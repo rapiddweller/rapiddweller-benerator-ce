@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.engine.expression;
 
-import com.rapiddweller.formats.script.ScriptUtil;
+import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.StringExpression;
 

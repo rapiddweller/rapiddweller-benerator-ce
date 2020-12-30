@@ -29,9 +29,9 @@ package com.rapiddweller.platform.file;
 import java.io.File;
 
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.IOUtil;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

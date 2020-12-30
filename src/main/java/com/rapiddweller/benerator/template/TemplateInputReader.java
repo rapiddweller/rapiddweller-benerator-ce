@@ -28,8 +28,8 @@ package com.rapiddweller.benerator.template;
 
 import java.io.IOException;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ParseException;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ParseException;
 
 /**
  * Reads the input file for a template and attaches it to a {@link Context}.<br/><br/>

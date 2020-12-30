@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.primitive.number;
 
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
 
 import java.math.BigInteger;
 

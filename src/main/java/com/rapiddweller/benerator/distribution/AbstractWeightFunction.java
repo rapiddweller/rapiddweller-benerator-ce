@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.distribution;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.BeanUtil;
+import com.rapiddweller.common.BeanUtil;
 
 /**
  * Abstract implementation of the {@link WeightFunction} interface.<br/>

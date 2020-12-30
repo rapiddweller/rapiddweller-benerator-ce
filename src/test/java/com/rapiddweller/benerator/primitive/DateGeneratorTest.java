@@ -30,8 +30,8 @@ import java.util.Date;
 
 import com.rapiddweller.benerator.primitive.datetime.DateGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.Period;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.Period;
+import com.rapiddweller.common.TimeUtil;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

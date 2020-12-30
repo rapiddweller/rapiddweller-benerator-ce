@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.util.UnsafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.context.ContextAware;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.model.data.Entity;
 
 /**

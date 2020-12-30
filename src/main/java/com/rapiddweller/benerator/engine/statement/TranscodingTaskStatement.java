@@ -32,12 +32,12 @@ import java.util.Map.Entry;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.collection.OrderedNameMap;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.collection.OrderedNameMap;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.jdbacl.identity.IdentityModel;
 import com.rapiddweller.jdbacl.identity.IdentityProvider;
 import com.rapiddweller.jdbacl.identity.KeyMapper;

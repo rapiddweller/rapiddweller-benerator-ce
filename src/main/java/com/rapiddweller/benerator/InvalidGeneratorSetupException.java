@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator;
 
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.ConfigurationError;
 
 import java.util.List;
 import java.util.Arrays;

@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.platform.memstore.MemStore;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;

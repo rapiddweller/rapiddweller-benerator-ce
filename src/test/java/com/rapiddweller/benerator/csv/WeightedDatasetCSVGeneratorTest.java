@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.csv;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

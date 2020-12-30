@@ -31,11 +31,11 @@ import com.rapiddweller.benerator.GeneratorState;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.util.UnsafeNonNullGenerator;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.script.ScriptUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.jdbacl.DBUtil;
 
 import java.io.Closeable;

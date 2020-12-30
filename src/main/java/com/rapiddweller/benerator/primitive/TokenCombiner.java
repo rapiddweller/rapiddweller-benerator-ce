@@ -38,13 +38,13 @@ import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.wrapper.CompositeStringGenerator;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.validator.BlacklistValidator;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.csv.CSVLineIterator;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.validator.BlacklistValidator;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.csv.CSVLineIterator;
 
 /**
  * {@link Generator} implementation which takes cells from a CSV file as input 

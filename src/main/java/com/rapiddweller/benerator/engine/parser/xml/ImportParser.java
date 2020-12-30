@@ -34,12 +34,12 @@ import com.rapiddweller.benerator.DefaultPlatformDescriptor;
 import com.rapiddweller.benerator.PlatformDescriptor;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ImportStatement;
-import com.rapiddweller.commons.ArrayBuilder;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ExceptionUtil;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.formats.xml.XMLElementParser;
+import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ExceptionUtil;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.format.xml.XMLElementParser;
 import org.w3c.dom.Element;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 

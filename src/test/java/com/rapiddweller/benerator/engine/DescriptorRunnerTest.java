@@ -34,7 +34,7 @@ import com.rapiddweller.benerator.consumer.AbstractConsumer;
 import com.rapiddweller.benerator.consumer.FileExporter;
 import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

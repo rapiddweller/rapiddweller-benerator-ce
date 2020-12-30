@@ -29,8 +29,8 @@ package com.rapiddweller.platform.dbunit;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.formats.DataIterator;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.format.DataIterator;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

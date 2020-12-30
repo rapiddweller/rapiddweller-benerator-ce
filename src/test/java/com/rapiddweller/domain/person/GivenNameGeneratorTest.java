@@ -28,7 +28,7 @@ package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.collection.ObjectCounter;
+import com.rapiddweller.common.collection.ObjectCounter;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

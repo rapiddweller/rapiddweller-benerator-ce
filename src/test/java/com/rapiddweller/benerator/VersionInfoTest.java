@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
 
 import java.util.Map;
 
-import com.rapiddweller.commons.version.VersionInfo;
+import com.rapiddweller.common.version.VersionInfo;
 import org.junit.Test;
 
 /**

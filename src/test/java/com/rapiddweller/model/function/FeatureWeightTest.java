@@ -29,7 +29,7 @@ package com.rapiddweller.model.function;
 import java.util.Map;
 
 import com.rapiddweller.benerator.distribution.FeatureWeight;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

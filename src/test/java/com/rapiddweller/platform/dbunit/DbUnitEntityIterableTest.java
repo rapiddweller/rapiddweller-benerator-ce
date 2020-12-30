@@ -31,7 +31,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
-import com.rapiddweller.formats.util.DataUtil;
+import com.rapiddweller.format.util.DataUtil;
 import com.rapiddweller.model.data.Entity;
 
 /**

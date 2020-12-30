@@ -35,8 +35,8 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
 import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.sample.SampleGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.ConverterManager;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.ConverterManager;
 
 /**
  * {@link Distribution} implementation which uses the inverse of a probability function integral 

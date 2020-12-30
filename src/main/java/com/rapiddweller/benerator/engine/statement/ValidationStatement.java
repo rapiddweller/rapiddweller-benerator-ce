@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.Validator;
 
 /**
  * {@link Statement} using a {@link Validator} to check if the current object is valid.<br/><br/>

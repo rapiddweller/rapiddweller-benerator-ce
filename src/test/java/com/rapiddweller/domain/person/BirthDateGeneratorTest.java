@@ -27,7 +27,7 @@ package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.TimeUtil;
 
 import java.util.Date;
 

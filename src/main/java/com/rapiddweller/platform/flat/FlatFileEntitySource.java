@@ -28,8 +28,8 @@ package com.rapiddweller.platform.flat;
 
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.formats.fixedwidth.FixedWidthColumnDescriptor;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.format.fixedwidth.FixedWidthColumnDescriptor;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

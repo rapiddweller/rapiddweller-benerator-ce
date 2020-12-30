@@ -35,8 +35,8 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import com.rapiddweller.commons.ArrayUtil;
-import com.rapiddweller.commons.FileUtil;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.FileUtil;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

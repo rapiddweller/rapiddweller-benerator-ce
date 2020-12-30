@@ -33,9 +33,9 @@ import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.sample.SampleGeneratorUtil;
 import com.rapiddweller.benerator.sample.SampleGenerator;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.formats.script.ScriptConverterForStrings;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.script.WeightedSample;
 
 /**

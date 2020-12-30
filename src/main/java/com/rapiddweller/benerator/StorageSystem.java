@@ -30,8 +30,8 @@ import java.io.Closeable;
 import java.io.Flushable;
 
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.formats.DataSource;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.format.DataSource;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.Entity;
 

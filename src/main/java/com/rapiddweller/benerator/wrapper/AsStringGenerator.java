@@ -27,8 +27,8 @@
 package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.ConverterManager;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.ConverterManager;
 
 /**
  * Wraps another {@link Generator} and converts its products to {@link String}s.<br/><br/>

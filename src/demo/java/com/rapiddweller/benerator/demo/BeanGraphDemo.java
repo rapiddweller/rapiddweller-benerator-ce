@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.demo;
 
 import org.databene.document.csv.CSVToJavaBeanMapper;
 import org.databene.webdecs.DataContainer;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.benerator.demo.product.Product;
 
 import java.io.IOException;

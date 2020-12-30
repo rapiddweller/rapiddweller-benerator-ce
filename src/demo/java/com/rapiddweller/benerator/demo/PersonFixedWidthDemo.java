@@ -30,9 +30,9 @@ import com.rapiddweller.domain.person.PersonGenerator;
 import com.rapiddweller.domain.person.Person;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.file.FileBuilder;
-import com.rapiddweller.commons.DocumentWriter;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.format.Alignment;
+import com.rapiddweller.common.DocumentWriter;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.format.Alignment;
 import org.databene.document.fixedwidth.BeanFixedWidthWriter;
 import org.databene.document.fixedwidth.FixedWidthColumnDescriptor;
 

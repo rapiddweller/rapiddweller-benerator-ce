@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.wrapper;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
-import com.rapiddweller.commons.BeanUtil;
+import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 

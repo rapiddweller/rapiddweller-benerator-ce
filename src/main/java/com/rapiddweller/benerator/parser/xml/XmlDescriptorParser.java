@@ -26,11 +26,11 @@
 
 package com.rapiddweller.benerator.parser.xml;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.converter.AnyConverter;
-import com.rapiddweller.commons.converter.ToStringConverter;
-import com.rapiddweller.formats.script.ScriptUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.converter.AnyConverter;
+import com.rapiddweller.common.converter.ToStringConverter;
+import com.rapiddweller.format.script.ScriptUtil;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 

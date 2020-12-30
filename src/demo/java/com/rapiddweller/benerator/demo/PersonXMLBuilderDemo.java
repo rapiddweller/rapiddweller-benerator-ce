@@ -31,12 +31,12 @@ import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.file.FileBuilder;
 import com.rapiddweller.domain.person.PersonGenerator;
 import com.rapiddweller.domain.person.Person;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 
 import java.io.*;
 
 /**
- * Demonstrates how to use a FreeMarker script for formatting JavaBeans in custom file formats, e.g. XML.<br/>
+ * Demonstrates how to use a FreeMarker script for formatting JavaBeans in custom file format, e.g. XML.<br/>
  * <br/>
  * Created: 07.06.2007 12:04:39
  */

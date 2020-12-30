@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.commons.Assert;
+import com.rapiddweller.common.Assert;
 import com.rapiddweller.script.Expression;
 
 /**

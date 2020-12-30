@@ -28,8 +28,8 @@ package com.rapiddweller.benerator.factory;
 
 import java.util.Date;
 
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
 
 /**
  * {@link DefaultsProvider} implementation which creates gentle defaults, trying to provoke as little errors as possible.<br/><br/>

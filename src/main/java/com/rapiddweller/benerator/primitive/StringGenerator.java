@@ -37,11 +37,11 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
-import com.rapiddweller.commons.Filter;
-import com.rapiddweller.commons.LocaleUtil;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.filter.FilterUtil;
-import com.rapiddweller.formats.regex.RegexParser;
+import com.rapiddweller.common.Filter;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.filter.FilterUtil;
+import com.rapiddweller.format.regex.RegexParser;
 import com.rapiddweller.model.data.Uniqueness;
 
 /**

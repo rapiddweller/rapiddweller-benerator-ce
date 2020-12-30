@@ -30,8 +30,8 @@ import static org.junit.Assert.*;
 
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import com.rapiddweller.jdbacl.model.DBForeignKeyConstraint;

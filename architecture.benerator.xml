@@ -56,12 +56,12 @@
 	      <element-group regex="com.rapiddweller.regex.*" />
 	      <element-group regex="com.rapiddweller.script.*" />
 	      <element-group regex="com.rapiddweller.text.*" />
-	      <element-group regex="com.rapiddweller.formats.demo.*" />
+	      <element-group regex="com.rapiddweller.format.demo.*" />
 	      <element-group regex="com.rapiddweller.xslt.*" />
 	  </component>
 	
       <component id="rapiddweller commons">
-          <element-group regex="com.rapiddweller.commons.*" />
+          <element-group regex="com.rapiddweller.common.*" />
       </component>
       
       <component id="databene gui">
@@ -122,12 +122,12 @@
     
     <allow from="benerator interface" to="model" />
     
-    <!-- formats -->
+    <!-- format -->
     <allow from="rapiddweller formats" to="databene commons" />
     <allow from="rapiddweller formats" to="JDK" />
     <allow from="rapiddweller formats" to="commons logging" />
     
-    <!-- formats -->
+    <!-- format -->
     <allow from="rapiddweller commons" to="JDK" />
     <allow from="rapiddweller commons" to="commons logging" />
     

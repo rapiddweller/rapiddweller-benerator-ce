@@ -33,7 +33,7 @@ import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.ConfigurationError;
 
 import java.util.List;
 import java.util.ArrayList;

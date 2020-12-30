@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.formats.xml.ParseContext;
+import com.rapiddweller.format.xml.ParseContext;
 
 /**
  * {@link ParseContext} implementation for Benerator. It defines parsers for all the descriptor XML elements.<br/><br/>

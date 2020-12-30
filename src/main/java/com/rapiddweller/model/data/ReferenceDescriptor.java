@@ -26,7 +26,7 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.operation.FirstArgSelector;
+import com.rapiddweller.common.operation.FirstArgSelector;
 
 /**
  * Describes a reference to an instance of a complex type (see {@link ComplexTypeDescriptor}).<br/>

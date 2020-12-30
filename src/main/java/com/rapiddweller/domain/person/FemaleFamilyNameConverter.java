@@ -27,10 +27,10 @@
 package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.dataset.DatasetUtil;
-import com.rapiddweller.commons.ArrayBuilder;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

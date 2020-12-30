@@ -26,8 +26,8 @@
 
 package com.rapiddweller.benerator.engine.expression;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.converter.LiteralParser;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.converter.LiteralParser;
 import com.rapiddweller.script.expression.UnaryExpression;
 
 /**

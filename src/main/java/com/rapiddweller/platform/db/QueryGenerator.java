@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.StringUtil;
 
 /**
  * Generates values based on a database query.<br/>

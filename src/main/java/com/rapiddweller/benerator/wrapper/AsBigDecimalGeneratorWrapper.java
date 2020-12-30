@@ -30,7 +30,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.commons.MathUtil;
+import com.rapiddweller.common.MathUtil;
 
 /**
  * Converts the {@link Number} products of another {@link Generator} to {@link BigDecimal}.<br/>

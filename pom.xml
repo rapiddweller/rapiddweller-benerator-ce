@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rapiddweller</groupId>
     <artifactId>rapiddweller-benerator-ce</artifactId>
-    <version>1.1.0+jdk-11</version>
+    <version>1.1.0+jdk-11-SNAPSHOT</version>
     <name>rapiddweller Benerator</name>
     <description>
         rapiddweller 'Benerator' is a software solution to
@@ -116,6 +116,10 @@
         <repository>
             <id>gitlab-maven</id>
             <url>${env.CI_SERVER_URL}/api/v4/groups/${env.CI_PROJECT_GROUP_ID}/-/packages/maven</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </repository>
     </repositories>
     <distributionManagement>
@@ -129,11 +133,12 @@
         </snapshotRepository>
     </distributionManagement>
     <properties>
-        <format_version>1.1.0+jdk-11</format_version>
-        <script_version>1.1.0+jdk-11</script_version>
-        <jdbacl_version>1.1.0+jdk-11</jdbacl_version>
-        <contiperf_version>2.4.0+jdk-11</contiperf_version>
-        <common_version>1.1.0+jdk-11</common_version>
+        <format_version>1.1.0+jdk-11-SNAPSHOT</format_version>
+        <script_version>1.1.0+jdk-11-SNAPSHOT</script_version>
+        <jdbacl_version>1.1.0+jdk-11-SNAPSHOT</jdbacl_version>
+        <contiperf_version>2.4.0+jdk-11-SNAPSHOT</contiperf_version>
+        <common_version>1.1.0+jdk-11-SNAPSHOT</common_version>
+        <graalvm.version>20.3.0</graalvm.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java_source_version>11</java_source_version>
         <java_target_version>11</java_target_version>
@@ -272,11 +277,41 @@
             <version>3.0.0</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
             <version>1.4.01</version>
         </dependency>
+
+        <!-- GraalVM dependencies -->
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>68.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.graalvm.sdk</groupId>
+            <artifactId>graal-sdk</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js-scriptengine</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+
     </dependencies>
     <build>
         <resources>

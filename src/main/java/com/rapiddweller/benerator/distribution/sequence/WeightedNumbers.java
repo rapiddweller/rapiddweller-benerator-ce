@@ -31,8 +31,8 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.sample.AttachedWeightSampleGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.WeightedSample;
 

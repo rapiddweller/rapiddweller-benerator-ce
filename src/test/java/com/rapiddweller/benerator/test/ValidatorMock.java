@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.test;
 
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.Validator;
 
 /**
  * Mock implementation of the {@link Validator} interface.<br/>

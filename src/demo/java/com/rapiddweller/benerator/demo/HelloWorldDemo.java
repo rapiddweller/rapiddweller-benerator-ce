@@ -34,7 +34,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 
 /**
  * Generates salutations using different salutation words for greeting different persons.

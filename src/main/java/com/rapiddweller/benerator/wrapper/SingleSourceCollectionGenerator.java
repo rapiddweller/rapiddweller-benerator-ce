@@ -30,7 +30,7 @@ import java.util.Collection;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
-import com.rapiddweller.commons.BeanUtil;
+import com.rapiddweller.common.BeanUtil;
 
 /**
  * {@link Generator} which takes one or more products from a source generator and wraps them with a {@link Collection}.

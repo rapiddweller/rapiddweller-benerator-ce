@@ -31,10 +31,10 @@ import java.math.BigDecimal;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.NumberUtil;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.NumberUtil;
 
-import static com.rapiddweller.commons.NumberUtil.*;
+import static com.rapiddweller.common.NumberUtil.*;
 
 /**
  * {@link Sequence} implementation that implements a 'shuffle' behavior, 

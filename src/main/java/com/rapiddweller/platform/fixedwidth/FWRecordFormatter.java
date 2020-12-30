@@ -28,14 +28,14 @@ package com.rapiddweller.platform.fixedwidth;
 
 import com.rapiddweller.model.data.ComponentAccessor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.AccessingConverter;
-import com.rapiddweller.commons.converter.ConverterChain;
-import com.rapiddweller.commons.converter.FormatFormatConverter;
-import com.rapiddweller.formats.fixedwidth.FixedWidthColumnDescriptor;
-import com.rapiddweller.formats.fixedwidth.FixedWidthUtil;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.AccessingConverter;
+import com.rapiddweller.common.converter.ConverterChain;
+import com.rapiddweller.common.converter.FormatFormatConverter;
+import com.rapiddweller.format.fixedwidth.FixedWidthColumnDescriptor;
+import com.rapiddweller.format.fixedwidth.FixedWidthUtil;
 
 import java.io.PrintWriter;
 import java.text.ParseException;

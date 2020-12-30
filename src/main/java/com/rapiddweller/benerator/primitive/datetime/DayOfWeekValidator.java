@@ -32,9 +32,9 @@ import java.util.Date;
 
 import javax.validation.ConstraintValidatorContext;
 
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 /**
  * Filters {@link Date}s by their day of week.

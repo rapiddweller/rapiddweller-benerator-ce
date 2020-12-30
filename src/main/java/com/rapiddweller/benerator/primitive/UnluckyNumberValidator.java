@@ -32,9 +32,9 @@ import java.util.Set;
 
 import javax.validation.ConstraintValidatorContext;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 import com.rapiddweller.domain.address.Country;
 
 /**

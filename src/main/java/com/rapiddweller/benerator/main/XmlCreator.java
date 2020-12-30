@@ -35,9 +35,9 @@ import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.file.XMLFileGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.ArrayUtil;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ui.ConsoleInfoPrinter;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ui.ConsoleInfoPrinter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

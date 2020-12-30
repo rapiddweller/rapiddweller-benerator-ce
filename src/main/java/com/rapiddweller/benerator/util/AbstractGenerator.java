@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.GeneratorState;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.BeanUtil;
+import com.rapiddweller.common.BeanUtil;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

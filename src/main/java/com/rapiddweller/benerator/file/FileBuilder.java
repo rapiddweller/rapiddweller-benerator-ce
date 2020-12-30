@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.file;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.DocumentWriter;
+import com.rapiddweller.common.DocumentWriter;
 
 import java.io.IOException;
 

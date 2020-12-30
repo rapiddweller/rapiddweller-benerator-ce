@@ -32,8 +32,8 @@ import java.util.Set;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.SequentialStatement;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.script.Expression;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;

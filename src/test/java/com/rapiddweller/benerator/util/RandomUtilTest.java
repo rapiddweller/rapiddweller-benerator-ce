@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.util;
 import static org.junit.Assert.*;
 
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.collection.ObjectCounter;
+import com.rapiddweller.common.collection.ObjectCounter;
 import org.junit.Test;
 
 import java.util.List;

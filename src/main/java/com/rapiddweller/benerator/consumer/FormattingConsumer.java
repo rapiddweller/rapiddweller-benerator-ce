@@ -26,8 +26,8 @@
 
 package com.rapiddweller.benerator.consumer;
 
-import com.rapiddweller.commons.Capitalization;
-import com.rapiddweller.commons.converter.ToStringConverter;
+import com.rapiddweller.common.Capitalization;
+import com.rapiddweller.common.converter.ToStringConverter;
 
 /**
  * Provides a datePattern property for child classes.<br/><br/>

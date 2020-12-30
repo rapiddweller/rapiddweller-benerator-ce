@@ -30,10 +30,10 @@ import java.lang.reflect.Array;
 import java.util.Map;
 
 import com.rapiddweller.benerator.factory.DescriptorUtil;
-import com.rapiddweller.commons.ArrayBuilder;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.AbstractConverter;
+import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.AbstractConverter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.Entity;

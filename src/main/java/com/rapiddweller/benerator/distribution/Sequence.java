@@ -27,8 +27,8 @@
 package com.rapiddweller.benerator.distribution;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
 
 /**
  * Provides access to specific Sequence number Generators.<br/>

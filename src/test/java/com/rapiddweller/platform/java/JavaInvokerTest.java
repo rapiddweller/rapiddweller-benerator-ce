@@ -29,7 +29,7 @@ package com.rapiddweller.platform.java;
 import static org.junit.Assert.*;
 
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import org.junit.Test;
 
 /**

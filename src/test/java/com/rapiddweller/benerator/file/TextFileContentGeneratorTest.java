@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.file;
 
 import java.io.File;
 
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 import org.junit.Test;
 
 /**

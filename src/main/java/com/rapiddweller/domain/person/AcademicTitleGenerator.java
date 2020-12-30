@@ -26,7 +26,7 @@
 package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.csv.LocalCSVGenerator;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 
 import java.util.Locale;
 

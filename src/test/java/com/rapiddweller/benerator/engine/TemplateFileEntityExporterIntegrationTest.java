@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.platform.template.TemplateFileEntityExporter;
 import org.junit.Test;
 

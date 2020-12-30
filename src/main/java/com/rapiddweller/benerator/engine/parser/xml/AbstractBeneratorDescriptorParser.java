@@ -38,9 +38,9 @@ import com.rapiddweller.benerator.engine.expression.context.DefaultPageSizeExpre
 import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
 import com.rapiddweller.benerator.engine.statement.RunTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.formats.xml.AbstractXMLElementParser;
-import com.rapiddweller.formats.xml.ParseContext;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.format.xml.AbstractXMLElementParser;
+import com.rapiddweller.format.xml.ParseContext;
 import com.rapiddweller.script.Expression;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;

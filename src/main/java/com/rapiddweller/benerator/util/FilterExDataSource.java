@@ -28,10 +28,10 @@ package com.rapiddweller.benerator.util;
 
 import java.util.Iterator;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.util.DataSourceProxy;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.util.DataSourceProxy;
 import com.rapiddweller.script.Expression;
 
 /**

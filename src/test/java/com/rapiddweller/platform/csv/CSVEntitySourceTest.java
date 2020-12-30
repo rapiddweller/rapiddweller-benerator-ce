@@ -30,8 +30,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.formats.DataIterator;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.platform.AbstractEntityIteratorTest;

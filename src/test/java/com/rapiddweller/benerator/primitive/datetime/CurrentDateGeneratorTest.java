@@ -27,8 +27,8 @@
 package com.rapiddweller.benerator.primitive.datetime;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.commons.validator.ConstantValidator;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.validator.ConstantValidator;
 import org.junit.Test;
 
 /**

@@ -29,8 +29,8 @@ package com.rapiddweller.platform;
 import static org.junit.Assert.assertNull;
 
 import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.model.data.Entity;
 
 /**

@@ -30,7 +30,7 @@ import java.util.Arrays;
 
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.PropertyMessage;
-import com.rapiddweller.commons.ArrayUtil;
+import com.rapiddweller.common.ArrayUtil;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

@@ -30,7 +30,7 @@ import java.lang.annotation.Annotation;
 
 import javax.validation.ConstraintValidatorContext;
 
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 /**
  * Validates a long value.<br/><br/>

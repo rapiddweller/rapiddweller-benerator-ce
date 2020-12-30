@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.sequence.RandomIntegerGenerator;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.StringUtil;
 
 /**
  * Generates US Social Security Numbers.<br/>

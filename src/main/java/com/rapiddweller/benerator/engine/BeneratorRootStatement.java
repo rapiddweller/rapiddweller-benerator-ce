@@ -39,10 +39,10 @@ import com.rapiddweller.benerator.engine.statement.LazyStatement;
 import com.rapiddweller.benerator.engine.statement.SequentialStatement;
 import com.rapiddweller.benerator.engine.statement.StatementProxy;
 import com.rapiddweller.benerator.wrapper.NShotGeneratorProxy;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.script.Expression;
-import com.rapiddweller.commons.Visitor;
+import com.rapiddweller.common.Visitor;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.script.DatabeneScriptParser;
 

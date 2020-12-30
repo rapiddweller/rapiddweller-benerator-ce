@@ -48,11 +48,11 @@ import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.domain.person.FamilyNameGenerator;
 import com.rapiddweller.domain.person.Gender;
 import com.rapiddweller.domain.person.GivenNameGenerator;
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.commons.bean.PropertyAccessConverter;
-import com.rapiddweller.formats.text.NameNormalizer;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.bean.PropertyAccessConverter;
+import com.rapiddweller.format.text.NameNormalizer;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

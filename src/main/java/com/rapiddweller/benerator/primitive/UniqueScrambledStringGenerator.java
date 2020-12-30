@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.wrapper.MultiGeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.CharSet;
+import com.rapiddweller.common.CharSet;
 
 import java.util.ArrayList;
 import java.util.List;

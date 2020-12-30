@@ -28,11 +28,11 @@ package com.rapiddweller.benerator.engine.parser;
 
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.context.ContextAware;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
-import com.rapiddweller.formats.script.ScriptUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.context.ContextAware;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
+import com.rapiddweller.format.script.ScriptUtil;
 
 /**
  * Parses a string and interprets it as a {@link Distribution} spec, 

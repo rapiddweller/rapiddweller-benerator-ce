@@ -36,10 +36,10 @@ import com.rapiddweller.benerator.engine.statement.TranscodingTaskStatement;
 
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
 
-import com.rapiddweller.commons.ArrayUtil;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.platform.db.DBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.FallbackExpression;

@@ -33,7 +33,7 @@ import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.wrapper.RepeatGeneratorProxy;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.ConfigurationError;
 
 /**
  * Distribution that repeats consecutive elements or numbers.<br/>

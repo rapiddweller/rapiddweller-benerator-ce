@@ -34,7 +34,7 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.MessageHolder;
+import com.rapiddweller.common.MessageHolder;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

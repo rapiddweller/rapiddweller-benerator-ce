@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.test;
 
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.UnsafeConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.UnsafeConverter;
 
 /**
  * Mock implementation of the {@link Converter} interface.<br/>

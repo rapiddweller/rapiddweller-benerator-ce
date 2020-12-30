@@ -31,9 +31,9 @@ import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Period;
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.commons.converter.DateString2DurationConverter;
+import com.rapiddweller.common.Period;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.converter.DateString2DurationConverter;
 
 import java.util.Date;
 import java.util.GregorianCalendar;

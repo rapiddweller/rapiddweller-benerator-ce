@@ -46,14 +46,14 @@ import javax.swing.KeyStroke;
 
 import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.BeneratorError;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.LogCategories;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.log.LoggingInfoPrinter;
-import com.rapiddweller.commons.ui.ApplicationUtil;
-import com.rapiddweller.commons.ui.JavaApplication;
-import com.rapiddweller.commons.version.VersionInfo;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.LogCategories;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.log.LoggingInfoPrinter;
+import com.rapiddweller.common.ui.ApplicationUtil;
+import com.rapiddweller.common.ui.JavaApplication;
+import com.rapiddweller.common.version.VersionInfo;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

@@ -26,8 +26,8 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
 
 /**
  * Task implementation that executes a series of other tasks consecutively.<br/>

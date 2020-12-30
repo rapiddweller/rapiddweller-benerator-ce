@@ -36,8 +36,8 @@ import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.engine.BeneratorOpts;
 import com.rapiddweller.benerator.wrapper.GeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.Resettable;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.Resettable;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

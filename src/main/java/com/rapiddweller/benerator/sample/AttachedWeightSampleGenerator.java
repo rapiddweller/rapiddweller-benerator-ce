@@ -32,7 +32,7 @@ import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
 import com.rapiddweller.benerator.distribution.WeightFunction;
 import com.rapiddweller.benerator.distribution.WeightedLongGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.NullSafeComparator;
+import com.rapiddweller.common.NullSafeComparator;
 import com.rapiddweller.script.WeightedSample;
 
 import java.util.ArrayList;

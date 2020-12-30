@@ -31,14 +31,14 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.fixedwidth.FixedWidthColumnDescriptor;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.fixedwidth.FixedWidthColumnDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.format.Alignment;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.format.Alignment;
 
 /**
  * Tests the {@link FixedWidthEntitySource}.<br/>

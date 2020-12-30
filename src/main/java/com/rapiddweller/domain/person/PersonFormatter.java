@@ -26,8 +26,8 @@
 
 package com.rapiddweller.domain.person;
 
-import com.rapiddweller.commons.*;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.*;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 import java.util.Locale;
 import java.util.Set;

@@ -26,9 +26,9 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
 
 /**
  * {@link TaskProxy} implementation that add thread-safety to an unsafe

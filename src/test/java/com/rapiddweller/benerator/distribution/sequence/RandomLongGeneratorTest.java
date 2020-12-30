@@ -27,8 +27,8 @@
 package com.rapiddweller.benerator.distribution.sequence;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.validator.ConstantValidator;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.validator.ConstantValidator;
 import org.junit.Test;
 
 /**

@@ -32,7 +32,7 @@ import java.io.IOException;
 
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Before;
 import org.junit.Test;

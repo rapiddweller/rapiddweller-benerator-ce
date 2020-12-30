@@ -26,7 +26,7 @@
 
 package com.rapiddweller.domain.finance;
 
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.Validator;
 
 /**
  * Validates a {@link BankAccount}.<br/><br/>

@@ -27,10 +27,10 @@
 package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.formats.DataSource;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.format.DataSource;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.script.Expression;

@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 import java.util.Locale;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.LocaleUtil;
+import com.rapiddweller.common.LocaleUtil;
 import org.junit.Test;
 
 /**

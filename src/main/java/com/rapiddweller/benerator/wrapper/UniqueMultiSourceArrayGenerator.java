@@ -31,8 +31,8 @@ import java.util.List;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
-import com.rapiddweller.commons.ArrayUtil;
-import com.rapiddweller.commons.ArrayFormat;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.ArrayFormat;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

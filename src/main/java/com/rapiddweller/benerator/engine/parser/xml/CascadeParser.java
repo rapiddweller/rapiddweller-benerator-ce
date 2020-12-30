@@ -34,9 +34,9 @@ import com.rapiddweller.benerator.engine.statement.CascadeParent;
 import com.rapiddweller.benerator.engine.statement.CascadeStatement;
 import com.rapiddweller.benerator.engine.statement.MutatingTypeExpression;
 import com.rapiddweller.benerator.engine.statement.TranscodeStatement;
-import com.rapiddweller.commons.ArrayUtil;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import org.w3c.dom.Element;
 
 /**

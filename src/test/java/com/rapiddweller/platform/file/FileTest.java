@@ -29,7 +29,7 @@ package com.rapiddweller.platform.file;
 import java.io.File;
 import java.io.IOException;
 
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 
 /**
  * Parent class for file-related tests.<br/>

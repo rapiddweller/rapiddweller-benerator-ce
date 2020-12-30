@@ -26,7 +26,7 @@
 
 package com.rapiddweller.platform.dbunit;
 
-import com.rapiddweller.commons.ArrayFormat;
+import com.rapiddweller.common.ArrayFormat;
 
 /**
  * Provides the data of a database row with meta information.<br/><br/>

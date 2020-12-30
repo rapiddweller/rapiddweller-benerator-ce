@@ -30,14 +30,14 @@ import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.engine.expression.ScriptableExpression;
 import com.rapiddweller.benerator.engine.expression.TypedScriptExpression;
 import com.rapiddweller.script.Expression;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.ConvertingExpression;
 import com.rapiddweller.script.expression.StringExpression;
 import com.rapiddweller.script.expression.TypeConvertingExpression;
 import com.rapiddweller.script.expression.UnescapeExpression;
-import com.rapiddweller.commons.xml.XMLUtil;
-import com.rapiddweller.formats.text.SplitStringConverter;
+import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.text.SplitStringConverter;
 import org.w3c.dom.Element;
 
 /**

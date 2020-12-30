@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.util.ThreadSafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Assert;
+import com.rapiddweller.common.Assert;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 

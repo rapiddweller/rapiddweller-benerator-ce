@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.commons.ArrayUtil;
+import com.rapiddweller.common.ArrayUtil;
 
 import java.lang.reflect.Array;
 

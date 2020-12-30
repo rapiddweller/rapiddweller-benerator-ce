@@ -33,10 +33,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import com.rapiddweller.commons.ArrayBuilder;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.domain.address.Country;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;

@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.csv.LocalCSVGenerator;
 import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 
 import java.util.Locale;
 

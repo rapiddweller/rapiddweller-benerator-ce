@@ -26,7 +26,7 @@
 
 package com.rapiddweller.domain.finance;
 
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.StringUtil;
 
 import java.math.BigDecimal;
 

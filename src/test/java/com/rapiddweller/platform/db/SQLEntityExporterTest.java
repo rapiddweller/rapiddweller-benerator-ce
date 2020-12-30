@@ -32,11 +32,11 @@ import java.io.BufferedReader;
 import java.io.File;
 
 import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ReaderLineIterator;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ReaderLineIterator;
+import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 

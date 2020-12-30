@@ -33,7 +33,7 @@ import com.rapiddweller.benerator.factory.InstanceGeneratorFactory;
 import com.rapiddweller.benerator.parser.ModelParser;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.Uniqueness;

@@ -31,12 +31,12 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.AbstractGenerator;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ThreadAware;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.util.ThreadLocalDataContainer;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ThreadAware;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.util.ThreadLocalDataContainer;
 
 /**
  * {@link Generator} implementation which reads and forwards data from a {@link DataSource}.<br/><br/>

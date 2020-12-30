@@ -29,7 +29,7 @@ package com.rapiddweller.platform.java;
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.commons.BeanUtil;
+import com.rapiddweller.common.BeanUtil;
 
 /**
  * {@link Consumer} implementation that maps input data to parameters

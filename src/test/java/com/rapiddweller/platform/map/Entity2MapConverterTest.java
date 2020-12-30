@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 
 import java.util.Map;
 

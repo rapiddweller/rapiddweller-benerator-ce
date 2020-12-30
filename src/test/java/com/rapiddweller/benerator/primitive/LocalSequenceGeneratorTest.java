@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.primitive;
 import java.io.File;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.FileUtil;
+import com.rapiddweller.common.FileUtil;
 import org.junit.Test;
 
 /**

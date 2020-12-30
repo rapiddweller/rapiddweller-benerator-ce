@@ -27,8 +27,8 @@
 package com.rapiddweller.domain.product;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.Validator;
-import com.rapiddweller.commons.validator.UniqueValidator;
+import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.validator.UniqueValidator;
 import org.junit.Test;
 
 /**

@@ -33,7 +33,7 @@ import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.engine.BeneratorOpts;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 
-import static com.rapiddweller.commons.NumberUtil.*;
+import static com.rapiddweller.common.NumberUtil.*;
 
 /**
  * {@link Sequence} implementation that makes use of Benerator's {@link ExpandGeneratorProxy} 

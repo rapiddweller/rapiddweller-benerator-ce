@@ -29,9 +29,9 @@ package com.rapiddweller.benerator.consumer;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.SystemInfo;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.SystemInfo;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -87,7 +87,7 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
     /**
      * Writes the data to the output file. 
      * It uses the parent class settings for rendering the object.
-     * Overwrite this in a child class for custom output formats.
+     * Overwrite this in a child class for custom output format.
      * @param data the data object to output
      */
     protected void startConsumingImpl(Object data) {

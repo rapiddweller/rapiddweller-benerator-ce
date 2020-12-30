@@ -26,8 +26,8 @@
 
 package com.rapiddweller.domain.br;
 
-import com.rapiddweller.commons.MathUtil;
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.MathUtil;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 import javax.validation.ConstraintValidatorContext;
 

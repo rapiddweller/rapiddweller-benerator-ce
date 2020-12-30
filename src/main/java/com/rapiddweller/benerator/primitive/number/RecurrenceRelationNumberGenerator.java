@@ -30,7 +30,7 @@ import java.util.LinkedList;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.commons.converter.AnyConverter;
+import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.domain.math.FibonacciLongGenerator;
 
 /**

@@ -30,8 +30,8 @@ import java.util.List;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.IOUtil;
 
 /**
  * Combines several Processors under one Processor interface.

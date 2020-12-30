@@ -28,11 +28,11 @@ package com.rapiddweller.benerator.primitive.number;
 
 import javax.validation.constraints.NotNull;
 
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.anno.Nullable;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.anno.Nullable;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.script.math.ArithmeticEngine;
 
 /**

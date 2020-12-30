@@ -30,12 +30,12 @@ import static org.junit.Assert.*;
 
 import java.util.Locale;
 
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.SystemInfo;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.domain.address.Country;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.script.ScriptUtil;
-import com.rapiddweller.formats.xls.XLSLineIterator;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.script.ScriptUtil;
+import com.rapiddweller.format.xls.XLSLineIterator;
 import org.junit.Test;
 
 /**

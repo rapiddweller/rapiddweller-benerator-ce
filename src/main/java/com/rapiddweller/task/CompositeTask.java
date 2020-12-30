@@ -26,9 +26,9 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.IOUtil;
 
 import java.util.List;
 

@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.engine.expression;
 import static org.junit.Assert.*;
 
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
-import com.rapiddweller.commons.Context;
+import com.rapiddweller.common.Context;
 import org.junit.Before;
 import org.junit.Test;
 

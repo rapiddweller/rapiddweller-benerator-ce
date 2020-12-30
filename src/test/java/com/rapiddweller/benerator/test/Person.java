@@ -30,7 +30,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.rapiddweller.commons.NullSafeComparator;
+import com.rapiddweller.common.NullSafeComparator;
 
 /**
  * JavaBean class for testing.<br/>

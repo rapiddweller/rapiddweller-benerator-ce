@@ -33,8 +33,8 @@ import com.rapiddweller.benerator.ConstantTestGenerator;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.collection.ObjectCounter;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.collection.ObjectCounter;
 import org.junit.Test;
 
 /**

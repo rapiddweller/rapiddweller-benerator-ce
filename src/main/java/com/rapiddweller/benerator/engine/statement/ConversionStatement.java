@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Converter;
+import com.rapiddweller.common.Converter;
 
 /**
  * {@link Statement} that uses a {@link Converter} to convert the current product.<br/><br/>

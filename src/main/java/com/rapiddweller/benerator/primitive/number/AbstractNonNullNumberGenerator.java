@@ -29,8 +29,8 @@ package com.rapiddweller.benerator.primitive.number;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.AbstractNonNullGenerator;
-import com.rapiddweller.commons.comparator.NumberComparator;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
+import com.rapiddweller.common.comparator.NumberComparator;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
 
 /**
  * Abstract parent class for all number generators.

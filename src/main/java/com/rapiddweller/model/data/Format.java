@@ -27,7 +27,7 @@
 package com.rapiddweller.model.data;
 
 /**
- * Enumeration for import formats.<br/><br/>
+ * Enumeration for import format.<br/><br/>
  * Created: 25.01.2013 08:42:13
  *
  * @author Volker Bergmann

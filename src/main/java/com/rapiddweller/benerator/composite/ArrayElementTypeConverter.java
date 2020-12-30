@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.composite;
 
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.AbstractConverter;
-import com.rapiddweller.commons.converter.AnyConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.AbstractConverter;
+import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;

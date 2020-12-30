@@ -28,7 +28,7 @@ package com.rapiddweller.domain.organization;
 
 import com.rapiddweller.benerator.csv.WeightedDatasetCSVGenerator;
 import com.rapiddweller.benerator.dataset.DatasetUtil;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 
 /**
  * Generates the abbreviated strings for legal forms of organizations.<br/><br/>

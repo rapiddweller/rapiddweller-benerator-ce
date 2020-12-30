@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
 
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import com.rapiddweller.model.data.DataModel;
 import org.junit.AfterClass;

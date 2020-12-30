@@ -30,9 +30,9 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntitySource;
 import com.rapiddweller.model.data.FileBasedEntitySource;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.formats.DataIterator;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.format.DataIterator;
 
 /**
  * Implements an {@link EntitySource} that reads Entities from an Excel sheet.<br/>

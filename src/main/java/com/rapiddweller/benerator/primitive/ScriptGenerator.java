@@ -28,8 +28,8 @@ package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.util.ThreadSafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.formats.script.Script;
-import com.rapiddweller.formats.script.ScriptUtil;
+import com.rapiddweller.format.script.Script;
+import com.rapiddweller.format.script.ScriptUtil;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

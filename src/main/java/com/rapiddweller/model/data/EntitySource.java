@@ -26,7 +26,7 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.formats.DataSource;
+import com.rapiddweller.format.DataSource;
 
 /**
  * Common interface for all Entity sources.<br/>

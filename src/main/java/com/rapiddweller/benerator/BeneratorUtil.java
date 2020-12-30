@@ -28,13 +28,13 @@ package com.rapiddweller.benerator;
 
 import java.io.File;
 
-import com.rapiddweller.commons.LogCategories;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.VMInfo;
-import com.rapiddweller.commons.ui.InfoPrinter;
-import com.rapiddweller.commons.version.VersionInfo;
-import com.rapiddweller.commons.version.VersionNumber;
+import com.rapiddweller.common.LogCategories;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.VMInfo;
+import com.rapiddweller.common.ui.InfoPrinter;
+import com.rapiddweller.common.version.VersionInfo;
+import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.profile.Profiling;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;

@@ -27,7 +27,7 @@
 package com.rapiddweller.model.data;
 
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.script.PrimitiveType;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;

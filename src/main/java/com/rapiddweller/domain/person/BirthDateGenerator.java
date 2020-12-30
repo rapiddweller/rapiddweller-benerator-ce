@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.primitive.datetime.DateGenerator;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
-import com.rapiddweller.commons.Period;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.Period;
+import com.rapiddweller.common.TimeUtil;
 
 import java.util.Calendar;
 import java.util.Date;

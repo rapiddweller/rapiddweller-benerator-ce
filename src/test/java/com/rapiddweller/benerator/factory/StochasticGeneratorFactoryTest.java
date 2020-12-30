@@ -41,7 +41,7 @@ import com.rapiddweller.benerator.distribution.function.GaussianFunction;
 import com.rapiddweller.benerator.distribution.sequence.HeadSequence;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
-import com.rapiddweller.commons.*;
+import com.rapiddweller.common.*;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.WeightedSample;
 import org.apache.logging.log4j.Logger;

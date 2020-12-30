@@ -27,8 +27,8 @@
 package com.rapiddweller.platform.db;
 
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.commons.LogCategories;
-import com.rapiddweller.commons.OrderedMap;
+import com.rapiddweller.common.LogCategories;
+import com.rapiddweller.common.OrderedMap;
 import com.rapiddweller.jdbacl.ColumnInfo;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.model.DBTable;

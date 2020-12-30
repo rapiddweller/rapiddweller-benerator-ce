@@ -56,7 +56,7 @@
        <priority value="info"/>
     </category>
 
-    <category name="com.rapiddweller.commons">
+    <category name="com.rapiddweller.common">
        <priority value="info"/>
     </category>
 

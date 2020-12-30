@@ -30,10 +30,10 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
-import com.rapiddweller.commons.ArrayFormat;
-import com.rapiddweller.commons.ArrayUtil;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.Converter;
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.Converter;
 
 /**
  * Reads products from a source Generator and applies a Converter to transform them into the target products.<br/>

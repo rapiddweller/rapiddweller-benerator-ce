@@ -27,10 +27,10 @@
 package com.rapiddweller.benerator.csv;
 
 import com.rapiddweller.benerator.sample.WeightedCSVSampleGenerator;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.LocaleUtil;
-import com.rapiddweller.commons.converter.NoOpConverter;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.converter.NoOpConverter;
 
 import java.util.Locale;
 

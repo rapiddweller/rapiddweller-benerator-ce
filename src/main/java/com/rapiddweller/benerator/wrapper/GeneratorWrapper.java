@@ -32,9 +32,9 @@ import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.util.AbstractGenerator;
 import com.rapiddweller.benerator.util.WrapperProvider;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.NullSafeComparator;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.NullSafeComparator;
 
 /**
  * Abstract generator class that wraps another generator object (in a <i>source</i> property)

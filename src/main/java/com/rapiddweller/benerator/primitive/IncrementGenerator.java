@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.primitive;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.ConfigurationError;
 
 /**
  * Generates long values by continuously incrementing a base (min) value.

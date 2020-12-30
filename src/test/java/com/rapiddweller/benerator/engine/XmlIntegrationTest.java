@@ -31,9 +31,9 @@ import static org.junit.Assert.*;
 import java.util.Set;
 
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.xml.XMLUtil;
-import com.rapiddweller.commons.xml.XPathUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.common.xml.XPathUtil;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;

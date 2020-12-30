@@ -32,12 +32,12 @@ import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
 import com.rapiddweller.benerator.factory.SimpleTypeGeneratorFactory;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.Validator;
-import com.rapiddweller.commons.version.VersionInfo;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.version.VersionInfo;
 
 /**
  * Abstract factory class for extending Benerator.<br/><br/>

@@ -32,9 +32,9 @@ import java.io.File;
 import java.net.URL;
 
 import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.commons.ArrayUtil;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.StringUtil;
 import org.junit.Ignore;
 import org.junit.Test;
 

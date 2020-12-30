@@ -28,12 +28,12 @@ package com.rapiddweller.benerator.util;
 
 import static org.junit.Assert.*;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.context.DefaultContext;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.util.DataIteratorFromJavaIterator;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.context.DefaultContext;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.util.DataIteratorFromJavaIterator;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.DynamicExpression;
 import org.junit.Test;

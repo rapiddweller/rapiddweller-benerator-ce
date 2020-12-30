@@ -30,7 +30,7 @@ import java.net.InetAddress;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
-import com.rapiddweller.commons.NumberUtil;
+import com.rapiddweller.common.NumberUtil;
 
 /**
  * Creates UUIDs evaluating IP address, a JVM ID and timestamp.

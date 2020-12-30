@@ -31,7 +31,7 @@ import java.math.BigDecimal;
 
 import javax.validation.ConstraintValidatorContext;
 
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 /**
  * Validates a price.<br/><br/>

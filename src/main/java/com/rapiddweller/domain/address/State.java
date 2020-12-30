@@ -26,8 +26,8 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.commons.NullSafeComparator;
-import com.rapiddweller.commons.OrderedMap;
+import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.OrderedMap;
 
 import java.util.Collection;
 import java.util.Locale;

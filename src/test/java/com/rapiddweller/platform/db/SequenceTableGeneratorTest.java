@@ -33,7 +33,7 @@ import java.util.List;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.Entity;

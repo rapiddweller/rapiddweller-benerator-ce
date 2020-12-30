@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.util;
 
 import static org.junit.Assert.assertEquals;
 
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.StringUtil;
 import org.junit.Test;
 
 /**

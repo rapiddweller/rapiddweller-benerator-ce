@@ -36,9 +36,9 @@ import com.rapiddweller.benerator.engine.statement.BeanStatement;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
 import com.rapiddweller.benerator.parser.ModelParser;
 import com.rapiddweller.model.data.*;
-import com.rapiddweller.commons.*;
-import com.rapiddweller.commons.context.ContextAware;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.*;
+import com.rapiddweller.common.context.ContextAware;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
@@ -53,7 +53,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.rapiddweller.commons.xml.XMLUtil.*;
+import static com.rapiddweller.common.xml.XMLUtil.*;
 import static com.rapiddweller.script.expression.ExpressionUtil.constant;
 
 /**

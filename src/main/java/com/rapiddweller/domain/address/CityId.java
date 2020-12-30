@@ -26,8 +26,8 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.commons.NullSafeComparator;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.StringUtil;
 
 /**
  * Wrapper for simple or composite city names like 'Paris' or 'Paris, Texas'.

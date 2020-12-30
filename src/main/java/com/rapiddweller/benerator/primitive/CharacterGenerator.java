@@ -30,9 +30,9 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.sample.NonNullSampleGenerator;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
-import com.rapiddweller.commons.LocaleUtil;
-import com.rapiddweller.commons.SyntaxError;
-import com.rapiddweller.formats.regex.RegexParser;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.format.regex.RegexParser;
 
 import java.util.*;
 
@@ -58,7 +58,7 @@ public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
 
     /**
      * initializes the generator to use letters of the fallback locale.
-     * @see com.rapiddweller.commons.LocaleUtil#getFallbackLocale()
+     * @see com.rapiddweller.common.LocaleUtil#getFallbackLocale()
      */
     public CharacterGenerator() {
         this("\\w");
@@ -66,7 +66,7 @@ public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
 
     /**
      * initializes the generator to create character that match a regular expressions and the fallback locale.
-     * @see com.rapiddweller.commons.LocaleUtil#getFallbackLocale()
+     * @see com.rapiddweller.common.LocaleUtil#getFallbackLocale()
      */
     public CharacterGenerator(String pattern) {
         this(pattern, LocaleUtil.getFallbackLocale());
@@ -74,7 +74,7 @@ public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
 
     /**
      * initializes the generator to create character that match a regular expressions and a locale.
-     * @see com.rapiddweller.commons.LocaleUtil#getFallbackLocale()
+     * @see com.rapiddweller.common.LocaleUtil#getFallbackLocale()
      */
     public CharacterGenerator(String pattern, Locale locale) {
 	    super(Character.class);
@@ -85,7 +85,7 @@ public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
 
     /**
      * initializes the generator to create characters from a character collection.
-     * @see com.rapiddweller.commons.LocaleUtil#getFallbackLocale()
+     * @see com.rapiddweller.common.LocaleUtil#getFallbackLocale()
      */
     public CharacterGenerator(Collection<Character> values) {
 	    super(Character.class);

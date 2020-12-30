@@ -32,11 +32,11 @@ import java.util.Arrays;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.HeavyweightIterator;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.TypedIterable;
-import com.rapiddweller.commons.iterator.TypedIterableProxy;
-import com.rapiddweller.commons.iterator.HeavyweightIterableAdapter;
+import com.rapiddweller.common.HeavyweightIterator;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.TypedIterable;
+import com.rapiddweller.common.iterator.TypedIterableProxy;
+import com.rapiddweller.common.iterator.HeavyweightIterableAdapter;
 
 import org.junit.Test;
 

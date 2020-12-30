@@ -26,7 +26,7 @@
 
 package com.rapiddweller.platform.xml;
 
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import org.w3c.dom.Element;
 
 /**

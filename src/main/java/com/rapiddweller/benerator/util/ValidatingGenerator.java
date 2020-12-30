@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.util;
 
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.Validator;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

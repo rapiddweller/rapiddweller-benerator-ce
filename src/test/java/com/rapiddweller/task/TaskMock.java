@@ -29,9 +29,9 @@ package com.rapiddweller.task;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.rapiddweller.benerator.util.RandomUtil;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.context.ContextAware;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.context.ContextAware;
 
 /**
  * Mock implementation of the {@link Task} interface.<br/><br/>

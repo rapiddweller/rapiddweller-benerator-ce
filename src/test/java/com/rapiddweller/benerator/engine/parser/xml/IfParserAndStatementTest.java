@@ -30,8 +30,8 @@ import static org.junit.Assert.*;
 
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
-import com.rapiddweller.commons.SyntaxError;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.Test;
 import org.w3c.dom.Element;
 

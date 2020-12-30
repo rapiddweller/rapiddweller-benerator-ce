@@ -26,10 +26,10 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.commons.Escalator;
-import com.rapiddweller.commons.LoggerEscalator;
-import com.rapiddweller.commons.NullSafeComparator;
-import com.rapiddweller.commons.bean.HashCodeBuilder;
+import com.rapiddweller.common.Escalator;
+import com.rapiddweller.common.LoggerEscalator;
+import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.bean.HashCodeBuilder;
 
 /**
  * Represents an address with phone numbers.<br/><br/>

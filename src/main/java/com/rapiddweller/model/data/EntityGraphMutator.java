@@ -26,10 +26,10 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Mutator;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.UpdateFailedException;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Mutator;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.UpdateFailedException;
 
 /**
  * Builds and mutates graphs of entities.<br/><br/>

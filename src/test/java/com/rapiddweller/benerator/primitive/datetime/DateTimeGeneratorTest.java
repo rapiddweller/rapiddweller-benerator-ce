@@ -33,7 +33,7 @@ import java.util.GregorianCalendar;
 
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.script.math.DateArithmetic;
 import org.junit.Test;
 import static org.junit.Assert.*;

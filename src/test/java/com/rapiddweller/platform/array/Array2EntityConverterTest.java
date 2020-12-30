@@ -33,9 +33,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.commons.Escalation;
-import com.rapiddweller.commons.Escalator;
-import com.rapiddweller.commons.LoggerEscalator;
+import com.rapiddweller.common.Escalation;
+import com.rapiddweller.common.Escalator;
+import com.rapiddweller.common.LoggerEscalator;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 

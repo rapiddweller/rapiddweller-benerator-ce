@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.factory;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.formats.DataSource;
+import com.rapiddweller.format.DataSource;
 
 /**
  * Interface for classes which provide {@link Iterable}s for iterating through data sources.<br/><br/>

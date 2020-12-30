@@ -26,10 +26,10 @@
 
 package com.rapiddweller.benerator.util;
 
-import com.rapiddweller.commons.ReaderLineIterator;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ui.ConsoleInfoPrinter;
+import com.rapiddweller.common.ReaderLineIterator;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ui.ConsoleInfoPrinter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

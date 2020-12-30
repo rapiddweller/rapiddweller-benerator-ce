@@ -32,7 +32,7 @@ import static org.junit.Assert.assertNull;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 import org.junit.Test;
 
 /**

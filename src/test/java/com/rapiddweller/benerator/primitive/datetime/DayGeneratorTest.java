@@ -34,7 +34,7 @@ import java.util.GregorianCalendar;
 
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.TimeUtil;
 import org.junit.Test;
 
 /**

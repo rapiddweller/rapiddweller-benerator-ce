@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 import org.junit.Test;
 
 import java.util.Locale;

@@ -33,7 +33,7 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.wrapper.LengthGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.formats.regex.RegexParser;
+import com.rapiddweller.format.regex.RegexParser;
 
 /**
  * Generates {@link String}s composed of numerical digits.<br/><br/>

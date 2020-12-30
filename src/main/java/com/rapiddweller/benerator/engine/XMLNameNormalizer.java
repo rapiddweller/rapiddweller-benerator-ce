@@ -26,10 +26,10 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 /**
  * Normalizes XML-valid names to Java-valid camel-case names, 

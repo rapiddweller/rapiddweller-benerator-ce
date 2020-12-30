@@ -37,11 +37,11 @@ import java.util.Set;
 
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.xml.XMLUtil;
-import com.rapiddweller.formats.xml.XMLElementParser;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.XMLElementParser;
 import org.w3c.dom.Element;
 
 /**

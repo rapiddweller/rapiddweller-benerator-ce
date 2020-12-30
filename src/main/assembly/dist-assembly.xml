@@ -48,7 +48,7 @@
             <directory>src/main/resources</directory>
             <outputDirectory>bin</outputDirectory>
             <includes>
-                <include>log4j.xml</include>
+                <include>log4j2.xml</include>
             </includes>
             <excludes>
                 <exclude>__MACOSX</exclude>
@@ -147,18 +147,20 @@
             <outputDirectory>lib</outputDirectory>
             <unpack>false</unpack>
             <scope>provided</scope>
-          <includes>
-            <include>net.sourceforge.jtds:jtds:jar</include>
-            <include>mysql:mysql-connector-java:jar</include>
-            <include>hsqldb:hsqldb:jar</include>
-            <include>com.h2database:h2:jar</include>
-            <include>org.apache.derby:derbyclient:jar</include>
-            <include>org.postgresql:postgresql:jar</include>
-            <include>net.sf.squirrel-sql.thirdparty-non-maven:jaybird:jar</include>
-            <include>javax.resource:connector-api:jar</include>
-            <include>org.apache.logging.log4j:log4j-api:jar</include>
-            <include>org.apache.logging.log4j:log4j-core:jar</include>
-          </includes>
+            <includes>
+                <include>net.sourceforge.jtds:jtds:jar</include>
+                <include>com.ibm.icu:icu4j:jar</include>
+                <include>org.graalvm.*:*:jar</include>
+                <include>mysql:mysql-connector-java:jar</include>
+                <include>hsqldb:hsqldb:jar</include>
+                <include>com.h2database:h2:jar</include>
+                <include>org.apache.derby:derbyclient:jar</include>
+                <include>org.postgresql:postgresql:jar</include>
+                <include>net.sf.squirrel-sql.thirdparty-non-maven:jaybird:jar</include>
+                <include>javax.resource:connector-api:jar</include>
+                <include>org.apache.logging.log4j:log4j-api:jar</include>
+                <include>org.apache.logging.log4j:log4j-core:jar</include>
+            </includes>
         </dependencySet>
         <dependencySet>
             <useProjectArtifact>true</useProjectArtifact>
@@ -167,7 +169,6 @@
             <unpack>false</unpack>
             <scope>runtime</scope>
             <includes>
-                <include>org.databene:*</include>
                 <include>com.rapiddweller:*</include>
                 <include>org.apache.poi:poi:jar</include>
                 <include>org.apache.poi:poi-ooxml:jar</include>

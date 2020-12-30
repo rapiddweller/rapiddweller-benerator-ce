@@ -28,9 +28,9 @@ package com.rapiddweller.platform.db;
 
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

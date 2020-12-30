@@ -32,7 +32,7 @@ import com.rapiddweller.benerator.csv.WeightedDatasetCSVGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.util.SharedGenerator;
 import com.rapiddweller.domain.address.Country;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 
 import java.util.HashMap;
 import java.util.Locale;

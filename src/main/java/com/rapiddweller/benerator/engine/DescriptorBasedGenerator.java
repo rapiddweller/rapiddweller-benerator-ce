@@ -30,8 +30,8 @@ import java.io.IOException;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.converter.ConverterManager;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.converter.ConverterManager;
 
 /**
  * Provides easy programmatic access to generators defined in an XML descriptor file.<br/><br/>

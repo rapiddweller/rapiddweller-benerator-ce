@@ -49,23 +49,23 @@ import com.rapiddweller.benerator.wrapper.AsByteGeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ByteArrayGenerator;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.Condition;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.Validator;
-import com.rapiddweller.commons.accessor.GraphAccessor;
-import com.rapiddweller.commons.converter.AnyConverter;
-import com.rapiddweller.commons.converter.ArrayElementExtractor;
-import com.rapiddweller.commons.converter.ConditionalConverter;
-import com.rapiddweller.commons.converter.ConverterChain;
-import com.rapiddweller.commons.converter.DateString2DurationConverter;
-import com.rapiddweller.commons.converter.LiteralParser;
-import com.rapiddweller.commons.converter.ToStringConverter;
-import com.rapiddweller.commons.validator.StringLengthValidator;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.script.ScriptConverterForStrings;
-import com.rapiddweller.formats.util.DataFileUtil;
+import com.rapiddweller.common.Condition;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.accessor.GraphAccessor;
+import com.rapiddweller.common.converter.AnyConverter;
+import com.rapiddweller.common.converter.ArrayElementExtractor;
+import com.rapiddweller.common.converter.ConditionalConverter;
+import com.rapiddweller.common.converter.ConverterChain;
+import com.rapiddweller.common.converter.DateString2DurationConverter;
+import com.rapiddweller.common.converter.LiteralParser;
+import com.rapiddweller.common.converter.ToStringConverter;
+import com.rapiddweller.common.validator.StringLengthValidator;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.script.ScriptConverterForStrings;
+import com.rapiddweller.format.util.DataFileUtil;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.UnionSimpleTypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
@@ -126,7 +126,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
         try {
 			Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
 			return context.getGeneratorFactory().createFromWeightedLiteralList(valueSpec, targetType, distribution, uniqueness.isUnique());
-        } catch (com.rapiddweller.commons.ParseException e) {
+        } catch (com.rapiddweller.common.ParseException e) {
 	        throw new ConfigurationError("Error parsing samples: " + valueSpec, e);
         }
     }

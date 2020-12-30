@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine;
 
 import java.io.Closeable;
 
-import com.rapiddweller.commons.Resettable;
+import com.rapiddweller.common.Resettable;
 
 /**
  * Declares life cycle methods: {@link #init(BeneratorContext)}, {@link #reset()} and {@link #close()}.<br/><br/>

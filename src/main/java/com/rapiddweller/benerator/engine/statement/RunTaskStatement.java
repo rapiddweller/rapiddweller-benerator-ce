@@ -32,7 +32,7 @@ import java.util.List;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.ErrorHandler;
+import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.TaskExecutor;

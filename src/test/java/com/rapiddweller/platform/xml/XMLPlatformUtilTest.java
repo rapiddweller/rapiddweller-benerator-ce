@@ -28,7 +28,7 @@ package com.rapiddweller.platform.xml;
 
 import static org.junit.Assert.assertEquals;
 
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.DefaultDescriptorProvider;
 import com.rapiddweller.model.data.DescriptorProvider;

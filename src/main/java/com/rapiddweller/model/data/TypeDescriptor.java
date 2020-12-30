@@ -26,8 +26,8 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.LocaleUtil;
-import com.rapiddweller.commons.operation.FirstNonNullSelector;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.operation.FirstNonNullSelector;
 
 import java.util.Locale;
 

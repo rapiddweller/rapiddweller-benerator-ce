@@ -29,10 +29,10 @@ package com.rapiddweller.platform.csv;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.FileBasedEntitySource;
-import com.rapiddweller.commons.*;
-import com.rapiddweller.commons.converter.NoOpConverter;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.csv.CSVUtil;
+import com.rapiddweller.common.*;
+import com.rapiddweller.common.converter.NoOpConverter;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.csv.CSVUtil;
 
 import java.io.FileNotFoundException;
 

@@ -28,12 +28,12 @@ package com.rapiddweller.platform.xls;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.DataSourceProvider;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.ArrayConverter;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.util.ConvertingDataSource;
-import com.rapiddweller.formats.util.OffsetDataSource;
-import com.rapiddweller.formats.xls.XLSSource;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.ArrayConverter;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.util.ConvertingDataSource;
+import com.rapiddweller.format.util.OffsetDataSource;
+import com.rapiddweller.format.xls.XLSSource;
 
 /**
  * {@link DataSourceProvider} implementation which creates {@link XLSSource}s.<br/><br/>

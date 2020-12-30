@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine;
 
 import java.util.Collection;
 
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 
 /**
  * Collects element and attribute names used in Benerator's XML descriptor files.<br/>

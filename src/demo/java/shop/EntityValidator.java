@@ -26,7 +26,7 @@
 
 package shop;
 
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.Validator;
 import com.rapiddweller.model.data.Entity;
 
 /**

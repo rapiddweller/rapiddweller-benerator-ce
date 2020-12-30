@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.primitive.number;
 
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 /**
  * Quantizes floating point numbers ({@link Double} or {@link Float}) 

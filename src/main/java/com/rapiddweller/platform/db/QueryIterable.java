@@ -26,9 +26,9 @@
 
 package com.rapiddweller.platform.db;
 
-import com.rapiddweller.commons.*;
-import com.rapiddweller.commons.converter.NoOpConverter;
-import com.rapiddweller.formats.script.ScriptConverterForStrings;
+import com.rapiddweller.common.*;
+import com.rapiddweller.common.converter.NoOpConverter;
+import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.jdbacl.QueryIterator;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;

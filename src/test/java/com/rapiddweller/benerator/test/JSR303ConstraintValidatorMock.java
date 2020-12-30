@@ -31,7 +31,7 @@ import java.lang.annotation.Annotation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 /**
  * Mock class for a JSR303 {@link ConstraintValidator}.<br/>

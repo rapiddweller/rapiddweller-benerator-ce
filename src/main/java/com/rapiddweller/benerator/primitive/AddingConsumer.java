@@ -28,11 +28,11 @@ package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
-import com.rapiddweller.commons.Accessor;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.accessor.FeatureAccessor;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
+import com.rapiddweller.common.Accessor;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.accessor.FeatureAccessor;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.math.ArithmeticEngine;
 

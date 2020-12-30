@@ -28,7 +28,7 @@ package com.rapiddweller.benerator;
 
 import java.util.BitSet;
 
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.Validator;
 
 /**
  * Accepts only unique numbers.<br/><br/>

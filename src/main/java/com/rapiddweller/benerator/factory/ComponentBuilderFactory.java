@@ -65,11 +65,11 @@ import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.SingleSourceArrayGenerator;
 import com.rapiddweller.benerator.wrapper.SingleSourceCollectionGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.SyntaxError;
-import com.rapiddweller.formats.script.Script;
-import com.rapiddweller.formats.script.ScriptUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.format.script.Script;
+import com.rapiddweller.format.script.ScriptUtil;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

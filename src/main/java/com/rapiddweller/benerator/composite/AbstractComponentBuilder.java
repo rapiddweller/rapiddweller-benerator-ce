@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Mutator;
+import com.rapiddweller.common.Mutator;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

@@ -38,17 +38,17 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.ArrayFormat;
-import com.rapiddweller.commons.ArrayUtil;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.Resettable;
-import com.rapiddweller.commons.Validator;
-import com.rapiddweller.commons.collection.ObjectCounter;
-import com.rapiddweller.commons.converter.ToStringConverter;
-import com.rapiddweller.commons.validator.UniqueValidator;
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.Resettable;
+import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.collection.ObjectCounter;
+import com.rapiddweller.common.converter.ToStringConverter;
+import com.rapiddweller.common.validator.UniqueValidator;
 import com.rapiddweller.model.data.Entity;
 
 /**

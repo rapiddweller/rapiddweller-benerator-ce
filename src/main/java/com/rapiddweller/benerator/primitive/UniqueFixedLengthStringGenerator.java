@@ -29,8 +29,8 @@ package com.rapiddweller.benerator.primitive;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ArrayFormat;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ArrayFormat;
 
 import java.util.Set;
 import java.util.TreeSet;

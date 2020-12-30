@@ -33,8 +33,8 @@ import java.util.Locale;
 
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
-import com.rapiddweller.commons.LocaleUtil;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 

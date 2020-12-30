@@ -26,11 +26,11 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.Escalator;
-import com.rapiddweller.commons.LoggerEscalator;
-import com.rapiddweller.commons.NullSafeComparator;
-import com.rapiddweller.commons.Operation;
-import com.rapiddweller.commons.operation.FirstArgSelector;
+import com.rapiddweller.common.Escalator;
+import com.rapiddweller.common.LoggerEscalator;
+import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.Operation;
+import com.rapiddweller.common.operation.FirstArgSelector;
 
 /**
  * A FeatureDescriptor is composed og FeatureDetails, which have name, value and type.<br/>

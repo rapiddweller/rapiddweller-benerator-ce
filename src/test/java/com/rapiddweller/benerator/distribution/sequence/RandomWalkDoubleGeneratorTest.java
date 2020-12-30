@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.distribution.sequence;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 
 import java.util.Set;
 import org.junit.Test;

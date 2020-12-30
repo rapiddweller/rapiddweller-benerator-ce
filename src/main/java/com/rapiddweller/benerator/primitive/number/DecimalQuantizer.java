@@ -28,9 +28,9 @@ package com.rapiddweller.benerator.primitive.number;
 
 import java.math.BigDecimal;
 
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 /**
  * {@link Converter} that quantizes {@link Number}s by a given 'min' value and 

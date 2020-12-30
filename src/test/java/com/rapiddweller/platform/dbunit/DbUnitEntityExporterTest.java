@@ -31,8 +31,8 @@ import static org.junit.Assert.*;
 import java.io.File;
 
 import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Before;
 import org.junit.Test;

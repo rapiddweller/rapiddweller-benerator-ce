@@ -33,10 +33,10 @@ import java.io.File;
 import java.io.IOException;
 
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.IOUtil;
 
 /**
  * Tests the {@link FileJoiner}.<br/>

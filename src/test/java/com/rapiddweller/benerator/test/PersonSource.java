@@ -28,9 +28,9 @@ package com.rapiddweller.benerator.test;
 
 import java.util.List;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.util.DataIteratorFromJavaIterator;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.util.DataIteratorFromJavaIterator;
 import com.rapiddweller.model.data.AbstractEntitySource;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.DescriptorProvider;

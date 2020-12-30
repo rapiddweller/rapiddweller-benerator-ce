@@ -29,10 +29,10 @@ package com.rapiddweller.benerator.factory;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.NumberUtil;
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.NumberUtil;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
 
 /**
  * {@link DefaultsProvider} implementation which provides mean defaults 

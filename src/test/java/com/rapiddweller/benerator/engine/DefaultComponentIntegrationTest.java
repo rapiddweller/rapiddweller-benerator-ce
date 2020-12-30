@@ -34,7 +34,7 @@ import java.util.List;
 
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 

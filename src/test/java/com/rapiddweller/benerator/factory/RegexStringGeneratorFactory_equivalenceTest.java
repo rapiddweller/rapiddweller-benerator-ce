@@ -30,7 +30,7 @@ import java.util.Locale;
 
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.LocaleUtil;
+import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.model.data.Uniqueness;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

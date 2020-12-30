@@ -26,7 +26,7 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.commons.NullSafeComparator;
+import com.rapiddweller.common.NullSafeComparator;
 
 /**
  * Represents a phone number.<br/>

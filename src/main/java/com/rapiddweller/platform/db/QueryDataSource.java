@@ -26,14 +26,14 @@
 
 package com.rapiddweller.platform.db;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.converter.NoOpConverter;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.script.ScriptConverterForStrings;
-import com.rapiddweller.formats.util.AbstractDataSource;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.converter.NoOpConverter;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.script.ScriptConverterForStrings;
+import com.rapiddweller.format.util.AbstractDataSource;
 import com.rapiddweller.jdbacl.QueryDataIterator;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;

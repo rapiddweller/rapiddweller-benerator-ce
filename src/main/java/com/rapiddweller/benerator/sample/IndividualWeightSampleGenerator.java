@@ -36,7 +36,7 @@ import com.rapiddweller.benerator.distribution.IndividualWeight;
 import com.rapiddweller.benerator.distribution.WeightFunction;
 import com.rapiddweller.benerator.distribution.WeightedLongGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Assert;
+import com.rapiddweller.common.Assert;
 
 /**
  * Maps an {@link IndividualWeight} distribution to an {@link AbstractWeightFunction} and uses its capabilities

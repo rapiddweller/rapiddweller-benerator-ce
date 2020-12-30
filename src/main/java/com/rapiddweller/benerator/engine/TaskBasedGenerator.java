@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.engine.statement.GenerateAndConsumeTask;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.ErrorHandler;
+import com.rapiddweller.common.ErrorHandler;
 
 /**
  * Wraps a {@link GenerateAndConsumeTask} with a {@link Generator} interface.<br/><br/>

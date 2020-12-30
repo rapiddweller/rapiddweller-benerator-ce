@@ -27,7 +27,7 @@
 package com.rapiddweller.platform.db;
 
 import com.rapiddweller.model.data.*;
-import com.rapiddweller.commons.converter.AnyConverter;
+import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.script.PrimitiveType;
 
 import java.sql.ResultSet;

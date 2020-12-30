@@ -31,10 +31,10 @@ import java.math.BigInteger;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.Validator;
-import com.rapiddweller.commons.converter.MessageConverter;
-import com.rapiddweller.commons.validator.StringLengthValidator;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.converter.MessageConverter;
+import com.rapiddweller.common.validator.StringLengthValidator;
 
 /**
  * Provides wrappers for number {@link Generator}s that converts 

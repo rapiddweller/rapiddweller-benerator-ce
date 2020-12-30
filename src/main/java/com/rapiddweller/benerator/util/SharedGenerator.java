@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.GeneratorState;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
-import com.rapiddweller.commons.Assert;
+import com.rapiddweller.common.Assert;
 
 /**
  * Proxy for generators that are used by several clients. It forwards all calls to 

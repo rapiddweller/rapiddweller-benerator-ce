@@ -28,8 +28,8 @@ package com.rapiddweller.platform;
 
 import static org.junit.Assert.*;
 
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.context.DefaultContext;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.platform.contiperf.PerfTrackingTaskProxy;
 import com.rapiddweller.stat.LatencyCounter;
 import com.rapiddweller.task.Task;

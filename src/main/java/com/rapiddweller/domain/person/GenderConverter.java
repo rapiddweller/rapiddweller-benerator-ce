@@ -26,8 +26,8 @@
 
 package com.rapiddweller.domain.person;
 
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 /**
  * Converts a {@link Gender} enumeration value to a configurable String.<br/>

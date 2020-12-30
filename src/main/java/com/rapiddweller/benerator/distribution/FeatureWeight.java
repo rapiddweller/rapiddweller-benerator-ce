@@ -26,10 +26,10 @@
 
 package com.rapiddweller.benerator.distribution;
 
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.NullSafeComparator;
-import com.rapiddweller.commons.accessor.FeatureAccessor;
-import com.rapiddweller.commons.converter.AnyConverter;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.accessor.FeatureAccessor;
+import com.rapiddweller.common.converter.AnyConverter;
 
 /**
  * Implements the IndividualWeight function for arbitrary feature names, 

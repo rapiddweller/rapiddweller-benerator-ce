@@ -33,8 +33,8 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.util.ValidatingGenerator;
 import com.rapiddweller.benerator.util.WrapperProvider;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.validator.StringLengthValidator;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.validator.StringLengthValidator;
 
 import java.text.MessageFormat;
 import java.util.List;

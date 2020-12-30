@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.distribution.sequence;
 
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
-import com.rapiddweller.commons.NumberUtil;
+import com.rapiddweller.common.NumberUtil;
 
 /**
  * Long Generator that implements a 'bitreverse' Long Sequence.<br/>

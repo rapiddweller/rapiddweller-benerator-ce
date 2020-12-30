@@ -4,7 +4,7 @@
     <#list setup.files as file>
         <echo>{'Parsing file ' + ${file}}</echo>
         <domtree id="dom_${file}" inputUri="{${file}}"
-                 outputUri="{com.rapiddweller.commons.FileUtil.prependFilePrefix('anon_', ${file})}"
+                 outputUri="{com.rapiddweller.common.FileUtil.prependFilePrefix('anon_', ${file})}"
                  namespaceAware="false"/>
     </#list>
 

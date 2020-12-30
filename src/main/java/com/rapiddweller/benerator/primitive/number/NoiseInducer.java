@@ -31,8 +31,8 @@ import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.util.GeneratingConverter;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.ConverterManager;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.ConverterManager;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.math.ArithmeticEngine;
 

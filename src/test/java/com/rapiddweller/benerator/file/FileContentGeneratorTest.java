@@ -30,8 +30,8 @@ import java.io.File;
 import java.io.IOException;
 
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.IOUtil;
 
 /**
  * Parent class for tests that relate to file and folder hierarchies.<br/><br/>

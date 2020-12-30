@@ -34,9 +34,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import com.rapiddweller.benerator.IteratorTestCase;
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.DefaultDescriptorProvider;

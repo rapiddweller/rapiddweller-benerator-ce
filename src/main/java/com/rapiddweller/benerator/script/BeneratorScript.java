@@ -26,10 +26,10 @@
 
 package com.rapiddweller.benerator.script;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.formats.script.AbstractScript;
-import com.rapiddweller.formats.script.Script;
-import com.rapiddweller.formats.script.ScriptException;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.format.script.AbstractScript;
+import com.rapiddweller.format.script.Script;
+import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.script.Expression;
 
 /**

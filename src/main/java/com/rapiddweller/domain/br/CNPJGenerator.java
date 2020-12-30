@@ -29,7 +29,7 @@ package com.rapiddweller.domain.br;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.sample.WeightedCSVSampleGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 
 import java.util.ArrayList;
 import java.util.Random;

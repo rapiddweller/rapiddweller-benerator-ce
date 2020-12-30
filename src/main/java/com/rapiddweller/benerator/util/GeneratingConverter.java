@@ -29,10 +29,10 @@ package com.rapiddweller.benerator.util;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.context.ContextAware;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.context.ContextAware;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 /**
  * {@link Converter} implementation which makes use of a {@link Generator}.<br/><br/>

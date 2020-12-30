@@ -27,7 +27,7 @@
 package com.rapiddweller.domain.net;
 
 import com.rapiddweller.benerator.sample.WeightedCSVSampleGenerator;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 
 /**
  * A WebmailDomainGenerator.<br/><br/>

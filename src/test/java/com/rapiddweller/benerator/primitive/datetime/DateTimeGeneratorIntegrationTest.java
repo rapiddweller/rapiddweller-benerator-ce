@@ -34,8 +34,8 @@ import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
 import com.rapiddweller.benerator.engine.statement.BeanStatement;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.commons.converter.ConverterManager;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.converter.ConverterManager;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -29,8 +29,8 @@ package com.rapiddweller.benerator.distribution.sequence;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.WeightedSample;
 

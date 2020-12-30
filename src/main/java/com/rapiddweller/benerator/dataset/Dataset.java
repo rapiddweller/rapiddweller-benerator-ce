@@ -31,7 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.rapiddweller.commons.Named;
+import com.rapiddweller.common.Named;
 
 /**
  * Defines a data set that may be nested.<br/><br/>

@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.commons.ArrayUtil;
+import com.rapiddweller.common.ArrayUtil;
 
 /**
  * Keeps an array of generators, of which it combines the products to an array.<br/><br/>

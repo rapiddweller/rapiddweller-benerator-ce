@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
 
 import java.util.Locale;
 
-import com.rapiddweller.commons.Locales;
+import com.rapiddweller.common.Locales;
 import org.junit.Test;
 
 /**

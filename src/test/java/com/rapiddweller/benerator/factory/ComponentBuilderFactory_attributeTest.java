@@ -33,9 +33,9 @@ import com.rapiddweller.benerator.composite.ComponentBuilder;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.commons.Validator;
-import com.rapiddweller.commons.validator.StringValidator;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.validator.StringValidator;
 import com.rapiddweller.model.data.AlternativeGroupDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.PartDescriptor;
@@ -102,7 +102,7 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 		PartDescriptor name = createPart("name");
 		SimpleTypeDescriptor type = (SimpleTypeDescriptor) name.getLocalType(false);
 		type.setScript("'abc'");
-		type.setConverter("com.rapiddweller.commons.converter.ToUpperCaseConverter");
+		type.setConverter("com.rapiddweller.common.converter.ToUpperCaseConverter");
 		ComponentBuilder builder = createComponentBuilder(name);
 		Generator<String> helper = new ComponentBuilderGenerator(builder, name.getName());
 		helper.init(context);
@@ -584,7 +584,7 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     public void testConvertingImport() {
         createGenerator("test",
                 "source", "com/rapiddweller/benerator/composite/dates.txt",
-                "converter", "com.rapiddweller.commons.converter.NoOpConverter");
+                "converter", "com.rapiddweller.common.converter.NoOpConverter");
         createGenerator("test",
                 "source", "com/rapiddweller/benerator/composite/dates.txt",
                 "type", "date",

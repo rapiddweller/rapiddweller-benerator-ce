@@ -30,8 +30,8 @@ import static org.junit.Assert.*;
 
 import java.util.Date;
 
-import static com.rapiddweller.commons.TimeUtil.*;
-import static com.rapiddweller.commons.Period.*;
+import static com.rapiddweller.common.TimeUtil.*;
+import static com.rapiddweller.common.Period.*;
 
 import org.junit.Test;
 

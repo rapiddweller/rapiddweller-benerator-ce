@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.test;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.ParseUtil;
+import com.rapiddweller.common.ParseUtil;
 import junit.framework.AssertionFailedError;
 import org.junit.Test;
 

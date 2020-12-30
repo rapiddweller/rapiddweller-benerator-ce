@@ -28,10 +28,10 @@ package com.rapiddweller.benerator.script;
 
 import java.io.IOException;
 
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ParseException;
-import com.rapiddweller.formats.script.Script;
-import com.rapiddweller.formats.script.ScriptFactory;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ParseException;
+import com.rapiddweller.format.script.Script;
+import com.rapiddweller.format.script.ScriptFactory;
 import com.rapiddweller.script.DatabeneScriptParser;
 
 /**

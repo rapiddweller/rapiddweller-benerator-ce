@@ -35,11 +35,11 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.converter.ConverterManager;
-import com.rapiddweller.commons.converter.ParseFormatConverter;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.converter.ConverterManager;
+import com.rapiddweller.common.converter.ParseFormatConverter;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import org.junit.Test;

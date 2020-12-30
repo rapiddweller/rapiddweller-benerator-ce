@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.primitive.number;
 
-import com.rapiddweller.commons.MathUtil;
+import com.rapiddweller.common.MathUtil;
 
 import java.math.BigDecimal;
 

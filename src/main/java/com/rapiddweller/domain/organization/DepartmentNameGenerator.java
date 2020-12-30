@@ -29,8 +29,8 @@ package com.rapiddweller.domain.organization;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.sample.WeightedCSVSampleGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.commons.LocaleUtil;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.LocaleUtil;
 
 import java.util.Locale;
 

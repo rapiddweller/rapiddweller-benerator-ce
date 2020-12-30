@@ -30,7 +30,7 @@ import java.util.List;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.formats.xml.XMLElementParser;
+import com.rapiddweller.format.xml.XMLElementParser;
 
 /**
  * Descriptor interface to provide informations about Benerator platforms.<br/><br/>

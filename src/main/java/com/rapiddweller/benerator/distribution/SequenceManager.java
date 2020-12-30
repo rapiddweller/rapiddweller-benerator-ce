@@ -40,7 +40,7 @@ import com.rapiddweller.benerator.distribution.sequence.RandomWalkSequence;
 import com.rapiddweller.benerator.distribution.sequence.ShuffleSequence;
 import com.rapiddweller.benerator.distribution.sequence.StepSequence;
 import com.rapiddweller.benerator.distribution.sequence.WedgeSequence;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.domain.math.FibonacciSequence;
 import com.rapiddweller.domain.math.PadovanSequence;
 

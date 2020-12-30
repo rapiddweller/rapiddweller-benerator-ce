@@ -26,8 +26,8 @@
 
 package com.rapiddweller.benerator.csv;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.Encodings;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 

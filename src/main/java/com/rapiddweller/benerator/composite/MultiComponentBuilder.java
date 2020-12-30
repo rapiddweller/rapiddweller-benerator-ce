@@ -31,8 +31,8 @@ import java.util.List;
 import com.rapiddweller.benerator.engine.AbstractScopedLifeCycleHolder;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.util.RandomUtil;
-import com.rapiddweller.commons.ArrayFormat;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.CollectionUtil;
 
 /**
  * Abstract parent class for all builders that relate to a group of components.<br/><br/>

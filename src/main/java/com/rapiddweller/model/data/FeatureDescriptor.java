@@ -26,13 +26,13 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.Named;
-import com.rapiddweller.commons.NullSafeComparator;
-import com.rapiddweller.commons.Operation;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.collection.OrderedNameMap;
-import com.rapiddweller.commons.converter.AnyConverter;
-import com.rapiddweller.commons.converter.ToStringConverter;
+import com.rapiddweller.common.Named;
+import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.Operation;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.collection.OrderedNameMap;
+import com.rapiddweller.common.converter.AnyConverter;
+import com.rapiddweller.common.converter.ToStringConverter;
 
 import java.util.List;
 

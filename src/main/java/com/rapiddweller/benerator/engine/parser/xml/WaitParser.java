@@ -37,7 +37,7 @@ import com.rapiddweller.benerator.factory.FactoryUtil;
 import com.rapiddweller.benerator.primitive.DynamicLongGenerator;
 import com.rapiddweller.benerator.util.ExpressionBasedGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.model.data.Uniqueness;

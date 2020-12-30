@@ -27,7 +27,7 @@
 package com.rapiddweller.domain.finance;
 
 import com.rapiddweller.domain.address.CountryCode2Validator;
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 import javax.validation.ConstraintValidatorContext;
 

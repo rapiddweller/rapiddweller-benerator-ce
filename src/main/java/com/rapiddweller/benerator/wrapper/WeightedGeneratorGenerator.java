@@ -33,7 +33,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.sample.AttachedWeightSampleGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.Weighted;
+import com.rapiddweller.common.Weighted;
 
 /**
  * {@link Generator} that wraps several other 'source generators' and assigns a weight to each one. 

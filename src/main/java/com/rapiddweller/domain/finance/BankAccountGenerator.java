@@ -32,8 +32,8 @@ import com.rapiddweller.benerator.primitive.RandomVarLengthStringGenerator;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.domain.address.Country;
-import com.rapiddweller.commons.LocaleUtil;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.StringUtil;
 
 /**
  * Generates German {@link BankAccount}s with low validity requirements.<br/><br/>

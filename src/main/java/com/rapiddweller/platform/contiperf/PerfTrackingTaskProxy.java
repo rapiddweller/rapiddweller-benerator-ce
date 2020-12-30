@@ -28,9 +28,9 @@ package com.rapiddweller.platform.contiperf;
 
 import com.rapiddweller.task.Task;
 import com.rapiddweller.task.TaskResult;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.contiperf.PerformanceTracker;
 
 /**

@@ -34,13 +34,13 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.wrapper.SkipGeneratorProxy;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.MathUtil;
-import com.rapiddweller.commons.NumberUtil;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.MathUtil;
+import com.rapiddweller.common.NumberUtil;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
 
-import static com.rapiddweller.commons.NumberUtil.*;
+import static com.rapiddweller.common.NumberUtil.*;
 
 /**
  * Random Walk {@link Sequence} implementation that supports a variable step width.<br/>

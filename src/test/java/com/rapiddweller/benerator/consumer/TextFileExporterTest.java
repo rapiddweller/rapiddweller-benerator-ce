@@ -29,8 +29,8 @@ package com.rapiddweller.benerator.consumer;
 import java.io.File;
 import java.io.IOException;
 
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.SystemInfo;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.SystemInfo;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

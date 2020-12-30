@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.distribution.sequence;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import static com.rapiddweller.commons.NumberUtil.*;
+import static com.rapiddweller.common.NumberUtil.*;
 
 /**
  * {@link Sequence} implementation for a distribution that creates the bit-reverses (r) 

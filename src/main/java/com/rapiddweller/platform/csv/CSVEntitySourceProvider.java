@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.factory.DataSourceProvider;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntitySource;
-import com.rapiddweller.commons.Converter;
+import com.rapiddweller.common.Converter;
 
 /**
  * {@link EntitySource} implementation which creates {@link Iterable}s that iterate through CSV files.<br/><br/>

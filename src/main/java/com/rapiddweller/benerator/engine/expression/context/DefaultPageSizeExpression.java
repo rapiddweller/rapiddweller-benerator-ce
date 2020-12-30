@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.engine.expression.context;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.commons.Context;
+import com.rapiddweller.common.Context;
 import com.rapiddweller.script.expression.DynamicExpression;
 
 /**

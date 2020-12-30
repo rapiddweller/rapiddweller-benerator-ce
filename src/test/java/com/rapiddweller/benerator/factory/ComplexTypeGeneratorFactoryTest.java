@@ -33,7 +33,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.test.PersonSource;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.collection.ObjectCounter;
+import com.rapiddweller.common.collection.ObjectCounter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.InstanceDescriptor;

@@ -36,8 +36,8 @@ import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.AbstractGenerator;
 import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.benerator.util.WrapperProvider;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ProgrammerError;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ProgrammerError;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

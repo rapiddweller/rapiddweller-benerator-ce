@@ -26,7 +26,7 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.operation.*;
+import com.rapiddweller.common.operation.*;
 import com.rapiddweller.script.PrimitiveType;
 
 /**

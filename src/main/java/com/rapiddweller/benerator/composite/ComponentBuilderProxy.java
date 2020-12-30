@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.engine.AbstractScopedLifeCycleHolder;
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.commons.Assert;
+import com.rapiddweller.common.Assert;
 
 /**
  * Proxy class for a {@link ComponentBuilder}.<br/><br/>

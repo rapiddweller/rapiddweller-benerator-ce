@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.util.UnsafeGenerator;
-import com.rapiddweller.commons.Accessor;
+import com.rapiddweller.common.Accessor;
 
 /**
  * Returns the results of an accessor that is applied on a constant provider object.<br/>

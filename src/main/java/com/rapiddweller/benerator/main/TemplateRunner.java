@@ -33,14 +33,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rapiddweller.benerator.template.TemplateInputReader;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.context.DefaultContext;
-import com.rapiddweller.commons.ui.ConsoleInfoPrinter;
-import com.rapiddweller.formats.script.Script;
-import com.rapiddweller.formats.script.freemarker.FreeMarkerScriptFactory;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.context.DefaultContext;
+import com.rapiddweller.common.ui.ConsoleInfoPrinter;
+import com.rapiddweller.format.script.Script;
+import com.rapiddweller.format.script.freemarker.FreeMarkerScriptFactory;
 
 /**
  * Anonymizes XML files homogeneously based on generator and XPath definitions in an Excel sheet.<br/><br/>

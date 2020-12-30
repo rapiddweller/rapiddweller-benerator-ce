@@ -29,7 +29,7 @@ package shop;
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.consumer.ConsumerProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 

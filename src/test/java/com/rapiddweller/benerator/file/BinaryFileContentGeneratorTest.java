@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Arrays;
 
-import com.rapiddweller.commons.ArrayFormat;
+import com.rapiddweller.common.ArrayFormat;
 import org.junit.Test;
 
 /**

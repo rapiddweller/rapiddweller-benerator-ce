@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator;
 
-import com.rapiddweller.commons.Weighted;
+import com.rapiddweller.common.Weighted;
 
 /**
  * Parent interface for {@link Generator}s that have a weight to be considered when combining Generators.<br/><br/>

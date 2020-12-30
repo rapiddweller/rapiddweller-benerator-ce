@@ -26,8 +26,8 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.MessageHolder;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.MessageHolder;
+import com.rapiddweller.common.StringUtil;
 
 /**
  * Exception which indicates that a required Task is unavailable.<br/><br/>

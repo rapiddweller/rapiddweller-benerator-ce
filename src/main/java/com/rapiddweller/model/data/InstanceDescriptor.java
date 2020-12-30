@@ -27,8 +27,8 @@
 package com.rapiddweller.model.data;
 
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
-import com.rapiddweller.commons.operation.AndOperation;
-import com.rapiddweller.commons.operation.OrOperation;
+import com.rapiddweller.common.operation.AndOperation;
+import com.rapiddweller.common.operation.OrOperation;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.TypeConvertingExpression;

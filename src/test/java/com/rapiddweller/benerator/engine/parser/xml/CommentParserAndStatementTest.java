@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
 
 import com.rapiddweller.benerator.engine.statement.CommentStatement;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.Test;
 import org.w3c.dom.Element;
 

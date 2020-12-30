@@ -34,7 +34,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.factory.EquivalenceGeneratorFactory;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
 import com.rapiddweller.benerator.factory.SourceFactory;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 import com.rapiddweller.model.data.Uniqueness;
 
 /**

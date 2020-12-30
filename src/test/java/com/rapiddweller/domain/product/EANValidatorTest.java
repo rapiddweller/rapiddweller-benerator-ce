@@ -26,7 +26,7 @@
 
 package com.rapiddweller.domain.product;
 
-import com.rapiddweller.commons.validator.SimpleValidatorTest;
+import com.rapiddweller.common.validator.SimpleValidatorTest;
 import org.junit.Test;
 
 /**

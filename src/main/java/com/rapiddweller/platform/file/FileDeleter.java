@@ -29,8 +29,8 @@ package com.rapiddweller.platform.file;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.task.AbstractTask;
 import com.rapiddweller.task.TaskResult;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
 
 import java.io.File;
 

@@ -31,7 +31,7 @@ import java.lang.annotation.Annotation;
 import javax.validation.ConstraintValidatorContext;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 import org.junit.Test;
 
 /**

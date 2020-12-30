@@ -32,7 +32,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
-import com.rapiddweller.commons.ArrayUtil;
+import com.rapiddweller.common.ArrayUtil;
 
 /**
  * Assembles the output of a source generator into an array of random length.<br/>

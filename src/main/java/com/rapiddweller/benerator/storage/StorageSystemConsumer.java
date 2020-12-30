@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.storage;
 
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
-import com.rapiddweller.commons.ThreadAware;
+import com.rapiddweller.common.ThreadAware;
 
 /**
  * Stores an Entity in the associated {@link StorageSystem}. It replaces the class SystemProcessor.<br/>

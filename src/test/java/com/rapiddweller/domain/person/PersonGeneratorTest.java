@@ -27,8 +27,8 @@
 package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.domain.address.Country;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;

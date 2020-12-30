@@ -30,8 +30,8 @@ import java.util.Arrays;
 
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.ArrayFormat;
-import com.rapiddweller.commons.ArrayUtil;
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.ArrayUtil;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

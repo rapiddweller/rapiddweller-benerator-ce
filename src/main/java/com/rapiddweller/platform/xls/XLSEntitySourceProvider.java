@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.factory.DataSourceProvider;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntitySource;
-import com.rapiddweller.commons.Converter;
+import com.rapiddweller.common.Converter;
 
 /**
  * {@link DataSourceProvider} implementation which creates XLS entity sources.<br/><br/>

@@ -28,8 +28,8 @@ package com.rapiddweller.platform.db;
 
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.ConverterManager;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.ConverterManager;
 
 /**
  * Generates {@link Long} values based on a database query.<br/>

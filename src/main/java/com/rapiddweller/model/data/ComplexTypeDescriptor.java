@@ -26,11 +26,11 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.ArrayBuilder;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.collection.ListBasedSet;
-import com.rapiddweller.commons.collection.NamedValueList;
+import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.collection.ListBasedSet;
+import com.rapiddweller.common.collection.NamedValueList;
 
 import java.util.ArrayList;
 import java.util.Collection;
