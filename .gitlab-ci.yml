@@ -108,6 +108,13 @@ deploy:jdk-11:
     - chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
     - benerator --version
 
+E2ET:script:
+  <<: *e2et-preparation
+  script:
+    - cd $ARTIFACT_FULLNAME/demo/script
+    - benerator scriptcode.ben.xml
+    - benerator scriptfile.ben.xml
+
 E2ET:db:
   <<: *e2et-preparation
   script:
