@@ -47,7 +47,7 @@ setup:jdk-11:
 ###################### Test / Build ######################
 
 build:jdk-11:
-  image: maven:3-openjdk-11
+  image: maven:3-adoptopenjdk-11
   needs:
     - job: setup:jdk-11
       artifacts: true
@@ -67,7 +67,7 @@ assembly:jdk-11:
       artifacts: true
     - job: build:jdk-11
       artifacts: true
-  image: maven:3-openjdk-11
+  image: maven:3-adoptopenjdk-11
   stage: distribution
   artifacts:
     paths:
@@ -83,7 +83,7 @@ deploy:jdk-11:
       artifacts: true
     - job: build:jdk-11
       artifacts: true
-  image: maven:3-openjdk-11
+  image: maven:3.6.3-adoptopenjdk-11
   stage: distribution
   script:
     - mvn $MAVEN_CLI_OPTS clean install deploy -Dmaven.test.skip=true
@@ -113,7 +113,7 @@ deploy:jdk-11:
 
 .e2et-preparation-openjdk11: &e2et-preparation-openjdk11
   <<: *e2et-preparation-common
-  image: maven:3-openjdk-11
+  image: maven:3.6.3-adoptopenjdk-11
   before_script:
     - tar -xzf target/$ARTIFACT_FULLNAME-dist.tar.gz
     - export SHELL=/bin/bash
@@ -124,7 +124,7 @@ deploy:jdk-11:
 
 E2ET:helper-scripts:jdk-11:
   <<: *e2et-preparation-common
-  image: maven:3-openjdk-11
+  image: maven:3.6.3-adoptopenjdk-11
   script:
     - bash script/1_install_mvn_dependencies.sh
     - bash script/2_setup_benerator.sh
