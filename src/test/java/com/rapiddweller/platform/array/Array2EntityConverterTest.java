@@ -71,9 +71,9 @@ public class Array2EntityConverterTest extends ModelTest {
     
     public static final class EscalatorMock implements Escalator {
     	
-    	private static LoggerEscalator loggerEscalator = new LoggerEscalator();
+    	private static final LoggerEscalator loggerEscalator = new LoggerEscalator();
 
-    	List<Escalation> escalations = new ArrayList<Escalation>();
+    	final List<Escalation> escalations = new ArrayList<>();
 
 		@Override
 		public void escalate(String message, Object originator, Object cause) {

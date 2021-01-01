@@ -49,7 +49,7 @@ public class PersonSource extends AbstractEntitySource {
 	
 	@Override
 	public DataIterator<Entity> iterator() {
-		return new DataIteratorFromJavaIterator<Entity>(createPersons().iterator(), Entity.class);
+		return new DataIteratorFromJavaIterator<>(createPersons().iterator(), Entity.class);
 	}
 
 	public List<Entity> createPersons() {

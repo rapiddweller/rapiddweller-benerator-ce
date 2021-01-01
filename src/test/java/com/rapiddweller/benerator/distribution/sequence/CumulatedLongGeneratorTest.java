@@ -40,7 +40,7 @@ import static org.junit.Assert.*;
  */
 public class CumulatedLongGeneratorTest extends GeneratorClassTest {
 
-    private static Logger logger = LogManager.getLogger(CumulatedLongGeneratorTest.class);
+    private static final Logger logger = LogManager.getLogger(CumulatedLongGeneratorTest.class);
 
     public CumulatedLongGeneratorTest() {
         super(CumulatedLongGenerator.class);

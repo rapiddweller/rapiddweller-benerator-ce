@@ -38,7 +38,7 @@ import com.rapiddweller.model.data.Entity;
 
 public class MyGenerator extends UnsafeGenerator<Entity> {
 	
-	private DescriptorProvider descriptorProvider = new DefaultDescriptorProvider(getClass().getName(), new DataModel());
+	private final DescriptorProvider descriptorProvider = new DefaultDescriptorProvider(getClass().getName(), new DataModel());
 	private Locale locale;
 	
 	public Locale getLocale() {

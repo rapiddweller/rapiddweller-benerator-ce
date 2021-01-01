@@ -27,7 +27,6 @@
 package com.rapiddweller.benerator.factory;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNull;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.test.GeneratorTest;
@@ -50,7 +49,7 @@ public class SourceFactoryTest extends GeneratorTest {
         assertEquals("Alice", nextProduct(generator));
         assertEquals("Bob", nextProduct(generator));
         assertEquals("Charly", nextProduct(generator));
-        assertNull(generator.generate(new ProductWrapper<String>()));
+        assertNull(generator.generate(new ProductWrapper<>()));
     }
 
     @Test
@@ -60,11 +59,11 @@ public class SourceFactoryTest extends GeneratorTest {
         generator.init(context);
         assertEqualArrays(new String[] { "Alice", "Bob" }, nextProduct(generator));
         assertEqualArrays(new String[] { "Charly"}, nextProduct(generator));
-        assertNull(generator.generate(new ProductWrapper<String[]>()));
+        assertNull(generator.generate(new ProductWrapper<>()));
     }
 
 	protected <T> T nextProduct(Generator<T> generator) {
-		return generator.generate(new ProductWrapper<T>()).unwrap();
+		return generator.generate(new ProductWrapper<>()).unwrap();
 	}
 
 }

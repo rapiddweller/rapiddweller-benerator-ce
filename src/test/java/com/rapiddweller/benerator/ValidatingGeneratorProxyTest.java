@@ -45,8 +45,8 @@ public class ValidatingGeneratorProxyTest {
 
 	@Test
     public void testValid() {
-        Generator<?> generator = new ValidatingGeneratorProxy<Integer>(
-                new ConstantGenerator<Integer>(1),
+        Generator<?> generator = new ValidatingGeneratorProxy<>(
+                new ConstantGenerator<>(1),
                 new MockValidator(true));
         for (int i = 0; i < 10; i++)
         	GeneratorUtil.generateNullable(generator);
@@ -54,8 +54,8 @@ public class ValidatingGeneratorProxyTest {
 
 	@Test
     public void testInvalid() {
-        Generator<?> generator = new ValidatingGeneratorProxy<Integer>(
-                new ConstantGenerator<Integer>(1),
+        Generator<?> generator = new ValidatingGeneratorProxy<>(
+                new ConstantGenerator<>(1),
                 new MockValidator(false));
         try {
             GeneratorUtil.generateNullable(generator);
@@ -67,7 +67,7 @@ public class ValidatingGeneratorProxyTest {
 
     private static final class MockValidator implements Validator<Integer> {
 
-        private boolean result;
+        private final boolean result;
 
         public MockValidator(boolean result) {
             this.result = result;

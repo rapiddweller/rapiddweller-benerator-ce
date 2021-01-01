@@ -138,7 +138,7 @@ public class DBSystemTest {
 		db.execute("insert into TEST (ID, NAME) values (1, 'Alice')");
 		db.execute("insert into TEST (ID, NAME) values (2, 'Bob')");
 		DefaultBeneratorContext context = new DefaultBeneratorContext();
-        DataContainer<Entity> container = new DataContainer<Entity>();
+        DataContainer<Entity> container = new DataContainer<>();
         
 		// test without selector
 		DataIterator<Entity> iterator = db.queryEntities("TEST", "ID = 1", context).iterator();
@@ -163,7 +163,7 @@ public class DBSystemTest {
         DataSource<Entity> entities = db.queryEntities("TEST", "ID = 1", new DefaultBeneratorContext());
         DataIterator<Entity> iterator = entities.iterator();
         assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), 
-        		iterator.next(new DataContainer<Entity>()).getData());
+        		iterator.next(new DataContainer<>()).getData());
 	}
 	
 	@Test
@@ -175,7 +175,7 @@ public class DBSystemTest {
         DataSource<Entity> entities = db.queryEntities("TEST", "ID = 1", new DefaultBeneratorContext());
         DataIterator<Entity> iterator = entities.iterator();
         assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), 
-        		iterator.next(new DataContainer<Entity>()).getData());
+        		iterator.next(new DataContainer<>()).getData());
 	}
 	
 	@Test
@@ -185,7 +185,7 @@ public class DBSystemTest {
 		Consumer updater = db.updater();
 		// update (1, Alice) to (1, Charly)
         Entity entity1 = new Entity("TEST", db, "ID", 1, "NAME", "Charly");
-        ProductWrapper<Entity> wrapper = new ProductWrapper<Entity>();
+        ProductWrapper<Entity> wrapper = new ProductWrapper<>();
 		updater.startConsuming(wrapper.wrap(entity1));
         updater.finishConsuming(wrapper.wrap(entity1));
 		// update (2, Bob) to (2, Otto)

@@ -46,8 +46,8 @@ import org.junit.Test;
  */
 public class ExponentialDensityIntegralTest extends GeneratorTest {
 
-	private ExponentialDensityIntegral fcn = new ExponentialDensityIntegral(0.5);
-	private BeneratorContext context = new DefaultBeneratorContext();
+	private final ExponentialDensityIntegral fcn = new ExponentialDensityIntegral(0.5);
+	private final BeneratorContext context = new DefaultBeneratorContext();
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateDoubleGenerator_unique() {
@@ -59,7 +59,7 @@ public class ExponentialDensityIntegralTest extends GeneratorTest {
 		Generator<Double> generator = fcn.createNumberGenerator(Double.class, 1., 2., 0.5, false);
 		generator.init(context);
 		int n = 2000;
-		Map<Double, AtomicInteger> counts = super.countProducts(generator, n);
+		Map<Double, AtomicInteger> counts = countProducts(generator, n);
 		assertEquals(3, counts.size());
 		int lastCount = n + 1;
 		for (double d = 1; d <= 2; d += 0.5) {
@@ -71,19 +71,19 @@ public class ExponentialDensityIntegralTest extends GeneratorTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testApply_unique() {
-		Generator<String> source = new SequenceTestGenerator<String>("A", "B");
+		Generator<String> source = new SequenceTestGenerator<>("A", "B");
 		source.init(new DefaultBeneratorContext());
 		fcn.applyTo(source, true);
 	}
 	
 	@Test
 	public void testApply_notUnique() {
-		Generator<String> source = new SequenceTestGenerator<String>("A", "B");
+		Generator<String> source = new SequenceTestGenerator<>("A", "B");
 		source.init(new DefaultBeneratorContext());
 		Generator<String> generator = fcn.applyTo(source, false);
 		generator.init(context);
 		int n = 1000;
-		Map<String, AtomicInteger> counts = super.countProducts(generator, n);
+		Map<String, AtomicInteger> counts = countProducts(generator, n);
 		assertEquals(2, counts.size());
 		assertTrue(counts.get("A").doubleValue() > counts.get("B").doubleValue());
 	}

@@ -46,7 +46,7 @@ public class CSVCellIteratorTest {
 	@Test
     public void test() throws IOException {
         CSVCellIterator iterator = new CSVCellIterator("com/rapiddweller/csv/names-abc.csv", ',', Encodings.UTF_8);
-        DataContainer<String> container = new DataContainer<String>();
+        DataContainer<String> container = new DataContainer<>();
         assertEquals("Alice",  iterator.next(container).getData());
         assertEquals("Bob",    iterator.next(container).getData());
         assertEquals("Charly", iterator.next(container).getData());

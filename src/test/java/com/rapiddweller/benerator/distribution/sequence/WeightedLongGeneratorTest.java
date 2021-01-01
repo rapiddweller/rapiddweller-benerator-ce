@@ -58,7 +58,7 @@ public class WeightedLongGeneratorTest extends GeneratorClassTest {
 
     private void checkUniformDistribution(int min, int max, int granularity,
                                           int iterations, double tolerance, int ... expectedValuesAsInt) {
-        Set<Long> expectedValues = new HashSet<Long>(expectedValuesAsInt.length);
+        Set<Long> expectedValues = new HashSet<>(expectedValuesAsInt.length);
         for (int i : expectedValuesAsInt)
             expectedValues.add((long)i);
         WeightedLongGenerator generator = new WeightedLongGenerator(min, max, granularity);

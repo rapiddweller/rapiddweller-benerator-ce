@@ -44,12 +44,12 @@ import static org.junit.Assert.*;
  */
 public class AttachedWeightSampleGeneratorTest extends GeneratorTest {
 
-    private static Logger logger = LogManager.getLogger(AttachedWeightSampleGeneratorTest.class);
+    private static final Logger logger = LogManager.getLogger(AttachedWeightSampleGeneratorTest.class);
 
     @Test
     public void testInstantiation() throws Exception {
-        new AttachedWeightSampleGenerator<Integer>(Integer.class);
-        new AttachedWeightSampleGenerator<String>(String.class);
+        new AttachedWeightSampleGenerator<>(Integer.class);
+        new AttachedWeightSampleGenerator<>(String.class);
     }
 
     @Test
@@ -57,18 +57,18 @@ public class AttachedWeightSampleGeneratorTest extends GeneratorTest {
     public void testDistribution() throws Exception {
     	// prepare
         WeightedSample<Integer>[] samples = new WeightedSample[] {
-            new WeightedSample<Integer>(0, 0.1),
-            new WeightedSample<Integer>(1, 0.3),
-            new WeightedSample<Integer>(2, 0.6)
+                new WeightedSample<>(0, 0.1),
+                new WeightedSample<>(1, 0.3),
+                new WeightedSample<>(2, 0.6)
         };
-        AttachedWeightSampleGenerator<Integer> g = new AttachedWeightSampleGenerator<Integer>(Integer.class);
+        AttachedWeightSampleGenerator<Integer> g = new AttachedWeightSampleGenerator<>(Integer.class);
         g.setSamples(samples);
         g.init(context);
         // execute
         int n = 10000;
         int[] sampleCount = new int[3];
         for (int i = 0; i < n; i++) {
-            sampleCount[g.generate(new ProductWrapper<Integer>()).unwrap()] ++;
+            sampleCount[g.generate(new ProductWrapper<>()).unwrap()] ++;
         }
         List<WeightedSample<? extends Integer>> samples2 = g.getSamples();
         for (int i = 0; i < sampleCount.length; i++) {

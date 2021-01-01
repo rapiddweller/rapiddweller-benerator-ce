@@ -44,7 +44,7 @@ import static org.junit.Assert.*;
  */
 public class DatasetTest {
     
-    private static Logger logger = LogManager.getLogger(DatasetTest.class);
+    private static final Logger logger = LogManager.getLogger(DatasetTest.class);
     
     private static final String REGION = "com/rapiddweller/dataset/region";
     public static final String TYPE = "test";

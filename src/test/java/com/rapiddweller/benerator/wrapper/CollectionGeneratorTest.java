@@ -52,10 +52,10 @@ public class CollectionGeneratorTest extends GeneratorClassTest {
     @Test
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void testElements() {
-        Generator<Integer> source = new ConstantTestGenerator<Integer>(1);
+        Generator<Integer> source = new ConstantTestGenerator<>(1);
         source.init(context);
 		CollectionGenerator<List, Integer> generator 
-        	= new CollectionGenerator<List, Integer>(List.class, source, 1, 5, SequenceManager.RANDOM_SEQUENCE);
+        	= new CollectionGenerator<>(List.class, source, 1, 5, SequenceManager.RANDOM_SEQUENCE);
         generator.init(context);
         List<Integer> list = GeneratorUtil.generateNonNull(generator);
         checkEqualDistribution(list, 0., CollectionUtil.toSet(1));
@@ -64,12 +64,12 @@ public class CollectionGeneratorTest extends GeneratorClassTest {
     @SuppressWarnings("rawtypes")
 	@Test
     public void testSize() {
-        Generator<Integer> source = new ConstantTestGenerator<Integer>(1);
+        Generator<Integer> source = new ConstantTestGenerator<>(1);
         source.init(context);
 		CollectionGenerator<List, Integer> generator 
-        	= new CollectionGenerator<List, Integer>(List.class, source, 0, 3, SequenceManager.RANDOM_SEQUENCE);
+        	= new CollectionGenerator<>(List.class, source, 0, 3, SequenceManager.RANDOM_SEQUENCE);
         generator.init(context);
-        ObjectCounter<Integer> counter = new ObjectCounter<Integer>(4);
+        ObjectCounter<Integer> counter = new ObjectCounter<>(4);
         for (int i = 0; i < 5000; i++)
             counter.count(GeneratorUtil.generateNonNull(generator).size());
         checkEqualDistribution(counter, 0.1, CollectionUtil.toSet(0, 1, 2, 3));

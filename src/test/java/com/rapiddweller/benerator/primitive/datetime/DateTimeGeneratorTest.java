@@ -45,7 +45,7 @@ import static org.junit.Assert.*;
  */
 public class DateTimeGeneratorTest extends GeneratorClassTest {
 	
-	DateArithmetic arithmetic = new DateArithmetic();
+	final DateArithmetic arithmetic = new DateArithmetic();
 	
     public DateTimeGeneratorTest() {
 	    super(DateTimeGenerator.class);

@@ -43,7 +43,7 @@ import org.junit.Test;
  */
 public class CustomWeightFunctionIntegrationTest extends BeneratorIntegrationTest {
 
-	String xml = 
+	final String xml =
 		"<generate type='entity' count='1000' consumer='cons'>" +
 		"	<attribute name='c' values=\"'a', 'b', 'c'\" " +
 				"distribution='new " + StandardWeightingFunction.class.getName() + "(50,30,20)' />" +

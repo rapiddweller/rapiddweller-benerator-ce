@@ -44,7 +44,6 @@ import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link CSVEntityExporter}.<br/>
@@ -249,13 +248,10 @@ public class CSVEntityExporterTest extends GeneratorTest {
 					DEFAULT_FILE.getAbsolutePath(), type);
 			final Entity entity = new Entity(type, "a", "0123456789", "b", "5555555555", "c", "9876543210");
 			ExecutorService service = Executors.newCachedThreadPool();
-			Runnable runner = new Runnable() {
-				@Override
-				public void run() {
-					for (int i = 0; i < 500; i++)
-						exporter.startProductConsumption(entity);
-					exporter.finishProductConsumption(entity);
-	            }
+			Runnable runner = () -> {
+				for (int i = 0; i < 500; i++)
+					exporter.startProductConsumption(entity);
+				exporter.finishProductConsumption(entity);
 			};
 			for (int i = 0; i < 20; i++)
 				service.execute(runner);

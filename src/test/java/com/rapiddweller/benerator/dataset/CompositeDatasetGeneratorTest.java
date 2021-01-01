@@ -65,19 +65,19 @@ public class CompositeDatasetGeneratorTest extends GeneratorTest {
 
 	@Before
 	public void prepareNumberSets() {
-		one = new AtomicDatasetGenerator<Integer>(new ConstantGenerator<Integer>(1), "num", "one", 1); 
-		two = new AtomicDatasetGenerator<Integer>(new ConstantGenerator<Integer>(2), "num", "two", 1);
+		one = new AtomicDatasetGenerator<>(new ConstantGenerator<>(1), "num", "one", 1);
+		two = new AtomicDatasetGenerator<>(new ConstantGenerator<>(2), "num", "two", 1);
 		
-		small = new CompositeDatasetGenerator<Integer>("num", "small", false);
+		small = new CompositeDatasetGenerator<>("num", "small", false);
 		small.addSubDataset(one, 1);
 		small.addSubDataset(two, 2);
 		
-		ten = new AtomicDatasetGenerator<Integer>(new ConstantGenerator<Integer>(10), "num", "ten", 1);
+		ten = new AtomicDatasetGenerator<>(new ConstantGenerator<>(10), "num", "ten", 1);
 		
-		large = new CompositeDatasetGenerator<Integer>("num", "large", false);
+		large = new CompositeDatasetGenerator<>("num", "large", false);
 		large.addSubDataset(ten, 1);
 
-		any = new CompositeDatasetGenerator<Integer>("num", "any", false);
+		any = new CompositeDatasetGenerator<>("num", "any", false);
 		any.addSubDataset(small, 1);
 		any.addSubDataset(large, 1);	
 		any.init(context);
@@ -115,11 +115,11 @@ public class CompositeDatasetGeneratorTest extends GeneratorTest {
 	public void testGenerateDataset() {
 		assertEquals(1, any.generateForDataset("one").intValue());
 		assertEquals(2, any.generateForDataset("two").intValue());
-		int smallValue = any.generateForDataset("small").intValue();
+		int smallValue = any.generateForDataset("small");
 		assertTrue(smallValue == 1 || smallValue == 2);
 		assertEquals(10, any.generateForDataset("ten").intValue());
 		assertEquals(10, any.generateForDataset("large").intValue());
-		int anyValue = any.generateForDataset("any").intValue();
+		int anyValue = any.generateForDataset("any");
 		assertTrue(anyValue == 1 || anyValue == 2 || anyValue == 10);
 	}
 

@@ -49,7 +49,7 @@ import static org.junit.Assert.*;
  */
 public class CoverageGeneratorFactoryTest extends GeneratorTest {
 	
-	private CoverageGeneratorFactory factory = new CoverageGeneratorFactory();
+	private final CoverageGeneratorFactory factory = new CoverageGeneratorFactory();
 
 	@Test
 	public void testCreateDateGenerator() {

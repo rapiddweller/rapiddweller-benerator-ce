@@ -49,20 +49,16 @@ public class DepartmentNameGeneratorTest extends GeneratorClassTest {
 
 	@Test
 	public void testLocales() {
-		Runnable runner = new Runnable() {
-			@Override
-			@SuppressWarnings("synthetic-access")
-			public void run() {
-				logger.debug("Checking Locale " + Locale.getDefault());
-				DepartmentNameGenerator generator = new DepartmentNameGenerator();
-				generator.init(context);
-				for (int i = 0; i < 100; i++) {
-					String product = generator.generate();
-					logger.debug(product);
-					assertNotNull(product);
-				}
+		Runnable runner = () -> {
+            logger.debug("Checking Locale " + Locale.getDefault());
+            DepartmentNameGenerator generator = new DepartmentNameGenerator();
+            generator.init(context);
+            for (int i = 0; i < 100; i++) {
+                String product = generator.generate();
+                logger.debug(product);
+                assertNotNull(product);
             }
-		};
+};
 		LocaleUtil.runInLocale(Locale.US, runner);
 		LocaleUtil.runInLocale(Locale.GERMAN, runner);
 		LocaleUtil.runInLocale(new Locale("XX"), runner);

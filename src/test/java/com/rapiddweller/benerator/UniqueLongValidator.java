@@ -38,7 +38,7 @@ import com.rapiddweller.common.Validator;
  */
 public class UniqueLongValidator implements Validator<Long> {
 
-	private BitSet bitSet;
+	private final BitSet bitSet;
 	
 	public UniqueLongValidator(int initialCapacity) {
 		bitSet = new BitSet(initialCapacity);

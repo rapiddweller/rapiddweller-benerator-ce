@@ -47,7 +47,7 @@ import static com.rapiddweller.jdbacl.dialect.HSQLUtil.*;
 public class DBSeqHiLoGeneratorTest extends GeneratorTest {
 
     private static final String SEQUENCE_NAME = "seq_id_gen";
-    private static Logger logger = LogManager.getLogger(DBSeqHiLoGeneratorTest.class);
+    private static final Logger logger = LogManager.getLogger(DBSeqHiLoGeneratorTest.class);
 
     private DefaultDBSystem db;
     

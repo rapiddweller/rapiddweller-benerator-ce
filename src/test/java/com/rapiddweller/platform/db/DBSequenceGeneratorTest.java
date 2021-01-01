@@ -44,7 +44,7 @@ import org.junit.Test;
 public class DBSequenceGeneratorTest extends GeneratorTest {
 
 	private DefaultDBSystem db;
-	private String seq = getClass().getSimpleName();
+	private final String seq = getClass().getSimpleName();
 	
 	@Before
 	public void setUpDB() throws SQLException {

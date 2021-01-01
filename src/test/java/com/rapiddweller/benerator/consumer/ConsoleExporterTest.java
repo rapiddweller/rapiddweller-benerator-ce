@@ -99,16 +99,14 @@ public class ConsoleExporterTest extends ModelTest {
 	private static void check(ConsoleExporter exporter, String expectedOut, Object... ins) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		exporter.setOut(new PrintStream(stream));
-		try {
-			for (Object in : ins) {
-				exporter.startProductConsumption(in);
-				exporter.finishProductConsumption(in);
-			}
-			exporter.flush();
-			assertEquals(expectedOut, stream.toString());
-		} finally {
-			exporter.close();
-		}
+        try (exporter) {
+            for (Object in : ins) {
+                exporter.startProductConsumption(in);
+                exporter.finishProductConsumption(in);
+            }
+            exporter.flush();
+            assertEquals(expectedOut, stream.toString());
+        }
 	}
 	
 }

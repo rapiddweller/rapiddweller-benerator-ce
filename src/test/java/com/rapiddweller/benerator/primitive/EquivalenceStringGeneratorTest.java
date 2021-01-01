@@ -41,9 +41,9 @@ public class EquivalenceStringGeneratorTest extends GeneratorTest {
 
 	@Test
 	public void test() {
-		EquivalenceStringGenerator<Character> generator = new EquivalenceStringGenerator<Character>(
-				new SequenceTestGenerator<Character>('a', 'b'),
-				WrapperFactory.asNonNullGenerator(new SequenceTestGenerator<Integer>(1, 3)));
+		EquivalenceStringGenerator<Character> generator = new EquivalenceStringGenerator<>(
+                new SequenceTestGenerator<>('a', 'b'),
+                WrapperFactory.asNonNullGenerator(new SequenceTestGenerator<>(1, 3)));
 		generator.init(context);
 		expectGeneratedSequence(generator, "a", "b", "aaa", "bbb");
 	}

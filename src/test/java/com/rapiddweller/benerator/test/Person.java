@@ -42,7 +42,7 @@ import com.rapiddweller.common.NullSafeComparator;
 
 public class Person {
 	
-	private DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
 	public String name;
 	public Date birthDate;

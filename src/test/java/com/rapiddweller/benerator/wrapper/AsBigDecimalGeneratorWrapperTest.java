@@ -46,9 +46,9 @@ public class AsBigDecimalGeneratorWrapperTest {
 
 	@Test
 	public void testGranularity() {
-		Generator<Double> source = new SequenceTestGenerator<Double>(0.1234, 1.234, 12.34, 123.4, 1234.56);
+		Generator<Double> source = new SequenceTestGenerator<>(0.1234, 1.234, 12.34, 123.4, 1234.56);
 		AsBigDecimalGeneratorWrapper<Double> wrapper 
-			= new AsBigDecimalGeneratorWrapper<Double>(source, BigDecimal.ZERO, new BigDecimal("0.01"));
+			= new AsBigDecimalGeneratorWrapper<>(source, BigDecimal.ZERO, new BigDecimal("0.01"));
 		wrapper.init(new DefaultBeneratorContext());
 		assertEquals(new BigDecimal("0.12"), GeneratorUtil.generateNonNull(wrapper));
 		assertEquals(new BigDecimal("1.23"), GeneratorUtil.generateNonNull(wrapper));

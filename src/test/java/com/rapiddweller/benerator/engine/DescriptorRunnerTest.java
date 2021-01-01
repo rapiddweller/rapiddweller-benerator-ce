@@ -110,7 +110,7 @@ public class DescriptorRunnerTest extends ModelTest {
 	
 	static class MyConsumer extends AbstractConsumer {
 		
-		List<Object> products = new ArrayList<Object>();
+		final List<Object> products = new ArrayList<>();
 
         @Override
 		public void startProductConsumption(Object object) {

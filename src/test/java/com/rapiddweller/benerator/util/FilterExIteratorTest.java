@@ -50,19 +50,19 @@ public class FilterExIteratorTest {
 	public void test() {
 		Context context = new DefaultContext();
 		Expression<Boolean> expression = new IsThreeExpression();
-		DataIterator<Integer> source = new DataIteratorFromJavaIterator<Integer>(
+		DataIterator<Integer> source = new DataIteratorFromJavaIterator<>(
 				CollectionUtil.toList(2, 3, 4).iterator(), Integer.class);
-		FilterExIterator<Integer> iterator = new FilterExIterator<Integer>(source, expression, context);
-		assertEquals(3, iterator.next(new DataContainer<Integer>()).getData().intValue());
-		assertNull(iterator.next(new DataContainer<Integer>()));
+		FilterExIterator<Integer> iterator = new FilterExIterator<>(source, expression, context);
+		assertEquals(3, iterator.next(new DataContainer<>()).getData().intValue());
+		assertNull(iterator.next(new DataContainer<>()));
 	}
 	
-	class IsThreeExpression extends DynamicExpression<Boolean> {
+	static class IsThreeExpression extends DynamicExpression<Boolean> {
 
 		@Override
 		public Boolean evaluate(Context context) {
 			Integer candidateValue = (Integer) context.get("_candidate");
-			return (candidateValue != null && candidateValue.intValue() == 3);
+			return (candidateValue != null && candidateValue == 3);
 		}
 
 	}

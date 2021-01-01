@@ -121,17 +121,18 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 			final BeneratorParseContext pContext) {
 		final boolean looped = AbstractBeneratorDescriptorParser.containsLoop(parentPath);
 		final boolean nested = AbstractBeneratorDescriptorParser.containsGeneratorStatement(parentPath);
-		Expression<Statement> expression = new DynamicExpression<Statement>() {
-			@Override
-			public Statement evaluate(Context context) {
-				return parseGenerate(
-						element, parentPath, pContext, (BeneratorContext) context, !looped, nested);
+		Expression<Statement> expression = new DynamicExpression<>() {
+            @Override
+            public Statement evaluate(Context context) {
+                return parseGenerate(
+                        element, parentPath, pContext, (BeneratorContext) context, !looped, nested);
             }
-			@Override
-			public String toString() {
-				return XMLUtil.formatShort(element);
-			}
-		};
+
+            @Override
+            public String toString() {
+                return XMLUtil.formatShort(element);
+            }
+        };
 		Statement statement = new LazyStatement(expression);
 		statement = new TimedGeneratorStatement(getNameOrType(element), statement, createProfilerPath(parentPath, statement), !looped);
 		return statement;

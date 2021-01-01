@@ -43,9 +43,9 @@ public class LastInstanceDetectorTest extends GeneratorTest {
 
 	@Test
 	public void testLifeCycle() {
-		Generator<Integer> source = new SequenceTestGenerator<Integer>(1, 2);
-		Generator<Integer> generator = initialize(new LastProductDetector<Integer>(source));
-		ProductWrapper<Integer> wrapper = new ProductWrapper<Integer>();
+		Generator<Integer> source = new SequenceTestGenerator<>(1, 2);
+		Generator<Integer> generator = initialize(new LastProductDetector<>(source));
+		ProductWrapper<Integer> wrapper = new ProductWrapper<>();
 		checkSequence(generator, wrapper);
 		generator.reset();
 		checkSequence(generator, wrapper);

@@ -45,11 +45,11 @@ public class UniqueCompositeArrayGeneratorTest extends GeneratorTest {
     @SuppressWarnings("unchecked")
     public void testInteger() {
         Generator<Integer>[] sources = new Generator [] {
-                new SequenceTestGenerator<Integer>(0, 1),
-                new SequenceTestGenerator<Integer>(0, 1),
-                new SequenceTestGenerator<Integer>(0, 1)
+				new SequenceTestGenerator<>(0, 1),
+				new SequenceTestGenerator<>(0, 1),
+				new SequenceTestGenerator<>(0, 1)
         };
-        UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<Integer>(Integer.class, sources);
+        UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<>(Integer.class, sources);
         generator.init(context);
 		expectUniqueProducts(generator,  8).withCeasedAvailability();
     }
@@ -58,11 +58,11 @@ public class UniqueCompositeArrayGeneratorTest extends GeneratorTest {
     @SuppressWarnings("unchecked")
     public void testString() {
         Generator<String>[] sources = new Generator [] {
-            new OneShotGenerator<String>("x"),
-            new SequenceTestGenerator<String>("a", "b"),
-            new OneShotGenerator<String>("x")
+				new OneShotGenerator<>("x"),
+				new SequenceTestGenerator<>("a", "b"),
+				new OneShotGenerator<>("x")
         };
-        UniqueMultiSourceArrayGenerator<String> generator = new UniqueMultiSourceArrayGenerator<String>(String.class, sources);
+        UniqueMultiSourceArrayGenerator<String> generator = new UniqueMultiSourceArrayGenerator<>(String.class, sources);
         generator.init(context);
 		expectUniqueProducts(generator,  2).withCeasedAvailability();
     }
@@ -71,10 +71,10 @@ public class UniqueCompositeArrayGeneratorTest extends GeneratorTest {
     @Test
 	public void testNotNull() {
         Generator<Integer>[] sources = new Generator [] {
-    		new SequenceGenerator<Integer>(Integer.class, 1, 2),
-    		new SequenceGenerator<Integer>(Integer.class, 3, 4)
+				new SequenceGenerator<>(Integer.class, 1, 2),
+				new SequenceGenerator<>(Integer.class, 3, 4)
         };
-        UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<Integer>(Integer.class, sources);
+        UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<>(Integer.class, sources);
 		generator.init(context);
 		expectGeneratedSequence(generator, 
 			new Integer[] { 1, 3 },
@@ -88,10 +88,10 @@ public class UniqueCompositeArrayGeneratorTest extends GeneratorTest {
     @Test
 	public void testNull() {
         Generator<Integer>[] sources = new Generator [] {
-			new SequenceGenerator<Integer>(Integer.class, null, 1),
-			new SequenceGenerator<Integer>(Integer.class, null, 2)
+				new SequenceGenerator<>(Integer.class, null, 1),
+				new SequenceGenerator<>(Integer.class, null, 2)
         };
-		UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<Integer>(
+		UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<>(
 				Integer.class, sources);
 		generator.init(context);
 		expectGeneratedSequence(generator, 
@@ -106,11 +106,11 @@ public class UniqueCompositeArrayGeneratorTest extends GeneratorTest {
 	@Test
 	public void testThreeDigits() {
         Generator<Integer>[] sources = new Generator [] {
-			new SequenceGenerator<Integer>(Integer.class, 1, 2),
-			new SequenceGenerator<Integer>(Integer.class, 3, 4),
-			new SequenceGenerator<Integer>(Integer.class, 5, 6)
+				new SequenceGenerator<>(Integer.class, 1, 2),
+				new SequenceGenerator<>(Integer.class, 3, 4),
+				new SequenceGenerator<>(Integer.class, 5, 6)
         };
-		UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<Integer>(Integer.class, sources);
+		UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<>(Integer.class, sources);
 		generator.init(context);
 		expectGeneratedSequence(generator, 
 			new Integer[] { 1, 3, 5 },

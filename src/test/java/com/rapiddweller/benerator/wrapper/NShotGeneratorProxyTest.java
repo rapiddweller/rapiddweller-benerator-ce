@@ -52,8 +52,8 @@ public class NShotGeneratorProxyTest extends GeneratorTest {
 	}
 
 	private Generator<Character> createAndInitGenerator(int n) {
-	    Generator<Character> source = new SequenceTestGenerator<Character>('A', 'B', 'C', 'D');
-		Generator<Character> generator = new NShotGeneratorProxy<Character>(source, n);
+	    Generator<Character> source = new SequenceTestGenerator<>('A', 'B', 'C', 'D');
+		Generator<Character> generator = new NShotGeneratorProxy<>(source, n);
 		generator.init(context);
 	    return generator;
     }

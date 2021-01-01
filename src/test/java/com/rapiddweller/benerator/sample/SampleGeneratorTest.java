@@ -40,7 +40,7 @@ import static org.junit.Assert.*;
  */
 public class SampleGeneratorTest extends GeneratorClassTest {
 
-    private static Logger logger = LogManager.getLogger(SampleGeneratorTest.class);
+    private static final Logger logger = LogManager.getLogger(SampleGeneratorTest.class);
 
     public SampleGeneratorTest() {
         super(SampleGenerator.class);
@@ -49,7 +49,7 @@ public class SampleGeneratorTest extends GeneratorClassTest {
     @Test
     public void testDistribution() throws Exception {
         Integer[] samples = new Integer[] { 0, 1, 2 };
-        SampleGenerator<Integer> generator = new SampleGenerator<Integer>(Integer.class);
+        SampleGenerator<Integer> generator = new SampleGenerator<>(Integer.class);
         generator.setValues(samples);
         generator.init(context);
         int n = 10000;
@@ -70,7 +70,7 @@ public class SampleGeneratorTest extends GeneratorClassTest {
     @Test
     public void testBigSet() {
     	// init generator
-        SampleGenerator<Integer> generator = new SampleGenerator<Integer>(Integer.class);
+        SampleGenerator<Integer> generator = new SampleGenerator<>(Integer.class);
         for (int i = 0; i < 200000; i++)
         	generator.addValue(i % 100);
         generator.init(context);

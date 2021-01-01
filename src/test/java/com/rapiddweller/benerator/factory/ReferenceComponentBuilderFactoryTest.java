@@ -152,7 +152,7 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
 	@SuppressWarnings({ "null", "rawtypes" })
     public void testSingleRef() {
 		ReferenceDescriptor ref = createTargetTypeDescriptor("ref", "Person", "Storage");
-		ref.setCount(new ConstantExpression<Long>(1L));
+		ref.setCount(new ConstantExpression<>(1L));
 		ComponentBuilder generator = createAndInitBuilder(ref);
 		assertTrue(generator != null);
 		Entity entity = createPersonEntity();
@@ -165,7 +165,7 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
 	@SuppressWarnings({ "null", "rawtypes" })
     public void testMultiRef() {
 		ReferenceDescriptor ref = createTargetTypeDescriptor("ref", "Person", "Storage");
-		ref.setCount(new ConstantExpression<Long>(2L));
+		ref.setCount(new ConstantExpression<>(2L));
 		ComponentBuilder builder = createAndInitBuilder(ref);
 		assertTrue(builder != null);
 		Entity entity = createPersonEntity();
@@ -231,9 +231,9 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
 
         @Override
 		public DataSource<?> queryEntityIds(String entityName, String selector, Context context) {
-			DataSource<String> source = 
-				new DataSourceFromIterable<String>(CollectionUtil.toList("Alice", "Bob"), String.class);
-			return new DataSourceProxy<String>(source);
+			DataSource<String> source =
+                    new DataSourceFromIterable<>(CollectionUtil.toList("Alice", "Bob"), String.class);
+			return new DataSourceProxy<>(source);
 		}
 
 		@Override

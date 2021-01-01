@@ -59,14 +59,14 @@ public class SequencedCSVSampleGeneratorTest extends GeneratorClassTest {
     private static final String DATE_FILE_PATH = "com/rapiddweller/benerator/csv/dates.csv";
     private static final String BIG_FILE_NAME = "many_dates.csv";
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
     @Test
     public void testSmallSet() throws ParseException {
     	// prepare
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        ParseFormatConverter<Date> converter = new ParseFormatConverter<Date>(Date.class, format, false);
-        SequencedCSVSampleGenerator<Date> generator = new SequencedCSVSampleGenerator<Date>(DATE_FILE_PATH, converter);
+        ParseFormatConverter<Date> converter = new ParseFormatConverter<>(Date.class, format, false);
+        SequencedCSVSampleGenerator<Date> generator = new SequencedCSVSampleGenerator<>(DATE_FILE_PATH, converter);
         generator.init(context);
         // test
         List<Date> expectedDates = CollectionUtil.toList(sdf.parse("01.02.2003"), sdf.parse("02.02.2003"), sdf.parse("03.02.2003"));
@@ -92,7 +92,7 @@ public class SequencedCSVSampleGeneratorTest extends GeneratorClassTest {
 	    	Converter<String, Integer> converter = ConverterManager.getInstance().createConverter(
 	    			String.class, Integer.class);
 	        SequencedCSVSampleGenerator<Integer> generator 
-	        	= new SequencedCSVSampleGenerator<Integer>(BIG_FILE_NAME, converter);
+	        	= new SequencedCSVSampleGenerator<>(BIG_FILE_NAME, converter);
 	        generator.init(context);
 	        for (int i = 0; i < 1000; i++) {
 	            int product = GeneratorUtil.generateNonNull(generator);

@@ -62,7 +62,7 @@ public class CharacterGeneratorTest extends GeneratorClassTest {
 
     @Test
     public void testLocale() throws Exception {
-        HashSet<Character> expectedSet = new HashSet<Character>();
+        HashSet<Character> expectedSet = new HashSet<>();
         for (char c = 'A'; c <= 'Z'; c++)
             expectedSet.add(c);
         for (char c = 'a'; c <= 'z'; c++)

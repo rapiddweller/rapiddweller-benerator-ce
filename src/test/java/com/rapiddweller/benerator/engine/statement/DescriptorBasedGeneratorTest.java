@@ -27,7 +27,6 @@
 package com.rapiddweller.benerator.engine.statement;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.DescriptorBasedGenerator;

@@ -63,9 +63,9 @@ public class TokenCombinerTest extends GeneratorTest {
 		expectGenerations(combinator, 6, new CombinationValidator(true), new UniqueValidator<String>()).withCeasedAvailability();
 	}
 	
-    public class CombinationValidator implements Validator<String> {
+    public static class CombinationValidator implements Validator<String> {
     	
-    	boolean excludeSeed;
+    	final boolean excludeSeed;
 
     	public CombinationValidator(boolean excludeSeed) {
 	        this.excludeSeed = excludeSeed;

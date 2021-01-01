@@ -105,7 +105,7 @@ public class RegexIntegrationTest extends BeneratorIntegrationTest {
         	"</generate>");
 		List<Entity> products = (List<Entity>) consumer.getProducts();
 		assertEquals(100, products.size());
-		HashSet<String> uniqueTexts = new HashSet<String>();
+		HashSet<String> uniqueTexts = new HashSet<>();
 		for (Entity product : products) {
 			String text = (String) product.get("text");
 			uniqueTexts.add(text);

@@ -42,7 +42,7 @@ import static org.junit.Assert.*;
  */
 public class XMLSchemaNativeTypeProviderTest {
     
-    private XMLNativeTypeDescriptorProvider provider = new XMLNativeTypeDescriptorProvider("xsd", new DataModel());
+    private final XMLNativeTypeDescriptorProvider provider = new XMLNativeTypeDescriptorProvider("xsd", new DataModel());
 
     @Test
     public void testDurationType() {

@@ -51,7 +51,7 @@ public class RepeatSequenceTest extends GeneratorTest {
 
 	@Test
 	public void testApplyTo() {
-        Generator<Integer> source = new SequenceTestGenerator<Integer>(1, 2, 3);
+        Generator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
 		RepeatSequence sequence = createSequence122333();
 		Generator<Integer> generator = sequence.applyTo(source, false);
 		generator.init(context);

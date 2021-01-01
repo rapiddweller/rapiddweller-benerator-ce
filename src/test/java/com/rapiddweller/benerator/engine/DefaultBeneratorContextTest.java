@@ -87,10 +87,10 @@ public class DefaultBeneratorContextTest {
 		BeneratorContext context = new DefaultBeneratorContext(OFF_CLASSPATH_RESOURCES_FOLDER);
 		String resourceUri = context.resolveRelativeUri(XLS_RESOURCE_NAME);
 		XLSLineIterator iterator = new XLSLineIterator(resourceUri);
-		assertArrayEquals(new Object[] { "name", "age" }, iterator.next(new DataContainer<Object[]>()).getData());
-		assertArrayEquals(new Object[] { "Alice", 23L }, iterator.next(new DataContainer<Object[]>()).getData());
-		assertArrayEquals(new Object[] { "Bob", 34L }, iterator.next(new DataContainer<Object[]>()).getData());
-		assertNull(iterator.next(new DataContainer<Object[]>()));
+		assertArrayEquals(new Object[] { "name", "age" }, iterator.next(new DataContainer<>()).getData());
+		assertArrayEquals(new Object[] { "Alice", 23L }, iterator.next(new DataContainer<>()).getData());
+		assertArrayEquals(new Object[] { "Bob", 34L }, iterator.next(new DataContainer<>()).getData());
+		assertNull(iterator.next(new DataContainer<>()));
 		context.close();
 	}
 	

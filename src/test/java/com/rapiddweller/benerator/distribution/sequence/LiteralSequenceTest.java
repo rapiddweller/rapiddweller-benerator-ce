@@ -57,7 +57,7 @@ public class LiteralSequenceTest extends GeneratorTest {
 
 	@Test
 	public void testApply() {
-		Generator<String> source = new SequenceTestGenerator<String>("A", "B", "C", "D");
+		Generator<String> source = new SequenceTestGenerator<>("A", "B", "C", "D");
 		LiteralSequence sequence = new LiteralSequence("1, 3");
 		Generator<String> generator = sequence.applyTo(source, false);
 		generator.init(context);

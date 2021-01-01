@@ -42,9 +42,9 @@ public class MessageGeneratorTest {
 
 	@Test
 	public void test() {
-		MessageGenerator generator = new MessageGenerator("Hello {0}{1}", 
-				new ConstantTestGenerator<String>("World"),
-				new ConstantTestGenerator<String>("!"));
+		MessageGenerator generator = new MessageGenerator("Hello {0}{1}",
+                new ConstantTestGenerator<>("World"),
+                new ConstantTestGenerator<>("!"));
 		init(generator);
 		assertEquals("Hello World!", generator.generate());
 		close(generator);

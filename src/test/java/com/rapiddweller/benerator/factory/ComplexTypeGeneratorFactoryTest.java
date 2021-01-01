@@ -129,7 +129,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
 		context.set("ottos_age", "89");
 		generator.init(context);
 		expectGeneratedSet(generator, 20, alice, otto).withContinuedAvailability();
-		ObjectCounter<Entity> counter = new ObjectCounter<Entity>(2);
+		ObjectCounter<Entity> counter = new ObjectCounter<>(2);
 		int n = 1000;
 		for (int i = 0; i < n; i++)
 			counter.count(GeneratorUtil.generateNonNull(generator));

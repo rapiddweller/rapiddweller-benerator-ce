@@ -77,7 +77,7 @@ public class SettingParserAndStatementTest extends BeneratorIntegrationTest {
 	
 	@Test
 	public void testSource() throws Exception {
-		context.setGlobal("myGen", new ConstantGenerator<String>("myProd"));
+		context.setGlobal("myGen", new ConstantGenerator<>("myProd"));
 		parseAndExecute("<setting name='globalProp' source='myGen' />");
 		assertEquals("myProd", context.get("globalProp"));
 	}

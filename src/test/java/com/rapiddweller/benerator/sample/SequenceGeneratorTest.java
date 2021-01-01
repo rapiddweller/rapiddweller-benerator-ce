@@ -39,7 +39,7 @@ public class SequenceGeneratorTest extends GeneratorTest {
 
 	@Test
 	public void test() {
-		SequenceGenerator<Integer> generator = new SequenceGenerator<Integer>(Integer.class, 1, 2, 3);
+		SequenceGenerator<Integer> generator = new SequenceGenerator<>(Integer.class, 1, 2, 3);
 		expectGeneratedSequence(generator, 1, 2, 3).withCeasedAvailability();
 	}
 }

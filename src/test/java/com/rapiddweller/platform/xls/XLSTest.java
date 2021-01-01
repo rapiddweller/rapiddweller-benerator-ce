@@ -27,7 +27,6 @@
 package com.rapiddweller.platform.xls;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNull;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -70,7 +69,7 @@ public abstract class XLSTest extends IteratorTestCase {
 
     protected static final ComplexTypeDescriptor XYZ_DESCRIPTOR;
     
-    protected static DefaultDescriptorProvider p = new DefaultDescriptorProvider("Test", new DataModel());
+    protected static final DefaultDescriptorProvider p = new DefaultDescriptorProvider("Test", new DataModel());
     
 	static {
 		XYZ_DESCRIPTOR = new ComplexTypeDescriptor("XYZ", p);
@@ -167,7 +166,7 @@ public abstract class XLSTest extends IteratorTestCase {
     }
 
 	protected static void assertUnavailable(DataIterator<Entity> iterator) {
-		assertNull(iterator.next(new DataContainer<Entity>()));
+		assertNull(iterator.next(new DataContainer<>()));
 	}
     
 }

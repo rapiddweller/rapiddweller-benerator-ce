@@ -53,7 +53,7 @@ public class CSVEntityIteratorTest extends AbstractEntityIteratorTest {
     public void testWithHeader() throws Exception {
     	ComplexTypeDescriptor countryDescriptor = createCountryDescriptor();
     	ComplexTypeDescriptor personDescriptor = createPersonDescriptor(countryDescriptor);
-    	CSVEntityIterator iterator = new CSVEntityIterator(PLAIN_URI, personDescriptor, new NoOpConverter<String>(), ',', Encodings.UTF_8);
+    	CSVEntityIterator iterator = new CSVEntityIterator(PLAIN_URI, personDescriptor, new NoOpConverter<>(), ',', Encodings.UTF_8);
         assertEquals(new Entity(personDescriptor, "name", "Alice", "age", 23), nextOf(iterator));
         assertEquals(new Entity(personDescriptor, "name", "Bob", "age", 34), nextOf(iterator));
         assertEquals(new Entity(personDescriptor, "name", "Charly", "age", 45), nextOf(iterator));
@@ -64,7 +64,7 @@ public class CSVEntityIteratorTest extends AbstractEntityIteratorTest {
     public void testWithoutHeader() throws Exception {
     	ComplexTypeDescriptor countryDescriptor = createCountryDescriptor();
     	ComplexTypeDescriptor personDescriptor = createPersonDescriptor(countryDescriptor);
-    	CSVEntityIterator iterator = new CSVEntityIterator(PLAIN_URI, personDescriptor, new NoOpConverter<String>(), ',', Encodings.UTF_8);
+    	CSVEntityIterator iterator = new CSVEntityIterator(PLAIN_URI, personDescriptor, new NoOpConverter<>(), ',', Encodings.UTF_8);
     	iterator.setColumns(new String[] { "c1", "c2" });
         assertEquals(new Entity(personDescriptor, "c1", "name", "c2", "age"), nextOf(iterator));
         assertEquals(new Entity(personDescriptor, "c1", "Alice", "c2", "23"), nextOf(iterator));

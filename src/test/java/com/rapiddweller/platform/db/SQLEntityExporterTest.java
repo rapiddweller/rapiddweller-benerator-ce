@@ -53,14 +53,12 @@ public class SQLEntityExporterTest extends ModelTest {
 
 	@Test(expected = ConfigurationError.class)
 	public void testWithoutDialect() throws Exception {
-		SQLEntityExporter exporter = new SQLEntityExporter(FILENAME);
-		try {
-			Entity alice = createEntity("Person", "name", "Alice", "birthDate", TimeUtil.date(1987, 11, 31), "score", 23);
-			exporter.startProductConsumption(alice);
-		} finally {
-			exporter.close();
-			FileUtil.deleteIfExists(new File(FILENAME));
-		}
+        try (SQLEntityExporter exporter = new SQLEntityExporter(FILENAME)) {
+            Entity alice = createEntity("Person", "name", "Alice", "birthDate", TimeUtil.date(1987, 11, 31), "score", 23);
+            exporter.startProductConsumption(alice);
+        } finally {
+            FileUtil.deleteIfExists(new File(FILENAME));
+        }
 	}
 	
 	@Test

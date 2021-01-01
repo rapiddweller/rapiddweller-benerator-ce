@@ -49,7 +49,6 @@ import com.rapiddweller.benerator.wrapper.AsByteGeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ByteArrayGenerator;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.common.Condition;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;

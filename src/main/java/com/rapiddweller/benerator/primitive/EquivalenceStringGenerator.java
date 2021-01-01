@@ -94,8 +94,7 @@ public class EquivalenceStringGenerator<E> extends CardinalGenerator<E, String> 
 
 	private String createString(E part, Integer length) {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < length; i++)
-			builder.append(part);
+        builder.append(String.valueOf(part).repeat(Math.max(0, length)));
 		return builder.toString();
 	}
 

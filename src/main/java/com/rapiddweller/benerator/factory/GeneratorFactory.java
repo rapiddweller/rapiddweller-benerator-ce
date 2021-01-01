@@ -206,10 +206,7 @@ public abstract class GeneratorFactory {
 			int regexMinLength = regex.minLength();
 			Integer regexMaxLength = regex.maxLength();
 	        if (maxLength == null) {
-	            if (regexMaxLength != null)
-	            	maxLength = regexMaxLength;
-	            else
-	            	maxLength = Math.max(regexMinLength * 2, defaultsProvider.defaultMaxLength());
+                maxLength = Objects.requireNonNullElseGet(regexMaxLength, () -> Math.max(regexMinLength * 2, defaultsProvider.defaultMaxLength()));
 	        }
 	        
 	        if (minLength == null)

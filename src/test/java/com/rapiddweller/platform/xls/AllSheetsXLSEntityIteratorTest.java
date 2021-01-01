@@ -69,33 +69,29 @@ public class AllSheetsXLSEntityIteratorTest extends XLSTest {
 	@Test
 	public void testImportAllSheets() throws Exception {
 		AllSheetsXLSEntityIterator iterator = new AllSheetsXLSEntityIterator(IMPORT_XLS);
-		iterator.setContext(context);
-		try {
+		try (iterator) {
+			iterator.setContext(context);
 			assertProduct(PROD1, DataUtil.nextNotNullData(iterator));
 			Entity next = DataUtil.nextNotNullData(iterator);
 			assertProduct(PROD2, next);
 			assertPerson(PERSON1, DataUtil.nextNotNullData(iterator));
-			assertNull(iterator.next(new DataContainer<Entity>()));
-		} finally {
-			iterator.close();
+			assertNull(iterator.next(new DataContainer<>()));
 		}
 	}
 	
 	@Test
 	public void testImportPredefinedEntityType() throws Exception {
 		ComplexTypeDescriptor entityDescriptor = new ComplexTypeDescriptor("XYZ", context.getLocalDescriptorProvider());
-		AllSheetsXLSEntityIterator iterator = new AllSheetsXLSEntityIterator(IMPORT_XLS, new NoOpConverter<String>(), entityDescriptor, false);
-		iterator.setContext(context);
-		try {
+		AllSheetsXLSEntityIterator iterator = new AllSheetsXLSEntityIterator(IMPORT_XLS, new NoOpConverter<>(), entityDescriptor, false);
+		try (iterator) {
+			iterator.setContext(context);
 			assertXYZ(XYZ11, DataUtil.nextNotNullData(iterator));
 			Entity next = DataUtil.nextNotNullData(iterator);
 			assertXYZ(XYZ12, next);
 			Entity entity = DataUtil.nextNotNullData(iterator);
 			assertEquals("XYZ", entity.type());
-			assertNull(iterator.next(new DataContainer<Entity>()));
+			assertNull(iterator.next(new DataContainer<>()));
 			assertEquals("Alice", entity.get("name"));
-		} finally {
-			iterator.close();
 		}
 	}
 	
@@ -124,13 +120,12 @@ public class AllSheetsXLSEntityIteratorTest extends XLSTest {
 		
 		// test import
 		AllSheetsXLSEntityIterator iterator = new AllSheetsXLSEntityIterator(PRODUCT_XLS);
-		iterator.setContext(context);
-		try {
+		try (iterator) {
+			iterator.setContext(context);
 			assertProduct(PROD1, DataUtil.nextNotNullData(iterator));
 			assertProduct(PROD2, DataUtil.nextNotNullData(iterator));
-			assertNull(iterator.next(new DataContainer<Entity>()));
+			assertNull(iterator.next(new DataContainer<>()));
 		} finally {
-			iterator.close();
 			context.getDataModel().removeDescriptorProvider("test");
 		}
 	}
@@ -139,14 +134,12 @@ public class AllSheetsXLSEntityIteratorTest extends XLSTest {
 	public void testColumnIteration() throws Exception {
 		// test import
 		AllSheetsXLSEntityIterator iterator = new AllSheetsXLSEntityIterator(PRODUCT_COLUMNS_XLS);
-		iterator.setContext(context);
-		iterator.setRowBased(false);
-		try {
+		try (iterator) {
+			iterator.setContext(context);
+			iterator.setRowBased(false);
 			assertProduct(PROD1, DataUtil.nextNotNullData(iterator));
 			assertProduct(PROD2, DataUtil.nextNotNullData(iterator));
-			assertNull(iterator.next(new DataContainer<Entity>()));
-		} finally {
-			iterator.close();
+			assertNull(iterator.next(new DataContainer<>()));
 		}
 	}
 	

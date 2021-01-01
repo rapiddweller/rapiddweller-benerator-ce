@@ -69,7 +69,7 @@ public class ArrayTypeGeneratorFactoryTest extends GeneratorTest {
 	static final Object[] INT23 = new Object[] { 2, 3 };
 	static final Object[] INT24 = new Object[] { 2, 4 };
 
-	ArrayTypeGeneratorFactory arrayTypeGeneratorFactory = new ArrayTypeGeneratorFactory();
+	final ArrayTypeGeneratorFactory arrayTypeGeneratorFactory = new ArrayTypeGeneratorFactory();
 	
 	@Before
 	public void setup() {
@@ -109,8 +109,8 @@ public class ArrayTypeGeneratorFactoryTest extends GeneratorTest {
 		descriptor.setDataset("DACH");
 		Generator<Object[]> generator = (Generator<Object[]>) arrayTypeGeneratorFactory.createGenerator(
 				descriptor, "testXlsDataset", false, Uniqueness.SIMPLE, context);
-		Generator<String> g = WrapperFactory.applyConverter(generator, 
-				new ArrayElementExtractor<String>(String.class, 0));
+		Generator<String> g = WrapperFactory.applyConverter(generator,
+				new ArrayElementExtractor<>(String.class, 0));
 		generator.init(context);
 		expectUniquelyGeneratedSet(g, "de", "at", "ch");
 		assertUnavailable(generator);
@@ -139,7 +139,7 @@ public class ArrayTypeGeneratorFactoryTest extends GeneratorTest {
 		descriptor.setDataset("DACH");
 		Generator<Object[]> generator = (Generator<Object[]>) arrayTypeGeneratorFactory.createGenerator(
 				descriptor, "testCsvDataset", false, Uniqueness.SIMPLE, context);
-		Generator<String> g = WrapperFactory.applyConverter(generator, new ArrayElementExtractor<String>(
+		Generator<String> g = WrapperFactory.applyConverter(generator, new ArrayElementExtractor<>(
 				String.class, 0));
 		generator.init(context);
 		expectUniquelyGeneratedSet(g, "de", "at", "ch");
@@ -269,12 +269,12 @@ public class ArrayTypeGeneratorFactoryTest extends GeneratorTest {
 		ArrayTypeDescriptor arrayTypeDescriptor = createArrayType("MyArray");
 		
 		// create descriptor
-		context.set("gen0", new SequenceTestGenerator<Integer>(1, 2));
+		context.set("gen0", new SequenceTestGenerator<>(1, 2));
 		ArrayElementDescriptor e0 = createArrayElement(0, "int");
 		((SimpleTypeDescriptor) e0.getLocalType(false)).setGenerator("gen0");
 		arrayTypeDescriptor.addElement(e0);
 		
-		context.set("gen1", new SequenceTestGenerator<Integer>(3, 4));
+		context.set("gen1", new SequenceTestGenerator<>(3, 4));
 		ArrayElementDescriptor e1 = createArrayElement(1, "int");
 		((SimpleTypeDescriptor) e1.getLocalType(false)).setGenerator("gen1");
 		arrayTypeDescriptor.addElement(e1);

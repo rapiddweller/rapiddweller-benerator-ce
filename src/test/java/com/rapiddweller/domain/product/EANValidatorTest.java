@@ -41,10 +41,10 @@ public class EANValidatorTest extends SimpleValidatorTest<String> {
 	    super(new EANValidator());
     }
 
-	private static String EAN_VOLVIC           = "3057640182693";
-    private static String ISBN_ISM2            = "9783981304602";
-    private static String EAN_INVALID_CHECKSUM = "3057640182692";
-    private static String EAN_INVALID_LENGTH   = "3057640182";
+	private static final String EAN_VOLVIC           = "3057640182693";
+    private static final String ISBN_ISM2            = "9783981304602";
+    private static final String EAN_INVALID_CHECKSUM = "3057640182692";
+    private static final String EAN_INVALID_LENGTH   = "3057640182";
 
     @Test
     public void testValidEAN() {

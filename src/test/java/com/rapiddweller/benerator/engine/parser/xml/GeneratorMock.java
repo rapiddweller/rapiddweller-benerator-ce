@@ -42,7 +42,7 @@ import com.rapiddweller.model.data.Entity;
  */
 public class GeneratorMock extends UnsafeGenerator<Entity> {
 
-	private BeneratorContext context;
+	private final BeneratorContext context;
 	
 	public GeneratorMock(BeneratorContext context) {
 		this.context = context;

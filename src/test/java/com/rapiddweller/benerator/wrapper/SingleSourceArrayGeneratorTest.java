@@ -54,8 +54,8 @@ public class SingleSourceArrayGeneratorTest extends GeneratorTest {
     // helpers ---------------------------------------------------------------------------------------------------------
 
     private void check(int minLength, int maxLength) {
-        Generator<String> source = new SampleGenerator<String>(String.class, "Alice", "Bob");
-        SingleSourceArrayGenerator<String, String[]> generator = new SingleSourceArrayGenerator<String, String[]>(
+        Generator<String> source = new SampleGenerator<>(String.class, "Alice", "Bob");
+        SingleSourceArrayGenerator<String, String[]> generator = new SingleSourceArrayGenerator<>(
                 source, String.class, minLength, maxLength, SequenceManager.RANDOM_SEQUENCE);
         generator.init(context);
         for (int i = 0; i < 100; i++) {

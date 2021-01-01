@@ -91,7 +91,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 		Statement statement = parse("<generate type='dummy' count='3' converter='conv' consumer='cons'/>");
 		ConsumerMock consumer = new ConsumerMock(true);
 		context.setGlobal("cons", consumer);
-		context.setGlobal("conv", new UnsafeConverter<Entity,Entity>(Entity.class, Entity.class) {
+		context.setGlobal("conv", new UnsafeConverter<>(Entity.class, Entity.class) {
 			@Override
 			public Entity convert(Entity sourceValue) {
 				ComplexTypeDescriptor descriptor = sourceValue.descriptor();
@@ -445,12 +445,12 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	
 	@Test
 	public void testIterateWithOffset() throws Exception {
-		Generator<Integer[]> source = new SequenceTestGenerator<Integer[]>(
-				new Integer[] { 1 }, 
-				new Integer[] { 2 }, 
-				new Integer[] { 3 }, 
-				new Integer[] { 4 }, 
-				new Integer[] { 5 });
+		Generator<Integer[]> source = new SequenceTestGenerator<>(
+				new Integer[]{1},
+				new Integer[]{2},
+				new Integer[]{3},
+				new Integer[]{4},
+				new Integer[]{5});
 		context.setGlobal("source", source);
 		Statement statement = parse("<iterate source='source' offset='2' type='array' count='3' consumer='cons' />");
 		ConsumerMock consumer = new ConsumerMock(true, 1);

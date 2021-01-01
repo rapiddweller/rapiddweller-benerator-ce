@@ -62,7 +62,7 @@ public class JSR303ConstraintValidatorMock extends AbstractConstraintValidator<A
 
     @Override
 	public boolean isValid(Integer candidate, ConstraintValidatorContext context) {
-    	return (candidate != null && value == candidate.intValue());
+    	return (candidate != null && value == candidate);
     }
 
 }

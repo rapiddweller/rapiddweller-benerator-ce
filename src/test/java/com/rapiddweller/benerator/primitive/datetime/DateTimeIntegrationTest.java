@@ -72,7 +72,7 @@ public class DateTimeIntegrationTest extends BeneratorIntegrationTest {
         	"  <value type='date' min='2008-09-29' max='2008-10-02' granularity='0000-00-01'/>" +
         	"</generate>");
 		List<Object[]> products = (List<Object[]>) consumer.getProducts();
-		HashSet<Date> usedDates = new HashSet<Date>();
+		HashSet<Date> usedDates = new HashSet<>();
 		for (Object[] product : products) {
 			Date date = (Date) product[0];
 			assertFalse(date.before(MIN_DATE));
@@ -91,7 +91,7 @@ public class DateTimeIntegrationTest extends BeneratorIntegrationTest {
         	"  <value type='date' min='2008-09-29' max='2008-10-02' />" +
         	"</generate>");
 		List<Object[]> products = (List<Object[]>) consumer.getProducts();
-		HashSet<Date> usedDates = new HashSet<Date>();
+		HashSet<Date> usedDates = new HashSet<>();
 		for (Object[] product : products) {
 			Date date = (Date) product[0];
 			assertFalse(date.before(MIN_DATE));
@@ -110,7 +110,7 @@ public class DateTimeIntegrationTest extends BeneratorIntegrationTest {
         	"  <value type='date' min='2008-09-29' />" +
         	"</generate>");
 		List<Object[]> products = (List<Object[]>) consumer.getProducts();
-		HashSet<Date> usedDates = new HashSet<Date>();
+		HashSet<Date> usedDates = new HashSet<>();
 		for (Object[] product : products) {
 			Date date = (Date) product[0];
 			assertFalse(date.before(MIN_DATE));
@@ -128,7 +128,7 @@ public class DateTimeIntegrationTest extends BeneratorIntegrationTest {
         	"  <value type='date' max='2008-10-02' />" +
         	"</generate>");
 		List<Object[]> products = (List<Object[]>) consumer.getProducts();
-		HashSet<Date> usedDates = new HashSet<Date>();
+		HashSet<Date> usedDates = new HashSet<>();
 		for (Object[] product : products) {
 			Date date = (Date) product[0];
 			assertFalse(date.after(MAX_DATE));

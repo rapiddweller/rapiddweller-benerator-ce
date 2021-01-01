@@ -73,14 +73,14 @@ public class BeneratorSubContextTest {
 		DefaultBeneratorSubContext child = (DefaultBeneratorSubContext) parent.createSubContext("sub");
 		
 		// verify access to parent's currentProduct
-		ProductWrapper<Integer> pp = new ProductWrapper<Integer>(11);
+		ProductWrapper<Integer> pp = new ProductWrapper<>(11);
 		parent.setCurrentProduct(pp);
 		assertEquals(pp, parent.getCurrentProduct());
 		assertEquals(pp.unwrap(), parent.get("this"));
 		assertEquals(pp.unwrap(), child.get("top"));
 		
 		// verify access to child's currentProduct
-		ProductWrapper<Integer> cp = new ProductWrapper<Integer>(12);
+		ProductWrapper<Integer> cp = new ProductWrapper<>(12);
 		child.setCurrentProduct(cp);
 		assertEquals(pp, parent.getCurrentProduct());
 		assertEquals(pp.unwrap(), parent.get("this"));

@@ -44,7 +44,7 @@ import org.junit.Test;
  */
 public class InverseProbabilityIntegralTest extends GeneratorTest {
 
-	private Fcn fcn = new Fcn();
+	private final Fcn fcn = new Fcn();
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateDoubleGenerator_unique() {
@@ -64,14 +64,14 @@ public class InverseProbabilityIntegralTest extends GeneratorTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testApply_unique() {
-		Generator<String> source = new SequenceTestGenerator<String>("A", "B");
+		Generator<String> source = new SequenceTestGenerator<>("A", "B");
 		source.init(context);
 		fcn.applyTo(source, true);
 	}
 	
 	@Test
 	public void testApply_notUnique() {
-		Generator<String> source = new SequenceTestGenerator<String>("A", "B");
+		Generator<String> source = new SequenceTestGenerator<>("A", "B");
 		source.init(context);
 		Generator<String> generator = fcn.applyTo(source, false);
 		generator.init(context);

@@ -57,9 +57,9 @@ import static org.junit.Assert.*;
  */
 public class StochasticGeneratorFactoryTest extends GeneratorTest {
 
-    private static Logger logger = LogManager.getLogger(StochasticGeneratorFactoryTest.class);
+    private static final Logger logger = LogManager.getLogger(StochasticGeneratorFactoryTest.class);
     
-    private GeneratorFactory generatorFactory = new StochasticGeneratorFactory();
+    private final GeneratorFactory generatorFactory = new StochasticGeneratorFactory();
 
     // boolean source -----------------------------------------------------------------------------------------------
 
@@ -106,7 +106,7 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     private <T extends Number> void checkNumberGenerator(Class<T> type, T min, T max, T granularity, Sequence sequence) {
         Generator<T> generator = generatorFactory.createNumberGenerator(type, min, true, max, true, granularity, sequence, Uniqueness.NONE);
         generator.init(context);
-        ProductWrapper<T> wrapper = new ProductWrapper<T>();
+        ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (int i = 0; i < 5; i++) {
             T n = generator.generate(wrapper).unwrap();
             assertNotNull("Generator not available: " + generator, n);
@@ -123,7 +123,7 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
         generator.init(context);
         int range = (int)((max.doubleValue() - min.doubleValue() + granularity.doubleValue()) / granularity.doubleValue());
         int[] count = new int[range];
-        ProductWrapper<T> wrapper = new ProductWrapper<T>();
+        ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (int i = 0; i < 1000; i++) {
             T n = generator.generate(wrapper).unwrap();
             double d = n.doubleValue();
@@ -139,7 +139,7 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
 
     @Test
     public void testGetSampleGenerator() {
-        List<Integer> samples = new ArrayList<Integer>();
+        List<Integer> samples = new ArrayList<>();
         for (int i = 0; i < 10; i++)
             samples.add(i);
         Generator<Integer> generator = generatorFactory.createSampleGenerator(samples, Integer.class, false);
@@ -147,9 +147,9 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     }
 
     public void testGetEmptySampleGenerator() {
-        Generator<Integer> generator = generatorFactory.createSampleGenerator(new HashSet<Integer>(), Integer.class, false);
+        Generator<Integer> generator = generatorFactory.createSampleGenerator(new HashSet<>(), Integer.class, false);
 		generator.init(context);
-		assertNull(generator.generate(new ProductWrapper<Integer>()));
+		assertNull(generator.generate(new ProductWrapper<>()));
     }
 
     // date source --------------------------------------------------------------------------------------------------
@@ -192,9 +192,9 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
         Generator<Character> generator = generatorFactory.createCharacterGenerator(null, locale, false);
         generator.init(context);
         List<Character> specialChars;
-        specialChars = new ArrayList<Character>(LocaleUtil.letters(locale));
+        specialChars = new ArrayList<>(LocaleUtil.letters(locale));
         int[] specialCount = new int[specialChars.size()];
-        ProductWrapper<Character> wrapper = new ProductWrapper<Character>();
+        ProductWrapper<Character> wrapper = new ProductWrapper<>();
         for (int i = 0; i < 1000; i++) {
             Character c = generator.generate(wrapper).unwrap();
             int index = specialChars.indexOf(c);
@@ -245,10 +245,10 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
 
     @Test
     public void testGetWeightedSampleGeneratorByValues() {
-        List<WeightedSample<Integer>> samples = new ArrayList<WeightedSample<Integer>>();
+        List<WeightedSample<Integer>> samples = new ArrayList<>();
         int n = 10;
         for (int i = 0; i < n; i++) {
-            WeightedSample<Integer> sample = new WeightedSample<Integer>(i, i * 2. / (n * (n + 1)));
+            WeightedSample<Integer> sample = new WeightedSample<>(i, i * 2. / (n * (n + 1)));
             samples.add(sample);
         }
         Generator<Integer> generator = generatorFactory.createWeightedSampleGenerator(samples, Integer.class);
@@ -261,15 +261,15 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void testGetHeterogenousArrayGenerator() {
         List<String> salutations = Arrays.asList("Hello", "Hi");
-        AttachedWeightSampleGenerator<String> salutationGenerator = new AttachedWeightSampleGenerator<String>(
-        		String.class, salutations);
+        AttachedWeightSampleGenerator<String> salutationGenerator = new AttachedWeightSampleGenerator<>(
+                String.class, salutations);
         List<String> names = Arrays.asList("Alice", "Bob", "Charly");
-        Generator<String> nameGenerator = new AttachedWeightSampleGenerator<String>(String.class, names);
+        Generator<String> nameGenerator = new AttachedWeightSampleGenerator<>(String.class, names);
         Generator[] sources = new Generator[] { salutationGenerator, nameGenerator };
         Generator<Object[]> generator = generatorFactory.createCompositeArrayGenerator(
         		Object.class, sources, Uniqueness.NONE);
         generator.init(context);
-        ProductWrapper<Object[]> wrapper = new ProductWrapper<Object[]>();
+        ProductWrapper<Object[]> wrapper = new ProductWrapper<>();
         for (int i = 0; i < 10; i++) {
 			Object[] array = generator.generate(wrapper).unwrap();
             assertEquals(2, array.length);
@@ -315,7 +315,7 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     private <T> void initAndUseGenerator(Generator<T> generator) {
     	generator.init(context);
         for (int i = 0; i < 5; i++) {
-            T product = generator.generate(new ProductWrapper<T>()).unwrap();
+            T product = generator.generate(new ProductWrapper<>()).unwrap();
         	assertNotNull("Generator unexpectedly invalid: " + generator.toString(), product);
         }
     }
