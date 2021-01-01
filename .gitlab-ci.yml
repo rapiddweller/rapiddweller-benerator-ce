@@ -47,7 +47,7 @@ setup:jdk-11:
 ###################### Test / Build ######################
 
 build:jdk-11:
-  image: maven:3-adoptopenjdk-11
+  image: maven:3-openjdk-11
   needs:
     - job: setup:jdk-11
       artifacts: true
@@ -59,6 +59,18 @@ build:jdk-11:
   script:
     - mvn $MAVEN_CLI_OPTS clean package
 
+###################### Quality ######################
+
+test:helper-scripts:jdk-11:
+  image: maven:3-openjdk-11
+  stage: quality
+  needs:
+    - job: setup:jdk-11
+      artifacts: true
+  script:
+    - bash script/1_install_mvn_dependencies.sh
+    - bash script/2_setup_benerator.sh
+    - bash script/3_execute_demos.sh
 ###################### Assembly and Deploy ######################
 
 assembly:jdk-11:
@@ -67,7 +79,7 @@ assembly:jdk-11:
       artifacts: true
     - job: build:jdk-11
       artifacts: true
-  image: maven:3-adoptopenjdk-11
+  image: maven:3-openjdk-11
   stage: distribution
   artifacts:
     paths:
@@ -83,7 +95,7 @@ deploy:jdk-11:
       artifacts: true
     - job: build:jdk-11
       artifacts: true
-  image: maven:3.6.3-adoptopenjdk-11
+  image: maven:3-openjdk-11
   stage: distribution
   script:
     - mvn $MAVEN_CLI_OPTS clean install deploy -Dmaven.test.skip=true
@@ -113,7 +125,7 @@ deploy:jdk-11:
 
 .e2et-preparation-openjdk11: &e2et-preparation-openjdk11
   <<: *e2et-preparation-common
-  image: maven:3.6.3-adoptopenjdk-11
+  image: maven:3-openjdk-11
   before_script:
     - tar -xzf target/$ARTIFACT_FULLNAME-dist.tar.gz
     - export SHELL=/bin/bash
@@ -121,6 +133,14 @@ deploy:jdk-11:
     - export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
     - chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
     - benerator --version
+
+E2ET:helper-scripts:jdk-11:
+  <<: *e2et-preparation-common
+  image: maven:3-openjdk-11
+  script:
+    - bash script/1_install_mvn_dependencies.sh
+    - bash script/2_setup_benerator.sh
+    - bash script/3_execute_demos.sh
 
 E2ET:script-graalvm11:
   <<: *e2et-preparation-graalvm11
