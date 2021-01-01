@@ -14,7 +14,7 @@ mvn versions:set -DnewVersion="$ARTIFACT_VERSION"
 mvn clean install assembly:single -Dmaven.test.skip=true
 rm -rd ~/"$BENERATOR_NAME"
 tar -xvzf target/"$BENERATOR_NAME"-dist.tar.gz -C ~
-export BENERATOR_HOME=$PWD/"$BENERATOR_NAME"
+export BENERATOR_HOME=~/"$BENERATOR_NAME"
 export PATH=$PATH:~/"$BENERATOR_NAME"/bin
 chmod -R 777 ~/"$BENERATOR_NAME"/bin/
 
