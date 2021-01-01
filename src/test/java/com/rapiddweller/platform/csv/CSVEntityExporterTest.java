@@ -104,7 +104,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 			exporter.setEndWithNewLine(true);
 			exporter.close();
 			assertTrue(DEFAULT_FILE.exists());
-			assertEquals("\r\n".length(), DEFAULT_FILE.length());
+			assertEquals("\n".length(), DEFAULT_FILE.length());
 		} finally {
 			DEFAULT_FILE.delete();
 		}
@@ -115,7 +115,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 		try {
 			CSVEntityExporter exporter = new CSVEntityExporter(customFile.getAbsolutePath(), "name");
 			cosumeAndClose(exporter);
-			assertEquals("name\r\nAlice\r\nBob", getContent(customFile));
+			assertEquals("name\nAlice\nBob", getContent(customFile));
 		} finally {
 			customFile.delete();
 		}
@@ -127,7 +127,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 			CSVEntityExporter exporter = new CSVEntityExporter(customFile.getAbsolutePath(), "name");
 			exporter.setEndWithNewLine(true);
 			cosumeAndClose(exporter);
-			assertEquals("name\r\nAlice\r\nBob\r\n", getContent(customFile));
+			assertEquals("name\nAlice\nBob\n", getContent(customFile));
 		} finally {
 			customFile.delete();
 		}
@@ -139,7 +139,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 			CSVEntityExporter exporter = new CSVEntityExporter(customFile.getAbsolutePath(), "name");
 			exporter.setHeadless(true);
 			cosumeAndClose(exporter);
-			assertEquals("Alice\r\nBob", getContent(customFile));
+			assertEquals("Alice\nBob", getContent(customFile));
 		} finally {
 			customFile.delete();
 		}
@@ -158,7 +158,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 			CSVEntityExporter exporter2 = new CSVEntityExporter(customFile.getAbsolutePath(), "name");
 			exporter2.setAppend(true);
 			cosumeAndClose(exporter2);
-			assertEquals("name\r\nAlice\r\nBob\r\nAlice\r\nBob", getContent(customFile));
+			assertEquals("name\nAlice\nBob\nAlice\nBob", getContent(customFile));
 		} finally {
 			customFile.delete();
 		}
@@ -169,7 +169,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 		try {
 			CSVEntityExporter exporter = new CSVEntityExporter(customFile.getAbsolutePath(), descriptor);
 			cosumeAndClose(exporter);
-			assertEquals("name,age,notes\r\nAlice,23,\r\nBob,34,", getContent(customFile));
+			assertEquals("name,age,notes\nAlice,23,\nBob,34,", getContent(customFile));
 		} finally {
 			customFile.delete();
 		}
@@ -180,7 +180,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 		try {
 			CSVEntityExporter exporter = new CSVEntityExporter();
 			cosumeAndClose(exporter);
-			assertEquals("name,age,notes\r\nAlice,23,\"\"\r\nBob,34,", getContent(DEFAULT_FILE));
+			assertEquals("name,age,notes\nAlice,23,\"\"\nBob,34,", getContent(DEFAULT_FILE));
 		} finally {
 			DEFAULT_FILE.delete();
 		}
@@ -191,7 +191,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 		try {
 			CSVEntityExporter exporter = new CSVEntityExporter();
 			cosumeAndClose(exporter);
-			assertEquals("name,age,notes\r\nAlice,23,\"\"\r\nBob,34,", getContent(DEFAULT_FILE));
+			assertEquals("name,age,notes\nAlice,23,\"\"\nBob,34,", getContent(DEFAULT_FILE));
 		} finally {
 			DEFAULT_FILE.delete();
 		}
@@ -203,7 +203,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 			CSVEntityExporter exporter = new CSVEntityExporter();
 			exporter.setQuoteEmpty(true);
 			cosumeAndClose(exporter);
-			assertEquals("name,age,notes\r\nAlice,23,\"\"\r\nBob,34,", getContent(DEFAULT_FILE));
+			assertEquals("name,age,notes\nAlice,23,\"\"\nBob,34,", getContent(DEFAULT_FILE));
 		} finally {
 			DEFAULT_FILE.delete();
 		}
@@ -215,7 +215,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 			CSVEntityExporter exporter = new CSVEntityExporter();
 			exporter.setQuoteEmpty(false);
 			cosumeAndClose(exporter);
-			assertEquals("name,age,notes\r\nAlice,23,\r\nBob,34,", getContent(DEFAULT_FILE));
+			assertEquals("name,age,notes\nAlice,23,\nBob,34,", getContent(DEFAULT_FILE));
 		} finally {
 			DEFAULT_FILE.delete();
 		}
@@ -231,7 +231,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 			exporter.startProductConsumption(entity);
 			exporter.finishProductConsumption(entity);
 			exporter.close();
-			assertEquals("value\r\n1-00", getContent(DEFAULT_FILE));
+			assertEquals("value\n1-00", getContent(DEFAULT_FILE));
 		} finally {
 			DEFAULT_FILE.delete();
 		}
