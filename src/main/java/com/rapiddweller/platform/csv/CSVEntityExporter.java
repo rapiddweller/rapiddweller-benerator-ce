@@ -53,7 +53,7 @@ public class CSVEntityExporter extends TextFileExporter {
 
     // defaults --------------------------------------------------------------------------------------------------------
 
-    private static final String DEFAULT_LINE_SEPARATOR = "\n"; // as defined by RFC 4180
+    private static final String DEFAULT_LINE_SEPARATOR = "\r\n"; // as defined by RFC 4180
     private static final String DEFAULT_URI = "export.csv";
 
     // configuration attributes ----------------------------------------------------------------------------------------
