@@ -59,18 +59,6 @@ build:jdk-11:
   script:
     - mvn $MAVEN_CLI_OPTS clean package
 
-###################### Quality ######################
-
-test:helper-scripts:jdk-11:
-  image: maven:3-openjdk-11
-  stage: quality
-  needs:
-    - job: setup:jdk-11
-      artifacts: true
-  script:
-    - bash script/1_install_mvn_dependencies.sh
-    - bash script/2_setup_benerator.sh
-    - bash script/3_execute_demos.sh
 ###################### Assembly and Deploy ######################
 
 assembly:jdk-11:
