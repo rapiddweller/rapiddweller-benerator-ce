@@ -81,7 +81,7 @@ public class IfParser extends AbstractBeneratorDescriptorParser {
 			// check that no elements conflict with 'then' and 'else'
 			assertThenElseChildren(ifElement);
 		} else
-            thenStatements = context.parseChildElementsOf(Objects.requireNonNullElse(thenElement, ifElement), ifPath);
+			thenStatements = context.parseChildElementsOf(Objects.requireNonNullElse(thenElement, ifElement), ifPath);
 		ifStatement.setThenStatement(new SequentialStatement(thenStatements));
 		ifStatement.setElseStatement(new SequentialStatement(elseStatements));
 		return ifStatement;

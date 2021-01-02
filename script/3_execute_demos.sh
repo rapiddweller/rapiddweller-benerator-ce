@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export ARTIFACT_ID=rapiddweller-benerator-ce
 export ARTIFACT_VERSION=1.1.0+jdk-11-SNAPSHOT
 export BENERATOR_HOME=~/$ARTIFACT_ID-$ARTIFACT_VERSION

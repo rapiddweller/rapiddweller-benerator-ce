@@ -91,7 +91,10 @@ public class Archetype implements Serializable {
 	    } catch (FileNotFoundException e) {
 	    	// no description file defined
 	    }
-		// if no description was found, choose the archetype id as description
+	    finally {
+
+		}
+	    // if no description was found, choose the archetype id as description
 	    return (desc != null ? desc : id);
     }
 

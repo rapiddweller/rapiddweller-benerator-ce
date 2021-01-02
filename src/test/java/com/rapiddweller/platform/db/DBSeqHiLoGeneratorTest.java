@@ -75,7 +75,7 @@ public class DBSeqHiLoGeneratorTest extends GeneratorTest {
     }
     
     @Test
-    public void testMaxLo100() throws Exception {
+    public void testMaxLo100() {
     	DBSeqHiLoGenerator generator = new DBSeqHiLoGenerator(SEQUENCE_NAME, 100, db);
     	generator.init(context);
         expectSequence(generator, 101, 102, 103, 104);
@@ -88,7 +88,13 @@ public class DBSeqHiLoGeneratorTest extends GeneratorTest {
 	    try {
     		db.dropSequence(SEQUENCE_NAME);
     	} catch (Exception e) {
-    		logger.error(e.getMessage(), e);
+	        if (e.getMessage().contains("Sequence not found"))
+            {
+                logger.warn(e.getMessage());
+            }
+	        else {
+                logger.error(e.getMessage(), e);
+            }
     	}
     }
     
