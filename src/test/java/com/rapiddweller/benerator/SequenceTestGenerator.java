@@ -39,7 +39,7 @@ public class SequenceTestGenerator<E> implements Generator<E> {
 
     private final E[] sequence;
     int cursor;
-    boolean initialized;
+    final boolean initialized;
     public int generateCount = 0;
     public int resetCount = 0;
     public int closeCount = 0;

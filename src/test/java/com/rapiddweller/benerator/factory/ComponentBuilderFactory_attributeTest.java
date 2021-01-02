@@ -210,12 +210,7 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 		ComponentBuilder builder = createComponentBuilder(name);
 		Generator<String> helper = new ComponentBuilderGenerator(builder, name.getName());
 		helper.init(context);
-		Validator<Character> charValidator = new Validator<Character>() {
-			@Override
-			public boolean valid(Character c) {
-	            return ('0' <= c && c <= '9');
-            }
-		};
+		Validator<Character> charValidator = c -> ('0' <= c && c <= '9');
 		expectGenerations(helper, 20, new StringValidator(charValidator, 2, 4));
 	}
 
@@ -280,8 +275,8 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 	private PartDescriptor createCSVStringAttributeDescriptor(String uri, String separator) {
 		String componentName = "name";
 		PartDescriptor name = createPartDescriptor(componentName);
-		name.setMinCount(new ConstantExpression<Long>(1L));
-		name.setMaxCount(new ConstantExpression<Long>(1L));
+		name.setMinCount(new ConstantExpression<>(1L));
+		name.setMaxCount(new ConstantExpression<>(1L));
 		name.getLocalType(false).setSource(uri);
 		name.getLocalType(false).setSeparator(separator);
 		return name;
@@ -335,8 +330,8 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 	public void testMap() {
 		String componentName = "flag";
 		PartDescriptor part = createPartDescriptor(componentName);
-		part.setMinCount(new ConstantExpression<Long>(1L));
-		part.setMaxCount(new ConstantExpression<Long>(1L));
+		part.setMinCount(new ConstantExpression<>(1L));
+		part.setMaxCount(new ConstantExpression<>(1L));
 		((SimpleTypeDescriptor) part.getLocalType(false)).setMap("1->'A',2->'B'");
 		part.getLocalType(false).setGenerator("com.rapiddweller.benerator.primitive.IncrementGenerator");
 		ComponentBuilder builder = ComponentBuilderFactory.createComponentBuilder(part, Uniqueness.NONE, context);
@@ -358,15 +353,16 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 		type.setGranularity("0000-00-01");
 		PartDescriptor attribute = createPart(componentName, type);
 		ComponentBuilder<Entity> builder = createComponentBuilder(attribute);
-		ComponentBuilderGenerator<Date> helper = new ComponentBuilderGenerator<Date>(builder, componentName);
+		ComponentBuilderGenerator<Date> helper = new ComponentBuilderGenerator<>(builder, componentName);
 		helper.init(context);
-		Validator<Date> validator = new Validator<Date>() {
+		Validator<Date> validator = new Validator<>() {
 			final Date minDate = TimeUtil.date(2000, 2, 4);
 			final Date maxDate = TimeUtil.date(2000, 7, 9);
+
 			@Override
 			public boolean valid(Date date) {
-	            return !minDate.after(date) && !maxDate.before(date);
-            }
+				return !minDate.after(date) && !maxDate.before(date);
+			}
 		};
 		expectGenerations(helper, 100, validator);
 	}

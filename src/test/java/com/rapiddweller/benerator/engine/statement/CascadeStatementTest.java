@@ -87,7 +87,7 @@ public class CascadeStatementTest extends GeneratorTest {
 		DBForeignKeyConstraint fk = db.getDbMetaData().getTable("referer").getForeignKeyConstraint(new String[] { "referee_id" });
 		Entity fromEntity = createEntity("referee", "id", 2);
 		DataIterator<Entity> iterator = ref.resolveToManyReference(fromEntity, fk, db, context);
-		DataContainer<Entity> container = new DataContainer<Entity>();
+		DataContainer<Entity> container = new DataContainer<>();
 		DataContainer<Entity> next = iterator.next(container);
 		assertNotNull("referee not found", next);
 		assertEquals(createEntity("REFERER", "ID", 4, "REFEREE_ID", 2, "THE_DATE", null), next.getData());
@@ -100,7 +100,7 @@ public class CascadeStatementTest extends GeneratorTest {
 		DBForeignKeyConstraint fk = db.getDbMetaData().getTable("referer").getForeignKeyConstraint(new String[] { "referee_id" });
 		Entity fromEntity = createEntity("referer", "id", 4, "referee_id", 2);
 		DataIterator<Entity> iterator = ref.resolveToOneReference(fromEntity, fk, db, context);
-		DataContainer<Entity> container = new DataContainer<Entity>();
+		DataContainer<Entity> container = new DataContainer<>();
 		DataContainer<Entity> next = iterator.next(container);
 		assertNotNull("referee not found", next);
 		assertEquals(createEntity("REFEREE", "ID", 2, "N", 2), next.getData());

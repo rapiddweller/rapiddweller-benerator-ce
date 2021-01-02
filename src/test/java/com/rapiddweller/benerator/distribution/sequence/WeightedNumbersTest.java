@@ -40,7 +40,7 @@ import org.junit.Test;
  */
 public class WeightedNumbersTest extends GeneratorTest {
 
-	WeightedNumbers<Integer> intDist = new WeightedNumbers<Integer>("0^0,1^3,2^2,3^1");
+	final WeightedNumbers<Integer> intDist = new WeightedNumbers<>("0^0,1^3,2^2,3^1");
 
 	@Test(expected = ConfigurationError.class)
 	public void testCreateGenerator_unique() {
@@ -61,12 +61,12 @@ public class WeightedNumbersTest extends GeneratorTest {
 
 	@Test(expected = ConfigurationError.class)
 	public void testApply_unique() {
-		intDist.applyTo(new SequenceTestGenerator<String>("X", "A", "B", "C"), true);
+		intDist.applyTo(new SequenceTestGenerator<>("X", "A", "B", "C"), true);
 	}
 
 	@Test
 	public void testApply_nonUnique() {
-		Generator<String> generator = intDist.applyTo(new SequenceTestGenerator<String>("X", "A", "B", "C"), false);
+		Generator<String> generator = intDist.applyTo(new SequenceTestGenerator<>("X", "A", "B", "C"), false);
 		generator.init(context);
 		expectRelativeWeights(generator, 3000, "X", 0, "A", 3, "B", 2, "C", 1);
 	}

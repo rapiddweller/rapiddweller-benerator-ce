@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import com.rapiddweller.benerator.engine.Statement;
@@ -79,10 +80,8 @@ public class IfParser extends AbstractBeneratorDescriptorParser {
 			elseStatements = context.parseChildElementsOf(elseElement, ifPath);
 			// check that no elements conflict with 'then' and 'else'
 			assertThenElseChildren(ifElement);
-		} else if (thenElement != null) {
-			thenStatements = context.parseChildElementsOf(thenElement, ifPath);
 		} else
-			thenStatements = context.parseChildElementsOf(ifElement, ifPath);
+			thenStatements = context.parseChildElementsOf(Objects.requireNonNullElse(thenElement, ifElement), ifPath);
 		ifStatement.setThenStatement(new SequentialStatement(thenStatements));
 		ifStatement.setElseStatement(new SequentialStatement(elseStatements));
 		return ifStatement;

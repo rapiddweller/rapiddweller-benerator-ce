@@ -50,7 +50,7 @@ public class EAN8GeneratorTest extends GeneratorClassTest {
 
     @Test
     public void testUnique() {
-        expectGenerations(createGenerator(true), 10000, new EANValidator(), new UniqueValidator<Object>());
+        expectGenerations(createGenerator(true), 10000, new EANValidator(), new UniqueValidator<>());
     }
     
 	private EAN8Generator createGenerator(boolean unique) {

@@ -54,8 +54,8 @@ public class PerfTrackingConsumerTest {
 		try {
 			tracker.setTarget(mock);
 			for (int i = 0; i < 10; i++) {
-				tracker.startConsuming(new ProductWrapper<Object>().wrap(null));
-				tracker.finishConsuming(new ProductWrapper<Object>().wrap(null));
+				tracker.startConsuming(new ProductWrapper<>().wrap(null));
+				tracker.finishConsuming(new ProductWrapper<>().wrap(null));
 			}
 			LatencyCounter counter = tracker.getOrCreateTracker().getCounters()[0];
 			counter.printSummary(new PrintWriter(System.out), 90, 95);

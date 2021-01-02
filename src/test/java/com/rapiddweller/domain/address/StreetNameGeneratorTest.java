@@ -56,18 +56,15 @@ public class StreetNameGeneratorTest extends GeneratorClassTest {
     
     @Test
     public void test_AU() {
-    	DatasetUtil.runInRegion(Country.AUSTRALIA.getIsoCode(), new Runnable() {
-			@Override
-			public void run() {
-		        StreetNameGenerator generator = new StreetNameGenerator();
-		        generator.init(context);
-		        for (int i = 0; i < 10; i++) {
-	                String product = generator.generate();
-	                assertNotNull(product);
-                }
-		        generator.close();
-            }
-    	});
+    	DatasetUtil.runInRegion(Country.AUSTRALIA.getIsoCode(), () -> {
+            StreetNameGenerator generator = new StreetNameGenerator();
+            generator.init(context);
+            for (int i = 0; i < 10; i++) {
+String product = generator.generate();
+assertNotNull(product);
+}
+            generator.close();
+});
     }
     
 }

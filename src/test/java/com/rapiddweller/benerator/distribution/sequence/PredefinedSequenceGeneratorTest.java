@@ -39,13 +39,13 @@ public class PredefinedSequenceGeneratorTest extends GeneratorTest {
 
 	@Test
 	public void testEmpty() {
-		PredefinedSequenceGenerator<Integer> generator = new PredefinedSequenceGenerator<Integer>();
+		PredefinedSequenceGenerator<Integer> generator = new PredefinedSequenceGenerator<>();
 		expectGeneratedSequence(generator);
 	}
 	
 	@Test
 	public void testPrimes() {
-		PredefinedSequenceGenerator<Integer> generator = new PredefinedSequenceGenerator<Integer>(2, 3, 5, 7, 11);
+		PredefinedSequenceGenerator<Integer> generator = new PredefinedSequenceGenerator<>(2, 3, 5, 7, 11);
 		expectGeneratedSequence(generator, 2, 3, 5, 7, 11);
 	}
 	

@@ -41,8 +41,8 @@ public class OffsetBasedGeneratorTest extends GeneratorTest {
 
 	@Test
 	public void test() {
-		Generator<Integer> source = new SequenceTestGenerator<Integer>(1, 2, 3);
-		Generator<Integer> generator = new OffsetBasedGenerator<Integer>(source, 1);
+		Generator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
+		Generator<Integer> generator = new OffsetBasedGenerator<>(source, 1);
 		generator.init(context);
 		expectGeneratedSequence(generator, 2, 3).withCeasedAvailability();
 	}

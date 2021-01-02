@@ -35,7 +35,7 @@ import com.rapiddweller.benerator.distribution.function.DiscreteFunction;
  */
 public class StandardWeightingFunction extends DiscreteFunction {
 	
-   double weights[] = new double[3];
+   final double[] weights = new double[3];
 
    public StandardWeightingFunction(int a, int b, int c) {
       weights[0] = a;

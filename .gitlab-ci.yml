@@ -122,6 +122,14 @@ deploy:jdk-11:
     - chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
     - benerator --version
 
+E2ET:helper-scripts:jdk-11:
+  <<: *e2et-preparation-common
+  image: maven:3.6.3-adoptopenjdk-11
+  script:
+    - bash script/1_install_mvn_dependencies.sh
+    - bash script/2_setup_benerator.sh
+    - bash script/3_execute_demos.sh
+
 E2ET:script-graalvm11:
   <<: *e2et-preparation-graalvm11
   script:

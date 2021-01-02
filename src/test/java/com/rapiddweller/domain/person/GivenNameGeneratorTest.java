@@ -46,7 +46,7 @@ public class GivenNameGeneratorTest extends GeneratorClassTest {
 
     @Test
     public void test() throws IllegalGeneratorStateException {
-        ObjectCounter<String> counter = new ObjectCounter<String>(10);
+        ObjectCounter<String> counter = new ObjectCounter<>(10);
         GivenNameGenerator generator = new GivenNameGenerator();
         generator.init(context);
         for (int i = 0; i < 10; i++)

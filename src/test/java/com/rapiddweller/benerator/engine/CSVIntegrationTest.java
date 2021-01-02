@@ -48,7 +48,7 @@ public class CSVIntegrationTest extends BeneratorIntegrationTest {
 		parseAndExecuteFile("/com/rapiddweller/benerator/engine/csv/headless_csv.ben.xml");
 		String generatedContent = IOUtil.getContentOfURI("target/headless-out.csv");
 		String expectedContent = 
-			"ALICE,231,A\r\n" + 
+			"ALICE,231,A\r\n" +
 			"BOB,341,B";
 		
 		assertEquals(expectedContent, generatedContent);

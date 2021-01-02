@@ -32,10 +32,7 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.collection.ListBasedSet;
 import com.rapiddweller.common.collection.NamedValueList;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Describes a type that aggregates {@link ComponentDescriptor}s.<br/>
@@ -110,10 +107,7 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
                 String name = pcd.getName();
                 if (pcd instanceof ComponentDescriptor && !parts.containsName(name)) {
                     InstanceDescriptor ccd = parts.someValueOfName(name);
-                    if (ccd != null)
-                        result.add(name, ccd);
-                    else
-                        result.add(name, pcd);
+                    result.add(name, Objects.requireNonNullElse(ccd, pcd));
                 }
             }
         }

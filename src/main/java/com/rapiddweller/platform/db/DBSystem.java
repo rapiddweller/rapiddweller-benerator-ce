@@ -137,8 +137,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
         if (scale == 0)
             return "1";
         StringBuilder builder = new StringBuilder("0.");
-        for (int i = 1; i < scale; i++)
-            builder.append('0');
+        builder.append("0".repeat(Math.max(0, scale - 1)));
         builder.append(1);
         return builder.toString();
     }

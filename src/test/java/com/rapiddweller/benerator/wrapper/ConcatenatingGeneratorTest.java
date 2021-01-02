@@ -39,7 +39,7 @@ import org.junit.Test;
  */
 public class ConcatenatingGeneratorTest extends GeneratorTest {
 
-	Generator<String[]> source = new ConstantGenerator<String[]>( new String[] { "Expressis", "Verbis"});			
+	final Generator<String[]> source = new ConstantGenerator<>(new String[]{"Expressis", "Verbis"});
 
     @Test
 	public void testDefault() {

@@ -47,9 +47,9 @@ public class CompositeArrayGeneratorTest extends GeneratorTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testNonUnique() {
-        ConstantTestGenerator<Integer> source1 = new ConstantTestGenerator<Integer>(1);
-        ConstantTestGenerator<Integer> source2 = new ConstantTestGenerator<Integer>(2);
-        MultiSourceArrayGenerator<Integer> generator = new MultiSourceArrayGenerator<Integer>(Integer.class, false, source1, source2);
+        ConstantTestGenerator<Integer> source1 = new ConstantTestGenerator<>(1);
+        ConstantTestGenerator<Integer> source2 = new ConstantTestGenerator<>(2);
+        MultiSourceArrayGenerator<Integer> generator = new MultiSourceArrayGenerator<>(Integer.class, false, source1, source2);
         generator.init(context);
         Integer[] EXPECTED_ARRAY = new Integer[] {1, 2};
         for (int i = 0; i < 10; i++)
@@ -59,9 +59,9 @@ public class CompositeArrayGeneratorTest extends GeneratorTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testUnique() {
-        Generator<Integer> source1 = new SequenceTestGenerator<Integer>(1, 2);
-        Generator<Integer> source2 = new SequenceTestGenerator<Integer>(3, 4);
-        MultiSourceArrayGenerator<Integer> generator = new MultiSourceArrayGenerator<Integer>(Integer.class, true, source1, source2);
+        Generator<Integer> source1 = new SequenceTestGenerator<>(1, 2);
+        Generator<Integer> source2 = new SequenceTestGenerator<>(3, 4);
+        MultiSourceArrayGenerator<Integer> generator = new MultiSourceArrayGenerator<>(Integer.class, true, source1, source2);
         generator.init(context);
         expectUniqueProducts(generator, 4).withCeasedAvailability();
     }

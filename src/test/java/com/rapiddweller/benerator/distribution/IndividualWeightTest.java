@@ -48,7 +48,7 @@ public class IndividualWeightTest extends GeneratorTest {
 
 	@Test
 	public void testApplyTo() {
-		SequenceGenerator<Integer> source = new SequenceGenerator<Integer>(Integer.class, 1, 2, 3);
+		SequenceGenerator<Integer> source = new SequenceGenerator<>(Integer.class, 1, 2, 3);
 		source.init(context);
 		Generator<Integer> generator = createWeight().applyTo(source, false);
 		generator.init(context);
@@ -58,12 +58,12 @@ public class IndividualWeightTest extends GeneratorTest {
 	// helpers ---------------------------------------------------------------------------------------------------------
 
 	private static IndividualWeight<Integer> createWeight() {
-	    IndividualWeight<Integer> weight = new IndividualWeight<Integer>() {
-	    	@Override
-	        public double weight(Integer object) {
-	            return object;
-	        }
-	    };
+	    IndividualWeight<Integer> weight = new IndividualWeight<>() {
+			@Override
+			public double weight(Integer object) {
+				return object;
+			}
+		};
 	    return weight;
     }
 	

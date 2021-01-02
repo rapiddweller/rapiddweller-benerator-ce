@@ -49,7 +49,7 @@ public class AlternativeGeneratorTest extends GeneratorTest {
     public void testNonUnique() {
         Generator<Integer> source1 = new RandomIntegerGenerator(-2, -1);
         Generator<Integer> source2 = new RandomIntegerGenerator(1, 2);
-        AlternativeGenerator<Integer> generator = new AlternativeGenerator<Integer>(Integer.class, source1, source2);
+        AlternativeGenerator<Integer> generator = new AlternativeGenerator<>(Integer.class, source1, source2);
         generator.init(context);
         for (int i = 0; i < 100; i++) {
 			int product = GeneratorUtil.generateNonNull(generator);
@@ -67,9 +67,9 @@ public class AlternativeGeneratorTest extends GeneratorTest {
     @SuppressWarnings("unchecked")
     public void testUniqueMultiAlternatives() {
         Generator<Integer>[] gens = new Generator[2];
-        gens[0] = new NShotGeneratorProxy<Integer>(new ConstantGenerator<Integer>(2), 1);
+        gens[0] = new NShotGeneratorProxy<>(new ConstantGenerator<>(2), 1);
         gens[1] = generator(0, 1);
-        Generator<Integer> generator = new AlternativeGenerator<Integer>(Integer.class, gens);
+        Generator<Integer> generator = new AlternativeGenerator<>(Integer.class, gens);
         generator.init(context);
         expectUniquelyGeneratedSet(generator, 0, 1, 2).withCeasedAvailability();
     }
@@ -78,9 +78,9 @@ public class AlternativeGeneratorTest extends GeneratorTest {
     @SuppressWarnings("unchecked")
     public void testUniqueManyAlternatives() {
         Generator<Integer>[] gens = new Generator[2];
-        gens[0] = new SequenceGenerator<Integer>(Integer.class, 0, 2, 4, 6, 8);
-        gens[1] = new SequenceGenerator<Integer>(Integer.class, 1, 3, 5, 7, 9);
-        Generator<Integer> generator = new AlternativeGenerator<Integer>(Integer.class, gens);
+        gens[0] = new SequenceGenerator<>(Integer.class, 0, 2, 4, 6, 8);
+        gens[1] = new SequenceGenerator<>(Integer.class, 1, 3, 5, 7, 9);
+        Generator<Integer> generator = new AlternativeGenerator<>(Integer.class, gens);
         generator.init(context);
         expectUniqueGenerations(generator, 10).withCeasedAvailability();
     }
@@ -91,8 +91,8 @@ public class AlternativeGeneratorTest extends GeneratorTest {
     private static Generator<Integer> generator(int ... values) {
         Generator<Integer>[] gens = new Generator[values.length];
         for (int i = 0; i < values.length; i++)
-            gens[i] = new NShotGeneratorProxy<Integer>(new ConstantGenerator<Integer>(values[i]), 1);
-        AlternativeGenerator<Integer> result = new AlternativeGenerator<Integer>(Integer.class, gens);
+            gens[i] = new NShotGeneratorProxy<>(new ConstantGenerator<>(values[i]), 1);
+        AlternativeGenerator<Integer> result = new AlternativeGenerator<>(Integer.class, gens);
 		return result;
     }
     

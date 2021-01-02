@@ -291,8 +291,8 @@ public class StringGeneratorTest extends GeneratorTest {
 				"AAA", "AAB", "ABA", "ABB", "BAA", "BAB", "BBA", "BBB");
 	}
 	
-	public class UmlautValidator implements Validator<String> {
-		private Set<Character> allowedValues = CollectionUtil.toSet('Ä', 'ä', 'Ö', 'ö', 'Ü', 'ü', 'ß');
+	public static class UmlautValidator implements Validator<String> {
+		private final Set<Character> allowedValues = CollectionUtil.toSet('Ä', 'ä', 'Ö', 'ö', 'Ü', 'ü', 'ß');
 		@Override
 		public boolean valid(String value) {
 			for (int i = 0; i < value.length(); i++)
@@ -302,7 +302,7 @@ public class StringGeneratorTest extends GeneratorTest {
 		}
 	}
 
-	public class LengthsValidator implements Validator<String> {
+	public static class LengthsValidator implements Validator<String> {
 		@Override
 		public boolean valid(String value) {
 			return value.length() == 500 || value.length() == 750 || value.length() == 1000;

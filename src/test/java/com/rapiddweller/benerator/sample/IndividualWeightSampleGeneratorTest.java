@@ -41,14 +41,14 @@ public class IndividualWeightSampleGeneratorTest extends GeneratorTest {
     @Test
     public void testDistribution() throws Exception {
     	// given an IndividualWeight which gives 'Alice' weight 2, all others the weight 1
-    	IndividualWeight<String> individualWeight = new IndividualWeight<String>() {
+    	IndividualWeight<String> individualWeight = new IndividualWeight<>() {
 			@Override
 			public double weight(String name) {
 				return ("Alice".equals(name) ? 2 : 1);
 			}
 		};
     	// when using a IndividualWeightSampleGenerator with values 'Alice' and 'Bob'
-		IndividualWeightSampleGenerator<String> generator = new IndividualWeightSampleGenerator<String>(
+		IndividualWeightSampleGenerator<String> generator = new IndividualWeightSampleGenerator<>(
 				String.class, individualWeight, "Alice", "Bob");
 		generator.init(context);
         // then the outcome should be 66% 'Alice' andf 33% 'Bob'

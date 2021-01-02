@@ -27,7 +27,6 @@
 package com.rapiddweller.benerator.factory;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
 
 import com.rapiddweller.benerator.composite.ComponentBuilder;
 import com.rapiddweller.benerator.primitive.HibUUIDGenerator;
@@ -104,7 +103,7 @@ public class ComponentBuilderFactory_IdTest extends AbstractComponentBuilderFact
 		ComponentBuilderGenerator<Long> helper = new ComponentBuilderGenerator(builder, componentName);
 		helper.init(context);
 		expectGeneratedSequenceOnce(helper, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L);
-		assertNotNull(helper.generate(new ProductWrapper<Long>()));
+		assertNotNull(helper.generate(new ProductWrapper<>()));
 	}
 	
 	/**

@@ -50,9 +50,9 @@ public class IteratingGeneratorTest extends GeneratorTest {
 
     @Test
     public void testDefaultBehaviour() {
-        HeavyweightIterableAdapter<Integer> iterable = new HeavyweightIterableAdapter<Integer>(Arrays.asList(1, 2));
-		TypedIterableProxy<Integer> hwIterable = new TypedIterableProxy<Integer>(Integer.class, iterable);
-		Generator<Integer> gen = new IteratingGenerator<Integer>(hwIterable);
+        HeavyweightIterableAdapter<Integer> iterable = new HeavyweightIterableAdapter<>(Arrays.asList(1, 2));
+		TypedIterableProxy<Integer> hwIterable = new TypedIterableProxy<>(Integer.class, iterable);
+		Generator<Integer> gen = new IteratingGenerator<>(hwIterable);
 		gen.init(context);
 		expectGeneratedSequence(gen, 1, 2).withCeasedAvailability();
 	}
@@ -60,7 +60,7 @@ public class IteratingGeneratorTest extends GeneratorTest {
     @Test
     public void testEmptyIterator() {
     	EmptyIterable emptySource = new EmptyIterable();
-    	Generator<Integer> generator = new IteratingGenerator<Integer>(emptySource);
+    	Generator<Integer> generator = new IteratingGenerator<>(emptySource);
     	generator.init(context);
     	assertUnavailable(generator);
     	assertTrue(emptySource.latestInstance.closed);

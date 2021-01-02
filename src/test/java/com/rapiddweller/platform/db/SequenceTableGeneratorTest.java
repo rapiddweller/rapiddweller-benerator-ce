@@ -76,7 +76,7 @@ public class SequenceTableGeneratorTest extends GeneratorTest {
 	public void testStatic() {
 		SequenceTableGenerator<Integer> generator = null;
 		try {
-	        generator = new SequenceTableGenerator<Integer>("TT", "value", db);
+	        generator = new SequenceTableGenerator<>("TT", "value", db);
 	        generator.setSelector("id1 = 1 and id2 = 2");
 	        generator.init(context);
 	        for (int i = 0; i < 100; i++)
@@ -91,7 +91,7 @@ public class SequenceTableGeneratorTest extends GeneratorTest {
 	public void testDynamicSelector() {
 		SequenceTableGenerator<Integer> generator = null;
 		try {
-	        generator = new SequenceTableGenerator<Integer>("TT", "value", db);
+	        generator = new SequenceTableGenerator<>("TT", "value", db);
 	        // the selector makes the generator use row #1 and #2 after each other for generating id values
 	        generator.setSelector("{'id1 = ' + (1 + (num % 2)) + ' and id2 = ' + (2 + (num % 2))}");
 	        generator.init(context);
@@ -113,7 +113,7 @@ public class SequenceTableGeneratorTest extends GeneratorTest {
 	public void testParameterizedSelector() {
 		SequenceTableGenerator<Integer> generator = null;
 		try {
-	        generator = new SequenceTableGenerator<Integer>("TT", "value", db, "id1 = ? and id2 = ?");
+	        generator = new SequenceTableGenerator<>("TT", "value", db, "id1 = ? and id2 = ?");
 	        generator.init(context);
         	assertEquals(1000, generator.generateWithParams(1, 2).intValue());
         	assertEquals(2000, generator.generateWithParams(2, 3).intValue());

@@ -39,7 +39,7 @@ import static org.junit.Assert.*;
 
 public class SSNValidator_USTest {
 	
-	private SSNValidator validator = new SSNValidator();
+	private final SSNValidator validator = new SSNValidator();
 
 	@Test
 	public void testInvalidNumbers() {

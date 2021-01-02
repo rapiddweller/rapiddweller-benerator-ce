@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 
 
@@ -7,6 +7,6 @@ if [ -z "$BENERATOR_HOME" ]; then
   echo "to the location of your benerator installation."
   exit 1
 fi
-. $BENERATOR_HOME/bin/benerator_common
+. "$BENERATOR_HOME"/bin/benerator_common
 benerator_exec_command="exec \"$JAVACMD\" $BENERATOR_OPTS -classpath \"$LOCALCLASSPATH\" com.rapiddweller.benerator.main.Benerator $*"
-eval $benerator_exec_command
+eval "$benerator_exec_command"

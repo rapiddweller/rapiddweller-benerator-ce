@@ -68,8 +68,8 @@ public class SkipGeneratorProxyTest extends GeneratorTest {
 
     @Test
     public void testNonRepetitive() {
-        SequenceTestGenerator<Integer> source = new SequenceTestGenerator<Integer>(1, 2);
-        SkipGeneratorProxy<Integer> generator = new SkipGeneratorProxy<Integer>(source);
+        SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2);
+        SkipGeneratorProxy<Integer> generator = new SkipGeneratorProxy<>(source);
         generator.init(context);
         assertEquals(1, (int) GeneratorUtil.generateNonNull(generator));
         assertEquals(2, (int) GeneratorUtil.generateNonNull(generator));
@@ -83,18 +83,18 @@ public class SkipGeneratorProxyTest extends GeneratorTest {
 
     @Test(expected = InvalidGeneratorSetupException.class)
     public void testNegativeMinIncrement() {
-        Generator<Integer> source = new ConstantTestGenerator<Integer>(1);
+        Generator<Integer> source = new ConstantTestGenerator<>(1);
         createAndInit(source, -1, 1);
     }
 
     @Test(expected = InvalidGeneratorSetupException.class)
     public void testMaxIncrementSmallerThanMinIncrement() {
-        Generator<Integer> source = new ConstantTestGenerator<Integer>(1);
+        Generator<Integer> source = new ConstantTestGenerator<>(1);
         createAndInit(source, 1, -1);
     }
 
     private void createAndInit(Generator<Integer> source, int minIncrement, int maxIncrement) {
-        Generator<Integer> generator = new SkipGeneratorProxy<Integer>(source, minIncrement, maxIncrement);
+        Generator<Integer> generator = new SkipGeneratorProxy<>(source, minIncrement, maxIncrement);
         generator.init(context);
     }
     

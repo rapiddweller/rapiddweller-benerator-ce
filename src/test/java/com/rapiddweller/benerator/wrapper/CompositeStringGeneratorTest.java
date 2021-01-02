@@ -43,9 +43,9 @@ public class CompositeStringGeneratorTest extends GeneratorTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testConstant() {
-		Generator<String> generator = new CompositeStringGenerator(true, 
-                new OneShotGenerator<String>("0"),
-                new OneShotGenerator<String>("1"));
+		Generator<String> generator = new CompositeStringGenerator(true,
+                new OneShotGenerator<>("0"),
+                new OneShotGenerator<>("1"));
         generator.init(context);
         expectUniquelyGeneratedSet(generator, "01").withCeasedAvailability();
     }
@@ -54,8 +54,8 @@ public class CompositeStringGeneratorTest extends GeneratorTest {
 	@Test
     public void testVariable() {
         Generator<String> generator = new CompositeStringGenerator(true,
-                new SequenceTestGenerator<String>("A", "B", "C"),
-                new SequenceTestGenerator<String>("0", "1"));
+                new SequenceTestGenerator<>("A", "B", "C"),
+                new SequenceTestGenerator<>("0", "1"));
         generator.init(context);
         expectUniquelyGeneratedSet(generator, "A0", "B0", "C0", "A1", "B1", "C1").withCeasedAvailability();
     }

@@ -60,25 +60,19 @@ public class SingleSheetXLSEntityIteratorTest extends XLSTest {
 	
 	@Test
 	public void testImportProductSheet() throws Exception {
-		SingleSheetXLSEntityIterator iterator = new SingleSheetXLSEntityIterator(IMPORT_XLS, "Product", null, null, context, true, false, null);
-		try {
+		try (SingleSheetXLSEntityIterator iterator = new SingleSheetXLSEntityIterator(IMPORT_XLS, "Product", null, null, context, true, false, null)) {
 			assertProduct(PROD1, DataUtil.nextNotNullData(iterator));
 			Entity next = DataUtil.nextNotNullData(iterator);
 			assertProduct(PROD2, next);
-			assertNull(iterator.next(new DataContainer<Entity>()));
-		} finally {
-			iterator.close();
+			assertNull(iterator.next(new DataContainer<>()));
 		}
 	}
 	
 	@Test
 	public void testImportPersonSheet() throws Exception {
-		SingleSheetXLSEntityIterator iterator = new SingleSheetXLSEntityIterator(IMPORT_XLS, "Person", null, null, context, true, false, null);
-		try {
+		try (SingleSheetXLSEntityIterator iterator = new SingleSheetXLSEntityIterator(IMPORT_XLS, "Person", null, null, context, true, false, null)) {
 			assertPerson(PERSON1, DataUtil.nextNotNullData(iterator));
-			assertNull(iterator.next(new DataContainer<Entity>()));
-		} finally {
-			iterator.close();
+			assertNull(iterator.next(new DataContainer<>()));
 		}
 	}
 	
@@ -92,8 +86,7 @@ public class SingleSheetXLSEntityIteratorTest extends XLSTest {
 	
 	@Test
 	public void testCollectionMapping() throws Exception {
-		SingleSheetXLSEntityIterator iterator = new SingleSheetXLSEntityIterator(COUNTRY_XLS, "country", null, null, context, true, false, null);
-		try {
+		try (SingleSheetXLSEntityIterator iterator = new SingleSheetXLSEntityIterator(COUNTRY_XLS, "country", null, null, context, true, false, null)) {
 			// check germany
 			Entity germany = DataUtil.nextNotNullData(iterator);
 			assertEquals("DE", germany.get("id"));
@@ -106,13 +99,13 @@ public class SingleSheetXLSEntityIteratorTest extends XLSTest {
 			assertEquals(2, cities_by.length);
 			assertEquals("Ingolstadt", cities_by[0].get("name"));
 			assertEquals("Regensburg", cities_by[1].get("name"));
-			
+
 			Entity hessen = states_de[1];
 			assertEquals("Hessen", hessen.get("name"));
 			Entity[] cities_he = (Entity[]) hessen.get("cities");
 			assertEquals(1, cities_he.length);
 			assertEquals("Frankfurt", cities_he[0].get("name"));
-			
+
 			// check italy
 			Entity it = DataUtil.nextNotNullData(iterator);
 			Entity[] states_it = (Entity[]) it.get("states");
@@ -123,16 +116,14 @@ public class SingleSheetXLSEntityIteratorTest extends XLSTest {
 			assertEquals(2, cities_vr.length);
 			assertEquals("Venezia", cities_vr[0].get("name"));
 			assertEquals("Verona", cities_vr[1].get("name"));
-			
+
 			Entity lombardia = states_it[1];
 			assertEquals("Lombardia", lombardia.get("name"));
 			Entity[] cities_lo = (Entity[]) lombardia.get("cities");
 			assertEquals(0, cities_lo.length);
-			
+
 			// assert endof data
-			assertNull(iterator.next(new DataContainer<Entity>()));
-		} finally {
-			iterator.close();
+			assertNull(iterator.next(new DataContainer<>()));
 		}
 	}
 	

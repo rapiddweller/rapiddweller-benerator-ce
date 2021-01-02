@@ -61,13 +61,10 @@ public class IncrementalIdGeneratorTest extends GeneratorClassTest {
 		final IncrementGenerator generator = new IncrementGenerator(0);
 		generator.init(context);
 		ExecutorService service = Executors.newCachedThreadPool();
-		Runnable runner = new Runnable() {
-			@Override
-			public void run() {
-				for (int i = 0; i < 500; i++)
-					generator.generate();
-            }
-		};
+		Runnable runner = () -> {
+            for (int i = 0; i < 500; i++)
+                generator.generate();
+};
 		for (int i = 0; i < 20; i++)
 			service.execute(runner);
 		service.shutdown();

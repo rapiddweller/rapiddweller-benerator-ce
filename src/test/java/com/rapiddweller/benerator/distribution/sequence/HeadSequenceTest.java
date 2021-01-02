@@ -72,7 +72,7 @@ public class HeadSequenceTest extends GeneratorTest {
 
     private Generator<Character> charGenerator(long n) {
 		Sequence sequence = new HeadSequence(n);
-		Generator<Character> source = new SequenceTestGenerator<Character>('A', 'B', 'C', 'D');
+		Generator<Character> source = new SequenceTestGenerator<>('A', 'B', 'C', 'D');
         return initialize(sequence.applyTo(source, false));
     }
 

@@ -52,7 +52,7 @@ public class StepSequenceTest extends GeneratorTest {
 	}
 
     private Generator<Integer> apply(long initial, long increment, long limit) {
-    	Generator<Integer> source = new SequenceTestGenerator<Integer>(1, 2, 3);
+    	Generator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
         StepSequence sequence = new StepSequence(
         		new BigDecimal(initial), new BigDecimal(increment), new BigDecimal(limit));
 		Generator<Integer> generator = sequence.applyTo(source, false);

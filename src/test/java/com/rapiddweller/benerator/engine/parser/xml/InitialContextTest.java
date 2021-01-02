@@ -62,24 +62,21 @@ public class InitialContextTest extends GeneratorTest {
 	@Test
 	public void test() {
 		SysUtil.runWithSystemProperty("jndi.properties", "com/rapiddweller/benerator/engine/jndi.properties",
-			new Runnable() {
-				@Override
-				public void run() {
-					ConsumerMock.lastInstance = null;
-                    DescriptorRunner runner = new DescriptorRunner(DESCRIPTOR_XML, context);
-					try {
-	                    BeneratorContext context = runner.getContext();
-	                    context.setValidate(false);
-	                    runner.run();
-	                    assertNotNull("Consumer was not invoked", ConsumerMock.lastInstance.lastProduct);
-	                    assertEquals("Alice", ((Entity) ConsumerMock.lastInstance.lastProduct).get("name"));
-                    } catch (IOException e) {
-	                    throw new RuntimeException(e);
-                    } finally {
-                    	IOUtil.close(runner);
-                    }
-                }
-		});
+                () -> {
+                    ConsumerMock.lastInstance = null;
+DescriptorRunner runner = new DescriptorRunner(DESCRIPTOR_XML, context);
+                    try {
+BeneratorContext context = runner.getContext();
+context.setValidate(false);
+runner.run();
+assertNotNull("Consumer was not invoked", ConsumerMock.lastInstance.lastProduct);
+assertEquals("Alice", ((Entity) ConsumerMock.lastInstance.lastProduct).get("name"));
+} catch (IOException e) {
+throw new RuntimeException(e);
+} finally {
+IOUtil.close(runner);
+}
+});
 	}
 	
 }

@@ -66,8 +66,8 @@ public abstract class AbstractComponentBuilderFactoryTest extends GeneratorTest 
 	public final class ComponentBuilderGenerator<E> extends AbstractGenerator<E> {
 		
         @SuppressWarnings("rawtypes")
-		private ComponentBuilder builder;
-		private String componentName;
+		private final ComponentBuilder builder;
+		private final String componentName;
 
         @SuppressWarnings("rawtypes")
 		public ComponentBuilderGenerator(ComponentBuilder builder, String componentName) {
@@ -90,7 +90,7 @@ public abstract class AbstractComponentBuilderFactoryTest extends GeneratorTest 
 		@SuppressWarnings("synthetic-access")
         public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
 			Entity entity = createEntity("Test");
-			context.setCurrentProduct(new ProductWrapper<Entity>(entity));
+			context.setCurrentProduct(new ProductWrapper<>(entity));
 			if (!builder.execute((BeneratorContext) context))
 				return null;
 			return wrapper.wrap((E) entity.get(componentName));
@@ -153,7 +153,7 @@ public abstract class AbstractComponentBuilderFactoryTest extends GeneratorTest 
 	*/
 
 	protected void expectNullGenerations(ComponentBuilderGenerator<String> gen, int n) {
-	    ProductWrapper<String> wrapper = new ProductWrapper<String>();
+	    ProductWrapper<String> wrapper = new ProductWrapper<>();
 	    for (int i = 0; i < n; i++) {
 	    	wrapper = gen.generate(wrapper);
 	    	assertNotNull(wrapper);

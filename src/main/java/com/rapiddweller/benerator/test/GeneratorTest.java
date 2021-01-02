@@ -329,7 +329,7 @@ public abstract class GeneratorTest extends ModelTest {
     }
 
     @SafeVarargs
-    private final <T> void expectGeneratedSetOnce(Generator<T> generator, int invocations, T... expectedProducts) {
+    private <T> void expectGeneratedSetOnce(Generator<T> generator, int invocations, T... expectedProducts) {
         Set<T> expectedSet = CollectionUtil.toSet(expectedProducts);
         Set<T> observedSet = new HashSet<>(expectedProducts.length);
         ProductWrapper<T> wrapper = new ProductWrapper<>();
@@ -348,7 +348,7 @@ public abstract class GeneratorTest extends ModelTest {
     }
 
     @SafeVarargs
-    private final <T>void expectUniquelyGeneratedSetOnce(Generator<T> generator, T... expectedProducts) {
+    private <T>void expectUniquelyGeneratedSetOnce(Generator<T> generator, T... expectedProducts) {
         Set<T> expectedSet = CollectionUtil.toSet(expectedProducts);
         UniqueValidator<Object> validator = new UniqueValidator<>();
         ProductWrapper<T> wrapper = new ProductWrapper<>();
@@ -377,7 +377,7 @@ public abstract class GeneratorTest extends ModelTest {
     }
 
     @SafeVarargs
-    private final <T> void expectGenerationsOnce(Generator<T> generator, int n, Validator<T>... validators) {
+    private <T> void expectGenerationsOnce(Generator<T> generator, int n, Validator<T>... validators) {
         ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (int i = 0; i < n; i++) {
         	wrapper = generator.generate(wrapper);
@@ -395,7 +395,7 @@ public abstract class GeneratorTest extends ModelTest {
     }
 
     @SafeVarargs
-    private final <T> void expectUniqueGenerationsOnce(Generator<T> generator, int n, Validator<T>... validators) {
+    private <T> void expectUniqueGenerationsOnce(Generator<T> generator, int n, Validator<T>... validators) {
         UniqueValidator<T> validator = new UniqueValidator<>();
         ProductWrapper<T> wrapper = new ProductWrapper<>();
         for (int i = 0; i < n; i++) {

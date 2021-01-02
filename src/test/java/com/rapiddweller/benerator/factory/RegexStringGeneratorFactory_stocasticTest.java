@@ -50,7 +50,7 @@ import static org.junit.Assert.*;
  */
 public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
 
-    private static Logger logger = LogManager.getLogger(RegexStringGeneratorFactory_stocasticTest.class);
+    private static final Logger logger = LogManager.getLogger(RegexStringGeneratorFactory_stocasticTest.class);
 
     private static Locale realLocale;
     

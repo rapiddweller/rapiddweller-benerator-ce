@@ -42,11 +42,11 @@ import com.rapiddweller.model.data.Entity;
 public abstract class AbstractEntityIteratorTest extends ModelTest {
 
 	public static Entity nextOf(DataIterator<Entity> iterator) {
-		return iterator.next(new DataContainer<Entity>()).getData();
+		return iterator.next(new DataContainer<>()).getData();
 	}
 
 	public static void assertUnavailable(DataIterator<Entity> iterator) {
-		assertNull(iterator.next(new DataContainer<Entity>()));
+		assertNull(iterator.next(new DataContainer<>()));
 	}
     
 }

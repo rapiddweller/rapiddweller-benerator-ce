@@ -43,7 +43,7 @@ public class ExpressionBasedGeneratorTest extends GeneratorTest {
 	@Test
 	public void test() {
 		Expression<Integer> expression = ExpressionUtil.constant(1);
-		Generator<Integer> generator = new ExpressionBasedGenerator<Integer>(expression, Integer.class);
+		Generator<Integer> generator = new ExpressionBasedGenerator<>(expression, Integer.class);
 		expectGeneratedSequence(generator, 1, 1, 1, 1).withContinuedAvailability();
 		generator.close();
 	}

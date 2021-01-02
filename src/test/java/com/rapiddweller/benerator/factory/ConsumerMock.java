@@ -38,14 +38,14 @@ import com.rapiddweller.model.data.Entity;
 public class ConsumerMock extends AbstractConsumer implements ContextAware {
 	
 	public static final HashMap<Integer, ConsumerMock> instances 
-		= new HashMap<Integer, ConsumerMock>();
-	private Random random = new Random();
+		= new HashMap<>();
+	private final Random random = new Random();
 	
 	public static ConsumerMock lastInstance;
 	
 	public Object lastProduct;
-	public int id;
-	public AtomicInteger invocationCount;
+	public final int id;
+	public final AtomicInteger invocationCount;
 	public boolean closed;
 	public Context context;
 	

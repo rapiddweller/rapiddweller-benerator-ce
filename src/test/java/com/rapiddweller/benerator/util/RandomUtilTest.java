@@ -62,7 +62,7 @@ public class RandomUtilTest extends GeneratorTest {
 	
 	@Test
 	public void testRandomFromLiteral() {
-		ObjectCounter<Object> counter = new ObjectCounter<Object>(2);
+		ObjectCounter<Object> counter = new ObjectCounter<>(2);
 		int n = 3000;
 		for (int i = 0; i < n; i++)
 			counter.count(RandomUtil.randomFromWeightLiteral("'A'^2,'B'^1"));
@@ -85,8 +85,8 @@ public class RandomUtilTest extends GeneratorTest {
     // implementation --------------------------------------------------------------------------------------------------
 
     private static void testEqualDistribution(int min, int max, double tolerance, int iterations) {
-        List<Integer> list = new ArrayList<Integer>();
-        Set<Integer> expectedSet = new HashSet<Integer>(max - min + 1);
+        List<Integer> list = new ArrayList<>();
+        Set<Integer> expectedSet = new HashSet<>(max - min + 1);
         for (int i = min; i <= max; i++)
             expectedSet.add(i);
         for (int i = 0; i < iterations; i++)
@@ -95,8 +95,8 @@ public class RandomUtilTest extends GeneratorTest {
     }
 
     private static void testEqualDistribution(long min, long max, double tolerance, int iterations) {
-        List<Long> list = new ArrayList<Long>();
-        Set<Long> expectedSet = new HashSet<Long>((int)(max - min + 1));
+        List<Long> list = new ArrayList<>();
+        Set<Long> expectedSet = new HashSet<>((int) (max - min + 1));
         for (long i = min; i <= max; i++)
             expectedSet.add(i);
         for (int i = 0; i < iterations; i++)

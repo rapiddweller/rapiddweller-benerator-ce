@@ -165,7 +165,7 @@ public class PersonGeneratorTest extends GeneratorClassTest {
         generator.setMaxAgeYears(21);
         generator.init(context);
         Date today = TimeUtil.today();
-        Set<Integer> agesUsed = new HashSet<Integer>();
+        Set<Integer> agesUsed = new HashSet<>();
         for (int i = 0; i < 1000; i++) {
             Person person = generator.generate();
             int age = TimeUtil.yearsBetween(person.getBirthDate(), today);

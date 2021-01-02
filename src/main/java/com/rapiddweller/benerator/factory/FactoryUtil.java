@@ -29,7 +29,6 @@ package com.rapiddweller.benerator.factory;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -148,14 +147,14 @@ public class FactoryUtil {
     
     public static Expression<Distribution> getDistributionExpression(
     		final String spec, final Uniqueness uniqueness, final boolean required) {
-    	return new DynamicExpression<Distribution>() {
+    	return new DynamicExpression<>() {
 
-			@Override
-			public Distribution evaluate(Context context) {
-	            return getDistribution(spec, uniqueness, required, (BeneratorContext) context);
+            @Override
+            public Distribution evaluate(Context context) {
+                return getDistribution(spec, uniqueness, required, (BeneratorContext) context);
             }
-    		
-    	};
+
+        };
     }
 
     public static Set<Character> fullLocaleCharSet(String pattern, Locale locale) {

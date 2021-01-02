@@ -36,10 +36,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class PageListenerMock implements PageListener {
 	
-	public int id;
+	public final int id;
 	
-	public static volatile AtomicInteger startCount = new AtomicInteger();
-	public static volatile AtomicInteger finishCount = new AtomicInteger();
+	public static final AtomicInteger startCount = new AtomicInteger();
+	public static final AtomicInteger finishCount = new AtomicInteger();
 
 	public PageListenerMock(int id) {
 	    this.id = id;

@@ -40,7 +40,7 @@ import static org.junit.Assert.*;
  */
 public class CompanyNameGeneratorTest extends GeneratorClassTest {
 
-	private static Logger logger = LogManager.getLogger(CompanyNameGeneratorTest.class);
+	private static final Logger logger = LogManager.getLogger(CompanyNameGeneratorTest.class);
 
     public CompanyNameGeneratorTest() {
 		super(CompanyNameGenerator.class);

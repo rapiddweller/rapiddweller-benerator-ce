@@ -171,7 +171,7 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
 		type.setDetailValue("distribution", "weighted");
 		Generator<String> generator = createAndInitGenerator(type, Uniqueness.NONE);
 		expectGeneratedSet(generator, 100, "Alice", "Otto").withContinuedAvailability();
-		ObjectCounter<String> counter = new ObjectCounter<String>(2);
+		ObjectCounter<String> counter = new ObjectCounter<>(2);
 		int n = 1000;
 		for (int i = 0; i < n; i++)
 			counter.count(GeneratorUtil.generateNonNull(generator));
@@ -192,7 +192,7 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
 		SimpleTypeDescriptor type = createSimpleType("givenName");
 		type.setSource(NAME_CSV);
 		Generator<String> generator = createAndInitGenerator(type, Uniqueness.SIMPLE);
-		ObjectCounter<String> counter = new ObjectCounter<String>(2);
+		ObjectCounter<String> counter = new ObjectCounter<>(2);
 		for (int i = 0; i < 2; i++)
 			counter.count(GeneratorUtil.generateNonNull(generator));
 		assertEquals(counter.toString(), 1, counter.getCount("Alice"));

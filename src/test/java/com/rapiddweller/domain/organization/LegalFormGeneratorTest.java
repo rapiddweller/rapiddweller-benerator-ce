@@ -54,8 +54,8 @@ public class LegalFormGeneratorTest extends GeneratorTest {
 	}
 
 	protected static Set<String> generatedSet(LegalFormGenerator generator, int n) {
-		Set<String> result = new HashSet<String>();
-		ProductWrapper<String> wrapper = new ProductWrapper<String>();
+		Set<String> result = new HashSet<>();
+		ProductWrapper<String> wrapper = new ProductWrapper<>();
 		for (int i = 0; i < n; i++)
 			result.add(generator.generate(wrapper ).unwrap());
 		return result;

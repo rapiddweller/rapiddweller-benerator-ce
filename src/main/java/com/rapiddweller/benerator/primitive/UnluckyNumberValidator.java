@@ -157,8 +157,7 @@ public class UnluckyNumberValidator extends AbstractConstraintValidator<UnluckyN
 
     private static Set<String> parseNumberSpec(String spec) {
 	    String[] tokens = StringUtil.tokenize(spec, ',');
-	    Set<String> set = new HashSet<>();
-        set.addAll(Arrays.asList(tokens));
+        Set<String> set = new HashSet<>(Arrays.asList(tokens));
 	    return set;
     }
 

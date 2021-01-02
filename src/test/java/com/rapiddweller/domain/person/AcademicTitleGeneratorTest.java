@@ -44,7 +44,7 @@ import org.junit.Test;
  */
 public class AcademicTitleGeneratorTest {
 	
-	Set<String> GERMAN_TITLES  = CollectionUtil.toSet("Dr.", "Prof. Dr.");
+	final Set<String> GERMAN_TITLES  = CollectionUtil.toSet("Dr.", "Prof. Dr.");
 	
 	@Test
 	public void test() {
@@ -53,7 +53,7 @@ public class AcademicTitleGeneratorTest {
 		int titleUsedCount = 0;
 		int n = 1000;
 		for (int i = 0; i < n; i++) {
-			String title = gen.generate(new ProductWrapper<String>()).unwrap();
+			String title = gen.generate(new ProductWrapper<>()).unwrap();
 			if (title != null) {
 				titleUsedCount++;
 				assertTrue(GERMAN_TITLES.contains(title));

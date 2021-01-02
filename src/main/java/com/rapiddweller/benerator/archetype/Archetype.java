@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Locale;
@@ -41,7 +40,6 @@ import java.util.Properties;
 
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.Filter;
 import com.rapiddweller.common.IOUtil;
 
 /**

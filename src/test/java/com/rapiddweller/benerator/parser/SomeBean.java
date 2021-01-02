@@ -35,7 +35,7 @@ package com.rapiddweller.benerator.parser;
  */
 
 public class SomeBean {
-	public int n;
+	public final int n;
 	
 	public SomeBean() {
 		this(1);

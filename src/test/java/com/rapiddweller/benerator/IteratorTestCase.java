@@ -63,7 +63,7 @@ public abstract class IteratorTestCase {
 	
 	public static class NextHelper {
 		
-		Iterator<?> iterator;
+		final Iterator<?> iterator;
 
 		public NextHelper(Iterator<?> iterator) {
 			this.iterator = iterator;

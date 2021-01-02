@@ -109,7 +109,7 @@ public class DayOfWeekValidatorTest {
 	    }
     }
 	
-    class Dummy {
+    static class Dummy {
     	@DayOfWeek(daysOfWeekAccepted = { DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY }) 
     	public Date date;
     }

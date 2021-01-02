@@ -57,7 +57,7 @@ public class ValidatorMock implements Validator<Integer> {
 
 	@Override
 	public boolean valid(Integer candidate) {
-		return (candidate != null && value == candidate.intValue());
+		return (candidate != null && value == candidate);
 	}
 
 }

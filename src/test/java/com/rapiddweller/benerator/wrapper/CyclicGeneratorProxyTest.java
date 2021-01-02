@@ -46,7 +46,7 @@ public class CyclicGeneratorProxyTest extends GeneratorTest {
 	
 	@Test
 	public void testSingleIteration() {
-		CyclicGeneratorProxy<Integer> proxy = new CyclicGeneratorProxy<Integer>(new Source12());
+		CyclicGeneratorProxy<Integer> proxy = new CyclicGeneratorProxy<>(new Source12());
 		proxy.init(context);
 		expect12(proxy);
 		proxy.close();
@@ -55,7 +55,7 @@ public class CyclicGeneratorProxyTest extends GeneratorTest {
 
 	@Test
 	public void testCyclicIteration() {
-		CyclicGeneratorProxy<Integer> proxy = new CyclicGeneratorProxy<Integer>(new Source12());
+		CyclicGeneratorProxy<Integer> proxy = new CyclicGeneratorProxy<>(new Source12());
 		proxy.init(context);
 		expect12(proxy);
 		expect12(proxy);
@@ -65,7 +65,7 @@ public class CyclicGeneratorProxyTest extends GeneratorTest {
 
 	@Test
 	public void testReset() {
-		CyclicGeneratorProxy<Integer> proxy = new CyclicGeneratorProxy<Integer>(new Source12());
+		CyclicGeneratorProxy<Integer> proxy = new CyclicGeneratorProxy<>(new Source12());
 		proxy.init(context);
 		assertAvailable(proxy);
 		proxy.reset();

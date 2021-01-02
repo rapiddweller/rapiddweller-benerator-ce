@@ -93,7 +93,7 @@ public class RandomWalkDoubleGeneratorTest extends GeneratorClassTest {
     }
 
     private static void assertProductSpace(Set<Double> space, Generator<Double> generator) {
-    	Double product = generator.generate(new ProductWrapper<Double>()).unwrap();
+    	Double product = generator.generate(new ProductWrapper<>()).unwrap();
 		assertTrue("Expected one of " + space + ", but found " + product, space.contains(product));
     }
 

@@ -38,7 +38,7 @@ import org.junit.Test;
  */
 public class BeanDescriptorProviderTest {
 
-	BeanDescriptorProvider provider = new BeanDescriptorProvider();
+	final BeanDescriptorProvider provider = new BeanDescriptorProvider();
 	
 	@Test
 	public void testAbstractType() {

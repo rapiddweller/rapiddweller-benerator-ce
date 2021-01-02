@@ -44,9 +44,9 @@ public class ConvertingGeneratorTest extends GeneratorTest {
 
     @Test
     public void test() {
-        ConstantTestGenerator<Integer> source = new ConstantTestGenerator<Integer>(1);
+        ConstantTestGenerator<Integer> source = new ConstantTestGenerator<>(1);
         TestConverter converter = new TestConverter();
-        ConvertingGenerator<Integer, String> generator = new ConvertingGenerator<Integer, String>(source, converter);
+        ConvertingGenerator<Integer, String> generator = new ConvertingGenerator<>(source, converter);
         assertEquals("constructor", source.getLastMethodCall());
         assertEquals("1", GeneratorUtil.generateNonNull(generator));
         assertEquals("1", GeneratorUtil.generateNonNull(generator));

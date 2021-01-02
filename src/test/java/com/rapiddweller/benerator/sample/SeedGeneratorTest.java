@@ -52,13 +52,13 @@ public class SeedGeneratorTest extends GeneratorTest {
 
 	@Test(expected = InvalidGeneratorSetupException.class)
 	public void testEmpty() {
-		SeedGenerator<Character> generator = new SeedGenerator<Character>(Character.class, 1);
+		SeedGenerator<Character> generator = new SeedGenerator<>(Character.class, 1);
 		generator.init(context);
 	}
 
 	@Test(expected = InvalidGeneratorSetupException.class)
 	public void testDepth0() {
-		new SeedGenerator<Character>(Character.class, 0).init(context);
+        new SeedGenerator<>(Character.class, 0).init(context);
 	}
 
 	@Test
@@ -84,7 +84,7 @@ public class SeedGeneratorTest extends GeneratorTest {
 	// helpers ---------------------------------------------------------------------------------------------------------
 	
 	private void checkGenerator(int depth) {
-	    SeedGenerator<Character> 		generator = new SeedGenerator<Character>(Character.class, depth);
+	    SeedGenerator<Character> 		generator = new SeedGenerator<>(Character.class, depth);
 		generator.addSample(SAMPLE1);
 		generator.addSample(SAMPLE2);
 		generator.addSample(SAMPLE3);

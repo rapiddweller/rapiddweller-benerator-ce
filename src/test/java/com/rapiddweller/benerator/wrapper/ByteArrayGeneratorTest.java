@@ -43,7 +43,7 @@ public class ByteArrayGeneratorTest extends GeneratorTest {
 
 	@Test
 	public void test() {
-		ConstantTestGenerator<Byte> source = new ConstantTestGenerator<Byte>((byte) 1);
+		ConstantTestGenerator<Byte> source = new ConstantTestGenerator<>((byte) 1);
 		ByteArrayGenerator generator = new ByteArrayGenerator(source, 2, 2);
 		init(generator);
 		byte[] result = generateNonNull(generator);

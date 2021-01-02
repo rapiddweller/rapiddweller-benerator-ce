@@ -26,12 +26,9 @@
 
 package com.rapiddweller.benerator.engine;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
-import com.rapiddweller.common.IOUtil;
 import org.junit.Test;
 
 /**

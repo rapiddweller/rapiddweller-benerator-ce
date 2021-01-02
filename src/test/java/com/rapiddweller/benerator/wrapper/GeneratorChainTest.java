@@ -42,9 +42,9 @@ public class GeneratorChainTest extends GeneratorTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testUnique() {
-		GeneratorChain<Integer> chain = new GeneratorChain<Integer>(Integer.class, true, 
-				new SequenceTestGenerator<Integer>(2, 3),
-				new SequenceTestGenerator<Integer>(1, 2));
+		GeneratorChain<Integer> chain = new GeneratorChain<>(Integer.class, true,
+                new SequenceTestGenerator<>(2, 3),
+                new SequenceTestGenerator<>(1, 2));
 		chain.init(context);
 		expectGeneratedSequence(chain, 2, 3, 1).withCeasedAvailability();
 	}
@@ -52,9 +52,9 @@ public class GeneratorChainTest extends GeneratorTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testNonUnique() {
-		GeneratorChain<Integer> chain = new GeneratorChain<Integer>(Integer.class, false, 
-				new OneShotGenerator<Integer>(2),
-				new OneShotGenerator<Integer>(1));
+		GeneratorChain<Integer> chain = new GeneratorChain<>(Integer.class, false,
+                new OneShotGenerator<>(2),
+                new OneShotGenerator<>(1));
 		chain.init(context);
 		expectGeneratedSequence(chain, 2, 1).withCeasedAvailability();
 	}

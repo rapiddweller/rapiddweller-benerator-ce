@@ -27,7 +27,6 @@
 package com.rapiddweller.benerator.main;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.MessageFormat;
 
 import com.rapiddweller.benerator.BeneratorConstants;
@@ -75,17 +74,15 @@ public class XmlCreator {
         long start = System.currentTimeMillis();
         BeneratorContext context = BeneratorFactory.getInstance().createContext(IOUtil.getParentUri(schemaUri));
         XMLFileGenerator fileGenerator = new XMLFileGenerator(schemaUri, root, pattern, propertiesFiles);
-        fileGenerator.init(context);
-        try {
-	        for (long i = 0; i < fileCount; i++) {
-	        	ProductWrapper<File> file = fileGenerator.generate(new ProductWrapper<>());
-	            if (file == null)
-	            	throw new RuntimeException("Unable to create the expected number of files. " +
-	            			"Created " + i + " of " + fileCount + " files");
-	            logger.info("created file: " + file);
-	        }
-        } finally {
-        	fileGenerator.close();
+        try (fileGenerator) {
+            fileGenerator.init(context);
+            for (long i = 0; i < fileCount; i++) {
+                ProductWrapper<File> file = fileGenerator.generate(new ProductWrapper<>());
+                if (file == null)
+                    throw new RuntimeException("Unable to create the expected number of files. " +
+                            "Created " + i + " of " + fileCount + " files");
+                logger.info("created file: " + file);
+            }
         }
         long duration = System.currentTimeMillis() - start;
         logger.info("Finished after " + duration + " ms");

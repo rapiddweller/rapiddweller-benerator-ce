@@ -58,17 +58,14 @@ public class GeneratorUtilTest extends GeneratorTest {
 	
 	@Test
 	public void testAllProducts_cacheSizeOverride() {
-		SysUtil.runWithSystemProperty(BeneratorOpts.OPTS_CACHE_SIZE, "2", new Runnable() {
-			@Override
-			public void run() {
-				SequenceTestGenerator<Integer> source = new SequenceTestGenerator<Integer>(1, 2, 3, 4);
-				source.init(context);
-				List<Integer> products = GeneratorUtil.allProducts(source);
-				assertEquals(2, products.size());
-				assertEquals(1, products.get(0).intValue());
-				assertEquals(2, products.get(1).intValue());
-            }
-		});
+		SysUtil.runWithSystemProperty(BeneratorOpts.OPTS_CACHE_SIZE, "2", () -> {
+			SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2, 3, 4);
+			source.init(context);
+			List<Integer> products = GeneratorUtil.allProducts(source);
+			assertEquals(2, products.size());
+			assertEquals(1, products.get(0).intValue());
+			assertEquals(2, products.get(1).intValue());
+});
 	}
 	
 }

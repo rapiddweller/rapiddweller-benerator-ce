@@ -41,7 +41,7 @@ import static org.junit.Assert.*;
  */
 public class BooleanGeneratorTest extends GeneratorClassTest {
 
-    private static Logger logger = LogManager.getLogger(BooleanGeneratorTest.class);
+    private static final Logger logger = LogManager.getLogger(BooleanGeneratorTest.class);
 
     public BooleanGeneratorTest() {
         super(BooleanGenerator.class);

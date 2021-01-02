@@ -48,7 +48,7 @@ public class StateTransitionGeneratorTest extends GeneratorTest {
 
 	@Test
     public void testDeterministicSequence() {
-		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<Integer>(Integer.class);
+		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<>(Integer.class);
 		generator.addTransition(null, 1, 1.);
 		generator.addTransition(1, 2, 1.);
 		generator.addTransition(2, null, 1.);
@@ -63,7 +63,7 @@ public class StateTransitionGeneratorTest extends GeneratorTest {
 	/** Tests a setup that generates Sequences null->1, (1->2, 2->1)* */
 	@Test
     public void testRandomSequence() {
-		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<Integer>(Integer.class);
+		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<>(Integer.class);
 		generator.addTransition(null, 1, 1.);
 		generator.addTransition(1, 2, 1.);
 		generator.addTransition(2, 1, 0.5);
@@ -86,7 +86,7 @@ public class StateTransitionGeneratorTest extends GeneratorTest {
 	/** Tests a setup that generates Sequences 1*, e.g. (1), (1, 1), (1, 1, 1), ... */
 	@Test
     public void testRecursion() {
-		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<Integer>(Integer.class);
+		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<>(Integer.class);
 		generator.addTransition(null, 1, 1.);
 		generator.addTransition(1, 1, 0.5);
 		generator.addTransition(1, null, 0.5);
@@ -97,8 +97,8 @@ public class StateTransitionGeneratorTest extends GeneratorTest {
 	/** Tests the textual specification of transitions */
 	@Test
     public void testTextualSpec() {
-		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<Integer>(
-				Integer.class, "null->1, 1->1^0.5, 1->null^0.5");
+		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<>(
+                Integer.class, "null->1, 1->1^0.5, 1->null^0.5");
 		generator.addTransition(null, 1, 1.);
 		generator.addTransition(1, 1, 0.5);
 		generator.addTransition(1, null, 0.5);
@@ -108,14 +108,14 @@ public class StateTransitionGeneratorTest extends GeneratorTest {
 	
 	@Test(expected = InvalidGeneratorSetupException.class)
 	public void testNoInitialState() {
-		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<Integer>(Integer.class);
+		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<>(Integer.class);
 		generator.addTransition(1, 2, 0.6);
 		generator.init(context);
 	}
 	
 	@Test(expected = InvalidGeneratorSetupException.class)
 	public void testNoFinalState() {
-		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<Integer>(Integer.class);
+		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<>(Integer.class);
 		generator.addTransition(null, 1, 0.6);
 		generator.init(context);
 	}

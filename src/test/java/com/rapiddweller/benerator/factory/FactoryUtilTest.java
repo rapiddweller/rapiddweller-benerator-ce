@@ -123,13 +123,13 @@ public class FactoryUtilTest extends GeneratorTest {
     @Test
     public void testGetMessageGenerator() {
         List<String> salutations = Arrays.asList("Hello", "Hi");
-        AttachedWeightSampleGenerator<String> salutationGenerator = new AttachedWeightSampleGenerator<String>(String.class, salutations);
+        AttachedWeightSampleGenerator<String> salutationGenerator = new AttachedWeightSampleGenerator<>(String.class, salutations);
         List<String> names = Arrays.asList("Alice", "Bob", "Charly");
-        AttachedWeightSampleGenerator<String> nameGenerator = new AttachedWeightSampleGenerator<String>(String.class, names);
+        AttachedWeightSampleGenerator<String> nameGenerator = new AttachedWeightSampleGenerator<>(String.class, names);
         String pattern = "{0} {1}";
         Generator<String> generator = WrapperFactory.createMessageGenerator(pattern, 0, 12, salutationGenerator, nameGenerator);
         generator.init(context);
-        ProductWrapper<String> wrapper = new ProductWrapper<String>();
+        ProductWrapper<String> wrapper = new ProductWrapper<>();
         for (int i = 0; i < 10; i++) {
             String message = generator.generate(wrapper).unwrap();
             StringTokenizer tokenizer = new StringTokenizer(message, " ");
@@ -143,15 +143,15 @@ public class FactoryUtilTest extends GeneratorTest {
     @Test
     public void testExtractValues() {
 		List<Integer> values = FactoryUtil.extractValues(CollectionUtil.toList(
-    			new WeightedSample<Integer>(1, 1),
-    			new WeightedSample<Integer>(null, 2)));
+				new WeightedSample<>(1, 1),
+				new WeightedSample<>(null, 2)));
     	assertEquals(CollectionUtil.toList(1, null), values);
     }
 
     private <T> void initAndUseGenerator(Generator<T> generator) {
     	generator.init(context);
         for (int i = 0; i < 5; i++) {
-            T product = generator.generate(new ProductWrapper<T>()).unwrap();
+            T product = generator.generate(new ProductWrapper<>()).unwrap();
         	assertNotNull("Generator unexpectedly invalid: " + generator.toString(), product);
         }
     }

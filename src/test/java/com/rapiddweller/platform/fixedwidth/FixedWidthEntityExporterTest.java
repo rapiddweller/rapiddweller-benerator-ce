@@ -53,16 +53,14 @@ public class FixedWidthEntityExporterTest extends ModelTest {
 		File file = tempFile();
 		String uri = file.getAbsolutePath();
 		FixedWidthEntityExporter exporter = new FixedWidthEntityExporter(uri, ENCODING, "left[10],right[N0000000.00]");
-		exporter.setNullString("");
-		try {
-			consumeEntity(exporter, 12, 34);       // int
-			consumeEntity(exporter, 56, 9876543L); // long
-			consumeEntity(exporter, 78, 9876543.); // round double
-			consumeEntity(exporter, 90, 1.5);      // double
-			consumeEntity(exporter, null, null);   // null
-		} finally {
-			exporter.close();
-		}
+        try (exporter) {
+            exporter.setNullString("");
+            consumeEntity(exporter, 12, 34);       // int
+            consumeEntity(exporter, 56, 9876543L); // long
+            consumeEntity(exporter, 78, 9876543.); // round double
+            consumeEntity(exporter, 90, 1.5);      // double
+            consumeEntity(exporter, null, null);   // null
+        }
 		assertTrue(file.exists());
 		String[] actualLines = IOUtil.readTextLines(file.getAbsolutePath(), true);
 		String[] expectedLines = new String [] {

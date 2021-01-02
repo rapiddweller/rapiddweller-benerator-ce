@@ -52,14 +52,14 @@ public class ExpandGeneratorProxyTest extends GeneratorTest {
 
 	@Test(expected = InvalidGeneratorSetupException.class)
 	public void testNullSource() {
-		Generator<Long> generator = new ExpandGeneratorProxy<Long>(null, CACHE_SIZE, BUCKET_SIZE);
+		Generator<Long> generator = new ExpandGeneratorProxy<>(null, CACHE_SIZE, BUCKET_SIZE);
 		generator.init(context);
 	}
 	
 	@Test
 	public void testEmptySource() {
-		SequenceTestGenerator<Long> emptyFeed = new SequenceTestGenerator<Long>();
-		Generator<Long> generator = new ExpandGeneratorProxy<Long>(emptyFeed, CACHE_SIZE, BUCKET_SIZE);
+		SequenceTestGenerator<Long> emptyFeed = new SequenceTestGenerator<>();
+		Generator<Long> generator = new ExpandGeneratorProxy<>(emptyFeed, CACHE_SIZE, BUCKET_SIZE);
 		generator.init(context);
 		assertUnavailable(generator);
 	}
