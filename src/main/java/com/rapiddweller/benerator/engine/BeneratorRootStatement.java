@@ -54,7 +54,7 @@ import com.rapiddweller.script.DatabeneScriptParser;
  */
 public class BeneratorRootStatement extends SequentialStatement {
 
-	private final Map<String, String> attributes;
+	private Map<String, String> attributes;
 	
     public BeneratorRootStatement(Map<String, String> attributes) {
     	this.attributes = new HashMap<>(attributes);
@@ -98,10 +98,10 @@ public class BeneratorRootStatement extends SequentialStatement {
     	}
 	}
     
-	static class BeneratorVisitor implements Visitor<Statement> {
+	class BeneratorVisitor implements Visitor<Statement> {
 		
-		private final String name;
-		private final BeneratorContext context;
+		private String name;
+		private BeneratorContext context;
 		private GenerateOrIterateStatement result;
 		
 		public BeneratorVisitor(String name, BeneratorContext context) {

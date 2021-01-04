@@ -281,6 +281,11 @@
             <version>3.0.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.6</version>
+        </dependency>
 
         <!-- GraalVM dependencies -->
         <dependency>
@@ -471,6 +476,40 @@
                     <tarLongFileMode>gnu</tarLongFileMode>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.6</version>
+                <configuration>
+                    <excludes>
+                        <exclude>com/rapiddweller/task/**/*</exclude>
+                        <exclude>com/rapiddweller/benerator/template/**/*</exclude>
+                        <exclude>com/rapiddweller/benerator/gui/**/*</exclude>
+                        <exclude>com/rapiddweller/benerator/anno/**/*</exclude>
+                        <exclude>com/rapiddweller/benerator/main/Benerator.class</exclude>
+                        <exclude>com/rapiddweller/benerator/main/BeneratorGUI.class</exclude>
+                        <exclude>com/rapiddweller/benerator/main/BeneratorGUI.BeneratorGUIFrame.class</exclude>
+                        <exclude>com/rapiddweller/benerator/main/NewProjectWizard.class</exclude>
+                        <exclude>com/rapiddweller/benerator/main/TemplateRunner.class</exclude>
+                        <exclude>com/rapiddweller/platform/xml/XMLSchemaDescriptorProvider.class</exclude>
+                        <exclude>com/rapiddweller/benerator/factory/**/*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <reporting>
@@ -499,6 +538,18 @@
                     <source>${java_source_version}</source>
                     <detectJavaApiLink>false</detectJavaApiLink>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <!-- select non-aggregate reports -->
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

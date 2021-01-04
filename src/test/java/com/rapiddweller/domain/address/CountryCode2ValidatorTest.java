@@ -27,29 +27,37 @@
 package com.rapiddweller.domain.address;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Tests the CountryCode2Validator.<br/>
  * <br/>
  * Created at 25.08.2008 09:19:13
- * @since 0.5.5
+ *
  * @author Volker Bergmann
- * 
+ * @since 0.5.5
  */
 public class CountryCode2ValidatorTest {
 
-	@Test
-	public void test() {
-		CountryCode2Validator validator = new CountryCode2Validator();
-		assertTrue(validator.isValid("DE", null));
-		assertTrue(validator.isValid("US", null));
-		assertFalse(validator.isValid(null, null));
-		assertFalse(validator.isValid("", null));
-		assertFalse(validator.isValid("USA", null));
-		assertFalse(validator.isValid("D1", null));
-		assertFalse(validator.isValid("1D", null));
-		assertFalse(validator.isValid(".*", null));
-	}
-	
+    @Test
+    public void test() {
+        CountryCode2Validator validator = new CountryCode2Validator();
+        assertTrue(validator.isValid("DE", null));
+        assertTrue(validator.isValid("US", null));
+        assertFalse(validator.isValid(null, null));
+        assertFalse(validator.isValid("", null));
+        assertFalse(validator.isValid("USA", null));
+        assertFalse(validator.isValid("D1", null));
+        assertFalse(validator.isValid("1D", null));
+        assertFalse(validator.isValid(".*", null));
+    }
+
+    @Test
+    public void testIsValid() {
+        assertFalse((new CountryCode2Validator()).isValid("Country Code", null));
+        assertFalse((new CountryCode2Validator()).isValid(null, null));
+    }
+
 }

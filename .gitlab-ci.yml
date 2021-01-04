@@ -11,7 +11,7 @@ stages:
 variables:
   ARTIFACT_ID: "rapiddweller-benerator-ce"
   ARTIFACT_VERSION_BASE: "1.1.0" # should be updated with the final release (tag release version)
-  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2"
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
   PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/releases/${CI_COMMIT_TAG}"
 
@@ -21,7 +21,7 @@ setup:jdk-11:
   stage: setup
   image:
     name: alpine/git:latest
-    entrypoint: [""]
+    entrypoint: [ "" ]
   script:
     - export RD_PROJECT_LATEST_TAG=$(git describe --abbrev=0 --tags)
     - echo "RD_PROJECT_LATEST_TAG=$RD_PROJECT_LATEST_TAG" >> build.env
@@ -58,6 +58,19 @@ build:jdk-11:
       - target/surefire-reports
   script:
     - mvn $MAVEN_CLI_OPTS clean package
+
+test:jdk11:
+  stage: build
+  image: maven:3-adoptopenjdk-11
+  needs:
+    - job: setup:jdk-11
+      artifacts: true
+  script:
+    - mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
+    - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco/jacoco.csv
+  artifacts:
+    paths:
+      - target/site/jacoco/jacoco.xml
 
 ###################### Assembly and Deploy ######################
 
@@ -233,8 +246,25 @@ E2ET:shop:postgres-graalvm11:
     - cd $ARTIFACT_FULLNAME/demo/shop
     - benerator shop-postgres.ben.xml
 
-###################### Sonarqube ######################
+###################### Quality ######################
 
+coverage:jdk11:
+  # Must be in a stage later than test:jdk11:'s stage.
+  # The `visualize` stage does not exist by default.
+  # Please define it first, or chose an existing stage like `deploy`.
+  stage: quality
+  image: haynes/jacoco2cobertura:1.0.4
+  script:
+    # convert report from jacoco to cobertura
+    - 'python /opt/cover2cover.py target/site/jacoco/jacoco.xml src/main/java > target/site/cobertura.xml'
+    # read the <source></source> tag and prepend the path to every filename attribute
+    - 'python /opt/source2filename.py target/site/cobertura.xml'
+  needs:
+    - job: test:jdk11
+      artifacts: true
+  artifacts:
+    reports:
+      cobertura: target/site/cobertura.xml
 
 ###################### Upload Binaries ######################
 
