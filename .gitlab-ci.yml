@@ -59,11 +59,15 @@ build:jdk-11:
   script:
     - mvn $MAVEN_CLI_OPTS clean package
 
-test-jdk11:
+test:jdk11:
   stage: build
   image: maven:3-adoptopenjdk-11
+  needs:
+    - job: setup:jdk-11
+      artifacts: true
   script:
-    - 'mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report'
+    - mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
+    - cat target/site/jacoco/index.html
   artifacts:
     paths:
       - target/site/jacoco/jacoco.xml
@@ -244,11 +248,8 @@ E2ET:shop:postgres-graalvm11:
 
 ###################### Quality ######################
 
-
-
-
-coverage-jdk11:
-  # Must be in a stage later than test-jdk11's stage.
+coverage:jdk11:
+  # Must be in a stage later than test:jdk11:'s stage.
   # The `visualize` stage does not exist by default.
   # Please define it first, or chose an existing stage like `deploy`.
   stage: quality
@@ -258,9 +259,9 @@ coverage-jdk11:
     - 'python /opt/cover2cover.py target/site/jacoco/jacoco.xml src/main/java > target/site/cobertura.xml'
     # read the <source></source> tag and prepend the path to every filename attribute
     - 'python /opt/source2filename.py target/site/cobertura.xml'
-  needs: [ "test-jdk11" ]
-  dependencies:
-    - test-jdk11
+  needs:
+    - job: test:jdk11
+      artifacts: true
   artifacts:
     reports:
       cobertura: target/site/cobertura.xml
