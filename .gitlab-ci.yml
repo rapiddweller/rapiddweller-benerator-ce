@@ -21,7 +21,7 @@ setup:jdk-11:
   stage: setup
   image:
     name: alpine/git:latest
-    entrypoint: [""]
+    entrypoint: [ "" ]
   script:
     - export RD_PROJECT_LATEST_TAG=$(git describe --abbrev=0 --tags)
     - echo "RD_PROJECT_LATEST_TAG=$RD_PROJECT_LATEST_TAG" >> build.env
@@ -58,6 +58,15 @@ build:jdk-11:
       - target/surefire-reports
   script:
     - mvn $MAVEN_CLI_OPTS clean package
+
+test-jdk11:
+  stage: build
+  image: maven:3-adoptopenjdk-11
+  script:
+    - 'mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report'
+  artifacts:
+    paths:
+      - target/site/jacoco/jacoco.xml
 
 ###################### Assembly and Deploy ######################
 
@@ -236,14 +245,7 @@ E2ET:shop:postgres-graalvm11:
 ###################### Quality ######################
 
 
-test-jdk11:
-  stage: quality
-  image: maven:3-adoptopenjdk-11
-  script:
-    - 'mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report'
-  artifacts:
-    paths:
-      - target/site/jacoco/jacoco.xml
+
 
 coverage-jdk11:
   # Must be in a stage later than test-jdk11's stage.
@@ -256,7 +258,7 @@ coverage-jdk11:
     - 'python /opt/cover2cover.py target/site/jacoco/jacoco.xml src/main/java > target/site/cobertura.xml'
     # read the <source></source> tag and prepend the path to every filename attribute
     - 'python /opt/source2filename.py target/site/cobertura.xml'
-  needs: ["test-jdk11"]
+  needs: [ "test-jdk11" ]
   dependencies:
     - test-jdk11
   artifacts:
