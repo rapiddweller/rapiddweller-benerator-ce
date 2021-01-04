@@ -1,7 +1,7 @@
-let a = 1;
-const b = 6;
+let a2 = 1;
+const b2 = 6;
 
 function multiply(number1){
-    a += 1;
-    return number1 * a + b;
+    a2 += 1;
+    return number1 * a2 + b2;
 }

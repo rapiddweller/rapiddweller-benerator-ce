@@ -52,7 +52,7 @@ import com.rapiddweller.domain.math.PadovanSequence;
  */
 public class SequenceManager {
 
-    private static final Map<String, Sequence> instances = new HashMap<>();
+    private static Map<String, Sequence> instances = new HashMap<>();
 
     public static final Sequence RANDOM_SEQUENCE      = register("random", new RandomSequence());
     public static final Sequence SHUFFLE_SEQUENCE     = register("shuffle", new ShuffleSequence());

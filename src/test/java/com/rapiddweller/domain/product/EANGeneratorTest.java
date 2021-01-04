@@ -26,6 +26,9 @@
 
 package com.rapiddweller.domain.product;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import org.junit.Test;
 
@@ -33,6 +36,7 @@ import org.junit.Test;
  * Tests the EANGenerator.<br/>
  * <br/>
  * Created: 30.07.2007 21:35:18
+ *
  * @author Volker Bergmann
  */
 public class EANGeneratorTest extends GeneratorClassTest {
@@ -50,11 +54,38 @@ public class EANGeneratorTest extends GeneratorClassTest {
     public void testUnique() {
         expectUniqueGenerations(createGenerator(true), 10000);
     }
-    
-	private EANGenerator createGenerator(boolean unique) {
-	    EANGenerator generator = new EANGenerator(unique);
-	    generator.init(context);
-		return generator;
+
+    private EANGenerator createGenerator(boolean unique) {
+        EANGenerator generator = new EANGenerator(unique);
+        generator.init(context);
+        return generator;
+    }
+
+    @Test
+    public void testConstructor() {
+        EANGenerator actualEanGenerator = new EANGenerator();
+        assertNull(actualEanGenerator.getSource());
+        assertEquals("EANGenerator", actualEanGenerator.toString());
+    }
+
+    @Test
+    public void testConstructor2() {
+        EANGenerator actualEanGenerator = new EANGenerator(true);
+        assertNull(actualEanGenerator.getSource());
+        assertEquals("EANGenerator[unique]", actualEanGenerator.toString());
+    }
+
+    @Test
+    public void testSetUnique() {
+        EANGenerator eanGenerator = new EANGenerator();
+        eanGenerator.setUnique(true);
+        assertEquals("EANGenerator[unique]", eanGenerator.toString());
+    }
+
+    @Test
+    public void testToString() {
+        assertEquals("EANGenerator", (new EANGenerator()).toString());
+        assertEquals("EANGenerator[unique]", (new EANGenerator(true)).toString());
     }
 
 }

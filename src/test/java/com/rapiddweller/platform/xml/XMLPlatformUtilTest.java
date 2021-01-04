@@ -39,20 +39,31 @@ import org.w3c.dom.Element;
 /**
  * Tests the {@link XMLPlatformUtil}.<br/><br/>
  * Created: 16.01.2014 13:57:18
- * @since 0.9.0
+ *
  * @author Volker Bergmann
+ * @since 0.9.0
  */
 
 public class XMLPlatformUtilTest {
 
-	@Test
-	public void test() {
-		Element element = XMLUtil.parseStringAsElement("<person age='23'><name>Alice</name></person>");
-		DescriptorProvider provider = new DefaultDescriptorProvider("test", new DataModel());
-		Entity entity = XMLPlatformUtil.convertElement2Entity(element, provider);
-		assertEquals("person", entity.type());
-		assertEquals("23", entity.get("age"));
-		assertEquals("Alice", entity.get("name"));
-	}
-	
+    @Test
+    public void test() {
+        Element element = XMLUtil.parseStringAsElement("<person age='23'><name>Alice</name></person>");
+        DescriptorProvider provider = new DefaultDescriptorProvider("test", new DataModel());
+        Entity entity = XMLPlatformUtil.convertElement2Entity(element, provider);
+        assertEquals("person", entity.type());
+        assertEquals("23", entity.get("age"));
+        assertEquals("Alice", entity.get("name"));
+    }
+
+    @Test
+    public void testConvertToString() {
+        assertEquals("value", XMLPlatformUtil.convertToString("value"));
+    }
+
+    @Test
+    public void testNormalizeName() {
+        assertEquals("Name", XMLPlatformUtil.normalizeName("Name"));
+    }
+
 }

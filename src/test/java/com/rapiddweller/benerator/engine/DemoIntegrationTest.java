@@ -24,43 +24,56 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.rapiddweller.platform.flat;
+package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.platform.fixedwidth.FixedWidthEntityExporter;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.common.FileUtil;
+
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
 /**
- * Inherits the new FixedWidthEntityExporter class emitting a deprecation warning..<br/><br/>
- * Created: 05.08.2011 10:38:10
+ * Integration test for Benerator's Demo Files.<br/><br/>
+ * <p>
+ * Created at 30.12.2020
  *
- * @author Volker Bergmann
- * @since 0.7.0
- * @deprecated Replaced with class {@link FixedWidthEntityExporter}
+ * @author Alexander Kell
+ * @since 1.1.0
  */
-@Deprecated
-public class FlatFileEntityExporter extends FixedWidthEntityExporter {
+public class DemoIntegrationTest extends BeneratorIntegrationTest {
+    String ROOT = "src/demo/resources/";
 
-    private static final Logger LOGGER = LogManager.getLogger(FlatFileEntityExporter.class);
-
-    public FlatFileEntityExporter() {
-        super();
-        reportDeprecation();
+    private void parseAndExecute() throws IOException {
+        for (File file : Objects.requireNonNull(new File(ROOT, context.getContextUri()).listFiles())) {
+            String filename = file.getPath();
+            if (FileUtil.isXMLFile(filename)) {
+                System.out.println(filename);
+                parseAndExecuteFile(filename);
+            }
+        }
     }
 
-    public FlatFileEntityExporter(String uri, String encoding, String columnFormatList) {
-        super(uri, encoding, columnFormatList);
-        reportDeprecation();
+    @Test
+    public void DemoFiles() throws IOException {
+        context.setContextUri("/demo/file");
+        parseAndExecute();
     }
 
-    public FlatFileEntityExporter(String uri, String columnFormatList) {
-        super(uri, columnFormatList);
-        reportDeprecation();
+    @Test
+    public void DemoDb() throws IOException {
+        context.setContextUri("/demo/db");
+        parseAndExecute();
     }
 
-    private void reportDeprecation() {
-        LOGGER.warn(getClass() + " has been deprecated and will not be supported in future releases. " +
-                "Use com.rapiddweller.platform.fixedwidth.FixedWidthEntityExporter instead");
+
+    @Test
+    public void DemoScript() throws IOException {
+        context.setContextUri("/demo/script");
+        parseAndExecute();
     }
+
 
 }
