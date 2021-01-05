@@ -60,10 +60,9 @@ setup:jdk-11:
 build:jdk-11:
   stage: build
   <<: *prepare-mvn-project
-  image: maven:3.6-adoptopenjdk-11
   needs:
-           - job: setup:jdk-11
-    artifacts: true
+    - job: setup:jdk-11
+      artifacts: true
   artifacts:
     paths:
       - target/*.jar
@@ -73,7 +72,6 @@ build:jdk-11:
 
 test:jdk11:
   stage: build
-  image: maven:3.6-adoptopenjdk-11
   <<: *prepare-mvn-project
   needs:
     - job: setup:jdk-11
