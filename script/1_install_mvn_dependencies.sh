@@ -4,11 +4,7 @@
 # check java target version
 ###################################################################
 
-TARGET_VERSION=$(mvn -q \
-  -Dexec.executable=echo \
-  -Dexec.args='${java_source_version}' \
-  --non-recursive \
-  exec:exec)
+TARGET_VERSION=11
 
 ###################################################################
 # check if necessary programs are installed

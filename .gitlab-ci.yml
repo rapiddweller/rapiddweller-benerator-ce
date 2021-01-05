@@ -11,9 +11,15 @@ stages:
 variables:
   ARTIFACT_ID: "rapiddweller-benerator-ce"
   ARTIFACT_VERSION_BASE: "1.1.0" # should be updated with the final release (tag release version)
-  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2"
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository/"
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
   PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/releases/${CI_COMMIT_TAG}"
+
+
+cache:
+  paths:
+    - .m2/repository/
+
 
 ###################### Setup ######################
 
@@ -46,12 +52,18 @@ setup:jdk-11:
 
 ###################### Test / Build ######################
 
+.prepare-mvn-project: &prepare-mvn-project
+  image: maven:3.6-adoptopenjdk-11
+  before_script:
+    - mvn versions:set -DnewVersion=$ARTIFACT_VERSION
+
 build:jdk-11:
-  image: maven:3-adoptopenjdk-11
-  needs:
-    - job: setup:jdk-11
-      artifacts: true
   stage: build
+  <<: *prepare-mvn-project
+  image: maven:3.6-adoptopenjdk-11
+  needs:
+           - job: setup:jdk-11
+    artifacts: true
   artifacts:
     paths:
       - target/*.jar
@@ -61,7 +73,8 @@ build:jdk-11:
 
 test:jdk11:
   stage: build
-  image: maven:3-adoptopenjdk-11
+  image: maven:3.6-adoptopenjdk-11
+  <<: *prepare-mvn-project
   needs:
     - job: setup:jdk-11
       artifacts: true
@@ -80,7 +93,7 @@ assembly:jdk-11:
       artifacts: true
     - job: build:jdk-11
       artifacts: true
-  image: maven:3-adoptopenjdk-11
+  <<: *prepare-mvn-project
   stage: distribution
   artifacts:
     paths:
@@ -96,7 +109,7 @@ deploy:jdk-11:
       artifacts: true
     - job: build:jdk-11
       artifacts: true
-  image: maven:3.6.3-adoptopenjdk-11
+  <<: *prepare-mvn-project
   stage: distribution
   script:
     - mvn $MAVEN_CLI_OPTS clean install deploy -Dmaven.test.skip=true
@@ -126,7 +139,7 @@ deploy:jdk-11:
 
 .e2et-preparation-openjdk11: &e2et-preparation-openjdk11
   <<: *e2et-preparation-common
-  image: maven:3.6.3-adoptopenjdk-11
+  image: maven:3.6-adoptopenjdk-11
   before_script:
     - tar -xzf target/$ARTIFACT_FULLNAME-dist.tar.gz
     - export SHELL=/bin/bash
@@ -137,7 +150,7 @@ deploy:jdk-11:
 
 E2ET:helper-scripts:jdk-11:
   <<: *e2et-preparation-common
-  image: maven:3.6.3-adoptopenjdk-11
+  image: maven:3.6-adoptopenjdk-11
   script:
     - bash script/1_install_mvn_dependencies.sh
     - bash script/2_setup_benerator.sh

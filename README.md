@@ -18,36 +18,6 @@ in language and region. It is strongly customizable with plugins and configurati
 
 rapiddweller 'Benerator' is build for Java 11.
 
-## Quick Start (only Linux and Mac OS X)
-Instead of going through the README, on Linux or Mac OS X you can also try the quick start by using the helper scripts.  
-**IMPORTANT:** If you want to use the command `benerator` in your shell session, you have to execute `source script/2_setup_benerator.sh`  
-If you want to install the benerator permanently into your system, you have to modify your environment file or your `~/.profile`   
-and add ENV variable `BENERATOR_HOME` and `PATH=$BENERATOR_HOME/bin:$PATH`  
-
-
-to execute the scripts you have can do ...
-
-`bash script/1_install_mvn_dependencies.sh`  
-`source script/2_setup_benerator.sh`  
-`bash script/3_execute_demos.sh`  
-
-... alternatively you can also set execute permissions like ...
-
-`chmod +x script/1_install_mvn_dependencies.sh`  
-`chmod +x script/2_setup_benerator.sh`  
-`chmod +x script/3_execute_demos.sh`
-
-... and execute scripts like this
-
-`.script/1_install_mvn_dependencies.sh`  
-`.script/2_setup_benerator.sh`  
-`.script/3_execute_demos.sh`
-  
-
-- _1_install_mvn_dependencies.sh_ : This script is checking Prerequisites for you, cloning all rapiddweller-benerator-ce SubProjects and install via Maven locally.
-- _2_setup_benerator.sh_ : This script is building on script no. 1 and using installed dependencies and packed jar, assemble it to a rapiddweller-benerator-ce.tar.gz and setup the benerator locally into your user home directory.
-- _3_execute_demos.sh_ : This script is building on script no. 2 and use the unpacked and configure rapiddweller-benerator-ce application to execute existing demo files.
-
 ## Prerequisites
 
 - Java 11 JDK (we recommend [adoptopenjdk](https://adoptopenjdk.net/))
@@ -124,7 +94,36 @@ There are various sources to get you started or extend your benerator knowledge:
   create your own docs using maven `mvn site:site`. 
   The generated docs include Javadoc, Test Reports and more.
 - Checkout the maintainers website [www.benerator.de](https://www.benerator.de/) for additional support resources.  
-  
+
+## Development Quick Start (only Linux and Mac OS X)
+If you want to start development or use the maven project to build rapiddweller 'Benerator' by yourself,
+on Linux or Mac OS X you can also try the quick start by using the helper scripts.  
+**IMPORTANT:** If you want to use the command `benerator` in your shell session, you have to execute `source script/2_setup_benerator.sh`  
+If you want to install the benerator permanently into your system, you have to modify your environment file or your `~/.profile`   
+and add ENV variable `BENERATOR_HOME` and `PATH=$BENERATOR_HOME/bin:$PATH`
+
+to execute the scripts you have can do ...
+
+`bash script/1_install_mvn_dependencies.sh`  
+`source script/2_setup_benerator.sh`  
+`bash script/3_execute_demos.sh`
+
+... alternatively you can also set execute permissions like ...
+
+`chmod +x script/1_install_mvn_dependencies.sh`  
+`chmod +x script/2_setup_benerator.sh`  
+`chmod +x script/3_execute_demos.sh`
+
+... and execute scripts like this
+
+`.script/1_install_mvn_dependencies.sh`  
+`.script/2_setup_benerator.sh`  
+`.script/3_execute_demos.sh`
+
+
+- _1_install_mvn_dependencies.sh_ : This script is checking Prerequisites for you, cloning all rapiddweller-benerator-ce SubProjects and install via Maven locally.
+- _2_setup_benerator.sh_ : This script is building on script no. 1 and using installed dependencies and packed jar, assemble it to a rapiddweller-benerator-ce.tar.gz and setup the benerator locally into your user home directory.
+- _3_execute_demos.sh_ : This script is building on script no. 2 and use the unpacked and configure rapiddweller-benerator-ce application to execute existing demo files.
 
 ## Getting Involved
 
