@@ -7,7 +7,7 @@
 
     <iterate type="Product" source="products.ent.csv" consumer="ConsoleExporter"/>
 
-    <generate type="transaction" count="100" consumer="new XLSEntityExporter('transactions.out.xls')">
+    <generate type="transaction" count="100" consumer="new XLSEntityExporter('target/transactions.out.xls')">
         <variable name="p" source="products.ent.csv" distribution="random"/>
 
         <id name="id" type="long"/>

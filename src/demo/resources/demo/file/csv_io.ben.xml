@@ -8,7 +8,7 @@
     <!-- read comma-sparated csv and output to semicolon separated csv -->
     <iterate type="db_product" source="demo/file/products.import.csv" encoding="ISO-8859-1">
         <consumer class="CSVEntityExporter">
-            <property name="uri" value="p1.csv"/>
+            <property name="uri" value="target/p1.csv"/>
             <property name="columns" value="ean_code,name"/>
             <property name="separator" value=";"/>
         </consumer>
@@ -23,7 +23,7 @@
 
     <iterate type="db_product" source="csv_semicolon_reader">
         <consumer class="CSVEntityExporter">
-            <property name="uri" value="p2.csv"/>
+            <property name="uri" value="target/p2.csv"/>
             <property name="encoding" value="UTF-8"/>
             <property name="columns" value="ean_code,name"/>
         </consumer>

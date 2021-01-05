@@ -7,7 +7,7 @@
 
     <import platforms="csv"/>
 
-    <generate type="transaction" count="100" consumer="CSVEntityExporter">
+    <generate type="transaction" count="100" consumer="new CSVEntityExporter('target/create_csv.csv')">
         <variable name="product" type="entity" source="products.ent.csv" distribution="random"/>
         <id name="id" type="long"/>
         <attribute name="comment" pattern="[A-Z][a-z]{5,12}"/>
@@ -19,10 +19,10 @@
     <echo>Generated data:</echo>
     <if test="com.rapiddweller.common.SystemInfo.isWindows()">
         <then>
-            <execute type="shell">cmd /C type export.csv</execute>
+            <execute type="shell">cmd /C type target/create_csv.csv</execute>
         </then>
         <else>
-            <execute type="shell">cat export.csv</execute>
+            <execute type="shell">cat target/create_csv.csv</execute>
         </else>
     </if>
 

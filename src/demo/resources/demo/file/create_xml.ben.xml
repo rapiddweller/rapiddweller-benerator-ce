@@ -8,7 +8,7 @@
     <import domains="person"/>
 
     <bean id="xml" class="com.rapiddweller.platform.xml.XMLEntityExporter">
-        <property name="uri" value="customers.xml"/>
+        <property name="uri" value="target/customers.xml"/>
     </bean>
 
     <generate type="customers" count="1" consumer="xml">
