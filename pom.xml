@@ -1,7 +1,6 @@
-<?xml version="1.0"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rapiddweller</groupId>
     <artifactId>rapiddweller-benerator-ce</artifactId>
@@ -26,10 +25,12 @@
     </description>
     <url>https://www.benerator.de</url>
     <inceptionYear>2006</inceptionYear>
+
     <organization>
         <name>rapiddweller GmbH</name>
         <url>https://www.rapiddweller.com</url>
     </organization>
+
     <licenses>
         <license>
             <name>GNU Public License</name>
@@ -51,6 +52,7 @@
             </comments>
         </license>
     </licenses>
+
     <developers>
         <developer>
             <id>volker.bergmann</id>
@@ -107,17 +109,20 @@
             <timezone>UTC+05:30</timezone>
         </developer>
     </developers>
+
     <scm>
         <url>${env.CI_PROJECT_URL}</url>
         <connection>scm:git:${env.CI_REPOSITORY_URL}</connection>
         <developerConnection>scm:git:${env.CI_REPOSITORY_URL}</developerConnection>
     </scm>
+
     <repositories>
         <repository>
             <id>gitlab-maven</id>
             <url>${env.CI_SERVER_URL}/api/v4/groups/${env.CI_PROJECT_GROUP_ID}/-/packages/maven</url>
         </repository>
     </repositories>
+
     <distributionManagement>
         <repository>
             <id>gitlab-maven</id>
@@ -128,194 +133,194 @@
             <url>${env.CI_SERVER_URL}/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven/</url>
         </snapshotRepository>
     </distributionManagement>
+
     <properties>
-        <format_version>1.1.0+jdk-11-SNAPSHOT</format_version>
-        <script_version>1.1.0+jdk-11-SNAPSHOT</script_version>
-        <jdbacl_version>1.1.0+jdk-11-SNAPSHOT</jdbacl_version>
-        <contiperf_version>2.4.0+jdk-11-SNAPSHOT</contiperf_version>
-        <common_version>1.1.0+jdk-11-SNAPSHOT</common_version>
-        <graalvm.version>20.3.0</graalvm.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <_rd_common_version>1.1.0+jdk-11-SNAPSHOT</_rd_common_version>
+        <_rd_contiperf_version>2.4.0+jdk-11-SNAPSHOT</_rd_contiperf_version>
+        <_rd_format_version>1.1.0+jdk-11-SNAPSHOT</_rd_format_version>
+        <_rd_jdbacl_version>1.1.0+jdk-11-SNAPSHOT</_rd_jdbacl_version>
+        <_rd_script_version>1.1.0+jdk-11-SNAPSHOT</_rd_script_version>
+        <!--suppress UnresolvedMavenProperty -->
+        <build_number>${env.CI_JOB_ID}</build_number>
+        <dependency_antlr-runtime.version>3.3</dependency_antlr-runtime.version>
+        <dependency_connector-api.version>1.5</dependency_connector-api.version>
+        <dependency_derbyclient.version>10.6.1.0</dependency_derbyclient.version>
+        <dependency_freemarker.version>2.3.20</dependency_freemarker.version>
+        <dependency_graalvm.version>20.3.0</dependency_graalvm.version>
+        <dependency_h2.version>1.2.136</dependency_h2.version>
+        <dependency_hsqldb.version>1.8.0.7</dependency_hsqldb.version>
+        <dependency_icu4j.version>67.1</dependency_icu4j.version>
+        <dependency_jaybird.version>4.0.1.java11</dependency_jaybird.version>
+        <dependency_jtds.version>1.3.1</dependency_jtds.version>
+        <dependency_junit.version>4.13.1</dependency_junit.version>
+        <dependency_log4j-api.version>2.14.0</dependency_log4j-api.version>
+        <dependency_log4j-core.version>2.14.0</dependency_log4j-core.version>
+        <dependency_mysql-connector-java.version>8.0.20</dependency_mysql-connector-java.version>
+        <dependency_postgresql.version>42.2.12</dependency_postgresql.version>
+        <dependency_validation-api.version>2.0.1.Final</dependency_validation-api.version>
+        <dependency_xml-apis.version>1.4.01</dependency_xml-apis.version>
         <java_source_version>11</java_source_version>
         <java_target_version>11</java_target_version>
+        <plugin_jacoco-maven-plugin.version>0.8.6</plugin_jacoco-maven-plugin.version>
+        <plugin_maven-assembly-plugin.version>3.3.0</plugin_maven-assembly-plugin.version>
+        <plugin_maven-compiler-plugin.version>3.8.1</plugin_maven-compiler-plugin.version>
+        <plugin_maven-deploy-plugin.version>3.0.0-M1</plugin_maven-deploy-plugin.version>
+        <plugin_maven-gpg-plugin.version>1.6</plugin_maven-gpg-plugin.version>
+        <plugin_maven-jar-plugin.version>2.5</plugin_maven-jar-plugin.version>
+        <plugin_maven-javadoc-plugin.version>3.2.0</plugin_maven-javadoc-plugin.version>
+        <plugin_maven-jxr-plugin.version>3.0.0</plugin_maven-jxr-plugin.version>
+        <plugin_maven-pmd-plugin.version>3.14.0</plugin_maven-pmd-plugin.version>
+        <plugin_maven-project-info-reports-plugin.version>3.1.1</plugin_maven-project-info-reports-plugin.version>
+        <plugin_maven-resources-plugin.version>2.6</plugin_maven-resources-plugin.version>
+        <plugin_maven-site-plugin.version>3.9.1</plugin_maven-site-plugin.version>
+        <plugin_maven-source-plugin.version>3.2.1</plugin_maven-source-plugin.version>
+        <plugin_maven-surefire-plugin.version>3.0.0-M5</plugin_maven-surefire-plugin.version>
+        <plugin_maven-surefire-report-plugin.version>3.0.0-M5</plugin_maven-surefire-report-plugin.version>
+        <plugin_nexus-staging-maven-plugin.version>1.6.8</plugin_nexus-staging-maven-plugin.version>
+        <plugin_surefire-api.version>3.0.0-M5</plugin_surefire-api.version>
+        <plugin_surefire-junit4.version>3.0.0-M5</plugin_surefire-junit4.version>
+        <plugin_versions-maven-plugin.version>2.8.1</plugin_versions-maven-plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <dependencies>
         <dependency>
-            <groupId>com.rapiddweller</groupId>
-            <artifactId>rd-lib-jdbacl</artifactId>
-            <version>${jdbacl_version}</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${dependency_h2.version}</version>
+            <scope>provided</scope>
         </dependency>
+        <!-- GraalVM dependencies -->
         <dependency>
-            <groupId>com.rapiddweller</groupId>
-            <artifactId>rd-lib-script</artifactId>
-            <version>${script_version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.rapiddweller</groupId>
-            <artifactId>rd-lib-format</artifactId>
-            <version>${format_version}</version>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>${dependency_icu4j.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.rapiddweller</groupId>
             <artifactId>rd-lib-common</artifactId>
-            <version>${common_version}</version>
+            <version>${_rd_common_version}</version>
         </dependency>
         <dependency>
             <groupId>com.rapiddweller</groupId>
             <artifactId>rd-lib-contiperf</artifactId>
-            <version>${contiperf_version}</version>
+            <version>${_rd_contiperf_version}</version>
         </dependency>
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.0.0.GA</version>
+            <groupId>com.rapiddweller</groupId>
+            <artifactId>rd-lib-format</artifactId>
+            <version>${_rd_format_version}</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <groupId>com.rapiddweller</groupId>
+            <artifactId>rd-lib-jdbacl</artifactId>
+            <version>${_rd_jdbacl_version}</version>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.jtds</groupId>
-            <artifactId>jtds</artifactId>
-            <version>1.3.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.20</version>
-            <scope>provided</scope>
+            <groupId>com.rapiddweller</groupId>
+            <artifactId>rd-lib-script</artifactId>
+            <version>${_rd_script_version}</version>
         </dependency>
         <dependency>
             <groupId>hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>1.8.0.7</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.2.136</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derbyclient</artifactId>
-            <version>10.6.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.2.12</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.firebirdsql.jdbc</groupId>
-            <artifactId>jaybird</artifactId>
-            <version>4.0.1.java11</version>
+            <version>${dependency_hsqldb.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.resource</groupId>
             <artifactId>connector-api</artifactId>
-            <version>1.5</version>
+            <version>${dependency_connector-api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>xml-apis</groupId>
-            <artifactId>xml-apis</artifactId>
-            <version>1.4.01</version>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${dependency_validation-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${dependency_junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${dependency_mysql-connector-java.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.jtds</groupId>
+            <artifactId>jtds</artifactId>
+            <version>${dependency_jtds.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr-runtime</artifactId>
-            <version>3.3</version>
+            <version>${dependency_antlr-runtime.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.20</version>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>${dependency_derbyclient.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.14.0</version>
+            <version>${dependency_log4j-api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.14.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- maven plugins dependencies -->
-
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <version>3.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-project-info-reports-plugin</artifactId>
-            <version>3.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.2.0</version>
+            <version>${dependency_log4j-core.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
+            <groupId>org.firebirdsql.jdbc</groupId>
+            <artifactId>jaybird</artifactId>
+            <version>${dependency_jaybird.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jxr-plugin</artifactId>
-            <version>3.0.0</version>
-            <scope>provided</scope>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${dependency_freemarker.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.6</version>
-        </dependency>
-
-        <!-- GraalVM dependencies -->
-        <dependency>
-            <groupId>com.ibm.icu</groupId>
-            <artifactId>icu4j</artifactId>
-            <version>68.2</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.graalvm.sdk</groupId>
-            <artifactId>graal-sdk</artifactId>
-            <version>${graalvm.version}</version>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js-scriptengine</artifactId>
+            <version>${dependency_graalvm.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
-            <version>${graalvm.version}</version>
+            <version>${dependency_graalvm.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.graalvm.js</groupId>
-            <artifactId>js-scriptengine</artifactId>
-            <version>${graalvm.version}</version>
+            <groupId>org.graalvm.sdk</groupId>
+            <artifactId>graal-sdk</artifactId>
+            <version>${dependency_graalvm.version}</version>
             <scope>provided</scope>
         </dependency>
-
-
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${dependency_postgresql.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>${dependency_xml-apis.version}</version>
+        </dependency>
     </dependencies>
+
     <build>
         <resources>
             <resource>
@@ -372,59 +377,18 @@
         </testResources>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0-M1</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.9.1</version>
-                <executions>
-                    <execution>
-                        <id>create-site</id>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>${plugin_maven-assembly-plugin.version}</version>
                 <configuration>
-                    <useSystemClassLoader>false</useSystemClassLoader>
+                    <descriptors>
+                        <descriptor>src/main/assembly/dist-assembly.xml</descriptor>
+                    </descriptors>
+                    <tarLongFileMode>gnu</tarLongFileMode>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit4</artifactId>
-                        <version>3.0.0-M5</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-api</artifactId>
-                        <version>3.0.0-M5</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>${java_source_version}</source>
-                    <target>${java_target_version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
             </plugin>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.5</version>
+                <version>${plugin_maven-jar-plugin.version}</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -436,22 +400,27 @@
                 </configuration>
             </plugin>
             <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${plugin_maven-resources-plugin.version}</version>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${plugin_maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java_source_version}</source>
+                    <target>${java_target_version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${plugin_maven-deploy-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>${plugin_maven-javadoc-plugin.version}</version>
                 <configuration>
                     <doclint>none</doclint>
                     <source>${java_source_version}</source>
@@ -467,19 +436,60 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${plugin_maven-site-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>create-site</id>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${plugin_maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${plugin_maven-surefire-plugin.version}</version>
                 <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/dist-assembly.xml</descriptor>
-                    </descriptors>
-                    <tarLongFileMode>gnu</tarLongFileMode>
+                    <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit4</artifactId>
+                        <version>${plugin_maven-surefire-plugin.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-api</artifactId>
+                        <version>${plugin_maven-surefire-plugin.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>${plugin_versions-maven-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.6</version>
+                <version>${plugin_jacoco-maven-plugin.version}</version>
                 <configuration>
                     <excludes>
                         <exclude>com/rapiddweller/task/**/*</exclude>
@@ -512,27 +522,28 @@
             </plugin>
         </plugins>
     </build>
+
     <reporting>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>${plugin_maven-surefire-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.14.0</version>
+                <version>${plugin_maven-pmd-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jxr-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>${plugin_maven-jxr-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>${plugin_maven-javadoc-plugin.version}</version>
                 <configuration>
                     <doclint>none</doclint>
                     <source>${java_source_version}</source>
@@ -554,7 +565,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>${plugin_maven-project-info-reports-plugin.version}</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -578,7 +589,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.1</version>
+                        <version>${plugin_maven-source-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -591,7 +602,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.2.0</version>
+                        <version>${plugin_maven-javadoc-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -604,7 +615,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>${plugin_maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
