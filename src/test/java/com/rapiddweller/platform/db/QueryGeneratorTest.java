@@ -72,7 +72,7 @@ public class QueryGeneratorTest extends GeneratorTest {
 
     @Test
     public void testConstructor() {
-        QueryGenerator<Object> actualQueryGenerator = new QueryGenerator<Object>();
+        QueryGenerator<Object> actualQueryGenerator = new QueryGenerator<>();
         assertEquals("QueryGenerator[null]", actualQueryGenerator.toString());
         Class<?> expectedGeneratedType = Object.class;
         assertSame(expectedGeneratedType, actualQueryGenerator.getGeneratedType());

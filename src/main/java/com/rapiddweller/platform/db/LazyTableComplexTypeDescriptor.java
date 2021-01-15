@@ -41,8 +41,8 @@ import java.util.List;
  */
 public class LazyTableComplexTypeDescriptor extends ComplexTypeDescriptor {
 
-    final DBTable table;
-    final DBSystem db;
+    public final DBTable table;
+    public final DBSystem db;
     boolean loaded;
 
     public LazyTableComplexTypeDescriptor(DBTable table, DBSystem db) {

@@ -46,8 +46,9 @@ public class IncrementGenerator extends ThreadSafeNonNullGenerator<Long> {
     private long min;
     private long max;
     private long increment;
-    
-    final AtomicLong cursor = new AtomicLong();
+
+    @SuppressWarnings("CanBeFinal")
+    volatile AtomicLong cursor = new AtomicLong();
     
     // constructors ----------------------------------------------------------------------------------------------------
     

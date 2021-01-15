@@ -41,7 +41,7 @@ import com.rapiddweller.common.context.ContextAware;
  */
 public class TaskMock extends AbstractTask implements ContextAware {
 
-	public static final AtomicInteger count = new AtomicInteger();
+	public static volatile AtomicInteger count = new AtomicInteger();
 	public int intProp;
 	public Context context;
 	

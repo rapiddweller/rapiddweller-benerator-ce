@@ -336,7 +336,7 @@ public class AnnotationMapperTest {
 	static class ClassWithBeanSource {
 		@Test
 		@Source("bean")
-		public void test(int value) {
+		public void test() {
 			
 		}
 	}

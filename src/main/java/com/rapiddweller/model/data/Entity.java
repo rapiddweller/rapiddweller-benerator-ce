@@ -44,7 +44,7 @@ import com.rapiddweller.script.PrimitiveType;
  */
 public class Entity implements Composite {
 
-    private final ComplexTypeDescriptor descriptor;
+    public final ComplexTypeDescriptor descriptor;
     private OrderedNameMap<Object> components;
 
     // constructors ----------------------------------------------------------------------------------------------------

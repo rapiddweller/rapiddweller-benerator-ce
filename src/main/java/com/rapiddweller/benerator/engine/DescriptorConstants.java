@@ -133,6 +133,7 @@ public interface DescriptorConstants {
     String ATT_FETCH_SIZE = "fetchSize";
     String ATT_BATCH = "batch";
     String ATT_META_CACHE = "metaCache";
+    String ATT_QUOTE_TABLE_NAMES = "quoteTableNames";
     String ATT_CATALOG = "catalog";
     String ATT_SCHEMA = "schema";
     String ATT_ENVIRONMENT = "environment";

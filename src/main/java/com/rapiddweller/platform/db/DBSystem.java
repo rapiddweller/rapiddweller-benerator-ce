@@ -90,15 +90,15 @@ public abstract class DBSystem extends AbstractStorageSystem {
     private boolean lazy;
     private boolean acceptUnknownColumnTypes;
     private int fetchSize;
+    private boolean quoteTableNames;
     private OrderedNameMap<TypeDescriptor> typeDescriptors;
     private final TypeMapper driverTypeMapper;
     private boolean dynamicQuerySupported;
-
     private boolean connectedBefore;
+
     private final AtomicInteger invalidationCount;
 
     // constructors ----------------------------------------------------------------------------------------------------
-
     public DBSystem(String id, String url, String driver, String user, String password, DataModel dataModel) {
         this(id, dataModel);
         setUrl(url);
@@ -131,8 +131,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
         this.invalidationCount = new AtomicInteger();
     }
 
-    // properties ------------------------------------------------------------------------------------------------------
 
+    // properties ------------------------------------------------------------------------------------------------------
     private static String decimalGranularity(int scale) {
         if (scale == 0)
             return "1";
@@ -243,6 +243,14 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
     public void setSchema(String schema) {
         this.schemaName = StringUtil.emptyToNull(StringUtil.trim(schema));
+    }
+
+    public boolean isQuoteTableNames() {
+        return quoteTableNames;
+    }
+
+    public void setQuoteTableNames(boolean quoteTableNames) {
+        this.quoteTableNames = quoteTableNames;
     }
 
     @Deprecated
@@ -387,7 +395,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
             selector = selector.substring(1, selector.length() - 1);
             script = true;
         }
-        String sql = null;
+        String sql;
         if (StringUtil.isEmpty(selector))
             sql = "select * from " + type;
         else if (StringUtil.startsWithIgnoreCase(selector, "select") || StringUtil.startsWithIgnoreCase(selector, "'select"))
@@ -798,10 +806,14 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
 
     private DBTable findTableInConfiguredCatalogAndSchema(String tableName) {
+        DBSchema dbSchema;
         DBCatalog catalog = database.getCatalog(catalogName);
-        if (catalog == null)
-            throw new ConfigurationError("Catalog '" + catalogName + "' not found in database '" + id + "'");
-        DBSchema dbSchema = catalog.getSchema(schemaName);
+        if (catalog == null) {
+            // logger.info("no catalog set, try to get schema directly");
+            dbSchema = database.getSchema(schemaName);
+        } else {
+            dbSchema = catalog.getSchema(schemaName);
+        }
         if (dbSchema != null) {
             return dbSchema.getTable(tableName);
         }
