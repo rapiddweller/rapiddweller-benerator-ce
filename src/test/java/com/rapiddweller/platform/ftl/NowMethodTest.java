@@ -12,7 +12,7 @@ public class NowMethodTest {
     @Test
     public void testExec() {
         NowMethod nowMethod = new NowMethod();
-        assertEquals(2, ((SimpleDate) nowMethod.exec(new ArrayList<Object>())).getDateType());
+        assertEquals(2, ((SimpleDate) nowMethod.exec(new ArrayList<>())).getDateType());
     }
 }
 

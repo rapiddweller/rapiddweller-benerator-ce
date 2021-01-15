@@ -250,7 +250,8 @@ public class StringGeneratorTest extends GeneratorTest {
 		generator.close();
 	}
 	
-	public void testNonUnique() {
+	@Test
+    public void testNonUnique() {
 		StringGenerator generator = new StringGenerator();
 		generator.setCharSet("[AB]");
 		generator.setMinLength(2);

@@ -48,6 +48,7 @@ import static org.junit.Assert.*;
 
 public class DayOfWeekValidatorTest {
 
+	@Test
 	public void testDefault() {
 		check(new DayOfWeekValidator(), true, true, true, true, true, true, true);
 	}

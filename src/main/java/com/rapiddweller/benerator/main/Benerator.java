@@ -61,7 +61,11 @@ public class Benerator {
 
 	public static void main(String[] args) throws IOException {
 		VersionInfo.getInfo("benerator").verifyDependencies();
-		if (ArrayUtil.contains("--version", args) || ArrayUtil.contains("-v", args))
+		if (
+				ArrayUtil.contains("--version", args) ||
+				ArrayUtil.contains("-v", args) ||
+				ArrayUtil.contains("-version", args)
+		)
 			printVersionInfoAndExit();
 		else
 			runFromCommandLine(args);

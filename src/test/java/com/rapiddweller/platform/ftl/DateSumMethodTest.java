@@ -19,7 +19,7 @@ public class DateSumMethodTest {
     @Test
     public void testExec() {
         DateSumMethod dateSumMethod = new DateSumMethod();
-        TemplateModel actualExecResult = dateSumMethod.exec(new ArrayList<Object>());
+        TemplateModel actualExecResult = dateSumMethod.exec(new ArrayList<>());
         int actualDateType = ((SimpleDate) actualExecResult).getDateType();
         assertEquals("1970-01-01", actualExecResult.toString());
         assertEquals(2, actualDateType);
@@ -27,7 +27,7 @@ public class DateSumMethodTest {
 
     @Test
     public void testExec2() {
-        ArrayList<Object> objectList = new ArrayList<Object>();
+        ArrayList<Object> objectList = new ArrayList<>();
         objectList.add("e");
         thrown.expect(IllegalArgumentException.class);
         (new DateSumMethod()).exec(objectList);
@@ -35,7 +35,7 @@ public class DateSumMethodTest {
 
     @Test
     public void testExec3() {
-        ArrayList<Object> objectList = new ArrayList<Object>();
+        ArrayList<Object> objectList = new ArrayList<>();
         objectList.add(null);
         objectList.add("e");
         thrown.expect(IllegalArgumentException.class);
@@ -44,7 +44,7 @@ public class DateSumMethodTest {
 
     @Test
     public void testExec4() {
-        ArrayList<Object> objectList = new ArrayList<Object>();
+        ArrayList<Object> objectList = new ArrayList<>();
         objectList.add(null);
         TemplateModel actualExecResult = (new DateSumMethod()).exec(objectList);
         int actualDateType = ((SimpleDate) actualExecResult).getDateType();

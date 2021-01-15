@@ -69,7 +69,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     private final List<ScopedLifeCycleHolder> scopeds;
     private Expression<Consumer> consumerExpr;
 
-    private final AtomicBoolean initialized;
+    private volatile AtomicBoolean initialized;
     private Consumer consumer;
     private String message;
 	private final String productName;

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns="http://databene.org/shop-0.5.0.xsd"
+        targetNamespace="http://databene.org/shop-0.5.0.xsd"
+        elementFormDefault="qualified">
+
+    <xs:simpleType name="category-id">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{4}(/[A-Z]{4})?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="string30">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="30"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ean-type">
+        <xs:union memberTypes="ean8-type ean13-type"/>
+    </xs:simpleType>
+
+    <xs:simpleType name="ean8-type">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{8}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ean13-type">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{13}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="price-type">
+        <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="0"/>
+            <xs:totalDigits value="8"/>
+            <xs:fractionDigits value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="surrogate-id">
+        <xs:restriction base="xs:long">
+            <xs:totalDigits value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="string16">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="16"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:attributeGroup name="audited">
+        <xs:attribute name="created_at" type="xs:dateTime" use="required"/>
+        <xs:attribute name="created_by" type="string16"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="audited-updateable">
+        <xs:attributeGroup ref="audited"/>
+        <xs:attribute name="updated_at" type="xs:dateTime" use="required"/>
+        <xs:attribute name="updated_by" type="string16"/>
+    </xs:attributeGroup>
+
+    <xs:element name="shop">
+        <xs:complexType>
+            <xs:sequence maxOccurs="unbounded">
+                <xs:element ref="category" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="product" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="admin" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="clerk" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="customer" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="order" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:key name="category_id">
+            <xs:selector xpath=".//category"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+        <xs:key name="product_ean_code">
+            <xs:selector xpath="product"/>
+            <xs:field xpath="@ean_code"/>
+        </xs:key>
+        <xs:key name="customer_id">
+            <xs:selector xpath="customer"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+        <xs:key name="order_id">
+            <xs:selector xpath="order"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+        <xs:keyref name="order_customer_id" refer="customer_id">
+            <xs:selector xpath="order"/>
+            <xs:field xpath="@customer_id"/>
+        </xs:keyref>
+        <xs:key name="order_item_id">
+            <xs:selector xpath="order/order_item"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+    </xs:element>
+
+    <xs:element name="category">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="category" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="category-id" use="required"/>
+            <xs:attribute name="name" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="30"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="product">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="description" type="xs:string" minOccurs="0"/>
+                <xs:element name="image" type="xs:base64Binary" minOccurs="0"/>
+                <xs:element name="notes" minOccurs="0">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="256"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="ean_code" type="ean-type" use="required"/>
+            <xs:attribute name="name" type="string30" use="required"/>
+            <xs:attribute name="category_id" type="category-id" use="required"/>
+            <xs:attribute name="price" type="price-type" use="required"/>
+            <xs:attribute name="manufacturer" type="string30" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="user-base">
+        <xs:attribute name="id" type="surrogate-id" use="required"/>
+        <xs:attribute name="email" type="string30" use="required"/>
+        <xs:attribute name="password" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[A-Za-z0-9]{8,12}"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="active" type="xs:boolean" default="true"/>
+        <xs:attributeGroup ref="audited-updateable"/>
+    </xs:complexType>
+
+    <xs:element name="admin">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="user-base">
+                    <xs:attribute name="role_id" type="xs:string" fixed="admin" use="prohibited"/>
+                    <xs:attribute name="name" type="string30" use="required"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="clerk">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="user-base">
+                    <xs:attribute name="role_id" type="xs:string" fixed="clerk" use="prohibited"/>
+                    <xs:attribute name="name" type="string30" use="required"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="customer">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="user-base">
+                    <xs:attribute name="role_id" type="xs:string" fixed="customer" use="prohibited"/>
+                    <xs:attribute name="category" use="required">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="A"/>
+                                <xs:enumeration value="B"/>
+                                <xs:enumeration value="C"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="salutation">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:maxLength value="10"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="first_name" type="string30" use="required"/>
+                    <xs:attribute name="last_name" type="string30" use="required"/>
+                    <xs:attribute name="birth_date" type="xs:date"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="order">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="order_item" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="surrogate-id" use="required"/>
+            <xs:attribute name="customer_id" type="surrogate-id"
+                          use="required"/> <!-- TODO v1.0 refer only existing customers -->
+            <xs:attributeGroup ref="audited-updateable"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="order_item">
+        <xs:complexType>
+            <xs:attribute name="id" type="surrogate-id" use="required"/>
+            <xs:attribute name="number_of_items" type="xs:positiveInteger" use="required"/>
+            <xs:attribute name="product_ean_code" type="ean-type"
+                          use="required"/> <!-- TODO v1.0 refer only existing products -->
+            <xs:attribute name="total_price" type="price-type" use="required"/>
+            <xs:attributeGroup ref="audited-updateable"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

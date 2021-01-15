@@ -2,6 +2,7 @@ stages:
   - setup
   - build
   - quality
+  - documentation
   - distribution
   - E2ET
   - upload
@@ -102,6 +103,25 @@ coverage:jdk-11:
     reports:
       cobertura: target/site/cobertura.xml
 
+############################# Documentation ##############################
+
+documentation:build:
+  stage: documentation
+  image:
+    name: squidfunk/mkdocs-material
+    entrypoint:
+      - ""
+  before_script:
+    - pip install markdown-include
+    - pip install mkdocs-markdownextradata-plugin
+    - pip install pymdown-extensions
+  script:
+    - mkdocs build
+    - mv site target/manual
+  artifacts:
+    paths:
+      - target/manual
+
 ###################### Assembly and Deploy ######################
 
 assembly:jdk-11:
@@ -109,6 +129,8 @@ assembly:jdk-11:
     - job: setup:jdk-11
       artifacts: true
     - job: build:jdk-11
+      artifacts: true
+    - job: documentation:build
       artifacts: true
   <<: *prepare-mvn-project
   stage: distribution

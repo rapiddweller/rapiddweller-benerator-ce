@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+
+<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.benerator.de/schema/1.0.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
+
+    <import platforms="xml"/>
+
+    <include uri="demo/shop/shop-plain.xsd"/>
+
+    <bean id="cons" spec="new XMLEntityExporter('test.xml')"/>
+
+    <generate type="shop" count="1" consumer="cons">
+        <generate type="product" count="5" consumer="cons"/>
+    </generate>
+
+</setup>
