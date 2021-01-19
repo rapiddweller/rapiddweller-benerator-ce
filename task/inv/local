@@ -1,0 +1,32 @@
+all:
+  hosts:
+    local:
+        ansible_host: 127.0.0.1
+  children:
+    crawler:
+      hosts:
+        local_crawler:
+          ansible_host: 172.16.218.131
+  vars:
+    domain: 172.16.218.131.nip.io
+    dashboard_domain: dash.172.16.218.131.nip.io
+    msg_domain: msg.172.16.218.131.nip.io
+    env: local
+    ansible_python_interpreter: /usr/bin/python3
+    gitlabUrl: https://gitlab.dwellerlab.com
+    ssh_keys:
+      master: .ssh/id_rsa.pub
+    ansible_user: vagrant
+    kubernetes:
+      version: '1.18'
+    nfs_path: /mnt/shared
+    #NAMESPACES
+    nexus3_namespace: nexus3
+    #CREDENTIALS
+    smtppwd: ^MvL8'D'F224RZ%?EvdTQZ*8JIdMrqZ8
+    #HELM ARGS
+    gitlabargs: >
+      --timeout 600
+      --namespace gitlab
+      --set global.edition=ce
+      -f /ressources/gitlab/templates/gitlab-dev-value.yaml

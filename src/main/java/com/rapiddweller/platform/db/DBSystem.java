@@ -90,7 +90,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
     private boolean lazy;
     private boolean acceptUnknownColumnTypes;
     private int fetchSize;
-    private boolean quoteTableNames;
     private OrderedNameMap<TypeDescriptor> typeDescriptors;
     private final TypeMapper driverTypeMapper;
     private boolean dynamicQuerySupported;
@@ -243,14 +242,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
     public void setSchema(String schema) {
         this.schemaName = StringUtil.emptyToNull(StringUtil.trim(schema));
-    }
-
-    public boolean isQuoteTableNames() {
-        return quoteTableNames;
-    }
-
-    public void setQuoteTableNames(boolean quoteTableNames) {
-        this.quoteTableNames = quoteTableNames;
     }
 
     @Deprecated
@@ -731,7 +722,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
         return complexType;
     }
 
-    List<ColumnInfo> getWriteColumnInfos(Entity entity, boolean insert) {
+    public List<ColumnInfo> getWriteColumnInfos(Entity entity, boolean insert) {
         String tableName = entity.type();
         DBTable table = getTable(tableName);
         List<String> pkColumnNames = CollectionUtil.toList(table.getPKColumnNames());
