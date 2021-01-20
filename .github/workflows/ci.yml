@@ -1,0 +1,97 @@
+name: "rapiddweller-benerator-ce CI"
+
+on:
+  push:
+    branches: [ ci-migration ]
+  pull_request:
+    branches: [ ci-migration ]
+
+env:
+  ARTIFACT_ID: "rapiddweller-benerator-ce"
+  ARTIFACT_VERSION_BASE: "1.1.0"
+  ARTIFACT_VERSION: $ARTIFACT_VERSION_BASE-SNAPSHOT
+  MAVEN_CLI_OPTS: "--batch-mode"
+
+jobs:
+
+###################### Test / Build ######################
+
+  build_jdk11:
+    runs-on: ubuntu-latest
+    container: maven:3.6-adoptopenjdk-11
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
+      - run: mvn $MAVEN_CLI_OPTS clean package
+      - name: Upload build artifact for assembly
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifact
+          path: |
+            target/*.tar.gz
+            target/*.zip
+            target/site/
+  
+  test_jdk11:
+    runs-on: ubuntu-latest
+    container: maven:3.6-adoptopenjdk-11
+
+    steps:
+      - uses: actions/checkout@v2    
+      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
+      - run: mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
+      - run: awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco/jacoco.csv
+      - name: Upload test-report result for coverage_jdk11
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: target/site/cobertura.xml
+
+###################### Quality ######################
+
+  coverage_jdk11:
+    runs-on: ubuntu-latest
+    container: haynes/jacoco2cobertura:1.0.4
+    needs: ["test_jdk11"]
+    steps:
+      - name: Download test-report result from test_jdk11
+        uses: actions/download-artifact@v2
+        with:
+          name: test-report
+      - run: 'python /opt/cover2cover.py target/site/jacoco/jacoco.xml src/main/java > target/site/cobertura.xml'
+      - run: 'python /opt/source2filename.py target/site/cobertura.xml'
+
+############################# Documentation ##############################
+
+  documentation_build:
+    runs-on: ubuntu-latest
+    container: squidfunk/mkdocs-material
+    steps:
+      - uses: actions/checkout@v2
+      - run: pip install markdown-include
+      - run: pip install mkdocs-markdownextradata-plugin
+      - run: mkdocs build
+      - run: mv site target/manual
+      - name: Upload documentation build for Assembly and hosting
+        uses: actions/upload-artifact@v2
+        with:
+          name: documentation
+          path: target/manual
+
+###################### Assembly and Deploy ######################
+
+  assembly_jdk11:
+    runs-on: ubuntu-latest
+    container: maven:3.6-adoptopenjdk-11
+
+    needs: ["build_jdk11","documentation_build"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download artifacts for assembly
+        uses: actions/download-artifact@v2
+        with:
+          name: |
+            build-artifact
+            documentation
+      - run: mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
