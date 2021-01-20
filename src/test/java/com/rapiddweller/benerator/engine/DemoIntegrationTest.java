@@ -29,6 +29,9 @@ package com.rapiddweller.benerator.engine;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.common.FileUtil;
 
+import com.rapiddweller.domain.organization.CompanyNameGeneratorTest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import java.io.File;
@@ -44,13 +47,15 @@ import java.util.Objects;
  * @since 1.1.0
  */
 public class DemoIntegrationTest extends BeneratorIntegrationTest {
+    private static final Logger logger = LogManager.getLogger(DemoIntegrationTest.class);
+
     String ROOT = "src/demo/resources/";
 
     private void parseAndExecute() throws IOException {
         for (File file : Objects.requireNonNull(new File(ROOT, context.getContextUri()).listFiles())) {
             String filename = file.getPath();
             if (FileUtil.isXMLFile(filename)) {
-                System.out.println(filename);
+                logger.info(filename);
                 parseAndExecuteFile(filename);
             }
         }
