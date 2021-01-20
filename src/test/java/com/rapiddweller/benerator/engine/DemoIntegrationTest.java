@@ -54,7 +54,7 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
     private void parseAndExecute() throws IOException {
         for (File file : Objects.requireNonNull(new File(ROOT, context.getContextUri()).listFiles())) {
             String filename = file.getPath();
-            if (FileUtil.isXMLFile(filename)) {
+            if (FileUtil.isXMLFile(filename) && !filename.equals("src/demo/resources/demo/db/compositekey.ben.xml")) {
                 logger.info(filename);
                 parseAndExecuteFile(filename);
             }
