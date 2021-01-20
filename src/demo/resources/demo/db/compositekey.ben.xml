@@ -35,16 +35,16 @@
     </execute>
 
     <generate type="playlist" count="20" consumer="db">
-        <id name="PlaylistId" generator="IncrementGenerator"/>
+        <id name="PlaylistId" type="int" generator="IncrementGenerator"/>
     </generate>
 
     <generate type="track" count="20" consumer="db">
-        <id name="TrackId" generator="IncrementGenerator"/>
+        <id name="TrackId" type="int" generator="IncrementGenerator"/>
     </generate>
 
     <generate type="playlist_track" count="20" consumer="db">
-        <reference name="PlaylistId" source="db" targetType="Playlist" unique="True"/>
-        <reference name="TrackId" source="db" targetType="Track" unique="True"/>
+        <reference name="PlaylistId" type="int" source="db" targetType="Playlist" unique="True"/>
+        <reference name="TrackId" type="int" source="db" targetType="Track" unique="True"/>
     </generate>
 
     <iterate type="playlist" source="db" consumer="ConsoleExporter"/>
