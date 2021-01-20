@@ -6,7 +6,8 @@
        xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
 
     <!-- define a database that will be referred by the id 'db' later -->
-    <database id="db" url="jdbc:hsqldb:hsql" driver="org.hsqldb.jdbcDriver" user="sa" tableFilter="db_.*" />
+    <comment>define a database that will be referred by the id 'db' subsequently</comment>
+    <database id="db" url="jdbc:hsqldb:mem:benerator" driver="org.hsqldb.jdbcDriver" user="sa" catalog="public" schema="public" tableFilter="db_.*" />
 
     <execute target="db" onError="warn">
         DROP TABLE db_dummy;
