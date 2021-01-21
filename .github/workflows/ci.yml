@@ -29,10 +29,8 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build-artifact
-          path: |
-            target/*.tar.gz
-            target/*.zip
-            target/site/
+          path: target/*.jar
+
   
   test_jdk11:
     runs-on: ubuntu-20.04
@@ -108,3 +106,11 @@ jobs:
             build-artifact
             documentation
       - run: mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
+      - name: Upload dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: |
+            target/*.tar.gz
+            target/*.zip
+            target/site/
