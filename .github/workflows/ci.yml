@@ -52,7 +52,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test_jdk11
-          entrypoint: target/site/jacoco/
           path: target/site/jacoco/jacoco.xml
           if-no-files-found: error
           retention-days: 5
@@ -68,9 +67,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: test_jdk11
-          path: target/site/jacoco/jacoco.xml
+          path: target
       - run: ls
-      - run: 'python /opt/cover2cover.py target/site/jacoco/jacoco.xml src/main/java > cobertura.xml'
+      - run: 'python /opt/cover2cover.py target/jacoco.xml src/main/java > cobertura.xml'
       - run: 'python /opt/source2filename.py cobertura.xml'
       - name: Upload cobertura report
         uses: actions/upload-artifact@v2
@@ -94,9 +93,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: documentation_build_assembly
-          path: |
-            site
-            !*.pdf
+          path: site/*.pdf
       - name: Upload documentation build for hosting
         uses: actions/upload-artifact@v2
         with:
@@ -120,10 +117,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build_jdk11
+          path: target
       - name: Download documentation_build_assembly for assembly
         uses: actions/download-artifact@v2
         with:
           name: documentation_build_assembly
+          path: target/manual
       - run: ls
       - run: cd target && ls && cd ..
       - run: mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true

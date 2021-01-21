@@ -111,9 +111,9 @@
     </developers>
 
     <scm>
-        <url>${env.CI_PROJECT_URL}</url>
-        <connection>scm:git:${env.CI_REPOSITORY_URL}</connection>
-        <developerConnection>scm:git:${env.CI_REPOSITORY_URL}</developerConnection>
+        <url>https://github.com/rapiddweller/rapiddweller-benerator-ce</url>
+        <connection>scm:git:github.com/rapiddweller/rapiddweller-benerator-ce</connection>
+        <developerConnection>scm:git:github.com/rapiddweller/rapiddweller-benerator-ce</developerConnection>
     </scm>
 
     <repositories>
@@ -125,13 +125,10 @@
 
     <distributionManagement>
         <repository>
-            <id>gitlab-maven</id>
-            <url>${env.CI_SERVER_URL}/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven/</url>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/OWNER/REPOSITORY</url>
         </repository>
-        <snapshotRepository>
-            <id>gitlab-maven</id>
-            <url>${env.CI_SERVER_URL}/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven/</url>
-        </snapshotRepository>
     </distributionManagement>
 
     <properties>
