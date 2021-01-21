@@ -12,7 +12,7 @@ jobs:
 ###################### Test / Build ######################
 
   build_jdk11:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     container: maven:3.6-adoptopenjdk-11
     env:
       ARTIFACT_ID: "rapiddweller-benerator-ce"
@@ -20,9 +20,11 @@ jobs:
       MAVEN_CLI_OPTS: "--batch-mode"
     steps:
       - run: export
+      - run: mvn -v
       - uses: actions/checkout@v2
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION_BASE-SNAPSHOT
       - run: mvn $MAVEN_CLI_OPTS clean package
+      - run: ls
       - name: Upload build artifact for assembly
         uses: actions/upload-artifact@v2
         with:
@@ -33,7 +35,7 @@ jobs:
             target/site/
   
   test_jdk11:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     container: maven:3.6-adoptopenjdk-11
     env:
       ARTIFACT_ID: "rapiddweller-benerator-ce"
@@ -46,16 +48,17 @@ jobs:
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION_BASE-SNAPSHOT
       - run: mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
       - run: awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco/jacoco.csv
+      - run: ls
       - name: Upload test-report result for coverage_jdk11
         uses: actions/upload-artifact@v2
         with:
           name: test-report
-          path: target/site/cobertura.xml
+          path: target/site/
 
 ###################### Quality ######################
 
   coverage_jdk11:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     container: haynes/jacoco2cobertura:1.0.4
     needs: ["test_jdk11"]
     steps:
@@ -69,7 +72,7 @@ jobs:
 ############################# Documentation ##############################
 
   documentation_build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: ["build_jdk11"]
     container: squidfunk/mkdocs-material
     steps:
@@ -88,7 +91,7 @@ jobs:
 ###################### Assembly and Deploy ######################
 
   assembly_jdk11:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     container: maven:3.6-adoptopenjdk-11
     env:
       ARTIFACT_ID: "rapiddweller-benerator-ce"
