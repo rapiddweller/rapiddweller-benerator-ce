@@ -34,6 +34,14 @@ theme:
   palette:
     accent: teal
 
+plugins:
+  - with-pdf:
+      author: rapiddweller GmbH & Volker Bergmann
+      copyright: Copyright &copy; 2006 - 2021 rapiddweller GmbH & Volker Bergmann
+      toc_level: 1
+      cover_title: rapiddweller-benerator-ce
+      cover_subtitle: manual
+      output_path: rapiddweller-benerator-ce.pdf
 
 markdown_extensions:
   - markdown.extensions.codehilite:
