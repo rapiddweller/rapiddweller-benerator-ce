@@ -23,12 +23,11 @@ jobs:
       - run: mvn -v
       - uses: actions/checkout@v2
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION_BASE-SNAPSHOT
-      - run: mvn $MAVEN_CLI_OPTS clean package
-      - run: ls
+      - run: mvn $MAVEN_CLI_OPTS clean package -Dmaven.test.skip=true
       - name: Upload build artifact for assembly
         uses: actions/upload-artifact@v2
         with:
-          name: build-artifact
+          name: build_jdk11
           path: target/*.jar
 
   
@@ -50,7 +49,7 @@ jobs:
       - name: Upload test-report result for coverage_jdk11
         uses: actions/upload-artifact@v2
         with:
-          name: test-report
+          name: test_jdk11
           path: target/site/
 
 ###################### Quality ######################
@@ -63,20 +62,19 @@ jobs:
       - name: Download test-report result from test_jdk11
         uses: actions/download-artifact@v2
         with:
-          name: test-report
+          name: test_jdk11
       - run: 'python /opt/cover2cover.py target/site/jacoco/jacoco.xml src/main/java > cobertura.xml'
       - run: 'python /opt/source2filename.py cobertura.xml'
       - name: Upload cobertura report
         uses: actions/upload-artifact@v2
         with:
-          name: cobertura-report
+          name: coverage_jdk11
           path: cobertura.xml
 
 ############################# Documentation ##############################
 
   documentation_build:
     runs-on: ubuntu-20.04
-#    needs: ["build_jdk11"]
     container: python:3.9
     steps:
       - uses: actions/checkout@v2
@@ -88,14 +86,14 @@ jobs:
       - name: Upload documentation build for Assembly
         uses: actions/upload-artifact@v2
         with:
-          name: documentation-assembly
+          name: documentation_build_assembly
           path: |
             site
             !*.pdf
       - name: Upload documentation build for hosting
         uses: actions/upload-artifact@v2
         with:
-          name: documentation-hosting
+          name: documentation_build_hosting
           path: site
 
 ###################### Assembly and Deploy ######################
@@ -107,7 +105,7 @@ jobs:
       ARTIFACT_ID: "rapiddweller-benerator-ce"
       ARTIFACT_VERSION_BASE: "1.1.0"
       MAVEN_CLI_OPTS: "--batch-mode"
-    needs: ["build_jdk11","documentation_build"]
+    needs: [build_jdk11,documentation_build]
     steps:
       - uses: actions/checkout@v2    
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION_BASE-SNAPSHOT
@@ -115,13 +113,13 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: |
-            build-artifact
-            documentation-assembly
+            build_jdk11
+            documentation_build_assembly
       - run: mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
       - name: Upload dist
         uses: actions/upload-artifact@v2
         with:
-          name: dist
+          name: assembly_jdk11
           path: |
             target/*.tar.gz
             target/*.zip
