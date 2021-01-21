@@ -110,12 +110,15 @@
         <fileSet>
             <directory>target/site</directory>
             <outputDirectory>doc/site</outputDirectory>
+            <includes>
+                <include>*.pdf</include>
+            </includes>
             <excludes>
                 <exclude>__MACOSX</exclude>
             </excludes>
         </fileSet>
         <fileSet>
-            <directory>target/manual</directory>
+            <directory>site</directory>
             <outputDirectory>doc/manual</outputDirectory>
             <excludes>
                 <exclude>__MACOSX</exclude>
