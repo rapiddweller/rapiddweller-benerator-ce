@@ -32,6 +32,7 @@ import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.domain.organization.CompanyNameGeneratorTest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -54,26 +55,28 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
     private void parseAndExecute() throws IOException {
         for (File file : Objects.requireNonNull(new File(ROOT, context.getContextUri()).listFiles())) {
             String filename = file.getPath();
-            if (FileUtil.isXMLFile(filename) && !filename.equals("src/demo/resources/demo/db/compositekey.ben.xml")) {
+            if (FileUtil.isXMLFile(filename)) {
                 logger.info(filename);
                 parseAndExecuteFile(filename);
             }
         }
     }
 
+    @Ignore
     @Test
     public void DemoFiles() throws IOException {
         context.setContextUri("/demo/file");
         parseAndExecute();
     }
 
+    @Ignore
     @Test
     public void DemoDb() throws IOException {
         context.setContextUri("/demo/db");
         parseAndExecute();
     }
 
-
+    @Ignore
     @Test
     public void DemoScript() throws IOException {
         context.setContextUri("/demo/script");
