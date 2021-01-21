@@ -76,10 +76,11 @@ jobs:
 
   documentation_build:
     runs-on: ubuntu-20.04
-    needs: ["build_jdk11"]
-    container: squidfunk/mkdocs-material
+#    needs: ["build_jdk11"]
+    container: python:3.9
     steps:
       - uses: actions/checkout@v2
+      - run: pip install mkdocs-material
       - run: pip install markdown-include
       - run: pip install mkdocs-markdownextradata-plugin
       - run: pip install mkdocs-with-pdf
