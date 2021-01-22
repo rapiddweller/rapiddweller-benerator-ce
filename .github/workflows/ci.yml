@@ -17,8 +17,12 @@ env:
   JAVA_JDKVERSION_TAG: "jdk-11"
   SET_VERSION: |
               if [ GITHUB_REF == refs/tags/* ];
-              then echo echo ARTIFACT_FULLNAME=$ARTIFACT_ID-${GITHUB_REF#refs/tags/v}-$JAVA_JDKVERSION_TAG  >> $GITHUB_ENV ;
-              else echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION_BASE-$JAVA_JDKVERSION_TAG-SNAPSHOT  >> $GITHUB_ENV ;
+              then
+                echo ARTIFACT_VERSION=${GITHUB_REF#refs/tags/v}-$JAVA_JDKVERSION_TAG  >> $GITHUB_ENV;
+                echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
+              else
+                echo ARTIFACT_VERSION=$ARTIFACT_VERSION_BASE-$JAVA_JDKVERSION_TAG-SNAPSHOT  >> $GITHUB_ENV;
+                echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
               fi
 jobs:
 
@@ -30,7 +34,7 @@ jobs:
     steps:
       - run: eval $SET_VERSION
       - uses: actions/checkout@v2
-      - run: mvn versions:set -DnewVersion=$ARTIFACT_FULLNAME
+      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - run: mvn $MAVEN_CLI_OPTS clean package -Dmaven.test.skip=true
       - name: Upload build artifact for assembly
         uses: actions/upload-artifact@v2
@@ -47,7 +51,7 @@ jobs:
     steps:
       - run: eval $SET_VERSION
       - uses: actions/checkout@v2
-      - run: mvn versions:set -DnewVersion=$ARTIFACT_FULLNAME
+      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - run: mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
       - run: awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco/jacoco.csv
       - run: ls
@@ -119,7 +123,7 @@ jobs:
     steps:
       - run: eval $SET_VERSION
       - uses: actions/checkout@v2
-      - run: mvn versions:set -DnewVersion=$ARTIFACT_FULLNAME
+      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
