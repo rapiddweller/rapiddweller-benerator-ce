@@ -150,7 +150,7 @@ jobs:
 
   E2ET_helper-scripts_jdk11:
     runs-on: ubuntu-20.04
-    container: oracle/graalvm-ce:20.3.0-java11
+    container: findepi/graalvm:java11-all
     needs: [ assembly_jdk11 ]
     steps:
       - run: eval $SET_VERSION
@@ -167,3 +167,98 @@ jobs:
       - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
       - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
       - run: benerator --version
+
+  E2ET_script-graalvm11:
+    runs-on: ubuntu-20.04
+    container: findepi/graalvm:java11-all
+    needs: [ assembly_jdk11 ]
+    steps:
+      - run: eval $SET_VERSION
+      - uses: actions/checkout@v2
+      - name: Download build_jdk11 for assembly
+        uses: actions/download-artifact@v2
+        with:
+          name: assembly_jdk11
+          path: target
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+      - run: export SHELL=/bin/bash
+      - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
+      - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
+      - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
+      - run: benerator --version
+      - run: cd $ARTIFACT_FULLNAME/demo/script
+      - run: benerator scriptcode.ben.xml
+      - run: benerator scriptfile.ben.xml
+
+  E2ET_db-graalvm11:
+    runs-on: ubuntu-20.04
+    container: findepi/graalvm:java11-all
+    needs: [ assembly_jdk11 ]
+    steps:
+      - run: eval $SET_VERSION
+      - uses: actions/checkout@v2
+      - name: Download build_jdk11 for assembly
+        uses: actions/download-artifact@v2
+        with:
+          name: assembly_jdk11
+          path: target
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+      - run: export SHELL=/bin/bash
+      - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
+      - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
+      - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
+      - run: benerator --version
+      - run: cd $ARTIFACT_FULLNAME/demo/db
+      - run: benerator user.ben.xml
+      - run: benerator compositekey.ben.xml
+
+  E2ET_files-graalvm11:
+    runs-on: ubuntu-20.04
+    container: findepi/graalvm:java11-all
+    needs: [ assembly_jdk11 ]
+    steps:
+      - run: eval $SET_VERSION
+      - uses: actions/checkout@v2
+      - name: Download build_jdk11 for assembly
+        uses: actions/download-artifact@v2
+        with:
+          name: assembly_jdk11
+          path: target
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+      - run: export SHELL=/bin/bash
+      - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
+      - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
+      - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
+      - run: benerator --version
+      - run: cd $ARTIFACT_FULLNAME/demo/file
+      - run: benerator create_csv.ben.xml
+      - run: benerator create_dates.ben.xml
+      - run: benerator create_fixed_width.ben.xml
+      - run: benerator create_xls.ben.xml
+      - run: benerator create_xml.ben.xml
+      - run: benerator create_xml_by_script.ben.xml
+      - run: benerator csv_io.ben.xml
+      - run: benerator greetings_csv.ben.xml
+      - run: benerator import_fixed_width.ben.xml
+      - run: benerator postprocess-import.ben.xml
+
+  E2ET_hsqlmem-graalvm11:
+    runs-on: ubuntu-20.04
+    container: findepi/graalvm:java11-all
+    needs: [ assembly_jdk11 ]
+    steps:
+      - run: eval $SET_VERSION
+      - uses: actions/checkout@v2
+      - name: Download build_jdk11 for assembly
+        uses: actions/download-artifact@v2
+        with:
+          name: assembly_jdk11
+          path: target
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+      - run: export SHELL=/bin/bash
+      - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
+      - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
+      - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
+      - run: benerator --version
+      - run: cd $ARTIFACT_FULLNAME/demo/shop
+      - run: benerator shop-hsqlmem.ben.xml
