@@ -174,8 +174,7 @@ jobs:
       - run: echo SHELL=/bin/bash >> $GITHUB_ENV
       - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
       - run: echo $BENERATOR_HOME
-      - run: echo PATH=$BENERATOR_HOME/bin >> $GITHUB_ENV
-      - run: echo $PATH
+      - run: echo PATH=$BENERATOR_HOME/bin:$PATH >> $GITHUB_ENV
       - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
       - run: benerator --version
 
@@ -195,8 +194,7 @@ jobs:
       - run: echo SHELL=/bin/bash >> $GITHUB_ENV
       - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
       - run: echo $BENERATOR_HOME
-      - run: echo PATH=$BENERATOR_HOME/bin >> $GITHUB_ENV
-      - run: echo $PATH
+      - run: echo PATH=$BENERATOR_HOME/bin:$PATH >> $GITHUB_ENV
       - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
       - run: benerator --version
       - run: cd $ARTIFACT_FULLNAME/demo/script
@@ -219,8 +217,7 @@ jobs:
       - run: echo SHELL=/bin/bash >> $GITHUB_ENV
       - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
       - run: echo $BENERATOR_HOME
-      - run: echo PATH=$BENERATOR_HOME/bin >> $GITHUB_ENV
-      - run: echo $PATH
+      - run: echo PATH=$BENERATOR_HOME/bin:$PATH >> $GITHUB_ENV
       - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
       - run: benerator --version
       - run: cd $ARTIFACT_FULLNAME/demo/db
@@ -243,8 +240,7 @@ jobs:
       - run: echo SHELL=/bin/bash >> $GITHUB_ENV
       - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
       - run: echo $BENERATOR_HOME
-      - run: echo PATH=$BENERATOR_HOME/bin >> $GITHUB_ENV
-      - run: echo $PATH
+      - run: echo PATH=$BENERATOR_HOME/bin:$PATH >> $GITHUB_ENV
       - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
       - run: benerator --version
       - run: cd $ARTIFACT_FULLNAME/demo/file
@@ -275,8 +271,7 @@ jobs:
       - run: echo SHELL=/bin/bash >> $GITHUB_ENV
       - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
       - run: echo $BENERATOR_HOME
-      - run: echo PATH=$BENERATOR_HOME/bin >> $GITHUB_ENV
-      - run: echo $PATH
+      - run: echo PATH=$BENERATOR_HOME/bin:$PATH >> $GITHUB_ENV
       - run: chmod -R 777 $BENERATOR_HOME/bin/
       - run: benerator --version
       - run: cd $ARTIFACT_FULLNAME/demo/shop
