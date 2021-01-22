@@ -261,7 +261,7 @@ jobs:
       - run: export
       - uses: actions/checkout@v2
       - name: Download build_jdk11 for assembly
-              uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v2
               with:
                 name: assembly_jdk11_test
                 path: target
