@@ -262,9 +262,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
-              with:
-                name: assembly_jdk11_test
-                path: target
+        with:
+            name: assembly_jdk11_test
+            path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
       - run: export SHELL=/bin/bash
       - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
