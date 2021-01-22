@@ -13,14 +13,16 @@ env:
   MAVEN_CLI_OPTS: "--batch-mode"
   JAVA_JDKVERSION_TAG: "jdk-11"
   SET_VERSION: |
-              if [ GITHUB_REF == refs/tags/* ];
-              then
-                echo ARTIFACT_VERSION=${GITHUB_REF#refs/tags/v}-$JAVA_JDKVERSION_TAG  >> $GITHUB_ENV;
-                echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
-              else
-                echo ARTIFACT_VERSION=$ARTIFACT_VERSION_BASE-$JAVA_JDKVERSION_TAG-SNAPSHOT  >> $GITHUB_ENV;
-                echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
-              fi
+    if [ GITHUB_REF == refs/tags/* ];
+    then
+    ARTIFACT_VERSION=$ARTIFACT_VERSION_BASE-$JAVA_JDKVERSION_TAG-SNAPSHOT;
+    echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
+      echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
+    else
+      ARTIFACT_VERSION=$ARTIFACT_VERSION_BASE-$JAVA_JDKVERSION_TAG-SNAPSHOT;
+      echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
+      echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
+    fi
 jobs:
 
   ###################### Test / Build ######################
@@ -145,6 +147,14 @@ jobs:
             target/manual/
           if-no-files-found: error
           retention-days: 5
+      - name: Upload dist test
+        uses: actions/upload-artifact@v2
+        with:
+          name: assembly_jdk11_test
+          path: |
+            target/*.tar.gz
+          if-no-files-found: error
+          retention-days: 1
 
   ###################### E2ET ######################
 
@@ -158,7 +168,7 @@ jobs:
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
-          name: assembly_jdk11
+          name: assembly_jdk11_test
           path: target
       - run: gu install python
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
@@ -178,7 +188,7 @@ jobs:
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
-          name: assembly_jdk11
+          name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
       - run: export SHELL=/bin/bash
@@ -200,9 +210,9 @@ jobs:
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
-          name: assembly_jdk11
+          name: assembly_jdk11_test
           path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
       - run: export SHELL=/bin/bash
       - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
       - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
@@ -222,7 +232,7 @@ jobs:
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
-          name: assembly_jdk11
+          name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
       - run: export SHELL=/bin/bash
@@ -248,13 +258,14 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - run: eval $SET_VERSION
-      - uses: actions/checkout@v2
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
-        with:
-          name: assembly_jdk11
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
+      - run: export
+            - uses: actions/checkout@v2
+            - name: Download build_jdk11 for assembly
+              uses: actions/download-artifact@v2
+              with:
+                name: assembly_jdk11_test
+                path: target
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
       - run: export SHELL=/bin/bash
       - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
       - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
