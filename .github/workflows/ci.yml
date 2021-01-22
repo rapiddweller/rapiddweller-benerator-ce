@@ -6,20 +6,20 @@ on:
   pull_request:
     branches: [ ci-migration ]
 
+defaults:
+  run:
+    shell: bash
+
 env:
   ARTIFACT_ID: "rapiddweller-benerator-ce"
   ARTIFACT_VERSION_BASE: "1.1.0"
   MAVEN_CLI_OPTS: "--batch-mode"
-  ASSIGN_CORRECT_VERSION: |
-          export RD_PROJECT_LATEST_TAG=$(git describe --abbrev=0 --tags)
-          export JAVA_JDKVERSION_TAG="jdk-11"
-          if [ -z "$GITHUB_REF" ];
-                then
-                  export ARTIFACT_VERSION=$ARTIFACT_VERSION_BASE+$JAVA_JDKVERSION_TAG-SNAPSHOT
-                else
-                  export ARTIFACT_VERSION=$GITHUB_REF+$JAVA_JDKVERSION_TAG
-                fi
-          export ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION
+  JAVA_JDKVERSION_TAG: "jdk-11"
+  SET_VERSION: |
+              if [ GITHUB_REF == refs/tags/* ];
+              then echo echo ARTIFACT_FULLNAME=$ARTIFACT_ID-${GITHUB_REF#refs/tags/v}-$JAVA_JDKVERSION_TAG  >> $GITHUB_ENV ;
+              else echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION_BASE-$JAVA_JDKVERSION_TAG-SNAPSHOT  >> $GITHUB_ENV ;
+              fi
 jobs:
 
   ###################### Test / Build ######################
@@ -28,9 +28,7 @@ jobs:
     runs-on: ubuntu-20.04
     container: maven:3.6-adoptopenjdk-11
     steps:
-      - run: bash -c $ASSIGN_CORRECT_VERSION
-      - run: export
-      - run: mvn -v
+      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
       - run: mvn versions:set -DnewVersion=$ARTIFACT_FULLNAME
       - run: mvn $MAVEN_CLI_OPTS clean package -Dmaven.test.skip=true
@@ -47,9 +45,7 @@ jobs:
     runs-on: ubuntu-20.04
     container: maven:3.6-adoptopenjdk-11
     steps:
-      - run: bash -c $ASSIGN_CORRECT_VERSION
-      - run: export
-      - run: mvn -v
+      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
       - run: mvn versions:set -DnewVersion=$ARTIFACT_FULLNAME
       - run: mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
@@ -121,8 +117,7 @@ jobs:
     container: maven:3.6-adoptopenjdk-11
     needs: [ test_jdk11,build_jdk11,documentation_build ]
     steps:
-      - run: bash -c $ASSIGN_CORRECT_VERSION
-      - run: export
+      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
       - run: mvn versions:set -DnewVersion=$ARTIFACT_FULLNAME
       - name: Download build_jdk11 for assembly
@@ -157,8 +152,7 @@ jobs:
     container: oracle/graalvm-ce:20.3.0-java11
     needs: [ assembly_jdk11 ]
     steps:
-      - run: bash -c $ASSIGN_CORRECT_VERSION
-      - run: export
+      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
@@ -166,8 +160,7 @@ jobs:
           name: assembly_jdk11
           path: target
       - run: gu install python
-      - run: gu install ruby
-      - run: tar -xzf target/$ARTIFACT_FULLNAME-dist.tar.gz
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
       - run: export SHELL=/bin/bash
       - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
       - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
