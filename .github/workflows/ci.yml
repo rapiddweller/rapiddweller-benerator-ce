@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ ci-migration ]
 
-defaults:
-  run:
-    shell: bash
 
 env:
   ARTIFACT_ID: "rapiddweller-benerator-ce"
