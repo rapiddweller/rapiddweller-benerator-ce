@@ -170,11 +170,12 @@ jobs:
         with:
           name: assembly_jdk11_test
           path: target
-      - run: gu install python
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - run: export SHELL=/bin/bash
-      - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
-      - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
+      - run: echo SHELL=/bin/bash >> $GITHUB_ENV
+      - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+      - run: echo $BENERATOR_HOME
+      - run: echo PATH=$BENERATOR_HOME/bin >> $GITHUB_ENV
+      - run: echo $PATH
       - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
       - run: benerator --version
 
@@ -191,9 +192,11 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - run: export SHELL=/bin/bash
-      - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
-      - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
+      - run: echo SHELL=/bin/bash >> $GITHUB_ENV
+      - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+      - run: echo $BENERATOR_HOME
+      - run: echo PATH=$BENERATOR_HOME/bin >> $GITHUB_ENV
+      - run: echo $PATH
       - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
       - run: benerator --version
       - run: cd $ARTIFACT_FULLNAME/demo/script
@@ -213,9 +216,11 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - run: export SHELL=/bin/bash
-      - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
-      - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
+      - run: echo SHELL=/bin/bash >> $GITHUB_ENV
+      - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+      - run: echo $BENERATOR_HOME
+      - run: echo PATH=$BENERATOR_HOME/bin >> $GITHUB_ENV
+      - run: echo $PATH
       - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
       - run: benerator --version
       - run: cd $ARTIFACT_FULLNAME/demo/db
@@ -235,9 +240,11 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - run: export SHELL=/bin/bash
-      - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
-      - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
+      - run: echo SHELL=/bin/bash >> $GITHUB_ENV
+      - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+      - run: echo $BENERATOR_HOME
+      - run: echo PATH=$BENERATOR_HOME/bin >> $GITHUB_ENV
+      - run: echo $PATH
       - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
       - run: benerator --version
       - run: cd $ARTIFACT_FULLNAME/demo/file
@@ -258,18 +265,19 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - run: eval $SET_VERSION
-      - run: export
       - uses: actions/checkout@v2
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
-            name: assembly_jdk11_test
-            path: target
+          name: assembly_jdk11_test
+          path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - run: export SHELL=/bin/bash
-      - run: export BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME
-      - run: export PATH=$PATH:$PWD/$ARTIFACT_FULLNAME/bin
-      - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
+      - run: echo SHELL=/bin/bash >> $GITHUB_ENV
+      - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+      - run: echo $BENERATOR_HOME
+      - run: echo PATH=$BENERATOR_HOME/bin >> $GITHUB_ENV
+      - run: echo $PATH
+      - run: chmod -R 777 $BENERATOR_HOME/bin/
       - run: benerator --version
       - run: cd $ARTIFACT_FULLNAME/demo/shop
       - run: benerator shop-hsqlmem.ben.xml
