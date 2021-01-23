@@ -171,7 +171,8 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - run: |
+      - name: setup benerator env and set permissions
+        run: |
           echo SHELL=/bin/bash >> $GITHUB_ENV
           echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
           echo $BENERATOR_HOME
@@ -197,7 +198,7 @@ jobs:
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
       - name: setup benerator env and set permissions
-      - run: |
+        run: |
           echo SHELL=/bin/bash >> $GITHUB_ENV
           echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
           echo $BENERATOR_HOME
@@ -223,7 +224,8 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - run: |
+      - name: setup benerator env and set permissions
+        run: |
           echo SHELL=/bin/bash >> $GITHUB_ENV
           echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
           echo $BENERATOR_HOME
@@ -249,7 +251,8 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - run: |
+      - name: setup benerator env and set permissions
+        run: |
           echo SHELL=/bin/bash >> $GITHUB_ENV
           echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
           echo $BENERATOR_HOME
@@ -291,7 +294,8 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - run: |
+      - name: setup benerator env and set permissions
+        run: |
           echo SHELL=/bin/bash >> $GITHUB_ENV
           echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
           echo $BENERATOR_HOME
