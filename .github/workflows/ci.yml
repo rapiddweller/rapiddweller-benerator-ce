@@ -341,9 +341,9 @@ jobs:
           DB_PORT: "5432"
           DB_CONNECTION: "postgres"
           # postgres
-          POSTGRES_DB: "e2etpostgres"
+          POSTGRES_DB: "benerator"
           POSTGRES_USER: "root"
-          POSTGRES_PASSWORD: "bentest!"
+          POSTGRES_PASSWORD: "Benerator123!"
           POSTGRES_HOST_AUTH_METHOD: trust
         # Set health checks to wait until postgres has started
         options: >-
@@ -372,11 +372,11 @@ jobs:
         run: benerator --version
       - run: |
           echo "
-          dbUrl=jdbc:postgresql://$DB_HOST:$DB_PORT/$POSTGRES_DB
+          dbUrl=jdbc:postgresql://postgres:5432/benerator
           dbDriver=org.postgresql.Driver
-          dbUser=$POSTGRES_USER
-          dbPassword=$POSTGRES_PASSWORD
-          dbCatalog=$POSTGRES_DB
+          dbUser=root
+          dbPassword=Benerator123!
+          dbCatalog=benerator
           dbSchema=public
           idStrategy=increment
           idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
@@ -400,8 +400,8 @@ jobs:
           DB_CONNECTION: "mysql"
           # mysql
           MYSQL_ROOT_USER: "root"
-          MYSQL_ROOT_PASSWORD: "bentest!"
-          MYSQL_DATABASE: "e2etmysql"
+          MYSQL_ROOT_PASSWORD: "Benerator123!"
+          MYSQL_DATABASE: "benerator"
     steps:
       - run: eval $SET_VERSION
       - uses: actions/checkout@v2
@@ -423,11 +423,11 @@ jobs:
         run: benerator --version
       - run: |
           echo "
-          dbUrl=jdbc:mysql://$DB_HOST:$DB_PORT/$MYSQL_DATABASE
+          dbUrl=jdbc:mysql://mysql:3306/benerator
           dbDriver=com.mysql.cj.jdbc.Driver
-          dbCatalog=$MYSQL_DATABASE
-          dbUser=$MYSQL_ROOT_USER
-          dbPassword=$MYSQL_ROOT_PASSWORD
+          dbCatalog=benerator
+          dbUser=root
+          dbPassword=Benerator123!
           idStrategy=increment
           idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
       - run: cat $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
