@@ -325,3 +325,94 @@ jobs:
       - name: check if benerator is setup correctly
         run: benerator --version
       - run: benerator $BENERATOR_HOME/demo/shop/shop-hsqlmem.ben.xml
+
+  E2ET_postgresql-graalvm11:
+    runs-on: ubuntu-latest
+    container: findepi/graalvm:java11-all
+    needs: [ assembly_jdk11 ]
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres:12.2-alpine
+        # Provide the password for postgres
+        env:
+          DB_HOST: postgres
+          DB_PORT: "5432"
+          DB_CONNECTION: "postgres"
+          # postgres
+          POSTGRES_DB: "e2etpostgres"
+          POSTGRES_USER: "root"
+          POSTGRES_PASSWORD: "bentest!"
+          POSTGRES_HOST_AUTH_METHOD: trust
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - run: eval $SET_VERSION
+      - uses: actions/checkout@v2
+      - name: Download build_jdk11 for assembly
+        uses: actions/download-artifact@v2
+        with:
+          name: assembly_jdk11_test
+          path: target
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
+      - name: setup benerator env
+        run: |
+          echo SHELL=/bin/bash >> $GITHUB_ENV
+          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+          echo $BENERATOR_HOME
+          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+      - name: set permission
+        run: chmod -R 777 $BENERATOR_HOME/bin/
+      - name: check if benerator is setup correctly
+        run: benerator --version
+      - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
+
+  E2ET_mysql-graalvm11:
+    runs-on: ubuntu-latest
+    container: findepi/graalvm:java11-all
+    needs: [ assembly_jdk11 ]
+    services:
+      # Label used to access the service container
+      mysql:
+        # Docker Hub image
+        image: mysql:8.0.22
+        # Provide the password for postgres
+        env:
+          DB_HOST: "mysql"
+          DB_PORT: "3306"
+          DB_CONNECTION: "mysql"
+          # mysql
+          MYSQL_ROOT_USER: "root"
+          MYSQL_ROOT_PASSWORD: "bentest!"
+          MYSQL_DATABASE: "e2etmysql"
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd mysqladmin status
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - run: eval $SET_VERSION
+      - uses: actions/checkout@v2
+      - name: Download build_jdk11 for assembly
+        uses: actions/download-artifact@v2
+        with:
+          name: assembly_jdk11_test
+          path: target
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
+      - name: setup benerator env
+        run: |
+          echo SHELL=/bin/bash >> $GITHUB_ENV
+          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+          echo $BENERATOR_HOME
+          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+      - name: set permission
+        run: chmod -R 777 $BENERATOR_HOME/bin/
+      - name: check if benerator is setup correctly
+        run: benerator --version
+      - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
