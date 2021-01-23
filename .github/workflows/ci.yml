@@ -370,6 +370,18 @@ jobs:
         run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
+      - run: |
+          echo "
+          dbUrl=jdbc:postgresql://$DB_HOST:$DB_PORT/$POSTGRES_DB
+          dbDriver=org.postgresql.Driver
+          dbUser=$POSTGRES_USER
+          dbPassword=$POSTGRES_PASSWORD
+          dbCatalog=$POSTGRES_DB
+          dbSchema=public
+          idStrategy=increment
+          idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
+      - run: cat $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
+      - run: sleep 30s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
 
   E2ET_mysql-graalvm11:
@@ -380,7 +392,7 @@ jobs:
       # Label used to access the service container
       mysql:
         # Docker Hub image
-        image: mysql:8.0.22
+        image: mysql
         # Provide the password for postgres
         env:
           DB_HOST: "mysql"
@@ -390,12 +402,6 @@ jobs:
           MYSQL_ROOT_USER: "root"
           MYSQL_ROOT_PASSWORD: "bentest!"
           MYSQL_DATABASE: "e2etmysql"
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd mysqladmin status
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
       - run: eval $SET_VERSION
       - uses: actions/checkout@v2
@@ -415,4 +421,61 @@ jobs:
         run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
+      - run: |
+          echo "
+          dbUrl=jdbc:mysql://$DB_HOST:$DB_PORT/$MYSQL_DATABASE
+          dbDriver=com.mysql.cj.jdbc.Driver
+          dbCatalog=$MYSQL_DATABASE
+          dbUser=$MYSQL_ROOT_USER
+          dbPassword=$MYSQL_ROOT_PASSWORD
+          idStrategy=increment
+          idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
+      - run: cat $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
+      - run: sleep 60s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
+
+  E2ET_mssql-graalvm11:
+    runs-on: ubuntu-latest
+    container: findepi/graalvm:java11-all
+    needs: [ assembly_jdk11 ]
+    services:
+      # Label used to access the service container
+      mssql:
+        # Docker Hub image
+        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        # Provide the password for postgres
+        env:
+          ACCEPT_EULA: Y,
+          SA_PASSWORD: Benerator123!
+    steps:
+      - run: eval $SET_VERSION
+      - uses: actions/checkout@v2
+      - name: Download build_jdk11 for assembly
+        uses: actions/download-artifact@v2
+        with:
+          name: assembly_jdk11_test
+          path: target
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
+      - name: setup benerator env
+        run: |
+          echo SHELL=/bin/bash >> $GITHUB_ENV
+          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+          echo $BENERATOR_HOME
+          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+      - name: set permission
+        run: chmod -R 777 $BENERATOR_HOME/bin/
+      - name: check if benerator is setup correctly
+        run: benerator --version
+      - run: |
+          echo "
+          dbUrl=jdbc:jtds:sqlserver://mssql:1433;databaseName=master
+          dbDriver=net.sourceforge.jtds.jdbc.Driver
+          dbCatalog=master
+          dbSchema=dbo
+          dbUser=sa
+          dbPassword=Benerator123!
+          idStrategy=increment
+          idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/sql_server/shop.sql_server.properties
+      - run: cat $ARTIFACT_FULLNAME/demo/shop/sql_server/shop.sql_server.properties
+      - run: sleep 60s
+      - run: benerator $BENERATOR_HOME/demo/shop/shop-mssql.ben.xml
