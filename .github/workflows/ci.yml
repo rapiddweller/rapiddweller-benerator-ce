@@ -11,7 +11,7 @@ env:
   ARTIFACT_ID: "rapiddweller-benerator-ce"
   ARTIFACT_VERSION_BASE: "1.1.0"
   MAVEN_CLI_OPTS: "--batch-mode --update-snapshots"
-  JAVA_JDKVERSION_TAG: "11"
+  JAVA_JDKVERSION_TAG: "jdk-11"
   SET_VERSION: |
     if [ GITHUB_REF == refs/tags/* ];
     then
@@ -28,7 +28,7 @@ jobs:
   ###################### Test / Build ######################
 
   build_jdk11:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - run: eval $SET_VERSION
       - uses: actions/checkout@v2
@@ -54,7 +54,7 @@ jobs:
 
 
   deploy_jdk11:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v1
@@ -75,7 +75,7 @@ jobs:
           path: staging
 
   test_jdk11:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - run: eval $SET_VERSION
       - uses: actions/checkout@v2
@@ -104,7 +104,7 @@ jobs:
   ###################### Quality ######################
 
   coverage_jdk11:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container: haynes/jacoco2cobertura:1.0.4
     needs: [ "test_jdk11" ]
     steps:
@@ -128,7 +128,7 @@ jobs:
   ############################# Documentation ##############################
 
   documentation_build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container: python:3.9
     steps:
       - uses: actions/checkout@v2
@@ -155,7 +155,7 @@ jobs:
   ###################### Assembly and Deploy ######################
 
   assembly_jdk11:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     needs: [ test_jdk11,build_jdk11,documentation_build ]
     steps:
       - run: eval $SET_VERSION
@@ -201,7 +201,7 @@ jobs:
   ###################### E2ET ######################
 
   E2ET_helper-scripts_jdk11:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - run: eval $SET_VERSION
       - uses: actions/checkout@v2
@@ -220,7 +220,7 @@ jobs:
       - run: bash script/3_execute_demos.sh
 
   E2ET_script-graalvm11:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container: findepi/graalvm:java11-all
     needs: [ assembly_jdk11 ]
     steps:
@@ -246,7 +246,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/script/scriptfile.ben.xml
 
   E2ET_db-graalvm11:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container: findepi/graalvm:java11-all
     needs: [ assembly_jdk11 ]
     steps:
@@ -272,7 +272,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/db/compositekey.ben.xml
 
   E2ET_files-graalvm11:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container: findepi/graalvm:java11-all
     needs: [ assembly_jdk11 ]
     steps:
@@ -306,7 +306,7 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/file/postprocess-import.ben.xml
 
   E2ET_hsqlmem-graalvm11:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container: findepi/graalvm:java11-all
     needs: [ assembly_jdk11 ]
     steps:
