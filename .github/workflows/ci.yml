@@ -175,7 +175,6 @@ jobs:
 
   publish_jdk11:
     runs-on: ubuntu-latest
-    container: maven:3.6-adoptopenjdk-11
     needs: [ test_jdk11,build_jdk11 ]
     steps:
       - uses: actions/checkout@v2
@@ -185,8 +184,12 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: Set up Java for publishing to GitHub Packages and autogenerate .m2/settings.xml
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
       - name: Publish package
-        run: mvn --batch-mode deploy
+        run: mvn --batch-mode deploy -Dmaven.test.skip=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -321,4 +324,4 @@ jobs:
         run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
-      - run: benerator $BENERATOR_HOME/demo/file/shop-hsqlmem.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/shop/shop-hsqlmem.ben.xml
