@@ -10,8 +10,8 @@ on:
 env:
   ARTIFACT_ID: "rapiddweller-benerator-ce"
   ARTIFACT_VERSION_BASE: "1.1.0"
-  MAVEN_CLI_OPTS: "--batch-mode"
-  JAVA_JDKVERSION_TAG: "jdk-11"
+  MAVEN_CLI_OPTS: "--batch-mode --update-snapshots"
+  JAVA_JDKVERSION_TAG: "11"
   SET_VERSION: |
     if [ GITHUB_REF == refs/tags/* ];
     then
@@ -29,10 +29,19 @@ jobs:
 
   build_jdk11:
     runs-on: ubuntu-20.04
-    container: maven:3.6-adoptopenjdk-11
     steps:
       - run: eval $SET_VERSION
       - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ubuntu-maven-jdk11-$ARTIFACT_FULLNAME
+          restore-keys: |
+            ubuntu-maven-jdk11-$ARTIFACT_FULLNAME
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - run: mvn $MAVEN_CLI_OPTS clean package -Dmaven.test.skip=true
       - name: Upload build artifact for assembly
@@ -44,12 +53,42 @@ jobs:
           retention-days: 5
 
 
+  deploy_jdk11:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ubuntu-maven-jdk11-$ARTIFACT_FULLNAME
+          restore-keys: |
+            ubuntu-maven-jdk11-$ARTIFACT_FULLNAME
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - run: mvn $MAVEN_CLI_OPTS verify
+      - run: mkdir staging && cp target/*.jar staging
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Package
+          path: staging
+
   test_jdk11:
     runs-on: ubuntu-20.04
-    container: maven:3.6-adoptopenjdk-11
     steps:
       - run: eval $SET_VERSION
       - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ubuntu-maven-jdk11-$ARTIFACT_FULLNAME
+          restore-keys: |
+            ubuntu-maven-jdk11-$ARTIFACT_FULLNAME
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - run: mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
       - run: awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco/jacoco.csv
@@ -117,17 +156,20 @@ jobs:
 
   assembly_jdk11:
     runs-on: ubuntu-20.04
-    container: maven:3.6-adoptopenjdk-11
     needs: [ test_jdk11,build_jdk11,documentation_build ]
     steps:
       - run: eval $SET_VERSION
       - uses: actions/checkout@v2
-      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+      - uses: actions/cache@v1
         with:
-          name: build_jdk11
-          path: target
+          path: ~/.m2/repository
+          key: ubuntu-maven-jdk11-$ARTIFACT_FULLNAME
+          restore-keys: |
+            ubuntu-maven-jdk11-$ARTIFACT_FULLNAME
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
       - name: Download documentation_build_assembly for assembly
         uses: actions/download-artifact@v2
         with:
@@ -160,28 +202,19 @@ jobs:
 
   E2ET_helper-scripts_jdk11:
     runs-on: ubuntu-20.04
-    container: findepi/graalvm:java11-all
-    needs: [ assembly_jdk11 ]
     steps:
       - run: eval $SET_VERSION
       - uses: actions/checkout@v2
-      - name: Download build_jdk11 for assembly
-        uses: actions/download-artifact@v2
+      - uses: actions/cache@v1
         with:
-          name: assembly_jdk11_test
-          path: target
-      - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - name: setup benerator env
-        run: |
-          echo SHELL=/bin/bash >> $GITHUB_ENV
-          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-          echo $BENERATOR_HOME
-          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-          chmod -R 777 $BENERATOR_HOME/bin/
-      - name: set permission
-        run: chmod -R 777 $BENERATOR_HOME/bin/
-      - name: check if benerator is setup correctly
-        run: benerator --version
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-jdk11-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-jdk11-${{ hashFiles('**/pom.xml') }}
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
       - run: bash script/1_install_mvn_dependencies.sh
       - run: bash script/2_setup_benerator.sh
       - run: bash script/3_execute_demos.sh
@@ -209,10 +242,8 @@ jobs:
         run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
-      - run: benerator scriptcode.ben.xml
-        working-directory: $BENERATOR_HOME/demo/script
-      - run: benerator scriptfile.ben.xml
-        working-directory: $BENERATOR_HOME/demo/script
+      - run: benerator $BENERATOR_HOME/demo/script/scriptcode.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/script/scriptfile.ben.xml
 
   E2ET_db-graalvm11:
     runs-on: ubuntu-20.04
@@ -237,10 +268,8 @@ jobs:
         run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
-      - run: benerator user.ben.xml
-        working-directory: $BENERATOR_HOME/demo/db
-      - run: benerator compositekey.ben.xml
-        working-directory: $BENERATOR_HOME/demo/db
+      - run: benerator $BENERATOR_HOME/demo/db/user.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/db/compositekey.ben.xml
 
   E2ET_files-graalvm11:
     runs-on: ubuntu-20.04
@@ -265,26 +294,16 @@ jobs:
         run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
-      - run: benerator create_csv.ben.xml
-        working-directory: $BENERATOR_HOME/demo/file
-      - run: benerator create_dates.ben.xml
-        working-directory: $BENERATOR_HOME/demo/file
-      - run: benerator create_fixed_width.ben.xml
-        working-directory: $BENERATOR_HOME/demo/file
-      - run: benerator create_xls.ben.xml
-        working-directory: $BENERATOR_HOME/demo/file
-      - run: benerator create_xml.ben.xml
-        working-directory: $BENERATOR_HOME/demo/file
-      - run: benerator create_xml_by_script.ben.xml
-        working-directory: $BENERATOR_HOME/demo/file
-      - run: benerator csv_io.ben.xml
-        working-directory: $BENERATOR_HOME/demo/file
-      - run: benerator greetings_csv.ben.xml
-        working-directory: $BENERATOR_HOME/demo/file
-      - run: benerator import_fixed_width.ben.xml
-        working-directory: $BENERATOR_HOME/demo/file
-      - run: benerator postprocess-import.ben.xml
-        working-directory: $BENERATOR_HOME/demo/file
+      - run: benerator $BENERATOR_HOME/demo/file/create_csv.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/file/create_dates.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/file/create_fixed_width.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/file/create_xls.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/file/create_xml.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/file/create_xml_by_script.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/file/csv_io.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/file/greetings_csv.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/file/import_fixed_width.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/file/postprocess-import.ben.xml
 
   E2ET_hsqlmem-graalvm11:
     runs-on: ubuntu-20.04
@@ -309,5 +328,4 @@ jobs:
         run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
-      - run: benerator shop-hsqlmem.ben.xml
-        working-directory: $BENERATOR_HOME/demo/file
+      - run: benerator $BENERATOR_HOME/demo/file/shop-hsqlmem.ben.xml
