@@ -171,12 +171,17 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - run: echo SHELL=/bin/bash >> $GITHUB_ENV
-      - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-      - run: echo $BENERATOR_HOME
-      - run: echo PATH=$BENERATOR_HOME/bin:$PATH >> $GITHUB_ENV
-      - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
-      - run: benerator --version
+      - run: |
+          echo SHELL=/bin/bash >> $GITHUB_ENV
+          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+          echo $BENERATOR_HOME
+          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+          chmod -R 777 $BENERATOR_HOME/bin/
+      - name: check if benerator is setup correctly
+        run: benerator --version
+      - run: bash script/1_install_mvn_dependencies.sh
+      - run: bash script/2_setup_benerator.sh
+      - run: bash script/3_execute_demos.sh
 
   E2ET_script-graalvm11:
     runs-on: ubuntu-20.04
@@ -191,15 +196,19 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - run: echo SHELL=/bin/bash >> $GITHUB_ENV
-      - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-      - run: echo $BENERATOR_HOME
-      - run: echo PATH=$BENERATOR_HOME/bin:$PATH >> $GITHUB_ENV
-      - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
-      - run: benerator --version
-      - run: cd $ARTIFACT_FULLNAME/demo/script
+      - name: setup benerator env and set permissions
+      - run: |
+          echo SHELL=/bin/bash >> $GITHUB_ENV
+          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+          echo $BENERATOR_HOME
+          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+          chmod -R 777 $BENERATOR_HOME/bin/
+      - name: check if benerator is setup correctly
+        run: benerator --version
       - run: benerator scriptcode.ben.xml
+        working-directory: $BENERATOR_HOME/demo/script
       - run: benerator scriptfile.ben.xml
+        working-directory: $BENERATOR_HOME/demo/script
 
   E2ET_db-graalvm11:
     runs-on: ubuntu-20.04
@@ -214,15 +223,18 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - run: echo SHELL=/bin/bash >> $GITHUB_ENV
-      - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-      - run: echo $BENERATOR_HOME
-      - run: echo PATH=$BENERATOR_HOME/bin:$PATH >> $GITHUB_ENV
-      - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
-      - run: benerator --version
-      - run: cd $ARTIFACT_FULLNAME/demo/db
+      - run: |
+          echo SHELL=/bin/bash >> $GITHUB_ENV
+          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+          echo $BENERATOR_HOME
+          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+          chmod -R 777 $BENERATOR_HOME/bin/
+      - name: check if benerator is setup correctly
+        run: benerator --version
       - run: benerator user.ben.xml
+        working-directory: $BENERATOR_HOME/demo/db
       - run: benerator compositekey.ben.xml
+        working-directory: $BENERATOR_HOME/demo/db
 
   E2ET_files-graalvm11:
     runs-on: ubuntu-20.04
@@ -237,23 +249,34 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - run: echo SHELL=/bin/bash >> $GITHUB_ENV
-      - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-      - run: echo $BENERATOR_HOME
-      - run: echo PATH=$BENERATOR_HOME/bin:$PATH >> $GITHUB_ENV
-      - run: chmod -R 777 $PWD/$ARTIFACT_FULLNAME/bin/
-      - run: benerator --version
-      - run: cd $ARTIFACT_FULLNAME/demo/file
+      - run: |
+          echo SHELL=/bin/bash >> $GITHUB_ENV
+          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+          echo $BENERATOR_HOME
+          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+          chmod -R 777 $BENERATOR_HOME/bin/
+      - name: check if benerator is setup correctly
+        run: benerator --version
       - run: benerator create_csv.ben.xml
+        working-directory: $BENERATOR_HOME/demo/file
       - run: benerator create_dates.ben.xml
+        working-directory: $BENERATOR_HOME/demo/file
       - run: benerator create_fixed_width.ben.xml
+        working-directory: $BENERATOR_HOME/demo/file
       - run: benerator create_xls.ben.xml
+        working-directory: $BENERATOR_HOME/demo/file
       - run: benerator create_xml.ben.xml
+        working-directory: $BENERATOR_HOME/demo/file
       - run: benerator create_xml_by_script.ben.xml
+        working-directory: $BENERATOR_HOME/demo/file
       - run: benerator csv_io.ben.xml
+        working-directory: $BENERATOR_HOME/demo/file
       - run: benerator greetings_csv.ben.xml
+        working-directory: $BENERATOR_HOME/demo/file
       - run: benerator import_fixed_width.ben.xml
+        working-directory: $BENERATOR_HOME/demo/file
       - run: benerator postprocess-import.ben.xml
+        working-directory: $BENERATOR_HOME/demo/file
 
   E2ET_hsqlmem-graalvm11:
     runs-on: ubuntu-20.04
@@ -268,11 +291,13 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - run: echo SHELL=/bin/bash >> $GITHUB_ENV
-      - run: echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
-      - run: echo $BENERATOR_HOME
-      - run: echo PATH=$BENERATOR_HOME/bin:$PATH >> $GITHUB_ENV
-      - run: chmod -R 777 $BENERATOR_HOME/bin/
-      - run: benerator --version
-      - run: cd $ARTIFACT_FULLNAME/demo/shop
+      - run: |
+          echo SHELL=/bin/bash >> $GITHUB_ENV
+          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+          echo $BENERATOR_HOME
+          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+          chmod -R 777 $BENERATOR_HOME/bin/
+      - name: check if benerator is setup correctly
+        run: benerator --version
       - run: benerator shop-hsqlmem.ben.xml
+        working-directory: $BENERATOR_HOME/demo/file
