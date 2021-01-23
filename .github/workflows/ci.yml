@@ -171,13 +171,15 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - name: setup benerator env and set permissions
+      - name: setup benerator env
         run: |
           echo SHELL=/bin/bash >> $GITHUB_ENV
           echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
           echo $BENERATOR_HOME
           echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
           chmod -R 777 $BENERATOR_HOME/bin/
+      - name: set permission
+        run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
       - run: bash script/1_install_mvn_dependencies.sh
@@ -197,13 +199,14 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - name: setup benerator env and set permissions
+      - name: setup benerator env
         run: |
           echo SHELL=/bin/bash >> $GITHUB_ENV
           echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
           echo $BENERATOR_HOME
           echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-          chmod -R 777 $BENERATOR_HOME/bin/
+      - name: set permission
+        run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
       - run: benerator scriptcode.ben.xml
@@ -224,13 +227,14 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - name: setup benerator env and set permissions
+      - name: setup benerator env
         run: |
           echo SHELL=/bin/bash >> $GITHUB_ENV
           echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
           echo $BENERATOR_HOME
           echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-          chmod -R 777 $BENERATOR_HOME/bin/
+      - name: set permission
+        run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
       - run: benerator user.ben.xml
@@ -251,13 +255,14 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME"-dist.tar.gz
-      - name: setup benerator env and set permissions
+      - name: setup benerator env
         run: |
           echo SHELL=/bin/bash >> $GITHUB_ENV
           echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
           echo $BENERATOR_HOME
           echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-          chmod -R 777 $BENERATOR_HOME/bin/
+      - name: set permission
+        run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
       - run: benerator create_csv.ben.xml
@@ -294,13 +299,14 @@ jobs:
           name: assembly_jdk11_test
           path: target
       - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
-      - name: setup benerator env and set permissions
+      - name: setup benerator env
         run: |
           echo SHELL=/bin/bash >> $GITHUB_ENV
           echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
           echo $BENERATOR_HOME
           echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
-          chmod -R 777 $BENERATOR_HOME/bin/
+      - name: set permission
+        run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
       - run: benerator shop-hsqlmem.ben.xml
