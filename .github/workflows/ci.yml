@@ -432,7 +432,7 @@ jobs:
           idParam=1010" > $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
       - run: cat $ARTIFACT_FULLNAME/demo/shop/mysql/shop.mysql.properties
       - run: sleep 60s
-      - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/shop/shop-mysql.ben.xml
 
   E2ET_mssql-graalvm11:
     runs-on: ubuntu-latest
