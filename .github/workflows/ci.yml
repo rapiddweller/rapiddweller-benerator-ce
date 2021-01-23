@@ -153,7 +153,7 @@ jobs:
         run: cd target && ls
       - run: mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
       - name: Upload dist
-        if: github.ref == refs/tags/*
+        if: github.ref == 'refs/tags/*'
         uses: actions/upload-artifact@v2
         with:
           name: assembly_jdk11
