@@ -27,7 +27,7 @@
                 <generate type="address" count="2" consumer="xml">
                     <variable name="addr" generator="com.rapiddweller.domain.address.AddressGenerator"/>
                     <attribute name="line1" script="ftl:${addr.street} ${addr.houseNumber}"/>
-                    <attribute name="line2" script="ftl:${addr.zipCode} ${addr.city}"/>
+                    <attribute name="line2" script="ftl:${addr.postalCode} ${addr.city}"/>
                     <attribute name="line3" script="addr.country"/>
                 </generate>
             </generate>

@@ -9,9 +9,9 @@
     <database id="db" url="jdbc:hsqldb:mem:benerator" driver="org.hsqldb.jdbcDriver" user="sa" catalog="public" schema="public" tableFilter="db_.*" />
 
     <execute target="db" onError="warn">
-        DROP TABLE playlist;
-        DROP TABLE track;
-        DROP TABLE playlist_track;
+        DROP TABLE IF EXISTS playlist;
+        DROP TABLE IF EXISTS track;
+        DROP TABLE IF EXISTS playlist_track;
     </execute>
 
     <execute target="db">

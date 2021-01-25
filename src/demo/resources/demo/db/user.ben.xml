@@ -10,9 +10,9 @@
     <database id="db" url="jdbc:hsqldb:mem:benerator" driver="org.hsqldb.jdbcDriver" user="sa" catalog="public" schema="public" tableFilter="db_.*" />
 
     <execute target="db" onError="warn">
-        DROP TABLE db_dummy;
-        DROP TABLE db_user;
-        DROP TABLE db_role;
+        DROP TABLE IF EXISTS db_dummy;
+        DROP TABLE IF EXISTS db_user;
+        DROP TABLE IF EXISTS db_role;
     </execute>
 
     <execute target="db">
