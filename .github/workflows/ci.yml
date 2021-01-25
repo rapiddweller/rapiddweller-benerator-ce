@@ -178,14 +178,13 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - run: eval $SET_VERSION
       - run: bash script/1_install_mvn_dependencies.sh
       - run: bash script/2_setup_benerator.sh
       - run: bash script/3_execute_demos.sh
 
-  E2ET_script-graalvm11:
+  E2ET_script-adoptopenjdk11:
     runs-on: ubuntu-latest
-    container: findepi/graalvm:java11-all
+    container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
     steps:
       - uses: actions/checkout@v2
@@ -215,9 +214,9 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/script/scriptcode.ben.xml
       - run: benerator $BENERATOR_HOME/demo/script/scriptfile.ben.xml
 
-  E2ET_db-graalvm11:
+  E2ET_db-adoptopenjdk11:
     runs-on: ubuntu-latest
-    container: findepi/graalvm:java11-all
+    container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
     steps:
       - uses: actions/checkout@v2
@@ -247,9 +246,9 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/db/user.ben.xml
       - run: benerator $BENERATOR_HOME/demo/db/compositekey.ben.xml
 
-  E2ET_files-graalvm11:
+  E2ET_files-adoptopenjdk11:
     runs-on: ubuntu-latest
-    container: findepi/graalvm:java11-all
+    container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
     steps:
       - uses: actions/checkout@v2
@@ -287,9 +286,9 @@ jobs:
       - run: benerator $BENERATOR_HOME/demo/file/import_fixed_width.ben.xml
       - run: benerator $BENERATOR_HOME/demo/file/postprocess-import.ben.xml
 
-  E2ET_hsqlmem-graalvm11:
+  E2ET_hsqlmem-adoptopenjdk11:
     runs-on: ubuntu-latest
-    container: findepi/graalvm:java11-all
+    container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
     steps:
       - uses: actions/checkout@v2
@@ -318,9 +317,9 @@ jobs:
         run: benerator --version
       - run: benerator $BENERATOR_HOME/demo/shop/shop-hsqlmem.ben.xml
 
-  E2ET_postgresql-graalvm11:
+  E2ET_postgresql-adoptopenjdk11:
     runs-on: ubuntu-latest
-    container: findepi/graalvm:java11-all
+    container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
     services:
       # Label used to access the service container
@@ -382,9 +381,9 @@ jobs:
       - run: sleep 30s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
 
-  E2ET_mysql-graalvm11:
+  E2ET_mysql-adoptopenjdk11:
     runs-on: ubuntu-latest
-    container: findepi/graalvm:java11-all
+    container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
     services:
       # Label used to access the service container
@@ -438,9 +437,9 @@ jobs:
       - run: sleep 60s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-mysql.ben.xml
 
-  E2ET_mssql-graalvm11:
+  E2ET_mssql-adoptopenjdk11:
     runs-on: ubuntu-latest
-    container: findepi/graalvm:java11-all
+    container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
     services:
       # Label used to access the service container
