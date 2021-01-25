@@ -100,13 +100,13 @@ jobs:
     container: maven:3.6-adoptopenjdk-11
     steps:
       - uses: actions/checkout@v2
-      - run: eval $SET_VERSION
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - run: eval $SET_VERSION
       - name: Download documentation_build_assembly for assembly
         uses: actions/download-artifact@v2
         with:
@@ -168,7 +168,6 @@ jobs:
     needs: [ test_jdk11 ]
     steps:
       - uses: actions/checkout@v2
-      - run: eval $SET_VERSION
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
@@ -179,6 +178,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - run: eval $SET_VERSION
       - run: bash script/1_install_mvn_dependencies.sh
       - run: bash script/2_setup_benerator.sh
       - run: bash script/3_execute_demos.sh
@@ -189,6 +189,12 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - uses: actions/checkout@v2
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
@@ -215,6 +221,12 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - uses: actions/checkout@v2
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
@@ -241,6 +253,12 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - uses: actions/checkout@v2
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
@@ -275,6 +293,12 @@ jobs:
     needs: [ assembly_jdk11 ]
     steps:
       - uses: actions/checkout@v2
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
@@ -321,6 +345,12 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v2
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
@@ -372,6 +402,12 @@ jobs:
           MYSQL_DATABASE: "benerator"
     steps:
       - uses: actions/checkout@v2
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
@@ -417,6 +453,12 @@ jobs:
           SA_PASSWORD: Benerator123!
     steps:
       - uses: actions/checkout@v2
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
