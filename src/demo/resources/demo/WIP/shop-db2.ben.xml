@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 
 <setup
@@ -33,7 +33,7 @@
 
     <comment>setting default values</comment>
     <setting name="stage" default="development"/>
-    <setting name="database" default="oracle"/>
+    <setting name="database" default="db2"/>
     <setting name="dbCatalog" default=""/>
     <setting name="dbSchema" default=""/>
     <setting name="dbPassword" default=""/>
@@ -52,9 +52,10 @@
     <echo>{ftl: ${items_per_order} items per order}</echo>
     <echo>{ftl:encoding:${context.defaultEncoding} default pageSize:${context.defaultPageSize}}</echo>
     <echo>{ftl:JDBC URL: ${dbUrl}}</echo>
-    
+
+    <!--  TODO use environment file -->
     <comment>define a database that will be referred by the id 'db' subsequently</comment>
-    <database id="db" url="{dbUrl}" driver="{dbDriver}" catalog="{dbCatalog}" schema="{dbSchema}"
+    <database id="db" url="{dbUrl}" driver="{dbDriver}" schema="{dbSchema}" catalog="{dbCatalog}"
               user="{dbUser}" password="{dbPassword}" batch="{dbBatch}"/>
 
     <comment>drop the current tables/sequences if they exist and recreate them</comment>
@@ -146,5 +147,10 @@
                    selector="{{ftl:select sum(total_price) from db_order_item where order_id = ${db_order.id}}}"
                    cyclic="true"/>
     </iterate>
-
+    
+    <echo>Debugging and show generated data from DBMS</echo>
+    <iterate source="db" type="db_order" consumer="ConsoleExporter"/>
+    <iterate source="db" type="db_order_item" consumer="ConsoleExporter"/>
+    <iterate source="db" type="db_user" consumer="ConsoleExporter"/>
+    <iterate source="db" type="db_product" consumer="ConsoleExporter"/>
 </setup>

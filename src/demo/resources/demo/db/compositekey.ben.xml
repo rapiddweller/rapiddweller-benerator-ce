@@ -1,16 +1,17 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="https://www.benerator.de/schema/1.0.0"
        xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
 
     <!-- define a database that will be referred by the id 'db' later -->
-    <database id="db" url="jdbc:hsqldb:hsql" driver="org.hsqldb.jdbcDriver" user="sa" tableFilter="db_.*"/>
+    <comment>define a database that will be referred by the id 'db' subsequently</comment>
+    <database id="db" url="jdbc:hsqldb:mem:benerator" driver="org.hsqldb.jdbcDriver" user="sa" catalog="public" schema="public" tableFilter="db_.*" />
 
     <execute target="db" onError="warn">
-        DROP TABLE playlist;
-        DROP TABLE track;
-        DROP TABLE playlist_track;
+        DROP TABLE IF EXISTS playlist;
+        DROP TABLE IF EXISTS track;
+        DROP TABLE IF EXISTS playlist_track;
     </execute>
 
     <execute target="db">
@@ -35,16 +36,16 @@
     </execute>
 
     <generate type="playlist" count="20" consumer="db">
-        <id name="PlaylistId" generator="IncrementGenerator"/>
+        <id name="PlaylistId" type="int" generator="IncrementGenerator"/>
     </generate>
 
     <generate type="track" count="20" consumer="db">
-        <id name="TrackId" generator="IncrementGenerator"/>
+        <id name="TrackId" type="int" generator="IncrementGenerator"/>
     </generate>
 
     <generate type="playlist_track" count="20" consumer="db">
-        <reference name="PlaylistId" source="db" targetType="Playlist" unique="True"/>
-        <reference name="TrackId" source="db" targetType="Track" unique="True"/>
+        <reference name="PlaylistId" type="int" source="db" targetType="Playlist" unique="True"/>
+        <reference name="TrackId" type="int" source="db" targetType="Track" unique="True"/>
     </generate>
 
     <iterate type="playlist" source="db" consumer="ConsoleExporter"/>

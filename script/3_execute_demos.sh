@@ -1,7 +1,11 @@
 #!/bin/bash
 
 export ARTIFACT_ID=rapiddweller-benerator-ce
-export ARTIFACT_VERSION=1.1.0+jdk-11-SNAPSHOT
+export ARTIFACT_VERSION=$(mvn -q \
+    -Dexec.executable=echo \
+    -Dexec.args='${project.version}' \
+    --non-recursive \
+    exec:exec)
 export BENERATOR_HOME=~/$ARTIFACT_ID-$ARTIFACT_VERSION
 export PATH=$PATH:~/$ARTIFACT_ID-$ARTIFACT_VERSION/bin
 

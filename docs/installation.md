@@ -78,7 +78,7 @@ On any OS, open a console window (shell,cmd or powershell) and type ...
 ```shell
 $ benerator -–version
 
-Benerator 1.1.0+jdk-11-SNAPSHOT build 1
+Benerator 1.1.0-jdk-11-SNAPSHOT build 1
 Java version 11.0.9
 JVM OpenJDK 64-Bit Server VM 11.0.9+11 (AdoptOpenJDK)
 OS Linux 5.9.16-050916-generic (amd64)

@@ -5,7 +5,7 @@
 The benerator configuration file is XML based. An XML schema is provided. The document root is a setup element:
 
 ```xml
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <setup xmlns="[https://www.benerator.de/schema/1.0.0](https://www.benerator.de/schema/1.0.0)"
 	   xmlns:xsi="[http://www.w3.org/2001/XMLSchema-instance](http://www.w3.org/2001/XMLSchema-instance)"
 	   xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/rapiddweller-benerator-ce-1.0.0.xsd">
@@ -40,7 +40,7 @@ You can configure them in the `<setup>` element, e.g.
 
 ```xml
 <setup xmlns=...
-		defaultEncoding="ISO-8859-1"
+		defaultencoding="utf-8"
 		defaultPageSize="1000">
 ```
 
