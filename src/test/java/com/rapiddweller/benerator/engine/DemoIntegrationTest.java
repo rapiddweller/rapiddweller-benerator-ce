@@ -157,7 +157,7 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
     @Test
     public void ShopScript() throws IOException {
         context.setContextUri("/demo/shop");
-        parseAndExecute();
+        parseAndExecuteFile("/demo/shop/multischema.ben.xml");
     }
 
 }

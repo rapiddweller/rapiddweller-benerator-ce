@@ -135,8 +135,8 @@ public class DBSystemTest {
 	
 	@Test
 	public void testQueryEntities() throws Exception {
-		db.execute("insert into TEST (ID, NAME) values (1, 'Alice')");
-		db.execute("insert into TEST (ID, NAME) values (2, 'Bob')");
+		db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
+		db.execute("insert into \"TEST\" (ID, NAME) values (2, 'Bob')");
 		DefaultBeneratorContext context = new DefaultBeneratorContext();
         DataContainer<Entity> container = new DataContainer<>();
         
@@ -216,7 +216,8 @@ public class DBSystemTest {
 		Connection connection = null;
 		try {
 			db = new DefaultDBSystem("db", IN_MEMORY_URL_PREFIX + "benerator", DRIVER, DEFAULT_USER, DEFAULT_PASSWORD, new DataModel());
-			db.setSchema("public");
+			db.setSchema("PUBLIC");
+			db.getDialect();
 			connection = db.createConnection();
 			try {
 				DBUtil.executeUpdate("drop table Test", connection);

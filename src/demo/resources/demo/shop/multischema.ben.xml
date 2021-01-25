@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<setup>
+<setup
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://databene.org/benerator/0.7.0"
+        xsi:schemaLocation="http://databene.org/benerator/0.7.0 http://databene.org/benerator-0.7.0.xsd">
     <import domains="person,net,product"/>
     <import platforms="db"/>
 
@@ -67,9 +68,9 @@
         COMMIT;
     </execute>
 
-    <database id="schema1" url="{dbUrl}" driver="{dbDriver}" schema="{dbSchema}"
+    <database id="schema1" url="{dbUrl}" driver="{dbDriver}" schema="schema1"
               user="{dbUser}" password="{dbPassword}" batch="{dbBatch}" includeTables="#all"/>
-    <database id="schema3" url="{dbUrl}" driver="{dbDriver}" schema="{dbSchema}"
+    <database id="schema3" url="{dbUrl}" driver="{dbDriver}" schema="schema3"
               user="{dbUser}" password="{dbPassword}" batch="{dbBatch}" includeTables="#all"/>
 
 

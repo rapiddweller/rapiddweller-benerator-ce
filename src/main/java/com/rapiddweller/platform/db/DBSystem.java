@@ -53,6 +53,9 @@ import java.sql.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.rapiddweller.jdbacl.SQLUtil.createCatSchTabString;
+import static com.rapiddweller.jdbacl.SQLUtil.renderQuery;
+
 /**
  * Abstract class that serves as parent for classes which connect to databases using JDBC.<br/><br/>
  * Created: 07.01.2013 08:11:25
@@ -388,13 +391,13 @@ public abstract class DBSystem extends AbstractStorageSystem {
         }
         String sql;
         if (StringUtil.isEmpty(selector))
-            sql = "select * from " + type;
+            sql = "select * from " + createCatSchTabString(catalogName, schemaName, type, dialect);
         else if (StringUtil.startsWithIgnoreCase(selector, "select") || StringUtil.startsWithIgnoreCase(selector, "'select"))
             sql = selector;
         else if (selector.startsWith("ftl:") || !script)
-            sql = "select * from " + type + " WHERE " + selector;
+            sql = "select * from " + createCatSchTabString(catalogName, schemaName, type, dialect) + " WHERE " + selector;
         else
-            sql = "'select * from " + type + " WHERE ' + " + selector;
+            sql = "'select * from " + createCatSchTabString(catalogName, schemaName, type, dialect) + " WHERE ' + " + selector;
         if (script)
             sql = '{' + sql + '}';
         DataSource<ResultSet> source = createQuery(sql, context, connection);
@@ -403,7 +406,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
     public long countEntities(String tableName) {
         logger.debug("countEntities({})", tableName);
-        String query = "select count(*) from " + tableName;
+        String query = "select count(*) from " + createCatSchTabString(catalogName, schemaName, tableName, dialect);
         return DBUtil.queryLong(query, getConnection());
     }
 
@@ -425,7 +428,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
             throw new ConfigurationError("Cannot create reference to table " + tableName + " since it does not define a primary key");
 
         // construct selector
-        String query = "select " + ArrayFormat.format(pkColumnNames) + " from " + tableName;
+        String query = renderQuery(catalogName, schemaName, tableName,pkColumnNames, dialect);
         if (selector != null) {
             if (script)
                 query = "{'" + query + " where ' + " + selector + "}";

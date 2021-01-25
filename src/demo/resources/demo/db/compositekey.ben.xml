@@ -6,50 +6,50 @@
 
     <!-- define a database that will be referred by the id 'db' later -->
     <comment>define a database that will be referred by the id 'db' subsequently</comment>
-    <database id="db" url="jdbc:hsqldb:mem:benerator" driver="org.hsqldb.jdbcDriver" user="sa" catalog="public" schema="public" tableFilter="db_.*" />
+    <database id="db" url="jdbc:hsqldb:mem:benerator" driver="org.hsqldb.jdbcDriver" user="sa" schema="PUBLIC" tableFilter="db_.*" />
 
     <execute target="db" onError="warn">
-        DROP TABLE IF EXISTS playlist;
-        DROP TABLE IF EXISTS track;
-        DROP TABLE IF EXISTS playlist_track;
+        DROP TABLE IF EXISTS PLAYLIST;
+        DROP TABLE IF EXISTS TRACK;
+        DROP TABLE IF EXISTS PLAYLIST_TRACK;
     </execute>
 
     <execute target="db">
-        CREATE TABLE playlist (
-        PlaylistId int NOT NULL,
+        CREATE TABLE PLAYLIST (
+        PLAYLIST_ID int NOT NULL,
         name varchar(16) NOT NULL,
-        PRIMARY KEY (PlaylistId)
+        PRIMARY KEY (PLAYLIST_ID)
         );
 
-        CREATE TABLE track (
-        TrackId int NOT NULL,
+        CREATE TABLE TRACK (
+        TRACK_ID int NOT NULL,
         name varchar(16) NOT NULL,
-        PRIMARY KEY (TrackId)
+        PRIMARY KEY (TRACK_ID)
         );
 
-        CREATE TABLE playlist_track (
-        PlaylistId int NOT NULL,
-        TrackId int NOT NULL,
+        CREATE TABLE PLAYLIST_TRACK (
+        PLAYLIST_ID int NOT NULL,
+        TRACK_ID int NOT NULL,
         name varchar(16) NOT NULL,
-        unique (PlaylistId, TrackId)
+        unique (PLAYLIST_ID, TRACK_ID)
         );
     </execute>
 
-    <generate type="playlist" count="20" consumer="db">
-        <id name="PlaylistId" type="int" generator="IncrementGenerator"/>
+    <generate type="PLAYLIST" count="20" consumer="db">
+        <id name="PLAYLIST_ID" type="int" generator="IncrementGenerator"/>
     </generate>
 
-    <generate type="track" count="20" consumer="db">
-        <id name="TrackId" type="int" generator="IncrementGenerator"/>
+    <generate type="TRACK" count="20" consumer="db">
+        <id name="TRACK_ID" type="int" generator="IncrementGenerator"/>
     </generate>
 
-    <generate type="playlist_track" count="20" consumer="db">
-        <reference name="PlaylistId" type="int" source="db" targetType="Playlist" unique="True"/>
-        <reference name="TrackId" type="int" source="db" targetType="Track" unique="True"/>
+    <generate type="PLAYLIST_TRACK" count="20" consumer="db">
+        <reference name="PLAYLIST_ID" type="int" source="db" targetType="PLAYLIST" unique="True"/>
+        <reference name="TRACK_ID" type="int" source="db" targetType="TRACK" unique="True"/>
     </generate>
 
-    <iterate type="playlist" source="db" consumer="ConsoleExporter"/>
-    <iterate type="track" source="db" consumer="ConsoleExporter"/>
-    <iterate type="playlist_track" source="db" consumer="ConsoleExporter"/>
+    <iterate type="PLAYLIST" source="db" consumer="ConsoleExporter"/>
+    <iterate type="TRACK" source="db" consumer="ConsoleExporter"/>
+    <iterate type="PLAYLIST_TRACK" source="db" consumer="ConsoleExporter"/>
 
 </setup>

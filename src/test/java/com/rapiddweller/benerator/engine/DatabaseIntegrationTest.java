@@ -151,7 +151,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
 	public void testDbRef_distribution() {
 		parseAndExecute(
 			"<generate type='referer' count='3' consumer='cons'>" +
-        	"  <reference name='referee_id' targetType='referee' source='db' distribution='new com.rapiddweller.benerator.distribution.function.ExponentialFunction(-0.5)' />" +
+        	"  <reference name='referee_id' targetType='REFEREE' source='db' distribution='new com.rapiddweller.benerator.distribution.function.ExponentialFunction(-0.5)' />" +
         	"</generate>");
 		List<Entity> products = getConsumedEntities();
 		assertEquals(3, products.size());
@@ -410,7 +410,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
 	public void testStaticEntitySelector_partial() {
 		parseAndExecute(
 				"<generate type='referer' count='2' consumer='cons'>" +
-				"  <variable name='e' type='referee' source='db' subSelector='id=3' />" + 
+				"  <variable name='e' type='REFEREE' source='db' subSelector='id=3' />" +
 	        	"  <reference name='referee_id' script='e.id' />" + 
 	        	"</generate>");
 			List<Entity> products = getConsumedEntities();
@@ -441,7 +441,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
 				"<generate type='referer' count='2' consumer='cons'>" +
 				"  <variable name='n' type='int' min='2' max='3' " +
 				"    distribution='new com.rapiddweller.benerator.distribution.sequence.StepSequence(-1)'/>" +
-				"  <variable name='e' type='referee' source='db' subSelector=\"{{'id=' + n}}\" />" + 
+				"  <variable name='e' type='REFEREE' source='db' subSelector=\"{{'id=' + n}}\" />" +
 	        	"  <reference name='referee_id' script='e.id' />" + 
 	        	"</generate>");
 			List<Entity> products = getConsumedEntities();
