@@ -29,7 +29,7 @@
 	<bean id="idGen" class="IncrementalIdGenerator" />
 	
 	<transcodingTask defaultSource="s" target="t" identity="Transcoding-identity.xml">
-		<transcode table="state" selector="id &gt; 0">
+		<transcode table="STATE" selector="id &gt; 0">
 			<id name="id" generator="idGen" />
 		</transcode>
 	</transcodingTask>

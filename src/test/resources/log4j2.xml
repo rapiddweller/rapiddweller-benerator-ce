@@ -35,11 +35,6 @@
         </Logger>
 
 
-        <Logger name="com.rapiddweller" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
-        </Logger>
-
-
         <Logger name="com.rapiddweller.platform.xml" level="info" additivity="true">
             <appender-ref ref="console" level="info" />
         </Logger>
@@ -69,10 +64,6 @@
         </Logger>
 
         <Logger name="com.rapiddweller.benerator.STATE" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
-        </Logger>
-
-        <Logger name="com.rapiddweller.benerator" level="info" additivity="true">
             <appender-ref ref="console" level="info" />
         </Logger>
 

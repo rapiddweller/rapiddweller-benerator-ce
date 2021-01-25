@@ -25,11 +25,11 @@
 	
 	<transcodingTask defaultSource="s" target="t" identity="Transcoding-identity.xml">
 
-		<transcode table="country" selector="id = 20">
+		<transcode table="COUNTRY" selector="id = 20">
 			<id name="id" generator="idGen" />
-			<cascade ref="state(country_fk)">
+			<cascade ref="STATE(country_fk)">
 				<id name="id" generator="idGen" />
-				<cascade ref="city(state_fk)">
+				<cascade ref="CITY(state_fk)">
 					<id name="id" generator="idGen" />
 				</cascade>
 			</cascade>
@@ -39,10 +39,10 @@
 	</transcodingTask>
 	
 	<echo>Countries:</echo>
-	<iterate source="t" type="country" consumer="ConsoleExporter"/>
+	<iterate source="t" type="COUNTRY" consumer="ConsoleExporter"/>
 	<echo>States:</echo>
-	<iterate source="t" type="state"   consumer="ConsoleExporter"/>
+	<iterate source="t" type="STATE"   consumer="ConsoleExporter"/>
 	<echo>Cities:</echo>
-	<iterate source="t" type="city"   consumer="ConsoleExporter"/>
+	<iterate source="t" type="CITY"   consumer="ConsoleExporter"/>
 	
 </setup>

@@ -1,0 +1,99 @@
+<setup
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://databene.org/benerator/0.7.0"
+        xsi:schemaLocation="http://databene.org/benerator/0.7.0 http://databene.org/benerator-0.7.0.xsd">
+    <import domains="person,net,product"/>
+    <import platforms="db"/>
+
+    <comment>setting default values</comment>
+    <setting name="stage" default="development"/>
+    <setting name="database" default="postgres"/>
+    <setting name="dbCatalog" default=""/>
+    <setting name="dbSchema" default=""/>
+    <setting name="dbPassword" default=""/>
+    <setting name="dbBatch" default="false"/>
+
+    <comment>import stage and database specific properties</comment>
+    <include
+            uri="{ftl:${database}/shop.${database}.properties}"/> <!-- ftl: is the prefix used for scripting with FreeMarker Template Language -->
+    <include uri="{ftl:shop.${stage}.properties}"/>
+
+    <comment>log the settings to the console</comment>
+    <echo>Starting generation for</echo>
+    <echo>{ftl: ${product_count + 6} products}</echo>
+    <echo>{ftl: ${customer_count + 1} customers}</echo>
+    <echo>{ftl: ${orders_per_customer} orders per customer}</echo>
+    <echo>{ftl: ${items_per_order} items per order}</echo>
+    <echo>{ftl:encoding:${context.defaultEncoding} default pageSize:${context.defaultPageSize}}</echo>
+    <echo>{ftl:JDBC URL: ${dbUrl}}</echo>
+
+    <comment>define a database that will be referred by the id 'db' subsequently</comment>
+    <database id="db" url="{dbUrl}" driver="{dbDriver}" schema="{dbSchema}"
+              user="{dbUser}" password="{dbPassword}" batch="{dbBatch}"/>
+
+    <execute target="db">
+        DROP SCHEMA IF EXISTS schema1 CASCADE;
+        DROP SCHEMA IF EXISTS schema2 CASCADE;
+        DROP SCHEMA IF EXISTS schema3 CASCADE;
+        create schema schema1;
+        create schema schema2;
+        create schema schema3;
+        CREATE SEQUENCE schema3.seq_id_gen START WITH 20;
+        CREATE TABLE schema3.db_manufacturer (
+        id SERIAL PRIMARY KEY,
+        name varchar(30) NOT NULL,
+        description text NULL
+        );
+        CREATE SEQUENCE schema1.seq_id_gen START WITH 10;
+        CREATE TABLE IF NOT EXISTS schema1.db_category (
+        id SERIAL PRIMARY KEY,
+        name varchar(30) NOT NULL
+        );
+        CREATE SEQUENCE schema2.seq_id_gen START WITH 10;
+        CREATE TABLE schema2.db_category (
+        id SERIAL PRIMARY KEY,
+        name varchar(30) NOT NULL
+        );
+        CREATE TABLE schema1.db_product (
+        ean_code varchar(13) NOT NULL,
+        name varchar(30) NOT NULL,
+        category_id int NOT NULL,
+        manufacturer_id int NOT NULL,
+        price decimal(8,2) NOT NULL,
+        notes varchar(256) NULL,
+        description text NULL,
+        CONSTRAINT db_product_category_fk FOREIGN KEY (category_id) REFERENCES schema1.db_category (id),
+        CONSTRAINT db_manufacturer_fk FOREIGN KEY (manufacturer_id) REFERENCES schema3.db_manufacturer (id)
+        );
+        COMMIT;
+    </execute>
+
+    <database id="schema1" url="{dbUrl}" driver="{dbDriver}" schema="schema1"
+              user="{dbUser}" password="{dbPassword}" batch="{dbBatch}" includeTables="#all"/>
+    <database id="schema3" url="{dbUrl}" driver="{dbDriver}" schema="schema3"
+              user="{dbUser}" password="{dbPassword}" batch="{dbBatch}" includeTables="#all"/>
+
+
+    <!--    <iterate type="app_order" source="public" consumer="ConsoleExporter"/>-->
+    <generate name="MAN" type="db_manufacturer" count="100" consumer="schema3" pageSize="100">
+        <id name="id" generator="new DBSequenceGenerator('schema3.db_manufacturer_id_seq', schema3)"/>
+        <attribute name="name" pattern="[A-Z][A-Z]{5,12}"/>
+    </generate>
+    <generate name="CAT" type="db_category" count="10" consumer="schema1">
+        <id name="id" generator="new DBSequenceGenerator('schema1.db_category_id_seq', schema1)"/>
+        <generate type="db_product" count="100" consumer="schema1" pageSize="100">
+            <id name="ean_code" generator="EANGenerator"/>
+            <reference name="category_id" script="CAT.id"/>
+            <reference name="manufacturer_id" source="schema3"
+                       selector="select id from schema3.db_manufacturer" cyclic="true"/>
+            <attribute name="price" pattern="[1-9]{1,2}"/>
+            <attribute name="name" pattern="[A-Z][A-Z]{5,12}"/>
+            <attribute name="notes" pattern="[A-Z][\n][a-z][0-9]{1,256}"/>
+            <attribute name="description" pattern="[A-Z][\n][a-z][0-9]{1,256}"/>
+        </generate>
+    </generate>
+
+    <iterate name="CAT_TRANS" type="db_category" source="schema1" consumer="ConsoleExporter"/>
+    <iterate name="PROD_TRANS" type="db_product" source="schema1" consumer="ConsoleExporter"/>
+    <iterate name="MAN_TRANS" type="db_manufacturer" source="schema3" consumer="ConsoleExporter"/>
+</setup>

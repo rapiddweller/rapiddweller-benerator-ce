@@ -396,6 +396,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 		// create DB
         DefaultDBSystem db = new DefaultDBSystem("db", HSQLUtil.getInMemoryURL("benetest"), 
         		HSQLUtil.DRIVER, HSQLUtil.DEFAULT_USER, HSQLUtil.DEFAULT_PASSWORD, context.getDataModel());
+        db.getDialect();
         try {
     		// prepare DB
         	db.execute(

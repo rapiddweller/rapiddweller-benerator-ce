@@ -68,10 +68,10 @@ public abstract class BeneratorFactory {
 			String version = VersionInfo.getInfo("benerator").getVersion();
 			if (version.endsWith("-SNAPSHOT"))
 				version = version.substring(0, version.length() - "-SNAPSHOT".length());
-			if (version.endsWith("+jdk-8"))
-				version = version.substring(0, version.length() - "+jdk-8".length());
-			if (version.endsWith("+jdk-11"))
-				version = version.substring(0, version.length() - "+jdk-11".length());
+			if (version.endsWith("-jdk-8"))
+				version = version.substring(0, version.length() - "-jdk-8".length());
+			if (version.endsWith("-jdk-11"))
+				version = version.substring(0, version.length() - "-jdk-11".length());
 			if (version.endsWith("--project-version--"))
 				version = "local";
 			XML_SCHEMA_PATH = "com/rapiddweller/benerator/benerator-" + version + ".xsd";

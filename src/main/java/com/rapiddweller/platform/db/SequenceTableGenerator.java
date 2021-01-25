@@ -37,12 +37,14 @@ import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.jdbacl.DBUtil;
+import com.rapiddweller.jdbacl.SQLUtil;
 
 import java.io.Closeable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 
 /**
  * Uses a database table to fetch and increment values like a database sequence.<br/><br/>
@@ -107,11 +109,10 @@ public class SequenceTableGenerator<E extends Number> extends UnsafeNonNullGener
         assertNotInitialized();
         if (database == null)
             throw new InvalidGeneratorSetupException("db is null");
-
         // initialize
-        query = "select " + column + " from " + table;
-        if (selector != null)
-            query = ScriptUtil.combineScriptableParts(query, " where ", selector);
+
+        query = SQLUtil.renderQuery(database.getCatalog(), database.getSchema(), table, column, selector, database.getDialect());
+
         incrementorStrategy = createIncrementor();
         super.init(context);
     }

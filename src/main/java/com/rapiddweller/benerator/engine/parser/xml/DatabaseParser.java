@@ -48,85 +48,83 @@ import org.w3c.dom.Element;
 /**
  * Parses a &lt;database&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:40:56
- *
- * @author Volker Bergmann
  * @since 0.6.0
+ * @author Volker Bergmann
  */
 public class DatabaseParser extends AbstractBeneratorDescriptorParser {
+	
+	private static final Set<String> REQUIRED_ATTRIBUTES = CollectionUtil.toSet(ATT_ID);
 
-    private static final Set<String> REQUIRED_ATTRIBUTES = CollectionUtil.toSet(ATT_ID);
-
-    private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
-            ATT_ENVIRONMENT, ATT_URL, ATT_DRIVER, ATT_USER, ATT_PASSWORD, ATT_CATALOG, ATT_SCHEMA,
-            ATT_TABLE_FILTER, ATT_INCL_TABLES, ATT_EXCL_TABLES, ATT_META_CACHE, ATT_QUOTE_TABLE_NAMES, ATT_BATCH, ATT_FETCH_SIZE,
-            ATT_READ_ONLY, ATT_LAZY, ATT_ACC_UNK_COL_TYPES);
+	private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
+			ATT_ENVIRONMENT, ATT_URL, ATT_DRIVER, ATT_USER, ATT_PASSWORD, ATT_CATALOG, ATT_SCHEMA, 
+			ATT_TABLE_FILTER, ATT_INCL_TABLES, ATT_EXCL_TABLES, ATT_META_CACHE, ATT_BATCH, ATT_FETCH_SIZE, 
+			ATT_READ_ONLY, ATT_LAZY, ATT_ACC_UNK_COL_TYPES);
 
 
-    // TODO v1.0 define parser extension mechanism and move DatabaseParser and DefineDatabaseStatement to DB package?
-
-    public DatabaseParser() {
-        super(EL_DATABASE, REQUIRED_ATTRIBUTES, OPTIONAL_ATTRIBUTES,
-                BeneratorRootStatement.class, IfStatement.class);
+	// TODO v1.0 define parser extension mechanism and move DatabaseParser and DefineDatabaseStatement to DB package?
+	
+	public DatabaseParser() {
+	    super(EL_DATABASE, REQUIRED_ATTRIBUTES, OPTIONAL_ATTRIBUTES, 
+	    		BeneratorRootStatement.class, IfStatement.class);
     }
 
-    @Override
+	@Override
     public DefineDatabaseStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-        // check preconditions
-        assertAtLeastOneAttributeIsSet(element, ATT_ENVIRONMENT, ATT_DRIVER);
-        assertAtLeastOneAttributeIsSet(element, ATT_ENVIRONMENT, ATT_URL);
-
-        // parse
-        try {
-            Expression<String> id = parseAttribute(ATT_ID, element);
-            Expression<String> environment = parseScriptableStringAttribute(ATT_ENVIRONMENT, element);
-            Expression<String> url = parseScriptableStringAttribute(ATT_URL, element);
-            Expression<String> driver = parseScriptableStringAttribute(ATT_DRIVER, element);
-            Expression<String> user = parseScriptableStringAttribute(ATT_USER, element);
-            Expression<String> password = parseScriptableStringAttribute(ATT_PASSWORD, element);
-            Expression<String> catalog = parseScriptableStringAttribute(ATT_CATALOG, element);
-            Expression<String> schema = parseScriptableStringAttribute(ATT_SCHEMA, element);
-            Expression<String> tableFilter = parseScriptableStringAttribute(ATT_TABLE_FILTER, element);
-            Expression<String> includeTables = parseScriptableStringAttribute(ATT_INCL_TABLES, element);
-            Expression<String> excludeTables = parseScriptableStringAttribute(ATT_EXCL_TABLES, element);
-            Expression<Boolean> quoteTableNames = parseBooleanExpressionAttribute(ATT_QUOTE_TABLE_NAMES, element, false);
-            Expression<Boolean> metaCache = parseBooleanExpressionAttribute(ATT_META_CACHE, element, false);
-            Expression<Boolean> batch = parseBooleanExpressionAttribute(ATT_BATCH, element, false);
-            Expression<Integer> fetchSize = parseIntAttribute(ATT_FETCH_SIZE, element, 100);
-            Expression<Boolean> readOnly = parseBooleanExpressionAttribute(ATT_READ_ONLY, element, false);
-            Expression<Boolean> lazy = parseBooleanExpressionAttribute(ATT_LAZY, element, true);
-            Expression<Boolean> acceptUnknownColumnTypes = new FallbackExpression<>(
+		// check preconditions
+		assertAtLeastOneAttributeIsSet(element, ATT_ENVIRONMENT, ATT_DRIVER);
+		assertAtLeastOneAttributeIsSet(element, ATT_ENVIRONMENT, ATT_URL);
+		
+		// parse
+		try {
+			Expression<String>  id            = parseAttribute(ATT_ID, element);
+			Expression<String>  environment   = parseScriptableStringAttribute(ATT_ENVIRONMENT,  element);
+			Expression<String>  url           = parseScriptableStringAttribute(ATT_URL,          element);
+			Expression<String>  driver        = parseScriptableStringAttribute(ATT_DRIVER,       element);
+			Expression<String>  user          = parseScriptableStringAttribute(ATT_USER,         element);
+			Expression<String>  password      = parseScriptableStringAttribute(ATT_PASSWORD,     element);
+			Expression<String>  catalog       = parseScriptableStringAttribute(ATT_CATALOG,      element);
+			Expression<String>  schema        = parseScriptableStringAttribute(ATT_SCHEMA,       element);
+			Expression<String>  tableFilter   = parseScriptableStringAttribute(ATT_TABLE_FILTER, element);
+			Expression<String>  includeTables = parseScriptableStringAttribute(ATT_INCL_TABLES,  element);
+			Expression<String>  excludeTables = parseScriptableStringAttribute(ATT_EXCL_TABLES,  element);
+			Expression<Boolean> metaCache     = parseBooleanExpressionAttribute(ATT_META_CACHE,  element, false);
+			Expression<Boolean> batch         = parseBooleanExpressionAttribute(ATT_BATCH,       element, false);
+			Expression<Integer> fetchSize     = parseIntAttribute(ATT_FETCH_SIZE,                element, 100);
+			Expression<Boolean> readOnly      = parseBooleanExpressionAttribute(ATT_READ_ONLY,   element, false);
+			Expression<Boolean> lazy          = parseBooleanExpressionAttribute(ATT_LAZY,        element, true);
+			Expression<Boolean> acceptUnknownColumnTypes = new FallbackExpression<>(
                     parseBooleanExpressionAttribute(ATT_ACC_UNK_COL_TYPES, element),
                     new GlobalAcceptUnknownSimpleTypeExpression());
-            return createDatabaseStatement(id, environment, url, driver, user,
-                    password, catalog, schema, tableFilter, includeTables,
-                    excludeTables, metaCache, quoteTableNames, batch, fetchSize, readOnly, lazy,
-                    acceptUnknownColumnTypes, context);
-        } catch (ConversionException e) {
-            throw new ConfigurationError(e);
-        }
+			return createDatabaseStatement(id, environment, url, driver, user,
+					password, catalog, schema, tableFilter, includeTables,
+					excludeTables, metaCache, batch, fetchSize, readOnly, lazy,
+					acceptUnknownColumnTypes, context);
+		} catch (ConversionException e) {
+			throw new ConfigurationError(e);
+		}
     }
 
-    protected DefineDatabaseStatement createDatabaseStatement(
-            Expression<String> id, Expression<String> environment,
-            Expression<String> url, Expression<String> driver,
-            Expression<String> user, Expression<String> password,
-            Expression<String> catalog, Expression<String> schema,
-            Expression<String> tableFilter, Expression<String> includeTables,
-            Expression<String> excludeTables, Expression<Boolean> metaCache,
-            Expression<Boolean> quoteTableNames, Expression<Boolean> batch, Expression<Integer> fetchSize,
-            Expression<Boolean> readOnly, Expression<Boolean> lazy,
-            Expression<Boolean> acceptUnknownColumnTypes,
-            BeneratorParseContext context) {
-        return new DefineDatabaseStatement(id, environment, url, driver, user, password, catalog, schema,
-                metaCache, tableFilter, includeTables, excludeTables,quoteTableNames,
-                batch, fetchSize, readOnly, lazy, acceptUnknownColumnTypes, context.getResourceManager());
-    }
+	protected DefineDatabaseStatement createDatabaseStatement(
+			Expression<String> id, Expression<String> environment,
+			Expression<String> url, Expression<String> driver,
+			Expression<String> user, Expression<String> password,
+			Expression<String> catalog, Expression<String> schema,
+			Expression<String> tableFilter, Expression<String> includeTables,
+			Expression<String> excludeTables, Expression<Boolean> metaCache,
+			Expression<Boolean> batch, Expression<Integer> fetchSize,
+			Expression<Boolean> readOnly, Expression<Boolean> lazy,
+			Expression<Boolean> acceptUnknownColumnTypes,
+			BeneratorParseContext context) {
+		return new DefineDatabaseStatement(id, environment, url, driver, user, password, catalog, schema, 
+				metaCache, tableFilter, includeTables, excludeTables,
+				batch, fetchSize, readOnly, lazy, acceptUnknownColumnTypes, context.getResourceManager());
+	}
 
-    static class GlobalAcceptUnknownSimpleTypeExpression extends DynamicExpression<Boolean> {
-        @Override
-        public Boolean evaluate(Context context) {
+	static class GlobalAcceptUnknownSimpleTypeExpression extends DynamicExpression<Boolean> {
+		@Override
+		public Boolean evaluate(Context context) {
             return ((BeneratorContext) context).isAcceptUnknownSimpleTypes();
         }
-    }
+	}
 
 }

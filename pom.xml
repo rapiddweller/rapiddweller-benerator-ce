@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rapiddweller</groupId>
     <artifactId>rapiddweller-benerator-ce</artifactId>
-    <version>1.1.0+jdk-11-SNAPSHOT</version>
+    <version>1.1.0-jdk-11-SNAPSHOT</version>
     <name>rapiddweller Benerator</name>
     <description>
         rapiddweller 'Benerator' is a software solution to
@@ -111,35 +111,37 @@
     </developers>
 
     <scm>
-        <url>${env.CI_PROJECT_URL}</url>
-        <connection>scm:git:${env.CI_REPOSITORY_URL}</connection>
-        <developerConnection>scm:git:${env.CI_REPOSITORY_URL}</developerConnection>
+        <url>https://github.com/rapiddweller/rapiddweller-benerator-ce</url>
+        <connection>scm:git:github.com/rapiddweller/rapiddweller-benerator-ce</connection>
+        <developerConnection>scm:git:github.com/rapiddweller/rapiddweller-benerator-ce</developerConnection>
     </scm>
 
     <repositories>
         <repository>
-            <id>gitlab-maven</id>
-            <url>${env.CI_SERVER_URL}/api/v4/groups/${env.CI_PROJECT_GROUP_ID}/-/packages/maven</url>
+            <id>rdd-nexus</id>
+            <url>https://nexus.dwellerlab.com/repository/maven-rdd</url>
         </repository>
     </repositories>
 
     <distributionManagement>
         <repository>
-            <id>gitlab-maven</id>
-            <url>${env.CI_SERVER_URL}/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven/</url>
+            <id>rdd-nexus</id>
+            <name>Releases</name>
+            <url>https://nexus.dwellerlab.com/repository/releases</url>
         </repository>
         <snapshotRepository>
-            <id>gitlab-maven</id>
-            <url>${env.CI_SERVER_URL}/api/v4/projects/${env.CI_PROJECT_ID}/packages/maven/</url>
+            <id>rdd-nexus</id>
+            <name>Snapshot</name>
+            <url>https://nexus.dwellerlab.com/repository/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
     <properties>
-        <_rd_common_version>1.1.0+jdk-11-SNAPSHOT</_rd_common_version>
-        <_rd_contiperf_version>2.4.0+jdk-11-SNAPSHOT</_rd_contiperf_version>
-        <_rd_format_version>1.1.0+jdk-11-SNAPSHOT</_rd_format_version>
-        <_rd_jdbacl_version>1.1.0+jdk-11-SNAPSHOT</_rd_jdbacl_version>
-        <_rd_script_version>1.1.0+jdk-11-SNAPSHOT</_rd_script_version>
+        <_rd_common_version>1.1.0-jdk-11-SNAPSHOT</_rd_common_version>
+        <_rd_contiperf_version>2.4.0-jdk-11-SNAPSHOT</_rd_contiperf_version>
+        <_rd_format_version>1.1.0-jdk-11-SNAPSHOT</_rd_format_version>
+        <_rd_jdbacl_version>1.1.0-jdk-11-SNAPSHOT</_rd_jdbacl_version>
+        <_rd_script_version>1.1.0-jdk-11-SNAPSHOT</_rd_script_version>
         <!--suppress UnresolvedMavenProperty -->
         <build_number>${env.CI_JOB_ID}</build_number>
         <dependency_antlr-runtime.version>3.3</dependency_antlr-runtime.version>

@@ -24,17 +24,17 @@
 	
 	<transcodingTask defaultSource="s" target="t" identity="Transcoding-identity.xml">
 
-		<transcode table="country" selector="id = 20">
+		<transcode table="COUNTRY" selector="id = 20">
 			<id name="id" generator="idGen" />
 		</transcode>
 
-		<transcode table="state" selector="id &gt;= 210">
+		<transcode table="STATE" selector="id &gt;= 210">
 			<id name="id" generator="idGen" />
 		</transcode>
 
 	</transcodingTask>
 	
-	<iterate source="t" type="country" consumer="ConsoleExporter"/>
-	<iterate source="t" type="state"   consumer="ConsoleExporter"/>
+	<iterate source="t" type="COUNTRY" consumer="ConsoleExporter"/>
+	<iterate source="t" type="STATE"   consumer="ConsoleExporter"/>
 	
 </setup>
