@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- Example architecture definition for JUnit. 
   This architecture definition is not based on the official documentation of JUnit, but has been built to demonstrate 
   the architecture analysis feature of ConQAT.

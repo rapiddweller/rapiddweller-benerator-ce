@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 
 <setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -6,7 +6,7 @@
        xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
 
     <!-- read comma-sparated csv and output to semicolon separated csv -->
-    <iterate type="db_product" source="demo/file/products.import.csv" encoding="ISO-8859-1">
+    <iterate type="db_product" source="demo/file/products.import.csv" encoding="utf-8">
         <consumer class="CSVEntityExporter">
             <property name="uri" value="target/p1.csv"/>
             <property name="columns" value="ean_code,name"/>
