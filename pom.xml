@@ -118,25 +118,30 @@
 
     <repositories>
         <repository>
-            <id>gitlab-maven</id>
-            <url>https://gitlab.com/api/v4/groups/10407046/-/packages/maven</url>
+            <id>rdd-nexus</id>
+            <url>https://nexus.dwellerlab.com/repository/maven-rdd</url>
         </repository>
     </repositories>
 
     <distributionManagement>
         <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/rapiddweller/rapiddweller-benerator-ce</url>
+            <id>rdd-nexus</id>
+            <name>Releases</name>
+            <url>https://nexus.dwellerlab.com/repository/releases</url>
         </repository>
+        <snapshotRepository>
+            <id>rdd-nexus</id>
+            <name>Snapshot</name>
+            <url>https://nexus.dwellerlab.com/repository/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <properties>
-        <_rd_common_version>1.1.0+jdk-11-SNAPSHOT</_rd_common_version>
-        <_rd_contiperf_version>2.4.0+jdk-11-SNAPSHOT</_rd_contiperf_version>
-        <_rd_format_version>1.1.0+jdk-11-SNAPSHOT</_rd_format_version>
-        <_rd_jdbacl_version>1.1.0+jdk-11-SNAPSHOT</_rd_jdbacl_version>
-        <_rd_script_version>1.1.0+jdk-11-SNAPSHOT</_rd_script_version>
+        <_rd_common_version>1.1.0-jdk-11-SNAPSHOT</_rd_common_version>
+        <_rd_contiperf_version>2.4.0-jdk-11-SNAPSHOT</_rd_contiperf_version>
+        <_rd_format_version>1.1.0-jdk-11-SNAPSHOT</_rd_format_version>
+        <_rd_jdbacl_version>1.1.0-jdk-11-SNAPSHOT</_rd_jdbacl_version>
+        <_rd_script_version>1.1.0-jdk-11-SNAPSHOT</_rd_script_version>
         <!--suppress UnresolvedMavenProperty -->
         <build_number>${env.CI_JOB_ID}</build_number>
         <dependency_antlr-runtime.version>3.3</dependency_antlr-runtime.version>
