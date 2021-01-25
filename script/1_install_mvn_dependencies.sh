@@ -122,7 +122,7 @@ for module in "${modules[@]}"; do
     echo "checking out module $module into $DIR"
     echo "###################################################################"
     echo "###################################################################"
-    git clone --branch development https://gitlab.com/rapiddweller/benerator/"$module".git "$DIR"
+    git clone --branch development https://github.com/rapiddweller/"$module".git "$DIR"
   fi
   echo "###################################################################"
   echo "###################################################################"
