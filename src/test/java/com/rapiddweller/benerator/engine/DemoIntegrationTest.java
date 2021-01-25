@@ -62,26 +62,29 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
         }
     }
 
-    @Ignore
     @Test
     public void DemoFiles() throws IOException {
         context.setContextUri("/demo/file");
         parseAndExecute();
     }
 
-    @Ignore
     @Test
     public void DemoDb() throws IOException {
         context.setContextUri("/demo/db");
         parseAndExecute();
     }
 
-    @Ignore
     @Test
     public void DemoScript() throws IOException {
         context.setContextUri("/demo/script");
         parseAndExecute();
     }
 
+    @Ignore
+    @Test
+    public void ShopScript() throws IOException {
+        context.setContextUri("/demo/shop");
+        parseAndExecute();
+    }
 
 }

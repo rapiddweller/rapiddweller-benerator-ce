@@ -1,25 +1,21 @@
-name: "rapiddweller-benerator-ce CI"
-
 on:
   push:
-    branches: [ ci-migration ]
-  pull_request:
-    branches: [ ci-migration ]
-
+    branches:
+      - '**'
 
 env:
-  ARTIFACT_ID: "rapiddweller-benerator-ce"
-  ARTIFACT_VERSION_BASE: "1.1.0"
   MAVEN_CLI_OPTS: "--batch-mode --update-snapshots"
   JAVA_JDKVERSION_TAG: "jdk-11"
   SET_VERSION: |
+    ARTIFACT_ID=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec);
+    echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV;
     if [ GITHUB_REF == refs/tags/* ];
     then
-    ARTIFACT_VERSION=$ARTIFACT_VERSION_BASE-$JAVA_JDKVERSION_TAG-SNAPSHOT;
-    echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
+      ARTIFACT_VERSION=${GITHUB_REF/refs\/tags\//}-$JAVA_JDKVERSION_TAG;
+      echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
       echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
     else
-      ARTIFACT_VERSION=$ARTIFACT_VERSION_BASE-$JAVA_JDKVERSION_TAG-SNAPSHOT;
+      ARTIFACT_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec);
       echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
       echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
     fi
@@ -31,7 +27,6 @@ jobs:
     runs-on: ubuntu-latest
     container: maven:3.6-adoptopenjdk-11
     steps:
-      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
       - name: Cache Maven packages
         uses: actions/cache@v2
@@ -39,6 +34,8 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - run: eval $SET_VERSION
+        shell: bash
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - run: mvn $MAVEN_CLI_OPTS clean package -Dmaven.test.skip=true
       - name: Upload build artifact for assembly
@@ -53,7 +50,6 @@ jobs:
     runs-on: ubuntu-latest
     container: maven:3.6-adoptopenjdk-11
     steps:
-      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
       - name: Cache Maven packages
         uses: actions/cache@v2
@@ -61,18 +57,13 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - run: eval $SET_VERSION
+        shell: bash
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - run: mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
       - run: awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco/jacoco.csv
       - run: bash <(curl -s https://codecov.io/bash)
         shell: bash
-      - name: Upload test-report result for coverage_jdk11
-        uses: actions/upload-artifact@v2
-        with:
-          name: test_jdk11
-          path: target/site/jacoco
-          if-no-files-found: error
-          retention-days: 5
 
   ############################# Documentation ##############################
 
@@ -108,8 +99,8 @@ jobs:
     needs: [ test_jdk11,build_jdk11,documentation_build ]
     container: maven:3.6-adoptopenjdk-11
     steps:
-      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
+      - run: eval $SET_VERSION
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
@@ -153,6 +144,7 @@ jobs:
   publish_jdk11:
     runs-on: ubuntu-latest
     needs: [ test_jdk11,build_jdk11 ]
+    container: maven:3.6-adoptopenjdk-11
     steps:
       - uses: actions/checkout@v2
       - name: Cache Maven packages
@@ -161,14 +153,13 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Set up Java for publishing to GitHub Packages and autogenerate .m2/settings.xml
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
+      - run: eval $SET_VERSION
+        shell: bash
       - name: Publish package
-        run: mvn --batch-mode deploy -Dmaven.test.skip=true
+        run: mvn --batch-mode deploy --settings .m2/settings.xml -Dmaven.test.skip=true -Dmaven.install.skip=true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXUS_USER: ${{ secrets.NEXUS_USER }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
 
   ###################### E2ET ######################
 

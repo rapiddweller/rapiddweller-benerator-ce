@@ -776,8 +776,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
             return table;
         table = findAnyTableOfName(tableName);
         if (table != null) {
-            logger.warn("Table '" + tableName + "' not found " +
-                    "in the expected catalog '" + catalogName + "' and schema '" + schemaName + "'. " +
+            logger.info("Table '" + tableName + "' not found " +
+                    "in the expected catalog or schema." +
                     "I have taken it from catalog '" + table.getCatalog() + "' and schema '" + table.getSchema() + "' instead. " +
                     "You better make sure this is right and fix the configuration");
             return table;
