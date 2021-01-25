@@ -167,8 +167,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ test_jdk11 ]
     steps:
-      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
+      - run: eval $SET_VERSION
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
@@ -188,8 +188,8 @@ jobs:
     container: findepi/graalvm:java11-all
     needs: [ assembly_jdk11 ]
     steps:
-      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
+      - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
@@ -214,8 +214,8 @@ jobs:
     container: findepi/graalvm:java11-all
     needs: [ assembly_jdk11 ]
     steps:
-      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
+      - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
@@ -240,8 +240,8 @@ jobs:
     container: findepi/graalvm:java11-all
     needs: [ assembly_jdk11 ]
     steps:
-      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
+      - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
@@ -274,8 +274,8 @@ jobs:
     container: findepi/graalvm:java11-all
     needs: [ assembly_jdk11 ]
     steps:
-      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
+      - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
@@ -320,8 +320,8 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
+      - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
@@ -371,8 +371,8 @@ jobs:
           MYSQL_ROOT_PASSWORD: "Benerator123!"
           MYSQL_DATABASE: "benerator"
     steps:
-      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
+      - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
@@ -416,8 +416,8 @@ jobs:
           ACCEPT_EULA: Y,
           SA_PASSWORD: Benerator123!
     steps:
-      - run: eval $SET_VERSION
       - uses: actions/checkout@v2
+      - run: eval $SET_VERSION
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
