@@ -8,15 +8,13 @@
 
 ![.github/workflows/ci.yml](https://github.com/rapiddweller/rapiddweller-benerator-ce/workflows/.github/workflows/ci.yml/badge.svg) 
 [![codecov](https://codecov.io/gh/rapiddweller/rapiddweller-benerator-ce/branch/development/graph/badge.svg?token=YGUTL8FXKE)](https://codecov.io/gh/rapiddweller/rapiddweller-benerator-ce)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.rapiddweller/rapiddweller-benerator-ce/badge.svg)](https://maven-badges.herokuapp.com/com.rapiddweller/rapiddweller-benerator-ce/rsql-parser)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.rapiddweller/rapiddweller-benerator-ce/badge.svg)](https://search.maven.org/artifact/com.rapiddweller/rapiddweller-benerator-ce)
 
 # rapiddweller-benerator-ce
 
 [rapiddweller 'Benerator'](https://www.benerator.de) is a software solution to 
 generate, anonymize, pseudonymize and migrate data for
 development, testing and training purposes.
-
-[[_TOC_]]
 
 ## Introduction
 
