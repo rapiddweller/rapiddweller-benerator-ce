@@ -129,5 +129,5 @@ for module in "${modules[@]}"; do
   echo "install $module into maven local repository"
   echo "###################################################################"
   echo "###################################################################"
-  cd "$DIR" && mvn clean install -DskipTests
+  cd "$DIR" && mvn clean install -DskipTests --update-snapshots
 done
