@@ -38,6 +38,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.FileUtil;
 
+import org.apache.poi.ss.usermodel.CellType;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -130,21 +131,22 @@ public class XLSEntityExporterTest extends XLSTest {
 	    if (ArrayUtil.isEmpty(values))
 	    	assertNull(row);
 	    for (int i = 0; i < values.length; i++) {
-	    	HSSFCell cell = row.getCell(i);
+			assert row != null;
+			HSSFCell cell = row.getCell(i);
 	    	Object expectedContent = values[i];
 	    	if (expectedContent == null)
 	    		assertNull(cell);
 	    	else if (expectedContent instanceof String) {
-	    		assertEquals(HSSFCell.CELL_TYPE_STRING, cell.getCellType());
+	    		assertEquals(CellType.STRING, cell.getCellType());
 	    		assertEquals(expectedContent, cell.getStringCellValue());
 	    	} else if (expectedContent instanceof Number) {
-	    		assertEquals(HSSFCell.CELL_TYPE_NUMERIC, cell.getCellType());
+	    		assertEquals(CellType.NUMERIC, cell.getCellType());
 	    		assertEquals(((Number) expectedContent).doubleValue(), cell.getNumericCellValue(), 0);
 	    	} else if (expectedContent instanceof Boolean) {
-	    		assertEquals(HSSFCell.CELL_TYPE_BOOLEAN, cell.getCellType());
+	    		assertEquals(CellType.BOOLEAN, cell.getCellType());
 	    		assertEquals(expectedContent, cell.getBooleanCellValue());
 	    	} else if (expectedContent instanceof Date) {
-	    		assertEquals(HSSFCell.CELL_TYPE_NUMERIC, cell.getCellType());
+	    		assertEquals(CellType.NUMERIC, cell.getCellType());
 	    		assertEquals(((Date) expectedContent).getTime() / 1000, cell.getDateCellValue().getTime() / 1000); // cut off milliseconds
 	    	} else
 	    		throw new RuntimeException("Type not supported: " + expectedContent.getClass());

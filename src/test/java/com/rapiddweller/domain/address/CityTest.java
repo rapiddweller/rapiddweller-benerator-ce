@@ -55,7 +55,7 @@ public class CityTest {
         City actualCity = new City(new State(), "Name", "Addition", new String[]{"foo", "foo", "foo"}, "Area Code");
         assertEquals("Addition", actualCity.getNameExtension());
         assertEquals("Area Code", actualCity.getAreaCode());
-        assertEquals(3, actualCity.getZipCodes().length);
+        assertEquals(3, actualCity.getPostalCodes().length);
         assertNull(actualCity.getCountry());
         assertEquals("Name", actualCity.getName());
     }
@@ -65,7 +65,7 @@ public class CityTest {
         City actualCity = new City(new State(), "Name", "Addition", null, "Area Code");
         assertEquals("Addition", actualCity.getNameExtension());
         assertEquals("Area Code", actualCity.getAreaCode());
-        assertEquals(0, actualCity.getZipCodes().length);
+        assertEquals(0, actualCity.getPostalCodes().length);
         assertNull(actualCity.getCountry());
         assertEquals("Name", actualCity.getName());
     }
@@ -95,13 +95,13 @@ public class CityTest {
     public void testAddPostalCode() {
         City city = new City(new State(), "Name", "Addition", new String[]{"foo", "foo", "foo"}, "Area Code");
         city.addPostalCode("Postal Code");
-        assertEquals(4, city.getZipCodes().length);
+        assertEquals(4, city.getPostalCodes().length);
     }
 
     @Test
-    public void testGetZipCodes() {
+    public void testgetPostalCodes() {
         assertEquals(3, (new City(new State(), "Name", "Addition", new String[]{"foo", "foo", "foo"}, "Area Code"))
-                .getZipCodes().length);
+                .getPostalCodes().length);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class CityTest {
     public void testAddZipCode() {
         City city = new City(new State(), "Name", "Addition", new String[]{"foo", "foo", "foo"}, "Area Code");
         city.addZipCode("21654");
-        assertEquals(4, city.getZipCodes().length);
+        assertEquals(4, city.getPostalCodes().length);
     }
 
     @Test

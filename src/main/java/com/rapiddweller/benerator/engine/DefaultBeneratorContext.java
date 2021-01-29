@@ -40,6 +40,8 @@ import com.rapiddweller.benerator.factory.DefaultsProvider;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
 import com.rapiddweller.benerator.factory.StochasticGeneratorFactory;
 import com.rapiddweller.benerator.script.BeneratorScriptFactory;
+import com.rapiddweller.benerator.script.graaljs.GraalJsScriptFactory;
+import com.rapiddweller.benerator.script.graalpy.GraalPyScriptFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ConfigurationError;
@@ -113,8 +115,10 @@ public class DefaultBeneratorContext implements BeneratorContext {
 	// construction ----------------------------------------------------------------------------------------------------
 	
     static {
-    	ScriptUtil.addFactory("ben", new BeneratorScriptFactory());
-    	ScriptUtil.setDefaultScriptEngine("ben");
+		ScriptUtil.addFactory("js", new GraalJsScriptFactory());
+		ScriptUtil.addFactory("py", new GraalPyScriptFactory());
+		ScriptUtil.addFactory("ben", new BeneratorScriptFactory());
+		ScriptUtil.setDefaultScriptEngine("ben");
     	ConverterManager.getInstance().registerConverterClass(String2DistributionConverter.class); // TODO is this required any longer?
     }
     
