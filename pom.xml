@@ -186,19 +186,7 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${dependency_h2.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- GraalVM dependencies -->
-        <dependency>
-            <groupId>com.ibm.icu</groupId>
-            <artifactId>icu4j</artifactId>
-            <version>${dependency_icu4j.version}</version>
-            <scope>provided</scope>
-        </dependency>
+        <!-- rapiddweller dependencies -->
         <dependency>
             <groupId>com.rapiddweller</groupId>
             <artifactId>rd-lib-common</artifactId>
@@ -224,27 +212,38 @@
             <artifactId>rd-lib-script</artifactId>
             <version>${_rd_script_version}</version>
         </dependency>
-        <dependency>
-            <groupId>hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>${dependency_hsqldb.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.resource</groupId>
-            <artifactId>connector-api</artifactId>
-            <version>${dependency_connector-api.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>${dependency_validation-api.version}</version>
-        </dependency>
+        <!--  test framework -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${dependency_junit.version}</version>
+        </dependency>
+        <!--  ANTLR (ANother Tool for Language Recognition) is a powerful parser generator for reading, processing,
+         executing, or translating structured text or binary files. It's widely used to build languages, tools, and
+          frameworks. From a grammar, ANTLR generates a parser that can build and walk parse trees. -->
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr</artifactId>
+            <version>${dependency_antlr-runtime.version}</version>
+        </dependency>
+        <!--  databases -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${dependency_h2.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>${dependency_derbyclient.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.firebirdsql.jdbc</groupId>
+            <artifactId>jaybird</artifactId>
+            <version>${dependency_jaybird.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -259,34 +258,24 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr-runtime</artifactId>
-            <version>${dependency_antlr-runtime.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derbyclient</artifactId>
-            <version>${dependency_derbyclient.version}</version>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>${dependency_hsqldb.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${dependency_log4j-api.version}</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${dependency_postgresql.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${dependency_log4j-core.version}</version>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>${dependency_icu4j.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.firebirdsql.jdbc</groupId>
-            <artifactId>jaybird</artifactId>
-            <version>${dependency_jaybird.version}</version>
-            <scope>provided</scope>
-        </dependency>
+        <!--  script handling -->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
@@ -311,15 +300,34 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${dependency_postgresql.version}</version>
+            <groupId>javax.resource</groupId>
+            <artifactId>connector-api</artifactId>
+            <version>${dependency_connector-api.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${dependency_validation-api.version}</version>
+        </dependency>
+        <!--  xml handling -->
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
             <version>${dependency_xml-apis.version}</version>
+        </dependency>
+        <!-- logging -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${dependency_log4j-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${dependency_log4j-core.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -498,11 +506,17 @@
                         <exclude>com/rapiddweller/benerator/template/**/*</exclude>
                         <exclude>com/rapiddweller/benerator/gui/**/*</exclude>
                         <exclude>com/rapiddweller/benerator/anno/**/*</exclude>
+                        <exclude>com/rapiddweller/benerator/wrapper/**/*</exclude>
+                        <exclude>com/rapiddweller/benerator/engine/AbstractBeneratorSubContext.class</exclude>
                         <exclude>com/rapiddweller/benerator/main/Benerator.class</exclude>
                         <exclude>com/rapiddweller/benerator/main/BeneratorGUI.class</exclude>
                         <exclude>com/rapiddweller/benerator/main/BeneratorGUI.BeneratorGUIFrame.class</exclude>
                         <exclude>com/rapiddweller/benerator/main/NewProjectWizard.class</exclude>
                         <exclude>com/rapiddweller/benerator/main/TemplateRunner.class</exclude>
+                        <exclude>com/rapiddweller/domain/address/Address.class</exclude>
+                        <exclude>com/rapiddweller/domain/address/CityManager.class</exclude>
+                        <exclude>com/rapiddweller/domain/address/AddressFormat.class</exclude>
+                        <exclude>com/rapiddweller/benerator/archetype/**/*</exclude>
                         <exclude>com/rapiddweller/platform/xml/XMLSchemaDescriptorProvider.class</exclude>
                         <exclude>com/rapiddweller/benerator/factory/**/*</exclude>
                     </excludes>

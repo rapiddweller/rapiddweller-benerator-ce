@@ -20,6 +20,24 @@ env:
       echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
     fi
 jobs:
+  ###################### Setup ######################
+  setup:
+    runs-on: ubuntu-latest
+    container: maven:3.6-adoptopenjdk-11
+    steps:
+      - uses: actions/checkout@v2
+      - run: eval $SET_VERSION
+      - run: |
+          echo "echo ARTIFACT_ID=${ARTIFACT_ID} >> \$GITHUB_ENV" >> dot.env
+          echo "echo ARTIFACT_VERSION=${ARTIFACT_VERSION} >> \$GITHUB_ENV" >> dot.env
+          echo "echo ARTIFACT_FULLNAME=${ARTIFACT_FULLNAME} >> \$GITHUB_ENV" >> dot.env
+      - name: Upload setupfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: setup
+          path: dot.env
+          if-no-files-found: error
+          retention-days: 1
 
   ###################### Test / Build ######################
 
@@ -34,8 +52,11 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - run: eval $SET_VERSION
-        shell: bash
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
+        with:
+          name: setup
+      - run: bash dot.env
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - run: mvn $MAVEN_CLI_OPTS clean package -Dmaven.test.skip=true
       - name: Upload build artifact for assembly
@@ -57,8 +78,11 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - run: eval $SET_VERSION
-        shell: bash
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
+        with:
+          name: setup
+      - run: bash dot.env
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - run: mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
       - run: awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco/jacoco.csv
@@ -106,7 +130,11 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - run: eval $SET_VERSION
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
+        with:
+          name: setup
+      - run: bash dot.env
       - name: Download documentation_build_assembly for assembly
         uses: actions/download-artifact@v2
         with:
@@ -153,8 +181,11 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - run: eval $SET_VERSION
-        shell: bash
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
+        with:
+          name: setup
+      - run: bash dot.env
       - name: Publish package
         run: mvn --batch-mode deploy --settings .m2/settings.xml -Dmaven.test.skip=true -Dmaven.install.skip=true
         env:
@@ -187,14 +218,11 @@ jobs:
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
     steps:
-      - uses: actions/checkout@v2
-      - name: Cache Maven packages
-        uses: actions/cache@v2
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - run: eval $SET_VERSION
+          name: setup
+      - run: bash dot.env
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
@@ -219,14 +247,11 @@ jobs:
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
     steps:
-      - uses: actions/checkout@v2
-      - name: Cache Maven packages
-        uses: actions/cache@v2
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - run: eval $SET_VERSION
+          name: setup
+      - run: bash dot.env
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
@@ -251,14 +276,11 @@ jobs:
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
     steps:
-      - uses: actions/checkout@v2
-      - name: Cache Maven packages
-        uses: actions/cache@v2
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - run: eval $SET_VERSION
+          name: setup
+      - run: bash dot.env
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
@@ -291,14 +313,11 @@ jobs:
     container: maven:3.6-adoptopenjdk-11
     needs: [ assembly_jdk11 ]
     steps:
-      - uses: actions/checkout@v2
-      - name: Cache Maven packages
-        uses: actions/cache@v2
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - run: eval $SET_VERSION
+          name: setup
+      - run: bash dot.env
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
@@ -343,14 +362,11 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v2
-      - name: Cache Maven packages
-        uses: actions/cache@v2
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - run: eval $SET_VERSION
+          name: setup
+      - run: bash dot.env
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
@@ -400,14 +416,11 @@ jobs:
           MYSQL_ROOT_PASSWORD: "Benerator123!"
           MYSQL_DATABASE: "benerator"
     steps:
-      - uses: actions/checkout@v2
-      - name: Cache Maven packages
-        uses: actions/cache@v2
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - run: eval $SET_VERSION
+          name: setup
+      - run: bash dot.env
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
@@ -451,14 +464,11 @@ jobs:
           ACCEPT_EULA: Y,
           SA_PASSWORD: Benerator123!
     steps:
-      - uses: actions/checkout@v2
-      - name: Cache Maven packages
-        uses: actions/cache@v2
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - run: eval $SET_VERSION
+          name: setup
+      - run: bash dot.env
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
