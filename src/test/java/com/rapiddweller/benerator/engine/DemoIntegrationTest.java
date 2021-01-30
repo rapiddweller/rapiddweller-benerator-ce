@@ -29,7 +29,6 @@ package com.rapiddweller.benerator.engine;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.common.FileUtil;
 
-import com.rapiddweller.domain.organization.CompanyNameGeneratorTest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Ignore;
@@ -106,7 +105,7 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
 
 
     @Test
-    public void DemoFilesCreateDates() throws IOException {
+    public void DemoFilesCreateDates() {
         try{
         context.setContextUri("/demo/file");
         parseAndExecuteFile("/demo/file/create_dates.ben.xml");

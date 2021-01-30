@@ -26,10 +26,10 @@
 
 package com.rapiddweller.platform.db;
 
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.jdbacl.ColumnInfo;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.DataModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -77,13 +77,15 @@ public class DefaultDBSystem extends DBSystem {
     }
 
     @Override
-    protected PreparedStatement getSelectByPKStatement(ComplexTypeDescriptor descriptor) {
+    protected PreparedStatement getSelectByPKStatement(
+            ComplexTypeDescriptor descriptor) {
         return connectionHolder.getSelectByPKStatement(descriptor);
     }
 
     @Override
     protected PreparedStatement getStatement(ComplexTypeDescriptor descriptor,
-                                             boolean insert, List<ColumnInfo> columnInfos) {
+                                             boolean insert,
+                                             List<ColumnInfo> columnInfos) {
         return connectionHolder.getStatement(descriptor, insert, columnInfos);
     }
 

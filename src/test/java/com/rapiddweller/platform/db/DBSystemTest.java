@@ -134,7 +134,7 @@ public class DBSystemTest {
 	}
 	
 	@Test
-	public void testQueryEntities() throws Exception {
+	public void testQueryEntities() {
 		db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
 		db.execute("insert into \"TEST\" (ID, NAME) values (2, 'Bob')");
 		DefaultBeneratorContext context = new DefaultBeneratorContext();
@@ -155,7 +155,7 @@ public class DBSystemTest {
 	}
 	
 	@Test
-	public void testInserter() throws Exception {
+	public void testInserter() {
         Consumer inserter = db.inserter();
         Entity entity = new Entity("TEST", db, "ID", 1, "NAME", "Alice");
         inserter.startConsuming(new ProductWrapper<Entity>().wrap(entity));
@@ -167,7 +167,7 @@ public class DBSystemTest {
 	}
 	
 	@Test
-	public void testInserter_table() throws Exception {
+	public void testInserter_table() {
         Consumer inserter = db.inserter("TEST");
         Entity entity = new Entity("Xyz", db, "ID", 1, "NAME", "Alice");
         inserter.startConsuming(new ProductWrapper<Entity>().wrap(entity));
@@ -200,7 +200,7 @@ public class DBSystemTest {
 	}
 	
 	@Test
-	public void testTableExists() throws Exception {
+	public void testTableExists() {
         assertTrue(db.tableExists("TEST"));
         assertFalse(db.tableExists("TEST_______"));
         assertFalse(db.tableExists(""));

@@ -43,9 +43,11 @@ import java.util.Random;
  * @author Eric Chaves
  * @see "http://en.wikipedia.org/wiki/Cadastro_de_Pessoas_F%C3%ADsicas"
  */
-public class CNPJGenerator extends WeightedCSVSampleGenerator<String> implements NonNullGenerator<String> {
+public class CNPJGenerator extends WeightedCSVSampleGenerator<String>
+        implements NonNullGenerator<String> {
 
-    private static final String LOCAL = "/com/rapiddweller/domain/br/cnpj_sufix.csv";
+    private static final String LOCAL =
+            "/com/rapiddweller/domain/br/cnpj_sufix.csv";
 
     /**
      * flag indicating should return CPF in numeric or formatted form. Defaults to true
@@ -68,14 +70,20 @@ public class CNPJGenerator extends WeightedCSVSampleGenerator<String> implements
 
     private static void addDigits(ArrayList<Integer> digits) {
         int sum = 0;
-        sum = (5 * digits.get(0)) + (4 * digits.get(1)) + (3 * digits.get(2)) + (2 * digits.get(3))
-                + (9 * digits.get(4)) + (8 * digits.get(5)) + (7 * digits.get(6)) + (6 * digits.get(7))
-                + (5 * digits.get(8)) + (4 * digits.get(9)) + (3 * digits.get(10)) + (2 * digits.get(11));
+        sum = (5 * digits.get(0)) + (4 * digits.get(1)) + (3 * digits.get(2)) +
+                (2 * digits.get(3))
+                + (9 * digits.get(4)) + (8 * digits.get(5)) +
+                (7 * digits.get(6)) + (6 * digits.get(7))
+                + (5 * digits.get(8)) + (4 * digits.get(9)) +
+                (3 * digits.get(10)) + (2 * digits.get(11));
         digits.add((sum % 11 < 2) ? 0 : 11 - (sum % 11));
 
-        sum = (6 * digits.get(0)) + (5 * digits.get(1)) + (4 * digits.get(2)) + (3 * digits.get(3))
-                + (2 * digits.get(4)) + (9 * digits.get(5)) + (8 * digits.get(6)) + (7 * digits.get(7))
-                + (6 * digits.get(8)) + (5 * digits.get(9)) + (4 * digits.get(10)) + (3 * digits.get(11))
+        sum = (6 * digits.get(0)) + (5 * digits.get(1)) + (4 * digits.get(2)) +
+                (3 * digits.get(3))
+                + (2 * digits.get(4)) + (9 * digits.get(5)) +
+                (8 * digits.get(6)) + (7 * digits.get(7))
+                + (6 * digits.get(8)) + (5 * digits.get(9)) +
+                (4 * digits.get(10)) + (3 * digits.get(11))
                 + (2 * digits.get(12));
         digits.add((sum % 11 < 2) ? 0 : 11 - (sum % 11));
     }
@@ -90,8 +98,9 @@ public class CNPJGenerator extends WeightedCSVSampleGenerator<String> implements
     @Override
     public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
         String suffix = super.generate(wrapper).unwrap();
-        if (suffix == null)
+        if (suffix == null) {
             suffix = "0000";
+        }
         return wrapper.wrap(generateCNPJ(suffix));
     }
 
@@ -99,13 +108,17 @@ public class CNPJGenerator extends WeightedCSVSampleGenerator<String> implements
 
         StringBuilder buf = new StringBuilder();
         ArrayList<Integer> digits = new ArrayList<>();
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++) {
             digits.add(random.nextInt(9));
-        for (int i = 0; i < 4; i++)
+        }
+        for (int i = 0; i < 4; i++) {
             digits.add(Integer.parseInt(sufix.substring(i, i + 1)));
+        }
         addDigits(digits);
 
-        for (Integer digit : digits) buf.append(digit);
+        for (Integer digit : digits) {
+            buf.append(digit);
+        }
         if (this.formatted) {
             buf.insert(2, '.');
             buf.insert(6, '.');

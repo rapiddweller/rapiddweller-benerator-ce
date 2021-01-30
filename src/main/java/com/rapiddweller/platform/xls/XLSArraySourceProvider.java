@@ -50,7 +50,10 @@ public class XLSArraySourceProvider implements DataSourceProvider<Object[]> {
     private final String nullMarker;
     private final boolean rowBased;
 
-    public XLSArraySourceProvider(boolean formatted, Converter<?, ?> scriptConverter, String emptyMarker, String nullMarker, boolean rowBased) {
+    public XLSArraySourceProvider(boolean formatted,
+                                  Converter<?, ?> scriptConverter,
+                                  String emptyMarker, String nullMarker,
+                                  boolean rowBased) {
         this.formatted = formatted;
         this.scriptConverter = scriptConverter;
         this.emptyMarker = emptyMarker;
@@ -61,9 +64,12 @@ public class XLSArraySourceProvider implements DataSourceProvider<Object[]> {
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public DataSource<Object[]> create(String uri, BeneratorContext context) {
-        DataSource<Object[]> source = new XLSSource(uri, formatted, emptyMarker, nullMarker, rowBased);
+        DataSource<Object[]> source =
+                new XLSSource(uri, formatted, emptyMarker, nullMarker,
+                        rowBased);
         source = new OffsetDataSource<>(source, 1); // skip header row
-        Converter<Object[], Object[]> converter = new ArrayConverter(Object.class, Object.class, scriptConverter);
+        Converter<Object[], Object[]> converter =
+                new ArrayConverter(Object.class, Object.class, scriptConverter);
         return new ConvertingDataSource<>(source, converter);
     }
 

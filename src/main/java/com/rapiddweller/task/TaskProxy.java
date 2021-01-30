@@ -38,7 +38,8 @@ import com.rapiddweller.common.MessageHolder;
  * @author Volker Bergmann
  * @since 0.2
  */
-public abstract class TaskProxy<E extends Task> extends AbstractTask implements Cloneable, MessageHolder {
+public abstract class TaskProxy<E extends Task> extends AbstractTask
+        implements Cloneable, MessageHolder {
 
     protected E realTask;
 
@@ -52,7 +53,8 @@ public abstract class TaskProxy<E extends Task> extends AbstractTask implements 
 
     public void setRealTask(E realTask) {
         this.realTask = realTask;
-        setTaskName(realTask != null ? realTask.getClass().getSimpleName() : "undefined");
+        setTaskName(realTask != null ? realTask.getClass().getSimpleName() :
+                "undefined");
     }
 
     @Override
@@ -77,7 +79,8 @@ public abstract class TaskProxy<E extends Task> extends AbstractTask implements 
 
     @Override
     public String getMessage() {
-        return (realTask instanceof MessageHolder ? ((MessageHolder) realTask).getMessage() : null);
+        return (realTask instanceof MessageHolder ?
+                ((MessageHolder) realTask).getMessage() : null);
     }
 
     @Override

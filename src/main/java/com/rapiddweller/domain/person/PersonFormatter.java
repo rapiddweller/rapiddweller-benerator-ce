@@ -26,7 +26,11 @@
 
 package com.rapiddweller.domain.person;
 
-import com.rapiddweller.common.*;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.Locales;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 import java.util.Locale;
@@ -39,12 +43,14 @@ import java.util.Set;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public abstract class PersonFormatter extends ThreadSafeConverter<Person, String> {
+public abstract class PersonFormatter
+        extends ThreadSafeConverter<Person, String> {
 
     public static final PersonFormatter WESTERN = new Western();
     public static final PersonFormatter EASTERN = new Eastern();
     private static final Set<Locale> EASTERN_LOCALES = CollectionUtil.toSet(
-            Locales.CHINESE, Locales.JAPANESE, Locales.KOREAN, Locales.THAI, Locales.VIETNAMESE
+            Locales.CHINESE, Locales.JAPANESE, Locales.KOREAN, Locales.THAI,
+            Locales.VIETNAMESE
     );
 
     public PersonFormatter() {
@@ -52,7 +58,8 @@ public abstract class PersonFormatter extends ThreadSafeConverter<Person, String
     }
 
     public static PersonFormatter getInstance(Locale locale) {
-        return (EASTERN_LOCALES.contains(LocaleUtil.language(locale)) ? EASTERN : WESTERN);
+        return (EASTERN_LOCALES.contains(LocaleUtil.language(locale)) ?
+                EASTERN : WESTERN);
     }
 
     @Override
@@ -64,8 +71,9 @@ public abstract class PersonFormatter extends ThreadSafeConverter<Person, String
 
     protected void appendSeparated(String part, StringBuilder builder) {
         if (!StringUtil.isEmpty(part)) {
-            if (builder.length() > 0)
+            if (builder.length() > 0) {
                 builder.append(' ');
+            }
             builder.append(part);
         }
     }

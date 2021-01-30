@@ -81,7 +81,7 @@ public class ImportParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 	
 	@Test(expected = SyntaxError.class)
-	public void testImportAttributeTypo() throws Exception {
+	public void testImportAttributeTypo() {
 		parse("<import platmof='typo' />");
 	}
 

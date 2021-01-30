@@ -63,7 +63,8 @@ public class GenderConverter extends ThreadSafeConverter<Gender, String> {
 
     @Override
     public String convert(Gender gender) throws ConversionException {
-        return (gender != null ? (Gender.MALE.equals(gender) ? male : female) : null);
+        return (gender != null ? (Gender.MALE.equals(gender) ? male : female) :
+                null);
     }
 
 }

@@ -33,7 +33,8 @@ package com.rapiddweller.model.data;
  * @author Volker Bergmann
  * @since 0.5.4
  */
-public class SequentialGroupDescriptor extends ComplexTypeDescriptor { // TODO v0.8 support this class
+public class SequentialGroupDescriptor
+        extends ComplexTypeDescriptor { // TODO v0.8 support this class
 
     public SequentialGroupDescriptor(String name, DescriptorProvider provider) {
         super(name, provider);

@@ -53,7 +53,8 @@ public class CompositeArrayGeneratorTest extends GeneratorTest {
         generator.init(context);
         Integer[] EXPECTED_ARRAY = new Integer[] {1, 2};
         for (int i = 0; i < 10; i++)
-            assertTrue(Arrays.equals(EXPECTED_ARRAY, GeneratorUtil.generateNonNull(generator)));
+            assertArrayEquals(EXPECTED_ARRAY,
+                    GeneratorUtil.generateNonNull(generator));
     }
     
     @Test

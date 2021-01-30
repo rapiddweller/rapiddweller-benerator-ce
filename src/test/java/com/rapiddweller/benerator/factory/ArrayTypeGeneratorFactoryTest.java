@@ -147,7 +147,7 @@ public class ArrayTypeGeneratorFactoryTest extends GeneratorTest {
 	}
 	
 	@Test
-	public void testDatabaseSource() throws Exception {
+	public void testDatabaseSource() {
 		// prepare DB
 		DefaultDBSystem db = new DefaultDBSystem("db", HSQLUtil.getInMemoryURL("benerator"), HSQLUtil.DRIVER, "sa", null, context.getDataModel());
 		context.set("db", db);
@@ -338,7 +338,7 @@ public class ArrayTypeGeneratorFactoryTest extends GeneratorTest {
 	        fail(failureMessage);
 	    assertEquals(failureMessage, expected.length, actual.length);
 	    for (int i = 0; i < expected.length; i++)
-	    	assertTrue(failureMessage, expected[i].equals(actual[i]));
+			assertEquals(failureMessage, expected[i], actual[i]);
     }
 
 	private static String failureMessage(Object[] expected, Object[] actual) {
@@ -355,7 +355,7 @@ public class ArrayTypeGeneratorFactoryTest extends GeneratorTest {
 	}
 
 	private static void assertEqualArrays(Object[] expected, Object[] actual) {
-	    assertTrue(errMsg(expected, actual), Arrays.equals(expected, actual));
+		assertArrayEquals(errMsg(expected, actual), expected, actual);
     }
 
 	private static String errMsg(Object[] expected, Object[] actual) {

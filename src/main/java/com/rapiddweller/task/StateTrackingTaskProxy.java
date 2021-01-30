@@ -48,13 +48,14 @@ public class StateTrackingTaskProxy<E extends Task> extends TaskProxy<E> {
     }
 
     public boolean isAvailable() {
-        return (state == TaskResult.EXECUTING);
+        return (state != TaskResult.EXECUTING);
     }
 
     @Override
     public TaskResult execute(Context context, ErrorHandler errorHandler) {
-        if (!isAvailable())
+        if (isAvailable()) {
             return TaskResult.UNAVAILABLE;
+        }
         TaskResult result = super.execute(context, errorHandler);
         state = result;
         return result; // avoiding synchronization issues using a local variable instead of 'state' attribute

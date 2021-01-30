@@ -49,8 +49,9 @@ public class RunnableTask extends AbstractTask {
 
     @Override
     public TaskResult execute(Context context, ErrorHandler errorHandler) {
-        if (runnable instanceof ContextAware)
+        if (runnable instanceof ContextAware) {
             ((ContextAware) runnable).setContext(context);
+        }
         runnable.run();
         return TaskResult.EXECUTING;
     }

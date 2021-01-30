@@ -35,7 +35,7 @@ import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.LogCategories;
+import com.rapiddweller.common.LogCategoriesConstants;
 import com.rapiddweller.common.log.LoggingInfoPrinter;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
 import com.rapiddweller.common.ui.InfoPrinter;
@@ -73,7 +73,7 @@ public class Benerator {
 
 	private static void runFromCommandLine(String[] args) throws IOException {
 		try {
-			InfoPrinter printer = new LoggingInfoPrinter(LogCategories.CONFIG);
+			InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
 			String filename = (args.length > 0 ? args[0] : "benerator.xml");
 			runFile(filename, printer);
 	    	DBUtil.assertAllDbResourcesClosed(false);

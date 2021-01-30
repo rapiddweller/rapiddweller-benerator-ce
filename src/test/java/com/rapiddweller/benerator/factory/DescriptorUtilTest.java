@@ -77,7 +77,7 @@ public class DescriptorUtilTest extends ModelTest {
 	}
 	
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		ConverterMock.latestInstance = null;
 	}
 
@@ -119,7 +119,8 @@ public class DescriptorUtilTest extends ModelTest {
 		SimpleTypeDescriptor typeDescriptor = (SimpleTypeDescriptor) model.getTypeDescriptor(targetType);
 		Object result = DescriptorUtil.convertType(source, typeDescriptor);
 		if (expectedResult instanceof BigDecimal && result instanceof BigDecimal)
-			assertTrue(((BigDecimal) expectedResult).compareTo((BigDecimal) result) == 0);
+			assertEquals(0, ((BigDecimal) expectedResult)
+					.compareTo((BigDecimal) result));
 		else
 			assertEquals(expectedResult, result);
 	}
@@ -242,9 +243,11 @@ public class DescriptorUtilTest extends ModelTest {
 
 	@Test
 	public void testIsUnique() {
-		assertEquals(false, DescriptorUtil.isUnique(createInstance("test"), context));
-		assertEquals(false, DescriptorUtil.isUnique(createInstance("test").withUnique(false), context));
-		assertEquals(true, DescriptorUtil.isUnique(createInstance("test").withUnique(true), context));
+		assertFalse(DescriptorUtil.isUnique(createInstance("test"), context));
+		assertFalse(DescriptorUtil
+				.isUnique(createInstance("test").withUnique(false), context));
+		assertTrue(DescriptorUtil
+				.isUnique(createInstance("test").withUnique(true), context));
 	}
 
 	@Test
@@ -287,7 +290,8 @@ public class DescriptorUtilTest extends ModelTest {
 		assertEquals(3L, DescriptorUtil.getMaxCount(createInstance("x").withMaxCount(4), 1L).evaluate(context).longValue());
 		// global maxCount overrides default
 		context.setMaxCount(null);
-		assertEquals(null, DescriptorUtil.getMaxCount(createInstance("x"), 1L).evaluate(context));
+		assertNull(DescriptorUtil.getMaxCount(createInstance("x"), 1L)
+				.evaluate(context));
 	}
 	
 	// helpers ---------------------------------------------------------------------------------------------------------
@@ -312,7 +316,7 @@ public class DescriptorUtilTest extends ModelTest {
 		Validator<Integer> validator = DescriptorUtil.getValidator(descriptor.getValidator(), context);
 		assertNotNull(validator);
 		if (validValue != null)
-			assertEquals(true, validator.valid(validValue));
+			assertTrue(validator.valid(validValue));
 	}
 	
 	private void checkGetGeneratorByName(

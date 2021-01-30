@@ -42,7 +42,8 @@ import com.rapiddweller.benerator.util.GeneratorUtil;
  *
  * @author Volker Bergmann
  */
-public class CityGenerator extends AbstractDatasetGenerator<City> implements NonNullGenerator<City> {
+public class CityGenerator extends AbstractDatasetGenerator<City>
+        implements NonNullGenerator<City> {
 
     private static final String REGION = "/com/rapiddweller/dataset/region";
 
@@ -58,14 +59,19 @@ public class CityGenerator extends AbstractDatasetGenerator<City> implements Non
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
-    protected WeightedGenerator<City> createGeneratorForAtomicDataset(Dataset dataset) {
-        IndividualWeightSampleGenerator<City> generator = new IndividualWeightSampleGenerator<City>(
-                City.class, (IndividualWeight) new FeatureWeight("population"));
+    protected WeightedGenerator<City> createGeneratorForAtomicDataset(
+            Dataset dataset) {
+        IndividualWeightSampleGenerator<City> generator =
+                new IndividualWeightSampleGenerator<City>(
+                        City.class,
+                        (IndividualWeight) new FeatureWeight("population"));
         Country country = Country.getInstance(dataset.getName());
         country.checkCities();
-        for (State state : country.getStates())
-            for (City city : state.getCities())
+        for (State state : country.getStates()) {
+            for (City city : state.getCities()) {
                 generator.addValue(city);
+            }
+        }
         return (generator.getVariety() > 0 ? generator : null);
     }
 

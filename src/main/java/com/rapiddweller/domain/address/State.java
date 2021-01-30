@@ -88,10 +88,11 @@ public class State {
     }
 
     public Locale getDefaultLanguageLocale() {
-        if (defaultLanguageLocale != null)
+        if (defaultLanguageLocale != null) {
             return defaultLanguageLocale;
-        else
+        } else {
             return country.getDefaultLanguageLocale();
+        }
     }
 
     public void setDefaultLanguageLocale(Locale defaultLanguage) {
@@ -145,15 +146,19 @@ public class State {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         final State that = (State) obj;
-        if (!NullSafeComparator.equals(this.country, that.country))
+        if (!NullSafeComparator.equals(this.country, that.country)) {
             return false;
+        }
         return name.equals(that.name);
     }
 

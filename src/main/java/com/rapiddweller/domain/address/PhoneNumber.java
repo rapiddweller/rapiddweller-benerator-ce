@@ -50,11 +50,13 @@ public class PhoneNumber {
         this("", "", "");
     }
 
-    public PhoneNumber(String countryCode, String cityCode, String localNumber) {
+    public PhoneNumber(String countryCode, String cityCode,
+                       String localNumber) {
         this(countryCode, cityCode, localNumber, false);
     }
 
-    public PhoneNumber(String countryCode, String cityCode, String localNumber, boolean mobile) {
+    public PhoneNumber(String countryCode, String cityCode, String localNumber,
+                       boolean mobile) {
         this.countryCode = countryCode;
         this.areaCode = cityCode;
         this.localNumber = localNumber;
@@ -117,17 +119,22 @@ public class PhoneNumber {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         final PhoneNumber that = (PhoneNumber) obj;
-        if (!this.areaCode.equals(that.areaCode))
+        if (!this.areaCode.equals(that.areaCode)) {
             return false;
-        if (!NullSafeComparator.equals(this.countryCode, that.countryCode))
+        }
+        if (!NullSafeComparator.equals(this.countryCode, that.countryCode)) {
             return false;
+        }
         return (this.localNumber.equals(that.localNumber));
     }
 

@@ -26,8 +26,8 @@
 
 package com.rapiddweller.platform.map;
 
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
+import com.rapiddweller.model.data.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,8 +48,10 @@ public class Entity2MapConverter extends ThreadSafeConverter<Entity, Map> {
 
     public static Map<String, Object> convertEntity(Entity sourceValue) {
         Map<String, Object> map = new HashMap<>();
-        for (Map.Entry<String, Object> entry : sourceValue.getComponents().entrySet())
+        for (Map.Entry<String, Object> entry : sourceValue.getComponents()
+                .entrySet()) {
             map.put(entry.getKey(), entry.getValue());
+        }
         return map;
     }
 

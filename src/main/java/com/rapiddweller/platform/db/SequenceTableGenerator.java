@@ -53,7 +53,8 @@ import java.sql.Statement;
  * @author Volker Bergmann
  * @since 0.6.4
  */
-public class SequenceTableGenerator<E extends Number> extends UnsafeNonNullGenerator<E> {
+public class SequenceTableGenerator<E extends Number>
+        extends UnsafeNonNullGenerator<E> {
 
     protected final Long increment = 1L;
     private String table;
@@ -72,7 +73,8 @@ public class SequenceTableGenerator<E extends Number> extends UnsafeNonNullGener
         this(table, column, db, null);
     }
 
-    public SequenceTableGenerator(String table, String column, DBSystem db, String selector) {
+    public SequenceTableGenerator(String table, String column, DBSystem db,
+                                  String selector) {
         this.table = table;
         this.column = column;
         this.database = db;
@@ -104,36 +106,45 @@ public class SequenceTableGenerator<E extends Number> extends UnsafeNonNullGener
     }
 
     @Override
-    public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
+    public void init(GeneratorContext context)
+            throws InvalidGeneratorSetupException {
         // check preconditions
         assertNotInitialized();
-        if (database == null)
+        if (database == null) {
             throw new InvalidGeneratorSetupException("db is null");
+        }
         // initialize
 
-        query = SQLUtil.renderQuery(database.getCatalog(), database.getSchema(), table, column, selector, database.getDialect());
+        query = SQLUtil.renderQuery(database.getCatalog(), database.getSchema(),
+                table, column, selector, database.getDialect());
 
         incrementorStrategy = createIncrementor();
         super.init(context);
     }
 
     private IncrementorStrategy createIncrementor() {
-        if (increment == null)
+        if (increment == null) {
             return null;
+        }
         String incrementorSql = "update " + table + " set " + column + " = ?";
-        if (selector != null)
-            incrementorSql = ScriptUtil.combineScriptableParts(incrementorSql, " where ", selector);
-        if (selector == null || !ScriptUtil.isScript(selector))
+        if (selector != null) {
+            incrementorSql = ScriptUtil
+                    .combineScriptableParts(incrementorSql, " where ",
+                            selector);
+        }
+        if (selector == null || !ScriptUtil.isScript(selector)) {
             return new PreparedStatementStrategy(incrementorSql, database);
-        else
+        } else {
             return new StatementStrategy(incrementorSql, database);
+        }
     }
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public E generate() {
-        if (this.state == GeneratorState.CLOSED)
+        if (this.state == GeneratorState.CLOSED) {
             return null;
+        }
         assertInitialized();
         DataSource<?> iterable = database.query(query, true, context);
         DataIterator<?> iterator = null;
@@ -146,7 +157,8 @@ public class SequenceTableGenerator<E extends Number> extends UnsafeNonNullGener
                 return null;
             }
             result = (E) container.getData();
-            incrementorStrategy.run(result.longValue(), (BeneratorContext) context);
+            incrementorStrategy
+                    .run(result.longValue(), (BeneratorContext) context);
         } finally {
             IOUtil.close(iterator);
         }
@@ -155,26 +167,34 @@ public class SequenceTableGenerator<E extends Number> extends UnsafeNonNullGener
 
     @SuppressWarnings({"unchecked", "cast"})
     public E generateWithParams(Object... params) {
-        if (this.state == GeneratorState.CLOSED)
+        if (this.state == GeneratorState.CLOSED) {
             return null;
+        }
         ResultSet resultSet = null;
         E result = null;
         try {
             if (parameterizedAccessorStatement == null) {
-                String queryText = String.valueOf(ScriptUtil.parseUnspecificText(query).evaluate(context));
-                parameterizedAccessorStatement = database.getConnection().prepareStatement(queryText);
+                String queryText = String.valueOf(
+                        ScriptUtil.parseUnspecificText(query)
+                                .evaluate(context));
+                parameterizedAccessorStatement =
+                        database.getConnection().prepareStatement(queryText);
             }
-            for (int i = 0; i < params.length; i++)
+            for (int i = 0; i < params.length; i++) {
                 parameterizedAccessorStatement.setObject(i + 1, params[i]);
+            }
             resultSet = parameterizedAccessorStatement.executeQuery();
             if (!resultSet.next()) {
                 close();
                 return null;
             }
             result = (E) resultSet.getObject(1);
-            incrementorStrategy.run(result.longValue(), (BeneratorContext) context, params);
+            incrementorStrategy
+                    .run(result.longValue(), (BeneratorContext) context,
+                            params);
         } catch (SQLException e) {
-            throw new RuntimeException("Error fetching value in " + getClass().getSimpleName(), e);
+            throw new RuntimeException(
+                    "Error fetching value in " + getClass().getSimpleName(), e);
         } finally {
             DBUtil.close(resultSet);
         }
@@ -215,11 +235,13 @@ public class SequenceTableGenerator<E extends Number> extends UnsafeNonNullGener
         }
 
         @Override
-        public void run(long currentValue, BeneratorContext context, Object... params) {
+        public void run(long currentValue, BeneratorContext context,
+                        Object... params) {
             try {
                 statement.setLong(1, currentValue + increment);
-                for (int i = 0; i < params.length; i++)
+                for (int i = 0; i < params.length; i++) {
                     statement.setObject(2 + i, params[i]);
+                }
                 statement.executeUpdate();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -247,10 +269,13 @@ public class SequenceTableGenerator<E extends Number> extends UnsafeNonNullGener
         }
 
         @Override
-        public void run(long currentValue, BeneratorContext context, Object... params) {
+        public void run(long currentValue, BeneratorContext context,
+                        Object... params) {
             try {
-                String cmd = sql.replace("?", String.valueOf(currentValue + increment));
-                cmd = ScriptUtil.parseUnspecificText(cmd).evaluate(context).toString();
+                String cmd = sql.replace("?",
+                        String.valueOf(currentValue + increment));
+                cmd = ScriptUtil.parseUnspecificText(cmd).evaluate(context)
+                        .toString();
                 statement.executeUpdate(cmd);
             } catch (SQLException e) {
                 throw new RuntimeException(e);

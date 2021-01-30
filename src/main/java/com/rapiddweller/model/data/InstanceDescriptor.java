@@ -69,15 +69,18 @@ public class InstanceDescriptor extends FeatureDescriptor {
         this(name, provider, null, null);
     }
 
-    public InstanceDescriptor(String name, DescriptorProvider provider, String typeName) {
+    public InstanceDescriptor(String name, DescriptorProvider provider,
+                              String typeName) {
         this(name, provider, typeName, null);
     }
 
-    public InstanceDescriptor(String name, DescriptorProvider provider, TypeDescriptor localType) {
+    public InstanceDescriptor(String name, DescriptorProvider provider,
+                              TypeDescriptor localType) {
         this(name, provider, null, localType);
     }
 
-    protected InstanceDescriptor(String name, DescriptorProvider provider, String typeName, TypeDescriptor localType) {
+    protected InstanceDescriptor(String name, DescriptorProvider provider,
+                                 String typeName, TypeDescriptor localType) {
         super(name, provider);
         this.localType = localType;
 
@@ -121,33 +124,43 @@ public class InstanceDescriptor extends FeatureDescriptor {
     }
 
     public TypeDescriptor getTypeDescriptor() {
-        if (getLocalType() != null)
+        if (getLocalType() != null) {
             return getLocalType();
+        }
         TypeDescriptor type = null;
-        if (getType() != null)
+        if (getType() != null) {
             type = getDataModel().getTypeDescriptor(getType());
+        }
         return type;
     }
 
     public TypeDescriptor getLocalType() {
-        if (localType == null && parent != null && parent.getLocalType() != null)
-            localType = getLocalType(parent.getLocalType() instanceof ComplexTypeDescriptor);
+        if (localType == null && parent != null &&
+                parent.getLocalType() != null) {
+            localType = getLocalType(
+                    parent.getLocalType() instanceof ComplexTypeDescriptor);
+        }
         return localType;
     }
 
     public void setLocalType(TypeDescriptor localType) {
         this.localType = localType;
-        if (localType != null)
+        if (localType != null) {
             setType(null);
+        }
     }
 
     public TypeDescriptor getLocalType(boolean complexType) {
-        if (localType != null)
+        if (localType != null) {
             return localType;
-        if (complexType)
-            localType = new ComplexTypeDescriptor(getName(), provider, getType());
-        else
-            localType = new SimpleTypeDescriptor(getName(), provider, getType());
+        }
+        if (complexType) {
+            localType =
+                    new ComplexTypeDescriptor(getName(), provider, getType());
+        } else {
+            localType =
+                    new SimpleTypeDescriptor(getName(), provider, getType());
+        }
         setType(null);
         return localType;
     }
@@ -162,15 +175,17 @@ public class InstanceDescriptor extends FeatureDescriptor {
 
     public Uniqueness getUniqueness() {
         Boolean unique = isUnique();
-        return (unique != null ? (unique ? Uniqueness.SIMPLE : Uniqueness.NONE) : null);
+        return (unique != null ?
+                (unique ? Uniqueness.SIMPLE : Uniqueness.NONE) : null);
     }
 
     public Boolean isNullable() {
         Boolean value = (Boolean) super.getDetailValue(NULLABLE);
         if (value == null && parent != null) {
             FeatureDetail<?> detail = parent.getConfiguredDetail(NULLABLE);
-            if (detail.getValue() != null && !(Boolean) detail.getValue())
+            if (detail.getValue() != null && !(Boolean) detail.getValue()) {
                 value = (Boolean) detail.getValue();
+            }
         }
         return value;
     }
@@ -252,28 +267,40 @@ public class InstanceDescriptor extends FeatureDescriptor {
         Object value = super.getDetailValue(name);
         if (value == null && parent != null && parent.supportsDetail(name)) {
             FeatureDetail<?> detail = parent.getConfiguredDetail(name);
-            if (detail.isConstraint())
+            if (detail.isConstraint()) {
                 value = detail.getValue();
+            }
         }
         return value;
     }
 
     @Override
     public void setDetailValue(String detailName, Object detailValue) {
-        if (COUNT.equals(detailName) || MIN_COUNT.equals(detailName) || MAX_COUNT.equals(detailName) || COUNT_GRANULARITY.equals(detailName)) {
+        if (COUNT.equals(detailName) || MIN_COUNT.equals(detailName) ||
+                MAX_COUNT.equals(detailName) ||
+                COUNT_GRANULARITY.equals(detailName)) {
             FeatureDetail<Object> detail = getConfiguredDetail(detailName);
-            if (detail == null)
-                throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support detail type: " + detailName);
-            if (detailValue instanceof Expression)
-                detail.setValue(new TypeConvertingExpression<>((Expression<?>) detailValue, Long.class));
-            else if (detailValue == null)
+            if (detail == null) {
+                throw new UnsupportedOperationException(
+                        getClass().getSimpleName() +
+                                " does not support detail type: " + detailName);
+            }
+            if (detailValue instanceof Expression) {
+                detail.setValue(new TypeConvertingExpression<>(
+                        (Expression<?>) detailValue, Long.class));
+            } else if (detailValue == null) {
                 detail.setValue(null);
-            else if (detailValue instanceof String)
-                detail.setValue(new TypeConvertingExpression<>(new ScriptExpression<>((String) detailValue), Long.class));
-            else
-                detail.setValue(new TypeConvertingExpression<>(new ConstantExpression<>(detailValue), Long.class));
-        } else
+            } else if (detailValue instanceof String) {
+                detail.setValue(new TypeConvertingExpression<>(
+                        new ScriptExpression<>((String) detailValue),
+                        Long.class));
+            } else {
+                detail.setValue(new TypeConvertingExpression<>(
+                        new ConstantExpression<>(detailValue), Long.class));
+            }
+        } else {
             super.setDetailValue(detailName, detailValue);
+        }
     }
 
     // convenience 'with...' methods -----------------------------------------------------------------------------------
@@ -309,7 +336,8 @@ public class InstanceDescriptor extends FeatureDescriptor {
 
     @Override
     public String toString() {
-        return getName() + "[details=" + renderDetails() + ", type=" + getTypeDescriptor() + "]";
+        return getName() + "[details=" + renderDetails() + ", type=" +
+                getTypeDescriptor() + "]";
     }
 
 }

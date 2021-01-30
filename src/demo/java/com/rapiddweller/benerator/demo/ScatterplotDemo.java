@@ -63,9 +63,14 @@ public class ScatterplotDemo extends Component {
     public void paint(Graphics g) {
         BeneratorContext context = new DefaultBeneratorContext();
         GeneratorFactory generatorFactory = context.getGeneratorFactory();
-        NonNullGenerator<Integer> xGen = generatorFactory.createNumberGenerator(Integer.class, 0, true, getWidth(), true, 1, new XFunction(), Uniqueness.NONE);
+        NonNullGenerator<Integer> xGen = generatorFactory
+                .createNumberGenerator(Integer.class, 0, true, getWidth(), true,
+                        1, new XFunction(), Uniqueness.NONE);
         xGen.init(context);
-        NonNullGenerator<Integer> yGen = generatorFactory.createNumberGenerator(Integer.class, 0, true, getHeight(), true, 1, SequenceManager.CUMULATED_SEQUENCE, Uniqueness.NONE);
+        NonNullGenerator<Integer> yGen = generatorFactory
+                .createNumberGenerator(Integer.class, 0, true, getHeight(),
+                        true, 1, SequenceManager.CUMULATED_SEQUENCE,
+                        Uniqueness.NONE);
         yGen.init(context);
         int n = getWidth() * getHeight() / 16;
         for (int i = 0; i < n; i++) {

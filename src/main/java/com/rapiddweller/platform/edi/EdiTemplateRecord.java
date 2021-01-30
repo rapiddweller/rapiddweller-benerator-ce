@@ -26,8 +26,8 @@
 
 package com.rapiddweller.platform.edi;
 
-import com.rapiddweller.platform.template.DefaultTemplateRecord;
 import com.rapiddweller.common.converter.AnyConverter;
+import com.rapiddweller.platform.template.DefaultTemplateRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -44,19 +44,23 @@ public class EdiTemplateRecord extends DefaultTemplateRecord {
 
     @Override
     public Object get(String name) {
-        if ("recursiveSegmentCount".equals(name))
+        if ("recursiveSegmentCount".equals(name)) {
             return calculateRecursiveSegmentCount();
-        else
+        } else {
             return super.get(name);
+        }
     }
 
     private int calculateRecursiveSegmentCount() {
         int sum = getBaseSegmentCount();
         for (Map.Entry<String, ?> component : components.entrySet()) {
             if (component.getValue() instanceof List) {
-                for (Object listItem : (List<?>) component.getValue())
-                    if (listItem instanceof EdiTemplateRecord)
-                        sum += ((EdiTemplateRecord) listItem).calculateRecursiveSegmentCount();
+                for (Object listItem : (List<?>) component.getValue()) {
+                    if (listItem instanceof EdiTemplateRecord) {
+                        sum += ((EdiTemplateRecord) listItem)
+                                .calculateRecursiveSegmentCount();
+                    }
+                }
             }
         }
         return sum;
@@ -64,10 +68,11 @@ public class EdiTemplateRecord extends DefaultTemplateRecord {
 
     private int getBaseSegmentCount() {
         Object baseSegmentCountSpec = get("baseSegmentCount");
-        if (baseSegmentCountSpec != null)
+        if (baseSegmentCountSpec != null) {
             return AnyConverter.convert(baseSegmentCountSpec, Integer.class);
-        else
+        } else {
             return 0;
+        }
     }
 
 }

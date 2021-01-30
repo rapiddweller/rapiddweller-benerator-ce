@@ -49,7 +49,8 @@ public class Entity2ArrayConverterTest extends ModelTest {
         Entity entity = new Entity(descriptor, "name", "Alice", "age", 23);
         Object[] array = new Object[] { "Alice", 23 };
         String[] featureNames = { "name", "age" };
-        assertTrue(Arrays.equals(array, new Entity2ArrayConverter(featureNames).convert(entity)));
+        assertArrayEquals(array,
+                new Entity2ArrayConverter(featureNames).convert(entity));
     }
 	
 }

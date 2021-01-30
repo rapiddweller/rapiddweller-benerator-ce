@@ -81,22 +81,26 @@ public class JdbcMetaTypeMapper {
                 Types.OTHER, PrimitiveType.STRING);
     }
 
-    public static String abstractType(DBDataType columnType, boolean acceptUnknown) {
+    public static String abstractType(DBDataType columnType,
+                                      boolean acceptUnknown) {
         int jdbcType = columnType.getJdbcType();
         PrimitiveType primitiveType = TYPE_MAP.get(jdbcType);
-        if (primitiveType != null)
+        if (primitiveType != null) {
             return primitiveType.getName();
-        else {
+        } else {
             String lcName = columnType.getName().toLowerCase();
-            if (lcName.startsWith("timestamp"))
+            if (lcName.startsWith("timestamp")) {
                 return PrimitiveType.TIMESTAMP.getName();
-            else if (lcName.endsWith("char") || lcName.startsWith("xml")
-                    || lcName.endsWith("varchar2") || lcName.endsWith("clob"))
+            } else if (lcName.endsWith("char") || lcName.startsWith("xml")
+                    || lcName.endsWith("varchar2") || lcName.endsWith("clob")) {
                 return PrimitiveType.STRING.getName();
-            else if (!acceptUnknown)
-                throw new ConfigurationError("Platform specific SQL type (" + jdbcType + ") not mapped: " + columnType.getName());
-            else
+            } else if (!acceptUnknown) {
+                throw new ConfigurationError(
+                        "Platform specific SQL type (" + jdbcType +
+                                ") not mapped: " + columnType.getName());
+            } else {
                 return null;
+            }
         }
     }
 

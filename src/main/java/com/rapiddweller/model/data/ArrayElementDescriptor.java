@@ -35,15 +35,18 @@ package com.rapiddweller.model.data;
  */
 public class ArrayElementDescriptor extends ComponentDescriptor {
 
-    public ArrayElementDescriptor(int index, DescriptorProvider provider, String typeName, TypeDescriptor localType) {
+    public ArrayElementDescriptor(int index, DescriptorProvider provider,
+                                  String typeName, TypeDescriptor localType) {
         super(String.valueOf(index), provider, typeName, localType);
     }
 
-    public ArrayElementDescriptor(int index, DescriptorProvider provider, String typeName) {
+    public ArrayElementDescriptor(int index, DescriptorProvider provider,
+                                  String typeName) {
         super(String.valueOf(index), provider, typeName);
     }
 
-    public ArrayElementDescriptor(int index, DescriptorProvider provider, TypeDescriptor localType) {
+    public ArrayElementDescriptor(int index, DescriptorProvider provider,
+                                  TypeDescriptor localType) {
         super(String.valueOf(index), provider, localType);
     }
 

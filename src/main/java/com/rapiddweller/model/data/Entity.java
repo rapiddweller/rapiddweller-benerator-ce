@@ -26,12 +26,12 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import com.rapiddweller.common.Composite;
 import com.rapiddweller.common.CompositeFormatter;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.converter.AnyConverter;
+import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import com.rapiddweller.script.PrimitiveType;
 
 /**
@@ -53,19 +53,24 @@ public class Entity implements Composite {
         this(new ComplexTypeDescriptor(name, descriptorProvider));
     }
 
-    public Entity(String name, DescriptorProvider descriptorProvider, Object... componentKeyValuePairs) {
-        this(new ComplexTypeDescriptor(name, descriptorProvider), componentKeyValuePairs);
+    public Entity(String name, DescriptorProvider descriptorProvider,
+                  Object... componentKeyValuePairs) {
+        this(new ComplexTypeDescriptor(name, descriptorProvider),
+                componentKeyValuePairs);
     }
 
     /**
      * @param descriptor             the name of the entity, it may be null
      * @param componentKeyValuePairs
      */
-    public Entity(ComplexTypeDescriptor descriptor, Object... componentKeyValuePairs) {
+    public Entity(ComplexTypeDescriptor descriptor,
+                  Object... componentKeyValuePairs) {
         this.descriptor = descriptor;
         this.components = OrderedNameMap.createCaseInsensitiveMap();
-        for (int i = 0; i < componentKeyValuePairs.length; i += 2)
-            setComponent((String) componentKeyValuePairs[i], componentKeyValuePairs[i + 1]);
+        for (int i = 0; i < componentKeyValuePairs.length; i += 2) {
+            setComponent((String) componentKeyValuePairs[i],
+                    componentKeyValuePairs[i + 1]);
+        }
     }
 
     public Entity(Entity prototype) {
@@ -119,18 +124,27 @@ public class Entity implements Composite {
     @Override
     public void setComponent(String componentName, Object component) {
         ComponentDescriptor componentDescriptor = null;
-        if (descriptor != null)
+        if (descriptor != null) {
             componentDescriptor = descriptor.getComponent(componentName);
-        if (componentDescriptor != null && componentDescriptor.getTypeDescriptor() instanceof SimpleTypeDescriptor) {
-            SimpleTypeDescriptor componentType = (SimpleTypeDescriptor) componentDescriptor.getTypeDescriptor();
+        }
+        if (componentDescriptor != null && componentDescriptor
+                .getTypeDescriptor() instanceof SimpleTypeDescriptor) {
+            SimpleTypeDescriptor componentType =
+                    (SimpleTypeDescriptor) componentDescriptor
+                            .getTypeDescriptor();
             PrimitiveType primitiveType = componentType.getPrimitiveType();
-            if (primitiveType == null)
+            if (primitiveType == null) {
                 primitiveType = PrimitiveType.STRING;
-            BeanDescriptorProvider beanProvider = descriptor.getDataModel().getBeanDescriptorProvider();
-            Class<?> javaType = beanProvider.concreteType(primitiveType.getName());
+            }
+            BeanDescriptorProvider beanProvider =
+                    descriptor.getDataModel().getBeanDescriptorProvider();
+            Class<?> javaType =
+                    beanProvider.concreteType(primitiveType.getName());
             component = AnyConverter.convert(component, javaType);
         }
-        String internalComponentName = componentDescriptor != null ? componentDescriptor.getName() : componentName;
+        String internalComponentName =
+                componentDescriptor != null ? componentDescriptor.getName() :
+                        componentName;
         components.put(internalComponentName, component);
     }
 
@@ -144,21 +158,24 @@ public class Entity implements Composite {
 
     public Object idComponentValues() {
         ComplexTypeDescriptor entityDescriptor = descriptor;
-        if (entityDescriptor == null)
+        if (entityDescriptor == null) {
             throw new ConfigurationError("Unknown type: " + this);
+        }
         String[] idComponentNames = entityDescriptor.getIdComponentNames();
-        if (idComponentNames.length == 1)
+        if (idComponentNames.length == 1) {
             return get(idComponentNames[0]);
-        else if (idComponentNames.length == 0)
+        } else if (idComponentNames.length == 0) {
             return null;
-        else
+        } else {
             return componentValues(idComponentNames);
+        }
     }
 
     public Object componentValues(String[] idComponentNames) {
         Object[] result = new Object[idComponentNames.length];
-        for (int i = 0; i < idComponentNames.length; i++)
+        for (int i = 0; i < idComponentNames.length; i++) {
             result[i] = get(idComponentNames[i]);
+        }
         return result;
     }
 
@@ -166,13 +183,16 @@ public class Entity implements Composite {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || !(o instanceof Entity))
+        }
+        if (!(o instanceof Entity)) {
             return false;
+        }
         final Entity that = (Entity) o;
-        if (!this.descriptor.getName().equals(that.descriptor.getName()))
+        if (!this.descriptor.getName().equals(that.descriptor.getName())) {
             return false;
+        }
         return this.components.equalsIgnoreOrder(that.components);
     }
 
@@ -183,7 +203,8 @@ public class Entity implements Composite {
 
     @Override
     public String toString() {
-        return new CompositeFormatter(true, true).render(type() + '[', this, "]");
+        return new CompositeFormatter(true, true)
+                .render(type() + '[', this, "]");
     }
 
 }

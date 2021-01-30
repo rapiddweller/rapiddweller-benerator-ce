@@ -52,8 +52,10 @@ public class PersonCSVCreatorDemo {
         try {
             out = new OutputStreamWriter(System.out);
             //out = new BufferedWriter(new FileWriter(FILE_NAME));
-            DocumentWriter<Person> writer = new BeanCSVWriter<Person>(out, ',', (Script) null, (Script) null,
-                    "salutation", "title", "givenName", "familyName");
+            DocumentWriter<Person> writer =
+                    new BeanCSVWriter<Person>(out, ',', (Script) null,
+                            (Script) null,
+                            "salutation", "title", "givenName", "familyName");
             System.out.println("Running...");
             long startMillis = System.currentTimeMillis();
             writer.setVariable("length", LENGTH);
@@ -61,8 +63,10 @@ public class PersonCSVCreatorDemo {
             generator.init(new DefaultBeneratorContext());
             FileBuilder.build(generator, LENGTH, writer);
             long elapsedTime = System.currentTimeMillis() - startMillis;
-            System.out.println("Created file " + FILE_NAME + " with " + LENGTH + " entries " +
-                    "within " + (elapsedTime / 1000) + "s (" + (LENGTH * 1000L / elapsedTime) + " entries per second)");
+            System.out.println("Created file " + FILE_NAME + " with " + LENGTH +
+                    " entries " +
+                    "within " + (elapsedTime / 1000) + "s (" +
+                    (LENGTH * 1000L / elapsedTime) + " entries per second)");
         } finally {
             IOUtil.close(out);
         }

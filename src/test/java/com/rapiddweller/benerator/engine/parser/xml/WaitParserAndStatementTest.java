@@ -44,7 +44,7 @@ import org.w3c.dom.Element;
 public class WaitParserAndStatementTest {
 	
 	@Test
-	public void testConstantDuration() throws Exception {
+	public void testConstantDuration() {
 		Element element = XMLUtil.parseStringAsElement("<wait duration='12'/>");
 		BeneratorContext context = new DefaultBeneratorContext();
 		WaitStatement statement = (WaitStatement) new WaitParser().parse(element, null, null);
@@ -53,7 +53,7 @@ public class WaitParserAndStatementTest {
 	}
 
 	@Test
-	public void testDistributedDuration() throws Exception {
+	public void testDistributedDuration() {
 		Element element = XMLUtil.parseStringAsElement(
 				"<wait min='11' max='25' granularity='2' distribution='step'/>");
 		BeneratorContext context = new DefaultBeneratorContext();

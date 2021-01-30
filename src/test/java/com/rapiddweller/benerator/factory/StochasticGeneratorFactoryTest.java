@@ -147,12 +147,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
         initAndUseGenerator(generator);
     }
 
-    public void testGetEmptySampleGenerator() {
-        Generator<Integer> generator = generatorFactory.createSampleGenerator(new HashSet<>(), Integer.class, false);
-		generator.init(context);
-		assertNull(generator.generate(new ProductWrapper<>()));
-    }
-
     // date source --------------------------------------------------------------------------------------------------
 
     @Test

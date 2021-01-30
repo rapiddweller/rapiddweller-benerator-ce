@@ -43,11 +43,13 @@ public class AuditedUpdateableValidator implements Validator<Entity> {
     private static AuditedValidator parent = new AuditedValidator();
 
     public boolean valid(Entity object) {
-        if (!parent.valid(object))
+        if (!parent.valid(object)) {
             return false;
+        }
         String updater = (String) object.getComponent("updated_by");
-        if (StringUtil.isEmpty(updater))
+        if (StringUtil.isEmpty(updater)) {
             return false;
+        }
         Date mutationDate = (Date) object.getComponent("updated_at");
         return (mutationDate != null);
     }

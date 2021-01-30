@@ -49,13 +49,15 @@ public class SequentialTask extends CompositeTask {
         TaskResult result = TaskResult.EXECUTING;
         for (Task subTask : subTasks) {
             TaskResult subResult = runSubTask(subTask, context, errorHandler);
-            if (subResult != TaskResult.EXECUTING)
+            if (subResult != TaskResult.EXECUTING) {
                 result = subResult;
+            }
         }
         return result;
     }
 
-    protected TaskResult runSubTask(Task subTask, Context context, ErrorHandler errorHandler) {
+    protected TaskResult runSubTask(Task subTask, Context context,
+                                    ErrorHandler errorHandler) {
         return subTask.execute(context, errorHandler);
     }
 

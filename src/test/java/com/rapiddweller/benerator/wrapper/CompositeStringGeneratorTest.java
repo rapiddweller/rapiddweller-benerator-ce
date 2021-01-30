@@ -40,7 +40,6 @@ import org.junit.Test;
  */
 public class CompositeStringGeneratorTest extends GeneratorTest {
 
-    @SuppressWarnings("unchecked")
     @Test
     public void testConstant() {
 		Generator<String> generator = new CompositeStringGenerator(true,
@@ -50,8 +49,7 @@ public class CompositeStringGeneratorTest extends GeneratorTest {
         expectUniquelyGeneratedSet(generator, "01").withCeasedAvailability();
     }
 
-    @SuppressWarnings("unchecked")
-	@Test
+    @Test
     public void testVariable() {
         Generator<String> generator = new CompositeStringGenerator(true,
                 new SequenceTestGenerator<>("A", "B", "C"),

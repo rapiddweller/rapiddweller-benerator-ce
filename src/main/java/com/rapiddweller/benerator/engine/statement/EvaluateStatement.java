@@ -44,7 +44,7 @@ import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.LogCategories;
+import com.rapiddweller.common.LogCategoriesConstants;
 import com.rapiddweller.common.ReaderLineIterator;
 import com.rapiddweller.common.ShellUtil;
 import com.rapiddweller.common.StringUtil;
@@ -250,7 +250,7 @@ public class EvaluateStatement implements Statement {
 			throw new TaskException("No uri or content");
         Connection connection = null;
         DBExecutionResult result = null;
-		ErrorHandler errorHandler = new ErrorHandler(LogCategories.SQL, Level.valueOf(onError));
+		ErrorHandler errorHandler = new ErrorHandler(LogCategoriesConstants.SQL, Level.valueOf(onError));
         try {
             connection = db.getConnection();
             if (text != null)

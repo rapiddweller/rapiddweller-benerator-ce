@@ -27,9 +27,6 @@
 package com.rapiddweller.platform.xml;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
@@ -125,12 +122,12 @@ public class DOMTreeTest {
     // private helpers -------------------------------------------------------------------------------------------------
 
     @SafeVarargs
-    private static <T> NextHelper expectNextElements(DataIterator<T> iterator, T... expectedValues) {
+    private static <T> void expectNextElements(DataIterator<T> iterator, T... expectedValues) {
         for (T expectedValue : expectedValues) {
             Object actualValue = iterator.next(new DataContainer<>()).getData();
             assertEquals(expectedValue, actualValue);
         }
-        return new NextHelper(iterator);
+        new NextHelper(iterator);
     }
 
 }

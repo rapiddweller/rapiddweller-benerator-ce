@@ -70,7 +70,7 @@ public class Street {
     }
 
     public String[] generateHouseNumberWithPostalCode() {
-        return new String[]{
+        return new String[] {
                 String.valueOf(random(1, maxHouseNumber)),
                 RandomUtil.randomElement(city.getPostalCodes())
         };

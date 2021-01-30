@@ -51,12 +51,14 @@ import java.util.Map.Entry;
 public class AddressFormat {
 
     static final Map<String, AddressFormat> instances = new HashMap<>();
-    private static final String CONFIG_FILE = "/com/rapiddweller/domain/address/addressFormat.properties";
+    private static final String CONFIG_FILE =
+            "/com/rapiddweller/domain/address/addressFormat.properties";
     public static final AddressFormat US = getInstance("US");
     public static final AddressFormat AU = getInstance("AU");
     public static final AddressFormat DE = getInstance("DE");
     public static final AddressFormat BE = getInstance("BE");
-    private static final FreeMarkerScriptFactory SCRIPT_FACTORY = new FreeMarkerScriptFactory();
+    private static final FreeMarkerScriptFactory SCRIPT_FACTORY =
+            new FreeMarkerScriptFactory();
     private final String pattern;
     private final Script script;
 
@@ -69,16 +71,21 @@ public class AddressFormat {
     public static AddressFormat getInstance(String country) {
         if (instances.size() == 0) {
             try {
-                IOUtil.readProperties(CONFIG_FILE, new UnsafeConverter<>(Map.Entry.class, Map.Entry.class) {
-                    @Override
-                    public Entry convert(Entry entry) {
-                        String pt = (String) entry.getValue();
-                        instances.put((String) entry.getKey(), new AddressFormat(pt));
-                        return entry;
-                    }
-                });
+                IOUtil.readProperties(CONFIG_FILE,
+                        new UnsafeConverter<>(Map.Entry.class,
+                                Map.Entry.class) {
+                            @Override
+                            public Entry convert(Entry entry) {
+                                String pt = (String) entry.getValue();
+                                instances.put((String) entry.getKey(),
+                                        new AddressFormat(pt));
+                                return entry;
+                            }
+                        });
             } catch (IOException e) {
-                throw new ConfigurationError("Error while processing AddressFormat configuration", e);
+                throw new ConfigurationError(
+                        "Error while processing AddressFormat configuration",
+                        e);
             }
         }
         return instances.get(country);

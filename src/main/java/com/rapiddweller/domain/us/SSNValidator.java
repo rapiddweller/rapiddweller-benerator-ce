@@ -45,7 +45,8 @@ import javax.validation.ConstraintValidatorContext;
  * @since 0.5.6
  */
 
-public class SSNValidator implements ConstraintValidator<SSN, String>, Validator<String> {
+public class SSNValidator
+        implements ConstraintValidator<SSN, String>, Validator<String> {
 
     private int maxAreaCode;
 
@@ -69,37 +70,49 @@ public class SSNValidator implements ConstraintValidator<SSN, String>, Validator
 
     @Override
     public boolean valid(String ssn) {
-        if (ssn == null || ssn.length() != 11)
+        if (ssn == null || ssn.length() != 11) {
             return false;
+        }
         String[] tokens = StringUtil.tokenize(ssn, '-');
-        if (tokens.length != 3)
+        if (tokens.length != 3) {
             return false;
+        }
         try {
             // validate area number
-            if (tokens[0].length() != 3)
+            if (tokens[0].length() != 3) {
                 return false;
+            }
             int areaNumber = Integer.parseInt(tokens[0]);
             // Currently, a valid SSN cannot have an area number between 734 and 749, or above 772,
             // the highest area number which the Social Security Administration has allocated
-            if (areaNumber < 1 || areaNumber == 666 || areaNumber > maxAreaCode || (areaNumber > 733 && areaNumber < 750))
+            if (areaNumber < 1 || areaNumber == 666 ||
+                    areaNumber > maxAreaCode ||
+                    (areaNumber > 733 && areaNumber < 750)) {
                 return false;
+            }
 
             // validate group number
-            if (tokens[1].length() != 2)
+            if (tokens[1].length() != 2) {
                 return false;
+            }
             int groupNumber = Integer.parseInt(tokens[1]);
-            if (groupNumber < 1)
+            if (groupNumber < 1) {
                 return false;
+            }
 
             // validate serial number
-            if (tokens[2].length() != 4)
+            if (tokens[2].length() != 4) {
                 return false;
+            }
             int serialNumber = Integer.parseInt(tokens[2]);
-            if (serialNumber < 1)
+            if (serialNumber < 1) {
                 return false;
+            }
             // Numbers from 987-65-4320 to 987-65-4329 are reserved for use in advertisements
-            if (areaNumber == 987 && areaNumber == 65 && (serialNumber >= 4320 && serialNumber <= 4329))
+            if (areaNumber == 987 && areaNumber == 65 &&
+                    (serialNumber >= 4320 && serialNumber <= 4329)) {
                 return false;
+            }
         } catch (NumberFormatException e) {
             return false;
         }

@@ -39,7 +39,8 @@ import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
  *
  * @author Volker Bergmann
  */
-public class PriceValidator extends AbstractConstraintValidator<Annotation, BigDecimal> {
+public class PriceValidator
+        extends AbstractConstraintValidator<Annotation, BigDecimal> {
 
     private int fractionDigits;
 
@@ -51,7 +52,8 @@ public class PriceValidator extends AbstractConstraintValidator<Annotation, BigD
         this.fractionDigits = fractionDigits;
     }
 
-    public boolean isValid(BigDecimal price, ConstraintValidatorContext context) {
+    public boolean isValid(BigDecimal price,
+                           ConstraintValidatorContext context) {
         return (price.scale() <= fractionDigits);
     }
 }

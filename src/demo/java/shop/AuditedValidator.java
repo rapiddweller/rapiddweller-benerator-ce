@@ -43,8 +43,9 @@ public class AuditedValidator implements Validator<Entity> {
 
     public boolean valid(Entity audited) {
         String creator = (String) audited.getComponent("created_by");
-        if (StringUtil.isEmpty(creator))
+        if (StringUtil.isEmpty(creator)) {
             return false;
+        }
         Date creationDate = (Date) audited.getComponent("created_at");
         return (creationDate != null);
     }

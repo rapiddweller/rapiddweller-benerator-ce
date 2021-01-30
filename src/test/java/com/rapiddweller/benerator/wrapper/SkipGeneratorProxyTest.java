@@ -62,7 +62,7 @@ public class SkipGeneratorProxyTest extends GeneratorTest {
         generator.init(context);
         Integer value = GeneratorUtil.generateNonNull(generator);
         assertNotNull(value);
-        assertTrue(value == 1);
+        assertEquals(1, (int) value);
         assertUnavailable(generator);
     }
 

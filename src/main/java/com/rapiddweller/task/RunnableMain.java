@@ -48,10 +48,13 @@ public class RunnableMain {
      */
     @SuppressWarnings("unchecked")
     public static void main(String[] args)
-            throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+            throws ClassNotFoundException, IllegalAccessException,
+            InstantiationException, NoSuchMethodException,
+            InvocationTargetException {
         assert args.length == 1;
         String className = args[0];
-        Class<? extends Runnable> type = (Class<? extends Runnable>) Class.forName(className);
+        Class<? extends Runnable> type =
+                (Class<? extends Runnable>) Class.forName(className);
         Runnable task = type.getDeclaredConstructor().newInstance();
         task.run();
     }

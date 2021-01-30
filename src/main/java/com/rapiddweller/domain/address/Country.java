@@ -45,47 +45,60 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.csv.CSVEntitySource;
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Represents a country and provides constants for most bigger countries.
  * Country information is read from the file com/rapiddweller/domain/address/country.csv.<br/><br/>
  * Created: 11.06.2006 08:15:37
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class Country {
 
     private final String isoCode;
     private final String name;
     private final String phoneCode;
-	private final boolean mobilePhoneCityRelated;
-	private final RegexStringGenerator mobilePrefixGenerator;
+    private final boolean mobilePhoneCityRelated;
+    private final RegexStringGenerator mobilePrefixGenerator;
     private final RandomVarLengthStringGenerator localNumberGenerator;
     private final Locale countryLocale;
     private final Locale defaultLanguageLocale;
     private Map<String, State> states;
     private final int population;
 
-	private CityGenerator cityGenerator;
+    private CityGenerator cityGenerator;
 
 
-    private Country(String isoCode, String defaultLanguage, int population, String phoneCode, String mobileCodePattern, 
-    		String name) {
+    private Country(String isoCode, String defaultLanguage, int population,
+                    String phoneCode, String mobileCodePattern,
+                    String name) {
         this.isoCode = isoCode;
         this.defaultLanguageLocale = LocaleUtil.getLocale(defaultLanguage);
         this.phoneCode = phoneCode;
-        this.countryLocale = new Locale(LocaleUtil.getLocale(defaultLanguage).getLanguage(), isoCode);
-        this.mobilePhoneCityRelated = "BR".equals(isoCode.toUpperCase()); // TODO v1.0 make configuration generic
-        this.mobilePrefixGenerator = new RegexStringGenerator(mobileCodePattern);
+        this.countryLocale =
+                new Locale(LocaleUtil.getLocale(defaultLanguage).getLanguage(),
+                        isoCode);
+        this.mobilePhoneCityRelated = "BR".equals(
+                isoCode.toUpperCase()); // TODO v1.0 make configuration generic
+        this.mobilePrefixGenerator =
+                new RegexStringGenerator(mobileCodePattern);
         this.mobilePrefixGenerator.init(null);
-        this.localNumberGenerator = new RandomVarLengthStringGenerator("\\d", 7);
+        this.localNumberGenerator =
+                new RandomVarLengthStringGenerator("\\d", 7);
         this.localNumberGenerator.init(null);
-        this.name = (name != null ? name : countryLocale.getDisplayCountry(Locale.US));
+        this.name = (name != null ? name :
+                countryLocale.getDisplayCountry(Locale.US));
         this.population = population;
         importStates();
         instances.put(isoCode, this);
@@ -93,62 +106,75 @@ public class Country {
 
     private void importStates() {
         this.states = new OrderedNameMap<>();
-        String filename = "/com/rapiddweller/domain/address/state_" + isoCode + ".csv";
+        String filename =
+                "/com/rapiddweller/domain/address/state_" + isoCode + ".csv";
         if (!IOUtil.isURIAvailable(filename)) {
-        	LOGGER.debug("No states defined for {}", this);
-        	return;
+            LOGGER.debug("No states defined for {}", this);
+            return;
         }
-		ComplexTypeDescriptor stateDescriptor = (ComplexTypeDescriptor) new BeanDescriptorProvider().getTypeDescriptor(State.class.getName());
-		CSVEntitySource source = new CSVEntitySource(filename, stateDescriptor, Encodings.UTF_8);
-		source.setContext(new DefaultBeneratorContext());
+        ComplexTypeDescriptor stateDescriptor =
+                (ComplexTypeDescriptor) new BeanDescriptorProvider()
+                        .getTypeDescriptor(State.class.getName());
+        CSVEntitySource source =
+                new CSVEntitySource(filename, stateDescriptor, Encodings.UTF_8);
+        source.setContext(new DefaultBeneratorContext());
         DataIterator<Entity> iterator = source.iterator();
         DataContainer<Entity> container = new DataContainer<>();
         while ((container = iterator.next(container)) != null) {
-        	Entity entity = container.getData();
-        	State state = new State();
-        	mapProperty("id", entity, state, true);
-        	mapProperty("name", entity, state, true);
-        	mapProperty("defaultLanguage", entity, state, false);
-        	state.setCountry(this);
-        	addState(state);
+            Entity entity = container.getData();
+            State state = new State();
+            mapProperty("id", entity, state, true);
+            mapProperty("name", entity, state, true);
+            mapProperty("defaultLanguage", entity, state, false);
+            state.setCountry(this);
+            addState(state);
         }
         IOUtil.close(iterator);
     }
 
-    private static void mapProperty(String propertyName, Entity source, State target, boolean required) {
-    	String propertyValue = String.valueOf(source.get(propertyName));
-    	if (required)
-    		Assert.notNull(propertyValue, propertyName);
-    	BeanUtil.setPropertyValue(target, propertyName, propertyValue);
+    private static void mapProperty(String propertyName, Entity source,
+                                    State target, boolean required) {
+        String propertyValue = String.valueOf(source.get(propertyName));
+        if (required) {
+            Assert.notNull(propertyValue, propertyName);
+        }
+        BeanUtil.setPropertyValue(target, propertyName, propertyValue);
     }
 
-	public String getIsoCode() {
+    public String getIsoCode() {
         return isoCode;
     }
 
-    /** Returns the English name */
+    /**
+     * Returns the English name
+     */
     public String getName() {
         return name;
     }
 
-    /** Returns the name in the user's {@link Locale} */
+    /**
+     * Returns the name in the user's {@link Locale}
+     */
     public String getDisplayName() {
         return countryLocale.getDisplayCountry(Locale.getDefault());
     }
 
-    /** Returns the name in the country's own {@link Locale} */
+    /**
+     * Returns the name in the country's own {@link Locale}
+     */
     public String getLocalName() {
-        return countryLocale.getDisplayCountry(new Locale(defaultLanguageLocale.getLanguage()));
+        return countryLocale.getDisplayCountry(
+                new Locale(defaultLanguageLocale.getLanguage()));
     }
 
     public Locale getDefaultLanguageLocale() {
-    	return defaultLanguageLocale;
+        return defaultLanguageLocale;
     }
-    
-	public int getPopulation() {
-		return population;
-	}
-	
+
+    public int getPopulation() {
+        return population;
+    }
+
     public String getPhoneCode() {
         return phoneCode;
     }
@@ -165,67 +191,75 @@ public class Country {
         state.setCountry(this);
         states.put(state.getId(), state);
     }
-    
+
     public boolean isMobilePhoneCityRelated() {
-    	return mobilePhoneCityRelated;
+        return mobilePhoneCityRelated;
     }
-    
+
     public List<City> getCities() {
-    	List<City> cities = new ArrayList<>();
-    	for (State state : states.values())
+        List<City> cities = new ArrayList<>();
+        for (State state : states.values()) {
             cities.addAll(state.getCities());
-    	return cities;
-    }
-    
-	public City generateCity() {
-	    return getCityGenerator().generate();
+        }
+        return cities;
     }
 
-	public PhoneNumber generatePhoneNumber() {
-		if (RandomUtil.randomInt(0, 2) < 2) // generate land line numbers in 66% of the cases
-			return generateLandlineNumber();
-		else
-			return generateMobileNumber();
+    public City generateCity() {
+        return getCityGenerator().generate();
     }
 
-	public PhoneNumber generateLandlineNumber() {
-		return generateCity().generateLandlineNumber();
+    public PhoneNumber generatePhoneNumber() {
+        if (RandomUtil.randomInt(0, 2) <
+                2) // generate land line numbers in 66% of the cases
+        {
+            return generateLandlineNumber();
+        } else {
+            return generateMobileNumber();
+        }
     }
 
-	public PhoneNumber generateMobileNumber() {
-		if (mobilePhoneCityRelated)
-			return generateCity().generateMobileNumber();
-		else
-			return generateMobileNumber(null);
+    public PhoneNumber generateLandlineNumber() {
+        return generateCity().generateLandlineNumber();
     }
 
-	public PhoneNumber generateMobileNumber(City city) {
-		String localNumber = localNumberGenerator.generate();
-		String mobilePrefix = mobilePrefixGenerator.generate();
-		if (mobilePhoneCityRelated)
-			return new PhoneNumber(phoneCode, 
-					city != null ? city.getAreaCode() : null,
-					mobilePrefix + localNumber.substring(mobilePrefix.length()));
-		else
-			return new PhoneNumber(phoneCode, 
-					mobilePrefix, 
-					localNumber);
+    public PhoneNumber generateMobileNumber() {
+        if (mobilePhoneCityRelated) {
+            return generateCity().generateMobileNumber();
+        } else {
+            return generateMobileNumber(null);
+        }
+    }
+
+    public PhoneNumber generateMobileNumber(City city) {
+        String localNumber = localNumberGenerator.generate();
+        String mobilePrefix = mobilePrefixGenerator.generate();
+        if (mobilePhoneCityRelated) {
+            return new PhoneNumber(phoneCode,
+                    city != null ? city.getAreaCode() : null,
+                    mobilePrefix +
+                            localNumber.substring(mobilePrefix.length()));
+        } else {
+            return new PhoneNumber(phoneCode,
+                    mobilePrefix,
+                    localNumber);
+        }
     }
 
     private CityGenerator getCityGenerator() {
-    	if (cityGenerator == null) {
-    		cityGenerator = new CityGenerator(this.getIsoCode());
-    		cityGenerator.init(null);
-    	}
-	    return cityGenerator;
+        if (cityGenerator == null) {
+            cityGenerator = new CityGenerator(this.getIsoCode());
+            cityGenerator.init(null);
+        }
+        return cityGenerator;
     }
 
-	public static Collection<Country> getInstances() {
+    public static Collection<Country> getInstances() {
         return instances.values();
     }
 
     /**
      * Retrieves a country from the country configuration file.
+     *
      * @param isoCode the ISO code of the country to retrieve
      * @return if it is a predfined country, an instance with the configured data is returned,
      * else one with the specified ISO code and default settings, e.g. phoneCode 'UNKNOWN'.
@@ -236,17 +270,21 @@ public class Country {
 
     /**
      * Retrieves a country from the country configuration file.
+     *
      * @param isoCode the ISO code of the country to retrieve
      * @return if it is a predfined country, an instance with the configured data is returned,
      * else one with the specified ISO code and default settings, e.g. phoneCode 'UNKNOWN'.
      */
     public static Country getInstance(String isoCode, boolean create) {
         Country country = instances.get(isoCode.toUpperCase());
-        if (country == null && create)
-            country = new Country(isoCode, Locale.getDefault().getLanguage(), 1000000, DEFAULT_PHONE_CODE, DEFAULT_MOBILE_PHONE_PATTERN, null);
+        if (country == null && create) {
+            country = new Country(isoCode, Locale.getDefault().getLanguage(),
+                    1000000, DEFAULT_PHONE_CODE, DEFAULT_MOBILE_PHONE_PATTERN,
+                    null);
+        }
         return country;
     }
-    
+
     public static boolean hasInstance(String isoCode) {
         return (instances.get(isoCode.toUpperCase()) != null);
     }
@@ -259,41 +297,45 @@ public class Country {
         Country.defaultCountry = country;
     }
 
-	public static Country getFallback() {
-		return Country.US;
-	}
-	
+    public static Country getFallback() {
+        return Country.US;
+    }
+
     // java.lang.Object overrides --------------------------------------------------------------------------------------
-    
+
     @Override
-	public String toString() {
+    public String toString() {
         return getName();
     }
 
-	@Override
-	public int hashCode() {
-		return isoCode.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return isoCode.hashCode();
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		final Country other = (Country) obj;
-		return isoCode.equals(other.isoCode);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Country other = (Country) obj;
+        return isoCode.equals(other.isoCode);
+    }
 
-	// constants -------------------------------------------------------------------------------------------------------
-	
-	private static final Logger LOGGER = LogManager.getLogger(Country.class);
+    // constants -------------------------------------------------------------------------------------------------------
 
-	private static final String DEFAULT_PHONE_CODE = "[2-9][0-9][0-9]";
+    private static final Logger LOGGER = LogManager.getLogger(Country.class);
 
-	private static final String DEFAULT_MOBILE_PHONE_PATTERN = "[1-9][0-9][0-9]";
+    private static final String DEFAULT_PHONE_CODE = "[2-9][0-9][0-9]";
+
+    private static final String DEFAULT_MOBILE_PHONE_PATTERN =
+            "[1-9][0-9][0-9]";
 
     private static final Map<String, Country> instances = new HashMap<>(250);
 
@@ -368,29 +410,29 @@ public class Country {
     public static final Country PAKISTAN = getInstance("PK");
     public static final Country QATAR = getInstance("QA");
     public static final Country SAUDI_ARABIA = getInstance("SA");
-    
+
     // Africa
     public static final Country ALGERIA = getInstance("AL");
     public static final Country EGYPT = getInstance("EG");
     public static final Country GHANA = getInstance("GH");
     public static final Country KENYA = getInstance("KE");
     public static final Country SOUTH_AFRICA = getInstance("ZA");
-    
+
     // North America
     public static final Country USA = getInstance("US");
     public static final Country US = USA;
     public static final Country CANADA = getInstance("CA");
-    
+
     // Central America
     public static final Country BAHAMAS = getInstance("BS");
     public static final Country MEXICO = getInstance("MX");
-    
+
     // South America
     public static final Country ARGENTINA = getInstance("AR");
     public static final Country BRAZIL = getInstance("BR");
     public static final Country CHILE = getInstance("CL");
     public static final Country ECUADOR = getInstance("EC");
-    
+
     // Asia
     public static final Country CHINA = getInstance("CN");
     public static final Country INDONESIA = getInstance("ID");
@@ -411,9 +453,10 @@ public class Country {
     private static Country defaultCountry;
 
     // initialization --------------------------------------------------------------------------------------------------
-    
+
     static {
-        defaultCountry = Country.getInstance(LocaleUtil.getDefaultCountryCode());
+        defaultCountry =
+                Country.getInstance(LocaleUtil.getDefaultCountryCode());
     }
 
     private static void parseConfigFile() {
@@ -426,33 +469,45 @@ public class Country {
             while ((container = iterator.next(container)) != null) {
                 String[] cells = container.getData();
                 String isoCode = cells[0];
-                String defaultLocale = (cells.length > 1 && !StringUtil.isEmpty(cells[1]) ? cells[1].trim() : "en");
-                String phoneCode = (cells.length > 2 && !StringUtil.isEmpty(cells[2]) ? cells[2].trim() : null);
-                String mobilCodePattern = (cells.length > 3 && !StringUtil.isEmpty(cells[3]) ? cells[3].trim() : DEFAULT_MOBILE_PHONE_PATTERN);
+                String defaultLocale =
+                        (cells.length > 1 && !StringUtil.isEmpty(cells[1]) ?
+                                cells[1].trim() : "en");
+                String phoneCode =
+                        (cells.length > 2 && !StringUtil.isEmpty(cells[2]) ?
+                                cells[2].trim() : null);
+                String mobilCodePattern =
+                        (cells.length > 3 && !StringUtil.isEmpty(cells[3]) ?
+                                cells[3].trim() : DEFAULT_MOBILE_PHONE_PATTERN);
                 String name = (cells.length > 4 ? cells[4].trim() : null);
-                int population = (cells.length > 5 ? Integer.parseInt(cells[5].trim()) : 1000000);
-                Country country = new Country(isoCode, defaultLocale, population, phoneCode, mobilCodePattern, name);
+                int population =
+                        (cells.length > 5 ? Integer.parseInt(cells[5].trim()) :
+                                1000000);
+                Country country =
+                        new Country(isoCode, defaultLocale, population,
+                                phoneCode, mobilCodePattern, name);
                 LOGGER.debug("Parsed country {}", country);
             }
         } catch (IOException e) {
-            throw new ConfigurationError("Country definition file could not be processed. ", e);
+            throw new ConfigurationError(
+                    "Country definition file could not be processed. ", e);
         } finally {
-            if (iterator != null)
+            if (iterator != null) {
                 iterator.close();
+            }
         }
     }
 
     private boolean citiesInitialized = false;
-    
-	void checkCities() {
-	    if (!citiesInitialized) {
-	    	synchronized (this) {
-	    		if (!citiesInitialized) {
-	    			citiesInitialized = true;
-	    			CityManager.readCities(this);
-	    		}
-	    	}
-	    }
+
+    void checkCities() {
+        if (!citiesInitialized) {
+            synchronized (this) {
+                if (!citiesInitialized) {
+                    citiesInitialized = true;
+                    CityManager.readCities(this);
+                }
+            }
+        }
     }
 
 }

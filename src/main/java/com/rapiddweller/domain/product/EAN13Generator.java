@@ -83,7 +83,8 @@ public class EAN13Generator extends NonNullGeneratorWrapper<String, String> {
     public synchronized void init(GeneratorContext context) {
         assertNotInitialized();
         Uniqueness uniqueness = Uniqueness.instance(unique, ordered);
-        setSource(context.getGeneratorFactory().createRegexStringGenerator("[0-9]{12}", 12, 12, uniqueness));
+        setSource(context.getGeneratorFactory()
+                .createRegexStringGenerator("[0-9]{12}", 12, 12, uniqueness));
         super.init(context);
     }
 
@@ -93,12 +94,14 @@ public class EAN13Generator extends NonNullGeneratorWrapper<String, String> {
         char[] chars = new char[13];
         int sum = 0;
         generateFromNotNullSource().getChars(0, 12, chars, 0);
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < 12; i++) {
             sum += (chars[i] - '0') * (1 + (i % 2) * 2);
-        if (sum % 10 == 0)
+        }
+        if (sum % 10 == 0) {
             chars[12] = '0';
-        else
+        } else {
             chars[12] = (char) ('0' + 10 - (sum % 10));
+        }
         return String.valueOf(chars);
     }
 

@@ -159,7 +159,7 @@ end;
 
 When using a database as consumer in a `<generate>` or `<iterate>` element, the elements are _inserted_ by default. For information, how to _update_ entries, see the next chapter.
 
-<generate type="db_user" count="50000" consumer="db" />
+<generate type="db_user" count="50000" consumer="db"></generate>
 
 If primary key generation should be performed by the database, you need to tell benerator to ignore the field, setting the mode to 'ignored'
 

@@ -49,14 +49,18 @@ public class OrderValidator extends EntityValidator {
 
     @Override
     public boolean valid(Entity order) {
-        if (!super.valid(order))
+        if (!super.valid(order)) {
             return false;
-        if ((Number) order.getComponent("id") == null)
+        }
+        if ((Number) order.getComponent("id") == null) {
             return false;
-        if ((Number) order.getComponent("customer_id") == null)
+        }
+        if ((Number) order.getComponent("customer_id") == null) {
             return false;
-        if ((Date) order.getComponent("created_at") == null)
+        }
+        if ((Date) order.getComponent("created_at") == null) {
             return false;
+        }
         return true;
     }
 

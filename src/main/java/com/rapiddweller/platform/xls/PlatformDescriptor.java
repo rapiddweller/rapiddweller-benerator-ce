@@ -56,8 +56,10 @@ public class PlatformDescriptor extends DefaultPlatformDescriptor {
         return collectionReferencePrefix;
     }
 
-    public static void setCollectionReferencePrefix(String collectionReferencePrefix) {
-        PlatformDescriptor.collectionReferencePrefix = collectionReferencePrefix;
+    public static void setCollectionReferencePrefix(
+            String collectionReferencePrefix) {
+        PlatformDescriptor.collectionReferencePrefix =
+                collectionReferencePrefix;
     }
 
 }

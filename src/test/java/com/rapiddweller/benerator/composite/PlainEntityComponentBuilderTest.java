@@ -39,7 +39,7 @@ public class PlainEntityComponentBuilderTest {
     @Test
     public void testConstructor() {
         PlainEntityComponentBuilder actualPlainEntityComponentBuilder = new PlainEntityComponentBuilder("Name",
-                new CompositeDatasetGenerator<Object>("Nesting", "Dataset Name", true), "Scope");
+                new CompositeDatasetGenerator<>("Nesting", "Dataset Name", true), "Scope");
         assertTrue(actualPlainEntityComponentBuilder.isParallelizable());
         assertFalse(actualPlainEntityComponentBuilder.isResetNeeded());
         assertEquals("Scope", actualPlainEntityComponentBuilder.getScope());

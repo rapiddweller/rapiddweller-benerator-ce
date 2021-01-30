@@ -38,12 +38,15 @@ import javax.validation.ConstraintValidatorContext;
  * @author Volker Bergmann
  * @since 0.5.1
  */
-public class CreditCardNumberValidator extends AbstractConstraintValidator<CreditCardNumber, CharSequence> {
+public class CreditCardNumberValidator
+        extends AbstractConstraintValidator<CreditCardNumber, CharSequence> {
 
     @Override
-    public boolean isValid(CharSequence number, ConstraintValidatorContext context) {
-        if (number == null || number.length() < 13 || number.length() > 16)
+    public boolean isValid(CharSequence number,
+                           ConstraintValidatorContext context) {
+        if (number == null || number.length() < 13 || number.length() > 16) {
             return false;
+        }
         return LuhnUtil.luhnValid(number);
     }
 

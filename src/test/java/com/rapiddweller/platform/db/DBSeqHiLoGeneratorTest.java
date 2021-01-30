@@ -37,7 +37,6 @@ import org.apache.logging.log4j.LogManager;
 
 import static org.junit.Assert.*;
 import static com.rapiddweller.jdbacl.dialect.HSQLUtil.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the DBSeqHiLoGenerator.<br/><br/>
@@ -69,7 +68,7 @@ public class DBSeqHiLoGeneratorTest extends GeneratorTest {
     // test methods ----------------------------------------------------------------------------------------------------
 
     @Test
-    public void testMaxLo2() throws Exception {
+    public void testMaxLo2() {
         DBSeqHiLoGenerator generator = new DBSeqHiLoGenerator(SEQUENCE_NAME, 2, db);
         generator.init(context);
         expectSequence(generator, 3, 4, 5, 6);

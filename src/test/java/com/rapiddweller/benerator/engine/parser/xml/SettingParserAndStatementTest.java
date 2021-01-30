@@ -43,25 +43,25 @@ import org.junit.Test;
 public class SettingParserAndStatementTest extends BeneratorIntegrationTest {
 	
 	@Test
-	public void testValue() throws Exception {
+	public void testValue() {
 		parseAndExecute("<setting name='globalProp' value='XYZ' />");
 		assertEquals("XYZ", context.get("globalProp"));
 	}
 	
 	@Test
-	public void testEscapedValue() throws Exception {
+	public void testEscapedValue() {
 		parseAndExecute("<setting name='globalProp' value=\"\\\'\\t\\'\" />");
 		assertEquals("'\t'", context.get("globalProp"));
 	}
 	
 	@Test
-	public void testDefault_undefined() throws Exception {
+	public void testDefault_undefined() {
 		parseAndExecute("<setting name='globalProp' default='XYZ' />");
 		assertEquals("XYZ", context.get("globalProp"));
 	}
 	
 	@Test
-	public void testDefault_predefined() throws Exception {
+	public void testDefault_predefined() {
 		Statement statement = parse("<setting name='globalProp' default='XYZ' />");
 		context.setGlobal("globalProp", "ZZZ");
 		statement.execute(context);
@@ -69,21 +69,21 @@ public class SettingParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 	
 	@Test
-	public void testRef() throws Exception {
+	public void testRef() {
 		context.setGlobal("setting", "cfg");
 		parseAndExecute("<setting name='globalProp' ref='setting' />");
 		assertEquals("cfg", context.get("globalProp"));
 	}
 	
 	@Test
-	public void testSource() throws Exception {
+	public void testSource() {
 		context.setGlobal("myGen", new ConstantGenerator<>("myProd"));
 		parseAndExecute("<setting name='globalProp' source='myGen' />");
 		assertEquals("myProd", context.get("globalProp"));
 	}
 	
 	@Test
-	public void testNestedBean() throws Exception {
+	public void testNestedBean() {
 		parseAndExecute(
 			"<setting name='globalProp'>" +
 			"	<bean spec='new com.rapiddweller.benerator.engine.parser.xml.BeanMock(123)'/>" +
@@ -92,7 +92,7 @@ public class SettingParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 	
 	@Test
-	public void testNestedBeanArray() throws Exception {
+	public void testNestedBeanArray() {
 		parseAndExecute(
 				"<setting name='globalProp'>" +
 				"	<bean spec='new com.rapiddweller.benerator.engine.parser.xml.BeanMock(1)'/>" +
@@ -105,12 +105,12 @@ public class SettingParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 	
 	@Test(expected = SyntaxError.class)
-	public void testInvalid() throws Exception {
+	public void testInvalid() {
 		parseAndExecute("<setting name='globalProp' xyz='XYZ' />");
 	}
 	
 	@Test
-	public void testBeneratorProperty() throws Exception {
+	public void testBeneratorProperty() {
 		assertTrue(context.getDefaultPageSize() != 123);
 		parseAndExecute("<setting name='context.defaultPageSize' value='123' />");
 		assertEquals(123, context.getDefaultPageSize());

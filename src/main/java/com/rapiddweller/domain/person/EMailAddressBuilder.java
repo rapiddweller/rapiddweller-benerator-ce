@@ -28,16 +28,16 @@ package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.sample.NonNullSampleGenerator;
-import com.rapiddweller.domain.net.DomainGenerator;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.ThreadAware;
 import com.rapiddweller.common.converter.CaseConverter;
 import com.rapiddweller.common.converter.ConverterChain;
+import com.rapiddweller.domain.net.DomainGenerator;
 import com.rapiddweller.format.text.DelocalizingConverter;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -61,7 +61,8 @@ public class EMailAddressBuilder implements ThreadAware {
     public EMailAddressBuilder(String dataset) {
         // Logger is not static in order to adopt sub classes
         Logger logger = LogManager.getLogger(getClass());
-        logger.debug("Creating instance of {} for dataset {}", getClass(), dataset);
+        logger.debug("Creating instance of {} for dataset {}", getClass(),
+                dataset);
         this.domainGenerator = new DomainGenerator(dataset);
         this.caseConverter = new CaseConverter(false);
         try {
@@ -71,7 +72,9 @@ public class EMailAddressBuilder implements ThreadAware {
         } catch (IOException e) {
             throw new ConfigurationError("Error in Converter setup", e);
         }
-        this.joinGenerator = new NonNullSampleGenerator<>(Character.class, '_', '.', '0', '1');
+        this.joinGenerator =
+                new NonNullSampleGenerator<>(Character.class, '_', '.', '0',
+                        '1');
     }
 
     // properties ------------------------------------------------------------------------------------------------------

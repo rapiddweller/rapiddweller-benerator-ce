@@ -209,11 +209,11 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
 		    if (elementDescriptor.isNullable() == null) { // assure an explicit setting for nullability
 		    	if (BeanUtil.isPrimitiveType(paramTypes[i].getName()))
 		    		elementDescriptor.setNullable(false); // primitives can never be null
-		    	else if (elementDescriptor.getNullQuota() != null && 
-		    			((Double) elementDescriptor.getDeclaredDetailValue("nullQuota")) == 0.)
-		    		elementDescriptor.setNullable(false); // if nullQuota == 0, then set nullable to false
-		    	else
-		    		elementDescriptor.setNullable(true);
+		    	else elementDescriptor.setNullable(
+						elementDescriptor.getNullQuota() == null ||
+								((Double) elementDescriptor
+										.getDeclaredDetailValue("nullQuota")) !=
+										0.); // if nullQuota == 0, then set nullable to false
 		    }
 			nativeDescriptor.addElement(elementDescriptor);
 		}
@@ -245,15 +245,16 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
 	private static boolean containsConfig(Annotation[] annotations) {
 		for (Annotation annotation : annotations) {
 			Package annoPkg = annotation.annotationType().getPackage();
-			if ((annoPkg == BENERATOR_ANNO_PACKAGE || annoPkg == BEANVAL_ANNO_PACKAGE) && 
-					!explicitlyMappedAnnotation(annotation))
+			if ((annoPkg == BENERATOR_ANNO_PACKAGE || annoPkg == BEANVAL_ANNO_PACKAGE) &&
+					explicitlyMappedAnnotation(annotation))
 				return true;
 		}
 		return false;
 	}
 
 	protected static boolean explicitlyMappedAnnotation(Annotation annotation) {
-		return EXPLICITLY_MAPPED_ANNOTATIONS.contains(annotation.annotationType());
+		return !EXPLICITLY_MAPPED_ANNOTATIONS
+				.contains(annotation.annotationType());
 	}
 
 	protected void applyMethodGeneratorFactory(MethodDescriptor testMethod, BeneratorContext context) {
@@ -522,7 +523,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
 				mapMaxDateAnnotation((MaxDate) annotation, instanceDescriptor);
 			else if (annotationType == Last.class)
 				instanceDescriptor.setMode(Mode.ignored);
-			else if (!explicitlyMappedAnnotation(annotation))
+			else if (explicitlyMappedAnnotation(annotation))
 				mapAnyValueTypeAnnotation(annotation, instanceDescriptor);
 		} catch (Exception e) {
 			throw new ConfigurationError("Error mapping annotation settings", e);

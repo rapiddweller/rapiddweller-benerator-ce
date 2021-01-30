@@ -48,12 +48,15 @@ public class CategoryValidator extends EntityValidator {
 
     @Override
     public boolean valid(Entity category) {
-        if (!super.valid(category))
+        if (!super.valid(category)) {
             return false;
-        if (!idValidator.isValid((String) category.get("id"), null))
+        }
+        if (!idValidator.isValid((String) category.get("id"), null)) {
             return false;
-        if (category.get("name") == null)
+        }
+        if (category.get("name") == null) {
             return false;
+        }
         String parent = (String) category.get("parent_id");
         return (parent == null || parent.length() == 4);
     }

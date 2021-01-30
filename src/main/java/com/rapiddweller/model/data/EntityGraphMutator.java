@@ -43,32 +43,42 @@ public class EntityGraphMutator implements Mutator {
     private final String featureName;
     private final ComplexTypeDescriptor descriptor;
 
-    public EntityGraphMutator(String featureName, ComplexTypeDescriptor descriptor) {
+    public EntityGraphMutator(String featureName,
+                              ComplexTypeDescriptor descriptor) {
         this.featureName = featureName;
         this.descriptor = descriptor;
     }
 
     @Override
-    public void setValue(Object target, Object value) throws UpdateFailedException {
+    public void setValue(Object target, Object value)
+            throws UpdateFailedException {
         Entity entity = (Entity) target;
         setFeature(featureName, value, entity, descriptor);
     }
 
-    private void setFeature(String featureName, Object value, Entity entity, ComplexTypeDescriptor descriptor) {
+    private void setFeature(String featureName, Object value, Entity entity,
+                            ComplexTypeDescriptor descriptor) {
         if (featureName.contains(".")) {
-            String[] subPaths = StringUtil.splitOnFirstSeparator(featureName, '.');
-            ComponentDescriptor subComponent = descriptor.getComponent(subPaths[0]);
-            if (subComponent == null)
-                throw new ConfigurationError("Component '" + subPaths[0] + "' not found in type " + descriptor.getName());
-            ComplexTypeDescriptor subType = (ComplexTypeDescriptor) subComponent.getTypeDescriptor();
+            String[] subPaths =
+                    StringUtil.splitOnFirstSeparator(featureName, '.');
+            ComponentDescriptor subComponent =
+                    descriptor.getComponent(subPaths[0]);
+            if (subComponent == null) {
+                throw new ConfigurationError(
+                        "Component '" + subPaths[0] + "' not found in type " +
+                                descriptor.getName());
+            }
+            ComplexTypeDescriptor subType =
+                    (ComplexTypeDescriptor) subComponent.getTypeDescriptor();
             Entity subEntity = (Entity) entity.get(subPaths[0]);
             if (subEntity == null) {
                 subEntity = new Entity(subType);
                 entity.setComponent(subPaths[0], subEntity);
             }
             setFeature(subPaths[1], value, subEntity, subType);
-        } else
+        } else {
             entity.setComponent(featureName, value);
+        }
     }
 
 }

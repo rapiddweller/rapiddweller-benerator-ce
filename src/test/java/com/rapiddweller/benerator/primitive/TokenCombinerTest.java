@@ -81,10 +81,8 @@ public class TokenCombinerTest extends GeneratorTest {
 	    	char c1 = value.charAt(1);
 	    	if (c1 < 'a' || c1 > 'c')
 	    		return false;
-	    	if (excludeSeed && Character.toLowerCase(c0) == c1)
-	    		return false;
-	    	return true;
-	    }
+			return !excludeSeed || Character.toLowerCase(c0) != c1;
+		}
 
     }
 

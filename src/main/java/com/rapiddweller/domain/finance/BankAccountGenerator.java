@@ -31,9 +31,9 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.primitive.RandomVarLengthStringGenerator;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.domain.address.Country;
 
 /**
  * Generates German {@link BankAccount}s with low validity requirements.<br/><br/>
@@ -42,7 +42,8 @@ import com.rapiddweller.common.StringUtil;
  * @author Volker Bergmann
  * @since 0.5.4
  */
-public class BankAccountGenerator extends CompositeGenerator<BankAccount> implements NonNullGenerator<BankAccount> {
+public class BankAccountGenerator extends CompositeGenerator<BankAccount>
+        implements NonNullGenerator<BankAccount> {
 
     private final String countryCode;
     private final BankGenerator bankGenerator;
@@ -53,7 +54,8 @@ public class BankAccountGenerator extends CompositeGenerator<BankAccount> implem
         LocaleUtil.getFallbackLocale();
         this.countryCode = Country.getDefault().getIsoCode();
         this.bankGenerator = registerComponent(new BankGenerator());
-        this.accountNumberGenerator = registerComponent(new RandomVarLengthStringGenerator("\\d", 10));
+        this.accountNumberGenerator = registerComponent(
+                new RandomVarLengthStringGenerator("\\d", 10));
     }
 
     @Override
@@ -64,7 +66,8 @@ public class BankAccountGenerator extends CompositeGenerator<BankAccount> implem
     }
 
     @Override
-    public ProductWrapper<BankAccount> generate(ProductWrapper<BankAccount> wrapper) {
+    public ProductWrapper<BankAccount> generate(
+            ProductWrapper<BankAccount> wrapper) {
         return wrapper.wrap(generate());
     }
 

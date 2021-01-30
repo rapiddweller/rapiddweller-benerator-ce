@@ -84,7 +84,8 @@ public class EAN8Generator extends NonNullGeneratorWrapper<String, String> {
     @Override
     public synchronized void init(GeneratorContext context) {
         Uniqueness uniqueness = Uniqueness.instance(unique, ordered);
-        setSource(context.getGeneratorFactory().createRegexStringGenerator("[0-9]{7}", 7, 7, uniqueness));
+        setSource(context.getGeneratorFactory()
+                .createRegexStringGenerator("[0-9]{7}", 7, 7, uniqueness));
         super.init(context);
     }
 
@@ -96,12 +97,14 @@ public class EAN8Generator extends NonNullGeneratorWrapper<String, String> {
         chars[7] = chars[6];
         chars[6] = '0';
         int sum = 0;
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++) {
             sum += (chars[i] - '0') * (1 + (i % 2) * 2);
-        if (sum % 10 == 0)
+        }
+        if (sum % 10 == 0) {
             chars[6] = '0';
-        else
+        } else {
             chars[6] = (char) ('0' + 10 - (sum % 10));
+        }
         return String.valueOf(chars);
     }
 

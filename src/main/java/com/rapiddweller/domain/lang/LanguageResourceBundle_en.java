@@ -39,7 +39,7 @@ public class LanguageResourceBundle_en extends LanguageResourceBundle {
 
     @Override
     protected Object[][] getContents() {
-        return new Object[][]{
+        return new Object[][] {
                 {"definite.article.singular.0", "the"},
                 {"indefinite.article.singular.0", "a"}
         };

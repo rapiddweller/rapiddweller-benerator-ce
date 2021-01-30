@@ -45,9 +45,11 @@ import java.util.Locale;
  * @since 0.6.0
  */
 
-public class DepartmentNameGenerator extends WeightedCSVSampleGenerator<String> implements NonNullGenerator<String> {
+public class DepartmentNameGenerator extends WeightedCSVSampleGenerator<String>
+        implements NonNullGenerator<String> {
 
-    private static final String FILENAME_PREFIX = "/com/rapiddweller/domain/organization/department";
+    private static final String FILENAME_PREFIX =
+            "/com/rapiddweller/domain/organization/department";
 
     public DepartmentNameGenerator() {
         this(Locale.getDefault());

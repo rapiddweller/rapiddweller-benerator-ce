@@ -88,6 +88,7 @@ import org.apache.logging.log4j.LogManager;
  * @since 0.5.6
  * @author Volker Bergmann
  */
+@SuppressWarnings("rawtypes")
 public class CreateProjectPanel extends JPanel {
 	
 	static final Logger logger = LogManager.getLogger(CreateProjectPanel.class);

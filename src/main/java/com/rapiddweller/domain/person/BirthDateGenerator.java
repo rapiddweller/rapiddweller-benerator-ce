@@ -85,7 +85,8 @@ public class BirthDateGenerator extends NonNullGeneratorProxy<Date> {
         min.add(Calendar.YEAR, -maxAgeYears - 1);
         Calendar max = TimeUtil.calendar(TimeUtil.today());
         max.add(Calendar.YEAR, -minAgeYears);
-        setSource(new DateGenerator(min.getTime(), max.getTime(), Period.DAY.getMillis(), SequenceManager.RANDOM_SEQUENCE));
+        setSource(new DateGenerator(min.getTime(), max.getTime(),
+                Period.DAY.getMillis(), SequenceManager.RANDOM_SEQUENCE));
         super.init(context);
     }
 
@@ -93,7 +94,8 @@ public class BirthDateGenerator extends NonNullGeneratorProxy<Date> {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[minAgeYears=" + minAgeYears + ", maxAgeYears=" + maxAgeYears + ']';
+        return getClass().getSimpleName() + "[minAgeYears=" + minAgeYears +
+                ", maxAgeYears=" + maxAgeYears + ']';
     }
 
 }

@@ -63,33 +63,47 @@ public class ArrayFixedWidthDemo {
     public static void main(String[] args) throws IOException {
         Writer out = null;
         try {
-            FixedWidthColumnDescriptor[] descriptors = new FixedWidthColumnDescriptor[]{
-                    new FixedWidthColumnDescriptor("rowType", 1, Alignment.RIGHT),
-                    new FixedWidthColumnDescriptor("recordNumber", 8, Alignment.RIGHT),
-                    new FixedWidthColumnDescriptor("type", 4, Alignment.LEFT),
-                    new FixedWidthColumnDescriptor("date", 8, Alignment.LEFT),
-                    new FixedWidthColumnDescriptor("partner", 6, Alignment.LEFT),
-                    new FixedWidthColumnDescriptor("articleNumber", 6, Alignment.RIGHT),
-                    new FixedWidthColumnDescriptor("itemCount", 3, Alignment.LEFT),
-                    new FixedWidthColumnDescriptor("itemPrice", 6, Alignment.LEFT)
-            };
+            FixedWidthColumnDescriptor[] descriptors =
+                    new FixedWidthColumnDescriptor[] {
+                            new FixedWidthColumnDescriptor("rowType", 1,
+                                    Alignment.RIGHT),
+                            new FixedWidthColumnDescriptor("recordNumber", 8,
+                                    Alignment.RIGHT),
+                            new FixedWidthColumnDescriptor("type", 4,
+                                    Alignment.LEFT),
+                            new FixedWidthColumnDescriptor("date", 8,
+                                    Alignment.LEFT),
+                            new FixedWidthColumnDescriptor("partner", 6,
+                                    Alignment.LEFT),
+                            new FixedWidthColumnDescriptor("articleNumber", 6,
+                                    Alignment.RIGHT),
+                            new FixedWidthColumnDescriptor("itemCount", 3,
+                                    Alignment.LEFT),
+                            new FixedWidthColumnDescriptor("itemPrice", 6,
+                                    Alignment.LEFT)
+                    };
             //out = new BufferedWriter(new FileWriter(FILE_NAME));
             out = new OutputStreamWriter(System.out);
             HeaderScript headerScript = new HeaderScript(LENGTH);
-            DocumentWriter<Object[]> writer = new ArrayFixedWidthWriter<Object>(out, headerScript, null, descriptors);
+            DocumentWriter<Object[]> writer =
+                    new ArrayFixedWidthWriter<Object>(out, headerScript, null,
+                            descriptors);
             System.out.println("Running...");
             long startMillis = System.currentTimeMillis();
             TransactionGenerator generator = new TransactionGenerator();
             FileBuilder.build(generator, LENGTH, writer);
             long elapsedTime = System.currentTimeMillis() - startMillis;
-            System.out.println("Created file " + FILE_NAME + " with " + LENGTH + " entries " +
-                    "within " + (elapsedTime / 1000) + "s (" + (LENGTH * 1000L / elapsedTime) + " entries per second)");
+            System.out.println("Created file " + FILE_NAME + " with " + LENGTH +
+                    " entries " +
+                    "within " + (elapsedTime / 1000) + "s (" +
+                    (LENGTH * 1000L / elapsedTime) + " entries per second)");
         } finally {
             IOUtil.close(out);
         }
     }
 
-    public static class TransactionGenerator extends MultiSourceArrayGenerator<Object> {
+    public static class TransactionGenerator
+            extends MultiSourceArrayGenerator<Object> {
 
         public TransactionGenerator() {
             super(Object.class, false, createSources());
@@ -97,23 +111,47 @@ public class ArrayFixedWidthDemo {
 
         @SuppressWarnings({"unchecked", "cast"})
         private static Generator<Object>[] createSources() {
-            StochasticGeneratorFactory generatorFactory = new StochasticGeneratorFactory();
-            Generator<Date> dateGenerator = generatorFactory.createDateGenerator( // transaction date
-                    TimeUtil.date(2004, 0, 1), TimeUtil.date(2006, 11, 31), Period.DAY.getMillis(),
-                    SequenceManager.RANDOM_SEQUENCE);
-            FormatFormatConverter<Date> dateRenderer = new FormatFormatConverter<Date>(Date.class, new SimpleDateFormat("yyyyMMdd"), false);
-            Generator<Object>[] sources = (Generator<Object>[]) new Generator[]{
-                    new ConstantGenerator<String>("R"),
-                    generatorFactory.createNumberGenerator(Integer.class, 1, true, LENGTH, true, 1, SequenceManager.RANDOM_WALK_SEQUENCE, Uniqueness.NONE),
-                    generatorFactory.createSampleGenerator(CollectionUtil.toList("BUY", "SALE"), String.class, false), // transaction type
-                    WrapperFactory.applyConverter(dateGenerator, dateRenderer), // transaction date
-                    generatorFactory.createSampleGenerator(CollectionUtil.toList("Alice", "Bob", "Charly"), String.class, false), // partner
-                    generatorFactory.createRegexStringGenerator("[A-Z0-9]{6}", 6, 6, Uniqueness.NONE), // article number
-                    generatorFactory.createNumberGenerator(Integer.class, 1, true, 20, true, 1, SequenceManager.RANDOM_SEQUENCE, Uniqueness.NONE), // item count
-                    generatorFactory.createNumberGenerator(BigDecimal.class, // item price
-                            new BigDecimal("0.50"), true, new BigDecimal("99.99"), true, new BigDecimal("0.01"),
-                            SequenceManager.CUMULATED_SEQUENCE, Uniqueness.NONE)
-            };
+            StochasticGeneratorFactory generatorFactory =
+                    new StochasticGeneratorFactory();
+            Generator<Date> dateGenerator =
+                    generatorFactory.createDateGenerator( // transaction date
+                            TimeUtil.date(2004, 0, 1),
+                            TimeUtil.date(2006, 11, 31), Period.DAY.getMillis(),
+                            SequenceManager.RANDOM_SEQUENCE);
+            FormatFormatConverter<Date> dateRenderer =
+                    new FormatFormatConverter<Date>(Date.class,
+                            new SimpleDateFormat("yyyyMMdd"), false);
+            Generator<Object>[] sources =
+                    (Generator<Object>[]) new Generator[] {
+                            new ConstantGenerator<String>("R"),
+                            generatorFactory.createNumberGenerator(
+                                    Integer.class, 1, true, LENGTH, true, 1,
+                                    SequenceManager.RANDOM_WALK_SEQUENCE,
+                                    Uniqueness.NONE),
+                            generatorFactory.createSampleGenerator(
+                                    CollectionUtil.toList("BUY", "SALE"),
+                                    String.class, false), // transaction type
+                            WrapperFactory.applyConverter(dateGenerator,
+                                    dateRenderer), // transaction date
+                            generatorFactory.createSampleGenerator(
+                                    CollectionUtil
+                                            .toList("Alice", "Bob", "Charly"),
+                                    String.class, false), // partner
+                            generatorFactory.createRegexStringGenerator(
+                                    "[A-Z0-9]{6}", 6, 6, Uniqueness.NONE),
+                            // article number
+                            generatorFactory.createNumberGenerator(
+                                    Integer.class, 1, true, 20, true, 1,
+                                    SequenceManager.RANDOM_SEQUENCE,
+                                    Uniqueness.NONE), // item count
+                            generatorFactory.createNumberGenerator(
+                                    BigDecimal.class, // item price
+                                    new BigDecimal("0.50"), true,
+                                    new BigDecimal("99.99"), true,
+                                    new BigDecimal("0.01"),
+                                    SequenceManager.CUMULATED_SEQUENCE,
+                                    Uniqueness.NONE)
+                    };
             GeneratorUtil.initAll(sources, new DefaultBeneratorContext());
             return sources;
         }

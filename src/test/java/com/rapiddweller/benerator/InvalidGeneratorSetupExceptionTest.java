@@ -50,7 +50,7 @@ public class InvalidGeneratorSetupExceptionTest {
 		PropertyMessage[] mm = ArrayUtil.toArray(m1, m2);
 		InvalidGeneratorSetupException e = new InvalidGeneratorSetupException(mm);
 		assertEquals("'p1' is null, 'p2' is too long", e.getMessage());
-		assertTrue(Arrays.equals(mm, e.getPropertyMessages()));
+        assertArrayEquals(mm, e.getPropertyMessages());
 	}
 	
 }

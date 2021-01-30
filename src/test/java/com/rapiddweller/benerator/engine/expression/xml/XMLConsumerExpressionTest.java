@@ -48,7 +48,7 @@ import org.w3c.dom.Document;
 public class XMLConsumerExpressionTest {
 	
 	@Test
-	public void testInlineConsumerClass() throws Exception {
+	public void testInlineConsumerClass() {
 		Document doc = XMLUtil.parseString("<generate " +
 				"consumer='com.rapiddweller.benerator.factory.ConsumerMock'/>");
 		XMLConsumerExpression expression = new XMLConsumerExpression(doc.getDocumentElement(), true, 
@@ -58,7 +58,7 @@ public class XMLConsumerExpressionTest {
 	}
 	
 	@Test
-	public void testInlineConsumerSpec() throws Exception {
+	public void testInlineConsumerSpec() {
 		Document doc = XMLUtil.parseString("<generate " +
 				"consumer='new com.rapiddweller.benerator.factory.ConsumerMock(2)'/>");
 		XMLConsumerExpression expression = new XMLConsumerExpression(doc.getDocumentElement(), true, 
@@ -69,7 +69,7 @@ public class XMLConsumerExpressionTest {
 	}
 	
 	@Test
-	public void testConsumerBean() throws Exception {
+	public void testConsumerBean() {
 		Document doc = XMLUtil.parseString("<generate>" +
 				"    <consumer spec='new com.rapiddweller.benerator.factory.ConsumerMock()'/>" +
 				"</generate>");
@@ -80,7 +80,7 @@ public class XMLConsumerExpressionTest {
 	}
 	
     @Test
-	public void testConsumerBeanRef() throws Exception {
+	public void testConsumerBeanRef() {
 		Document doc = XMLUtil.parseString("<generate>" +
 				"    <consumer ref='myc'/>" +
 				"</generate>");
@@ -94,7 +94,7 @@ public class XMLConsumerExpressionTest {
 	}
 	
 	@Test
-	public void testInlineConsumerList() throws Exception {
+	public void testInlineConsumerList() {
 		Document doc = XMLUtil.parseString("<generate " +
 			"consumer='myc,new com.rapiddweller.benerator.factory.ConsumerMock(5)'/>");
 		XMLConsumerExpression expression = new XMLConsumerExpression(doc.getDocumentElement(), true, 

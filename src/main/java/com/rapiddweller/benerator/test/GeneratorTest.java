@@ -149,19 +149,18 @@ public abstract class GeneratorTest extends ModelTest {
         return new Helper(generator);
     }
 
-    @SuppressWarnings("unchecked")
-	protected <T> Helper expectUniqueGenerations(Generator<T> generator, int n) {
+    protected <T> Helper expectUniqueGenerations(Generator<T> generator, int n) {
         expectUniqueGenerationsOnce(generator, n);
         generator.reset();
         expectUniqueGenerationsOnce(generator, n);
         return new Helper(generator);
     }
     
-    protected <T extends Comparable<T>> Helper expectRange(Generator<T> generator, int n, T min, T max) {
+    protected <T extends Comparable<T>> void expectRange(Generator<T> generator, int n, T min, T max) {
     	expectRangeOnce(generator, n, min, max);
         generator.reset();
     	expectRangeOnce(generator, n, min, max);
-        return new Helper(generator);
+        new Helper(generator);
     }
 
     protected <T>String format(T product) {

@@ -37,8 +37,8 @@ import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.StringUtil;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Locale;
 import java.util.Stack;
@@ -51,12 +51,16 @@ import java.util.Stack;
  * @author Volker Bergmann
  * @since 0.1
  */
-public class StreetNameGenerator extends GeneratorProxy<String> implements DatasetBasedGenerator<String>, NonNullGenerator<String> {
+public class StreetNameGenerator extends GeneratorProxy<String>
+        implements DatasetBasedGenerator<String>, NonNullGenerator<String> {
 
-    private static final Logger LOGGER = LogManager.getLogger(StreetNameGenerator.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(StreetNameGenerator.class);
 
-    private static final String REGION_NESTING = "com/rapiddweller/dataset/region";
-    private static final String FILENAME_PATTERN = "/com/rapiddweller/domain/address/street_{0}.csv";
+    private static final String REGION_NESTING =
+            "com/rapiddweller/dataset/region";
+    private static final String FILENAME_PATTERN =
+            "/com/rapiddweller/domain/address/street_{0}.csv";
 
     private String datasetName;
 
@@ -74,7 +78,8 @@ public class StreetNameGenerator extends GeneratorProxy<String> implements Datas
     // DatasetBasedGenerator interface implementation ------------------------------------------------------------------
 
     private static Generator<String> createSource(String datasetName) {
-        return new WeightedDatasetCSVGenerator<>(String.class, FILENAME_PATTERN, datasetName, REGION_NESTING, true, Encodings.UTF_8);
+        return new WeightedDatasetCSVGenerator<>(String.class, FILENAME_PATTERN,
+                datasetName, REGION_NESTING, true, Encodings.UTF_8);
     }
 
     @Override
@@ -101,8 +106,9 @@ public class StreetNameGenerator extends GeneratorProxy<String> implements Datas
         Stack<String> datasetOptions = new Stack<>();
         datasetOptions.push(DatasetUtil.fallbackRegionName());
         datasetOptions.push(DatasetUtil.defaultRegionName());
-        if (!StringUtil.isEmpty(datasetName))
+        if (!StringUtil.isEmpty(datasetName)) {
             datasetOptions.push(datasetName);
+        }
         init(datasetOptions, context);
     }
 
@@ -113,10 +119,13 @@ public class StreetNameGenerator extends GeneratorProxy<String> implements Datas
             super.init(context);
         } catch (Exception e) {
             // if the call fails, try another option
-            if (datasetOptions.isEmpty())
-                throw new ConfigurationError(getClass().getSimpleName() + " could not be initialized");
+            if (datasetOptions.isEmpty()) {
+                throw new ConfigurationError(getClass().getSimpleName() +
+                        " could not be initialized");
+            }
             String nextOption = datasetOptions.peek();
-            LOGGER.error("Error initializing " + getClass().getSimpleName() + " with dataset '" + currentOption + "': " +
+            LOGGER.error("Error initializing " + getClass().getSimpleName() +
+                    " with dataset '" + currentOption + "': " +
                     e.getMessage() + ". Falling back to '" + nextOption + "'");
             init(datasetOptions, context);
         }
@@ -134,11 +143,13 @@ public class StreetNameGenerator extends GeneratorProxy<String> implements Datas
 
     // helpers ---------------------------------------------------------------------------------------------------------
 
-    public String generateForCountryAndLocale(String countryCode, Locale language) {
+    public String generateForCountryAndLocale(String countryCode,
+                                              Locale language) {
         WeightedDatasetCSVGenerator<String> source = getSource();
         String subset = countryCode + '_' + language.getLanguage();
-        if (source.supportsDataset(subset))
+        if (source.supportsDataset(subset)) {
             return source.generateForDataset(subset);
+        }
         subset = countryCode;
         return source.generateForDataset(countryCode);
     }

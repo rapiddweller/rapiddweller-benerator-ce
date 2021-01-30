@@ -54,7 +54,8 @@ public class QueryGenerator<E> extends GeneratorProxy<E> {
     }
 
     @SuppressWarnings("unchecked")
-    public QueryGenerator(String selector, StorageSystem target, boolean simplifying) {
+    public QueryGenerator(String selector, StorageSystem target,
+                          boolean simplifying) {
         super((Class<E>) Object.class);
         this.target = target;
         this.selector = selector;
@@ -71,17 +72,21 @@ public class QueryGenerator<E> extends GeneratorProxy<E> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
+    public void init(GeneratorContext context)
+            throws InvalidGeneratorSetupException {
 
         // check preconditions
         assertNotInitialized();
-        if (target == null)
+        if (target == null) {
             throw new InvalidGeneratorSetupException("source is null");
-        if (StringUtil.isEmpty(selector))
+        }
+        if (StringUtil.isEmpty(selector)) {
             throw new InvalidGeneratorSetupException("no query defined");
+        }
 
         // initialize
-        setSource(new DataSourceGenerator(target.query(selector, simplifying, context)));
+        setSource(new DataSourceGenerator(
+                target.query(selector, simplifying, context)));
         super.init(context);
     }
 

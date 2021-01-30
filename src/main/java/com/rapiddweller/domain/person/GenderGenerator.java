@@ -73,7 +73,8 @@ public class GenderGenerator extends NonNullGeneratorProxy<Gender> {
                 new WeightedSample<>(Gender.FEMALE, femaleQuota),
                 new WeightedSample<>(Gender.MALE, 1 - femaleQuota)
         );
-        Generator<Gender> source = context.getGeneratorFactory().createWeightedSampleGenerator(samples, Gender.class);
+        Generator<Gender> source = context.getGeneratorFactory()
+                .createWeightedSampleGenerator(samples, Gender.class);
         setSource(WrapperFactory.asNonNullGenerator(source));
         super.init(context);
     }

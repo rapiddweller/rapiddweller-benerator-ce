@@ -41,19 +41,19 @@ import org.junit.Test;
 public class HeadSequenceTest extends GeneratorTest {
 
 	@Test
-    public void testLongGenerator() throws Exception {
+    public void testLongGenerator() {
         expectGeneratedSequence(longGenerator(1),  0L).withCeasedAvailability();
         expectGeneratedSequence(longGenerator(2),  0L, 1L).withCeasedAvailability();
     }
 
 	@Test
-    public void testDoubleGenerator() throws Exception {
+    public void testDoubleGenerator() {
         expectGeneratedSequence(doubleGenerator(1),  0.).withCeasedAvailability();
         expectGeneratedSequence(doubleGenerator(2),  0., 1.).withCeasedAvailability();
     }
 
 	@Test
-    public void testApply() throws Exception {
+    public void testApply() {
         expectGeneratedSequence(charGenerator(1),  'A').withCeasedAvailability();
         expectGeneratedSequence(charGenerator(2),  'A', 'B').withCeasedAvailability();
     }

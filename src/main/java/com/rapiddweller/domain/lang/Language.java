@@ -45,7 +45,8 @@ public class Language {
 
     public Language(Locale locale) {
         this.locale = locale;
-        this.bundle = (LanguageResourceBundle) ResourceBundle.getBundle(LanguageResourceBundle.class.getName(), locale);
+        this.bundle = (LanguageResourceBundle) ResourceBundle
+                .getBundle(LanguageResourceBundle.class.getName(), locale);
     }
 
     public static Language getInstance(Locale locale) {
@@ -57,11 +58,15 @@ public class Language {
     }
 
     public String definiteArticle(int gender, boolean plural) {
-        return bundle.getString("definite.article." + (plural ? "plural." : "singular.") + gender);
+        return bundle.getString(
+                "definite.article." + (plural ? "plural." : "singular.") +
+                        gender);
     }
 
     public String indefiniteArticle(int gender, boolean plural) {
-        return bundle.getString("indefinite.article." + (plural ? "plural." : "singular.") + gender);
+        return bundle.getString(
+                "indefinite.article." + (plural ? "plural." : "singular.") +
+                        gender);
     }
 
 }

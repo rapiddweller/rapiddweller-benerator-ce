@@ -37,12 +37,13 @@ public class TaskUtil {
 
     @SuppressWarnings("unchecked")
     public static <T extends Task> T unwrap(Task task, Class<T> type) {
-        if (type.getClass().equals(task))
+        if (type.getClass().equals(task)) {
             return (T) task;
-        else if (task instanceof TaskProxy)
+        } else if (task instanceof TaskProxy) {
             return unwrap(((TaskProxy<?>) task).getRealTask(), type);
-        else
+        } else {
             return null;
+        }
     }
 
 }

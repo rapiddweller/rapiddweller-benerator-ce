@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.common.LogCategories;
+import com.rapiddweller.common.LogCategoriesConstants;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -42,7 +42,7 @@ import org.apache.logging.log4j.LogManager;
 
 public class CommentStatement implements Statement {
 	
-	private static final Logger commentLogger = LogManager.getLogger(LogCategories.COMMENT);
+	private static final Logger commentLogger = LogManager.getLogger(LogCategoriesConstants.COMMENT);
 
 	private final String comment;
 	

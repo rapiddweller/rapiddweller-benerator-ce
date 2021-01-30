@@ -50,7 +50,7 @@ public class SimpleTypeEntityGeneratorTest extends ModelTest {
 		Entity entity = GeneratorUtil.generateNonNull(generator);
 		assertNotNull(entity);
 		String content = (String) entity.getComponent(ComplexTypeDescriptor.__SIMPLE_CONTENT);
-		assertTrue(content != null);
+		assertNotNull(content);
 		generator.close();
 	}
 	

@@ -78,7 +78,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 	// tests -----------------------------------------------------------------------------------------------------------
 
 	@Test
-	public void testEmptyFile() throws Exception {
+	public void testEmptyFile() {
 		if (DEFAULT_FILE.exists())
 			DEFAULT_FILE.delete();
 		try {
@@ -95,7 +95,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
 	 * Tests a bug
 	 */
 	@Test
-	public void testEmptyFileWithEndWithNewLine() throws Exception {
+	public void testEmptyFileWithEndWithNewLine() {
 		if (DEFAULT_FILE.exists())
 			DEFAULT_FILE.delete();
 		try {

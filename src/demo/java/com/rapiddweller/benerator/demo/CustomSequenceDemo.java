@@ -53,10 +53,13 @@ public class CustomSequenceDemo {
      */
     public static void main(String[] args) {
         Sequence odd = new OddNumberSequence();
-        Generator<Integer> generator = new StochasticGeneratorFactory().createNumberGenerator(Integer.class, 3, true, Integer.MAX_VALUE, true, 2, odd, Uniqueness.NONE);
+        Generator<Integer> generator = new StochasticGeneratorFactory()
+                .createNumberGenerator(Integer.class, 3, true,
+                        Integer.MAX_VALUE, true, 2, odd, Uniqueness.NONE);
         init(generator);
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++) {
             System.out.println(generateNonNull(generator));
+        }
         close(generator);
     }
 
@@ -65,14 +68,20 @@ public class CustomSequenceDemo {
      */
     public static class OddNumberSequence extends Sequence {
 
-        public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity,
-                                                                            boolean unique) {
-            OddNumberGenerator doubleGenerator = new OddNumberGenerator(min.doubleValue(), max.doubleValue());
-            return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, doubleGenerator, min, granularity);
+        public <T extends Number> NonNullGenerator<T> createNumberGenerator(
+                Class<T> numberType, T min, T max, T granularity,
+                boolean unique) {
+            OddNumberGenerator doubleGenerator =
+                    new OddNumberGenerator(min.doubleValue(),
+                            max.doubleValue());
+            return WrapperFactory
+                    .asNonNullNumberGeneratorOfType(numberType, doubleGenerator,
+                            min, granularity);
         }
     }
 
-    public static class OddNumberGenerator extends UnsafeNonNullGenerator<Double> {
+    public static class OddNumberGenerator
+            extends UnsafeNonNullGenerator<Double> {
 
         private double min;
         private double max;
@@ -99,8 +108,9 @@ public class CustomSequenceDemo {
 
         @Override
         public Double generate() {
-            if (next >= max)
+            if (next >= max) {
                 return null;
+            }
             double result = next;
             next += granularity;
             return result;

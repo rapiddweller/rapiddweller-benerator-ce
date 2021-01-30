@@ -48,13 +48,12 @@ import org.junit.Test;
  */
 public class CascadeStatementTest extends GeneratorTest {
 
-	private DefaultDBSystem db; 
-	private ConsumerMock consumer;
-	
+	private DefaultDBSystem db;
+
 	@Before
-	public void setUpDatabase() throws Exception {
+	public void setUpDatabase() {
 		DBUtil.resetMonitors();
-		consumer = new ConsumerMock(true);
+		ConsumerMock consumer = new ConsumerMock(true);
 		context.setGlobal("cons", consumer);
 		String dbUrl = HSQLUtil.getInMemoryURL(getClass().getSimpleName());
 		db = new DefaultDBSystem("db", dbUrl, HSQLUtil.DRIVER, 

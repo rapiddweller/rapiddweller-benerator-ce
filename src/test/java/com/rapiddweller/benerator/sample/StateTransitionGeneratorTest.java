@@ -71,7 +71,8 @@ public class StateTransitionGeneratorTest extends GeneratorTest {
 		generator.init(context);
 		for (int n = 0; n < 10; n++) {
 			List<Transition> products = GeneratorUtil.allProducts(generator);
-			assertTrue("Expected an odd number of products, but found: " + products.size(), products.size() % 2 == 1);
+            assertEquals("Expected an odd number of products, but found: " +
+                    products.size(), 1, products.size() % 2);
 			assertEquals(new Transition(null, 1), products.get(0));
 			for (int i = 1; i < products.size() - 1; i++) {
 				int oldState = 1 + ((i - 1) % 2);

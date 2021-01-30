@@ -30,8 +30,8 @@ import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.xml.XMLUtil;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
@@ -43,30 +43,35 @@ import java.util.Map;
  */
 public class DefaultDescriptorProvider implements DescriptorProvider {
 
-    private static final Logger logger = LogManager.getLogger(DefaultDescriptorProvider.class);
-
-    protected DataModel dataModel;
+    private static final Logger logger =
+            LogManager.getLogger(DefaultDescriptorProvider.class);
     protected final Map<String, TypeDescriptor> typeMap;
-    protected String id;
     private final boolean redefinable;
+    protected DataModel dataModel;
+    protected String id;
 
     public DefaultDescriptorProvider(String id, DataModel dataModel) {
         this(id, dataModel, false);
     }
 
-    public DefaultDescriptorProvider(String id, DataModel dataModel, boolean redefinable) {
+    public DefaultDescriptorProvider(String id, DataModel dataModel,
+                                     boolean redefinable) {
         this.typeMap = new OrderedNameMap<>();
         this.id = id;
         this.redefinable = redefinable;
-        if (dataModel != null)
+        if (dataModel != null) {
             dataModel.addDescriptorProvider(this);
+        }
     }
 
     public void addTypeDescriptor(TypeDescriptor descriptor) {
-        if (!redefinable && typeMap.get(descriptor.getName()) != null)
-            throw new ConfigurationError("Type has already been defined: " + descriptor.getName());
+        if (!redefinable && typeMap.get(descriptor.getName()) != null) {
+            throw new ConfigurationError(
+                    "Type has already been defined: " + descriptor.getName());
+        }
         typeMap.put(descriptor.getName(), descriptor);
-        logger.debug("added " + descriptor.getClass().getSimpleName() + ": " + descriptor);
+        logger.debug("added " + descriptor.getClass().getSimpleName() + ": " +
+                descriptor);
     }
 
     @Override

@@ -75,7 +75,7 @@ public class DbUnitEntityExporterTest extends ModelTest {
 	}
 
 	@Test
-	public void testClosingTwice() throws Exception {
+	public void testClosingTwice() {
 		DbUnitEntityExporter exporter = new DbUnitEntityExporter(FILENAME);
 		exporter.startProductConsumption(ALICE);
 		exporter.finishProductConsumption(ALICE);
@@ -84,7 +84,7 @@ public class DbUnitEntityExporterTest extends ModelTest {
 	}
 
 	@Test
-	public void testUnusedClose() throws Exception {
+	public void testUnusedClose() {
 		DbUnitEntityExporter exporter = new DbUnitEntityExporter(FILENAME);
 		exporter.close();
 	}

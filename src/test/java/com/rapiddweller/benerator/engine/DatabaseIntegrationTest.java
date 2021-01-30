@@ -55,7 +55,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
 	private ConsumerMock consumer;
 	
 	@Before
-	public void setUpDatabase() throws Exception {
+	public void setUpDatabase() {
 		DBUtil.resetMonitors();
 		consumer = new ConsumerMock(true);
 		context.setGlobal("cons", consumer);
@@ -603,7 +603,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
 	}
 	
 	@Test(expected = RuntimeException.class)
-	public void testUpdateOnNonExistingPK() throws Exception {
+	public void testUpdateOnNonExistingPK() {
 		parseAndExecute(
 			"<iterate type='referee' source='db' selector='id=2' consumer='db.updater(), cons'>" +
         	"  <attribute name='id' constant='11' />" +

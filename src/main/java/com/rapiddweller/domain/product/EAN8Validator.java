@@ -43,8 +43,9 @@ public class EAN8Validator extends AbstractConstraintValidator<EAN8, String> {
 
     @Override
     public boolean isValid(String number, ConstraintValidatorContext context) {
-        if (number == null || number.length() != 8)
+        if (number == null || number.length() != 8) {
             return false;
+        }
         return checksumValidator.valid(number);
     }
 

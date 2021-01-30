@@ -66,12 +66,12 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNullPattern() throws Exception {
+    public void testNullPattern() {
         checkRegexGeneration(null);
     }
 
     @Test
-    public void testEmptyPattern() throws Exception {
+    public void testEmptyPattern() {
         checkRegexGeneration("");
     }
 
@@ -96,7 +96,7 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     }
 
     @Test
-    public void testCardinalities() throws Exception {
+    public void testCardinalities() {
         checkRegexGeneration("a");
         checkRegexGeneration("a?");
         checkRegexGeneration("a*");
@@ -108,21 +108,21 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     }
 
     @Test
-    public void testRanges() throws Exception {
+    public void testRanges() {
         checkRegexGeneration("[a-c]");
         checkRegexGeneration("[a-cA-C]");
 
     }
 
     @Test
-    public void testPredefinedClasses() throws Exception {
+    public void testPredefinedClasses() {
         checkRegexGeneration("\\d");
         checkRegexGeneration("\\s");
         checkRegexGeneration("\\w");
     }
 
     @Test
-    public void testCombinations() throws Exception {
+    public void testCombinations() {
         checkRegexGeneration("[^\\w]");
         checkRegexGeneration("[^0-1]");
 
@@ -136,13 +136,13 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     }
 
     @Test
-    public void testGroups() throws Exception {
+    public void testGroups() {
         checkRegexGeneration("(abc){1,3}");
         checkRegexGeneration("(a+b?c*){1,3}");
     }
 
     @Test
-    public void testAlternatives() throws Exception {
+    public void testAlternatives() {
         checkRegexGeneration("(a|b|c){1,3}");
         String byteValuePattern = "[1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]";
         String ipAddressPattern = "(" + byteValuePattern + "\\.){3}" + byteValuePattern;

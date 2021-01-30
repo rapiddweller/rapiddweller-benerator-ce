@@ -56,12 +56,12 @@ public class DBSequenceGeneratorTest extends GeneratorTest {
 	}
 	
 	@Test
-	public void testUncached() throws Exception {
+	public void testUncached() {
 		check(false);
 	}
 
 	@Test
-	public void testCached() throws Exception {
+	public void testCached() {
 		check(true);
 	}
 

@@ -41,7 +41,7 @@ import org.junit.Test;
 public class WhileParserAndStatementTest extends BeneratorIntegrationTest {
 
 	@Test
-	public void testNoLoop() throws Exception {
+	public void testNoLoop() {
 		context.setGlobal("count", 0);
 		parseAndExecute(
 				"<while test='2==3'>" +
@@ -51,7 +51,7 @@ public class WhileParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 	
 	@Test
-	public void testThreeLoops() throws Exception {
+	public void testThreeLoops() {
 		context.setGlobal("count", 0);
 		parseAndExecute(
 				"<while test='count &lt; 3'>" +

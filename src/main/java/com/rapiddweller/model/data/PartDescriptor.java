@@ -41,19 +41,25 @@ public class PartDescriptor extends ComponentDescriptor {
         this(name, provider, (TypeDescriptor) null);
     }
 
-    public PartDescriptor(String name, DescriptorProvider provider, String type) {
+    public PartDescriptor(String name, DescriptorProvider provider,
+                          String type) {
         this(name, provider, type, null, null, null);
     }
 
-    public PartDescriptor(String name, DescriptorProvider provider, TypeDescriptor localType) {
+    public PartDescriptor(String name, DescriptorProvider provider,
+                          TypeDescriptor localType) {
         this(name, provider, localType, null, null);
     }
 
-    public PartDescriptor(String name, DescriptorProvider provider, TypeDescriptor localType, Expression<Long> minCount, Expression<Long> maxCount) {
+    public PartDescriptor(String name, DescriptorProvider provider,
+                          TypeDescriptor localType, Expression<Long> minCount,
+                          Expression<Long> maxCount) {
         this(name, provider, null, localType, minCount, maxCount);
     }
 
-    public PartDescriptor(String name, DescriptorProvider provider, String type, TypeDescriptor localType, Expression<Long> minCount, Expression<Long> maxCount) {
+    public PartDescriptor(String name, DescriptorProvider provider, String type,
+                          TypeDescriptor localType, Expression<Long> minCount,
+                          Expression<Long> maxCount) {
         super(name, provider, type, localType);
         setMinCount(minCount);
         setMaxCount(maxCount);

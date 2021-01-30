@@ -60,7 +60,8 @@ public class DateTimeGeneratorTest extends GeneratorClassTest {
 
 	@Test
     public void testMinMax() {
-        check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0,  1), TimeUtil.time(12, 0), TimeUtil.time(12, 00));
+        check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0,  1), TimeUtil.time(12, 0), TimeUtil.time(12,
+                0));
         check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0,  1), TimeUtil.time( 0, 0), TimeUtil.time(23, 59));
         check(TimeUtil.date(2008, 6, 5), TimeUtil.date(2008, 6, 25), TimeUtil.time( 9, 0), TimeUtil.time(17,  0));
     }

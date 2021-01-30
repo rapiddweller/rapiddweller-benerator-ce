@@ -42,7 +42,8 @@ import org.apache.logging.log4j.LogManager;
  */
 public class SpecialTask extends AbstractTask {
 
-    private static final Logger logger = LogManager.getLogger(SpecialTask.class);
+    private static final Logger logger =
+            LogManager.getLogger(SpecialTask.class);
 
     public TaskResult execute(Context context, ErrorHandler errorHandler) {
         logger.info("I'm special");

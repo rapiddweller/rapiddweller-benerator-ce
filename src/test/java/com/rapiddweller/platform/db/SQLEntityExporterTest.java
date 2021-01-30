@@ -52,7 +52,7 @@ public class SQLEntityExporterTest extends ModelTest {
 		+ SQLEntityExporterTest.class.getSimpleName() + ".sql";
 
 	@Test(expected = ConfigurationError.class)
-	public void testWithoutDialect() throws Exception {
+	public void testWithoutDialect() {
         try (SQLEntityExporter exporter = new SQLEntityExporter(FILENAME)) {
             Entity alice = createEntity("Person", "name", "Alice", "birthDate", TimeUtil.date(1987, 11, 31), "score", 23);
             exporter.startProductConsumption(alice);

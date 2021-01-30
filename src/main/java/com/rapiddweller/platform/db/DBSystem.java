@@ -29,28 +29,69 @@ package com.rapiddweller.platform.db;
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.benerator.storage.StorageSystemInserter;
-import com.rapiddweller.model.data.*;
-import com.rapiddweller.common.*;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.ConnectFailedException;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ImportFailedException;
+import com.rapiddweller.common.ObjectNotFoundException;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.util.ConvertingDataSource;
-import com.rapiddweller.jdbacl.*;
+import com.rapiddweller.jdbacl.ColumnInfo;
+import com.rapiddweller.jdbacl.DBUtil;
+import com.rapiddweller.jdbacl.DatabaseDialect;
+import com.rapiddweller.jdbacl.DatabaseDialectManager;
+import com.rapiddweller.jdbacl.JDBCConnectData;
+import com.rapiddweller.jdbacl.ResultSetConverter;
 import com.rapiddweller.jdbacl.dialect.OracleDialect;
-import com.rapiddweller.jdbacl.model.*;
+import com.rapiddweller.jdbacl.model.DBCatalog;
+import com.rapiddweller.jdbacl.model.DBColumn;
+import com.rapiddweller.jdbacl.model.DBDataType;
+import com.rapiddweller.jdbacl.model.DBForeignKeyConstraint;
+import com.rapiddweller.jdbacl.model.DBMetaDataImporter;
+import com.rapiddweller.jdbacl.model.DBPrimaryKeyConstraint;
+import com.rapiddweller.jdbacl.model.DBSchema;
+import com.rapiddweller.jdbacl.model.DBTable;
+import com.rapiddweller.jdbacl.model.DBUniqueConstraint;
+import com.rapiddweller.jdbacl.model.Database;
 import com.rapiddweller.jdbacl.model.cache.CachingDBImporter;
 import com.rapiddweller.jdbacl.model.jdbc.JDBCDBImporter;
 import com.rapiddweller.jdbacl.model.jdbc.JDBCMetaDataUtil;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.ComponentDescriptor;
+import com.rapiddweller.model.data.DataModel;
+import com.rapiddweller.model.data.Entity;
+import com.rapiddweller.model.data.IdDescriptor;
+import com.rapiddweller.model.data.Mode;
+import com.rapiddweller.model.data.PartDescriptor;
+import com.rapiddweller.model.data.ReferenceDescriptor;
+import com.rapiddweller.model.data.SimpleTypeDescriptor;
+import com.rapiddweller.model.data.TypeDescriptor;
+import com.rapiddweller.model.data.TypeMapper;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.sql.*;
-import java.util.*;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.rapiddweller.jdbacl.SQLUtil.createCatSchTabString;
@@ -66,8 +107,10 @@ import static com.rapiddweller.jdbacl.SQLUtil.renderQuery;
 public abstract class DBSystem extends AbstractStorageSystem {
 
     private static final int DEFAULT_FETCH_SIZE = 100;
-    private static final VersionNumber MIN_ORACLE_VERSION = VersionNumber.valueOf("10.2.0.4");
-    private static final TypeDescriptor[] EMPTY_TYPE_DESCRIPTOR_ARRAY = new TypeDescriptor[0];
+    private static final VersionNumber MIN_ORACLE_VERSION =
+            VersionNumber.valueOf("10.2.0.4");
+    private static final TypeDescriptor[] EMPTY_TYPE_DESCRIPTOR_ARRAY =
+            new TypeDescriptor[0];
 
     // constants -------------------------------------------------------------------------------------------------------
     protected final Logger logger = LogManager.getLogger(getClass());
@@ -101,7 +144,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
     private final AtomicInteger invalidationCount;
 
     // constructors ----------------------------------------------------------------------------------------------------
-    public DBSystem(String id, String url, String driver, String user, String password, DataModel dataModel) {
+    public DBSystem(String id, String url, String driver, String user,
+                    String password, DataModel dataModel) {
         this(id, dataModel);
         setUrl(url);
         setUser(user);
@@ -136,8 +180,9 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
     // properties ------------------------------------------------------------------------------------------------------
     private static String decimalGranularity(int scale) {
-        if (scale == 0)
+        if (scale == 0) {
             return "1";
+        }
         StringBuilder builder = new StringBuilder("0.");
         builder.append("0".repeat(Math.max(0, scale - 1)));
         builder.append(1);
@@ -325,10 +370,12 @@ public abstract class DBSystem extends AbstractStorageSystem {
     public TypeDescriptor[] getTypeDescriptors() {
         logger.debug("getTypeDescriptors()");
         parseMetadataIfNecessary();
-        if (typeDescriptors == null)
+        if (typeDescriptors == null) {
             return EMPTY_TYPE_DESCRIPTOR_ARRAY;
-        else
-            return CollectionUtil.toArray(typeDescriptors.values(), TypeDescriptor.class);
+        } else {
+            return CollectionUtil
+                    .toArray(typeDescriptors.values(), TypeDescriptor.class);
+        }
     }
 
     @Override
@@ -340,40 +387,47 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
     @Override
     public void store(Entity entity) {
-        if (readOnly)
-            throw new IllegalStateException("Tried to insert rows into table '" + entity.type() + "' " +
-                    "though database '" + id + "' is read-only");
+        if (readOnly) {
+            throw new IllegalStateException(
+                    "Tried to insert rows into table '" + entity.type() + "' " +
+                            "though database '" + id + "' is read-only");
+        }
         logger.debug("Storing {}", entity);
         persistOrUpdate(entity, true);
     }
 
     @Override
     public void update(Entity entity) {
-        if (readOnly)
-            throw new IllegalStateException("Tried to update table '" + entity.type() + "' " +
-                    "though database '" + id + "' is read-only");
+        if (readOnly) {
+            throw new IllegalStateException(
+                    "Tried to update table '" + entity.type() + "' " +
+                            "though database '" + id + "' is read-only");
+        }
         logger.debug("Updating {}", entity);
         persistOrUpdate(entity, false);
     }
 
     @Override
     public void close() {
-        if (database != null)
+        if (database != null) {
             CachingDBImporter.updateCacheFile(database);
+        }
         IOUtil.close(importer);
     }
 
     public Entity queryEntityById(String tableName, Object id) {
         try {
             logger.debug("queryEntityById({}, {})", tableName, id);
-            ComplexTypeDescriptor descriptor = (ComplexTypeDescriptor) getTypeDescriptor(tableName);
+            ComplexTypeDescriptor descriptor =
+                    (ComplexTypeDescriptor) getTypeDescriptor(tableName);
             PreparedStatement query = getSelectByPKStatement(descriptor);
             query.setObject(1, id); // TODO v0.7.6 support composite keys
             ResultSet resultSet = query.executeQuery();
-            if (resultSet.next())
+            if (resultSet.next()) {
                 return ResultSet2EntityConverter.convert(resultSet, descriptor);
-            else
+            } else {
                 return null;
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Error querying " + tableName, e);
         }
@@ -381,42 +435,58 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
     @Override
     @SuppressWarnings("null")
-    public DataSource<Entity> queryEntities(String type, String selector, Context context) {
+    public DataSource<Entity> queryEntities(String type, String selector,
+                                            Context context) {
         logger.debug("queryEntities({})", type);
         Connection connection = getConnection();
         boolean script = false;
-        if (selector != null && selector.startsWith("{") && selector.endsWith("}")) {
+        if (selector != null && selector.startsWith("{") &&
+                selector.endsWith("}")) {
             selector = selector.substring(1, selector.length() - 1);
             script = true;
         }
         String sql;
-        if (StringUtil.isEmpty(selector))
-            sql = "select * from " + createCatSchTabString(catalogName, schemaName, type, dialect);
-        else if (StringUtil.startsWithIgnoreCase(selector, "select") || StringUtil.startsWithIgnoreCase(selector, "'select"))
+        if (StringUtil.isEmpty(selector)) {
+            sql = "select * from " +
+                    createCatSchTabString(catalogName, schemaName, type,
+                            dialect);
+        } else if (StringUtil.startsWithIgnoreCase(selector, "select") ||
+                StringUtil.startsWithIgnoreCase(selector, "'select")) {
             sql = selector;
-        else if (selector.startsWith("ftl:") || !script)
-            sql = "select * from " + createCatSchTabString(catalogName, schemaName, type, dialect) + " WHERE " + selector;
-        else
-            sql = "'select * from " + createCatSchTabString(catalogName, schemaName, type, dialect) + " WHERE ' + " + selector;
-        if (script)
+        } else if (selector.startsWith("ftl:") || !script) {
+            sql = "select * from " +
+                    createCatSchTabString(catalogName, schemaName, type,
+                            dialect) + " WHERE " + selector;
+        } else {
+            sql = "'select * from " +
+                    createCatSchTabString(catalogName, schemaName, type,
+                            dialect) + " WHERE ' + " + selector;
+        }
+        if (script) {
             sql = '{' + sql + '}';
+        }
         DataSource<ResultSet> source = createQuery(sql, context, connection);
-        return new EntityResultSetDataSource(source, (ComplexTypeDescriptor) getTypeDescriptor(type));
+        return new EntityResultSetDataSource(source,
+                (ComplexTypeDescriptor) getTypeDescriptor(type));
     }
 
     public long countEntities(String tableName) {
         logger.debug("countEntities({})", tableName);
-        String query = "select count(*) from " + createCatSchTabString(catalogName, schemaName, tableName, dialect);
+        String query = "select count(*) from " +
+                createCatSchTabString(catalogName, schemaName, tableName,
+                        dialect);
         return DBUtil.queryLong(query, getConnection());
     }
 
     @Override
-    public DataSource<?> queryEntityIds(String tableName, String selector, Context context) {
+    public DataSource<?> queryEntityIds(String tableName, String selector,
+                                        Context context) {
         logger.debug("queryEntityIds({}, {})", tableName, selector);
 
         // check for script
         boolean script = false;
-        if (selector != null && selector.startsWith("{") && selector.endsWith("}")) {
+        if (selector != null && selector.startsWith("{") &&
+                selector.endsWith("}")) {
             selector = selector.substring(1, selector.length() - 1);
             script = true;
         }
@@ -424,28 +494,38 @@ public abstract class DBSystem extends AbstractStorageSystem {
         // find out pk columns
         DBTable table = getTable(tableName);
         String[] pkColumnNames = table.getPKColumnNames();
-        if (pkColumnNames.length == 0)
-            throw new ConfigurationError("Cannot create reference to table " + tableName + " since it does not define a primary key");
+        if (pkColumnNames.length == 0) {
+            throw new ConfigurationError(
+                    "Cannot create reference to table " + tableName +
+                            " since it does not define a primary key");
+        }
 
         // construct selector
-        String query = renderQuery(catalogName, schemaName, tableName,pkColumnNames, dialect);
+        String query =
+                renderQuery(catalogName, schemaName, tableName, pkColumnNames,
+                        dialect);
         if (selector != null) {
-            if (script)
+            if (script) {
                 query = "{'" + query + " where ' + " + selector + "}";
-            else
+            } else {
                 query += " where " + selector;
+            }
         }
         return query(query, true, context);
     }
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public DataSource<?> query(String query, boolean simplify, Context context) {
+    public DataSource<?> query(String query, boolean simplify,
+                               Context context) {
         logger.debug("query({})", query);
         Connection connection = getConnection();
-        QueryDataSource resultSetIterable = createQuery(query, context, connection);
-        ResultSetConverter converter = new ResultSetConverter(Object.class, simplify);
-        return new ConvertingDataSource<ResultSet, Object>(resultSetIterable, converter);
+        QueryDataSource resultSetIterable =
+                createQuery(query, context, connection);
+        ResultSetConverter converter =
+                new ResultSetConverter(Object.class, simplify);
+        return new ConvertingDataSource<ResultSet, Object>(resultSetIterable,
+                converter);
     }
 
     // database-specific interface -------------------------------------------------------------------------------------
@@ -455,12 +535,14 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
 
     public Consumer inserter(String tableName) {
-        return new StorageSystemInserter(this, (ComplexTypeDescriptor) getTypeDescriptor(tableName));
+        return new StorageSystemInserter(this,
+                (ComplexTypeDescriptor) getTypeDescriptor(tableName));
     }
 
     public abstract Connection getConnection();
 
-    protected abstract PreparedStatement getSelectByPKStatement(ComplexTypeDescriptor descriptor);
+    protected abstract PreparedStatement getSelectByPKStatement(
+            ComplexTypeDescriptor descriptor);
 
     public boolean tableExists(String tableName) {
         logger.debug("tableExists({})", tableName);
@@ -486,16 +568,20 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
 
     public long nextSequenceValue(String sequenceName) {
-        return DBUtil.queryLong(getDialect().renderFetchSequenceValue(sequenceName), getConnection());
+        return DBUtil
+                .queryLong(getDialect().renderFetchSequenceValue(sequenceName),
+                        getConnection());
     }
 
-    public void setSequenceValue(String sequenceName, long value) throws SQLException {
+    public void setSequenceValue(String sequenceName, long value)
+            throws SQLException {
         getDialect().setNextSequenceValue(sequenceName, value, getConnection());
     }
 
     protected Connection createConnection() {
         try {
-            Connection connection = DBUtil.connect(url, driver, user, password, readOnly);
+            Connection connection =
+                    DBUtil.connect(url, driver, user, password, readOnly);
             if (!connectedBefore) {
                 DBUtil.logMetaData(connection);
                 connectedBefore = true;
@@ -503,7 +589,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
             connection.setAutoCommit(false);
             return connection;
         } catch (ConnectFailedException e) {
-            throw new RuntimeException("Connecting the database failed. URL: " + url, e);
+            throw new RuntimeException(
+                    "Connecting the database failed. URL: " + url, e);
         } catch (SQLException e) {
             throw new ConfigurationError("Turning off auto-commit failed", e);
         }
@@ -519,8 +606,9 @@ public abstract class DBSystem extends AbstractStorageSystem {
                 if (!bufferFile.delete() && metaDataCache) {
                     logger.error("Deleting " + bufferFile + " failed");
                     metaDataCache = false;
-                } else
+                } else {
                     logger.info("Deleted meta data cache file: " + bufferFile);
+                }
 
             }
         }
@@ -536,13 +624,16 @@ public abstract class DBSystem extends AbstractStorageSystem {
         //this.tableColumnIndexes = new HashMap<String, Map<String, Integer>>();
         getDialect(); // make sure dialect is initialized
         database = getDbMetaData();
-        if (lazy)
-            logger.info("Fetching table details and ordering tables by dependency");
-        else
+        if (lazy) {
+            logger.info(
+                    "Fetching table details and ordering tables by dependency");
+        } else {
             logger.info("Ordering tables by dependency");
+        }
         List<DBTable> tables = DBUtil.dependencyOrderedTables(database);
-        for (DBTable table : tables)
+        for (DBTable table : tables) {
             parseTable(table);
+        }
     }
 
     public DatabaseDialect getDialect() {
@@ -550,11 +641,14 @@ public abstract class DBSystem extends AbstractStorageSystem {
             try {
                 DatabaseMetaData metaData = getConnection().getMetaData();
                 String productName = metaData.getDatabaseProductName();
-                VersionNumber productVersion = VersionNumber.valueOf(metaData.getDatabaseMajorVersion() + "." +
-                        metaData.getDatabaseMinorVersion());
-                dialect = DatabaseDialectManager.getDialectForProduct(productName, productVersion);
+                VersionNumber productVersion = VersionNumber
+                        .valueOf(metaData.getDatabaseMajorVersion() + "." +
+                                metaData.getDatabaseMinorVersion());
+                dialect = DatabaseDialectManager
+                        .getDialectForProduct(productName, productVersion);
             } catch (SQLException e) {
-                throw new ConfigurationError("Database meta data access failed", e);
+                throw new ConfigurationError("Database meta data access failed",
+                        e);
             }
         }
         return dialect;
@@ -569,8 +663,9 @@ public abstract class DBSystem extends AbstractStorageSystem {
     // private helpers ------------------------------------------------------------------------------
 
     public Database getDbMetaData() {
-        if (database == null)
+        if (database == null) {
             fetchDbMetaData();
+        }
         return database;
     }
 
@@ -585,10 +680,13 @@ public abstract class DBSystem extends AbstractStorageSystem {
             try {
                 connection = getConnection();
                 DatabaseMetaData metaData = connection.getMetaData();
-                VersionNumber driverVersion = VersionNumber.valueOf(metaData.getDriverVersion());
-                if (driverVersion.compareTo(MIN_ORACLE_VERSION) < 0)
-                    logger.warn("Your Oracle driver has a bug in metadata support. Please update to 10.2.0.4 or newer. " +
-                            "You can use that driver for accessing an Oracle 9 server as well.");
+                VersionNumber driverVersion =
+                        VersionNumber.valueOf(metaData.getDriverVersion());
+                if (driverVersion.compareTo(MIN_ORACLE_VERSION) < 0) {
+                    logger.warn(
+                            "Your Oracle driver has a bug in metadata support. Please update to 10.2.0.4 or newer. " +
+                                    "You can use that driver for accessing an Oracle 9 server as well.");
+                }
             } catch (SQLException e) {
                 throw new ConfigurationError(e);
             } finally {
@@ -600,64 +698,83 @@ public abstract class DBSystem extends AbstractStorageSystem {
     private void fetchDbMetaData() {
         try {
             importer = createJDBCImporter();
-            if (metaDataCache)
-                importer = new CachingDBImporter((JDBCDBImporter) importer, getEnvironment());
+            if (metaDataCache) {
+                importer = new CachingDBImporter((JDBCDBImporter) importer,
+                        getEnvironment());
+            }
             database = importer.importDatabase();
         } catch (ConnectFailedException e) {
             throw new ConfigurationError("Database not available. ", e);
         } catch (ImportFailedException e) {
-            throw new ConfigurationError("Unexpected failure of database meta data import. ", e);
+            throw new ConfigurationError(
+                    "Unexpected failure of database meta data import. ", e);
         }
     }
 
     private JDBCDBImporter createJDBCImporter() {
-        return JDBCMetaDataUtil.getJDBCDBImporter(getConnection(), user, schemaName,
-                true, false, false, false, includeTables, excludeTables);
+        return JDBCMetaDataUtil
+                .getJDBCDBImporter(getConnection(), user, schemaName,
+                        true, false, false, false, includeTables,
+                        excludeTables);
     }
 
-    private QueryDataSource createQuery(String query, Context context, Connection connection) {
-        return new QueryDataSource(connection, query, fetchSize, (dynamicQuerySupported ? context : null));
+    private QueryDataSource createQuery(String query, Context context,
+                                        Connection connection) {
+        return new QueryDataSource(connection, query, fetchSize,
+                (dynamicQuerySupported ? context : null));
     }
 
-    protected abstract PreparedStatement getStatement(ComplexTypeDescriptor descriptor, boolean insert,
-                                                      List<ColumnInfo> columnInfos);
+    protected abstract PreparedStatement getStatement(
+            ComplexTypeDescriptor descriptor, boolean insert,
+            List<ColumnInfo> columnInfos);
 
     private void parseTable(DBTable table) {
-        logger.debug("Parsing table {}" + table);
+        logger.debug("Parsing table {}", table);
         String tableName = table.getName();
         tables.put(tableName.toUpperCase(), table);
         ComplexTypeDescriptor complexType;
-        if (lazy)
+        if (lazy) {
             complexType = new LazyTableComplexTypeDescriptor(table, this);
-        else
-            complexType = mapTableToComplexTypeDescriptor(table, new ComplexTypeDescriptor(tableName, this));
+        } else {
+            complexType = mapTableToComplexTypeDescriptor(table,
+                    new ComplexTypeDescriptor(tableName, this));
+        }
         typeDescriptors.put(tableName, complexType);
     }
 
-    public ComplexTypeDescriptor mapTableToComplexTypeDescriptor(DBTable table, ComplexTypeDescriptor complexType) {
+    public ComplexTypeDescriptor mapTableToComplexTypeDescriptor(DBTable table,
+                                                                 ComplexTypeDescriptor complexType) {
         // process primary keys
         DBPrimaryKeyConstraint pkConstraint = table.getPrimaryKeyConstraint();
         if (pkConstraint != null) {
             String[] pkColumnNames = pkConstraint.getColumnNames();
-            if (pkColumnNames.length == 1) { // TODO v0.7.6 support composite primary keys
+            if (pkColumnNames.length ==
+                    1) { // TODO v0.7.6 support composite primary keys
                 String columnName = pkColumnNames[0];
                 DBColumn column = table.getColumn(columnName);
                 table.getColumn(columnName);
-                String abstractType = JdbcMetaTypeMapper.abstractType(column.getType(), acceptUnknownColumnTypes);
-                IdDescriptor idDescriptor = new IdDescriptor(columnName, this, abstractType);
+                String abstractType = JdbcMetaTypeMapper
+                        .abstractType(column.getType(),
+                                acceptUnknownColumnTypes);
+                IdDescriptor idDescriptor =
+                        new IdDescriptor(columnName, this, abstractType);
                 complexType.setComponent(idDescriptor);
             }
         }
 
         // process foreign keys
-        for (DBForeignKeyConstraint constraint : table.getForeignKeyConstraints()) {
-            String[] foreignKeyColumnNames = constraint.getForeignKeyColumnNames();
+        for (DBForeignKeyConstraint constraint : table
+                .getForeignKeyConstraints()) {
+            String[] foreignKeyColumnNames =
+                    constraint.getForeignKeyColumnNames();
             if (foreignKeyColumnNames.length == 1) {
                 String fkColumnName = foreignKeyColumnNames[0];
                 DBTable targetTable = constraint.getRefereeTable();
-                DBColumn fkColumn = constraint.getTable().getColumn(fkColumnName);
+                DBColumn fkColumn =
+                        constraint.getTable().getColumn(fkColumnName);
                 DBDataType concreteType = fkColumn.getType();
-                String abstractType = JdbcMetaTypeMapper.abstractType(concreteType, acceptUnknownColumnTypes);
+                String abstractType = JdbcMetaTypeMapper
+                        .abstractType(concreteType, acceptUnknownColumnTypes);
                 ReferenceDescriptor descriptor = new ReferenceDescriptor(
                         fkColumnName,
                         this,
@@ -669,8 +786,10 @@ public abstract class DBSystem extends AbstractStorageSystem {
                 descriptor.setMaxCount(new ConstantExpression<>(1L));
                 boolean nullable = fkColumn.isNullable();
                 descriptor.setNullable(nullable);
-                complexType.setComponent(descriptor); // overwrite possible id descriptor for foreign keys
-                logger.debug("Parsed reference " + table.getName() + '.' + descriptor);
+                complexType.setComponent(
+                        descriptor); // overwrite possible id descriptor for foreign keys
+                logger.debug("Parsed reference " + table.getName() + '.' +
+                        descriptor);
             } else {
                 // TODO v0.7.6 handle composite keys
             }
@@ -680,46 +799,60 @@ public abstract class DBSystem extends AbstractStorageSystem {
             try {
                 logger.debug("parsing column: {}", column);
                 String columnName = column.getName();
-                if (complexType.getComponent(columnName) != null)
+                if (complexType.getComponent(columnName) != null) {
                     continue; // skip columns that were already parsed (fk)
+                }
                 String columnId = table.getName() + '.' + columnName;
                 if (column.isVersionColumn()) {
                     logger.debug("Leaving out version column {}", columnId);
                     continue;
                 }
                 DBDataType columnType = column.getType();
-                String type = JdbcMetaTypeMapper.abstractType(columnType, acceptUnknownColumnTypes);
+                String type = JdbcMetaTypeMapper
+                        .abstractType(columnType, acceptUnknownColumnTypes);
                 String defaultValue = column.getDefaultValue();
-                SimpleTypeDescriptor typeDescriptor = new SimpleTypeDescriptor(columnId, this, type);
-                if (defaultValue != null)
+                SimpleTypeDescriptor typeDescriptor =
+                        new SimpleTypeDescriptor(columnId, this, type);
+                if (defaultValue != null) {
                     typeDescriptor.setDetailValue("constant", defaultValue);
-                if (column.getSize() != null)
+                }
+                if (column.getSize() != null) {
                     typeDescriptor.setMaxLength(column.getSize());
+                }
                 if (column.getFractionDigits() != null) {
-                    if ("timestamp".equals(type))
+                    if ("timestamp".equals(type)) {
                         typeDescriptor.setGranularity("1970-01-02");
-                    else
-                        typeDescriptor.setGranularity(decimalGranularity(column.getFractionDigits()));
+                    } else {
+                        typeDescriptor.setGranularity(
+                                decimalGranularity(column.getFractionDigits()));
+                    }
                 }
                 //typeDescriptors.put(typeDescriptor.getName(), typeDescriptor);
-                PartDescriptor descriptor = new PartDescriptor(columnName, this);
+                PartDescriptor descriptor =
+                        new PartDescriptor(columnName, this);
                 descriptor.setLocalType(typeDescriptor);
                 descriptor.setMinCount(new ConstantExpression<>(1L));
                 descriptor.setMaxCount(new ConstantExpression<>(1L));
                 descriptor.setNullable(column.getNotNullConstraint() == null);
-                List<DBUniqueConstraint> ukConstraints = column.getUkConstraints();
+                List<DBUniqueConstraint> ukConstraints =
+                        column.getUkConstraints();
                 for (DBUniqueConstraint constraint : ukConstraints) {
                     if (constraint.getColumnNames().length == 1) {
                         descriptor.setUnique(true);
                     } else {
-                        logger.warn("Automated uniqueness assurance on multiple columns is not provided yet: " + constraint);
+                        logger.warn(
+                                "Automated uniqueness assurance on multiple columns is not provided yet: " +
+                                        constraint);
                         // TODO v0.7.6 support uniqueness constraints on combination of columns
                     }
                 }
-                logger.debug("parsed attribute " + columnId + ": " + descriptor);
+                logger.debug(
+                        "parsed attribute " + columnId + ": " + descriptor);
                 complexType.addComponent(descriptor);
             } catch (Exception e) {
-                throw new ConfigurationError("Error processing column " + column.getName() + " of table " + table.getName(), e);
+                throw new ConfigurationError(
+                        "Error processing column " + column.getName() +
+                                " of table " + table.getName(), e);
             }
         }
         return complexType;
@@ -728,39 +861,54 @@ public abstract class DBSystem extends AbstractStorageSystem {
     public List<ColumnInfo> getWriteColumnInfos(Entity entity, boolean insert) {
         String tableName = entity.type();
         DBTable table = getTable(tableName);
-        List<String> pkColumnNames = CollectionUtil.toList(table.getPKColumnNames());
-        ComplexTypeDescriptor typeDescriptor = (ComplexTypeDescriptor) getTypeDescriptor(tableName);
-        Collection<ComponentDescriptor> componentDescriptors = typeDescriptor.getComponents();
+        List<String> pkColumnNames =
+                CollectionUtil.toList(table.getPKColumnNames());
+        ComplexTypeDescriptor typeDescriptor =
+                (ComplexTypeDescriptor) getTypeDescriptor(tableName);
+        Collection<ComponentDescriptor> componentDescriptors =
+                typeDescriptor.getComponents();
         List<ColumnInfo> pkInfos = new ArrayList<>(componentDescriptors.size());
-        List<ColumnInfo> normalInfos = new ArrayList<>(componentDescriptors.size());
+        List<ColumnInfo> normalInfos =
+                new ArrayList<>(componentDescriptors.size());
         ComplexTypeDescriptor entityDescriptor = entity.descriptor();
         for (ComponentDescriptor dbCompDescriptor : componentDescriptors) {
-            ComponentDescriptor enCompDescriptor = entityDescriptor.getComponent(dbCompDescriptor.getName());
-            if (enCompDescriptor != null && enCompDescriptor.getMode() == Mode.ignored)
+            ComponentDescriptor enCompDescriptor =
+                    entityDescriptor.getComponent(dbCompDescriptor.getName());
+            if (enCompDescriptor != null &&
+                    enCompDescriptor.getMode() == Mode.ignored) {
                 continue;
+            }
             if (dbCompDescriptor.getMode() != Mode.ignored) {
                 String name = dbCompDescriptor.getName();
-                SimpleTypeDescriptor type = (SimpleTypeDescriptor) dbCompDescriptor.getTypeDescriptor();
+                SimpleTypeDescriptor type =
+                        (SimpleTypeDescriptor) dbCompDescriptor
+                                .getTypeDescriptor();
                 PrimitiveType primitiveType = type.getPrimitiveType();
                 if (primitiveType == null) {
-                    if (!acceptUnknownColumnTypes)
-                        throw new ConfigurationError("Column type of " + entityDescriptor.getName() + "." +
-                                dbCompDescriptor.getName() + " unknown: " + type.getName());
-                    else if (entity.get(type.getName()) instanceof String)
+                    if (!acceptUnknownColumnTypes) {
+                        throw new ConfigurationError(
+                                "Column type of " + entityDescriptor.getName() +
+                                        "." +
+                                        dbCompDescriptor.getName() +
+                                        " unknown: " + type.getName());
+                    } else if (entity.get(type.getName()) instanceof String) {
                         primitiveType = PrimitiveType.STRING;
-                    else
+                    } else {
                         primitiveType = PrimitiveType.OBJECT;
+                    }
                 }
                 String primitiveTypeName = primitiveType.getName();
                 DBColumn column = table.getColumn(name);
                 DBDataType columnType = column.getType();
                 int sqlType = columnType.getJdbcType();
-                Class<?> javaType = driverTypeMapper.concreteType(primitiveTypeName);
+                Class<?> javaType =
+                        driverTypeMapper.concreteType(primitiveTypeName);
                 ColumnInfo info = new ColumnInfo(name, sqlType, javaType);
-                if (pkColumnNames.contains(name))
+                if (pkColumnNames.contains(name)) {
                     pkInfos.add(info);
-                else
+                } else {
                     normalInfos.add(info);
+                }
             }
         }
         if (insert) {
@@ -775,13 +923,15 @@ public abstract class DBSystem extends AbstractStorageSystem {
     public DBTable getTable(String tableName) {
         parseMetadataIfNecessary();
         DBTable table = findTableInConfiguredCatalogAndSchema(tableName);
-        if (table != null)
+        if (table != null) {
             return table;
+        }
         table = findAnyTableOfName(tableName);
         if (table != null) {
             logger.info("Table '" + tableName + "' not found " +
                     "in the expected catalog or schema." +
-                    "I have taken it from catalog '" + table.getCatalog() + "' and schema '" + table.getSchema() + "' instead. " +
+                    "I have taken it from catalog '" + table.getCatalog() +
+                    "' and schema '" + table.getSchema() + "' instead. " +
                     "You better make sure this is right and fix the configuration");
             return table;
         }
@@ -792,8 +942,9 @@ public abstract class DBSystem extends AbstractStorageSystem {
         for (DBCatalog catalog : database.getCatalogs()) {
             for (DBSchema schema : catalog.getSchemas()) {
                 DBTable table = schema.getTable(tableName);
-                if (table != null)
+                if (table != null) {
                     return table;
+                }
             }
         }
         return null;
@@ -819,28 +970,41 @@ public abstract class DBSystem extends AbstractStorageSystem {
         List<ColumnInfo> writeColumnInfos = getWriteColumnInfos(entity, insert);
         try {
             String tableName = entity.type();
-            PreparedStatement statement = getStatement(entity.descriptor(), insert, writeColumnInfos);
+            PreparedStatement statement =
+                    getStatement(entity.descriptor(), insert, writeColumnInfos);
             for (int i = 0; i < writeColumnInfos.size(); i++) {
                 ColumnInfo info = writeColumnInfos.get(i);
                 Object jdbcValue = entity.getComponent(info.name);
-                if (info.type != null)
+                if (info.type != null) {
                     jdbcValue = AnyConverter.convert(jdbcValue, info.type);
+                }
                 try {
-                    boolean criticalOracleType = (dialect instanceof OracleDialect && (info.sqlType == Types.NCLOB || info.sqlType == Types.OTHER));
-                    if (jdbcValue != null || criticalOracleType) // Oracle is not able to perform setNull() on NCLOBs and NVARCHAR2
+                    boolean criticalOracleType =
+                            (dialect instanceof OracleDialect &&
+                                    (info.sqlType == Types.NCLOB ||
+                                            info.sqlType == Types.OTHER));
+                    if (jdbcValue != null ||
+                            criticalOracleType) // Oracle is not able to perform setNull() on NCLOBs and NVARCHAR2
+                    {
                         statement.setObject(i + 1, jdbcValue);
-                    else
+                    } else {
                         statement.setNull(i + 1, info.sqlType);
+                    }
                 } catch (SQLException e) {
-                    throw new RuntimeException("error setting column " + tableName + '.' + info.name, e);
+                    throw new RuntimeException(
+                            "error setting column " + tableName + '.' +
+                                    info.name, e);
                 }
             }
             if (batch) {
                 statement.addBatch();
             } else {
                 int rowCount = statement.executeUpdate();
-                if (rowCount == 0)
-                    throw new RuntimeException("Update failed because, since there is no database entry with the PK of " + entity);
+                if (rowCount == 0) {
+                    throw new RuntimeException(
+                            "Update failed because, since there is no database entry with the PK of " +
+                                    entity);
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException("Error in persisting " + entity, e);
@@ -848,8 +1012,9 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
 
     private void parseMetadataIfNecessary() {
-        if (typeDescriptors == null)
+        if (typeDescriptors == null) {
             parseMetaData();
+        }
     }
 
 }

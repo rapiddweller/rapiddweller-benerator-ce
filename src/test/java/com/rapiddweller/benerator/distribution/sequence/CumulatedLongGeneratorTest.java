@@ -49,12 +49,12 @@ public class CumulatedLongGeneratorTest extends GeneratorClassTest {
     // tests -----------------------------------------------------------------------------------------------------------
 
     @Test
-    public void testInstantiation() throws Exception {
+    public void testInstantiation() {
         new CumulatedLongGenerator(0, 10);
     }
 
     @Test
-    public void testAverage() throws Exception {
+    public void testAverage() {
         checkAverage(0, 1, 0.5);
         checkAverage(1, 2, 1.5);
         checkAverage(0, 2, 1);
@@ -62,13 +62,13 @@ public class CumulatedLongGeneratorTest extends GeneratorClassTest {
     }
 
     @Test
-    public void testDistribution() throws Exception {
+    public void testDistribution() {
         checkDistribution(0, 1, 1000);
         checkDistribution(0, 5, 10000);
     }
 
     @Test
-    public void testRange() throws Exception {
+    public void testRange() {
     	long min = -10;
         long max = CumulatedLongGenerator.DEFAULT_MAX;
 		CumulatedLongGenerator generator = new CumulatedLongGenerator(min, max);

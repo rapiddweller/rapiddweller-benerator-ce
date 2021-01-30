@@ -45,8 +45,9 @@ public class EntityValidator implements Validator<Entity> {
     }
 
     public boolean valid(Entity entity) {
-        if (entity == null)
+        if (entity == null) {
             return false;
+        }
         return entityType.equalsIgnoreCase(entity.type());
     }
 

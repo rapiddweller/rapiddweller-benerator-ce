@@ -43,18 +43,18 @@ import com.rapiddweller.benerator.wrapper.AlternativeGenerator;
 import com.rapiddweller.benerator.wrapper.MessageGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.bean.PropertyAccessConverter;
 import com.rapiddweller.domain.address.CityGenerator;
 import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.domain.person.FamilyNameGenerator;
 import com.rapiddweller.domain.person.Gender;
 import com.rapiddweller.domain.person.GivenNameGenerator;
-import com.rapiddweller.common.Assert;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.Encodings;
-import com.rapiddweller.common.bean.PropertyAccessConverter;
 import com.rapiddweller.format.text.NameNormalizer;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +72,8 @@ import static com.rapiddweller.benerator.util.GeneratorUtil.generateNullable;
 public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
         implements NonNullGenerator<CompanyName> {
 
-    protected static final Logger LOGGER = LogManager.getLogger(CompanyNameGenerator.class);
+    protected static final Logger LOGGER =
+            LogManager.getLogger(CompanyNameGenerator.class);
 
     private static final String ORG = "/com/rapiddweller/domain/organization/";
 
@@ -91,7 +92,8 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
         this(true, true, true);
     }
 
-    public CompanyNameGenerator(boolean sector, boolean location, boolean legalForm) {
+    public CompanyNameGenerator(boolean sector, boolean location,
+                                boolean legalForm) {
         this(sector, location, legalForm, Country.getDefault().getIsoCode());
     }
 
@@ -99,9 +101,11 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
         this(true, true, true, dataset);
     }
 
-    public CompanyNameGenerator(boolean sector, boolean location, boolean legalForm, String datasetName) {
+    public CompanyNameGenerator(boolean sector, boolean location,
+                                boolean legalForm, String datasetName) {
         super(CompanyName.class, DatasetUtil.REGION_NESTING, datasetName, true);
-        LOGGER.debug("Creating instance of {} for dataset {}", getClass(), datasetName);
+        LOGGER.debug("Creating instance of {} for dataset {}", getClass(),
+                datasetName);
         this.sector = sector;
         this.location = location;
         this.legalForm = legalForm;
@@ -146,11 +150,13 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
     }
 
     @Override
-    protected WeightedGenerator<CompanyName> createGeneratorForAtomicDataset(Dataset dataset) {
+    protected WeightedGenerator<CompanyName> createGeneratorForAtomicDataset(
+            Dataset dataset) {
         String isoCode = dataset.getName();
         Country country = Country.getInstance(isoCode, false);
-        if (country == null)
+        if (country == null) {
             throw new ConfigurationError("Unknown country code: " + isoCode);
+        }
         return new CountryCompanyNameGenerator(country);
     }
 
@@ -163,7 +169,8 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
 
     // helper class ----------------------------------------------------------------------------------------------------
 
-    class CountryCompanyNameGenerator extends ThreadSafeNonNullGenerator<CompanyName>
+    class CountryCompanyNameGenerator
+            extends ThreadSafeNonNullGenerator<CompanyName>
             implements WeightedGenerator<CompanyName> {
 
         private final Country country;
@@ -189,12 +196,16 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
                 initWithDataset(country.getIsoCode(), context);
             } catch (Exception e) {
                 String fallbackDataset = DatasetUtil.fallbackRegionName();
-                LOGGER.warn("Error initializing location generator for dataset " + datasetName + ", falling back to " + fallbackDataset);
+                LOGGER.warn(
+                        "Error initializing location generator for dataset " +
+                                datasetName + ", falling back to " +
+                                fallbackDataset);
                 initWithDataset(fallbackDataset, context);
             }
         }
 
-        public void initWithDataset(String datasetToUse, GeneratorContext context) {
+        public void initWithDataset(String datasetToUse,
+                                    GeneratorContext context) {
             createAndInitLocationGenerator(datasetToUse);
             initLegalFormGenerator(datasetToUse);
             initSectorGenerator(datasetToUse);
@@ -209,16 +220,19 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
 
             if (sectorGenerator != null) {
                 String sector = generateNullable(sectorGenerator);
-                if (sector != null)
+                if (sector != null) {
                     name.setSector(sector);
+                }
             }
             if (locationGenerator != null) {
                 String location = generateNullable(locationGenerator);
-                if (location != null)
+                if (location != null) {
                     name.setLocation(location);
+                }
             }
-            if (legalFormGenerator != null)
+            if (legalFormGenerator != null) {
                 name.setLegalForm(generateNullable(legalFormGenerator));
+            }
             name.setDatasetName(datasetName);
             return name;
         }
@@ -235,18 +249,23 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
 
         // private helpers -------------------------------------------------------------------------------------------------
 
-        private void createAndInitShortNameGenerator(String datasetToUse, GeneratorContext context) {
+        private void createAndInitShortNameGenerator(String datasetToUse,
+                                                     GeneratorContext context) {
             shortNameGenerator = new AlternativeGenerator<>(String.class);
             shortNameGenerator.addSource(createInitialsNameGenerator());
-            addSourceIfNotNull(createPersonNameGenerator(datasetToUse), shortNameGenerator);
-            addSourceIfNotNull(createArtificialNameGenerator(), shortNameGenerator);
+            addSourceIfNotNull(createPersonNameGenerator(datasetToUse),
+                    shortNameGenerator);
+            addSourceIfNotNull(createArtificialNameGenerator(),
+                    shortNameGenerator);
             addSourceIfNotNull(createTechNameGenerator(), shortNameGenerator);
             shortNameGenerator.init(context);
         }
 
-        private void addSourceIfNotNull(Generator<String> source, AlternativeGenerator<String> master) {
-            if (source != null)
+        private void addSourceIfNotNull(Generator<String> source,
+                                        AlternativeGenerator<String> master) {
+            if (source != null) {
                 master.addSource(source);
+            }
         }
 
         private RegexStringGenerator createInitialsNameGenerator() {
@@ -256,32 +275,42 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
         private MessageGenerator createTechNameGenerator() {
             try {
                 return new MessageGenerator("{0}{1}",
-                        new SequencedCSVSampleGenerator<String>(ORG + "tech1.csv"),
-                        new SequencedCSVSampleGenerator<String>(ORG + "tech2.csv")
+                        new SequencedCSVSampleGenerator<String>(
+                                ORG + "tech1.csv"),
+                        new SequencedCSVSampleGenerator<String>(
+                                ORG + "tech2.csv")
                 );
             } catch (Exception e) {
-                LOGGER.info("Cannot create technical company name generator: " + e.getMessage());
+                LOGGER.info("Cannot create technical company name generator: " +
+                        e.getMessage());
                 return null;
             }
         }
 
         private TokenCombiner createArtificialNameGenerator() {
             try {
-                return new TokenCombiner(ORG + "artificialName.csv", false, '-', Encodings.UTF_8, false);
+                return new TokenCombiner(ORG + "artificialName.csv", false, '-',
+                        Encodings.UTF_8, false);
             } catch (Exception e) {
-                LOGGER.info("Cannot create artificial company name generator: " + e.getMessage());
+                LOGGER.info(
+                        "Cannot create artificial company name generator: " +
+                                e.getMessage());
                 return null;
             }
         }
 
-        private MessageGenerator createPersonNameGenerator(String datasetToUse) {
+        private MessageGenerator createPersonNameGenerator(
+                String datasetToUse) {
             try {
                 return new MessageGenerator("{0} {1}",
-                        GivenNameGenerator.sharedInstance(datasetToUse, Gender.MALE),
+                        GivenNameGenerator
+                                .sharedInstance(datasetToUse, Gender.MALE),
                         FamilyNameGenerator.sharedInstance(datasetToUse)
                 );
             } catch (Exception e) {
-                LOGGER.info("Cannot create person-based company name generator: " + e.getMessage());
+                LOGGER.info(
+                        "Cannot create person-based company name generator: " +
+                                e.getMessage());
                 return null;
             }
         }
@@ -290,12 +319,17 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
             if (sector) {
                 try {
                     Country country = Country.getInstance(datasetName);
-                    sectorGenerator = new SectorGenerator(country.getDefaultLanguageLocale());
+                    sectorGenerator = new SectorGenerator(
+                            country.getDefaultLanguageLocale());
                     sectorGenerator.init(context);
                 } catch (Exception e) {
-                    if ("US".equals(datasetName))
-                        throw new ConfigurationError("Failed to initialize SectorGenerator with US dataset", e);
-                    LOGGER.info("Cannot create sector generator: " + e.getMessage() + ". Falling back to US");
+                    if ("US".equals(datasetName)) {
+                        throw new ConfigurationError(
+                                "Failed to initialize SectorGenerator with US dataset",
+                                e);
+                    }
+                    LOGGER.info("Cannot create sector generator: " +
+                            e.getMessage() + ". Falling back to US");
                     initSectorGenerator("US");
                 }
             }
@@ -308,7 +342,8 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
                     legalFormGenerator = new LegalFormGenerator(datasetName);
                     legalFormGenerator.init(context);
                 } catch (Exception e) {
-                    LOGGER.error("Cannot create legal form generator: " + e.getMessage() + ". Falling back to US. ");
+                    LOGGER.error("Cannot create legal form generator: " +
+                            e.getMessage() + ". Falling back to US. ");
                     initLegalFormGenerator("US");
                 }
             }
@@ -322,24 +357,31 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
                 Generator<String> locationBaseGen;
                 if (location && country != null) {
                     try {
-                        Generator<String> cityGen = WrapperFactory.applyConverter(
-                                new CityGenerator(country.getIsoCode()),
-                                new PropertyAccessConverter("name"),
-                                new NameNormalizer());
-                        if (DatasetUtil.getDataset(DatasetUtil.REGION_NESTING, datasetName).isAtomic()) {
-                            locationBaseGen = new AlternativeGenerator<>(String.class,
-                                    new ConstantGenerator<>(country.getLocalName()),
-                                    cityGen);
+                        Generator<String> cityGen =
+                                WrapperFactory.applyConverter(
+                                        new CityGenerator(country.getIsoCode()),
+                                        new PropertyAccessConverter("name"),
+                                        new NameNormalizer());
+                        if (DatasetUtil.getDataset(DatasetUtil.REGION_NESTING,
+                                datasetName).isAtomic()) {
+                            locationBaseGen =
+                                    new AlternativeGenerator<>(String.class,
+                                            new ConstantGenerator<>(
+                                                    country.getLocalName()),
+                                            cityGen);
                         } else {
                             locationBaseGen = cityGen;
                         }
                     } catch (Exception e) {
-                        LOGGER.info("Cannot create location generator: " + e.getMessage());
+                        LOGGER.info("Cannot create location generator: " +
+                                e.getMessage());
                         locationBaseGen = new ConstantGenerator<>(null);
                     }
-                } else
+                } else {
                     locationBaseGen = new ConstantGenerator<>(null);
-                locationGenerator = WrapperFactory.injectNulls(locationBaseGen, nullQuota);
+                }
+                locationGenerator =
+                        WrapperFactory.injectNulls(locationBaseGen, nullQuota);
                 locationGenerator.init(context);
                 locationGenerators.put(datasetName, locationGenerator);
             }

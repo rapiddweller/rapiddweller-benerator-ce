@@ -49,20 +49,23 @@ public class PersonXMLBuilderDemo {
         try {
             //out = new BufferedWriter(new FileWriter(FILE_NAME));
             out = new OutputStreamWriter(System.out);
-            ScriptedDocumentWriter<Person> writer = new ScriptedDocumentWriter<Person>(
-                    out,
-                    "com/rapiddweller/benerator/xmlHeader.ftl",
-                    "com/rapiddweller/benerator/xmlPart.ftl",
-                    "com/rapiddweller/benerator/xmlFooter.ftl"
-            );
+            ScriptedDocumentWriter<Person> writer =
+                    new ScriptedDocumentWriter<Person>(
+                            out,
+                            "com/rapiddweller/benerator/xmlHeader.ftl",
+                            "com/rapiddweller/benerator/xmlPart.ftl",
+                            "com/rapiddweller/benerator/xmlFooter.ftl"
+                    );
             System.out.println("Running...");
             long startMillis = System.currentTimeMillis();
             PersonGenerator generator = new PersonGenerator();
             generator.init(new DefaultBeneratorContext());
             FileBuilder.build(generator, LENGTH, writer);
             long elapsedTime = System.currentTimeMillis() - startMillis;
-            System.out.println("Created file " + FILE_NAME + " with " + LENGTH + " entries " +
-                    "within " + (elapsedTime / 1000) + "s (" + (LENGTH * 1000L / elapsedTime) +
+            System.out.println("Created file " + FILE_NAME + " with " + LENGTH +
+                    " entries " +
+                    "within " + (elapsedTime / 1000) + "s (" +
+                    (LENGTH * 1000L / elapsedTime) +
                     " entries per second)");
         } finally {
             IOUtil.close(out);

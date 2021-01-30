@@ -26,10 +26,10 @@
 
 package com.rapiddweller.platform.xml;
 
+import com.rapiddweller.common.anno.Nullable;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.common.anno.Nullable;
 import org.w3c.dom.Element;
 
 /**
@@ -50,20 +50,23 @@ public class XmlEntity extends Entity {
     @Nullable
     private Element sourceElement;
 
-    public XmlEntity(ComplexTypeDescriptor descriptor, Object... componentKeyValuePairs) {
+    public XmlEntity(ComplexTypeDescriptor descriptor,
+                     Object... componentKeyValuePairs) {
         super(descriptor, componentKeyValuePairs);
         this.sourceElement = null;
     }
 
     public XmlEntity(Entity prototype) {
         super(prototype);
-        if (prototype instanceof XmlEntity)
+        if (prototype instanceof XmlEntity) {
             this.sourceElement = ((XmlEntity) prototype).sourceElement;
-        else
+        } else {
             this.sourceElement = null;
+        }
     }
 
-    public XmlEntity(String name, DescriptorProvider descriptorProvider, Object... componentKeyValuePairs) {
+    public XmlEntity(String name, DescriptorProvider descriptorProvider,
+                     Object... componentKeyValuePairs) {
         super(name, descriptorProvider, componentKeyValuePairs);
         this.sourceElement = null;
     }

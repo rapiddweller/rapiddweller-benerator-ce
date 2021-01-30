@@ -48,7 +48,7 @@ import org.junit.Test;
 public class ExecuteParserAndStatementTest extends BeneratorIntegrationTest {
 
 	@Test
-	public void testBeanInvocation() throws Exception {
+	public void testBeanInvocation() {
 		Statement statement = parse("<execute>bean.invoke(2)</execute>");
 		BeanMock bean = new BeanMock();
 		context.set("bean", bean);
@@ -58,14 +58,14 @@ public class ExecuteParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 
 	@Test
-	public void testSimpleTypeVariableDefinition() throws Exception {
+	public void testSimpleTypeVariableDefinition() {
 		Statement statement = parse("<execute>x = 3</execute>");
 		statement.execute(context);
 		assertEquals(3, context.get("x"));
 	}
 	
 	@Test
-	public void testSimpleTypeVariableAccess() throws Exception {
+	public void testSimpleTypeVariableAccess() {
 		context.setGlobal("x", 3);
 		Statement statement = parse("<execute>x = x + 2</execute>");
 		statement.execute(context);
@@ -73,13 +73,13 @@ public class ExecuteParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 	
 	@Test(expected = ConfigurationError.class)
-	public void testSqlExecutionWithoutTarget() throws Exception {
+	public void testSqlExecutionWithoutTarget() {
 		Statement statement = parse("<execute type='sql'>create sequence seq</execute>");
 		statement.execute(context);
 	}
 
 	@Test
-	public void testEmptyResultSet() throws Exception {
+	public void testEmptyResultSet() {
 		String url = HSQLUtil.getInMemoryURL("benerator");
 		DBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
 		BeneratorContext context = new DefaultBeneratorContext();
@@ -95,7 +95,7 @@ public class ExecuteParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 
 	@Test
-	public void testDbInvalidationDefault() throws Exception {
+	public void testDbInvalidationDefault() {
 		String url = HSQLUtil.getInMemoryURL("benerator");
 		DBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
 		BeneratorContext context = new DefaultBeneratorContext();
@@ -116,7 +116,7 @@ public class ExecuteParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 
 	@Test
-	public void testDbInvalidationOverride() throws Exception {
+	public void testDbInvalidationOverride() {
 		String url = HSQLUtil.getInMemoryURL("benerator");
 		DBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
 		BeneratorContext context = new DefaultBeneratorContext();

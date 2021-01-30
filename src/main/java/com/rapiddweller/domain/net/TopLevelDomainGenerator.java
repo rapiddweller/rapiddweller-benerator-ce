@@ -38,7 +38,8 @@ import com.rapiddweller.common.Encodings;
  * @author Volker Bergmann
  * @since 0.5.2
  */
-public class TopLevelDomainGenerator extends WeightedCSVSampleGenerator<String> implements NonNullGenerator<String> {
+public class TopLevelDomainGenerator extends WeightedCSVSampleGenerator<String>
+        implements NonNullGenerator<String> {
 
     public TopLevelDomainGenerator() {
         super("/com/rapiddweller/domain/net/tld.csv", Encodings.UTF_8);

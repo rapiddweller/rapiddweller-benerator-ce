@@ -48,11 +48,13 @@ public class CSVTableExporterDemo {
     private static final String USER = "sa";
     private static final String PASSWORD = null;
 
-    private static Logger logger = LogManager.getLogger(CSVTableExporterDemo.class);
+    private static Logger logger =
+            LogManager.getLogger(CSVTableExporterDemo.class);
 
     public static void main(String[] args) throws IOException {
         // first we create a table with some data to export
-        DBSystem db = new DBSystem(null, JDBC_URL, JDBC_DRIVER, USER, PASSWORD, new DataModel());
+        DBSystem db = new DBSystem(null, JDBC_URL, JDBC_DRIVER, USER, PASSWORD,
+                new DataModel());
         try {
             db.execute("create table db_data (" +
                     "    id   int," +
@@ -73,18 +75,22 @@ public class CSVTableExporterDemo {
     }
 
     private static void exportTableAsCSV(StorageSystem db, String filename) {
-        DataSource<Entity> entities = (DataSource<Entity>) db.queryEntities("db_data", null, null);
+        DataSource<Entity> entities =
+                (DataSource<Entity>) db.queryEntities("db_data", null, null);
         DataIterator<Entity> iterator = null;
         try {
             iterator = entities.iterator();
-            DataContainer<Entity> container = iterator.next(new DataContainer<Entity>());
+            DataContainer<Entity> container =
+                    iterator.next(new DataContainer<Entity>());
             Entity cursor = container.getData();
-            CSVEntityExporter exporter = new CSVEntityExporter(filename, cursor.descriptor());
+            CSVEntityExporter exporter =
+                    new CSVEntityExporter(filename, cursor.descriptor());
             try {
                 logger.info("exporting data, please wait...");
                 exporter.startProductConsumption(cursor);
-                while ((container = iterator.next(container)) != null)
+                while ((container = iterator.next(container)) != null) {
                     exporter.startProductConsumption(container.getData());
+                }
             } finally {
                 exporter.close();
             }
@@ -98,8 +104,9 @@ public class CSVTableExporterDemo {
         ReaderLineIterator iterator = null;
         try {
             iterator = new ReaderLineIterator(IOUtil.getReaderForURI(filename));
-            while (iterator.hasNext())
+            while (iterator.hasNext()) {
                 System.out.println(iterator.next());
+            }
         } finally {
             IOUtil.close(iterator);
         }

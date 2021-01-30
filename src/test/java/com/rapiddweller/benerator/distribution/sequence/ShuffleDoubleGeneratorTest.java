@@ -44,19 +44,19 @@ public class ShuffleDoubleGeneratorTest extends GeneratorClassTest {
     }
 
     @Test
-    public void testIncrementOne() throws Exception {
+    public void testIncrementOne() {
         check( 0, 2, 1, 1,   0,  1, 2);
         check(-2, 0, 1, 1,  -2, -1, 0);
     }
 
     @Test
-    public void testIncrementTwo() throws Exception {
+    public void testIncrementTwo() {
         check( 0, 2, 1, 2,   0,  2, 1);
         check(-2, 0, 1, 2,  -2, 0, -1);
     }
 
     @Test
-    public void testFractionalGranularity() throws Exception {
+    public void testFractionalGranularity() {
         check( 0, 1, 0.5, 1,   0, 1,  0.5);
         check(-1, 0, 0.5, 1,  -1, 0, -0.5);
     }
@@ -87,7 +87,7 @@ public class ShuffleDoubleGeneratorTest extends GeneratorClassTest {
     }
 
     @Test
-    public void testReset() throws Exception {
+    public void testReset() {
     	ShuffleDoubleGenerator generator = new ShuffleDoubleGenerator(0., 3., 1., 2.);
     	generator.init(context);
         expectGeneratedSequence(generator, 0., 2., 1., 3.).withCeasedAvailability();

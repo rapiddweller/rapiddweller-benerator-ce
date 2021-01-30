@@ -46,14 +46,14 @@ public class IncludeParserAndStatementTest extends BeneratorIntegrationTest {
 	private static final String PROP_URI = "com/rapiddweller/benerator/engine/parser/xml/included.properties";
 
 	@Test
-	public void testIncludePropertiesFile() throws Exception {
+	public void testIncludePropertiesFile() {
 		Statement statement = parse("<include uri='" + PROP_URI + "' />");
 		statement.execute(context);
 		assertEquals("done", context.get("incProp"));
 	}
 
 	@Test
-	public void testIncludeDescriptorFile() throws Exception {
+	public void testIncludeDescriptorFile() {
 		Statement statement = parse("<include uri='" + DESC_URI + "' />");
 		statement.execute(context);
 		assertEquals("done", context.get("incProp"));

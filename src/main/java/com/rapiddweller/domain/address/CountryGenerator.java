@@ -43,7 +43,8 @@ import com.rapiddweller.benerator.wrapper.WeighingGeneratorWrapper;
  *
  * @author Volker Bergmann
  */
-public class CountryGenerator extends AbstractDatasetGenerator<Country> implements NonNullGenerator<Country> {
+public class CountryGenerator extends AbstractDatasetGenerator<Country>
+        implements NonNullGenerator<Country> {
 
     private static final String REGION = "/com/rapiddweller/dataset/region";
 
@@ -64,7 +65,8 @@ public class CountryGenerator extends AbstractDatasetGenerator<Country> implemen
     }
 
     @Override
-    protected WeightedGenerator<Country> createGeneratorForAtomicDataset(Dataset dataset) {
+    protected WeightedGenerator<Country> createGeneratorForAtomicDataset(
+            Dataset dataset) {
         WeightedDatasetGenerator<Country> result;
         Country country = Country.getInstance(dataset.getName(), false);
         result = createGeneratorForCountry(country);
@@ -72,11 +74,16 @@ public class CountryGenerator extends AbstractDatasetGenerator<Country> implemen
         return result;
     }
 
-    protected WeightedDatasetGenerator<Country> createGeneratorForCountry(Country country) {
-        ConstantGenerator<Country> coreGenerator = new ConstantGenerator<>(country);
-        WeightedGenerator<Country> generator = new WeighingGeneratorWrapper<>(coreGenerator, country.getPopulation());
+    protected WeightedDatasetGenerator<Country> createGeneratorForCountry(
+            Country country) {
+        ConstantGenerator<Country> coreGenerator =
+                new ConstantGenerator<>(country);
+        WeightedGenerator<Country> generator =
+                new WeighingGeneratorWrapper<>(coreGenerator,
+                        country.getPopulation());
         totalWeight += generator.getWeight();
-        return new AtomicDatasetGenerator<>(generator, nesting, country.getIsoCode());
+        return new AtomicDatasetGenerator<>(generator, nesting,
+                country.getIsoCode());
     }
 
     @Override

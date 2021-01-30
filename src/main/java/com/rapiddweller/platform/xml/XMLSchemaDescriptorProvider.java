@@ -412,7 +412,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
         }
     }
 
-    private ComplexTypeDescriptor parseSimpleContent(Element simpleContentElement, ComplexTypeDescriptor complexType) {
+    private void parseSimpleContent(Element simpleContentElement, ComplexTypeDescriptor complexType) {
         Annotation annotation = null;
         LOGGER.debug("parseSimpleContent()");
         for (Element child : XMLUtil.getChildElements(simpleContentElement)) {
@@ -428,7 +428,6 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
         }
         if (annotation != null && annotation.getAppInfo() != null)
             complexType = parseComplexTypeAppinfo(complexType, annotation);
-        return complexType;
     }
 
     private void parseSimpleContentRestriction(Element restriction, ComplexTypeDescriptor complexType) {
@@ -477,7 +476,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
         }
     }
 
-    private TypeDescriptor parseTopLevelElement(Element element) {
+    private void parseTopLevelElement(Element element) {
         String name = element.getAttribute(NAME);
         LOGGER.debug("parseTopLevelElement({})", name);
         TypeDescriptor descriptor = null;
@@ -509,10 +508,9 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
         if (descriptor == null)
             descriptor = new ComplexTypeDescriptor(name, this);
         addTypeDescriptor(descriptor);
-        return descriptor;
     }
 
-    private ComponentDescriptor parseContainedElement(Element element, ComplexTypeDescriptor owner) {
+    private void parseContainedElement(Element element, ComplexTypeDescriptor owner) {
         String name = element.getAttribute(NAME);
         LOGGER.debug("parseElement({})", element.getAttribute(NAME));
         Assert.notNull(owner, "owner");
@@ -556,7 +554,6 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
         if ("false".equals(element.getAttribute("nillable")))
             descriptor.setNullable(false);
         owner.addComponent(descriptor);
-        return descriptor;
     }
 
     private ComplexTypeDescriptor wrapSimpleTypeWithComplexType(SimpleTypeDescriptor simpleType) {
@@ -702,7 +699,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     }
 
     @SuppressWarnings("null")
-    private ComponentDescriptor parseAttribute(Element attributeElement, ComplexTypeDescriptor owner) {
+    private void parseAttribute(Element attributeElement, ComplexTypeDescriptor owner) {
         String name = attributeElement.getAttribute(NAME);
         LOGGER.debug("parseAttribute({})", name);
         if (StringUtil.isEmpty(name))
@@ -741,7 +738,6 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
         if ("prohibited".equals(attributeElement.getAttribute("use")))
             descriptor.setMode(Mode.ignored);
         owner.addComponent(descriptor);
-        return descriptor;
     }
 
     @SuppressWarnings("unchecked")

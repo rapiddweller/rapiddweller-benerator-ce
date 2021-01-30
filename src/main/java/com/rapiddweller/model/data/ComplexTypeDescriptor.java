@@ -32,7 +32,11 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.collection.ListBasedSet;
 import com.rapiddweller.common.collection.NamedValueList;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Describes a type that aggregates {@link ComponentDescriptor}s.<br/>
@@ -42,7 +46,8 @@ import java.util.*;
  * @author Volker Bergmann
  * @since 0.5.0
  */
-public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHolder {
+public class ComplexTypeDescriptor extends TypeDescriptor
+        implements VariableHolder {
 
     public static final String __SIMPLE_CONTENT = "__SIMPLE_CONTENT";
 
@@ -54,12 +59,14 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
         this(name, provider, (String) null);
     }
 
-    public ComplexTypeDescriptor(String name, DescriptorProvider provider, ComplexTypeDescriptor parent) {
+    public ComplexTypeDescriptor(String name, DescriptorProvider provider,
+                                 ComplexTypeDescriptor parent) {
         super(name, provider, parent);
         init();
     }
 
-    public ComplexTypeDescriptor(String name, DescriptorProvider provider, String parentName) {
+    public ComplexTypeDescriptor(String name, DescriptorProvider provider,
+                                 String parentName) {
         super(name, provider, parentName);
         init();
     }
@@ -67,45 +74,62 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
     // component handling ----------------------------------------------------------------------------------------------
 
     public void addPart(InstanceDescriptor part) {
-        if (part instanceof ComponentDescriptor)
+        if (part instanceof ComponentDescriptor) {
             addComponent((ComponentDescriptor) part);
-        else
+        } else {
             addVariable((VariableDescriptor) part);
+        }
     }
 
     public void addComponent(ComponentDescriptor descriptor) {
         String componentName = descriptor.getName();
-        if (parent != null && ((ComplexTypeDescriptor) parent).getComponent(componentName) != null)
-            descriptor.setParent(((ComplexTypeDescriptor) parent).getComponent(componentName));
+        if (parent != null &&
+                ((ComplexTypeDescriptor) parent).getComponent(componentName) !=
+                        null) {
+            descriptor.setParent(((ComplexTypeDescriptor) parent)
+                    .getComponent(componentName));
+        }
         parts.add(componentName, descriptor);
     }
 
     public void setComponent(ComponentDescriptor component) {
         String componentName = component.getName();
-        if (parent != null && ((ComplexTypeDescriptor) parent).getComponent(componentName) != null)
-            component.setParent(((ComplexTypeDescriptor) parent).getComponent(componentName));
+        if (parent != null &&
+                ((ComplexTypeDescriptor) parent).getComponent(componentName) !=
+                        null) {
+            component.setParent(((ComplexTypeDescriptor) parent)
+                    .getComponent(componentName));
+        }
         parts.set(componentName, component);
     }
 
     public ComponentDescriptor getComponent(String name) {
-        for (InstanceDescriptor part : parts.values())
-            if (StringUtil.equalsIgnoreCase(part.getName(), name) && part instanceof ComponentDescriptor)
+        for (InstanceDescriptor part : parts.values()) {
+            if (StringUtil.equalsIgnoreCase(part.getName(), name) &&
+                    part instanceof ComponentDescriptor) {
                 return (ComponentDescriptor) part;
-        if (getParent() != null)
+            }
+        }
+        if (getParent() != null) {
             return ((ComplexTypeDescriptor) getParent()).getComponent(name);
+        }
         return null;
     }
 
     public List<InstanceDescriptor> getParts() {
-        NamedValueList<InstanceDescriptor> result = NamedValueList.createCaseInsensitiveList();
+        NamedValueList<InstanceDescriptor> result =
+                NamedValueList.createCaseInsensitiveList();
 
-        for (InstanceDescriptor ccd : parts.values())
+        for (InstanceDescriptor ccd : parts.values()) {
             result.add(ccd.getName(), ccd);
+        }
         if (getParent() != null) {
-            List<InstanceDescriptor> parentParts = ((ComplexTypeDescriptor) getParent()).getParts();
+            List<InstanceDescriptor> parentParts =
+                    ((ComplexTypeDescriptor) getParent()).getParts();
             for (InstanceDescriptor pcd : parentParts) {
                 String name = pcd.getName();
-                if (pcd instanceof ComponentDescriptor && !parts.containsName(name)) {
+                if (pcd instanceof ComponentDescriptor &&
+                        !parts.containsName(name)) {
                     InstanceDescriptor ccd = parts.someValueOfName(name);
                     result.add(name, Objects.requireNonNullElse(ccd, pcd));
                 }
@@ -116,14 +140,17 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
 
     public List<ComponentDescriptor> getComponents() {
         List<ComponentDescriptor> result = new ArrayList<>();
-        for (InstanceDescriptor instance : getParts())
-            if (instance instanceof ComponentDescriptor)
+        for (InstanceDescriptor instance : getParts()) {
+            if (instance instanceof ComponentDescriptor) {
                 result.add((ComponentDescriptor) instance);
+            }
+        }
         return result;
     }
 
     public Collection<InstanceDescriptor> getDeclaredParts() {
-        Set<InstanceDescriptor> declaredDescriptors = new ListBasedSet<>(parts.size());
+        Set<InstanceDescriptor> declaredDescriptors =
+                new ListBasedSet<>(parts.size());
         declaredDescriptors.addAll(parts.values());
         return declaredDescriptors;
     }
@@ -134,14 +161,17 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
 
     public String[] getIdComponentNames() {
         ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
-        for (ComponentDescriptor descriptor : getComponents())
-            if (descriptor instanceof IdDescriptor)
+        for (ComponentDescriptor descriptor : getComponents()) {
+            if (descriptor instanceof IdDescriptor) {
                 builder.add(descriptor.getName());
+            }
+        }
         return builder.toArray();
     }
 
     public List<ReferenceDescriptor> getReferenceComponents() {
-        return CollectionUtil.extractItemsOfExactType(ReferenceDescriptor.class, getComponents());
+        return CollectionUtil.extractItemsOfExactType(ReferenceDescriptor.class,
+                getComponents());
     }
 
     @Override
@@ -151,7 +181,8 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
 
     // construction helper methods -------------------------------------------------------------------------------------
 
-    public ComplexTypeDescriptor withComponent(ComponentDescriptor componentDescriptor) {
+    public ComplexTypeDescriptor withComponent(
+            ComponentDescriptor componentDescriptor) {
         addComponent(componentDescriptor);
         return this;
     }
@@ -166,8 +197,9 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
 
     @Override
     public String toString() {
-        if (parts.size() == 0)
+        if (parts.size() == 0) {
             return super.toString();
+        }
         //return new CompositeFormatter(false, false).render(super.toString() + '{', new CompositeAdapter(), "}");
         return getName() + getParts();
     }

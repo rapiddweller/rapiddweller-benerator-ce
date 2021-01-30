@@ -45,7 +45,6 @@ import static org.junit.Assert.*;
 public class AlternativeGeneratorTest extends GeneratorTest {
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testNonUnique() {
         Generator<Integer> source1 = new RandomIntegerGenerator(-2, -1);
         Generator<Integer> source2 = new RandomIntegerGenerator(1, 2);
@@ -92,8 +91,7 @@ public class AlternativeGeneratorTest extends GeneratorTest {
         Generator<Integer>[] gens = new Generator[values.length];
         for (int i = 0; i < values.length; i++)
             gens[i] = new NShotGeneratorProxy<>(new ConstantGenerator<>(values[i]), 1);
-        AlternativeGenerator<Integer> result = new AlternativeGenerator<>(Integer.class, gens);
-		return result;
+        return new AlternativeGenerator<>(Integer.class, gens);
     }
     
 

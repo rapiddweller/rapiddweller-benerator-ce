@@ -43,7 +43,9 @@ import com.rapiddweller.benerator.distribution.Sequence;
 public class PadovanSequence extends LongBasedSequence {
 
     @Override
-    protected NonNullGenerator<Long> createLongGenerator(Long min, Long max, Long granularity, boolean unique) {
+    protected NonNullGenerator<Long> createLongGenerator(Long min, Long max,
+                                                         Long granularity,
+                                                         boolean unique) {
         return new PadovanLongGenerator(min, max, unique);
     }
 

@@ -38,8 +38,9 @@ import org.junit.Test;
 public class VariableTest {
     @Test
     public void testConstructor() {
-        Variable<Object> actualVariable = new Variable<Object>("Name",
-                new CompositeDatasetGenerator<Object>("Nesting", "Dataset Name", true), "Scope");
+        Variable<Object> actualVariable = new Variable<>("Name",
+                new CompositeDatasetGenerator<>("Nesting", "Dataset Name",
+                        true), "Scope");
         assertTrue(actualVariable.isParallelizable());
         assertFalse(actualVariable.isResetNeeded());
         assertEquals("Scope", actualVariable.getScope());

@@ -71,9 +71,10 @@ public class EANGenerator extends NonNullGeneratorProxy<String> {
     @Override
     public void init(GeneratorContext context) {
         assertNotInitialized();
-        setSource(WrapperFactory.asNonNullGenerator(new AlternativeGenerator<>(String.class,
-                new EAN8Generator(unique),
-                new EAN13Generator(unique))));
+        setSource(WrapperFactory
+                .asNonNullGenerator(new AlternativeGenerator<>(String.class,
+                        new EAN8Generator(unique),
+                        new EAN13Generator(unique))));
         super.init(context);
     }
 

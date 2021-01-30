@@ -39,7 +39,8 @@ import com.rapiddweller.common.Encodings;
 public class WebmailDomainGenerator extends WeightedCSVSampleGenerator<String> {
 
     public WebmailDomainGenerator() {
-        super("/com/rapiddweller/domain/net/webmailDomain.csv", Encodings.UTF_8);
+        super("/com/rapiddweller/domain/net/webmailDomain.csv",
+                Encodings.UTF_8);
     }
 
     @Override

@@ -45,7 +45,8 @@ public class ArrayTypeDescriptor extends TypeDescriptor {
         this(name, provider, null);
     }
 
-    public ArrayTypeDescriptor(String name, DescriptorProvider provider, ArrayTypeDescriptor parent) {
+    public ArrayTypeDescriptor(String name, DescriptorProvider provider,
+                               ArrayTypeDescriptor parent) {
         super(name, provider, parent);
         this.elements = new TreeMap<>();
     }
@@ -67,13 +68,15 @@ public class ArrayTypeDescriptor extends TypeDescriptor {
 
     public ArrayElementDescriptor getElement(int index, boolean inherit) {
         ArrayElementDescriptor element = getElement(index);
-        if (element != null)
+        if (element != null) {
             return element;
+        }
         ArrayTypeDescriptor tmp = getParent();
         while (tmp != null && inherit) {
             ArrayElementDescriptor candidate = tmp.getElement(index);
-            if (candidate != null)
+            if (candidate != null) {
                 return candidate;
+            }
             tmp = tmp.getParent();
         }
         return null;
@@ -84,7 +87,9 @@ public class ArrayTypeDescriptor extends TypeDescriptor {
     }
 
     public int getElementCount() {
-        return (parent != null ? ((ArrayTypeDescriptor) parent).getElementCount() : elements.size());
+        return (parent != null ?
+                ((ArrayTypeDescriptor) parent).getElementCount() :
+                elements.size());
     }
 
     // variable handling -----------------------------------------------------------------------------------------------
@@ -98,10 +103,12 @@ public class ArrayTypeDescriptor extends TypeDescriptor {
 
     @Override
     public String toString() {
-        if (elements.size() == 0)
+        if (elements.size() == 0) {
             return super.toString();
+        }
         //return new CompositeFormatter(false, false).render(super.toString() + '{', new CompositeAdapter(), "}");
-        return getClass().getSimpleName() + "[name=" + getName() + ", elements=" + elements.toString() + ']';
+        return getClass().getSimpleName() + "[name=" + getName() +
+                ", elements=" + elements.toString() + ']';
     }
 
 }

@@ -47,7 +47,7 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     private static Locale realLocale;
     
     @BeforeClass
-    public static void setUpFallbackLocale() throws Exception {
+    public static void setUpFallbackLocale() {
     	realLocale = Locale.getDefault();
         Locale.setDefault(LocaleUtil.getFallbackLocale());
     }
@@ -62,24 +62,24 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     // tests -----------------------------------------------------------------------------------------------------------
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNullPattern() throws Exception {
+    public void testNullPattern() {
         createGenerator(null, 0, null);
     }
 
     @Test
-    public void testEmptyPattern() throws Exception {
+    public void testEmptyPattern() {
     	expectSequence("", "");
     }
 
     @Test
-    public void testConstant() throws Exception {
+    public void testConstant() {
     	expectSequence("a", "a");
     	expectSequence("ab", "ab");
     	expectSequence("abc@xyz\\.com", "abc@xyz.com");
     }
     
     @Test
-    public void testEscapeCharacters() throws Exception {
+    public void testEscapeCharacters() {
         expectSequence("\\-\\+\\*\\.\\?\\,\\&\\^\\$\\\\\\|", "-+*.?,&^$\\|");
         expectSequence("\\(\\)", "()");
         expectSequence("\\[\\]", "[]");
@@ -87,12 +87,12 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     }
     
     @Test
-    public void testStartEndCharacters() throws Exception {
+    public void testStartEndCharacters() {
     	expectSequence("^ABC$", "ABC");
     }
 
     @Test
-    public void testCardinalities() throws Exception {
+    public void testCardinalities() {
         expectSequence("a", "a");
         expectSequence("a?", "", "a");
         expectSequence("a*", 0, 6, "", "a", "aaa", "aaaaa", "aaaaaa");
@@ -105,7 +105,7 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     
 
     @Test
-    public void testRanges() throws Exception {
+    public void testRanges() {
     	expectSequence("[a-e]", "a", "c", "e");
     	expectSequence("[A-Ea-e]", "A", "C", "E", "a", "c", "e");
         expectSet("[a]{1,2}", "a", "aa");
@@ -116,13 +116,13 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     }
 
     @Test
-    public void testPredefinedClasses() throws Exception {
+    public void testPredefinedClasses() {
     	expectSequence("\\d", "0", "5", "9");
         expectSequence("\\w", "A", "N", "Z", "a", "n", "z", "0", "5", "9", "_");
     }
 
     @Test
-    public void testCombinations() throws Exception {
+    public void testCombinations() {
         expectSequence("[\\d^0-2]", "3", "6", "9");
         expectSet("[BL][au]", "Ba", "Bu", "La", "Lu");
         expectSet("[1-9]\\d{1,2}", 
@@ -133,14 +133,14 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     }
 
     @Test
-    public void testChoices() throws Exception {
+    public void testChoices() {
         expectSet("a|b|c|d|e", "a", "b", "c", "d", "e");
         expectSet("alpha|beta", "alpha", "beta");
         expectSet("a{1,2}|b{2,3}", "a", "aa", "bb", "bbb");
     }
 
     @Test
-    public void testGroups() throws Exception {
+    public void testGroups() {
     	expectSet("(abc){1,3}", "abc", "abcabc", "abcabcabc");
     	expectSet("(ab?){1,2}", "a", "ab", "aa", "aab", "aba", "abab");
         expectSet("x(ab){1,2}x", "xabx", "xababx");
@@ -148,7 +148,7 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     }
 
     @Test
-    public void testGroupedChoices() throws Exception {
+    public void testGroupedChoices() {
         expectSet("(a|b|c){1,2}", "a", "b", "c", "aa", "ab", "ac", "ba", "bb", "bc", "ca", "cb", "cc");
         expectSet("x(a|b)x", "xax", "xbx");
         expectSet("x(a|b){2}x", "xaax", "xabx", "xbax", "xbbx");

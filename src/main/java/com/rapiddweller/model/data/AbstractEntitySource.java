@@ -41,7 +41,8 @@ import com.rapiddweller.format.util.AbstractDataSource;
  * @since 0.5.8
  */
 
-public abstract class AbstractEntitySource extends AbstractDataSource<Entity> implements EntitySource, ContextAware {
+public abstract class AbstractEntitySource extends AbstractDataSource<Entity>
+        implements EntitySource, ContextAware {
 
     protected BeneratorContext context;
 

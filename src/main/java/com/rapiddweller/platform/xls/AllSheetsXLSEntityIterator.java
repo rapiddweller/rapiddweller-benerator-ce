@@ -28,12 +28,6 @@ package com.rapiddweller.platform.xls;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.Entity;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.IOUtil;
@@ -41,6 +35,12 @@ import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,7 +55,8 @@ import java.util.List;
  * @since 0.5.8
  */
 
-public class AllSheetsXLSEntityIterator implements DataIterator<Entity>, ContextAware {
+public class AllSheetsXLSEntityIterator
+        implements DataIterator<Entity>, ContextAware {
 
     private final String uri;
 
@@ -75,32 +76,46 @@ public class AllSheetsXLSEntityIterator implements DataIterator<Entity>, Context
 
     // constructors ----------------------------------------------------------------------------------------------------
 
-    public AllSheetsXLSEntityIterator(String uri) throws IOException, InvalidFormatException {
+    public AllSheetsXLSEntityIterator(String uri)
+            throws IOException, InvalidFormatException {
         this(uri, new NoOpConverter<>(), null, false);
     }
 
-    public AllSheetsXLSEntityIterator(String uri, Converter<String, ?> preprocessor, ComplexTypeDescriptor entityDescriptor, boolean formatted)
-            throws IOException, InvalidFormatException {
+    public AllSheetsXLSEntityIterator(String uri,
+                                      Converter<String, ?> preprocessor,
+                                      ComplexTypeDescriptor entityDescriptor,
+                                      boolean formatted)
+            throws IOException {
         this.uri = uri;
         this.preprocessor = preprocessor;
         this.entityDescriptor = entityDescriptor;
-        this.rowBased = (entityDescriptor != null && entityDescriptor.isRowBased() != null ? entityDescriptor.isRowBased() : true);
-        this.emptyMarker = (entityDescriptor != null && entityDescriptor.getEmptyMarker() != null ? entityDescriptor.getEmptyMarker() : null);
-        this.workbook = WorkbookFactory.create(IOUtil.getInputStreamForURI(uri));
+        this.rowBased = (entityDescriptor != null &&
+                entityDescriptor.isRowBased() != null ?
+                entityDescriptor.isRowBased() : true);
+        this.emptyMarker = (entityDescriptor != null &&
+                entityDescriptor.getEmptyMarker() != null ?
+                entityDescriptor.getEmptyMarker() : null);
+        this.workbook =
+                WorkbookFactory.create(IOUtil.getInputStreamForURI(uri));
         this.sheetNo = -1;
         this.formatted = formatted;
     }
 
     // properties ------------------------------------------------------------------------------------------------------
 
-    public static List<Entity> parseAll(String uri, Converter<String, ?> preprocessor, boolean formatted)
+    public static List<Entity> parseAll(String uri,
+                                        Converter<String, ?> preprocessor,
+                                        boolean formatted)
             throws IOException, InvalidFormatException {
         List<Entity> list = new ArrayList<>();
-        AllSheetsXLSEntityIterator iterator = new AllSheetsXLSEntityIterator(uri, preprocessor, null, formatted);
+        AllSheetsXLSEntityIterator iterator =
+                new AllSheetsXLSEntityIterator(uri, preprocessor, null,
+                        formatted);
         iterator.setContext(new DefaultBeneratorContext());
         DataContainer<Entity> container = new DataContainer<>();
-        while ((container = iterator.next(container)) != null)
+        while ((container = iterator.next(container)) != null) {
             list.add(container.getData());
+        }
         return list;
     }
 
@@ -129,16 +144,20 @@ public class AllSheetsXLSEntityIterator implements DataIterator<Entity>, Context
     }
 
     @Override
-    public synchronized DataContainer<Entity> next(DataContainer<Entity> container) {
-        if (sheetNo == -1)
+    public synchronized DataContainer<Entity> next(
+            DataContainer<Entity> container) {
+        if (sheetNo == -1) {
             nextSheet();
+        }
         DataContainer<Entity> result;
         do {
-            if (source == null)
+            if (source == null) {
                 return null;
+            }
             result = source.next(container);
-            if (result == null)
+            if (result == null) {
                 nextSheet();
+            }
         } while (source != null && result == null);
         return result;
     }
@@ -169,15 +188,17 @@ public class AllSheetsXLSEntityIterator implements DataIterator<Entity>, Context
         }
 
         // if a sheet was already opened, then close it
-        if (source != null)
+        if (source != null) {
             IOUtil.close(source);
+        }
 
         // select sheet
         this.sheetNo++;
 
         // create iterator
         Sheet sheet = workbook.getSheetAt(sheetNo);
-        source = new SingleSheetXLSEntityIterator(sheet, preprocessor, entityDescriptor, context, rowBased, formatted, emptyMarker);
+        source = new SingleSheetXLSEntityIterator(sheet, preprocessor,
+                entityDescriptor, context, rowBased, formatted, emptyMarker);
     }
 
 }

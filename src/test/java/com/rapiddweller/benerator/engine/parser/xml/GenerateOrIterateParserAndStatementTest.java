@@ -61,7 +61,7 @@ import org.junit.Test;
 public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegrationTest {
 
 	@Test(expected = SyntaxError.class)
-	public void testIllegalNullable() throws Exception {
+	public void testIllegalNullable() {
 		BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
 		Statement statement = parse(
 				"<generate type='dummy' count='1' consumer='NoConsumer'>" +
@@ -71,7 +71,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	}
 
 	@Test
-	public void testPaging() throws Exception {
+	public void testPaging() {
 		BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
 		Statement statement = parse(
 				"<generate type='dummy' count='{c}' pageSize='{ps}' consumer='cons'/>");
@@ -86,7 +86,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	}
 
 	@Test
-	public void testConverter() throws Exception {
+	public void testConverter() {
 		BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
 		Statement statement = parse("<generate type='dummy' count='3' converter='conv' consumer='cons'/>");
 		ConsumerMock consumer = new ConsumerMock(true);
@@ -96,8 +96,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 			public Entity convert(Entity sourceValue) {
 				ComplexTypeDescriptor descriptor = sourceValue.descriptor();
 				descriptor.setName("CONV_DUMMY");
-				Entity result = new Entity(descriptor);
-				return result;
+				return new Entity(descriptor);
 			}
 		});
 		statement.execute(context);
@@ -109,7 +108,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	}
 
 	@Test
-	public void testValidator() throws Exception {
+	public void testValidator() {
 		BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
 		Statement statement = parse(
 				"<generate type='dummy' count='3' validator='vali' consumer='cons'>" +
@@ -133,7 +132,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testArray() throws Exception {
+	public void testArray() {
 		Statement statement = parse(
 				"<generate type='array' count='5' consumer='cons'>" +
 				"  <value pattern='ABC' />" +
@@ -155,7 +154,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	}
 
     @Test
-	public void testGeneratePageSize2() throws Exception {
+	public void testGeneratePageSize2() {
 		BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
 		ConsumerMock cons = new ConsumerMock(false);
 		context.setGlobal("cons", cons);
@@ -177,7 +176,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	}
 
     @Test
-	public void testGeneratePageSize0() throws Exception {
+	public void testGeneratePageSize0() {
 		BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
 		ConsumerMock cons = new ConsumerMock(false);
 		context.setGlobal("cons", cons);
@@ -196,7 +195,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	}
 
     @Test
-	public void testSimpleSubGenerate() throws Exception {
+	public void testSimpleSubGenerate() {
 		BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
 		Statement statement = parse(
 				"<generate type='top' count='3' consumer='cons1'>" +
@@ -207,17 +206,17 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 		context.setGlobal("cons1", outerConsumer);
 		statement.execute(context);
 		assertEquals(3, outerConsumer.startConsumingCount.get());
-		assertTrue(outerConsumer.closeCount.get() == 0);
+		assertEquals(0, outerConsumer.closeCount.get());
 		ConsumerMock innerConsumer = ConsumerMock.instances.get(2);
 		assertEquals(6, innerConsumer.startConsumingCount.get());
 		assertTrue(innerConsumer.flushCount.get() > 0);
-		assertTrue(outerConsumer.closeCount.get() == 0);
+		assertEquals(0, outerConsumer.closeCount.get());
 		assertTrue(innerConsumer.closeCount.get() > 0);
 		assertEquals(9L, BeneratorMonitor.INSTANCE.getTotalGenerationCount());
 	}
 
     @Test
-	public void testSubGenerateLifeCycle() throws Exception {
+	public void testSubGenerateLifeCycle() {
 		BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
 		Statement statement = parse(
 				"<generate type='top' count='3'>" +
@@ -241,7 +240,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	}
 
     @Test
-	public void testSubGeneratePageSize2() throws Exception {
+	public void testSubGeneratePageSize2() {
 		BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
 		ConsumerMock cons = new ConsumerMock(false);
 		context.setGlobal("cons", cons);
@@ -277,7 +276,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	}
 
     @Test
-	public void testSubGeneratePageSize0() throws Exception {
+	public void testSubGeneratePageSize0() {
 		BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
 		ConsumerMock cons = new ConsumerMock(false);
 		context.setGlobal("cons", cons);
@@ -305,7 +304,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 
     /** Tests a sub loop that derives its loop length from a parent attribute. */
 	@Test
-	public void testSubGenerateParentRef() throws Exception {
+	public void testSubGenerateParentRef() {
 		Statement statement = parse(
 				"<generate name='pName' type='outer' count='3' consumer='cons'>" +
 				"    <attribute name='n' type='int' distribution='step' />" +
@@ -328,7 +327,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 
     /** Tests a combination of variable and attribute with the same name. */
 	@Test
-	public void testVariableOfSameNameAsAttribute() throws Exception {
+	public void testVariableOfSameNameAsAttribute() {
 		Statement statement = parse(
 				"<generate name='pName' type='outer' count='3' consumer='cons'>" +
 				"    <variable name='n' type='int' distribution='step' />" +
@@ -352,7 +351,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 
 	/** Tests the nesting of an &lt;execute&gt; element within a &lt;generate&gt; element */
 	@Test
-	public void testSubExecute() throws Exception {
+	public void testSubExecute() {
 		Statement statement = parse(
 				"<generate type='dummy' count='3'>" +
         		"	<execute>bean.invoke(2)</execute>" +
@@ -367,7 +366,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	
 	/** Tests iterating an {@link EntitySource} */
 	@Test
-	public void testIterate() throws Exception {
+	public void testIterate() {
 		Statement statement = parse("<iterate type='Person' source='personSource' consumer='cons' />");
 		PersonSource source = new PersonSource();
 		source.setContext(context);
@@ -381,7 +380,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	
 	/** Tests pure {@link Entity} generation */
 	@Test
-	public void testGenerate() throws Exception {
+	public void testGenerate() {
 		Statement statement = parse("<generate type='Person' count='2' consumer='cons' />");
 		ConsumerMock consumer = new ConsumerMock(false);
 		context.setGlobal("cons", consumer);
@@ -392,7 +391,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	
 	/** Tests DB update */
 	@Test
-	public void testDBUpdate() throws Exception {
+	public void testDBUpdate() {
 		// create DB
         DefaultDBSystem db = new DefaultDBSystem("db", HSQLUtil.getInMemoryURL("benetest"), 
         		HSQLUtil.DRIVER, HSQLUtil.DEFAULT_USER, HSQLUtil.DEFAULT_PASSWORD, context.getDataModel());
@@ -430,7 +429,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	}
 
 	@Test
-	public void testGenerateWithOffset() throws Exception {
+	public void testGenerateWithOffset() {
 		Statement statement = parse(
 				"<generate name='array' count='3' consumer='cons'>" +
 				"    <value type='int' distribution='step' offset='2'/>" +
@@ -445,7 +444,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
 	}
 	
 	@Test
-	public void testIterateWithOffset() throws Exception {
+	public void testIterateWithOffset() {
 		Generator<Integer[]> source = new SequenceTestGenerator<>(
 				new Integer[]{1},
 				new Integer[]{2},

@@ -44,37 +44,42 @@ public class TINValidator extends AbstractConstraintValidator<TIN, String> {
         int product = 0;
         for (int i = 0; i < 10; i++) {
             int sum = (number.charAt(i) - '0' + product) % 10;
-            if (sum == 0)
+            if (sum == 0) {
                 sum = 10;
+            }
             product = (sum * 2) % 11;
         }
         int checksum = 11 - product;
-        if (checksum == 10)
+        if (checksum == 10) {
             checksum = 0;
+        }
         return checksum;
     }
 
     @Override
     public boolean isValid(String number, ConstraintValidatorContext context) {
-        if (number == null || number.length() != 11)
+        if (number == null || number.length() != 11) {
             return false;
+        }
         boolean[] digitUsed = new boolean[10];
         // assure that at most one digit is used twice
         int doubleCount = 0;
         for (int i = 0; i < 10; i++) {
             int digit = number.charAt(i) - '0';
             boolean used = digitUsed[digit];
-            if (!used)
+            if (!used) {
                 digitUsed[digit] = true;
-            else {
+            } else {
                 doubleCount++;
-                if (doubleCount == 2)
+                if (doubleCount == 2) {
                     return false;
+                }
             }
         }
         // assure that there is exactly one digit used twice
-        if (doubleCount == 0)
+        if (doubleCount == 0) {
             return false;
+        }
         int checksum = calculateChecksum(number);
         return (number.charAt(10) == checksum + '0');
     }

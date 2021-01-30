@@ -50,22 +50,30 @@ public class CustomerValidator extends EntityValidator {
 
     @Override
     public boolean valid(Entity customer) {
-        if (!super.valid(customer))
+        if (!super.valid(customer)) {
             return false;
-        if ((Number) customer.getComponent("id") == null)
+        }
+        if ((Number) customer.getComponent("id") == null) {
             return false;
-        if (StringUtil.isEmpty((String) customer.getComponent("category")))
+        }
+        if (StringUtil.isEmpty((String) customer.getComponent("category"))) {
             return false;
-        if (StringUtil.isEmpty((String) customer.getComponent("salutation")))
+        }
+        if (StringUtil.isEmpty((String) customer.getComponent("salutation"))) {
             return false;
+        }
         String firstName = (String) customer.getComponent("first_name");
-        if (StringUtil.isEmpty(firstName))
+        if (StringUtil.isEmpty(firstName)) {
             return false;
-        if (StringUtil.isEmpty((String) customer.getComponent("last_name")))
+        }
+        if (StringUtil.isEmpty((String) customer.getComponent("last_name"))) {
             return false;
+        }
         // require date except for Charly Brown
-        if ((Date) customer.getComponent("birth_date") == null && !"Charly".equals(firstName))
+        if ((Date) customer.getComponent("birth_date") == null &&
+                !"Charly".equals(firstName)) {
             return false;
+        }
         return true;
     }
 }

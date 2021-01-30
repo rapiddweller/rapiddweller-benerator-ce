@@ -139,8 +139,7 @@ public class FactoryUtilTest extends GeneratorTest {
         }
     }
     
-	@SuppressWarnings("unchecked")
-    @Test
+	@Test
     public void testExtractValues() {
 		List<Integer> values = FactoryUtil.extractValues(CollectionUtil.toList(
 				new WeightedSample<>(1, 1),

@@ -42,19 +42,19 @@ public class BitReverseLongGeneratorTest extends GeneratorClassTest {
     }
 
     @Test
-    public void testInstantiation() throws Exception {
+    public void testInstantiation() {
         createAndInit(0, 10);
     }
 
     @Test
-    public void testBasic() throws Exception {
+    public void testBasic() {
         expectGeneratedSequence(createAndInit(0, 3),  0L,  2L,  1L, 3L).withCeasedAvailability();
         expectGeneratedSequence(createAndInit(0, 4),  0L,  4L,  2L, 1L, 3L).withCeasedAvailability();
         expectGeneratedSequence(createAndInit(0, 7),  0L,  4L,  2L, 6L, 1L, 5L, 3L, 7L).withCeasedAvailability();
     }
 
     @Test
-    public void testShifted() throws Exception {
+    public void testShifted() {
         expectGeneratedSequence(createAndInit( 1,  4),  1L,  3L,  2L,  4L).withCeasedAvailability();
         expectGeneratedSequence(createAndInit( 1,  5),  1L,  5L,  3L,  2L, 4L).withCeasedAvailability();
         expectGeneratedSequence(createAndInit(-1,  6), -1L,  3L,  1L,  5L, 0L, 4L, 2L, 6L).withCeasedAvailability();
@@ -62,17 +62,17 @@ public class BitReverseLongGeneratorTest extends GeneratorClassTest {
     }
 
     @Test
-    public void testScaled() throws Exception {
+    public void testScaled() {
         expectGeneratedSequence(createAndInit( 2,  8, 2),  2L,  6L,  4L,  8L).withCeasedAvailability();
     }
 
     @Test
-    public void testScaledAndShifted() throws Exception {
+    public void testScaledAndShifted() {
         expectGeneratedSequence(createAndInit( 1,  7, 2),  1L,  5L,  3L,  7L).withCeasedAvailability();
     }
 
     @Test
-    public void testReset() throws Exception {
+    public void testReset() {
         expectGeneratedSequence(createAndInit( 1,  4),  1L,  3L,  2L).withContinuedAvailability();
     }
 

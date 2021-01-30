@@ -46,17 +46,16 @@ import org.junit.Test;
  */
 public class MemStoreIntegrationTest extends BeneratorIntegrationTest {
 
-	private MemStore src; 
-	private MemStore dst; 
+	private MemStore dst;
 	private ConsumerMock consumer;
 	
 	@Before
-	public void setUpConsumerAndDescriptor() throws Exception {
+	public void setUpConsumerAndDescriptor() {
 		consumer = new ConsumerMock(true);
 		context.setGlobal("cons", consumer);
 
 		// create source store and prefill it
-		src = new MemStore("src", context.getDataModel());
+		MemStore src = new MemStore("src", context.getDataModel());
 		context.setGlobal("src", src);
 		ComplexTypeDescriptor descriptor = createComplexType("product");
 		descriptor.addComponent(createId("id", "int"));

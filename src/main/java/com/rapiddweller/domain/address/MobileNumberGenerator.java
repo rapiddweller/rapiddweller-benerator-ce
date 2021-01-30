@@ -35,7 +35,8 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class MobileNumberGenerator extends ThreadSafeNonNullGenerator<PhoneNumber> {
+public class MobileNumberGenerator
+        extends ThreadSafeNonNullGenerator<PhoneNumber> {
 
     private Country country;
 

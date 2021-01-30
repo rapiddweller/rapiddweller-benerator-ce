@@ -42,10 +42,12 @@ import java.util.Locale;
  */
 public class SectorGenerator extends NullInjectingGeneratorProxy<String> {
 
-    private static final String BASE_FILE_NAME = "/com/rapiddweller/domain/organization/sector";
+    private static final String BASE_FILE_NAME =
+            "/com/rapiddweller/domain/organization/sector";
 
     public SectorGenerator(Locale locale) {
-        super(new LocalCSVGenerator<>(String.class, BASE_FILE_NAME, locale, ".csv", Encodings.UTF_8), 0.7);
+        super(new LocalCSVGenerator<>(String.class, BASE_FILE_NAME, locale,
+                ".csv", Encodings.UTF_8), 0.7);
     }
 
 }

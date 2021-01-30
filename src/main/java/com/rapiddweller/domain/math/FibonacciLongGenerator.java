@@ -43,7 +43,8 @@ import com.rapiddweller.benerator.primitive.number.RecurrenceRelationNumberGener
  * @since 0.6.0
  */
 
-public class FibonacciLongGenerator extends RecurrenceRelationNumberGenerator<Long> {
+public class FibonacciLongGenerator
+        extends RecurrenceRelationNumberGenerator<Long> {
 
     private final boolean unique;
 

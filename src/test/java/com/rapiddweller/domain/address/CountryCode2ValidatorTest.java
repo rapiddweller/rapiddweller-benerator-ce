@@ -29,7 +29,6 @@ package com.rapiddweller.domain.address;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertFalse;
 
 /**
  * Tests the CountryCode2Validator.<br/>
