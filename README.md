@@ -6,8 +6,9 @@
 </p>
 
 
-![.github/workflows/ci.yml](https://github.com/rapiddweller/rapiddweller-benerator-ce/workflows/.github/workflows/ci.yml/badge.svg) 
-[![codecov](https://codecov.io/gh/rapiddweller/rapiddweller-benerator-ce/branch/development/graph/badge.svg?token=YGUTL8FXKE)](https://codecov.io/gh/rapiddweller/rapiddweller-benerator-ce)
+![.github/workflows/ci.yml](https://github.com/rapiddweller/rapiddweller-benerator-ce/workflows/.github/workflows/ci.yml/badge.svg)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/99c887d3153744e395f539551cdec103)](https://www.codacy.com/gh/rapiddweller/rapiddweller-benerator-ce/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rapiddweller/rapiddweller-benerator-ce&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/99c887d3153744e395f539551cdec103)](https://www.codacy.com/gh/rapiddweller/rapiddweller-benerator-ce/dashboard?utm_source=github.com&utm_medium=referral&utm_content=rapiddweller/rapiddweller-benerator-ce&utm_campaign=Badge_Coverage)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.rapiddweller/rapiddweller-benerator-ce/badge.svg)](https://search.maven.org/artifact/com.rapiddweller/rapiddweller-benerator-ce)
 
 # rapiddweller-benerator-ce

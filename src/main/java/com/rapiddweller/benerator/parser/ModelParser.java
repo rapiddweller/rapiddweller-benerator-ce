@@ -185,10 +185,10 @@ public class ModelParser {
             descriptor.setMaxCount(new ConstantExpression<>(1L));
 	}
 
-    public SimpleTypeDescriptor parseSimpleType(Element element) {
-        assertElementName(element, "type");
-        return parseSimpleType(element, new SimpleTypeDescriptor(null, descriptorProvider, (String) null));
-    }
+//    public SimpleTypeDescriptor parseSimpleType(Element element) {
+//        assertElementName(element, "type");
+//        return parseSimpleType(element, new SimpleTypeDescriptor(null, descriptorProvider, (String) null));
+//    }
 
     public SimpleTypeDescriptor parseSimpleType(Element element, SimpleTypeDescriptor descriptor) {
         assertElementName(element, "type");
@@ -298,13 +298,14 @@ public class ModelParser {
     private IdDescriptor parseId(Element element, ComplexTypeDescriptor owner, ComponentDescriptor descriptor) {
         assertElementName(element, "id");
         IdDescriptor result;
+        IdDescriptor resultTmp;
         if (descriptor instanceof IdDescriptor)
-            result = (IdDescriptor) descriptor;
+            resultTmp = (IdDescriptor) descriptor;
         else if (descriptor != null)
-            result = new IdDescriptor(descriptor.getName(), descriptorProvider, descriptor.getType());
+            resultTmp = new IdDescriptor(descriptor.getName(), descriptorProvider, descriptor.getType());
         else
-            result = new IdDescriptor(element.getAttribute("name"), descriptorProvider, element.getAttribute("type"));
-        result = mapInstanceDetails(element, false, result);
+            resultTmp = new IdDescriptor(element.getAttribute("name"), descriptorProvider, element.getAttribute("type"));
+        result = mapInstanceDetails(element, false, resultTmp);
         if (owner != null) {
             ComponentDescriptor parentComponent = owner.getComponent(result.getName());
             if (parentComponent != null) {
