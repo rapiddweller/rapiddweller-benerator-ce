@@ -26,35 +26,6 @@
 
 package com.rapiddweller.benerator.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.*;
-import java.sql.DriverManager;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.zip.ZipException;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-
 import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.archetype.Archetype;
 import com.rapiddweller.benerator.archetype.ArchetypeManager;
@@ -71,14 +42,21 @@ import com.rapiddweller.common.ui.I18NSupport;
 import com.rapiddweller.common.ui.swing.AlignedPane;
 import com.rapiddweller.common.ui.swing.ProgressMonitor;
 import com.rapiddweller.common.ui.swing.SwingUtil;
-import com.rapiddweller.common.ui.swing.delegate.PropertyCheckBox;
-import com.rapiddweller.common.ui.swing.delegate.PropertyComboBox;
-import com.rapiddweller.common.ui.swing.delegate.PropertyFileField;
-import com.rapiddweller.common.ui.swing.delegate.PropertyPasswordField;
-import com.rapiddweller.common.ui.swing.delegate.PropertyTextField;
+import com.rapiddweller.common.ui.swing.delegate.*;
 import com.rapiddweller.jdbacl.JDBCDriverInfo;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.*;
+import java.sql.DriverManager;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.zip.ZipException;
 
 /**
  * Lets the user enter benerator project data and 

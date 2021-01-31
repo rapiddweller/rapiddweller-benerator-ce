@@ -26,22 +26,17 @@
 
 package com.rapiddweller.benerator.main;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Image;
+import com.rapiddweller.benerator.gui.CreateProjectPanel;
+import com.rapiddweller.common.ui.I18NSupport;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.UIManager;
-
-import com.rapiddweller.benerator.gui.CreateProjectPanel;
-import com.rapiddweller.common.ui.I18NSupport;
 
 /**
  * Main class for the benerator GUI.<br/>

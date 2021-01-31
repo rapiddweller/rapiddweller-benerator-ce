@@ -26,12 +26,12 @@
 
 package com.rapiddweller.benerator.anno;
 
+import com.rapiddweller.benerator.factory.GeneratorFactory;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import com.rapiddweller.benerator.factory.GeneratorFactory;
 
 /**
  * Declares a {@link GeneratorFactory} to use for testing.<br/><br/>

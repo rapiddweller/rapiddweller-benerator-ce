@@ -28,21 +28,10 @@ package com.rapiddweller.benerator.test;
 
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.model.data.ArrayElementDescriptor;
-import com.rapiddweller.model.data.ArrayTypeDescriptor;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.DataModel;
-import com.rapiddweller.model.data.DefaultDescriptorProvider;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.IdDescriptor;
-import com.rapiddweller.model.data.InstanceDescriptor;
-import com.rapiddweller.model.data.PartDescriptor;
-import com.rapiddweller.model.data.ReferenceDescriptor;
-import com.rapiddweller.model.data.SimpleTypeDescriptor;
-import com.rapiddweller.model.data.TypeDescriptor;
-import org.junit.Before;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.model.data.*;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.Before;
 
 /**
  * Abstract parent class for all tests which rely on a {@link DataModel}.<br/><br/>

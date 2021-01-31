@@ -27,10 +27,10 @@
 package com.rapiddweller.platform.file;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.task.AbstractTask;
-import com.rapiddweller.task.TaskResult;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.task.AbstractTask;
+import com.rapiddweller.task.TaskResult;
 
 import java.io.File;
 

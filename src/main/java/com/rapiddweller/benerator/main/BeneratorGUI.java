@@ -26,24 +26,6 @@
 
 package com.rapiddweller.benerator.main;
 
-import java.awt.Container;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.AbstractAction;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
-
 import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.BeneratorError;
 import com.rapiddweller.common.FileUtil;
@@ -54,8 +36,16 @@ import com.rapiddweller.common.log.LoggingInfoPrinter;
 import com.rapiddweller.common.ui.ApplicationUtil;
 import com.rapiddweller.common.ui.JavaApplication;
 import com.rapiddweller.common.version.VersionInfo;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 
 
 /**

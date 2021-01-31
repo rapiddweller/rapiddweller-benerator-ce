@@ -26,15 +26,17 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ErrorStatement;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.StringExpression;
 import org.w3c.dom.Element;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ERROR;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableElementText;
 
 /**
  * Parses Benerator's &lt;error&gt; descriptor XML element and maps it to an {@link ErrorStatement}.<br/><br/>

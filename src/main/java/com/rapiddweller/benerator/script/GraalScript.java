@@ -26,16 +26,24 @@
 
 package com.rapiddweller.benerator.script;
 
+import com.rapiddweller.benerator.factory.InstanceGeneratorFactory;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.converter.GraalValueConverter;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptException;
+import com.rapiddweller.model.data.Entity;
+import com.rapiddweller.platform.map.Entity2MapConverter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Value;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Provides {@link Script} functionality based on GraalVM: Scripting for the Java platform.
@@ -51,6 +59,7 @@ public class GraalScript implements Script {
     private final String text;
     private final String language;
     private static final org.graalvm.polyglot.Context polyglotCtx = org.graalvm.polyglot.Context.newBuilder("js").allowAllAccess(true).build();
+    private static final Logger LOGGER = LogManager.getLogger(GraalScript.class);
 
     public GraalScript(String text, Engine scriptEngine, String languageId) {
         Assert.notEmpty(text, "text");
@@ -70,8 +79,16 @@ public class GraalScript implements Script {
 
     private void migrateBeneratorContext2GraalVM(Context context) {
         // add benerator context to graalvm script context
-        for (String key : context.keySet())
-            polyglotCtx.getBindings(this.language).putMember(key, context.get(key));
+        for (Map.Entry<String, Object> set : context.entrySet()) {
+            if (set.getValue() != null && set.getValue().getClass().equals(Entity.class)) {
+                LOGGER.debug("Entity found : {}", set.getKey());
+                Object map = new Entity2MapConverter().convert((Entity) set.getValue());
+                polyglotCtx.getBindings(this.language).putMember(set.getKey(), map);
+            }
+            else {
+                polyglotCtx.getBindings(this.language).putMember(set.getKey(), set.getValue());
+            }
+        }
     }
 
     @Override

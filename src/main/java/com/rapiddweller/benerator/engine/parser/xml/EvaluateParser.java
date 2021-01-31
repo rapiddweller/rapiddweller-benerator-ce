@@ -26,11 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-
-import java.util.Set;
-
 import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
@@ -42,6 +37,11 @@ import com.rapiddweller.script.expression.ConvertingExpression;
 import com.rapiddweller.script.expression.FeatureAccessExpression;
 import com.rapiddweller.script.expression.StringExpression;
 import org.w3c.dom.Element;
+
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
 
 /**
  * Parses an &lt;evaluate&gt; element in a Benerator descriptor file.<br/><br/>

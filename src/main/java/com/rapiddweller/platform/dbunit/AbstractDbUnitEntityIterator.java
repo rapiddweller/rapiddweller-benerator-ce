@@ -27,12 +27,12 @@
 package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.DataIterator;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;

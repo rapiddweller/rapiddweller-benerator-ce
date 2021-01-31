@@ -26,12 +26,7 @@
 
 package com.rapiddweller.platform.csv;
 
-import com.rapiddweller.common.ArrayUtil;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.Converter;
-import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.SystemInfo;
-import com.rapiddweller.common.Tabular;
+import com.rapiddweller.common.*;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.csv.CSVUtil;

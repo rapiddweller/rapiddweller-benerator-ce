@@ -26,29 +26,9 @@
 
 package com.rapiddweller.benerator.gui;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.rapiddweller.benerator.archetype.FolderLayout;
-
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import com.rapiddweller.benerator.main.DBSnapshotTool;
-import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.Context;
-import com.rapiddweller.common.Encodings;
-import com.rapiddweller.common.FileUtil;
-import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.OrderedMap;
-import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.*;
 import com.rapiddweller.common.accessor.GraphAccessor;
 import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.common.converter.ToStringConverter;
@@ -59,20 +39,23 @@ import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.format.html.parser.DefaultHTMLTokenizer;
 import com.rapiddweller.format.html.parser.HTMLTokenizer;
 import com.rapiddweller.format.text.LFNormalizingStringBuilder;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.ComponentDescriptor;
-import com.rapiddweller.model.data.DataModel;
-import com.rapiddweller.model.data.FeatureDetail;
-import com.rapiddweller.model.data.IdDescriptor;
-import com.rapiddweller.model.data.InstanceDescriptor;
-import com.rapiddweller.model.data.PartDescriptor;
-import com.rapiddweller.model.data.ReferenceDescriptor;
-import com.rapiddweller.model.data.SimpleTypeDescriptor;
-import com.rapiddweller.model.data.TypeDescriptor;
+import com.rapiddweller.model.data.*;
 import com.rapiddweller.platform.db.DBSystem;
 import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**
  * Creates benerator project archetypes.<br/>

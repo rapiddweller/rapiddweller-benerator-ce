@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.csv;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.WeightedGenerator;
 import com.rapiddweller.benerator.dataset.AbstractDatasetGenerator;
 import com.rapiddweller.benerator.dataset.AtomicDatasetGenerator;
@@ -39,8 +37,10 @@ import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.script.WeightedSample;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.List;
 
 /**
  * Generates data from a csv file set that is organized as {@link Dataset}.

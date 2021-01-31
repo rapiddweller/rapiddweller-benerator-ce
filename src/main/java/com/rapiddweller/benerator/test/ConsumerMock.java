@@ -26,17 +26,11 @@
 
 package com.rapiddweller.benerator.test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
+
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Mock implementation of the {@link Consumer} interface to be used for testing.<br/><br/>

@@ -26,21 +26,20 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.SequentialStatement;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.script.Expression;
+import org.w3c.dom.Element;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-
-import org.w3c.dom.Element;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
 
 /**
  * Parses an &lt;if&gt; element.<br/><br/>

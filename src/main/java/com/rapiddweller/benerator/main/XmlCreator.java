@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.main;
 
-import java.io.File;
-import java.text.MessageFormat;
-
 import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.BeneratorContext;
@@ -37,8 +34,11 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.File;
+import java.text.MessageFormat;
 
 /**
  * Main class for generating XML files from the command line.<br/><br/>

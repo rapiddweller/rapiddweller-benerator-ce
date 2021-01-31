@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
@@ -38,8 +35,11 @@ import com.rapiddweller.benerator.wrapper.GeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.Resettable;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides utility methods for data generation.<br/><br/>

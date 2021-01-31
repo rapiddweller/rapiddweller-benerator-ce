@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import java.util.Set;
-
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
@@ -38,7 +36,11 @@ import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.StringExpression;
 import org.w3c.dom.Element;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_URI;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_INCLUDE;
 
 /**
  * Parses an {@literal <}include{@literal >} element in a Benerator descriptor file.<br/><br/>

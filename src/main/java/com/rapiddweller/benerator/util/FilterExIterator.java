@@ -26,13 +26,13 @@
 
 package com.rapiddweller.benerator.util;
 
-import java.util.Iterator;
-
 import com.rapiddweller.common.Context;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.util.DataIteratorProxy;
 import com.rapiddweller.script.Expression;
+
+import java.util.Iterator;
 
 /**
  * {@link Iterator} proxy which filters its source's output with a (boolean) filter expression.<br/><br/>

@@ -27,14 +27,14 @@
 package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.converter.ToStringConverter;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.model.data.Entity;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 

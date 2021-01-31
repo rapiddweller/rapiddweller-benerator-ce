@@ -29,8 +29,8 @@ package com.rapiddweller.benerator.util;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Validator;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Provides an abstract implementation of a generator that validates its generated values.<br/>

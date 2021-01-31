@@ -43,8 +43,9 @@ import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.contiperf.sensor.MemorySensor;
 import com.rapiddweller.format.text.KiloFormatter;
 import com.rapiddweller.jdbacl.DBUtil;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 
 /**

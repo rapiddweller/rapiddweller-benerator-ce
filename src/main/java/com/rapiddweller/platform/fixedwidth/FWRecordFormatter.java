@@ -26,8 +26,6 @@
 
 package com.rapiddweller.platform.fixedwidth;
 
-import com.rapiddweller.model.data.ComponentAccessor;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
@@ -36,6 +34,8 @@ import com.rapiddweller.common.converter.ConverterChain;
 import com.rapiddweller.common.converter.FormatFormatConverter;
 import com.rapiddweller.format.fixedwidth.FixedWidthColumnDescriptor;
 import com.rapiddweller.format.fixedwidth.FixedWidthUtil;
+import com.rapiddweller.model.data.ComponentAccessor;
+import com.rapiddweller.model.data.Entity;
 
 import java.io.PrintWriter;
 import java.text.ParseException;

@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
@@ -40,14 +38,16 @@ import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ParseException;
+import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.CompositeExpression;
 import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.script.expression.IsNullExpression;
-import com.rapiddweller.common.xml.XMLUtil;
-import com.rapiddweller.script.DatabeneScriptParser;
 import org.w3c.dom.Element;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**
  * Parses a &lt;Property&gt; element in a Benerator descriptor file.<br/><br/>

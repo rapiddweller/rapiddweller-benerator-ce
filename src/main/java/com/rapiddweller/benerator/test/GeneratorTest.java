@@ -26,30 +26,23 @@
 
 package com.rapiddweller.benerator.test;
 
-import static org.junit.Assert.*;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.Collection;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.common.ArrayFormat;
-import com.rapiddweller.common.ArrayUtil;
-import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.Converter;
-import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.Resettable;
-import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.*;
 import com.rapiddweller.common.collection.ObjectCounter;
 import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.common.validator.UniqueValidator;
 import com.rapiddweller.model.data.Entity;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.junit.Assert.*;
 
 /**
  * Provides methods for testing generators.<br/>

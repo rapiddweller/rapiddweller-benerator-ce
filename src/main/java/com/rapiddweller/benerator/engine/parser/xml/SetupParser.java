@@ -26,15 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.common.CollectionUtil;
@@ -43,6 +34,11 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.XMLElementParser;
 import org.w3c.dom.Element;
+
+import java.util.*;
+import java.util.Map.Entry;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**
  * {@link XMLElementParser} implementation for parsing a Benerator descriptor file's root XML element.<br/><br/>

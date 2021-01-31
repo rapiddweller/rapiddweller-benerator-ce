@@ -26,11 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-
-import java.util.Set;
-
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.context.DefaultPageSizeExpression;
@@ -47,6 +42,11 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.Task;
 import org.w3c.dom.Element;
+
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
 
 /**
  * Parses a run-task descriptor.<br/><br/>

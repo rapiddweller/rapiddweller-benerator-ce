@@ -26,16 +26,16 @@
 
 package com.rapiddweller.benerator.util;
 
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ReaderLineIterator;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Reads a text file, shuffles its lines and writes it to another file.<br/>

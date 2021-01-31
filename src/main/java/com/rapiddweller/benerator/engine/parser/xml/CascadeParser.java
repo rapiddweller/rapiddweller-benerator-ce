@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import java.util.Set;
-
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.CascadeParent;
 import com.rapiddweller.benerator.engine.statement.CascadeStatement;
@@ -38,6 +35,10 @@ import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.w3c.dom.Element;
+
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**
  * Parses &lt;cascade ref="..."&gt; descriptors.<br/><br/>

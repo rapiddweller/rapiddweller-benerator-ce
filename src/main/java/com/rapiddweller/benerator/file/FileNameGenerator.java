@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.file;
 
-import java.io.File;
-
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
+
+import java.io.File;
 
 /**
  * Generates file and/or directory names out of a directory.<br/><br/>

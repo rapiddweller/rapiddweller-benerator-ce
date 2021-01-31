@@ -26,16 +26,9 @@
 
 package com.rapiddweller.benerator.main;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.NumberUtil;
-import com.rapiddweller.common.RoundedNumberFormat;
-import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.*;
 import com.rapiddweller.common.ui.ProgressMonitor;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
@@ -46,8 +39,11 @@ import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.platform.db.SQLEntityExporter;
 import com.rapiddweller.platform.dbunit.DbUnitEntityExporter;
 import com.rapiddweller.platform.xls.XLSEntityExporter;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Creates a snapshot of a database schema and exports it in DbUnit XML file format.

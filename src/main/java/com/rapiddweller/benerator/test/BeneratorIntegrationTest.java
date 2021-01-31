@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.test;
 
-import java.io.IOException;
-
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
@@ -39,6 +37,8 @@ import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.w3c.dom.Element;
+
+import java.io.IOException;
 
 /**
  * Parent class for Benerator integration tests.<br/><br/>

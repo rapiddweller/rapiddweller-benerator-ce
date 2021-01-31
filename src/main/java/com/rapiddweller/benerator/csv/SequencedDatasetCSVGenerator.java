@@ -26,17 +26,17 @@
 
 package com.rapiddweller.benerator.csv;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.Sequence;
-import com.rapiddweller.benerator.sample.SampleGeneratorUtil;
 import com.rapiddweller.benerator.sample.SampleGenerator;
+import com.rapiddweller.benerator.sample.SampleGeneratorUtil;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.script.WeightedSample;
+
+import java.util.List;
 
 /**
  * Generates values from a dataset based on a {@link Sequence}.<br/><br/>

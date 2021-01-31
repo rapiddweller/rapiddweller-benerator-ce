@@ -26,14 +26,14 @@
 
 package com.rapiddweller.benerator.util;
 
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.script.DatabeneScriptParser;
+import com.rapiddweller.script.WeightedSample;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-
-import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.script.DatabeneScriptParser;
-import com.rapiddweller.script.WeightedSample;
 
 /**
  * Provides utility functions for generating numbers in an interval.<br/>

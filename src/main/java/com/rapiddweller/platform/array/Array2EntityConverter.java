@@ -26,13 +26,13 @@
 
 package com.rapiddweller.platform.array;
 
-import com.rapiddweller.model.data.*;
 import com.rapiddweller.common.*;
 import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.common.converter.ConverterManager;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.common.mutator.ConvertingMutator;
+import com.rapiddweller.model.data.*;
 
 /**
  * Converts an array of feature values to an entity.<br/>

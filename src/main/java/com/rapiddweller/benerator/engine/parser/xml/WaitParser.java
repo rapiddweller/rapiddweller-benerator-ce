@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.Statement;
@@ -38,10 +35,14 @@ import com.rapiddweller.benerator.primitive.DynamicLongGenerator;
 import com.rapiddweller.benerator.util.ExpressionBasedGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
-import com.rapiddweller.model.data.Uniqueness;
 import org.w3c.dom.Element;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseLongAttribute;
 
 /**
  * Parses a 'wait' element.<br/><br/>

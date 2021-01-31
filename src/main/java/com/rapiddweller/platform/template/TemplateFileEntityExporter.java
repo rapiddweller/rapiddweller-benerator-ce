@@ -28,7 +28,6 @@ package com.rapiddweller.platform.template;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.*;
 import com.rapiddweller.common.accessor.FeatureAccessor;
 import com.rapiddweller.common.context.ContextAware;
@@ -38,8 +37,9 @@ import com.rapiddweller.common.mutator.AnyMutator;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.format.script.ScriptUtil;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.model.data.Entity;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;

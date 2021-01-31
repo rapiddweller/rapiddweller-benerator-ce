@@ -26,10 +26,10 @@
 
 package com.rapiddweller.benerator.file;
 
-import java.io.IOException;
-
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.common.IOUtil;
+
+import java.io.IOException;
 
 /**
  * Provides file contents as {@link String}s.<br/><br/>

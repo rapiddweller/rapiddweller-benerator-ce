@@ -26,11 +26,7 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.common.operation.AndOperation;
-import com.rapiddweller.common.operation.MaxNumberStringOperation;
-import com.rapiddweller.common.operation.MaxOperation;
-import com.rapiddweller.common.operation.MinNumberStringOperation;
-import com.rapiddweller.common.operation.MinOperation;
+import com.rapiddweller.common.operation.*;
 import com.rapiddweller.script.PrimitiveType;
 
 /**

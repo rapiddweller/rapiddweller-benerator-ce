@@ -27,11 +27,11 @@
 package com.rapiddweller.platform.script;
 
 import com.rapiddweller.benerator.consumer.TextFileExporter;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.format.script.ScriptedDocumentWriter;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.model.data.Entity;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 

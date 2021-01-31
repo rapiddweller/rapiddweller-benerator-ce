@@ -26,10 +26,10 @@
 
 package com.rapiddweller.platform.array;
 
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
+import com.rapiddweller.model.data.Entity;
 
 /**
  * Converts an Entity's features values to an array of objects.<br/>

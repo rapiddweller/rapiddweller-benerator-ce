@@ -17,6 +17,12 @@
         <attribute name="multiply" type="int" script="{js:add(age)}"/>
     </iterate>
 
+    <iterate type="person2" name="p2" source="person.ent.csv" consumer="ConsoleExporter">
+        <attribute name="multiply" script="{js:add(this.age)}"/>
+        <attribute name="multiply2" script="{js:add(this.age)}"/>
+        <attribute name="multiply3" script="{js:add(this.age)}"/>
+    </iterate>
+
     <generate type="script" count="5" consumer="ConsoleExporter">
         <variable name="count" type="integer" generator="IncrementalIdGenerator"/>
         <attribute name="multiply" type="int" script="{js:add(count)}"/>

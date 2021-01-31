@@ -26,11 +26,11 @@
 
 package com.rapiddweller.benerator.util;
 
-import java.io.Closeable;
-import java.util.Iterator;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
+
+import java.io.Closeable;
+import java.util.Iterator;
 
 /**
  * Wraps a {@link Generator} with an {@link Iterator} interface.<br/>

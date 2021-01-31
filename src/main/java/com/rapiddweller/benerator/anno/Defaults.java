@@ -26,12 +26,12 @@
 
 package com.rapiddweller.benerator.anno;
 
+import com.rapiddweller.benerator.factory.DefaultsProvider;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import com.rapiddweller.benerator.factory.DefaultsProvider;
 
 /**
  * Declares a {@link DefaultsProvider} to use for testing.<br/><br/>

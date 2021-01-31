@@ -27,13 +27,13 @@
 package com.rapiddweller.platform.fixedwidth;
 
 import com.rapiddweller.benerator.consumer.TextFileExporter;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.collection.OrderedNameMap;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.model.data.Entity;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Locale;
 import java.util.Map;

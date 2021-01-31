@@ -27,10 +27,10 @@
 package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.FileBasedEntitySource;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.model.data.Entity;
+import com.rapiddweller.model.data.FileBasedEntitySource;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;

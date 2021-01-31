@@ -26,12 +26,6 @@
 
 package com.rapiddweller.benerator.main;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.rapiddweller.benerator.template.TemplateInputReader;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ConfigurationError;
@@ -41,6 +35,12 @@ import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.freemarker.FreeMarkerScriptFactory;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Anonymizes XML files homogeneously based on generator and XPath definitions in an Excel sheet.<br/><br/>

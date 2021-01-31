@@ -35,15 +35,15 @@ import com.rapiddweller.benerator.engine.parser.xml.IncludeParser;
 import com.rapiddweller.benerator.engine.statement.BeanStatement;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
 import com.rapiddweller.benerator.parser.ModelParser;
-import com.rapiddweller.model.data.*;
 import com.rapiddweller.common.*;
 import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.model.data.*;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

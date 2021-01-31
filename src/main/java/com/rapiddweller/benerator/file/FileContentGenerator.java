@@ -26,10 +26,10 @@
 
 package com.rapiddweller.benerator.file;
 
-import java.io.File;
-
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
+
+import java.io.File;
 
 /**
  * Abstract parent class for generators that generate products based on concrete files.<br/><br/>

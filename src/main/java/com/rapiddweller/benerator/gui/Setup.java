@@ -26,23 +26,19 @@
 
 package com.rapiddweller.benerator.gui;
 
+import com.rapiddweller.benerator.archetype.Archetype;
+import com.rapiddweller.benerator.archetype.ArchetypeManager;
+import com.rapiddweller.benerator.main.DBSnapshotTool;
+import com.rapiddweller.common.*;
+import com.rapiddweller.common.bean.ObservableBean;
+import com.rapiddweller.common.ui.I18NError;
+import com.rapiddweller.jdbacl.JDBCDriverInfo;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.Locale;
-
-import com.rapiddweller.benerator.archetype.Archetype;
-import com.rapiddweller.benerator.archetype.ArchetypeManager;
-import com.rapiddweller.benerator.main.DBSnapshotTool;
-import com.rapiddweller.common.FileUtil;
-import com.rapiddweller.common.LocaleUtil;
-import com.rapiddweller.common.NullSafeComparator;
-import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.SystemInfo;
-import com.rapiddweller.common.bean.ObservableBean;
-import com.rapiddweller.common.ui.I18NError;
-import com.rapiddweller.jdbacl.JDBCDriverInfo;
 
 /**
  * Assembles all data useful for creating benerator archetypes.<br/>

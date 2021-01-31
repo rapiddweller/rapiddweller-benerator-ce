@@ -26,20 +26,17 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TEST;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_IF;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_SETUP;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_WHILE;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-
-import java.util.List;
-import java.util.Set;
-
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
+
+import java.util.List;
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
 
 /**
  * Parses a 'while' element.<br/><br/>

@@ -26,13 +26,6 @@
 
 package com.rapiddweller.benerator.file;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Locale;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
@@ -53,6 +46,9 @@ import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.platform.xml.XMLEntityExporter;
 import com.rapiddweller.platform.xml.XMLSchemaDescriptorProvider;
+
+import java.io.*;
+import java.util.Locale;
 
 /**
  * Generates XML files.<br/>

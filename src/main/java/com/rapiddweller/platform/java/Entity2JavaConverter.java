@@ -26,10 +26,10 @@
 
 package com.rapiddweller.platform.java;
 
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.common.mutator.AnyMutator;
+import com.rapiddweller.model.data.Entity;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;

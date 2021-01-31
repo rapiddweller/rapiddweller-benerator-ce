@@ -26,30 +26,26 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.BeanStatement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
-import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.ConversionException;
-import com.rapiddweller.common.ParseException;
-import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.*;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.script.Assignment;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.Expression;
-import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.script.expression.BeanConstruction;
 import com.rapiddweller.script.expression.DefaultConstruction;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.script.expression.ExpressionUtil;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**
  * Parses a &lt;bean&gt; element.<br/><br/>

@@ -26,11 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-
-import java.util.Map;
-
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
@@ -41,6 +36,12 @@ import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.w3c.dom.Element;
+
+import java.util.Map;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ID;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_MEMSTORE;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getAttribute;
 
 /**
  * Parses a &lt;memstore%gt; statement.<br/><br/>

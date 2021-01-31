@@ -26,9 +26,9 @@
 
 package com.rapiddweller.platform.java;
 
-import com.rapiddweller.model.data.*;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.model.data.*;
 import com.rapiddweller.script.expression.ConstantExpression;
 
 import java.beans.PropertyDescriptor;

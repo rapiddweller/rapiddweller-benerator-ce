@@ -27,10 +27,10 @@
 package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.script.ScriptUtil;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;

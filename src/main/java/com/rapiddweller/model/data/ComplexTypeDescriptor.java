@@ -32,11 +32,7 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.collection.ListBasedSet;
 import com.rapiddweller.common.collection.NamedValueList;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Describes a type that aggregates {@link ComponentDescriptor}s.<br/>

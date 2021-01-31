@@ -26,12 +26,12 @@
 
 package com.rapiddweller.benerator.anno;
 
+import com.rapiddweller.model.data.Format;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import com.rapiddweller.model.data.Format;
 
 /**
  * Specifies a data source and its characteristics for generating data for the annotated element.<br/><br/>

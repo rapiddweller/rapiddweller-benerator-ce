@@ -26,21 +26,18 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.rapiddweller.benerator.DefaultPlatformDescriptor;
 import com.rapiddweller.benerator.PlatformDescriptor;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ImportStatement;
-import com.rapiddweller.common.ArrayBuilder;
-import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ExceptionUtil;
-import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.*;
 import com.rapiddweller.format.xml.XMLElementParser;
 import org.w3c.dom.Element;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**

@@ -27,10 +27,6 @@
 package com.rapiddweller.platform.fixedwidth;
 
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.FileBasedEntitySource;
-import com.rapiddweller.platform.array.Array2EntityConverter;
 import com.rapiddweller.common.*;
 import com.rapiddweller.common.bean.ArrayPropertyExtractor;
 import com.rapiddweller.common.converter.ArrayConverter;
@@ -44,6 +40,10 @@ import com.rapiddweller.format.fixedwidth.FixedWidthLineSource;
 import com.rapiddweller.format.fixedwidth.FixedWidthRowTypeDescriptor;
 import com.rapiddweller.format.fixedwidth.FixedWidthUtil;
 import com.rapiddweller.format.util.ConvertingDataIterator;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
+import com.rapiddweller.model.data.FileBasedEntitySource;
+import com.rapiddweller.platform.array.Array2EntityConverter;
 
 import java.text.ParseException;
 import java.util.Locale;

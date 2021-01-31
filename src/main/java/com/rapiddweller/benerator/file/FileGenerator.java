@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.file;
 
-import java.io.File;
-
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.sample.NonNullSampleGenerator;
@@ -35,6 +33,8 @@ import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.IOUtil;
+
+import java.io.File;
 
 /**
  * Generates {@link File} objects which represent files and/or directories in a parent directory.<br/><br/>

@@ -26,15 +26,16 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.EchoStatement;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.script.Expression;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableElementText;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
 /**
  * Parses an &lt;echo&gt; element in a Benerator descriptor file.<br/><br/>

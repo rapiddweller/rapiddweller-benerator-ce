@@ -26,10 +26,10 @@
 
 package com.rapiddweller.platform.contiperf;
 
-import com.rapiddweller.task.Task;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.contiperf.Invoker;
+import com.rapiddweller.task.Task;
 
 /**
  * {@link Invoker} implementation that calls {@link Task#execute(Context, ErrorHandler)}.<br/><br/>

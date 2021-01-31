@@ -26,12 +26,12 @@
 
 package com.rapiddweller.platform.contiperf;
 
-import com.rapiddweller.task.Task;
-import com.rapiddweller.task.TaskResult;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.contiperf.PerformanceTracker;
+import com.rapiddweller.task.Task;
+import com.rapiddweller.task.TaskResult;
 
 /**
  * Proxies a {@link Task} and tracks its execution times.<br/><br/>

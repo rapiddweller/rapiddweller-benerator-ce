@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.util;
 
-import javax.validation.ConstraintValidatorContext;
-
 import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
+
+import javax.validation.ConstraintValidatorContext;
 
 /**
  * Tests if a number passes the Luhn algorithm.<br/><br/>

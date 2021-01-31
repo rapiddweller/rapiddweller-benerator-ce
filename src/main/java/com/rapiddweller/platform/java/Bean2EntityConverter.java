@@ -26,10 +26,10 @@
 
 package com.rapiddweller.platform.java;
 
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
 
 import java.beans.PropertyDescriptor;
 
