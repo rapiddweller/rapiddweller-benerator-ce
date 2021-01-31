@@ -49,13 +49,16 @@ public class HelloWorldDemo {
 
         // create and initialize the salutation generator
         GeneratorFactory generatorFactory = context.getGeneratorFactory();
-        List<String> salutations = CollectionUtil.toList("Hi", "Hello", "Howdy");
-        Generator<String> salutationGenerator = generatorFactory.createSampleGenerator(salutations, String.class, false);
+        List<String> salutations =
+                CollectionUtil.toList("Hi", "Hello", "Howdy");
+        Generator<String> salutationGenerator = generatorFactory
+                .createSampleGenerator(salutations, String.class, false);
         salutationGenerator.init(context);
 
         // create and initialize the name generator
         List<String> names = CollectionUtil.toList("Alice", "Bob", "Charly");
-        Generator<String> nameGenerator = generatorFactory.createSampleGenerator(names, String.class, false);
+        Generator<String> nameGenerator = generatorFactory
+                .createSampleGenerator(names, String.class, false);
         init(nameGenerator, context);
 
         // use the generators

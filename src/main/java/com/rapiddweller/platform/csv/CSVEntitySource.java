@@ -26,13 +26,18 @@
 
 package com.rapiddweller.platform.csv;
 
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.FileBasedEntitySource;
-import com.rapiddweller.common.*;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.Tabular;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.csv.CSVUtil;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
+import com.rapiddweller.model.data.FileBasedEntitySource;
 
 import java.io.FileNotFoundException;
 
@@ -58,11 +63,13 @@ public class CSVEntitySource extends FileBasedEntitySource implements Tabular {
         this(null, null, SystemInfo.getFileEncoding());
     }
 
-    public CSVEntitySource(String uri, ComplexTypeDescriptor entityType, String encoding) {
+    public CSVEntitySource(String uri, ComplexTypeDescriptor entityType,
+                           String encoding) {
         this(uri, entityType, encoding, new NoOpConverter<>(), ',');
     }
 
-    public CSVEntitySource(String uri, ComplexTypeDescriptor entityType, String encoding,
+    public CSVEntitySource(String uri, ComplexTypeDescriptor entityType,
+                           String encoding,
                            Converter<String, ?> preprocessor, char separator) {
         super(uri);
         this.separator = separator;
@@ -85,16 +92,17 @@ public class CSVEntitySource extends FileBasedEntitySource implements Tabular {
     @Override
     public String[] getColumnNames() {
         if (ArrayUtil.isEmpty(columnNames)) {
-            columnNames = StringUtil.trimAll(CSVUtil.parseHeader(uri, separator, encoding));
+            columnNames = StringUtil
+                    .trimAll(CSVUtil.parseHeader(uri, separator, encoding));
             expectingHeader = true;
         }
         return columnNames;
     }
 
     public void setColumns(String[] columns) {
-        if (ArrayUtil.isEmpty(columns))
+        if (ArrayUtil.isEmpty(columns)) {
             this.columnNames = null;
-        else {
+        } else {
             this.columnNames = columns.clone();
             StringUtil.trimAll(this.columnNames);
             expectingHeader = false;
@@ -106,7 +114,9 @@ public class CSVEntitySource extends FileBasedEntitySource implements Tabular {
     @Override
     public DataIterator<Entity> iterator() {
         try {
-            CSVEntityIterator iterator = new CSVEntityIterator(resolveUri(), entityType, preprocessor, separator, encoding);
+            CSVEntityIterator iterator =
+                    new CSVEntityIterator(resolveUri(), entityType,
+                            preprocessor, separator, encoding);
             if (!expectingHeader) {
                 iterator.setColumns(getColumnNames());
                 iterator.setExpectingHeader(false);
@@ -121,7 +131,8 @@ public class CSVEntitySource extends FileBasedEntitySource implements Tabular {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[uri=" + uri + ", encoding=" + encoding + ", separator=" + separator +
+        return getClass().getSimpleName() + "[uri=" + uri + ", encoding=" +
+                encoding + ", separator=" + separator +
                 ", entityType=" + entityType.getName() + "]";
     }
 

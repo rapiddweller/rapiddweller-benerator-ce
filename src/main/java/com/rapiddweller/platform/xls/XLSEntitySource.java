@@ -26,13 +26,13 @@
 
 package com.rapiddweller.platform.xls;
 
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntitySource;
 import com.rapiddweller.model.data.FileBasedEntitySource;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.Converter;
-import com.rapiddweller.format.DataIterator;
 
 /**
  * Implements an {@link EntitySource} that reads Entities from an Excel sheet.<br/>
@@ -52,7 +52,9 @@ public class XLSEntitySource extends FileBasedEntitySource {
 
     // constructors ----------------------------------------------------------------------------------------------------
 
-    public XLSEntitySource(String uri, Converter<String, ?> preprocessor, ComplexTypeDescriptor entityType, String sheetName, boolean formatted) {
+    public XLSEntitySource(String uri, Converter<String, ?> preprocessor,
+                           ComplexTypeDescriptor entityType, String sheetName,
+                           boolean formatted) {
         super(uri);
         this.entityType = entityType;
         this.preprocessor = preprocessor;
@@ -65,10 +67,14 @@ public class XLSEntitySource extends FileBasedEntitySource {
     @Override
     public DataIterator<Entity> iterator() {
         try {
-            if (sheetName != null)
-                return new SingleSheetXLSEntityIterator(resolveUri(), sheetName, preprocessor, entityType, context, true, formatted, null);
-            else
-                return new AllSheetsXLSEntityIterator(resolveUri(), preprocessor, entityType, formatted);
+            if (sheetName != null) {
+                return new SingleSheetXLSEntityIterator(resolveUri(), sheetName,
+                        preprocessor, entityType, context, true, formatted,
+                        null);
+            } else {
+                return new AllSheetsXLSEntityIterator(resolveUri(),
+                        preprocessor, entityType, formatted);
+            }
         } catch (Exception e) {
             throw new ConfigurationError("Cannot create iterator. ", e);
         }

@@ -43,8 +43,6 @@ import org.w3c.dom.Element;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 /**
  * Tests the AddressGenerator.<br/><br/>
@@ -171,7 +169,7 @@ public class AddressGeneratorTest extends GeneratorClassTest {
     }
 
     @SuppressWarnings("unchecked")
-    public void checkDescriptorMapping(Country country) throws Exception {
+    public void checkDescriptorMapping(Country country) {
         String xml =
                 "<variable name='x' " +
                         "generator='com.rapiddweller.domain.address.AddressGenerator' ";

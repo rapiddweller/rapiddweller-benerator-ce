@@ -57,7 +57,8 @@ public class Annotation {
     }
 
     private static String getDocumentation(Element element) {
-        Element docElement = XMLUtil.getChildElement(element, false, false, "documentation");
+        Element docElement =
+                XMLUtil.getChildElement(element, false, false, "documentation");
         return XMLUtil.getText(docElement);
     }
 

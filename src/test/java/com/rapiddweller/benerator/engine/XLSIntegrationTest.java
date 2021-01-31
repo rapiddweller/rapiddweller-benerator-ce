@@ -48,7 +48,7 @@ public class XLSIntegrationTest extends BeneratorIntegrationTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testDefault() throws Exception {
+	public void testDefault() {
 		ConsumerMock con = new ConsumerMock(true);
 		context.setGlobal("con", con);
 		parseAndExecute("<iterate type='dummy' source='com/rapiddweller/benerator/engine/xls/types.xls' consumer='con'/>");
@@ -59,7 +59,7 @@ public class XLSIntegrationTest extends BeneratorIntegrationTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testFormatted() throws Exception {
+	public void testFormatted() {
 		ConsumerMock con = new ConsumerMock(true);
 		context.setGlobal("con", con);
 		LocaleUtil.runInLocale(Locale.US, () -> parseAndExecute("<iterate type='dummy' source='com/rapiddweller/benerator/engine/xls/types.xls' format='formatted' consumer='con'/>"));
@@ -70,7 +70,7 @@ public class XLSIntegrationTest extends BeneratorIntegrationTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testSheet() throws Exception {
+	public void testSheet() {
 		ConsumerMock con = new ConsumerMock(true);
 		context.setGlobal("con", con);
 		parseAndExecute("<iterate type='dummy' segment='address' source='com/rapiddweller/benerator/engine/xls/sheets.xls' consumer='con'/>");

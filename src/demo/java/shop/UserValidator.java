@@ -46,26 +46,32 @@ public class UserValidator extends EntityValidator {
 
     @Override
     public boolean valid(Entity user) {
-        if (user.getComponent("id") == null)
+        if (user.getComponent("id") == null) {
             return false;
-        if (StringUtil.isEmpty((String) user.getComponent("name")))
+        }
+        if (StringUtil.isEmpty((String) user.getComponent("name"))) {
             return false;
-        if (StringUtil.isEmpty((String) user.getComponent("email")))
+        }
+        if (StringUtil.isEmpty((String) user.getComponent("email"))) {
             return false;
-        if (StringUtil.isEmpty((String) user.getComponent("password")))
+        }
+        if (StringUtil.isEmpty((String) user.getComponent("password"))) {
             return false;
+        }
         /*String roleId = (String) user.getComponent("role_id");
         if (!roles.contains(roleId))
             return false;*/
         Object active = user.getComponent("active");
         if (active instanceof Number) {
             int value = ((Number) active).intValue();
-            if (value < 0 || value > 1)
+            if (value < 0 || value > 1) {
                 return false;
-        } else if (active instanceof Boolean)
+            }
+        } else if (active instanceof Boolean) {
             return (Boolean) active;
-        else
+        } else {
             return false;
+        }
         return true;
     }
 

@@ -233,28 +233,26 @@ public class ProjectBuilder implements Runnable {
 	    advanceMonitor();
     }
 
-	private File createDbSnapshot() {
+	private void createDbSnapshot() {
 		String format = setup.getDbSnapshot();
 		File file = setup.projectFile(setup.getDbSnapshotFile());
 		DBSnapshotTool.export(setup.getDbUrl(), setup.getDbDriver(), setup.getDbSchema(), 
 				setup.getDbUser(), setup.getDbPassword(), file.getAbsolutePath(), setup.getEncoding(), format, 
 				null, monitor);
-		return file;
 	}
 
-	private File createPOM() {
+	private void createPOM() {
         noteMonitor("creating pom.xml");
-		return resolveVariables(new File(setup.getProjectFolder(), "pom.xml"));
+		resolveVariables(new File(setup.getProjectFolder(), "pom.xml"));
 	}
 
-	private File createProjectPropertiesFile() {
+	private void createProjectPropertiesFile() {
 		String filename = "benerator.properties";
 		File file = new File(setup.getProjectFolder(), filename);
 		if (file.exists()) {
 			noteMonitor("creating " + filename);
-			return resolveVariables(file);
+			resolveVariables(file);
 		}
-		return null;
 	}
 	
 	public File resolveVariables(File file) {
@@ -480,10 +478,7 @@ public class ProjectBuilder implements Runnable {
     }
 	
     private static boolean isDefaultValue(Object value, String name) {
-    	if ("nullable".equals(name) && (value == null || ((Boolean) value))) 
-    		return true;
-    	else
-    		return false;
+		return "nullable".equals(name) && (value == null || ((Boolean) value));
 	}
 
 	private static void appendEndElement(String nodeName, LFNormalizingStringBuilder writer) {

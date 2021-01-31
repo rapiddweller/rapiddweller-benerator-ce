@@ -34,7 +34,8 @@
     <setting name="dbBatch" default="false"/>
 
     <comment>import stage and database specific properties</comment>
-    <include uri="{ftl:conf/${stage}.properties}"/> <!-- ftl: is the prefix used for scripting with FreeMarker Template Language -->
+    <include
+            uri="{ftl:conf/${stage}.properties}"/> <!-- ftl: is the prefix used for scripting with FreeMarker Template Language -->
 
     <comment>log the settings to the console</comment>
     <echo>Starting generation for</echo>
@@ -139,8 +140,8 @@
                    selector="{{ftl:select sum(total_price) from db_order_item where order_id = ${db_order.id}}}"
                    cyclic="true"/>
     </iterate>
-	
-	 <echo>Debugging and show generated data from DBMS</echo>
+
+    <echo>Debugging and show generated data from DBMS</echo>
     <iterate source="db" type="db_order" consumer="ConsoleExporter"/>
     <iterate source="db" type="db_order_item" consumer="ConsoleExporter"/>
     <iterate source="db" type="db_user" consumer="ConsoleExporter"/>

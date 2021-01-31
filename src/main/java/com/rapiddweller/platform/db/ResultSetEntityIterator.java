@@ -26,11 +26,11 @@
 
 package com.rapiddweller.platform.db;
 
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -47,7 +47,8 @@ public class ResultSetEntityIterator implements DataIterator<Entity> {
 
     private final ComplexTypeDescriptor descriptor;
 
-    public ResultSetEntityIterator(DataIterator<ResultSet> source, ComplexTypeDescriptor descriptor) {
+    public ResultSetEntityIterator(DataIterator<ResultSet> source,
+                                   ComplexTypeDescriptor descriptor) {
         this.source = source;
         this.descriptor = descriptor;
     }
@@ -61,10 +62,12 @@ public class ResultSetEntityIterator implements DataIterator<Entity> {
     public DataContainer<Entity> next(DataContainer<Entity> container) {
         try {
             DataContainer<ResultSet> feed = source.next(new DataContainer<>());
-            if (feed == null)
+            if (feed == null) {
                 return null;
+            }
             ResultSet resultSet = feed.getData();
-            Entity result = ResultSet2EntityConverter.convert(resultSet, descriptor);
+            Entity result =
+                    ResultSet2EntityConverter.convert(resultSet, descriptor);
             return container.setData(result);
         } catch (SQLException e) {
             throw new RuntimeException(e);

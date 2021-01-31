@@ -33,10 +33,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 
 /**
  * Tests the {@link City} class.<br/><br/>
@@ -189,14 +185,14 @@ public class CityTest {
 
     @Test
     public void testEquals2() {
-        assertFalse(
-                (new City(new State(), "Name", "Addition", new String[]{"foo", "foo", "foo"}, "Area Code")).equals("o"));
+        assertNotEquals("o", (new City(new State(), "Name", "Addition",
+                new String[] {"foo", "foo", "foo"}, "Area Code")));
     }
 
     @Test
     public void testEquals3() {
-        assertFalse(
-                (new City(new State(), "Name", "Addition", new String[]{"foo", "foo", "foo"}, "Area Code")).equals(null));
+        assertNotEquals(null, (new City(new State(), "Name", "Addition",
+                new String[] {"foo", "foo", "foo"}, "Area Code")));
     }
 
     @Test

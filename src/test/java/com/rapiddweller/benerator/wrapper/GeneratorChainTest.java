@@ -39,7 +39,6 @@ import org.junit.Test;
  */
 public class GeneratorChainTest extends GeneratorTest {
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testUnique() {
 		GeneratorChain<Integer> chain = new GeneratorChain<>(Integer.class, true,
@@ -49,7 +48,6 @@ public class GeneratorChainTest extends GeneratorTest {
 		expectGeneratedSequence(chain, 2, 3, 1).withCeasedAvailability();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testNonUnique() {
 		GeneratorChain<Integer> chain = new GeneratorChain<>(Integer.class, false,

@@ -63,28 +63,34 @@ public class CityId {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
         final CityId that = (CityId) o;
-        if (!name.equals(that.name))
+        if (!name.equals(that.name)) {
             return false;
-        return NullSafeComparator.equals(this.nameExtension, that.nameExtension);
+        }
+        return NullSafeComparator
+                .equals(this.nameExtension, that.nameExtension);
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode() * 29 + (nameExtension != null ? nameExtension.hashCode() : 0);
+        return name.hashCode() * 29 +
+                (nameExtension != null ? nameExtension.hashCode() : 0);
     }
 
     @Override
     public String toString() {
-        if (StringUtil.isEmpty(nameExtension))
+        if (StringUtil.isEmpty(nameExtension)) {
             return name;
-        else if (nameExtension.charAt(0) == ',')
+        } else if (nameExtension.charAt(0) == ',') {
             return name + nameExtension;
-        else
+        } else {
             return name + ' ' + nameExtension;
+        }
     }
 }

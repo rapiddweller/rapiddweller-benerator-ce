@@ -62,8 +62,10 @@ public class QueryLongGenerator extends QueryGenerator<Long> {
     @Override
     public ProductWrapper<Long> generate(ProductWrapper<Long> wrapper) {
         Object input = super.generateFromSource();
-        if (converter == null)
-            converter = ConverterManager.getInstance().createConverter(input.getClass(), Long.class);
+        if (converter == null) {
+            converter = ConverterManager.getInstance()
+                    .createConverter(input.getClass(), Long.class);
+        }
         return wrapper.wrap((Long) converter.convert(input));
     }
 

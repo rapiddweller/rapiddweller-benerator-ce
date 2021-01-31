@@ -41,7 +41,7 @@ import org.junit.Test;
 public class BeanParserAndStatementTest extends BeneratorIntegrationTest {
 
 	@Test
-    public void testParseBeanClass() throws Exception {
+    public void testParseBeanClass() {
 		String xml = "<bean id='id' class='" + BeanMock.class.getName() + "' />";
 		BeneratorContext context = parseAndExecute(xml);
 		Object bean = context.get("id");
@@ -52,7 +52,7 @@ public class BeanParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 
 	@Test
-	public void testParseBeanSpec() throws Exception {
+	public void testParseBeanSpec() {
 		String xml = "<bean id='id' spec='new " + BeanMock.class.getName() + "(2)' />";
 		BeneratorContext context = parseAndExecute(xml);
 		Object bean = context.get("id");
@@ -63,7 +63,7 @@ public class BeanParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 	
 	@Test
-	public void testStringProperty() throws Exception {
+	public void testStringProperty() {
 		String xml = 
 				"<bean id='id' class='" + BeanMock.class.getName() + "'>" +
 				"	<property name='text' value='xxx' />" + 
@@ -74,7 +74,7 @@ public class BeanParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 	
 	@Test
-	public void testEmptyStringProperty() throws Exception {
+	public void testEmptyStringProperty() {
 		String xml = 
 				"<bean id='id' class='" + BeanMock.class.getName() + "'>" +
 				"	<property name='text' value='' />" + 

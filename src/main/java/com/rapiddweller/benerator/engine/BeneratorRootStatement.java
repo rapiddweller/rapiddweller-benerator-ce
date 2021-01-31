@@ -98,7 +98,7 @@ public class BeneratorRootStatement extends SequentialStatement {
     	}
 	}
     
-	class BeneratorVisitor implements Visitor<Statement> {
+	static class BeneratorVisitor implements Visitor<Statement> {
 		
 		private String name;
 		private BeneratorContext context;
@@ -122,27 +122,22 @@ public class BeneratorRootStatement extends SequentialStatement {
 				GenerateAndConsumeTask target = generatorStatement.getTask();
 				if (name.equals(target.getTaskName())) {
 					result = generatorStatement;
-					return;
 				}
 			} else if (statement instanceof StatementProxy)
 				visit(((StatementProxy) statement).getRealStatement(context));
-			else if (statement instanceof LazyStatement) {
-	            Expression<Statement> targetExpression = ((LazyStatement) statement).getTargetExpression();
-	            visit(ExpressionUtil.evaluate(targetExpression, context));
-            } else if (statement instanceof IncludeStatement) {
-                String uri = ((IncludeStatement) statement).getUri().evaluate(context);
-                if (uri != null && uri.toLowerCase().endsWith(".xml")) {
-	                DescriptorRunner descriptorRunner = new DescriptorRunner(context.resolveRelativeUri(uri), context);
-	            	try {
-		                BeneratorRootStatement rootStatement = descriptorRunner.parseDescriptorFile();
-		                result = rootStatement.getGeneratorStatement(name, context);
-		                return;
-	                } catch (IOException e) {
-		                throw new ConfigurationError("error parsing file " + uri, e);
-	                }
-                }
-            } else if (!(statement instanceof BeneratorRootStatement))
-            	statement.execute(context);
+			else if (statement instanceof IncludeStatement) {
+				String uri = ((IncludeStatement) statement).getUri().evaluate(context);
+				if (uri != null && uri.toLowerCase().endsWith(".xml")) {
+					DescriptorRunner descriptorRunner = new DescriptorRunner(context.resolveRelativeUri(uri), context);
+					try {
+						BeneratorRootStatement rootStatement = descriptorRunner.parseDescriptorFile();
+						result = rootStatement.getGeneratorStatement(name, context);
+					} catch (IOException e) {
+						throw new ConfigurationError("error parsing file " + uri, e);
+					}
+				}
+			} else if (!(statement instanceof BeneratorRootStatement))
+				statement.execute(context);
         }
 	}
 	

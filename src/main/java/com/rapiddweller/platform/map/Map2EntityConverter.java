@@ -26,9 +26,9 @@
 
 package com.rapiddweller.platform.map;
 
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 import java.util.Map;
 import java.util.Set;
@@ -53,8 +53,9 @@ public class Map2EntityConverter extends ThreadSafeConverter<Map, Entity> {
     @Override
     public Entity convert(Map map) {
         Entity entity = new Entity(descriptor);
-        for (Map.Entry entry : ((Set<Map.Entry>) map.entrySet()))
+        for (Map.Entry entry : ((Set<Map.Entry>) map.entrySet())) {
             entity.setComponent((String) entry.getKey(), entry.getValue());
+        }
         return entity;
     }
 

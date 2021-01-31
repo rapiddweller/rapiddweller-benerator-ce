@@ -130,7 +130,7 @@ public class LocalSequenceGenerator extends NonNullGeneratorProxy<Long> {
 		try {
 	        IOUtil.writeProperties(values, FILENAME);
         } catch (IOException e) {
-        	throw new RuntimeException(e);
+        	throw new RuntimeException("RuntimeException while persist() with following stacktrace : ", e);
         }
     }
 

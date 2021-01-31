@@ -27,9 +27,6 @@
 package com.rapiddweller.platform.db;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;

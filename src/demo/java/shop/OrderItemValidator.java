@@ -50,20 +50,28 @@ public class OrderItemValidator extends EntityValidator {
 
     @Override
     public boolean valid(Entity item) {
-        if (!super.valid(item))
+        if (!super.valid(item)) {
             return false;
-        if ((Number) item.getComponent("id") == null)
+        }
+        if ((Number) item.getComponent("id") == null) {
             return false;
-        if ((Number) item.getComponent("order_id") == null)
+        }
+        if ((Number) item.getComponent("order_id") == null) {
             return false;
+        }
         Integer n = (Integer) item.getComponent("number_of_items");
-        if (n == null || n <= 0)
+        if (n == null || n <= 0) {
             return false;
-        if (!eanValidator.isValid((String) item.getComponent("product_ean_code"), null))
+        }
+        if (!eanValidator
+                .isValid((String) item.getComponent("product_ean_code"),
+                        null)) {
             return false;
+        }
         Number totalPrice = (Number) item.getComponent("total_price");
-        if (totalPrice == null || totalPrice.doubleValue() < 0)
+        if (totalPrice == null || totalPrice.doubleValue() < 0) {
             return false;
+        }
         return true;
     }
 }

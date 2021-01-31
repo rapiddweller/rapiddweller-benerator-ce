@@ -32,9 +32,6 @@ import com.rapiddweller.domain.person.FamilyNameGenerator;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 
 /**
  * Tests the {@link StreetNameGenerator}.<br/><br/>

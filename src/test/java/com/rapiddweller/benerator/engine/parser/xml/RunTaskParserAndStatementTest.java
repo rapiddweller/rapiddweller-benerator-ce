@@ -49,7 +49,7 @@ public class RunTaskParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 	
     @Test
-	public void testSingleThreaded() throws Exception {
+	public void testSingleThreaded() {
         String xml =
         		"<run-task id='myId' class='com.rapiddweller.task.TaskMock' count='5' pageSize='2' stats='true' " +
         		"      pager='new com.rapiddweller.task.PageListenerMock(1)'>" +
@@ -64,7 +64,7 @@ public class RunTaskParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 	
     @Test
-	public void testMultiThreaded() throws Exception {
+	public void testMultiThreaded() {
         String xml =
         		"<run-task id='myId' class='com.rapiddweller.task.TaskMock' count='5' pageSize='2' threads='2' stats='true' " +
         		"      pager='new com.rapiddweller.task.PageListenerMock(1)'>" +

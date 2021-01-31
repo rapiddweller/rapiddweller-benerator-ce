@@ -40,7 +40,8 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  * @author Volker Bergmann
  * @since 0.5.4
  */
-public class BankGenerator extends CompositeGenerator<Bank> implements NonNullGenerator<Bank> {
+public class BankGenerator extends CompositeGenerator<Bank>
+        implements NonNullGenerator<Bank> {
 
     private final RandomVarLengthStringGenerator bankCodeGenerator;
     private final RegexStringGenerator nameGenerator;
@@ -49,10 +50,14 @@ public class BankGenerator extends CompositeGenerator<Bank> implements NonNullGe
 
     public BankGenerator() {
         super(Bank.class);
-        this.bankCodeGenerator = registerComponent(new RandomVarLengthStringGenerator("\\d", 8));
-        this.nameGenerator = registerComponent(new RegexStringGenerator("(Deutsche Bank|Dresdner Bank|Commerzbank|Spardabank|HVB)"));
-        this.bicGenerator = registerComponent(new RegexStringGenerator("[A-Z]{4}DE[A-Z0-9]{2}"));
-        this.binGenerator = registerComponent(new RandomVarLengthStringGenerator("\\d", 4));
+        this.bankCodeGenerator =
+                registerComponent(new RandomVarLengthStringGenerator("\\d", 8));
+        this.nameGenerator = registerComponent(new RegexStringGenerator(
+                "(Deutsche Bank|Dresdner Bank|Commerzbank|Spardabank|HVB)"));
+        this.bicGenerator = registerComponent(
+                new RegexStringGenerator("[A-Z]{4}DE[A-Z0-9]{2}"));
+        this.binGenerator =
+                registerComponent(new RandomVarLengthStringGenerator("\\d", 4));
     }
 
     @Override

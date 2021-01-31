@@ -48,7 +48,7 @@ import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.BeneratorError;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.LogCategories;
+import com.rapiddweller.common.LogCategoriesConstants;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.log.LoggingInfoPrinter;
 import com.rapiddweller.common.ui.ApplicationUtil;
@@ -152,7 +152,7 @@ public class BeneratorGUI {
 		            file = File.createTempFile("benerator-", ".ben.xml");
 		            CharSequence builder = createXML();
 		            IOUtil.writeTextFile(file.getAbsolutePath(), builder.toString());
-		            Benerator.runFile(file.getAbsolutePath(), new LoggingInfoPrinter(LogCategories.CONFIG));
+		            Benerator.runFile(file.getAbsolutePath(), new LoggingInfoPrinter(LogCategoriesConstants.CONFIG));
 	            } catch (BeneratorError e) {
 	        		System.err.println("Error: " + e.getMessage());
 	            	LOGGER.error(e.getMessage());

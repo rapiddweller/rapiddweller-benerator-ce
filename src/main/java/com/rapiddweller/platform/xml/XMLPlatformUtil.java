@@ -92,10 +92,9 @@ public class XMLPlatformUtil {
         return entity;
     }
 
-    public static Element mapEntityToElement(Entity source, Element target) {
+    public static void mapEntityToElement(Entity source, Element target) {
         for (Map.Entry<String, Object> component : source.getComponents().entrySet())
             mapComponent(component.getKey(), component.getValue(), target);
-        return target;
     }
 
     public static void mapComponent(String componentName, Object componentValue, Element target) {

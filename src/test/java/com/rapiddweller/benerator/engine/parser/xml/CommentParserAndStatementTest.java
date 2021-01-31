@@ -43,7 +43,7 @@ import org.w3c.dom.Element;
 public class CommentParserAndStatementTest extends BeneratorIntegrationTest {
 
 	@Test
-	public void testValue() throws Exception {
+	public void testValue() {
 		Element element = XMLUtil.parseStringAsElement("<comment>Hello</comment>");
 		CommentStatement statement = (CommentStatement) new CommentParser().parse(element, null, null);
 		statement.execute(context);

@@ -26,7 +26,11 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.common.operation.*;
+import com.rapiddweller.common.operation.AndOperation;
+import com.rapiddweller.common.operation.MaxNumberStringOperation;
+import com.rapiddweller.common.operation.MaxOperation;
+import com.rapiddweller.common.operation.MinNumberStringOperation;
+import com.rapiddweller.common.operation.MinOperation;
 import com.rapiddweller.script.PrimitiveType;
 
 /**
@@ -61,12 +65,14 @@ public class SimpleTypeDescriptor extends TypeDescriptor {
         this(name, provider, (String) null);
     }
 
-    public SimpleTypeDescriptor(String name, DescriptorProvider provider, SimpleTypeDescriptor parent) {
+    public SimpleTypeDescriptor(String name, DescriptorProvider provider,
+                                SimpleTypeDescriptor parent) {
         this(name, provider, parent.getName());
         this.parent = parent;
     }
 
-    public SimpleTypeDescriptor(String name, DescriptorProvider provider, String parentName) {
+    public SimpleTypeDescriptor(String name, DescriptorProvider provider,
+                                String parentName) {
         super(name, provider, parentName);
         // number setup
         addConstraint(MIN, String.class, new MaxNumberStringOperation());
@@ -94,13 +100,16 @@ public class SimpleTypeDescriptor extends TypeDescriptor {
     }
 
     public PrimitiveType getPrimitiveType() {
-        if (primitiveType != null)
+        if (primitiveType != null) {
             return primitiveType;
+        }
         primitiveType = PrimitiveType.getInstance(getName());
-        if (primitiveType != null)
+        if (primitiveType != null) {
             return primitiveType;
-        if (getParent() != null)
+        }
+        if (getParent() != null) {
             return getParent().getPrimitiveType();
+        }
         return null;
     }
 
@@ -186,10 +195,11 @@ public class SimpleTypeDescriptor extends TypeDescriptor {
 
     public void addValue(String value) {
         String valuesBefore = getValues();
-        if (valuesBefore == null || valuesBefore.length() == 0)
+        if (valuesBefore == null || valuesBefore.length() == 0) {
             setValues(value);
-        else
+        } else {
             setValues(valuesBefore + ',' + value);
+        }
     }
 
     public String getConstant() {

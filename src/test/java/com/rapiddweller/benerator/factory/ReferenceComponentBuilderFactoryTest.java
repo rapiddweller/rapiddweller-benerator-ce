@@ -79,7 +79,7 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
 		Entity entity = createPersonEntity();
 		setCurrentProduct(entity, "e");
 		generator.execute(context);
-		assertEquals(null, entity.get("ref"));
+		assertNull(entity.get("ref"));
 	}
 
     @SuppressWarnings("rawtypes")
@@ -92,7 +92,7 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
 		Entity entity = createPersonEntity();
 		setCurrentProduct(entity, "e");
 		generator.execute(context);
-		assertEquals(null, entity.get("ref"));
+		assertNull(entity.get("ref"));
 	}
 
     @SuppressWarnings("rawtypes")
@@ -154,7 +154,7 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
 		ReferenceDescriptor ref = createTargetTypeDescriptor("ref", "Person", "Storage");
 		ref.setCount(new ConstantExpression<>(1L));
 		ComponentBuilder generator = createAndInitBuilder(ref);
-		assertTrue(generator != null);
+		assertNotNull(generator);
 		Entity entity = createPersonEntity();
 		setCurrentProduct(entity, "e");
 		generator.execute(context);
@@ -167,7 +167,7 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
 		ReferenceDescriptor ref = createTargetTypeDescriptor("ref", "Person", "Storage");
 		ref.setCount(new ConstantExpression<>(2L));
 		ComponentBuilder builder = createAndInitBuilder(ref);
-		assertTrue(builder != null);
+		assertNotNull(builder);
 		Entity entity = createPersonEntity();
 		setCurrentProduct(entity, "e");
 		builder.execute(context);

@@ -59,7 +59,8 @@ public class ComponentNameMapper extends ThreadSafeConverter<Entity, Entity> {
     @Override
     public Entity convert(Entity input) throws ConversionException {
         Entity output = new Entity(input.descriptor());
-        for (Map.Entry<String, Object> component : input.getComponents().entrySet()) {
+        for (Map.Entry<String, Object> component : input.getComponents()
+                .entrySet()) {
             String inCptName = component.getKey();
             String outCptName = (String) nameMapper.convert(inCptName);
             output.setComponent(outCptName, input.get(inCptName));

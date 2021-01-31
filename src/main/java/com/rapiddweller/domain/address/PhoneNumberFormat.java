@@ -64,7 +64,8 @@ public class PhoneNumberFormat extends Format {
     }
 
     @Override
-    public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+    public StringBuffer format(Object obj, StringBuffer toAppendTo,
+                               FieldPosition pos) {
         PhoneNumber number = (PhoneNumber) obj;
         for (int i = 0; i < pattern.length(); i++) {
             char c = pattern.charAt(i);
@@ -101,8 +102,12 @@ public class PhoneNumberFormat extends Format {
                     number.setLocalNumber(parseDigits(source, pos));
                     break;
                 default:
-                    if (source.charAt(pos.getIndex()) != c)
-                        throw new IllegalArgumentException("Pattern '" + pattern + "' is not matched by String: " + source);
+                    if (source.charAt(pos.getIndex()) != c) {
+                        throw new IllegalArgumentException(
+                                "Pattern '" + pattern +
+                                        "' is not matched by String: " +
+                                        source);
+                    }
                     pos.setIndex(pos.getIndex() + 1);
             }
         }
@@ -119,14 +124,18 @@ public class PhoneNumberFormat extends Format {
     }
 
     private String parseDigits(String source, ParsePosition pos) {
-        if (pos.getIndex() >= source.length())
-            throw new IllegalArgumentException("Text cannot be parsed unambiguously as phone number with pattern: " + pattern);
+        if (pos.getIndex() >= source.length()) {
+            throw new IllegalArgumentException(
+                    "Text cannot be parsed unambiguously as phone number with pattern: " +
+                            pattern);
+        }
         int start = pos.getIndex();
         int end;
         for (end = start; end < source.length(); end++) {
             char c = source.charAt(end);
-            if (!Character.isDigit(c))
+            if (!Character.isDigit(c)) {
                 break;
+            }
         }
         pos.setIndex(end);
         return source.substring(start, end);

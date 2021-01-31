@@ -46,7 +46,7 @@ import org.junit.Test;
 public class PerfTrackingTaskProxyTest {
 
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		DefaultContext context = new DefaultContext();
 		Task task = new TaskMock(0, context);
 		PerfTrackingTaskProxy proxy = new PerfTrackingTaskProxy(task);

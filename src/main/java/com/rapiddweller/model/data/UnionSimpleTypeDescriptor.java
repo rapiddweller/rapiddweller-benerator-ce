@@ -60,8 +60,10 @@ public class UnionSimpleTypeDescriptor extends SimpleTypeDescriptor {
     @Override
     public PrimitiveType getPrimitiveType() {
         TypeDescriptor firstType = alternatives.get(0);
-        if (firstType == null)
-            throw new ConfigurationError("Cannot determine primitive type of union: " + getName());
+        if (firstType == null) {
+            throw new ConfigurationError(
+                    "Cannot determine primitive type of union: " + getName());
+        }
         return ((SimpleTypeDescriptor) firstType).getPrimitiveType();
     }
 

@@ -26,11 +26,11 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import com.rapiddweller.script.PrimitiveType;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,10 +57,13 @@ public class DataModel {
         new BeanDescriptorProvider(this);
     }
 
-    private static TypeDescriptor searchCaseInsensitive(DescriptorProvider provider, String name) {
-        for (TypeDescriptor type : provider.getTypeDescriptors())
-            if (type.getName().equals(name))
+    private static TypeDescriptor searchCaseInsensitive(
+            DescriptorProvider provider, String name) {
+        for (TypeDescriptor type : provider.getTypeDescriptors()) {
+            if (type.getName().equals(name)) {
                 return type;
+            }
+        }
         return null;
     }
 
@@ -72,11 +75,13 @@ public class DataModel {
         addDescriptorProvider(provider, true);
     }
 
-    public void addDescriptorProvider(DescriptorProvider provider, boolean validate) {
+    public void addDescriptorProvider(DescriptorProvider provider,
+                                      boolean validate) {
         providers.put(provider.getId(), provider);
         provider.setDataModel(this);
-        if (validate)
+        if (validate) {
             validate();
+        }
     }
 
     public DescriptorProvider getDescriptorProvider(String id) {
@@ -88,8 +93,9 @@ public class DataModel {
     }
 
     public TypeDescriptor getTypeDescriptor(String typeId) {
-        if (typeId == null)
+        if (typeId == null) {
             return null;
+        }
         String namespace = null;
         String name = typeId;
         if (typeId.contains(":")) {
@@ -101,16 +107,18 @@ public class DataModel {
     }
 
     public TypeDescriptor getTypeDescriptor(String namespace, String name) {
-        if (name == null)
+        if (name == null) {
             return null;
+        }
         if (namespace != null) {
             DescriptorProvider provider = providers.get(namespace);
             if (provider != null) {
                 // first, search case-sensitive
-                TypeDescriptor typeDescriptor = provider.getTypeDescriptor(name);
-                if (typeDescriptor != null)
+                TypeDescriptor typeDescriptor =
+                        provider.getTypeDescriptor(name);
+                if (typeDescriptor != null) {
                     return typeDescriptor;
-                else {
+                } else {
                     // not found yet, try it case-insensitive
                     return searchCaseInsensitive(provider, name);
                 }
@@ -119,14 +127,16 @@ public class DataModel {
         // first, search case-sensitive
         for (DescriptorProvider provider : providers.values()) {
             TypeDescriptor descriptor = provider.getTypeDescriptor(name);
-            if (descriptor != null)
+            if (descriptor != null) {
                 return descriptor;
+            }
         }
         // not found yet, try it case-insensitive
         for (DescriptorProvider provider : providers.values()) {
             TypeDescriptor descriptor = searchCaseInsensitive(provider, name);
-            if (descriptor != null)
+            if (descriptor != null) {
                 return descriptor;
+            }
         }
         return null;
     }
@@ -135,8 +145,9 @@ public class DataModel {
 
     public void validate() {
         for (DescriptorProvider provider : providers.values()) {
-            for (TypeDescriptor desc : provider.getTypeDescriptors())
+            for (TypeDescriptor desc : provider.getTypeDescriptors()) {
                 validate(desc);
+            }
         }
     }
 
@@ -148,41 +159,52 @@ public class DataModel {
             validate((ComplexTypeDescriptor) type);
         } else if (type instanceof ArrayTypeDescriptor) {
             validate((ArrayTypeDescriptor) type);
-        } else
-            throw new UnsupportedOperationException("Descriptor type not supported: " + type.getClass());
+        } else {
+            throw new UnsupportedOperationException(
+                    "Descriptor type not supported: " + type.getClass());
+        }
     }
 
     private void validate(SimpleTypeDescriptor desc) {
         PrimitiveType primitiveType = desc.getPrimitiveType();
-        if (primitiveType == null && !acceptUnknownPrimitives)
-            throw new ConfigurationError("No primitive type defined for simple type: " + desc.getName());
+        if (primitiveType == null && !acceptUnknownPrimitives) {
+            throw new ConfigurationError(
+                    "No primitive type defined for simple type: " +
+                            desc.getName());
+        }
     }
 
     private void validate(ComplexTypeDescriptor desc) {
         for (ComponentDescriptor component : desc.getComponents()) {
             TypeDescriptor type = component.getTypeDescriptor();
-            if (type == null)
-                throw new ConfigurationError("Type of component is not defined: " + desc.getName());
-            else if (!(type instanceof ComplexTypeDescriptor))
+            if (type == null) {
+                throw new ConfigurationError(
+                        "Type of component is not defined: " + desc.getName());
+            } else if (!(type instanceof ComplexTypeDescriptor)) {
                 validate(type);
+            }
         }
     }
 
     private void validate(ArrayTypeDescriptor desc) {
         for (ArrayElementDescriptor element : desc.getElements()) {
             TypeDescriptor type = element.getTypeDescriptor();
-            if (!(type instanceof ComplexTypeDescriptor))
+            if (!(type instanceof ComplexTypeDescriptor)) {
                 validate(type);
+            }
         }
     }
 
     public SimpleTypeDescriptor getPrimitiveTypeDescriptor(Class<?> javaType) {
-        PrimitiveDescriptorProvider primitiveProvider = (PrimitiveDescriptorProvider) providers.get(PrimitiveDescriptorProvider.NAMESPACE);
+        PrimitiveDescriptorProvider primitiveProvider =
+                (PrimitiveDescriptorProvider) providers
+                        .get(PrimitiveDescriptorProvider.NAMESPACE);
         return primitiveProvider.getPrimitiveTypeDescriptor(javaType);
     }
 
     public BeanDescriptorProvider getBeanDescriptorProvider() {
-        return (BeanDescriptorProvider) providers.get(BeanDescriptorProvider.NAMESPACE);
+        return (BeanDescriptorProvider) providers
+                .get(BeanDescriptorProvider.NAMESPACE);
     }
 
 }

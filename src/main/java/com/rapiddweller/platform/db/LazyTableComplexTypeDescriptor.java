@@ -26,8 +26,12 @@
 
 package com.rapiddweller.platform.db;
 
-import com.rapiddweller.model.data.*;
 import com.rapiddweller.jdbacl.model.DBTable;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.ComponentDescriptor;
+import com.rapiddweller.model.data.InstanceDescriptor;
+import com.rapiddweller.model.data.ReferenceDescriptor;
+import com.rapiddweller.model.data.VariableDescriptor;
 
 import java.util.Collection;
 import java.util.List;
@@ -128,7 +132,8 @@ public class LazyTableComplexTypeDescriptor extends ComplexTypeDescriptor {
     // construction helper methods -------------------------------------------------------------------------------------
 
     @Override
-    public ComplexTypeDescriptor withComponent(ComponentDescriptor componentDescriptor) {
+    public ComplexTypeDescriptor withComponent(
+            ComponentDescriptor componentDescriptor) {
         assureLoaded();
         addComponent(componentDescriptor);
         return this;

@@ -41,14 +41,16 @@ import static com.rapiddweller.benerator.util.GeneratorUtil.generateNonNull;
  * @author Volker Bergmann
  * @since 0.5.2
  */
-public class RandomDomainGenerator extends CompositeGenerator<String> implements NonNullGenerator<String> {
+public class RandomDomainGenerator extends CompositeGenerator<String>
+        implements NonNullGenerator<String> {
 
     private final RegexStringGenerator nameGenerator;
     private final TopLevelDomainGenerator tldGenerator;
 
     public RandomDomainGenerator() {
         super(String.class);
-        this.nameGenerator = registerComponent(new RegexStringGenerator("[a-z]{4,12}"));
+        this.nameGenerator =
+                registerComponent(new RegexStringGenerator("[a-z]{4,12}"));
         this.tldGenerator = registerComponent(new TopLevelDomainGenerator());
     }
 

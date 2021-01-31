@@ -35,8 +35,8 @@ import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.format.util.AbstractDataSource;
 import com.rapiddweller.jdbacl.QueryDataIterator;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -51,7 +51,8 @@ import java.sql.ResultSet;
  */
 public class QueryDataSource extends AbstractDataSource<ResultSet> {
 
-    private static final Logger LOGGER = LogManager.getLogger(QueryIterable.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(QueryIterable.class);
 
     private final Connection connection;
     private final String query;
@@ -60,19 +61,23 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> {
     private final Converter<String, ?> queryPreprocessor;
     private String renderedQuery;
 
-    public QueryDataSource(Connection connection, String query, int fetchSize, Context context) {
+    public QueryDataSource(Connection connection, String query, int fetchSize,
+                           Context context) {
         super(ResultSet.class);
-        if (connection == null)
+        if (connection == null) {
             throw new IllegalStateException("'connection' is null");
-        if (StringUtil.isEmpty(query))
+        }
+        if (StringUtil.isEmpty(query)) {
             throw new IllegalStateException("'query' is empty or null");
+        }
         this.connection = connection;
         this.query = query;
         this.fetchSize = fetchSize;
-        if (context != null)
+        if (context != null) {
             this.queryPreprocessor = new ScriptConverterForStrings(context);
-        else
+        } else {
             this.queryPreprocessor = new NoOpConverter<>();
+        }
         LOGGER.debug("Constructed QueryIterable: {}", query);
     }
 
@@ -88,7 +93,8 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + '[' + (renderedQuery != null ? renderedQuery : query) + ']';
+        return getClass().getSimpleName() + '[' +
+                (renderedQuery != null ? renderedQuery : query) + ']';
     }
 
 }

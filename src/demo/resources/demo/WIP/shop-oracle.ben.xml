@@ -52,7 +52,7 @@
     <echo>{ftl: ${items_per_order} items per order}</echo>
     <echo>{ftl:encoding:${context.defaultEncoding} default pageSize:${context.defaultPageSize}}</echo>
     <echo>{ftl:JDBC URL: ${dbUrl}}</echo>
-    
+
     <comment>define a database that will be referred by the id 'db' subsequently</comment>
     <database id="db" url="{dbUrl}" driver="{dbDriver}" catalog="{dbCatalog}" schema="{dbSchema}"
               user="{dbUser}" password="{dbPassword}" batch="{dbBatch}"/>

@@ -44,7 +44,7 @@ public class BeneratorSubContextTest {
 	public void testGetParent() {
 		DefaultBeneratorContext parent = new DefaultBeneratorContext();
 		DefaultBeneratorSubContext child = (DefaultBeneratorSubContext) parent.createSubContext("sub");
-		assertTrue(parent == child.getParent());
+        assertSame(parent, child.getParent());
 	}
 	
 	@Test
@@ -53,7 +53,7 @@ public class BeneratorSubContextTest {
 		DefaultBeneratorSubContext child = (DefaultBeneratorSubContext) parent.createSubContext("sub");
 		// verify that child settings are not available in parent
 		child.set("c", 2);
-		assertEquals(null, parent.get("c"));
+        assertNull(parent.get("c"));
 		assertEquals(2, child.get("c"));
 		// verify that parent settings are available in child
 		parent.set("x", 3);

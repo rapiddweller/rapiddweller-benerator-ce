@@ -47,10 +47,10 @@ public class FeatureDetail<E> {
 
     private final String name;
     private final Class<E> type;
-    private E value;
     private final Operation<E, E> combinator;
     private final boolean constraint;
     private final boolean deprecated;
+    private E value;
 
     // constructors ----------------------------------------------------------------------------------------------------
 
@@ -58,7 +58,8 @@ public class FeatureDetail<E> {
         this(name, type, constraint, new FirstArgSelector<>());
     }
 
-    public FeatureDetail(String name, Class<E> type, boolean constraint, Operation<E, E> combinator) {
+    public FeatureDetail(String name, Class<E> type, boolean constraint,
+                         Operation<E, E> combinator) {
         this(name, type, constraint, combinator, false);
     }
 
@@ -87,11 +88,17 @@ public class FeatureDetail<E> {
     }
 
     public void setValue(E value) {
-        if (deprecated && value != null)
-            escalator.escalate("Feature '" + name + "' is deprecated", getClass(), value);
-        if (value != null && !(type.isAssignableFrom(value.getClass())))
-            throw new IllegalArgumentException("Tried to assign a value of type '" + value.getClass().getName()
-                    + "'to detail '" + name + "' of type '" + type + "'");
+        if (deprecated && value != null) {
+            escalator.escalate("Feature '" + name + "' is deprecated",
+                    getClass(), value);
+        }
+        if (value != null && !(type.isAssignableFrom(value.getClass()))) {
+            throw new IllegalArgumentException(
+                    "Tried to assign a value of type '" +
+                            value.getClass().getName()
+                            + "'to detail '" + name + "' of type '" + type +
+                            "'");
+        }
         this.value = value;
     }
 
@@ -123,10 +130,12 @@ public class FeatureDetail<E> {
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
         final FeatureDetail<E> that = (FeatureDetail<E>) o;
         return (name.equals(that.name)
                 && NullSafeComparator.equals(this.value, that.value));

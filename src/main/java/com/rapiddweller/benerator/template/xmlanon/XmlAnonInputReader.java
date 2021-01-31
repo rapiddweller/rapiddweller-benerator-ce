@@ -56,16 +56,12 @@ public class XmlAnonInputReader implements TemplateInputReader {
 
 	@Override
 	public void parse(String uri, Context context) throws IOException, ParseException {
-		try {
-			AnonymizationSetup setup = parseXls(uri);
-			verifyXMLFileSettings(setup);
-			context.set("setup", setup);
-		} catch (InvalidFormatException e) {
-			throw new ParseException("Error parsing Input file for XML Anonymization: " + e.getMessage(), uri);
-		}
-	}
+        AnonymizationSetup setup = parseXls(uri);
+        verifyXMLFileSettings(setup);
+        context.set("setup", setup);
+    }
 
-	private static AnonymizationSetup parseXls(String xlsUri) throws IOException, InvalidFormatException {
+	private static AnonymizationSetup parseXls(String xlsUri) throws IOException {
 		Workbook workbook = WorkbookFactory.create(IOUtil.getInputStreamForURI(xlsUri));
 		Sheet sheet = workbook.getSheetAt(0);
 		

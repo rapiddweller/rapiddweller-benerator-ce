@@ -65,7 +65,10 @@ public class Address {
         this(null, null, null, null, null, null, null, null, null, null);
     }
 
-    public Address(String street, String houseNumber, String postalCode, City city, State state, Country country, PhoneNumber privatePhone, PhoneNumber officePhone, PhoneNumber mobilePhone, PhoneNumber fax) {
+    public Address(String street, String houseNumber, String postalCode,
+                   City city, State state, Country country,
+                   PhoneNumber privatePhone, PhoneNumber officePhone,
+                   PhoneNumber mobilePhone, PhoneNumber fax) {
         this.street = street;
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
@@ -104,13 +107,17 @@ public class Address {
 
     @Deprecated
     public String getZipCode() {
-        escalator.escalate("Property 'zipCode' is deprecated and replaced with 'postalCode'", getClass(), "zipCode");
+        escalator.escalate(
+                "Property 'zipCode' is deprecated and replaced with 'postalCode'",
+                getClass(), "zipCode");
         return getPostalCode();
     }
 
     @Deprecated
     public void setZipCode(String zipCode) {
-        escalator.escalate("Property 'zipCode' is deprecated and replaced with 'postalCode'", getClass(), "zipCode");
+        escalator.escalate(
+                "Property 'zipCode' is deprecated and replaced with 'postalCode'",
+                getClass(), "zipCode");
         setPostalCode(zipCode);
     }
 
@@ -181,8 +188,9 @@ public class Address {
     @Override
     public String toString() {
         AddressFormat format = AddressFormat.getInstance(country.getIsoCode());
-        if (format == null)
+        if (format == null) {
             format = AddressFormat.DE;
+        }
         return format.format(this);
     }
 
@@ -196,35 +204,49 @@ public class Address {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null || getClass() != obj.getClass())
+        }
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
+        }
         Address that = (Address) obj;
-        if (!NullSafeComparator.equals(this.postalCode, that.postalCode))
+        if (!NullSafeComparator.equals(this.postalCode, that.postalCode)) {
             return false;
-        if (!NullSafeComparator.equals(this.street, that.street))
+        }
+        if (!NullSafeComparator.equals(this.street, that.street)) {
             return false;
-        if (!NullSafeComparator.equals(this.houseNumber, that.houseNumber))
+        }
+        if (!NullSafeComparator.equals(this.houseNumber, that.houseNumber)) {
             return false;
-        if (!NullSafeComparator.equals(this.poBox, that.poBox))
+        }
+        if (!NullSafeComparator.equals(this.poBox, that.poBox)) {
             return false;
-        if (!NullSafeComparator.equals(this.city, that.city))
+        }
+        if (!NullSafeComparator.equals(this.city, that.city)) {
             return false;
-        if (!NullSafeComparator.equals(this.organization, that.organization))
+        }
+        if (!NullSafeComparator.equals(this.organization, that.organization)) {
             return false;
-        if (!NullSafeComparator.equals(this.building, that.building))
+        }
+        if (!NullSafeComparator.equals(this.building, that.building)) {
             return false;
-        if (!NullSafeComparator.equals(this.co, that.co))
+        }
+        if (!NullSafeComparator.equals(this.co, that.co)) {
             return false;
-        if (!NullSafeComparator.equals(this.department, that.department))
+        }
+        if (!NullSafeComparator.equals(this.department, that.department)) {
             return false;
-        if (!NullSafeComparator.equals(this.fax, that.fax))
+        }
+        if (!NullSafeComparator.equals(this.fax, that.fax)) {
             return false;
-        if (!NullSafeComparator.equals(this.mobilePhone, that.mobilePhone))
+        }
+        if (!NullSafeComparator.equals(this.mobilePhone, that.mobilePhone)) {
             return false;
-        if (!NullSafeComparator.equals(this.officePhone, that.officePhone))
+        }
+        if (!NullSafeComparator.equals(this.officePhone, that.officePhone)) {
             return false;
+        }
         return NullSafeComparator.equals(this.privatePhone, that.privatePhone);
     }
 

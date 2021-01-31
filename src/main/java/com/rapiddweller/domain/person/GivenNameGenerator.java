@@ -31,8 +31,8 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.csv.WeightedDatasetCSVGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.util.SharedGenerator;
-import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.common.Encodings;
+import com.rapiddweller.domain.address.Country;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -46,11 +46,13 @@ import java.util.Map;
  * @author Volker Bergmann
  * @since 0.1
  */
-public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String> implements NonNullGenerator<String> {
+public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String>
+        implements NonNullGenerator<String> {
 
     // default instance management -------------------------------------------------------------------------------------
 
-    private static final Map<String, Generator<String>> defaultInstances = new HashMap<>();
+    private static final Map<String, Generator<String>> defaultInstances =
+            new HashMap<>();
 
     public GivenNameGenerator() {
         this(Locale.getDefault().getCountry(), Gender.MALE);
@@ -65,16 +67,22 @@ public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String> impl
                 gender);
     }
 
-    public GivenNameGenerator(String datasetName, String nesting, String baseName, Gender gender) {
-        super(String.class, genderBaseName(baseName, gender) + "_{0}.csv", datasetName, nesting, true, Encodings.UTF_8);
-        logger.debug("Instantiated GivenNameGenerator for dataset '{}' and gender '{}'", datasetName, gender);
+    public GivenNameGenerator(String datasetName, String nesting,
+                              String baseName, Gender gender) {
+        super(String.class, genderBaseName(baseName, gender) + "_{0}.csv",
+                datasetName, nesting, true, Encodings.UTF_8);
+        logger.debug(
+                "Instantiated GivenNameGenerator for dataset '{}' and gender '{}'",
+                datasetName, gender);
     }
 
-    public static Generator<String> sharedInstance(String datasetName, Gender gender) {
+    public static Generator<String> sharedInstance(String datasetName,
+                                                   Gender gender) {
         String key = datasetName + '-' + gender;
         Generator<String> instance = defaultInstances.get(key);
         if (instance == null) {
-            instance = new SharedGenerator<>(new GivenNameGenerator(datasetName, gender));
+            instance = new SharedGenerator<>(
+                    new GivenNameGenerator(datasetName, gender));
             defaultInstances.put(key, instance);
         }
         return instance;
@@ -83,12 +91,13 @@ public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String> impl
     // public methods --------------------------------------------------------------------------------------------------
 
     private static String genderBaseName(String baseName, Gender gender) {
-        if (gender == Gender.FEMALE)
+        if (gender == Gender.FEMALE) {
             return baseName + "_female";
-        else if (gender == Gender.MALE)
+        } else if (gender == Gender.MALE) {
             return baseName + "_male";
-        else
+        } else {
             throw new IllegalArgumentException("Gender: " + gender);
+        }
     }
 
     // NonNullGenerator interface implementation -----------------------------------------------------------------------

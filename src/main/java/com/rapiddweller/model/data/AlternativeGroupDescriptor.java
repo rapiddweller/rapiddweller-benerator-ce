@@ -35,7 +35,8 @@ package com.rapiddweller.model.data;
  */
 public class AlternativeGroupDescriptor extends ComplexTypeDescriptor {
 
-    public AlternativeGroupDescriptor(String name, DescriptorProvider provider) {
+    public AlternativeGroupDescriptor(String name,
+                                      DescriptorProvider provider) {
         super(name, provider);
     }
 

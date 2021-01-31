@@ -28,12 +28,16 @@ package com.rapiddweller.platform.csv;
 
 import com.rapiddweller.benerator.consumer.TextFileExporter;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.common.*;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
 import java.util.List;
@@ -49,11 +53,13 @@ import java.util.List;
  */
 public class CSVEntityExporter extends TextFileExporter {
 
-    private static final Logger logger = LogManager.getLogger(CSVEntityExporter.class);
+    private static final Logger logger =
+            LogManager.getLogger(CSVEntityExporter.class);
 
     // defaults --------------------------------------------------------------------------------------------------------
 
-    private static final String DEFAULT_LINE_SEPARATOR = "\r\n"; // as defined by RFC 4180
+    private static final String DEFAULT_LINE_SEPARATOR = "\r\n";
+            // as defined by RFC 4180
     private static final String DEFAULT_URI = "export.csv";
 
     // configuration attributes ----------------------------------------------------------------------------------------
@@ -79,13 +85,17 @@ public class CSVEntityExporter extends TextFileExporter {
     }
 
     public CSVEntityExporter(String uri, String columnsSpec) {
-        this(uri, columnsSpec, DefaultBeneratorContext.getDefaultCellSeparator(), null, DEFAULT_LINE_SEPARATOR);
+        this(uri, columnsSpec,
+                DefaultBeneratorContext.getDefaultCellSeparator(), null,
+                DEFAULT_LINE_SEPARATOR);
     }
 
-    public CSVEntityExporter(String uri, String columnsSpec, char separator, String encoding, String lineSeparator) {
+    public CSVEntityExporter(String uri, String columnsSpec, char separator,
+                             String encoding, String lineSeparator) {
         super(uri, encoding, lineSeparator);
-        if (columnsSpec != null)
+        if (columnsSpec != null) {
             setColumns(ArrayFormat.parse(columnsSpec, ",", String.class));
+        }
         this.separator = separator;
         this.quoteEmpty = true;
     }
@@ -95,13 +105,18 @@ public class CSVEntityExporter extends TextFileExporter {
     }
 
     public CSVEntityExporter(String uri, ComplexTypeDescriptor descriptor) {
-        this(uri, descriptor, DefaultBeneratorContext.getDefaultCellSeparator(), null, DEFAULT_LINE_SEPARATOR);
+        this(uri, descriptor, DefaultBeneratorContext.getDefaultCellSeparator(),
+                null, DEFAULT_LINE_SEPARATOR);
     }
 
-    public CSVEntityExporter(String uri, ComplexTypeDescriptor descriptor, char separator, String encoding, String lineSeparator) {
+    public CSVEntityExporter(String uri, ComplexTypeDescriptor descriptor,
+                             char separator, String encoding,
+                             String lineSeparator) {
         super(uri, encoding, lineSeparator);
-        Collection<ComponentDescriptor> componentDescriptors = descriptor.getComponents();
-        List<String> componentNames = BeanUtil.extractProperties(componentDescriptors, "name");
+        Collection<ComponentDescriptor> componentDescriptors =
+                descriptor.getComponents();
+        List<String> componentNames =
+                BeanUtil.extractProperties(componentDescriptors, "name");
         this.columns = CollectionUtil.toArray(componentNames, String.class);
         this.endWithNewLine = false;
         this.separator = separator;
@@ -111,9 +126,9 @@ public class CSVEntityExporter extends TextFileExporter {
     // properties ------------------------------------------------------------------------------------------------------
 
     public void setColumns(String[] columns) {
-        if (ArrayUtil.isEmpty(columns))
+        if (ArrayUtil.isEmpty(columns)) {
             this.columns = null;
-        else {
+        } else {
             this.columns = columns.clone();
             StringUtil.trimAll(this.columns);
         }
@@ -152,26 +167,30 @@ public class CSVEntityExporter extends TextFileExporter {
     @Override
     protected void startConsumingImpl(Object object) {
         logger.debug("exporting {}", object);
-        if (!(object instanceof Entity))
+        if (!(object instanceof Entity)) {
             throw new IllegalArgumentException("Expecting entity");
+        }
         Entity entity = (Entity) object;
-        if (lfRequired)
+        if (lfRequired) {
             println();
-        else
+        } else {
             lfRequired = true;
+        }
         for (int i = 0; i < columns.length; i++) {
-            if (i > 0)
+            if (i > 0) {
                 printer.print(separator);
+            }
             Object value = entity.getComponent(columns[i]);
             String out;
-            if (value == null)
+            if (value == null) {
                 out = getNullString();
-            else {
+            } else {
                 out = plainConverter.convert(value);
-                if (out.length() == 0 && quoteEmpty)
+                if (out.length() == 0 && quoteEmpty) {
                     out = "\"\"";
-                else if (out.indexOf(separator) >= 0)
+                } else if (out.indexOf(separator) >= 0) {
                     out = '"' + out + '"';
+                }
             }
             printer.print(out);
         }
@@ -181,15 +200,17 @@ public class CSVEntityExporter extends TextFileExporter {
     protected void postInitPrinter(Object object) {
         Entity entity = (Entity) object;
         // determine columns from entity, if they have not been predefined
-        if (columns == null && entity != null)
+        if (columns == null && entity != null) {
             columns = CollectionUtil.toArray(entity.getComponents().keySet());
+        }
         printHeaderRow();
     }
 
     @Override
     protected void preClosePrinter() {
-        if (endWithNewLine)
+        if (endWithNewLine) {
             println();
+        }
     }
 
 
@@ -197,11 +218,13 @@ public class CSVEntityExporter extends TextFileExporter {
 
     private void printHeaderRow() {
         if (!wasAppended && !headless && columns != null) {
-            if (wasAppended && !endWithNewLine)
+            if (wasAppended && !endWithNewLine) {
                 println();
+            }
             for (int i = 0; i < columns.length; i++) {
-                if (i > 0)
+                if (i > 0) {
                     printer.print(separator);
+                }
                 printer.print(columns[i]);
             }
             lfRequired = true;

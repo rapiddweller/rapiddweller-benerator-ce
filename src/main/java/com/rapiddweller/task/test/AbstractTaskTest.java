@@ -27,11 +27,11 @@
 package com.rapiddweller.task.test;
 
 import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.task.Task;
-import com.rapiddweller.task.TaskResult;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.Level;
+import com.rapiddweller.task.Task;
+import com.rapiddweller.task.TaskResult;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
@@ -45,12 +45,16 @@ import static org.junit.Assert.assertNotSame;
  */
 public class AbstractTaskTest extends ModelTest {
 
-    protected static void executeStepAndAssertAvailability(Task task, Context context) {
-        assertEquals("Task is expected to be available", TaskResult.EXECUTING, task.execute(context, errorHandler()));
+    protected static void executeStepAndAssertAvailability(Task task,
+                                                           Context context) {
+        assertEquals("Task is expected to be available", TaskResult.EXECUTING,
+                task.execute(context, errorHandler()));
     }
 
-    protected static void executeStepAndAssertUnavailability(Task task, Context context) {
-        assertNotSame("Task is expected to be unavailable", task.execute(context, errorHandler()), TaskResult.EXECUTING);
+    protected static void executeStepAndAssertUnavailability(Task task,
+                                                             Context context) {
+        assertNotSame("Task is expected to be unavailable",
+                task.execute(context, errorHandler()), TaskResult.EXECUTING);
     }
 
     static ErrorHandler errorHandler() {

@@ -31,8 +31,8 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 import com.rapiddweller.common.StringUtil;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Abstract parent class for database-sequence-related {@link Generator}s.<br/><br/>
@@ -41,7 +41,8 @@ import org.apache.logging.log4j.LogManager;
  * @author Volker Bergmann
  * @since 0.7.0
  */
-public abstract class AbstractSequenceGenerator extends ThreadSafeNonNullGenerator<Long> {
+public abstract class AbstractSequenceGenerator
+        extends ThreadSafeNonNullGenerator<Long> {
 
     protected final Logger logger = LogManager.getLogger(getClass());
 
@@ -80,10 +81,14 @@ public abstract class AbstractSequenceGenerator extends ThreadSafeNonNullGenerat
 
     @Override
     public synchronized void init(GeneratorContext context) {
-        if (database == null)
-            throw new InvalidGeneratorSetupException("No 'source' database defined");
-        if (StringUtil.isEmpty(name))
-            throw new InvalidGeneratorSetupException("No sequence 'name' defined");
+        if (database == null) {
+            throw new InvalidGeneratorSetupException(
+                    "No 'source' database defined");
+        }
+        if (StringUtil.isEmpty(name)) {
+            throw new InvalidGeneratorSetupException(
+                    "No sequence 'name' defined");
+        }
         super.init(context);
     }
 

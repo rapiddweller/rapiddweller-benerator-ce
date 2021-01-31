@@ -41,15 +41,18 @@ public class PrimitiveDescriptorProvider extends DefaultDescriptorProvider {
 
     public PrimitiveDescriptorProvider(DataModel dataModel) {
         super(NAMESPACE, dataModel);
-        for (PrimitiveType type : PrimitiveType.getInstances())
-            addTypeDescriptor(new SimpleTypeDescriptor(type.getName(), this, type.getName()));
+        for (PrimitiveType type : PrimitiveType.getInstances()) {
+            addTypeDescriptor(new SimpleTypeDescriptor(type.getName(), this,
+                    type.getName()));
+        }
         addTypeDescriptor(new ComplexTypeDescriptor("entity", this));
     }
 
     public SimpleTypeDescriptor getPrimitiveTypeDescriptor(Class<?> javaType) {
         PrimitiveType type = PrimitiveType.findByJavaType(javaType);
-        if (type != null)
+        if (type != null) {
             return (SimpleTypeDescriptor) getTypeDescriptor(type.getName());
+        }
         return null;
     }
 

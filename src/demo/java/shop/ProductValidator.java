@@ -50,21 +50,27 @@ public class ProductValidator extends EntityValidator {
 
     @Override
     public boolean valid(Entity product) {
-        if (!super.valid(product))
+        if (!super.valid(product)) {
             return false;
+        }
         String ean = (String) product.getComponent("ean_code");
-        if (!eanValidator.isValid(ean, null))
+        if (!eanValidator.isValid(ean, null)) {
             return false;
+        }
         String name = (String) product.getComponent("name");
-        if (name == null || name.length() == 0)
+        if (name == null || name.length() == 0) {
             return false;
-        if (product.getComponent("name") == null)
+        }
+        if (product.getComponent("name") == null) {
             return false;
+        }
         Number price = (Number) product.getComponent("price");
-        if (price == null || price.doubleValue() < 0)
+        if (price == null || price.doubleValue() < 0) {
             return false;
-        if (product.getComponent("manufacturer") == null)
+        }
+        if (product.getComponent("manufacturer") == null) {
             return false;
+        }
         return true;
     }
 }

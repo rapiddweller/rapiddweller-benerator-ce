@@ -28,9 +28,6 @@ package com.rapiddweller.platform.xml;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.NullSafeComparator;
@@ -40,9 +37,12 @@ import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.common.xml.XPathUtil;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.util.DataSourceFromIterable;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
+import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.script.PrimitiveType;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -93,8 +93,9 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
     }
 
     private static String normalizeEncoding(String encoding) {
-        if (encoding.startsWith("UTF-16"))
+        if (encoding.startsWith("UTF-16")) {
             encoding = "UTF-16";
+        }
         return encoding;
     }
 
@@ -134,12 +135,14 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
     @Override
     public void setContext(Context context) {
         this.context = context;
-        if (context instanceof BeneratorContext)
+        if (context instanceof BeneratorContext) {
             setDataModel(((BeneratorContext) context).getDataModel());
+        }
     }
 
     @Override
-    public DataSource<Entity> queryEntities(String type, String selector, Context context) {
+    public DataSource<Entity> queryEntities(String type, String selector,
+                                            Context context) {
         beInitialized();
         LOGGER.debug("queryEntities({}, {}, context)", type, selector);
         try {
@@ -148,22 +151,28 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
             List<Entity> list = new ArrayList<>(nodes.getLength());
             for (int i = 0; i < nodes.getLength(); i++) {
                 Element element = (Element) nodes.item(i);
-                Entity entity = XMLPlatformUtil.convertElement2Entity(element, this);
+                Entity entity =
+                        XMLPlatformUtil.convertElement2Entity(element, this);
                 list.add(entity);
             }
             return new DataSourceFromIterable<>(list, Entity.class);
         } catch (XPathExpressionException e) {
-            throw new RuntimeException("Error querying " + (type != null ? type : "") + " elements with xpath: " + selector, e);
+            throw new RuntimeException(
+                    "Error querying " + (type != null ? type : "") +
+                            " elements with xpath: " + selector, e);
         }
     }
 
     @Override
-    public DataSource<?> queryEntityIds(String type, String selector, Context context) {
-        throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support queries for entity ids");
+    public DataSource<?> queryEntityIds(String type, String selector,
+                                        Context context) {
+        throw new UnsupportedOperationException(getClass().getSimpleName() +
+                " does not support queries for entity ids");
     }
 
     @Override
-    public DataSource<?> query(String selector, boolean simplify, Context context) {
+    public DataSource<?> query(String selector, boolean simplify,
+                               Context context) {
         beInitialized();
         LOGGER.debug("query({}, {}, context)", selector, simplify);
         try {
@@ -176,22 +185,26 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
             }
             return new DataSourceFromIterable<>(list, Object.class);
         } catch (XPathExpressionException e) {
-            throw new RuntimeException("Error querying items with xpath: " + selector, e);
+            throw new RuntimeException(
+                    "Error querying items with xpath: " + selector, e);
         }
     }
 
     @Override
     public void store(Entity entity) {
-        throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support storing entities");
+        throw new UnsupportedOperationException(getClass().getSimpleName() +
+                " does not support storing entities");
     }
 
     @Override
     public void update(Entity entity) {
         beInitialized();
         if (entity instanceof XmlEntity) {
-            XMLPlatformUtil.mapEntityToElement(entity, ((XmlEntity) entity).getSourceElement());
+            XMLPlatformUtil.mapEntityToElement(entity,
+                    ((XmlEntity) entity).getSourceElement());
         } else {
-            throw new UnsupportedOperationException(getClass().getSimpleName() + " cannot update entities from other sources");
+            throw new UnsupportedOperationException(getClass().getSimpleName() +
+                    " cannot update entities from other sources");
         }
     }
 
@@ -216,8 +229,9 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
 
     @Override
     public TypeDescriptor getTypeDescriptor(String typeName) {
-        if (PrimitiveType.getInstance(typeName) != null)
+        if (PrimitiveType.getInstance(typeName) != null) {
             return null;
+        }
         ComplexTypeDescriptor type = types.get(typeName);
         if (type == null) {
             type = new ComplexTypeDescriptor(typeName, this);
@@ -235,31 +249,39 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
             File uri = new File(resolveUri(outputUri));
             XMLUtil.saveDocument(document, uri, encoding);
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("Error writing DOMTree to " + outputUri, e);
+            throw new RuntimeException("Error writing DOMTree to " + outputUri,
+                    e);
         }
     }
 
     private void beInitialized() {
-        if (this.document == null)
+        if (this.document == null) {
             init();
+        }
     }
 
     private void init() {
         try {
-            this.document = XMLUtil.parse(resolveUri(inputUri), namespaceAware, null, null, null);
-            System.out.println(this.document.getDocumentElement().getNamespaceURI());
+            this.document =
+                    XMLUtil.parse(resolveUri(inputUri), namespaceAware, null,
+                            null, null);
+            System.out.println(
+                    this.document.getDocumentElement().getNamespaceURI());
         } catch (IOException e) {
             throw new RuntimeException("Error parsing " + inputUri, e);
         }
     }
 
     private String resolveUri(String uri) {
-        return (context instanceof BeneratorContext ? ((BeneratorContext) context).resolveRelativeUri(uri) : uri);
+        return (context instanceof BeneratorContext ?
+                ((BeneratorContext) context).resolveRelativeUri(uri) : uri);
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[" + inputUri + (NullSafeComparator.equals(inputUri, outputUri) ? "" : " -> " + outputUri) + "]";
+        return getClass().getSimpleName() + "[" + inputUri +
+                (NullSafeComparator.equals(inputUri, outputUri) ? "" :
+                        " -> " + outputUri) + "]";
     }
 
 }

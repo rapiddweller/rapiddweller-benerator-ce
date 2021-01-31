@@ -75,8 +75,9 @@ public class Product {
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         if (category != null) {
-            if (category.getGroup() != null)
+            if (category.getGroup() != null) {
                 buffer.append(category.getGroup().getName() + '/');
+            }
             buffer.append(category.getName()).append('/');
         }
         buffer.append(name).append('[').append(eanCode).append(']');

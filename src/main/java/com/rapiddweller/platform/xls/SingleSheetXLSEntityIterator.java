@@ -27,6 +27,19 @@
 package com.rapiddweller.platform.xls;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.converter.ConverterManager;
+import com.rapiddweller.common.converter.ToStringConverter;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.util.OrthogonalArrayIterator;
+import com.rapiddweller.format.util.ThreadLocalDataContainer;
+import com.rapiddweller.format.xls.XLSLineIterator;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.DataModel;
@@ -36,14 +49,6 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import com.rapiddweller.common.*;
-import com.rapiddweller.common.converter.ConverterManager;
-import com.rapiddweller.common.converter.ToStringConverter;
-import com.rapiddweller.format.DataContainer;
-import com.rapiddweller.format.DataIterator;
-import com.rapiddweller.format.util.OrthogonalArrayIterator;
-import com.rapiddweller.format.util.ThreadLocalDataContainer;
-import com.rapiddweller.format.xls.XLSLineIterator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,7 +73,8 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
     private final Converter<String, ?> preprocessor;
     private Array2EntityConverter converter;
     private Object[] buffer;
-    private final ThreadLocalDataContainer<Object[]> sourceContainer = new ThreadLocalDataContainer<>();
+    private final ThreadLocalDataContainer<Object[]> sourceContainer =
+            new ThreadLocalDataContainer<>();
     private ComplexTypeDescriptor entityDescriptor;
     private final BeneratorContext context;
     private String[] headers;
@@ -76,17 +82,24 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
 
     // constructors ----------------------------------------------------------------------------------------------------
 
-    public SingleSheetXLSEntityIterator(String uri, String sheetName, Converter<String, ?> preprocessor,
-                                        ComplexTypeDescriptor entityType, BeneratorContext context,
-                                        boolean rowBased, boolean formatted, String emptyMarker)
+    public SingleSheetXLSEntityIterator(String uri, String sheetName,
+                                        Converter<String, ?> preprocessor,
+                                        ComplexTypeDescriptor entityType,
+                                        BeneratorContext context,
+                                        boolean rowBased, boolean formatted,
+                                        String emptyMarker)
             throws InvalidFormatException, IOException {
-        this(loadSheet(uri, sheetName), preprocessor, entityType, context, rowBased, formatted, emptyMarker);
+        this(loadSheet(uri, sheetName), preprocessor, entityType, context,
+                rowBased, formatted, emptyMarker);
         this.uri = uri;
     }
 
-    public SingleSheetXLSEntityIterator(Sheet sheet, Converter<String, ?> preprocessor,
-                                        ComplexTypeDescriptor entityDescriptor, BeneratorContext context,
-                                        boolean rowBased, boolean formatted, String emptyMarker) {
+    public SingleSheetXLSEntityIterator(Sheet sheet,
+                                        Converter<String, ?> preprocessor,
+                                        ComplexTypeDescriptor entityDescriptor,
+                                        BeneratorContext context,
+                                        boolean rowBased, boolean formatted,
+                                        String emptyMarker) {
         this.workbook = sheet.getWorkbook();
         this.preprocessor = preprocessor;
         this.context = context;
@@ -101,13 +114,18 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
             String entityTypeName = sheet.getSheetName();
             if (context != null) {
                 DataModel dataModel = context.getDataModel();
-                this.entityDescriptor = (ComplexTypeDescriptor) dataModel.getTypeDescriptor(entityTypeName);
-                if (this.entityDescriptor != null)
-                    this.entityDescriptor = new ComplexTypeDescriptor(entityTypeName + "_", context.getLocalDescriptorProvider());
-                else
+                this.entityDescriptor = (ComplexTypeDescriptor) dataModel
+                        .getTypeDescriptor(entityTypeName);
+                if (this.entityDescriptor != null) {
+                    this.entityDescriptor =
+                            new ComplexTypeDescriptor(entityTypeName + "_",
+                                    context.getLocalDescriptorProvider());
+                } else {
                     this.entityDescriptor = createDescriptor(entityTypeName);
-            } else
+                }
+            } else {
                 this.entityDescriptor = createDescriptor(entityTypeName);
+            }
         }
 
         // parse headers
@@ -124,34 +142,51 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
             return;
         }
         this.buffer = tmp.getData();
-        converter = new Array2EntityConverter(this.entityDescriptor, headers, false);
+        converter = new Array2EntityConverter(this.entityDescriptor, headers,
+                false);
     }
 
 
     // DataIterator interface implementation ---------------------------------------------------------------------------
 
-    public static List<Entity> parseAll(String uri, String sheetName, Converter<String, ?> preprocessor, ComplexTypeDescriptor type,
-                                        BeneratorContext context, boolean rowBased, boolean formatted, String emptyMarker)
+    public static List<Entity> parseAll(String uri, String sheetName,
+                                        Converter<String, ?> preprocessor,
+                                        ComplexTypeDescriptor type,
+                                        BeneratorContext context,
+                                        boolean rowBased, boolean formatted,
+                                        String emptyMarker)
             throws IOException, InvalidFormatException {
         Sheet sheet = loadSheet(uri, sheetName);
-        return parseAll(sheet, preprocessor, type, context, rowBased, formatted, emptyMarker);
+        return parseAll(sheet, preprocessor, type, context, rowBased, formatted,
+                emptyMarker);
     }
 
-    public static List<Entity> parseAll(Sheet sheet, Converter<String, ?> preprocessor, ComplexTypeDescriptor type,
-                                        BeneratorContext context, boolean rowBased, boolean formatted, String emptyMarker) {
+    public static List<Entity> parseAll(Sheet sheet,
+                                        Converter<String, ?> preprocessor,
+                                        ComplexTypeDescriptor type,
+                                        BeneratorContext context,
+                                        boolean rowBased, boolean formatted,
+                                        String emptyMarker) {
         List<Entity> list = new ArrayList<>();
-        SingleSheetXLSEntityIterator iterator = new SingleSheetXLSEntityIterator(sheet, preprocessor, type, context, rowBased, formatted, emptyMarker);
+        SingleSheetXLSEntityIterator iterator =
+                new SingleSheetXLSEntityIterator(sheet, preprocessor, type,
+                        context, rowBased, formatted, emptyMarker);
         DataContainer<Entity> container = new DataContainer<>();
-        while ((container = iterator.next(container)) != null)
+        while ((container = iterator.next(container)) != null) {
             list.add(container.getData());
+        }
         return list;
     }
 
-    private static Sheet loadSheet(String uri, String sheetName) throws InvalidFormatException, IOException {
-        Workbook workbook = WorkbookFactory.create(IOUtil.getInputStreamForURI(uri));
+    private static Sheet loadSheet(String uri, String sheetName)
+            throws IOException {
+        Workbook workbook =
+                WorkbookFactory.create(IOUtil.getInputStreamForURI(uri));
         Sheet sheet = workbook.getSheet(sheetName);
-        if (sheet == null)
-            throw new ConfigurationError("Sheet '" + sheetName + "' not found in file " + uri);
+        if (sheet == null) {
+            throw new ConfigurationError(
+                    "Sheet '" + sheetName + "' not found in file " + uri);
+        }
         return sheet;
     }
 
@@ -159,13 +194,17 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
     // convenience methods ---------------------------------------------------------------------------------------------
 
     private static String[] normalizeHeaders(Object[] rawHeaders) {
-        String[] headers = (String[]) ConverterManager.convertAll(rawHeaders, new ToStringConverter(), String.class);
+        String[] headers = (String[]) ConverterManager
+                .convertAll(rawHeaders, new ToStringConverter(), String.class);
         StringUtil.trimAll(headers);
         int lastNonEmptyIndex = headers.length - 1;
-        while (lastNonEmptyIndex >= 0 && StringUtil.isEmpty(headers[lastNonEmptyIndex]))
+        while (lastNonEmptyIndex >= 0 &&
+                StringUtil.isEmpty(headers[lastNonEmptyIndex])) {
             lastNonEmptyIndex--;
-        if (lastNonEmptyIndex < headers.length - 1)
+        }
+        if (lastNonEmptyIndex < headers.length - 1) {
             headers = ArrayUtil.copyOfRange(headers, 0, lastNonEmptyIndex + 1);
+        }
         return headers;
     }
 
@@ -179,16 +218,18 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
 
     @Override
     public DataContainer<Entity> next(DataContainer<Entity> container) {
-        if (source == null)
+        if (source == null) {
             return null;
+        }
         Object[] rawData;
         if (buffer != null) {
             rawData = buffer;
             buffer = null;
         } else {
             DataContainer<Object[]> tmp = source.next(sourceContainer.get());
-            if (tmp == null)
+            if (tmp == null) {
                 return null;
+            }
             rawData = tmp.getData();
         }
         resolveCollections(rawData);
@@ -206,18 +247,24 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
         this.headers = (tmp != null ? normalizeHeaders(tmp.getData()) : null);
     }
 
-    private DataIterator<Object[]> createRawIterator(Sheet sheet, boolean rowBased, Converter<String, ?> preprocessor) {
-        XLSLineIterator iterator = new XLSLineIterator(sheet, false, formatted, preprocessor);
-        if (emptyMarker != null)
+    private DataIterator<Object[]> createRawIterator(Sheet sheet,
+                                                     boolean rowBased,
+                                                     Converter<String, ?> preprocessor) {
+        XLSLineIterator iterator =
+                new XLSLineIterator(sheet, false, formatted, preprocessor);
+        if (emptyMarker != null) {
             iterator.setEmptyMarker(emptyMarker);
-        if (!rowBased)
+        }
+        if (!rowBased) {
             return new OrthogonalArrayIterator<>(iterator);
+        }
         return iterator;
     }
 
     private ComplexTypeDescriptor createDescriptor(String entityTypeName) {
         ComplexTypeDescriptor descriptor;
-        descriptor = new ComplexTypeDescriptor(entityTypeName, context.getLocalDescriptorProvider());
+        descriptor = new ComplexTypeDescriptor(entityTypeName,
+                context.getLocalDescriptorProvider());
         context.addLocalType(descriptor);
         return descriptor;
     }
@@ -226,10 +273,15 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
         String colRefPrefix = PlatformDescriptor.getCollectionReferencePrefix();
         for (int i = 0; i < rawData.length; i++) {
             Object cellValue = rawData[i];
-            if (cellValue instanceof String && ((String) cellValue).startsWith(colRefPrefix)) {
-                String tabName = ((String) cellValue).substring(colRefPrefix.length());
-                ComponentDescriptor component = entityDescriptor.getComponent(headers[i]);
-                ComplexTypeDescriptor componentType = (component != null ? (ComplexTypeDescriptor) component.getTypeDescriptor() : null);
+            if (cellValue instanceof String &&
+                    ((String) cellValue).startsWith(colRefPrefix)) {
+                String tabName =
+                        ((String) cellValue).substring(colRefPrefix.length());
+                ComponentDescriptor component =
+                        entityDescriptor.getComponent(headers[i]);
+                ComplexTypeDescriptor componentType = (component != null ?
+                        (ComplexTypeDescriptor) component.getTypeDescriptor() :
+                        null);
                 rawData[i] = mapTabToArray(tabName, componentType);
             }
         }
@@ -237,18 +289,23 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
 
     private Entity[] mapTabToArray(String tabName, ComplexTypeDescriptor type) {
         Sheet sheet = getSheet(tabName);
-        List<Entity> elements = parseAll(sheet, preprocessor, type, context, rowBased, formatted, emptyMarker);
+        List<Entity> elements =
+                parseAll(sheet, preprocessor, type, context, rowBased,
+                        formatted, emptyMarker);
         return CollectionUtil.toArray(elements, Entity.class);
     }
 
     private Sheet getSheet(String tabName) {
         for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
             Sheet candidate = workbook.getSheetAt(i);
-            if (candidate.getSheetName().trim().equalsIgnoreCase(tabName.trim()))
+            if (candidate.getSheetName().trim()
+                    .equalsIgnoreCase(tabName.trim())) {
                 return candidate;
+            }
         }
         // tab not found
-        throw new ConfigurationError("Tab '" + tabName + "' not found" + (uri != null ? " in " + uri : ""));
+        throw new ConfigurationError("Tab '" + tabName + "' not found" +
+                (uri != null ? " in " + uri : ""));
     }
 
 

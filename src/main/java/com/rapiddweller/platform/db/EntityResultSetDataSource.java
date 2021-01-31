@@ -26,11 +26,11 @@
 
 package com.rapiddweller.platform.db;
 
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.DataSource;
 import com.rapiddweller.model.data.AbstractEntitySource;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.format.DataIterator;
-import com.rapiddweller.format.DataSource;
 
 import java.sql.ResultSet;
 

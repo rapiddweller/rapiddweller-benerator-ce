@@ -76,7 +76,7 @@ public class BeneratorRootStatementTest extends BeneratorIntegrationTest {
 	}
 	
 	@Test
-	public void testDefaultImports_default() throws Exception {
+	public void testDefaultImports_default() {
 		// given the default settings
 		String xml = "<setup/>";
 		// when executing the RootStatement
@@ -87,7 +87,7 @@ public class BeneratorRootStatementTest extends BeneratorIntegrationTest {
 	}
 	
 	@Test
-	public void testDefaultImports_true() throws Exception {
+	public void testDefaultImports_true() {
 		// given that defaults import is requested explicitly
 		String xml = "<setup defaultImports='true'/>";
 		// when executing the RootStatement
@@ -97,7 +97,7 @@ public class BeneratorRootStatementTest extends BeneratorIntegrationTest {
 	}
 
 	@Test(expected = ConfigurationError.class)
-	public void testDefaultImports_false() throws Exception {
+	public void testDefaultImports_false() {
 		// given that defaults import is disabled
 		String xml = "<setup defaultImports='false'/>";
 		// when executing the RootStatement

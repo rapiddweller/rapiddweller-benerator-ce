@@ -43,7 +43,8 @@ import com.rapiddweller.benerator.primitive.number.RecurrenceRelationNumberGener
  * @since 0.6.0
  */
 
-public class PadovanLongGenerator extends RecurrenceRelationNumberGenerator<Long> {
+public class PadovanLongGenerator
+        extends RecurrenceRelationNumberGenerator<Long> {
 
     private final boolean unique;
 

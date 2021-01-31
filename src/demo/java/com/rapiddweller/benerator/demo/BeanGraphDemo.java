@@ -44,11 +44,14 @@ import java.io.BufferedReader;
 public class BeanGraphDemo {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader reader = IOUtil.getReaderForURI("com/rapiddweller/benerator/products.csv");
-        CSVToJavaBeanMapper<Product> mapper = new CSVToJavaBeanMapper<Product>(reader, Product.class);
+        BufferedReader reader = IOUtil.getReaderForURI(
+                "com/rapiddweller/benerator/products.csv");
+        CSVToJavaBeanMapper<Product> mapper =
+                new CSVToJavaBeanMapper<Product>(reader, Product.class);
         DataContainer<Product> value = new DataContainer<Product>();
-        while ((value = mapper.next(value)) != null)
+        while ((value = mapper.next(value)) != null) {
             System.out.println(value.getData());
+        }
     }
 
 }

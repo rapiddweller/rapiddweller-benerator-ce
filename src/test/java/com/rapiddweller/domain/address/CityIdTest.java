@@ -2,6 +2,7 @@ package com.rapiddweller.domain.address;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 
@@ -22,8 +23,8 @@ public class CityIdTest {
 
     @Test
     public void testEquals() {
-        assertFalse((new CityId("Name", "Name Extension")).equals("o"));
-        assertFalse((new CityId("Name", "Name Extension")).equals(null));
+        assertNotEquals("o", (new CityId("Name", "Name Extension")));
+        assertNotEquals(null, (new CityId("Name", "Name Extension")));
     }
 
     @Test

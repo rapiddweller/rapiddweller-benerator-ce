@@ -44,7 +44,8 @@ import java.util.regex.Pattern;
  * @author Volker Bergmann
  * @since 0.6.4
  */
-public class PostalCodeValidator extends AbstractConstraintValidator<PostalCode, String> {
+public class PostalCodeValidator
+        extends AbstractConstraintValidator<PostalCode, String> {
 
     Pattern pattern;
 
@@ -63,16 +64,20 @@ public class PostalCodeValidator extends AbstractConstraintValidator<PostalCode,
 
     private void setCountry(String countryCode) {
         try {
-            Map<String, String> formats = IOUtil.readProperties("/com/rapiddweller/domain/address/postalCodeFormat.properties", Encodings.UTF_8);
+            Map<String, String> formats = IOUtil.readProperties(
+                    "/com/rapiddweller/domain/address/postalCodeFormat.properties",
+                    Encodings.UTF_8);
             pattern = Pattern.compile(formats.get(countryCode));
         } catch (IOException e) {
-            throw new ConfigurationError("Error initializing " + getClass().getSimpleName() +
-                    " with country code '" + countryCode + "'");
+            throw new ConfigurationError(
+                    "Error initializing " + getClass().getSimpleName() +
+                            " with country code '" + countryCode + "'");
         }
     }
 
     @Override
-    public boolean isValid(String candidate, ConstraintValidatorContext context) {
+    public boolean isValid(String candidate,
+                           ConstraintValidatorContext context) {
         return (candidate != null && pattern.matcher(candidate).matches());
     }
 

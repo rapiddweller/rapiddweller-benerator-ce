@@ -48,13 +48,17 @@ public class QueryHiLoGenerator extends HiLoGenerator {
         this(selector, source, DEFAULT_MAX_LO);
     }
 
-    public QueryHiLoGenerator(String selector, StorageSystem source, int maxLo) {
-        super(WrapperFactory.asNonNullGenerator(new QueryLongGenerator(selector, source)), maxLo);
+    public QueryHiLoGenerator(String selector, StorageSystem source,
+                              int maxLo) {
+        super(WrapperFactory
+                        .asNonNullGenerator(new QueryLongGenerator(selector, source)),
+                maxLo);
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + '[' + hiGenerator + ',' + maxLo + ']';
+        return getClass().getSimpleName() + '[' + hiGenerator + ',' + maxLo +
+                ']';
     }
 
 }

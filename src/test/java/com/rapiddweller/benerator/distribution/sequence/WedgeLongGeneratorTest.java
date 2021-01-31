@@ -41,12 +41,12 @@ public class WedgeLongGeneratorTest extends GeneratorClassTest {
     }
 
     @Test
-    public void testInstantiation() throws Exception {
+    public void testInstantiation() {
         new WedgeLongGenerator(0, 10, 1);
     }
 
     @Test
-    public void testGranularity1() throws Exception {
+    public void testGranularity1() {
         expectGeneratedSequence(create( 1,  3, 1),  1L,  3L,  2L).withCeasedAvailability();
         expectGeneratedSequence(create( 1,  4, 1),  1L,  4L,  2L,  3L).withCeasedAvailability();
         expectGeneratedSequence(create(-3, -1, 1), -3L, -1L, -2L).withCeasedAvailability();
@@ -57,7 +57,7 @@ public class WedgeLongGeneratorTest extends GeneratorClassTest {
     }
 
     @Test
-    public void testGranularity5() throws Exception {
+    public void testGranularity5() {
         expectGeneratedSequence(create(  1, 11, 5),   1L, 11L,  6L).withCeasedAvailability();
         expectGeneratedSequence(create(  1, 16, 5),   1L, 16L,  6L, 11L).withCeasedAvailability();
         expectGeneratedSequence(create(-11, -1, 5), -11L, -1L, -6L).withCeasedAvailability();

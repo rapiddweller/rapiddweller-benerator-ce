@@ -41,7 +41,8 @@ import javax.validation.ConstraintValidatorContext;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class CNPJValidator extends AbstractConstraintValidator<CNPJ, CharSequence> {
+public class CNPJValidator
+        extends AbstractConstraintValidator<CNPJ, CharSequence> {
 
     private boolean acceptingFormattedNumbers = true;
 
@@ -57,7 +58,8 @@ public class CNPJValidator extends AbstractConstraintValidator<CNPJ, CharSequenc
         return acceptingFormattedNumbers;
     }
 
-    public void setAcceptingFormattedNumbers(boolean acceptingFormattedNumbers) {
+    public void setAcceptingFormattedNumbers(
+            boolean acceptingFormattedNumbers) {
         this.acceptingFormattedNumbers = acceptingFormattedNumbers;
     }
 
@@ -68,38 +70,49 @@ public class CNPJValidator extends AbstractConstraintValidator<CNPJ, CharSequenc
     }
 
     @Override
-    public boolean isValid(CharSequence number, ConstraintValidatorContext context) {
+    public boolean isValid(CharSequence number,
+                           ConstraintValidatorContext context) {
         // do simple checks first
-        if (number == null)
+        if (number == null) {
             return false;
+        }
         int length = number.length();
         boolean formattedNumber = (acceptingFormattedNumbers && length == 18);
-        if (length != 14 && !formattedNumber)
+        if (length != 14 && !formattedNumber) {
             return false;
+        }
         if (formattedNumber) {
             // check grouping characters
-            if (number.charAt(2) != '.' || number.charAt(6) != '.' || number.charAt(10) != '/' || number.charAt(15) != '-')
+            if (number.charAt(2) != '.' || number.charAt(6) != '.' ||
+                    number.charAt(10) != '/' || number.charAt(15) != '-') {
                 return false;
+            }
             // remove grouping
-            number = "" + number.subSequence(0, 2) + number.subSequence(3, 6) + number.subSequence(7, 10) +
+            number = "" + number.subSequence(0, 2) + number.subSequence(3, 6) +
+                    number.subSequence(7, 10) +
                     number.subSequence(11, 15) + number.subSequence(16, 18);
         }
         // compute 1st verification digit
-        int v1 = MathUtil.weightedSumOfDigits(number, 0, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2);
+        int v1 = MathUtil.weightedSumOfDigits(number, 0, 5, 4, 3, 2, 9, 8, 7, 6,
+                5, 4, 3, 2);
         v1 = 11 - v1 % 11;
-        if (v1 >= 10)
+        if (v1 >= 10) {
             v1 = 0;
+        }
 
         // Check 1st verification digit
-        if (v1 != number.charAt(12) - '0')
+        if (v1 != number.charAt(12) - '0') {
             return false;
+        }
 
         // compute 2nd verification digit
-        int v2 = MathUtil.weightedSumOfDigits(number, 0, 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3);
+        int v2 = MathUtil.weightedSumOfDigits(number, 0, 6, 5, 4, 3, 2, 9, 8, 7,
+                6, 5, 4, 3);
         v2 += 2 * v1;
         v2 = 11 - v2 % 11;
-        if (v2 >= 10)
+        if (v2 >= 10) {
             v2 = 0;
+        }
 
         // Check 2nd verification digit
         return (v2 == number.charAt(13) - '0');

@@ -27,6 +27,8 @@
 package com.rapiddweller.benerator.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import com.rapiddweller.common.StringUtil;
 import org.junit.Test;
@@ -51,9 +53,9 @@ public class LuhnUtilTest {
 
 	@Test
 	public void testLuhnValid() {
-		assertEquals(false, LuhnUtil.luhnValid("0000000009"));
-		assertEquals(true, LuhnUtil.luhnValid("0000000000"));
-		assertEquals(true, LuhnUtil.luhnValid("1234001234560"));
+        assertFalse(LuhnUtil.luhnValid("0000000009"));
+        assertTrue(LuhnUtil.luhnValid("0000000000"));
+        assertTrue(LuhnUtil.luhnValid("1234001234560"));
 	}
 
 }

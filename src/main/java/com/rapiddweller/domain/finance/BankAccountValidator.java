@@ -41,10 +41,12 @@ public class BankAccountValidator implements Validator<BankAccount> {
 
     @Override
     public boolean valid(BankAccount account) {
-        if (account == null)
+        if (account == null) {
             return false;
+        }
         String accountNumber = account.getAccountNumber();
-        return (accountNumber != null && (accountNumber.length() >= 1 && accountNumber.length() <= 10)
+        return (accountNumber != null &&
+                (accountNumber.length() >= 1 && accountNumber.length() <= 10)
                 && account.getBankCode() != null
                 && account.getBankName() != null
                 && account.getBic() != null

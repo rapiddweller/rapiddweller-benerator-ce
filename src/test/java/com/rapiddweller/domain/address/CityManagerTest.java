@@ -27,8 +27,6 @@
 package com.rapiddweller.domain.address;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.util.regex.Pattern;
 
@@ -50,7 +48,7 @@ public class CityManagerTest {
                 new String[]{"foo", "foo", "foo"}, "Area Code");
         assertEquals("Name Extension", actualCityHelper.getNameExtension());
         assertEquals("Area Code", actualCityHelper.getAreaCode());
-        assertEquals(3, actualCityHelper.getZipCodes().length);
+        assertEquals(3, actualCityHelper.getPostalCodes().length);
         assertNull(actualCityHelper.getCountry());
         assertEquals("Name", actualCityHelper.getName());
     }
@@ -65,12 +63,12 @@ public class CityManagerTest {
     }
 
     @Test
-    public void testGenerateGermanCity() throws Exception {
+    public void testGenerateGermanCity() {
         assertNotNull(Country.GERMANY.generateCity());
     }
 
     @Test
-    public void testGermanAreaCodes() throws Exception {
+    public void testGermanAreaCodes() {
         Pattern pattern = Pattern.compile("\\d{2,5}");
         for (City city : Country.GERMANY.getCities()) {
             String areaCode = city.getAreaCode();

@@ -31,8 +31,8 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.csv.WeightedDatasetCSVGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.util.SharedGenerator;
-import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.common.Encodings;
+import com.rapiddweller.domain.address.Country;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -46,11 +46,13 @@ import java.util.Map;
  * @author Volker Bergmann
  * @since 0.1
  */
-public class FamilyNameGenerator extends WeightedDatasetCSVGenerator<String> implements NonNullGenerator<String> {
+public class FamilyNameGenerator extends WeightedDatasetCSVGenerator<String>
+        implements NonNullGenerator<String> {
 
     // default instance management -------------------------------------------------------------------------------------
 
-    private static final Map<String, Generator<String>> defaultInstances = new HashMap<>();
+    private static final Map<String, Generator<String>> defaultInstances =
+            new HashMap<>();
 
     public FamilyNameGenerator() {
         this(Locale.getDefault().getCountry());
@@ -64,15 +66,19 @@ public class FamilyNameGenerator extends WeightedDatasetCSVGenerator<String> imp
                 "/com/rapiddweller/domain/person/familyName_{0}.csv");
     }
 
-    public FamilyNameGenerator(String datasetName, String nesting, String fileNamePattern) {
-        super(String.class, fileNamePattern, datasetName, nesting, true, Encodings.UTF_8);
-        logger.debug("Instantiated FamilyNameGenerator for dataset '{}'", datasetName);
+    public FamilyNameGenerator(String datasetName, String nesting,
+                               String fileNamePattern) {
+        super(String.class, fileNamePattern, datasetName, nesting, true,
+                Encodings.UTF_8);
+        logger.debug("Instantiated FamilyNameGenerator for dataset '{}'",
+                datasetName);
     }
 
     public static Generator<String> sharedInstance(String datasetName) {
         Generator<String> instance = defaultInstances.get(datasetName);
         if (instance == null) {
-            instance = new SharedGenerator<>(new FamilyNameGenerator(datasetName));
+            instance =
+                    new SharedGenerator<>(new FamilyNameGenerator(datasetName));
             defaultInstances.put(datasetName, instance);
         }
         return instance;

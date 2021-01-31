@@ -2,24 +2,24 @@
 
 
 <setup>
-	<execute type="js">
-		let c = 1;
-		const d = 6;
+    <execute type="js">
+        let c = 1;
+        const d = 6;
 
-		function add(number1){
-		c += 1;
-		return number1 + c + d;
-		}
-	</execute>
+        function add(number1){
+        c += 1;
+        return number1 + c + d;
+        }
+    </execute>
 
-	<iterate type="person" name="person" source="person.ent.csv" consumer="ConsoleExporter">
-		<variable name="age" type="integer" script="this.age"/>
-		<attribute name="multiply" type="int" script="{js:add(age)}"/>
-	</iterate>
+    <iterate type="person" name="person" source="person.ent.csv" consumer="ConsoleExporter">
+        <variable name="age" type="integer" script="this.age"/>
+        <attribute name="multiply" type="int" script="{js:add(age)}"/>
+    </iterate>
 
-	<generate type="script" count="5" consumer="ConsoleExporter">
-		<variable name="count" type="integer" generator="IncrementalIdGenerator"/>
-		<attribute name="multiply" type="int" script="{js:add(count)}"/>
-	</generate>
+    <generate type="script" count="5" consumer="ConsoleExporter">
+        <variable name="count" type="integer" generator="IncrementalIdGenerator"/>
+        <attribute name="multiply" type="int" script="{js:add(count)}"/>
+    </generate>
 
 </setup>

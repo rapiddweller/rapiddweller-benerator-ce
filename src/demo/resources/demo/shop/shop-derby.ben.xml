@@ -147,7 +147,7 @@
                    selector="{{ftl:select sum(total_price) from db_order_item where order_id = ${db_order.id}}}"
                    cyclic="true"/>
     </iterate>
-    
+
     <echo>Debugging and show generated data from DBMS</echo>
     <iterate source="db" type="db_order" consumer="ConsoleExporter"/>
     <iterate source="db" type="db_order_item" consumer="ConsoleExporter"/>

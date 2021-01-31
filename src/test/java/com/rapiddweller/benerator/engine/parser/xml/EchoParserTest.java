@@ -41,25 +41,25 @@ import org.junit.Test;
 public class EchoParserTest extends BeneratorIntegrationTest {
 
 	@Test
-	public void testSimpleMessageAttribute() throws Exception {
+	public void testSimpleMessageAttribute() {
 		EchoStatement statement = (EchoStatement) parse("<echo message='Hello' />");
 		assertEquals("Hello", statement.getExpression().evaluate(context));
 	}
 	
 	@Test
-	public void testSimpleElementText() throws Exception {
+	public void testSimpleElementText() {
 		EchoStatement statement = (EchoStatement) parse("<echo>Hello</echo>");
 		assertEquals("Hello", statement.getExpression().evaluate(context));
 	}
 	
 	@Test
-	public void testEscapedMessageAttribute() throws Exception {
+	public void testEscapedMessageAttribute() {
 		EchoStatement statement = (EchoStatement) parse("<echo message=\"\\'Test\\'\" />");
 		assertEquals("'Test'", statement.getExpression().evaluate(context));
 	}
 	
 	@Test
-	public void testEscapedElementText() throws Exception {
+	public void testEscapedElementText() {
 		EchoStatement statement = (EchoStatement) parse("<echo>\\'Test\\'</echo>");
 		assertEquals("'Test'", statement.getExpression().evaluate(context));
 	}

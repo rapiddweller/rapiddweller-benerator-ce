@@ -62,22 +62,28 @@ public class Noun {
         this.language = language;
     }
 
-    public static Collection<Noun> getInstances(Locale locale) throws IOException {
+    public static Collection<Noun> getInstances(Locale locale)
+            throws IOException {
         Language language = Language.getInstance(locale);
         Set<Noun> nouns = new HashSet<>(500);
-        String url = LocaleUtil.availableLocaleUrl("/com/rapiddweller/domain/lang/noun", locale, ".csv");
+        String url = LocaleUtil
+                .availableLocaleUrl("/com/rapiddweller/domain/lang/noun",
+                        locale, ".csv");
         CSVLineIterator iterator = new CSVLineIterator(url, ',', true);
         DataContainer<String[]> container = new DataContainer<>();
         while ((container = iterator.next(container)) != null) {
             String[] line = container.getData();
-            String singular = (StringUtil.isEmpty(line[0]) ? null : line[0].trim());
+            String singular =
+                    (StringUtil.isEmpty(line[0]) ? null : line[0].trim());
             String plural;
             if (line.length > 1 && !StringUtil.isEmpty(line[1])) {
                 plural = line[1].trim();
-                if (plural.startsWith("-"))
+                if (plural.startsWith("-")) {
                     plural = singular + plural.substring(1);
-            } else
+                }
+            } else {
                 plural = null;
+            }
             int gender = (line.length >= 3 ? Integer.parseInt(line[2]) : 0);
             nouns.add(new Noun(singular, plural, gender, language));
         }
@@ -96,12 +102,16 @@ public class Noun {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         if (singular != null) {
-            builder.append(language.definiteArticle(gender, false)).append(' ').append(singular);
-            if (plural != null)
+            builder.append(language.definiteArticle(gender, false)).append(' ')
+                    .append(singular);
+            if (plural != null) {
                 builder.append(", ");
+            }
         }
-        if (plural != null)
-            builder.append(language.definiteArticle(gender, true)).append(' ').append(plural);
+        if (plural != null) {
+            builder.append(language.definiteArticle(gender, true)).append(' ')
+                    .append(plural);
+        }
         return builder.toString();
     }
 
@@ -114,12 +124,15 @@ public class Noun {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Noun that = (Noun) obj;
         return NullSafeComparator.equals(this.singular, that.singular) &&
                 NullSafeComparator.equals(this.plural, that.plural) &&

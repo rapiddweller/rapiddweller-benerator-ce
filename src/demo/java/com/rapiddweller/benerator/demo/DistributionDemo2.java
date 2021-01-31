@@ -48,10 +48,12 @@ public class DistributionDemo2 {
     private static void generateNumbers() {
         System.out.println("Generating numbers");
         Distribution distribution = new ExponentialFunction(5, -0.5);
-        Generator<Double> generator = distribution.createNumberGenerator(Double.class, 3., 8., 0.1, false);
+        Generator<Double> generator = distribution
+                .createNumberGenerator(Double.class, 3., 8., 0.1, false);
         init(generator);
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 20; i++) {
             System.out.println(generateNonNull(generator));
+        }
         close(generator);
     }
 

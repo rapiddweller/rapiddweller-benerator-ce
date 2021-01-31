@@ -44,24 +44,28 @@ public class TaskUnavailableException extends TaskException {
     private final long requiredCount;
     private final long actualCount;
 
-    public TaskUnavailableException(Task task, long requiredCount, long actualCount) {
+    public TaskUnavailableException(Task task, long requiredCount,
+                                    long actualCount) {
         super(renderMessage(task, requiredCount, actualCount));
         this.task = task;
         this.requiredCount = requiredCount;
         this.actualCount = actualCount;
     }
 
-    private static String renderMessage(Task task, long requiredCount, long actualCount) {
+    private static String renderMessage(Task task, long requiredCount,
+                                        long actualCount) {
         StringBuilder builder = new StringBuilder("Task ").append(task);
-        if (actualCount == 0)
+        if (actualCount == 0) {
             builder.append(" not available");
-        else
+        } else {
             builder.append(" could be executed only ").append(actualCount)
                     .append(" times, required minimum: ").append(requiredCount);
+        }
         if (task instanceof MessageHolder) {
             String message = ((MessageHolder) task).getMessage();
-            if (!StringUtil.isEmpty(message))
+            if (!StringUtil.isEmpty(message)) {
                 builder.append(". ").append(message);
+            }
         }
         return builder.toString();
     }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://databene.org/benerator/0.7.0"
+<setup xmlns="http://databene.org/benerator/0.7.0"
 >
     <import domains="person"/>
-    <import platforms="csv, multi"/> 
+    <import platforms="csv, multi"/>
     <generate type="greeting" count="35" consumer="MultiExporter">
         <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
                   locale="de"/>
@@ -10,6 +10,26 @@
         <variable name="nachname" script="person.familyName"/>
         <variable name="geschlecht" map="'MALE'->
             'm','FEMALE'->'w'" script="person.gender.name()"/>
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name" script="vorname"/>
+        <attribute name="surname" script="nachname"/>
+        <attribute name="gender" script="geschlecht"/>
+        <attribute name="birthdate" type="date" script="person.birthDate"/>
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name2" script="vorname"/>
+        <attribute name="surname2" script="nachname"/>
+        <attribute name="gender2" script="geschlecht"/>
+        <attribute name="birthdate2" type="date" script="person.birthDate"/>
+        <attribute name="email" script="person.email"/>
+    </generate>
+    <if test="greeting.vorname == null">
+        <generate type="greeting2" count="10" consumer="MultiExporter">
+            <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
+                      locale="de"/>
+            <variable name="vorname" script="person.givenName"/>
+            <variable name="nachname" script="person.familyName"/>
+            <variable name="geschlecht" map="'MALE'->
+                    'm','FEMALE'->'w'" script="person.gender.name()"/>
             <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
             <attribute name="name" script="vorname"/>
             <attribute name="surname" script="nachname"/>
@@ -22,139 +42,119 @@
             <attribute name="birthdate2" type="date" script="person.birthDate"/>
             <attribute name="email" script="person.email"/>
         </generate>
-        <if test="greeting.vorname == null">
-            <generate type="greeting2" count="10" consumer="MultiExporter">
-                <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
-                      locale="de"/>
-                <variable name="vorname" script="person.givenName"/>
-                <variable name="nachname" script="person.familyName"/>
-                <variable name="geschlecht" map="'MALE'->
-                    'm','FEMALE'->'w'" script="person.gender.name()"/>
-                    <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                    <attribute name="name" script="vorname"/>
-                    <attribute name="surname" script="nachname"/>
-                    <attribute name="gender" script="geschlecht"/>
-                    <attribute name="birthdate" type="date" script="person.birthDate"/>
-                    <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                    <attribute name="name2" script="vorname"/>
-                    <attribute name="surname2" script="nachname"/>
-                    <attribute name="gender2" script="geschlecht"/>
-                    <attribute name="birthdate2" type="date" script="person.birthDate"/>
-                    <attribute name="email" script="person.email"/>
-                </generate>
-            </if>
-            <generate type="greeting3" count="10" consumer="MultiExporter">
-                <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
+    </if>
+    <generate type="greeting3" count="10" consumer="MultiExporter">
+        <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
                   locale="de"/>
-                <variable name="vorname" script="person.givenName"/>
-                <variable name="nachname" script="person.familyName"/>
-                <variable name="geschlecht" map="'MALE'->
+        <variable name="vorname" script="person.givenName"/>
+        <variable name="nachname" script="person.familyName"/>
+        <variable name="geschlecht" map="'MALE'->
                     'm','FEMALE'->'w'" script="person.gender.name()"/>
-                    <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                    <attribute name="name" script="vorname"/>
-                    <attribute name="surname" script="nachname"/>
-                    <attribute name="gender" script="geschlecht"/>
-                    <attribute name="birthdate" type="date" script="person.birthDate"/>
-                    <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                    <attribute name="name2" script="vorname"/>
-                    <attribute name="surname2" script="nachname"/>
-                    <attribute name="gender2" script="geschlecht"/>
-                    <attribute name="birthdate2" type="date" script="person.birthDate"/>
-                    <attribute name="email" script="person.email"/>
-                </generate>
-                <generate type="greeting3" count="43" consumer="MultiExporter">
-                    <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name" script="vorname"/>
+        <attribute name="surname" script="nachname"/>
+        <attribute name="gender" script="geschlecht"/>
+        <attribute name="birthdate" type="date" script="person.birthDate"/>
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name2" script="vorname"/>
+        <attribute name="surname2" script="nachname"/>
+        <attribute name="gender2" script="geschlecht"/>
+        <attribute name="birthdate2" type="date" script="person.birthDate"/>
+        <attribute name="email" script="person.email"/>
+    </generate>
+    <generate type="greeting3" count="43" consumer="MultiExporter">
+        <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
                   locale="de"/>
-                    <variable name="vorname" script="person.givenName"/>
-                    <variable name="nachname" script="person.familyName"/>
-                    <variable name="geschlecht" map="'MALE'->
+        <variable name="vorname" script="person.givenName"/>
+        <variable name="nachname" script="person.familyName"/>
+        <variable name="geschlecht" map="'MALE'->
                         'm','FEMALE'->'w'" script="person.gender.name()"/>
-                        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                        <attribute name="name" script="vorname"/>
-                        <attribute name="surname" script="nachname"/>
-                        <attribute name="gender" script="geschlecht"/>
-                        <attribute name="birthdate" type="date" script="person.birthDate"/>
-                        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                        <attribute name="name2" script="vorname"/>
-                        <attribute name="surname2" script="nachname"/>
-                        <attribute name="gender2" script="geschlecht"/>
-                        <attribute name="birthdate2" type="date" script="person.birthDate"/>
-                        <attribute name="email" script="person.email"/>
-                    </generate>
-                    <generate type="greeting4" count="10" consumer="MultiExporter">
-                        <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name" script="vorname"/>
+        <attribute name="surname" script="nachname"/>
+        <attribute name="gender" script="geschlecht"/>
+        <attribute name="birthdate" type="date" script="person.birthDate"/>
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name2" script="vorname"/>
+        <attribute name="surname2" script="nachname"/>
+        <attribute name="gender2" script="geschlecht"/>
+        <attribute name="birthdate2" type="date" script="person.birthDate"/>
+        <attribute name="email" script="person.email"/>
+    </generate>
+    <generate type="greeting4" count="10" consumer="MultiExporter">
+        <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
                   locale="de"/>
-                        <variable name="vorname" script="person.givenName"/>
-                        <variable name="nachname" script="person.familyName"/>
-                        <variable name="geschlecht" map="'MALE'->
+        <variable name="vorname" script="person.givenName"/>
+        <variable name="nachname" script="person.familyName"/>
+        <variable name="geschlecht" map="'MALE'->
                             'm','FEMALE'->'w'" script="person.gender.name()"/>
-                            <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                            <attribute name="name" script="vorname"/>
-                            <attribute name="surname" script="nachname"/>
-                            <attribute name="gender" script="geschlecht"/>
-                            <attribute name="birthdate" type="date" script="person.birthDate"/>
-                            <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                            <attribute name="name2" script="vorname"/>
-                            <attribute name="surname2" script="nachname"/>
-                            <attribute name="gender2" script="geschlecht"/>
-                            <attribute name="birthdate2" type="date" script="person.birthDate"/>
-                            <attribute name="email" script="person.email"/>
-                        </generate>
-                        <generate type="greeting5" count="10" consumer="MultiExporter">
-                            <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name" script="vorname"/>
+        <attribute name="surname" script="nachname"/>
+        <attribute name="gender" script="geschlecht"/>
+        <attribute name="birthdate" type="date" script="person.birthDate"/>
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name2" script="vorname"/>
+        <attribute name="surname2" script="nachname"/>
+        <attribute name="gender2" script="geschlecht"/>
+        <attribute name="birthdate2" type="date" script="person.birthDate"/>
+        <attribute name="email" script="person.email"/>
+    </generate>
+    <generate type="greeting5" count="10" consumer="MultiExporter">
+        <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
                   locale="de"/>
-                            <variable name="vorname" script="person.givenName"/>
-                            <variable name="nachname" script="person.familyName"/>
-                            <variable name="geschlecht" map="'MALE'->
+        <variable name="vorname" script="person.givenName"/>
+        <variable name="nachname" script="person.familyName"/>
+        <variable name="geschlecht" map="'MALE'->
                                 'm','FEMALE'->'w'" script="person.gender.name()"/>
-                                <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                                <attribute name="name" script="vorname"/>
-                                <attribute name="surname" script="nachname"/>
-                                <attribute name="gender" script="geschlecht"/>
-                                <attribute name="birthdate" type="date" script="person.birthDate"/>
-                                <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                                <attribute name="name2" script="vorname"/>
-                                <attribute name="surname2" script="nachname"/>
-                                <attribute name="gender2" script="geschlecht"/>
-                                <attribute name="birthdate2" type="date" script="person.birthDate"/>
-                                <attribute name="email" script="person.email"/>
-                            </generate>
-                            <generate type="greeting6" count="10" consumer="MultiExporter">
-                                <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name" script="vorname"/>
+        <attribute name="surname" script="nachname"/>
+        <attribute name="gender" script="geschlecht"/>
+        <attribute name="birthdate" type="date" script="person.birthDate"/>
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name2" script="vorname"/>
+        <attribute name="surname2" script="nachname"/>
+        <attribute name="gender2" script="geschlecht"/>
+        <attribute name="birthdate2" type="date" script="person.birthDate"/>
+        <attribute name="email" script="person.email"/>
+    </generate>
+    <generate type="greeting6" count="10" consumer="MultiExporter">
+        <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
                   locale="de"/>
-                                <variable name="vorname" script="person.givenName"/>
-                                <variable name="nachname" script="person.familyName"/>
-                                <variable name="geschlecht" map="'MALE'->
+        <variable name="vorname" script="person.givenName"/>
+        <variable name="nachname" script="person.familyName"/>
+        <variable name="geschlecht" map="'MALE'->
                                     'm','FEMALE'->'w'" script="person.gender.name()"/>
-                                    <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                                    <attribute name="name" script="vorname"/>
-                                    <attribute name="surname" script="nachname"/>
-                                    <attribute name="gender" script="geschlecht"/>
-                                    <attribute name="birthdate" type="date" script="person.birthDate"/>
-                                    <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                                    <attribute name="name2" script="vorname"/>
-                                    <attribute name="surname2" script="nachname"/>
-                                    <attribute name="gender2" script="geschlecht"/>
-                                    <attribute name="birthdate2" type="date" script="person.birthDate"/>
-                                    <attribute name="email" script="person.email"/>
-                                </generate>
-                                <generate type="greeting7" count="10" consumer="MultiExporter">
-                                    <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name" script="vorname"/>
+        <attribute name="surname" script="nachname"/>
+        <attribute name="gender" script="geschlecht"/>
+        <attribute name="birthdate" type="date" script="person.birthDate"/>
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name2" script="vorname"/>
+        <attribute name="surname2" script="nachname"/>
+        <attribute name="gender2" script="geschlecht"/>
+        <attribute name="birthdate2" type="date" script="person.birthDate"/>
+        <attribute name="email" script="person.email"/>
+    </generate>
+    <generate type="greeting7" count="10" consumer="MultiExporter">
+        <variable name="person" dataset="DE" generator="new PersonGenerator{minAgeYears='16', maxAgeYears='122'}"
                   locale="de"/>
-                                    <variable name="vorname" script="person.givenName"/>
-                                    <variable name="nachname" script="person.familyName"/>
-                                    <variable name="geschlecht" map="'MALE'->
+        <variable name="vorname" script="person.givenName"/>
+        <variable name="nachname" script="person.familyName"/>
+        <variable name="geschlecht" map="'MALE'->
                                         'm','FEMALE'->'w'" script="person.gender.name()"/>
-                                        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                                        <attribute name="name" script="vorname"/>
-                                        <attribute name="surname" script="nachname"/>
-                                        <attribute name="gender" script="geschlecht"/>
-                                        <attribute name="birthdate" type="date" script="person.birthDate"/>
-                                        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
-                                        <attribute name="name2" script="vorname"/>
-                                        <attribute name="surname2" script="nachname"/>
-                                        <attribute name="gender2" script="geschlecht"/>
-                                        <attribute name="birthdate2" type="date" script="person.birthDate"/>
-                                        <attribute name="email" script="person.email"/>
-                                    </generate>
-                                </setup>
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name" script="vorname"/>
+        <attribute name="surname" script="nachname"/>
+        <attribute name="gender" script="geschlecht"/>
+        <attribute name="birthdate" type="date" script="person.birthDate"/>
+        <attribute name="salutation" values="'Hello','Hi','Howdy','How it is going','How was your day '"/>
+        <attribute name="name2" script="vorname"/>
+        <attribute name="surname2" script="nachname"/>
+        <attribute name="gender2" script="geschlecht"/>
+        <attribute name="birthdate2" type="date" script="person.birthDate"/>
+        <attribute name="email" script="person.email"/>
+    </generate>
+</setup>

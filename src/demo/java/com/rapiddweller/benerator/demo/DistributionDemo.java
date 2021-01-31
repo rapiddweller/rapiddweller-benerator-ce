@@ -66,21 +66,34 @@ public class DistributionDemo {
         Container contentPane = frame.getContentPane();
         contentPane.setLayout(new GridLayout(2, 4));
         contentPane.setBackground(Color.WHITE);
-        contentPane.add(createDistributionPane("random", SequenceManager.RANDOM_SEQUENCE));
-        contentPane.add(createDistributionPane("cumulated", SequenceManager.CUMULATED_SEQUENCE));
-        contentPane.add(createDistributionPane("randomWalk[0,2]", new RandomWalkSequence(BigDecimal.valueOf(0), BigDecimal.valueOf(2))));
-        contentPane.add(createDistributionPane("randomWalk[-1,1]", new RandomWalkSequence(BigDecimal.valueOf(-1), BigDecimal.valueOf(1))));
-        contentPane.add(createDistributionPane("step[1]", new StepSequence(BigDecimal.ONE)));
-        contentPane.add(createDistributionPane("wedge", SequenceManager.WEDGE_SEQUENCE));
-        contentPane.add(createDistributionPane("shuffle", new ShuffleSequence(BigDecimal.valueOf(8))));
-        contentPane.add(createDistributionPane("bitreverse", SequenceManager.BIT_REVERSE_SEQUENCE));
+        contentPane.add(createDistributionPane("random",
+                SequenceManager.RANDOM_SEQUENCE));
+        contentPane.add(createDistributionPane("cumulated",
+                SequenceManager.CUMULATED_SEQUENCE));
+        contentPane.add(createDistributionPane("randomWalk[0,2]",
+                new RandomWalkSequence(BigDecimal.valueOf(0),
+                        BigDecimal.valueOf(2))));
+        contentPane.add(createDistributionPane("randomWalk[-1,1]",
+                new RandomWalkSequence(BigDecimal.valueOf(-1),
+                        BigDecimal.valueOf(1))));
+        contentPane.add(createDistributionPane("step[1]",
+                new StepSequence(BigDecimal.ONE)));
+        contentPane.add(createDistributionPane("wedge",
+                SequenceManager.WEDGE_SEQUENCE));
+        contentPane.add(createDistributionPane("shuffle",
+                new ShuffleSequence(BigDecimal.valueOf(8))));
+        contentPane.add(createDistributionPane("bitreverse",
+                SequenceManager.BIT_REVERSE_SEQUENCE));
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
 
-    private static DistributionPane createDistributionPane(String label, Sequence sequence) {
-        Generator<Integer> generator = new StochasticGeneratorFactory().createNumberGenerator(Integer.class, 0, true, N - 1, true, 1, sequence, Uniqueness.NONE);
+    private static DistributionPane createDistributionPane(String label,
+                                                           Sequence sequence) {
+        Generator<Integer> generator = new StochasticGeneratorFactory()
+                .createNumberGenerator(Integer.class, 0, true, N - 1, true, 1,
+                        sequence, Uniqueness.NONE);
         generator.init(new DefaultBeneratorContext());
         return new DistributionPane(label, generator);
     }
@@ -119,8 +132,9 @@ public class DistributionDemo {
             g.drawString(title, 0, 10);
             for (int i = 0; i < N; i++) {
                 Integer y = generateNonNull(generator);
-                if (y != null)
+                if (y != null) {
                     g.fillRect(i, 16 + N - y, 2, 2);
+                }
             }
         }
 

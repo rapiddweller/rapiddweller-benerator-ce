@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.domain.address.Country;
 
 import java.util.Locale;
 
@@ -42,7 +42,8 @@ import java.util.Locale;
  * @author Volker Bergmann
  * @since 0.5.1
  */
-public class EMailAddressGenerator extends EMailAddressBuilder implements NonNullGenerator<String> {
+public class EMailAddressGenerator extends EMailAddressBuilder
+        implements NonNullGenerator<String> {
 
     private final PersonGenerator personGenerator;
 
@@ -52,7 +53,8 @@ public class EMailAddressGenerator extends EMailAddressBuilder implements NonNul
 
     public EMailAddressGenerator(String dataset) {
         super(dataset); // creation log is done in parent class constructor
-        this.personGenerator = new PersonGenerator(dataset, LocaleUtil.getFallbackLocale());
+        this.personGenerator =
+                new PersonGenerator(dataset, LocaleUtil.getFallbackLocale());
     }
 
     // properties ------------------------------------------------------------------------------------------------------
@@ -77,7 +79,8 @@ public class EMailAddressGenerator extends EMailAddressBuilder implements NonNul
     }
 
     @Override
-    public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
+    public void init(GeneratorContext context)
+            throws InvalidGeneratorSetupException {
         personGenerator.init(context);
         super.init(context);
     }

@@ -40,7 +40,7 @@ public class ArchetypeManagerTest {
 
 	@SuppressWarnings("null")
     @Test
-	public void testArchetypeLookup() throws Exception {
+	public void testArchetypeLookup() {
 		Archetype[] archetypes = ArchetypeManager.getInstance().getArchetypes();
 		// verify that archetypes have been found
 		assertTrue(archetypes != null && archetypes.length > 2);
@@ -49,7 +49,7 @@ public class ArchetypeManagerTest {
 	}
 
     @Test
-	public void testDefaultArchetype() throws Exception {
+	public void testDefaultArchetype() {
 		Archetype defaultArchetype = ArchetypeManager.getInstance().getDefaultArchetype();
 		assertNotNull(defaultArchetype);
 		assertEquals("simple", defaultArchetype.getId());

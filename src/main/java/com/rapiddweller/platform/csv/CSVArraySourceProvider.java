@@ -49,7 +49,10 @@ public class CSVArraySourceProvider implements DataSourceProvider<Object[]> {
     private final char separator;
     private final String encoding;
 
-    public CSVArraySourceProvider(String type, Converter<String, ?> preprocessor, boolean rowBased, char separator, String encoding) {
+    public CSVArraySourceProvider(String type,
+                                  Converter<String, ?> preprocessor,
+                                  boolean rowBased, char separator,
+                                  String encoding) {
         this.preprocessor = preprocessor;
         this.rowBased = rowBased;
         this.separator = separator;
@@ -61,9 +64,12 @@ public class CSVArraySourceProvider implements DataSourceProvider<Object[]> {
     public DataSource<Object[]> create(String uri, BeneratorContext context) {
         DataSource<String[]> source;
         source = new CSVSource(uri, separator, encoding, true, rowBased);
-        Converter<String[], Object[]> converter = new ArrayConverter(String.class, Object.class, preprocessor);
-        DataSource<Object[]> result = new ConvertingDataSource<>(source, converter);
-        result = new OffsetDataSource<>(result, 1); // offset = 1 in order to skip header row
+        Converter<String[], Object[]> converter =
+                new ArrayConverter(String.class, Object.class, preprocessor);
+        DataSource<Object[]> result =
+                new ConvertingDataSource<>(source, converter);
+        result = new OffsetDataSource<>(result,
+                1); // offset = 1 in order to skip header row
         return result;
     }
 

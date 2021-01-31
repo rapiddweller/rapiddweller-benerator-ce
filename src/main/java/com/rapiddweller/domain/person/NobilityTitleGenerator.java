@@ -48,7 +48,8 @@ import java.util.Locale;
  */
 public class NobilityTitleGenerator extends GeneratorProxy<String> {
 
-    private final static String BASE_NAME = "/com/rapiddweller/domain/person/nobTitle_";
+    private final static String BASE_NAME =
+            "/com/rapiddweller/domain/person/nobTitle_";
 
     private Gender gender;
     private Locale locale;
@@ -66,17 +67,20 @@ public class NobilityTitleGenerator extends GeneratorProxy<String> {
 
     // properties ------------------------------------------------------------------------------------------------------
 
-    private static LocalCSVGenerator<String> createCSVGenerator(Gender gender, Locale locale) {
-        return new LocalCSVGenerator<>(String.class, baseName(gender), locale, ".csv", Encodings.UTF_8);
+    private static LocalCSVGenerator<String> createCSVGenerator(Gender gender,
+                                                                Locale locale) {
+        return new LocalCSVGenerator<>(String.class, baseName(gender), locale,
+                ".csv", Encodings.UTF_8);
     }
 
     private static String baseName(Gender gender) {
-        if (gender == Gender.FEMALE)
+        if (gender == Gender.FEMALE) {
             return BASE_NAME + "female";
-        else if (gender == Gender.MALE)
+        } else if (gender == Gender.MALE) {
             return BASE_NAME + "male";
-        else
+        } else {
             throw new IllegalArgumentException("Gender: " + gender);
+        }
     }
 
     public void setGender(Gender gender) {
@@ -105,10 +109,11 @@ public class NobilityTitleGenerator extends GeneratorProxy<String> {
 
     @Override
     public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
-        if (RandomUtil.randomProbability() < getNobleQuota())
+        if (RandomUtil.randomProbability() < getNobleQuota()) {
             return super.generate(wrapper);
-        else
+        } else {
             return wrapper.wrap("");
+        }
     }
 
     @Override

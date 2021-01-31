@@ -42,12 +42,12 @@ import org.junit.Test;
 public class StepSequenceTest extends GeneratorTest {
 
 	@Test
-    public void testApplyTo_limit() throws Exception {
+    public void testApplyTo_limit() {
         expectGeneratedSequence(apply(1L, 1L, 1L),  1).withCeasedAvailability();
 	}
 
 	@Test
-    public void testCreateGenerator_limit() throws Exception {
+    public void testCreateGenerator_limit() {
         expectGeneratedSequence(numberGen(1L, 1L, 1L),  1L).withCeasedAvailability();
 	}
 

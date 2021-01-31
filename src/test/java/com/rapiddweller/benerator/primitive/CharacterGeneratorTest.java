@@ -49,19 +49,19 @@ public class CharacterGeneratorTest extends GeneratorClassTest {
     }
 
     @Test
-    public void testDigit() throws Exception {
+    public void testDigit() {
         checkProductSet(create("\\d"), 1000,
                 CollectionUtil.toSet('0', '1', '2', '3', '4', '5', '6', '7','8', '9'));
     }
 
     @Test
-    public void testRange() throws Exception {
+    public void testRange() {
         checkProductSet(create("[1-2]"), 1000, CollectionUtil.toSet('1', '2'));
         checkProductSet(create("[12]"), 1000, CollectionUtil.toSet('1', '2'));
     }
 
     @Test
-    public void testLocale() throws Exception {
+    public void testLocale() {
         HashSet<Character> expectedSet = new HashSet<>();
         for (char c = 'A'; c <= 'Z'; c++)
             expectedSet.add(c);

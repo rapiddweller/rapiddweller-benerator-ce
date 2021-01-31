@@ -28,10 +28,10 @@ package com.rapiddweller.platform.xls;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.DataSourceProvider;
+import com.rapiddweller.common.Converter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntitySource;
-import com.rapiddweller.common.Converter;
 
 /**
  * {@link DataSourceProvider} implementation which creates XLS entity sources.<br/><br/>
@@ -46,7 +46,9 @@ public class XLSEntitySourceProvider implements DataSourceProvider<Entity> {
     private final Converter<String, ?> scriptConverter;
     private final boolean formatted;
 
-    public XLSEntitySourceProvider(ComplexTypeDescriptor entityType, boolean formatted, Converter<String, ?> scriptConverter) {
+    public XLSEntitySourceProvider(ComplexTypeDescriptor entityType,
+                                   boolean formatted,
+                                   Converter<String, ?> scriptConverter) {
         this.entityType = entityType;
         this.scriptConverter = scriptConverter;
         this.formatted = formatted;
@@ -54,7 +56,9 @@ public class XLSEntitySourceProvider implements DataSourceProvider<Entity> {
 
     @Override
     public EntitySource create(String uri, BeneratorContext context) {
-        XLSEntitySource source = new XLSEntitySource(uri, scriptConverter, entityType, entityType.getSegment(), formatted);
+        XLSEntitySource source =
+                new XLSEntitySource(uri, scriptConverter, entityType,
+                        entityType.getSegment(), formatted);
         source.setContext(context);
         return source;
     }

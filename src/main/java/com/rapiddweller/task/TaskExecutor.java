@@ -26,12 +26,12 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.platform.contiperf.PerfTrackingTaskProxy;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.contiperf.PerformanceTracker;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.platform.contiperf.PerfTrackingTaskProxy;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -45,7 +45,8 @@ import java.util.List;
  */
 public class TaskExecutor {
 
-    private static final Logger LOGGER = LogManager.getLogger(TaskExecutor.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(TaskExecutor.class);
 
     private final Task target;
     private final Context context;
@@ -55,13 +56,16 @@ public class TaskExecutor {
     private final boolean infoLog;
     private PerformanceTracker tracker;
 
-    private TaskExecutor(Task target, List<PageListener> pageListeners, long pageSize,
-                         boolean stats, Context context, ErrorHandler errorHandler, boolean infoLog) {
+    private TaskExecutor(Task target, List<PageListener> pageListeners,
+                         long pageSize,
+                         boolean stats, Context context,
+                         ErrorHandler errorHandler, boolean infoLog) {
         this.context = context;
         this.errorHandler = errorHandler;
         if (stats) {
             target = new PerfTrackingTaskProxy(target);
-            this.tracker = ((PerfTrackingTaskProxy) target).getOrCreateTracker();
+            this.tracker =
+                    ((PerfTrackingTaskProxy) target).getOrCreateTracker();
         }
         this.target = new StateTrackingTaskProxy<>(target);
         this.pageListeners = pageListeners;
@@ -69,88 +73,121 @@ public class TaskExecutor {
         this.infoLog = infoLog;
     }
 
-    public static void execute(Task task, Context context, Long requestedInvocations, Long minInvocations,
-                               List<PageListener> pageListeners, long pageSize, boolean stats,
+    public static void execute(Task task, Context context,
+                               Long requestedInvocations, Long minInvocations,
+                               List<PageListener> pageListeners, long pageSize,
+                               boolean stats,
                                ErrorHandler errorHandler, boolean infoLog) {
         TaskExecutor runner = new TaskExecutor(task, pageListeners,
                 pageSize, stats, context, errorHandler, infoLog);
         runner.run(requestedInvocations, minInvocations);
     }
 
-    private static long runWithoutPage(Task target, Long invocationCount, Context context, ErrorHandler errorHandler) {
+    private static long runWithoutPage(Task target, Long invocationCount,
+                                       Context context,
+                                       ErrorHandler errorHandler) {
         long actualCount = 0;
         for (int i = 0; invocationCount == null || i < invocationCount; i++) {
             TaskResult stepResult = target.execute(context, errorHandler);
-            if (stepResult != TaskResult.UNAVAILABLE)
+            if (stepResult != TaskResult.UNAVAILABLE) {
                 actualCount++;
-            if (stepResult != TaskResult.EXECUTING)
+            }
+            if (stepResult != TaskResult.EXECUTING) {
                 break;
+            }
         }
         return actualCount;
     }
 
-    private static void logExecutionInfo(Task task, Long minInvocations, Long maxInvocations, long pageSize, boolean infoLog) {
+    private static void logExecutionInfo(Task task, Long minInvocations,
+                                         Long maxInvocations, long pageSize,
+                                         boolean infoLog) {
         if (infoLog) {
-            if (LOGGER.isInfoEnabled())
-                LOGGER.info(executionInfo(task, minInvocations, maxInvocations, pageSize));
-        } else if (LOGGER.isDebugEnabled())
-            LOGGER.debug(executionInfo(task, minInvocations, maxInvocations, pageSize));
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info(executionInfo(task, minInvocations, maxInvocations,
+                        pageSize));
+            }
+        } else if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(executionInfo(task, minInvocations, maxInvocations,
+                    pageSize));
+        }
     }
 
-    private static String executionInfo(Task task, Long minInvocations, Long maxInvocations, long pageSize) {
-        String invocationInfo = (maxInvocations == null ? "as long as available" :
-                (maxInvocations > 1 ? maxInvocations + " times" : ""));
-        if (minInvocations != null && minInvocations > 0 && (maxInvocations == null || maxInvocations > minInvocations))
-            invocationInfo += " requiring at least " + minInvocations + " generations";
-        if (invocationInfo.length() > 0)
-            invocationInfo += " with page size " + pageSize + " in a single thread";
+    private static String executionInfo(Task task, Long minInvocations,
+                                        Long maxInvocations, long pageSize) {
+        String invocationInfo =
+                (maxInvocations == null ? "as long as available" :
+                        (maxInvocations > 1 ? maxInvocations + " times" : ""));
+        if (minInvocations != null && minInvocations > 0 &&
+                (maxInvocations == null || maxInvocations > minInvocations)) {
+            invocationInfo +=
+                    " requiring at least " + minInvocations + " generations";
+        }
+        if (invocationInfo.length() > 0) {
+            invocationInfo +=
+                    " with page size " + pageSize + " in a single thread";
+        }
         return "Running task " + task + " " + invocationInfo;
     }
 
-    private long run(Long requestedInvocations, Long minInvocations) {
-        logExecutionInfo(target, requestedInvocations, minInvocations, pageSize, infoLog);
+    private void run(Long requestedInvocations, Long minInvocations) {
+        logExecutionInfo(target, requestedInvocations, minInvocations, pageSize,
+                infoLog);
         // first run without verification
         long countValue = run(requestedInvocations);
         // afterwards verify execution count
-        if (minInvocations != null && countValue < minInvocations)
-            throw new TaskUnavailableException(target, minInvocations, countValue);
-        if (tracker != null)
-            tracker.getCounters()[0].printSummary(new PrintWriter(System.out), 90, 95);
-        return countValue;
+        if (minInvocations != null && countValue < minInvocations) {
+            throw new TaskUnavailableException(target, minInvocations,
+                    countValue);
+        }
+        if (tracker != null) {
+            tracker.getCounters()[0]
+                    .printSummary(new PrintWriter(System.out), 90, 95);
+        }
     }
 
     private long run(Long requestedInvocations) {
-        if (requestedInvocations != null && requestedInvocations == 0)
+        if (requestedInvocations != null && requestedInvocations == 0) {
             return 0;
+        }
         long queuedInvocations = 0;
         long actualCount = 0;
-        if (requestedInvocations != null)
+        if (requestedInvocations != null) {
             queuedInvocations = requestedInvocations;
+        }
         LOGGER.debug("Starting task {}", getTaskName());
         int currentPageNo = 0;
         do {
             try {
-                if (pageSize > 0)
+                if (pageSize > 0) {
                     pageStarting(currentPageNo);
-                long currentPageSize = currentPageSize(requestedInvocations, queuedInvocations);
+                }
+                long currentPageSize = currentPageSize(requestedInvocations,
+                        queuedInvocations);
                 queuedInvocations -= currentPageSize;
                 actualCount += runPage(currentPageSize, (pageSize > 0));
-                if (pageSize > 0)
+                if (pageSize > 0) {
                     pageFinished(currentPageNo, context);
+                }
                 currentPageNo++;
             } catch (Exception e) {
-                errorHandler.handleError("Error in execution of task " + getTaskName(), e);
+                errorHandler.handleError(
+                        "Error in execution of task " + getTaskName(), e);
             }
         } while (workPending(requestedInvocations, queuedInvocations));
         LOGGER.debug("Finished task {}", getTaskName());
         return actualCount;
     }
 
-    protected long currentPageSize(Long requestedInvocations, long queuedInvocations) {
-        if (pageSize > 0)
-            return (requestedInvocations == null ? pageSize : Math.min(pageSize, queuedInvocations));
-        else
-            return (requestedInvocations == null ? 1 : Math.min(requestedInvocations, queuedInvocations));
+    protected long currentPageSize(Long requestedInvocations,
+                                   long queuedInvocations) {
+        if (pageSize > 0) {
+            return (requestedInvocations == null ? pageSize :
+                    Math.min(pageSize, queuedInvocations));
+        } else {
+            return (requestedInvocations == null ? 1 :
+                    Math.min(requestedInvocations, queuedInvocations));
+        }
     }
 
     private String getTaskName() {
@@ -159,34 +196,46 @@ public class TaskExecutor {
 
     private long runPage(Long invocationCount, boolean finishPage) {
         try {
-            return runWithoutPage(target, invocationCount, context, errorHandler);
+            return runWithoutPage(target, invocationCount, context,
+                    errorHandler);
         } finally {
-            if (finishPage)
+            if (finishPage) {
                 target.pageFinished();
+            }
         }
     }
 
-    private boolean workPending(Long maxInvocationCount, long queuedInvocations) {
-        if (!((StateTrackingTaskProxy<? extends Task>) target).isAvailable())
+    private boolean workPending(Long maxInvocationCount,
+                                long queuedInvocations) {
+        if (((StateTrackingTaskProxy<? extends Task>) target).isAvailable()) {
             return false;
-        if (maxInvocationCount == null)
+        }
+        if (maxInvocationCount == null) {
             return true;
+        }
         return (queuedInvocations > 0);
     }
 
     private void pageStarting(int currentPageNo) {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Starting page " + (currentPageNo + 1) + " of " + getTaskName() + " with pageSize=" + pageSize);
-        if (pageListeners != null)
-            for (PageListener listener : pageListeners)
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Starting page " + (currentPageNo + 1) + " of " +
+                    getTaskName() + " with pageSize=" + pageSize);
+        }
+        if (pageListeners != null) {
+            for (PageListener listener : pageListeners) {
                 listener.pageStarting();
+            }
+        }
     }
 
     private void pageFinished(int currentPageNo, Context context) {
-        LOGGER.debug("Page {} of {} finished", currentPageNo + 1, getTaskName());
-        if (pageListeners != null)
-            for (PageListener listener : pageListeners)
+        LOGGER.debug("Page {} of {} finished", currentPageNo + 1,
+                getTaskName());
+        if (pageListeners != null) {
+            for (PageListener listener : pageListeners) {
                 listener.pageFinished();
+            }
+        }
     }
 
 

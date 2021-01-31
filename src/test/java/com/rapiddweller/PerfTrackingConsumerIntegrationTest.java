@@ -47,7 +47,7 @@ import org.junit.Test;
 public class PerfTrackingConsumerIntegrationTest extends BeneratorIntegrationTest {
 
 	@Test
-	public void testNesting() throws Exception {
+	public void testNesting() {
 		TimedGeneratorStatement statement = (TimedGeneratorStatement) parse(
 				"<generate type='bla' count='10'>" +
 				"	<consumer class='com.rapiddweller.platform.contiperf.PerfTrackingConsumer'>" +
@@ -63,7 +63,7 @@ public class PerfTrackingConsumerIntegrationTest extends BeneratorIntegrationTes
 	}
 
 	@Test
-	public void testScript() throws Exception {
+	public void testScript() {
 		TimedGeneratorStatement statement = (TimedGeneratorStatement) parse(
 				"<generate type='bla' count='10'>" +
 				"	<consumer spec='new com.rapiddweller.platform.contiperf.PerfTrackingConsumer(new com.rapiddweller.benerator.test.ConsumerMock(false, 0, 50, 100))'/>" +

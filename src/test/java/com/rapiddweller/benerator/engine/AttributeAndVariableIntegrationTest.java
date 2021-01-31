@@ -48,7 +48,7 @@ public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTes
 	private ConsumerMock consumer;
 	
     @Before
-	public void setUpSourceAndConsumer() throws Exception {
+	public void setUpSourceAndConsumer() {
 		consumer = new ConsumerMock(true);
 		context.setGlobal("cons", consumer);
 		PersonSource pit = new PersonSource();

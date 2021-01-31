@@ -50,9 +50,11 @@ public abstract class AbstractTask implements Task {
         this(taskName, false, false);
     }
 
-    protected AbstractTask(String taskName, boolean threadSafe, boolean parallelizable) {
-        if (taskName == null)
+    protected AbstractTask(String taskName, boolean threadSafe,
+                           boolean parallelizable) {
+        if (taskName == null) {
             taskName = getClass().getSimpleName();
+        }
         setTaskName(taskName);
         this.threadSafe = threadSafe;
         this.parallelizable = parallelizable;

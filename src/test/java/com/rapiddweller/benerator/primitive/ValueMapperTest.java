@@ -39,7 +39,7 @@ import org.junit.Test;
 public class ValueMapperTest {
 
 	@Test
-	public void testNormalMapping() throws Exception {
+	public void testNormalMapping() {
 		ValueMapper mapper = new ValueMapper("1->2,4->3");
 		assertEquals(Integer.class, mapper.getSourceType());
 		assertEquals(2, mapper.convert(1));
@@ -47,20 +47,20 @@ public class ValueMapperTest {
 	}
 	
 	@Test
-	public void testCanConvert_Strict() throws Exception {
+	public void testCanConvert_Strict() {
 		ValueMapper mapper = new ValueMapper("1->2,4->3");
 		assertEquals(Integer.class, mapper.getSourceType());
 		assertEquals(2, mapper.convert(1));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testConvert_Strict() throws Exception {
+	public void testConvert_Strict() {
 		ValueMapper mapper = new ValueMapper("1->2,4->3");
 		mapper.convert(2);
 	}
 
 	@Test
-	public void testLenientMapping() throws Exception {
+	public void testLenientMapping() {
 		ValueMapper mapper = new ValueMapper("1->2,4->3", true);
 		assertEquals(Integer.class, mapper.getSourceType());
 		assertEquals(2, mapper.convert(1));
@@ -68,7 +68,7 @@ public class ValueMapperTest {
 	}
 
 	@Test
-	public void testLenientWOMapping() throws Exception {
+	public void testLenientWOMapping() {
 		ValueMapper mapper = new ValueMapper(null, true);
 		assertEquals(Object.class, mapper.getSourceType());
 		assertEquals(1, mapper.convert(1));

@@ -28,19 +28,25 @@ package com.rapiddweller.platform.xls;
 
 import com.rapiddweller.benerator.consumer.FileExporter;
 import com.rapiddweller.benerator.consumer.FormattingConsumer;
-import com.rapiddweller.model.data.ComponentDescriptor;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.SimpleTypeDescriptor;
-import com.rapiddweller.platform.csv.CSVEntityExporter;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.CellStyle;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.xls.XLSUtil;
+import com.rapiddweller.model.data.ComponentDescriptor;
+import com.rapiddweller.model.data.Entity;
+import com.rapiddweller.model.data.SimpleTypeDescriptor;
+import com.rapiddweller.platform.csv.CSVEntityExporter;
 import com.rapiddweller.script.PrimitiveType;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -58,9 +64,11 @@ import java.util.Set;
  * @author Volker Bergmann
  * @since 0.5.3
  */
-public class XLSEntityExporter extends FormattingConsumer implements FileExporter {
+public class XLSEntityExporter extends FormattingConsumer
+        implements FileExporter {
 
-    private static final Logger logger = LogManager.getLogger(CSVEntityExporter.class);
+    private static final Logger logger =
+            LogManager.getLogger(CSVEntityExporter.class);
 
     // defaults --------------------------------------------------------------------------------------------------------
 
@@ -106,14 +114,16 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
     @Override
     public void startProductConsumption(Object object) {
         logger.debug("exporting {}", object);
-        if (!(object instanceof Entity))
+        if (!(object instanceof Entity)) {
             throw new IllegalArgumentException("Expecting Entity");
+        }
         Entity entity = (Entity) object;
         HSSFSheet sheet = getOrCreateSheet(entity);
         HSSFRow row = sheet.createRow(sheet.getLastRowNum() + 1);
         int i = 0;
-        for (Map.Entry<String, Object> component : getComponents(entity))
+        for (Map.Entry<String, Object> component : getComponents(entity)) {
             render(row, i++, component.getValue());
+        }
     }
 
     // private helpers -------------------------------------------------------------------------------------------------
@@ -122,10 +132,12 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
     public void close() {
         FileOutputStream out = null;
         try {
-            if (workbook == null)
-                workbook = new HSSFWorkbook(); // if no data was added, create an empty Excel document
-            else
+            if (workbook == null) {
+                workbook =
+                        new HSSFWorkbook(); // if no data was added, create an empty Excel document
+            } else {
                 XLSUtil.autoSizeColumns(workbook);
+            }
             // Write the output to a file
             out = new FileOutputStream(uri);
             workbook.write(out);
@@ -140,8 +152,9 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
 
     private HSSFSheet getOrCreateSheet(Entity entity) {
         // create file
-        if (workbook == null)
+        if (workbook == null) {
             createWorkbook();
+        }
         String sheetName = entity.type();
         HSSFSheet sheet = workbook.getSheet(sheetName);
         if (sheet == null) {
@@ -164,26 +177,35 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
         int colnum = 0;
         for (Map.Entry<String, Object> component : getComponents(entity)) {
             String componentName = component.getKey();
-            headerRow.createCell(colnum).setCellValue(new HSSFRichTextString(componentName));
-            ComponentDescriptor cd = entity.descriptor().getComponent(componentName);
+            headerRow.createCell(colnum)
+                    .setCellValue(new HSSFRichTextString(componentName));
+            ComponentDescriptor cd =
+                    entity.descriptor().getComponent(componentName);
             PrimitiveType primitiveType;
-            if (cd.getTypeDescriptor() instanceof SimpleTypeDescriptor)
-                primitiveType = ((SimpleTypeDescriptor) cd.getTypeDescriptor()).getPrimitiveType();
-            else
-                throw new UnsupportedOperationException("Can only export simple type attributes, " +
-                        "failed to export " + entity.type() + '.' + cd.getName());
-            Class<?> javaType = (primitiveType != null ? primitiveType.getJavaType() : String.class);
+            if (cd.getTypeDescriptor() instanceof SimpleTypeDescriptor) {
+                primitiveType = ((SimpleTypeDescriptor) cd.getTypeDescriptor())
+                        .getPrimitiveType();
+            } else {
+                throw new UnsupportedOperationException(
+                        "Can only export simple type attributes, " +
+                                "failed to export " + entity.type() + '.' +
+                                cd.getName());
+            }
+            Class<?> javaType =
+                    (primitiveType != null ? primitiveType.getJavaType() :
+                            String.class);
             String formatString = null;
-            if (BeanUtil.isIntegralNumberType(javaType))
+            if (BeanUtil.isIntegralNumberType(javaType)) {
                 formatString = getIntegralPattern();
-            else if (BeanUtil.isDecimalNumberType(javaType))
+            } else if (BeanUtil.isDecimalNumberType(javaType)) {
                 formatString = getDecimalPattern();
-            else if (Time.class.isAssignableFrom(javaType))
+            } else if (Time.class.isAssignableFrom(javaType)) {
                 formatString = getTimePattern();
-            else if (Timestamp.class.isAssignableFrom(javaType))
+            } else if (Timestamp.class.isAssignableFrom(javaType)) {
                 formatString = getTimestampPattern();
-            else if (Date.class.isAssignableFrom(javaType))
+            } else if (Date.class.isAssignableFrom(javaType)) {
                 formatString = getDatePattern();
+            }
             if (formatString != null) {
                 HSSFDataFormat dataFormat = workbook.createDataFormat();
                 CellStyle columnStyle = workbook.createCellStyle();
@@ -196,13 +218,13 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
 
     private void render(HSSFRow row, int column, Object value) {
         HSSFCell cell = row.createCell(column);
-        if (value instanceof Number)
+        if (value instanceof Number) {
             cell.setCellValue(((Number) value).doubleValue());
-        else if (value instanceof Date)
+        } else if (value instanceof Date) {
             cell.setCellValue((Date) value);
-        else if (value instanceof Boolean)
+        } else if (value instanceof Boolean) {
             cell.setCellValue((Boolean) value);
-        else {
+        } else {
             String s = plainConverter.convert(value);
             cell.setCellValue(new HSSFRichTextString(s));
         }
@@ -222,10 +244,12 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null || getClass() != obj.getClass())
+        }
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
+        }
         XLSEntityExporter that = (XLSEntityExporter) obj;
         return (this.uri.equals(that.uri));
     }

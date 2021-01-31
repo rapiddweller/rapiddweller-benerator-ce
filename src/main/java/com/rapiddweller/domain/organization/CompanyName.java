@@ -85,12 +85,15 @@ public class CompanyName {
 
     public String getFullName() {
         StringBuilder builder = new StringBuilder(shortName);
-        if (sector != null)
+        if (sector != null) {
             builder.append(' ').append(sector);
-        if (location != null)
+        }
+        if (location != null) {
             builder.append(' ').append(location);
-        if (location != null)
+        }
+        if (location != null) {
             builder.append(' ').append(legalForm);
+        }
         return builder.toString();
     }
 

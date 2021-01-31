@@ -52,7 +52,8 @@ public class DecimalQuantizer extends ThreadSafeConverter<Number, BigDecimal> {
 
 	@Override
 	public BigDecimal convert(Number sourceValue) throws ConversionException {
-		BigDecimal value = (sourceValue instanceof BigDecimal ? (BigDecimal) sourceValue : new BigDecimal(sourceValue.doubleValue()));
+		BigDecimal value = (sourceValue instanceof BigDecimal ? (BigDecimal) sourceValue :
+                BigDecimal.valueOf(sourceValue.doubleValue()));
 		BigDecimal ofs = value.subtract(min).divideToIntegralValue(granularity);
 		return ofs.multiply(granularity).add(min);
     }

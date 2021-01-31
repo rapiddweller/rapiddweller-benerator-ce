@@ -52,7 +52,7 @@ public class ScriptableExpressionTest {
 	@Test
 	public void testEmpty() {
 		ScriptableExpression expression = new ScriptableExpression(null, null);
-		assertEquals(null, expression.evaluate(context));
+        assertNull(expression.evaluate(context));
 	}
 	
 	@Test

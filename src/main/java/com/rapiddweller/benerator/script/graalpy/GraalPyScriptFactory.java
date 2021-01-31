@@ -23,7 +23,6 @@ import org.graalvm.polyglot.Engine;
 import java.io.IOException;
 
 /**
- * Creates {@link GraalPyScript}s.
  *
  * Created at 30.12.2020
  *

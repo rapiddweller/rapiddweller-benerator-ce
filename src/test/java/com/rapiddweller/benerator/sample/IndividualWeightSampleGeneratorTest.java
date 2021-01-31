@@ -39,7 +39,7 @@ import org.junit.Test;
 public class IndividualWeightSampleGeneratorTest extends GeneratorTest {
 
     @Test
-    public void testDistribution() throws Exception {
+    public void testDistribution() {
     	// given an IndividualWeight which gives 'Alice' weight 2, all others the weight 1
     	IndividualWeight<String> individualWeight = new IndividualWeight<>() {
 			@Override

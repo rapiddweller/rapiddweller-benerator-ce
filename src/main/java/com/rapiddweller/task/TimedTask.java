@@ -29,8 +29,8 @@ package com.rapiddweller.task;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Wraps a Task and logs its execution time.<br/>

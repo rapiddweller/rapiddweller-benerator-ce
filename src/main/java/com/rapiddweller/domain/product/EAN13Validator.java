@@ -43,8 +43,9 @@ public class EAN13Validator extends AbstractConstraintValidator<EAN13, String> {
 
     @Override
     public boolean isValid(String number, ConstraintValidatorContext context) {
-        if (number == null || number.length() != 13)
+        if (number == null || number.length() != 13) {
             return false;
+        }
         return checksumValidator.valid(number);
     }
 

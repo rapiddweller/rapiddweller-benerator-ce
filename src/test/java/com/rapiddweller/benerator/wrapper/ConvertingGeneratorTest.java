@@ -50,7 +50,7 @@ public class ConvertingGeneratorTest extends GeneratorTest {
         assertEquals("constructor", source.getLastMethodCall());
         assertEquals("1", GeneratorUtil.generateNonNull(generator));
         assertEquals("1", GeneratorUtil.generateNonNull(generator));
-        assertTrue(generator.getSource() == source);
+        assertSame(generator.getSource(), source);
         generator.reset();
         assertEquals("reset", source.getLastMethodCall());
         generator.close();

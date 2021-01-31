@@ -28,7 +28,7 @@ package com.rapiddweller.benerator;
 
 import java.io.File;
 
-import com.rapiddweller.common.LogCategories;
+import com.rapiddweller.common.LogCategoriesConstants;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.VMInfo;
@@ -47,7 +47,7 @@ import org.apache.logging.log4j.LogManager;
  */
 public class BeneratorUtil {
 	
-	private static final Logger CONFIG_LOGGER = LogManager.getLogger(LogCategories.CONFIG);
+	private static final Logger CONFIG_LOGGER = LogManager.getLogger(LogCategoriesConstants.CONFIG);
 	
 	public static boolean isDescriptorFilePath(String filePath) {
 		if (StringUtil.isEmpty(filePath))

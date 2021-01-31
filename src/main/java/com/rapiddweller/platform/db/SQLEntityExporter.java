@@ -27,14 +27,14 @@
 package com.rapiddweller.platform.db;
 
 import com.rapiddweller.benerator.consumer.TextFileExporter;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.platform.csv.CSVEntityExporter;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.jdbacl.DatabaseDialectManager;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.model.data.Entity;
+import com.rapiddweller.platform.csv.CSVEntityExporter;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map.Entry;
 import java.util.Set;
@@ -48,7 +48,8 @@ import java.util.Set;
  */
 public class SQLEntityExporter extends TextFileExporter {
 
-    private static final Logger LOGGER = LogManager.getLogger(CSVEntityExporter.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(CSVEntityExporter.class);
 
     // defaults --------------------------------------------------------------------------------------------------------
 
@@ -74,32 +75,40 @@ public class SQLEntityExporter extends TextFileExporter {
         this(uri, dialect, null, null);
     }
 
-    public SQLEntityExporter(String uri, String dialect, String lineSeparator, String encoding) {
+    public SQLEntityExporter(String uri, String dialect, String lineSeparator,
+                             String encoding) {
         super(uri, encoding, lineSeparator);
         setDialect(dialect);
     }
 
     public void setDialect(String dialectName) {
         this.dialectName = dialectName;
-        if (dialectName != null)
-            this.dialect = DatabaseDialectManager.getDialectForProduct(dialectName, dialectVersion);
+        if (dialectName != null) {
+            this.dialect = DatabaseDialectManager
+                    .getDialectForProduct(dialectName, dialectVersion);
+        }
     }
 
     public void setVersion(String version) {
         this.dialectVersion = VersionNumber.valueOf(version);
-        if (this.dialectName != null)
-            this.dialect = DatabaseDialectManager.getDialectForProduct(dialectName, dialectVersion);
+        if (this.dialectName != null) {
+            this.dialect = DatabaseDialectManager
+                    .getDialectForProduct(dialectName, dialectVersion);
+        }
     }
 
     // Callback methods for parent class functionality -----------------------------------------------------------------
 
     @Override
     protected void startConsumingImpl(Object object) {
-        if (dialect == null)
-            throw new ConfigurationError("'dialect' not set in " + getClass().getSimpleName());
+        if (dialect == null) {
+            throw new ConfigurationError(
+                    "'dialect' not set in " + getClass().getSimpleName());
+        }
         LOGGER.debug("exporting {}", object);
-        if (!(object instanceof Entity))
+        if (!(object instanceof Entity)) {
             throw new IllegalArgumentException("Expected Entity");
+        }
         Entity entity = (Entity) object;
         String sql = createSQLInsert(entity);
         printer.println(sql);
@@ -113,27 +122,31 @@ public class SQLEntityExporter extends TextFileExporter {
     String createSQLInsert(Entity entity) {
         String table = entity.type();
         StringBuilder builder = new StringBuilder("insert into ");
-        if (dialect.quoteTableNames)
+        if (dialect.quoteTableNames) {
             builder.append('"').append(table).append('"');
-        else
+        } else {
             builder.append(table);
+        }
         builder.append(" (");
-        Set<Entry<String, Object>> components = entity.getComponents().entrySet();
+        Set<Entry<String, Object>> components =
+                entity.getComponents().entrySet();
         boolean first = true;
         for (Entry<String, Object> entry : components) {
-            if (first)
+            if (first) {
                 first = false;
-            else
+            } else {
                 builder.append(", ");
+            }
             builder.append(entry.getKey());
         }
         builder.append(") values (");
         first = true;
         for (Entry<String, Object> entry : components) {
-            if (first)
+            if (first) {
                 first = false;
-            else
+            } else {
                 builder.append(", ");
+            }
             Object value = entry.getValue();
             builder.append(dialect.formatValue(value));
         }

@@ -39,7 +39,7 @@ import org.junit.Test;
 public class BeneratorMonitorTest {
 
 	@Test
-	public void testGenerationCount() throws Exception {
+	public void testGenerationCount() {
 		BeneratorMonitor monitor = BeneratorMonitor.INSTANCE;
 		monitor.setTotalGenerationCount(0);
 		assertEquals(0L, monitor.getTotalGenerationCount());

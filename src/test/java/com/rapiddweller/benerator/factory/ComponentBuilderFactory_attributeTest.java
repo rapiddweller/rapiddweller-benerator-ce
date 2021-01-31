@@ -93,7 +93,7 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 		Generator<String> helper = new ComponentBuilderGenerator(builder, name.getName());
 		helper.init(context);
 		for (int i = 0; i < 10; i++)
-			assertEquals(null, GeneratorUtil.generateNullable(helper));
+			assertNull(GeneratorUtil.generateNullable(helper));
 	}
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

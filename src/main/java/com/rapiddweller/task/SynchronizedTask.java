@@ -46,7 +46,8 @@ public class SynchronizedTask extends TaskProxy {
     }
 
     @Override
-    public synchronized TaskResult execute(Context context, ErrorHandler errorHandler) {
+    public synchronized TaskResult execute(Context context,
+                                           ErrorHandler errorHandler) {
         return super.execute(context, errorHandler);
     }
 

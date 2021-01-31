@@ -45,7 +45,8 @@ import com.rapiddweller.common.StringUtil;
  * @since 0.5.6
  */
 
-public class SSNGenerator extends CompositeGenerator<String> implements NonNullGenerator<String> {
+public class SSNGenerator extends CompositeGenerator<String>
+        implements NonNullGenerator<String> {
 
     private final RandomIntegerGenerator areaNumberGenerator;
     private final RandomIntegerGenerator groupNumberGenerator;
@@ -57,9 +58,12 @@ public class SSNGenerator extends CompositeGenerator<String> implements NonNullG
 
     public SSNGenerator(int maxAreaCode) {
         super(String.class);
-        areaNumberGenerator = registerComponent(new RandomIntegerGenerator(1, maxAreaCode));
-        groupNumberGenerator = registerComponent(new RandomIntegerGenerator(1, 99));
-        serialNumberGenerator = registerComponent(new RandomIntegerGenerator(1, 9999));
+        areaNumberGenerator =
+                registerComponent(new RandomIntegerGenerator(1, maxAreaCode));
+        groupNumberGenerator =
+                registerComponent(new RandomIntegerGenerator(1, 99));
+        serialNumberGenerator =
+                registerComponent(new RandomIntegerGenerator(1, 9999));
     }
 
     @Override
@@ -74,8 +78,12 @@ public class SSNGenerator extends CompositeGenerator<String> implements NonNullG
             area = areaNumberGenerator.generate();
         } while (area == 666 || (area >= 734 && area <= 749));
         return StringUtil.padLeft(String.valueOf(area), 3, '0') + '-' +
-                StringUtil.padLeft(String.valueOf(groupNumberGenerator.generate()), 2, '0') + '-' +
-                StringUtil.padLeft(String.valueOf(serialNumberGenerator.generate()), 4, '0');
+                StringUtil.padLeft(
+                        String.valueOf(groupNumberGenerator.generate()), 2,
+                        '0') + '-' +
+                StringUtil.padLeft(
+                        String.valueOf(serialNumberGenerator.generate()), 4,
+                        '0');
     }
 
     public void setMaxAreaCode(int maxAreaCode) {

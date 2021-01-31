@@ -36,7 +36,8 @@ public class IdDescriptor extends ComponentDescriptor {
         super(name, provider, type);
     }
 
-    public IdDescriptor(String name, DescriptorProvider provider, TypeDescriptor type) {
+    public IdDescriptor(String name, DescriptorProvider provider,
+                        TypeDescriptor type) {
         super(name, provider, type);
     }
 

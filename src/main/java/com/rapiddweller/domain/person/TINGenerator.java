@@ -65,8 +65,9 @@ public class TINGenerator extends ThreadSafeNonNullGenerator<String> {
                     buffer[i] = (char) ('0' + digit);
                     doubleCount++;
                     done = true;
-                } else
+                } else {
                     done = false;
+                }
             } while (!done);
         }
         // assure there is a double digit

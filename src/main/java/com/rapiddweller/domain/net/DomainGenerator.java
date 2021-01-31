@@ -38,7 +38,8 @@ import com.rapiddweller.domain.address.Country;
  * @author Volker Bergmann
  * @since 0.5.2
  */
-public class DomainGenerator extends AlternativeGenerator<String> implements NonNullGenerator<String> {
+public class DomainGenerator extends AlternativeGenerator<String>
+        implements NonNullGenerator<String> {
 
     public DomainGenerator() {
         this(Country.getDefault().getIsoCode());

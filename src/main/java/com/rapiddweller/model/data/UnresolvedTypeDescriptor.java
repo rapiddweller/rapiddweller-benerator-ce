@@ -39,7 +39,8 @@ public class UnresolvedTypeDescriptor extends TypeDescriptor {
         this(name, provider, null);
     }
 
-    public UnresolvedTypeDescriptor(String name, DescriptorProvider provider, String parentName) {
+    public UnresolvedTypeDescriptor(String name, DescriptorProvider provider,
+                                    String parentName) {
         super(name, provider, parentName);
     }
 

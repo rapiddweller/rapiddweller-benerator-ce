@@ -60,7 +60,7 @@ public class DefaultBeneratorContextTest {
 		assertEquals("ben", context.getDefaultScript());
 		assertEquals("ben", ScriptUtil.getDefaultScriptEngine());
 		assertEquals(',', context.getDefaultSeparator());
-		assertEquals(null, context.getMaxCount());
+        assertNull(context.getMaxCount());
 		context.close();
 	}
 	

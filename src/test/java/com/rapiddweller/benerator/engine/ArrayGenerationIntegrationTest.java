@@ -46,7 +46,7 @@ public class ArrayGenerationIntegrationTest extends BeneratorIntegrationTest {
 	private ConsumerMock consumer;
 
 	@Before
-	public void setUpConsumer() throws Exception {
+	public void setUpConsumer() {
 		consumer = new ConsumerMock(true);
 		context.setGlobal("cons", consumer);
 	}

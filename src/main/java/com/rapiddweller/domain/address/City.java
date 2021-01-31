@@ -27,7 +27,11 @@
 package com.rapiddweller.domain.address;
 
 import com.rapiddweller.benerator.primitive.RandomVarLengthStringGenerator;
-import com.rapiddweller.common.*;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.Escalator;
+import com.rapiddweller.common.LoggerEscalator;
+import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.StringUtil;
 
 import java.util.Locale;
 
@@ -44,7 +48,8 @@ public class City {
     private static final RandomVarLengthStringGenerator localNumberGenerator;
 
     static {
-        localNumberGenerator = new RandomVarLengthStringGenerator("\\d", 7, 8, 1);
+        localNumberGenerator =
+                new RandomVarLengthStringGenerator("\\d", 7, 8, 1);
         localNumberGenerator.init(null);
     }
 
@@ -56,9 +61,11 @@ public class City {
     private Locale language;
     private int population;
 
-    public City(State state, String name, String addition, String[] postalCodes, String areaCode) {
-        if (areaCode == null)
+    public City(State state, String name, String addition, String[] postalCodes,
+                String areaCode) {
+        if (areaCode == null) {
             throw new IllegalArgumentException("Area Code is null for " + name);
+        }
         this.state = state;
         this.name = name;
         this.nameExtension = addition;
@@ -91,7 +98,9 @@ public class City {
      */
     @Deprecated
     public String[] getZipCodes() {
-        escalator.escalate("property City.zipCode is deprecated, use City.postalCode instead", City.class, "Invoked getZipCodes()");
+        escalator.escalate(
+                "property City.zipCode is deprecated, use City.postalCode instead",
+                City.class, "Invoked getZipCodes()");
         return getPostalCodes();
     }
 
@@ -100,7 +109,9 @@ public class City {
      */
     @Deprecated
     public void setZipCodes(String[] zipCodes) {
-        escalator.escalate("property City.zipCode is deprecated, use City.postalCode instead", City.class, "Invoked setZipCodes()");
+        escalator.escalate(
+                "property City.zipCode is deprecated, use City.postalCode instead",
+                City.class, "Invoked setZipCodes()");
         this.postalCodes = zipCodes;
     }
 
@@ -109,7 +120,9 @@ public class City {
      */
     @Deprecated
     public void addZipCode(String zipCode) {
-        escalator.escalate("property City.zipCode is deprecated, use City.postalCode instead", City.class, "Invoked addZipCode()");
+        escalator.escalate(
+                "property City.zipCode is deprecated, use City.postalCode instead",
+                City.class, "Invoked addZipCode()");
         postalCodes = ArrayUtil.append(zipCode, postalCodes);
     }
 
@@ -138,10 +151,12 @@ public class City {
     }
 
     public Locale getLanguage() {
-        if (language != null)
+        if (language != null) {
             return language;
-        if (state != null)
+        }
+        if (state != null) {
             return state.getDefaultLanguageLocale();
+        }
         Country country = getCountry();
         return (country != null ? country.getDefaultLanguageLocale() : null);
     }
@@ -163,7 +178,8 @@ public class City {
     }
 
     public PhoneNumber generateLandlineNumber() {
-        return new PhoneNumber(getCountry().getPhoneCode(), areaCode, localNumberGenerator.generate());
+        return new PhoneNumber(getCountry().getPhoneCode(), areaCode,
+                localNumberGenerator.generate());
     }
 
     // java.lang.Object overrides --------------------------------------------------------------------------------------
@@ -171,20 +187,26 @@ public class City {
     @Override
     public String toString() {
         return name + (StringUtil.isEmpty(nameExtension) ? "" :
-                (Character.isLetter(nameExtension.charAt(0)) ? " " : "") + nameExtension);
+                (Character.isLetter(nameExtension.charAt(0)) ? " " : "") +
+                        nameExtension);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
         final City that = (City) o;
-        if (!this.name.equals(that.name))
+        if (!this.name.equals(that.name)) {
             return false;
-        if (!NullSafeComparator.equals(this.nameExtension, that.nameExtension))
+        }
+        if (!NullSafeComparator
+                .equals(this.nameExtension, that.nameExtension)) {
             return false;
+        }
         return NullSafeComparator.equals(this.state, that.state);
     }
 

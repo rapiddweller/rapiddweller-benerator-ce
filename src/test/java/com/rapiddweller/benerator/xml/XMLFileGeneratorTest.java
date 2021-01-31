@@ -101,8 +101,7 @@ public class XMLFileGeneratorTest extends GeneratorTest {
         logger.debug("Generated " + file);
         generator.close();
         // validate the generated file
-        Document document = XMLUtil.parse(file.getAbsolutePath());
-        return document;
+        return XMLUtil.parse(file.getAbsolutePath());
     }
 
 }

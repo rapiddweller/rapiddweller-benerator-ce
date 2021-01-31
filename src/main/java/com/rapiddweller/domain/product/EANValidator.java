@@ -41,13 +41,15 @@ public class EANValidator extends AbstractConstraintValidator<EAN8, String> {
 
     @Override
     public boolean isValid(String number, ConstraintValidatorContext context) {
-        if (number == null || (number.length() != 8 && number.length() != 13))
+        if (number == null || (number.length() != 8 && number.length() != 13)) {
             return false;
+        }
         int sum = 0;
         for (int i = 0; i < number.length(); i++) {
             char c = number.charAt(i);
-            if (!Character.isDigit(c))
+            if (!Character.isDigit(c)) {
                 return false;
+            }
             sum += (c - '0') * (1 + (i % 2) * 2);
         }
         return (sum % 10 == 0);

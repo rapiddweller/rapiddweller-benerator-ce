@@ -47,7 +47,7 @@ public class SampleGeneratorTest extends GeneratorClassTest {
     }
 
     @Test
-    public void testDistribution() throws Exception {
+    public void testDistribution() {
         Integer[] samples = new Integer[] { 0, 1, 2 };
         SampleGenerator<Integer> generator = new SampleGenerator<>(Integer.class);
         generator.setValues(samples);

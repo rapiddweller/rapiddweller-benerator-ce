@@ -47,14 +47,14 @@ public class AttachedWeightSampleGeneratorTest extends GeneratorTest {
     private static final Logger logger = LogManager.getLogger(AttachedWeightSampleGeneratorTest.class);
 
     @Test
-    public void testInstantiation() throws Exception {
+    public void testInstantiation() {
         new AttachedWeightSampleGenerator<>(Integer.class);
         new AttachedWeightSampleGenerator<>(String.class);
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testDistribution() throws Exception {
+    public void testDistribution() {
     	// prepare
         WeightedSample<Integer>[] samples = new WeightedSample[] {
                 new WeightedSample<>(0, 0.1),

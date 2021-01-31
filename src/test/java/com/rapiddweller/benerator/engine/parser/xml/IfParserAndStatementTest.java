@@ -44,31 +44,31 @@ import org.w3c.dom.Element;
 public class IfParserAndStatementTest extends BeneratorIntegrationTest {
 
 	@Test
-	public void testPlainTrue() throws Exception {
+	public void testPlainTrue() {
 		parseAndExecute("<if test='1==1'><setting name='executed' value='OK'/></if>");
 		assertEquals("OK", context.getGlobal("executed"));
 	}
 	
 	@Test
-	public void testPlainFalse() throws Exception {
+	public void testPlainFalse() {
 		parseAndExecute("<if test='2==3'><setting name='executed' value='OK'/></if>");
-		assertEquals(null, context.getGlobal("executed"));
+		assertNull(context.getGlobal("executed"));
 	}
 	
 	@Test
-	public void testThenTrue() throws Exception {
+	public void testThenTrue() {
 		parseAndExecute("<if test='1==1'><then><setting name='executed' value='OK'/></then></if>");
 		assertEquals("OK", context.getGlobal("executed"));
 	}
 	
 	@Test
-	public void testThenFalse() throws Exception {
+	public void testThenFalse() {
 		parseAndExecute("<if test='2==3'><then><setting name='executed' value='OK'/></then></if>");
-		assertEquals(null, context.getGlobal("executed"));
+		assertNull(context.getGlobal("executed"));
 	}
 	
 	@Test
-	public void testThenElse() throws Exception {
+	public void testThenElse() {
 		Statement statement = parse(
 			"<if test='x==3'>" +
 			"	<then>" + 
@@ -90,18 +90,18 @@ public class IfParserAndStatementTest extends BeneratorIntegrationTest {
 	}
 	
 	@Test(expected = SyntaxError.class)
-	public void testElseWithoutIf() throws Exception {
+	public void testElseWithoutIf() {
 		parseAndExecute("<if test='2==3'><else/></if>");
 	}
 	
 	@Test(expected = SyntaxError.class)
-	public void testTwoThens() throws Exception {
+	public void testTwoThens() {
 		Element element = XMLUtil.parseStringAsElement("<if test='2==3'><then/><then/></if>");
 		new IfParser().parse(element, null, null);
 	}
 	
 	@Test(expected = SyntaxError.class)
-	public void testTwoElses() throws Exception {
+	public void testTwoElses() {
 		Element element = XMLUtil.parseStringAsElement("<if test='2==3'><then/><else/><else/></if>");
 		new IfParser().parse(element, null, null);
 	}

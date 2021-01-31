@@ -38,7 +38,8 @@ import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
  *
  * @author Volker Bergmann
  */
-public class LongValidator extends AbstractConstraintValidator<Annotation, Long> {
+public class LongValidator
+        extends AbstractConstraintValidator<Annotation, Long> {
 
     public boolean isValid(Long n, ConstraintValidatorContext context) {
         return (n != null);

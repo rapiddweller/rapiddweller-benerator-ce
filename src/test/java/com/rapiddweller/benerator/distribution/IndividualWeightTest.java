@@ -58,13 +58,12 @@ public class IndividualWeightTest extends GeneratorTest {
 	// helpers ---------------------------------------------------------------------------------------------------------
 
 	private static IndividualWeight<Integer> createWeight() {
-	    IndividualWeight<Integer> weight = new IndividualWeight<>() {
-			@Override
-			public double weight(Integer object) {
-				return object;
-			}
-		};
-	    return weight;
+        return new IndividualWeight<>() {
+            @Override
+            public double weight(Integer object) {
+                return object;
+            }
+        };
     }
 	
 }

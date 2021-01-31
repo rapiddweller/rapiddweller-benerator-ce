@@ -70,7 +70,7 @@ public class GenerateAndConsumeTaskTest extends AbstractTaskTest {
     // tests -----------------------------------------------------------------------------------------------------------
 
     @Test
-    public void testFlat() throws Exception {
+    public void testFlat() {
     	// setup
 		final ListConsumer consumer = new ListConsumer();
 		Expression<Consumer> consumerExpr = new ConstantExpression<>(consumer);

@@ -138,7 +138,6 @@ public class DescriptorRunner implements ResourceManager {
 	    		LOGGER.error("OutOfMemoryError! This probably happened because you activated profiling", t);
 	    	else
 	    		LOGGER.error("Error in Benerator execution", t);
-	    	return;
 		} finally {
 			context.close();
 		}

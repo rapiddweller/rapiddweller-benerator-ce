@@ -61,8 +61,9 @@ public abstract class CompositeTask extends AbstractTask {
 
     @Override
     public void close() {
-        for (Task subTask : subTasks)
+        for (Task subTask : subTasks) {
             IOUtil.close(subTask);
+        }
     }
 
 }

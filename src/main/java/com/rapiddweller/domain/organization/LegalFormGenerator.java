@@ -39,10 +39,12 @@ import com.rapiddweller.common.Encodings;
  */
 public class LegalFormGenerator extends WeightedDatasetCSVGenerator<String> {
 
-    private static final String PATH_PATTERN = "/com/rapiddweller/domain/organization/legalForm_{0}.csv";
+    private static final String PATH_PATTERN =
+            "/com/rapiddweller/domain/organization/legalForm_{0}.csv";
 
     public LegalFormGenerator(String dataset) {
-        super(String.class, PATH_PATTERN, dataset, DatasetUtil.REGION_NESTING, true, Encodings.UTF_8);
+        super(String.class, PATH_PATTERN, dataset, DatasetUtil.REGION_NESTING,
+                true, Encodings.UTF_8);
     }
 
 }
