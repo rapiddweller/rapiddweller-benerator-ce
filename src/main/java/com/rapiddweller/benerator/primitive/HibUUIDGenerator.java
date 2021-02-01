@@ -90,12 +90,10 @@ public class HibUUIDGenerator extends ThreadSafeNonNullGenerator<String> {
         short count = (short) counter.getAndIncrement();
         if (count < 0)
         	count += Short.MAX_VALUE + 1;
-        return new StringBuilder(36)
-            .append(ipJvm)
-            .append(NumberUtil.formatHex((short) (time >>> 32), 4)).append(separator)
-            .append(NumberUtil.formatHex((int) time, 8)).append(separator)
-            .append(NumberUtil.formatHex(count, 4))
-            .toString();
+        return ipJvm +
+                NumberUtil.formatHex((short) (time >>> 32), 4) + separator +
+                NumberUtil.formatHex((int) time, 8) + separator +
+                NumberUtil.formatHex(count, 4);
     }
 
     // java.lang.Object overrides --------------------------------------------------------------------------------------

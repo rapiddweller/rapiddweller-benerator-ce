@@ -83,7 +83,7 @@ public class CascadeStatementTest extends GeneratorTest {
 	@Test
 	public void testResolveToManyReference() {
 		CascadeStatement.Reference ref = new CascadeStatement.Reference("referee", new String[] { "id" });
-		DBForeignKeyConstraint fk = db.getDbMetaData().getTable("referer").getForeignKeyConstraint(new String[] { "referee_id" });
+		DBForeignKeyConstraint fk = db.getDbMetaData().getTable("referer").getForeignKeyConstraint("referee_id");
 		Entity fromEntity = createEntity("referee", "id", 2);
 		DataIterator<Entity> iterator = ref.resolveToManyReference(fromEntity, fk, db, context);
 		DataContainer<Entity> container = new DataContainer<>();
@@ -96,7 +96,7 @@ public class CascadeStatementTest extends GeneratorTest {
 	@Test
 	public void testResolveToOneReference() {
 		CascadeStatement.Reference ref = new CascadeStatement.Reference("referer", new String[] { "referee_id" });
-		DBForeignKeyConstraint fk = db.getDbMetaData().getTable("referer").getForeignKeyConstraint(new String[] { "referee_id" });
+		DBForeignKeyConstraint fk = db.getDbMetaData().getTable("referer").getForeignKeyConstraint("referee_id");
 		Entity fromEntity = createEntity("referer", "id", 4, "referee_id", 2);
 		DataIterator<Entity> iterator = ref.resolveToOneReference(fromEntity, fk, db, context);
 		DataContainer<Entity> container = new DataContainer<>();

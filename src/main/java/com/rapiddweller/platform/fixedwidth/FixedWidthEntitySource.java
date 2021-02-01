@@ -112,7 +112,7 @@ public class FixedWidthEntitySource extends FileBasedEntitySource {
     }
 
     /**
-     * @throws ParseException
+     * @throws ParseException if something went wrong while parsing
      * @deprecated use {@link #setColumns(String)}
      */
     @Deprecated

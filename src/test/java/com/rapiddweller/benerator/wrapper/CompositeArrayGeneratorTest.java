@@ -32,7 +32,6 @@ import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 
-import java.util.Arrays;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

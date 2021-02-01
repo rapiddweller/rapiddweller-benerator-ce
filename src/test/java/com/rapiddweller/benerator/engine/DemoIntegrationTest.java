@@ -31,7 +31,6 @@ import com.rapiddweller.common.FileUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -128,9 +127,15 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
     }
 
     @Test
-    public void DemoDbUser() throws IOException {
+    public void DemoMassTest() throws IOException {
         context.setContextUri("/demo/db");
-        parseAndExecuteFile("/demo/db/user.ben.xml");
+        parseAndExecuteFile("/demo/db/hsqlmem.masstest.ben.xml");
+    }
+
+    @Test
+    public void DemoH2MultiSchema() throws IOException {
+        context.setContextUri("/demo/db");
+        parseAndExecuteFile("/demo/db/h2.multischema.ben.xml");
     }
 
     @Test
@@ -152,11 +157,17 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
         parseAndExecuteFile("/demo/script/scriptfile.ben.xml");
     }
 
-    @Ignore
+
     @Test
-    public void ShopScript() throws IOException {
+    public void ShopScriptHSQLMem() throws IOException {
         context.setContextUri("/demo/shop");
-        parseAndExecuteFile("/demo/shop/multischema.ben.xml");
+        parseAndExecuteFile("/demo/shop/shop-hsqlmem.ben.xml");
+    }
+
+    @Test
+    public void ShopScriptH2Mem() throws IOException {
+        context.setContextUri("/demo/shop");
+        parseAndExecuteFile("/demo/shop/shop-h2.ben.xml");
     }
 
 }

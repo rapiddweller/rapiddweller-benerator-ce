@@ -34,9 +34,9 @@
         DROP SCHEMA IF EXISTS schema1 CASCADE;
         DROP SCHEMA IF EXISTS schema2 CASCADE;
         DROP SCHEMA IF EXISTS schema3 CASCADE;
-        create schema schema1;
-        create schema schema2;
-        create schema schema3;
+        CREATE SCHEMA schema1;
+        CREATE SCHEMA schema2;
+        CREATE SCHEMA schema3;
         CREATE SEQUENCE schema3.seq_id_gen START WITH 20;
         CREATE TABLE schema3.db_manufacturer (
         id SERIAL PRIMARY KEY,

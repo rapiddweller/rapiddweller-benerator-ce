@@ -62,7 +62,7 @@ public class ShopXMLTest extends GeneratorTest {
     private static final Logger logger =
             LogManager.getLogger(ShopXMLTest.class);
 
-    String schemaUri = "demo/shop/shop.xsd";
+    String schemaUri = "demo/shop/schema/shop.xsd";
     String contextUri = IOUtil.getParentUri(schemaUri);
 
     @Test

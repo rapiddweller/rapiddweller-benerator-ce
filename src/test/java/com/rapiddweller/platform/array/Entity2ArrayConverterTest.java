@@ -33,8 +33,6 @@ import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 
-import java.util.Arrays;
-
 /**
  * Tests the Entity2ArrayConverter.<br/>
  * <br/>

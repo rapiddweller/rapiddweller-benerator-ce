@@ -26,7 +26,6 @@
 
 package com.rapiddweller.benerator.script;
 
-import com.rapiddweller.benerator.factory.InstanceGeneratorFactory;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.converter.GraalValueConverter;
@@ -41,8 +40,6 @@ import org.graalvm.polyglot.Value;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

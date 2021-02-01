@@ -10,13 +10,13 @@
               tableFilter="db_.*"/>
 
     <execute target="db" onError="warn">
-        DROP TABLE IF EXISTS PLAYLIST;
+        DROP TABLE IF EXISTS "playlist";
         DROP TABLE IF EXISTS TRACK;
         DROP TABLE IF EXISTS PLAYLIST_TRACK;
     </execute>
 
     <execute target="db">
-        CREATE TABLE PLAYLIST (
+        CREATE TABLE "playlist" (
         PLAYLIST_ID int NOT NULL,
         name varchar(16) NOT NULL,
         PRIMARY KEY (PLAYLIST_ID)
@@ -36,7 +36,7 @@
         );
     </execute>
 
-    <generate type="PLAYLIST" count="20" consumer="db">
+    <generate type="playlist" count="20" consumer="db">
         <id name="PLAYLIST_ID" type="int" generator="IncrementGenerator"/>
     </generate>
 
@@ -45,12 +45,27 @@
     </generate>
 
     <generate type="PLAYLIST_TRACK" count="20" consumer="db">
-        <reference name="PLAYLIST_ID" type="int" source="db" targetType="PLAYLIST" unique="True"/>
+        <reference name="PLAYLIST_ID" type="int" source="db" targetType="playlist" unique="True"/>
         <reference name="TRACK_ID" type="int" source="db" targetType="TRACK" unique="True"/>
     </generate>
 
-    <iterate type="PLAYLIST" source="db" consumer="ConsoleExporter"/>
-    <iterate type="TRACK" source="db" consumer="ConsoleExporter"/>
-    <iterate type="PLAYLIST_TRACK" source="db" consumer="ConsoleExporter"/>
+    <iterate type="playlist" source="db" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="playlist.counter != 20">
+        <error>{ftl: ${playlist.counter} items instead of 20}</error>
+    </if>
+    <iterate type="TRACK" source="db" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="TRACK.counter != 20">
+        <error>{ftl: ${TRACK.counter} items instead of 20}</error>
+    </if>
+    <iterate type="PLAYLIST_TRACK" source="db" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="PLAYLIST_TRACK.counter != 20">
+        <error>{ftl: ${PLAYLIST_TRACK.counter instead of 20} items}</error>
+    </if>
 
 </setup>

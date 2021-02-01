@@ -142,10 +142,9 @@ public abstract class DBSystem extends AbstractStorageSystem {
         if (scale == 0) {
             return "1";
         }
-        StringBuilder builder = new StringBuilder("0.");
-        builder.append("0".repeat(Math.max(0, scale - 1)));
-        builder.append(1);
-        return builder.toString();
+        String builder = "0." + "0".repeat(Math.max(0, scale - 1)) +
+                1;
+        return builder;
     }
 
     private static TypeMapper driverTypeMapper() {

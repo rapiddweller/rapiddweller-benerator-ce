@@ -69,7 +69,7 @@ public class SourceFactory {
      *
      * @param uri              the uri of the CSV file
      * @param separator        the cell separator used in the CSV file
-     * @param encoding 
+     * @param encoding         encoding what the generator should use
      * @param ignoreEmptyLines flag whether to leave out empty lines
      * @return a generator of the desired characteristics
      */

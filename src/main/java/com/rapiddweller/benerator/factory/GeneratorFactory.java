@@ -242,7 +242,7 @@ public abstract class GeneratorFactory {
      * @param minLength the minimum length of the products
      * @param maxLength the maximum length of the products
      * @return a generator of the desired characteristics
-     * @throws ConfigurationError 
+     * @throws ConfigurationError if something is wrong configured
      */
     public NonNullGenerator<String> createRegexStringGenerator(String pattern, int minLength, Integer maxLength, 
     		Uniqueness uniqueness) throws ConfigurationError {

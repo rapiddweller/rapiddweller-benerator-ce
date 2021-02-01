@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator;
 
-import java.util.Arrays;
-
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.PropertyMessage;
 import com.rapiddweller.common.ArrayUtil;

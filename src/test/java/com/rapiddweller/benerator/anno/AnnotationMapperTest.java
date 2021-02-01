@@ -103,7 +103,7 @@ public class AnnotationMapperTest {
 	
 	@Test
 	public void testUniqueMethod() throws Exception {
-	    Method stringMethod = getClass().getDeclaredMethod("uniqueMethod", new Class[] { String.class });
+	    Method stringMethod = getClass().getDeclaredMethod("uniqueMethod", String.class);
 	    @SuppressWarnings("resource")
 		BeneratorContext context = new DefaultBeneratorContext();
 		AnnotationMapper mapper = new AnnotationMapper(context.getDataModel(), new DefaultPathResolver());
@@ -346,7 +346,7 @@ public class AnnotationMapperTest {
 	
 	private void checkMethod(String methodName, Class<?> methodArgType, String expectedType, Object ... details)
             throws NoSuchMethodException {
-	    Method stringMethod = getClass().getDeclaredMethod(methodName, new Class[] { methodArgType });
+	    Method stringMethod = getClass().getDeclaredMethod(methodName, methodArgType);
 		@SuppressWarnings("resource")
 		DefaultBeneratorContext context = new DefaultBeneratorContext();
 	    AnnotationMapper mapper = new AnnotationMapper(context.getDataModel(), new DefaultPathResolver());

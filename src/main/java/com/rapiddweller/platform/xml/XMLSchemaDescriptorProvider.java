@@ -625,7 +625,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
      *   <xs:element name="variable" type="generator-setup"/>
      * </pre>
      *
-     * @param element
+     * @param element supported elements
      */
     private TypeDescriptor parseTopLevelElementWithType(Element element) {
         String name = element.getAttribute(NAME);

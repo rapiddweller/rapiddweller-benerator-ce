@@ -134,7 +134,7 @@ public class DBSnapshotTool {
             db.setDynamicQuerySupported(false);
 
             // create exporter
-            if (DBUNIT_FORMAT.equals(format.toLowerCase()))
+            if (DBUNIT_FORMAT.equalsIgnoreCase(format))
                 exporter = new DbUnitEntityExporter(filename, encoding);
             else if (XLS_FORMAT.equals(format))
                 exporter = new XLSEntityExporter(filename);
@@ -146,7 +146,7 @@ public class DBSnapshotTool {
                 throw new IllegalArgumentException("Unknown format: " + format);
 
             // export data
-            List<TypeDescriptor> descriptors = Arrays.asList(db.getTypeDescriptors());
+            TypeDescriptor[] descriptors = db.getTypeDescriptors();
             logger.info("Starting export");
             for (TypeDescriptor descriptor : descriptors) {
                 String note = "Exporting table " + descriptor.getName();

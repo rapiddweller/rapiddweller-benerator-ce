@@ -34,7 +34,6 @@
     <comment>setting default values</comment>
     <setting name="stage" default="development"/>
     <setting name="database" default="h2"/>
-    <setting name="dbCatalog" default=""/>
     <setting name="dbSchema" default=""/>
     <setting name="dbPassword" default=""/>
     <setting name="dbBatch" default="false"/>
@@ -54,31 +53,31 @@
     <echo>{ftl:JDBC URL: ${dbUrl}}</echo>
 
     <!--  TODO use environment file -->
-    <comment>define a database that will be referred by the id 'db' subsequently</comment>
-    <database id="db" url="{dbUrl}" driver="{dbDriver}" schema="{dbSchema}" catalog="{dbCatalog}"
+    <echo>define a database that will be referred by the id 'db' subsequently</echo>
+    <database id="db" url="{dbUrl}" driver="{dbDriver}" schema="{dbSchema}"
               user="{dbUser}" password="{dbPassword}" batch="{dbBatch}"/>
 
-    <comment>drop the current tables/sequences if they exist and recreate them</comment>
+    <echo>drop the current tables/sequences if they exist and recreate them</echo>
     <execute uri="{ftl:${database}/drop_tables.${database}.sql}" target="db" onError="ignore"/>
     <execute uri="{ftl:${database}/create_tables.${database}.sql}" target="db"/>
 
     <bean id="idGen" spec="new IncrementGenerator(1000)"/>
 
-    <comment>Creating a valid base data set for regression testing by importing a DbUnit file</comment>
+    <echo>Creating a valid base data set for regression testing by importing a DbUnit file</echo>
     <iterate source="shop.dbunit.xml" consumer="db"/>
 
-    <comment>Importing some more predefined products from a CSV file</comment>
+    <echo>Importing some more predefined products from a CSV file</echo>
     <iterate source="products.import.csv" type="db_product" encoding="utf-8" consumer="db"/>
 
-    <comment>You could import them from a fixed column width file as well, e.g.
+    <echo>You could import them from a fixed column width file as well, e.g.
         iterate name="db_product" source="products.import.fcw"
         pattern="ean_code[13],name[30],category_id[9],price[8r0],manufacturer[30]" consumer="db" /
-    </comment>
+    </echo>
 
-    <comment>
+    <echo>
         Creating products of random attributes and category and exporting them to
         the database as well as to a fixed column width file
-    </comment>
+    </echo>
     <generate type="db_product" count="{product_count}" consumer="db">
         <id name="ean_code" generator="new EANGenerator(true)"/>
         <reference name="category_id" targetType="db_category" source="db" distribution="random"/>
@@ -132,11 +131,11 @@
     <comment>create order items</comment>
     <generate type="db_order_item"
               count="{customer_count * orders_per_customer * items_per_order}" consumer="db">
-        <variable name="product" source="db" selector="select ean_code, price from db_product"
+        <variable name="product" source="db" selector="select ean_code, price from &quot;db_product&quot;"
                   distribution="cumulated"/>
         <id name="id" generator="idGen"/>
         <attribute name="number_of_items" min="1" max="27" distribution="cumulated"/>
-        <reference name="order_id" source="db" selector="select id from db_order where id &gt; 1" cyclic="true"/>
+        <reference name="order_id" source="db" selector="select id from &quot;db_order&quot; where id &gt; 1" cyclic="true"/>
         <reference name="product_ean_code" script="product[0]"/>
         <attribute name="total_price" script="product[1] * db_order_item.number_of_items"/>
     </generate>
@@ -144,7 +143,7 @@
     <comment>Update order data, calculating the total sum of each order</comment>
     <iterate source="db" type="db_order" consumer="db.updater()">
         <attribute name="total_price" source="db"
-                   selector="{{ftl:select sum(total_price) from db_order_item where order_id = ${db_order.id}}}"
+                   selector="{{ftl:select sum(total_price) from &quot;db_order_item&quot; where order_id = ${db_order.id}}}"
                    cyclic="true"/>
     </iterate>
 

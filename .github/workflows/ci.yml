@@ -274,8 +274,9 @@ jobs:
         run: chmod -R 777 $BENERATOR_HOME/bin/
       - name: check if benerator is setup correctly
         run: benerator --version
-      - run: benerator $BENERATOR_HOME/demo/db/user.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/db/hsqlmem.masstest.ben.xml
       - run: benerator $BENERATOR_HOME/demo/db/compositekey.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/db/h2.multischema.ben.xml
 
   E2ET_files-adoptopenjdk11:
     runs-on: ubuntu-latest

@@ -104,14 +104,14 @@ public class CityTest {
     public void testSetZipCodes() {
         City city = new City(new State(), "Name", "Addition", new String[]{"foo", "foo", "foo"}, "Area Code");
         String[] stringArray = new String[]{"foo", "foo", "foo"};
-        city.setZipCodes(stringArray);
+        city.setPostalCodes(stringArray);
         assertSame(stringArray, city.getPostalCodes());
     }
 
     @Test
     public void testAddZipCode() {
         City city = new City(new State(), "Name", "Addition", new String[]{"foo", "foo", "foo"}, "Area Code");
-        city.addZipCode("21654");
+        city.addPostalCode("21654");
         assertEquals(4, city.getPostalCodes().length);
     }
 

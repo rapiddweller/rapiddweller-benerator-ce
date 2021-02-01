@@ -80,11 +80,10 @@ public class BankAccountGenerator extends CompositeGenerator<BankAccount>
     }
 
     private String createIban(Bank bank, String accountNumber) {
-        StringBuilder builder = new StringBuilder(countryCode);
-        builder.append("00");
-        builder.append(bank.getBankCode());
-        builder.append(StringUtil.padLeft(accountNumber, 10, '0'));
-        return IBANUtil.fixChecksum(builder.toString());
+        String builder = countryCode + "00" +
+                bank.getBankCode() +
+                StringUtil.padLeft(accountNumber, 10, '0');
+        return IBANUtil.fixChecksum(builder);
     }
 
 }

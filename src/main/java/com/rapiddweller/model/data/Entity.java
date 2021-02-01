@@ -61,7 +61,7 @@ public class Entity implements Composite {
 
     /**
      * @param descriptor             the name of the entity, it may be null
-     * @param componentKeyValuePairs
+     * @param componentKeyValuePairs content of Entity column and value
      */
     public Entity(ComplexTypeDescriptor descriptor,
                   Object... componentKeyValuePairs) {

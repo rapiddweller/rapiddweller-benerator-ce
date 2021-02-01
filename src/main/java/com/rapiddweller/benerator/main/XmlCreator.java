@@ -51,7 +51,7 @@ public class XmlCreator {
     private static final Logger logger = LogManager.getLogger(XmlCreator.class);
 
     /**
-     * @param args
+     * @param args additional args you can add
      */
     public static void main(String[] args) {
         if (args.length < 3) {
