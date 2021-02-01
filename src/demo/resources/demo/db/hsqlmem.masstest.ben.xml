@@ -27,8 +27,7 @@
         id int NOT NULL,
         name varchar(30) NOT NULL,
         role_fk int NOT NULL,
-        PRIMARY KEY (id),
-        CONSTRAINT user_role_fk FOREIGN KEY (role_fk) REFERENCES db_role (id)
+        PRIMARY KEY (id)
         );
         CREATE INDEX user_role_fki on db_user (role_fk);
 
@@ -48,8 +47,8 @@
         <id name="id" type="int" generator="IncrementGenerator"/>
     </generate>
 
-    <generate type="db_user" consumer="db" count="100000" pageSize="1000">
-        <id name="id" type="int" generator="LocalSequenceGenerator"/>
+    <generate type="db_user" consumer="db" count="100000" pageSize="100000">
+        <id name="id" type="int" generator="IncrementGenerator"/>
         <attribute name="index" generator="IncrementGenerator"/>
         <reference name="role_fk" source="db" targetType="DB_ROLE" distribution="random"/>
     </generate>
