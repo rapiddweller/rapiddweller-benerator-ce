@@ -77,7 +77,7 @@ public class GraalScript implements Script {
     private void migrateBeneratorContext2GraalVM(Context context) {
         // add benerator context to graalvm script context
         for (Map.Entry<String, Object> set : context.entrySet()) {
-            
+            polyglotCtx.getBindings(this.language).putMember(set.getKey(), set.getValue());
             //TODO: in complex entity structures there is an issue with this implementation, maybe a switch would be helpful and definitely additional tests.
             /*
             if (set.getValue() != null && set.getValue().getClass().equals(Entity.class)) {
