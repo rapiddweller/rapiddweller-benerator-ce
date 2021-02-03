@@ -29,14 +29,34 @@ package com.rapiddweller.benerator.dataset;
 import com.rapiddweller.benerator.Generator;
 
 /**
- * Interface for dataset related {@link Generator}s 
+ * Interface for dataset related {@link Generator}s
  * which can generate data with and for dedicated sub sets.<br/><br/>
  * Created: 09.03.2011 14:00:02
- * @since 0.6.6
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public interface DatasetBasedGenerator<E> extends Generator<E> {
-	String getNesting();
-	String getDataset();
-	E generateForDataset(String dataset);
+  /**
+   * Gets nesting.
+   *
+   * @return the nesting
+   */
+  String getNesting();
+
+  /**
+   * Gets dataset.
+   *
+   * @return the dataset
+   */
+  String getDataset();
+
+  /**
+   * Generate for dataset e.
+   *
+   * @param dataset the dataset
+   * @return the e
+   */
+  E generateForDataset(String dataset);
 }

@@ -26,109 +26,133 @@
 
 package com.rapiddweller.benerator.sample;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link StateGenerator}.<br/>
  * <br/>
  * Created at 17.07.2009 05:56:28
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class StateGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void testDeterministicSequence() {
-		StateGenerator<Integer> generator = new StateGenerator<>(Integer.class);
-		generator.addTransition(null, 1, 1.);
-		generator.addTransition(1, 2, 1.);
-		generator.addTransition(2, null, 1.);
-		generator.init(context);
-		expectGeneratedSequence(generator, 1, 2).withCeasedAvailability();
-	}
-	
-	@Test
-	public void testDeterministicIntSequenceByStringSpec() {
-		StateGenerator<Integer> generator = new StateGenerator<>("null->1,1->2,2->null");
-		generator.init(context);
-		expectGeneratedSequence(generator, 1, 2).withCeasedAvailability();
-	}
-	
-	@Test
-	public void testDeterministicStringSequenceByStringSpec() {
-		StateGenerator<String> generator = new StateGenerator<>("null->'1', '1'->'2', '2'->null");
-		generator.init(context);
-		expectGeneratedSequence(generator, "1", "2").withCeasedAvailability();
-	}
-	
-	/** Tests a setup that generates Sequences (1, 2)*, e.g. (1, 2), (1, 2, 1, 2), (1, 2, 1, 2, 1, 2), ... */
-	@Test
-	public void testRandomSequence() {
-		StateGenerator<Integer> generator = new StateGenerator<>(Integer.class);
-		generator.addTransition(null, 1, 1.);
-		generator.addTransition(1, 2, 1.);
-		generator.addTransition(2, 1, 0.5);
-		generator.addTransition(2, null, 0.5);
-		generator.init(context);
-		for (int n = 0; n < 10; n++) {
-			List<Integer> products = GeneratorUtil.allProducts(generator);
-			assertEquals(0, products.size() % 2);
-			for (int i = 0; i < products.size(); i++)
+  /**
+   * Test deterministic sequence.
+   */
+  @Test
+  public void testDeterministicSequence() {
+    StateGenerator<Integer> generator = new StateGenerator<>(Integer.class);
+    generator.addTransition(null, 1, 1.);
+    generator.addTransition(1, 2, 1.);
+    generator.addTransition(2, null, 1.);
+    generator.init(context);
+    expectGeneratedSequence(generator, 1, 2).withCeasedAvailability();
+  }
 
-				assertEquals((1 + (i % 2)), products.get(i).intValue());
-			generator.reset();
-		}
-	}
-	
-	/** Tests a setup that generates Sequences (1, 2)*, e.g. (1, 2), (1, 2, 1, 2), (1, 2, 1, 2, 1, 2), ... */
-	@Test
-	public void testRandomSequenceByStringSpec() {
-		StateGenerator<String> generator = new StateGenerator<>("null->1,1->2,2->1^0.5,2->null^0.5");
-		generator.init(context);
-		for (int n = 0; n < 10; n++) {
-			List<String> products = GeneratorUtil.allProducts(generator);
-			assertEquals(0, products.size() % 2);
-			for (int i = 0; i < products.size(); i++) {
-				assertEquals(1 + (i % 2), products.get(i));
-			}
-			generator.reset();
-		}
-	}
-	
-	/** Tests a setup that generates Sequences 1*, e.g. (1), (1, 1), (1, 1, 1), ... */
-	@Test
-	public void testRecursion() {
-		StateGenerator<Integer> generator = new StateGenerator<>(Integer.class);
-		generator.addTransition(null, 1, 1.);
-		generator.addTransition(1, 1, 0.5);
-		generator.addTransition(1, null, 0.5);
-		generator.init(context);
-		for (int n = 0; n < 10; n++) {
-			List<Integer> products = GeneratorUtil.allProducts(generator);
-			for (Integer product : products) assertEquals(1, product.intValue());
-			generator.reset();
-		}
-	}
-	
-	@Test(expected = InvalidGeneratorSetupException.class)
-	public void testNoInitialState() {
-		StateGenerator<Integer> generator = new StateGenerator<>(Integer.class);
-		generator.addTransition(1, 2, 0.6);
-		generator.init(context);
-	}
-	
-	@Test(expected = InvalidGeneratorSetupException.class)
-	public void testNoFinalState() {
-		StateGenerator<Integer> generator = new StateGenerator<>(Integer.class);
-		generator.addTransition(null, 1, 0.6);
-		generator.init(context);
-	}
-	
+  /**
+   * Test deterministic int sequence by string spec.
+   */
+  @Test
+  public void testDeterministicIntSequenceByStringSpec() {
+    StateGenerator<Integer> generator = new StateGenerator<>("null->1,1->2,2->null");
+    generator.init(context);
+    expectGeneratedSequence(generator, 1, 2).withCeasedAvailability();
+  }
+
+  /**
+   * Test deterministic string sequence by string spec.
+   */
+  @Test
+  public void testDeterministicStringSequenceByStringSpec() {
+    StateGenerator<String> generator = new StateGenerator<>("null->'1', '1'->'2', '2'->null");
+    generator.init(context);
+    expectGeneratedSequence(generator, "1", "2").withCeasedAvailability();
+  }
+
+  /**
+   * Tests a setup that generates Sequences (1, 2)*, e.g. (1, 2), (1, 2, 1, 2), (1, 2, 1, 2, 1, 2), ...
+   */
+  @Test
+  public void testRandomSequence() {
+    StateGenerator<Integer> generator = new StateGenerator<>(Integer.class);
+    generator.addTransition(null, 1, 1.);
+    generator.addTransition(1, 2, 1.);
+    generator.addTransition(2, 1, 0.5);
+    generator.addTransition(2, null, 0.5);
+    generator.init(context);
+    for (int n = 0; n < 10; n++) {
+      List<Integer> products = GeneratorUtil.allProducts(generator);
+      assertEquals(0, products.size() % 2);
+      for (int i = 0; i < products.size(); i++) {
+        assertEquals((1 + (i % 2)), products.get(i).intValue());
+      }
+      generator.reset();
+    }
+  }
+
+  /**
+   * Tests a setup that generates Sequences (1, 2)*, e.g. (1, 2), (1, 2, 1, 2), (1, 2, 1, 2, 1, 2), ...
+   */
+  @Test
+  public void testRandomSequenceByStringSpec() {
+    StateGenerator<String> generator = new StateGenerator<>("null->1,1->2,2->1^0.5,2->null^0.5");
+    generator.init(context);
+    for (int n = 0; n < 10; n++) {
+      List<String> products = GeneratorUtil.allProducts(generator);
+      assertEquals(0, products.size() % 2);
+      for (int i = 0; i < products.size(); i++) {
+        assertEquals(1 + (i % 2), products.get(i));
+      }
+      generator.reset();
+    }
+  }
+
+  /**
+   * Tests a setup that generates Sequences 1*, e.g. (1), (1, 1), (1, 1, 1), ...
+   */
+  @Test
+  public void testRecursion() {
+    StateGenerator<Integer> generator = new StateGenerator<>(Integer.class);
+    generator.addTransition(null, 1, 1.);
+    generator.addTransition(1, 1, 0.5);
+    generator.addTransition(1, null, 0.5);
+    generator.init(context);
+    for (int n = 0; n < 10; n++) {
+      List<Integer> products = GeneratorUtil.allProducts(generator);
+      for (Integer product : products) {
+        assertEquals(1, product.intValue());
+      }
+      generator.reset();
+    }
+  }
+
+  /**
+   * Test no initial state.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testNoInitialState() {
+    StateGenerator<Integer> generator = new StateGenerator<>(Integer.class);
+    generator.addTransition(1, 2, 0.6);
+    generator.init(context);
+  }
+
+  /**
+   * Test no final state.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testNoFinalState() {
+    StateGenerator<Integer> generator = new StateGenerator<>(Integer.class);
+    generator.addTransition(null, 1, 0.6);
+    generator.init(context);
+  }
+
 }

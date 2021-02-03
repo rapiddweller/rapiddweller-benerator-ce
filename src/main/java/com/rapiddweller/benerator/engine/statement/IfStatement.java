@@ -26,62 +26,94 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import java.io.Closeable;
-import java.io.IOException;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.script.Expression;
 
+import java.io.Closeable;
+import java.io.IOException;
+
 /**
- * {@link CompositeStatement} that executes it parts 
+ * {@link CompositeStatement} that executes it parts
  * only if a condition is matched.<br/><br/>
  * Created: 19.02.2010 09:13:30
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class IfStatement extends ConditionStatement {
-	
-	private Statement thenStatement;
-	private Statement elseStatement;
 
-	public IfStatement(Expression<Boolean> condition) {
-	    super(condition);
+  private Statement thenStatement;
+  private Statement elseStatement;
+
+  /**
+   * Instantiates a new If statement.
+   *
+   * @param condition the condition
+   */
+  public IfStatement(Expression<Boolean> condition) {
+    super(condition);
+  }
+
+  /**
+   * Instantiates a new If statement.
+   *
+   * @param condition     the condition
+   * @param thenStatement the then statement
+   */
+  public IfStatement(Expression<Boolean> condition, Statement thenStatement) {
+    this(condition, thenStatement, null);
+  }
+
+  /**
+   * Instantiates a new If statement.
+   *
+   * @param condition     the condition
+   * @param thenStatement the then statement
+   * @param elseStatement the else statement
+   */
+  public IfStatement(Expression<Boolean> condition, Statement thenStatement, Statement elseStatement) {
+    super(condition);
+    setThenStatement(thenStatement);
+    setElseStatement(elseStatement);
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    if (condition.evaluate(context)) {
+      return thenStatement.execute(context);
+    } else if (elseStatement != null) {
+      return elseStatement.execute(context);
     }
+    return true;
+  }
 
-	public IfStatement(Expression<Boolean> condition, Statement thenStatement) {
-	    this(condition, thenStatement, null);
+  /**
+   * Sets then statement.
+   *
+   * @param thenStatement the then statement
+   */
+  public void setThenStatement(Statement thenStatement) {
+    this.thenStatement = thenStatement;
+  }
+
+  /**
+   * Sets else statement.
+   *
+   * @param elseStatement the else statement
+   */
+  public void setElseStatement(Statement elseStatement) {
+    this.elseStatement = elseStatement;
+  }
+
+  @Override
+  public void close() throws IOException {
+    if (thenStatement instanceof Closeable) {
+      ((Closeable) thenStatement).close();
     }
-
-	public IfStatement(Expression<Boolean> condition, Statement thenStatement, Statement elseStatement) {
-	    super(condition);
-	    setThenStatement(thenStatement);
-	    setElseStatement(elseStatement);
+    if (elseStatement instanceof Closeable) {
+      ((Closeable) elseStatement).close();
     }
-
-    @Override
-	public boolean execute(BeneratorContext context) {
-	    if (condition.evaluate(context))
-	    	return thenStatement.execute(context);
-	    else if (elseStatement != null)
-	    	return elseStatement.execute(context);
-	    return true;
-    }
-
-	public void setThenStatement(Statement thenStatement) {
-	    this.thenStatement = thenStatement;
-    }
-
-	public void setElseStatement(Statement elseStatement) {
-	    this.elseStatement = elseStatement;
-    }
-
-	@Override
-	public void close() throws IOException {
-		if (thenStatement instanceof Closeable)
-			((Closeable) thenStatement).close();
-		if (elseStatement instanceof Closeable)
-			((Closeable) elseStatement).close();
-	}
+  }
 
 }

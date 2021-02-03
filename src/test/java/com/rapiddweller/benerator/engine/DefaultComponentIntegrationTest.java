@@ -26,58 +26,77 @@
 
 package com.rapiddweller.benerator.engine;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Tests the &lt;defaultComponents&gt; element.<br/><br/>
  * Created: 23.05.2011 09:37:37
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class DefaultComponentIntegrationTest extends BeneratorIntegrationTest {
 
-	@Test
-	public void testStandardIntegration() throws Exception {
-		checkFile("com/rapiddweller/benerator/engine/defaultComponent-std.ben.xml");
-	}
-	
-	@Test
-	public void testDbIntegration() throws Exception {
-		checkFile("com/rapiddweller/benerator/engine/defaultComponent-db.ben.xml");
-	}
+  /**
+   * Test standard integration.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testStandardIntegration() throws Exception {
+    checkFile("com/rapiddweller/benerator/engine/defaultComponent-std.ben.xml");
+  }
 
-	@SuppressWarnings("unchecked")
-	public void checkFile(String uri) throws IOException {
-		ConsumerMock consumer = new ConsumerMock(true);
-		context.setGlobal("cons", consumer);
-		DescriptorRunner runner = new DescriptorRunner(uri, context);
-		try {
-			runner.run();
-			List<Entity> products = (List<Entity>) consumer.getProducts();
-			long currentMillies = System.currentTimeMillis();
-			for (Entity product : products) {
-				// check created_by
-				String createdBy = (String) product.get("created_by");
-				assertEquals("Bob", createdBy);
-				// check created_at
-				Date creationDate = (Date) product.get("created_at");
-				assertNotNull(creationDate);
-				long productMillies = creationDate.getTime();
-				assertTrue(Math.abs(productMillies - currentMillies) < 3000);
-			}
-		} finally {
-			IOUtil.close(runner);
-		}
-	}
-	
+  /**
+   * Test db integration.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testDbIntegration() throws Exception {
+    checkFile("com/rapiddweller/benerator/engine/defaultComponent-db.ben.xml");
+  }
+
+  /**
+   * Check file.
+   *
+   * @param uri the uri
+   * @throws IOException the io exception
+   */
+  @SuppressWarnings("unchecked")
+  public void checkFile(String uri) throws IOException {
+    ConsumerMock consumer = new ConsumerMock(true);
+    context.setGlobal("cons", consumer);
+    DescriptorRunner runner = new DescriptorRunner(uri, context);
+    try {
+      runner.run();
+      List<Entity> products = (List<Entity>) consumer.getProducts();
+      long currentMillies = System.currentTimeMillis();
+      for (Entity product : products) {
+        // check created_by
+        String createdBy = (String) product.get("created_by");
+        assertEquals("Bob", createdBy);
+        // check created_at
+        Date creationDate = (Date) product.get("created_at");
+        assertNotNull(creationDate);
+        long productMillies = creationDate.getTime();
+        assertTrue(Math.abs(productMillies - currentMillies) < 3000);
+      }
+    } finally {
+      IOUtil.close(runner);
+    }
+  }
+
 }

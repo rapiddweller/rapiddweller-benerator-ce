@@ -33,42 +33,67 @@ import com.rapiddweller.common.ArrayUtil;
 /**
  * Keeps an array of generators, of which it combines the products to an array.<br/><br/>
  * Created: 28.07.2010 19:10:53
- * @since 0.1
+ *
+ * @param <S> the type parameter
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class MultiSourceArrayGenerator<S> extends GeneratorProxy<S[]> {
 
-	private final Class<S> componentType;
-    private boolean unique;
-    private Generator<? extends S>[] sources;
-    
-	@SuppressWarnings("unchecked")
-	public MultiSourceArrayGenerator(Class<S> componentType, boolean unique, Generator<? extends S>... sources) {
-		super(ArrayUtil.arrayType(componentType));
-	    this.componentType = componentType;
-	    this.unique = unique;
-	    this.sources = sources;
-    }
+  private final Class<S> componentType;
+  private boolean unique;
+  private Generator<? extends S>[] sources;
 
-	public void setUnique(boolean unique) {
-    	this.unique = unique;
+  /**
+   * Instantiates a new Multi source array generator.
+   *
+   * @param componentType the component type
+   * @param unique        the unique
+   * @param sources       the sources
+   */
+  @SuppressWarnings("unchecked")
+  public MultiSourceArrayGenerator(Class<S> componentType, boolean unique, Generator<? extends S>... sources) {
+    super(ArrayUtil.arrayType(componentType));
+    this.componentType = componentType;
+    this.unique = unique;
+    this.sources = sources;
+  }
+
+  /**
+   * Sets unique.
+   *
+   * @param unique the unique
+   */
+  public void setUnique(boolean unique) {
+    this.unique = unique;
+  }
+
+  /**
+   * Get sources generator [ ].
+   *
+   * @return the generator [ ]
+   */
+  public Generator<? extends S>[] getSources() {
+    return sources;
+  }
+
+  /**
+   * Sets sources.
+   *
+   * @param sources the sources
+   */
+  public void setSources(Generator<? extends S>[] sources) {
+    this.sources = sources;
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    if (unique) {
+      super.setSource(new UniqueMultiSourceArrayGenerator<>(componentType, sources));
+    } else {
+      super.setSource(new SimpleMultiSourceArrayGenerator<>(componentType, sources));
     }
-	
-	public Generator<? extends S>[] getSources() {
-		return sources;
-	}
-	
-	public void setSources(Generator<? extends S>[] sources) {
-		this.sources = sources;
-	}
-    
-    @Override
-    public synchronized void init(GeneratorContext context) {
-		if (unique)
-			super.setSource(new UniqueMultiSourceArrayGenerator<>(componentType, sources));
-		else
-			super.setSource(new SimpleMultiSourceArrayGenerator<>(componentType, sources));
-	    super.init(context);
-    }
-    
+    super.init(context);
+  }
+
 }

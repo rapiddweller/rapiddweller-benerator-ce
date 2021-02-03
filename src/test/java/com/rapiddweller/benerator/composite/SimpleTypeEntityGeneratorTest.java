@@ -32,33 +32,37 @@ import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests the {@link SimpleTypeEntityGenerator}.<br/><br/>
  * Created at 13.05.2008 21:16:33
- * @since 0.5.4
+ *
  * @author Volker Bergmann
+ * @since 0.5.4
  */
 public class SimpleTypeEntityGeneratorTest extends ModelTest {
 
-	@Test
-	public void test() {
-		SimpleTypeEntityGenerator generator = new SimpleTypeEntityGenerator(new ConstantGenerator<>("hi"), createComplexType());
-		Entity entity = GeneratorUtil.generateNonNull(generator);
-		assertNotNull(entity);
-		String content = (String) entity.getComponent(ComplexTypeDescriptor.__SIMPLE_CONTENT);
-		assertNotNull(content);
-		generator.close();
-	}
-	
-	private ComplexTypeDescriptor createComplexType() {
-		ComplexTypeDescriptor type = createComplexType(null);
-		SimpleTypeDescriptor content = createSimpleType(null, "string");
-		type.addComponent(createPart(ComplexTypeDescriptor.__SIMPLE_CONTENT, content));
-		return type;
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    SimpleTypeEntityGenerator generator = new SimpleTypeEntityGenerator(new ConstantGenerator<>("hi"), createComplexType());
+    Entity entity = GeneratorUtil.generateNonNull(generator);
+    assertNotNull(entity);
+    String content = (String) entity.getComponent(ComplexTypeDescriptor.__SIMPLE_CONTENT);
+    assertNotNull(content);
+    generator.close();
+  }
+
+  private ComplexTypeDescriptor createComplexType() {
+    ComplexTypeDescriptor type = createComplexType(null);
+    SimpleTypeDescriptor content = createSimpleType(null, "string");
+    type.addComponent(createPart(ComplexTypeDescriptor.__SIMPLE_CONTENT, content));
+    return type;
+  }
+
 }

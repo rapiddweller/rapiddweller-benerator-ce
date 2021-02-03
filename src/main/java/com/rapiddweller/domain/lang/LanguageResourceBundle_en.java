@@ -34,15 +34,14 @@ package com.rapiddweller.domain.lang;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class LanguageResourceBundle_en extends LanguageResourceBundle {
 
-    @Override
-    protected Object[][] getContents() {
-        return new Object[][] {
-                {"definite.article.singular.0", "the"},
-                {"indefinite.article.singular.0", "a"}
-        };
-    }
+  @Override
+  protected Object[][] getContents() {
+    return new Object[][] {
+        {"definite.article.singular.0", "the"},
+        {"indefinite.article.singular.0", "a"}
+    };
+  }
 
 }

@@ -34,11 +34,17 @@ import java.lang.annotation.Target;
 /**
  * Specifies which {@link com.rapiddweller.benerator.Generator} to use when generating data for the annotated element.<br/><br/>
  * Created: 02.05.2010 18:52:02
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.CONSTRUCTOR } )
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.CONSTRUCTOR})
 public @interface Generator {
-	String value();
+  /**
+   * Value string.
+   *
+   * @return the string
+   */
+  String value();
 }

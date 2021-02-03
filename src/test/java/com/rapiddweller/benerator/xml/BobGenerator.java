@@ -31,18 +31,19 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 /**
  * Generates JavaBeans with 'name' property of value "Bob" for testing.<br/><br/>
  * Created: 29.03.2008 08:26:22
+ *
  * @author Volker Bergmann
  */
 public class BobGenerator extends ThreadSafeNonNullGenerator<Bob> {
 
-    @Override
-	public Class<Bob> getGeneratedType() {
-	    return Bob.class;
-    }
+  @Override
+  public Class<Bob> getGeneratedType() {
+    return Bob.class;
+  }
 
-	@Override
-	public Bob generate() {
-        return new Bob();
-    }
+  @Override
+  public Bob generate() {
+    return new Bob();
+  }
 
 }

@@ -44,179 +44,282 @@ import java.util.Locale;
  */
 public class City {
 
-    private static final Escalator escalator = new LoggerEscalator();
-    private static final RandomVarLengthStringGenerator localNumberGenerator;
+  private static final Escalator escalator = new LoggerEscalator();
+  private static final RandomVarLengthStringGenerator localNumberGenerator;
 
-    static {
-        localNumberGenerator =
-                new RandomVarLengthStringGenerator("\\d", 7, 8, 1);
-        localNumberGenerator.init(null);
+  static {
+    localNumberGenerator =
+        new RandomVarLengthStringGenerator("\\d", 7, 8, 1);
+    localNumberGenerator.init(null);
+  }
+
+  private final String name;
+  private String nameExtension;
+  private String[] postalCodes;
+  private String areaCode;
+  private State state;
+  private Locale language;
+  private int population;
+
+  /**
+   * Instantiates a new City.
+   *
+   * @param state       the state
+   * @param name        the name
+   * @param addition    the addition
+   * @param postalCodes the postal codes
+   * @param areaCode    the area code
+   */
+  public City(State state, String name, String addition, String[] postalCodes,
+              String areaCode) {
+    if (areaCode == null) {
+      throw new IllegalArgumentException("Area Code is null for " + name);
     }
+    this.state = state;
+    this.name = name;
+    this.nameExtension = addition;
+    this.postalCodes = (postalCodes != null ? postalCodes : new String[0]);
+    this.areaCode = areaCode;
+  }
 
-    private final String name;
-    private String nameExtension;
-    private String[] postalCodes;
-    private String areaCode;
-    private State state;
-    private Locale language;
-    private int population;
+  /**
+   * Gets name extension.
+   *
+   * @return the name extension
+   */
+  public String getNameExtension() {
+    return nameExtension;
+  }
 
-    public City(State state, String name, String addition, String[] postalCodes,
-                String areaCode) {
-        if (areaCode == null) {
-            throw new IllegalArgumentException("Area Code is null for " + name);
-        }
-        this.state = state;
-        this.name = name;
-        this.nameExtension = addition;
-        this.postalCodes = (postalCodes != null ? postalCodes : new String[0]);
-        this.areaCode = areaCode;
+  /**
+   * Sets name extension.
+   *
+   * @param nameExtension the name extension
+   */
+  public void setNameExtension(String nameExtension) {
+    this.nameExtension = nameExtension;
+  }
+
+  /**
+   * Get postal codes string [ ].
+   *
+   * @return the string [ ]
+   */
+  public String[] getPostalCodes() {
+    return postalCodes;
+  }
+
+  /**
+   * Sets postal codes.
+   *
+   * @param postalCodes the postal codes
+   */
+  public void setPostalCodes(String[] postalCodes) {
+    this.postalCodes = postalCodes;
+  }
+
+  /**
+   * Add postal code.
+   *
+   * @param postalCode the postal code
+   */
+  public void addPostalCode(String postalCode) {
+    postalCodes = ArrayUtil.append(postalCode, postalCodes);
+  }
+
+  /**
+   * Get zip codes string [ ].
+   *
+   * @return the string [ ]
+   * @deprecated use property postalCodes
+   */
+  @Deprecated
+  public String[] getZipCodes() {
+    escalator.escalate(
+        "property City.zipCode is deprecated, use City.postalCode instead",
+        City.class, "Invoked getZipCodes()");
+    return getPostalCodes();
+  }
+
+  /**
+   * Sets zip codes.
+   *
+   * @param zipCodes the zip codes
+   * @deprecated use property postalCodes
+   */
+  @Deprecated
+  public void setZipCodes(String[] zipCodes) {
+    escalator.escalate(
+        "property City.zipCode is deprecated, use City.postalCode instead",
+        City.class, "Invoked setZipCodes()");
+    this.postalCodes = zipCodes;
+  }
+
+  /**
+   * Add zip code.
+   *
+   * @param zipCode the zip code
+   * @deprecated use property postalCodes
+   */
+  @Deprecated
+  public void addZipCode(String zipCode) {
+    escalator.escalate(
+        "property City.zipCode is deprecated, use City.postalCode instead",
+        City.class, "Invoked addZipCode()");
+    postalCodes = ArrayUtil.append(zipCode, postalCodes);
+  }
+
+  /**
+   * Gets area code.
+   *
+   * @return the area code
+   */
+  public String getAreaCode() {
+    return areaCode;
+  }
+
+  /**
+   * Sets area code.
+   *
+   * @param phoneCode the phone code
+   */
+  public void setAreaCode(String phoneCode) {
+    this.areaCode = phoneCode;
+  }
+
+  /**
+   * Gets state.
+   *
+   * @return the state
+   */
+  public State getState() {
+    return state;
+  }
+
+  /**
+   * Sets state.
+   *
+   * @param state the state
+   */
+  public void setState(State state) {
+    this.state = state;
+  }
+
+  /**
+   * Gets country.
+   *
+   * @return the country
+   */
+  public Country getCountry() {
+    return (state != null ? state.getCountry() : null);
+  }
+
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Gets language.
+   *
+   * @return the language
+   */
+  public Locale getLanguage() {
+    if (language != null) {
+      return language;
     }
-
-    public String getNameExtension() {
-        return nameExtension;
+    if (state != null) {
+      return state.getDefaultLanguageLocale();
     }
+    Country country = getCountry();
+    return (country != null ? country.getDefaultLanguageLocale() : null);
+  }
 
-    public void setNameExtension(String nameExtension) {
-        this.nameExtension = nameExtension;
+  /**
+   * Sets language.
+   *
+   * @param language the language
+   */
+  public void setLanguage(Locale language) {
+    this.language = language;
+  }
+
+  /**
+   * Gets population.
+   *
+   * @return the population
+   */
+  public int getPopulation() {
+    return population;
+  }
+
+  /**
+   * Sets population.
+   *
+   * @param population the population
+   */
+  public void setPopulation(int population) {
+    this.population = population;
+  }
+
+  /**
+   * Generate mobile number phone number.
+   *
+   * @return the phone number
+   */
+  public PhoneNumber generateMobileNumber() {
+    return getCountry().generateMobileNumber(this);
+  }
+
+  /**
+   * Generate landline number phone number.
+   *
+   * @return the phone number
+   */
+  public PhoneNumber generateLandlineNumber() {
+    return new PhoneNumber(getCountry().getPhoneCode(), areaCode,
+        localNumberGenerator.generate());
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return name + (StringUtil.isEmpty(nameExtension) ? "" :
+        (Character.isLetter(nameExtension.charAt(0)) ? " " : "") +
+            nameExtension);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    public String[] getPostalCodes() {
-        return postalCodes;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
-
-    public void setPostalCodes(String[] postalCodes) {
-        this.postalCodes = postalCodes;
+    final City that = (City) o;
+    if (!this.name.equals(that.name)) {
+      return false;
     }
-
-    public void addPostalCode(String postalCode) {
-        postalCodes = ArrayUtil.append(postalCode, postalCodes);
+    if (!NullSafeComparator
+        .equals(this.nameExtension, that.nameExtension)) {
+      return false;
     }
+    return NullSafeComparator.equals(this.state, that.state);
+  }
 
-    /**
-     * @deprecated use property postalCodes
-     */
-    @Deprecated
-    public String[] getZipCodes() {
-        escalator.escalate(
-                "property City.zipCode is deprecated, use City.postalCode instead",
-                City.class, "Invoked getZipCodes()");
-        return getPostalCodes();
-    }
-
-    /**
-     * @deprecated use property postalCodes
-     */
-    @Deprecated
-    public void setZipCodes(String[] zipCodes) {
-        escalator.escalate(
-                "property City.zipCode is deprecated, use City.postalCode instead",
-                City.class, "Invoked setZipCodes()");
-        this.postalCodes = zipCodes;
-    }
-
-    /**
-     * @deprecated use property postalCodes
-     */
-    @Deprecated
-    public void addZipCode(String zipCode) {
-        escalator.escalate(
-                "property City.zipCode is deprecated, use City.postalCode instead",
-                City.class, "Invoked addZipCode()");
-        postalCodes = ArrayUtil.append(zipCode, postalCodes);
-    }
-
-    public String getAreaCode() {
-        return areaCode;
-    }
-
-    public void setAreaCode(String phoneCode) {
-        this.areaCode = phoneCode;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    public Country getCountry() {
-        return (state != null ? state.getCountry() : null);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Locale getLanguage() {
-        if (language != null) {
-            return language;
-        }
-        if (state != null) {
-            return state.getDefaultLanguageLocale();
-        }
-        Country country = getCountry();
-        return (country != null ? country.getDefaultLanguageLocale() : null);
-    }
-
-    public void setLanguage(Locale language) {
-        this.language = language;
-    }
-
-    public int getPopulation() {
-        return population;
-    }
-
-    public void setPopulation(int population) {
-        this.population = population;
-    }
-
-    public PhoneNumber generateMobileNumber() {
-        return getCountry().generateMobileNumber(this);
-    }
-
-    public PhoneNumber generateLandlineNumber() {
-        return new PhoneNumber(getCountry().getPhoneCode(), areaCode,
-                localNumberGenerator.generate());
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return name + (StringUtil.isEmpty(nameExtension) ? "" :
-                (Character.isLetter(nameExtension.charAt(0)) ? " " : "") +
-                        nameExtension);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        final City that = (City) o;
-        if (!this.name.equals(that.name)) {
-            return false;
-        }
-        if (!NullSafeComparator
-                .equals(this.nameExtension, that.nameExtension)) {
-            return false;
-        }
-        return NullSafeComparator.equals(this.state, that.state);
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        result = name.hashCode();
-        result = 29 * result + NullSafeComparator.hashCode(nameExtension);
-        result = 29 * result + NullSafeComparator.hashCode(state);
-        return result;
-    }
+  @Override
+  public int hashCode() {
+    int result;
+    result = name.hashCode();
+    result = 29 * result + NullSafeComparator.hashCode(nameExtension);
+    result = 29 * result + NullSafeComparator.hashCode(state);
+    return result;
+  }
 
 }

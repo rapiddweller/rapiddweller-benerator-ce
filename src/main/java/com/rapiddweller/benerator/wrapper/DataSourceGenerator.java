@@ -41,98 +41,121 @@ import com.rapiddweller.format.util.ThreadLocalDataContainer;
 /**
  * {@link Generator} implementation which reads and forwards data from a {@link DataSource}.<br/><br/>
  * Created: 24.07.2011 08:58:09
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class DataSourceGenerator<E> extends AbstractGenerator<E> {
 
-    private DataSource<E> source;
-    private DataIterator<E> iterator;
-    private final ThreadLocalDataContainer<E> container = new ThreadLocalDataContainer<>();
+  private DataSource<E> source;
+  private DataIterator<E> iterator;
+  private final ThreadLocalDataContainer<E> container = new ThreadLocalDataContainer<>();
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public DataSourceGenerator() {
-        this(null);
+  /**
+   * Instantiates a new Data source generator.
+   */
+  public DataSourceGenerator() {
+    this(null);
+  }
+
+  /**
+   * Instantiates a new Data source generator.
+   *
+   * @param source the source
+   */
+  public DataSourceGenerator(DataSource<E> source) {
+    this.source = source;
+    this.iterator = null;
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets source.
+   *
+   * @return the source
+   */
+  public DataSource<E> getSource() {
+    return source;
+  }
+
+  /**
+   * Sets source.
+   *
+   * @param source the source
+   */
+  public void setSource(DataSource<E> source) {
+    if (this.source != null) {
+      throw new IllegalGeneratorStateException("Mutating an initialized generator");
     }
+    this.source = source;
+  }
 
-    public DataSourceGenerator(DataSource<E> source) {
-        this.source = source;
-        this.iterator = null;
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return (source instanceof ThreadAware && ((ThreadAware) source).isThreadSafe());
+  }
+
+  @Override
+  public Class<E> getGeneratedType() {
+    return source.getType();
+  }
+
+  @Override
+  public void init(GeneratorContext context) {
+    if (source == null) {
+      throw new InvalidGeneratorSetupException("source", "is null");
     }
-    
-    // properties ------------------------------------------------------------------------------------------------------
+    super.init(context);
+  }
 
-    public DataSource<E> getSource() {
-        return source;
-    }
-
-    public void setSource(DataSource<E> source) {
-        if (this.source != null)
-        	throw new IllegalGeneratorStateException("Mutating an initialized generator");
-        this.source = source;
-    }
-
-    // Generator interface ---------------------------------------------------------------------------------------------
-
-	@Override
-	public boolean isParallelizable() {
-	    return false;
-    }
-
-	@Override
-	public boolean isThreadSafe() {
-	    return (source instanceof ThreadAware && ((ThreadAware) source).isThreadSafe());
-    }
-    
-    @Override
-	public Class<E> getGeneratedType() {
-        return source.getType();
-    }
-
-    @Override
-    public void init(GeneratorContext context) {
-    	if (source == null)
-    		throw new InvalidGeneratorSetupException("source", "is null");
-    	super.init(context);
-    }
-
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-        try {
-            assertInitialized();
-            if (iterator == null)
-            	iterator = source.iterator(); // iterator initialized lazily to reflect context state at invocation
-        	DataContainer<E> tmp = iterator.next(container.get());
-            if (tmp == null) {
-                IOUtil.close(iterator);
-            	return null;
-            }
-			return wrapper.wrap(tmp.getData());
-        } catch (Exception e) {
-        	throw new IllegalGeneratorStateException("Generation failed: ", e);
-        }
-    }
-
-	@Override
-    public void reset() {
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    try {
+      assertInitialized();
+      if (iterator == null) {
+        iterator = source.iterator(); // iterator initialized lazily to reflect context state at invocation
+      }
+      DataContainer<E> tmp = iterator.next(container.get());
+      if (tmp == null) {
         IOUtil.close(iterator);
-        iterator = null;
-        super.reset();
+        return null;
+      }
+      return wrapper.wrap(tmp.getData());
+    } catch (Exception e) {
+      throw new IllegalGeneratorStateException("Generation failed: ", e);
     }
+  }
 
-    @Override
-    public void close() {
-        IOUtil.close(iterator);
-        super.close();
-       	IOUtil.close(source);
-    }
+  @Override
+  public void reset() {
+    IOUtil.close(iterator);
+    iterator = null;
+    super.reset();
+  }
 
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
+  @Override
+  public void close() {
+    IOUtil.close(iterator);
+    super.close();
+    IOUtil.close(source);
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[" + source + ']';
-    }
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + source + ']';
+  }
 
 }

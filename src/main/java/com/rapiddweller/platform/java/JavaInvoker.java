@@ -28,8 +28,8 @@ package com.rapiddweller.platform.java;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.model.data.Entity;
 
 /**
  * {@link Consumer} implementation that maps input data to parameters
@@ -41,72 +41,105 @@ import com.rapiddweller.common.BeanUtil;
  */
 public class JavaInvoker extends AbstractConsumer {
 
-    private Object target;
-    private String methodName;
+  private Object target;
+  private String methodName;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public JavaInvoker() {
-        this(null, null);
+  /**
+   * Instantiates a new Java invoker.
+   */
+  public JavaInvoker() {
+    this(null, null);
+  }
+
+  /**
+   * Instantiates a new Java invoker.
+   *
+   * @param target     the target
+   * @param methodName the method name
+   */
+  public JavaInvoker(Object target, String methodName) {
+    this.target = target;
+    this.methodName = methodName;
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets target.
+   *
+   * @return the target
+   */
+  public Object getTarget() {
+    return target;
+  }
+
+  /**
+   * Sets target.
+   *
+   * @param target the target
+   */
+  public void setTarget(Object target) {
+    this.target = target;
+  }
+
+  /**
+   * Gets method name.
+   *
+   * @return the method name
+   */
+  public String getMethodName() {
+    return methodName;
+  }
+
+  /**
+   * Sets method name.
+   *
+   * @param methodName the method name
+   */
+  public void setMethodName(String methodName) {
+    this.methodName = methodName;
+  }
+
+  // Consumer interface impelementation ------------------------------------------------------------------------------
+
+  @Override
+  public void startProductConsumption(Object object) {
+    if (object instanceof Entity) {
+      invokeByEntity((Entity) object);
+    } else if (object.getClass().isArray()) {
+      invokeByArray((Object[]) object);
+    } else {
+      invokeByObject(object);
     }
+  }
 
-    public JavaInvoker(Object target, String methodName) {
-        this.target = target;
-        this.methodName = methodName;
+  // private helper methods ------------------------------------------------------------------------------------------
+
+  private void invokeByEntity(Entity object) {
+    Object[] args = object.getComponents().values().toArray();
+    if (target instanceof Class) {
+      BeanUtil.invokeStatic((Class<?>) target, methodName, args);
+    } else {
+      BeanUtil.invoke(false, target, methodName, args);
     }
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
-
-    public Object getTarget() {
-        return target;
+  private void invokeByArray(Object[] args) {
+    if (target instanceof Class) {
+      BeanUtil.invokeStatic((Class<?>) target, methodName, args);
+    } else {
+      BeanUtil.invoke(target, methodName, args);
     }
+  }
 
-    public void setTarget(Object target) {
-        this.target = target;
+  private void invokeByObject(Object object) {
+    if (target instanceof Class) {
+      BeanUtil.invokeStatic((Class<?>) target, methodName, object);
+    } else {
+      BeanUtil.invoke(target, methodName, object);
     }
-
-    public String getMethodName() {
-        return methodName;
-    }
-
-    public void setMethodName(String methodName) {
-        this.methodName = methodName;
-    }
-
-    // Consumer interface impelementation ------------------------------------------------------------------------------
-
-    @Override
-    public void startProductConsumption(Object object) {
-        if (object instanceof Entity)
-            invokeByEntity((Entity) object);
-        else if (object.getClass().isArray())
-            invokeByArray((Object[]) object);
-        else
-            invokeByObject(object);
-    }
-
-    // private helper methods ------------------------------------------------------------------------------------------
-
-    private void invokeByEntity(Entity object) {
-        Object[] args = object.getComponents().values().toArray();
-        if (target instanceof Class)
-            BeanUtil.invokeStatic((Class<?>) target, methodName, args);
-        else
-            BeanUtil.invoke(false, target, methodName, args);
-    }
-
-    private void invokeByArray(Object[] args) {
-        if (target instanceof Class)
-            BeanUtil.invokeStatic((Class<?>) target, methodName, args);
-        else
-            BeanUtil.invoke(target, methodName, args);
-    }
-
-    private void invokeByObject(Object object) {
-        if (target instanceof Class)
-            BeanUtil.invokeStatic((Class<?>) target, methodName, object);
-        else
-            BeanUtil.invoke(target, methodName, object);
-    }
+  }
 
 }

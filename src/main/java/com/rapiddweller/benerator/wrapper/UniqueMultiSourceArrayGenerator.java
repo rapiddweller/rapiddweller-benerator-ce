@@ -26,15 +26,15 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
-import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.ArrayFormat;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.common.ArrayUtil;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.List;
 
 /**
  * Creates arrays of unique combinations of the output of other generators.
@@ -42,101 +42,117 @@ import org.apache.logging.log4j.LogManager;
  * each used generator is supposed to generate unique values itself.<br/>
  * <br/>
  * Created: 17.11.2007 13:37:37
+ *
+ * @param <S> the type parameter
  * @author Volker Bergmann
  */
 public class UniqueMultiSourceArrayGenerator<S> extends MultiGeneratorWrapper<S, S[]> {
 
-    private static final Logger logger = LogManager.getLogger(UniqueMultiSourceArrayGenerator.class);
+  private static final Logger logger = LogManager.getLogger(UniqueMultiSourceArrayGenerator.class);
 
-    private final Class<S> componentType;
-    private Object[] buffer;
+  private final Class<S> componentType;
+  private Object[] buffer;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    /**
-     * Initializes the generator to an array of source generators
-     */
-    @SuppressWarnings("unchecked")
-	public UniqueMultiSourceArrayGenerator(Class<S> componentType, Generator<? extends S> ... sources) {
-        super(ArrayUtil.arrayType(componentType), sources);
-        this.componentType = componentType;
+  /**
+   * Initializes the generator to an array of source generators
+   *
+   * @param componentType the component type
+   * @param sources       the sources
+   */
+  @SuppressWarnings("unchecked")
+  public UniqueMultiSourceArrayGenerator(Class<S> componentType, Generator<? extends S>... sources) {
+    super(ArrayUtil.arrayType(componentType), sources);
+    this.componentType = componentType;
+  }
+
+  /**
+   * Instantiates a new Unique multi source array generator.
+   *
+   * @param componentType the component type
+   * @param sources       the sources
+   */
+  @SuppressWarnings("unchecked")
+  public UniqueMultiSourceArrayGenerator(Class<S> componentType, List<Generator<? extends S>> sources) {
+    super(ArrayUtil.arrayType(componentType), sources);
+    this.componentType = componentType;
+  }
+
+  // Generator implementation ----------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    super.init(context);
+    init();
+  }
+
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  private void init() {
+    if (sources.size() == 0) {
+      throw new InvalidGeneratorSetupException("source", "is null");
     }
-
-    @SuppressWarnings("unchecked")
-	public UniqueMultiSourceArrayGenerator(Class<S> componentType, List<Generator<? extends S>> sources) {
-        super(ArrayUtil.arrayType(componentType), sources);
-        this.componentType = componentType;
-    }
-
-    // Generator implementation ----------------------------------------------------------------------------------------
-
-    @Override
-    public void init(GeneratorContext context) {
-        super.init(context);
-        init();
-    }
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void init() {
-	    if (sources.size() == 0)
-            throw new InvalidGeneratorSetupException("source", "is null");
-        buffer = ArrayUtil.newInstance(componentType, sources.size());
-        for (int i = 0; i < buffer.length; i++) {
-        	Generator<? extends S> source = sources.get(i);
-        	if (source != null) {
-				ProductWrapper<?> wrapper = source.generate((ProductWrapper) getSourceWrapper());
-	            if (wrapper == null)
-	                throw new InvalidGeneratorSetupException("Sub generator not available: " + source);
-	        	buffer[i] = wrapper.unwrap();
-        	}
+    buffer = ArrayUtil.newInstance(componentType, sources.size());
+    for (int i = 0; i < buffer.length; i++) {
+      Generator<? extends S> source = sources.get(i);
+      if (source != null) {
+        ProductWrapper<?> wrapper = source.generate((ProductWrapper) getSourceWrapper());
+        if (wrapper == null) {
+          throw new InvalidGeneratorSetupException("Sub generator not available: " + source);
         }
+        buffer[i] = wrapper.unwrap();
+      }
+    }
+  }
+
+  @Override
+  @SuppressWarnings("cast")
+  public ProductWrapper<S[]> generate(ProductWrapper<S[]> wrapper) {
+    assertInitialized();
+    if (buffer == null) {
+      return null;
+    }
+    S[] result = ArrayUtil.copyOfRange(buffer, 0, buffer.length, componentType);
+    fetchNextArrayItem(buffer.length - 1);
+    if (logger.isDebugEnabled()) {
+      logger.debug("generated: " + ArrayFormat.format(result));
+    }
+    return wrapper.wrap(result);
+  }
+
+  @Override
+  public void reset() {
+    assertInitialized();
+    super.reset();
+    init();
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private void fetchNextArrayItem(int index) {
+    // skip ignored elements
+    while (index >= 0 && sources.get(index) == null) {
+      index--;
     }
 
-    @Override
-	@SuppressWarnings("cast")
-	public ProductWrapper<S[]> generate(ProductWrapper<S[]> wrapper) {
-    	assertInitialized();
-    	if (buffer == null)
-    		return null;
-        S[] result = (S[]) ArrayUtil.copyOfRange(buffer, 0, buffer.length, componentType);
-        fetchNextArrayItem(buffer.length - 1);
-        if (logger.isDebugEnabled())
-            logger.debug("generated: " + ArrayFormat.format(result));
-        return wrapper.wrap(result);
+    // check for overrun
+    if (buffer == null || index < 0 || index >= sources.size()) {
+      buffer = null;
+      return;
     }
-
-    @Override
-    public void reset() {
-    	assertInitialized();
-        super.reset();
-        init();
+    // if available, fetch the digit's next value
+    Generator<? extends S> elementGenerator = sources.get(index);
+    ProductWrapper elementWrapper = elementGenerator.generate((ProductWrapper) getSourceWrapper());
+    if (elementWrapper != null) {
+      buffer[index] = elementWrapper.unwrap();
+      return;
     }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-	private void fetchNextArrayItem(int index) {
-    	// skip ignored elements
-    	while (index >= 0 && sources.get(index) == null)
-    		index--;
-    	
-        // check for overrun
-        if (buffer == null || index < 0 || index >= sources.size()) {
-            buffer = null;
-            return;
-        }
-        // if available, fetch the digit's next value
-        Generator<? extends S> elementGenerator = sources.get(index);
-        ProductWrapper elementWrapper = elementGenerator.generate((ProductWrapper) getSourceWrapper());
-        if (elementWrapper != null) {
-            buffer[index] = elementWrapper.unwrap();
-            return;
-        }
-        // sources[index] was not available, move on to the next index
-        fetchNextArrayItem(index - 1);
-        if (buffer != null) {
-            elementGenerator.reset();
-            elementWrapper = elementGenerator.generate((ProductWrapper) getSourceWrapper());
-            buffer[index] = elementWrapper.unwrap();
-        }
+    // sources[index] was not available, move on to the next index
+    fetchNextArrayItem(index - 1);
+    if (buffer != null) {
+      elementGenerator.reset();
+      elementWrapper = elementGenerator.generate((ProductWrapper) getSourceWrapper());
+      buffer[index] = elementWrapper.unwrap();
     }
+  }
 
 }

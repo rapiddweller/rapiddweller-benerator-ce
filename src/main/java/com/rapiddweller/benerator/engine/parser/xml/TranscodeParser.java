@@ -26,16 +26,10 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import java.util.Set;
-
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.MutatingTypeExpression;
 import com.rapiddweller.benerator.engine.statement.TranscodeStatement;
 import com.rapiddweller.benerator.engine.statement.TranscodingTaskStatement;
-
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ErrorHandler;
@@ -45,68 +39,91 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.FallbackExpression;
 import org.w3c.dom.Element;
 
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGESIZE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SELECTOR;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TABLE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TARGET;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ATTRIBUTE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ID;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_TRANSCODE;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
+
 /**
  * Parses a &lt;transcode&gt; element.<br/><br/>
  * Created: 08.09.2010 16:13:13
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class TranscodeParser extends AbstractTranscodeParser {
-	
-	private static final Set<String> MEMBER_ELEMENTS = CollectionUtil.toSet(
-			EL_ID, EL_ATTRIBUTE, EL_REFERENCE);
-	
-	public TranscodeParser() {
-	    super(EL_TRANSCODE, 
-	    		CollectionUtil.toSet(ATT_TABLE), 
-	    		CollectionUtil.toSet(ATT_SOURCE, ATT_SELECTOR, ATT_TARGET, ATT_PAGESIZE, ATT_ON_ERROR), 
-	    		TranscodingTaskStatement.class);
-    }
 
-    @Override
-    public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-		String table = getAttribute(ATT_TABLE, element);
-		TranscodingTaskStatement parent = (TranscodingTaskStatement) ArrayUtil.lastElementOf(parentPath);
-		Expression<DBSystem> sourceEx   = parseSource(element, parent);
-		Expression<String>   selectorEx = parseSelector(element, parent);
-		Expression<DBSystem> targetEx   = parseTarget(element, parent);
-		Expression<Long>     pageSizeEx = parsePageSize(element, parent);
-	    Expression<ErrorHandler> errorHandlerEx = parseOnErrorAttribute(element, table);
-	    TranscodeStatement result = new TranscodeStatement(new MutatingTypeExpression(element, getRequiredAttribute("table", element)), 
-	    		parent, sourceEx, selectorEx, targetEx, pageSizeEx, errorHandlerEx);
-	    Statement[] currentPath = context.createSubPath(parentPath, result);
-	    for (Element child : XMLUtil.getChildElements(element)) {
-	    	String childName = child.getNodeName();
-	    	if (!MEMBER_ELEMENTS.contains(childName))
-	    		result.addSubStatement(context.parseChildElement(child, currentPath));
-	    	// The 'component' child elements (id, attribute, reference) are handled by the MutatingTypeExpression 
-	    }
-		return result;
-    }
+  private static final Set<String> MEMBER_ELEMENTS = CollectionUtil.toSet(
+      EL_ID, EL_ATTRIBUTE, EL_REFERENCE);
 
-	private static Expression<String> parseSelector(Element element, TranscodingTaskStatement parent) {
-		return parseScriptableStringAttribute("selector", element);
-	}
+  /**
+   * Instantiates a new Transcode parser.
+   */
+  public TranscodeParser() {
+    super(EL_TRANSCODE,
+        CollectionUtil.toSet(ATT_TABLE),
+        CollectionUtil.toSet(ATT_SOURCE, ATT_SELECTOR, ATT_TARGET, ATT_PAGESIZE, ATT_ON_ERROR),
+        TranscodingTaskStatement.class);
+  }
 
-	private Expression<Long> parsePageSize(Element element, Statement parent) {
-	    Expression<Long> result = super.parsePageSize(element);
-	    if (parent instanceof TranscodingTaskStatement)
-			result = new FallbackExpression<>(result, ((TranscodingTaskStatement) parent).getPageSizeEx());
-	    return result;
+  @Override
+  public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    String table = getAttribute(ATT_TABLE, element);
+    TranscodingTaskStatement parent = (TranscodingTaskStatement) ArrayUtil.lastElementOf(parentPath);
+    Expression<DBSystem> sourceEx = parseSource(element, parent);
+    Expression<String> selectorEx = parseSelector(element, parent);
+    Expression<DBSystem> targetEx = parseTarget(element, parent);
+    Expression<Long> pageSizeEx = parsePageSize(element, parent);
+    Expression<ErrorHandler> errorHandlerEx = parseOnErrorAttribute(element, table);
+    TranscodeStatement result = new TranscodeStatement(new MutatingTypeExpression(element, getRequiredAttribute("table", element)),
+        parent, sourceEx, selectorEx, targetEx, pageSizeEx, errorHandlerEx);
+    Statement[] currentPath = context.createSubPath(parentPath, result);
+    for (Element child : XMLUtil.getChildElements(element)) {
+      String childName = child.getNodeName();
+      if (!MEMBER_ELEMENTS.contains(childName)) {
+        result.addSubStatement(context.parseChildElement(child, currentPath));
+      }
+      // The 'component' child elements (id, attribute, reference) are handled by the MutatingTypeExpression
     }
+    return result;
+  }
 
-	private Expression<DBSystem> parseSource(Element element, Statement parent) {
-	    Expression<DBSystem> result = super.parseSource(element);
-	    if (parent instanceof TranscodingTaskStatement)
-			result = new FallbackExpression<>(result, ((TranscodingTaskStatement) parent).getSourceEx());
-	    return result;
-    }
+  private static Expression<String> parseSelector(Element element, TranscodingTaskStatement parent) {
+    return parseScriptableStringAttribute("selector", element);
+  }
 
-	private Expression<DBSystem> parseTarget(Element element, Statement parent) {
-	    Expression<DBSystem> result = super.parseTarget(element);
-	    if (parent instanceof TranscodingTaskStatement)
-			result = new FallbackExpression<>(result, ((TranscodingTaskStatement) parent).getTargetEx());
-	    return result;
+  private Expression<Long> parsePageSize(Element element, Statement parent) {
+    Expression<Long> result = super.parsePageSize(element);
+    if (parent instanceof TranscodingTaskStatement) {
+      result = new FallbackExpression<>(result, ((TranscodingTaskStatement) parent).getPageSizeEx());
     }
+    return result;
+  }
+
+  private Expression<DBSystem> parseSource(Element element, Statement parent) {
+    Expression<DBSystem> result = super.parseSource(element);
+    if (parent instanceof TranscodingTaskStatement) {
+      result = new FallbackExpression<>(result, ((TranscodingTaskStatement) parent).getSourceEx());
+    }
+    return result;
+  }
+
+  private Expression<DBSystem> parseTarget(Element element, Statement parent) {
+    Expression<DBSystem> result = super.parseTarget(element);
+    if (parent instanceof TranscodingTaskStatement) {
+      result = new FallbackExpression<>(result, ((TranscodingTaskStatement) parent).getTargetEx());
+    }
+    return result;
+  }
 
 }

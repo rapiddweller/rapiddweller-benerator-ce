@@ -27,11 +27,11 @@
 package com.rapiddweller.platform.script;
 
 import com.rapiddweller.benerator.consumer.TextFileExporter;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.format.script.ScriptedDocumentWriter;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.model.data.Entity;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
@@ -45,79 +45,128 @@ import java.io.IOException;
  */
 public class ScriptedEntityExporter extends TextFileExporter {
 
-    private static final Logger LOGGER = LogManager.getLogger(ScriptedEntityExporter.class);
+  private static final Logger LOGGER = LogManager.getLogger(ScriptedEntityExporter.class);
 
-    private String headerScript;
-    private String partScript;
-    private String footerScript;
+  private String headerScript;
+  private String partScript;
+  private String footerScript;
 
-    private ScriptedDocumentWriter<Entity> docWriter;
+  private ScriptedDocumentWriter<Entity> docWriter;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public ScriptedEntityExporter() {
-        this(null, null);
+  /**
+   * Instantiates a new Scripted entity exporter.
+   */
+  public ScriptedEntityExporter() {
+    this(null, null);
+  }
+
+  /**
+   * Instantiates a new Scripted entity exporter.
+   *
+   * @param uri        the uri
+   * @param partScript the part script
+   */
+  public ScriptedEntityExporter(String uri, String partScript) {
+    this(uri, null, null, partScript, null);
+  }
+
+  /**
+   * Instantiates a new Scripted entity exporter.
+   *
+   * @param uri          the uri
+   * @param encoding     the encoding
+   * @param headerScript the header script
+   * @param partScript   the part script
+   * @param footerScript the footer script
+   */
+  public ScriptedEntityExporter(String uri, String encoding, String headerScript, String partScript, String footerScript) {
+    super(uri, encoding, null);
+    this.headerScript = headerScript;
+    this.partScript = partScript;
+    this.footerScript = footerScript;
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets header script.
+   *
+   * @return the header script
+   */
+  public String getHeaderScript() {
+    return headerScript;
+  }
+
+  /**
+   * Sets header script.
+   *
+   * @param headerScript the header script
+   */
+  public void setHeaderScript(String headerScript) {
+    this.headerScript = headerScript;
+  }
+
+  /**
+   * Gets part script.
+   *
+   * @return the part script
+   */
+  public String getPartScript() {
+    return partScript;
+  }
+
+  /**
+   * Sets part script.
+   *
+   * @param partScript the part script
+   */
+  public void setPartScript(String partScript) {
+    this.partScript = partScript;
+  }
+
+  /**
+   * Gets footer script.
+   *
+   * @return the footer script
+   */
+  public String getFooterScript() {
+    return footerScript;
+  }
+
+  /**
+   * Sets footer script.
+   *
+   * @param footerScript the footer script
+   */
+  public void setFooterScript(String footerScript) {
+    this.footerScript = footerScript;
+  }
+
+  // Consumer interface ----------------------------------------------------------------------------------------------
+
+  @Override
+  protected void postInitPrinter(Object object) {
+    try {
+      docWriter = new ScriptedDocumentWriter<>(printer, headerScript, partScript, footerScript);
+      if (append) {
+        docWriter.setWriteHeader(false);
+      }
+    } catch (IOException e) {
+      throw new ConfigurationError(e);
     }
+  }
 
-    public ScriptedEntityExporter(String uri, String partScript) {
-        this(uri, null, null, partScript, null);
+  @Override
+  protected void startConsumingImpl(Object object) {
+    try {
+      LOGGER.debug("Exporting {}", object);
+      Entity entity = (Entity) object;
+      docWriter.writeElement(entity);
+    } catch (IOException e) {
+      throw new ConfigurationError(e);
     }
-
-    public ScriptedEntityExporter(String uri, String encoding, String headerScript, String partScript, String footerScript) {
-        super(uri, encoding, null);
-        this.headerScript = headerScript;
-        this.partScript = partScript;
-        this.footerScript = footerScript;
-    }
-
-    // properties ------------------------------------------------------------------------------------------------------
-
-    public String getHeaderScript() {
-        return headerScript;
-    }
-
-    public void setHeaderScript(String headerScript) {
-        this.headerScript = headerScript;
-    }
-
-    public String getPartScript() {
-        return partScript;
-    }
-
-    public void setPartScript(String partScript) {
-        this.partScript = partScript;
-    }
-
-    public String getFooterScript() {
-        return footerScript;
-    }
-
-    public void setFooterScript(String footerScript) {
-        this.footerScript = footerScript;
-    }
-
-    // Consumer interface ----------------------------------------------------------------------------------------------
-
-    @Override
-    protected void postInitPrinter(Object object) {
-        try {
-            docWriter = new ScriptedDocumentWriter<>(printer, headerScript, partScript, footerScript);
-            if (append)
-                docWriter.setWriteHeader(false);
-        } catch (IOException e) {
-            throw new ConfigurationError(e);
-        }
-    }
-
-    @Override
-    protected void startConsumingImpl(Object object) {
-        try {
-            LOGGER.debug("Exporting {}", object);
-            Entity entity = (Entity) object;
-            docWriter.writeElement(entity);
-        } catch (IOException e) {
-            throw new ConfigurationError(e);
-        }
-    }
+  }
 
 }

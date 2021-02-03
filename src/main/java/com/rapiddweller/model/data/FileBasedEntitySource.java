@@ -37,36 +37,65 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
  */
 public abstract class FileBasedEntitySource extends AbstractEntitySource {
 
-    protected String uri;
+  /**
+   * The Uri.
+   */
+  protected String uri;
 
-    public FileBasedEntitySource(String uri) {
-        this(uri, null);
-    }
+  /**
+   * Instantiates a new File based entity source.
+   *
+   * @param uri the uri
+   */
+  public FileBasedEntitySource(String uri) {
+    this(uri, null);
+  }
 
-    public FileBasedEntitySource(String uri, BeneratorContext context) {
-        this.uri = uri;
-        this.context = context;
-    }
+  /**
+   * Instantiates a new File based entity source.
+   *
+   * @param uri     the uri
+   * @param context the context
+   */
+  public FileBasedEntitySource(String uri, BeneratorContext context) {
+    this.uri = uri;
+    this.context = context;
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    public String getUri() {
-        return uri;
-    }
+  /**
+   * Gets uri.
+   *
+   * @return the uri
+   */
+  public String getUri() {
+    return uri;
+  }
 
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
+  /**
+   * Sets uri.
+   *
+   * @param uri the uri
+   */
+  public void setUri(String uri) {
+    this.uri = uri;
+  }
 
-    protected String resolveUri() {
-        return context.resolveRelativeUri(uri);
-    }
+  /**
+   * Resolve uri string.
+   *
+   * @return the string
+   */
+  protected String resolveUri() {
+    return context.resolveRelativeUri(uri);
+  }
 
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[" + uri + "]";
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + uri + "]";
+  }
 
 }

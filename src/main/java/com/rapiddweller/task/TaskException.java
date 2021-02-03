@@ -36,20 +36,39 @@ package com.rapiddweller.task;
  */
 public class TaskException extends RuntimeException {
 
-    private static final long serialVersionUID = 5922654543378249601L;
+  private static final long serialVersionUID = 5922654543378249601L;
 
-    public TaskException() {
-    }
+  /**
+   * Instantiates a new Task exception.
+   */
+  public TaskException() {
+  }
 
-    public TaskException(String message) {
-        super(message);
-    }
+  /**
+   * Instantiates a new Task exception.
+   *
+   * @param message the message
+   */
+  public TaskException(String message) {
+    super(message);
+  }
 
-    public TaskException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  /**
+   * Instantiates a new Task exception.
+   *
+   * @param message the message
+   * @param cause   the cause
+   */
+  public TaskException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-    public TaskException(Throwable cause) {
-        super(cause);
-    }
+  /**
+   * Instantiates a new Task exception.
+   *
+   * @param cause the cause
+   */
+  public TaskException(Throwable cause) {
+    super(cause);
+  }
 }

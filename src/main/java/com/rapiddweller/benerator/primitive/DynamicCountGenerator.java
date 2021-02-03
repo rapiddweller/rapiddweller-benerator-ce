@@ -32,39 +32,53 @@ import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.script.Expression;
 
 /**
- * Behaves similar to the {@link DynamicLongGenerator}, 
+ * Behaves similar to the {@link DynamicLongGenerator},
  * but generates <code>maxFallback</code> values, if <code>max</code> is set to <code>null</code>.<br/><br/>
  * Created: 28.03.2010 08:48:11
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class DynamicCountGenerator extends DynamicLongGenerator {
-	
-	private boolean resetToMin;
 
-    public DynamicCountGenerator() {
-        super();
-    }
+  private boolean resetToMin;
 
-    public DynamicCountGenerator(Expression<Long> min, Expression<Long> max, Expression<Long> granularity, 
-    		Expression<? extends Distribution> distribution, Expression<Boolean> unique, boolean resetToMin) {
-        super(min, max, granularity, distribution, unique);
-        this.resetToMin = resetToMin;
+  /**
+   * Instantiates a new Dynamic count generator.
+   */
+  public DynamicCountGenerator() {
+    super();
+  }
+
+  /**
+   * Instantiates a new Dynamic count generator.
+   *
+   * @param min          the min
+   * @param max          the max
+   * @param granularity  the granularity
+   * @param distribution the distribution
+   * @param unique       the unique
+   * @param resetToMin   the reset to min
+   */
+  public DynamicCountGenerator(Expression<Long> min, Expression<Long> max, Expression<Long> granularity,
+                               Expression<? extends Distribution> distribution, Expression<Boolean> unique, boolean resetToMin) {
+    super(min, max, granularity, distribution, unique);
+    this.resetToMin = resetToMin;
+  }
+
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  @Override
+  protected void resetMembers(Long minValue, Long maxValue) {
+    if (maxValue != null) {
+      super.resetMembers(minValue, maxValue);
+    } else {
+      // if it is not required to reset to min (<generate> or <iterate>), make it unlimited (returning null),
+      // otherwise reset to the min value (component generation)
+      Long constant = (resetToMin ? minValue : null);
+      Generator<Long> source = new ConstantGenerator(constant);
+      source.init(context);
+      setSource(source);
     }
-    
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	protected void resetMembers(Long minValue, Long maxValue) {
-		if (maxValue != null)
-		    super.resetMembers(minValue, maxValue);
-		else {
-			// if it is not required to reset to min (<generate> or <iterate>), make it unlimited (returning null),
-			// otherwise reset to the min value (component generation)
-			Long constant = (resetToMin ? minValue : null);
-			Generator<Long> source = new ConstantGenerator(constant);
-	        source.init(context);
-	        setSource(source);
-		}
-	}
-	
+  }
+
 }

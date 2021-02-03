@@ -26,10 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.rapiddweller.benerator.DefaultPlatformDescriptor;
 import com.rapiddweller.benerator.PlatformDescriptor;
 import com.rapiddweller.benerator.engine.Statement;
@@ -41,80 +37,99 @@ import com.rapiddweller.common.ExceptionUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.format.xml.XMLElementParser;
 import org.w3c.dom.Element;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CLASS;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULTS;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DOMAINS;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PLATFORMS;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_IMPORT;
 
 /**
  * Parses an &lt;import&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:53:06
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ImportParser extends AbstractBeneratorDescriptorParser {
-	
-	private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
-		ATT_CLASS, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS);
 
-	public ImportParser() {
-	    super(EL_IMPORT, null, OPTIONAL_ATTRIBUTES);
+  private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
+      ATT_CLASS, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS);
+
+  /**
+   * Instantiates a new Import parser.
+   */
+  public ImportParser() {
+    super(EL_IMPORT, null, OPTIONAL_ATTRIBUTES);
+  }
+
+  @Override
+  public ImportStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    // check syntax
+    assertAtLeastOneAttributeIsSet(element, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS, ATT_CLASS);
+
+    // prepare parsing
+    ArrayBuilder<String> classImports = new ArrayBuilder<>(String.class);
+    ArrayBuilder<String> domainImports = new ArrayBuilder<>(String.class);
+
+    // defaults import
+    boolean defaults = ("true".equals(element.getAttribute("defaults")));
+
+    // check class import
+    String attribute = element.getAttribute("class");
+    if (!StringUtil.isEmpty(attribute)) {
+      classImports.add(attribute);
     }
 
-	@Override
-	public ImportStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-		// check syntax
-		assertAtLeastOneAttributeIsSet(element, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS, ATT_CLASS);
-		
-		// prepare parsing
-		ArrayBuilder<String> classImports = new ArrayBuilder<>(String.class);
-		ArrayBuilder<String> domainImports = new ArrayBuilder<>(String.class);
-		
-		// defaults import
-		boolean defaults = ("true".equals(element.getAttribute("defaults")));
-		
-		// check class import
-		String attribute = element.getAttribute("class");
-		if (!StringUtil.isEmpty(attribute))
-			classImports.add(attribute);
-		
-		// (multiple) domain import
-		attribute = element.getAttribute("domains");
-		if (!StringUtil.isEmpty(attribute))
-			domainImports.addAll(StringUtil.trimAll(StringUtil.tokenize(attribute, ',')));
-		
-		// (multiple) platform import
-		attribute = element.getAttribute("platforms");
-		
-		List<PlatformDescriptor> platformImports = null; 
-		if (!StringUtil.isEmpty(attribute))
-			platformImports = importPlatforms(StringUtil.trimAll(attribute.split(",")), context);
-		
-		return new ImportStatement(defaults, classImports.toArray(), domainImports.toArray(), platformImports);
-	}
+    // (multiple) domain import
+    attribute = element.getAttribute("domains");
+    if (!StringUtil.isEmpty(attribute)) {
+      domainImports.addAll(StringUtil.trimAll(StringUtil.tokenize(attribute, ',')));
+    }
 
-	private static List<PlatformDescriptor> importPlatforms(String[] platformNames, BeneratorParseContext context) {
-		List<PlatformDescriptor> platforms = new ArrayList<>(platformNames.length);
-		for (String platformName : platformNames) {
-			PlatformDescriptor platformDescriptor = createPlatformDescriptor(platformName);
-			List<XMLElementParser<Statement>> parsers = platformDescriptor.getParsers();
-			if (parsers != null)
-				for (XMLElementParser<Statement> parser : parsers)
-					context.addParser(parser);
-			platforms.add(platformDescriptor);
-		}
-		return platforms;
-	}
+    // (multiple) platform import
+    attribute = element.getAttribute("platforms");
 
-	private static PlatformDescriptor createPlatformDescriptor(String platformName) {
-		String platformPackage = (platformName.indexOf('.') < 0 ? "com.rapiddweller.platform." + platformName : platformName);
-		String descriptorClassName = platformPackage + ".PlatformDescriptor";
-		try {
-			// if there is a platform descriptor, then use it
-			return (PlatformDescriptor) BeanUtil.newInstance(descriptorClassName);
-		} catch (RuntimeException e) {
-			if (ExceptionUtil.getRootCause(e) instanceof ClassNotFoundException) { // TODO test
-                return new DefaultPlatformDescriptor(platformPackage);
-			} else
-				throw e;
-		}
-	}
+    List<PlatformDescriptor> platformImports = null;
+    if (!StringUtil.isEmpty(attribute)) {
+      platformImports = importPlatforms(StringUtil.trimAll(attribute.split(",")), context);
+    }
+
+    return new ImportStatement(defaults, classImports.toArray(), domainImports.toArray(), platformImports);
+  }
+
+  private static List<PlatformDescriptor> importPlatforms(String[] platformNames, BeneratorParseContext context) {
+    List<PlatformDescriptor> platforms = new ArrayList<>(platformNames.length);
+    for (String platformName : platformNames) {
+      PlatformDescriptor platformDescriptor = createPlatformDescriptor(platformName);
+      List<XMLElementParser<Statement>> parsers = platformDescriptor.getParsers();
+      if (parsers != null) {
+        for (XMLElementParser<Statement> parser : parsers) {
+          context.addParser(parser);
+        }
+      }
+      platforms.add(platformDescriptor);
+    }
+    return platforms;
+  }
+
+  private static PlatformDescriptor createPlatformDescriptor(String platformName) {
+    String platformPackage = (platformName.indexOf('.') < 0 ? "com.rapiddweller.platform." + platformName : platformName);
+    String descriptorClassName = platformPackage + ".PlatformDescriptor";
+    try {
+      // if there is a platform descriptor, then use it
+      return (PlatformDescriptor) BeanUtil.newInstance(descriptorClassName);
+    } catch (RuntimeException e) {
+      if (ExceptionUtil.getRootCause(e) instanceof ClassNotFoundException) { // TODO test
+        return new DefaultPlatformDescriptor(platformPackage);
+      } else {
+        throw e;
+      }
+    }
+  }
 
 }

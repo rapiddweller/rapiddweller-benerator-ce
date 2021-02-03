@@ -28,23 +28,29 @@
 
 package com.rapiddweller.benerator.composite;
 
+import com.rapiddweller.benerator.dataset.CompositeDatasetGenerator;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.rapiddweller.benerator.dataset.CompositeDatasetGenerator;
-import org.junit.Test;
-
+/**
+ * The type Plain entity component builder test.
+ */
 public class PlainEntityComponentBuilderTest {
-    @Test
-    public void testConstructor() {
-        PlainEntityComponentBuilder actualPlainEntityComponentBuilder = new PlainEntityComponentBuilder("Name",
-                new CompositeDatasetGenerator<>("Nesting", "Dataset Name", true), "Scope");
-        assertTrue(actualPlainEntityComponentBuilder.isParallelizable());
-        assertFalse(actualPlainEntityComponentBuilder.isResetNeeded());
-        assertEquals("Scope", actualPlainEntityComponentBuilder.getScope());
-        assertEquals("Name", actualPlainEntityComponentBuilder.getName());
-    }
+  /**
+   * Test constructor.
+   */
+  @Test
+  public void testConstructor() {
+    PlainEntityComponentBuilder actualPlainEntityComponentBuilder = new PlainEntityComponentBuilder("Name",
+        new CompositeDatasetGenerator<>("Nesting", "Dataset Name", true), "Scope");
+    assertTrue(actualPlainEntityComponentBuilder.isParallelizable());
+    assertFalse(actualPlainEntityComponentBuilder.isResetNeeded());
+    assertEquals("Scope", actualPlainEntityComponentBuilder.getScope());
+    assertEquals("Name", actualPlainEntityComponentBuilder.getName());
+  }
 
 }
 

@@ -37,23 +37,26 @@ import org.junit.Test;
 /**
  * Tests the {@link ComponentTypeConverter}.<br/><br/>
  * Created: 28.08.2013 17:19:08
- * @since 0.8.3
+ *
  * @author Volker Bergmann
+ * @since 0.8.3
  */
-
 public class ComponentTypeConverterTest {
-	
-	@Test
-	public void testRecursively() {
-		DescriptorProvider provider = new DefaultDescriptorProvider("p", new DataModel());
-		ComplexTypeDescriptor childType = new ComplexTypeDescriptor("childType", provider);
-		childType.addComponent(new PartDescriptor("child", provider, "string"));
-		ComplexTypeDescriptor parentType = new ComplexTypeDescriptor("parentType", provider);
-		parentType.addComponent(new PartDescriptor("child", provider, childType));
-		ComponentTypeConverter converter = new ComponentTypeConverter(parentType);
-		Entity child = new Entity(childType, "child", "childChildValue");
-		Entity parent = new Entity(parentType, "child", child);
-		converter.convert(parent);
-	}
-	
+
+  /**
+   * Test recursively.
+   */
+  @Test
+  public void testRecursively() {
+    DescriptorProvider provider = new DefaultDescriptorProvider("p", new DataModel());
+    ComplexTypeDescriptor childType = new ComplexTypeDescriptor("childType", provider);
+    childType.addComponent(new PartDescriptor("child", provider, "string"));
+    ComplexTypeDescriptor parentType = new ComplexTypeDescriptor("parentType", provider);
+    parentType.addComponent(new PartDescriptor("child", provider, childType));
+    ComponentTypeConverter converter = new ComponentTypeConverter(parentType);
+    Entity child = new Entity(childType, "child", "childChildValue");
+    Entity parent = new Entity(parentType, "child", child);
+    converter.convert(parent);
+  }
+
 }

@@ -31,50 +31,61 @@ import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.Encodings;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the DatasetCSVGenerator.<br/><br/>
  * Created: 21.03.2008 16:58:20
- * @since 0.5.0
+ *
  * @author Volker Bergmann
+ * @since 0.5.0
  */
 public class WeightedDatasetCSVGeneratorTest extends GeneratorTest {
 
-    private static final String FAMILY_NAME = "com/rapiddweller/domain/person/familyName";
-    private static final String REGION = "com/rapiddweller/dataset/region";
+  private static final String FAMILY_NAME = "com/rapiddweller/domain/person/familyName";
+  private static final String REGION = "com/rapiddweller/dataset/region";
 
-    @Test
-    public void testDE() {
-        WeightedDatasetCSVGenerator<String> source = new WeightedDatasetCSVGenerator<>(
-                String.class, FAMILY_NAME + "_{0}.csv", "DE", REGION, false, Encodings.UTF_8);
-        NonNullGenerator<String> generator = WrapperFactory.asNonNullGenerator(source);
-        generator.init(context);
-        boolean mueller = false;
-        for (int i = 0; i < 1000; i++) {
-            if ("Müller".equals(generator.generate()))
-                mueller = true;
-        }
-        assertTrue(mueller);
+  /**
+   * Test de.
+   */
+  @Test
+  public void testDE() {
+    WeightedDatasetCSVGenerator<String> source = new WeightedDatasetCSVGenerator<>(
+        String.class, FAMILY_NAME + "_{0}.csv", "DE", REGION, false, Encodings.UTF_8);
+    NonNullGenerator<String> generator = WrapperFactory.asNonNullGenerator(source);
+    generator.init(context);
+    boolean mueller = false;
+    for (int i = 0; i < 1000; i++) {
+      if ("Müller".equals(generator.generate())) {
+        mueller = true;
+      }
     }
+    assertTrue(mueller);
+  }
 
-    @Test
-    public void testEurope() {
-        WeightedDatasetCSVGenerator<String> source = new WeightedDatasetCSVGenerator<>(
-                String.class, FAMILY_NAME + "_{0}.csv", "europe", REGION, false, Encodings.UTF_8);
-        NonNullGenerator<String> generator = WrapperFactory.asNonNullGenerator(source);
-        generator.init(context);
-        boolean mueller = false; // German name
-        boolean garcia = false;  // Spanish name
-        for (int i = 0; i < 100000 && (!mueller || !garcia); i++) {
-            String name = generator.generate();
-            if ("Müller".equals(name))
-                mueller = true;
-            if ("García".equals(name))
-                garcia = true;
-        }
-        assertTrue(mueller);
-        assertTrue(garcia);
+  /**
+   * Test europe.
+   */
+  @Test
+  public void testEurope() {
+    WeightedDatasetCSVGenerator<String> source = new WeightedDatasetCSVGenerator<>(
+        String.class, FAMILY_NAME + "_{0}.csv", "europe", REGION, false, Encodings.UTF_8);
+    NonNullGenerator<String> generator = WrapperFactory.asNonNullGenerator(source);
+    generator.init(context);
+    boolean mueller = false; // German name
+    boolean garcia = false;  // Spanish name
+    for (int i = 0; i < 100000 && (!mueller || !garcia); i++) {
+      String name = generator.generate();
+      if ("Müller".equals(name)) {
+        mueller = true;
+      }
+      if ("García".equals(name)) {
+        garcia = true;
+      }
     }
-    
+    assertTrue(mueller);
+    assertTrue(garcia);
+  }
+
 }

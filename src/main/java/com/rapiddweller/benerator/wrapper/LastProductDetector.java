@@ -33,44 +33,53 @@ import com.rapiddweller.benerator.GeneratorContext;
  * Wraps another {@link Generator}, finds out which is the last generated object and tags that with "last"="true".<br/>
  * <br/>
  * Created: 12.09.2011 12:06:26
- * @see ProductWrapper#getTag(String)
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @see ProductWrapper#getTag(String) ProductWrapper#getTag(String)
+ * @since 0.7.0
  */
 public class LastProductDetector<E> extends GeneratorProxy<E> {
 
-	private ProductWrapper<E> next;
-	
-	public LastProductDetector(Generator<E> source) {
-		super(source);
-	}
-	
-	@Override
-	public synchronized void init(GeneratorContext context) {
-		super.init(context);
-		this.next = generateFromSource();
-	}
+  private ProductWrapper<E> next;
 
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-		if (next == null)
-			return null;
-		wrapper.wrap(next.unwrap());
-		next = super.generate(next);
-		if (next == null)
-			wrapper.setTag("last", "true");
-		return wrapper;
-	}
-	
-	@Override
-	public void reset() {
-		super.reset();
-		this.next = generateFromSource();
-	}
+  /**
+   * Instantiates a new Last product detector.
+   *
+   * @param source the source
+   */
+  public LastProductDetector(Generator<E> source) {
+    super(source);
+  }
 
-	@Override
-	public void close() {
-		super.close();
-		this.next = null;
-	}
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    super.init(context);
+    this.next = generateFromSource();
+  }
+
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    if (next == null) {
+      return null;
+    }
+    wrapper.wrap(next.unwrap());
+    next = super.generate(next);
+    if (next == null) {
+      wrapper.setTag("last", "true");
+    }
+    return wrapper;
+  }
+
+  @Override
+  public void reset() {
+    super.reset();
+    this.next = generateFromSource();
+  }
+
+  @Override
+  public void close() {
+    super.close();
+    this.next = null;
+  }
 }

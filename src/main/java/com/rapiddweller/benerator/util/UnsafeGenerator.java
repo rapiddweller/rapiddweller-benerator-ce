@@ -31,19 +31,21 @@ import com.rapiddweller.benerator.Generator;
 /**
  * Abstract parent class for {@link Generator}s that are neither thread-safe nor parallelizable.<br/><br/>
  * Created: 20.03.2010 10:30:34
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public abstract class UnsafeGenerator<E> extends AbstractGenerator<E> {
 
-	@Override
-	public boolean isParallelizable() {
-	    return false;
-    }
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
 
-	@Override
-	public boolean isThreadSafe() {
-	    return false;
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return false;
+  }
 
 }

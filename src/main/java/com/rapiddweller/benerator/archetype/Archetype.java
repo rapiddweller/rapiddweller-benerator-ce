@@ -26,6 +26,10 @@
 
 package com.rapiddweller.benerator.archetype;
 
+import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.IOUtil;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -38,131 +42,161 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
 
-import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.IOUtil;
-
 /**
  * Represents a Benerator project archetype.<br/><br/>
  * Created at 18.02.2009 07:34:50
- * @since 0.5.9
+ *
  * @author Volker Bergmann
+ * @since 0.5.9
  */
-
 public class Archetype implements Serializable {
-	
-    private static final long serialVersionUID = 2552120042802481049L;
-    
-	private final String id;
-	private final URL url;
-	private final URL iconUrl;
-	private final String description;
 
-	public Archetype(URL url) {
-	    try {
-	    	String urlString = url.toString();
-	    	this.id = urlString.substring(urlString.lastIndexOf('/') + 1);
-	        this.url = url;
-	        URL infoUrl = new URL(url.toString() + "/ARCHETYPE-INF");
-	        iconUrl = new URL(infoUrl.toString() + "/icon.gif");
-	        this.description = resolveDescription(id, infoUrl);
-        } catch (Exception e) {
-        	throw new ConfigurationError("Error reading archetype info from " + url, e);
+  private static final long serialVersionUID = 2552120042802481049L;
+
+  private final String id;
+  private final URL url;
+  private final URL iconUrl;
+  private final String description;
+
+  /**
+   * Instantiates a new Archetype.
+   *
+   * @param url the url
+   */
+  public Archetype(URL url) {
+    try {
+      String urlString = url.toString();
+      this.id = urlString.substring(urlString.lastIndexOf('/') + 1);
+      this.url = url;
+      URL infoUrl = new URL(url + "/ARCHETYPE-INF");
+      iconUrl = new URL(infoUrl + "/icon.gif");
+      this.description = resolveDescription(id, infoUrl);
+    } catch (Exception e) {
+      throw new ConfigurationError("Error reading archetype info from " + url, e);
+    }
+  }
+
+  private static String resolveDescription(String id, URL infoUrl) throws IOException {
+    URL descriptionUrl = new URL(infoUrl.toString() + "/description.properties");
+    String desc = null;
+    try {
+      InputStream descriptionFileStream = descriptionUrl.openStream();
+      Properties descriptions = new Properties();
+      descriptions.load(descriptionFileStream);
+      // try to get the name in the user's default locale...
+      desc = descriptions.getProperty(Locale.getDefault().getLanguage());
+      if (desc == null) { // ...if no such name was defined, fall back to the English name (if it exists)
+
+        desc = descriptions.getProperty("en");
+      }
+      if (desc == null) { // if there is even no English name, choose an arbitrary one
+        Collection<Object> values = descriptions.values();
+        if (values.size() > 0) {
+          desc = values.iterator().next().toString();
         }
+      }
+      descriptionFileStream.close();
+    } catch (FileNotFoundException e) {
+      // no description file defined
     }
+    // if no description was found, choose the archetype id as description
+    return (desc != null ? desc : id);
+  }
 
-	private static String resolveDescription(String id, URL infoUrl) throws IOException {
-	    URL descriptionUrl = new URL(infoUrl.toString() + "/description.properties");
-	    String desc = null;
-	    try {
-		    InputStream descriptionFileStream = descriptionUrl.openStream();
-		    Properties descriptions = new Properties();
-			descriptions.load(descriptionFileStream);
-            // try to get the name in the user's default locale...
-		    desc = descriptions.getProperty(Locale.getDefault().getLanguage());
-		    if (desc == null) // ...if no such name was defined, fall back to the English name (if it exists)
-		    	desc = descriptions.getProperty("en");
-		    if (desc == null) { // if there is even no English name, choose an arbitrary one
-		    	Collection<Object> values = descriptions.values();
-		    	if (values.size() > 0)
-		    		desc = values.iterator().next().toString();
-		    }
-			descriptionFileStream.close();
-	    } catch (FileNotFoundException e) {
-	    	// no description file defined
-	    }
-		// if no description was found, choose the archetype id as description
-	    return (desc != null ? desc : id);
+  /**
+   * Gets id.
+   *
+   * @return the id
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
+   * Gets description.
+   *
+   * @return the description
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * Gets icon url.
+   *
+   * @return the icon url
+   */
+  public URL getIconURL() {
+    return iconUrl;
+  }
+
+  /**
+   * Copy files to.
+   *
+   * @param targetFolder the target folder
+   * @param layout       the layout
+   * @throws IOException the io exception
+   */
+  public void copyFilesTo(File targetFolder, FolderLayout layout) throws IOException {
+    copyNonSourceFilesTo(targetFolder);
+    copySourceFilesTo(targetFolder, layout);
+  }
+
+  private void copyNonSourceFilesTo(File targetFolder) throws IOException {
+    IOUtil.copyDirectory(url, targetFolder, candidate -> !candidate.contains("ARCHETYPE-INF") && !candidate.contains("/src/"));
+    copySchemaTo(targetFolder);
+  }
+
+  private void copySourceFilesTo(File targetFolder, FolderLayout layout) throws IOException {
+    copySourceDirectory(targetFolder, "src/main/java", layout);
+    copySourceDirectory(targetFolder, "src/main/resources", layout);
+    copySourceDirectory(targetFolder, "src/test/java", layout);
+    copySourceDirectory(targetFolder, "src/test/resources", layout);
+    copySchemaTo(targetFolder);
+  }
+
+  private void copySourceDirectory(File targetFolder, String subFolder, FolderLayout layout) throws IOException {
+    URL srcUrl = new URL(url.toString() + '/' + subFolder);
+    targetFolder = new File(targetFolder, layout.mapSubFolder(subFolder));
+    targetFolder.mkdir();
+    if (IOUtil.listResources(srcUrl).length > 0) {
+      IOUtil.copyDirectory(srcUrl, targetFolder, null);
     }
+  }
 
-	public String getId() {
-		return id;
-	}
-	
-	public String getDescription() {
-    	return description;
+  private void copySchemaTo(File targetFolder) throws IOException {
+    String xmlSchemaPath = BeneratorFactory.getSchemaPathForCurrentVersion();
+    URL schemaUrl = getClass().getClassLoader().getResource(xmlSchemaPath);
+    if (schemaUrl == null) {
+      throw new FileNotFoundException("File not found: " + xmlSchemaPath);
     }
+    InputStream in = schemaUrl.openStream();
+    File file = new File(targetFolder, xmlSchemaPath.substring(xmlSchemaPath.lastIndexOf('/')));
+    OutputStream out = new FileOutputStream(file);
+    IOUtil.transfer(in, out);
+    in.close();
+  }
 
-	public URL getIconURL() {
-    	return iconUrl;
+  @Override
+  public String toString() {
+    return description;
+  }
+
+  @Override
+  public int hashCode() {
+    return id.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-
-	public void copyFilesTo(File targetFolder, FolderLayout layout) throws IOException {
-		copyNonSourceFilesTo(targetFolder);
-		copySourceFilesTo(targetFolder, layout);
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
     }
+    Archetype that = (Archetype) obj;
+    return (this.id.equals(that.id));
+  }
 
-	private void copyNonSourceFilesTo(File targetFolder) throws IOException {
-		IOUtil.copyDirectory(url, targetFolder, candidate -> !candidate.contains("ARCHETYPE-INF") && !candidate.contains("/src/"));
-		copySchemaTo(targetFolder);
-    }
-
-	private void copySourceFilesTo(File targetFolder, FolderLayout layout) throws IOException {
-		copySourceDirectory(targetFolder, "src/main/java", layout);
-		copySourceDirectory(targetFolder, "src/main/resources", layout);
-		copySourceDirectory(targetFolder, "src/test/java", layout);
-		copySourceDirectory(targetFolder, "src/test/resources", layout);
-		copySchemaTo(targetFolder);
-    }
-
-	private void copySourceDirectory(File targetFolder, String subFolder, FolderLayout layout) throws IOException {
-	    URL srcUrl = new URL(url.toString() + '/' + subFolder);
-	    targetFolder = new File(targetFolder, layout.mapSubFolder(subFolder));
-	    targetFolder.mkdir();
-	    if (IOUtil.listResources(srcUrl).length > 0)
-	    	IOUtil.copyDirectory(srcUrl, targetFolder, null);
-    }
-
-	private void copySchemaTo(File targetFolder) throws IOException {
-		String xmlSchemaPath = BeneratorFactory.getSchemaPathForCurrentVersion();
-	    URL schemaUrl = getClass().getClassLoader().getResource(xmlSchemaPath);
-	    if (schemaUrl == null)
-	    	throw new FileNotFoundException("File not found: " + xmlSchemaPath);
-		InputStream in = schemaUrl.openStream();
-		File file = new File(targetFolder, xmlSchemaPath.substring(xmlSchemaPath.lastIndexOf('/')));
-		OutputStream out = new FileOutputStream(file);
-		IOUtil.transfer(in, out);
-		in.close();
-    }
-
-	@Override
-	public String toString() {
-		return description;
-	}
-
-	@Override
-    public int hashCode() {
-	    return id.hashCode();
-    }
-
-	@Override
-    public boolean equals(Object obj) {
-	    if (this == obj)
-		    return true;
-	    if (obj == null || getClass() != obj.getClass())
-		    return false;
-	    Archetype that = (Archetype) obj;
-	    return (this.id.equals(that.id));
-    }
-	
 }

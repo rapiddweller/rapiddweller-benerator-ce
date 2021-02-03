@@ -40,19 +40,24 @@ import com.rapiddweller.format.util.AbstractDataSource;
  * @author Volker Bergmann
  * @since 0.5.8
  */
-
 public abstract class AbstractEntitySource extends AbstractDataSource<Entity>
-        implements EntitySource, ContextAware {
+    implements EntitySource, ContextAware {
 
-    protected BeneratorContext context;
+  /**
+   * The Context.
+   */
+  protected BeneratorContext context;
 
-    public AbstractEntitySource() {
-        super(Entity.class);
-    }
+  /**
+   * Instantiates a new Abstract entity source.
+   */
+  public AbstractEntitySource() {
+    super(Entity.class);
+  }
 
-    @Override
-    public void setContext(Context ctx) {
-        this.context = (BeneratorContext) ctx;
-    }
+  @Override
+  public void setContext(Context ctx) {
+    this.context = (BeneratorContext) ctx;
+  }
 
 }

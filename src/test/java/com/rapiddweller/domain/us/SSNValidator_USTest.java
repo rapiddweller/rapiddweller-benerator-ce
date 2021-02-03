@@ -27,34 +27,41 @@
 package com.rapiddweller.domain.us;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertFalse;
 
 /**
  * Tests the {@link SSNValidator}.<br/>
  * <br/>
  * Created at 17.11.2008 07:32:50
- * @since 0.5.6
+ *
  * @author Volker Bergmann
+ * @since 0.5.6
  */
-
 public class SSNValidator_USTest {
-	
-	private final SSNValidator validator = new SSNValidator();
 
-	@Test
-	public void testInvalidNumbers() {
-		assertFalse(validator.isValid(null, null));
-		assertFalse(validator.isValid("ABC-65-4329", null));
-		assertFalse(validator.isValid("001654329", null));
-		assertFalse(validator.isValid("987-65-43292", null));
-		assertFalse(validator.isValid("987-651-4329", null));
-		assertFalse(validator.isValid("0001-65-432", null));
-	}
-	
-	@Test
-	public void testAdvertisementNumbers() {
-		assertFalse(validator.isValid("987-65-4320", null));
-		assertFalse(validator.isValid("987-65-4329", null));
-	}
-	
+  private final SSNValidator validator = new SSNValidator();
+
+  /**
+   * Test invalid numbers.
+   */
+  @Test
+  public void testInvalidNumbers() {
+    assertFalse(validator.isValid(null, null));
+    assertFalse(validator.isValid("ABC-65-4329", null));
+    assertFalse(validator.isValid("001654329", null));
+    assertFalse(validator.isValid("987-65-43292", null));
+    assertFalse(validator.isValid("987-651-4329", null));
+    assertFalse(validator.isValid("0001-65-432", null));
+  }
+
+  /**
+   * Test advertisement numbers.
+   */
+  @Test
+  public void testAdvertisementNumbers() {
+    assertFalse(validator.isValid("987-65-4320", null));
+    assertFalse(validator.isValid("987-65-4329", null));
+  }
+
 }

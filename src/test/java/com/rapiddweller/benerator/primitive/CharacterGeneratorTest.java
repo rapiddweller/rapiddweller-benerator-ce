@@ -31,80 +31,98 @@ import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.common.CollectionUtil;
 import org.junit.Test;
 
-import java.util.Locale;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
  * Tests the {@link CharacterGenerator}.<br/>
  * <br/>
+ *
  * @author Volker Bergmann
- * @since 0.1
- * Created: 09.06.2006 21:03:42
+ * @since 0.1  Created: 09.06.2006 21:03:42
  */
 public class CharacterGeneratorTest extends GeneratorClassTest {
 
-    public CharacterGeneratorTest() {
-        super(CharacterGenerator.class);
-    }
+  /**
+   * Instantiates a new Character generator test.
+   */
+  public CharacterGeneratorTest() {
+    super(CharacterGenerator.class);
+  }
 
-    @Test
-    public void testDigit() {
-        checkProductSet(create("\\d"), 1000,
-                CollectionUtil.toSet('0', '1', '2', '3', '4', '5', '6', '7','8', '9'));
-    }
+  /**
+   * Test digit.
+   */
+  @Test
+  public void testDigit() {
+    checkProductSet(create("\\d"), 1000,
+        CollectionUtil.toSet('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'));
+  }
 
-    @Test
-    public void testRange() {
-        checkProductSet(create("[1-2]"), 1000, CollectionUtil.toSet('1', '2'));
-        checkProductSet(create("[12]"), 1000, CollectionUtil.toSet('1', '2'));
-    }
+  /**
+   * Test range.
+   */
+  @Test
+  public void testRange() {
+    checkProductSet(create("[1-2]"), 1000, CollectionUtil.toSet('1', '2'));
+    checkProductSet(create("[12]"), 1000, CollectionUtil.toSet('1', '2'));
+  }
 
-    @Test
-    public void testLocale() {
-        HashSet<Character> expectedSet = new HashSet<>();
-        for (char c = 'A'; c <= 'Z'; c++)
-            expectedSet.add(c);
-        for (char c = 'a'; c <= 'z'; c++)
-            expectedSet.add(c);
-        for (char c = '0'; c <= '9'; c++)
-            expectedSet.add(c);
-        expectedSet.add('_');
-        expectedSet.add('ä');
-        expectedSet.add('ö');
-        expectedSet.add('ü');
-        expectedSet.add('Ä');
-        expectedSet.add('Ö');
-        expectedSet.add('Ü');
-        expectedSet.add('ß');
+  /**
+   * Test locale.
+   */
+  @Test
+  public void testLocale() {
+    HashSet<Character> expectedSet = new HashSet<>();
+    for (char c = 'A'; c <= 'Z'; c++) {
+      expectedSet.add(c);
+    }
+    for (char c = 'a'; c <= 'z'; c++) {
+      expectedSet.add(c);
+    }
+    for (char c = '0'; c <= '9'; c++) {
+      expectedSet.add(c);
+    }
+    expectedSet.add('_');
+    expectedSet.add('ä');
+    expectedSet.add('ö');
+    expectedSet.add('ü');
+    expectedSet.add('Ä');
+    expectedSet.add('Ö');
+    expectedSet.add('Ü');
+    expectedSet.add('ß');
 
-        checkProductSet(create("\\w", Locale.GERMAN), 10000, expectedSet);
-    }
+    checkProductSet(create("\\w", Locale.GERMAN), 10000, expectedSet);
+  }
 
-	@Test
-    public void testSet() {
-        Set<Character> values = CollectionUtil.toSet('A', 'B');
-        checkProductSet(create(values), 1000, values);
-    }
-	
-	// private helpers -------------------------------------------------------------------------------------------------
-    
-	private CharacterGenerator create(String pattern) {
-	    CharacterGenerator generator = new CharacterGenerator(pattern);
-	    generator.init(context);
-		return generator;
-    }
+  /**
+   * Test set.
+   */
+  @Test
+  public void testSet() {
+    Set<Character> values = CollectionUtil.toSet('A', 'B');
+    checkProductSet(create(values), 1000, values);
+  }
 
-    private Generator<Character> create(String pattern, Locale locale) {
-	    CharacterGenerator generator = new CharacterGenerator(pattern, locale);
-	    generator.init(context);
-		return generator;
-    }
+  // private helpers -------------------------------------------------------------------------------------------------
 
-	private Generator<Character> create(Set<Character> values) {
-	    CharacterGenerator generator = new CharacterGenerator(values);
-	    generator.init(context);
-		return generator;
-    }
+  private CharacterGenerator create(String pattern) {
+    CharacterGenerator generator = new CharacterGenerator(pattern);
+    generator.init(context);
+    return generator;
+  }
+
+  private Generator<Character> create(String pattern, Locale locale) {
+    CharacterGenerator generator = new CharacterGenerator(pattern, locale);
+    generator.init(context);
+    return generator;
+  }
+
+  private Generator<Character> create(Set<Character> values) {
+    CharacterGenerator generator = new CharacterGenerator(values);
+    generator.init(context);
+    return generator;
+  }
 
 }

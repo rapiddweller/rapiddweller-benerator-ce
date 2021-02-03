@@ -27,6 +27,8 @@
 package com.rapiddweller.benerator.factory;
 
 import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.primitive.IncrementGenerator;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.IdDescriptor;
 import com.rapiddweller.model.data.InstanceDescriptor;
@@ -34,82 +36,115 @@ import com.rapiddweller.model.data.Mode;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.benerator.primitive.IncrementGenerator;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Creates entity generators from entity metadata.<br/>
  * <br/>
  * Created: 08.09.2007 07:45:40
+ *
  * @author Volker Bergmann
  */
 public class InstanceGeneratorFactory {
-	
-	private static final Logger LOGGER = LogManager.getLogger(InstanceGeneratorFactory.class);
 
-    // protected constructor for preventing instantiation --------------------------------------------------------------
-    
-    protected InstanceGeneratorFactory() {}
+  private static final Logger LOGGER = LogManager.getLogger(InstanceGeneratorFactory.class);
 
-    public static Generator<?> createSingleInstanceGenerator(
-            InstanceDescriptor descriptor, Uniqueness ownerUniqueness, BeneratorContext context) {
-    	// check if nullQuota is 1
-        Generator<?> generator = DescriptorUtil.createNullQuotaOneGenerator(descriptor, context);
-        if (generator != null)
-        	return generator;
-        
-        // check uniqueness setting
-        Uniqueness uniqueness = DescriptorUtil.getUniqueness(descriptor, context);
-        if (!uniqueness.isUnique())
-        	uniqueness = ownerUniqueness;
-        
-        // check nullability
-		boolean nullable = DescriptorUtil.isNullable(descriptor, context);
-		
-		// check 'ignored' setting
-		if (descriptor.getMode() == Mode.ignored) {
-			LOGGER.debug("Ignoring descriptor {}", descriptor);
-			return null;
-		}
-		
-		// create an appropriate generator
-		TypeDescriptor type = descriptor.getTypeDescriptor();
-		String instanceName = descriptor.getName();
-		if (type != null) {
-			generator = MetaGeneratorFactory.createTypeGenerator(type, instanceName, nullable, uniqueness, context);
-		} else {
-        	ComponentDescriptor defaultConfig = context.getDefaultComponentConfig(instanceName);
-        	if (defaultConfig != null)
-        		return createSingleInstanceGenerator(defaultConfig, ownerUniqueness, context);
-        	if (nullable && DescriptorUtil.shouldNullifyEachNullable(descriptor, context))
-        		return createNullGenerator(descriptor, context);
-        	if (descriptor instanceof IdDescriptor)
-				generator = new IncrementGenerator(1);
-        	else
-        		throw new UnsupportedOperationException("Type of " + instanceName + " is not defined");
-        }
-		GeneratorFactory generatorFactory = context.getGeneratorFactory();
-		generator = generatorFactory.applyNullSettings(generator, nullable, descriptor.getNullQuota());
-		return generator;
-    }
-    
-    public static Generator<?> createConfiguredDefaultGenerator(String componentName, Uniqueness ownerUniqueness, BeneratorContext context) {
-    	ComponentDescriptor defaultConfig = context.getDefaultComponentConfig(componentName);
-    	if (defaultConfig != null)
-    		return createSingleInstanceGenerator(defaultConfig, ownerUniqueness, context);
-    	return null;
+  // protected constructor for preventing instantiation --------------------------------------------------------------
+
+  /**
+   * Instantiates a new Instance generator factory.
+   */
+  protected InstanceGeneratorFactory() {
+  }
+
+  /**
+   * Create single instance generator generator.
+   *
+   * @param descriptor      the descriptor
+   * @param ownerUniqueness the owner uniqueness
+   * @param context         the context
+   * @return the generator
+   */
+  public static Generator<?> createSingleInstanceGenerator(
+      InstanceDescriptor descriptor, Uniqueness ownerUniqueness, BeneratorContext context) {
+    // check if nullQuota is 1
+    Generator<?> generator = DescriptorUtil.createNullQuotaOneGenerator(descriptor, context);
+    if (generator != null) {
+      return generator;
     }
 
-	protected static Generator<?> createNullGenerator(InstanceDescriptor descriptor, BeneratorContext context) {
-		Class<?> generatedType;
-		TypeDescriptor typeDescriptor = descriptor.getTypeDescriptor();
-		if (typeDescriptor instanceof SimpleTypeDescriptor)
-			generatedType = ((SimpleTypeDescriptor) typeDescriptor).getPrimitiveType().getJavaType();
-		else
-			generatedType = String.class;
-		return context.getGeneratorFactory().createNullGenerator(generatedType); 
+    // check uniqueness setting
+    Uniqueness uniqueness = DescriptorUtil.getUniqueness(descriptor, context);
+    if (!uniqueness.isUnique()) {
+      uniqueness = ownerUniqueness;
     }
+
+    // check nullability
+    boolean nullable = DescriptorUtil.isNullable(descriptor, context);
+
+    // check 'ignored' setting
+    if (descriptor.getMode() == Mode.ignored) {
+      LOGGER.debug("Ignoring descriptor {}", descriptor);
+      return null;
+    }
+
+    // create an appropriate generator
+    TypeDescriptor type = descriptor.getTypeDescriptor();
+    String instanceName = descriptor.getName();
+    if (type != null) {
+      generator = MetaGeneratorFactory.createTypeGenerator(type, instanceName, nullable, uniqueness, context);
+    } else {
+      ComponentDescriptor defaultConfig = context.getDefaultComponentConfig(instanceName);
+      if (defaultConfig != null) {
+        return createSingleInstanceGenerator(defaultConfig, ownerUniqueness, context);
+      }
+      if (nullable && DescriptorUtil.shouldNullifyEachNullable(descriptor, context)) {
+        return createNullGenerator(descriptor, context);
+      }
+      if (descriptor instanceof IdDescriptor) {
+        generator = new IncrementGenerator(1);
+      } else {
+        throw new UnsupportedOperationException("Type of " + instanceName + " is not defined");
+      }
+    }
+    GeneratorFactory generatorFactory = context.getGeneratorFactory();
+    generator = generatorFactory.applyNullSettings(generator, nullable, descriptor.getNullQuota());
+    return generator;
+  }
+
+  /**
+   * Create configured default generator generator.
+   *
+   * @param componentName   the component name
+   * @param ownerUniqueness the owner uniqueness
+   * @param context         the context
+   * @return the generator
+   */
+  public static Generator<?> createConfiguredDefaultGenerator(String componentName, Uniqueness ownerUniqueness, BeneratorContext context) {
+    ComponentDescriptor defaultConfig = context.getDefaultComponentConfig(componentName);
+    if (defaultConfig != null) {
+      return createSingleInstanceGenerator(defaultConfig, ownerUniqueness, context);
+    }
+    return null;
+  }
+
+  /**
+   * Create null generator generator.
+   *
+   * @param descriptor the descriptor
+   * @param context    the context
+   * @return the generator
+   */
+  protected static Generator<?> createNullGenerator(InstanceDescriptor descriptor, BeneratorContext context) {
+    Class<?> generatedType;
+    TypeDescriptor typeDescriptor = descriptor.getTypeDescriptor();
+    if (typeDescriptor instanceof SimpleTypeDescriptor) {
+      generatedType = ((SimpleTypeDescriptor) typeDescriptor).getPrimitiveType().getJavaType();
+    } else {
+      generatedType = String.class;
+    }
+    return context.getGeneratorFactory().createNullGenerator(generatedType);
+  }
 
 }

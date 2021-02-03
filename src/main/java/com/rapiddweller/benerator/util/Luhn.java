@@ -26,27 +26,27 @@
 
 package com.rapiddweller.benerator.util;
 
+import javax.validation.Constraint;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import javax.validation.Constraint;
-
 /**
  * Bean Validation annotation for fields that must pass the Luhn number test.<br/><br/>
  * Created: 16.10.2009 18:41:23
- * @since 0.6.0
+ *
  * @author Volker Bergmann
  * @see "http://en.wikipedia.org/wiki/Luhn_algorithm"
+ * @since 0.6.0
  */
 @Documented
 @Constraint(validatedBy = LuhnValidator.class)
-@Target({ METHOD, FIELD, TYPE })
+@Target({METHOD, FIELD, TYPE})
 @Retention(RUNTIME)
 public @interface Luhn {
 

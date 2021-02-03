@@ -31,30 +31,37 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 /**
  * Sub context version of the {@link BeneratorContext}.<br/><br/>
  * Created: 02.09.2011 14:35:59
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class DefaultBeneratorSubContext extends AbstractBeneratorSubContext {
-	
-	private ProductWrapper<?> currentProduct;
 
-	public DefaultBeneratorSubContext(String productName, BeneratorContext parent) {
-		super(productName, parent);
-	}
-	
-	@Override
-	public ProductWrapper<?> getCurrentProduct() {
-		return currentProduct;
-	}
+  private ProductWrapper<?> currentProduct;
 
-	@Override
-	public void setCurrentProduct(ProductWrapper<?> currentProduct) {
-		this.currentProduct = currentProduct;
-	}
-	
-	@Override
-	public BeneratorContext createSubContext(String productName) {
-		return new DefaultBeneratorSubContext(productName, this);
-	}
+  /**
+   * Instantiates a new Default benerator sub context.
+   *
+   * @param productName the product name
+   * @param parent      the parent
+   */
+  public DefaultBeneratorSubContext(String productName, BeneratorContext parent) {
+    super(productName, parent);
+  }
+
+  @Override
+  public ProductWrapper<?> getCurrentProduct() {
+    return currentProduct;
+  }
+
+  @Override
+  public void setCurrentProduct(ProductWrapper<?> currentProduct) {
+    this.currentProduct = currentProduct;
+  }
+
+  @Override
+  public BeneratorContext createSubContext(String productName) {
+    return new DefaultBeneratorSubContext(productName, this);
+  }
 
 }

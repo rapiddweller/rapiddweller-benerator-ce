@@ -33,17 +33,21 @@ import org.junit.Test;
  * Tests the {@link BankAccountGenerator}.<br/>
  * <br/>
  * Created at 24.06.2008 09:20:06
- * @since 0.5.4
+ *
  * @author Volker Bergmann
+ * @since 0.5.4
  */
 public class BankAccountGeneratorTest extends GeneratorTest {
-	
-	@Test
-	public void test() {
-		BankAccountGenerator generator = new BankAccountGenerator();
-		generator.init(context);
-		BankAccountValidator validator = new BankAccountValidator();
-		expectGenerations(generator, 100, validator);
-	}
-	
+
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    BankAccountGenerator generator = new BankAccountGenerator();
+    generator.init(context);
+    BankAccountValidator validator = new BankAccountValidator();
+    expectGenerations(generator, 100, validator);
+  }
+
 }

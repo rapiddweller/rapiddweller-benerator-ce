@@ -26,10 +26,6 @@
 
 package com.rapiddweller.benerator.composite;
 
-import java.io.Closeable;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorContext;
@@ -38,94 +34,120 @@ import com.rapiddweller.common.MessageHolder;
 import com.rapiddweller.common.Resettable;
 import com.rapiddweller.common.ThreadAware;
 import com.rapiddweller.common.ThreadUtil;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.Closeable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Offers support for entity or array component generation with or without variable generation.<br/><br/>
  * Created: 13.01.2011 10:52:43
- * @since 0.6.4
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class ComponentAndVariableSupport<E> implements ThreadAware, MessageHolder, Resettable, Closeable {
-	
-    private static final Logger LOGGER = LogManager.getLogger(ComponentAndVariableSupport.class);
-    private static final Logger STATE_LOGGER = LogManager.getLogger(BeneratorConstants.STATE_LOGGER);
-    
-    private final String instanceName;
-    private final List<GeneratorComponent<E>> components;
-	private String message;
-	
-	public ComponentAndVariableSupport(String instanceName, List<GeneratorComponent<E>> components, 
-			GeneratorContext context) {
-		this.instanceName = instanceName;
-        this.components = (components != null ? components : new ArrayList<>());
-	}
-	
-    public void init(BeneratorContext context) {
-    	for (GeneratorComponent<?> component : components)
-    		component.init(context);
-	}
 
-    public boolean apply(E target, BeneratorContext context) {
-    	BeneratorContext subContext = context.createSubContext(instanceName);
-    	subContext.setCurrentProduct(new ProductWrapper<>(target));
-    	for (GeneratorComponent<E> component : components) {
-            try {
-                if (!component.execute(subContext)) {
-                	message = "Component generator for '" + instanceName + 
-                		"' is not available any longer: " + component;
-                    STATE_LOGGER.debug(message);
-                    return false;
-                }
-            } catch (Exception e) {
-                throw new RuntimeException("Failure in generation of '" + instanceName + "', " +
-                		"Failed component: " + component, e);
-            }
-    	}
-    	LOGGER.debug("Generated {}", target);
-    	subContext.close();
-    	return true;
-	}
+  private static final Logger LOGGER = LogManager.getLogger(ComponentAndVariableSupport.class);
+  private static final Logger STATE_LOGGER = LogManager.getLogger(BeneratorConstants.STATE_LOGGER);
 
-    @Override
-	public void reset() {
-		for (GeneratorComponent<E> component : components)
-			component.reset();
-	}
+  private final String instanceName;
+  private final List<GeneratorComponent<E>> components;
+  private String message;
 
-    @Override
-	public void close() {
-		for (GeneratorComponent<E> component : components)
-			component.close();
-	}
-	
-	@Override
-	public String getMessage() {
-		return message;
-	}
-	
-	
-	
-	// ThreadAware interface implementation ----------------------------------------------------------------------------
-	
-    @Override
-	public boolean isParallelizable() {
-	    return ThreadUtil.allParallelizable(components);
+  /**
+   * Instantiates a new Component and variable support.
+   *
+   * @param instanceName the instance name
+   * @param components   the components
+   * @param context      the context
+   */
+  public ComponentAndVariableSupport(String instanceName, List<GeneratorComponent<E>> components,
+                                     GeneratorContext context) {
+    this.instanceName = instanceName;
+    this.components = (components != null ? components : new ArrayList<>());
+  }
+
+  /**
+   * Init.
+   *
+   * @param context the context
+   */
+  public void init(BeneratorContext context) {
+    for (GeneratorComponent<?> component : components) {
+      component.init(context);
     }
+  }
 
-    @Override
-	public boolean isThreadSafe() {
-	    return ThreadUtil.allThreadSafe(components);
+  /**
+   * Apply boolean.
+   *
+   * @param target  the target
+   * @param context the context
+   * @return the boolean
+   */
+  public boolean apply(E target, BeneratorContext context) {
+    BeneratorContext subContext = context.createSubContext(instanceName);
+    subContext.setCurrentProduct(new ProductWrapper<>(target));
+    for (GeneratorComponent<E> component : components) {
+      try {
+        if (!component.execute(subContext)) {
+          message = "Component generator for '" + instanceName +
+              "' is not available any longer: " + component;
+          STATE_LOGGER.debug(message);
+          return false;
+        }
+      } catch (Exception e) {
+        throw new RuntimeException("Failure in generation of '" + instanceName + "', " +
+            "Failed component: " + component, e);
+      }
     }
-    
-    
-    
-	// java.lang.Object overrides --------------------------------------------------------------------------------------
-	
-	@Override
-	public String toString() {
-	    return getClass().getSimpleName() + components;
-	}
+    LOGGER.debug("Generated {}", target);
+    subContext.close();
+    return true;
+  }
+
+  @Override
+  public void reset() {
+    for (GeneratorComponent<E> component : components) {
+      component.reset();
+    }
+  }
+
+  @Override
+  public void close() {
+    for (GeneratorComponent<E> component : components) {
+      component.close();
+    }
+  }
+
+  @Override
+  public String getMessage() {
+    return message;
+  }
+
+
+  // ThreadAware interface implementation ----------------------------------------------------------------------------
+
+  @Override
+  public boolean isParallelizable() {
+    return ThreadUtil.allParallelizable(components);
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return ThreadUtil.allThreadSafe(components);
+  }
+
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + components;
+  }
 
 }

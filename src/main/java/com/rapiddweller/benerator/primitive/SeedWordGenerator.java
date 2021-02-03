@@ -26,6 +26,12 @@
 
 package com.rapiddweller.benerator.primitive;
 
+import com.rapiddweller.benerator.sample.SeedGenerator;
+import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.domain.lang.Noun;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -33,93 +39,104 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
-import com.rapiddweller.benerator.sample.SeedGenerator;
-import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.LocaleUtil;
-import com.rapiddweller.domain.lang.Noun;
-
 /**
  * Generates words based on a word seed.<br/>
  * <br/>
  * Created at 11.07.2009 19:30:12
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class SeedWordGenerator extends NonNullGeneratorWrapper<Character[], String> {
-	
-    private static final int DEFAULT_DEPTH = 4;
-	
-    public SeedWordGenerator() {
-	    this(null, DEFAULT_DEPTH);
-    }
-	
-	public SeedWordGenerator(Iterator<String> seed, int depth) {
-		super(createSource(seed, depth));
-    }
 
-	private static SeedGenerator<Character> createSource(Iterator<String> seed, int depth) {
-		if (seed == null)
-			seed = defaultNounIterator();
-		SeedGenerator<Character> result = new SeedGenerator<>(Character.class, depth);
-	    while (seed.hasNext()) {
-			char[] charArray = seed.next().toCharArray();
-			Character[] objectSample = new Character[charArray.length];
-			for (int i = 0; i < charArray.length; i++)
-				objectSample[i] = charArray[i];
-			result.addSample(objectSample);
-	    }
-	    return result;
-	}
+  private static final int DEFAULT_DEPTH = 4;
 
-	
-	// Generator interface implementation ------------------------------------------------------------------------------
-	
-	@Override
-	public Class<String> getGeneratedType() {
-	    return String.class;
-    }
+  /**
+   * Instantiates a new Seed word generator.
+   */
+  public SeedWordGenerator() {
+    this(null, DEFAULT_DEPTH);
+  }
 
-	@Override
-	public String generate() {
-		assertInitialized();
-	    return toString(generateFromNotNullSource());
-    }
-	
-    private static String toString(Character[] chars) {
-	    StringBuilder builder = new StringBuilder(chars.length);
-	    for (char c : chars)
-	    	builder.append(c);
-	    return builder.toString();
-    }
+  /**
+   * Instantiates a new Seed word generator.
+   *
+   * @param seed  the seed
+   * @param depth the depth
+   */
+  public SeedWordGenerator(Iterator<String> seed, int depth) {
+    super(createSource(seed, depth));
+  }
 
-	// private helpers -------------------------------------------------------------------------------------------------
-
-    private static Iterator<String> defaultNounIterator() {
-    	try {
-	        Iterator<String> iterator = getNounIterator(Locale.getDefault());
-	        return (iterator != null ? iterator : getNounIterator(LocaleUtil.getFallbackLocale()));
-    	} catch (Exception e) {
-    		throw new ConfigurationError(e);
-    	}
+  private static SeedGenerator<Character> createSource(Iterator<String> seed, int depth) {
+    if (seed == null) {
+      seed = defaultNounIterator();
     }
-
-    private static Iterator<String> getNounIterator(Locale locale) throws IOException {
-    	Collection<Noun> nouns = Noun.getInstances(locale);
-    	Set<String> words = new HashSet<>(nouns.size() * 2);
-    	for (Noun noun : nouns) {
-    		if (noun.getSingular() != null)
-    			words.add(noun.getSingular());
-    		if (noun.getPlural() != null)
-    			words.add(noun.getPlural());
-    	}
-    	return words.iterator();
+    SeedGenerator<Character> result = new SeedGenerator<>(Character.class, depth);
+    while (seed.hasNext()) {
+      char[] charArray = seed.next().toCharArray();
+      Character[] objectSample = new Character[charArray.length];
+      for (int i = 0; i < charArray.length; i++) {
+        objectSample[i] = charArray[i];
+      }
+      result.addSample(objectSample);
     }
+    return result;
+  }
 
-    public void printState() {
-	    System.out.println(getClass().getSimpleName());
-	    ((SeedGenerator<Character>) getSource()).printState("  ");
+
+  // Generator interface implementation ------------------------------------------------------------------------------
+
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
+
+  @Override
+  public String generate() {
+    assertInitialized();
+    return toString(generateFromNotNullSource());
+  }
+
+  private static String toString(Character[] chars) {
+    StringBuilder builder = new StringBuilder(chars.length);
+    for (char c : chars) {
+      builder.append(c);
     }
+    return builder.toString();
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private static Iterator<String> defaultNounIterator() {
+    try {
+      Iterator<String> iterator = getNounIterator(Locale.getDefault());
+      return (iterator != null ? iterator : getNounIterator(LocaleUtil.getFallbackLocale()));
+    } catch (Exception e) {
+      throw new ConfigurationError(e);
+    }
+  }
+
+  private static Iterator<String> getNounIterator(Locale locale) throws IOException {
+    Collection<Noun> nouns = Noun.getInstances(locale);
+    Set<String> words = new HashSet<>(nouns.size() * 2);
+    for (Noun noun : nouns) {
+      if (noun.getSingular() != null) {
+        words.add(noun.getSingular());
+      }
+      if (noun.getPlural() != null) {
+        words.add(noun.getPlural());
+      }
+    }
+    return words.iterator();
+  }
+
+  /**
+   * Print state.
+   */
+  public void printState() {
+    System.out.println(getClass().getSimpleName());
+    ((SeedGenerator<Character>) getSource()).printState("  ");
+  }
 
 }

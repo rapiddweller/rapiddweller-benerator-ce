@@ -23,6 +23,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.rapiddweller.benerator.distribution;
 
 import com.rapiddweller.benerator.distribution.function.DiscreteFunction;
@@ -30,24 +31,35 @@ import com.rapiddweller.benerator.distribution.function.DiscreteFunction;
 /**
  * Custom weight function implementation.<br/><br/>
  * Created: 09.07.2010 07:41:55
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class StandardWeightingFunction extends DiscreteFunction {
-	
-   final double[] weights = new double[3];
 
-   public StandardWeightingFunction(int a, int b, int c) {
-      weights[0] = a;
-      weights[1] = b;
-      weights[2] = c;
-   }
+  /**
+   * The Weights.
+   */
+  final double[] weights = new double[3];
 
-   @Override
-   public double value(double arg) {
-      int i = (int) arg;
-      return weights[i];
-   }
-   
+  /**
+   * Instantiates a new Standard weighting function.
+   *
+   * @param a the a
+   * @param b the b
+   * @param c the c
+   */
+  public StandardWeightingFunction(int a, int b, int c) {
+    weights[0] = a;
+    weights[1] = b;
+    weights[2] = c;
+  }
+
+  @Override
+  public double value(double arg) {
+    int i = (int) arg;
+    return weights[i];
+  }
+
 }
 

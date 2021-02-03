@@ -37,46 +37,84 @@ import java.util.Random;
  */
 public class Street {
 
-    private final City city;
-    private String name;
-    private int maxHouseNumber;
-    private final Random random;
+  private final City city;
+  private String name;
+  private int maxHouseNumber;
+  private final Random random;
 
-    public Street(City city, String name) {
-        this(city, name, 50);
-    }
+  /**
+   * Instantiates a new Street.
+   *
+   * @param city the city
+   * @param name the name
+   */
+  public Street(City city, String name) {
+    this(city, name, 50);
+  }
 
-    public Street(City city, String name, int maxHouseNumber) {
-        this.city = city;
-        this.name = name;
-        this.maxHouseNumber = maxHouseNumber;
-        this.random = new Random();
-    }
+  /**
+   * Instantiates a new Street.
+   *
+   * @param city           the city
+   * @param name           the name
+   * @param maxHouseNumber the max house number
+   */
+  public Street(City city, String name, int maxHouseNumber) {
+    this.city = city;
+    this.name = name;
+    this.maxHouseNumber = maxHouseNumber;
+    this.random = new Random();
+  }
 
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public int getMaxHouseNumber() {
-        return maxHouseNumber;
-    }
+  /**
+   * Gets max house number.
+   *
+   * @return the max house number
+   */
+  public int getMaxHouseNumber() {
+    return maxHouseNumber;
+  }
 
-    public void setMaxHouseNumber(int maxHouseNumber) {
-        this.maxHouseNumber = maxHouseNumber;
-    }
+  /**
+   * Sets max house number.
+   *
+   * @param maxHouseNumber the max house number
+   */
+  public void setMaxHouseNumber(int maxHouseNumber) {
+    this.maxHouseNumber = maxHouseNumber;
+  }
 
-    public String[] generateHouseNumberWithPostalCode() {
-        return new String[] {
-                String.valueOf(random(1, maxHouseNumber)),
-                RandomUtil.randomElement(city.getPostalCodes())
-        };
-    }
+  /**
+   * Generate house number with postal code string [ ].
+   *
+   * @return the string [ ]
+   */
+  public String[] generateHouseNumberWithPostalCode() {
+    return new String[] {
+        String.valueOf(random(1, maxHouseNumber)),
+        RandomUtil.randomElement(city.getPostalCodes())
+    };
+  }
 
-    private int random(int min, int max) {
-        return min + random.nextInt(max - min + 1);
-    }
+  private int random(int min, int max) {
+    return min + random.nextInt(max - min + 1);
+  }
 }

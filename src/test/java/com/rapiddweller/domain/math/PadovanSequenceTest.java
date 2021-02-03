@@ -34,34 +34,43 @@ import org.junit.Test;
  * Tests the {@link PadovanSequence}.<br/>
  * <br/>
  * Created at 03.07.2009 13:25:56
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class PadovanSequenceTest extends GeneratorTest {
 
-	@Test
-	public void testLimitedRange() {
-		PadovanSequence padovanSequence = new PadovanSequence();
-		Generator<Integer> generator = padovanSequence.createNumberGenerator(Integer.class, 0, 10, 1, false);
-		generator.init(context);
-		expectGeneratedSequence(generator, 1, 1, 1, 2, 2, 3, 4, 5, 7, 9).withCeasedAvailability();
-	}
-	
-	@Test
-	public void testUnlimitedRange() {
-		PadovanSequence padovanSequence = new PadovanSequence();
-		Generator<Integer> generator = padovanSequence.createNumberGenerator(Integer.class, 0, null, 1, false);
-		generator.init(context);
-		expectGeneratedSequence(generator, 1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12, 16).withContinuedAvailability();
-	}
-	
-	@Test
-	public void testUniqueness() {
-		PadovanSequence padovanSequence = new PadovanSequence();
-		Generator<Integer> generator = padovanSequence.createNumberGenerator(Integer.class, 0, 10, 1, true);
-		generator.init(context);
-		expectGeneratedSequence(generator, 1, 2, 2, 3, 4, 5, 7, 9).withCeasedAvailability();
-	}
-	
+  /**
+   * Test limited range.
+   */
+  @Test
+  public void testLimitedRange() {
+    PadovanSequence padovanSequence = new PadovanSequence();
+    Generator<Integer> generator = padovanSequence.createNumberGenerator(Integer.class, 0, 10, 1, false);
+    generator.init(context);
+    expectGeneratedSequence(generator, 1, 1, 1, 2, 2, 3, 4, 5, 7, 9).withCeasedAvailability();
+  }
+
+  /**
+   * Test unlimited range.
+   */
+  @Test
+  public void testUnlimitedRange() {
+    PadovanSequence padovanSequence = new PadovanSequence();
+    Generator<Integer> generator = padovanSequence.createNumberGenerator(Integer.class, 0, null, 1, false);
+    generator.init(context);
+    expectGeneratedSequence(generator, 1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12, 16).withContinuedAvailability();
+  }
+
+  /**
+   * Test uniqueness.
+   */
+  @Test
+  public void testUniqueness() {
+    PadovanSequence padovanSequence = new PadovanSequence();
+    Generator<Integer> generator = padovanSequence.createNumberGenerator(Integer.class, 0, 10, 1, true);
+    generator.init(context);
+    expectGeneratedSequence(generator, 1, 2, 2, 3, 4, 5, 7, 9).withCeasedAvailability();
+  }
+
 }

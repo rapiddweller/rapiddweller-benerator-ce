@@ -26,50 +26,63 @@
 
 package com.rapiddweller.benerator;
 
+import com.rapiddweller.benerator.wrapper.ProductWrapper;
+
 import java.io.Closeable;
 import java.io.Flushable;
 
-import com.rapiddweller.benerator.wrapper.ProductWrapper;
-
 /**
  * Abstraction of an object that consumes (possibly larger quantities of) objects.
- * Consumation is a two-step process: For each object A to be consumed, Benerator 
- * first calls {@link #startConsuming(ProductWrapper)}, then 
- * {@link #finishConsuming(ProductWrapper)} with a wrapper of this object: 
+ * Consumation is a two-step process: For each object A to be consumed, Benerator
+ * first calls {@link #startConsuming(ProductWrapper)}, then
+ * {@link #finishConsuming(ProductWrapper)} with a wrapper of this object:
  * <pre>
- * 	startConsuming(A);
- * 	finishConsuming(A);
+ * startConsuming(A);
+ * finishConsuming(A);
  * </pre>
- * If an object A has a 'sub object' B, (defined via nested a &gt;generate&lt; 
+ * If an object A has a 'sub object' B, (defined via nested a &gt;generate&lt;
  * statement), Benerator represents the recursion by the following invocation sequence:
  * <pre>
- * 	startConsuming(A);
- * 	startConsuming(B);
- * 	finishConsuming(B);
- * 	finishConsuming(A);
+ * startConsuming(A);
+ * startConsuming(B);
+ * finishConsuming(B);
+ * finishConsuming(A);
  * </pre>
  * <br/>
  * Created: 01.02.2008 16:15:09
- * @since 0.4.0
+ *
  * @author Volker Bergmann
+ * @since 0.4.0
  */
 public interface Consumer extends Flushable, Closeable {
-	
-	/** Starts consumption of an object. For invocation details see the class documentation. */
-    void startConsuming(ProductWrapper<?> wrapper);
-    
-	/** Starts consumption of an object. For invocation details see the class documentation. */
-    void finishConsuming(ProductWrapper<?> wrapper);
-    
-    /** Is called by Benerator for advising the Consumer to finish processing of the objects 
-     *  consumed so far. In Benerator descriptor files, the flushing behavior is controlled 
-     *  by the <code>pageSize</code> attribute. */
-    @Override
-	void flush();
-    
-    /** When called, the implementor has to close and free all resources. 
-     * It will not receive any more calls. */
-    @Override
-	void close();
-    
+
+  /**
+   * Starts consumption of an object. For invocation details see the class documentation.
+   *
+   * @param wrapper the wrapper
+   */
+  void startConsuming(ProductWrapper<?> wrapper);
+
+  /**
+   * Starts consumption of an object. For invocation details see the class documentation.
+   *
+   * @param wrapper the wrapper
+   */
+  void finishConsuming(ProductWrapper<?> wrapper);
+
+  /**
+   * Is called by Benerator for advising the Consumer to finish processing of the objects
+   * consumed so far. In Benerator descriptor files, the flushing behavior is controlled
+   * by the <code>pageSize</code> attribute.
+   */
+  @Override
+  void flush();
+
+  /**
+   * When called, the implementor has to close and free all resources.
+   * It will not receive any more calls.
+   */
+  @Override
+  void close();
+
 }

@@ -33,57 +33,78 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
  * Generates integers reversing the bits of a continuously rising number.<br/>
  * <br/>
  * Created: 13.11.2007 15:42:27
+ *
  * @author Volker Bergmann
  */
 public class BitReverseLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
-    public static final long MAX_INDEX_RANGE = (1L << 30) - 1;
-    
-	private BitReverseNaturalNumberGenerator indexGenerator;
+  /**
+   * The constant MAX_INDEX_RANGE.
+   */
+  public static final long MAX_INDEX_RANGE = (1L << 30) - 1;
 
-    public BitReverseLongGenerator() {
-        this(0, MAX_INDEX_RANGE);
+  private BitReverseNaturalNumberGenerator indexGenerator;
+
+  /**
+   * Instantiates a new Bit reverse long generator.
+   */
+  public BitReverseLongGenerator() {
+    this(0, MAX_INDEX_RANGE);
+  }
+
+  /**
+   * Instantiates a new Bit reverse long generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public BitReverseLongGenerator(long min, long max) {
+    this(min, max, 1);
+  }
+
+  /**
+   * Instantiates a new Bit reverse long generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   */
+  public BitReverseLongGenerator(long min, long max, long granularity) {
+    super(Long.class, min, max, granularity);
+  }
+
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    indexGenerator = new BitReverseNaturalNumberGenerator((max - min - 1 + granularity) / granularity);
+    indexGenerator.init(context);
+    super.init(context);
+  }
+
+  @Override
+  public synchronized Long generate() {
+    assertInitialized();
+    Long index = indexGenerator.generate();
+    if (index == null) {
+      return null;
     }
+    return min + index * granularity;
+  }
 
-    public BitReverseLongGenerator(long min, long max) {
-        this(min, max, 1);
-    }
+  @Override
+  public void reset() {
+    assertInitialized();
+    super.reset();
+    indexGenerator.reset();
+  }
 
-    public BitReverseLongGenerator(long min, long max, long granularity) {
-        super(Long.class, min, max, granularity);
-    }
+  @Override
+  public void close() {
+    assertInitialized();
+    super.close();
+    indexGenerator.close();
+  }
 
-    // Generator interface ---------------------------------------------------------------------------------------------
-
-    @Override
-	public void init(GeneratorContext context) {
-    	assertNotInitialized();
-        indexGenerator = new BitReverseNaturalNumberGenerator((max - min - 1 + granularity) / granularity);
-        indexGenerator.init(context);
-        super.init(context);
-    }
-
-	@Override
-	public synchronized Long generate() {
-        assertInitialized();
-        Long index = indexGenerator.generate();
-        if (index == null)
-        	return null;
-        return min + index * granularity;
-    }
-
-    @Override
-	public void reset() {
-    	assertInitialized();
-        super.reset();
-        indexGenerator.reset();
-    }
-
-    @Override
-	public void close() {
-    	assertInitialized();
-        super.close();
-        indexGenerator.close();
-    }
-    
 }

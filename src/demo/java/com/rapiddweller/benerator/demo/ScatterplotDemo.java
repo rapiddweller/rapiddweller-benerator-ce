@@ -44,46 +44,65 @@ import java.awt.*;
  * <br/>
  * Created: 07.09.2006 19:06:16
  *
- * @see XFunction <br/>
+ * @see XFunction<br/>
  */
 public class ScatterplotDemo extends Component {
 
-    private static final long serialVersionUID = 5264230937667632984L;
+  private static final long serialVersionUID = 5264230937667632984L;
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("ScatterplotDemo");
-        frame.getContentPane().add(new ScatterplotDemo(), BorderLayout.CENTER);
-        frame.getContentPane().setBackground(Color.WHITE);
-        frame.setBounds(0, 0, (int) (Math.PI * 150), 480);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-    }
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   */
+  public static void main(String[] args) {
+    JFrame frame = new JFrame("ScatterplotDemo");
+    frame.getContentPane().add(new ScatterplotDemo(), BorderLayout.CENTER);
+    frame.getContentPane().setBackground(Color.WHITE);
+    frame.setBounds(0, 0, (int) (Math.PI * 150), 480);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setVisible(true);
+  }
 
-    @Override
-    public void paint(Graphics g) {
-        BeneratorContext context = new DefaultBeneratorContext();
-        GeneratorFactory generatorFactory = context.getGeneratorFactory();
-        NonNullGenerator<Integer> xGen = generatorFactory
-                .createNumberGenerator(Integer.class, 0, true, getWidth(), true,
-                        1, new XFunction(), Uniqueness.NONE);
-        xGen.init(context);
-        NonNullGenerator<Integer> yGen = generatorFactory
-                .createNumberGenerator(Integer.class, 0, true, getHeight(),
-                        true, 1, SequenceManager.CUMULATED_SEQUENCE,
-                        Uniqueness.NONE);
-        yGen.init(context);
-        int n = getWidth() * getHeight() / 16;
-        for (int i = 0; i < n; i++) {
-            int x = xGen.generate();
-            int y = yGen.generate();
-            g.drawLine(x, y, x, y);
-        }
+  /**
+   * Paint.
+   *
+   * @param g the g
+   */
+  @Override
+  public void paint(Graphics g) {
+    BeneratorContext context = new DefaultBeneratorContext();
+    GeneratorFactory generatorFactory = context.getGeneratorFactory();
+    NonNullGenerator<Integer> xGen = generatorFactory
+        .createNumberGenerator(Integer.class, 0, true, getWidth(), true,
+            1, new XFunction(), Uniqueness.NONE);
+    xGen.init(context);
+    NonNullGenerator<Integer> yGen = generatorFactory
+        .createNumberGenerator(Integer.class, 0, true, getHeight(),
+            true, 1, SequenceManager.CUMULATED_SEQUENCE,
+            Uniqueness.NONE);
+    yGen.init(context);
+    int n = getWidth() * getHeight() / 16;
+    for (int i = 0; i < n; i++) {
+      int x = xGen.generate();
+      int y = yGen.generate();
+      g.drawLine(x, y, x, y);
     }
+  }
 
-    static class XFunction extends AbstractWeightFunction {
-        public double value(double param) {
-            double s = Math.sin(param / 30);
-            return s * s;
-        }
+  /**
+   * The type X function.
+   */
+  static class XFunction extends AbstractWeightFunction {
+    /**
+     * Value double.
+     *
+     * @param param the param
+     * @return the double
+     */
+    public double value(double param) {
+      double s = Math.sin(param / 30);
+      return s * s;
     }
+  }
 }

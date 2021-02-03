@@ -37,26 +37,25 @@ import com.rapiddweller.common.Validator;
  */
 public class BankAccountValidator implements Validator<BankAccount> {
 
-    private final Validator<String> ibanValidator = new IBANValidator();
+  private final Validator<String> ibanValidator = new IBANValidator();
 
-    @Override
-    public boolean valid(BankAccount account) {
-        if (account == null) {
-            return false;
-        }
-        String accountNumber = account.getAccountNumber();
-        return (accountNumber != null &&
-                (accountNumber.length() >= 1 && accountNumber.length() <= 10)
-                && account.getBankCode() != null
-                && account.getBankName() != null
-                && account.getBic() != null
-                && ibanValidator.valid(account.getIban())
-        );
+  @Override
+  public boolean valid(BankAccount account) {
+    if (account == null) {
+      return false;
     }
+    String accountNumber = account.getAccountNumber();
+    return (accountNumber != null &&
+        (accountNumber.length() >= 1 && accountNumber.length() <= 10)
+        && account.getBankCode() != null
+        && account.getBankName() != null
+        && account.getBic() != null
+        && ibanValidator.valid(account.getIban()));
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 
 }

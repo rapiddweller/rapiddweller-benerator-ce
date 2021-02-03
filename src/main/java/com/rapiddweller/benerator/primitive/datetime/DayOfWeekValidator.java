@@ -26,81 +26,105 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.validation.ConstraintValidatorContext;
-
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
+import javax.validation.ConstraintValidatorContext;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Filters {@link Date}s by their day of week.
- * All days of the week are accepted by default. 
- * Attention: The weekday array begins with Monday (as defined in ISO_8601), 
+ * All days of the week are accepted by default.
+ * Attention: The weekday array begins with Monday (as defined in ISO_8601),
  * not with Sunday (as used in {@link java.util.Calendar}).<br/>
  * <br/>
  * Created at 23.09.2009 17:51:52
- * @since 0.6.0
+ *
  * @author Volker Bergmann
  * @see <a href="http://en.wikipedia.org/wiki/ISO_8601#Week_dates">ISO 8601</a>
+ * @since 0.6.0
  */
-
 public class DayOfWeekValidator extends AbstractConstraintValidator<DayOfWeek, Date> {
-	
-	/** 
-	 * holds a flag for each weekday that tells if it is accepted. 
-	 */
-	private final boolean[] daysOfWeekAccepted;
-	
-    public DayOfWeekValidator() {
-    	this.daysOfWeekAccepted = new boolean[7];
-    	Arrays.fill(daysOfWeekAccepted, true);
-    }
-    
-    // properties ------------------------------------------------------------------------------------------------------
 
-    public void setDaysOfWeekAccepted(boolean... daysOfWeekAccepted) {
-    	Assert.equals(7, daysOfWeekAccepted.length, getClass().getName() + ".day");
-    	System.arraycopy(daysOfWeekAccepted, 0, this.daysOfWeekAccepted, 0, 7);
-    }
-    
-    public void setWeekdaysAccepted(boolean weekdayAccepted) {
-    	Arrays.fill(daysOfWeekAccepted, 0, 5, weekdayAccepted);
-    }
-    
-    public void setWeekendsAccepted(boolean weekendAccepted) {
-    	daysOfWeekAccepted[6] = weekendAccepted;
-    	daysOfWeekAccepted[5] = weekendAccepted;
-    }
-    
-    @Override
-    public void initialize(DayOfWeek params) {
-        Arrays.fill(daysOfWeekAccepted, false);
-        for (int dayOfWeek : params.daysOfWeekAccepted())
-        	daysOfWeekAccepted[isoDayOfWeek(dayOfWeek) - 1] = true;
-    }
-    
-	@Override
-	public boolean isValid(Date candidate, ConstraintValidatorContext ctx) {
-	    int isoDayOfWeek = isoDayOfWeek(candidate);
-		return daysOfWeekAccepted[isoDayOfWeek - 1];
-    }
+  /**
+   * holds a flag for each weekday that tells if it is accepted.
+   */
+  private final boolean[] daysOfWeekAccepted;
 
-    static int isoDayOfWeek(Date candidate) {
-	    Calendar calendar = TimeUtil.calendar(candidate);
-		int javaDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-		return isoDayOfWeek(javaDayOfWeek);
-    }
+  /**
+   * Instantiates a new Day of week validator.
+   */
+  public DayOfWeekValidator() {
+    this.daysOfWeekAccepted = new boolean[7];
+    Arrays.fill(daysOfWeekAccepted, true);
+  }
 
-    /** 
-     * Calculates the day of the week (1=monday - 7=sunday) according to ISO 8601 
-     * for the day of week returned by Calendar.get(DAY_OF_WEEK).
-     */
-	private static int isoDayOfWeek(int calendarDayOfWeek) {
-	    return (calendarDayOfWeek == Calendar.SUNDAY ? 7 : calendarDayOfWeek - 1);
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Sets days of week accepted.
+   *
+   * @param daysOfWeekAccepted the days of week accepted
+   */
+  public void setDaysOfWeekAccepted(boolean... daysOfWeekAccepted) {
+    Assert.equals(7, daysOfWeekAccepted.length, getClass().getName() + ".day");
+    System.arraycopy(daysOfWeekAccepted, 0, this.daysOfWeekAccepted, 0, 7);
+  }
+
+  /**
+   * Sets weekdays accepted.
+   *
+   * @param weekdayAccepted the weekday accepted
+   */
+  public void setWeekdaysAccepted(boolean weekdayAccepted) {
+    Arrays.fill(daysOfWeekAccepted, 0, 5, weekdayAccepted);
+  }
+
+  /**
+   * Sets weekends accepted.
+   *
+   * @param weekendAccepted the weekend accepted
+   */
+  public void setWeekendsAccepted(boolean weekendAccepted) {
+    daysOfWeekAccepted[6] = weekendAccepted;
+    daysOfWeekAccepted[5] = weekendAccepted;
+  }
+
+  @Override
+  public void initialize(DayOfWeek params) {
+    Arrays.fill(daysOfWeekAccepted, false);
+    for (int dayOfWeek : params.daysOfWeekAccepted()) {
+      daysOfWeekAccepted[isoDayOfWeek(dayOfWeek) - 1] = true;
     }
+  }
+
+  @Override
+  public boolean isValid(Date candidate, ConstraintValidatorContext ctx) {
+    int isoDayOfWeek = isoDayOfWeek(candidate);
+    return daysOfWeekAccepted[isoDayOfWeek - 1];
+  }
+
+  /**
+   * Iso day of week int.
+   *
+   * @param candidate the candidate
+   * @return the int
+   */
+  static int isoDayOfWeek(Date candidate) {
+    Calendar calendar = TimeUtil.calendar(candidate);
+    int javaDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+    return isoDayOfWeek(javaDayOfWeek);
+  }
+
+  /**
+   * Calculates the day of the week (1=monday - 7=sunday) according to ISO 8601
+   * for the day of week returned by Calendar.get(DAY_OF_WEEK).
+   */
+  private static int isoDayOfWeek(int calendarDayOfWeek) {
+    return (calendarDayOfWeek == Calendar.SUNDAY ? 7 : calendarDayOfWeek - 1);
+  }
 
 }

@@ -27,10 +27,10 @@
 package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.script.ScriptUtil;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
@@ -44,49 +44,62 @@ import javax.xml.stream.XMLStreamConstants;
  */
 public class FlatDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
 
-    public FlatDbUnitEntityIterator(String uri, BeneratorContext context) {
-        super(uri, context);
-        DbUnitUtil.skipRootElement(reader);
+  /**
+   * Instantiates a new Flat db unit entity iterator.
+   *
+   * @param uri     the uri
+   * @param context the context
+   */
+  public FlatDbUnitEntityIterator(String uri, BeneratorContext context) {
+    super(uri, context);
+    DbUnitUtil.skipRootElement(reader);
+  }
+
+  // DataIterator interface implementation ---------------------------------------------------------------------------
+
+  @Override
+  public DataContainer<Entity> next(DataContainer<Entity> container) {
+    DbUnitUtil.skipNonStartTags(reader);
+    if (reader.getEventType() == XMLStreamConstants.END_DOCUMENT) {
+      return null;
     }
+    // map element to entity
+    QName name = reader.getName();
+    Row row = parseDataset(name.getLocalPart());
+    Entity result = mapToEntity(row);
+    return container.setData(result);
+  }
 
-    // DataIterator interface implementation ---------------------------------------------------------------------------
+  // private helpers -------------------------------------------------------------------------------------------------
 
-    @Override
-    public DataContainer<Entity> next(DataContainer<Entity> container) {
-        DbUnitUtil.skipNonStartTags(reader);
-        if (reader.getEventType() == XMLStreamConstants.END_DOCUMENT)
-            return null;
-        // map element to entity
-        QName name = reader.getName();
-        Row row = parseDataset(name.getLocalPart());
-        Entity result = mapToEntity(row);
-        return container.setData(result);
+  private Row parseDataset(String tableName) {
+    int columnCount = reader.getAttributeCount();
+    String[] columnNames = new String[columnCount];
+    String[] cellValues = new String[columnCount];
+    for (int i = 0; i < columnCount; i++) {
+      columnNames[i] = reader.getAttributeLocalName(i);
+      cellValues[i] = reader.getAttributeValue(i);
     }
+    Row row = new Row(tableName, columnNames, cellValues);
+    logger.debug("parsed row {}", row);
+    return row;
+  }
 
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private Row parseDataset(String tableName) {
-        int columnCount = reader.getAttributeCount();
-        String[] columnNames = new String[columnCount];
-        String[] cellValues = new String[columnCount];
-        for (int i = 0; i < columnCount; i++) {
-            columnNames[i] = reader.getAttributeLocalName(i);
-            cellValues[i] = reader.getAttributeValue(i);
-        }
-        Row row = new Row(tableName, columnNames, cellValues);
-        logger.debug("parsed row {}", row);
-        return row;
+  /**
+   * Map to entity entity.
+   *
+   * @param row the row
+   * @return the entity
+   */
+  protected Entity mapToEntity(Row row) {
+    String[] cells = row.getValues();
+    ComplexTypeDescriptor descriptor = getType(row);
+    Entity result = new Entity(descriptor);
+    for (int i = 0; i < cells.length; i++) {
+      String rowValue = String.valueOf(ScriptUtil.evaluate(cells[i], context));
+      result.setComponent(row.getColumnName(i), rowValue);
     }
-
-    protected Entity mapToEntity(Row row) {
-        String[] cells = row.getValues();
-        ComplexTypeDescriptor descriptor = getType(row);
-        Entity result = new Entity(descriptor);
-        for (int i = 0; i < cells.length; i++) {
-            String rowValue = String.valueOf(ScriptUtil.evaluate(cells[i], context));
-            result.setComponent(row.getColumnName(i), rowValue);
-        }
-        return result;
-    }
+    return result;
+  }
 
 }

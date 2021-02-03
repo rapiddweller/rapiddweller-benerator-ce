@@ -31,8 +31,10 @@ import com.rapiddweller.common.Weighted;
 /**
  * Parent interface for {@link Generator}s that have a weight to be considered when combining Generators.<br/><br/>
  * Created: 29.08.2011 21:39:41
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public interface WeightedGenerator<E> extends Generator<E>, Weighted {
 }

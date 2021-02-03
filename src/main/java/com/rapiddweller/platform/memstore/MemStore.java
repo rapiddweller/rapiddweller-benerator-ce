@@ -29,10 +29,6 @@ package com.rapiddweller.platform.memstore;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.benerator.util.FilterExDataSource;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.DataModel;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.OrderedMap;
@@ -42,6 +38,10 @@ import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.util.DataSourceFromIterable;
 import com.rapiddweller.format.util.DataSourceProxy;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.DataModel;
+import com.rapiddweller.model.data.Entity;
+import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.script.Expression;
 
 import java.util.Collection;
@@ -56,109 +56,130 @@ import java.util.Map;
  */
 public class MemStore extends AbstractStorageSystem {
 
-    static boolean ignoreClose = false; // for testing
+  /**
+   * The Ignore close.
+   */
+  static boolean ignoreClose = false; // for testing
 
-    private final String id;
-    private final OrderedNameMap<ComplexTypeDescriptor> types;
-    private final Map<String, Map<Object, Entity>> typeMap;
+  private final String id;
+  private final OrderedNameMap<ComplexTypeDescriptor> types;
+  private final Map<String, Map<Object, Entity>> typeMap;
 
-    public MemStore(String id, DataModel dataModel) {
-        this.setDataModel(dataModel);
-        this.types = OrderedNameMap.createCaseInsensitiveMap();
-        typeMap = OrderedNameMap.createCaseInsensitiveMap();
-        this.id = id;
+  /**
+   * Instantiates a new Mem store.
+   *
+   * @param id        the id
+   * @param dataModel the data model
+   */
+  public MemStore(String id, DataModel dataModel) {
+    this.setDataModel(dataModel);
+    this.types = OrderedNameMap.createCaseInsensitiveMap();
+    typeMap = OrderedNameMap.createCaseInsensitiveMap();
+    this.id = id;
+  }
+
+  @Override
+  public String getId() {
+    return id;
+  }
+
+  @Override
+  public DataSource<Entity> queryEntities(String entityType, String selector, Context context) {
+    Map<?, Entity> idMap = getOrCreateIdMapForType(entityType);
+    DataSource<Entity> result = new DataSourceProxy<>(new DataSourceFromIterable<>(idMap.values(), Entity.class));
+    if (!StringUtil.isEmpty(selector)) {
+      Expression<Boolean> filterEx = new ScriptExpression<>(ScriptUtil.parseScriptText(selector));
+      result = new FilterExDataSource<>(result, filterEx, context);
     }
+    return result;
+  }
 
-    @Override
-    public String getId() {
-        return id;
+  @Override
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public DataSource<?> queryEntityIds(String entityType, String selector, Context context) {
+    Map<?, Entity> idMap = getOrCreateIdMapForType(entityType);
+    DataSource<?> result = new DataSourceProxy(new DataSourceFromIterable(idMap.keySet(), Object.class));
+    if (!StringUtil.isEmpty(selector)) {
+      Expression<Boolean> filterEx = new ScriptExpression<>(ScriptUtil.parseScriptText(selector));
+      result = new FilterExDataSource(result, filterEx, context);
     }
+    return result;
+  }
 
-    @Override
-    public DataSource<Entity> queryEntities(String entityType, String selector, Context context) {
-        Map<?, Entity> idMap = getOrCreateIdMapForType(entityType);
-        DataSource<Entity> result = new DataSourceProxy<>(new DataSourceFromIterable<>(idMap.values(), Entity.class));
-        if (!StringUtil.isEmpty(selector)) {
-            Expression<Boolean> filterEx = new ScriptExpression<>(ScriptUtil.parseScriptText(selector));
-            result = new FilterExDataSource<>(result, filterEx, context);
-        }
-        return result;
-    }
+  @Override
+  public DataSource<?> query(String selector, boolean simplify, Context context) {
+    throw new UnsupportedOperationException(getClass() + " does not support query(String, Context)");
+  }
 
-    @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public DataSource<?> queryEntityIds(String entityType, String selector, Context context) {
-        Map<?, Entity> idMap = getOrCreateIdMapForType(entityType);
-        DataSource<?> result = new DataSourceProxy(new DataSourceFromIterable(idMap.keySet(), Object.class));
-        if (!StringUtil.isEmpty(selector)) {
-            Expression<Boolean> filterEx = new ScriptExpression<>(ScriptUtil.parseScriptText(selector));
-            result = new FilterExDataSource(result, filterEx, context);
-        }
-        return result;
+  @Override
+  public void store(Entity entity) {
+    String entityType = entity.type();
+    Map<Object, Entity> idMap = getOrCreateIdMapForType(entityType);
+    Object idComponentValues = entity.idComponentValues();
+    if (idComponentValues == null) {
+      idComponentValues = entity.getComponents().values();
     }
+    idMap.put(idComponentValues, entity);
+    if (!types.containsKey(entityType)) {
+      types.put(entityType, new ComplexTypeDescriptor(entityType, this));
+    }
+  }
 
-    @Override
-    public DataSource<?> query(String selector, boolean simplify, Context context) {
-        throw new UnsupportedOperationException(getClass() + " does not support query(String, Context)");
-    }
+  @Override
+  public void update(Entity entity) {
+    store(entity);
+  }
 
-    @Override
-    public void store(Entity entity) {
-        String entityType = entity.type();
-        Map<Object, Entity> idMap = getOrCreateIdMapForType(entityType);
-        Object idComponentValues = entity.idComponentValues();
-        if (idComponentValues == null)
-            idComponentValues = entity.getComponents().values();
-        idMap.put(idComponentValues, entity);
-        if (!types.containsKey(entityType))
-            types.put(entityType, new ComplexTypeDescriptor(entityType, this));
-    }
+  @Override
+  public TypeDescriptor[] getTypeDescriptors() {
+    return CollectionUtil.toArray(types.values(), TypeDescriptor.class);
+  }
 
-    @Override
-    public void update(Entity entity) {
-        store(entity);
-    }
+  @Override
+  public TypeDescriptor getTypeDescriptor(String typeName) {
+    return types.get(typeName);
+  }
 
-    @Override
-    public TypeDescriptor[] getTypeDescriptors() {
-        return CollectionUtil.toArray(types.values(), TypeDescriptor.class);
-    }
+  @Override
+  public void flush() {
+  }
 
-    @Override
-    public TypeDescriptor getTypeDescriptor(String typeName) {
-        return types.get(typeName);
+  @Override
+  public void close() {
+    if (!ignoreClose) {
+      typeMap.clear();
     }
+  }
 
-    @Override
-    public void flush() {
+  /**
+   * Print content.
+   */
+  public void printContent() {
+    for (Map.Entry<String, Map<Object, Entity>> typeEntry : typeMap.entrySet()) {
+      System.out.println(typeEntry.getKey() + ':');
+      for (Map.Entry<Object, Entity> valueEntry : typeEntry.getValue().entrySet()) {
+        System.out.println(valueEntry.getKey() + ": " + valueEntry.getValue());
+      }
     }
+  }
 
-    @Override
-    public void close() {
-        if (!ignoreClose)
-            typeMap.clear();
+  private Map<Object, Entity> getOrCreateIdMapForType(String entityType) {
+    Map<Object, Entity> idMap = typeMap.get(entityType);
+    if (idMap == null) {
+      idMap = new OrderedMap<>();
+      typeMap.put(entityType, idMap);
     }
+    return idMap;
+  }
 
-    public void printContent() {
-        for (Map.Entry<String, Map<Object, Entity>> typeEntry : typeMap.entrySet()) {
-            System.out.println(typeEntry.getKey() + ':');
-            for (Map.Entry<Object, Entity> valueEntry : typeEntry.getValue().entrySet()) {
-                System.out.println(valueEntry.getKey() + ": " + valueEntry.getValue());
-            }
-        }
-    }
-
-    private Map<Object, Entity> getOrCreateIdMapForType(String entityType) {
-        Map<Object, Entity> idMap = typeMap.get(entityType);
-        if (idMap == null) {
-            idMap = new OrderedMap<>();
-            typeMap.put(entityType, idMap);
-        }
-        return idMap;
-    }
-
-    public Collection<Entity> getEntities(String entityType) {
-        return typeMap.get(entityType).values();
-    }
+  /**
+   * Gets entities.
+   *
+   * @param entityType the entity type
+   * @return the entities
+   */
+  public Collection<Entity> getEntities(String entityType) {
+    return typeMap.get(entityType).values();
+  }
 
 }

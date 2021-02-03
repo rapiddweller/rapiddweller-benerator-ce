@@ -26,46 +26,73 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseAttribute;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptAttribute;
-
-import java.util.Set;
-
 import com.rapiddweller.format.text.SplitStringConverter;
 import com.rapiddweller.platform.db.DBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ConvertingExpression;
 import org.w3c.dom.Element;
 
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptAttribute;
+
 /**
- * Parent class for parsers that read parsing related XML elements. 
- * It provides functionality for parsing <code>source</code>, 
- * <code>target</code> and <code>irrelevantColumns</code>, 
+ * Parent class for parsers that read parsing related XML elements.
+ * It provides functionality for parsing <code>source</code>,
+ * <code>target</code> and <code>irrelevantColumns</code>,
  * <code>pageSize</code> and <code>onError</code>.<br/><br/>
  * Created: 11.09.2010 07:12:55
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public abstract class AbstractTranscodeParser extends AbstractBeneratorDescriptorParser {
 
-	public AbstractTranscodeParser(String elementName, 
-			Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
-	    super(elementName, requiredAttributes, optionalAttributes, supportedParentTypes);
-    }
+  /**
+   * Instantiates a new Abstract transcode parser.
+   *
+   * @param elementName          the element name
+   * @param requiredAttributes   the required attributes
+   * @param optionalAttributes   the optional attributes
+   * @param supportedParentTypes the supported parent types
+   */
+  public AbstractTranscodeParser(String elementName,
+                                 Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
+    super(elementName, requiredAttributes, optionalAttributes, supportedParentTypes);
+  }
 
-	@SuppressWarnings("unchecked")
-    protected Expression<DBSystem> parseTarget(Element element) {
-	    return (Expression<DBSystem>) parseScriptAttribute("target", element);
-    }
+  /**
+   * Parse target expression.
+   *
+   * @param element the element
+   * @return the expression
+   */
+  @SuppressWarnings("unchecked")
+  protected Expression<DBSystem> parseTarget(Element element) {
+    return (Expression<DBSystem>) parseScriptAttribute("target", element);
+  }
 
-	@SuppressWarnings("unchecked")
-    protected Expression<DBSystem> parseSource(Element element) {
-        return (Expression<DBSystem>) parseScriptAttribute("source", element);
-    }
+  /**
+   * Parse source expression.
+   *
+   * @param element the element
+   * @return the expression
+   */
+  @SuppressWarnings("unchecked")
+  protected Expression<DBSystem> parseSource(Element element) {
+    return (Expression<DBSystem>) parseScriptAttribute("source", element);
+  }
 
-	protected Expression<String[]> parseIrrelevantColumns(Element element) {
-	    return new ConvertingExpression<>(
-                parseAttribute("irrelevantColumns", element), new SplitStringConverter(','));
-    }
+  /**
+   * Parse irrelevant columns expression.
+   *
+   * @param element the element
+   * @return the expression
+   */
+  protected Expression<String[]> parseIrrelevantColumns(Element element) {
+    return new ConvertingExpression<>(
+        parseAttribute("irrelevantColumns", element), new SplitStringConverter(','));
+  }
 
 }

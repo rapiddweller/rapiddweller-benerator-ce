@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import java.util.Set;
-
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
@@ -38,28 +36,39 @@ import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.StringExpression;
 import org.w3c.dom.Element;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_URI;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_INCLUDE;
 
 /**
  * Parses an {@literal <}include{@literal >} element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:32:02
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class IncludeParser extends AbstractBeneratorDescriptorParser {
-	
-	static final Set<String> REQUIRED_ATTRIBUTES = CollectionUtil.toSet(ATT_URI);
 
-	public IncludeParser() {
-	    super(EL_INCLUDE, REQUIRED_ATTRIBUTES, null, 
-	    		BeneratorRootStatement.class, IfStatement.class);
-    }
+  /**
+   * The Required attributes.
+   */
+  static final Set<String> REQUIRED_ATTRIBUTES = CollectionUtil.toSet(ATT_URI);
 
-	@Override
-	public IncludeStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-        String uriAttr = element.getAttribute(DescriptorConstants.ATT_URI);
-		Expression<String> uriEx = new StringExpression(new ScriptableExpression(uriAttr, null));
-        return new IncludeStatement(uriEx);
-    }
+  /**
+   * Instantiates a new Include parser.
+   */
+  public IncludeParser() {
+    super(EL_INCLUDE, REQUIRED_ATTRIBUTES, null,
+        BeneratorRootStatement.class, IfStatement.class);
+  }
+
+  @Override
+  public IncludeStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    String uriAttr = element.getAttribute(DescriptorConstants.ATT_URI);
+    Expression<String> uriEx = new StringExpression(new ScriptableExpression(uriAttr, null));
+    return new IncludeStatement(uriEx);
+  }
 
 }

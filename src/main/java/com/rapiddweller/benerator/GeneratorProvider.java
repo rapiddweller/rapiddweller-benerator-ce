@@ -29,9 +29,16 @@ package com.rapiddweller.benerator;
 /**
  * Provides a {@link Generator}.<br/><br/>
  * Created: 08.07.2011 10:53:44
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public interface GeneratorProvider<E> {
-	Generator<E> create();
+  /**
+   * Create generator.
+   *
+   * @return the generator
+   */
+  Generator<E> create();
 }

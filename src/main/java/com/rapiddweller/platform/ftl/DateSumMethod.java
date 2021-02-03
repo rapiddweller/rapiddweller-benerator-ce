@@ -45,22 +45,22 @@ import java.util.List;
  */
 public class DateSumMethod implements TemplateMethodModelEx {
 
-    @Override
-    public TemplateModel exec(List args) {
-        long sum = 0;
-        for (Object arg : args) {
-            arg = LiteralParser.parse((String) arg);
-            if (arg instanceof Date) {
-                sum += ((Date) arg).getTime();
-            } else if (arg instanceof Timestamp) {
-                sum += ((Timestamp) arg).getTime();
-            } else if (arg instanceof Number) {
-                sum += ((Number) arg).longValue();
-            } else if (arg != null) {
-                throw new IllegalArgumentException(
-                        "Not a supported date type: " + arg.getClass());
-            }
-        }
-        return new SimpleDate(new java.sql.Date(sum));
+  @Override
+  public TemplateModel exec(List args) {
+    long sum = 0;
+    for (Object arg : args) {
+      arg = LiteralParser.parse((String) arg);
+      if (arg instanceof Date) {
+        sum += ((Date) arg).getTime();
+      } else if (arg instanceof Timestamp) {
+        sum += ((Timestamp) arg).getTime();
+      } else if (arg instanceof Number) {
+        sum += ((Number) arg).longValue();
+      } else if (arg != null) {
+        throw new IllegalArgumentException(
+            "Not a supported date type: " + arg.getClass());
+      }
     }
+    return new SimpleDate(new java.sql.Date(sum));
+  }
 }

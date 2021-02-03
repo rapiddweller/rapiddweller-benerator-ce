@@ -27,25 +27,30 @@
 package com.rapiddweller.domain.person;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link TINGenerator}.<br/>
  * <br/>
  * Created at 27.08.2008 00:23:07
- * @since 0.5.5
+ *
  * @author Volker Bergmann
+ * @since 0.5.5
  */
 public class TINGeneratorTest {
 
-	@Test
-	public void test() {
-		TINGenerator generator = new TINGenerator();
-		TINValidator validator = new TINValidator();
-		for (int i = 0; i < 1000; i++) {
-			String number = generator.generate();
-			assertTrue(validator.isValid(number, null));
-		}
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    TINGenerator generator = new TINGenerator();
+    TINValidator validator = new TINValidator();
+    for (int i = 0; i < 1000; i++) {
+      String number = generator.generate();
+      assertTrue(validator.isValid(number, null));
+    }
+  }
+
 }

@@ -39,17 +39,17 @@ import org.apache.logging.log4j.Logger;
  */
 public class LoggingPageListener implements PageListener {
 
-    private static final Logger logger =
-            LogManager.getLogger(LoggingPageListener.class);
+  private static final Logger logger =
+      LogManager.getLogger(LoggingPageListener.class);
 
-    @Override
-    public void pageStarting() {
-        logger.info("pageStarting()");
-    }
+  @Override
+  public void pageStarting() {
+    logger.info("pageStarting()");
+  }
 
-    @Override
-    public void pageFinished() {
-        logger.info("pageFinished()");
-    }
+  @Override
+  public void pageFinished() {
+    logger.info("pageFinished()");
+  }
 
 }

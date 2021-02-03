@@ -26,16 +26,6 @@
 
 package com.rapiddweller.benerator.template.xmlanon;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import com.rapiddweller.benerator.template.TemplateInputReader;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.ConfigurationError;
@@ -44,90 +34,107 @@ import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ParseException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.format.xls.XLSUtil;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Reads XLS documents for a multi-file XML anonymization.<br/><br/>
  * Created: 06.03.2014 08:25:43
- * @since 0.9.0
+ *
  * @author Volker Bergmann
+ * @since 0.9.0
  */
-
 public class XmlAnonInputReader implements TemplateInputReader {
 
-	@Override
-	public void parse(String uri, Context context) throws IOException, ParseException {
-        AnonymizationSetup setup = parseXls(uri);
-        verifyXMLFileSettings(setup);
-        context.set("setup", setup);
+  @Override
+  public void parse(String uri, Context context) throws IOException, ParseException {
+    AnonymizationSetup setup = parseXls(uri);
+    verifyXMLFileSettings(setup);
+    context.set("setup", setup);
+  }
+
+  private static AnonymizationSetup parseXls(String xlsUri) throws IOException {
+    Workbook workbook = WorkbookFactory.create(IOUtil.getInputStreamForURI(xlsUri));
+    Sheet sheet = workbook.getSheetAt(0);
+
+    // parse header information
+    int varnameColumnIndex = -1;
+    ArrayList<String> files = new ArrayList<>();
+    Row headerRow = sheet.getRow(0);
+    Assert.notNull(headerRow, "header row");
+    for (int i = 0; i <= headerRow.getLastCellNum(); i++) {
+      String header = headerRow.getCell(i).getStringCellValue();
+      if ("varname".equals(header)) {
+        varnameColumnIndex = i;
+        break;
+      } else {
+        if (StringUtil.isEmpty(header)) {
+          throw new ConfigurationError("Filename missing in column header #" + i + " of Excel document " + xlsUri);
+        }
+        files.add(header);
+      }
+    }
+    if (varnameColumnIndex == -1) {
+      throw new ConfigurationError("No 'varname' header defined in Excel document " + xlsUri);
+    }
+    if (files.size() == 0) {
+      throw new ConfigurationError("No files specified in Excel document " + xlsUri);
     }
 
-	private static AnonymizationSetup parseXls(String xlsUri) throws IOException {
-		Workbook workbook = WorkbookFactory.create(IOUtil.getInputStreamForURI(xlsUri));
-		Sheet sheet = workbook.getSheetAt(0);
-		
-		// parse header information
-		int varnameColumnIndex = -1;
-		ArrayList<String> files = new ArrayList<>();
-		Row headerRow = sheet.getRow(0);
-		Assert.notNull(headerRow, "header row");
-		for (int i = 0; i <= headerRow.getLastCellNum(); i++) {
-			String header = headerRow.getCell(i).getStringCellValue();
-			if ("varname".equals(header)) {
-				varnameColumnIndex = i;
-				break;
-			} else {
-				if (StringUtil.isEmpty(header))
-					throw new ConfigurationError("Filename missing in column header #" + i + " of Excel document " + xlsUri);
-				files.add(header);
-			}
-		}
-		if (varnameColumnIndex == -1)
-			throw new ConfigurationError("No 'varname' header defined in Excel document " + xlsUri);
-		if (files.size() == 0)
-			throw new ConfigurationError("No files specified in Excel document " + xlsUri);
-		
-		// parse anonymization rows
-		List<Anonymization> anonymizations = new ArrayList<>();
-		for (int rownum = 1; rownum <= sheet.getLastRowNum(); rownum++) {
-			Row row = sheet.getRow(rownum);
-			if (XLSUtil.isEmpty(row))
-				continue;
-			Cell varnameCell = row.getCell(varnameColumnIndex);
-			if (varnameCell == null || StringUtil.isEmpty(varnameCell.getStringCellValue()))
-				throw new ConfigurationError("'varname' cell empty in table row #" + (rownum + 1));
-			Anonymization anon = new Anonymization(varnameCell.getStringCellValue());
-			// parse locators
-			for (int colnum = 0; colnum < varnameColumnIndex; colnum++) {
-				Cell cell = row.getCell(colnum);
-				String path = (cell != null ? cell.getStringCellValue() : null);
-				if (!StringUtil.isEmpty(path)) {
-					List<String> tokens = XPathTokenizer.tokenize(path);
-					String entityPath = XPathTokenizer.merge(tokens, 0, tokens.size() - 2);
-					String entity = normalizeXMLPath(XPathTokenizer.nodeName(tokens.get(tokens.size() - 2)));
-					String attribute = normalizeXMLPath(tokens.get(tokens.size() - 1));
-					anon.addLocator(new Locator(files.get(colnum), path, entityPath, entity, attribute));
-				}
-			}
-			// parse settings
-			for (int colnum = varnameColumnIndex + 1; colnum < row.getLastCellNum() - 1; colnum += 2) {
-				String key = row.getCell(colnum).getStringCellValue();
-				String value = row.getCell(colnum + 1).getStringCellValue();
-				if (!StringUtil.isEmpty(key) && !StringUtil.isEmpty(value))
-					anon.addSetting(key, value);
-			}
-			anonymizations.add(anon);
-		}
-		return new AnonymizationSetup(files, anonymizations);
-	}
-	
-	private static void verifyXMLFileSettings(AnonymizationSetup setup) {
-		for (String file : setup.getFiles())
-			if (StringUtil.isEmpty(System.getProperty(file)))
-				throw new ConfigurationError("No concrete file specified for file variable " + file);
-	}
+    // parse anonymization rows
+    List<Anonymization> anonymizations = new ArrayList<>();
+    for (int rownum = 1; rownum <= sheet.getLastRowNum(); rownum++) {
+      Row row = sheet.getRow(rownum);
+      if (XLSUtil.isEmpty(row)) {
+        continue;
+      }
+      Cell varnameCell = row.getCell(varnameColumnIndex);
+      if (varnameCell == null || StringUtil.isEmpty(varnameCell.getStringCellValue())) {
+        throw new ConfigurationError("'varname' cell empty in table row #" + (rownum + 1));
+      }
+      Anonymization anon = new Anonymization(varnameCell.getStringCellValue());
+      // parse locators
+      for (int colnum = 0; colnum < varnameColumnIndex; colnum++) {
+        Cell cell = row.getCell(colnum);
+        String path = (cell != null ? cell.getStringCellValue() : null);
+        if (!StringUtil.isEmpty(path)) {
+          List<String> tokens = XPathTokenizer.tokenize(path);
+          String entityPath = XPathTokenizer.merge(tokens, 0, tokens.size() - 2);
+          String entity = normalizeXMLPath(XPathTokenizer.nodeName(tokens.get(tokens.size() - 2)));
+          String attribute = normalizeXMLPath(tokens.get(tokens.size() - 1));
+          anon.addLocator(new Locator(files.get(colnum), path, entityPath, entity, attribute));
+        }
+      }
+      // parse settings
+      for (int colnum = varnameColumnIndex + 1; colnum < row.getLastCellNum() - 1; colnum += 2) {
+        String key = row.getCell(colnum).getStringCellValue();
+        String value = row.getCell(colnum + 1).getStringCellValue();
+        if (!StringUtil.isEmpty(key) && !StringUtil.isEmpty(value)) {
+          anon.addSetting(key, value);
+        }
+      }
+      anonymizations.add(anon);
+    }
+    return new AnonymizationSetup(files, anonymizations);
+  }
 
-	private static String normalizeXMLPath(String path) {
-		return path.replace('.', '_').replace('-', '_');
-	}
+  private static void verifyXMLFileSettings(AnonymizationSetup setup) {
+    for (String file : setup.getFiles()) {
+      if (StringUtil.isEmpty(System.getProperty(file))) {
+        throw new ConfigurationError("No concrete file specified for file variable " + file);
+      }
+    }
+  }
+
+  private static String normalizeXMLPath(String path) {
+    return path.replace('.', '_').replace('-', '_');
+  }
 
 }

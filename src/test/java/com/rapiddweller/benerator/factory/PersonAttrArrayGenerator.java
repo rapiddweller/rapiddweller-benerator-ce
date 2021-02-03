@@ -32,21 +32,25 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 /**
  * Constant array generator for test purposes.<br/><br/>
  * Created: 04.05.2010 14:19:53
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 public class PersonAttrArrayGenerator extends UnsafeGenerator<Object[]> {
 
-	static final Object[] ALICE = new Object[] { "Alice", 23 };
+  /**
+   * The Alice.
+   */
+  static final Object[] ALICE = new Object[] {"Alice", 23};
 
-	@Override
-	public Class<Object[]> getGeneratedType() {
-        return Object[].class;
-    }
-	
-	@Override
-	public ProductWrapper<Object[]> generate(ProductWrapper<Object[]> wrapper) {
-        return wrapper.wrap(ALICE);
-    }
+  @Override
+  public Class<Object[]> getGeneratedType() {
+    return Object[].class;
+  }
+
+  @Override
+  public ProductWrapper<Object[]> generate(ProductWrapper<Object[]> wrapper) {
+    return wrapper.wrap(ALICE);
+  }
 
 }

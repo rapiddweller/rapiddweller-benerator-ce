@@ -33,50 +33,58 @@ import org.junit.Test;
 /**
  * Tests the {@link RecurrenceRelationNumberGenerator}.<br/><br/>
  * Created: 13.10.2009 19:54:23
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class RecursiveNumberGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void testDepthOne() {
-		Generator<Integer> generator = new RecurrenceRelationNumberGenerator<>(Integer.class, 1, 0, 5) {
+  /**
+   * Test depth one.
+   */
+  @Test
+  public void testDepthOne() {
+    Generator<Integer> generator = new RecurrenceRelationNumberGenerator<>(Integer.class, 1, 0, 5) {
 
-            @Override
-            protected Integer a0(int n) {
-                return 0;
-            }
+      @Override
+      protected Integer a0(int n) {
+        return 0;
+      }
 
-            @Override
-            protected Integer aN() {
-                return aN(-1) + 1;
-            }
+      @Override
+      protected Integer aN() {
+        return aN(-1) + 1;
+      }
 
-        };
-		generator.init(context);
-		expectGeneratedSequence(generator, 0, 1, 2, 3, 4, 5).withCeasedAvailability();
-	}
+    };
+    generator.init(context);
+    expectGeneratedSequence(generator, 0, 1, 2, 3, 4, 5).withCeasedAvailability();
+  }
 
-	@Test
-	public void testDepthTwo() {
-		Generator<Integer> generator = new RecurrenceRelationNumberGenerator<>(Integer.class, 2, 0, 5) {
+  /**
+   * Test depth two.
+   */
+  @Test
+  public void testDepthTwo() {
+    Generator<Integer> generator = new RecurrenceRelationNumberGenerator<>(Integer.class, 2, 0, 5) {
 
-            @Override
-            protected Integer a0(int n) {
-                if (n == 0)
-                    return 0;
-                else
-                    return 1;
-            }
+      @Override
+      protected Integer a0(int n) {
+        if (n == 0) {
+          return 0;
+        } else {
+          return 1;
+        }
+      }
 
-            @Override
-            protected Integer aN() {
-                return 2 * aN(-2) + aN(-1);
-            }
+      @Override
+      protected Integer aN() {
+        return 2 * aN(-2) + aN(-1);
+      }
 
-        };
-		generator.init(context);
-		expectGeneratedSequence(generator, 0, 1, 1, 3, 5).withCeasedAvailability();
-	}
-	
+    };
+    generator.init(context);
+    expectGeneratedSequence(generator, 0, 1, 1, 3, 5).withCeasedAvailability();
+  }
+
 }

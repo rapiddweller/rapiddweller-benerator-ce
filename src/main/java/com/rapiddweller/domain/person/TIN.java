@@ -47,7 +47,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 @Documented
 @Constraint(validatedBy = UnluckyNumberValidator.class)
 @Target({METHOD, FIELD, TYPE})

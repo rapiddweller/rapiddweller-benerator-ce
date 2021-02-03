@@ -32,31 +32,60 @@ package com.rapiddweller.benerator.demo.product;
  * Created: 19.07.2007 07:10:07
  */
 public class ProductCategory {
-    private String name;
-    private ProductGroup group;
+  private String name;
+  private ProductGroup group;
 
-    public ProductCategory() {
-        this(null, null);
-    }
+  /**
+   * Instantiates a new Product category.
+   */
+  public ProductCategory() {
+    this(null, null);
+  }
 
-    public ProductCategory(String name, ProductGroup group) {
-        this.name = name;
-        this.group = group;
-    }
+  /**
+   * Instantiates a new Product category.
+   *
+   * @param name  the name
+   * @param group the group
+   */
+  public ProductCategory(String name, ProductGroup group) {
+    this.name = name;
+    this.group = group;
+  }
 
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public ProductGroup getGroup() {
-        return group;
-    }
+  /**
+   * Gets group.
+   *
+   * @return the group
+   */
+  public ProductGroup getGroup() {
+    return group;
+  }
 
-    public void setGroup(ProductGroup group) {
-        this.group = group;
-    }
+  /**
+   * Sets group.
+   *
+   * @param group the group
+   */
+  public void setGroup(ProductGroup group) {
+    this.group = group;
+  }
 }

@@ -39,26 +39,39 @@ import com.rapiddweller.domain.address.Country;
  * @since 0.5.2
  */
 public class DomainGenerator extends AlternativeGenerator<String>
-        implements NonNullGenerator<String> {
+    implements NonNullGenerator<String> {
 
-    public DomainGenerator() {
-        this(Country.getDefault().getIsoCode());
-    }
+  /**
+   * Instantiates a new Domain generator.
+   */
+  public DomainGenerator() {
+    this(Country.getDefault().getIsoCode());
+  }
 
-    public DomainGenerator(String datasetName) {
-        super(String.class,
-                new RandomDomainGenerator(),
-                new WebmailDomainGenerator(),
-                new CompanyDomainGenerator(datasetName));
-    }
+  /**
+   * Instantiates a new Domain generator.
+   *
+   * @param datasetName the dataset name
+   */
+  public DomainGenerator(String datasetName) {
+    super(String.class,
+        new RandomDomainGenerator(),
+        new WebmailDomainGenerator(),
+        new CompanyDomainGenerator(datasetName));
+  }
 
-    public void setDataset(String datasetName) {
-        ((CompanyDomainGenerator) sources.get(2)).setDataset(datasetName);
-    }
+  /**
+   * Sets dataset.
+   *
+   * @param datasetName the dataset name
+   */
+  public void setDataset(String datasetName) {
+    ((CompanyDomainGenerator) sources.get(2)).setDataset(datasetName);
+  }
 
-    @Override
-    public String generate() {
-        return GeneratorUtil.generateNonNull(this);
-    }
+  @Override
+  public String generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
 
 }

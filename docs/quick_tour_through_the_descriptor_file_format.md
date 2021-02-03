@@ -48,8 +48,7 @@ You can configure them in the `<setup>` element, e.g.
 
 ### Inclusion of properties files
 
-An alternative way to specify the Benerator properties from the previous chapter is to specify them in a properties
-file, e.g.
+An alternative way to specify the Benerator properties from the previous chapter is to specify them in a properties file, e.g.
 
 ```properties
 context.defaultEncoding=UTF-8
@@ -64,8 +63,7 @@ and include the properties file in the benerator descriptor file:
 
 This way you can easily use different settings in different environments (see Section 4.7, “Staging”).
 
-File entries that do not begin with 'benerator“ are simply put into the generation context and can be used to configure
-generation behavior.
+File entries that do not begin with 'benerator“ are simply put into the generation context and can be used to configure generation behavior.
 
 ### Sub-Invocation of descriptor files
 
@@ -77,8 +75,8 @@ Besides properties files, Benerator descriptor files can be included too, e.g.
 
 ## Global settings
 
-benerator supports global settings. They can be evaluated using script expressions, e.g. {user_count}. This way,
-different types of settings may be evaluated:
+benerator supports global settings. They can be evaluated using script expressions, e.g. {user_count}. This way, different types of settings may be
+evaluated:
 
 * system environment
 
@@ -94,8 +92,7 @@ A setting is explicitely defined using a setting element:
 
 ## `<import>`
 
-Benerator has lots of plugin interfaces, but is agnostic of most implementors. So you need to explicitly import what you
-need.
+Benerator has lots of plugin interfaces, but is agnostic of most implementors. So you need to explicitly import what you need.
 
 The following packages are imported by default (providing, for example, the ConsoleExporter):
 
@@ -116,7 +113,8 @@ The following packages are imported by default (providing, for example, the Cons
 | com.rapiddweller.platform.dbunit | DbUnit file importer and exporter |
 | com.rapiddweller.platform.xls | Excel(TM) Sheet importer and exporter |
 
-Benerator extensions can be bundled as domains (logical extensions) or platforms (technical extensions). You can export different bundles as comma-separated lists:
+Benerator extensions can be bundled as domains (logical extensions) or platforms (technical extensions). You can export different bundles as
+comma-separated lists:
 
 ```xml
 <import domains="address, net"/>
@@ -128,31 +126,33 @@ Imports must be the first elements used in a descriptor file.
 
 When using a Benerator plugin or another library, you need to make sure that Benerator finds its binary. There are three alternatives:
 
-1. Putting the associated jar file(s) into the lib folder of your Benerator installation. This way it is avaliable for all data generation projects on your machine. If you work in a team where everyone in familiar with Benerator and the toolset is not based on Maven, this is generally the preferred approach.
+1. Putting the associated jar file(s) into the lib folder of your Benerator installation. This way it is avaliable for all data generation projects on
+   your machine. If you work in a team where everyone in familiar with Benerator and the toolset is not based on Maven, this is generally the
+   preferred approach.
 
-2. Create a sub folder named lib under the data generation project folder and put the jar file(s) there. When distributing the project to be executed on machines with plain Benerator installations, distribute the full folder content including the lib sub folder.
+2. Create a sub folder named lib under the data generation project folder and put the jar file(s) there. When distributing the project to be executed
+   on machines with plain Benerator installations, distribute the full folder content including the lib sub folder.
 
-3. When using Maven to run Benerator, simply create the necessary Maven dependencies and Maven will acquire all needed libraries dynamically. Read more about this in the chapter Maven Benerator Plugin
-
+3. When using Maven to run Benerator, simply create the necessary Maven dependencies and Maven will acquire all needed libraries dynamically. Read
+   more about this in the chapter Maven Benerator Plugin
 
 ## `<generate>`
 
-`<generate>` elements are used to generate data from scratch. There are lots of configuration options. The minimal
-configuration specifies the type of data to be generated. For now, all generated data are 'entities' (composite data).
+`<generate>` elements are used to generate data from scratch. There are lots of configuration options. The minimal configuration specifies the type of
+data to be generated. For now, all generated data are 'entities' (composite data).
 
 ```xml
 <generate type="Person" count="10" consumer="ConsoleExporter"/>
 ```
 
-This will make Benerator generate 10 'Person' Entities and send it to a ConsoleExporter that prints out the persons to
-the console. But what is a Person? Benerator will figure it out by itself, if it knows e.g. a database with a 'PERSON'
-table, an XML schema with a 'Person' element or any other 'DescriptorProvider'. Benerator will generate database-valid
-or XML-Schema-valid data automatically. More about this later.
+This will make Benerator generate 10 'Person' Entities and send it to a ConsoleExporter that prints out the persons to the console. But what is a
+Person? Benerator will figure it out by itself, if it knows e.g. a database with a 'PERSON' table, an XML schema with a 'Person' element or any
+other 'DescriptorProvider'. Benerator will generate database-valid or XML-Schema-valid data automatically. More about this later.
 
 Let us start without DescriptorProviders, manually putting together what we need.
 
-Entities consist of members, e.g. `<attribute>`s, `<id>`s or `<reference>`s. I will concentrate on attributes in the
-following sections and explain ids and references later.
+Entities consist of members, e.g. `<attribute>`s, `<id>`s or `<reference>`s. I will concentrate on attributes in the following sections and explain
+ids and references later.
 
 ### "constant"
 
@@ -177,8 +177,8 @@ Attributes may be randomly set from a list of comma-separated values
 </generate>
 ```
 
-So we define, that Person entities have a 'firstName' attribute that is 'Alice', 'Bob' or 'Charly' and a rank of 1, 2 or
-3\. Note that string literals must be 'quoted', while number or Boolean literals do not.
+So we define, that Person entities have a 'firstName' attribute that is 'Alice', 'Bob' or 'Charly' and a rank of 1, 2 or 3\. Note that string literals
+must be 'quoted', while number or Boolean literals do not.
 
 ### "pattern": Generation by Regular Expression
 
@@ -191,13 +191,11 @@ String attribute generation can be configured using the "pattern" attribute with
 </generate>
 ```
 
-You can find a detailed descripton about Benerator's regular expression support in the chapter „Regular Expression
-Support“.
+You can find a detailed descripton about Benerator's regular expression support in the chapter „Regular Expression Support“.
 
 ## `<iterate>`
 
-The `<iterate>` element is used to iterate through pre-existing data, e.g. in a data file or database. The general form
-is
+The `<iterate>` element is used to iterate through pre-existing data, e.g. in a data file or database. The general form is
 
 ```xml
 <iterate type="Person" source="persons.csv"/>
@@ -205,13 +203,12 @@ is
 
 which iterates through all Persons defined in a CSV-file called 'persons.csv'.
 
-By default, iteration goes once from beginning to the end, but later you will learn about many ways to iterate
-repeatedly, apply distributions or filter the data to iterate through.
+By default, iteration goes once from beginning to the end, but later you will learn about many ways to iterate repeatedly, apply distributions or
+filter the data to iterate through.
 
 ## "offset"
 
-In whatever type of data generation or iteration, an **offset** can applied to skip the heading entries of a data
-source, e.g.
+In whatever type of data generation or iteration, an **offset** can applied to skip the heading entries of a data source, e.g.
 
 ```xml
 <iterate type="Person" source="persons.csv" offset="10"/>
@@ -221,15 +218,15 @@ leaves out the first ten entries of the persons.csv file.
 
 ## `<echo>`
 
-The meaning of the `<echo>` element is similar to the echo command in batch files: Simply writing information to the
-console to inform the user what is happening, e.g.
+The meaning of the `<echo>` element is similar to the echo command in batch files: Simply writing information to the console to inform the user what
+is happening, e.g.
 
 ```xml
 <echo>Running...</echo>
 ```
 
-For Mac OS X users there is a nice extra feature: When using **type='speech'**, Benerator uses Mac OS X's speech
-facility to speak the text. When executed on other operating systems, the text is only printed to the console:
+For Mac OS X users there is a nice extra feature: When using **type='speech'**, Benerator uses Mac OS X's speech facility to speak the text. When
+executed on other operating systems, the text is only printed to the console:
 
 ```xml
 <echo type='speech'>Generation Finished</echo>
@@ -241,15 +238,15 @@ makes Benerator emit a short beep
 
 ## `<comment>`
 
-The `<comment>` element also prints output, not to the console, but to a logger. Thus you have the option of configuring
-whether to ignore the output or where to send it to.
+The `<comment>` element also prints output, not to the console, but to a logger. Thus you have the option of configuring whether to ignore the output
+or where to send it to.
 
 ```xml
 <comment>`Here we reach the critical part...`</comment>
 ```
 
-Using XML comments `<!-- -->` instead of comment descriptors would make it harder for you to comment out larger portions
-of a file for testing and debugging.
+Using XML comments `<!-- -->` instead of comment descriptors would make it harder for you to comment out larger portions of a file for testing and
+debugging.
 
 ## `<execute type="shell">`
 
@@ -261,15 +258,13 @@ The `<execute>` element serves to execute different kinds of code. One option is
 
 The program output is printed to the console.
 
-Note that some windows shell commands are only available in the command line interpreter. In order to invoke them, you
-need to call cmd /C, e.g.
+Note that some windows shell commands are only available in the command line interpreter. In order to invoke them, you need to call cmd /C, e.g.
 
 ```xml
 <execute type="shell">cmd /C type myGeneratedFile.csv</execute>
 ```
 
-You can use `<execute>` for invoking scripts too (SQL, DatabeneScript, JavaScript, FreeMarker and more), but that will
-be explained later.
+You can use `<execute>` for invoking scripts too (SQL, DatabeneScript, JavaScript, FreeMarker and more), but that will be explained later.
 
 ## `<wait>`
 
@@ -283,8 +278,8 @@ A fixed amount of time is useful, e.g. for waiting until a system is initialized
 
 The duration is the time in milliseconds.
 
-Random periods of wait time are useful when using Benerator to simulate client activity on a system. For this, you can
-nest `<wait>` elements in `<generate>` elements. More about this later.
+Random periods of wait time are useful when using Benerator to simulate client activity on a system. For this, you can nest `<wait>` elements
+in `<generate>` elements. More about this later.
 
 ## `<error>`
 
@@ -294,8 +289,8 @@ You can make Benerator signal an error with a message and code:
 <error code="-3">An error has occured</error>
 ```
 
-If Benerator is not configured to do otherwise, it prints out the error message, cancels execution, finishes the process
-and returns the exit code to the operating system. If no exit code is specified, Benerator uses -1.
+If Benerator is not configured to do otherwise, it prints out the error message, cancels execution, finishes the process and returns the exit code to
+the operating system. If no exit code is specified, Benerator uses -1.
 
 ## `<if>`
 
@@ -322,8 +317,7 @@ or a decision between alternatives:
 </if>
 ```
 
-A typical application of the `<if>` element is to check if a required configuration is defined, and if not, to fall back
-to a default...:
+A typical application of the `<if>` element is to check if a required configuration is defined, and if not, to fall back to a default...:
 
 ```xml
 <if test="!context.contains('stage')">
@@ -363,8 +357,7 @@ For marking an entity member as identifier, it is declared with an `<id>` elemen
 <id name="identifier" type="long"/>
 ```
 
-There are several special id generators available. If you do not specify one explicitly, Benerator takes the
-IncrementalIdGenerator.
+There are several special id generators available. If you do not specify one explicitly, Benerator takes the IncrementalIdGenerator.
 
 For explicitly choosing or initializing an id generator, use the generator attribute, e.g.:
 
@@ -374,8 +367,7 @@ For explicitly choosing or initializing an id generator, use the generator attri
 
 for using an IncrementalIdGenerator, that starts with the value 100.
 
-See the chapter „Common ID Generators“ for a complete ID generator reference and „Using databases“ for database-related
-id generators.
+See the chapter „Common ID Generators“ for a complete ID generator reference and „Using databases“ for database-related id generators.
 
 Instead of using a generator, you can as well use other `<attribute>`-like features, e.g. scripts:
 

@@ -48,5 +48,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, TYPE})
 @Retention(RUNTIME)
 public @interface PostalCode {
-    String country();
+  /**
+   * Country string.
+   *
+   * @return the string
+   */
+  String country();
 }

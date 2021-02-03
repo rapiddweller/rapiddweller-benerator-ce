@@ -26,28 +26,32 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.engine.statement.CommentStatement;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link CommentParser} and the {@link CommentStatement}.<br/><br/>
  * Created: 19.02.2010 12:54:43
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class CommentParserAndStatementTest extends BeneratorIntegrationTest {
 
-	@Test
-	public void testValue() {
-		Element element = XMLUtil.parseStringAsElement("<comment>Hello</comment>");
-		CommentStatement statement = (CommentStatement) new CommentParser().parse(element, null, null);
-		statement.execute(context);
-		assertEquals("Hello", statement.getComment());
-	}
-	
+  /**
+   * Test value.
+   */
+  @Test
+  public void testValue() {
+    Element element = XMLUtil.parseStringAsElement("<comment>Hello</comment>");
+    CommentStatement statement = (CommentStatement) new CommentParser().parse(element, null, null);
+    statement.execute(context);
+    assertEquals("Hello", statement.getComment());
+  }
+
 }

@@ -33,36 +33,44 @@ import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.common.Assert;
 
 /**
- * Proxy for generators that are used by several clients. It forwards all calls to 
+ * Proxy for generators that are used by several clients. It forwards all calls to
  * the real generator except calls to {@link #reset()} and {@link #close()} to assure
- * that clients do not interfere with each other. This class may only be applied to 
+ * that clients do not interfere with each other. This class may only be applied to
  * {@link Generator}s of which behaviour does not change in case of a reset.<br/>
  * <br/>
  * Created: 20.01.2012 16:28:14
- * @since 0.7.6
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.6
  */
 public class SharedGenerator<E> extends GeneratorProxy<E> {
 
-	public SharedGenerator(Generator<E> source) {
-		super(source);
-		Assert.notNull(source, "source");
-	}
-	
-	@Override
-	public synchronized void init(GeneratorContext context) {
-		if (state == GeneratorState.CREATED)
-			super.init(context);
-	}
-	
-	@Override
-	public void reset() {
-		// ignore
-	}
-	
-	@Override
-	public void close() {
-		// ignore
-	}
-	
+  /**
+   * Instantiates a new Shared generator.
+   *
+   * @param source the source
+   */
+  public SharedGenerator(Generator<E> source) {
+    super(source);
+    Assert.notNull(source, "source");
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    if (state == GeneratorState.CREATED) {
+      super.init(context);
+    }
+  }
+
+  @Override
+  public void reset() {
+    // ignore
+  }
+
+  @Override
+  public void close() {
+    // ignore
+  }
+
 }

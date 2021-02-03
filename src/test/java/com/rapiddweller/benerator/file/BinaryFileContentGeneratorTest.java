@@ -26,57 +26,65 @@
 
 package com.rapiddweller.benerator.file;
 
-import static org.junit.Assert.*;
+import com.rapiddweller.common.ArrayFormat;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.Arrays;
 
-import com.rapiddweller.common.ArrayFormat;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Tests the {@link BinaryFileContentGenerator}.<br/><br/>
  * Created: 24.02.2010 11:02:44
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class BinaryFileContentGeneratorTest extends FileContentGeneratorTest {
 
-	@Test
-	public void testListFiles() throws Exception {
-		// prepare tests
-		createTestFolders();
-		try {
-			// execute tests
-			check(null, false, true, false); // non-recursive, only files, w/o pattern
-			check("fr.*", false, true, false); // non-recursive, only files,  w/ pattern
-			check(null, true, true, true); // recursive, w/o pattern
-			check("fs.*", true, false, true); // recursive, w/ pattern
-        } finally {
-        	// remove the used files
-        	removeTestFolders();
-        }
-	}
-
-	private void check(String regex, boolean recursive, boolean rootFileExpected, boolean subFileExpected) {
-	    BinaryFileContentGenerator generator = new BinaryFileContentGenerator();
-	    generator.setUri(ROOT_DIR.getParent() + File.separator + ROOT_DIR.getName());
-	    generator.setFilter(regex);
-	    generator.setRecursive(recursive);
-	    generator.init(context);
-	    boolean rootFileUsed = false;
-	    boolean subFileUsed = false;
-	    for (int i = 0; i < 20; i++) {
-	    	byte[] product = generator.generate();
-	    	if (Arrays.equals(ROOT_DIR_FILE_CONTENT_ARRAY, product))
-	    		rootFileUsed = true;
-	    	else if (Arrays.equals(SUB_DIR_FILE_CONTENT_ARRAY, product))
-	    		subFileUsed = true;
-	    	else
-	    		fail("Unexpected product: " + ArrayFormat.formatBytes(", ", product));
-	    }
-	    assertEquals(rootFileExpected, rootFileUsed);
-	    assertEquals(subFileExpected, subFileUsed);
+  /**
+   * Test list files.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testListFiles() throws Exception {
+    // prepare tests
+    createTestFolders();
+    try {
+      // execute tests
+      check(null, false, true, false); // non-recursive, only files, w/o pattern
+      check("fr.*", false, true, false); // non-recursive, only files,  w/ pattern
+      check(null, true, true, true); // recursive, w/o pattern
+      check("fs.*", true, false, true); // recursive, w/ pattern
+    } finally {
+      // remove the used files
+      removeTestFolders();
     }
-	
+  }
+
+  private void check(String regex, boolean recursive, boolean rootFileExpected, boolean subFileExpected) {
+    BinaryFileContentGenerator generator = new BinaryFileContentGenerator();
+    generator.setUri(ROOT_DIR.getParent() + File.separator + ROOT_DIR.getName());
+    generator.setFilter(regex);
+    generator.setRecursive(recursive);
+    generator.init(context);
+    boolean rootFileUsed = false;
+    boolean subFileUsed = false;
+    for (int i = 0; i < 20; i++) {
+      byte[] product = generator.generate();
+      if (Arrays.equals(ROOT_DIR_FILE_CONTENT_ARRAY, product)) {
+        rootFileUsed = true;
+      } else if (Arrays.equals(SUB_DIR_FILE_CONTENT_ARRAY, product)) {
+        subFileUsed = true;
+      } else {
+        fail("Unexpected product: " + ArrayFormat.formatBytes(", ", product));
+      }
+    }
+    assertEquals(rootFileExpected, rootFileUsed);
+    assertEquals(subFileExpected, subFileUsed);
+  }
+
 }

@@ -26,37 +26,44 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import java.math.BigInteger;
-
 import com.rapiddweller.benerator.Generator;
+
+import java.math.BigInteger;
 
 /**
  * Converts the {@link Number} products of another {@link Generator} to {@link BigInteger}.<br/>
  * <br/>
  * Created at 23.06.2009 22:58:26
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class AsBigIntegerGeneratorWrapper<E extends Number> extends GeneratorWrapper<E, BigInteger> {
 
-    public AsBigIntegerGeneratorWrapper(Generator<E> source) {
-	    super(source);
-    }
+  /**
+   * Instantiates a new As big integer generator wrapper.
+   *
+   * @param source the source
+   */
+  public AsBigIntegerGeneratorWrapper(Generator<E> source) {
+    super(source);
+  }
 
-	@Override
-	public Class<BigInteger> getGeneratedType() {
-	    return BigInteger.class;
-    }
+  @Override
+  public Class<BigInteger> getGeneratedType() {
+    return BigInteger.class;
+  }
 
-	@Override
-	public ProductWrapper<BigInteger> generate(ProductWrapper<BigInteger> wrapper) {
-    	assertInitialized();
-	    ProductWrapper<E> tmp = generateFromSource();
-	    if (tmp == null)
-	    	return null;
-		E feed = tmp.unwrap();
-		return wrapper.wrap(BigInteger.valueOf(feed.longValue()));
+  @Override
+  public ProductWrapper<BigInteger> generate(ProductWrapper<BigInteger> wrapper) {
+    assertInitialized();
+    ProductWrapper<E> tmp = generateFromSource();
+    if (tmp == null) {
+      return null;
     }
+    E feed = tmp.unwrap();
+    return wrapper.wrap(BigInteger.valueOf(feed.longValue()));
+  }
 
 }

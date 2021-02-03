@@ -26,32 +26,39 @@
 
 package com.rapiddweller.benerator.engine;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.engine.statement.EvaluateStatement;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Integration test for the &lt;evaluate&gt; statement.<br/><br/>
  * Created: 24.03.2011 11:54:43
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class EvaluateIntegrationTest extends BeneratorIntegrationTest {
 
-	@Test
-	public void testBeneratorScriptStringLiteral() {
-		parseAndExecute("<evaluate id='result'>'TEST'</evaluate>");
-		assertEquals("TEST", context.get("result"));
-	}
+  /**
+   * Test benerator script string literal.
+   */
+  @Test
+  public void testBeneratorScriptStringLiteral() {
+    parseAndExecute("<evaluate id='result'>'TEST'</evaluate>");
+    assertEquals("TEST", context.get("result"));
+  }
 
-	@Test
-	public void testBeneratorScriptStringLiteralWithQuotes() {
-		EvaluateStatement statement = (EvaluateStatement) parse("<evaluate id='result'>'\\'TEST\\''</evaluate>");
-		assertEquals("'\\'TEST\\''", statement.getTextEx().evaluate(context));
-		statement.execute(context);
-		assertEquals("'TEST'", context.get("result"));
-	}
-	
+  /**
+   * Test benerator script string literal with quotes.
+   */
+  @Test
+  public void testBeneratorScriptStringLiteralWithQuotes() {
+    EvaluateStatement statement = (EvaluateStatement) parse("<evaluate id='result'>'\\'TEST\\''</evaluate>");
+    assertEquals("'\\'TEST\\''", statement.getTextEx().evaluate(context));
+    statement.execute(context);
+    assertEquals("'TEST'", context.get("result"));
+  }
+
 }

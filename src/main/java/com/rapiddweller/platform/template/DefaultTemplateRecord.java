@@ -37,33 +37,38 @@ import java.util.Set;
  * @author Volker Bergmann
  * @since 0.9.7
  */
-
 public class DefaultTemplateRecord implements TemplateRecord {
 
-    protected final Map<String, Object> components;
+  /**
+   * The Components.
+   */
+  protected final Map<String, Object> components;
 
-    public DefaultTemplateRecord() {
-        this.components = new HashMap<>();
-    }
+  /**
+   * Instantiates a new Default template record.
+   */
+  public DefaultTemplateRecord() {
+    this.components = new HashMap<>();
+  }
 
-    @Override
-    public Object get(String name) {
-        return components.get(name);
-    }
+  @Override
+  public Object get(String name) {
+    return components.get(name);
+  }
 
-    @Override
-    public void set(String name, Object value) {
-        this.components.put(name, value);
-    }
+  @Override
+  public void set(String name, Object value) {
+    this.components.put(name, value);
+  }
 
-    @Override
-    public Set<Map.Entry<String, Object>> entrySet() {
-        return components.entrySet();
-    }
+  @Override
+  public Set<Map.Entry<String, Object>> entrySet() {
+    return components.entrySet();
+  }
 
-    @Override
-    public String toString() {
-        return components.toString();
-    }
+  @Override
+  public String toString() {
+    return components.toString();
+  }
 
 }

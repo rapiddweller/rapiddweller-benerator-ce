@@ -33,30 +33,41 @@ import com.rapiddweller.script.Expression;
 /**
  * {@link ComponentBuilder} which executes only if a condition expression evaluates to 'true'.<br/><br/>
  * Created: 11.10.2010 11:15:14
- * @since 0.6.4
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class ConditionalComponentBuilder<E> extends ComponentBuilderProxy<E> {
 
-	private final Expression<?> condition;
-	
-	public ConditionalComponentBuilder(ComponentBuilder<E> source, Expression<?> condition) {
-	    super(source);
-	    Assert.notNull(condition, "condition");
-	    this.condition = condition;
-    }
+  private final Expression<?> condition;
 
-	@Override
-    public boolean execute(BeneratorContext context) {
-		Object conditionResult = condition.evaluate(context);
-		if (conditionResult == null)
-			throw new IllegalArgumentException("Condition resolves to null: " + condition);
-		if (!(conditionResult instanceof Boolean))
-			throw new IllegalArgumentException("Condition does not resolve to a boolean value: " + condition);
-		if ((Boolean) conditionResult)
-			return source.execute(context);
-		else
-			return true;
-	}
-	
+  /**
+   * Instantiates a new Conditional component builder.
+   *
+   * @param source    the source
+   * @param condition the condition
+   */
+  public ConditionalComponentBuilder(ComponentBuilder<E> source, Expression<?> condition) {
+    super(source);
+    Assert.notNull(condition, "condition");
+    this.condition = condition;
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    Object conditionResult = condition.evaluate(context);
+    if (conditionResult == null) {
+      throw new IllegalArgumentException("Condition resolves to null: " + condition);
+    }
+    if (!(conditionResult instanceof Boolean)) {
+      throw new IllegalArgumentException("Condition does not resolve to a boolean value: " + condition);
+    }
+    if ((Boolean) conditionResult) {
+      return source.execute(context);
+    } else {
+      return true;
+    }
+  }
+
 }

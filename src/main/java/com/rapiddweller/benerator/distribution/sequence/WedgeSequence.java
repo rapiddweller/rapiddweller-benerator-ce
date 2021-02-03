@@ -31,26 +31,28 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.NumberUtil;
-import static com.rapiddweller.common.NumberUtil.*;
+
+import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
  * {@link Sequence} implementation that creates Number {@link Generator} with a wedge distribution.
  * The number sequences a related generator produces is unique as long as the generator is not reset.<br/>
  * <br/>
  * Created at 23.09.2009 18:59:30
+ *
+ * @author Volker Bergmann
  * @see WedgeLongGenerator
  * @since 0.6.0
- * @author Volker Bergmann
  */
-
 public class WedgeSequence extends Sequence {
 
-    @Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
-    	if (max == null)
-    		max = NumberUtil.maxValue(numberType);
-		NonNullGenerator<? extends Number> base = new WedgeLongGenerator(toLong(min), toLong(max), toLong(granularity));
-		return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
+    if (max == null) {
+      max = NumberUtil.maxValue(numberType);
     }
+    NonNullGenerator<? extends Number> base = new WedgeLongGenerator(toLong(min), toLong(max), toLong(granularity));
+    return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
+  }
 
 }

@@ -27,23 +27,28 @@
 package com.rapiddweller.domain.finance;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link CreditCardNumberValidator}.<br/><br/>
  * Created at 09.04.2008 12:35:58
- * @since 0.5.1
+ *
  * @author Volker Bergmann
+ * @since 0.5.1
  */
 public class CreditCardNumberValidatorTest {
-	
-	@Test
-	public void test() {
-		CreditCardNumberValidator validator = new CreditCardNumberValidator();
-		assertTrue(validator.isValid("4111111111111111", null)); // VISA
-		assertTrue(validator.isValid("30000000000004", null)); // Diner's Club 11
-		assertTrue(validator.isValid("340000000000009", null)); // American Express12
-		assertTrue(validator.isValid("3088000000000009", null)); // JCB
-	}
-	
+
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    CreditCardNumberValidator validator = new CreditCardNumberValidator();
+    assertTrue(validator.isValid("4111111111111111", null)); // VISA
+    assertTrue(validator.isValid("30000000000004", null)); // Diner's Club 11
+    assertTrue(validator.isValid("340000000000009", null)); // American Express12
+    assertTrue(validator.isValid("3088000000000009", null)); // JCB
+  }
+
 }

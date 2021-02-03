@@ -32,9 +32,9 @@ import com.rapiddweller.benerator.Generator;
  * Common parent class for all {@link Generator}s that are based on weights.<br/>
  * <br/>
  * Created at 30.06.2009 07:06:31
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public interface Weight extends Distribution {
 }

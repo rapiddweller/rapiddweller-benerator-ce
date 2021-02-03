@@ -41,47 +41,80 @@ import org.w3c.dom.Element;
  * @author Volker Bergmann
  * @since 0.9.0
  */
-
 public class XmlEntity extends Entity {
 
-    /**
-     * The original XML Element as it was parsed from the XML source. It may be null.
-     */
-    @Nullable
-    private Element sourceElement;
+  /**
+   * The original XML Element as it was parsed from the XML source. It may be null.
+   */
+  @Nullable
+  private Element sourceElement;
 
-    public XmlEntity(ComplexTypeDescriptor descriptor,
-                     Object... componentKeyValuePairs) {
-        super(descriptor, componentKeyValuePairs);
-        this.sourceElement = null;
-    }
+  /**
+   * Instantiates a new Xml entity.
+   *
+   * @param descriptor             the descriptor
+   * @param componentKeyValuePairs the component key value pairs
+   */
+  public XmlEntity(ComplexTypeDescriptor descriptor,
+                   Object... componentKeyValuePairs) {
+    super(descriptor, componentKeyValuePairs);
+    this.sourceElement = null;
+  }
 
-    public XmlEntity(Entity prototype) {
-        super(prototype);
-        if (prototype instanceof XmlEntity) {
-            this.sourceElement = ((XmlEntity) prototype).sourceElement;
-        } else {
-            this.sourceElement = null;
-        }
+  /**
+   * Instantiates a new Xml entity.
+   *
+   * @param prototype the prototype
+   */
+  public XmlEntity(Entity prototype) {
+    super(prototype);
+    if (prototype instanceof XmlEntity) {
+      this.sourceElement = ((XmlEntity) prototype).sourceElement;
+    } else {
+      this.sourceElement = null;
     }
+  }
 
-    public XmlEntity(String name, DescriptorProvider descriptorProvider,
-                     Object... componentKeyValuePairs) {
-        super(name, descriptorProvider, componentKeyValuePairs);
-        this.sourceElement = null;
-    }
+  /**
+   * Instantiates a new Xml entity.
+   *
+   * @param name                   the name
+   * @param descriptorProvider     the descriptor provider
+   * @param componentKeyValuePairs the component key value pairs
+   */
+  public XmlEntity(String name, DescriptorProvider descriptorProvider,
+                   Object... componentKeyValuePairs) {
+    super(name, descriptorProvider, componentKeyValuePairs);
+    this.sourceElement = null;
+  }
 
-    public XmlEntity(String name, DescriptorProvider descriptorProvider) {
-        super(name, descriptorProvider);
-        this.sourceElement = null;
-    }
+  /**
+   * Instantiates a new Xml entity.
+   *
+   * @param name               the name
+   * @param descriptorProvider the descriptor provider
+   */
+  public XmlEntity(String name, DescriptorProvider descriptorProvider) {
+    super(name, descriptorProvider);
+    this.sourceElement = null;
+  }
 
-    public Element getSourceElement() {
-        return sourceElement;
-    }
+  /**
+   * Gets source element.
+   *
+   * @return the source element
+   */
+  public Element getSourceElement() {
+    return sourceElement;
+  }
 
-    public void setSourceElement(Element sourceElement) {
-        this.sourceElement = sourceElement;
-    }
+  /**
+   * Sets source element.
+   *
+   * @param sourceElement the source element
+   */
+  public void setSourceElement(Element sourceElement) {
+    this.sourceElement = sourceElement;
+  }
 
 }

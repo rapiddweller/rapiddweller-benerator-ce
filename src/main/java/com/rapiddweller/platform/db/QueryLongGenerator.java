@@ -39,34 +39,42 @@ import com.rapiddweller.common.converter.ConverterManager;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class QueryLongGenerator extends QueryGenerator<Long> {
 
-    @SuppressWarnings("rawtypes")
-    private Converter converter;
+  @SuppressWarnings("rawtypes")
+  private Converter converter;
 
-    public QueryLongGenerator() {
-        this(null, null);
-    }
+  /**
+   * Instantiates a new Query long generator.
+   */
+  public QueryLongGenerator() {
+    this(null, null);
+  }
 
-    public QueryLongGenerator(String selector, StorageSystem source) {
-        super(selector, source, true);
-    }
+  /**
+   * Instantiates a new Query long generator.
+   *
+   * @param selector the selector
+   * @param source   the source
+   */
+  public QueryLongGenerator(String selector, StorageSystem source) {
+    super(selector, source, true);
+  }
 
-    @Override
-    public Class<Long> getGeneratedType() {
-        return Long.class;
-    }
+  @Override
+  public Class<Long> getGeneratedType() {
+    return Long.class;
+  }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public ProductWrapper<Long> generate(ProductWrapper<Long> wrapper) {
-        Object input = super.generateFromSource();
-        if (converter == null) {
-            converter = ConverterManager.getInstance()
-                    .createConverter(input.getClass(), Long.class);
-        }
-        return wrapper.wrap((Long) converter.convert(input));
+  @SuppressWarnings("unchecked")
+  @Override
+  public ProductWrapper<Long> generate(ProductWrapper<Long> wrapper) {
+    Object input = super.generateFromSource();
+    if (converter == null) {
+      converter = ConverterManager.getInstance()
+          .createConverter(input.getClass(), Long.class);
     }
+    return wrapper.wrap((Long) converter.convert(input));
+  }
 
 }

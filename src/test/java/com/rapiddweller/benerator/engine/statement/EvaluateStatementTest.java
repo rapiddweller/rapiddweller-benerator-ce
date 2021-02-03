@@ -38,8 +38,8 @@ import com.rapiddweller.script.expression.ExpressionUtil;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static com.rapiddweller.script.expression.ExpressionUtil.*;
-import static org.junit.Assert.*;
+import static com.rapiddweller.script.expression.ExpressionUtil.constant;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link EvaluateStatement}.<br/><br/>
@@ -50,146 +50,165 @@ import static org.junit.Assert.*;
  */
 public class EvaluateStatementTest extends AbstractStatementTest {
 
-    @Test
-    public void testInlineJavaScript() {
-        EvaluateStatement stmt = new EvaluateStatement(
-                true,
-                constant("message"),
-                constant("'Hello World'"),
-                null,
-                null,
-                null,
-                null,
-                constant("fatal"),
-                constant(Encodings.UTF_8),
-                constant(false),
-                null,
-                null);
-        stmt.execute(context);
-        assertEquals("Hello World", context.get("message"));
+  /**
+   * Test inline java script.
+   */
+  @Test
+  public void testInlineJavaScript() {
+    EvaluateStatement stmt = new EvaluateStatement(
+        true,
+        constant("message"),
+        constant("'Hello World'"),
+        null,
+        null,
+        null,
+        null,
+        constant("fatal"),
+        constant(Encodings.UTF_8),
+        constant(false),
+        null,
+        null);
+    stmt.execute(context);
+    assertEquals("Hello World", context.get("message"));
+  }
+
+  /**
+   * Test uri mapping.
+   */
+  @Ignore
+  @Test
+  public void testUriMapping() {
+    EvaluateStatement stmt = new EvaluateStatement(
+        true,
+        constant("message"),
+        null,
+        constant("/com/rapiddweller/benerator/engine/statement/HelloWorld.js"),
+        null,
+        null,
+        null,
+        constant("fatal"),
+        constant(Encodings.UTF_8),
+        constant(false),
+        null,
+        null);
+    stmt.execute(context);
+    assert (context.get("message") == "\"Hello World\"" || context.get("message") == "Hello World");
+  }
+
+  /**
+   * Test shell.
+   */
+  @Test
+  public void testShell() {
+    String cmd = "echo 42";
+    if (SystemInfo.isWindows()) {
+      cmd = "cmd.exe /C " + cmd;
+    }
+    EvaluateStatement stmt = new EvaluateStatement(
+        true,
+        constant("result"),
+        constant(cmd),
+        null,
+        constant("shell"),
+        null,
+        null,
+        constant("fatal"),
+        constant(Encodings.UTF_8),
+        constant(false),
+        null,
+        null);
+    stmt.execute(context);
+    assertEquals(42, context.get("result"));
+  }
+
+  /**
+   * Test storage system.
+   */
+  @Test
+  public void testStorageSystem() {
+    StSys stSys = new StSys();
+    Expression<StSys> stSysEx = ExpressionUtil.constant(stSys);
+    EvaluateStatement stmt = new EvaluateStatement(
+        true,
+        constant("message"),
+        constant("HelloHi"),
+        null,
+        null,
+        stSysEx,
+        null,
+        constant("fatal"),
+        constant(Encodings.UTF_8),
+        constant(false),
+        null,
+        null);
+    stmt.execute(context);
+    assertEquals("HelloHi", stSys.execInfo);
+  }
+
+  /**
+   * The type St sys.
+   */
+  public static class StSys extends AbstractStorageSystem {
+
+    /**
+     * The Exec info.
+     */
+    protected String execInfo;
+
+    @Override
+    public TypeDescriptor[] getTypeDescriptors() {
+      return new TypeDescriptor[0];
     }
 
-    @Ignore
-    @Test
-    public void testUriMapping() {
-        EvaluateStatement stmt = new EvaluateStatement(
-                true,
-                constant("message"),
-                null,
-                constant("/com/rapiddweller/benerator/engine/statement/HelloWorld.js"),
-                null,
-                null,
-                null,
-                constant("fatal"),
-                constant(Encodings.UTF_8),
-                constant(false),
-                null,
-                null);
-        stmt.execute(context);
-        assert(context.get("message") == "\"Hello World\"" || context.get("message") == "Hello World");
+    @Override
+    public TypeDescriptor getTypeDescriptor(String typeName) {
+      return null;
     }
 
-    @Test
-    public void testShell() {
-        String cmd = "echo 42";
-        if (SystemInfo.isWindows())
-            cmd = "cmd.exe /C " + cmd;
-        EvaluateStatement stmt = new EvaluateStatement(
-                true,
-                constant("result"),
-                constant(cmd),
-                null,
-                constant("shell"),
-                null,
-                null,
-                constant("fatal"),
-                constant(Encodings.UTF_8),
-                constant(false),
-                null,
-                null);
-        stmt.execute(context);
-        assertEquals(42, context.get("result"));
+    @Override
+    public String getId() {
+      return "id";
     }
 
-    @Test
-    public void testStorageSystem() {
-        StSys stSys = new StSys();
-        Expression<StSys> stSysEx = ExpressionUtil.constant(stSys);
-        EvaluateStatement stmt = new EvaluateStatement(
-                true,
-                constant("message"),
-                constant("HelloHi"),
-                null,
-                null,
-                stSysEx,
-                null,
-                constant("fatal"),
-                constant(Encodings.UTF_8),
-                constant(false),
-                null,
-                null);
-        stmt.execute(context);
-        assertEquals("HelloHi", stSys.execInfo);
-    }
-
-    public static class StSys extends AbstractStorageSystem {
-
-        protected String execInfo;
-
-        @Override
-        public TypeDescriptor[] getTypeDescriptors() {
-            return new TypeDescriptor[0];
-        }
-
-        @Override
-        public TypeDescriptor getTypeDescriptor(String typeName) {
-            return null;
-        }
-
-        @Override
-        public String getId() {
-            return "id";
-        }
-
-        @Override
-        public DataSource<Entity> queryEntities(String type,
-                                                String selector, Context context) {
-            return null;
-        }
-
-        @Override
-        public DataSource<?> queryEntityIds(String entityName,
+    @Override
+    public DataSource<Entity> queryEntities(String type,
                                             String selector, Context context) {
-            return null;
-        }
-
-        @Override
-        public DataSource<?> query(String selector, boolean simplify, Context context) {
-            return null;
-        }
-
-        @Override
-        public void store(Entity entity) {
-        }
-
-        @Override
-        public void update(Entity entity) {
-        }
-
-        @Override
-        public Object execute(String command) {
-            this.execInfo = command;
-            return command;
-        }
-
-        @Override
-        public void flush() {
-        }
-
-        @Override
-        public void close() {
-        }
-
+      return null;
     }
+
+    @Override
+    public DataSource<?> queryEntityIds(String entityName,
+                                        String selector, Context context) {
+      return null;
+    }
+
+    @Override
+    public DataSource<?> query(String selector, boolean simplify, Context context) {
+      return null;
+    }
+
+    @Override
+    public void store(Entity entity) {
+    }
+
+    @Override
+    public void update(Entity entity) {
+    }
+
+    @Override
+    public Object execute(String command) {
+      this.execInfo = command;
+      return command;
+    }
+
+    @Override
+    public void flush() {
+    }
+
+    @Override
+    public void close() {
+    }
+
+  }
 
 }

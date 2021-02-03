@@ -32,28 +32,35 @@ import com.rapiddweller.benerator.Generator;
  * Converts the {@link Number} products of another {@link Generator} to {@link Float}.<br/>
  * <br/>
  * Created at 23.06.2009 22:58:26
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class AsFloatGeneratorWrapper<E extends Number> extends GeneratorWrapper<E, Float> {
 
-    public AsFloatGeneratorWrapper(Generator<E> source) {
-	    super(source);
-    }
+  /**
+   * Instantiates a new As float generator wrapper.
+   *
+   * @param source the source
+   */
+  public AsFloatGeneratorWrapper(Generator<E> source) {
+    super(source);
+  }
 
-	@Override
-	public Class<Float> getGeneratedType() {
-	    return Float.class;
-    }
+  @Override
+  public Class<Float> getGeneratedType() {
+    return Float.class;
+  }
 
-	@Override
-	public ProductWrapper<Float> generate(ProductWrapper<Float> wrapper) {
-    	assertInitialized();
-	    ProductWrapper<E> tmp = generateFromSource();
-	    if (tmp == null)
-	    	return null;
-		return wrapper.wrap(tmp.unwrap().floatValue());
+  @Override
+  public ProductWrapper<Float> generate(ProductWrapper<Float> wrapper) {
+    assertInitialized();
+    ProductWrapper<E> tmp = generateFromSource();
+    if (tmp == null) {
+      return null;
     }
+    return wrapper.wrap(tmp.unwrap().floatValue());
+  }
 
 }

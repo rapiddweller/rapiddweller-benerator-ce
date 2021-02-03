@@ -1,13 +1,19 @@
 package com.rapiddweller.benerator;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
+/**
+ * The type Benerator factory test.
+ */
 public class BeneratorFactoryTest {
-    @Test
-    public void testGetSchemaPathForCurrentVersion() {
-        assertEquals("com/rapiddweller/benerator/benerator-1.1.0.xsd", BeneratorFactory.getSchemaPathForCurrentVersion());
-    }
+  /**
+   * Test get schema path for current version.
+   */
+  @Test
+  public void testGetSchemaPathForCurrentVersion() {
+    assertEquals("com/rapiddweller/benerator/benerator-1.1.0.xsd", BeneratorFactory.getSchemaPathForCurrentVersion());
+  }
 }
 

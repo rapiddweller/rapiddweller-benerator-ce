@@ -26,47 +26,54 @@
 
 package com.rapiddweller.platform.file;
 
-import java.io.File;
-
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.IOUtil;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.io.File;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link FileDeleter}.<br/>
  * <br/>
  * Created at 17.09.2009 10:26:38
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class FileDeleterTest extends FileTest {
 
-	@Test
-	public void test() throws Exception {
-	    File sourceFile1 = null;
-		File sourceFile2 = null;
-		FileDeleter deleter = new FileDeleter();
-		try {
-			sourceFile1 = createSource1();
-			sourceFile2 = createSource2();
-			assertTrue(sourceFile1.exists());
-			assertTrue(sourceFile2.exists());
-			deleter.setFiles(new String[] { 
-				"target" + File.separator + sourceFile1.getName(), 
-				"target" + File.separator + sourceFile2.getName() 
-			});
-			deleter.execute(new DefaultBeneratorContext(), ErrorHandler.getDefault());
-			assertFalse(sourceFile1.exists());
-			assertFalse(sourceFile2.exists());
-		} finally {
-			FileUtil.deleteIfExists(sourceFile1);
-			FileUtil.deleteIfExists(sourceFile2);
-			IOUtil.close(deleter);
-		}
+  /**
+   * Test.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void test() throws Exception {
+    File sourceFile1 = null;
+    File sourceFile2 = null;
+    FileDeleter deleter = new FileDeleter();
+    try {
+      sourceFile1 = createSource1();
+      sourceFile2 = createSource2();
+      assertTrue(sourceFile1.exists());
+      assertTrue(sourceFile2.exists());
+      deleter.setFiles(new String[] {
+          "target" + File.separator + sourceFile1.getName(),
+          "target" + File.separator + sourceFile2.getName()
+      });
+      deleter.execute(new DefaultBeneratorContext(), ErrorHandler.getDefault());
+      assertFalse(sourceFile1.exists());
+      assertFalse(sourceFile2.exists());
+    } finally {
+      FileUtil.deleteIfExists(sourceFile1);
+      FileUtil.deleteIfExists(sourceFile2);
+      IOUtil.close(deleter);
     }
+  }
 
 }

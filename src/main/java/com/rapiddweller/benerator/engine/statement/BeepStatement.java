@@ -26,23 +26,24 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import java.awt.Toolkit;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
+
+import java.awt.Toolkit;
 
 /**
  * {@link Statement} that emits a beep.<br/><br/>
  * Created: 14.09.2010 14:40:33
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class BeepStatement implements Statement {
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-	    Toolkit.getDefaultToolkit().beep();
-    	return true;
-    }
-	
+  @Override
+  public boolean execute(BeneratorContext context) {
+    Toolkit.getDefaultToolkit().beep();
+    return true;
+  }
+
 }

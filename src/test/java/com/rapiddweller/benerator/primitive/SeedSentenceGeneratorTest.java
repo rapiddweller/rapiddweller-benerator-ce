@@ -28,26 +28,32 @@ package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.test.GeneratorTest;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests the {@link SeedSentenceGenerator}.<br/>
  * <br/>
  * Created at 16.07.2009 20:11:35
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class SeedSentenceGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void test() throws Exception {
-		SeedSentenceGenerator generator = new SeedSentenceGenerator("license.txt");
-		generator.init(context);
-		for (int i = 0; i < 10; i++) {
-	        String sentence = generator.generate();
-	        assertNotNull(sentence);
-        }
-	}
-	
+  /**
+   * Test.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void test() throws Exception {
+    SeedSentenceGenerator generator = new SeedSentenceGenerator("license.txt");
+    generator.init(context);
+    for (int i = 0; i < 10; i++) {
+      String sentence = generator.generate();
+      assertNotNull(sentence);
+    }
+  }
+
 }

@@ -23,6 +23,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.rapiddweller.benerator.anno;
 
 import java.lang.annotation.Retention;
@@ -31,12 +32,30 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Property configration for a @{@link Bean}.<br/><br/>
  * Created: 16.06.2011 10:22:44
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Property {
-	String name();
-	String value() default "";
-	String ref() default "";
+  /**
+   * Name string.
+   *
+   * @return the string
+   */
+  String name();
+
+  /**
+   * Value string.
+   *
+   * @return the string
+   */
+  String value() default "";
+
+  /**
+   * Ref string.
+   *
+   * @return the string
+   */
+  String ref() default "";
 }

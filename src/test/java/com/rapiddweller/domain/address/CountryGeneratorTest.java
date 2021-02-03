@@ -26,14 +26,17 @@
 
 package com.rapiddweller.domain.address;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.dataset.CompositeDatasetGenerator;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.wrapper.WeightedGeneratorGenerator;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 /**
  * Tests the {@link CountryGenerator}.<br/><br/>
@@ -44,53 +47,68 @@ import static org.junit.Assert.*;
  */
 public class CountryGeneratorTest extends GeneratorClassTest {
 
-    @Test
-    public void testConstructor() {
-        CountryGenerator actualCountryGenerator = new CountryGenerator();
-        assertEquals("world", actualCountryGenerator.getDataset());
-        Class<?> expectedGeneratedType = Country.class;
-        assertSame(expectedGeneratedType, actualCountryGenerator.getGeneratedType());
-        assertNull(actualCountryGenerator.getSource());
-        assertEquals("/com/rapiddweller/dataset/region", actualCountryGenerator.getNesting());
-        assertEquals(0.0, actualCountryGenerator.getWeight(), 0.0);
-    }
+  /**
+   * Test constructor.
+   */
+  @Test
+  public void testConstructor() {
+    CountryGenerator actualCountryGenerator = new CountryGenerator();
+    assertEquals("world", actualCountryGenerator.getDataset());
+    Class<?> expectedGeneratedType = Country.class;
+    assertSame(expectedGeneratedType, actualCountryGenerator.getGeneratedType());
+    assertNull(actualCountryGenerator.getSource());
+    assertEquals("/com/rapiddweller/dataset/region", actualCountryGenerator.getNesting());
+    assertEquals(0.0, actualCountryGenerator.getWeight(), 0.0);
+  }
 
-    @Test
-    public void testConstructor2() {
-        CountryGenerator actualCountryGenerator = new CountryGenerator("Dataset Name");
-        assertEquals("Dataset Name", actualCountryGenerator.getDataset());
-        Class<?> expectedGeneratedType = Country.class;
-        assertSame(expectedGeneratedType, actualCountryGenerator.getGeneratedType());
-        assertNull(actualCountryGenerator.getSource());
-        assertEquals("/com/rapiddweller/dataset/region", actualCountryGenerator.getNesting());
-        assertEquals(0.0, actualCountryGenerator.getWeight(), 0.0);
-    }
+  /**
+   * Test constructor 2.
+   */
+  @Test
+  public void testConstructor2() {
+    CountryGenerator actualCountryGenerator = new CountryGenerator("Dataset Name");
+    assertEquals("Dataset Name", actualCountryGenerator.getDataset());
+    Class<?> expectedGeneratedType = Country.class;
+    assertSame(expectedGeneratedType, actualCountryGenerator.getGeneratedType());
+    assertNull(actualCountryGenerator.getSource());
+    assertEquals("/com/rapiddweller/dataset/region", actualCountryGenerator.getNesting());
+    assertEquals(0.0, actualCountryGenerator.getWeight(), 0.0);
+  }
 
-    public CountryGeneratorTest() {
-        super(CountryGenerator.class);
-    }
+  /**
+   * Instantiates a new Country generator test.
+   */
+  public CountryGeneratorTest() {
+    super(CountryGenerator.class);
+  }
 
-    @Test
-    public void testDefaultGeneration() {
-        CountryGenerator generator = new CountryGenerator();
-        generator.init(context);
-        for (int i = 0; i < 100; i++) {
-            Country country = generator.generate();
-            assertNotNull(country);
-            assertNotNull(Country.getInstance(country.getIsoCode()));
-        }
+  /**
+   * Test default generation.
+   */
+  @Test
+  public void testDefaultGeneration() {
+    CountryGenerator generator = new CountryGenerator();
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      Country country = generator.generate();
+      assertNotNull(country);
+      assertNotNull(Country.getInstance(country.getIsoCode()));
     }
+  }
 
-    @Test
-    public void testWeightsForDACH() {
-        CountryGenerator generator = new CountryGenerator("dach");
-        generator.init(context);
-        CompositeDatasetGenerator<Country> compGen = (CompositeDatasetGenerator<Country>) generator.getSource();
-        WeightedGeneratorGenerator<Country> genGen = compGen.getSource();
-        List<Double> sourceWeights = genGen.getSourceWeights();
-        assertEquals(81000000., sourceWeights.get(0), 0); // DE
-        assertEquals(8000000., sourceWeights.get(2), 0); // CH
-        assertEquals(7000000., sourceWeights.get(1), 0); // AT
-    }
+  /**
+   * Test weights for dach.
+   */
+  @Test
+  public void testWeightsForDACH() {
+    CountryGenerator generator = new CountryGenerator("dach");
+    generator.init(context);
+    CompositeDatasetGenerator<Country> compGen = (CompositeDatasetGenerator<Country>) generator.getSource();
+    WeightedGeneratorGenerator<Country> genGen = compGen.getSource();
+    List<Double> sourceWeights = genGen.getSourceWeights();
+    assertEquals(81000000., sourceWeights.get(0), 0); // DE
+    assertEquals(8000000., sourceWeights.get(2), 0); // CH
+    assertEquals(7000000., sourceWeights.get(1), 0); // AT
+  }
 
 }

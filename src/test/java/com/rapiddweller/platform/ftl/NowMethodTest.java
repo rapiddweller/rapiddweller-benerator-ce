@@ -1,18 +1,23 @@
 package com.rapiddweller.platform.ftl;
 
-import static org.junit.Assert.assertEquals;
-
 import freemarker.template.SimpleDate;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
+/**
+ * The type Now method test.
+ */
 public class NowMethodTest {
-    @Test
-    public void testExec() {
-        NowMethod nowMethod = new NowMethod();
-        assertEquals(2, ((SimpleDate) nowMethod.exec(new ArrayList<>())).getDateType());
-    }
+  /**
+   * Test exec.
+   */
+  @Test
+  public void testExec() {
+    NowMethod nowMethod = new NowMethod();
+    assertEquals(2, ((SimpleDate) nowMethod.exec(new ArrayList<>())).getDateType());
+  }
 }
 

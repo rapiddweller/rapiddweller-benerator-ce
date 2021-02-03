@@ -41,16 +41,26 @@ import java.io.IOException;
  */
 public class FileBuilder {
 
-    public static <T> void build(Generator<T> generator, int length, DocumentWriter<T> writer) throws IOException {
-        writer.setVariable("part_count", length);
-        ProductWrapper<T> wrapper = new ProductWrapper<>();
-        for (int i = 0; i < length && wrapper != null; i++) {
-            writer.setVariable("part_index", i);
-            wrapper = generator.generate(wrapper);
-            if (wrapper != null)
-                writer.writeElement(wrapper.unwrap());
-        }
-        writer.close();
+  /**
+   * Build.
+   *
+   * @param <T>       the type parameter
+   * @param generator the generator
+   * @param length    the length
+   * @param writer    the writer
+   * @throws IOException the io exception
+   */
+  public static <T> void build(Generator<T> generator, int length, DocumentWriter<T> writer) throws IOException {
+    writer.setVariable("part_count", length);
+    ProductWrapper<T> wrapper = new ProductWrapper<>();
+    for (int i = 0; i < length && wrapper != null; i++) {
+      writer.setVariable("part_index", i);
+      wrapper = generator.generate(wrapper);
+      if (wrapper != null) {
+        writer.writeElement(wrapper.unwrap());
+      }
     }
+    writer.close();
+  }
 
 }

@@ -38,32 +38,45 @@ import org.junit.Test;
 /**
  * Tests the performance of the {@link AddressGenerator}.<br/><br/>
  * Created: 17.04.2010 07:12:51
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class AddressGeneratorPerfTest {
-	
-	@Rule public ContiPerfRule rule = new ContiPerfRule();
 
-	private AddressGenerator generatorDE;
-	
-	@Before
-	public void setUp() {
-		generatorDE = new AddressGenerator(Country.GERMANY.getIsoCode());
-		generatorDE.init(new DefaultBeneratorContext());
-	}
-	
-	@After
-	public void tearDown() {
-		generatorDE.close();
-	}
-	
-	/** Verifies that the {@link AddressGenerator} generates at least 1000 addresses per second */
-	@Test
-	@PerfTest(invocations = 1000)
-	@Required(throughput = 1000)
-	public void test_DE() {
-		generatorDE.generate();
-	}
-	
+  /**
+   * The Rule.
+   */
+  @Rule
+  public ContiPerfRule rule = new ContiPerfRule();
+
+  private AddressGenerator generatorDE;
+
+  /**
+   * Sets up.
+   */
+  @Before
+  public void setUp() {
+    generatorDE = new AddressGenerator(Country.GERMANY.getIsoCode());
+    generatorDE.init(new DefaultBeneratorContext());
+  }
+
+  /**
+   * Tear down.
+   */
+  @After
+  public void tearDown() {
+    generatorDE.close();
+  }
+
+  /**
+   * Verifies that the {@link AddressGenerator} generates at least 1000 addresses per second
+   */
+  @Test
+  @PerfTest(invocations = 1000)
+  @Required(throughput = 1000)
+  public void test_DE() {
+    generatorDE.generate();
+  }
+
 }

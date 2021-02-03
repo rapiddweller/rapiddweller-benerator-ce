@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import java.util.Collection;
-import java.util.Iterator;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.format.DataContainer;
@@ -38,55 +35,83 @@ import com.rapiddweller.format.util.AbstractDataSource;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntitySource;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 /**
- * {@link EntitySource} implementation that looks up an entity by its name ({@link #productName}) in the context, 
- * accesses a 'part' component of it (by its {@link #partName}), and provides the entities contained within 
+ * {@link EntitySource} implementation that looks up an entity by its name ({@link #productName}) in the context,
+ * accesses a 'part' component of it (by its {@link #partName}), and provides the entities contained within
  * in the form of a {@link DataIterator}.<br/><br/>
  * Created: 06.03.2012 21:50:23
- * @since 0.7.6
+ *
  * @author Volker Bergmann
+ * @since 0.7.6
  */
 public class EntityPartSource extends AbstractDataSource<Entity> implements EntitySource {
-	
-	protected final String productName;
-	protected final String partName;
-	protected final BeneratorContext context;
-	
-	public EntityPartSource(String productName, String partName, BeneratorContext context) {
-		super(Entity.class);
-		this.productName = productName;
-		this.partName = partName;
-		this.context = context;
-	}
 
-	@Override
-	public DataIterator<Entity> iterator() {
-		return new EntityPartIterator();
-	}
+  /**
+   * The Product name.
+   */
+  protected final String productName;
+  /**
+   * The Part name.
+   */
+  protected final String partName;
+  /**
+   * The Context.
+   */
+  protected final BeneratorContext context;
 
-	public class EntityPartIterator extends AbstractDataIterator<Entity> {
-		
-		private final Iterator<Entity> source;
-		
-		@SuppressWarnings("unchecked")
-		public EntityPartIterator() {
-			super(Entity.class);
-			Entity entity = (Entity) context.get(productName);
-			Object part = entity.get(partName);
-			if (part instanceof Collection)
-				source = ((Collection<Entity>) part).iterator();
-			else
-				source = CollectionUtil.toList((Entity)part).iterator();
-		}
+  /**
+   * Instantiates a new Entity part source.
+   *
+   * @param productName the product name
+   * @param partName    the part name
+   * @param context     the context
+   */
+  public EntityPartSource(String productName, String partName, BeneratorContext context) {
+    super(Entity.class);
+    this.productName = productName;
+    this.partName = partName;
+    this.context = context;
+  }
 
-		@Override
-		public DataContainer<Entity> next(DataContainer<Entity> container) {
-			if (source.hasNext())
-				return container.setData(source.next());
-			else
-				return null;
-		}
+  @Override
+  public DataIterator<Entity> iterator() {
+    return new EntityPartIterator();
+  }
 
-	}
+  /**
+   * The type Entity part iterator.
+   */
+  public class EntityPartIterator extends AbstractDataIterator<Entity> {
+
+    private final Iterator<Entity> source;
+
+    /**
+     * Instantiates a new Entity part iterator.
+     */
+    @SuppressWarnings("unchecked")
+    public EntityPartIterator() {
+      super(Entity.class);
+      Entity entity = (Entity) context.get(productName);
+      Object part = entity.get(partName);
+      if (part instanceof Collection) {
+        source = ((Collection<Entity>) part).iterator();
+      } else {
+        source = CollectionUtil.toList((Entity) part).iterator();
+      }
+    }
+
+    @Override
+    public DataContainer<Entity> next(DataContainer<Entity> container) {
+      if (source.hasNext()) {
+        return container.setData(source.next());
+      } else {
+        return null;
+      }
+    }
+
+  }
 
 }

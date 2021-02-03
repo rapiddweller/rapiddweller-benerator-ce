@@ -26,46 +26,52 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import java.util.Date;
-
 import com.rapiddweller.benerator.primitive.datetime.DateGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.common.Period;
 import com.rapiddweller.common.TimeUtil;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests the DateGenerator.<br/><br/>
  * Created: 15.03.2008 13:06:24
- * @since 0.5.0
+ *
  * @author Volker Bergmann
+ * @since 0.5.0
  */
 public class DateGeneratorTest extends GeneratorTest {
 
-	@Test
-    public void test() {
-        check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0,  1), Period.DAY.getMillis());
-        check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0, 10), Period.DAY.getMillis());
-        check(TimeUtil.date(1970, 6, 1), TimeUtil.date(1970, 6, 10), Period.DAY.getMillis());
-        check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0,  3), Period.HOUR.getMillis());
-        check(TimeUtil.date(1970, 6, 1), TimeUtil.date(1970, 6,  3), Period.HOUR.getMillis());
-        check(TimeUtil.date(1970, 6, 1), TimeUtil.date(1970, 6,  3), Period.MILLISECOND.getMillis());
-    }
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0, 1), Period.DAY.getMillis());
+    check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0, 10), Period.DAY.getMillis());
+    check(TimeUtil.date(1970, 6, 1), TimeUtil.date(1970, 6, 10), Period.DAY.getMillis());
+    check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0, 3), Period.HOUR.getMillis());
+    check(TimeUtil.date(1970, 6, 1), TimeUtil.date(1970, 6, 3), Period.HOUR.getMillis());
+    check(TimeUtil.date(1970, 6, 1), TimeUtil.date(1970, 6, 3), Period.MILLISECOND.getMillis());
+  }
 
-    private void check(Date min, Date max, long granularity) {
-        DateGenerator generator = new DateGenerator(min, max, granularity);
-        generator.init(context);
-        for (int i = 0; i < 10000; i++) {
-            Date date = generator.generate();
-            assertNotNull(date);
-            assertFalse(date.before(min));
-            assertFalse(date.after(max));
-            long time = date.getTime();
-            long time0 = min.getTime();
-            assertEquals(0, (time - time0) % granularity);
-        }
+  private void check(Date min, Date max, long granularity) {
+    DateGenerator generator = new DateGenerator(min, max, granularity);
+    generator.init(context);
+    for (int i = 0; i < 10000; i++) {
+      Date date = generator.generate();
+      assertNotNull(date);
+      assertFalse(date.before(min));
+      assertFalse(date.after(max));
+      long time = date.getTime();
+      long time0 = min.getTime();
+      assertEquals(0, (time - time0) % granularity);
     }
+  }
 
 }

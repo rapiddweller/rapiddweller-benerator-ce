@@ -39,66 +39,90 @@ import com.rapiddweller.contiperf.Invoker;
  */
 public class PerfTrackingConsumer extends PerfTrackingWrapper implements Consumer {
 
-    private String id;
-    private Consumer target;
+  private String id;
+  private Consumer target;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public PerfTrackingConsumer() {
-        this(null);
+  /**
+   * Instantiates a new Perf tracking consumer.
+   */
+  public PerfTrackingConsumer() {
+    this(null);
+  }
+
+  /**
+   * Instantiates a new Perf tracking consumer.
+   *
+   * @param target the target
+   */
+  public PerfTrackingConsumer(Consumer target) {
+    this(target, "Unnamed");
+  }
+
+  /**
+   * Instantiates a new Perf tracking consumer.
+   *
+   * @param target the target
+   * @param id     the id
+   */
+  public PerfTrackingConsumer(Consumer target, String id) {
+    this.id = id;
+    this.target = target;
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Sets id.
+   *
+   * @param id the id
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  /**
+   * Sets target.
+   *
+   * @param target the target
+   */
+  public void setTarget(Consumer target) {
+    this.target = target;
+  }
+
+  // Consumer interface implementation -------------------------------------------------------------------------------
+
+  @Override
+  public void startConsuming(ProductWrapper<?> wrapper) {
+    try {
+      getOrCreateTracker().invoke(new Object[] {wrapper});
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    public PerfTrackingConsumer(Consumer target) {
-        this(target, "Unnamed");
-    }
+  @Override
+  public void finishConsuming(ProductWrapper<?> wrapper) {
+    target.finishConsuming(wrapper);
+  }
 
-    public PerfTrackingConsumer(Consumer target, String id) {
-        this.id = id;
-        this.target = target;
-    }
+  @Override
+  public void flush() {
+    target.flush();
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  @Override
+  public void close() {
+    super.close();
+    target.close();
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  // PerfTrackingWrapper callback method implementation --------------------------------------------------------------
 
-    public void setTarget(Consumer target) {
-        this.target = target;
-    }
-
-    // Consumer interface implementation -------------------------------------------------------------------------------
-
-    @Override
-    public void startConsuming(ProductWrapper<?> wrapper) {
-        try {
-            getOrCreateTracker().invoke(new Object[]{wrapper});
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void finishConsuming(ProductWrapper<?> wrapper) {
-        target.finishConsuming(wrapper);
-    }
-
-    @Override
-    public void flush() {
-        target.flush();
-    }
-
-    @Override
-    public void close() {
-        super.close();
-        target.close();
-    }
-
-    // PerfTrackingWrapper callback method implementation --------------------------------------------------------------
-
-    @Override
-    protected Invoker getInvoker() {
-        return new ConsumerInvoker(id, target);
-    }
+  @Override
+  protected Invoker getInvoker() {
+    return new ConsumerInvoker(id, target);
+  }
 
 }

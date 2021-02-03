@@ -26,62 +26,74 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import java.util.Collection;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.common.BeanUtil;
+
+import java.util.Collection;
 
 /**
  * {@link Generator} which takes one or more products from a source generator and wraps them with a {@link Collection}.
  * <br/><br/>
  * Created: 24.02.2012 19:52:24
- * @since 0.7.6
+ *
+ * @param <I> the type parameter
+ * @param <C> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.6
  */
 public class SingleSourceCollectionGenerator<I, C extends Collection<I>> extends CardinalGenerator<I, C> implements NonNullGenerator<C> {
 
-    private final Class<C> collectionType;
+  private final Class<C> collectionType;
 
-	public SingleSourceCollectionGenerator(Generator<I> source, Class<C> collectionType, 
-			NonNullGenerator<Integer> lengthGenerator) {
-        super(source, false, lengthGenerator);
-        this.collectionType = collectionType;
+  /**
+   * Instantiates a new Single source collection generator.
+   *
+   * @param source          the source
+   * @param collectionType  the collection type
+   * @param lengthGenerator the length generator
+   */
+  public SingleSourceCollectionGenerator(Generator<I> source, Class<C> collectionType,
+                                         NonNullGenerator<Integer> lengthGenerator) {
+    super(source, false, lengthGenerator);
+    this.collectionType = collectionType;
+  }
+
+  // configuration properties ----------------------------------------------------------------------------------------
+
+  @Override
+  public Class<C> getGeneratedType() {
+    return collectionType;
+  }
+
+  @Override
+  public ProductWrapper<C> generate(ProductWrapper<C> wrapper) {
+    return wrapper.wrap(generate());
+  }
+
+  @Override
+  public C generate() {
+    ProductWrapper<Integer> sizeWrapper = generateCardinalWrapper();
+    if (sizeWrapper == null) {
+      return null;
     }
-
-    // configuration properties ----------------------------------------------------------------------------------------
-
-    @Override
-	public Class<C> getGeneratedType() {
-        return collectionType;
+    Integer size = sizeWrapper.unwrap();
+    // the following works for primitive types as well as for objects
+    C collection;
+    if (size != null) {
+      collection = BeanUtil.newInstance(collectionType, new Object[] {size});
+    } else {
+      collection = BeanUtil.newInstance(collectionType);
     }
-
-	@Override
-	public ProductWrapper<C> generate(ProductWrapper<C> wrapper) {
-        return wrapper.wrap(generate());
+    for (int i = 0; size == null || i < size; i++) {
+      ProductWrapper<I> component = generateFromSource();
+      if (component == null) {
+        getSource().reset();
+        break;
+      }
+      collection.add(component.unwrap());
     }
-
-	@Override
-	public C generate() {
-    	ProductWrapper<Integer> sizeWrapper = generateCardinalWrapper();
-    	if (sizeWrapper == null)
-    		return null;
-    	Integer size = sizeWrapper.unwrap();
-    	// the following works for primitive types as well as for objects
-		C collection;
-		if (size != null)
-			collection = BeanUtil.newInstance(collectionType, new Object[] {size});
-		else
-			collection = BeanUtil.newInstance(collectionType);
-        for (int i = 0; size == null || i < size; i++) {
-            ProductWrapper<I> component = generateFromSource();
-            if (component == null) {
-            	getSource().reset();
-            	break;
-            }
-			collection.add(component.unwrap());
-        } 
-        return collection;
-	}
+    return collection;
+  }
 
 }

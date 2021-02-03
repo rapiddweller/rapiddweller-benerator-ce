@@ -26,37 +26,118 @@
 
 package com.rapiddweller.benerator.anno;
 
+import com.rapiddweller.model.data.Format;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.rapiddweller.model.data.Format;
-
 /**
  * Specifies a data source and its characteristics for generating data for the annotated element.<br/><br/>
  * Created: 02.05.2010 19:01:59
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.CONSTRUCTOR } )
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.CONSTRUCTOR})
 public @interface Source {
-	String value() default "";
-	
-	String id() default "";
-	String selector() default "";
-	
-	String uri() default "";
-	String segment() default "";
-	Format format() default Format.globalDefault;
-	
-	String filter() default "";
-	String separator() default "";
-	String dataset() default "";
-	String nesting() default "";
-	String encoding() default "";
-	String emptyMarker() default "";
-	String nullMarker() default "";
-	boolean rowBased() default true;
+  /**
+   * Value string.
+   *
+   * @return the string
+   */
+  String value() default "";
+
+  /**
+   * Id string.
+   *
+   * @return the string
+   */
+  String id() default "";
+
+  /**
+   * Selector string.
+   *
+   * @return the string
+   */
+  String selector() default "";
+
+  /**
+   * Uri string.
+   *
+   * @return the string
+   */
+  String uri() default "";
+
+  /**
+   * Segment string.
+   *
+   * @return the string
+   */
+  String segment() default "";
+
+  /**
+   * Format format.
+   *
+   * @return the format
+   */
+  Format format() default Format.globalDefault;
+
+  /**
+   * Filter string.
+   *
+   * @return the string
+   */
+  String filter() default "";
+
+  /**
+   * Separator string.
+   *
+   * @return the string
+   */
+  String separator() default "";
+
+  /**
+   * Dataset string.
+   *
+   * @return the string
+   */
+  String dataset() default "";
+
+  /**
+   * Nesting string.
+   *
+   * @return the string
+   */
+  String nesting() default "";
+
+  /**
+   * Encoding string.
+   *
+   * @return the string
+   */
+  String encoding() default "";
+
+  /**
+   * Empty marker string.
+   *
+   * @return the string
+   */
+  String emptyMarker() default "";
+
+  /**
+   * Null marker string.
+   *
+   * @return the string
+   */
+  String nullMarker() default "";
+
+  /**
+   * Row based boolean.
+   *
+   * @return the boolean
+   */
+  boolean rowBased() default true;
 }

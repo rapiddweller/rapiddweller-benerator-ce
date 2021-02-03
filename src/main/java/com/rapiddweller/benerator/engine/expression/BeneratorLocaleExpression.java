@@ -26,36 +26,42 @@
 
 package com.rapiddweller.benerator.engine.expression;
 
-import java.util.Locale;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 
+import java.util.Locale;
+
 /**
  * Evaluates a string expression for a Locale string, if none is set, it picks Benerator's default Locale.<br/><br/>
  * Created: 29.11.2010 15:30:37
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class BeneratorLocaleExpression implements Expression<Locale> {
 
-	private final Expression<String> provider;
+  private final Expression<String> provider;
 
-	public BeneratorLocaleExpression(Expression<String> codeProvider) {
-		this.provider = codeProvider;
-	}
+  /**
+   * Instantiates a new Benerator locale expression.
+   *
+   * @param codeProvider the code provider
+   */
+  public BeneratorLocaleExpression(Expression<String> codeProvider) {
+    this.provider = codeProvider;
+  }
 
-	@Override
-	public Locale evaluate(Context context) {
-		String localeSpec = ExpressionUtil.evaluate(provider, context);
-		return (localeSpec != null ? new Locale(localeSpec) : ((BeneratorContext) context).getDefaultLocale());
-	}
+  @Override
+  public Locale evaluate(Context context) {
+    String localeSpec = ExpressionUtil.evaluate(provider, context);
+    return (localeSpec != null ? new Locale(localeSpec) : ((BeneratorContext) context).getDefaultLocale());
+  }
 
-	@Override
-	public boolean isConstant() {
-		return (provider == null || provider.isConstant());
-	}
-	
+  @Override
+  public boolean isConstant() {
+    return (provider == null || provider.isConstant());
+  }
+
 }

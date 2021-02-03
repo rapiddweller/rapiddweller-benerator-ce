@@ -33,53 +33,72 @@ import com.rapiddweller.common.ThreadAware;
 /**
  * Parent class for {@link Consumer}s that serve as proxy to other Consumers.<br/><br/>
  * Created: 22.10.2009 16:18:07
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public abstract class ConsumerProxy implements Consumer, ThreadAware {
 
-	protected Consumer target;
+  /**
+   * The Target.
+   */
+  protected Consumer target;
 
-	public ConsumerProxy(Consumer target) {
-	    this.target = target;
-    }
-	
-	@Override
-	public boolean isThreadSafe() {
-		return (target instanceof ThreadAware && ((ThreadAware) target).isThreadSafe());
-	}
-	
-	@Override
-	public boolean isParallelizable() {
-		return false;
-	}
+  /**
+   * Instantiates a new Consumer proxy.
+   *
+   * @param target the target
+   */
+  public ConsumerProxy(Consumer target) {
+    this.target = target;
+  }
 
-	public Consumer getTarget() {
-		return target;
-	}
+  @Override
+  public boolean isThreadSafe() {
+    return (target instanceof ThreadAware && ((ThreadAware) target).isThreadSafe());
+  }
 
-	public void setTarget(Consumer target) {
-    	this.target = target;
-    }
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
 
-	@Override
-	public void startConsuming(ProductWrapper<?> wrapper) {
-		target.startConsuming(wrapper);
-	}
-	
-	@Override
-	public void finishConsuming(ProductWrapper<?> wrapper) {
-	    target.finishConsuming(wrapper);
-    }
+  /**
+   * Gets target.
+   *
+   * @return the target
+   */
+  public Consumer getTarget() {
+    return target;
+  }
 
-	@Override
-	public void flush() {
-	    target.flush();
-    }
+  /**
+   * Sets target.
+   *
+   * @param target the target
+   */
+  public void setTarget(Consumer target) {
+    this.target = target;
+  }
 
-	@Override
-	public void close() {
-	    target.close();
-    }
+  @Override
+  public void startConsuming(ProductWrapper<?> wrapper) {
+    target.startConsuming(wrapper);
+  }
+
+  @Override
+  public void finishConsuming(ProductWrapper<?> wrapper) {
+    target.finishConsuming(wrapper);
+  }
+
+  @Override
+  public void flush() {
+    target.flush();
+  }
+
+  @Override
+  public void close() {
+    target.close();
+  }
 
 }

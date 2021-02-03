@@ -38,36 +38,40 @@ import org.junit.Test;
  * Tests the {@link InstanceGeneratorFactory}.<br/>
  * <br/>
  * Created at 27.08.2008 13:55:03
- * @since 0.5.5
+ *
  * @author Volker Bergmann
+ * @since 0.5.5
  */
 public class InstanceGeneratorFactoryTest extends GeneratorTest {
-	
-	/**
-	 * Test unique generation based on random sequence.
-	 * <attribute distribution="random" unique="true"/>
-	 */
-	@Test
-	public void testUniqueRandom() {
-		SimpleTypeDescriptor type = createSimpleType(null, "long").withMin("1").withMax("3").withDistribution("random");
-		InstanceDescriptor instance = createInstance("n", type).withUnique(true);
-		Generator<Long> generator = createInstanceGenerator(instance);
-		generator.init(context);
-		expectUniquelyGeneratedSet(generator, 1L, 2L, 3L).withCeasedAvailability();
-	}
-	
-	@Test
-	public void testDefaultId() {
-		IdDescriptor descriptor = createId("id", "long");
-		Generator<Long> generator = createInstanceGenerator(descriptor);
-		generator.init(context);
-		expectUniquelyGeneratedSet(generator, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L).withContinuedAvailability();
-	}
-	
-	@SuppressWarnings("unchecked")
-    private Generator<Long> createInstanceGenerator(InstanceDescriptor instance) {
-		return (Generator<Long>) InstanceGeneratorFactory.createSingleInstanceGenerator(
-				instance, Uniqueness.NONE, context);
-	}
+
+  /**
+   * Test unique generation based on random sequence.
+   * <attribute distribution="random" unique="true"/>
+   */
+  @Test
+  public void testUniqueRandom() {
+    SimpleTypeDescriptor type = createSimpleType(null, "long").withMin("1").withMax("3").withDistribution("random");
+    InstanceDescriptor instance = createInstance("n", type).withUnique(true);
+    Generator<Long> generator = createInstanceGenerator(instance);
+    generator.init(context);
+    expectUniquelyGeneratedSet(generator, 1L, 2L, 3L).withCeasedAvailability();
+  }
+
+  /**
+   * Test default id.
+   */
+  @Test
+  public void testDefaultId() {
+    IdDescriptor descriptor = createId("id", "long");
+    Generator<Long> generator = createInstanceGenerator(descriptor);
+    generator.init(context);
+    expectUniquelyGeneratedSet(generator, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L).withContinuedAvailability();
+  }
+
+  @SuppressWarnings("unchecked")
+  private Generator<Long> createInstanceGenerator(InstanceDescriptor instance) {
+    return (Generator<Long>) InstanceGeneratorFactory.createSingleInstanceGenerator(
+        instance, Uniqueness.NONE, context);
+  }
 
 }

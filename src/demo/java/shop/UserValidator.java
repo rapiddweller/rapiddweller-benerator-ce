@@ -38,41 +38,52 @@ import com.rapiddweller.model.data.Entity;
  */
 public class UserValidator extends EntityValidator {
 
-    //private Set<String> supportedRoles = CollectionUtil.toSet("administrator", "clerk", "customer");
+  //private Set<String> supportedRoles = CollectionUtil.toSet("administrator", "clerk", "customer");
 
-    public UserValidator(String entityName) {
-        super(entityName);
+  /**
+   * Instantiates a new User validator.
+   *
+   * @param entityName the entity name
+   */
+  public UserValidator(String entityName) {
+    super(entityName);
+  }
+
+  /**
+   * Valid boolean.
+   *
+   * @param user the user
+   * @return the boolean
+   */
+  @Override
+  public boolean valid(Entity user) {
+    if (user.getComponent("id") == null) {
+      return false;
     }
-
-    @Override
-    public boolean valid(Entity user) {
-        if (user.getComponent("id") == null) {
-            return false;
-        }
-        if (StringUtil.isEmpty((String) user.getComponent("name"))) {
-            return false;
-        }
-        if (StringUtil.isEmpty((String) user.getComponent("email"))) {
-            return false;
-        }
-        if (StringUtil.isEmpty((String) user.getComponent("password"))) {
-            return false;
-        }
+    if (StringUtil.isEmpty((String) user.getComponent("name"))) {
+      return false;
+    }
+    if (StringUtil.isEmpty((String) user.getComponent("email"))) {
+      return false;
+    }
+    if (StringUtil.isEmpty((String) user.getComponent("password"))) {
+      return false;
+    }
         /*String roleId = (String) user.getComponent("role_id");
         if (!roles.contains(roleId))
             return false;*/
-        Object active = user.getComponent("active");
-        if (active instanceof Number) {
-            int value = ((Number) active).intValue();
-            if (value < 0 || value > 1) {
-                return false;
-            }
-        } else if (active instanceof Boolean) {
-            return (Boolean) active;
-        } else {
-            return false;
-        }
-        return true;
+    Object active = user.getComponent("active");
+    if (active instanceof Number) {
+      int value = ((Number) active).intValue();
+      if (value < 0 || value > 1) {
+        return false;
+      }
+    } else if (active instanceof Boolean) {
+      return (Boolean) active;
+    } else {
+      return false;
     }
+    return true;
+  }
 
 }

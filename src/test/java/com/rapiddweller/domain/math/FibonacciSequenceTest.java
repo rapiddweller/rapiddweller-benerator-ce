@@ -28,38 +28,46 @@ package com.rapiddweller.domain.math;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.test.GeneratorTest;
-
 import org.junit.Test;
 
 /**
  * Tests the {@link FibonacciSequence}.<br/>
  * <br/>
  * Created at 03.07.2009 10:51:18
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class FibonacciSequenceTest extends GeneratorTest {
 
-	@Test
-	public void testUnlimitedRange() {
-		Generator<Integer> generator = new FibonacciSequence().createNumberGenerator(Integer.class, 0, null, 1, false);
-		generator.init(context);
-		expectGeneratedSequence(generator, 0, 1, 1, 2, 3, 5, 8).withContinuedAvailability();
-	}
-	
-	@Test
-	public void testLimitedRange() {
-		Generator<Integer> generator = new FibonacciSequence().createNumberGenerator(Integer.class, 0, 10, 1, false);
-		generator.init(context);
-		expectGeneratedSequence(generator, 0, 1, 1, 2, 3, 5, 8).withCeasedAvailability();
-	}
-	
-	@Test
-	public void testUnique() {
-		Generator<Integer> generator = new FibonacciSequence().createNumberGenerator(Integer.class, 0, 10, 1, true);
-		generator.init(context);
-		expectGeneratedSequence(generator, 1, 2, 3, 5, 8).withCeasedAvailability();
-	}
-	
+  /**
+   * Test unlimited range.
+   */
+  @Test
+  public void testUnlimitedRange() {
+    Generator<Integer> generator = new FibonacciSequence().createNumberGenerator(Integer.class, 0, null, 1, false);
+    generator.init(context);
+    expectGeneratedSequence(generator, 0, 1, 1, 2, 3, 5, 8).withContinuedAvailability();
+  }
+
+  /**
+   * Test limited range.
+   */
+  @Test
+  public void testLimitedRange() {
+    Generator<Integer> generator = new FibonacciSequence().createNumberGenerator(Integer.class, 0, 10, 1, false);
+    generator.init(context);
+    expectGeneratedSequence(generator, 0, 1, 1, 2, 3, 5, 8).withCeasedAvailability();
+  }
+
+  /**
+   * Test unique.
+   */
+  @Test
+  public void testUnique() {
+    Generator<Integer> generator = new FibonacciSequence().createNumberGenerator(Integer.class, 0, 10, 1, true);
+    generator.init(context);
+    expectGeneratedSequence(generator, 1, 2, 3, 5, 8).withCeasedAvailability();
+  }
+
 }

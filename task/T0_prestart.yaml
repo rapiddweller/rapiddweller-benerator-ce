@@ -8,12 +8,16 @@
     supported_services:
       postgres:
         name: postgres_local
-        docker_image: bitnami/postgresql:latest
+        docker_image: postgres:latest
         network: "{{ network }}"
+        volumes:
+          - ./scripts/:/docker-entrypoint-initdb.d/
         env: {
           POSTGRESQL_DATABASE: benerator,
           POSTGRESQL_USERNAME: benerator,
-          POSTGRESQL_PASSWORD: benerator
+          POSTGRESQL_PASSWORD: benerator,
+          POSTGRES_PASSWORD: benerator,
+          POSTGRES_HOST_AUTH_METHOD: trust
         }
         published_ports:
           - "35432:5432"

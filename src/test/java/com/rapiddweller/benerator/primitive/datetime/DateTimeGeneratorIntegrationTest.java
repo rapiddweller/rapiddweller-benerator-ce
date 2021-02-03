@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
@@ -39,56 +37,66 @@ import com.rapiddweller.common.converter.ConverterManager;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 /**
- * Tests the correct interaction of XML parser, 
+ * Tests the correct interaction of XML parser,
  * Benerator engine and {@link DateTimeGenerator}.<br/><br/>
  * Created: 04.05.2010 06:13:08
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 public class DateTimeGeneratorIntegrationTest extends BeneratorIntegrationTest {
 
-	@Before
-	public void setupConverterManager() {
-		ConverterManager converterManager = ConverterManager.getInstance();
-		converterManager.reset();
-    	converterManager.registerConverterClass(String2DistributionConverter.class);
-		converterManager.setContext(context);
-	}
+  /**
+   * Sets converter manager.
+   */
+  @Before
+  public void setupConverterManager() {
+    ConverterManager converterManager = ConverterManager.getInstance();
+    converterManager.reset();
+    converterManager.registerConverterClass(String2DistributionConverter.class);
+    converterManager.setContext(context);
+  }
 
-	@Test
-	public void test() {
-		// create DateTimeGenerator from XML descriptor
-		String beanId = "datetime_gen";
-		String xml =
-			"<bean id='" + beanId + "' class='" + DateTimeGenerator.class.getName() + "'>" +
-			"  <property name='minDate'          value='2008-09-01'/>" +
-			"  <property name='maxDate'          value='2008-09-05'/>" +
-			"  <property name='dateGranularity'    value='00-00-02'  />" +
-			"  <property name='dateDistribution' value='step'      />" +
-			"  <property name='minTime'          value='08:00:00'  />" +
-			"  <property name='maxTime'          value='16:00:00'  />" +
-			"  <property name='timeGranularity'    value='00:00:01'  />" +
-			"  <property name='timeDistribution' value='step'      />" +
-			"</bean>";
-		BeanStatement statement = (BeanStatement) parse(xml);
-		statement.execute(context);
-		DateTimeGenerator generator = (DateTimeGenerator) GeneratorUtil.unwrap((Generator<?>) context.get(beanId));
-		
-		// check generator configuration
-		assertEquals(TimeUtil.date(2008, 8, 1,  0, 0, 0, 0), generator.minDate);
-		assertEquals(TimeUtil.date(2008, 8, 5,  0, 0, 0, 0), generator.maxDate);
-		assertEquals(SequenceManager.STEP_SEQUENCE, generator.dateDistribution);
-		assertEquals( 8 * 3600 * 1000, generator.minTime);
-		assertEquals(16 * 3600 * 1000, generator.maxTime);
-		assertEquals(1000, generator.timeGranularity);
-		assertEquals(SequenceManager.STEP_SEQUENCE, generator.timeDistribution);
-		
-		// check generation
-		assertEquals(TimeUtil.date(2008, 8, 1, 8, 0, 0, 0), generator.generate());
-		assertEquals(TimeUtil.date(2008, 8, 3, 8, 0, 1, 0), generator.generate());
-		assertEquals(TimeUtil.date(2008, 8, 5, 8, 0, 2, 0), generator.generate());
-		assertNull(generator.generate());
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    // create DateTimeGenerator from XML descriptor
+    String beanId = "datetime_gen";
+    String xml =
+        "<bean id='" + beanId + "' class='" + DateTimeGenerator.class.getName() + "'>" +
+            "  <property name='minDate'          value='2008-09-01'/>" +
+            "  <property name='maxDate'          value='2008-09-05'/>" +
+            "  <property name='dateGranularity'    value='00-00-02'  />" +
+            "  <property name='dateDistribution' value='step'      />" +
+            "  <property name='minTime'          value='08:00:00'  />" +
+            "  <property name='maxTime'          value='16:00:00'  />" +
+            "  <property name='timeGranularity'    value='00:00:01'  />" +
+            "  <property name='timeDistribution' value='step'      />" +
+            "</bean>";
+    BeanStatement statement = (BeanStatement) parse(xml);
+    statement.execute(context);
+    DateTimeGenerator generator = (DateTimeGenerator) GeneratorUtil.unwrap((Generator<?>) context.get(beanId));
+
+    // check generator configuration
+    assertEquals(TimeUtil.date(2008, 8, 1, 0, 0, 0, 0), generator.minDate);
+    assertEquals(TimeUtil.date(2008, 8, 5, 0, 0, 0, 0), generator.maxDate);
+    assertEquals(SequenceManager.STEP_SEQUENCE, generator.dateDistribution);
+    assertEquals(8 * 3600 * 1000, generator.minTime);
+    assertEquals(16 * 3600 * 1000, generator.maxTime);
+    assertEquals(1000, generator.timeGranularity);
+    assertEquals(SequenceManager.STEP_SEQUENCE, generator.timeDistribution);
+
+    // check generation
+    assertEquals(TimeUtil.date(2008, 8, 1, 8, 0, 0, 0), generator.generate());
+    assertEquals(TimeUtil.date(2008, 8, 3, 8, 0, 1, 0), generator.generate());
+    assertEquals(TimeUtil.date(2008, 8, 5, 8, 0, 2, 0), generator.generate());
+    assertNull(generator.generate());
+  }
+
 }

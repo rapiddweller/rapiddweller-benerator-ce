@@ -1,6 +1,6 @@
-# Using Relational Databases 
+# Using Relational Databases
 
-## Import and `<database>` 
+## Import and `<database>`
 
 For using database-related features, you must import the 'db' package:
 
@@ -14,7 +14,8 @@ You can easily define a database:
 <database id="db" url="jdbc:hsqldb:hsql://localhost" driver="org.hsqldb.jdbcDriver" user="sa" batch="false"/>
 ```
 
-A database must have an id by which it can be referenced later. For starting a project, it is better to have batch="false". In this mode, database errors are easier to track.
+A database must have an id by which it can be referenced later. For starting a project, it is better to have batch="
+false". In this mode, database errors are easier to track.
 
 The following attributes are available in the `<database>` element:
 
@@ -37,9 +38,12 @@ The following attributes are available in the `<database>` element:
 | readOnly | indicates if only read access shall be allowed in order to protect sensitive data |
 | acceptUnknownColumnTypes | If set to true, Benerator accepts exotic database column types without complaining and relies on the user to take care of the appropriate data type when generating values for the column. |
 
-**Attention**: Benerator has some built-in knowledge about the most widely used database systems and their conventions. So in most cases, it is sufficient to provide url, driver user and password. In special cases, e.g. if you want to access a schema ehich is not the default schema of your user, you may have to set schema (and possibly catalog) explicitly.
+**Attention**: Benerator has some built-in knowledge about the most widely used database systems and their conventions. So in most cases, it is
+sufficient to provide url, driver user and password. In special cases, e.g. if you want to access a schema ehich is not the default schema of your
+user, you may have to set schema (and possibly catalog)
+explicitly.
 
-## Usual Database Settings 
+## Usual Database Settings
 
 | Database | URL Format | Driver Class | Default Catalog | Default Schema |
 | --- | --- | --- | --- | --- |
@@ -53,9 +57,13 @@ The following attributes are available in the `<database>` element:
 | Postgres | jdbc:postgresql://host:5432/dbname | org.postgresql.Driver |  | `<user name>` |
 | SQL Server | jdbc:jtds:sqlserver://host:1433;DatabaseName=dbname | net.sourceforge.jtds.jdbc.Driver | dbo |  |
 
-## Using Database Repositories 
+## Using Database Repositories
 
-For frequently-used databases it is more convenient to use a central database configuration repository. The repository is located in a folder 'databene' under your user home directory. You can define a database configuration with a name (e.g. 'mydb') by storing a correspondingly named properties file there assigning the suffix '.env.properties' (e.g. 'mydb.env.properties', on Windows the file location would be `C:\Documents and Settings\<user_name>\mydb.env.properties`). In the file you can configure the JDBC connection information with the keys db_url, db_driver, db_user, db_password and db_url.
+For frequently-used databases it is more convenient to use a central database configuration repository. The repository is located in a folder '
+databene' under your user home directory. You can define a database configuration with a name (
+e.g. 'mydb') by storing a correspondingly named properties file there assigning the suffix '.env.properties' (e.g. '
+mydb.env.properties', on Windows the file location would be `C:\Documents and Settings\<user_name>\mydb.env.properties`)
+. In the file you can configure the JDBC connection information with the keys db_url, db_driver, db_user, db_password and db_url.
 
 As an example, a file `mydb.env.properties` would configure the environment 'mydb' and would have a content like this for an HSQL database:
 
@@ -65,9 +73,12 @@ Having done so, you can connect a database more simply using the `<database>`'s 
 
 `<database id="db" environment="mydb"/>`
 
-If you define a mydb.env.properties file in the directory in which Benerator executes, this file will be used. If not, the configuration is taken from your database repository.
+If you define a mydb.env.properties file in the directory in which Benerator executes, this file will be used. If not, the configuration is taken from
+your database repository.
 
-If you add conflicting attributes in your `<database>` element (like another user and password), they override the configuration details in the database repository. This way you can have a central and convenient database lookup and can access the database with different users in the same run. An example:
+If you add conflicting attributes in your `<database>` element (like another user and password), they override the configuration details in the
+database repository. This way you can have a central and convenient database lookup and can access the database with different users in the same run.
+An example:
 
 ```xml
 <database id="db1" environment="mydb" user="user1" password="password1"/>
@@ -77,33 +88,37 @@ If you add conflicting attributes in your `<database>` element (like another use
 <database id="db2" environment="mydb" user="user2" password="password2"/>
 ```
 
+## Caching Database Metadata
 
-
-## Caching Database Metadata 
-
-On very large databases, especially when accessed remotely, database metadata retrieval may take several minutes. In this case, you can make use of the metaCache facility.
+On very large databases, especially when accessed remotely, database metadata retrieval may take several minutes. In this case, you can make use of
+the metaCache facility.
 
 Two preconditions exist for using meta data caching: You need to
 
-1.  configure a database repository (environment) and
+1. configure a database repository (environment) and
 
-2.  set metaCache to "true"
+2. set metaCache to "true"
 
 ```xml
 <database id="db2" environment="mydb" metaCache="true"/>
 ```
 
-On the first run, you will not observe any speedup – meta data parsing may even take longer, since the cache needs to be built up on the first run and Benerator is likely to read (much) more meta data than you absolutely need for your specific data generation. When done so, Benerator saves the meta data in an XML file. On subsequent runs, Benerator notices the cache file and reads it within milliseconds.
+On the first run, you will not observe any speedup – meta data parsing may even take longer, since the cache needs to be built up on the first run and
+Benerator is likely to read (much) more meta data than you absolutely need for your specific data generation. When done so, Benerator saves the meta
+data in an XML file. On subsequent runs, Benerator notices the cache file and reads it within milliseconds.
 
 **Cache Invalidation**: There are several reasons that make Benerator invalidate its cache information and reload it:
 
-*   **Execution of SQL code via `<execute>`**: Benerator is not so clever about interpreting SQL code. Thus it interprets any executed SQL code as a potential meta data change and invalidates the cache.
+* **Execution of SQL code via `<execute>`**: Benerator is not so clever about interpreting SQL code. Thus it interprets any executed SQL code as a
+  potential meta data change and invalidates the cache.
 
-*   **Cache time out**: If the cache file is older than twelve hours, Benerator throws it away just in case. If you are sure that the database has not changed meanwhile, you can perform a 'touch' on the cache file.
+* **Cache time out**: If the cache file is older than twelve hours, Benerator throws it away just in case. If you are sure that the database has not
+  changed meanwhile, you can perform a 'touch' on the cache file.
 
-**Warning**: If you change the database structure from another client system and Benerator is configured to cache meta data, there is no way to become aware of it and the old meta data cache file is used which has become obsolete. You need to delete the cache file manually in such cases!
+**Warning**: If you change the database structure from another client system and Benerator is configured to cache meta data, there is no way to become
+aware of it and the old meta data cache file is used which has become obsolete. You need to delete the cache file manually in such cases!
 
-## Executing SQL statements 
+## Executing SQL statements
 
 SQL code can be executed, e.g. from a file:
 
@@ -111,7 +126,8 @@ SQL code can be executed, e.g. from a file:
 <execute uri="drop-tables.sql" target="db" onError="warn"/>
 ```
 
-Uris are resolved relative to the benerator file that declares them (as common in HTML). If the file is not found locally, it is searched relative to the current working directory.
+Uris are resolved relative to the benerator file that declares them (as common in HTML). If the file is not found locally, it is searched relative to
+the current working directory.
 
 You can inline SQL code as well:
 
@@ -131,11 +147,11 @@ PRIMARY KEY (id)
 </execute>
 ```
 
+### Alternative Delimiters
 
-
-### Alternative Delimiters 
-
-By default, the semicolon is the delimiter between commands: Benerator splits SQL commands by their delimiter and sends one after the other to the database. In some cases you need a different behaviour, e.g. if a procedure should be defined and/or called. In such cases, you can specify an alternative delimiter in an `<execute>` statement:
+By default, the semicolon is the delimiter between commands: Benerator splits SQL commands by their delimiter and sends one after the other to the
+database. In some cases you need a different behaviour, e.g. if a procedure should be defined and/or called. In such cases, you can specify an
+alternative delimiter in an `<execute>` statement:
 
 ```xml
 <execute target="db" separator="/">
@@ -153,11 +169,10 @@ end;
 </execute>
 ```
 
+## Inserting entities into a database
 
-
-## Inserting entities into a database 
-
-When using a database as consumer in a `<generate>` or `<iterate>` element, the elements are _inserted_ by default. For information, how to _update_ entries, see the next chapter.
+When using a database as consumer in a `<generate>` or `<iterate>` element, the elements are _inserted_ by default. For information, how to _update_
+entries, see the next chapter.
 
 <generate type="db_user" count="50000" consumer="db"></generate>
 
@@ -171,27 +186,30 @@ If primary key generation should be performed by the database, you need to tell 
 </generate>
 ```
 
-
-
-## Database-related Id Generators 
+## Database-related Id Generators
 
 The following id generators make use of database features:
 
-*   **DBSequenceGenerator**: Retrieves id values from a database sequence. With default settings, it operates quite slowly, since it incurs an additional database call for obtaining the id value for each generated entity. When setting its property '**cached**' to true, it fetches the current value of its database sequence, creates ids offline in Benerator RAM and updates the database sequence in the end. Of course this requires Benerator to run in a single instance and no other client may be writing data to the system while Benerator is generating – otherwise a primary key conflict may arise.
+* **DBSequenceGenerator**: Retrieves id values from a database sequence. With default settings, it operates quite slowly, since it incurs an
+  additional database call for obtaining the id value for each generated entity. When setting its property '**cached**' to true, it fetches the
+  current value of its database sequence, creates ids offline in Benerator RAM and updates the database sequence in the end. Of course this requires
+  Benerator to run in a single instance and no other client may be writing data to the system while Benerator is generating – otherwise a primary key
+  conflict may arise.
 
-*   **DBSeqHiLoGenerator**: Combines a value retrieved from a database with a local counter to create unique values (with a strongly reduced performance burden compared to the DBSequenceGenerator)
+* **DBSeqHiLoGenerator**: Combines a value retrieved from a database with a local counter to create unique values (with a strongly reduced performance
+  burden compared to the DBSequenceGenerator)
 
-*   **QueryGenerator**: Uses a database query to calculate id values
+* **QueryGenerator**: Uses a database query to calculate id values
 
-*   **QueryLongGenerator**: Uses a database to calculate id values of number type
+* **QueryLongGenerator**: Uses a database to calculate id values of number type
 
-*   **QueryHiLoGenerator**: Works like a DBSeqHiLoGenerator, but based on a query instead of a sequence
+* **QueryHiLoGenerator**: Works like a DBSeqHiLoGenerator, but based on a query instead of a sequence
 
-*   **SequenceTableGenerator**: Lets you read and increment values from database tables
+* **SequenceTableGenerator**: Lets you read and increment values from database tables
 
 Best performance with cluster-safe generators is achieved with the DBSeqHiLoGenerator, followed by the QueryHiLoGenerator.
 
-### SequenceTableGenerator 
+### SequenceTableGenerator
 
 The SequenceTableGenerator lets you create unique long values from a database table. Depending on the table structure this can be trivial or tricky.
 
@@ -212,7 +230,9 @@ In the simplest case, you have a table which stores a single row with a single v
 
 Name-Value-Pair Table
 
-In a slightly more difficult case, you have name-value-pairs of 'sequence identifier' and 'sequence value'. Then you must specify a selector, that tells Benerator which row to use. For example, if the sequence for the PERSON table is specified by a row in which the SEQ_ID column has the value 'PERSON':
+In a slightly more difficult case, you have name-value-pairs of 'sequence identifier' and 'sequence value'. Then you must specify a selector, that
+tells Benerator which row to use. For example, if the sequence for the PERSON table is specified by a row in which the SEQ_ID column has the value '
+PERSON':
 
 ```xml
 <database id="db" environment="mydb" />
@@ -226,7 +246,9 @@ In a slightly more difficult case, you have name-value-pairs of 'sequence identi
 
 Arbitrary Table
 
-You can support arbitrary complex sequence tables with a **parameterized selector**. It marks each parameter with a question mark (**?**) and must be invoked differently than the examples above, using a **script** that calls the **generateWithParams(...)** method:
+You can support arbitrary complex sequence tables with a **parameterized selector**. It marks each parameter with a question mark (**?**) and must be
+invoked differently than the examples above, using a **script** that calls the **
+generateWithParams(...)** method:
 
 ```xml
 <database id="db" environment="mydb" />
@@ -238,15 +260,16 @@ You can support arbitrary complex sequence tables with a **parameterized selecto
 </generate>`
 ```
 
+## Handling of common Columns
 
+In many databases, you encounter common columns like auditing information 'created_by', 'created_at', 'updated_by', '
+updated_at' or optimistic locking columns. See the chapter 'Default Attribute Settings' for instructions how to define a common default generation
+settings for these.
 
-## Handling of common Columns 
+## Determining attribute values by a database query
 
-In many databases, you encounter common columns like auditing information 'created_by', 'created_at', 'updated_by', 'updated_at' or optimistic locking columns. See the chapter 'Default Attribute Settings' for instructions how to define a common default generation settings for these.
-
-## Determining attribute values by a database query 
-
-You can use database queries to determine column values. A **source** attribute identifies the database to query and a selector the SQL query to perform:
+You can use database queries to determine column values. A **source** attribute identifies the database to query and a selector the SQL query to
+perform:
 
 ```xml
 <attribute name="user_rank" source="db" selector="select rank from ranks where active = 1" />
@@ -254,15 +277,20 @@ You can use database queries to determine column values. A **source** attribute 
 
 You can use **source** and selector in `<attribute>`, `<id>`, `<reference>` and `<variable>` statements.
 
-**Attention**: Whis this syntax, the query's result set is iterated throughout the `<generate>` loop until its end is reached. In the example above, a result set with the rows [1], [2], [3] will result in the user_rank values 1 for the first generated entry, 2, for the second and 3 for the third. After that the end of the result set is reached, the component signals, that it is unavailable and Benerator will terminate the generation loop. If you configured more than 3 objects to be generated, you will get an exception that Benerator was not able to provide the requested number of data sets. You have the following alternatives:
+**Attention**: Whis this syntax, the query's result set is iterated throughout the `<generate>` loop until its end is reached. In the example above, a
+result set with the rows [1], [2], [3] will result in the user_rank values 1 for the first generated entry, 2, for the second and 3 for the third.
+After that the end of the result set is reached, the component signals, that it is unavailable and Benerator will terminate the generation loop. If
+you configured more than 3 objects to be generated, you will get an exception that Benerator was not able to provide the requested number of data
+sets. You have the following alternatives:
 
-1.  Cycling through the result set again and again (cyclic="true")
+1. Cycling through the result set again and again (cyclic="true")
 
-2.  Apply a distribution choose a mode for selecting elements of the result set repeatedly or randomly
+2. Apply a distribution choose a mode for selecting elements of the result set repeatedly or randomly
 
-3.  If the query should be performed for each generated entity and is supposed to provide a single result, this is called sub query and is supported by a 'subQuery' attribute
+3. If the query should be performed for each generated entity and is supposed to provide a single result, this is called sub query and is supported by
+   a 'subQuery' attribute
 
-### Cycling through query result sets 
+### Cycling through query result sets
 
 When using a selector in combination with **cyclic="true"**, the query is automatically repeated when the end of the result set is reached:
 
@@ -270,25 +298,29 @@ When using a selector in combination with **cyclic="true"**, the query is automa
 <attribute name="user_rank" source="db" selector="select rank from ranks where active = 1" cyclic="true" />
 ```
 
+### Applying a distribution to a query
 
-
-### Applying a distribution to a query 
-
-When using a selector in combination with a **distribution**, the query's result set in processed by the selected distribution algorithm. Depending on the distribution, the result set may be buffered. Result set elements may be provided uniquely or repeatedly in an ordered or a random fashion. See the
+When using a selector in combination with a **distribution**, the query's result set in processed by the selected distribution algorithm. Depending on
+the distribution, the result set may be buffered. Result set elements may be provided uniquely or repeatedly in an ordered or a random fashion. See
+the
 
 distribution reference
 
-. The most common distribution is the 'random' distribution which buffers the full result set and then provides a rnadomly chosen entry on each invocation.
+. The most common distribution is the 'random' distribution which buffers the full result set and then provides a rnadomly chosen entry on each
+invocation.
 
 ```xml
 <attribute name="user_rank" source="db" selector="select rank from ranks where active = 1" distribution="random" />
 ```
 
+### Sub selectors
 
-
-### Sub selectors 
-
-Frequently you will encounter multi-field-constraints in an entity which can be matched by a query. Usually this means to first generate a random value and then to impose a database query with the value generated before. The query's results are valid only for the currently generated entity, and in general only one query result row is expected. You have a kind of „sub query“ which is handled best by using a **subSelector**. For example, you might offer products (table 'product') in different geographical regions and have a cross-reference table product_region that describes, which products are available in which region:
+Frequently you will encounter multi-field-constraints in an entity which can be matched by a query. Usually this means to first generate a random
+value and then to impose a database query with the value generated before. The query's results are valid only for the currently generated entity, and
+in general only one query result row is expected. You have a kind of „sub query“ which is handled best by using a **subSelector**. For example, you
+might offer products (
+table 'product') in different geographical regions and have a cross-reference table product_region that describes, which products are available in
+which region:
 
 ```xml
 <attribute name="region" values="'americas','emea','asia'" />
@@ -297,13 +329,15 @@ Frequently you will encounter multi-field-constraints in an entity which can be 
 
 ```
 
-**Attention**: In the example, you need double brackets {{…}} in order to signal that **this.region** should be reevaluated on each invocation. When using a single bracket, the query memorizes the value of **this.region** at the first invocation and reuses it on each subsequent call.
+**Attention**: In the example, you need double brackets {{…}} in order to signal that **this.region** should be reevaluated on each invocation. When
+using a single bracket, the query memorizes the value of **this.region** at the first invocation and reuses it on each subsequent call.
 
-## Resolving Database Relations 
+## Resolving Database Relations
 
-### Automatic referencing 
+### Automatic referencing
 
-By default, benerator assumes that all relations are one-to-one as the most defensive choice. Thus the following setup in which a table db_user references a table db_role will cause an error:
+By default, benerator assumes that all relations are one-to-one as the most defensive choice. Thus the following setup in which a table db_user
+references a table db_role will cause an error:
 
 ```xml
 <generate type="db_role" count="10" consumer="db" />
@@ -313,9 +347,13 @@ By default, benerator assumes that all relations are one-to-one as the most defe
 <generate type="db_user" count="100" consumer="db" />
 ```
 
-This is because, assuming a one-to-one relationship, you can only generate as many users as unique roles are available! ...and you have generated only 10 roles before. In other words, in fully automatic data generation, the number of user entries will be the number of role entries.
+This is because, assuming a one-to-one relationship, you can only generate as many users as unique roles are available!
+...and you have generated only 10 roles before. In other words, in fully automatic data generation, the number of user entries will be the number of
+role entries.
 
-In most cases you actually deal with many-to-one relationships and thus need to specify its characteristics explicitly, typically by using a distribution. Basically, a reference is defined by (column) **name**, (dabase) **source** and **targetType** (referenced table):
+In most cases you actually deal with many-to-one relationships and thus need to specify its characteristics explicitly, typically by using a
+distribution. Basically, a reference is defined by (column) **name**, (dabase) **source** and **
+targetType** (referenced table):
 
 ```xml
 <generate type="db_role" count="10" consumer="db" />
@@ -329,7 +367,7 @@ In most cases you actually deal with many-to-one relationships and thus need to 
 
 This will cause creation of 100 users which are evenly distributed over the roles.
 
-### Null references 
+### Null references
 
 If you want to generate only null values, you can reduce the declaration to a **name** and **nullQuota="1"** element:
 
@@ -341,11 +379,10 @@ If you want to generate only null values, you can reduce the declaration to a **
 </generate>
 ```
 
+### Selective Referencing
 
-
-### Selective Referencing 
-
-For restricting the objects referred to or using an individual way to construct the reference values, you can specify a selector which will be evaluated by the target system and return a reference value. For databases the selector needs to be a SQL where clause or complete query:
+For restricting the objects referred to or using an individual way to construct the reference values, you can specify a selector which will be
+evaluated by the target system and return a reference value. For databases the selector needs to be a SQL where clause or complete query:
 
 ```xml
 <generate type="db_role" count="10" consumer="db" />
@@ -357,11 +394,10 @@ For restricting the objects referred to or using an individual way to construct 
 </generate>
 ```
 
+### Other referencing options
 
-
-### Other referencing options 
-
-Besides selective referencing, you can use (almost) the full feature set of `<attribute>` elements to generate references, e.g. constant, pattern, values, script, etc. You could, e.g., configure the use of each role type by itself:
+Besides selective referencing, you can use (almost) the full feature set of `<attribute>` elements to generate references, e.g. constant, pattern,
+values, script, etc. You could, e.g., configure the use of each role type by itself:
 
 ```xml
 <generate type="db_user" count="5" consumer="db">
@@ -381,19 +417,20 @@ Besides selective referencing, you can use (almost) the full feature set of `<at
 </generate>
 ```
 
+## Composite Keys
 
+Benerator does not provide an **automated** composite key handling, but you can configure it to handle them **
+explicitly**. The typical approach for this is a prototype query.
 
-## Composite Keys 
+## Prototype Queries
 
-Benerator does not provide an **automated** composite key handling, but you can configure it to handle them **explicitly**. The typical approach for this is a prototype query.
+For the general idea of prototype-based generation, see the corresponding chapter. In addition to the core features, the prototype approach is a good
+way to handle composite primary keys and composite foreign keys, since their components are available in combination.
 
-## Prototype Queries 
+### Prototype Queries on Entities
 
-For the general idea of prototype-based generation, see the corresponding chapter. In addition to the core features, the prototype approach is a good way to handle composite primary keys and composite foreign keys, since their components are available in combination.
-
-### Prototype Queries on Entities 
-
-When querying entities, you specify the database to query as **source**, the where clause of the select as selector, and the table which is queried as **type**. After that, you can access the results' attributes by their names:
+When querying entities, you specify the database to query as **source**, the where clause of the select as selector, and the table which is queried
+as **type**. After that, you can access the results' attributes by their names:
 
 ```xml
 <variable name="_product" type**="MY_PRODUCT" **source**="db" selector="sysdate between VALID_FROM and VALID_TO" distribution="random" />
@@ -403,9 +440,11 @@ When querying entities, you specify the database to query as **source**, the whe
 <attribute name="ROUTING_TYPE" script="_product.ROUTING_TYPE" />
 ```
 
-When aggregating data with a general query that is not (or cannot be) mapped to a type, you can access the results' column values as array elements (indices are 0-based):
+When aggregating data with a general query that is not (or cannot be) mapped to a type, you can access the results' column values as array elements (
+indices are 0-based):
 
-<variable name="_product" source**="db" selector="select PRODUCT_ID, ROUTING_TYPE from MY_PRODUCT where sysdate between VALID_FROM and VALID_TO" distribution="random" />
+<variable name="_product" source**="db" selector="select PRODUCT_ID, ROUTING_TYPE from MY_PRODUCT where sysdate between VALID_FROM and VALID_TO"
+distribution="random" />
 
 ```xml
 <reference name="PRODUCT_ID" script="_product[0]" />
@@ -413,9 +452,7 @@ When aggregating data with a general query that is not (or cannot be) mapped to 
 <reference name="ROUTNG_TYPE" script="_product[1]" />
 ```
 
-
-
-## Exporting Database Content 
+## Exporting Database Content
 
 The rows of a database table can be iterated simply. Here's an example for writing all users of a table 'db_user' to a file 'users.csv':
 
@@ -429,13 +466,12 @@ You can as well select a subset to iterate:
 <iterate source="db" type="db_user" selector="active = 1"consumer="new CSVEntityConsumer('users.csv')" />
 ```
 
-
-
-## Updating Database Entries 
+## Updating Database Entries
 
 When using a database, you can update existing entries.
 
-For example, if you have db_orders that refer (one-to-many) db_order_items, you can calculate the sum of the db_order_items' total_price values and write it to the db_order's total_price column:
+For example, if you have db_orders that refer (one-to-many) db_order_items, you can calculate the sum of the db_order_items' total_price values and
+write it to the db_order's total_price column:
 
 ```xml
 <iterate type="db_order" source="db" consumer="db.updater()">
@@ -449,7 +485,8 @@ cyclic="true"/>
 </iterate>
 ```
 
-The described update mechanism can also be used to anonymize production data – see the chapter 'Production Data Anonymization'. For transfering user data from a source database 'sourcedb' to a target database 'testdb', you would write
+The described update mechanism can also be used to anonymize production data – see the chapter 'Production Data Anonymization'. For transfering user
+data from a source database 'sourcedb' to a target database 'testdb', you would write
 
 ```xml
 <iterate source="sourcedb" type="db_user" consumer="testdb">
@@ -479,11 +516,11 @@ If you want to read data from one table, anonymize it and write it to a differen
 </iterate>
 ```
 
+## Controlling Transactions
 
-
-## Controlling Transactions 
-
-By default, Benerator performs one transaction per data set that is generated. When generating huge amounts of data, transaction overhead quickly becomes significant and you will want to insert several data set in a common transaction. You can use the pageSize argument to configure the number of data elements per transaction. For most databases and tasks, pageSize="1000" is a reasonable setting:
+By default, Benerator performs one transaction per data set that is generated. When generating huge amounts of data, transaction overhead quickly
+becomes significant and you will want to insert several data set in a common transaction. You can use the pageSize argument to configure the number of
+data elements per transaction. For most databases and tasks, pageSize="1000" is a reasonable setting:
 
 ```xml
 <generate type="user" count="1000000" pageSize="1000" consumer="db" />
@@ -501,9 +538,12 @@ If you are nesting creation loops, you can set the transaction control for each 
 </generate>
 ```
 
-But an 'inner' transaction commit will commit the outer elements too, so you may get more transactions than you expect. The inner pageCount in the descriptor example makes the outer pageSize 10 effectively, since there is a commit after 500 orders. With 50 orders per customer, it is a commit for every 10th customer.
+But an 'inner' transaction commit will commit the outer elements too, so you may get more transactions than you expect. The inner pageCount in the
+descriptor example makes the outer pageSize 10 effectively, since there is a commit after 500 orders. With 50 orders per customer, it is a commit for
+every 10th customer.
 
-In most cases it is feasible and more intuitive to make the sub creation loops simply join the outer transaction control, by setting their pageSize to zero:
+In most cases it is feasible and more intuitive to make the sub creation loops simply join the outer transaction control, by setting their pageSize to
+zero:
 
 ```xml
 <generate type="user" count="1000" pageSize="100" consumer="db">
@@ -515,23 +555,25 @@ In most cases it is feasible and more intuitive to make the sub creation loops s
 
 Any `<generate>` loop with pageSize >` 0 is flushed when finished. For databases this means a commit.
 
-## Transcoding Database Data 
+## Transcoding Database Data
 
 Benerator's transcoding feature enables you to
 
-1.  copy database entries from one database to another
+1. copy database entries from one database to another
 
-2.  assign new primary key values while copying
+2. assign new primary key values while copying
 
-3.  transcode relationships (automatically translate foreign key relationships to the new primary key values)
+3. transcode relationships (automatically translate foreign key relationships to the new primary key values)
 
-4.  merge relationships (make copied data refer to pre-existing data in the target database)
+4. merge relationships (make copied data refer to pre-existing data in the target database)
 
 Features 1-3 are can be performed easily, for feature 4 you need so fulfill some preconditions.
 
-### Copying database entries 
+### Copying database entries
 
-A transcoding task that involves one or more database tables is wrapped with a `<transcodingTask>` and for each table to be transcoded, there needs to be a `<transcode>` element that specifies the table name. The `<transcode>` steps must be specified in the order in which they can be applied without violating foreign key constraints. For example, if you have a table USER which references a table ROLE, you need to transcode ROLE first, then USER.
+A transcoding task that involves one or more database tables is wrapped with a `<transcodingTask>` and for each table to be transcoded, there needs to
+be a `<transcode>` element that specifies the table name. The `<transcode>` steps must be specified in the order in which they can be applied without
+violating foreign key constraints. For example, if you have a table USER which references a table ROLE, you need to transcode ROLE first, then USER.
 
 ```xml
 <transcodingTask defaultSource="db1" target="db2">
@@ -543,7 +585,7 @@ A transcoding task that involves one or more database tables is wrapped with a `
 
 This copies the full content of the tables ROLE and USER from db1 to db2\.
 
-### Restricting the copied Set 
+### Restricting the copied Set
 
 You can resctrict the set of database entries to copy by using a 'selector' attribute in the `<transcode>` element:
 
@@ -557,7 +599,7 @@ You can resctrict the set of database entries to copy by using a 'selector' attr
 
 Only the ROLE with id 1 and the USERs that refer role #1 are copied.
 
-### Transcoding 
+### Transcoding
 
 You can overwrite primary key values and other attributes while you are transfering data using the normal Benerator syntax:
 
@@ -574,11 +616,16 @@ You can overwrite primary key values and other attributes while you are transfer
 
 Each ROLE and USER gets a new primary key value and the foreign key references from USER to ROLE are reassigned to match the new id values.
 
-### Cascaded Transcoding 
+### Cascaded Transcoding
 
-As an easy approach to transcode graphs of dependent objects along with their parent object, they can be transcoded in cascade along with their 'owner' object. This means, for each transcoded owner object, Benerator looks up, which database rows relate to it as defined in the cascade and transcodes them too. Thus, if you restrict the owners (e.g. company) to a subset of all available owners, the cascade statement assures that only database rows (e.g. department), which relate to this subset (company), are transcoded.
+As an easy approach to transcode graphs of dependent objects along with their parent object, they can be transcoded in cascade along with their '
+owner' object. This means, for each transcoded owner object, Benerator looks up, which database rows relate to it as defined in the cascade and
+transcodes them too. Thus, if you restrict the owners (e.g. company) to a subset of all available owners, the cascade statement assures that only
+database rows (e.g. department), which relate to this subset (company), are transcoded.
 
-A cascade statement consists of `<cascade>` element nested in a `<transcode>` element specifying a ref that tells, which columns of which table make up the table relationship. The Syntax is table(column1 [, column2 [, …]]), depending on the number of columns used as foreign key. Benerator looks up the corresponding foreign key constraint in the database and finds out the type of relationship.
+A cascade statement consists of `<cascade>` element nested in a `<transcode>` element specifying a ref that tells, which columns of which table make
+up the table relationship. The Syntax is table(column1 [, column2 [, …]]), depending on the number of columns used as foreign key. Benerator looks up
+the corresponding foreign key constraint in the database and finds out the type of relationship.
 
 As an example, if you want to transcode the rows of a company table and cascade to their departments, you would write
 
@@ -599,15 +646,18 @@ In `<cascade>`, you can overwrite attributes, ids and references like in `<trans
 <id name="id" generator="IncrementalIdGenerator" /> <cascade ref="department(company_id)" /> </transcode>
 ```
 
+### Merging Foreign Key Relations
 
+Benerator allows you to merge data from different databases. To continue the example above, you could have ROLES and USERS in different databases and
+merge them into one single target database. This introduces a new requirement: Since you might have automatically assigned technical ids, an object
+with a given 'business' identity (e.g. user 'Volker Bergmann') might have different 'technical' ids (primary keys of value e.g. 10 or 1000) in
+different databases. Thus, you need to provide Benerator with a description, which technical id relates to which business id in which database.
 
-### Merging Foreign Key Relations 
+There are several alternatives available, so I start with one of the simplest and most widely used in order to give you an overview of the approach
+and then provide you with a complete list of possibilites.
 
-Benerator allows you to merge data from different databases. To continue the example above, you could have ROLES and USERS in different databases and merge them into one single target database. This introduces a new requirement: Since you might have automatically assigned technical ids, an object with a given 'business' identity (e.g. user 'Volker Bergmann') might have different 'technical' ids (primary keys of value e.g. 10 or 1000) in different databases. Thus, you need to provide Benerator with a description, which technical id relates to which business id in which database.
-
-There are several alternatives available, so I start with one of the simplest and most widely used in order to give you an overview of the approach and then provide you with a complete list of possibilites.
-
-Let's assume the tables ROLE and USER each have a NAME column with unique identifiers. In this case, you can apply the unique-key identity mapping ans store it in a file with the suffix .id.xml, e.g. identities.id.xml:
+Let's assume the tables ROLE and USER each have a NAME column with unique identifiers. In this case, you can apply the unique-key identity mapping ans
+store it in a file with the suffix .id.xml, e.g. identities.id.xml:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -633,11 +683,11 @@ This identity file enables Benerator to merge foreign key relationships in the t
 </transcodingTask>
 ```
 
+### Defining Identities
 
-
-### Defining Identities 
-
-Identites are definied in a file format taken from DB Sanity. Thus, it is XML and its root element is `<dbsanity>`. Under the root, all `<identity>` definitions are listed, each referring to a **table** and having a certain identity **type**, e.g.
+Identites are definied in a file format taken from DB Sanity. Thus, it is XML and its root element is `<dbsanity>`. Under the root, all `<identity>`
+definitions are listed, each referring to a **table** and having a certain identity **
+type**, e.g.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -663,17 +713,20 @@ The simplest type of identity applies if the primary key (PK) is a business key 
 
 unique-key
 
-If a non-pk-column or a combination of several columns is unique, use the `<unique-key>` identity and list the key components in a comma-separated list in a 'columns' attribute:
+If a non-pk-column or a combination of several columns is unique, use the `<unique-key>` identity and list the key components in a comma-separated
+list in a 'columns' attribute:
 
 ```xml
 <identity table="PRODUCT" type="unique-key" columns="CATEGORY,CODE"/>
 ```
 
-You may as well include foreign keys in the list: Benerator will use the business id of the referenced objects to determine the identity of the referer.
+You may as well include foreign keys in the list: Benerator will use the business id of the referenced objects to determine the identity of the
+referer.
 
 nk-pk-query
 
-In more complicated cases, you might need a definition style that gives you more freedom. The `<nk-pk-query>` allows you to specify an arbitrary SQL query which is supposed to return a pair of natural key and primary key values for each table row:
+In more complicated cases, you might need a definition style that gives you more freedom. The `<nk-pk-query>` allows you to specify an arbitrary SQL
+query which is supposed to return a pair of natural key and primary key values for each table row:
 
 ```xml
 <identity table="COUNTRY" type="nk-pk-query">
@@ -685,7 +738,9 @@ select COUNTRY_NAME.NAME as NK, COUNTRY.ID as PK from COUNTRY_NAME join COUNTRY 
 
 sub-nk-pk-query
 
-A table's rows may have a complex identity definition, which is only unique in the context of a 'parent' row in another table. A good example is if a state name is only unique within a given country, nut different countries may have a state of the same name, but different identities. The provided query must have the parent's primary key as '?' parameter:
+A table's rows may have a complex identity definition, which is only unique in the context of a 'parent' row in another table. A good example is if a
+state name is only unique within a given country, nut different countries may have a state of the same name, but different identities. The provided
+query must have the parent's primary key as '?' parameter:
 
 ```xml
 <identity type="sub-nk-pk-query" table="" parents="COUNTRY">
@@ -695,8 +750,7 @@ select sn.STATE_NAME as SUB_NK, s.STATE_ID as PK from STATE s join STATE_NAME sn
 </identity>
 ```
 
+### Limitations
 
-
-### Limitations 
-
-Currently, the amount of data that can be transcoded is limited by the amount of avaliable Java heap memory, but as long as you do not transcode billions of data sets you are not supposed to get problems. Composite primary keys are not supported.
+Currently, the amount of data that can be transcoded is limited by the amount of avaliable Java heap memory, but as long as you do not transcode
+billions of data sets you are not supposed to get problems. Composite primary keys are not supported.

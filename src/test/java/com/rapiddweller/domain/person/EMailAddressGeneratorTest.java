@@ -27,43 +27,54 @@
 package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * A EMailGeneratorTest.<br/><br/>
  * Created at 20.04.2008 08:16:28
- * @since 0.5.2
+ *
  * @author Volker Bergmann
+ * @since 0.5.2
  */
 public class EMailAddressGeneratorTest extends GeneratorClassTest {
-	
-	private static final Logger logger = LogManager.getLogger(EMailAddressGeneratorTest.class);
 
-	public EMailAddressGeneratorTest() {
-		super(EMailAddressGenerator.class);
-	}
+  private static final Logger logger = LogManager.getLogger(EMailAddressGeneratorTest.class);
 
-	@Test
-	public void testDE() {
-		check("DE");
-	}
+  /**
+   * Instantiates a new E mail address generator test.
+   */
+  public EMailAddressGeneratorTest() {
+    super(EMailAddressGenerator.class);
+  }
 
-	@Test
-	public void testUS() {
-		check("US");
-	}
+  /**
+   * Test de.
+   */
+  @Test
+  public void testDE() {
+    check("DE");
+  }
 
-	private void check(String datasetName) {
-		EMailAddressGenerator generator = new EMailAddressGenerator(datasetName);
-		generator.init(context);
-		for (int i = 0; i < 10; i++) {
-			String email = generator.generate();
-			assertNotNull(email);
-			logger.debug(email);
-		}
-	}
-	
+  /**
+   * Test us.
+   */
+  @Test
+  public void testUS() {
+    check("US");
+  }
+
+  private void check(String datasetName) {
+    EMailAddressGenerator generator = new EMailAddressGenerator(datasetName);
+    generator.init(context);
+    for (int i = 0; i < 10; i++) {
+      String email = generator.generate();
+      assertNotNull(email);
+      logger.debug(email);
+    }
+  }
+
 }

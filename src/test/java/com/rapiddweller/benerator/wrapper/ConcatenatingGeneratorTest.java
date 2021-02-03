@@ -34,25 +34,35 @@ import org.junit.Test;
 /**
  * Tests the {@link ConcatenatingGenerator}.<br/><br/>
  * Created: 14.10.2009 10:16:05
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ConcatenatingGeneratorTest extends GeneratorTest {
 
-	final Generator<String[]> source = new ConstantGenerator<>(new String[]{"Expressis", "Verbis"});
+  /**
+   * The Source.
+   */
+  final Generator<String[]> source = new ConstantGenerator<>(new String[] {"Expressis", "Verbis"});
 
-    @Test
-	public void testDefault() {
-		Generator<String> generator = new ConcatenatingGenerator(source);
-		generator.init(context);
-		expectGeneratedSequence(generator, "ExpressisVerbis", "ExpressisVerbis").withContinuedAvailability();
-	}
+  /**
+   * Test default.
+   */
+  @Test
+  public void testDefault() {
+    Generator<String> generator = new ConcatenatingGenerator(source);
+    generator.init(context);
+    expectGeneratedSequence(generator, "ExpressisVerbis", "ExpressisVerbis").withContinuedAvailability();
+  }
 
-    @Test
-	public void testSeparator() {
-		Generator<String> generator = new ConcatenatingGenerator(source, " ");
-		generator.init(context);
-		expectGeneratedSequence(generator, "Expressis Verbis", "Expressis Verbis").withContinuedAvailability();
-	}
+  /**
+   * Test separator.
+   */
+  @Test
+  public void testSeparator() {
+    Generator<String> generator = new ConcatenatingGenerator(source, " ");
+    generator.init(context);
+    expectGeneratedSequence(generator, "Expressis Verbis", "Expressis Verbis").withContinuedAvailability();
+  }
 
 }

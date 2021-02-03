@@ -26,31 +26,32 @@
 
 package com.rapiddweller.benerator;
 
-import java.util.Arrays;
-
-import com.rapiddweller.benerator.InvalidGeneratorSetupException;
-import com.rapiddweller.benerator.PropertyMessage;
 import com.rapiddweller.common.ArrayUtil;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link InvalidGeneratorSetupException}.<br/><br/>
  * Created at 03.05.2008 12:31:14
- * @since 0.5.3
+ *
  * @author Volker Bergmann
+ * @since 0.5.3
  */
 public class InvalidGeneratorSetupExceptionTest {
-	
-	@Test
-	public void test() {
-		PropertyMessage m1 = new PropertyMessage("p1", "is null");
-		PropertyMessage m2 = new PropertyMessage("p2", "is too long");
-		PropertyMessage[] mm = ArrayUtil.toArray(m1, m2);
-		InvalidGeneratorSetupException e = new InvalidGeneratorSetupException(mm);
-		assertEquals("'p1' is null, 'p2' is too long", e.getMessage());
-        assertArrayEquals(mm, e.getPropertyMessages());
-	}
-	
+
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    PropertyMessage m1 = new PropertyMessage("p1", "is null");
+    PropertyMessage m2 = new PropertyMessage("p2", "is too long");
+    PropertyMessage[] mm = ArrayUtil.toArray(m1, m2);
+    InvalidGeneratorSetupException e = new InvalidGeneratorSetupException(mm);
+    assertEquals("'p1' is null, 'p2' is too long", e.getMessage());
+    assertArrayEquals(mm, e.getPropertyMessages());
+  }
+
 }

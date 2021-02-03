@@ -46,97 +46,121 @@ import java.util.Set;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class Noun {
 
-    private final Language language;
+  private final Language language;
 
-    private final String singular;
-    private final String plural;
-    private final int gender;
+  private final String singular;
+  private final String plural;
+  private final int gender;
 
-    public Noun(String singular, String plural, int gender, Language language) {
-        this.singular = singular;
-        this.plural = plural;
-        this.gender = gender;
-        this.language = language;
-    }
+  /**
+   * Instantiates a new Noun.
+   *
+   * @param singular the singular
+   * @param plural   the plural
+   * @param gender   the gender
+   * @param language the language
+   */
+  public Noun(String singular, String plural, int gender, Language language) {
+    this.singular = singular;
+    this.plural = plural;
+    this.gender = gender;
+    this.language = language;
+  }
 
-    public static Collection<Noun> getInstances(Locale locale)
-            throws IOException {
-        Language language = Language.getInstance(locale);
-        Set<Noun> nouns = new HashSet<>(500);
-        String url = LocaleUtil
-                .availableLocaleUrl("/com/rapiddweller/domain/lang/noun",
-                        locale, ".csv");
-        CSVLineIterator iterator = new CSVLineIterator(url, ',', true);
-        DataContainer<String[]> container = new DataContainer<>();
-        while ((container = iterator.next(container)) != null) {
-            String[] line = container.getData();
-            String singular =
-                    (StringUtil.isEmpty(line[0]) ? null : line[0].trim());
-            String plural;
-            if (line.length > 1 && !StringUtil.isEmpty(line[1])) {
-                plural = line[1].trim();
-                if (plural.startsWith("-")) {
-                    plural = singular + plural.substring(1);
-                }
-            } else {
-                plural = null;
-            }
-            int gender = (line.length >= 3 ? Integer.parseInt(line[2]) : 0);
-            nouns.add(new Noun(singular, plural, gender, language));
+  /**
+   * Gets instances.
+   *
+   * @param locale the locale
+   * @return the instances
+   * @throws IOException the io exception
+   */
+  public static Collection<Noun> getInstances(Locale locale)
+      throws IOException {
+    Language language = Language.getInstance(locale);
+    Set<Noun> nouns = new HashSet<>(500);
+    String url = LocaleUtil
+        .availableLocaleUrl("/com/rapiddweller/domain/lang/noun",
+            locale, ".csv");
+    CSVLineIterator iterator = new CSVLineIterator(url, ',', true);
+    DataContainer<String[]> container = new DataContainer<>();
+    while ((container = iterator.next(container)) != null) {
+      String[] line = container.getData();
+      String singular =
+          (StringUtil.isEmpty(line[0]) ? null : line[0].trim());
+      String plural;
+      if (line.length > 1 && !StringUtil.isEmpty(line[1])) {
+        plural = line[1].trim();
+        if (plural.startsWith("-")) {
+          plural = singular + plural.substring(1);
         }
-        return nouns;
+      } else {
+        plural = null;
+      }
+      int gender = (line.length >= 3 ? Integer.parseInt(line[2]) : 0);
+      nouns.add(new Noun(singular, plural, gender, language));
     }
+    return nouns;
+  }
 
-    public String getSingular() {
-        return singular;
-    }
+  /**
+   * Gets singular.
+   *
+   * @return the singular
+   */
+  public String getSingular() {
+    return singular;
+  }
 
-    public String getPlural() {
-        return plural;
-    }
+  /**
+   * Gets plural.
+   *
+   * @return the plural
+   */
+  public String getPlural() {
+    return plural;
+  }
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        if (singular != null) {
-            builder.append(language.definiteArticle(gender, false)).append(' ')
-                    .append(singular);
-            if (plural != null) {
-                builder.append(", ");
-            }
-        }
-        if (plural != null) {
-            builder.append(language.definiteArticle(gender, true)).append(' ')
-                    .append(plural);
-        }
-        return builder.toString();
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    if (singular != null) {
+      builder.append(language.definiteArticle(gender, false)).append(' ')
+          .append(singular);
+      if (plural != null) {
+        builder.append(", ");
+      }
     }
+    if (plural != null) {
+      builder.append(language.definiteArticle(gender, true)).append(' ')
+          .append(plural);
+    }
+    return builder.toString();
+  }
 
-    @Override
-    public int hashCode() {
-        int pHash = (plural == null ? 0 : plural.hashCode());
-        int sHash = (singular == null ? 0 : singular.hashCode());
-        return (pHash * 31 + sHash) * 31 + gender;
-    }
+  @Override
+  public int hashCode() {
+    int pHash = (plural == null ? 0 : plural.hashCode());
+    int sHash = (singular == null ? 0 : singular.hashCode());
+    return (pHash * 31 + sHash) * 31 + gender;
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        Noun that = (Noun) obj;
-        return NullSafeComparator.equals(this.singular, that.singular) &&
-                NullSafeComparator.equals(this.plural, that.plural) &&
-                this.gender == that.gender;
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Noun that = (Noun) obj;
+    return NullSafeComparator.equals(this.singular, that.singular) &&
+        NullSafeComparator.equals(this.plural, that.plural) &&
+        this.gender == that.gender;
+  }
 
 }

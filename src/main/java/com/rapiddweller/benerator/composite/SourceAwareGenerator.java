@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.composite;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
@@ -35,110 +33,121 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.MessageHolder;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.List;
 
 /**
- * {@link Generator} proxy that combines a 'source' entity generator 
+ * {@link Generator} proxy that combines a 'source' entity generator
  * with variable support and ComponentBuilders.<br/><br/>
  * Created: 29.08.2010 09:59:03
- * @since 0.6.4
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class SourceAwareGenerator<E> extends GeneratorProxy<E> implements MessageHolder {
-	
-    private static final Logger LOGGER = LogManager.getLogger(SourceAwareGenerator.class);
-    private static final Logger STATE_LOGGER = LogManager.getLogger(BeneratorConstants.STATE_LOGGER);
-    
-    private final String instanceName;
-    private E currentInstance;
-	private String message;
-	private final ComponentAndVariableSupport<E> support;
-	
-	/**
-     * @param source another Generator of entities that serves as Entity builder. 
-     *     It may construct empty Entities or may import them (so this may overwrite imported attributes). 
-     * @param instanceName instance name for the generated entities. 
-	 */
-	public SourceAwareGenerator(String instanceName, Generator<E> source, 
-			List<GeneratorComponent<E>> components, BeneratorContext context) {
-        super(source);
-        this.instanceName = instanceName;
-        this.support = new ComponentAndVariableSupport<>(instanceName, components, context);
-		this.context = context;
-	}
-	
-	// Generator implementation ----------------------------------------------------------------------------------------
-	
-	@Override
-    public void init(GeneratorContext context) {
-        support.init((BeneratorContext) context);
-		super.init(context);
-	}
 
-	@SuppressWarnings("null")
-	@Override
-    public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-    	wrapper = getSource().generate(wrapper);
-    	boolean available = (wrapper != null);
-    	if (!available)
-            STATE_LOGGER.debug("Source for entity '{}' is not available: {}", instanceName, getSource());
-        if (available) {
-            currentInstance = wrapper.unwrap();
-            if (instanceName != null)
-            	context.set(instanceName, currentInstance);
-    		available = support.apply(currentInstance, (BeneratorContext) context);
-        }
-		if (available) {
-        	LOGGER.debug("Generated {}", currentInstance);
-            return wrapper.wrap(currentInstance);
-		} else {
-			currentInstance = null;
-            if (instanceName != null)
-            	context.remove(instanceName);
-            return null;
-        }
-	}
+  private static final Logger LOGGER = LogManager.getLogger(SourceAwareGenerator.class);
+  private static final Logger STATE_LOGGER = LogManager.getLogger(BeneratorConstants.STATE_LOGGER);
 
-	@Override
-    public void reset() {
-		support.reset();
-		super.reset();
-	}
+  private final String instanceName;
+  private E currentInstance;
+  private String message;
+  private final ComponentAndVariableSupport<E> support;
 
-	@Override
-    public void close() {
-		support.close();
-		super.close();
-	}
-	
-	@Override
-	public String getMessage() {
-		if (message != null)
-			return message;
-		Generator<E> source = getSource();
-	    if (source instanceof MessageHolder && ((MessageHolder) source).getMessage() != null)
-	    	return ((MessageHolder) source).getMessage();
-	    return support.getMessage();
-	}
-	
-	
-	
-	// java.lang.Object overrides --------------------------------------------------------------------------------------
-	
-	@Override
-	public String toString() {
-	    return getClass().getSimpleName() + "[" + getSource() + "]";
-	}
+  /**
+   * Instantiates a new Source aware generator.
+   *
+   * @param instanceName instance name for the generated entities.
+   * @param source       another Generator of entities that serves as Entity builder.                     It may construct empty Entities or may import them (so this may overwrite imported attributes).
+   * @param components   the components
+   * @param context      the context
+   */
+  public SourceAwareGenerator(String instanceName, Generator<E> source,
+                              List<GeneratorComponent<E>> components, BeneratorContext context) {
+    super(source);
+    this.instanceName = instanceName;
+    this.support = new ComponentAndVariableSupport<>(instanceName, components, context);
+    this.context = context;
+  }
 
-	@Override
-    public boolean isParallelizable() {
-	    return getSource().isParallelizable() && support.isParallelizable();
+  // Generator implementation ----------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    support.init((BeneratorContext) context);
+    super.init(context);
+  }
+
+  @SuppressWarnings("null")
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    wrapper = getSource().generate(wrapper);
+    boolean available = (wrapper != null);
+    if (!available) {
+      STATE_LOGGER.debug("Source for entity '{}' is not available: {}", instanceName, getSource());
     }
-
-	@Override
-    public boolean isThreadSafe() {
-	    return getSource().isThreadSafe() && support.isThreadSafe();
+    if (available) {
+      currentInstance = wrapper.unwrap();
+      if (instanceName != null) {
+        context.set(instanceName, currentInstance);
+      }
+      available = support.apply(currentInstance, (BeneratorContext) context);
     }
+    if (available) {
+      LOGGER.debug("Generated {}", currentInstance);
+      return wrapper.wrap(currentInstance);
+    } else {
+      currentInstance = null;
+      if (instanceName != null) {
+        context.remove(instanceName);
+      }
+      return null;
+    }
+  }
+
+  @Override
+  public void reset() {
+    support.reset();
+    super.reset();
+  }
+
+  @Override
+  public void close() {
+    support.close();
+    super.close();
+  }
+
+  @Override
+  public String getMessage() {
+    if (message != null) {
+      return message;
+    }
+    Generator<E> source = getSource();
+    if (source instanceof MessageHolder && ((MessageHolder) source).getMessage() != null) {
+      return ((MessageHolder) source).getMessage();
+    }
+    return support.getMessage();
+  }
+
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + getSource() + "]";
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return getSource().isParallelizable() && support.isParallelizable();
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return getSource().isThreadSafe() && support.isThreadSafe();
+  }
 
 }

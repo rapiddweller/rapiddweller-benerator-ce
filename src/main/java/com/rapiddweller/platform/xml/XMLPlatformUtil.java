@@ -26,13 +26,17 @@
 
 package com.rapiddweller.platform.xml;
 
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.converter.ToStringConverter;
-import org.w3c.dom.*;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 import java.util.Map;
 
@@ -43,92 +47,127 @@ import java.util.Map;
  * @author Volker Bergmann
  * @since 0.9.0
  */
-
 public class XMLPlatformUtil {
 
-    private XMLPlatformUtil() {
+  private XMLPlatformUtil() {
+  }
+
+  /**
+   * Convert element 2 entity entity.
+   *
+   * @param element  the element
+   * @param provider the provider
+   * @return the entity
+   */
+  public static Entity convertElement2Entity(Element element, DescriptorProvider provider) {
+
+    // Determine data type
+    String typeName = normalizeName(element.getNodeName());
+    TypeDescriptor typeDescriptor = provider.getTypeDescriptor(typeName);
+    if (typeDescriptor == null) {
+      typeDescriptor = new ComplexTypeDescriptor(typeName, provider);
+    } else if (!(typeDescriptor instanceof ComplexTypeDescriptor)) {
+      throw new ConfigurationError("Expected ComplexTypeDescriptor for type " + typeName +
+          ", but found " + typeDescriptor.getClass().getSimpleName());
     }
 
-    public static Entity convertElement2Entity(Element element, DescriptorProvider provider) {
+    // create entity
+    XmlEntity entity = new XmlEntity((ComplexTypeDescriptor) typeDescriptor);
+    entity.setSourceElement(element);
 
-        // Determine data type
-        String typeName = normalizeName(element.getNodeName());
-        TypeDescriptor typeDescriptor = provider.getTypeDescriptor(typeName);
-        if (typeDescriptor == null)
-            typeDescriptor = new ComplexTypeDescriptor(typeName, provider);
-        else if (!(typeDescriptor instanceof ComplexTypeDescriptor))
-            throw new ConfigurationError("Expected ComplexTypeDescriptor for type " + typeName +
-                    ", but found " + typeDescriptor.getClass().getSimpleName());
+    // map attributes
+    NamedNodeMap atts = element.getAttributes();
+    for (int i = 0; i < atts.getLength(); i++) {
+      Node att = atts.item(i);
+      String name = XMLPlatformUtil.normalizeName(att.getNodeName());
+      entity.setComponent(name, att.getNodeValue());
+    }
 
-        // create entity
-        XmlEntity entity = new XmlEntity((ComplexTypeDescriptor) typeDescriptor);
-        entity.setSourceElement(element);
-
-        // map attributes
-        NamedNodeMap atts = element.getAttributes();
-        for (int i = 0; i < atts.getLength(); i++) {
-            Node att = atts.item(i);
-            String name = XMLPlatformUtil.normalizeName(att.getNodeName());
-            entity.setComponent(name, att.getNodeValue());
+    // map sub elements that contain only text
+    NodeList childNodes = element.getChildNodes();
+    for (int i = 0; i < childNodes.getLength(); i++) {
+      Node childNode = childNodes.item(i);
+      if (childNode instanceof Element) {
+        Element childElement = (Element) childNode;
+        NodeList grandchildNodes = childElement.getChildNodes();
+        if (grandchildNodes.getLength() == 1) {
+          Node grandchild = grandchildNodes.item(0);
+          if (grandchild instanceof Text) {
+            String childElementName = childElement.getNodeName();
+            String attributeName = XMLPlatformUtil.normalizeName(childElementName);
+            entity.setComponent(attributeName, grandchild.getTextContent());
+          }
         }
+      }
+    }
+    return entity;
+  }
 
-        // map sub elements that contain only text
-        NodeList childNodes = element.getChildNodes();
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            Node childNode = childNodes.item(i);
-            if (childNode instanceof Element) {
-                Element childElement = (Element) childNode;
-                NodeList grandchildNodes = childElement.getChildNodes();
-                if (grandchildNodes.getLength() == 1) {
-                    Node grandchild = grandchildNodes.item(0);
-                    if (grandchild instanceof Text) {
-                        String childElementName = childElement.getNodeName();
-                        String attributeName = XMLPlatformUtil.normalizeName(childElementName);
-                        entity.setComponent(attributeName, grandchild.getTextContent());
-                    }
-                }
-            }
+  /**
+   * Map entity to element.
+   *
+   * @param source the source
+   * @param target the target
+   */
+  public static void mapEntityToElement(Entity source, Element target) {
+    for (Map.Entry<String, Object> component : source.getComponents().entrySet()) {
+      mapComponent(component.getKey(), component.getValue(), target);
+    }
+  }
+
+  /**
+   * Map component.
+   *
+   * @param componentName  the component name
+   * @param componentValue the component value
+   * @param target         the target
+   */
+  public static void mapComponent(String componentName, Object componentValue, Element target) {
+    if (componentValue instanceof Entity) {
+      return; // ignore sub entities
+    }
+
+    // if the element has an attribute of an appropriate name, then set it and return...
+    NamedNodeMap targetAttributes = target.getAttributes();
+    for (int i = 0; i < targetAttributes.getLength(); i++) {
+      Node attribute = targetAttributes.item(i);
+      if (normalizeName(attribute.getNodeName()).equals(componentName)) {
+        target.setAttribute(componentName, convertToString(componentValue));
+        return;
+      }
+    }
+
+    // ... otherwise search for a child element and set that one
+    NodeList childNodes = target.getChildNodes();
+    for (int i = 0; i < childNodes.getLength(); i++) {
+      Node childNode = childNodes.item(i);
+      if (childNode instanceof Element) {
+        Element childElement = (Element) childNode;
+        if (componentName.equals(normalizeName(childElement.getNodeName()))) {
+          childElement.setTextContent(convertToString(componentValue));
         }
-        return entity;
+      }
     }
+  }
 
-    public static void mapEntityToElement(Entity source, Element target) {
-        for (Map.Entry<String, Object> component : source.getComponents().entrySet())
-            mapComponent(component.getKey(), component.getValue(), target);
-    }
+  /**
+   * Convert to string string.
+   *
+   * @param value the value
+   * @return the string
+   */
+  public static String convertToString(Object value) {
+    return ToStringConverter.convert(value, null);
+  }
 
-    public static void mapComponent(String componentName, Object componentValue, Element target) {
-        if (componentValue instanceof Entity)
-            return; // ignore sub entities
-
-        // if the element has an attribute of an appropriate name, then set it and return...
-        NamedNodeMap targetAttributes = target.getAttributes();
-        for (int i = 0; i < targetAttributes.getLength(); i++) {
-            Node attribute = targetAttributes.item(i);
-            if (normalizeName(attribute.getNodeName()).equals(componentName)) {
-                target.setAttribute(componentName, convertToString(componentValue));
-                return;
-            }
-        }
-
-        // ... otherwise search for a child element and set that one
-        NodeList childNodes = target.getChildNodes();
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            Node childNode = childNodes.item(i);
-            if (childNode instanceof Element) {
-                Element childElement = (Element) childNode;
-                if (componentName.equals(normalizeName(childElement.getNodeName())))
-                    childElement.setTextContent(convertToString(componentValue));
-            }
-        }
-    }
-
-    public static String convertToString(Object value) {
-        return ToStringConverter.convert(value, null);
-    }
-
-    public static String normalizeName(String name) {
-        return name.replace('-', '_').replace('.', '_');
-    }
+  /**
+   * Normalize name string.
+   *
+   * @param name the name
+   * @return the string
+   */
+  public static String normalizeName(String name) {
+    return name.replace('-', '_').replace('.', '_');
+  }
 
 }

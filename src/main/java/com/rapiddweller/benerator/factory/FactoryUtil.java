@@ -26,13 +26,6 @@
 
 package com.rapiddweller.benerator.factory;
 
-import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.distribution.AttachedWeight;
@@ -58,131 +51,207 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.WeightedSample;
 import com.rapiddweller.script.expression.DynamicExpression;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAME;
 
 /**
  * Provides utility methods for Generator factories.<br/><br/>
  * Created: 08.03.2008 09:39:05
+ *
  * @author Volker Bergmann
  */
 public class FactoryUtil {
-	
-    public static void mapDetailsToBeanProperties(FeatureDescriptor descriptor, Object bean, Context context) {
-        for (FeatureDetail<?> detail : descriptor.getDetails()) {
-        	if (!ATT_NAME.equals(detail.getName()))
-        		mapDetailToBeanProperty(descriptor, detail.getName(), bean, context);
+
+  /**
+   * Map details to bean properties.
+   *
+   * @param descriptor the descriptor
+   * @param bean       the bean
+   * @param context    the context
+   */
+  public static void mapDetailsToBeanProperties(FeatureDescriptor descriptor, Object bean, Context context) {
+    for (FeatureDetail<?> detail : descriptor.getDetails()) {
+      if (!ATT_NAME.equals(detail.getName())) {
+        mapDetailToBeanProperty(descriptor, detail.getName(), bean, context);
+      }
+    }
+  }
+
+  /**
+   * Map detail to bean property.
+   *
+   * @param descriptor the descriptor
+   * @param detailName the detail name
+   * @param bean       the bean
+   * @param context    the context
+   */
+  public static void mapDetailToBeanProperty(FeatureDescriptor descriptor, String detailName, Object bean, Context context) {
+    Object detailValue = descriptor.getDetailValue(detailName);
+    if (detailValue instanceof Expression) {
+      detailValue = ((Expression<?>) detailValue).evaluate(context);
+    }
+    setBeanProperty(bean, detailName, detailValue, context);
+  }
+
+  /**
+   * Sets bean property.
+   *
+   * @param bean        the bean
+   * @param detailName  the detail name
+   * @param detailValue the detail value
+   * @param context     the context
+   */
+  public static void setBeanProperty(Object bean, String detailName, Object detailValue, Context context) {
+    if (detailValue != null && BeanUtil.hasProperty(bean.getClass(), detailName)) {
+      try {
+        PropertyDescriptor propertyDescriptor = BeanUtil.getPropertyDescriptor(bean.getClass(), detailName);
+        Class<?> propertyType = propertyDescriptor.getPropertyType();
+        Object propertyValue = detailValue;
+        if (detailValue instanceof String && StorageSystem.class.isAssignableFrom(propertyType)) {
+          propertyValue = context.get(propertyValue.toString());
         }
+        BeanUtil.setPropertyValue(bean, detailName, propertyValue, false);
+      } catch (RuntimeException e) {
+        throw new RuntimeException("Error setting '" + detailName + "' of class " + bean.getClass().getName(), e);
+      }
+    }
+  }
+
+  /**
+   * Extracts distribution information from the descriptor.
+   *
+   * @param spec       the textual representation of the distribution
+   * @param uniqueness tells if a unique distribution is requested
+   * @param required   if set the method will never return null
+   * @param context    the {@link BeneratorContext}
+   * @return a distribution that reflects the descriptor setup, null if distribution info is not found nor required.
+   */
+  @SuppressWarnings("rawtypes")
+  public static Distribution getDistribution(
+      String spec, Uniqueness uniqueness, boolean required, BeneratorContext context) {
+
+    // handle absence of distribution spec
+    if (StringUtil.isEmpty(spec)) {
+      if (required) {
+        return context.getGeneratorFactory().defaultDistribution(uniqueness);
+      } else {
+        return null;
+      }
     }
 
-    public static void mapDetailToBeanProperty(FeatureDescriptor descriptor, String detailName, Object bean, Context context) {
-        Object detailValue = descriptor.getDetailValue(detailName);
-        if (detailValue instanceof Expression)
-        	detailValue = ((Expression<?>) detailValue).evaluate(context);
-		setBeanProperty(bean, detailName, detailValue, context);
+    // check for context reference
+    Object contextObject = context.get(spec);
+    if (contextObject != null) {
+      if (contextObject instanceof Distribution) {
+        return (Distribution) contextObject;
+      } else {
+        throw new ConfigurationError("Not a distribution: " + spec + "=" + contextObject);
+      }
     }
 
-    public static void setBeanProperty(Object bean, String detailName, Object detailValue, Context context) {
-        if (detailValue != null && BeanUtil.hasProperty(bean.getClass(), detailName)) {
-            try {
-                PropertyDescriptor propertyDescriptor = BeanUtil.getPropertyDescriptor(bean.getClass(), detailName);
-                Class<?> propertyType = propertyDescriptor.getPropertyType();
-                Object propertyValue = detailValue;
-                if (detailValue instanceof String && StorageSystem.class.isAssignableFrom(propertyType))
-                    propertyValue = context.get(propertyValue.toString());
-                BeanUtil.setPropertyValue(bean, detailName, propertyValue, false);
-            } catch (RuntimeException e) {
-                throw new RuntimeException("Error setting '" + detailName + "' of class " + bean.getClass().getName(), e); 
-            }
-        }
+    // check for 'weighted' distribution
+    if (spec.startsWith("weighted[") && spec.endsWith("]")) {
+      return new FeatureWeight(spec.substring("weighted[".length(), spec.length() - 1).trim());
+    } else if ("weighted".equals(spec)) {
+      return new AttachedWeight();
     }
 
-    /**
-     * Extracts distribution information from the descriptor.
-     * @param spec the textual representation of the distribution
-     * @param uniqueness tells if a unique distribution is requested
-     * @param required if set the method will never return null
-     * @param context the {@link BeneratorContext}
-     * @return a distribution that reflects the descriptor setup, null if distribution info is not found nor required.
-     */
-    @SuppressWarnings("rawtypes")
-	public static Distribution getDistribution(
-			String spec, Uniqueness uniqueness, boolean required, BeneratorContext context) {
-        
-        // handle absence of distribution spec
-        if (StringUtil.isEmpty(spec))
-        	if (required)
-        		return context.getGeneratorFactory().defaultDistribution(uniqueness);
-        	else
-        		return null;
-        
-        // check for context reference
-        Object contextObject = context.get(spec);
-        if (contextObject != null) {
-        	if (contextObject instanceof Distribution)
-        		return (Distribution) contextObject;
-        	else
-        		throw new ConfigurationError("Not a distribution: " + spec + "=" + contextObject);
-        }
-
-        // check for 'weighted' distribution
-        if (spec.startsWith("weighted[") && spec.endsWith("]"))
-    		return new FeatureWeight(spec.substring("weighted[".length(), spec.length() - 1).trim());
-    	else if ("weighted".equals(spec))
-    		return new AttachedWeight();
-        
-        // check for default sequence reference
-        Distribution result = SequenceManager.getRegisteredSequence(spec, false);
-        if (result != null)
-        	return result;
-
-        // check for explicit construction
-    	try {
-	        Expression beanEx = DatabeneScriptParser.parseBeanSpec(spec);
-	        return (Distribution) beanEx.evaluate(context);
-        } catch (ParseException e) {
-        	throw new ConfigurationError("Error parsing distribution spec: " + spec);
-        }
-	}
-
-    
-    public static Expression<Distribution> getDistributionExpression(
-    		final String spec, final Uniqueness uniqueness, final boolean required) {
-    	return new DynamicExpression<>() {
-
-            @Override
-            public Distribution evaluate(Context context) {
-                return getDistribution(spec, uniqueness, required, (BeneratorContext) context);
-            }
-
-        };
+    // check for default sequence reference
+    Distribution result = SequenceManager.getRegisteredSequence(spec, false);
+    if (result != null) {
+      return result;
     }
 
-    public static Set<Character> fullLocaleCharSet(String pattern, Locale locale) {
-        Set<Character> chars;
-        if (pattern != null) {
-            try {
-                chars = new RegexParser(locale).parseSingleChar(pattern).getCharSet().getSet();
-            } catch (ParseException e) {
-                throw new ConfigurationError("Invalid regular expression.", e);
-            }
-        } else
-            chars = LocaleUtil.letters(locale);
-        return chars;
+    // check for explicit construction
+    try {
+      Expression beanEx = DatabeneScriptParser.parseBeanSpec(spec);
+      return (Distribution) beanEx.evaluate(context);
+    } catch (ParseException e) {
+      throw new ConfigurationError("Error parsing distribution spec: " + spec);
     }
+  }
 
-	public static Locale defaultLocale() {
-		return Locale.getDefault();
-	}
 
-	public static <T> List<T> extractValues(Collection<WeightedSample<T>> samples) {
-		List<T> values = new ArrayList<>(samples.size());
-        for (WeightedSample<T> sample : samples) values.add(sample.getValue());
-		return values;
-	}
+  /**
+   * Gets distribution expression.
+   *
+   * @param spec       the spec
+   * @param uniqueness the uniqueness
+   * @param required   the required
+   * @return the distribution expression
+   */
+  public static Expression<Distribution> getDistributionExpression(
+      final String spec, final Uniqueness uniqueness, final boolean required) {
+    return new DynamicExpression<>() {
 
-    public static Generator<?> createScriptGenerator(String scriptText) {
-        Script script = ScriptUtil.parseScriptText(scriptText);
-        return new ScriptGenerator(script);
+      @Override
+      public Distribution evaluate(Context context) {
+        return getDistribution(spec, uniqueness, required, (BeneratorContext) context);
+      }
+
+    };
+  }
+
+  /**
+   * Full locale char set set.
+   *
+   * @param pattern the pattern
+   * @param locale  the locale
+   * @return the set
+   */
+  public static Set<Character> fullLocaleCharSet(String pattern, Locale locale) {
+    Set<Character> chars;
+    if (pattern != null) {
+      try {
+        chars = new RegexParser(locale).parseSingleChar(pattern).getCharSet().getSet();
+      } catch (ParseException e) {
+        throw new ConfigurationError("Invalid regular expression.", e);
+      }
+    } else {
+      chars = LocaleUtil.letters(locale);
     }
+    return chars;
+  }
+
+  /**
+   * Default locale locale.
+   *
+   * @return the locale
+   */
+  public static Locale defaultLocale() {
+    return Locale.getDefault();
+  }
+
+  /**
+   * Extract values list.
+   *
+   * @param <T>     the type parameter
+   * @param samples the samples
+   * @return the list
+   */
+  public static <T> List<T> extractValues(Collection<WeightedSample<T>> samples) {
+    List<T> values = new ArrayList<>(samples.size());
+    for (WeightedSample<T> sample : samples) {
+      values.add(sample.getValue());
+    }
+    return values;
+  }
+
+  /**
+   * Create script generator generator.
+   *
+   * @param scriptText the script text
+   * @return the generator
+   */
+  public static Generator<?> createScriptGenerator(String scriptText) {
+    Script script = ScriptUtil.parseScriptText(scriptText);
+    return new ScriptGenerator(script);
+  }
 
 }

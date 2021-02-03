@@ -29,10 +29,24 @@ package com.rapiddweller.benerator.anno;
 /**
  * Interface for resolving resource paths for test case classes.<br/><br/>
  * Created: 12.12.2011 12:36:14
- * @since 0.7.4
+ *
  * @author Volker Bergmann
+ * @since 0.7.4
  */
 public interface PathResolver {
-	void setBasePath(String basePath);
-	String getPathFor(String locator, Class<?> testClass);
+  /**
+   * Sets base path.
+   *
+   * @param basePath the base path
+   */
+  void setBasePath(String basePath);
+
+  /**
+   * Gets path for.
+   *
+   * @param locator   the locator
+   * @param testClass the test class
+   * @return the path for
+   */
+  String getPathFor(String locator, Class<?> testClass);
 }

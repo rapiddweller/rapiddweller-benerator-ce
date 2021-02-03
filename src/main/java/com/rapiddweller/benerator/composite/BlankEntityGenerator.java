@@ -36,30 +36,36 @@ import com.rapiddweller.model.data.Entity;
  * Instantiates an entity without initializing any components.<br/>
  * <br/>
  * Created: 01.09.2007 07:39:52
+ *
  * @author Volker Bergmann
  */
 public class BlankEntityGenerator extends ThreadSafeGenerator<Entity> {
 
-    private final ComplexTypeDescriptor descriptor;
+  private final ComplexTypeDescriptor descriptor;
 
-    public BlankEntityGenerator(ComplexTypeDescriptor descriptor) {
-    	Assert.notNull(descriptor, "descriptor");
-        this.descriptor = descriptor;
-    }
+  /**
+   * Instantiates a new Blank entity generator.
+   *
+   * @param descriptor the descriptor
+   */
+  public BlankEntityGenerator(ComplexTypeDescriptor descriptor) {
+    Assert.notNull(descriptor, "descriptor");
+    this.descriptor = descriptor;
+  }
 
-	@Override
-	public Class<Entity> getGeneratedType() {
-        return Entity.class;
-    }
+  @Override
+  public Class<Entity> getGeneratedType() {
+    return Entity.class;
+  }
 
-	@Override
-	public ProductWrapper<Entity> generate(ProductWrapper<Entity> wrapper) {
-        return wrapper.wrap(new Entity(descriptor));
-	}
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[" + descriptor.getName() + "]";
-	}
-	
+  @Override
+  public ProductWrapper<Entity> generate(ProductWrapper<Entity> wrapper) {
+    return wrapper.wrap(new Entity(descriptor));
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + descriptor.getName() + "]";
+  }
+
 }

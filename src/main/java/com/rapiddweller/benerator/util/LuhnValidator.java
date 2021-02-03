@@ -26,23 +26,24 @@
 
 package com.rapiddweller.benerator.util;
 
-import javax.validation.ConstraintValidatorContext;
-
 import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
+
+import javax.validation.ConstraintValidatorContext;
 
 /**
  * Tests if a number passes the Luhn algorithm.<br/><br/>
  * Created: 16.10.2009 18:36:20
- * @since 0.6.0
+ *
  * @author Volker Bergmann
  * @see "http://en.wikipedia.org/wiki/Luhn_algorithm"
  * @see Luhn
+ * @since 0.6.0
  */
 public class LuhnValidator extends AbstractConstraintValidator<Luhn, CharSequence> {
 
-	@Override
-	public boolean isValid(CharSequence number, ConstraintValidatorContext context) {
-	    return LuhnUtil.luhnValid(number);
-    }
-	
+  @Override
+  public boolean isValid(CharSequence number, ConstraintValidatorContext context) {
+    return LuhnUtil.luhnValid(number);
+  }
+
 }

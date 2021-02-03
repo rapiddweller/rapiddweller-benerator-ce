@@ -26,41 +26,52 @@
 
 package com.rapiddweller.benerator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.format.xml.XMLElementParser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Default implementation of the {@link PlatformDescriptor} interface.<br/><br/>
  * Created: 07.12.2011 18:58:25
- * @since 0.7.4
+ *
  * @author Volker Bergmann
+ * @since 0.7.4
  */
 public class DefaultPlatformDescriptor implements PlatformDescriptor {
-	
-	private final String rootPackage;
-	private final List<XMLElementParser<Statement>> parsers;
 
-	public DefaultPlatformDescriptor(String rootPackage) {
-		this.rootPackage = rootPackage;
-		this.parsers = new ArrayList<>();
-	}
+  private final String rootPackage;
+  private final List<XMLElementParser<Statement>> parsers;
 
-	@Override
-	public List<XMLElementParser<Statement>> getParsers() {
-		return parsers;
-	}
-	
-	public void addParser(XMLElementParser<Statement> parser) {
-		parsers.add(parser);
-	}
+  /**
+   * Instantiates a new Default platform descriptor.
+   *
+   * @param rootPackage the root package
+   */
+  public DefaultPlatformDescriptor(String rootPackage) {
+    this.rootPackage = rootPackage;
+    this.parsers = new ArrayList<>();
+  }
 
-	@Override
-	public void init(BeneratorContext context) {
-		context.importPackage(rootPackage);
-	}
+  @Override
+  public List<XMLElementParser<Statement>> getParsers() {
+    return parsers;
+  }
+
+  /**
+   * Add parser.
+   *
+   * @param parser the parser
+   */
+  public void addParser(XMLElementParser<Statement> parser) {
+    parsers.add(parser);
+  }
+
+  @Override
+  public void init(BeneratorContext context) {
+    context.importPackage(rootPackage);
+  }
 
 }

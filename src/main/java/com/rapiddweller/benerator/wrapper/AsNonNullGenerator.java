@@ -33,18 +33,25 @@ import com.rapiddweller.benerator.util.GeneratorUtil;
 /**
  * Adapter class which makes an arbitrary {@link Generator} available as {@link NonNullGenerator}.<br/><br/>
  * Created: 27.07.2011 12:12:12
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class AsNonNullGenerator<E> extends GeneratorProxy<E> implements NonNullGenerator<E> {
 
-	public AsNonNullGenerator(Generator<E> source) {
-		super(source);
-	}
-	
-	@Override
-	public E generate() {
-		return GeneratorUtil.generateNonNull(getSource());
-	}
-	
+  /**
+   * Instantiates a new As non null generator.
+   *
+   * @param source the source
+   */
+  public AsNonNullGenerator(Generator<E> source) {
+    super(source);
+  }
+
+  @Override
+  public E generate() {
+    return GeneratorUtil.generateNonNull(getSource());
+  }
+
 }

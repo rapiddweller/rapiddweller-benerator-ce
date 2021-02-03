@@ -31,8 +31,10 @@ import com.rapiddweller.benerator.WeightedGenerator;
 /**
  * Parent interface for {@link DatasetBasedGenerator}s that have a weight to be considered when combining Generators.<br/><br/>
  * Created: 29.08.2011 22:13:04
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public interface WeightedDatasetGenerator<E> extends DatasetBasedGenerator<E>, WeightedGenerator<E> {
 }

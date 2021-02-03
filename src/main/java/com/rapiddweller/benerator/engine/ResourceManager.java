@@ -32,12 +32,19 @@ import java.io.Closeable;
  * Parent interface for classes that manage resources.<br/>
  * <br/>
  * Created at 24.09.2009 16:45:56
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public interface ResourceManager extends Closeable {
-	boolean addResource(Closeable resource);
-	@Override
-	void close();
+  /**
+   * Add resource boolean.
+   *
+   * @param resource the resource
+   * @return the boolean
+   */
+  boolean addResource(Closeable resource);
+
+  @Override
+  void close();
 }

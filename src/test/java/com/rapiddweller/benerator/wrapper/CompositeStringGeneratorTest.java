@@ -36,26 +36,33 @@ import org.junit.Test;
  * Tests the UniqueFixedCountCompositeStringGenerator.<br/>
  * <br/>
  * Created: 17.11.2007 17:45:41
+ *
  * @author Volker Bergmann
  */
 public class CompositeStringGeneratorTest extends GeneratorTest {
 
-    @Test
-    public void testConstant() {
-		Generator<String> generator = new CompositeStringGenerator(true,
-                new OneShotGenerator<>("0"),
-                new OneShotGenerator<>("1"));
-        generator.init(context);
-        expectUniquelyGeneratedSet(generator, "01").withCeasedAvailability();
-    }
+  /**
+   * Test constant.
+   */
+  @Test
+  public void testConstant() {
+    Generator<String> generator = new CompositeStringGenerator(true,
+        new OneShotGenerator<>("0"),
+        new OneShotGenerator<>("1"));
+    generator.init(context);
+    expectUniquelyGeneratedSet(generator, "01").withCeasedAvailability();
+  }
 
-    @Test
-    public void testVariable() {
-        Generator<String> generator = new CompositeStringGenerator(true,
-                new SequenceTestGenerator<>("A", "B", "C"),
-                new SequenceTestGenerator<>("0", "1"));
-        generator.init(context);
-        expectUniquelyGeneratedSet(generator, "A0", "B0", "C0", "A1", "B1", "C1").withCeasedAvailability();
-    }
+  /**
+   * Test variable.
+   */
+  @Test
+  public void testVariable() {
+    Generator<String> generator = new CompositeStringGenerator(true,
+        new SequenceTestGenerator<>("A", "B", "C"),
+        new SequenceTestGenerator<>("0", "1"));
+    generator.init(context);
+    expectUniquelyGeneratedSet(generator, "A0", "B0", "C0", "A1", "B1", "C1").withCeasedAvailability();
+  }
 
 }

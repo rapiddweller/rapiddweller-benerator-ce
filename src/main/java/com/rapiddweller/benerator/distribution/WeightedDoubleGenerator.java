@@ -39,84 +39,107 @@ import java.util.Random;
  * Double Generator that supports a weight function.<br/>
  * <br/>
  * Created: 11.06.2006 21:33:41
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class WeightedDoubleGenerator extends AbstractNonNullNumberGenerator<Double> {
 
-    private final WeightFunction function;
-    private final Random random;
+  private final WeightFunction function;
+  private final Random random;
 
-    private double[] value;
-    private double[] probSum;
+  private double[] value;
+  private double[] probSum;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public WeightedDoubleGenerator() {
-        this(0, 0, 1, new ConstantFunction(1));
+  /**
+   * Instantiates a new Weighted double generator.
+   */
+  public WeightedDoubleGenerator() {
+    this(0, 0, 1, new ConstantFunction(1));
+  }
+
+  /**
+   * Instantiates a new Weighted double generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   * @param function    the function
+   */
+  public WeightedDoubleGenerator(double min, double max, double granularity, WeightFunction function) {
+    super(Double.class, min, max, granularity);
+    this.function = function;
+    this.random = new Random();
+  }
+
+  /**
+   * Gets distribution.
+   *
+   * @return the distribution
+   */
+  public Distribution getDistribution() {
+    return function;
+  }
+
+  // Generator implementation ----------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    if (min > max) {
+      throw new InvalidGeneratorSetupException("min (" + min + ") > max(" + max + ")");
     }
-
-    public WeightedDoubleGenerator(double min, double max, double granularity, WeightFunction function) {
-        super(Double.class, min, max, granularity);
-        this.function = function;
-        this.random = new Random();
+    if (granularity <= 0) {
+      throw new InvalidGeneratorSetupException("granularity value not supported: " + granularity);
     }
-
-    public Distribution getDistribution() {
-        return function;
+    int sampleCount = (int) ((max - min) / granularity) + 1;
+    if (sampleCount > 100000) {
+      throw new InvalidGeneratorSetupException("granularity", "too small, resulting in a set of " + sampleCount + " samples");
     }
-
-    // Generator implementation ----------------------------------------------------------------------------------------
-
-    @Override
-	public void init(GeneratorContext context) {
-    	if (min > max)
-            throw new InvalidGeneratorSetupException("min ("+ min + ") > max(" + max + ")");
-        if (granularity <= 0)
-            throw new InvalidGeneratorSetupException("granularity value not supported: "+ granularity);
-        int sampleCount = (int) ((max - min) / granularity) + 1;
-        if (sampleCount > 100000)
-            throw new InvalidGeneratorSetupException("granularity", "too small, resulting in a set of " + sampleCount + " samples");
-        probSum = new double[sampleCount];
-        value = new double[sampleCount];
-        if (sampleCount == 1) {
-            value[0] = min;
-            probSum[0] = 1;
-        } else {
-            double sum = 0;
-            double dx = (max - min) / (sampleCount - 1);
-            for (int i = 0; i < sampleCount; i++) {
-                value[i] = min + i * dx;
-                sum += function.value(value[i]);
-                probSum[i] = sum;
-            }
-            if (sum <= 0)
-                throw new IllegalGeneratorStateException(
-                        "Invalid WeightFunction: Sum is not positive for " + function);
-            for (int i = 0; i < sampleCount; i++) {
-                probSum[i] /= sum;
-            }
-        }
-        super.init(context);
+    probSum = new double[sampleCount];
+    value = new double[sampleCount];
+    if (sampleCount == 1) {
+      value[0] = min;
+      probSum[0] = 1;
+    } else {
+      double sum = 0;
+      double dx = (max - min) / (sampleCount - 1);
+      for (int i = 0; i < sampleCount; i++) {
+        value[i] = min + i * dx;
+        sum += function.value(value[i]);
+        probSum[i] = sum;
+      }
+      if (sum <= 0) {
+        throw new IllegalGeneratorStateException(
+            "Invalid WeightFunction: Sum is not positive for " + function);
+      }
+      for (int i = 0; i < sampleCount; i++) {
+        probSum[i] /= sum;
+      }
     }
+    super.init(context);
+  }
 
-	@Override
-	public Double generate() {
-        assertInitialized();
-        double randomValue = random.nextDouble();
-        int n = intervallNoOfRandom(randomValue);
-        return value[n];
+  @Override
+  public Double generate() {
+    assertInitialized();
+    double randomValue = random.nextDouble();
+    int n = intervallNoOfRandom(randomValue);
+    return value[n];
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private int intervallNoOfRandom(double random) {
+    int i = Arrays.binarySearch(probSum, random);
+    if (i < 0) {
+      i = -i - 1;
     }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private int intervallNoOfRandom(double random) {
-        int i = Arrays.binarySearch(probSum, random);
-        if (i < 0)
-            i = - i - 1;
-        if (i >= probSum.length)
-            return probSum.length - 1;
-        return i;
+    if (i >= probSum.length) {
+      return probSum.length - 1;
     }
+    return i;
+  }
 
 }

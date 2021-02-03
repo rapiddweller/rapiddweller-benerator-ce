@@ -26,31 +26,40 @@
 
 package com.rapiddweller.domain.lang;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests the {@link NounGenerator}.<br/>
  * <br/>
  * Created at 15.07.2009 22:57:37
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class NounGeneratorTest extends GeneratorClassTest {
 
-    public NounGeneratorTest() {
-	    super(NounGenerator.class);
-    }
+  /**
+   * Instantiates a new Noun generator test.
+   */
+  public NounGeneratorTest() {
+    super(NounGenerator.class);
+  }
 
-    @Test
-    public void test() throws Exception {
-    	NounGenerator generator = new NounGenerator();
-    	generator.init(context);
-    	for (int i = 0; i < 10; i++)
-    		assertNotNull(generator.generate());
+  /**
+   * Test.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void test() throws Exception {
+    NounGenerator generator = new NounGenerator();
+    generator.init(context);
+    for (int i = 0; i < 10; i++) {
+      assertNotNull(generator.generate());
     }
-    
+  }
+
 }

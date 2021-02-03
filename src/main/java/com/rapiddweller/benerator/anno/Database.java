@@ -34,18 +34,66 @@ import java.lang.annotation.Target;
 /**
  * Annotation for declaring a database.<br/><br/>
  * Created: 31.05.2011 12:11:07
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR } )
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR})
 public @interface Database {
-	String id();
-	String environment() default "";
-	String url() default "";
-	String driver() default "";
-	String user() default "";
-	String password() default "";
-	String catalog() default "";
-	String schema() default "";
+  /**
+   * Id string.
+   *
+   * @return the string
+   */
+  String id();
+
+  /**
+   * Environment string.
+   *
+   * @return the string
+   */
+  String environment() default "";
+
+  /**
+   * Url string.
+   *
+   * @return the string
+   */
+  String url() default "";
+
+  /**
+   * Driver string.
+   *
+   * @return the string
+   */
+  String driver() default "";
+
+  /**
+   * User string.
+   *
+   * @return the string
+   */
+  String user() default "";
+
+  /**
+   * Password string.
+   *
+   * @return the string
+   */
+  String password() default "";
+
+  /**
+   * Catalog string.
+   *
+   * @return the string
+   */
+  String catalog() default "";
+
+  /**
+   * Schema string.
+   *
+   * @return the string
+   */
+  String schema() default "";
 }

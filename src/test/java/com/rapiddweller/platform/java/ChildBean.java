@@ -31,41 +31,56 @@ import com.rapiddweller.platform.PersonBean;
 /**
  * TODO Document class.<br/><br/>
  * Created: 13.05.2014 11:52:54
- * @since TODO version
+ *
  * @author Volker Bergmann
+ * @since TODO version
  */
-
 public class ChildBean extends PersonBean {
-	
-	public int childNo;
 
-	public ChildBean() {
-		this(null, 0, 0);
-	}
-	
-	public ChildBean(String name, int age, int childNo) {
-		super(name, age);
-		this.childNo = childNo;
-	}
+  /**
+   * The Child no.
+   */
+  public int childNo;
 
-	@Override
-	public int hashCode() {
-		return 31 * super.hashCode() + childNo;
-	}
+  /**
+   * Instantiates a new Child bean.
+   */
+  public ChildBean() {
+    this(null, 0, 0);
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj) || getClass() != obj.getClass())
-			return false;
-		ChildBean that = (ChildBean) obj;
-		return (this.childNo == that.childNo);
-	}
-	
-	@Override
-	public String toString() {
-		return super.toString() + "#" + childNo;
-	}
-	
+  /**
+   * Instantiates a new Child bean.
+   *
+   * @param name    the name
+   * @param age     the age
+   * @param childNo the child no
+   */
+  public ChildBean(String name, int age, int childNo) {
+    super(name, age);
+    this.childNo = childNo;
+  }
+
+  @Override
+  public int hashCode() {
+    return 31 * super.hashCode() + childNo;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (!super.equals(obj) || getClass() != obj.getClass()) {
+      return false;
+    }
+    ChildBean that = (ChildBean) obj;
+    return (this.childNo == that.childNo);
+  }
+
+  @Override
+  public String toString() {
+    return super.toString() + "#" + childNo;
+  }
+
 }

@@ -45,98 +45,113 @@ import java.util.List;
  */
 public class LazyTableComplexTypeDescriptor extends ComplexTypeDescriptor {
 
-    public final DBTable table;
-    public final DBSystem db;
-    boolean loaded;
+  /**
+   * The Table.
+   */
+  public final DBTable table;
+  /**
+   * The Db.
+   */
+  public final DBSystem db;
+  /**
+   * The Loaded.
+   */
+  boolean loaded;
 
-    public LazyTableComplexTypeDescriptor(DBTable table, DBSystem db) {
-        super(table.getName(), db);
-        this.table = table;
-        this.db = db;
-        this.loaded = false;
+  /**
+   * Instantiates a new Lazy table complex type descriptor.
+   *
+   * @param table the table
+   * @param db    the db
+   */
+  public LazyTableComplexTypeDescriptor(DBTable table, DBSystem db) {
+    super(table.getName(), db);
+    this.table = table;
+    this.db = db;
+    this.loaded = false;
+  }
+
+  @Override
+  public List<InstanceDescriptor> getParts() {
+    assureLoaded();
+    return super.getParts();
+  }
+
+  @Override
+  public void addComponent(ComponentDescriptor component) {
+    assureLoaded();
+    super.addComponent(component);
+  }
+
+  private void assureLoaded() {
+    if (!loaded) {
+      loaded = true;
+      db.mapTableToComplexTypeDescriptor(table, this);
     }
+  }
 
-    @Override
-    public List<InstanceDescriptor> getParts() {
-        assureLoaded();
-        return super.getParts();
-    }
+  @Override
+  public void setComponent(ComponentDescriptor component) {
+    assureLoaded();
+    super.setComponent(component);
+  }
 
-    @Override
-    public void addComponent(ComponentDescriptor component) {
-        assureLoaded();
-        super.addComponent(component);
-    }
+  @Override
+  public ComponentDescriptor getComponent(String name) {
+    assureLoaded();
+    return super.getComponent(name);
+  }
 
-    private void assureLoaded() {
-        if (!loaded) {
-            loaded = true;
-            db.mapTableToComplexTypeDescriptor(table, this);
-        }
-    }
+  @Override
+  public List<ComponentDescriptor> getComponents() {
+    assureLoaded();
+    return super.getComponents();
+  }
 
-    @Override
-    public void setComponent(ComponentDescriptor component) {
-        assureLoaded();
-        super.setComponent(component);
-    }
+  @Override
+  public Collection<InstanceDescriptor> getDeclaredParts() {
+    assureLoaded();
+    return super.getDeclaredParts();
+  }
 
-    @Override
-    public ComponentDescriptor getComponent(String name) {
-        assureLoaded();
-        return super.getComponent(name);
-    }
+  @Override
+  public boolean isDeclaredComponent(String componentName) {
+    assureLoaded();
+    return super.isDeclaredComponent(componentName);
+  }
 
-    @Override
-    public List<ComponentDescriptor> getComponents() {
-        assureLoaded();
-        return super.getComponents();
-    }
+  @Override
+  public String[] getIdComponentNames() {
+    assureLoaded();
+    return super.getIdComponentNames();
+  }
 
-    @Override
-    public Collection<InstanceDescriptor> getDeclaredParts() {
-        assureLoaded();
-        return super.getDeclaredParts();
-    }
+  @Override
+  public void addPart(InstanceDescriptor part) {
+    assureLoaded();
+    super.addPart(part);
+  }
 
-    @Override
-    public boolean isDeclaredComponent(String componentName) {
-        assureLoaded();
-        return super.isDeclaredComponent(componentName);
-    }
+  @Override
+  public List<ReferenceDescriptor> getReferenceComponents() {
+    assureLoaded();
+    return super.getReferenceComponents();
+  }
 
-    @Override
-    public String[] getIdComponentNames() {
-        assureLoaded();
-        return super.getIdComponentNames();
-    }
+  @Override
+  public void addVariable(VariableDescriptor variable) {
+    assureLoaded();
+    super.addVariable(variable);
+  }
 
-    @Override
-    public void addPart(InstanceDescriptor part) {
-        assureLoaded();
-        super.addPart(part);
-    }
+  // construction helper methods -------------------------------------------------------------------------------------
 
-    @Override
-    public List<ReferenceDescriptor> getReferenceComponents() {
-        assureLoaded();
-        return super.getReferenceComponents();
-    }
-
-    @Override
-    public void addVariable(VariableDescriptor variable) {
-        assureLoaded();
-        super.addVariable(variable);
-    }
-
-    // construction helper methods -------------------------------------------------------------------------------------
-
-    @Override
-    public ComplexTypeDescriptor withComponent(
-            ComponentDescriptor componentDescriptor) {
-        assureLoaded();
-        addComponent(componentDescriptor);
-        return this;
-    }
+  @Override
+  public ComplexTypeDescriptor withComponent(
+      ComponentDescriptor componentDescriptor) {
+    assureLoaded();
+    addComponent(componentDescriptor);
+    return this;
+  }
 
 }

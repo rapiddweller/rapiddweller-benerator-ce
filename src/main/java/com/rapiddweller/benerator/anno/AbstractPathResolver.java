@@ -31,34 +31,57 @@ import java.io.File;
 /**
  * Abstract implementation of the {@link PathResolver} interface.<br/><br/>
  * Created: 04.05.2012 08:56:44
- * @since 0.7.7
+ *
  * @author Volker Bergmann
+ * @since 0.7.7
  */
 public abstract class AbstractPathResolver implements PathResolver {
-	
-	protected String basePath;
 
-	protected AbstractPathResolver() {
-		this(".");
-	}
-	
-	protected AbstractPathResolver(String basePath) {
-		setBasePath(basePath);
-	}
-	
-	public String getBasePath() {
-		return basePath;
-	}
-	
-	// partial PathResolver interface implementation -------------------------------------------------------------------
+  /**
+   * The Base path.
+   */
+  protected String basePath;
 
-	@Override
-	public void setBasePath(String basePath) {
-		this.basePath = normalizePath(basePath);
-	}
-	
-	protected String normalizePath(String path) {
-		return path.replace('/', File.separatorChar).replace('\\', File.separatorChar);
-	}
+  /**
+   * Instantiates a new Abstract path resolver.
+   */
+  protected AbstractPathResolver() {
+    this(".");
+  }
+
+  /**
+   * Instantiates a new Abstract path resolver.
+   *
+   * @param basePath the base path
+   */
+  protected AbstractPathResolver(String basePath) {
+    setBasePath(basePath);
+  }
+
+  /**
+   * Gets base path.
+   *
+   * @return the base path
+   */
+  public String getBasePath() {
+    return basePath;
+  }
+
+  // partial PathResolver interface implementation -------------------------------------------------------------------
+
+  @Override
+  public void setBasePath(String basePath) {
+    this.basePath = normalizePath(basePath);
+  }
+
+  /**
+   * Normalize path string.
+   *
+   * @param path the path
+   * @return the string
+   */
+  protected String normalizePath(String path) {
+    return path.replace('/', File.separatorChar).replace('\\', File.separatorChar);
+  }
 
 }

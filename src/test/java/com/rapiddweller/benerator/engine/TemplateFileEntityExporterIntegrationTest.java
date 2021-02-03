@@ -35,55 +35,70 @@ import org.junit.Test;
 /**
  * Tests the {@link TemplateFileEntityExporter}.<br/><br/>
  * Created: 27.06.2014 17:42:34
- * @since 0.9.7
+ *
  * @author Volker Bergmann
+ * @since 0.9.7
  */
-
 public class TemplateFileEntityExporterIntegrationTest extends BeneratorIntegrationTest {
 
-	@Test
-	public void testCountries() throws Exception {
-		String uri = "target/" + getClass().getName() + ".txt";
-		String templateUri = "com/rapiddweller/benerator/engine/template/countries.ftl";
-		BeneratorContext context = parseAndExecute(
-			"<setup>" +
-			"<bean id='con' class='TemplateFileEntityExporter'>" + 
-			"	<property name='uri' value='" + uri + "'/>" + 
-			"	<property name='templateUri' value='" + templateUri + "'/>" + 
-			"</bean>" +
-			"<generate type='countries' count='3' consumer='con'>" +
-	    	"	<attribute name='name' pattern='[A-Z]{5,10}' />" + 
-	    	"	<attribute name='population' type='int' min='1000000' max='100000000' />" + 
-			"   <generate type='states' minCount='3' maxCount='7' consumer='con'>" +
-	    	"      <attribute name='name' pattern='[A-Z]{5,10}' />" + 
-	    	"   </generate>" +
-	    	"</generate>" +
-	    	"</setup>");
-		closeCon(context);
-		String content = IOUtil.getContentOfURI(uri);
-		System.out.println(content);
-	}
+  /**
+   * Test countries.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testCountries() throws Exception {
+    String uri = "target/" + getClass().getName() + ".txt";
+    String templateUri = "com/rapiddweller/benerator/engine/template/countries.ftl";
+    BeneratorContext context = parseAndExecute(
+        "<setup>" +
+            "<bean id='con' class='TemplateFileEntityExporter'>" +
+            "	<property name='uri' value='" + uri + "'/>" +
+            "	<property name='templateUri' value='" + templateUri + "'/>" +
+            "</bean>" +
+            "<generate type='countries' count='3' consumer='con'>" +
+            "	<attribute name='name' pattern='[A-Z]{5,10}' />" +
+            "	<attribute name='population' type='int' min='1000000' max='100000000' />" +
+            "   <generate type='states' minCount='3' maxCount='7' consumer='con'>" +
+            "      <attribute name='name' pattern='[A-Z]{5,10}' />" +
+            "   </generate>" +
+            "</generate>" +
+            "</setup>");
+    closeCon(context);
+    String content = IOUtil.getContentOfURI(uri);
+    System.out.println(content);
+  }
 
-	@Test
-	public void testIFTDGN1() throws Exception {
-		BeneratorContext context = parseAndExecuteFile("com/rapiddweller/benerator/engine/template/IFTDGN1.ben.xml");
-		closeCon(context);
-		String content = IOUtil.getContentOfURI("target/IFTDGN1.edi");
-		System.out.println(content);
-	}
+  /**
+   * Test iftdgn 1.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testIFTDGN1() throws Exception {
+    BeneratorContext context = parseAndExecuteFile("com/rapiddweller/benerator/engine/template/IFTDGN1.ben.xml");
+    closeCon(context);
+    String content = IOUtil.getContentOfURI("target/IFTDGN1.edi");
+    System.out.println(content);
+  }
 
-	@Test
-	public void testIFTDGN2() throws Exception {
-		BeneratorContext context = parseAndExecuteFile("com/rapiddweller/benerator/engine/template/IFTDGN2.ben.xml");
-		closeCon(context);
-		IOUtil.close(context);
-		String content = IOUtil.getContentOfURI("target/IFTDGN2.edi");
-		System.out.println(content);
-	}
+  /**
+   * Test iftdgn 2.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testIFTDGN2() throws Exception {
+    BeneratorContext context = parseAndExecuteFile("com/rapiddweller/benerator/engine/template/IFTDGN2.ben.xml");
+    closeCon(context);
+    IOUtil.close(context);
+    String content = IOUtil.getContentOfURI("target/IFTDGN2.edi");
+    System.out.println(content);
+  }
 
-	private static void closeCon(BeneratorContext context) {
-		Consumer con = (Consumer) context.get("con");
-		con.close();
-	}
+  private static void closeCon(BeneratorContext context) {
+    Consumer con = (Consumer) context.get("con");
+    con.close();
+  }
 
 }

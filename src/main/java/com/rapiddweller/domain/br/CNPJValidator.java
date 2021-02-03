@@ -42,80 +42,98 @@ import javax.validation.ConstraintValidatorContext;
  * @since 0.6.0
  */
 public class CNPJValidator
-        extends AbstractConstraintValidator<CNPJ, CharSequence> {
+    extends AbstractConstraintValidator<CNPJ, CharSequence> {
 
-    private boolean acceptingFormattedNumbers = true;
+  private boolean acceptingFormattedNumbers = true;
 
-    public CNPJValidator() {
-        this(false);
+  /**
+   * Instantiates a new Cnpj validator.
+   */
+  public CNPJValidator() {
+    this(false);
+  }
+
+  /**
+   * Instantiates a new Cnpj validator.
+   *
+   * @param acceptingFormattedNumbers the accepting formatted numbers
+   */
+  public CNPJValidator(boolean acceptingFormattedNumbers) {
+    this.acceptingFormattedNumbers = acceptingFormattedNumbers;
+  }
+
+  /**
+   * Is accepting formatted numbers boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isAcceptingFormattedNumbers() {
+    return acceptingFormattedNumbers;
+  }
+
+  /**
+   * Sets accepting formatted numbers.
+   *
+   * @param acceptingFormattedNumbers the accepting formatted numbers
+   */
+  public void setAcceptingFormattedNumbers(
+      boolean acceptingFormattedNumbers) {
+    this.acceptingFormattedNumbers = acceptingFormattedNumbers;
+  }
+
+  @Override
+  public void initialize(CNPJ params) {
+    super.initialize(params);
+    acceptingFormattedNumbers = params.formatted();
+  }
+
+  @Override
+  public boolean isValid(CharSequence number,
+                         ConstraintValidatorContext context) {
+    // do simple checks first
+    if (number == null) {
+      return false;
+    }
+    int length = number.length();
+    boolean formattedNumber = (acceptingFormattedNumbers && length == 18);
+    if (length != 14 && !formattedNumber) {
+      return false;
+    }
+    if (formattedNumber) {
+      // check grouping characters
+      if (number.charAt(2) != '.' || number.charAt(6) != '.' ||
+          number.charAt(10) != '/' || number.charAt(15) != '-') {
+        return false;
+      }
+      // remove grouping
+      number = "" + number.subSequence(0, 2) + number.subSequence(3, 6) +
+          number.subSequence(7, 10) +
+          number.subSequence(11, 15) + number.subSequence(16, 18);
+    }
+    // compute 1st verification digit
+    int v1 = MathUtil.weightedSumOfDigits(number, 0, 5, 4, 3, 2, 9, 8, 7, 6,
+        5, 4, 3, 2);
+    v1 = 11 - v1 % 11;
+    if (v1 >= 10) {
+      v1 = 0;
     }
 
-    public CNPJValidator(boolean acceptingFormattedNumbers) {
-        this.acceptingFormattedNumbers = acceptingFormattedNumbers;
+    // Check 1st verification digit
+    if (v1 != number.charAt(12) - '0') {
+      return false;
     }
 
-    public boolean isAcceptingFormattedNumbers() {
-        return acceptingFormattedNumbers;
+    // compute 2nd verification digit
+    int v2 = MathUtil.weightedSumOfDigits(number, 0, 6, 5, 4, 3, 2, 9, 8, 7,
+        6, 5, 4, 3);
+    v2 += 2 * v1;
+    v2 = 11 - v2 % 11;
+    if (v2 >= 10) {
+      v2 = 0;
     }
 
-    public void setAcceptingFormattedNumbers(
-            boolean acceptingFormattedNumbers) {
-        this.acceptingFormattedNumbers = acceptingFormattedNumbers;
-    }
-
-    @Override
-    public void initialize(CNPJ params) {
-        super.initialize(params);
-        acceptingFormattedNumbers = params.formatted();
-    }
-
-    @Override
-    public boolean isValid(CharSequence number,
-                           ConstraintValidatorContext context) {
-        // do simple checks first
-        if (number == null) {
-            return false;
-        }
-        int length = number.length();
-        boolean formattedNumber = (acceptingFormattedNumbers && length == 18);
-        if (length != 14 && !formattedNumber) {
-            return false;
-        }
-        if (formattedNumber) {
-            // check grouping characters
-            if (number.charAt(2) != '.' || number.charAt(6) != '.' ||
-                    number.charAt(10) != '/' || number.charAt(15) != '-') {
-                return false;
-            }
-            // remove grouping
-            number = "" + number.subSequence(0, 2) + number.subSequence(3, 6) +
-                    number.subSequence(7, 10) +
-                    number.subSequence(11, 15) + number.subSequence(16, 18);
-        }
-        // compute 1st verification digit
-        int v1 = MathUtil.weightedSumOfDigits(number, 0, 5, 4, 3, 2, 9, 8, 7, 6,
-                5, 4, 3, 2);
-        v1 = 11 - v1 % 11;
-        if (v1 >= 10) {
-            v1 = 0;
-        }
-
-        // Check 1st verification digit
-        if (v1 != number.charAt(12) - '0') {
-            return false;
-        }
-
-        // compute 2nd verification digit
-        int v2 = MathUtil.weightedSumOfDigits(number, 0, 6, 5, 4, 3, 2, 9, 8, 7,
-                6, 5, 4, 3);
-        v2 += 2 * v1;
-        v2 = 11 - v2 % 11;
-        if (v2 >= 10) {
-            v2 = 0;
-        }
-
-        // Check 2nd verification digit
-        return (v2 == number.charAt(13) - '0');
-    }
+    // Check 2nd verification digit
+    return (v2 == number.charAt(13) - '0');
+  }
 
 }

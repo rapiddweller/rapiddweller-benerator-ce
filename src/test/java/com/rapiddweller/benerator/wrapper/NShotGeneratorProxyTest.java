@@ -34,28 +34,35 @@ import org.junit.Test;
 /**
  * Tests the {@link NShotGeneratorProxy}.<br/><br/>
  * Created: 25.07.2010 11:38:23
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class NShotGeneratorProxyTest extends GeneratorTest {
 
-	@Test
-	public void testN1() {
-		Generator<Character> generator = createAndInitGenerator(1);
-		expectGeneratedSequence(generator, 'A').withCeasedAvailability();
-	}
+  /**
+   * Test n 1.
+   */
+  @Test
+  public void testN1() {
+    Generator<Character> generator = createAndInitGenerator(1);
+    expectGeneratedSequence(generator, 'A').withCeasedAvailability();
+  }
 
-	@Test
-	public void testN2() {
-		Generator<Character> generator = createAndInitGenerator(2);
-		expectGeneratedSequence(generator, 'A', 'B').withCeasedAvailability();
-	}
+  /**
+   * Test n 2.
+   */
+  @Test
+  public void testN2() {
+    Generator<Character> generator = createAndInitGenerator(2);
+    expectGeneratedSequence(generator, 'A', 'B').withCeasedAvailability();
+  }
 
-	private Generator<Character> createAndInitGenerator(int n) {
-	    Generator<Character> source = new SequenceTestGenerator<>('A', 'B', 'C', 'D');
-		Generator<Character> generator = new NShotGeneratorProxy<>(source, n);
-		generator.init(context);
-	    return generator;
-    }
-	
+  private Generator<Character> createAndInitGenerator(int n) {
+    Generator<Character> source = new SequenceTestGenerator<>('A', 'B', 'C', 'D');
+    Generator<Character> generator = new NShotGeneratorProxy<>(source, n);
+    generator.init(context);
+    return generator;
+  }
+
 }

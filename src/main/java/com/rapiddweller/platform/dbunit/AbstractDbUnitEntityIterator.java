@@ -27,12 +27,12 @@
 package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.DataIterator;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -47,49 +47,71 @@ import javax.xml.stream.XMLStreamReader;
  */
 public abstract class AbstractDbUnitEntityIterator implements DataIterator<Entity> {
 
-    protected final Logger logger = LogManager.getLogger(getClass());
+  /**
+   * The Logger.
+   */
+  protected final Logger logger = LogManager.getLogger(getClass());
 
-    protected BeneratorContext context;
+  /**
+   * The Context.
+   */
+  protected BeneratorContext context;
 
-    protected XMLStreamReader reader;
+  /**
+   * The Reader.
+   */
+  protected XMLStreamReader reader;
 
-    public AbstractDbUnitEntityIterator(String uri, BeneratorContext context) {
-        try {
-            this.context = context;
-            XMLInputFactory factory = XMLInputFactory.newInstance();
-            reader = factory.createXMLStreamReader(IOUtil.getInputStreamForURI(uri));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+  /**
+   * Instantiates a new Abstract db unit entity iterator.
+   *
+   * @param uri     the uri
+   * @param context the context
+   */
+  public AbstractDbUnitEntityIterator(String uri, BeneratorContext context) {
+    try {
+      this.context = context;
+      XMLInputFactory factory = XMLInputFactory.newInstance();
+      reader = factory.createXMLStreamReader(IOUtil.getInputStreamForURI(uri));
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    // DataIterator interface implementation ---------------------------------------------------------------------------
+  // DataIterator interface implementation ---------------------------------------------------------------------------
 
-    @Override
-    public Class<Entity> getType() {
-        return Entity.class;
+  @Override
+  public Class<Entity> getType() {
+    return Entity.class;
+  }
+
+  @Override
+  public void close() {
+    if (reader != null) {
+      try {
+        reader.close();
+      } catch (XMLStreamException e) {
+        logger.warn("Error closing XML reader", e);
+      }
     }
+    this.reader = null;
+  }
 
-    @Override
-    public void close() {
-        if (reader != null) {
-            try {
-                reader.close();
-            } catch (XMLStreamException e) {
-                logger.warn("Error closing XML reader", e);
-            }
-        }
-        this.reader = null;
+  // non-public helpers ----------------------------------------------------------------------------------------------
+
+  /**
+   * Gets type.
+   *
+   * @param row the row
+   * @return the type
+   */
+  protected ComplexTypeDescriptor getType(Row row) {
+    String name = row.getTableName();
+    ComplexTypeDescriptor type = (ComplexTypeDescriptor) context.getDataModel().getTypeDescriptor(name);
+    if (type == null) {
+      type = new ComplexTypeDescriptor(name, context.getLocalDescriptorProvider());
     }
-
-    // non-public helpers ----------------------------------------------------------------------------------------------
-
-    protected ComplexTypeDescriptor getType(Row row) {
-        String name = row.getTableName();
-        ComplexTypeDescriptor type = (ComplexTypeDescriptor) context.getDataModel().getTypeDescriptor(name);
-        if (type == null)
-            type = new ComplexTypeDescriptor(name, context.getLocalDescriptorProvider());
-        return type;
-    }
+    return type;
+  }
 
 }

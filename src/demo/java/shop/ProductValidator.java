@@ -38,39 +38,53 @@ import com.rapiddweller.model.data.Entity;
  */
 public class ProductValidator extends EntityValidator {
 
-    private EANValidator eanValidator = new EANValidator();
+  private EANValidator eanValidator = new EANValidator();
 
-    public ProductValidator() {
-        this("product");
-    }
+  /**
+   * Instantiates a new Product validator.
+   */
+  public ProductValidator() {
+    this("product");
+  }
 
-    public ProductValidator(String entityName) {
-        super(entityName);
-    }
+  /**
+   * Instantiates a new Product validator.
+   *
+   * @param entityName the entity name
+   */
+  public ProductValidator(String entityName) {
+    super(entityName);
+  }
 
-    @Override
-    public boolean valid(Entity product) {
-        if (!super.valid(product)) {
-            return false;
-        }
-        String ean = (String) product.getComponent("ean_code");
-        if (!eanValidator.isValid(ean, null)) {
-            return false;
-        }
-        String name = (String) product.getComponent("name");
-        if (name == null || name.length() == 0) {
-            return false;
-        }
-        if (product.getComponent("name") == null) {
-            return false;
-        }
-        Number price = (Number) product.getComponent("price");
-        if (price == null || price.doubleValue() < 0) {
-            return false;
-        }
-        if (product.getComponent("manufacturer") == null) {
-            return false;
-        }
-        return true;
+  /**
+   * Valid boolean.
+   *
+   * @param product the product
+   * @return the boolean
+   */
+  @Override
+  public boolean valid(Entity product) {
+    if (!super.valid(product)) {
+      return false;
     }
+    String ean = (String) product.getComponent("ean_code");
+    if (!eanValidator.isValid(ean, null)) {
+      return false;
+    }
+    String name = (String) product.getComponent("name");
+    if (name == null || name.length() == 0) {
+      return false;
+    }
+    if (product.getComponent("name") == null) {
+      return false;
+    }
+    Number price = (Number) product.getComponent("price");
+    if (price == null || price.doubleValue() < 0) {
+      return false;
+    }
+    if (product.getComponent("manufacturer") == null) {
+      return false;
+    }
+    return true;
+  }
 }

@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.test.GeneratorTest;
@@ -36,34 +34,43 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link DynamicCountGenerator}.<br/><br/>
  * Created: 28.03.2010 12:57:38
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class DynamicCountGeneratorTest extends GeneratorTest {
 
-	private static final Expression<Long> ONE = ExpressionUtil.constant(1L);
-	private static final Expression<Long> TWO = ExpressionUtil.constant(2L);
-	private static final Expression<Long> NULL = ExpressionUtil.constant(null);
-	private static final Expression<Sequence> STEP = ExpressionUtil.constant(SequenceManager.STEP_SEQUENCE);
-	private static final Expression<Boolean> FALSE = ExpressionUtil.constant(false);
-	
-	@Test
-	public void testNormal() {
-		DynamicCountGenerator generator = new DynamicCountGenerator(ONE, TWO, ONE, STEP, FALSE, false);
-		generator.init(context);
-		expectGeneratedSequence(generator, 1L, 2L);
-		generator.close();
-	}
-	
-	@Test
-	public void testMaxIsNull() {
-		DynamicCountGenerator generator = new DynamicCountGenerator(ONE, NULL, ONE, STEP, FALSE, true);
-		generator.init(context);
-		assertEquals(1L, GeneratorUtil.generateNonNull(generator).longValue());
-		generator.close();
-	}
-	
+  private static final Expression<Long> ONE = ExpressionUtil.constant(1L);
+  private static final Expression<Long> TWO = ExpressionUtil.constant(2L);
+  private static final Expression<Long> NULL = ExpressionUtil.constant(null);
+  private static final Expression<Sequence> STEP = ExpressionUtil.constant(SequenceManager.STEP_SEQUENCE);
+  private static final Expression<Boolean> FALSE = ExpressionUtil.constant(false);
+
+  /**
+   * Test normal.
+   */
+  @Test
+  public void testNormal() {
+    DynamicCountGenerator generator = new DynamicCountGenerator(ONE, TWO, ONE, STEP, FALSE, false);
+    generator.init(context);
+    expectGeneratedSequence(generator, 1L, 2L);
+    generator.close();
+  }
+
+  /**
+   * Test max is null.
+   */
+  @Test
+  public void testMaxIsNull() {
+    DynamicCountGenerator generator = new DynamicCountGenerator(ONE, NULL, ONE, STEP, FALSE, true);
+    generator.init(context);
+    assertEquals(1L, GeneratorUtil.generateNonNull(generator).longValue());
+    generator.close();
+  }
+
 }

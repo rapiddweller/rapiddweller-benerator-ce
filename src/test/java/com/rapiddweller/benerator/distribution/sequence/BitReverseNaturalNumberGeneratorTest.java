@@ -32,26 +32,36 @@ import org.junit.Test;
 /**
  * Tests the BitReverseNaturalNumberGeneratorTest<br/><br/>
  * Created: 13.11.2007 13:10:39
+ *
  * @author Volker Bergmann
  */
 public class BitReverseNaturalNumberGeneratorTest extends GeneratorClassTest {
 
-    public BitReverseNaturalNumberGeneratorTest() {
-        super(BitReverseNaturalNumberGenerator.class);
-    }
+  /**
+   * Instantiates a new Bit reverse natural number generator test.
+   */
+  public BitReverseNaturalNumberGeneratorTest() {
+    super(BitReverseNaturalNumberGenerator.class);
+  }
 
-    @Test
-    public void testSequences() {
-        expectGeneratedSequence(initialize(new BitReverseNaturalNumberGenerator(3)),  0L,  2L,  1L, 3L).withCeasedAvailability();
-        expectGeneratedSequence(initialize(new BitReverseNaturalNumberGenerator(4)),  0L,  4L,  2L, 1L, 3L).withCeasedAvailability();
-        expectGeneratedSequence(initialize(new BitReverseNaturalNumberGenerator(7)),  0L,  4L,  2L, 6L, 1L, 5L, 3L, 7L).withCeasedAvailability();
-    }
+  /**
+   * Test sequences.
+   */
+  @Test
+  public void testSequences() {
+    expectGeneratedSequence(initialize(new BitReverseNaturalNumberGenerator(3)), 0L, 2L, 1L, 3L).withCeasedAvailability();
+    expectGeneratedSequence(initialize(new BitReverseNaturalNumberGenerator(4)), 0L, 4L, 2L, 1L, 3L).withCeasedAvailability();
+    expectGeneratedSequence(initialize(new BitReverseNaturalNumberGenerator(7)), 0L, 4L, 2L, 6L, 1L, 5L, 3L, 7L).withCeasedAvailability();
+  }
 
-    @Test
-    public void testCoverage() {
-    	expectUniquelyGeneratedSet(initialize(new BitReverseNaturalNumberGenerator(2)), 0L, 1L, 2L).withCeasedAvailability();
-    	expectUniquelyGeneratedSet(initialize(new BitReverseNaturalNumberGenerator(9)), 0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L)
-                .withCeasedAvailability();
-    }
+  /**
+   * Test coverage.
+   */
+  @Test
+  public void testCoverage() {
+    expectUniquelyGeneratedSet(initialize(new BitReverseNaturalNumberGenerator(2)), 0L, 1L, 2L).withCeasedAvailability();
+    expectUniquelyGeneratedSet(initialize(new BitReverseNaturalNumberGenerator(9)), 0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L)
+        .withCeasedAvailability();
+  }
 
 }

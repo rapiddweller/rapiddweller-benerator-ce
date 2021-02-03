@@ -28,7 +28,6 @@ package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.common.FileUtil;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Ignore;
@@ -47,116 +46,215 @@ import java.util.Objects;
  * @since 1.1.0
  */
 public class DemoIntegrationTest extends BeneratorIntegrationTest {
-    private static final Logger logger = LogManager.getLogger(DemoIntegrationTest.class);
+  private static final Logger logger = LogManager.getLogger(DemoIntegrationTest.class);
 
-    String ROOT = "src/demo/resources/";
+  /**
+   * The Root.
+   */
+  String ROOT = "src/demo/resources/";
 
-    private void parseAndExecute() throws IOException {
-        for (File file : Objects.requireNonNull(new File(ROOT, context.getContextUri()).listFiles())) {
-            String filename = file.getPath();
-            if (FileUtil.isXMLFile(filename)) {
-                logger.info(filename);
-                parseAndExecuteFile(filename);
-            }
-        }
+  private void parseAndExecute() throws IOException {
+    for (File file : Objects.requireNonNull(new File(ROOT, context.getContextUri()).listFiles())) {
+      String filename = file.getPath();
+      if (FileUtil.isXMLFile(filename)) {
+        logger.info(filename);
+        parseAndExecuteFile(filename);
+      }
     }
+  }
 
-    @Test
-    public void DemoFilesPostprocess() throws IOException {
-        context.setContextUri("/demo/file");
-        parseAndExecuteFile("/demo/file/postprocess-import.ben.xml");
+  /**
+   * Demo files postprocess.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoFilesPostprocess() throws IOException {
+    context.setContextUri("/demo/file");
+    parseAndExecuteFile("/demo/file/postprocess-import.ben.xml");
+  }
+
+  /**
+   * Demo files import fixed width.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoFilesImportFixedWidth() throws IOException {
+    context.setContextUri("/demo/file");
+    parseAndExecuteFile("/demo/file/import_fixed_width.ben.xml");
+  }
+
+  /**
+   * Demo files greeting csv.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoFilesGreetingCSV() throws IOException {
+    context.setContextUri("/demo/file");
+    parseAndExecuteFile("/demo/file/greetings_csv.ben.xml");
+  }
+
+  /**
+   * Demo files csvio.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoFilesCSVIO() throws IOException {
+    context.setContextUri("/demo/file");
+    parseAndExecuteFile("/demo/file/csv_io.ben.xml");
+  }
+
+  /**
+   * Demo files xml by script.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoFilesXMLByScript() throws IOException {
+    context.setContextUri("/demo/file");
+    parseAndExecuteFile("/demo/file/create_xml_by_script.ben.xml");
+  }
+
+  /**
+   * Demo files create xml.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoFilesCreateXML() throws IOException {
+    context.setContextUri("/demo/file");
+    parseAndExecuteFile("/demo/file/create_xml.ben.xml");
+  }
+
+  /**
+   * Demo files create xlsl.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoFilesCreateXLSL() throws IOException {
+    context.setContextUri("/demo/file");
+    parseAndExecuteFile("/demo/file/create_xls.ben.xml");
+  }
+
+
+  /**
+   * Demo files create dates.
+   */
+  @Test
+  public void DemoFilesCreateDates() {
+    try {
+      context.setContextUri("/demo/file");
+      parseAndExecuteFile("/demo/file/create_dates.ben.xml");
+    } catch (Exception e) {
+      logger.info(e);
     }
+  }
 
-    @Test
-    public void DemoFilesImportFixedWidth() throws IOException {
-        context.setContextUri("/demo/file");
-        parseAndExecuteFile("/demo/file/import_fixed_width.ben.xml");
-    }
+  /**
+   * Demo files create csv.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoFilesCreateCSV() throws IOException {
+    context.setContextUri("/demo/file");
+    parseAndExecuteFile("/demo/file/create_csv.ben.xml");
+  }
 
-    @Test
-    public void DemoFilesGreetingCSV() throws IOException {
-        context.setContextUri("/demo/file");
-        parseAndExecuteFile("/demo/file/greetings_csv.ben.xml");
-    }
+  /**
+   * Demo files xls demo.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoFilesXLSDemo() throws IOException {
+    context.setContextUri("/demo/file");
+    parseAndExecuteFile("/demo/file/xls-demo.ben.xml");
+  }
 
-    @Test
-    public void DemoFilesCSVIO() throws IOException {
-        context.setContextUri("/demo/file");
-        parseAndExecuteFile("/demo/file/csv_io.ben.xml");
-    }
+  /**
+   * Demo mass test.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoMassTest() throws IOException {
+    context.setContextUri("/demo/db");
+    parseAndExecuteFile("/demo/db/hsqlmem.masstest.ben.xml");
+  }
 
-    @Test
-    public void DemoFilesXMLByScript() throws IOException {
-        context.setContextUri("/demo/file");
-        parseAndExecuteFile("/demo/file/create_xml_by_script.ben.xml");
-    }
+  /**
+   * Demo h 2 multi schema.
+   *
+   * @throws IOException the io exception
+   */
+  @Ignore
+  @Test
+  public void DemoH2MultiSchema() throws IOException {
+    context.setContextUri("/demo/db");
+    parseAndExecuteFile("/demo/db/h2.multischema.ben.xml");
+  }
 
-    @Test
-    public void DemoFilesCreateXML() throws IOException {
-        context.setContextUri("/demo/file");
-        parseAndExecuteFile("/demo/file/create_xml.ben.xml");
-    }
+  /**
+   * Demo db composite key.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoDbCompositeKey() throws IOException {
+    context.setContextUri("/demo/db");
+    parseAndExecuteFile("/demo/db/compositekey.ben.xml");
+  }
 
-    @Test
-    public void DemoFilesCreateXLSL() throws IOException {
-        context.setContextUri("/demo/file");
-        parseAndExecuteFile("/demo/file/create_xls.ben.xml");
-    }
+  /**
+   * Demo script code.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoScriptCode() throws IOException {
+    context.setContextUri("/demo/script");
+    parseAndExecuteFile("/demo/script/scriptcode.ben.xml");
+
+  }
+
+  /**
+   * Demo script file.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoScriptFile() throws IOException {
+    context.setContextUri("/demo/script");
+    parseAndExecuteFile("/demo/script/scriptfile.ben.xml");
+  }
 
 
-    @Test
-    public void DemoFilesCreateDates() {
-        try{
-        context.setContextUri("/demo/file");
-        parseAndExecuteFile("/demo/file/create_dates.ben.xml");
-        }
-        catch (Exception e){
-            logger.info(e);
-        }
-    }
+  /**
+   * Shop script hsql mem.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void ShopScriptHSQLMem() throws IOException {
+    context.setContextUri("/demo/shop");
+    parseAndExecuteFile("/demo/shop/shop-hsqlmem.ben.xml");
+  }
 
-    @Test
-    public void DemoFilesCreateCSV() throws IOException {
-        context.setContextUri("/demo/file");
-        parseAndExecuteFile("/demo/file/create_csv.ben.xml");
-    }
+  /**
+   * Shop script h 2 mem.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void ShopScriptH2Mem() throws IOException {
+    context.setContextUri("/demo/shop");
+    parseAndExecuteFile("/demo/shop/shop-h2.ben.xml");
+  }
 
-    @Test
-    public void DemoFilesXLSDemo() throws IOException {
-        context.setContextUri("/demo/file");
-        parseAndExecuteFile("/demo/file/xls-demo.ben.xml");
-    }
-
-    @Test
-    public void DemoDbUser() throws IOException {
-        context.setContextUri("/demo/db");
-        parseAndExecuteFile("/demo/db/user.ben.xml");
-    }
-
-    @Test
-    public void DemoDbCompositeKey() throws IOException {
-        context.setContextUri("/demo/db");
-        parseAndExecuteFile("/demo/db/compositekey.ben.xml");
-    }
-
-    @Test
-    public void DemoScriptCode() throws IOException {
-        context.setContextUri("/demo/script");
-        parseAndExecuteFile("/demo/script/scriptcode.ben.xml");
-
-    }
-
-    @Test
-    public void DemoScriptFile() throws IOException {
-        context.setContextUri("/demo/script");
-        parseAndExecuteFile("/demo/script/scriptfile.ben.xml");
-    }
-
-    @Ignore
-    @Test
-    public void ShopScript() throws IOException {
-        context.setContextUri("/demo/shop");
-        parseAndExecuteFile("/demo/shop/multischema.ben.xml");
-    }
 
 }

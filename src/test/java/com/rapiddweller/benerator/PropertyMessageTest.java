@@ -26,29 +26,34 @@
 
 package com.rapiddweller.benerator;
 
-import com.rapiddweller.benerator.PropertyMessage;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Tests the {@link PropertyMessage}.<br/><br/>
  * Created at 02.05.2008 13:45:55
- * @since 0.5.3
+ *
  * @author Volker Bergmann
+ * @since 0.5.3
  */
 public class PropertyMessageTest {
-	
-	@Test
-	public void testEquals() {
-		PropertyMessage m11 = new PropertyMessage("prop1", "mess1");
-		// simple tests
-		assertNotEquals(null, m11);
-		assertNotEquals("", m11);
-		assertEquals(m11, m11);
-		// real comparisons
-		assertEquals(m11, new PropertyMessage("prop1", "mess1"));
-		assertNotEquals(m11, new PropertyMessage("prop2", "mess1"));
-		assertNotEquals(m11, new PropertyMessage("prop1", "mess2"));
-	}
-	
+
+  /**
+   * Test equals.
+   */
+  @Test
+  public void testEquals() {
+    PropertyMessage m11 = new PropertyMessage("prop1", "mess1");
+    // simple tests
+    assertNotEquals(null, m11);
+    assertNotEquals("", m11);
+    assertEquals(m11, m11);
+    // real comparisons
+    assertEquals(m11, new PropertyMessage("prop1", "mess1"));
+    assertNotEquals(m11, new PropertyMessage("prop2", "mess1"));
+    assertNotEquals(m11, new PropertyMessage("prop1", "mess2"));
+  }
+
 }

@@ -35,38 +35,70 @@ package com.rapiddweller.domain.finance;
  */
 public class BankAccount {
 
-    private final Bank bank;
-    private final String accountNumber;
-    private final String iban;
+  private final Bank bank;
+  private final String accountNumber;
+  private final String iban;
 
-    public BankAccount(Bank bank, String accountNumber, String iban) {
-        this.bank = bank;
-        this.accountNumber = accountNumber;
-        this.iban = iban;
-    }
+  /**
+   * Instantiates a new Bank account.
+   *
+   * @param bank          the bank
+   * @param accountNumber the account number
+   * @param iban          the iban
+   */
+  public BankAccount(Bank bank, String accountNumber, String iban) {
+    this.bank = bank;
+    this.accountNumber = accountNumber;
+    this.iban = iban;
+  }
 
-    public String getBankCode() {
-        return bank.getBankCode();
-    }
+  /**
+   * Gets bank code.
+   *
+   * @return the bank code
+   */
+  public String getBankCode() {
+    return bank.getBankCode();
+  }
 
-    public String getBankName() {
-        return bank.getName();
-    }
+  /**
+   * Gets bank name.
+   *
+   * @return the bank name
+   */
+  public String getBankName() {
+    return bank.getName();
+  }
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
+  /**
+   * Gets account number.
+   *
+   * @return the account number
+   */
+  public String getAccountNumber() {
+    return accountNumber;
+  }
 
-    public String getBic() {
-        return bank.getBic();
-    }
+  /**
+   * Gets bic.
+   *
+   * @return the bic
+   */
+  public String getBic() {
+    return bank.getBic();
+  }
 
-    public String getIban() {
-        return iban;
-    }
+  /**
+   * Gets iban.
+   *
+   * @return the iban
+   */
+  public String getIban() {
+    return iban;
+  }
 
-    @Override
-    public String toString() {
-        return "Account #" + accountNumber + " at " + bank + ", IBAN=" + iban;
-    }
+  @Override
+  public String toString() {
+    return "Account #" + accountNumber + " at " + bank + ", IBAN=" + iban;
+  }
 }

@@ -33,68 +33,94 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  * Generator implementation that always returns the same value.<br/>
  * <br/>
  * Created: 08.06.2006 20:26:22
- * @since 0.1
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class ConstantGenerator<E> extends ThreadSafeGenerator<E> {
 
-    /** The value to return */
-    private E value;
-    
-    private final Class<E> generatedType;
+  /**
+   * The value to return
+   */
+  private E value;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  private final Class<E> generatedType;
 
-    public ConstantGenerator() {
-        this((E) null);
-    }
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    /** Initializes the generator to generate the specified value */
+  /**
+   * Instantiates a new Constant generator.
+   */
+  public ConstantGenerator() {
+    this(null);
+  }
 
-    @SuppressWarnings("unchecked")
-    public ConstantGenerator(E value) {
-    	this(value, (Class<E>) (value != null ? value.getClass() : Object.class));
-    }
+  /**
+   * Initializes the generator to generate the specified value
+   *
+   * @param value the value
+   */
+  @SuppressWarnings("unchecked")
+  public ConstantGenerator(E value) {
+    this(value, (Class<E>) (value != null ? value.getClass() : Object.class));
+  }
 
-    public ConstantGenerator(E value, Class<E> generatedType) {
-        this.value = value;
-        this.generatedType = generatedType;
-    }
+  /**
+   * Instantiates a new Constant generator.
+   *
+   * @param value         the value
+   * @param generatedType the generated type
+   */
+  public ConstantGenerator(E value, Class<E> generatedType) {
+    this.value = value;
+    this.generatedType = generatedType;
+  }
 
-    // config properties -----------------------------------------------------------------------------------------------
+  // config properties -----------------------------------------------------------------------------------------------
 
-    /** Returns the property 'value' */
-    public E getValue() {
-        return value;
-    }
+  /**
+   * Returns the property 'value'
+   *
+   * @return the value
+   */
+  public E getValue() {
+    return value;
+  }
 
-    /** Sets the property 'value' */
-    public void setValue(E value) {
-        this.value = value;
-    }
+  /**
+   * Sets the property 'value'
+   *
+   * @param value the value
+   */
+  public void setValue(E value) {
+    this.value = value;
+  }
 
-    // Generator implementation ----------------------------------------------------------------------------------------
+  // Generator implementation ----------------------------------------------------------------------------------------
 
-	@Override
-	@SuppressWarnings("unchecked")
-    public Class<E> getGeneratedType() {
-	    return (generatedType != null ? 
-	    		generatedType : 
-	    		(value != null ? (Class<E>) value.getClass() : (Class<E>) Object.class)
-	    	);
-    }
+  @Override
+  @SuppressWarnings("unchecked")
+  public Class<E> getGeneratedType() {
+    return (generatedType != null ?
+        generatedType :
+        (value != null ? (Class<E>) value.getClass() : (Class<E>) Object.class)
+    );
+  }
 
-    /** Returns the value of property 'value' */
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-        return wrapper.wrap(value);
-    }
+  /**
+   * Returns the value of property 'value'
+   */
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    return wrapper.wrap(value);
+  }
 
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + value + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + value + ']';
+  }
 
 }

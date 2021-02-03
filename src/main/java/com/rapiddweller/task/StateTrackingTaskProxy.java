@@ -35,40 +35,54 @@ import com.rapiddweller.common.ErrorHandler;
  * property <code>available</code>.<br/><br/>
  * Created: 05.02.2010 10:41:55
  *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6
  */
 public class StateTrackingTaskProxy<E extends Task> extends TaskProxy<E> {
 
-    protected volatile TaskResult state;
+  /**
+   * The State.
+   */
+  protected volatile TaskResult state;
 
-    public StateTrackingTaskProxy(E realTask) {
-        super(realTask);
-        this.state = TaskResult.EXECUTING;
-    }
+  /**
+   * Instantiates a new State tracking task proxy.
+   *
+   * @param realTask the real task
+   */
+  public StateTrackingTaskProxy(E realTask) {
+    super(realTask);
+    this.state = TaskResult.EXECUTING;
+  }
 
-    public boolean isAvailable() {
-        return (state != TaskResult.EXECUTING);
-    }
+  /**
+   * Is available boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isAvailable() {
+    return (state != TaskResult.EXECUTING);
+  }
 
-    @Override
-    public TaskResult execute(Context context, ErrorHandler errorHandler) {
-        if (isAvailable()) {
-            return TaskResult.UNAVAILABLE;
-        }
-        TaskResult result = super.execute(context, errorHandler);
-        state = result;
-        return result; // avoiding synchronization issues using a local variable instead of 'state' attribute
+  @Override
+  public TaskResult execute(Context context, ErrorHandler errorHandler) {
+    if (isAvailable()) {
+      return TaskResult.UNAVAILABLE;
     }
+    TaskResult result = super.execute(context, errorHandler);
+    state = result;
+    return result; // avoiding synchronization issues using a local variable instead of 'state' attribute
+  }
 
-    @Override
-    public StateTrackingTaskProxy<E> clone() {
-        return new StateTrackingTaskProxy<>(BeanUtil.clone(realTask));
-    }
+  @Override
+  public StateTrackingTaskProxy<E> clone() {
+    return new StateTrackingTaskProxy<>(BeanUtil.clone(realTask));
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + realTask.toString() + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + realTask.toString() + ']';
+  }
 
 }

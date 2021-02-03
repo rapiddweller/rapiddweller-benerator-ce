@@ -40,30 +40,47 @@ import java.util.List;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public abstract class CompositeTask extends AbstractTask {
 
-    protected final List<Task> subTasks;
+  /**
+   * The Sub tasks.
+   */
+  protected final List<Task> subTasks;
 
-    public CompositeTask(Task... subTasks) {
-        super(); // parent class default constructor chooses name
-        this.subTasks = CollectionUtil.toList(subTasks);
-    }
+  /**
+   * Instantiates a new Composite task.
+   *
+   * @param subTasks the sub tasks
+   */
+  public CompositeTask(Task... subTasks) {
+    super(); // parent class default constructor chooses name
+    this.subTasks = CollectionUtil.toList(subTasks);
+  }
 
-    public void addSubTask(Task task) {
-        Assert.notNull(task, "task");
-        subTasks.add(task);
-    }
+  /**
+   * Add sub task.
+   *
+   * @param task the task
+   */
+  public void addSubTask(Task task) {
+    Assert.notNull(task, "task");
+    subTasks.add(task);
+  }
 
-    public Task[] getSubTasks() {
-        return CollectionUtil.toArray(subTasks);
-    }
+  /**
+   * Get sub tasks task [ ].
+   *
+   * @return the task [ ]
+   */
+  public Task[] getSubTasks() {
+    return CollectionUtil.toArray(subTasks);
+  }
 
-    @Override
-    public void close() {
-        for (Task subTask : subTasks) {
-            IOUtil.close(subTask);
-        }
+  @Override
+  public void close() {
+    for (Task subTask : subTasks) {
+      IOUtil.close(subTask);
     }
+  }
 
 }

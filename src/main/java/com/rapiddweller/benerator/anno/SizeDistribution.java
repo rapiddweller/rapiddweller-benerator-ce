@@ -37,11 +37,17 @@ import java.lang.annotation.Target;
  * Specifies which length {@link Distribution}
  * to use when generating data for the annotated element
  * Created: 02.05.2010 19:01:02
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER } )
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 public @interface SizeDistribution {
-	String value();
+  /**
+   * Value string.
+   *
+   * @return the string
+   */
+  String value();
 }

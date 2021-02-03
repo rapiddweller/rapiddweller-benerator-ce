@@ -26,36 +26,43 @@
 
 package com.rapiddweller.benerator;
 
-import java.util.BitSet;
-
 import com.rapiddweller.common.Validator;
+
+import java.util.BitSet;
 
 /**
  * Accepts only unique numbers.<br/><br/>
  * Created: 10.12.2009 15:58:21
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class UniqueLongValidator implements Validator<Long> {
 
-	private final BitSet bitSet;
-	
-	public UniqueLongValidator(int initialCapacity) {
-		bitSet = new BitSet(initialCapacity);
-	}
-	
-	@Override
-	public boolean valid(Long candidate) {
-		if (bitSet.get(candidate.intValue()))
-			return false;
-		else
-			bitSet.set(candidate.intValue());
-		return true;
-    }
+  private final BitSet bitSet;
 
-	@Override
-	public String toString() {
-	    return getClass().getSimpleName();
-	}
-	
+  /**
+   * Instantiates a new Unique long validator.
+   *
+   * @param initialCapacity the initial capacity
+   */
+  public UniqueLongValidator(int initialCapacity) {
+    bitSet = new BitSet(initialCapacity);
+  }
+
+  @Override
+  public boolean valid(Long candidate) {
+    if (bitSet.get(candidate.intValue())) {
+      return false;
+    } else {
+      bitSet.set(candidate.intValue());
+    }
+    return true;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
+
 }

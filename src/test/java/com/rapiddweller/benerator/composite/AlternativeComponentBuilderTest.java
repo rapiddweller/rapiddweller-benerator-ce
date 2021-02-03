@@ -28,19 +28,25 @@
 
 package com.rapiddweller.benerator.composite;
 
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import org.junit.Test;
-
+/**
+ * The type Alternative component builder test.
+ */
 public class AlternativeComponentBuilderTest {
-    @Test
-    public void testConstructor() {
-        AlternativeComponentBuilder<Object> actualAlternativeComponentBuilder = new AlternativeComponentBuilder<Object>(
-                new ComponentBuilder[]{}, "Scope");
-        assertEquals("AlternativeComponentBuilder", actualAlternativeComponentBuilder.toString());
-        assertFalse(actualAlternativeComponentBuilder.isResetNeeded());
-        assertEquals("Scope", actualAlternativeComponentBuilder.getScope());
-    }
+  /**
+   * Test constructor.
+   */
+  @Test
+  public void testConstructor() {
+    AlternativeComponentBuilder<Object> actualAlternativeComponentBuilder = new AlternativeComponentBuilder<Object>(
+        new ComponentBuilder[] {}, "Scope");
+    assertEquals("AlternativeComponentBuilder", actualAlternativeComponentBuilder.toString());
+    assertFalse(actualAlternativeComponentBuilder.isResetNeeded());
+    assertEquals("Scope", actualAlternativeComponentBuilder.getScope());
+  }
 }
 

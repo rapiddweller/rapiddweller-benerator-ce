@@ -38,104 +38,209 @@ import java.util.Locale;
  */
 public class Person {
 
-    private String givenName;
-    private String secondGivenName;
-    private String familyName;
-    private Gender gender;
-    private String salutation;
-    private String academicTitle;
-    private String nobilityTitle;
-    private Date birthDate;
-    private String email;
-    private final Locale locale;
+  private String givenName;
+  private String secondGivenName;
+  private String familyName;
+  private Gender gender;
+  private String salutation;
+  private String academicTitle;
+  private String nobilityTitle;
+  private Date birthDate;
+  private String email;
+  private final Locale locale;
 
-    public Person(Locale locale) {
-        this.locale = locale;
-    }
+  /**
+   * Instantiates a new Person.
+   *
+   * @param locale the locale
+   */
+  public Person(Locale locale) {
+    this.locale = locale;
+  }
 
-    public String getSalutation() {
-        return salutation;
-    }
+  /**
+   * Gets salutation.
+   *
+   * @return the salutation
+   */
+  public String getSalutation() {
+    return salutation;
+  }
 
-    public void setSalutation(String salutation) {
-        this.salutation = salutation;
-    }
+  /**
+   * Sets salutation.
+   *
+   * @param salutation the salutation
+   */
+  public void setSalutation(String salutation) {
+    this.salutation = salutation;
+  }
 
-    public String getTitle() {
-        return getAcademicTitle();
-    }
+  /**
+   * Gets title.
+   *
+   * @return the title
+   */
+  public String getTitle() {
+    return getAcademicTitle();
+  }
 
-    public void setTitle(String title) {
-        this.setAcademicTitle(title);
-    }
+  /**
+   * Sets title.
+   *
+   * @param title the title
+   */
+  public void setTitle(String title) {
+    this.setAcademicTitle(title);
+  }
 
-    public String getAcademicTitle() {
-        return academicTitle;
-    }
+  /**
+   * Gets academic title.
+   *
+   * @return the academic title
+   */
+  public String getAcademicTitle() {
+    return academicTitle;
+  }
 
-    public void setAcademicTitle(String academicTitle) {
-        this.academicTitle = academicTitle;
-    }
+  /**
+   * Sets academic title.
+   *
+   * @param academicTitle the academic title
+   */
+  public void setAcademicTitle(String academicTitle) {
+    this.academicTitle = academicTitle;
+  }
 
-    public String getNobilityTitle() {
-        return nobilityTitle;
-    }
+  /**
+   * Gets nobility title.
+   *
+   * @return the nobility title
+   */
+  public String getNobilityTitle() {
+    return nobilityTitle;
+  }
 
-    public void setNobilityTitle(String nobilityTitle) {
-        this.nobilityTitle = nobilityTitle;
-    }
+  /**
+   * Sets nobility title.
+   *
+   * @param nobilityTitle the nobility title
+   */
+  public void setNobilityTitle(String nobilityTitle) {
+    this.nobilityTitle = nobilityTitle;
+  }
 
-    public Gender getGender() {
-        return gender;
-    }
+  /**
+   * Gets gender.
+   *
+   * @return the gender
+   */
+  public Gender getGender() {
+    return gender;
+  }
 
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
+  /**
+   * Sets gender.
+   *
+   * @param gender the gender
+   */
+  public void setGender(Gender gender) {
+    this.gender = gender;
+  }
 
-    public String getGivenName() {
-        return givenName;
-    }
+  /**
+   * Gets given name.
+   *
+   * @return the given name
+   */
+  public String getGivenName() {
+    return givenName;
+  }
 
-    public void setGivenName(String givenName) {
-        this.givenName = givenName;
-    }
+  /**
+   * Sets given name.
+   *
+   * @param givenName the given name
+   */
+  public void setGivenName(String givenName) {
+    this.givenName = givenName;
+  }
 
-    public String getSecondGivenName() {
-        return secondGivenName;
-    }
+  /**
+   * Gets second given name.
+   *
+   * @return the second given name
+   */
+  public String getSecondGivenName() {
+    return secondGivenName;
+  }
 
-    public void setSecondGivenName(String secondGivenName) {
-        this.secondGivenName = secondGivenName;
-    }
+  /**
+   * Sets second given name.
+   *
+   * @param secondGivenName the second given name
+   */
+  public void setSecondGivenName(String secondGivenName) {
+    this.secondGivenName = secondGivenName;
+  }
 
-    public String getFamilyName() {
-        return familyName;
-    }
+  /**
+   * Gets family name.
+   *
+   * @return the family name
+   */
+  public String getFamilyName() {
+    return familyName;
+  }
 
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
-    }
+  /**
+   * Sets family name.
+   *
+   * @param familyName the family name
+   */
+  public void setFamilyName(String familyName) {
+    this.familyName = familyName;
+  }
 
-    public Date getBirthDate() {
-        return birthDate;
-    }
+  /**
+   * Gets birth date.
+   *
+   * @return the birth date
+   */
+  public Date getBirthDate() {
+    return birthDate;
+  }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
+  /**
+   * Sets birth date.
+   *
+   * @param birthDate the birth date
+   */
+  public void setBirthDate(Date birthDate) {
+    this.birthDate = birthDate;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  /**
+   * Gets email.
+   *
+   * @return the email
+   */
+  public String getEmail() {
+    return email;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  /**
+   * Sets email.
+   *
+   * @param email the email
+   */
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    @Override
-    public synchronized String toString() {
-        return PersonFormatter.getInstance(locale).format(this);
-    }
+  @Override
+  public synchronized String toString() {
+    return PersonFormatter.getInstance(locale).format(this);
+  }
 
 }

@@ -27,49 +27,55 @@
 package com.rapiddweller.benerator.engine;
 
 /**
- * Parent class for all generation components that can connect to the life cycle of a different component 
+ * Parent class for all generation components that can connect to the life cycle of a different component
  * (thus defining a 'scope').<br/>
  * <br/>
  * Created: 03.04.2012 19:28:48
- * @since 0.7.6
+ *
  * @author Volker Bergmann
+ * @since 0.7.6
  */
 public abstract class AbstractScopedLifeCycleHolder implements ScopedLifeCycleHolder {
-	
-	private String scope;
-	private boolean resetNeeded;
-	
-	public AbstractScopedLifeCycleHolder(String scope) {
-		this.scope = scope;
-		setResetNeeded(false);
-	}
 
-	@Override
-	public String getScope() {
-		return scope;
-	}
+  private String scope;
+  private boolean resetNeeded;
 
-	@Override
-	public void setScope(String scope) {
-		this.scope = scope;
-	}
+  /**
+   * Instantiates a new Abstract scoped life cycle holder.
+   *
+   * @param scope the scope
+   */
+  public AbstractScopedLifeCycleHolder(String scope) {
+    this.scope = scope;
+    setResetNeeded(false);
+  }
 
-	@Override
-	public boolean isResetNeeded() {
-		return resetNeeded;
-	}
+  @Override
+  public String getScope() {
+    return scope;
+  }
 
-	@Override
-	public void setResetNeeded(boolean resetNeeded) {
-		this.resetNeeded = resetNeeded;
-	}
+  @Override
+  public void setScope(String scope) {
+    this.scope = scope;
+  }
 
-	@Override
-	public void resetIfNeeded() {
-		if (this.resetNeeded) {
-			reset();
-			setResetNeeded(false);
-		}
-	}
+  @Override
+  public boolean isResetNeeded() {
+    return resetNeeded;
+  }
+
+  @Override
+  public void setResetNeeded(boolean resetNeeded) {
+    this.resetNeeded = resetNeeded;
+  }
+
+  @Override
+  public void resetIfNeeded() {
+    if (this.resetNeeded) {
+      reset();
+      setResetNeeded(false);
+    }
+  }
 
 }

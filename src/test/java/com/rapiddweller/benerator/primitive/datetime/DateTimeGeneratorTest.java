@@ -26,101 +26,123 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
-import java.sql.Time;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.script.math.DateArithmetic;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests the {@link DateTimeGenerator}.
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class DateTimeGeneratorTest extends GeneratorClassTest {
-	
-	final DateArithmetic arithmetic = new DateArithmetic();
-	
-    public DateTimeGeneratorTest() {
-	    super(DateTimeGenerator.class);
-    }
 
-	static final int N = 100;
+  /**
+   * The Arithmetic.
+   */
+  final DateArithmetic arithmetic = new DateArithmetic();
 
-	@Test
-    public void testInvalidSettings() {
-        new DateTimeGenerator();
-    }
+  /**
+   * Instantiates a new Date time generator test.
+   */
+  public DateTimeGeneratorTest() {
+    super(DateTimeGenerator.class);
+  }
 
-	@Test
-    public void testMinMax() {
-        check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0,  1), TimeUtil.time(12, 0), TimeUtil.time(12,
-                0));
-        check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0,  1), TimeUtil.time( 0, 0), TimeUtil.time(23, 59));
-        check(TimeUtil.date(2008, 6, 5), TimeUtil.date(2008, 6, 25), TimeUtil.time( 9, 0), TimeUtil.time(17,  0));
-    }
+  /**
+   * The N.
+   */
+  static final int N = 100;
 
-	@Test
-    public void testDateDistribution() {
-    	int minYear = 2008;
-    	int maxYear = 2008;
-    	int hour = 1;
-    	int minute = 2;
-    	int second = 3;
-    	int millisecond = 4;
-    	
-        DateTimeGenerator generator = createGenerator(
-        		TimeUtil.date(minYear, 7, 6), 
-        		TimeUtil.date(maxYear, 8, 8),
-        		TimeUtil.time(hour, minute, second, millisecond), 
-        		TimeUtil.time(hour, minute, second, millisecond));
-        Date minDate = TimeUtil.date(minYear, 7, 6, hour, minute, second, millisecond);
-        Date maxDate = TimeUtil.date(maxYear, 8, 8, hour, minute, second, millisecond);
-        generator.setDateDistribution(SequenceManager.STEP_SEQUENCE);
-        generator.init(context);
-        for (int i = 0; i < 34; i++) {
-            Date date = generator.generate();
-            assertNotNull("Generator unavailable after " + i + " generations", date);
-            assertFalse("Generated date " + date + " is before min date: " + minDate, date.before(minDate));
-            assertFalse(date.after(maxDate));
-            Calendar cal = new GregorianCalendar();
-            cal.setTime(date);
-            assertEquals(hour, cal.get(Calendar.HOUR));
-            assertEquals(minute, cal.get(Calendar.MINUTE));
-            assertEquals(second, cal.get(Calendar.SECOND));
-            assertEquals(millisecond, cal.get(Calendar.MILLISECOND));
-        }
-        assertUnavailable(generator);
-    }
+  /**
+   * Test invalid settings.
+   */
+  @Test
+  public void testInvalidSettings() {
+    new DateTimeGenerator();
+  }
 
-    // private helpers ---------------------------------------------------------
-    
-    private void check(Date minDate, Date maxDate, Time minTime, Time maxTime) {
-        DateTimeGenerator generator = createGenerator(minDate, maxDate, minTime, maxTime);
-        generator.init(context);
-        Date maxResult = arithmetic.add(maxDate, maxTime);
-        for (int i = 0; i < N; i++) {
-            Date date = generator.generate();
-            assertFalse("Generated date (" + date + ") is before minDate (" + minDate + ")", date.before(minDate));
-            assertFalse(date.after(maxResult));
-            Calendar cal = new GregorianCalendar();
-            cal.setTime(date);
-        }
-    }
+  /**
+   * Test min max.
+   */
+  @Test
+  public void testMinMax() {
+    check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0, 1), TimeUtil.time(12, 0), TimeUtil.time(12,
+        0));
+    check(TimeUtil.date(1970, 0, 1), TimeUtil.date(1970, 0, 1), TimeUtil.time(0, 0), TimeUtil.time(23, 59));
+    check(TimeUtil.date(2008, 6, 5), TimeUtil.date(2008, 6, 25), TimeUtil.time(9, 0), TimeUtil.time(17, 0));
+  }
 
-	private static DateTimeGenerator createGenerator(Date minDate, Date maxDate, Time minTime, Time maxTime) {
-	    DateTimeGenerator generator = new DateTimeGenerator();
-        generator.setMinDate(minDate);
-        generator.setMaxDate(maxDate);
-        generator.setMinTime(minTime);
-        generator.setMaxTime(maxTime);
-	    return generator;
+  /**
+   * Test date distribution.
+   */
+  @Test
+  public void testDateDistribution() {
+    int minYear = 2008;
+    int maxYear = 2008;
+    int hour = 1;
+    int minute = 2;
+    int second = 3;
+    int millisecond = 4;
+
+    DateTimeGenerator generator = createGenerator(
+        TimeUtil.date(minYear, 7, 6),
+        TimeUtil.date(maxYear, 8, 8),
+        TimeUtil.time(hour, minute, second, millisecond),
+        TimeUtil.time(hour, minute, second, millisecond));
+    Date minDate = TimeUtil.date(minYear, 7, 6, hour, minute, second, millisecond);
+    Date maxDate = TimeUtil.date(maxYear, 8, 8, hour, minute, second, millisecond);
+    generator.setDateDistribution(SequenceManager.STEP_SEQUENCE);
+    generator.init(context);
+    for (int i = 0; i < 34; i++) {
+      Date date = generator.generate();
+      assertNotNull("Generator unavailable after " + i + " generations", date);
+      assertFalse("Generated date " + date + " is before min date: " + minDate, date.before(minDate));
+      assertFalse(date.after(maxDate));
+      Calendar cal = new GregorianCalendar();
+      cal.setTime(date);
+      assertEquals(hour, cal.get(Calendar.HOUR));
+      assertEquals(minute, cal.get(Calendar.MINUTE));
+      assertEquals(second, cal.get(Calendar.SECOND));
+      assertEquals(millisecond, cal.get(Calendar.MILLISECOND));
     }
-	
+    assertUnavailable(generator);
+  }
+
+  // private helpers ---------------------------------------------------------
+
+  private void check(Date minDate, Date maxDate, Time minTime, Time maxTime) {
+    DateTimeGenerator generator = createGenerator(minDate, maxDate, minTime, maxTime);
+    generator.init(context);
+    Date maxResult = arithmetic.add(maxDate, maxTime);
+    for (int i = 0; i < N; i++) {
+      Date date = generator.generate();
+      assertFalse("Generated date (" + date + ") is before minDate (" + minDate + ")", date.before(minDate));
+      assertFalse(date.after(maxResult));
+      Calendar cal = new GregorianCalendar();
+      cal.setTime(date);
+    }
+  }
+
+  private static DateTimeGenerator createGenerator(Date minDate, Date maxDate, Time minTime, Time maxTime) {
+    DateTimeGenerator generator = new DateTimeGenerator();
+    generator.setMinDate(minDate);
+    generator.setMaxDate(maxDate);
+    generator.setMinTime(minTime);
+    generator.setMaxTime(maxTime);
+    return generator;
+  }
+
 }

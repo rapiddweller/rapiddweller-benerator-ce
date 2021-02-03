@@ -46,15 +46,22 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 @Documented
 @Constraint(validatedBy = UnluckyNumberValidator.class)
 @Target({METHOD, FIELD, TYPE})
 @Retention(RUNTIME)
 public @interface SSN {
 
-    int DEFAULT_MAX_AREA_CODE = 772;
+  /**
+   * The constant DEFAULT_MAX_AREA_CODE.
+   */
+  int DEFAULT_MAX_AREA_CODE = 772;
 
-    int maxAreaCode() default DEFAULT_MAX_AREA_CODE;
+  /**
+   * Max area code int.
+   *
+   * @return the int
+   */
+  int maxAreaCode() default DEFAULT_MAX_AREA_CODE;
 
 }

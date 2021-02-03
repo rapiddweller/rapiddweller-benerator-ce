@@ -38,17 +38,28 @@ import com.rapiddweller.model.data.Entity;
  */
 public class EntityValidator implements Validator<Entity> {
 
-    private String entityType;
+  private String entityType;
 
-    public EntityValidator(String entityType) {
-        this.entityType = entityType;
-    }
+  /**
+   * Instantiates a new Entity validator.
+   *
+   * @param entityType the entity type
+   */
+  public EntityValidator(String entityType) {
+    this.entityType = entityType;
+  }
 
-    public boolean valid(Entity entity) {
-        if (entity == null) {
-            return false;
-        }
-        return entityType.equalsIgnoreCase(entity.type());
+  /**
+   * Valid boolean.
+   *
+   * @param entity the entity
+   * @return the boolean
+   */
+  public boolean valid(Entity entity) {
+    if (entity == null) {
+      return false;
     }
+    return entityType.equalsIgnoreCase(entity.type());
+  }
 
 }

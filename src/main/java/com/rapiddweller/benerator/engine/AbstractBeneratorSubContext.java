@@ -26,12 +26,6 @@
 
 package com.rapiddweller.benerator.engine;
 
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
-import java.util.Map.Entry;
-import java.util.concurrent.ExecutorService;
-
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.factory.DefaultsProvider;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
@@ -40,336 +34,357 @@ import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.TypeDescriptor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Abstract implementation of the {@link BeneratorSubContext} interface.<br/><br/>
  * Created: 26.01.2013 13:14:37
- * @since 0.8.0
+ *
  * @author Volker Bergmann
+ * @since 0.8.0
  */
 public abstract class AbstractBeneratorSubContext implements BeneratorSubContext {
 
-	protected final BeneratorContext parent;
-	protected final String currentProductName;
-	private final Context localContext;
-	
-	public AbstractBeneratorSubContext(String productName, BeneratorContext parent) {
-		this.currentProductName = productName;
-		this.parent = parent;
-		this.localContext = BeneratorFactory.getInstance().createGenerationContext();
-	}
-	
-	@Override
-	public BeneratorContext getParent() {
-		return parent;
-	}
+  private static final Logger LOGGER = LogManager.getLogger(AbstractBeneratorSubContext.class);
+  /**
+   * The Parent.
+   */
+  protected final BeneratorContext parent;
+  /**
+   * The Current product name.
+   */
+  protected final String currentProductName;
+  private final Context localContext;
 
-	@Override
-	public String getDefaultEncoding() {
-		return parent.getDefaultEncoding();
-	}
-	
-	// simple delegates ------------------------------------------------------------------------------------------------
-	
-	@Override
-	public String getDefaultLineSeparator() {
-		return parent.getDefaultLineSeparator();
-	}
+  /**
+   * Instantiates a new Abstract benerator sub context.
+   *
+   * @param productName the product name
+   * @param parent      the parent
+   */
+  public AbstractBeneratorSubContext(String productName, BeneratorContext parent) {
+    this.currentProductName = productName;
+    this.parent = parent;
+    this.localContext = BeneratorFactory.getInstance().createGenerationContext();
+  }
 
-	@Override
-	public Locale getDefaultLocale() {
-		return parent.getDefaultLocale();
-	}
+  @Override
+  public BeneratorContext getParent() {
+    return parent;
+  }
 
-	@Override
-	public void remove(String key) {
-		parent.remove(key);
-	}
+  @Override
+  public String getDefaultEncoding() {
+    return parent.getDefaultEncoding();
+  }
 
-	@Override
-	public String getDefaultDataset() {
-		return parent.getDefaultDataset();
-	}
+  // simple delegates ------------------------------------------------------------------------------------------------
 
-	@Override
-	public long getDefaultPageSize() {
-		return parent.getDefaultPageSize();
-	}
+  @Override
+  public void setDefaultEncoding(String defaultEncoding) {
+    parent.setDefaultEncoding(defaultEncoding);
+  }
 
-	@Override
-	public String getDefaultScript() {
-		return parent.getDefaultScript();
-	}
+  @Override
+  public String getDefaultLineSeparator() {
+    return parent.getDefaultLineSeparator();
+  }
 
-	@Override
-	public boolean isDefaultNull() {
-		return parent.isDefaultNull();
-	}
+  @Override
+  public void setDefaultLineSeparator(String defaultLineSeparator) {
+    parent.setDefaultLineSeparator(defaultLineSeparator);
+  }
 
-	@Override
-	public char getDefaultSeparator() {
-		return parent.getDefaultSeparator();
-	}
+  @Override
+  public Locale getDefaultLocale() {
+    return parent.getDefaultLocale();
+  }
 
-	@Override
-	public String getDefaultErrorHandler() {
-		return parent.getDefaultErrorHandler();
-	}
+  @Override
+  public void setDefaultLocale(Locale defaultLocale) {
+    parent.setDefaultLocale(defaultLocale);
+  }
 
-	@Override
-	public String getContextUri() {
-		return parent.getContextUri();
-	}
+  @Override
+  public void remove(String key) {
+    parent.remove(key);
+  }
 
-	@Override
-	public boolean isValidate() {
-		return parent.isValidate();
-	}
+  @Override
+  public String getDefaultDataset() {
+    return parent.getDefaultDataset();
+  }
 
-	@Override
-	public Long getMaxCount() {
-		return parent.getMaxCount();
-	}
+  @Override
+  public void setDefaultDataset(String defaultDataset) {
+    parent.setDefaultDataset(defaultDataset);
+  }
 
-	@Override
-	public GeneratorFactory getGeneratorFactory() {
-		return parent.getGeneratorFactory();
-	}
+  @Override
+  public long getDefaultPageSize() {
+    return parent.getDefaultPageSize();
+  }
 
-	@Override
-	public void setGeneratorFactory(GeneratorFactory generatorFactory) {
-		parent.setGeneratorFactory(generatorFactory);
-	}
+  @Override
+  public void setDefaultPageSize(long defaultPageSize) {
+    parent.setDefaultPageSize(defaultPageSize);
+  }
 
-	@Override
-	public Object getGlobal(String name) {
-		return parent.getGlobal(name);
-	}
+  @Override
+  public String getDefaultScript() {
+    return parent.getDefaultScript();
+  }
 
-	@Override
-	public DefaultsProvider getDefaultsProvider() {
-		return parent.getDefaultsProvider();
-	}
+  @Override
+  public void setDefaultScript(String defaultScript) {
+    parent.setDefaultScript(defaultScript);
+  }
 
-	@Override
-	public void setDefaultsProvider(DefaultsProvider defaultsProvider) {
-		parent.setDefaultsProvider(defaultsProvider);
-	}
+  @Override
+  public boolean isDefaultNull() {
+    return parent.isDefaultNull();
+  }
 
-	@Override
-	public Class<?> forName(String className) {
-		return parent.forName(className);
-	}
+  @Override
+  public void setDefaultNull(boolean defaultNull) {
+    parent.setDefaultNull(defaultNull);
+  }
 
-	@Override
-	public ExecutorService getExecutorService() {
-		return parent.getExecutorService();
-	}
+  @Override
+  public char getDefaultSeparator() {
+    return parent.getDefaultSeparator();
+  }
 
-	@Override
-	public void setGlobal(String name, Object value) {
-		parent.setGlobal(name, value);
-	}
+  @Override
+  public void setDefaultSeparator(char defaultSeparator) {
+    parent.setDefaultSeparator(defaultSeparator);
+  }
 
-	@Override
-	public String resolveRelativeUri(String relativeUri) {
-		return parent.resolveRelativeUri(relativeUri);
-	}
+  @Override
+  public String getDefaultErrorHandler() {
+    return parent.getDefaultErrorHandler();
+  }
 
-	@Override
-	public void close() {
-		parent.close();
-	}
+  @Override
+  public void setDefaultErrorHandler(String defaultErrorHandler) {
+    parent.setDefaultErrorHandler(defaultErrorHandler);
+  }
 
-	@Override
-	public void importClass(String className) {
-		parent.importClass(className);
-	}
+  @Override
+  public String getContextUri() {
+    return parent.getContextUri();
+  }
 
-	@Override
-	public void importPackage(String packageName) {
-		parent.importPackage(packageName);
-	}
+  @Override
+  public void setContextUri(String contextUri) {
+    parent.setContextUri(contextUri);
+  }
 
-	@Override
-	public void importDefaults() {
-		parent.importDefaults();
-	}
+  @Override
+  public boolean isValidate() {
+    return parent.isValidate();
+  }
 
-	@Override
-	public void setDefaultEncoding(String defaultEncoding) {
-		parent.setDefaultEncoding(defaultEncoding);
-	}
+  @Override
+  public void setValidate(boolean validate) {
+    parent.setValidate(validate);
+  }
 
-	@Override
-	public void setDefaultLineSeparator(String defaultLineSeparator) {
-		parent.setDefaultLineSeparator(defaultLineSeparator);
-	}
+  @Override
+  public Long getMaxCount() {
+    return parent.getMaxCount();
+  }
 
-	@Override
-	public void setDefaultLocale(Locale defaultLocale) {
-		parent.setDefaultLocale(defaultLocale);
-	}
+  @Override
+  public void setMaxCount(Long maxCount) {
+    parent.setMaxCount(maxCount);
+  }
 
-	@Override
-	public void setDefaultDataset(String defaultDataset) {
-		parent.setDefaultDataset(defaultDataset);
-	}
+  @Override
+  public GeneratorFactory getGeneratorFactory() {
+    return parent.getGeneratorFactory();
+  }
 
-	@Override
-	public void setDefaultPageSize(long defaultPageSize) {
-		parent.setDefaultPageSize(defaultPageSize);
-	}
+  @Override
+  public void setGeneratorFactory(GeneratorFactory generatorFactory) {
+    parent.setGeneratorFactory(generatorFactory);
+  }
 
-	@Override
-	public void setDefaultScript(String defaultScript) {
-		parent.setDefaultScript(defaultScript);
-	}
+  @Override
+  public Object getGlobal(String name) {
+    return parent.getGlobal(name);
+  }
 
-	@Override
-	public void setDefaultNull(boolean defaultNull) {
-		parent.setDefaultNull(defaultNull);
-	}
+  @Override
+  public DefaultsProvider getDefaultsProvider() {
+    return parent.getDefaultsProvider();
+  }
 
-	@Override
-	public void setDefaultSeparator(char defaultSeparator) {
-		parent.setDefaultSeparator(defaultSeparator);
-	}
+  @Override
+  public void setDefaultsProvider(DefaultsProvider defaultsProvider) {
+    parent.setDefaultsProvider(defaultsProvider);
+  }
 
-	@Override
-	public ComponentDescriptor getDefaultComponentConfig(String name) {
-		return parent.getDefaultComponentConfig(name);
-	}
+  @Override
+  public Class<?> forName(String className) {
+    return parent.forName(className);
+  }
 
-	@Override
-	public void setDefaultComponentConfig(ComponentDescriptor component) {
-		parent.setDefaultComponentConfig(component);
-	}
+  @Override
+  public ExecutorService getExecutorService() {
+    return parent.getExecutorService();
+  }
 
-	@Override
-	public void setDefaultErrorHandler(String defaultErrorHandler) {
-		parent.setDefaultErrorHandler(defaultErrorHandler);
-	}
+  @Override
+  public void setGlobal(String name, Object value) {
+    parent.setGlobal(name, value);
+  }
 
-	@Override
-	public void setContextUri(String contextUri) {
-		parent.setContextUri(contextUri);
-	}
+  @Override
+  public String resolveRelativeUri(String relativeUri) {
+    return parent.resolveRelativeUri(relativeUri);
+  }
 
-	@Override
-	public void setValidate(boolean validate) {
-		parent.setValidate(validate);
-	}
+  @Override
+  public void close() {
+    parent.close();
+  }
 
-	@Override
-	public void setMaxCount(Long maxCount) {
-		parent.setMaxCount(maxCount);
-	}
+  @Override
+  public void importClass(String className) {
+    parent.importClass(className);
+  }
 
-	@Override
-	public boolean isDefaultOneToOne() {
-		return parent.isDefaultOneToOne();
-	}
+  @Override
+  public void importPackage(String packageName) {
+    parent.importPackage(packageName);
+  }
 
-	@Override
-	public void setDefaultOneToOne(boolean defaultOneToOne) {
-		parent.setDefaultOneToOne(defaultOneToOne);
-	}
+  @Override
+  public void importDefaults() {
+    parent.importDefaults();
+  }
 
-	@Override
-	public boolean isAcceptUnknownSimpleTypes() {
-		return parent.isAcceptUnknownSimpleTypes();
-	}
+  @Override
+  public ComponentDescriptor getDefaultComponentConfig(String name) {
+    return parent.getDefaultComponentConfig(name);
+  }
 
-	@Override
-	public void setAcceptUnknownSimpleTypes(boolean acceptUnknownSimpleTypes) {
-		parent.setAcceptUnknownSimpleTypes(acceptUnknownSimpleTypes);
-	}
+  @Override
+  public void setDefaultComponentConfig(ComponentDescriptor component) {
+    parent.setDefaultComponentConfig(component);
+  }
 
-	@Override
-	public boolean isDefaultImports() {
-		return parent.isDefaultImports();
-	}
+  @Override
+  public boolean isDefaultOneToOne() {
+    return parent.isDefaultOneToOne();
+  }
 
-	@Override
-	public void setDefaultImports(boolean defaultImports) {
-		parent.setDefaultImports(defaultImports);
-	}
+  @Override
+  public void setDefaultOneToOne(boolean defaultOneToOne) {
+    parent.setDefaultOneToOne(defaultOneToOne);
+  }
 
-	@Override
-	public DataModel getDataModel() {
-		return parent.getDataModel();
-	}
+  @Override
+  public boolean isAcceptUnknownSimpleTypes() {
+    return parent.isAcceptUnknownSimpleTypes();
+  }
 
-	@Override
-	public void setDataModel(DataModel dataModel) {
-		parent.setDataModel(dataModel);
-	}
+  @Override
+  public void setAcceptUnknownSimpleTypes(boolean acceptUnknownSimpleTypes) {
+    parent.setAcceptUnknownSimpleTypes(acceptUnknownSimpleTypes);
+  }
 
-	@Override
-	public DescriptorProvider getLocalDescriptorProvider() {
-		return parent.getLocalDescriptorProvider();
-	}
-	
-	@Override
-	public void addLocalType(TypeDescriptor type) {
-		parent.addLocalType(type);
-	}
-	
-	
-	
-	// Functional interface --------------------------------------------------------------------------------------------
+  @Override
+  public boolean isDefaultImports() {
+    return parent.isDefaultImports();
+  }
 
-	@Override
-	public boolean hasProductNameInScope(String currentProductName) {
-		return (this.currentProductName != null && this.currentProductName.equals(currentProductName))
-			|| (parent != null && parent.hasProductNameInScope(currentProductName));
-	}
-	
-	@Override
-	public boolean contains(String key) {
-		return key != null && (key.equalsIgnoreCase(currentProductName) || "this".equalsIgnoreCase(key) || 
-				localContext.contains(key) || parent.contains(key));
-	}
+  @Override
+  public void setDefaultImports(boolean defaultImports) {
+    parent.setDefaultImports(defaultImports);
+  }
 
-	@Override
-	public Object get(String key) {
-		if (key == null)
-			return null;
-		else if (localContext.contains(key))
-			return localContext.get(key);
-		else if (key.equalsIgnoreCase(currentProductName) || "this".equalsIgnoreCase(key))
-			return getCurrentProduct().unwrap();
-		else
-			return parent.get(key);
-	}
-	
-	@Override
-	public void set(String key, Object value) {
-		localContext.set(key, value);
-	}
-	
-	@Override
-	public Set<String> keySet() {
-        Set<String> keySet = new HashSet<>(parent.keySet());
-        keySet.addAll(localContext.keySet());
-        return keySet;
-	}
+  @Override
+  public DataModel getDataModel() {
+    return parent.getDataModel();
+  }
 
-	@Override
-	public Set<Entry<String, Object>> entrySet() {
-		Set<Entry<String, Object>> entrySet = new HashSet<>(parent.entrySet());
-		entrySet.addAll(localContext.entrySet());
-		return entrySet;
-	}
+  @Override
+  public void setDataModel(DataModel dataModel) {
+    parent.setDataModel(dataModel);
+  }
 
-	
-	
-	// java.lang.Object overrides --------------------------------------------------------------------------------------
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "(" + currentProductName + ")";
-	}
-	
+  @Override
+  public DescriptorProvider getLocalDescriptorProvider() {
+    return parent.getLocalDescriptorProvider();
+  }
+
+  @Override
+  public void addLocalType(TypeDescriptor type) {
+    parent.addLocalType(type);
+  }
+
+
+  // Functional interface --------------------------------------------------------------------------------------------
+
+  @Override
+  public boolean hasProductNameInScope(String currentProductName) {
+    return (this.currentProductName != null && this.currentProductName.equals(currentProductName))
+        || (parent != null && parent.hasProductNameInScope(currentProductName));
+  }
+
+  @Override
+  public boolean contains(String key) {
+    return key != null && (key.equalsIgnoreCase(currentProductName) || "this".equalsIgnoreCase(key) ||
+        localContext.contains(key) || parent.contains(key));
+  }
+
+  @Override
+  public Object get(String key) {
+    if (key == null) {
+      return null;
+    } else if (localContext.contains(key)) {
+      return localContext.get(key);
+    } else if (key.equalsIgnoreCase(currentProductName) || "this".equalsIgnoreCase(key)) {
+      return getCurrentProduct().unwrap();
+    } else {
+      return parent.get(key);
+    }
+  }
+
+  @Override
+  public void set(String key, Object value) {
+    localContext.set(key, value);
+  }
+
+  @Override
+  public Set<String> keySet() {
+    Set<String> keySet = new HashSet<>(parent.keySet());
+    keySet.addAll(localContext.keySet());
+    return keySet;
+  }
+
+  @Override
+  public Set<Entry<String, Object>> entrySet() {
+    Set<Entry<String, Object>> entrySet = new HashSet<>(parent.entrySet());
+    entrySet.addAll(localContext.entrySet());
+    return entrySet;
+  }
+
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "(" + currentProductName + ")";
+  }
+
 }

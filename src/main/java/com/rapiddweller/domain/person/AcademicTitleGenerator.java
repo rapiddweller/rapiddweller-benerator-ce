@@ -23,6 +23,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.csv.LocalCSVGenerator;
@@ -39,13 +40,21 @@ import java.util.Locale;
  */
 public class AcademicTitleGenerator extends LocalCSVGenerator<String> {
 
-    public AcademicTitleGenerator() {
-        this(Locale.getDefault());
-    }
+  /**
+   * Instantiates a new Academic title generator.
+   */
+  public AcademicTitleGenerator() {
+    this(Locale.getDefault());
+  }
 
-    public AcademicTitleGenerator(Locale locale) {
-        super(String.class, "/com/rapiddweller/domain/person/title", locale,
-                ".csv", Encodings.UTF_8);
-    }
+  /**
+   * Instantiates a new Academic title generator.
+   *
+   * @param locale the locale
+   */
+  public AcademicTitleGenerator(Locale locale) {
+    super(String.class, "/com/rapiddweller/domain/person/title", locale,
+        ".csv", Encodings.UTF_8);
+  }
 
 }

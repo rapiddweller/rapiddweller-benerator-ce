@@ -1,6 +1,7 @@
-# Scripting 
+# Scripting
 
-Benerator supports arbitrary scripting languages that are supported by Java and has an own scripting language DatabeneScript which is designed specifically for the purpose of data generation.
+Benerator supports arbitrary scripting languages that are supported by Java and has an own scripting language DatabeneScript which is designed
+specifically for the purpose of data generation.
 
 The invocation syntax is as described for SQL invocation and inlining: You can include the script inline like this:
 
@@ -24,7 +25,8 @@ print('DB-URL' + db.getUrl());
 </execute>
 ```
 
-As you see with the db variable, all objects of the benerator context are made provided to the script. In this case, it is a DBSystem bean, which is used to store Entities created by the script. So, you can import objects of arbitrary Java classes and use them in your favorite scripting language.
+As you see with the db variable, all objects of the benerator context are made provided to the script. In this case, it is a DBSystem bean, which is
+used to store Entities created by the script. So, you can import objects of arbitrary Java classes and use them in your favorite scripting language.
 
 Alternatively to inlining script text, you can put it in a script file and invoke this:
 
@@ -38,35 +40,38 @@ With rapiddweller Benerator, GraalVM[js] implementation is shipped. For all othe
 
 The following attributes are available for the `<execute>` element:
 
-*   uri: the URI of the script file to execute
+* uri: the URI of the script file to execute
 
-*   encoding: the encoding of the script file
+* encoding: the encoding of the script file
 
-*   type: Type (language) of the script
+* type: Type (language) of the script
 
-*   target: a target to execute the script on, typically a database for a SQL script
+* target: a target to execute the script on, typically a database for a SQL script
 
-*   onError: How to handle errors. One of (ignore, trace, debug, info, warn, error, fatal. fatal causes benerator to cancel execution in case of an error.
+* onError: How to handle errors. One of (ignore, trace, debug, info, warn, error, fatal. fatal causes benerator to cancel execution in case of an
+  error.
 
-*   optimize: boolean flag that tells benerator whether it may optimize script execution for the sake of performance. E.g. For an Oracle SQL script this would leave out comments for faster table creation.
+* optimize: boolean flag that tells benerator whether it may optimize script execution for the sake of performance. E.g. For an Oracle SQL script this
+  would leave out comments for faster table creation.
 
 benerator supports the following script types:
 
-*   shell: system shell invocations, e.g. for invoking batch files.
+* shell: system shell invocations, e.g. for invoking batch files.
 
-*   sql: SQL, it requires specification of the database in a target property.
+* sql: SQL, it requires specification of the database in a target property.
 
-*   jar: java library files with a configured main-class
+* jar: java library files with a configured main-class
 
-*   ben: DatabeneScript, which is the default script language
+* ben: DatabeneScript, which is the default script language
 
-*   ftl: FreeMarker
+* ftl: FreeMarker
 
-*   GraalVM: Any language that has been plugged into the local Java environment, e.g. JavaScript, Python, Ruby, Groovy and many more.
+* GraalVM: Any language that has been plugged into the local Java environment, e.g. JavaScript, Python, Ruby, Groovy and many more.
 
-## Shell scripting 
+## Shell scripting
 
-You can call shell files or issue shell commands. When inlining shell commands, script expressions will be resolved. So you could, for example, use global properties for setting parameters of a sqlplus call:
+You can call shell files or issue shell commands. When inlining shell commands, script expressions will be resolved. So you could, for example, use
+global properties for setting parameters of a sqlplus call:
 
 ```xml
 <execute type="shell">{ftl:sqlplus ${dbUser}/${dbPassword}@${database} @create_tables.sql}</execute>

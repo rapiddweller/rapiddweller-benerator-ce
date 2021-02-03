@@ -38,54 +38,102 @@ import com.rapiddweller.common.operation.FirstArgSelector;
  */
 public class ReferenceDescriptor extends ComponentDescriptor {
 
-    private static final String TARGET_TYPE = "targetType";
-    private static final String TARGET_COMPONENT = "targetComponent";
+  private static final String TARGET_TYPE = "targetType";
+  private static final String TARGET_COMPONENT = "targetComponent";
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public ReferenceDescriptor(String name, DescriptorProvider provider,
-                               String typeName) {
-        this(name, provider, typeName, null, null);
-    }
+  /**
+   * Instantiates a new Reference descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   * @param typeName the type name
+   */
+  public ReferenceDescriptor(String name, DescriptorProvider provider,
+                             String typeName) {
+    this(name, provider, typeName, null, null);
+  }
 
-    public ReferenceDescriptor(String name, DescriptorProvider provider,
-                               String typeName, String targetType,
-                               String targetComponent) {
-        // TODO v0.7.2 test non-PK reference
-        super(name, provider, typeName);
-        addConstraint(TARGET_TYPE, String.class, new FirstArgSelector<>());
-        addConstraint(TARGET_COMPONENT, String.class, new FirstArgSelector<>());
-        setTargetType(targetType);
-    }
+  /**
+   * Instantiates a new Reference descriptor.
+   *
+   * @param name            the name
+   * @param provider        the provider
+   * @param typeName        the type name
+   * @param targetType      the target type
+   * @param targetComponent the target component
+   */
+  public ReferenceDescriptor(String name, DescriptorProvider provider,
+                             String typeName, String targetType,
+                             String targetComponent) {
+    // TODO v0.7.2 test non-PK reference
+    super(name, provider, typeName);
+    addConstraint(TARGET_TYPE, String.class, new FirstArgSelector<>());
+    addConstraint(TARGET_COMPONENT, String.class, new FirstArgSelector<>());
+    setTargetType(targetType);
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    public String getTargetType() {
-        return (String) getDetailValue(TARGET_TYPE);
-    }
+  /**
+   * Gets target type.
+   *
+   * @return the target type
+   */
+  public String getTargetType() {
+    return (String) getDetailValue(TARGET_TYPE);
+  }
 
-    public void setTargetType(String targetType) {
-        setDetailValue(TARGET_TYPE, targetType);
-    }
+  /**
+   * Sets target type.
+   *
+   * @param targetType the target type
+   */
+  public void setTargetType(String targetType) {
+    setDetailValue(TARGET_TYPE, targetType);
+  }
 
-    public String getTargetComponent() {
-        return (String) getDetailValue(TARGET_COMPONENT);
-    }
+  /**
+   * Gets target component.
+   *
+   * @return the target component
+   */
+  public String getTargetComponent() {
+    return (String) getDetailValue(TARGET_COMPONENT);
+  }
 
-    public void setTargetComponent(String targetComponent) {
-        setDetailValue(TARGET_COMPONENT, targetComponent);
-    }
+  /**
+   * Sets target component.
+   *
+   * @param targetComponent the target component
+   */
+  public void setTargetComponent(String targetComponent) {
+    setDetailValue(TARGET_COMPONENT, targetComponent);
+  }
 
-    // convenience-with-methods for construction -----------------------------------------------------------------------
+  // convenience-with-methods for construction -----------------------------------------------------------------------
 
-    public ReferenceDescriptor withTargetType(String targetType) {
-        setTargetType(targetType);
-        return this;
-    }
+  /**
+   * With target type reference descriptor.
+   *
+   * @param targetType the target type
+   * @return the reference descriptor
+   */
+  public ReferenceDescriptor withTargetType(String targetType) {
+    setTargetType(targetType);
+    return this;
+  }
 
-    public ReferenceDescriptor withTargetComponent(String targetComponent) {
-        setTargetComponent(targetComponent);
-        return this;
-    }
+  /**
+   * With target component reference descriptor.
+   *
+   * @param targetComponent the target component
+   * @return the reference descriptor
+   */
+  public ReferenceDescriptor withTargetComponent(String targetComponent) {
+    setTargetComponent(targetComponent);
+    return this;
+  }
 
 }

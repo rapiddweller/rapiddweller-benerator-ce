@@ -26,10 +26,6 @@
 
 package com.rapiddweller.benerator.factory;
 
-import java.util.Date;
-import java.util.Set;
-import java.util.TreeSet;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
@@ -38,76 +34,84 @@ import com.rapiddweller.benerator.wrapper.GeneratorChain;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.model.data.Uniqueness;
 
+import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
+
 /**
- * {@link GeneratorFactory} implementation which creates data sets 
+ * {@link GeneratorFactory} implementation which creates data sets
  * that cover the full range of available data and combinations.<br/><br/>
  * Created: 04.07.2011 09:39:08
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class CoverageGeneratorFactory extends EquivalenceGeneratorFactory {
-	
-	private final SerialGeneratorFactory serialFactory;
-	
-	public CoverageGeneratorFactory() {
-		this.serialFactory = new SerialGeneratorFactory();
-	}
-	
-	// generator factory method ----------------------------------------------------------------------------------------
-	
-    @Override
-	public Generator<Date> createDateGenerator(
-            Date min, Date max, long granularity, Distribution distribution) {
-    	return new GeneratorChain<>(Date.class, true,
-				super.createDateGenerator(min, max, granularity, distribution),
-				serialFactory.createDateGenerator(min, max, granularity, distribution)
-		);
-    }
 
-    @Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(
-            Class<T> numberType, T min, Boolean minInclusive, T max, Boolean maxInclusive, 
-            T granularity, Distribution distribution, Uniqueness uniqueness) {
-    	return WrapperFactory.asNonNullGenerator(new GeneratorChain<>(numberType, true,
-				super.createNumberGenerator(numberType, min, minInclusive, max, maxInclusive,
-						granularity, distribution, uniqueness),
-				serialFactory.createNumberGenerator(numberType, min, minInclusive, max, maxInclusive,
-						granularity, distribution, uniqueness)
-		));
-    }
-    
-	@Override
-	public NonNullGenerator<String> createStringGenerator(Set<Character> chars,
-			Integer minLength, Integer maxLength, int lengthGranularity, Distribution lengthDistribution, 
-			Uniqueness uniqueness) {
-    	NonNullGenerator<String> eqGenerator = super.createStringGenerator(
-    			chars, minLength, maxLength, lengthGranularity, lengthDistribution, uniqueness);
-		NonNullGenerator<String> serialGenerator = serialFactory.createStringGenerator(
-				chars, minLength, maxLength, lengthGranularity, lengthDistribution, uniqueness);
-		return WrapperFactory.asNonNullGenerator(new GeneratorChain<>(
-				String.class, true, eqGenerator, serialGenerator));
-	}
-	
-	
-	
-	// defaults --------------------------------------------------------------------------------------------------------
-	
-    @Override
-	public Set<Character> defaultSubSet(Set<Character> characters) {
-    	return characters;
-    }
+  private final SerialGeneratorFactory serialFactory;
 
-	@Override
-	protected Set<Integer> defaultCounts(int minParts, int maxParts, int partsGranularity) {
-		TreeSet<Integer> counts = new TreeSet<>();
-		for (int i = minParts; i <= maxParts; i += partsGranularity)
-			counts.add(i);
-		return counts;
-	}
+  /**
+   * Instantiates a new Coverage generator factory.
+   */
+  public CoverageGeneratorFactory() {
+    this.serialFactory = new SerialGeneratorFactory();
+  }
 
-	@Override
-	public Distribution defaultDistribution(Uniqueness uniqueness) {
-    	return SequenceManager.STEP_SEQUENCE;
-	}
+  // generator factory method ----------------------------------------------------------------------------------------
+
+  @Override
+  public Generator<Date> createDateGenerator(
+      Date min, Date max, long granularity, Distribution distribution) {
+    return new GeneratorChain<>(Date.class, true,
+        super.createDateGenerator(min, max, granularity, distribution),
+        serialFactory.createDateGenerator(min, max, granularity, distribution)
+    );
+  }
+
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(
+      Class<T> numberType, T min, Boolean minInclusive, T max, Boolean maxInclusive,
+      T granularity, Distribution distribution, Uniqueness uniqueness) {
+    return WrapperFactory.asNonNullGenerator(new GeneratorChain<>(numberType, true,
+        super.createNumberGenerator(numberType, min, minInclusive, max, maxInclusive,
+            granularity, distribution, uniqueness),
+        serialFactory.createNumberGenerator(numberType, min, minInclusive, max, maxInclusive,
+            granularity, distribution, uniqueness)
+    ));
+  }
+
+  @Override
+  public NonNullGenerator<String> createStringGenerator(Set<Character> chars,
+                                                        Integer minLength, Integer maxLength, int lengthGranularity, Distribution lengthDistribution,
+                                                        Uniqueness uniqueness) {
+    NonNullGenerator<String> eqGenerator = super.createStringGenerator(
+        chars, minLength, maxLength, lengthGranularity, lengthDistribution, uniqueness);
+    NonNullGenerator<String> serialGenerator = serialFactory.createStringGenerator(
+        chars, minLength, maxLength, lengthGranularity, lengthDistribution, uniqueness);
+    return WrapperFactory.asNonNullGenerator(new GeneratorChain<>(
+        String.class, true, eqGenerator, serialGenerator));
+  }
+
+
+  // defaults --------------------------------------------------------------------------------------------------------
+
+  @Override
+  public Set<Character> defaultSubSet(Set<Character> characters) {
+    return characters;
+  }
+
+  @Override
+  protected Set<Integer> defaultCounts(int minParts, int maxParts, int partsGranularity) {
+    TreeSet<Integer> counts = new TreeSet<>();
+    for (int i = minParts; i <= maxParts; i += partsGranularity) {
+      counts.add(i);
+    }
+    return counts;
+  }
+
+  @Override
+  public Distribution defaultDistribution(Uniqueness uniqueness) {
+    return SequenceManager.STEP_SEQUENCE;
+  }
 
 }

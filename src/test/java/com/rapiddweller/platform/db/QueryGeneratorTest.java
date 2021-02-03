@@ -26,8 +26,6 @@
 
 package com.rapiddweller.platform.db;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.common.IOUtil;
@@ -38,6 +36,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+
 /**
  * Tests the {@link QueryGenerator}.<br/><br/>
  * Created: 09.08.2010 13:05:02
@@ -47,51 +49,69 @@ import org.junit.Test;
  */
 public class QueryGeneratorTest extends GeneratorTest {
 
-    static DefaultDBSystem db;
+  /**
+   * The Db.
+   */
+  static DefaultDBSystem db;
 
-    @BeforeClass
-    public static void setupDB() {
-        db = new DefaultDBSystem("db", HSQLUtil.getInMemoryURL(QueryGeneratorTest.class.getSimpleName()), HSQLUtil.DRIVER, "sa", null, new DataModel());
-        db.execute("create table TT ( id int, value int )");
-        db.execute("insert into TT (id, value) values (1, 1000)");
+  /**
+   * Sets db.
+   */
+  @BeforeClass
+  public static void setupDB() {
+    db = new DefaultDBSystem("db", HSQLUtil.getInMemoryURL(QueryGeneratorTest.class.getSimpleName()), HSQLUtil.DRIVER, "sa", null, new DataModel());
+    db.execute("create table TT ( id int, value int )");
+    db.execute("insert into TT (id, value) values (1, 1000)");
+  }
+
+  /**
+   * Sets table.
+   */
+  @Before
+  public void setupTable() {
+    db.execute("update TT set value = 1000 where id = 1");
+  }
+
+  /**
+   * Close db.
+   */
+  @AfterClass
+  public static void closeDB() {
+    db.execute("drop table TT");
+    IOUtil.close(db);
+  }
+
+  /**
+   * Test constructor.
+   */
+  @Test
+  public void testConstructor() {
+    QueryGenerator<Object> actualQueryGenerator = new QueryGenerator<>();
+    assertEquals("QueryGenerator[null]", actualQueryGenerator.toString());
+    Class<?> expectedGeneratedType = Object.class;
+    assertSame(expectedGeneratedType, actualQueryGenerator.getGeneratedType());
+    assertNull(actualQueryGenerator.getSource());
+  }
+
+  /**
+   * Test simple.
+   */
+  @Test
+  public void testSimple() {
+    QueryGenerator<Integer> generator = null;
+    try {
+      generator = new QueryGenerator<>("select value from TT", db, true);
+      generator.init(context);
+      assertEquals(1000, GeneratorUtil.generateNonNull(generator).intValue());
+      assertUnavailable(generator);
+
+      db.execute("update TT set value = 1001 where id = 1");
+      generator.reset();
+      assertEquals(1001, GeneratorUtil.generateNonNull(generator).intValue());
+      assertUnavailable(generator);
+    } finally {
+      IOUtil.close(generator);
     }
-
-    @Before
-    public void setupTable() {
-        db.execute("update TT set value = 1000 where id = 1");
-    }
-
-    @AfterClass
-    public static void closeDB() {
-        db.execute("drop table TT");
-        IOUtil.close(db);
-    }
-
-    @Test
-    public void testConstructor() {
-        QueryGenerator<Object> actualQueryGenerator = new QueryGenerator<>();
-        assertEquals("QueryGenerator[null]", actualQueryGenerator.toString());
-        Class<?> expectedGeneratedType = Object.class;
-        assertSame(expectedGeneratedType, actualQueryGenerator.getGeneratedType());
-        assertNull(actualQueryGenerator.getSource());
-    }
-
-    @Test
-    public void testSimple() {
-        QueryGenerator<Integer> generator = null;
-        try {
-            generator = new QueryGenerator<>("select value from TT", db, true);
-            generator.init(context);
-            assertEquals(1000, GeneratorUtil.generateNonNull(generator).intValue());
-            assertUnavailable(generator);
-
-            db.execute("update TT set value = 1001 where id = 1");
-            generator.reset();
-            assertEquals(1001, GeneratorUtil.generateNonNull(generator).intValue());
-            assertUnavailable(generator);
-        } finally {
-            IOUtil.close(generator);
-        }
-    }
+  }
 
 }

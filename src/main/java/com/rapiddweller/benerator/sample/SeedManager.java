@@ -26,111 +26,166 @@
 
 package com.rapiddweller.benerator.sample;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Counts frequencies of atoms and provides random atoms with the same frequency.<br/>
  * <br/>
  * Created at 12.07.2009 07:51:04
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class SeedManager<E> {
-	
-	private final Map<E, SeedManager<E>> successors;
-	private int weight;
-	private final int depth;
-	private boolean initialized;
-	private AttachedWeightSampleGenerator<E> helper;
-	private final Class<E> generatedType;
-	private final WrapperProvider<E> wrapperProvider;
-	
-	// constructor and properties --------------------------------------------------------------------------------------
-	
-	public SeedManager(Class<E> generatedType, int depth) {
-		this.generatedType = generatedType;
-		this.weight = 0;
-		this.depth = depth;
-	    this.successors = new HashMap<>();
-	    this.wrapperProvider = new WrapperProvider<>();
-    }
 
-    public int getDepth() {
-	    return depth;
-    }
+  private final Map<E, SeedManager<E>> successors;
+  private int weight;
+  private final int depth;
+  private boolean initialized;
+  private AttachedWeightSampleGenerator<E> helper;
+  private final Class<E> generatedType;
+  private final WrapperProvider<E> wrapperProvider;
 
-    public double getWeight() {
-	    return weight;
-    }
+  // constructor and properties --------------------------------------------------------------------------------------
 
-    // functional interface --------------------------------------------------------------------------------------------
-    
-    public Class<E> getGeneratedType() {
-    	return generatedType;
-    }
-    
-	@SafeVarargs
-	public final void addSequence(int startIndex, E... sequence) {
-		weight++;
-		if (depth > 0)
-			getSuccessor(sequence[startIndex]).addSequence(startIndex + 1, sequence);
-	}
-	
-    public void init() {
-    	if (initialized)
-    		throw new IllegalGeneratorStateException("Already initialized: " + this);
-	    if (getWeight() == 0)
-	    	throw new InvalidGeneratorSetupException(getClass().getSimpleName() + " is empty");
-    	helper = new AttachedWeightSampleGenerator<>(generatedType);
-    	for (Map.Entry<E, SeedManager<E>> entry : successors.entrySet())
-    		helper.addSample(entry.getKey(), entry.getValue().getWeight());
-	    helper.init(null);
-    }
-    
-	public E randomAtom() {
-		if (!initialized)
-			init();
-		return helper.generate(getWrapper()).unwrap();
-	}
+  /**
+   * Instantiates a new Seed manager.
+   *
+   * @param generatedType the generated type
+   * @param depth         the depth
+   */
+  public SeedManager(Class<E> generatedType, int depth) {
+    this.generatedType = generatedType;
+    this.weight = 0;
+    this.depth = depth;
+    this.successors = new HashMap<>();
+    this.wrapperProvider = new WrapperProvider<>();
+  }
 
-	public SeedManager<E> getSuccessor(E atom) {
-	    SeedManager<E> result = successors.get(atom);
-	    if (result == null) {
-	    	result = new SeedManager<>(generatedType, depth - 1);
-	    	successors.put(atom, result);
-	    }
-	    return result;
-    }
+  /**
+   * Gets depth.
+   *
+   * @return the depth
+   */
+  public int getDepth() {
+    return depth;
+  }
 
-    public void printState() {
-    	printState("");
-    }
-    
-    public void printState(String indent) {
-    	for (Map.Entry<E, SeedManager<E>> entry : successors.entrySet()) {
-	        SeedManager<E> successor = entry.getValue();
-	        System.out.println(indent + entry.getKey() + '[' + successor.getWeight() + ']');
-	        successor.printState("  " + indent);
-        }
-    }
+  /**
+   * Gets weight.
+   *
+   * @return the weight
+   */
+  public double getWeight() {
+    return weight;
+  }
 
-    private ProductWrapper<E> getWrapper() {
-		return wrapperProvider.get();
-	}
+  // functional interface --------------------------------------------------------------------------------------------
 
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-    
-    @Override
-    public String toString() {
-        return BeanUtil.toString(this, true);
+  /**
+   * Gets generated type.
+   *
+   * @return the generated type
+   */
+  public Class<E> getGeneratedType() {
+    return generatedType;
+  }
+
+  /**
+   * Add sequence.
+   *
+   * @param startIndex the start index
+   * @param sequence   the sequence
+   */
+  @SafeVarargs
+  public final void addSequence(int startIndex, E... sequence) {
+    weight++;
+    if (depth > 0) {
+      getSuccessor(sequence[startIndex]).addSequence(startIndex + 1, sequence);
     }
+  }
+
+  /**
+   * Init.
+   */
+  public void init() {
+    if (initialized) {
+      throw new IllegalGeneratorStateException("Already initialized: " + this);
+    }
+    if (getWeight() == 0) {
+      throw new InvalidGeneratorSetupException(getClass().getSimpleName() + " is empty");
+    }
+    helper = new AttachedWeightSampleGenerator<>(generatedType);
+    for (Map.Entry<E, SeedManager<E>> entry : successors.entrySet()) {
+      helper.addSample(entry.getKey(), entry.getValue().getWeight());
+    }
+    helper.init(null);
+  }
+
+  /**
+   * Random atom e.
+   *
+   * @return the e
+   */
+  public E randomAtom() {
+    if (!initialized) {
+      init();
+    }
+    return helper.generate(getWrapper()).unwrap();
+  }
+
+  /**
+   * Gets successor.
+   *
+   * @param atom the atom
+   * @return the successor
+   */
+  public SeedManager<E> getSuccessor(E atom) {
+    SeedManager<E> result = successors.get(atom);
+    if (result == null) {
+      result = new SeedManager<>(generatedType, depth - 1);
+      successors.put(atom, result);
+    }
+    return result;
+  }
+
+  /**
+   * Print state.
+   */
+  public void printState() {
+    printState("");
+  }
+
+  /**
+   * Print state.
+   *
+   * @param indent the indent
+   */
+  public void printState(String indent) {
+    for (Map.Entry<E, SeedManager<E>> entry : successors.entrySet()) {
+      SeedManager<E> successor = entry.getValue();
+      System.out.println(indent + entry.getKey() + '[' + successor.getWeight() + ']');
+      successor.printState("  " + indent);
+    }
+  }
+
+  private ProductWrapper<E> getWrapper() {
+    return wrapperProvider.get();
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return BeanUtil.toString(this, true);
+  }
 
 }

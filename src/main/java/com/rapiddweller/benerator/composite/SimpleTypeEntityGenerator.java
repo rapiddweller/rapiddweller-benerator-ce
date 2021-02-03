@@ -35,35 +35,43 @@ import com.rapiddweller.model.data.Entity;
 /**
  * Generates Entities that wrap a content of simple type.<br/><br/>
  * Created at 11.05.2008 23:37:42
- * @since 0.5.4
+ *
  * @author Volker Bergmann
+ * @since 0.5.4
  */
 public class SimpleTypeEntityGenerator extends GeneratorWrapper<Object, Entity> {
-	
-	private final ComplexTypeDescriptor complexType;
 
-	@SuppressWarnings("unchecked")
-    public SimpleTypeEntityGenerator(Generator<?> source, ComplexTypeDescriptor complexType) {
-		super((Generator<Object>) source);
-		this.complexType = complexType;
-	}
+  private final ComplexTypeDescriptor complexType;
 
-	// Generator interface implementation ------------------------------------------------------------------------------
+  /**
+   * Instantiates a new Simple type entity generator.
+   *
+   * @param source      the source
+   * @param complexType the complex type
+   */
+  @SuppressWarnings("unchecked")
+  public SimpleTypeEntityGenerator(Generator<?> source, ComplexTypeDescriptor complexType) {
+    super((Generator<Object>) source);
+    this.complexType = complexType;
+  }
 
-	@Override
-	public Class<Entity> getGeneratedType() {
-		return Entity.class;
-	}
-	
-	@Override
-	public ProductWrapper<Entity> generate(ProductWrapper<Entity> wrapper) {
-		ProductWrapper<Object> sourceWrapper = generateFromSource();
-		if (sourceWrapper == null)
-			return null;
-		Object content = sourceWrapper.unwrap();
-		Entity entity = new Entity(complexType);
-		entity.setComponent(ComplexTypeDescriptor.__SIMPLE_CONTENT, content);
-		return wrapper.wrap(entity);
-	}
+  // Generator interface implementation ------------------------------------------------------------------------------
+
+  @Override
+  public Class<Entity> getGeneratedType() {
+    return Entity.class;
+  }
+
+  @Override
+  public ProductWrapper<Entity> generate(ProductWrapper<Entity> wrapper) {
+    ProductWrapper<Object> sourceWrapper = generateFromSource();
+    if (sourceWrapper == null) {
+      return null;
+    }
+    Object content = sourceWrapper.unwrap();
+    Entity entity = new Entity(complexType);
+    entity.setComponent(ComplexTypeDescriptor.__SIMPLE_CONTENT, content);
+    return wrapper.wrap(entity);
+  }
 
 }

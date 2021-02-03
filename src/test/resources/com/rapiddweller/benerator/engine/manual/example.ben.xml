@@ -24,11 +24,11 @@
 
     <generate type="test" count="10" consumer="ConsoleExporter">
         <id name="identifier" type="long"/>
-        <id name="identifier2" type="long" generator="new IncrementalIdGenerator(100)" />
+        <id name="identifier2" type="long" generator="new IncrementalIdGenerator(100)"/>
         <while test="this.identifier == 5">
             <echo>add 10 to this.identifier</echo>
             <execute type="ben">this.identifier = this.identifier + 10</execute>
-            <wait duration="1000" />
+            <wait duration="1000"/>
         </while>
     </generate>
 </setup>

@@ -26,104 +26,161 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 import com.rapiddweller.common.ConfigurationError;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * Generates long values by continuously incrementing a base (min) value.
+ *
  * @author Volker Bergmann
  * @since 0.3.04
  */
 public class IncrementGenerator extends ThreadSafeNonNullGenerator<Long> {
 
-    private static final long DEFAULT_MIN = 1;
-    private static final long DEFAULT_MAX = Long.MAX_VALUE - 1;
-    
-    // attributes ------------------------------------------------------------------------------------------------------
-    
-    private long min;
-    private long max;
-    private long increment;
+  private static final long DEFAULT_MIN = 1;
+  private static final long DEFAULT_MAX = Long.MAX_VALUE - 1;
 
-    @SuppressWarnings("CanBeFinal")
-    volatile AtomicLong cursor = new AtomicLong();
-    
-    // constructors ----------------------------------------------------------------------------------------------------
-    
-    public IncrementGenerator() {
-        this(DEFAULT_MIN);
-    }
-    
-    public IncrementGenerator(long min) {
-        this(min, 1);
-    }
-    
-    public IncrementGenerator(long min, long increment) {
-        this(min, increment, DEFAULT_MAX);
-    }
-    
-    public IncrementGenerator(long min, long increment, long max) {
-        setMin(min);
-        setIncrement(increment);
-        setMax(max);
-    }
-    
-    // properties ------------------------------------------------------------------------------------------------------
+  // attributes ------------------------------------------------------------------------------------------------------
 
-    public Long getMin() {
-        return min;
-    }
-    
-    public void setMin(Long min) {
-        this.min = min;
-        this.cursor.set(min);
-    }
-    
-    public long getMax() {
-        return max;
-    }
+  private long min;
+  private long max;
+  private long increment;
 
-    public void setMax(long max) {
-        this.max = max;
-    }
-    
-    public long getIncrement() {
-    	return increment;
-    }
+  /**
+   * The Cursor.
+   */
+  @SuppressWarnings("CanBeFinal")
+  volatile AtomicLong cursor = new AtomicLong();
 
-	public void setIncrement(long increment) {
-		if (increment < 1)
-			throw new ConfigurationError("increment must be a positive number, but was " + increment);
-    	this.increment = increment;
-    }
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    // Generator interface ---------------------------------------------------------------------------------------------
+  /**
+   * Instantiates a new Increment generator.
+   */
+  public IncrementGenerator() {
+    this(DEFAULT_MIN);
+  }
 
-	@Override
-	public Class<Long> getGeneratedType() {
-	    return Long.class;
-    }
+  /**
+   * Instantiates a new Increment generator.
+   *
+   * @param min the min
+   */
+  public IncrementGenerator(long min) {
+    this(min, 1);
+  }
 
-	@Override
-	public Long generate() {
-    	if (cursor.get() <= max)
-    		return cursor.getAndAdd(increment);
-    	else
-    		return null;
-    }
-    
-    @Override
-    public void reset() {
-        this.cursor.set(min);
-    }
+  /**
+   * Instantiates a new Increment generator.
+   *
+   * @param min       the min
+   * @param increment the increment
+   */
+  public IncrementGenerator(long min, long increment) {
+    this(min, increment, DEFAULT_MAX);
+  }
 
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-    
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + cursor + ']';
+  /**
+   * Instantiates a new Increment generator.
+   *
+   * @param min       the min
+   * @param increment the increment
+   * @param max       the max
+   */
+  public IncrementGenerator(long min, long increment, long max) {
+    setMin(min);
+    setIncrement(increment);
+    setMax(max);
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets min.
+   *
+   * @return the min
+   */
+  public Long getMin() {
+    return min;
+  }
+
+  /**
+   * Sets min.
+   *
+   * @param min the min
+   */
+  public void setMin(Long min) {
+    this.min = min;
+    this.cursor.set(min);
+  }
+
+  /**
+   * Gets max.
+   *
+   * @return the max
+   */
+  public long getMax() {
+    return max;
+  }
+
+  /**
+   * Sets max.
+   *
+   * @param max the max
+   */
+  public void setMax(long max) {
+    this.max = max;
+  }
+
+  /**
+   * Gets increment.
+   *
+   * @return the increment
+   */
+  public long getIncrement() {
+    return increment;
+  }
+
+  /**
+   * Sets increment.
+   *
+   * @param increment the increment
+   */
+  public void setIncrement(long increment) {
+    if (increment < 1) {
+      throw new ConfigurationError("increment must be a positive number, but was " + increment);
     }
+    this.increment = increment;
+  }
+
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public Class<Long> getGeneratedType() {
+    return Long.class;
+  }
+
+  @Override
+  public Long generate() {
+    if (cursor.get() <= max) {
+      return cursor.getAndAdd(increment);
+    } else {
+      return null;
+    }
+  }
+
+  @Override
+  public void reset() {
+    this.cursor.set(min);
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + cursor + ']';
+  }
 
 }

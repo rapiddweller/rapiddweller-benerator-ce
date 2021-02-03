@@ -28,8 +28,11 @@ package com.rapiddweller.platform.template;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.common.*;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ProgrammerError;
 import com.rapiddweller.common.accessor.FeatureAccessor;
 import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.common.context.DefaultContext;
@@ -38,8 +41,9 @@ import com.rapiddweller.common.mutator.AnyMutator;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.format.script.ScriptUtil;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.model.data.Entity;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,163 +60,211 @@ import java.util.Stack;
  * @author Volker Bergmann
  * @since 0.9.7
  */
-
 public class TemplateFileEntityExporter implements Consumer, ContextAware {
 
-    private static final Logger LOGGER = LogManager.getLogger(TemplateFileEntityExporter.class);
+  private static final Logger LOGGER = LogManager.getLogger(TemplateFileEntityExporter.class);
 
 
-    // attributes ------------------------------------------------------------------------------------------------------
+  // attributes ------------------------------------------------------------------------------------------------------
 
-    private String templateUri;
-    private String uri;
-    private String encoding;
-    private Class<? extends TemplateRecord> recordType;
+  private String templateUri;
+  private String uri;
+  private String encoding;
+  private Class<? extends TemplateRecord> recordType;
 
-    private TemplateRecord root;
-    private Stack<TemplateRecord> stack;
+  private TemplateRecord root;
+  private Stack<TemplateRecord> stack;
 
-    private Context context;
+  private Context context;
 
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public TemplateFileEntityExporter() {
-        this.recordType = DefaultTemplateRecord.class;
+  /**
+   * Instantiates a new Template file entity exporter.
+   */
+  public TemplateFileEntityExporter() {
+    this.recordType = DefaultTemplateRecord.class;
+  }
+
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  @SuppressWarnings("unchecked")
+  private static void updateFeature(String featureName, TemplateRecord parent, TemplateRecord product) {
+    Object previousObject = FeatureAccessor.getValue(parent, featureName, false);
+    if (previousObject == null) {
+      List<TemplateRecord> list = new ArrayList<>();
+      list.add(product);
+      AnyMutator.setValue(parent, featureName, list);
+      //parentMap.put(product.type(), entityMap);
+    } else if (previousObject instanceof List) {
+      ((List<TemplateRecord>) previousObject).add(product);
+    } else {
+      throw new ProgrammerError("Invalid assumption");
     }
+  }
+
+  /**
+   * Gets uri.
+   *
+   * @return the uri
+   */
+  public String getUri() {
+    return uri;
+  }
+
+  /**
+   * Sets uri.
+   *
+   * @param uri the uri
+   */
+  public void setUri(String uri) {
+    this.uri = uri;
+  }
+
+  /**
+   * Gets encoding.
+   *
+   * @return the encoding
+   */
+  public String getEncoding() {
+    return encoding;
+  }
+
+  /**
+   * Sets encoding.
+   *
+   * @param encoding the encoding
+   */
+  public void setEncoding(String encoding) {
+    this.encoding = encoding;
+  }
+
+  /**
+   * Gets template uri.
+   *
+   * @return the template uri
+   */
+  public String getTemplateUri() {
+    return templateUri;
+  }
 
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // ContextAware interface implementation ---------------------------------------------------------------------------
 
-    @SuppressWarnings("unchecked")
-    private static void updateFeature(String featureName, TemplateRecord parent, TemplateRecord product) {
-        Object previousObject = FeatureAccessor.getValue(parent, featureName, false);
-        if (previousObject == null) {
-            List<TemplateRecord> list = new ArrayList<>();
-            list.add(product);
-            AnyMutator.setValue(parent, featureName, list);
-            //parentMap.put(product.type(), entityMap);
-        } else if (previousObject instanceof List) {
-            ((List<TemplateRecord>) previousObject).add(product);
-        } else {
-            throw new ProgrammerError("Invalid assumption");
+  /**
+   * Sets template uri.
+   *
+   * @param templateUri the template uri
+   */
+  public void setTemplateUri(String templateUri) {
+    this.templateUri = templateUri;
+  }
+
+  /**
+   * Gets record type.
+   *
+   * @return the record type
+   */
+  public Class<? extends TemplateRecord> getRecordType() {
+    return recordType;
+  }
+
+  /**
+   * Sets record type.
+   *
+   * @param recordType the record type
+   */
+  public void setRecordType(Class<? extends TemplateRecord> recordType) {
+    this.recordType = recordType;
+  }
+
+
+  // Consumer interface implementation -------------------------------------------------------------------------------
+
+  @Override
+  public void setContext(Context context) {
+    this.context = context;
+  }
+
+  @Override
+  public void startConsuming(ProductWrapper<?> wrapper) {
+    if (root == null) {
+      init();
+    }
+    Object object = wrapper.unwrap();
+    if (!(object instanceof Entity)) {
+      throw new ConfigurationError(getClass() + " can only consume Entities, but was provided with a " + object.getClass());
+    }
+    Entity product = (Entity) object;
+    TemplateRecord productRecord = entityToRecord(product);
+    String featureName = product.type();
+    TemplateRecord parentRecord = stack.peek();
+    updateFeature(featureName, parentRecord, productRecord);
+    stack.push(productRecord);
+  }
+
+  @Override
+  public void finishConsuming(ProductWrapper<?> wrapper) {
+    Entity product = (Entity) wrapper.unwrap();
+    if (stack.isEmpty()) {
+      throw new ConfigurationError("Trying to pop product from empty stack: '" + product + "'");
+    }
+    stack.pop();
+  }
+
+  @Override
+  public void close() {
+    if (root != null) {
+      LOGGER.debug("Writing file {}", uri);
+      try {
+        Script template = ScriptUtil.readFile(templateUri);
+        mapRootToContext();
+        Context subContext = new DefaultContext(context);
+        String text = ToStringConverter.convert(template.evaluate(subContext), "");
+        String path = uri.replace('/', File.separatorChar);
+        File folder = new File(path).getParentFile();
+        if (folder != null) {
+          folder.mkdirs();
         }
+        IOUtil.writeTextFile(uri, text, encoding);
+      } catch (ScriptException e) {
+        throw new ConfigurationError("Error evaluating template " + templateUri, e);
+      } catch (IOException e) {
+        throw new RuntimeException("Error creating template-based output", e);
+      }
+    } else {
+      LOGGER.error("Unable to write file {}", uri);
     }
+  }
 
-    public String getUri() {
-        return uri;
+
+  // private helper methods ------------------------------------------------------------------------------------------
+
+  @Override
+  public void flush() {
+    // nothing to do for this class
+  }
+
+  private void init() {
+    this.root = BeanUtil.newInstance(recordType);
+    this.stack = new Stack<>();
+    this.stack.push(root);
+  }
+
+  private TemplateRecord entityToRecord(Entity entity) {
+    TemplateRecord record = BeanUtil.newInstance(recordType);
+    for (Map.Entry<String, Object> entry : entity.getComponents().entrySet()) {
+      AnyMutator.setValue(record, entry.getKey(), entry.getValue());
     }
+    return record;
+  }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+  private void mapRootToContext() {
+    for (Map.Entry<String, ?> entry : root.entrySet()) {
+      context.set(entry.getKey(), entry.getValue());
     }
-
-    public String getEncoding() {
-        return encoding;
-    }
-
-    public void setEncoding(String encoding) {
-        this.encoding = encoding;
-    }
-
-    public String getTemplateUri() {
-        return templateUri;
-    }
-
-
-    // ContextAware interface implementation ---------------------------------------------------------------------------
-
-    public void setTemplateUri(String templateUri) {
-        this.templateUri = templateUri;
-    }
-
-    public Class<? extends TemplateRecord> getRecordType() {
-        return recordType;
-    }
-
-    public void setRecordType(Class<? extends TemplateRecord> recordType) {
-        this.recordType = recordType;
-    }
-
-
-    // Consumer interface implementation -------------------------------------------------------------------------------
-
-    @Override
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
-    @Override
-    public void startConsuming(ProductWrapper<?> wrapper) {
-        if (root == null)
-            init();
-        Object object = wrapper.unwrap();
-        if (!(object instanceof Entity))
-            throw new ConfigurationError(getClass() + " can only consume Entities, but was provided with a " + object.getClass());
-        Entity product = (Entity) object;
-        TemplateRecord productRecord = entityToRecord(product);
-        String featureName = product.type();
-        TemplateRecord parentRecord = stack.peek();
-        updateFeature(featureName, parentRecord, productRecord);
-        stack.push(productRecord);
-    }
-
-    @Override
-    public void finishConsuming(ProductWrapper<?> wrapper) {
-        Entity product = (Entity) wrapper.unwrap();
-        if (stack.isEmpty())
-            throw new ConfigurationError("Trying to pop product from empty stack: '" + product + "'");
-        stack.pop();
-    }
-
-    @Override
-    public void close() {
-        if (root != null) {
-            LOGGER.debug("Writing file {}", uri);
-            try {
-                Script template = ScriptUtil.readFile(templateUri);
-                mapRootToContext();
-                Context subContext = new DefaultContext(context);
-                String text = ToStringConverter.convert(template.evaluate(subContext), "");
-                String path = uri.replace('/', File.separatorChar);
-                File folder = new File(path).getParentFile();
-                if (folder != null)
-                    folder.mkdirs();
-                IOUtil.writeTextFile(uri, text, encoding);
-            } catch (ScriptException e) {
-                throw new ConfigurationError("Error evaluating template " + templateUri, e);
-            } catch (IOException e) {
-                throw new RuntimeException("Error creating template-based output", e);
-            }
-        } else {
-            LOGGER.error("Unable to write file {}", uri);
-        }
-    }
-
-
-    // private helper methods ------------------------------------------------------------------------------------------
-
-    @Override
-    public void flush() {
-        // nothing to do for this class
-    }
-
-    private void init() {
-        this.root = BeanUtil.newInstance(recordType);
-        this.stack = new Stack<>();
-        this.stack.push(root);
-    }
-
-    private TemplateRecord entityToRecord(Entity entity) {
-        TemplateRecord record = BeanUtil.newInstance(recordType);
-        for (Map.Entry<String, Object> entry : entity.getComponents().entrySet())
-            AnyMutator.setValue(record, entry.getKey(), entry.getValue());
-        return record;
-    }
-
-    private void mapRootToContext() {
-        for (Map.Entry<String, ?> entry : root.entrySet())
-            context.set(entry.getKey(), entry.getValue());
-    }
+  }
 
 }

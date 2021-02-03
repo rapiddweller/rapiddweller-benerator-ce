@@ -34,81 +34,100 @@ import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
 /**
  * Creates unique pseudo-random int arrays.<br/><br/>
  * Created: 01.08.2011 17:00:57
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class UniqueIntsGenerator extends NonNullGeneratorProxy<int[]> {
 
-    private int[] digits;
-    private final int[] displayColumn;
-    private final int[] digitOffsets;
-    private int cycleCounter;
+  private int[] digits;
+  private final int[] displayColumn;
+  private final int[] digitOffsets;
+  private int cycleCounter;
 
-    public UniqueIntsGenerator(int radix, int length) {
-    	super(new IncrementalIntsGenerator(radix, length));
-    	this.displayColumn = new int[length];
-    	this.digitOffsets = new int[length];
-	}
+  /**
+   * Instantiates a new Unique ints generator.
+   *
+   * @param radix  the radix
+   * @param length the length
+   */
+  public UniqueIntsGenerator(int radix, int length) {
+    super(new IncrementalIntsGenerator(radix, length));
+    this.displayColumn = new int[length];
+    this.digitOffsets = new int[length];
+  }
 
-	@Override
-	public IncrementalIntsGenerator getSource() {
-		return (IncrementalIntsGenerator) super.getSource();
-	}
-	
-    public int getRadix() {
-		return getSource().getRadix();
-	}
+  @Override
+  public IncrementalIntsGenerator getSource() {
+    return (IncrementalIntsGenerator) super.getSource();
+  }
 
-	public int getLength() {
-		return getSource().getLength();
-	}
-	
-    @Override
-    public synchronized void init(GeneratorContext context) {
-    	assertNotInitialized();
-    	int length = getLength();
-    	int radix = getRadix();
-		NonNullGenerator<Long> colGen = new BitReverseNaturalNumberGenerator(length - 1);
-        colGen.init(context);
-        for (int i = 0; i < length; i++) {
-            this.displayColumn[i] = colGen.generate().intValue();
-            this.digitOffsets[i] = (length - 1 - this.displayColumn[i]) % radix;
-        }
-        resetMembers();
-        super.init(context);
+  /**
+   * Gets radix.
+   *
+   * @return the radix
+   */
+  public int getRadix() {
+    return getSource().getRadix();
+  }
+
+  /**
+   * Gets length.
+   *
+   * @return the length
+   */
+  public int getLength() {
+    return getSource().getLength();
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    assertNotInitialized();
+    int length = getLength();
+    int radix = getRadix();
+    NonNullGenerator<Long> colGen = new BitReverseNaturalNumberGenerator(length - 1);
+    colGen.init(context);
+    for (int i = 0; i < length; i++) {
+      this.displayColumn[i] = colGen.generate().intValue();
+      this.digitOffsets[i] = (length - 1 - this.displayColumn[i]) % radix;
     }
-    
-	@Override
-	public int[] generate() {
-        if (digits == null)
-            return null;
-        int length = getLength();
-        int radix = getRadix();
-        int[] buffer = new int[length];
-        for (int i = 0; i < digits.length; i++)
-            buffer[displayColumn[i]] = (digits[i] + digitOffsets[i] + cycleCounter) % radix;
-        if (cycleCounter < radix - 1 && length > 0) {
-            cycleCounter++;
-        } else {
-            digits = super.generate();
-            if (radix == 1 || (digits != null && digits[0] > 0)) {
-                // counter + cycle have run through all combinations
-                digits = null;
-            }
-            cycleCounter = 0;
-        }
-        return buffer;
-    }
+    resetMembers();
+    super.init(context);
+  }
 
-	@Override
-    public void reset() {
-        super.reset();
-        resetMembers();
+  @Override
+  public int[] generate() {
+    if (digits == null) {
+      return null;
     }
+    int length = getLength();
+    int radix = getRadix();
+    int[] buffer = new int[length];
+    for (int i = 0; i < digits.length; i++) {
+      buffer[displayColumn[i]] = (digits[i] + digitOffsets[i] + cycleCounter) % radix;
+    }
+    if (cycleCounter < radix - 1 && length > 0) {
+      cycleCounter++;
+    } else {
+      digits = super.generate();
+      if (radix == 1 || (digits != null && digits[0] > 0)) {
+        // counter + cycle have run through all combinations
+        digits = null;
+      }
+      cycleCounter = 0;
+    }
+    return buffer;
+  }
 
-	private void resetMembers() {
-		this.digits = super.generate().clone();
-        this.cycleCounter = 0;
-    }
+  @Override
+  public void reset() {
+    super.reset();
+    resetMembers();
+  }
+
+  private void resetMembers() {
+    this.digits = super.generate().clone();
+    this.cycleCounter = 0;
+  }
 
 }

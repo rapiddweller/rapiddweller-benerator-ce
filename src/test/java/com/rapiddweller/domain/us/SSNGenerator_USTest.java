@@ -28,31 +28,39 @@ package com.rapiddweller.domain.us;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link SSNGenerator}.<br/>
  * <br/>
  * Created at 17.11.2008 07:49:03
- * @since 0.5.6
+ *
  * @author Volker Bergmann
+ * @since 0.5.6
  */
-
 public class SSNGenerator_USTest extends GeneratorClassTest {
 
-	public SSNGenerator_USTest() {
-		super(SSNGenerator.class);
-	}
+  /**
+   * Instantiates a new Ssn generator us test.
+   */
+  public SSNGenerator_USTest() {
+    super(SSNGenerator.class);
+  }
 
-	@Test
-	public void testDefault() {
-		SSNGenerator generator = new SSNGenerator();
-		assertEquals(String.class, generator.getGeneratedType());
-		SSNValidator validator = new SSNValidator();
-		for (int i = 0; i < 1000; i++) {
-			String ssn = generator.generate();
-			assertTrue("Invalid SSN: " + ssn, validator.isValid(ssn, null));
-		}
-	}
+  /**
+   * Test default.
+   */
+  @Test
+  public void testDefault() {
+    SSNGenerator generator = new SSNGenerator();
+    assertEquals(String.class, generator.getGeneratedType());
+    SSNValidator validator = new SSNValidator();
+    for (int i = 0; i < 1000; i++) {
+      String ssn = generator.generate();
+      assertTrue("Invalid SSN: " + ssn, validator.isValid(ssn, null));
+    }
+  }
 
 }

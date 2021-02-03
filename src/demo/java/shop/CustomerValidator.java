@@ -40,40 +40,54 @@ import com.rapiddweller.model.data.Entity;
  */
 public class CustomerValidator extends EntityValidator {
 
-    public CustomerValidator() {
-        this("customer");
-    }
+  /**
+   * Instantiates a new Customer validator.
+   */
+  public CustomerValidator() {
+    this("customer");
+  }
 
-    public CustomerValidator(String entityName) {
-        super(entityName);
-    }
+  /**
+   * Instantiates a new Customer validator.
+   *
+   * @param entityName the entity name
+   */
+  public CustomerValidator(String entityName) {
+    super(entityName);
+  }
 
-    @Override
-    public boolean valid(Entity customer) {
-        if (!super.valid(customer)) {
-            return false;
-        }
-        if ((Number) customer.getComponent("id") == null) {
-            return false;
-        }
-        if (StringUtil.isEmpty((String) customer.getComponent("category"))) {
-            return false;
-        }
-        if (StringUtil.isEmpty((String) customer.getComponent("salutation"))) {
-            return false;
-        }
-        String firstName = (String) customer.getComponent("first_name");
-        if (StringUtil.isEmpty(firstName)) {
-            return false;
-        }
-        if (StringUtil.isEmpty((String) customer.getComponent("last_name"))) {
-            return false;
-        }
-        // require date except for Charly Brown
-        if ((Date) customer.getComponent("birth_date") == null &&
-                !"Charly".equals(firstName)) {
-            return false;
-        }
-        return true;
+  /**
+   * Valid boolean.
+   *
+   * @param customer the customer
+   * @return the boolean
+   */
+  @Override
+  public boolean valid(Entity customer) {
+    if (!super.valid(customer)) {
+      return false;
     }
+    if ((Number) customer.getComponent("id") == null) {
+      return false;
+    }
+    if (StringUtil.isEmpty((String) customer.getComponent("category"))) {
+      return false;
+    }
+    if (StringUtil.isEmpty((String) customer.getComponent("salutation"))) {
+      return false;
+    }
+    String firstName = (String) customer.getComponent("first_name");
+    if (StringUtil.isEmpty(firstName)) {
+      return false;
+    }
+    if (StringUtil.isEmpty((String) customer.getComponent("last_name"))) {
+      return false;
+    }
+    // require date except for Charly Brown
+    if ((Date) customer.getComponent("birth_date") == null &&
+        !"Charly".equals(firstName)) {
+      return false;
+    }
+    return true;
+  }
 }

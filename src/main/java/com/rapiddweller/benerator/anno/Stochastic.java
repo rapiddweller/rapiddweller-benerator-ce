@@ -36,11 +36,12 @@ import java.lang.annotation.Target;
  * or random and non-reproducible data.<br/>
  * <br/>
  * Created: 05.07.2011 16:20:53
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR } )
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR})
 public @interface Stochastic {
 
 }

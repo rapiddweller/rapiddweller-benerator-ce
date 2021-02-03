@@ -32,10 +32,15 @@ import com.rapiddweller.benerator.Consumer;
  * Common interface for all classes that export .<br/>
  * <br/>
  * Created at 26.02.2009 17:46:23
- * @since 0.5.8
+ *
  * @author Volker Bergmann
+ * @since 0.5.8
  */
-
 public interface FileExporter extends Consumer {
-	String getUri();
+  /**
+   * Gets uri.
+   *
+   * @return the uri
+   */
+  String getUri();
 }

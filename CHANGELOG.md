@@ -14,10 +14,8 @@ N/A
 
 # 1.0.0
 
-Adoption of rapiddweller-benerator-ce by [rapiddweller](https://rapiddweller.com).
-Project was hard forked, updated and tidied however no logical changes have occurred since
-databene-benerator v0.9.8 was released by Volker Bergmann.
-
+Adoption of rapiddweller-benerator-ce by [rapiddweller](https://rapiddweller.com). Project was hard forked, updated and tidied however no logical
+changes have occurred since databene-benerator v0.9.8 was released by Volker Bergmann.
 
 ## Release Highlights
 
@@ -35,7 +33,7 @@ N/A
 
 ## Changes since 0.9.8:
 
-- Migration of [databene-benerator](https://sourceforge.net/projects/benerator/) 
+- Migration of [databene-benerator](https://sourceforge.net/projects/benerator/)
   to [rapiddweller](https://rapiddweller.com)
     - Update project and dependencies to Java 1.8 and Jave 11
     - Migrate and update databene dependencies (e.g. databene-commons -> rapidweller-common)

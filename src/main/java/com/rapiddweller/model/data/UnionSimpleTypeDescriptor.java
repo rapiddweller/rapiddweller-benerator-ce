@@ -42,29 +42,45 @@ import java.util.List;
  */
 public class UnionSimpleTypeDescriptor extends SimpleTypeDescriptor {
 
-    private final List<SimpleTypeDescriptor> alternatives;
+  private final List<SimpleTypeDescriptor> alternatives;
 
-    public UnionSimpleTypeDescriptor(String name, DescriptorProvider provider) {
-        super(name, provider, (String) null);
-        this.alternatives = new ArrayList<>();
-    }
+  /**
+   * Instantiates a new Union simple type descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   */
+  public UnionSimpleTypeDescriptor(String name, DescriptorProvider provider) {
+    super(name, provider, (String) null);
+    this.alternatives = new ArrayList<>();
+  }
 
-    public void addAlternative(SimpleTypeDescriptor alternative) {
-        this.alternatives.add(alternative);
-    }
+  /**
+   * Add alternative.
+   *
+   * @param alternative the alternative
+   */
+  public void addAlternative(SimpleTypeDescriptor alternative) {
+    this.alternatives.add(alternative);
+  }
 
-    public List<SimpleTypeDescriptor> getAlternatives() {
-        return alternatives;
-    }
+  /**
+   * Gets alternatives.
+   *
+   * @return the alternatives
+   */
+  public List<SimpleTypeDescriptor> getAlternatives() {
+    return alternatives;
+  }
 
-    @Override
-    public PrimitiveType getPrimitiveType() {
-        TypeDescriptor firstType = alternatives.get(0);
-        if (firstType == null) {
-            throw new ConfigurationError(
-                    "Cannot determine primitive type of union: " + getName());
-        }
-        return ((SimpleTypeDescriptor) firstType).getPrimitiveType();
+  @Override
+  public PrimitiveType getPrimitiveType() {
+    TypeDescriptor firstType = alternatives.get(0);
+    if (firstType == null) {
+      throw new ConfigurationError(
+          "Cannot determine primitive type of union: " + getName());
     }
+    return ((SimpleTypeDescriptor) firstType).getPrimitiveType();
+  }
 
 }

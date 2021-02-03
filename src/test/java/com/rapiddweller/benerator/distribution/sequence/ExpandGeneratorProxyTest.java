@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.NonNullGenerator;
@@ -38,47 +36,60 @@ import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import org.junit.Test;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Tests the {@link ExpandGeneratorProxy}.<br/><br/>
  * Created: 10.12.2009 15:53:20
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ExpandGeneratorProxyTest extends GeneratorTest {
-	
-	private static final int N = 100;
-	private static final int CACHE_SIZE = 30;
-	private static final int BUCKET_SIZE = 10;
 
-	@Test(expected = InvalidGeneratorSetupException.class)
-	public void testNullSource() {
-		Generator<Long> generator = new ExpandGeneratorProxy<>(null, CACHE_SIZE, BUCKET_SIZE);
-		generator.init(context);
-	}
-	
-	@Test
-	public void testEmptySource() {
-		SequenceTestGenerator<Long> emptyFeed = new SequenceTestGenerator<>();
-		Generator<Long> generator = new ExpandGeneratorProxy<>(emptyFeed, CACHE_SIZE, BUCKET_SIZE);
-		generator.init(context);
-		assertUnavailable(generator);
-	}
-	
-	@Test
-	public void testNormal() {
-		Generator<Long> feed = new IncrementGenerator(1, 1, N);
-		NonNullGenerator<Long> generator = WrapperFactory.asNonNullGenerator(
-			ExpandGeneratorProxy.uniqueProxy(feed, CACHE_SIZE, BUCKET_SIZE));
-		generator.init(context);
-		UniqueLongValidator validator = new UniqueLongValidator(N);
-		for (int i = 0; i < N; i++) {
-			Long product = generator.generate();
-			assertNotNull(product);
-			assertTrue("Not unique: " + product, validator.valid(product));
-			assertTrue(product <= N);
-			assertTrue(product >= 1);
-		}
-		assertUnavailable(generator);
-	}
-	
+  private static final int N = 100;
+  private static final int CACHE_SIZE = 30;
+  private static final int BUCKET_SIZE = 10;
+
+  /**
+   * Test null source.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testNullSource() {
+    Generator<Long> generator = new ExpandGeneratorProxy<>(null, CACHE_SIZE, BUCKET_SIZE);
+    generator.init(context);
+  }
+
+  /**
+   * Test empty source.
+   */
+  @Test
+  public void testEmptySource() {
+    SequenceTestGenerator<Long> emptyFeed = new SequenceTestGenerator<>();
+    Generator<Long> generator = new ExpandGeneratorProxy<>(emptyFeed, CACHE_SIZE, BUCKET_SIZE);
+    generator.init(context);
+    assertUnavailable(generator);
+  }
+
+  /**
+   * Test normal.
+   */
+  @Test
+  public void testNormal() {
+    Generator<Long> feed = new IncrementGenerator(1, 1, N);
+    NonNullGenerator<Long> generator = WrapperFactory.asNonNullGenerator(
+        ExpandGeneratorProxy.uniqueProxy(feed, CACHE_SIZE, BUCKET_SIZE));
+    generator.init(context);
+    UniqueLongValidator validator = new UniqueLongValidator(N);
+    for (int i = 0; i < N; i++) {
+      Long product = generator.generate();
+      assertNotNull(product);
+      assertTrue("Not unique: " + product, validator.valid(product));
+      assertTrue(product <= N);
+      assertTrue(product >= 1);
+    }
+    assertUnavailable(generator);
+  }
+
 }

@@ -1,18 +1,27 @@
 ## Preface
 
-This document is supposed to become a complete summary of everything you need of benerator usage, use it efficiently and extend it as you need. This reference is under construction and will update from time to time. Feel free to contribute your ideas in our repo at [https://gitlab.com/rapiddweller/benerator/rapiddweller-benerator-ce/](https://gitlab.com/rapiddweller/benerator/rapiddweller-benerator-ce/-/issues).
+This document is supposed to become a complete summary of everything you need of benerator usage, use it efficiently and extend it as you need. This
+reference is under construction and will update from time to time. Feel free to contribute your ideas in our repo
+at [https://gitlab.com/rapiddweller/benerator/rapiddweller-benerator-ce/](https://gitlab.com/rapiddweller/benerator/rapiddweller-benerator-ce/-/issues)
+.
 
-If problems remain unsolved after reading this book, do not hesitate to contact us for help. rapiddweller-benerator-ce is and remains open source and is provided for free.
+If problems remain unsolved after reading this book, do not hesitate to contact us for help. rapiddweller-benerator-ce is and remains open source and
+is provided for free.
 
-If you are interested in additional support and our premium features, we encourage you to check the website [https://www.benerator.de](https://www.benerator.de/). We offer additional services to make your data generation project a success and provide detailed use cases to ease your start into more complex scenarios.
+If you are interested in additional support and our premium features, we encourage you to check the
+website [https://www.benerator.de](https://www.benerator.de/). We offer additional services to make your data generation project a success and provide
+detailed use cases to ease your start into more complex scenarios.
 
 Since you can do quite a lot of different things with benerator but surely are interested in just a part of it, here's some guidance:
 
-**'Introduction to benerator'**, introduces you to goals and features of benerator and advises you how to install a binary distribution and how to get the sources and set up an Eclipse project for using, debugging and customizing benerator.
+**'Introduction to benerator'**, introduces you to goals and features of benerator and advises you how to install a binary distribution and how to get
+the sources and set up an Eclipse project for using, debugging and customizing benerator.
 
-**'Data Generation Concepts'**, **'Descriptor File Format'** and **'Advanced Topics'** then provide you with a structured and complete introduction into the benerator descriptor file setup.
+**'Data Generation Concepts'**, **'Descriptor File Format'** and **'Advanced Topics'** then provide you with a structured and complete introduction
+into the benerator descriptor file setup.
 
-Benerator supports a multitude of service provider interfaces (SPIs). It comes along with some implementations for specific business domains (**'Domains'**) and general purpose classes in **'Component Reference'**.
+Benerator supports a multitude of service provider interfaces (SPIs). It comes along with some implementations for specific business domains (**'
+Domains'**) and general purpose classes in **'Component Reference'**.
 
 Finally you are instructed how to write custom SPI implementations in **'Extending benerator'**.
 

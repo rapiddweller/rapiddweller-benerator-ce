@@ -32,55 +32,57 @@ import com.rapiddweller.benerator.GeneratorContext;
 /**
  * Synchronized wrapper class for non-thread-safe {@link Generator} implementations.<br/><br/>
  * Created: 24.02.2010 23:08:39
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class SynchronizedGeneratorProxy<E> implements Generator<E> {
-	
-	private final Generator<E> source;
 
-	private SynchronizedGeneratorProxy(Generator<E> source) {
-	    this.source = source;
-    }
+  private final Generator<E> source;
 
-	@Override
-	public synchronized void init(GeneratorContext context) {
-	    source.init(context);
-    }
-	
-	@Override
-	public synchronized boolean wasInitialized() {
-		return source.wasInitialized();
-	}
+  private SynchronizedGeneratorProxy(Generator<E> source) {
+    this.source = source;
+  }
 
-	@Override
-	public synchronized Class<E> getGeneratedType() {
-	    return source.getGeneratedType();
-    }
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    source.init(context);
+  }
 
-	@Override
-	public synchronized ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-	    return source.generate(wrapper);
-    }
+  @Override
+  public synchronized boolean wasInitialized() {
+    return source.wasInitialized();
+  }
 
-	@Override
-	public synchronized void reset() {
-	    source.reset();
-    }
+  @Override
+  public synchronized Class<E> getGeneratedType() {
+    return source.getGeneratedType();
+  }
 
-	@Override
-	public synchronized void close() {
-	    source.close();
-    }
+  @Override
+  public synchronized ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    return source.generate(wrapper);
+  }
 
-	@Override
-	public boolean isThreadSafe() {
-	    return true;
-    }
+  @Override
+  public synchronized void reset() {
+    source.reset();
+  }
 
-	@Override
-	public boolean isParallelizable() {
-	    return false;
-    }
+  @Override
+  public synchronized void close() {
+    source.close();
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
 
 }

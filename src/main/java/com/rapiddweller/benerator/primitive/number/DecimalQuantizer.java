@@ -26,36 +26,43 @@
 
 package com.rapiddweller.benerator.primitive.number;
 
-import java.math.BigDecimal;
-
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
 
+import java.math.BigDecimal;
+
 /**
- * {@link Converter} that quantizes {@link Number}s by a given 'min' value and 
+ * {@link Converter} that quantizes {@link Number}s by a given 'min' value and
  * 'granularity' and converts it into a {@link BigDecimal}.<br/><br/>
  * Created: 11.04.2011 17:53:55
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class DecimalQuantizer extends ThreadSafeConverter<Number, BigDecimal> {
-	
-	private final BigDecimal min;
-	private final BigDecimal granularity;
 
-	public DecimalQuantizer(BigDecimal min, BigDecimal granularity) {
-	    super(Number.class, BigDecimal.class);
-	    this.min = (min != null ? min : BigDecimal.ZERO);
-	    this.granularity = granularity;
-    }
+  private final BigDecimal min;
+  private final BigDecimal granularity;
 
-	@Override
-	public BigDecimal convert(Number sourceValue) throws ConversionException {
-		BigDecimal value = (sourceValue instanceof BigDecimal ? (BigDecimal) sourceValue :
-                BigDecimal.valueOf(sourceValue.doubleValue()));
-		BigDecimal ofs = value.subtract(min).divideToIntegralValue(granularity);
-		return ofs.multiply(granularity).add(min);
-    }
+  /**
+   * Instantiates a new Decimal quantizer.
+   *
+   * @param min         the min
+   * @param granularity the granularity
+   */
+  public DecimalQuantizer(BigDecimal min, BigDecimal granularity) {
+    super(Number.class, BigDecimal.class);
+    this.min = (min != null ? min : BigDecimal.ZERO);
+    this.granularity = granularity;
+  }
+
+  @Override
+  public BigDecimal convert(Number sourceValue) throws ConversionException {
+    BigDecimal value = (sourceValue instanceof BigDecimal ? (BigDecimal) sourceValue :
+        BigDecimal.valueOf(sourceValue.doubleValue()));
+    BigDecimal ofs = value.subtract(min).divideToIntegralValue(granularity);
+    return ofs.multiply(granularity).add(min);
+  }
 
 }

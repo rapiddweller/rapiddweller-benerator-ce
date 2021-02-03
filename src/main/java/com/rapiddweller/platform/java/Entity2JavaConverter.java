@@ -26,10 +26,10 @@
 
 package com.rapiddweller.platform.java;
 
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.common.mutator.AnyMutator;
+import com.rapiddweller.model.data.Entity;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
@@ -47,90 +47,110 @@ import java.util.Map;
  */
 public class Entity2JavaConverter extends ThreadSafeConverter<Object, Object> {
 
-    public Entity2JavaConverter() {
-        super(Object.class, Object.class);
-    }
+  /**
+   * Instantiates a new Entity 2 java converter.
+   */
+  public Entity2JavaConverter() {
+    super(Object.class, Object.class);
+  }
 
-    public static Object convertAny(Object entityOrArray) {
-        if (entityOrArray == null)
-            return null;
-        else if (entityOrArray instanceof Entity)
-            return convertEntity((Entity) entityOrArray, BeanUtil.forName(((Entity) entityOrArray).type()));
-        else if (entityOrArray.getClass().isArray())
-            return convertArray((Object[]) entityOrArray);
-        else
-            return entityOrArray;
+  /**
+   * Convert any object.
+   *
+   * @param entityOrArray the entity or array
+   * @return the object
+   */
+  public static Object convertAny(Object entityOrArray) {
+    if (entityOrArray == null) {
+      return null;
+    } else if (entityOrArray instanceof Entity) {
+      return convertEntity((Entity) entityOrArray, BeanUtil.forName(((Entity) entityOrArray).type()));
+    } else if (entityOrArray.getClass().isArray()) {
+      return convertArray((Object[]) entityOrArray);
+    } else {
+      return entityOrArray;
     }
+  }
 
-    public static Object convertAny(Object entityOrArray, Class<?> targetType) {
-        if (entityOrArray == null)
-            return null;
-        else if (entityOrArray instanceof Entity)
-            return convertEntity((Entity) entityOrArray, targetType);
-        else if (entityOrArray.getClass().isArray())
-            return convertArray((Object[]) entityOrArray, targetType);
-        else
-            return entityOrArray;
+  /**
+   * Convert any object.
+   *
+   * @param entityOrArray the entity or array
+   * @param targetType    the target type
+   * @return the object
+   */
+  public static Object convertAny(Object entityOrArray, Class<?> targetType) {
+    if (entityOrArray == null) {
+      return null;
+    } else if (entityOrArray instanceof Entity) {
+      return convertEntity((Entity) entityOrArray, targetType);
+    } else if (entityOrArray.getClass().isArray()) {
+      return convertArray((Object[]) entityOrArray, targetType);
+    } else {
+      return entityOrArray;
     }
+  }
 
-    private static Object convertArray(Object[] array, Class<?> targetType) {
-        Object result = Array.newInstance(targetType, array.length);
-        for (int i = 0; i < array.length; i++) {
-            Object value = convertAny(array[i], targetType);
-            Array.set(result, i, value);
-        }
-        return result;
+  private static Object convertArray(Object[] array, Class<?> targetType) {
+    Object result = Array.newInstance(targetType, array.length);
+    for (int i = 0; i < array.length; i++) {
+      Object value = convertAny(array[i], targetType);
+      Array.set(result, i, value);
     }
+    return result;
+  }
 
-    private static Object convertArray(Object[] array) {
-        Object[] result = new Object[array.length];
-        for (int i = 0; i < array.length; i++)
-            result[i] = convertAny(array[i]);
-        return result;
+  private static Object convertArray(Object[] array) {
+    Object[] result = new Object[array.length];
+    for (int i = 0; i < array.length; i++) {
+      result[i] = convertAny(array[i]);
     }
+    return result;
+  }
 
-    private static Object convertEntity(Entity entity, Class<?> targetBeanType) {
-        Object result = BeanUtil.newInstance(targetBeanType);
-        for (Map.Entry<String, Object> entry : entity.getComponents().entrySet()) {
-            String featureName = entry.getKey();
-            Class<?> targetComponentType = typeOrComponentTypeOf(featureName, targetBeanType);
-            if (targetComponentType != null) { // if the target object does not contain a feature of the given name, ignore the entry
-                Object value = convertAny(entry.getValue(), targetComponentType);
-                AnyMutator.setValue(result, featureName, value, false, true);
-            }
-        }
-        return result;
+  private static Object convertEntity(Entity entity, Class<?> targetBeanType) {
+    Object result = BeanUtil.newInstance(targetBeanType);
+    for (Map.Entry<String, Object> entry : entity.getComponents().entrySet()) {
+      String featureName = entry.getKey();
+      Class<?> targetComponentType = typeOrComponentTypeOf(featureName, targetBeanType);
+      if (targetComponentType != null) { // if the target object does not contain a feature of the given name, ignore the entry
+        Object value = convertAny(entry.getValue(), targetComponentType);
+        AnyMutator.setValue(result, featureName, value, false, true);
+      }
     }
+    return result;
+  }
 
-    private static Class<?> typeOrComponentTypeOf(String featureName, Class<?> beanClass) {
-        Class<?> propertyType = null;
-        PropertyDescriptor propertyDescriptor = BeanUtil.getPropertyDescriptor(beanClass, featureName);
-        if (propertyDescriptor != null) {
-            propertyType = propertyDescriptor.getPropertyType();
-        } else {
-            try {
-                Field field = BeanUtil.getField(beanClass, featureName);
-                propertyType = field.getType();
-            } catch (Exception e) {
-                return null;
-            }
-        }
-        if (propertyType.isArray())
-            return propertyType.getComponentType();
-        else if (Collection.class.isAssignableFrom(propertyType))
-            return getCollectionType(propertyDescriptor);
-        else
-            return propertyType;
+  private static Class<?> typeOrComponentTypeOf(String featureName, Class<?> beanClass) {
+    Class<?> propertyType = null;
+    PropertyDescriptor propertyDescriptor = BeanUtil.getPropertyDescriptor(beanClass, featureName);
+    if (propertyDescriptor != null) {
+      propertyType = propertyDescriptor.getPropertyType();
+    } else {
+      try {
+        Field field = BeanUtil.getField(beanClass, featureName);
+        propertyType = field.getType();
+      } catch (Exception e) {
+        return null;
+      }
     }
+    if (propertyType.isArray()) {
+      return propertyType.getComponentType();
+    } else if (Collection.class.isAssignableFrom(propertyType)) {
+      return getCollectionType(propertyDescriptor);
+    } else {
+      return propertyType;
+    }
+  }
 
-    private static Class<?> getCollectionType(PropertyDescriptor propertyDescriptor) {
-        ParameterizedType genericReturnType = (ParameterizedType) propertyDescriptor.getReadMethod().getGenericReturnType();
-        return (Class<?>) genericReturnType.getActualTypeArguments()[0];
-    }
+  private static Class<?> getCollectionType(PropertyDescriptor propertyDescriptor) {
+    ParameterizedType genericReturnType = (ParameterizedType) propertyDescriptor.getReadMethod().getGenericReturnType();
+    return (Class<?>) genericReturnType.getActualTypeArguments()[0];
+  }
 
-    @Override
-    public Object convert(Object entityOrArray) {
-        return convertAny(entityOrArray);
-    }
+  @Override
+  public Object convert(Object entityOrArray) {
+    return convertAny(entityOrArray);
+  }
 
 }

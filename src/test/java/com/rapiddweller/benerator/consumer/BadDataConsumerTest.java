@@ -26,45 +26,50 @@
 
 package com.rapiddweller.benerator.consumer;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link BadDataConsumer}.<br/><br/>
  * Created: 23.01.2011 08:15:24
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class BadDataConsumerTest {
-	
-	@Test
-	public void test() {
-		// the real consumer throws an exception on every second invocation
-		Consumer realTarget = new AbstractConsumer() {
-			@Override
-			public void startProductConsumption(Object object) {
-				if (((Integer) object) % 2 == 1)
-					throw new RuntimeException();
-			}
-		};
-		
-		// the bad data consumer stores error data in a list
-		ListConsumer badTarget = new ListConsumer();
-		
-		BadDataConsumer consumer = new BadDataConsumer(badTarget, realTarget);
 
-		for (int i = 1; i <= 5; i++) {
-			consumer.startConsuming(new ProductWrapper<Integer>().wrap(i));
-			consumer.finishConsuming(new ProductWrapper<Integer>().wrap(i));
-		}
-		consumer.close();
-		
-		assertEquals(3, badTarget.getConsumedData().size());
-		assertEquals(1, badTarget.getConsumedData().get(0));
-		assertEquals(3, badTarget.getConsumedData().get(1));
-	}
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    // the real consumer throws an exception on every second invocation
+    Consumer realTarget = new AbstractConsumer() {
+      @Override
+      public void startProductConsumption(Object object) {
+        if (((Integer) object) % 2 == 1) {
+          throw new RuntimeException();
+        }
+      }
+    };
+
+    // the bad data consumer stores error data in a list
+    ListConsumer badTarget = new ListConsumer();
+
+    BadDataConsumer consumer = new BadDataConsumer(badTarget, realTarget);
+
+    for (int i = 1; i <= 5; i++) {
+      consumer.startConsuming(new ProductWrapper<Integer>().wrap(i));
+      consumer.finishConsuming(new ProductWrapper<Integer>().wrap(i));
+    }
+    consumer.close();
+
+    assertEquals(3, badTarget.getConsumedData().size());
+    assertEquals(1, badTarget.getConsumedData().get(0));
+    assertEquals(3, badTarget.getConsumedData().get(1));
+  }
 
 }

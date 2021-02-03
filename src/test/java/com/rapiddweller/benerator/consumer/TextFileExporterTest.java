@@ -26,34 +26,39 @@
 
 package com.rapiddweller.benerator.consumer;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SystemInfo;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link TextFileExporter}.<br/>
  * <br/>
  * Created at 28.02.2009 07:19:13
- * @since 0.5.8
+ *
  * @author Volker Bergmann
+ * @since 0.5.8
  */
-
 public class TextFileExporterTest {
-	
-	@Test
-	public void test() throws IOException {
-		String uri = "target" + File.separator + getClass().getSimpleName() + ".txt";
-		TextFileExporter exporter = new TextFileExporter(uri);
-		exporter.startProductConsumption("test");
-		exporter.close();
-		assertEquals(uri, exporter.getUri());
-		String content = IOUtil.getContentOfURI(uri);
-		assertEquals("test" + SystemInfo.getLineSeparator(), content);
-	}
-	
+
+  /**
+   * Test.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void test() throws IOException {
+    String uri = "target" + File.separator + getClass().getSimpleName() + ".txt";
+    TextFileExporter exporter = new TextFileExporter(uri);
+    exporter.startProductConsumption("test");
+    exporter.close();
+    assertEquals(uri, exporter.getUri());
+    String content = IOUtil.getContentOfURI(uri);
+    assertEquals("test" + SystemInfo.getLineSeparator(), content);
+  }
+
 }

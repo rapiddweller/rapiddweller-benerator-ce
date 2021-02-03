@@ -26,64 +26,113 @@
 
 package com.rapiddweller.benerator.wrapper;
 
+import com.rapiddweller.benerator.Generator;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.rapiddweller.benerator.Generator;
 
 /**
  * Helper class for the {@link Generator} class.<br/><br/>
  * Created: 26.01.2010 10:53:53
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ProductWrapper<E> {
-	
-	private E product;
-	private Map<String, String> tags;
-	
-	public ProductWrapper(E product) {
-		this();
-		wrap(product);
-	}
-	
-	public ProductWrapper() {
-		this.tags = null;
-	}
-	
-	public ProductWrapper<E> wrap(E product) {
-		return wrap(product, true);
-	}
-	
-	public ProductWrapper<E> wrap(E product, boolean clearTags) {
-		this.product = product;
-		if (tags != null && clearTags)
-			tags.clear();
-		return this;
-	}
-	
-	public E unwrap() {
-        return this.product;
-	}
-	
-	public String getTag(String key) {
-		return (tags != null ? tags.get(key) : null);
-	}
-	
-	public ProductWrapper<E> setTag(String key, String value) {
-		if (tags == null)
-			tags = new HashMap<>();
-		tags.put(key, value);
-		return this;
-	}
 
-	@Override
-	public String toString() {
-	    return String.valueOf(product);
-	}
+  private E product;
+  private Map<String, String> tags;
 
-	public static Object unwrap(ProductWrapper<?> wrapper) {
-	    return (wrapper != null ? wrapper.product : null);
+  /**
+   * Instantiates a new Product wrapper.
+   *
+   * @param product the product
+   */
+  public ProductWrapper(E product) {
+    this();
+    wrap(product);
+  }
+
+  /**
+   * Instantiates a new Product wrapper.
+   */
+  public ProductWrapper() {
+    this.tags = null;
+  }
+
+  /**
+   * Wrap product wrapper.
+   *
+   * @param product the product
+   * @return the product wrapper
+   */
+  public ProductWrapper<E> wrap(E product) {
+    return wrap(product, true);
+  }
+
+  /**
+   * Wrap product wrapper.
+   *
+   * @param product   the product
+   * @param clearTags the clear tags
+   * @return the product wrapper
+   */
+  public ProductWrapper<E> wrap(E product, boolean clearTags) {
+    this.product = product;
+    if (tags != null && clearTags) {
+      tags.clear();
     }
-	
+    return this;
+  }
+
+  /**
+   * Unwrap e.
+   *
+   * @return the e
+   */
+  public E unwrap() {
+    return this.product;
+  }
+
+  /**
+   * Gets tag.
+   *
+   * @param key the key
+   * @return the tag
+   */
+  public String getTag(String key) {
+    return (tags != null ? tags.get(key) : null);
+  }
+
+  /**
+   * Sets tag.
+   *
+   * @param key   the key
+   * @param value the value
+   * @return the tag
+   */
+  public ProductWrapper<E> setTag(String key, String value) {
+    if (tags == null) {
+      tags = new HashMap<>();
+    }
+    tags.put(key, value);
+    return this;
+  }
+
+  @Override
+  public String toString() {
+    return String.valueOf(product);
+  }
+
+  /**
+   * Unwrap object.
+   *
+   * @param wrapper the wrapper
+   * @return the object
+   */
+  public static Object unwrap(ProductWrapper<?> wrapper) {
+    return (wrapper != null ? wrapper.product : null);
+  }
+
 }

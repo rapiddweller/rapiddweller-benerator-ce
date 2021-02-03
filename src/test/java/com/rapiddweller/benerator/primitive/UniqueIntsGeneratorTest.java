@@ -32,26 +32,30 @@ import org.junit.Test;
 /**
  * Tests the {@link UniqueIntsGenerator}.<br/><br/>
  * Created: 01.08.2011 17:17:54
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class UniqueIntsGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void test() {
-		UniqueIntsGenerator generator = new UniqueIntsGenerator(2, 3);
-		initialize(generator);
-		expectGeneratedSequence(generator, 
-			new int[] { 0, 1, 0 },
-			new int[] { 1, 0, 1 },
-			new int[] { 0, 0, 0 },
-			new int[] { 1, 1, 1 },
-			new int[] { 0, 1, 1 },
-			new int[] { 1, 0, 0 },
-			new int[] { 0, 0, 1 },
-			new int[] { 1, 1, 0 }
-		).withCeasedAvailability();
-		close(generator);
-	}
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    UniqueIntsGenerator generator = new UniqueIntsGenerator(2, 3);
+    initialize(generator);
+    expectGeneratedSequence(generator,
+        new int[] {0, 1, 0},
+        new int[] {1, 0, 1},
+        new int[] {0, 0, 0},
+        new int[] {1, 1, 1},
+        new int[] {0, 1, 1},
+        new int[] {1, 0, 0},
+        new int[] {0, 0, 1},
+        new int[] {1, 1, 0}
+    ).withCeasedAvailability();
+    close(generator);
+  }
 
 }

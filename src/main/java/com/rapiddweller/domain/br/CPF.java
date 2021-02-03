@@ -51,5 +51,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, TYPE})
 @Retention(RUNTIME)
 public @interface CPF {
-    boolean formatted() default true;
+  /**
+   * Formatted boolean.
+   *
+   * @return the boolean
+   */
+  boolean formatted() default true;
 }

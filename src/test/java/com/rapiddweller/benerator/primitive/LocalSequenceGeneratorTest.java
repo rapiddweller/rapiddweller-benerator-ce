@@ -26,45 +26,51 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import java.io.File;
-
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.common.FileUtil;
 import org.junit.Test;
+
+import java.io.File;
 
 /**
  * Tests the {@link LocalSequenceGenerator}.<br/>
  * <br/>
  * Created at 01.07.2009 17:30:46
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class LocalSequenceGeneratorTest extends GeneratorClassTest {
 
-    public LocalSequenceGeneratorTest() {
-	    super(LocalSequenceGenerator.class);
-    }
+  /**
+   * Instantiates a new Local sequence generator test.
+   */
+  public LocalSequenceGeneratorTest() {
+    super(LocalSequenceGenerator.class);
+  }
 
-    @Test
-	public void testPersistence() {
-		File propertiesFile = new File(LocalSequenceGenerator.FILENAME);
-		FileUtil.deleteIfExists(propertiesFile);
-    	String sequenceName = getClass().getSimpleName();
-		LocalSequenceGenerator.invalidateInstances();
-    	try {
-			LocalSequenceGenerator generator = new LocalSequenceGenerator(sequenceName);
-			generator.init(context);
-	    	expectGeneratedSequenceOnce(generator, 1L, 2L, 3L);
-	    	generator.close();
-	    	
-	    	LocalSequenceGenerator generator2 = new LocalSequenceGenerator(sequenceName);
-	    	generator2.init(context);
-	    	expectGeneratedSequenceOnce(generator2, 4L, 5L, 6L);
-	    	generator.close();
-    	} finally {
-    		FileUtil.deleteIfExists(propertiesFile);
-    	}
+  /**
+   * Test persistence.
+   */
+  @Test
+  public void testPersistence() {
+    File propertiesFile = new File(LocalSequenceGenerator.FILENAME);
+    FileUtil.deleteIfExists(propertiesFile);
+    String sequenceName = getClass().getSimpleName();
+    LocalSequenceGenerator.invalidateInstances();
+    try {
+      LocalSequenceGenerator generator = new LocalSequenceGenerator(sequenceName);
+      generator.init(context);
+      expectGeneratedSequenceOnce(generator, 1L, 2L, 3L);
+      generator.close();
+
+      LocalSequenceGenerator generator2 = new LocalSequenceGenerator(sequenceName);
+      generator2.init(context);
+      expectGeneratedSequenceOnce(generator2, 4L, 5L, 6L);
+      generator.close();
+    } finally {
+      FileUtil.deleteIfExists(propertiesFile);
     }
-    
+  }
+
 }

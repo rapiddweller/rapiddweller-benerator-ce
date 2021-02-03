@@ -39,29 +39,43 @@ import com.rapiddweller.model.data.Entity;
  */
 public class OrderValidator extends EntityValidator {
 
-    public OrderValidator() {
-        this("order");
-    }
+  /**
+   * Instantiates a new Order validator.
+   */
+  public OrderValidator() {
+    this("order");
+  }
 
-    public OrderValidator(String entityName) {
-        super(entityName);
-    }
+  /**
+   * Instantiates a new Order validator.
+   *
+   * @param entityName the entity name
+   */
+  public OrderValidator(String entityName) {
+    super(entityName);
+  }
 
-    @Override
-    public boolean valid(Entity order) {
-        if (!super.valid(order)) {
-            return false;
-        }
-        if ((Number) order.getComponent("id") == null) {
-            return false;
-        }
-        if ((Number) order.getComponent("customer_id") == null) {
-            return false;
-        }
-        if ((Date) order.getComponent("created_at") == null) {
-            return false;
-        }
-        return true;
+  /**
+   * Valid boolean.
+   *
+   * @param order the order
+   * @return the boolean
+   */
+  @Override
+  public boolean valid(Entity order) {
+    if (!super.valid(order)) {
+      return false;
     }
+    if ((Number) order.getComponent("id") == null) {
+      return false;
+    }
+    if ((Number) order.getComponent("customer_id") == null) {
+      return false;
+    }
+    if ((Date) order.getComponent("created_at") == null) {
+      return false;
+    }
+    return true;
+  }
 
 }

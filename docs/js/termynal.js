@@ -22,7 +22,7 @@ class Termynal {
      * @param {number} options.lineDelay - Delay between each line, in ms.
      * @param {number} options.progressLength - Number of characters displayed as progress bar.
      * @param {string} options.progressChar – Character to use for progress bar, defaults to █.
-	 * @param {number} options.progressPercent - Max percent of progress.
+     * @param {number} options.progressPercent - Max percent of progress.
      * @param {string} options.cursor – Character to use for cursor, defaults to ▋.
      * @param {Object[]} lineData - Dynamically loaded line data objects.
      * @param {boolean} options.noInit - Don't initialise the animation.
@@ -40,7 +40,7 @@ class Termynal {
             || parseFloat(this.container.getAttribute(`${this.pfx}-progressLength`)) || 40;
         this.progressChar = options.progressChar
             || this.container.getAttribute(`${this.pfx}-progressChar`) || '█';
-		this.progressPercent = options.progressPercent
+        this.progressPercent = options.progressPercent
             || parseFloat(this.container.getAttribute(`${this.pfx}-progressPercent`)) || 100;
         this.cursor = options.cursor
             || this.container.getAttribute(`${this.pfx}-cursor`) || '▋';
@@ -72,14 +72,14 @@ class Termynal {
      * Initialise the widget, get lines, clear container and start animation.
      */
     init() {
-        /** 
+        /**
          * Calculates width and height of Termynal container.
          * If container is empty and lines are dynamically loaded, defaults to browser `auto` or CSS.
-         */ 
+         */
         const containerStyle = getComputedStyle(this.container);
-        this.container.style.width = containerStyle.width !== '0px' ? 
+        this.container.style.width = containerStyle.width !== '0px' ?
             containerStyle.width : undefined;
-        this.container.style.minHeight = containerStyle.height !== '0px' ? 
+        this.container.style.minHeight = containerStyle.height !== '0px' ?
             containerStyle.height : undefined;
 
         this.container.setAttribute('data-termynal', '');
@@ -105,14 +105,10 @@ class Termynal {
                 line.setAttribute(`${this.pfx}-cursor`, this.cursor);
                 await this.type(line);
                 await this._wait(delay);
-            }
-
-            else if (type == 'progress') {
+            } else if (type == 'progress') {
                 await this.progress(line);
                 await this._wait(delay);
-            }
-
-            else {
+            } else {
                 this.container.appendChild(line);
                 await this._wait(delay);
             }
@@ -138,7 +134,7 @@ class Termynal {
         restart.innerHTML = "restart ↻"
         return restart
     }
-    
+
     generateFinish() {
         const finish = document.createElement('a')
         finish.onclick = (e) => {
@@ -190,8 +186,8 @@ class Termynal {
         const progressChar = line.getAttribute(`${this.pfx}-progressChar`)
             || this.progressChar;
         const chars = progressChar.repeat(progressLength);
-		const progressPercent = line.getAttribute(`${this.pfx}-progressPercent`)
-			|| this.progressPercent;
+        const progressPercent = line.getAttribute(`${this.pfx}-progressPercent`)
+            || this.progressPercent;
         line.textContent = '';
         this.container.appendChild(line);
 
@@ -199,9 +195,9 @@ class Termynal {
             await this._wait(this.typeDelay);
             const percent = Math.round(i / chars.length * 100);
             line.textContent = `${chars.slice(0, i)} ${percent}%`;
-			if (percent>progressPercent) {
-				break;
-			}
+            if (percent > progressPercent) {
+                break;
+            }
         }
     }
 
@@ -215,7 +211,7 @@ class Termynal {
 
     /**
      * Converts line data objects into line elements.
-     * 
+     *
      * @param {Object[]} lineData - Dynamically loaded lines.
      * @param {Object} line - Line data object.
      * @returns {Element[]} - Array of line elements.
@@ -231,7 +227,7 @@ class Termynal {
 
     /**
      * Helper function for generating attributes string.
-     * 
+     *
      * @param {Object} line - Line data object.
      * @returns {string} - String of attributes.
      */
@@ -255,8 +251,8 @@ class Termynal {
 }
 
 /**
-* HTML API: If current script has container(s) specified, initialise Termynal.
-*/
+ * HTML API: If current script has container(s) specified, initialise Termynal.
+ */
 if (document.currentScript.hasAttribute('data-termynal-container')) {
     const containers = document.currentScript.getAttribute('data-termynal-container');
     containers.split('|')

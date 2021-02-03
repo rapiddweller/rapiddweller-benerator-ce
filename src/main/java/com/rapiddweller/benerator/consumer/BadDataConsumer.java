@@ -31,43 +31,53 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
 
 /**
- * {@link Consumer} proxy that forwards data to 'real consumer' and if the real consumer 
+ * {@link Consumer} proxy that forwards data to 'real consumer' and if the real consumer
  * raises an error, forwards the data to a 'bad data consumer'.<br/><br/>
  * Created: 23.01.2011 08:04:17
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class BadDataConsumer extends ConsumerProxy {
-	
-	final Consumer badDataTarget;
-	
-	public BadDataConsumer(Consumer badDataTarget, Consumer realTarget) {
-		super(realTarget);
-		this.badDataTarget = badDataTarget;
-	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public void startConsuming(ProductWrapper<?> wrapper) {
-		Object product = wrapper.unwrap();
-		try {
-			target.startConsuming(((ProductWrapper) wrapper).wrap(product));
-		} catch (Exception e) {
-			badDataTarget.startConsuming(((ProductWrapper) wrapper).wrap(product));
-			badDataTarget.finishConsuming(((ProductWrapper) wrapper).wrap(product));
-		}
-	}
+  /**
+   * The Bad data target.
+   */
+  final Consumer badDataTarget;
 
-	@Override
-	public void flush() {
-		super.flush();
-		badDataTarget.flush();
-	}
-	
-	@Override
-	public void close() {
-		super.close();
-		badDataTarget.close();
-	}
-	
+  /**
+   * Instantiates a new Bad data consumer.
+   *
+   * @param badDataTarget the bad data target
+   * @param realTarget    the real target
+   */
+  public BadDataConsumer(Consumer badDataTarget, Consumer realTarget) {
+    super(realTarget);
+    this.badDataTarget = badDataTarget;
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  @Override
+  public void startConsuming(ProductWrapper<?> wrapper) {
+    Object product = wrapper.unwrap();
+    try {
+      target.startConsuming(((ProductWrapper) wrapper).wrap(product));
+    } catch (Exception e) {
+      badDataTarget.startConsuming(((ProductWrapper) wrapper).wrap(product));
+      badDataTarget.finishConsuming(((ProductWrapper) wrapper).wrap(product));
+    }
+  }
+
+  @Override
+  public void flush() {
+    super.flush();
+    badDataTarget.flush();
+  }
+
+  @Override
+  public void close() {
+    super.close();
+    badDataTarget.close();
+  }
+
 }

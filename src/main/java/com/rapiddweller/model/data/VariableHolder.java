@@ -34,5 +34,10 @@ package com.rapiddweller.model.data;
  * @since 0.6.1
  */
 public interface VariableHolder {
-    void addVariable(VariableDescriptor variable);
+  /**
+   * Add variable.
+   *
+   * @param variable the variable
+   */
+  void addVariable(VariableDescriptor variable);
 }

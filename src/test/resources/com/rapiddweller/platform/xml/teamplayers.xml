@@ -2,28 +2,28 @@
 
 
 <teams>
-	<team tnum="1">
-		<person pnum="1a">
-			<name>Alice</name>
-			<city>Atlanta</city>
-			<age>23</age>
-		</person>
-		<person pnum="1b">
-			<name>Bob</name>
-			<city>Boston</city>
-			<age>34</age>
-		</person>
-	</team>
-	<team tnum="2">
-		<person pnum="2a">
-			<name>Charly</name>
-			<city>Cleveland</city>
-			<age>45</age>
-		</person>
-		<person pnum="2b">
-			<name>Otto</name>
-			<city>Oslo</city>
-			<age>89</age>
-		</person>
-	</team>
+    <team tnum="1">
+        <person pnum="1a">
+            <name>Alice</name>
+            <city>Atlanta</city>
+            <age>23</age>
+        </person>
+        <person pnum="1b">
+            <name>Bob</name>
+            <city>Boston</city>
+            <age>34</age>
+        </person>
+    </team>
+    <team tnum="2">
+        <person pnum="2a">
+            <name>Charly</name>
+            <city>Cleveland</city>
+            <age>45</age>
+        </person>
+        <person pnum="2b">
+            <name>Otto</name>
+            <city>Oslo</city>
+            <age>89</age>
+        </person>
+    </team>
 </teams>

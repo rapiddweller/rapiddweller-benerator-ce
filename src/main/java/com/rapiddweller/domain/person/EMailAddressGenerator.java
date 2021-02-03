@@ -43,89 +43,97 @@ import java.util.Locale;
  * @since 0.5.1
  */
 public class EMailAddressGenerator extends EMailAddressBuilder
-        implements NonNullGenerator<String> {
+    implements NonNullGenerator<String> {
 
-    private final PersonGenerator personGenerator;
+  private final PersonGenerator personGenerator;
 
-    public EMailAddressGenerator() {
-        this(Country.getDefault().getIsoCode());
-    }
+  /**
+   * Instantiates a new E mail address generator.
+   */
+  public EMailAddressGenerator() {
+    this(Country.getDefault().getIsoCode());
+  }
 
-    public EMailAddressGenerator(String dataset) {
-        super(dataset); // creation log is done in parent class constructor
-        this.personGenerator =
-                new PersonGenerator(dataset, LocaleUtil.getFallbackLocale());
-    }
+  /**
+   * Instantiates a new E mail address generator.
+   *
+   * @param dataset the dataset
+   */
+  public EMailAddressGenerator(String dataset) {
+    super(dataset); // creation log is done in parent class constructor
+    this.personGenerator =
+        new PersonGenerator(dataset, LocaleUtil.getFallbackLocale());
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    @Override
-    public void setDataset(String datasetName) {
-        super.setDataset(datasetName);
-        personGenerator.setDataset(datasetName);
-    }
+  @Override
+  public void setDataset(String datasetName) {
+    super.setDataset(datasetName);
+    personGenerator.setDataset(datasetName);
+  }
 
-    @Override
-    public void setLocale(Locale locale) {
-        super.setLocale(locale);
-        personGenerator.setLocale(locale);
-    }
+  @Override
+  public void setLocale(Locale locale) {
+    super.setLocale(locale);
+    personGenerator.setLocale(locale);
+  }
 
-    // Generator interface ---------------------------------------------------------------------------------------------
+  // Generator interface ---------------------------------------------------------------------------------------------
 
-    @Override
-    public Class<String> getGeneratedType() {
-        return String.class;
-    }
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
 
-    @Override
-    public void init(GeneratorContext context)
-            throws InvalidGeneratorSetupException {
-        personGenerator.init(context);
-        super.init(context);
-    }
+  @Override
+  public void init(GeneratorContext context)
+      throws InvalidGeneratorSetupException {
+    personGenerator.init(context);
+    super.init(context);
+  }
 
-    @Override
-    public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
-        return wrapper.wrap(generate());
-    }
+  @Override
+  public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
+    return wrapper.wrap(generate());
+  }
 
-    @Override
-    public String generate() {
-        Person person = personGenerator.generate();
-        return generate(person.getGivenName(), person.getFamilyName());
-    }
+  @Override
+  public String generate() {
+    Person person = personGenerator.generate();
+    return generate(person.getGivenName(), person.getFamilyName());
+  }
 
-    @Override
-    public boolean wasInitialized() {
-        return personGenerator.wasInitialized();
-    }
+  @Override
+  public boolean wasInitialized() {
+    return personGenerator.wasInitialized();
+  }
 
-    @Override
-    public void reset() {
-    }
+  @Override
+  public void reset() {
+  }
 
-    @Override
-    public void close() {
-    }
+  @Override
+  public void close() {
+  }
 
-    // ThreadAware interface implementation ----------------------------------------------------------------------------
+  // ThreadAware interface implementation ----------------------------------------------------------------------------
 
-    @Override
-    public boolean isThreadSafe() {
-        return super.isThreadSafe() && personGenerator.isThreadSafe();
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return super.isThreadSafe() && personGenerator.isThreadSafe();
+  }
 
-    @Override
-    public boolean isParallelizable() {
-        return super.isParallelizable() && personGenerator.isParallelizable();
-    }
+  @Override
+  public boolean isParallelizable() {
+    return super.isParallelizable() && personGenerator.isParallelizable();
+  }
 
-    // java.lang.Object override ---------------------------------------------------------------------------------------
+  // java.lang.Object override ---------------------------------------------------------------------------------------
 
-    @Override
-    public String toString() {
-        return getClass().getName() + '[' + personGenerator.getDataset() + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getName() + '[' + personGenerator.getDataset() + ']';
+  }
 
 }

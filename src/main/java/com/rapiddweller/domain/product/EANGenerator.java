@@ -40,48 +40,66 @@ import com.rapiddweller.benerator.wrapper.WrapperFactory;
  */
 public class EANGenerator extends NonNullGeneratorProxy<String> {
 
-    private boolean unique;
+  private boolean unique;
 
-    public EANGenerator() {
-        this(false);
-    }
+  /**
+   * Instantiates a new Ean generator.
+   */
+  public EANGenerator() {
+    this(false);
+  }
 
-    public EANGenerator(boolean unique) {
-        super(String.class);
-        this.unique = unique;
-    }
+  /**
+   * Instantiates a new Ean generator.
+   *
+   * @param unique the unique
+   */
+  public EANGenerator(boolean unique) {
+    super(String.class);
+    this.unique = unique;
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    public boolean isUnique() {
-        return unique;
-    }
+  /**
+   * Is unique boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isUnique() {
+    return unique;
+  }
 
-    public void setUnique(boolean unique) {
-        this.unique = unique;
-    }
+  /**
+   * Sets unique.
+   *
+   * @param unique the unique
+   */
+  public void setUnique(boolean unique) {
+    this.unique = unique;
+  }
 
-    // Generator interface ---------------------------------------------------------------------------------------------
+  // Generator interface ---------------------------------------------------------------------------------------------
 
-    @Override
-    public Class<String> getGeneratedType() {
-        return String.class;
-    }
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
 
-    @Override
-    public void init(GeneratorContext context) {
-        assertNotInitialized();
-        setSource(WrapperFactory
-                .asNonNullGenerator(new AlternativeGenerator<>(String.class,
-                        new EAN8Generator(unique),
-                        new EAN13Generator(unique))));
-        super.init(context);
-    }
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    setSource(WrapperFactory
+        .asNonNullGenerator(new AlternativeGenerator<>(String.class,
+            new EAN8Generator(unique),
+            new EAN13Generator(unique))));
+    super.init(context);
+  }
 
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + (unique ? "[unique]" : "");
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + (unique ? "[unique]" : "");
+  }
 }

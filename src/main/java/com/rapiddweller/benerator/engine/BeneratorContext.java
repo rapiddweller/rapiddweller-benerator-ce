@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.engine;
 
-import java.util.Locale;
-
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.factory.DefaultsProvider;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
@@ -38,70 +36,261 @@ import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.script.ScriptContext;
 
+import java.util.Locale;
+
 /**
  * A BeneratorContext.<br/><br/>
  * Created at 20.04.2008 06:41:04
- * @since 0.5.2
+ *
  * @author Volker Bergmann
+ * @since 0.5.2
  */
 public interface BeneratorContext extends GeneratorContext, ScriptContext {
-	
-	// simple configuration properties ---------------------------------------------------------------------------------
-	
-	void setDefaultEncoding(String defaultEncoding);
-	void setDefaultLineSeparator(String defaultLineSeparator);
-	void setDefaultLocale(Locale defaultLocale);
-	void setDefaultDataset(String defaultDataset);
-    void setDefaultPageSize(long defaultPageSize);
-    void setDefaultScript(String defaultScript);
-    void setDefaultNull(boolean defaultNull);
-	void setDefaultSeparator(char defaultSeparator);
-	void setDefaultErrorHandler(String defaultErrorHandler);
-	void setContextUri(String contextUri);
-	void setValidate(boolean validate);
-	void setMaxCount(Long maxCount);
-	boolean isDefaultImports();
-	void setDefaultImports(boolean defaultImports);
-	boolean isDefaultOneToOne();
-	void setDefaultOneToOne(boolean defaultOneToOne);
-	boolean isAcceptUnknownSimpleTypes();
-	void setAcceptUnknownSimpleTypes(boolean acceptUnknownSimpleTypes);
-	
-	// import handling -------------------------------------------------------------------------------------------------
-	
-	@Override
-	void importClass(String className);
-	void importPackage(String packageName);
-	void importDefaults();
 
-	// service provider sharing ----------------------------------------------------------------------------------------
-	
-	@Override
-	GeneratorFactory getGeneratorFactory();
-	void setGeneratorFactory(GeneratorFactory generatorFactory);
-	
-	DataModel getDataModel();
-	void setDataModel(DataModel dataModel);
-	
-	DefaultsProvider getDefaultsProvider();
-	void setDefaultsProvider(DefaultsProvider defaultsProvider);
-	
-	DescriptorProvider getLocalDescriptorProvider();
-	void addLocalType(TypeDescriptor type);
+  // simple configuration properties ---------------------------------------------------------------------------------
 
-	ComponentDescriptor getDefaultComponentConfig(String name);
-	void setDefaultComponentConfig(ComponentDescriptor component);
+  /**
+   * Sets default encoding.
+   *
+   * @param defaultEncoding the default encoding
+   */
+  void setDefaultEncoding(String defaultEncoding);
 
-	// data management -------------------------------------------------------------------------------------------------
-	
-	void setGlobal(String name, Object value);
-	
-	@Override
-	ProductWrapper<?> getCurrentProduct();
-	@Override
-	void setCurrentProduct(ProductWrapper<?> currentProduct);
-	boolean hasProductNameInScope(String productName);
-	
-	BeneratorContext createSubContext(String productName);
+  /**
+   * Sets default line separator.
+   *
+   * @param defaultLineSeparator the default line separator
+   */
+  void setDefaultLineSeparator(String defaultLineSeparator);
+
+  /**
+   * Sets default locale.
+   *
+   * @param defaultLocale the default locale
+   */
+  void setDefaultLocale(Locale defaultLocale);
+
+  /**
+   * Sets default dataset.
+   *
+   * @param defaultDataset the default dataset
+   */
+  void setDefaultDataset(String defaultDataset);
+
+  /**
+   * Sets default page size.
+   *
+   * @param defaultPageSize the default page size
+   */
+  void setDefaultPageSize(long defaultPageSize);
+
+  /**
+   * Sets default script.
+   *
+   * @param defaultScript the default script
+   */
+  void setDefaultScript(String defaultScript);
+
+  /**
+   * Sets default null.
+   *
+   * @param defaultNull the default null
+   */
+  void setDefaultNull(boolean defaultNull);
+
+  /**
+   * Sets default separator.
+   *
+   * @param defaultSeparator the default separator
+   */
+  void setDefaultSeparator(char defaultSeparator);
+
+  /**
+   * Sets default error handler.
+   *
+   * @param defaultErrorHandler the default error handler
+   */
+  void setDefaultErrorHandler(String defaultErrorHandler);
+
+  /**
+   * Sets context uri.
+   *
+   * @param contextUri the context uri
+   */
+  void setContextUri(String contextUri);
+
+  /**
+   * Sets validate.
+   *
+   * @param validate the validate
+   */
+  void setValidate(boolean validate);
+
+  /**
+   * Sets max count.
+   *
+   * @param maxCount the max count
+   */
+  void setMaxCount(Long maxCount);
+
+  /**
+   * Is default imports boolean.
+   *
+   * @return the boolean
+   */
+  boolean isDefaultImports();
+
+  /**
+   * Sets default imports.
+   *
+   * @param defaultImports the default imports
+   */
+  void setDefaultImports(boolean defaultImports);
+
+  /**
+   * Is default one to one boolean.
+   *
+   * @return the boolean
+   */
+  boolean isDefaultOneToOne();
+
+  /**
+   * Sets default one to one.
+   *
+   * @param defaultOneToOne the default one to one
+   */
+  void setDefaultOneToOne(boolean defaultOneToOne);
+
+  /**
+   * Is accept unknown simple types boolean.
+   *
+   * @return the boolean
+   */
+  boolean isAcceptUnknownSimpleTypes();
+
+  /**
+   * Sets accept unknown simple types.
+   *
+   * @param acceptUnknownSimpleTypes the accept unknown simple types
+   */
+  void setAcceptUnknownSimpleTypes(boolean acceptUnknownSimpleTypes);
+
+  // import handling -------------------------------------------------------------------------------------------------
+
+  @Override
+  void importClass(String className);
+
+  /**
+   * Import package.
+   *
+   * @param packageName the package name
+   */
+  void importPackage(String packageName);
+
+  /**
+   * Import defaults.
+   */
+  void importDefaults();
+
+  // service provider sharing ----------------------------------------------------------------------------------------
+
+  @Override
+  GeneratorFactory getGeneratorFactory();
+
+  /**
+   * Sets generator factory.
+   *
+   * @param generatorFactory the generator factory
+   */
+  void setGeneratorFactory(GeneratorFactory generatorFactory);
+
+  /**
+   * Gets data model.
+   *
+   * @return the data model
+   */
+  DataModel getDataModel();
+
+  /**
+   * Sets data model.
+   *
+   * @param dataModel the data model
+   */
+  void setDataModel(DataModel dataModel);
+
+  /**
+   * Gets defaults provider.
+   *
+   * @return the defaults provider
+   */
+  DefaultsProvider getDefaultsProvider();
+
+  /**
+   * Sets defaults provider.
+   *
+   * @param defaultsProvider the defaults provider
+   */
+  void setDefaultsProvider(DefaultsProvider defaultsProvider);
+
+  /**
+   * Gets local descriptor provider.
+   *
+   * @return the local descriptor provider
+   */
+  DescriptorProvider getLocalDescriptorProvider();
+
+  /**
+   * Add local type.
+   *
+   * @param type the type
+   */
+  void addLocalType(TypeDescriptor type);
+
+  /**
+   * Gets default component config.
+   *
+   * @param name the name
+   * @return the default component config
+   */
+  ComponentDescriptor getDefaultComponentConfig(String name);
+
+  /**
+   * Sets default component config.
+   *
+   * @param component the component
+   */
+  void setDefaultComponentConfig(ComponentDescriptor component);
+
+  // data management -------------------------------------------------------------------------------------------------
+
+  /**
+   * Sets global.
+   *
+   * @param name  the name
+   * @param value the value
+   */
+  void setGlobal(String name, Object value);
+
+  @Override
+  ProductWrapper<?> getCurrentProduct();
+
+  @Override
+  void setCurrentProduct(ProductWrapper<?> currentProduct);
+
+  /**
+   * Has product name in scope boolean.
+   *
+   * @param productName the product name
+   * @return the boolean
+   */
+  boolean hasProductNameInScope(String productName);
+
+  /**
+   * Create sub context benerator context.
+   *
+   * @param productName the product name
+   * @return the benerator context
+   */
+  BeneratorContext createSubContext(String productName);
 
 }

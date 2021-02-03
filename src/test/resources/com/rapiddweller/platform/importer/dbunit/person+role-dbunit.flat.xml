@@ -2,9 +2,9 @@
 
 
 <dataset>
-    <PERSON name="Alice"  age="23"/>
-    <PERSON name="Bob"    age="34"/>
+    <PERSON name="Alice" age="23"/>
+    <PERSON name="Bob" age="34"/>
     <PERSON name="Charly" age="45"/>
-    <ROLE   name="Admin"/>
-    <ROLE   name="User"/>
+    <ROLE name="Admin"/>
+    <ROLE name="User"/>
 </dataset>

@@ -30,40 +30,46 @@ import com.rapiddweller.benerator.util.ThreadSafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptUtil;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Creates {@link Object}s based on a Script.<br/><br/>
  * Created: 29.01.2008 17:19:24
- * @since 0.4.0
+ *
  * @author Volker Bergmann
+ * @since 0.4.0
  */
 public class ScriptGenerator extends ThreadSafeGenerator<Object> {
-    
-    private static final Logger LOGGER = LogManager.getLogger(ScriptGenerator.class);
 
-    private final Script script;
-    
-    public ScriptGenerator(Script script) {
-        this.script = script;
-    }
+  private static final Logger LOGGER = LogManager.getLogger(ScriptGenerator.class);
 
-    @Override
-	public Class<Object> getGeneratedType() {
-	    return Object.class;
-    }
+  private final Script script;
 
-	@Override
-	public ProductWrapper<Object> generate(ProductWrapper<Object> wrapper) {
-        Object result = ScriptUtil.execute(script, context);
-        LOGGER.debug("Generated: {}", result);
-        return wrapper.wrap(result);
-    }
-    
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + script + ']';
-    }
+  /**
+   * Instantiates a new Script generator.
+   *
+   * @param script the script
+   */
+  public ScriptGenerator(Script script) {
+    this.script = script;
+  }
+
+  @Override
+  public Class<Object> getGeneratedType() {
+    return Object.class;
+  }
+
+  @Override
+  public ProductWrapper<Object> generate(ProductWrapper<Object> wrapper) {
+    Object result = ScriptUtil.execute(script, context);
+    LOGGER.debug("Generated: {}", result);
+    return wrapper.wrap(result);
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + script + ']';
+  }
 
 }

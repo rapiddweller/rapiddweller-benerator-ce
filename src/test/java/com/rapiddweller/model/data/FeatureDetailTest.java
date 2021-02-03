@@ -27,28 +27,34 @@
 package com.rapiddweller.model.data;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Tests the {@link FeatureDetail}.<br/><br/>
  * Created at 03.05.2008 12:14:11
- * @since 0.5.3
+ *
  * @author Volker Bergmann
+ * @since 0.5.3
  */
 public class FeatureDetailTest {
 
-	@Test
-	public void testEquals() {
-		FeatureDetail<Integer> min = new FeatureDetail<>("min", Integer.class, true);
-		min.setValue(1);
-		assertNotEquals(null, min);
-		assertNotEquals("", min);
-		assertEquals(min, min);
-		FeatureDetail<Integer> min2 = new FeatureDetail<>("min", Integer.class, true);
-		min.setValue(2);
-		assertNotEquals(min, min2);
-		FeatureDetail<Integer> max = new FeatureDetail<>("max", Integer.class, true);
-		assertNotEquals(min, max);
-	}
-	
+  /**
+   * Test equals.
+   */
+  @Test
+  public void testEquals() {
+    FeatureDetail<Integer> min = new FeatureDetail<>("min", Integer.class, true);
+    min.setValue(1);
+    assertNotEquals(null, min);
+    assertNotEquals("", min);
+    assertEquals(min, min);
+    FeatureDetail<Integer> min2 = new FeatureDetail<>("min", Integer.class, true);
+    min.setValue(2);
+    assertNotEquals(min, min2);
+    FeatureDetail<Integer> max = new FeatureDetail<>("max", Integer.class, true);
+    assertNotEquals(min, max);
+  }
+
 }

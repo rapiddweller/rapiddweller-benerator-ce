@@ -2,37 +2,41 @@
 
 
 <!--DOCTYPE xs:schema PUBLIC "-//W3C//DTD XMLSCHEMA 200102//EN" "XMLSchema.dtd"-->
-<xs:schema 
+<xs:schema
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         xmlns:ben="https://www.benerator.de/schema/1.0.0"
-		targetNamespace="annotation-test.xsd"
-		xmlns="annotation-test.xsd"
-		elementFormDefault="qualified">
+        targetNamespace="annotation-test.xsd"
+        xmlns="annotation-test.xsd"
+        elementFormDefault="qualified">
 
-	<xs:element name="root">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="simple-type"/>
-				<xs:element ref="complex-type"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="simple-type"/>
+                <xs:element ref="complex-type"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
-	<xs:element name="simple-type" type="xs:string">
-		<xs:annotation>
-			<xs:appinfo><ben:type values="'Alice','Bob'"/></xs:appinfo>
-		</xs:annotation>
-	</xs:element>
+    <xs:element name="simple-type" type="xs:string">
+        <xs:annotation>
+            <xs:appinfo>
+                <ben:type values="'Alice','Bob'"/>
+            </xs:appinfo>
+        </xs:annotation>
+    </xs:element>
 
-	<xs:element name="complex-type" type="person">
-		<xs:annotation>
-			<xs:appinfo><ben:type source="person.csv"/></xs:appinfo>
-		</xs:annotation>
-	</xs:element>
+    <xs:element name="complex-type" type="person">
+        <xs:annotation>
+            <xs:appinfo>
+                <ben:type source="person.csv"/>
+            </xs:appinfo>
+        </xs:annotation>
+    </xs:element>
 
-	<xs:complexType name="person">
-		<xs:attribute name="name" type="xs:string"/>
-		<xs:attribute name="age"  type="xs:int"/>
-	</xs:complexType>
+    <xs:complexType name="person">
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="age" type="xs:int"/>
+    </xs:complexType>
 
 </xs:schema>

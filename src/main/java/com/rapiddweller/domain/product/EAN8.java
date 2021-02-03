@@ -44,7 +44,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 @Documented
 @Constraint(validatedBy = EAN13Validator.class)
 @Target({METHOD, FIELD, TYPE})

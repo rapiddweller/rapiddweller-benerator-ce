@@ -38,30 +38,38 @@ import com.rapiddweller.script.expression.ExpressionUtil;
  * Parses an <code>onError</code> attribute in an XML descriptor element.<br/>
  * <br/>
  * Created at 24.07.2009 08:42:51
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class ErrorHandlerExpression extends DynamicExpression<ErrorHandler> {
-	
-	private final String category;
-	private final Expression<String> levelExpr;
 
-    public ErrorHandlerExpression(String category, Expression<String> levelExpr) {
-	    this.levelExpr = levelExpr;
-	    this.category = category;
-    }
+  private final String category;
+  private final Expression<String> levelExpr;
 
-	@Override
-	public ErrorHandler evaluate(Context context) {
-		String levelName = ExpressionUtil.evaluate(levelExpr, context);
-		if (levelName == null)
-			if (context != null)
-				levelName = ((BeneratorContext) context).getDefaultErrorHandler();
-			else
-				levelName = Level.fatal.name();
-		Level level = Level.valueOf(levelName);
-		return new ErrorHandler(category, level);
+  /**
+   * Instantiates a new Error handler expression.
+   *
+   * @param category  the category
+   * @param levelExpr the level expr
+   */
+  public ErrorHandlerExpression(String category, Expression<String> levelExpr) {
+    this.levelExpr = levelExpr;
+    this.category = category;
+  }
+
+  @Override
+  public ErrorHandler evaluate(Context context) {
+    String levelName = ExpressionUtil.evaluate(levelExpr, context);
+    if (levelName == null) {
+      if (context != null) {
+        levelName = ((BeneratorContext) context).getDefaultErrorHandler();
+      } else {
+        levelName = Level.fatal.name();
+      }
     }
+    Level level = Level.valueOf(levelName);
+    return new ErrorHandler(category, level);
+  }
 
 }

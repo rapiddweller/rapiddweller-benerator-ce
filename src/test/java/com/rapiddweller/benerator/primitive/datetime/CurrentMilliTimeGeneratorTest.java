@@ -26,36 +26,42 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
-import java.lang.annotation.Annotation;
-
-import javax.validation.ConstraintValidatorContext;
-
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 import org.junit.Test;
+
+import javax.validation.ConstraintValidatorContext;
+import java.lang.annotation.Annotation;
 
 /**
  * Tests the CurrentMilliTimeGenerator.<br/>
  * <br/>
  * Created: 19.11.2007 20:43:45
+ *
  * @author Volker Bergmann
  */
 public class CurrentMilliTimeGeneratorTest extends GeneratorClassTest {
 
-    public CurrentMilliTimeGeneratorTest() {
-        super(CurrentMilliTimeGenerator.class);
-    }
+  /**
+   * Instantiates a new Current milli time generator test.
+   */
+  public CurrentMilliTimeGeneratorTest() {
+    super(CurrentMilliTimeGenerator.class);
+  }
 
-    @Test
-    public void testProducts() {
-        CurrentMilliTimeGenerator generator = new CurrentMilliTimeGenerator();
-        generator.init(context);
-		expectGenerations(generator, 10, new AbstractConstraintValidator<Annotation, Long>() {
-            @Override
-			public boolean isValid(Long millis, ConstraintValidatorContext context) {
-                return Math.abs(System.currentTimeMillis() - millis) < 1000L;
-            }
-        });
-    }
-    
+  /**
+   * Test products.
+   */
+  @Test
+  public void testProducts() {
+    CurrentMilliTimeGenerator generator = new CurrentMilliTimeGenerator();
+    generator.init(context);
+    expectGenerations(generator, 10, new AbstractConstraintValidator<Annotation, Long>() {
+      @Override
+      public boolean isValid(Long millis, ConstraintValidatorContext context) {
+        return Math.abs(System.currentTimeMillis() - millis) < 1000L;
+      }
+    });
+  }
+
 }

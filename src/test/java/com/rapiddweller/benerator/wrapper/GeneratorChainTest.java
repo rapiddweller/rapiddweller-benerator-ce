@@ -34,27 +34,34 @@ import org.junit.Test;
 /**
  * Tests the {@link GeneratorChain} class.<br/><br/>
  * Created: 22.07.2011 15:02:07
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class GeneratorChainTest extends GeneratorTest {
 
-	@Test
-	public void testUnique() {
-		GeneratorChain<Integer> chain = new GeneratorChain<>(Integer.class, true,
-                new SequenceTestGenerator<>(2, 3),
-                new SequenceTestGenerator<>(1, 2));
-		chain.init(context);
-		expectGeneratedSequence(chain, 2, 3, 1).withCeasedAvailability();
-	}
-	
-	@Test
-	public void testNonUnique() {
-		GeneratorChain<Integer> chain = new GeneratorChain<>(Integer.class, false,
-                new OneShotGenerator<>(2),
-                new OneShotGenerator<>(1));
-		chain.init(context);
-		expectGeneratedSequence(chain, 2, 1).withCeasedAvailability();
-	}
-	
+  /**
+   * Test unique.
+   */
+  @Test
+  public void testUnique() {
+    GeneratorChain<Integer> chain = new GeneratorChain<>(Integer.class, true,
+        new SequenceTestGenerator<>(2, 3),
+        new SequenceTestGenerator<>(1, 2));
+    chain.init(context);
+    expectGeneratedSequence(chain, 2, 3, 1).withCeasedAvailability();
+  }
+
+  /**
+   * Test non unique.
+   */
+  @Test
+  public void testNonUnique() {
+    GeneratorChain<Integer> chain = new GeneratorChain<>(Integer.class, false,
+        new OneShotGenerator<>(2),
+        new OneShotGenerator<>(1));
+    chain.init(context);
+    expectGeneratedSequence(chain, 2, 1).withCeasedAvailability();
+  }
+
 }

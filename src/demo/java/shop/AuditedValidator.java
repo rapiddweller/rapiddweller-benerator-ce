@@ -41,12 +41,18 @@ import com.rapiddweller.model.data.Entity;
  */
 public class AuditedValidator implements Validator<Entity> {
 
-    public boolean valid(Entity audited) {
-        String creator = (String) audited.getComponent("created_by");
-        if (StringUtil.isEmpty(creator)) {
-            return false;
-        }
-        Date creationDate = (Date) audited.getComponent("created_at");
-        return (creationDate != null);
+  /**
+   * Valid boolean.
+   *
+   * @param audited the audited
+   * @return the boolean
+   */
+  public boolean valid(Entity audited) {
+    String creator = (String) audited.getComponent("created_by");
+    if (StringUtil.isEmpty(creator)) {
+      return false;
     }
+    Date creationDate = (Date) audited.getComponent("created_at");
+    return (creationDate != null);
+  }
 }

@@ -26,50 +26,66 @@
 
 package com.rapiddweller.benerator.distribution;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 /**
  * Tests the definition of custom weight functions.<br/><br/>
  * Created: 09.07.2010 07:23:54
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class CustomWeightFunctionIntegrationTest extends BeneratorIntegrationTest {
 
-	final String xml =
-		"<generate type='entity' count='1000' consumer='cons'>" +
-		"	<attribute name='c' values=\"'a', 'b', 'c'\" " +
-				"distribution='new " + StandardWeightingFunction.class.getName() + "(50,30,20)' />" +
-		"</generate>";
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void test() {
-		ConsumerMock consumer = new ConsumerMock(true);
-		context.setGlobal("cons", consumer);
-		parseAndExecute(xml);
-		List<Entity> products = (List<Entity>) consumer.getProducts();
-		assertEquals(1000, products.size());
-		int a = 0, b = 0, c = 0;
-		for (Entity e : products) {
-			String val = (String) e.get("c");
-			switch (val.charAt(0)) {
-				case 'a' : a++; break;
-				case 'b' : b++; break;
-				case 'c' : c++; break;
-				default: fail("expected 'a', 'b' or 'c', found: " + val.charAt(0));
-			}
-		}
-		assertTrue(a > b);
-		assertTrue(b > c);
-	}
-	
+  /**
+   * The Xml.
+   */
+  final String xml =
+      "<generate type='entity' count='1000' consumer='cons'>" +
+          "	<attribute name='c' values=\"'a', 'b', 'c'\" " +
+          "distribution='new " + StandardWeightingFunction.class.getName() + "(50,30,20)' />" +
+          "</generate>";
+
+  /**
+   * Test.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void test() {
+    ConsumerMock consumer = new ConsumerMock(true);
+    context.setGlobal("cons", consumer);
+    parseAndExecute(xml);
+    List<Entity> products = (List<Entity>) consumer.getProducts();
+    assertEquals(1000, products.size());
+    int a = 0, b = 0, c = 0;
+    for (Entity e : products) {
+      String val = (String) e.get("c");
+      switch (val.charAt(0)) {
+        case 'a':
+          a++;
+          break;
+        case 'b':
+          b++;
+          break;
+        case 'c':
+          c++;
+          break;
+        default:
+          fail("expected 'a', 'b' or 'c', found: " + val.charAt(0));
+      }
+    }
+    assertTrue(a > b);
+    assertTrue(b > c);
+  }
+
 }
 

@@ -39,77 +39,106 @@ import com.rapiddweller.model.data.Uniqueness;
  */
 public class EAN13Generator extends NonNullGeneratorWrapper<String, String> {
 
-    private boolean unique;
-    private boolean ordered;
+  private boolean unique;
+  private boolean ordered;
 
-    public EAN13Generator() {
-        this(false);
+  /**
+   * Instantiates a new Ean 13 generator.
+   */
+  public EAN13Generator() {
+    this(false);
+  }
+
+  /**
+   * Instantiates a new Ean 13 generator.
+   *
+   * @param unique the unique
+   */
+  public EAN13Generator(boolean unique) {
+    this(unique, false);
+  }
+
+  /**
+   * Instantiates a new Ean 13 generator.
+   *
+   * @param unique  the unique
+   * @param ordered the ordered
+   */
+  public EAN13Generator(boolean unique, boolean ordered) {
+    super(null);
+    setUnique(unique);
+    setOrdered(ordered);
+  }
+
+  /**
+   * Is unique boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isUnique() {
+    return unique;
+  }
+
+  private void setUnique(boolean unique) {
+    this.unique = unique;
+  }
+
+  /**
+   * Is ordered boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isOrdered() {
+    return ordered;
+  }
+
+  /**
+   * Sets ordered.
+   *
+   * @param ordered the ordered
+   */
+  public void setOrdered(boolean ordered) {
+    this.ordered = ordered;
+  }
+
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    assertNotInitialized();
+    Uniqueness uniqueness = Uniqueness.instance(unique, ordered);
+    setSource(context.getGeneratorFactory()
+        .createRegexStringGenerator("[0-9]{12}", 12, 12, uniqueness));
+    super.init(context);
+  }
+
+  @Override
+  public String generate() {
+    assertInitialized();
+    char[] chars = new char[13];
+    int sum = 0;
+    generateFromNotNullSource().getChars(0, 12, chars, 0);
+    for (int i = 0; i < 12; i++) {
+      sum += (chars[i] - '0') * (1 + (i % 2) * 2);
     }
-
-    public EAN13Generator(boolean unique) {
-        this(unique, false);
+    if (sum % 10 == 0) {
+      chars[12] = '0';
+    } else {
+      chars[12] = (char) ('0' + 10 - (sum % 10));
     }
+    return String.valueOf(chars);
+  }
 
-    public EAN13Generator(boolean unique, boolean ordered) {
-        super(null);
-        setUnique(unique);
-        setOrdered(ordered);
-    }
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    public boolean isUnique() {
-        return unique;
-    }
-
-    private void setUnique(boolean unique) {
-        this.unique = unique;
-    }
-
-    public boolean isOrdered() {
-        return ordered;
-    }
-
-    public void setOrdered(boolean ordered) {
-        this.ordered = ordered;
-    }
-
-    // Generator interface ---------------------------------------------------------------------------------------------
-
-    @Override
-    public Class<String> getGeneratedType() {
-        return String.class;
-    }
-
-    @Override
-    public synchronized void init(GeneratorContext context) {
-        assertNotInitialized();
-        Uniqueness uniqueness = Uniqueness.instance(unique, ordered);
-        setSource(context.getGeneratorFactory()
-                .createRegexStringGenerator("[0-9]{12}", 12, 12, uniqueness));
-        super.init(context);
-    }
-
-    @Override
-    public String generate() {
-        assertInitialized();
-        char[] chars = new char[13];
-        int sum = 0;
-        generateFromNotNullSource().getChars(0, 12, chars, 0);
-        for (int i = 0; i < 12; i++) {
-            sum += (chars[i] - '0') * (1 + (i % 2) * 2);
-        }
-        if (sum % 10 == 0) {
-            chars[12] = '0';
-        } else {
-            chars[12] = (char) ('0' + 10 - (sum % 10));
-        }
-        return String.valueOf(chars);
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + (unique ? "[unique]" : "");
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + (unique ? "[unique]" : "");
+  }
 
 }

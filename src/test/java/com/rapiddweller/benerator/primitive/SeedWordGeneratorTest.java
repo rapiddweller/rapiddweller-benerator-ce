@@ -28,35 +28,43 @@ package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link SeedWordGenerator}.<br/>
  * <br/>
  * Created at 11.07.2009 19:34:40
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class SeedWordGeneratorTest extends GeneratorClassTest {
 
-    public SeedWordGeneratorTest() {
-	    super(SeedWordGenerator.class);
-    }
+  /**
+   * Instantiates a new Seed word generator test.
+   */
+  public SeedWordGeneratorTest() {
+    super(SeedWordGenerator.class);
+  }
 
-    @Test
-    public void test() {
-    	SeedWordGenerator generator = new SeedWordGenerator();
-    	generator.init(context);
-    	//generator.printState();
-    	for (int i = 0; i < 10; i++) {
-    		String word = generator.generate();
-    		assertNotNull(word);
-			logger.debug(word);
-    		assertNotNull(word);
-    		assertTrue(word.length() > 0);
-    	}
-		assertAvailable(generator);
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    SeedWordGenerator generator = new SeedWordGenerator();
+    generator.init(context);
+    //generator.printState();
+    for (int i = 0; i < 10; i++) {
+      String word = generator.generate();
+      assertNotNull(word);
+      logger.debug(word);
+      assertNotNull(word);
+      assertTrue(word.length() > 0);
     }
-    
+    assertAvailable(generator);
+  }
+
 }

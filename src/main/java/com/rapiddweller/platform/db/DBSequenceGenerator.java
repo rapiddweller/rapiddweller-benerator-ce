@@ -37,58 +37,100 @@ import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class DBSequenceGenerator extends NonNullGeneratorProxy<Long> {
 
-    private String name;
-    private DBSystem database;
-    private boolean cached;
+  private String name;
+  private DBSystem database;
+  private boolean cached;
 
-    public DBSequenceGenerator(String name, DBSystem source) {
-        this(name, source, false);
-    }
+  /**
+   * Instantiates a new Db sequence generator.
+   *
+   * @param name   the name
+   * @param source the source
+   */
+  public DBSequenceGenerator(String name, DBSystem source) {
+    this(name, source, false);
+  }
 
-    public DBSequenceGenerator(String name, DBSystem database, boolean cached) {
-        super(Long.class);
-        this.name = name;
-        this.database = database;
-        this.cached = cached;
-    }
+  /**
+   * Instantiates a new Db sequence generator.
+   *
+   * @param name     the name
+   * @param database the database
+   * @param cached   the cached
+   */
+  public DBSequenceGenerator(String name, DBSystem database, boolean cached) {
+    super(Long.class);
+    this.name = name;
+    this.database = database;
+    this.cached = cached;
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public DBSystem getDatabase() {
-        return database;
-    }
+  /**
+   * Gets database.
+   *
+   * @return the database
+   */
+  public DBSystem getDatabase() {
+    return database;
+  }
 
-    public void setDatabase(DBSystem database) {
-        this.database = database;
-    }
+  /**
+   * Sets database.
+   *
+   * @param database the database
+   */
+  public void setDatabase(DBSystem database) {
+    this.database = database;
+  }
 
-    public boolean isCached() {
-        return cached;
-    }
+  /**
+   * Is cached boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isCached() {
+    return cached;
+  }
 
-    public void setCached(boolean cached) {
-        this.cached = cached;
-    }
+  /**
+   * Sets cached.
+   *
+   * @param cached the cached
+   */
+  public void setCached(boolean cached) {
+    this.cached = cached;
+  }
 
-    // Generator interface implementation ------------------------------------------------------------------------------
+  // Generator interface implementation ------------------------------------------------------------------------------
 
-    @Override
-    public synchronized void init(GeneratorContext context) {
-        setSource(cached ?
-                new CachedSequenceGenerator(name, database) :
-                new PlainSequenceGenerator(name, database));
-        super.init(context);
-    }
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    setSource(cached ?
+        new CachedSequenceGenerator(name, database) :
+        new PlainSequenceGenerator(name, database));
+    super.init(context);
+  }
 
 }

@@ -27,25 +27,28 @@
 package com.rapiddweller.benerator.parser.xml;
 
 import com.rapiddweller.common.xml.XMLUtil;
+import org.junit.Test;
 import org.w3c.dom.Element;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link XmlDescriptorParser}.<br/>
  * <br/>
  * Created at 02.01.2009 17:58:45
- * @since 0.5.7
+ *
  * @author Volker Bergmann
+ * @since 0.5.7
  */
-
 public class XmlDescriptorParserTest {
 
-	@Test
-	public void testUnresolvedEscaping() {
-		Element element = XMLUtil.parseStringAsElement("<bla name='a\\tb\\\\c'/>");
-		assertEquals("a\\tb\\\\c", XmlDescriptorParser.parseStringAttribute(element, "name", null));
-	}
+  /**
+   * Test unresolved escaping.
+   */
+  @Test
+  public void testUnresolvedEscaping() {
+    Element element = XMLUtil.parseStringAsElement("<bla name='a\\tb\\\\c'/>");
+    assertEquals("a\\tb\\\\c", XmlDescriptorParser.parseStringAttribute(element, "name", null));
+  }
 
 }

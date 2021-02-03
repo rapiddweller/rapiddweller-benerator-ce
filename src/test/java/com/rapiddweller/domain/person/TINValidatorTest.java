@@ -27,26 +27,32 @@
 package com.rapiddweller.domain.person;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link TINValidator}.<br/>
  * <br/>
  * Created at 27.08.2008 00:14:42
- * @since 0.5.5
+ *
  * @author Volker Bergmann
+ * @since 0.5.5
  */
 public class TINValidatorTest {
 
-	@Test
-	public void test() {
-		TINValidator validator = new TINValidator();
-		assertFalse(validator.isValid(null, null));
-		assertFalse(validator.isValid("0123456789", null));
-		assertFalse(validator.isValid("012345678901", null));
-		assertTrue( validator.isValid("85546190279", null));
-		assertTrue( validator.isValid("13774960521", null));
-		assertTrue( validator.isValid("24321065874", null));
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    TINValidator validator = new TINValidator();
+    assertFalse(validator.isValid(null, null));
+    assertFalse(validator.isValid("0123456789", null));
+    assertFalse(validator.isValid("012345678901", null));
+    assertTrue(validator.isValid("85546190279", null));
+    assertTrue(validator.isValid("13774960521", null));
+    assertTrue(validator.isValid("24321065874", null));
+  }
+
 }

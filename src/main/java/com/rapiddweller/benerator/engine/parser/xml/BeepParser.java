@@ -36,19 +36,23 @@ import org.w3c.dom.Element;
 /**
  * Parses a &lt;beep/&gt; descriptor.<br/><br/>
  * Created: 14.09.2010 14:35:23
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class BeepParser extends AbstractBeneratorDescriptorParser {
 
-	public BeepParser() {
-	    super("beep", null, null, 
-	    		BeneratorRootStatement.class, IfStatement.class, WhileStatement.class);
-    }
+  /**
+   * Instantiates a new Beep parser.
+   */
+  public BeepParser() {
+    super("beep", null, null,
+        BeneratorRootStatement.class, IfStatement.class, WhileStatement.class);
+  }
 
-	@Override
-	public BeepStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-        return new BeepStatement();
-    }
+  @Override
+  public BeepStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    return new BeepStatement();
+  }
 
 }

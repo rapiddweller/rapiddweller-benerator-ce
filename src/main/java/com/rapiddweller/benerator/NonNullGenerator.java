@@ -31,9 +31,16 @@ package com.rapiddweller.benerator;
  * {@link Generator} interface which declares a {@link #generate()} method as in Benerator versions before 0.7.<br/>
  * <br/>
  * Created: 26.07.2011 17:34:50
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public interface NonNullGenerator<E> extends Generator<E> {
-	E generate();
+  /**
+   * Generate e.
+   *
+   * @return the e
+   */
+  E generate();
 }

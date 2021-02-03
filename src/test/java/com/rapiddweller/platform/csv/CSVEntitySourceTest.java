@@ -26,69 +26,80 @@
 
 package com.rapiddweller.platform.csv;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.format.DataIterator;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.AbstractEntityIteratorTest;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link CSVEntitySource}.<br/><br/>
  * Created: 26.08.2007 12:45:17
+ *
  * @author Volker Bergmann
  */
 public class CSVEntitySourceTest extends AbstractEntityIteratorTest {
 
-    private static final String PERSON_URI = "com/rapiddweller/platform/csv/person-bean.csv";
-	private static final String PERSON_URI_WO_HEADERS = "string://Alice,23\nBob,34\nCharly,45";
+  private static final String PERSON_URI = "com/rapiddweller/platform/csv/person-bean.csv";
+  private static final String PERSON_URI_WO_HEADERS = "string://Alice,23\nBob,34\nCharly,45";
 
-    // test methods ----------------------------------------------------------------------------------------------------
+  // test methods ----------------------------------------------------------------------------------------------------
 
-    @Test
-    public void testSingleRun() {
-    	CSVEntitySource source = new CSVEntitySource(PERSON_URI, createPersonDescriptor(), Encodings.UTF_8);
-    	source.setContext(new DefaultBeneratorContext());
-        checkIteration(source.iterator(), "name", "age", false);
+  /**
+   * Test single run.
+   */
+  @Test
+  public void testSingleRun() {
+    CSVEntitySource source = new CSVEntitySource(PERSON_URI, createPersonDescriptor(), Encodings.UTF_8);
+    source.setContext(new DefaultBeneratorContext());
+    checkIteration(source.iterator(), "name", "age", false);
+  }
+
+  /**
+   * Test reset.
+   */
+  @Test
+  public void testReset() {
+    CSVEntitySource source = new CSVEntitySource(PERSON_URI, createPersonDescriptor(), Encodings.UTF_8);
+    source.setContext(new DefaultBeneratorContext());
+    checkIteration(source.iterator(), "name", "age", false);
+    checkIteration(source.iterator(), "name", "age", false);
+  }
+
+  /**
+   * Test without headers.
+   */
+  @Test
+  public void testWithoutHeaders() {
+    CSVEntitySource source = new CSVEntitySource(PERSON_URI_WO_HEADERS, createPersonDescriptor(), Encodings.UTF_8);
+    source.setColumns(new String[] {"c1", "c2"});
+    source.setContext(new DefaultBeneratorContext());
+    checkIteration(source.iterator(), "c1", "c2", false);
+    checkIteration(source.iterator(), "c1", "c2", false);
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private void checkIteration(DataIterator<Entity> iterator, String col1, String col2, boolean headersAsEntityExpected) {
+    ComplexTypeDescriptor descriptor = createPersonDescriptor();
+    if (headersAsEntityExpected) {
+      assertEquals(new Entity(descriptor, col1, "name", col2, "age"), nextOf(iterator));
     }
+    assertEquals(new Entity(descriptor, col1, "Alice", col2, "23"), nextOf(iterator));
+    assertEquals(new Entity(descriptor, col1, "Bob", col2, "34"), nextOf(iterator));
+    assertEquals(new Entity(descriptor, col1, "Charly", col2, "45"), nextOf(iterator));
+    assertUnavailable(iterator);
+  }
 
-    @Test
-    public void testReset() {
-    	CSVEntitySource source = new CSVEntitySource(PERSON_URI, createPersonDescriptor(), Encodings.UTF_8);
-    	source.setContext(new DefaultBeneratorContext());
-        checkIteration(source.iterator(), "name", "age", false);
-        checkIteration(source.iterator(), "name", "age", false);
-    }
-
-    @Test
-    public void testWithoutHeaders() {
-    	CSVEntitySource source = new CSVEntitySource(PERSON_URI_WO_HEADERS, createPersonDescriptor(), Encodings.UTF_8);
-    	source.setColumns(new String[] { "c1", "c2" });
-    	source.setContext(new DefaultBeneratorContext());
-        checkIteration(source.iterator(), "c1", "c2", false);
-        checkIteration(source.iterator(), "c1", "c2", false);
-    }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private void checkIteration(DataIterator<Entity> iterator, String col1, String col2, boolean headersAsEntityExpected) {
-        ComplexTypeDescriptor descriptor = createPersonDescriptor();
-        if (headersAsEntityExpected)
-            assertEquals(new Entity(descriptor, col1, "name", col2, "age"), nextOf(iterator));
-        assertEquals(new Entity(descriptor, col1, "Alice",  col2, "23"), nextOf(iterator));
-        assertEquals(new Entity(descriptor, col1, "Bob",    col2, "34"), nextOf(iterator));
-        assertEquals(new Entity(descriptor, col1, "Charly", col2, "45"), nextOf(iterator));
-        assertUnavailable(iterator);
-    }
-
-	private ComplexTypeDescriptor createPersonDescriptor() {
-		ComplexTypeDescriptor countryDescriptor = createComplexType("Country");
-    	countryDescriptor.addComponent(createPart("isoCode", "string"));
-    	countryDescriptor.addComponent(createPart("name", "string"));
-		return countryDescriptor;
-	}
+  private ComplexTypeDescriptor createPersonDescriptor() {
+    ComplexTypeDescriptor countryDescriptor = createComplexType("Country");
+    countryDescriptor.addComponent(createPart("isoCode", "string"));
+    countryDescriptor.addComponent(createPart("name", "string"));
+    return countryDescriptor;
+  }
 
 }

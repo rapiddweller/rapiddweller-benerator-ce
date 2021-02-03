@@ -26,10 +26,6 @@
 
 package com.rapiddweller.benerator.engine;
 
-import static org.junit.Assert.*;
-
-import java.util.Locale;
-
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.domain.address.Country;
@@ -38,70 +34,94 @@ import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.xls.XLSLineIterator;
 import org.junit.Test;
 
+import java.util.Locale;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 /**
  * Tests the {@link BeneratorContext}.<br/><br/>
  * Created: 31.03.2010 15:15:07
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class DefaultBeneratorContextTest {
 
-	private static final String OFF_CLASSPATH_RESOURCES_FOLDER = "src/test/offCpResources";
+  private static final String OFF_CLASSPATH_RESOURCES_FOLDER = "src/test/offCpResources";
 
-	@Test
-	public void testDefaults() {
-		BeneratorContext context = new DefaultBeneratorContext();
-		assertEquals(".", context.getContextUri());
-		assertEquals(Country.getDefault().getIsoCode(), context.getDefaultDataset());
-		assertEquals("fatal", context.getDefaultErrorHandler());
-		assertEquals(SystemInfo.getLineSeparator(), context.getDefaultLineSeparator());
-		assertEquals(Locale.getDefault(), context.getDefaultLocale());
-		assertEquals(1, context.getDefaultPageSize());
-		assertEquals("ben", context.getDefaultScript());
-		assertEquals("ben", ScriptUtil.getDefaultScriptEngine());
-		assertEquals(',', context.getDefaultSeparator());
-        assertNull(context.getMaxCount());
-		context.close();
-	}
-	
-	@Test
-	public void testSysPropAccess() {
-		BeneratorContext context = new DefaultBeneratorContext();
-		assertEquals(System.getProperty("user.name"), context.get("user.name"));
-		context.close();
-	}
-	
-	@Test
-	public void testClassInJarInLibFolder() {
-		BeneratorContext context = new DefaultBeneratorContext(OFF_CLASSPATH_RESOURCES_FOLDER);
-		Class<?> testClassInJar = context.forName("com.my.TestClassInJar");
-		Object o = BeanUtil.newInstance(testClassInJar);
-		assertEquals("staticMethodInJar called", BeanUtil.invoke(testClassInJar, "staticMethodInJar"));
-		assertEquals("instanceMethodInJar called", BeanUtil.invoke(o, "instanceMethodInJar"));
-		context.close();
-	}
-	
-	@Test
-	public void testResourceInJarInLibFolder() throws Exception {
-		String XLS_RESOURCE_NAME = "xls/xls_in_jar.xls";
-		BeneratorContext context = new DefaultBeneratorContext(OFF_CLASSPATH_RESOURCES_FOLDER);
-		String resourceUri = context.resolveRelativeUri(XLS_RESOURCE_NAME);
-		XLSLineIterator iterator = new XLSLineIterator(resourceUri);
-		assertArrayEquals(new Object[] { "name", "age" }, iterator.next(new DataContainer<>()).getData());
-		assertArrayEquals(new Object[] { "Alice", 23L }, iterator.next(new DataContainer<>()).getData());
-		assertArrayEquals(new Object[] { "Bob", 34L }, iterator.next(new DataContainer<>()).getData());
-		assertNull(iterator.next(new DataContainer<>()));
-		context.close();
-	}
-	
-	@Test
-	public void testClassFileInLibFolder() {
-		BeneratorContext context = new DefaultBeneratorContext(OFF_CLASSPATH_RESOURCES_FOLDER);
-		Class<?> testClassInJar = context.forName("com.my.TestClassInPath");
-		Object o = BeanUtil.newInstance(testClassInJar);
-		assertEquals("staticMethodInPath called", BeanUtil.invoke(testClassInJar, "staticMethodInPath"));
-		assertEquals("instanceMethodInPath called", BeanUtil.invoke(o, "instanceMethodInPath"));
-		context.close();
-	}
-	
+  /**
+   * Test defaults.
+   */
+  @Test
+  public void testDefaults() {
+    BeneratorContext context = new DefaultBeneratorContext();
+    assertEquals(".", context.getContextUri());
+    assertEquals(Country.getDefault().getIsoCode(), context.getDefaultDataset());
+    assertEquals("fatal", context.getDefaultErrorHandler());
+    assertEquals(SystemInfo.getLineSeparator(), context.getDefaultLineSeparator());
+    assertEquals(Locale.getDefault(), context.getDefaultLocale());
+    assertEquals(1, context.getDefaultPageSize());
+    assertEquals("ben", context.getDefaultScript());
+    assertEquals("ben", ScriptUtil.getDefaultScriptEngine());
+    assertEquals(',', context.getDefaultSeparator());
+    assertNull(context.getMaxCount());
+    context.close();
+  }
+
+  /**
+   * Test sys prop access.
+   */
+  @Test
+  public void testSysPropAccess() {
+    BeneratorContext context = new DefaultBeneratorContext();
+    assertEquals(System.getProperty("user.name"), context.get("user.name"));
+    context.close();
+  }
+
+  /**
+   * Test class in jar in lib folder.
+   */
+  @Test
+  public void testClassInJarInLibFolder() {
+    BeneratorContext context = new DefaultBeneratorContext(OFF_CLASSPATH_RESOURCES_FOLDER);
+    Class<?> testClassInJar = context.forName("com.my.TestClassInJar");
+    Object o = BeanUtil.newInstance(testClassInJar);
+    assertEquals("staticMethodInJar called", BeanUtil.invoke(testClassInJar, "staticMethodInJar"));
+    assertEquals("instanceMethodInJar called", BeanUtil.invoke(o, "instanceMethodInJar"));
+    context.close();
+  }
+
+  /**
+   * Test resource in jar in lib folder.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testResourceInJarInLibFolder() throws Exception {
+    String XLS_RESOURCE_NAME = "xls/xls_in_jar.xls";
+    BeneratorContext context = new DefaultBeneratorContext(OFF_CLASSPATH_RESOURCES_FOLDER);
+    String resourceUri = context.resolveRelativeUri(XLS_RESOURCE_NAME);
+    XLSLineIterator iterator = new XLSLineIterator(resourceUri);
+    assertArrayEquals(new Object[] {"name", "age"}, iterator.next(new DataContainer<>()).getData());
+    assertArrayEquals(new Object[] {"Alice", 23L}, iterator.next(new DataContainer<>()).getData());
+    assertArrayEquals(new Object[] {"Bob", 34L}, iterator.next(new DataContainer<>()).getData());
+    assertNull(iterator.next(new DataContainer<>()));
+    context.close();
+  }
+
+  /**
+   * Test class file in lib folder.
+   */
+  @Test
+  public void testClassFileInLibFolder() {
+    BeneratorContext context = new DefaultBeneratorContext(OFF_CLASSPATH_RESOURCES_FOLDER);
+    Class<?> testClassInJar = context.forName("com.my.TestClassInPath");
+    Object o = BeanUtil.newInstance(testClassInJar);
+    assertEquals("staticMethodInPath called", BeanUtil.invoke(testClassInJar, "staticMethodInPath"));
+    assertEquals("instanceMethodInPath called", BeanUtil.invoke(o, "instanceMethodInPath"));
+    context.close();
+  }
+
 }

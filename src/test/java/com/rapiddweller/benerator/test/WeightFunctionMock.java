@@ -33,32 +33,51 @@ import com.rapiddweller.benerator.distribution.WeightFunction;
  * Mock implementation of the {@link WeightFunction} interface.<br/>
  * <br/>
  * Created at 29.12.2008 07:31:04
- * @since 0.5.7
+ *
  * @author Volker Bergmann
+ * @since 0.5.7
  */
-
 public class WeightFunctionMock extends AbstractWeightFunction {
-	
-	public static WeightFunctionMock latestInstance;
 
-	public double value;
-	
-	public WeightFunctionMock() {
-		this(1.);
-	}
+  /**
+   * The constant latestInstance.
+   */
+  public static WeightFunctionMock latestInstance;
 
-	public WeightFunctionMock(double value) {
-		this.value = value;
-		latestInstance = this;
-	}
+  /**
+   * The Value.
+   */
+  public double value;
 
-	public void setValue(double value) {
-		this.value = value;
-	}
+  /**
+   * Instantiates a new Weight function mock.
+   */
+  public WeightFunctionMock() {
+    this(1.);
+  }
 
-	@Override
-	public double value(double param) {
-		return value;
-	}
-	
+  /**
+   * Instantiates a new Weight function mock.
+   *
+   * @param value the value
+   */
+  public WeightFunctionMock(double value) {
+    this.value = value;
+    latestInstance = this;
+  }
+
+  /**
+   * Sets value.
+   *
+   * @param value the value
+   */
+  public void setValue(double value) {
+    this.value = value;
+  }
+
+  @Override
+  public double value(double param) {
+    return value;
+  }
+
 }

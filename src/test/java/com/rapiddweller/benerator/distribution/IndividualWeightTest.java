@@ -35,35 +35,41 @@ import org.junit.Test;
  * Tests the {@link IndividualWeight}.<br/>
  * <br/>
  * Created at 01.07.2009 16:39:01
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class IndividualWeightTest extends GeneratorTest {
 
-	@Test(expected=Exception.class)
-	public void testCreateGenerator() {
-		createWeight().createNumberGenerator(Integer.class, 1, 3, 1, false);
-	}
+  /**
+   * Test create generator.
+   */
+  @Test(expected = Exception.class)
+  public void testCreateGenerator() {
+    createWeight().createNumberGenerator(Integer.class, 1, 3, 1, false);
+  }
 
-	@Test
-	public void testApplyTo() {
-		SequenceGenerator<Integer> source = new SequenceGenerator<>(Integer.class, 1, 2, 3);
-		source.init(context);
-		Generator<Integer> generator = createWeight().applyTo(source, false);
-		generator.init(context);
-		expectRelativeWeights(generator, 5000, 1, 1, 2, 2, 3, 3);
-	}
-	
-	// helpers ---------------------------------------------------------------------------------------------------------
+  /**
+   * Test apply to.
+   */
+  @Test
+  public void testApplyTo() {
+    SequenceGenerator<Integer> source = new SequenceGenerator<>(Integer.class, 1, 2, 3);
+    source.init(context);
+    Generator<Integer> generator = createWeight().applyTo(source, false);
+    generator.init(context);
+    expectRelativeWeights(generator, 5000, 1, 1, 2, 2, 3, 3);
+  }
 
-	private static IndividualWeight<Integer> createWeight() {
-        return new IndividualWeight<>() {
-            @Override
-            public double weight(Integer object) {
-                return object;
-            }
-        };
-    }
-	
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  private static IndividualWeight<Integer> createWeight() {
+    return new IndividualWeight<>() {
+      @Override
+      public double weight(Integer object) {
+        return object;
+      }
+    };
+  }
+
 }

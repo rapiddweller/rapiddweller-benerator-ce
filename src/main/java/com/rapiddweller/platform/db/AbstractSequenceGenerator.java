@@ -42,60 +42,100 @@ import org.apache.logging.log4j.Logger;
  * @since 0.7.0
  */
 public abstract class AbstractSequenceGenerator
-        extends ThreadSafeNonNullGenerator<Long> {
+    extends ThreadSafeNonNullGenerator<Long> {
 
-    protected final Logger logger = LogManager.getLogger(getClass());
+  /**
+   * The Logger.
+   */
+  protected final Logger logger = LogManager.getLogger(getClass());
 
-    protected String name;
-    protected DBSystem database;
+  /**
+   * The Name.
+   */
+  protected String name;
+  /**
+   * The Database.
+   */
+  protected DBSystem database;
 
-    public AbstractSequenceGenerator(String name, DBSystem database) {
-        this.name = name;
-        this.database = database;
+  /**
+   * Instantiates a new Abstract sequence generator.
+   *
+   * @param name     the name
+   * @param database the database
+   */
+  public AbstractSequenceGenerator(String name, DBSystem database) {
+    this.name = name;
+    this.database = database;
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Gets database.
+   *
+   * @return the database
+   */
+  public DBSystem getDatabase() {
+    return database;
+  }
+
+  /**
+   * Sets database.
+   *
+   * @param database the database
+   */
+  public void setDatabase(DBSystem database) {
+    this.database = database;
+  }
+
+  // Generator interface implementation ------------------------------------------------------------------------------
+
+  @Override
+  public Class<Long> getGeneratedType() {
+    return Long.class;
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    if (database == null) {
+      throw new InvalidGeneratorSetupException(
+          "No 'source' database defined");
     }
-
-    // properties ------------------------------------------------------------------------------------------------------
-
-    public String getName() {
-        return name;
+    if (StringUtil.isEmpty(name)) {
+      throw new InvalidGeneratorSetupException(
+          "No sequence 'name' defined");
     }
+    super.init(context);
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  // helpers ---------------------------------------------------------------------------------------------------------
 
-    public DBSystem getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(DBSystem database) {
-        this.database = database;
-    }
-
-    // Generator interface implementation ------------------------------------------------------------------------------
-
-    @Override
-    public Class<Long> getGeneratedType() {
-        return Long.class;
-    }
-
-    @Override
-    public synchronized void init(GeneratorContext context) {
-        if (database == null) {
-            throw new InvalidGeneratorSetupException(
-                    "No 'source' database defined");
-        }
-        if (StringUtil.isEmpty(name)) {
-            throw new InvalidGeneratorSetupException(
-                    "No sequence 'name' defined");
-        }
-        super.init(context);
-    }
-
-    // helpers ---------------------------------------------------------------------------------------------------------
-
-    protected long fetchSequenceValue() {
-        return database.nextSequenceValue(name);
-    }
+  /**
+   * Fetch sequence value long.
+   *
+   * @return the long
+   */
+  protected long fetchSequenceValue() {
+    return database.nextSequenceValue(name);
+  }
 
 }

@@ -33,21 +33,27 @@ import com.rapiddweller.common.Validator;
 /**
  * {@link Statement} using a {@link Validator} to check if the current object is valid.<br/><br/>
  * Created: 06.09.2011 12:50:04
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ValidationStatement implements Statement {
 
-	private final Validator validator;
-	
-	public ValidationStatement(Validator validator) {
-		this.validator = validator;
-	}
+  private final Validator validator;
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-		return validator.valid(context.getCurrentProduct().unwrap());
-	}
+  /**
+   * Instantiates a new Validation statement.
+   *
+   * @param validator the validator
+   */
+  public ValidationStatement(Validator validator) {
+    this.validator = validator;
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    return validator.valid(context.getCurrentProduct().unwrap());
+  }
 
 }

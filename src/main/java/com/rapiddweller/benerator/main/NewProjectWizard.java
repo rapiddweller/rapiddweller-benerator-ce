@@ -26,6 +26,12 @@
 
 package com.rapiddweller.benerator.main;
 
+import com.rapiddweller.benerator.gui.CreateProjectPanel;
+import com.rapiddweller.common.ui.I18NSupport;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.UIManager;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Image;
@@ -36,61 +42,70 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.UIManager;
-
-import com.rapiddweller.benerator.gui.CreateProjectPanel;
-import com.rapiddweller.common.ui.I18NSupport;
-
 /**
  * Main class for the benerator GUI.<br/>
  * <br/>
  * Created at 17.07.2008 09:32:54
- * @since 0.5.6
+ *
  * @author Volker Bergmann
+ * @since 0.5.6
  */
 public class NewProjectWizard extends JFrame {
-	
-	private static final long serialVersionUID = -359209516189875124L;
 
-	final I18NSupport i18n;
-	final CreateProjectPanel mainPanel;
+  private static final long serialVersionUID = -359209516189875124L;
 
-	public NewProjectWizard() {
-		setIcons("com/rapiddweller/benerator/gui/benerator{0}.png", 16, 32, 64, 128);
-		
-		i18n = new I18NSupport("com/rapiddweller/benerator/gui/benerator", Locale.getDefault());
-		mainPanel = new CreateProjectPanel(i18n);
-		
-		setTitle(i18n.getString("newProjectWizardTitle"));
-		Container contentPane = getContentPane();
-		contentPane.setLayout(new BorderLayout());
-		contentPane.add(mainPanel, BorderLayout.CENTER);
-		getRootPane().setDefaultButton(mainPanel.getCreateButton());
-		
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				mainPanel.exit();
-			}
-		});
-		pack();
-		setLocationRelativeTo(null);
-	}
+  /**
+   * The 18 n.
+   */
+  final I18NSupport i18n;
+  /**
+   * The Main panel.
+   */
+  final CreateProjectPanel mainPanel;
 
-	private void setIcons(String pattern, int... sizes) {
-		List<Image> images = new ArrayList<>();
-		for (int size : sizes) {
-			String name = MessageFormat.format(pattern, size);
-			images.add(new ImageIcon(name).getImage());
-		}
+  /**
+   * Instantiates a new New project wizard.
+   */
+  public NewProjectWizard() {
+    setIcons("com/rapiddweller/benerator/gui/benerator{0}.png", 16, 32, 64, 128);
 
-		this.setIconImages(images);
-	}
+    i18n = new I18NSupport("com/rapiddweller/benerator/gui/benerator", Locale.getDefault());
+    mainPanel = new CreateProjectPanel(i18n);
 
-	public static void main(String[] args) throws Exception {
-		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		new NewProjectWizard().setVisible(true);
-	}
+    setTitle(i18n.getString("newProjectWizardTitle"));
+    Container contentPane = getContentPane();
+    contentPane.setLayout(new BorderLayout());
+    contentPane.add(mainPanel, BorderLayout.CENTER);
+    getRootPane().setDefaultButton(mainPanel.getCreateButton());
+
+    addWindowListener(new WindowAdapter() {
+      @Override
+      public void windowClosing(WindowEvent e) {
+        mainPanel.exit();
+      }
+    });
+    pack();
+    setLocationRelativeTo(null);
+  }
+
+  private void setIcons(String pattern, int... sizes) {
+    List<Image> images = new ArrayList<>();
+    for (int size : sizes) {
+      String name = MessageFormat.format(pattern, size);
+      images.add(new ImageIcon(name).getImage());
+    }
+
+    this.setIconImages(images);
+  }
+
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   * @throws Exception the exception
+   */
+  public static void main(String[] args) throws Exception {
+    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    new NewProjectWizard().setVisible(true);
+  }
 }

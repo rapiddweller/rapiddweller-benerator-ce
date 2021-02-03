@@ -7,8 +7,8 @@
 
     <!-- define a database that will be referred by the id 'db' later -->
     <comment>define a database that will be referred by the id 'db' subsequently</comment>
-    <database id="db" url="jdbc:hsqldb:mem:benerator" driver="org.hsqldb.jdbcDriver" user="sa" catalog="public"
-              schema="public" tableFilter="db_.*"/>
+    <database id="db" url="jdbc:hsqldb:mem:beneratormass" driver="org.hsqldb.jdbcDriver" user="sa" schema="PUBLIC"
+              tableFilter="db_.*"/>
 
     <execute target="db" onError="warn">
         DROP TABLE IF EXISTS db_dummy;
@@ -28,8 +28,7 @@
         id int NOT NULL,
         name varchar(30) NOT NULL,
         role_fk int NOT NULL,
-        PRIMARY KEY (id),
-        CONSTRAINT user_role_fk FOREIGN KEY (role_fk) REFERENCES db_role (id)
+        PRIMARY KEY (id)
         );
         CREATE INDEX user_role_fki on db_user (role_fk);
 
@@ -49,11 +48,17 @@
         <id name="id" type="int" generator="IncrementGenerator"/>
     </generate>
 
-    <generate type="db_user" consumer="db,ConsoleExporter" count="10">
-        <id name="id" type="int" generator="LocalSequenceGenerator"/>
+    <generate type="db_user" consumer="db" count="100000" pageSize="100000">
+        <id name="id" type="int" generator="IncrementGenerator"/>
         <attribute name="index" generator="IncrementGenerator"/>
-        <attribute name="role_fk" source="db" type="int" selector="SELECT id from db_role" distribution="random"
-                   cyclic="True"/>
+        <reference name="role_fk" source="db" targetType="DB_ROLE" distribution="random"/>
     </generate>
+
+    <iterate type="DB_USER" source="db" consumer="NoConsumer">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="DB_USER.counter &#60; 100000">
+        <error>{ftl: ${DB_USER.counter} items instead of 100000}</error>
+    </if>
 
 </setup>

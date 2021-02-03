@@ -43,157 +43,224 @@ import java.util.List;
  * Assembles the output of several source generators by a java.text.MessageFormat.<br/>
  * <br/>
  * Created: 08.06.2006 21:48:08
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class MessageGenerator extends ValidatingGenerator<String> implements NonNullGenerator<String> {
 
-    /**
-     * Pattern of the MessageFormat to use.
-     * @see MessageFormat
-     */
-    private String pattern;
+  /**
+   * Pattern of the MessageFormat to use.
+   *
+   * @see MessageFormat
+   */
+  private String pattern;
 
-    /** minimum length of the generated String */
-    private int minLength;
+  /**
+   * minimum length of the generated String
+   */
+  private int minLength;
 
-    /** maximum length of the generated String */
-    private int maxLength;
+  /**
+   * maximum length of the generated String
+   */
+  private int maxLength;
 
-    /** provides the objects to format */
-    private final SimpleMultiSourceArrayGenerator<?> helper;
+  /**
+   * provides the objects to format
+   */
+  private final SimpleMultiSourceArrayGenerator<?> helper;
 
-	private final WrapperProvider<Object[]> sourceWrapperProvider;
+  private final WrapperProvider<Object[]> sourceWrapperProvider;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    /** Sets minLength to 0, maxLength to 30 and all other values empty. */
-    public MessageGenerator() {
-        this(null);
+  /**
+   * Sets minLength to 0, maxLength to 30 and all other values empty.
+   */
+  public MessageGenerator() {
+    this(null);
+  }
+
+  /**
+   * Instantiates a new Message generator.
+   *
+   * @param pattern the pattern
+   * @param sources the sources
+   */
+  public MessageGenerator(String pattern, Generator<?>... sources) {
+    this(pattern, 0, 30, sources);
+  }
+
+  /**
+   * Initializes Generator
+   *
+   * @param pattern   the pattern
+   * @param minLength the min length
+   * @param maxLength the max length
+   * @param sources   the sources
+   */
+  public MessageGenerator(String pattern, int minLength, int maxLength, Generator<?>... sources) {
+    super(new StringLengthValidator());
+    this.pattern = pattern;
+    this.minLength = minLength;
+    this.maxLength = maxLength;
+    this.helper = new SimpleMultiSourceArrayGenerator<>(Object.class, sources);
+    this.sourceWrapperProvider = new WrapperProvider<>();
+  }
+
+  // config properties -----------------------------------------------------------------------------------------------
+
+  /**
+   * Returns the pattern property
+   *
+   * @return the pattern
+   */
+  public String getPattern() {
+    return pattern;
+  }
+
+  /**
+   * Sets the pattern property
+   *
+   * @param pattern the pattern
+   */
+  public void setPattern(String pattern) {
+    this.pattern = pattern;
+  }
+
+  /**
+   * Gets min length.
+   *
+   * @return the min length
+   */
+  /* Returns the minimum length of the generated String */
+  public int getMinLength() {
+    return minLength;
+  }
+
+  /**
+   * Sets min length.
+   *
+   * @param minLength the min length
+   */
+  /* Sets the minimum length of the generated String */
+  public void setMinLength(int minLength) {
+    this.minLength = minLength;
+  }
+
+  /**
+   * Gets max length.
+   *
+   * @return the max length
+   */
+  /* Returns the maximum length of the generated String */
+  public int getMaxLength() {
+    return maxLength;
+  }
+
+  /**
+   * Sets max length.
+   *
+   * @param maxLength the max length
+   */
+  /* Sets the maximum length of the generated String */
+  public void setMaxLength(int maxLength) {
+    this.maxLength = maxLength;
+  }
+
+  /**
+   * Sets the source generators
+   *
+   * @param sources the sources
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public void setSources(Generator<?>[] sources) {
+    this.helper.setSources((List) CollectionUtil.toList(sources));
+  }
+
+  // generator interface ---------------------------------------------------------------------------------------------
+
+  /**
+   * ensures consistency of the generator's state
+   */
+  @Override
+  public void init(GeneratorContext context) {
+    if (pattern == null) {
+      throw new InvalidGeneratorSetupException("pattern", "is null");
     }
+    StringLengthValidator v = (StringLengthValidator) validator;
+    v.setMinLength(minLength);
+    v.setMaxLength(maxLength);
+    helper.init(context);
+    super.init(context);
+  }
 
-    public MessageGenerator(String pattern, Generator<?> ... sources) {
-        this(pattern, 0, 30, sources);
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
+
+  @Override
+  public String generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
+
+  /**
+   * Implementation of ValidatingGenerator's generation callback method
+   */
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  @Override
+  protected ProductWrapper<String> doGenerate(ProductWrapper<String> wrapper) {
+    Object[] values = (Object[]) helper.generate((ProductWrapper) getSourceWrapper()).unwrap();
+    //changed  from Object[] to  Object
+    if (values == null) {
+      return null;
+    } else {
+      return wrapper.wrap(MessageFormat.format(pattern, values));
     }
+  }
 
-    /** Initializes Generator */
-    public MessageGenerator(String pattern, int minLength, int maxLength, Generator<?> ... sources) {
-        super(new StringLengthValidator());
-        this.pattern = pattern;
-        this.minLength = minLength;
-        this.maxLength = maxLength;
-        this.helper = new SimpleMultiSourceArrayGenerator<>(Object.class, sources);
-        this.sourceWrapperProvider = new WrapperProvider<>();
-    }
+  /**
+   * @see Generator#reset()
+   */
+  @Override
+  public void reset() {
+    helper.reset();
+    super.reset();
+  }
 
-    // config properties -----------------------------------------------------------------------------------------------
+  @Override
+  public boolean isParallelizable() {
+    return helper.isParallelizable();
+  }
 
-    /** Returns the pattern property */
-    public String getPattern() {
-        return pattern;
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return helper.isThreadSafe();
+  }
 
-    /** Sets the pattern property */
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
-    }
+  /**
+   * @see Generator#close()
+   */
+  @Override
+  public void close() {
+    helper.close();
+    super.close();
+  }
 
-    /* Returns the minimum length of the generated String */
-    public int getMinLength() {
-        return minLength;
-    }
+  private ProductWrapper<Object[]> getSourceWrapper() {
+    return sourceWrapperProvider.get();
+  }
 
-    /* Sets the minimum length of the generated String */
-    public void setMinLength(int minLength) {
-        this.minLength = minLength;
-    }
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    /* Returns the maximum length of the generated String */
-    public int getMaxLength() {
-        return maxLength;
-    }
-
-    /* Sets the maximum length of the generated String */
-    public void setMaxLength(int maxLength) {
-        this.maxLength = maxLength;
-    }
-
-    /** Sets the source generators */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void setSources(Generator<?>[] sources) {
-        this.helper.setSources((List) CollectionUtil.toList(sources));
-    }
-
-    // generator interface ---------------------------------------------------------------------------------------------
-
-    /** ensures consistency of the generator's state */
-    @Override
-    public void init(GeneratorContext context) {
-        if (pattern == null)
-            throw new InvalidGeneratorSetupException("pattern", "is null");
-        StringLengthValidator v = (StringLengthValidator) validator;
-        v.setMinLength(minLength);
-        v.setMaxLength(maxLength);
-        helper.init(context);
-        super.init(context);
-    }
-
-    @Override
-	public Class<String> getGeneratedType() {
-        return String.class;
-    }
-
-	@Override
-	public String generate() {
-		return GeneratorUtil.generateNonNull(this);
-	}
-
-    /** Implementation of ValidatingGenerator's generation callback method */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	protected ProductWrapper<String> doGenerate(ProductWrapper<String> wrapper) {
-        Object[] values = (Object[]) helper.generate((ProductWrapper) getSourceWrapper()).unwrap();
-        //changed  from Object[] to  Object
-        if (values == null)
-        	return null;
-        else
-        	return wrapper.wrap(MessageFormat.format(pattern, values));
-    }
-
-	/** @see Generator#reset() */
-    @Override
-    public void reset() {
-        helper.reset();
-        super.reset();
-    }
-
-	@Override
-	public boolean isParallelizable() {
-	    return helper.isParallelizable();
-    }
-
-	@Override
-	public boolean isThreadSafe() {
-	    return helper.isThreadSafe();
-    }
-
-	/** @see Generator#close() */
-    @Override
-    public void close() {
-        helper.close();
-        super.close();
-    }
-
-    private ProductWrapper<Object[]> getSourceWrapper() {
-		return sourceWrapperProvider.get();
-	}
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    /** Returns a String representation of the generator */
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[pattern='" + pattern + "', " + minLength + "<=length<=" + maxLength + "]";
-    }
+  /**
+   * Returns a String representation of the generator
+   */
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[pattern='" + pattern + "', " + minLength + "<=length<=" + maxLength + "]";
+  }
 
 }

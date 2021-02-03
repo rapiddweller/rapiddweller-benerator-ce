@@ -26,45 +26,160 @@
 
 package com.rapiddweller.benerator;
 
-import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-
 import com.rapiddweller.benerator.factory.GeneratorFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Context;
 
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+
 /**
  * Provides configuration and variable space for {@link Generator}s.<br/><br/>
  * Created: 14.03.2010 13:14:00
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public interface GeneratorContext extends Context {
 
-	// global properties -----------------------------------------------------------------------------------------------
-	
-    String getDefaultEncoding();
-    String getDefaultLineSeparator();
-	Locale getDefaultLocale();
-	String getDefaultDataset();
-	long getDefaultPageSize();
-    String getDefaultScript();
-    boolean isDefaultNull();
-	char getDefaultSeparator();
-	String getDefaultErrorHandler();
-	String getContextUri();
-	boolean isValidate();
-	Long getMaxCount();
+  // global properties -----------------------------------------------------------------------------------------------
 
-	// other features --------------------------------------------------------------------------------------------------
-	
-    GeneratorFactory getGeneratorFactory();
-	Object getGlobal(String name);
-    Class<?> forName(String className);
-	ExecutorService getExecutorService();
-	String resolveRelativeUri(String relativeUri);
+  /**
+   * Gets default encoding.
+   *
+   * @return the default encoding
+   */
+  String getDefaultEncoding();
 
-	ProductWrapper<?> getCurrentProduct();
-	void setCurrentProduct(ProductWrapper<?> currentProduct);
-	
+  /**
+   * Gets default line separator.
+   *
+   * @return the default line separator
+   */
+  String getDefaultLineSeparator();
+
+  /**
+   * Gets default locale.
+   *
+   * @return the default locale
+   */
+  Locale getDefaultLocale();
+
+  /**
+   * Gets default dataset.
+   *
+   * @return the default dataset
+   */
+  String getDefaultDataset();
+
+  /**
+   * Gets default page size.
+   *
+   * @return the default page size
+   */
+  long getDefaultPageSize();
+
+  /**
+   * Gets default script.
+   *
+   * @return the default script
+   */
+  String getDefaultScript();
+
+  /**
+   * Is default null boolean.
+   *
+   * @return the boolean
+   */
+  boolean isDefaultNull();
+
+  /**
+   * Gets default separator.
+   *
+   * @return the default separator
+   */
+  char getDefaultSeparator();
+
+  /**
+   * Gets default error handler.
+   *
+   * @return the default error handler
+   */
+  String getDefaultErrorHandler();
+
+  /**
+   * Gets context uri.
+   *
+   * @return the context uri
+   */
+  String getContextUri();
+
+  /**
+   * Is validate boolean.
+   *
+   * @return the boolean
+   */
+  boolean isValidate();
+
+  /**
+   * Gets max count.
+   *
+   * @return the max count
+   */
+  Long getMaxCount();
+
+  // other features --------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets generator factory.
+   *
+   * @return the generator factory
+   */
+  GeneratorFactory getGeneratorFactory();
+
+  /**
+   * Gets global.
+   *
+   * @param name the name
+   * @return the global
+   */
+  Object getGlobal(String name);
+
+  /**
+   * For name class.
+   *
+   * @param className the class name
+   * @return the class
+   */
+  Class<?> forName(String className);
+
+  /**
+   * Gets executor service.
+   *
+   * @return the executor service
+   */
+  ExecutorService getExecutorService();
+
+  /**
+   * Resolve relative uri string.
+   *
+   * @param relativeUri the relative uri
+   * @return the string
+   */
+  String resolveRelativeUri(String relativeUri);
+
+  /**
+   * Gets current product.
+   *
+   * @return the current product
+   */
+  ProductWrapper<?> getCurrentProduct();
+
+  /**
+   * Sets current product.
+   *
+   * @param currentProduct the current product
+   */
+  void setCurrentProduct(ProductWrapper<?> currentProduct);
+
 }

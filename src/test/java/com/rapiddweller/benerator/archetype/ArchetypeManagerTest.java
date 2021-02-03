@@ -26,33 +26,42 @@
 
 package com.rapiddweller.benerator.archetype;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link ArchetypeManager}.<br/><br/>
  * Created: 02.04.2010 10:04:23
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ArchetypeManagerTest {
 
-	@SuppressWarnings("null")
-    @Test
-	public void testArchetypeLookup() {
-		Archetype[] archetypes = ArchetypeManager.getInstance().getArchetypes();
-		// verify that archetypes have been found
-		assertTrue(archetypes != null && archetypes.length > 2);
-		// verify that the first archetype is 'hello'
-		assertEquals("hello", archetypes[0].getId());
-	}
+  /**
+   * Test archetype lookup.
+   */
+  @SuppressWarnings("null")
+  @Test
+  public void testArchetypeLookup() {
+    Archetype[] archetypes = ArchetypeManager.getInstance().getArchetypes();
+    // verify that archetypes have been found
+    assertTrue(archetypes != null && archetypes.length > 2);
+    // verify that the first archetype is 'hello'
+    assertEquals("hello", archetypes[0].getId());
+  }
 
-    @Test
-	public void testDefaultArchetype() {
-		Archetype defaultArchetype = ArchetypeManager.getInstance().getDefaultArchetype();
-		assertNotNull(defaultArchetype);
-		assertEquals("simple", defaultArchetype.getId());
-	}
+  /**
+   * Test default archetype.
+   */
+  @Test
+  public void testDefaultArchetype() {
+    Archetype defaultArchetype = ArchetypeManager.getInstance().getDefaultArchetype();
+    assertNotNull(defaultArchetype);
+    assertEquals("simple", defaultArchetype.getId());
+  }
 
 }

@@ -37,29 +37,35 @@ import org.apache.logging.log4j.Logger;
  * <br/>
  * Created: 06.07.2007 06:49:20
  *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.2
  */
 public class TimedTask<E extends Task> extends TaskProxy<E> {
 
-    private static final Logger logger = LogManager.getLogger(TimedTask.class);
+  private static final Logger logger = LogManager.getLogger(TimedTask.class);
 
-    public TimedTask(E realTask) {
-        super(realTask);
-    }
+  /**
+   * Instantiates a new Timed task.
+   *
+   * @param realTask the real task
+   */
+  public TimedTask(E realTask) {
+    super(realTask);
+  }
 
-    @Override
-    public TaskResult execute(Context context, ErrorHandler errorHandler) {
-        long startTime = System.currentTimeMillis();
-        TaskResult result = super.execute(context, errorHandler);
-        logger.info("Executing " + realTask + " took " +
-                (System.currentTimeMillis() - startTime) + " ms");
-        return result;
-    }
+  @Override
+  public TaskResult execute(Context context, ErrorHandler errorHandler) {
+    long startTime = System.currentTimeMillis();
+    TaskResult result = super.execute(context, errorHandler);
+    logger.info("Executing " + realTask + " took " +
+        (System.currentTimeMillis() - startTime) + " ms");
+    return result;
+  }
 
-    @Override
-    public Object clone() {
-        return new TimedTask<>(BeanUtil.clone(realTask));
-    }
+  @Override
+  public Object clone() {
+    return new TimedTask<>(BeanUtil.clone(realTask));
+  }
 
 }

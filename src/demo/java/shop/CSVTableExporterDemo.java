@@ -41,75 +41,84 @@ import org.databene.webdecs.DataSource;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+/**
+ * The type Csv table exporter demo.
+ */
 public class CSVTableExporterDemo {
 
-    private static final String JDBC_DRIVER = "org.hsqldb.jdbcDriver";
-    private static final String JDBC_URL = "jdbc:hsqldb:mem:benerator";
-    private static final String USER = "sa";
-    private static final String PASSWORD = null;
+  private static final String JDBC_DRIVER = "org.hsqldb.jdbcDriver";
+  private static final String JDBC_URL = "jdbc:hsqldb:mem:benerator";
+  private static final String USER = "sa";
+  private static final String PASSWORD = null;
 
-    private static Logger logger =
-            LogManager.getLogger(CSVTableExporterDemo.class);
+  private static Logger logger =
+      LogManager.getLogger(CSVTableExporterDemo.class);
 
-    public static void main(String[] args) throws IOException {
-        // first we create a table with some data to export
-        DBSystem db = new DBSystem(null, JDBC_URL, JDBC_DRIVER, USER, PASSWORD,
-                new DataModel());
-        try {
-            db.execute("create table db_data (" +
-                    "    id   int," +
-                    "    name varchar(30) NOT NULL," +
-                    "    PRIMARY KEY  (id)" +
-                    ")");
-            db.execute("insert into db_data values (1, 'alpha')");
-            db.execute("insert into db_data values (2, 'beta')");
-            db.execute("insert into db_data values (3, 'gamma')");
-            db.setFetchSize(100);
-            // ...and then we export it
-            exportTableAsCSV(db, "db_data.csv");
-            logger.info("...done!");
-            printFile("db_data.csv");
-        } finally {
-            db.execute("drop table db_data");
-        }
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   * @throws IOException the io exception
+   */
+  public static void main(String[] args) throws IOException {
+    // first we create a table with some data to export
+    DBSystem db = new DBSystem(null, JDBC_URL, JDBC_DRIVER, USER, PASSWORD,
+        new DataModel());
+    try {
+      db.execute("create table db_data (" +
+          "    id   int," +
+          "    name varchar(30) NOT NULL," +
+          "    PRIMARY KEY  (id)" +
+          ")");
+      db.execute("insert into db_data values (1, 'alpha')");
+      db.execute("insert into db_data values (2, 'beta')");
+      db.execute("insert into db_data values (3, 'gamma')");
+      db.setFetchSize(100);
+      // ...and then we export it
+      exportTableAsCSV(db, "db_data.csv");
+      logger.info("...done!");
+      printFile("db_data.csv");
+    } finally {
+      db.execute("drop table db_data");
     }
+  }
 
-    private static void exportTableAsCSV(StorageSystem db, String filename) {
-        DataSource<Entity> entities =
-                (DataSource<Entity>) db.queryEntities("db_data", null, null);
-        DataIterator<Entity> iterator = null;
-        try {
-            iterator = entities.iterator();
-            DataContainer<Entity> container =
-                    iterator.next(new DataContainer<Entity>());
-            Entity cursor = container.getData();
-            CSVEntityExporter exporter =
-                    new CSVEntityExporter(filename, cursor.descriptor());
-            try {
-                logger.info("exporting data, please wait...");
-                exporter.startProductConsumption(cursor);
-                while ((container = iterator.next(container)) != null) {
-                    exporter.startProductConsumption(container.getData());
-                }
-            } finally {
-                exporter.close();
-            }
-        } finally {
-            IOUtil.close(iterator);
+  private static void exportTableAsCSV(StorageSystem db, String filename) {
+    DataSource<Entity> entities =
+        (DataSource<Entity>) db.queryEntities("db_data", null, null);
+    DataIterator<Entity> iterator = null;
+    try {
+      iterator = entities.iterator();
+      DataContainer<Entity> container =
+          iterator.next(new DataContainer<Entity>());
+      Entity cursor = container.getData();
+      CSVEntityExporter exporter =
+          new CSVEntityExporter(filename, cursor.descriptor());
+      try {
+        logger.info("exporting data, please wait...");
+        exporter.startProductConsumption(cursor);
+        while ((container = iterator.next(container)) != null) {
+          exporter.startProductConsumption(container.getData());
         }
+      } finally {
+        exporter.close();
+      }
+    } finally {
+      IOUtil.close(iterator);
     }
+  }
 
-    private static void printFile(String filename) throws IOException {
-        System.out.println("Content of file " + filename + ":");
-        ReaderLineIterator iterator = null;
-        try {
-            iterator = new ReaderLineIterator(IOUtil.getReaderForURI(filename));
-            while (iterator.hasNext()) {
-                System.out.println(iterator.next());
-            }
-        } finally {
-            IOUtil.close(iterator);
-        }
+  private static void printFile(String filename) throws IOException {
+    System.out.println("Content of file " + filename + ":");
+    ReaderLineIterator iterator = null;
+    try {
+      iterator = new ReaderLineIterator(IOUtil.getReaderForURI(filename));
+      while (iterator.hasNext()) {
+        System.out.println(iterator.next());
+      }
+    } finally {
+      IOUtil.close(iterator);
     }
+  }
 
 }

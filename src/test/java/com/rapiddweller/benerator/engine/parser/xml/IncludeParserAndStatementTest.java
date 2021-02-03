@@ -26,42 +26,52 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.common.SyntaxError;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Integration test for {@link IncludeParser} and {@link IncludeStatement}.<br/><br/>
  * Created: 12.03.2010 10:37:04
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class IncludeParserAndStatementTest extends BeneratorIntegrationTest {
-	
-	private static final String DESC_URI = "com/rapiddweller/benerator/engine/parser/xml/included.ben.xml";
-	private static final String PROP_URI = "com/rapiddweller/benerator/engine/parser/xml/included.properties";
 
-	@Test
-	public void testIncludePropertiesFile() {
-		Statement statement = parse("<include uri='" + PROP_URI + "' />");
-		statement.execute(context);
-		assertEquals("done", context.get("incProp"));
-	}
+  private static final String DESC_URI = "com/rapiddweller/benerator/engine/parser/xml/included.ben.xml";
+  private static final String PROP_URI = "com/rapiddweller/benerator/engine/parser/xml/included.properties";
 
-	@Test
-	public void testIncludeDescriptorFile() {
-		Statement statement = parse("<include uri='" + DESC_URI + "' />");
-		statement.execute(context);
-		assertEquals("done", context.get("incProp"));
-	}
+  /**
+   * Test include properties file.
+   */
+  @Test
+  public void testIncludePropertiesFile() {
+    Statement statement = parse("<include uri='" + PROP_URI + "' />");
+    statement.execute(context);
+    assertEquals("done", context.get("incProp"));
+  }
 
-	@Test(expected = SyntaxError.class)
-	public void testAttributeTypo() {
-		parse("<include urr='bla.bla' />");
-	}
-	
+  /**
+   * Test include descriptor file.
+   */
+  @Test
+  public void testIncludeDescriptorFile() {
+    Statement statement = parse("<include uri='" + DESC_URI + "' />");
+    statement.execute(context);
+    assertEquals("done", context.get("incProp"));
+  }
+
+  /**
+   * Test attribute typo.
+   */
+  @Test(expected = SyntaxError.class)
+  public void testAttributeTypo() {
+    parse("<include urr='bla.bla' />");
+  }
+
 }

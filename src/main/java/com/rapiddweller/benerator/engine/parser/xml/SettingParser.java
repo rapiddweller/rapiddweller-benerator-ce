@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
@@ -40,108 +38,139 @@ import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ParseException;
+import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.CompositeExpression;
 import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.script.expression.IsNullExpression;
-import com.rapiddweller.common.xml.XMLUtil;
-import com.rapiddweller.script.DatabeneScriptParser;
 import org.w3c.dom.Element;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAME;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_REF;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_VALUE;
 
 /**
  * Parses a &lt;Property&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:58:53
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class SettingParser extends AbstractBeneratorDescriptorParser {
 
-	public SettingParser() {
-	    super(DescriptorConstants.EL_SETTING, CollectionUtil.toSet(ATT_NAME), 
-	    		CollectionUtil.toSet(ATT_DEFAULT, ATT_VALUE, ATT_REF, ATT_SOURCE));
+  /**
+   * Instantiates a new Setting parser.
+   */
+  public SettingParser() {
+    super(DescriptorConstants.EL_SETTING, CollectionUtil.toSet(ATT_NAME),
+        CollectionUtil.toSet(ATT_DEFAULT, ATT_VALUE, ATT_REF, ATT_SOURCE));
+  }
+
+  @Override
+  public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    String propertyName = element.getAttribute(ATT_NAME);
+    if (element.hasAttribute(ATT_DEFAULT)) {
+      return parseDefault(propertyName, element.getAttribute(ATT_DEFAULT));
+    } else {
+      Expression<?> valueEx = parseValue(element);
+      return new SetSettingStatement(propertyName, valueEx);
+    }
+  }
+
+  /**
+   * Parse value expression.
+   *
+   * @param element the element
+   * @return the expression
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public static Expression<?> parseValue(Element element) {
+    if (element.hasAttribute(ATT_VALUE)) {
+      return DescriptorParserUtil.parseScriptableStringAttribute(ATT_VALUE, element);
+    } else if (element.hasAttribute(ATT_REF)) {
+      return new ContextReference(element.getAttribute(ATT_REF));
+    } else if (element.hasAttribute(ATT_SOURCE)) {
+      return parseSource(element.getAttribute(ATT_SOURCE));
+    } else { // map child elements to a collection or array
+      Element[] childElements = XMLUtil.getChildElements(element);
+      Expression[] subExpressions = new Expression[childElements.length];
+      for (int j = 0; j < childElements.length; j++) {
+        subExpressions[j] = BeanParser.parseBeanExpression(childElements[j]);
+      }
+      switch (subExpressions.length) {
+        case 0:
+          throw new ConfigurationError("No valid property spec: " + XMLUtil.formatShort(element));
+        case 1:
+          return subExpressions[0];
+        default:
+          return new CompositeExpression<Object, Object>(subExpressions) {
+            @Override
+            public Object[] evaluate(Context context) {
+              return ExpressionUtil.evaluateAll(terms, context);
+            }
+          };
+      }
+    }
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private static Expression<?> parseSource(String source) {
+    try {
+      return new SourceExpression(DatabeneScriptParser.parseBeanSpec(source));
+    } catch (ParseException e) {
+      throw new ConfigurationError("Error parsing property source expression: " + source, e);
+    }
+  }
+
+  private static Statement parseDefault(String propertyName, String defaultValue) {
+    try {
+      ScriptableExpression valueExpression = new ScriptableExpression(defaultValue, null);
+      SetSettingStatement setterStatement = new SetSettingStatement(propertyName, valueExpression);
+      Expression<Boolean> condition = new IsNullExpression(new ContextReference(propertyName));
+      return new IfStatement(condition, setterStatement);
+    } catch (ParseException e) {
+      throw new ConfigurationError("Error parsing property default value expression: " + defaultValue, e);
+    }
+  }
+
+  /**
+   * Evaluates a 'source' expression to a Generator.<br/><br/>
+   * Created: 26.10.2009 08:38:44
+   *
+   * @param <E> the type parameter
+   * @author Volker Bergmann
+   * @since 0.6.0
+   */
+  public static class SourceExpression<E> extends DynamicExpression<E> {
+
+    /**
+     * The Source.
+     */
+    final Expression<Generator<E>> source;
+
+    /**
+     * Instantiates a new Source expression.
+     *
+     * @param source the source
+     */
+    public SourceExpression(Expression<Generator<E>> source) {
+      this.source = source;
     }
 
     @Override
-	public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-		String propertyName = element.getAttribute(ATT_NAME);
-		if (element.hasAttribute(ATT_DEFAULT))
-			return parseDefault(propertyName, element.getAttribute(ATT_DEFAULT));
-		else {
-			Expression<?> valueEx = parseValue(element);
-			return new SetSettingStatement(propertyName, valueEx);
-		}
-	}
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static Expression<?> parseValue(Element element) {
-		if (element.hasAttribute(ATT_VALUE))
-			return DescriptorParserUtil.parseScriptableStringAttribute(ATT_VALUE, element);
-		else if (element.hasAttribute(ATT_REF))
-			return new ContextReference(element.getAttribute(ATT_REF));
-		else if (element.hasAttribute(ATT_SOURCE))
-			return parseSource(element.getAttribute(ATT_SOURCE));
-		else { // map child elements to a collection or array
-	        Element[] childElements = XMLUtil.getChildElements(element);
-	        Expression[] subExpressions = new Expression[childElements.length];
-	        for (int j = 0; j < childElements.length; j++)
-	        	subExpressions[j] = BeanParser.parseBeanExpression(childElements[j]);
-	        switch (subExpressions.length) {
-		        case 0: throw new ConfigurationError("No valid property spec: " + XMLUtil.formatShort(element));
-		        case 1: return subExpressions[0];
-		        default: return new CompositeExpression<Object, Object>(subExpressions) {
-		    		@Override
-					public Object[] evaluate(Context context) {
-		                return ExpressionUtil.evaluateAll(terms, context);
-		            }
-		        };
-	        }
-	    }
-	}
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private static Expression<?> parseSource(String source) {
-		try {
-			return new SourceExpression(DatabeneScriptParser.parseBeanSpec(source));
-        } catch (ParseException e) {
-            throw new ConfigurationError("Error parsing property source expression: " + source, e);
-        }
+    public E evaluate(Context context) {
+      Generator<E> generator = source.evaluate(context);
+      ProductWrapper<E> wrapper = generator.generate(new ProductWrapper<>());
+      if (wrapper == null) {
+        throw new ConfigurationError("Generator not available: " + generator);
+      }
+      return wrapper.unwrap();
     }
 
-    private static Statement parseDefault(String propertyName, String defaultValue) {
-		try {
-			ScriptableExpression valueExpression = new ScriptableExpression(defaultValue, null);
-			SetSettingStatement setterStatement = new SetSettingStatement(propertyName, valueExpression);
-			Expression<Boolean> condition = new IsNullExpression(new ContextReference(propertyName));
-			return new IfStatement(condition, setterStatement);
-        } catch (ParseException e) {
-            throw new ConfigurationError("Error parsing property default value expression: " + defaultValue, e);
-        }
-    }
-
-	/**
-     * Evaluates a 'source' expression to a Generator.<br/><br/>
-     * Created: 26.10.2009 08:38:44
-     * @since 0.6.0
-     * @author Volker Bergmann
-     */
-    public static class SourceExpression<E> extends DynamicExpression<E> {
-    	
-    	final Expression<Generator<E>> source;
-    	
-		public SourceExpression(Expression<Generator<E>> source) {
-	        this.source = source;
-        }
-
-        @Override
-		public E evaluate(Context context) {
-			Generator<E> generator = source.evaluate(context);
-			ProductWrapper<E> wrapper = generator.generate(new ProductWrapper<>());
-			if (wrapper == null)
-				throw new ConfigurationError("Generator not available: " + generator);
-			return wrapper.unwrap();
-		}
-
-    }
+  }
 
 }

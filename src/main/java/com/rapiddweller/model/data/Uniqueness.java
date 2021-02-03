@@ -35,23 +35,44 @@ package com.rapiddweller.model.data;
  */
 public enum Uniqueness {
 
-    NONE(false),
-    SIMPLE(true),
-    ORDERED(true);
+  /**
+   * None uniqueness.
+   */
+  NONE(false),
+  /**
+   * Simple uniqueness.
+   */
+  SIMPLE(true),
+  /**
+   * Ordered uniqueness.
+   */
+  ORDERED(true);
 
-    private final boolean unique;
+  private final boolean unique;
 
-    Uniqueness(boolean unique) {
-        this.unique = unique;
-    }
+  Uniqueness(boolean unique) {
+    this.unique = unique;
+  }
 
-    public static Uniqueness instance(boolean unique, boolean ordered) {
-        return (unique ? (ordered ? Uniqueness.ORDERED : Uniqueness.SIMPLE) :
-                Uniqueness.NONE);
-    }
+  /**
+   * Instance uniqueness.
+   *
+   * @param unique  the unique
+   * @param ordered the ordered
+   * @return the uniqueness
+   */
+  public static Uniqueness instance(boolean unique, boolean ordered) {
+    return (unique ? (ordered ? Uniqueness.ORDERED : Uniqueness.SIMPLE) :
+        Uniqueness.NONE);
+  }
 
-    public boolean isUnique() {
-        return unique;
-    }
+  /**
+   * Is unique boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isUnique() {
+    return unique;
+  }
 
 }

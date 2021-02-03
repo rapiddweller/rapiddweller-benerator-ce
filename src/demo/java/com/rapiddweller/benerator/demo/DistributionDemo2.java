@@ -41,20 +41,25 @@ import com.rapiddweller.benerator.distribution.function.ExponentialFunction;
  */
 public class DistributionDemo2 {
 
-    public static void main(String[] args) {
-        generateNumbers();
-    }
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   */
+  public static void main(String[] args) {
+    generateNumbers();
+  }
 
-    private static void generateNumbers() {
-        System.out.println("Generating numbers");
-        Distribution distribution = new ExponentialFunction(5, -0.5);
-        Generator<Double> generator = distribution
-                .createNumberGenerator(Double.class, 3., 8., 0.1, false);
-        init(generator);
-        for (int i = 0; i < 20; i++) {
-            System.out.println(generateNonNull(generator));
-        }
-        close(generator);
+  private static void generateNumbers() {
+    System.out.println("Generating numbers");
+    Distribution distribution = new ExponentialFunction(5, -0.5);
+    Generator<Double> generator = distribution
+        .createNumberGenerator(Double.class, 3., 8., 0.1, false);
+    init(generator);
+    for (int i = 0; i < 20; i++) {
+      System.out.println(generateNonNull(generator));
     }
+    close(generator);
+  }
 
 }

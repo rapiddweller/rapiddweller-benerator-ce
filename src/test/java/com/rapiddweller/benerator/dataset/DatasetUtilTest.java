@@ -26,32 +26,36 @@
 
 package com.rapiddweller.benerator.dataset;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.util.Locale;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link DatasetUtil}.<br/><br/>
  * Created: 31.01.2012 11:17:29
- * @since 0.7.5
+ *
  * @author Volker Bergmann
+ * @since 0.7.5
  */
 public class DatasetUtilTest {
-	
-	@Test
-	public void testDefaultLanguageForRegion() {
-		assertEquals(Locale.getDefault(), DatasetUtil.defaultLanguageForRegion(null));
-		assertEquals(Locale.getDefault(), DatasetUtil.defaultLanguageForRegion(""));
-		assertEquals(Locale.US, DatasetUtil.defaultLanguageForRegion("US"));
-		assertEquals(Locale.ENGLISH, DatasetUtil.defaultLanguageForRegion("UK"));
-		assertEquals(Locale.UK, DatasetUtil.defaultLanguageForRegion("GB"));
-		assertEquals(new Locale("hi", "IN"), DatasetUtil.defaultLanguageForRegion("IN"));
-		assertEquals(Locale.GERMANY, DatasetUtil.defaultLanguageForRegion("DE"));
-		assertEquals(Locale.GERMAN, DatasetUtil.defaultLanguageForRegion("dach"));
-		assertEquals(Locale.ENGLISH, DatasetUtil.defaultLanguageForRegion("europe"));
-		assertEquals(Locale.ENGLISH, DatasetUtil.defaultLanguageForRegion("world"));
-	}
-	
+
+  /**
+   * Test default language for region.
+   */
+  @Test
+  public void testDefaultLanguageForRegion() {
+    assertEquals(Locale.getDefault(), DatasetUtil.defaultLanguageForRegion(null));
+    assertEquals(Locale.getDefault(), DatasetUtil.defaultLanguageForRegion(""));
+    assertEquals(Locale.US, DatasetUtil.defaultLanguageForRegion("US"));
+    assertEquals(Locale.ENGLISH, DatasetUtil.defaultLanguageForRegion("UK"));
+    assertEquals(Locale.UK, DatasetUtil.defaultLanguageForRegion("GB"));
+    assertEquals(new Locale("hi", "IN"), DatasetUtil.defaultLanguageForRegion("IN"));
+    assertEquals(Locale.GERMANY, DatasetUtil.defaultLanguageForRegion("DE"));
+    assertEquals(Locale.GERMAN, DatasetUtil.defaultLanguageForRegion("dach"));
+    assertEquals(Locale.ENGLISH, DatasetUtil.defaultLanguageForRegion("europe"));
+    assertEquals(Locale.ENGLISH, DatasetUtil.defaultLanguageForRegion("world"));
+  }
+
 }

@@ -26,32 +26,38 @@
 
 package com.rapiddweller.benerator.engine;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.common.IOUtil;
 import org.junit.Test;
 
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Integration test for Benerator's CSV functionality.<br/><br/>
  * Created: 03.02.2011 18:15:34
- * @since 0.6.5
+ *
  * @author Volker Bergmann
+ * @since 0.6.5
  */
 public class CSVIntegrationTest extends BeneratorIntegrationTest {
 
-	@Test
-	public void testHeadless() throws IOException {
-		context.setContextUri("/com/rapiddweller/benerator/engine/csv");
-		parseAndExecuteFile("/com/rapiddweller/benerator/engine/csv/headless_csv.ben.xml");
-		String generatedContent = IOUtil.getContentOfURI("target/headless-out.csv");
-		String expectedContent = 
-			"ALICE,231,A\r\n" +
-			"BOB,341,B";
-		
-		assertEquals(expectedContent, generatedContent);
-	}
+  /**
+   * Test headless.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void testHeadless() throws IOException {
+    context.setContextUri("/com/rapiddweller/benerator/engine/csv");
+    parseAndExecuteFile("/com/rapiddweller/benerator/engine/csv/headless_csv.ben.xml");
+    String generatedContent = IOUtil.getContentOfURI("target/headless-out.csv");
+    String expectedContent =
+        "ALICE,231,A\r\n" +
+            "BOB,341,B";
+
+    assertEquals(expectedContent, generatedContent);
+  }
 
 }

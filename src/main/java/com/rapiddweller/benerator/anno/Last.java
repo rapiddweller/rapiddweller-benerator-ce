@@ -35,11 +35,12 @@ import java.lang.annotation.Target;
  * Marks a boolean parameter to carry the information, whether the current invocation is the last one.<br/>
  * <br/>
  * Created: 12.09.2011 11:40:14
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.PARAMETER } )
+@Target({ElementType.PARAMETER})
 public @interface Last {
 
 }

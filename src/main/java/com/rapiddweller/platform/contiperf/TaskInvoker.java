@@ -26,10 +26,10 @@
 
 package com.rapiddweller.platform.contiperf;
 
-import com.rapiddweller.task.Task;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.contiperf.Invoker;
+import com.rapiddweller.task.Task;
 
 /**
  * {@link Invoker} implementation that calls {@link Task#execute(Context, ErrorHandler)}.<br/><br/>
@@ -40,20 +40,25 @@ import com.rapiddweller.contiperf.Invoker;
  */
 public class TaskInvoker implements Invoker {
 
-    private final Task target;
+  private final Task target;
 
-    public TaskInvoker(Task target) {
-        this.target = target;
-    }
+  /**
+   * Instantiates a new Task invoker.
+   *
+   * @param target the target
+   */
+  public TaskInvoker(Task target) {
+    this.target = target;
+  }
 
-    @Override
-    public String getId() {
-        return target.getTaskName();
-    }
+  @Override
+  public String getId() {
+    return target.getTaskName();
+  }
 
-    @Override
-    public Object invoke(Object[] args) {
-        return target.execute((Context) args[0], (ErrorHandler) args[1]);
-    }
+  @Override
+  public Object invoke(Object[] args) {
+    return target.execute((Context) args[0], (ErrorHandler) args[1]);
+  }
 
 }

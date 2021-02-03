@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.jdbacl.identity.IdentityProvider;
@@ -36,20 +34,81 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.db.DBSystem;
 
+import java.util.List;
+
 /**
  * Interface for transcoding classes that can be parents of cascade operations.<br/><br/>
  * Created: 18.04.2011 08:35:04
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public interface CascadeParent extends Statement {
-	void addSubStatement(Statement subStatement);
-	DBSystem getSource(BeneratorContext context);
-	DBSystem getTarget(BeneratorContext context);
-	Entity currentEntity();
-	KeyMapper getKeyMapper();
-	IdentityProvider getIdentityProvider();
-	boolean needsNkMapping(String type);
-	ComplexTypeDescriptor getType(DBSystem db, BeneratorContext context);
-	List<Statement> getSubStatements();
+  /**
+   * Add sub statement.
+   *
+   * @param subStatement the sub statement
+   */
+  void addSubStatement(Statement subStatement);
+
+  /**
+   * Gets source.
+   *
+   * @param context the context
+   * @return the source
+   */
+  DBSystem getSource(BeneratorContext context);
+
+  /**
+   * Gets target.
+   *
+   * @param context the context
+   * @return the target
+   */
+  DBSystem getTarget(BeneratorContext context);
+
+  /**
+   * Current entity entity.
+   *
+   * @return the entity
+   */
+  Entity currentEntity();
+
+  /**
+   * Gets key mapper.
+   *
+   * @return the key mapper
+   */
+  KeyMapper getKeyMapper();
+
+  /**
+   * Gets identity provider.
+   *
+   * @return the identity provider
+   */
+  IdentityProvider getIdentityProvider();
+
+  /**
+   * Needs nk mapping boolean.
+   *
+   * @param type the type
+   * @return the boolean
+   */
+  boolean needsNkMapping(String type);
+
+  /**
+   * Gets type.
+   *
+   * @param db      the db
+   * @param context the context
+   * @return the type
+   */
+  ComplexTypeDescriptor getType(DBSystem db, BeneratorContext context);
+
+  /**
+   * Gets sub statements.
+   *
+   * @return the sub statements
+   */
+  List<Statement> getSubStatements();
 }

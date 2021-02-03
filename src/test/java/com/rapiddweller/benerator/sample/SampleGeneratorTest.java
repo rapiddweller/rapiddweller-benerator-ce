@@ -28,57 +28,69 @@ package com.rapiddweller.benerator.sample;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link SampleGenerator}.<br/>
  * Created: 07.06.2006 21:59:02
+ *
  * @author Volker Bergmann
  */
 public class SampleGeneratorTest extends GeneratorClassTest {
 
-    private static final Logger logger = LogManager.getLogger(SampleGeneratorTest.class);
+  private static final Logger logger = LogManager.getLogger(SampleGeneratorTest.class);
 
-    public SampleGeneratorTest() {
-        super(SampleGenerator.class);
-    }
+  /**
+   * Instantiates a new Sample generator test.
+   */
+  public SampleGeneratorTest() {
+    super(SampleGenerator.class);
+  }
 
-    @Test
-    public void testDistribution() {
-        Integer[] samples = new Integer[] { 0, 1, 2 };
-        SampleGenerator<Integer> generator = new SampleGenerator<>(Integer.class);
-        generator.setValues(samples);
-        generator.init(context);
-        int n = 10000;
-        int[] sampleCount = new int[3];
-        for (int i = 0; i < n; i++) {
-            sampleCount[GeneratorUtil.generateNonNull(generator)] ++;
-        }
-        for (int i = 0; i < sampleCount.length; i++) {
-            int count = sampleCount[i];
-            double measuredProbability = (float)count / n;
-            double expectedProbability = 1. / samples.length;
-            double ratio = measuredProbability / expectedProbability;
-            logger.debug(i + " " + count + " " + ratio);
-            assertTrue(ratio > 0.9 && ratio < 1.1);
-        }
+  /**
+   * Test distribution.
+   */
+  @Test
+  public void testDistribution() {
+    Integer[] samples = new Integer[] {0, 1, 2};
+    SampleGenerator<Integer> generator = new SampleGenerator<>(Integer.class);
+    generator.setValues(samples);
+    generator.init(context);
+    int n = 10000;
+    int[] sampleCount = new int[3];
+    for (int i = 0; i < n; i++) {
+      sampleCount[GeneratorUtil.generateNonNull(generator)]++;
     }
+    for (int i = 0; i < sampleCount.length; i++) {
+      int count = sampleCount[i];
+      double measuredProbability = (float) count / n;
+      double expectedProbability = 1. / samples.length;
+      double ratio = measuredProbability / expectedProbability;
+      logger.debug(i + " " + count + " " + ratio);
+      assertTrue(ratio > 0.9 && ratio < 1.1);
+    }
+  }
 
-    @Test
-    public void testBigSet() {
-    	// init generator
-        SampleGenerator<Integer> generator = new SampleGenerator<>(Integer.class);
-        for (int i = 0; i < 200000; i++)
-        	generator.addValue(i % 100);
-        generator.init(context);
-        // test
-        for (int i = 0; i < 100; i++) {
-            int product = GeneratorUtil.generateNonNull(generator);
-            assertTrue("generated value not in expected value range: " + product, 0 <= product && product <= 99);
-        }
+  /**
+   * Test big set.
+   */
+  @Test
+  public void testBigSet() {
+    // init generator
+    SampleGenerator<Integer> generator = new SampleGenerator<>(Integer.class);
+    for (int i = 0; i < 200000; i++) {
+      generator.addValue(i % 100);
     }
-    
+    generator.init(context);
+    // test
+    for (int i = 0; i < 100; i++) {
+      int product = GeneratorUtil.generateNonNull(generator);
+      assertTrue("generated value not in expected value range: " + product, 0 <= product && product <= 99);
+    }
+  }
+
 }

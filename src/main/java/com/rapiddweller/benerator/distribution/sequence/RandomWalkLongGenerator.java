@@ -36,96 +36,156 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
  * Long Generator that implements a 'randomWalk' Long Sequence.<br/>
  * <br/>
  * Created: 13.06.2006 07:36:45
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class RandomWalkLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
-    final long minIncrement;
-    final long maxIncrement;
-    final Distribution incrementDistribution;
-    
-    private long initial;
-    private long next;
+  /**
+   * The Min increment.
+   */
+  final long minIncrement;
+  /**
+   * The Max increment.
+   */
+  final long maxIncrement;
+  /**
+   * The Increment distribution.
+   */
+  final Distribution incrementDistribution;
 
-    private NonNullGenerator<Long> incrementGenerator;
+  private long initial;
+  private long next;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  private NonNullGenerator<Long> incrementGenerator;
 
-    public RandomWalkLongGenerator() {
-        this(Long.MIN_VALUE, Long.MAX_VALUE);
+  // constructors ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Instantiates a new Random walk long generator.
+   */
+  public RandomWalkLongGenerator() {
+    this(Long.MIN_VALUE, Long.MAX_VALUE);
+  }
+
+  /**
+   * Instantiates a new Random walk long generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public RandomWalkLongGenerator(long min, long max) {
+    this(min, max, 1, 2);
+  }
+
+  /**
+   * Instantiates a new Random walk long generator.
+   *
+   * @param min          the min
+   * @param max          the max
+   * @param minIncrement the min increment
+   * @param maxIncrement the max increment
+   */
+  public RandomWalkLongGenerator(long min, long max, long minIncrement, long maxIncrement) {
+    this(min, max, 1, min, minIncrement, maxIncrement, SequenceManager.RANDOM_SEQUENCE);
+  }
+
+  /**
+   * Instantiates a new Random walk long generator.
+   *
+   * @param min          the min
+   * @param max          the max
+   * @param granularity  the granularity
+   * @param initial      the initial
+   * @param minIncrement the min increment
+   * @param maxIncrement the max increment
+   */
+  public RandomWalkLongGenerator(long min, long max, long granularity, long initial, long minIncrement, long maxIncrement) {
+    this(min, max, granularity, initial, minIncrement, maxIncrement, SequenceManager.RANDOM_SEQUENCE);
+  }
+
+  /**
+   * Instantiates a new Random walk long generator.
+   *
+   * @param min                   the min
+   * @param max                   the max
+   * @param granularity           the granularity
+   * @param initial               the initial
+   * @param minIncrement          the min increment
+   * @param maxIncrement          the max increment
+   * @param incrementDistribution the increment distribution
+   */
+  public RandomWalkLongGenerator(long min, long max, long granularity, long initial,
+                                 long minIncrement, long maxIncrement, Distribution incrementDistribution) {
+    super(Long.class, min, max, granularity);
+    this.minIncrement = minIncrement;
+    this.maxIncrement = maxIncrement;
+    this.incrementDistribution = incrementDistribution;
+    this.initial = initial;
+  }
+
+  // config properties -----------------------------------------------------------------------------------------------
+
+  /**
+   * Gets next.
+   *
+   * @return the next
+   */
+  public long getNext() {
+    return next;
+  }
+
+  /**
+   * Sets next.
+   *
+   * @param next the next
+   */
+  public void setNext(long next) {
+    this.next = next;
+  }
+
+  // Generator implementation ----------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    incrementGenerator = incrementDistribution.createNumberGenerator(
+        Long.class, minIncrement, maxIncrement, granularity, false);
+    if (minIncrement < 0 && maxIncrement <= 0) {
+      initial = max;
+    } else if (minIncrement >= 0 && maxIncrement > 0) {
+      initial = min;
+    } else {
+      initial = (min + max) / 2;
     }
+    next = initial;
+    incrementGenerator.init(context);
+    super.init(context);
+  }
 
-    public RandomWalkLongGenerator(long min, long max) {
-        this(min, max, 1, 2);
+  @Override
+  public synchronized Long generate() {
+    assertInitialized();
+    long value = next;
+    next += incrementGenerator.generate();
+    if (next > max) {
+      next = max;
+    } else if (next < min) {
+      next = min;
     }
+    return value;
+  }
 
-    public RandomWalkLongGenerator(long min, long max, long minIncrement, long maxIncrement) {
-        this(min, max, 1, min, minIncrement, maxIncrement, SequenceManager.RANDOM_SEQUENCE);
-    }
+  @Override
+  public synchronized void reset() {
+    super.reset();
+    next = initial;
+  }
 
-    public RandomWalkLongGenerator(long min, long max, long granularity, long initial, long minIncrement, long maxIncrement) {
-        this(min, max, granularity, initial, minIncrement, maxIncrement, SequenceManager.RANDOM_SEQUENCE);
-    }
+  @Override
+  public synchronized void close() {
+    super.close();
+    next = initial;
+  }
 
-    public RandomWalkLongGenerator(long min, long max, long granularity, long initial, 
-    		long minIncrement, long maxIncrement, Distribution incrementDistribution) {
-        super(Long.class, min, max, granularity);
-        this.minIncrement = minIncrement;
-        this.maxIncrement = maxIncrement;
-        this.incrementDistribution = incrementDistribution;
-        this.initial = initial;
-    }
-
-    // config properties -----------------------------------------------------------------------------------------------
-
-    public long getNext() {
-        return next;
-    }
-
-    public void setNext(long next) {
-        this.next = next;
-    }
-
-    // Generator implementation ----------------------------------------------------------------------------------------
-
-    @Override
-    public void init(GeneratorContext context) {
-        incrementGenerator = incrementDistribution.createNumberGenerator(
-        		Long.class, minIncrement, maxIncrement, granularity, false);
-        if (minIncrement < 0 && maxIncrement <= 0)
-            initial = max;
-        else if (minIncrement >= 0 && maxIncrement > 0)
-            initial = min;
-        else
-            initial = (min + max) / 2;
-        next = initial;
-        incrementGenerator.init(context);
-        super.init(context);
-    }
-
-	@Override
-	public synchronized Long generate() {
-        assertInitialized();
-        long value = next;
-        next += incrementGenerator.generate();
-        if (next > max)
-            next = max;
-        else if (next < min)
-            next = min;
-        return value;
-    }
-
-    @Override
-    public synchronized void reset() {
-    	super.reset();
-    	next = initial;
-    }
-    
-    @Override
-    public synchronized void close() {
-    	super.close();
-    	next = initial;
-    }
-    
 }

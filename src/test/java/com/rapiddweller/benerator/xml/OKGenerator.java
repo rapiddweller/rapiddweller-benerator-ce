@@ -31,18 +31,19 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 /**
  * Generates "OK" strings for testing.<br/><br/>
  * Created: 29.03.2008 08:26:22
+ *
  * @author Volker Bergmann
  */
 public class OKGenerator extends ThreadSafeNonNullGenerator<String> {
 
-	@Override
-	public Class<String> getGeneratedType() {
-	    return String.class;
-    }
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
 
-	@Override
-	public String generate() {
-        return "OK";
-    }
+  @Override
+  public String generate() {
+    return "OK";
+  }
 
 }

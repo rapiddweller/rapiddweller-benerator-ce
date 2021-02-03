@@ -32,14 +32,18 @@ import org.junit.Test;
 /**
  * Tests the {@link SequenceGenerator}.<br/><br/>
  * Created: 08.07.2011 06:49:31
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class SequenceGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void test() {
-		SequenceGenerator<Integer> generator = new SequenceGenerator<>(Integer.class, 1, 2, 3);
-		expectGeneratedSequence(generator, 1, 2, 3).withCeasedAvailability();
-	}
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    SequenceGenerator<Integer> generator = new SequenceGenerator<>(Integer.class, 1, 2, 3);
+    expectGeneratedSequence(generator, 1, 2, 3).withCeasedAvailability();
+  }
 }

@@ -26,35 +26,44 @@
 
 package com.rapiddweller.benerator.util;
 
-import java.util.Iterator;
-
 import com.rapiddweller.common.Context;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.util.DataSourceProxy;
 import com.rapiddweller.script.Expression;
 
+import java.util.Iterator;
+
 /**
  * {@link Iterable} proxy which creates {@link Iterator}s that filter their output with a (boolean) filter expression.<br/><br/>
  * Created: 08.03.2011 11:47:20
- * @since 0.5.8
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  * @see FilterExIterator
+ * @since 0.5.8
  */
 public class FilterExDataSource<E> extends DataSourceProxy<E> {
 
-	private final Expression<Boolean> filterEx;
-	private final Context context;
+  private final Expression<Boolean> filterEx;
+  private final Context context;
 
-	public FilterExDataSource(DataSource<E> source, Expression<Boolean> filterEx, Context context) {
-	    super(source);
-	    this.filterEx = filterEx;
-	    this.context = context;
-    }
+  /**
+   * Instantiates a new Filter ex data source.
+   *
+   * @param source   the source
+   * @param filterEx the filter ex
+   * @param context  the context
+   */
+  public FilterExDataSource(DataSource<E> source, Expression<Boolean> filterEx, Context context) {
+    super(source);
+    this.filterEx = filterEx;
+    this.context = context;
+  }
 
-	@Override
-	public DataIterator<E> iterator() {
-		return new FilterExIterator<>(super.iterator(), filterEx, context);
-	}
+  @Override
+  public DataIterator<E> iterator() {
+    return new FilterExIterator<>(super.iterator(), filterEx, context);
+  }
 
 }

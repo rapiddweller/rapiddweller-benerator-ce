@@ -3,35 +3,35 @@
 
 <setup>
 
-	<import class="com.rapiddweller.benerator.primitive.IncrementalIdGenerator" />
-	
-  	<database id="s" url="jdbc:hsqldb:mem:s" driver="org.hsqldb.jdbcDriver" schema="PUBLIC" user="sa" />
+    <import class="com.rapiddweller.benerator.primitive.IncrementalIdGenerator"/>
 
-  	<database id="t" url="jdbc:hsqldb:mem:t" driver="org.hsqldb.jdbcDriver" schema="PUBLIC" user="sa" />
+    <database id="s" url="jdbc:hsqldb:mem:s" driver="org.hsqldb.jdbcDriver" schema="PUBLIC" user="sa"/>
 
-	<execute uri="createTables.sql" target="s" />
-	<execute uri="createTables.sql" target="t" />
-	
-	<execute target="s">
-		insert into COUNTRY values (10, 'United States');
-		insert into COUNTRY values (20, 'Germany');
-		insert into STATE   values (110, 10, 'California');
-		insert into STATE   values (120, 10, 'Florida');
-		insert into STATE   values (210, 20, 'Bayern');
-		insert into STATE   values (220, 20, 'Hamburg');
-	</execute>
-	
-	<execute target="t">
-		insert into COUNTRY values (1000, 'United States');
-		insert into COUNTRY values (2000, 'Germany');
-	</execute>
-	
-	<bean id="idGen" class="IncrementalIdGenerator" />
-	
-	<transcodingTask defaultSource="s" target="t" identity="Transcoding-identity.xml">
-		<transcode table="STATE" selector="id &gt; 0">
-			<id name="id" generator="idGen" />
-		</transcode>
-	</transcodingTask>
-	
+    <database id="t" url="jdbc:hsqldb:mem:t" driver="org.hsqldb.jdbcDriver" schema="PUBLIC" user="sa"/>
+
+    <execute uri="createTables.sql" target="s"/>
+    <execute uri="createTables.sql" target="t"/>
+
+    <execute target="s">
+        insert into COUNTRY values (10, 'United States');
+        insert into COUNTRY values (20, 'Germany');
+        insert into STATE values (110, 10, 'California');
+        insert into STATE values (120, 10, 'Florida');
+        insert into STATE values (210, 20, 'Bayern');
+        insert into STATE values (220, 20, 'Hamburg');
+    </execute>
+
+    <execute target="t">
+        insert into COUNTRY values (1000, 'United States');
+        insert into COUNTRY values (2000, 'Germany');
+    </execute>
+
+    <bean id="idGen" class="IncrementalIdGenerator"/>
+
+    <transcodingTask defaultSource="s" target="t" identity="Transcoding-identity.xml">
+        <transcode table="STATE" selector="id &gt; 0">
+            <id name="id" generator="idGen"/>
+        </transcode>
+    </transcodingTask>
+
 </setup>

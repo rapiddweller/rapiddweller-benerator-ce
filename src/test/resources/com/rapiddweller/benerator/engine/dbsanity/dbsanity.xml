@@ -3,10 +3,10 @@
 
 <dbsanity>
 
-	<check name="testForSuccess" table="table1" defectType="generic">
-		<sql>
-			select id from table1 where id != id
-		</sql>
-	</check>
+    <check name="testForSuccess" table="table1" defectType="generic">
+        <sql>
+            select id from table1 where id != id
+        </sql>
+    </check>
 
 </dbsanity>

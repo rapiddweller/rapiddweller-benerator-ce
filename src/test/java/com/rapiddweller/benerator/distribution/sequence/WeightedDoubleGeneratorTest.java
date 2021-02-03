@@ -38,52 +38,81 @@ import org.junit.Test;
 /**
  * Tests the {@link WeightedDoubleGenerator}.<br/><br/>
  * Created: 18.06.2006 15:04:17
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class WeightedDoubleGeneratorTest extends GeneratorClassTest {
 
-    public WeightedDoubleGeneratorTest() {
-        super(WeightedDoubleGenerator.class);
-    }
+  /**
+   * Instantiates a new Weighted double generator test.
+   */
+  public WeightedDoubleGeneratorTest() {
+    super(WeightedDoubleGenerator.class);
+  }
 
-    @Test
-    public void testSingleValueGeneration() throws IllegalGeneratorStateException {
-        checkProductSet(
-                create(0, 0, 1, new ConstantFunction(1)), 300, CollectionUtil.toSet(0.));
-        checkProductSet(
-        		create( 1,  1, 0.5, new ConstantFunction(1)), 300, CollectionUtil.toSet(1.));
-        checkProductSet(
-        		create(-1, -1, 1, new ConstantFunction(1)), 300, CollectionUtil.toSet(-1.));
-    }
+  /**
+   * Test single value generation.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void testSingleValueGeneration() throws IllegalGeneratorStateException {
+    checkProductSet(
+        create(0, 0, 1, new ConstantFunction(1)), 300, CollectionUtil.toSet(0.));
+    checkProductSet(
+        create(1, 1, 0.5, new ConstantFunction(1)), 300, CollectionUtil.toSet(1.));
+    checkProductSet(
+        create(-1, -1, 1, new ConstantFunction(1)), 300, CollectionUtil.toSet(-1.));
+  }
 
-    @Test
-    public void testDiscreteRangeGeneration() throws IllegalGeneratorStateException {
-        checkProductSet(
-        		create( -1,  0, 0.5, new ConstantFunction(1)), 300, CollectionUtil.toSet(-1., -0.5, 0.));
-        checkProductSet(
-        		create(-1, 1, 0.5, new ConstantFunction(1)), 300, CollectionUtil.toSet(-1., -0.5, 0., 0.5, 1.));
-    }
+  /**
+   * Test discrete range generation.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void testDiscreteRangeGeneration() throws IllegalGeneratorStateException {
+    checkProductSet(
+        create(-1, 0, 0.5, new ConstantFunction(1)), 300, CollectionUtil.toSet(-1., -0.5, 0.));
+    checkProductSet(
+        create(-1, 1, 0.5, new ConstantFunction(1)), 300, CollectionUtil.toSet(-1., -0.5, 0., 0.5, 1.));
+  }
 
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testNegativeGranularity() throws IllegalGeneratorStateException {
-    	create( 0,  1, -1, new ConstantFunction(1)); // negative granularity
-    }
+  /**
+   * Test negative granularity.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testNegativeGranularity() throws IllegalGeneratorStateException {
+    create(0, 1, -1, new ConstantFunction(1)); // negative granularity
+  }
 
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testZeroGranularity() throws IllegalGeneratorStateException {
-    	create( 0,  1,  0, new ConstantFunction(1)); // granularity == 0
-    }
+  /**
+   * Test zero granularity.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testZeroGranularity() throws IllegalGeneratorStateException {
+    create(0, 1, 0, new ConstantFunction(1)); // granularity == 0
+  }
 
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testInvalidRange() throws IllegalGeneratorStateException {
-    	create( 2,  1,  1, new ConstantFunction(1)); // min > max
-    }
-    
-	private WeightedDoubleGenerator create(double min, double max, double granularity, WeightFunction distribution) {
-	    WeightedDoubleGenerator generator = new WeightedDoubleGenerator(min, max, granularity, distribution);
-	    generator.init(context);
-		return generator;
-    }
+  /**
+   * Test invalid range.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testInvalidRange() throws IllegalGeneratorStateException {
+    create(2, 1, 1, new ConstantFunction(1)); // min > max
+  }
+
+  private WeightedDoubleGenerator create(double min, double max, double granularity, WeightFunction distribution) {
+    WeightedDoubleGenerator generator = new WeightedDoubleGenerator(min, max, granularity, distribution);
+    generator.init(context);
+    return generator;
+  }
 
 }

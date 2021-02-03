@@ -40,82 +40,114 @@ import java.util.Set;
  * Generates unique strings of variable length.<br/>
  * <br/>
  * Created: 16.11.2007 11:56:15
+ *
  * @author Volker Bergmann
  */
 public class UniqueScrambledStringGenerator extends MultiGeneratorWrapper<String, String> implements VarLengthStringGenerator {
 
-    private int minLength;
-    private int maxLength;
-    private final Set<Character> chars;
+  private int minLength;
+  private int maxLength;
+  private final Set<Character> chars;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public UniqueScrambledStringGenerator() {
-        this(new CharSet('A', 'Z').getSet(), 4, 8);
+  /**
+   * Instantiates a new Unique scrambled string generator.
+   */
+  public UniqueScrambledStringGenerator() {
+    this(new CharSet('A', 'Z').getSet(), 4, 8);
+  }
+
+  /**
+   * Instantiates a new Unique scrambled string generator.
+   *
+   * @param chars     the chars
+   * @param minLength the min length
+   * @param maxLength the max length
+   */
+  public UniqueScrambledStringGenerator(Set<Character> chars, int minLength, int maxLength) {
+    super(String.class);
+    this.minLength = minLength;
+    this.maxLength = maxLength;
+    this.chars = chars;
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets min length.
+   *
+   * @return the min length
+   */
+  public int getMinLength() {
+    return minLength;
+  }
+
+  /**
+   * Sets min length.
+   *
+   * @param minLength the min length
+   */
+  public void setMinLength(int minLength) {
+    this.minLength = minLength;
+  }
+
+  /**
+   * Gets max length.
+   *
+   * @return the max length
+   */
+  public int getMaxLength() {
+    return maxLength;
+  }
+
+  /**
+   * Sets max length.
+   *
+   * @param maxLength the max length
+   */
+  public void setMaxLength(int maxLength) {
+    this.maxLength = maxLength;
+  }
+
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    // create sub generators
+    List<Generator<? extends String>> subGens = new ArrayList<>(maxLength - minLength + 1);
+    for (int i = minLength; i <= maxLength; i++) {
+      subGens.add(new UniqueFixedLengthStringGenerator(chars, i, false));
     }
+    setSources(subGens);
+    super.init(context);
+  }
 
-    public UniqueScrambledStringGenerator(Set<Character> chars, int minLength, int maxLength) {
-    	super(String.class);
-        this.minLength = minLength;
-        this.maxLength = maxLength;
-        this.chars = chars;
-    }
-    
-    // properties ------------------------------------------------------------------------------------------------------
+  @Override
+  public String generateWithLength(int length) {
+    ProductWrapper<String> wrapper = generateFromSource(length - minLength, getSourceWrapper());
+    return (wrapper != null ? wrapper.unwrap() : null);
+  }
 
-    public int getMinLength() {
-        return minLength;
-    }
+  @Override
+  public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
+    assertInitialized();
+    return generateFromRandomSource(wrapper);
+  }
 
-    public void setMinLength(int minLength) {
-        this.minLength = minLength;
-    }
+  @Override
+  public String generate() {
+    ProductWrapper<String> wrapper = generate(getResultWrapper());
+    return (wrapper != null ? wrapper.unwrap() : null);
+  }
 
-    public int getMaxLength() {
-        return maxLength;
-    }
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    public void setMaxLength(int maxLength) {
-        this.maxLength = maxLength;
-    }
-
-    // Generator interface ---------------------------------------------------------------------------------------------
-
-    @Override
-    public void init(GeneratorContext context) {
-    	assertNotInitialized();
-    	// create sub generators
-        List<Generator<? extends String>> subGens = new ArrayList<>(maxLength - minLength + 1);
-        for (int i = minLength; i <= maxLength; i++)
-            subGens.add(new UniqueFixedLengthStringGenerator(chars, i, false));
-        setSources(subGens);
-        super.init(context);
-    }
-
-	@Override
-	public String generateWithLength(int length) {
-		ProductWrapper<String> wrapper = generateFromSource(length - minLength, getSourceWrapper());
-		return (wrapper != null ? wrapper.unwrap() : null);
-	}
-
-	@Override
-	public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
-    	assertInitialized();
-    	return generateFromRandomSource(wrapper);
-    }
-
-	@Override
-	public String generate() {
-		ProductWrapper<String> wrapper = generate(getResultWrapper());
-		return (wrapper != null ? wrapper.unwrap() : null);
-	}
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + minLength + "<=length<=" + maxLength + ", " +
-                "charSet=" + chars + "]";
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + minLength + "<=length<=" + maxLength + ", " +
+        "charSet=" + chars + "]";
+  }
 
 }

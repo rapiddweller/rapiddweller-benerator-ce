@@ -28,28 +28,36 @@ package com.rapiddweller.domain.net;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests the TopLevelDomainGenerator.<br/><br/>
  * Created at 20.04.2008 08:08:18
- * @since 0.5.2
+ *
  * @author Volker Bergmann
+ * @since 0.5.2
  */
 public class TopLevelDomainGeneratorTest extends GeneratorClassTest {
-	
-	public TopLevelDomainGeneratorTest() {
-		super(TopLevelDomainGenerator.class);
-	}
-	
-	@Test
-	public void testGeneration() {
-		TopLevelDomainGenerator generator = new TopLevelDomainGenerator();
-		generator.init(context);
-		for (int i = 0; i < 10; i++) {
-			String tld = generator.generate();
-			assertNotNull(tld);
-		}
-	}
-	
+
+  /**
+   * Instantiates a new Top level domain generator test.
+   */
+  public TopLevelDomainGeneratorTest() {
+    super(TopLevelDomainGenerator.class);
+  }
+
+  /**
+   * Test generation.
+   */
+  @Test
+  public void testGeneration() {
+    TopLevelDomainGenerator generator = new TopLevelDomainGenerator();
+    generator.init(context);
+    for (int i = 0; i < 10; i++) {
+      String tld = generator.generate();
+      assertNotNull(tld);
+    }
+  }
+
 }

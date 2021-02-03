@@ -33,61 +33,86 @@ import org.junit.Test;
 /**
  * Tests the {@link ShuffleLongGenerator}.<br/><br/>
  * Created: 07.06.2006 20:23:39
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class ShuffleLongGeneratorTest extends GeneratorClassTest {
 
-    public ShuffleLongGeneratorTest() {
-        super(ShuffleLongGenerator.class);
-    }
+  /**
+   * Instantiates a new Shuffle long generator test.
+   */
+  public ShuffleLongGeneratorTest() {
+    super(ShuffleLongGenerator.class);
+  }
 
-    @Test
-    public void testInstantiation() {
-        new ShuffleLongGenerator();
-        new ShuffleLongGenerator(0, 10);
-        new ShuffleLongGenerator(0, 10, 1, 1);
-    }
+  /**
+   * Test instantiation.
+   */
+  @Test
+  public void testInstantiation() {
+    new ShuffleLongGenerator();
+    new ShuffleLongGenerator(0, 10);
+    new ShuffleLongGenerator(0, 10, 1, 1);
+  }
 
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testIncrement0() {
-        ShuffleLongGenerator generator = new ShuffleLongGenerator(0, 3, 1, 0);
-        generator.init(context);
-    }
+  /**
+   * Test increment 0.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testIncrement0() {
+    ShuffleLongGenerator generator = new ShuffleLongGenerator(0, 3, 1, 0);
+    generator.init(context);
+  }
 
-	@Test
-    public void testIncrement1() {
-        ShuffleLongGenerator generator = new ShuffleLongGenerator(0, 3, 1, 1);
-        generator.init(context);
-        expectGeneratedSequence(generator, 0L, 1L, 2L, 3L).withCeasedAvailability();
-    }
+  /**
+   * Test increment 1.
+   */
+  @Test
+  public void testIncrement1() {
+    ShuffleLongGenerator generator = new ShuffleLongGenerator(0, 3, 1, 1);
+    generator.init(context);
+    expectGeneratedSequence(generator, 0L, 1L, 2L, 3L).withCeasedAvailability();
+  }
 
-    @Test
-    public void testIncrement2() {
-        ShuffleLongGenerator generator = new ShuffleLongGenerator(0, 3, 1, 2);
-        generator.init(context);
-        expectGeneratedSequence(generator, 0L, 2L, 1L, 3L).withCeasedAvailability();
-    }
+  /**
+   * Test increment 2.
+   */
+  @Test
+  public void testIncrement2() {
+    ShuffleLongGenerator generator = new ShuffleLongGenerator(0, 3, 1, 2);
+    generator.init(context);
+    expectGeneratedSequence(generator, 0L, 2L, 1L, 3L).withCeasedAvailability();
+  }
 
-    @Test
-    public void testIncrement3() {
-        ShuffleLongGenerator generator = new ShuffleLongGenerator(0, 3, 1, 3);
-        generator.init(context);
-        expectGeneratedSequence(generator, 0L, 3L, 1L, 2L).withCeasedAvailability();
-    }
+  /**
+   * Test increment 3.
+   */
+  @Test
+  public void testIncrement3() {
+    ShuffleLongGenerator generator = new ShuffleLongGenerator(0, 3, 1, 3);
+    generator.init(context);
+    expectGeneratedSequence(generator, 0L, 3L, 1L, 2L).withCeasedAvailability();
+  }
 
-    @Test
-    public void testIncrement4() {
-        ShuffleLongGenerator generator = new ShuffleLongGenerator(0, 3, 1, 4);
-        generator.init(context);
-        expectGeneratedSequence(generator, 0L, 1L, 2L, 3L).withCeasedAvailability();
-    }
+  /**
+   * Test increment 4.
+   */
+  @Test
+  public void testIncrement4() {
+    ShuffleLongGenerator generator = new ShuffleLongGenerator(0, 3, 1, 4);
+    generator.init(context);
+    expectGeneratedSequence(generator, 0L, 1L, 2L, 3L).withCeasedAvailability();
+  }
 
-    @Test
-    public void testReset() {
-        ShuffleLongGenerator generator = new ShuffleLongGenerator(0, 3, 1, 2);
-        generator.init(context);
-        expectGeneratedSequence(generator, 0L, 2L, 1L, 3L).withCeasedAvailability();
-    }
+  /**
+   * Test reset.
+   */
+  @Test
+  public void testReset() {
+    ShuffleLongGenerator generator = new ShuffleLongGenerator(0, 3, 1, 2);
+    generator.init(context);
+    expectGeneratedSequence(generator, 0L, 2L, 1L, 3L).withCeasedAvailability();
+  }
 
 }

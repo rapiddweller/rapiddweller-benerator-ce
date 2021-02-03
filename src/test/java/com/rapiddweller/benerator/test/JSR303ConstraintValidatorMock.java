@@ -26,43 +26,61 @@
 
 package com.rapiddweller.benerator.test;
 
-import java.lang.annotation.Annotation;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
-import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
+import java.lang.annotation.Annotation;
 
 /**
  * Mock class for a JSR303 {@link ConstraintValidator}.<br/>
  * <br/>
  * Created at 05.07.2009 07:16:43
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class JSR303ConstraintValidatorMock extends AbstractConstraintValidator<Annotation, Integer> {
-	
-	public static JSR303ConstraintValidatorMock latestInstance;
-	
-	public int value;
-	
-	public JSR303ConstraintValidatorMock() {
-		this(1);
-	}
-	
-	public JSR303ConstraintValidatorMock(int value) {
-		this.value = value;
-		latestInstance = this;
-	}
-	
-	public void setValue(int value) {
-		this.value = value;
-	}
 
-    @Override
-	public boolean isValid(Integer candidate, ConstraintValidatorContext context) {
-    	return (candidate != null && value == candidate);
-    }
+  /**
+   * The constant latestInstance.
+   */
+  public static JSR303ConstraintValidatorMock latestInstance;
+
+  /**
+   * The Value.
+   */
+  public int value;
+
+  /**
+   * Instantiates a new Jsr 303 constraint validator mock.
+   */
+  public JSR303ConstraintValidatorMock() {
+    this(1);
+  }
+
+  /**
+   * Instantiates a new Jsr 303 constraint validator mock.
+   *
+   * @param value the value
+   */
+  public JSR303ConstraintValidatorMock(int value) {
+    this.value = value;
+    latestInstance = this;
+  }
+
+  /**
+   * Sets value.
+   *
+   * @param value the value
+   */
+  public void setValue(int value) {
+    this.value = value;
+  }
+
+  @Override
+  public boolean isValid(Integer candidate, ConstraintValidatorContext context) {
+    return (candidate != null && value == candidate);
+  }
 
 }

@@ -34,11 +34,17 @@ import java.lang.annotation.Target;
 /**
  * Specifies the values to use when generating data for the annotated element.<br/><br/>
  * Created: 02.05.2010 18:52:54
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER } )
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 public @interface Values {
-	String[] value();
+  /**
+   * Value string [ ].
+   *
+   * @return the string [ ]
+   */
+  String[] value();
 }

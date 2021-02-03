@@ -28,31 +28,46 @@
 
 package com.rapiddweller.benerator.composite;
 
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-import org.junit.Test;
-
+/**
+ * The type Blank array generator test.
+ */
 public class BlankArrayGeneratorTest {
-    @Test
-    public void testConstructor() {
-        assertEquals("BlankArrayGenerator[3]", (new BlankArrayGenerator(3)).toString());
-    }
+  /**
+   * Test constructor.
+   */
+  @Test
+  public void testConstructor() {
+    assertEquals("BlankArrayGenerator[3]", (new BlankArrayGenerator(3)).toString());
+  }
 
-    @Test
-    public void testGetGeneratedType() {
-        assertEquals("[Ljava.lang.Object;", (new BlankArrayGenerator(3)).getGeneratedType().getName());
-    }
+  /**
+   * Test get generated type.
+   */
+  @Test
+  public void testGetGeneratedType() {
+    assertEquals("[Ljava.lang.Object;", (new BlankArrayGenerator(3)).getGeneratedType().getName());
+  }
 
-    @Test
-    public void testGenerate() {
-        assertEquals(3, (new BlankArrayGenerator(3)).generate().length);
-        assertThrows(NegativeArraySizeException.class, () -> (new BlankArrayGenerator(-1)).generate());
-    }
+  /**
+   * Test generate.
+   */
+  @Test
+  public void testGenerate() {
+    assertEquals(3, (new BlankArrayGenerator(3)).generate().length);
+    assertThrows(NegativeArraySizeException.class, () -> (new BlankArrayGenerator(-1)).generate());
+  }
 
-    @Test
-    public void testToString() {
-        assertEquals("BlankArrayGenerator[3]", (new BlankArrayGenerator(3)).toString());
-    }
+  /**
+   * Test to string.
+   */
+  @Test
+  public void testToString() {
+    assertEquals("BlankArrayGenerator[3]", (new BlankArrayGenerator(3)).toString());
+  }
 }
 

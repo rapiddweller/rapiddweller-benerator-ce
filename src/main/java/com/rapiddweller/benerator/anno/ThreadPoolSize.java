@@ -34,11 +34,17 @@ import java.lang.annotation.Target;
 /**
  * Specifies the maximum number of threads to use.<br/><br/>
  * Created: 21.10.2011 09:47:02
- * @since 0.7.2
+ *
  * @author Volker Bergmann
+ * @since 0.7.2
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR } )
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR})
 public @interface ThreadPoolSize {
-	int value();
+  /**
+   * Value int.
+   *
+   * @return the int
+   */
+  int value();
 }

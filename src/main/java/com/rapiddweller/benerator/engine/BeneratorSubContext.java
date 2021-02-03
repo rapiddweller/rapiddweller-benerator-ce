@@ -29,9 +29,15 @@ package com.rapiddweller.benerator.engine;
 /**
  * Common interface for Benerator sub contexts.<br/><br/>
  * Created: 26.01.2013 16:09:25
- * @since 0.8.0
+ *
  * @author Volker Bergmann
+ * @since 0.8.0
  */
 public interface BeneratorSubContext extends BeneratorContext {
-	BeneratorContext getParent();
+  /**
+   * Gets parent.
+   *
+   * @return the parent
+   */
+  BeneratorContext getParent();
 }

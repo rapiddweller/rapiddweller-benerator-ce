@@ -2,6 +2,6 @@
 
 
 <dataset>
-    <person name="Alice" age="23" />
-    <person name="Otto" age="89" />
+    <person name="Alice" age="23"/>
+    <person name="Otto" age="89"/>
 </dataset>

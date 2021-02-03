@@ -39,52 +39,71 @@ import com.rapiddweller.common.ConfigurationError;
  * Distribution that repeats consecutive elements or numbers.<br/>
  * <br/>
  * Created at 01.07.2009 15:40:02
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class RepeatSequence extends Sequence {
 
-    private final int minRepetitions;
-    private final int maxRepetitions;
-    private final int repetitionGranularity;
-    private final Distribution repetitionDistribution;
+  private final int minRepetitions;
+  private final int maxRepetitions;
+  private final int repetitionGranularity;
+  private final Distribution repetitionDistribution;
 
-	private final static Distribution stepSequence = new StepSequence();
+  private static Distribution stepSequence = new StepSequence();
 
-	public RepeatSequence() {
-		this(0, 3);
-	}
-    
-	public RepeatSequence(int minRepetitions, int maxRepetitions) {
-		this(minRepetitions, maxRepetitions, 1, SequenceManager.RANDOM_SEQUENCE);
-	}
-	
-	public RepeatSequence(int minRepetitions, int maxRepetitions, int repetitionGranularity,
-			Distribution repetitionDistribution) {
-	    this.minRepetitions = minRepetitions;
-	    this.maxRepetitions = maxRepetitions;
-	    this.repetitionGranularity = repetitionGranularity;
-	    this.repetitionDistribution = repetitionDistribution;
+  /**
+   * Instantiates a new Repeat sequence.
+   */
+  public RepeatSequence() {
+    this(0, 3);
+  }
+
+  /**
+   * Instantiates a new Repeat sequence.
+   *
+   * @param minRepetitions the min repetitions
+   * @param maxRepetitions the max repetitions
+   */
+  public RepeatSequence(int minRepetitions, int maxRepetitions) {
+    this(minRepetitions, maxRepetitions, 1, SequenceManager.RANDOM_SEQUENCE);
+  }
+
+  /**
+   * Instantiates a new Repeat sequence.
+   *
+   * @param minRepetitions         the min repetitions
+   * @param maxRepetitions         the max repetitions
+   * @param repetitionGranularity  the repetition granularity
+   * @param repetitionDistribution the repetition distribution
+   */
+  public RepeatSequence(int minRepetitions, int maxRepetitions, int repetitionGranularity,
+                        Distribution repetitionDistribution) {
+    this.minRepetitions = minRepetitions;
+    this.maxRepetitions = maxRepetitions;
+    this.repetitionGranularity = repetitionGranularity;
+    this.repetitionDistribution = repetitionDistribution;
+  }
+
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(
+      Class<T> numberType, T min, T max, T granularity, boolean unique) {
+    if (minRepetitions > maxRepetitions) {
+      throw new ConfigurationError("minRepetitions (" + minRepetitions + ") > " +
+          "maxRepetitions (" + maxRepetitions + ")");
     }
+    if (unique && (minRepetitions > 0 || maxRepetitions > 0)) {
+      throw new ConfigurationError("Uniqueness can't be assured for minRepetitions=" + minRepetitions
+          + " and maxRepetitions=" + maxRepetitions);
+    }
+    Generator<T> source = stepSequence.createNumberGenerator(numberType, min, max, granularity, unique);
+    return WrapperFactory.asNonNullGenerator(applyTo(source, unique));
+  }
 
-    @Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(
-    		Class<T> numberType, T min, T max, T granularity, boolean unique) {
-    	if (minRepetitions > maxRepetitions)
-    		throw new ConfigurationError("minRepetitions (" + minRepetitions + ") > " +
-    				"maxRepetitions (" + maxRepetitions + ")");
-    	if (unique && (minRepetitions > 0 || maxRepetitions > 0))
-    		throw new ConfigurationError("Uniqueness can't be assured for minRepetitions=" + minRepetitions
-    				+ " and maxRepetitions=" + maxRepetitions);
-		Generator<T> source = stepSequence.createNumberGenerator(numberType, min, max, granularity, unique);
-		return WrapperFactory.asNonNullGenerator(applyTo(source, unique));
-	}
-	
-    @Override
-	public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-	    return new RepeatGeneratorProxy<>(source, minRepetitions, maxRepetitions,
-				repetitionGranularity, repetitionDistribution);
-	}
-	
+  @Override
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    return new RepeatGeneratorProxy<>(source, minRepetitions, maxRepetitions,
+        repetitionGranularity, repetitionDistribution);
+  }
+
 }

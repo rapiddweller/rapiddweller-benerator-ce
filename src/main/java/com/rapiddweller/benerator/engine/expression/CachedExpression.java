@@ -31,35 +31,45 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionProxy;
 
 /**
- * Caches the result of another expression and returns it on subsequent calls 
- * without evaluating the other expression again. The cache can be invalidated 
+ * Caches the result of another expression and returns it on subsequent calls
+ * without evaluating the other expression again. The cache can be invalidated
  * by calling the <code>invalidate()</code> method.<br/><br/>
  * Created: 21.10.2009 14:42:15
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class CachedExpression<E> extends ExpressionProxy<E> {
-	
-	private boolean valid;
-	private E cachedValue;
 
-	public CachedExpression(Expression<E> realExpression) {
-	    super(realExpression);
-	    this.cachedValue = null;
-	    this.valid = false;
+  private boolean valid;
+  private E cachedValue;
+
+  /**
+   * Instantiates a new Cached expression.
+   *
+   * @param realExpression the real expression
+   */
+  public CachedExpression(Expression<E> realExpression) {
+    super(realExpression);
+    this.cachedValue = null;
+    this.valid = false;
+  }
+
+  @Override
+  public E evaluate(Context context) {
+    if (!valid) {
+      cachedValue = super.evaluate(context);
+      valid = true;
     }
+    return cachedValue;
+  }
 
-	@Override
-	public E evaluate(Context context) {
-		if (!valid) {
-			cachedValue = super.evaluate(context);
-			valid = true;
-		}
-	    return cachedValue;
-	}
-	
-	public void invalidate() {
-		valid = false;
-	}
-	
+  /**
+   * Invalidate.
+   */
+  public void invalidate() {
+    valid = false;
+  }
+
 }

@@ -33,33 +33,43 @@ import com.rapiddweller.common.Accessor;
  * Returns the results of an accessor that is applied on a constant provider object.<br/>
  * <br/>
  * Created: 22.08.2007 19:05:40
+ *
+ * @param <S> the type parameter
+ * @param <P> the type parameter
  * @author Volker Bergmann
  */
 public class AccessingGenerator<S, P> extends UnsafeGenerator<P> {
 
-	private final Class<P> targetType;
-    private final Accessor<S, P> accessor;
-    private final S provider;
+  private final Class<P> targetType;
+  private final Accessor<S, P> accessor;
+  private final S provider;
 
-    public AccessingGenerator(Class<P> targetType, Accessor<S, P> accessor, S provider) {
-        this.targetType = targetType;
-        this.accessor = accessor;
-        this.provider = provider;
-    }
+  /**
+   * Instantiates a new Accessing generator.
+   *
+   * @param targetType the target type
+   * @param accessor   the accessor
+   * @param provider   the provider
+   */
+  public AccessingGenerator(Class<P> targetType, Accessor<S, P> accessor, S provider) {
+    this.targetType = targetType;
+    this.accessor = accessor;
+    this.provider = provider;
+  }
 
-	@Override
-	public ProductWrapper<P> generate(ProductWrapper<P> wrapper) {
-        return wrapper.wrap(accessor.getValue(provider));
-    }
-    
-	@Override
-	public Class<P> getGeneratedType() {
-		return targetType;
-    }
-    
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[accessor=" + accessor + ']';
-    }
+  @Override
+  public ProductWrapper<P> generate(ProductWrapper<P> wrapper) {
+    return wrapper.wrap(accessor.getValue(provider));
+  }
+
+  @Override
+  public Class<P> getGeneratedType() {
+    return targetType;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[accessor=" + accessor + ']';
+  }
 
 }

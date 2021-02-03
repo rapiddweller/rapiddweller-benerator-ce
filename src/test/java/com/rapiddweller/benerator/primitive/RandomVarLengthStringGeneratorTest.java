@@ -26,25 +26,29 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import static com.rapiddweller.benerator.util.GeneratorUtil.*;
-
 import com.rapiddweller.benerator.test.GeneratorTest;
 import org.junit.Test;
+
+import static com.rapiddweller.benerator.util.GeneratorUtil.init;
 
 /**
  * Tests the {@link RandomVarLengthStringGenerator}.<br/><br/>
  * Created: 01.08.2011 08:28:47
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class RandomVarLengthStringGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void test() {
-		RandomVarLengthStringGenerator generator = new RandomVarLengthStringGenerator("x", 3);
-		init(generator);
-		expectGeneratedSequence(generator, "xxx", "xxx").withContinuedAvailability();
-		close(generator);
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    RandomVarLengthStringGenerator generator = new RandomVarLengthStringGenerator("x", 3);
+    init(generator);
+    expectGeneratedSequence(generator, "xxx", "xxx").withContinuedAvailability();
+    close(generator);
+  }
+
 }
