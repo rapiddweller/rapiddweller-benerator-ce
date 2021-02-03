@@ -1,19 +1,16 @@
-<setup
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://databene.org/benerator/0.7.0"
-        xsi:schemaLocation="http://databene.org/benerator/0.7.0 http://databene.org/benerator-0.7.0.xsd">
+<setup>
     <import domains="person,net,product"/>
     <import platforms="db"/>
 
     <comment>setting default values</comment>
     <setting name="stage" default="development"/>
     <setting name="database" default="h2"/>
-    <setting name="dbUrl" default="jdbc:h2:mem:benerator"/>
+    <setting name="dbUrl" default="jdbc:h2:mem:benerator;MODE=Postgresql"/>
     <setting name="dbDriver" default="org.h2.Driver"/>
     <setting name="dbSchema" default="public"/>
     <setting name="dbUser" default="sa"/>
-    <setting name="dbPassword" default=""/>
-    <setting name="dbBatch" default="false"/>
+    <setting name="dbPassword" default="12312312321312312312312312321"/>
+    <setting name="dbBatch" default="true"/>
 
     <comment>log the settings to the console</comment>
     <echo>{ftl:encoding:${context.defaultEncoding} default pageSize:${context.defaultPageSize}}</echo>
@@ -28,23 +25,23 @@
         CREATE SCHEMA IF NOT EXISTS "schema2" AUTHORIZATION sa;
         CREATE SCHEMA IF NOT EXISTS "schema3" AUTHORIZATION sa;
 
-        CREATE TABLE IF NOT EXISTS "schema3"."db_manufacturer" (
-        id SERIAL PRIMARY KEY,
+        CREATE TABLE "schema3"."db_manufacturer"(
+        id INT AUTO_INCREMENT PRIMARY KEY,
         name varchar(30) NOT NULL,
-        description text NULL
+        description VARCHAR(250) DEFAULT NULL
         );
-        CREATE TABLE IF NOT EXISTS "schema1"."db_Category" (
-        id SERIAL PRIMARY KEY,
+        CREATE TABLE "schema1"."db_Category"(
+        id INT AUTO_INCREMENT PRIMARY KEY,
         name varchar(30) NOT NULL
         );
-        CREATE TABLE IF NOT EXISTS "schema1"."db_product" (
+        CREATE TABLE "schema1"."db_product"(
         ean_code varchar(13) NOT NULL,
         name varchar(30) NOT NULL,
         category_id int NOT NULL,
         manufacturer_id int NOT NULL,
         price decimal(8,2) NOT NULL,
         notes varchar(256) NULL,
-        description text NULL,
+        description VARCHAR(250) DEFAULT NULL
         );
         COMMIT;
     </execute>

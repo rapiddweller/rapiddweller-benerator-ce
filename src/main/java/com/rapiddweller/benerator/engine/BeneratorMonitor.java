@@ -26,113 +26,144 @@
 
 package com.rapiddweller.benerator.engine;
 
-import java.lang.management.ManagementFactory;
+import com.rapiddweller.jdbacl.DBUtil;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
-
-import com.rapiddweller.jdbacl.DBUtil;
+import java.lang.management.ManagementFactory;
 
 /**
  * MBean implementation for monitoring Benerator.<br/><br/>
  * Created: 27.07.2010 21:15:28
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class BeneratorMonitor implements BeneratorMonitorMBean {
-	
-	public static final BeneratorMonitor INSTANCE;
 
-	static {
-		try {
-			MBeanServer server = ManagementFactory.getPlatformMBeanServer();
-	        INSTANCE = new BeneratorMonitor();
-	        ObjectName name = new ObjectName("benerator:service=monitor");
-	        server.registerMBean(INSTANCE, name);
-        } catch (Exception e) {
-	        throw new RuntimeException(e);
+  /**
+   * The constant INSTANCE.
+   */
+  public static final BeneratorMonitor INSTANCE;
+
+  static {
+    try {
+      MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+      INSTANCE = new BeneratorMonitor();
+      ObjectName name = new ObjectName("benerator:service=monitor");
+      server.registerMBean(INSTANCE, name);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * The Latest time stamp.
+   */
+  long latestTimeStamp;
+  /**
+   * The Latest generation count.
+   */
+  long latestGenerationCount = 0;
+  /**
+   * The Total generation count.
+   */
+  long totalGenerationCount = 0;
+  /**
+   * The Current throughput.
+   */
+  int currentThroughput;
+
+  private BeneratorMonitor() {
+    ControlThread controlThread = new ControlThread();
+    controlThread.setDaemon(true);
+    controlThread.start();
+  }
+
+  /**
+   * Count generations.
+   *
+   * @param newGenerations the new generations
+   */
+  public synchronized void countGenerations(int newGenerations) {
+    totalGenerationCount += newGenerations;
+  }
+
+  @Override
+  public long getTotalGenerationCount() {
+    return totalGenerationCount;
+  }
+
+  @Override
+  public long getCurrentThroughput() {
+    return currentThroughput;
+  }
+
+  /**
+   * Sets total generation count.
+   *
+   * @param totalGenerationCount the total generation count
+   */
+  public void setTotalGenerationCount(long totalGenerationCount) {
+    this.totalGenerationCount = totalGenerationCount;
+  }
+
+  @Override
+  public int getOpenConnectionCount() {
+    return DBUtil.getOpenConnectionCount();
+  }
+
+  @Override
+  public int getOpenResultSetCount() {
+    return DBUtil.getOpenResultSetCount();
+  }
+
+  @Override
+  public int getOpenStatementCount() {
+    return DBUtil.getOpenStatementCount();
+  }
+
+  @Override
+  public int getOpenPreparedStatementCount() {
+    return DBUtil.getOpenPreparedStatementCount();
+  }
+
+  @Override
+  public void reset() {
+    this.latestTimeStamp = 0;
+    this.latestGenerationCount = 0;
+    this.totalGenerationCount = 0;
+    this.currentThroughput = 0;
+  }
+
+  /**
+   * The type Control thread.
+   */
+  class ControlThread extends Thread {
+    @Override
+    public void run() {
+      try {
+        latestTimeStamp = System.nanoTime();
+        //noinspection InfiniteLoopStatement
+        while (true) {
+          Thread.sleep(500);
+          update();
         }
-	}
-	
-	long latestTimeStamp;
-	long latestGenerationCount = 0;
-	long totalGenerationCount = 0;
-	int  currentThroughput;
-	
-	private BeneratorMonitor() { 
-		ControlThread controlThread = new ControlThread();
-		controlThread.setDaemon(true);
-		controlThread.start();
-	}
-	
-	public synchronized void countGenerations(int newGenerations) {
-		totalGenerationCount += newGenerations;
-	}
-	
-	@Override
-	public long getTotalGenerationCount() {
-	    return totalGenerationCount;
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
     }
 
-	@Override
-	public long getCurrentThroughput() {
-	    return currentThroughput;
+    /**
+     * Update.
+     */
+    public void update() {
+      long currentGenerationCount = totalGenerationCount;
+      long currentTime = System.nanoTime();
+      currentThroughput = (int) ((currentGenerationCount - latestGenerationCount) * 1000000000 / (currentTime - latestTimeStamp));
+      latestTimeStamp = currentTime;
+      latestGenerationCount = currentGenerationCount;
     }
-
-	public void setTotalGenerationCount(long totalGenerationCount) {
-    	this.totalGenerationCount = totalGenerationCount;
-    }
-
-	@Override
-	public int getOpenConnectionCount() {
-		return DBUtil.getOpenConnectionCount();
-	}
-	
-	@Override
-	public int getOpenResultSetCount() {
-		return DBUtil.getOpenResultSetCount();
-	}
-
-	@Override
-	public int getOpenStatementCount() {
-		return DBUtil.getOpenStatementCount();
-	}
-
-	@Override
-	public int getOpenPreparedStatementCount() {
-		return DBUtil.getOpenPreparedStatementCount();
-	}
-
-	@Override
-	public void reset() {
-		this.latestTimeStamp = 0;
-		this.latestGenerationCount = 0;
-		this.totalGenerationCount = 0;
-		this.currentThroughput = 0;
-	}
-
-	class ControlThread extends Thread {
-		@Override
-		public void run() {
-		    try {
-            	latestTimeStamp = System.nanoTime();
-				//noinspection InfiniteLoopStatement
-				while (true) {
-	            	Thread.sleep(500);
-	            	update();
-	            }
-            } catch (InterruptedException e) {
-	            e.printStackTrace();
-            }
-		}
-
-		public void update() {
-        	long currentGenerationCount = totalGenerationCount;
-			long currentTime = System.nanoTime();
-			currentThroughput = (int) ((currentGenerationCount - latestGenerationCount) * 1000000000 / (currentTime - latestTimeStamp));
-			latestTimeStamp = currentTime;
-			latestGenerationCount = currentGenerationCount;
-        }
-	}
+  }
 
 }

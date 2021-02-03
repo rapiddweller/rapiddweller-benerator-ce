@@ -32,14 +32,20 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation which specifies that a given number of generated data elements 
+ * Annotation which specifies that a given number of generated data elements
  * should be skipped when testing.<br/><br/>
  * Created: 23.07.2011 11:20:59
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.CONSTRUCTOR } )
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.CONSTRUCTOR})
 public @interface Offset {
-	int value() default 0;
+  /**
+   * Value int.
+   *
+   * @return the int
+   */
+  int value() default 0;
 }

@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.parser;
 
-import java.util.Map;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.Converter;
@@ -37,56 +35,72 @@ import com.rapiddweller.common.converter.LiteralParser;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.common.mutator.AnyMutator;
 
+import java.util.Map;
+
 /**
- * Converts Map entries by first applying a preprocessor to the value, 
+ * Converts Map entries by first applying a preprocessor to the value,
  * then (if possible) converting the result to a number or boolean.<br/><br/>
  * Created: 01.02.2008 14:40:43
- * @since 0.4.0
+ *
  * @author Volker Bergmann
+ * @since 0.4.0
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class DefaultEntryConverter extends AbstractConverter<Map.Entry, Map.Entry> {
-    
-    private final BeneratorContext context;
-    private final Converter<?, ?> preprocessor;
-    private final LiteralParser stringParser;
-    private final boolean putEntriesToContext;
 
-    public DefaultEntryConverter(BeneratorContext context) {
-        this(new NoOpConverter(), context, false);
-    }
+  private final BeneratorContext context;
+  private final Converter<?, ?> preprocessor;
+  private final LiteralParser stringParser;
+  private final boolean putEntriesToContext;
 
-    public DefaultEntryConverter(Converter<?, ?> preprocessor, BeneratorContext context, boolean putEntriesToContext) {
-    	super(Map.Entry.class, Map.Entry.class);
-        this.preprocessor = preprocessor;
-        this.context = context;
-        this.putEntriesToContext = putEntriesToContext;
-        this.stringParser = new LiteralParser();
-    }
+  /**
+   * Instantiates a new Default entry converter.
+   *
+   * @param context the context
+   */
+  public DefaultEntryConverter(BeneratorContext context) {
+    this(new NoOpConverter(), context, false);
+  }
 
-    @Override
-	public Map.Entry convert(Map.Entry entry) throws ConversionException {
-        String key = String.valueOf(entry.getKey());
-        String sourceValue = String.valueOf(entry.getValue());
-        sourceValue = String.valueOf(((Converter) preprocessor).convert(sourceValue));
-        Object result = stringParser.convert(sourceValue);
-        if (putEntriesToContext) {
-    		if (key.startsWith("benerator."))
-    			AnyMutator.setValue(context, key, result, true, false);
-    		else
-    			context.setGlobal(key, result);
-        }
-        return new MapEntry<>(key, result);
-    }
+  /**
+   * Instantiates a new Default entry converter.
+   *
+   * @param preprocessor        the preprocessor
+   * @param context             the context
+   * @param putEntriesToContext the put entries to context
+   */
+  public DefaultEntryConverter(Converter<?, ?> preprocessor, BeneratorContext context, boolean putEntriesToContext) {
+    super(Map.Entry.class, Map.Entry.class);
+    this.preprocessor = preprocessor;
+    this.context = context;
+    this.putEntriesToContext = putEntriesToContext;
+    this.stringParser = new LiteralParser();
+  }
 
-	@Override
-	public boolean isParallelizable() {
-	    return preprocessor.isParallelizable();
+  @Override
+  public Map.Entry convert(Map.Entry entry) throws ConversionException {
+    String key = String.valueOf(entry.getKey());
+    String sourceValue = String.valueOf(entry.getValue());
+    sourceValue = String.valueOf(((Converter) preprocessor).convert(sourceValue));
+    Object result = stringParser.convert(sourceValue);
+    if (putEntriesToContext) {
+      if (key.startsWith("benerator.")) {
+        AnyMutator.setValue(context, key, result, true, false);
+      } else {
+        context.setGlobal(key, result);
+      }
     }
+    return new MapEntry<>(key, result);
+  }
 
-	@Override
-	public boolean isThreadSafe() {
-	    return preprocessor.isThreadSafe();
-    }
+  @Override
+  public boolean isParallelizable() {
+    return preprocessor.isParallelizable();
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return preprocessor.isThreadSafe();
+  }
 
 }

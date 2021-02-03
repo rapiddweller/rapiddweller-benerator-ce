@@ -1,5 +1,3 @@
-
-
 <!--DOCTYPE dataset SYSTEM "dataset.dtd"-->
 <dataset>
     <table name="PERSON">
@@ -30,5 +28,5 @@
     <table name="EMPTY1">
         <column>name</column>
     </table>
-    <table name="EMPTY2" />
+    <table name="EMPTY2"/>
 </dataset>

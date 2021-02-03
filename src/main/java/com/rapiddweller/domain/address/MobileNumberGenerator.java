@@ -36,31 +36,44 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
  * @since 0.6.0
  */
 public class MobileNumberGenerator
-        extends ThreadSafeNonNullGenerator<PhoneNumber> {
+    extends ThreadSafeNonNullGenerator<PhoneNumber> {
 
-    private Country country;
+  private Country country;
 
-    public MobileNumberGenerator() {
-        this(Country.getDefault());
-    }
+  /**
+   * Instantiates a new Mobile number generator.
+   */
+  public MobileNumberGenerator() {
+    this(Country.getDefault());
+  }
 
-    public MobileNumberGenerator(Country country) {
-        this.country = country;
-    }
+  /**
+   * Instantiates a new Mobile number generator.
+   *
+   * @param country the country
+   */
+  public MobileNumberGenerator(Country country) {
+    this.country = country;
+  }
 
-    public void setCountry(Country country) {
-        this.country = country;
-    }
+  /**
+   * Sets country.
+   *
+   * @param country the country
+   */
+  public void setCountry(Country country) {
+    this.country = country;
+  }
 
-    @Override
-    public Class<PhoneNumber> getGeneratedType() {
-        return PhoneNumber.class;
-    }
+  @Override
+  public Class<PhoneNumber> getGeneratedType() {
+    return PhoneNumber.class;
+  }
 
-    @Override
-    public PhoneNumber generate() {
-        return country.generateMobileNumber();
-    }
+  @Override
+  public PhoneNumber generate() {
+    return country.generateMobileNumber();
+  }
 
 
 }

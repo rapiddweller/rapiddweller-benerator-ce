@@ -1,22 +1,20 @@
-
-
 <setup>
-	<import platforms="db" />
-	
-	<database id="db" environment="hsqlmem" />
-	
-	<execute target="db" onError="ignore">
-		drop table TT ( id1 int, id2 int, value int );
-	</execute>
-	<execute target="db">
-		create table TT ( id1 int, id2 int, value int );
-		insert into TT (id1, id2, value) values (1, 2, 1000);
-		insert into TT (id1, id2, value) values (2, 3, 2000);
-	</execute>
-	
-	<bean id="sg" spec="new SequenceTableGenerator('TT', 'value', db, 'id1 = ? and id2 = ?')" />
-	
-	<generate type="x" count="2" consumer="cons">
-	  <attribute name="id" type="int" script="sg.generateWithParams(2, 3)" />
-	</generate>
+    <import platforms="db"/>
+
+    <database id="db" environment="hsqlmem"/>
+
+    <execute target="db" onError="ignore">
+        drop table TT ( id1 int, id2 int, value int );
+    </execute>
+    <execute target="db">
+        create table TT ( id1 int, id2 int, value int );
+        insert into TT (id1, id2, value) values (1, 2, 1000);
+        insert into TT (id1, id2, value) values (2, 3, 2000);
+    </execute>
+
+    <bean id="sg" spec="new SequenceTableGenerator('TT', 'value', db, 'id1 = ? and id2 = ?')"/>
+
+    <generate type="x" count="2" consumer="cons">
+        <attribute name="id" type="int" script="sg.generateWithParams(2, 3)"/>
+    </generate>
 </setup>

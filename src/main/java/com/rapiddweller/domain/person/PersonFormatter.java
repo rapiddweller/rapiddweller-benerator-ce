@@ -26,7 +26,11 @@
 
 package com.rapiddweller.domain.person;
 
-import com.rapiddweller.common.*;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.Locales;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 import java.util.Locale;
@@ -40,66 +44,99 @@ import java.util.Set;
  * @since 0.6.0
  */
 public abstract class PersonFormatter
-        extends ThreadSafeConverter<Person, String> {
+    extends ThreadSafeConverter<Person, String> {
 
-    public static final PersonFormatter WESTERN = new Western();
-    public static final PersonFormatter EASTERN = new Eastern();
-    private static final Set<Locale> EASTERN_LOCALES = CollectionUtil.toSet(
-            Locales.CHINESE, Locales.JAPANESE, Locales.KOREAN, Locales.THAI,
-            Locales.VIETNAMESE
-    );
+  /**
+   * The constant WESTERN.
+   */
+  public static final PersonFormatter WESTERN = new Western();
+  /**
+   * The constant EASTERN.
+   */
+  public static final PersonFormatter EASTERN = new Eastern();
+  private static final Set<Locale> EASTERN_LOCALES = CollectionUtil.toSet(
+      Locales.CHINESE, Locales.JAPANESE, Locales.KOREAN, Locales.THAI,
+      Locales.VIETNAMESE
+  );
 
-    public PersonFormatter() {
-        super(Person.class, String.class);
+  /**
+   * Instantiates a new Person formatter.
+   */
+  public PersonFormatter() {
+    super(Person.class, String.class);
+  }
+
+  /**
+   * Gets instance.
+   *
+   * @param locale the locale
+   * @return the instance
+   */
+  public static PersonFormatter getInstance(Locale locale) {
+    return (EASTERN_LOCALES.contains(LocaleUtil.language(locale)) ?
+        EASTERN : WESTERN);
+  }
+
+  @Override
+  public String convert(Person person) throws ConversionException {
+    return format(person);
+  }
+
+  /**
+   * Format string.
+   *
+   * @param person the person
+   * @return the string
+   */
+  public abstract String format(Person person);
+
+  /**
+   * Append separated.
+   *
+   * @param part    the part
+   * @param builder the builder
+   */
+  protected void appendSeparated(String part, StringBuilder builder) {
+    if (!StringUtil.isEmpty(part)) {
+      if (builder.length() > 0) {
+        builder.append(' ');
+      }
+      builder.append(part);
     }
+  }
 
-    public static PersonFormatter getInstance(Locale locale) {
-        return (EASTERN_LOCALES.contains(LocaleUtil.language(locale)) ?
-                EASTERN : WESTERN);
-    }
+  /**
+   * The type Western.
+   */
+  static class Western extends PersonFormatter {
 
     @Override
-    public String convert(Person person) throws ConversionException {
-        return format(person);
+    public String format(Person person) {
+      StringBuilder builder = new StringBuilder();
+      appendSeparated(person.getSalutation(), builder);
+      appendSeparated(person.getAcademicTitle(), builder);
+      appendSeparated(person.getNobilityTitle(), builder);
+      appendSeparated(person.getGivenName(), builder);
+      appendSeparated(person.getFamilyName(), builder);
+      return builder.toString();
     }
+  }
 
-    public abstract String format(Person person);
+  /**
+   * The type Eastern.
+   */
+  static class Eastern extends PersonFormatter {
 
-    protected void appendSeparated(String part, StringBuilder builder) {
-        if (!StringUtil.isEmpty(part)) {
-            if (builder.length() > 0) {
-                builder.append(' ');
-            }
-            builder.append(part);
-        }
+    @Override
+    public String format(Person person) {
+      StringBuilder builder = new StringBuilder();
+      appendSeparated(person.getSalutation(), builder);
+      appendSeparated(person.getAcademicTitle(), builder);
+      appendSeparated(person.getNobilityTitle(), builder);
+      appendSeparated(person.getFamilyName(), builder);
+      appendSeparated(person.getGivenName(), builder);
+      return builder.toString();
     }
-
-    static class Western extends PersonFormatter {
-
-        @Override
-        public String format(Person person) {
-            StringBuilder builder = new StringBuilder();
-            appendSeparated(person.getSalutation(), builder);
-            appendSeparated(person.getAcademicTitle(), builder);
-            appendSeparated(person.getNobilityTitle(), builder);
-            appendSeparated(person.getGivenName(), builder);
-            appendSeparated(person.getFamilyName(), builder);
-            return builder.toString();
-        }
-    }
-
-    static class Eastern extends PersonFormatter {
-
-        @Override
-        public String format(Person person) {
-            StringBuilder builder = new StringBuilder();
-            appendSeparated(person.getSalutation(), builder);
-            appendSeparated(person.getAcademicTitle(), builder);
-            appendSeparated(person.getNobilityTitle(), builder);
-            appendSeparated(person.getFamilyName(), builder);
-            appendSeparated(person.getGivenName(), builder);
-            return builder.toString();
-        }
-    }
+  }
 
 }

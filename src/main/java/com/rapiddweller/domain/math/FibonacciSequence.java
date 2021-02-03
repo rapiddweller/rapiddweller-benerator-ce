@@ -39,14 +39,13 @@ import com.rapiddweller.benerator.distribution.Sequence;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class FibonacciSequence extends LongBasedSequence {
 
-    @Override
-    protected NonNullGenerator<Long> createLongGenerator(Long min, Long max,
-                                                         Long granularity,
-                                                         boolean unique) {
-        return new FibonacciLongGenerator(min, max, unique);
-    }
+  @Override
+  protected NonNullGenerator<Long> createLongGenerator(Long min, Long max,
+                                                       Long granularity,
+                                                       boolean unique) {
+    return new FibonacciLongGenerator(min, max, unique);
+  }
 
 }

@@ -26,69 +26,94 @@
 
 package com.rapiddweller.task;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.context.ContextAware;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Mock implementation of the {@link Task} interface.<br/><br/>
  * Created: 26.10.2009 07:09:12
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class TaskMock extends AbstractTask implements ContextAware {
 
-	public static volatile AtomicInteger count = new AtomicInteger();
-	public int intProp;
-	public Context context;
-	
-	public TaskMock() {
-	    this(0, null);
-    }
+  /**
+   * The constant count.
+   */
+  public static volatile AtomicInteger count = new AtomicInteger();
+  /**
+   * The Int prop.
+   */
+  public int intProp;
+  /**
+   * The Context.
+   */
+  public Context context;
 
-	public TaskMock(int intProp, Context context) {
-	    this.intProp = intProp;
-	    this.context = context;
-    }
+  /**
+   * Instantiates a new Task mock.
+   */
+  public TaskMock() {
+    this(0, null);
+  }
 
-	@Override
-	public void setContext(Context context) {
-		this.context = context;
-    }
+  /**
+   * Instantiates a new Task mock.
+   *
+   * @param intProp the int prop
+   * @param context the context
+   */
+  public TaskMock(int intProp, Context context) {
+    this.intProp = intProp;
+    this.context = context;
+  }
 
-	public void setIntProp(int intProp) {
-    	this.intProp = intProp;
-    }
-	
-	@Override
-	public boolean isParallelizable() {
-	    return true;
-	}
-	
-	@Override
-    public Object clone() {
-		return new TaskMock(intProp, context);
-	}
+  @Override
+  public void setContext(Context context) {
+    this.context = context;
+  }
 
-	@Override
-	public TaskResult execute(Context context, ErrorHandler errorHandler) {
-		if (this.context == null)
-			throw new IllegalStateException("Context has not been injected");
-	    count.incrementAndGet();
-	    try {
-	        Thread.sleep(RandomUtil.randomLong(1, 10));
-        } catch (InterruptedException e) {
-	        throw new RuntimeException(e);
-        }
-	    return TaskResult.EXECUTING;
+  /**
+   * Sets int prop.
+   *
+   * @param intProp the int prop
+   */
+  public void setIntProp(int intProp) {
+    this.intProp = intProp;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return true;
+  }
+
+  @Override
+  public Object clone() {
+    return new TaskMock(intProp, context);
+  }
+
+  @Override
+  public TaskResult execute(Context context, ErrorHandler errorHandler) {
+    if (this.context == null) {
+      throw new IllegalStateException("Context has not been injected");
     }
-	
-	@Override
-	public void close() {
-	    super.close();
-	}
+    count.incrementAndGet();
+    try {
+      Thread.sleep(RandomUtil.randomLong(1, 10));
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+    return TaskResult.EXECUTING;
+  }
+
+  @Override
+  public void close() {
+    super.close();
+  }
 
 }

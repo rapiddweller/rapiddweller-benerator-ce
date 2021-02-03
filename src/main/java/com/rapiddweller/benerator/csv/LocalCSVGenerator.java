@@ -41,59 +41,99 @@ import java.util.Locale;
  * <br/>
  * Created: 07.06.2007 17:21:24
  *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  */
 public class LocalCSVGenerator<E> extends WeightedCSVSampleGenerator<E> {
 
-    private final String baseName;
-    private Locale locale;
-    private final String suffix;
+  private final String baseName;
+  private Locale locale;
+  private final String suffix;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public LocalCSVGenerator(Class<E> targetType, String baseName, String suffix, String encoding) {
-        this(targetType, baseName, Locale.getDefault(), suffix, encoding);
+  /**
+   * Instantiates a new Local csv generator.
+   *
+   * @param targetType the target type
+   * @param baseName   the base name
+   * @param suffix     the suffix
+   * @param encoding   the encoding
+   */
+  public LocalCSVGenerator(Class<E> targetType, String baseName, String suffix, String encoding) {
+    this(targetType, baseName, Locale.getDefault(), suffix, encoding);
+  }
+
+  /**
+   * Instantiates a new Local csv generator.
+   *
+   * @param targetType the target type
+   * @param baseName   the base name
+   * @param locale     the locale
+   * @param suffix     the suffix
+   * @param encoding   the encoding
+   */
+  @SuppressWarnings("unchecked")
+  public LocalCSVGenerator(Class<E> targetType, String baseName, Locale locale, String suffix, String encoding) {
+    this(targetType, baseName, locale, suffix, encoding, NoOpConverter.getInstance());
+  }
+
+  /**
+   * Instantiates a new Local csv generator.
+   *
+   * @param targetType the target type
+   * @param baseName   the base name
+   * @param locale     the locale
+   * @param suffix     the suffix
+   * @param encoding   the encoding
+   * @param converter  the converter
+   */
+  public LocalCSVGenerator(Class<E> targetType, String baseName, Locale locale, String suffix, String encoding,
+                           Converter<String, E> converter) {
+    super(targetType, availableUri(baseName, locale, suffix), encoding, converter);
+    this.baseName = baseName;
+    this.locale = locale;
+    this.suffix = suffix;
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  private static String availableUri(String baseName, Locale locale, String suffix) {
+    if (baseName == null || suffix == null) {
+      return null;
     }
-
-    @SuppressWarnings("unchecked")
-    public LocalCSVGenerator(Class<E> targetType, String baseName, Locale locale, String suffix, String encoding) {
-        this(targetType, baseName, locale, suffix, encoding, NoOpConverter.getInstance());
+    String uri = LocaleUtil.availableLocaleUrl(baseName, locale, suffix);
+    if (uri == null) {
+      throw new ConfigurationError("No localization found for " + baseName + suffix + " on locale " + locale);
     }
+    return uri;
+  }
 
-    public LocalCSVGenerator(Class<E> targetType, String baseName, Locale locale, String suffix, String encoding,
-                             Converter<String, E> converter) {
-        super(targetType, availableUri(baseName, locale, suffix), encoding, converter);
-        this.baseName = baseName;
-        this.locale = locale;
-        this.suffix = suffix;
-    }
+  /**
+   * Gets locale.
+   *
+   * @return the locale
+   */
+  public Locale getLocale() {
+    return locale;
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // private helpers -------------------------------------------------------------------------------------------------
 
-    private static String availableUri(String baseName, Locale locale, String suffix) {
-        if (baseName == null || suffix == null)
-            return null;
-        String uri = LocaleUtil.availableLocaleUrl(baseName, locale, suffix);
-        if (uri == null)
-            throw new ConfigurationError("No localization found for " + baseName + suffix + " on locale " + locale);
-        return uri;
-    }
+  /**
+   * Sets locale.
+   *
+   * @param locale the locale
+   */
+  public void setLocale(Locale locale) {
+    this.uri = availableUri(baseName, locale, suffix);
+    this.locale = locale;
+  }
 
-    public Locale getLocale() {
-        return locale;
-    }
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    public void setLocale(Locale locale) {
-        this.uri = availableUri(baseName, locale, suffix);
-        this.locale = locale;
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + baseName + ',' + locale + ',' + suffix + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + baseName + ',' + locale + ',' + suffix + ']';
+  }
 }

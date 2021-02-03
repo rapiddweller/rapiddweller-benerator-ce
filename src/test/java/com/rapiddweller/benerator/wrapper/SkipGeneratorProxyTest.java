@@ -26,76 +26,97 @@
 
 package com.rapiddweller.benerator.wrapper;
 
+import com.rapiddweller.benerator.ConstantTestGenerator;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
-import com.rapiddweller.benerator.ConstantTestGenerator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link SkipGeneratorProxy}.<br/><br/>
  * Created: 11.10.2006 23:10:34
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class SkipGeneratorProxyTest extends GeneratorTest {
 
-    @Test
-    public void testSkip() {
-        SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
-        SkipGeneratorProxy<Integer> generator = new SkipGeneratorProxy<>(source, 1, 2);
-        generator.init(context);
-        int value = GeneratorUtil.generateNonNull(generator);
-        assertTrue(value == 1 || value == 2);
-    }
+  /**
+   * Test skip.
+   */
+  @Test
+  public void testSkip() {
+    SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
+    SkipGeneratorProxy<Integer> generator = new SkipGeneratorProxy<>(source, 1, 2);
+    generator.init(context);
+    int value = GeneratorUtil.generateNonNull(generator);
+    assertTrue(value == 1 || value == 2);
+  }
 
-    @Test
-    public void testLimit1() {
-        SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
-        SkipGeneratorProxy<Integer> generator = new SkipGeneratorProxy<>(
-                source, 1, 1, SequenceManager.RANDOM_SEQUENCE, 1);
-        generator.init(context);
-        Integer value = GeneratorUtil.generateNonNull(generator);
-        assertNotNull(value);
-        assertEquals(1, (int) value);
-        assertUnavailable(generator);
-    }
+  /**
+   * Test limit 1.
+   */
+  @Test
+  public void testLimit1() {
+    SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
+    SkipGeneratorProxy<Integer> generator = new SkipGeneratorProxy<>(
+        source, 1, 1, SequenceManager.RANDOM_SEQUENCE, 1);
+    generator.init(context);
+    Integer value = GeneratorUtil.generateNonNull(generator);
+    assertNotNull(value);
+    assertEquals(1, (int) value);
+    assertUnavailable(generator);
+  }
 
-    @Test
-    public void testNonRepetitive() {
-        SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2);
-        SkipGeneratorProxy<Integer> generator = new SkipGeneratorProxy<>(source);
-        generator.init(context);
-        assertEquals(1, (int) GeneratorUtil.generateNonNull(generator));
-        assertEquals(2, (int) GeneratorUtil.generateNonNull(generator));
-        assertUnavailable(generator);
-    }
+  /**
+   * Test non repetitive.
+   */
+  @Test
+  public void testNonRepetitive() {
+    SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2);
+    SkipGeneratorProxy<Integer> generator = new SkipGeneratorProxy<>(source);
+    generator.init(context);
+    assertEquals(1, (int) GeneratorUtil.generateNonNull(generator));
+    assertEquals(2, (int) GeneratorUtil.generateNonNull(generator));
+    assertUnavailable(generator);
+  }
 
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testMissingSource() {
-        createAndInit(null, 1, 1);
-    }
+  /**
+   * Test missing source.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testMissingSource() {
+    createAndInit(null, 1, 1);
+  }
 
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testNegativeMinIncrement() {
-        Generator<Integer> source = new ConstantTestGenerator<>(1);
-        createAndInit(source, -1, 1);
-    }
+  /**
+   * Test negative min increment.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testNegativeMinIncrement() {
+    Generator<Integer> source = new ConstantTestGenerator<>(1);
+    createAndInit(source, -1, 1);
+  }
 
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testMaxIncrementSmallerThanMinIncrement() {
-        Generator<Integer> source = new ConstantTestGenerator<>(1);
-        createAndInit(source, 1, -1);
-    }
+  /**
+   * Test max increment smaller than min increment.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testMaxIncrementSmallerThanMinIncrement() {
+    Generator<Integer> source = new ConstantTestGenerator<>(1);
+    createAndInit(source, 1, -1);
+  }
 
-    private void createAndInit(Generator<Integer> source, int minIncrement, int maxIncrement) {
-        Generator<Integer> generator = new SkipGeneratorProxy<>(source, minIncrement, maxIncrement);
-        generator.init(context);
-    }
-    
+  private void createAndInit(Generator<Integer> source, int minIncrement, int maxIncrement) {
+    Generator<Integer> generator = new SkipGeneratorProxy<>(source, minIncrement, maxIncrement);
+    generator.init(context);
+  }
+
 }

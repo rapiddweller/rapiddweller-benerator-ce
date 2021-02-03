@@ -26,11 +26,6 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import static org.junit.Assert.*;
-
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.distribution.SequenceManager;
@@ -41,53 +36,74 @@ import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.junit.Test;
 
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Tests the {@link DynamicLongGenerator}.<br/><br/>
  * Created: 28.03.2010 12:36:26
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 public class DynamicLongGeneratorTest extends GeneratorTest {
 
-	private static final Expression<Long> ONE = ExpressionUtil.constant(1L);
-	private static final Expression<Long> TWO = ExpressionUtil.constant(2L);
-	private static final Expression<Long> THREE = ExpressionUtil.constant(3L);
-	private static final Expression<Sequence> RANDOM_SEQUENCE = ExpressionUtil.constant(SequenceManager.RANDOM_SEQUENCE);
-	private static final Expression<Sequence> STEP_SEQUENCE = ExpressionUtil.constant(SequenceManager.STEP_SEQUENCE);
-	private static final Expression<Boolean> NOT_UNIQUE = ExpressionUtil.constant(false);
+  private static final Expression<Long> ONE = ExpressionUtil.constant(1L);
+  private static final Expression<Long> TWO = ExpressionUtil.constant(2L);
+  private static final Expression<Long> THREE = ExpressionUtil.constant(3L);
+  private static final Expression<Sequence> RANDOM_SEQUENCE = ExpressionUtil.constant(SequenceManager.RANDOM_SEQUENCE);
+  private static final Expression<Sequence> STEP_SEQUENCE = ExpressionUtil.constant(SequenceManager.STEP_SEQUENCE);
+  private static final Expression<Boolean> NOT_UNIQUE = ExpressionUtil.constant(false);
 
-	@Test
-	public void testConstant() {
-		Generator<Long> generator = new DynamicLongGenerator(ONE, THREE, TWO, RANDOM_SEQUENCE, NOT_UNIQUE);
-		generator.init(context);
-		Map<Long, AtomicInteger> productCounts = countProducts(generator, 100);
-		assertEquals(2, productCounts.size());
-		assertTrue(productCounts.containsKey(1L));
-		assertTrue(productCounts.containsKey(3L));
-	}
+  /**
+   * Test constant.
+   */
+  @Test
+  public void testConstant() {
+    Generator<Long> generator = new DynamicLongGenerator(ONE, THREE, TWO, RANDOM_SEQUENCE, NOT_UNIQUE);
+    generator.init(context);
+    Map<Long, AtomicInteger> productCounts = countProducts(generator, 100);
+    assertEquals(2, productCounts.size());
+    assertTrue(productCounts.containsKey(1L));
+    assertTrue(productCounts.containsKey(3L));
+  }
 
-	@Test
-	public void testLifeCycle() {
-		Generator<Long> generator = new DynamicLongGenerator(new IncrementExpression(1), new IncrementExpression(2), 
-				ONE, STEP_SEQUENCE, NOT_UNIQUE);
-		generator.init(context); // min==1, max==2
-		expectGeneratedSequenceOnce(generator, 1L, 2L);
-		generator.reset(); // min==2, max==3
-		expectGeneratedSequenceOnce(generator, 2L, 3L);
-	}
-	
-	static class IncrementExpression extends DynamicExpression<Long> {
-		
-		private long value;
-		
-		public IncrementExpression(long value) {
-	        this.value = value;
-        }
+  /**
+   * Test life cycle.
+   */
+  @Test
+  public void testLifeCycle() {
+    Generator<Long> generator = new DynamicLongGenerator(new IncrementExpression(1), new IncrementExpression(2),
+        ONE, STEP_SEQUENCE, NOT_UNIQUE);
+    generator.init(context); // min==1, max==2
+    expectGeneratedSequenceOnce(generator, 1L, 2L);
+    generator.reset(); // min==2, max==3
+    expectGeneratedSequenceOnce(generator, 2L, 3L);
+  }
 
-		@Override
-		public Long evaluate(Context context) {
-	        return value++;
-        }
-	}
-	
+  /**
+   * The type Increment expression.
+   */
+  static class IncrementExpression extends DynamicExpression<Long> {
+
+    private long value;
+
+    /**
+     * Instantiates a new Increment expression.
+     *
+     * @param value the value
+     */
+    public IncrementExpression(long value) {
+      this.value = value;
+    }
+
+    @Override
+    public Long evaluate(Context context) {
+      return value++;
+    }
+  }
+
 }

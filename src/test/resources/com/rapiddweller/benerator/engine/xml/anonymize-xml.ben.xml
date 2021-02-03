@@ -2,33 +2,33 @@
 
 
 <setup>
-	
-	<bean id="dom" class="com.rapiddweller.platform.xml.DOMTree">
-		<property name="inputUri" value="com/rapiddweller/platform/xml/teamplayers.xml"/>
-		<property name="outputUri" value="target/test-classes/teamplayers-anon.xml"/>
-	</bean>
-	
-	<comment>Anonymizing People Names</comment>
-	<iterate name="p" type="person" source="dom" selector="//person" consumer="dom.updater()">
-		<attribute name="name" values="'Michael','Maria','Miles','Manfred'" />
-	</iterate>
-	
-	<memstore id="mem" />
-	
-	<comment>Extracting City Names</comment>
-	<generate type="citymap" consumer="mem,ConsoleExporter">
-		<variable name="city" type="string" source="dom" selector="//city" />
-		<id name="source" type="string" script="city" />
-		<attribute name="target" type="string" values="'Munich','Michigan','Madrid','Milano'" />
-	</generate>
-	
-	<echo>City Anonymizations:</echo>
-	<iterate type="citymap" source="mem" consumer="ConsoleExporter" />
-	
-	<comment>Anonymizing City Information</comment>
-	<iterate name="p" type="person" source="dom" selector="//person" consumer="dom.updater(),ConsoleExporter">
-		<variable name="citymap" source="mem" type="citymap" selector="_candidate.source==p.city"/>
-		<attribute name="city" script="citymap.target" />
-	</iterate>
-	
+
+    <bean id="dom" class="com.rapiddweller.platform.xml.DOMTree">
+        <property name="inputUri" value="com/rapiddweller/platform/xml/teamplayers.xml"/>
+        <property name="outputUri" value="target/test-classes/teamplayers-anon.xml"/>
+    </bean>
+
+    <comment>Anonymizing People Names</comment>
+    <iterate name="p" type="person" source="dom" selector="//person" consumer="dom.updater()">
+        <attribute name="name" values="'Michael','Maria','Miles','Manfred'"/>
+    </iterate>
+
+    <memstore id="mem"/>
+
+    <comment>Extracting City Names</comment>
+    <generate type="citymap" consumer="mem,ConsoleExporter">
+        <variable name="city" type="string" source="dom" selector="//city"/>
+        <id name="source" type="string" script="city"/>
+        <attribute name="target" type="string" values="'Munich','Michigan','Madrid','Milano'"/>
+    </generate>
+
+    <echo>City Anonymizations:</echo>
+    <iterate type="citymap" source="mem" consumer="ConsoleExporter"/>
+
+    <comment>Anonymizing City Information</comment>
+    <iterate name="p" type="person" source="dom" selector="//person" consumer="dom.updater(),ConsoleExporter">
+        <variable name="citymap" source="mem" type="citymap" selector="_candidate.source==p.city"/>
+        <attribute name="city" script="citymap.target"/>
+    </iterate>
+
 </setup>

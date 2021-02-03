@@ -32,21 +32,28 @@ import org.junit.Test;
 /**
  * Tests the {@link PredefinedSequenceGenerator}.<br/><br/>
  * Created: 03.06.2010 09:03:32
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class PredefinedSequenceGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void testEmpty() {
-		PredefinedSequenceGenerator<Integer> generator = new PredefinedSequenceGenerator<>();
-		expectGeneratedSequence(generator);
-	}
-	
-	@Test
-	public void testPrimes() {
-		PredefinedSequenceGenerator<Integer> generator = new PredefinedSequenceGenerator<>(2, 3, 5, 7, 11);
-		expectGeneratedSequence(generator, 2, 3, 5, 7, 11);
-	}
-	
+  /**
+   * Test empty.
+   */
+  @Test
+  public void testEmpty() {
+    PredefinedSequenceGenerator<Integer> generator = new PredefinedSequenceGenerator<>();
+    expectGeneratedSequence(generator);
+  }
+
+  /**
+   * Test primes.
+   */
+  @Test
+  public void testPrimes() {
+    PredefinedSequenceGenerator<Integer> generator = new PredefinedSequenceGenerator<>(2, 3, 5, 7, 11);
+    expectGeneratedSequence(generator, 2, 3, 5, 7, 11);
+  }
+
 }

@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import java.beans.PropertyDescriptor;
-import java.io.Closeable;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManager;
@@ -40,48 +37,63 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.BeanConstruction;
 import com.rapiddweller.task.Task;
 
+import java.beans.PropertyDescriptor;
+import java.io.Closeable;
+
 /**
  * {@link Task} implementation that instantiates a JavaBean.<br/>
  * <br/>
  * Created at 24.07.2009 07:00:52
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class BeanStatement extends SequentialStatement {
-	
-	private String id;
-    private Expression<?> constructionExpression;
-    private ResourceManager resourceManager;
 
-    public BeanStatement(String id, Expression<?> constructionExpression, ResourceManager resourceManager) {
-    	this.id = id;
-        this.constructionExpression = constructionExpression;
-        this.resourceManager = resourceManager;
-    }
+  private final String id;
+  private final Expression<?> constructionExpression;
+  private final ResourceManager resourceManager;
 
-	@SuppressWarnings({ "rawtypes" })
-    @Override
-    public boolean execute(BeneratorContext context) {
-		// invoke constructor
-        Object bean = constructionExpression.evaluate(context);
-        // post construction steps
-        super.execute(context);
-        if (!StringUtil.isEmpty(id)) {
-        	PropertyDescriptor descriptor = BeanUtil.getPropertyDescriptor(bean.getClass(), "id");
-        	if (descriptor != null && descriptor.getWriteMethod() != null)
-        		BeanUtil.setPropertyValue(bean, "id", id, false);
-        }
-        if (bean instanceof ContextAware)
-			((ContextAware) bean).setContext(context);
-		if (bean instanceof DescriptorProvider)
-			context.getDataModel().addDescriptorProvider((DescriptorProvider) bean);
-		if (bean instanceof Closeable && resourceManager != null)
-			resourceManager.addResource((Closeable) bean);
-		if (bean instanceof Generator && constructionExpression instanceof BeanConstruction)
-			((Generator) bean).init(context);
-		context.setGlobal(id, bean);
-    	return true;
+  /**
+   * Instantiates a new Bean statement.
+   *
+   * @param id                     the id
+   * @param constructionExpression the construction expression
+   * @param resourceManager        the resource manager
+   */
+  public BeanStatement(String id, Expression<?> constructionExpression, ResourceManager resourceManager) {
+    this.id = id;
+    this.constructionExpression = constructionExpression;
+    this.resourceManager = resourceManager;
+  }
+
+  @SuppressWarnings({"rawtypes"})
+  @Override
+  public boolean execute(BeneratorContext context) {
+    // invoke constructor
+    Object bean = constructionExpression.evaluate(context);
+    // post construction steps
+    super.execute(context);
+    if (!StringUtil.isEmpty(id)) {
+      PropertyDescriptor descriptor = BeanUtil.getPropertyDescriptor(bean.getClass(), "id");
+      if (descriptor != null && descriptor.getWriteMethod() != null) {
+        BeanUtil.setPropertyValue(bean, "id", id, false);
+      }
     }
+    if (bean instanceof ContextAware) {
+      ((ContextAware) bean).setContext(context);
+    }
+    if (bean instanceof DescriptorProvider) {
+      context.getDataModel().addDescriptorProvider((DescriptorProvider) bean);
+    }
+    if (bean instanceof Closeable && resourceManager != null) {
+      resourceManager.addResource((Closeable) bean);
+    }
+    if (bean instanceof Generator && constructionExpression instanceof BeanConstruction) {
+      ((Generator) bean).init(context);
+    }
+    context.setGlobal(id, bean);
+    return true;
+  }
 
 }

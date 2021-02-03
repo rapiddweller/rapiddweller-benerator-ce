@@ -46,47 +46,65 @@ import java.util.List;
  */
 public class GenderGenerator extends NonNullGeneratorProxy<Gender> {
 
-    private double femaleQuota;
+  private double femaleQuota;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public GenderGenerator() {
-        this(0.5);
-    }
+  /**
+   * Instantiates a new Gender generator.
+   */
+  public GenderGenerator() {
+    this(0.5);
+  }
 
-    public GenderGenerator(double femaleQuota) {
-        super(Gender.class);
-        setFemaleQuota(femaleQuota);
-    }
+  /**
+   * Instantiates a new Gender generator.
+   *
+   * @param femaleQuota the female quota
+   */
+  public GenderGenerator(double femaleQuota) {
+    super(Gender.class);
+    setFemaleQuota(femaleQuota);
+  }
 
-    // Generator interface implementation ------------------------------------------------------------------------------
+  // Generator interface implementation ------------------------------------------------------------------------------
 
-    @Override
-    public Class<Gender> getGeneratedType() {
-        return Gender.class;
-    }
+  @Override
+  public Class<Gender> getGeneratedType() {
+    return Gender.class;
+  }
 
-    @Override
-    public synchronized void init(GeneratorContext context) {
-        assertNotInitialized();
-        List<WeightedSample<Gender>> samples = CollectionUtil.toList(
-                new WeightedSample<>(Gender.FEMALE, femaleQuota),
-                new WeightedSample<>(Gender.MALE, 1 - femaleQuota)
-        );
-        Generator<Gender> source = context.getGeneratorFactory()
-                .createWeightedSampleGenerator(samples, Gender.class);
-        setSource(WrapperFactory.asNonNullGenerator(source));
-        super.init(context);
-    }
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    assertNotInitialized();
+    List<WeightedSample<Gender>> samples = CollectionUtil.toList(
+        new WeightedSample<>(Gender.FEMALE, femaleQuota),
+        new WeightedSample<>(Gender.MALE, 1 - femaleQuota)
+    );
+    Generator<Gender> source = context.getGeneratorFactory()
+        .createWeightedSampleGenerator(samples, Gender.class);
+    setSource(WrapperFactory.asNonNullGenerator(source));
+    super.init(context);
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    public double getFemaleQuota() {
-        return femaleQuota;
-    }
+  /**
+   * Gets female quota.
+   *
+   * @return the female quota
+   */
+  public double getFemaleQuota() {
+    return femaleQuota;
+  }
 
-    public void setFemaleQuota(double femaleQuota) {
-        this.femaleQuota = femaleQuota;
-    }
+  /**
+   * Sets female quota.
+   *
+   * @param femaleQuota the female quota
+   */
+  public void setFemaleQuota(double femaleQuota) {
+    this.femaleQuota = femaleQuota;
+  }
 
 }

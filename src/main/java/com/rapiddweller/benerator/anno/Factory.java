@@ -36,11 +36,17 @@ import java.lang.annotation.Target;
 /**
  * Declares a {@link GeneratorFactory} to use for testing.<br/><br/>
  * Created: 10.11.2012 08:29:35
- * @since 0.7.10
+ *
  * @author Volker Bergmann
+ * @since 0.7.10
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR } )
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR})
 public @interface Factory {
-	Class<? extends GeneratorFactory> value();
+  /**
+   * Value class.
+   *
+   * @return the class
+   */
+  Class<? extends GeneratorFactory> value();
 }

@@ -26,88 +26,106 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.common.HeavyweightIterator;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.TypedIterable;
-import com.rapiddweller.common.iterator.TypedIterableProxy;
 import com.rapiddweller.common.iterator.HeavyweightIterableAdapter;
-
+import com.rapiddweller.common.iterator.TypedIterableProxy;
 import org.junit.Test;
+
+import java.util.Arrays;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link IteratingGenerator}.<br/>
  * <br/>
  * Created: 01.09.2007 17:22:03
+ *
  * @author Volker Bergmann
  */
 public class IteratingGeneratorTest extends GeneratorTest {
 
-    @Test
-    public void testDefaultBehaviour() {
-        HeavyweightIterableAdapter<Integer> iterable = new HeavyweightIterableAdapter<>(Arrays.asList(1, 2));
-		TypedIterableProxy<Integer> hwIterable = new TypedIterableProxy<>(Integer.class, iterable);
-		Generator<Integer> gen = new IteratingGenerator<>(hwIterable);
-		gen.init(context);
-		expectGeneratedSequence(gen, 1, 2).withCeasedAvailability();
-	}
-    
-    @Test
-    public void testEmptyIterator() {
-    	EmptyIterable emptySource = new EmptyIterable();
-    	Generator<Integer> generator = new IteratingGenerator<>(emptySource);
-    	generator.init(context);
-    	assertUnavailable(generator);
-    	assertTrue(emptySource.latestInstance.closed);
-    	IOUtil.close(generator);
-	}
-    
-    public static class EmptyIterable implements TypedIterable<Integer> {
+  /**
+   * Test default behaviour.
+   */
+  @Test
+  public void testDefaultBehaviour() {
+    HeavyweightIterableAdapter<Integer> iterable = new HeavyweightIterableAdapter<>(Arrays.asList(1, 2));
+    TypedIterableProxy<Integer> hwIterable = new TypedIterableProxy<>(Integer.class, iterable);
+    Generator<Integer> gen = new IteratingGenerator<>(hwIterable);
+    gen.init(context);
+    expectGeneratedSequence(gen, 1, 2).withCeasedAvailability();
+  }
 
-    	public EmptyIterator latestInstance;
-    	
-		@Override
-		public Class<Integer> getType() {
-			return Integer.class;
-		}
-    	
-		@Override
-		public HeavyweightIterator<Integer> iterator() {
-			latestInstance = new EmptyIterator();
-			 return latestInstance;
-		}
+  /**
+   * Test empty iterator.
+   */
+  @Test
+  public void testEmptyIterator() {
+    EmptyIterable emptySource = new EmptyIterable();
+    Generator<Integer> generator = new IteratingGenerator<>(emptySource);
+    generator.init(context);
+    assertUnavailable(generator);
+    assertTrue(emptySource.latestInstance.closed);
+    IOUtil.close(generator);
+  }
 
+  /**
+   * The type Empty iterable.
+   */
+  public static class EmptyIterable implements TypedIterable<Integer> {
+
+    /**
+     * The Latest instance.
+     */
+    public EmptyIterator latestInstance;
+
+    @Override
+    public Class<Integer> getType() {
+      return Integer.class;
     }
-    
-    public static class EmptyIterator implements HeavyweightIterator<Integer> {
-    	
-    	public boolean closed = false;
 
-		@Override
-		public boolean hasNext() {
-			return false;
-		}
-
-		@Override
-		public Integer next() {
-			throw new IllegalStateException();
-		}
-
-		@Override
-		public void remove() {
-			throw new UnsupportedOperationException("EmptyIterator.remove() is not supported");
-		}
-
-		@Override
-		public void close() {
-			closed = true;
-		}
-    	
+    @Override
+    public HeavyweightIterator<Integer> iterator() {
+      latestInstance = new EmptyIterator();
+      return latestInstance;
     }
-    	
+
+  }
+
+  /**
+   * The type Empty iterator.
+   */
+  public static class EmptyIterator implements HeavyweightIterator<Integer> {
+
+    /**
+     * The Closed.
+     */
+    public boolean closed = false;
+
+    @Override
+    public boolean hasNext() {
+      return false;
+    }
+
+    @Override
+    public Integer next() {
+      throw new IllegalStateException();
+    }
+
+    @Override
+    public void remove() {
+      throw new UnsupportedOperationException("EmptyIterator.remove() is not supported");
+    }
+
+    @Override
+    public void close() {
+      closed = true;
+    }
+
+  }
+
 }

@@ -26,66 +26,85 @@
 
 package com.rapiddweller.platform.db;
 
-import static org.junit.Assert.*;
-
-import java.sql.SQLException;
-
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.SQLException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Tests the {@link DBSequenceGenerator}.<br/><br/>
  * Created: 11.11.2009 18:50:58
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class DBSequenceGeneratorTest extends GeneratorTest {
 
-	private DefaultDBSystem db;
-	private final String seq = getClass().getSimpleName();
-	
-	@Before
-	public void setUpDB() throws SQLException {
-		db = new DefaultDBSystem("db", 
-				HSQLUtil.IN_MEMORY_URL_PREFIX + "benerator", 
-				HSQLUtil.DRIVER, HSQLUtil.DEFAULT_USER, HSQLUtil.DEFAULT_PASSWORD, context.getDataModel());
-		// create sequence and read its value
-		db.createSequence(seq);
-	}
-	
-	@Test
-	public void testUncached() {
-		check(false);
-	}
+  private DefaultDBSystem db;
+  private final String seq = getClass().getSimpleName();
 
-	@Test
-	public void testCached() {
-		check(true);
-	}
+  /**
+   * Sets up db.
+   *
+   * @throws SQLException the sql exception
+   */
+  @Before
+  public void setUpDB() throws SQLException {
+    db = new DefaultDBSystem("db",
+        HSQLUtil.IN_MEMORY_URL_PREFIX + "benerator",
+        HSQLUtil.DRIVER, HSQLUtil.DEFAULT_USER, HSQLUtil.DEFAULT_PASSWORD, context.getDataModel());
+    // create sequence and read its value
+    db.createSequence(seq);
+  }
 
-	protected void check(boolean cached) {
-		long first = db.nextSequenceValue(seq);
-		try {
-			// assure that the generated values are like if they stem from the DB sequence
-			DBSequenceGenerator generator = new DBSequenceGenerator(seq, db, cached);
-			generator.init(context);
-			long n = first;
-			for (int i = 0; i < 10; i++) {
-				Long product = generator.generate();
-				assertNotNull(product);
-				assertEquals(++n, product.longValue());
-			}
-			// verify that the original sequence value has not been changed if cache is active
-			if (cached)
-				assertEquals(first + 2, db.nextSequenceValue(seq));
-			// assure that after closing the generator, the DB sequence continues as if it had been used itself
-			generator.close();
-			assertEquals(n + 1, db.nextSequenceValue(seq));
-		} finally {
-			db.dropSequence(seq);
-		}
-	}
+  /**
+   * Test uncached.
+   */
+  @Test
+  public void testUncached() {
+    check(false);
+  }
+
+  /**
+   * Test cached.
+   */
+  @Test
+  public void testCached() {
+    check(true);
+  }
+
+  /**
+   * Check.
+   *
+   * @param cached the cached
+   */
+  protected void check(boolean cached) {
+    long first = db.nextSequenceValue(seq);
+    try {
+      // assure that the generated values are like if they stem from the DB sequence
+      DBSequenceGenerator generator = new DBSequenceGenerator(seq, db, cached);
+      generator.init(context);
+      long n = first;
+      for (int i = 0; i < 10; i++) {
+        Long product = generator.generate();
+        assertNotNull(product);
+        assertEquals(++n, product.longValue());
+      }
+      // verify that the original sequence value has not been changed if cache is active
+      if (cached) {
+        assertEquals(first + 2, db.nextSequenceValue(seq));
+      }
+      // assure that after closing the generator, the DB sequence continues as if it had been used itself
+      generator.close();
+      assertEquals(n + 1, db.nextSequenceValue(seq));
+    } finally {
+      db.dropSequence(seq);
+    }
+  }
 
 }

@@ -34,11 +34,17 @@ import java.lang.annotation.Target;
 /**
  * Specifies a minimum date to use for testing.<br/><br/>
  * Created: 23.07.2011 17:19:56
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.PARAMETER } )
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 public @interface MinDate {
-	String value();
+  /**
+   * Value string.
+   *
+   * @return the string
+   */
+  String value();
 }

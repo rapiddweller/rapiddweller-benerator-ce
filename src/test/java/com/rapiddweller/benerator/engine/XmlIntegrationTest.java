@@ -26,10 +26,6 @@
 
 package com.rapiddweller.benerator.engine;
 
-import static org.junit.Assert.*;
-
-import java.util.Set;
-
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.xml.XMLUtil;
@@ -38,33 +34,42 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import java.util.Set;
+
+import static org.junit.Assert.assertTrue;
+
 /**
  * Integration-tests Benerator's XML features.<br/><br/>
  * Created: 14.01.2014 10:09:40
- * @since 0.9.0
+ *
  * @author Volker Bergmann
+ * @since 0.9.0
  */
-
 public class XmlIntegrationTest extends BeneratorIntegrationTest {
-	
-	@Test
-	public void testAnonymization() throws Exception {
-		parseAndExecuteFile("com/rapiddweller/benerator/engine/xml/anonymize-xml.ben.xml");
-		resourceManager.close();
-		
-		Set<String> anonNames = CollectionUtil.toSet("Michael", "Maria", "Miles", "Manfred");
-		Set<String> anonCities = CollectionUtil.toSet("Munich", "Michigan", "Madrid", "Milano");
-		Document document = XMLUtil.parse("target/test-classes/teamplayers-anon.xml");
-		NodeList names = XPathUtil.queryNodes(document, "//name/text()");
-		for (int i = 0; i < names.getLength(); i++) {
-			String name = names.item(i).getTextContent();
-			assertTrue("Not an anonymized name: " + name, anonNames.contains(name));
-		}
-		NodeList cities = XPathUtil.queryNodes(document, "//city/text()");
-		for (int i = 0; i < cities.getLength(); i++) {
-			String city = cities.item(i).getTextContent();
-			assertTrue("not an anonymized city: " + city, anonCities.contains(city));
-		}
-	}
-	
+
+  /**
+   * Test anonymization.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testAnonymization() throws Exception {
+    parseAndExecuteFile("com/rapiddweller/benerator/engine/xml/anonymize-xml.ben.xml");
+    resourceManager.close();
+
+    Set<String> anonNames = CollectionUtil.toSet("Michael", "Maria", "Miles", "Manfred");
+    Set<String> anonCities = CollectionUtil.toSet("Munich", "Michigan", "Madrid", "Milano");
+    Document document = XMLUtil.parse("target/test-classes/teamplayers-anon.xml");
+    NodeList names = XPathUtil.queryNodes(document, "//name/text()");
+    for (int i = 0; i < names.getLength(); i++) {
+      String name = names.item(i).getTextContent();
+      assertTrue("Not an anonymized name: " + name, anonNames.contains(name));
+    }
+    NodeList cities = XPathUtil.queryNodes(document, "//city/text()");
+    for (int i = 0; i < cities.getLength(); i++) {
+      String city = cities.item(i).getTextContent();
+      assertTrue("not an anonymized city: " + city, anonCities.contains(city));
+    }
+  }
+
 }

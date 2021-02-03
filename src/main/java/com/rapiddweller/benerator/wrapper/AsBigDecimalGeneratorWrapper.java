@@ -26,55 +26,71 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.common.MathUtil;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
 
 /**
  * Converts the {@link Number} products of another {@link Generator} to {@link BigDecimal}.<br/>
  * <br/>
  * Created at 23.06.2009 22:58:26
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class AsBigDecimalGeneratorWrapper<E extends Number> extends GeneratorWrapper<E, BigDecimal> {
 
-	private int fractionDigits;
-	
-    public AsBigDecimalGeneratorWrapper(Generator<E> source) {
-	    this(source, null, null);
-    }
+  private int fractionDigits;
 
-    public AsBigDecimalGeneratorWrapper(Generator<E> source, BigDecimal min, BigDecimal granularity) {
-	    super(source);
-	    if (granularity != null) {
-	    	this.fractionDigits = MathUtil.fractionDigits(granularity.doubleValue());
-	    	if (min != null)
-	    		this.fractionDigits = Math.max(this.fractionDigits, MathUtil.fractionDigits(min.doubleValue()));
-	    } else if (min != null)
-	    	this.fractionDigits = MathUtil.fractionDigits(min.doubleValue());
-	    else
-	    	this.fractionDigits = 0;
-    }
+  /**
+   * Instantiates a new As big decimal generator wrapper.
+   *
+   * @param source the source
+   */
+  public AsBigDecimalGeneratorWrapper(Generator<E> source) {
+    this(source, null, null);
+  }
 
-	@Override
-	public Class<BigDecimal> getGeneratedType() {
-	    return BigDecimal.class;
+  /**
+   * Instantiates a new As big decimal generator wrapper.
+   *
+   * @param source      the source
+   * @param min         the min
+   * @param granularity the granularity
+   */
+  public AsBigDecimalGeneratorWrapper(Generator<E> source, BigDecimal min, BigDecimal granularity) {
+    super(source);
+    if (granularity != null) {
+      this.fractionDigits = MathUtil.fractionDigits(granularity.doubleValue());
+      if (min != null) {
+        this.fractionDigits = Math.max(this.fractionDigits, MathUtil.fractionDigits(min.doubleValue()));
+      }
+    } else if (min != null) {
+      this.fractionDigits = MathUtil.fractionDigits(min.doubleValue());
+    } else {
+      this.fractionDigits = 0;
     }
+  }
 
-	@Override
-	public ProductWrapper<BigDecimal> generate(ProductWrapper<BigDecimal> wrapper) {
-		ProductWrapper<E> tmp = generateFromSource();
-	    if (tmp == null)
-	    	return null;
-	    E feed = tmp.unwrap();
-	    double d = feed.doubleValue();
-		int prefixDigits = (Math.floor(d) == 0. ? 0 : MathUtil.prefixDigitCount(d));
-		MathContext mathcontext = new MathContext(prefixDigits + fractionDigits);
-		return wrapper.wrap(new BigDecimal(d, mathcontext));
+  @Override
+  public Class<BigDecimal> getGeneratedType() {
+    return BigDecimal.class;
+  }
+
+  @Override
+  public ProductWrapper<BigDecimal> generate(ProductWrapper<BigDecimal> wrapper) {
+    ProductWrapper<E> tmp = generateFromSource();
+    if (tmp == null) {
+      return null;
     }
+    E feed = tmp.unwrap();
+    double d = feed.doubleValue();
+    int prefixDigits = (Math.floor(d) == 0. ? 0 : MathUtil.prefixDigitCount(d));
+    MathContext mathcontext = new MathContext(prefixDigits + fractionDigits);
+    return wrapper.wrap(new BigDecimal(d, mathcontext));
+  }
 
 }

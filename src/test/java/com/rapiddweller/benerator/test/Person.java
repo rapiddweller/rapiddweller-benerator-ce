@@ -26,122 +26,202 @@
 
 package com.rapiddweller.benerator.test;
 
+import com.rapiddweller.common.NullSafeComparator;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.rapiddweller.common.NullSafeComparator;
 
 /**
  * JavaBean class for testing.<br/>
  * <br/>
  * Created at 28.12.2008 11:34:47
- * @since 0.5.7
+ *
  * @author Volker Bergmann
+ * @since 0.5.7
  */
-
 public class Person {
-	
-	private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-	public String name;
-	public Date birthDate;
-	public int score;
-	public boolean registered;
-	public char rank;
-	
-	// constructors ----------------------------------------------------------------------------------------------------
-	
-	public Person() {
-		this("anonymous", null, 0, false, 'C');
-	}
+  private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-	public Person(String name, Date birthDate, int score, boolean registered, char rank) {
-		this.name = name;
-		this.birthDate = birthDate;
-		this.score = score;
-		this.registered = registered;
-		this.rank = rank;
-	}
-	
-	// properties ------------------------------------------------------------------------------------------------------
+  /**
+   * The Name.
+   */
+  public String name;
+  /**
+   * The Birth date.
+   */
+  public Date birthDate;
+  /**
+   * The Score.
+   */
+  public int score;
+  /**
+   * The Registered.
+   */
+  public boolean registered;
+  /**
+   * The Rank.
+   */
+  public char rank;
 
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public Date getBirthDate() {
-		return birthDate;
-	}
+  // constructors ----------------------------------------------------------------------------------------------------
 
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
-	}
+  /**
+   * Instantiates a new Person.
+   */
+  public Person() {
+    this("anonymous", null, 0, false, 'C');
+  }
 
-	public int getScore() {
-		return score;
-	}
-	
-	public void setScore(int age) {
-		this.score = age;
-	}
-	
-	public boolean isRegistered() {
-		return registered;
-	}
-	
-	public void setRegistered(boolean registered) {
-		this.registered = registered;
-	}
-	
-	public char getRank() {
-		return rank;
-	}
-	
-	public void setRank(char rank) {
-		this.rank = rank;
-	}
-	
-	// java.lang.Object overrides --------------------------------------------------------------------------------------
+  /**
+   * Instantiates a new Person.
+   *
+   * @param name       the name
+   * @param birthDate  the birth date
+   * @param score      the score
+   * @param registered the registered
+   * @param rank       the rank
+   */
+  public Person(String name, Date birthDate, int score, boolean registered, char rank) {
+    this.name = name;
+    this.birthDate = birthDate;
+    this.score = score;
+    this.registered = registered;
+    this.rank = rank;
+  }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((birthDate == null) ? 0 : birthDate.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + rank;
-		result = prime * result + (registered ? 1231 : 1237);
-		result = prime * result + score;
-		return result;
-	}
+  // properties ------------------------------------------------------------------------------------------------------
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Person that = (Person) obj;
-		return NullSafeComparator.equals(this.birthDate, that.birthDate) 
-			&& NullSafeComparator.equals(this.name, that.name)
-			&& this.rank == that.rank
-			&& this.registered == that.registered
-			&& this.score == that.score;
-	}
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[name='" + name + "', " +
-				"birthDate=" + (birthDate != null ? df.format(birthDate) : "null") + ", " +
-				"score=" + score + ", registered=" + registered + ", rank='" + rank + "'";
-	}
-	
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Gets birth date.
+   *
+   * @return the birth date
+   */
+  public Date getBirthDate() {
+    return birthDate;
+  }
+
+  /**
+   * Sets birth date.
+   *
+   * @param birthDate the birth date
+   */
+  public void setBirthDate(Date birthDate) {
+    this.birthDate = birthDate;
+  }
+
+  /**
+   * Gets score.
+   *
+   * @return the score
+   */
+  public int getScore() {
+    return score;
+  }
+
+  /**
+   * Sets score.
+   *
+   * @param age the age
+   */
+  public void setScore(int age) {
+    this.score = age;
+  }
+
+  /**
+   * Is registered boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isRegistered() {
+    return registered;
+  }
+
+  /**
+   * Sets registered.
+   *
+   * @param registered the registered
+   */
+  public void setRegistered(boolean registered) {
+    this.registered = registered;
+  }
+
+  /**
+   * Gets rank.
+   *
+   * @return the rank
+   */
+  public char getRank() {
+    return rank;
+  }
+
+  /**
+   * Sets rank.
+   *
+   * @param rank the rank
+   */
+  public void setRank(char rank) {
+    this.rank = rank;
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result
+        + ((birthDate == null) ? 0 : birthDate.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + rank;
+    result = prime * result + (registered ? 1231 : 1237);
+    result = prime * result + score;
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Person that = (Person) obj;
+    return NullSafeComparator.equals(this.birthDate, that.birthDate)
+        && NullSafeComparator.equals(this.name, that.name)
+        && this.rank == that.rank
+        && this.registered == that.registered
+        && this.score == that.score;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[name='" + name + "', " +
+        "birthDate=" + (birthDate != null ? df.format(birthDate) : "null") + ", " +
+        "score=" + score + ", registered=" + registered + ", rank='" + rank + "'";
+  }
+
 }

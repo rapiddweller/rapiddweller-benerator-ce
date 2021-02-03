@@ -44,32 +44,37 @@ import com.rapiddweller.model.data.Uniqueness;
  */
 public class RegexDemo {
 
-    private static final String PHONE_PATTERN =
-            "\\+[1-9][0-9]{1,2}/[1-9][0-9]{0,4}/[1-9][0-9]{4,8}";
-    private static final String EMAIL_PATTERN =
-            "[a-z][a-z0-9\\.]{3,12}[a-z0-9]@[a-z0-9]{3,12}\\.com";
+  private static final String PHONE_PATTERN =
+      "\\+[1-9][0-9]{1,2}/[1-9][0-9]{0,4}/[1-9][0-9]{4,8}";
+  private static final String EMAIL_PATTERN =
+      "[a-z][a-z0-9\\.]{3,12}[a-z0-9]@[a-z0-9]{3,12}\\.com";
 
-    public static void main(String[] args) {
-        BeneratorContext context = new DefaultBeneratorContext();
-        GeneratorFactory generatorFactory = context.getGeneratorFactory();
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   */
+  public static void main(String[] args) {
+    BeneratorContext context = new DefaultBeneratorContext();
+    GeneratorFactory generatorFactory = context.getGeneratorFactory();
 
-        Generator<String> phoneGenerator = generatorFactory
-                .createRegexStringGenerator(PHONE_PATTERN, 1, 16,
-                        Uniqueness.NONE);
-        phoneGenerator.init(context);
-        for (int i = 0; i < 5; i++) {
-            System.out.println(generateNonNull(phoneGenerator));
-        }
-        close(phoneGenerator);
-
-        Generator<String> emailGenerator = generatorFactory
-                .createRegexStringGenerator(EMAIL_PATTERN, 1, 100,
-                        Uniqueness.NONE);
-        emailGenerator.init(context);
-        for (int i = 0; i < 5; i++) {
-            System.out.println(generateNonNull(emailGenerator));
-        }
-        close(emailGenerator);
+    Generator<String> phoneGenerator = generatorFactory
+        .createRegexStringGenerator(PHONE_PATTERN, 1, 16,
+            Uniqueness.NONE);
+    phoneGenerator.init(context);
+    for (int i = 0; i < 5; i++) {
+      System.out.println(generateNonNull(phoneGenerator));
     }
+    close(phoneGenerator);
+
+    Generator<String> emailGenerator = generatorFactory
+        .createRegexStringGenerator(EMAIL_PATTERN, 1, 100,
+            Uniqueness.NONE);
+    emailGenerator.init(context);
+    for (int i = 0; i < 5; i++) {
+      System.out.println(generateNonNull(emailGenerator));
+    }
+    close(emailGenerator);
+  }
 
 }

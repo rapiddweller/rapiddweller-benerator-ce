@@ -30,35 +30,43 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.script.Expression;
 
 /**
- * Evaluates an {@link Expression} on each call to {@link ExpressionBasedGenerator#generate(ProductWrapper)} 
+ * Evaluates an {@link Expression} on each call to {@link ExpressionBasedGenerator#generate(ProductWrapper)}
  * and returns its results.<br/><br/>
  * Created: 27.03.2010 19:51:46
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ExpressionBasedGenerator<E> extends ThreadSafeGenerator<E> {
 
-	private final Expression<E> expression;
-	private final Class<E> generatedType;
-	
-	public ExpressionBasedGenerator(Expression<E> expression, Class<E> generatedType) {
-	    this.expression = expression;
-	    this.generatedType = generatedType;
-    }
+  private final Expression<E> expression;
+  private final Class<E> generatedType;
 
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-	    return wrapper.wrap(expression.evaluate(context));
-    }
+  /**
+   * Instantiates a new Expression based generator.
+   *
+   * @param expression    the expression
+   * @param generatedType the generated type
+   */
+  public ExpressionBasedGenerator(Expression<E> expression, Class<E> generatedType) {
+    this.expression = expression;
+    this.generatedType = generatedType;
+  }
 
-	@Override
-	public Class<E> getGeneratedType() {
-	    return generatedType;
-    }
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    return wrapper.wrap(expression.evaluate(context));
+  }
 
-	@Override
-	public String toString() {
-	    return getClass().getSimpleName() + "(" + expression + " -> " + generatedType + ")";
-	}
+  @Override
+  public Class<E> getGeneratedType() {
+    return generatedType;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "(" + expression + " -> " + generatedType + ")";
+  }
 
 }

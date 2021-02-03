@@ -45,48 +45,64 @@ import org.w3c.dom.Element;
 
 import java.util.Set;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CLASS;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_COUNT;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ID;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGER;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGESIZE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SPEC;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_STATS;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_THREADS;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_RUN_TASK;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseLongAttribute;
 
 /**
  * Parses a run-task descriptor.<br/><br/>
  * Created: 25.10.2009 00:55:16
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class RunTaskParser extends AbstractBeneratorDescriptorParser {
-	
-	private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(ATT_ID, ATT_CLASS, ATT_SPEC, ATT_COUNT, ATT_PAGESIZE, ATT_THREADS, ATT_PAGER, ATT_STATS, ATT_ON_ERROR);
-	private static final DefaultPageSizeExpression DEFAULT_PAGE_SIZE = new DefaultPageSizeExpression();
 
-	public RunTaskParser() {
-	    super(EL_RUN_TASK, null, OPTIONAL_ATTRIBUTES, 
-	    	BeneratorRootStatement.class, IfStatement.class, WhileStatement.class, GenerateOrIterateStatement.class);
+  private static final Set<String> OPTIONAL_ATTRIBUTES =
+      CollectionUtil.toSet(ATT_ID, ATT_CLASS, ATT_SPEC, ATT_COUNT, ATT_PAGESIZE, ATT_THREADS, ATT_PAGER, ATT_STATS, ATT_ON_ERROR);
+  private static final DefaultPageSizeExpression DEFAULT_PAGE_SIZE = new DefaultPageSizeExpression();
+
+  /**
+   * Instantiates a new Run task parser.
+   */
+  public RunTaskParser() {
+    super(EL_RUN_TASK, null, OPTIONAL_ATTRIBUTES,
+        BeneratorRootStatement.class, IfStatement.class, WhileStatement.class, GenerateOrIterateStatement.class);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public RunTaskStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    try {
+      Expression<Task> taskProvider = (Expression<Task>) BeanParser.parseBeanExpression(element);
+      Expression<Long> count = parseLongAttribute(ATT_COUNT, element, 1);
+      Expression<Long> pageSize = parseLongAttribute(ATT_PAGESIZE, element, DEFAULT_PAGE_SIZE);
+      Expression<Integer> threads = parseIntAttribute(ATT_THREADS, element, 1);
+      Expression<PageListener> pager = parsePager(element);
+      Expression<Boolean> stats = parseBooleanExpressionAttribute(ATT_STATS, element, false);
+      Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_ID));
+      boolean infoLog = containsLoop(parentPath);
+      return new RunTaskStatement(taskProvider, count, pageSize, pager, threads,
+          stats, errorHandler, infoLog);
+    } catch (ConversionException e) {
+      throw new ConfigurationError(e);
     }
+  }
 
-    @Override
-	@SuppressWarnings("unchecked")
-    public RunTaskStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-		try {
-		    Expression<Task> taskProvider   = (Expression<Task>) BeanParser.parseBeanExpression(element);
-			Expression<Long> count          = parseLongAttribute(ATT_COUNT, element, 1);
-			Expression<Long> pageSize       = parseLongAttribute(ATT_PAGESIZE, element, DEFAULT_PAGE_SIZE);
-			Expression<Integer> threads     = parseIntAttribute(ATT_THREADS, element, 1);
-			Expression<PageListener> pager  = parsePager(element);
-		    Expression<Boolean> stats       = parseBooleanExpressionAttribute(ATT_STATS, element, false);
-			Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_ID));
-			boolean infoLog = containsLoop(parentPath);
-			return new RunTaskStatement(taskProvider, count, pageSize, pager, threads, 
-					stats, errorHandler, infoLog);
-		} catch (ConversionException e) {
-			throw new ConfigurationError(e);
-        }
-	}
-
-	@SuppressWarnings("unchecked")
-    private static Expression<PageListener> parsePager(Element element) {
-		String pagerSpec = element.getAttribute(ATT_PAGER);
-		return (Expression<PageListener>) DatabeneScriptParser.parseBeanSpec(pagerSpec);
-	}
+  @SuppressWarnings("unchecked")
+  private static Expression<PageListener> parsePager(Element element) {
+    String pagerSpec = element.getAttribute(ATT_PAGER);
+    return (Expression<PageListener>) DatabeneScriptParser.parseBeanSpec(pagerSpec);
+  }
 
 }

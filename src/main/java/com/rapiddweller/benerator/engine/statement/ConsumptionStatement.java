@@ -35,36 +35,46 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 /**
  * {@link Statement} that consumes the current entity of a {@link GeneratorContext} using a {@link Consumer}.<br/><br/>
  * Created: 01.09.2011 15:51:27
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class ConsumptionStatement implements Statement {
-	
-	private final Consumer consumer;
-	private final boolean start;
-	private final boolean finish;
-	
-	public ConsumptionStatement(Consumer consumer, boolean start, boolean finish) {
-		this.consumer = consumer;
-		this.start = start;
-		this.finish = finish;
-	}
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-		if (consumer != null) {
-			ProductWrapper<?> product = context.getCurrentProduct();
-			if (start)
-				consumer.startConsuming(product);
-			if (finish)
-				consumer.finishConsuming(product);
-		}
-		return true;
-	}
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[" + consumer + "]";
-	}
-	
+  private final Consumer consumer;
+  private final boolean start;
+  private final boolean finish;
+
+  /**
+   * Instantiates a new Consumption statement.
+   *
+   * @param consumer the consumer
+   * @param start    the start
+   * @param finish   the finish
+   */
+  public ConsumptionStatement(Consumer consumer, boolean start, boolean finish) {
+    this.consumer = consumer;
+    this.start = start;
+    this.finish = finish;
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    if (consumer != null) {
+      ProductWrapper<?> product = context.getCurrentProduct();
+      if (start) {
+        consumer.startConsuming(product);
+      }
+      if (finish) {
+        consumer.finishConsuming(product);
+      }
+    }
+    return true;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + consumer + "]";
+  }
+
 }

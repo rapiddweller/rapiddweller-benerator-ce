@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.test;
 
-import java.util.List;
-
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.util.DataIteratorFromJavaIterator;
@@ -38,40 +36,64 @@ import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntitySource;
 import com.rapiddweller.model.data.PartDescriptor;
 
+import java.util.List;
+
 /**
  * {@link EntitySource} implementation for testing.<br/>
  * <br/>
  * Created: 11.03.2010 12:42:48
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class PersonSource extends AbstractEntitySource {
-	
-	@Override
-	public DataIterator<Entity> iterator() {
-		return new DataIteratorFromJavaIterator<>(createPersons().iterator(), Entity.class);
-	}
 
-	public List<Entity> createPersons() {
-		return CollectionUtil.toList(createAlice(), createBob(provider()));
-	}
+  @Override
+  public DataIterator<Entity> iterator() {
+    return new DataIteratorFromJavaIterator<>(createPersons().iterator(), Entity.class);
+  }
 
-	public Entity createAlice() {
-		return new Entity(createPersonDescriptor(), "name", "Alice", "age", "23");
-	}
+  /**
+   * Create persons list.
+   *
+   * @return the list
+   */
+  public List<Entity> createPersons() {
+    return CollectionUtil.toList(createAlice(), createBob(provider()));
+  }
 
-	public Entity createBob(DescriptorProvider provider) {
-		return new Entity(createPersonDescriptor(), "name", "Bob", "age", "34");
-	}
-	
-	public ComplexTypeDescriptor createPersonDescriptor() {
-		return new ComplexTypeDescriptor(
-				"Person", provider()).withComponent(new PartDescriptor("name", provider(), "string"))
-				.withComponent(new PartDescriptor("age", provider(), "int"));
-	}
-	
-	private DescriptorProvider provider() {
-		return context.getLocalDescriptorProvider();
-	}
+  /**
+   * Create alice entity.
+   *
+   * @return the entity
+   */
+  public Entity createAlice() {
+    return new Entity(createPersonDescriptor(), "name", "Alice", "age", "23");
+  }
+
+  /**
+   * Create bob entity.
+   *
+   * @param provider the provider
+   * @return the entity
+   */
+  public Entity createBob(DescriptorProvider provider) {
+    return new Entity(createPersonDescriptor(), "name", "Bob", "age", "34");
+  }
+
+  /**
+   * Create person descriptor complex type descriptor.
+   *
+   * @return the complex type descriptor
+   */
+  public ComplexTypeDescriptor createPersonDescriptor() {
+    return new ComplexTypeDescriptor(
+        "Person", provider()).withComponent(new PartDescriptor("name", provider(), "string"))
+        .withComponent(new PartDescriptor("age", provider(), "int"));
+  }
+
+  private DescriptorProvider provider() {
+    return context.getLocalDescriptorProvider();
+  }
 
 }

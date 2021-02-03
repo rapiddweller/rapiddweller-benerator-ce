@@ -29,14 +29,24 @@ package com.rapiddweller.benerator;
 /**
  * Holds constants which are of general interest for Benerator.<br/><br/>
  * Created: 07.08.2011 15:49:47
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public interface BeneratorConstants {
-	
-    String STATE_LOGGER = "com.rapiddweller.benerator.STATE";
 
-    int EXIT_CODE_NORMAL = 0;
-    int EXIT_CODE_ERROR  = -1;
-    
+  /**
+   * The constant STATE_LOGGER.
+   */
+  String STATE_LOGGER = "com.rapiddweller.benerator.STATE";
+
+  /**
+   * The constant EXIT_CODE_NORMAL.
+   */
+  int EXIT_CODE_NORMAL = 0;
+  /**
+   * The constant EXIT_CODE_ERROR.
+   */
+  int EXIT_CODE_ERROR = -1;
+
 }

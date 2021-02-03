@@ -31,39 +31,50 @@ import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.platform.memstore.MemStore;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
- * {@link Statement} that instantiates a {@link MemStore} 
+ * {@link Statement} that instantiates a {@link MemStore}
  * and registers it in the {@link BeneratorContext}.<br/><br/>
  * Created: 08.03.2011 13:30:45
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class MemStoreStatement implements Statement {
-	
-	private static final Logger logger = LogManager.getLogger(DefineDatabaseStatement.class);
-	
-	private final String id;
-	ResourceManager resourceManager;
-	
-	public MemStoreStatement(String id, ResourceManager resourceManager) {
-		if (id == null)
-			throw new ConfigurationError("No store id defined");
-		this.id = id;
-		this.resourceManager = resourceManager;
-    }
 
-    @Override
-	public boolean execute(BeneratorContext context) {
-	    logger.debug("Instantiating store with id '" + id + "'");
-		MemStore store = new MemStore(id, context.getDataModel());
-	    // register this object on all relevant managers and in the context
-	    context.setGlobal(id, store);
-	    context.getDataModel().addDescriptorProvider(store);
-	    resourceManager.addResource(store);
-    	return true;
+  private static final Logger logger = LogManager.getLogger(DefineDatabaseStatement.class);
+
+  private final String id;
+  /**
+   * The Resource manager.
+   */
+  ResourceManager resourceManager;
+
+  /**
+   * Instantiates a new Mem store statement.
+   *
+   * @param id              the id
+   * @param resourceManager the resource manager
+   */
+  public MemStoreStatement(String id, ResourceManager resourceManager) {
+    if (id == null) {
+      throw new ConfigurationError("No store id defined");
     }
+    this.id = id;
+    this.resourceManager = resourceManager;
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    logger.debug("Instantiating store with id '" + id + "'");
+    MemStore store = new MemStore(id, context.getDataModel());
+    // register this object on all relevant managers and in the context
+    context.setGlobal(id, store);
+    context.getDataModel().addDescriptorProvider(store);
+    resourceManager.addResource(store);
+    return true;
+  }
 
 }

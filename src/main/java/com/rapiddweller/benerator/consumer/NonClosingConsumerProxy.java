@@ -31,26 +31,32 @@ import com.rapiddweller.benerator.engine.ResourceManager;
 
 /**
  * {@link Consumer} proxy that prevents its delegate from being closed.
- * Note: Users of this class must ensure that the delegate is closed 
+ * Note: Users of this class must ensure that the delegate is closed
  * a different way (e.g. by a {@link ResourceManager}).<br/><br/>
  * Created: 14.04.2011 11:36:07
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class NonClosingConsumerProxy extends ConsumerProxy {
 
-	public NonClosingConsumerProxy(Consumer target) {
-		super(target);
-	}
+  /**
+   * Instantiates a new Non closing consumer proxy.
+   *
+   * @param target the target
+   */
+  public NonClosingConsumerProxy(Consumer target) {
+    super(target);
+  }
 
-	@Override
-	public void close() {
-		// don't close the target here, that's the job of the target's originator
-	}
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + '[' + target + ']';
-	}
-	
+  @Override
+  public void close() {
+    // don't close the target here, that's the job of the target's originator
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + target + ']';
+  }
+
 }

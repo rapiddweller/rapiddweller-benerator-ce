@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.distribution.Distribution;
@@ -41,120 +38,183 @@ import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.model.data.Uniqueness;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Generates dates with a granularity of days, months or years.<br/><br/>
  * Created: 12.10.2010 20:57:18
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class DayGenerator extends ThreadSafeNonNullGenerator<Date> {
 
-	protected Date min;
-	protected Date max;
-	protected Distribution distribution;
-	protected boolean unique;
-	
-	protected int yearGranularity;
-	protected int monthGranularity;
-	protected int dayGranularity;
-	
-	private Calendar minCalendar;
-	private Generator<Integer> multiplierGenerator;
-	private final WrapperProvider<Integer> intWrapper = new WrapperProvider<>();
+  /**
+   * The Min.
+   */
+  protected Date min;
+  /**
+   * The Max.
+   */
+  protected Date max;
+  /**
+   * The Distribution.
+   */
+  protected Distribution distribution;
+  /**
+   * The Unique.
+   */
+  protected boolean unique;
 
-	public DayGenerator() {
-		this(TimeUtil.date(TimeUtil.currentYear() - 5, 0, 1),
-			TimeUtil.today(),
-			SequenceManager.RANDOM_SEQUENCE,
-			false);
-	}
+  /**
+   * The Year granularity.
+   */
+  protected int yearGranularity;
+  /**
+   * The Month granularity.
+   */
+  protected int monthGranularity;
+  /**
+   * The Day granularity.
+   */
+  protected int dayGranularity;
 
-	public DayGenerator(Date min, Date max, Distribution distribution, boolean unique) {
-	    this.min = min;
-	    this.max = max;
-	    this.distribution = distribution;
-	    this.unique = unique;
-	    this.yearGranularity = 0;
-	    this.monthGranularity = 0;
-	    this.dayGranularity = 1;
+  private Calendar minCalendar;
+  private Generator<Integer> multiplierGenerator;
+  private final WrapperProvider<Integer> intWrapper = new WrapperProvider<>();
+
+  /**
+   * Instantiates a new Day generator.
+   */
+  public DayGenerator() {
+    this(TimeUtil.date(TimeUtil.currentYear() - 5, 0, 1),
+        TimeUtil.today(),
+        SequenceManager.RANDOM_SEQUENCE,
+        false);
+  }
+
+  /**
+   * Instantiates a new Day generator.
+   *
+   * @param min          the min
+   * @param max          the max
+   * @param distribution the distribution
+   * @param unique       the unique
+   */
+  public DayGenerator(Date min, Date max, Distribution distribution, boolean unique) {
+    this.min = min;
+    this.max = max;
+    this.distribution = distribution;
+    this.unique = unique;
+    this.yearGranularity = 0;
+    this.monthGranularity = 0;
+    this.dayGranularity = 1;
+  }
+
+  /**
+   * Sets min.
+   *
+   * @param min the min
+   */
+  public void setMin(Date min) {
+    this.min = min;
+  }
+
+  /**
+   * Sets max.
+   *
+   * @param max the max
+   */
+  public void setMax(Date max) {
+    this.max = max;
+  }
+
+  /**
+   * Sets granularity.
+   *
+   * @param granularitySpec the granularity spec
+   */
+  public void setGranularity(String granularitySpec) {
+    String[] tokens = granularitySpec.split("-");
+    if (tokens.length != 3) {
+      throw new ConfigurationError("Illegal date granularity spec: " + granularitySpec);
     }
+    this.yearGranularity = Integer.parseInt(tokens[0]);
+    this.monthGranularity = Integer.parseInt(tokens[1]);
+    this.dayGranularity = Integer.parseInt(tokens[2]);
+  }
 
-	public void setMin(Date min) {
-    	this.min = min;
+  /**
+   * Sets distribution.
+   *
+   * @param distribution the distribution
+   */
+  public void setDistribution(Distribution distribution) {
+    this.distribution = distribution;
+  }
+
+  /**
+   * Sets unique.
+   *
+   * @param unique the unique
+   */
+  public void setUnique(boolean unique) {
+    this.unique = unique;
+  }
+
+  @Override
+  public Class<Date> getGeneratedType() {
+    return Date.class;
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    this.minCalendar = TimeUtil.calendar(min);
+    int count = 0;
+    Calendar calendar = (Calendar) minCalendar.clone();
+    do {
+      calendar.add(Calendar.YEAR, yearGranularity);
+      calendar.add(Calendar.MONTH, monthGranularity);
+      calendar.add(Calendar.DAY_OF_MONTH, dayGranularity);
+      count++;
+    } while (!max.before(calendar.getTime()));
+    multiplierGenerator = context.getGeneratorFactory().createNumberGenerator(
+        Integer.class, 0, true, count - 1, true, 1, distribution, (unique ? Uniqueness.SIMPLE : Uniqueness.NONE));
+    multiplierGenerator.init(context);
+    super.init(context);
+  }
+
+  @Override
+  public Date generate() {
+    assertInitialized();
+    ProductWrapper<Integer> multiplierWrapper = multiplierGenerator.generate(intWrapper.get());
+    if (multiplierWrapper == null) {
+      return null;
     }
+    int multiplier = multiplierWrapper.unwrap();
+    Calendar calendar = (Calendar) minCalendar.clone();
+    calendar.add(Calendar.YEAR, multiplier * yearGranularity);
+    calendar.add(Calendar.MONTH, multiplier * monthGranularity);
+    calendar.add(Calendar.DAY_OF_MONTH, multiplier * dayGranularity);
+    return calendar.getTime();
+  }
 
-	public void setMax(Date max) {
-    	this.max = max;
-    }
+  @Override
+  public void reset() {
+    multiplierGenerator.reset();
+    super.reset();
+  }
 
-	public void setGranularity(String granularitySpec) {
-		String[] tokens = granularitySpec.split("-");
-		if (tokens.length != 3)
-			throw new ConfigurationError("Illegal date granularity spec: " + granularitySpec);
-		this.yearGranularity = Integer.parseInt(tokens[0]);
-		this.monthGranularity = Integer.parseInt(tokens[1]);
-		this.dayGranularity = Integer.parseInt(tokens[2]);
-	}
-	
-	public void setDistribution(Distribution distribution) {
-    	this.distribution = distribution;
-    }
+  @Override
+  public void close() {
+    multiplierGenerator.close();
+    super.close();
+  }
 
-	public void setUnique(boolean unique) {
-		this.unique = unique;
-	}
-	
-	@Override
-	public Class<Date> getGeneratedType() {
-	    return Date.class;
-    }
-
-	@Override
-	public synchronized void init(GeneratorContext context) {
-		this.minCalendar = TimeUtil.calendar(min);
-		int count = 0;
-		Calendar calendar = (Calendar) minCalendar.clone();
-		do {
-			calendar.add(Calendar.YEAR, yearGranularity);
-			calendar.add(Calendar.MONTH, monthGranularity);
-			calendar.add(Calendar.DAY_OF_MONTH, dayGranularity);
-			count++;
-		} while (!max.before(calendar.getTime()));
-		multiplierGenerator = context.getGeneratorFactory().createNumberGenerator(
-				Integer.class, 0, true, count - 1, true, 1, distribution, (unique ? Uniqueness.SIMPLE : Uniqueness.NONE));
-		multiplierGenerator.init(context);
-	    super.init(context);
-	}
-	
-	@Override
-	public Date generate() {
-		assertInitialized();
-		ProductWrapper<Integer> multiplierWrapper = multiplierGenerator.generate(intWrapper.get());
-		if (multiplierWrapper == null)
-			return null;
-		int multiplier = multiplierWrapper.unwrap();
-		Calendar calendar = (Calendar) minCalendar.clone();
-		calendar.add(Calendar.YEAR,         multiplier * yearGranularity );
-		calendar.add(Calendar.MONTH,        multiplier * monthGranularity);
-		calendar.add(Calendar.DAY_OF_MONTH, multiplier * dayGranularity  );
-		return calendar.getTime();
-    }
-
-	@Override
-	public void reset() {
-		multiplierGenerator.reset();
-		super.reset();
-	}
-	
-	@Override
-	public void close() {
-		multiplierGenerator.close();
-		super.close();
-	}
-	
-	@Override
-	public String toString() {
-		return BeanUtil.toString(this);
-	}
+  @Override
+  public String toString() {
+    return BeanUtil.toString(this);
+  }
 
 }

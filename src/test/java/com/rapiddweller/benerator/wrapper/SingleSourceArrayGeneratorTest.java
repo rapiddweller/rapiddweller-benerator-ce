@@ -32,37 +32,42 @@ import com.rapiddweller.benerator.sample.SampleGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link SingleSourceArrayGenerator}.<br/><br/>
  * Created: 11.10.2006 23:12:21
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class SingleSourceArrayGeneratorTest extends GeneratorTest {
 
-	@Test
-    public void test() {
-        check(0, 0);
-        check(3, 3);
-        check(0, 1);
-        check(1, 2);
-        check(3, 6);
-    }
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    check(0, 0);
+    check(3, 3);
+    check(0, 1);
+    check(1, 2);
+    check(3, 6);
+  }
 
-    // helpers ---------------------------------------------------------------------------------------------------------
+  // helpers ---------------------------------------------------------------------------------------------------------
 
-    private void check(int minLength, int maxLength) {
-        Generator<String> source = new SampleGenerator<>(String.class, "Alice", "Bob");
-        SingleSourceArrayGenerator<String, String[]> generator = new SingleSourceArrayGenerator<>(
-                source, String.class, minLength, maxLength, SequenceManager.RANDOM_SEQUENCE);
-        generator.init(context);
-        for (int i = 0; i < 100; i++) {
-            String[] product = GeneratorUtil.generateNonNull(generator);
-            assertTrue(minLength <= product.length);
-            assertTrue(product.length <= maxLength);
-        }
+  private void check(int minLength, int maxLength) {
+    Generator<String> source = new SampleGenerator<>(String.class, "Alice", "Bob");
+    SingleSourceArrayGenerator<String, String[]> generator = new SingleSourceArrayGenerator<>(
+        source, String.class, minLength, maxLength, SequenceManager.RANDOM_SEQUENCE);
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      String[] product = GeneratorUtil.generateNonNull(generator);
+      assertTrue(minLength <= product.length);
+      assertTrue(product.length <= maxLength);
     }
-    
+  }
+
 }

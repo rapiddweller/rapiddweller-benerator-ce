@@ -35,68 +35,81 @@ import com.rapiddweller.common.Validator;
  * Generator proxy that uses another generator for creating values and filters out invalid ones.
  * <br/>
  * Created: 29.08.2006 08:27:11
+ *
+ * @param <E> the type parameter
  * @see ValidatingGenerator
  */
 public class ValidatingGeneratorProxy<E> extends ValidatingGenerator<E> {
 
-    /** The source generator to use */
-    private final Generator<E> source;
+  /**
+   * The source generator to use
+   */
+  private final Generator<E> source;
 
-    /** Constructor with the source generator and the validator to use */
-    public ValidatingGeneratorProxy(Generator<E> source, Validator<E> validator) {
-        super(validator);
-        this.source = source;
-    }
+  /**
+   * Constructor with the source generator and the validator to use
+   *
+   * @param source    the source
+   * @param validator the validator
+   */
+  public ValidatingGeneratorProxy(Generator<E> source, Validator<E> validator) {
+    super(validator);
+    this.source = source;
+  }
 
-    // Generator & ValidatingGenerator implementation ------------------------------------------------------------------
+  // Generator & ValidatingGenerator implementation ------------------------------------------------------------------
 
-    @Override
-	public Class<E> getGeneratedType() {
-        return source.getGeneratedType();
-    }
+  @Override
+  public Class<E> getGeneratedType() {
+    return source.getGeneratedType();
+  }
 
-    /**
-     * Callback method implementation from ValidatingGenerator.
-     * This calls the source's generate() method and returns its result.
-     */
-    @Override
-    protected ProductWrapper<E> doGenerate(ProductWrapper<E> wrapper) {
-        return source.generate(wrapper);
-    }
+  /**
+   * Callback method implementation from ValidatingGenerator.
+   * This calls the source's generate() method and returns its result.
+   */
+  @Override
+  protected ProductWrapper<E> doGenerate(ProductWrapper<E> wrapper) {
+    return source.generate(wrapper);
+  }
 
-    @Override
-    public void init(GeneratorContext context) {
-        source.init(context);
-        super.init(context);
-    }
+  @Override
+  public void init(GeneratorContext context) {
+    source.init(context);
+    super.init(context);
+  }
 
-    /** Calls the reset() method on the source generator */
-    @Override
-    public void reset() {
-        source.reset();
-        super.reset();
-    }
+  /**
+   * Calls the reset() method on the source generator
+   */
+  @Override
+  public void reset() {
+    source.reset();
+    super.reset();
+  }
 
-    /** Calls the close() method on the source generator */
-    @Override
-    public void close() {
-        source.close();
-        super.close();
-    }
+  /**
+   * Calls the close() method on the source generator
+   */
+  @Override
+  public void close() {
+    source.close();
+    super.close();
+  }
 
-	@Override
-	public boolean isThreadSafe() {
-	    return source.isThreadSafe();
-    }
-    
-	@Override
-	public boolean isParallelizable() {
-	    return source.isParallelizable();
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return source.isThreadSafe();
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + source + ']';
-    }
+  @Override
+  public boolean isParallelizable() {
+    return source.isParallelizable();
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + source + ']';
+  }
 
 }

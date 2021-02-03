@@ -33,28 +33,35 @@ import org.junit.Test;
 /**
  * Tests the {@link IncrementalStringGenerator}.<br/><br/>
  * Created: 02.08.2011 10:48:41
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class IncrementalStringGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void testGranularity1() {
-		IncrementalStringGenerator generator = new IncrementalStringGenerator(CollectionUtil.toSet('A', 'B'), 1, 3, 1);
-		initialize(generator);
-		expectGeneratedSequence(generator, 
-				"A", "B",  
-				"AA", "AB", "BA", "BB", 
-				"AAA", "AAB", "ABA", "ABB", "BAA", "BAB", "BBA", "BBB");
-	}
-	
-	@Test
-	public void testGranularity2() {
-		IncrementalStringGenerator generator = new IncrementalStringGenerator(CollectionUtil.toSet('A', 'B'), 1, 3, 2);
-		initialize(generator);
-		expectGeneratedSequence(generator, 
-				"A", "B", 
-				"AAA", "AAB", "ABA", "ABB", "BAA", "BAB", "BBA", "BBB");
-	}
-	
+  /**
+   * Test granularity 1.
+   */
+  @Test
+  public void testGranularity1() {
+    IncrementalStringGenerator generator = new IncrementalStringGenerator(CollectionUtil.toSet('A', 'B'), 1, 3, 1);
+    initialize(generator);
+    expectGeneratedSequence(generator,
+        "A", "B",
+        "AA", "AB", "BA", "BB",
+        "AAA", "AAB", "ABA", "ABB", "BAA", "BAB", "BBA", "BBB");
+  }
+
+  /**
+   * Test granularity 2.
+   */
+  @Test
+  public void testGranularity2() {
+    IncrementalStringGenerator generator = new IncrementalStringGenerator(CollectionUtil.toSet('A', 'B'), 1, 3, 2);
+    initialize(generator);
+    expectGeneratedSequence(generator,
+        "A", "B",
+        "AAA", "AAB", "ABA", "ABB", "BAA", "BAB", "BBA", "BBB");
+  }
+
 }

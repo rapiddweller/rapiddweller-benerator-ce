@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.consumer;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.factory.ConsumerMock;
 import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
@@ -35,30 +33,36 @@ import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link MappingEntityConsumer}.<br/><br/>
  * Created: 22.02.2010 20:09:02
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class MappingEntityConsumerTest extends ModelTest {
 
-	@Test
-	public void test() {
-		ConsumerMock target = new ConsumerMock();
-		MappingEntityConsumer consumer = new MappingEntityConsumer();
-		try {
-			consumer.setTarget(target);
-			consumer.setMappings("'name'->'givenName', 'none'->'some'");
-			
-			Entity input = createEntity("Person", "name", "Alice", "age", 23);
-			consumer.startConsuming(new ProductWrapper<Entity>().wrap(input));
-			consumer.finishConsuming(new ProductWrapper<Entity>().wrap(input));
-			assertEquals(createEntity("Person", "givenName", "Alice", "age", 23), target.lastProduct);
-		} finally {
-        	IOUtil.close(consumer);
-        }
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    ConsumerMock target = new ConsumerMock();
+    MappingEntityConsumer consumer = new MappingEntityConsumer();
+    try {
+      consumer.setTarget(target);
+      consumer.setMappings("'name'->'givenName', 'none'->'some'");
 
-	}
-	
+      Entity input = createEntity("Person", "name", "Alice", "age", 23);
+      consumer.startConsuming(new ProductWrapper<Entity>().wrap(input));
+      consumer.finishConsuming(new ProductWrapper<Entity>().wrap(input));
+      assertEquals(createEntity("Person", "givenName", "Alice", "age", 23), target.lastProduct);
+    } finally {
+      IOUtil.close(consumer);
+    }
+
+  }
+
 }

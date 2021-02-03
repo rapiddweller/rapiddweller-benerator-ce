@@ -32,18 +32,19 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
  * Generates Long values that represent the current time in milliseconds.<br/>
  * <br/>
  * Created: 17.11.2007 13:14:55
+ *
  * @author Volker Bergmann
  */
 public class CurrentMilliTimeGenerator extends ThreadSafeNonNullGenerator<Long> {
 
-	@Override
-	public Class<Long> getGeneratedType() {
-    	return Long.class;
-    }
+  @Override
+  public Class<Long> getGeneratedType() {
+    return Long.class;
+  }
 
-	@Override
-	public Long generate() {
-        return System.currentTimeMillis();
-    }
+  @Override
+  public Long generate() {
+    return System.currentTimeMillis();
+  }
 
 }

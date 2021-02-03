@@ -39,8 +39,17 @@ import com.rapiddweller.common.version.VersionInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.AbstractAction;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
+import java.awt.Container;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -51,141 +60,171 @@ import java.io.IOException;
 /**
  * Small Swing application for editing and running Benerator descriptors.<br/><br/>
  * Created: 31.05.2010 08:05:35
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class BeneratorGUI {
-	
-	protected static final Logger LOGGER = LogManager.getLogger(BeneratorGUI.class);
-	
-	static final File BUFFER_FILE = new File(BeneratorGUI.class.getSimpleName() + ".txt");
-	
-	public static void main(String[] args) throws Exception {
-		ApplicationUtil.prepareNativeLAF("Benerator GUI");
-		BeneratorGUIFrame appAndFrame = new BeneratorGUIFrame();
-		ApplicationUtil.configureApplication(appAndFrame);
-		appAndFrame.setVisible(true);
-	}
-	
-	public static class BeneratorGUIFrame extends JFrame implements JavaApplication {
-		
-		final JTextArea text;
-		
-		public BeneratorGUIFrame() throws IOException {
-		    super("Benerator GUI");
-		    Container contentPane = getContentPane();
-		    text = new JTextArea();
-		    if (BUFFER_FILE.exists())
-		    	text.setText(IOUtil.getContentOfURI(BUFFER_FILE.getAbsolutePath()));
-		    contentPane.add(new JScrollPane(text));
-			createMenuBar();
-		    setSize(600, 400);
-		    addWindowListener(new WindowAdapter() {
-		    	@Override
-		    	public void windowClosing(WindowEvent e) {
-		    	    exit();
-		    	}
-		    });
-			setLocationRelativeTo(null);
-	    }
 
-		private void createMenuBar() {
-		    JMenuBar menubar = new JMenuBar();
-		    
-		    // create file menu
-		    JMenu fileMenu = new JMenu("File");
-		    fileMenu.setMnemonic('F');
-		    menubar.add(fileMenu);
-		    
-		    // create edit menu
-		    JMenu editMenu = new JMenu("Edit");
-		    editMenu.setMnemonic('E');
-		    
-		    createRunAction(editMenu);
-		    menubar.add(editMenu);
-		    
-			setJMenuBar(menubar);
-	    }
+  /**
+   * The constant LOGGER.
+   */
+  protected static final Logger LOGGER = LogManager.getLogger(BeneratorGUI.class);
 
-		private void createRunAction(JMenu editMenu) {
-		    JMenuItem urlDecodeItem = editMenu.add(new RunAction());
-		    urlDecodeItem.setAccelerator(
-		    		KeyStroke.getKeyStroke('R',
-                            Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
-		    	    false));
-		    urlDecodeItem.setMnemonic('R');
-	    }
+  /**
+   * The Buffer file.
+   */
+  static final File BUFFER_FILE = new File(BeneratorGUI.class.getSimpleName() + ".txt");
 
-		@Override
-		public void exit() {
-			//noinspection finally
-			try {
-		        String content = text.getText();
-				IOUtil.writeTextFile(BUFFER_FILE.getAbsolutePath(), content);
-	        } catch (IOException e) {
-		        throw new RuntimeException(e);
-	        } finally {
-	        	System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
-	        }
-		}
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   * @throws Exception the exception
+   */
+  public static void main(String[] args) throws Exception {
+    ApplicationUtil.prepareNativeLAF("Benerator GUI");
+    BeneratorGUIFrame appAndFrame = new BeneratorGUIFrame();
+    ApplicationUtil.configureApplication(appAndFrame);
+    appAndFrame.setVisible(true);
+  }
 
-		private class RunAction extends AbstractAction {
+  /**
+   * The type Benerator gui frame.
+   */
+  public static class BeneratorGUIFrame extends JFrame implements JavaApplication {
 
-			public RunAction() {
-		        super("Run");
-	        }
+    /**
+     * The Text.
+     */
+    final JTextArea text;
 
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				File file = null;
-				try {
-		            file = File.createTempFile("benerator-", ".ben.xml");
-		            CharSequence builder = createXML();
-		            IOUtil.writeTextFile(file.getAbsolutePath(), builder.toString());
-		            Benerator.runFile(file.getAbsolutePath(), new LoggingInfoPrinter(LogCategoriesConstants.CONFIG));
-	            } catch (BeneratorError e) {
-	        		System.err.println("Error: " + e.getMessage());
-	            	LOGGER.error(e.getMessage());
-	            } catch (Exception e) {
-		            e.printStackTrace();
-	            } finally {
-	            	if (file != null)
-	            		FileUtil.deleteIfExists(file);
-	            }
-	        }
-
-			private CharSequence createXML() {
-				if (text.getText().startsWith("<?xml"))
-					return text.getText();
-		        StringBuilder builder = new StringBuilder("<setup>");
-		        builder.append(text.getText());
-		        builder.append("</setup>");
-		        return builder;
-	        }
-			
-		}
-
-		@Override
-		public void about() {
-			JOptionPane.showMessageDialog(this, 
-					"Benerator GUI " + VersionInfo.getInfo("benerator").getVersion() + SystemInfo.getLineSeparator() + 
-					"(c) 2011 by Volker Bergmann");
+    /**
+     * Instantiates a new Benerator gui frame.
+     *
+     * @throws IOException the io exception
+     */
+    public BeneratorGUIFrame() throws IOException {
+      super("Benerator GUI");
+      Container contentPane = getContentPane();
+      text = new JTextArea();
+      if (BUFFER_FILE.exists()) {
+        text.setText(IOUtil.getContentOfURI(BUFFER_FILE.getAbsolutePath()));
+      }
+      contentPane.add(new JScrollPane(text));
+      createMenuBar();
+      setSize(600, 400);
+      addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+          exit();
         }
+      });
+      setLocationRelativeTo(null);
+    }
 
-		@Override
-		public String iconPath() {
-			return null; // TODO
-		}
+    private void createMenuBar() {
+      JMenuBar menubar = new JMenuBar();
 
-		@Override
-		public void preferences() {
-		}
+      // create file menu
+      JMenu fileMenu = new JMenu("File");
+      fileMenu.setMnemonic('F');
+      menubar.add(fileMenu);
 
-		@Override
-		public boolean supportsPreferences() {
-			return false;
-		}
+      // create edit menu
+      JMenu editMenu = new JMenu("Edit");
+      editMenu.setMnemonic('E');
 
-	}
-	
+      createRunAction(editMenu);
+      menubar.add(editMenu);
+
+      setJMenuBar(menubar);
+    }
+
+    private void createRunAction(JMenu editMenu) {
+      JMenuItem urlDecodeItem = editMenu.add(new RunAction());
+      urlDecodeItem.setAccelerator(
+          KeyStroke.getKeyStroke('R',
+              Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
+              false));
+      urlDecodeItem.setMnemonic('R');
+    }
+
+    @Override
+    public void exit() {
+      //noinspection finally
+      try {
+        String content = text.getText();
+        IOUtil.writeTextFile(BUFFER_FILE.getAbsolutePath(), content);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      } finally {
+        System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+      }
+    }
+
+    private class RunAction extends AbstractAction {
+
+      /**
+       * Instantiates a new Run action.
+       */
+      public RunAction() {
+        super("Run");
+      }
+
+      @Override
+      public void actionPerformed(ActionEvent evt) {
+        File file = null;
+        try {
+          file = File.createTempFile("benerator-", ".ben.xml");
+          CharSequence builder = createXML();
+          IOUtil.writeTextFile(file.getAbsolutePath(), builder.toString());
+          Benerator.runFile(file.getAbsolutePath(), new LoggingInfoPrinter(LogCategoriesConstants.CONFIG));
+        } catch (BeneratorError e) {
+          System.err.println("Error: " + e.getMessage());
+          LOGGER.error(e.getMessage());
+        } catch (Exception e) {
+          e.printStackTrace();
+        } finally {
+          if (file != null) {
+            FileUtil.deleteIfExists(file);
+          }
+        }
+      }
+
+      private CharSequence createXML() {
+        if (text.getText().startsWith("<?xml")) {
+          return text.getText();
+        }
+        StringBuilder builder = new StringBuilder("<setup>");
+        builder.append(text.getText());
+        builder.append("</setup>");
+        return builder;
+      }
+
+    }
+
+    @Override
+    public void about() {
+      JOptionPane.showMessageDialog(this,
+          "Benerator GUI " + VersionInfo.getInfo("benerator").getVersion() + SystemInfo.getLineSeparator() +
+              "(c) 2011 by Volker Bergmann");
+    }
+
+    @Override
+    public String iconPath() {
+      return null; // TODO
+    }
+
+    @Override
+    public void preferences() {
+    }
+
+    @Override
+    public boolean supportsPreferences() {
+      return false;
+    }
+
+  }
+
 }

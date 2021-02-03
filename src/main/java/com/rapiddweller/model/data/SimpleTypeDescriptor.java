@@ -26,7 +26,11 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.common.operation.*;
+import com.rapiddweller.common.operation.AndOperation;
+import com.rapiddweller.common.operation.MaxNumberStringOperation;
+import com.rapiddweller.common.operation.MaxOperation;
+import com.rapiddweller.common.operation.MinNumberStringOperation;
+import com.rapiddweller.common.operation.MinOperation;
 import com.rapiddweller.script.PrimitiveType;
 
 /**
@@ -39,234 +43,480 @@ import com.rapiddweller.script.PrimitiveType;
  */
 public class SimpleTypeDescriptor extends TypeDescriptor {
 
-    public static final String MIN = "min";
-    public static final String MAX = "max";
-    public static final String MIN_INCLUSIVE = "minInclusive";
-    public static final String MAX_INCLUSIVE = "maxInclusive";
+  /**
+   * The constant MIN.
+   */
+  public static final String MIN = "min";
+  /**
+   * The constant MAX.
+   */
+  public static final String MAX = "max";
+  /**
+   * The constant MIN_INCLUSIVE.
+   */
+  public static final String MIN_INCLUSIVE = "minInclusive";
+  /**
+   * The constant MAX_INCLUSIVE.
+   */
+  public static final String MAX_INCLUSIVE = "maxInclusive";
 
-    public static final String GRANULARITY = "granularity";
+  /**
+   * The constant GRANULARITY.
+   */
+  public static final String GRANULARITY = "granularity";
 
-    public static final String TRUE_QUOTA = "trueQuota";
-    public static final String MIN_LENGTH = "minLength";
-    public static final String MAX_LENGTH = "maxLength";
-    public static final String LENGTH_DISTRIBUTION = "lengthDistribution";
+  /**
+   * The constant TRUE_QUOTA.
+   */
+  public static final String TRUE_QUOTA = "trueQuota";
+  /**
+   * The constant MIN_LENGTH.
+   */
+  public static final String MIN_LENGTH = "minLength";
+  /**
+   * The constant MAX_LENGTH.
+   */
+  public static final String MAX_LENGTH = "maxLength";
+  /**
+   * The constant LENGTH_DISTRIBUTION.
+   */
+  public static final String LENGTH_DISTRIBUTION = "lengthDistribution";
 
-    public static final String CONSTANT = "constant";
-    public static final String VALUES = "values";
-    public static final String MAP = "map";
+  /**
+   * The constant CONSTANT.
+   */
+  public static final String CONSTANT = "constant";
+  /**
+   * The constant VALUES.
+   */
+  public static final String VALUES = "values";
+  /**
+   * The constant MAP.
+   */
+  public static final String MAP = "map";
 
-    private PrimitiveType primitiveType = null;
+  private PrimitiveType primitiveType = null;
 
-    public SimpleTypeDescriptor(String name, DescriptorProvider provider) {
-        this(name, provider, (String) null);
+  /**
+   * Instantiates a new Simple type descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   */
+  public SimpleTypeDescriptor(String name, DescriptorProvider provider) {
+    this(name, provider, (String) null);
+  }
+
+  /**
+   * Instantiates a new Simple type descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   * @param parent   the parent
+   */
+  public SimpleTypeDescriptor(String name, DescriptorProvider provider,
+                              SimpleTypeDescriptor parent) {
+    this(name, provider, parent.getName());
+    this.parent = parent;
+  }
+
+  /**
+   * Instantiates a new Simple type descriptor.
+   *
+   * @param name       the name
+   * @param provider   the provider
+   * @param parentName the parent name
+   */
+  public SimpleTypeDescriptor(String name, DescriptorProvider provider,
+                              String parentName) {
+    super(name, provider, parentName);
+    // number setup
+    addConstraint(MIN, String.class, new MaxNumberStringOperation());
+    addConstraint(MAX, String.class, new MinNumberStringOperation());
+    addConstraint(MIN_INCLUSIVE, Boolean.class, new AndOperation());
+    addConstraint(MAX_INCLUSIVE, Boolean.class, new AndOperation());
+    addConfig(GRANULARITY, String.class);
+    // boolean setup
+    addConfig(TRUE_QUOTA, Double.class);
+    // string setup
+    addConstraint(MIN_LENGTH, Integer.class, new MaxOperation<>());
+    addConstraint(MAX_LENGTH, Integer.class, new MinOperation<>());
+    addConfig(LENGTH_DISTRIBUTION, String.class);
+    // other config
+    addConfig(VALUES, String.class);
+    addConfig(CONSTANT, String.class);
+    addConfig(MAP, String.class);
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  @Override
+  public SimpleTypeDescriptor getParent() {
+    return (SimpleTypeDescriptor) super.getParent();
+  }
+
+  /**
+   * Gets primitive type.
+   *
+   * @return the primitive type
+   */
+  public PrimitiveType getPrimitiveType() {
+    if (primitiveType != null) {
+      return primitiveType;
     }
-
-    public SimpleTypeDescriptor(String name, DescriptorProvider provider,
-                                SimpleTypeDescriptor parent) {
-        this(name, provider, parent.getName());
-        this.parent = parent;
+    primitiveType = PrimitiveType.getInstance(getName());
+    if (primitiveType != null) {
+      return primitiveType;
     }
-
-    public SimpleTypeDescriptor(String name, DescriptorProvider provider,
-                                String parentName) {
-        super(name, provider, parentName);
-        // number setup
-        addConstraint(MIN, String.class, new MaxNumberStringOperation());
-        addConstraint(MAX, String.class, new MinNumberStringOperation());
-        addConstraint(MIN_INCLUSIVE, Boolean.class, new AndOperation());
-        addConstraint(MAX_INCLUSIVE, Boolean.class, new AndOperation());
-        addConfig(GRANULARITY, String.class);
-        // boolean setup
-        addConfig(TRUE_QUOTA, Double.class);
-        // string setup
-        addConstraint(MIN_LENGTH, Integer.class, new MaxOperation<>());
-        addConstraint(MAX_LENGTH, Integer.class, new MinOperation<>());
-        addConfig(LENGTH_DISTRIBUTION, String.class);
-        // other config
-        addConfig(VALUES, String.class);
-        addConfig(CONSTANT, String.class);
-        addConfig(MAP, String.class);
+    if (getParent() != null) {
+      return getParent().getPrimitiveType();
     }
+    return null;
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  /**
+   * Gets min.
+   *
+   * @return the min
+   */
+  public String getMin() {
+    return (String) getDetailValue(MIN);
+  }
 
-    @Override
-    public SimpleTypeDescriptor getParent() {
-        return (SimpleTypeDescriptor) super.getParent();
+  /**
+   * Sets min.
+   *
+   * @param min the min
+   */
+  public void setMin(String min) {
+    setDetailValue(MIN, min);
+  }
+
+  /**
+   * Is min inclusive boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean isMinInclusive() {
+    return (Boolean) getDetailValue(MIN_INCLUSIVE);
+  }
+
+  /**
+   * Sets min inclusive.
+   *
+   * @param minInclusive the min inclusive
+   */
+  public void setMinInclusive(Boolean minInclusive) {
+    setDetailValue(MIN, minInclusive);
+  }
+
+  /**
+   * Gets max.
+   *
+   * @return the max
+   */
+  public String getMax() {
+    return (String) getDetailValue(MAX);
+  }
+
+  /**
+   * Sets max.
+   *
+   * @param max the max
+   */
+  public void setMax(String max) {
+    setDetailValue(MAX, max);
+  }
+
+  /**
+   * Is max inclusive boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean isMaxInclusive() {
+    return (Boolean) getDetailValue(MAX_INCLUSIVE);
+  }
+
+  /**
+   * Sets max inclusive.
+   *
+   * @param maxInclusive the max inclusive
+   */
+  public void setMaxInclusive(Boolean maxInclusive) {
+    setDetailValue(MAX_INCLUSIVE, maxInclusive);
+  }
+
+  /**
+   * Gets granularity.
+   *
+   * @return the granularity
+   */
+  public String getGranularity() {
+    return (String) getDetailValue(GRANULARITY);
+  }
+
+  /**
+   * Sets granularity.
+   *
+   * @param granularity the granularity
+   */
+  public void setGranularity(String granularity) {
+    setDetailValue(GRANULARITY, granularity);
+  }
+
+  /**
+   * Gets true quota.
+   *
+   * @return the true quota
+   */
+  public Double getTrueQuota() {
+    return (Double) getDetailValue(TRUE_QUOTA);
+  }
+
+  /**
+   * Sets true quota.
+   *
+   * @param trueQuota the true quota
+   */
+  public void setTrueQuota(Double trueQuota) {
+    setDetailValue(TRUE_QUOTA, trueQuota);
+  }
+
+  /**
+   * Gets min length.
+   *
+   * @return the min length
+   */
+  public Integer getMinLength() {
+    return (Integer) getDetailValue(MIN_LENGTH);
+  }
+
+  /**
+   * Sets min length.
+   *
+   * @param minLength the min length
+   */
+  public void setMinLength(Integer minLength) {
+    setDetailValue(MIN_LENGTH, minLength);
+  }
+
+  /**
+   * Gets max length.
+   *
+   * @return the max length
+   */
+  public Integer getMaxLength() {
+    return (Integer) getDetailValue(MAX_LENGTH);
+  }
+
+  /**
+   * Sets max length.
+   *
+   * @param maxLength the max length
+   */
+  public void setMaxLength(Integer maxLength) {
+    setDetailValue(MAX_LENGTH, maxLength);
+  }
+
+  /**
+   * Gets length distribution.
+   *
+   * @return the length distribution
+   */
+  public String getLengthDistribution() {
+    return (String) getDetailValue(LENGTH_DISTRIBUTION);
+  }
+
+  /**
+   * Sets length distribution.
+   *
+   * @param lengthDistribution the length distribution
+   */
+  public void setLengthDistribution(String lengthDistribution) {
+    setDetailValue(LENGTH_DISTRIBUTION, lengthDistribution);
+  }
+
+  /**
+   * Gets values.
+   *
+   * @return the values
+   */
+  public String getValues() {
+    return (String) getDetailValue(VALUES);
+  }
+
+  /**
+   * Sets values.
+   *
+   * @param values the values
+   */
+  public void setValues(String values) {
+    setDetailValue(VALUES, values);
+  }
+
+  /**
+   * Add value.
+   *
+   * @param value the value
+   */
+  public void addValue(String value) {
+    String valuesBefore = getValues();
+    if (valuesBefore == null || valuesBefore.length() == 0) {
+      setValues(value);
+    } else {
+      setValues(valuesBefore + ',' + value);
     }
+  }
 
-    public PrimitiveType getPrimitiveType() {
-        if (primitiveType != null) {
-            return primitiveType;
-        }
-        primitiveType = PrimitiveType.getInstance(getName());
-        if (primitiveType != null) {
-            return primitiveType;
-        }
-        if (getParent() != null) {
-            return getParent().getPrimitiveType();
-        }
-        return null;
-    }
+  /**
+   * Gets constant.
+   *
+   * @return the constant
+   */
+  public String getConstant() {
+    return (String) getDetailValue(CONSTANT);
+  }
 
-    public String getMin() {
-        return (String) getDetailValue(MIN);
-    }
+  /**
+   * Sets constant.
+   *
+   * @param constant the constant
+   */
+  public void setConstant(String constant) {
+    setDetailValue(CONSTANT, constant);
+  }
 
-    public void setMin(String min) {
-        setDetailValue(MIN, min);
-    }
+  /**
+   * Gets map.
+   *
+   * @return the map
+   */
+  public String getMap() {
+    return (String) getDetailValue(MAP);
+  }
 
-    public Boolean isMinInclusive() {
-        return (Boolean) getDetailValue(MIN_INCLUSIVE);
-    }
+  /**
+   * Sets map.
+   *
+   * @param map the map
+   */
+  public void setMap(String map) {
+    setDetailValue(MAP, map);
+  }
 
-    public void setMinInclusive(Boolean minInclusive) {
-        setDetailValue(MIN, minInclusive);
-    }
+  // literate build helpers ------------------------------------------------------------------------------------------
 
-    public String getMax() {
-        return (String) getDetailValue(MAX);
-    }
+  /**
+   * With min simple type descriptor.
+   *
+   * @param min the min
+   * @return the simple type descriptor
+   */
+  public SimpleTypeDescriptor withMin(String min) {
+    setMin(min);
+    return this;
+  }
 
-    public void setMax(String max) {
-        setDetailValue(MAX, max);
-    }
+  /**
+   * With max simple type descriptor.
+   *
+   * @param max the max
+   * @return the simple type descriptor
+   */
+  public SimpleTypeDescriptor withMax(String max) {
+    setMax(max);
+    return this;
+  }
 
-    public Boolean isMaxInclusive() {
-        return (Boolean) getDetailValue(MAX_INCLUSIVE);
-    }
+  /**
+   * With granularity simple type descriptor.
+   *
+   * @param granularity the granularity
+   * @return the simple type descriptor
+   */
+  public SimpleTypeDescriptor withGranularity(String granularity) {
+    setGranularity(granularity);
+    return this;
+  }
 
-    public void setMaxInclusive(Boolean maxInclusive) {
-        setDetailValue(MAX_INCLUSIVE, maxInclusive);
-    }
+  /**
+   * With pattern simple type descriptor.
+   *
+   * @param pattern the pattern
+   * @return the simple type descriptor
+   */
+  public SimpleTypeDescriptor withPattern(String pattern) {
+    setPattern(pattern);
+    return this;
+  }
 
-    public String getGranularity() {
-        return (String) getDetailValue(GRANULARITY);
-    }
+  /**
+   * With distribution simple type descriptor.
+   *
+   * @param distribution the distribution
+   * @return the simple type descriptor
+   */
+  public SimpleTypeDescriptor withDistribution(String distribution) {
+    setDistribution(distribution);
+    return this;
+  }
 
-    public void setGranularity(String granularity) {
-        setDetailValue(GRANULARITY, granularity);
-    }
+  /**
+   * With dataset simple type descriptor.
+   *
+   * @param dataset the dataset
+   * @return the simple type descriptor
+   */
+  public SimpleTypeDescriptor withDataset(String dataset) {
+    setDataset(dataset);
+    return this;
+  }
 
-    public Double getTrueQuota() {
-        return (Double) getDetailValue(TRUE_QUOTA);
-    }
+  /**
+   * With locale id simple type descriptor.
+   *
+   * @param localeId the locale id
+   * @return the simple type descriptor
+   */
+  public SimpleTypeDescriptor withLocaleId(String localeId) {
+    setLocaleId(localeId);
+    return this;
+  }
 
-    public void setTrueQuota(Double trueQuota) {
-        setDetailValue(TRUE_QUOTA, trueQuota);
-    }
+  /**
+   * With true quota simple type descriptor.
+   *
+   * @param trueQuota the true quota
+   * @return the simple type descriptor
+   */
+  public SimpleTypeDescriptor withTrueQuota(Double trueQuota) {
+    setTrueQuota(trueQuota);
+    return this;
+  }
 
-    public Integer getMinLength() {
-        return (Integer) getDetailValue(MIN_LENGTH);
-    }
+  /**
+   * With uri simple type descriptor.
+   *
+   * @param source the source
+   * @return the simple type descriptor
+   */
+  public SimpleTypeDescriptor withUri(String source) {
+    setSource(source);
+    return this;
+  }
 
-    public void setMinLength(Integer minLength) {
-        setDetailValue(MIN_LENGTH, minLength);
-    }
+  /**
+   * With values simple type descriptor.
+   *
+   * @param values the values
+   * @return the simple type descriptor
+   */
+  public SimpleTypeDescriptor withValues(String values) {
+    this.setValues(values);
+    return this;
+  }
 
-    public Integer getMaxLength() {
-        return (Integer) getDetailValue(MAX_LENGTH);
-    }
-
-    public void setMaxLength(Integer maxLength) {
-        setDetailValue(MAX_LENGTH, maxLength);
-    }
-
-    public String getLengthDistribution() {
-        return (String) getDetailValue(LENGTH_DISTRIBUTION);
-    }
-
-    public void setLengthDistribution(String lengthDistribution) {
-        setDetailValue(LENGTH_DISTRIBUTION, lengthDistribution);
-    }
-
-    public String getValues() {
-        return (String) getDetailValue(VALUES);
-    }
-
-    public void setValues(String values) {
-        setDetailValue(VALUES, values);
-    }
-
-    public void addValue(String value) {
-        String valuesBefore = getValues();
-        if (valuesBefore == null || valuesBefore.length() == 0) {
-            setValues(value);
-        } else {
-            setValues(valuesBefore + ',' + value);
-        }
-    }
-
-    public String getConstant() {
-        return (String) getDetailValue(CONSTANT);
-    }
-
-    public void setConstant(String constant) {
-        setDetailValue(CONSTANT, constant);
-    }
-
-    public String getMap() {
-        return (String) getDetailValue(MAP);
-    }
-
-    public void setMap(String map) {
-        setDetailValue(MAP, map);
-    }
-
-    // literate build helpers ------------------------------------------------------------------------------------------
-
-    public SimpleTypeDescriptor withMin(String min) {
-        setMin(min);
-        return this;
-    }
-
-    public SimpleTypeDescriptor withMax(String max) {
-        setMax(max);
-        return this;
-    }
-
-    public SimpleTypeDescriptor withGranularity(String granularity) {
-        setGranularity(granularity);
-        return this;
-    }
-
-    public SimpleTypeDescriptor withPattern(String pattern) {
-        setPattern(pattern);
-        return this;
-    }
-
-    public SimpleTypeDescriptor withDistribution(String distribution) {
-        setDistribution(distribution);
-        return this;
-    }
-
-    public SimpleTypeDescriptor withDataset(String dataset) {
-        setDataset(dataset);
-        return this;
-    }
-
-    public SimpleTypeDescriptor withLocaleId(String localeId) {
-        setLocaleId(localeId);
-        return this;
-    }
-
-    public SimpleTypeDescriptor withTrueQuota(Double trueQuota) {
-        setTrueQuota(trueQuota);
-        return this;
-    }
-
-    public SimpleTypeDescriptor withUri(String source) {
-        setSource(source);
-        return this;
-    }
-
-    public SimpleTypeDescriptor withValues(String values) {
-        this.setValues(values);
-        return this;
-    }
-
-    // generic property access -----------------------------------------------------------------------------------------
+  // generic property access -----------------------------------------------------------------------------------------
 
 /*
     public void setDetail(String detailName, Object detailValue) {

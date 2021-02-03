@@ -30,128 +30,165 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.util.AbstractNonNullGenerator;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
- * Combines the output of a 'slow' generator (e.g. a remote hiGenerator) 
+ * Combines the output of a 'slow' generator (e.g. a remote hiGenerator)
  * with quickly generated numbers in a range: value = hi * maxLo + local.
+ *
  * @author Volker Bergmann
  * @since 0.3.04
  */
 public class HiLoGenerator extends AbstractNonNullGenerator<Long> {
 
-    private static final Logger logger = LogManager.getLogger(HiLoGenerator.class);
+  private static final Logger logger = LogManager.getLogger(HiLoGenerator.class);
 
-    protected static final int DEFAULT_MAX_LO = 100;
+  /**
+   * The constant DEFAULT_MAX_LO.
+   */
+  protected static final int DEFAULT_MAX_LO = 100;
 
-    protected int maxLo;
-    
-    private int lo;
-    private Long hi;
+  /**
+   * The Max lo.
+   */
+  protected int maxLo;
 
-    protected NonNullGenerator<Long> hiGenerator;
-    
-    // constructors ----------------------------------------------------------------------------------------------------
+  private int lo;
+  private Long hi;
 
-    public HiLoGenerator() {
-        this(new IncrementGenerator(), DEFAULT_MAX_LO);
-    }
-    
-    public HiLoGenerator(int maxLo) {
-    	this(new IncrementGenerator(), DEFAULT_MAX_LO);
-    }
-    
-    public HiLoGenerator(NonNullGenerator<Long> hiGenerator, int maxLo) {
-        this.hiGenerator = hiGenerator;
-        setMaxLo(maxLo);
-        resetMembers();
-    }
+  /**
+   * The Hi generator.
+   */
+  protected NonNullGenerator<Long> hiGenerator;
 
-    // properties ------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public void setHiGenerator(NonNullGenerator<Long> hiGenerator) {
-        this.hiGenerator = hiGenerator;
-    }
+  /**
+   * Instantiates a new Hi lo generator.
+   */
+  public HiLoGenerator() {
+    this(new IncrementGenerator(), DEFAULT_MAX_LO);
+  }
 
-    /**
-     * @return the maxLo
-     */
-    public int getMaxLo() {
-        return maxLo;
-    }
+  /**
+   * Instantiates a new Hi lo generator.
+   *
+   * @param maxLo the max lo
+   */
+  public HiLoGenerator(int maxLo) {
+    this(new IncrementGenerator(), DEFAULT_MAX_LO);
+  }
 
-    /**
-     * @param maxLo the maxLo to set
-     */
-    public void setMaxLo(int maxLo) {
-        if (maxLo <= 0)
-            throw new IllegalArgumentException("maxLo must be greater than 0, was: " + maxLo);
-        this.maxLo = maxLo;
-    }
+  /**
+   * Instantiates a new Hi lo generator.
+   *
+   * @param hiGenerator the hi generator
+   * @param maxLo       the max lo
+   */
+  public HiLoGenerator(NonNullGenerator<Long> hiGenerator, int maxLo) {
+    this.hiGenerator = hiGenerator;
+    setMaxLo(maxLo);
+    resetMembers();
+  }
 
-    // Generator interface -------------------------------------------------------------------
-    
-    @Override
-	public Class<Long> getGeneratedType() {
-        return Long.class;
-    }
+  // properties ------------------------------------------------------------------------------------
 
-    @Override
-    public synchronized void init(GeneratorContext context) {
-    	assertNotInitialized();
-        if (hiGenerator == null)
-            throw new InvalidGeneratorSetupException("hiGenerator", "is null");
-        hiGenerator.init(context);
-        resetMembers();
-        super.init(context);
-    }
+  /**
+   * Sets hi generator.
+   *
+   * @param hiGenerator the hi generator
+   */
+  public void setHiGenerator(NonNullGenerator<Long> hiGenerator) {
+    this.hiGenerator = hiGenerator;
+  }
 
-	@Override
-	public synchronized Long generate() {
-        assertInitialized();
-        if (hi == -1 || lo >= maxLo) {
-            hi = hiGenerator.generate();
-            if (hi == null)
-            	return null;
-            logger.debug("fetched new hi value: {}", hi);
-            lo = 0;
-        } else
-            lo++;
-        return hi * (maxLo + 1) + lo;
-    }
-    
-    @Override
-    public void reset() {
-        hiGenerator.reset();
-        resetMembers();
-        super.reset();
-    }
+  /**
+   * Gets max lo.
+   *
+   * @return the maxLo
+   */
+  public int getMaxLo() {
+    return maxLo;
+  }
 
-    @Override
-    public void close() {
-        hiGenerator.close();
-        super.close();
+  /**
+   * Sets max lo.
+   *
+   * @param maxLo the maxLo to set
+   */
+  public void setMaxLo(int maxLo) {
+    if (maxLo <= 0) {
+      throw new IllegalArgumentException("maxLo must be greater than 0, was: " + maxLo);
     }
+    this.maxLo = maxLo;
+  }
 
-	@Override
-	public boolean isThreadSafe() {
-	    return hiGenerator.isThreadSafe();
-    }
-    
-	@Override
-	public boolean isParallelizable() {
-	    return hiGenerator.isParallelizable();
-    }
+  // Generator interface -------------------------------------------------------------------
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + maxLo + ',' + hiGenerator + ']';
-    }
+  @Override
+  public Class<Long> getGeneratedType() {
+    return Long.class;
+  }
 
-	private void resetMembers() {
-	    this.lo = -1;
-        this.hi = -1L;
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    assertNotInitialized();
+    if (hiGenerator == null) {
+      throw new InvalidGeneratorSetupException("hiGenerator", "is null");
     }
+    hiGenerator.init(context);
+    resetMembers();
+    super.init(context);
+  }
+
+  @Override
+  public synchronized Long generate() {
+    assertInitialized();
+    if (hi == -1 || lo >= maxLo) {
+      hi = hiGenerator.generate();
+      if (hi == null) {
+        return null;
+      }
+      logger.debug("fetched new hi value: {}", hi);
+      lo = 0;
+    } else {
+      lo++;
+    }
+    return hi * (maxLo + 1) + lo;
+  }
+
+  @Override
+  public void reset() {
+    hiGenerator.reset();
+    resetMembers();
+    super.reset();
+  }
+
+  @Override
+  public void close() {
+    hiGenerator.close();
+    super.close();
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return hiGenerator.isThreadSafe();
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return hiGenerator.isParallelizable();
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + maxLo + ',' + hiGenerator + ']';
+  }
+
+  private void resetMembers() {
+    this.lo = -1;
+    this.hi = -1L;
+  }
 
 }

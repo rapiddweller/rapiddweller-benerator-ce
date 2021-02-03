@@ -44,33 +44,42 @@ import com.rapiddweller.format.xls.XLSSource;
  */
 public class XLSArraySourceProvider implements DataSourceProvider<Object[]> {
 
-    private final boolean formatted;
-    private final Converter<?, ?> scriptConverter;
-    private final String emptyMarker;
-    private final String nullMarker;
-    private final boolean rowBased;
+  private final boolean formatted;
+  private final Converter<?, ?> scriptConverter;
+  private final String emptyMarker;
+  private final String nullMarker;
+  private final boolean rowBased;
 
-    public XLSArraySourceProvider(boolean formatted,
-                                  Converter<?, ?> scriptConverter,
-                                  String emptyMarker, String nullMarker,
-                                  boolean rowBased) {
-        this.formatted = formatted;
-        this.scriptConverter = scriptConverter;
-        this.emptyMarker = emptyMarker;
-        this.nullMarker = nullMarker;
-        this.rowBased = rowBased;
-    }
+  /**
+   * Instantiates a new Xls array source provider.
+   *
+   * @param formatted       the formatted
+   * @param scriptConverter the script converter
+   * @param emptyMarker     the empty marker
+   * @param nullMarker      the null marker
+   * @param rowBased        the row based
+   */
+  public XLSArraySourceProvider(boolean formatted,
+                                Converter<?, ?> scriptConverter,
+                                String emptyMarker, String nullMarker,
+                                boolean rowBased) {
+    this.formatted = formatted;
+    this.scriptConverter = scriptConverter;
+    this.emptyMarker = emptyMarker;
+    this.nullMarker = nullMarker;
+    this.rowBased = rowBased;
+  }
 
-    @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public DataSource<Object[]> create(String uri, BeneratorContext context) {
-        DataSource<Object[]> source =
-                new XLSSource(uri, formatted, emptyMarker, nullMarker,
-                        rowBased);
-        source = new OffsetDataSource<>(source, 1); // skip header row
-        Converter<Object[], Object[]> converter =
-                new ArrayConverter(Object.class, Object.class, scriptConverter);
-        return new ConvertingDataSource<>(source, converter);
-    }
+  @Override
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public DataSource<Object[]> create(String uri, BeneratorContext context) {
+    DataSource<Object[]> source =
+        new XLSSource(uri, formatted, emptyMarker, nullMarker,
+            rowBased);
+    source = new OffsetDataSource<>(source, 1); // skip header row
+    Converter<Object[], Object[]> converter =
+        new ArrayConverter(Object.class, Object.class, scriptConverter);
+    return new ConvertingDataSource<>(source, converter);
+  }
 
 }

@@ -34,59 +34,78 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 /**
  * {@link DatasetBasedGenerator} implementation which bases on an atomic dataset.<br/><br/>
  * Created: 09.03.2011 10:54:28
- * @since 0.6.6
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class AtomicDatasetGenerator<E> extends GeneratorProxy<E> implements WeightedDatasetGenerator<E> {
 
-	private final String nesting;
-	private final String dataset;
-	private final double weight;
-	
-	public AtomicDatasetGenerator(WeightedGenerator<E> source, String nesting, String dataset) {
-		this(source, nesting, dataset, source.getWeight());
-	}
-	
-	public AtomicDatasetGenerator(Generator<E> source, String nesting, String dataset, double weight) {
-		super(source);
-		this.nesting = nesting;
-		this.dataset = dataset;
-		this.weight = weight;
-	}
-	
-	@Override
-	public String getNesting() {
-		return nesting;
-	}
-	
-	@Override
-	public String getDataset() {
-		return dataset;
-	}
+  private final String nesting;
+  private final String dataset;
+  private final double weight;
 
-	@Override
-	public double getWeight() {
-		return weight;
-	}
-	
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-		return super.generate(wrapper).setTag(nesting, dataset);
-	}
-	
-	@Override
-	public E generateForDataset(String requestedDataset) {
-		if (!dataset.equals(requestedDataset))
-			throw new IllegalArgumentException("Requested dataset " + requestedDataset + ", but supporting only dataset " + this.dataset);
-		ProductWrapper<E> wrapper = generate(getResultWrapper());
-		if (wrapper == null)
-			return null;
-		return wrapper.unwrap();
-	}
+  /**
+   * Instantiates a new Atomic dataset generator.
+   *
+   * @param source  the source
+   * @param nesting the nesting
+   * @param dataset the dataset
+   */
+  public AtomicDatasetGenerator(WeightedGenerator<E> source, String nesting, String dataset) {
+    this(source, nesting, dataset, source.getWeight());
+  }
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[" + nesting + ":" + dataset + "]";
-	}
+  /**
+   * Instantiates a new Atomic dataset generator.
+   *
+   * @param source  the source
+   * @param nesting the nesting
+   * @param dataset the dataset
+   * @param weight  the weight
+   */
+  public AtomicDatasetGenerator(Generator<E> source, String nesting, String dataset, double weight) {
+    super(source);
+    this.nesting = nesting;
+    this.dataset = dataset;
+    this.weight = weight;
+  }
+
+  @Override
+  public String getNesting() {
+    return nesting;
+  }
+
+  @Override
+  public String getDataset() {
+    return dataset;
+  }
+
+  @Override
+  public double getWeight() {
+    return weight;
+  }
+
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    return super.generate(wrapper).setTag(nesting, dataset);
+  }
+
+  @Override
+  public E generateForDataset(String requestedDataset) {
+    if (!dataset.equals(requestedDataset)) {
+      throw new IllegalArgumentException("Requested dataset " + requestedDataset + ", but supporting only dataset " + this.dataset);
+    }
+    ProductWrapper<E> wrapper = generate(getResultWrapper());
+    if (wrapper == null) {
+      return null;
+    }
+    return wrapper.unwrap();
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + nesting + ":" + dataset + "]";
+  }
 
 }

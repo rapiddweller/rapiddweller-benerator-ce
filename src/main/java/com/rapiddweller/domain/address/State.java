@@ -43,123 +43,208 @@ import java.util.Map;
  */
 public class State {
 
-    private String id;
-    private String name;
-    private Country country;
-    private final Map<CityId, City> cities;
-    private int population;
-    private Locale defaultLanguageLocale;
+  private String id;
+  private String name;
+  private Country country;
+  private final Map<CityId, City> cities;
+  private int population;
+  private Locale defaultLanguageLocale;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public State() {
-        this(null);
+  /**
+   * Instantiates a new State.
+   */
+  public State() {
+    this(null);
+  }
+
+  /**
+   * Instantiates a new State.
+   *
+   * @param id the id
+   */
+  public State(String id) {
+    this.id = id;
+    this.cities = new OrderedMap<>();
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets id.
+   *
+   * @return the id
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
+   * Sets id.
+   *
+   * @param id the id
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Gets default language.
+   *
+   * @return the default language
+   */
+  public String getDefaultLanguage() {
+    return getDefaultLanguageLocale().getLanguage();
+  }
+
+  /**
+   * Sets default language.
+   *
+   * @param defaultLanguage the default language
+   */
+  public void setDefaultLanguage(String defaultLanguage) {
+    setDefaultLanguageLocale(new Locale(defaultLanguage));
+  }
+
+  /**
+   * Gets default language locale.
+   *
+   * @return the default language locale
+   */
+  public Locale getDefaultLanguageLocale() {
+    if (defaultLanguageLocale != null) {
+      return defaultLanguageLocale;
+    } else {
+      return country.getDefaultLanguageLocale();
     }
+  }
 
-    public State(String id) {
-        this.id = id;
-        this.cities = new OrderedMap<>();
+  /**
+   * Sets default language locale.
+   *
+   * @param defaultLanguage the default language
+   */
+  public void setDefaultLanguageLocale(Locale defaultLanguage) {
+    this.defaultLanguageLocale = defaultLanguage;
+  }
+
+  /**
+   * Gets population.
+   *
+   * @return the population
+   */
+  public int getPopulation() {
+    return population;
+  }
+
+  /**
+   * Sets population.
+   *
+   * @param population the population
+   */
+  public void setPopulation(int population) {
+    this.population = population;
+  }
+
+  /**
+   * Gets country.
+   *
+   * @return the country
+   */
+  public Country getCountry() {
+    return country;
+  }
+
+  /**
+   * Sets country.
+   *
+   * @param country the country
+   */
+  public void setCountry(Country country) {
+    this.country = country;
+  }
+
+  // city handling ---------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets city.
+   *
+   * @param id the id
+   * @return the city
+   */
+  public City getCity(CityId id) {
+    country.checkCities();
+    return cities.get(id);
+  }
+
+  /**
+   * Gets cities.
+   *
+   * @return the cities
+   */
+  public Collection<City> getCities() {
+    country.checkCities();
+    return cities.values();
+  }
+
+  /**
+   * Add city.
+   *
+   * @param id   the id
+   * @param city the city
+   */
+  public void addCity(CityId id, City city) {
+    city.setState(this);
+    cities.put(id, city);
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return (name != null ? name : id);
+  }
+
+  @Override
+  public int hashCode() {
+    return NullSafeComparator.hashCode(country) * 31 + name.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-
-    // properties ------------------------------------------------------------------------------------------------------
-
-    public String getId() {
-        return id;
+    if (obj == null) {
+      return false;
     }
-
-    public void setId(String id) {
-        this.id = id;
+    if (getClass() != obj.getClass()) {
+      return false;
     }
-
-    public String getName() {
-        return name;
+    final State that = (State) obj;
+    if (!NullSafeComparator.equals(this.country, that.country)) {
+      return false;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDefaultLanguage() {
-        return getDefaultLanguageLocale().getLanguage();
-    }
-
-    public void setDefaultLanguage(String defaultLanguage) {
-        setDefaultLanguageLocale(new Locale(defaultLanguage));
-    }
-
-    public Locale getDefaultLanguageLocale() {
-        if (defaultLanguageLocale != null) {
-            return defaultLanguageLocale;
-        } else {
-            return country.getDefaultLanguageLocale();
-        }
-    }
-
-    public void setDefaultLanguageLocale(Locale defaultLanguage) {
-        this.defaultLanguageLocale = defaultLanguage;
-    }
-
-    public int getPopulation() {
-        return population;
-    }
-
-    public void setPopulation(int population) {
-        this.population = population;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
-    }
-
-    // city handling ---------------------------------------------------------------------------------------------------
-
-    public City getCity(CityId id) {
-        country.checkCities();
-        return cities.get(id);
-    }
-
-    public Collection<City> getCities() {
-        country.checkCities();
-        return cities.values();
-    }
-
-    public void addCity(CityId id, City city) {
-        city.setState(this);
-        cities.put(id, city);
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return (name != null ? name : id);
-    }
-
-    @Override
-    public int hashCode() {
-        return NullSafeComparator.hashCode(country) * 31 + name.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final State that = (State) obj;
-        if (!NullSafeComparator.equals(this.country, that.country)) {
-            return false;
-        }
-        return name.equals(that.name);
-    }
+    return name.equals(that.name);
+  }
 
 }

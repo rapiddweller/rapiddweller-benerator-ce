@@ -36,19 +36,36 @@ import com.rapiddweller.benerator.primitive.HiLoGenerator;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class DBSeqHiLoGenerator extends HiLoGenerator {
 
-    public DBSeqHiLoGenerator(String name, int maxLo) {
-        this(name, 100, null);
-    }
+  /**
+   * Instantiates a new Db seq hi lo generator.
+   *
+   * @param name  the name
+   * @param maxLo the max lo
+   */
+  public DBSeqHiLoGenerator(String name, int maxLo) {
+    this(name, 100, null);
+  }
 
-    public DBSeqHiLoGenerator(String sequenceName, int maxLo, DBSystem source) {
-        super(new DBSequenceGenerator(sequenceName, source), maxLo);
-    }
+  /**
+   * Instantiates a new Db seq hi lo generator.
+   *
+   * @param sequenceName the sequence name
+   * @param maxLo        the max lo
+   * @param source       the source
+   */
+  public DBSeqHiLoGenerator(String sequenceName, int maxLo, DBSystem source) {
+    super(new DBSequenceGenerator(sequenceName, source), maxLo);
+  }
 
-    public void setDatabase(DBSystem source) {
-        ((DBSequenceGenerator) hiGenerator).setDatabase(source);
-    }
+  /**
+   * Sets database.
+   *
+   * @param source the source
+   */
+  public void setDatabase(DBSystem source) {
+    ((DBSequenceGenerator) hiGenerator).setDatabase(source);
+  }
 
 }

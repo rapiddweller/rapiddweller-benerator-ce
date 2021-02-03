@@ -26,33 +26,33 @@
 
 package com.rapiddweller.benerator.script;
 
-import java.io.IOException;
-
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ParseException;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptFactory;
 import com.rapiddweller.script.DatabeneScriptParser;
 
+import java.io.IOException;
+
 /**
  * {@link ScriptFactory} implementation for BeneratorScript.<br/>
  * <br/>
  * Created at 09.10.2009 06:46:51
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class BeneratorScriptFactory implements ScriptFactory {
 
-    @Override
-	public Script parseText(String text) throws ParseException {
-        return new BeneratorScript(DatabeneScriptParser.parseExpression(text), text);
-    }
+  @Override
+  public Script parseText(String text) throws ParseException {
+    return new BeneratorScript(DatabeneScriptParser.parseExpression(text), text);
+  }
 
-    @Override
-	public Script readFile(String uri) throws ParseException, IOException {
-	    String text = IOUtil.getContentOfURI(uri);
-	    return parseText(text);
-    }
+  @Override
+  public Script readFile(String uri) throws ParseException, IOException {
+    String text = IOUtil.getContentOfURI(uri);
+    return parseText(text);
+  }
 
 }

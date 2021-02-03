@@ -31,19 +31,21 @@ import com.rapiddweller.benerator.NonNullGenerator;
 /**
  * {@link NonNullGenerator} implementation which declares that it is neither thread-safe nor parallelizable.<br/><br/>
  * Created: 26.07.2011 18:38:42
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public abstract class UnsafeNonNullGenerator<E> extends AbstractNonNullGenerator<E> {
 
-	@Override
-	public boolean isParallelizable() {
-		return false;
-	}
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
 
-	@Override
-	public boolean isThreadSafe() {
-		return false;
-	}
+  @Override
+  public boolean isThreadSafe() {
+    return false;
+  }
 
 }

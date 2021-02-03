@@ -36,66 +36,89 @@ package com.rapiddweller.task;
  */
 public abstract class AbstractTask implements Task {
 
-    private final boolean threadSafe;
-    private final boolean parallelizable;
-    protected String taskName;
+  private final boolean threadSafe;
+  private final boolean parallelizable;
+  /**
+   * The Task name.
+   */
+  protected String taskName;
 
-    // constructor -----------------------------------------------------------------------------------------------------
+  // constructor -----------------------------------------------------------------------------------------------------
 
-    protected AbstractTask() {
-        this(null);
+  /**
+   * Instantiates a new Abstract task.
+   */
+  protected AbstractTask() {
+    this(null);
+  }
+
+  /**
+   * Instantiates a new Abstract task.
+   *
+   * @param taskName the task name
+   */
+  protected AbstractTask(String taskName) {
+    this(taskName, false, false);
+  }
+
+  /**
+   * Instantiates a new Abstract task.
+   *
+   * @param taskName       the task name
+   * @param threadSafe     the thread safe
+   * @param parallelizable the parallelizable
+   */
+  protected AbstractTask(String taskName, boolean threadSafe,
+                         boolean parallelizable) {
+    if (taskName == null) {
+      taskName = getClass().getSimpleName();
     }
+    setTaskName(taskName);
+    this.threadSafe = threadSafe;
+    this.parallelizable = parallelizable;
+  }
 
-    protected AbstractTask(String taskName) {
-        this(taskName, false, false);
-    }
+  // Task interface --------------------------------------------------------------------------------------------------
 
-    protected AbstractTask(String taskName, boolean threadSafe,
-                           boolean parallelizable) {
-        if (taskName == null) {
-            taskName = getClass().getSimpleName();
-        }
-        setTaskName(taskName);
-        this.threadSafe = threadSafe;
-        this.parallelizable = parallelizable;
-    }
+  @Override
+  public String getTaskName() {
+    return taskName;
+  }
 
-    // Task interface --------------------------------------------------------------------------------------------------
+  /**
+   * Sets task name.
+   *
+   * @param taskName the task name
+   */
+  public void setTaskName(String taskName) {
+    this.taskName = taskName;
+  }
 
-    @Override
-    public String getTaskName() {
-        return taskName;
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return threadSafe;
+  }
 
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
+  @Override
+  public boolean isParallelizable() {
+    return parallelizable;
+  }
 
-    @Override
-    public boolean isThreadSafe() {
-        return threadSafe;
-    }
+  @Override
+  public void pageFinished() {
+    // empty
+  }
 
-    @Override
-    public boolean isParallelizable() {
-        return parallelizable;
-    }
+  @Override
+  public void close() {
+    // empty
+  }
 
-    @Override
-    public void pageFinished() {
-        // empty
-    }
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    @Override
-    public void close() {
-        // empty
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + taskName + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + taskName + ']';
+  }
 
 }

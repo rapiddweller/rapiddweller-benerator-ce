@@ -37,68 +37,107 @@ import java.util.List;
  * @author Volker Bergmann
  * @since 0.9.7
  */
-
 public class EdiEscapeFreeMarkerMethod implements TemplateMethodModelEx {
 
-    private char componentSeparator = ':';
-    private char elementSeparator = '+';
-    private char escapeChar = '?';
-    private char segmentSeparator = '\'';
+  private char componentSeparator = ':';
+  private char elementSeparator = '+';
+  private char escapeChar = '?';
+  private char segmentSeparator = '\'';
 
-    public char getComponentSeparator() {
-        return componentSeparator;
-    }
+  /**
+   * Gets component separator.
+   *
+   * @return the component separator
+   */
+  public char getComponentSeparator() {
+    return componentSeparator;
+  }
 
-    public void setComponentSeparator(char componentSeparator) {
-        this.componentSeparator = componentSeparator;
-    }
+  /**
+   * Sets component separator.
+   *
+   * @param componentSeparator the component separator
+   */
+  public void setComponentSeparator(char componentSeparator) {
+    this.componentSeparator = componentSeparator;
+  }
 
-    public char getElementSeparator() {
-        return elementSeparator;
-    }
+  /**
+   * Gets element separator.
+   *
+   * @return the element separator
+   */
+  public char getElementSeparator() {
+    return elementSeparator;
+  }
 
-    public void setElementSeparator(char elementSeparator) {
-        this.elementSeparator = elementSeparator;
-    }
+  /**
+   * Sets element separator.
+   *
+   * @param elementSeparator the element separator
+   */
+  public void setElementSeparator(char elementSeparator) {
+    this.elementSeparator = elementSeparator;
+  }
 
-    public char getEscapeChar() {
-        return escapeChar;
-    }
+  /**
+   * Gets escape char.
+   *
+   * @return the escape char
+   */
+  public char getEscapeChar() {
+    return escapeChar;
+  }
 
-    public void setEscapeChar(char escapeChar) {
-        this.escapeChar = escapeChar;
-    }
+  /**
+   * Sets escape char.
+   *
+   * @param escapeChar the escape char
+   */
+  public void setEscapeChar(char escapeChar) {
+    this.escapeChar = escapeChar;
+  }
 
-    public char getSegmentSeparator() {
-        return segmentSeparator;
-    }
+  /**
+   * Gets segment separator.
+   *
+   * @return the segment separator
+   */
+  public char getSegmentSeparator() {
+    return segmentSeparator;
+  }
 
-    public void setSegmentSeparator(char segmentSeparator) {
-        this.segmentSeparator = segmentSeparator;
-    }
+  /**
+   * Sets segment separator.
+   *
+   * @param segmentSeparator the segment separator
+   */
+  public void setSegmentSeparator(char segmentSeparator) {
+    this.segmentSeparator = segmentSeparator;
+  }
 
-    @Override
-    public Object exec(List args) {
-        StringBuilder builder = new StringBuilder();
-        for (int index = 0; index < args.size(); index++) {
-            if (index > 0) {
-                builder.append(':');
-            }
-            String s = String.valueOf(args.get(index));
-            for (int i = 0; i < s.length(); i++) {
-                char c = s.charAt(i);
-                if (needsEscaping(c)) {
-                    builder.append(escapeChar);
-                }
-                builder.append(c);
-            }
+  @Override
+  public Object exec(List args) {
+    StringBuilder builder = new StringBuilder();
+    for (int index = 0; index < args.size(); index++) {
+      if (index > 0) {
+        builder.append(':');
+      }
+      String s = String.valueOf(args.get(index));
+      for (int i = 0; i < s.length(); i++) {
+        char c = s.charAt(i);
+        if (needsEscaping(c)) {
+          builder.append(escapeChar);
         }
-        return builder.toString();
+        builder.append(c);
+      }
     }
+    return builder.toString();
+  }
 
-    private boolean needsEscaping(char c) {
-        return (c == componentSeparator || c == elementSeparator ||
-                c == escapeChar || c == segmentSeparator);
-    }
+  private boolean needsEscaping(char c) {
+    return (c == componentSeparator || c == elementSeparator ||
+        c == escapeChar || c == segmentSeparator);
+  }
 
 }

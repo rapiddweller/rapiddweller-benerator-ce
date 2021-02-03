@@ -34,65 +34,92 @@ import org.junit.Test;
 /**
  * Tests the {@link TokenCombiner}.<br/><br/>
  * Created: 01.08.2010 15:10:43
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class TokenCombinerTest extends GeneratorTest {
 
-	@Test
-	public void testNonUnique() {
-		TokenCombiner combinator = createCombinator(false, false);
-		expectGenerations(combinator, 100, new CombinationValidator(false)).withContinuedAvailability();
-	}
+  /**
+   * Test non unique.
+   */
+  @Test
+  public void testNonUnique() {
+    TokenCombiner combinator = createCombinator(false, false);
+    expectGenerations(combinator, 100, new CombinationValidator(false)).withContinuedAvailability();
+  }
 
-	@Test
-	public void testNonUniqueSeedExcluded() {
-		TokenCombiner combinator = createCombinator(false, true);
-		expectGenerations(combinator, 100, new CombinationValidator(true)).withContinuedAvailability();
-	}
-	
-	@Test
-	public void testUnique() {
-		TokenCombiner combinator = createCombinator(true, false);
-		expectGenerations(combinator, 9, new CombinationValidator(false), new UniqueValidator<String>()).withCeasedAvailability();
-	}
-	
-	@Test
-	public void testUniqueSeedExcluded() {
-		TokenCombiner combinator = createCombinator(true, true);
-		expectGenerations(combinator, 6, new CombinationValidator(true), new UniqueValidator<String>()).withCeasedAvailability();
-	}
-	
-    public static class CombinationValidator implements Validator<String> {
-    	
-    	final boolean excludeSeed;
+  /**
+   * Test non unique seed excluded.
+   */
+  @Test
+  public void testNonUniqueSeedExcluded() {
+    TokenCombiner combinator = createCombinator(false, true);
+    expectGenerations(combinator, 100, new CombinationValidator(true)).withContinuedAvailability();
+  }
 
-    	public CombinationValidator(boolean excludeSeed) {
-	        this.excludeSeed = excludeSeed;
-        }
+  /**
+   * Test unique.
+   */
+  @Test
+  public void testUnique() {
+    TokenCombiner combinator = createCombinator(true, false);
+    expectGenerations(combinator, 9, new CombinationValidator(false), new UniqueValidator<String>()).withCeasedAvailability();
+  }
 
-		@Override
-		public boolean valid(String value) {
-	    	if (value == null || value.length() != 2)
-	    		return false;
-	    	char c0 = value.charAt(0);
-	    	if (c0 < 'A' || c0 > 'C')
-	    		return false;
-	    	char c1 = value.charAt(1);
-	    	if (c1 < 'a' || c1 > 'c')
-	    		return false;
-			return !excludeSeed || Character.toLowerCase(c0) != c1;
-		}
+  /**
+   * Test unique seed excluded.
+   */
+  @Test
+  public void testUniqueSeedExcluded() {
+    TokenCombiner combinator = createCombinator(true, true);
+    expectGenerations(combinator, 6, new CombinationValidator(true), new UniqueValidator<String>()).withCeasedAvailability();
+  }
 
+  /**
+   * The type Combination validator.
+   */
+  public static class CombinationValidator implements Validator<String> {
+
+    /**
+     * The Exclude seed.
+     */
+    final boolean excludeSeed;
+
+    /**
+     * Instantiates a new Combination validator.
+     *
+     * @param excludeSeed the exclude seed
+     */
+    public CombinationValidator(boolean excludeSeed) {
+      this.excludeSeed = excludeSeed;
     }
 
-	private TokenCombiner createCombinator(boolean unique, boolean excludeSeed) {
-	    TokenCombiner combinator = new TokenCombiner("com/rapiddweller/benerator/primitive/TokenCombinerTest.csv");
-		combinator.setSeparator('|');
-		combinator.setUnique(unique);
-		combinator.setExcludeSeed(excludeSeed);
-		combinator.init(context);
-	    return combinator;
+    @Override
+    public boolean valid(String value) {
+      if (value == null || value.length() != 2) {
+        return false;
+      }
+      char c0 = value.charAt(0);
+      if (c0 < 'A' || c0 > 'C') {
+        return false;
+      }
+      char c1 = value.charAt(1);
+      if (c1 < 'a' || c1 > 'c') {
+        return false;
+      }
+      return !excludeSeed || Character.toLowerCase(c0) != c1;
     }
-	
+
+  }
+
+  private TokenCombiner createCombinator(boolean unique, boolean excludeSeed) {
+    TokenCombiner combinator = new TokenCombiner("com/rapiddweller/benerator/primitive/TokenCombinerTest.csv");
+    combinator.setSeparator('|');
+    combinator.setUnique(unique);
+    combinator.setExcludeSeed(excludeSeed);
+    combinator.init(context);
+    return combinator;
+  }
+
 }

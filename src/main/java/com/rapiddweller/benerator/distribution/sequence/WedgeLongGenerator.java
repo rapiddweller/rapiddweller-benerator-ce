@@ -26,73 +26,92 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Long Generator that implements a 'wedge' Long Sequence.<br/>
  * <br/>
  * Created: 13.11.2007 12:54:29
+ *
  * @author Volker Bergmann
  */
 public class WedgeLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
-    private AtomicLong next;
-    private long end;
+  private AtomicLong next;
+  private long end;
 
-    public WedgeLongGenerator() {
-        this(Long.MIN_VALUE, Long.MAX_VALUE);
+  /**
+   * Instantiates a new Wedge long generator.
+   */
+  public WedgeLongGenerator() {
+    this(Long.MIN_VALUE, Long.MAX_VALUE);
+  }
+
+  /**
+   * Instantiates a new Wedge long generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public WedgeLongGenerator(long min, long max) {
+    this(min, max, 1);
+  }
+
+  /**
+   * Instantiates a new Wedge long generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   */
+  public WedgeLongGenerator(long min, long max, long granularity) {
+    super(Long.class, min, max, granularity);
+    this.next = new AtomicLong(min);
+  }
+
+  // generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    max = min + (max - min) / granularity * granularity;
+    long steps = (max - min) / granularity + 1;
+    end = min + steps / 2 * granularity;
+    super.init(context);
+  }
+
+  @Override
+  public synchronized Long generate() {
+    assertInitialized();
+    if (next == null) {
+      return null;
     }
-
-    public WedgeLongGenerator(long min, long max) {
-        this(min, max, 1);
+    long result = next.get();
+    if (result == end) {
+      next = null;
+    } else {
+      long nextValue = max - result + min;
+      if (nextValue < end) {
+        nextValue += granularity;
+      }
+      next.set(nextValue);
     }
+    return result;
+  }
 
-    public WedgeLongGenerator(long min, long max, long granularity) {
-        super(Long.class, min, max, granularity);
-        this.next = new AtomicLong(min);
-    }
+  @Override
+  public synchronized void reset() {
+    super.reset();
+    this.next = new AtomicLong(min);
+  }
 
-    // generator interface ---------------------------------------------------------------------------------------------
-
-    @Override
-	public void init(GeneratorContext context) {
-    	assertNotInitialized();
-        max = min + (max - min) / granularity * granularity;
-        long steps = (max - min) / granularity + 1;
-        end = min + steps / 2 * granularity;
-        super.init(context);
-    }
-
-	@Override
-	public synchronized Long generate() {
-        assertInitialized();
-        if (next == null)
-            return null;
-        long result = next.get();
-        if (result == end)
-            next = null;
-        else {
-            long nextValue = max - result + min;
-            if (nextValue < end)
-            	nextValue += granularity;
-            next.set(nextValue);
-        }
-        return result;
-    }
-
-    @Override
-	public synchronized void reset() {
-        super.reset();
-        this.next = new AtomicLong(min);
-    }
-
-    @Override
-	public synchronized void close() {
-        super.close();
-        this.next = null;
-    }
+  @Override
+  public synchronized void close() {
+    super.close();
+    this.next = null;
+  }
 
 }

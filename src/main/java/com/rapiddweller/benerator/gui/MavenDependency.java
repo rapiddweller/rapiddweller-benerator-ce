@@ -30,48 +30,88 @@ package com.rapiddweller.benerator.gui;
  * Represents a Maven dependency.<br/>
  * <br/>
  * Created at 29.11.2008 23:25:08
- * @since 0.5.6
+ *
  * @author Volker Bergmann
+ * @since 0.5.6
  */
-
 public class MavenDependency {
-	
-	private String groupId;
-    private String artifactId;
-    private String version;
-    
-	public MavenDependency() {
-		this(null, null, null);
-	}
-	
-	public MavenDependency(String groupId, String artifactId, String version) {
-		this.groupId = groupId;
-		this.artifactId = artifactId;
-		this.version = version;
-	}
 
-	public String getGroupId() {
-		return groupId;
-	}
+  private String groupId;
+  private String artifactId;
+  private String version;
 
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
-	}
+  /**
+   * Instantiates a new Maven dependency.
+   */
+  public MavenDependency() {
+    this(null, null, null);
+  }
 
-	public String getArtifactId() {
-		return artifactId;
-	}
+  /**
+   * Instantiates a new Maven dependency.
+   *
+   * @param groupId    the group id
+   * @param artifactId the artifact id
+   * @param version    the version
+   */
+  public MavenDependency(String groupId, String artifactId, String version) {
+    this.groupId = groupId;
+    this.artifactId = artifactId;
+    this.version = version;
+  }
 
-	public void setArtifactId(String artifactId) {
-		this.artifactId = artifactId;
-	}
+  /**
+   * Gets group id.
+   *
+   * @return the group id
+   */
+  public String getGroupId() {
+    return groupId;
+  }
 
-	public String getVersion() {
-		return version;
-	}
+  /**
+   * Sets group id.
+   *
+   * @param groupId the group id
+   */
+  public void setGroupId(String groupId) {
+    this.groupId = groupId;
+  }
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
-    
+  /**
+   * Gets artifact id.
+   *
+   * @return the artifact id
+   */
+  public String getArtifactId() {
+    return artifactId;
+  }
+
+  /**
+   * Sets artifact id.
+   *
+   * @param artifactId the artifact id
+   */
+  public void setArtifactId(String artifactId) {
+    this.artifactId = artifactId;
+  }
+
+  /**
+   * Gets version.
+   *
+   * @return the version
+   */
+  public String getVersion() {
+    return version;
+  }
+
+  /**
+   * Sets version.
+   *
+   * @param version the version
+   */
+  public void setVersion(String version) {
+    this.version = version;
+  }
+
 }

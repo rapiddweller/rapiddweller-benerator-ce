@@ -33,25 +33,32 @@ import com.rapiddweller.benerator.Generator;
  * calls its generate() method and returns the product.<br/>
  * <br/>
  * Created: 30.08.2006 21:56:59
- * @since 0.1
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class AlternativeGenerator<E> extends MultiGeneratorWrapper<E, E> {
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-	/** Initializes the generator to a collection of source generators */
-    @SafeVarargs
-	public AlternativeGenerator(Class<E> targetType, Generator<E>... sources) {
-        super(targetType, sources);
-    }
+  /**
+   * Initializes the generator to a collection of source generators
+   *
+   * @param targetType the target type
+   * @param sources    the sources
+   */
+  @SafeVarargs
+  public AlternativeGenerator(Class<E> targetType, Generator<E>... sources) {
+    super(targetType, sources);
+  }
 
-    // Generator implementation ----------------------------------------------------------------------------------------
+  // Generator implementation ----------------------------------------------------------------------------------------
 
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-    	assertInitialized();
-    	return generateFromRandomSource(wrapper);
-    }
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    assertInitialized();
+    return generateFromRandomSource(wrapper);
+  }
 
 }

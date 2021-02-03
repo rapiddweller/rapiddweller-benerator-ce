@@ -38,71 +38,97 @@ import org.apache.logging.log4j.Logger;
 /**
  * Abstract {@link Generator} implementation which holds a state and state management methods.<br/><br/>
  * Created: 24.02.2010 12:28:05
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public abstract class AbstractGenerator<E> implements Generator<E> {
 
-	protected final Logger logger = LogManager.getLogger(getClass());
-	
-	protected GeneratorState state;
+  /**
+   * The Logger.
+   */
+  protected final Logger logger = LogManager.getLogger(getClass());
+  private final WrapperProvider<E> resultWrapperProvider;
+  /**
+   * The State.
+   */
+  protected GeneratorState state;
+  /**
+   * The Context.
+   */
+  protected GeneratorContext context;
 
-	protected GeneratorContext context;
-	
-	private final WrapperProvider<E> resultWrapperProvider;
+  /**
+   * Instantiates a new Abstract generator.
+   */
+  public AbstractGenerator() {
+    this.state = GeneratorState.CREATED;
+    this.resultWrapperProvider = new WrapperProvider<>();
+  }
 
-	public AbstractGenerator() {
-	    this.state = GeneratorState.CREATED;
-	    this.resultWrapperProvider = new WrapperProvider<>();
-    }
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    this.context = context;
+    this.state = GeneratorState.RUNNING;
+  }
 
-	@Override
-	public synchronized void init(GeneratorContext context) {
-		this.context = context;
-		this.state = GeneratorState.RUNNING;
-    }
-	
-	@Override
-	public boolean wasInitialized() {
-	    return (state != GeneratorState.CREATED);
-	}
+  @Override
+  public boolean wasInitialized() {
+    return (state != GeneratorState.CREATED);
+  }
 
-	@Override
-	public void reset() {
-	    this.state = GeneratorState.RUNNING;
-	}
-	
-	@Override
-	public void close() {
-	    this.state = GeneratorState.CLOSED;
-	}
-	
-	// internal helpers ------------------------------------------------------------------------------------------------
-    
-    protected final void assertNotInitialized() {
-	    if (state != GeneratorState.CREATED)
-	    	if (state == GeneratorState.RUNNING)
-	    		throw new IllegalGeneratorStateException("Trying to initialize generator a 2nd time: " + this);
-	    	else
-	    		throw new IllegalGeneratorStateException("Trying to initialize generator in '" + state + "' state: " + this);
-    }
+  @Override
+  public void reset() {
+    this.state = GeneratorState.RUNNING;
+  }
 
-    protected final void assertInitialized() {
-    	if (state == GeneratorState.CREATED)
-    		throw new IllegalGeneratorStateException("Generator has not been initialized: " + this);
-    	if (state == GeneratorState.CLOSED)
-    		throw new IllegalGeneratorStateException("Generator has already been closed: " + this);
-    }
-    
-    protected ProductWrapper<E> getResultWrapper() {
-    	return resultWrapperProvider.get();
-    }
-    
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
+  @Override
+  public void close() {
+    this.state = GeneratorState.CLOSED;
+  }
 
-    @Override
-    public String toString() {
-        return (state == GeneratorState.RUNNING ? BeanUtil.toString(this) : getClass().getSimpleName());
+  // internal helpers ------------------------------------------------------------------------------------------------
+
+  /**
+   * Assert not initialized.
+   */
+  protected final void assertNotInitialized() {
+    if (state != GeneratorState.CREATED) {
+      if (state == GeneratorState.RUNNING) {
+        throw new IllegalGeneratorStateException("Trying to initialize generator a 2nd time: " + this);
+      } else {
+        throw new IllegalGeneratorStateException("Trying to initialize generator in '" + state + "' state: " + this);
+      }
     }
-    
+  }
+
+  /**
+   * Assert initialized.
+   */
+  protected final void assertInitialized() {
+    if (state == GeneratorState.CREATED) {
+      throw new IllegalGeneratorStateException("Generator has not been initialized: " + this);
+    }
+    if (state == GeneratorState.CLOSED) {
+      throw new IllegalGeneratorStateException("Generator has already been closed: " + this);
+    }
+  }
+
+  /**
+   * Gets result wrapper.
+   *
+   * @return the result wrapper
+   */
+  protected ProductWrapper<E> getResultWrapper() {
+    return resultWrapperProvider.get();
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return (state == GeneratorState.RUNNING ? BeanUtil.toString(this) : getClass().getSimpleName());
+  }
+
 }

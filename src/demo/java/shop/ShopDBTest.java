@@ -51,28 +51,40 @@ import java.util.Map;
  */
 public class ShopDBTest {
 
-    private static final String BENERATOR_FILE = "demo/shop/shop.ben.xml";
+  private static final String BENERATOR_FILE = "demo/shop/shop.ben.xml";
 
-    private static final Logger logger = LogManager.getLogger(ShopDBTest.class);
+  private static final Logger logger = LogManager.getLogger(ShopDBTest.class);
 
-    /*
-        public void testDB2() throws IOException, InterruptedException {
-            checkGeneration("db2");
-        }
+  /**
+   * Test hsql in mem.
+   *
+   * @throws IOException          the io exception
+   * @throws InterruptedException the interrupted exception
+   */
+/*
+      public void testDB2() throws IOException, InterruptedException {
+          checkGeneration("db2");
+      }
 
-        public void testDerby() throws IOException, InterruptedException {
-            checkGeneration("derby");
-        }
-    */
-    @Test
-    public void testHSQLInMem() throws IOException, InterruptedException {
-        checkGeneration("hsqlmem");
-    }
+      public void testDerby() throws IOException, InterruptedException {
+          checkGeneration("derby");
+      }
+  */
+  @Test
+  public void testHSQLInMem() throws IOException, InterruptedException {
+    checkGeneration("hsqlmem");
+  }
 
-    @Test
-    public void testFirebird() throws IOException, InterruptedException {
-        checkGeneration("firebird");
-    }
+  /**
+   * Test firebird.
+   *
+   * @throws IOException          the io exception
+   * @throws InterruptedException the interrupted exception
+   */
+  @Test
+  public void testFirebird() throws IOException, InterruptedException {
+    checkGeneration("firebird");
+  }
     /*
     public void testHSQL() throws IOException, InterruptedException {
         checkGeneration("hsql");
@@ -93,85 +105,85 @@ public class ShopDBTest {
         checkGeneration("postgres");
     }
 */
-    // private helpers -------------------------------------------------------------------------------------------------
+  // private helpers -------------------------------------------------------------------------------------------------
 
-    private void checkGeneration(String database)
-            throws IOException, InterruptedException {
-        //checkGeneration(database, true);
-        checkGeneration(database, "test", false);
-    }
+  private void checkGeneration(String database)
+      throws IOException, InterruptedException {
+    //checkGeneration(database, true);
+    checkGeneration(database, "test", false);
+  }
 
-    private void checkGeneration(String database, String stage, boolean shell)
-            throws IOException, InterruptedException {
-        if (shell) {
-            runFromCommandLine(BENERATOR_FILE, database, "test");
-        } else {
-            runAsClass(BENERATOR_FILE, database, "test");
-        }
-        // connect to database
-        Map<String, String> dbCfg = IOUtil.readProperties(
-                "demo/shop/" + database + "/shop." + database + ".properties");
-        DefaultBeneratorContext context = new DefaultBeneratorContext();
-        DBSystem db =
-                new DBSystem("db", dbCfg.get("dbUri"), dbCfg.get("dbDriver"),
-                        dbCfg.get("dbUser"), dbCfg.get("dbPassword"),
-                        context.getDataModel());
-        // check generation results
-        Map<String, Object> genCfg =
-                IOUtil.readProperties("demo/shop/shop." + stage + ".properties",
-                        new DefaultEntryConverter(context));
-        int expectedProductCount = 6 + (Integer) genCfg.get("product_count");
-        int expectedCustomerCount = 1 + (Integer) genCfg.get("customer_count");
-        int expectedUserCount = 3 + expectedCustomerCount;
-        int ordersPerCustomer = (Integer) genCfg.get("orders_per_customer");
-        int expectedOrderCount =
-                (expectedCustomerCount - 1) * ordersPerCustomer + 1;
-        int itemsPerOrder = (Integer) genCfg.get("items_per_order");
-        int expectedOrderItemCount =
-                (expectedOrderCount - 1) * itemsPerOrder + 1;
-        checkEntities("db_category", new CategoryValidator("db_category"), 28,
-                db);
-        checkEntities("db_product", new ProductValidator("db_product"),
-                expectedProductCount, db);
-        checkEntities("db_user", new UserValidator("db_user"),
-                expectedUserCount, db);
-        checkEntities("db_customer", new CustomerValidator("db_customer"),
-                expectedCustomerCount, db);
-        checkEntities("db_order", new OrderValidator("db_order"),
-                expectedOrderCount, db);
-        checkEntities("db_order_item", new OrderItemValidator("db_order_item"),
-                expectedOrderItemCount, db);
+  private void checkGeneration(String database, String stage, boolean shell)
+      throws IOException, InterruptedException {
+    if (shell) {
+      runFromCommandLine(BENERATOR_FILE, database, "test");
+    } else {
+      runAsClass(BENERATOR_FILE, database, "test");
     }
+    // connect to database
+    Map<String, String> dbCfg = IOUtil.readProperties(
+        "demo/shop/" + database + "/shop." + database + ".properties");
+    DefaultBeneratorContext context = new DefaultBeneratorContext();
+    DBSystem db =
+        new DBSystem("db", dbCfg.get("dbUri"), dbCfg.get("dbDriver"),
+            dbCfg.get("dbUser"), dbCfg.get("dbPassword"),
+            context.getDataModel());
+    // check generation results
+    Map<String, Object> genCfg =
+        IOUtil.readProperties("demo/shop/shop." + stage + ".properties",
+            new DefaultEntryConverter(context));
+    int expectedProductCount = 6 + (Integer) genCfg.get("product_count");
+    int expectedCustomerCount = 1 + (Integer) genCfg.get("customer_count");
+    int expectedUserCount = 3 + expectedCustomerCount;
+    int ordersPerCustomer = (Integer) genCfg.get("orders_per_customer");
+    int expectedOrderCount =
+        (expectedCustomerCount - 1) * ordersPerCustomer + 1;
+    int itemsPerOrder = (Integer) genCfg.get("items_per_order");
+    int expectedOrderItemCount =
+        (expectedOrderCount - 1) * itemsPerOrder + 1;
+    checkEntities("db_category", new CategoryValidator("db_category"), 28,
+        db);
+    checkEntities("db_product", new ProductValidator("db_product"),
+        expectedProductCount, db);
+    checkEntities("db_user", new UserValidator("db_user"),
+        expectedUserCount, db);
+    checkEntities("db_customer", new CustomerValidator("db_customer"),
+        expectedCustomerCount, db);
+    checkEntities("db_order", new OrderValidator("db_order"),
+        expectedOrderCount, db);
+    checkEntities("db_order_item", new OrderItemValidator("db_order_item"),
+        expectedOrderItemCount, db);
+  }
 
-    private void checkEntities(String entityName, Validator<Entity> validator,
-                               int expectedCount, DBSystem db) {
-        assertEquals("Wrong number of '" + entityName + "' instances.",
-                expectedCount, db.countEntities(entityName));
-        DataIterator<Entity> iterator =
-                db.queryEntities(entityName, null, null).iterator();
-        DataContainer<Entity> container = new DataContainer<Entity>();
-        while ((container = iterator.next(container)) != null) {
-            Entity entity = container.getData();
-            assertTrue("Invalid entity: " + entity, validator.valid(entity));
-        }
+  private void checkEntities(String entityName, Validator<Entity> validator,
+                             int expectedCount, DBSystem db) {
+    assertEquals("Wrong number of '" + entityName + "' instances.",
+        expectedCount, db.countEntities(entityName));
+    DataIterator<Entity> iterator =
+        db.queryEntities(entityName, null, null).iterator();
+    DataContainer<Entity> container = new DataContainer<Entity>();
+    while ((container = iterator.next(container)) != null) {
+      Entity entity = container.getData();
+      assertTrue("Invalid entity: " + entity, validator.valid(entity));
     }
+  }
 
-    private void runAsClass(String file, String database, String stage)
-            throws IOException {
-        System.setProperty("stage", stage);
-        System.setProperty("database", database);
-        Benerator.main(new String[] {file});
-    }
+  private void runAsClass(String file, String database, String stage)
+      throws IOException {
+    System.setProperty("stage", stage);
+    System.setProperty("database", database);
+    Benerator.main(new String[] {file});
+  }
 
-    private void runFromCommandLine(String file, String database, String stage)
-            throws IOException, InterruptedException {
-        String command =
-                "benerator -Ddatabase=" + database + " -Dstage=" + stage + " " +
-                        file;
-        logger.debug(command);
-        Process process = Runtime.getRuntime().exec(command);
-        IOUtil.transfer(process.getInputStream(), System.out);
-        process.waitFor();
-        logger.debug(String.valueOf(process.exitValue()));
-    }
+  private void runFromCommandLine(String file, String database, String stage)
+      throws IOException, InterruptedException {
+    String command =
+        "benerator -Ddatabase=" + database + " -Dstage=" + stage + " " +
+            file;
+    logger.debug(command);
+    Process process = Runtime.getRuntime().exec(command);
+    IOUtil.transfer(process.getInputStream(), System.out);
+    process.waitFor();
+    logger.debug(String.valueOf(process.exitValue()));
+  }
 }

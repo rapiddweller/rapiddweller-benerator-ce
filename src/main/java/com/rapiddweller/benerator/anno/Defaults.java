@@ -36,11 +36,17 @@ import java.lang.annotation.Target;
 /**
  * Declares a {@link DefaultsProvider} to use for testing.<br/><br/>
  * Created: 11.11.2012 14:58:15
- * @since 0.7.10
+ *
  * @author Volker Bergmann
+ * @since 0.7.10
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR } )
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR})
 public @interface Defaults {
-	Class<? extends DefaultsProvider> value();
+  /**
+   * Value class.
+   *
+   * @return the class
+   */
+  Class<? extends DefaultsProvider> value();
 }

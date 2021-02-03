@@ -40,114 +40,142 @@ import java.util.Iterator;
  * Iterates over Iterators that are provided by an {@link Iterable}.<br/>
  * <br/>
  * Created: 16.08.2007 07:09:57
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  */
 public class IteratingGenerator<E> extends AbstractGenerator<E> {
 
-    private TypedIterable<E> iterable;
-    private Iterator<E> iterator;
+  private TypedIterable<E> iterable;
+  private Iterator<E> iterator;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public IteratingGenerator() {
-        this(null);
+  /**
+   * Instantiates a new Iterating generator.
+   */
+  public IteratingGenerator() {
+    this(null);
+  }
+
+  /**
+   * Instantiates a new Iterating generator.
+   *
+   * @param iterable the iterable
+   */
+  public IteratingGenerator(TypedIterable<E> iterable) {
+    this.iterable = iterable;
+    this.iterator = null;
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets iterable.
+   *
+   * @return the iterable
+   */
+  public TypedIterable<E> getIterable() {
+    return iterable;
+  }
+
+  /**
+   * Sets iterable.
+   *
+   * @param iterable the iterable
+   */
+  public void setIterable(TypedIterable<E> iterable) {
+    if (this.iterable != null) {
+      throw new IllegalGeneratorStateException("Mutating an initialized generator");
     }
+    this.iterable = iterable;
+  }
 
-    public IteratingGenerator(TypedIterable<E> iterable) {
-        this.iterable = iterable;
-        this.iterator = null;
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return false;
+  }
+
+  @Override
+  public void init(GeneratorContext context) {
+    if (iterable == null) {
+      throw new InvalidGeneratorSetupException("iterable", "is null");
     }
-    
-    // properties ------------------------------------------------------------------------------------------------------
+    super.init(context);
+  }
 
-    public TypedIterable<E> getIterable() {
-        return iterable;
-    }
+  @Override
+  public Class<E> getGeneratedType() {
+    return iterable.getType();
+  }
 
-    public void setIterable(TypedIterable<E> iterable) {
-        if (this.iterable != null)
-        	throw new IllegalGeneratorStateException("Mutating an initialized generator");
-        this.iterable = iterable;
-    }
-
-    // Generator interface ---------------------------------------------------------------------------------------------
-
-	@Override
-	public boolean isParallelizable() {
-	    return false;
-    }
-
-	@Override
-	public boolean isThreadSafe() {
-	    return false;
-    }
-    
-    @Override
-    public void init(GeneratorContext context) {
-    	if (iterable == null)
-    		throw new InvalidGeneratorSetupException("iterable", "is null");
-    	super.init(context);
-    }
-
-    @Override
-	public Class<E> getGeneratedType() {
-        return iterable.getType();
-    }
-
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-        try {
-            assertInitialized();
-            if (iterator != null && !iterator.hasNext())
-            	return null;
-            if (iterator == null) // iterator is created lazily for avoiding script evaluation errors in init()
-        		createIterator();
-            if (!iterator.hasNext()) {
-            	closeIterator();
-            	return null;
-            }
-        	E result = iterator.next();
-        	if (!iterator.hasNext())
-	            closeIterator();
-			return wrapper.wrap(result);
-        } catch (Exception e) {
-        	throw new IllegalGeneratorStateException("Generation failed: ", e);
-        }
-    }
-
-	@Override
-    public void reset() {
-        closeIterator();
-        super.reset();
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    try {
+      assertInitialized();
+      if (iterator != null && !iterator.hasNext()) {
+        return null;
+      }
+      if (iterator == null) {
+        // iterator is created lazily for avoiding script evaluation errors in init()
         createIterator();
-    }
-
-    @Override
-    public void close() {
+      }
+      if (!iterator.hasNext()) {
         closeIterator();
-        super.close();
-        if (iterable instanceof Closeable)
-        	IOUtil.close((Closeable) iterable);
+        return null;
+      }
+      E result = iterator.next();
+      if (!iterator.hasNext()) {
+        closeIterator();
+      }
+      return wrapper.wrap(result);
+    } catch (Exception e) {
+      throw new IllegalGeneratorStateException("Generation failed: ", e);
     }
+  }
 
-    // private helpers -------------------------------------------------------------------------------------------------    
-    
-	private void createIterator() {
-	    iterator = iterable.iterator();
+  @Override
+  public void reset() {
+    closeIterator();
+    super.reset();
+    createIterator();
+  }
+
+  @Override
+  public void close() {
+    closeIterator();
+    super.close();
+    if (iterable instanceof Closeable) {
+      IOUtil.close((Closeable) iterable);
     }
+  }
 
-    private void closeIterator() {
-		if (iterator != null) {
-            if (iterator instanceof Closeable)
-                IOUtil.close((Closeable) iterator);
-        }
-	}
+  // private helpers -------------------------------------------------------------------------------------------------
 
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
+  private void createIterator() {
+    iterator = iterable.iterator();
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[" + iterable + ']';
+  private void closeIterator() {
+    if (iterator != null) {
+      if (iterator instanceof Closeable) {
+        IOUtil.close((Closeable) iterator);
+      }
     }
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + iterable + ']';
+  }
 
 }

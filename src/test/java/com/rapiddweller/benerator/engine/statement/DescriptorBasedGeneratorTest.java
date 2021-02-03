@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.DescriptorBasedGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
@@ -36,36 +34,46 @@ import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Tests the {@link DescriptorBasedGenerator}.<br/><br/>
  * Created: 23.02.2010 12:17:27
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class DescriptorBasedGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void testGetGenerator() throws Exception {
-		String lf = SystemInfo.getLineSeparator();
-		String uri = "string://<setup>" + lf +
-				"	<generate name='perGen' type='Person' count='3'>" + lf +
-				"		<id name='id' type='int'/>" + lf +
-				"		<attribute name='name' constant='Alice'/>" + lf +
-				"	</generate>" + lf +
-				"</setup>";
-		context.setValidate(false);
-		Generator<?> generator = new DescriptorBasedGenerator(uri, "perGen", context);
-		assertEquals(Object.class, generator.getGeneratedType());
-		assertNotNull(generator);
-		generator.init(context);
-		for (int i = 0; i < 3; i++)
-			checkGeneration((Entity) GeneratorUtil.generateNonNull(generator), i + 1);
-		assertUnavailable(generator);
-		generator.close();
-	}
-
-	private void checkGeneration(Entity entity, int id) {
-	    assertEquals(createEntity("Person", "id", id, "name", "Alice"), entity);
+  /**
+   * Test get generator.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testGetGenerator() throws Exception {
+    String lf = SystemInfo.getLineSeparator();
+    String uri = "string://<setup>" + lf +
+        "	<generate name='perGen' type='Person' count='3'>" + lf +
+        "		<id name='id' type='int'/>" + lf +
+        "		<attribute name='name' constant='Alice'/>" + lf +
+        "	</generate>" + lf +
+        "</setup>";
+    context.setValidate(false);
+    Generator<?> generator = new DescriptorBasedGenerator(uri, "perGen", context);
+    assertEquals(Object.class, generator.getGeneratedType());
+    assertNotNull(generator);
+    generator.init(context);
+    for (int i = 0; i < 3; i++) {
+      checkGeneration((Entity) GeneratorUtil.generateNonNull(generator), i + 1);
     }
-	
+    assertUnavailable(generator);
+    generator.close();
+  }
+
+  private void checkGeneration(Entity entity, int id) {
+    assertEquals(createEntity("Person", "id", id, "name", "Alice"), entity);
+  }
+
 }

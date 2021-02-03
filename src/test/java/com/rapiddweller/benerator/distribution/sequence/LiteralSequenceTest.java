@@ -34,34 +34,44 @@ import org.junit.Test;
 /**
  * Tests the {@link LiteralSequence}.<br/><br/>
  * Created: 03.06.2010 09:08:56
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class LiteralSequenceTest extends GeneratorTest {
-	
-	@Test
-	public void testCreateGenerator_empty() {
-		LiteralSequence sequence = new LiteralSequence("");
-		Generator<Integer> generator = sequence.createNumberGenerator(Integer.class, 1, 20, 1, false);
-		generator.init(context);
-		expectGeneratedSequence(generator);
-	}
 
-	@Test
-	public void testCreateGenerator_int() {
-		LiteralSequence sequence = new LiteralSequence("2, 3, 5, 7, 11");
-		Generator<Integer> generator = sequence.createNumberGenerator(Integer.class, 1, 20, 1, false);
-		generator.init(context);
-		expectGeneratedSequence(generator, 2, 3, 5, 7, 11);
-	}
+  /**
+   * Test create generator empty.
+   */
+  @Test
+  public void testCreateGenerator_empty() {
+    LiteralSequence sequence = new LiteralSequence("");
+    Generator<Integer> generator = sequence.createNumberGenerator(Integer.class, 1, 20, 1, false);
+    generator.init(context);
+    expectGeneratedSequence(generator);
+  }
 
-	@Test
-	public void testApply() {
-		Generator<String> source = new SequenceTestGenerator<>("A", "B", "C", "D");
-		LiteralSequence sequence = new LiteralSequence("1, 3");
-		Generator<String> generator = sequence.applyTo(source, false);
-		generator.init(context);
-		expectGeneratedSequence(generator, "B", "D");
-	}
+  /**
+   * Test create generator int.
+   */
+  @Test
+  public void testCreateGenerator_int() {
+    LiteralSequence sequence = new LiteralSequence("2, 3, 5, 7, 11");
+    Generator<Integer> generator = sequence.createNumberGenerator(Integer.class, 1, 20, 1, false);
+    generator.init(context);
+    expectGeneratedSequence(generator, 2, 3, 5, 7, 11);
+  }
+
+  /**
+   * Test apply.
+   */
+  @Test
+  public void testApply() {
+    Generator<String> source = new SequenceTestGenerator<>("A", "B", "C", "D");
+    LiteralSequence sequence = new LiteralSequence("1, 3");
+    Generator<String> generator = sequence.applyTo(source, false);
+    generator.init(context);
+    expectGeneratedSequence(generator, "B", "D");
+  }
 
 }

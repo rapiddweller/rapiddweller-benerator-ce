@@ -37,116 +37,182 @@ import com.rapiddweller.common.operation.FirstArgSelector;
  * <br/>
  * Created: 03.08.2007 06:57:42
  *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  */
 public class FeatureDetail<E> {
 
-    private static final Escalator escalator = new LoggerEscalator();
+  private static final Escalator escalator = new LoggerEscalator();
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    private final String name;
-    private final Class<E> type;
-    private final Operation<E, E> combinator;
-    private final boolean constraint;
-    private final boolean deprecated;
-    private E value;
+  private final String name;
+  private final Class<E> type;
+  private final Operation<E, E> combinator;
+  private final boolean constraint;
+  private final boolean deprecated;
+  private E value;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public FeatureDetail(String name, Class<E> type, boolean constraint) {
-        this(name, type, constraint, new FirstArgSelector<>());
+  /**
+   * Instantiates a new Feature detail.
+   *
+   * @param name       the name
+   * @param type       the type
+   * @param constraint the constraint
+   */
+  public FeatureDetail(String name, Class<E> type, boolean constraint) {
+    this(name, type, constraint, new FirstArgSelector<>());
+  }
+
+  /**
+   * Instantiates a new Feature detail.
+   *
+   * @param name       the name
+   * @param type       the type
+   * @param constraint the constraint
+   * @param combinator the combinator
+   */
+  public FeatureDetail(String name, Class<E> type, boolean constraint,
+                       Operation<E, E> combinator) {
+    this(name, type, constraint, combinator, false);
+  }
+
+  /**
+   * Instantiates a new Feature detail.
+   *
+   * @param name       the name
+   * @param type       the type
+   * @param constraint the constraint
+   * @param combinator the combinator
+   * @param deprecated the deprecated
+   */
+  public FeatureDetail(String name, Class<E> type, boolean constraint,
+                       Operation<E, E> combinator, boolean deprecated) {
+    this.name = name;
+    this.type = type;
+    this.value = null;
+    this.constraint = constraint;
+    this.combinator = combinator;
+    this.deprecated = deprecated;
+  }
+
+  // interface -------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Gets type.
+   *
+   * @return the type
+   */
+  public Class<E> getType() {
+    return type;
+  }
+
+  /**
+   * Gets value.
+   *
+   * @return the value
+   */
+  public E getValue() {
+    return value;
+  }
+
+  /**
+   * Sets value.
+   *
+   * @param value the value
+   */
+  public void setValue(E value) {
+    if (deprecated && value != null) {
+      escalator.escalate("Feature '" + name + "' is deprecated",
+          getClass(), value);
     }
-
-    public FeatureDetail(String name, Class<E> type, boolean constraint,
-                         Operation<E, E> combinator) {
-        this(name, type, constraint, combinator, false);
+    if (value != null && !(type.isAssignableFrom(value.getClass()))) {
+      throw new IllegalArgumentException(
+          "Tried to assign a value of type '" +
+              value.getClass().getName()
+              + "'to detail '" + name + "' of type '" + type +
+              "'");
     }
+    this.value = value;
+  }
 
-    public FeatureDetail(String name, Class<E> type, boolean constraint,
-                         Operation<E, E> combinator, boolean deprecated) {
-        this.name = name;
-        this.type = type;
-        this.value = null;
-        this.constraint = constraint;
-        this.combinator = combinator;
-        this.deprecated = deprecated;
+  /**
+   * Combine with e.
+   *
+   * @param otherValue the other value
+   * @return the e
+   */
+  @SuppressWarnings("unchecked")
+  public E combineWith(E otherValue) {
+    return combinator.perform(this.value, otherValue);
+  }
+
+  /**
+   * Is constraint boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isConstraint() {
+    return constraint;
+  }
+
+  /**
+   * Gets description.
+   *
+   * @return the description
+   */
+  public String getDescription() {
+    return name + '=' + value + " (" + type + ')';
+  }
+
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  /**
+   * Is deprecated boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isDeprecated() {
+    return deprecated;
+  }
+
+  @Override
+  public String toString() {
+    return name + '=' + value;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    // interface -------------------------------------------------------------------------------------------------------
-
-    public String getName() {
-        return name;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    final FeatureDetail<E> that = (FeatureDetail<E>) o;
+    return (name.equals(that.name)
+        && NullSafeComparator.equals(this.value, that.value));
+  }
 
-    public Class<E> getType() {
-        return type;
-    }
-
-    public E getValue() {
-        return value;
-    }
-
-    public void setValue(E value) {
-        if (deprecated && value != null) {
-            escalator.escalate("Feature '" + name + "' is deprecated",
-                    getClass(), value);
-        }
-        if (value != null && !(type.isAssignableFrom(value.getClass()))) {
-            throw new IllegalArgumentException(
-                    "Tried to assign a value of type '" +
-                            value.getClass().getName()
-                            + "'to detail '" + name + "' of type '" + type +
-                            "'");
-        }
-        this.value = value;
-    }
-
-    @SuppressWarnings("unchecked")
-    public E combineWith(E otherValue) {
-        return combinator.perform(this.value, otherValue);
-    }
-
-    public boolean isConstraint() {
-        return constraint;
-    }
-
-    public String getDescription() {
-        return name + '=' + value + " (" + type + ')';
-    }
-
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    public boolean isDeprecated() {
-        return deprecated;
-    }
-
-    @Override
-    public String toString() {
-        return name + '=' + value;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        final FeatureDetail<E> that = (FeatureDetail<E>) o;
-        return (name.equals(that.name)
-                && NullSafeComparator.equals(this.value, that.value));
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        result = name.hashCode();
-        result = 29 * result + (value != null ? value.hashCode() : 0);
-        return result;
-    }
+  @Override
+  public int hashCode() {
+    int result;
+    result = name.hashCode();
+    result = 29 * result + (value != null ? value.hashCode() : 0);
+    return result;
+  }
 
 }

@@ -30,81 +30,116 @@ import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.CollectionUtil;
+import org.junit.Test;
 
 import java.util.Set;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the RandomWalkLongGenerator
  * Created: 18.06.2006 09:11:19
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class RandomWalkLongGeneratorTest extends GeneratorClassTest {
 
-    public RandomWalkLongGeneratorTest() {
-        super(RandomWalkLongGenerator.class);
-    }
+  /**
+   * Instantiates a new Random walk long generator test.
+   */
+  public RandomWalkLongGeneratorTest() {
+    super(RandomWalkLongGenerator.class);
+  }
 
-    @Test
-    public void testGreater() throws IllegalGeneratorStateException {
-        RandomWalkLongGenerator simpleGenerator = new RandomWalkLongGenerator(1, 5, 1, 1, 1, 1);
-        simpleGenerator.init(context);
-        expectGeneratedSequence(simpleGenerator, 1L, 2L, 3L);
+  /**
+   * Test greater.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void testGreater() throws IllegalGeneratorStateException {
+    RandomWalkLongGenerator simpleGenerator = new RandomWalkLongGenerator(1, 5, 1, 1, 1, 1);
+    simpleGenerator.init(context);
+    expectGeneratedSequence(simpleGenerator, 1L, 2L, 3L);
 
-        RandomWalkLongGenerator oddGenerator = new RandomWalkLongGenerator(1, 5, 2, 1, 2, 2);
-        oddGenerator.init(context);
-        expectGeneratedSequence(oddGenerator, 1L, 3L, 5L);
-    }
+    RandomWalkLongGenerator oddGenerator = new RandomWalkLongGenerator(1, 5, 2, 1, 2, 2);
+    oddGenerator.init(context);
+    expectGeneratedSequence(oddGenerator, 1L, 3L, 5L);
+  }
 
-    @Test
-    public void testGreaterOrEquals() throws IllegalGeneratorStateException {
-        RandomWalkLongGenerator generator = new RandomWalkLongGenerator(1, 5, 2, 1, 0, 2);
-        generator.init(context);
-        Set<Long> space = CollectionUtil.toSet(1L, 3L, 5L);
-        assertProductSpace(space, generator);
-        assertProductSpace(space, generator);
-        assertProductSpace(space, generator);
-    }
+  /**
+   * Test greater or equals.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void testGreaterOrEquals() throws IllegalGeneratorStateException {
+    RandomWalkLongGenerator generator = new RandomWalkLongGenerator(1, 5, 2, 1, 0, 2);
+    generator.init(context);
+    Set<Long> space = CollectionUtil.toSet(1L, 3L, 5L);
+    assertProductSpace(space, generator);
+    assertProductSpace(space, generator);
+    assertProductSpace(space, generator);
+  }
 
-    @Test
-	public void testEquals() throws IllegalGeneratorStateException {
-        RandomWalkLongGenerator generator = new RandomWalkLongGenerator(1, 5, 2, 1, 0, 0);
-        generator.init(context);
-        expectGeneratedSequence(generator, 3L, 3L, 3L);
-    }
+  /**
+   * Test equals.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void testEquals() throws IllegalGeneratorStateException {
+    RandomWalkLongGenerator generator = new RandomWalkLongGenerator(1, 5, 2, 1, 0, 0);
+    generator.init(context);
+    expectGeneratedSequence(generator, 3L, 3L, 3L);
+  }
 
-    @Test
-    public void testLessOrEquals() throws IllegalGeneratorStateException {
-        RandomWalkLongGenerator generator = new RandomWalkLongGenerator(1, 5, 2, 5, -2, 0);
-        generator.init(context);
-        Set<Long> space = CollectionUtil.toSet(1L, 3L, 5L);
-        assertProductSpace(space, generator);
-        assertProductSpace(space, generator);
-        assertProductSpace(space, generator);
-    }
+  /**
+   * Test less or equals.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void testLessOrEquals() throws IllegalGeneratorStateException {
+    RandomWalkLongGenerator generator = new RandomWalkLongGenerator(1, 5, 2, 5, -2, 0);
+    generator.init(context);
+    Set<Long> space = CollectionUtil.toSet(1L, 3L, 5L);
+    assertProductSpace(space, generator);
+    assertProductSpace(space, generator);
+    assertProductSpace(space, generator);
+  }
 
-    @Test
-    public void testLess() throws IllegalGeneratorStateException {
-        RandomWalkLongGenerator generator = new RandomWalkLongGenerator(1, 5, 2, 1, -2, -2);
-        generator.init(context);
-        expectGeneratedSequence(generator, 5L, 3L, 1L);
-    }
+  /**
+   * Test less.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void testLess() throws IllegalGeneratorStateException {
+    RandomWalkLongGenerator generator = new RandomWalkLongGenerator(1, 5, 2, 1, -2, -2);
+    generator.init(context);
+    expectGeneratedSequence(generator, 5L, 3L, 1L);
+  }
 
-    @Test
-    public void testLessOrGreater() throws IllegalGeneratorStateException {
-        RandomWalkLongGenerator generator = new RandomWalkLongGenerator(1, 5, 2, 1, -2, 2);
-        generator.init(context);
-        Set<Long> space = CollectionUtil.toSet(1L, 3L, 5L);
-        assertProductSpace(space, generator);
-        assertProductSpace(space, generator);
-        assertProductSpace(space, generator);
-    }
+  /**
+   * Test less or greater.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void testLessOrGreater() throws IllegalGeneratorStateException {
+    RandomWalkLongGenerator generator = new RandomWalkLongGenerator(1, 5, 2, 1, -2, 2);
+    generator.init(context);
+    Set<Long> space = CollectionUtil.toSet(1L, 3L, 5L);
+    assertProductSpace(space, generator);
+    assertProductSpace(space, generator);
+    assertProductSpace(space, generator);
+  }
 
-    private static void assertProductSpace(Set<Long> space, RandomWalkLongGenerator generator) {
-        Long product = generator.generate(new ProductWrapper<>()).unwrap();
-		assertTrue("Expected one of " + space + ", but found " + product, space.contains(product));
-    }
+  private static void assertProductSpace(Set<Long> space, RandomWalkLongGenerator generator) {
+    Long product = generator.generate(new ProductWrapper<>()).unwrap();
+    assertTrue("Expected one of " + space + ", but found " + product, space.contains(product));
+  }
 
 }

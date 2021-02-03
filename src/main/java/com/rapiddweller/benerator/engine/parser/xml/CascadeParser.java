@@ -38,38 +38,47 @@ import org.w3c.dom.Element;
 
 import java.util.Set;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_REF;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ATTRIBUTE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_CASCADE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ID;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE;
 
 /**
  * Parses &lt;cascade ref="..."&gt; descriptors.<br/><br/>
  * Created: 18.04.2011 08:27:48
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class CascadeParser extends AbstractBeneratorDescriptorParser {
 
-	private static final Set<String> MEMBER_ELEMENTS = CollectionUtil.toSet(
-			EL_ID, EL_ATTRIBUTE, EL_REFERENCE);
+  private static final Set<String> MEMBER_ELEMENTS = CollectionUtil.toSet(
+      EL_ID, EL_ATTRIBUTE, EL_REFERENCE);
 
-	public CascadeParser() {
-		super(EL_CASCADE, CollectionUtil.toSet(ATT_REF), null, 
-				TranscodeStatement.class, CascadeStatement.class);
-	}
+  /**
+   * Instantiates a new Cascade parser.
+   */
+  public CascadeParser() {
+    super(EL_CASCADE, CollectionUtil.toSet(ATT_REF), null,
+        TranscodeStatement.class, CascadeStatement.class);
+  }
 
-	@Override
-	public Statement doParse(Element element, Statement[] parentPath,
-			BeneratorParseContext context) {
-		CascadeParent parent = (CascadeParent) ArrayUtil.lastElementOf(parentPath);
-		String ref = getRequiredAttribute("ref", element);
-		CascadeStatement result = new CascadeStatement(ref, new MutatingTypeExpression(element, null), parent);
-		Statement[] currentPath = context.createSubPath(parentPath, result);
-	    for (Element child : XMLUtil.getChildElements(element)) {
-	    	String childName = child.getNodeName();
-	    	if (!MEMBER_ELEMENTS.contains(childName))
-	    		result.addSubStatement(context.parseChildElement(child, currentPath));
-	    	// The 'component' child elements (id, attribute, reference) are handled by the MutatingTypeExpression 
-	    }
-		return result;
-	}
+  @Override
+  public Statement doParse(Element element, Statement[] parentPath,
+                           BeneratorParseContext context) {
+    CascadeParent parent = (CascadeParent) ArrayUtil.lastElementOf(parentPath);
+    String ref = getRequiredAttribute("ref", element);
+    CascadeStatement result = new CascadeStatement(ref, new MutatingTypeExpression(element, null), parent);
+    Statement[] currentPath = context.createSubPath(parentPath, result);
+    for (Element child : XMLUtil.getChildElements(element)) {
+      String childName = child.getNodeName();
+      if (!MEMBER_ELEMENTS.contains(childName)) {
+        result.addSubStatement(context.parseChildElement(child, currentPath));
+      }
+      // The 'component' child elements (id, attribute, reference) are handled by the MutatingTypeExpression
+    }
+    return result;
+  }
 
 }

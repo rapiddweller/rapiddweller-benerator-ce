@@ -26,11 +26,11 @@
 
 package com.rapiddweller.domain.product;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests the EANGenerator.<br/>
@@ -41,51 +41,69 @@ import org.junit.Test;
  */
 public class EANGeneratorTest extends GeneratorClassTest {
 
-    public EANGeneratorTest() {
-        super(EANGenerator.class);
-    }
+  /**
+   * Instantiates a new Ean generator test.
+   */
+  public EANGeneratorTest() {
+    super(EANGenerator.class);
+  }
 
-    @Test
-    public void testNonUnique() {
-        expectGenerations(createGenerator(false), 100, new EANValidator());
-    }
+  /**
+   * Test non unique.
+   */
+  @Test
+  public void testNonUnique() {
+    expectGenerations(createGenerator(false), 100, new EANValidator());
+  }
 
-    @Test
-    public void testUnique() {
-        expectUniqueGenerations(createGenerator(true), 10000);
-    }
+  /**
+   * Test unique.
+   */
+  @Test
+  public void testUnique() {
+    expectUniqueGenerations(createGenerator(true), 10000);
+  }
 
-    private EANGenerator createGenerator(boolean unique) {
-        EANGenerator generator = new EANGenerator(unique);
-        generator.init(context);
-        return generator;
-    }
+  private EANGenerator createGenerator(boolean unique) {
+    EANGenerator generator = new EANGenerator(unique);
+    generator.init(context);
+    return generator;
+  }
 
-    @Test
-    public void testConstructor() {
-        EANGenerator actualEanGenerator = new EANGenerator();
-        assertNull(actualEanGenerator.getSource());
-        assertEquals("EANGenerator", actualEanGenerator.toString());
-    }
+  /**
+   * Test constructor.
+   */
+  @Test
+  public void testConstructor() {
+    EANGenerator actualEanGenerator = new EANGenerator();
+    assertNull(actualEanGenerator.getSource());
+    assertEquals("EANGenerator", actualEanGenerator.toString());
+  }
 
-    @Test
-    public void testConstructor2() {
-        EANGenerator actualEanGenerator = new EANGenerator(true);
-        assertNull(actualEanGenerator.getSource());
-        assertEquals("EANGenerator[unique]", actualEanGenerator.toString());
-    }
+  /**
+   * Test constructor 2.
+   */
+  @Test
+  public void testConstructor2() {
+    EANGenerator actualEanGenerator = new EANGenerator(true);
+    assertNull(actualEanGenerator.getSource());
+    assertEquals("EANGenerator[unique]", actualEanGenerator.toString());
+  }
 
-    @Test
-    public void testSetUnique() {
-        EANGenerator eanGenerator = new EANGenerator();
-        eanGenerator.setUnique(true);
-        assertEquals("EANGenerator[unique]", eanGenerator.toString());
-    }
+  /**
+   * Test set unique.
+   */
+  @Test
+  public void testSetUnique() {
+    EANGenerator eanGenerator = new EANGenerator();
+    eanGenerator.setUnique(true);
+    assertEquals("EANGenerator[unique]", eanGenerator.toString());
+  }
 
-    @Test
-    public void testToString() {
-        assertEquals("EANGenerator", (new EANGenerator()).toString());
-        assertEquals("EANGenerator[unique]", (new EANGenerator(true)).toString());
-    }
+  @Test
+  public void testToString() {
+    assertEquals("EANGenerator", (new EANGenerator()).toString());
+    assertEquals("EANGenerator[unique]", (new EANGenerator(true)).toString());
+  }
 
 }

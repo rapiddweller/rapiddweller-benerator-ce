@@ -37,34 +37,52 @@ import com.rapiddweller.common.converter.ThreadSafeConverter;
  * @author Volker Bergmann
  * @since 0.5.8
  */
-
 public class GenderConverter extends ThreadSafeConverter<Gender, String> {
 
-    private String male;
-    private String female;
+  private String male;
+  private String female;
 
-    public GenderConverter() {
-        this("m", "f");
-    }
+  /**
+   * Instantiates a new Gender converter.
+   */
+  public GenderConverter() {
+    this("m", "f");
+  }
 
-    public GenderConverter(String male, String female) {
-        super(Gender.class, String.class);
-        this.male = male;
-        this.female = female;
-    }
+  /**
+   * Instantiates a new Gender converter.
+   *
+   * @param male   the male
+   * @param female the female
+   */
+  public GenderConverter(String male, String female) {
+    super(Gender.class, String.class);
+    this.male = male;
+    this.female = female;
+  }
 
-    public void setMale(String male) {
-        this.male = male;
-    }
+  /**
+   * Sets male.
+   *
+   * @param male the male
+   */
+  public void setMale(String male) {
+    this.male = male;
+  }
 
-    public void setFemale(String female) {
-        this.female = female;
-    }
+  /**
+   * Sets female.
+   *
+   * @param female the female
+   */
+  public void setFemale(String female) {
+    this.female = female;
+  }
 
-    @Override
-    public String convert(Gender gender) throws ConversionException {
-        return (gender != null ? (Gender.MALE.equals(gender) ? male : female) :
-                null);
-    }
+  @Override
+  public String convert(Gender gender) throws ConversionException {
+    return (gender != null ? (Gender.MALE.equals(gender) ? male : female) :
+        null);
+  }
 
 }

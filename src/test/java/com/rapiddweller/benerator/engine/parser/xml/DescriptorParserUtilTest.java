@@ -26,32 +26,36 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.script.Expression;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link DescriptorParserUtil}.<br/><br/>
  * Created: 11.04.2011 13:10:30
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class DescriptorParserUtilTest {
 
-	@Test
-	public void testParseScriptableElementText() {
-		Element element = XMLUtil.parseStringAsElement("<text>'\\'Test\\''</text>");
-		
-		Expression<String> asIsExpression = DescriptorParserUtil.parseScriptableElementText(element, false);
-		System.out.println(asIsExpression);
-		assertEquals("'\\'Test\\''", asIsExpression.evaluate(new DefaultContext()));
-		
-		Expression<String> unescapingExpression = DescriptorParserUtil.parseScriptableElementText(element, true);
-		System.out.println(unescapingExpression);
-		assertEquals("''Test''", unescapingExpression.evaluate(new DefaultContext()));
-	}
+  /**
+   * Test parse scriptable element text.
+   */
+  @Test
+  public void testParseScriptableElementText() {
+    Element element = XMLUtil.parseStringAsElement("<text>'\\'Test\\''</text>");
+
+    Expression<String> asIsExpression = DescriptorParserUtil.parseScriptableElementText(element, false);
+    System.out.println(asIsExpression);
+    assertEquals("'\\'Test\\''", asIsExpression.evaluate(new DefaultContext()));
+
+    Expression<String> unescapingExpression = DescriptorParserUtil.parseScriptableElementText(element, true);
+    System.out.println(unescapingExpression);
+    assertEquals("''Test''", unescapingExpression.evaluate(new DefaultContext()));
+  }
 }

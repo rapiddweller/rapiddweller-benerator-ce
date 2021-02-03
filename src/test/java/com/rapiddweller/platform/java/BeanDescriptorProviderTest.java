@@ -26,28 +26,38 @@
 
 package com.rapiddweller.platform.java;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link BeanDescriptorProvider}.<br/><br/>
  * Created: 19.04.2010 10:38:21
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 public class BeanDescriptorProviderTest {
 
-	final BeanDescriptorProvider provider = new BeanDescriptorProvider();
-	
-	@Test
-	public void testAbstractType() {
-		assertEquals("string", provider.abstractType(String.class));
-	}
-	
-	@Test
-	public void testConcreteType() {
-		assertEquals(String.class, provider.concreteType("string"));
-	}
-	
+  /**
+   * The Provider.
+   */
+  final BeanDescriptorProvider provider = new BeanDescriptorProvider();
+
+  /**
+   * Test abstract type.
+   */
+  @Test
+  public void testAbstractType() {
+    assertEquals("string", provider.abstractType(String.class));
+  }
+
+  /**
+   * Test concrete type.
+   */
+  @Test
+  public void testConcreteType() {
+    assertEquals(String.class, provider.concreteType("string"));
+  }
+
 }

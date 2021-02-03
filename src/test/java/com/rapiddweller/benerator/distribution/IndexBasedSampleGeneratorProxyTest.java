@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.distribution;
 
-import static org.junit.Assert.assertEquals;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
@@ -35,53 +33,62 @@ import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link IndexBasedSampleGeneratorProxy}.<br/><br/>
  * Created: 21.07.2010 07:09:23
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class IndexBasedSampleGeneratorProxyTest extends GeneratorTest {
 
-	@Test
-	public void testSourceHandling() {
-		SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
-		Distribution distribution = new TestDistribution();
-		NonNullGenerator<Integer> generator = WrapperFactory.asNonNullGenerator(
-				new IndexBasedSampleGeneratorProxy<>(source, distribution, false));
-		
-		// on initialization, DistributingSampleGeneratorProxy scans throug all available 3 source values 
-		// plus a single call that returns null for signaling unavailability
-		generator.init(context);
-		assertEquals(4, source.generateCount);
-		assertEquals(Integer.valueOf(1), generator.generate());
-		assertEquals(4, source.generateCount);
+  /**
+   * Test source handling.
+   */
+  @Test
+  public void testSourceHandling() {
+    SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
+    Distribution distribution = new TestDistribution();
+    NonNullGenerator<Integer> generator = WrapperFactory.asNonNullGenerator(
+        new IndexBasedSampleGeneratorProxy<>(source, distribution, false));
 
-		// on reset(), the source must be scanned once more
-		generator.reset();
-		assertEquals(1, source.resetCount);
-		assertEquals(8, source.generateCount);
-		assertEquals(Integer.valueOf(1), generator.generate());
-		
-		// on close(), the source must be closed too
-		generator.close();
-		assertEquals(8, source.generateCount);
-		assertEquals(1, source.closeCount);
-	}
-	
-	public static class TestDistribution implements Distribution {
+    // on initialization, DistributingSampleGeneratorProxy scans throug all available 3 source values
+    // plus a single call that returns null for signaling unavailability
+    generator.init(context);
+    assertEquals(4, source.generateCount);
+    assertEquals(Integer.valueOf(1), generator.generate());
+    assertEquals(4, source.generateCount);
 
-		@Override
-		public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-	        throw new UnsupportedOperationException("not implemented");
-        }
+    // on reset(), the source must be scanned once more
+    generator.reset();
+    assertEquals(1, source.resetCount);
+    assertEquals(8, source.generateCount);
+    assertEquals(Integer.valueOf(1), generator.generate());
 
-		@Override
-		@SuppressWarnings("unchecked")
-        public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity,
-                boolean unique) {
-	        return (NonNullGenerator<T>) WrapperFactory.asNonNullGenerator(new SequenceTestGenerator<>(0, 1, 2));
-        }
-	}
-	
+    // on close(), the source must be closed too
+    generator.close();
+    assertEquals(8, source.generateCount);
+    assertEquals(1, source.closeCount);
+  }
+
+  /**
+   * The type Test distribution.
+   */
+  public static class TestDistribution implements Distribution {
+
+    @Override
+    public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+      throw new UnsupportedOperationException("not implemented");
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity,
+                                                                        boolean unique) {
+      return (NonNullGenerator<T>) WrapperFactory.asNonNullGenerator(new SequenceTestGenerator<>(0, 1, 2));
+    }
+  }
+
 }

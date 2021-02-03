@@ -29,35 +29,45 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.common.LogCategoriesConstants;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Parses a comment and logs its content to the category 'org.databene.COMMENT'.<br/>
  * <br/>
  * Created at 22.07.2009 08:11:22
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class CommentStatement implements Statement {
-	
-	private static final Logger commentLogger = LogManager.getLogger(LogCategoriesConstants.COMMENT);
 
-	private final String comment;
-	
-    public CommentStatement(String comment) {
-	    this.comment = comment;
-    }
-    
-	public String getComment() {
-    	return comment;
-    }
+  private static final Logger commentLogger = LogManager.getLogger(LogCategoriesConstants.COMMENT);
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-		commentLogger.debug(comment);
-    	return true;
-	}
+  private final String comment;
+
+  /**
+   * Instantiates a new Comment statement.
+   *
+   * @param comment the comment
+   */
+  public CommentStatement(String comment) {
+    this.comment = comment;
+  }
+
+  /**
+   * Gets comment.
+   *
+   * @return the comment
+   */
+  public String getComment() {
+    return comment;
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    commentLogger.debug(comment);
+    return true;
+  }
 
 }

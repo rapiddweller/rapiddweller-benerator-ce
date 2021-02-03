@@ -34,43 +34,74 @@ import com.rapiddweller.benerator.wrapper.GeneratorProxy;
  * Generates values defined by a weighted or non-weighted value list literal, like "'A'^3,'B'^2",
  * supporting weighted random generation and uniqueness.<br/><br/>
  * Created: 28.07.2010 17:56:44
- * @since 0.6.3
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class WeigthedLiteralGenerator<E> extends GeneratorProxy<E> {
-	
-	private boolean unique;
-	private String valueSpec;
-	
-	public WeigthedLiteralGenerator(Class<E> targetType) {
-	    this(targetType, null);
-    }
 
-	public WeigthedLiteralGenerator(Class<E> targetType, String valueSpec) {
-	    this(targetType, valueSpec, false);
-    }
+  private boolean unique;
+  private String valueSpec;
 
-	public WeigthedLiteralGenerator(Class<E> targetType, String valueSpec, boolean unique) {
-		super(targetType);
-		this.valueSpec = valueSpec;
-	    this.unique = unique;
-    }
+  /**
+   * Instantiates a new Weigthed literal generator.
+   *
+   * @param targetType the target type
+   */
+  public WeigthedLiteralGenerator(Class<E> targetType) {
+    this(targetType, null);
+  }
 
-	public void setValueSpec(String valueSpec) {
-		this.valueSpec = valueSpec;
-	}
+  /**
+   * Instantiates a new Weigthed literal generator.
+   *
+   * @param targetType the target type
+   * @param valueSpec  the value spec
+   */
+  public WeigthedLiteralGenerator(Class<E> targetType, String valueSpec) {
+    this(targetType, valueSpec, false);
+  }
 
-	public void setUnique(boolean unique) {
-    	this.unique = unique;
+  /**
+   * Instantiates a new Weigthed literal generator.
+   *
+   * @param targetType the target type
+   * @param valueSpec  the value spec
+   * @param unique     the unique
+   */
+  public WeigthedLiteralGenerator(Class<E> targetType, String valueSpec, boolean unique) {
+    super(targetType);
+    this.valueSpec = valueSpec;
+    this.unique = unique;
+  }
+
+  /**
+   * Sets value spec.
+   *
+   * @param valueSpec the value spec
+   */
+  public void setValueSpec(String valueSpec) {
+    this.valueSpec = valueSpec;
+  }
+
+  /**
+   * Sets unique.
+   *
+   * @param unique the unique
+   */
+  public void setUnique(boolean unique) {
+    this.unique = unique;
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    if (valueSpec == null) {
+      throw new InvalidGeneratorSetupException("'codes' is null");
     }
-	
-	@Override
-	public synchronized void init(GeneratorContext context) {
-		if (valueSpec == null)
-			throw new InvalidGeneratorSetupException("'codes' is null");
-	    super.setSource(context.getGeneratorFactory().createFromWeightedLiteralList(
-	    		valueSpec, getGeneratedType(), null, unique));
-	    super.init(context);
-    }
+    super.setSource(context.getGeneratorFactory().createFromWeightedLiteralList(
+        valueSpec, getGeneratedType(), null, unique));
+    super.init(context);
+  }
 
 }

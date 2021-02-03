@@ -35,13 +35,19 @@ package com.rapiddweller.platform.db;
  */
 public class PlainSequenceGenerator extends AbstractSequenceGenerator {
 
-    public PlainSequenceGenerator(String name, DBSystem database) {
-        super(name, database);
-    }
+  /**
+   * Instantiates a new Plain sequence generator.
+   *
+   * @param name     the name
+   * @param database the database
+   */
+  public PlainSequenceGenerator(String name, DBSystem database) {
+    super(name, database);
+  }
 
-    @Override
-    public Long generate() {
-        return fetchSequenceValue();
-    }
+  @Override
+  public Long generate() {
+    return fetchSequenceValue();
+  }
 
 }

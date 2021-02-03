@@ -30,29 +30,37 @@ import com.rapiddweller.benerator.Generator;
 
 /**
  * Long Generator that maps products from a Double generator.<br/>
- * <br/> 
+ * <br/>
  * Created: 23.09.2006 09:02:10
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  */
 public class AsLongGeneratorWrapper<E extends Number> extends GeneratorWrapper<E, Long> {
 
-    public AsLongGeneratorWrapper(Generator<E> source) {
-        super(source);
-    }
+  /**
+   * Instantiates a new As long generator wrapper.
+   *
+   * @param source the source
+   */
+  public AsLongGeneratorWrapper(Generator<E> source) {
+    super(source);
+  }
 
-    @Override
-	public Class<Long> getGeneratedType() {
-	    return Long.class;
-    }
+  @Override
+  public Class<Long> getGeneratedType() {
+    return Long.class;
+  }
 
-	@Override
-	public ProductWrapper<Long> generate(ProductWrapper<Long> wrapper) {
-    	assertInitialized();
-	    ProductWrapper<E> tmp = generateFromSource();
-	    if (tmp == null)
-	    	return null;
-		E feed = tmp.unwrap();
-		return wrapper.wrap(feed.longValue());
+  @Override
+  public ProductWrapper<Long> generate(ProductWrapper<Long> wrapper) {
+    assertInitialized();
+    ProductWrapper<E> tmp = generateFromSource();
+    if (tmp == null) {
+      return null;
     }
+    E feed = tmp.unwrap();
+    return wrapper.wrap(feed.longValue());
+  }
 
 }

@@ -26,57 +26,69 @@
 
 package com.rapiddweller.benerator;
 
-import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.wrapper.ValidatingGeneratorProxy;
 import com.rapiddweller.common.Validator;
+import org.junit.Test;
+
+import static org.junit.Assert.fail;
 
 /**
  * Tests the {@link ValidatingGeneratorProxy}.<br/><br/>
  * Created: 29.09.2006 17:01:59
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class ValidatingGeneratorProxyTest {
 
-	@Test
-    public void testValid() {
-        Generator<?> generator = new ValidatingGeneratorProxy<>(
-                new ConstantGenerator<>(1),
-                new MockValidator(true));
-        for (int i = 0; i < 10; i++)
-        	GeneratorUtil.generateNullable(generator);
+  /**
+   * Test valid.
+   */
+  @Test
+  public void testValid() {
+    Generator<?> generator = new ValidatingGeneratorProxy<>(
+        new ConstantGenerator<>(1),
+        new MockValidator(true));
+    for (int i = 0; i < 10; i++) {
+      GeneratorUtil.generateNullable(generator);
+    }
+  }
+
+  /**
+   * Test invalid.
+   */
+  @Test
+  public void testInvalid() {
+    Generator<?> generator = new ValidatingGeneratorProxy<>(
+        new ConstantGenerator<>(1),
+        new MockValidator(false));
+    try {
+      GeneratorUtil.generateNullable(generator);
+      fail("Exception expercted");
+    } catch (IllegalGeneratorStateException e) {
+      // This is the expected behavior
+    }
+  }
+
+  private static final class MockValidator implements Validator<Integer> {
+
+    private final boolean result;
+
+    /**
+     * Instantiates a new Mock validator.
+     *
+     * @param result the result
+     */
+    public MockValidator(boolean result) {
+      this.result = result;
     }
 
-	@Test
-    public void testInvalid() {
-        Generator<?> generator = new ValidatingGeneratorProxy<>(
-                new ConstantGenerator<>(1),
-                new MockValidator(false));
-        try {
-            GeneratorUtil.generateNullable(generator);
-            fail("Exception expercted");
-        } catch (IllegalGeneratorStateException e) {
-            // This is the expected behavior
-        }
+    @Override
+    public boolean valid(Integer object) {
+      return result;
     }
+  }
 
-    private static final class MockValidator implements Validator<Integer> {
-
-        private final boolean result;
-
-        public MockValidator(boolean result) {
-            this.result = result;
-        }
-
-        @Override
-		public boolean valid(Integer object) {
-            return result;
-        }
-    }
-    
 }

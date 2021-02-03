@@ -26,10 +26,6 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.common.CollectionUtil;
@@ -55,144 +51,222 @@ import com.rapiddweller.script.expression.ExpressionUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
- * Groups {@link TranscodeStatement}s and provides common features like 
+ * Groups {@link TranscodeStatement}s and provides common features like
  * {@link IdentityProvider} and {@link KeyMapper} objects.<br/><br/>
  * Created: 10.09.2010 18:25:18
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class TranscodingTaskStatement extends SequentialStatement {
-	
-    final Expression<DBSystem> sourceEx;
-    final Expression<DBSystem> targetEx;
-    final Expression<String> identityEx;
-	final Expression<Long> pageSizeEx;
-    final Expression<ErrorHandler> errorHandlerExpression;
-    final IdentityProvider identityProvider;
-    KeyMapper mapper;
-	final Map<String, Boolean> tableNkRequirements = OrderedNameMap.createCaseIgnorantMap();
-    
-	public TranscodingTaskStatement(Expression<DBSystem> sourceEx, Expression<DBSystem> targetEx, Expression<String> identityEx, 
-    		Expression<Long> pageSizeEx, Expression<ErrorHandler> errorHandlerExpression) {
-	    this.sourceEx = cache(sourceEx);
-	    this.targetEx = cache(targetEx);
-	    this.identityEx = cache(identityEx);
-	    this.pageSizeEx = cache(pageSizeEx);
-	    this.errorHandlerExpression = cache(errorHandlerExpression);
-		this.identityProvider = new IdentityProvider();
+
+  /**
+   * The Source ex.
+   */
+  final Expression<DBSystem> sourceEx;
+  /**
+   * The Target ex.
+   */
+  final Expression<DBSystem> targetEx;
+  /**
+   * The Identity ex.
+   */
+  final Expression<String> identityEx;
+  /**
+   * The Page size ex.
+   */
+  final Expression<Long> pageSizeEx;
+  /**
+   * The Error handler expression.
+   */
+  final Expression<ErrorHandler> errorHandlerExpression;
+  /**
+   * The Identity provider.
+   */
+  final IdentityProvider identityProvider;
+  /**
+   * The Mapper.
+   */
+  KeyMapper mapper;
+  /**
+   * The Table nk requirements.
+   */
+  final Map<String, Boolean> tableNkRequirements = OrderedNameMap.createCaseIgnorantMap();
+
+  /**
+   * Instantiates a new Transcoding task statement.
+   *
+   * @param sourceEx               the source ex
+   * @param targetEx               the target ex
+   * @param identityEx             the identity ex
+   * @param pageSizeEx             the page size ex
+   * @param errorHandlerExpression the error handler expression
+   */
+  public TranscodingTaskStatement(Expression<DBSystem> sourceEx, Expression<DBSystem> targetEx, Expression<String> identityEx,
+                                  Expression<Long> pageSizeEx, Expression<ErrorHandler> errorHandlerExpression) {
+    this.sourceEx = cache(sourceEx);
+    this.targetEx = cache(targetEx);
+    this.identityEx = cache(identityEx);
+    this.pageSizeEx = cache(pageSizeEx);
+    this.errorHandlerExpression = cache(errorHandlerExpression);
+    this.identityProvider = new IdentityProvider();
+  }
+
+  /**
+   * Gets source ex.
+   *
+   * @return the source ex
+   */
+  public Expression<DBSystem> getSourceEx() {
+    return sourceEx;
+  }
+
+  /**
+   * Gets target ex.
+   *
+   * @return the target ex
+   */
+  public Expression<DBSystem> getTargetEx() {
+    return targetEx;
+  }
+
+  /**
+   * Gets page size ex.
+   *
+   * @return the page size ex
+   */
+  public Expression<Long> getPageSizeEx() {
+    return pageSizeEx;
+  }
+
+  /**
+   * Gets error handler ex.
+   *
+   * @return the error handler ex
+   */
+  public Expression<ErrorHandler> getErrorHandlerEx() {
+    return errorHandlerExpression;
+  }
+
+  /**
+   * Gets identity provider.
+   *
+   * @return the identity provider
+   */
+  public IdentityProvider getIdentityProvider() {
+    return identityProvider;
+  }
+
+  /**
+   * Gets key mapper.
+   *
+   * @return the key mapper
+   */
+  KeyMapper getKeyMapper() {
+    return mapper;
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    DBSystem target = getTarget(context);
+    Database database = target.getDbMetaData();
+    mapper = new MemKeyMapper(null, null, target.getConnection(), target.getId(), identityProvider, database);
+    checkPrecoditions(context);
+    super.execute(context);
+    return true;
+  }
+
+  private void checkPrecoditions(BeneratorContext context) {
+    DBSystem target = targetEx.evaluate(context);
+    boolean identitiesRequired = collectPreconditions(subStatements, context);
+    // check that each table for which an identity definition is required has one
+    if (identitiesRequired) {
+      readIdentityDefinition(context);
     }
-
-	public Expression<DBSystem> getSourceEx() {
-	    return sourceEx;
+    for (Entry<String, Boolean> req : tableNkRequirements.entrySet()) {
+      String tableName = req.getKey();
+      Boolean required = req.getValue();
+      IdentityModel identity = identityProvider.getIdentity(tableName, false);
+      if (identity == null) {
+        if (required) {
+          throw new ConfigurationError("For transcoding, an identity definition of table '" + tableName + "' is required");
+        } else {
+          DBTable table = target.getDbMetaData().getTable(tableName);
+          identity = new NoIdentity(table.getName());
+          identityProvider.registerIdentity(identity, tableName);
+        }
+      }
     }
+  }
 
-	public Expression<DBSystem> getTargetEx() {
-	    return targetEx;
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  private boolean collectPreconditions(List<Statement> subStatements, BeneratorContext context) {
+    boolean identitiesRequired = false;
+    List<CascadeParent> children = CollectionUtil.extractItemsOfCompatibleType(CascadeParent.class, subStatements);
+    for (CascadeParent statement : children) {
+      ComplexTypeDescriptor type = statement.getType(getSourceEx().evaluate(context), context);
+      String tableName = type.getName();
+      // items to be transcoded do not need NK definition
+      tableNkRequirements.put(tableName, false);
+      for (ReferenceDescriptor ref : type.getReferenceComponents()) {
+        String targetTable = ref.getTargetType();
+        if (!tableNkRequirements.containsKey(targetTable) && statement.getSource(context).countEntities(targetTable) > 0) {
+          tableNkRequirements.put(targetTable, true);
+          identitiesRequired = true;
+        }
+      }
+      identitiesRequired |= collectPreconditions(statement.getSubStatements(), context);
     }
+    return identitiesRequired;
+  }
 
-    public Expression<Long> getPageSizeEx() {
-	    return pageSizeEx;
+  private void readIdentityDefinition(BeneratorContext context) {
+    try {
+      // check identity definition
+      String identityUri = ExpressionUtil.evaluate(identityEx, context);
+      if (identityUri == null) {
+        throw new ConfigurationError("No 'identity' definition file defined");
+      }
+      String idFile = context.resolveRelativeUri(identityUri);
+      IdentityParser parser = new IdentityParser();
+      IdentityParseContext parseContext = new IdentityParseContext(identityProvider);
+      Document idXml = XMLUtil.parse(IOUtil.getInputStreamForURI(idFile));
+      Object[] parentPath = new Object[0];
+      for (Element child : XMLUtil.getChildElements(idXml.getDocumentElement())) {
+        parser.parse(child, parentPath, parseContext);
+      }
+    } catch (Exception e) {
+      throw new ConfigurationError("Error setting up transcoding task", e);
     }
+  }
 
-	public Expression<ErrorHandler> getErrorHandlerEx() {
-    	return errorHandlerExpression;
+  private DBSystem getTarget(BeneratorContext context) {
+    DBSystem target = ExpressionUtil.evaluate(targetEx, context);
+    if (target == null) {
+      throw new ConfigurationError("No 'target' database defined in <transcodingTask>");
     }
+    return target;
+  }
 
-	public IdentityProvider getIdentityProvider() {
-		return identityProvider;
-	}
-	
-	KeyMapper getKeyMapper() {
-		return mapper;
-	}
-	
-	@Override
-	public boolean execute(BeneratorContext context) {
-		DBSystem target = getTarget(context);
-		Database database = target.getDbMetaData();
-		mapper = new MemKeyMapper(null, null, target.getConnection(), target.getId(), identityProvider, database);
-		checkPrecoditions(context);
-		super.execute(context);
-    	return true;
-	}
-	
-	private void checkPrecoditions(BeneratorContext context) {
-		DBSystem target = targetEx.evaluate(context);
-		boolean identitiesRequired = collectPreconditions(subStatements, context);
-		// check that each table for which an identity definition is required has one
-		if (identitiesRequired)
-			readIdentityDefinition(context);
-		for (Entry<String, Boolean> req : tableNkRequirements.entrySet()) {
-			String tableName = req.getKey();
-			Boolean required = req.getValue();
-			IdentityModel identity = identityProvider.getIdentity(tableName, false);
-			if (identity == null) {
-				if (required) {
-					throw new ConfigurationError("For transcoding, an identity definition of table '" + tableName + "' is required");
-				} else {
-					DBTable table = target.getDbMetaData().getTable(tableName);
-					identity = new NoIdentity(table.getName());
-					identityProvider.registerIdentity(identity, tableName);
-				}
-			}
-		}
-	}
-	
-	
-	
-	// helpers ---------------------------------------------------------------------------------------------------------
+  /**
+   * Needs nk mapping boolean.
+   *
+   * @param tableName the table name
+   * @return the boolean
+   */
+  public boolean needsNkMapping(String tableName) {
+    Boolean required = tableNkRequirements.get(tableName);
+    if (required == null) {
+      throw new RuntimeException("Assertion failed: Not clear if an identity definition is necessary for table " + tableName);
+    }
+    return required;
+  }
 
-	private boolean collectPreconditions(List<Statement> subStatements, BeneratorContext context) {
-		boolean identitiesRequired = false;
-		List<CascadeParent> children = CollectionUtil.extractItemsOfCompatibleType(CascadeParent.class, subStatements);
-		for (CascadeParent statement : children) {
-			ComplexTypeDescriptor type = statement.getType(getSourceEx().evaluate(context), context);
-			String tableName = type.getName();
-			// items to be transcoded do not need NK definition
-			tableNkRequirements.put(tableName, false);
-			for (ReferenceDescriptor ref : type.getReferenceComponents()) {
-				String targetTable = ref.getTargetType();
-				if (!tableNkRequirements.containsKey(targetTable) && statement.getSource(context).countEntities(targetTable) > 0) {
-					tableNkRequirements.put(targetTable, true);
-					identitiesRequired = true;
-				}
-			}
-			identitiesRequired |= collectPreconditions(statement.getSubStatements(), context);
-		}
-		return identitiesRequired;
-	}
-
-	private void readIdentityDefinition(BeneratorContext context) {
-		try {
-			// check identity definition
-			String identityUri = ExpressionUtil.evaluate(identityEx, context);
-			if (identityUri == null)
-				throw new ConfigurationError("No 'identity' definition file defined");
-			String idFile = context.resolveRelativeUri(identityUri);
-			IdentityParser parser = new IdentityParser();
-			IdentityParseContext parseContext = new IdentityParseContext(identityProvider);
-			Document idXml = XMLUtil.parse(IOUtil.getInputStreamForURI(idFile));
-			Object[] parentPath = new Object[0];
-			for (Element child : XMLUtil.getChildElements(idXml.getDocumentElement()))
-				parser.parse(child, parentPath, parseContext);
-		} catch (Exception e) {
-			throw new ConfigurationError("Error setting up transcoding task", e);
-		}
-	}
-
-	private DBSystem getTarget(BeneratorContext context) {
-		DBSystem target = ExpressionUtil.evaluate(targetEx, context);
-		if (target == null)
-			throw new ConfigurationError("No 'target' database defined in <transcodingTask>");
-		return target;
-	}
-
-	public boolean needsNkMapping(String tableName) {
-		Boolean required = tableNkRequirements.get(tableName);
-		if (required == null)
-			throw new RuntimeException("Assertion failed: Not clear if an identity definition is necessary for table " + tableName);
-		return required;
-	}
-	
 }

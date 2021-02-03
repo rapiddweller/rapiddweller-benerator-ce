@@ -38,104 +38,162 @@ import com.rapiddweller.common.NullSafeComparator;
  */
 public class PhoneNumber {
 
-    private String countryCode;
-    private String areaCode;
-    private String localNumber;
+  private String countryCode;
+  private String areaCode;
+  private String localNumber;
 
-    private boolean mobile;
+  private boolean mobile;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public PhoneNumber() {
-        this("", "", "");
+  /**
+   * Instantiates a new Phone number.
+   */
+  public PhoneNumber() {
+    this("", "", "");
+  }
+
+  /**
+   * Instantiates a new Phone number.
+   *
+   * @param countryCode the country code
+   * @param cityCode    the city code
+   * @param localNumber the local number
+   */
+  public PhoneNumber(String countryCode, String cityCode,
+                     String localNumber) {
+    this(countryCode, cityCode, localNumber, false);
+  }
+
+  /**
+   * Instantiates a new Phone number.
+   *
+   * @param countryCode the country code
+   * @param cityCode    the city code
+   * @param localNumber the local number
+   * @param mobile      the mobile
+   */
+  public PhoneNumber(String countryCode, String cityCode, String localNumber,
+                     boolean mobile) {
+    this.countryCode = countryCode;
+    this.areaCode = cityCode;
+    this.localNumber = localNumber;
+    this.mobile = mobile;
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets country code.
+   *
+   * @return the country code
+   */
+  public String getCountryCode() {
+    return countryCode;
+  }
+
+  /**
+   * Sets country code.
+   *
+   * @param countryCode the country code
+   */
+  public void setCountryCode(String countryCode) {
+    this.countryCode = countryCode;
+  }
+
+  /**
+   * Gets area code.
+   *
+   * @return the area code
+   */
+  public String getAreaCode() {
+    return areaCode;
+  }
+
+  /**
+   * Sets area code.
+   *
+   * @param cityCode the city code
+   */
+  public void setAreaCode(String cityCode) {
+    this.areaCode = cityCode;
+  }
+
+  /**
+   * Gets local number.
+   *
+   * @return the local number
+   */
+  public String getLocalNumber() {
+    return localNumber;
+  }
+
+  /**
+   * Sets local number.
+   *
+   * @param localNumber the local number
+   */
+  public void setLocalNumber(String localNumber) {
+    this.localNumber = localNumber;
+  }
+
+  /**
+   * Is mobile boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isMobile() {
+    return mobile;
+  }
+
+  /**
+   * Sets mobile.
+   *
+   * @param mobile the mobile
+   */
+  public void setMobile(boolean mobile) {
+    this.mobile = mobile;
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return "+" + countryCode + '-' + areaCode + '-' + localNumber;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result
+        + ((areaCode == null) ? 0 : areaCode.hashCode());
+    result = prime * result
+        + ((countryCode == null) ? 0 : countryCode.hashCode());
+    result = prime * result
+        + ((localNumber == null) ? 0 : localNumber.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-
-    public PhoneNumber(String countryCode, String cityCode,
-                       String localNumber) {
-        this(countryCode, cityCode, localNumber, false);
+    if (obj == null) {
+      return false;
     }
-
-    public PhoneNumber(String countryCode, String cityCode, String localNumber,
-                       boolean mobile) {
-        this.countryCode = countryCode;
-        this.areaCode = cityCode;
-        this.localNumber = localNumber;
-        this.mobile = mobile;
+    if (getClass() != obj.getClass()) {
+      return false;
     }
-
-    // properties ------------------------------------------------------------------------------------------------------
-
-    public String getCountryCode() {
-        return countryCode;
+    final PhoneNumber that = (PhoneNumber) obj;
+    if (!this.areaCode.equals(that.areaCode)) {
+      return false;
     }
-
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
+    if (!NullSafeComparator.equals(this.countryCode, that.countryCode)) {
+      return false;
     }
-
-    public String getAreaCode() {
-        return areaCode;
-    }
-
-    public void setAreaCode(String cityCode) {
-        this.areaCode = cityCode;
-    }
-
-    public String getLocalNumber() {
-        return localNumber;
-    }
-
-    public void setLocalNumber(String localNumber) {
-        this.localNumber = localNumber;
-    }
-
-    public boolean isMobile() {
-        return mobile;
-    }
-
-    public void setMobile(boolean mobile) {
-        this.mobile = mobile;
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return "+" + countryCode + '-' + areaCode + '-' + localNumber;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + ((areaCode == null) ? 0 : areaCode.hashCode());
-        result = prime * result
-                + ((countryCode == null) ? 0 : countryCode.hashCode());
-        result = prime * result
-                + ((localNumber == null) ? 0 : localNumber.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final PhoneNumber that = (PhoneNumber) obj;
-        if (!this.areaCode.equals(that.areaCode)) {
-            return false;
-        }
-        if (!NullSafeComparator.equals(this.countryCode, that.countryCode)) {
-            return false;
-        }
-        return (this.localNumber.equals(that.localNumber));
-    }
+    return (this.localNumber.equals(that.localNumber));
+  }
 
 }

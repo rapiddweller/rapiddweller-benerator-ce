@@ -2,7 +2,7 @@
 <Configuration status="warn">
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout   pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n" />
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"/>
         </Console>
     </Appenders>
     <Loggers>
@@ -11,64 +11,64 @@
         <!-- ================ -->
 
         <Logger name="com.rapiddweller.apache" level="warn" additivity="true">
-            <appender-ref ref="console" level="warn" />
+            <appender-ref ref="console" level="warn"/>
         </Logger>
 
         <Logger name="com.rapiddweller.JDBC" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <Logger name="com.rapiddweller.SQL" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <Logger name="com.rapiddweller.COMMENT" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <Logger name="com.rapiddweller.CONFIG" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <Logger name="com.rapiddweller.shop" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
 
         <Logger name="com.rapiddweller.platform.xml" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <Logger name="com.rapiddweller.platform.db.DBSystem" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <Logger name="com.rapiddweller.common.converter" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <Logger name="com.rapiddweller.platform.db" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <Logger name="com.rapiddweller.model" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <Logger name="com.rapiddweller.dataset" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <Logger name="com.rapiddweller.common" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <Logger name="com.rapiddweller.benerator.STATE" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <Logger name="com.rapiddweller.domain" level="info" additivity="true">
-            <appender-ref ref="console" level="info" />
+            <appender-ref ref="console" level="info"/>
         </Logger>
 
         <!-- ======================= -->

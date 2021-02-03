@@ -26,95 +26,116 @@
 
 package com.rapiddweller.benerator.sample;
 
-import java.util.Arrays;
-
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.ArrayUtil;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link SeedGenerator}.<br/>
  * <br/>
  * Created at 12.07.2009 09:16:46
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class SeedGeneratorTest extends GeneratorTest {
-	
-	private static final Character[] SAMPLE1 = { '0', '1', '2' };
-	private static final Character[] SAMPLE2 = { '0', '1', '1' };
-	private static final Character[] SAMPLE3 = { '0', '0', '1' };
 
-	@Test(expected = InvalidGeneratorSetupException.class)
-	public void testEmpty() {
-		SeedGenerator<Character> generator = new SeedGenerator<>(Character.class, 1);
-		generator.init(context);
-	}
+  private static final Character[] SAMPLE1 = {'0', '1', '2'};
+  private static final Character[] SAMPLE2 = {'0', '1', '1'};
+  private static final Character[] SAMPLE3 = {'0', '0', '1'};
 
-	@Test(expected = InvalidGeneratorSetupException.class)
-	public void testDepth0() {
-        new SeedGenerator<>(Character.class, 0).init(context);
-	}
+  /**
+   * Test empty.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testEmpty() {
+    SeedGenerator<Character> generator = new SeedGenerator<>(Character.class, 1);
+    generator.init(context);
+  }
 
-	@Test
-	public void testDepth1() {
-		checkGenerator(1);
-	}
+  /**
+   * Test depth 0.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testDepth0() {
+    new SeedGenerator<>(Character.class, 0).init(context);
+  }
 
-	@Test
-	public void testDepth3() {
-		checkGenerator(3);
-	}
+  /**
+   * Test depth 1.
+   */
+  @Test
+  public void testDepth1() {
+    checkGenerator(1);
+  }
 
-	@Test
-	public void testDepth4() {
-		checkGenerator(4);
-	}
+  /**
+   * Test depth 3.
+   */
+  @Test
+  public void testDepth3() {
+    checkGenerator(3);
+  }
 
-	@Test
-	public void testDepth5() {
-		checkGenerator(5);
-	}
+  /**
+   * Test depth 4.
+   */
+  @Test
+  public void testDepth4() {
+    checkGenerator(4);
+  }
 
-	// helpers ---------------------------------------------------------------------------------------------------------
-	
-	private void checkGenerator(int depth) {
-	    SeedGenerator<Character> 		generator = new SeedGenerator<>(Character.class, depth);
-		generator.addSample(SAMPLE1);
-		generator.addSample(SAMPLE2);
-		generator.addSample(SAMPLE3);
-		generator.init(context);
-		for (int i = 0; i < 100; i++) {
-	        Character[] sequence = generator.generate();
-	        checkSequence(sequence, depth);
-        }
+  /**
+   * Test depth 5.
+   */
+  @Test
+  public void testDepth5() {
+    checkGenerator(5);
+  }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  private void checkGenerator(int depth) {
+    SeedGenerator<Character> generator = new SeedGenerator<>(Character.class, depth);
+    generator.addSample(SAMPLE1);
+    generator.addSample(SAMPLE2);
+    generator.addSample(SAMPLE3);
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      Character[] sequence = generator.generate();
+      checkSequence(sequence, depth);
     }
+  }
 
-	private static void checkSequence(Character[] sequence, int depth) {
-	    String seqString = ArrayFormat.format(sequence);
-	    assertNotNull(sequence);
-	    assertTrue(sequence.length > 0);
-	    for (Character c : sequence)
-	    	assertTrue(c >= '0' && c <= '2');
-	    if (depth > 1) {
-	    	assertEquals('0', (char) sequence[0]);
-		    char lastAtom = ArrayUtil.lastElementOf(sequence);
-			assertTrue("Expected last atom to be '1' or '2': " + seqString, lastAtom == '1' || lastAtom == '2');
-		    assertTrue(ArrayUtil.contains('0', sequence));
-		    assertTrue(ArrayUtil.contains('1', sequence));
-	    }
-	    if (depth >= 4) {
-	        assertTrue(
-		        	Arrays.deepEquals(sequence, SAMPLE1) ||
-		        	Arrays.deepEquals(sequence, SAMPLE2) ||
-		        	Arrays.deepEquals(sequence, SAMPLE3)
-		        );
-	    }
+  private static void checkSequence(Character[] sequence, int depth) {
+    String seqString = ArrayFormat.format(sequence);
+    assertNotNull(sequence);
+    assertTrue(sequence.length > 0);
+    for (Character c : sequence) {
+      assertTrue(c >= '0' && c <= '2');
     }
-    
+    if (depth > 1) {
+      assertEquals('0', (char) sequence[0]);
+      char lastAtom = ArrayUtil.lastElementOf(sequence);
+      assertTrue("Expected last atom to be '1' or '2': " + seqString, lastAtom == '1' || lastAtom == '2');
+      assertTrue(ArrayUtil.contains('0', sequence));
+      assertTrue(ArrayUtil.contains('1', sequence));
+    }
+    if (depth >= 4) {
+      assertTrue(
+          Arrays.deepEquals(sequence, SAMPLE1) ||
+              Arrays.deepEquals(sequence, SAMPLE2) ||
+              Arrays.deepEquals(sequence, SAMPLE3)
+      );
+    }
+  }
+
 }

@@ -43,65 +43,80 @@ import java.text.MessageFormat;
 /**
  * Main class for generating XML files from the command line.<br/><br/>
  * Created: 28.03.2008 16:52:49
- * @since 0.5.0
+ *
  * @author Volker Bergmann
+ * @since 0.5.0
  */
 public class XmlCreator {
-    
-    private static final Logger logger = LogManager.getLogger(XmlCreator.class);
 
-    /**
-     * @param args additional args you can add
-     */
-    public static void main(String[] args) {
-        if (args.length < 3) {
-            printHelp();
-            System.exit(BeneratorConstants.EXIT_CODE_ERROR);
-        }
-        String schemaUri = args[0];
-        String root = args[1];
-        String pattern = args[2];
-        long fileCount = 1;
-        if (args.length >= 4)
-        	fileCount = Long.parseLong(args[3]);
-        String[] propertiesFiles = (args.length > 4 ? ArrayUtil.copyOfRange(args, 4, args.length - 4) : new String[0]);
-        createXMLFiles(schemaUri, root, pattern, fileCount, propertiesFiles);
+  private static final Logger logger = LogManager.getLogger(XmlCreator.class);
+
+  /**
+   * The entry point of application.
+   *
+   * @param args additional args you can add
+   */
+  public static void main(String[] args) {
+    if (args.length < 3) {
+      printHelp();
+      System.exit(BeneratorConstants.EXIT_CODE_ERROR);
     }
-
-	public static void createXMLFiles(String schemaUri, String root,
-			String pattern, long fileCount, String[] propertiesFiles) {
-		logParams(schemaUri, root, pattern, fileCount);
-        long start = System.currentTimeMillis();
-        BeneratorContext context = BeneratorFactory.getInstance().createContext(IOUtil.getParentUri(schemaUri));
-        XMLFileGenerator fileGenerator = new XMLFileGenerator(schemaUri, root, pattern, propertiesFiles);
-        try (fileGenerator) {
-            fileGenerator.init(context);
-            for (long i = 0; i < fileCount; i++) {
-                ProductWrapper<File> file = fileGenerator.generate(new ProductWrapper<>());
-                if (file == null)
-                    throw new RuntimeException("Unable to create the expected number of files. " +
-                            "Created " + i + " of " + fileCount + " files");
-                logger.info("created file: " + file);
-            }
-        }
-        long duration = System.currentTimeMillis() - start;
-        logger.info("Finished after " + duration + " ms");
-	}
-
-	private static void logParams(String schemaUri, String root, String pattern, long fileCount) {
-		if (logger.isDebugEnabled()) {
-        	if (fileCount > 1)
-        		logger.debug("Creating " + fileCount + " XML files for schema " + schemaUri + " with root " + root + " and pattern " + pattern);
-        	else
-        		logger.debug("Creating XML file " + MessageFormat.format(pattern, fileCount) + " for schema " + schemaUri + " with root " + root);
-        }
-	}
-
-    private static void printHelp() {
-    	ConsoleInfoPrinter.printHelp(
-        	"Invalid parameters",
-        	"parameters: schemaUri root fileNamePattern [count [propertiesFilenames]]"
-        );
+    String schemaUri = args[0];
+    String root = args[1];
+    String pattern = args[2];
+    long fileCount = 1;
+    if (args.length >= 4) {
+      fileCount = Long.parseLong(args[3]);
     }
-    
+    String[] propertiesFiles = (args.length > 4 ? ArrayUtil.copyOfRange(args, 4, args.length - 4) : new String[0]);
+    createXMLFiles(schemaUri, root, pattern, fileCount, propertiesFiles);
+  }
+
+  /**
+   * Create xml files.
+   *
+   * @param schemaUri       the schema uri
+   * @param root            the root
+   * @param pattern         the pattern
+   * @param fileCount       the file count
+   * @param propertiesFiles the properties files
+   */
+  public static void createXMLFiles(String schemaUri, String root,
+                                    String pattern, long fileCount, String[] propertiesFiles) {
+    logParams(schemaUri, root, pattern, fileCount);
+    long start = System.currentTimeMillis();
+    BeneratorContext context = BeneratorFactory.getInstance().createContext(IOUtil.getParentUri(schemaUri));
+    XMLFileGenerator fileGenerator = new XMLFileGenerator(schemaUri, root, pattern, propertiesFiles);
+    try (fileGenerator) {
+      fileGenerator.init(context);
+      for (long i = 0; i < fileCount; i++) {
+        ProductWrapper<File> file = fileGenerator.generate(new ProductWrapper<>());
+        if (file == null) {
+          throw new RuntimeException("Unable to create the expected number of files. " +
+              "Created " + i + " of " + fileCount + " files");
+        }
+        logger.info("created file: " + file);
+      }
+    }
+    long duration = System.currentTimeMillis() - start;
+    logger.info("Finished after " + duration + " ms");
+  }
+
+  private static void logParams(String schemaUri, String root, String pattern, long fileCount) {
+    if (logger.isDebugEnabled()) {
+      if (fileCount > 1) {
+        logger.debug("Creating " + fileCount + " XML files for schema " + schemaUri + " with root " + root + " and pattern " + pattern);
+      } else {
+        logger.debug("Creating XML file " + MessageFormat.format(pattern, fileCount) + " for schema " + schemaUri + " with root " + root);
+      }
+    }
+  }
+
+  private static void printHelp() {
+    ConsoleInfoPrinter.printHelp(
+        "Invalid parameters",
+        "parameters: schemaUri root fileNamePattern [count [propertiesFilenames]]"
+    );
+  }
+
 }

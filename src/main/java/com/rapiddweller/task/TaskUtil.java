@@ -35,16 +35,24 @@ package com.rapiddweller.task;
  */
 public class TaskUtil {
 
-    @SuppressWarnings("unchecked")
-    public static <T extends Task> T unwrap(Task task, Class<T> type) {
-        //changed task to task.getClass()
-        if (type.equals(task.getClass())) {
-            return (T) task;
-        } else if (task instanceof TaskProxy) {
-            return unwrap(((TaskProxy<?>) task).getRealTask(), type);
-        } else {
-            return null;
-        }
+  /**
+   * Unwrap t.
+   *
+   * @param <T>  the type parameter
+   * @param task the task
+   * @param type the type
+   * @return the t
+   */
+  @SuppressWarnings("unchecked")
+  public static <T extends Task> T unwrap(Task task, Class<T> type) {
+    //changed task to task.getClass()
+    if (type.equals(task.getClass())) {
+      return (T) task;
+    } else if (task instanceof TaskProxy) {
+      return unwrap(((TaskProxy<?>) task).getRealTask(), type);
+    } else {
+      return null;
     }
+  }
 
 }

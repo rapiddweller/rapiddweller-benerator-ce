@@ -39,76 +39,111 @@ import java.util.TreeMap;
  */
 public class ArrayTypeDescriptor extends TypeDescriptor {
 
-    private final Map<Integer, ArrayElementDescriptor> elements;
+  private final Map<Integer, ArrayElementDescriptor> elements;
 
-    public ArrayTypeDescriptor(String name, DescriptorProvider provider) {
-        this(name, provider, null);
+  /**
+   * Instantiates a new Array type descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   */
+  public ArrayTypeDescriptor(String name, DescriptorProvider provider) {
+    this(name, provider, null);
+  }
+
+  /**
+   * Instantiates a new Array type descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   * @param parent   the parent
+   */
+  public ArrayTypeDescriptor(String name, DescriptorProvider provider,
+                             ArrayTypeDescriptor parent) {
+    super(name, provider, parent);
+    this.elements = new TreeMap<>();
+  }
+
+  // element handling ------------------------------------------------------------------------------------------------
+
+  @Override
+  public ArrayTypeDescriptor getParent() {
+    return (ArrayTypeDescriptor) super.getParent();
+  }
+
+  /**
+   * Add element.
+   *
+   * @param descriptor the descriptor
+   */
+  public void addElement(ArrayElementDescriptor descriptor) {
+    elements.put(descriptor.getIndex(), descriptor);
+  }
+
+  /**
+   * Gets element.
+   *
+   * @param index the index
+   * @return the element
+   */
+  public ArrayElementDescriptor getElement(int index) {
+    return elements.get(index);
+  }
+
+  /**
+   * Gets element.
+   *
+   * @param index   the index
+   * @param inherit the inherit
+   * @return the element
+   */
+  public ArrayElementDescriptor getElement(int index, boolean inherit) {
+    ArrayElementDescriptor element = getElement(index);
+    if (element != null) {
+      return element;
     }
-
-    public ArrayTypeDescriptor(String name, DescriptorProvider provider,
-                               ArrayTypeDescriptor parent) {
-        super(name, provider, parent);
-        this.elements = new TreeMap<>();
+    ArrayTypeDescriptor tmp = getParent();
+    while (tmp != null && inherit) {
+      ArrayElementDescriptor candidate = tmp.getElement(index);
+      if (candidate != null) {
+        return candidate;
+      }
+      tmp = tmp.getParent();
     }
+    return null;
+  }
 
-    // element handling ------------------------------------------------------------------------------------------------
+  /**
+   * Gets elements.
+   *
+   * @return the elements
+   */
+  public Collection<ArrayElementDescriptor> getElements() {
+    return elements.values();
+  }
 
-    @Override
-    public ArrayTypeDescriptor getParent() {
-        return (ArrayTypeDescriptor) super.getParent();
+  /**
+   * Gets element count.
+   *
+   * @return the element count
+   */
+  public int getElementCount() {
+    return (parent != null ?
+        ((ArrayTypeDescriptor) parent).getElementCount() :
+        elements.size());
+  }
+
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    if (elements.size() == 0) {
+      return super.toString();
     }
-
-    public void addElement(ArrayElementDescriptor descriptor) {
-        elements.put(descriptor.getIndex(), descriptor);
-    }
-
-    public ArrayElementDescriptor getElement(int index) {
-        return elements.get(index);
-    }
-
-    public ArrayElementDescriptor getElement(int index, boolean inherit) {
-        ArrayElementDescriptor element = getElement(index);
-        if (element != null) {
-            return element;
-        }
-        ArrayTypeDescriptor tmp = getParent();
-        while (tmp != null && inherit) {
-            ArrayElementDescriptor candidate = tmp.getElement(index);
-            if (candidate != null) {
-                return candidate;
-            }
-            tmp = tmp.getParent();
-        }
-        return null;
-    }
-
-    public Collection<ArrayElementDescriptor> getElements() {
-        return elements.values();
-    }
-
-    public int getElementCount() {
-        return (parent != null ?
-                ((ArrayTypeDescriptor) parent).getElementCount() :
-                elements.size());
-    }
-
-    // variable handling -----------------------------------------------------------------------------------------------
-    /*
-    public void addVariable(VariableDescriptor variable) {
-        parts.add(variable);
-    }
-    */
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        if (elements.size() == 0) {
-            return super.toString();
-        }
-        //return new CompositeFormatter(false, false).render(super.toString() + '{', new CompositeAdapter(), "}");
-        return getClass().getSimpleName() + "[name=" + getName() +
-                ", elements=" + elements.toString() + ']';
-    }
+    //return new CompositeFormatter(false, false).render(super.toString() + '{', new CompositeAdapter(), "}");
+    return getClass().getSimpleName() + "[name=" + getName() +
+        ", elements=" + elements + ']';
+  }
 
 }

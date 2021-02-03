@@ -52,60 +52,75 @@ import java.io.IOException;
  * Parses and executes a benerator setup file.<br/>
  * <br/>
  * Created: 14.08.2007 19:14:28
+ *
  * @author Volker Bergmann
  */
 public class Benerator {
-	
-	private static final Logger LOGGER = LogManager.getLogger(Benerator.class);
 
-	// methods ---------------------------------------------------------------------------------------------------------
+  private static final Logger LOGGER = LogManager.getLogger(Benerator.class);
 
-	public static void main(String[] args) throws IOException {
-		VersionInfo.getInfo("benerator").verifyDependencies();
-		if (
-				ArrayUtil.contains("--version", args) ||
-				ArrayUtil.contains("-v", args) ||
-				ArrayUtil.contains("-version", args)
-		)
-			printVersionInfoAndExit();
-		else
-			runFromCommandLine(args);
-	}
+  // methods ---------------------------------------------------------------------------------------------------------
 
-	private static void runFromCommandLine(String[] args) throws IOException {
-		try {
-			InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
-			String filename = (args.length > 0 ? args[0] : "benerator.xml");
-			runFile(filename, printer);
-	    	DBUtil.assertAllDbResourcesClosed(false);
-		} catch (BeneratorError e) {
-			LOGGER.error(e.getMessage(), e);
-			System.exit(e.getCode());
-		}
-	}
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   * @throws IOException the io exception
+   */
+  public static void main(String[] args) throws IOException {
+    VersionInfo.getInfo("benerator").verifyDependencies();
+    if (
+        ArrayUtil.contains("--version", args) ||
+            ArrayUtil.contains("-v", args) ||
+            ArrayUtil.contains("-version", args)
+    ) {
+      printVersionInfoAndExit();
+    } else {
+      runFromCommandLine(args);
+    }
+  }
 
-	public static void runFile(String filename, InfoPrinter printer) throws IOException {
-		BeneratorMonitor.INSTANCE.reset();
-		MemorySensor memProfiler = MemorySensor.getInstance();
-		memProfiler.reset();
-		if (printer != null) {
-			printer.printLines("Running file " + filename);
-			BeneratorUtil.checkSystem(printer);
-		}
-		BeneratorContext context = BeneratorFactory.getInstance().createContext(IOUtil.getParentUri(filename));
-		DescriptorRunner runner = new DescriptorRunner(filename, context);
-		try {
-			runner.run();
-		} finally {
-			IOUtil.close(runner);
-		}
-		BeneratorUtil.logConfig("Max. committed heap size: " + new KiloFormatter(1024).format(memProfiler.getMaxCommittedHeapSize()) + "B");
-	}
+  private static void runFromCommandLine(String[] args) throws IOException {
+    try {
+      InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
+      String filename = (args.length > 0 ? args[0] : "benerator.xml");
+      runFile(filename, printer);
+      DBUtil.assertAllDbResourcesClosed(false);
+    } catch (BeneratorError e) {
+      LOGGER.error(e.getMessage(), e);
+      System.exit(e.getCode());
+    }
+  }
 
-	private static void printVersionInfoAndExit() {
-		InfoPrinter console = new ConsoleInfoPrinter();
-		BeneratorUtil.printVersionInfo(console);
-		System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
-	}
+  /**
+   * Run file.
+   *
+   * @param filename the filename
+   * @param printer  the printer
+   * @throws IOException the io exception
+   */
+  public static void runFile(String filename, InfoPrinter printer) throws IOException {
+    BeneratorMonitor.INSTANCE.reset();
+    MemorySensor memProfiler = MemorySensor.getInstance();
+    memProfiler.reset();
+    if (printer != null) {
+      printer.printLines("Running file " + filename);
+      BeneratorUtil.checkSystem(printer);
+    }
+    BeneratorContext context = BeneratorFactory.getInstance().createContext(IOUtil.getParentUri(filename));
+    DescriptorRunner runner = new DescriptorRunner(filename, context);
+    try {
+      runner.run();
+    } finally {
+      IOUtil.close(runner);
+    }
+    BeneratorUtil.logConfig("Max. committed heap size: " + new KiloFormatter(1024).format(memProfiler.getMaxCommittedHeapSize()) + "B");
+  }
+
+  private static void printVersionInfoAndExit() {
+    InfoPrinter console = new ConsoleInfoPrinter();
+    BeneratorUtil.printVersionInfo(console);
+    System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+  }
 
 }

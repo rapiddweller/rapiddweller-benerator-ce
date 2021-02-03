@@ -37,48 +37,67 @@ import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.WeightedSample;
 
 /**
- * Generates numbers with weights that are defined using a literal, 
- * for example "1^3,2^7" would cause generation of 30% '1' values and 
+ * Generates numbers with weights that are defined using a literal,
+ * for example "1^3,2^7" would cause generation of 30% '1' values and
  * 70% '2' values.<br/><br/>
  * Created: 02.06.2010 07:27:36
- * @since 0.6.3
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class WeightedNumbers<E> extends Sequence {
 
-	private WeightedSample<?>[] samples;
-	
-    public WeightedNumbers() {
-    	this(null);
+  private WeightedSample<?>[] samples;
+
+  /**
+   * Instantiates a new Weighted numbers.
+   */
+  public WeightedNumbers() {
+    this(null);
+  }
+
+  /**
+   * Instantiates a new Weighted numbers.
+   *
+   * @param spec the spec
+   */
+  public WeightedNumbers(String spec) {
+    if (spec != null) {
+      setSpec(spec);
     }
+  }
 
-    public WeightedNumbers(String spec) {
-    	if (spec != null)
-    		setSpec(spec);
+  /**
+   * Sets spec.
+   *
+   * @param spec the spec
+   */
+  public void setSpec(String spec) {
+    samples = DatabeneScriptParser.parseWeightedLiteralList(spec);
+  }
+
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity,
+                                                                      boolean unique) {
+    if (unique) {
+      throw new ConfigurationError(getClass().getSimpleName() + " is not designed to generate unique values");
     }
-
-	public void setSpec(String spec) {
-		samples = DatabeneScriptParser.parseWeightedLiteralList(spec);
-	}
-
-	@Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity,
-            boolean unique) {
-		if (unique)
-			throw new ConfigurationError(getClass().getSimpleName() + " is not designed to generate unique values");
-		AttachedWeightSampleGenerator<T> generator = new AttachedWeightSampleGenerator<>(numberType);
-		for (WeightedSample<?> sample : samples)
-			generator.addSample(
-					NumberToNumberConverter.convert((Number) sample.getValue(), numberType),
-					sample.getWeight());
-		return WrapperFactory.asNonNullGenerator(generator);
+    AttachedWeightSampleGenerator<T> generator = new AttachedWeightSampleGenerator<>(numberType);
+    for (WeightedSample<?> sample : samples) {
+      generator.addSample(
+          NumberToNumberConverter.convert((Number) sample.getValue(), numberType),
+          sample.getWeight());
     }
+    return WrapperFactory.asNonNullGenerator(generator);
+  }
 
-	@Override
-	public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-		if (unique)
-			throw new ConfigurationError(getClass().getSimpleName() + " is not designed to generate unique values");
-	    return super.applyTo(source, unique);
-	}
-	
+  @Override
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    if (unique) {
+      throw new ConfigurationError(getClass().getSimpleName() + " is not designed to generate unique values");
+    }
+    return super.applyTo(source, unique);
+  }
+
 }

@@ -31,39 +31,47 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertArrayEquals;
 
 /**
  * Tests the {@link MultiSourceArrayGenerator}.<br/><br/>
  * Created: 11.10.2006 23:12:21
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class CompositeArrayGeneratorTest extends GeneratorTest {
 
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testNonUnique() {
-        ConstantTestGenerator<Integer> source1 = new ConstantTestGenerator<>(1);
-        ConstantTestGenerator<Integer> source2 = new ConstantTestGenerator<>(2);
-        MultiSourceArrayGenerator<Integer> generator = new MultiSourceArrayGenerator<>(Integer.class, false, source1, source2);
-        generator.init(context);
-        Integer[] EXPECTED_ARRAY = new Integer[] {1, 2};
-        for (int i = 0; i < 10; i++)
-            assertArrayEquals(EXPECTED_ARRAY,
-                    GeneratorUtil.generateNonNull(generator));
+  /**
+   * Test non unique.
+   */
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testNonUnique() {
+    ConstantTestGenerator<Integer> source1 = new ConstantTestGenerator<>(1);
+    ConstantTestGenerator<Integer> source2 = new ConstantTestGenerator<>(2);
+    MultiSourceArrayGenerator<Integer> generator = new MultiSourceArrayGenerator<>(Integer.class, false, source1, source2);
+    generator.init(context);
+    Integer[] EXPECTED_ARRAY = new Integer[] {1, 2};
+    for (int i = 0; i < 10; i++) {
+      assertArrayEquals(EXPECTED_ARRAY,
+          GeneratorUtil.generateNonNull(generator));
     }
-    
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testUnique() {
-        Generator<Integer> source1 = new SequenceTestGenerator<>(1, 2);
-        Generator<Integer> source2 = new SequenceTestGenerator<>(3, 4);
-        MultiSourceArrayGenerator<Integer> generator = new MultiSourceArrayGenerator<>(Integer.class, true, source1, source2);
-        generator.init(context);
-        expectUniqueProducts(generator, 4).withCeasedAvailability();
-    }
-    
+  }
+
+  /**
+   * Test unique.
+   */
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testUnique() {
+    Generator<Integer> source1 = new SequenceTestGenerator<>(1, 2);
+    Generator<Integer> source2 = new SequenceTestGenerator<>(3, 4);
+    MultiSourceArrayGenerator<Integer> generator = new MultiSourceArrayGenerator<>(Integer.class, true, source1, source2);
+    generator.init(context);
+    expectUniqueProducts(generator, 4).withCeasedAvailability();
+  }
+
 }

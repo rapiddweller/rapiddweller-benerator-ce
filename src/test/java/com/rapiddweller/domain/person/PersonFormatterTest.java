@@ -26,39 +26,46 @@
 
 package com.rapiddweller.domain.person;
 
-import static org.junit.Assert.*;
+import com.rapiddweller.common.Locales;
+import org.junit.Test;
 
 import java.util.Locale;
 
-import com.rapiddweller.common.Locales;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link PersonFormatter}.<br/><br/>
  * Created: 22.02.2010 13:50:13
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class PersonFormatterTest {
-	
-	@Test
-	public void testWestern() {
-		check("Herr Urs Züggeli", new Locale("de", "CH", "ZU"), "Herr", "Urs", "Züggeli");
-		check("Herr Urs Züggeli", new Locale("de"), "Herr", "Urs", "Züggeli");
-	}
 
-	@Test
-	public void testEastern() {
-		check("Lee Bruce", Locales.CHINESE, null, "Bruce", "Lee");
-	}
+  /**
+   * Test western.
+   */
+  @Test
+  public void testWestern() {
+    check("Herr Urs Züggeli", new Locale("de", "CH", "ZU"), "Herr", "Urs", "Züggeli");
+    check("Herr Urs Züggeli", new Locale("de"), "Herr", "Urs", "Züggeli");
+  }
 
-	private static void check(String expected, Locale locale, String salutation, String givenName, String familyName) {
-		Person person = new Person(locale);
-		person.setSalutation(salutation);
-		person.setGivenName(givenName);
-		person.setFamilyName(familyName);
-		String actual = PersonFormatter.getInstance(locale).format(person);
-		assertEquals(expected, actual);
-	}
-	
+  /**
+   * Test eastern.
+   */
+  @Test
+  public void testEastern() {
+    check("Lee Bruce", Locales.CHINESE, null, "Bruce", "Lee");
+  }
+
+  private static void check(String expected, Locale locale, String salutation, String givenName, String familyName) {
+    Person person = new Person(locale);
+    person.setSalutation(salutation);
+    person.setGivenName(givenName);
+    person.setFamilyName(familyName);
+    String actual = PersonFormatter.getInstance(locale).format(person);
+    assertEquals(expected, actual);
+  }
+
 }

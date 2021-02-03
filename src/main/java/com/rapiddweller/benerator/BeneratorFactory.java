@@ -42,52 +42,127 @@ import com.rapiddweller.common.version.VersionInfo;
 /**
  * Abstract factory class for extending Benerator.<br/><br/>
  * Created: 08.09.2010 15:43:11
+ *
+ * @author Volker Bergmann
  * @see DefaultBeneratorFactory
  * @since 0.6.4
- * @author Volker Bergmann
  */
 public abstract class BeneratorFactory {
 
-	public static final String BENERATOR_FACTORY_PROPERTY = "benerator.factory";
-	private static String XML_SCHEMA_PATH = null;
+  /**
+   * The constant BENERATOR_FACTORY_PROPERTY.
+   */
+  public static final String BENERATOR_FACTORY_PROPERTY = "benerator.factory";
+  private static String XML_SCHEMA_PATH = null;
 
-	private static BeneratorFactory instance;
+  private static BeneratorFactory instance;
 
-	public static BeneratorFactory getInstance() {
-		if (instance == null) {
-			String configuredClass = System.getProperty(BENERATOR_FACTORY_PROPERTY);
-			if (StringUtil.isEmpty(configuredClass))
-				configuredClass = DefaultBeneratorFactory.class.getName();
-			instance = (BeneratorFactory) BeanUtil.newInstance(configuredClass);
-		}
-		return instance;
-	}
-	
-	public static synchronized String getSchemaPathForCurrentVersion() {
-		if (XML_SCHEMA_PATH == null) { 
-			String version = VersionInfo.getInfo("benerator").getVersion();
-			if (version.endsWith("-SNAPSHOT"))
-				version = version.substring(0, version.length() - "-SNAPSHOT".length());
-			if (version.endsWith("-jdk-8"))
-				version = version.substring(0, version.length() - "-jdk-8".length());
-			if (version.endsWith("-jdk-11"))
-				version = version.substring(0, version.length() - "-jdk-11".length());
-			if (version.endsWith("--project-version--"))
-				version = "local";
-			XML_SCHEMA_PATH = "com/rapiddweller/benerator/benerator-" + version + ".xsd";
-		}
-		return XML_SCHEMA_PATH;
-	}
+  /**
+   * Gets instance.
+   *
+   * @return the instance
+   */
+  public static BeneratorFactory getInstance() {
+    if (instance == null) {
+      String configuredClass = System.getProperty(BENERATOR_FACTORY_PROPERTY);
+      if (StringUtil.isEmpty(configuredClass)) {
+        configuredClass = DefaultBeneratorFactory.class.getName();
+      }
+      instance = (BeneratorFactory) BeanUtil.newInstance(configuredClass);
+    }
+    return instance;
+  }
 
-    public abstract BeneratorContext createContext(String contextUri);
-    public abstract BeneratorParseContext createParseContext(ResourceManager resourceManager);
-	public abstract Context createGenerationContext();
-    
-	public abstract ComplexTypeGeneratorFactory getComplexTypeGeneratorFactory();
-	public abstract SimpleTypeGeneratorFactory getSimpleTypeGeneratorFactory();
-	
-	public abstract <S, T> Converter<S, T> configureConverter(Converter<S, T> converter, BeneratorContext context);
-	public abstract <T> Validator<T> configureValidator(Validator<T> validator, BeneratorContext context);
-	public abstract Consumer configureConsumer(Consumer consumer, BeneratorContext context);
-	
+  /**
+   * Gets schema path for current version.
+   *
+   * @return the schema path for current version
+   */
+  public static synchronized String getSchemaPathForCurrentVersion() {
+    if (XML_SCHEMA_PATH == null) {
+      String version = VersionInfo.getInfo("benerator").getVersion();
+      if (version.endsWith("-SNAPSHOT")) {
+        version = version.substring(0, version.length() - "-SNAPSHOT".length());
+      }
+      if (version.endsWith("-jdk-8")) {
+        version = version.substring(0, version.length() - "-jdk-8".length());
+      }
+      if (version.endsWith("-jdk-11")) {
+        version = version.substring(0, version.length() - "-jdk-11".length());
+      }
+      if (version.endsWith("--project-version--")) {
+        version = "local";
+      }
+      XML_SCHEMA_PATH = "com/rapiddweller/benerator/benerator-" + version + ".xsd";
+    }
+    return XML_SCHEMA_PATH;
+  }
+
+  /**
+   * Create context benerator context.
+   *
+   * @param contextUri the context uri
+   * @return the benerator context
+   */
+  public abstract BeneratorContext createContext(String contextUri);
+
+  /**
+   * Create parse context benerator parse context.
+   *
+   * @param resourceManager the resource manager
+   * @return the benerator parse context
+   */
+  public abstract BeneratorParseContext createParseContext(ResourceManager resourceManager);
+
+  /**
+   * Create generation context context.
+   *
+   * @return the context
+   */
+  public abstract Context createGenerationContext();
+
+  /**
+   * Gets complex type generator factory.
+   *
+   * @return the complex type generator factory
+   */
+  public abstract ComplexTypeGeneratorFactory getComplexTypeGeneratorFactory();
+
+  /**
+   * Gets simple type generator factory.
+   *
+   * @return the simple type generator factory
+   */
+  public abstract SimpleTypeGeneratorFactory getSimpleTypeGeneratorFactory();
+
+  /**
+   * Configure converter converter.
+   *
+   * @param <S>       the type parameter
+   * @param <T>       the type parameter
+   * @param converter the converter
+   * @param context   the context
+   * @return the converter
+   */
+  public abstract <S, T> Converter<S, T> configureConverter(Converter<S, T> converter, BeneratorContext context);
+
+  /**
+   * Configure validator validator.
+   *
+   * @param <T>       the type parameter
+   * @param validator the validator
+   * @param context   the context
+   * @return the validator
+   */
+  public abstract <T> Validator<T> configureValidator(Validator<T> validator, BeneratorContext context);
+
+  /**
+   * Configure consumer consumer.
+   *
+   * @param consumer the consumer
+   * @param context  the context
+   * @return the consumer
+   */
+  public abstract Consumer configureConsumer(Consumer consumer, BeneratorContext context);
+
 }

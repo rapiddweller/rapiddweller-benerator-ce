@@ -26,60 +26,73 @@
 
 package com.rapiddweller.platform.array;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.common.Escalation;
 import com.rapiddweller.common.Escalator;
 import com.rapiddweller.common.LoggerEscalator;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the Array2EntityConverter.<br/>
  * <br/>
  * Created: 29.08.2007 19:09:05
+ *
  * @author Volker Bergmann
  */
 public class Array2EntityConverterTest extends ModelTest {
-	
-	@Test
-    public void testSimple() {
-        ComplexTypeDescriptor descriptor = createComplexType("Person");
-        Entity entity = new Entity(descriptor, "name", "Alice", "age", 23);
-        String[] featureNames = { "name", "age" };
-        Object[] array = new Object[] { "Alice", 23 };
-        assertEquals(entity, new Array2EntityConverter(descriptor, featureNames, false).convert(array));
-    }
-	
-	@Test
-    public void testOverflow() {
-        ComplexTypeDescriptor descriptor = createComplexType("Person");
-        Entity entity = new Entity(descriptor, "name", "Alice", "age", 23);
-        String[] featureNames = { "name", "age" };
-        Object[] array = new Object[] { "Alice", 23, "superfluous" };
-        Array2EntityConverter converter = new Array2EntityConverter(descriptor, featureNames, false);
-        EscalatorMock escalator = new EscalatorMock();
-        converter.escalator = escalator;
-		assertEquals(entity, converter.convert(array));
-		assertEquals(1, escalator.escalations.size());
-    }
-    
-    public static final class EscalatorMock implements Escalator {
-    	
-    	private static final LoggerEscalator loggerEscalator = new LoggerEscalator();
 
-    	final List<Escalation> escalations = new ArrayList<>();
+  /**
+   * Test simple.
+   */
+  @Test
+  public void testSimple() {
+    ComplexTypeDescriptor descriptor = createComplexType("Person");
+    Entity entity = new Entity(descriptor, "name", "Alice", "age", 23);
+    String[] featureNames = {"name", "age"};
+    Object[] array = new Object[] {"Alice", 23};
+    assertEquals(entity, new Array2EntityConverter(descriptor, featureNames, false).convert(array));
+  }
 
-		@Override
-		public void escalate(String message, Object originator, Object cause) {
-			escalations.add(new Escalation(message, originator, cause));
-			loggerEscalator.escalate(message, originator, cause);
-		}
+  /**
+   * Test overflow.
+   */
+  @Test
+  public void testOverflow() {
+    ComplexTypeDescriptor descriptor = createComplexType("Person");
+    Entity entity = new Entity(descriptor, "name", "Alice", "age", 23);
+    String[] featureNames = {"name", "age"};
+    Object[] array = new Object[] {"Alice", 23, "superfluous"};
+    Array2EntityConverter converter = new Array2EntityConverter(descriptor, featureNames, false);
+    EscalatorMock escalator = new EscalatorMock();
+    converter.escalator = escalator;
+    assertEquals(entity, converter.convert(array));
+    assertEquals(1, escalator.escalations.size());
+  }
+
+  /**
+   * The type Escalator mock.
+   */
+  public static final class EscalatorMock implements Escalator {
+
+    private static final LoggerEscalator loggerEscalator = new LoggerEscalator();
+
+    /**
+     * The Escalations.
+     */
+    final List<Escalation> escalations = new ArrayList<>();
+
+    @Override
+    public void escalate(String message, Object originator, Object cause) {
+      escalations.add(new Escalation(message, originator, cause));
+      loggerEscalator.escalate(message, originator, cause);
     }
-    
+  }
+
 }

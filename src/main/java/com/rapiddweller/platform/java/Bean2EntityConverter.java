@@ -42,30 +42,41 @@ import java.beans.PropertyDescriptor;
  */
 public class Bean2EntityConverter extends ThreadSafeConverter<Object, Entity> {
 
-    private final ComplexTypeDescriptor descriptor;
-    private final BeanDescriptorProvider beanDescriptorProvider = new BeanDescriptorProvider();
+  private final ComplexTypeDescriptor descriptor;
+  private final BeanDescriptorProvider beanDescriptorProvider = new BeanDescriptorProvider();
 
-    public Bean2EntityConverter() {
-        this(null);
-    }
+  /**
+   * Instantiates a new Bean 2 entity converter.
+   */
+  public Bean2EntityConverter() {
+    this(null);
+  }
 
-    public Bean2EntityConverter(ComplexTypeDescriptor descriptor) {
-        super(Object.class, Entity.class);
-        this.descriptor = descriptor;
-    }
+  /**
+   * Instantiates a new Bean 2 entity converter.
+   *
+   * @param descriptor the descriptor
+   */
+  public Bean2EntityConverter(ComplexTypeDescriptor descriptor) {
+    super(Object.class, Entity.class);
+    this.descriptor = descriptor;
+  }
 
-    @Override
-    public Entity convert(Object bean) {
-        if (bean == null)
-            return null;
-        Entity entity = new Entity(descriptor != null ? descriptor : createBeanDescriptor(bean.getClass()));
-        for (PropertyDescriptor descriptor : BeanUtil.getPropertyDescriptors(bean.getClass()))
-            if (!"class".equals(descriptor.getName()))
-                entity.setComponent(descriptor.getName(), BeanUtil.getPropertyValue(bean, descriptor.getName()));
-        return entity;
+  @Override
+  public Entity convert(Object bean) {
+    if (bean == null) {
+      return null;
     }
+    Entity entity = new Entity(descriptor != null ? descriptor : createBeanDescriptor(bean.getClass()));
+    for (PropertyDescriptor descriptor : BeanUtil.getPropertyDescriptors(bean.getClass())) {
+      if (!"class".equals(descriptor.getName())) {
+        entity.setComponent(descriptor.getName(), BeanUtil.getPropertyValue(bean, descriptor.getName()));
+      }
+    }
+    return entity;
+  }
 
-    private ComplexTypeDescriptor createBeanDescriptor(Class<?> beanClass) {
-        return (ComplexTypeDescriptor) beanDescriptorProvider.getTypeDescriptor(beanClass.getName());
-    }
+  private ComplexTypeDescriptor createBeanDescriptor(Class<?> beanClass) {
+    return (ComplexTypeDescriptor) beanDescriptorProvider.getTypeDescriptor(beanClass.getName());
+  }
 }

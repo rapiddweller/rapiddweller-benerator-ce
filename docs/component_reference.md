@@ -1,62 +1,69 @@
-# Component Reference 
+# Component Reference
 
-benerator has lots of predefined generators which are available implicitly from the descriptor. Most of them only need to be created explicitly when using the benerator API programmatically.
+benerator has lots of predefined generators which are available implicitly from the descriptor. Most of them only need to be created explicitly when
+using the benerator API programmatically.
 
-## Generators 
+## Generators
 
-### Domain Generators 
+### Domain Generators
 
 For domain-specific generators (e.g. person, address, finance), see **'Domains'**.
 
-### Common Id Generators 
+### Common Id Generators
 
 Benerator contains the following common predefined and platform-independent generators:
 
-*   **IncrementalIdGenerator**: Creates consecutive id values, starting with 1 by default.
+* **IncrementalIdGenerator**: Creates consecutive id values, starting with 1 by default.
 
-*   **UUIDGenerator**: Creates UUIDs by the JDK class java.util.UUID
+* **UUIDGenerator**: Creates UUIDs by the JDK class java.util.UUID
 
-*   **HibUUIDGenerator**: Creates UUIDs like the Hibernate UUID key generator
+* **HibUUIDGenerator**: Creates UUIDs like the Hibernate UUID key generator
 
-*   **LocalSequenceGenerator**: Mimics the behavior of a (named) database sequence on a single client VM. Its property 'cached' (true by default) specifies if sequence value changes shall be persisted immediately or in the end.
+* **LocalSequenceGenerator**: Mimics the behavior of a (named) database sequence on a single client VM. Its property '
+  cached' (true by default) specifies if sequence value changes shall be persisted immediately or in the end.
 
-### Database-related Generators 
+### Database-related Generators
 
 See 'Using databases'
 
-### simple type generators 
+### simple type generators
 
-*   **CharacterGenerator**:
+* **CharacterGenerator**:
 
-*   **IncrementGenerator**: Generates numbers starting with one and incrementing the number on each subsequent call
+* **IncrementGenerator**: Generates numbers starting with one and incrementing the number on each subsequent call
 
-*   **StringGenerator**: Generates strings based on character set, prefix, suffix and length characteristics. This is the typical component for generating code numbers. Properties: charSet (regular expression for a character class), locale, unique, ordered, prefix, minInitial, suffix, minLength, maxLength, lengthGranularity, lengthDistribution
+* **StringGenerator**: Generates strings based on character set, prefix, suffix and length characteristics. This is the typical component for
+  generating code numbers. Properties: charSet (regular expression for a character class), locale, unique, ordered, prefix, minInitial, suffix,
+  minLength, maxLength, lengthGranularity, lengthDistribution
 
-*   **RegexStringGenerator**: Generates strings that match a given regular expression. This is the typical component for generating strings that are composed of different sub patterns. Properties: pattern (regular expression), unique, ordered, locale, minLength, maxLength
+* **RegexStringGenerator**: Generates strings that match a given regular expression. This is the typical component for generating strings that are
+  composed of different sub patterns. Properties: pattern (regular expression), unique, ordered, locale, minLength, maxLength
 
-*   **MessageGenerator**: Composes strings using a MessageFormat
+* **MessageGenerator**: Composes strings using a MessageFormat
 
-*   **LuhnGenerator**: Generates Luhn-valid strings like credit card numbers
+* **LuhnGenerator**: Generates Luhn-valid strings like credit card numbers
 
-### current date / time generators 
+### current date / time generators
 
-*   **CurrentDateGenerator**: Generates java.util.Date objects that represent the current date
+* **CurrentDateGenerator**: Generates java.util.Date objects that represent the current date
 
-*   **CurrentDateTimeGenerator**: Generates java.util.Date objects that represent the current date and time
+* **CurrentDateTimeGenerator**: Generates java.util.Date objects that represent the current date and time
 
-*   **CurrentMilliTimeGenerator**: Generates long values that denote the number of milliseconds since 1970-01-01 00:00:00
+* **CurrentMilliTimeGenerator**: Generates long values that denote the number of milliseconds since 1970-01-01 00:00:00
 
-*   **CurrentNanoTimeGenerator**: Generates long values that denote a number of milliseconds since an arbitrary point in time (possible even in the future, so values may be negative)
+* **CurrentNanoTimeGenerator**: Generates long values that denote a number of milliseconds since an arbitrary point in time (possible even in the
+  future, so values may be negative)
 
-*   **CurrentTimeGenerator**: Generates java.util.Date objects that represent the current time of the day
+* **CurrentTimeGenerator**: Generates java.util.Date objects that represent the current time of the day
 
-### arbitrary date / time generators 
+### arbitrary date / time generators
 
-*   **DateGenerator**: Generates date values that represent a certain time at a certain day based on a common Distribution
+* **DateGenerator**: Generates date values that represent a certain time at a certain day based on a common Distribution
 
-*   **DayGenerator**: Generates date values that represent „day“ dates – dates at midnight
+* **DayGenerator**: Generates date values that represent „day“ dates – dates at midnight
 
-*   **DateTimeGenerator**: Generates date values with date and time configurable independentlyIts properties are: minDate, maxDate, dateGranularity, dateDistribution, minTime, maxTime, timeGranularity, timeDistribution. For a 9-to-5 datetime on odd days in August 2010, configure
+* **DateTimeGenerator**: Generates date values with date and time configurable independentlyIts properties are: minDate, maxDate, dateGranularity,
+  dateDistribution, minTime, maxTime, timeGranularity, timeDistribution. For a 9-to-5 datetime on odd days in August 2010, configure
 
 `<bean id="dtGen" class="DateTimeGenerator">`
 `<property name='minDate' value='2010-08-01'/>`
@@ -69,47 +76,58 @@ See 'Using databases'
 `<property name='timeDistribution' value='random' />`
 `</bean>`
 
-### file related generators 
+### file related generators
 
-*   **FileGenerator**: generates java.io.File objects representing files in a given directory structure
+* **FileGenerator**: generates java.io.File objects representing files in a given directory structure
 
-*   **FileNameGenerator**: generates file names representing files in a given directory structure
+* **FileNameGenerator**: generates file names representing files in a given directory structure
 
-*   **TextFileContentGenerator**: provides text file contents as String
+* **TextFileContentGenerator**: provides text file contents as String
 
-*   **BinaryFileContentGenerator**: provides binary file contents as byte[]
+* **BinaryFileContentGenerator**: provides binary file contents as byte[]
 
-### State Generators 
+### State Generators
 
-*   **StateGenerator**: Generates states based on a state machine
+* **StateGenerator**: Generates states based on a state machine
 
-*   **StateTransitionGenerator**: Like the StateGenerator, but generating Transition objects
+* **StateTransitionGenerator**: Like the StateGenerator, but generating Transition objects
 
-### Seed Based Generators 
+### Seed Based Generators
 
-*   **SeedWordGenerator**: Generates new word based on rules derived from a dictionary.
+* **SeedWordGenerator**: Generates new word based on rules derived from a dictionary.
 
-*   **SeedSentenceGenerator**: Generates sentences based on rules derived from a text file.
+* **SeedSentenceGenerator**: Generates sentences based on rules derived from a text file.
 
-## Distributions 
+## Distributions
 
-A Distribution describes stochastic properties for distributing the data that benerator generates. You can use the predefined distributions or implement and introduce custom implementations. The most important types of distribution are _Sequence_, _WeightFunction_ and _CumulativeDistributionFunction_.
+A Distribution describes stochastic properties for distributing the data that benerator generates. You can use the predefined distributions or
+implement and introduce custom implementations. The most important types of distribution are _Sequence_, _WeightFunction_ and _
+CumulativeDistributionFunction_.
 
-A Distribution implements a common concept for generating numbers or taking values from a data source and providing them in a rearragned order or distribution with similar semantics as the number generation feature.
+A Distribution implements a common concept for generating numbers or taking values from a data source and providing them in a rearragned order or
+distribution with similar semantics as the number generation feature.
 
-As an example, a 'Skip2' sequence might generate numbers with an increment of 2: 1, 3, 5, 7,… When it is used to redistribute given data item1, item2, item3, item4,... , it would provide the values item1, item3, ...
+As an example, a 'Skip2' sequence might generate numbers with an increment of 2: 1, 3, 5, 7,… When it is used to redistribute given data item1, item2,
+item3, item4,... , it would provide the values item1, item3, ...
 
 While most Distribution components implement number generation as well data rearrangement, they are not required to support both concepts.
 
 All Distributions listed below are included in the default imports.
 
-### Memory consumption 
+### Memory consumption
 
-Distributions that are based on number generation may adopt data redistribution by simply loading all available data into a long list in RAM and then using their number generation feature to determine indices of the data to provide. If the data amount is large, you may get memory problems. In order to provide an easy start, Benerator reduces the default size of these lists to 100,000 elements, prints out an error message if the number is exceeded, but simply continues to work with the reduced amount of data. You can allow Benerator to use a larger cache by adding a benerator.cacheSize to your BENERATOR_OPTS, e.g. -Dbenerator.cacheSize=2000000\. If this makes you run into an OutOfMemoryError, check the 'Troubleshooting' section on how to allocate a larger Java heap in Benerator.
+Distributions that are based on number generation may adopt data redistribution by simply loading all available data into a long list in RAM and then
+using their number generation feature to determine indices of the data to provide. If the data amount is large, you may get memory problems. In order
+to provide an easy start, Benerator reduces the default size of these lists to 100,000 elements, prints out an error message if the number is
+exceeded, but simply continues to work with the reduced amount of data. You can allow Benerator to use a larger cache by adding a benerator.cacheSize
+to your BENERATOR_OPTS, e.g. -Dbenerator.cacheSize=2000000\. If this makes you run into an OutOfMemoryError, check the '
+Troubleshooting' section on how to allocate a larger Java heap in Benerator.
 
-### Sequences 
+### Sequences
 
-Sequences reflect the idea of a mathematical sequence. The primary focus in number generation, but they can be applied for data redestribution as well. Most sequences have a default instance which can be used by their literal, e.g. distribution="random" uses the 'random' literal for the Distribution defined in the class RandomSequence.
+Sequences reflect the idea of a mathematical sequence. The primary focus in number generation, but they can be applied for data redestribution as
+well. Most sequences have a default instance which can be used by their literal, e.g. distribution="random" uses the 'random' literal for the
+Distribution defined in the class RandomSequence.
 
 | Class | RandomSequence |
 | --- | --- |
@@ -130,7 +148,8 @@ Sequences reflect the idea of a mathematical sequence. The primary focus in numb
 
 | Class | RandomWalkSequence |
 | --- | --- |
-| Description | Starting with an → **initial** value, a random value between → **minStep** and → **maxStep** is added on each subsequent invocation |
+| Description | Starting with an → **initial** value, a random value between → **minStep** and → **
+maxStep** is added on each subsequent invocation |
 | Default Instance | randomWalk |
 | Property | Property Description | Default Value |
 | minStep | The maximum delta between the next and the previous value | -1 |
@@ -165,7 +184,8 @@ Sequences reflect the idea of a mathematical sequence. The primary focus in numb
 
 | Class | HeadSequence |
 | --- | --- |
-| Description | When applied to a data source or generator, only the first few elements are provided. The number of elements is defined by the **size** property. |
+| Description | When applied to a data source or generator, only the first few elements are provided. The number of elements is defined by the **
+size** property. |
 | Default Instance | head |
 | Property | Property Description | Default Value |
 | size | The size of the buffer | 1 |
@@ -194,21 +214,25 @@ Sequences reflect the idea of a mathematical sequence. The primary focus in numb
 | Description | Generates numbers based on the Padovan Sequence |
 | Default Instance | padovan |
 
-### CumulativeDistributionFunction 
+### CumulativeDistributionFunction
 
-The CumulativeDistributionFunction is another special case of a Distribution, which allows for continuous value generation as opposed to Sequence and WeightFunction.
+The CumulativeDistributionFunction is another special case of a Distribution, which allows for continuous value generation as opposed to Sequence and
+WeightFunction.
 
-### ExponentialDensityIntegral 
+### ExponentialDensityIntegral
 
-Inverse of the integral of the probability density f(x) = a e^{-ax} (x >` 0), which resolves to F^{-1}(x) = - log(1 - x) / a.
+Inverse of the integral of the probability density f(x) = a e^{-ax} (x >` 0), which resolves to F^{-1}(x) = - log(1 - x)
+/ a.
 
-### Weight Functions 
+### Weight Functions
 
-Weight funtions are another special case of Distributions. They are based on a function which is supposed to allow contibuous value generation, but since Benerator needs to perform a numerical integration for deriving random values, a granularity must be applied. This way, the generated value set is quantized. Another drawback of the approach is that fine-grained generation is memory-consuming and slow.
+Weight funtions are another special case of Distributions. They are based on a function which is supposed to allow contibuous value generation, but
+since Benerator needs to perform a numerical integration for deriving random values, a granularity must be applied. This way, the generated value set
+is quantized. Another drawback of the approach is that fine-grained generation is memory-consuming and slow.
 
 Thus, it is recommended to avoid weight functions if possible and choose a similar Sequence or CumulativeDistributionFunction instead.
 
-### GaussianFunction 
+### GaussianFunction
 
 This implements the well-known Gaussian Function.
 
@@ -224,7 +248,7 @@ Example:
 
 `<attribute name="price" type="big_decimal" min="0.1" max="99.90" granularity="0.1" distribution="new GaussianFunction(50,20)"/>`
 
-### ExponentialFunction 
+### ExponentialFunction
 
 The Exponential Function.
 
@@ -240,7 +264,7 @@ Example:
 
 `<attribute name="category" type="char" values="A,B,C" distribution="new ExponentialFunction(0.5)"/>`
 
-### DiscreteFunction 
+### DiscreteFunction
 
 Discrete Function that specifies an explicit weight for each possible value
 
@@ -256,69 +280,76 @@ Example:
 
 `<attribute name="rating" type="int" min="1", max="3" distribution="new DiscreteFunction(1, 2, 1)"/>`
 
-## Converters 
+## Converters
 
 Benerator supports two different types of converter interfaces:
 
-*   com.rapiddweller.common.Converter
+* com.rapiddweller.common.Converter
 
-*   java.text.Format
+* java.text.Format
 
-### Databene Converters 
+### Databene Converters
 
 The following converter classes are located in the package **com.rapiddweller.common.converters** and are imported with the default imports:
 
-*   **ByteArrayToBase64Converter**: Converts byte arrays to strings which are base-64-encoded
+* **ByteArrayToBase64Converter**: Converts byte arrays to strings which are base-64-encoded
 
-*   **ToLowerCaseConverter**: Converts strings to lowercase
+* **ToLowerCaseConverter**: Converts strings to lowercase
 
-*   **ToUpperCaseConverter**: Converts strings to uppercase
+* **ToUpperCaseConverter**: Converts strings to uppercase
 
-*   **LiteralParser**: Parses strings as numbers, strings, dates and times
+* **LiteralParser**: Parses strings as numbers, strings, dates and times
 
-*   **MessageConverter**: Converts an object, wrapping it with a message string, using a java.text.MessageFormat
+* **MessageConverter**: Converts an object, wrapping it with a message string, using a java.text.MessageFormat
 
-*   **PropertyResourceBundleConverter**: Uses a Java PropertyResourceBundle to translate keywords to translations in a given Java Locale
+* **PropertyResourceBundleConverter**: Uses a Java PropertyResourceBundle to translate keywords to translations in a given Java Locale
 
-*   **ToStringConverter**: Converts arbitrary objects to strings
+* **ToStringConverter**: Converts arbitrary objects to strings
 
-*   **UniqueStringConverter**: Assures uniqueness for all processed Strings by appending unique numbers to recurring instances (attention: limited to a few 100.000 elements)
+* **UniqueStringConverter**: Assures uniqueness for all processed Strings by appending unique numbers to recurring instances (attention: limited to a
+  few 100.000 elements)
 
-*   **URLEncodeConverter**: Applies a URL encoding to strings
+* **URLEncodeConverter**: Applies a URL encoding to strings
 
-*   **URLDecodeConverter**: decodes URL encoded strings
+* **URLDecodeConverter**: decodes URL encoded strings
 
-*   **PrintfConverter**: formats objects using a pattern in printf format
+* **PrintfConverter**: formats objects using a pattern in printf format
 
-*   **RegexReplacer**: Uses a regular expression to replace parts of the processed strings
+* **RegexReplacer**: Uses a regular expression to replace parts of the processed strings
 
-*   **SubstringExtractor**: Extracts substrings from strings. It has the properties '**from**' and '**to**'. If '**to**' is not set, it extracts from '**from**' until the end. If '**to**' or '**from**' is negative, it denotes a backwards position count, making e.g. -1 the last character position.
+* **SubstringExtractor**: Extracts substrings from strings. It has the properties '**from**' and '**to**'. If '**to**'
+  is not set, it extracts from '**from**' until the end. If '**to**' or '**from**' is negative, it denotes a backwards position count, making e.g. -1
+  the last character position.
 
-*   **EscapingConverter**: Escapes strings in Java style, like "A\tB"
+* **EscapingConverter**: Escapes strings in Java style, like "A\tB"
 
-*   **Number2CharConverter**: Converts a number to a character of the corresponding ASCII code
+* **Number2CharConverter**: Converts a number to a character of the corresponding ASCII code
 
-*   **Char2StringConverter**: Converts a character to a string of length 1
+* **Char2StringConverter**: Converts a character to a string of length 1
 
-*   **EscapingConverter**: Escapes control codes in a string in C and Java style, e.g. with \r, \n, \t
+* **EscapingConverter**: Escapes control codes in a string in C and Java style, e.g. with \r, \n, \t
 
-*   **Number2CharConverter**: Converts a number to a character with the corresponding ASCII code, e.g. 65 → 'A'
+* **Number2CharConverter**: Converts a number to a character with the corresponding ASCII code, e.g. 65 → 'A'
 
 The package **com.rapiddweller.text** provides the following converters:
 
-*   **DelocalizingConverter**: Converts strings with non-ASCII letters to ASCII strings, e.g. Müller → Mueller, Sœr → Soer
+* **DelocalizingConverter**: Converts strings with non-ASCII letters to ASCII strings, e.g. Müller → Mueller, Sœr → Soer
 
-*   **NameNormalizer**: Normalizes a string by trimming it, normalizing inner white space and formatting each word to start with an uppercase character and continue with lowercase characters
+* **NameNormalizer**: Normalizes a string by trimming it, normalizing inner white space and formatting each word to start with an uppercase character
+  and continue with lowercase characters
 
-*   **NormalizeSpaceConverter**: Trims a string and normalizes inner white space to one space character
+* **NormalizeSpaceConverter**: Trims a string and normalizes inner white space to one space character
 
-*   **ToHexConverter**: Renders characters, strings snd integral numbers in hexadecimal representation
+* **ToHexConverter**: Renders characters, strings snd integral numbers in hexadecimal representation
 
 In the package **com.rapiddweller.benerator.primitive.number** there are two converters that can be used to quantize numerical values:
 
-*   **FloatingPointQuantizer**, **IntegralQuantizer, NumberQuantizer**: Quantize numbers to be a **min** value plus an integral multiple of a **granularity**
+* **FloatingPointQuantizer**, **IntegralQuantizer, NumberQuantizer**: Quantize numbers to be a **min** value plus an integral multiple of a **
+  granularity**
 
-*   **NoiseInducer**: Adds numerical noise to numbers. The noise characteristics can be configured with the properties minNoise, maxNoise, noiseGranularity and noiseDistribution. When setting the boolean property relative to true, noise is relative, where maxCount=1 corresponds to 100% noise-to-signal ratio. If relative=false, the absolute value of the noise is added or subtracted. Example:
+* **NoiseInducer**: Adds numerical noise to numbers. The noise characteristics can be configured with the properties minNoise, maxNoise,
+  noiseGranularity and noiseDistribution. When setting the boolean property relative to true, noise is relative, where maxCount=1 corresponds to 100%
+  noise-to-signal ratio. If relative=false, the absolute value of the noise is added or subtracted. Example:
 
 NoiseInducer example:
 
@@ -354,58 +385,59 @@ entity[x=104]
 
 entity[x=99]
 
-### Java Formats 
+### Java Formats
 
 Beware that the java.text.Format classes are not thread-safe!
 
-*   **SimpleDateFormat**: Uses a pattern to format dates as strings
+* **SimpleDateFormat**: Uses a pattern to format dates as strings
 
-*   **DecimalFormat**: Uses a pattern to format numbers as strings
+* **DecimalFormat**: Uses a pattern to format numbers as strings
 
-## Validators 
+## Validators
 
-### Domain Validators 
+### Domain Validators
 
 For the validators from the domains see 'Domains'
 
-### Common validators 
+### Common validators
 
-*   **CharacterRangeValidator**: Validates if a character is in a certain range
+* **CharacterRangeValidator**: Validates if a character is in a certain range
 
-*   **NotNullValidator**: Requires the validated data to be not null
+* **NotNullValidator**: Requires the validated data to be not null
 
-*   **StringLengthValidator**: Limits allowed strings to a minimum and/or maximum length
+* **StringLengthValidator**: Limits allowed strings to a minimum and/or maximum length
 
-*   **StringValidator**: Validates string by min length, max length and a charactor validator
+* **StringValidator**: Validates string by min length, max length and a charactor validator
 
-*   **UniqueValidator**: Requires data to be unique (attention: limited to some 100.000 elements)
+* **UniqueValidator**: Requires data to be unique (attention: limited to some 100.000 elements)
 
-*   **UnluckyNumberValidator**: Checks if a String contains an 'unlucky' number like 13 in western cultures or 4 in east-asian cultures
+* **UnluckyNumberValidator**: Checks if a String contains an 'unlucky' number like 13 in western cultures or 4 in east-asian cultures
 
-*   **DayOfWeekValidator**: Accepts only Dates of certain (configurable) weekdays
+* **DayOfWeekValidator**: Accepts only Dates of certain (configurable) weekdays
 
-*   **RegexValidator**: Validates if a string matches a regular expression
+* **RegexValidator**: Validates if a string matches a regular expression
 
-*   **LuhnValidator**: Checks if a number string (e.g. credit card number) is Luhn-valid
+* **LuhnValidator**: Checks if a number string (e.g. credit card number) is Luhn-valid
 
-### Tasks 
+### Tasks
 
-*   **FileJoiner**: Joins several files (**sources**) into a **destination** file, optionally **append**ing the joint data to an existing destination file, or overwriting it. If **deleteSources** is set to true, the sources are deleted afterwards.
+* **FileJoiner**: Joins several files (**sources**) into a **destination** file, optionally **append**ing the joint data to an existing destination
+  file, or overwriting it. If **deleteSources** is set to true, the sources are deleted afterwards.
 
-*   **FileDeleter**: Deletes a number of **files**.
+* **FileDeleter**: Deletes a number of **files**.
 
-## Consumers 
+## Consumers
 
 A Consumer consumes generated data and usually is used for exporting or persisting the data.
 
-### LoggingConsumer 
+### LoggingConsumer
 
 | Class Name | LoggingConsumer |
 | --- | --- |
 | Import | default |
 | Class Description | Logs all Consumer invocations to a logger |
 
-### ConsoleExporter 
+### ConsoleExporter
 
 | Class Name | ConsoleExporter |
 | --- | --- |
@@ -422,7 +454,7 @@ A Consumer consumes generated data and usually is used for exporting or persisti
 | decimalSeparator | The decimal separator to use for decimal values | System default |
 | integralPattern | The pattern to integral number values | System default |
 
-### JavaInvoker 
+### JavaInvoker
 
 | Class Name | DbUnitEntityExporter |
 | --- | --- |
@@ -438,7 +470,7 @@ Usage example:
 
 `<bean id="invoker" spec="new JavaInvoker(ejb, 'enrolCustomer')" />`
 
-### DbUnitEntityExporter 
+### DbUnitEntityExporter
 
 | Class Name | DbUnitEntityExporter |
 | --- | --- |
@@ -448,7 +480,7 @@ Usage example:
 | uri | The URI of the file to create | "data.dbunit.xml" |
 | encoding | The character encoding to use for the file | The system default |
 
-### XMLEntityExporter 
+### XMLEntityExporter
 
 | Class Name | XMLEntityExporter |
 | --- | --- |
@@ -458,14 +490,14 @@ Usage example:
 | uri | The URI of the file to create | "export.xml" |
 | encoding | The character encoding to use for the file | The system default |
 
-### NoConsumer 
+### NoConsumer
 
 | Class Name | NoConsumer |
 | --- | --- |
 | Import | default |
 | Class Description | In some cases a pseudo `<generate>` statements acts as a mechanism to perform a loop. In such cases a consumer does not make sense but causes Benerator to emit a warning „No consumers defined for `<loop name>`“. In order to avoid this warning, you can use the NoConsumer class, which is an empty implementation of the Consumer interface. |
 
-### ScriptedEntityExporter 
+### ScriptedEntityExporter
 
 | Class Name | ScriptedEntityExporter |
 | --- | --- |
@@ -487,7 +519,7 @@ Usage example:
 | decimalSeparator | The decimal separator to use for decimal values | System default |
 | integralPattern | The pattern to integral number values | System default |
 
-### FixedWidthEntityExporter 
+### FixedWidthEntityExporter
 
 | Class Name | FixedWidthEntityExporter |
 | --- | --- |
@@ -509,15 +541,16 @@ Usage example:
 | decimalSeparator | The decimal separator to use for decimal values | System default |
 | integralPattern | The pattern to integral number values | System default |
 
-The line format is described as a comma-separated list of property names with format spec, e.g. name[20],age[3r],points[5.2r0]. The format spec consists of
+The line format is described as a comma-separated list of property names with format spec, e.g. name[20],age[3r]
+,points[5.2r0]. The format spec consists of
 
-*   [] brackets
+* [] brackets
 
-*   the (required) column width
+* the (required) column width
 
-*   an optional alignment flag l, r or c (for left, right, center), left by default
+* an optional alignment flag l, r or c (for left, right, center), left by default
 
-*   an optional pad character, space by default
+* an optional pad character, space by default
 
 So a property configuration of name[20],age[3r],points[5.2r0] would resolve to three columns,
 
@@ -535,7 +568,7 @@ Bob Durand 4601.23
 
 Helmut Schmidt 10226.14
 
-### XLSEntityExporter 
+### XLSEntityExporter
 
 | Class Name | XLSEntityExporter |
 | --- | --- |
@@ -546,7 +579,7 @@ Helmut Schmidt 10226.14
 | columns | A comma-separated list of column names |  |
 | nullString | Text to represent _null_ values | "" |
 
-### CSVEntityExporter 
+### CSVEntityExporter
 
 | Class Name | CSVEntityExporter |
 | --- | --- |
@@ -572,7 +605,7 @@ Helmut Schmidt 10226.14
 | decimalSeparator | The decimal separator to use for decimal values | System default |
 | integralPattern | The pattern to integral number values | System default |
 
-### SQLEntityExporter 
+### SQLEntityExporter
 
 | Class Name | SQLEntityExporter |
 | --- | --- |
@@ -591,11 +624,11 @@ Helmut Schmidt 10226.14
 | decimalSeparator | The decimal separator to use for decimal values | System default |
 | integralPattern | The pattern to integral number values | System default |
 
-## EntitySources (Importers) 
+## EntitySources (Importers)
 
 benerator provides the following implementations of the EntitySource interface:
 
-### DbUnitEntitySource 
+### DbUnitEntitySource
 
 | Class Name | DbUnitEntitySource |
 | --- | --- |
@@ -604,7 +637,7 @@ benerator provides the following implementations of the EntitySource interface:
 | Property | Property Description | Default Value |
 | uri | The URI of the file to read | "export.sql" |
 
-### CSVEntitySource 
+### CSVEntitySource
 
 | Class Name | CSVEntitySource |
 | --- | --- |
@@ -616,7 +649,7 @@ benerator provides the following implementations of the EntitySource interface:
 | separator | The line separator used in the file | "," |
 | columns | When set, the input file is expected to have no header row |  |
 
-### FixedColumnWidthEntitySource 
+### FixedColumnWidthEntitySource
 
 | Class Name | CSVEntitySource |
 | --- | --- |
@@ -627,7 +660,7 @@ benerator provides the following implementations of the EntitySource interface:
 | encoding | The character encoding of the file | System default |
 | columns | The columns specification (See the FixedWidthEntityExporter for documentation) |  |
 
-### XLSEntitySource 
+### XLSEntitySource
 
 | Class Name | XLSEntitySource |
 | --- | --- |
@@ -636,9 +669,9 @@ benerator provides the following implementations of the EntitySource interface:
 | Property | Property Description | Default Value |
 | uri | The URI of the file to read |  |
 
-## Benerator Utility Classes 
+## Benerator Utility Classes
 
-### RandomUtil 
+### RandomUtil
 
 | Class Name | RandomUtil |
 | --- | --- |
@@ -655,11 +688,13 @@ benerator provides the following implementations of the EntitySource interface:
 | randomDate(min, max) | Returns a random date between min (inclusively) and max (inclusively) |
 | randomFromWeightLiteral(literal) | Evaluates the weight literal and returns one of the specified values with the specified probability. Example literal: 'A'^3,'B'^1 will produce 75% of 'A' values and 25% of 'B' values. |
 
-## Databene Commons Library 
+## Databene Commons Library
 
-The library Databene commons is a general-purpose utility collection which also provides some features useful for data generation and manipulation. Its converters and validators are liste above, but there are some general utility classes too. They can be invoked directly using DatabeneScript or other supported script languages.
+The library Databene commons is a general-purpose utility collection which also provides some features useful for data generation and manipulation.
+Its converters and validators are liste above, but there are some general utility classes too. They can be invoked directly using DatabeneScript or
+other supported script languages.
 
-### TimeUtil 
+### TimeUtil
 
 | Class Name | TimeUtil |
 | --- | --- |
@@ -689,7 +724,7 @@ The library Databene commons is a general-purpose utility collection which also 
 | addMonths(date, noOfMonths) | Calculates a date a given number of months past a given date |
 | addYears(date, noOfYears) | Calculates a date a given number of years past a given date |
 
-### Period 
+### Period
 
 | Class Name | Period |
 | --- | --- |
@@ -702,7 +737,7 @@ The library Databene commons is a general-purpose utility collection which also 
 | Period.DAY.millis | The number of milliseconds in a day |
 | Period.WEEK.millis | The number of milliseconds in a week |
 
-### IOUtil 
+### IOUtil
 
 | Class Name | IOUtil |
 | --- | --- |
@@ -717,7 +752,7 @@ The library Databene commons is a general-purpose utility collection which also 
 | download(sourceUrl, targetFile) | Downloads the content of a remote URI to the local file system |
 | copyFile(sourceUri, targetUri) | Copies a file on the local file system |
 
-### CharUtil 
+### CharUtil
 
 | Class Name | CharUtil |
 | --- | --- |

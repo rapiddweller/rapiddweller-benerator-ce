@@ -26,36 +26,43 @@
 
 package com.rapiddweller.benerator.util;
 
+import com.rapiddweller.common.StringUtil;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.rapiddweller.common.StringUtil;
-import org.junit.Test;
-
 /**
  * Tests the {@link LuhnUtil} class.<br/><br/>
  * Created: 18.10.2009 10:29:43
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class LuhnUtilTest {
 
-	private static final String LUHN_VALID_NUMBER = "49927398716";
+  private static final String LUHN_VALID_NUMBER = "49927398716";
 
-	@Test
-	public void testRequiredLuhnDigit() {
-		assertEquals('0', LuhnUtil.requiredCheckDigit("0000000009"));
-		assertEquals(StringUtil.lastChar(LUHN_VALID_NUMBER), LuhnUtil.requiredCheckDigit(LUHN_VALID_NUMBER));
-		assertEquals('0', LuhnUtil.requiredCheckDigit("1234001234560"));
-		assertEquals('1', LuhnUtil.requiredCheckDigit("234001234560"));
-	}
+  /**
+   * Test required luhn digit.
+   */
+  @Test
+  public void testRequiredLuhnDigit() {
+    assertEquals('0', LuhnUtil.requiredCheckDigit("0000000009"));
+    assertEquals(StringUtil.lastChar(LUHN_VALID_NUMBER), LuhnUtil.requiredCheckDigit(LUHN_VALID_NUMBER));
+    assertEquals('0', LuhnUtil.requiredCheckDigit("1234001234560"));
+    assertEquals('1', LuhnUtil.requiredCheckDigit("234001234560"));
+  }
 
-	@Test
-	public void testLuhnValid() {
-        assertFalse(LuhnUtil.luhnValid("0000000009"));
-        assertTrue(LuhnUtil.luhnValid("0000000000"));
-        assertTrue(LuhnUtil.luhnValid("1234001234560"));
-	}
+  /**
+   * Test luhn valid.
+   */
+  @Test
+  public void testLuhnValid() {
+    assertFalse(LuhnUtil.luhnValid("0000000009"));
+    assertTrue(LuhnUtil.luhnValid("0000000000"));
+    assertTrue(LuhnUtil.luhnValid("1234001234560"));
+  }
 
 }

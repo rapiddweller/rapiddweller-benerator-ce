@@ -26,27 +26,41 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import java.io.Closeable;
-
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.script.Expression;
+
+import java.io.Closeable;
 
 /**
  * {@link CompositeStatement} that holds a condition expression.<br/><br/>
  * Created: 19.02.2010 09:08:00
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public abstract class ConditionStatement implements Statement, Closeable {
-	
-	protected final Expression<Boolean> condition;
 
-    public ConditionStatement(Expression<Boolean> condition) {
-	    this.condition = condition;
-    }
+  /**
+   * The Condition.
+   */
+  protected final Expression<Boolean> condition;
 
-	public Expression<Boolean> getCondidition() {
-    	return condition;
-    }
+  /**
+   * Instantiates a new Condition statement.
+   *
+   * @param condition the condition
+   */
+  public ConditionStatement(Expression<Boolean> condition) {
+    this.condition = condition;
+  }
+
+  /**
+   * Gets condidition.
+   *
+   * @return the condidition
+   */
+  public Expression<Boolean> getCondidition() {
+    return condition;
+  }
 
 }

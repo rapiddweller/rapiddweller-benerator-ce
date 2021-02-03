@@ -42,42 +42,50 @@ import com.rapiddweller.model.data.FileBasedEntitySource;
  * @author Volker Bergmann
  * @since 0.5.7
  */
-
 public class XLSEntitySource extends FileBasedEntitySource {
 
-    private final ComplexTypeDescriptor entityType;
-    private final Converter<String, ?> preprocessor;
-    private final String sheetName;
-    private final boolean formatted;
+  private final ComplexTypeDescriptor entityType;
+  private final Converter<String, ?> preprocessor;
+  private final String sheetName;
+  private final boolean formatted;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public XLSEntitySource(String uri, Converter<String, ?> preprocessor,
-                           ComplexTypeDescriptor entityType, String sheetName,
-                           boolean formatted) {
-        super(uri);
-        this.entityType = entityType;
-        this.preprocessor = preprocessor;
-        this.sheetName = sheetName;
-        this.formatted = formatted;
+  /**
+   * Instantiates a new Xls entity source.
+   *
+   * @param uri          the uri
+   * @param preprocessor the preprocessor
+   * @param entityType   the entity type
+   * @param sheetName    the sheet name
+   * @param formatted    the formatted
+   */
+  public XLSEntitySource(String uri, Converter<String, ?> preprocessor,
+                         ComplexTypeDescriptor entityType, String sheetName,
+                         boolean formatted) {
+    super(uri);
+    this.entityType = entityType;
+    this.preprocessor = preprocessor;
+    this.sheetName = sheetName;
+    this.formatted = formatted;
+  }
+
+  // EntityIterable interface ----------------------------------------------------------------------------------------
+
+  @Override
+  public DataIterator<Entity> iterator() {
+    try {
+      if (sheetName != null) {
+        return new SingleSheetXLSEntityIterator(resolveUri(), sheetName,
+            preprocessor, entityType, context, true, formatted,
+            null);
+      } else {
+        return new AllSheetsXLSEntityIterator(resolveUri(),
+            preprocessor, entityType, formatted);
+      }
+    } catch (Exception e) {
+      throw new ConfigurationError("Cannot create iterator. ", e);
     }
-
-    // EntityIterable interface ----------------------------------------------------------------------------------------
-
-    @Override
-    public DataIterator<Entity> iterator() {
-        try {
-            if (sheetName != null) {
-                return new SingleSheetXLSEntityIterator(resolveUri(), sheetName,
-                        preprocessor, entityType, context, true, formatted,
-                        null);
-            } else {
-                return new AllSheetsXLSEntityIterator(resolveUri(),
-                        preprocessor, entityType, formatted);
-            }
-        } catch (Exception e) {
-            throw new ConfigurationError("Cannot create iterator. ", e);
-        }
-    }
+  }
 
 }

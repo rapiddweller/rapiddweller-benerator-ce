@@ -28,23 +28,29 @@
 
 package com.rapiddweller.benerator.composite;
 
+import com.rapiddweller.benerator.dataset.CompositeDatasetGenerator;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.rapiddweller.benerator.dataset.CompositeDatasetGenerator;
-import org.junit.Test;
-
+/**
+ * The type Variable test.
+ */
 public class VariableTest {
-    @Test
-    public void testConstructor() {
-        Variable<Object> actualVariable = new Variable<>("Name",
-                new CompositeDatasetGenerator<>("Nesting", "Dataset Name",
-                        true), "Scope");
-        assertTrue(actualVariable.isParallelizable());
-        assertFalse(actualVariable.isResetNeeded());
-        assertEquals("Scope", actualVariable.getScope());
-        assertEquals("Variable[Name:CompositeDatasetGenerator]", actualVariable.toString());
-    }
+  /**
+   * Test constructor.
+   */
+  @Test
+  public void testConstructor() {
+    Variable<Object> actualVariable = new Variable<>("Name",
+        new CompositeDatasetGenerator<>("Nesting", "Dataset Name",
+            true), "Scope");
+    assertTrue(actualVariable.isParallelizable());
+    assertFalse(actualVariable.isResetNeeded());
+    assertEquals("Scope", actualVariable.getScope());
+    assertEquals("Variable[Name:CompositeDatasetGenerator]", actualVariable.toString());
+  }
 }
 

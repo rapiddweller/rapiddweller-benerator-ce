@@ -26,44 +26,52 @@
 
 package com.rapiddweller.domain.address;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link PostalCodeValidator}.<br/><br/>
  * Created: 28.08.2010 15:43:51
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class PostalCodeValidatorTest {
 
-	@Test
-	public void testGermany() {
-		PostalCodeValidator validator = new PostalCodeValidator("DE");
-		assertTrue(validator.valid("12345"));
-		assertTrue(validator.valid("01234"));
-		assertTrue(validator.valid("D12345"));
-		assertTrue(validator.valid("D 12345"));
-		assertTrue(validator.valid("DE12345"));
-		assertTrue(validator.valid("DE 12345"));
-		assertTrue(validator.valid("D-12345"));
-		assertTrue(validator.valid("DE-12345"));
-		assertFalse(validator.valid("123456"));
-		assertFalse(validator.valid("1234"));
-		assertFalse(validator.valid(""));
-		assertFalse(validator.valid(null));
-	}
+  /**
+   * Test germany.
+   */
+  @Test
+  public void testGermany() {
+    PostalCodeValidator validator = new PostalCodeValidator("DE");
+    assertTrue(validator.valid("12345"));
+    assertTrue(validator.valid("01234"));
+    assertTrue(validator.valid("D12345"));
+    assertTrue(validator.valid("D 12345"));
+    assertTrue(validator.valid("DE12345"));
+    assertTrue(validator.valid("DE 12345"));
+    assertTrue(validator.valid("D-12345"));
+    assertTrue(validator.valid("DE-12345"));
+    assertFalse(validator.valid("123456"));
+    assertFalse(validator.valid("1234"));
+    assertFalse(validator.valid(""));
+    assertFalse(validator.valid(null));
+  }
 
-	@Test
-	public void testUS() {
-		PostalCodeValidator validator = new PostalCodeValidator("US");
-		assertTrue(validator.valid("12345"));
-		assertTrue(validator.valid("01234"));
-		assertFalse(validator.valid("123456"));
-		assertFalse(validator.valid("1234"));
-		assertFalse(validator.valid(""));
-		assertFalse(validator.valid(null));
-	}
+  /**
+   * Test us.
+   */
+  @Test
+  public void testUS() {
+    PostalCodeValidator validator = new PostalCodeValidator("US");
+    assertTrue(validator.valid("12345"));
+    assertTrue(validator.valid("01234"));
+    assertFalse(validator.valid("123456"));
+    assertFalse(validator.valid("1234"));
+    assertFalse(validator.valid(""));
+    assertFalse(validator.valid(null));
+  }
 
 }

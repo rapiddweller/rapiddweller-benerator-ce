@@ -37,60 +37,86 @@ import com.rapiddweller.common.StringUtil;
  */
 public class CityId {
 
-    private String name;
-    private String nameExtension;
+  private String name;
+  private String nameExtension;
 
-    public CityId(String name, String nameExtension) {
-        this.name = name;
-        this.nameExtension = nameExtension;
-    }
+  /**
+   * Instantiates a new City id.
+   *
+   * @param name          the name
+   * @param nameExtension the name extension
+   */
+  public CityId(String name, String nameExtension) {
+    this.name = name;
+    this.nameExtension = nameExtension;
+  }
 
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getNameExtension() {
-        return nameExtension;
-    }
+  /**
+   * Gets name extension.
+   *
+   * @return the name extension
+   */
+  public String getNameExtension() {
+    return nameExtension;
+  }
 
-    public void setNameExtension(String nameExtension) {
-        this.nameExtension = nameExtension;
-    }
+  /**
+   * Sets name extension.
+   *
+   * @param nameExtension the name extension
+   */
+  public void setNameExtension(String nameExtension) {
+    this.nameExtension = nameExtension;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        final CityId that = (CityId) o;
-        if (!name.equals(that.name)) {
-            return false;
-        }
-        return NullSafeComparator
-                .equals(this.nameExtension, that.nameExtension);
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    final CityId that = (CityId) o;
+    if (!name.equals(that.name)) {
+      return false;
+    }
+    return NullSafeComparator
+        .equals(this.nameExtension, that.nameExtension);
+  }
 
-    @Override
-    public int hashCode() {
-        return name.hashCode() * 29 +
-                (nameExtension != null ? nameExtension.hashCode() : 0);
-    }
+  @Override
+  public int hashCode() {
+    return name.hashCode() * 29 +
+        (nameExtension != null ? nameExtension.hashCode() : 0);
+  }
 
-    @Override
-    public String toString() {
-        if (StringUtil.isEmpty(nameExtension)) {
-            return name;
-        } else if (nameExtension.charAt(0) == ',') {
-            return name + nameExtension;
-        } else {
-            return name + ' ' + nameExtension;
-        }
+  @Override
+  public String toString() {
+    if (StringUtil.isEmpty(nameExtension)) {
+      return name;
+    } else if (nameExtension.charAt(0) == ',') {
+      return name + nameExtension;
+    } else {
+      return name + ' ' + nameExtension;
     }
+  }
 }

@@ -26,19 +26,31 @@
 
 package com.rapiddweller.benerator;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.format.xml.XMLElementParser;
 
+import java.util.List;
+
 /**
  * Descriptor interface to provide informations about Benerator platforms.<br/><br/>
  * Created: 07.12.2011 18:27:53
- * @since 0.7.4
+ *
  * @author Volker Bergmann
+ * @since 0.7.4
  */
 public interface PlatformDescriptor {
-	List<XMLElementParser<Statement>> getParsers();
-	void init(BeneratorContext context);
+  /**
+   * Gets parsers.
+   *
+   * @return the parsers
+   */
+  List<XMLElementParser<Statement>> getParsers();
+
+  /**
+   * Init.
+   *
+   * @param context the context
+   */
+  void init(BeneratorContext context);
 }

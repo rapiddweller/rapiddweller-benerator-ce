@@ -33,7 +33,11 @@ import com.rapiddweller.common.ui.ConsoleInfoPrinter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,72 +48,96 @@ import java.util.List;
  */
 public class LineShuffler {
 
-    public static final Logger logger = LogManager.getLogger(LineShuffler.class);
+  /**
+   * The constant logger.
+   */
+  public static final Logger logger = LogManager.getLogger(LineShuffler.class);
 
-    public static void main(String[] args) throws IOException {
-        if (args.length < 2) {
-            printHelp();
-            System.exit(-1);
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   * @throws IOException the io exception
+   */
+  public static void main(String[] args) throws IOException {
+    if (args.length < 2) {
+      printHelp();
+      System.exit(-1);
+    }
+    String inFilename = args[0];
+    String outFilename = args[1];
+    int bufferSize = (args.length > 2 ? Integer.parseInt(args[2]) : 100000);
+    shuffle(inFilename, outFilename, bufferSize);
+  }
+
+  /**
+   * Shuffle.
+   *
+   * @param inFilename  the in filename
+   * @param outFilename the out filename
+   * @param bufferSize  the buffer size
+   * @throws IOException the io exception
+   */
+  public static void shuffle(String inFilename, String outFilename, int bufferSize) throws IOException {
+    logger.info("shuffling " + inFilename + " and writing to " + outFilename + " (max. " + bufferSize + " lines)");
+    ReaderLineIterator iterator = new ReaderLineIterator(new BufferedReader(IOUtil.getReaderForURI(inFilename)));
+    List<String> lines = read(bufferSize, iterator);
+    shuffle(lines);
+    save(lines, outFilename);
+  }
+
+  /**
+   * Shuffle.
+   *
+   * @param lines the lines
+   */
+  public static void shuffle(List<String> lines) {
+    int size = lines.size();
+    //Generator<Integer> indexGenerator = new IntegerGenerator(0, size - 1, 1, Sequence.RANDOM);
+    int iterations = size / 2;
+    for (int i = 0; i < iterations; i++) {
+      int i1 = RandomUtil.randomInt(0, size - 1);
+      int i2;
+      do {
+        i2 = RandomUtil.randomInt(0, size - 1);
+      } while (i1 == i2);
+      String tmp = lines.get(i1);
+      lines.set(i1, lines.get(i2));
+      lines.set(i2, tmp);
+    }
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private static List<String> read(int bufferSize, ReaderLineIterator iterator) {
+    List<String> lines = new ArrayList<>(Math.max(100000, bufferSize));
+    int lineCount = 0;
+    while (iterator.hasNext() && lineCount < bufferSize) {
+      String line = iterator.next();
+      if (!StringUtil.isEmpty(line)) {
+        lines.add(line);
+        lineCount++;
+        if (lineCount % 100000 == 99999) {
+          logger.info("parsed " + lineCount + " lines");
         }
-        String inFilename = args[0];
-        String outFilename = args[1];
-        int bufferSize = (args.length > 2 ? Integer.parseInt(args[2]) : 100000);
-        shuffle(inFilename, outFilename, bufferSize);
+      }
     }
+    return lines;
+  }
 
-    public static void shuffle(String inFilename, String outFilename, int bufferSize) throws IOException {
-        logger.info("shuffling " + inFilename + " and writing to " + outFilename + " (max. " + bufferSize + " lines)");
-        ReaderLineIterator iterator = new ReaderLineIterator(new BufferedReader(IOUtil.getReaderForURI(inFilename)));
-        List<String> lines = read(bufferSize, iterator);
-        shuffle(lines);
-        save(lines, outFilename);
+  private static void save(List<String> lines, String outputFilename) throws IOException {
+    logger.info("saving " + outputFilename + "...");
+    PrintWriter printer = new PrintWriter(new BufferedWriter(new FileWriter(outputFilename)));
+    try {
+      for (String line : lines) {
+        printer.println(line);
+      }
+    } finally {
+      IOUtil.close(printer);
     }
+  }
 
-    public static void shuffle(List<String> lines) {
-        int size = lines.size();
-        //Generator<Integer> indexGenerator = new IntegerGenerator(0, size - 1, 1, Sequence.RANDOM);
-        int iterations = size / 2;
-        for (int i = 0; i < iterations; i++) {
-            int i1 = RandomUtil.randomInt(0, size - 1);
-            int i2;
-            do {
-                i2 = RandomUtil.randomInt(0, size - 1);
-            } while (i1 == i2);
-            String tmp = lines.get(i1);
-            lines.set(i1, lines.get(i2));
-            lines.set(i2, tmp);
-        }
-    }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private static List<String> read(int bufferSize, ReaderLineIterator iterator) {
-        List<String> lines = new ArrayList<>(Math.max(100000, bufferSize));
-        int lineCount = 0;
-        while (iterator.hasNext() && lineCount < bufferSize) {
-            String line = iterator.next();
-            if (!StringUtil.isEmpty(line)) {
-                lines.add(line);
-                lineCount++;
-                if (lineCount % 100000 == 99999)
-                    logger.info("parsed " + lineCount + " lines");
-            }
-        }
-        return lines;
-    }
-
-    private static void save(List<String> lines, String outputFilename) throws IOException {
-        logger.info("saving " + outputFilename + "...");
-        PrintWriter printer = new PrintWriter(new BufferedWriter(new FileWriter(outputFilename)));
-        try {
-            for (String line : lines)
-                printer.println(line);
-        } finally {
-            IOUtil.close(printer);
-        }
-    }
-
-    private static void printHelp() {
-        ConsoleInfoPrinter.printHelp("Parameters: inFile outFile [buffer size]");
-    }
+  private static void printHelp() {
+    ConsoleInfoPrinter.printHelp("Parameters: inFile outFile [buffer size]");
+  }
 }

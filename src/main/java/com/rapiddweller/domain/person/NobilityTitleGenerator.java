@@ -48,78 +48,112 @@ import java.util.Locale;
  */
 public class NobilityTitleGenerator extends GeneratorProxy<String> {
 
-    private final static String BASE_NAME =
-            "/com/rapiddweller/domain/person/nobTitle_";
+  private final static String BASE_NAME =
+      "/com/rapiddweller/domain/person/nobTitle_";
 
-    private Gender gender;
-    private Locale locale;
-    private float nobleQuota = 0.005f;
+  private Gender gender;
+  private Locale locale;
+  private float nobleQuota = 0.005f;
 
-    public NobilityTitleGenerator() {
-        this(Gender.MALE, Locale.getDefault());
+  /**
+   * Instantiates a new Nobility title generator.
+   */
+  public NobilityTitleGenerator() {
+    this(Gender.MALE, Locale.getDefault());
+  }
+
+  /**
+   * Instantiates a new Nobility title generator.
+   *
+   * @param gender the gender
+   * @param locale the locale
+   */
+  public NobilityTitleGenerator(Gender gender, Locale locale) {
+    super(String.class);
+    this.gender = gender;
+    this.locale = locale;
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  private static LocalCSVGenerator<String> createCSVGenerator(Gender gender,
+                                                              Locale locale) {
+    return new LocalCSVGenerator<>(String.class, baseName(gender), locale,
+        ".csv", Encodings.UTF_8);
+  }
+
+  private static String baseName(Gender gender) {
+    if (gender == Gender.FEMALE) {
+      return BASE_NAME + "female";
+    } else if (gender == Gender.MALE) {
+      return BASE_NAME + "male";
+    } else {
+      throw new IllegalArgumentException("Gender: " + gender);
     }
+  }
 
-    public NobilityTitleGenerator(Gender gender, Locale locale) {
-        super(String.class);
-        this.gender = gender;
-        this.locale = locale;
+  /**
+   * Sets gender.
+   *
+   * @param gender the gender
+   */
+  public void setGender(Gender gender) {
+    this.gender = gender;
+  }
+
+  /**
+   * Gets locale.
+   *
+   * @return the locale
+   */
+  public Locale getLocale() {
+    return locale;
+  }
+
+  /**
+   * Sets locale.
+   *
+   * @param locale the locale
+   */
+  public void setLocale(Locale locale) {
+    this.locale = locale;
+  }
+
+  // Generator interface implementation ------------------------------------------------------------------------------
+
+  /**
+   * Gets noble quota.
+   *
+   * @return the noble quota
+   */
+  public double getNobleQuota() {
+    return nobleQuota;
+  }
+
+  /**
+   * Sets noble quota.
+   *
+   * @param nobleQuota the noble quota
+   */
+  public void setNobleQuota(double nobleQuota) {
+    this.nobleQuota = (float) nobleQuota;
+  }
+
+  // helper methods --------------------------------------------------------------------------------------------------
+
+  @Override
+  public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
+    if (RandomUtil.randomProbability() < getNobleQuota()) {
+      return super.generate(wrapper);
+    } else {
+      return wrapper.wrap("");
     }
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
-
-    private static LocalCSVGenerator<String> createCSVGenerator(Gender gender,
-                                                                Locale locale) {
-        return new LocalCSVGenerator<>(String.class, baseName(gender), locale,
-                ".csv", Encodings.UTF_8);
-    }
-
-    private static String baseName(Gender gender) {
-        if (gender == Gender.FEMALE) {
-            return BASE_NAME + "female";
-        } else if (gender == Gender.MALE) {
-            return BASE_NAME + "male";
-        } else {
-            throw new IllegalArgumentException("Gender: " + gender);
-        }
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
-
-    // Generator interface implementation ------------------------------------------------------------------------------
-
-    public double getNobleQuota() {
-        return nobleQuota;
-    }
-
-    public void setNobleQuota(double nobleQuota) {
-        this.nobleQuota = (float) nobleQuota;
-    }
-
-    // helper methods --------------------------------------------------------------------------------------------------
-
-    @Override
-    public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
-        if (RandomUtil.randomProbability() < getNobleQuota()) {
-            return super.generate(wrapper);
-        } else {
-            return wrapper.wrap("");
-        }
-    }
-
-    @Override
-    public synchronized void init(GeneratorContext context) {
-        setSource(createCSVGenerator(gender, locale));
-        super.init(context);
-    }
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    setSource(createCSVGenerator(gender, locale));
+    super.init(context);
+  }
 
 }

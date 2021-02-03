@@ -26,71 +26,99 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
-import java.util.Random;
-
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.PropertyMessage;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 
+import java.util.Random;
+
 /**
  * Creates random {@link Integer} values with a uniform distribution.<br/>
  * <br/>
  * Created at 24.06.2009 00:57:52
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class RandomIntegerGenerator extends AbstractNonNullNumberGenerator<Integer> {
 
-    private static final int DEFAULT_MIN = Integer.MIN_VALUE / 2 + 1; // test if it works with these min/max values
-	private static final int DEFAULT_MAX = Integer.MAX_VALUE / 2 - 1;
-	private static final int DEFAULT_GRANULARITY = 1;
+  private static final int DEFAULT_MIN = Integer.MIN_VALUE / 2 + 1; // test if it works with these min/max values
+  private static final int DEFAULT_MAX = Integer.MAX_VALUE / 2 - 1;
+  private static final int DEFAULT_GRANULARITY = 1;
 
-	private static final Random random = new Random();
+  private static final Random random = new Random();
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public RandomIntegerGenerator() {
-    	this(DEFAULT_MIN, DEFAULT_MAX);
+  /**
+   * Instantiates a new Random integer generator.
+   */
+  public RandomIntegerGenerator() {
+    this(DEFAULT_MIN, DEFAULT_MAX);
+  }
+
+  /**
+   * Instantiates a new Random integer generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public RandomIntegerGenerator(int min, int max) {
+    this(min, max, DEFAULT_GRANULARITY);
+  }
+
+  /**
+   * Instantiates a new Random integer generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   */
+  public RandomIntegerGenerator(int min, int max, int granularity) {
+    super(Integer.class, min, max, granularity);
+  }
+
+  // Generator implementation ----------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    if (granularity == 0) {
+      throw new InvalidGeneratorSetupException(getClass().getSimpleName() + ".granularity may not be 0");
     }
+    super.init(context);
+  }
 
-    public RandomIntegerGenerator(int min, int max) {
-        this(min, max, DEFAULT_GRANULARITY);
-    }
+  @Override
+  public Integer generate() {
+    return generate(min, max, granularity);
+  }
 
-    public RandomIntegerGenerator(int min, int max, int granularity) {
-        super(Integer.class, min, max, granularity);
-    }
+  // public convenience method ---------------------------------------------------------------------------------------
 
-    // Generator implementation ----------------------------------------------------------------------------------------
-
-    @Override
-    public void init(GeneratorContext context) {
-    	if (granularity == 0)
-    		throw new InvalidGeneratorSetupException(getClass().getSimpleName() + ".granularity may not be 0");
-        super.init(context);
+  /**
+   * Generate int.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   * @return the int
+   */
+  public static int generate(int min, int max, int granularity) {
+    if (min > max) {
+      throw new InvalidGeneratorSetupException(new PropertyMessage("min", "greater than max"));
     }
-    
-	@Override
-	public Integer generate() {
-        return generate(min, max, granularity);
+    int range = (max - min + granularity) / granularity;
+    int result;
+    if (range != 0) {
+      result = min + Math.abs(random.nextInt() % range) * granularity;
+    } else {
+      result = random.nextInt() * granularity;
     }
-    
-    // public convenience method ---------------------------------------------------------------------------------------
-
-    public static int generate(int min, int max, int granularity) {
-        if (min > max)
-            throw new InvalidGeneratorSetupException(new PropertyMessage("min", "greater than max"));
-        int range = (max - min + granularity) / granularity;
-        int result;
-        if (range != 0)
-            result = min + Math.abs(random.nextInt() % range) * granularity;
-        else
-            result = random.nextInt() * granularity;
-        if (result < min)
-            result += range;
-        return result;
+    if (result < min) {
+      result += range;
     }
+    return result;
+  }
 
 }

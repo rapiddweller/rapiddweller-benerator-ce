@@ -44,36 +44,45 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class CachedSequenceGenerator extends AbstractSequenceGenerator {
 
-    private AtomicLong cacheValue;
+  private AtomicLong cacheValue;
 
-    public CachedSequenceGenerator() {
-        this(null, null);
-    }
+  /**
+   * Instantiates a new Cached sequence generator.
+   */
+  public CachedSequenceGenerator() {
+    this(null, null);
+  }
 
-    public CachedSequenceGenerator(String name, DBSystem database) {
-        super(name, database);
-    }
+  /**
+   * Instantiates a new Cached sequence generator.
+   *
+   * @param name     the name
+   * @param database the database
+   */
+  public CachedSequenceGenerator(String name, DBSystem database) {
+    super(name, database);
+  }
 
-    @Override
-    public void init(GeneratorContext context) {
-        super.init(context);
-        cacheValue = new AtomicLong(fetchSequenceValue());
-    }
+  @Override
+  public void init(GeneratorContext context) {
+    super.init(context);
+    cacheValue = new AtomicLong(fetchSequenceValue());
+  }
 
-    @Override
-    public Long generate() {
-        return cacheValue.getAndIncrement();
-    }
+  @Override
+  public Long generate() {
+    return cacheValue.getAndIncrement();
+  }
 
-    @Override
-    public void close() {
-        try {
-            database.setSequenceValue(name, cacheValue.get());
-            cacheValue = null;
-            super.close();
-        } catch (SQLException e) {
-            logger.error("Error closing " + this, e);
-        }
+  @Override
+  public void close() {
+    try {
+      database.setSequenceValue(name, cacheValue.get());
+      cacheValue = null;
+      super.close();
+    } catch (SQLException e) {
+      logger.error("Error closing " + this, e);
     }
+  }
 
 }

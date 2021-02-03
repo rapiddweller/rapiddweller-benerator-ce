@@ -26,94 +26,126 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.common.SyntaxError;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Tests the {@link SettingParser}.<br/><br/>
  * Created: 18.02.2010 22:46:46
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class SettingParserAndStatementTest extends BeneratorIntegrationTest {
-	
-	@Test
-	public void testValue() {
-		parseAndExecute("<setting name='globalProp' value='XYZ' />");
-		assertEquals("XYZ", context.get("globalProp"));
-	}
-	
-	@Test
-	public void testEscapedValue() {
-		parseAndExecute("<setting name='globalProp' value=\"\\\'\\t\\'\" />");
-		assertEquals("'\t'", context.get("globalProp"));
-	}
-	
-	@Test
-	public void testDefault_undefined() {
-		parseAndExecute("<setting name='globalProp' default='XYZ' />");
-		assertEquals("XYZ", context.get("globalProp"));
-	}
-	
-	@Test
-	public void testDefault_predefined() {
-		Statement statement = parse("<setting name='globalProp' default='XYZ' />");
-		context.setGlobal("globalProp", "ZZZ");
-		statement.execute(context);
-		assertEquals("ZZZ", context.get("globalProp"));
-	}
-	
-	@Test
-	public void testRef() {
-		context.setGlobal("setting", "cfg");
-		parseAndExecute("<setting name='globalProp' ref='setting' />");
-		assertEquals("cfg", context.get("globalProp"));
-	}
-	
-	@Test
-	public void testSource() {
-		context.setGlobal("myGen", new ConstantGenerator<>("myProd"));
-		parseAndExecute("<setting name='globalProp' source='myGen' />");
-		assertEquals("myProd", context.get("globalProp"));
-	}
-	
-	@Test
-	public void testNestedBean() {
-		parseAndExecute(
-			"<setting name='globalProp'>" +
-			"	<bean spec='new com.rapiddweller.benerator.engine.parser.xml.BeanMock(123)'/>" +
-			"</setting>");
-		assertEquals(123, ((BeanMock) context.get("globalProp")).lastValue);
-	}
-	
-	@Test
-	public void testNestedBeanArray() {
-		parseAndExecute(
-				"<setting name='globalProp'>" +
-				"	<bean spec='new com.rapiddweller.benerator.engine.parser.xml.BeanMock(1)'/>" +
-				"	<bean spec='new com.rapiddweller.benerator.engine.parser.xml.BeanMock(2)'/>" +
-				"</setting>");
-		Object[] beans = (Object[]) context.get("globalProp");
-		assertEquals(2, beans.length);
-		assertEquals(1, ((BeanMock) beans[0]).lastValue);
-		assertEquals(2, ((BeanMock) beans[1]).lastValue);
-	}
-	
-	@Test(expected = SyntaxError.class)
-	public void testInvalid() {
-		parseAndExecute("<setting name='globalProp' xyz='XYZ' />");
-	}
-	
-	@Test
-	public void testBeneratorProperty() {
-		assertTrue(context.getDefaultPageSize() != 123);
-		parseAndExecute("<setting name='context.defaultPageSize' value='123' />");
-		assertEquals(123, context.getDefaultPageSize());
-	}
-	
+
+  /**
+   * Test value.
+   */
+  @Test
+  public void testValue() {
+    parseAndExecute("<setting name='globalProp' value='XYZ' />");
+    assertEquals("XYZ", context.get("globalProp"));
+  }
+
+  /**
+   * Test escaped value.
+   */
+  @Test
+  public void testEscapedValue() {
+    parseAndExecute("<setting name='globalProp' value=\"\\'\\t\\'\" />");
+    assertEquals("'\t'", context.get("globalProp"));
+  }
+
+  /**
+   * Test default undefined.
+   */
+  @Test
+  public void testDefault_undefined() {
+    parseAndExecute("<setting name='globalProp' default='XYZ' />");
+    assertEquals("XYZ", context.get("globalProp"));
+  }
+
+  /**
+   * Test default predefined.
+   */
+  @Test
+  public void testDefault_predefined() {
+    Statement statement = parse("<setting name='globalProp' default='XYZ' />");
+    context.setGlobal("globalProp", "ZZZ");
+    statement.execute(context);
+    assertEquals("ZZZ", context.get("globalProp"));
+  }
+
+  /**
+   * Test ref.
+   */
+  @Test
+  public void testRef() {
+    context.setGlobal("setting", "cfg");
+    parseAndExecute("<setting name='globalProp' ref='setting' />");
+    assertEquals("cfg", context.get("globalProp"));
+  }
+
+  /**
+   * Test source.
+   */
+  @Test
+  public void testSource() {
+    context.setGlobal("myGen", new ConstantGenerator<>("myProd"));
+    parseAndExecute("<setting name='globalProp' source='myGen' />");
+    assertEquals("myProd", context.get("globalProp"));
+  }
+
+  /**
+   * Test nested bean.
+   */
+  @Test
+  public void testNestedBean() {
+    parseAndExecute(
+        "<setting name='globalProp'>" +
+            "	<bean spec='new com.rapiddweller.benerator.engine.parser.xml.BeanMock(123)'/>" +
+            "</setting>");
+    assertEquals(123, ((BeanMock) context.get("globalProp")).lastValue);
+  }
+
+  /**
+   * Test nested bean array.
+   */
+  @Test
+  public void testNestedBeanArray() {
+    parseAndExecute(
+        "<setting name='globalProp'>" +
+            "	<bean spec='new com.rapiddweller.benerator.engine.parser.xml.BeanMock(1)'/>" +
+            "	<bean spec='new com.rapiddweller.benerator.engine.parser.xml.BeanMock(2)'/>" +
+            "</setting>");
+    Object[] beans = (Object[]) context.get("globalProp");
+    assertEquals(2, beans.length);
+    assertEquals(1, ((BeanMock) beans[0]).lastValue);
+    assertEquals(2, ((BeanMock) beans[1]).lastValue);
+  }
+
+  /**
+   * Test invalid.
+   */
+  @Test(expected = SyntaxError.class)
+  public void testInvalid() {
+    parseAndExecute("<setting name='globalProp' xyz='XYZ' />");
+  }
+
+  /**
+   * Test benerator property.
+   */
+  @Test
+  public void testBeneratorProperty() {
+    assertTrue(context.getDefaultPageSize() != 123);
+    parseAndExecute("<setting name='context.defaultPageSize' value='123' />");
+    assertEquals(123, context.getDefaultPageSize());
+  }
+
 }

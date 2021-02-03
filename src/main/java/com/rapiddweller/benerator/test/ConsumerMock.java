@@ -29,112 +29,183 @@ package com.rapiddweller.benerator.test;
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Mock implementation of the {@link Consumer} interface to be used for testing.<br/><br/>
  * Created: 11.03.2010 12:51:40
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ConsumerMock extends AbstractConsumer {
-	
-	public static final String START_CONSUMING = "sc";
-	public static final String FINISH_CONSUMING = "fc";
-	public static final String FLUSH = "fl";
-	public static final String CLOSE = "cl";
 
-	public static final Map<Integer, ConsumerMock> instances = new HashMap<>();
-	
-	private final int id;
-	private final int minDelay;
-	private final int delayDelta;
-	
-	private final boolean storeProducts;
-	public List<Object> products;
-	public final List<String> invocations;
+  /**
+   * The constant START_CONSUMING.
+   */
+  public static final String START_CONSUMING = "sc";
+  /**
+   * The constant FINISH_CONSUMING.
+   */
+  public static final String FINISH_CONSUMING = "fc";
+  /**
+   * The constant FLUSH.
+   */
+  public static final String FLUSH = "fl";
+  /**
+   * The constant CLOSE.
+   */
+  public static final String CLOSE = "cl";
 
-	public final AtomicInteger startConsumingCount = new AtomicInteger();
-	public final AtomicInteger finishConsumingCount = new AtomicInteger();
-	public final AtomicInteger flushCount = new AtomicInteger();
-	public final AtomicInteger closeCount = new AtomicInteger();
+  /**
+   * The constant instances.
+   */
+  public static final Map<Integer, ConsumerMock> instances = new HashMap<>();
 
-	private Random random;
-	private final Set<String> threadNames;
-	
-	public ConsumerMock(boolean storeProducts) {
-	    this(storeProducts, 0, 0, 0);
-    }
+  private final int id;
+  private final int minDelay;
+  private final int delayDelta;
 
-	public ConsumerMock(boolean storeProducts, int id) {
-	    this(storeProducts, id, 0, 0);
-    }
+  private final boolean storeProducts;
+  /**
+   * The Products.
+   */
+  public List<Object> products;
+  /**
+   * The Invocations.
+   */
+  public final List<String> invocations;
 
-	public ConsumerMock(boolean storeProducts, int id, int minDelay, int maxDelay) {
-	    this.storeProducts = storeProducts;
-	    this.id = id;
-	    this.minDelay = minDelay;
-	    if (maxDelay > 0) {
-	    	this.delayDelta = maxDelay - minDelay;
-	    	random = new Random();
-	    } else
-	    	this.delayDelta = 0;
-	    if (storeProducts)
-	    	products = new ArrayList<>();
-	    this.invocations = new ArrayList<>();
-	    instances.put(id, this);
-		threadNames = new HashSet<>();
-    }
-	
-	public List<?> getProducts() {
-    	return products;
-    }
+  /**
+   * The Start consuming count.
+   */
+  public final AtomicInteger startConsumingCount = new AtomicInteger();
+  /**
+   * The Finish consuming count.
+   */
+  public final AtomicInteger finishConsumingCount = new AtomicInteger();
+  /**
+   * The Flush count.
+   */
+  public final AtomicInteger flushCount = new AtomicInteger();
+  /**
+   * The Close count.
+   */
+  public final AtomicInteger closeCount = new AtomicInteger();
 
-    public int getThreadCount() {
-    	return threadNames.size();
-    }
-    
-	@Override
-	public synchronized void startProductConsumption(Object product) {
-        threadNames.add(Thread.currentThread().getName());
-		invocations.add(START_CONSUMING);
-	    startConsumingCount.incrementAndGet();
-	    if (storeProducts) {
-	    	synchronized (products) {
-	            products.add(product);
-            }
-	    }
-	    if (random != null) {
-	    	try {
-	    		Thread.sleep(minDelay + random.nextInt(delayDelta));
-	    	} catch (InterruptedException e) {
-	    		// nothing to do
-	    	}
-	    }
-    }
+  private Random random;
+  private final Set<String> threadNames;
 
-	@Override
-	public void finishProductConsumption(Object product) {
-		invocations.add(FINISH_CONSUMING);
-	    finishConsumingCount.incrementAndGet();
-    }
+  /**
+   * Instantiates a new Consumer mock.
+   *
+   * @param storeProducts the store products
+   */
+  public ConsumerMock(boolean storeProducts) {
+    this(storeProducts, 0, 0, 0);
+  }
 
-	@Override
-	public void flush() {
-		invocations.add(FLUSH);
-	    flushCount.incrementAndGet();
-    }
+  /**
+   * Instantiates a new Consumer mock.
+   *
+   * @param storeProducts the store products
+   * @param id            the id
+   */
+  public ConsumerMock(boolean storeProducts, int id) {
+    this(storeProducts, id, 0, 0);
+  }
 
-	@Override
-	public void close() {
-		invocations.add(CLOSE);
-	    closeCount.incrementAndGet();
+  /**
+   * Instantiates a new Consumer mock.
+   *
+   * @param storeProducts the store products
+   * @param id            the id
+   * @param minDelay      the min delay
+   * @param maxDelay      the max delay
+   */
+  public ConsumerMock(boolean storeProducts, int id, int minDelay, int maxDelay) {
+    this.storeProducts = storeProducts;
+    this.id = id;
+    this.minDelay = minDelay;
+    if (maxDelay > 0) {
+      this.delayDelta = maxDelay - minDelay;
+      random = new Random();
+    } else {
+      this.delayDelta = 0;
     }
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + '[' + id + ']';
-	}
+    if (storeProducts) {
+      products = new ArrayList<>();
+    }
+    this.invocations = new ArrayList<>();
+    instances.put(id, this);
+    threadNames = new HashSet<>();
+  }
+
+  /**
+   * Gets products.
+   *
+   * @return the products
+   */
+  public List<?> getProducts() {
+    return products;
+  }
+
+  /**
+   * Gets thread count.
+   *
+   * @return the thread count
+   */
+  public int getThreadCount() {
+    return threadNames.size();
+  }
+
+  @Override
+  public synchronized void startProductConsumption(Object product) {
+    threadNames.add(Thread.currentThread().getName());
+    invocations.add(START_CONSUMING);
+    startConsumingCount.incrementAndGet();
+    if (storeProducts) {
+      synchronized (products) {
+        products.add(product);
+      }
+    }
+    if (random != null) {
+      try {
+        Thread.sleep(minDelay + random.nextInt(delayDelta));
+      } catch (InterruptedException e) {
+        // nothing to do
+      }
+    }
+  }
+
+  @Override
+  public void finishProductConsumption(Object product) {
+    invocations.add(FINISH_CONSUMING);
+    finishConsumingCount.incrementAndGet();
+  }
+
+  @Override
+  public void flush() {
+    invocations.add(FLUSH);
+    flushCount.incrementAndGet();
+  }
+
+  @Override
+  public void close() {
+    invocations.add(CLOSE);
+    closeCount.incrementAndGet();
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + id + ']';
+  }
 
 }

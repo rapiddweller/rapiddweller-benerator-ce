@@ -26,11 +26,6 @@
 
 package com.rapiddweller.platform.fixedwidth;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-import java.io.IOException;
-
 import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.FileUtil;
@@ -38,52 +33,64 @@ import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Tests the {@link FixedWidthEntityExporter}.<br/><br/>
  * Created: 14.11.2009 10:04:46
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class FixedWidthEntityExporterTest extends ModelTest {
 
-	private static final String ENCODING = Encodings.UTF_8;
+  private static final String ENCODING = Encodings.UTF_8;
 
-	@Test
-	public void testFormat() throws Exception {
-		File file = tempFile();
-		String uri = file.getAbsolutePath();
-		FixedWidthEntityExporter exporter = new FixedWidthEntityExporter(uri, ENCODING, "left[10],right[N0000000.00]");
-        try (exporter) {
-            exporter.setNullString("");
-            consumeEntity(exporter, 12, 34);       // int
-            consumeEntity(exporter, 56, 9876543L); // long
-            consumeEntity(exporter, 78, 9876543.); // round double
-            consumeEntity(exporter, 90, 1.5);      // double
-            consumeEntity(exporter, null, null);   // null
-        }
-		assertTrue(file.exists());
-		String[] actualLines = IOUtil.readTextLines(file.getAbsolutePath(), true);
-		String[] expectedLines = new String [] {
-				"12        0000034.00",
-				"56        9876543.00",
-				"78        9876543.00",
-				"90        0000001.50",
-				"                    "
-		};
-		assertArrayEquals(expectedLines, actualLines);
-		FileUtil.deleteIfExists(file);
-	}
+  /**
+   * Test format.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testFormat() throws Exception {
+    File file = tempFile();
+    String uri = file.getAbsolutePath();
+    FixedWidthEntityExporter exporter = new FixedWidthEntityExporter(uri, ENCODING, "left[10],right[N0000000.00]");
+    try (exporter) {
+      exporter.setNullString("");
+      consumeEntity(exporter, 12, 34);       // int
+      consumeEntity(exporter, 56, 9876543L); // long
+      consumeEntity(exporter, 78, 9876543.); // round double
+      consumeEntity(exporter, 90, 1.5);      // double
+      consumeEntity(exporter, null, null);   // null
+    }
+    assertTrue(file.exists());
+    String[] actualLines = IOUtil.readTextLines(file.getAbsolutePath(), true);
+    String[] expectedLines = new String[] {
+        "12        0000034.00",
+        "56        9876543.00",
+        "78        9876543.00",
+        "90        0000001.50",
+        "                    "
+    };
+    assertArrayEquals(expectedLines, actualLines);
+    FileUtil.deleteIfExists(file);
+  }
 
-	private void consumeEntity(FixedWidthEntityExporter exporter, Number left, Number right) {
-		Entity entity = createEntity("row", "left", left, "right", right);
-		exporter.startProductConsumption(entity);
-		exporter.finishProductConsumption(entity);
-	}
+  private void consumeEntity(FixedWidthEntityExporter exporter, Number left, Number right) {
+    Entity entity = createEntity("row", "left", left, "right", right);
+    exporter.startProductConsumption(entity);
+    exporter.finishProductConsumption(entity);
+  }
 
-	private File tempFile() throws IOException {
-		File file = File.createTempFile(getClass().getSimpleName(), ".fcw", new File("target"));
-		FileUtil.deleteIfExists(file);
-		return file;
-	}
-	
+  private File tempFile() throws IOException {
+    File file = File.createTempFile(getClass().getSimpleName(), ".fcw", new File("target"));
+    FileUtil.deleteIfExists(file);
+    return file;
+  }
+
 }

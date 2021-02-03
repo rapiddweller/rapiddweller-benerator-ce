@@ -33,39 +33,55 @@ import org.junit.Test;
  * Tests the validation of EAN codes with the {@link EANValidator}.<br/>
  * <br/>
  * Created: 29.07.2007 08:04:09
+ *
  * @author Volker Bergmann
  */
 public class EANValidatorTest extends SimpleValidatorTest<String> {
 
-    public EANValidatorTest() {
-	    super(new EANValidator());
-    }
+  /**
+   * Instantiates a new Ean validator test.
+   */
+  public EANValidatorTest() {
+    super(new EANValidator());
+  }
 
-	private static final String EAN_VOLVIC           = "3057640182693";
-    private static final String ISBN_ISM2            = "9783981304602";
-    private static final String EAN_INVALID_CHECKSUM = "3057640182692";
-    private static final String EAN_INVALID_LENGTH   = "3057640182";
+  private static final String EAN_VOLVIC = "3057640182693";
+  private static final String ISBN_ISM2 = "9783981304602";
+  private static final String EAN_INVALID_CHECKSUM = "3057640182692";
+  private static final String EAN_INVALID_LENGTH = "3057640182";
 
-    @Test
-    public void testValidEAN() {
-        assertValid(EAN_VOLVIC);
-    }
-    
-    @Test
-    public void testValidISBN() {
-        assertValid(ISBN_ISM2);
-    }
-    
-    @Test
-    public void testIllegalValues() {
-        assertInvalid(null);
-        assertInvalid("");
-    }
-    
-    @Test
-    public void testInvalidChecksums() {
-    	assertInvalid(EAN_INVALID_CHECKSUM);
-    	assertInvalid(EAN_INVALID_LENGTH);
-    }
-    
+  /**
+   * Test valid ean.
+   */
+  @Test
+  public void testValidEAN() {
+    assertValid(EAN_VOLVIC);
+  }
+
+  /**
+   * Test valid isbn.
+   */
+  @Test
+  public void testValidISBN() {
+    assertValid(ISBN_ISM2);
+  }
+
+  /**
+   * Test illegal values.
+   */
+  @Test
+  public void testIllegalValues() {
+    assertInvalid(null);
+    assertInvalid("");
+  }
+
+  /**
+   * Test invalid checksums.
+   */
+  @Test
+  public void testInvalidChecksums() {
+    assertInvalid(EAN_INVALID_CHECKSUM);
+    assertInvalid(EAN_INVALID_LENGTH);
+  }
+
 }

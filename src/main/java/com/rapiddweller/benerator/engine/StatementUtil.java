@@ -31,17 +31,27 @@ import com.rapiddweller.benerator.engine.statement.StatementProxy;
 /**
  * Provides utility methods for {@link Statement} processing.<br/><br/>
  * Created: 01.09.2011 16:50:54
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class StatementUtil {
-	
-	private StatementUtil() { }
 
-	public static Statement getRealStatement(Statement statement, BeneratorContext context) {
-		while (statement instanceof StatementProxy) 
-			statement = ((StatementProxy) statement).getRealStatement(context);
-		return statement;
-	}
-    
+  private StatementUtil() {
+  }
+
+  /**
+   * Gets real statement.
+   *
+   * @param statement the statement
+   * @param context   the context
+   * @return the real statement
+   */
+  public static Statement getRealStatement(Statement statement, BeneratorContext context) {
+    while (statement instanceof StatementProxy) {
+      statement = ((StatementProxy) statement).getRealStatement(context);
+    }
+    return statement;
+  }
+
 }

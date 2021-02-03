@@ -29,26 +29,27 @@ package com.rapiddweller.benerator.distribution.sequence;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import static com.rapiddweller.common.NumberUtil.*;
+
+import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
- * {@link Sequence} implementation for a distribution that creates the bit-reverses (r) 
- * of a continuous series, e.g. r(1), r(2), r(3), ...; the numbers produced by a related 
+ * {@link Sequence} implementation for a distribution that creates the bit-reverses (r)
+ * of a continuous series, e.g. r(1), r(2), r(3), ...; the numbers produced by a related
  * generator are unique as long as the generator is not reset.<br/>
  * <br/>
  * Created at 23.09.2009 18:59:30
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class BitReverseSequence extends Sequence {
 
-    @Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(
-    		Class<T> numberType, T min, T max, T granularity, boolean unique) {
-    	long lMax = (max != null ? max.longValue() : BitReverseLongGenerator.MAX_INDEX_RANGE + toLong(min));
-    	NonNullGenerator<? extends Number> base = new BitReverseLongGenerator(toLong(min), lMax, toLong(granularity));
-		return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
-    }
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(
+      Class<T> numberType, T min, T max, T granularity, boolean unique) {
+    long lMax = (max != null ? max.longValue() : BitReverseLongGenerator.MAX_INDEX_RANGE + toLong(min));
+    NonNullGenerator<? extends Number> base = new BitReverseLongGenerator(toLong(min), lMax, toLong(granularity));
+    return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
+  }
 
 }

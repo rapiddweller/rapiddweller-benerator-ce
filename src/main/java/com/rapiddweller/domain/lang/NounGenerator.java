@@ -39,16 +39,26 @@ import java.util.Locale;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class NounGenerator extends NonNullSampleGenerator<Noun> {
 
-    public NounGenerator() throws IOException {
-        this(Locale.getDefault());
-    }
+  /**
+   * Instantiates a new Noun generator.
+   *
+   * @throws IOException the io exception
+   */
+  public NounGenerator() throws IOException {
+    this(Locale.getDefault());
+  }
 
-    public NounGenerator(Locale locale) throws IOException {
-        super(Noun.class);
-        addValues(Noun.getInstances(locale));
-    }
+  /**
+   * Instantiates a new Noun generator.
+   *
+   * @param locale the locale
+   * @throws IOException the io exception
+   */
+  public NounGenerator(Locale locale) throws IOException {
+    super(Noun.class);
+    addValues(Noun.getInstances(locale));
+  }
 
 }

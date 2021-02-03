@@ -26,83 +26,102 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
- * Proxies several source generators, initially returning products of the first source as long 
+ * Proxies several source generators, initially returning products of the first source as long
  * as it is available, then of the second source and son on.
  * When generating unique data, the last source generator is required to generate unique data itself.<br/>
  * <br/>
  * Created: 22.07.2011 14:58:00
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class GeneratorChain<E> extends MultiGeneratorWrapper<E, E> {
 
-	private final boolean unique;
-	private final Set<E> usedValues;
-	
-	@SafeVarargs
-	public GeneratorChain(Class<E> generatedType, boolean unique, Generator<? extends E>... sources) {
-		super(generatedType, sources);
-		this.unique = unique;
-		this.usedValues = new HashSet<>();
-	}
-	
-	@Override
-	public synchronized void init(GeneratorContext context) {
-		clearMembers();
-		super.init(context);
-	}
+  private final boolean unique;
+  private final Set<E> usedValues;
 
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-		assertInitialized();
-		boolean ok = true;
-		E value;
-		do {
-			wrapper = generateUnvalidated(wrapper);
-			if (wrapper == null)
-				return null;
-			value = wrapper.unwrap();
-			if (unique) {
-				if (availableSourceCount() > 1) {
-					// for all but the last generator check if the value has already occurred and store it...
-					ok = usedValues.add(value);
-				} else {
-					// ...since each generator is expected to be unique itself, 
-					// there is no need to store the value of the last generator in the chain
-					ok = !usedValues.contains(value);
-				}
-			}
-		} while (!ok);
-		return wrapper.wrap(value);
-	}
+  /**
+   * Instantiates a new Generator chain.
+   *
+   * @param generatedType the generated type
+   * @param unique        the unique
+   * @param sources       the sources
+   */
+  @SafeVarargs
+  public GeneratorChain(Class<E> generatedType, boolean unique, Generator<? extends E>... sources) {
+    super(generatedType, sources);
+    this.unique = unique;
+    this.usedValues = new HashSet<>();
+  }
 
-	@Override
-	public synchronized void reset() {
-		super.reset();
-		clearMembers();
-	}
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    clearMembers();
+    super.init(context);
+  }
 
-	@Override
-	public synchronized void close() {
-		super.close();
-		clearMembers();
-	}
-	
-	// helpers ---------------------------------------------------------------------------------------------------------
-	
-	protected ProductWrapper<E> generateUnvalidated(ProductWrapper<E> wrapper) {
-		return generateFromAvailableSource(wrapper);
-	}
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    assertInitialized();
+    boolean ok = true;
+    E value;
+    do {
+      wrapper = generateUnvalidated(wrapper);
+      if (wrapper == null) {
+        return null;
+      }
+      value = wrapper.unwrap();
+      if (unique) {
+        if (availableSourceCount() > 1) {
+          // for all but the last generator check if the value has already occurred and store it...
+          ok = usedValues.add(value);
+        } else {
+          // ...since each generator is expected to be unique itself,
+          // there is no need to store the value of the last generator in the chain
+          ok = !usedValues.contains(value);
+        }
+      }
+    } while (!ok);
+    return wrapper.wrap(value);
+  }
 
-	protected void clearMembers() {
-		this.usedValues.clear();
-	}
+  @Override
+  public synchronized void reset() {
+    super.reset();
+    clearMembers();
+  }
+
+  @Override
+  public synchronized void close() {
+    super.close();
+    clearMembers();
+  }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  /**
+   * Generate unvalidated product wrapper.
+   *
+   * @param wrapper the wrapper
+   * @return the product wrapper
+   */
+  protected ProductWrapper<E> generateUnvalidated(ProductWrapper<E> wrapper) {
+    return generateFromAvailableSource(wrapper);
+  }
+
+  /**
+   * Clear members.
+   */
+  protected void clearMembers() {
+    this.usedValues.clear();
+  }
 
 }

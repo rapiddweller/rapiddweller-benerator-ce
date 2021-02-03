@@ -36,19 +36,28 @@ import com.rapiddweller.benerator.util.UnsafeNonNullGenerator;
  * @author Volker Bergmann
  * @since 0.5.7
  */
-
 public class AlternatingGenerator extends UnsafeNonNullGenerator<Integer> {
 
-    private int value = 1;
+  private int value = 1;
 
-    public Class<Integer> getGeneratedType() {
-        return Integer.class;
-    }
+  /**
+   * Gets generated type.
+   *
+   * @return the generated type
+   */
+  public Class<Integer> getGeneratedType() {
+    return Integer.class;
+  }
 
-    @Override
-    public Integer generate() {
-        value = (value + 1) % 2;
-        return value;
-    }
+  /**
+   * Generate integer.
+   *
+   * @return the integer
+   */
+  @Override
+  public Integer generate() {
+    value = (value + 1) % 2;
+    return value;
+  }
 
 }

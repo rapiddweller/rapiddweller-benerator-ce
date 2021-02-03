@@ -45,20 +45,37 @@ import static org.junit.Assert.assertNotSame;
  */
 public class AbstractTaskTest extends ModelTest {
 
-    protected static void executeStepAndAssertAvailability(Task task,
+  /**
+   * Execute step and assert availability.
+   *
+   * @param task    the task
+   * @param context the context
+   */
+  protected static void executeStepAndAssertAvailability(Task task,
+                                                         Context context) {
+    assertEquals("Task is expected to be available", TaskResult.EXECUTING,
+        task.execute(context, errorHandler()));
+  }
+
+  /**
+   * Execute step and assert unavailability.
+   *
+   * @param task    the task
+   * @param context the context
+   */
+  protected static void executeStepAndAssertUnavailability(Task task,
                                                            Context context) {
-        assertEquals("Task is expected to be available", TaskResult.EXECUTING,
-                task.execute(context, errorHandler()));
-    }
+    assertNotSame("Task is expected to be unavailable",
+        task.execute(context, errorHandler()), TaskResult.EXECUTING);
+  }
 
-    protected static void executeStepAndAssertUnavailability(Task task,
-                                                             Context context) {
-        assertNotSame("Task is expected to be unavailable",
-                task.execute(context, errorHandler()), TaskResult.EXECUTING);
-    }
-
-    static ErrorHandler errorHandler() {
-        return new ErrorHandler(AbstractTaskTest.class.getName(), Level.fatal);
-    }
+  /**
+   * Error handler error handler.
+   *
+   * @return the error handler
+   */
+  static ErrorHandler errorHandler() {
+    return new ErrorHandler(AbstractTaskTest.class.getName(), Level.fatal);
+  }
 
 }

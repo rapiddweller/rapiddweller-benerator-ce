@@ -26,7 +26,11 @@
 
 package com.rapiddweller.platform.db;
 
-import com.rapiddweller.common.*;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.HeavyweightIterable;
+import com.rapiddweller.common.HeavyweightIterator;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.jdbacl.QueryIterator;
@@ -45,51 +49,64 @@ import java.sql.ResultSet;
  */
 public class QueryIterable implements HeavyweightIterable<ResultSet> {
 
-    private static final Logger logger =
-            LogManager.getLogger(QueryIterable.class);
+  private static final Logger logger =
+      LogManager.getLogger(QueryIterable.class);
 
-    private final Connection connection;
-    private final String query;
-    private final int fetchSize;
+  private final Connection connection;
+  private final String query;
+  private final int fetchSize;
 
-    private final Converter<String, ?> queryPreprocessor;
-    private String renderedQuery;
+  private final Converter<String, ?> queryPreprocessor;
+  private String renderedQuery;
 
-    public QueryIterable(Connection connection, String query, int fetchSize,
-                         Context context) {
-        if (connection == null) {
-            throw new IllegalStateException("'connection' is null");
-        }
-        if (StringUtil.isEmpty(query)) {
-            throw new IllegalStateException("'query' is empty or null");
-        }
-        this.connection = connection;
-        this.query = query;
-        this.fetchSize = fetchSize;
-        if (context != null) {
-            this.queryPreprocessor = new ScriptConverterForStrings(context);
-        } else {
-            this.queryPreprocessor = new NoOpConverter<>();
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug("Constructed QueryIterable: " + query);
-        }
+  /**
+   * Instantiates a new Query iterable.
+   *
+   * @param connection the connection
+   * @param query      the query
+   * @param fetchSize  the fetch size
+   * @param context    the context
+   */
+  public QueryIterable(Connection connection, String query, int fetchSize,
+                       Context context) {
+    if (connection == null) {
+      throw new IllegalStateException("'connection' is null");
     }
-
-    public String getQuery() {
-        return query;
+    if (StringUtil.isEmpty(query)) {
+      throw new IllegalStateException("'query' is empty or null");
     }
-
-    @Override
-    public HeavyweightIterator<ResultSet> iterator() {
-        renderedQuery = queryPreprocessor.convert(query).toString();
-        return new QueryIterator(renderedQuery, connection, fetchSize);
+    this.connection = connection;
+    this.query = query;
+    this.fetchSize = fetchSize;
+    if (context != null) {
+      this.queryPreprocessor = new ScriptConverterForStrings(context);
+    } else {
+      this.queryPreprocessor = new NoOpConverter<>();
     }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' +
-                (renderedQuery != null ? renderedQuery : query) + ']';
+    if (logger.isDebugEnabled()) {
+      logger.debug("Constructed QueryIterable: " + query);
     }
+  }
+
+  /**
+   * Gets query.
+   *
+   * @return the query
+   */
+  public String getQuery() {
+    return query;
+  }
+
+  @Override
+  public HeavyweightIterator<ResultSet> iterator() {
+    renderedQuery = queryPreprocessor.convert(query).toString();
+    return new QueryIterator(renderedQuery, connection, fetchSize);
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' +
+        (renderedQuery != null ? renderedQuery : query) + ']';
+  }
 
 }

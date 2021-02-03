@@ -42,60 +42,71 @@ import com.rapiddweller.task.TaskResult;
  */
 public class PerfTrackingTaskProxy extends PerfTrackingWrapper implements Task {
 
-    private final Task realTask;
+  private final Task realTask;
 
-    public PerfTrackingTaskProxy(Task realTask) {
-        this(realTask, null);
-    }
+  /**
+   * Instantiates a new Perf tracking task proxy.
+   *
+   * @param realTask the real task
+   */
+  public PerfTrackingTaskProxy(Task realTask) {
+    this(realTask, null);
+  }
 
-    public PerfTrackingTaskProxy(Task realTask, PerformanceTracker tracker) {
-        super(tracker);
-        this.realTask = realTask;
-    }
+  /**
+   * Instantiates a new Perf tracking task proxy.
+   *
+   * @param realTask the real task
+   * @param tracker  the tracker
+   */
+  public PerfTrackingTaskProxy(Task realTask, PerformanceTracker tracker) {
+    super(tracker);
+    this.realTask = realTask;
+  }
 
-    @Override
-    public TaskResult execute(Context context, ErrorHandler errorHandler) {
-        try {
-            return (TaskResult) getOrCreateTracker().invoke(new Object[]{context, errorHandler});
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+  @Override
+  public TaskResult execute(Context context, ErrorHandler errorHandler) {
+    try {
+      return (TaskResult) getOrCreateTracker().invoke(new Object[] {context, errorHandler});
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    @Override
-    public void pageFinished() {
-        // nothing special to do here
-    }
+  @Override
+  public void pageFinished() {
+    // nothing special to do here
+  }
 
-    @Override
-    public void close() {
-        super.close();
-        realTask.close();
-    }
+  @Override
+  public void close() {
+    super.close();
+    realTask.close();
+  }
 
-    @Override
-    public Object clone() {
-        return new PerfTrackingTaskProxy(BeanUtil.clone(realTask), getOrCreateTracker());
-    }
+  @Override
+  public Object clone() {
+    return new PerfTrackingTaskProxy(BeanUtil.clone(realTask), getOrCreateTracker());
+  }
 
-    @Override
-    public String getTaskName() {
-        return realTask.getTaskName();
-    }
+  @Override
+  public String getTaskName() {
+    return realTask.getTaskName();
+  }
 
-    @Override
-    public boolean isParallelizable() {
-        return realTask.isParallelizable();
-    }
+  @Override
+  public boolean isParallelizable() {
+    return realTask.isParallelizable();
+  }
 
-    @Override
-    public boolean isThreadSafe() {
-        return realTask.isThreadSafe();
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return realTask.isThreadSafe();
+  }
 
-    @Override
-    protected TaskInvoker getInvoker() {
-        return new TaskInvoker(realTask);
-    }
+  @Override
+  protected TaskInvoker getInvoker() {
+    return new TaskInvoker(realTask);
+  }
 
 }

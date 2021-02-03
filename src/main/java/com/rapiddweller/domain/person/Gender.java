@@ -34,5 +34,12 @@ package com.rapiddweller.domain.person;
  * @author Volker Bergmann
  */
 public enum Gender {
-    FEMALE, MALE
+  /**
+   * Female gender.
+   */
+  FEMALE,
+  /**
+   * Male gender.
+   */
+  MALE
 }

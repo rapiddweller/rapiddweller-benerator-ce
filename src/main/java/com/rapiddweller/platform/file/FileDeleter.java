@@ -42,36 +42,47 @@ import java.io.File;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class FileDeleter extends AbstractTask {
 
-    private String[] files = new String[0];
+  private String[] files = new String[0];
 
-    public String[] getFiles() {
-        return files;
-    }
+  /**
+   * Get files string [ ].
+   *
+   * @return the string [ ]
+   */
+  public String[] getFiles() {
+    return files;
+  }
 
-    public void setFiles(String[] files) {
-        this.files = files.clone();
-    }
+  /**
+   * Sets files.
+   *
+   * @param files the files
+   */
+  public void setFiles(String[] files) {
+    this.files = files.clone();
+  }
 
-    @Override
-    public TaskResult execute(Context ctx, ErrorHandler errorHandler) {
-        BeneratorContext context = (BeneratorContext) ctx;
-        for (String filename : files) {
-            File file = new File(context.resolveRelativeUri(filename));
-            if (file.exists()) {
-                try {
-                    if (!file.delete())
-                        errorHandler.handleError("File could not be deleted: " + filename + ". " +
-                                "Probably it is locked.");
-                } catch (Exception e) {
-                    errorHandler.handleError("Error deleting file " + file);
-                }
-            } else
-                errorHandler.handleError("File not found: " + file);
+  @Override
+  public TaskResult execute(Context ctx, ErrorHandler errorHandler) {
+    BeneratorContext context = (BeneratorContext) ctx;
+    for (String filename : files) {
+      File file = new File(context.resolveRelativeUri(filename));
+      if (file.exists()) {
+        try {
+          if (!file.delete()) {
+            errorHandler.handleError("File could not be deleted: " + filename + ". " +
+                "Probably it is locked.");
+          }
+        } catch (Exception e) {
+          errorHandler.handleError("Error deleting file " + file);
         }
-        return TaskResult.FINISHED;
+      } else {
+        errorHandler.handleError("File not found: " + file);
+      }
     }
+    return TaskResult.FINISHED;
+  }
 
 }

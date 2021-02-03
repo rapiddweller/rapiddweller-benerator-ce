@@ -25,7 +25,7 @@
 
     <generate type="script" count="5" consumer="ConsoleExporter">
         <variable name="count" type="integer" generator="IncrementalIdGenerator"/>
-        <attribute name="multiply" type="int" script="{js:add(count)}"/>
+        <attribute name="multiply" script="{js:add(count)}"/>
     </generate>
 
 </setup>

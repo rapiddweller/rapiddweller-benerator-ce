@@ -26,8 +26,6 @@
 
 package com.rapiddweller.platform;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.platform.contiperf.PerfTrackingTaskProxy;
@@ -37,25 +35,31 @@ import com.rapiddweller.task.TaskMock;
 import com.rapiddweller.task.TaskResult;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link PerfTrackingTaskProxy}.<br/><br/>
  * Created: 25.02.2010 09:16:55
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class PerfTrackingTaskProxyTest {
 
-	@Test
-	public void test() {
-		DefaultContext context = new DefaultContext();
-		Task task = new TaskMock(0, context);
-		PerfTrackingTaskProxy proxy = new PerfTrackingTaskProxy(task);
-		for (int i = 0; i < 100; i++) {
-			assertEquals(TaskResult.EXECUTING, proxy.execute(context, ErrorHandler.getDefault()));
-		}
-		LatencyCounter counter = proxy.getOrCreateTracker().getCounters()[0];
-		assertEquals(100, counter.sampleCount());
-		proxy.close();
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    DefaultContext context = new DefaultContext();
+    Task task = new TaskMock(0, context);
+    PerfTrackingTaskProxy proxy = new PerfTrackingTaskProxy(task);
+    for (int i = 0; i < 100; i++) {
+      assertEquals(TaskResult.EXECUTING, proxy.execute(context, ErrorHandler.getDefault()));
+    }
+    LatencyCounter counter = proxy.getOrCreateTracker().getCounters()[0];
+    assertEquals(100, counter.sampleCount());
+    proxy.close();
+  }
+
 }

@@ -59,90 +59,99 @@ import org.apache.logging.log4j.LogManager;
  */
 public class ShopXMLTest extends GeneratorTest {
 
-    private static final Logger logger =
-            LogManager.getLogger(ShopXMLTest.class);
+  private static final Logger logger =
+      LogManager.getLogger(ShopXMLTest.class);
 
-    String schemaUri = "demo/shop/schema/shop.xsd";
-    String contextUri = IOUtil.getParentUri(schemaUri);
+  /**
+   * The Schema uri.
+   */
+  String schemaUri = "demo/shop/schema/shop.xsd";
+  /**
+   * The Context uri.
+   */
+  String contextUri = IOUtil.getParentUri(schemaUri);
 
-    @Test
-    public void test() {
-        System.setProperty("stage", "test");
-        DataModel dataModel = new DataModel();
-        XMLSchemaDescriptorProvider provider =
-                new XMLSchemaDescriptorProvider(schemaUri, context);
-        dataModel.validate();
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    System.setProperty("stage", "test");
+    DataModel dataModel = new DataModel();
+    XMLSchemaDescriptorProvider provider =
+        new XMLSchemaDescriptorProvider(schemaUri, context);
+    dataModel.validate();
 
-        logger.debug("Supported types:");
-        logger.debug("----------------");
-        for (TypeDescriptor descriptor : provider.getTypeDescriptors()) {
-            logger.debug(descriptor.toString());
-        }
-
-        checkSimpleType("category-id", provider, new CategoryIdValidator());
-        checkSimpleType("string30", provider, new StringLengthValidator(30));
-        checkSimpleType("ean-type", provider, new EANValidator());
-        checkSimpleType("ean8-type", provider, new EAN8Validator());
-        checkSimpleType("ean13-type", provider, new EAN13Validator());
-        checkSimpleType("price-type", provider, new PriceValidator());
-        checkSimpleType("surrogate-id", provider, new LongValidator());
-        checkSimpleType("string16", provider, new StringLengthValidator(16));
-
-        checkComplexType("audited", provider, new AuditedValidator());
-        checkComplexType("audited-updateable", provider,
-                new AuditedUpdateableValidator());
-        checkComplexType("category", provider, new CategoryValidator());
-        checkComplexType("product", provider, new ProductValidator());
-        checkComplexType("admin", provider, new UserValidator("admin"));
-        checkComplexType("clerk", provider, new UserValidator("clerk"));
-        checkComplexType("customer", provider, new CustomerValidator());
+    logger.debug("Supported types:");
+    logger.debug("----------------");
+    for (TypeDescriptor descriptor : provider.getTypeDescriptors()) {
+      logger.debug(descriptor.toString());
     }
 
-    @SuppressWarnings("unchecked")
-    private <T> void checkSimpleType(String name,
-                                     XMLSchemaDescriptorProvider provider,
-                                     Validator<T> validator) {
-        SimpleTypeDescriptor descriptor =
-                (SimpleTypeDescriptor) provider.getTypeDescriptor(name);
-        logger.debug("");
-        logger.debug("Testing simple type: " + descriptor.getName());
-        logger.debug("-------------------------------------");
-        Generator<T> generator =
-                (Generator<T>) MetaGeneratorFactory.createTypeGenerator(
-                        descriptor, descriptor.getName(), false,
-                        Uniqueness.NONE, provider.getContext());
-        generator.init(new DefaultBeneratorContext());
-        for (int i = 0; i < 10; i++) {
-            T object = GeneratorUtil.generateNonNull(generator);
-            logger.debug(object.toString());
-            assertTrue("Invalid object: " + object, validator.valid(object));
-        }
-    }
+    checkSimpleType("category-id", provider, new CategoryIdValidator());
+    checkSimpleType("string30", provider, new StringLengthValidator(30));
+    checkSimpleType("ean-type", provider, new EANValidator());
+    checkSimpleType("ean8-type", provider, new EAN8Validator());
+    checkSimpleType("ean13-type", provider, new EAN13Validator());
+    checkSimpleType("price-type", provider, new PriceValidator());
+    checkSimpleType("surrogate-id", provider, new LongValidator());
+    checkSimpleType("string16", provider, new StringLengthValidator(16));
 
-    @SuppressWarnings({"unchecked", "cast"})
-    private void checkComplexType(String name,
-                                  XMLSchemaDescriptorProvider provider,
-                                  Validator<Entity> validator) {
-        ComplexTypeDescriptor descriptor =
-                (ComplexTypeDescriptor) provider.getTypeDescriptor(name);
-        logger.debug("");
-        logger.debug("Testing complex type: " + descriptor.getName());
-        logger.debug("-------------------------------------");
-        Generator<?> tmp =
-                (Generator<Entity>) MetaGeneratorFactory.createTypeGenerator(
-                        descriptor, "instance", false, Uniqueness.NONE,
-                        provider.getContext());
-        assertEquals(Entity.class, tmp.getGeneratedType());
-        Generator<Entity> generator = (Generator<Entity>) tmp;
-        generator.init(new DefaultBeneratorContext());
-        for (int i = 0; i < 10; i++) {
-            Entity entity = GeneratorUtil.generateNonNull(generator);
-            if (entity != null) {
-                logger.debug(entity.toString());
-                assertTrue("Invalid entity: " + entity,
-                        validator.valid(entity));
-            }
-        }
+    checkComplexType("audited", provider, new AuditedValidator());
+    checkComplexType("audited-updateable", provider,
+        new AuditedUpdateableValidator());
+    checkComplexType("category", provider, new CategoryValidator());
+    checkComplexType("product", provider, new ProductValidator());
+    checkComplexType("admin", provider, new UserValidator("admin"));
+    checkComplexType("clerk", provider, new UserValidator("clerk"));
+    checkComplexType("customer", provider, new CustomerValidator());
+  }
+
+  @SuppressWarnings("unchecked")
+  private <T> void checkSimpleType(String name,
+                                   XMLSchemaDescriptorProvider provider,
+                                   Validator<T> validator) {
+    SimpleTypeDescriptor descriptor =
+        (SimpleTypeDescriptor) provider.getTypeDescriptor(name);
+    logger.debug("");
+    logger.debug("Testing simple type: " + descriptor.getName());
+    logger.debug("-------------------------------------");
+    Generator<T> generator =
+        (Generator<T>) MetaGeneratorFactory.createTypeGenerator(
+            descriptor, descriptor.getName(), false,
+            Uniqueness.NONE, provider.getContext());
+    generator.init(new DefaultBeneratorContext());
+    for (int i = 0; i < 10; i++) {
+      T object = GeneratorUtil.generateNonNull(generator);
+      logger.debug(object.toString());
+      assertTrue("Invalid object: " + object, validator.valid(object));
     }
+  }
+
+  @SuppressWarnings({"unchecked", "cast"})
+  private void checkComplexType(String name,
+                                XMLSchemaDescriptorProvider provider,
+                                Validator<Entity> validator) {
+    ComplexTypeDescriptor descriptor =
+        (ComplexTypeDescriptor) provider.getTypeDescriptor(name);
+    logger.debug("");
+    logger.debug("Testing complex type: " + descriptor.getName());
+    logger.debug("-------------------------------------");
+    Generator<?> tmp =
+        (Generator<Entity>) MetaGeneratorFactory.createTypeGenerator(
+            descriptor, "instance", false, Uniqueness.NONE,
+            provider.getContext());
+    assertEquals(Entity.class, tmp.getGeneratedType());
+    Generator<Entity> generator = (Generator<Entity>) tmp;
+    generator.init(new DefaultBeneratorContext());
+    for (int i = 0; i < 10; i++) {
+      Entity entity = GeneratorUtil.generateNonNull(generator);
+      if (entity != null) {
+        logger.debug(entity.toString());
+        assertTrue("Invalid entity: " + entity,
+            validator.valid(entity));
+      }
+    }
+  }
 
 }

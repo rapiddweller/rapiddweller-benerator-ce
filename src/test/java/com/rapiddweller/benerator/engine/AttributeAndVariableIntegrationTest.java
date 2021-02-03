@@ -26,10 +26,6 @@
 
 package com.rapiddweller.benerator.engine;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.benerator.test.PersonSource;
@@ -37,104 +33,127 @@ import com.rapiddweller.model.data.Entity;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests &lt;variable&gt; support in Benerator descriptor files.<br/><br/>
  * Created: 10.08.2010 07:06:46
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTest {
 
-	private ConsumerMock consumer;
-	
-    @Before
-	public void setUpSourceAndConsumer() {
-		consumer = new ConsumerMock(true);
-		context.setGlobal("cons", consumer);
-		PersonSource pit = new PersonSource();
-		pit.setContext(context);
-		context.setGlobal("pit", pit);
-	}
-	
-	// test methods ----------------------------------------------------------------------------------------------------
+  private ConsumerMock consumer;
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testIterateThis() {
-		parseAndExecute(
-				"<iterate type='referer' source='pit' consumer='cons'>" +
-				"	<variable name='_n' script='this.name' converter='com.rapiddweller.common.converter.ToUpperCaseConverter' />" +
-				"	<attribute name='name' script='_n' />" +
-				"</iterate>");
-		List<Entity> products = (List<Entity>) consumer.getProducts();
-		assertEquals(2, products.size());
-		assertEquals("ALICE", products.get(0).get("name"));
-		assertEquals(23,      products.get(0).get("age"));
-		assertEquals("BOB",   products.get(1).get("name"));
-		assertEquals(34,      products.get(1).get("age"));
-	}
+  /**
+   * Sets up source and consumer.
+   */
+  @Before
+  public void setUpSourceAndConsumer() {
+    consumer = new ConsumerMock(true);
+    context.setGlobal("cons", consumer);
+    PersonSource pit = new PersonSource();
+    pit.setContext(context);
+    context.setGlobal("pit", pit);
+  }
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testAttributeFromVariable() {
-		parseAndExecute(
-				"<generate type='testAttributeFromVariable' count='2' consumer='cons'>" +
-				"	<variable name='_n' type='int' distribution='increment' />" +
-				"	<attribute name='x' type='int' script='_n + 1' />" +
-				"</generate>");
-		List<Entity> products = (List<Entity>) consumer.getProducts();
-		assertEquals(2, products.size());
-		assertEquals(2, products.get(0).get("x"));
-		assertEquals(3, products.get(1).get("x"));
-	}
+  // test methods ----------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testVariableFromAttribute_refByThis() {
-		parseAndExecute(
-				"<generate type='testVariableFromAttribute_refByThis' count='2' consumer='cons'>" +
-				"	<attribute name='x' type='int' distribution='increment' />" +
-				"	<attribute name='y' type='int' script='this.x + 3' />" +
-				"</generate>");
-		List<Entity> products = (List<Entity>) consumer.getProducts();
-		assertEquals(2, products.size());
-		assertEquals(1, products.get(0).get("x"));
-		assertEquals(4, products.get(0).get("y"));
-		assertEquals(2, products.get(1).get("x"));
-		assertEquals(5, products.get(1).get("y"));
-	}
+  /**
+   * Test iterate this.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testIterateThis() {
+    parseAndExecute(
+        "<iterate type='referer' source='pit' consumer='cons'>" +
+            "	<variable name='_n' script='this.name' converter='com.rapiddweller.common.converter.ToUpperCaseConverter' />" +
+            "	<attribute name='name' script='_n' />" +
+            "</iterate>");
+    List<Entity> products = (List<Entity>) consumer.getProducts();
+    assertEquals(2, products.size());
+    assertEquals("ALICE", products.get(0).get("name"));
+    assertEquals(23, products.get(0).get("age"));
+    assertEquals("BOB", products.get(1).get("name"));
+    assertEquals(34, products.get(1).get("age"));
+  }
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testVariableFromAttribute_refByTypeName() {
-		parseAndExecute(
-				"<generate type='testVariableFromAttribute_refByTypeName' count='2' consumer='cons'>" +
-				"	<attribute name='x' type='int' distribution='increment' />" +
-				"	<attribute name='y' type='int' script='testVariableFromAttribute_refByTypeName.x + 3' />" +
-				"</generate>");
-		List<Entity> products = (List<Entity>) consumer.getProducts();
-		assertEquals(2, products.size());
-		assertEquals(1, products.get(0).get("x"));
-		assertEquals(4, products.get(0).get("y"));
-		assertEquals(2, products.get(1).get("x"));
-		assertEquals(5, products.get(1).get("y"));
-	}
+  /**
+   * Test attribute from variable.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testAttributeFromVariable() {
+    parseAndExecute(
+        "<generate type='testAttributeFromVariable' count='2' consumer='cons'>" +
+            "	<variable name='_n' type='int' distribution='increment' />" +
+            "	<attribute name='x' type='int' script='_n + 1' />" +
+            "</generate>");
+    List<Entity> products = (List<Entity>) consumer.getProducts();
+    assertEquals(2, products.size());
+    assertEquals(2, products.get(0).get("x"));
+    assertEquals(3, products.get(1).get("x"));
+  }
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testVariableFromAttribute_refByInstanceName() {
-		parseAndExecute(
-				"<generate name='xyz' type='testVariableFromAttribute_refByInstanceName' count='2' consumer='cons'>" +
-				"	<attribute name='x' type='int' distribution='increment' />" +
-				"	<attribute name='y' type='int' script='xyz.x + 3' />" +
-				"</generate>");
-		List<Entity> products = (List<Entity>) consumer.getProducts();
-		assertEquals(2, products.size());
-		assertEquals(1, products.get(0).get("x"));
-		assertEquals(4, products.get(0).get("y"));
-		assertEquals(2, products.get(1).get("x"));
-		assertEquals(5, products.get(1).get("y"));
-	}
+  /**
+   * Test variable from attribute ref by this.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testVariableFromAttribute_refByThis() {
+    parseAndExecute(
+        "<generate type='testVariableFromAttribute_refByThis' count='2' consumer='cons'>" +
+            "	<attribute name='x' type='int' distribution='increment' />" +
+            "	<attribute name='y' type='int' script='this.x + 3' />" +
+            "</generate>");
+    List<Entity> products = (List<Entity>) consumer.getProducts();
+    assertEquals(2, products.size());
+    assertEquals(1, products.get(0).get("x"));
+    assertEquals(4, products.get(0).get("y"));
+    assertEquals(2, products.get(1).get("x"));
+    assertEquals(5, products.get(1).get("y"));
+  }
+
+  /**
+   * Test variable from attribute ref by type name.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testVariableFromAttribute_refByTypeName() {
+    parseAndExecute(
+        "<generate type='testVariableFromAttribute_refByTypeName' count='2' consumer='cons'>" +
+            "	<attribute name='x' type='int' distribution='increment' />" +
+            "	<attribute name='y' type='int' script='testVariableFromAttribute_refByTypeName.x + 3' />" +
+            "</generate>");
+    List<Entity> products = (List<Entity>) consumer.getProducts();
+    assertEquals(2, products.size());
+    assertEquals(1, products.get(0).get("x"));
+    assertEquals(4, products.get(0).get("y"));
+    assertEquals(2, products.get(1).get("x"));
+    assertEquals(5, products.get(1).get("y"));
+  }
+
+  /**
+   * Test variable from attribute ref by instance name.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testVariableFromAttribute_refByInstanceName() {
+    parseAndExecute(
+        "<generate name='xyz' type='testVariableFromAttribute_refByInstanceName' count='2' consumer='cons'>" +
+            "	<attribute name='x' type='int' distribution='increment' />" +
+            "	<attribute name='y' type='int' script='xyz.x + 3' />" +
+            "</generate>");
+    List<Entity> products = (List<Entity>) consumer.getProducts();
+    assertEquals(2, products.size());
+    assertEquals(1, products.get(0).get("x"));
+    assertEquals(4, products.get(0).get("y"));
+    assertEquals(2, products.get(1).get("x"));
+    assertEquals(5, products.get(1).get("y"));
+  }
 
 	/* This syntax is not supported any longer
 	@Test
@@ -153,26 +172,32 @@ public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTes
 	}
 	*/
 
-	@Test
-	public void testEvaluateBetweenAttributes() {
-		parseAndExecute(
-				"<generate name='e' type='entity' count='1'>" +
-				"	<evaluate id='val1' assert='result==null'>this.id</evaluate>" +
-				"	<id name='id' type='int'/>" +
-				"	<evaluate id='val2' assert='result==1'>this.id</evaluate>" +
-				"	<attribute name='x' type='int' script='val2' />" + 
-				"</generate>");
-		Entity e = (Entity) context.get("e");
-		assertEquals(1, e.get("x"));
-	}
-	
-	@Test
-	public void testAttributeAfterSubGen() {
-		parseAndExecute(
-				"<generate count='5'>" +
-				"	<generate count='3'/>" +
-				"	<attribute name='y' type='int'/>" +
-				"</generate>");
-	}
-	
+  /**
+   * Test evaluate between attributes.
+   */
+  @Test
+  public void testEvaluateBetweenAttributes() {
+    parseAndExecute(
+        "<generate name='e' type='entity' count='1'>" +
+            "	<evaluate id='val1' assert='result==null'>this.id</evaluate>" +
+            "	<id name='id' type='int'/>" +
+            "	<evaluate id='val2' assert='result==1'>this.id</evaluate>" +
+            "	<attribute name='x' type='int' script='val2' />" +
+            "</generate>");
+    Entity e = (Entity) context.get("e");
+    assertEquals(1, e.get("x"));
+  }
+
+  /**
+   * Test attribute after sub gen.
+   */
+  @Test
+  public void testAttributeAfterSubGen() {
+    parseAndExecute(
+        "<generate count='5'>" +
+            "	<generate count='3'/>" +
+            "	<attribute name='y' type='int'/>" +
+            "</generate>");
+  }
+
 }

@@ -27,29 +27,37 @@
 package com.rapiddweller.domain.finance;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link CreditCardNumberGenerator}.<br/><br/>
  * Created at 09.04.2008 13:03:46
- * @since 0.5.1
+ *
  * @author Volker Bergmann
+ * @since 0.5.1
  */
 public class CreditCardNumberGeneratorTest extends GeneratorClassTest {
 
-    public CreditCardNumberGeneratorTest() {
-	    super(CreditCardNumberGenerator.class);
-    }
+  /**
+   * Instantiates a new Credit card number generator test.
+   */
+  public CreditCardNumberGeneratorTest() {
+    super(CreditCardNumberGenerator.class);
+  }
 
-    @Test
-	public void test() {
-		CreditCardNumberGenerator generator = new CreditCardNumberGenerator();
-		generator.init(context);
-		CreditCardNumberValidator validator = new CreditCardNumberValidator();
-		for (int i = 0; i < 10; i++)
-			assertTrue(validator.isValid(generator.generate(), null));
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    CreditCardNumberGenerator generator = new CreditCardNumberGenerator();
+    generator.init(context);
+    CreditCardNumberValidator validator = new CreditCardNumberValidator();
+    for (int i = 0; i < 10; i++) {
+      assertTrue(validator.isValid(generator.generate(), null));
+    }
+  }
+
 }

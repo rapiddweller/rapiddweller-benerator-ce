@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.factory;
 
-import java.util.Collection;
-import java.util.Set;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorProvider;
 import com.rapiddweller.benerator.NonNullGenerator;
@@ -57,171 +54,196 @@ import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.WeightedSample;
 
+import java.util.Collection;
+import java.util.Set;
+
 /**
- * {@link GeneratorFactory} implementation that generates docile data in order to avoid functional failures 
- * and combines them randomly and repetitively for generating large data volumes. Its primary purpose is 
+ * {@link GeneratorFactory} implementation that generates docile data in order to avoid functional failures
+ * and combines them randomly and repetitively for generating large data volumes. Its primary purpose is
  * data generation for performance tests.<br/>
  * <br/>
  * Created: 04.07.2011 09:34:34
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class StochasticGeneratorFactory extends GeneratorFactory {
 
-	public StochasticGeneratorFactory() {
-		super(new GentleDefaultsProvider());
-	}
+  /**
+   * Instantiates a new Stochastic generator factory.
+   */
+  public StochasticGeneratorFactory() {
+    super(new GentleDefaultsProvider());
+  }
 
-	@Override
-	public <T> Generator<T> createAlternativeGenerator(Class<T> targetType, Generator<T>[] sources, 
-			Uniqueness uniqueness) {
-		if (uniqueness == Uniqueness.ORDERED)
-			return new GeneratorChain<>(targetType, uniqueness.isUnique(), sources);
-		else
-			return new AlternativeGenerator<>(targetType, sources);
-	}
-
-	@Override
-	public <T> Generator<T[]> createCompositeArrayGenerator(
-			Class<T> componentType, Generator<T>[] sources, Uniqueness uniqueness) {
-        if (uniqueness.isUnique())
-        	return new UniqueMultiSourceArrayGenerator<>(componentType, sources);
-        else
-        	return new SimpleMultiSourceArrayGenerator<>(componentType, sources);
-	}
-
-	@Override
-	public <T> Generator<T> createSampleGenerator(Collection<T> values,
-			Class<T> generatedType, boolean unique) {
-        SampleGenerator<T> generator = new SampleGenerator<>(generatedType, values);
-        generator.setUnique(unique);
-		return generator;
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> Generator<T> createFromWeightedLiteralList(String valueSpec, Class<T> targetType,
-            Distribution distribution, boolean unique) {
-	    WeightedSample<T>[] samples = (WeightedSample<T>[]) DatabeneScriptParser.parseWeightedLiteralList(valueSpec);
-	    if (distribution == null && !unique && weightsUsed(samples)) {
-	    	AttachedWeightSampleGenerator<T> generator = new AttachedWeightSampleGenerator<>(targetType);
-			for (WeightedSample<T> sample : samples) {
-				if (sample.getValue() == null)
-					throw new ConfigurationError("null is not supported in values='...', drop it from the list and " +
-							"use a nullQuota instead");
-				generator.addSample(sample.getValue(), sample.getWeight());
-			}
-	    	return generator;
-	    } else {
-	    	String[] values = new String[samples.length];
-	    	for (int i = 0; i < samples.length; i++) {
-	    		T rawValue = samples[i].getValue();
-				String value = ToStringConverter.convert(rawValue, null);
-	    		values[i] = value;
-	    	}
-	        IteratingGenerator<String> source = new IteratingGenerator<>(
-                    new ArrayIterable<>(values, String.class));
-	        if (distribution == null)
-	        	distribution = SequenceManager.RANDOM_SEQUENCE;
-	        Generator<T> gen = WrapperFactory.applyConverter(source, ConverterManager.getInstance().createConverter(
-	        		String.class, targetType));
-	    	return distribution.applyTo(gen, unique);
-	    }
+  @Override
+  public <T> Generator<T> createAlternativeGenerator(Class<T> targetType, Generator<T>[] sources,
+                                                     Uniqueness uniqueness) {
+    if (uniqueness == Uniqueness.ORDERED) {
+      return new GeneratorChain<>(targetType, uniqueness.isUnique(), sources);
+    } else {
+      return new AlternativeGenerator<>(targetType, sources);
     }
-	
-    @Override
-	public Generator<Boolean> createBooleanGenerator(Double trueQuota) {
-        return new BooleanGenerator(trueQuota != null ? trueQuota : 0.5);
+  }
+
+  @Override
+  public <T> Generator<T[]> createCompositeArrayGenerator(
+      Class<T> componentType, Generator<T>[] sources, Uniqueness uniqueness) {
+    if (uniqueness.isUnique()) {
+      return new UniqueMultiSourceArrayGenerator<>(componentType, sources);
+    } else {
+      return new SimpleMultiSourceArrayGenerator<>(componentType, sources);
     }
+  }
 
-    private static boolean weightsUsed(WeightedSample<?>[] samples) {
-	    for (WeightedSample<?> sample : samples)
-	    	if (sample.getWeight() != 1)
-	    		return true;
-	    return false;
+  @Override
+  public <T> Generator<T> createSampleGenerator(Collection<T> values,
+                                                Class<T> generatedType, boolean unique) {
+    SampleGenerator<T> generator = new SampleGenerator<>(generatedType, values);
+    generator.setUnique(unique);
+    return generator;
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public <T> Generator<T> createFromWeightedLiteralList(String valueSpec, Class<T> targetType,
+                                                        Distribution distribution, boolean unique) {
+    WeightedSample<T>[] samples = (WeightedSample<T>[]) DatabeneScriptParser.parseWeightedLiteralList(valueSpec);
+    if (distribution == null && !unique && weightsUsed(samples)) {
+      AttachedWeightSampleGenerator<T> generator = new AttachedWeightSampleGenerator<>(targetType);
+      for (WeightedSample<T> sample : samples) {
+        if (sample.getValue() == null) {
+          throw new ConfigurationError("null is not supported in values='...', drop it from the list and " +
+              "use a nullQuota instead");
+        }
+        generator.addSample(sample.getValue(), sample.getWeight());
+      }
+      return generator;
+    } else {
+      String[] values = new String[samples.length];
+      for (int i = 0; i < samples.length; i++) {
+        T rawValue = samples[i].getValue();
+        String value = ToStringConverter.convert(rawValue, null);
+        values[i] = value;
+      }
+      IteratingGenerator<String> source = new IteratingGenerator<>(
+          new ArrayIterable<>(values, String.class));
+      if (distribution == null) {
+        distribution = SequenceManager.RANDOM_SEQUENCE;
+      }
+      Generator<T> gen = WrapperFactory.applyConverter(source, ConverterManager.getInstance().createConverter(
+          String.class, targetType));
+      return distribution.applyTo(gen, unique);
     }
+  }
 
-	@Override
-	public NonNullGenerator<String> createStringGenerator(Set<Character> chars,
-			Integer minLength, Integer maxLength, int lengthGranularity, Distribution lengthDistribution, 
-			Uniqueness uniqueness) {
-        if (uniqueness == Uniqueness.ORDERED)
-            return new IncrementalStringGenerator(chars, minLength, maxLength, lengthGranularity);
-        else if (uniqueness.isUnique())
-            return new UniqueScrambledStringGenerator(chars, minLength, maxLength);
-        else
-    		return new RandomVarLengthStringGenerator(
-    				chars, minLength, maxLength, lengthGranularity, lengthDistribution);
-	}
+  @Override
+  public Generator<Boolean> createBooleanGenerator(Double trueQuota) {
+    return new BooleanGenerator(trueQuota != null ? trueQuota : 0.5);
+  }
 
-	@Override
-	public Generator<?> applyNullSettings(Generator<?> source, Boolean nullable, Double nullQuota)  {
-    	if (nullQuota == null) {
-    		if (nullable == null)
-    			nullable = defaultsProvider.defaultNullable();
-    		nullQuota = (nullable ? (defaultsProvider.defaultNullQuota() != 1 ? defaultsProvider.defaultNullQuota() : 0) : 0);
-    	}
-		return WrapperFactory.injectNulls(source, nullQuota);
-	}
-
-    @Override
-	public <T> Generator<T> createSingleValueGenerator(T value, boolean unique) {
-    	if (unique)
-    		return new OneShotGenerator<>(value);
-    	else
-    		return new ConstantGenerator<>(value);
+  private static boolean weightsUsed(WeightedSample<?>[] samples) {
+    for (WeightedSample<?> sample : samples) {
+      if (sample.getWeight() != 1) {
+        return true;
+      }
     }
-    
-    @Override
-	protected double defaultTrueQuota() {
-		return 0.5;
-	}
+    return false;
+  }
 
-	@Override
-	protected Distribution defaultLengthDistribution(Uniqueness uniqueness, boolean required) {
-    	switch (uniqueness) {
-	    	case ORDERED: 	return SequenceManager.STEP_SEQUENCE;
-	    	case SIMPLE: 	return SequenceManager.EXPAND_SEQUENCE;
-	    	default: 		if (required)
-	    						return SequenceManager.RANDOM_SEQUENCE;
-	    					else
-	    						return null;
-		}
-	}
+  @Override
+  public NonNullGenerator<String> createStringGenerator(Set<Character> chars,
+                                                        Integer minLength, Integer maxLength, int lengthGranularity, Distribution lengthDistribution,
+                                                        Uniqueness uniqueness) {
+    if (uniqueness == Uniqueness.ORDERED) {
+      return new IncrementalStringGenerator(chars, minLength, maxLength, lengthGranularity);
+    } else if (uniqueness.isUnique()) {
+      return new UniqueScrambledStringGenerator(chars, minLength, maxLength);
+    } else {
+      return new RandomVarLengthStringGenerator(
+          chars, minLength, maxLength, lengthGranularity, lengthDistribution);
+    }
+  }
 
-	@Override
-	public Distribution defaultDistribution(Uniqueness uniqueness) {
-		if (uniqueness == null)
-			return SequenceManager.STEP_SEQUENCE;
-    	switch (uniqueness) {
-        	case ORDERED: 	return SequenceManager.STEP_SEQUENCE;
-        	case SIMPLE: 	return SequenceManager.EXPAND_SEQUENCE;
-        	default: 		return SequenceManager.RANDOM_SEQUENCE;
-    	}
-	}
+  @Override
+  public Generator<?> applyNullSettings(Generator<?> source, Boolean nullable, Double nullQuota) {
+    if (nullQuota == null) {
+      if (nullable == null) {
+        nullable = defaultsProvider.defaultNullable();
+      }
+      nullQuota = (nullable ? (defaultsProvider.defaultNullQuota() != 1 ? defaultsProvider.defaultNullQuota() : 0) : 0);
+    }
+    return WrapperFactory.injectNulls(source, nullQuota);
+  }
 
-	@Override
-	protected boolean defaultUnique() {
-		return false;
-	}
+  @Override
+  public <T> Generator<T> createSingleValueGenerator(T value, boolean unique) {
+    if (unique) {
+      return new OneShotGenerator<>(value);
+    } else {
+      return new ConstantGenerator<>(value);
+    }
+  }
 
-	@Override
-	public <T> Generator<T> createNullGenerator(Class<T> generatedType) {
-		return new ConstantGenerator<>(null, generatedType);
-	}
+  @Override
+  protected double defaultTrueQuota() {
+    return 0.5;
+  }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public NonNullGenerator<String> createCompositeStringGenerator(
-			GeneratorProvider<?> partGeneratorProvider, int minParts, int maxParts, Uniqueness uniqueness) {
-		AlternativeGenerator<String> result = new AlternativeGenerator<>(String.class);
-		for (int partCount = minParts; partCount <= maxParts; partCount++) {
-			Generator<String>[] sources = new Generator[partCount];
-			for (int i = 0; i < partCount; i++)
-				sources[i] = WrapperFactory.asStringGenerator(partGeneratorProvider.create());
-			result.addSource(new CompositeStringGenerator(uniqueness.isUnique(), sources));
-		}
-		return WrapperFactory.asNonNullGenerator(result);
-	}
+  @Override
+  protected Distribution defaultLengthDistribution(Uniqueness uniqueness, boolean required) {
+    switch (uniqueness) {
+      case ORDERED:
+        return SequenceManager.STEP_SEQUENCE;
+      case SIMPLE:
+        return SequenceManager.EXPAND_SEQUENCE;
+      default:
+        if (required) {
+          return SequenceManager.RANDOM_SEQUENCE;
+        } else {
+          return null;
+        }
+    }
+  }
+
+  @Override
+  public Distribution defaultDistribution(Uniqueness uniqueness) {
+    if (uniqueness == null) {
+      return SequenceManager.STEP_SEQUENCE;
+    }
+    switch (uniqueness) {
+      case ORDERED:
+        return SequenceManager.STEP_SEQUENCE;
+      case SIMPLE:
+        return SequenceManager.EXPAND_SEQUENCE;
+      default:
+        return SequenceManager.RANDOM_SEQUENCE;
+    }
+  }
+
+  @Override
+  protected boolean defaultUnique() {
+    return false;
+  }
+
+  @Override
+  public <T> Generator<T> createNullGenerator(Class<T> generatedType) {
+    return new ConstantGenerator<>(null, generatedType);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public NonNullGenerator<String> createCompositeStringGenerator(
+      GeneratorProvider<?> partGeneratorProvider, int minParts, int maxParts, Uniqueness uniqueness) {
+    AlternativeGenerator<String> result = new AlternativeGenerator<>(String.class);
+    for (int partCount = minParts; partCount <= maxParts; partCount++) {
+      Generator<String>[] sources = new Generator[partCount];
+      for (int i = 0; i < partCount; i++) {
+        sources[i] = WrapperFactory.asStringGenerator(partGeneratorProvider.create());
+      }
+      result.addSource(new CompositeStringGenerator(uniqueness.isUnique(), sources));
+    }
+    return WrapperFactory.asNonNullGenerator(result);
+  }
 
 }

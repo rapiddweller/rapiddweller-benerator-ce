@@ -32,31 +32,40 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.script.Expression;
 
 /**
- * Generator proxy which takes the input of another Generator and only 
+ * Generator proxy which takes the input of another Generator and only
  * passes it if a boolean expression evaluates to true.<br/><br/>
  * Created: 11.03.2010 14:23:53
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class FilteringGenerator<E> extends GeneratorProxy<E> {
-	
-	private final Expression<Boolean> filter;
 
-	public FilteringGenerator(Generator<E> source, Expression<Boolean> filter) {
-	    super(source);
-	    this.filter = filter;
+  private final Expression<Boolean> filter;
+
+  /**
+   * Instantiates a new Filtering generator.
+   *
+   * @param source the source
+   * @param filter the filter
+   */
+  public FilteringGenerator(Generator<E> source, Expression<Boolean> filter) {
+    super(source);
+    this.filter = filter;
+  }
+
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    ProductWrapper<E> feed;
+    while ((feed = super.generate(wrapper)) != null) {
+      E candidate = feed.unwrap();
+      context.set("_candidate", candidate);
+      if (filter.evaluate(context)) {
+        return wrapper.wrap(candidate);
+      }
     }
+    return null;
+  }
 
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-		ProductWrapper<E> feed;
-		while ((feed = super.generate(wrapper)) != null) {
-			E candidate = feed.unwrap();
-			context.set("_candidate", candidate);
-			if (filter.evaluate(context))
-				return wrapper.wrap(candidate);
-		}
-		return null;
-	}
-	
 }

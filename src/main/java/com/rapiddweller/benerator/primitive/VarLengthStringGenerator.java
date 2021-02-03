@@ -29,12 +29,19 @@ package com.rapiddweller.benerator.primitive;
 import com.rapiddweller.benerator.NonNullGenerator;
 
 /**
- * Common parent class for {@link NonNullGenerator}s that can 
+ * Common parent class for {@link NonNullGenerator}s that can
  * generate a String of a requested length.<br/><br/>
  * Created: 01.08.2011 07:41:21
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public interface VarLengthStringGenerator extends NonNullGenerator<String> {
-	String generateWithLength(int length);
+  /**
+   * Generate with length string.
+   *
+   * @param length the length
+   * @return the string
+   */
+  String generateWithLength(int length);
 }

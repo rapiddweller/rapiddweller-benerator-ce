@@ -39,12 +39,19 @@ import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
  * @author Volker Bergmann
  */
 public class CategoryIdValidator
-        extends AbstractConstraintValidator<Annotation, String> {
+    extends AbstractConstraintValidator<Annotation, String> {
 
-    public boolean isValid(String categoryId,
-                           ConstraintValidatorContext context) {
-        return (categoryId != null &&
-                (categoryId.length() == 4 || categoryId.length() == 9));
-    }
+  /**
+   * Is valid boolean.
+   *
+   * @param categoryId the category id
+   * @param context    the context
+   * @return the boolean
+   */
+  public boolean isValid(String categoryId,
+                         ConstraintValidatorContext context) {
+    return (categoryId != null &&
+        (categoryId.length() == 4 || categoryId.length() == 9));
+  }
 
 }

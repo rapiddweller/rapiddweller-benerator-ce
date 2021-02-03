@@ -30,154 +30,195 @@ import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.domain.address.Country;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Tests the {@link PersonGenerator}.<br/>
  * <br/>
  * Created: 09.06.2006 22:14:08
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class PersonGeneratorTest extends GeneratorClassTest {
 
-    private static final Logger logger = LogManager.getLogger(PersonGeneratorTest.class);
+  private static final Logger logger = LogManager.getLogger(PersonGeneratorTest.class);
 
-    public PersonGeneratorTest() {
-        super(PersonGenerator.class);
-    }
+  /**
+   * Instantiates a new Person generator test.
+   */
+  public PersonGeneratorTest() {
+    super(PersonGenerator.class);
+  }
 
-    @Test
-    public void testGermany() {
-        PersonGenerator generator = new PersonGenerator(Country.GERMANY.getIsoCode(), Locale.GERMANY);
-        generator.init(context);
-        for (int i = 0; i < 10; i++) {
-            Person person = generator.generate();
-            logger.debug(person.toString());
-        }
+  /**
+   * Test germany.
+   */
+  @Test
+  public void testGermany() {
+    PersonGenerator generator = new PersonGenerator(Country.GERMANY.getIsoCode(), Locale.GERMANY);
+    generator.init(context);
+    for (int i = 0; i < 10; i++) {
+      Person person = generator.generate();
+      logger.debug(person.toString());
     }
+  }
 
-    @Test
-    public void testSwitzerland() {
-        PersonGenerator generator = new PersonGenerator(Country.SWITZERLAND.getIsoCode(), Locale.GERMAN);
-        generator.init(context);
-        for (int i = 0; i < 10; i++) {
-            Person person = generator.generate();
-            logger.debug(person.toString());
-        }
+  /**
+   * Test switzerland.
+   */
+  @Test
+  public void testSwitzerland() {
+    PersonGenerator generator = new PersonGenerator(Country.SWITZERLAND.getIsoCode(), Locale.GERMAN);
+    generator.init(context);
+    for (int i = 0; i < 10; i++) {
+      Person person = generator.generate();
+      logger.debug(person.toString());
     }
+  }
 
-    @Test
-    public void testFemaleQuota() {
-        PersonGenerator generator = new PersonGenerator();
-        generator.setDataset("DE");
-        generator.setLocale(new Locale("de_DE"));
-        generator.setFemaleQuota(0.1);
-        generator.init(context);
-        int femCount = 0;
-        for (int i = 0; i < 1000; i++) {
-            Person person = generator.generate();
-            if (person.getGender() == Gender.FEMALE)
-            	femCount++;
-            logger.debug(person.toString());
-        }
-        assertTrue(femCount < 200);
+  /**
+   * Test female quota.
+   */
+  @Test
+  public void testFemaleQuota() {
+    PersonGenerator generator = new PersonGenerator();
+    generator.setDataset("DE");
+    generator.setLocale(new Locale("de_DE"));
+    generator.setFemaleQuota(0.1);
+    generator.init(context);
+    int femCount = 0;
+    for (int i = 0; i < 1000; i++) {
+      Person person = generator.generate();
+      if (person.getGender() == Gender.FEMALE) {
+        femCount++;
+      }
+      logger.debug(person.toString());
     }
+    assertTrue(femCount < 200);
+  }
 
-    @Test
-    public void testRussia() {
-        PersonGenerator generator = new PersonGenerator(Country.RUSSIA.getIsoCode(), new Locale("ru"));
-        generator.init(context);
-        for (int i = 0; i < 10; i++) {
-            Person person = generator.generate();
-            assertNotNull(person);
-            logger.debug(person.toString());
-        }
+  /**
+   * Test russia.
+   */
+  @Test
+  public void testRussia() {
+    PersonGenerator generator = new PersonGenerator(Country.RUSSIA.getIsoCode(), new Locale("ru"));
+    generator.init(context);
+    for (int i = 0; i < 10; i++) {
+      Person person = generator.generate();
+      assertNotNull(person);
+      logger.debug(person.toString());
     }
+  }
 
-    @Test
-    public void testPoland() {
-        PersonGenerator generator = new PersonGenerator(Country.POLAND.getIsoCode(), new Locale("pl"));
-        generator.init(context);
-        for (int i = 0; i < 10; i++) {
-            Person person = generator.generate();
-            assertNotNull(person);
-            logger.debug(person.toString());
-        }
+  /**
+   * Test poland.
+   */
+  @Test
+  public void testPoland() {
+    PersonGenerator generator = new PersonGenerator(Country.POLAND.getIsoCode(), new Locale("pl"));
+    generator.init(context);
+    for (int i = 0; i < 10; i++) {
+      Person person = generator.generate();
+      assertNotNull(person);
+      logger.debug(person.toString());
     }
+  }
 
-    @Test
-    public void testChina() {
-        PersonGenerator generator = new PersonGenerator(Country.CHINA.getIsoCode(), Locale.CHINESE);
-        generator.init(context);
-        for (int i = 0; i < 10; i++) {
-            Person person = generator.generate();
-            assertNotNull(person);
-            logger.debug(person.toString());
-        }
+  /**
+   * Test china.
+   */
+  @Test
+  public void testChina() {
+    PersonGenerator generator = new PersonGenerator(Country.CHINA.getIsoCode(), Locale.CHINESE);
+    generator.init(context);
+    for (int i = 0; i < 10; i++) {
+      Person person = generator.generate();
+      assertNotNull(person);
+      logger.debug(person.toString());
     }
+  }
 
-    @Test
-    public void testGenerateForDataset_DE() {
-        PersonGenerator generator = new PersonGenerator("dach");
-        generator.init(context);
-        for (int i = 0; i < 10; i++) {
-            Person person = generator.generateForDataset("DE");
-            assertNotNull(person);
-            logger.debug(person.toString());
-        }
+  /**
+   * Test generate for dataset de.
+   */
+  @Test
+  public void testGenerateForDataset_DE() {
+    PersonGenerator generator = new PersonGenerator("dach");
+    generator.init(context);
+    for (int i = 0; i < 10; i++) {
+      Person person = generator.generateForDataset("DE");
+      assertNotNull(person);
+      logger.debug(person.toString());
     }
+  }
 
-    @Test
-    public void testGenerateForDataset_fallback_LI_to_DE() {
-        PersonGenerator generator = new PersonGenerator("dach");
-        generator.init(context);
-        // test fallback for requested LI data in dach region
-        generator.generateForDataset("LI");
-    }
+  /**
+   * Test generate for dataset fallback li to de.
+   */
+  @Test
+  public void testGenerateForDataset_fallback_LI_to_DE() {
+    PersonGenerator generator = new PersonGenerator("dach");
+    generator.init(context);
+    // test fallback for requested LI data in dach region
+    generator.generateForDataset("LI");
+  }
 
-    @Test
-    public void testGenerateForDataset_fallbackForInvalidSet() {
-        PersonGenerator generator = new PersonGenerator("dach");
-        generator.init(context);
-        generator.generateForDataset("US");
-    }
+  /**
+   * Test generate for dataset fallback for invalid set.
+   */
+  @Test
+  public void testGenerateForDataset_fallbackForInvalidSet() {
+    PersonGenerator generator = new PersonGenerator("dach");
+    generator.init(context);
+    generator.generateForDataset("US");
+  }
 
-    @Test
-    public void testGenerateForDataset_fallbackForIllegalSet() {
-        PersonGenerator generator = new PersonGenerator("dach");
-        generator.init(context);
-        generator.generateForDataset("xx");
-    }
+  /**
+   * Test generate for dataset fallback for illegal set.
+   */
+  @Test
+  public void testGenerateForDataset_fallbackForIllegalSet() {
+    PersonGenerator generator = new PersonGenerator("dach");
+    generator.init(context);
+    generator.generateForDataset("xx");
+  }
 
-    @Test
-    public void testMinMaxAgeYears() {
-        PersonGenerator generator = new PersonGenerator();
-        generator.setMinAgeYears(18);
-        generator.setMaxAgeYears(21);
-        generator.init(context);
-        Date today = TimeUtil.today();
-        Set<Integer> agesUsed = new HashSet<>();
-        for (int i = 0; i < 1000; i++) {
-            Person person = generator.generate();
-            int age = TimeUtil.yearsBetween(person.getBirthDate(), today);
-            assertTrue("Person is expected to be at least 18 years old, but is " + age + ", " +
-            		"birthDate=" + person.getBirthDate(), 
-            		age >= 18);
-            assertTrue("Person is expected to be at most 21 years old, but is " + age + ", " +
-            		"birthDate=" + person.getBirthDate(), age <= 21);
-            agesUsed.add(age);
-            logger.debug(person.toString());
-        }
-        assertEquals(CollectionUtil.toSet(18, 19, 20, 21), agesUsed);
+  /**
+   * Test min max age years.
+   */
+  @Test
+  public void testMinMaxAgeYears() {
+    PersonGenerator generator = new PersonGenerator();
+    generator.setMinAgeYears(18);
+    generator.setMaxAgeYears(21);
+    generator.init(context);
+    Date today = TimeUtil.today();
+    Set<Integer> agesUsed = new HashSet<>();
+    for (int i = 0; i < 1000; i++) {
+      Person person = generator.generate();
+      int age = TimeUtil.yearsBetween(person.getBirthDate(), today);
+      assertTrue("Person is expected to be at least 18 years old, but is " + age + ", " +
+              "birthDate=" + person.getBirthDate(),
+          age >= 18);
+      assertTrue("Person is expected to be at most 21 years old, but is " + age + ", " +
+          "birthDate=" + person.getBirthDate(), age <= 21);
+      agesUsed.add(age);
+      logger.debug(person.toString());
     }
+    assertEquals(CollectionUtil.toSet(18, 19, 20, 21), agesUsed);
+  }
 
 }

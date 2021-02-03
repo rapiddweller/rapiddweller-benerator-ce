@@ -26,47 +26,58 @@
 
 package com.rapiddweller.benerator.factory;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.util.Date;
 
-import static com.rapiddweller.common.TimeUtil.*;
-import static com.rapiddweller.common.Period.*;
-
-import org.junit.Test;
+import static com.rapiddweller.common.Period.DAY;
+import static com.rapiddweller.common.Period.HOUR;
+import static com.rapiddweller.common.Period.MINUTE;
+import static com.rapiddweller.common.TimeUtil.date;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link EquivalenceGeneratorFactory}.<br/><br/>
  * Created: 29.08.2011 18:09:46
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class EquivalenceGeneratorFactoryTest {
 
-	@Test
-	public void testMidDate_midnights() {
-		checkMidDate(date(2011, 7, 29), date(2011, 8, 1), DAY.getMillis(), date(2011, 7, 30));
-		checkMidDate(date(2011, 7, 20), date(2011, 7, 25), 2 * DAY.getMillis(), date(2011, 7, 22));
-	}
-	
-	@Test
-	public void testMidDate_hours() {
-		checkMidDate(date(2011, 7, 29, 16, 0, 0, 0), date(2011, 7, 29, 17, 0, 0, 0), HOUR.getMillis() / 2, date(2011, 7, 29, 16, 30, 0, 0));
-		checkMidDate(date(2011, 7, 29, 16, 0, 0, 0), date(2011, 7, 29, 17, 0, 0, 0), MINUTE.getMillis(), date(2011, 7, 29, 16, 30, 0, 0));
-		checkMidDate(date(2011, 7, 29, 16, 0, 0, 0), date(2011, 7, 29, 17, 0, 0, 0), 20 * MINUTE.getMillis(), date(2011, 7, 29, 16, 20, 0, 0));
-	}
-	
-	@Test
-	public void testMidDate_fractionalDays() {
-		checkMidDate(date(2011, 7, 29), date(2011, 7, 30), DAY.getMillis() / 2, date(2011, 7, 29, 12, 0, 0, 0));
-		checkMidDate(date(2011, 7, 20), date(2011, 7, 30), DAY.getMillis() / 2, date(2011, 7, 25, 0, 0, 0, 0));
-		checkMidDate(date(2011, 7, 20), date(2011, 7, 30), DAY.getMillis() * 3 / 2, date(2011, 7, 24, 12, 0, 0, 0));
-	}
-	
-	private static void checkMidDate(Date min, Date max, long granularity, Date expected) {
-		EquivalenceGeneratorFactory factory = new EquivalenceGeneratorFactory();
-		Date result = factory.midDate(min, max, granularity);
-		assertEquals(expected, result);
-	}
-	
+  /**
+   * Test mid date midnights.
+   */
+  @Test
+  public void testMidDate_midnights() {
+    checkMidDate(date(2011, 7, 29), date(2011, 8, 1), DAY.getMillis(), date(2011, 7, 30));
+    checkMidDate(date(2011, 7, 20), date(2011, 7, 25), 2 * DAY.getMillis(), date(2011, 7, 22));
+  }
+
+  /**
+   * Test mid date hours.
+   */
+  @Test
+  public void testMidDate_hours() {
+    checkMidDate(date(2011, 7, 29, 16, 0, 0, 0), date(2011, 7, 29, 17, 0, 0, 0), HOUR.getMillis() / 2, date(2011, 7, 29, 16, 30, 0, 0));
+    checkMidDate(date(2011, 7, 29, 16, 0, 0, 0), date(2011, 7, 29, 17, 0, 0, 0), MINUTE.getMillis(), date(2011, 7, 29, 16, 30, 0, 0));
+    checkMidDate(date(2011, 7, 29, 16, 0, 0, 0), date(2011, 7, 29, 17, 0, 0, 0), 20 * MINUTE.getMillis(), date(2011, 7, 29, 16, 20, 0, 0));
+  }
+
+  /**
+   * Test mid date fractional days.
+   */
+  @Test
+  public void testMidDate_fractionalDays() {
+    checkMidDate(date(2011, 7, 29), date(2011, 7, 30), DAY.getMillis() / 2, date(2011, 7, 29, 12, 0, 0, 0));
+    checkMidDate(date(2011, 7, 20), date(2011, 7, 30), DAY.getMillis() / 2, date(2011, 7, 25, 0, 0, 0, 0));
+    checkMidDate(date(2011, 7, 20), date(2011, 7, 30), DAY.getMillis() * 3 / 2, date(2011, 7, 24, 12, 0, 0, 0));
+  }
+
+  private static void checkMidDate(Date min, Date max, long granularity, Date expected) {
+    EquivalenceGeneratorFactory factory = new EquivalenceGeneratorFactory();
+    Date result = factory.midDate(min, max, granularity);
+    assertEquals(expected, result);
+  }
+
 }

@@ -26,8 +26,6 @@
 
 package com.rapiddweller;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
 import com.rapiddweller.benerator.engine.statement.StatementProxy;
@@ -38,53 +36,64 @@ import com.rapiddweller.platform.contiperf.PerfTrackingConsumer;
 import com.rapiddweller.stat.LatencyCounter;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Integration test of the {@link PerfTrackingConsumer}.<br/><br/>
  * Created: 14.03.2010 12:17:07
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class PerfTrackingConsumerIntegrationTest extends BeneratorIntegrationTest {
 
-	@Test
-	public void testNesting() {
-		TimedGeneratorStatement statement = (TimedGeneratorStatement) parse(
-				"<generate type='bla' count='10'>" +
-				"	<consumer class='com.rapiddweller.platform.contiperf.PerfTrackingConsumer'>" +
-				"		<property name='target'>" +
-				"			<bean id='c' spec='new com.rapiddweller.benerator.test.ConsumerMock(false, 0, 50, 100)' />" +
-				"		</property>" +
-				"	</consumer>" +
-				"</generate>");
-		statement.execute(context);
-		ConsumerMock consumerMock = ConsumerMock.instances.get(0);
-		assertEquals(10, consumerMock.startConsumingCount.get());
-		checkStats(statement);
-	}
+  /**
+   * Test nesting.
+   */
+  @Test
+  public void testNesting() {
+    TimedGeneratorStatement statement = (TimedGeneratorStatement) parse(
+        "<generate type='bla' count='10'>" +
+            "	<consumer class='com.rapiddweller.platform.contiperf.PerfTrackingConsumer'>" +
+            "		<property name='target'>" +
+            "			<bean id='c' spec='new com.rapiddweller.benerator.test.ConsumerMock(false, 0, 50, 100)' />" +
+            "		</property>" +
+            "	</consumer>" +
+            "</generate>");
+    statement.execute(context);
+    ConsumerMock consumerMock = ConsumerMock.instances.get(0);
+    assertEquals(10, consumerMock.startConsumingCount.get());
+    checkStats(statement);
+  }
 
-	@Test
-	public void testScript() {
-		TimedGeneratorStatement statement = (TimedGeneratorStatement) parse(
-				"<generate type='bla' count='10'>" +
-				"	<consumer spec='new com.rapiddweller.platform.contiperf.PerfTrackingConsumer(new com.rapiddweller.benerator.test.ConsumerMock(false, 0, 50, 100))'/>" +
-				"</generate>");
-		statement.execute(context);
-		ConsumerMock consumerMock = ConsumerMock.instances.get(0);
-		assertEquals(10, consumerMock.startConsumingCount.get());
-		checkStats(statement);
-	}
+  /**
+   * Test script.
+   */
+  @Test
+  public void testScript() {
+    TimedGeneratorStatement statement = (TimedGeneratorStatement) parse(
+        "<generate type='bla' count='10'>" +
+            "	<consumer spec='new com.rapiddweller.platform.contiperf.PerfTrackingConsumer(new com.rapiddweller.benerator.test.ConsumerMock(false, 0, 50, 100))'/>" +
+            "</generate>");
+    statement.execute(context);
+    ConsumerMock consumerMock = ConsumerMock.instances.get(0);
+    assertEquals(10, consumerMock.startConsumingCount.get());
+    checkStats(statement);
+  }
 
-	private void checkStats(TimedGeneratorStatement statement) {
-		Statement tmp = statement;
-		while (tmp instanceof StatementProxy)
-			tmp = ((StatementProxy) tmp).getRealStatement(context);
-	    GenerateOrIterateStatement realStatement = (GenerateOrIterateStatement) tmp;
-		PerfTrackingConsumer tracker = (PerfTrackingConsumer) (realStatement.getTask()).getConsumer();
-		LatencyCounter counter = tracker.getOrCreateTracker().getCounters()[0];
-		assertEquals(10, counter.sampleCount());
-		assertTrue("Expected latency greater than 29 ms, but measured " + counter.minLatency() + " ms", counter.minLatency() > 29);
-		assertTrue(counter.averageLatency() > 29);
-		assertTrue(counter.minLatency() < counter.maxLatency());
+  private void checkStats(TimedGeneratorStatement statement) {
+    Statement tmp = statement;
+    while (tmp instanceof StatementProxy) {
+      tmp = ((StatementProxy) tmp).getRealStatement(context);
     }
-	
+    GenerateOrIterateStatement realStatement = (GenerateOrIterateStatement) tmp;
+    PerfTrackingConsumer tracker = (PerfTrackingConsumer) (realStatement.getTask()).getConsumer();
+    LatencyCounter counter = tracker.getOrCreateTracker().getCounters()[0];
+    assertEquals(10, counter.sampleCount());
+    assertTrue("Expected latency greater than 29 ms, but measured " + counter.minLatency() + " ms", counter.minLatency() > 29);
+    assertTrue(counter.averageLatency() > 29);
+    assertTrue(counter.minLatency() < counter.maxLatency());
+  }
+
 }

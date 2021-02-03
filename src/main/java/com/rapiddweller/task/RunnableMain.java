@@ -37,25 +37,27 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class RunnableMain {
 
-    /**
-     * Instantiates the class specified by args[0] and calls its run() method.
-     * The class needs to implement the interface java.lang.Runnable and to provide a public default constructor.
-     *
-     * @param args a String array of length 1 containing the name of the class to instantiate and execute
-     * @throws ClassNotFoundException if the class could not be found
-     * @throws IllegalAccessException if the constructor is not public
-     * @throws InstantiationException if the class is abstract
-     */
-    @SuppressWarnings("unchecked")
-    public static void main(String[] args)
-            throws ClassNotFoundException, IllegalAccessException,
-            InstantiationException, NoSuchMethodException,
-            InvocationTargetException {
-        assert args.length == 1;
-        String className = args[0];
-        Class<? extends Runnable> type =
-                (Class<? extends Runnable>) Class.forName(className);
-        Runnable task = type.getDeclaredConstructor().newInstance();
-        task.run();
-    }
+  /**
+   * Instantiates the class specified by args[0] and calls its run() method.
+   * The class needs to implement the interface java.lang.Runnable and to provide a public default constructor.
+   *
+   * @param args a String array of length 1 containing the name of the class to instantiate and execute
+   * @throws ClassNotFoundException    if the class could not be found
+   * @throws IllegalAccessException    if the constructor is not public
+   * @throws InstantiationException    if the class is abstract
+   * @throws NoSuchMethodException     the no such method exception
+   * @throws InvocationTargetException the invocation target exception
+   */
+  @SuppressWarnings("unchecked")
+  public static void main(String[] args)
+      throws ClassNotFoundException, IllegalAccessException,
+      InstantiationException, NoSuchMethodException,
+      InvocationTargetException {
+    assert args.length == 1;
+    String className = args[0];
+    Class<? extends Runnable> type =
+        (Class<? extends Runnable>) Class.forName(className);
+    Runnable task = type.getDeclaredConstructor().newInstance();
+    task.run();
+  }
 }

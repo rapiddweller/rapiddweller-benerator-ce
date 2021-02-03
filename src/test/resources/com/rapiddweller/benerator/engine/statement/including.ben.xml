@@ -1,5 +1,3 @@
-
-
 <setup>
-	<include uri="simple.ben.xml" />
+    <include uri="simple.ben.xml"/>
 </setup>

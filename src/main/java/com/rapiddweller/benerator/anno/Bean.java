@@ -34,14 +34,38 @@ import java.lang.annotation.Target;
 /**
  * Annotation for bean construction in context.<br/><br/>
  * Created: 16.06.2011 10:20:02
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR } )
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR})
 public @interface Bean {
-	String id();
-	Class<?> type() default Object.class;
-	String spec() default "";
-	Property[] properties() default {};
+  /**
+   * Id string.
+   *
+   * @return the string
+   */
+  String id();
+
+  /**
+   * Type class.
+   *
+   * @return the class
+   */
+  Class<?> type() default Object.class;
+
+  /**
+   * Spec string.
+   *
+   * @return the string
+   */
+  String spec() default "";
+
+  /**
+   * Properties property [ ].
+   *
+   * @return the property [ ]
+   */
+  Property[] properties() default {};
 }

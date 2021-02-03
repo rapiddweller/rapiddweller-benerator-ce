@@ -35,48 +35,72 @@ import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
  */
 public class GaussianFunction extends AbstractWeightFunction {
 
-    /** the average value */
-    private final double average;
+  /**
+   * the average value
+   */
+  private final double average;
 
-    /** the deviation */
-    private final double deviation;
+  /**
+   * the deviation
+   */
+  private final double deviation;
 
-    /** a constant scale factor of the function */
-    private final double scale;
+  /**
+   * a constant scale factor of the function
+   */
+  private final double scale;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    /** Fully Initializes the function */
-    public GaussianFunction(double average, double deviation) {
-        this.average = average;
-        this.deviation = deviation;
-        this.scale = 1. / deviation / Math.sqrt(2 * Math.PI);
-    }
+  /**
+   * Fully Initializes the function
+   *
+   * @param average   the average
+   * @param deviation the deviation
+   */
+  public GaussianFunction(double average, double deviation) {
+    this.average = average;
+    this.deviation = deviation;
+    this.scale = 1. / deviation / Math.sqrt(2 * Math.PI);
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    /** returns the average */
-    public double getAverage() {
-        return average;
-    }
+  /**
+   * returns the average
+   *
+   * @return the average
+   */
+  public double getAverage() {
+    return average;
+  }
 
-    /** returns the deviation */
-    public double getDeviation() {
-        return deviation;
-    }
+  /**
+   * returns the deviation
+   *
+   * @return the deviation
+   */
+  public double getDeviation() {
+    return deviation;
+  }
 
-    // WeightFunction implementation -----------------------------------------------------------------------------------------
+  // WeightFunction implementation -----------------------------------------------------------------------------------------
 
-    /** calculates the value */
-    @Override
-	public double value(double param) {
-        double x = (param - average) / deviation;
-        return scale * Math.exp(-0.5 * x*x);
-    }
+  /**
+   * calculates the value
+   */
+  @Override
+  public double value(double param) {
+    double x = (param - average) / deviation;
+    return scale * Math.exp(-0.5 * x * x);
+  }
 
-    /** Creates a String representation of the function */
-    @Override
-	public String toString() {
-        return getClass().getSimpleName() + "[1. / (" + deviation + "*sqrt(2*PI)) * e^(-" + (average != 0 ? "(x - " + average + ")" : "x") + "^2/" + (2 * deviation * deviation) + ")]";
-    }
+  /**
+   * Creates a String representation of the function
+   */
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[1. / (" + deviation + "*sqrt(2*PI)) * e^(-" + (average != 0 ? "(x - " + average + ")" : "x") + "^2/" +
+        (2 * deviation * deviation) + ")]";
+  }
 }

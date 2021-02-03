@@ -39,29 +39,41 @@ import javax.xml.stream.XMLStreamReader;
  */
 public class DbUnitUtil {
 
-    public static void skipRootElement(XMLStreamReader reader) {
-        try {
-            while (reader.hasNext()) {
-                if (reader.next() == XMLStreamConstants.START_ELEMENT &&
-                        "dataset".equals(reader.getLocalName()))
-                    return;
-            }
-        } catch (XMLStreamException e) {
-            throw new RuntimeException(e);
+  /**
+   * Skip root element.
+   *
+   * @param reader the reader
+   */
+  public static void skipRootElement(XMLStreamReader reader) {
+    try {
+      while (reader.hasNext()) {
+        if (reader.next() == XMLStreamConstants.START_ELEMENT &&
+            "dataset".equals(reader.getLocalName())) {
+          return;
         }
+      }
+    } catch (XMLStreamException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    public static void skipNonStartTags(XMLStreamReader reader) {
-        // skip non-start-tags
-        try {
-            while (reader.hasNext() && reader.next() != XMLStreamConstants.START_ELEMENT) {
-                // empty loop
-                if (reader.getEventType() == XMLStreamConstants.START_ELEMENT)
-                    System.out.println(reader.getLocalName());
-            }
-        } catch (XMLStreamException e) {
-            throw new RuntimeException(e);
+  /**
+   * Skip non start tags.
+   *
+   * @param reader the reader
+   */
+  public static void skipNonStartTags(XMLStreamReader reader) {
+    // skip non-start-tags
+    try {
+      while (reader.hasNext() && reader.next() != XMLStreamConstants.START_ELEMENT) {
+        // empty loop
+        if (reader.getEventType() == XMLStreamConstants.START_ELEMENT) {
+          System.out.println(reader.getLocalName());
         }
+      }
+    } catch (XMLStreamException e) {
+      throw new RuntimeException(e);
     }
+  }
 
 }

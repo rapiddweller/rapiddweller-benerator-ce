@@ -29,39 +29,47 @@ package com.rapiddweller.benerator.util;
 /**
  * Provides utility methods for Luhn check digit calculation.<br/><br/>
  * Created: 18.10.2009 10:06:01
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class LuhnUtil {
-	
-	private LuhnUtil() { }
-	
-    /**
-     * Calculates the last digit expected for a number that passes the Luhn test,
-     * ignoring the last digit. This is useful for creating Luhn numbers.
-     * The actual evaluation if a number passes the test is done by 
-     * {@link #luhnValid(CharSequence)}.
-     * @see "http://en.wikipedia.org/wiki/Luhn_algorithm"
-     */
-	public static char requiredCheckDigit(CharSequence number) {
-		int sum = 0;
-		int multiplier = 2;
-		for (int i = number.length() - 2; i >= 0; i--) {
-			int digit = number.charAt(i) - '0';
-			int partialSum = digit * multiplier;
-			sum += (partialSum > 9 ? 1 + (partialSum % 10) : partialSum);
-			multiplier = 1 + (multiplier % 2);
-		}
-		return (char) ('0' + (10 - sum % 10) % 10); 
-	}
-	
-    /**
-     * Tests a number against the Luhn algorithm
-     * @see #requiredCheckDigit(CharSequence)
-     * @see "http://en.wikipedia.org/wiki/Luhn_algorithm"
-     */
-	public static boolean luhnValid(CharSequence number) {
-		return (requiredCheckDigit(number) == number.charAt(number.length() - 1)); 
-	}
-	
+
+  private LuhnUtil() {
+  }
+
+  /**
+   * Calculates the last digit expected for a number that passes the Luhn test,
+   * ignoring the last digit. This is useful for creating Luhn numbers.
+   * The actual evaluation if a number passes the test is done by
+   * {@link #luhnValid(CharSequence)}.
+   *
+   * @param number the number
+   * @return the char
+   * @see "http://en.wikipedia.org/wiki/Luhn_algorithm"
+   */
+  public static char requiredCheckDigit(CharSequence number) {
+    int sum = 0;
+    int multiplier = 2;
+    for (int i = number.length() - 2; i >= 0; i--) {
+      int digit = number.charAt(i) - '0';
+      int partialSum = digit * multiplier;
+      sum += (partialSum > 9 ? 1 + (partialSum % 10) : partialSum);
+      multiplier = 1 + (multiplier % 2);
+    }
+    return (char) ('0' + (10 - sum % 10) % 10);
+  }
+
+  /**
+   * Tests a number against the Luhn algorithm
+   *
+   * @param number the number
+   * @return the boolean
+   * @see #requiredCheckDigit(CharSequence) #requiredCheckDigit(CharSequence)
+   * @see "http://en.wikipedia.org/wiki/Luhn_algorithm"
+   */
+  public static boolean luhnValid(CharSequence number) {
+    return (requiredCheckDigit(number) == number.charAt(number.length() - 1));
+  }
+
 }

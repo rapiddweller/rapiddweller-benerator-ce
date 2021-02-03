@@ -41,42 +41,48 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test the ScriptSupport class.
  * Created: 29.01.2021 17:38:51
+ *
  * @author Alexander Kell
  */
-
 public class ScriptSupportTest {
 
-    @Test
-    public void GraalJsTest() {
-        ScriptUtil.addFactory("js", new GraalJsScriptFactory());
-        Context context = new DefaultContext();
-        context.set("i", 5);
-        assertEquals(14, ScriptUtil.evaluate("{js:4+5+i}", context));
-        assertEquals("The number is 0\n" +
-                "The number is 1\n" +
-                "The number is 2\n" +
-                "The number is 3\n" +
-                "The number is 4\n", ScriptUtil.evaluate("{js:var text = \"\";\n" +
-                "var GraalJsTest;\n" +
-                "for (GraalJsTest = 0; GraalJsTest < 5; GraalJsTest++) {\n" +
-                "  text += \"The number is \" + GraalJsTest + \"\\n\";\n" +
-                "}}", context));
-    }
+  /**
+   * Graal js test.
+   */
+  @Test
+  public void GraalJsTest() {
+    ScriptUtil.addFactory("js", new GraalJsScriptFactory());
+    Context context = new DefaultContext();
+    context.set("i", 5);
+    assertEquals(14, ScriptUtil.evaluate("{js:4+5+i}", context));
+    assertEquals("The number is 0\n" +
+        "The number is 1\n" +
+        "The number is 2\n" +
+        "The number is 3\n" +
+        "The number is 4\n", ScriptUtil.evaluate("{js:var text = \"\";\n" +
+        "var GraalJsTest;\n" +
+        "for (GraalJsTest = 0; GraalJsTest < 5; GraalJsTest++) {\n" +
+        "  text += \"The number is \" + GraalJsTest + \"\\n\";\n" +
+        "}}", context));
+  }
 
-    @Ignore
-    @Test
-    public void GraalPythonTest() {
-        Context context = new DefaultContext();
-        ScriptUtil.addFactory("py", new GraalPyScriptFactory());
-        context.set("i", 5);
+  /**
+   * Graal python test.
+   */
+  @Ignore
+  @Test
+  public void GraalPythonTest() {
+    Context context = new DefaultContext();
+    ScriptUtil.addFactory("py", new GraalPyScriptFactory());
+    context.set("i", 5);
 
-        System.out.println("Evaluate Python calc ...");
-        Integer IntResultExpected = 14;
-        assertEquals(IntResultExpected, ScriptUtil.evaluate("{py:4+5+i}", context));
+    System.out.println("Evaluate Python calc ...");
+    Integer IntResultExpected = 14;
+    assertEquals(IntResultExpected, ScriptUtil.evaluate("{py:4+5+i}", context));
 
-        String StringResultExpected = "this is my number 5 ...";
-        System.out.println("Evaluate Python fstring ...");
-        ScriptUtil.evaluate("{py: ", context);
-        assertEquals(StringResultExpected, ScriptUtil.evaluate("{py:f'this is my number {i} ...'}", context));
-    }
+    String StringResultExpected = "this is my number 5 ...";
+    System.out.println("Evaluate Python fstring ...");
+    ScriptUtil.evaluate("{py: ", context);
+    assertEquals(StringResultExpected, ScriptUtil.evaluate("{py:f'this is my number {i} ...'}", context));
+  }
 }

@@ -33,26 +33,30 @@ import org.junit.Test;
 /**
  * Tests the {@link IndividualWeightSampleGenerator}.<br/><br/>
  * Created: 29.08.2011 15:52:51
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class IndividualWeightSampleGeneratorTest extends GeneratorTest {
 
-    @Test
-    public void testDistribution() {
-    	// given an IndividualWeight which gives 'Alice' weight 2, all others the weight 1
-    	IndividualWeight<String> individualWeight = new IndividualWeight<>() {
-			@Override
-			public double weight(String name) {
-				return ("Alice".equals(name) ? 2 : 1);
-			}
-		};
-    	// when using a IndividualWeightSampleGenerator with values 'Alice' and 'Bob'
-		IndividualWeightSampleGenerator<String> generator = new IndividualWeightSampleGenerator<>(
-				String.class, individualWeight, "Alice", "Bob");
-		generator.init(context);
-        // then the outcome should be 66% 'Alice' andf 33% 'Bob'
-        expectRelativeWeights(generator, 1000, "Alice", 2, "Bob", 1);
-    }
-    
+  /**
+   * Test distribution.
+   */
+  @Test
+  public void testDistribution() {
+    // given an IndividualWeight which gives 'Alice' weight 2, all others the weight 1
+    IndividualWeight<String> individualWeight = new IndividualWeight<>() {
+      @Override
+      public double weight(String name) {
+        return ("Alice".equals(name) ? 2 : 1);
+      }
+    };
+    // when using a IndividualWeightSampleGenerator with values 'Alice' and 'Bob'
+    IndividualWeightSampleGenerator<String> generator = new IndividualWeightSampleGenerator<>(
+        String.class, individualWeight, "Alice", "Bob");
+    generator.init(context);
+    // then the outcome should be 66% 'Alice' andf 33% 'Bob'
+    expectRelativeWeights(generator, 1000, "Alice", 2, "Bob", 1);
+  }
+
 }

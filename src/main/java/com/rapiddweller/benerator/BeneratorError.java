@@ -29,32 +29,60 @@ package com.rapiddweller.benerator;
 /**
  * Indicates an error in Benerator execution, for example raised by an &lt;error&gt; element.<br/><br/>
  * Created: 12.01.2011 09:13:11
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class BeneratorError extends RuntimeException {
 
-	private static final long serialVersionUID = 4922982624810176934L;
-	
-	protected final int code;
+  private static final long serialVersionUID = 4922982624810176934L;
 
-	public BeneratorError(String s, Throwable throwable, int code) {
-		super(s, throwable);
-		this.code = code;
-	}
+  /**
+   * The Code.
+   */
+  protected final int code;
 
-	public BeneratorError(String s, int code) {
-		super(s);
-		this.code = code;
-	}
+  /**
+   * Instantiates a new Benerator error.
+   *
+   * @param s         the s
+   * @param throwable the throwable
+   * @param code      the code
+   */
+  public BeneratorError(String s, Throwable throwable, int code) {
+    super(s, throwable);
+    this.code = code;
+  }
 
-	public BeneratorError(Throwable throwable, int code) {
-		super(throwable);
-		this.code = code;
-	}
+  /**
+   * Instantiates a new Benerator error.
+   *
+   * @param s    the s
+   * @param code the code
+   */
+  public BeneratorError(String s, int code) {
+    super(s);
+    this.code = code;
+  }
 
-	public int getCode() {
-		return code;
-	}
+  /**
+   * Instantiates a new Benerator error.
+   *
+   * @param throwable the throwable
+   * @param code      the code
+   */
+  public BeneratorError(Throwable throwable, int code) {
+    super(throwable);
+    this.code = code;
+  }
+
+  /**
+   * Gets code.
+   *
+   * @return the code
+   */
+  public int getCode() {
+    return code;
+  }
 
 }

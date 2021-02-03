@@ -29,14 +29,15 @@ package com.rapiddweller.benerator.archetype;
 /**
  * {@link FolderLayout} for Eclipse.<br/><br/>
  * Created: 04.04.2010 11:40:57
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class EclipseFolderLayout implements FolderLayout {
 
-	@Override
-	public String mapSubFolder(String path) {
-	    return "src";
-    }
+  @Override
+  public String mapSubFolder(String path) {
+    return "src";
+  }
 
 }

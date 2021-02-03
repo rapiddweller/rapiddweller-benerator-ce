@@ -33,31 +33,49 @@ import com.rapiddweller.benerator.util.RandomUtil;
  * Double Generator that implements a 'random' Double Sequence.<br/>
  * <br/>
  * Created: 11.06.2006 07:55:54
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class RandomDoubleGenerator extends AbstractNonNullNumberGenerator<Double> {
-	
-    public RandomDoubleGenerator() {
-        this(Double.MIN_VALUE, Double.MAX_VALUE);
-    }
 
-    public RandomDoubleGenerator(double min, double max) {
-        this(min, max, 1);
-    }
+  /**
+   * Instantiates a new Random double generator.
+   */
+  public RandomDoubleGenerator() {
+    this(Double.MIN_VALUE, Double.MAX_VALUE);
+  }
 
-    public RandomDoubleGenerator(double min, double max, double granularity) {
-        super(Double.class, min, max, granularity);
-    }
+  /**
+   * Instantiates a new Random double generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public RandomDoubleGenerator(double min, double max) {
+    this(min, max, 1);
+  }
 
-    // Generator interface ---------------------------------------------------------------------------------------------
+  /**
+   * Instantiates a new Random double generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   */
+  public RandomDoubleGenerator(double min, double max, double granularity) {
+    super(Double.class, min, max, granularity);
+  }
 
-	@Override
-	public Double generate() {
-        if (granularity == 0)
-            return min + Math.random() * (max - min);
-        int n = (int)((max - min) / granularity);
-        return min + RandomUtil.randomInt(0, n) * granularity;
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public Double generate() {
+    if (granularity == 0) {
+      return min + Math.random() * (max - min);
     }
+    int n = (int) ((max - min) / granularity);
+    return min + RandomUtil.randomInt(0, n) * granularity;
+  }
 
 }

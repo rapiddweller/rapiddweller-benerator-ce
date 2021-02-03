@@ -31,31 +31,53 @@ import com.rapiddweller.common.StringUtil;
 /**
  * Provides support for Benerator's system property settings.<br/><br/>
  * Created: 30.07.2010 18:25:01
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class BeneratorOpts {
-	
-	public static final String OPTS_VALIDATE = "benerator.validate";
-	public static final String OPTS_CACHE_SIZE = "benerator.cacheSize";
 
-	private static final int DEFAULT_CACHE_SIZE = 100000;
-	
-	public static void setValidating(boolean validating) {
-		System.setProperty(OPTS_VALIDATE, String.valueOf(validating));
-	}
+  /**
+   * The constant OPTS_VALIDATE.
+   */
+  public static final String OPTS_VALIDATE = "benerator.validate";
+  /**
+   * The constant OPTS_CACHE_SIZE.
+   */
+  public static final String OPTS_CACHE_SIZE = "benerator.cacheSize";
 
-	public static boolean isValidating() {
-		return !("false".equals(System.getProperty(OPTS_VALIDATE)));
-	}
+  private static final int DEFAULT_CACHE_SIZE = 100000;
 
-	public static int getCacheSize() {
-		return parseIntProperty(OPTS_CACHE_SIZE, DEFAULT_CACHE_SIZE);
-	}
-	
-	private static int parseIntProperty(String propertyKey, int defaultValue) {
-		String propertyValue = System.getProperty(propertyKey);
-		return (StringUtil.isEmpty(propertyValue) ? defaultValue : Integer.parseInt(propertyValue));
-	}
-	
+  /**
+   * Sets validating.
+   *
+   * @param validating the validating
+   */
+  public static void setValidating(boolean validating) {
+    System.setProperty(OPTS_VALIDATE, String.valueOf(validating));
+  }
+
+  /**
+   * Is validating boolean.
+   *
+   * @return the boolean
+   */
+  public static boolean isValidating() {
+    return !("false".equals(System.getProperty(OPTS_VALIDATE)));
+  }
+
+  /**
+   * Gets cache size.
+   *
+   * @return the cache size
+   */
+  public static int getCacheSize() {
+    return parseIntProperty(OPTS_CACHE_SIZE, DEFAULT_CACHE_SIZE);
+  }
+
+  private static int parseIntProperty(String propertyKey, int defaultValue) {
+    String propertyValue = System.getProperty(propertyKey);
+    return (StringUtil.isEmpty(propertyValue) ? defaultValue : Integer.parseInt(propertyValue));
+  }
+
 }

@@ -29,78 +29,111 @@ package com.rapiddweller.benerator.distribution.sequence;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link ShuffleDoubleGenerator}.<br/><br/>
  * Created: 07.06.2006 20:23:39
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class ShuffleDoubleGeneratorTest extends GeneratorClassTest {
 
-    public ShuffleDoubleGeneratorTest() {
-        super(ShuffleDoubleGenerator.class);
-    }
+  /**
+   * Instantiates a new Shuffle double generator test.
+   */
+  public ShuffleDoubleGeneratorTest() {
+    super(ShuffleDoubleGenerator.class);
+  }
 
-    @Test
-    public void testIncrementOne() {
-        check( 0, 2, 1, 1,   0,  1, 2);
-        check(-2, 0, 1, 1,  -2, -1, 0);
-    }
+  /**
+   * Test increment one.
+   */
+  @Test
+  public void testIncrementOne() {
+    check(0, 2, 1, 1, 0, 1, 2);
+    check(-2, 0, 1, 1, -2, -1, 0);
+  }
 
-    @Test
-    public void testIncrementTwo() {
-        check( 0, 2, 1, 2,   0,  2, 1);
-        check(-2, 0, 1, 2,  -2, 0, -1);
-    }
+  /**
+   * Test increment two.
+   */
+  @Test
+  public void testIncrementTwo() {
+    check(0, 2, 1, 2, 0, 2, 1);
+    check(-2, 0, 1, 2, -2, 0, -1);
+  }
 
-    @Test
-    public void testFractionalGranularity() {
-        check( 0, 1, 0.5, 1,   0, 1,  0.5);
-        check(-1, 0, 0.5, 1,  -1, 0, -0.5);
-    }
+  /**
+   * Test fractional granularity.
+   */
+  @Test
+  public void testFractionalGranularity() {
+    check(0, 1, 0.5, 1, 0, 1, 0.5);
+    check(-1, 0, 0.5, 1, -1, 0, -0.5);
+  }
 
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testMinGreaterMax() {
-        new ShuffleDoubleGenerator(1, 0,  1, 1).init(context);
-    }
+  /**
+   * Test min greater max.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testMinGreaterMax() {
+    new ShuffleDoubleGenerator(1, 0, 1, 1).init(context);
+  }
 
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testZeroIncrement() {
-        new ShuffleDoubleGenerator(0, 1,  1, 0).init(context);
-    }
+  /**
+   * Test zero increment.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testZeroIncrement() {
+    new ShuffleDoubleGenerator(0, 1, 1, 0).init(context);
+  }
 
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testNegativeIncrement() {
-        new ShuffleDoubleGenerator(0, 1, 1, -1).init(context);
-    }
+  /**
+   * Test negative increment.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testNegativeIncrement() {
+    new ShuffleDoubleGenerator(0, 1, 1, -1).init(context);
+  }
 
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testZeroGranularity() {
-        new ShuffleDoubleGenerator(0, 1, 0, 1).init(context);
-    }
+  /**
+   * Test zero granularity.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testZeroGranularity() {
+    new ShuffleDoubleGenerator(0, 1, 0, 1).init(context);
+  }
 
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testNegativeGranularity() {
-        new ShuffleDoubleGenerator(0, 1, -1, 1).init(context);
-    }
+  /**
+   * Test negative granularity.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testNegativeGranularity() {
+    new ShuffleDoubleGenerator(0, 1, -1, 1).init(context);
+  }
 
-    @Test
-    public void testReset() {
-    	ShuffleDoubleGenerator generator = new ShuffleDoubleGenerator(0., 3., 1., 2.);
-    	generator.init(context);
-        expectGeneratedSequence(generator, 0., 2., 1., 3.).withCeasedAvailability();
-    }
-    
-    // helper methods --------------------------------------------------------------------------------------------------
+  /**
+   * Test reset.
+   */
+  @Test
+  public void testReset() {
+    ShuffleDoubleGenerator generator = new ShuffleDoubleGenerator(0., 3., 1., 2.);
+    generator.init(context);
+    expectGeneratedSequence(generator, 0., 2., 1., 3.).withCeasedAvailability();
+  }
 
-    private void check(double min, double max, double granularity, double increment, double ... expectedProducts) {
-    	ShuffleDoubleGenerator generator = new ShuffleDoubleGenerator(min, max, granularity, increment);
-        generator.init(context);
-        for (double expected : expectedProducts)
-			assertEquals(expected, generator.generate(), 0);
-        assertUnavailable(generator);
+  // helper methods --------------------------------------------------------------------------------------------------
+
+  private void check(double min, double max, double granularity, double increment, double... expectedProducts) {
+    ShuffleDoubleGenerator generator = new ShuffleDoubleGenerator(min, max, granularity, increment);
+    generator.init(context);
+    for (double expected : expectedProducts) {
+      assertEquals(expected, generator.generate(), 0);
     }
+    assertUnavailable(generator);
+  }
 
 }

@@ -26,43 +26,55 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 /**
  * Tests the {@link LastProductDetector}.<br/><br/>
  * Created: 12.09.2011 12:46:53
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class LastInstanceDetectorTest extends GeneratorTest {
 
-	@Test
-	public void testLifeCycle() {
-		Generator<Integer> source = new SequenceTestGenerator<>(1, 2);
-		Generator<Integer> generator = initialize(new LastProductDetector<>(source));
-		ProductWrapper<Integer> wrapper = new ProductWrapper<>();
-		checkSequence(generator, wrapper);
-		generator.reset();
-		checkSequence(generator, wrapper);
-	}
+  /**
+   * Test life cycle.
+   */
+  @Test
+  public void testLifeCycle() {
+    Generator<Integer> source = new SequenceTestGenerator<>(1, 2);
+    Generator<Integer> generator = initialize(new LastProductDetector<>(source));
+    ProductWrapper<Integer> wrapper = new ProductWrapper<>();
+    checkSequence(generator, wrapper);
+    generator.reset();
+    checkSequence(generator, wrapper);
+  }
 
-	protected void checkSequence(Generator<Integer> generator,
-			ProductWrapper<Integer> wrapper) {
-		// generating 1
-		wrapper = generator.generate(wrapper);
-		assertNotNull(wrapper);
-		assertNull(wrapper.getTag("last"));
-		// generating 2
-		wrapper = generator.generate(wrapper);
-		assertNotNull(wrapper);
-		assertEquals("true", wrapper.getTag("last"));
-		// unavailable
-		assertNull(generator.generate(wrapper));
-	}
-	
+  /**
+   * Check sequence.
+   *
+   * @param generator the generator
+   * @param wrapper   the wrapper
+   */
+  protected void checkSequence(Generator<Integer> generator,
+                               ProductWrapper<Integer> wrapper) {
+    // generating 1
+    wrapper = generator.generate(wrapper);
+    assertNotNull(wrapper);
+    assertNull(wrapper.getTag("last"));
+    // generating 2
+    wrapper = generator.generate(wrapper);
+    assertNotNull(wrapper);
+    assertEquals("true", wrapper.getTag("last"));
+    // unavailable
+    assertNull(generator.generate(wrapper));
+  }
+
 }

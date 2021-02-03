@@ -26,27 +26,39 @@
 
 package com.rapiddweller.platform;
 
-import static org.junit.Assert.assertNull;
-
 import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.model.data.Entity;
 
+import static org.junit.Assert.assertNull;
+
 /**
  * Parent class for Entity-related {@link DataIterator} tests.<br/><br/>
  * Created: 24.07.2011 15:55:14
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public abstract class AbstractEntityIteratorTest extends ModelTest {
 
-	public static Entity nextOf(DataIterator<Entity> iterator) {
-		return iterator.next(new DataContainer<>()).getData();
-	}
+  /**
+   * Next of entity.
+   *
+   * @param iterator the iterator
+   * @return the entity
+   */
+  public static Entity nextOf(DataIterator<Entity> iterator) {
+    return iterator.next(new DataContainer<>()).getData();
+  }
 
-	public static void assertUnavailable(DataIterator<Entity> iterator) {
-		assertNull(iterator.next(new DataContainer<>()));
-	}
-    
+  /**
+   * Assert unavailable.
+   *
+   * @param iterator the iterator
+   */
+  public static void assertUnavailable(DataIterator<Entity> iterator) {
+    assertNull(iterator.next(new DataContainer<>()));
+  }
+
 }

@@ -33,31 +33,38 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_MESSAGE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ECHO;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableElementText;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
 /**
  * Parses an &lt;echo&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:30:29
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class EchoParser extends AbstractBeneratorDescriptorParser {
 
-	public EchoParser() {
-	    super(EL_ECHO, null, CollectionUtil.toSet(ATT_MESSAGE, ATT_TYPE));
-    }
+  /**
+   * Instantiates a new Echo parser.
+   */
+  public EchoParser() {
+    super(EL_ECHO, null, CollectionUtil.toSet(ATT_MESSAGE, ATT_TYPE));
+  }
 
-	@Override
-	public EchoStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-        Expression<String> messageEx;
-		if (!StringUtil.isEmpty(element.getAttribute(ATT_MESSAGE)))
-	        messageEx = parseScriptableStringAttribute(ATT_MESSAGE, element);
-        else
-			messageEx = parseScriptableElementText(element, true);
-		Expression<String> typeEx = parseScriptableStringAttribute("type", element);
-		return new EchoStatement(messageEx, typeEx);
+  @Override
+  public EchoStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    Expression<String> messageEx;
+    if (!StringUtil.isEmpty(element.getAttribute(ATT_MESSAGE))) {
+      messageEx = parseScriptableStringAttribute(ATT_MESSAGE, element);
+    } else {
+      messageEx = parseScriptableElementText(element, true);
     }
+    Expression<String> typeEx = parseScriptableStringAttribute("type", element);
+    return new EchoStatement(messageEx, typeEx);
+  }
 
 }

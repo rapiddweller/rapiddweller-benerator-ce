@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import java.util.Random;
-
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
+
+import java.util.Random;
 
 /**
  * Generates boolean values with a configurable quota of true values.<br/>
@@ -37,54 +37,72 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
  */
 public class BooleanGenerator extends ThreadSafeNonNullGenerator<Boolean> {
 
-    /** The quota of true values to create */
-    private double trueQuota;
-    
-    private final Random random;
+  /**
+   * The quota of true values to create
+   */
+  private double trueQuota;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  private final Random random;
 
-    /** Initializes the generator to a trueQuota of 50% */
-    public BooleanGenerator() {
-        this(0.5f);
-    }
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    /** Initializes the generator to a trueQuota */
-    public BooleanGenerator(double trueQuota) {
-        this.trueQuota = trueQuota;
-        this.random = new Random();
-    }
+  /**
+   * Initializes the generator to a trueQuota of 50%
+   */
+  public BooleanGenerator() {
+    this(0.5f);
+  }
 
-    // config properties -----------------------------------------------------------------------------------------------
+  /**
+   * Initializes the generator to a trueQuota
+   *
+   * @param trueQuota the true quota
+   */
+  public BooleanGenerator(double trueQuota) {
+    this.trueQuota = trueQuota;
+    this.random = new Random();
+  }
 
-    /** Sets the quota of true values to create */
-    public double getTrueQuota() {
-        return trueQuota;
-    }
+  // config properties -----------------------------------------------------------------------------------------------
 
-    /** Returns the quota of true values to create */
-    public void setTrueQuota(double trueQuota) {
-        this.trueQuota = trueQuota;
-    }
+  /**
+   * Sets the quota of true values to create
+   *
+   * @return the true quota
+   */
+  public double getTrueQuota() {
+    return trueQuota;
+  }
 
-    // Generator interface ---------------------------------------------------------------------------------------------
+  /**
+   * Returns the quota of true values to create
+   *
+   * @param trueQuota the true quota
+   */
+  public void setTrueQuota(double trueQuota) {
+    this.trueQuota = trueQuota;
+  }
 
-    @Override
-	public Class<Boolean> getGeneratedType() {
-        return Boolean.class;
-    }
+  // Generator interface ---------------------------------------------------------------------------------------------
 
-    /** generates boolean values with a quota of true values according to the trueQuota property */
-	@Override
-	public Boolean generate() {
-        return (random.nextFloat() <= trueQuota);
-    }
+  @Override
+  public Class<Boolean> getGeneratedType() {
+    return Boolean.class;
+  }
 
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
+  /**
+   * generates boolean values with a quota of true values according to the trueQuota property
+   */
+  @Override
+  public Boolean generate() {
+    return (random.nextFloat() <= trueQuota);
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[trueQuota=" + trueQuota + ']';
-    }
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[trueQuota=" + trueQuota + ']';
+  }
 
 }

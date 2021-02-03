@@ -35,40 +35,59 @@ import org.junit.Test;
 /**
  * Tests the {@link WeightedNumbers} sequence.<br/><br/>
  * Created: 02.06.2010 08:10:28
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class WeightedNumbersTest extends GeneratorTest {
 
-	final WeightedNumbers<Integer> intDist = new WeightedNumbers<>("0^0,1^3,2^2,3^1");
+  /**
+   * The Int dist.
+   */
+  final WeightedNumbers<Integer> intDist = new WeightedNumbers<>("0^0,1^3,2^2,3^1");
 
-	@Test(expected = ConfigurationError.class)
-	public void testCreateGenerator_unique() {
-		intDist.createNumberGenerator(Integer.class, 0, 3, 1, true);
-	}
-	
-	@Test
-	public void testCreateGenerator_nonUnique() {
-		Generator<Integer> generator = intDist.createNumberGenerator(Integer.class, 0, 3, 1, false);
-		generator.init(context);
-		expectRelativeWeights(generator, 3000, 0, 0, 1, 3, 2, 2, 3, 1);
-	}
-	
-	@Test(expected = ConfigurationError.class)
-	public void testApply_null() {
-		intDist.applyTo(null, true);
-	}
+  /**
+   * Test create generator unique.
+   */
+  @Test(expected = ConfigurationError.class)
+  public void testCreateGenerator_unique() {
+    intDist.createNumberGenerator(Integer.class, 0, 3, 1, true);
+  }
 
-	@Test(expected = ConfigurationError.class)
-	public void testApply_unique() {
-		intDist.applyTo(new SequenceTestGenerator<>("X", "A", "B", "C"), true);
-	}
+  /**
+   * Test create generator non unique.
+   */
+  @Test
+  public void testCreateGenerator_nonUnique() {
+    Generator<Integer> generator = intDist.createNumberGenerator(Integer.class, 0, 3, 1, false);
+    generator.init(context);
+    expectRelativeWeights(generator, 3000, 0, 0, 1, 3, 2, 2, 3, 1);
+  }
 
-	@Test
-	public void testApply_nonUnique() {
-		Generator<String> generator = intDist.applyTo(new SequenceTestGenerator<>("X", "A", "B", "C"), false);
-		generator.init(context);
-		expectRelativeWeights(generator, 3000, "X", 0, "A", 3, "B", 2, "C", 1);
-	}
+  /**
+   * Test apply null.
+   */
+  @Test(expected = ConfigurationError.class)
+  public void testApply_null() {
+    intDist.applyTo(null, true);
+  }
+
+  /**
+   * Test apply unique.
+   */
+  @Test(expected = ConfigurationError.class)
+  public void testApply_unique() {
+    intDist.applyTo(new SequenceTestGenerator<>("X", "A", "B", "C"), true);
+  }
+
+  /**
+   * Test apply non unique.
+   */
+  @Test
+  public void testApply_nonUnique() {
+    Generator<String> generator = intDist.applyTo(new SequenceTestGenerator<>("X", "A", "B", "C"), false);
+    generator.init(context);
+    expectRelativeWeights(generator, 3000, "X", 0, "A", 3, "B", 2, "C", 1);
+  }
 
 }

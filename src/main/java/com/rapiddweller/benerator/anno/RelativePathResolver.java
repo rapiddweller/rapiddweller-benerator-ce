@@ -29,35 +29,44 @@ package com.rapiddweller.benerator.anno;
 import java.io.File;
 
 /**
- * {@link PathResolver} implementation which is based on a base path and appends the test classes' package name 
+ * {@link PathResolver} implementation which is based on a base path and appends the test classes' package name
  * and finally the resource name (or path) itself to construct the resolved path.<br/><br/>
  * Created: 12.12.2011 13:16:56
- * @since 0.7.4
+ *
  * @author Volker Bergmann
+ * @since 0.7.4
  */
 public class RelativePathResolver extends AbstractPathResolver {
-	
-	// constructors ----------------------------------------------------------------------------------------------------
-	
-	public RelativePathResolver() {
-		super();
-	}
 
-	public RelativePathResolver(String basePath) {
-		super(basePath);
-	}
-	
-	// PathResolver interface implementation ---------------------------------------------------------------------------
-	
-	@Override
-	public String getPathFor(String uri, Class<?> testClass) {
-		char sep = File.separatorChar;
-		return basePath + sep + testClass.getPackage().getName().replace('.', sep) + sep + normalizePath(uri);
-	}
-	
-	@Override
-	public String toString() {
- 		return getClass().getName() + '[' + basePath + ']';
-	}
-	
+  // constructors ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Instantiates a new Relative path resolver.
+   */
+  public RelativePathResolver() {
+    super();
+  }
+
+  /**
+   * Instantiates a new Relative path resolver.
+   *
+   * @param basePath the base path
+   */
+  public RelativePathResolver(String basePath) {
+    super(basePath);
+  }
+
+  // PathResolver interface implementation ---------------------------------------------------------------------------
+
+  @Override
+  public String getPathFor(String uri, Class<?> testClass) {
+    char sep = File.separatorChar;
+    return basePath + sep + testClass.getPackage().getName().replace('.', sep) + sep + normalizePath(uri);
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getName() + '[' + basePath + ']';
+  }
+
 }

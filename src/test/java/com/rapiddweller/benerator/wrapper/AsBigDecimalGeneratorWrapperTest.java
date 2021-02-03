@@ -26,35 +26,39 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import static org.junit.Assert.*;
-
-import java.math.BigDecimal;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link AsBigDecimalGeneratorWrapper}.<br/><br/>
  * Created: 12.01.2011 00:02:55
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class AsBigDecimalGeneratorWrapperTest {
 
-	@Test
-	public void testGranularity() {
-		Generator<Double> source = new SequenceTestGenerator<>(0.1234, 1.234, 12.34, 123.4, 1234.56);
-		AsBigDecimalGeneratorWrapper<Double> wrapper 
-			= new AsBigDecimalGeneratorWrapper<>(source, BigDecimal.ZERO, new BigDecimal("0.01"));
-		wrapper.init(new DefaultBeneratorContext());
-		assertEquals(new BigDecimal("0.12"), GeneratorUtil.generateNonNull(wrapper));
-		assertEquals(new BigDecimal("1.23"), GeneratorUtil.generateNonNull(wrapper));
-		assertEquals(new BigDecimal("12.34"), GeneratorUtil.generateNonNull(wrapper));
-		assertEquals(new BigDecimal("123.40"), GeneratorUtil.generateNonNull(wrapper));
-		assertEquals(new BigDecimal("1234.56"), GeneratorUtil.generateNonNull(wrapper));
-	}
-	
+  /**
+   * Test granularity.
+   */
+  @Test
+  public void testGranularity() {
+    Generator<Double> source = new SequenceTestGenerator<>(0.1234, 1.234, 12.34, 123.4, 1234.56);
+    AsBigDecimalGeneratorWrapper<Double> wrapper
+        = new AsBigDecimalGeneratorWrapper<>(source, BigDecimal.ZERO, new BigDecimal("0.01"));
+    wrapper.init(new DefaultBeneratorContext());
+    assertEquals(new BigDecimal("0.12"), GeneratorUtil.generateNonNull(wrapper));
+    assertEquals(new BigDecimal("1.23"), GeneratorUtil.generateNonNull(wrapper));
+    assertEquals(new BigDecimal("12.34"), GeneratorUtil.generateNonNull(wrapper));
+    assertEquals(new BigDecimal("123.40"), GeneratorUtil.generateNonNull(wrapper));
+    assertEquals(new BigDecimal("1234.56"), GeneratorUtil.generateNonNull(wrapper));
+  }
+
 }

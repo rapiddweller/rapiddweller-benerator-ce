@@ -30,28 +30,36 @@ import com.rapiddweller.benerator.Generator;
 
 /**
  * Double Generator that maps products from a generator of a different number type.<br/>
- * <br/> 
+ * <br/>
  * Created: 13.11.2007 12:43:10
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  */
 public class AsDoubleGeneratorWrapper<E extends Number> extends GeneratorWrapper<E, Double> {
 
-    public AsDoubleGeneratorWrapper(Generator<E> source) {
-        super(source);
-    }
+  /**
+   * Instantiates a new As double generator wrapper.
+   *
+   * @param source the source
+   */
+  public AsDoubleGeneratorWrapper(Generator<E> source) {
+    super(source);
+  }
 
-    @Override
-	public Class<Double> getGeneratedType() {
-	    return Double.class;
-    }
+  @Override
+  public Class<Double> getGeneratedType() {
+    return Double.class;
+  }
 
-	@Override
-	public ProductWrapper<Double> generate(ProductWrapper<Double> wrapper) {
-    	assertInitialized();
-    	ProductWrapper<E> number = generateFromSource();
-        if (number == null)
-        	return null;
-		return wrapper.wrap(number.unwrap().doubleValue());
+  @Override
+  public ProductWrapper<Double> generate(ProductWrapper<Double> wrapper) {
+    assertInitialized();
+    ProductWrapper<E> number = generateFromSource();
+    if (number == null) {
+      return null;
     }
+    return wrapper.wrap(number.unwrap().doubleValue());
+  }
 
 }

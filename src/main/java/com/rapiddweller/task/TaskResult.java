@@ -34,7 +34,16 @@ package com.rapiddweller.task;
  * @since 0.6.0
  */
 public enum TaskResult {
-    EXECUTING,
-    FINISHED,
-    UNAVAILABLE
+  /**
+   * Executing task result.
+   */
+  EXECUTING,
+  /**
+   * Finished task result.
+   */
+  FINISHED,
+  /**
+   * Unavailable task result.
+   */
+  UNAVAILABLE
 }

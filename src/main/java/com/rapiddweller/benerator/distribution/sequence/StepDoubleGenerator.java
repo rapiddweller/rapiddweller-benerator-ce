@@ -33,63 +33,89 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
  * Double Generator that implements a 'step' Double Sequence.<br/>
  * <br/>
  * Created: 26.07.2007 18:36:45
+ *
  * @author Volker Bergmann
  */
 public class StepDoubleGenerator extends AbstractNonNullNumberGenerator<Double> {
 
-	private final double increment;
-	private final double initial;
-	
-    private double next;
+  private final double increment;
+  private final double initial;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  private double next;
 
-    public StepDoubleGenerator() {
-        this(Double.MIN_VALUE, Double.MAX_VALUE);
+  // constructors ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Instantiates a new Step double generator.
+   */
+  public StepDoubleGenerator() {
+    this(Double.MIN_VALUE, Double.MAX_VALUE);
+  }
+
+  /**
+   * Instantiates a new Step double generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public StepDoubleGenerator(double min, double max) {
+    this(min, max, 1., null);
+  }
+
+  /**
+   * Instantiates a new Step double generator.
+   *
+   * @param min       the min
+   * @param max       the max
+   * @param increment the increment
+   */
+  public StepDoubleGenerator(double min, double max, double increment) {
+    this(min, max, increment, null);
+  }
+
+  /**
+   * Instantiates a new Step double generator.
+   *
+   * @param min       the min
+   * @param max       the max
+   * @param increment the increment
+   * @param initial   the initial
+   */
+  public StepDoubleGenerator(double min, Double max, double increment, Double initial) {
+    super(Double.class, min, max, Math.abs(increment));
+    this.increment = increment;
+    this.initial = (initial != null ? initial : (increment >= 0 ? min : max));
+    reset();
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    resetMembers();
+    super.init(context);
+  }
+
+  @Override
+  public Double generate() {
+    assertInitialized();
+    if (increment == 0 || (increment > 0 && (max == null || next <= max)) || (increment < 0 && next >= min)) {
+      double value = next;
+      next += increment;
+      return value;
+    } else {
+      return null;
     }
+  }
 
-    public StepDoubleGenerator(double min, double max) {
-        this(min, max, 1., null);
-    }
+  @Override
+  public synchronized void reset() {
+    resetMembers();
+  }
 
-    public StepDoubleGenerator(double min, double max, double increment) {
-        this(min, max, increment, null);
-    }
-
-    public StepDoubleGenerator(double min, Double max, double increment, Double initial) {
-        super(Double.class, min, max, Math.abs(increment));
-        this.increment = increment;
-        this.initial = (initial != null ? initial : (increment >= 0 ? min : max));
-        reset();
-    }
-
-    // properties ------------------------------------------------------------------------------------------------------
-
-    @Override
-	public void init(GeneratorContext context) {
-    	assertNotInitialized();
-        resetMembers();
-        super.init(context);
-    }
-
-	@Override
-	public Double generate() {
-    	assertInitialized();
-    	if (increment == 0 || (increment > 0 && (max == null || next <= max)) || (increment < 0 && next >= min)) {
-	        double value = next;
-	        next += increment;
-	        return value;
-    	} else
-    		return null;
-    }
-
-	@Override
-	public synchronized void reset() {
-		resetMembers();
-	}
-
-	private void resetMembers() {
-	    next = initial;
-    }
+  private void resetMembers() {
+    next = initial;
+  }
 
 }

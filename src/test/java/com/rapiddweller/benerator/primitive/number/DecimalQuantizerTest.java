@@ -26,39 +26,46 @@
 
 package com.rapiddweller.benerator.primitive.number;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link DecimalQuantizer}.<br/><br/>
  * Created: 11.04.2011 16:28:24
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class DecimalQuantizerTest {
-	
-	@Test
-	public void testPositiveMin() {
-		DecimalQuantizer posQuantizer = new DecimalQuantizer(new BigDecimal("0.1"), new BigDecimal("0.2"));
-		checkConversion( "0.1", "0.1", posQuantizer);
-		checkConversion( "0.1", "0.2", posQuantizer);
-		checkConversion( "0.3", "0.3", posQuantizer);
-	}
 
-	@Test
-	public void testNegativeMin() {
-		DecimalQuantizer posQuantizer = new DecimalQuantizer(new BigDecimal("-0.1"), new BigDecimal("0.2"));
-		checkConversion("-0.1", "-0.1", posQuantizer);
-		checkConversion("-0.1",  "0.0",  posQuantizer);
-		checkConversion( "0.1",  "0.1", posQuantizer);
-		checkConversion( "0.1",  "0.2", posQuantizer);
-	}
+  /**
+   * Test positive min.
+   */
+  @Test
+  public void testPositiveMin() {
+    DecimalQuantizer posQuantizer = new DecimalQuantizer(new BigDecimal("0.1"), new BigDecimal("0.2"));
+    checkConversion("0.1", "0.1", posQuantizer);
+    checkConversion("0.1", "0.2", posQuantizer);
+    checkConversion("0.3", "0.3", posQuantizer);
+  }
 
-	private static void checkConversion(String expectedResult, String sourceValue, DecimalQuantizer quantizer) {
-		assertEquals(0, new BigDecimal(expectedResult).compareTo(quantizer.convert(new BigDecimal(sourceValue))));
-	}
-	
+  /**
+   * Test negative min.
+   */
+  @Test
+  public void testNegativeMin() {
+    DecimalQuantizer posQuantizer = new DecimalQuantizer(new BigDecimal("-0.1"), new BigDecimal("0.2"));
+    checkConversion("-0.1", "-0.1", posQuantizer);
+    checkConversion("-0.1", "0.0", posQuantizer);
+    checkConversion("0.1", "0.1", posQuantizer);
+    checkConversion("0.1", "0.2", posQuantizer);
+  }
+
+  private static void checkConversion(String expectedResult, String sourceValue, DecimalQuantizer quantizer) {
+    assertEquals(0, new BigDecimal(expectedResult).compareTo(quantizer.convert(new BigDecimal(sourceValue))));
+  }
+
 }

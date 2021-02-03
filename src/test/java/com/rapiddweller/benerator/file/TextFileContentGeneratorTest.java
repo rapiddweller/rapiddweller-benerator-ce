@@ -26,42 +26,48 @@
 
 package com.rapiddweller.benerator.file;
 
-import java.io.File;
-
 import com.rapiddweller.common.CollectionUtil;
 import org.junit.Test;
+
+import java.io.File;
 
 /**
  * Tests the {@link TextFileContentGenerator}.<br/><br/>
  * Created: 24.02.2010 10:22:20
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class TextFileContentGeneratorTest extends FileContentGeneratorTest {
 
-	@Test
-	public void testListFiles() throws Exception {
-		// prepare tests
-		createTestFolders();
-		try {
-			// execute tests
-			check(null, false, ROOT_DIR_FILE_CONTENT); // non-recursive, only files, w/o pattern
-			check("fr.*", false, ROOT_DIR_FILE_CONTENT); // non-recursive, only files,  w/ pattern
-			check(null, true, ROOT_DIR_FILE_CONTENT, SUB_DIR_FILE_CONTENT); // recursive, w/o pattern
-			check("fr.*", true, ROOT_DIR_FILE_CONTENT); // recursive, w/ pattern
-        } finally {
-        	// remove the used files
-        	removeTestFolders();
-        }
-	}
-
-	private void check(String regex, boolean recursive, String... values) {
-	    TextFileContentGenerator generator = new TextFileContentGenerator();
-	    generator.setUri(ROOT_DIR.getParent() + File.separator + ROOT_DIR.getName());
-	    generator.setFilter(regex);
-	    generator.setRecursive(recursive);
-	    generator.init(context);
-	    checkProductSet(generator, 20, CollectionUtil.toSet(values));
+  /**
+   * Test list files.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testListFiles() throws Exception {
+    // prepare tests
+    createTestFolders();
+    try {
+      // execute tests
+      check(null, false, ROOT_DIR_FILE_CONTENT); // non-recursive, only files, w/o pattern
+      check("fr.*", false, ROOT_DIR_FILE_CONTENT); // non-recursive, only files,  w/ pattern
+      check(null, true, ROOT_DIR_FILE_CONTENT, SUB_DIR_FILE_CONTENT); // recursive, w/o pattern
+      check("fr.*", true, ROOT_DIR_FILE_CONTENT); // recursive, w/ pattern
+    } finally {
+      // remove the used files
+      removeTestFolders();
     }
-	
+  }
+
+  private void check(String regex, boolean recursive, String... values) {
+    TextFileContentGenerator generator = new TextFileContentGenerator();
+    generator.setUri(ROOT_DIR.getParent() + File.separator + ROOT_DIR.getName());
+    generator.setFilter(regex);
+    generator.setRecursive(recursive);
+    generator.init(context);
+    checkProductSet(generator, 20, CollectionUtil.toSet(values));
+  }
+
 }

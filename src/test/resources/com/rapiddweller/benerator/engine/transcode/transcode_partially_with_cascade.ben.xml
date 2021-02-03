@@ -3,46 +3,46 @@
 
 <setup>
 
-  	<database id="s" url="jdbc:hsqldb:mem:s" driver="org.hsqldb.jdbcDriver" schema="PUBLIC" user="sa" />
+    <database id="s" url="jdbc:hsqldb:mem:s" driver="org.hsqldb.jdbcDriver" schema="PUBLIC" user="sa"/>
 
-  	<database id="t" url="jdbc:hsqldb:mem:t" driver="org.hsqldb.jdbcDriver" schema="PUBLIC" user="sa" />
+    <database id="t" url="jdbc:hsqldb:mem:t" driver="org.hsqldb.jdbcDriver" schema="PUBLIC" user="sa"/>
 
-	<execute uri="createTables.sql" target="s" />
-	<execute uri="createTables.sql" target="t" />
-	
-	<execute target="s">
-		insert into COUNTRY values (10, 'United States');
-		insert into COUNTRY values (20, 'Germany');
-		insert into STATE   values (110, 10, 'California');
-		insert into STATE   values (120, 10, 'Florida');
-		insert into STATE   values (210, 20, 'Bayern');
-		insert into STATE   values (220, 20, 'Hamburg');
-		insert into CITY    values (2110, 210, 'München');
-		insert into CITY    values (2120, 210, 'Ingolstadt');
-	</execute>
-	
-	<bean id="idGen" class="IncrementalIdGenerator" />
-	
-	<transcodingTask defaultSource="s" target="t" identity="Transcoding-identity.xml">
+    <execute uri="createTables.sql" target="s"/>
+    <execute uri="createTables.sql" target="t"/>
 
-		<transcode table="COUNTRY" selector="id = 20">
-			<id name="id" generator="idGen" />
-			<cascade ref="STATE(country_fk)">
-				<id name="id" generator="idGen" />
-				<cascade ref="CITY(state_fk)">
-					<id name="id" generator="idGen" />
-				</cascade>
-			</cascade>
-		</transcode>
+    <execute target="s">
+        insert into COUNTRY values (10, 'United States');
+        insert into COUNTRY values (20, 'Germany');
+        insert into STATE values (110, 10, 'California');
+        insert into STATE values (120, 10, 'Florida');
+        insert into STATE values (210, 20, 'Bayern');
+        insert into STATE values (220, 20, 'Hamburg');
+        insert into CITY values (2110, 210, 'München');
+        insert into CITY values (2120, 210, 'Ingolstadt');
+    </execute>
+
+    <bean id="idGen" class="IncrementalIdGenerator"/>
+
+    <transcodingTask defaultSource="s" target="t" identity="Transcoding-identity.xml">
+
+        <transcode table="COUNTRY" selector="id = 20">
+            <id name="id" generator="idGen"/>
+            <cascade ref="STATE(country_fk)">
+                <id name="id" generator="idGen"/>
+                <cascade ref="CITY(state_fk)">
+                    <id name="id" generator="idGen"/>
+                </cascade>
+            </cascade>
+        </transcode>
 
 
-	</transcodingTask>
-	
-	<echo>Countries:</echo>
-	<iterate source="t" type="COUNTRY" consumer="ConsoleExporter"/>
-	<echo>States:</echo>
-	<iterate source="t" type="STATE"   consumer="ConsoleExporter"/>
-	<echo>Cities:</echo>
-	<iterate source="t" type="CITY"   consumer="ConsoleExporter"/>
-	
+    </transcodingTask>
+
+    <echo>Countries:</echo>
+    <iterate source="t" type="COUNTRY" consumer="ConsoleExporter"/>
+    <echo>States:</echo>
+    <iterate source="t" type="STATE" consumer="ConsoleExporter"/>
+    <echo>Cities:</echo>
+    <iterate source="t" type="CITY" consumer="ConsoleExporter"/>
+
 </setup>

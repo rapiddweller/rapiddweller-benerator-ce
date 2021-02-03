@@ -26,11 +26,6 @@
 
 package com.rapiddweller.benerator.engine;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-import java.util.Locale;
-
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.common.LocaleUtil;
@@ -38,58 +33,73 @@ import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 
+import java.util.List;
+import java.util.Locale;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Testing XLS imports.<br/><br/>
  * Created: 24.01.2013 15:46:57
- * @since 0.8.0
+ *
  * @author Volker Bergmann
+ * @since 0.8.0
  */
 public class XLSIntegrationTest extends BeneratorIntegrationTest {
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testDefault() {
-		ConsumerMock con = new ConsumerMock(true);
-		context.setGlobal("con", con);
-		parseAndExecute("<iterate type='dummy' source='com/rapiddweller/benerator/engine/xls/types.xls' consumer='con'/>");
-		List<Entity> products = (List<Entity>) con.getProducts();
-		assertEquals(1, products.size());
-		assertPersonValues("Alice", 123L, TimeUtil.date(2008, 11, 31), TimeUtil.date(2008, 11, 31, 13, 45, 0, 0), products.get(0));
-	}
+  /**
+   * Test default.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testDefault() {
+    ConsumerMock con = new ConsumerMock(true);
+    context.setGlobal("con", con);
+    parseAndExecute("<iterate type='dummy' source='com/rapiddweller/benerator/engine/xls/types.xls' consumer='con'/>");
+    List<Entity> products = (List<Entity>) con.getProducts();
+    assertEquals(1, products.size());
+    assertPersonValues("Alice", 123L, TimeUtil.date(2008, 11, 31), TimeUtil.date(2008, 11, 31, 13, 45, 0, 0), products.get(0));
+  }
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testFormatted() {
-		ConsumerMock con = new ConsumerMock(true);
-		context.setGlobal("con", con);
-		LocaleUtil.runInLocale(Locale.US, () -> parseAndExecute("<iterate type='dummy' source='com/rapiddweller/benerator/engine/xls/types.xls' format='formatted' consumer='con'/>"));
-		List<Entity> products = (List<Entity>) con.getProducts();
-		assertEquals(1, products.size());
-		assertPersonValues("Alice", "123", "2008-Dec-31", "13:45", products.get(0));
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testSheet() {
-		ConsumerMock con = new ConsumerMock(true);
-		context.setGlobal("con", con);
-		parseAndExecute("<iterate type='dummy' segment='address' source='com/rapiddweller/benerator/engine/xls/sheets.xls' consumer='con'/>");
-		List<Entity> products = (List<Entity>) con.getProducts();
-		assertEquals(1, products.size());
-		Entity address = products.get(0);
-		assertEquals("Main Street", address.get("street"));
-		assertEquals("New York", address.get("city"));
-	}
+  /**
+   * Test formatted.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testFormatted() {
+    ConsumerMock con = new ConsumerMock(true);
+    context.setGlobal("con", con);
+    LocaleUtil.runInLocale(Locale.US,
+        () -> parseAndExecute("<iterate type='dummy' source='com/rapiddweller/benerator/engine/xls/types.xls' format='formatted' consumer='con'/>"));
+    List<Entity> products = (List<Entity>) con.getProducts();
+    assertEquals(1, products.size());
+    assertPersonValues("Alice", "123", "2008-Dec-31", "13:45", products.get(0));
+  }
 
-	
-	
-	// private helper methods ------------------------------------------------------------------------------------------
-	
-	private static void assertPersonValues(Object name, Object number, Object date, Object time, Entity entity) {
-		assertEquals(name, entity.get("name"));
-		assertEquals(number, entity.get("number"));
-		assertEquals(date, entity.get("a_date"));
-		assertEquals(time, entity.get("a_time"));
-	}
-	
+  /**
+   * Test sheet.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testSheet() {
+    ConsumerMock con = new ConsumerMock(true);
+    context.setGlobal("con", con);
+    parseAndExecute("<iterate type='dummy' segment='address' source='com/rapiddweller/benerator/engine/xls/sheets.xls' consumer='con'/>");
+    List<Entity> products = (List<Entity>) con.getProducts();
+    assertEquals(1, products.size());
+    Entity address = products.get(0);
+    assertEquals("Main Street", address.get("street"));
+    assertEquals("New York", address.get("city"));
+  }
+
+
+  // private helper methods ------------------------------------------------------------------------------------------
+
+  private static void assertPersonValues(Object name, Object number, Object date, Object time, Entity entity) {
+    assertEquals(name, entity.get("name"));
+    assertEquals(number, entity.get("number"));
+    assertEquals(date, entity.get("a_date"));
+    assertEquals(time, entity.get("a_time"));
+  }
+
 }

@@ -61,30 +61,30 @@ markdown_extensions:
 # Page tree
 nav:
   - Home: index.md
-  -  Introduction to benerator: introduction_to_benerator.md
-  -  Installation: installation.md
-  -  The Benerator Project Wizard: the_benerator_project_wizard.md
-  -  Quick tour through the descriptor file format: quick_tour_through_the_descriptor_file_format.md
-  -  Data Generation Concepts: data_generation_concepts.md
-  -  Regular Expression Support: regular_expression_support.md
-  -  Processing and creating CSV Files: processing_and_creating_csv_files.md
-  -  Using Relational Databases: using_relational_databases.md
-  -  Using mongoDB: using_mongodb.md
-  -  Generating XML Files: generating_xml_files.md
-  -  Advanced Topics: advanced_topics.md
-  -  Generating Unique Data: generating_unique_data.md
-  -  Scripting: scripting.md
-  -  DatabeneScript: databenescript.md
-  -  Command Line Tools: command_line_tools.md
-  -  Domains: domains.md
-  -  Component Reference: component_reference.md
-  -  Using DB Sanity: using_db_sanity.md
-  -  Maven Benerator Plugin: maven_benerator_plugin.md
-  -  Extending benerator: extending_benerator.md
-  -  Using Benerator as Load Generator: using_benerator_as_load_generator.md
-  -  Troubleshooting: troubleshooting.md
-  -  Monitoring Benerator: monitoring_benerator.md
-  -  Benerator Performance Tuning: benerator_performance_tuning.md
+  - Introduction to benerator: introduction_to_benerator.md
+  - Installation: installation.md
+  - The Benerator Project Wizard: the_benerator_project_wizard.md
+  - Quick tour through the descriptor file format: quick_tour_through_the_descriptor_file_format.md
+  - Data Generation Concepts: data_generation_concepts.md
+  - Regular Expression Support: regular_expression_support.md
+  - Processing and creating CSV Files: processing_and_creating_csv_files.md
+  - Using Relational Databases: using_relational_databases.md
+  - Using mongoDB: using_mongodb.md
+  - Generating XML Files: generating_xml_files.md
+  - Advanced Topics: advanced_topics.md
+  - Generating Unique Data: generating_unique_data.md
+  - Scripting: scripting.md
+  - DatabeneScript: databenescript.md
+  - Command Line Tools: command_line_tools.md
+  - Domains: domains.md
+  - Component Reference: component_reference.md
+  - Using DB Sanity: using_db_sanity.md
+  - Maven Benerator Plugin: maven_benerator_plugin.md
+  - Extending benerator: extending_benerator.md
+  - Using Benerator as Load Generator: using_benerator_as_load_generator.md
+  - Troubleshooting: troubleshooting.md
+  - Monitoring Benerator: monitoring_benerator.md
+  - Benerator Performance Tuning: benerator_performance_tuning.md
 
 extra:
   social:

@@ -44,101 +44,171 @@ import java.util.List;
 /**
  * Provides utility methods for data generation.<br/><br/>
  * Created: 19.11.2007 15:27:50
+ *
  * @author Volker Bergmann
  */
 public class GeneratorUtil {
-	
-	private static final Logger LOGGER = LogManager.getLogger(GeneratorUtil.class);
-	
-    public static void init(Generator<?> generator) {
-    	init(generator, BeneratorFactory.getInstance().createContext("."));
+
+  private static final Logger LOGGER = LogManager.getLogger(GeneratorUtil.class);
+
+  /**
+   * Init.
+   *
+   * @param generator the generator
+   */
+  public static void init(Generator<?> generator) {
+    init(generator, BeneratorFactory.getInstance().createContext("."));
+  }
+
+  /**
+   * Init.
+   *
+   * @param generator the generator
+   * @param context   the context
+   */
+  public static void init(Generator<?> generator, GeneratorContext context) {
+    generator.init(context);
+  }
+
+  /**
+   * Close.
+   *
+   * @param generator the generator
+   */
+  public static void close(Generator<?> generator) {
+    IOUtil.close(generator);
+  }
+
+  /**
+   * Calls a {@link Generator}'s {@link Generator#generate(ProductWrapper)} method and returns its unwrapped result,
+   * allowing <code>null<code> values as generation results, but requiring the generator to be available.
+   *
+   * @param <T>       the type parameter
+   * @param generator the generator
+   * @return the t
+   */
+  public static <T> T generateNullable(Generator<T> generator) {
+    ProductWrapper<T> wrapper = generator.generate(GeneratorUtil.getWrapper());
+    if (wrapper == null) {
+      throw new IllegalGeneratorStateException("Generator unavailable in generateNullable(): " + generator);
     }
+    return wrapper.unwrap();
+  }
 
-    public static void init(Generator<?> generator, GeneratorContext context) {
-    	generator.init(context);
+  /**
+   * Calls a {@link Generator}'s {@link Generator#generate(ProductWrapper)} method and returns its unwrapped result,
+   * signaling generator unavailability with a <code>null</code> value and requiring the Generator
+   * not to create <code>null</code> values as result.
+   *
+   * @param <T>       the type parameter
+   * @param generator the generator
+   * @return the t
+   */
+  public static <T> T generateNonNull(Generator<T> generator) {
+    ProductWrapper<T> wrapper = generator.generate(GeneratorUtil.getWrapper());
+    if (wrapper == null) {
+      return null;
     }
-
-    public static void close(Generator<?> generator) {
-    	IOUtil.close(generator);
+    T result = wrapper.unwrap();
+    if (result == null) {
+      throw new IllegalGeneratorStateException("Generated null value in generateNonNull(): " + generator);
     }
+    return result;
+  }
 
-    /**
-     * Calls a {@link Generator}'s {@link Generator#generate(ProductWrapper)} method and returns its unwrapped result, 
-     * allowing <code>null<code> values as generation results, but requiring the generator to be available. 
-     */
-    public static <T> T generateNullable(Generator<T> generator) {
-    	ProductWrapper<T> wrapper = generator.generate(GeneratorUtil.getWrapper());
-		if (wrapper == null)
-			throw new IllegalGeneratorStateException("Generator unavailable in generateNullable(): " + generator);
-		return wrapper.unwrap();
+  /**
+   * Gets wrapper.
+   *
+   * @param <T> the type parameter
+   * @return the wrapper
+   */
+  protected static <T> ProductWrapper<T> getWrapper() {
+    return new ProductWrapper<>();
+  }
+
+  /**
+   * All products list.
+   *
+   * @param <T>       the type parameter
+   * @param generator the generator
+   * @return the list
+   */
+  public static <T> List<T> allProducts(Generator<T> generator) {
+    List<T> list = new ArrayList<>();
+    int count = 0;
+    int cacheSize = BeneratorOpts.getCacheSize();
+    ProductWrapper<T> wrapper = GeneratorUtil.getWrapper();
+    while ((wrapper = generator.generate(wrapper)) != null) {
+      count++;
+      if (count > cacheSize) {
+        LOGGER.error("Data set of generator has reached the cache limit and will be reduced to its size " +
+            "of " + cacheSize + " elements). " +
+            "If that is not acceptable then choose a distribution that does not cache data sets " +
+            "or increase the cache size. Concerned generator: " + generator);
+        break;
+      }
+      list.add(wrapper.unwrap());
     }
+    return list;
+  }
 
-    /**
-     * Calls a {@link Generator}'s {@link Generator#generate(ProductWrapper)} method and returns its unwrapped result, 
-     * signaling generator unavailability with a <code>null</code> value and requiring the Generator 
-     * not to create <code>null</code> values as result. 
-     */
-    public static <T> T generateNonNull(Generator<T> generator) {
-    	ProductWrapper<T> wrapper = generator.generate(GeneratorUtil.getWrapper());
-    	if (wrapper == null)
-    		return null;
-		T result = wrapper.unwrap();
-		if (result == null)
-			throw new IllegalGeneratorStateException("Generated null value in generateNonNull(): " + generator);
-		return result;
+  /**
+   * Common target type of class.
+   *
+   * @param <T>     the type parameter
+   * @param sources the sources
+   * @return the class
+   */
+  @SuppressWarnings("unchecked")
+  public static <T> Class<T> commonTargetTypeOf(Generator<T>... sources) {
+    if (sources.length == 0) {
+      return (Class<T>) Object.class;
     }
-
-	protected static <T> ProductWrapper<T> getWrapper() {
-		return new ProductWrapper<>();
-	}
-
-	public static <T> List<T> allProducts(Generator<T> generator) {
-		List<T> list = new ArrayList<>();
-		int count = 0;
-		int cacheSize = BeneratorOpts.getCacheSize();
-		ProductWrapper<T> wrapper = GeneratorUtil.getWrapper();
-		while ((wrapper = generator.generate(wrapper)) != null) {
-			count++;
-			if (count > cacheSize) {
-				LOGGER.error("Data set of generator has reached the cache limit and will be reduced to its size " +
-						"of " + cacheSize + " elements). " +
-						"If that is not acceptable then choose a distribution that does not cache data sets " +
-						"or increase the cache size. Concerned generator: " + generator);
-				break;
-			}
-			list.add(wrapper.unwrap());
-		}
-		return list;
-	}
-	
-    @SuppressWarnings("unchecked")
-    public static <T> Class<T> commonTargetTypeOf(Generator<T>... sources) {
-    	if (sources.length == 0)
-    		return (Class<T>) Object.class;
-    	Class<T> type = sources[0].getGeneratedType();
-    	for (int i = 1; i < sources.length; i++) {
-    		Class<T> tmp = sources[i].getGeneratedType();
-    		if (tmp.isAssignableFrom(type))
-    			type = tmp;
-    	}
-		return type;
-	}
-
-	public static void initAll(Generator<?>[] generators, GeneratorContext context) {
-	    for (Generator<?> generator : generators)
-	    	generator.init(context);
+    Class<T> type = sources[0].getGeneratedType();
+    for (int i = 1; i < sources.length; i++) {
+      Class<T> tmp = sources[i].getGeneratedType();
+      if (tmp.isAssignableFrom(type)) {
+        type = tmp;
+      }
     }
+    return type;
+  }
 
-	public static void resetAll(Resettable[] resettables) {
-	    for (Resettable resettable : resettables)
-	    	resettable.reset();
+  /**
+   * Init all.
+   *
+   * @param generators the generators
+   * @param context    the context
+   */
+  public static void initAll(Generator<?>[] generators, GeneratorContext context) {
+    for (Generator<?> generator : generators) {
+      generator.init(context);
     }
+  }
 
-    public static Generator<?> unwrap(Generator<?> generator) {
-		Generator<?> result = generator;
-		while (result instanceof GeneratorWrapper)
-			result = ((GeneratorWrapper<?,?>) result).getSource();
-		return result;
-	}
-	
+  /**
+   * Reset all.
+   *
+   * @param resettables the resettables
+   */
+  public static void resetAll(Resettable[] resettables) {
+    for (Resettable resettable : resettables) {
+      resettable.reset();
+    }
+  }
+
+  /**
+   * Unwrap generator.
+   *
+   * @param generator the generator
+   * @return the generator
+   */
+  public static Generator<?> unwrap(Generator<?> generator) {
+    Generator<?> result = generator;
+    while (result instanceof GeneratorWrapper) {
+      result = ((GeneratorWrapper<?, ?>) result).getSource();
+    }
+    return result;
+  }
+
 }

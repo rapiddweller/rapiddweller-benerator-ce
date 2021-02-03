@@ -32,75 +32,99 @@ import com.rapiddweller.common.ArrayFormat;
 /**
  * Helper class for testing.<br/><br/>
  * Created: 16.12.2006 19:36:25
- * @since 0.1
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class SequenceTestGenerator<E> implements Generator<E> {
 
-    private final E[] sequence;
-    int cursor;
-    final boolean initialized;
-    public int generateCount = 0;
-    public int resetCount = 0;
-    public int closeCount = 0;
+  private final E[] sequence;
+  /**
+   * The Cursor.
+   */
+  int cursor;
+  /**
+   * The Initialized.
+   */
+  final boolean initialized;
+  /**
+   * The Generate count.
+   */
+  public int generateCount = 0;
+  /**
+   * The Reset count.
+   */
+  public int resetCount = 0;
+  /**
+   * The Close count.
+   */
+  public int closeCount = 0;
 
-    @SafeVarargs
-    public SequenceTestGenerator(E... sequence) {
-        this.sequence = sequence;
-        this.cursor = 0;
-        this.initialized = false;
-    }
+  /**
+   * Instantiates a new Sequence test generator.
+   *
+   * @param sequence the sequence
+   */
+  @SafeVarargs
+  public SequenceTestGenerator(E... sequence) {
+    this.sequence = sequence;
+    this.cursor = 0;
+    this.initialized = false;
+  }
 
-    @Override
-	public void init(GeneratorContext context) {
-        if (sequence == null)
-            throw new IllegalArgumentException("sequence is null");
+  @Override
+  public void init(GeneratorContext context) {
+    if (sequence == null) {
+      throw new IllegalArgumentException("sequence is null");
     }
+  }
 
-    @Override
-	@SuppressWarnings("unchecked")
-    public Class<E> getGeneratedType() {
-        return (Class<E>) (sequence.length > 0 ? sequence[0].getClass() : Object.class);
-    }
+  @Override
+  @SuppressWarnings("unchecked")
+  public Class<E> getGeneratedType() {
+    return (Class<E>) (sequence.length > 0 ? sequence[0].getClass() : Object.class);
+  }
 
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-    	generateCount++;
-        if (cursor >= sequence.length)
-            return null;
-        return wrapper.wrap(sequence[cursor++]);
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    generateCount++;
+    if (cursor >= sequence.length) {
+      return null;
     }
+    return wrapper.wrap(sequence[cursor++]);
+  }
 
-    @Override
-	public boolean wasInitialized() {
-        return initialized;
-    }
+  @Override
+  public boolean wasInitialized() {
+    return initialized;
+  }
 
-    @Override
-	public void reset() {
-        this.cursor = 0;
-        this.resetCount++;
-    }
+  @Override
+  public void reset() {
+    this.cursor = 0;
+    this.resetCount++;
+  }
 
-    @Override
-	public void close() {
-    	this.closeCount++;
-        this.cursor = sequence.length;
-    }
+  @Override
+  public void close() {
+    this.closeCount++;
+    this.cursor = sequence.length;
+  }
 
-	@Override
-	public boolean isParallelizable() {
-	    return false;
-    }
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
 
-	@Override
-	public boolean isThreadSafe() {
-	    return false;
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return false;
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + ArrayFormat.format(sequence) + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + ArrayFormat.format(sequence) + ']';
+  }
 
 }

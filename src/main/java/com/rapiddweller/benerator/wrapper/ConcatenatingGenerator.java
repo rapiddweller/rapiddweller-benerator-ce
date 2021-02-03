@@ -29,54 +29,72 @@ package com.rapiddweller.benerator.wrapper;
 import com.rapiddweller.benerator.Generator;
 
 /**
- * {@link Generator} implementation that wraps several String generators 
+ * {@link Generator} implementation that wraps several String generators
  * and concatenates their results to a composite {@link String}.<br/>
  * <br/>
  * Created at 21.09.2009 18:54:32
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class ConcatenatingGenerator extends GeneratorWrapper<String[], String> {
 
-	private final String separator;
-	
-    public ConcatenatingGenerator(Generator<String[]> source) {
-	    this(source, "");
-    }
-    
-    public ConcatenatingGenerator(Generator<String[]> source, String separator) {
-	    super(source);
-	    this.separator = separator;
-    }
-    
-    public String getSeparator() {
-	    return separator;
-    }
-    
-    // Generator interface implementation ------------------------------------------------------------------------------
-    
-	@Override
-	public Class<String> getGeneratedType() {
-	    return String.class;
-    }
+  private final String separator;
 
-	@Override
-	public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
-		ProductWrapper<String[]> sourceWrapper = generateFromSource();
-        if (sourceWrapper == null)
-        	return null;
-        String[] parts = sourceWrapper.unwrap();
-        if (parts.length > 0) {
-	        StringBuilder builder = new StringBuilder();
-	        builder.append(parts[0]);
-	        for (int i = 1; i < parts.length; i++) {
-	        	String part = parts[i];
-	            builder.append(separator).append(part);
-	        }
-	        return wrapper.wrap(builder.toString());
-        } else
-        	return wrapper.wrap("");
-	}
+  /**
+   * Instantiates a new Concatenating generator.
+   *
+   * @param source the source
+   */
+  public ConcatenatingGenerator(Generator<String[]> source) {
+    this(source, "");
+  }
+
+  /**
+   * Instantiates a new Concatenating generator.
+   *
+   * @param source    the source
+   * @param separator the separator
+   */
+  public ConcatenatingGenerator(Generator<String[]> source, String separator) {
+    super(source);
+    this.separator = separator;
+  }
+
+  /**
+   * Gets separator.
+   *
+   * @return the separator
+   */
+  public String getSeparator() {
+    return separator;
+  }
+
+  // Generator interface implementation ------------------------------------------------------------------------------
+
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
+
+  @Override
+  public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
+    ProductWrapper<String[]> sourceWrapper = generateFromSource();
+    if (sourceWrapper == null) {
+      return null;
+    }
+    String[] parts = sourceWrapper.unwrap();
+    if (parts.length > 0) {
+      StringBuilder builder = new StringBuilder();
+      builder.append(parts[0]);
+      for (int i = 1; i < parts.length; i++) {
+        String part = parts[i];
+        builder.append(separator).append(part);
+      }
+      return wrapper.wrap(builder.toString());
+    } else {
+      return wrapper.wrap("");
+    }
+  }
 
 }

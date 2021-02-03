@@ -26,8 +26,6 @@
 
 package com.rapiddweller.benerator.distribution;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
@@ -35,43 +33,52 @@ import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link DistributingGenerator}.<br/><br/>
  * Created: 21.07.2010 06:54:40
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class DistributingGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void test() {
-		SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
-		Distribution distribution = new TestDistribution();
-		NonNullGenerator<Integer> generator = WrapperFactory.asNonNullGenerator(
-				new DistributingGenerator<>(source, distribution, false));
-		generator.init(context);
-		assertEquals(Integer.valueOf(1), generator.generate());
-		generator.reset();
-		assertEquals(1, source.resetCount);
-		assertEquals(Integer.valueOf(1), generator.generate());
-		generator.close();
-		assertEquals(2, source.generateCount);
-		assertEquals(1, source.closeCount);
-	}
-	
-	public static class TestDistribution implements Distribution {
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
+    Distribution distribution = new TestDistribution();
+    NonNullGenerator<Integer> generator = WrapperFactory.asNonNullGenerator(
+        new DistributingGenerator<>(source, distribution, false));
+    generator.init(context);
+    assertEquals(Integer.valueOf(1), generator.generate());
+    generator.reset();
+    assertEquals(1, source.resetCount);
+    assertEquals(Integer.valueOf(1), generator.generate());
+    generator.close();
+    assertEquals(2, source.generateCount);
+    assertEquals(1, source.closeCount);
+  }
 
-		@Override
-		public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-	        return source;
-        }
+  /**
+   * The type Test distribution.
+   */
+  public static class TestDistribution implements Distribution {
 
-		@Override
-		public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity,
-                boolean unique) {
-	        throw new UnsupportedOperationException("not implemented");
-        }
-		
-	}
-	
+    @Override
+    public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+      return source;
+    }
+
+    @Override
+    public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity,
+                                                                        boolean unique) {
+      throw new UnsupportedOperationException("not implemented");
+    }
+
+  }
+
 }

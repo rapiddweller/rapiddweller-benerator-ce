@@ -27,23 +27,29 @@
 package com.rapiddweller.domain.address;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests the {@link Country} class.<br/>
  * <br/>
  * Created at 26.08.2008 11:46:32
- * @since 0.5.5
+ *
  * @author Volker Bergmann
+ * @since 0.5.5
  */
 public class CountryTest {
 
-	@Test
-	public void testInstances() {
-		assertSame(Country.GERMANY, Country.getInstance("DE"));
-		assertSame(Country.US, Country.getInstance("US"));
-		assertSame(Country.UNITED_KINGDOM, Country.getInstance("GB"));
-		assertNotNull(Country.getInstance("SO"));
-	}
+  /**
+   * Test instances.
+   */
+  @Test
+  public void testInstances() {
+    assertEquals(Country.GERMANY, Country.getInstance("DE"));
+    assertEquals(Country.US, Country.getInstance("US"));
+    assertEquals(Country.UNITED_KINGDOM, Country.getInstance("GB"));
+    assertNotNull(Country.getInstance("SO"));
+  }
 
 }

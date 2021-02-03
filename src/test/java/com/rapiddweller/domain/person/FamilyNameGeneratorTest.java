@@ -30,29 +30,39 @@ import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.common.collection.ObjectCounter;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link FamilyNameGenerator}.<br/><br/>
  * Created: 09.06.2006 22:16:06
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
-
 public class FamilyNameGeneratorTest extends GeneratorClassTest {
 
-    public FamilyNameGeneratorTest() {
-        super(FamilyNameGenerator.class);
-    }
+  /**
+   * Instantiates a new Family name generator test.
+   */
+  public FamilyNameGeneratorTest() {
+    super(FamilyNameGenerator.class);
+  }
 
-    @Test
-    public void test() throws IllegalGeneratorStateException {
-        ObjectCounter<String> counter = new ObjectCounter<>(10);
-        FamilyNameGenerator generator = new FamilyNameGenerator();
-        generator.init(context);
-        for (int i = 0; i < 10; i++)
-            counter.count(generator.generate());
-        assertTrue(counter.objectSet().size() >= 3);
+  /**
+   * Test.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void test() throws IllegalGeneratorStateException {
+    ObjectCounter<String> counter = new ObjectCounter<>(10);
+    FamilyNameGenerator generator = new FamilyNameGenerator();
+    generator.init(context);
+    for (int i = 0; i < 10; i++) {
+      counter.count(generator.generate());
     }
-    
+    assertTrue(counter.objectSet().size() >= 3);
+  }
+
 }

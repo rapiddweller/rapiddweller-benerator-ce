@@ -41,55 +41,63 @@ import java.util.Random;
  */
 public class CPFGenerator extends ThreadSafeNonNullGenerator<String> {
 
-    /**
-     * flag indicating should return CPF in numeric or formatted form.
-     * defaults to true
-     */
-    private final boolean formatted;
-    private final Random random;
+  /**
+   * flag indicating should return CPF in numeric or formatted form.
+   * defaults to true
+   */
+  private final boolean formatted;
+  private final Random random;
 
-    public CPFGenerator() {
-        this(false);
+  /**
+   * Instantiates a new Cpf generator.
+   */
+  public CPFGenerator() {
+    this(false);
+  }
+
+  /**
+   * Instantiates a new Cpf generator.
+   *
+   * @param formatted the formatted
+   */
+  public CPFGenerator(boolean formatted) {
+    this.random = new Random();
+    this.formatted = formatted;
+  }
+
+  private static void addDigit(ArrayList<Integer> digits) {
+    int sum = 0;
+    for (int i = 0, j = digits.size() + 1; i < digits.size(); i++, j--) {
+      sum += digits.get(i) * j;
     }
+    digits.add((sum % 11 < 2) ? 0 : 11 - (sum % 11));
+  }
 
-    public CPFGenerator(boolean formatted) {
-        this.random = new Random();
-        this.formatted = formatted;
+  @Override
+  public String generate() {
+    StringBuilder buf = new StringBuilder();
+    ArrayList<Integer> digits = new ArrayList<>();
+
+    for (int i = 0; i < 9; i++) {
+      digits.add(random.nextInt(9));
     }
+    addDigit(digits);
+    addDigit(digits);
 
-    private static void addDigit(ArrayList<Integer> digits) {
-        int sum = 0;
-        for (int i = 0, j = digits.size() + 1; i < digits.size(); i++, j--) {
-            sum += digits.get(i) * j;
-        }
-        digits.add((sum % 11 < 2) ? 0 : 11 - (sum % 11));
+    for (Integer digit : digits) {
+      buf.append(digit);
     }
-
-    @Override
-    public String generate() {
-        StringBuilder buf = new StringBuilder();
-        ArrayList<Integer> digits = new ArrayList<>();
-
-        for (int i = 0; i < 9; i++) {
-            digits.add(random.nextInt(9));
-        }
-        addDigit(digits);
-        addDigit(digits);
-
-        for (Integer digit : digits) {
-            buf.append(digit);
-        }
-        if (this.formatted) {
-            buf.insert(3, '.');
-            buf.insert(7, '.');
-            buf.insert(11, '-');
-        }
-        return buf.toString();
+    if (this.formatted) {
+      buf.insert(3, '.');
+      buf.insert(7, '.');
+      buf.insert(11, '-');
     }
+    return buf.toString();
+  }
 
-    @Override
-    public Class<String> getGeneratedType() {
-        return String.class;
-    }
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
 
 }

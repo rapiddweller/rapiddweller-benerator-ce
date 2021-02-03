@@ -39,26 +39,41 @@ import com.rapiddweller.benerator.wrapper.WrapperFactory;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class QueryHiLoGenerator extends HiLoGenerator {
 
-    protected static final int DEFAULT_MAX_LO = 100;
+  /**
+   * The constant DEFAULT_MAX_LO.
+   */
+  protected static final int DEFAULT_MAX_LO = 100;
 
-    public QueryHiLoGenerator(String selector, StorageSystem source) {
-        this(selector, source, DEFAULT_MAX_LO);
-    }
+  /**
+   * Instantiates a new Query hi lo generator.
+   *
+   * @param selector the selector
+   * @param source   the source
+   */
+  public QueryHiLoGenerator(String selector, StorageSystem source) {
+    this(selector, source, DEFAULT_MAX_LO);
+  }
 
-    public QueryHiLoGenerator(String selector, StorageSystem source,
-                              int maxLo) {
-        super(WrapperFactory
-                        .asNonNullGenerator(new QueryLongGenerator(selector, source)),
-                maxLo);
-    }
+  /**
+   * Instantiates a new Query hi lo generator.
+   *
+   * @param selector the selector
+   * @param source   the source
+   * @param maxLo    the max lo
+   */
+  public QueryHiLoGenerator(String selector, StorageSystem source,
+                            int maxLo) {
+    super(WrapperFactory
+            .asNonNullGenerator(new QueryLongGenerator(selector, source)),
+        maxLo);
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + hiGenerator + ',' + maxLo +
-                ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + hiGenerator + ',' + maxLo +
+        ']';
+  }
 
 }

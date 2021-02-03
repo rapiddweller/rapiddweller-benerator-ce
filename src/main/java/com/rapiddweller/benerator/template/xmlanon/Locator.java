@@ -27,52 +27,86 @@
 package com.rapiddweller.benerator.template.xmlanon;
 
 /**
- * Denominates XML elements in an XML file and provides their mapping 
+ * Denominates XML elements in an XML file and provides their mapping
  * to Benerator entity and attribute names.<br/><br/>
  * Created: 27.02.2014 14:11:24
- * @since 0.9.0
+ *
  * @author Volker Bergmann
+ * @since 0.9.0
  */
-
 public class Locator {
-	
-	private final String file;
-	private final String path;
-	private final String entityPath;
-	private final String entity;
-	private final String attribute;
-	
-	public Locator(String file, String path, String entityPath, String entity, String attribute) {
-		this.file = file;
-		this.path = path;
-		this.entityPath = entityPath;
-		this.entity = entity;
-		this.attribute = attribute;
-	}
 
-	public String getFile() {
-		return file;
-	}
-	
-	public String getPath() {
-		return path;
-	}
-	
-	public String getEntityPath() {
-		return entityPath;
-	}
+  private final String file;
+  private final String path;
+  private final String entityPath;
+  private final String entity;
+  private final String attribute;
 
-	public String getEntity() {
-		return entity;
-	}
+  /**
+   * Instantiates a new Locator.
+   *
+   * @param file       the file
+   * @param path       the path
+   * @param entityPath the entity path
+   * @param entity     the entity
+   * @param attribute  the attribute
+   */
+  public Locator(String file, String path, String entityPath, String entity, String attribute) {
+    this.file = file;
+    this.path = path;
+    this.entityPath = entityPath;
+    this.entity = entity;
+    this.attribute = attribute;
+  }
 
-	public String getAttribute() {
-		return attribute;
-	}
-	
-	@Override
-	public String toString() {
-		return file + "[" + entityPath + "/" + attribute + "]";
-	}
-	
+  /**
+   * Gets file.
+   *
+   * @return the file
+   */
+  public String getFile() {
+    return file;
+  }
+
+  /**
+   * Gets path.
+   *
+   * @return the path
+   */
+  public String getPath() {
+    return path;
+  }
+
+  /**
+   * Gets entity path.
+   *
+   * @return the entity path
+   */
+  public String getEntityPath() {
+    return entityPath;
+  }
+
+  /**
+   * Gets entity.
+   *
+   * @return the entity
+   */
+  public String getEntity() {
+    return entity;
+  }
+
+  /**
+   * Gets attribute.
+   *
+   * @return the attribute
+   */
+  public String getAttribute() {
+    return attribute;
+  }
+
+  @Override
+  public String toString() {
+    return file + "[" + entityPath + "/" + attribute + "]";
+  }
+
 }

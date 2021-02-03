@@ -23,40 +23,50 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.common.TimeUtil;
+import org.junit.Test;
 
 import java.util.Date;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link BirthDateGenerator}.<br/><br/>
  * Created: 09.06.2006 22:14:08
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class BirthDateGeneratorTest extends GeneratorClassTest {
 
-    public BirthDateGeneratorTest() {
-        super(BirthDateGenerator.class);
-    }
+  /**
+   * Instantiates a new Birth date generator test.
+   */
+  public BirthDateGeneratorTest() {
+    super(BirthDateGenerator.class);
+  }
 
-    @Test
-    public void test() throws IllegalGeneratorStateException {
-        Date now = TimeUtil.today();
-        BirthDateGenerator generator = new BirthDateGenerator(3, 12);
-        generator.init(context);
-        for (int i = 0; i < 1000; i++) {
-            Date birthDate = generator.generate();
-            int age = TimeUtil.yearsBetween(birthDate, now);
-            assertTrue("Generated birth date is too new: " + birthDate, age >= 3);
-            assertTrue("Generated birth date is too old: " + birthDate, age <= 12);
-        }
+  /**
+   * Test.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void test() throws IllegalGeneratorStateException {
+    Date now = TimeUtil.today();
+    BirthDateGenerator generator = new BirthDateGenerator(3, 12);
+    generator.init(context);
+    for (int i = 0; i < 1000; i++) {
+      Date birthDate = generator.generate();
+      int age = TimeUtil.yearsBetween(birthDate, now);
+      assertTrue("Generated birth date is too new: " + birthDate, age >= 3);
+      assertTrue("Generated birth date is too old: " + birthDate, age <= 12);
     }
-    
+  }
+
 }

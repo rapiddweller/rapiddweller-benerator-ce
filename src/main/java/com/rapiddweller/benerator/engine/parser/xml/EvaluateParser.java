@@ -40,53 +40,69 @@ import org.w3c.dom.Element;
 
 import java.util.Set;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ASSERT;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ENCODING;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ID;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_INVALIDATE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_OPTIMIZE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SEPARATOR;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TARGET;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_URI;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableElementText;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
 /**
  * Parses an &lt;evaluate&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 01:01:02
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class EvaluateParser extends AbstractBeneratorDescriptorParser {
-	
-	private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
-			ATT_ID, ATT_URI, ATT_TYPE, ATT_TARGET, ATT_SEPARATOR, ATT_ON_ERROR, ATT_ENCODING, 
-			ATT_OPTIMIZE, ATT_INVALIDATE, ATT_ASSERT);
 
-	public EvaluateParser() {
-		super(null, null, OPTIONAL_ATTRIBUTES);
-	}
+  private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
+      ATT_ID, ATT_URI, ATT_TYPE, ATT_TARGET, ATT_SEPARATOR, ATT_ON_ERROR, ATT_ENCODING,
+      ATT_OPTIMIZE, ATT_INVALIDATE, ATT_ASSERT);
 
-	@Override
-	public boolean supports(Element element, Statement[] parentPath) {
-		String name = element.getNodeName();
-	    return DescriptorConstants.EL_EVALUATE.equals(name) 
-	    	|| DescriptorConstants.EL_EXECUTE.equals(name);
+  /**
+   * Instantiates a new Evaluate parser.
+   */
+  public EvaluateParser() {
+    super(null, null, OPTIONAL_ATTRIBUTES);
+  }
+
+  @Override
+  public boolean supports(Element element, Statement[] parentPath) {
+    String name = element.getNodeName();
+    return DescriptorConstants.EL_EVALUATE.equals(name)
+        || DescriptorConstants.EL_EXECUTE.equals(name);
+  }
+
+  @Override
+  public EvaluateStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    boolean evaluate = DescriptorConstants.EL_EVALUATE.equals(element.getNodeName());
+    if (evaluate) {
+      assertAtLeastOneAttributeIsSet(element, ATT_ID, ATT_ASSERT);
+    } else {
+      assertAttributeIsNotSet(element, ATT_ID);
+      assertAttributeIsNotSet(element, ATT_ASSERT);
     }
-
-	@Override
-	public EvaluateStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-		boolean evaluate = DescriptorConstants.EL_EVALUATE.equals(element.getNodeName());
-		if (evaluate) {
-			assertAtLeastOneAttributeIsSet(element, ATT_ID, ATT_ASSERT);
-		} else {
-			assertAttributeIsNotSet(element, ATT_ID);
-			assertAttributeIsNotSet(element, ATT_ASSERT);
-		}
-		Expression<String> id           = parseAttribute(ATT_ID, element);
-		Expression<String> text         = new StringExpression(parseScriptableElementText(element, false));
-		Expression<String> uri          = parseScriptableStringAttribute(ATT_URI, element);
-		Expression<String> type         = parseAttribute(ATT_TYPE, element);
-		Expression<?> targetObject      = new FeatureAccessExpression<>(element.getAttribute(ATT_TARGET));
-		Expression<Character> separator = new ConvertingExpression<>(parseScriptableStringAttribute(ATT_SEPARATOR, element), new String2CharConverter());
-		Expression<String> onError      = parseScriptableStringAttribute(ATT_ON_ERROR, element);
-		Expression<String> encoding     = parseScriptableStringAttribute(ATT_ENCODING, element);
-		Expression<Boolean> optimize    = parseBooleanExpressionAttribute(ATT_OPTIMIZE, element, false);
-		Expression<Boolean> invalidate  = parseBooleanExpressionAttribute(ATT_INVALIDATE, element, null);
-		Expression<?> assertion         = new ScriptExpression<>(element.getAttribute(ATT_ASSERT));
-		return new EvaluateStatement(evaluate, id, text, uri, type, targetObject, separator, onError, encoding, optimize, invalidate, assertion);
-	}
+    Expression<String> id = parseAttribute(ATT_ID, element);
+    Expression<String> text = new StringExpression(parseScriptableElementText(element, false));
+    Expression<String> uri = parseScriptableStringAttribute(ATT_URI, element);
+    Expression<String> type = parseAttribute(ATT_TYPE, element);
+    Expression<?> targetObject = new FeatureAccessExpression<>(element.getAttribute(ATT_TARGET));
+    Expression<Character> separator = new ConvertingExpression<>(parseScriptableStringAttribute(ATT_SEPARATOR, element), new String2CharConverter());
+    Expression<String> onError = parseScriptableStringAttribute(ATT_ON_ERROR, element);
+    Expression<String> encoding = parseScriptableStringAttribute(ATT_ENCODING, element);
+    Expression<Boolean> optimize = parseBooleanExpressionAttribute(ATT_OPTIMIZE, element, false);
+    Expression<Boolean> invalidate = parseBooleanExpressionAttribute(ATT_INVALIDATE, element, null);
+    Expression<?> assertion = new ScriptExpression<>(element.getAttribute(ATT_ASSERT));
+    return new EvaluateStatement(evaluate, id, text, uri, type, targetObject, separator, onError, encoding, optimize, invalidate, assertion);
+  }
 
 }

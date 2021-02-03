@@ -38,17 +38,22 @@ import com.rapiddweller.domain.address.AddressGenerator;
  */
 public class AddressDemo {
 
-    public static void main(String[] args) {
-        AddressGenerator generator = new AddressGenerator("world");
-        init(generator);
-        for (int i = 0; i < 10; i++) {
-            Address address = generateNonNull(generator);
-            System.out.println(address);
-            System.out.printf("phone: %s", address.getPrivatePhone());
-            System.out.printf("fax: %s", address.getFax());
-            System.out.println();
-        }
-        close(generator);
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   */
+  public static void main(String[] args) {
+    AddressGenerator generator = new AddressGenerator("world");
+    init(generator);
+    for (int i = 0; i < 10; i++) {
+      Address address = generateNonNull(generator);
+      System.out.println(address);
+      System.out.printf("phone: %s", address.getPrivatePhone());
+      System.out.printf("fax: %s", address.getFax());
+      System.out.println();
     }
+    close(generator);
+  }
 
 }

@@ -26,7 +26,12 @@
 
 package com.rapiddweller.platform.csv;
 
-import com.rapiddweller.common.*;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.Tabular;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.csv.CSVUtil;
@@ -43,92 +48,126 @@ import java.io.FileNotFoundException;
  */
 public class CSVEntitySource extends FileBasedEntitySource implements Tabular {
 
-    private char separator;
-    private String encoding;
-    private final Converter<String, ?> preprocessor;
+  private char separator;
+  private String encoding;
+  private final Converter<String, ?> preprocessor;
 
-    private final ComplexTypeDescriptor entityType;
-    private String[] columnNames;
-    private boolean expectingHeader;
+  private final ComplexTypeDescriptor entityType;
+  private String[] columnNames;
+  private boolean expectingHeader;
 
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public CSVEntitySource() {
-        this(null, null, SystemInfo.getFileEncoding());
+  /**
+   * Instantiates a new Csv entity source.
+   */
+  public CSVEntitySource() {
+    this(null, null, SystemInfo.getFileEncoding());
+  }
+
+  /**
+   * Instantiates a new Csv entity source.
+   *
+   * @param uri        the uri
+   * @param entityType the entity type
+   * @param encoding   the encoding
+   */
+  public CSVEntitySource(String uri, ComplexTypeDescriptor entityType,
+                         String encoding) {
+    this(uri, entityType, encoding, new NoOpConverter<>(), ',');
+  }
+
+  /**
+   * Instantiates a new Csv entity source.
+   *
+   * @param uri          the uri
+   * @param entityType   the entity type
+   * @param encoding     the encoding
+   * @param preprocessor the preprocessor
+   * @param separator    the separator
+   */
+  public CSVEntitySource(String uri, ComplexTypeDescriptor entityType,
+                         String encoding,
+                         Converter<String, ?> preprocessor, char separator) {
+    super(uri);
+    this.separator = separator;
+    this.encoding = encoding;
+    this.entityType = entityType;
+    this.preprocessor = preprocessor;
+    this.expectingHeader = true;
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Sets separator.
+   *
+   * @param separator the separator
+   */
+  public void setSeparator(char separator) {
+    this.separator = separator;
+  }
+
+  /**
+   * Sets encoding.
+   *
+   * @param encoding the encoding
+   */
+  public void setEncoding(String encoding) {
+    this.encoding = encoding;
+  }
+
+  @Override
+  public String[] getColumnNames() {
+    if (ArrayUtil.isEmpty(columnNames)) {
+      columnNames = StringUtil
+          .trimAll(CSVUtil.parseHeader(uri, separator, encoding));
+      expectingHeader = true;
     }
+    return columnNames;
+  }
 
-    public CSVEntitySource(String uri, ComplexTypeDescriptor entityType,
-                           String encoding) {
-        this(uri, entityType, encoding, new NoOpConverter<>(), ',');
+  /**
+   * Sets columns.
+   *
+   * @param columns the columns
+   */
+  public void setColumns(String[] columns) {
+    if (ArrayUtil.isEmpty(columns)) {
+      this.columnNames = null;
+    } else {
+      this.columnNames = columns.clone();
+      StringUtil.trimAll(this.columnNames);
+      expectingHeader = false;
     }
+  }
 
-    public CSVEntitySource(String uri, ComplexTypeDescriptor entityType,
-                           String encoding,
-                           Converter<String, ?> preprocessor, char separator) {
-        super(uri);
-        this.separator = separator;
-        this.encoding = encoding;
-        this.entityType = entityType;
-        this.preprocessor = preprocessor;
-        this.expectingHeader = true;
+  // EntitySource interface ------------------------------------------------------------------------------------------
+
+  @Override
+  public DataIterator<Entity> iterator() {
+    try {
+      CSVEntityIterator iterator =
+          new CSVEntityIterator(resolveUri(), entityType,
+              preprocessor, separator, encoding);
+      if (!expectingHeader) {
+        iterator.setColumns(getColumnNames());
+        iterator.setExpectingHeader(false);
+      }
+      return iterator;
+    } catch (FileNotFoundException e) {
+      throw new ConfigurationError("Cannot create iterator. ", e);
     }
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    public void setSeparator(char separator) {
-        this.separator = separator;
-    }
-
-    public void setEncoding(String encoding) {
-        this.encoding = encoding;
-    }
-
-    @Override
-    public String[] getColumnNames() {
-        if (ArrayUtil.isEmpty(columnNames)) {
-            columnNames = StringUtil
-                    .trimAll(CSVUtil.parseHeader(uri, separator, encoding));
-            expectingHeader = true;
-        }
-        return columnNames;
-    }
-
-    public void setColumns(String[] columns) {
-        if (ArrayUtil.isEmpty(columns)) {
-            this.columnNames = null;
-        } else {
-            this.columnNames = columns.clone();
-            StringUtil.trimAll(this.columnNames);
-            expectingHeader = false;
-        }
-    }
-
-    // EntitySource interface ------------------------------------------------------------------------------------------
-
-    @Override
-    public DataIterator<Entity> iterator() {
-        try {
-            CSVEntityIterator iterator =
-                    new CSVEntityIterator(resolveUri(), entityType,
-                            preprocessor, separator, encoding);
-            if (!expectingHeader) {
-                iterator.setColumns(getColumnNames());
-                iterator.setExpectingHeader(false);
-            }
-            return iterator;
-        } catch (FileNotFoundException e) {
-            throw new ConfigurationError("Cannot create iterator. ", e);
-        }
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[uri=" + uri + ", encoding=" +
-                encoding + ", separator=" + separator +
-                ", entityType=" + entityType.getName() + "]";
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[uri=" + uri + ", encoding=" +
+        encoding + ", separator=" + separator +
+        ", entityType=" + entityType.getName() + "]";
+  }
 
 }

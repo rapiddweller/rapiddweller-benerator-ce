@@ -32,68 +32,90 @@ import com.rapiddweller.common.accessor.FeatureAccessor;
 import com.rapiddweller.common.converter.AnyConverter;
 
 /**
- * Implements the IndividualWeight function for arbitrary feature names, 
+ * Implements the IndividualWeight function for arbitrary feature names,
  * supporting e.g. properties, attributes, or Map keys.<br/><br/>
  * Created at 27.04.2008 17:23:45
- * @since 0.5.2
+ *
  * @author Volker Bergmann
+ * @since 0.5.2
  */
 public class FeatureWeight extends IndividualWeight<Object> {
 
-	private final String feature;
-	
-    private final FeatureAccessor<Object, Double> accessor;
-	private final Converter<Object, Double> converter;
+  private final String feature;
 
-	// constructors ----------------------------------------------------------------------------------------------------
-	
-	public FeatureWeight() {
-		this("weight");
-	}
+  private final FeatureAccessor<Object, Double> accessor;
+  private final Converter<Object, Double> converter;
 
-	public FeatureWeight(String feature) {
-		this.feature = feature;
-		this.accessor = new FeatureAccessor<>(feature);
-		this.converter = new AnyConverter<>(Double.class);
-	}
-	
-	// interface -------------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-	public String getWeightFeature() {
-		return accessor.getFeatureName();
-	}
+  /**
+   * Instantiates a new Feature weight.
+   */
+  public FeatureWeight() {
+    this("weight");
+  }
 
-	public void setWeightFeature(String weightFeature) {
-		this.accessor.setFeatureName(weightFeature);
-	}
+  /**
+   * Instantiates a new Feature weight.
+   *
+   * @param feature the feature
+   */
+  public FeatureWeight(String feature) {
+    this.feature = feature;
+    this.accessor = new FeatureAccessor<>(feature);
+    this.converter = new AnyConverter<>(Double.class);
+  }
 
-	@Override
-    public double weight(Object object) {
-		return converter.convert(accessor.getValue(object));
-	}
-	
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
+  // interface -------------------------------------------------------------------------------------------------------
 
-	@Override
-	public int hashCode() {
-		return accessor.getFeatureName().hashCode();
-	}
+  /**
+   * Gets weight feature.
+   *
+   * @return the weight feature
+   */
+  public String getWeightFeature() {
+    return accessor.getFeatureName();
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		final FeatureWeight that = (FeatureWeight) obj;
-		return NullSafeComparator.equals(this.getWeightFeature(), that.getWeightFeature());
-	}
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + '[' + feature + ']';
-	}
+  /**
+   * Sets weight feature.
+   *
+   * @param weightFeature the weight feature
+   */
+  public void setWeightFeature(String weightFeature) {
+    this.accessor.setFeatureName(weightFeature);
+  }
+
+  @Override
+  public double weight(Object object) {
+    return converter.convert(accessor.getValue(object));
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public int hashCode() {
+    return accessor.getFeatureName().hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final FeatureWeight that = (FeatureWeight) obj;
+    return NullSafeComparator.equals(this.getWeightFeature(), that.getWeightFeature());
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + feature + ']';
+  }
 
 }

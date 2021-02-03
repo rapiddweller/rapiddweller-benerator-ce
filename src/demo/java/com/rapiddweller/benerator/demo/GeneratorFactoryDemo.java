@@ -46,50 +46,55 @@ import com.rapiddweller.model.data.Uniqueness;
  */
 public class GeneratorFactoryDemo {
 
-    public static void main(String[] args) {
-        GeneratorFactory factory = new EquivalenceGeneratorFactory();
-        generateByRegex(factory);
-        generateByWeightedLiteralList(factory);
-        iterateCsv(factory);
-    }
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   */
+  public static void main(String[] args) {
+    GeneratorFactory factory = new EquivalenceGeneratorFactory();
+    generateByRegex(factory);
+    generateByWeightedLiteralList(factory);
+    iterateCsv(factory);
+  }
 
-    private static void iterateCsv(GeneratorFactory generatorFactory) {
-        Generator<String[]> generator = SourceFactory.createCSVLineGenerator(
-                "com/rapiddweller/benerator/products.csv", ';', Encodings.UTF_8,
-                true);
-        init(generator);
-        String[] row;
-        while ((row = generateNonNull(generator)) !=
-                null) // null signals that the generator is used up
-        {
-            System.out.println(Arrays.toString(row));
-        }
-        close(generator);
+  private static void iterateCsv(GeneratorFactory generatorFactory) {
+    Generator<String[]> generator = SourceFactory.createCSVLineGenerator(
+        "com/rapiddweller/benerator/products.csv", ';', Encodings.UTF_8,
+        true);
+    init(generator);
+    String[] row;
+    while ((row = generateNonNull(generator)) !=
+        null) // null signals that the generator is used up
+    {
+      System.out.println(Arrays.toString(row));
     }
+    close(generator);
+  }
 
-    private static void generateByWeightedLiteralList(
-            GeneratorFactory generatorFactory) {
-        String valueSpec = "'Alpha'^4,'Bravo'^1";
-        Generator<String> generator =
-                generatorFactory.createFromWeightedLiteralList(
-                        valueSpec, String.class, null, false);
-        init(generator);
-        for (int i = 0; i < 10; i++) {
-            System.out.println(generateNonNull(generator));
-        }
-        close(generator);
+  private static void generateByWeightedLiteralList(
+      GeneratorFactory generatorFactory) {
+    String valueSpec = "'Alpha'^4,'Bravo'^1";
+    Generator<String> generator =
+        generatorFactory.createFromWeightedLiteralList(
+            valueSpec, String.class, null, false);
+    init(generator);
+    for (int i = 0; i < 10; i++) {
+      System.out.println(generateNonNull(generator));
     }
+    close(generator);
+  }
 
-    private static void generateByRegex(GeneratorFactory generatorFactory) {
-        // generating German phone numbers
-        String pattern = "\\+49\\-[1-9]{2,5}\\-[1-9][0-9]{3,9}";
-        Generator<String> generator = generatorFactory
-                .createRegexStringGenerator(pattern, 8, 20, Uniqueness.NONE);
-        init(generator);
-        for (int i = 0; i < 10; i++) {
-            System.out.println(generateNonNull(generator));
-        }
-        close(generator);
+  private static void generateByRegex(GeneratorFactory generatorFactory) {
+    // generating German phone numbers
+    String pattern = "\\+49\\-[1-9]{2,5}\\-[1-9][0-9]{3,9}";
+    Generator<String> generator = generatorFactory
+        .createRegexStringGenerator(pattern, 8, 20, Uniqueness.NONE);
+    init(generator);
+    for (int i = 0; i < 10; i++) {
+      System.out.println(generateNonNull(generator));
     }
+    close(generator);
+  }
 
 }

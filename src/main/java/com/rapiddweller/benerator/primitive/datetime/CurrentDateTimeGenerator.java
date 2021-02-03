@@ -26,31 +26,32 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
-import java.util.Date;
-
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
+
+import java.util.Date;
 
 /**
  * Generates java.util.Date objects that represent the current date and time.<br/>
  * <br/>
  * Created: 17.11.2007 13:07:18
+ *
  * @author Volker Bergmann
  */
 public class CurrentDateTimeGenerator extends ThreadSafeNonNullGenerator<Date> {
 
-	@Override
-	public Class<Date> getGeneratedType() {
-	    return Date.class;
-    }
+  @Override
+  public Class<Date> getGeneratedType() {
+    return Date.class;
+  }
 
-	@Override
-	public Date generate() {
-        return new Date();
-    }
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName();
-	}
-	
+  @Override
+  public Date generate() {
+    return new Date();
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
+
 }

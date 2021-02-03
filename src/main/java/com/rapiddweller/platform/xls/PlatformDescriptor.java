@@ -37,29 +37,52 @@ import com.rapiddweller.benerator.DefaultPlatformDescriptor;
  */
 public class PlatformDescriptor extends DefaultPlatformDescriptor {
 
-    private static boolean formattedByDefault = false;
-    private static String collectionReferencePrefix = "tab:";
+  private static boolean formattedByDefault = false;
+  private static String collectionReferencePrefix = "tab:";
 
-    public PlatformDescriptor() {
-        super(PlatformDescriptor.class.getName());
-    }
+  /**
+   * Instantiates a new Platform descriptor.
+   */
+  public PlatformDescriptor() {
+    super(PlatformDescriptor.class.getName());
+  }
 
-    public static boolean isFormattedByDefault() {
-        return formattedByDefault;
-    }
+  /**
+   * Is formatted by default boolean.
+   *
+   * @return the boolean
+   */
+  public static boolean isFormattedByDefault() {
+    return formattedByDefault;
+  }
 
-    public static void setFormattedByDefault(boolean formattedByDefault) {
-        PlatformDescriptor.formattedByDefault = formattedByDefault;
-    }
+  /**
+   * Sets formatted by default.
+   *
+   * @param formattedByDefault the formatted by default
+   */
+  public static void setFormattedByDefault(boolean formattedByDefault) {
+    PlatformDescriptor.formattedByDefault = formattedByDefault;
+  }
 
-    public static String getCollectionReferencePrefix() {
-        return collectionReferencePrefix;
-    }
+  /**
+   * Gets collection reference prefix.
+   *
+   * @return the collection reference prefix
+   */
+  public static String getCollectionReferencePrefix() {
+    return collectionReferencePrefix;
+  }
 
-    public static void setCollectionReferencePrefix(
-            String collectionReferencePrefix) {
-        PlatformDescriptor.collectionReferencePrefix =
-                collectionReferencePrefix;
-    }
+  /**
+   * Sets collection reference prefix.
+   *
+   * @param collectionReferencePrefix the collection reference prefix
+   */
+  public static void setCollectionReferencePrefix(
+      String collectionReferencePrefix) {
+    PlatformDescriptor.collectionReferencePrefix =
+        collectionReferencePrefix;
+  }
 
 }

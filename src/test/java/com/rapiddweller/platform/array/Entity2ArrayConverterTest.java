@@ -26,29 +26,33 @@
 
 package com.rapiddweller.platform.array;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
+import org.junit.Test;
+
+import static org.junit.Assert.assertArrayEquals;
 
 /**
  * Tests the Entity2ArrayConverter.<br/>
  * <br/>
  * Created: 29.08.2007 19:09:05
+ *
  * @author Volker Bergmann
  */
 public class Entity2ArrayConverterTest extends ModelTest {
-	
-	@Test
-    public void test() {
-        ComplexTypeDescriptor descriptor = createComplexType("Person");
-        Entity entity = new Entity(descriptor, "name", "Alice", "age", 23);
-        Object[] array = new Object[] { "Alice", 23 };
-        String[] featureNames = { "name", "age" };
-        assertArrayEquals(array,
-                new Entity2ArrayConverter(featureNames).convert(entity));
-    }
-	
+
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    ComplexTypeDescriptor descriptor = createComplexType("Person");
+    Entity entity = new Entity(descriptor, "name", "Alice", "age", 23);
+    Object[] array = new Object[] {"Alice", 23};
+    String[] featureNames = {"name", "age"};
+    assertArrayEquals(array,
+        new Entity2ArrayConverter(featureNames).convert(entity));
+  }
+
 }

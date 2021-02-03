@@ -32,18 +32,19 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
  * Generates Long objects that represent the current system time in nanoseconds since 1970-01-01.<br/>
  * <br/>
  * Created: 17.11.2007 13:08:47
+ *
  * @author Volker Bergmann
  */
 public class CurrentNanoTimeGenerator extends ThreadSafeNonNullGenerator<Long> {
 
-	@Override
-	public Class<Long> getGeneratedType() {
-    	return Long.class;
-    }
+  @Override
+  public Class<Long> getGeneratedType() {
+    return Long.class;
+  }
 
-	@Override
-	public Long generate() {
-        return System.nanoTime();
-    }
+  @Override
+  public Long generate() {
+    return System.nanoTime();
+  }
 
 }

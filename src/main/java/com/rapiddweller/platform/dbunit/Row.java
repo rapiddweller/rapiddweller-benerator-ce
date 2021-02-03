@@ -37,31 +37,54 @@ import com.rapiddweller.common.ArrayFormat;
  */
 class Row {
 
-    private final String tableName;
-    private final String[] columnNames;
-    private final String[] values;
+  private final String tableName;
+  private final String[] columnNames;
+  private final String[] values;
 
-    public Row(String tableName, String[] columnNames, String[] values) {
-        this.tableName = tableName;
-        this.columnNames = columnNames;
-        this.values = values;
-    }
+  /**
+   * Instantiates a new Row.
+   *
+   * @param tableName   the table name
+   * @param columnNames the column names
+   * @param values      the values
+   */
+  public Row(String tableName, String[] columnNames, String[] values) {
+    this.tableName = tableName;
+    this.columnNames = columnNames;
+    this.values = values;
+  }
 
-    public String getTableName() {
-        return tableName;
-    }
+  /**
+   * Gets table name.
+   *
+   * @return the table name
+   */
+  public String getTableName() {
+    return tableName;
+  }
 
-    public String[] getValues() {
-        return values;
-    }
+  /**
+   * Get values string [ ].
+   *
+   * @return the string [ ]
+   */
+  public String[] getValues() {
+    return values;
+  }
 
-    public String getColumnName(int i) {
-        return columnNames[i];
-    }
+  /**
+   * Gets column name.
+   *
+   * @param i the
+   * @return the column name
+   */
+  public String getColumnName(int i) {
+    return columnNames[i];
+  }
 
-    @Override
-    public String toString() {
-        return tableName + '[' + ArrayFormat.format(values) + ']';
-    }
+  @Override
+  public String toString() {
+    return tableName + '[' + ArrayFormat.format(values) + ']';
+  }
 
 }

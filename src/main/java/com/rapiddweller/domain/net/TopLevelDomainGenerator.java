@@ -39,20 +39,23 @@ import com.rapiddweller.common.Encodings;
  * @since 0.5.2
  */
 public class TopLevelDomainGenerator extends WeightedCSVSampleGenerator<String>
-        implements NonNullGenerator<String> {
+    implements NonNullGenerator<String> {
 
-    public TopLevelDomainGenerator() {
-        super("/com/rapiddweller/domain/net/tld.csv", Encodings.UTF_8);
-    }
+  /**
+   * Instantiates a new Top level domain generator.
+   */
+  public TopLevelDomainGenerator() {
+    super("/com/rapiddweller/domain/net/tld.csv", Encodings.UTF_8);
+  }
 
-    @Override
-    public String generate() {
-        return GeneratorUtil.generateNonNull(this);
-    }
+  @Override
+  public String generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 
 }

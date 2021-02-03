@@ -37,36 +37,65 @@ import java.util.ResourceBundle;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class Language {
 
-    private final Locale locale;
-    private final LanguageResourceBundle bundle;
+  private final Locale locale;
+  private final LanguageResourceBundle bundle;
 
-    public Language(Locale locale) {
-        this.locale = locale;
-        this.bundle = (LanguageResourceBundle) ResourceBundle
-                .getBundle(LanguageResourceBundle.class.getName(), locale);
-    }
+  /**
+   * Instantiates a new Language.
+   *
+   * @param locale the locale
+   */
+  public Language(Locale locale) {
+    this.locale = locale;
+    this.bundle = (LanguageResourceBundle) ResourceBundle
+        .getBundle(LanguageResourceBundle.class.getName(), locale);
+  }
 
-    public static Language getInstance(Locale locale) {
-        return new Language(locale);
-    }
+  /**
+   * Gets instance.
+   *
+   * @param locale the locale
+   * @return the instance
+   */
+  public static Language getInstance(Locale locale) {
+    return new Language(locale);
+  }
 
-    public Locale getLocale() {
-        return locale;
-    }
+  /**
+   * Gets locale.
+   *
+   * @return the locale
+   */
+  public Locale getLocale() {
+    return locale;
+  }
 
-    public String definiteArticle(int gender, boolean plural) {
-        return bundle.getString(
-                "definite.article." + (plural ? "plural." : "singular.") +
-                        gender);
-    }
+  /**
+   * Definite article string.
+   *
+   * @param gender the gender
+   * @param plural the plural
+   * @return the string
+   */
+  public String definiteArticle(int gender, boolean plural) {
+    return bundle.getString(
+        "definite.article." + (plural ? "plural." : "singular.") +
+            gender);
+  }
 
-    public String indefiniteArticle(int gender, boolean plural) {
-        return bundle.getString(
-                "indefinite.article." + (plural ? "plural." : "singular.") +
-                        gender);
-    }
+  /**
+   * Indefinite article string.
+   *
+   * @param gender the gender
+   * @param plural the plural
+   * @return the string
+   */
+  public String indefiniteArticle(int gender, boolean plural) {
+    return bundle.getString(
+        "indefinite.article." + (plural ? "plural." : "singular.") +
+            gender);
+  }
 
 }

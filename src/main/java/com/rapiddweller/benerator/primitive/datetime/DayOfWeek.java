@@ -26,37 +26,63 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
+import javax.validation.Constraint;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.util.Calendar;
 
-import javax.validation.Constraint;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Bean validation annotation (JSR 303) based on the day of week.<br/><br/>
  * Created: 16.02.2010 22:50:57
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 @Documented
 @Constraint(validatedBy = DayOfWeekValidator.class)
-@Target({ METHOD, FIELD, TYPE })
+@Target({METHOD, FIELD, TYPE})
 @Retention(RUNTIME)
 public @interface DayOfWeek {
-	
-	int MONDAY    = Calendar.MONDAY;
-	int TUESDAY   = Calendar.TUESDAY;
-	int WEDNESDAY = Calendar.WEDNESDAY;
-	int THURSDAY  = Calendar.THURSDAY;
-	int FRIDAY    = Calendar.FRIDAY;
-	int SATURDAY  = Calendar.SATURDAY;
-	int SUNDAY    = Calendar.SUNDAY;
-	
-	int[] daysOfWeekAccepted() default { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY};
+
+  /**
+   * The constant MONDAY.
+   */
+  int MONDAY = Calendar.MONDAY;
+  /**
+   * The constant TUESDAY.
+   */
+  int TUESDAY = Calendar.TUESDAY;
+  /**
+   * The constant WEDNESDAY.
+   */
+  int WEDNESDAY = Calendar.WEDNESDAY;
+  /**
+   * The constant THURSDAY.
+   */
+  int THURSDAY = Calendar.THURSDAY;
+  /**
+   * The constant FRIDAY.
+   */
+  int FRIDAY = Calendar.FRIDAY;
+  /**
+   * The constant SATURDAY.
+   */
+  int SATURDAY = Calendar.SATURDAY;
+  /**
+   * The constant SUNDAY.
+   */
+  int SUNDAY = Calendar.SUNDAY;
+
+  /**
+   * Days of week accepted int [ ].
+   *
+   * @return the int [ ]
+   */
+  int[] daysOfWeekAccepted() default {MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY};
 }

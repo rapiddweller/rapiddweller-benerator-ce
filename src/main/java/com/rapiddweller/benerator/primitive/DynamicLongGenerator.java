@@ -35,67 +35,102 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 
 /**
- * {@link Generator} implementation that generates {@link Long} numbers, 
+ * {@link Generator} implementation that generates {@link Long} numbers,
  * redefining the underlying distribution on each <code>reset()</code> by
  * evaluating the <code>min</code>, <code>max</code>, <code>granularity</code>,
  * <code>distribution</code> and <code>unique</code> values.<br/><br/>
  * Created: 27.03.2010 19:28:38
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class DynamicLongGenerator extends GeneratorProxy<Long> {
 
-    protected final Expression<Long> min;
-    protected final Expression<Long> max;
-    protected final Expression<Long> granularity;
-    protected final Expression<? extends Distribution> distribution;
+  /**
+   * The Min.
+   */
+  protected final Expression<Long> min;
+  /**
+   * The Max.
+   */
+  protected final Expression<Long> max;
+  /**
+   * The Granularity.
+   */
+  protected final Expression<Long> granularity;
+  /**
+   * The Distribution.
+   */
+  protected final Expression<? extends Distribution> distribution;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public DynamicLongGenerator() {
-        this(ExpressionUtil.constant(0L), ExpressionUtil.constant(30L), 
-        		ExpressionUtil.constant(1L), ExpressionUtil.constant(SequenceManager.RANDOM_SEQUENCE), 
-        		ExpressionUtil.constant(false));
+  /**
+   * Instantiates a new Dynamic long generator.
+   */
+  public DynamicLongGenerator() {
+    this(ExpressionUtil.constant(0L), ExpressionUtil.constant(30L),
+        ExpressionUtil.constant(1L), ExpressionUtil.constant(SequenceManager.RANDOM_SEQUENCE),
+        ExpressionUtil.constant(false));
+  }
+
+  /**
+   * Instantiates a new Dynamic long generator.
+   *
+   * @param min          the min
+   * @param max          the max
+   * @param granularity  the granularity
+   * @param distribution the distribution
+   * @param unique       the unique
+   */
+  public DynamicLongGenerator(Expression<Long> min, Expression<Long> max,
+                              Expression<Long> granularity, Expression<? extends Distribution> distribution,
+                              Expression<Boolean> unique) {
+    super(Long.class);
+    this.min = min;
+    this.max = max;
+    this.granularity = granularity;
+    this.distribution = distribution;
+  }
+
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  /**
+   * ensures consistency of the state
+   */
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    this.context = context;
+    resetMembers(min.evaluate(context), max.evaluate(context));
+    super.init(context);
+  }
+
+  @Override
+  public void reset() {
+    assertInitialized();
+    resetMembers(min.evaluate(context), max.evaluate(context));
+    super.reset();
+  }
+
+  /**
+   * Reset members.
+   *
+   * @param minValue the min value
+   * @param maxValue the max value
+   */
+  protected void resetMembers(Long minValue, Long maxValue) {
+    if (minValue == null) {
+      minValue = 0L;
     }
-
-    public DynamicLongGenerator(Expression<Long> min, Expression<Long> max, 
-    		Expression<Long> granularity, Expression<? extends Distribution> distribution,
-    	    Expression<Boolean> unique) {
-        super(Long.class);
-        this.min = min;
-        this.max = max;
-        this.granularity = granularity;
-        this.distribution = distribution;
+    Long granularityValue = ExpressionUtil.evaluate(granularity, context);
+    if (granularityValue == null) {
+      granularityValue = 1L;
     }
-    
-    // Generator interface ---------------------------------------------------------------------------------------------
+    Distribution dist = distribution.evaluate(context);
+    Generator<Long> source = dist.createNumberGenerator(Long.class, minValue, maxValue, granularityValue, false);
+    source.init(context);
+    setSource(source);
+  }
 
-	/** ensures consistency of the state */
-    @Override
-    public void init(GeneratorContext context) {
-    	assertNotInitialized();
-    	this.context = context;
-    	resetMembers(min.evaluate(context), max.evaluate(context));
-        super.init(context);
-    }
-
-    @Override
-    public void reset() {
-    	assertInitialized();
-    	resetMembers(min.evaluate(context), max.evaluate(context));
-        super.reset();
-    }
-
-	protected void resetMembers(Long minValue, Long maxValue) {
-		if (minValue == null)
-			minValue = 0L;
-		Long granularityValue = ExpressionUtil.evaluate(granularity, context);
-		if (granularityValue == null)
-			granularityValue = 1L;
-	    Distribution dist = distribution.evaluate(context);
-	    Generator<Long> source = dist.createNumberGenerator(Long.class, minValue, maxValue, granularityValue, false);
-        source.init(context);
-        setSource(source);
-    }
-    
 }

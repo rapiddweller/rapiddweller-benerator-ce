@@ -35,35 +35,49 @@ import org.w3c.dom.Element;
 import java.util.List;
 import java.util.Set;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TEST;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_IF;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_SETUP;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_WHILE;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
 
 /**
  * Parses a 'while' element.<br/><br/>
  * Created: 19.02.2010 09:18:47
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class WhileParser extends AbstractBeneratorDescriptorParser {
 
-	private static final Set<String> LEGAL_PARENTS = CollectionUtil.toSet(
-			EL_SETUP, EL_IF, EL_WHILE);
+  private static final Set<String> LEGAL_PARENTS = CollectionUtil.toSet(
+      EL_SETUP, EL_IF, EL_WHILE);
 
-	public WhileParser() {
-		super(EL_WHILE, CollectionUtil.toSet(ATT_TEST), null);
-	}
+  /**
+   * Instantiates a new While parser.
+   */
+  public WhileParser() {
+    super(EL_WHILE, CollectionUtil.toSet(ATT_TEST), null);
+  }
 
-    public boolean supports(String elementName, String parentName) {
-	    return (EL_WHILE.equals(elementName) && LEGAL_PARENTS.contains(parentName));
-    }
+  /**
+   * Supports boolean.
+   *
+   * @param elementName the element name
+   * @param parentName  the parent name
+   * @return the boolean
+   */
+  public boolean supports(String elementName, String parentName) {
+    return (EL_WHILE.equals(elementName) && LEGAL_PARENTS.contains(parentName));
+  }
 
-	@Override
-	public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-		Expression<Boolean> condition = parseBooleanExpressionAttribute(ATT_TEST, element);
-		WhileStatement whileStatement = new WhileStatement(condition);
-		List<Statement> subStatements = context.parseChildElementsOf(element, context.createSubPath(parentPath, whileStatement));
-		whileStatement.setSubStatements(subStatements);
-	    return whileStatement;
-    }
+  @Override
+  public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    Expression<Boolean> condition = parseBooleanExpressionAttribute(ATT_TEST, element);
+    WhileStatement whileStatement = new WhileStatement(condition);
+    List<Statement> subStatements = context.parseChildElementsOf(element, context.createSubPath(parentPath, whileStatement));
+    whileStatement.setSubStatements(subStatements);
+    return whileStatement;
+  }
 
 }

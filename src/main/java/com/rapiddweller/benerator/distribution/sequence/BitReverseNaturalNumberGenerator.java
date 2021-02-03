@@ -34,88 +34,105 @@ import com.rapiddweller.common.NumberUtil;
  * Long Generator that implements a 'bitreverse' Long Sequence.<br/>
  * <br/>
  * Created: 13.11.2007 14:39:29
+ *
  * @author Volker Bergmann
  */
 public class BitReverseNaturalNumberGenerator extends ThreadSafeNonNullGenerator<Long> {
 
-    private long max;
-    private long cursor;
-    private int bitsUsed;
-    private long maxCursor;
+  private long max;
+  private long cursor;
+  private int bitsUsed;
+  private long maxCursor;
 
-    public BitReverseNaturalNumberGenerator() {
-        this(Long.MAX_VALUE);
+  /**
+   * Instantiates a new Bit reverse natural number generator.
+   */
+  public BitReverseNaturalNumberGenerator() {
+    this(Long.MAX_VALUE);
+  }
+
+  /**
+   * Instantiates a new Bit reverse natural number generator.
+   *
+   * @param max the max
+   */
+  public BitReverseNaturalNumberGenerator(long max) {
+    this.max = max;
+  }
+
+  // config properties -----------------------------------------------------------------------------------------------
+
+  @Override
+  public Class<Long> getGeneratedType() {
+    return Long.class;
+  }
+
+  /**
+   * Sets max.
+   *
+   * @param max the max
+   */
+  public void setMax(Long max) {
+    if (max < 0) {
+      throw new IllegalArgumentException("No negative min supported, was: " + max);
     }
+    this.max = max;
+  }
 
-    public BitReverseNaturalNumberGenerator(long max) {
-        this.max = max;
+  // generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    initMembers();
+    super.init(context);
+  }
+
+  @Override
+  public synchronized Long generate() {
+    assertInitialized();
+    long result;
+    do {
+      result = cursorReversed();
+      cursor++;
+    } while (result > max && cursor < maxCursor);
+    if (cursor >= maxCursor) {
+      return null;
     }
+    return result;
+  }
 
-    // config properties -----------------------------------------------------------------------------------------------
+  @Override
+  public synchronized void reset() {
+    initMembers();
+    super.reset();
+  }
 
-	@Override
-	public Class<Long> getGeneratedType() {
-        return Long.class;
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + renderState() + ']';
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private void initMembers() {
+    cursor = 0;
+    bitsUsed = NumberUtil.bitsUsed(max);
+    this.maxCursor = (1 << bitsUsed) + 1;
+  }
+
+  private long cursorReversed() {
+    long result = 0;
+    for (int i = 0; i <= bitsUsed; i++) {
+      result |= ((cursor >> i) & 1) << (bitsUsed - i - 1);
     }
+    return result;
+  }
 
-    public void setMax(Long max) {
-        if (max < 0)
-            throw new IllegalArgumentException("No negative min supported, was: " + max);
-        this.max = max;
-    }
+  private String renderState() {
+    return "max=" + max + ", cursor=" + cursor;
+  }
 
-    // generator interface ---------------------------------------------------------------------------------------------
-
-    @Override
-	public void init(GeneratorContext context) {
-    	assertNotInitialized();
-    	initMembers();
-        super.init(context);
-    }
-
-	@Override
-	public synchronized Long generate() {
-        assertInitialized();
-        long result;
-        do {
-            result = cursorReversed();
-            cursor++;
-        } while (result > max && cursor < maxCursor);
-        if (cursor >= maxCursor)
-            return null;
-        return result;
-    }
-
-    @Override
-	public synchronized void reset() {
-        initMembers();
-        super.reset();
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-	public String toString() {
-        return getClass().getSimpleName() + '[' + renderState() + ']';
-    }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-	private void initMembers() {
-	    cursor = 0;
-        bitsUsed = NumberUtil.bitsUsed(max);
-        this.maxCursor = (1 << bitsUsed) + 1;
-    }
-
-    private long cursorReversed() {
-        long result = 0;
-        for (int i = 0; i <= bitsUsed; i++)
-            result |= ((cursor >> i) & 1) << (bitsUsed - i - 1);
-        return result;
-    }
-
-    private String renderState() {
-        return "max=" + max + ", cursor=" + cursor;
-    }
-    
 }

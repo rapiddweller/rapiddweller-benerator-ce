@@ -26,27 +26,31 @@
 
 package com.rapiddweller.domain.lang;
 
+import org.junit.Test;
+
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link LanguageResourceBundle}.<br/>
  * <br/>
  * Created at 16.07.2009 19:15:45
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class LanguageResourceBundleTest {
 
-	@Test
-	public void test() {
-		ResourceBundle myResources = ResourceBundle.getBundle(LanguageResourceBundle.class.getName(), Locale.GERMAN);
-		assertEquals("der", myResources.getObject("definite.article.singular.0"));
-		assertEquals("eine", myResources.getObject("indefinite.article.singular.1"));
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    ResourceBundle myResources = ResourceBundle.getBundle(LanguageResourceBundle.class.getName(), Locale.GERMAN);
+    assertEquals("der", myResources.getObject("definite.article.singular.0"));
+    assertEquals("eine", myResources.getObject("indefinite.article.singular.1"));
+  }
+
 }

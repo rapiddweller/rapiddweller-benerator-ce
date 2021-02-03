@@ -26,8 +26,6 @@
 
 package com.rapiddweller.platform.xml;
 
-import static org.junit.Assert.assertEquals;
-
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.DefaultDescriptorProvider;
@@ -36,6 +34,8 @@ import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link XMLPlatformUtil}.<br/><br/>
  * Created: 16.01.2014 13:57:18
@@ -43,27 +43,35 @@ import org.w3c.dom.Element;
  * @author Volker Bergmann
  * @since 0.9.0
  */
-
 public class XMLPlatformUtilTest {
 
-    @Test
-    public void test() {
-        Element element = XMLUtil.parseStringAsElement("<person age='23'><name>Alice</name></person>");
-        DescriptorProvider provider = new DefaultDescriptorProvider("test", new DataModel());
-        Entity entity = XMLPlatformUtil.convertElement2Entity(element, provider);
-        assertEquals("person", entity.type());
-        assertEquals("23", entity.get("age"));
-        assertEquals("Alice", entity.get("name"));
-    }
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    Element element = XMLUtil.parseStringAsElement("<person age='23'><name>Alice</name></person>");
+    DescriptorProvider provider = new DefaultDescriptorProvider("test", new DataModel());
+    Entity entity = XMLPlatformUtil.convertElement2Entity(element, provider);
+    assertEquals("person", entity.type());
+    assertEquals("23", entity.get("age"));
+    assertEquals("Alice", entity.get("name"));
+  }
 
-    @Test
-    public void testConvertToString() {
-        assertEquals("value", XMLPlatformUtil.convertToString("value"));
-    }
+  /**
+   * Test convert to string.
+   */
+  @Test
+  public void testConvertToString() {
+    assertEquals("value", XMLPlatformUtil.convertToString("value"));
+  }
 
-    @Test
-    public void testNormalizeName() {
-        assertEquals("Name", XMLPlatformUtil.normalizeName("Name"));
-    }
+  /**
+   * Test normalize name.
+   */
+  @Test
+  public void testNormalizeName() {
+    assertEquals("Name", XMLPlatformUtil.normalizeName("Name"));
+  }
 
 }

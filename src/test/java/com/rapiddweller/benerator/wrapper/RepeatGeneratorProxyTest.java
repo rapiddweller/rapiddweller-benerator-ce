@@ -35,24 +35,31 @@ import org.junit.Test;
  * Tests the RepeatGeneratorProxy.<br/>
  * <br/>
  * Created: 01.09.2007 11:05:04
+ *
  * @author Volker Bergmann
  */
 public class RepeatGeneratorProxyTest extends GeneratorTest {
 
-    @Test
-    public void testNonRepeating() {
-        Generator<Integer> generator = new SequenceTestGenerator<>(1, 2);
-        generator = new RepeatGeneratorProxy<>(generator, 0, 0);
-        generator.init(context);
-        expectGeneratedSequence(generator, 1, 2).withCeasedAvailability();
-    }
+  /**
+   * Test non repeating.
+   */
+  @Test
+  public void testNonRepeating() {
+    Generator<Integer> generator = new SequenceTestGenerator<>(1, 2);
+    generator = new RepeatGeneratorProxy<>(generator, 0, 0);
+    generator.init(context);
+    expectGeneratedSequence(generator, 1, 2).withCeasedAvailability();
+  }
 
-    @Test
-    public void testOneRepetition() {
-        Generator<Integer> generator = new SequenceTestGenerator<>(1, 2);
-        generator = new RepeatGeneratorProxy<>(generator, 2, 2);
-        generator.init(context);
-        expectGeneratedSequence(generator, 1, 1, 1, 2, 2, 2).withCeasedAvailability();
-    }
-    
+  /**
+   * Test one repetition.
+   */
+  @Test
+  public void testOneRepetition() {
+    Generator<Integer> generator = new SequenceTestGenerator<>(1, 2);
+    generator = new RepeatGeneratorProxy<>(generator, 2, 2);
+    generator.init(context);
+    expectGeneratedSequence(generator, 1, 1, 1, 2, 2, 2).withCeasedAvailability();
+  }
+
 }

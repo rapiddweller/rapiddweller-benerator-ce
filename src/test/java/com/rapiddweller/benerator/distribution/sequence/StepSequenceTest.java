@@ -26,44 +26,51 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
-import java.math.BigDecimal;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 /**
  * Tests the {@link StepSequence}.<br/><br/>
  * Created: 20.07.2010 23:30:08
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class StepSequenceTest extends GeneratorTest {
 
-	@Test
-    public void testApplyTo_limit() {
-        expectGeneratedSequence(apply(1L, 1L, 1L),  1).withCeasedAvailability();
-	}
+  /**
+   * Test apply to limit.
+   */
+  @Test
+  public void testApplyTo_limit() {
+    expectGeneratedSequence(apply(1L, 1L, 1L), 1).withCeasedAvailability();
+  }
 
-	@Test
-    public void testCreateGenerator_limit() {
-        expectGeneratedSequence(numberGen(1L, 1L, 1L),  1L).withCeasedAvailability();
-	}
+  /**
+   * Test create generator limit.
+   */
+  @Test
+  public void testCreateGenerator_limit() {
+    expectGeneratedSequence(numberGen(1L, 1L, 1L), 1L).withCeasedAvailability();
+  }
 
-    private Generator<Integer> apply(long initial, long increment, long limit) {
-    	Generator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
-        StepSequence sequence = new StepSequence(
-        		new BigDecimal(initial), new BigDecimal(increment), new BigDecimal(limit));
-		Generator<Integer> generator = sequence.applyTo(source, false);
-		return initialize(generator);
-    }
+  private Generator<Integer> apply(long initial, long increment, long limit) {
+    Generator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
+    StepSequence sequence = new StepSequence(
+        new BigDecimal(initial), new BigDecimal(increment), new BigDecimal(limit));
+    Generator<Integer> generator = sequence.applyTo(source, false);
+    return initialize(generator);
+  }
 
-    private Generator<Long> numberGen(long initial, long increment, long limit) {
-        StepSequence sequence = new StepSequence(
-        		new BigDecimal(initial), new BigDecimal(increment), new BigDecimal(limit));
-		Generator<Long> generator = sequence.createNumberGenerator(Long.class, initial, limit, increment, false);
-		return initialize(generator);
-    }
+  private Generator<Long> numberGen(long initial, long increment, long limit) {
+    StepSequence sequence = new StepSequence(
+        new BigDecimal(initial), new BigDecimal(increment), new BigDecimal(limit));
+    Generator<Long> generator = sequence.createNumberGenerator(Long.class, initial, limit, increment, false);
+    return initialize(generator);
+  }
 
 }

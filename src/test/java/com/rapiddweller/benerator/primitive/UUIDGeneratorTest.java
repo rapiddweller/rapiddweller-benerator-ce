@@ -35,21 +35,27 @@ import org.junit.Test;
  * Tests the UUIDGenerator.<br/>
  * <br/>
  * Created at 26.09.2009 07:56:05
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class UUIDGeneratorTest extends GeneratorClassTest {
 
-    public UUIDGeneratorTest() {
-        super(UUIDGenerator.class);
-    }
+  /**
+   * Instantiates a new Uuid generator test.
+   */
+  public UUIDGeneratorTest() {
+    super(UUIDGenerator.class);
+  }
 
-    @Test
-    public void testUniqueness() {
-        Generator<String> generator = new UUIDGenerator();
-        generator.init(new DefaultBeneratorContext());
-        expectUniqueGenerations(generator, 100);
-    }
-    
+  /**
+   * Test uniqueness.
+   */
+  @Test
+  public void testUniqueness() {
+    Generator<String> generator = new UUIDGenerator();
+    generator.init(new DefaultBeneratorContext());
+    expectUniqueGenerations(generator, 100);
+  }
+
 }

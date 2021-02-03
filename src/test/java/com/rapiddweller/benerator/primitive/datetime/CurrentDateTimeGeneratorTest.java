@@ -26,34 +26,39 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
-import static org.junit.Assert.*;
+import com.rapiddweller.benerator.test.GeneratorTest;
+import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import com.rapiddweller.benerator.test.GeneratorTest;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link CurrentDateGenerator}.<br/><br/>
  * Created: 15.04.2011 08:52:43
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class CurrentDateTimeGeneratorTest extends GeneratorTest {
-	
-	@Test
-	public void test() {
-		Date startDate = new Date();
-		CurrentDateTimeGenerator generator = new CurrentDateTimeGenerator();
-		generator.init(context);
-		Date generatedDate = generator.generate();
-		assertFalse(startDate.after(generatedDate));
-		Calendar toleratedLimit = new GregorianCalendar();
-		toleratedLimit.setTime(startDate);
-		toleratedLimit.add(Calendar.SECOND, 2);
-		assertTrue(generatedDate.before(toleratedLimit.getTime()));
-	}
-	
+
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    Date startDate = new Date();
+    CurrentDateTimeGenerator generator = new CurrentDateTimeGenerator();
+    generator.init(context);
+    Date generatedDate = generator.generate();
+    assertFalse(startDate.after(generatedDate));
+    Calendar toleratedLimit = new GregorianCalendar();
+    toleratedLimit.setTime(startDate);
+    toleratedLimit.add(Calendar.SECOND, 2);
+    assertTrue(generatedDate.before(toleratedLimit.getTime()));
+  }
+
 }

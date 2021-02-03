@@ -41,10 +41,15 @@ import java.io.IOException;
  */
 public class ManualExampleTest extends BeneratorIntegrationTest {
 
-    @Test
-    public void example1() throws IOException {
-        context.setContextUri("/com/rapiddweller/benerator/engine/manual");
-        parseAndExecuteFile("/com/rapiddweller/benerator/engine/manual/example.ben.xml");
-    }
+  /**
+   * Example 1.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void example1() throws IOException {
+    context.setContextUri("/com/rapiddweller/benerator/engine/manual");
+    parseAndExecuteFile("/com/rapiddweller/benerator/engine/manual/example.ben.xml");
+  }
 
 }

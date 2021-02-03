@@ -33,21 +33,39 @@ package com.rapiddweller.benerator.demo.product;
  */
 public class ProductGroup {
 
-    private String name;
+  private String name;
 
-    public ProductGroup() {
-        this(null);
-    }
+  /**
+   * Instantiates a new Product group.
+   */
+  public ProductGroup() {
+    this(null);
+  }
 
-    public ProductGroup(String name) {
-        this.name = name;
-    }
+  /**
+   * Instantiates a new Product group.
+   *
+   * @param name the name
+   */
+  public ProductGroup(String name) {
+    this.name = name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 }

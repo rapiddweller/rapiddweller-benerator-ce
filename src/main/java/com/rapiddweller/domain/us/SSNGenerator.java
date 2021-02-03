@@ -44,55 +44,67 @@ import com.rapiddweller.common.StringUtil;
  * @see "http://www.socialsecurity.gov/employer/ssnvhighgroup.htm"
  * @since 0.5.6
  */
-
 public class SSNGenerator extends CompositeGenerator<String>
-        implements NonNullGenerator<String> {
+    implements NonNullGenerator<String> {
 
-    private final RandomIntegerGenerator areaNumberGenerator;
-    private final RandomIntegerGenerator groupNumberGenerator;
-    private final RandomIntegerGenerator serialNumberGenerator;
+  private final RandomIntegerGenerator areaNumberGenerator;
+  private final RandomIntegerGenerator groupNumberGenerator;
+  private final RandomIntegerGenerator serialNumberGenerator;
 
-    public SSNGenerator() {
-        this(772);
-    }
+  /**
+   * Instantiates a new Ssn generator.
+   */
+  public SSNGenerator() {
+    this(772);
+  }
 
-    public SSNGenerator(int maxAreaCode) {
-        super(String.class);
-        areaNumberGenerator =
-                registerComponent(new RandomIntegerGenerator(1, maxAreaCode));
-        groupNumberGenerator =
-                registerComponent(new RandomIntegerGenerator(1, 99));
-        serialNumberGenerator =
-                registerComponent(new RandomIntegerGenerator(1, 9999));
-    }
+  /**
+   * Instantiates a new Ssn generator.
+   *
+   * @param maxAreaCode the max area code
+   */
+  public SSNGenerator(int maxAreaCode) {
+    super(String.class);
+    areaNumberGenerator =
+        registerComponent(new RandomIntegerGenerator(1, maxAreaCode));
+    groupNumberGenerator =
+        registerComponent(new RandomIntegerGenerator(1, 99));
+    serialNumberGenerator =
+        registerComponent(new RandomIntegerGenerator(1, 9999));
+  }
 
-    @Override
-    public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
-        return wrapper.wrap(generate());
-    }
+  @Override
+  public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
+    return wrapper.wrap(generate());
+  }
 
-    @Override
-    public String generate() {
-        Integer area;
-        do {
-            area = areaNumberGenerator.generate();
-        } while (area == 666 || (area >= 734 && area <= 749));
-        return StringUtil.padLeft(String.valueOf(area), 3, '0') + '-' +
-                StringUtil.padLeft(
-                        String.valueOf(groupNumberGenerator.generate()), 2,
-                        '0') + '-' +
-                StringUtil.padLeft(
-                        String.valueOf(serialNumberGenerator.generate()), 4,
-                        '0');
-    }
+  @Override
+  public String generate() {
+    Integer area;
+    do {
+      area = areaNumberGenerator.generate();
+    } while (area == 666 || (area >= 734 && area <= 749));
+    return StringUtil.padLeft(String.valueOf(area), 3, '0') + '-' +
+        StringUtil.padLeft(
+            String.valueOf(groupNumberGenerator.generate()), 2,
+            '0') + '-' +
+        StringUtil.padLeft(
+            String.valueOf(serialNumberGenerator.generate()), 4,
+            '0');
+  }
 
-    public void setMaxAreaCode(int maxAreaCode) {
-        areaNumberGenerator.setMax(maxAreaCode);
-    }
+  /**
+   * Sets max area code.
+   *
+   * @param maxAreaCode the max area code
+   */
+  public void setMaxAreaCode(int maxAreaCode) {
+    areaNumberGenerator.setMax(maxAreaCode);
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 
 }

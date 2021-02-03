@@ -36,48 +36,84 @@ import com.rapiddweller.script.Expression;
 /**
  * Abstract implementation of the Statement interface.<br/><br/>
  * Created: 27.10.2009 20:16:20
- * @since 0.5.0
+ *
  * @author Volker Bergmann
+ * @since 0.5.0
  */
 public abstract class AbstractStatement implements Statement {
 
-    private final Expression<ErrorHandler> errorHandler;
+  private final Expression<ErrorHandler> errorHandler;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    protected AbstractStatement() {
-        this(null);
-    }
+  /**
+   * Instantiates a new Abstract statement.
+   */
+  protected AbstractStatement() {
+    this(null);
+  }
 
-    protected AbstractStatement(Expression<ErrorHandler> errorHandler) {
-        this.errorHandler = errorHandler;
-    }
-    
-    // Task interface --------------------------------------------------------------------------------------------------
+  /**
+   * Instantiates a new Abstract statement.
+   *
+   * @param errorHandler the error handler
+   */
+  protected AbstractStatement(Expression<ErrorHandler> errorHandler) {
+    this.errorHandler = errorHandler;
+  }
 
-    public ErrorHandler getErrorHandler(Context context) {
-    	if (errorHandler == null)
-    		return new ErrorHandler(getClass().getName(), Level.fatal);
-		return errorHandler.evaluate(context);
-	}
-    
-    // helpers ---------------------------------------------------------------------------------------------------------
-    
-    protected void handleError(String message, Context context) {
-    	getErrorHandler(context).handleError(message);
-    }
-    
-    protected void handleError(String message, Context context, Throwable t) {
-    	getErrorHandler(context).handleError(message, t);
-    }
-    
-    protected static <T> Expression<T> cache(Expression<T> expression) {
-		return (expression != null ? new CachedExpression<>(expression) : null);
-	}
+  // Task interface --------------------------------------------------------------------------------------------------
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
+  /**
+   * Gets error handler.
+   *
+   * @param context the context
+   * @return the error handler
+   */
+  public ErrorHandler getErrorHandler(Context context) {
+    if (errorHandler == null) {
+      return new ErrorHandler(getClass().getName(), Level.fatal);
     }
+    return errorHandler.evaluate(context);
+  }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  /**
+   * Handle error.
+   *
+   * @param message the message
+   * @param context the context
+   */
+  protected void handleError(String message, Context context) {
+    getErrorHandler(context).handleError(message);
+  }
+
+  /**
+   * Handle error.
+   *
+   * @param message the message
+   * @param context the context
+   * @param t       the t
+   */
+  protected void handleError(String message, Context context, Throwable t) {
+    getErrorHandler(context).handleError(message, t);
+  }
+
+  /**
+   * Cache expression.
+   *
+   * @param <T>        the type parameter
+   * @param expression the expression
+   * @return the expression
+   */
+  protected static <T> Expression<T> cache(Expression<T> expression) {
+    return (expression != null ? new CachedExpression<>(expression) : null);
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 
 }

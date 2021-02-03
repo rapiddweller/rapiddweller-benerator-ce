@@ -27,8 +27,6 @@
 
 package com.rapiddweller.benerator.factory;
 
-import java.util.Locale;
-
 import com.rapiddweller.benerator.util.UnsafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.model.data.DataModel;
@@ -36,27 +34,42 @@ import com.rapiddweller.model.data.DefaultDescriptorProvider;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.Entity;
 
+import java.util.Locale;
+
+/**
+ * The type My generator.
+ */
 public class MyGenerator extends UnsafeGenerator<Entity> {
-	
-	private final DescriptorProvider descriptorProvider = new DefaultDescriptorProvider(getClass().getName(), new DataModel());
-	private Locale locale;
-	
-	public Locale getLocale() {
-		return locale;
-	}
 
-	public void setLocale(Locale locale) {
-		this.locale = locale;
-	}
+  private final DescriptorProvider descriptorProvider = new DefaultDescriptorProvider(getClass().getName(), new DataModel());
+  private Locale locale;
 
-	@Override
-	public ProductWrapper<Entity> generate(ProductWrapper<Entity> wrapper) {
-		return wrapper.wrap(new Entity("MyEntity", descriptorProvider, "locale", locale));
-	}
+  /**
+   * Gets locale.
+   *
+   * @return the locale
+   */
+  public Locale getLocale() {
+    return locale;
+  }
 
-    @Override
-	public Class<Entity> getGeneratedType() {
-        return Entity.class;
-    }
+  /**
+   * Sets locale.
+   *
+   * @param locale the locale
+   */
+  public void setLocale(Locale locale) {
+    this.locale = locale;
+  }
+
+  @Override
+  public ProductWrapper<Entity> generate(ProductWrapper<Entity> wrapper) {
+    return wrapper.wrap(new Entity("MyEntity", descriptorProvider, "locale", locale));
+  }
+
+  @Override
+  public Class<Entity> getGeneratedType() {
+    return Entity.class;
+  }
 
 }

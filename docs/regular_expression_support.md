@@ -1,10 +1,12 @@
-# Regular Expression Support 
+# Regular Expression Support
 
-Benerator supports most common regular expression features and given a regular expression, it is able to generate strings that match the regular expression – even in a unique manner if required. Here is a full description of regular expression features recognized for data generation setup:
+Benerator supports most common regular expression features and given a regular expression, it is able to generate strings that match the regular
+expression – even in a unique manner if required. Here is a full description of regular expression features recognized for data generation setup:
 
-## Characters 
+## Characters
 
-Digits (0-9) and US-ASCII letters (A-Z, a-z) are supported as they are. Special characters can be defined by their UNICODE number in octal or hexadecimal form:
+Digits (0-9) and US-ASCII letters (A-Z, a-z) are supported as they are. Special characters can be defined by their UNICODE number in octal or
+hexadecimal form:
 
 ```shell
 \0n The character with octal value 0n (0 `<= n `<= 7)
@@ -36,7 +38,8 @@ and certain control codes have own representations:
 \e The escape character ('\u001B')
 ```
 
-Some characters have a special meaning in regular expressions, so if you want to use them as a plain character (and not in their regex-meaning), you need to escape them with a backslash:
+Some characters have a special meaning in regular expressions, so if you want to use them as a plain character (and not in their regex-meaning), you
+need to escape them with a backslash:
 
 ```bash
 .Dot
@@ -64,9 +67,7 @@ Some characters have a special meaning in regular expressions, so if you want to
 \\ Backslash character
 ```
 
-
-
-## Character Classes 
+## Character Classes
 
 A 'character class' defines a set of characters from which one can be chosen and is marked by surrounding brackets: []
 
@@ -116,9 +117,7 @@ _X_{_n_,}_X_, at least _n_ times
 _X_{_n_,_m_}_X_, at least _n_ but not more than _m_ times
 ```
 
-
-
-## Operators 
+## Operators
 
 ```shell
 XY_X followed by _Y_
@@ -128,12 +127,15 @@ _X_|_Y_ Either _X_ or _Y_
 (_X_) X, as a group
 ```
 
+## Frequently asked Questions
 
+For generating characters which appear in your language, but not in English (like German umlauts), you can use their unicode representation (e.g.
+\u00FC for 'ü').
 
-## Frequently asked Questions 
+Different implementations of regular expression parsers exist and many have slight differences. So, if you take a regular expression that worked on
+one parser and run it on another one, you may get an error message. Benerator users that do not construct a regular expression by themselves, but
+simply take on 'from the internet' observe the same effect: The most frequent fault is if someone wants to generate a character that has a special
+meaning in a regular expression and does not escape it with a backslash, e.g. \., \\, \-, \|, \[, \], \{, \}, …
 
-For generating characters which appear in your language, but not in English (like German umlauts), you can use their unicode representation (e.g. \u00FC for 'ü').
-
-Different implementations of regular expression parsers exist and many have slight differences. So, if you take a regular expression that worked on one parser and run it on another one, you may get an error message. Benerator users that do not construct a regular expression by themselves, but simply take on 'from the internet' observe the same effect: The most frequent fault is if someone wants to generate a character that has a special meaning in a regular expression and does not escape it with a backslash, e.g. \., \\, \-, \|, \[, \], \{, \}, …
-
-An example: Some regex parsers recognize that the expression [A-]X could resolve to AX or A-. While others (like Benerator's parser) diagnose a malformed character class (a missing character behind the minus) and report an error. You can resolve this by escaping the minus sign: [A\-]X.
+An example: Some regex parsers recognize that the expression [A-]X could resolve to AX or A-. While others (like Benerator's parser) diagnose a
+malformed character class (a missing character behind the minus) and report an error. You can resolve this by escaping the minus sign: [A\-]X.

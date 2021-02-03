@@ -26,131 +26,157 @@
 
 package com.rapiddweller.platform.xls;
 
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.FileUtil;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellType;
+import org.junit.Test;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Date;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import com.rapiddweller.common.ArrayUtil;
-import com.rapiddweller.common.FileUtil;
-
-import org.apache.poi.ss.usermodel.CellType;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link XLSEntityExporter}.<br/>
  * <br/>
  * Created at 14.03.2009 07:27:34
- * @since 0.5.8
+ *
  * @author Volker Bergmann
+ * @since 0.5.8
  */
-
 public class XLSEntityExporterTest extends XLSTest {
-	
-	private static final boolean CLEAN_UP = true;
 
-	protected static final File STANDARD_FILE = new File("export.xls");
-	protected static final File CUSTOM_FILE = new File("target", XLSEntityExporterTest.class.getSimpleName() + ".xls");
+  private static final boolean CLEAN_UP = true;
 
-	// tests -----------------------------------------------------------------------------------------------------------
-	
-	@Test
-	public void testEmptyStandard() {
-		try {
-			XLSEntityExporter exporter = new XLSEntityExporter();
-			exporter.close();
-			assertTrue(STANDARD_FILE.exists());
-		} finally {
-			if (CLEAN_UP)
-				FileUtil.deleteIfExists(STANDARD_FILE);
-		}
-	}
+  /**
+   * The constant STANDARD_FILE.
+   */
+  protected static final File STANDARD_FILE = new File("export.xls");
+  /**
+   * The constant CUSTOM_FILE.
+   */
+  protected static final File CUSTOM_FILE = new File("target", XLSEntityExporterTest.class.getSimpleName() + ".xls");
 
-	@Test
-	public void testSingleEntity() throws Exception {
-		try {
-			XLSEntityExporter exporter = new XLSEntityExporter(CUSTOM_FILE.getAbsolutePath());
-			consumeProducts(exporter);
-			exporter.close();
-			assertFullContent(CUSTOM_FILE);
-		} finally {
-			if (CLEAN_UP)
-				FileUtil.deleteIfExists(CUSTOM_FILE);
-		}
+  // tests -----------------------------------------------------------------------------------------------------------
 
-	}
-
-	@Test
-	public void testTwoEntities() throws Exception {
-		try {
-			XLSEntityExporter exporter = new XLSEntityExporter(CUSTOM_FILE.getAbsolutePath());
-			consumeProducts(exporter);
-			consumePersons(exporter);
-			exporter.close();
-			assertFullContent(CUSTOM_FILE);
-		} finally {
-			if (CLEAN_UP)
-				FileUtil.deleteIfExists(CUSTOM_FILE);
-		}
-	}
-
-	// helpers ---------------------------------------------------------------------------------------------------------
-
-	private static void consumeProducts(XLSEntityExporter exporter) {
-	    exporter.startProductConsumption(PROD1);
-		exporter.finishProductConsumption(PROD1);
-		exporter.startProductConsumption(PROD2);
-		exporter.finishProductConsumption(PROD2);
+  /**
+   * Test empty standard.
+   */
+  @Test
+  public void testEmptyStandard() {
+    try {
+      XLSEntityExporter exporter = new XLSEntityExporter();
+      exporter.close();
+      assertTrue(STANDARD_FILE.exists());
+    } finally {
+      if (CLEAN_UP) {
+        FileUtil.deleteIfExists(STANDARD_FILE);
+      }
     }
-	
-	private static void consumePersons(XLSEntityExporter exporter) {
-	    exporter.startProductConsumption(PERSON1);
-		exporter.finishProductConsumption(PERSON1);
-    }
-	
-	private static void assertFullContent(File file) throws IOException {
-	    assertTrue(file.exists());
-		HSSFSheet sheet = readFirstSheetOf(CUSTOM_FILE);
-		checkCells(sheet.getRow(0), "ean", "price", "date", "avail", "updated", null);
-		checkCells(sheet.getRow(1), EAN1, PRICE1, DATE1, AVAIL1, UPDATED1, null);
-		checkCells(sheet.getRow(2), EAN2, PRICE2, DATE2, AVAIL2, UPDATED2, null);
-		checkCells(sheet.getRow(3));
+  }
+
+  /**
+   * Test single entity.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testSingleEntity() throws Exception {
+    try {
+      XLSEntityExporter exporter = new XLSEntityExporter(CUSTOM_FILE.getAbsolutePath());
+      consumeProducts(exporter);
+      exporter.close();
+      assertFullContent(CUSTOM_FILE);
+    } finally {
+      if (CLEAN_UP) {
+        FileUtil.deleteIfExists(CUSTOM_FILE);
+      }
     }
 
-    private static HSSFSheet readFirstSheetOf(File file) throws IOException {
-	    HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(file));
-	    return wb.getSheetAt(0);
-    }
+  }
 
-    private static void checkCells(HSSFRow row, Object... values) {
-	    if (ArrayUtil.isEmpty(values))
-	    	assertNull(row);
-	    for (int i = 0; i < values.length; i++) {
-			assert row != null;
-			HSSFCell cell = row.getCell(i);
-	    	Object expectedContent = values[i];
-	    	if (expectedContent == null)
-	    		assertNull(cell);
-	    	else if (expectedContent instanceof String) {
-	    		assertEquals(CellType.STRING, cell.getCellType());
-	    		assertEquals(expectedContent, cell.getStringCellValue());
-	    	} else if (expectedContent instanceof Number) {
-	    		assertEquals(CellType.NUMERIC, cell.getCellType());
-	    		assertEquals(((Number) expectedContent).doubleValue(), cell.getNumericCellValue(), 0);
-	    	} else if (expectedContent instanceof Boolean) {
-	    		assertEquals(CellType.BOOLEAN, cell.getCellType());
-	    		assertEquals(expectedContent, cell.getBooleanCellValue());
-	    	} else if (expectedContent instanceof Date) {
-	    		assertEquals(CellType.NUMERIC, cell.getCellType());
-	    		assertEquals(((Date) expectedContent).getTime() / 1000, cell.getDateCellValue().getTime() / 1000); // cut off milliseconds
-	    	} else
-	    		throw new RuntimeException("Type not supported: " + expectedContent.getClass());
-	    }
+  /**
+   * Test two entities.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testTwoEntities() throws Exception {
+    try {
+      XLSEntityExporter exporter = new XLSEntityExporter(CUSTOM_FILE.getAbsolutePath());
+      consumeProducts(exporter);
+      consumePersons(exporter);
+      exporter.close();
+      assertFullContent(CUSTOM_FILE);
+    } finally {
+      if (CLEAN_UP) {
+        FileUtil.deleteIfExists(CUSTOM_FILE);
+      }
     }
+  }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  private static void consumeProducts(XLSEntityExporter exporter) {
+    exporter.startProductConsumption(PROD1);
+    exporter.finishProductConsumption(PROD1);
+    exporter.startProductConsumption(PROD2);
+    exporter.finishProductConsumption(PROD2);
+  }
+
+  private static void consumePersons(XLSEntityExporter exporter) {
+    exporter.startProductConsumption(PERSON1);
+    exporter.finishProductConsumption(PERSON1);
+  }
+
+  private static void assertFullContent(File file) throws IOException {
+    assertTrue(file.exists());
+    HSSFSheet sheet = readFirstSheetOf(CUSTOM_FILE);
+    checkCells(sheet.getRow(0), "ean", "price", "date", "avail", "updated", null);
+    checkCells(sheet.getRow(1), EAN1, PRICE1, DATE1, AVAIL1, UPDATED1, null);
+    checkCells(sheet.getRow(2), EAN2, PRICE2, DATE2, AVAIL2, UPDATED2, null);
+    checkCells(sheet.getRow(3));
+  }
+
+  private static HSSFSheet readFirstSheetOf(File file) throws IOException {
+    HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(file));
+    return wb.getSheetAt(0);
+  }
+
+  private static void checkCells(HSSFRow row, Object... values) {
+    if (ArrayUtil.isEmpty(values)) {
+      assertNull(row);
+    }
+    for (int i = 0; i < values.length; i++) {
+      assert row != null;
+      HSSFCell cell = row.getCell(i);
+      Object expectedContent = values[i];
+      if (expectedContent == null) {
+        assertNull(cell);
+      } else if (expectedContent instanceof String) {
+        assertEquals(CellType.STRING, cell.getCellType());
+        assertEquals(expectedContent, cell.getStringCellValue());
+      } else if (expectedContent instanceof Number) {
+        assertEquals(CellType.NUMERIC, cell.getCellType());
+        assertEquals(((Number) expectedContent).doubleValue(), cell.getNumericCellValue(), 0);
+      } else if (expectedContent instanceof Boolean) {
+        assertEquals(CellType.BOOLEAN, cell.getCellType());
+        assertEquals(expectedContent, cell.getBooleanCellValue());
+      } else if (expectedContent instanceof Date) {
+        assertEquals(CellType.NUMERIC, cell.getCellType());
+        assertEquals(((Date) expectedContent).getTime() / 1000, cell.getDateCellValue().getTime() / 1000); // cut off milliseconds
+      } else {
+        throw new RuntimeException("Type not supported: " + expectedContent.getClass());
+      }
+    }
+  }
 
 }

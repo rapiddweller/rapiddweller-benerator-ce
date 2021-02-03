@@ -26,10 +26,10 @@
 
 package com.rapiddweller.benerator.engine;
 
-import java.io.IOException;
-
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import org.junit.Test;
+
+import java.io.IOException;
 
 /**
  * Integration test for Benerator's Script functionality.<br/><br/>
@@ -41,16 +41,26 @@ import org.junit.Test;
  */
 public class ScriptIntegrationTest extends BeneratorIntegrationTest {
 
-    @Test
-    public void scriptInFile() throws IOException {
-        context.setContextUri("/com/rapiddweller/benerator/engine/script");
-        parseAndExecuteFile("/com/rapiddweller/benerator/engine/script/scriptfile.ben.xml");
-    }
+  /**
+   * Script in file.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void scriptInFile() throws IOException {
+    context.setContextUri("/com/rapiddweller/benerator/engine/script");
+    parseAndExecuteFile("/com/rapiddweller/benerator/engine/script/scriptfile.ben.xml");
+  }
 
-    @Test
-    public void scriptInCode() throws IOException {
-        context.setContextUri("/com/rapiddweller/benerator/engine/script");
-        parseAndExecuteFile("/com/rapiddweller/benerator/engine/script/scriptcode.ben.xml");
-    }
+  /**
+   * Script in code.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void scriptInCode() throws IOException {
+    context.setContextUri("/com/rapiddweller/benerator/engine/script");
+    parseAndExecuteFile("/com/rapiddweller/benerator/engine/script/scriptcode.ben.xml");
+  }
 
 }

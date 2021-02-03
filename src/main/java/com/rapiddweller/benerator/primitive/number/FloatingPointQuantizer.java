@@ -31,29 +31,38 @@ import com.rapiddweller.common.converter.NumberToNumberConverter;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 /**
- * Quantizes floating point numbers ({@link Double} or {@link Float}) 
+ * Quantizes floating point numbers ({@link Double} or {@link Float})
  * to be <code>min</code> plus an integral multiple of <code>granularity</code>.<br/><br/>
  * Created: 15.03.2010 15:35:05
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class FloatingPointQuantizer<E extends Number> extends ThreadSafeConverter<E, E> {
-	
-	private final Double min;
-	private final double granularity;
-	private final NumberToNumberConverter<Double, E> converter;
 
-	public FloatingPointQuantizer(Class<E> numberType, Double min, double granularity) {
-	    super(numberType, numberType);
-	    this.min = (min != null ? min : 0.);
-	    this.granularity = granularity;
-	    this.converter = new NumberToNumberConverter<>(Double.class, numberType);
-    }
+  private final Double min;
+  private final double granularity;
+  private final NumberToNumberConverter<Double, E> converter;
 
-	@Override
-	public E convert(E sourceValue) throws ConversionException {
-		double l = Math.floor((sourceValue.doubleValue() - min) / granularity) * granularity + min;
-	    return converter.convert(l);
-    }
+  /**
+   * Instantiates a new Floating point quantizer.
+   *
+   * @param numberType  the number type
+   * @param min         the min
+   * @param granularity the granularity
+   */
+  public FloatingPointQuantizer(Class<E> numberType, Double min, double granularity) {
+    super(numberType, numberType);
+    this.min = (min != null ? min : 0.);
+    this.granularity = granularity;
+    this.converter = new NumberToNumberConverter<>(Double.class, numberType);
+  }
+
+  @Override
+  public E convert(E sourceValue) throws ConversionException {
+    double l = Math.floor((sourceValue.doubleValue() - min) / granularity) * granularity + min;
+    return converter.convert(l);
+  }
 
 }

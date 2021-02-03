@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.distribution;
 
-import java.util.List;
-import java.util.Random;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
@@ -38,81 +35,111 @@ import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.converter.ConverterManager;
 
+import java.util.List;
+import java.util.Random;
+
 /**
- * {@link Distribution} implementation which uses the inverse of a probability function integral 
- * for efficiently generating numbers with a given probability distribution. 
- * See <a href="http://www.stat.wisc.edu/~larget/math496/random2.html">Random 
+ * {@link Distribution} implementation which uses the inverse of a probability function integral
+ * for efficiently generating numbers with a given probability distribution.
+ * See <a href="http://www.stat.wisc.edu/~larget/math496/random2.html">Random
  * Number Generation from Non-uniform Distributions</a>.<br/><br/>
  * Created: 12.03.2010 13:31:16
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public abstract class CumulativeDistributionFunction implements Distribution {
-	
-	public abstract double cumulativeProbability(double value);
-	
-	public abstract double inverse(double probability);
 
-	@Override
-	public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-		if (unique)
-			throw new IllegalArgumentException(this + " cannot generate unique values");
-	    List<T> allProducts = GeneratorUtil.allProducts(source);
-	    if (allProducts.size() == 1)
-	    	return new ConstantGenerator<>(allProducts.get(0));
-	    return new SampleGenerator<>(source.getGeneratedType(), this, unique, allProducts);
-    }
+  /**
+   * Cumulative probability double.
+   *
+   * @param value the value
+   * @return the double
+   */
+  public abstract double cumulativeProbability(double value);
 
-	@Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(
-			Class<T> numberType, T min, T max, T granularity, boolean unique) {
-		if (unique)
-			throw new IllegalArgumentException(this + " cannot generate unique values");
-	    return new IPINumberGenerator<>(this, numberType, min, max, granularity);
+  /**
+   * Inverse double.
+   *
+   * @param probability the probability
+   * @return the double
+   */
+  public abstract double inverse(double probability);
+
+  @Override
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    if (unique) {
+      throw new IllegalArgumentException(this + " cannot generate unique values");
     }
-	
-	@Override
-	public String toString() {
-	    return getClass().getSimpleName();
-	}
-	
+    List<T> allProducts = GeneratorUtil.allProducts(source);
+    if (allProducts.size() == 1) {
+      return new ConstantGenerator<>(allProducts.get(0));
+    }
+    return new SampleGenerator<>(source.getGeneratedType(), this, unique, allProducts);
+  }
+
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(
+      Class<T> numberType, T min, T max, T granularity, boolean unique) {
+    if (unique) {
+      throw new IllegalArgumentException(this + " cannot generate unique values");
+    }
+    return new IPINumberGenerator<>(this, numberType, min, max, granularity);
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
+
+  /**
+   * Generates numbers according to an {@link CumulativeDistributionFunction}.<br/><br/>
+   * Created: 12.03.2010 14:37:33
+   *
+   * @param <E> the type parameter
+   * @author Volker Bergmann
+   * @since 0.6.0
+   */
+  public static class IPINumberGenerator<E extends Number> extends AbstractNonNullNumberGenerator<E> {
+
+    private final CumulativeDistributionFunction fcn;
+    private final Random random = new Random();
+    private final Converter<Double, E> converter;
+    private final double minProb;
+    private final double probScale;
+    private final double minD;
+    private double maxD;
+    private final double granularityD;
+
     /**
-     * Generates numbers according to an {@link CumulativeDistributionFunction}.<br/><br/>
-     * Created: 12.03.2010 14:37:33
-     * @since 0.6.0
-     * @author Volker Bergmann
+     * Instantiates a new Ipi number generator.
+     *
+     * @param fcn         the fcn
+     * @param targetType  the target type
+     * @param min         the min
+     * @param max         the max
+     * @param granularity the granularity
      */
-    public static class IPINumberGenerator<E extends Number> extends AbstractNonNullNumberGenerator<E> {
-    	
-    	private final CumulativeDistributionFunction fcn;
-    	private final Random random = new Random();
-		private final Converter<Double, E> converter;
-		private final double minProb;
-		private final double probScale;
-		private final double minD;
-		private double maxD;
-		private final double granularityD;
-    	
-		public IPINumberGenerator(CumulativeDistributionFunction fcn, Class<E> targetType, E min, E max, E granularity) {
-			super(targetType, min, max, granularity);
-			this.fcn = fcn;
-			this.minD = (min != null ? min.doubleValue() : (max != null ? maxD - 9 : 0));
-			this.maxD = (max != null ? max.doubleValue() : (min != null ? minD + 9 : 0));
-			this.granularityD = granularity.doubleValue();
-			this.minProb = fcn.cumulativeProbability(minD);
-			this.probScale = fcn.cumulativeProbability(maxD + granularityD) - this.minProb;
-			this.converter = ConverterManager.getInstance().createConverter(Double.class, targetType);
-        }
-
-		@Override
-		public E generate() {
-			double tmp;
-			double prob = minProb + random.nextDouble() * probScale;
-			tmp = fcn.inverse(prob);
-			tmp = Math.floor((tmp - minD) / granularityD) * granularityD + minD;
-			return converter.convert(tmp);
-        }
-
+    public IPINumberGenerator(CumulativeDistributionFunction fcn, Class<E> targetType, E min, E max, E granularity) {
+      super(targetType, min, max, granularity);
+      this.fcn = fcn;
+      this.minD = (min != null ? min.doubleValue() : (max != null ? maxD - 9 : 0));
+      this.maxD = (max != null ? max.doubleValue() : (min != null ? minD + 9 : 0));
+      this.granularityD = granularity.doubleValue();
+      this.minProb = fcn.cumulativeProbability(minD);
+      this.probScale = fcn.cumulativeProbability(maxD + granularityD) - this.minProb;
+      this.converter = ConverterManager.getInstance().createConverter(Double.class, targetType);
     }
+
+    @Override
+    public E generate() {
+      double tmp;
+      double prob = minProb + random.nextDouble() * probScale;
+      tmp = fcn.inverse(prob);
+      tmp = Math.floor((tmp - minD) / granularityD) * granularityD + minD;
+      return converter.convert(tmp);
+    }
+
+  }
 
 }

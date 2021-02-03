@@ -43,34 +43,39 @@ import com.rapiddweller.common.CollectionUtil;
  */
 public class HelloWorldDemo {
 
-    public static void main(String[] args) {
-        // first create a context
-        BeneratorContext context = new DefaultBeneratorContext();
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   */
+  public static void main(String[] args) {
+    // first create a context
+    BeneratorContext context = new DefaultBeneratorContext();
 
-        // create and initialize the salutation generator
-        GeneratorFactory generatorFactory = context.getGeneratorFactory();
-        List<String> salutations =
-                CollectionUtil.toList("Hi", "Hello", "Howdy");
-        Generator<String> salutationGenerator = generatorFactory
-                .createSampleGenerator(salutations, String.class, false);
-        salutationGenerator.init(context);
+    // create and initialize the salutation generator
+    GeneratorFactory generatorFactory = context.getGeneratorFactory();
+    List<String> salutations =
+        CollectionUtil.toList("Hi", "Hello", "Howdy");
+    Generator<String> salutationGenerator = generatorFactory
+        .createSampleGenerator(salutations, String.class, false);
+    salutationGenerator.init(context);
 
-        // create and initialize the name generator
-        List<String> names = CollectionUtil.toList("Alice", "Bob", "Charly");
-        Generator<String> nameGenerator = generatorFactory
-                .createSampleGenerator(names, String.class, false);
-        init(nameGenerator, context);
+    // create and initialize the name generator
+    List<String> names = CollectionUtil.toList("Alice", "Bob", "Charly");
+    Generator<String> nameGenerator = generatorFactory
+        .createSampleGenerator(names, String.class, false);
+    init(nameGenerator, context);
 
-        // use the generators
-        for (int i = 0; i < 5; i++) {
-            String salutation = generateNonNull(salutationGenerator);
-            String name = generateNonNull(nameGenerator);
-            System.out.println(salutation + " " + name);
-        }
-
-        // in the end, close the generators
-        close(salutationGenerator);
-        close(nameGenerator);
+    // use the generators
+    for (int i = 0; i < 5; i++) {
+      String salutation = generateNonNull(salutationGenerator);
+      String name = generateNonNull(nameGenerator);
+      System.out.println(salutation + " " + name);
     }
+
+    // in the end, close the generators
+    close(salutationGenerator);
+    close(nameGenerator);
+  }
 
 }

@@ -33,18 +33,24 @@ import com.rapiddweller.model.data.Entity;
 /**
  * {@link Consumer} implementation that updates database rows.<br/><br/>
  * Created: 02.08.2010 20:25:22
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class StorageSystemUpdater extends StorageSystemConsumer {
 
-	public StorageSystemUpdater(StorageSystem system) {
-	    super(system);
-    }
+  /**
+   * Instantiates a new Storage system updater.
+   *
+   * @param system the system
+   */
+  public StorageSystemUpdater(StorageSystem system) {
+    super(system);
+  }
 
-    @Override
-	public void startProductConsumption(Object object) {
-		system.update((Entity) object);
-    }
+  @Override
+  public void startProductConsumption(Object object) {
+    system.update((Entity) object);
+  }
 
 }

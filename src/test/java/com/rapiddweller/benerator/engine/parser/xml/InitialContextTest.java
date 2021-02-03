@@ -26,57 +26,62 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-
-import com.rapiddweller.benerator.factory.ConsumerMock;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
+import com.rapiddweller.benerator.factory.ConsumerMock;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SysUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Tests access to Benerator's InitialContext in descriptor file.<br/><br/>
  * Created: 21.10.2009 19:25:37
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class InitialContextTest extends GeneratorTest {
 
-	private static final String DESCRIPTOR_XML = "string://<setup>" +
-		                    		"<bean id='ctx' class='com.rapiddweller.platform.jndi.InitialContext'>" +
-		                    		"  <property name='factory' value='com.rapiddweller.platform.jndi.InitialContextFactoryMock' />" +
-		                    		"  <property name='url' value='lru' />" +
-		                    		"  <property name='user' value='resu' />" +
-		                    		"  <property name='password' value='drowssap' />" +
-		                    		"</bean>" +
-		                    		"<generate name='Person' count='1' consumer=\"ctx.lookup('cons')\">" +
-		                    		"  <attribute name='name' constant='Alice'/>" +
-		                    		"</generate>" +
-		                    		"</setup>";
+  private static final String DESCRIPTOR_XML = "string://<setup>" +
+      "<bean id='ctx' class='com.rapiddweller.platform.jndi.InitialContext'>" +
+      "  <property name='factory' value='com.rapiddweller.platform.jndi.InitialContextFactoryMock' />" +
+      "  <property name='url' value='lru' />" +
+      "  <property name='user' value='resu' />" +
+      "  <property name='password' value='drowssap' />" +
+      "</bean>" +
+      "<generate name='Person' count='1' consumer=\"ctx.lookup('cons')\">" +
+      "  <attribute name='name' constant='Alice'/>" +
+      "</generate>" +
+      "</setup>";
 
-	@Test
-	public void test() {
-		SysUtil.runWithSystemProperty("jndi.properties", "com/rapiddweller/benerator/engine/jndi.properties",
-                () -> {
-                    ConsumerMock.lastInstance = null;
-DescriptorRunner runner = new DescriptorRunner(DESCRIPTOR_XML, context);
-                    try {
-BeneratorContext context = runner.getContext();
-context.setValidate(false);
-runner.run();
-assertNotNull("Consumer was not invoked", ConsumerMock.lastInstance.lastProduct);
-assertEquals("Alice", ((Entity) ConsumerMock.lastInstance.lastProduct).get("name"));
-} catch (IOException e) {
-throw new RuntimeException(e);
-} finally {
-IOUtil.close(runner);
-}
-});
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    SysUtil.runWithSystemProperty("jndi.properties", "com/rapiddweller/benerator/engine/jndi.properties",
+        () -> {
+          ConsumerMock.lastInstance = null;
+          DescriptorRunner runner = new DescriptorRunner(DESCRIPTOR_XML, context);
+          try {
+            BeneratorContext context = runner.getContext();
+            context.setValidate(false);
+            runner.run();
+            assertNotNull("Consumer was not invoked", ConsumerMock.lastInstance.lastProduct);
+            assertEquals("Alice", ((Entity) ConsumerMock.lastInstance.lastProduct).get("name"));
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          } finally {
+            IOUtil.close(runner);
+          }
+        });
+  }
+
 }

@@ -33,60 +33,107 @@ import java.util.Collection;
 /**
  * Generates values from a list of samples.<br/><br/>
  * Created: 29.04.2008 07:30:08
- * @since 0.5.2
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.5.2
  */
 public abstract class AbstractSampleGenerator<E> extends ThreadSafeGenerator<E> {
-	
-	private final Class<E> generatedType;
 
-    public AbstractSampleGenerator(Class<E> generatedType) {
-		this.generatedType = generatedType;
-	}
+  private final Class<E> generatedType;
 
-    @Override
-	public Class<E> getGeneratedType() {
-        return generatedType;
+  /**
+   * Instantiates a new Abstract sample generator.
+   *
+   * @param generatedType the generated type
+   */
+  public AbstractSampleGenerator(Class<E> generatedType) {
+    this.generatedType = generatedType;
+  }
+
+  @Override
+  public Class<E> getGeneratedType() {
+    return generatedType;
+  }
+
+  /**
+   * Adds values to the sample list
+   *
+   * @param <T>    the type parameter
+   * @param values the values
+   */
+  public <T extends E> void setValues(Iterable<T> values) {
+    clear();
+    if (values != null) {
+      for (T value : values) {
+        addValue(value);
+      }
     }
-    
-    /** Adds values to the sample list */
-    public <T extends E> void setValues(Iterable<T> values) {
-        clear();
-        if (values != null)
-            for (T value : values)
-                addValue(value);
+  }
+
+  /**
+   * Sets the sample list to the specified values
+   *
+   * @param <T>    the type parameter
+   * @param values the values
+   */
+  @SafeVarargs
+  public final <T extends E> void setValues(T... values) {
+    clear();
+    if (values != null) {
+      for (E value : values) {
+        addValue(value);
+      }
     }
+  }
 
-    /** Sets the sample list to the specified values */
-    @SafeVarargs
-    public final <T extends E> void setValues(T... values) {
-        clear();
-        if (values != null)
-            for (E value : values)
-                addValue(value);
+  /**
+   * Adds values to the sample list
+   *
+   * @param <T>    the type parameter
+   * @param values the values
+   */
+  @SafeVarargs
+  public final <T extends E> void addValues(T... values) {
+    if (values != null) {
+      for (T value : values) {
+        addValue(value);
+      }
     }
+  }
 
-	/** Adds values to the sample list */
-    @SafeVarargs
-    public final <T extends E> void addValues(T... values) {
-        if (values != null)
-            for (T value : values)
-                addValue(value);
+  /**
+   * Adds values to the sample list
+   *
+   * @param <T>    the type parameter
+   * @param values the values
+   */
+  public <T extends E> void addValues(Collection<T> values) {
+    if (values != null) {
+      for (T value : values) {
+        addValue(value);
+      }
     }
+  }
 
-    /** Adds values to the sample list */
-    public <T extends E> void addValues(Collection<T> values) {
-        if (values != null)
-            for (T value : values)
-                addValue(value);
-    }
+  /**
+   * Adds a value to the sample list
+   *
+   * @param <T>   the type parameter
+   * @param value the value
+   */
+  public abstract <T extends E> void addValue(T value);
 
-    /** Adds a value to the sample list */
-    public abstract <T extends E> void addValue(T value);
+  /**
+   * Removes all values from the sample list
+   */
+  public abstract void clear();
 
-    /** Removes all values from the sample list */
-    public abstract void clear();
-    
-    public abstract long getVariety();
-    
+  /**
+   * Gets variety.
+   *
+   * @return the variety
+   */
+  public abstract long getVariety();
+
 }

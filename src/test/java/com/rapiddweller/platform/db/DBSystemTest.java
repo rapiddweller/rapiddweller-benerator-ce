@@ -26,11 +26,6 @@
 
 package com.rapiddweller.platform.db;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
-
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
@@ -40,200 +35,246 @@ import com.rapiddweller.format.DataSource;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.Entity;
-
 import org.junit.Before;
 import org.junit.Test;
-import static com.rapiddweller.jdbacl.dialect.HSQLUtil.*;
-import static org.junit.Assert.*;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
+import static com.rapiddweller.jdbacl.dialect.HSQLUtil.DEFAULT_PASSWORD;
+import static com.rapiddweller.jdbacl.dialect.HSQLUtil.DEFAULT_USER;
+import static com.rapiddweller.jdbacl.dialect.HSQLUtil.DRIVER;
+import static com.rapiddweller.jdbacl.dialect.HSQLUtil.IN_MEMORY_URL_PREFIX;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Tests {@link DefaultDBSystem}.<br/>
  * <br/>
  * Created at 26.12.2008 03:40:44
- * @since 0.5.6
+ *
  * @author Volker Bergmann
+ * @since 0.5.6
  */
-
 public class DBSystemTest {
 
-	@Test
-	public void testReadWrite() {
-		db.setReadOnly(false);
-		
-		// test insert w/o readOnly
-		db.store(new Entity("Test", db, "ID", 1, "NAME", "Alice"));
-		
-		// test update w/o readOnly
-		db.update(new Entity("Test", db, "ID", 1, "NAME", "Bob"));
-	}
-	
-	@Test
-	public void testReadOnly() {
-		db.setReadOnly(true);
+  /**
+   * Test read write.
+   */
+  @Test
+  public void testReadWrite() {
+    db.setReadOnly(false);
 
-		// test select w/ readOnly
-		DataSource<?> result = db.query("select id from Test", true, null);
-		result.iterator().close();
+    // test insert w/o readOnly
+    db.store(new Entity("Test", db, "ID", 1, "NAME", "Alice"));
 
-		// test insert w/ readOnly
-		try {
-			db.store(new Entity("Test", db, "ID", 2, "NAME", "Charly"));
-			fail("Exception expected in store()");
-		} catch (Exception e) {
-			// That's the required behavior!
-		}
+    // test update w/o readOnly
+    db.update(new Entity("Test", db, "ID", 1, "NAME", "Bob"));
+  }
 
-		// test update w/ readOnly
-		try {
-			db.update(new Entity("Test", db, "ID", 2, "NAME", "Doris"));
-			fail("Exception expected in update()");
-		} catch (Exception e) {
-			// That's the required behavior!
-		}
+  /**
+   * Test read only.
+   */
+  @Test
+  public void testReadOnly() {
+    db.setReadOnly(true);
 
-		Connection connection = null;
-		try {
-			// test drop w/ readOnly in createStatement
-			Statement statement = null;
-			try {
-				connection = db.createConnection();
-				statement = connection.createStatement();
-				statement.execute("drop table Test");
-				fail("Exception expected in execute()");
-			} catch (Exception e) {
-				// That's the required behavior!
-			} finally {
-				DBUtil.close(statement);
-			}
-			
-			// test drop w/ readOnly in prepareStatement
-			try {
-				connection = db.createConnection();
-				connection.prepareStatement("drop table Test");
-				fail("Exception expected in prepareStatement()");
-			} catch (Exception e) {
-				// That's the required behavior!
-			}
-		} finally {
-			DBUtil.close(connection);
-		}
-	}
+    // test select w/ readOnly
+    DataSource<?> result = db.query("select id from Test", true, null);
+    result.iterator().close();
 
-	@Test
-	public void testSequence() throws Exception {
-		String seq = getClass().getSimpleName();
-		try { 
-			db.createSequence(seq);
-			assertEquals(1, db.nextSequenceValue(seq));
-			assertEquals(2, db.nextSequenceValue(seq));
-			db.setSequenceValue(seq, 5);
-			assertEquals(5, db.nextSequenceValue(seq));
-		} finally {
-			db.dropSequence(seq);
-		}
-	}
-	
-	@Test
-	public void testQueryEntities() {
-		db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
-		db.execute("insert into \"TEST\" (ID, NAME) values (2, 'Bob')");
-		DefaultBeneratorContext context = new DefaultBeneratorContext();
-        DataContainer<Entity> container = new DataContainer<>();
-        
-		// test without selector
-		DataIterator<Entity> iterator = db.queryEntities("TEST", "ID = 1", context).iterator();
-		assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), iterator.next(container).getData());
-		assertNull(iterator.next(container));
-        iterator.close();
-        
-		// test with selector
-		DataIterator<Entity> iterator2 = db.queryEntities("TEST", null, context).iterator();
-        assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), iterator2.next(container).getData());
-        assertEquals(new Entity("TEST", db, "ID", 2, "NAME", "Bob"), iterator2.next(container).getData());
-		assertNull(iterator2.next(container));
-        iterator2.close();
-	}
-	
-	@Test
-	public void testInserter() {
-        Consumer inserter = db.inserter();
-        Entity entity = new Entity("TEST", db, "ID", 1, "NAME", "Alice");
-        inserter.startConsuming(new ProductWrapper<Entity>().wrap(entity));
-        inserter.finishConsuming(new ProductWrapper<Entity>().wrap(entity));
-        DataSource<Entity> entities = db.queryEntities("TEST", "ID = 1", new DefaultBeneratorContext());
-        DataIterator<Entity> iterator = entities.iterator();
-        assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), 
-        		iterator.next(new DataContainer<>()).getData());
-	}
-	
-	@Test
-	public void testInserter_table() {
-        Consumer inserter = db.inserter("TEST");
-        Entity entity = new Entity("Xyz", db, "ID", 1, "NAME", "Alice");
-        inserter.startConsuming(new ProductWrapper<Entity>().wrap(entity));
-        inserter.finishConsuming(new ProductWrapper<Entity>().wrap(entity));
-        DataSource<Entity> entities = db.queryEntities("TEST", "ID = 1", new DefaultBeneratorContext());
-        DataIterator<Entity> iterator = entities.iterator();
-        assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), 
-        		iterator.next(new DataContainer<>()).getData());
-	}
-	
-	@Test
-	public void testUpdater() throws Exception {
-		db.execute("insert into TEST (ID, NAME) values (1, 'Alice')");
-		db.execute("insert into TEST (ID, NAME) values (2, 'Bob')");
-		Consumer updater = db.updater();
-		// update (1, Alice) to (1, Charly)
-        Entity entity1 = new Entity("TEST", db, "ID", 1, "NAME", "Charly");
-        ProductWrapper<Entity> wrapper = new ProductWrapper<>();
-		updater.startConsuming(wrapper.wrap(entity1));
-        updater.finishConsuming(wrapper.wrap(entity1));
-		// update (2, Bob) to (2, Otto)
-        Entity entity2 = new Entity("TEST", db, "ID", 2, "NAME", "Otto");
-		updater.startConsuming(wrapper.wrap(entity2));
-        updater.finishConsuming(wrapper.wrap(entity2));
-        // check database content
-		List<Object[]> storedData = DBUtil.query("select ID, NAME from TEST", db.getConnection());
-		assertEquals(2, storedData.size());
-		assertArrayEquals(new Object[] { 1, "Charly" }, storedData.get(0));
-		assertArrayEquals(new Object[] { 2, "Otto"   }, storedData.get(1));
-	}
-	
-	@Test
-	public void testTableExists() {
-        assertTrue(db.tableExists("TEST"));
-        assertFalse(db.tableExists("TEST_______"));
-        assertFalse(db.tableExists(""));
-        assertFalse(db.tableExists(null));
-	}
-	
-	// helpers ---------------------------------------------------------------------------------------------------------
-	
-	private DefaultDBSystem db;
-	
-	@Before
-	public void setUp() throws Exception {
-		Connection connection = null;
-		try {
-			db = new DefaultDBSystem("db", IN_MEMORY_URL_PREFIX + "benerator", DRIVER, DEFAULT_USER, DEFAULT_PASSWORD, new DataModel());
-			db.setSchema("PUBLIC");
-			db.getDialect();
-			connection = db.createConnection();
-			try {
-				DBUtil.executeUpdate("drop table Test", connection);
-			} catch (SQLException e) {
-				// ignore
-			}
-			DBUtil.executeUpdate("create table Test ( "
-					+ "ID   int,"
-					+ "NAME varchar(30) not null,"
-					+ "constraint T1_PK primary key (ID)"
-					+ ");", 
-					connection);
-			db.invalidate();
-		} finally {
-			DBUtil.close(connection);
-		}
-	}
-	
+    // test insert w/ readOnly
+    try {
+      db.store(new Entity("Test", db, "ID", 2, "NAME", "Charly"));
+      fail("Exception expected in store()");
+    } catch (Exception e) {
+      // That's the required behavior!
+    }
+
+    // test update w/ readOnly
+    try {
+      db.update(new Entity("Test", db, "ID", 2, "NAME", "Doris"));
+      fail("Exception expected in update()");
+    } catch (Exception e) {
+      // That's the required behavior!
+    }
+
+    Connection connection = null;
+    try {
+      // test drop w/ readOnly in createStatement
+      Statement statement = null;
+      try {
+        connection = db.createConnection();
+        statement = connection.createStatement();
+        statement.execute("drop table Test");
+        fail("Exception expected in execute()");
+      } catch (Exception e) {
+        // That's the required behavior!
+      } finally {
+        DBUtil.close(statement);
+      }
+
+      // test drop w/ readOnly in prepareStatement
+      try {
+        connection = db.createConnection();
+        connection.prepareStatement("drop table Test");
+        fail("Exception expected in prepareStatement()");
+      } catch (Exception e) {
+        // That's the required behavior!
+      }
+    } finally {
+      DBUtil.close(connection);
+    }
+  }
+
+  /**
+   * Test sequence.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testSequence() throws Exception {
+    String seq = getClass().getSimpleName();
+    try {
+      db.createSequence(seq);
+      assertEquals(1, db.nextSequenceValue(seq));
+      assertEquals(2, db.nextSequenceValue(seq));
+      db.setSequenceValue(seq, 5);
+      assertEquals(5, db.nextSequenceValue(seq));
+    } finally {
+      db.dropSequence(seq);
+    }
+  }
+
+  /**
+   * Test query entities.
+   */
+  @Test
+  public void testQueryEntities() {
+    db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
+    db.execute("insert into \"TEST\" (ID, NAME) values (2, 'Bob')");
+    DefaultBeneratorContext context = new DefaultBeneratorContext();
+    DataContainer<Entity> container = new DataContainer<>();
+
+    // test without selector
+    DataIterator<Entity> iterator = db.queryEntities("TEST", "ID = 1", context).iterator();
+    assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), iterator.next(container).getData());
+    assertNull(iterator.next(container));
+    iterator.close();
+
+    // test with selector
+    DataIterator<Entity> iterator2 = db.queryEntities("TEST", null, context).iterator();
+    assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"), iterator2.next(container).getData());
+    assertEquals(new Entity("TEST", db, "ID", 2, "NAME", "Bob"), iterator2.next(container).getData());
+    assertNull(iterator2.next(container));
+    iterator2.close();
+  }
+
+  /**
+   * Test inserter.
+   */
+  @Test
+  public void testInserter() {
+    Consumer inserter = db.inserter();
+    Entity entity = new Entity("TEST", db, "ID", 1, "NAME", "Alice");
+    inserter.startConsuming(new ProductWrapper<Entity>().wrap(entity));
+    inserter.finishConsuming(new ProductWrapper<Entity>().wrap(entity));
+    DataSource<Entity> entities = db.queryEntities("TEST", "ID = 1", new DefaultBeneratorContext());
+    DataIterator<Entity> iterator = entities.iterator();
+    assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"),
+        iterator.next(new DataContainer<>()).getData());
+  }
+
+  /**
+   * Test inserter table.
+   */
+  @Test
+  public void testInserter_table() {
+    Consumer inserter = db.inserter("TEST");
+    Entity entity = new Entity("Xyz", db, "ID", 1, "NAME", "Alice");
+    inserter.startConsuming(new ProductWrapper<Entity>().wrap(entity));
+    inserter.finishConsuming(new ProductWrapper<Entity>().wrap(entity));
+    DataSource<Entity> entities = db.queryEntities("TEST", "ID = 1", new DefaultBeneratorContext());
+    DataIterator<Entity> iterator = entities.iterator();
+    assertEquals(new Entity("TEST", db, "ID", 1, "NAME", "Alice"),
+        iterator.next(new DataContainer<>()).getData());
+  }
+
+  /**
+   * Test updater.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testUpdater() throws Exception {
+    db.execute("insert into TEST (ID, NAME) values (1, 'Alice')");
+    db.execute("insert into TEST (ID, NAME) values (2, 'Bob')");
+    Consumer updater = db.updater();
+    // update (1, Alice) to (1, Charly)
+    Entity entity1 = new Entity("TEST", db, "ID", 1, "NAME", "Charly");
+    ProductWrapper<Entity> wrapper = new ProductWrapper<>();
+    updater.startConsuming(wrapper.wrap(entity1));
+    updater.finishConsuming(wrapper.wrap(entity1));
+    // update (2, Bob) to (2, Otto)
+    Entity entity2 = new Entity("TEST", db, "ID", 2, "NAME", "Otto");
+    updater.startConsuming(wrapper.wrap(entity2));
+    updater.finishConsuming(wrapper.wrap(entity2));
+    // check database content
+    List<Object[]> storedData = DBUtil.query("select ID, NAME from TEST", db.getConnection());
+    assertEquals(2, storedData.size());
+    assertArrayEquals(new Object[] {1, "Charly"}, storedData.get(0));
+    assertArrayEquals(new Object[] {2, "Otto"}, storedData.get(1));
+  }
+
+  /**
+   * Test table exists.
+   */
+  @Test
+  public void testTableExists() {
+    assertTrue(db.tableExists("TEST"));
+    assertFalse(db.tableExists("TEST_______"));
+    assertFalse(db.tableExists(""));
+    assertFalse(db.tableExists(null));
+  }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  private DefaultDBSystem db;
+
+  /**
+   * Sets up.
+   *
+   * @throws Exception the exception
+   */
+  @Before
+  public void setUp() throws Exception {
+    Connection connection = null;
+    try {
+      db = new DefaultDBSystem("db", IN_MEMORY_URL_PREFIX + "benerator", DRIVER, DEFAULT_USER, DEFAULT_PASSWORD, new DataModel());
+      db.setSchema("PUBLIC");
+      db.getDialect();
+      connection = db.createConnection();
+      try {
+        DBUtil.executeUpdate("drop table Test", connection);
+      } catch (SQLException e) {
+        // ignore
+      }
+      DBUtil.executeUpdate("create table Test ( "
+              + "ID   int,"
+              + "NAME varchar(30) not null,"
+              + "constraint T1_PK primary key (ID)"
+              + ");",
+          connection);
+      db.invalidate();
+    } finally {
+      DBUtil.close(connection);
+    }
+  }
+
 }

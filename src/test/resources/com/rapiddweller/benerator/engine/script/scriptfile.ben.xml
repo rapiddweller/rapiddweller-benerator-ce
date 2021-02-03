@@ -2,16 +2,16 @@
 
 
 <setup>
-	<execute type="js" uri="multiply.js"/>
+    <execute type="js" uri="multiply.js"/>
 
-	<iterate type="person" name="person" source="person.ent.csv" consumer="ConsoleExporter">
-		<variable name="age" type="integer" script="this.age"/>
-		<attribute name="multiply" type="int" script="{js:multiply(age)}"/>
-	</iterate>
+    <iterate type="person" name="person" source="person.ent.csv" consumer="ConsoleExporter">
+        <variable name="age" type="integer" script="this.age"/>
+        <attribute name="multiply" type="int" script="{js:multiply(age)}"/>
+    </iterate>
 
-	<generate type="script" count="5" consumer="ConsoleExporter">
-		<variable name="count" type="integer" generator="IncrementalIdGenerator"/>
-		<attribute name="multiply" type="int" script="{js:multiply(count)}"/>
-	</generate>
+    <generate type="script" count="5" consumer="ConsoleExporter">
+        <variable name="count" type="integer" generator="IncrementalIdGenerator"/>
+        <attribute name="multiply" type="int" script="{js:multiply(count)}"/>
+    </generate>
 
 </setup>

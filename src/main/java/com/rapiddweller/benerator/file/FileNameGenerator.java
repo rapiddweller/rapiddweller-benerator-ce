@@ -33,61 +33,104 @@ import java.io.File;
 /**
  * Generates file and/or directory names out of a directory.<br/><br/>
  * Created: 24.02.2010 06:30:22
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class FileNameGenerator extends NonNullGeneratorWrapper<File, String> {
 
-	public FileNameGenerator() {
-	    this(".", null, false, true, false);
-    }
-	
-	public FileNameGenerator(String rootUri, String filter, boolean recursive, boolean files, boolean folders) {
-		super(new FileGenerator(rootUri, filter, recursive, folders, files));
-	    setRootUri(rootUri);
-	    setFilter(filter);
-	    setRecursive(recursive);
-	    setFolders(folders);
-	    setFiles(files);
-    }
+  /**
+   * Instantiates a new File name generator.
+   */
+  public FileNameGenerator() {
+    this(".", null, false, true, false);
+  }
 
-	// properties ------------------------------------------------------------------------------------------------------
+  /**
+   * Instantiates a new File name generator.
+   *
+   * @param rootUri   the root uri
+   * @param filter    the filter
+   * @param recursive the recursive
+   * @param files     the files
+   * @param folders   the folders
+   */
+  public FileNameGenerator(String rootUri, String filter, boolean recursive, boolean files, boolean folders) {
+    super(new FileGenerator(rootUri, filter, recursive, folders, files));
+    setRootUri(rootUri);
+    setFilter(filter);
+    setRecursive(recursive);
+    setFolders(folders);
+    setFiles(files);
+  }
 
-	public void setRootUri(String rootUri) {
-	    ((FileGenerator) getSource()).setRootUri(rootUri);
-    }
+  // properties ------------------------------------------------------------------------------------------------------
 
-	public void setFilter(String filter) {
-		((FileGenerator) getSource()).setFilter(filter);
-    }
+  /**
+   * Sets root uri.
+   *
+   * @param rootUri the root uri
+   */
+  public void setRootUri(String rootUri) {
+    ((FileGenerator) getSource()).setRootUri(rootUri);
+  }
 
-	public void setFiles(boolean files) {
-		((FileGenerator) getSource()).setFiles(files);
-    }
+  /**
+   * Sets filter.
+   *
+   * @param filter the filter
+   */
+  public void setFilter(String filter) {
+    ((FileGenerator) getSource()).setFilter(filter);
+  }
 
-	public void setFolders(boolean folders) {
-		((FileGenerator) getSource()).setFolders(folders);
-    }
+  /**
+   * Sets files.
+   *
+   * @param files the files
+   */
+  public void setFiles(boolean files) {
+    ((FileGenerator) getSource()).setFiles(files);
+  }
 
-	public void setRecursive(boolean recursive) {
-		((FileGenerator) getSource()).setRecursive(recursive);
-    }
+  /**
+   * Sets folders.
+   *
+   * @param folders the folders
+   */
+  public void setFolders(boolean folders) {
+    ((FileGenerator) getSource()).setFolders(folders);
+  }
 
-	public void setUnique(boolean unique) {
-		((FileGenerator) getSource()).setUnique(unique);
-    }
+  /**
+   * Sets recursive.
+   *
+   * @param recursive the recursive
+   */
+  public void setRecursive(boolean recursive) {
+    ((FileGenerator) getSource()).setRecursive(recursive);
+  }
 
-	
-	// Generator implementation ----------------------------------------------------------------------------------------
+  /**
+   * Sets unique.
+   *
+   * @param unique the unique
+   */
+  public void setUnique(boolean unique) {
+    ((FileGenerator) getSource()).setUnique(unique);
+  }
 
-	@Override
-	public Class<String> getGeneratedType() {
-	    return String.class;
-    }
 
-	@Override
-	public String generate() {
-	    return generateFromSource().unwrap().getAbsolutePath();
-    }
+  // Generator implementation ----------------------------------------------------------------------------------------
+
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
+
+  @Override
+  public String generate() {
+    return generateFromSource().unwrap().getAbsolutePath();
+  }
 
 }

@@ -42,27 +42,35 @@ import com.rapiddweller.model.data.EntitySource;
  */
 public class CSVEntitySourceProvider implements DataSourceProvider<Entity> {
 
-    private final ComplexTypeDescriptor entityType;
-    private final Converter<String, ?> converter;
-    private final char separator;
-    private final String encoding;
+  private final ComplexTypeDescriptor entityType;
+  private final Converter<String, ?> converter;
+  private final char separator;
+  private final String encoding;
 
-    public CSVEntitySourceProvider(ComplexTypeDescriptor entityType,
-                                   Converter<String, ?> converter,
-                                   char separator, String encoding) {
-        this.entityType = entityType;
-        this.converter = converter;
-        this.separator = separator;
-        this.encoding = encoding;
-    }
+  /**
+   * Instantiates a new Csv entity source provider.
+   *
+   * @param entityType the entity type
+   * @param converter  the converter
+   * @param separator  the separator
+   * @param encoding   the encoding
+   */
+  public CSVEntitySourceProvider(ComplexTypeDescriptor entityType,
+                                 Converter<String, ?> converter,
+                                 char separator, String encoding) {
+    this.entityType = entityType;
+    this.converter = converter;
+    this.separator = separator;
+    this.encoding = encoding;
+  }
 
-    @Override
-    public EntitySource create(String id, BeneratorContext context) {
-        CSVEntitySource iterable =
-                new CSVEntitySource(id, entityType, encoding, converter,
-                        separator);
-        iterable.setContext(context);
-        return iterable;
-    }
+  @Override
+  public EntitySource create(String id, BeneratorContext context) {
+    CSVEntitySource iterable =
+        new CSVEntitySource(id, entityType, encoding, converter,
+            separator);
+    iterable.setContext(context);
+    return iterable;
+  }
 
 }

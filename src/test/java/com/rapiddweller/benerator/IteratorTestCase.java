@@ -30,52 +30,95 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Parent class for {@link Iterator} test classes.<br/><br/>
+ *
  * @author Volker Bergmann
  */
 public abstract class IteratorTestCase {
 
-    public static <T> void checkUniqueIteration(Iterator<T> iterator, int count) {
-        Set<T> items = new HashSet<>(count);
-        for (int i = 0; i < count; i++) {
-            assertTrue(iterator.hasNext());
-            T item = iterator.next();
-            assertFalse(items.contains(item)); // check uniqueness
-            items.add(item);
-        }
+  /**
+   * Check unique iteration.
+   *
+   * @param <T>      the type parameter
+   * @param iterator the iterator
+   * @param count    the count
+   */
+  public static <T> void checkUniqueIteration(Iterator<T> iterator, int count) {
+    Set<T> items = new HashSet<>(count);
+    for (int i = 0; i < count; i++) {
+      assertTrue(iterator.hasNext());
+      T item = iterator.next();
+      assertFalse(items.contains(item)); // check uniqueness
+      items.add(item);
+    }
+  }
+
+  /**
+   * Expect next elements next helper.
+   *
+   * @param <T>            the type parameter
+   * @param iterator       the iterator
+   * @param expectedValues the expected values
+   * @return the next helper
+   */
+  @SafeVarargs
+  public static <T> NextHelper expectNextElements(Iterator<?> iterator, T... expectedValues) {
+    for (T expected : expectedValues) {
+      assertNext(expected, iterator);
+    }
+    return new NextHelper(iterator);
+  }
+
+  /**
+   * Assert next.
+   *
+   * @param <T>          the type parameter
+   * @param expectedNext the expected next
+   * @param iterator     the iterator
+   */
+  public static <T> void assertNext(T expectedNext, Iterator<?> iterator) {
+    assertTrue("Iterator is expected to have a next, but does not", iterator.hasNext());
+    Object actual = iterator.next();
+    assertEquals(expectedNext, actual);
+  }
+
+  /**
+   * The type Next helper.
+   */
+  public static class NextHelper {
+
+    /**
+     * The Iterator.
+     */
+    final Iterator<?> iterator;
+
+    /**
+     * Instantiates a new Next helper.
+     *
+     * @param iterator the iterator
+     */
+    public NextHelper(Iterator<?> iterator) {
+      this.iterator = iterator;
     }
 
-	@SafeVarargs
-	public static <T> NextHelper expectNextElements(Iterator<?> iterator, T... expectedValues) {
-		for (T expected : expectedValues)
-			assertNext(expected, iterator);
-		return new NextHelper(iterator);
-	}
+    /**
+     * With next.
+     */
+    public void withNext() {
+      assertTrue("Iterator is expected to have a next, but it does not", iterator.hasNext());
+    }
 
-	public static <T> void assertNext(T expectedNext, Iterator<?> iterator) {
-		assertTrue("Iterator is expected to have a next, but does not", iterator.hasNext());
-		Object actual = iterator.next();
-		assertEquals(expectedNext, actual);
-	}
-	
-	public static class NextHelper {
-		
-		final Iterator<?> iterator;
+    /**
+     * With no next.
+     */
+    public void withNoNext() {
+      assertFalse("Iterator is expected to have no next, but it has", iterator.hasNext());
+    }
+  }
 
-		public NextHelper(Iterator<?> iterator) {
-			this.iterator = iterator;
-		}
-		
-		public void withNext() {
-			assertTrue("Iterator is expected to have a next, but it does not", iterator.hasNext());
-		}
-		
-		public void withNoNext() {
-			assertFalse("Iterator is expected to have no next, but it has", iterator.hasNext());
-		}
-	}
-	
 }

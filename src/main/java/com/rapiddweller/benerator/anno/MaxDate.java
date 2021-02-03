@@ -34,11 +34,17 @@ import java.lang.annotation.Target;
 /**
  * Specifies a maximum date to use for testing.<br/><br/>
  * Created: 23.07.2011 17:21:55
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.PARAMETER } )
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 public @interface MaxDate {
-	String value();
+  /**
+   * Value string.
+   *
+   * @return the string
+   */
+  String value();
 }

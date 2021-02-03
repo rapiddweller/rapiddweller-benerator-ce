@@ -33,33 +33,40 @@ import com.rapiddweller.benerator.Generator;
  * replaces a boolean array value at a given index ({@link #indexOfLastFlag}) with true, otherwise with false.<br/>
  * <br/>
  * Created: 12.09.2011 12:27:34
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class LastFlagGenerator extends GeneratorProxy<Object[]> {
-	
-	private final int indexOfLastFlag;
 
-	public LastFlagGenerator(Generator<Object[]> source, int indexOfLastFlag) {
-		super(source);
-		this.indexOfLastFlag = indexOfLastFlag;
-	}
+  private final int indexOfLastFlag;
 
-	@Override
-	public ProductWrapper<Object[]> generate(ProductWrapper<Object[]> wrapper) {
-		wrapper = super.generate(wrapper);
-		if (wrapper != null) {
-			Object[] product = wrapper.unwrap();
-			if (indexOfLastFlag == product.length) {
-				// the @Last parameter might be additional to an imported array of size = paramCount - 1
-				Object[] tmp = new Object[product.length + 1];
-				System.arraycopy(product, 0, tmp, 0, product.length);
-				product = tmp;
-				wrapper.wrap(product, false);
-			}
-			product[indexOfLastFlag] = ("true".equals(wrapper.getTag("last")));
-		}
-		return wrapper;
-	}
-	
+  /**
+   * Instantiates a new Last flag generator.
+   *
+   * @param source          the source
+   * @param indexOfLastFlag the index of last flag
+   */
+  public LastFlagGenerator(Generator<Object[]> source, int indexOfLastFlag) {
+    super(source);
+    this.indexOfLastFlag = indexOfLastFlag;
+  }
+
+  @Override
+  public ProductWrapper<Object[]> generate(ProductWrapper<Object[]> wrapper) {
+    wrapper = super.generate(wrapper);
+    if (wrapper != null) {
+      Object[] product = wrapper.unwrap();
+      if (indexOfLastFlag == product.length) {
+        // the @Last parameter might be additional to an imported array of size = paramCount - 1
+        Object[] tmp = new Object[product.length + 1];
+        System.arraycopy(product, 0, tmp, 0, product.length);
+        product = tmp;
+        wrapper.wrap(product, false);
+      }
+      product[indexOfLastFlag] = ("true".equals(wrapper.getTag("last")));
+    }
+    return wrapper;
+  }
+
 }

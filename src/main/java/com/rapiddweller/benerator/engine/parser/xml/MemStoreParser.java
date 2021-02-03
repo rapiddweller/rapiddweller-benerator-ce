@@ -46,32 +46,39 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 /**
  * Parses a &lt;memstore%gt; statement.<br/><br/>
  * Created: 08.03.2011 13:28:55
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class MemStoreParser extends AbstractBeneratorDescriptorParser {
-	
-	public MemStoreParser() {
-	    super(EL_MEMSTORE, CollectionUtil.toSet(ATT_ID), null, BeneratorRootStatement.class, IfStatement.class);
-    }
 
-	@Override
-    public MemStoreStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-		checkAttributeSupport(XMLUtil.getAttributes(element));
-		try {
-			String id = getAttribute(ATT_ID, element);
-			return new MemStoreStatement(id, context.getResourceManager());
-		} catch (ConversionException e) {
-			throw new ConfigurationError(e);
-		}
-    }
+  /**
+   * Instantiates a new Mem store parser.
+   */
+  public MemStoreParser() {
+    super(EL_MEMSTORE, CollectionUtil.toSet(ATT_ID), null, BeneratorRootStatement.class, IfStatement.class);
+  }
 
-	private static void checkAttributeSupport(Map<String, String> attributes) {
-		if (StringUtil.isEmpty(attributes.get(ATT_ID)))
-			throw new ConfigurationError("No id specified for <store>");
-		for (String key : attributes.keySet())
-			if (!"id".equals(key))
-				throw new ConfigurationError("Not a supported attribute of <store>: " + key);
-	}
+  @Override
+  public MemStoreStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    checkAttributeSupport(XMLUtil.getAttributes(element));
+    try {
+      String id = getAttribute(ATT_ID, element);
+      return new MemStoreStatement(id, context.getResourceManager());
+    } catch (ConversionException e) {
+      throw new ConfigurationError(e);
+    }
+  }
+
+  private static void checkAttributeSupport(Map<String, String> attributes) {
+    if (StringUtil.isEmpty(attributes.get(ATT_ID))) {
+      throw new ConfigurationError("No id specified for <store>");
+    }
+    for (String key : attributes.keySet()) {
+      if (!"id".equals(key)) {
+        throw new ConfigurationError("Not a supported attribute of <store>: " + key);
+      }
+    }
+  }
 
 }

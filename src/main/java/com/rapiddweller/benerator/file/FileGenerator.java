@@ -39,69 +39,112 @@ import java.io.File;
 /**
  * Generates {@link File} objects which represent files and/or directories in a parent directory.<br/><br/>
  * Created: 24.02.2010 10:47:44
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-public class FileGenerator extends NonNullSampleGenerator<File> { 
-	
-	private String rootUri;
-	private String filter;
-	private boolean recursive;
-	private boolean folders;
-	private boolean files;
-	
-	public FileGenerator() {
-	    this(".", null, false, false, true);
-    }
-	
-	public FileGenerator(String rootUri, String filter, boolean recursive, boolean files, boolean folders) {
-		super(File.class);
-	    this.rootUri = rootUri;
-	    this.filter = filter;
-	    this.recursive = recursive;
-	    this.folders = folders;
-	    this.files = files;
-    }
-	
-	// properties ------------------------------------------------------------------------------------------------------
+public class FileGenerator extends NonNullSampleGenerator<File> {
 
-	public void setRootUri(String rootUri) {
-    	this.rootUri = rootUri;
-    }
+  private String rootUri;
+  private String filter;
+  private boolean recursive;
+  private boolean folders;
+  private boolean files;
 
-	public void setFilter(String filter) {
-    	this.filter = filter;
-    }
+  /**
+   * Instantiates a new File generator.
+   */
+  public FileGenerator() {
+    this(".", null, false, false, true);
+  }
 
-	public void setRecursive(boolean recursive) {
-    	this.recursive = recursive;
-    }
+  /**
+   * Instantiates a new File generator.
+   *
+   * @param rootUri   the root uri
+   * @param filter    the filter
+   * @param recursive the recursive
+   * @param files     the files
+   * @param folders   the folders
+   */
+  public FileGenerator(String rootUri, String filter, boolean recursive, boolean files, boolean folders) {
+    super(File.class);
+    this.rootUri = rootUri;
+    this.filter = filter;
+    this.recursive = recursive;
+    this.folders = folders;
+    this.files = files;
+  }
 
-	public void setFolders(boolean folders) {
-    	this.folders = folders;
-    }
+  // properties ------------------------------------------------------------------------------------------------------
 
-	public void setFiles(boolean files) {
-    	this.files = files;
-    }
+  /**
+   * Sets root uri.
+   *
+   * @param rootUri the root uri
+   */
+  public void setRootUri(String rootUri) {
+    this.rootUri = rootUri;
+  }
 
-	public void setContext(Context context) {
-	    this.context = (BeneratorContext) context;
+  /**
+   * Sets filter.
+   *
+   * @param filter the filter
+   */
+  public void setFilter(String filter) {
+    this.filter = filter;
+  }
+
+  /**
+   * Sets recursive.
+   *
+   * @param recursive the recursive
+   */
+  public void setRecursive(boolean recursive) {
+    this.recursive = recursive;
+  }
+
+  /**
+   * Sets folders.
+   *
+   * @param folders the folders
+   */
+  public void setFolders(boolean folders) {
+    this.folders = folders;
+  }
+
+  /**
+   * Sets files.
+   *
+   * @param files the files
+   */
+  public void setFiles(boolean files) {
+    this.files = files;
+  }
+
+  /**
+   * Sets context.
+   *
+   * @param context the context
+   */
+  public void setContext(Context context) {
+    this.context = (BeneratorContext) context;
+  }
+
+  // implementation --------------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    try {
+      String baseUri = IOUtil.resolveRelativeUri(rootUri, context.getContextUri());
+      File baseFile = new File(baseUri);
+      setValues(FileUtil.listFiles(baseFile, filter, recursive, files, folders));
+      super.init(context);
+    } catch (Exception e) {
+      throw new ConfigurationError(e);
     }
-	
-	// implementation --------------------------------------------------------------------------------------------------
-	
-	@Override
-	public void init(GeneratorContext context) {
-		assertNotInitialized();
-    	try {
-            String baseUri = IOUtil.resolveRelativeUri(rootUri, context.getContextUri());
-            File baseFile = new File(baseUri);
-			setValues(FileUtil.listFiles(baseFile, filter, recursive, files, folders));
-            super.init(context);
-        } catch (Exception e) {
-            throw new ConfigurationError(e);
-        }
-	}
+  }
 
 }

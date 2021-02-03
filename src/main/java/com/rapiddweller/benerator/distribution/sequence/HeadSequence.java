@@ -34,40 +34,57 @@ import com.rapiddweller.benerator.wrapper.WrapperFactory;
 
 /**
  * Sequence implementation that returns the first n values of another Generator (default 1).
- * When used to create number generators, it creates generators that count incrementally 
+ * When used to create number generators, it creates generators that count incrementally
  * from 'min' to min + n - 1.<br/><br/>
  * Created: 25.07.2010 09:55:54
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class HeadSequence extends Sequence {
-	
-	private static final StepSequence STEP_SEQ = new StepSequence();
 
-	long size;
-	
-	public HeadSequence() {
-	    this(1);
-    }
+  private static final StepSequence STEP_SEQ = new StepSequence();
 
-	public HeadSequence(long size) {
-	    this.size = size;
-    }
+  /**
+   * The Size.
+   */
+  long size;
 
-	public void setSize(long n) {
-		this.size = n;
-	}
-	
-	@Override
-	public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-	    return new NShotGeneratorProxy<>(source, size);
-	}
-	
-    @Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(
-    		Class<T> numberType, T min, T max, T granularity, boolean unique) {
-    	Generator<T> source = STEP_SEQ.createNumberGenerator(numberType, min, max, granularity, unique);
-		return WrapperFactory.asNonNullGenerator(new NShotGeneratorProxy<>(source, size));
-	}
+  /**
+   * Instantiates a new Head sequence.
+   */
+  public HeadSequence() {
+    this(1);
+  }
+
+  /**
+   * Instantiates a new Head sequence.
+   *
+   * @param size the size
+   */
+  public HeadSequence(long size) {
+    this.size = size;
+  }
+
+  /**
+   * Sets size.
+   *
+   * @param n the n
+   */
+  public void setSize(long n) {
+    this.size = n;
+  }
+
+  @Override
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    return new NShotGeneratorProxy<>(source, size);
+  }
+
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(
+      Class<T> numberType, T min, T max, T granularity, boolean unique) {
+    Generator<T> source = STEP_SEQ.createNumberGenerator(numberType, min, max, granularity, unique);
+    return WrapperFactory.asNonNullGenerator(new NShotGeneratorProxy<>(source, size));
+  }
 
 }

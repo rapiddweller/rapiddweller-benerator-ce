@@ -43,65 +43,92 @@ import java.util.Map;
  */
 public class DefaultDescriptorProvider implements DescriptorProvider {
 
-    private static final Logger logger =
-            LogManager.getLogger(DefaultDescriptorProvider.class);
-    protected final Map<String, TypeDescriptor> typeMap;
-    private final boolean redefinable;
-    protected DataModel dataModel;
-    protected String id;
+  private static final Logger logger =
+      LogManager.getLogger(DefaultDescriptorProvider.class);
+  /**
+   * The Type map.
+   */
+  protected final Map<String, TypeDescriptor> typeMap;
+  private final boolean redefinable;
+  /**
+   * The Data model.
+   */
+  protected DataModel dataModel;
+  /**
+   * The Id.
+   */
+  protected String id;
 
-    public DefaultDescriptorProvider(String id, DataModel dataModel) {
-        this(id, dataModel, false);
-    }
+  /**
+   * Instantiates a new Default descriptor provider.
+   *
+   * @param id        the id
+   * @param dataModel the data model
+   */
+  public DefaultDescriptorProvider(String id, DataModel dataModel) {
+    this(id, dataModel, false);
+  }
 
-    public DefaultDescriptorProvider(String id, DataModel dataModel,
-                                     boolean redefinable) {
-        this.typeMap = new OrderedNameMap<>();
-        this.id = id;
-        this.redefinable = redefinable;
-        if (dataModel != null) {
-            dataModel.addDescriptorProvider(this);
-        }
+  /**
+   * Instantiates a new Default descriptor provider.
+   *
+   * @param id          the id
+   * @param dataModel   the data model
+   * @param redefinable the redefinable
+   */
+  public DefaultDescriptorProvider(String id, DataModel dataModel,
+                                   boolean redefinable) {
+    this.typeMap = new OrderedNameMap<>();
+    this.id = id;
+    this.redefinable = redefinable;
+    if (dataModel != null) {
+      dataModel.addDescriptorProvider(this);
     }
+  }
 
-    public void addTypeDescriptor(TypeDescriptor descriptor) {
-        if (!redefinable && typeMap.get(descriptor.getName()) != null) {
-            throw new ConfigurationError(
-                    "Type has already been defined: " + descriptor.getName());
-        }
-        typeMap.put(descriptor.getName(), descriptor);
-        logger.debug("added " + descriptor.getClass().getSimpleName() + ": " +
-                descriptor);
+  /**
+   * Add type descriptor.
+   *
+   * @param descriptor the descriptor
+   */
+  public void addTypeDescriptor(TypeDescriptor descriptor) {
+    if (!redefinable && typeMap.get(descriptor.getName()) != null) {
+      throw new ConfigurationError(
+          "Type has already been defined: " + descriptor.getName());
     }
+    typeMap.put(descriptor.getName(), descriptor);
+    logger.debug("added " + descriptor.getClass().getSimpleName() + ": " +
+        descriptor);
+  }
 
-    @Override
-    public DataModel getDataModel() {
-        return dataModel;
-    }
+  @Override
+  public DataModel getDataModel() {
+    return dataModel;
+  }
 
-    @Override
-    public void setDataModel(DataModel dataModel) {
-        this.dataModel = dataModel;
-    }
+  @Override
+  public void setDataModel(DataModel dataModel) {
+    this.dataModel = dataModel;
+  }
 
-    @Override
-    public String getId() {
-        return id;
-    }
+  @Override
+  public String getId() {
+    return id;
+  }
 
-    @Override
-    public TypeDescriptor getTypeDescriptor(String typeName) {
-        String localName = XMLUtil.localName(typeName);
-        return typeMap.get(localName);
-    }
+  @Override
+  public TypeDescriptor getTypeDescriptor(String typeName) {
+    String localName = XMLUtil.localName(typeName);
+    return typeMap.get(localName);
+  }
 
-    @Override
-    public TypeDescriptor[] getTypeDescriptors() {
-        return CollectionUtil.toArray(typeMap.values(), TypeDescriptor.class);
-    }
+  @Override
+  public TypeDescriptor[] getTypeDescriptors() {
+    return CollectionUtil.toArray(typeMap.values(), TypeDescriptor.class);
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '(' + id + ')';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '(' + id + ')';
+  }
 }

@@ -36,7 +36,6 @@ import java.util.ListResourceBundle;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public abstract class LanguageResourceBundle extends ListResourceBundle {
 
 }

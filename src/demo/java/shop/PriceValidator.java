@@ -40,20 +40,35 @@ import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
  * @author Volker Bergmann
  */
 public class PriceValidator
-        extends AbstractConstraintValidator<Annotation, BigDecimal> {
+    extends AbstractConstraintValidator<Annotation, BigDecimal> {
 
-    private int fractionDigits;
+  private int fractionDigits;
 
-    public PriceValidator() {
-        this(2);
-    }
+  /**
+   * Instantiates a new Price validator.
+   */
+  public PriceValidator() {
+    this(2);
+  }
 
-    public PriceValidator(int fractionDigits) {
-        this.fractionDigits = fractionDigits;
-    }
+  /**
+   * Instantiates a new Price validator.
+   *
+   * @param fractionDigits the fraction digits
+   */
+  public PriceValidator(int fractionDigits) {
+    this.fractionDigits = fractionDigits;
+  }
 
-    public boolean isValid(BigDecimal price,
-                           ConstraintValidatorContext context) {
-        return (price.scale() <= fractionDigits);
-    }
+  /**
+   * Is valid boolean.
+   *
+   * @param price   the price
+   * @param context the context
+   * @return the boolean
+   */
+  public boolean isValid(BigDecimal price,
+                         ConstraintValidatorContext context) {
+    return (price.scale() <= fractionDigits);
+  }
 }

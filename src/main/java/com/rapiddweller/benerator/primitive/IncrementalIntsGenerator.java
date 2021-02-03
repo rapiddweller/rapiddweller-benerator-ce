@@ -26,79 +26,98 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import java.util.Arrays;
-
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 
+import java.util.Arrays;
+
 /**
- * Generates int arrays in the same manner in which decimal numbers are used. 
+ * Generates int arrays in the same manner in which decimal numbers are used.
  * It can be used to generate numbers or strings of arbitrary numerical radix.<br/><br/>
  * Created: 01.08.2011 15:15:39
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class IncrementalIntsGenerator extends ThreadSafeNonNullGenerator<int[]> {
 
-	private final int radix;
-    private final int[] digits;
-    private boolean overrun;
+  private final int radix;
+  private final int[] digits;
+  private boolean overrun;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public IncrementalIntsGenerator(int radix, int length) {
-    	this.radix = radix;
-        this.digits = new int[length];
-        Arrays.fill(digits, 0);
-        this.overrun = false;
+  /**
+   * Instantiates a new Incremental ints generator.
+   *
+   * @param radix  the radix
+   * @param length the length
+   */
+  public IncrementalIntsGenerator(int radix, int length) {
+    this.radix = radix;
+    this.digits = new int[length];
+    Arrays.fill(digits, 0);
+    this.overrun = false;
+  }
+
+  // interface -------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets radix.
+   *
+   * @return the radix
+   */
+  public int getRadix() {
+    return radix;
+  }
+
+  /**
+   * Gets length.
+   *
+   * @return the length
+   */
+  public int getLength() {
+    return digits.length;
+  }
+
+  @Override
+  public Class<int[]> getGeneratedType() {
+    return int[].class;
+  }
+
+  @Override
+  public int[] generate() {
+    if (overrun) {
+      return null;
     }
+    int[] result = digits.clone();
+    incrementDigit(digits.length - 1);
+    return result;
+  }
 
-    // interface -------------------------------------------------------------------------------------------------------
+  @Override
+  public void reset() {
+    super.reset();
+    Arrays.fill(digits, 0);
+    this.overrun = false;
+  }
 
-	public int getRadix() {
-		return radix;
-	}
+  // private helpers -------------------------------------------------------------------------------------------------
 
-	public int getLength() {
-		return digits.length;
-	}
-
-	@Override
-	public Class<int[]> getGeneratedType() {
-		return int[].class;
-	}
-	
-    @Override
-	public int[] generate() {
-    	if (overrun)
-    		return null;
-        int[] result = digits.clone();
-        incrementDigit(digits.length - 1);
-		return result;
+  private void incrementDigit(int i) {
+    if (i < 0) {
+      overrun = true;
+      return;
     }
-    
-    @Override
-    public void reset() {
-    	super.reset();
-        Arrays.fill(digits, 0);
-        this.overrun = false;
+    if (digits[i] < radix - 1) {
+      digits[i]++;
+    } else {
+      digits[i] = 0;
+      if (i > 0) {
+        incrementDigit(i - 1);
+      } else {
+        overrun = true;
+      }
     }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private void incrementDigit(int i) {
-        if (i < 0) {
-            overrun = true;
-            return;
-        }
-        if (digits[i] < radix - 1)
-            digits[i]++;
-        else {
-            digits[i] = 0;
-            if (i > 0)
-                incrementDigit(i - 1);
-            else
-                overrun = true;
-        }
-    }
+  }
 
 }

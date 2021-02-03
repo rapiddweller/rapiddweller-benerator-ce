@@ -33,54 +33,99 @@ package com.rapiddweller.benerator.demo.product;
  */
 public class Product {
 
-    private String name;
-    private String eanCode;
-    private ProductCategory category;
+  private String name;
+  private String eanCode;
+  private ProductCategory category;
 
-    public Product() {
-        this(null, null, null);
-    }
+  /**
+   * Instantiates a new Product.
+   */
+  public Product() {
+    this(null, null, null);
+  }
 
-    public Product(String name, String eanCode, ProductCategory category) {
-        this.name = name;
-        this.eanCode = eanCode;
-        this.category = category;
-    }
+  /**
+   * Instantiates a new Product.
+   *
+   * @param name     the name
+   * @param eanCode  the ean code
+   * @param category the category
+   */
+  public Product(String name, String eanCode, ProductCategory category) {
+    this.name = name;
+    this.eanCode = eanCode;
+    this.category = category;
+  }
 
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getEanCode() {
-        return eanCode;
-    }
+  /**
+   * Gets ean code.
+   *
+   * @return the ean code
+   */
+  public String getEanCode() {
+    return eanCode;
+  }
 
-    public void setEanCode(String eanCode) {
-        this.eanCode = eanCode;
-    }
+  /**
+   * Sets ean code.
+   *
+   * @param eanCode the ean code
+   */
+  public void setEanCode(String eanCode) {
+    this.eanCode = eanCode;
+  }
 
-    public ProductCategory getCategory() {
-        return category;
-    }
+  /**
+   * Gets category.
+   *
+   * @return the category
+   */
+  public ProductCategory getCategory() {
+    return category;
+  }
 
-    public void setCategory(ProductCategory category) {
-        this.category = category;
-    }
+  /**
+   * Sets category.
+   *
+   * @param category the category
+   */
+  public void setCategory(ProductCategory category) {
+    this.category = category;
+  }
 
-    @Override
-    public String toString() {
-        StringBuilder buffer = new StringBuilder();
-        if (category != null) {
-            if (category.getGroup() != null) {
-                buffer.append(category.getGroup().getName() + '/');
-            }
-            buffer.append(category.getName()).append('/');
-        }
-        buffer.append(name).append('[').append(eanCode).append(']');
-        return buffer.toString();
+  /**
+   * To string string.
+   *
+   * @return the string
+   */
+  @Override
+  public String toString() {
+    StringBuilder buffer = new StringBuilder();
+    if (category != null) {
+      if (category.getGroup() != null) {
+        buffer.append(category.getGroup().getName() + '/');
+      }
+      buffer.append(category.getName()).append('/');
     }
+    buffer.append(name).append('[').append(eanCode).append(']');
+    return buffer.toString();
+  }
 }

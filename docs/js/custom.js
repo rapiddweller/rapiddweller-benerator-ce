@@ -19,6 +19,7 @@ function setupTermynal() {
                 const lines = text.split("\n");
                 const useLines = [];
                 let buffer = [];
+
                 function saveBuffer() {
                     if (buffer.length) {
                         let isBlankSpace = true;
@@ -42,6 +43,7 @@ function setupTermynal() {
                         buffer = [];
                     }
                 }
+
                 for (let line of lines) {
                     if (line === progressLiteralStart) {
                         saveBuffer();
@@ -101,6 +103,7 @@ function setupTermynal() {
             return true;
         });
     }
+
     window.addEventListener("scroll", loadVisibleTermynals);
     createTermynals();
     loadVisibleTermynals();

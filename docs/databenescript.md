@@ -1,28 +1,29 @@
-# DatabeneScript 
+# DatabeneScript
 
-## Motivation 
+## Motivation
 
-DatabeneScript is a script language designed for simplifying test data generation. Text-targeted template languages like FreeMarker and general languages like JavaScript have specific problems, which can be avoided by a language tailored to the task of data generation.
+DatabeneScript is a script language designed for simplifying test data generation. Text-targeted template languages like FreeMarker and general
+languages like JavaScript have specific problems, which can be avoided by a language tailored to the task of data generation.
 
 DatabeneScript uses many elements familiar from C-style languages like Java and C#, but adds some specials:
 
-*   More convenient object construction
+* More convenient object construction
 
-*   intuitive date arithmetic
+* intuitive date arithmetic
 
-*   seamless integration and interaction with Benerator
+* seamless integration and interaction with Benerator
 
-## Examples 
+## Examples
 
-### Variable definition 
+### Variable definition
 
 `<execute>`x = 3`</execute>`
 
-### Variable assignment 
+### Variable assignment
 
 `<execute>`x = x + 1`</execute>`
 
-### Object construction 
+### Object construction
 
 Constructor-based:
 
@@ -32,11 +33,11 @@ Properties-based:
 
 new MyGenerator { filename='alpha.txt', limit=23 }
 
-### Date arithmetic 
+### Date arithmetic
 
 new Date() + 5000
 
-### Java integration 
+### Java integration
 
 (com.rapiddweller.common.SystemInfo.isWindows() ? 'win' : 'other')
 
@@ -44,19 +45,19 @@ Benerator integration
 
 (context.contains('key') ? 'def' : 'none')
 
-## Syntax 
+## Syntax
 
-### Comments 
+### Comments
 
 Line comments start with // and include the rest of the line.
 
 Normal comments begin with /* and end with */
 
-### White Space 
+### White Space
 
 Spaces, tabs, CR, LF, \u000C
 
-### Data Types 
+### Data Types
 
 Signed integral numbers: long, int, short, byte, big_integer
 
@@ -68,7 +69,7 @@ Date/time: date, timestamp
 
 Other: boolean, object (Java object), binary (byte[])
 
-### Identifiers 
+### Identifiers
 
 The first character must be an ASCII letter or underscore. An arbitrary number of subsequent characters may be ASCII letters, underscores or numbers.
 
@@ -76,7 +77,7 @@ Legal identifiers: _test, A1234, _999
 
 Illegal identifiers: 1ABC, XÖ, F$D, alpha.beta
 
-### Escape Sequences 
+### Escape Sequences
 
 \bBackspace
 
@@ -94,17 +95,17 @@ Illegal identifiers: 1ABC, XÖ, F$D, alpha.beta
 
 \nnnOctal encoded character
 
-### String Literal 
+### String Literal
 
 Quoted with single quotes, e.g. 'Text'
 
-### Decimal Literal 
+### Decimal Literal
 
 Supporting decimal syntax.
 
 Legal decimal values: 1234.2345E+12, 1234.2345E12, 1234.2345e-12
 
-### Integral Number Literal 
+### Integral Number Literal
 
 Supporting decimal, hexadecimal and octal syntax.
 
@@ -114,27 +115,27 @@ Legal octal values: 01, 00123
 
 Legal hexadecimal values: 0x0dFa
 
-### Boolean Literal 
+### Boolean Literal
 
 Legal values: true, false
 
-### null Literal 
+### null Literal
 
 Legal value: null
 
-### Qualified name 
+### Qualified name
 
 identifier(.identifier)*
 
 Legal values: com.rapiddweller.benerator.Generator, Generator
 
-### Constructor invocation 
+### Constructor invocation
 
 Works like in Java, e.g.
 
 new MyGenerator('alpha.txt', 23)
 
-### Bean construction 
+### Bean construction
 
 Instantiates an object by the class' default constructor and calling property setters, e.g.
 
@@ -148,7 +149,7 @@ generator.setFilename("alpha.txt");
 
 generator.setLimit(23);
 
-### Method invocation 
+### Method invocation
 
 Can occur on static Java methods on a class or instance methods on an object.
 
@@ -156,7 +157,7 @@ Static method invocation: com.my.SpecialClass.getInstance()
 
 instance method invocation: generator.generate()
 
-### Attribute access 
+### Attribute access
 
 Can occur on static Java attributes on a class or instance methods on an object.
 
@@ -164,13 +165,13 @@ Static attribute access: com.my.SpecialClass.instance
 
 instance attribute access: user.name
 
-### Casts 
+### Casts
 
 Benerator can casts data types. Cast arguments are Benerator's simple types.
 
 Examples: (date) '2009-11-23', (long) 2.34
 
-### Unary Operators 
+### Unary Operators
 
 Arithmetic Negation: -
 
@@ -178,7 +179,7 @@ Bitwise complement: ~
 
 Boolean Negation: !
 
-### Arithmetic Operators 
+### Arithmetic Operators
 
 Multiplication: *
 
@@ -190,7 +191,7 @@ Addition: +, e.g. new Date() + 5000
 
 Subtraction: -
 
-### Shift Operators 
+### Shift Operators
 
 Left shift: `<`< (in XML descriptor files use &lt;&lt;)
 
@@ -198,15 +199,15 @@ Right shift: >`>` (in XML descriptor files use &gt;&gt;)
 
 Right shift: >`>`>` (in XML descriptor files use &gt;&gt;&gt;)
 
-### Relation Operators 
+### Relation Operators
 
 `<=, `<, >`, =>` (in XML descriptor files use &lt;=, &lt;, &gt;, =&gt;)
 
-### Equality Operators 
+### Equality Operators
 
 ==, !=
 
-### Bitwise Operators 
+### Bitwise Operators
 
 And: &amp; (in XML descriptor files use &amp;)
 
@@ -214,18 +215,19 @@ Exclusive Or: ^
 
 Inclusive Or: |
 
-### Boolean Operators 
+### Boolean Operators
 
 And: &amp;&amp; (in XML descriptor files use &amp;&amp;)
 
 Or: ||
 
-DatabeneScript uses shortcut evaluation like C, C++ and Java: First it evaluates the left hand side of an operation. If the result is completely determined by the result, it does not evaluate the right hand side.
+DatabeneScript uses shortcut evaluation like C, C++ and Java: First it evaluates the left hand side of an operation. If the result is completely
+determined by the result, it does not evaluate the right hand side.
 
-### Conditional Expression 
+### Conditional Expression
 
 ... ? ... : …, e.g. a>`3 ? 0 : 1
 
-### Assignment 
+### Assignment
 
 qualifiedName = expression

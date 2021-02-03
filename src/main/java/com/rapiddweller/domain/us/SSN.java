@@ -33,7 +33,9 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
@@ -44,15 +46,22 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 @Documented
 @Constraint(validatedBy = UnluckyNumberValidator.class)
 @Target({METHOD, FIELD, TYPE})
 @Retention(RUNTIME)
 public @interface SSN {
 
-    int DEFAULT_MAX_AREA_CODE = 772;
+  /**
+   * The constant DEFAULT_MAX_AREA_CODE.
+   */
+  int DEFAULT_MAX_AREA_CODE = 772;
 
-    int maxAreaCode() default DEFAULT_MAX_AREA_CODE;
+  /**
+   * Max area code int.
+   *
+   * @return the int
+   */
+  int maxAreaCode() default DEFAULT_MAX_AREA_CODE;
 
 }

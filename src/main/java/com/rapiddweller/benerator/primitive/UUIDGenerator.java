@@ -26,30 +26,30 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import java.util.UUID;
-
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
+
+import java.util.UUID;
 
 /**
  * Creates UUIDs using {@link java.util.UUID#randomUUID()}.<br/>
  * <br/>
  * Created at 26.09.2009 07:51:56
- * @see java.util.UUID#randomUUID()
+ *
+ * @author Volker Bergmann
+ * @see java.util.UUID#randomUUID() java.util.UUID#randomUUID()
  * @see <a href="http://www.ietf.org/rfc/rfc4122.txt">RFC 4122</a>
  * @since 0.6.0
- * @author Volker Bergmann
  */
-
 public class UUIDGenerator extends ThreadSafeNonNullGenerator<String> {
-	
-	@Override
-	public Class<String> getGeneratedType() {
-	    return String.class;
-    }
 
-	@Override
-	public String generate() {
-    	return UUID.randomUUID().toString();
-    }
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
+
+  @Override
+  public String generate() {
+    return UUID.randomUUID().toString();
+  }
 
 }

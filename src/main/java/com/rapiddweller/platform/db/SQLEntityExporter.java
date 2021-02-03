@@ -48,112 +48,150 @@ import java.util.Set;
  */
 public class SQLEntityExporter extends TextFileExporter {
 
-    private static final Logger LOGGER =
-            LogManager.getLogger(CSVEntityExporter.class);
+  private static final Logger LOGGER =
+      LogManager.getLogger(CSVEntityExporter.class);
 
-    // defaults --------------------------------------------------------------------------------------------------------
+  // defaults --------------------------------------------------------------------------------------------------------
 
-    private static final String DEFAULT_URI = "export.sql";
+  private static final String DEFAULT_URI = "export.sql";
 
-    // attributes ------------------------------------------------------------------------------------------------------
+  // attributes ------------------------------------------------------------------------------------------------------
 
-    private DatabaseDialect dialect = null;
-    private String dialectName;
-    private VersionNumber dialectVersion;
+  private DatabaseDialect dialect = null;
+  private String dialectName;
+  private VersionNumber dialectVersion;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public SQLEntityExporter() {
-        this(DEFAULT_URI);
+  /**
+   * Instantiates a new Sql entity exporter.
+   */
+  public SQLEntityExporter() {
+    this(DEFAULT_URI);
+  }
+
+  /**
+   * Instantiates a new Sql entity exporter.
+   *
+   * @param uri the uri
+   */
+  public SQLEntityExporter(String uri) {
+    this(uri, null);
+  }
+
+  /**
+   * Instantiates a new Sql entity exporter.
+   *
+   * @param uri     the uri
+   * @param dialect the dialect
+   */
+  public SQLEntityExporter(String uri, String dialect) {
+    this(uri, dialect, null, null);
+  }
+
+  /**
+   * Instantiates a new Sql entity exporter.
+   *
+   * @param uri           the uri
+   * @param dialect       the dialect
+   * @param lineSeparator the line separator
+   * @param encoding      the encoding
+   */
+  public SQLEntityExporter(String uri, String dialect, String lineSeparator,
+                           String encoding) {
+    super(uri, encoding, lineSeparator);
+    setDialect(dialect);
+  }
+
+  /**
+   * Sets dialect.
+   *
+   * @param dialectName the dialect name
+   */
+  public void setDialect(String dialectName) {
+    this.dialectName = dialectName;
+    if (dialectName != null) {
+      this.dialect = DatabaseDialectManager
+          .getDialectForProduct(dialectName, dialectVersion);
     }
+  }
 
-    public SQLEntityExporter(String uri) {
-        this(uri, null);
+  /**
+   * Sets version.
+   *
+   * @param version the version
+   */
+  public void setVersion(String version) {
+    this.dialectVersion = VersionNumber.valueOf(version);
+    if (this.dialectName != null) {
+      this.dialect = DatabaseDialectManager
+          .getDialectForProduct(dialectName, dialectVersion);
     }
+  }
 
-    public SQLEntityExporter(String uri, String dialect) {
-        this(uri, dialect, null, null);
+  // Callback methods for parent class functionality -----------------------------------------------------------------
+
+  @Override
+  protected void startConsumingImpl(Object object) {
+    if (dialect == null) {
+      throw new ConfigurationError(
+          "'dialect' not set in " + getClass().getSimpleName());
     }
-
-    public SQLEntityExporter(String uri, String dialect, String lineSeparator,
-                             String encoding) {
-        super(uri, encoding, lineSeparator);
-        setDialect(dialect);
+    LOGGER.debug("exporting {}", object);
+    if (!(object instanceof Entity)) {
+      throw new IllegalArgumentException("Expected Entity");
     }
+    Entity entity = (Entity) object;
+    String sql = createSQLInsert(entity);
+    printer.println(sql);
+  }
 
-    public void setDialect(String dialectName) {
-        this.dialectName = dialectName;
-        if (dialectName != null) {
-            this.dialect = DatabaseDialectManager
-                    .getDialectForProduct(dialectName, dialectVersion);
-        }
+  @Override
+  protected void postInitPrinter(Object object) {
+    // nothing special to do
+  }
+
+  /**
+   * Create sql insert string.
+   *
+   * @param entity the entity
+   * @return the string
+   */
+  String createSQLInsert(Entity entity) {
+    String table = entity.type();
+    StringBuilder builder = new StringBuilder("insert into ");
+    if (dialect.quoteTableNames) {
+      builder.append('"').append(table).append('"');
+    } else {
+      builder.append(table);
     }
-
-    public void setVersion(String version) {
-        this.dialectVersion = VersionNumber.valueOf(version);
-        if (this.dialectName != null) {
-            this.dialect = DatabaseDialectManager
-                    .getDialectForProduct(dialectName, dialectVersion);
-        }
+    builder.append(" (");
+    Set<Entry<String, Object>> components =
+        entity.getComponents().entrySet();
+    boolean first = true;
+    for (Entry<String, Object> entry : components) {
+      if (first) {
+        first = false;
+      } else {
+        builder.append(", ");
+      }
+      builder.append(entry.getKey());
     }
-
-    // Callback methods for parent class functionality -----------------------------------------------------------------
-
-    @Override
-    protected void startConsumingImpl(Object object) {
-        if (dialect == null) {
-            throw new ConfigurationError(
-                    "'dialect' not set in " + getClass().getSimpleName());
-        }
-        LOGGER.debug("exporting {}", object);
-        if (!(object instanceof Entity)) {
-            throw new IllegalArgumentException("Expected Entity");
-        }
-        Entity entity = (Entity) object;
-        String sql = createSQLInsert(entity);
-        printer.println(sql);
+    builder.append(") values (");
+    first = true;
+    for (Entry<String, Object> entry : components) {
+      if (first) {
+        first = false;
+      } else {
+        builder.append(", ");
+      }
+      Object value = entry.getValue();
+      builder.append(dialect.formatValue(value));
     }
-
-    @Override
-    protected void postInitPrinter(Object object) {
-        // nothing special to do
-    }
-
-    String createSQLInsert(Entity entity) {
-        String table = entity.type();
-        StringBuilder builder = new StringBuilder("insert into ");
-        if (dialect.quoteTableNames) {
-            builder.append('"').append(table).append('"');
-        } else {
-            builder.append(table);
-        }
-        builder.append(" (");
-        Set<Entry<String, Object>> components =
-                entity.getComponents().entrySet();
-        boolean first = true;
-        for (Entry<String, Object> entry : components) {
-            if (first) {
-                first = false;
-            } else {
-                builder.append(", ");
-            }
-            builder.append(entry.getKey());
-        }
-        builder.append(") values (");
-        first = true;
-        for (Entry<String, Object> entry : components) {
-            if (first) {
-                first = false;
-            } else {
-                builder.append(", ");
-            }
-            Object value = entry.getValue();
-            builder.append(dialect.formatValue(value));
-        }
-        builder.append(");");
-        String sql = builder.toString();
-        LOGGER.debug("built SQL statement: " + sql);
-        return sql;
-    }
+    builder.append(");");
+    String sql = builder.toString();
+    LOGGER.debug("built SQL statement: " + sql);
+    return sql;
+  }
 
 }

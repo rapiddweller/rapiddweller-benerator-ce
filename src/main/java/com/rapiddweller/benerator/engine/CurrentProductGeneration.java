@@ -33,51 +33,58 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 /**
  * Uses a {@link Generator} to create the currently processed object.<br/><br/>
  * Created: 01.09.2011 19:03:38
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class CurrentProductGeneration implements Statement, LifeCycleHolder {
-	
-	private final String instanceName;
-	private final Generator<Object> source;
-	private final WrapperProvider<Object> provider;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public CurrentProductGeneration(String instanceName, Generator<?> source) {
-		this.instanceName = instanceName;
-		this.source = (Generator) source;
-		this.provider = new WrapperProvider<>();
-	}
+  private final String instanceName;
+  private final Generator<Object> source;
+  private final WrapperProvider<Object> provider;
 
-	@Override
-	public void init(BeneratorContext context) {
-		source.init(context);
-	}
+  /**
+   * Instantiates a new Current product generation.
+   *
+   * @param instanceName the instance name
+   * @param source       the source
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public CurrentProductGeneration(String instanceName, Generator<?> source) {
+    this.instanceName = instanceName;
+    this.source = (Generator) source;
+    this.provider = new WrapperProvider<>();
+  }
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-		ProductWrapper<Object> wrapper = source.generate(provider.get());
-		context.setCurrentProduct(wrapper);
-		if (instanceName != null && wrapper != null) {
-			BeneratorContext parent = ((BeneratorSubContext) context).getParent();
-			parent.set(instanceName, wrapper.unwrap());
-		}
-		return (wrapper != null);
-	}
+  @Override
+  public void init(BeneratorContext context) {
+    source.init(context);
+  }
 
-	@Override
-	public void reset() {
-		source.reset();
-	}
+  @Override
+  public boolean execute(BeneratorContext context) {
+    ProductWrapper<Object> wrapper = source.generate(provider.get());
+    context.setCurrentProduct(wrapper);
+    if (instanceName != null && wrapper != null) {
+      BeneratorContext parent = ((BeneratorSubContext) context).getParent();
+      parent.set(instanceName, wrapper.unwrap());
+    }
+    return (wrapper != null);
+  }
 
-	@Override
-	public void close() {
-		source.close();
-	}
+  @Override
+  public void reset() {
+    source.reset();
+  }
 
-	@Override
-	public String toString() {
-		return instanceName + ':' + source;
-	}
+  @Override
+  public void close() {
+    source.close();
+  }
+
+  @Override
+  public String toString() {
+    return instanceName + ':' + source;
+  }
 
 }

@@ -26,10 +26,8 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import java.util.List;
-
-import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.ConstantTestGenerator;
+import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
@@ -37,42 +35,55 @@ import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.collection.ObjectCounter;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * Tests the {@link CollectionGenerator}.<br/><br/>
  * Created: 11.10.2006 23:12:21
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class CollectionGeneratorTest extends GeneratorClassTest {
 
-    public CollectionGeneratorTest() {
-        super(CollectionGenerator.class);
-    }
+  /**
+   * Instantiates a new Collection generator test.
+   */
+  public CollectionGeneratorTest() {
+    super(CollectionGenerator.class);
+  }
 
-    @Test
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void testElements() {
-        Generator<Integer> source = new ConstantTestGenerator<>(1);
-        source.init(context);
-		CollectionGenerator<List, Integer> generator 
-        	= new CollectionGenerator<>(List.class, source, 1, 5, SequenceManager.RANDOM_SEQUENCE);
-        generator.init(context);
-        List<Integer> list = GeneratorUtil.generateNonNull(generator);
-        checkEqualDistribution(list, 0., CollectionUtil.toSet(1));
-    }
+  /**
+   * Test elements.
+   */
+  @Test
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public void testElements() {
+    Generator<Integer> source = new ConstantTestGenerator<>(1);
+    source.init(context);
+    CollectionGenerator<List, Integer> generator
+        = new CollectionGenerator<>(List.class, source, 1, 5, SequenceManager.RANDOM_SEQUENCE);
+    generator.init(context);
+    List<Integer> list = GeneratorUtil.generateNonNull(generator);
+    checkEqualDistribution(list, 0., CollectionUtil.toSet(1));
+  }
 
-    @SuppressWarnings("rawtypes")
-	@Test
-    public void testSize() {
-        Generator<Integer> source = new ConstantTestGenerator<>(1);
-        source.init(context);
-		CollectionGenerator<List, Integer> generator 
-        	= new CollectionGenerator<>(List.class, source, 0, 3, SequenceManager.RANDOM_SEQUENCE);
-        generator.init(context);
-        ObjectCounter<Integer> counter = new ObjectCounter<>(4);
-        for (int i = 0; i < 5000; i++)
-            counter.count(GeneratorUtil.generateNonNull(generator).size());
-        checkEqualDistribution(counter, 0.1, CollectionUtil.toSet(0, 1, 2, 3));
+  /**
+   * Test size.
+   */
+  @SuppressWarnings("rawtypes")
+  @Test
+  public void testSize() {
+    Generator<Integer> source = new ConstantTestGenerator<>(1);
+    source.init(context);
+    CollectionGenerator<List, Integer> generator
+        = new CollectionGenerator<>(List.class, source, 0, 3, SequenceManager.RANDOM_SEQUENCE);
+    generator.init(context);
+    ObjectCounter<Integer> counter = new ObjectCounter<>(4);
+    for (int i = 0; i < 5000; i++) {
+      counter.count(GeneratorUtil.generateNonNull(generator).size());
     }
-    
+    checkEqualDistribution(counter, 0.1, CollectionUtil.toSet(0, 1, 2, 3));
+  }
+
 }

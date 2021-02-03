@@ -26,8 +26,6 @@
 
 package com.rapiddweller.domain.address;
 
-import java.util.Locale;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.factory.InstanceGeneratorFactory;
 import com.rapiddweller.benerator.parser.ModelParser;
@@ -37,12 +35,18 @@ import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
-import org.w3c.dom.Element;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
+import org.w3c.dom.Element;
 
-import static org.junit.Assert.*;
+import java.util.Locale;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 /**
  * Tests the AddressGenerator.<br/><br/>
@@ -53,141 +57,190 @@ import static org.junit.Assert.*;
  */
 public class AddressGeneratorTest extends GeneratorClassTest {
 
-    private static final Logger LOGGER = LogManager.getLogger(AddressGeneratorTest.class);
+  private static final Logger LOGGER = LogManager.getLogger(AddressGeneratorTest.class);
 
-    public AddressGeneratorTest() {
-        super(AddressGenerator.class);
+  /**
+   * Instantiates a new Address generator test.
+   */
+  public AddressGeneratorTest() {
+    super(AddressGenerator.class);
+  }
+
+  // tests -----------------------------------------------------------------------------------------------------------
+
+  /**
+   * Test germany.
+   */
+  @Test
+  public void testGermany() {
+    check(Country.GERMANY, true);
+  }
+
+  /**
+   * Test usa.
+   */
+  @Test
+  public void testUSA() {
+    check(Country.US, true);
+  }
+
+  /**
+   * Test brazil.
+   */
+  @Test
+  public void testBrazil() {
+    check(Country.BRAZIL, true);
+  }
+
+  /**
+   * Test switzerland.
+   */
+  @Test
+  public void testSwitzerland() {
+    check(Country.SWITZERLAND, true);
+  }
+
+  /**
+   * Test swiss locale.
+   */
+  @Test
+  public void testSwissLocale() {
+    AddressGenerator generator = new AddressGenerator("CH");
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      Address address = generator.generate();
+      LOGGER.debug("{}", address);
+      Locale language = address.getCity().getLanguage();
+      String languageCode = language.getLanguage();
+      String street = address.getStreet();
+      if ("de".equals(languageCode)) {
+        assertFalse(street.startsWith("Chaussée "));
+        assertFalse(street.startsWith("Route "));
+        assertFalse(street.startsWith("Rue "));
+        assertFalse(street.startsWith("Via "));
+      } else if ("fr".equals(languageCode)) {
+        assertFalse(street.endsWith("strasse"));
+        assertFalse(street.startsWith("Via "));
+      } else if ("it".equals(languageCode)) {
+        assertFalse(street.startsWith("Chaussée "));
+        assertFalse(street.startsWith("Route "));
+        assertFalse(street.startsWith("Rue "));
+        assertFalse(street.endsWith("strasse"));
+      } else {
+        fail("Illegal language for Switzerland: " + language);
+      }
     }
+  }
 
-    // tests -----------------------------------------------------------------------------------------------------------
+  /**
+   * Test singapore.
+   */
+  @Test
+  public void testSingapore() {
+    check(Country.SINGAPORE, false);
+  }
 
-    @Test
-    public void testGermany() {
-        check(Country.GERMANY, true);
+  /**
+   * Test default descriptor mapping.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testDefaultDescriptorMapping() throws Exception {
+    Country country = Country.getDefault();
+    try {
+      Country.setDefault(Country.GERMANY);
+      checkDescriptorMapping(null);
+    } finally {
+      Country.setDefault(country);
     }
+  }
 
-    @Test
-    public void testUSA() {
-        check(Country.US, true);
+  /**
+   * Test us descriptor mapping.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testUSDescriptorMapping() throws Exception {
+    checkDescriptorMapping(Country.US);
+  }
+
+  /**
+   * Test de descriptor mapping.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testDEDescriptorMapping() throws Exception {
+    checkDescriptorMapping(Country.GERMANY);
+  }
+
+  // helper ----------------------------------------------------------------------------------------------------------
+
+  private void check(Country country, boolean supported) {
+    AddressGenerator generator = new AddressGenerator(country.getIsoCode());
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      Address address = generator.generate();
+      LOGGER.debug("{}", address);
+      assertNotNull(address);
+      // check generated phone numbers
+      String cityAreaCode = address.getCity().getAreaCode();
+      if (country.isMobilePhoneCityRelated()) {
+        assertEquals(cityAreaCode, address.getMobilePhone().getAreaCode());
+      }
+      assertEquals(cityAreaCode, address.getOfficePhone().getAreaCode());
+      assertEquals(cityAreaCode, address.getFax().getAreaCode());
+      assertNotNull(address.getState());
+      assertNotNull(address.getCountry());
+      // check country
+      if (supported) {
+        assertEquals(country, address.getCountry());
+      } else {
+        assertEquals(Country.US, address.getCountry());
+      }
     }
+  }
 
-    @Test
-    public void testBrazil() {
-        check(Country.BRAZIL, true);
+  /**
+   * Test constructor.
+   */
+  @Test
+  public void testConstructor() {
+    AddressGenerator actualAddressGenerator = new AddressGenerator("Dataset");
+    assertEquals("AddressGenerator[Dataset]", actualAddressGenerator.toString());
+    Class<?> expectedGeneratedType = Address.class;
+    assertSame(expectedGeneratedType, actualAddressGenerator.getGeneratedType());
+  }
+
+  /**
+   * Check descriptor mapping.
+   *
+   * @param country the country
+   */
+  @SuppressWarnings("unchecked")
+  public void checkDescriptorMapping(Country country) {
+    String xml =
+        "<variable name='x' " +
+            "generator='com.rapiddweller.domain.address.AddressGenerator' ";
+    if (country != null) {
+      xml += "dataset='" + country.getIsoCode() + "'";
     }
-
-    @Test
-    public void testSwitzerland() {
-        check(Country.SWITZERLAND, true);
+    xml += "/>";
+    Element element = XMLUtil.parseStringAsElement(xml);
+    ModelParser parser = new ModelParser(context);
+    ComplexTypeDescriptor parent = createComplexType("y");
+    InstanceDescriptor descriptor = parser.parseVariable(element, parent);
+    Generator<Address> generator = (Generator<Address>) InstanceGeneratorFactory.createSingleInstanceGenerator(
+        descriptor, Uniqueness.NONE, context);
+    generator.init(context);
+    Country generatedCountry = GeneratorUtil.generateNonNull(generator).getCountry();
+    if (country == null) {
+      assertEquals(Country.getDefault(), generatedCountry);
+    } else {
+      assertEquals(country, generatedCountry);
     }
-
-    @Test
-    public void testSwissLocale() {
-        AddressGenerator generator = new AddressGenerator("CH");
-        generator.init(context);
-        for (int i = 0; i < 100; i++) {
-            Address address = generator.generate();
-            LOGGER.debug("{}", address);
-            Locale language = address.getCity().getLanguage();
-            String languageCode = language.getLanguage();
-            String street = address.getStreet();
-            if ("de".equals(languageCode)) {
-                assertFalse(street.startsWith("Chaussée "));
-                assertFalse(street.startsWith("Route "));
-                assertFalse(street.startsWith("Rue "));
-                assertFalse(street.startsWith("Via "));
-            } else if ("fr".equals(languageCode)) {
-                assertFalse(street.endsWith("strasse"));
-                assertFalse(street.startsWith("Via "));
-            } else if ("it".equals(languageCode)) {
-                assertFalse(street.startsWith("Chaussée "));
-                assertFalse(street.startsWith("Route "));
-                assertFalse(street.startsWith("Rue "));
-                assertFalse(street.endsWith("strasse"));
-            } else
-                fail("Illegal language for Switzerland: " + language);
-        }
-    }
-
-    @Test
-    public void testSingapore() {
-        check(Country.SINGAPORE, false);
-    }
-
-    @Test
-    public void testDefaultDescriptorMapping() throws Exception {
-        Country country = Country.getDefault();
-        try {
-            Country.setDefault(Country.GERMANY);
-            checkDescriptorMapping(null);
-        } finally {
-            Country.setDefault(country);
-        }
-    }
-
-    @Test
-    public void testUSDescriptorMapping() throws Exception {
-        checkDescriptorMapping(Country.US);
-    }
-
-    @Test
-    public void testDEDescriptorMapping() throws Exception {
-        checkDescriptorMapping(Country.GERMANY);
-    }
-
-    // helper ----------------------------------------------------------------------------------------------------------
-
-    private void check(Country country, boolean supported) {
-        AddressGenerator generator = new AddressGenerator(country.getIsoCode());
-        generator.init(context);
-        for (int i = 0; i < 100; i++) {
-            Address address = generator.generate();
-            LOGGER.debug("{}", address);
-            assertNotNull(address);
-            // check generated phone numbers
-            String cityAreaCode = address.getCity().getAreaCode();
-            if (country.isMobilePhoneCityRelated())
-                assertEquals(cityAreaCode, address.getMobilePhone().getAreaCode());
-            assertEquals(cityAreaCode, address.getOfficePhone().getAreaCode());
-            assertEquals(cityAreaCode, address.getFax().getAreaCode());
-            assertNotNull(address.getState());
-            assertNotNull(address.getCountry());
-            // check country
-            if (supported)
-                assertEquals(country, address.getCountry());
-            else
-                assertEquals(Country.US, address.getCountry());
-        }
-    }
-
-    @Test
-    public void testConstructor() {
-        AddressGenerator actualAddressGenerator = new AddressGenerator("Dataset");
-        assertEquals("AddressGenerator[Dataset]", actualAddressGenerator.toString());
-        Class<?> expectedGeneratedType = Address.class;
-        assertSame(expectedGeneratedType, actualAddressGenerator.getGeneratedType());
-    }
-
-    @SuppressWarnings("unchecked")
-    public void checkDescriptorMapping(Country country) {
-        String xml =
-                "<variable name='x' " +
-                        "generator='com.rapiddweller.domain.address.AddressGenerator' ";
-        if (country != null)
-            xml += "dataset='" + country.getIsoCode() + "'";
-        xml += "/>";
-        Element element = XMLUtil.parseStringAsElement(xml);
-        ModelParser parser = new ModelParser(context);
-        ComplexTypeDescriptor parent = createComplexType("y");
-        InstanceDescriptor descriptor = parser.parseVariable(element, parent);
-        Generator<Address> generator = (Generator<Address>) InstanceGeneratorFactory.createSingleInstanceGenerator(
-                descriptor, Uniqueness.NONE, context);
-        generator.init(context);
-        Country generatedCountry = GeneratorUtil.generateNonNull(generator).getCountry();
-        if (country == null) {
-            assertEquals(Country.getDefault(), generatedCountry);
-        } else
-            assertEquals(country, generatedCountry);
-    }
+  }
 
 }

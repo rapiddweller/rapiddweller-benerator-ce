@@ -36,53 +36,87 @@ import com.rapiddweller.benerator.util.RandomUtil;
  * Long Generator that implements a 'random' Long Sequence.<br/>
  * <br/>
  * Created: 03.09.2006 09:53:01
+ *
  * @author Volker Bergmann
  */
 public class RandomLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
-    public static final long DEFAULT_MIN = Long.MIN_VALUE / 2 + 1;
-    public static final long DEFAULT_MAX = Long.MAX_VALUE / 2 - 1;
-	private static final long DEFAULT_GRANULARITY = 1;
+  /**
+   * The constant DEFAULT_MIN.
+   */
+  public static final long DEFAULT_MIN = Long.MIN_VALUE / 2 + 1;
+  /**
+   * The constant DEFAULT_MAX.
+   */
+  public static final long DEFAULT_MAX = Long.MAX_VALUE / 2 - 1;
+  private static final long DEFAULT_GRANULARITY = 1;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public RandomLongGenerator() {
-    	this(DEFAULT_MIN, DEFAULT_MAX);
+  /**
+   * Instantiates a new Random long generator.
+   */
+  public RandomLongGenerator() {
+    this(DEFAULT_MIN, DEFAULT_MAX);
+  }
+
+  /**
+   * Instantiates a new Random long generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public RandomLongGenerator(long min, Long max) {
+    this(min, max, DEFAULT_GRANULARITY);
+  }
+
+  /**
+   * Instantiates a new Random long generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   */
+  public RandomLongGenerator(long min, Long max, long granularity) {
+    super(Long.class, min, max, granularity);
+  }
+
+  // Generator implementation ----------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    if (granularity == 0L) {
+      throw new InvalidGeneratorSetupException(getClass().getSimpleName() + ".granularity may not be 0");
     }
-
-    public RandomLongGenerator(long min, Long max) {
-        this(min, max, DEFAULT_GRANULARITY);
+    if (min > max) {
+      throw new InvalidGeneratorSetupException(
+          new PropertyMessage("min", "greater than max"),
+          new PropertyMessage("max", "less than min"));
     }
+    super.init(context);
+  }
 
-    public RandomLongGenerator(long min, Long max, long granularity) {
-        super(Long.class, min, max, granularity);
-    }
+  @Override
+  public synchronized Long generate() {
+    return generate(min, max, granularity);
+  }
 
-    // Generator implementation ----------------------------------------------------------------------------------------
+  // public convenience method ---------------------------------------------------------------------------------------
 
-    @Override
-    public void init(GeneratorContext context) {
-    	if (granularity == 0L)
-    		throw new InvalidGeneratorSetupException(getClass().getSimpleName() + ".granularity may not be 0");
-        if (min > max)
-            throw new InvalidGeneratorSetupException(
-                    new PropertyMessage("min", "greater than max"),
-                    new PropertyMessage("max", "less than min"));
-        super.init(context);
+  /**
+   * Generate long.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   * @return the long
+   */
+  public static long generate(long min, long max, long granularity) {
+    if (min == max) {
+      return min;
     }
-    
-	@Override
-	public synchronized Long generate() {
-        return generate(min, max, granularity);
-    }
-    
-    // public convenience method ---------------------------------------------------------------------------------------
-
-    public static long generate(long min, long max, long granularity) {
-    	if (min == max)
-    		return min;
-        long range = (max - min) / granularity;
-        return min + RandomUtil.randomLong(0, range) * granularity;
-    }
+    long range = (max - min) / granularity;
+    return min + RandomUtil.randomLong(0, range) * granularity;
+  }
 
 }

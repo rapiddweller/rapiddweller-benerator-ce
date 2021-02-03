@@ -35,14 +35,19 @@ import com.rapiddweller.common.Accessor;
  */
 public class ComponentAccessor implements Accessor<Entity, Object> {
 
-    private final String componentName;
+  private final String componentName;
 
-    public ComponentAccessor(String componentName) {
-        this.componentName = componentName;
-    }
+  /**
+   * Instantiates a new Component accessor.
+   *
+   * @param componentName the component name
+   */
+  public ComponentAccessor(String componentName) {
+    this.componentName = componentName;
+  }
 
-    @Override
-    public Object getValue(Entity target) {
-        return target.getComponent(componentName);
-    }
+  @Override
+  public Object getValue(Entity target) {
+    return target.getComponent(componentName);
+  }
 }
