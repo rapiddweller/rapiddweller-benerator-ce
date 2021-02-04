@@ -21,11 +21,13 @@ testing and training purposes.
 [rapiddweller 'Benerator'](https://www.benerator.de) allows creating realistic and valid high-volume test data, used for testing (
 unit/integration/load) and showcase setup.
 
-Metadata constraints are imported from systems and/or configuration files. Data can imported from and exported to files and systems, anonymized or
+Metadata constraints are imported from systems and/or configuration files. Data can be imported from and exported to files and systems, anonymized, or
 generated from scratch. Domain packages provide reusable generators for creating domain-specific data as names and addresses internationalizable in
 language and region. It is strongly customizable with plugins and configuration options.
 
-rapiddweller 'Benerator' is build for Java 11.
+rapiddweller 'Benerator' is built for Java 11. 
+
+If you need support for Java 8 or earlier, please consider using the previous version 1.0.1. 
 
 ## Prerequisites
 
@@ -58,7 +60,7 @@ mvn -version
       Enter BENERATOR_HOME as name and the path as value
       (e.g. C:\Program Files\Development\rapiddweller-benerator-ce-1.0.0+jdk8). Click OK several times.
     - Mac/Unix/Linux Details: Add an entry that points to benerator,
-      e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.0.0+jdk8`
+      e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.0.0-jdk8`
 
 
 3. On Unix/Linux/Mac systems: **Set permissions**   
@@ -73,7 +75,7 @@ mvn -version
    simply define JAVA_HOME by adding the following line to your .profile: in your user directory:
    `export JAVA_HOME=/Library/Java/Home`
    If it does not work or if you need to use different Java versions, it is easier to 'hard-code' JAVA_HOME like this:
-   `export  JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/`
+   `export  JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home/`
 
    **Note**: We currently recommend following projects for your proper Mac OS X setup:
     - [brew](https://brew.sh/)
@@ -82,7 +84,7 @@ mvn -version
 
 ## Run
 
-If you followed above installation steps carefully, run your benerator scripts from commandline.
+If you followed above installation steps carefully, run your benerator scripts from command line.
 
 1. Start benerator from command line
 
@@ -97,16 +99,44 @@ To get started please find some demo scripts in the folder
 
 There are various sources to get you started or extend your benerator knowledge:
 
-- Download the [Benerator Manual](https://www.benerator.de/ce/1.0.0/rapiddweller-benerator-ce-manual-1.0.0.pdf)
-  from our website.
-- Read the docs on our [Docs site](https://www.benerator.de/ce/1.0.0/doc/) or create your own docs using maven `mvn site:site`. The generated docs
+- Read our docs on our [Benerator Manual site](https://www.benerator.de/ce/1.1.0/doc/) or create your own mkdocs with python `mkdocs build`. Keep in mind that you might need to install certain mkdocs dependencies first. 
+- Consider the [Maven Site Docs](https://www.benerator.de/ce/1.1.0/mvn-site/) or create your own docs using maven `mvn site:site`. The generated docs
   include Javadoc, Test Reports and more.
-- Checkout the maintainers website [www.benerator.de](https://www.benerator.de/) for additional support resources.
+- Download the [Benerator Manual](https://www.benerator.de/ce/1.1.0/rapiddweller-benerator-ce-manual-1.1.0.pdf)
+  from our website.
+- Checkout the maintainer's website [www.benerator.de](https://www.benerator.de/) for additional support resources.
+
+# Table of Contents of Project mkdocs (sources for the generated Docs)
+
+* [Introduction to benerator](docs/introduction_to_benerator.md)
+* [Installation](docs/installation.md)
+* [The Benerator Project Wizard](docs/the_benerator_project_wizard.md)
+* [Quick tour through the descriptor file format](docs/quick_tour_through_the_descriptor_file_format.md)
+* [Data Generation Concepts](docs/data_generation_concepts.md)
+* [Regular Expression Support](docs/regular_expression_support.md)
+* [Processing and creating CSV Files](docs/processing_and_creating_csv_files.md)
+* [Using Relational Databases](docs/using_relational_databases.md)
+* [Using mongoDB](docs/using_mongodb.md)
+* [Generating XML Files](docs/generating_xml_files.md)
+* [Advanced Topics](docs/advanced_topics.md)
+* [Generating Unique Data](docs/generating_unique_data.md)
+* [Scripting](docs/scripting.md)
+* [DatabeneScript](docs/databenescript.md)
+* [Command Line Tools](docs/command_line_tools.md)
+* [Domains](docs/domains.md)
+* [Component Reference](docs/component_reference.md)
+* [Using DB Sanity](docs/using_db_sanity.md)
+* [Maven Benerator Plugin](docs/maven_benerator_plugin.md)
+* [Extending benerator](docs/extending_benerator.md)
+* [Using Benerator as Load Generator](docs/using_benerator_as_load_generator.md)
+* [Troubleshooting](docs/troubleshooting.md)
+* [Monitoring Benerator](docs/monitoring_benerator.md)
+* [Benerator Performance Tuning](docs/benerator_performance_tuning.md)
 
 ## Development Quick Start (only Linux and Mac OS X)
 
 If you want to start development or use the maven project to build rapiddweller 'Benerator' by yourself, on Linux or Mac OS X you can also try the
-quick start by using the helper scripts.  
+quickstart by using the helper scripts.  
 **IMPORTANT:** If you want to use the command `benerator` in your shell session, you have to execute `source script/2_setup_benerator.sh`  
 If you want to install the benerator permanently into your system, you have to modify your environment file or your `~/.profile`   
 and add ENV variable `BENERATOR_HOME` and `PATH=$BENERATOR_HOME/bin:$PATH`
@@ -117,7 +147,7 @@ to execute the scripts you have can do ...
 `source script/2_setup_benerator.sh`  
 `bash script/3_execute_demos.sh`
 
-... alternatively you can also set execute permissions like ...
+... alternatively, you can also set execute permissions like ...
 
 `chmod +x script/1_install_mvn_dependencies.sh`  
 `chmod +x script/2_setup_benerator.sh`  
