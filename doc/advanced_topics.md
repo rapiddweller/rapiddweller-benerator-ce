@@ -15,9 +15,8 @@ You can instantiate JavaBeans by an intuitive syntax like this:
 ```
 
 The _class_ attribute denotes which JavaBean class to instantiate (by the default constructor). The enclosed property tags cause the JavaBean's
-properties and attributes to be set to appropriate values. Benerator converts common types automatically. If benerator cannot perform conversion of a
-custom type, you can define a custom ConverterManager setup (
-see databene-commons). Date and time formatting is supported according to ISO 8601 Conventions.
+properties and attributes to be set to appropriate values. Benerator converts common types automatically. If Benerator cannot perform conversion of a
+custom type, you can define a custom ConverterManager setup (see rd-lib-common). Date and time formatting is supported according to ISO 8601 Conventions.
 
 Objects are made available by exposing them in a context. The id attribute defines the name with which an object can be found, e.g. for a 'source'
 or 'ref' attribute of another element's setup.

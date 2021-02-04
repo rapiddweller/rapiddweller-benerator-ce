@@ -56,7 +56,7 @@ Then you can choose among a list of predefined project types:
 * **Reproduce &amp; scale existing database**: Creates a snapshot of the current database content and creates a descriptor which replays the snapshot
   and defines templates for adding arbitrary volumes of data to each table.
 
-* **Shop example database**: Performs Definition and population of the databene shop database example for all database systems supported by Benerator:
+* **Shop example database**: Performs Definition and population of the Benerator shop database example for all database systems supported by Benerator:
   DB2, Derby, Firebird, HSQL, H2, Oracle, PostgreSQL and SQLServer.
 
 * **Generate simple XML file**: Defines generation of a simple XML file

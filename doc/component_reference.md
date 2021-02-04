@@ -298,7 +298,7 @@ Benerator supports two different types of converter interfaces:
 
 * java.text.Format
 
-### Databene Converters
+### rapiddweller Converters
 
 The following converter classes are located in the package **com.rapiddweller.common.converters** and are imported with the default imports:
 
@@ -695,9 +695,9 @@ benerator provides the following implementations of the EntitySource interface:
 | randomDate(min, max) | Returns a random date between min (inclusively) and max (inclusively) |
 | randomFromWeightLiteral(literal) | Evaluates the weight literal and returns one of the specified values with the specified probability. Example literal: 'A'^3,'B'^1 will produce 75% of 'A' values and 25% of 'B' values. |
 
-## Databene Commons Library
+## rapiddweller Commons Library
 
-The library Databene commons is a general-purpose utility collection which also provides some features useful for data generation and manipulation.
+The library rd-lib-common derived from Databene Commons from Volker Bergmann is a general-purpose utility collection which also provides some features useful for data generation and manipulation.
 Its converters and validators are liste above, but there are some general utility classes too. They can be invoked directly using rapiddwellerScript or
 other supported script languages.
 

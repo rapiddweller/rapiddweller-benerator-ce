@@ -59,8 +59,8 @@ explicitly.
 
 ## Using Database Repositories
 
-For frequently-used databases it is more convenient to use a central database configuration repository. The repository is located in a folder '
-databene' under your user home directory. You can define a database configuration with a name (
+For frequently-used databases it is more convenient to use a central database configuration repository. 
+The repository is located in a folder 'databene' under your user home directory. You can define a database configuration with a name (
 e.g. 'mydb') by storing a correspondingly named properties file there assigning the suffix '.env.properties' (e.g. '
 mydb.env.properties', on Windows the file location would be `C:\Documents and Settings\<user_name>\mydb.env.properties`)
 . In the file you can configure the JDBC connection information with the keys db_url, db_driver, db_user, db_password and db_url.

@@ -105,9 +105,9 @@ The following packages are imported by default (providing, for example, the Cons
 | com.rapiddweller.benerator.distribution.cumulative | Distributions of type 'CumulativeDistributionFunction' |
 | com.rapiddweller.benerator.sample | Generator components that use sample sets or seeds |
 | com.rapiddweller.model.consumer | ConsoleExporter and LoggingConsumer |
-| com.rapiddweller.common.converter | Converter components from databene-commons |
-| com.rapiddweller.common.format | Format components from databene-commons |
-| com.rapiddweller.common.validator | Validator components from databene-commons |
+| com.rapiddweller.common.converter | Converter components from rd-lib-common |
+| com.rapiddweller.common.format | Format components from rd-lib-common |
+| com.rapiddweller.common.validator | Validator components from rd-lib-common |
 | com.rapiddweller.platform.fixedwidth | Fixed column width file importer and exporter |
 | com.rapiddweller.platform.csv | CSV file importer and exporter |
 | com.rapiddweller.platform.dbunit | DbUnit file importer and exporter |

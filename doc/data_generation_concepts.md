@@ -72,7 +72,7 @@ benerator abstracts simple types too. These are the predefined simple types:
 Oracle's NCHAR, NVARCHAR2 and NCLOB types are treated like strings.
 
 The following JDBC types are not supported: DATALINK (70), NULL (0), DISTINCT (2001), STRUCT (2002), ARRAY (2003), REF (
-2006). If you need them, tell me (volker@databene.org).
+2006). If you need them, create an issue or get in touch.
 
 ## Data Characteristics
 
@@ -84,7 +84,7 @@ There are two special issues which often remain unaddressed in testing:
 
 * creating unique values (e.g. IDs or unique phone numbers for fraud checking)
 
-For these purposes, databene benerator provides several interfaces, which extend a common interface, Distribution. The most important ones are
+For these purposes, rapiddweller Benerator provides several interfaces, which extend a common interface, Distribution. The most important ones are
 
 * WeightFunction
 
