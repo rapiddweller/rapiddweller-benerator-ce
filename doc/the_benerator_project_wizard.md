@@ -90,6 +90,5 @@ are eventually necessary (e.g. proprietary database drivers), how to invoke Bene
 customizations.
 
 The easiest way to run the generated project is to run the Maven Benerator Plugin as described in the generated readme.txt files. The project wizard
-creates all necessary files for you to execute the created projects immediately (
-except for proprietary database drivers: Oracle or DB2). However you can also invoke Benerator directly from the command line, but have to take care
+creates all necessary files for you to execute the created projects immediately (except for proprietary database drivers: Oracle or DB2). However you can also invoke Benerator directly from the command line, but have to take care
 of compiling custom Java classes in the project for yourself.

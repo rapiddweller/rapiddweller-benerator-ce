@@ -46,7 +46,7 @@ mvn -version
 1. Choose how to install:
 
    a) Download a Prebuilt Distribution from **Project Overview > Releases**   
-   (current release is `1.0.0`, cp. rapiddweller-benerator-ce-1.0.0+jdk8-dist.zip)
+   (current release is `1.1.0`, cp. rapiddweller-benerator-ce-1.1.0-jdk11-dist.zip)
    and unzip the downloaded file in an appropriate directory, e.g. /Developer/Applications or C:\Program Files\Development.
 
    b) Checkout repository and build your own rapiddweller-benerator-ce using   

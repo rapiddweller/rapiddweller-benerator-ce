@@ -19,8 +19,8 @@ testing and training purposes.
 
 ## Summary
 
-[rapiddweller 'Benerator'](https://www.benerator.de) allows creating realistic and valid high-volume test data, used for testing (
-unit/integration/load) and showcase setup.
+[rapiddweller 'Benerator'](https://www.benerator.de) allows creating realistic and valid high-volume test data, 
+used for testing (unit/integration/load) and showcase setup.
 
 Metadata constraints are imported from systems and/or configuration files. Data can be imported from and exported to files and systems, anonymized, or
 generated from scratch. Domain packages provide reusable generators for creating domain-specific data as names and addresses internationalizable in
@@ -34,14 +34,15 @@ If you need support for Java 8 or earlier, please consider using the versions `<
 
 This document is supposed to become a complete summary of everything you need of benerator usage, use it efficiently and extend it as you need. This
 reference is under construction and will update from time to time. Feel free to contribute your ideas in our repo
-at [https://github.com/rapiddweller/rapiddweller-benerator-ce/](https://github.com/rapiddweller/rapiddweller-benerator-ce/issues)
-.
+at: 
+
+[https://github.com/rapiddweller/rapiddweller-benerator-ce/](https://github.com/rapiddweller/rapiddweller-benerator-ce/issues)
 
 If problems remain unsolved after reading this book, do not hesitate to contact us for help. rapiddweller-benerator-ce is and remains open-source and
 is provided for free.
 
-If you are interested in additional support and our premium features, we encourage you to check the
-website [https://www.benerator.de](https://www.benerator.de/). We offer additional services to make your data generation project a success and provide
+If you are interested in additional support, and our premium features, we encourage you to check the
+website **[www.benerator.de](https://www.benerator.de/)**. We offer additional services to make your data generation project a success and provide
 detailed use cases to ease your start into more complex scenarios.
 
 Since you can do quite a lot of different things with Benerator but surely are interested in just a part of it, here's some guidance:
@@ -49,7 +50,7 @@ Since you can do quite a lot of different things with Benerator but surely are i
 **'[Introduction to benerator](introduction_to_benerator.md)'**, introduces you to the goals and features of Benerator. 
 
 Find advise on how to install a binary distribution and how to get
-the sources and set up an IntelliJ/Eclipse project for using, debugging, and customizing Benerator in [Installation](installation.md).
+the sources and set up an IntelliJ/Eclipse project for using, debugging, and customizing Benerator in **'[Installation](installation.md)'**.
 
 **'[Data Generation Concepts](data_generation_concepts.md)'**, **'[Descriptor File Format](quick_tour_through_the_descriptor_file_format.md)'** and **'[Advanced Topics](advanced_topics.md)'** then provide you with a structured and complete introduction
 into the Benerator descriptor file setup.

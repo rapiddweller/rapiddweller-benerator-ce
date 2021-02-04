@@ -2,7 +2,7 @@
 
 ## Benerator
 
-benerator expects a descriptor file name as the only command line parameter, e.g. on Windows systems
+Benerator expects a descriptor file name as the only command line parameter, e.g. on Windows systems
 
 <div class="termy">
 ```bash
