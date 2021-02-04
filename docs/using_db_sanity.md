@@ -1,8 +1,8 @@
 # Using DB Sanity
 
 You can call Databene DB Sanity for checking preconditions before starting data generation and for verifying properness of the generated data in the
-end. For detailed information about DB Sanity, check its project homepage: [http://databene.org/dbsanity](http://databene.org/dbsanity). To use its
-functionality in Benerator, download and install dbsanity4ben from [http://databene.org/dbsanity4ben](http://databene.org/dbsanity4ben).
+end. For detailed information about DB Sanity, check its project homepage: [https://sourceforge.net/projects/dbsanity/](https://sourceforge.net/projects/dbsanity/). To use its
+functionality in Benerator, download and install dbsanity4ben from [https://sourceforge.net/projects/dbsanity/files/](https://sourceforge.net/projects/dbsanity/files/).
 
 For calling DB Sanity in a Benerator descriptor file, you define the checks and put them into a single XML file or distribute them over several ones
 and put them into a sub directory of your Benerator project, typically called '
@@ -10,7 +10,7 @@ dbsanity'.
 
 Import the plugin functionality to your Benerator project using
 
-``` xml
+```xml
 <import platform="dbsanity" … />
 ```
 

@@ -1,13 +1,13 @@
 # Component Reference
 
-benerator has lots of predefined generators which are available implicitly from the descriptor. Most of them only need to be created explicitly when
-using the benerator API programmatically.
+Benerator has lots of predefined generators which are available implicitly from the descriptor. Most of them only need to be created explicitly when
+using the Benerator API programmatically.
 
 ## Generators
 
 ### Domain Generators
 
-For domain-specific generators (e.g. person, address, finance), see **'Domains'**.
+For domain-specific generators (e.g. person, address, finance), see **'[Domains](domains.md)'**.
 
 ### Common Id Generators
 
@@ -65,16 +65,19 @@ See 'Using databases'
 * **DateTimeGenerator**: Generates date values with date and time configurable independentlyIts properties are: minDate, maxDate, dateGranularity,
   dateDistribution, minTime, maxTime, timeGranularity, timeDistribution. For a 9-to-5 datetime on odd days in August 2010, configure
 
-`<bean id="dtGen" class="DateTimeGenerator">`
-`<property name='minDate' value='2010-08-01'/>`
-`<property name='maxDate' value='2010-08-31'/>`
-`<property name='dategranularity' value='00-00-02' />`
-`<property name='dateDistribution' value='random' />`
-`<property name='minTime' value='08:00:00' />`
-`<property name='maxTime' value='17:00:00' />`
-`<property name='timeGranularity' value='00:00:01' />`
-`<property name='timeDistribution' value='random' />`
-`</bean>`
+```xml
+
+<bean id="dtGen" class="DateTimeGenerator">
+  <property name='minDate' value='2010-08-01'/>
+  <property name='maxDate' value='2010-08-31'/>
+  <property name='dategranularity' value='00-00-02'/>
+  <property name='dateDistribution' value='random'/>
+  <property name='minTime' value='08:00:00'/>
+  <property name='maxTime' value='17:00:00'/>
+  <property name='timeGranularity' value='00:00:01'/>
+  <property name='timeDistribution' value='random'/>
+</bean>
+```
 
 ### file related generators
 
@@ -100,7 +103,7 @@ See 'Using databases'
 
 ## Distributions
 
-A Distribution describes stochastic properties for distributing the data that benerator generates. You can use the predefined distributions or
+A Distribution describes stochastic properties for distributing the data that Benerator generates. You can use the predefined distributions or
 implement and introduce custom implementations. The most important types of distribution are _Sequence_, _WeightFunction_ and _
 CumulativeDistributionFunction_.
 
@@ -120,12 +123,16 @@ Distributions that are based on number generation may adopt data redistribution 
 using their number generation feature to determine indices of the data to provide. If the data amount is large, you may get memory problems. In order
 to provide an easy start, Benerator reduces the default size of these lists to 100,000 elements, prints out an error message if the number is
 exceeded, but simply continues to work with the reduced amount of data. You can allow Benerator to use a larger cache by adding a benerator.cacheSize
-to your BENERATOR_OPTS, e.g. -Dbenerator.cacheSize=2000000\. If this makes you run into an OutOfMemoryError, check the '
-Troubleshooting' section on how to allocate a larger Java heap in Benerator.
+to your **BENERATOR_OPTS**, e.g. 
+
+`-Dbenerator.cacheSize=2000000`
+
+If this makes you run into an OutOfMemoryError, check the '
+[Troubleshooting](troubleshooting.md)' section on how to allocate a larger Java heap in Benerator.
 
 ### Sequences
 
-Sequences reflect the idea of a mathematical sequence. The primary focus in number generation, but they can be applied for data redestribution as
+Sequences reflect the idea of a mathematical sequence. They primary focus in number generation, but they can be applied for data redestribution as
 well. Most sequences have a default instance which can be used by their literal, e.g. distribution="random" uses the 'random' literal for the
 Distribution defined in the class RandomSequence.
 
@@ -242,11 +249,12 @@ Parameters: average [, deviation]
 
 Example:
 
-`<import class="com.rapiddweller.benerator.distribution.function.*"/>`
-
+```xml
+<import class="com.rapiddweller.benerator.distribution.function.*"/>
 ...
-
-`<attribute name="price" type="big_decimal" min="0.1" max="99.90" granularity="0.1" distribution="new GaussianFunction(50,20)"/>`
+<attribute name="price" type="big_decimal" min="0.1" max="99.90" granularity="0.1"
+           distribution="new GaussianFunction(50,20)"/>
+```
 
 ### ExponentialFunction
 
@@ -258,11 +266,11 @@ Parameters: [scale,] frequency
 
 Example:
 
-`<import class="com.rapiddweller.benerator.distribution.function.*"/>`
-
+```xml
+<import class="com.rapiddweller.benerator.distribution.function.*"/>
 ...
-
-`<attribute name="category" type="char" values="A,B,C" distribution="new ExponentialFunction(0.5)"/>`
+<attribute name="category" type="char" values="A,B,C" distribution="new ExponentialFunction(0.5)"/>
+```
 
 ### DiscreteFunction
 
@@ -274,11 +282,13 @@ Parameters: weight1 [, weight2 [, weight3 ...]]
 
 Example:
 
-`<import class="com.rapiddweller.benerator.distribution.function.*"/>`
+```xml
+<import class="com.rapiddweller.benerator.distribution.function.*"/>
 
 ...
 
-`<attribute name="rating" type="int" min="1", max="3" distribution="new DiscreteFunction(1, 2, 1)"/>`
+<attribute name="rating" type="int" min="1", max="3" distribution="new DiscreteFunction(1, 2, 1)"/>
+```
 
 ## Converters
 
@@ -353,28 +363,21 @@ In the package **com.rapiddweller.benerator.primitive.number** there are two con
 
 NoiseInducer example:
 
-`<bean id="inducer" class="com.rapiddweller.benerator.primitive.number.NoiseInducer">`
-
-`<property name="minNoise" value="-0.2"/>`
-
-`<property name="maxNoise" value="0.2"/>`
-
-`<property name="noiseGranularity" value="0.01"/>`
-
-`<property name="noiseDistribution" value="cumulated"/>`
-
-`<property name="relative" value="true"/>`
-
-`</bean>`
-
-`<generate count="5" consumer="ConsoleExporter">`
-
-`<attribute name="x" type="int" constant="100" converter="inducer" />`
-
-`</generate>`
+```xml
+<bean id="inducer" class="com.rapiddweller.benerator.primitive.number.NoiseInducer">
+  <property name="minNoise" value="-0.2"/>
+  <property name="maxNoise" value="0.2"/>
+  <property name="noiseGranularity" value="0.01"/>
+  <property name="noiseDistribution" value="cumulated"/>
+  <property name="relative" value="true"/>
+</bean><generate count="5" consumer="ConsoleExporter">
+<attribute name="x" type="int" constant="100" converter="inducer"/>
+</generate>
+```
 
 produces the result:
 
+```bash
 entity[x=99]
 
 entity[x=105]
@@ -384,6 +387,7 @@ entity[x=92]
 entity[x=104]
 
 entity[x=99]
+```
 
 ### Java Formats
 
@@ -397,7 +401,7 @@ Beware that the java.text.Format classes are not thread-safe!
 
 ### Domain Validators
 
-For the validators from the domains see 'Domains'
+For the validators from the domains see '[Domains](domains.md)'
 
 ### Common validators
 
@@ -466,9 +470,10 @@ A Consumer consumes generated data and usually is used for exporting or persisti
 
 Usage example:
 
-`<bean id="service" spec="..." />`
-
-`<bean id="invoker" spec="new JavaInvoker(ejb, 'enrolCustomer')" />`
+```xml
+<bean id="service" spec="..." />
+<bean id="invoker" spec="new JavaInvoker(ejb, 'enrolCustomer')" />
+```
 
 ### DbUnitEntityExporter
 
@@ -562,11 +567,13 @@ third, a points column, padded to 5 columns using zeros, having two fraction dig
 
 and would be rendered like this:
 
+```bash
 Alice Hamilton 2310.05
 
 Bob Durand 4601.23
 
 Helmut Schmidt 10226.14
+```
 
 ### XLSEntityExporter
 
@@ -691,7 +698,7 @@ benerator provides the following implementations of the EntitySource interface:
 ## Databene Commons Library
 
 The library Databene commons is a general-purpose utility collection which also provides some features useful for data generation and manipulation.
-Its converters and validators are liste above, but there are some general utility classes too. They can be invoked directly using DatabeneScript or
+Its converters and validators are liste above, but there are some general utility classes too. They can be invoked directly using rapiddwellerScript or
 other supported script languages.
 
 ### TimeUtil

@@ -27,7 +27,7 @@ Several global benerator properties allow for customization of its behavior:
 | defaultLocale | The locale to use if none has been specified explicitly | The system's language code, e.g. 'de' |
 | defaultDataset | The dataset to use if none has been specified explicitly | The system's country's two-letter ISO code, e.g. 'US' |
 | defaultPageSize | the number of entities to create in one 'run', typically a transaction | 1 |
-| defaultScript | The default script engine to use for evaluating script expressions | ben (DatabeneScript) |
+| defaultScript | The default script engine to use for evaluating script expressions | ben (rapiddwellerScript) |
 | defaultNull | tells if nullable attribute should always be generated as null by default | true |
 | defaultSeparator | the default column separator to use for csv files | , |
 | defaultErrorHandler | the default error handling mechanism to use | fatal |
@@ -264,7 +264,7 @@ Note that some windows shell commands are only available in the command line int
 <execute type="shell">cmd /C type myGeneratedFile.csv</execute>
 ```
 
-You can use `<execute>` for invoking scripts too (SQL, DatabeneScript, JavaScript, FreeMarker and more), but that will be explained later.
+You can use `<execute>` for invoking scripts too (SQL, rapiddwellerScript, JavaScript, FreeMarker and more), but that will be explained later.
 
 ## `<wait>`
 

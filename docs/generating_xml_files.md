@@ -317,6 +317,7 @@ data. The contents of this data are mapped using script expressions:
 </xs:annotation>
 
 </xs:attribute>
+```
 
 Using a CSV file with product definitions:
 
@@ -332,6 +333,7 @@ ean_code,name,category_id,price,manufacturer
 
 we finally get a satisfactory result:
 
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 
 <transactions elementFormDefault="unqualified">

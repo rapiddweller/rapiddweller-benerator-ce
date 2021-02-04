@@ -1,14 +1,15 @@
 # Scripting
 
-Benerator supports arbitrary scripting languages that are supported by Java and has an own scripting language DatabeneScript which is designed
+Benerator supports arbitrary scripting languages that are supported by Java and has an own scripting language rapiddwellerScript which is designed
 specifically for the purpose of data generation.
 
 The invocation syntax is as described for SQL invocation and inlining: You can include the script inline like this:
 
 ```xml
+
 <database id="db" url="jdbc:hsqldb:hsql://localhost:9001"
 
-driver="org.hsqldb.jdbcDriver" schema="public" user="sa"/>
+          driver="org.hsqldb.jdbcDriver" schema="public" user="sa"/>
 
 <execute type="js">
 
@@ -62,7 +63,7 @@ benerator supports the following script types:
 
 * jar: java library files with a configured main-class
 
-* ben: DatabeneScript, which is the default script language
+* ben: rapiddwellerScript, which is the default script language
 
 * ftl: FreeMarker
 

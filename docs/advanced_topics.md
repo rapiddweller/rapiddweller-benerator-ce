@@ -64,9 +64,9 @@ example:
 </bean>
 ```
 
-You can use all inline construction styles in a spec attribute, too. See ???, ??? and ???
+You can use all inline construction styles in a spec attribute, too. 
 
-You can invoke methods on beans using DatabeneScript:
+You can invoke methods on beans using rapiddwellerScript:
 
 `<execute>`myBean.init(47 + 11)`</execute>`
 
@@ -780,18 +780,3 @@ The default is 'list'.
 
 Using a data source which provides hierarchical data, nested collection components (like user.addresses in the previous example) can be iterated
 explicitly, specifying the root component as **source** and providing the component **name**.
-
-Here is an example which performs a primitive data anonymization job on users and their addresses in a mongoDB server:
-
-```xml
-<setup>
-    <import platforms='mongodb'/>
-    <mongodb id='db' environment='mymongo'/>
-    <iterate type='user' source='db' consumer='db.updater(),ConsoleExporter'>
-        <attribute name='age' constant='33'/>
-        <part name='addresses' source='user' container='list'>
-            <attribute name='houseNo' constant='123'/>
-        </part>
-    </iterate>
-</setup>
-```

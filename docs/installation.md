@@ -2,26 +2,27 @@
 
 ## Download the distribution binary
 
-Download benerator
-from [https://gitlab.com/rapiddweller/benerator/rapiddweller-benerator-ce/files/](https://gitlab.com/rapiddweller/benerator/rapiddweller-benerator-ce/files/)
-.
+Download Benerator from: 
+
+[https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/)
+
 
 You should download the most recent version of the rapiddweller-benerator-dist archive from the download page, e.g.
-rapiddweller-benerator-ce-1.0.0+jdk-11-dist.zip.d
+_rapiddweller-benerator-ce-1.1.0-jdk-11-dist.zip_ .
 
 ## Unzip Benerator
 
-Unzip the downloaded file in an appropriate directory, e.g. /Developer/Applications or C:\Program Files\Development.
+Unzip the downloaded file in an appropriate directory, e.g. `/Developer/Applications` or `C:\Program Files\Development`.
 
 ## Set BENERATOR_HOME
 
 Create an environment variable BENERATOR_HOME that points to the path you extracted benerator to.
 
 **Windows Details**: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the User Variables section. Enter
-BENERATOR_HOME as name and the path as value (e.g. C:\Program Files\Development\rapiddweller-benerator-ce-1.0.0). Click OK several times.
+BENERATOR_HOME as name and the path as value (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.0`). Click OK several times.
 
 **Mac/Unix/Linux Details**: Open the file .profile in your user directory. Add an entry that points to benerator, e.g.:
-export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.0.0
+`export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.0.0`
 
 ## Optional: Install JDBC drivers
 
@@ -44,11 +45,11 @@ Benerator comes with open source JDBC drivers (for connecting to a database). No
 However, if you need to use a closed source database driver, the vendor usually requires you to accept usage conditions before you can download and
 install their driver. So, if you are using Oracle DB or DB2, get the JDBC drivers from these sites:
 
-• Oracle [http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html]: Click on "Oracle Database 11g Release 2 (11.2.0.1.0) drivers".
+• Oracle [http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html]([http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html): Click on "Oracle Database 11g Release 2 (11.2.0.1.0) drivers".
 Download ojdbc6.jar and put it into benerator's lib directory. You will need to create a free Oracle account.
 
-• DB2 [http://www-306.ibm.com/software/data/db2/java]: Follow the link 'IBM Data Server Driver for JDBC and SQLJ', download the driver archive and
-copy the contained file db2jcc.jar to benerator's lib directory.
+• DB2 [http://www-306.ibm.com/software/data/db2/java](http://www-306.ibm.com/software/data/db2/java): Follow the link 'IBM Data Server Driver for JDBC and SQLJ', download the driver archive and
+copy the contained file db2jcc.jar to Benerator's lib directory.
 
 ## Optional: Set up log4j2
 

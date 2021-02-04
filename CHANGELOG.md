@@ -20,7 +20,7 @@ N/A
 
 ## Important Notes
 
-...
+- Repository shift to github.com
 
 ## Breaking Changes
 

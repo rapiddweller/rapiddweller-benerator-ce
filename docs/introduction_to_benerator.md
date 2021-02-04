@@ -1,8 +1,8 @@
-# Introduction to benerator
+# Goals and Features <br />Introduction to Benerator
 
 ## Goals
 
-The core goals of benerator are
+The core goals of Benerator are
 
 * Generation of data that satisfies complex data validity requirements
 
@@ -42,17 +42,16 @@ Production data can be easily extracted from production systems. Tables can be i
 
 ![](assets/grafik2.png)
 
-## State of the benerator
+## State of the Benerator
 
-benerator is developed and continuously extended and improved since June 2006\. benerator is mainly used and tested best for data file and database
-data generation, for these applications benerator should help you for almost all your data generation needs out of the box - and extending benerator
+Benerator is developed and continuously extended and improved since June 2006\. Benerator is mainly used and tested best for data file and database
+data generation, for these applications Benerator should help you for almost all your data generation needs out of the box - and extending Benerator
 for specific needs is easy.
 
-XML-Schema, on the other hand, allows for an extraordinarily wide range of features. benerator's XML support is limited to features that are useful
+XML-Schema, on the other hand, allows for an extraordinarily wide range of features. Benerator's XML support is limited to features that are useful
 for generating XML data structures (no mixed content) and does not yet support all variants possible with XML schema. The elements `<unique>`, `<key>`
 and `<keyRef>` cannot be handled automatically, but require manual configuration. The following features are not yet implemented: `<group>`
-, `<import>`, `<all>` and `<sequence>`
-with minCount != 1 or maxCount != 1\. If you need support for some of these, please contact me.
+, `<import>`, `<all>` and `<sequence>` with minCount != 1 or maxCount != 1\. If you need support for some of these, please contact us.
 
 ## Building Blocks
 
@@ -60,9 +59,9 @@ with minCount != 1 or maxCount != 1\. If you need support for some of these, ple
 
 ## Database Support
 
-All common SQL data types are supported (for a list of unsupported types, see ??? )
+All common SQL data types are supported.
 
-benerator was tested with and provides examples for
+Benerator was tested with and provides examples for
 
 * Oracle 19c (thin driver)
 

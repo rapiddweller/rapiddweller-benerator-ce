@@ -5,11 +5,11 @@ generation:
 
 ## Naming
 
-Business objects are called _entity_ in this book, their contained simple type data are _attributes_ .
+Business objects are called _entity_ in this book, their contained simple type data are _attributes_.
 
 ## Entity Data
 
-benerator generates entities in a platform-independent manner (internally using the class com.rapiddweller.model.data.Entity. An entity will be
+benerator generates entities in a platform-independent manner (internally using the class `com.rapiddweller.model.data.Entity`. An entity will be
 interpreted individually depending on the target system. It can be mapped to
 
 * relational data (DB)
@@ -134,23 +134,16 @@ In the system initialization stage you typically use scripts for starting and in
 
 For starting a database with a shell script and initializing it with a SQL script, you could write:
 
-`<execute type="shell">`sh ./startdb.sh &amp;`</execute>`
-
-`<execute target="db" type="sql" onError="warn">`
-
+```xml
+<execute type="shell">`sh ./startdb.sh &amp;`</execute>
+<execute target="db" type="sql" onError="warn">
 DROP TABLE db_user;
-
-CREATE TABLE db_user (
-
-id int NOT NULL,
-
+CREATE TABLE db_user (id int NOT NULL,
 name varchar(30) NOT NULL,
-
 PRIMARY KEY (id),
-
 );
-
-`</execute>`
+</execute>
+```
 
 As you see, scripts can be inlined or imported from files. See Chapter 5, Scripting for a full introduction.
 
@@ -182,13 +175,12 @@ For predefined data generation it is most convenient to import core data from a 
 and is the most reliable source for reproducible data. Currently, the most convenient file formats for this task are DbUnit XML files (one file with
 several tables) and CSV (one file per table).
 
-`<!-- import integration test data for all tables from one DbUnit file -->`
-
-`<iterate source="core.dbunit.xml" consumer="db" />`
-
-`<!-- import predefined products from a CSV file -->`
-
-`<iterate type="db_product" source="demo/shop/products.import.csv" encoding="utf-8" consumer="db" />`
+```xml
+<!-- import integration test data for all tables from one DbUnit file -->
+<iterate source="core.dbunit.xml" consumer="db" />
+<!-- import predefined products from a CSV file -->
+<iterate type="db_product" source="demo/shop/products.import.csv" encoding="utf-8" consumer="db" />
+```
 
 Fixed column width files and SQL files can be used too. If you need to import data of other formats you can easily write a parser and use it directly
 from benerator (See Section 9.9, “Custom EntitySources”).
@@ -205,13 +197,13 @@ and _Chapter 4, Advanced Topics_ for a description.
 If your system has complex business logic (typically workflows), you will encounter generation requirements that are easier to satisfy by calling
 application business logic than by a pure descriptor-based generation.
 
-For example you might need to generate performance test data for a mortgage application: People may apply for a mortgage, enter information about
-their house, incomes and expenses, their application is rated by some rule set and the mortgages finally is granted or rejected. The you have complex
+For example, you might need to generate performance test data for a mortgage application: People may apply for a mortgage, enter information about
+their house, incomes and expenses, their application is rated by some rule set, and the mortgages finally is granted or rejected. Then you have complex
 logic (rating) that is not necessarily useful to be reproduced for data generation. It is easiest to call the business logic directly.
 
 This can be done in two ways:
 
-* Scripts : Having script commands inlined in the benerator descriptor file or called from external files, e.g. DatabeneScript, JavaScript, Groovy,
+* Scripts : Having script commands inlined in the benerator descriptor file or called from external files, e.g. rapiddwellerScript, JavaScript, Groovy,
   Ruby, Python. See Chapter 5, Scripting
 
 * Tasks : Programming own Java modules that are invoked by benerator. See Section 4.6, “Tasks”
@@ -239,15 +231,13 @@ You can also use DB Sanity for verifying the preconditions; see the chapter abou
 benerator processes metadata descriptors that can be imported from systems like databases and can be overwritten manually. Benerator automatically
 generates data that matches the (e.g. database) constraints. So, when it encounters a table defined like this:
 
+```sql
 CREATE TABLE db_user (
-
 ...
-
 active SMALLINT DEFAULT 1 NOT NULL,
-
 ...
-
 );
+```
 
 When generating data for the user table, benerator will automatically generate all users with active set to 1:
 
@@ -256,11 +246,11 @@ When generating data for the user table, benerator will automatically generate a
 If you specify active as an attribute, you inherit a new setting from the parent descriptor, dropping the parent's configuration of values=1 and
 adding a new one, e.g. the configuration
 
-`<generate type="db_user" count="100" consumer="db">`
-
-`<attribute name="active" values="0,1"/>`
-
-`<generate>`
+```xml
+<generate type="db_user" count="100" consumer="db">
+<attribute name="active" values="0,1"/>
+<generate>
+```
 
 will cause generation of 50% 0 and 50% 1 values.
 
@@ -327,13 +317,12 @@ implementation.
 
 You ca define global components in a Spring-like syntax:
 
-`<bean id="helper" class="com.my.Helper">`
-
-`<property name="min" value="5"/>`
-
-`<property name="max" value="23"/>`
-
-`</bean>`
+```xml
+<bean id="helper" class="com.my.Helper">
+  <property name="min" value="5"/>
+  <property name="max" value="23"/>
+</bean>
+```
 
 For details on this syntax and other variants, see the section “JavaBeans and the Benerator Context”. You can refer to such an object by its id ('
 helper' in this case).
@@ -419,8 +408,7 @@ The resulting entries are database-valid automatically.
 
 ## Constructive Data Generation
 
-Constructive metadata describes methods of data generation, e.g. import from a data source or stochastic number generation. For a complete list of
-options, see ???.
+Constructive metadata describes methods of data generation, e.g. import from a data source or stochastic number generation. 
 
 We can improve the credit card example from above by adding own, constructive metadata to the descriptive ones imported from the database:
 
@@ -476,13 +464,12 @@ a `<variable>` as an auxiliary generator inside a `<generate>` descriptor and as
 generator will provide a new generated object under the assigned name ('person'). So, if you want to access a part of a composite generated object you
 can query it e.g. by a script expression like person.familyName:
 
-`<generate type="customer" consumer="ConsoleExporter">`
-
-`<variable name="person" generator="PersonGenerator" />`
-
-`<attribute name="lastName" script="person.familyName" />`
-
-`</generate>`
+```xml
+<generate type="customer" consumer="ConsoleExporter">
+  <variable name="person" generator="PersonGenerator" />
+  <attribute name="lastName" script="person.familyName" />
+</generate>
+```
 
 For defining a variable, you can use the same syntax elements like for an attribute. But the type of data that the variable can generate is much less
 restricted. A variable may
@@ -546,19 +533,15 @@ used to store the entities. File exporters (for CSV and fixed column width files
 New import formats can be supported by implementing the EntitySource interface with a JavaBean implementation, instantiating it as bean and referring
 it by its id with a 'source' attribute, e.g.
 
-`<bean id="products_file"
+```xml
+<bean id="products_file" class="com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource">
+  <property name="uri" value="shop/products.import.fcw"/>
+  <property name="entity" value="product"/>
+  <property name="properties" value="ean_code[13],name[30],price[8r0]"/>
+</bean>
 
-class="com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource">`
-
-`<property name="uri" value="shop/products.import.fcw"/>`
-
-`<property name="entity" value="product"/>`
-
-`<property name="properties" value="ean_code[13],name[30],price[8r0]"/>`
-
-`</bean>`
-
-`<iterate type="product" source="products_file" consumer="ConsoleExporter"/>`
+<iterate type="product" source="products_file" consumer="ConsoleExporter"/>
+```
 
 ## Consumers
 
@@ -570,15 +553,13 @@ JavaBeans that implement the Consumer interface. They are not supposed to mutate
 A `<generate>` element may have consumers in `<consumer>` sub-elements or in a comma-separated list in a consumer attribute, e.g. consumer="a,b". A
 consumer sub element has the same syntax as a `<bean>` element, e.g.
 
-`<generate type="db_product">`
-
-`<consumer class="com.my.SpecialConsumer">`
-
-`<property name="format" value="uppercase"/>`
-
-`</consumer>`
-
-`</generate>`
+```xml
+<generate type="db_product">
+  <consumer class="com.my.SpecialConsumer">
+      <property name="format" value="uppercase"/>
+  </consumer>
+</generate>
+```
 
 A consumer attribute may hold a comma-separated list consisting of
 
@@ -592,23 +573,23 @@ Examples:
 
 The `<database>` declaration will be described later.
 
-`<bean id="special" class="com.my.SpecialConsumer"/>`
+```xml
+<bean id="special" class="com.my.SpecialConsumer"/>
+    <property name="format" value="uppercase"/>
+</bean>
 
-`<property name="format" value="uppercase"/>`
-
-`</bean>`
-
-`<generate type="db_product" consumer="db,special"/>`
+<generate type="db_product" consumer="db,special"/>
+```
 
 or
 
-`<bean id="special" class="com.my.SpecialConsumer"/>`
+```xml
+<bean id="special" class="com.my.SpecialConsumer"/>
+    <property name="format" value="uppercase"/>
+</bean>
 
-`<property name="format" value="uppercase"/>`
-
-`</bean>`
-
-`<generate type="db_product" consumer="com.my.SpecialConsumer"/>`
+<generate type="db_product" consumer="com.my.SpecialConsumer"/>
+```
 
 ### Consumer Life Cycle
 
@@ -626,19 +607,16 @@ cycle:
 
 You will need to reuse some of the generated data for setting up (load) test clients. You can export data by simply defining an appropriate consumer:
 
-`<import platforms="fixedwidth" />`
+```xml
+<import platforms="fixedwidth" />
 
-`<generate type="db_product" **consumer="db">`
-
-`<consumer class="FixedWidthEntityExporter">`
-
-`<property name="uri" value="products.fcw"/>`
-
-`<property name="properties" value="ean_code[13],name[30l],price[10r0]"/>`
-
-`</consumer>`
-
-`</generate>`
+<generate type="db_product" **consumer="db">
+  <consumer class="FixedWidthEntityExporter">
+    <property name="uri" value="products.fcw"/>
+    <property name="properties" value="ean_code[13],name[30l],price[10r0]"/>
+  </consumer>
+</generate>
+```
 
 ## Post Processing Imported or Variable Data
 
@@ -656,19 +634,19 @@ You could also combine the approaches
 
 ### overwriting post processing
 
-`<iterate type="TX" source="tx.ent.csv" >`
-
-`<id name="ID" **generator="IncrementalIdGenerator" />`
-
-`</generate>`
+```xml
+<iterate type="TX" source="tx.ent.csv" >
+    <id name="ID" **generator="IncrementalIdGenerator" />
+</iterate>
+```
 
 ### "script" post processing
 
-`<iterate type="TX" source="tx.ent.csv">`
-
-`<attribute name="CARD" **script="TX.CARD == 'Y' ? 1 : 0" />`
-
-`</generate>`
+```xml
+<iterate type="TX" source="tx.ent.csv">
+    <attribute name="CARD" **script="TX.CARD == 'Y' ? 1 : 0" />
+</iterate>
+```
 
 ### "map" post processing
 
@@ -678,13 +656,12 @@ postprocessing step, so it can be combined with an arbitrary generation strategy
 
 Example
 
-`<iterate type="db_user" source="db">`
-
-`<variable name="p" generator="person" />`
-
-`<attribute name="gender" **script="p.gender.name()" **map="'MALE'->`'m','FEMALE'->`'f'" />`
-
-`</iterate>`
+```xml
+<iterate type="db_user" source="db">
+    <variable name="p" generator="person" />
+    <attribute name="gender" **script="p.gender.name()" **map="'MALE'->`'m','FEMALE'->`'f'" />
+</iterate>
+```
 
 In a script, the keyword **this** refers to the entity currently being generated/iterated.
 
@@ -692,11 +669,11 @@ In a script, the keyword **this** refers to the entity currently being generated
 
 For more intelligent/dynamic conversions, you can inject a converter, e.g. for converting strings to upper case:
 
-`<iterate type="TX" source="tx.ent.csv">`
-
-`<attribute name="PRODUCT" **script="{this.PRODUCT}" **converter="CaseConverter" />`
-
-`</generate>`
+```xml
+<iterate type="TX" source="tx.ent.csv">
+    <attribute name="PRODUCT" **script="{this.PRODUCT}" **converter="CaseConverter" />
+</iterate>
+```
 
 ## Anonymizing Production Data
 
@@ -709,13 +686,15 @@ database (test_db). All attributes that are not overwritten, will be exported as
 prototype generator (...PersonGenerator) is used to generate prototypes (named person) whose attributes are used to overwrite production customer
 attributes:
 
-`<iterate source="prod_db" type="db_customer" consumer="test_db">`
-
-`<variable name="person" generator="com.rapiddweller.domain.person.PersonGenerator"/>`
-
-`<attribute name="salutation" script="person.salutation" />` `<attribute name="first_name" script="person.givenName" />` `<attribute name="last_name" script="person.familyName" />` `<attribute name="birth_date" nullable="false" />`
-
-`</iterate>`
+```xml
+<iterate source="prod_db" type="db_customer" consumer="test_db">
+  <variable name="person" generator="com.rapiddweller.domain.person.PersonGenerator"/>
+  <attribute name="salutation" script="person.salutation" />
+  <attribute name="first_name" script="person.givenName" />
+  <attribute name="last_name" script="person.familyName" />
+  <attribute name="birth_date" nullable="false" />
+</iterate>
+```
 
 ![](assets/grafik14.png)
 
@@ -726,24 +705,23 @@ field C must be null“. It many cases, an easy solution is to import data, muta
 short syntax element to do so is the condition attribute. It contains a condition and when added to a component generator, the generator is only
 applied if the condition resolves to true:
 
-`<iterate source="db1" type="customer" consumer="">`
-
-`<attribute name="vat_no" **condition="this.vat_no != null" pattern="DE[1-9][0-9]{8}" unique="true" />`
-
-`</iterate>`
+```xml
+<iterate source="db1" type="customer" consumer="">
+    <attribute name="vat_no" **condition="this.vat_no != null" pattern="DE[1-9][0-9]{8}" unique="true" />
+</iterate>
+```
 
 ## Converters
 
 Converters are useful for supporting using custom data types (e.g. a three-part phone number) and common conversions (
 e.g. formatting a date a date as string). Converters can be applied to entities as well as attributes by specifying a converter attribute:
 
-`<generate type="TRANSACTION" consumer="db">`
-
-`<id name="ID" type="long" strategy="increment" param="1000" />`
-
-`<attribute name="PRODUCT" source="{TRANSACTION.PRODUCT}" converter="CaseConverter"/>`
-
-`</generate>`
+```xml
+<generate type="TRANSACTION" consumer="db">
+  <id name="ID" type="long" strategy="increment" param="1000" />
+  <attribute name="PRODUCT" source="{TRANSACTION.PRODUCT}" converter="CaseConverter"/>
+</generate>
+```
 
 For specifying Converters, you can
 
@@ -805,8 +783,7 @@ There are different ways of determining or limiting the number of generated enti
 
 Data generation stops if either the limit count is reached or a component generator becomes unavailable.
 
-If you have problems with unexpectedly low numbers of generated entities you can set the log category com.rapiddweller.benerator.STATE to debug level
-as described in ???.
+If you have problems with unexpectedly low numbers of generated entities you can set the log category `com.rapiddweller.benerator.STATE` to debug level.
 
 ## Using Predefined Entities
 
@@ -874,11 +851,11 @@ admin,1
 
 and use it in an configuration like this:
 
-`<generate type="user" count="100">`
-
-`<attribute name="role" source="roles.wgt.csv" />`
-
-`</generate>`
+```xml
+<generate type="user" count="100">
+<attribute name="role" source="roles.wgt.csv" />
+</generate>
+```
 
 this will create 100 users of which about 70 will have the role 'customer', 20 'clerk' and 10 'admin'.
 
@@ -900,15 +877,13 @@ San Francisco,764976
 
 and e.g. create addresses with city names weighted by population, when specifying
 
-`<generate type="address" count="100" consumer="ConsoleExporter">`
-
-`<variable name="city_data" source="cities.ent.csv" **distribution="weighted[population]"/>`
-
-`<id name="id" type="long" />`
-
-`<attribute name="city" script="city_data.name"/>`
-
-`</generate>`
+```xml
+<generate type="address" count="100" consumer="ConsoleExporter">
+<variable name="city_data" source="cities.ent.csv" **distribution="weighted[population]"/>
+<id name="id" type="long" />
+<attribute name="city" script="city_data.name"/>
+</generate>
+```
 
 ## Nesting Entities
 
@@ -918,39 +893,30 @@ Consider a database schema with a db_user and a db_customer table. Each row in t
 key in the db_user table. So an easy way to implement this is to nest db_customer generation with db_user generation and use the outer db_user's id
 value for setting the db_customer id:
 
-`<generate type="db_user" count="10" consumer="db">`
-
-`<id name="id" strategy="increment" />`
-
+```xml
+<generate type="db_user" count="10" consumer="db">
+<id name="id" strategy="increment" />
 ...
-
-`<generate type="db_customer" count="1" consumer="db">`
-
-`<attribute name="id" script="{db_user.id}" />`
-
+<generate type="db_customer" count="1" consumer="db">
+<attribute name="id" script="{db_user.id}" />`
 ...
-
-`</generate>`
-
-`</generate>`
+</generate>
+</generate>
+```
 
 ## Imposing one-field business constraints
 
 Simple constraints, e.g. formats can be assured by defining an appropriate Generator or regular expression, e.g.
 
-`<import domains="product" />`
-
-`<!-- create products of random attribs &amp; category -->`
-
-`<generate type="db_product" count="1000" pageSize="100">`
-
-`<attribute name="ean_code" generator="EANGenerator"/>`
-
-`<attribute name="name" pattern="[A-Z][A-Z]{5,12}"/>`
-
-`<consumer ref="db"/>`
-
-`</generate>`
+```xml
+<import domains="product" />
+<!-- create products of random attribs &amp; category -->
+<generate type="db_product" count="1000" pageSize="100">
+<attribute name="ean_code" generator="EANGenerator"/>
+<attribute name="name" pattern="[A-Z][A-Z]{5,12}"/>
+<consumer ref="db"/>
+</generate>
+```
 
 ## Imposing multi-field-constraints
 
@@ -959,19 +925,15 @@ prototype objects (or object graphs) which are used as prototype. They may be En
 generator. On each generation run, an instance is generated and made available to the other sub generators. They can use the entity or sub elements by
 a source path attribute:
 
-`<import domains="person"/>`
-
-`<generate type="db_customer" consumer="db">`
-
-`<variable name="person" generator="PersonGenerator"/>`
-
-`<attribute name="salutation" script="person.salutation"/>`
-
-`<attribute name="first_name" script="person.givenName"/>`
-
-`<attribute name="last_name" script="person.familyName"/>`
-
-`</generate>`
+```xml
+<import domains="person"/>
+<generate type="db_customer" consumer="db">
+<variable name="person" generator="PersonGenerator"/>
+<attribute name="salutation" script="person.salutation"/>
+<attribute name="first_name" script="person.givenName"/>
+<attribute name="last_name" script="person.familyName"/>
+</generate>
+```
 
 The source path may be composed of property names, map keys and entity features, separated by a dot.
 
@@ -979,23 +941,16 @@ The source path may be composed of property names, map keys and entity features,
 
 Usually most entities have common attribute names, e.g. for ids or audit data. You can specify default settings by column name:
 
-`<defaultComponents>`
-
-`<id name="ID" type="long" source="db"
-
-strategy="sequence" param="hibernate_sequence"/>`
-
-`<attribute name="VERSION" values="1"/>`
-
-`<attribute name="CREATED_AT" generator=currentDateGenerator"/>`
-
-`<attribute name="CREATED_BY" values="vbergmann"/>`
-
-`<attribute name="UPDATED_AT" generator="currentDateGenerator"/>`
-
-`<attribute name="UPDATED_BY" values="vbergmann"/>`
-
-`</defaultComponents>`
+```xml
+<defaultComponents>
+<id name="ID" type="long" source="db" strategy="sequence" param="hibernate_sequence"/>
+<attribute name="VERSION" values="1"/>
+<attribute name="CREATED_AT" generator=currentDateGenerator"/>
+<attribute name="CREATED_BY" values="vbergmann"/>
+<attribute name="UPDATED_AT" generator="currentDateGenerator"/>
+<attribute name="UPDATED_BY" values="vbergmann"/>
+</defaultComponents>
+```
 
 If a table has a column which is not configured in the benerator descriptor but as defaultComponent, benerator uses the defaultComponent config. If no
 defaultComponent config exists, benerator falls back to a useful standard setting.
@@ -1014,35 +969,25 @@ or import several of them from a properties file:
 
 Arbitrary information may be queried from a system by a 'selector' attribute, which is system-dependent. For a database SQL is used:
 
-`<generate type="db_order" count="30" pageSize="100">`
-
-`<reference name="customer_id" source="db"
-
-selector="select id from db_customer" _cyclic="true"_/>`
-
-`<consumer ref="db"/>` `<!-- automatically chosen by benerator -->`
-
-`</generate>`
+```xml
+<generate type="db_order" count="30" pageSize="100">
+  <reference name="customer_id" source="db" selector="select id from db_customer" _cyclic="true"_/>
+  <consumer ref="db"/>` `<!-- automatically chosen by benerator -->
+</generate>
+```
 
 Using cyclic="true", the result set will be re-iterated from the beginning when it has reached the end.
 
 You may apply a distribution as well:
 
-`<generate type="db_order_item" count="100" pageSize="100">`
-
-`<attribute name="number_of_items" min="1" max="27" distribution="cumulated"/>`
-
-`<reference name="order_id" source="db"
-
-selector="select id from db_order" cyclic="true"/>`
-
-`<reference name="product_id" source="db"
-
-selector="select ean_code from db_product" distribution="random"/>`
-
-`<consumer ref="db"/>`
-
-`</generate>`
+```xml
+<generate type="db_order_item" count="100" pageSize="100">
+  <attribute name="number_of_items" min="1" max="27" distribution="cumulated"/>
+  <reference name="order_id" source="db" selector="select id from db_order" cyclic="true"/>
+  <reference name="product_id" source="db" selector="select ean_code from db_product" distribution="random"/>
+  <consumer ref="db"/>
+</generate>
+```
 
 The result set of a selector might be quite large, so take care, which distribution to apply:
 
@@ -1070,19 +1015,14 @@ selector="{{ftl:select ean_code from db_product where country='${shop.country}'}
 
 Example:
 
-`<generate type="shop" count="10">`
-
-`<attribute name="country" values="DE,AT,CH"/>`
-
-`<generate type="product" count="100" consumer="db">`
-
-`<attribute name="ean_code" source="db"
-
-selector="{{ftl:select ean_code from db_product where country='${shop.country}'}}"/>`
-
-`</generate>`
-
-`</generate>`
+```xml
+<generate type="shop" count="10">
+  <attribute name="country" values="DE,AT,CH"/>
+  <generate type="product" count="100" consumer="db">
+    <attribute name="ean_code" source="db" selector="{{ftl:select ean_code from db_product where country='${shop.country}'}}"/>
+  </generate>
+</generate>
+```
 
 ## Attribute Metadata Reference
 
@@ -1173,13 +1113,12 @@ resolves the familyName attribute/property/key of a person.
 In a script, the keyword 'this' always refers to the entity currently being generated. You can use this to construct attributes which have
 dependencies to each other:
 
-`<generate type="product">`
-
-`<id name="id" />`
-
-`<attribute name="code" script="'ID#' + this.id" />`
-
-`</generate>`
+```xml
+<generate type="product">
+  <id name="id" />
+  <attribute name="code" script="'ID#' + this.id" />
+</generate>
+```
 
 ## Handling Errors
 
@@ -1192,11 +1131,11 @@ The default severity is 'fatal', which causes Benerator to stop execution.
 Other available severities are ignore, trace, debug, info, warn, error, which mainly influence the log level in which errors are reported, but do not
 stop execution.
 
-`<generate type="product" count="1000" **onError="fatal"** consumer="db">`
-
-`<!-- component setup here -->`
-
-`</generate>`
+```xml
+<generate type="product" count="1000" **onError="fatal"** consumer="db">
+<!-- component setup here -->
+</generate>
+```
 
 ### BadDataConsumer
 
@@ -1204,14 +1143,10 @@ For errors that are raised by a consumer, you have the alternative option to cat
 alternative consumer. For example, you can write the problematic data to a CSV file named '
 errordata.csv' and postprocess it:
 
-`<generate type="product" count="1000" consumer="**new BadDataConsumer(new CSVExporter('errors.csv'),** **db.inserter())">`
+```xml
+<generate type="product" count="1000" consumer="**new BadDataConsumer(new CSVExporter('errors.csv'),** **db.inserter())">
+<!-- component setup here -->
+</generate>
+```
 
-`<!-- component setup here -->`
-
-`</generate>`
-
-Note that this cannot work properly with a database which uses batch processing (see
-
-Using Databases
-
-).
+Note that this cannot work properly with a database which uses batch processing (see Using Databases).

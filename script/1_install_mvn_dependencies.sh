@@ -103,7 +103,7 @@ done
 echo "###################################################################"
 
 ###################################################################
-# check missing projects out from gitlab repository
+# check missing projects out from github repository
 ###################################################################
 
 cd "$PWD" || exit

@@ -1,53 +1,60 @@
-## Preface
+<p align="center">
+  <a href="https://benerator.de"><img width="300" height="300" src="https://github.com/rapiddweller/rapiddweller-benerator-ce/raw/development/docs/assets/benerator-icon.png" alt="Benerator"></a>
+</p>
+<p align="center">
+    <em>Benerator, the smart way to generate data</em>
+</p>
+
+
+![.github/workflows/ci.yml](https://github.com/rapiddweller/rapiddweller-benerator-ce/workflows/.github/workflows/ci.yml/badge.svg)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/99c887d3153744e395f539551cdec103)](https://www.codacy.com/gh/rapiddweller/rapiddweller-benerator-ce/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rapiddweller/rapiddweller-benerator-ce&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/99c887d3153744e395f539551cdec103)](https://www.codacy.com/gh/rapiddweller/rapiddweller-benerator-ce/dashboard?utm_source=github.com&utm_medium=referral&utm_content=rapiddweller/rapiddweller-benerator-ce&utm_campaign=Badge_Coverage)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.rapiddweller/rapiddweller-benerator-ce/badge.svg)](https://search.maven.org/artifact/com.rapiddweller/rapiddweller-benerator-ce)
+
+
+# rapiddweller 'Benerator'
+
+[rapiddweller 'Benerator'](https://www.benerator.de) is a software solution to generate, anonymize, pseudonymize and migrate data for development,
+testing and training purposes.
+
+## Summary
+
+[rapiddweller 'Benerator'](https://www.benerator.de) allows creating realistic and valid high-volume test data, used for testing (
+unit/integration/load) and showcase setup.
+
+Metadata constraints are imported from systems and/or configuration files. Data can be imported from and exported to files and systems, anonymized, or
+generated from scratch. Domain packages provide reusable generators for creating domain-specific data as names and addresses internationalizable in
+language and region. It is strongly customizable with plugins and configuration options.
+
+rapiddweller 'Benerator' is built for Java 11.
+
+If you need support for Java 8 or earlier, please consider using the versions `<= 1.0.1`.
+
+## Preface of this manual
 
 This document is supposed to become a complete summary of everything you need of benerator usage, use it efficiently and extend it as you need. This
 reference is under construction and will update from time to time. Feel free to contribute your ideas in our repo
-at [https://gitlab.com/rapiddweller/benerator/rapiddweller-benerator-ce/](https://gitlab.com/rapiddweller/benerator/rapiddweller-benerator-ce/-/issues)
+at [https://github.com/rapiddweller/rapiddweller-benerator-ce/](https://github.com/rapiddweller/rapiddweller-benerator-ce/issues)
 .
 
-If problems remain unsolved after reading this book, do not hesitate to contact us for help. rapiddweller-benerator-ce is and remains open source and
+If problems remain unsolved after reading this book, do not hesitate to contact us for help. rapiddweller-benerator-ce is and remains open-source and
 is provided for free.
 
 If you are interested in additional support and our premium features, we encourage you to check the
 website [https://www.benerator.de](https://www.benerator.de/). We offer additional services to make your data generation project a success and provide
 detailed use cases to ease your start into more complex scenarios.
 
-Since you can do quite a lot of different things with benerator but surely are interested in just a part of it, here's some guidance:
+Since you can do quite a lot of different things with Benerator but surely are interested in just a part of it, here's some guidance:
 
-**'Introduction to benerator'**, introduces you to goals and features of benerator and advises you how to install a binary distribution and how to get
-the sources and set up an Eclipse project for using, debugging and customizing benerator.
+**'[Introduction to benerator](introduction_to_benerator.md)'**, introduces you to the goals and features of Benerator. 
 
-**'Data Generation Concepts'**, **'Descriptor File Format'** and **'Advanced Topics'** then provide you with a structured and complete introduction
-into the benerator descriptor file setup.
+Find advise on how to install a binary distribution and how to get
+the sources and set up an IntelliJ/Eclipse project for using, debugging, and customizing Benerator in [Installation](installation.md).
+
+**'[Data Generation Concepts](data_generation_concepts.md)'**, **'[Descriptor File Format](quick_tour_through_the_descriptor_file_format.md)'** and **'[Advanced Topics](advanced_topics.md)'** then provide you with a structured and complete introduction
+into the Benerator descriptor file setup.
 
 Benerator supports a multitude of service provider interfaces (SPIs). It comes along with some implementations for specific business domains (**'
-Domains'**) and general purpose classes in **'Component Reference'**.
+[Domains](domains.md)'**) and general-purpose classes in **'[Component Reference](component_reference.md)'**.
 
-Finally you are instructed how to write custom SPI implementations in **'Extending benerator'**.
-
-# Summary
-
-* [Introduction to benerator](introduction_to_benerator.md)
-* [Installation](installation.md)
-* [The Benerator Project Wizard](the_benerator_project_wizard.md)
-* [Quick tour through the descriptor file format](quick_tour_through_the_descriptor_file_format.md)
-* [Data Generation Concepts](data_generation_concepts.md)
-* [Regular Expression Support](regular_expression_support.md)
-* [Processing and creating CSV Files](processing_and_creating_csv_files.md)
-* [Using Relational Databases](using_relational_databases.md)
-* [Using mongoDB](using_mongodb.md)
-* [Generating XML Files](generating_xml_files.md)
-* [Advanced Topics](advanced_topics.md)
-* [Generating Unique Data](generating_unique_data.md)
-* [Scripting](scripting.md)
-* [DatabeneScript](databenescript.md)
-* [Command Line Tools](command_line_tools.md)
-* [Domains](domains.md)
-* [Component Reference](component_reference.md)
-* [Using DB Sanity](using_db_sanity.md)
-* [Maven Benerator Plugin](maven_benerator_plugin.md)
-* [Extending benerator](extending_benerator.md)
-* [Using Benerator as Load Generator](using_benerator_as_load_generator.md)
-* [Troubleshooting](troubleshooting.md)
-* [Monitoring Benerator](monitoring_benerator.md)
-* [Benerator Performance Tuning](benerator_performance_tuning.md)
+Finally, you are instructed how to write custom SPI implementations in **'[Extending benerator](extending_benerator.md)'**.

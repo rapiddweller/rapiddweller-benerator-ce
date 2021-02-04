@@ -62,7 +62,7 @@ Depending on the settings it may be difficult to find out what caused the proble
 your `<database>` setup and use pagesize="1" in the `<generate>`. These are default settings, so you do not need to specify them explicitly if you did
 not change the default.
 
-If that alone does not help, set the log category com.rapiddweller.benerator.main to debug level to find out which element caused the error. If there
+If that alone does not help, set the log category `com.rapiddweller.benerator.main` to debug level to find out which element caused the error. If there
 is a stack trace, check it to get a hint which part of the element's generation went wrong. If that does not help, remove one attribute/reference/id
 after the other for finding the actual troublemaker. If you still cannot solve the problem, post a message in the benerator forum. You can check out
 the benerator sources from the SVN source repository, open it in Eclipse and debug through the code.

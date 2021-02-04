@@ -13,21 +13,21 @@
 
 # rapiddweller-benerator-ce
 
-[rapiddweller 'Benerator'](https://www.benerator.de) is a software solution to generate, anonymize, pseudonymize and migrate data for development,
+[rapiddweller 'Benerator'](https://www.benerator.de) is a software solution to 
+generate, anonymize, pseudonymize and migrate data for development,
 testing and training purposes.
 
 ## Introduction
 
-[rapiddweller 'Benerator'](https://www.benerator.de) allows creating realistic and valid high-volume test data, used for testing (
-unit/integration/load) and showcase setup.
+[rapiddweller 'Benerator'](https://www.benerator.de) allows creating realistic and valid high-volume test data, used for testing (unit/integration/load) and showcase setup.
 
 Metadata constraints are imported from systems and/or configuration files. Data can be imported from and exported to files and systems, anonymized, or
 generated from scratch. Domain packages provide reusable generators for creating domain-specific data as names and addresses internationalizable in
 language and region. It is strongly customizable with plugins and configuration options.
 
-rapiddweller 'Benerator' is built for Java 11. 
+rapiddweller 'Benerator' is built for Java 11.
 
-If you need support for Java 8 or earlier, please consider using the previous version 1.0.1. 
+If you need support for Java 8 or earlier, please consider using the versions `<= 1.0.1`.
 
 ## Prerequisites
 
@@ -99,14 +99,14 @@ To get started please find some demo scripts in the folder
 
 There are various sources to get you started or extend your benerator knowledge:
 
-- Read our docs on our [Benerator Manual site](https://www.benerator.de/ce/1.1.0/doc/) or create your own mkdocs with python `mkdocs build`. Keep in mind that you might need to install certain mkdocs dependencies first. 
-- Consider the [Maven Site Docs](https://www.benerator.de/ce/1.1.0/mvn-site/) or create your own docs using maven `mvn site:site`. The generated docs
+- Read our docs on our [Benerator Manual site](https://www.benerator.de/ce/doc/) or create your own mkdocs with python `mkdocs build`. Keep in mind that you might need to install certain mkdocs dependencies first. 
+- Consider the [Maven Site Docs](https://www.benerator.de/ce/doc/mvn-site/) or create your own docs using maven `mvn site:site`. The generated docs
   include Javadoc, Test Reports and more.
-- Download the [Benerator Manual](https://www.benerator.de/ce/1.1.0/rapiddweller-benerator-ce-manual-1.1.0.pdf)
+- Download the [Benerator Manual](https://www.benerator.de/ce/rapiddweller-benerator-ce-manual.pdf)
   from our website.
 - Checkout the maintainer's website [www.benerator.de](https://www.benerator.de/) for additional support resources.
 
-# Table of Contents of Project mkdocs (sources for the generated Docs)
+# Table of Contents - Manual (sources for the generated mkdocs)
 
 * [Introduction to benerator](docs/introduction_to_benerator.md)
 * [Installation](docs/installation.md)
@@ -116,12 +116,11 @@ There are various sources to get you started or extend your benerator knowledge:
 * [Regular Expression Support](docs/regular_expression_support.md)
 * [Processing and creating CSV Files](docs/processing_and_creating_csv_files.md)
 * [Using Relational Databases](docs/using_relational_databases.md)
-* [Using mongoDB](docs/using_mongodb.md)
 * [Generating XML Files](docs/generating_xml_files.md)
 * [Advanced Topics](docs/advanced_topics.md)
 * [Generating Unique Data](docs/generating_unique_data.md)
 * [Scripting](docs/scripting.md)
-* [DatabeneScript](docs/databenescript.md)
+* [rapiddwellerScript](docs/rapiddwellerscript.md)
 * [Command Line Tools](docs/command_line_tools.md)
 * [Domains](docs/domains.md)
 * [Component Reference](docs/component_reference.md)
@@ -138,7 +137,7 @@ There are various sources to get you started or extend your benerator knowledge:
 If you want to start development or use the maven project to build rapiddweller 'Benerator' by yourself, on Linux or Mac OS X you can also try the
 quickstart by using the helper scripts.  
 **IMPORTANT:** If you want to use the command `benerator` in your shell session, you have to execute `source script/2_setup_benerator.sh`  
-If you want to install the benerator permanently into your system, you have to modify your environment file or your `~/.profile`   
+If you want to install Benerator permanently into your system, you have to modify your environment file or your `~/.profile`   
 and add ENV variable `BENERATOR_HOME` and `PATH=$BENERATOR_HOME/bin:$PATH`
 
 to execute the scripts you have can do ...
@@ -162,7 +161,7 @@ to execute the scripts you have can do ...
 - _1_install_mvn_dependencies.sh_ : This script is checking Prerequisites for you, cloning all rapiddweller-benerator-ce SubProjects and install via
   Maven locally.
 - _2_setup_benerator.sh_ : This script is building on script no. 1 and using installed dependencies and packed jar, assemble it to a
-  rapiddweller-benerator-ce.tar.gz and setup the benerator locally into your user home directory.
+  rapiddweller-benerator-ce.tar.gz and setup Benerator locally into your user home directory.
 - _3_execute_demos.sh_ : This script is building on script no. 2 and use the unpacked and configure rapiddweller-benerator-ce application to execute
   existing demo files.
 
