@@ -12,6 +12,34 @@ N/A
 
 N/A
 
+# 1.1.0
+
+## Release Highlights
+
+...GraalVM, MKDocs, DemoCases
+
+## Important Notes
+
+...
+
+## Breaking Changes
+
+...
+
+# 1.0.1
+
+## Release Highlights
+
+Fix logging (log4j config)
+
+## Important Notes
+
+src/main/resources/log4j.xml changed to src/main/resources/log4j2.xml
+
+## Breaking Changes
+
+N/A
+
 # 1.0.0
 
 Adoption of rapiddweller-benerator-ce by [rapiddweller](https://rapiddweller.com). Project was hard forked, updated and tidied however no logical
@@ -47,4 +75,3 @@ N/A
 ## Changes before v0.9.8:
 
 - Please see previous [releasenotes](/releasenotes) in the releasenotes project folder. 
-
