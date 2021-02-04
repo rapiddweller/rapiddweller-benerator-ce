@@ -62,7 +62,7 @@ markdown_extensions:
 # Page tree
 nav:
   - Home: index.md
-  - Goals and Features: introduction_to_benerator.md
+  - Goals and Features: benerator_goals_features.md
   - Installation: installation.md
   - The Benerator Project Wizard: the_benerator_project_wizard.md
   - Quick tour through the descriptor file format: quick_tour_through_the_descriptor_file_format.md

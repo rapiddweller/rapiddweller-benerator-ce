@@ -14,8 +14,8 @@
 
 # rapiddweller 'Benerator'
 
-[rapiddweller 'Benerator'](https://www.benerator.de) is a software solution to generate, anonymize, pseudonymize and migrate data for development,
-testing and training purposes.
+[rapiddweller 'Benerator'](https://www.benerator.de) is a software solution to **generate**, **anonymize**, 
+**pseudonymize** and **migrate** data for development, testing and training purposes.
 
 ## Summary
 
@@ -47,7 +47,7 @@ detailed use cases to ease your start into more complex scenarios.
 
 Since you can do quite a lot of different things with Benerator but surely are interested in just a part of it, here's some guidance:
 
-**'[Introduction to benerator](introduction_to_benerator.md)'**, introduces you to the goals and features of Benerator. 
+**'[Goals and Features](benerator_goals_features.md)'**, introduces you to the goals and features of Benerator. 
 
 Find advise on how to install a binary distribution and how to get
 the sources and set up an IntelliJ/Eclipse project for using, debugging, and customizing Benerator in **'[Installation](installation.md)'**.

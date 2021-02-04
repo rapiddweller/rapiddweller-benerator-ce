@@ -108,7 +108,7 @@ There are various sources to get you started or extend your benerator knowledge:
 
 # Table of Contents - Manual (sources for the generated mkdocs)
 
-* [Introduction to benerator](doc/introduction_to_benerator.md)
+* [Goals and Features](doc/benerator_goals_features.md)
 * [Installation](doc/installation.md)
 * [The Benerator Project Wizard](doc/the_benerator_project_wizard.md)
 * [Quick tour through the descriptor file format](doc/quick_tour_through_the_descriptor_file_format.md)
