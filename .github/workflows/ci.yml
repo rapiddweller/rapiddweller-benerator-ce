@@ -9,7 +9,7 @@ env:
   SET_VERSION: |
     ARTIFACT_ID=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec);
     echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV;
-    if [ GITHUB_REF == refs/tags/* ];
+    if [ $GITHUB_REF == refs/tags/* ];
     then
       ARTIFACT_VERSION=${GITHUB_REF/refs\/tags\//}-$JAVA_JDKVERSION_TAG;
       echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
@@ -24,6 +24,9 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     container: maven:3.6-adoptopenjdk-11
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v2
       - run: eval $SET_VERSION
