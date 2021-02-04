@@ -45,8 +45,8 @@ Benerator comes with open source JDBC drivers (for connecting to a database). No
 However, if you need to use a closed source database driver, the vendor usually requires you to accept usage conditions before you can download and
 install their driver. So, if you are using Oracle DB or DB2, get the JDBC drivers from these sites:
 
-• Oracle [http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html]([http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html): Click on "Oracle Database 11g Release 2 (11.2.0.1.0) drivers".
-Download ojdbc6.jar and put it into benerator's lib directory. You will need to create a free Oracle account.
+• Oracle [http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html](http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html): Click on "Oracle Database 11g Release 2 (11.2.0.1.0) drivers".
+Download ojdbc6.jar and put it into Benerator's lib directory. You will need to create a free Oracle account.
 
 • DB2 [http://www-306.ibm.com/software/data/db2/java](http://www-306.ibm.com/software/data/db2/java): Follow the link 'IBM Data Server Driver for JDBC and SQLJ', download the driver archive and
 copy the contained file db2jcc.jar to Benerator's lib directory.

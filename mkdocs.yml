@@ -1,4 +1,5 @@
 # Project information
+docs_dir: doc
 site_name: rapiddweller Benerator
 site_url: https://www.benerator.de/ce/doc
 site_author: rapiddweller GmbH & Volker Bergmann
@@ -47,7 +48,7 @@ markdown_extensions:
   - markdown.extensions.codehilite:
       guess_lang: false
   - markdown_include.include:
-      base_path: docs
+      base_path: doc
   - admonition
   - codehilite
   - extra

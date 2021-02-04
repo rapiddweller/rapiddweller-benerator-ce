@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://benerator.de"><img width="300" height="300" src="https://github.com/rapiddweller/rapiddweller-benerator-ce/blob/development/docs/assets/benerator-icon.png" alt="Benerator"></a>
+  <a href="https://benerator.de"><img width="300" height="300" src="https://github.com/rapiddweller/rapiddweller-benerator-ce/blob/development/doc/assets/benerator-icon.png" alt="Benerator"></a>
 </p>
 <p align="center">
     <em>Benerator, the smart way to generate data</em>
@@ -54,13 +54,13 @@ mvn -version
 
 
 2. Set **BENERATOR_HOME**  
-   Create an environment variable BENERATOR_HOME that points to the path you extracted benerator to.
+   Create an environment variable BENERATOR_HOME that points to the path you extracted Benerator to.
 
     - Windows Details: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the User Variables section.
       Enter BENERATOR_HOME as name and the path as value
-      (e.g. C:\Program Files\Development\rapiddweller-benerator-ce-1.0.0+jdk8). Click OK several times.
-    - Mac/Unix/Linux Details: Add an entry that points to benerator,
-      e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.0.0-jdk8`
+      (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.0-jdk11`). Click OK several times.
+    - Mac/Unix/Linux Details: Add an entry that points to Benerator,
+      e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.1.0-jdk11`
 
 
 3. On Unix/Linux/Mac systems: **Set permissions**   
@@ -95,7 +95,7 @@ benerator <YOUR_BENERATOR_SCRIPT>.xml
 To get started please find some demo scripts in the folder
 [/src/demo/resources/demo](/src/demo/resources/demo) of this repository.
 
-## Docs
+## Docs / rapiddweller manual
 
 There are various sources to get you started or extend your benerator knowledge:
 
@@ -108,29 +108,29 @@ There are various sources to get you started or extend your benerator knowledge:
 
 # Table of Contents - Manual (sources for the generated mkdocs)
 
-* [Introduction to benerator](docs/introduction_to_benerator.md)
-* [Installation](docs/installation.md)
-* [The Benerator Project Wizard](docs/the_benerator_project_wizard.md)
-* [Quick tour through the descriptor file format](docs/quick_tour_through_the_descriptor_file_format.md)
-* [Data Generation Concepts](docs/data_generation_concepts.md)
-* [Regular Expression Support](docs/regular_expression_support.md)
-* [Processing and creating CSV Files](docs/processing_and_creating_csv_files.md)
-* [Using Relational Databases](docs/using_relational_databases.md)
-* [Generating XML Files](docs/generating_xml_files.md)
-* [Advanced Topics](docs/advanced_topics.md)
-* [Generating Unique Data](docs/generating_unique_data.md)
-* [Scripting](docs/scripting.md)
-* [rapiddwellerScript](docs/rapiddwellerscript.md)
-* [Command Line Tools](docs/command_line_tools.md)
-* [Domains](docs/domains.md)
-* [Component Reference](docs/component_reference.md)
-* [Using DB Sanity](docs/using_db_sanity.md)
-* [Maven Benerator Plugin](docs/maven_benerator_plugin.md)
-* [Extending benerator](docs/extending_benerator.md)
-* [Using Benerator as Load Generator](docs/using_benerator_as_load_generator.md)
-* [Troubleshooting](docs/troubleshooting.md)
-* [Monitoring Benerator](docs/monitoring_benerator.md)
-* [Benerator Performance Tuning](docs/benerator_performance_tuning.md)
+* [Introduction to benerator](doc/introduction_to_benerator.md)
+* [Installation](doc/installation.md)
+* [The Benerator Project Wizard](doc/the_benerator_project_wizard.md)
+* [Quick tour through the descriptor file format](doc/quick_tour_through_the_descriptor_file_format.md)
+* [Data Generation Concepts](doc/data_generation_concepts.md)
+* [Regular Expression Support](doc/regular_expression_support.md)
+* [Processing and creating CSV Files](doc/processing_and_creating_csv_files.md)
+* [Using Relational Databases](doc/using_relational_databases.md)
+* [Generating XML Files](doc/generating_xml_files.md)
+* [Advanced Topics](doc/advanced_topics.md)
+* [Generating Unique Data](doc/generating_unique_data.md)
+* [Scripting](doc/scripting.md)
+* [rapiddwellerScript](doc/rapiddwellerscript.md)
+* [Command Line Tools](doc/command_line_tools.md)
+* [Domains](doc/domains.md)
+* [Component Reference](doc/component_reference.md)
+* [Using DB Sanity](doc/using_db_sanity.md)
+* [Maven Benerator Plugin](doc/maven_benerator_plugin.md)
+* [Extending benerator](doc/extending_benerator.md)
+* [Using Benerator as Load Generator](doc/using_benerator_as_load_generator.md)
+* [Troubleshooting](doc/troubleshooting.md)
+* [Monitoring Benerator](doc/monitoring_benerator.md)
+* [Benerator Performance Tuning](doc/benerator_performance_tuning.md)
 
 ## Development Quick Start (only Linux and Mac OS X)
 
