@@ -112,8 +112,8 @@
 
     <scm>
         <url>https://github.com/rapiddweller/rapiddweller-benerator-ce</url>
-        <connection>scm:git:github.com/rapiddweller/rapiddweller-benerator-ce</connection>
-        <developerConnection>scm:git:github.com/rapiddweller/rapiddweller-benerator-ce</developerConnection>
+        <connection>scm:git:git://github.com/rapiddweller/rapiddweller-benerator-ce.git</connection>
+        <developerConnection>scm:git:git://github.com/rapiddweller/rapiddweller-benerator-ce.git</developerConnection>
     </scm>
 
     <repositories>
