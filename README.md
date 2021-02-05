@@ -56,11 +56,11 @@ mvn -version
 2. Set **BENERATOR_HOME**  
    Create an environment variable BENERATOR_HOME that points to the path you extracted Benerator to.
 
-    - Windows Details: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the User Variables section.
-      Enter BENERATOR_HOME as name and the path as value
-      (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.0-jdk11`). Click OK several times.
-    - Mac/Unix/Linux Details: Add an entry that points to Benerator,
-      e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.1.0-jdk11`
+    -  Windows Details: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the User Variables section.
+       Enter BENERATOR_HOME as name and the path as value
+       (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.0-jdk11`). Click OK several times.
+    -  Mac/Unix/Linux Details: Add an entry that points to Benerator,
+       e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.1.0-jdk11`
 
 
 3. On Unix/Linux/Mac systems: **Set permissions**   
@@ -106,31 +106,55 @@ There are various sources to get you started or extend your benerator knowledge:
   from our website.
 - Checkout the maintainer's website [www.benerator.de](https://www.benerator.de/) for additional support resources.
 
-# Table of Contents - Manual (sources for the generated mkdocs)
+# Table of Contents Manual
 
-* [Goals and Features](doc/benerator_goals_features.md)
-* [Installation](doc/installation.md)
-* [The Benerator Project Wizard](doc/the_benerator_project_wizard.md)
-* [Quick tour through the descriptor file format](doc/quick_tour_through_the_descriptor_file_format.md)
-* [Data Generation Concepts](doc/data_generation_concepts.md)
-* [Regular Expression Support](doc/regular_expression_support.md)
-* [Processing and creating CSV Files](doc/processing_and_creating_csv_files.md)
-* [Using Relational Databases](doc/using_relational_databases.md)
-* [Generating XML Files](doc/generating_xml_files.md)
-* [Advanced Topics](doc/advanced_topics.md)
-* [Generating Unique Data](doc/generating_unique_data.md)
-* [Scripting](doc/scripting.md)
-* [rapiddwellerScript](doc/rapiddwellerscript.md)
-* [Command Line Tools](doc/command_line_tools.md)
-* [Domains](doc/domains.md)
-* [Component Reference](doc/component_reference.md)
-* [Using DB Sanity](doc/using_db_sanity.md)
-* [Maven Benerator Plugin](doc/maven_benerator_plugin.md)
-* [Extending benerator](doc/extending_benerator.md)
-* [Using Benerator as Load Generator](doc/using_benerator_as_load_generator.md)
-* [Troubleshooting](doc/troubleshooting.md)
-* [Monitoring Benerator](doc/monitoring_benerator.md)
-* [Benerator Performance Tuning](doc/benerator_performance_tuning.md)
+Navigate to the sources for our generated mkdocs:
+
+*  [Goals and Features](doc/benerator_goals_features.md)
+   
+*  [Installation](doc/installation.md)
+   
+*  [The Benerator Project Wizard](doc/the_benerator_project_wizard.md)
+   
+*  [Quick tour through the descriptor file format](doc/quick_tour_through_the_descriptor_file_format.md)
+   
+*  [Data Generation Concepts](doc/data_generation_concepts.md)
+   
+*  [Regular Expression Support](doc/regular_expression_support.md)
+   
+*  [Processing and creating CSV Files](doc/processing_and_creating_csv_files.md)
+   
+*  [Using Relational Databases](doc/using_relational_databases.md)
+   
+*  [Generating XML Files](doc/generating_xml_files.md)
+   
+*  [Advanced Topics](doc/advanced_topics.md)
+   
+*  [Generating Unique Data](doc/generating_unique_data.md)
+   
+*  [Scripting](doc/scripting.md)
+   
+*  [rapiddwellerScript](doc/rapiddwellerscript.md)
+   
+*  [Command Line Tools](doc/command_line_tools.md)
+   
+*  [Domains](doc/domains.md)
+   
+*  [Component Reference](doc/component_reference.md)
+   
+*  [Using DB Sanity](doc/using_db_sanity.md)
+   
+*  [Maven Benerator Plugin](doc/maven_benerator_plugin.md)
+   
+*  [Extending benerator](doc/extending_benerator.md)
+   
+*  [Using Benerator as Load Generator](doc/using_benerator_as_load_generator.md)
+   
+*  [Troubleshooting](doc/troubleshooting.md)
+   
+*  [Monitoring Benerator](doc/monitoring_benerator.md)
+   
+*  [Benerator Performance Tuning](doc/benerator_performance_tuning.md)
 
 ## Development Quick Start (only Linux and Mac OS X)
 
@@ -173,5 +197,6 @@ If you would like to reach out to the maintainers, contact us via our
 
 ## Contributing
 
-Please see our [Contributing](CONTRIBUTING.md) guidelines. For releasing see our [release creation guide](RELEASE.md). And check out the
-maintainers [website!](https://rapiddweller.com)
+Please see our [Contributing](CONTRIBUTING.md) guidelines. 
+For releasing see our [release creation guide](RELEASE.md). 
+Check out the maintainers [website](https://rapiddweller.com)!
