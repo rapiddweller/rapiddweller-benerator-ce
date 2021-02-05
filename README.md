@@ -45,9 +45,10 @@ mvn -version
 
 1. Choose how to install:
 
-   a) Download a Prebuilt Distribution from **Project Overview > Releases**   
+   a)  Download a Prebuilt Distribution from **Project Overview > Releases**
    (current release is `1.1.0`, cp. rapiddweller-benerator-ce-1.1.0-jdk11-dist.zip)
-   and unzip the downloaded file in an appropriate directory, e.g. /Developer/Applications or C:\Program Files\Development.
+   and unzip the downloaded file in an appropriate directory, e.g. 
+   `/Developer/Applications` or `C:\Program Files\Development`.
 
    b) Checkout repository and build your own rapiddweller-benerator-ce using   
    maven command `mvn clean install`
@@ -59,6 +60,7 @@ mvn -version
     -  Windows Details: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the User Variables section.
        Enter BENERATOR_HOME as name and the path as value
        (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.0-jdk11`). Click OK several times.
+
     -  Mac/Unix/Linux Details: Add an entry that points to Benerator,
        e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.1.0-jdk11`
 
@@ -68,7 +70,7 @@ mvn -version
    `chmod a+x bin/*.sh`
 
 
-4. Mac OS X configuration **Set JAVA_HOME**  
+4. Mac OS X configuration **Set JAVA_HOME**
    On Mac OS X you need to provide benerator with an explicit configuration of the JAVA_HOME path.
    See http://developer.apple.com/qa/qa2001/qa1170.html for a good introduction to the OS X way of setting up Java. It is based on aliases
    conventions. If you are not familiar with that, you should read the article. If Java 8 (or newer) is the default version you will use, you can
@@ -77,10 +79,14 @@ mvn -version
    If it does not work or if you need to use different Java versions, it is easier to 'hard-code' JAVA_HOME like this:
    `export  JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home/`
 
+
    **Note**: We currently recommend following projects for your proper Mac OS X setup:
-    - [brew](https://brew.sh/)
-    - [adoptopenjdk](https://adoptopenjdk.net/)
-    - [jenv](https://www.jenv.be/)
+
+- [brew](https://brew.sh/)
+
+-  [adoptopenjdk](https://adoptopenjdk.net/)
+
+-  [jenv](https://www.jenv.be/)
 
 ## Run
 
@@ -99,62 +105,66 @@ To get started please find some demo scripts in the folder
 
 There are various sources to get you started or extend your benerator knowledge:
 
-- Read our docs on our [Benerator Manual site](https://www.benerator.de/ce/doc/) or create your own mkdocs with python `mkdocs build`. Keep in mind that you might need to install certain mkdocs dependencies first. 
-- Consider the [Maven Site Docs](https://www.benerator.de/ce/doc/mvn-site/) or create your own docs using maven `mvn site:site`. The generated docs
-  include Javadoc, Test Reports and more.
-- Download the [Benerator Manual](https://www.benerator.de/ce/rapiddweller-benerator-ce-manual.pdf)
-  from our website.
+-  Read our docs on our [Benerator Manual site](https://www.benerator.de/ce/doc/) or 
+   create your own mkdocs with python `mkdocs build`. Keep in mind that you might need to install certain mkdocs dependencies first. 
+
+-  Consider the [Maven Site Docs](https://www.benerator.de/ce/doc/mvn-site/) or create your own docs using maven `mvn site:site`. The generated docs
+   include Javadoc, Test Reports and more.
+
+-  Download the [Benerator Manual](https://www.benerator.de/ce/rapiddweller-benerator-ce-manual.pdf)
+   from our website.
+
 - Checkout the maintainer's website [www.benerator.de](https://www.benerator.de/) for additional support resources.
 
-# Table of Contents Manual
+## Table of Contents Manual
 
 Navigate to the sources for our generated mkdocs:
 
-*  [Goals and Features](doc/benerator_goals_features.md)
+-  [Goals and Features](doc/benerator_goals_features.md)
    
-*  [Installation](doc/installation.md)
+-  [Installation](doc/installation.md)
    
-*  [The Benerator Project Wizard](doc/the_benerator_project_wizard.md)
+-  [The Benerator Project Wizard](doc/the_benerator_project_wizard.md)
    
-*  [Quick tour through the descriptor file format](doc/quick_tour_through_the_descriptor_file_format.md)
+-  [Quick tour through the descriptor file format](doc/quick_tour_through_the_descriptor_file_format.md)
    
-*  [Data Generation Concepts](doc/data_generation_concepts.md)
+-  [Data Generation Concepts](doc/data_generation_concepts.md)
    
-*  [Regular Expression Support](doc/regular_expression_support.md)
+-  [Regular Expression Support](doc/regular_expression_support.md)
    
-*  [Processing and creating CSV Files](doc/processing_and_creating_csv_files.md)
+-  [Processing and creating CSV Files](doc/processing_and_creating_csv_files.md)
    
-*  [Using Relational Databases](doc/using_relational_databases.md)
+-  [Using Relational Databases](doc/using_relational_databases.md)
    
-*  [Generating XML Files](doc/generating_xml_files.md)
+-  [Generating XML Files](doc/generating_xml_files.md)
    
-*  [Advanced Topics](doc/advanced_topics.md)
+-  [Advanced Topics](doc/advanced_topics.md)
    
-*  [Generating Unique Data](doc/generating_unique_data.md)
+-  [Generating Unique Data](doc/generating_unique_data.md)
    
-*  [Scripting](doc/scripting.md)
+-  [Scripting](doc/scripting.md)
    
-*  [rapiddwellerScript](doc/rapiddwellerscript.md)
+-  [rapiddwellerScript](doc/rapiddwellerscript.md)
    
-*  [Command Line Tools](doc/command_line_tools.md)
+-  [Command Line Tools](doc/command_line_tools.md)
    
-*  [Domains](doc/domains.md)
+-  [Domains](doc/domains.md)
    
-*  [Component Reference](doc/component_reference.md)
+-  [Component Reference](doc/component_reference.md)
    
-*  [Using DB Sanity](doc/using_db_sanity.md)
+-  [Using DB Sanity](doc/using_db_sanity.md)
    
-*  [Maven Benerator Plugin](doc/maven_benerator_plugin.md)
+-  [Maven Benerator Plugin](doc/maven_benerator_plugin.md)
    
-*  [Extending benerator](doc/extending_benerator.md)
+-  [Extending benerator](doc/extending_benerator.md)
    
-*  [Using Benerator as Load Generator](doc/using_benerator_as_load_generator.md)
+-  [Using Benerator as Load Generator](doc/using_benerator_as_load_generator.md)
    
-*  [Troubleshooting](doc/troubleshooting.md)
+-  [Troubleshooting](doc/troubleshooting.md)
    
-*  [Monitoring Benerator](doc/monitoring_benerator.md)
+-  [Monitoring Benerator](doc/monitoring_benerator.md)
    
-*  [Benerator Performance Tuning](doc/benerator_performance_tuning.md)
+-  [Benerator Performance Tuning](doc/benerator_performance_tuning.md)
 
 ## Development Quick Start (only Linux and Mac OS X)
 
@@ -182,11 +192,13 @@ to execute the scripts you have can do ...
 `.script/2_setup_benerator.sh`  
 `.script/3_execute_demos.sh`
 
-- _1_install_mvn_dependencies.sh_ : This script is checking Prerequisites for you, cloning all rapiddweller-benerator-ce SubProjects and install via
+-  _1_install_mvn_dependencies.sh_ : This script is checking Prerequisites for you, cloning all rapiddweller-benerator-ce SubProjects and install via
   Maven locally.
-- _2_setup_benerator.sh_ : This script is building on script no. 1 and using installed dependencies and packed jar, assemble it to a
+  
+-  _2_setup_benerator.sh_ : This script is building on script no. 1 and using installed dependencies and packed jar, assemble it to a
   rapiddweller-benerator-ce.tar.gz and setup Benerator locally into your user home directory.
-- _3_execute_demos.sh_ : This script is building on script no. 2 and use the unpacked and configure rapiddweller-benerator-ce application to execute
+
+-  _3_execute_demos.sh_ : This script is building on script no. 2 and use the unpacked and configure rapiddweller-benerator-ce application to execute
   existing demo files.
 
 ## Getting Involved
