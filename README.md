@@ -57,7 +57,7 @@ mvn -version
 
    - Windows Details: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the User Variables section.
      Enter BENERATOR_HOME as name and the path as value
-     (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.0-jdk11`). Click OK several times.
+     (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.0-jdk-11`). Click OK several times.
 
    - Mac/Unix/Linux Details: Add an entry that points to Benerator,
      e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.1.0-jdk11`
