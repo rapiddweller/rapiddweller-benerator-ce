@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://benerator.de"><img width="300" height="300" src="https://github.com/rapiddweller/rapiddweller-benerator-ce/raw/development/docs/assets/benerator-icon.png" alt="Benerator"></a>
+  <a href="https://benerator.de"><img width="300" height="300" src="https://github.com/rapiddweller/rapiddweller-benerator-ce/raw/development/doc/assets/benerator-icon.png" alt="Benerator"></a>
 </p>
 <p align="center">
     <em>Benerator, the smart way to generate data</em>
