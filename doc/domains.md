@@ -1,9 +1,9 @@
 # Domains
 
-benerator domains are a vehicle for defining, bundling and reusing domain specific data generation, e.g. for personal data, addresses, internet,
+Benerator domains are a vehicle for defining, bundling and reusing domain specific data generation, e.g. for personal data, addresses, internet,
 banking, telecom. They may be localized to specific languages and be grouped to hierarchical datasets, e.g. for continents, countries and regions.
 
-benerator comes packaged with several domains that have simple implementation of specific data generation and may serve as a base for deriving own
+Benerator comes packaged with several domains that have simple implementation of specific data generation and may serve as a base for deriving own
 specific data generation domains:
 
 * **person**: Data related to a person
@@ -57,18 +57,19 @@ salutation and givenName are consistent.
 
 You can use the PersonGenerator like this:
 
-`<import domains="person"/>`
+```xml
+<import domains="person"/>
 
-`<generate type="user" count="5" consumer="ConsoleExporter">`
-
-`<variable name="person" generator="PersonGenerator" dataset="FR" locale="fr"/>`
-
-`<attribute name="salutation" source="person.salutation" />` `<attribute name="name" script="{person.givenName +' '+ person.familyName}}" />`
-
-`</generate>`
+<generate type="user" count="5" consumer="ConsoleExporter">
+    <variable name="person" generator="PersonGenerator" dataset="FR" locale="fr" />
+    <attribute name="salutation" source="person.salutation" />
+    <attribute name="name" script="{person.givenName +' '+ person.familyName}}" />
+</generate>
+```
 
 to get output similar to this:
 
+```bash
 user[salutation=Mr, name=David Morel]
 
 user[salutation=Mr, name=Robert Robert]
@@ -78,6 +79,7 @@ user[salutation=Mr, name=Eric Morel]
 user[salutation=Mr, name=Patrick Lefebvre]
 
 user[salutation=Mme, name=Helene Fournier]
+```
 
 ### PersonGenerator Properties
 
@@ -85,13 +87,12 @@ The PersonGenerator can be configured with several properties:
 
 | Property | Description | Default Value |
 | --- | --- | --- |
-| dataset | Either a region name or the two-letter-ISO-code of a country, e.g. US for the USA. See
-
-Region Nesting
-
-. | The user's default country | | locale | Two-letter-ISO-code of the language in which to create salutation and titles, e.g. en for English | The
-user's default language | | minAgeYears | The minimum age of generated persons | 15 | | maxAgeYears | The maximum age of generated persons | 105 | |
-femaleQuota | The quota of generated women (1 → 100%) | 0.5 | | nobleQuota | The quota of generated noble persons (1 → 100%) | 0.005 |
+| dataset | Either a region name or the two-letter-ISO-code of a country, e.g. US for the USA. See [Advanced Topics > Region nesting](advanced_topics.md) | The user's default country | 
+| locale | Two-letter-ISO-code of the language in which to create salutation and titles, e.g. en for English | The user's default language | 
+| minAgeYears | The minimum age of generated persons | 15 | 
+| maxAgeYears | The maximum age of generated persons | 105 | 
+| femaleQuota | The quota of generated women (1 → 100%) | 0.5 |
+| nobleQuota | The quota of generated noble persons (1 → 100%) | 0.005 |
 
 ### Person Class
 
@@ -186,16 +187,17 @@ Provides the following generators:
 
 If you use the CompanyNameGenerator like this:
 
-`<import domains="organization" />`
+```xml
+<import domains="organization" />
 
-`<generate type="company" count="5" consumer="ConsoleExporter">`
-
-`<attribute name="name" generator="CompanyNameGenerator" dataset="DE" locale="de_DE"/>`
-
-`</generate>`
+<generate type="company" count="5" consumer="ConsoleExporter">
+    <attribute name="name" generator="CompanyNameGenerator" dataset="DE" locale="de_DE"/>
+</generate>
+```
 
 you get output like this:
 
+```bash
 company[name=Belanda Aktiengesellschaft &amp; Co. KG]
 
 company[name=MyWare Technologies GmbH]
@@ -205,6 +207,7 @@ company[name=WebBox AG]
 company[name=Altis AG]
 
 company[name=Ernst Fischer Technik GmbH]
+```
 
 Company names can be generated for the following countries:
 
@@ -217,15 +220,14 @@ The Generator creates objects of type CompanyName, consisting of **shortName**, 
 legalForm** information. You can make use of the object as a whole which is converted to a string automatically using the '**fullName**' version as
 shown in the example above. But you can also make direct use of the basic properties:
 
-`<import domains="organization" />`
+```xml
+<import domains="organization" />
 
-`<generate type="company" count="5" consumer="ConsoleExporter">`
-
-`<variable name="c" generator="CompanyNameGenerator" dataset="DE" locale="de_DE"/>`
-
-`<attribute name="name" script="c.shortName + ' ' + c.legalForm" />`
-
-`</generate>`
+<generate type="company" count="5" consumer="ConsoleExporter">
+    <variable name="c" generator="CompanyNameGenerator" dataset="DE" locale="de_DE"/>
+    <attribute name="name" script="c.shortName + ' ' + c.legalForm" />
+</generate>
+```
 
 ## finance domain
 

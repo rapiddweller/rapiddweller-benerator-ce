@@ -1,6 +1,6 @@
 # Maven Benerator Plugin
 
-The benerator plugin enables you to attach benerator to your build cycle or simply use maven and its configuration capabilities for benerator setup
+The Benerator plugin enables you to attach Benerator to your build cycle or simply use maven and its configuration capabilities for benerator setup
 and invocation.
 
 You can use the plugin to
@@ -13,9 +13,9 @@ You can use the plugin to
 
 ## System Requirements
 
-Maven 3.x or newer
+* Maven 3.x or newer
 
-JDK 11 or newer
+* JDK 11 or newer
 
 ## Getting started
 
@@ -25,13 +25,14 @@ manually. The minimal configuration in Maven's pom.xml would be:
 
 ```xml
 <build>
-
 ...
 
 <plugins>
-
-<plugin> <groupId>org.databene</groupId> <artifactId>maven-benerator-plugin</artifactId> <version>0.8.1</version> </plugin>
-
+  <plugin> 
+    <groupId>org.databene</groupId>
+    <artifactId>maven-benerator-plugin</artifactId>
+    <version>0.8.1</version>
+  </plugin>
 </plugins>
 
 </build>
@@ -42,19 +43,19 @@ In order to make use of a plugin, it must be listed as dependency, e.g. dbsanity
 ```xml
 <dependencies>
 
-<dependency>
-<groupId>org.databene</groupId>
-<artifactId>dbsanity4ben</artifactId>
-<version>0.9.4</version>
-</dependency>
+  <dependency>
+    <groupId>org.databene</groupId>
+    <artifactId>dbsanity4ben</artifactId>
+    <version>0.9.4</version>
+  </dependency>
 
-<dependency>
-<groupId>org.databene</groupId>
-<artifactId>mongo4ben</artifactId>
-<version>0.1</version>
-</dependency>
-
+  <dependency>
+    <groupId>org.databene</groupId>
+    <artifactId>mongo4ben</artifactId>
+    <version>0.1</version>
+  </dependency>
 ...
+</dependencies>
 ```
 
 When using proprietary database drivers (e.g. Oracle), you need to fetch and store them in your Maven repository manually and stated as depenency in
@@ -73,21 +74,16 @@ You may configure certain aspects of benerator behavior, e.g. file encoding and 
 configuration, e.g.:
 
 ```xml
+
 <plugin>
+  <groupId>org.databene</groupId>
+  <artifactId>maven-benerator-plugin</artifactId>
+  <version>0.8.1</version>
 
-<groupId>org.databene</groupId>
-
-<artifactId>maven-benerator-plugin</artifactId>
-
-<version>0.8.1</version>
-
-<configuration>
-
-<encoding>iso-8859-1</encoding>
-
-<scope>test</scope>
-
-</configuration>
+  <configuration>
+    <encoding>iso-8859-1</encoding>
+    <scope>test</scope>
+  </configuration>
 
 </plugin>
 ```
@@ -180,33 +176,26 @@ If you need to extend the classpath to libraries different to your project depen
 configuration (this requires Maven 2.0.9 or newer):
 
 ```xml
+
 <plugin>
 
-<groupId>org.databene</groupId>
+  <groupId>org.databene</groupId>
+  <artifactId>maven-benerator-plugin</artifactId>
+  <version>0.8.1</version>
+  
+  <configuration>
+    ...
+  </configuration>
 
-<artifactId>maven-benerator-plugin</artifactId>
+  <dependencies>
+    
+    <dependency>
+      <groupId>oracle</groupId>
+      <artifactId>ojdbc</artifactId>
+      <version>1.4</version>
+    </dependency>
 
-<version>0.8.1</version>
-
-<configuration>
-
-...
-
-</configuration>
-
-<dependencies>
-
-<dependency>
-
-<groupId>oracle</groupId>
-
-<artifactId>ojdbc</artifactId>
-
-<version>1.4</version>
-
-</dependency>
-
-</dependencies>
+  </dependencies>
 
 </plugin>
 ```
@@ -219,63 +208,43 @@ configurations on your local development systems. You can then specify them as p
 ```xml
 <profiles>
 
-<profile>
+  <profile>
+    <id>development</id>
 
-<id>development</id>
+    <activation>
+      <activeByDefault>true</activeByDefault>
+    </activation>
 
-<activation>
+    <properties>
+      <database.driver>oracle.jdbc.driver.OracleDriver</database.driver>
+      <database.url>jdbc:oracle:thin:@localhost:1521:XE</database.url>
+      <database.user>user</database.user>
+      <database.pwd>user</database.pwd>
+    </properties>
 
-<activeByDefault>true</activeByDefault>
+  </profile>
 
-</activation>
+</profiles>
+```
+    You would then refer them in your pom.xml:
 
-<properties>
+```xml
+    <plugin>
+      <groupId>org.databene</groupId>
+      <artifactId>maven-benerator-plugin</artifactId>
+      <version>0.8.1</version>
 
-<database.driver>oracle.jdbc.driver.OracleDriver</database.driver>
+      <configuration>
+        <descriptor>src/test/benerator/myproject.ben.xml</descriptor>
+        <encoding>ISO-8859-1</encoding>
+        <dbDriver>${database.driver}</dbDriver>
+        <dbUrl>${database.url}</dbUrl>
+        <dbUser>${database.user}</dbUser>
+        <dbPassword>${database.pwd}</dbPassword>
+        <dbSchema>${database.user}</dbSchema>
+      </configuration>
 
-<database.url>jdbc:oracle:thin:@localhost:1521:XE</database.url>
-
-<database.user>user</database.user>
-
-<database.pwd>user</database.pwd>
-
-</properties>
-
-</profile>
-
-<profiles>
-
-You would then refer them in your pom.xml:
-
-<plugin>
-
-<groupId>org.databene</groupId>
-
-<artifactId>maven-benerator-plugin</artifactId>
-
-<version>0.8.1</version>
-
-<configuration>
-
-<descriptor>src/test/benerator/myproject.ben.xml</descriptor>
-
-<encoding>ISO-8859-1</encoding>
-
-<dbDriver>${database.driver}</dbDriver>
-
-<dbUrl>${database.url}</dbUrl>
-
-<dbUser>${database.user}</dbUser>
-
-<dbPassword>${database.pwd}</dbPassword>
-
-<dbSchema>${database.user}</dbSchema>
-
-</configuration>
-
-</plugin>
-
-## 
+    </plugin>
 ```
 
 ## Attaching the Mojo to the Build Lifecycle
@@ -283,42 +252,35 @@ You would then refer them in your pom.xml:
 You can also configure the benerator plugin to attach specific goals to a particular phase of the build lifecycle. Here is an example:
 
 ```xml
+
 <build>
 
-<plugins>
+  <plugins>
 
-<plugin>
+    <plugin>
+      <groupId>org.databene</groupId>
+      <artifactId>maven-benerator-plugin</artifactId>
+      <version>0.8.1</version>
 
-<groupId>org.databene</groupId>
+      <executions>
 
-<artifactId>maven-benerator-plugin</artifactId>
+        <execution>
+          <phase>integration-test</phase>
+          <goals>
+            <goal>generate</goal>
+          </goals>
+        </execution>
 
-<version>0.8.1</version>
+      </executions>
 
-<executions>
+    </plugin>
 
-<execution>
-
-<phase>integration-test</phase>
-
-<goals>
-
-<goal>generate</goal>
-
-</goals>
-
-</execution>
-
-</executions>
-
-</plugin>
-
-</plugins>
+  </plugins>
 
 </build>
 ```
 
-This causes the benerator goal 'generate' to be executed whenever integration tests are run. For more information on binding a plugin to phases in the
+This causes the Benerator goal 'generate' to be executed whenever integration tests are run. For more information on binding a plugin to phases in the
 lifecycle, please refer to the Build Lifecycle documentation.
 
 For more information, see Maven's "Guide to Configuring

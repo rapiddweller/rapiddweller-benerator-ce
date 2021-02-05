@@ -19,11 +19,8 @@ The performance of consumer invocations can be tracked, using the PerfTrackingCo
 <bean id="myWS" spec="new MyWebServiceConsumer(...)"/>
 
 <generate type="params" count="10000">
-
-<value type="int" min="100" max="10000" distribution="random"/>
-
-<consumer spec='new PerfTrackingConsumer(myWS)'/>
-
+  <value type="int" min="100" max="10000" distribution="random"/>
+  <consumer spec='new PerfTrackingConsumer(myWS)'/>
 </generate>
 ```
 
@@ -42,9 +39,7 @@ For tracking invocation performance, you need to add the PerfTrackingConsumer:
 
 ```xml
 <bean id="enrolCustomer" class="PerfTrackingConsumer" >
-
-<property name="target" value="{invoker}" />
-
+  <property name="target" value="{invoker}" />
 </bean>
 ```
 
@@ -66,15 +61,10 @@ An example for the properties described above:
 <import class="com.rapiddweller.contiperf.report.ConsoleReportModule" />
 
 <bean id="enrolCustomer" class="PerfTrackingConsumer" >
-
-<property name="target" value="{invoker}" />
-
-<property name="executionLogger" value="{new ConsoleExecutionLogger()}" />
-
-<property name="max" value="5000" />
-
-<property name="percentiles" value="90:5000, 95:7000"/>
-
+  <property name="target" value="{invoker}" />
+  <property name="executionLogger" value="{new ConsoleExecutionLogger()}" />
+  <property name="max" value="5000" />
+  <property name="percentiles" value="90:5000, 95:7000"/>
 </bean>
 ```
 

@@ -42,7 +42,7 @@ For monitoring Benerator execution from a remote machine, you need to set some B
 
 **Warning:** **The settings described here do not provide any security and thus are recommended only for evaluation!**
 If you do want to monitor a sensitive system in a remote manner, you need to apply security settings as described
-in [http://download.oracle.com/javase/1.5.0/docs/guide/management/agent.html](http://download.oracle.com/javase/1.5.0/docs/guide/management/agent.html)!
+in [https://docs.oracle.com/en/java/javase/11/management/monitoring-and-management-using-jmx-technology.html](https://docs.oracle.com/en/java/javase/11/management/monitoring-and-management-using-jmx-technology.html)!
 
 These are server-side settings and are independent of the client you are using:
 

@@ -37,4 +37,4 @@ Note this uses `5.6.7` as an example release number.
   git push --tags
   ```
 
-8. The Gitlab pipeline creates the release artifacts
+8. The GitHub pipeline creates the release artifacts

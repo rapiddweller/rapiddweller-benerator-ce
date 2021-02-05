@@ -59,8 +59,8 @@ explicitly.
 
 ## Using Database Repositories
 
-For frequently-used databases it is more convenient to use a central database configuration repository. The repository is located in a folder '
-databene' under your user home directory. You can define a database configuration with a name (
+For frequently-used databases it is more convenient to use a central database configuration repository. 
+The repository is located in a folder 'databene' under your user home directory. You can define a database configuration with a name (
 e.g. 'mydb') by storing a correspondingly named properties file there assigning the suffix '.env.properties' (e.g. '
 mydb.env.properties', on Windows the file location would be `C:\Documents and Settings\<user_name>\mydb.env.properties`)
 . In the file you can configure the JDBC connection information with the keys db_url, db_driver, db_user, db_password and db_url.
@@ -385,12 +385,11 @@ For restricting the objects referred to or using an individual way to construct 
 evaluated by the target system and return a reference value. For databases the selector needs to be a SQL where clause or complete query:
 
 ```xml
-<generate type="db_role" count="10" consumer="db" />
+<generate type="db_role" count="10" consumer="db"/>
 
 <generate type="db_user" count="100" consumer="db">
-
-<reference name="role_fk" targetType="db_role" source="db" selector="role_name != 'admin'" distribution="random"/>
-
+    <reference name="role_fk" targetType="db_role" source="db" 
+               selector="role_name != 'admin'" distribution="random"/>
 </generate>
 ```
 
@@ -401,19 +400,13 @@ values, script, etc. You could, e.g., configure the use of each role type by its
 
 ```xml
 <generate type="db_user" count="5" consumer="db">
-
-<reference name="role_fk" constant="'admin'"/>
-
-...
-
+  <reference name="role_fk" constant="'admin'"/>
+  ...
 </generate>
 
 <generate type="db_user" count="95" consumer="db">
-
-<reference name="role_fk" constant="'customer'"/>
-
-...
-
+    <reference name="role_fk" constant="'customer'"/>
+    ...
 </generate>
 ```
 
@@ -433,11 +426,12 @@ When querying entities, you specify the database to query as **source**, the whe
 as **type**. After that, you can access the results' attributes by their names:
 
 ```xml
-<variable name="_product" type**="MY_PRODUCT" **source**="db" selector="sysdate between VALID_FROM and VALID_TO" distribution="random" />
+<variable name="_product"
+          type**="MY_PRODUCT" **source**="db" selector="sysdate between VALID_FROM and VALID_TO" distribution="random" />
 
-<reference name="PRODUCT_ID" script="_product.PRODUCT_ID" />
+<reference name="PRODUCT_ID" script="_product.PRODUCT_ID"/>
 
-<attribute name="ROUTING_TYPE" script="_product.ROUTING_TYPE" />
+<attribute name="ROUTING_TYPE" script="_product.ROUTING_TYPE"/>
 ```
 
 When aggregating data with a general query that is not (or cannot be) mapped to a type, you can access the results' column values as array elements (
@@ -475,13 +469,11 @@ write it to the db_order's total_price column:
 
 ```xml
 <iterate type="db_order" source="db" consumer="db.updater()">
-
-<attribute name="total_price" source="db"
-
-selector="{{ftl:select sum(total_price) from db_order_item where order_id = ${db_order.id}}}"
-
-cyclic="true"/>
-
+  
+  <attribute name="total_price" source="db"
+             selector="{{ftl:select sum(total_price) from db_order_item where order_id = ${db_order.id}}}"
+             cyclic="true"/>
+  
 </iterate>
 ```
 
@@ -532,9 +524,7 @@ If you are nesting creation loops, you can set the transaction control for each 
 
 ```xml
 <generate type="user" count="1000" pageSize="100" consumer="db">
-
-<generate type="order" count="50" pageSize="500" consumer="db" />
-
+  <generate type="order" count="50" pageSize="500" consumer="db" />
 </generate>
 ```
 
@@ -547,9 +537,9 @@ zero:
 
 ```xml
 <generate type="user" count="1000" pageSize="100" consumer="db">
-
-<generate type="order" count="50" pageSize="0" consumer="db" />
-
+  
+  <generate type="order" count="50" pageSize="0" consumer="db" />
+  
 </generate>
 ```
 
@@ -577,9 +567,9 @@ violating foreign key constraints. For example, if you have a table USER which r
 
 ```xml
 <transcodingTask defaultSource="db1" target="db2">
-
-<transcode table="ROLE"/> <transcode table="USER"/>
-
+  
+  <transcode table="ROLE"/> <transcode table="USER"/>
+  
 </transcodingTask>
 ```
 
@@ -591,9 +581,10 @@ You can resctrict the set of database entries to copy by using a 'selector' attr
 
 ```xml
 <transcodingTask defaultSource="s" target="t">
-
-<transcode table="ROLE" selector="ID = 1" /> <transcode table="USER" selector="ROLE_ID = 1" />
-
+  
+  <transcode table="ROLE" selector="ID = 1" />
+  <transcode table="USER" selector="ROLE_ID = 1" />
+  
 </transcodingTask>
 ```
 
@@ -604,12 +595,16 @@ Only the ROLE with id 1 and the USERs that refer role #1 are copied.
 You can overwrite primary key values and other attributes while you are transfering data using the normal Benerator syntax:
 
 ```xml
+
 <transcodingTask defaultSource="s" target="t">
 
-<transcode table="ROLE"> <id name="id" generator="IncrementalIdGenerator" /> </transcode>
+  <transcode table="ROLE">
+    <id name="id" generator="IncrementalIdGenerator"/>
+  </transcode>
 
-<transcode table="USER">
-<id name="id" generator="IncrementalIdGenerator" /> </transcode>
+  <transcode table="USER">
+    <id name="id" generator="IncrementalIdGenerator"/>
+  </transcode>
 
 </transcodingTask>
 ```
@@ -630,20 +625,33 @@ the corresponding foreign key constraint in the database and finds out the type 
 As an example, if you want to transcode the rows of a company table and cascade to their departments, you would write
 
 ```xml
-<transcode table="company"> <cascade ref="department(company_id)" /> </transcode>
+
+<transcode table="company">
+  <cascade ref="department(company_id)"/>
+</transcode>
 ```
 
 Cascades can be nested:
 
 ```xml
-<transcode table="company"> <cascade ref="department(company_id)"> <cascade ref="employee(department_id)" /> </cascade> </transcode>
+<transcode table="company">
+  
+  <cascade ref="department(company_id)">
+    <cascade ref="employee(department_id)"/>
+  </cascade>
+  
+</transcode>
 ```
 
 In `<cascade>`, you can overwrite attributes, ids and references like in `<transcode>`:
 
 ```xml
 <transcode table="company">
-<id name="id" generator="IncrementalIdGenerator" /> <cascade ref="department(company_id)" /> </transcode>
+  
+  <id name="id" generator="IncrementalIdGenerator"/>
+  <cascade ref="department(company_id)"/>
+  
+</transcode>
 ```
 
 ### Merging Foreign Key Relations
@@ -663,11 +671,8 @@ store it in a file with the suffix .id.xml, e.g. identities.id.xml:
 <?xml version="1.0" encoding="UTF-8"?>
 
 <dbsanity>
-
-<identity table="ROLE" type="unique-key" columns="NAME" />
-
-<identity table="USER" type="unique-key" columns="NAME" />
-
+  <identity table="ROLE" type="unique-key" columns="NAME"/>
+  <identity table="USER" type="unique-key" columns="NAME"/>
 </dbsanity>
 ```
 
@@ -675,11 +680,8 @@ This identity file enables Benerator to merge foreign key relationships in the t
 
 ```xml
 <transcodingTask target="db3" identity="identity-def.xml">
-
-<transcode table="ROLE" source="db1"/>
-
-<transcode table="USER" source="db2"/>
-
+  <transcode table="ROLE" source="db1"/>
+  <transcode table="USER" source="db2"/>
 </transcodingTask>
 ```
 
@@ -693,11 +695,8 @@ type**, e.g.
 <?xml version="1.0" encoding="UTF-8"?>
 
 <dbsanity>
-
-<identity table="ROLE" type="..." ... />
-
-<identity table="USER" type="..." ... />
-
+  <identity table="ROLE" type="..." ... />
+  <identity table="USER" type="..." ... />
 </dbsanity>
 ```
 
@@ -717,7 +716,7 @@ If a non-pk-column or a combination of several columns is unique, use the `<uniq
 list in a 'columns' attribute:
 
 ```xml
-<identity table="PRODUCT" type="unique-key" columns="CATEGORY,CODE"/>
+<identity table="PRODUCT" type="unique-key" columns="CATEGORY,CODE" />
 ```
 
 You may as well include foreign keys in the list: Benerator will use the business id of the referenced objects to determine the identity of the
@@ -752,5 +751,5 @@ select sn.STATE_NAME as SUB_NK, s.STATE_ID as PK from STATE s join STATE_NAME sn
 
 ### Limitations
 
-Currently, the amount of data that can be transcoded is limited by the amount of avaliable Java heap memory, but as long as you do not transcode
+Currently, the amount of data that can be transcoded is limited by the amount of available Java heap memory, but as long as you do not transcode
 billions of data sets you are not supposed to get problems. Composite primary keys are not supported.

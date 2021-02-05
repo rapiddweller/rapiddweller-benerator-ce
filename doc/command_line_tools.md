@@ -2,25 +2,37 @@
 
 ## Benerator
 
-benerator expects a descriptor file name as the only command line parameter, e.g. on Windows systems
+Benerator expects a descriptor file name as the only command line parameter, e.g. on Windows systems
 
-`benerator test.ben.xml`
+<div class="termy">
+```bash
+benerator test.ben.xml
+```
+</div>
 
 or, on Unix and Mac OS X systems,
 
-`benerator test.ben.xml`
+```bash
+benerator test.ben.xml
+```
 
 You can change default behavior by Java VM parameters, e.g.
 
-`benerator.bat -Dfile.encoding=iso-8859-1 -Djava.io.tmpdir="C:\temp" test.ben.xml`
+```bash
+benerator.bat -Dfile.encoding=iso-8859-1 -Djava.io.tmpdir="C:\temp" test.ben.xml
+```
 
 Validation can be turned off from the command line alternatively using a VM parameter:
 
-`mvn benerator:generate -Dbenerator.validate=false`
+```bash
+mvn benerator:generate -Dbenerator.validate=false
+```
 
 or
 
-`benerator myproject.ben.xml -Dbenerator.validate=false`
+```bash
+benerator myproject.ben.xml -Dbenerator.validate=false
+```
 
 ## DB Snapshot Tool
 
@@ -50,7 +62,9 @@ You need the following VM parameters to configure database access. Use them like
 The XMLCreator reads a XML Schema file and creates a number of XML files that comply to the schema. It can read XML annotations which provide
 benerator configuration in the XML schema file. It is invoked from the command line and has the following parameter order:
 
-`createxml <schemaUri> <root-element> <filename-pattern> <file-count> [<properties file name(s)>]`
+```bash
+createxml <schemaUri> <root-element> <filename-pattern> <file-count> [<properties file name(s)>]
+```
 
 Their meaning is as follows:
 
@@ -67,11 +81,15 @@ Their meaning is as follows:
 
 Under Windows, an example call would be:
 
-```createxml myschema.xsd product-list products-{0}.xml 10000 perftest.properties```
+```bash
+createxml myschema.xsd product-list products-{0}.xml 10000 perftest.properties
+```
 
 or, on Unix and Mac OS X systems,
 
-`sh myschema.xsd product-list products-{0}.xml 10000 perftest.properties`
+```bash
+sh myschema.xsd product-list products-{0}.xml 10000 perftest.properties
+```
 
 for generation 10,000 XML files that comply to the XML Schema definition in file myschema.xsd and have product-list as root element. The files will be
 named products-1.xml, products-2.xml, products-3.xml, ...

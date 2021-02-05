@@ -74,8 +74,8 @@ with something like this:
 
 ## Scripts
 
-When using other script languages that DatabeneScript, the scripts expressions are parsed at runtime, thus are significantly slower than compiled
-code. For performing CPU-intensive operations or excessive looping, use DatabeneScript or program a Java task (See Manual Section 10, “Custom Tasks”).
+When using other script languages that rapiddwellerScript, the scripts expressions are parsed at runtime, thus are significantly slower than compiled
+code. For performing CPU-intensive operations or excessive looping, use rapiddwellerScript or program a Java task (See Manual Section 10, “Custom Tasks”).
 
 ## Parsing (Oracle) metadata
 

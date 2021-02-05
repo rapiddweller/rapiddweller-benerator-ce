@@ -56,7 +56,7 @@ Then you can choose among a list of predefined project types:
 * **Reproduce &amp; scale existing database**: Creates a snapshot of the current database content and creates a descriptor which replays the snapshot
   and defines templates for adding arbitrary volumes of data to each table.
 
-* **Shop example database**: Performs Definition and population of the databene shop database example for all database systems supported by Benerator:
+* **Shop example database**: Performs Definition and population of the Benerator shop database example for all database systems supported by Benerator:
   DB2, Derby, Firebird, HSQL, H2, Oracle, PostgreSQL and SQLServer.
 
 * **Generate simple XML file**: Defines generation of a simple XML file
@@ -90,6 +90,5 @@ are eventually necessary (e.g. proprietary database drivers), how to invoke Bene
 customizations.
 
 The easiest way to run the generated project is to run the Maven Benerator Plugin as described in the generated readme.txt files. The project wizard
-creates all necessary files for you to execute the created projects immediately (
-except for proprietary database drivers: Oracle or DB2). However you can also invoke Benerator directly from the command line, but have to take care
+creates all necessary files for you to execute the created projects immediately (except for proprietary database drivers: Oracle or DB2). However you can also invoke Benerator directly from the command line, but have to take care
 of compiling custom Java classes in the project for yourself.
