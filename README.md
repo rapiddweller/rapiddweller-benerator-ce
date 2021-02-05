@@ -45,7 +45,7 @@ mvn -version
 1. Choose how to install:
 
    a) Download a Prebuilt Distribution from **Project Overview > Releases**
-   (current release is `1.1.0`, cp. rapiddweller-benerator-ce-1.1.0-jdk11-dist.zip)
+   (current release is `1.1.0`, cp. rapiddweller-benerator-ce-1.1.0-jdk-11-dist.zip)
    and unzip the downloaded file in an appropriate directory, e.g.
    `/Developer/Applications` or `C:\Program Files\Development`.
 
@@ -60,7 +60,7 @@ mvn -version
      (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.0-jdk-11`). Click OK several times.
 
    - Mac/Unix/Linux Details: Add an entry that points to Benerator,
-     e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.1.0-jdk11`
+     e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.1.0-jdk-11`
 
 3. On Unix/Linux/Mac systems: **Set permissions**  
    Open a shell on the installation's root directory and execute
