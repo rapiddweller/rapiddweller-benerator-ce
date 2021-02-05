@@ -1,5 +1,7 @@
 # Changelog
 
+<!--lint disable no-duplicate-headings-->
+
 ## Vx.x.x (Pre-release)
 
 ### Release Highlights
@@ -22,7 +24,7 @@ N/A
 
 ### Important Notes
 
--  Repository shift to github.com
+- Repository shift to github.com
 
 ### Breaking Changes
 
@@ -49,11 +51,9 @@ changes have occurred since databene-benerator v0.9.8 was released by Volker Ber
 
 ### Release Highlights
 
--  Project and dependency update to Java 1.8 and Jave 11
-   
--  Update shop demo cases to get started
-   
--  Repository shift to gitlab.com (Build pipeline, E2ET)
+- Project and dependency update to Java 1.8 and Jave 11
+- Update shop demo cases to get started
+- Repository shift to gitlab.com (Build pipeline, E2ET)
 
 ### Important Notes
 
@@ -63,26 +63,19 @@ N/A
 
 N/A
 
-### Changes since 0.9.8:
+### Changes since 0.9.8
 
--  Migration of [databene-benerator](https://sourceforge.net/projects/benerator/)
+- Migration of [databene-benerator](https://sourceforge.net/projects/benerator/)
   to [rapiddweller](https://rapiddweller.com)
-    -  Update project and dependencies to Java 1.8 and Jave 11
-       
-    -  Migrate and update databene dependencies (e.g. databene-commons -> rapidweller-common)
+- Update project and dependencies to Java 1.8 and Jave 11
+- Migrate and update databene dependencies (e.g. databene-commons -> rapidweller-common)
+- Create automated build pipeline
+- Create README, CHANGELOG, CONTRIBUTING, RELEASE pages
+- Minor improvements of code
+- Adjust unit tests to align with new java and dependency versions
+- Add E2ET for several DB for shop demo
+- Rename project from org.databene.benerator to com.rapiddweller.benerator
 
-    -  Create automated build pipeline
+### Changes before v0.9.8
 
-    -  Create README, CHANGELOG, CONTRIBUTING, RELEASE pages    
-   
-    -  Minor improvements of code
-
-    -  Adjust unit tests to align with new java and dependency versions
-
-    -  Add E2ET for several DB for shop demo
-
-    -  Rename project from org.databene.benerator to com.rapiddweller.benerator
-
-### Changes before v0.9.8:
-
--  Please see previous [releasenotes](/releasenotes) in the releasenotes project folder. 
+- Please see previous [releasenotes](/releasenotes) in the releasenotes project folder.
