@@ -183,10 +183,12 @@ Example:
     <attribute name="country" values="DE,AT,CH"/>
 
     <generate type="product" count="100" consumer="db">
-
-        <attribute name="ean_code" source="db" selector="ftl:selector="{{select ean_code from db_product where
-        country='${shop.country}'}}"/>
-
+        
+        <attribute name="ean_code" 
+                   source="db" 
+                   selector="{{ftl:select ean_code from db_product where country='${shop.country}'}}"
+                   />
+        
     </generate>
 
 </generate>
@@ -228,7 +230,7 @@ Afterwards you can query the generated products for referencing them in generate
 </generate>
 ```
 
-Note that you can only query for entities – if you need only an attribute of an entity, you must first use a variable to get the entity and then a
+**Note** that you can **only** query for entities – if you need only an attribute of an entity, you must first use a variable to get the entity and then a
 script to get the required attribute.
 
 You can use a distribution:
@@ -236,8 +238,9 @@ You can use a distribution:
 `<variable name="product" source="store" type="product" distribution="random"/>`
 
 A simple form of query is supported by a 'selector' element. Its content must be a script expression that serves as a filter. The expression is
-consecutively evaluated on each element (as candidate) and has to return true, if the candidate is accepted, otherwise false. The script can access
-each candidate with the keyword _candidate.
+consecutively evaluated on each element (as candidate) and has to return true, if the candidate is accepted, otherwise false. 
+
+**IMPORTANT**: The script only can access each candidate by using the keyword **_candidate**.
 
 As an example, here is a query which only returns products whose name starts with 'A':
 

@@ -54,8 +54,8 @@ explicitly.
 | HSQL | jdbc:hsqldb:hsql://host:9001/dbname | org.hsqldb.jdbcDriver |  | PUBLIC |
 | MySQL | jdbc:mysql://host:3306/dbname | com.mysql.jdbc.Driver | `<user name>` |  |
 | Oracle | jdbc:oracle:thin:@host:1521:SID | oracle.jdbc.driver.OracleDriver |  | `<user name>` |
-| Postgres | jdbc:postgresql://host:5432/dbname | org.postgresql.Driver |  | `<user name>` |
-| SQL Server | jdbc:jtds:sqlserver://host:1433;DatabaseName=dbname | net.sourceforge.jtds.jdbc.Driver | dbo |  |
+| Postgres | jdbc:postgresql://host:5432/dbname | org.postgresql.Driver | `<user name>` | public |
+| SQL Server | jdbc:jtds:sqlserver://host:1433/dbname | net.sourceforge.jtds.jdbc.Driver | master | dbo |
 
 ## Using Database Repositories
 
@@ -67,7 +67,14 @@ mydb.env.properties', on Windows the file location would be `C:\Documents and Se
 
 As an example, a file `mydb.env.properties` would configure the environment 'mydb' and would have a content like this for an HSQL database:
 
-`db_url=jdbc:hsqldb:mem:DbRelatedTestdb_driver=org.hsqldb.jdbcDriverdb_user=sadb_password=db_schema=public`
+
+```properties
+db_url=jdbc:hsqldb:mem:DbRelatedTest
+db_driver=org.hsqldb.jdbcDriver
+db_user=sa
+db_password=
+db_schema=public
+```
 
 Having done so, you can connect a database more simply using the `<database>`'s 'environment' attribute:
 
@@ -336,7 +343,7 @@ using a single bracket, the query memorizes the value of **this.region** at the 
 
 ### Automatic referencing
 
-By default, benerator assumes that all relations are one-to-one as the most defensive choice. Thus the following setup in which a table db_user
+**By default**, Benerator assumes that all relations are **one-to-one** as the most defensive choice. Thus the following setup in which a table db_user
 references a table db_role will cause an error:
 
 ```xml
@@ -347,13 +354,12 @@ references a table db_role will cause an error:
 <generate type="db_user" count="100" consumer="db" />
 ```
 
-This is because, assuming a one-to-one relationship, you can only generate as many users as unique roles are available!
+This is because, assuming a **one-to-one** relationship, you **can only** generate as many users as unique roles are available!
 ...and you have generated only 10 roles before. In other words, in fully automatic data generation, the number of user entries will be the number of
 role entries.
 
 In most cases you actually deal with many-to-one relationships and thus need to specify its characteristics explicitly, typically by using a
-distribution. Basically, a reference is defined by (column) **name**, (dabase) **source** and **
-targetType** (referenced table):
+distribution. Basically, a reference is defined by (column) **name**, (dabase) **source** and **targetType** (referenced table):
 
 ```xml
 <generate type="db_role" count="10" consumer="db" />
@@ -753,3 +759,98 @@ select sn.STATE_NAME as SUB_NK, s.STATE_ID as PK from STATE s join STATE_NAME sn
 
 Currently, the amount of data that can be transcoded is limited by the amount of available Java heap memory, but as long as you do not transcode
 billions of data sets you are not supposed to get problems. Composite primary keys are not supported.
+
+### Multi-schema references
+
+Benerator is scanning data sources for references and validity and if all data types can be handled by Benerator in general.
+
+When you have a PostgreSQL database for example with following data model :
+
+```sql
+        CREATE SCHEMA schema1;
+        CREATE SCHEMA schema2;
+        CREATE SCHEMA schema3;
+        CREATE SEQUENCE schema3.seq_id_gen START WITH 20;
+        CREATE TABLE schema3.db_manufacturer (
+        id SERIAL PRIMARY KEY,
+        name varchar(30) NOT NULL,
+        description text NULL
+        );
+        CREATE SEQUENCE schema1.seq_id_gen START WITH 10;
+        CREATE TABLE IF NOT EXISTS schema1.db_category (
+        id SERIAL PRIMARY KEY,
+        name varchar(30) NOT NULL
+        );
+        CREATE SEQUENCE schema2.seq_id_gen START WITH 10;
+        CREATE TABLE schema2.db_category (
+        id SERIAL PRIMARY KEY,
+        name varchar(30) NOT NULL
+        );
+        CREATE TABLE schema1.db_product (
+        ean_code varchar(13) NOT NULL,
+        name varchar(30) NOT NULL,
+        category_id int NOT NULL,
+        manufacturer_id int NOT NULL,
+        price decimal(8,2) NOT NULL,
+        notes varchar(256) NULL,
+        description text NULL,
+        CONSTRAINT db_product_category_fk FOREIGN KEY (category_id) REFERENCES schema1.db_category (id),
+        CONSTRAINT db_manufacturer_fk FOREIGN KEY (manufacturer_id) REFERENCES schema3.db_manufacturer (id)
+        );
+        COMMIT;
+```
+
+you would have related data distributed into different schema. In Benerator script you would define 3 different data sources ... 
+
+```xml
+    <database id="schema1" 
+              url="{dbUrl}" 
+              driver="{dbDriver}" 
+              schema="schema1" 
+              user="{dbUser}" 
+              password="{dbPassword}" 
+              batch="{dbBatch}"/>    
+    <database id="schema2" 
+              url="{dbUrl}" 
+              driver="{dbDriver}" 
+              schema="schema2" 
+              user="{dbUser}" 
+              password="{dbPassword}" 
+              batch="{dbBatch}"/>  
+    <database id="schema3" 
+              url="{dbUrl}" 
+              driver="{dbDriver}" 
+              schema="schema3" 
+              user="{dbUser}" 
+              password="{dbPassword}" 
+              batch="{dbBatch}"/>  
+```
+
+when you try to fill one of the table, the Benerator scan your data source and check if all references are accessible, this would mean in your case, data source ***schema1*** has one table ***db_product*** with a foreign key reference into schema 3 and this schema is not  part of scope , you would get an error message ...
+
+```shell
+[ERROR] com.rapiddweller.common.ObjectNotFoundException: Table db_manufacturer is referenced by table db_product but not found in the database. Possibly it was filtered out?
+```
+
+in this situation you have two possibilities to address this issue , you could create a view in schema 1 of table db_product in schema 3
+
+```sql
+CREATE VIEW schema1.db_product AS
+    SELECT *
+    FROM schema3.db_product;
+```
+
+this would make the target of reference visible for Benerator. An alternative would be to use the ***includeTable*** tag in data source  ...
+
+```xml
+    <database id="schema1" 
+              url="{dbUrl}" 
+              driver="{dbDriver}" 
+              schema="schema1" 
+              user="{dbUser}" 
+              password="{dbPassword}" 
+              batch="{dbBatch}"
+              includeTable="#all"/> 
+```
+
+this would make all schema's visible for data source ***schema1***.

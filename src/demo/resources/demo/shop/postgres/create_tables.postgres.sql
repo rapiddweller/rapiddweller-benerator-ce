@@ -1,8 +1,8 @@
-CREATE SEQUENCE seq_id_gen START WITH 10;
+create sequence IF NOT EXISTS seq_id_gen START with 10;
 --
 -- db_category
 --
-CREATE TABLE db_category
+create TABLE IF NOT EXISTS db_category
 (
     id        varchar(9)  NOT NULL,
     name      varchar(30) NOT NULL,
@@ -10,30 +10,30 @@ CREATE TABLE db_category
     PRIMARY KEY (id),
     CONSTRAINT db_category_parent_fk FOREIGN KEY (parent_id) REFERENCES db_category (id)
 );
-CREATE
-INDEX db_cat_parent_fki ON db_category (parent_id);
+create
+    INDEX IF NOT EXISTS db_cat_parent_fki ON db_category (parent_id);
 --
 -- db_product
 --
-CREATE TABLE db_product
+create TABLE IF NOT EXISTS db_product
 (
     ean_code     varchar(13)   NOT NULL,
     name         varchar(30)   NOT NULL,
     category_id  varchar(9)    NOT NULL,
     price        decimal(8, 2) NOT NULL,
     manufacturer varchar(30)   NOT NULL,
-    notes        varchar(256) NULL,
-    description  text NULL,
+    notes        varchar(256)  NULL,
+    description  text          NULL,
 --  image        bytea            NULL, TODO support bytea type
     PRIMARY KEY (ean_code),
     CONSTRAINT db_product_category_fk FOREIGN KEY (category_id) REFERENCES db_category (id)
 );
-CREATE
-INDEX db_product_category_fki ON db_product (category_id);
+create
+    INDEX IF NOT EXISTS db_product_category_fki ON db_product (category_id);
 --
 -- db_role
 --
-CREATE TABLE db_role
+create TABLE IF NOT EXISTS db_role
 (
     name varchar(16) NOT NULL,
     PRIMARY KEY (name)
@@ -41,7 +41,7 @@ CREATE TABLE db_role
 --
 -- db_user
 --
-CREATE TABLE db_user
+create TABLE IF NOT EXISTS db_user
 (
     id       integer     NOT NULL DEFAULT nextval('seq_id_gen'),
     name     varchar(30) NOT NULL,
@@ -53,12 +53,12 @@ CREATE TABLE db_user
     CONSTRAINT db_user_role_fk FOREIGN KEY (role_id) REFERENCES db_role (name),
     constraint active_flag check (active in (0, 1))
 );
-CREATE
-INDEX db_user_role_fki on db_user (role_id);
+create
+    INDEX IF NOT EXISTS db_user_role_fki on db_user (role_id);
 --
 -- db_customer
 --
-CREATE TABLE db_customer
+create TABLE IF NOT EXISTS db_customer
 (
     id         integer     NOT NULL default 0,
     category   char(1)     NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE db_customer
 --
 -- db_order
 --
-CREATE TABLE db_order
+create TABLE IF NOT EXISTS db_order
 (
     id          integer       NOT NULL DEFAULT nextval('seq_id_gen'),
     customer_id integer       NOT NULL,
@@ -81,38 +81,13 @@ CREATE TABLE db_order
     PRIMARY KEY (id),
     CONSTRAINT db_order_customer_fk FOREIGN KEY (customer_id) REFERENCES db_customer (id)
 );
-CREATE
-INDEX db_order_customer_fki on db_order (customer_id);
-/*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, is permitted under the terms of the
- * GNU General Public License.
- *
- * For redistributing this software or a derivative work under a license other
- * than the GPL-compatible Free Software License as defined by the Free
- * Software Foundation or approved by OSI, you must first obtain a commercial
- * license to this software product from rapiddweller GmbH & Volker Bergmann.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * WITHOUT A WARRANTY OF ANY KIND. ALL EXPRESS OR IMPLIED CONDITIONS,
- * REPRESENTATIONS AND WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE
- * HEREBY EXCLUDED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
+create
+    INDEX IF NOT EXISTS db_order_customer_fki on db_order (customer_id);
 
 --
 -- db_order_item
 --
-CREATE TABLE db_order_item
+create TABLE IF NOT EXISTS db_order_item
 (
     id               integer       NOT NULL DEFAULT nextval('seq_id_gen'),
     order_id         integer       NOT NULL,
@@ -123,8 +98,8 @@ CREATE TABLE db_order_item
     CONSTRAINT db_order_item_order_fk FOREIGN KEY (order_id) REFERENCES db_order (id),
     CONSTRAINT db_order_item_product_fk FOREIGN KEY (product_ean_code) REFERENCES db_product (ean_code)
 );
-CREATE
-INDEX db_order_item_order_fki ON db_order_item (order_id);
-CREATE
-INDEX db_order_item_product_fki ON db_order_item (product_ean_code);
-COMMIT;
+create
+    INDEX IF NOT EXISTS db_order_item_order_fki ON db_order_item (order_id);
+create
+    INDEX IF NOT EXISTS db_order_item_product_fki ON db_order_item (product_ean_code);
+commit;

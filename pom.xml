@@ -110,38 +110,12 @@
         </developer>
     </developers>
 
-    <scm>
-        <url>https://github.com/rapiddweller/rapiddweller-benerator-ce</url>
-        <connection>scm:git:git://github.com/rapiddweller/rapiddweller-benerator-ce.git</connection>
-        <developerConnection>scm:git:git://github.com/rapiddweller/rapiddweller-benerator-ce.git</developerConnection>
-    </scm>
-
-    <repositories>
-        <repository>
-            <id>rdd-nexus</id>
-            <url>https://nexus.dwellerlab.com/repository/maven-rdd</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>rdd-nexus</id>
-            <name>Releases</name>
-            <url>https://nexus.dwellerlab.com/repository/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>rdd-nexus</id>
-            <name>Snapshot</name>
-            <url>https://nexus.dwellerlab.com/repository/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <properties>
-        <_rd_common_version>1.1.0-jdk-11-SNAPSHOT</_rd_common_version>
-        <_rd_contiperf_version>2.4.0-jdk-11-SNAPSHOT</_rd_contiperf_version>
-        <_rd_format_version>1.1.0-jdk-11-SNAPSHOT</_rd_format_version>
-        <_rd_jdbacl_version>1.1.0-jdk-11-SNAPSHOT</_rd_jdbacl_version>
-        <_rd_script_version>1.1.0-jdk-11-SNAPSHOT</_rd_script_version>
+        <_rd_common_version>1.1.0-jdk-11</_rd_common_version>
+        <_rd_contiperf_version>2.4.0-jdk-11</_rd_contiperf_version>
+        <_rd_format_version>1.1.0-jdk-11</_rd_format_version>
+        <_rd_jdbacl_version>1.1.1-jdk-11-SNAPSHOT</_rd_jdbacl_version>
+        <_rd_script_version>1.1.0-jdk-11</_rd_script_version>
         <!--suppress UnresolvedMavenProperty -->
         <build_number>${env.CI_JOB_ID}</build_number>
         <dependency_antlr-runtime.version>3.3</dependency_antlr-runtime.version>
@@ -639,11 +613,64 @@
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>${plugin_nexus-staging-maven-plugin.version}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
         </profile>
     </profiles>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <scm>
+        <url>https://github.com/rapiddweller/rapiddweller-benerator-ce</url>
+        <connection>scm:git:git://github.com/rapiddweller/rapiddweller-benerator-ce.git</connection>
+        <developerConnection>scm:git:git://github.com/rapiddweller/rapiddweller-benerator-ce.git</developerConnection>
+    </scm>
+
 </project>

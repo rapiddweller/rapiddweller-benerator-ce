@@ -37,10 +37,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Value;
+import org.graalvm.polyglot.proxy.ProxyObject;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Date;
+import java.util.Map;
 
 /**
  * Provides {@link Script} functionality based on GraalVM: Scripting for the Java platform.
@@ -52,74 +53,66 @@ import java.util.Date;
  */
 public class GraalScript implements Script {
 
-  private final String text;
-  private final String language;
-  private static final org.graalvm.polyglot.Context polyglotCtx = org.graalvm.polyglot.Context.newBuilder("js").allowAllAccess(true).build();
-  private static final Logger LOGGER = LogManager.getLogger(GraalScript.class);
+    private final String text;
+    private final String language;
+    private static final org.graalvm.polyglot.Context polyglotCtx = org.graalvm.polyglot.Context.newBuilder("js").allowAllAccess(true).build();
+    private static final Logger LOGGER = LogManager.getLogger(GraalScript.class);
 
-  /**
-   * Instantiates a new Graal script.
-   *
-   * @param text         the text
-   * @param scriptEngine the script engine
-   * @param languageId   the language id
-   */
-  public GraalScript(String text, Engine scriptEngine, String languageId) {
-    Assert.notEmpty(text, "text");
-    Assert.notNull(scriptEngine, "engine");
-    this.text = text;
-    this.language = languageId;
-  }
-
-  @Override
-  public Object evaluate(Context context) throws ScriptException {
-    migrateBeneratorContext2GraalVM(context);
-
-    Value returnValue = polyglotCtx.eval(this.language, text);
-    GraalValueConverter converter = new GraalValueConverter();
-    return converter.convert(returnValue);
-  }
-
-  private void migrateBeneratorContext2GraalVM(Context context) {
-    // add benerator context to graalvm script context
-    try {
-      for (String key : context.keySet()) {
-        Object valueType = context.get(key) != null ? context.get(key).getClass() : null;
-        if (valueType == null) {
-          continue;
-        }
-        // code block
-        if (Entity.class.equals(valueType)) {
-          LOGGER.debug("Entity found : {}", key);
-          Object map = new Entity2MapConverter().convert((Entity) context.get(key));
-          polyglotCtx.getBindings(this.language).putMember(key, map);
-        } else if (
-            String.class.equals(valueType) ||
-                Integer.class.equals(valueType) ||
-                Boolean.class.equals(valueType) ||
-                Float.class.equals(valueType) ||
-                Byte.class.equals(valueType) ||
-                Double.class.equals(valueType) ||
-                Long.class.equals(valueType) ||
-                Date.class.equals(valueType)
-        ) {
-          polyglotCtx.getBindings(this.language).putMember(key, context.get(key));
-        } else {
-          LOGGER.warn("migration of benerator value does not match supported data types : " + key);
-        }
-      }
-    } catch (NullPointerException e) {
-      LOGGER.fatal("Context {} was NULL, this should not happen!", context);
+    /**
+     * Instantiates a new Graal script.
+     *
+     * @param text         the text
+     * @param scriptEngine the script engine
+     * @param languageId   the language id
+     */
+    public GraalScript(String text, Engine scriptEngine, String languageId) {
+        Assert.notEmpty(text, "text");
+        Assert.notNull(scriptEngine, "engine");
+        this.text = text;
+        this.language = languageId;
     }
-  }
 
-  @Override
-  public void execute(Context context, Writer out) throws ScriptException, IOException {
-    out.write(String.valueOf(evaluate(context)));
-  }
+    @Override
+    public Object evaluate(Context context) throws ScriptException {
+        migrateBeneratorContext2GraalVM(context);
 
-  @Override
-  public String toString() {
-    return text;
-  }
+        Value returnValue = polyglotCtx.eval(this.language, text);
+        GraalValueConverter converter = new GraalValueConverter();
+        return converter.convert(returnValue);
+    }
+
+    private void migrateBeneratorContext2GraalVM(Context context) {
+        // add benerator context to graalvm script context
+        try {
+            for (String key : context.keySet()) {
+                Object valueType = context.get(key) != null ? context.get(key).getClass() : null;
+                if (valueType == null) {
+                    continue;
+                }
+                // check if Entity Object
+                if (Entity.class.equals(valueType)) {
+                    LOGGER.debug("Entity found : {}", key);
+                    Map<String, Object> map = new Entity2MapConverter().convert((Entity) context.get(key));
+                    // to access items of map in polyglotCtx it is nessesary to create an ProxyObject
+                    // TODO: might should create an Entity2ProxyObjectConverter in 1.2.0
+                    ProxyObject proxy = ProxyObject.fromMap(map);
+                    polyglotCtx.getBindings(this.language).putMember(key, proxy);
+                } else {
+                    polyglotCtx.getBindings(this.language).putMember(key, context.get(key));
+                }
+            }
+        } catch (NullPointerException e) {
+            LOGGER.fatal("Context {} was NULL, this should not happen!", context);
+        }
+    }
+
+    @Override
+    public void execute(Context context, Writer out) throws ScriptException, IOException {
+        out.write(String.valueOf(evaluate(context)));
+    }
+
+    @Override
+    public String toString() {
+        return text;
+    }
 }
