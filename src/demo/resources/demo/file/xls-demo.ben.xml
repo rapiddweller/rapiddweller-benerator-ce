@@ -12,17 +12,6 @@
 
     <memstore id="store"/>
 
-    <bean id="dtGen" class="DateTimeGenerator">
-        <property name='minDate' value='2010-08-01'/>
-        <property name='maxDate' value='2010-08-31'/>
-        <property name='dateGranularity' value='00-00-02'/>
-        <property name='dateDistribution' value='random'/>
-        <property name='minTime' value='08:00:00'/>
-        <property name='maxTime' value='17:00:00'/>
-        <property name='timeGranularity' value='00:00:01'/>
-        <property name='timeDistribution' value='random'/>
-    </bean>
-
     <generate type="german"
               count="{transaction_count}"
               consumer="new XLSEntityExporter('target/person_german.out.xlsx'),store">
@@ -64,7 +53,6 @@
         <attribute name="ean" script="ean"/>
         <attribute name="cpnf" script="cpnf"/>
         <attribute name="ssn" script="ssn"/>
-        <attribute name="timestamp" generator="dtGen"/>
     </generate>
 
     <iterate type="german" source="store" consumer="ConsoleExporter" selector="_candidate.city.startsWith('H')"/>
