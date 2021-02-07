@@ -70,7 +70,7 @@ See 'Using databases'
 <bean id="dtGen" class="DateTimeGenerator">
   <property name='minDate' value='2010-08-01'/>
   <property name='maxDate' value='2010-08-31'/>
-  <property name='dategranularity' value='00-00-02'/>
+  <property name='dateGranularity' value='00-00-02'/>
   <property name='dateDistribution' value='random'/>
   <property name='minTime' value='08:00:00'/>
   <property name='maxTime' value='17:00:00'/>

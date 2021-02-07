@@ -7,12 +7,72 @@
 
     <comment>setting default values</comment>
     <setting name="transaction_count" default="100"/>
-    <import domains="person"/>
+    <import platforms="mem"/>
+    <import domains="person, address, net, organization,finance,product,br,us"/>
+
+    <memstore id="store"/>
+
+    <bean id="dtGen" class="DateTimeGenerator">
+        <property name='minDate' value='2010-08-01'/>
+        <property name='maxDate' value='2010-08-31'/>
+        <property name='dateGranularity' value='00-00-02'/>
+        <property name='dateDistribution' value='random'/>
+        <property name='minTime' value='08:00:00'/>
+        <property name='maxTime' value='17:00:00'/>
+        <property name='timeGranularity' value='00:00:01'/>
+        <property name='timeDistribution' value='random'/>
+    </bean>
+
+    <generate type="german"
+              count="{transaction_count}"
+              consumer="new XLSEntityExporter('target/person_german.out.xlsx'),store">
+        <variable name="person" generator="PersonGenerator" dataset="DE" locale="de"/>
+        <variable name="address" generator="AddressGenerator" dataset="DE" locale="de"/>
+        <variable name="domain" generator="DomainGenerator" dataset="DE" locale="de"/>
+        <variable name="company" generator="CompanyNameGenerator" dataset="DE" locale="de"/>
+        <variable name="depart" generator="DepartmentNameGenerator" dataset="DE" locale="de"/>
+        <variable name="ean8" generator="EAN8Generator" dataset="DE" locale="de"/>
+        <variable name="ean13" generator="EAN13Generator" dataset="DE" locale="de"/>
+        <variable name="ean" generator="EANGenerator" dataset="DE" locale="de"/>
+        <variable name="cpnf" generator="CPFGenerator" dataset="DE" locale="de"/>
+        <variable name="ssn" generator="SSNGenerator" dataset="DE" locale="de"/>
+        <variable name="bankaccount" generator="BankAccountGenerator" dataset="DE" locale="de"/>
+        <variable name="credicard" generator="CreditCardNumberGenerator" dataset="DE" locale="de"/>
+        <attribute name="id" generator="IncrementGenerator"/>
+        <attribute name="email" pattern="[a-z]{5,8}[0-9]{0,2}@[a-z]{8,12}\.(de|at|ch|com|org)"/>
+        <attribute name="password" pattern="[A-Za-z0-9]{8,12}"/>
+        <attribute name="role_id" constant="customer"/>
+        <attribute name="category" values="'A','B','C'"/>
+        <attribute name="salutation" script="person.salutation"/>
+        <attribute name="first_name" script="person.givenName"/>
+        <attribute name="last_name" script="person.familyName"/>
+        <attribute name="timestamp" generator="dtGen"/>
+        <attribute name="street" script="address.street"/>
+        <attribute name="city" script="address.city"/>
+        <attribute name="state" script="address.state"/>
+        <attribute name="country" script="address.country"/>
+        <attribute name="privatePhone" script="address.privatePhone"/>
+        <attribute name="officePhone" script="address.officePhone"/>
+        <attribute name="mobilePhone" script="address.mobilePhone"/>
+        <attribute name="web" script="domain"/>
+        <attribute name="companyname" script="company"/>
+        <attribute name="department" script="depart"/>
+        <attribute name="bankaccount" script="bankaccount"/>
+        <attribute name="credicard" script="credicard"/>
+        <attribute name="ean8" script="ean8"/>
+        <attribute name="ean13" script="ean13"/>
+        <attribute name="ean" script="ean"/>
+        <attribute name="cpnf" script="cpnf"/>
+        <attribute name="ssn" script="ssn"/>
+        <attribute name="timestamp" generator="dtGen"/>
+    </generate>
+
+    <iterate type="german" source="store" consumer="ConsoleExporter" selector="_candidate.city.startsWith('H')"/>
 
     <generate type="transaction"
               count="{transaction_count}"
-              consumer="new XLSEntityExporter('targets/demoxls.out.xlsx')">
-        <variable name="person" generator="PersonGenerator"/>
+              consumer="new XLSEntityExporter('target/person_russia.out.xlsx')">
+        <variable name="person" generator="PersonGenerator" dataset="RU" locale="ru"/>
         <attribute name="id" generator="IncrementGenerator"/>
         <attribute name="email" pattern="[a-z]{5,8}[0-9]{0,2}@[a-z]{8,12}\.(de|at|ch|com|org)"/>
         <attribute name="password" pattern="[A-Za-z0-9]{8,12}"/>
@@ -23,11 +83,19 @@
         <attribute name="last_name" script="person.familyName"/>
     </generate>
 
-    <iterate type="transaction" source="target/demoxls.out.xlsx" consumer="NoConsumer">
+    <iterate type="german" source="target/person_german.out.xlsx" consumer="NoConsumer">
         <attribute name="counter" type="int" generator="IncrementGenerator"/>
     </iterate>
-    <if test="transaction.counter != transaction_count">
-        <error>{ftl: ${transaction.counter} transaction instead of ${transaction_count}}</error>
+    <if test="german.counter != transaction_count">
+        <error>{ftl: ${german.counter} transaction instead of ${transaction_count}}</error>
     </if>
-    <echo>{ftl: ${transaction_count} transaction has been successfully processed}</echo>
+    <echo>{ftl: ${transaction_count} german dataset has been successfully benerated}</echo>
+
+    <iterate type="russia" source="target/person_russia.out.xlsx" consumer="NoConsumer">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="russia.counter != transaction_count">
+        <error>{ftl: ${russia.counter} transaction instead of ${transaction_count}}</error>
+    </if>
+    <echo>{ftl: ${transaction_count} russian dataset has been successfully benerated}</echo>
 </setup>
