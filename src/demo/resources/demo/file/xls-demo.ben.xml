@@ -35,7 +35,6 @@
         <attribute name="salutation" script="person.salutation"/>
         <attribute name="first_name" script="person.givenName"/>
         <attribute name="last_name" script="person.familyName"/>
-        <attribute name="timestamp" generator="dtGen"/>
         <attribute name="street" script="address.street"/>
         <attribute name="city" script="address.city"/>
         <attribute name="state" script="address.state"/>
