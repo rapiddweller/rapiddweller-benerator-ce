@@ -2,25 +2,17 @@
 
 <!--lint disable no-duplicate-headings-->
 
-## Vx.x.x (Pre-release)
-
-### Release Highlights
-
-N/A
-
-### Important Notes
-
-N/A
-
-### Breaking Changes
-
-N/A
-
 ## 1.1.0
 
 ### Release Highlights
 
-...GraalVM, MKDocs, DemoCases
+- GraalVM Script engine support (https://www.graalvm.org/)
+- support for case-sensitive database names and multi schema references (for supported databases)
+- new MKDocs manual (https://www.benerator.de/ce/1.1.0/doc/)
+- several new DemoCases to show how to use ... 
+  - multi schema databases with references into foreign schemas 
+  - case-sensitive database names like "cataloG"."Schema"."PersoN" 
+  - GraalVM Script engine
 
 ### Important Notes
 
@@ -28,7 +20,9 @@ N/A
 
 ### Breaking Changes
 
-...
+- removed Oracle Nashorn and replace it with GraalVM
+
+---
 
 ## 1.0.1
 
@@ -43,6 +37,8 @@ src/main/resources/log4j.xml changed to src/main/resources/log4j2.xml
 ### Breaking Changes
 
 N/A
+
+---
 
 ## 1.0.0
 
@@ -63,6 +59,8 @@ N/A
 
 N/A
 
+---
+
 ### Changes since 0.9.8
 
 - Migration of [databene-benerator](https://sourceforge.net/projects/benerator/)
@@ -75,6 +73,8 @@ N/A
 - Adjust unit tests to align with new java and dependency versions
 - Add E2ET for several DB for shop demo
 - Rename project from org.databene.benerator to com.rapiddweller.benerator
+
+---
 
 ### Changes before v0.9.8
 
