@@ -18,13 +18,14 @@ hexadecimal form:
 \xhh The character with hexadecimal value 0xhh
 
 \uhhhh The character with hexadecimal value 0xhhhh
-
+```
 For control codes in general there is a special notation
-
+```shell
 \cx The control character corresponding to x (e.g. \cA for Ctrl-A)
+```
 
 and certain control codes have own representations:
-
+```shell
 \t The tab character ('\u0009')
 
 \n The newline (line feed) character ('\u000A')
@@ -42,27 +43,27 @@ Some characters have a special meaning in regular expressions, so if you want to
 need to escape them with a backslash:
 
 ```bash
-.Dot
+\.	Dot
 
-\-Minus sign
+\-	Minus sign
 
-\^Circumflex
+\^	Circumflex
 
-\$Dollar
+\$	Dollar
 
-\|'Or' sign
+\|	'Or' sign
 
-\(Left parenthesis
+\(	Left parenthesis
 
-\)Right parenthesis
+\)	Right parenthesis
 
-\[Left bracket
+\[	Left bracket
 
-\]Right bracket
+\]	Right bracket
 
-\{Left curly brace
+\{	Left curly brace
 
-\}Right curly brace
+\}	Right curly brace
 
 \\ Backslash character
 ```
@@ -72,59 +73,59 @@ need to escape them with a backslash:
 A 'character class' defines a set of characters from which one can be chosen and is marked by surrounding brackets: []
 
 ```shell
-[abc] a, b, or c (simple class)
+[abc] 				a, b, or c (simple class)
 
-[^abc] Any character except a, b, or c (negation)
+[^abc] 				Any character except a, b, or c (negation)
 
-[a-zA-Z] a through z or A through Z, inclusive (range). Note: This includes only US-ASCII letters, not special letters of your configured language
+[a-zA-Z] 			a through z or A through Z, inclusive (range). 
 
-[a-d[m-p]] a through d, or m through p: [a-dm-p] (union)
+[a-d[m-p]] 			a through d, or m through p: [a-dm-p] (union)
 
-[a-z&amp;&amp;[def]] d, e, or f (intersection)
+[a-z&&[def]] 		d, e, or f (intersection)
 
-[a-z&amp;&amp;[^bc]] a through z, except for b and c: [ad-z] (subtraction)
+[a-z&&[^bc]] 		a through z, except for b and c: [ad-z] (subtraction)
 
-[a-z&amp;&amp;[^m-p]] a through z, and not m through p: [a-lq-z] (subtraction)
-
+[a-z&&[^m-p]]  		a through z, and not m through p: [a-lq-z] (subtraction)
+```
 There are some popular predefined character classes:
+```shell
+. 		Any character (may or may not match line terminators)
 
-. Any character (may or may not match line terminators)
+\d 		A digit: [0-9]
 
-\d A digit: [0-9]
+\D 		A non-digit: [^0-9]
 
-\D A non-digit: [^0-9]
+\s 		A whitespace character: [ \t\n\x0B\f\r]
 
-\s A whitespace character: [ \t\n\x0B\f\r]
+\S 		A non-whitespace character: [^\s]
 
-\S A non-whitespace character: [^\s]
+\w 		A word character: [a-zA-Z_0-9]
 
-\w A word character: [a-zA-Z_0-9]
-
-\W A non-word character: [^\w]
-
+\W 		A non-word character: [^\w]
+```
 Quantifiers can be used to specify how many characters of a class (or other regular expression construct) should appear:
+```shell
+X?		X, once or not at all
 
-_X_?_X_, once or not at all
+X*		X, zero or more times
 
-_X_*_X_, zero or more times
+X+		X, one or more times
 
-_X_+_X_, one or more times
+X{n}	X, exactly n times
 
-_X_{_n_}_X_, exactly _n_ times
+X{n,}	X, at least n times
 
-_X_{_n_,}_X_, at least _n_ times
-
-_X_{_n_,_m_}_X_, at least _n_ but not more than _m_ times
+X{n,m}	X, at least n but not more than m times
 ```
 
 ## Operators
 
 ```shell
-XY_X followed by _Y_
+XY		X followed by Y
 
-_X_|_Y_ Either _X_ or _Y_
+X|Y 	Either X or Y
 
-(_X_) X, as a group
+(X) 	X, as a group
 ```
 
 ## Frequently asked Questions

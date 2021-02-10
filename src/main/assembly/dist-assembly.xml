@@ -181,8 +181,10 @@
             <includes>
                 <include>com.rapiddweller:*</include>
                 <include>org.apache.poi:poi:jar</include>
-                <include>org.apache.poi:poi-ooxml:jar</include>
-                <include>org.apache.poi:poi-ooxml-schemas:jar</include>
+                <include>org.apache.poi:poi-ooxml-full:jar</include>
+                <include>org.apache.commons:commons-math3:jar</include>
+                <include>org.apache.commons:commons-collections4:jar</include>
+                <include>org.apache.commons:commons-compress:jar</include>
                 <include>org.apache.xmlbeans:xmlbeans:jar</include>
                 <include>commons-codec:commons-codec:jar</include>
                 <include>dom4j:dom4j:jar</include>

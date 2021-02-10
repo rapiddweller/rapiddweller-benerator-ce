@@ -361,6 +361,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
      * @param refSpec the ref spec
      * @return the reference
      */
+    @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     static Reference parse(String refSpec) {
       StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(refSpec));
       tokenizer.wordChars('_', '_');
@@ -370,6 +371,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
         if (token != TT_WORD) {
           throw new SyntaxError(REF_SYNTAX_MESSAGE, refSpec);
         }
+        // this must be at this position!
         String tableName = tokenizer.sval;
 
         // parse column names

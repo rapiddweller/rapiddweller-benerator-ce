@@ -51,7 +51,7 @@ import java.util.LinkedList;
  * </ul>
  * <p>
  * For a Generator of Long values, this translates to an implementation with<br/><br/>
- * <pre>depth = 2</code>
+ * <pre><code>depth = 2</code>
  *
  * protected Long aN() {
  *     return aN(-1) + aN(-2);

@@ -44,6 +44,7 @@ import static org.junit.Assert.assertNotNull;
  * @author Volker Bergmann
  * @since 0.6.0
  */
+@SuppressWarnings("CheckStyle")
 public class DescriptorBasedGeneratorTest extends GeneratorTest {
 
   /**

@@ -32,6 +32,7 @@ import com.rapiddweller.common.SystemInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -242,6 +243,7 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
       }
       preClosePrinter();
     } finally {
+      assert printer != null;
       printer.close();
     }
   }
@@ -259,6 +261,19 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
       throw new ConfigurationError("Property 'uri' not set on bean " + getClass().getName());
     }
     wasAppended = (append && IOUtil.isURIAvailable(uri));
+
+    // check if path exists, if not make sure it exists
+    File directory = new File(uri);
+    if (!wasAppended
+        && directory.getParent() != null
+        && !directory.isDirectory()
+        && !directory.getParentFile().exists()) {
+      boolean result = directory.getParentFile().mkdirs();
+      if (!result) {
+        throw new ConfigurationError("filepath does not exists and can not be created ...");
+      }
+    }
+
     printer = IOUtil.getPrinterForURI(uri, encoding, append, lineSeparator, true);
     postInitPrinter(data);
   }

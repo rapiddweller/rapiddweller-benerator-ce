@@ -626,7 +626,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   }
 
   @Override
-  @SuppressWarnings("null")
+  @SuppressWarnings({"null", "checkstyle:VariableDeclarationUsageDistance"})
   public DataSource<Entity> queryEntities(String type, String selector,
                                           Context context) {
     logger.debug("queryEntities({})", type);
@@ -1293,8 +1293,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
                   (info.sqlType == Types.NCLOB ||
                       info.sqlType == Types.OTHER));
           if (jdbcValue != null ||
-              criticalOracleType) // Oracle is not able to perform setNull() on NCLOBs and NVARCHAR2
-          {
+              criticalOracleType) { // Oracle is not able to perform setNull() on NCLOBs and NVARCHAR2
+
             statement.setObject(i + 1, jdbcValue);
           } else {
             statement.setNull(i + 1, info.sqlType);

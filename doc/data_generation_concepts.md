@@ -1,6 +1,6 @@
 # Data Generation Concepts
 
-Now that you have mastered the first tutorials and have had a glance on benerator's features, it is time for an in-depth introduction to data
+Now that you have mastered the first tutorials and have had a glance on Benerator's features, it is time for an in-depth introduction to data
 generation:
 
 ## Naming
@@ -9,7 +9,7 @@ Business objects are called _entity_ in this book, their contained simple type d
 
 ## Entity Data
 
-benerator generates entities in a platform-independent manner (internally using the class `com.rapiddweller.model.data.Entity`. An entity will be
+Benerator generates entities in a platform-independent manner (internally using the class `com.rapiddweller.model.data.Entity`. An entity will be
 interpreted individually depending on the target system. It can be mapped to
 
 * relational data (DB)
@@ -25,7 +25,7 @@ address generator defined once can be used for populating customer tables in a d
 
 ![](assets/grafik4.png)
 
-Metadata is platform-neutral too. So benerator can import metadata definitions from a database and use it for generating XML data:
+Metadata is platform-neutral too. So Benerator can import metadata definitions from a database and use it for generating XML data:
 
 ![](assets/grafik5.png)
 
@@ -40,9 +40,9 @@ Entities can have
 
 ## Simple Data Types
 
-benerator abstracts simple types too. These are the predefined simple types:
+Benerator abstracts simple types too. These are the predefined simple types:
 
-| benerator type | JDBC type name | JDBC type code | Java type |
+| Benerator type | JDBC type name | JDBC type code | Java type |
 | --- | --- | --- | --- |
 | byte | Types.BIT | -7 | java.lang.Byte |
 | byte | Types.TINYINT | -6 | java.lang.Byte |
@@ -145,7 +145,7 @@ PRIMARY KEY (id),
 </execute>
 ```
 
-As you see, scripts can be inlined or imported from files. See Chapter 5, Scripting for a full introduction.
+As you see, scripts can be inlined or imported from files. See '[Scripting](scripting.md)' for a full introduction.
 
 ### Precondition Checking Stage
 
@@ -159,7 +159,7 @@ where db_product.category_id is null`</evaluate>`
 
 The `<evaluate>` element works as follows: First it evaluates a script the same way like a `<execute>` element does – In this example, the 'select'
 query is performed on the database. Then the result into a variable named 'result' and the '
-assert' condition is evaluated which checks the value of the result and returns true or false. if the assertion resolves to 'false', benerator raises
+assert' condition is evaluated which checks the value of the result and returns true or false. if the assertion resolves to 'false', Benerator raises
 an error.
 
 In this example, an error is raised if there is a category without any product assigned.
@@ -167,7 +167,7 @@ In this example, an error is raised if there is a category without any product a
 You can use an arbitrary expression language for performing the check. Like in `<execute>`, a prefix with colon can be used to indicate the script
 language. You can optionally add an 'id' attribute which will make Benerator put the evaluation result into the context with this id.
 
-You can also call DB Sanity for verifying the preconditions, see the chapter about DB Sanity.
+You can also call DB Sanity for verifying the preconditions, see '[DB Sanity](using_db_sanity.md)'.
 
 ### Core Data Generation Stage
 
@@ -183,14 +183,13 @@ several tables) and CSV (one file per table).
 ```
 
 Fixed column width files and SQL files can be used too. If you need to import data of other formats you can easily write a parser and use it directly
-from benerator (See Section 9.9, “Custom EntitySources”).
+from Benerator (See '[Custom EntitySources](extending_benerator.md#custom-entitysources)').
 
 ### Mass Data Generation Stage
 
-Mass data generation is the primary goal of benerator and the main topic of this book. It is mainly performed by `<generate>` descriptors, which
+Mass data generation is the primary goal of Benerator. It is mainly performed by `<generate>` descriptors, which
 describe the creation of synthetic data, but may also include the import and reuse of information from external sources by an `<iterate>` descriptor.
-See the chapters _Chapter 3, Descriptor File Format_
-and _Chapter 4, Advanced Topics_ for a description.
+See '[Descriptor File Format](quick_tour_through_the_descriptor_file_format.md)' and '[Advanced Topics](advanced_topics.md)' for a description.
 
 ### Data Postprocessing Stage
 
@@ -203,10 +202,10 @@ logic (rating) that is not necessarily useful to be reproduced for data generati
 
 This can be done in two ways:
 
-* Scripts : Having script commands inlined in the benerator descriptor file or called from external files, e.g. rapiddwellerScript, JavaScript, Groovy,
-  Ruby, Python. See Chapter 5, Scripting
+* Scripts : Having script commands inlined in the Benerator descriptor file or called from external files, e.g. rapiddwellerScript, JavaScript, Groovy,
+  Ruby, Python. See '[Scripting](scripting.md)'
 
-* Tasks : Programming own Java modules that are invoked by benerator. See Section 4.6, “Tasks”
+* Tasks : Programming own Java modules that are invoked by Benerator. See '[Tasks](advanced_topics.md#tasks)'
 
 ### Result Validation Stage
 
@@ -224,11 +223,11 @@ You can do so with the `<evaluate/>` element, e.g. checking the number of genera
 
 The `<evaluate>` element was described above in the 'Precondition Checking' section.
 
-You can also use DB Sanity for verifying the preconditions; see the chapter about DB Sanity.
+You can also use DB Sanity for verifying the preconditions; see '[DB Sanity](using_db_sanity.md)'.
 
 ## Metadata Concepts
 
-benerator processes metadata descriptors that can be imported from systems like databases and can be overwritten manually. Benerator automatically
+Benerator processes metadata descriptors that can be imported from systems like databases and can be overwritten manually. Benerator automatically
 generates data that matches the (e.g. database) constraints. So, when it encounters a table defined like this:
 
 ```sql
@@ -239,7 +238,7 @@ active SMALLINT DEFAULT 1 NOT NULL,
 );
 ```
 
-When generating data for the user table, benerator will automatically generate all users with active set to 1:
+When generating data for the user table, Benerator will automatically generate all users with active set to 1:
 
 `<generate type="db_user" count="100" consumer="db"/>`
 
@@ -256,19 +255,19 @@ will cause generation of 50% 0 and 50% 1 values.
 
 ### Case Sensitivity
 
-benerator has a heuristic case-sensitivity: It needs to combine metadata from different types of systems of which some may be case-sensitive, some may
-not. So benerator first assumes case-sensitivity when looking for a type. If the type is found in the same capitalization, this information used. If
-it is not found, benerator falls back to searching the type in a case-insensitive manner.
+Benerator has a heuristic case-sensitivity: It needs to combine metadata from different types of systems of which some may be case-sensitive, some may
+not. So Benerator first assumes case-sensitivity when looking for a type. If the type is found in the same capitalization, this information used. If
+it is not found, Benerator falls back to searching the type in a case-insensitive manner.
 
 ### Namespaces
 
-benerator has a heuristic namespace support, similar to case-sensitivity handling: when looking up a descriptor by name, benerator first searches the
-name in its assigned namespace. If the type is found there, this information used. If it is not found, benerator falls back to searching the type in
+Benerator has a heuristic namespace support, similar to case-sensitivity handling: when looking up a descriptor by name, Benerator first searches the
+name in its assigned namespace. If the type is found there, this information used. If it is not found, Benerator falls back to searching the type in
 all available namespaces.
 
-### `<setting>` and benerator identifiers
+### `<setting>` and Benerator identifiers
 
-A benerator identifier (variable, entity or bean name) may contain only ASCII letters, numbers and underscores (no dot !) and is defined using
+A Benerator identifier (variable, entity or bean name) may contain only ASCII letters, numbers and underscores (no dot !) and is defined using
 a `<setting>` element - either in the descriptor file, e.g.
 
 `<setting name="user_count" value="1000000"/>`
@@ -329,7 +328,7 @@ helper' in this case).
 
 ## Instantiating Local Components
 
-The following chapters will introduce you to the usage of each component type available in benerator. They have common styles of definition and
+The following chapters will introduce you to the usage of each component type available in Benerator. They have common styles of definition and
 referral. If a component needs to be reused in different places, you would create it with a `<bean>` element and apply referral to use it. If you do
 not need to reuse one component in different places, there are more concise inline instantiation styles available:
 
@@ -341,7 +340,7 @@ not need to reuse one component in different places, there are more concise inli
 
 ### Referral
 
-Any class can be instantiated and made available to benerator by using a bean element, e.g. the 'helper' instance above, you can use it like this:
+Any class can be instantiated and made available to Benerator by using a bean element, e.g. the 'helper' instance above, you can use it like this:
 
 `<attribute name="number" generator="helper"/>`
 
@@ -349,15 +348,15 @@ This is called referral.
 
 ### Default Construction
 
-If you specify just a class name, benerator will create an instance of the class by invoking the default constructor. Be aware that the class needs a
+If you specify just a class name, Benerator will create an instance of the class by invoking the default constructor. Be aware that the class needs a
 public no-argument constructor for being instantiated this way:
 
 `<attribute name="number" generator="com.my.Helper"/>`
 
 ### Parameterized Construction
 
-You can as well specify the 'new' keyword, a class name and constructor parameters. benerator will then search a constructor with matching parameters
-and invoke it. If the class has several constructors with the same number of parameters benerator might choose the wrong one, so it is good practice
+You can as well specify the 'new' keyword, a class name and constructor parameters. Benerator will then search a constructor with matching parameters
+and invoke it. If the class has several constructors with the same number of parameters Benerator might choose the wrong one, so it is good practice
 to have just one constructor for each possible number of parameters.
 
 `<attribute name="number" generator="new com.my.Helper(5, 23)"/>`
@@ -365,7 +364,7 @@ to have just one constructor for each possible number of parameters.
 ### Property-based Construction
 
 This is the most elegant and maintainable inline construction style, you specify the 'new' keyword, the class name and, in square brackets, a
-comma-separated list of name-value pairs for each JavaBean property. benerator uses a default constructor and the corresponding set...() methods to
+comma-separated list of name-value pairs for each JavaBean property. Benerator uses a default constructor and the corresponding set...() methods to
 initialize the object.
 
 `<attribute name="number" generator="new com.my.Helper{min=5, max=23}"/>`
@@ -382,25 +381,25 @@ database schema metadata and be used for automatic database-valid data generatio
 
 ## Default Data Generation
 
-Based on descriptive metadata, benerator applies several defaults for generating database-valid data.
+Based on descriptive metadata, Benerator applies several defaults for generating database-valid data.
 
 All nullable attributes are generated as null by default.
 
 Primary keys are generated as integral numbers by default, starting from 1 and increased by 1 consecutively. Primary keys of string type are handled
 similarly.
 
-Foreign keys are resolved automatically. For avoiding illegal generation cases, benerator assumes any foreign key relation to be one-to-one by
+Foreign keys are resolved automatically. For avoiding illegal generation cases, Benerator assumes any foreign key relation to be one-to-one by
 default. Many-to-one relationships need to be configured manually.
 
 Now have a look at an example for generating credit cards in a database:
 
 ![](assets/grafik9.png)
 
-benerator reads the metadata for the table credit_card from a database. This results in descriptive metadata , saying that a credit_card entity has
+Benerator reads the metadata for the table credit_card from a database. This results in descriptive metadata , saying that a credit_card entity has
 three attributes: issuer and number of type string and validUntil of type date. All of them may not be null and the issuer attribute has a maximum
 length of 20 characters, the number of 16 characters.
 
-This is enough information to make benerator generate, e.g. 50000 credit cards with a trivial setup:
+This is enough information to make Benerator generate, e.g. 50000 credit cards with a trivial setup:
 
 `<generate type="credit_card" count="500000" consumer="db"/>`
 
@@ -423,7 +422,7 @@ For a complete reference of metadata configuration, see Section 3.38, “Attribu
 
 Suppose you have a validation component available, but do not know all details necessary for constructing valid data. In such a case, you can set up a
 constructive data generation and combine it with the validation module. So take the setup from the chapter before, write an adapter to your validation
-component and include it in benerator's data generation:
+component and include it in Benerator's data generation:
 
 ![](assets/grafik11.png)
 
@@ -503,13 +502,13 @@ password@server/dir/file;type=i
 
 ## Protocols
 
-Currently benerator supports only file URIs for reading and writing and HTTP and FTP URIs for reading. Support of further protocols is possible and
+Currently Benerator supports only file URIs for reading and writing and HTTP and FTP URIs for reading. Support of further protocols is possible and
 planned for future releases.
 
 ## Relative URIs
 
-Relative URIs are resolved in a HTML hypertext manner: A relative URL is interpreted relative to a 'base URI' which is the path of the benerator
-descriptor file. If file lookup fails, benerator searches the file relative to the current directory. If that fails to, benerator tries to retrieve
+Relative URIs are resolved in a HTML hypertext manner: A relative URL is interpreted relative to a 'base URI' which is the path of the Benerator
+descriptor file. If file lookup fails, Benerator searches the file relative to the current directory. If that fails to, Benerator tries to retrieve
 the file from the Java classpath.
 
 Benerator recognizes absolute paths under Windows (e.g. C:\test) and Unix (/test or ~/test). When in doubt, mark the URL as file URL: file:///C:/test
@@ -727,41 +726,41 @@ For specifying Converters, you can
 
 * use the class name
 
-* refer a JavaBean in the benerator context
+* refer a JavaBean in the Benerator context
 
 * provide a comma-separated Converter list in the two types above
 
-benerator supports two types of converters:
+Benerator supports two types of converters:
 
-* Classes that implement the interface com.rapiddweller.common.Converter
+1. Classes that implement the interface com.rapiddweller.common.Converter
 
-* Classes that extend the class java.text.Format
+1. Classes that extend the class java.text.Format
 
-If the class has a 'pattern' property, benerator maps a descriptor's pattern attribute to the bean instance property.
+If the class has a 'pattern' property, Benerator maps a descriptor's pattern attribute to the bean instance property.
 
 ## Validators
 
 Validators assist you in assuring validity of generated data. Validators can be applied to attributes and full entities. They intercept in data
 generation: If a generated item is invalid, it will be discarded and regenerated transparently. This is a cheap way of fulfilling complex constraints
 which are only partially known: If you have a class or system that can validate this data, you can set up a heuristic generation which has a high
-probability of succeeding and simply discard the invalid ones. If the ratio of invalid objects is more than 99%, benerator will give you a warning
-since this is likely to impact generation performance. If the ratio rises to 99.9%, benerator will terminate with an exception.
+probability of succeeding and simply discard the invalid ones. If the ratio of invalid objects is more than 99%, Benerator will give you a warning
+since this is likely to impact generation performance. If the ratio rises to 99.9%, Benerator will terminate with an exception.
 
 For specifying Validators, you can
 
 * use the class name
 
-* refer a JavaBean in the benerator context
+* refer a JavaBean in the Benerator context
 
 * provide a comma-separated Validator list in the two types above
 
 ## Creating random Entities
 
-Entities can be generated without any input files - benerator provides a rich set of Generator implementations. When using `<generate>` without a '
+Entities can be generated without any input files - Benerator provides a rich set of Generator implementations. When using `<generate>` without a '
 source' attribute, the registered systems (e.g. the database are requested for metadata). From the metadata, attributes are generated that match the
 metadata (e.g. database) constraints, as column length, referenced entities and more. By default, associations are treated as one-to-one associations.
 
-With benerator's many useful defaults, you have a minimum effort on initial configuration:
+With Benerator's many useful defaults, you have a minimum effort on initial configuration:
 
 `<generate type="db_user" count="1000" consumer="db" />`
 
@@ -777,7 +776,7 @@ There are different ways of determining or limiting the number of generated enti
 
 * the count attribute specifies a fix number of instances to create
 
-* the minCount, maxCount and countDistribution attributes let benerator choose an instance count with the specified characteristics.
+* the minCount, maxCount and countDistribution attributes let Benerator choose an instance count with the specified characteristics.
 
 * availability of the component generators
 
@@ -787,12 +786,12 @@ If you have problems with unexpectedly low numbers of generated entities you can
 
 ## Using Predefined Entities
 
-When iterating predefined entities (e.g. imported from file or database), benerator's default behaviour is to serve each item exactly once and in the
+When iterating predefined entities (e.g. imported from file or database), Benerator's default behaviour is to serve each item exactly once and in the
 order as provided. You can change that behaviour in many ways, but need to be aware of the iterated data volume:
 
 For small data sets (`< 100,000 items) you can apply a distribution method (see Section 3.29, “Applying a Weight Function” or Section 3.30, “Applying
-a Sequence”). This will cause benerator to load all available instances into memory and serve them as specified by the distribution: A WeightFunction
-will tell benerator how often to serve an instance of a certain list index, a Sequence will tell each index consecutively. Depending on the Sequence,
+a Sequence”). This will cause Benerator to load all available instances into memory and serve them as specified by the distribution: A WeightFunction
+will tell Benerator how often to serve an instance of a certain list index, a Sequence will tell each index consecutively. Depending on the Sequence,
 data can be provided uniquely or weighted.
 
 For big data sets (>` 100,000 items) you need to be more conservative, since the data volume is not supposed to fit into main memory. You have two
@@ -802,7 +801,7 @@ options here: cyclic iteration and proxy iteration. Actually, both types can be 
 
 By default, imported entities are processed consecutively and only once.
 
-When setting cyclic="true" benerator serves the imported data consecutively too but does not stop when it reaches the end. Instead it restarts
+When setting cyclic="true" Benerator serves the imported data consecutively too but does not stop when it reaches the end. Instead it restarts
 iteration. Beware: For SQL queries this means that the query is reissued, so it may have a different result set than the former invocation.
 
 When using a distribution, you can manipulate what happens with the original data, e.g. by dropping or repeating data.
@@ -818,7 +817,7 @@ double value(double param);
 
 }
 
-When using a weight function, benerator will serve data items in random order and as often as implied by the function value. benerator automatically
+When using a weight function, Benerator will serve data items in random order and as often as implied by the function value. Benerator automatically
 evaluates the full applicable number range (as defined by numerical min/max or number of objects to choose from) and normalize the weights. There is
 no need to provide a pre-normalized distribution function. You may define custom Weight Functions by implementing the WeightFunction interface.
 
@@ -837,7 +836,7 @@ When importing data from data sources, you have additional options for specifyin
 ### Importing primitive data weights
 
 When importing primitive data from a CSV file, each value is expected to be in an extra row. If a row has more than one column, the content of the
-second column is interpreted as weight. If there is no such column, a weight of 1 is assumed. benerator automatically normalizes over all data
+second column is interpreted as weight. If there is no such column, a weight of 1 is assumed. Benerator automatically normalizes over all data
 objects, so there is no need to care about manual weight normalization. Remember to use a filename that indicates the weight character, using a suffix
 like '.wgt.csv' or 'wgt.xls'.
 
@@ -952,8 +951,8 @@ Usually most entities have common attribute names, e.g. for ids or audit data. Y
 </defaultComponents>
 ```
 
-If a table has a column which is not configured in the benerator descriptor but as defaultComponent, benerator uses the defaultComponent config. If no
-defaultComponent config exists, benerator falls back to a useful standard setting.
+If a table has a column which is not configured in the Benerator descriptor but as defaultComponent, Benerator uses the defaultComponent config. If no
+defaultComponent config exists, Benerator falls back to a useful standard setting.
 
 ## Settings
 
@@ -972,7 +971,7 @@ Arbitrary information may be queried from a system by a 'selector' attribute, wh
 ```xml
 <generate type="db_order" count="30" pageSize="100">
   <reference name="customer_id" source="db" selector="select id from db_customer" _cyclic="true"_/>
-  <consumer ref="db"/>` `<!-- automatically chosen by benerator -->
+  <consumer ref="db"/>` `<!-- automatically chosen by Benerator -->
 </generate>
 ```
 
@@ -1075,7 +1074,7 @@ Scripts are supported in
 A script is denoted by curly braces, e.g. {'Hi, I am ' + my_name}. This syntax will use the default script engine for rendering the text as, e.g. 'Hi,
 I am Volker'. The default script engine is set writing `<setup defaultScript="...">` in the decriptor file's root element. If you want to use
 different script engines at the same time, you can differ them by prepending the scripting engine id, e.g. {ftl:Hi, I am ${my_name}} or {ben:'Hi, I
-am ' + my_name}. Scripts in benerator descriptors are evaluated while parsing.
+am ' + my_name}. Scripts in Benerator descriptors are evaluated while parsing.
 
 If you need to dynamically calculate data at runtime, use a script attribute, e.g.:
 
@@ -1089,7 +1088,7 @@ Using scripts you can access
 
 * JVM parameters, e.g. benerator.validate
 
-* any JavaBean globally declared in the benerator setup, e.g. db
+* any JavaBean globally declared in the Benerator setup, e.g. db
 
 * the last generated entity of each type, e.g. db_user
 
@@ -1149,4 +1148,4 @@ errordata.csv' and postprocess it:
 </generate>
 ```
 
-Note that this cannot work properly with a database which uses batch processing (see Using Databases).
+Note that this cannot work properly with a database which uses batch processing (see '[Using Databases](using_relational_databases.md)').

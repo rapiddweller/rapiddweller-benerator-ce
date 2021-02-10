@@ -260,7 +260,6 @@
             <property name="lineWrappingIndentation" value="4"/>
             <property name="arrayInitIndent" value="2"/>
         </module>
-        <module name="OverloadMethodsDeclarationOrder"/>
         <module name="VariableDeclarationUsageDistance"/>
         <module name="MethodParamPad">
             <property name="tokens"

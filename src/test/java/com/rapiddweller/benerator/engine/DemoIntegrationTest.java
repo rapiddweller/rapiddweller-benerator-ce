@@ -200,6 +200,40 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
   }
 
   /**
+   * Demo postgres multi schema.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoPostgresMultiSchema() throws IOException {
+    context.setContextUri("/demo/shop");
+    parseAndExecuteFile("/demo/shop/postgres.multischema.ben.xml");
+  }
+
+
+  /**
+   * Demo Mysql Shop
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoMysqlShop() throws IOException {
+    context.setContextUri("/demo/shop");
+    parseAndExecuteFile("/demo/shop/shop-mysql.ben.xml");
+  }
+
+  /**
+   * Demo postgres shop.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoPostgresShop() throws IOException {
+    context.setContextUri("/demo/shop");
+    parseAndExecuteFile("/demo/shop/shop-postgres.ben.xml");
+  }
+
+  /**
    * Demo db composite key.
    *
    * @throws IOException the io exception

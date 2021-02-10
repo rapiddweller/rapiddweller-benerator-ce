@@ -44,6 +44,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.6.4
  */
+@SuppressWarnings("ALL")
 public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTest {
 
   private ConsumerMock consumer;
@@ -70,8 +71,8 @@ public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTes
   public void testIterateThis() {
     parseAndExecute(
         "<iterate type='referer' source='pit' consumer='cons'>" +
-            "	<variable name='_n' script='this.name' converter='com.rapiddweller.common.converter.ToUpperCaseConverter' />" +
-            "	<attribute name='name' script='_n' />" +
+            "   <variable name='_n' script='this.name' converter='com.rapiddweller.common.converter.ToUpperCaseConverter' />" +
+            "   <attribute name='name' script='_n' />" +
             "</iterate>");
     List<Entity> products = (List<Entity>) consumer.getProducts();
     assertEquals(2, products.size());
@@ -89,8 +90,8 @@ public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTes
   public void testAttributeFromVariable() {
     parseAndExecute(
         "<generate type='testAttributeFromVariable' count='2' consumer='cons'>" +
-            "	<variable name='_n' type='int' distribution='increment' />" +
-            "	<attribute name='x' type='int' script='_n + 1' />" +
+            "   <variable name='_n' type='int' distribution='increment' />" +
+            "   <attribute name='x' type='int' script='_n + 1' />" +
             "</generate>");
     List<Entity> products = (List<Entity>) consumer.getProducts();
     assertEquals(2, products.size());
@@ -106,8 +107,8 @@ public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTes
   public void testVariableFromAttribute_refByThis() {
     parseAndExecute(
         "<generate type='testVariableFromAttribute_refByThis' count='2' consumer='cons'>" +
-            "	<attribute name='x' type='int' distribution='increment' />" +
-            "	<attribute name='y' type='int' script='this.x + 3' />" +
+            "   <attribute name='x' type='int' distribution='increment' />" +
+            "   <attribute name='y' type='int' script='this.x + 3' />" +
             "</generate>");
     List<Entity> products = (List<Entity>) consumer.getProducts();
     assertEquals(2, products.size());
@@ -120,13 +121,13 @@ public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTes
   /**
    * Test variable from attribute ref by type name.
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "checkstyle:FileTabCharacter"})
   @Test
   public void testVariableFromAttribute_refByTypeName() {
     parseAndExecute(
         "<generate type='testVariableFromAttribute_refByTypeName' count='2' consumer='cons'>" +
-            "	<attribute name='x' type='int' distribution='increment' />" +
-            "	<attribute name='y' type='int' script='testVariableFromAttribute_refByTypeName.x + 3' />" +
+            "   <attribute name='x' type='int' distribution='increment' />" +
+            "   <attribute name='y' type='int' script='testVariableFromAttribute_refByTypeName.x + 3' />" +
             "</generate>");
     List<Entity> products = (List<Entity>) consumer.getProducts();
     assertEquals(2, products.size());
@@ -139,13 +140,13 @@ public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTes
   /**
    * Test variable from attribute ref by instance name.
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "checkstyle:FileTabCharacter"})
   @Test
   public void testVariableFromAttribute_refByInstanceName() {
     parseAndExecute(
         "<generate name='xyz' type='testVariableFromAttribute_refByInstanceName' count='2' consumer='cons'>" +
-            "	<attribute name='x' type='int' distribution='increment' />" +
-            "	<attribute name='y' type='int' script='xyz.x + 3' />" +
+            "   <attribute name='x' type='int' distribution='increment' />" +
+            "   <attribute name='y' type='int' script='xyz.x + 3' />" +
             "</generate>");
     List<Entity> products = (List<Entity>) consumer.getProducts();
     assertEquals(2, products.size());
@@ -155,34 +156,18 @@ public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTes
     assertEquals(5, products.get(1).get("y"));
   }
 
-	/* This syntax is not supported any longer
-	@Test
-	public void testVarAfterSubGen() {
-		parseAndExecute(
-				"<generate name='e' type='entity' count='1'>" +
-				"	<generate name='sub' count='3'>" +
-				"		<attribute name='x' type='int' generator='IncrementGenerator' />" +
-				"	</generate>" +
-				"	<variable name='y' type='int' script='sub.x'/>" +
-				"	<evaluate id='res' assert='result==3'>{y}</evaluate>" +
-				"	<attribute name='val' type='int' script='y'/>" +
-				"</generate>");
-		Entity e = (Entity) context.get("e");
-		assertEquals(3, e.get("val"));
-	}
-	*/
-
   /**
    * Test evaluate between attributes.
    */
+  @SuppressWarnings("checkstyle:FileTabCharacter")
   @Test
   public void testEvaluateBetweenAttributes() {
     parseAndExecute(
         "<generate name='e' type='entity' count='1'>" +
-            "	<evaluate id='val1' assert='result==null'>this.id</evaluate>" +
-            "	<id name='id' type='int'/>" +
-            "	<evaluate id='val2' assert='result==1'>this.id</evaluate>" +
-            "	<attribute name='x' type='int' script='val2' />" +
+            "   <evaluate id='val1' assert='result==null'>this.id</evaluate>" +
+            "   <id name='id' type='int'/>" +
+            "   <evaluate id='val2' assert='result==1'>this.id</evaluate>" +
+            "   <attribute name='x' type='int' script='val2' />" +
             "</generate>");
     Entity e = (Entity) context.get("e");
     assertEquals(1, e.get("x"));
@@ -191,12 +176,13 @@ public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTes
   /**
    * Test attribute after sub gen.
    */
+  @SuppressWarnings("checkstyle:FileTabCharacter")
   @Test
   public void testAttributeAfterSubGen() {
     parseAndExecute(
         "<generate count='5'>" +
-            "	<generate count='3'/>" +
-            "	<attribute name='y' type='int'/>" +
+            "   <generate count='3'/>" +
+            "   <attribute name='y' type='int'/>" +
             "</generate>");
   }
 

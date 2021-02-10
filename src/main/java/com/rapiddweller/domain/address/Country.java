@@ -532,9 +532,9 @@ public class Country {
   private static void parseConfigFile() {
     CSVLineIterator iterator = null;
     try {
-      String FILE_NAME = "/com/rapiddweller/domain/address/country.csv";
-      iterator = new CSVLineIterator(FILE_NAME, ',', true);
-      LOGGER.debug("Parsing country setup file {}", FILE_NAME);
+      String fileName = "/com/rapiddweller/domain/address/country.csv";
+      iterator = new CSVLineIterator(fileName, ',', true);
+      LOGGER.debug("Parsing country setup file {}", fileName);
       DataContainer<String[]> container = new DataContainer<>();
       while ((container = iterator.next(container)) != null) {
         String[] cells = container.getData();

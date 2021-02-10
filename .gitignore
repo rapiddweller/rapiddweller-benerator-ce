@@ -8,6 +8,7 @@ pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
+LocalSequenceGenerator.properties
 .mvn/timing.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
@@ -40,6 +41,7 @@ hs_err_pid*
 !/src/test/*/**
 
 .DS_Store
+site/
 
 # IDE
 .idea/

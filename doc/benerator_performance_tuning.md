@@ -2,32 +2,32 @@
 
 ## Performance
 
-benerator is regularly optimized for performance, so single threaded data generation is efficient enough in the most cases. As a result, multithreaded
+Benerator is regularly optimized for performance, so single threaded data generation is efficient enough in the most cases. As a result, multithreaded
 generation is tested much less intensively than singlethreaded operation. The following recommendations are ordered in 'bang-for-the-bucks' order: The
 first tips have a better ratio of effort to gain than the later ones.
 
 ## pageSize
 
-By default benerator stores each entity in an own transaction, because this simplifies error tracking when creating a descriptor file. But this has a
+By default Benerator stores each entity in an own transaction, because this simplifies error tracking when creating a descriptor file. But this has a
 tremendous impact on performance. When configuration is complete, and you need performance, set the pagesize attribute of critical `<generate>`
 elements, e.g. `<generate type="db_user" count="1000000" consumer="db" pagesize="1000">`
 
 ## JDBC batch
 
-JDBC batches provide for significantly better database insertion performance than standard operation. In benerator this is turned of by default, since
+JDBC batches provide for significantly better database insertion performance than standard operation. In Benerator this is turned of by default, since
 error messages that arise from bad generation setup are much harder to analyze in batch mode. When you are finished with defining data generation and
 need performance for mass data, you can activate batch operation by the batch attribute of the database element:
 
 `<database ... batch="true" />`
 
-benerator is optimized for performance. Thus you may get problems when combining nested `<generate>` elements with batching. It typically results in
+Benerator is optimized for performance. Thus you may get problems when combining nested `<generate>` elements with batching. It typically results in
 exceptions that indicate violation of a foreign-key constraint.
 
 ## Query fetch size
 
 If you are querying data with large result sets from your database, e.g. when anonymizing production data, you should tune the database's fetch size.
-It determines how many rows are transmitted from the database to benerator when accessing the first query result. So it reduces the number of network
-roundtrips. benerator uses a fetch size of 100 by default which should be useful in most cases.
+It determines how many rows are transmitted from the database to Benerator when accessing the first query result. So it reduces the number of network
+roundtrips. Benerator uses a fetch size of 100 by default which should be useful in most cases.
 
 You can experiment with higher values, e.g. 1000 by configuring the batch attribute of the database element: `<database ... batch="true" />`. This is
 mainly useful if the database is accessed over a slow network connection and query result sets are at least as large as the fetch size and are
@@ -36,7 +36,7 @@ iterated to a relevant extent. When setting the fetch size to value that is too 
 ## Id Generation
 
 The most efficient id generation strategy is increment since it works without connecting the database. It works fine for multithreaded generation,
-too. But for concurrent execution of multiple benerator processes or continuation of a cancelled generation process you need an id generation that is
+too. But for concurrent execution of multiple Benerator processes or continuation of a cancelled generation process you need an id generation that is
 unique among several runs. The most efficient id strategies with such behavior are seqhilo (database-based) and uuid (universally unique string id).
 
 Relational Data Generation

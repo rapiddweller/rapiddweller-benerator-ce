@@ -63,6 +63,7 @@ import static org.junit.Assert.assertTrue;
  * @author Volker Bergmann
  * @since 0.6.0
  */
+@SuppressWarnings("CheckStyle")
 public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegrationTest {
 
   /**
@@ -73,7 +74,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
     Statement statement = parse(
         "<generate type='dummy' count='1' consumer='NoConsumer'>" +
-            "	<attribute name='x' nullable='xxx'/>" +
+            "   <attribute name='x' nullable='xxx'/>" +
             "</generate>");
     statement.execute(context);
   }
@@ -130,7 +131,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
     Statement statement = parse(
         "<generate type='dummy' count='3' validator='vali' consumer='cons'>" +
-            "	<id name='id' type='int' />" +
+            "   <id name='id' type='int' />" +
             "</generate>");
     ConsumerMock consumer = new ConsumerMock(true);
     context.setGlobal("cons", consumer);
@@ -255,8 +256,8 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
     Statement statement = parse(
         "<generate type='top' count='3'>" +
             "    <generate type='sub' count='2' consumer='new " + ConsumerMock.class.getName() + "(true)'>" +
-            "		<attribute name='x' type='int' generator='" + IncrementGenerator.class.getName() + "' />" +
-            "	</generate>" +
+            "      <attribute name='x' type='int' generator='" + IncrementGenerator.class.getName() + "' />" +
+            "   </generate>" +
             "</generate>"
     );
     statement.execute(context);
@@ -400,7 +401,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
   public void testSubExecute() {
     Statement statement = parse(
         "<generate type='dummy' count='3'>" +
-            "	<execute>bean.invoke(2)</execute>" +
+            "   <execute>bean.invoke(2)</execute>" +
             "</generate>");
     BeanMock bean = new BeanMock();
     bean.invocationCount = 0;
@@ -452,16 +453,16 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
       // prepare DB
       db.execute(
           "create table GOIPAST (" +
-              "	ID int," +
-              "	N  int," +
-              "	primary key (ID)" +
+              "   ID int," +
+              "   N  int," +
+              "   primary key (ID)" +
               ")");
       db.execute("insert into GOIPAST (id, n) values (1, 3)");
       db.execute("insert into GOIPAST (id, n) values (2, 4)");
       // parse and run statement
       Statement statement = parse(
           "<iterate type='GOIPAST' source='db' consumer='db.updater()'>" +
-              "	<attribute name='n' constant='2' />" +
+              "   <attribute name='n' constant='2' />" +
               "</iterate>"
       );
       context.setGlobal("db", db);
@@ -527,15 +528,15 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
   public void testScopeWithAttributes() {
     Statement statement = parse(
         "<generate name='a' count='2' consumer='NoConsumer'>" +
-            "	<generate name='b' count='2' consumer='NoConsumer'>" +
-            "		<generate name='c' count='2' consumer='ConsoleExporter,cons'>" +
-            "			<attribute name='slash' type='int' distribution='increment' scope='/'/>" +
-            "			<attribute name='a' type='int' distribution='increment' scope='a'/>" +
-            "			<attribute name='b' type='int' distribution='increment' scope='b'/>" +
-            "			<attribute name='c' type='int' distribution='increment' scope='c'/>" +
-            "			<attribute name='def' type='int' distribution='increment'/>" +
-            "		</generate>" +
-            "	</generate>" +
+            "   <generate name='b' count='2' consumer='NoConsumer'>" +
+            "      <generate name='c' count='2' consumer='ConsoleExporter,cons'>" +
+            "         <attribute name='slash' type='int' distribution='increment' scope='/'/>" +
+            "         <attribute name='a' type='int' distribution='increment' scope='a'/>" +
+            "         <attribute name='b' type='int' distribution='increment' scope='b'/>" +
+            "         <attribute name='c' type='int' distribution='increment' scope='c'/>" +
+            "         <attribute name='def' type='int' distribution='increment'/>" +
+            "      </generate>" +
+            "   </generate>" +
             "</generate>"
     );
     ConsumerMock consumer = new ConsumerMock(true, 1);
@@ -559,22 +560,22 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
   public void testScopeWithVariables() {
     Statement statement = parse(
         "<generate name='a' count='2' consumer='NoConsumer'>" +
-            "	<generate name='b' count='2' consumer='NoConsumer'>" +
-            "		<generate name='c' count='2' consumer='ConsoleExporter,cons'>" +
-            "			<variable name='slash'  type='int' distribution='increment' scope='/'/>" +
-            "			<variable name='a'      type='int' distribution='increment' scope='a'/>" +
+            "   <generate name='b' count='2' consumer='NoConsumer'>" +
+            "      <generate name='c' count='2' consumer='ConsoleExporter,cons'>" +
+            "         <variable name='slash'  type='int' distribution='increment' scope='/'/>" +
+            "         <variable name='a'      type='int' distribution='increment' scope='a'/>" +
             // TODO it should be forbidden to use a variable name that shadows an outer entity/variable name
-            "			<variable name='b'      type='int' distribution='increment' scope='b'/>" +
-            "			<variable name='c'      type='int' distribution='increment' scope='c'/>" +
-            "			<variable name='def'    type='int' distribution='increment'/>" +
+            "         <variable name='b'      type='int' distribution='increment' scope='b'/>" +
+            "         <variable name='c'      type='int' distribution='increment' scope='c'/>" +
+            "         <variable name='def'    type='int' distribution='increment'/>" +
 
-            "			<attribute name='slash' type='int' script='slash'/>" +
-            "			<attribute name='a'     type='int' script='a'/>" +
-            "			<attribute name='b'     type='int' script='b'/>" +
-            "			<attribute name='c'     type='int' script='c'/>" +
-            "			<attribute name='def'   type='int' script='def'/>" +
-            "		</generate>" +
-            "	</generate>" +
+            "         <attribute name='slash' type='int' script='slash'/>" +
+            "         <attribute name='a'     type='int' script='a'/>" +
+            "         <attribute name='b'     type='int' script='b'/>" +
+            "         <attribute name='c'     type='int' script='c'/>" +
+            "         <attribute name='def'   type='int' script='def'/>" +
+            "      </generate>" +
+            "   </generate>" +
             "</generate>"
     );
     ConsumerMock consumer = new ConsumerMock(true, 1);
@@ -598,7 +599,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
   public void testIdIgnored() {
     Statement statement = parse(
         "<generate name='a' count='3' consumer='cons'>" +
-            "	<id name='id' mode='ignored' />" +
+            "   <id name='id' mode='ignored' />" +
             "</generate>"
     );
     ConsumerMock consumer = new ConsumerMock(true, 1);
@@ -617,7 +618,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
   public void testAttributeIgnored() {
     Statement statement = parse(
         "<generate name='a' count='3' consumer='cons'>" +
-            "	<attribute name='att' mode='ignored' />" +
+            "   <attribute name='att' mode='ignored' />" +
             "</generate>"
     );
     ConsumerMock consumer = new ConsumerMock(true, 1);
@@ -636,7 +637,7 @@ public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegratio
   public void testReferenceIgnored() {
     Statement statement = parse(
         "<generate type='a' count='3' consumer='cons'>" +
-            "	<reference name='ref' targetType='b' mode='ignored' />" +
+            "   <reference name='ref' targetType='b' mode='ignored' />" +
             "</generate>"
     );
     ConsumerMock consumer = new ConsumerMock(true, 1);

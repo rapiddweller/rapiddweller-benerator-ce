@@ -43,6 +43,7 @@ plugins:
       cover_title: rapiddweller-benerator-ce
       cover_subtitle: manual
       output_path: rapiddweller-benerator-ce-manual.pdf
+  - search
 
 markdown_extensions:
   - markdown.extensions.codehilite:

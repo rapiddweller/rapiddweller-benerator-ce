@@ -51,7 +51,6 @@ public class InstanceDescriptor extends FeatureDescriptor {
   /**
    * The constant UNIQUE.
    */
-// constraints
   public static final String UNIQUE = "unique";
   /**
    * The constant NULLABLE.
@@ -73,7 +72,6 @@ public class InstanceDescriptor extends FeatureDescriptor {
   /**
    * The constant COUNT_GRANULARITY.
    */
-// configs
   public static final String COUNT_GRANULARITY = "countGranularity";
   /**
    * The constant COUNT_DISTRIBUTION.

@@ -58,4 +58,4 @@ into the Benerator descriptor file setup.
 Benerator supports a multitude of service provider interfaces (SPIs). It comes along with some implementations for specific business domains (**'
 [Domains](domains.md)'**) and general-purpose classes in **'[Component Reference](component_reference.md)'**.
 
-Finally, you are instructed how to write custom SPI implementations in **'[Extending benerator](extending_benerator.md)'**.
+Finally, you are instructed how to write custom SPI implementations in **'[Extending Benerator](extending_benerator.md)'**.

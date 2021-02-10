@@ -70,7 +70,7 @@ See 'Using databases'
 <bean id="dtGen" class="DateTimeGenerator">
   <property name='minDate' value='2010-08-01'/>
   <property name='maxDate' value='2010-08-31'/>
-  <property name='dategranularity' value='00-00-02'/>
+  <property name='dateGranularity' value='00-00-02'/>
   <property name='dateDistribution' value='random'/>
   <property name='minTime' value='08:00:00'/>
   <property name='maxTime' value='17:00:00'/>
@@ -580,7 +580,7 @@ Helmut Schmidt 10226.14
 | Class Name | XLSEntityExporter |
 | --- | --- |
 | Import | `<import platforms="xls"/>` |
-| Class Description | Exports entities to Excel XLS files. For using this exporter you need to add the Apache POI library to the benerator's lib directory. |
+| Class Description | Exports entities to Excel XLS files. For using this exporter you need to add the Apache POI library to the Benerator's lib directory. |
 | Property | Property Description | Default Value |
 | uri | The URI of the file to create | "export.xls" |
 | columns | A comma-separated list of column names |  |
@@ -633,7 +633,7 @@ Helmut Schmidt 10226.14
 
 ## EntitySources (Importers)
 
-benerator provides the following implementations of the EntitySource interface:
+Benerator provides the following implementations of the EntitySource interface:
 
 ### DbUnitEntitySource
 

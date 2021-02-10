@@ -784,10 +784,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
         return new SimpleTypeDescriptor(name, this, typeName);
       } else if (type instanceof ComplexTypeDescriptor) {
         return new ComplexTypeDescriptor(name, this, typeName);
-      }
-//        	else if (parentType instanceof UnresolvedTypeDescriptor)
-//        		return new UnresolvedTypeDescriptor(name, typeName);
-      else {
+      } else {
         throw new UnsupportedOperationException("Unsupported descriptor: " + type);
       }
     } else {

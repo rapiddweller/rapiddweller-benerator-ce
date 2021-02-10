@@ -37,10 +37,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Value;
+import org.graalvm.polyglot.proxy.ProxyObject;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Date;
+import java.util.Map;
 
 /**
  * Provides {@link Script} functionality based on GraalVM: Scripting for the Java platform.
@@ -88,24 +89,16 @@ public class GraalScript implements Script {
         if (valueType == null) {
           continue;
         }
-        // code block
+        // check if Entity Object
         if (Entity.class.equals(valueType)) {
           LOGGER.debug("Entity found : {}", key);
-          Object map = new Entity2MapConverter().convert((Entity) context.get(key));
-          polyglotCtx.getBindings(this.language).putMember(key, map);
-        } else if (
-            String.class.equals(valueType) ||
-                Integer.class.equals(valueType) ||
-                Boolean.class.equals(valueType) ||
-                Float.class.equals(valueType) ||
-                Byte.class.equals(valueType) ||
-                Double.class.equals(valueType) ||
-                Long.class.equals(valueType) ||
-                Date.class.equals(valueType)
-        ) {
-          polyglotCtx.getBindings(this.language).putMember(key, context.get(key));
+          Map<String, Object> map = new Entity2MapConverter().convert((Entity) context.get(key));
+          // to access items of map in polyglotCtx it is nessesary to create an ProxyObject
+          // TODO: might should create an Entity2ProxyObjectConverter in 1.2.0
+          ProxyObject proxy = ProxyObject.fromMap(map);
+          polyglotCtx.getBindings(this.language).putMember(key, proxy);
         } else {
-          LOGGER.warn("migration of benerator value does not match supported data types : " + key);
+          polyglotCtx.getBindings(this.language).putMember(key, context.get(key));
         }
       }
     } catch (NullPointerException e) {

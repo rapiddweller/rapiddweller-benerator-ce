@@ -77,27 +77,31 @@ Other: boolean, object (Java object), binary (byte[])
 
 The first character must be an ASCII letter or underscore. An arbitrary number of subsequent characters may be ASCII letters, underscores or numbers.
 
+```shell
 Legal identifiers: _test, A1234, _999
 
 Illegal identifiers: 1ABC, XÖ, F$D, alpha.beta
+```
 
 ### Escape Sequences
 
-\bBackspace
+```shell
+\b			Backspace
 
-\tTab
+\t			Tab
 
-\nNew Line
+\n			New Line
 
-\rCarriage Return
+\r			Carriage Return
 
-\fForm Feed
+\f			Form Feed
 
-\"Double quote
+\"			Double quote
 
-\'Single quote
+\'			Single quote
 
-\nnnOctal encoded character
+\nnn	Octal encoded character
+```
 
 ### String Literal
 

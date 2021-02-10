@@ -47,8 +47,7 @@ public class LanguageResourceBundle_de extends LanguageResourceBundle {
         {"definite.article.plural.2", "die"},
         {"indefinite.article.singular.0", "ein"},
         {"indefinite.article.singular.1", "eine"},
-        {"indefinite.article.singular.2", "ein"},
-    };
+        {"indefinite.article.singular.2", "ein"}};
   }
 
 }

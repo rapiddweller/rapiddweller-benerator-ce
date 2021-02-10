@@ -131,7 +131,7 @@ Navigate to the sources for our generated mkdocs:
 - [Component Reference](doc/component_reference.md)
 - [Using DB Sanity](doc/using_db_sanity.md)
 - [Maven Benerator Plugin](doc/maven_benerator_plugin.md)
-- [Extending benerator](doc/extending_benerator.md)
+- [Extending Benerator](doc/extending_benerator.md)
 - [Using Benerator as Load Generator](doc/using_benerator_as_load_generator.md)
 - [Troubleshooting](doc/troubleshooting.md)
 - [Monitoring Benerator](doc/monitoring_benerator.md)

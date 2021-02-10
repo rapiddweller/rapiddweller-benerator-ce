@@ -168,8 +168,7 @@ public abstract class MultiGeneratorWrapper<S, P> extends AbstractGenerator<P> {
     }
     makeAllGeneratorsAvailable();
     for (Generator<? extends S> source : sources) {
-      if (source != null) // some elements may be Mode.ignored
-      {
+      if (source != null) { // some elements may be Mode.ignored
         source.init(context);
       }
     }

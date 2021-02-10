@@ -71,7 +71,7 @@ You can invoke methods on beans using rapiddwellerScript:
 
 ## Importing Java classes
 
-benerator provides an import facility similar to the Java language. You can import classes, packages and domains.
+Benerator provides an import facility similar to the Java language. You can import classes, packages and domains.
 
 So, instead of using the fully qualified name:
 
@@ -93,7 +93,7 @@ The following alternative works as well and imports all classes of the com.my pa
 <bean id="special" class="com.my.SpecialGenerator"/>
 ```
 
-Domains can be imported as well. For the built-in benerator domains, only the domain name is necessary, for custom domains, the fully qualified name
+Domains can be imported as well. For the built-in Benerator domains, only the domain name is necessary, for custom domains, the fully qualified name
 of the domain's top level package. For a built-in domain:
 
 ```xml
@@ -183,10 +183,12 @@ Example:
     <attribute name="country" values="DE,AT,CH"/>
 
     <generate type="product" count="100" consumer="db">
-
-        <attribute name="ean_code" source="db" selector="ftl:selector="{{select ean_code from db_product where
-        country='${shop.country}'}}"/>
-
+        
+        <attribute name="ean_code" 
+                   source="db" 
+                   selector="{{ftl:select ean_code from db_product where country='${shop.country}'}}"
+                   />
+        
     </generate>
 
 </generate>
@@ -228,7 +230,7 @@ Afterwards you can query the generated products for referencing them in generate
 </generate>
 ```
 
-Note that you can only query for entities – if you need only an attribute of an entity, you must first use a variable to get the entity and then a
+**Note** that you can **only** query for entities – if you need only an attribute of an entity, you must first use a variable to get the entity and then a
 script to get the required attribute.
 
 You can use a distribution:
@@ -236,8 +238,9 @@ You can use a distribution:
 `<variable name="product" source="store" type="product" distribution="random"/>`
 
 A simple form of query is supported by a 'selector' element. Its content must be a script expression that serves as a filter. The expression is
-consecutively evaluated on each element (as candidate) and has to return true, if the candidate is accepted, otherwise false. The script can access
-each candidate with the keyword _candidate.
+consecutively evaluated on each element (as candidate) and has to return true, if the candidate is accepted, otherwise false. 
+
+**IMPORTANT**: The script only can access each candidate by using the keyword **_candidate**.
 
 As an example, here is a query which only returns products whose name starts with 'A':
 
@@ -348,7 +351,7 @@ city[name=Toronto]
 
 ### Region nesting
 
-benerator comes with a predefined nesting definition for geographical datasets, called 'region':
+Benerator comes with a predefined nesting definition for geographical datasets, called 'region':
 
 ```properties
 europe=western_europe,central_europe,\
@@ -485,7 +488,7 @@ generator.close();
 
 In many cases, data generation based on the descriptor file format may be too complex and a script based generation too slow.
 
-In these cases you can provide a custom class that implements the com.rapiddweller.task.Task interface and can be invoked from the benerator
+In these cases you can provide a custom class that implements the com.rapiddweller.task.Task interface and can be invoked from the Benerator
 descriptor file. For example you could write a Task implementation that calls business logic for triggering complex operations on business objects.
 
 Such a class can be instantiated and invoked with a similar syntax like any JavaBean, e.g.:
@@ -500,7 +503,7 @@ Such a class can be instantiated and invoked with a similar syntax like any Java
 </run-task>
 ```
 
-You can instantiate and initialize a task like a `<bean>` (see _JavaBeans and the benerator Context_). Tasks can be executed in pages, ensuring that
+You can instantiate and initialize a task like a `<bean>` (see _JavaBeans and the Benerator Context_). Tasks can be executed in pages, ensuring that
 the total number of execution over all threads is the page size. For this, The element run-task also supports the attributes
 
 * count : the total number of times the Task is executed (defaults to 1)

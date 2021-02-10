@@ -48,6 +48,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellStyle;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.Time;
@@ -151,8 +152,22 @@ public class XLSEntityExporter extends FormattingConsumer
       } else {
         XLSUtil.autoSizeColumns(workbook);
       }
+
+      File directory = new File(uri);
+      // check if path exists, if not make sure it exists
+      if (directory.getParent() != null
+          && !directory.isDirectory()
+          && !directory.getParentFile().exists()) {
+        boolean result = directory.getParentFile().mkdirs();
+        if (!result) {
+          throw new ConfigurationError("filepath does not exists and can not be created ...");
+        }
+      }
+
       // Write the output to a file
       out = new FileOutputStream(uri);
+
+
       workbook.write(out);
     } catch (FileNotFoundException e) {
       throw new ConfigurationError(e);

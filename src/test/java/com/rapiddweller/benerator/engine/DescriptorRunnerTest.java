@@ -47,6 +47,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.5.8
  */
+@SuppressWarnings("CheckStyle")
 public class DescriptorRunnerTest extends ModelTest {
 
   private static final String EXPORT_FILE_URI = "test-uri.txt";

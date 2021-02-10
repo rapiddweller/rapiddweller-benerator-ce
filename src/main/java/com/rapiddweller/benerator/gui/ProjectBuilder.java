@@ -102,7 +102,7 @@ public class ProjectBuilder implements Runnable {
   private static final String COMMENT_CREATE_TABLES = "Create the tables and sequences";
 
 
-  private final static Set<String> DB_CONSTRAINT_NAMES = CollectionUtil.toSet("nullable", "maxLength", "type");
+  private static final Set<String> DB_CONSTRAINT_NAMES = CollectionUtil.toSet("nullable", "maxLength", "type");
   private static final ToStringConverter toStringConverter = new ToStringConverter("");
 
   /**
@@ -546,6 +546,7 @@ public class ProjectBuilder implements Runnable {
     return db;
   }
 
+  @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
   private void generateTable(InstanceDescriptor descriptor, LFNormalizingStringBuilder writer) {
     ComplexTypeDescriptor type = (ComplexTypeDescriptor) descriptor.getTypeDescriptor();
     Map<String, String> attributes = new OrderedMap<>();
