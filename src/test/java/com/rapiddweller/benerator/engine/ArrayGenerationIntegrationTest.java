@@ -58,6 +58,7 @@ public class ArrayGenerationIntegrationTest extends BeneratorIntegrationTest {
   /**
    * Test simple case.
    */
+  @SuppressWarnings("checkstyle:FileTabCharacter")
   @Test
   public void testSimpleCase() {
     parseAndExecute(
@@ -73,24 +74,7 @@ public class ArrayGenerationIntegrationTest extends BeneratorIntegrationTest {
       assertEquals("x", product[1]);
     }
   }
-	/* TODO v0.7.1 make it work
-	@Test
-	public void testVariable() {
-		parseAndExecute(
-				"<generate count='2' consumer='cons'>" +
-				"	<variable name='aVar' constant='4' />" +
-				"	<value type='int' script='aVar'/>" +
-				"	<value type='string' constant='x'/>" +
-				"</generate>");
-		List<Object[]> products = getConsumedEntities();
-		assertEquals(2, products.size());
-		for (Object[] product : products) {
-			assertEquals(2, product.length);
-			assertEquals(4, product[0]);
-			assertEquals("x", product[1]);
-		}
-	}
-	*/
+
 
   // helpers ---------------------------------------------------------------------------------------------------------
 

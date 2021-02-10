@@ -56,6 +56,7 @@ public class CascadeStatementTest extends GeneratorTest {
   /**
    * Sets up database.
    */
+  @SuppressWarnings("checkstyle:FileTabCharacter")
   @Before
   public void setUpDatabase() {
     DBUtil.resetMonitors();

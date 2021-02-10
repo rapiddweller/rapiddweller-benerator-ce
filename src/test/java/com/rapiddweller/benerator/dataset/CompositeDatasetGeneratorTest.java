@@ -156,26 +156,4 @@ public class CompositeDatasetGeneratorTest extends GeneratorTest {
     assertTrue(anyValue == 1 || anyValue == 2 || anyValue == 10);
   }
 
-	/* TODO v0.8 support limited/unique generators
-	@Test
-	public void testLimitedSources() {
-		AtomicDatasetGenerator<Integer> five = new AtomicDatasetGenerator<Integer>(new OneShotGenerator<Integer>(5), "num", "five"); 
-		AtomicDatasetGenerator<Integer> six = new AtomicDatasetGenerator<Integer>(new ConstantGenerator<Integer>(6), "num", "six");
-		CompositeDatasetGenerator<Integer> medium = new CompositeDatasetGenerator<Integer>("num", "medium");
-		medium.addSubDataset(five, 1);
-		medium.addSubDataset(six, 1);
-		medium.init(context);
-		// check first generation
-		Integer product = medium.generate();
-		assertNotNull(product);
-		assertTrue(product == 5 || product == 6);
-		// check second generation
-		product = medium.generate();
-		assertNotNull(product);
-		assertTrue(product == 5 || product == 6);
-		// assert unavailable
-		assertNull(medium.generate());
-		medium.close();
-	}
-	*/
 }

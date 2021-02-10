@@ -52,6 +52,7 @@ import static org.junit.Assert.assertTrue;
  * @author Volker Bergmann
  * @since 0.6.2
  */
+@SuppressWarnings("CheckStyle")
 public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
 
   private DefaultDBSystem db;
@@ -76,10 +77,10 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
     db.execute("insert into referee (id, n) values (3, 3)");
     db.execute(
         "create table referer ( " +
-            "	id int," +
-            "	referee_id int," +
-            "	the_date date," +
-            "	primary key (id)," +
+            "   id int," +
+            "   referee_id int," +
+            "   the_date date," +
+            "   primary key (id)," +
             "   constraint referee_fk foreign key (referee_id) references referee (id))");
     context.setGlobal("db", db);
     context.getDataModel().addDescriptorProvider(db);
@@ -283,7 +284,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
     parseAndExecute(
         "<generate type='referer' consumer='cons'>" +
             "  <reference name='referee_id' source='db' " +
-            "	  selector=\"{ftl:select id from referee where id=${key}}\" " +
+            "     selector=\"{ftl:select id from referee where id=${key}}\" " +
             "     nullable='false'/>" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
@@ -301,7 +302,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
     parseAndExecute(
         "<generate type='referer' consumer='cons' count='3'>" +
             "  <reference name='referee_id' source='db' " +
-            "	  subSelector='{ftl:select id from referee order by id}' " +
+            "     subSelector='{ftl:select id from referee order by id}' " +
             "     nullable='false'/>" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
@@ -321,7 +322,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
     parseAndExecute(
         "<generate type='referer' consumer='cons'>" +
             "  <reference name='referee_id' source='db' " +
-            "	  selector='{ftl:id=${key}}' " +
+            "     selector='{ftl:id=${key}}' " +
             "     nullable='false'/>" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
@@ -341,7 +342,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
     parseAndExecute(
         "<iterate type='referee' source='db' consumer='cons'>" +
             "  <attribute name='n' source='db' " +
-            "	  selector=\"{{'select n+1 from referee where id = ' + this.id}}\" cyclic='true' />" +
+            "     selector=\"{{'select n+1 from referee where id = ' + this.id}}\" cyclic='true' />" +
             "</iterate>");
     List<Entity> products = getConsumedEntities();
     assertEquals(2, products.size());
@@ -381,8 +382,8 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
     db.execute("delete from referee");
     parseAndExecute(
         "<generate type='referee' count='2' consumer='cons'>" +
-            "	<generate type='referer' count='2' consumer='cons'>" +
-            "	</generate>" +
+            "   <generate type='referer' count='2' consumer='cons'>" +
+            "   </generate>" +
             "</generate>");
     // check generated products
     List<Entity> products = getConsumedEntities();
@@ -416,8 +417,8 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
     db.execute("delete from referee");
     parseAndExecute(
         "<generate type='referee' count='2' consumer='cons'>" +
-            "	<generate type='referer' count='2' pageSize='0' consumer='cons'>" +
-            "	</generate>" +
+            "   <generate type='referer' count='2' pageSize='0' consumer='cons'>" +
+            "   </generate>" +
             "</generate>");
     // check generated products
     List<Entity> products = getConsumedEntities();
@@ -447,8 +448,8 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
     db.execute("delete from referee");
     parseAndExecute(
         "<generate type='referee' count='2' pageSize='0' consumer='cons'>" +
-            "	<generate type='referer' count='2' pageSize='0' consumer='cons'>" +
-            "	</generate>" +
+            "   <generate type='referer' count='2' pageSize='0' consumer='cons'>" +
+            "   </generate>" +
             "</generate>");
     // check generated products
     List<Entity> products = getConsumedEntities();
@@ -589,7 +590,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <variable name='v' type='int' min='2' distribution='increment' />" +
             "  <reference name='referee_id' source='db' " +
-            "	  subSelector='select n from referee where id=3' />" +
+            "     subSelector='select n from referee where id=3' />" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
     assertEquals(2, products.size());
@@ -608,7 +609,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <id name='id' type='int' min='2' distribution='increment' />" +
             "  <reference name='referee_id' source='db' " +
-            "	  subSelector=\"{{'select n from referee where id=' + key}}\" />" +
+            "     subSelector=\"{{'select n from referee where id=' + key}}\" />" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
     assertEquals(2, products.size());
@@ -626,7 +627,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <variable name='v' type='int' min='2' distribution='increment' />" +
             "  <reference name='referee_id' source='db' " +
-            "	  subSelector=\"{{'select n from referee where id=' + v}}\" />" +
+            "     subSelector=\"{{'select n from referee where id=' + v}}\" />" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
     assertEquals(2, products.size());
@@ -644,7 +645,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <id name='id' type='int' min='2' distribution='increment' />" +
             "  <reference name='referee_id' source='db' " +
-            "	  subSelector=\"{{'select n from referee where id=' + referer.id}}\" />" +
+            "     subSelector=\"{{'select n from referee where id=' + referer.id}}\" />" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
     assertEquals(2, products.size());
@@ -661,7 +662,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
     parseAndExecute(
         "<generate type='referer' maxCount='2' consumer='cons'>" +
             "  <reference name='referee_id' source='db' " +
-            "	  subSelector='select id from referee where id=5' />" +
+            "     subSelector='select id from referee where id=5' />" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
     assertEquals(0, products.size());
@@ -676,7 +677,7 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
     parseAndExecute(
         "<generate type='referer' count='2' consumer='cons'>" +
             "  <attribute name='referee_id' source='db' " +
-            "	  subSelector='select null from referee where id=2' />" +
+            "     subSelector='select null from referee where id=2' />" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
     assertEquals(2, products.size());

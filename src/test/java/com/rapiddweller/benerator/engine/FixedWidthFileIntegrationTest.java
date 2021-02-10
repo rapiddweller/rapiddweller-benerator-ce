@@ -41,6 +41,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.9.2
  */
+@SuppressWarnings("CheckStyle")
 public class FixedWidthFileIntegrationTest extends BeneratorIntegrationTest {
 
   /**
