@@ -41,6 +41,7 @@ hs_err_pid*
 !/src/test/*/**
 
 .DS_Store
+site/
 
 # IDE
 .idea/

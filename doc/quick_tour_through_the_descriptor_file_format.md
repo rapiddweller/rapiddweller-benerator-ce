@@ -48,7 +48,8 @@ You can configure them in the `<setup>` element, e.g.
 
 ### Inclusion of properties files
 
-An alternative way to specify the Benerator properties from the previous chapter is to specify them in a properties file, e.g.
+An alternative way to specify the Benerator properties from the previous chapter is to 
+specify them in a properties file, e.g.
 
 ```properties
 context.defaultEncoding=UTF-8
@@ -134,7 +135,7 @@ When using a Benerator plugin or another library, you need to make sure that Ben
    on machines with plain Benerator installations, distribute the full folder content including the lib sub folder.
 
 3. When using Maven to run Benerator, simply create the necessary Maven dependencies and Maven will acquire all needed libraries dynamically. Read
-   more about this in the chapter Maven Benerator Plugin
+   more about this in '[Maven Benerator Plugin](maven_benerator_plugin.md)' 
 
 ## `<generate>`
 
@@ -191,7 +192,8 @@ String attribute generation can be configured using the "pattern" attribute with
 </generate>
 ```
 
-You can find a detailed descripton about Benerator's regular expression support in the chapter „Regular Expression Support“.
+You can find a detailed description about Benerator's regular expression support 
+in '[Regular Expression Support](regular_expression_support.md)'.
 
 ## `<iterate>`
 
@@ -367,7 +369,8 @@ For explicitly choosing or initializing an id generator, use the generator attri
 
 for using an IncrementalIdGenerator, that starts with the value 100.
 
-See the chapter „Common ID Generators“ for a complete ID generator reference and „Using databases“ for database-related id generators.
+See '[Common ID Generators](component_reference.md#common-id-generators)' for a complete ID generator reference and 
+'[Using Relational Databases](using_relational_databases.md)' for database-related id generators.
 
 Instead of using a generator, you can as well use other `<attribute>`-like features, e.g. scripts:
 

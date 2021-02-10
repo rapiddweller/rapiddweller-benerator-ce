@@ -580,7 +580,7 @@ Helmut Schmidt 10226.14
 | Class Name | XLSEntityExporter |
 | --- | --- |
 | Import | `<import platforms="xls"/>` |
-| Class Description | Exports entities to Excel XLS files. For using this exporter you need to add the Apache POI library to the benerator's lib directory. |
+| Class Description | Exports entities to Excel XLS files. For using this exporter you need to add the Apache POI library to the Benerator's lib directory. |
 | Property | Property Description | Default Value |
 | uri | The URI of the file to create | "export.xls" |
 | columns | A comma-separated list of column names |  |
@@ -633,7 +633,7 @@ Helmut Schmidt 10226.14
 
 ## EntitySources (Importers)
 
-benerator provides the following implementations of the EntitySource interface:
+Benerator provides the following implementations of the EntitySource interface:
 
 ### DbUnitEntitySource
 

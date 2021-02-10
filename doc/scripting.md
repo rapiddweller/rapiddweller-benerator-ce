@@ -36,7 +36,8 @@ Alternatively to inlining script text, you can put it in a script file and invok
 
 You can bind a language of choice by using the mechanisms of GraalVM: Scripting for the Java Platform.
 
-With rapiddweller Benerator, GraalVM[js] implementation is shipped. For all other platforms and languages you need to configure language support.
+With rapiddweller Benerator, GraalVM[js] implementation is shipped. For all other platforms 
+and languages you need to configure language support.
 
 The following attributes are available for the `<execute>` element:
 
@@ -48,13 +49,13 @@ The following attributes are available for the `<execute>` element:
 
 * target: a target to execute the script on, typically a database for a SQL script
 
-* onError: How to handle errors. One of (ignore, trace, debug, info, warn, error, fatal. fatal causes benerator to cancel execution in case of an
-  error.
+* onError: How to handle errors. One of (ignore, trace, debug, info, warn, error, fatal. fatal causes 
+  Benerator to cancel execution in case of an error.
 
-* optimize: boolean flag that tells benerator whether it may optimize script execution for the sake of performance. E.g. For an Oracle SQL script this
-  would leave out comments for faster table creation.
+* optimize: boolean flag that tells Benerator whether it may optimize script execution for the sake of performance. 
+  E.g. For an Oracle SQL script, this would leave out comments for faster table creation.
 
-benerator supports the following script types:
+Benerator supports the following script types:
 
 * shell: system shell invocations, e.g. for invoking batch files.
 * sql: SQL, it requires specification of the database in a target property.
@@ -62,12 +63,14 @@ benerator supports the following script types:
 * ben: rapiddwellerScript, which is the default script language
 * ftl: FreeMarker
 * js: JavaScript is shipped with Benerator GraalVM dependencies
-* py: is not enable in DEFAULT a [GraalVM](https://www.graalvm.org/downloads/) as JVM is nessesary with Python installed ( this is not supported on Windows at the moment )
+* py: is not enabled by DEFAULT - it requires a [GraalVM](https://www.graalvm.org/downloads/) as JVM  
+  with Python installed ( this is not supported on Windows at the moment )
 
 Example:
 
 ```XML
 <setup>
+  
     <execute type="js">
         let c = 1;
         const d = 6;
@@ -97,12 +100,13 @@ Example:
 </setup>
 ```
 
-Make sure not to redefine a variable or method, because these variable and functions you are defining in your Benerator script are valid for the whole runtime.
+Make sure not to redefine a variable or method, because these variable and functions you are defining 
+in your Benerator script are valid for the whole runtime.
 
 ## Shell scripting
 
-You can call shell files or issue shell commands. When in-lining shell commands, script expressions will be resolved. So you could, for example, use
-global properties for setting parameters of a sqlplus call:
+You can call shell files or issue shell commands. When in-lining shell commands, script expressions will be resolved. 
+So you could, for example, use global properties for setting parameters of a sqlplus call:
 
 ```xml
 <execute type="shell">{ftl:sqlplus ${dbUser}/${dbPassword}@${database} @create_tables.sql}</execute>

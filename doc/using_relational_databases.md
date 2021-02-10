@@ -41,8 +41,8 @@ The following attributes are available in the `<database>` element:
 | acceptUnknownColumnTypes | If set to true, Benerator accepts exotic database column types without complaining and relies on the user to take care of the appropriate data type when generating values for the column. |
 
 **Attention**: Benerator has some built-in knowledge about the most widely used database systems and their conventions.
-So in most cases, it is sufficient to provide url, driver user and password. In special cases, e.g. if you want to
-access a schema ehich is not the default schema of your user, you may have to set schema (and possibly catalog)
+So in most cases, it is sufficient to provide url, driver, user, and password. In special cases, e.g. if you want to
+access a schema that is not the default schema of your user, you may have to set schema (and possibly catalog)
 explicitly.
 
 ## Usual Database Settings
@@ -95,7 +95,8 @@ access the database with different users in the same run. An example:
 <database id="db1" environment="mydb" user="user1" password="password1"/>
 ```
 
-```xaml
+```xml
+
 <database id="db2" environment="mydb" user="user2" password="password2"/>
 ```
 
@@ -189,12 +190,11 @@ and/or called. In such cases, you can specify an alternative delimiter in an `<e
 ## Inserting entities into a database
 
 When using a database as consumer in a `<generate>` or `<iterate>` element, the elements are _inserted_ by default. For
-information, how to _update_
-entries, see the next chapter.
+information, how to _update_ entries, see the next chapter.
 
 <generate type="db_user" count="50000" consumer="db"></generate>
 
-If primary key generation should be performed by the database, you need to tell benerator to ignore the field, setting
+If primary key generation should be performed by the database, you need to tell Benerator to ignore the field, setting
 the mode to 'ignored'
 
 ```xml
@@ -310,7 +310,7 @@ generateWithParams(...)** method:
 ## Handling of common Columns
 
 In many databases, you encounter common columns like auditing information 'created_by', 'created_at', 'updated_by', '
-updated_at' or optimistic locking columns. See the chapter 'Default Attribute Settings' for instructions how to define a
+updated_at' or optimistic locking columns. See '[Default Attribute Settings](data_generation_concepts.md#default-attribute-settings)' for instructions how to define a
 common default generation settings for these.
 
 ## Determining attribute values by a database query
@@ -379,8 +379,7 @@ products are available in which region:
   <attribute name="region" values="'americas','emea','asia'"/>
   
   <reference name="product" source="db"
-             subSelector="{{'select product_id from product_region where region_id = ' + this.region }}"
-  />
+             subSelector="{{'select product_id from product_region where region_id = ' + this.region }}"  />
 </generate>
 ```
 
@@ -392,7 +391,7 @@ first invocation and reuses it on each subsequent call.
 
 ### Automatic referencing
 
-**By default**, Benerator assumes that all relations are **one-to-one** as the most defensive choice. Thus the following
+**By default**, Benerator assumes that all relations are **one-to-one** as the most defensive choice. Thus, the following
 setup in which a table db_user references a table db_role will cause an error:
 
 ```xml
@@ -411,8 +410,8 @@ available!
 entries will be the number of role entries.
 
 In most cases you actually deal with many-to-one relationships and thus need to specify its characteristics explicitly,
-typically by using a distribution. Basically, a reference is defined by (column) **name**, (dabase) **source** and **
-targetType** (referenced table):
+typically by using a distribution. Basically, a reference is defined by (column) **name**, (database) **source** and 
+**targetType** (referenced table):
 
 ```xml
 <setup>
@@ -481,12 +480,12 @@ references, e.g. constant, pattern, values, script, etc. You could, e.g., config
 
 ## Composite Keys
 
-Benerator does not provide an **automated** composite key handling, but you can configure it to handle them **
-explicitly**. The typical approach for this is a prototype query.
+Benerator does not provide an **automated** composite key handling, but you can configure it to handle them 
+**explicitly**. The typical approach for this is a prototype query.
 
 ## Prototype Queries
 
-For the general idea of prototype-based generation, see the corresponding chapter. In addition to the core features, the
+For the general idea of prototype-based generation, see '[Prototype-based Data Generation](data_generation_concepts.md#prototype-based-data-generation)'. In addition to the core features, the
 prototype approach is a good way to handle composite primary keys and composite foreign keys, since their components are
 available in combination.
 
@@ -510,14 +509,15 @@ the table which is queried as **type**. After that, you can access the results' 
 ```
 
 When aggregating data with a general query that is not (or cannot be) mapped to a type, you can access the results'
-column values as array elements (
-indices are 0-based):
-
-<variable name="_product" source**="db" selector="select PRODUCT_ID, ROUTING_TYPE from MY_PRODUCT where sysdate between
-VALID_FROM and VALID_TO"
-distribution="random" />
+column values as array elements (indices are 0-based):
 
 ```xml
+
+<variable name="_product" source="db" 
+          selector="select PRODUCT_ID, ROUTING_TYPE from MY_PRODUCT where sysdate between VALID_FROM and VALID_TO"
+          distribution="random" />
+
+
 <generate name="example" type="ex" count="5" consumer="ConsoleExporter">
   <reference name="PRODUCT_ID" script="_product[0]"/>
   
@@ -560,9 +560,9 @@ db_order_items' total_price values and write it to the db_order's total_price co
 </iterate>
 ```
 
-The described update mechanism can also be used to anonymize production data – see the chapter 'Production Data
-Anonymization'. For transfering user data from a source database 'sourcedb' to a target database 'testdb', you would
-write
+The described update mechanism can also be used to anonymize production data – 
+see '[Production Data Anonymization](benerator_goals_features.md#production-data-anonymization)'. 
+For transferring user data from a source database 'sourcedb' to a target database 'testdb', you would write
 
 ```xml
 
@@ -599,7 +599,7 @@ use a special inserter:
 ## Controlling Transactions
 
 By default, Benerator performs one transaction per data set that is generated. When generating huge amounts of data,
-transaction overhead quickly becomes significant and you will want to insert several data set in a common transaction.
+transaction overhead quickly becomes significant, and you will want to insert several data set in a common transaction.
 You can use the pageSize argument to configure the number of data elements per transaction. For most databases and
 tasks, pageSize="1000" is a reasonable setting:
 
@@ -608,7 +608,7 @@ tasks, pageSize="1000" is a reasonable setting:
 <generate type="user" count="1000000" pageSize="1000" consumer="db"/>
 ```
 
-For further hints on improving performance, refer to the 'Performance' section.
+For further hints on improving performance, refer to the '[Performance](benerator_performance_tuning.md)' section.
 
 If you are nesting creation loops, you can set the transaction control for each level separately:
 
@@ -643,11 +643,11 @@ Benerator's transcoding feature enables you to
 
 1. copy database entries from one database to another
 
-2. assign new primary key values while copying
+1. assign new primary key values while copying
 
-3. transcode relationships (automatically translate foreign key relationships to the new primary key values)
+1. transcode relationships (automatically translate foreign key relationships to the new primary key values)
 
-4. merge relationships (make copied data refer to pre-existing data in the target database)
+1. merge relationships (make copied data refer to pre-existing data in the target database)
 
 Features 1-3 are can be performed easily, for feature 4 you need so fulfill some preconditions.
 
@@ -672,7 +672,7 @@ This copies the full content of the tables ROLE and USER from db1 to db2\.
 
 ### Restricting the copied Set
 
-You can resctrict the set of database entries to copy by using a 'selector' attribute in the `<transcode>` element:
+You can restrict the set of database entries to copy by using a 'selector' attribute in the `<transcode>` element:
 
 ```xml
 
@@ -706,7 +706,7 @@ syntax:
 </transcodingTask>
 ```
 
-Each ROLE and USER gets a new primary key value and the foreign key references from USER to ROLE are reassigned to match
+Each ROLE and USER gets a new primary key value, and the foreign key references from USER to ROLE are reassigned to match
 the new id values.
 
 ### Cascaded Transcoding
@@ -765,11 +765,11 @@ you might have automatically assigned technical ids, an object with a given 'bus
 Bergmann') might have different 'technical' ids (primary keys of value e.g. 10 or 1000) in different databases. Thus,
 you need to provide Benerator with a description, which technical id relates to which business id in which database.
 
-There are several alternatives available, so I start with one of the simplest and most widely used in order to give you
-an overview of the approach and then provide you with a complete list of possibilites.
+There are several alternatives available: Let us start with one of the simplest, and most widely used in order 
+to give you an overview of the approach and then provide you with a complete list of possibilities.
 
 Let's assume the tables ROLE and USER each have a NAME column with unique identifiers. In this case, you can apply the
-unique-key identity mapping ans store it in a file with the suffix .id.xml, e.g. identities.id.xml:
+unique-key identity mapping and store it in a file with the suffix .id.xml, e.g. identities.id.xml:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -792,10 +792,9 @@ This identity file enables Benerator to merge foreign key relationships in the t
 
 ### Defining Identities
 
-Identites are definied in a file format taken from DB Sanity. Thus, it is XML and its root element is `<dbsanity>`.
+Identities are defined in a file format taken from DB Sanity. Thus, it is XML and its root element is `<dbsanity>`.
 Under the root, all `<identity>`
-definitions are listed, each referring to a **table** and having a certain identity **
-type**, e.g.
+definitions are listed, each referring to a **table** and having a certain identity **type**, e.g.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -808,7 +807,7 @@ type**, e.g.
 
 There are different types of entity definitions available:
 
-natural-pk
+#### natural-pk
 
 The simplest type of identity applies if the primary key (PK) is a business key (natural key). In this case, use
 a `<natural-pk>` definition:
@@ -818,7 +817,7 @@ a `<natural-pk>` definition:
 <identity table="CURRENCY" type="natural-pk"/>
 ```
 
-unique-key
+#### unique-key
 
 If a non-pk-column or a combination of several columns is unique, use the `<unique-key>` identity and list the key
 components in a comma-separated list in a 'columns' attribute:
@@ -831,7 +830,7 @@ components in a comma-separated list in a 'columns' attribute:
 You may as well include foreign keys in the list: Benerator will use the business id of the referenced objects to
 determine the identity of the referer.
 
-nk-pk-query
+#### nk-pk-query
 
 In more complicated cases, you might need a definition style that gives you more freedom. The `<nk-pk-query>` allows you
 to specify an arbitrary SQL query which is supposed to return a pair of natural key and primary key values for each
@@ -847,7 +846,7 @@ table row:
 </identity>
 ```
 
-sub-nk-pk-query
+#### sub-nk-pk-query
 
 A table's rows may have a complex identity definition, which is only unique in the context of a 'parent' row in another
 table. A good example is if a state name is only unique within a given country, nut different countries may have a state
@@ -874,41 +873,42 @@ supported.
 Benerator is scanning data sources for references and validity and check if all data types can be handled by Benerator
 in general.
 
-When you have a PostgreSQL database for example with following data model :
+When you have a PostgreSQL database for example with following data model:
 
 ```sql
-        CREATE SCHEMA schema1;
-        CREATE SCHEMA schema2;
-        CREATE SCHEMA schema3;
-        CREATE SEQUENCE schema1.seq_id_gen START WITH 10;
-        CREATE SEQUENCE schema2.seq_id_gen START WITH 10;
-        CREATE SEQUENCE schema3.seq_id_gen START WITH 20;
-        
-        CREATE TABLE schema3.db_manufacturer (
-        id SERIAL PRIMARY KEY,
-        name varchar(30) NOT NULL,
-        description text NULL
-        );
-        CREATE TABLE IF NOT EXISTS schema1.db_category (
-        id SERIAL PRIMARY KEY,
-        name varchar(30) NOT NULL
-        );
-        CREATE TABLE schema2.db_category (
-        id SERIAL PRIMARY KEY,
-        name varchar(30) NOT NULL
-        );
-        CREATE TABLE schema1.db_product (
-        ean_code varchar(13) NOT NULL,
-        name varchar(30) NOT NULL,
-        category_id int NOT NULL,
-        manufacturer_id int NOT NULL,
-        price decimal(8,2) NOT NULL,
-        notes varchar(256) NULL,
-        description text NULL,
-        CONSTRAINT db_product_category_fk FOREIGN KEY (category_id) REFERENCES schema1.db_category (id),
-        CONSTRAINT db_manufacturer_fk FOREIGN KEY (manufacturer_id) REFERENCES schema3.db_manufacturer (id)
-        );
-        COMMIT;
+
+CREATE SCHEMA schema1;
+CREATE SCHEMA schema2;
+CREATE SCHEMA schema3;
+CREATE SEQUENCE schema1.seq_id_gen START WITH 10;
+CREATE SEQUENCE schema2.seq_id_gen START WITH 10;
+CREATE SEQUENCE schema3.seq_id_gen START WITH 20;
+
+CREATE TABLE schema3.db_manufacturer (
+id SERIAL PRIMARY KEY,
+name varchar(30) NOT NULL,
+description text NULL
+);
+CREATE TABLE IF NOT EXISTS schema1.db_category (
+id SERIAL PRIMARY KEY,
+name varchar(30) NOT NULL
+);
+CREATE TABLE schema2.db_category (
+id SERIAL PRIMARY KEY,
+name varchar(30) NOT NULL
+);
+CREATE TABLE schema1.db_product (
+ean_code varchar(13) NOT NULL,
+name varchar(30) NOT NULL,
+category_id int NOT NULL,
+manufacturer_id int NOT NULL,
+price decimal(8,2) NOT NULL,
+notes varchar(256) NULL,
+description text NULL,
+CONSTRAINT db_product_category_fk FOREIGN KEY (category_id) REFERENCES schema1.db_category (id),
+CONSTRAINT db_manufacturer_fk FOREIGN KEY (manufacturer_id) REFERENCES schema3.db_manufacturer (id)
+);
+COMMIT;
 ```
 
 you would have related data distributed into different schema. In Benerator script you would define 3 different data
@@ -916,6 +916,7 @@ sources ...
 
 ```xml
 <setup>
+  
   <database id="schema1"
             url="{dbUrl}"
             driver="{dbDriver}"
@@ -923,6 +924,7 @@ sources ...
             user="{dbUser}"
             password="{dbPassword}"
             batch="{dbBatch}"/>
+  
   <database id="schema2"
             url="{dbUrl}"
             driver="{dbDriver}"
@@ -930,6 +932,7 @@ sources ...
             user="{dbUser}"
             password="{dbPassword}"
             batch="{dbBatch}"/>
+  
   <database id="schema3"
             url="{dbUrl}"
             driver="{dbDriver}"
@@ -941,23 +944,26 @@ sources ...
 </setup>
 ```
 
-when you try to fill one of the table, the Benerator scan your data source and check if all references are accessible,
-this would mean in your case, data source ***schema1*** has one table ***db_product*** with a foreign key reference into
-schema 3 and this schema is not part of scope , you would get an error message ...
+when you try to fill one of the tables, Benerator scans your data source and checks if all references are accessible. 
+In this case, data source ***schema1*** has one table ***db_product*** with a foreign key reference into
+schema 3. This schema is not part of scope, and thus, would create an error message ...
 
 ```shell
-[ERROR] com.rapiddweller.common.ObjectNotFoundException: Table db_manufacturer is referenced by table db_product but not found in the database. Possibly it was filtered out?
+[ERROR] com.rapiddweller.common.ObjectNotFoundException: Table db_manufacturer is referenced 
+by table db_product but not found in the database. Possibly it was filtered out?
 ```
 
-in this situation you have two possibilities to address this issue , you could create a view in schema 1 of table
-db_product in schema 3
+In this situation you have two possibilities to address this issue. 
+
+1. You could create a view in schema 1 of table db_product in schema 3
 
 ```sql
 CREATE VIEW schema1.db_product AS SELECT * FROM schema3.db_product;
 ```
 
-this would make the target of reference visible for Benerator. An alternative would be to use the ***includeTable*** tag
-in data source ...
+This makes the target of reference visible for Benerator. 
+
+2. Alternatively, use the ***includeTable*** tag in the data source ...
 
 ```xml
 
@@ -971,4 +977,4 @@ in data source ...
           includeTable="#all"/> 
 ```
 
-this would make all schema's visible for data source ***schema1***.
+This makes all schema's visible for data source ***schema1***.

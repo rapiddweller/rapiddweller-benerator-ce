@@ -31,7 +31,7 @@ You have the following configuration options:
 
 | Option | Description | Default Value |
 | --- | --- | --- |
-| environment | The environment name with the configuration of the database to verify (see the 'database' chapter about environment definition). | - |
+| environment | The environment name with the configuration of the database to verify (see '[Database](using_relational_databases.html#using-database-repositories)' for environment definition). | - |
 | database | The database to verify | - |
 | in | The directory from which to read the | dbsanity |
 | out | The directory in which to put the report | dbsanity-report |
@@ -41,4 +41,4 @@ You have the following configuration options:
 | skin | The DB sanity skin to use for reports | online |
 | locale | The locale in which to render values | default locale |
 | mode | DB Sanity's execution mode | default |
-| onError | Configures how to react to a requirements violation | See the chapter 'Error Handling' |
+| onError | Configures how to react to a requirements violation | See '[Error Handling](data_generation_concepts.md#handling-errors)' |

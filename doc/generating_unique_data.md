@@ -2,8 +2,9 @@
 
 ## ID Generation
 
-For generating unique data for dataset identifiers like primary keys in a database, see the chapters „Common ID Generators“ for a complete ID
-generator reference and „Using databases“ for database-related id generators.
+For generating unique data for dataset identifiers like primary keys in a database, 
+see '[Common ID Generators](component_reference.md#common-id-generators)' for a complete ID generator reference and
+'[Using Relational Databases](using_relational_databases.md)' for database-related id generators.
 
 ## Unique Number Generation
 
@@ -17,17 +18,18 @@ Most → Sequences are able to generate unique numbers. Just apply a unique="tru
 
 ### Uniqueness with Regular Expression
 
-There are ID generators which generate UUID strings, but in most cases you have constraints on string length and character select which require you to
-have something more individual and configurable.
+There are ID generators which generate UUID strings, but in most cases you have constraints on string length and 
+character select which require you to have something more individual and configurable.
 
-One of the best general approches is to use Benerator's feature to generate unique strings that match a regular expression. For example, for
-generating unique phone numbers, you could write:
+One of the best general approaches is to use Benerator's feature to generate unique strings 
+that match a regular expression. For example, for generating unique phone numbers, you could write:
 
 ```xml
+
 <attribute name="phone" type="string"pattern="[1-9][0-9]{2}\-[0-9]{4}\-[0-9]{5}" unique="true" />
 ```
 
-For an introduction to regular expressions, read the chapter „Regular Expressions“.
+For an introduction to regular expressions, read about '[Regular Expressions](regular_expression_support.md)'.
 
 ### Making Strings unique
 
@@ -52,6 +54,7 @@ If you need a more individual generation algorithm of which you do not know (or 
 filter out duplicate values.
 
 ```xml
+
 <attribute name="code" pattern="[A-Z]{6,12}" validator="UniqueValidator"/>
 ```
 
@@ -154,8 +157,7 @@ You can use the prototype approach for getting unique compsite keys: A variable'
 </generate>
 ```
 
-The most frequent application of this approach is the generation of unique database references using a prototype query. See the chapter
-_Prototype Queries_.
+The most frequent application of this approach is the generation of unique database references using a prototype query. See '[Prototype Queries](using_relational_databases.md#prototype-queries)'
 
 ## Achieving local uniqueness
 
