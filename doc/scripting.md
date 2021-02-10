@@ -6,24 +6,23 @@ specifically for the purpose of data generation.
 The invocation syntax is as described for SQL invocation and inlining: You can include the script inline like this:
 
 ```xml
-
-<database id="db" url="jdbc:hsqldb:hsql://localhost:9001"
-
-          driver="org.hsqldb.jdbcDriver" schema="public" user="sa"/>
-
-<execute type="js">
-
-importPackage(com.rapiddweller.model.data);
-
-print('DB-URL' + db.getUrl());
-
-// create user Alice var alice = new Entity('db_user'); alice.set('id', 1); alice.set('name', 'Alice'); db.store(alice);
-
-// create user Bob var bob = new Entity('db_user', 'id', '2', 'name', 'Bob'); db.store(bob);
-
-// persist everything db.flush();
-
-</execute>
+<setup>
+  <database id="db" url="jdbc:hsqldb:mem:example" driver="org.hsqldb.jdbcDriver" user="sa" schema="PUBLIC"/>
+  
+  <execute type="js">
+  
+  importPackage(com.rapiddweller.model.data);
+  
+  print('DB-URL' + db.getUrl());
+  
+  // create user Alice var alice = new Entity('db_user'); alice.set('id', 1); alice.set('name', 'Alice'); db.store(alice);
+  
+  // create user Bob var bob = new Entity('db_user', 'id', '2', 'name', 'Bob'); db.store(bob);
+  
+  // persist everything db.flush();
+  
+  </execute>
+</setup>
 ```
 
 As you see with the db variable, all objects of the benerator context are made provided to the script. In this case, it is a DBSystem bean, which is
@@ -58,20 +57,51 @@ The following attributes are available for the `<execute>` element:
 benerator supports the following script types:
 
 * shell: system shell invocations, e.g. for invoking batch files.
-
 * sql: SQL, it requires specification of the database in a target property.
-
 * jar: java library files with a configured main-class
-
 * ben: rapiddwellerScript, which is the default script language
-
 * ftl: FreeMarker
+* js: JavaScript is shipped with Benerator GraalVM dependencies
+* py: is not enable in DEFAULT a [GraalVM](https://www.graalvm.org/downloads/) as JVM is nessesary with Python installed ( this is not supported on Windows at the moment )
 
-* GraalVM: Any language that has been plugged into the local Java environment, e.g. JavaScript, Python, Ruby, Groovy and many more.
+Example:
+
+```XML
+<setup>
+    <execute type="js">
+        let c = 1;
+        const d = 6;
+
+        function add(number1){
+        c += 1;
+        return number1 + c + d;
+        }
+    </execute>
+
+    <iterate type="person" source="person.ent.csv" consumer="ConsoleExporter">
+        <variable name="age" type="integer" script="this.age"/>
+        <attribute name="multiply" type="int" script="{js:add(age)}"/>
+    </iterate>
+
+    <iterate type="person2" source="person.ent.csv" consumer="ConsoleExporter">
+        <attribute name="multiply" script="{js:add(person2.age)}"/>
+        <attribute name="multiply2" script="{js:add(person2.age)}"/>
+        <attribute name="multiply3" script="{js:add(person2.age)}"/>
+    </iterate>
+
+    <generate type="script" count="5" consumer="ConsoleExporter">
+        <variable name="count" type="integer" generator="IncrementalIdGenerator"/>
+        <attribute name="multiply" script="{js:add(count)}"/>
+    </generate>
+
+</setup>
+```
+
+Make sure not to redefine a variable or method, because these variable and functions you are defining in your Benerator script are valid for the whole runtime.
 
 ## Shell scripting
 
-You can call shell files or issue shell commands. When inlining shell commands, script expressions will be resolved. So you could, for example, use
+You can call shell files or issue shell commands. When in-lining shell commands, script expressions will be resolved. So you could, for example, use
 global properties for setting parameters of a sqlplus call:
 
 ```xml
