@@ -202,42 +202,26 @@ jobs:
     container: maven:3.6-adoptopenjdk-11
     steps:
       - uses: actions/checkout@v2
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
+        with:
+          name: setup
+      - run: bash dot.env
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Download dot.env
-        uses: actions/download-artifact@v2
-        with:
-          name: setup
-      - run: bash dot.env
-      - name: Download documentation_build_assembly for assembly
-        uses: actions/download-artifact@v2
-        with:
-          name: documentation_build_assembly
-          path: target/manual
       - name: Download build_jdk11 for assembly
         uses: actions/download-artifact@v2
         with:
           name: build_jdk11
           path: target
+      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
       - name: check content of target
         run: cd target && ls
       - run: mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
-      - name: Upload dist
-        if: github.ref == 'refs/tags/*'
-        uses: actions/upload-artifact@v2
-        with:
-          name: assembly_jdk11
-          path: |
-            target/*.tar.gz
-            target/*.zip
-            target/site/
-            target/manual/
-          if-no-files-found: error
-          retention-days: 5
       - name: Upload dist test
         uses: actions/upload-artifact@v2
         with:
@@ -587,3 +571,69 @@ jobs:
       - run: cat $ARTIFACT_FULLNAME/demo/shop/sql_server/shop.sql_server.properties
       - run: sleep 60s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-mssql.ben.xml
+
+  ###################### Release ######################
+
+  release_jdk11:
+    runs-on: ubuntu-latest
+    needs:
+      - test_jdk11
+      - build_jdk11
+    if: startsWith(github.ref, 'refs/tags/')
+    container: maven:3.6-adoptopenjdk-11
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
+        with:
+          name: setup
+      - run: bash dot.env
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Download build_jdk11 for assembly
+        uses: actions/download-artifact@v2
+        with:
+          name: build_jdk11
+          path: target
+      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
+      - name: check content of target
+        run: cd target && ls
+      - run: mvn $MAVEN_CLI_OPTS site:site assembly:single -Dmaven.test.skip=true
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ env.ARTIFACT_VERSION }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: true
+          prerelease: false
+      - name: Upload zip Release Asset
+        id: upload-release-asset-zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: target/${{ env.ARTIFACT_FULLNAME }}-dist.zip
+          asset_name: ${{ env.ARTIFACT_FULLNAME }}-dist.zip
+          asset_content_type: application/zip
+      - name: Upload tar.gz Release Asset
+        id: upload-release-asset-tar
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: target/${{ env.ARTIFACT_FULLNAME }}-dist.tar.gz
+          asset_name: ${{ env.ARTIFACT_FULLNAME }}-dist.tar.gz
+          asset_content_type: application/zip
