@@ -31,7 +31,7 @@ You have the following configuration options:
 
 | Option | Description | Default Value |
 | --- | --- | --- |
-| environment | The environment name with the configuration of the database to verify (see '[Database](using_relational_databases.html#using-database-repositories)' for environment definition). | - |
+| environment | The environment name with the configuration of the database to verify (see '[Database](using_relational_databases.md#using-database-repositories)' for environment definition). | - |
 | database | The database to verify | - |
 | in | The directory from which to read the | dbsanity |
 | out | The directory in which to put the report | dbsanity-report |
