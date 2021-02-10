@@ -7,6 +7,11 @@ import com.rapiddweller.common.Validator;
  */
 public class CreditCardValidator implements Validator<String> {
 
+  /**
+   * valid
+   *
+   * @return true or false (boolean)
+   */
   public boolean valid(String number) {
     if (number == null || number.length() < 13 || number.length() > 16) {
       return false;

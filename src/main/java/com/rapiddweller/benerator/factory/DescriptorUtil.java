@@ -333,7 +333,8 @@ public class DescriptorUtil {
    * Calculates the 'count' value.
    *
    * @param descriptor the descriptor
-   * @return the 'count' value. If a global 'maxCount' was set too, it returns the minimum of 'count' and 'maxCount'. If no 'count' value was specified, it returns null.
+   * @return the 'count' value. If a global 'maxCount' was set too, it returns the minimum of 'count' and 'maxCount'.
+   * If no 'count' value was specified, it returns null.
    */
   @SuppressWarnings("unchecked")
   public static Expression<Long> getCount(InstanceDescriptor descriptor) {

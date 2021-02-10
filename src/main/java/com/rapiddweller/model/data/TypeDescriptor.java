@@ -43,7 +43,9 @@ public abstract class TypeDescriptor extends FeatureDescriptor {
   /**
    * The constant VALIDATOR.
    */
-// constraint names
+
+  // constraint names
+
   public static final String VALIDATOR = "validator";
   /**
    * The constant FILTER.
@@ -57,7 +59,9 @@ public abstract class TypeDescriptor extends FeatureDescriptor {
   /**
    * The constant GENERATOR.
    */
-// config names
+
+  // config names
+
   public static final String GENERATOR = "generator";
   /**
    * The constant CONVERTER.

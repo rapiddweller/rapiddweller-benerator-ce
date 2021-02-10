@@ -80,7 +80,7 @@ import java.util.List;
  */
 public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTypeDescriptor> {
 
-  private final static ComplexTypeGeneratorFactory INSTANCE = new ComplexTypeGeneratorFactory();
+  private static final ComplexTypeGeneratorFactory INSTANCE = new ComplexTypeGeneratorFactory();
 
   /**
    * Gets instance.

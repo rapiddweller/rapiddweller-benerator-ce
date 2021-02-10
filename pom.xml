@@ -113,8 +113,8 @@
     <properties>
         <_rd_common_version>1.1.0-jdk-11</_rd_common_version>
         <_rd_contiperf_version>2.4.0-jdk-11</_rd_contiperf_version>
-        <_rd_format_version>1.1.1-jdk-11-SNAPSHOT</_rd_format_version>
-        <_rd_jdbacl_version>1.1.1-jdk-11-SNAPSHOT</_rd_jdbacl_version>
+        <_rd_format_version>1.1.1-jdk-11</_rd_format_version>
+        <_rd_jdbacl_version>1.1.1-jdk-11</_rd_jdbacl_version>
         <_rd_script_version>1.1.0-jdk-11</_rd_script_version>
         <!--suppress UnresolvedMavenProperty -->
         <build_number>${env.CI_JOB_ID}</build_number>

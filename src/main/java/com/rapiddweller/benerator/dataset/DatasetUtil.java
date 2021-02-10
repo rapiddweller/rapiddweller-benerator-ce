@@ -205,7 +205,7 @@ public class DatasetUtil {
     return dataset;
   }
 
-  private synchronized static Map<String, Dataset> parseDatasetTypeConfig(String nesting) {
+  private static synchronized Map<String, Dataset> parseDatasetTypeConfig(String nesting) {
     try {
       Map<String, Dataset> sets = new HashMap<>();
       Map<String, String> properties = IOUtil.readProperties(nesting + ".set.properties");

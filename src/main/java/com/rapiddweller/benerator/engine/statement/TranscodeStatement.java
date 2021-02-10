@@ -276,40 +276,41 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
     }
   }
 
-	/*
-	@Override
-    public void merge(DBSystem source, DBSystem target, int pageSize, KeyMapper mapper, Context context) {
-		String activity = "Merging " + name + " from " + source.getId() + " to " + target.getId();
-		startActivity(activity);
-		HeavyweightIterator<Object[]> nkIterator = createNkPkIterator(source, mapper, context);
-		Set<String> sourceNKs = new HashSet<String>();
-		try {
-			while (nkIterator.hasNext()) {
-				Object[] row = nkIterator.next();
-				String nk = String.valueOf(row[0]);
-				sourceNKs.add(nk);
-				Object sourceId = extractPK(row);
-				Entity sourceEntity = source.queryEntityById(name, sourceId);
-				Object targetId = mapper.getTargetPK(this, nk);
-				if (targetId == null) {
-					handleNKNotFound(nk, name, source, target);
-					continue;
-                } else {
-					Entity targetEntity = target.queryEntityById(name, targetId);
-					String message = checkEquivalence(sourceEntity, targetEntity, source, nk, mapper);
-					if (message != null)
-						handleNonEquivalence(message, source.getId(), sourceEntity);
-                }
-				// TODO v1.1 store in target if there is a rule one day
-				mapper.store(source, this, nk, sourceId, targetId);
-			}
-		} finally {
-			IOUtil.close(nkIterator);
-		}
-    	target.flush();
-    	
-		endActivity(activity, source.countEntities(name));
-    }
-*/
+
+//  @Override
+//  public void merge(DBSystem source, DBSystem target, int pageSize, KeyMapper mapper, Context context) {
+//    String activity = "Merging " + name + " from " + source.getId() + " to " + target.getId();
+//    startActivity(activity);
+//    HeavyweightIterator<Object[]> nkIterator = createNkPkIterator(source, mapper, context);
+//    Set<String> sourceNKs = new HashSet<String>();
+//    try {
+//      while (nkIterator.hasNext()) {
+//        Object[] row = nkIterator.next();
+//        String nk = String.valueOf(row[0]);
+//        sourceNKs.add(nk);
+//        Object sourceId = extractPK(row);
+//        Entity sourceEntity = source.queryEntityById(name, sourceId);
+//        Object targetId = mapper.getTargetPK(this, nk);
+//        if (targetId == null) {
+//          handleNKNotFound(nk, name, source, target);
+//          continue;
+//        } else {
+//          Entity targetEntity = target.queryEntityById(name, targetId);
+//          String message = checkEquivalence(sourceEntity, targetEntity, source, nk, mapper);
+//          if (message != null) {
+//            handleNonEquivalence(message, source.getId(), sourceEntity);
+//          }
+//        }
+//        // TODO v1.2 store in target if there is a rule one day
+//        mapper.store(source, this, nk, sourceId, targetId);
+//      }
+//    } finally {
+//      IOUtil.close(nkIterator);
+//    }
+//    target.flush();
+//
+//    endActivity(activity, source.countEntities(name));
+//  }
+
 
 }

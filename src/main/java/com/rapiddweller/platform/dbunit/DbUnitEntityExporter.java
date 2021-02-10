@@ -205,7 +205,7 @@ public class DbUnitEntityExporter extends AbstractConsumer {
     }
   }
 
-// java.lang.String overrides --------------------------------------------------------------------------------------
+  //  java.lang.String overrides --------------------------------------------------------------------------------------
 
   private void initPrinter() throws IOException {
     try {

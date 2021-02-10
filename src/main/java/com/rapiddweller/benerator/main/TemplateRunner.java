@@ -98,6 +98,7 @@ public class TemplateRunner {
     return params;
   }
 
+  @SuppressWarnings("checkstyle:FileTabCharacter")
   private static void printHelpAndExit() {
     ConsoleInfoPrinter.printHelp(
         "The class " + TemplateRunner.class.getName(),
