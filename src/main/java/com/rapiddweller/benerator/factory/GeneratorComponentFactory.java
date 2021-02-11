@@ -35,32 +35,43 @@ import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.Mode;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.model.data.VariableDescriptor;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Factory for {@link GeneratorComponent}s.<br/><br/>
  * Created: 08.08.2011 12:04:39
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class GeneratorComponentFactory {
-	
-	private static final Logger LOGGER = LogManager.getLogger(GeneratorComponentFactory.class);
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static GeneratorComponent<?> createGeneratorComponent(InstanceDescriptor descriptor, Uniqueness ownerUniqueness, BeneratorContext context) {
-		if (descriptor.getMode() == Mode.ignored) {
-			LOGGER.debug("Ignoring {}", descriptor);
-			return null;
-		}
-		if (descriptor instanceof ComponentDescriptor)
-			return ComponentBuilderFactory.createComponentBuilder((ComponentDescriptor) descriptor, ownerUniqueness, context);
-		else if (descriptor instanceof VariableDescriptor)
-			return new Variable(descriptor.getName(), VariableGeneratorFactory.createGenerator((VariableDescriptor) descriptor, context), descriptor.getTypeDescriptor().getScope());
-		else if (descriptor instanceof ArrayElementDescriptor)
-			return ComponentBuilderFactory.createComponentBuilder((ArrayElementDescriptor) descriptor, ownerUniqueness, context);
-		else
-			throw new UnsupportedOperationException("Not a supported generator compnent type: " + descriptor.getClass());
-	}
+  private static final Logger LOGGER = LogManager.getLogger(GeneratorComponentFactory.class);
+
+  /**
+   * Create generator component generator component.
+   *
+   * @param descriptor      the descriptor
+   * @param ownerUniqueness the owner uniqueness
+   * @param context         the context
+   * @return the generator component
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public static GeneratorComponent<?> createGeneratorComponent(InstanceDescriptor descriptor, Uniqueness ownerUniqueness, BeneratorContext context) {
+    if (descriptor.getMode() == Mode.ignored) {
+      LOGGER.debug("Ignoring {}", descriptor);
+      return null;
+    }
+    if (descriptor instanceof ComponentDescriptor) {
+      return ComponentBuilderFactory.createComponentBuilder((ComponentDescriptor) descriptor, ownerUniqueness, context);
+    } else if (descriptor instanceof VariableDescriptor) {
+      return new Variable(descriptor.getName(), VariableGeneratorFactory.createGenerator((VariableDescriptor) descriptor, context),
+          descriptor.getTypeDescriptor().getScope());
+    } else if (descriptor instanceof ArrayElementDescriptor) {
+      return ComponentBuilderFactory.createComponentBuilder((ArrayElementDescriptor) descriptor, ownerUniqueness, context);
+    } else {
+      throw new UnsupportedOperationException("Not a supported generator compnent type: " + descriptor.getClass());
+    }
+  }
 }

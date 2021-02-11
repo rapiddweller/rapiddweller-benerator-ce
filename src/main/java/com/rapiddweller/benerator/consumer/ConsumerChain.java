@@ -26,86 +26,122 @@
 
 package com.rapiddweller.benerator.consumer;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.IOUtil;
+
+import java.util.List;
 
 /**
  * Combines several Processors under one Processor interface.
  * Each call to the Processor is forwarded to all sub Processors.<br/>
  * <br/>
  * Created: 26.08.2007 14:50:29
- * @since 0.4.0
+ *
  * @author Volker Bergmann
+ * @since 0.4.0
  */
 public class ConsumerChain implements Consumer {
 
-    private List<Consumer> components;
+  private List<Consumer> components;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public ConsumerChain(Consumer ... components) {
-    	setComponents(components);
-    }
+  /**
+   * Instantiates a new Consumer chain.
+   *
+   * @param components the components
+   */
+  public ConsumerChain(Consumer... components) {
+    setComponents(components);
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    public void setComponents(Consumer... components) {
-    	this.components = CollectionUtil.toList(components);
-    }
+  /**
+   * Sets components.
+   *
+   * @param components the components
+   */
+  public void setComponents(Consumer... components) {
+    this.components = CollectionUtil.toList(components);
+  }
 
-    public void addComponent(Consumer component) {
-        this.components.add(component);
-    }
-    
-    public Consumer getComponent(int index) {
-        return this.components.get(index);
-    }
-    
-    public int componentCount() {
-    	return components.size();
-    }
+  /**
+   * Add component.
+   *
+   * @param component the component
+   */
+  public void addComponent(Consumer component) {
+    this.components.add(component);
+  }
 
-    // Processor interface ---------------------------------------------------------------------------------------------
+  /**
+   * Gets component.
+   *
+   * @param index the index
+   * @return the component
+   */
+  public Consumer getComponent(int index) {
+    return this.components.get(index);
+  }
 
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void startConsuming(ProductWrapper<?> wrapper) {
-		Object product = wrapper.unwrap();
-        for (Consumer processor : components)
-            processor.startConsuming(((ProductWrapper) wrapper).wrap(product));
-    }
+  /**
+   * Component count int.
+   *
+   * @return the int
+   */
+  public int componentCount() {
+    return components.size();
+  }
 
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void finishConsuming(ProductWrapper<?> wrapper) {
-		Object product = wrapper.unwrap();
-        for (Consumer processor : components)
-            processor.finishConsuming(((ProductWrapper) wrapper).wrap(product));
-    }
+  // Processor interface ---------------------------------------------------------------------------------------------
 
-	@Override
-	public void flush() {
-        for (Consumer processor : components)
-            processor.flush();
+  @Override
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public void startConsuming(ProductWrapper<?> wrapper) {
+    Object product = wrapper.unwrap();
+    for (Consumer processor : components) {
+      processor.startConsuming(((ProductWrapper) wrapper).wrap(product));
     }
+  }
 
-	@Override
-	public void close() {
-        for (Consumer consumer : components)
-            IOUtil.close(consumer);
+  @Override
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public void finishConsuming(ProductWrapper<?> wrapper) {
+    Object product = wrapper.unwrap();
+    for (Consumer processor : components) {
+      processor.finishConsuming(((ProductWrapper) wrapper).wrap(product));
     }
+  }
 
-    public List<Consumer> getComponents() {
-    	return components;
+  @Override
+  public void flush() {
+    for (Consumer processor : components) {
+      processor.flush();
     }
-    
-    @Override
-    public String toString() {
-    	return getClass().getSimpleName() + components;
+  }
+
+  @Override
+  public void close() {
+    for (Consumer consumer : components) {
+      IOUtil.close(consumer);
     }
-    
+  }
+
+  /**
+   * Gets components.
+   *
+   * @return the components
+   */
+  public List<Consumer> getComponents() {
+    return components;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + components;
+  }
+
 }

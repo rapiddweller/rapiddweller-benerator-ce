@@ -1,0 +1,104 @@
+# Project information
+docs_dir: doc
+site_name: rapiddweller Benerator
+site_url: https://www.benerator.de/ce/doc
+site_author: rapiddweller GmbH & Volker Bergmann
+copyright: Copyright &copy; 2006 - 2021 rapiddweller GmbH & Volker Bergmann
+site_description: >-
+  This document is supposed to become a complete summary of everything you need to know of Benerator usage,
+  use it efficiently and extend it as you need. This reference is under construction and will update from time to time.
+  Feel free to contribute your ideas in our repo at https://github.com/rapiddweller/rapiddweller-benerator-ce/.
+
+# Repository
+repo_name: rapiddweller-benerator-ce
+repo_url: https://github.com/rapiddweller/rapiddweller-benerator-ce
+edit_uri: ""
+
+extra_css:
+  - stylesheets/extra.css
+  - stylesheets/termynal.css
+
+extra_javascript:
+  - https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js
+  - js/termynal.js
+  - js/custom.js
+
+use_directory_urls: false
+
+theme:
+  name: material
+  logo: assets/rd.png
+  favicon: assets/rd.png
+  language: en
+  font:
+    code: Roboto Mono
+  palette:
+    accent: teal
+
+plugins:
+  - with-pdf:
+      author: rapiddweller GmbH & Volker Bergmann
+      copyright: Copyright &copy; 2006 - 2021 rapiddweller GmbH & Volker Bergmann
+      toc_level: 1
+      cover_title: rapiddweller-benerator-ce
+      cover_subtitle: manual
+      output_path: rapiddweller-benerator-ce-manual.pdf
+  - search
+
+markdown_extensions:
+  - markdown.extensions.codehilite:
+      guess_lang: false
+  - markdown_include.include:
+      base_path: doc
+  - admonition
+  - codehilite
+  - extra
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_div_format ''
+  - pymdownx.tabbed
+
+# Page tree
+nav:
+  - Home: index.md
+  - Goals and Features: benerator_goals_features.md
+  - Installation: installation.md
+  - The Benerator Project Wizard: the_benerator_project_wizard.md
+  - Quick tour through the descriptor file format: quick_tour_through_the_descriptor_file_format.md
+  - Data Generation Concepts: data_generation_concepts.md
+  - Regular Expression Support: regular_expression_support.md
+  - Processing and creating CSV Files: processing_and_creating_csv_files.md
+  - Using Relational Databases: using_relational_databases.md
+  - Generating XML Files: generating_xml_files.md
+  - Advanced Topics: advanced_topics.md
+  - Generating Unique Data: generating_unique_data.md
+  - Scripting: scripting.md
+  - rapiddwellerScript: rapiddwellerscript.md
+  - Command Line Tools: command_line_tools.md
+  - Domains: domains.md
+  - Component Reference: component_reference.md
+  - Using DB Sanity: using_db_sanity.md
+  - Maven Benerator Plugin: maven_benerator_plugin.md
+  - Extending Benerator: extending_benerator.md
+  - Using Benerator as Load Generator: using_benerator_as_load_generator.md
+  - Troubleshooting: troubleshooting.md
+  - Monitoring Benerator: monitoring_benerator.md
+  - Benerator Performance Tuning: benerator_performance_tuning.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github-square
+      link: https://github.com/rapiddweller/rapiddweller-benerator-ce
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/rapiddweller
+    - icon: fontawesome/brands/facebook-square
+      link: https://www.facebook.com/rapiddweller/
+    - icon: fontawesome/brands/twitter-square
+      link: https://twitter.com/intent/follow?screen_name=rapiddweller
+
+# Google Analytics
+google_analytics:
+  - !!python/object/apply:os.getenv [ "GOOGLE_ANALYTICS_KEY" ]
+  - auto

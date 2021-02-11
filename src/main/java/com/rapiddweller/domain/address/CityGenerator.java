@@ -42,36 +42,47 @@ import com.rapiddweller.benerator.util.GeneratorUtil;
  *
  * @author Volker Bergmann
  */
-public class CityGenerator extends AbstractDatasetGenerator<City> implements NonNullGenerator<City> {
+public class CityGenerator extends AbstractDatasetGenerator<City>
+    implements NonNullGenerator<City> {
 
-    private static final String REGION = "/com/rapiddweller/dataset/region";
+  private static final String REGION = "/com/rapiddweller/dataset/region";
 
-    public CityGenerator(String dataset) {
-        super(City.class, REGION, dataset, true);
+  /**
+   * Instantiates a new City generator.
+   *
+   * @param dataset the dataset
+   */
+  public CityGenerator(String dataset) {
+    super(City.class, REGION, dataset, true);
+  }
+
+  @Override
+  protected boolean isAtomic(Dataset dataset) {
+    Country country = Country.getInstance(dataset.getName(), false);
+    return (country != null);
+  }
+
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  @Override
+  protected WeightedGenerator<City> createGeneratorForAtomicDataset(
+      Dataset dataset) {
+    IndividualWeightSampleGenerator<City> generator =
+        new IndividualWeightSampleGenerator<City>(
+            City.class,
+            (IndividualWeight) new FeatureWeight("population"));
+    Country country = Country.getInstance(dataset.getName());
+    country.checkCities();
+    for (State state : country.getStates()) {
+      for (City city : state.getCities()) {
+        generator.addValue(city);
+      }
     }
+    return (generator.getVariety() > 0 ? generator : null);
+  }
 
-    @Override
-    protected boolean isAtomic(Dataset dataset) {
-        Country country = Country.getInstance(dataset.getName(), false);
-        return (country != null);
-    }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    @Override
-    protected WeightedGenerator<City> createGeneratorForAtomicDataset(Dataset dataset) {
-        IndividualWeightSampleGenerator<City> generator = new IndividualWeightSampleGenerator<City>(
-                City.class, (IndividualWeight) new FeatureWeight("population"));
-        Country country = Country.getInstance(dataset.getName());
-        country.checkCities();
-        for (State state : country.getStates())
-            for (City city : state.getCities())
-                generator.addValue(city);
-        return (generator.getVariety() > 0 ? generator : null);
-    }
-
-    @Override
-    public City generate() {
-        return GeneratorUtil.generateNonNull(this);
-    }
+  @Override
+  public City generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
 
 }

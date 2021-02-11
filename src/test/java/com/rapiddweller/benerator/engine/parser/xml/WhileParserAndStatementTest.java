@@ -26,38 +26,45 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static org.junit.Assert.assertEquals;
-
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link WhileParser} and the {@link WhileStatement}.<br/><br/>
  * Created: 19.02.2010 10:06:29
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class WhileParserAndStatementTest extends BeneratorIntegrationTest {
 
-	@Test
-	public void testNoLoop() throws Exception {
-		context.setGlobal("count", 0);
-		parseAndExecute(
-				"<while test='2==3'>" +
-				"	<evaluate id='count'>count + 1</evaluate>" +
-				"</while>");
-		assertEquals(0, context.get("count"));
-	}
-	
-	@Test
-	public void testThreeLoops() throws Exception {
-		context.setGlobal("count", 0);
-		parseAndExecute(
-				"<while test='count &lt; 3'>" +
-				"	<execute>count = count + 1</execute>" +
-				"</while>");
-		assertEquals(3, context.get("count"));
-	}
-	
+  /**
+   * Test no loop.
+   */
+  @Test
+  public void testNoLoop() {
+    context.setGlobal("count", 0);
+    parseAndExecute(
+        "<while test='2==3'>" +
+            "	<evaluate id='count'>count + 1</evaluate>" +
+            "</while>");
+    assertEquals(0, context.get("count"));
+  }
+
+  /**
+   * Test three loops.
+   */
+  @Test
+  public void testThreeLoops() {
+    context.setGlobal("count", 0);
+    parseAndExecute(
+        "<while test='count &lt; 3'>" +
+            "	<execute>count = count + 1</execute>" +
+            "</while>");
+    assertEquals(3, context.get("count"));
+  }
+
 }

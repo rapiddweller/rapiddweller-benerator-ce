@@ -29,9 +29,16 @@ package com.rapiddweller.benerator.engine;
 /**
  * Parent interface for all statement implementations.<br/><br/>
  * Created: 27.10.2009 15:57:12
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public interface Statement {
-	boolean execute(BeneratorContext context);
+  /**
+   * Execute boolean.
+   *
+   * @param context the context
+   * @return the boolean
+   */
+  boolean execute(BeneratorContext context);
 }

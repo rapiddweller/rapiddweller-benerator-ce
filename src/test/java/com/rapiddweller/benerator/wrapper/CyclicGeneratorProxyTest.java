@@ -26,85 +26,97 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.util.UnsafeGenerator;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link CyclicGeneratorProxy}.<br/>
  * <br/>
  * Created at 18.03.2009 09:17:10
- * @since 0.5.9
+ *
  * @author Volker Bergmann
+ * @since 0.5.9
  */
-
 public class CyclicGeneratorProxyTest extends GeneratorTest {
-	
-	@Test
-	public void testSingleIteration() {
-		CyclicGeneratorProxy<Integer> proxy = new CyclicGeneratorProxy<Integer>(new Source12());
-		proxy.init(context);
-		expect12(proxy);
-		proxy.close();
-		assertUnavailable(proxy);
-	}
 
-	@Test
-	public void testCyclicIteration() {
-		CyclicGeneratorProxy<Integer> proxy = new CyclicGeneratorProxy<Integer>(new Source12());
-		proxy.init(context);
-		expect12(proxy);
-		expect12(proxy);
-		proxy.close();
-		assertUnavailable(proxy);
-	}
+  /**
+   * Test single iteration.
+   */
+  @Test
+  public void testSingleIteration() {
+    CyclicGeneratorProxy<Integer> proxy = new CyclicGeneratorProxy<>(new Source12());
+    proxy.init(context);
+    expect12(proxy);
+    proxy.close();
+    assertUnavailable(proxy);
+  }
 
-	@Test
-	public void testReset() {
-		CyclicGeneratorProxy<Integer> proxy = new CyclicGeneratorProxy<Integer>(new Source12());
-		proxy.init(context);
-		assertAvailable(proxy);
-		proxy.reset();
-		expect12(proxy);
-		proxy.close();
-		assertUnavailable(proxy);
-	}
-	
-	// helper methods --------------------------------------------------------------------------------------------------
+  /**
+   * Test cyclic iteration.
+   */
+  @Test
+  public void testCyclicIteration() {
+    CyclicGeneratorProxy<Integer> proxy = new CyclicGeneratorProxy<>(new Source12());
+    proxy.init(context);
+    expect12(proxy);
+    expect12(proxy);
+    proxy.close();
+    assertUnavailable(proxy);
+  }
 
-	private static void expect12(CyclicGeneratorProxy<Integer> wrapper) {
-		assertEquals(1, (int) GeneratorUtil.generateNonNull(wrapper));
-		assertEquals(2, (int) GeneratorUtil.generateNonNull(wrapper));
+  /**
+   * Test reset.
+   */
+  @Test
+  public void testReset() {
+    CyclicGeneratorProxy<Integer> proxy = new CyclicGeneratorProxy<>(new Source12());
+    proxy.init(context);
+    assertAvailable(proxy);
+    proxy.reset();
+    expect12(proxy);
+    proxy.close();
+    assertUnavailable(proxy);
+  }
+
+  // helper methods --------------------------------------------------------------------------------------------------
+
+  private static void expect12(CyclicGeneratorProxy<Integer> wrapper) {
+    assertEquals(1, (int) GeneratorUtil.generateNonNull(wrapper));
+    assertEquals(2, (int) GeneratorUtil.generateNonNull(wrapper));
+  }
+
+  /**
+   * The type Source 12.
+   */
+  public static class Source12 extends UnsafeGenerator<Integer> {
+
+    private int n = 0;
+
+    @Override
+    public Class<Integer> getGeneratedType() {
+      return Integer.class;
     }
 
-	public static class Source12 extends UnsafeGenerator<Integer> {
-		
-		private int n = 0;
-		
-		@Override
-		public Class<Integer> getGeneratedType() {
-	        return Integer.class;
-        }
-		
-		@Override
-		public ProductWrapper<Integer> generate(ProductWrapper<Integer> wrapper) {
-	        return (n < 2 ? wrapper.wrap(++n) : null);
-        }
+    @Override
+    public ProductWrapper<Integer> generate(ProductWrapper<Integer> wrapper) {
+      return (n < 2 ? wrapper.wrap(++n) : null);
+    }
 
-        @Override
-        public void reset() throws IllegalGeneratorStateException {
-	        n = 0;
-        }
+    @Override
+    public void reset() throws IllegalGeneratorStateException {
+      n = 0;
+    }
 
-        @Override
-        public void close() {
-	        n = 3;
-        }
+    @Override
+    public void close() {
+      n = 3;
+    }
 
-	}
+  }
 
 }

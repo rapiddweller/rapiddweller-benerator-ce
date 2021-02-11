@@ -28,10 +28,10 @@ package com.rapiddweller.platform.xls;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.DataSourceProvider;
+import com.rapiddweller.common.Converter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntitySource;
-import com.rapiddweller.commons.Converter;
 
 /**
  * {@link DataSourceProvider} implementation which creates XLS entity sources.<br/><br/>
@@ -42,21 +42,32 @@ import com.rapiddweller.commons.Converter;
  */
 public class XLSEntitySourceProvider implements DataSourceProvider<Entity> {
 
-    private final ComplexTypeDescriptor entityType;
-    private final Converter<String, ?> scriptConverter;
-    private final boolean formatted;
+  private final ComplexTypeDescriptor entityType;
+  private final Converter<String, ?> scriptConverter;
+  private final boolean formatted;
 
-    public XLSEntitySourceProvider(ComplexTypeDescriptor entityType, boolean formatted, Converter<String, ?> scriptConverter) {
-        this.entityType = entityType;
-        this.scriptConverter = scriptConverter;
-        this.formatted = formatted;
-    }
+  /**
+   * Instantiates a new Xls entity source provider.
+   *
+   * @param entityType      the entity type
+   * @param formatted       the formatted
+   * @param scriptConverter the script converter
+   */
+  public XLSEntitySourceProvider(ComplexTypeDescriptor entityType,
+                                 boolean formatted,
+                                 Converter<String, ?> scriptConverter) {
+    this.entityType = entityType;
+    this.scriptConverter = scriptConverter;
+    this.formatted = formatted;
+  }
 
-    @Override
-    public EntitySource create(String uri, BeneratorContext context) {
-        XLSEntitySource source = new XLSEntitySource(uri, scriptConverter, entityType, entityType.getSegment(), formatted);
-        source.setContext(context);
-        return source;
-    }
+  @Override
+  public EntitySource create(String uri, BeneratorContext context) {
+    XLSEntitySource source =
+        new XLSEntitySource(uri, scriptConverter, entityType,
+            entityType.getSegment(), formatted);
+    source.setContext(context);
+    return source;
+  }
 
 }

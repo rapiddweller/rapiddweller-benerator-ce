@@ -26,47 +26,59 @@
 
 package com.rapiddweller.benerator.dataset;
 
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.ArrayUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.Test;
+
 import java.util.List;
 
-import com.rapiddweller.commons.ArrayFormat;
-import com.rapiddweller.commons.ArrayUtil;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link Dataset} features.<br/><br/>
  * Created: 21.03.2008 14:20:59
- * @since 0.5.0
+ *
  * @author Volker Bergmann
+ * @since 0.5.0
  */
 public class DatasetTest {
-    
-    private static Logger logger = LogManager.getLogger(DatasetTest.class);
-    
-    private static final String REGION = "com/rapiddweller/dataset/region";
-    public static final String TYPE = "test";
-    
-    @Test
-    public void testAtomicSet() {
-        Dataset set = DatasetUtil.getDataset(REGION, "DE");
-        assertEquals("DE", set.getName());
-    }
-    
-    @Test
-    public void testNestedSet() {
-        Dataset eu = DatasetUtil.getDataset(REGION, "europe");
-        assertNotNull(eu);
-        Dataset centralEurope = DatasetUtil.getDataset(REGION, "central_europe");
-        assertTrue(eu.getSubSets().contains(centralEurope));
-        List<Dataset> atomicSubSets = eu.allAtomicSubSets();
-        assertTrue(atomicSubSets.contains(DatasetUtil.getDataset(REGION, "DE")));
-        assertTrue(atomicSubSets.contains(DatasetUtil.getDataset(REGION, "AT")));
-        String[] dataFiles = DatasetUtil.getDataFiles("com/rapiddweller/domain/person/familyName_{0}.csv", "europe", REGION);
-        logger.debug(ArrayFormat.format(dataFiles));
-        assertTrue(ArrayUtil.contains("com/rapiddweller/domain/person/familyName_DE.csv", dataFiles));
-    }
-    
+
+  private static final Logger logger = LogManager.getLogger(DatasetTest.class);
+
+  private static final String REGION = "com/rapiddweller/dataset/region";
+  /**
+   * The constant TYPE.
+   */
+  public static final String TYPE = "test";
+
+  /**
+   * Test atomic set.
+   */
+  @Test
+  public void testAtomicSet() {
+    Dataset set = DatasetUtil.getDataset(REGION, "DE");
+    assertEquals("DE", set.getName());
+  }
+
+  /**
+   * Test nested set.
+   */
+  @Test
+  public void testNestedSet() {
+    Dataset eu = DatasetUtil.getDataset(REGION, "europe");
+    assertNotNull(eu);
+    Dataset centralEurope = DatasetUtil.getDataset(REGION, "central_europe");
+    assertTrue(eu.getSubSets().contains(centralEurope));
+    List<Dataset> atomicSubSets = eu.allAtomicSubSets();
+    assertTrue(atomicSubSets.contains(DatasetUtil.getDataset(REGION, "DE")));
+    assertTrue(atomicSubSets.contains(DatasetUtil.getDataset(REGION, "AT")));
+    String[] dataFiles = DatasetUtil.getDataFiles("com/rapiddweller/domain/person/familyName_{0}.csv", "europe", REGION);
+    logger.debug(ArrayFormat.format(dataFiles));
+    assertTrue(ArrayUtil.contains("com/rapiddweller/domain/person/familyName_DE.csv", dataFiles));
+  }
+
 }

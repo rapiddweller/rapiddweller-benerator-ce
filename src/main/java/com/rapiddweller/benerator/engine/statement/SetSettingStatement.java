@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.mutator.AnyMutator;
+import com.rapiddweller.common.mutator.AnyMutator;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 
@@ -36,29 +36,35 @@ import com.rapiddweller.script.expression.ExpressionUtil;
  * Sets a global Benerator property.<br/>
  * <br/>
  * Created at 23.07.2009 14:50:08
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class SetSettingStatement implements Statement {
-	
-	private final String propertyName;
-	private final Expression<?> valueExpression;
 
-    public SetSettingStatement(String propertyName, Expression<?> valueExpression) {
-    	this.propertyName = propertyName;
-    	this.valueExpression = valueExpression;
+  private final String propertyName;
+  private final Expression<?> valueExpression;
+
+  /**
+   * Instantiates a new Set setting statement.
+   *
+   * @param propertyName    the property name
+   * @param valueExpression the value expression
+   */
+  public SetSettingStatement(String propertyName, Expression<?> valueExpression) {
+    this.propertyName = propertyName;
+    this.valueExpression = valueExpression;
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    Object value = ExpressionUtil.evaluate(valueExpression, context);
+    if (propertyName.startsWith("context.")) {
+      AnyMutator.setValue(context, propertyName, value, true, true);
+    } else {
+      context.setGlobal(propertyName, value);
     }
-
-	@Override
-	public boolean execute(BeneratorContext context) {
-        Object value = ExpressionUtil.evaluate(valueExpression, context);
-		if (propertyName.startsWith("context."))
-	        AnyMutator.setValue(context, propertyName, value, true, true);
-        else {
-			context.setGlobal(propertyName, value);
-        }
-    	return true;
-	}
+    return true;
+  }
 
 }

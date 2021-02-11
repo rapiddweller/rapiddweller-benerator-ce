@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.DescriptorUtil;
-import com.rapiddweller.commons.Context;
+import com.rapiddweller.common.Context;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.script.Expression;
@@ -37,35 +37,47 @@ import org.w3c.dom.Element;
 /**
  * {@link Expression} which changes an {@link Entity}'s type.<br/><br/>
  * Created: 18.04.2011 14:48:57
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class MutatingTypeExpression implements Expression<ComplexTypeDescriptor> {
 
-	private Element element;
-	private String typeName;
+  private final Element element;
+  private String typeName;
 
-	public MutatingTypeExpression(Element element, String typeName) {
-		this.element = element;
-		this.typeName = typeName;
-	}
+  /**
+   * Instantiates a new Mutating type expression.
+   *
+   * @param element  the element
+   * @param typeName the type name
+   */
+  public MutatingTypeExpression(Element element, String typeName) {
+    this.element = element;
+    this.typeName = typeName;
+  }
 
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
+  /**
+   * Sets type name.
+   *
+   * @param typeName the type name
+   */
+  public void setTypeName(String typeName) {
+    this.typeName = typeName;
+  }
 
-	@Override
-	public boolean isConstant() {
-		return true;
-	}
+  @Override
+  public boolean isConstant() {
+    return true;
+  }
 
-	@Override
-	public ComplexTypeDescriptor evaluate(Context ctx) {
-		BeneratorContext context = (BeneratorContext) ctx;
-	    ComplexTypeDescriptor parent = (ComplexTypeDescriptor) context.getDataModel().getTypeDescriptor(typeName);
-	    ComplexTypeDescriptor type = new ComplexTypeDescriptor(typeName, context.getLocalDescriptorProvider(), parent);
-	    DescriptorUtil.parseComponentConfig(element, type, context);
-	    return type;
-	}
+  @Override
+  public ComplexTypeDescriptor evaluate(Context ctx) {
+    BeneratorContext context = (BeneratorContext) ctx;
+    ComplexTypeDescriptor parent = (ComplexTypeDescriptor) context.getDataModel().getTypeDescriptor(typeName);
+    ComplexTypeDescriptor type = new ComplexTypeDescriptor(typeName, context.getLocalDescriptorProvider(), parent);
+    DescriptorUtil.parseComponentConfig(element, type, context);
+    return type;
+  }
 
 }

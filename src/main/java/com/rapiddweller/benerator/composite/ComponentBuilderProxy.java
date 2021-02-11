@@ -28,57 +28,67 @@ package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.engine.AbstractScopedLifeCycleHolder;
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.commons.Assert;
+import com.rapiddweller.common.Assert;
 
 /**
  * Proxy class for a {@link ComponentBuilder}.<br/><br/>
  * Created: 11.10.2010 11:10:51
- * @since 0.6.4
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class ComponentBuilderProxy<E> extends AbstractScopedLifeCycleHolder implements ComponentBuilder<E> {
-	
-	protected final ComponentBuilder<E> source;
 
-	public ComponentBuilderProxy(ComponentBuilder<E> source) {
-		super(source.getScope());
-		Assert.notNull(source, "source");
-	    this.source = source;
-    }
+  /**
+   * The Source.
+   */
+  protected final ComponentBuilder<E> source;
 
-	@Override
-	public boolean isParallelizable() {
-	    return source.isParallelizable();
-    }
+  /**
+   * Instantiates a new Component builder proxy.
+   *
+   * @param source the source
+   */
+  public ComponentBuilderProxy(ComponentBuilder<E> source) {
+    super(source.getScope());
+    Assert.notNull(source, "source");
+    this.source = source;
+  }
 
-	@Override
-	public boolean isThreadSafe() {
-	    return source.isThreadSafe();
-    }
+  @Override
+  public boolean isParallelizable() {
+    return source.isParallelizable();
+  }
 
-	@Override
-	public void init(BeneratorContext context) {
-		source.init(context);
-	}
+  @Override
+  public boolean isThreadSafe() {
+    return source.isThreadSafe();
+  }
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-	    return source.execute(context);
-    }
-	
-	@Override
-	public void reset() {
-	    source.reset();
-    }
+  @Override
+  public void init(BeneratorContext context) {
+    source.init(context);
+  }
 
-	@Override
-	public void close() {
-	    source.close();
-    }
+  @Override
+  public boolean execute(BeneratorContext context) {
+    return source.execute(context);
+  }
 
-	@Override
-	public String getMessage() {
-		return source.getMessage();
-	}
+  @Override
+  public void reset() {
+    source.reset();
+  }
+
+  @Override
+  public void close() {
+    source.close();
+  }
+
+  @Override
+  public String getMessage() {
+    return source.getMessage();
+  }
 
 }

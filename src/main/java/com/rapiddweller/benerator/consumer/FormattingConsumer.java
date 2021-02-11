@@ -26,101 +26,211 @@
 
 package com.rapiddweller.benerator.consumer;
 
-import com.rapiddweller.commons.Capitalization;
-import com.rapiddweller.commons.converter.ToStringConverter;
+import com.rapiddweller.common.Capitalization;
+import com.rapiddweller.common.converter.ToStringConverter;
 
 /**
  * Provides a datePattern property for child classes.<br/><br/>
  * Created at 08.04.2008 07:18:17
- * @since 0.5.1
+ *
  * @author Volker Bergmann
+ * @since 0.5.1
  */
 public abstract class FormattingConsumer extends AbstractConsumer {
 
-	protected ToStringConverter plainConverter = new ToStringConverter();
+  /**
+   * The Plain converter.
+   */
+  protected final ToStringConverter plainConverter = new ToStringConverter();
 
-	public String getNullString() {
-		return plainConverter.getNullString();
-	}
+  /**
+   * Gets null string.
+   *
+   * @return the null string
+   */
+  public String getNullString() {
+    return plainConverter.getNullString();
+  }
 
-	public void setNullString(String nullString) {
-		plainConverter.setNullString(nullString);
-	}
+  /**
+   * Sets null string.
+   *
+   * @param nullString the null string
+   */
+  public void setNullString(String nullString) {
+    plainConverter.setNullString(nullString);
+  }
 
-	public String getDatePattern() {
-		return plainConverter.getDatePattern();
-	}
+  /**
+   * Gets date pattern.
+   *
+   * @return the date pattern
+   */
+  public String getDatePattern() {
+    return plainConverter.getDatePattern();
+  }
 
-	public void setDatePattern(String datePattern) {
-		plainConverter.setDatePattern(datePattern);
-	}
+  /**
+   * Sets date pattern.
+   *
+   * @param datePattern the date pattern
+   */
+  public void setDatePattern(String datePattern) {
+    plainConverter.setDatePattern(datePattern);
+  }
 
-	public Capitalization getDateCapitalization() {
-		return plainConverter.getDateCapitalization();
-	}
+  /**
+   * Gets date capitalization.
+   *
+   * @return the date capitalization
+   */
+  public Capitalization getDateCapitalization() {
+    return plainConverter.getDateCapitalization();
+  }
 
-	public void setDateCapitalization(Capitalization dateCapitalization) {
-		plainConverter.setDateCapitalization(dateCapitalization);
-	}
+  /**
+   * Sets date capitalization.
+   *
+   * @param dateCapitalization the date capitalization
+   */
+  public void setDateCapitalization(Capitalization dateCapitalization) {
+    plainConverter.setDateCapitalization(dateCapitalization);
+  }
 
-	public String getDateTimePattern() {
-		return plainConverter.getDateTimePattern();
-	}	
+  /**
+   * Gets date time pattern.
+   *
+   * @return the date time pattern
+   */
+  public String getDateTimePattern() {
+    return plainConverter.getDateTimePattern();
+  }
 
-	public void setDateTimePattern(String dateTimePattern) {
-		plainConverter.setDateTimePattern(dateTimePattern);
-	}
-	
-	public String getTimestampPattern() {
-		return plainConverter.getTimestampPattern();
-	}	
+  /**
+   * Sets date time pattern.
+   *
+   * @param dateTimePattern the date time pattern
+   */
+  public void setDateTimePattern(String dateTimePattern) {
+    plainConverter.setDateTimePattern(dateTimePattern);
+  }
 
-	public void setTimestampPattern(String timestampPattern) {
-		plainConverter.setTimestampPattern(timestampPattern);
-	}
-	
-	public Capitalization getTimestampCapitalization() {
-		return plainConverter.getTimestampCapitalization();
-	}
+  /**
+   * Gets timestamp pattern.
+   *
+   * @return the timestamp pattern
+   */
+  public String getTimestampPattern() {
+    return plainConverter.getTimestampPattern();
+  }
 
-	public void setTimestampCapitalization(Capitalization timestampCapitalization) {
-		plainConverter.setTimestampCapitalization(timestampCapitalization);
-	}
+  /**
+   * Sets timestamp pattern.
+   *
+   * @param timestampPattern the timestamp pattern
+   */
+  public void setTimestampPattern(String timestampPattern) {
+    plainConverter.setTimestampPattern(timestampPattern);
+  }
 
-	public String getDecimalPattern() {
-		return plainConverter.getDecimalPattern();
-	}
+  /**
+   * Gets timestamp capitalization.
+   *
+   * @return the timestamp capitalization
+   */
+  public Capitalization getTimestampCapitalization() {
+    return plainConverter.getTimestampCapitalization();
+  }
 
-	public void setDecimalPattern(String decimalPattern) {
-		plainConverter.setDecimalPattern(decimalPattern);
-	}
+  /**
+   * Sets timestamp capitalization.
+   *
+   * @param timestampCapitalization the timestamp capitalization
+   */
+  public void setTimestampCapitalization(Capitalization timestampCapitalization) {
+    plainConverter.setTimestampCapitalization(timestampCapitalization);
+  }
 
-	public char getDecimalSeparator() {
-    	return plainConverter.getDecimalSeparator();
-    }
+  /**
+   * Gets decimal pattern.
+   *
+   * @return the decimal pattern
+   */
+  public String getDecimalPattern() {
+    return plainConverter.getDecimalPattern();
+  }
 
-	public void setDecimalSeparator(char decimalSeparator) {
-		plainConverter.setDecimalSeparator(decimalSeparator);
-    }
-	
-	public String getTimePattern() {
-		return plainConverter.getTimePattern();
-	}
-	
-    public void setTimePattern(String timePattern) {
-		plainConverter.setTimePattern(timePattern);
-    }
+  /**
+   * Sets decimal pattern.
+   *
+   * @param decimalPattern the decimal pattern
+   */
+  public void setDecimalPattern(String decimalPattern) {
+    plainConverter.setDecimalPattern(decimalPattern);
+  }
 
-    public String getIntegralPattern() {
-    	return plainConverter.getIntegralPattern();
-    }
-    
-    public void setIntegralPattern(String integralPattern) {
-		plainConverter.setIntegralPattern(integralPattern);
-    }
+  /**
+   * Gets decimal separator.
+   *
+   * @return the decimal separator
+   */
+  public char getDecimalSeparator() {
+    return plainConverter.getDecimalSeparator();
+  }
 
-	protected String format(Object o) {
-		return plainConverter.convert(o);
-	}
-	
+  /**
+   * Sets decimal separator.
+   *
+   * @param decimalSeparator the decimal separator
+   */
+  public void setDecimalSeparator(char decimalSeparator) {
+    plainConverter.setDecimalSeparator(decimalSeparator);
+  }
+
+  /**
+   * Gets time pattern.
+   *
+   * @return the time pattern
+   */
+  public String getTimePattern() {
+    return plainConverter.getTimePattern();
+  }
+
+  /**
+   * Sets time pattern.
+   *
+   * @param timePattern the time pattern
+   */
+  public void setTimePattern(String timePattern) {
+    plainConverter.setTimePattern(timePattern);
+  }
+
+  /**
+   * Gets integral pattern.
+   *
+   * @return the integral pattern
+   */
+  public String getIntegralPattern() {
+    return plainConverter.getIntegralPattern();
+  }
+
+  /**
+   * Sets integral pattern.
+   *
+   * @param integralPattern the integral pattern
+   */
+  public void setIntegralPattern(String integralPattern) {
+    plainConverter.setIntegralPattern(integralPattern);
+  }
+
+  /**
+   * Format string.
+   *
+   * @param o the o
+   * @return the string
+   */
+  protected String format(Object o) {
+    return plainConverter.convert(o);
+  }
+
 }

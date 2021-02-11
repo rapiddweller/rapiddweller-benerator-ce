@@ -31,79 +31,93 @@ import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.util.UnsafeGenerator;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link GeneratorWrapper}.<br/>
  * <br/>
  * Created at 18.03.2009 07:55:31
- * @since 0.5.9
+ *
  * @author Volker Bergmann
+ * @since 0.5.9
  */
-
 public class GeneratorWrapperTest extends GeneratorTest {
-	
-	@Test
-	public void testReset() {
-		MyWrapper wrapper = initialize(new MyWrapper(new Source12()));
-		expect12(wrapper);
-		wrapper.reset();
-		expect12(wrapper);
-		wrapper.close();
-	}
-	
-	// helpers ---------------------------------------------------------------------------------------------------------
 
-	private static void expect12(MyWrapper wrapper) {
-		assertEquals(1, (int) GeneratorUtil.generateNonNull(wrapper));
-		assertEquals(2, (int) GeneratorUtil.generateNonNull(wrapper));
-		assertUnavailable(wrapper);
+  /**
+   * Test reset.
+   */
+  @Test
+  public void testReset() {
+    MyWrapper wrapper = initialize(new MyWrapper(new Source12()));
+    expect12(wrapper);
+    wrapper.reset();
+    expect12(wrapper);
+    wrapper.close();
+  }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  private static void expect12(MyWrapper wrapper) {
+    assertEquals(1, (int) GeneratorUtil.generateNonNull(wrapper));
+    assertEquals(2, (int) GeneratorUtil.generateNonNull(wrapper));
+    assertUnavailable(wrapper);
+  }
+
+  /**
+   * The type My wrapper.
+   */
+  public static class MyWrapper extends GeneratorWrapper<Integer, Integer> {
+
+    /**
+     * Instantiates a new My wrapper.
+     *
+     * @param source the source
+     */
+    public MyWrapper(Generator<Integer> source) {
+      super(source);
     }
-	
-	public static class MyWrapper extends GeneratorWrapper<Integer, Integer> {
 
-        public MyWrapper(Generator<Integer> source) {
-	        super(source);
-        }
+    @Override
+    public Class<Integer> getGeneratedType() {
+      return getSource().getGeneratedType();
+    }
 
-        @Override
-		public Class<Integer> getGeneratedType() {
-	        return getSource().getGeneratedType();
-        }
-		
-		@Override
-		public ProductWrapper<Integer> generate(ProductWrapper<Integer> wrapper) {
-	        return getSource().generate(wrapper);
-        }
+    @Override
+    public ProductWrapper<Integer> generate(ProductWrapper<Integer> wrapper) {
+      return getSource().generate(wrapper);
+    }
 
-	}
-	
-	public static class Source12 extends UnsafeGenerator<Integer> {
-		
-		private int n = 0;
-		
-		@Override
-		public Class<Integer> getGeneratedType() {
-	        return Integer.class;
-        }
+  }
 
-		@Override
-		public ProductWrapper<Integer> generate(ProductWrapper<Integer> wrapper) {
-        	return (n < 2 ? wrapper.wrap(++n) : null);
-        }
+  /**
+   * The type Source 12.
+   */
+  public static class Source12 extends UnsafeGenerator<Integer> {
 
-        @Override
-        public void reset() throws IllegalGeneratorStateException {
-	        n = 0;
-        }
+    private int n = 0;
 
-        @Override
-        public void close() {
-	        n = 3;
-        }
+    @Override
+    public Class<Integer> getGeneratedType() {
+      return Integer.class;
+    }
 
-	}
-	
+    @Override
+    public ProductWrapper<Integer> generate(ProductWrapper<Integer> wrapper) {
+      return (n < 2 ? wrapper.wrap(++n) : null);
+    }
+
+    @Override
+    public void reset() throws IllegalGeneratorStateException {
+      n = 0;
+    }
+
+    @Override
+    public void close() {
+      n = 3;
+    }
+
+  }
+
 }

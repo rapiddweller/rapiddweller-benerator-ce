@@ -34,11 +34,17 @@ import java.lang.annotation.Target;
 /**
  * Annotation for configuring Feed4TestNG test method invocation.<br/><br/>
  * Created: 19.04.2010 09:47:18
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.METHOD } )
+@Target({ElementType.METHOD})
 public @interface InvocationCount {
-	int value();
+  /**
+   * Value int.
+   *
+   * @return the int
+   */
+  int value();
 }

@@ -29,14 +29,15 @@ package com.rapiddweller.benerator.engine;
 /**
  * {@link Statement} implementation that does not do anything, sometimes useful for testing.<br/><br/>
  * Created: 10.09.2010 18:59:49
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class EmptyStatement implements Statement {
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-    	return true;
-	}
+  @Override
+  public boolean execute(BeneratorContext context) {
+    return true;
+  }
 
 }

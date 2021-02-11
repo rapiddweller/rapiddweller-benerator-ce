@@ -26,28 +26,33 @@
 
 package com.rapiddweller.model.data;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.test.ModelTest;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests the {@link ComponentNameMapper}.<br/><br/>
  * Created: 22.02.2010 20:00:34
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ComponentMapperTest extends ModelTest {
 
-	@Test
-	public void test() {
-		Entity in = createEntity("Person", "name", "Alice", "age", 23);
-		ComponentNameMapper mapper = new ComponentNameMapper("'name'->'givenName','none'->'some'");
-		Entity out = mapper.convert(in);
-		assertEquals(in.type(), out.type());
-		assertNull(out.get("name"));
-		assertEquals("Alice", out.get("givenName"));
-		assertEquals(23, out.get("age"));
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    Entity in = createEntity("Person", "name", "Alice", "age", 23);
+    ComponentNameMapper mapper = new ComponentNameMapper("'name'->'givenName','none'->'some'");
+    Entity out = mapper.convert(in);
+    assertEquals(in.type(), out.type());
+    assertNull(out.get("name"));
+    assertEquals("Alice", out.get("givenName"));
+    assertEquals(23, out.get("age"));
+  }
+
 }

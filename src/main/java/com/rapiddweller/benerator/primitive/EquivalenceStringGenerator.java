@@ -36,67 +36,78 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  * {@link Generator} which generates {@link String}s by first generating a part and a part count
  * and the repeating the part the generated number of times.<br/><br/>
  * Created: 08.07.2011 06:20:42
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class EquivalenceStringGenerator<E> extends CardinalGenerator<E, String> implements NonNullGenerator<String> {
 
-	protected Integer currentLength;
-	
-	public EquivalenceStringGenerator(Generator<E> charGenerator, NonNullGenerator<Integer> lengthGenerator) {
-		super(charGenerator, true, lengthGenerator);
-	}
+  /**
+   * The Current length.
+   */
+  protected Integer currentLength;
 
-	@Override
-	public Class<String> getGeneratedType() {
-		return String.class;
-	}
-	
-	@Override
-	public synchronized void init(GeneratorContext context) {
-		super.init(context);
-		currentLength = generateCardinal();
-	}
+  /**
+   * Instantiates a new Equivalence string generator.
+   *
+   * @param charGenerator   the char generator
+   * @param lengthGenerator the length generator
+   */
+  public EquivalenceStringGenerator(Generator<E> charGenerator, NonNullGenerator<Integer> lengthGenerator) {
+    super(charGenerator, true, lengthGenerator);
+  }
 
-	@Override
-	public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
-		String result = generate();
-		return (result != null ? wrapper.wrap(result) : null);
-	}
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
 
-	@Override
-	public String generate() {
-		assertInitialized();
-		if (currentLength == null)
-			return null;
-		ProductWrapper<E> part = generateFromSource(); // try to select a new character and keep the previous length 
-		if (part == null) {                            // if you are through with the characters, ...
-			currentLength = generateCardinal();           // ...choose the next length value...
-			if (currentLength == null)
-				return null;
-			getSource().reset();                            // ...and reset character selection
-			part = generateFromSource();
-		}
-		String result = createString(part.unwrap(), currentLength.intValue());
-		if (currentLength == 0) 
-			while (generateFromSource() != null) {
-				// for length 0, any character repetition is "", 
-				// so get rid of the remaining characters and proceed to the next length value
-			}
-		return result;
-	}
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    super.init(context);
+    currentLength = generateCardinal();
+  }
 
-	@Override
-	public void reset() {
-		super.reset();
-		currentLength = generateCardinal();
-	}
+  @Override
+  public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
+    String result = generate();
+    return (result != null ? wrapper.wrap(result) : null);
+  }
 
-	private String createString(E part, Integer length) {
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < length; i++)
-			builder.append(part);
-		return builder.toString();
-	}
+  @Override
+  public String generate() {
+    assertInitialized();
+    if (currentLength == null) {
+      return null;
+    }
+    ProductWrapper<E> part = generateFromSource(); // try to select a new character and keep the previous length
+    if (part == null) {                            // if you are through with the characters, ...
+      currentLength = generateCardinal();           // ...choose the next length value...
+      if (currentLength == null) {
+        return null;
+      }
+      getSource().reset();                            // ...and reset character selection
+      part = generateFromSource();
+    }
+    String result = createString(part.unwrap(), currentLength);
+    if (currentLength == 0) {
+      while (generateFromSource() != null) {
+        // for length 0, any character repetition is "",
+        // so get rid of the remaining characters and proceed to the next length value
+      }
+    }
+    return result;
+  }
+
+  @Override
+  public void reset() {
+    super.reset();
+    currentLength = generateCardinal();
+  }
+
+  private String createString(E part, Integer length) {
+    return String.valueOf(part).repeat(Math.max(0, length));
+  }
 
 }

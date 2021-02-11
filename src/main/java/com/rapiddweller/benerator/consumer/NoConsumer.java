@@ -31,14 +31,15 @@ import com.rapiddweller.benerator.Consumer;
 /**
  * Empty {@link Consumer} implementation which does nothing.<br/><br/>
  * Created: 07.09.2011 07:57:55
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class NoConsumer extends AbstractConsumer {
 
-	@Override
-	public void startProductConsumption(Object object) {
-		// ignore call
-	}
+  @Override
+  public void startProductConsumption(Object object) {
+    // ignore call
+  }
 
 }

@@ -26,37 +26,54 @@
 
 package com.rapiddweller.platform.file;
 
+import com.rapiddweller.common.IOUtil;
+
 import java.io.File;
 import java.io.IOException;
-
-import com.rapiddweller.commons.IOUtil;
 
 /**
  * Parent class for file-related tests.<br/>
  * <br/>
  * Created at 17.09.2009 10:25:10
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public abstract class FileTest {
 
-    protected File createSource1() throws IOException {
-	    File sourceFile1;
-	    sourceFile1 = new File("target" + File.separator + "FT1.txt");
-	    IOUtil.writeTextFile(sourceFile1.getAbsolutePath(), "ABC");
-	    return sourceFile1;
-    }
-	
-    protected File createSource2() throws IOException {
-	    File sourceFile2;
-	    sourceFile2 = new File("target" + File.separator + "FT2.txt");
-	    IOUtil.writeTextFile(sourceFile2.getAbsolutePath(), "123");
-	    return sourceFile2;
-    }
+  /**
+   * Create source 1 file.
+   *
+   * @return the file
+   * @throws IOException the io exception
+   */
+  protected File createSource1() throws IOException {
+    File sourceFile1;
+    sourceFile1 = new File("target" + File.separator + "FT1.txt");
+    IOUtil.writeTextFile(sourceFile1.getAbsolutePath(), "ABC");
+    return sourceFile1;
+  }
 
-    protected String prefix() {
-    	return getClass().getSimpleName();
-    }
+  /**
+   * Create source 2 file.
+   *
+   * @return the file
+   * @throws IOException the io exception
+   */
+  protected File createSource2() throws IOException {
+    File sourceFile2;
+    sourceFile2 = new File("target" + File.separator + "FT2.txt");
+    IOUtil.writeTextFile(sourceFile2.getAbsolutePath(), "123");
+    return sourceFile2;
+  }
+
+  /**
+   * Prefix string.
+   *
+   * @return the string
+   */
+  protected String prefix() {
+    return getClass().getSimpleName();
+  }
 
 }

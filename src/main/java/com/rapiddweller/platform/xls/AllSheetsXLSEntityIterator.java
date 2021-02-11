@@ -28,19 +28,19 @@ package com.rapiddweller.platform.xls;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.context.ContextAware;
+import com.rapiddweller.common.converter.NoOpConverter;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.context.ContextAware;
-import com.rapiddweller.commons.converter.NoOpConverter;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,130 +54,186 @@ import java.util.List;
  * @author Volker Bergmann
  * @since 0.5.8
  */
+public class AllSheetsXLSEntityIterator
+    implements DataIterator<Entity>, ContextAware {
 
-public class AllSheetsXLSEntityIterator implements DataIterator<Entity>, ContextAware {
+  private final String uri;
 
-    private final String uri;
+  private final Workbook workbook;
 
-    private final Workbook workbook;
+  private final boolean formatted;
+  private boolean rowBased;
+  private final String emptyMarker;
 
-    private final boolean formatted;
-    private boolean rowBased;
-    private final String emptyMarker;
+  private final Converter<String, ?> preprocessor;
+  private DataIterator<Entity> source;
+  private BeneratorContext context;
 
-    private final Converter<String, ?> preprocessor;
-    private DataIterator<Entity> source;
-    private BeneratorContext context;
+  private final ComplexTypeDescriptor entityDescriptor;
 
-    private final ComplexTypeDescriptor entityDescriptor;
+  private int sheetNo;
 
-    private int sheetNo;
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  /**
+   * Instantiates a new All sheets xls entity iterator.
+   *
+   * @param uri the uri
+   * @throws IOException            the io exception
+   * @throws InvalidFormatException the invalid format exception
+   */
+  public AllSheetsXLSEntityIterator(String uri)
+      throws IOException, InvalidFormatException {
+    this(uri, new NoOpConverter<>(), null, false);
+  }
 
-    public AllSheetsXLSEntityIterator(String uri) throws IOException, InvalidFormatException {
-        this(uri, new NoOpConverter<String>(), null, false);
+  /**
+   * Instantiates a new All sheets xls entity iterator.
+   *
+   * @param uri              the uri
+   * @param preprocessor     the preprocessor
+   * @param entityDescriptor the entity descriptor
+   * @param formatted        the formatted
+   * @throws IOException the io exception
+   */
+  public AllSheetsXLSEntityIterator(String uri,
+                                    Converter<String, ?> preprocessor,
+                                    ComplexTypeDescriptor entityDescriptor,
+                                    boolean formatted)
+      throws IOException {
+    this.uri = uri;
+    this.preprocessor = preprocessor;
+    this.entityDescriptor = entityDescriptor;
+    this.rowBased = (entityDescriptor != null &&
+        entityDescriptor.isRowBased() != null ?
+        entityDescriptor.isRowBased() : true);
+    this.emptyMarker = (entityDescriptor != null &&
+        entityDescriptor.getEmptyMarker() != null ?
+        entityDescriptor.getEmptyMarker() : null);
+    this.workbook =
+        WorkbookFactory.create(IOUtil.getInputStreamForURI(uri));
+    this.sheetNo = -1;
+    this.formatted = formatted;
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Parse all list.
+   *
+   * @param uri          the uri
+   * @param preprocessor the preprocessor
+   * @param formatted    the formatted
+   * @return the list
+   * @throws IOException            the io exception
+   * @throws InvalidFormatException the invalid format exception
+   */
+  public static List<Entity> parseAll(String uri,
+                                      Converter<String, ?> preprocessor,
+                                      boolean formatted)
+      throws IOException, InvalidFormatException {
+    List<Entity> list = new ArrayList<>();
+    AllSheetsXLSEntityIterator iterator =
+        new AllSheetsXLSEntityIterator(uri, preprocessor, null,
+            formatted);
+    iterator.setContext(new DefaultBeneratorContext());
+    DataContainer<Entity> container = new DataContainer<>();
+    while ((container = iterator.next(container)) != null) {
+      list.add(container.getData());
+    }
+    return list;
+  }
+
+  /**
+   * Sets row based.
+   *
+   * @param rowBased the row based
+   */
+  public void setRowBased(boolean rowBased) {
+    this.rowBased = rowBased;
+  }
+
+
+  // ContextAware interface implementation ---------------------------------------------------------------------------
+
+  /**
+   * Gets uri.
+   *
+   * @return the uri
+   */
+  public String getUri() {
+    return uri;
+  }
+
+
+  // DataSource interface implementation -----------------------------------------------------------------------------
+
+  @Override
+  public void setContext(Context context) {
+    this.context = (BeneratorContext) context;
+  }
+
+  @Override
+  public Class<Entity> getType() {
+    return Entity.class;
+  }
+
+  @Override
+  public synchronized DataContainer<Entity> next(
+      DataContainer<Entity> container) {
+    if (sheetNo == -1) {
+      nextSheet();
+    }
+    DataContainer<Entity> result;
+    do {
+      if (source == null) {
+        return null;
+      }
+      result = source.next(container);
+      if (result == null) {
+        nextSheet();
+      }
+    } while (source != null && result == null);
+    return result;
+  }
+
+
+  // convenience methods ---------------------------------------------------------------------------------------------
+
+  @Override
+  public synchronized void close() {
+    IOUtil.close(source);
+  }
+
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + uri + "]";
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private void nextSheet() {
+    // check if a sheet is available
+    if (sheetNo >= workbook.getNumberOfSheets() - 1) {
+      source = null;
+      return;
     }
 
-    public AllSheetsXLSEntityIterator(String uri, Converter<String, ?> preprocessor, ComplexTypeDescriptor entityDescriptor, boolean formatted)
-            throws IOException, InvalidFormatException {
-        this.uri = uri;
-        this.preprocessor = preprocessor;
-        this.entityDescriptor = entityDescriptor;
-        this.rowBased = (entityDescriptor != null && entityDescriptor.isRowBased() != null ? entityDescriptor.isRowBased() : true);
-        this.emptyMarker = (entityDescriptor != null && entityDescriptor.getEmptyMarker() != null ? entityDescriptor.getEmptyMarker() : null);
-        this.workbook = WorkbookFactory.create(IOUtil.getInputStreamForURI(uri));
-        this.sheetNo = -1;
-        this.formatted = formatted;
+    // if a sheet was already opened, then close it
+    if (source != null) {
+      IOUtil.close(source);
     }
 
-    // properties ------------------------------------------------------------------------------------------------------
+    // select sheet
+    this.sheetNo++;
 
-    public static List<Entity> parseAll(String uri, Converter<String, ?> preprocessor, boolean formatted)
-            throws IOException, InvalidFormatException {
-        List<Entity> list = new ArrayList<Entity>();
-        AllSheetsXLSEntityIterator iterator = new AllSheetsXLSEntityIterator(uri, preprocessor, null, formatted);
-        iterator.setContext(new DefaultBeneratorContext());
-        DataContainer<Entity> container = new DataContainer<Entity>();
-        while ((container = iterator.next(container)) != null)
-            list.add(container.getData());
-        return list;
-    }
-
-    public void setRowBased(boolean rowBased) {
-        this.rowBased = rowBased;
-    }
-
-
-    // ContextAware interface implementation ---------------------------------------------------------------------------
-
-    public String getUri() {
-        return uri;
-    }
-
-
-    // DataSource interface implementation -----------------------------------------------------------------------------
-
-    @Override
-    public void setContext(Context context) {
-        this.context = (BeneratorContext) context;
-    }
-
-    @Override
-    public Class<Entity> getType() {
-        return Entity.class;
-    }
-
-    @Override
-    public synchronized DataContainer<Entity> next(DataContainer<Entity> container) {
-        if (sheetNo == -1)
-            nextSheet();
-        DataContainer<Entity> result;
-        do {
-            if (source == null)
-                return null;
-            result = source.next(container);
-            if (result == null)
-                nextSheet();
-        } while (source != null && result == null);
-        return result;
-    }
-
-
-    // convenience methods ---------------------------------------------------------------------------------------------
-
-    @Override
-    public synchronized void close() {
-        IOUtil.close(source);
-    }
-
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[" + uri + "]";
-    }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private void nextSheet() {
-        // check if a sheet is available
-        if (sheetNo >= workbook.getNumberOfSheets() - 1) {
-            source = null;
-            return;
-        }
-
-        // if a sheet was already opened, then close it
-        if (source != null)
-            IOUtil.close(source);
-
-        // select sheet
-        this.sheetNo++;
-
-        // create iterator
-        Sheet sheet = workbook.getSheetAt(sheetNo);
-        source = new SingleSheetXLSEntityIterator(sheet, preprocessor, entityDescriptor, context, rowBased, formatted, emptyMarker);
-    }
+    // create iterator
+    Sheet sheet = workbook.getSheetAt(sheetNo);
+    source = new SingleSheetXLSEntityIterator(sheet, preprocessor,
+        entityDescriptor, context, rowBased, formatted, emptyMarker);
+  }
 
 }

@@ -33,11 +33,32 @@ import com.rapiddweller.benerator.NonNullGenerator;
  * Parent interface for all distribution types.<br/>
  * <br/>
  * Created: 11.09.2006 21:31:54
- * @version 0.1
+ *
  * @author Volker Bergmann
+ * @version 0.1
  */
 public interface Distribution {
-    <T extends Number> NonNullGenerator<T> createNumberGenerator(
-    		Class<T> numberType, T min, T max, T granularity, boolean unique);
-    <T> Generator<T> applyTo(Generator<T> source, boolean unique);
+  /**
+   * Create number generator non null generator.
+   *
+   * @param <T>         the type parameter
+   * @param numberType  the number type
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   * @param unique      the unique
+   * @return the non null generator
+   */
+  <T extends Number> NonNullGenerator<T> createNumberGenerator(
+      Class<T> numberType, T min, T max, T granularity, boolean unique);
+
+  /**
+   * Apply to generator.
+   *
+   * @param <T>    the type parameter
+   * @param source the source
+   * @param unique the unique
+   * @return the generator
+   */
+  <T> Generator<T> applyTo(Generator<T> source, boolean unique);
 }

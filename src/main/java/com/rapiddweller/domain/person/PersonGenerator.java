@@ -34,8 +34,8 @@ import com.rapiddweller.benerator.dataset.DatasetUtil;
 import com.rapiddweller.benerator.primitive.BooleanGenerator;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.common.Converter;
 import com.rapiddweller.domain.address.Country;
-import com.rapiddweller.commons.Converter;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -53,200 +53,290 @@ import static com.rapiddweller.benerator.util.GeneratorUtil.generateNullable;
  * @since 0.1
  */
 public class PersonGenerator extends CompositeGenerator<Person>
-        implements DatasetBasedGenerator<Person>, NonNullGenerator<Person> {
+    implements DatasetBasedGenerator<Person>, NonNullGenerator<Person> {
 
-    private static final String REGION_NESTING = "com/rapiddweller/dataset/region";
+  private static final String REGION_NESTING =
+      "com/rapiddweller/dataset/region";
 
-    private String datasetName;
-    private Locale locale;
+  private String datasetName;
+  private Locale locale;
 
-    private final GenderGenerator genderGen;
-    private GivenNameGenerator maleGivenNameGen;
-    private GivenNameGenerator femaleGivenNameGen;
-    private BooleanGenerator secondNameTest;
-    private FamilyNameGenerator familyNameGen;
-    private final Map<String, Converter<String, String>> femaleFamilyNameConverters;
-    private AcademicTitleGenerator acadTitleGen;
-    private NobilityTitleGenerator maleNobilityTitleGen;
-    private NobilityTitleGenerator femaleNobilityTitleGen;
-    private SalutationProvider salutationProvider;
+  private final GenderGenerator genderGen;
+  private GivenNameGenerator maleGivenNameGen;
+  private GivenNameGenerator femaleGivenNameGen;
+  private BooleanGenerator secondNameTest;
+  private FamilyNameGenerator familyNameGen;
+  private final Map<String, Converter<String, String>>
+      femaleFamilyNameConverters;
+  private AcademicTitleGenerator acadTitleGen;
+  private NobilityTitleGenerator maleNobilityTitleGen;
+  private NobilityTitleGenerator femaleNobilityTitleGen;
+  private SalutationProvider salutationProvider;
 
-    private final BirthDateGenerator birthDateGenerator;
-    private EMailAddressBuilder emailGenerator;
+  private final BirthDateGenerator birthDateGenerator;
+  private EMailAddressBuilder emailGenerator;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public PersonGenerator() {
-        this(Country.getDefault().getIsoCode(), Locale.getDefault());
+  /**
+   * Instantiates a new Person generator.
+   */
+  public PersonGenerator() {
+    this(Country.getDefault().getIsoCode(), Locale.getDefault());
+  }
+
+  /**
+   * Instantiates a new Person generator.
+   *
+   * @param datasetName the dataset name
+   */
+  public PersonGenerator(String datasetName) {
+    this(datasetName, DatasetUtil.defaultLanguageForRegion(datasetName));
+  }
+
+  /**
+   * Instantiates a new Person generator.
+   *
+   * @param datasetName the dataset name
+   * @param locale      the locale
+   */
+  public PersonGenerator(String datasetName, Locale locale) {
+    super(Person.class);
+    logger.debug(
+        "Instantiating PersonGenerator with dataset '{}' and locale '{}'",
+        datasetName, locale);
+    this.datasetName = datasetName;
+    this.locale = locale;
+    genderGen = registerComponent(new GenderGenerator(0.5));
+    birthDateGenerator = registerComponent(new BirthDateGenerator(15, 105));
+    this.femaleFamilyNameConverters = new HashMap<>();
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Sets min age years.
+   *
+   * @param minAgeYears the min age years
+   */
+  public void setMinAgeYears(int minAgeYears) {
+    birthDateGenerator.setMinAgeYears(minAgeYears);
+  }
+
+  /**
+   * Sets max age years.
+   *
+   * @param maxAgeYears the max age years
+   */
+  public void setMaxAgeYears(int maxAgeYears) {
+    birthDateGenerator.setMaxAgeYears(maxAgeYears);
+  }
+
+  /**
+   * Gets female quota.
+   *
+   * @return the female quota
+   */
+  public double getFemaleQuota() {
+    return genderGen.getFemaleQuota();
+  }
+
+  /**
+   * Sets female quota.
+   *
+   * @param femaleQuota the female quota
+   */
+  public void setFemaleQuota(double femaleQuota) {
+    this.genderGen.setFemaleQuota(femaleQuota);
+  }
+
+  /**
+   * Gets noble quota.
+   *
+   * @return the noble quota
+   */
+  public double getNobleQuota() {
+    return maleNobilityTitleGen.getNobleQuota();
+  }
+
+  /**
+   * Sets noble quota.
+   *
+   * @param nobleQuota the noble quota
+   */
+  public void setNobleQuota(double nobleQuota) {
+    maleNobilityTitleGen.setNobleQuota(nobleQuota);
+    femaleNobilityTitleGen.setNobleQuota(nobleQuota);
+  }
+
+  /**
+   * Gets locale.
+   *
+   * @return the locale
+   */
+  public Locale getLocale() {
+    return acadTitleGen.getLocale();
+  }
+
+  /**
+   * Sets locale.
+   *
+   * @param locale the locale
+   */
+  public void setLocale(Locale locale) {
+    this.locale = locale;
+  }
+
+  @Override
+  public String getDataset() {
+    return datasetName;
+  }
+
+  // DatasetBasedGenerator interface implementation ------------------------------------------------------------------
+
+  /**
+   * Sets dataset.
+   *
+   * @param datasetName the dataset name
+   */
+  public void setDataset(String datasetName) {
+    this.datasetName = datasetName;
+  }
+
+  @Override
+  public String getNesting() {
+    return REGION_NESTING;
+  }
+
+  @Override
+  public Person generateForDataset(String datasetToUse) {
+    assertInitialized();
+    Person person = new Person(acadTitleGen.getLocale());
+    person.setGender(generateNonNull(genderGen));
+    GivenNameGenerator givenNameGenerator
+        = (Gender.MALE.equals(person.getGender()) ? maleGivenNameGen :
+        femaleGivenNameGen);
+    String givenName = givenNameGenerator.generateForDataset(datasetToUse);
+    person.setGivenName(givenName);
+    if (generateNullable(secondNameTest)) {
+      do {
+        person.setSecondGivenName(
+            givenNameGenerator.generateForDataset(datasetToUse));
+      } while (person.getGivenName().equals(person.getSecondGivenName()));
     }
-
-    public PersonGenerator(String datasetName) {
-        this(datasetName, DatasetUtil.defaultLanguageForRegion(datasetName));
+    String familyName = familyNameGen.generateForDataset(datasetToUse);
+    if (Gender.FEMALE.equals(person.getGender())) {
+      familyName = getFemaleFamilyNameConverter(datasetToUse)
+          .convert(familyName);
     }
+    person.setFamilyName(familyName);
+    person.setSalutation(salutationProvider.salutation(person.getGender()));
+    person.setAcademicTitle(generateNullable(acadTitleGen));
+    NobilityTitleGenerator nobTitleGenerator
+        =
+        (Gender.MALE.equals(person.getGender()) ? maleNobilityTitleGen :
+            femaleNobilityTitleGen);
+    person.setNobilityTitle(generateNullable(nobTitleGenerator));
+    person.setBirthDate(generateNullable(birthDateGenerator));
+    person.setEmail(emailGenerator.generate(givenName, familyName));
+    return person;
+  }
 
-    public PersonGenerator(String datasetName, Locale locale) {
-        super(Person.class);
-        logger.debug("Instantiating PersonGenerator with dataset '{}' and locale '{}'", datasetName, locale);
-        this.datasetName = datasetName;
-        this.locale = locale;
-        genderGen = registerComponent(new GenderGenerator(0.5));
-        birthDateGenerator = registerComponent(new BirthDateGenerator(15, 105));
-        this.femaleFamilyNameConverters = new HashMap<String, Converter<String, String>>();
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    secondNameTest = registerAndInitComponent(new BooleanGenerator(0.2));
+    genderGen.init(context);
+    birthDateGenerator.init(context);
+    acadTitleGen =
+        registerAndInitComponent(new AcademicTitleGenerator(locale));
+    acadTitleGen.setLocale(locale);
+    maleNobilityTitleGen = registerAndInitComponent(
+        new NobilityTitleGenerator(Gender.MALE, locale));
+    femaleNobilityTitleGen = registerAndInitComponent(
+        new NobilityTitleGenerator(Gender.FEMALE, locale));
+    salutationProvider = new SalutationProvider(locale);
+
+    try {
+      initMembersWithDataset(context);
+    } catch (RuntimeException e) {
+      Country fallBackCountry = Country.getFallback();
+      if (!fallBackCountry.getIsoCode().equals(datasetName)) {
+        logger.error("Error initializing " + getClass().getSimpleName(),
+            e);
+        logger.error("Cannot generate persons for " + datasetName +
+            ", falling back to " + fallBackCountry);
+        this.datasetName = fallBackCountry.getIsoCode();
+        initMembersWithDataset(context);
+      } else {
+        throw e;
+      }
     }
+    super.init(context);
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  /**
+   * Register and init component t.
+   *
+   * @param <T>       the type parameter
+   * @param <U>       the type parameter
+   * @param generator the generator
+   * @return the t
+   */
+  protected <T extends Generator<U>, U> T registerAndInitComponent(
+      T generator) {
+    registerComponent(generator);
+    generator.init(context);
+    return generator;
+  }
 
-    public void setMinAgeYears(int minAgeYears) {
-        birthDateGenerator.setMinAgeYears(minAgeYears);
+  @Override
+  public ProductWrapper<Person> generate(ProductWrapper<Person> wrapper) {
+    String usedDataset = randomDataset();
+    Person person = generateForDataset(usedDataset);
+    return wrapper.wrap(person).setTag(REGION_NESTING, usedDataset);
+  }
+
+  @Override
+  public Person generate() {
+    return generateForDataset(randomDataset());
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private String randomDataset() {
+    return maleGivenNameGen.generate(new ProductWrapper<>())
+        .getTag(DatasetUtil.REGION_NESTING);
+  }
+
+  private Converter<String, String> getFemaleFamilyNameConverter(
+      String usedDataset) {
+    Converter<String, String> result =
+        femaleFamilyNameConverters.get(usedDataset);
+    if (result == null) {
+      result = new FemaleFamilyNameConverter(datasetName);
+      femaleFamilyNameConverters.put(usedDataset, result);
     }
+    return result;
+  }
 
-    public void setMaxAgeYears(int maxAgeYears) {
-        birthDateGenerator.setMaxAgeYears(maxAgeYears);
-    }
+  private void initMembersWithDataset(GeneratorContext context) {
+    maleGivenNameGen = registerAndInitComponent(
+        new GivenNameGenerator(datasetName, Gender.MALE));
+    femaleGivenNameGen = registerAndInitComponent(
+        new GivenNameGenerator(datasetName, Gender.FEMALE));
+    familyNameGen =
+        registerAndInitComponent(new FamilyNameGenerator(datasetName));
+    emailGenerator = new EMailAddressBuilder(datasetName);
+    emailGenerator.init(context);
+  }
 
-    public double getFemaleQuota() {
-        return genderGen.getFemaleQuota();
-    }
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    public void setFemaleQuota(double femaleQuota) {
-        this.genderGen.setFemaleQuota(femaleQuota);
-    }
-
-    public double getNobleQuota() {
-        return maleNobilityTitleGen.getNobleQuota();
-    }
-
-    public void setNobleQuota(double nobleQuota) {
-        maleNobilityTitleGen.setNobleQuota(nobleQuota);
-        femaleNobilityTitleGen.setNobleQuota(nobleQuota);
-    }
-
-    public Locale getLocale() {
-        return acadTitleGen.getLocale();
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
-
-    @Override
-    public String getDataset() {
-        return datasetName;
-    }
-
-    // DatasetBasedGenerator interface implementation ------------------------------------------------------------------
-
-    public void setDataset(String datasetName) {
-        this.datasetName = datasetName;
-    }
-
-    @Override
-    public String getNesting() {
-        return REGION_NESTING;
-    }
-
-    @Override
-    public Person generateForDataset(String datasetToUse) {
-        assertInitialized();
-        Person person = new Person(acadTitleGen.getLocale());
-        person.setGender(generateNonNull(genderGen));
-        GivenNameGenerator givenNameGenerator
-                = (Gender.MALE.equals(person.getGender()) ? maleGivenNameGen : femaleGivenNameGen);
-        String givenName = givenNameGenerator.generateForDataset(datasetToUse);
-        person.setGivenName(givenName);
-        if (generateNullable(secondNameTest)) {
-            do {
-                person.setSecondGivenName(givenNameGenerator.generateForDataset(datasetToUse));
-            } while (person.getGivenName().equals(person.getSecondGivenName()));
-        }
-        String familyName = familyNameGen.generateForDataset(datasetToUse);
-        if (Gender.FEMALE.equals(person.getGender()))
-            familyName = getFemaleFamilyNameConverter(datasetToUse).convert(familyName);
-        person.setFamilyName(familyName);
-        person.setSalutation(salutationProvider.salutation(person.getGender()));
-        person.setAcademicTitle(generateNullable(acadTitleGen));
-        NobilityTitleGenerator nobTitleGenerator
-                = (Gender.MALE.equals(person.getGender()) ? maleNobilityTitleGen : femaleNobilityTitleGen);
-        person.setNobilityTitle(generateNullable(nobTitleGenerator));
-        person.setBirthDate(generateNullable(birthDateGenerator));
-        person.setEmail(emailGenerator.generate(givenName, familyName));
-        return person;
-    }
-
-    // Generator interface ---------------------------------------------------------------------------------------------
-
-    @Override
-    public synchronized void init(GeneratorContext context) {
-        secondNameTest = registerAndInitComponent(new BooleanGenerator(0.2));
-        genderGen.init(context);
-        birthDateGenerator.init(context);
-        acadTitleGen = registerAndInitComponent(new AcademicTitleGenerator(locale));
-        acadTitleGen.setLocale(locale);
-        maleNobilityTitleGen = registerAndInitComponent(new NobilityTitleGenerator(Gender.MALE, locale));
-        femaleNobilityTitleGen = registerAndInitComponent(new NobilityTitleGenerator(Gender.FEMALE, locale));
-        salutationProvider = new SalutationProvider(locale);
-
-        try {
-            initMembersWithDataset(context);
-        } catch (RuntimeException e) {
-            Country fallBackCountry = Country.getFallback();
-            if (!fallBackCountry.getIsoCode().equals(datasetName)) {
-                logger.error("Error initializing " + getClass().getSimpleName(), e);
-                logger.error("Cannot generate persons for " + datasetName + ", falling back to " + fallBackCountry);
-                this.datasetName = fallBackCountry.getIsoCode();
-                initMembersWithDataset(context);
-            } else
-                throw e;
-        }
-        super.init(context);
-    }
-
-    protected <T extends Generator<U>, U> T registerAndInitComponent(T generator) {
-        registerComponent(generator);
-        generator.init(context);
-        return generator;
-    }
-
-    @Override
-    public ProductWrapper<Person> generate(ProductWrapper<Person> wrapper) {
-        String usedDataset = randomDataset();
-        Person person = generateForDataset(usedDataset);
-        return wrapper.wrap(person).setTag(REGION_NESTING, usedDataset);
-    }
-
-    @Override
-    public Person generate() {
-        return generateForDataset(randomDataset());
-    }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private String randomDataset() {
-        return maleGivenNameGen.generate(new ProductWrapper<String>()).getTag(DatasetUtil.REGION_NESTING);
-    }
-
-    private Converter<String, String> getFemaleFamilyNameConverter(String usedDataset) {
-        Converter<String, String> result = femaleFamilyNameConverters.get(usedDataset);
-        if (result == null) {
-            result = new FemaleFamilyNameConverter(datasetName);
-            femaleFamilyNameConverters.put(usedDataset, result);
-        }
-        return result;
-    }
-
-    private void initMembersWithDataset(GeneratorContext context) {
-        maleGivenNameGen = registerAndInitComponent(new GivenNameGenerator(datasetName, Gender.MALE));
-        femaleGivenNameGen = registerAndInitComponent(new GivenNameGenerator(datasetName, Gender.FEMALE));
-        familyNameGen = registerAndInitComponent(new FamilyNameGenerator(datasetName));
-        emailGenerator = new EMailAddressBuilder(datasetName);
-        emailGenerator.init(context);
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 
 }

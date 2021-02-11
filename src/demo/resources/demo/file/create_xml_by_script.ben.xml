@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 
 <setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -12,7 +12,7 @@
         <attribute name="price" script="product.price"/>
         <attribute name="items" type="short" min="1" max="27"/>
         <consumer class="com.rapiddweller.platform.script.ScriptedEntityExporter">
-            <property name="uri" value="transactions.xml"/>
+            <property name="uri" value="target/transactions.xml"/>
             <property name="headerScript" value="demo/file/transaction_xml_header.ftl"/>
             <property name="partScript" value="demo/file/transaction_xml_part.ftl"/>
             <property name="footerScript" value="demo/file/transaction_xml_footer.ftl"/>

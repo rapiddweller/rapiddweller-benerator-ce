@@ -26,45 +26,53 @@
 
 package com.rapiddweller.benerator.util;
 
-import static org.junit.Assert.*;
-
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.context.DefaultContext;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.util.DataIteratorFromJavaIterator;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.context.DefaultContext;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.util.DataIteratorFromJavaIterator;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.DynamicExpression;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 /**
  * Tests the {@link FilterExIterator}.<br/><br/>
  * Created: 08.03.2011 14:24:18
- * @since 0.5.8
+ *
  * @author Volker Bergmann
+ * @since 0.5.8
  */
 public class FilterExIteratorTest {
 
-	@Test
-	public void test() {
-		Context context = new DefaultContext();
-		Expression<Boolean> expression = new IsThreeExpression();
-		DataIterator<Integer> source = new DataIteratorFromJavaIterator<Integer>(
-				CollectionUtil.toList(2, 3, 4).iterator(), Integer.class);
-		FilterExIterator<Integer> iterator = new FilterExIterator<Integer>(source, expression, context);
-		assertEquals(3, iterator.next(new DataContainer<Integer>()).getData().intValue());
-		assertNull(iterator.next(new DataContainer<Integer>()));
-	}
-	
-	class IsThreeExpression extends DynamicExpression<Boolean> {
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    Context context = new DefaultContext();
+    Expression<Boolean> expression = new IsThreeExpression();
+    DataIterator<Integer> source = new DataIteratorFromJavaIterator<>(
+        CollectionUtil.toList(2, 3, 4).iterator(), Integer.class);
+    FilterExIterator<Integer> iterator = new FilterExIterator<>(source, expression, context);
+    assertEquals(3, iterator.next(new DataContainer<>()).getData().intValue());
+    assertNull(iterator.next(new DataContainer<>()));
+  }
 
-		@Override
-		public Boolean evaluate(Context context) {
-			Integer candidateValue = (Integer) context.get("_candidate");
-			return (candidateValue != null && candidateValue.intValue() == 3);
-		}
+  /**
+   * The type Is three expression.
+   */
+  static class IsThreeExpression extends DynamicExpression<Boolean> {
 
-	}
+    @Override
+    public Boolean evaluate(Context context) {
+      Integer candidateValue = (Integer) context.get("_candidate");
+      return (candidateValue != null && candidateValue == 3);
+    }
+
+  }
 
 }

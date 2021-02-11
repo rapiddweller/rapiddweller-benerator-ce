@@ -27,33 +27,41 @@
 package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.commons.ThreadUtil;
+import com.rapiddweller.common.ThreadUtil;
 
 /**
  * Creates one component from an arbitrary choice of different available ones.<br/><br/>
  * Created at 09.05.2008 13:28:19
- * @since 0.5.4
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.5.4
  */
 public class AlternativeComponentBuilder<E> extends MultiComponentBuilder<E> {
-	
-	public AlternativeComponentBuilder(ComponentBuilder<E>[] alternatives, String scope) {
-		super(alternatives, scope);
-	}
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-		return buildRandomComponent(context);
-	}
+  /**
+   * Instantiates a new Alternative component builder.
+   *
+   * @param alternatives the alternatives
+   * @param scope        the scope
+   */
+  public AlternativeComponentBuilder(ComponentBuilder<E>[] alternatives, String scope) {
+    super(alternatives, scope);
+  }
 
-	@Override
-	public boolean isParallelizable() {
-	    return ThreadUtil.allParallelizable(builders);
-    }
+  @Override
+  public boolean execute(BeneratorContext context) {
+    return buildRandomComponent(context);
+  }
 
-	@Override
-	public boolean isThreadSafe() {
-	    return ThreadUtil.allThreadSafe(builders);
-    }
+  @Override
+  public boolean isParallelizable() {
+    return ThreadUtil.allParallelizable(builders);
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return ThreadUtil.allThreadSafe(builders);
+  }
 
 }

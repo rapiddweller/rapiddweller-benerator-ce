@@ -2,27 +2,31 @@
 
 
 <!--DOCTYPE xs:schema PUBLIC "-//W3C//DTD XMLSCHEMA 200102//EN" "XMLSchema.dtd"-->
-<xs:schema 
-		xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		xmlns:ben="https://www.benerator.de/schema/benerator-1.0.0.xsd"
-		targetNamespace="bean_test.xsd"
-		xmlns="bean_test.xsd"
-		elementFormDefault="qualified">
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:ben="https://www.benerator.de/schema/benerator-1.0.0.xsd"
+        targetNamespace="bean_test.xsd"
+        xmlns="bean_test.xsd"
+        elementFormDefault="qualified">
 
-	<xs:annotation>
-		<xs:appinfo><ben:bean id="result_generator" class="com.rapiddweller.benerator.xml.OKGenerator" /></xs:appinfo>
-	</xs:annotation>
+    <xs:annotation>
+        <xs:appinfo>
+            <ben:bean id="result_generator" class="com.rapiddweller.benerator.xml.OKGenerator"/>
+        </xs:appinfo>
+    </xs:annotation>
 
-	<xs:element name="root">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="result" type="xs:string" minOccurs="1" maxOccurs="1">
-					<xs:annotation><xs:appinfo>
-						<ben:type source="result_generator" />
-					</xs:appinfo></xs:annotation>
-				</xs:element>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="result" type="xs:string" minOccurs="1" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <ben:type source="result_generator"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
 </xs:schema>

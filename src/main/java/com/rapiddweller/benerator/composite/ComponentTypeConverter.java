@@ -26,86 +26,101 @@
 
 package com.rapiddweller.benerator.composite;
 
-import java.lang.reflect.Array;
-import java.util.Map;
-
 import com.rapiddweller.benerator.factory.DescriptorUtil;
-import com.rapiddweller.commons.ArrayBuilder;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.AbstractConverter;
+import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.AbstractConverter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 
+import java.lang.reflect.Array;
+import java.util.Map;
+
 /**
  * Converts an Entity's components to the type specified by the EntityDescriptor.
- * This is used for e.g. importing Entities from file with String component values and 
+ * This is used for e.g. importing Entities from file with String component values and
  * converting them to the correct target type.<br/><br/>
  * Created at 06.05.2008 11:34:46
- * @since 0.5.3
+ *
  * @author Volker Bergmann
+ * @since 0.5.3
  */
 public class ComponentTypeConverter extends AbstractConverter<Entity, Entity> {
 
-	private ComplexTypeDescriptor type;
+  private final ComplexTypeDescriptor type;
 
-	public ComponentTypeConverter(ComplexTypeDescriptor type) {
-		super(Entity.class, Entity.class);
-		this.type = type;
-	}
+  /**
+   * Instantiates a new Component type converter.
+   *
+   * @param type the type
+   */
+  public ComponentTypeConverter(ComplexTypeDescriptor type) {
+    super(Entity.class, Entity.class);
+    this.type = type;
+  }
 
-	@Override
-	public Entity convert(Entity entity) throws ConversionException {
-		return convert(entity, type);
-	}
-
-	@Override
-	public boolean isParallelizable() {
-	    return false;
+  /**
+   * Convert entity.
+   *
+   * @param entity the entity
+   * @param type   the type
+   * @return the entity
+   * @throws ConversionException the conversion exception
+   */
+  public static Entity convert(Entity entity, ComplexTypeDescriptor type) throws ConversionException {
+    if (entity == null) {
+      return null;
     }
-
-	@Override
-	public boolean isThreadSafe() {
-	    return false;
+    Map<String, Object> components = entity.getComponents();
+    for (Map.Entry<String, Object> entry : components.entrySet()) {
+      String componentName = entry.getKey();
+      ComponentDescriptor componentDescriptor = type.getComponent(componentName);
+      if (componentDescriptor != null) {
+        TypeDescriptor componentType = componentDescriptor.getTypeDescriptor();
+        Object componentValue = entry.getValue();
+        if (componentType instanceof SimpleTypeDescriptor) {
+          Object javaValue = DescriptorUtil.convertType(componentValue, (SimpleTypeDescriptor) componentType);
+          components.put(componentName, javaValue);
+        } else if (componentValue instanceof Entity) {
+          components.put(componentName, convert((Entity) componentValue, (ComplexTypeDescriptor) componentType));
+        } else if (componentValue.getClass().isArray()) {
+          int n = Array.getLength(componentValue);
+          ArrayBuilder<Entity> builder = new ArrayBuilder<>(Entity.class, n);
+          for (int i = 0; i < n; i++) {
+            Entity item = (Entity) Array.get(componentValue, i);
+            builder.add(convert(item, (ComplexTypeDescriptor) componentType));
+          }
+          components.put(componentName, builder.toArray());
+        } else {
+          throw new ConfigurationError("Expected complex data type for '" + componentName + "' but got " + componentValue.getClass());
+        }
+      }
     }
+    return entity;
+  }
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[" + type + "]";
-	}
-	
-	public static Entity convert(Entity entity, ComplexTypeDescriptor type) throws ConversionException {
-		if (entity == null)
-			return null;
-		Map<String, Object> components = entity.getComponents();
-		for (Map.Entry<String, Object> entry : components.entrySet()) {
-			String componentName = entry.getKey();
-			ComponentDescriptor componentDescriptor = type.getComponent(componentName);
-			if (componentDescriptor != null) {
-				TypeDescriptor componentType = componentDescriptor.getTypeDescriptor();
-				Object componentValue = entry.getValue();
-				if (componentType instanceof SimpleTypeDescriptor) {
-					Object javaValue = DescriptorUtil.convertType(componentValue, (SimpleTypeDescriptor) componentType);
-			        components.put(componentName, javaValue);
-				} else if (componentValue instanceof Entity) {
-			        components.put(componentName, convert((Entity) componentValue, (ComplexTypeDescriptor) componentType));
-				} else if (componentValue.getClass().isArray()) {
-					int n = Array.getLength(componentValue);
-					ArrayBuilder<Entity> builder = new ArrayBuilder<Entity>(Entity.class, n);
-					for (int i = 0; i < n; i++) {
-						Entity item = (Entity) Array.get(componentValue, i);
-						builder.add(convert(item, (ComplexTypeDescriptor) componentType));
-					}
-			        components.put(componentName, builder.toArray());
-				} else {
-					throw new ConfigurationError("Expected complex data type for '" + componentName + "' but got " + componentValue.getClass());
-				}
-			}
-		}
-		return entity;
-	}
+  @Override
+  public Entity convert(Entity entity) throws ConversionException {
+    return convert(entity, type);
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return false;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + type + "]";
+  }
 
 }

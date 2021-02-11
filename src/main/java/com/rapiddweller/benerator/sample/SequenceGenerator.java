@@ -26,82 +26,104 @@
 
 package com.rapiddweller.benerator.sample;
 
+import com.rapiddweller.benerator.util.ThreadSafeGenerator;
+import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.common.CollectionUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import com.rapiddweller.benerator.util.ThreadSafeGenerator;
-import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.CollectionUtil;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 /**
  * Creates a predefined sequence of objects.<br/>
  * <br/>
  * Created: 19.11.2007 15:21:24
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  */
 public class SequenceGenerator<E> extends ThreadSafeGenerator<E> {
-    
-    private static final Logger logger = LogManager.getLogger(SequenceGenerator.class);
 
-    private final Class<E> productType;
-    private List<E> values;
-    private int cursor;
+  private static final Logger logger = LogManager.getLogger(SequenceGenerator.class);
 
-    @SafeVarargs
-    public SequenceGenerator(Class<E> productType, E... values) {
-        this(productType, (values != null ? CollectionUtil.toList(values) : null));
-    }
-    
-    public SequenceGenerator(Class<E> productType, Collection<? extends E> values) {
-        this.productType = productType;
-        this.values = (values != null ? new ArrayList<>(values) : new ArrayList<>());
-        this.cursor = 0;
-    }
-    
-    public void addValue(E value) {
-    	this.values.add(value);
-    }
+  private final Class<E> productType;
+  private List<E> values;
+  private int cursor;
 
-    // Generator interface ---------------------------------------------------------------------------------------------
+  /**
+   * Instantiates a new Sequence generator.
+   *
+   * @param productType the product type
+   * @param values      the values
+   */
+  @SafeVarargs
+  public SequenceGenerator(Class<E> productType, E... values) {
+    this(productType, (values != null ? CollectionUtil.toList(values) : null));
+  }
 
-    @Override
-	public Class<E> getGeneratedType() {
-        return productType;
-    }
+  /**
+   * Instantiates a new Sequence generator.
+   *
+   * @param productType the product type
+   * @param values      the values
+   */
+  public SequenceGenerator(Class<E> productType, Collection<? extends E> values) {
+    this.productType = productType;
+    this.values = (values != null ? new ArrayList<>(values) : new ArrayList<>());
+    this.cursor = 0;
+  }
 
-	@Override
-	public synchronized ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-        if (cursor < 0)
-            return null;
-        E result = values.get(cursor);
-        if (cursor < values.size() - 1)
-            cursor++;
-        else
-            cursor = -1;
-        if (logger.isDebugEnabled())
-            logger.debug("created: " + result);
-        return wrapper.wrap(result);
-    }
+  /**
+   * Add value.
+   *
+   * @param value the value
+   */
+  public void addValue(E value) {
+    this.values.add(value);
+  }
 
-    @Override
-    public synchronized void reset() {
-        cursor = 0;
-        super.reset();
-    }
+  // Generator interface ---------------------------------------------------------------------------------------------
 
-    @Override
-    public synchronized void close() {
-        values = null;
-        cursor = -1;
-        super.close();
+  @Override
+  public Class<E> getGeneratedType() {
+    return productType;
+  }
+
+  @Override
+  public synchronized ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    if (cursor < 0) {
+      return null;
     }
-    
-    @Override
-    public String toString() {
-    	return getClass().getSimpleName() + values;
+    E result = values.get(cursor);
+    if (cursor < values.size() - 1) {
+      cursor++;
+    } else {
+      cursor = -1;
     }
+    if (logger.isDebugEnabled()) {
+      logger.debug("created: " + result);
+    }
+    return wrapper.wrap(result);
+  }
+
+  @Override
+  public synchronized void reset() {
+    cursor = 0;
+    super.reset();
+  }
+
+  @Override
+  public synchronized void close() {
+    values = null;
+    cursor = -1;
+    super.close();
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + values;
+  }
 
 }

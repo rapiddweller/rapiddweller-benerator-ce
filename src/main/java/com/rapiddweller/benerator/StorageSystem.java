@@ -26,54 +26,95 @@
 
 package com.rapiddweller.benerator;
 
-import java.io.Closeable;
-import java.io.Flushable;
-
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.formats.DataSource;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.format.DataSource;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.Entity;
 
+import java.io.Closeable;
+import java.io.Flushable;
+
 /**
- * Abstract interface characterizing an Entity storage system. 
+ * Abstract interface characterizing an Entity storage system.
  * An implementation of this interface must inherit the class {@link AbstractStorageSystem}
  * if it is needs to be forward compatible.<br/><br/>
  * <br/>
  * Created: 27.06.2007 23:02:21
- * @since 0.4.0
+ *
  * @author Volker Bergmann
+ * @since 0.4.0
  */
 public interface StorageSystem extends DescriptorProvider, Closeable, Flushable {
 
-    /** Returns a name that identifies the database */
-    @Override
-	String getId();
-    
-    /** Creates an iterator that provides all entities of given type. */
-    DataSource<Entity> queryEntities(String type, String selector, Context context);
-    
-    /** Queries for entity ids */
-    DataSource<?> queryEntityIds(String type, String selector, Context context);
+  /**
+   * Returns a name that identifies the database
+   */
+  @Override
+  String getId();
 
-    /** Creates an Iterable for repetitive iteration through the results of the specified query. */
-    DataSource<?> query(String selector, boolean simplify, Context context);
-    
-    /** Persists a new entity. */
-    void store(Entity entity);
-    
-    /** Updates an existing entity. */
-    void update(Entity entity);
-    
-    /** Executes a command on the storage system */
-    Object execute(String command);
-    
-    /** Assures that all data that has been {@link #store(Entity)}d, is send to the target system. */
-    @Override
-	void flush();
-    
-    /** Closes the database. */
-    @Override
-	void close();
-    
+  /**
+   * Creates an iterator that provides all entities of given type.
+   *
+   * @param type     the type
+   * @param selector the selector
+   * @param context  the context
+   * @return the data source
+   */
+  DataSource<Entity> queryEntities(String type, String selector, Context context);
+
+  /**
+   * Queries for entity ids
+   *
+   * @param type     the type
+   * @param selector the selector
+   * @param context  the context
+   * @return the data source
+   */
+  DataSource<?> queryEntityIds(String type, String selector, Context context);
+
+  /**
+   * Creates an Iterable for repetitive iteration through the results of the specified query.
+   *
+   * @param selector the selector
+   * @param simplify the simplify
+   * @param context  the context
+   * @return the data source
+   */
+  DataSource<?> query(String selector, boolean simplify, Context context);
+
+  /**
+   * Persists a new entity.
+   *
+   * @param entity the entity
+   */
+  void store(Entity entity);
+
+  /**
+   * Updates an existing entity.
+   *
+   * @param entity the entity
+   */
+  void update(Entity entity);
+
+  /**
+   * Executes a command on the storage system
+   *
+   * @param command the command
+   * @return the object
+   */
+  Object execute(String command);
+
+  /**
+   * Assures that all data that has been {@link #store(Entity)}d, is send to the target system.
+   */
+  @Override
+  void flush();
+
+  /**
+   * Closes the database.
+   */
+  @Override
+  void close();
+
 }

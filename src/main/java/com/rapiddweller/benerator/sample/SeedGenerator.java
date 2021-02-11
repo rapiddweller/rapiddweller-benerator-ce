@@ -26,100 +26,129 @@
 
 package com.rapiddweller.benerator.sample;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.UnsafeNonNullGenerator;
-import com.rapiddweller.commons.ArrayUtil;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.CollectionUtil;
+
+import java.util.List;
 
 /**
  * Generates value sequences derived from seed sequences.<br/>
  * <br/>
  * Created at 12.07.2009 09:04:43
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
+public class SeedGenerator<E> extends UnsafeNonNullGenerator<E[]> {
 
-public class SeedGenerator<E> extends UnsafeNonNullGenerator<E[]>{
-	
-	private final Class<E> atomType;
-	private final Class<E[]> targetType;
-	private final SeedManager<E> atomProvider;
-	
-	@SuppressWarnings("unchecked")
-    public SeedGenerator(Class<E> atomType, int depth) {
-		if (depth <= 0)
-			throw new InvalidGeneratorSetupException("depth: " + depth);
-		this.atomType = atomType;
-	    this.targetType = ArrayUtil.arrayType(atomType);
-	    this.atomProvider = new SeedManager<>(atomType, depth);
-    }
+  private final Class<E> atomType;
+  private final Class<E[]> targetType;
+  private final SeedManager<E> atomProvider;
 
-	private E generate(List<E> predecessors) {
-		E result;
-		do {
-			int preSize = predecessors.size();
-			if (preSize < 1)
-				throw new IllegalArgumentException("Predecessor list is empty");
-			if (predecessors.get(0) != null)
-				throw new IllegalArgumentException("Predecessor list must start with null");
-			SeedManager<E> generator = atomProvider;
-			for (int i = Math.max(0, preSize - getDepth() + 1); i < preSize; i++)
-				generator = generator.getSuccessor(predecessors.get(i));
-			result = generator.randomAtom();
-		} while (predecessors.size() == 1 && result == null);
-		return result;
-	}
+  /**
+   * Instantiates a new Seed generator.
+   *
+   * @param atomType the atom type
+   * @param depth    the depth
+   */
+  @SuppressWarnings("unchecked")
+  public SeedGenerator(Class<E> atomType, int depth) {
+    if (depth <= 0) {
+      throw new InvalidGeneratorSetupException("depth: " + depth);
+    }
+    this.atomType = atomType;
+    this.targetType = ArrayUtil.arrayType(atomType);
+    this.atomProvider = new SeedManager<>(atomType, depth);
+  }
 
-    public int getDepth() {
-	    return atomProvider.getDepth();
-    }
-    
-    @SafeVarargs
-	public final void addSample(E... sequence) {
-    	E[] atoms = wrapWithNulls(sequence);
-    	for (int i = 0; i <= atoms.length - getDepth(); i++)
-    		atomProvider.addSequence(i, atoms);
-    }
+  private E generate(List<E> predecessors) {
+    E result;
+    do {
+      int preSize = predecessors.size();
+      if (preSize < 1) {
+        throw new IllegalArgumentException("Predecessor list is empty");
+      }
+      if (predecessors.get(0) != null) {
+        throw new IllegalArgumentException("Predecessor list must start with null");
+      }
+      SeedManager<E> generator = atomProvider;
+      for (int i = Math.max(0, preSize - getDepth() + 1); i < preSize; i++) {
+        generator = generator.getSuccessor(predecessors.get(i));
+      }
+      result = generator.randomAtom();
+    } while (predecessors.size() == 1 && result == null);
+    return result;
+  }
 
-    private E[] wrapWithNulls(E[] sequence) {
-	    E[] result = ArrayUtil.newInstance(atomType, sequence.length + 2);
-	    System.arraycopy(sequence, 0, result, 1, sequence.length);
-	    return result;
-    }
+  /**
+   * Gets depth.
+   *
+   * @return the depth
+   */
+  public int getDepth() {
+    return atomProvider.getDepth();
+  }
 
-	@Override
-	public Class<E[]> getGeneratedType() {
-	    return targetType;
+  /**
+   * Add sample.
+   *
+   * @param sequence the sequence
+   */
+  @SafeVarargs
+  public final void addSample(E... sequence) {
+    E[] atoms = wrapWithNulls(sequence);
+    for (int i = 0; i <= atoms.length - getDepth(); i++) {
+      atomProvider.addSequence(i, atoms);
     }
-	
-	@Override
-	public void init(GeneratorContext context) {
-		assertNotInitialized();
-		atomProvider.init();
-		super.init(context);
-	}
-	
-	@Override
-	@SuppressWarnings("unchecked")
-	public E[] generate() {
-		assertInitialized();
-	    List<E> tmp = CollectionUtil.toList((E) null);
-	    do {
-	    	tmp.add(generate(tmp));
-	    } while (CollectionUtil.lastElement(tmp) != null);
-	    return CollectionUtil.extractArray(tmp, atomType, 1, tmp.size() - 1);
-    }
+  }
 
-    public void printState() {
-	    printState("");
-    }
+  private E[] wrapWithNulls(E[] sequence) {
+    E[] result = ArrayUtil.newInstance(atomType, sequence.length + 2);
+    System.arraycopy(sequence, 0, result, 1, sequence.length);
+    return result;
+  }
 
-    public void printState(String indent) {
-	    System.out.println(this);
-	    atomProvider.printState(indent + "+ ");
-    }
+  @Override
+  public Class<E[]> getGeneratedType() {
+    return targetType;
+  }
+
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    atomProvider.init();
+    super.init(context);
+  }
+
+  @Override
+  public E[] generate() {
+    assertInitialized();
+    List<E> tmp = CollectionUtil.toList((E) null);
+    do {
+      tmp.add(generate(tmp));
+    } while (CollectionUtil.lastElement(tmp) != null);
+    return CollectionUtil.extractArray(tmp, atomType, 1, tmp.size() - 1);
+  }
+
+  /**
+   * Print state.
+   */
+  public void printState() {
+    printState("");
+  }
+
+  /**
+   * Print state.
+   *
+   * @param indent the indent
+   */
+  public void printState(String indent) {
+    System.out.println(this);
+    atomProvider.printState(indent + "+ ");
+  }
 
 }

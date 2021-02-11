@@ -26,7 +26,7 @@
 
 package com.rapiddweller.domain.finance;
 
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.StringUtil;
 
 import java.math.BigDecimal;
 
@@ -40,30 +40,42 @@ import java.math.BigDecimal;
  */
 public class IBANUtil {
 
-    private static final BigDecimal NINETYSEVEN = BigDecimal.valueOf(97);
+  private static final BigDecimal NINETYSEVEN = BigDecimal.valueOf(97);
 
-    public static int checksum(String iban) {
-        String tmp = (iban.substring(4) + iban.substring(0, 4)).toUpperCase();
-        StringBuffer digits = new StringBuffer();
-        for (int i = 0; i < tmp.length(); i++) {
-            char c = tmp.charAt(i);
-            if (c >= '0' && c <= '9')
-                digits.append(c);
-            else if (c >= 'A' && c <= 'Z') {
-                int n = c - 'A' + 10;
-                digits.append((char) ('0' + n / 10));
-                digits.append((char) ('0' + (n % 10)));
-            } else
-                return -1;
-        }
-        BigDecimal n = new BigDecimal(digits.toString());
-        int remainder = n.remainder(NINETYSEVEN).intValue();
-        return remainder;
+  /**
+   * Checksum int.
+   *
+   * @param iban the iban
+   * @return the int
+   */
+  public static int checksum(String iban) {
+    String tmp = (iban.substring(4) + iban.substring(0, 4)).toUpperCase();
+    StringBuilder digits = new StringBuilder();
+    for (int i = 0; i < tmp.length(); i++) {
+      char c = tmp.charAt(i);
+      if (c >= '0' && c <= '9') {
+        digits.append(c);
+      } else if (c >= 'A' && c <= 'Z') {
+        int n = c - 'A' + 10;
+        digits.append((char) ('0' + n / 10));
+        digits.append((char) ('0' + (n % 10)));
+      } else {
+        return -1;
+      }
     }
+    BigDecimal n = new BigDecimal(digits.toString());
+    return n.remainder(NINETYSEVEN).intValue();
+  }
 
-    public static String fixChecksum(String ibanTemplate) {
-        int remainder = IBANUtil.checksum(ibanTemplate);
-        String pp = StringUtil.padLeft(String.valueOf(98 - remainder), 2, '0');
-        return ibanTemplate.substring(0, 2) + pp + ibanTemplate.substring(4);
-    }
+  /**
+   * Fix checksum string.
+   *
+   * @param ibanTemplate the iban template
+   * @return the string
+   */
+  public static String fixChecksum(String ibanTemplate) {
+    int remainder = IBANUtil.checksum(ibanTemplate);
+    String pp = StringUtil.padLeft(String.valueOf(98 - remainder), 2, '0');
+    return ibanTemplate.substring(0, 2) + pp + ibanTemplate.substring(4);
+  }
 }

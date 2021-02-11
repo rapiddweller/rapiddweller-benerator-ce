@@ -26,82 +26,98 @@
 
 package com.rapiddweller.benerator.sample;
 
+import com.rapiddweller.benerator.test.GeneratorClassTest;
+import com.rapiddweller.benerator.util.GeneratorUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.converter.ConverterManager;
+import com.rapiddweller.common.converter.ParseFormatConverter;
+import org.junit.Test;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.converter.ConverterManager;
-import com.rapiddweller.commons.converter.ParseFormatConverter;
-import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.benerator.util.GeneratorUtil;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link SequencedCSVSampleGenerator}.<br/>
  * Created: 26.07.2007 18:16:11
+ *
  * @author Volker Bergmann
  */
 public class SequencedCSVSampleGeneratorTest extends GeneratorClassTest {
 
-    public SequencedCSVSampleGeneratorTest() {
-        super(SequencedCSVSampleGenerator.class);
+  /**
+   * Instantiates a new Sequenced csv sample generator test.
+   */
+  public SequencedCSVSampleGeneratorTest() {
+    super(SequencedCSVSampleGenerator.class);
+  }
+
+  private static final String DATE_FILE_PATH = "com/rapiddweller/benerator/csv/dates.csv";
+  private static final String BIG_FILE_NAME = "many_dates.csv";
+
+  private static final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+
+  /**
+   * Test small set.
+   *
+   * @throws ParseException the parse exception
+   */
+  @Test
+  public void testSmallSet() throws ParseException {
+    // prepare
+    SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+    ParseFormatConverter<Date> converter = new ParseFormatConverter<>(Date.class, format, false);
+    SequencedCSVSampleGenerator<Date> generator = new SequencedCSVSampleGenerator<>(DATE_FILE_PATH, converter);
+    generator.init(context);
+    // test
+    List<Date> expectedDates = CollectionUtil.toList(sdf.parse("01.02.2003"), sdf.parse("02.02.2003"), sdf.parse("03.02.2003"));
+    for (int i = 0; i < 100; i++) {
+      Date generatedDate = GeneratorUtil.generateNonNull(generator);
+      assertTrue("generated date not in expected value set: " + sdf.format(generatedDate),
+          expectedDates.contains(generatedDate));
     }
+  }
 
-    private static final String DATE_FILE_PATH = "com/rapiddweller/benerator/csv/dates.csv";
-    private static final String BIG_FILE_NAME = "many_dates.csv";
+  /**
+   * Test big set.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testBigSet() throws Exception {
+    File csvFile = new File(BIG_FILE_NAME);
+    try {
+      // prepare
+      PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(csvFile)));
+      // create large CSV file
+      for (int i = 0; i < 200000; i++) {
+        writer.println(i % 100);
+      }
+      writer.close();
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-
-    @Test
-    public void testSmallSet() throws ParseException {
-    	// prepare
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        ParseFormatConverter<Date> converter = new ParseFormatConverter<Date>(Date.class, format, false);
-        SequencedCSVSampleGenerator<Date> generator = new SequencedCSVSampleGenerator<Date>(DATE_FILE_PATH, converter);
-        generator.init(context);
-        // test
-        List<Date> expectedDates = CollectionUtil.toList(sdf.parse("01.02.2003"), sdf.parse("02.02.2003"), sdf.parse("03.02.2003"));
-        for (int i = 0; i < 100; i++) {
-            Date generatedDate = GeneratorUtil.generateNonNull(generator);
-            assertTrue("generated date not in expected value set: " + sdf.format(generatedDate),
-                    expectedDates.contains(generatedDate));
-        }
+      // test generator
+      Converter<String, Integer> converter = ConverterManager.getInstance().createConverter(
+          String.class, Integer.class);
+      SequencedCSVSampleGenerator<Integer> generator
+          = new SequencedCSVSampleGenerator<>(BIG_FILE_NAME, converter);
+      generator.init(context);
+      for (int i = 0; i < 1000; i++) {
+        int product = GeneratorUtil.generateNonNull(generator);
+        assertTrue("generated value not in expected value range: " + product, 0 <= product && product <= 99);
+      }
+    } finally {
+      // delete CSV file
+      FileUtil.deleteIfExists(csvFile);
     }
+  }
 
-    @Test
-    public void testBigSet() throws Exception {
-    	File csvFile = new File(BIG_FILE_NAME);
-    	try {
-    		// prepare
-	    	PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(csvFile)));
-	    	// create large CSV file
-	        for (int i = 0; i < 200000; i++)
-	        	writer.println(i % 100);
-	    	writer.close();
-	    	
-	    	// test generator
-	    	Converter<String, Integer> converter = ConverterManager.getInstance().createConverter(
-	    			String.class, Integer.class);
-	        SequencedCSVSampleGenerator<Integer> generator 
-	        	= new SequencedCSVSampleGenerator<Integer>(BIG_FILE_NAME, converter);
-	        generator.init(context);
-	        for (int i = 0; i < 1000; i++) {
-	            int product = GeneratorUtil.generateNonNull(generator);
-	            assertTrue("generated value not in expected value range: " + product, 0 <= product && product <= 99);
-	        }
-    	} finally {
-	        // delete CSV file
-	        FileUtil.deleteIfExists(csvFile);
-    	}
-    }
-    
 }

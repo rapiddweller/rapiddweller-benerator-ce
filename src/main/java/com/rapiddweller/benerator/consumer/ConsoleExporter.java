@@ -26,97 +26,133 @@
 
 package com.rapiddweller.benerator.consumer;
 
+import com.rapiddweller.common.CompositeFormatter;
+import com.rapiddweller.model.data.Entity;
+
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.rapiddweller.commons.CompositeFormatter;
-import com.rapiddweller.model.data.Entity;
-
 /**
  * Exports generated objects to the standard output.<br/><br/>
  * Created: 27.02.2008 11:40:37
- * @since 0.5.0
+ *
  * @author Volker Bergmann
+ * @since 0.5.0
  */
 public class ConsoleExporter extends FormattingConsumer {
-	
-	private Long limit;
-	private String indent;
-	
-	private CompositeFormatter compositeFormatter;
-	private PrintStream out = System.out;
-	private Map<String, AtomicLong> counters;
-	
-	// Constructors ----------------------------------------------------------------------------------------------------
-	
-	public ConsoleExporter() {
-		this(null);
-	}
-	
-	public ConsoleExporter(Long limit) {
-		this(limit, "");
-	}
-	
-	public ConsoleExporter(Long limit, String indent) {
-		this.limit = limit;
-		this.indent = indent;
-		this.counters = new HashMap<String, AtomicLong>();
-		this.compositeFormatter = new CompositeFormatter(true, true);
-		this.compositeFormatter.setDatePattern(getDatePattern());
-		this.compositeFormatter.setTimestampPattern(getTimestampPattern());
-	}
-	
-	// properties ------------------------------------------------------------------------------------------------------
-	
-	@Override
-	public void setDatePattern(String datePattern) {
-		super.setDatePattern(datePattern);
-		compositeFormatter.setDatePattern(datePattern);
-	}
 
-	@Override
-	public void setTimestampPattern(String timestampPattern) {
-		super.setTimestampPattern(timestampPattern);
-		compositeFormatter.setTimestampPattern(timestampPattern);
-	}
+  private Long limit;
+  private String indent;
 
-	public void setLimit(Long limit) {
-    	this.limit = limit;
+  private final CompositeFormatter compositeFormatter;
+  private PrintStream out = System.out;
+  private final Map<String, AtomicLong> counters;
+
+  // Constructors ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Instantiates a new Console exporter.
+   */
+  public ConsoleExporter() {
+    this(null);
+  }
+
+  /**
+   * Instantiates a new Console exporter.
+   *
+   * @param limit the limit
+   */
+  public ConsoleExporter(Long limit) {
+    this(limit, "");
+  }
+
+  /**
+   * Instantiates a new Console exporter.
+   *
+   * @param limit  the limit
+   * @param indent the indent
+   */
+  public ConsoleExporter(Long limit, String indent) {
+    this.limit = limit;
+    this.indent = indent;
+    this.counters = new HashMap<>();
+    this.compositeFormatter = new CompositeFormatter(true, true);
+    this.compositeFormatter.setDatePattern(getDatePattern());
+    this.compositeFormatter.setTimestampPattern(getTimestampPattern());
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  @Override
+  public void setDatePattern(String datePattern) {
+    super.setDatePattern(datePattern);
+    compositeFormatter.setDatePattern(datePattern);
+  }
+
+  @Override
+  public void setTimestampPattern(String timestampPattern) {
+    super.setTimestampPattern(timestampPattern);
+    compositeFormatter.setTimestampPattern(timestampPattern);
+  }
+
+  /**
+   * Sets limit.
+   *
+   * @param limit the limit
+   */
+  public void setLimit(Long limit) {
+    this.limit = limit;
+  }
+
+  /**
+   * Sets indent.
+   *
+   * @param indent the indent
+   */
+  public void setIndent(String indent) {
+    this.indent = indent;
+  }
+
+  /**
+   * Sets flat.
+   *
+   * @param flat the flat
+   */
+  public void setFlat(boolean flat) {
+    this.compositeFormatter.setFlat(flat);
+  }
+
+  /**
+   * Sets out.
+   *
+   * @param out the out
+   */
+  public void setOut(PrintStream out) {
+    this.out = out;
+  }
+
+  // Consumer interface implementation -------------------------------------------------------------------------------
+
+  @Override
+  public void startProductConsumption(Object object) {
+    if (object instanceof Entity) {
+      String entityType = ((Entity) object).type();
+      AtomicLong counter = counters.get(entityType);
+      if (counter == null) {
+        counter = new AtomicLong(0);
+        counters.put(entityType, counter);
+      }
+      long counterValue = counter.incrementAndGet();
+      if (limit == null || limit < 0 || counterValue <= limit) {
+        out.println(indent + compositeFormatter.render(entityType + '[', (Entity) object, "]"));
+      } else {
+        out.print(".");
+      }
+    } else {
+      out.println(plainConverter.convert(object));
     }
-	
-	public void setIndent(String indent) {
-		this.indent = indent;
-	}
-	
-	public void setFlat(boolean flat) {
-		this.compositeFormatter.setFlat(flat);
-	}
-	
-	public void setOut(PrintStream out) {
-		this.out = out;
-	}
-	
-	// Consumer interface implementation -------------------------------------------------------------------------------
-	
-	@Override
-	public void startProductConsumption(Object object) {
-		if (object instanceof Entity) {
-			String entityType = ((Entity) object).type();
-			AtomicLong counter = counters.get(entityType);
-			if (counter == null) {
-				counter = new AtomicLong(0);
-				counters.put(entityType, counter);
-			}
-			long counterValue = counter.incrementAndGet();
-			if (limit == null || limit < 0 || counterValue <= limit)
-				out.println(indent + compositeFormatter.render(entityType + '[', (Entity) object, "]"));
-			else
-				out.print(".");
-		} else {
-			out.println(plainConverter.convert(object));
-		}
-    }
-	
+  }
+
 }

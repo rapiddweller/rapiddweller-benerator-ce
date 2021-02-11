@@ -29,7 +29,7 @@ package com.rapiddweller.domain.organization;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.csv.LocalCSVGenerator;
 import com.rapiddweller.benerator.wrapper.NullInjectingGeneratorProxy;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 
 import java.util.Locale;
 
@@ -42,10 +42,17 @@ import java.util.Locale;
  */
 public class SectorGenerator extends NullInjectingGeneratorProxy<String> {
 
-    private static final String BASE_FILE_NAME = "/com/rapiddweller/domain/organization/sector";
+  private static final String BASE_FILE_NAME =
+      "/com/rapiddweller/domain/organization/sector";
 
-    public SectorGenerator(Locale locale) {
-        super(new LocalCSVGenerator<String>(String.class, BASE_FILE_NAME, locale, ".csv", Encodings.UTF_8), 0.7);
-    }
+  /**
+   * Instantiates a new Sector generator.
+   *
+   * @param locale the locale
+   */
+  public SectorGenerator(Locale locale) {
+    super(new LocalCSVGenerator<>(String.class, BASE_FILE_NAME, locale,
+        ".csv", Encodings.UTF_8), 0.7);
+  }
 
 }

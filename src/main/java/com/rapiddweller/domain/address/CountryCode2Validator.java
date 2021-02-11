@@ -26,7 +26,7 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 import javax.validation.ConstraintValidatorContext;
 
@@ -39,16 +39,20 @@ import javax.validation.ConstraintValidatorContext;
  * @see "http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2"
  * @since 0.5.4
  */
-public class CountryCode2Validator extends AbstractConstraintValidator<CountryCode2, String> {
+public class CountryCode2Validator
+    extends AbstractConstraintValidator<CountryCode2, String> {
 
-    @Override
-    public boolean isValid(String countryCode, ConstraintValidatorContext context) {
-        if (countryCode == null || countryCode.length() != 2)
-            return false;
-        if (!Character.isLetter(countryCode.charAt(0))
-                || !Character.isLetter(countryCode.charAt(1)))
-            return false;
-        return (Country.getInstance(countryCode) != null);
+  @Override
+  public boolean isValid(String countryCode,
+                         ConstraintValidatorContext context) {
+    if (countryCode == null || countryCode.length() != 2) {
+      return false;
     }
+    if (!Character.isLetter(countryCode.charAt(0))
+        || !Character.isLetter(countryCode.charAt(1))) {
+      return false;
+    }
+    return (Country.getInstance(countryCode) != null);
+  }
 
 }

@@ -31,41 +31,53 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.script.Expression;
 
 /**
- * {@link Statement} implementation that evaluates an {@link Expression} 
+ * {@link Statement} implementation that evaluates an {@link Expression}
  * which returns a Task and executes the returned Task.<br/>
  * <br/>
  * Created: 27.10.2009 16:09:20
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class LazyStatement extends StatementProxy { // TODO v0.8 remove this class
 
-	private Expression<Statement> statementExpression;
+  private final Expression<Statement> statementExpression;
 
-    public LazyStatement(Expression<Statement> statementExpression) {
-    	super(null);
-	    this.statementExpression = statementExpression;
+  /**
+   * Instantiates a new Lazy statement.
+   *
+   * @param statementExpression the statement expression
+   */
+  public LazyStatement(Expression<Statement> statementExpression) {
+    super(null);
+    this.statementExpression = statementExpression;
+  }
+
+  /**
+   * Gets target expression.
+   *
+   * @return the target expression
+   */
+  public Expression<Statement> getTargetExpression() {
+    return statementExpression;
+  }
+
+  @Override
+  public Statement getRealStatement(BeneratorContext context) {
+    if (this.realStatement == null) {
+      this.realStatement = statementExpression.evaluate(context);
     }
+    return this.realStatement;
+  }
 
-	public Expression<Statement> getTargetExpression() {
-	    return statementExpression;
-    }
+  @Override
+  public boolean execute(BeneratorContext context) {
+    return getRealStatement(context).execute(context);
+  }
 
-	@Override
-	public Statement getRealStatement(BeneratorContext context) {
-	    if (this.realStatement == null)
-	    	this.realStatement = statementExpression.evaluate(context);
-	    return this.realStatement;
-	}
-	
-	@Override
-	public boolean execute(BeneratorContext context) {
-		return getRealStatement(context).execute(context);
-    }
-
-	@Override
-	public String toString() {
-	    return getClass().getSimpleName() + '(' + (realStatement != null ? realStatement : statementExpression) + ')';
-	}
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '(' + (realStatement != null ? realStatement : statementExpression) + ')';
+  }
 
 }

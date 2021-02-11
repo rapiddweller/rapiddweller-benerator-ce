@@ -26,14 +26,14 @@
 
 package com.rapiddweller.platform.db;
 
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.commons.LogCategories;
-import com.rapiddweller.commons.OrderedMap;
+import com.rapiddweller.common.LogCategoriesConstants;
+import com.rapiddweller.common.OrderedMap;
 import com.rapiddweller.jdbacl.ColumnInfo;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.model.DBTable;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Closeable;
 import java.sql.Connection;
@@ -51,115 +51,178 @@ import java.util.Map;
  */
 public class ConnectionHolder implements Closeable {
 
-    private static final Logger JDBC_LOGGER = LogManager.getLogger(LogCategories.JDBC);
-    public Map<ComplexTypeDescriptor, PreparedStatement> insertStatements;
-    public Map<ComplexTypeDescriptor, PreparedStatement> updateStatements;
-    public Map<ComplexTypeDescriptor, PreparedStatement> selectByPKStatements;
-    private final DBSystem db;
-    private Connection connection;
+  private static final Logger JDBC_LOGGER =
+      LogManager.getLogger(LogCategoriesConstants.JDBC);
+  /**
+   * The Insert statements.
+   */
+  public final Map<ComplexTypeDescriptor, PreparedStatement> insertStatements;
+  /**
+   * The Update statements.
+   */
+  public final Map<ComplexTypeDescriptor, PreparedStatement> updateStatements;
+  /**
+   * The Select by pk statements.
+   */
+  public final Map<ComplexTypeDescriptor, PreparedStatement>
+      selectByPKStatements;
+  private final DBSystem db;
+  private Connection connection;
 
-    public ConnectionHolder(DBSystem db) {
-        this.insertStatements = new OrderedMap<ComplexTypeDescriptor, PreparedStatement>();
-        this.updateStatements = new OrderedMap<ComplexTypeDescriptor, PreparedStatement>();
-        this.selectByPKStatements = new OrderedMap<ComplexTypeDescriptor, PreparedStatement>();
-        this.db = db;
-        this.connection = null; // lazily initialized
+  /**
+   * Instantiates a new Connection holder.
+   *
+   * @param db the db
+   */
+  public ConnectionHolder(DBSystem db) {
+    this.insertStatements = new OrderedMap<>();
+    this.updateStatements = new OrderedMap<>();
+    this.selectByPKStatements = new OrderedMap<>();
+    this.db = db;
+    this.connection = null; // lazily initialized
+  }
+
+  /**
+   * Gets connection.
+   *
+   * @return the connection
+   */
+  public Connection getConnection() {
+    if (connection == null) {
+      this.connection = db.createConnection();
     }
+    return connection;
+  }
 
-    public Connection getConnection() {
-        if (connection == null)
-            this.connection = db.createConnection();
-        return connection;
+  /**
+   * Commit.
+   */
+  public void commit() {
+    try {
+      flushStatements(insertStatements);
+      flushStatements(updateStatements);
+      JDBC_LOGGER.debug("Committing connection: {}", connection);
+      getConnection().commit();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    public void commit() {
-        try {
-            flushStatements(insertStatements);
-            flushStatements(updateStatements);
-            JDBC_LOGGER.debug("Committing connection: {}" + connection);
-            getConnection().commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+  private void flushStatements(
+      Map<ComplexTypeDescriptor, PreparedStatement> statements)
+      throws SQLException {
+    for (Map.Entry<ComplexTypeDescriptor, PreparedStatement> entry : statements
+        .entrySet()) {
+      PreparedStatement statement = entry.getValue();
+      if (statement != null) {
+        // need to finish old statement
+        if (db.isBatch()) {
+          statement.executeBatch();
         }
+        JDBC_LOGGER.debug("Closing statement: {}", statement);
+        DBUtil.close(statement);
+      }
+      entry.setValue(null);
     }
+  }
 
-    private void flushStatements(Map<ComplexTypeDescriptor, PreparedStatement> statements) throws SQLException {
-        for (Map.Entry<ComplexTypeDescriptor, PreparedStatement> entry : statements.entrySet()) {
-            PreparedStatement statement = entry.getValue();
-            if (statement != null) {
-                // need to finish old statement
-                if (db.isBatch())
-                    statement.executeBatch();
-                JDBC_LOGGER.debug("Closing statement: {}", statement);
-                DBUtil.close(statement);
-            }
-            entry.setValue(null);
-        }
+  /**
+   * Gets select by pk statement.
+   *
+   * @param descriptor the descriptor
+   * @return the select by pk statement
+   */
+  public PreparedStatement getSelectByPKStatement(
+      ComplexTypeDescriptor descriptor) {
+    try {
+      PreparedStatement statement = selectByPKStatements.get(descriptor);
+      if (statement == null) {
+        statement = createSelectByPKStatement(descriptor);
+      } else {
+        statement.clearParameters();
+      }
+      return statement;
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    public PreparedStatement getSelectByPKStatement(ComplexTypeDescriptor descriptor) {
-        try {
-            PreparedStatement statement = selectByPKStatements.get(descriptor);
-            if (statement == null)
-                statement = createSelectByPKStatement(descriptor);
-            else
-                statement.clearParameters();
-            return statement;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+  private PreparedStatement createSelectByPKStatement(
+      ComplexTypeDescriptor descriptor) throws SQLException {
+    PreparedStatement statement;
+    String tableName = descriptor.getName();
+    DBTable table = db.getTable(tableName.toUpperCase());
+    if (table == null) {
+      throw new IllegalArgumentException("Table not found: " + tableName);
     }
+    StringBuilder builder =
+        new StringBuilder("select * from ").append(tableName)
+            .append(" where");
+    for (String idColumnName : descriptor.getIdComponentNames()) {
+      builder.append(' ').append(idColumnName).append("=?");
+    }
+    statement = DBUtil.prepareStatement(getConnection(), builder.toString(),
+        db.isReadOnly());
+    selectByPKStatements.put(descriptor, statement);
+    return statement;
+  }
 
-    private PreparedStatement createSelectByPKStatement(ComplexTypeDescriptor descriptor) throws SQLException {
-        PreparedStatement statement;
-        String tableName = descriptor.getName();
-        DBTable table = db.getTable(tableName.toUpperCase());
-        if (table == null)
-            throw new IllegalArgumentException("Table not found: " + tableName);
-        StringBuilder builder = new StringBuilder("select * from ").append(tableName).append(" where");
-        for (String idColumnName : descriptor.getIdComponentNames())
-            builder.append(' ').append(idColumnName).append("=?");
-        statement = DBUtil.prepareStatement(getConnection(), builder.toString(), db.isReadOnly());
-        selectByPKStatements.put(descriptor, statement);
-        return statement;
+  /**
+   * Gets statement.
+   *
+   * @param descriptor  the descriptor
+   * @param insert      the insert
+   * @param columnInfos the column infos
+   * @return the statement
+   */
+  public PreparedStatement getStatement(ComplexTypeDescriptor descriptor,
+                                        boolean insert,
+                                        List<ColumnInfo> columnInfos) {
+    try {
+      PreparedStatement statement =
+          (insert ? insertStatements.get(descriptor) :
+              updateStatements.get(descriptor));
+      if (statement == null) {
+        statement = createStatement(descriptor, insert, columnInfos);
+      } else {
+        statement.clearParameters();
+      }
+      return statement;
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    public PreparedStatement getStatement(ComplexTypeDescriptor descriptor, boolean insert, List<ColumnInfo> columnInfos) {
-        try {
-            PreparedStatement statement = (insert ? insertStatements.get(descriptor) : updateStatements.get(descriptor));
-            if (statement == null)
-                statement = createStatement(descriptor, insert, columnInfos);
-            else
-                statement.clearParameters();
-            return statement;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+  private PreparedStatement createStatement(ComplexTypeDescriptor descriptor,
+                                            boolean insert,
+                                            List<ColumnInfo> columnInfos)
+      throws SQLException {
+    PreparedStatement statement;
+    String tableName = descriptor.getName();
+    DBTable table = db.getTable(tableName.toUpperCase());
+    if (table == null) {
+      throw new IllegalArgumentException("Table not found: " + tableName);
     }
+    String sql = (insert ?
+        db.getDialect().insert(table, columnInfos) :
+        db.getDialect().update(table,
+            db.getTable(tableName).getPKColumnNames(),
+            columnInfos));
+    JDBC_LOGGER.debug("Creating prepared statement: {}", sql);
+    statement =
+        DBUtil.prepareStatement(getConnection(), sql, db.isReadOnly());
+    if (insert) {
+      insertStatements.put(descriptor, statement);
+    } else {
+      updateStatements.put(descriptor, statement);
+    }
+    return statement;
+  }
 
-    private PreparedStatement createStatement(ComplexTypeDescriptor descriptor, boolean insert,
-                                              List<ColumnInfo> columnInfos) throws SQLException {
-        PreparedStatement statement;
-        String tableName = descriptor.getName();
-        DBTable table = db.getTable(tableName.toUpperCase());
-        if (table == null)
-            throw new IllegalArgumentException("Table not found: " + tableName);
-        String sql = (insert ?
-                db.getDialect().insert(table, columnInfos) :
-                db.getDialect().update(table, db.getTable(tableName).getPKColumnNames(), columnInfos));
-        JDBC_LOGGER.debug("Creating prepared statement: {}", sql);
-        statement = DBUtil.prepareStatement(getConnection(), sql, db.isReadOnly());
-        if (insert)
-            insertStatements.put(descriptor, statement);
-        else
-            updateStatements.put(descriptor, statement);
-        return statement;
-    }
-
-    @Override
-    public void close() {
-        commit();
-        DBUtil.close(connection);
-    }
+  @Override
+  public void close() {
+    commit();
+    DBUtil.close(connection);
+  }
 
 }

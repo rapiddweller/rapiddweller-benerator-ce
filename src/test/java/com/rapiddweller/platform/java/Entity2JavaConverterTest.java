@@ -26,69 +26,83 @@
 
 package com.rapiddweller.platform.java;
 
-import java.util.Arrays;
-
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.PersonBean;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-import com.rapiddweller.commons.ArrayFormat;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link Entity2JavaConverter}.<br/>
  * <br/>
  * Created: 29.08.2007 18:54:45
+ *
  * @author Volker Bergmann
  */
 public class Entity2JavaConverterTest {
 
-    final BeanDescriptorProvider provider = new BeanDescriptorProvider();
+  /**
+   * The Provider.
+   */
+  final BeanDescriptorProvider provider = new BeanDescriptorProvider();
 
-    @Test
-    public void testEntity() {
-		ComplexTypeDescriptor descriptor = getPersonTypeDescriptor();
-        Entity entity = createAlice(descriptor);
-        PersonBean bean = new PersonBean("Alice", 23);
-        assertEquals(bean, new Entity2JavaConverter().convert(entity));
-    }
+  /**
+   * Test entity.
+   */
+  @Test
+  public void testEntity() {
+    ComplexTypeDescriptor descriptor = getPersonTypeDescriptor();
+    Entity entity = createAlice(descriptor);
+    PersonBean bean = new PersonBean("Alice", 23);
+    assertEquals(bean, new Entity2JavaConverter().convert(entity));
+  }
 
-    @Test
-    public void testEntityWithChildClass() {
-		Entity entity = createAlice(getChildTypeDescriptor());
-		entity.set("childNo", 1);
-        ChildBean bean = new ChildBean("Alice", 23, 1);
-        assertEquals(bean, new Entity2JavaConverter().convert(entity));
-    }
+  /**
+   * Test entity with child class.
+   */
+  @Test
+  public void testEntityWithChildClass() {
+    Entity entity = createAlice(getChildTypeDescriptor());
+    entity.set("childNo", 1);
+    ChildBean bean = new ChildBean("Alice", 23, 1);
+    assertEquals(bean, new Entity2JavaConverter().convert(entity));
+  }
 
-	@Test
-    public void testEntityArray() {
-        ComplexTypeDescriptor descriptor = getPersonTypeDescriptor();
-        Object[] expected = new Object[] { new PersonBean("Alice", 23), new PersonBean("Bob", 34) };
-        Object[] array = new Object[] { createAlice(descriptor), createBob(descriptor) };
-        Object[] actual = (Object[]) new Entity2JavaConverter().convert(array);
-		assertTrue("Expected [" + ArrayFormat.format(expected) + "], found: [" + ArrayFormat.format(actual) + "]",
-				Arrays.deepEquals(expected, actual));
-    }
-	
-	
-	// private helpers -------------------------------------------------------------------------------------------------
-	
-	private ComplexTypeDescriptor getPersonTypeDescriptor() {
-		return (ComplexTypeDescriptor) provider.getTypeDescriptor(PersonBean.class.getName());
-	}
+  /**
+   * Test entity array.
+   */
+  @Test
+  public void testEntityArray() {
+    ComplexTypeDescriptor descriptor = getPersonTypeDescriptor();
+    Object[] expected = new Object[] {new PersonBean("Alice", 23), new PersonBean("Bob", 34)};
+    Object[] array = new Object[] {createAlice(descriptor), createBob(descriptor)};
+    Object[] actual = (Object[]) new Entity2JavaConverter().convert(array);
+    assertTrue("Expected [" + ArrayFormat.format(expected) + "], found: [" + ArrayFormat.format(actual) + "]",
+        Arrays.deepEquals(expected, actual));
+  }
 
-	private ComplexTypeDescriptor getChildTypeDescriptor() {
-		return (ComplexTypeDescriptor) provider.getTypeDescriptor(ChildBean.class.getName());
-	}
 
-	private static Entity createAlice(ComplexTypeDescriptor descriptor) {
-		return new Entity(descriptor, "name", "Alice", "age", 23);
-	}
-	
-	private static Entity createBob(ComplexTypeDescriptor descriptor) {
-		return new Entity(descriptor, "name", "Bob", "age", 34);
-	}
-	
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private ComplexTypeDescriptor getPersonTypeDescriptor() {
+    return (ComplexTypeDescriptor) provider.getTypeDescriptor(PersonBean.class.getName());
+  }
+
+  private ComplexTypeDescriptor getChildTypeDescriptor() {
+    return (ComplexTypeDescriptor) provider.getTypeDescriptor(ChildBean.class.getName());
+  }
+
+  private static Entity createAlice(ComplexTypeDescriptor descriptor) {
+    return new Entity(descriptor, "name", "Alice", "age", 23);
+  }
+
+  private static Entity createBob(ComplexTypeDescriptor descriptor) {
+    return new Entity(descriptor, "name", "Bob", "age", 34);
+  }
+
 }

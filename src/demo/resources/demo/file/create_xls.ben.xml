@@ -1,13 +1,18 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 
 <setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="https://www.benerator.de/schema/1.0.0"
        xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
 
+    <comment>setting default values</comment>
+    <setting name="transaction_count" default="100"/>
+
     <iterate type="Product" source="products.ent.csv" consumer="ConsoleExporter"/>
 
-    <generate type="transaction" count="100" consumer="new XLSEntityExporter('transactions.out.xls')">
+    <generate type="transaction"
+              count="{transaction_count}"
+              consumer="new XLSEntityExporter('target/transactions.out.xlsx')">
         <variable name="p" source="products.ent.csv" distribution="random"/>
 
         <id name="id" type="long"/>
@@ -17,4 +22,11 @@
         <attribute name="items" type="short" min="1" max="27"/>
     </generate>
 
+    <iterate type="transaction" source="target/transactions.out.xlsx" consumer="NoConsumer">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="transaction.counter != transaction_count">
+        <error>{ftl: ${transaction.counter} transaction instead of ${transaction_count}}</error>
+    </if>
+    <echo>{ftl: ${transaction_count} transaction has been successfully processed}</echo>
 </setup>

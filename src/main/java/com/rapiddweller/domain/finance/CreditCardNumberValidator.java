@@ -27,7 +27,7 @@
 package com.rapiddweller.domain.finance;
 
 import com.rapiddweller.benerator.util.LuhnUtil;
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 import javax.validation.ConstraintValidatorContext;
 
@@ -38,13 +38,16 @@ import javax.validation.ConstraintValidatorContext;
  * @author Volker Bergmann
  * @since 0.5.1
  */
-public class CreditCardNumberValidator extends AbstractConstraintValidator<CreditCardNumber, CharSequence> {
+public class CreditCardNumberValidator
+    extends AbstractConstraintValidator<CreditCardNumber, CharSequence> {
 
-    @Override
-    public boolean isValid(CharSequence number, ConstraintValidatorContext context) {
-        if (number == null || number.length() < 13 || number.length() > 16)
-            return false;
-        return LuhnUtil.luhnValid(number);
+  @Override
+  public boolean isValid(CharSequence number,
+                         ConstraintValidatorContext context) {
+    if (number == null || number.length() < 13 || number.length() > 16) {
+      return false;
     }
+    return LuhnUtil.luhnValid(number);
+  }
 
 }

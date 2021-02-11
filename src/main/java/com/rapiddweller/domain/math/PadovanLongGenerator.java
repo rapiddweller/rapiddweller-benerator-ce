@@ -42,41 +42,48 @@ import com.rapiddweller.benerator.primitive.number.RecurrenceRelationNumberGener
  * @see PadovanSequence
  * @since 0.6.0
  */
+public class PadovanLongGenerator
+    extends RecurrenceRelationNumberGenerator<Long> {
 
-public class PadovanLongGenerator extends RecurrenceRelationNumberGenerator<Long> {
+  private final boolean unique;
 
-    private final boolean unique;
+  /**
+   * Instantiates a new Padovan long generator.
+   *
+   * @param min    the min
+   * @param max    the max
+   * @param unique the unique
+   */
+  public PadovanLongGenerator(Long min, Long max, boolean unique) {
+    super(Long.class, 3, min, max);
+    this.unique = unique;
+  }
 
-    public PadovanLongGenerator(Long min, Long max, boolean unique) {
-        super(Long.class, 3, min, max);
-        this.unique = unique;
+  // RecurrenceRelationNumberGenerator interface implementation ------------------------------------------------------
+
+  @Override
+  protected Long a0(int n) {
+    return 1L;
+  }
+
+  @Override
+  protected Long aN() {
+    return aN(-2) + aN(-3);
+  }
+
+  @Override
+  public void reset() {
+    super.reset();
+  }
+
+  @Override
+  protected void resetMembers() {
+    super.resetMembers();
+    if (unique) {
+      // take out the first two '1' elements
+      generate();
+      generate();
     }
-
-    // RecurrenceRelationNumberGenerator interface implementation ------------------------------------------------------
-
-    @Override
-    protected Long a0(int n) {
-        return 1L;
-    }
-
-    @Override
-    protected Long aN() {
-        return aN(-2) + aN(-3);
-    }
-
-    @Override
-    public void reset() {
-        super.reset();
-    }
-
-    @Override
-    protected void resetMembers() {
-        super.resetMembers();
-        if (unique) {
-            // take out the first two '1' elements
-            generate();
-            generate();
-        }
-    }
+  }
 
 }

@@ -34,10 +34,11 @@ import java.lang.annotation.Target;
 /**
  * Annotation that marks a test as equivalence partitioning test.<br/><br/>
  * Created: 05.07.2011 16:18:15
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR } )
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR})
 public @interface Equivalence {
 }

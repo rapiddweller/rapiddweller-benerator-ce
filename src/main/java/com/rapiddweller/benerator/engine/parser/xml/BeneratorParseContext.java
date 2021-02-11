@@ -28,51 +28,71 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.formats.xml.ParseContext;
+import com.rapiddweller.format.xml.ParseContext;
 
 /**
  * {@link ParseContext} implementation for Benerator. It defines parsers for all the descriptor XML elements.<br/><br/>
  * Created: 14.12.2010 16:29:38
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class BeneratorParseContext extends ParseContext<Statement> {
 
-	ResourceManager resourceManager;
+  /**
+   * The Resource manager.
+   */
+  final ResourceManager resourceManager;
 
-	public BeneratorParseContext(ResourceManager resourceManager) {
-		super(Statement.class);
-		this.resourceManager = resourceManager;
-		factory.addParser(new BeanParser());
-		factory.addParser(new BeepParser());
-		factory.addParser(new CascadeParser());
-		factory.addParser(new CommentParser());
-		factory.addParser(new DatabaseParser());
-		factory.addParser(new DefaultComponentParser());
-		factory.addParser(new DOMTreeParser());
-		factory.addParser(new EchoParser());
-		factory.addParser(new ErrorParser());
-		factory.addParser(new EvaluateParser());
-		factory.addParser(new GenerateOrIterateParser());
-		factory.addParser(new IfParser());
-		factory.addParser(new ImportParser());
-		factory.addParser(new IncludeParser());
-		factory.addParser(new SettingParser());
-		factory.addParser(new RunTaskParser());
-		factory.addParser(new SetupParser());
-		factory.addParser(new MemStoreParser());
-		factory.addParser(new TranscodeParser());
-		factory.addParser(new TranscodingTaskParser());
-		factory.addParser(new WaitParser());
-		factory.addParser(new WhileParser());
-	}
-	
-	public ResourceManager getResourceManager() {
-		return resourceManager;
-	}
+  /**
+   * Instantiates a new Benerator parse context.
+   *
+   * @param resourceManager the resource manager
+   */
+  public BeneratorParseContext(ResourceManager resourceManager) {
+    super(Statement.class);
+    this.resourceManager = resourceManager;
+    factory.addParser(new BeanParser());
+    factory.addParser(new BeepParser());
+    factory.addParser(new CascadeParser());
+    factory.addParser(new CommentParser());
+    factory.addParser(new DatabaseParser());
+    factory.addParser(new DefaultComponentParser());
+    factory.addParser(new DOMTreeParser());
+    factory.addParser(new EchoParser());
+    factory.addParser(new ErrorParser());
+    factory.addParser(new EvaluateParser());
+    factory.addParser(new GenerateOrIterateParser());
+    factory.addParser(new IfParser());
+    factory.addParser(new ImportParser());
+    factory.addParser(new IncludeParser());
+    factory.addParser(new SettingParser());
+    factory.addParser(new RunTaskParser());
+    factory.addParser(new SetupParser());
+    factory.addParser(new MemStoreParser());
+    factory.addParser(new TranscodeParser());
+    factory.addParser(new TranscodingTaskParser());
+    factory.addParser(new WaitParser());
+    factory.addParser(new WhileParser());
+  }
 
-	public BeneratorParseContext createSubContext(ResourceManager resourceManager) {
-		return new BeneratorParseContext(resourceManager);
-	}
+  /**
+   * Gets resource manager.
+   *
+   * @return the resource manager
+   */
+  public ResourceManager getResourceManager() {
+    return resourceManager;
+  }
+
+  /**
+   * Create sub context benerator parse context.
+   *
+   * @param resourceManager the resource manager
+   * @return the benerator parse context
+   */
+  public BeneratorParseContext createSubContext(ResourceManager resourceManager) {
+    return new BeneratorParseContext(resourceManager);
+  }
 
 }

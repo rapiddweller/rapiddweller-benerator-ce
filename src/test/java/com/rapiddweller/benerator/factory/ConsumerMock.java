@@ -26,62 +26,101 @@
 
 package com.rapiddweller.benerator.factory;
 
+import com.rapiddweller.benerator.consumer.AbstractConsumer;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.context.ContextAware;
+import com.rapiddweller.model.data.Entity;
+
 import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.rapiddweller.benerator.consumer.AbstractConsumer;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.context.ContextAware;
-import com.rapiddweller.model.data.Entity;
-
+/**
+ * The type Consumer mock.
+ */
 public class ConsumerMock extends AbstractConsumer implements ContextAware {
-	
-	public static final HashMap<Integer, ConsumerMock> instances 
-		= new HashMap<Integer, ConsumerMock>();
-	private Random random = new Random();
-	
-	public static ConsumerMock lastInstance;
-	
-	public Object lastProduct;
-	public int id;
-	public AtomicInteger invocationCount;
-	public boolean closed;
-	public Context context;
-	
-	public ConsumerMock() {
-		this(1);
-	}
 
-	public ConsumerMock(int id) {
-		this.id = id;
-		this.invocationCount = new AtomicInteger();
-		this.closed = false;
-		lastInstance = this;
-		instances.put(id, this);
-	}
-	
-	@Override
-	public void setContext(Context context) {
-	    this.context = context;
-	}
+  /**
+   * The constant instances.
+   */
+  public static final HashMap<Integer, ConsumerMock> instances
+      = new HashMap<>();
+  private final Random random = new Random();
 
-    @Override
-	public void startProductConsumption(Object object) {
-        lastProduct = object;
-        invocationCount.incrementAndGet();
-    }
-    
-    @Override
-    public void close() {
-        super.close();
-        closed = true;
-    }
-    
-    public void enrolCustomer(String name, int age) throws Exception {
-        lastProduct = new Entity("Person", null, "name", name, "age", age);
-        System.out.println("enrolled: " + name + " (" + age + ") - " + Thread.currentThread().getName());
-        Thread.sleep(50 + random.nextInt(100));
-    }
-    
+  /**
+   * The constant lastInstance.
+   */
+  public static ConsumerMock lastInstance;
+
+  /**
+   * The Last product.
+   */
+  public Object lastProduct;
+  /**
+   * The Id.
+   */
+  public final int id;
+  /**
+   * The Invocation count.
+   */
+  public final AtomicInteger invocationCount;
+  /**
+   * The Closed.
+   */
+  public boolean closed;
+  /**
+   * The Context.
+   */
+  public Context context;
+
+  /**
+   * Instantiates a new Consumer mock.
+   */
+  public ConsumerMock() {
+    this(1);
+  }
+
+  /**
+   * Instantiates a new Consumer mock.
+   *
+   * @param id the id
+   */
+  public ConsumerMock(int id) {
+    this.id = id;
+    this.invocationCount = new AtomicInteger();
+    this.closed = false;
+    lastInstance = this;
+    instances.put(id, this);
+  }
+
+  @Override
+  public void setContext(Context context) {
+    this.context = context;
+  }
+
+  @Override
+  public void startProductConsumption(Object object) {
+    lastProduct = object;
+    invocationCount.incrementAndGet();
+  }
+
+  @Override
+  public void close() {
+    super.close();
+    closed = true;
+  }
+
+  /**
+   * Enrol customer.
+   *
+   * @param name the name
+   * @param age  the age
+   * @throws Exception the exception
+   */
+  public void enrolCustomer(String name, int age) throws Exception {
+    lastProduct = new Entity("Person", null, "name", name, "age", age);
+    System.out.println("enrolled: " + name + " (" + age + ") - " + Thread.currentThread().getName());
+    Thread.sleep(50 + random.nextInt(100));
+  }
+
 }

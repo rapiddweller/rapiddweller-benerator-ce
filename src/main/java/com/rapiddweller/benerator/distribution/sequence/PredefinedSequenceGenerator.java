@@ -26,49 +26,57 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.util.ThreadSafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * {@link Generator} class for use by the {@link LiteralSequence}.<br/><br/>
  * Created: 03.06.2010 08:48:44
- * @since 0.6.3
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class PredefinedSequenceGenerator<E extends Number> extends ThreadSafeGenerator<E> { // compare with SequenceGenerator
 
-	private Class<E> numberType;
-	private E[] numbers;
-	private AtomicInteger cursor;
-	
-	@SuppressWarnings("unchecked")
-    public PredefinedSequenceGenerator(E... numbers) {
-	    this.numbers = numbers;
-	    this.numberType = (numbers.length > 0 ? (Class<E>) numbers[0].getClass() : (Class<E>) Number.class);
-	    this.cursor = new AtomicInteger(0);
-    }
+  private final Class<E> numberType;
+  private final E[] numbers;
+  private final AtomicInteger cursor;
 
-	@Override
-	public Class<E> getGeneratedType() {
-	    return numberType;
-    }
+  /**
+   * Instantiates a new Predefined sequence generator.
+   *
+   * @param numbers the numbers
+   */
+  @SuppressWarnings("unchecked")
+  public PredefinedSequenceGenerator(E... numbers) {
+    this.numbers = numbers;
+    this.numberType = (numbers.length > 0 ? (Class<E>) numbers[0].getClass() : (Class<E>) Number.class);
+    this.cursor = new AtomicInteger(0);
+  }
 
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-	    int i = cursor.getAndIncrement();
-	    if (i >= numbers.length)
-	    	return null;
-	    else
-	    	return wrapper.wrap(numbers[i]);
-    }
+  @Override
+  public Class<E> getGeneratedType() {
+    return numberType;
+  }
 
-	@Override
-	public void reset() {
-		this.cursor.set(0);
-	    super.reset();
-	}
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    int i = cursor.getAndIncrement();
+    if (i >= numbers.length) {
+      return null;
+    } else {
+      return wrapper.wrap(numbers[i]);
+    }
+  }
+
+  @Override
+  public void reset() {
+    this.cursor.set(0);
+    super.reset();
+  }
 
 }

@@ -26,68 +26,69 @@
 
 package com.rapiddweller.benerator.factory;
 
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.NumberUtil;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.NumberUtil;
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
-
 /**
- * {@link DefaultsProvider} implementation which provides mean defaults 
+ * {@link DefaultsProvider} implementation which provides mean defaults
  * for provoking errors in functional testing.<br/><br/>
  * Created: 15.07.2011 21:22:39
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class MeanDefaultsProvider implements DefaultsProvider {
 
-	private static final BigDecimal DECIMAL_GRANULARITY = new BigDecimal("0.00001");
+  private static final BigDecimal DECIMAL_GRANULARITY = new BigDecimal("0.00001");
 
-	@Override
-	public <T extends Number> T defaultMin(Class<T> numberType) {
-		return NumberUtil.minValue(numberType);
-	}
+  @Override
+  public <T extends Number> T defaultMin(Class<T> numberType) {
+    return NumberUtil.minValue(numberType);
+  }
 
-	@Override
-	public <T extends Number> T defaultMax(Class<T> numberType) {
-		return NumberUtil.maxValue(numberType);
-	}
+  @Override
+  public <T extends Number> T defaultMax(Class<T> numberType) {
+    return NumberUtil.maxValue(numberType);
+  }
 
-	@Override
-	public <T extends Number> T defaultGranularity(Class<T> numberType) {
-		return NumberToNumberConverter.convert((BeanUtil.isDecimalNumberType(numberType) ? DECIMAL_GRANULARITY : 1), numberType);
-	}
+  @Override
+  public <T extends Number> T defaultGranularity(Class<T> numberType) {
+    return NumberToNumberConverter.convert((BeanUtil.isDecimalNumberType(numberType) ? DECIMAL_GRANULARITY : 1), numberType);
+  }
 
-	@Override
-	public int defaultMinLength() {
-		return 0;
-	}
+  @Override
+  public int defaultMinLength() {
+    return 0;
+  }
 
-	@Override
-	public Integer defaultMaxLength() {
-		return 1000;
-	}
+  @Override
+  public Integer defaultMaxLength() {
+    return 1000;
+  }
 
-	@Override
-	public boolean defaultNullable() {
-		return true;
-	}
+  @Override
+  public boolean defaultNullable() {
+    return true;
+  }
 
-	@Override
-	public double defaultNullQuota() {
-		return 0.5;
-	}
+  @Override
+  public double defaultNullQuota() {
+    return 0.5;
+  }
 
-	@Override
-	public Date defaultMinDate() {
-		return TimeUtil.date(-2000, 0, 1);
-	}
+  @Override
+  public Date defaultMinDate() {
+    return TimeUtil.date(-2000, 0, 1);
+  }
 
-	@Override
-	public Date defaultMaxDate() {
-		return TimeUtil.date(2999, 11, 31);
-	}
+  @Override
+  public Date defaultMaxDate() {
+    return TimeUtil.date(2999, 11, 31);
+  }
 
 }

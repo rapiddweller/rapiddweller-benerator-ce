@@ -30,33 +30,39 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.util.UnsafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.context.ContextAware;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.model.data.Entity;
 
 /**
  * Mock implementation of {@link Generator} and {@link ContextAware}.<br/><br/>
  * Created: 16.02.2010 12:16:33
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class GeneratorMock extends UnsafeGenerator<Entity> {
 
-	private BeneratorContext context;
-	
-	public GeneratorMock(BeneratorContext context) {
-		this.context = context;
-	}
+  private final BeneratorContext context;
 
-	@Override
-	public Class<Entity> getGeneratedType() {
-		return Entity.class;
-    }
+  /**
+   * Instantiates a new Generator mock.
+   *
+   * @param context the context
+   */
+  public GeneratorMock(BeneratorContext context) {
+    this.context = context;
+  }
 
-	@Override
-	public ProductWrapper<Entity> generate(ProductWrapper<Entity> wrapper) {
-		Assert.notNull(context, "context");
-		return wrapper.wrap(new Entity("Dummy", context.getLocalDescriptorProvider()));
-    }
+  @Override
+  public Class<Entity> getGeneratedType() {
+    return Entity.class;
+  }
+
+  @Override
+  public ProductWrapper<Entity> generate(ProductWrapper<Entity> wrapper) {
+    Assert.notNull(context, "context");
+    return wrapper.wrap(new Entity("Dummy", context.getLocalDescriptorProvider()));
+  }
 
 }

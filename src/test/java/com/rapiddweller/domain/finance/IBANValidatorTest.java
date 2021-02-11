@@ -27,27 +27,33 @@
 package com.rapiddweller.domain.finance;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link IBANValidator}.<br/>
  * <br/>
  * Created at 12.07.2008 15:28:08
- * @since 0.5.4
+ *
  * @author Volker Bergmann
+ * @since 0.5.4
  */
 public class IBANValidatorTest {
-	
-	@Test
-	public void test() {
-		IBANValidator v = new IBANValidator();
-		assertFalse(v.isValid(null, null));
-		assertFalse(v.isValid("", null));
-		assertFalse(v.isValid("DE", null));
-		assertFalse(v.isValid("DE6821050170001234567891234567890123456789", null));
-		assertFalse(v.isValid("DE123456789", null));
-		assertFalse( v.isValid("DE12345678", null));
-		assertTrue( v.isValid("DE68210501700012345678", null));
-	}
-	
+
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    IBANValidator v = new IBANValidator();
+    assertFalse(v.isValid(null, null));
+    assertFalse(v.isValid("", null));
+    assertFalse(v.isValid("DE", null));
+    assertFalse(v.isValid("DE6821050170001234567891234567890123456789", null));
+    assertFalse(v.isValid("DE123456789", null));
+    assertFalse(v.isValid("DE12345678", null));
+    assertTrue(v.isValid("DE68210501700012345678", null));
+  }
+
 }

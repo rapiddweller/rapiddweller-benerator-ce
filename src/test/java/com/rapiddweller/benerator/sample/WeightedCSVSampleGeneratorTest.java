@@ -26,47 +26,54 @@
 
 package com.rapiddweller.benerator.sample;
 
-import java.text.SimpleDateFormat;
+import com.rapiddweller.benerator.test.GeneratorTest;
+import com.rapiddweller.benerator.util.GeneratorUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.converter.ParseFormatConverter;
+import org.junit.Test;
+
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.commons.converter.ParseFormatConverter;
-import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.benerator.util.GeneratorUtil;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link WeightedCSVSampleGenerator}.<br/><br/>
  * Created: 27.09.2006 23:16:11
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class WeightedCSVSampleGeneratorTest extends GeneratorTest {
 
-    private static final String FILE_PATH = "com/rapiddweller/benerator/csv/dates.csv";
+  private static final String FILE_PATH = "com/rapiddweller/benerator/csv/dates.csv";
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+  private static final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
-    @Test
-    public void test() throws ParseException {
-    	// prepare
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        ParseFormatConverter<Date> converter = new ParseFormatConverter<Date>(Date.class, format, false);
-        WeightedCSVSampleGenerator<Date> generator = new WeightedCSVSampleGenerator<Date>(
-        		Date.class, FILE_PATH, Encodings.UTF_8, converter);
-        generator.init(context);
-        // run test
-        List<Date> expectedDates = CollectionUtil.toList(sdf.parse("01.02.2003"), sdf.parse("02.02.2003"), 
-        		sdf.parse("03.02.2003"));
-        for (int i = 0; i < 10; i++) {
-            Date generatedDate = GeneratorUtil.generateNonNull(generator);
-            assertTrue("generated date not in expected value set: " + sdf.format(generatedDate),
-                    expectedDates.contains(generatedDate));
-        }
+  /**
+   * Test.
+   *
+   * @throws ParseException the parse exception
+   */
+  @Test
+  public void test() throws ParseException {
+    // prepare
+    SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+    ParseFormatConverter<Date> converter = new ParseFormatConverter<>(Date.class, format, false);
+    WeightedCSVSampleGenerator<Date> generator = new WeightedCSVSampleGenerator<>(
+        Date.class, FILE_PATH, Encodings.UTF_8, converter);
+    generator.init(context);
+    // run test
+    List<Date> expectedDates = CollectionUtil.toList(sdf.parse("01.02.2003"), sdf.parse("02.02.2003"),
+        sdf.parse("03.02.2003"));
+    for (int i = 0; i < 10; i++) {
+      Date generatedDate = GeneratorUtil.generateNonNull(generator);
+      assertTrue("generated date not in expected value set: " + sdf.format(generatedDate),
+          expectedDates.contains(generatedDate));
     }
-    
+  }
+
 }

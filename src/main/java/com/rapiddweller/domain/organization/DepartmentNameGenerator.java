@@ -29,8 +29,8 @@ package com.rapiddweller.domain.organization;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.sample.WeightedCSVSampleGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.commons.LocaleUtil;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.LocaleUtil;
 
 import java.util.Locale;
 
@@ -44,41 +44,55 @@ import java.util.Locale;
  * @author Volker Bergmann
  * @since 0.6.0
  */
+public class DepartmentNameGenerator extends WeightedCSVSampleGenerator<String>
+    implements NonNullGenerator<String> {
 
-public class DepartmentNameGenerator extends WeightedCSVSampleGenerator<String> implements NonNullGenerator<String> {
+  private static final String FILENAME_PREFIX =
+      "/com/rapiddweller/domain/organization/department";
 
-    private static final String FILENAME_PREFIX = "/com/rapiddweller/domain/organization/department";
+  /**
+   * Instantiates a new Department name generator.
+   */
+  public DepartmentNameGenerator() {
+    this(Locale.getDefault());
+  }
 
-    public DepartmentNameGenerator() {
-        this(Locale.getDefault());
-    }
+  /**
+   * Instantiates a new Department name generator.
+   *
+   * @param locale the locale
+   */
+  public DepartmentNameGenerator(Locale locale) {
+    super(uriForLocale(locale), Encodings.UTF_8);
+  }
 
-    public DepartmentNameGenerator(Locale locale) {
-        super(uriForLocale(locale), Encodings.UTF_8);
-    }
+  // properties ------------------------------------------------------------------------------------------------------
 
-    // properties ------------------------------------------------------------------------------------------------------
+  private static String uriForLocale(Locale locale) {
+    return LocaleUtil.availableLocaleUrl(FILENAME_PREFIX, locale, ".csv");
+  }
 
-    private static String uriForLocale(Locale locale) {
-        return LocaleUtil.availableLocaleUrl(FILENAME_PREFIX, locale, ".csv");
-    }
+  // Generator interface implementation ------------------------------------------------------------------------------
 
-    // Generator interface implementation ------------------------------------------------------------------------------
+  /**
+   * Sets locale.
+   *
+   * @param locale the locale
+   */
+  public void setLocale(Locale locale) {
+    setUri(uriForLocale(locale));
+  }
 
-    public void setLocale(Locale locale) {
-        setUri(uriForLocale(locale));
-    }
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
 
-    @Override
-    public Class<String> getGeneratedType() {
-        return String.class;
-    }
+  // helpers ---------------------------------------------------------------------------------------------------------
 
-    // helpers ---------------------------------------------------------------------------------------------------------
-
-    @Override
-    public String generate() {
-        return GeneratorUtil.generateNonNull(this);
-    }
+  @Override
+  public String generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
 
 }

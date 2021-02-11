@@ -39,51 +39,85 @@ import com.rapiddweller.model.data.Uniqueness;
 /**
  * Facade class for the various {@link MetaGeneratorFactory} implementations.<br/><br/>
  * Created: 06.09.2011 07:30:48
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class MetaGeneratorFactory {
 
-    private static ArrayTypeGeneratorFactory arrayTypeGeneratorFactory = new ArrayTypeGeneratorFactory();
-    
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Generator<?> createRootGenerator(
-    		InstanceDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
-		boolean nullable = DescriptorUtil.isNullable(descriptor, context);
-		String instanceName = descriptor.getName();
-        TypeDescriptor type = descriptor.getTypeDescriptor();
-		TypeGeneratorFactory factory = factoryFor(type);
-        Generator generator = factory.createRootGenerator(type, instanceName, nullable, uniqueness, context);
-        generator = factory.applyOffsetAndCyclic(generator, descriptor.getTypeDescriptor(), instanceName, uniqueness, context);
-		return generator;
-    }
-    
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Generator<?> createTypeGenerator(TypeDescriptor type, String instanceName, 
-    		boolean nullable, Uniqueness uniqueness, BeneratorContext context) {
-		TypeGeneratorFactory factory = factoryFor(type);
-		return factory.createGenerator(type, instanceName, nullable, uniqueness, context);
-    }
+  private static final ArrayTypeGeneratorFactory arrayTypeGeneratorFactory = new ArrayTypeGeneratorFactory();
 
-    protected static TypeGeneratorFactory<?> factoryFor(TypeDescriptor type) {
-        if (type instanceof SimpleTypeDescriptor)
-			return BeneratorFactory.getInstance().getSimpleTypeGeneratorFactory();
-		else if (type instanceof ComplexTypeDescriptor)
-    		return BeneratorFactory.getInstance().getComplexTypeGeneratorFactory();
-        else if (type instanceof ArrayTypeDescriptor)
-    		return arrayTypeGeneratorFactory;
-        else
-            throw new UnsupportedOperationException("Descriptor type not supported: " + type.getClass());
-    }
+  /**
+   * Create root generator generator.
+   *
+   * @param descriptor the descriptor
+   * @param uniqueness the uniqueness
+   * @param context    the context
+   * @return the generator
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public static Generator<?> createRootGenerator(
+      InstanceDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
+    boolean nullable = DescriptorUtil.isNullable(descriptor, context);
+    String instanceName = descriptor.getName();
+    TypeDescriptor type = descriptor.getTypeDescriptor();
+    TypeGeneratorFactory factory = factoryFor(type);
+    Generator generator = factory.createRootGenerator(type, instanceName, nullable, uniqueness, context);
+    generator = factory.applyOffsetAndCyclic(generator, descriptor.getTypeDescriptor(), instanceName, uniqueness, context);
+    return generator;
+  }
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Generator<?> createNullGenerator(TypeDescriptor type, BeneratorContext context) {
-		Class generatedType;
-		if (type != null)
-			generatedType = ((TypeGeneratorFactory) factoryFor(type)).getGeneratedType(type);
-		else
-			generatedType = Object.class;
-		return context.getGeneratorFactory().createNullGenerator(generatedType);
-	}
-    
+  /**
+   * Create type generator generator.
+   *
+   * @param type         the type
+   * @param instanceName the instance name
+   * @param nullable     the nullable
+   * @param uniqueness   the uniqueness
+   * @param context      the context
+   * @return the generator
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public static Generator<?> createTypeGenerator(TypeDescriptor type, String instanceName,
+                                                 boolean nullable, Uniqueness uniqueness, BeneratorContext context) {
+    TypeGeneratorFactory factory = factoryFor(type);
+    return factory.createGenerator(type, instanceName, nullable, uniqueness, context);
+  }
+
+  /**
+   * Factory for type generator factory.
+   *
+   * @param type the type
+   * @return the type generator factory
+   */
+  protected static TypeGeneratorFactory<?> factoryFor(TypeDescriptor type) {
+    if (type instanceof SimpleTypeDescriptor) {
+      return BeneratorFactory.getInstance().getSimpleTypeGeneratorFactory();
+    } else if (type instanceof ComplexTypeDescriptor) {
+      return BeneratorFactory.getInstance().getComplexTypeGeneratorFactory();
+    } else if (type instanceof ArrayTypeDescriptor) {
+      return arrayTypeGeneratorFactory;
+    } else {
+      throw new UnsupportedOperationException("Descriptor type not supported: " + type.getClass());
+    }
+  }
+
+  /**
+   * Create null generator generator.
+   *
+   * @param type    the type
+   * @param context the context
+   * @return the generator
+   */
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public static Generator<?> createNullGenerator(TypeDescriptor type, BeneratorContext context) {
+    Class generatedType;
+    if (type != null) {
+      generatedType = ((TypeGeneratorFactory) factoryFor(type)).getGeneratedType(type);
+    } else {
+      generatedType = Object.class;
+    }
+    return context.getGeneratorFactory().createNullGenerator(generatedType);
+  }
+
 }

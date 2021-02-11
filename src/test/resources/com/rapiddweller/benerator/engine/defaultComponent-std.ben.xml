@@ -1,13 +1,11 @@
-
-
 <setup>
-	<defaultComponents>
-		<attribute name="created_at" generator="CurrentDateTimeGenerator"/>
-		<attribute name="created_by" constant="Bob"/>
-	</defaultComponents>
-	
-	<generate count="3" consumer="cons">
-		<attribute name="created_at" />
-		<attribute name="created_by" />
-	</generate>
+    <defaultComponents>
+        <attribute name="created_at" generator="CurrentDateTimeGenerator"/>
+        <attribute name="created_by" constant="Bob"/>
+    </defaultComponents>
+
+    <generate count="3" consumer="cons">
+        <attribute name="created_at"/>
+        <attribute name="created_by"/>
+    </generate>
 </setup>

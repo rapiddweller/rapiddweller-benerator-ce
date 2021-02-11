@@ -26,93 +26,112 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.sample.AttachedWeightSampleGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.Weighted;
+import com.rapiddweller.common.Weighted;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * {@link Generator} that wraps several other 'source generators' and assigns a weight to each one. 
- * Calls to {@link Generator#generate(ProductWrapper)} are forwarded to a random source generator, with a probability 
- * proportional to its assigned weight. If a source generator becomes unavailable, its weight is 
+ * {@link Generator} that wraps several other 'source generators' and assigns a weight to each one.
+ * Calls to {@link Generator#generate(ProductWrapper)} are forwarded to a random source generator, with a probability
+ * proportional to its assigned weight. If a source generator becomes unavailable, its weight is
  * ignored.<br/><br/>
  * Created: 09.03.2011 07:59:04
- * @since 0.6.6
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class WeightedGeneratorGenerator<E> extends MultiGeneratorWrapper<E, Generator<E>> implements Weighted {
-	
-	private List<Double> sourceWeights;
-	private AttachedWeightSampleGenerator<Integer> indexGenerator;
-	private double totalWeight;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public WeightedGeneratorGenerator() {
-		super((Class) Generator.class);
-		this.sourceWeights = new ArrayList<Double>();
-		this.totalWeight = 0;
-	}
-	
-	@Override
-	public double getWeight() {
-		return totalWeight;
-	}
-	
-	public List<Double> getSourceWeights() {
-		return sourceWeights;
-	}
+  private final List<Double> sourceWeights;
+  private AttachedWeightSampleGenerator<Integer> indexGenerator;
+  private double totalWeight;
 
-	@Override
-	public synchronized void addSource(Generator<? extends E> source) {
-		addSource(source, 1.);
-	}
-	
-	public synchronized void addSource(Generator<? extends E> source, Double weight) {
-		if (weight == null)
-			weight = 1.;
-		this.sourceWeights.add(weight);
-		super.addSource(source);
-		this.totalWeight += weight;
-	}
-	
-	private void createAndInitIndexGenerator() {
-		indexGenerator = new AttachedWeightSampleGenerator<Integer>(Integer.class);
-		for (int i = 0; i < sourceWeights.size(); i++)
-			indexGenerator.addSample(i, sourceWeights.get(i));
-		indexGenerator.init(context);
-	}
+  /**
+   * Instantiates a new Weighted generator generator.
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public WeightedGeneratorGenerator() {
+    super((Class) Generator.class);
+    this.sourceWeights = new ArrayList<>();
+    this.totalWeight = 0;
+  }
 
-	@Override
-	public synchronized void init(GeneratorContext context) {
-		super.init(context);
-		createAndInitIndexGenerator();
-	}
-	
-	@Override
-	@SuppressWarnings("unchecked")
-	public ProductWrapper<Generator<E>> generate(ProductWrapper<Generator<E>> wrapper) {
-    	assertInitialized();
-    	if (availableSourceCount() == 0)
-    		return null;
-    	int sourceIndex = GeneratorUtil.generateNonNull(indexGenerator);
-		Generator<E> result = (Generator<E>) getAvailableSource(sourceIndex);
-		return wrapper.wrap(result);
-	}
+  @Override
+  public double getWeight() {
+    return totalWeight;
+  }
 
-	@Override
-	public synchronized void reset() {
-		super.reset();
-		createAndInitIndexGenerator();
-	}
-	
-	@Override
-	public synchronized void close() {
-		super.close();
-		indexGenerator.close();
-	}
+  /**
+   * Gets source weights.
+   *
+   * @return the source weights
+   */
+  public List<Double> getSourceWeights() {
+    return sourceWeights;
+  }
+
+  @Override
+  public synchronized void addSource(Generator<? extends E> source) {
+    addSource(source, 1.);
+  }
+
+  /**
+   * Add source.
+   *
+   * @param source the source
+   * @param weight the weight
+   */
+  public synchronized void addSource(Generator<? extends E> source, Double weight) {
+    if (weight == null) {
+      weight = 1.;
+    }
+    this.sourceWeights.add(weight);
+    super.addSource(source);
+    this.totalWeight += weight;
+  }
+
+  private void createAndInitIndexGenerator() {
+    indexGenerator = new AttachedWeightSampleGenerator<>(Integer.class);
+    for (int i = 0; i < sourceWeights.size(); i++) {
+      indexGenerator.addSample(i, sourceWeights.get(i));
+    }
+    indexGenerator.init(context);
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    super.init(context);
+    createAndInitIndexGenerator();
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public ProductWrapper<Generator<E>> generate(ProductWrapper<Generator<E>> wrapper) {
+    assertInitialized();
+    if (availableSourceCount() == 0) {
+      return null;
+    }
+    int sourceIndex = GeneratorUtil.generateNonNull(indexGenerator);
+    Generator<E> result = (Generator<E>) getAvailableSource(sourceIndex);
+    return wrapper.wrap(result);
+  }
+
+  @Override
+  public synchronized void reset() {
+    super.reset();
+    createAndInitIndexGenerator();
+  }
+
+  @Override
+  public synchronized void close() {
+    super.close();
+    indexGenerator.close();
+  }
 
 }

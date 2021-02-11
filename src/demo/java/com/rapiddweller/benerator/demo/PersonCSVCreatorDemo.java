@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.file.FileBuilder;
 import com.rapiddweller.domain.person.PersonGenerator;
 import com.rapiddweller.domain.person.Person;
-import com.rapiddweller.commons.DocumentWriter;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.DocumentWriter;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.script.Script;
 import org.databene.document.csv.BeanCSVWriter;
 
@@ -44,27 +44,37 @@ import java.io.*;
  */
 public class PersonCSVCreatorDemo {
 
-    private static final String FILE_NAME = "persons.csv";
-    private static final int LENGTH = 5;
+  private static final String FILE_NAME = "persons.csv";
+  private static final int LENGTH = 5;
 
-    public static void main(String[] args) throws IOException {
-        Writer out = null;
-        try {
-            out = new OutputStreamWriter(System.out);
-            //out = new BufferedWriter(new FileWriter(FILE_NAME));
-            DocumentWriter<Person> writer = new BeanCSVWriter<Person>(out, ',', (Script) null, (Script) null,
-                    "salutation", "title", "givenName", "familyName");
-            System.out.println("Running...");
-            long startMillis = System.currentTimeMillis();
-            writer.setVariable("length", LENGTH);
-            PersonGenerator generator = new PersonGenerator();
-            generator.init(new DefaultBeneratorContext());
-            FileBuilder.build(generator, LENGTH, writer);
-            long elapsedTime = System.currentTimeMillis() - startMillis;
-            System.out.println("Created file " + FILE_NAME + " with " + LENGTH + " entries " +
-                    "within " + (elapsedTime / 1000) + "s (" + (LENGTH * 1000L / elapsedTime) + " entries per second)");
-        } finally {
-            IOUtil.close(out);
-        }
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   * @throws IOException the io exception
+   */
+  public static void main(String[] args) throws IOException {
+    Writer out = null;
+    try {
+      out = new OutputStreamWriter(System.out);
+      //out = new BufferedWriter(new FileWriter(FILE_NAME));
+      DocumentWriter<Person> writer =
+          new BeanCSVWriter<Person>(out, ',', (Script) null,
+              (Script) null,
+              "salutation", "title", "givenName", "familyName");
+      System.out.println("Running...");
+      long startMillis = System.currentTimeMillis();
+      writer.setVariable("length", LENGTH);
+      PersonGenerator generator = new PersonGenerator();
+      generator.init(new DefaultBeneratorContext());
+      FileBuilder.build(generator, LENGTH, writer);
+      long elapsedTime = System.currentTimeMillis() - startMillis;
+      System.out.println("Created file " + FILE_NAME + " with " + LENGTH +
+          " entries " +
+          "within " + (elapsedTime / 1000) + "s (" +
+          (LENGTH * 1000L / elapsedTime) + " entries per second)");
+    } finally {
+      IOUtil.close(out);
     }
+  }
 }

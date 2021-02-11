@@ -27,32 +27,34 @@
 package com.rapiddweller.benerator.distribution;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
 
 /**
  * Provides access to specific Sequence number Generators.<br/>
  * <br/>
  * Created: 11.09.2006 21:12:57
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public abstract class Sequence implements Distribution {
-	
-    // interface -------------------------------------------------------------------------------------------------------
 
-    @Override
-	public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-    	if (source == null)
-    		throw new ConfigurationError("No source provided");
-	    return new IndexBasedSampleGeneratorProxy<T>(source, this, unique);
+  // interface -------------------------------------------------------------------------------------------------------
+
+  @Override
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    if (source == null) {
+      throw new ConfigurationError("No source provided");
     }
-    
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-    
-    @Override
-    public String toString() {
-        return BeanUtil.toString(this);
-    }
+    return new IndexBasedSampleGeneratorProxy<>(source, this, unique);
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return BeanUtil.toString(this);
+  }
 
 }

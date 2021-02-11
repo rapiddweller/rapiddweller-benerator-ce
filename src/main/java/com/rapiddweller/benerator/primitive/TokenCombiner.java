@@ -26,10 +26,6 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.NonNullGenerator;
@@ -38,126 +34,199 @@ import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.wrapper.CompositeStringGenerator;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.validator.BlacklistValidator;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.csv.CSVLineIterator;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.validator.BlacklistValidator;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.csv.CSVLineIterator;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * {@link Generator} implementation which takes cells from a CSV file as input 
+ * {@link Generator} implementation which takes cells from a CSV file as input
  * and combines the cells by taking a cell value from a random row for each column
  * and concatenating them to a string.<br/><br/>
  * Created: 01.08.2010 14:48:50
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class TokenCombiner extends GeneratorProxy<String> implements NonNullGenerator<String> {
 
-	protected String uri;
-	private boolean unique;
-	protected char separator = ',';
-	protected String encoding = Encodings.UTF_8;
-	protected boolean excludeSeed = false;
-	
-	protected Set<String> seed = new HashSet<String>();
-	
-	public TokenCombiner(String uri) {
-	    this(uri, false);
+  /**
+   * The Uri.
+   */
+  protected String uri;
+  private boolean unique;
+  /**
+   * The Separator.
+   */
+  protected char separator = ',';
+  /**
+   * The Encoding.
+   */
+  protected String encoding = Encodings.UTF_8;
+  /**
+   * The Exclude seed.
+   */
+  protected boolean excludeSeed = false;
+
+  /**
+   * The Seed.
+   */
+  protected final Set<String> seed = new HashSet<>();
+
+  /**
+   * Instantiates a new Token combiner.
+   *
+   * @param uri the uri
+   */
+  public TokenCombiner(String uri) {
+    this(uri, false);
+  }
+
+  /**
+   * Instantiates a new Token combiner.
+   *
+   * @param uri    the uri
+   * @param unique the unique
+   */
+  public TokenCombiner(String uri, boolean unique) {
+    this(uri, unique, ',', SystemInfo.getFileEncoding(), false);
+  }
+
+  /**
+   * Instantiates a new Token combiner.
+   *
+   * @param uri         the uri
+   * @param unique      the unique
+   * @param separator   the separator
+   * @param encoding    the encoding
+   * @param excludeSeed the exclude seed
+   */
+  public TokenCombiner(String uri, boolean unique, char separator, String encoding, boolean excludeSeed) {
+    super(String.class);
+    this.uri = uri;
+    this.unique = unique;
+    this.separator = separator;
+    this.encoding = encoding;
+    this.excludeSeed = excludeSeed;
+  }
+
+  /**
+   * Sets uri.
+   *
+   * @param uri the uri
+   */
+  public void setUri(String uri) {
+    this.uri = uri;
+  }
+
+  /**
+   * Sets unique.
+   *
+   * @param unique the unique
+   */
+  public void setUnique(boolean unique) {
+    this.unique = unique;
+  }
+
+  /**
+   * Sets separator.
+   *
+   * @param separator the separator
+   */
+  public void setSeparator(char separator) {
+    this.separator = separator;
+  }
+
+  /**
+   * Sets encoding.
+   *
+   * @param encoding the encoding
+   */
+  public void setEncoding(String encoding) {
+    this.encoding = encoding;
+  }
+
+  /**
+   * Sets exclude seed.
+   *
+   * @param excludeSeed the exclude seed
+   */
+  public void setExcludeSeed(boolean excludeSeed) {
+    this.excludeSeed = excludeSeed;
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    Generator<String> source = new SimpleTokenCombinator(unique);
+    if (excludeSeed) {
+      BlacklistValidator<String> validator = new BlacklistValidator<>(seed);
+      source = WrapperFactory.applyValidator(validator, source);
+    }
+    super.setSource(source);
+    super.init(context);
+  }
+
+  @Override
+  public String generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
+
+
+  /**
+   * The type Simple token combinator.
+   */
+  protected class SimpleTokenCombinator extends CompositeStringGenerator {
+
+    /**
+     * Instantiates a new Simple token combinator.
+     *
+     * @param unique the unique
+     */
+    SimpleTokenCombinator(boolean unique) {
+      super(unique);
     }
 
-	public TokenCombiner(String uri, boolean unique) {
-	    this(uri, unique, ',', SystemInfo.getFileEncoding(), false);
-    }
-
-	public TokenCombiner(String uri, boolean unique, char separator, String encoding, boolean excludeSeed) {
-		super(String.class);
-	    this.uri = uri;
-		this.unique = unique;
-		this.separator = separator;
-		this.encoding = encoding;
-		this.excludeSeed = excludeSeed;
-    }
-
-	public void setUri(String uri) {
-    	this.uri = uri;
-    }
-
-	public void setUnique(boolean unique) {
-    	this.unique = unique;
-    }
-
-	public void setSeparator(char separator) {
-    	this.separator = separator;
-    }
-
-	public void setEncoding(String encoding) {
-    	this.encoding = encoding;
-    }
-
-	public void setExcludeSeed(boolean excludeSeed) {
-    	this.excludeSeed = excludeSeed;
-    }
-	
-	@SuppressWarnings("resource")
-	@Override
-	public synchronized void init(GeneratorContext context) {
-		Generator<String> source = new SimpleTokenCombinator(unique);
-		if (excludeSeed) { 
-			BlacklistValidator<String> validator = new BlacklistValidator<String>(seed);
-			source = WrapperFactory.applyValidator(validator, source);
-		}
-		super.setSource(source);
-	    super.init(context);
-	}
-
-	@Override
-	public String generate() {
-		return GeneratorUtil.generateNonNull(this);
-	}
-	
-	
-	
-	protected class SimpleTokenCombinator extends CompositeStringGenerator {
-		
-		@SuppressWarnings("unchecked")
-		SimpleTokenCombinator(boolean unique) {
-	        super(unique);
+    @Override
+    @SuppressWarnings("unchecked")
+    public void init(GeneratorContext context) {
+      try {
+        NonNullSampleGenerator<String>[] sources = null;
+        String absoluteUri = context.resolveRelativeUri(uri);
+        CSVLineIterator iterator = new CSVLineIterator(absoluteUri, separator, true, encoding);
+        int tokenCount = -1;
+        DataContainer<String[]> container = new DataContainer<>();
+        while ((container = iterator.next(container)) != null) {
+          String[] tokens = container.getData();
+          if (sources == null) {
+            tokenCount = tokens.length;
+            sources = new NonNullSampleGenerator[tokenCount];
+            for (int i = 0; i < tokenCount; i++) {
+              sources[i] = new NonNullSampleGenerator<>(String.class);
+              sources[i].setUnique(unique);
+            }
+          }
+          for (int i = 0; i < tokens.length; i++) {
+            if (!unique || !sources[i].contains(tokens[i])) {
+              sources[i].addValue(tokens[i]);
+            }
+          }
+          if (excludeSeed) {
+            seed.add(StringUtil.concat(null, tokens));
+          }
         }
-
-		@Override
-		@SuppressWarnings("unchecked")
-	    public void init(GeneratorContext context) {
-			try {
-				NonNullSampleGenerator<String>[] sources = null;
-				String absoluteUri = context.resolveRelativeUri(uri);
-		        CSVLineIterator iterator = new CSVLineIterator(absoluteUri, separator, true, encoding);
-		        int tokenCount = -1;
-		        DataContainer<String[]> container = new DataContainer<String[]>();
-		        while ((container = iterator.next(container)) != null) {
-			        String[] tokens = container.getData();
-		        	if (sources == null) {
-		        		tokenCount = tokens.length;
-		        		sources = new NonNullSampleGenerator[tokenCount];
-		        		for (int i = 0; i < tokenCount; i++) {
-		        			sources[i] = new NonNullSampleGenerator<String>(String.class);
-		        			sources[i].setUnique(unique);
-		        		}
-		        	}
-		        	for (int i = 0; i < tokens.length; i++)
-		        		if (!unique || !sources[i].contains(tokens[i]))
-		        			sources[i].addValue(tokens[i]);
-		        	if (excludeSeed)
-		        		seed.add(StringUtil.concat(null, tokens));
-		        }
-		        setSources(sources);
-		        super.init(context);
-	        } catch (IOException e) {
-	    		throw new ConfigurationError("Error initializing " + getClass().getSimpleName() + " from URI " + uri, e);
-	        }
-	    }
-	}
+        setSources(sources);
+        super.init(context);
+      } catch (IOException e) {
+        throw new ConfigurationError("Error initializing " + getClass().getSimpleName() + " from URI " + uri, e);
+      }
+    }
+  }
 
 }

@@ -26,28 +26,32 @@
 
 package com.rapiddweller.platform.java;
 
+import com.rapiddweller.benerator.test.ModelTest;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.PersonBean;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the Bean2EntityConverter.<br/><br/>
  * Created: 29.08.2007 18:54:45
+ *
  * @author Volker Bergmann
  */
 public class Bean2EntityConverterTest extends ModelTest {
 
-	@Test
-    public void test() {
-        ComplexTypeDescriptor descriptor = createComplexType(PersonBean.class.getName());
-        Entity entity = new Entity(descriptor, "name", "Alice", "age", 23);
-        PersonBean bean = new PersonBean("Alice", 23);
-        assertEquals(entity, new Bean2EntityConverter(descriptor).convert(bean));
-        assertEquals(entity, new Bean2EntityConverter().convert(bean));
-    }
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    ComplexTypeDescriptor descriptor = createComplexType(PersonBean.class.getName());
+    Entity entity = new Entity(descriptor, "name", "Alice", "age", 23);
+    PersonBean bean = new PersonBean("Alice", 23);
+    assertEquals(entity, new Bean2EntityConverter(descriptor).convert(bean));
+    assertEquals(entity, new Bean2EntityConverter().convert(bean));
+  }
+
 }

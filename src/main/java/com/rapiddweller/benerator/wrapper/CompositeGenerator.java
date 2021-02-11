@@ -26,68 +26,102 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.util.AbstractGenerator;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.ThreadAware;
-import com.rapiddweller.commons.ThreadUtil;
-import com.rapiddweller.commons.context.ContextAware;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.ThreadAware;
+import com.rapiddweller.common.ThreadUtil;
+import com.rapiddweller.common.context.ContextAware;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * {@link Generator} implementation that makes use of other {@link ContextAware}
  * objects by which its threading support is influenced.<br/><br/>
  * Created: 20.03.2010 11:19:11
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public abstract class CompositeGenerator<E> extends AbstractGenerator<E> {
-	
-	protected Class<E> generatedType;
-	protected List<ThreadAware> components;
-	
-	protected CompositeGenerator(Class<E> generatedType) {
-		this.generatedType = generatedType;
-		this.components = new ArrayList<ThreadAware>();
-	}
-	
-	
-	// component registration ------------------------------------------------------------------------------------------
-	
-	protected <T extends Generator<U>, U> T registerComponent(T component) {
-		components.add(component);
-		return component;
-	}
 
-	protected <T extends Converter<U,V>, U, V> T registerComponent(T component) {
-		components.add(component);
-		return component;
-	}
+  /**
+   * The Generated type.
+   */
+  protected final Class<E> generatedType;
+  /**
+   * The Components.
+   */
+  protected final List<ThreadAware> components;
 
-	protected void registerComponents(ThreadAware[] components) {
-		for (ThreadAware component : components)
-			this.components.add(component);
-	}
+  /**
+   * Instantiates a new Composite generator.
+   *
+   * @param generatedType the generated type
+   */
+  protected CompositeGenerator(Class<E> generatedType) {
+    this.generatedType = generatedType;
+    this.components = new ArrayList<>();
+  }
 
-	
-	
-	// partial Generator interface implementation ----------------------------------------------------------------------
-	
-	@Override
-	public Class<E> getGeneratedType() {
-	    return generatedType;
-    }
 
-	@Override
-	public boolean isThreadSafe() {
-		return ThreadUtil.allThreadSafe(components);
-    }
+  // component registration ------------------------------------------------------------------------------------------
 
-	@Override
-	public boolean isParallelizable() {
-		return ThreadUtil.allParallelizable(components);
-    }
+  /**
+   * Register component t.
+   *
+   * @param <T>       the type parameter
+   * @param <U>       the type parameter
+   * @param component the component
+   * @return the t
+   */
+  protected <T extends Generator<U>, U> T registerComponent(T component) {
+    components.add(component);
+    return component;
+  }
+
+  /**
+   * Register component t.
+   *
+   * @param <T>       the type parameter
+   * @param <U>       the type parameter
+   * @param <V>       the type parameter
+   * @param component the component
+   * @return the t
+   */
+  protected <T extends Converter<U, V>, U, V> T registerComponent(T component) {
+    components.add(component);
+    return component;
+  }
+
+  /**
+   * Register components.
+   *
+   * @param components the components
+   */
+  protected void registerComponents(ThreadAware[] components) {
+    this.components.addAll(Arrays.asList(components));
+  }
+
+
+  // partial Generator interface implementation ----------------------------------------------------------------------
+
+  @Override
+  public Class<E> getGeneratedType() {
+    return generatedType;
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return ThreadUtil.allThreadSafe(components);
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return ThreadUtil.allParallelizable(components);
+  }
 
 }

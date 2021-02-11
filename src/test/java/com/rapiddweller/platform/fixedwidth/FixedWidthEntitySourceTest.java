@@ -26,82 +26,95 @@
 
 package com.rapiddweller.platform.fixedwidth;
 
+import com.rapiddweller.benerator.InvalidGeneratorSetupException;
+import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.format.Alignment;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.fixedwidth.FixedWidthColumnDescriptor;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.AbstractEntityIteratorTest;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.fixedwidth.FixedWidthColumnDescriptor;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.benerator.InvalidGeneratorSetupException;
-import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.format.Alignment;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link FixedWidthEntitySource}.<br/>
  * <br/>
  * Created: 27.08.2007 19:20:25
+ *
  * @author Volker Bergmann
  */
 public class FixedWidthEntitySourceTest extends AbstractEntityIteratorTest {
 
-    private static final String URI = "com/rapiddweller/platform/flat/person-bean.fcw";
+  private static final String URI = "com/rapiddweller/platform/flat/person-bean.fcw";
 
-    private static final FixedWidthColumnDescriptor[] descriptors = new FixedWidthColumnDescriptor[] {
-            new FixedWidthColumnDescriptor("name", 6, Alignment.LEFT, ' '),
-            new FixedWidthColumnDescriptor("age", 3, Alignment.RIGHT, '0')
-    };
-    private ComplexTypeDescriptor descriptor;
+  private static final FixedWidthColumnDescriptor[] descriptors = new FixedWidthColumnDescriptor[] {
+      new FixedWidthColumnDescriptor("name", 6, Alignment.LEFT, ' '),
+      new FixedWidthColumnDescriptor("age", 3, Alignment.RIGHT, '0')
+  };
+  private ComplexTypeDescriptor descriptor;
 
-    private Entity ALICE;
-	private Entity BOB;
-	private Entity CHARLY;
+  private Entity ALICE;
+  private Entity BOB;
+  private Entity CHARLY;
 
-	@Before
-	public void setUpPersons() {
-	    descriptor = createComplexType("person");
-	    ALICE = new Entity(descriptor, "name", "Alice", "age", "23");
-		BOB = new Entity(descriptor, "name", "Bob", "age", "34");
-		CHARLY = new Entity(descriptor, "name", "Charly", "age", "45");
-	}
-    
-    @Test
-    public void testUnfiltered() {
-        FixedWidthEntitySource source = new FixedWidthEntitySource(URI, descriptor, SystemInfo.getFileEncoding(), null, descriptors);
-        source.setContext(new DefaultBeneratorContext());
-        DataIterator<Entity> iterator = source.iterator();
-        assertEquals(ALICE, nextOf(iterator));
-        assertEquals(BOB, nextOf(iterator));
-        assertEquals(CHARLY, nextOf(iterator));
-        assertUnavailable(iterator);
-        iterator = source.iterator();
-        assertEquals(ALICE, nextOf(iterator));
-        assertEquals(BOB, nextOf(iterator));
-        assertEquals(CHARLY, nextOf(iterator));
-        assertUnavailable(iterator);
-    }
-    
-    @Test
-    public void testFiltered() {
-        FixedWidthEntitySource source = new FixedWidthEntitySource(URI, descriptor, SystemInfo.getFileEncoding(), "Bob.*", descriptors);
-        source.setContext(new DefaultBeneratorContext());
-        DataIterator<Entity> iterator = source.iterator();
-        assertEquals(BOB, nextOf(iterator));
-        assertUnavailable(iterator);
-        iterator = source.iterator();
-        assertEquals(BOB, nextOf(iterator));
-        assertUnavailable(iterator);
-    }
-    
-    @Test(expected = InvalidGeneratorSetupException.class)
-    public void testMissingColumnSpec() {
-        FixedWidthEntitySource source = new FixedWidthEntitySource(URI, descriptor, SystemInfo.getFileEncoding(), null);
-        source.setContext(new DefaultBeneratorContext());
-        DataIterator<Entity> iterator = source.iterator();
-        assertEquals(BOB, nextOf(iterator));
-    }
-    
+  /**
+   * Sets up persons.
+   */
+  @Before
+  public void setUpPersons() {
+    descriptor = createComplexType("person");
+    ALICE = new Entity(descriptor, "name", "Alice", "age", "23");
+    BOB = new Entity(descriptor, "name", "Bob", "age", "34");
+    CHARLY = new Entity(descriptor, "name", "Charly", "age", "45");
+  }
+
+  /**
+   * Test unfiltered.
+   */
+  @Test
+  public void testUnfiltered() {
+    FixedWidthEntitySource source = new FixedWidthEntitySource(URI, descriptor, SystemInfo.getFileEncoding(), null, descriptors);
+    source.setContext(new DefaultBeneratorContext());
+    DataIterator<Entity> iterator = source.iterator();
+    assertEquals(ALICE, nextOf(iterator));
+    assertEquals(BOB, nextOf(iterator));
+    assertEquals(CHARLY, nextOf(iterator));
+    assertUnavailable(iterator);
+    iterator = source.iterator();
+    assertEquals(ALICE, nextOf(iterator));
+    assertEquals(BOB, nextOf(iterator));
+    assertEquals(CHARLY, nextOf(iterator));
+    assertUnavailable(iterator);
+  }
+
+  /**
+   * Test filtered.
+   */
+  @Test
+  public void testFiltered() {
+    FixedWidthEntitySource source = new FixedWidthEntitySource(URI, descriptor, SystemInfo.getFileEncoding(), "Bob.*", descriptors);
+    source.setContext(new DefaultBeneratorContext());
+    DataIterator<Entity> iterator = source.iterator();
+    assertEquals(BOB, nextOf(iterator));
+    assertUnavailable(iterator);
+    iterator = source.iterator();
+    assertEquals(BOB, nextOf(iterator));
+    assertUnavailable(iterator);
+  }
+
+  /**
+   * Test missing column spec.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testMissingColumnSpec() {
+    FixedWidthEntitySource source = new FixedWidthEntitySource(URI, descriptor, SystemInfo.getFileEncoding(), null);
+    source.setContext(new DefaultBeneratorContext());
+    DataIterator<Entity> iterator = source.iterator();
+    assertEquals(BOB, nextOf(iterator));
+  }
+
 }

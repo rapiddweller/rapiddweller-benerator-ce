@@ -29,30 +29,39 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Converter;
+import com.rapiddweller.common.Converter;
 
 /**
  * {@link Statement} that uses a {@link Converter} to convert the current product.<br/><br/>
  * Created: 06.09.2011 12:41:22
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ConversionStatement implements Statement {
-	
-	Converter converter;
-	
-	public ConversionStatement(Converter converter) {
-		this.converter = converter;
-	}
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-		ProductWrapper currentProduct = context.getCurrentProduct();
-		Object value = currentProduct.unwrap();
-		value = converter.convert(value);
-		currentProduct.wrap(value);
-		return true;
-	}
+  /**
+   * The Converter.
+   */
+  final Converter converter;
+
+  /**
+   * Instantiates a new Conversion statement.
+   *
+   * @param converter the converter
+   */
+  public ConversionStatement(Converter converter) {
+    this.converter = converter;
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    ProductWrapper currentProduct = context.getCurrentProduct();
+    Object value = currentProduct.unwrap();
+    value = converter.convert(value);
+    currentProduct.wrap(value);
+    return true;
+  }
 
 }

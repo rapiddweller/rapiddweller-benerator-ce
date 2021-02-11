@@ -26,41 +26,48 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
-import java.math.BigDecimal;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 /**
  * Tests the {@link RepeatSequence}.<br/><br/>
  * Created: 12.02.2010 12:28:43
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class RepeatSequenceTest extends GeneratorTest {
 
-	@Test
-	public void testCreateSequence() {
-		RepeatSequence sequence = createSequence122333();
-		Generator<Integer> generator = sequence.createNumberGenerator(Integer.class, 1, 3, 1, false);
-		generator.init(context);
-		expectGeneratedSequence(generator, 1, 2, 2, 3, 3, 3).withCeasedAvailability();
-	}
+  /**
+   * Test create sequence.
+   */
+  @Test
+  public void testCreateSequence() {
+    RepeatSequence sequence = createSequence122333();
+    Generator<Integer> generator = sequence.createNumberGenerator(Integer.class, 1, 3, 1, false);
+    generator.init(context);
+    expectGeneratedSequence(generator, 1, 2, 2, 3, 3, 3).withCeasedAvailability();
+  }
 
-	@Test
-	public void testApplyTo() {
-        Generator<Integer> source = new SequenceTestGenerator<Integer>(1, 2, 3);
-		RepeatSequence sequence = createSequence122333();
-		Generator<Integer> generator = sequence.applyTo(source, false);
-		generator.init(context);
-		expectGeneratedSequence(generator, 1, 2, 2, 3, 3, 3).withCeasedAvailability();
-	}
-	
-	private static RepeatSequence createSequence122333() {
-	    StepSequence repetitionDistribution = new StepSequence(BigDecimal.ONE, BigDecimal.ZERO);
-		return new RepeatSequence(0, 2, 1, repetitionDistribution);
-    }
-	
+  /**
+   * Test apply to.
+   */
+  @Test
+  public void testApplyTo() {
+    Generator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
+    RepeatSequence sequence = createSequence122333();
+    Generator<Integer> generator = sequence.applyTo(source, false);
+    generator.init(context);
+    expectGeneratedSequence(generator, 1, 2, 2, 3, 3, 3).withCeasedAvailability();
+  }
+
+  private static RepeatSequence createSequence122333() {
+    StepSequence repetitionDistribution = new StepSequence(BigDecimal.ONE, BigDecimal.ZERO);
+    return new RepeatSequence(0, 2, 1, repetitionDistribution);
+  }
+
 }

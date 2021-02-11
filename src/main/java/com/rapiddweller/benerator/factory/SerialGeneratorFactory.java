@@ -26,13 +26,6 @@
 
 package com.rapiddweller.benerator.factory;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorProvider;
 import com.rapiddweller.benerator.NonNullGenerator;
@@ -45,176 +38,203 @@ import com.rapiddweller.benerator.wrapper.CompositeStringGenerator;
 import com.rapiddweller.benerator.wrapper.GeneratorChain;
 import com.rapiddweller.benerator.wrapper.SimpleMultiSourceArrayGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.NumberUtil;
-import com.rapiddweller.commons.converter.AnyConverter;
-import com.rapiddweller.commons.converter.ConverterManager;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.NumberUtil;
+import com.rapiddweller.common.converter.AnyConverter;
+import com.rapiddweller.common.converter.ConverterManager;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.WeightedSample;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
+
 /**
- * {@link GeneratorFactory} implementation which provides 
+ * {@link GeneratorFactory} implementation which provides
  * serial value generation and parallel combinations.<br/>
  * <br/>
  * Created: 22.07.2011 10:14:36
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class SerialGeneratorFactory extends GeneratorFactory {
 
-	public SerialGeneratorFactory() {
-		super(new MeanDefaultsProvider());
-	}
+  /**
+   * Instantiates a new Serial generator factory.
+   */
+  public SerialGeneratorFactory() {
+    super(new MeanDefaultsProvider());
+  }
 
-	@Override
-	public <T> Generator<T> createAlternativeGenerator(
-			Class<T> targetType, Generator<T>[] sources, Uniqueness uniqueness) {
-		return new GeneratorChain<T>(targetType, uniqueness.isUnique(), sources);
-	}
-	
-	@Override
-	public <T> Generator<T[]> createCompositeArrayGenerator(
-			Class<T> componentType, Generator<T>[] sources, Uniqueness uniqueness) {
-    	return new SimpleMultiSourceArrayGenerator<T>(componentType, sources);
-	}
+  @Override
+  public <T> Generator<T> createAlternativeGenerator(
+      Class<T> targetType, Generator<T>[] sources, Uniqueness uniqueness) {
+    return new GeneratorChain<>(targetType, uniqueness.isUnique(), sources);
+  }
 
-	@Override
-	public <T> Generator<T> createSampleGenerator(Collection<T> values, Class<T> generatedType, boolean unique) {
-        return new SequenceGenerator<T>(generatedType, values);
-	}
+  @Override
+  public <T> Generator<T[]> createCompositeArrayGenerator(
+      Class<T> componentType, Generator<T>[] sources, Uniqueness uniqueness) {
+    return new SimpleMultiSourceArrayGenerator<>(componentType, sources);
+  }
 
-	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public <T> Generator<T> createFromWeightedLiteralList(String valueSpec, Class<T> targetType,
-            Distribution distribution, boolean unique) {
-	    List<WeightedSample<?>> samples = CollectionUtil.toList(DatabeneScriptParser.parseWeightedLiteralList(valueSpec));
-    	List<?> values = FactoryUtil.extractValues((List) samples);
-	    Converter<?, T> typeConverter = new AnyConverter<T>(targetType);
-	    Collection<T> convertedValues = ConverterManager.convertAll((List) values, typeConverter);
-	    return createSampleGenerator(convertedValues, targetType, true);
+  @Override
+  public <T> Generator<T> createSampleGenerator(Collection<T> values, Class<T> generatedType, boolean unique) {
+    return new SequenceGenerator<>(generatedType, values);
+  }
+
+  @Override
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public <T> Generator<T> createFromWeightedLiteralList(String valueSpec, Class<T> targetType,
+                                                        Distribution distribution, boolean unique) {
+    List<WeightedSample<?>> samples = CollectionUtil.toList(DatabeneScriptParser.parseWeightedLiteralList(valueSpec));
+    List<?> values = FactoryUtil.extractValues((List) samples);
+    Converter<?, T> typeConverter = new AnyConverter<>(targetType);
+    Collection<T> convertedValues = ConverterManager.convertAll((List) values, typeConverter);
+    return createSampleGenerator(convertedValues, targetType, true);
+  }
+
+  @Override
+  public <T> Generator<T> createWeightedSampleGenerator(Collection<WeightedSample<T>> samples, Class<T> targetType) {
+    List<T> values = FactoryUtil.extractValues(samples);
+    return createSampleGenerator(values, targetType, true);
+  }
+
+  @Override
+  public Generator<Date> createDateGenerator(
+      Date min, Date max, long granularity, Distribution distribution) {
+    if (distribution == null) {
+      distribution = SequenceManager.STEP_SEQUENCE;
     }
+    return super.createDateGenerator(min, max, granularity, distribution);
+  }
 
-    @Override
-	public <T> Generator<T> createWeightedSampleGenerator(Collection<WeightedSample<T>> samples, Class<T> targetType) {
-    	List<T> values = FactoryUtil.extractValues(samples);
-	    return createSampleGenerator(values, targetType, true);
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(
+      Class<T> numberType, T min, Boolean minInclusive, T max, Boolean maxInclusive,
+      T granularity, Distribution distribution, Uniqueness uniqueness) {
+    Assert.notNull(numberType, "numberType");
+    if (distribution == null) {
+      distribution = SequenceManager.STEP_SEQUENCE;
     }
-
-    @Override
-	public Generator<Date> createDateGenerator(
-            Date min, Date max, long granularity, Distribution distribution) {
-    	if (distribution == null)
-    		distribution = SequenceManager.STEP_SEQUENCE;
-    	return super.createDateGenerator(min, max, granularity, distribution);
+    if (min == null) {
+      min = (NumberUtil.isLimited(numberType) ? NumberUtil.minValue(numberType) : defaultsProvider.defaultMin(numberType));
     }
-
-	@Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(
-            Class<T> numberType, T min, Boolean minInclusive, T max, Boolean maxInclusive, 
-            T granularity, Distribution distribution, Uniqueness uniqueness) {
-        Assert.notNull(numberType, "numberType");
-        if (distribution == null)
-        	distribution = SequenceManager.STEP_SEQUENCE;
-        if (min == null)
-        	min = (NumberUtil.isLimited(numberType) ? NumberUtil.minValue(numberType) : defaultsProvider.defaultMin(numberType));
-        if (max == null)
-        	max = (NumberUtil.isLimited(numberType) ? NumberUtil.maxValue(numberType) : defaultsProvider.defaultMax(numberType));
-        if (granularity == null)
-        	granularity = defaultsProvider.defaultGranularity(numberType);
-    	return super.createNumberGenerator(numberType, min, minInclusive, max, maxInclusive, 
-    			granularity, distribution, uniqueness);
+    if (max == null) {
+      max = (NumberUtil.isLimited(numberType) ? NumberUtil.maxValue(numberType) : defaultsProvider.defaultMax(numberType));
     }
-    
-	@Override
-	public NonNullGenerator<String> createStringGenerator(Set<Character> chars,
-			Integer minLength, Integer maxLength, int lengthGranularity, Distribution lengthDistribution, 
-			Uniqueness uniqueness) {
-		Generator<Character> charGenerator = createCharacterGenerator(chars);
-		Set<Integer> counts = defaultCounts(minLength, maxLength, lengthGranularity);
-		NonNullGenerator<Integer> lengthGenerator = WrapperFactory.asNonNullGenerator(
-				new SequenceGenerator<Integer>(Integer.class, counts));
-		return new EquivalenceStringGenerator<Character>(charGenerator, lengthGenerator);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public NonNullGenerator<String> createCompositeStringGenerator(
-			GeneratorProvider<?> partGeneratorProvider, int minParts, int maxParts, Uniqueness uniqueness) {
-		GeneratorChain<String> result = new GeneratorChain<String>(String.class, true);
-		Set<Integer> partCounts = defaultCounts(minParts, maxParts, 1);
-		for (int partCount : partCounts) {
-			Generator<String>[] sources = new Generator[partCount];
-			for (int i = 0; i < partCount; i++)
-				sources[i] = WrapperFactory.asStringGenerator(partGeneratorProvider.create());
-			result.addSource(new CompositeStringGenerator(true, sources));
-		}
-		return WrapperFactory.asNonNullGenerator(result);
-	}
-	
-    @Override
-	public Generator<Character> createCharacterGenerator(String pattern, Locale locale, boolean unique) {
-        return super.createCharacterGenerator(pattern, locale, true);
+    if (granularity == null) {
+      granularity = defaultsProvider.defaultGranularity(numberType);
     }
+    return super.createNumberGenerator(numberType, min, minInclusive, max, maxInclusive,
+        granularity, distribution, uniqueness);
+  }
 
-    @Override
-	public NonNullGenerator<Character> createCharacterGenerator(Set<Character> characters) {
-        return WrapperFactory.asNonNullGenerator(
-        		new SequenceGenerator<Character>(Character.class, characters));
+  @Override
+  public NonNullGenerator<String> createStringGenerator(Set<Character> chars,
+                                                        Integer minLength, Integer maxLength, int lengthGranularity, Distribution lengthDistribution,
+                                                        Uniqueness uniqueness) {
+    Generator<Character> charGenerator = createCharacterGenerator(chars);
+    Set<Integer> counts = defaultCounts(minLength, maxLength, lengthGranularity);
+    NonNullGenerator<Integer> lengthGenerator = WrapperFactory.asNonNullGenerator(
+        new SequenceGenerator<>(Integer.class, counts));
+    return new EquivalenceStringGenerator<>(charGenerator, lengthGenerator);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public NonNullGenerator<String> createCompositeStringGenerator(
+      GeneratorProvider<?> partGeneratorProvider, int minParts, int maxParts, Uniqueness uniqueness) {
+    GeneratorChain<String> result = new GeneratorChain<>(String.class, true);
+    Set<Integer> partCounts = defaultCounts(minParts, maxParts, 1);
+    for (int partCount : partCounts) {
+      Generator<String>[] sources = new Generator[partCount];
+      for (int i = 0; i < partCount; i++) {
+        sources[i] = WrapperFactory.asStringGenerator(partGeneratorProvider.create());
+      }
+      result.addSource(new CompositeStringGenerator(true, sources));
     }
+    return WrapperFactory.asNonNullGenerator(result);
+  }
 
-	protected Set<Integer> defaultCounts(int minCount, int maxCount, int countPrecision) {
-		Set<Integer> result = new TreeSet<Integer>();
-		for (int i = minCount; i <= maxCount; i += countPrecision)
-			result.add(i);
-		return result;
-	}
+  @Override
+  public Generator<Character> createCharacterGenerator(String pattern, Locale locale, boolean unique) {
+    return super.createCharacterGenerator(pattern, locale, true);
+  }
 
-    @Override
-	public <T> Generator<T> createSingleValueGenerator(T value, boolean unique) {
-		return new OneShotGenerator<T>(value);
+  @Override
+  public NonNullGenerator<Character> createCharacterGenerator(Set<Character> characters) {
+    return WrapperFactory.asNonNullGenerator(
+        new SequenceGenerator<>(Character.class, characters));
+  }
+
+  /**
+   * Default counts set.
+   *
+   * @param minCount       the min count
+   * @param maxCount       the max count
+   * @param countPrecision the count precision
+   * @return the set
+   */
+  protected Set<Integer> defaultCounts(int minCount, int maxCount, int countPrecision) {
+    Set<Integer> result = new TreeSet<>();
+    for (int i = minCount; i <= maxCount; i += countPrecision) {
+      result.add(i);
     }
+    return result;
+  }
 
-	@Override
-	public <T> Generator<T> createNullGenerator(Class<T> generatedType) {
-		return new OneShotGenerator<T>(null, generatedType);
-	}
+  @Override
+  public <T> Generator<T> createSingleValueGenerator(T value, boolean unique) {
+    return new OneShotGenerator<>(value);
+  }
 
-    @Override
-	public Set<Character> defaultSubSet(Set<Character> characters) {
-    	return characters;
+  @Override
+  public <T> Generator<T> createNullGenerator(Class<T> generatedType) {
+    return new OneShotGenerator<>(null, generatedType);
+  }
+
+  @Override
+  public Set<Character> defaultSubSet(Set<Character> characters) {
+    return characters;
+  }
+
+  // defaults --------------------------------------------------------------------------------------------------------
+
+  @Override
+  public Generator<?> applyNullSettings(Generator<?> source, Boolean nullable, Double nullQuota) {
+    if (nullable == null || nullable || (nullQuota != null && nullQuota > 0)) {
+      return WrapperFactory.prependNull(source);
+    } else {
+      return source;
     }
+  }
 
-    // defaults --------------------------------------------------------------------------------------------------------
-    
-    @Override
-	public Generator<?> applyNullSettings(Generator<?> source, Boolean nullable, Double nullQuota)  {
-		if (nullable == null || nullable || (nullQuota != null && nullQuota > 0))
-			return WrapperFactory.prependNull(source);
-		else
-			return source;
-	}
+  @Override
+  protected Distribution defaultLengthDistribution(Uniqueness uniqueness, boolean required) {
+    return (required ? SequenceManager.STEP_SEQUENCE : null);
+  }
 
-	@Override
-	protected Distribution defaultLengthDistribution(Uniqueness uniqueness, boolean required) {
-    	return (required ? SequenceManager.STEP_SEQUENCE : null);
-	}
+  @Override
+  public Distribution defaultDistribution(Uniqueness uniqueness) {
+    return SequenceManager.STEP_SEQUENCE;
+  }
 
-	@Override
-	public Distribution defaultDistribution(Uniqueness uniqueness) {
-		return SequenceManager.STEP_SEQUENCE;
-	}
+  @Override
+  protected double defaultTrueQuota() {
+    return 0.5;
+  }
 
-	@Override
-	protected double defaultTrueQuota() {
-		return 0.5;
-	}
-
-	@Override
-	protected boolean defaultUnique() {
-		return true;
-	}
+  @Override
+  protected boolean defaultUnique() {
+    return true;
+  }
 
 }

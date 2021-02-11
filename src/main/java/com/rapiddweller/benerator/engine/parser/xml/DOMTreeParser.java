@@ -26,52 +26,59 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseAttribute;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
-
-import java.util.Set;
-
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.DefineDOMTreeStatement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.ConversionException;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
+
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ID;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_INPUT_URI;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAMESPACE_AWARE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_OUTPUT_URI;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_DOMTREE;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
 /**
  * Parses &lt;domtree&gt; elements in a Benerator descriptor file.<br/><br/>
  * Created: 16.01.2014 15:59:48
- * @since 0.9.0
+ *
  * @author Volker Bergmann
+ * @since 0.9.0
  */
-
 public class DOMTreeParser extends AbstractBeneratorDescriptorParser {
-	
-	private static final Set<String> REQUIRED_ATTRIBUTES = CollectionUtil.toSet(ATT_ID, ATT_INPUT_URI);
 
-	private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(ATT_OUTPUT_URI, ATT_NAMESPACE_AWARE);
+  private static final Set<String> REQUIRED_ATTRIBUTES = CollectionUtil.toSet(ATT_ID, ATT_INPUT_URI);
+
+  private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(ATT_OUTPUT_URI, ATT_NAMESPACE_AWARE);
 
 
-	public DOMTreeParser() {
-	    super(EL_DOMTREE, REQUIRED_ATTRIBUTES, OPTIONAL_ATTRIBUTES, BeneratorRootStatement.class, IfStatement.class);
+  /**
+   * Instantiates a new Dom tree parser.
+   */
+  public DOMTreeParser() {
+    super(EL_DOMTREE, REQUIRED_ATTRIBUTES, OPTIONAL_ATTRIBUTES, BeneratorRootStatement.class, IfStatement.class);
+  }
+
+  @Override
+  public DefineDOMTreeStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    try {
+      Expression<String> id = parseAttribute(ATT_ID, element);
+      Expression<String> inputUri = parseScriptableStringAttribute(ATT_INPUT_URI, element);
+      Expression<String> outputUri = parseScriptableStringAttribute(ATT_OUTPUT_URI, element);
+      Expression<Boolean> namespaceAware = parseBooleanExpressionAttribute(ATT_NAMESPACE_AWARE, element);
+      return new DefineDOMTreeStatement(id, inputUri, outputUri, namespaceAware, context.getResourceManager());
+    } catch (ConversionException e) {
+      throw new ConfigurationError(e);
     }
-
-	@Override
-    public DefineDOMTreeStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-		try {
-			Expression<String>  id        = parseAttribute(ATT_ID, element);
-			Expression<String>  inputUri  = parseScriptableStringAttribute(ATT_INPUT_URI,  element);
-			Expression<String>  outputUri = parseScriptableStringAttribute(ATT_OUTPUT_URI, element);
-			Expression<Boolean> namespaceAware = parseBooleanExpressionAttribute(ATT_NAMESPACE_AWARE, element);
-			return new DefineDOMTreeStatement(id, inputUri, outputUri, namespaceAware, context.getResourceManager());
-		} catch (ConversionException e) {
-			throw new ConfigurationError(e);
-		}
-    }
+  }
 
 }

@@ -26,21 +26,21 @@
 
 package com.rapiddweller.benerator.csv;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.WeightedGenerator;
 import com.rapiddweller.benerator.dataset.AbstractDatasetGenerator;
 import com.rapiddweller.benerator.dataset.AtomicDatasetGenerator;
 import com.rapiddweller.benerator.dataset.Dataset;
 import com.rapiddweller.benerator.dataset.DatasetUtil;
 import com.rapiddweller.benerator.sample.AttachedWeightSampleGenerator;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.converter.NoOpConverter;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.script.WeightedSample;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.List;
 
 /**
  * Generates data from a csv file set that is organized as {@link Dataset}.
@@ -49,76 +49,146 @@ import org.apache.logging.log4j.LogManager;
  * <br/>
  * Created: 21.03.2008 16:32:04
  *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.5.0
  */
 public class WeightedDatasetCSVGenerator<E> extends AbstractDatasetGenerator<E> {
 
-    private static final Logger LOGGER = LogManager.getLogger(WeightedDatasetCSVGenerator.class);
+  private static final Logger LOGGER = LogManager.getLogger(WeightedDatasetCSVGenerator.class);
 
-    protected String filenamePattern;
-    protected String encoding;
-    protected char separator;
-    protected Converter<String, E> converter;
+  /**
+   * The Filename pattern.
+   */
+  protected String filenamePattern;
+  /**
+   * The Encoding.
+   */
+  protected final String encoding;
+  /**
+   * The Separator.
+   */
+  protected final char separator;
+  /**
+   * The Converter.
+   */
+  protected final Converter<String, E> converter;
 
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, String datasetName, String nesting, boolean fallback) {
-        this(generatedType, filenamePattern, ',', datasetName, nesting, fallback, SystemInfo.getFileEncoding());
+  /**
+   * Instantiates a new Weighted dataset csv generator.
+   *
+   * @param generatedType   the generated type
+   * @param filenamePattern the filename pattern
+   * @param datasetName     the dataset name
+   * @param nesting         the nesting
+   * @param fallback        the fallback
+   */
+  public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, String datasetName, String nesting, boolean fallback) {
+    this(generatedType, filenamePattern, ',', datasetName, nesting, fallback, SystemInfo.getFileEncoding());
+  }
+
+  /**
+   * Instantiates a new Weighted dataset csv generator.
+   *
+   * @param generatedType   the generated type
+   * @param filenamePattern the filename pattern
+   * @param separator       the separator
+   * @param datasetName     the dataset name
+   * @param nesting         the nesting
+   * @param fallback        the fallback
+   * @param encoding        the encoding
+   */
+  @SuppressWarnings({"unchecked", "cast", "rawtypes"})
+  public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, char separator, String datasetName, String nesting,
+                                     boolean fallback, String encoding) {
+    this(generatedType, filenamePattern, separator, datasetName, nesting, fallback, encoding, (Converter<String, E>) new NoOpConverter());
+  }
+
+  /**
+   * Instantiates a new Weighted dataset csv generator.
+   *
+   * @param generatedType   the generated type
+   * @param filenamePattern the filename pattern
+   * @param datasetName     the dataset name
+   * @param nesting         the nesting
+   * @param fallback        the fallback
+   * @param encoding        the encoding
+   */
+  @SuppressWarnings({"cast", "unchecked", "rawtypes"})
+  public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, String datasetName, String nesting, boolean fallback,
+                                     String encoding) {
+    this(generatedType, filenamePattern, ',', datasetName, nesting, fallback, encoding, (Converter<String, E>) new NoOpConverter());
+  }
+
+  /**
+   * Instantiates a new Weighted dataset csv generator.
+   *
+   * @param generatedType   the generated type
+   * @param filenamePattern the filename pattern
+   * @param separator       the separator
+   * @param datasetName     the dataset name
+   * @param nesting         the nesting
+   * @param fallback        the fallback
+   * @param encoding        the encoding
+   * @param converter       the converter
+   */
+  public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, char separator, String datasetName, String nesting,
+                                     boolean fallback,
+                                     String encoding, Converter<String, E> converter) {
+    super(generatedType, nesting, datasetName, fallback);
+    this.filenamePattern = filenamePattern;
+    this.separator = separator;
+    this.encoding = encoding;
+    this.converter = converter;
+  }
+
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Sets filename pattern.
+   *
+   * @param filenamePattern the filename pattern
+   */
+  public void setFilenamePattern(String filenamePattern) {
+    this.filenamePattern = filenamePattern;
+  }
+
+  /**
+   * Gets filename pattern.
+   *
+   * @return the filename pattern
+   */
+  public String getFilenamePattern() {
+    return filenamePattern;
+  }
+
+  @Override
+  protected WeightedGenerator<E> createGeneratorForAtomicDataset(Dataset dataset) {
+    String filename = DatasetUtil.filenameOfDataset(dataset.getName(), filenamePattern);
+    LOGGER.debug("Creating weighted data set CSV generator for file {}", filename);
+    if (IOUtil.isURIAvailable(filename)) {
+      List<WeightedSample<E>> samples = CSVGeneratorUtil.parseFile(filename, separator, encoding, converter);
+      AttachedWeightSampleGenerator<E> generator = new AttachedWeightSampleGenerator<>(generatedType);
+      for (WeightedSample<E> sample : samples) {
+        generator.addSample(sample.getValue(), sample.getWeight());
+      }
+      if (samples.size() > 0) {
+        return new AtomicDatasetGenerator<>(generator, filename, dataset.getName());
+      }
     }
-
-    @SuppressWarnings({"unchecked", "cast", "rawtypes"})
-    public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, char separator, String datasetName, String nesting, boolean fallback, String encoding) {
-        this(generatedType, filenamePattern, separator, datasetName, nesting, fallback, encoding, (Converter<String, E>) new NoOpConverter());
-    }
-
-    @SuppressWarnings({"cast", "unchecked", "rawtypes"})
-    public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, String datasetName, String nesting, boolean fallback, String encoding) {
-        this(generatedType, filenamePattern, ',', datasetName, nesting, fallback, encoding, (Converter<String, E>) new NoOpConverter());
-    }
-
-    public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, char separator, String datasetName, String nesting, boolean fallback,
-                                       String encoding, Converter<String, E> converter) {
-        super(generatedType, nesting, datasetName, fallback);
-        this.filenamePattern = filenamePattern;
-        this.separator = separator;
-        this.encoding = encoding;
-        this.converter = converter;
-    }
+    return null;
+  }
 
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    public void setFilenamePattern(String filenamePattern) {
-        this.filenamePattern = filenamePattern;
-    }
-
-    public String getFilenamePattern() {
-        return filenamePattern;
-    }
-
-    @Override
-    protected WeightedGenerator<E> createGeneratorForAtomicDataset(Dataset dataset) {
-        String filename = DatasetUtil.filenameOfDataset(dataset.getName(), filenamePattern);
-        LOGGER.debug("Creating weighted data set CSV generator for file {}", filename);
-        if (IOUtil.isURIAvailable(filename)) {
-            List<WeightedSample<E>> samples = CSVGeneratorUtil.parseFile(filename, separator, encoding, converter);
-            AttachedWeightSampleGenerator<E> generator = new AttachedWeightSampleGenerator<E>(generatedType);
-            for (WeightedSample<E> sample : samples)
-                generator.addSample(sample.getValue(), sample.getWeight());
-            if (samples.size() > 0)
-                return new AtomicDatasetGenerator<E>(generator, filename, dataset.getName());
-        }
-        return null;
-    }
-
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + filenamePattern + ',' + nesting + ':' + datasetName + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + filenamePattern + ',' + nesting + ':' + datasetName + ']';
+  }
 
 }

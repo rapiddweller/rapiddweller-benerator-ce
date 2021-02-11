@@ -33,18 +33,18 @@ package com.rapiddweller.model.data;
  */
 public enum Mode {
 
-    /**
-     * do nothing special about the described object.
-     */
-    normal,
+  /**
+   * do nothing special about the described object.
+   */
+  normal,
 
-    /**
-     * do not generate data for the described object.
-     */
-    ignored,
+  /**
+   * do not generate data for the described object.
+   */
+  ignored,
 
-    /**
-     * keep the described object secret.
-     */
-    secret
+  /**
+   * keep the described object secret.
+   */
+  secret
 }

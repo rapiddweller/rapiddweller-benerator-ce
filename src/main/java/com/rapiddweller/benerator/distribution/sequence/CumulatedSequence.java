@@ -26,41 +26,44 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
-import java.math.BigInteger;
-
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.NumberUtil;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.NumberUtil;
 
-import static com.rapiddweller.commons.NumberUtil.*;
+import java.math.BigInteger;
+
+import static com.rapiddweller.common.NumberUtil.toDouble;
+import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
  * {@link Sequence} implementation for an efficient bell-like distribution.<br/>
  * <br/>
  * Created at 23.09.2009 18:59:30
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class CumulatedSequence extends Sequence {
 
-    @Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
-    	if (unique)
-    		throw new ConfigurationError(getClass().getSimpleName() + " does not support uniqueness");
-    	NonNullGenerator<? extends Number> base;
-		if (BeanUtil.isIntegralNumberType(numberType)) {
-	    	long lMax = (max != null ? max.longValue() : 
-	    		(numberType != Long.class && numberType != BigInteger.class ? NumberUtil.maxValue(numberType).longValue() : CumulatedLongGenerator.DEFAULT_MAX));
-			base = new CumulatedLongGenerator(toLong(min), lMax, toLong(granularity));
-		} else {
-			double dMax = (max != null ? max.doubleValue() : Long.MAX_VALUE);
-			base = new CumulatedDoubleGenerator(toDouble(min), dMax, toDouble(granularity));
-		}
-		return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
+    if (unique) {
+      throw new ConfigurationError(getClass().getSimpleName() + " does not support uniqueness");
     }
+    NonNullGenerator<? extends Number> base;
+    if (BeanUtil.isIntegralNumberType(numberType)) {
+      long lMax = (max != null ? max.longValue() :
+          (numberType != Long.class && numberType != BigInteger.class ? NumberUtil.maxValue(numberType).longValue() :
+              CumulatedLongGenerator.DEFAULT_MAX));
+      base = new CumulatedLongGenerator(toLong(min), lMax, toLong(granularity));
+    } else {
+      double dMax = (max != null ? max.doubleValue() : Long.MAX_VALUE);
+      base = new CumulatedDoubleGenerator(toDouble(min), dMax, toDouble(granularity));
+    }
+    return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
+  }
 
 }

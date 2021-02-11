@@ -26,18 +26,26 @@
 
 package com.rapiddweller.benerator.template;
 
-import java.io.IOException;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ParseException;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ParseException;
+import java.io.IOException;
 
 /**
  * Reads the input file for a template and attaches it to a {@link Context}.<br/><br/>
  * Created: 06.03.2014 08:22:09
- * @since 0.9.0
+ *
  * @author Volker Bergmann
+ * @since 0.9.0
  */
-
 public interface TemplateInputReader {
-	void parse(String uri, Context context) throws IOException, ParseException;
+  /**
+   * Parse.
+   *
+   * @param uri     the uri
+   * @param context the context
+   * @throws IOException    the io exception
+   * @throws ParseException the parse exception
+   */
+  void parse(String uri, Context context) throws IOException, ParseException;
 }

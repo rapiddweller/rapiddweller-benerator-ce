@@ -30,7 +30,7 @@ import java.lang.annotation.Annotation;
 
 import javax.validation.ConstraintValidatorContext;
 
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 /**
  * Validates a long value.<br/><br/>
@@ -38,10 +38,18 @@ import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
  *
  * @author Volker Bergmann
  */
-public class LongValidator extends AbstractConstraintValidator<Annotation, Long> {
+public class LongValidator
+    extends AbstractConstraintValidator<Annotation, Long> {
 
-    public boolean isValid(Long n, ConstraintValidatorContext context) {
-        return (n != null);
-    }
+  /**
+   * Is valid boolean.
+   *
+   * @param n       the n
+   * @param context the context
+   * @return the boolean
+   */
+  public boolean isValid(Long n, ConstraintValidatorContext context) {
+    return (n != null);
+  }
 
 }

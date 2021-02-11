@@ -26,26 +26,32 @@
 
 package com.rapiddweller.benerator.engine.expression.context;
 
-import com.rapiddweller.commons.Context;
+import com.rapiddweller.common.Context;
 import com.rapiddweller.script.expression.DynamicExpression;
 
 /**
  * Represents and resolves a reference to an object in a {@link Context}.<br/><br/>
  * Created: 25.10.2009 09:33:35
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ContextReference extends DynamicExpression<Object> {
 
-	private String ref;
-	
-	public ContextReference(String ref) {
-	    this.ref = ref;
-    }
+  private final String ref;
 
-	@Override
-	public Object evaluate(Context context) {
-	    return context.get(ref);
-    }
+  /**
+   * Instantiates a new Context reference.
+   *
+   * @param ref the ref
+   */
+  public ContextReference(String ref) {
+    this.ref = ref;
+  }
+
+  @Override
+  public Object evaluate(Context context) {
+    return context.get(ref);
+  }
 
 }

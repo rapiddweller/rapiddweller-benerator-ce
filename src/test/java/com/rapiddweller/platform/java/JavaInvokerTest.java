@@ -26,123 +26,179 @@
 
 package com.rapiddweller.platform.java;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link JavaInvoker}.<br/><br/>
  * Created: 21.10.2009 18:28:17
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class JavaInvokerTest extends GeneratorTest {
 
-	@Test
-	public void testInstanceMethodEntity() {
-		POJO target = new POJO();
-		JavaInvoker invoker = new JavaInvoker(target, "dynP2");
-		try {
-			invoker.startProductConsumption(createEntity("params", "name", "Alice", "age", 23));
-			invoker.startProductConsumption(createEntity("params", "name", "Bob", "age", 34));
-			assertEquals(2, target.dynCountP2);
-		} finally {
-	    	IOUtil.close(invoker);
-	    }
-	}
+  /**
+   * Test instance method entity.
+   */
+  @Test
+  public void testInstanceMethodEntity() {
+    POJO target = new POJO();
+    JavaInvoker invoker = new JavaInvoker(target, "dynP2");
+    try {
+      invoker.startProductConsumption(createEntity("params", "name", "Alice", "age", 23));
+      invoker.startProductConsumption(createEntity("params", "name", "Bob", "age", 34));
+      assertEquals(2, target.dynCountP2);
+    } finally {
+      IOUtil.close(invoker);
+    }
+  }
 
-	@Test
-	public void testStaticMethodEntity() {
-		POJO.statCountP2 = 0;
-		Class<POJO> target = POJO.class;
-		JavaInvoker invoker = new JavaInvoker(target, "statP2");
-		try {
-			invoker.startProductConsumption(createEntity("params", "name", "Alice", "age", 23));
-			invoker.startProductConsumption(createEntity("params", "name", "Bob", "age", 34));
-			assertEquals(2, POJO.statCountP2);
-		} finally {
-	    	IOUtil.close(invoker);
-	    }
-	}
-	
-	@Test
-	public void testInstanceMethodObject() {
-		POJO target = new POJO();
-		JavaInvoker invoker = new JavaInvoker(target, "dynP1");
-		try {
-			invoker.startProductConsumption("Alice");
-			invoker.startProductConsumption("Bob");
-			assertEquals(2, target.dynCountP1);
-		} finally {
-	    	IOUtil.close(invoker);
-	    }
-	}
+  /**
+   * Test static method entity.
+   */
+  @Test
+  public void testStaticMethodEntity() {
+    POJO.statCountP2 = 0;
+    Class<POJO> target = POJO.class;
+    JavaInvoker invoker = new JavaInvoker(target, "statP2");
+    try {
+      invoker.startProductConsumption(createEntity("params", "name", "Alice", "age", 23));
+      invoker.startProductConsumption(createEntity("params", "name", "Bob", "age", 34));
+      assertEquals(2, POJO.statCountP2);
+    } finally {
+      IOUtil.close(invoker);
+    }
+  }
 
-	@Test
-	public void testStaticMethodObject() {
-		POJO.statCountP1 = 0;
-		Class<POJO> target = POJO.class;
-		JavaInvoker invoker = new JavaInvoker(target, "statP1");
-		try {
-			invoker.startProductConsumption(23);
-			invoker.startProductConsumption(34);
-			assertEquals(2, POJO.statCountP1);
-		} finally {
-	    	IOUtil.close(invoker);
-	    }
-	}
-	
-	@Test
-	public void testInstanceMethodArray() {
-		POJO target = new POJO();
-		JavaInvoker invoker = new JavaInvoker(target, "dynP2");
-		try {
-			invoker.startProductConsumption(new Object[] { "Alice", 23 });
-			invoker.startProductConsumption(new Object[] { "Bob",   34 });
-			assertEquals(2, target.dynCountP2);
-		} finally {
-	    	IOUtil.close(invoker);
-	    }
-	}
+  /**
+   * Test instance method object.
+   */
+  @Test
+  public void testInstanceMethodObject() {
+    POJO target = new POJO();
+    JavaInvoker invoker = new JavaInvoker(target, "dynP1");
+    try {
+      invoker.startProductConsumption("Alice");
+      invoker.startProductConsumption("Bob");
+      assertEquals(2, target.dynCountP1);
+    } finally {
+      IOUtil.close(invoker);
+    }
+  }
 
-	@Test
-	public void testStaticMethodArray() {
-		POJO.statCountP2= 0;
-		Class<POJO> target = POJO.class;
-		JavaInvoker invoker = new JavaInvoker(target, "statP2");
-		try {
-			invoker.startProductConsumption(new Object[] { "Alice", 23 });
-			invoker.startProductConsumption(new Object[] { "Bob",   34 });
-			assertEquals(2, POJO.statCountP2);
-		} finally {
-	    	IOUtil.close(invoker);
-	    }
-	}
-	
-	public static class POJO {
-		
-		public int dynCountP1 = 0;
-		public static int statCountP1 = 0;
-		public int dynCountP2 = 0;
-		public static int statCountP2 = 0;
-		
-		public void dynP1(String name) {
-			dynCountP1++;
-		}
-		
-		public static void statP1(int age) {
-			statCountP1++;
-		}
-		
-		public void dynP2(String name, int age) {
-			dynCountP2++;
-		}
-		
-		public static void statP2(String name, int age) {
-			statCountP2++;
-		}
-	}
+  /**
+   * Test static method object.
+   */
+  @Test
+  public void testStaticMethodObject() {
+    POJO.statCountP1 = 0;
+    Class<POJO> target = POJO.class;
+    JavaInvoker invoker = new JavaInvoker(target, "statP1");
+    try {
+      invoker.startProductConsumption(23);
+      invoker.startProductConsumption(34);
+      assertEquals(2, POJO.statCountP1);
+    } finally {
+      IOUtil.close(invoker);
+    }
+  }
+
+  /**
+   * Test instance method array.
+   */
+  @Test
+  public void testInstanceMethodArray() {
+    POJO target = new POJO();
+    JavaInvoker invoker = new JavaInvoker(target, "dynP2");
+    try {
+      invoker.startProductConsumption(new Object[] {"Alice", 23});
+      invoker.startProductConsumption(new Object[] {"Bob", 34});
+      assertEquals(2, target.dynCountP2);
+    } finally {
+      IOUtil.close(invoker);
+    }
+  }
+
+  /**
+   * Test static method array.
+   */
+  @Test
+  public void testStaticMethodArray() {
+    POJO.statCountP2 = 0;
+    Class<POJO> target = POJO.class;
+    JavaInvoker invoker = new JavaInvoker(target, "statP2");
+    try {
+      invoker.startProductConsumption(new Object[] {"Alice", 23});
+      invoker.startProductConsumption(new Object[] {"Bob", 34});
+      assertEquals(2, POJO.statCountP2);
+    } finally {
+      IOUtil.close(invoker);
+    }
+  }
+
+  /**
+   * The type Pojo.
+   */
+  public static class POJO {
+
+    /**
+     * The Dyn count p 1.
+     */
+    public int dynCountP1 = 0;
+    /**
+     * The constant statCountP1.
+     */
+    public static int statCountP1 = 0;
+    /**
+     * The Dyn count p 2.
+     */
+    public int dynCountP2 = 0;
+    /**
+     * The constant statCountP2.
+     */
+    public static int statCountP2 = 0;
+
+    /**
+     * Dyn p 1.
+     *
+     * @param name the name
+     */
+    public void dynP1(String name) {
+      dynCountP1++;
+    }
+
+    /**
+     * Stat p 1.
+     *
+     * @param age the age
+     */
+    public static void statP1(int age) {
+      statCountP1++;
+    }
+
+    /**
+     * Dyn p 2.
+     *
+     * @param name the name
+     * @param age  the age
+     */
+    public void dynP2(String name, int age) {
+      dynCountP2++;
+    }
+
+    /**
+     * Stat p 2.
+     *
+     * @param name the name
+     * @param age  the age
+     */
+    public static void statP2(String name, int age) {
+      statCountP2++;
+    }
+  }
 
 }

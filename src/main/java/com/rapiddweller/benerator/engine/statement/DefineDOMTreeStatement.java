@@ -29,62 +29,74 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.platform.xml.DOMTree;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
- * {@link Statement} for creating a {@link DOMTree} element 
+ * {@link Statement} for creating a {@link DOMTree} element
  * and assigning it with context and resource manager.<br/><br/>
  * Created: 16.01.2014 16:07:06
- * @since 0.9.0
+ *
  * @author Volker Bergmann
+ * @since 0.9.0
  */
-
 public class DefineDOMTreeStatement implements Statement {
-	
-	private static Logger logger = LogManager.getLogger(DefineDOMTreeStatement.class);
-	
-	private ResourceManager resourceManager;
-	
-	private Expression<String>  id;
-	private Expression<String>  inputUri;
-	private Expression<String>  outputUri;
-	private Expression<Boolean> namespaceAware;
-	
-	public DefineDOMTreeStatement(Expression<String> id, Expression<String> inputUri, 
-			Expression<String> outputUri, Expression<Boolean> namespaceAware, ResourceManager resourceManager) {
-		if (id == null)
-			throw new ConfigurationError("No DOMTree id defined");
-		this.id = id;
-		this.inputUri = inputUri;
-	    this.outputUri = outputUri;
-	    this.namespaceAware = namespaceAware;
-	    this.resourceManager = resourceManager;
+
+  private static final Logger logger = LogManager.getLogger(DefineDOMTreeStatement.class);
+
+  private final ResourceManager resourceManager;
+
+  private final Expression<String> id;
+  private final Expression<String> inputUri;
+  private final Expression<String> outputUri;
+  private final Expression<Boolean> namespaceAware;
+
+  /**
+   * Instantiates a new Define dom tree statement.
+   *
+   * @param id              the id
+   * @param inputUri        the input uri
+   * @param outputUri       the output uri
+   * @param namespaceAware  the namespace aware
+   * @param resourceManager the resource manager
+   */
+  public DefineDOMTreeStatement(Expression<String> id, Expression<String> inputUri,
+                                Expression<String> outputUri, Expression<Boolean> namespaceAware, ResourceManager resourceManager) {
+    if (id == null) {
+      throw new ConfigurationError("No DOMTree id defined");
+    }
+    this.id = id;
+    this.inputUri = inputUri;
+    this.outputUri = outputUri;
+    this.namespaceAware = namespaceAware;
+    this.resourceManager = resourceManager;
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    logger.debug("Instantiating database with id '" + id + "'");
+    String idValue = id.evaluate(context);
+    String inputUriValue = ExpressionUtil.evaluate(inputUri, context);
+    DOMTree domTree = new DOMTree(inputUriValue, context);
+
+    String outputUriValue = ExpressionUtil.evaluate(outputUri, context);
+    if (outputUriValue != null) {
+      domTree.setOutputUri(outputUriValue);
+    }
+    Boolean namespaceAwareValue = ExpressionUtil.evaluate(namespaceAware, context);
+    if (namespaceAware != null) {
+      domTree.setNamespaceAware(namespaceAwareValue);
     }
 
-	@Override
-    public boolean execute(BeneratorContext context) {
-	    logger.debug("Instantiating database with id '" + id + "'");
-	    String idValue = id.evaluate(context);
-		String inputUriValue = ExpressionUtil.evaluate(inputUri, context);
-	    DOMTree domTree = new DOMTree(inputUriValue, context);
-		
-		String outputUriValue = ExpressionUtil.evaluate(outputUri, context);
-		if (outputUriValue != null)
-			domTree.setOutputUri(outputUriValue);
-		Boolean namespaceAwareValue = ExpressionUtil.evaluate(namespaceAware, context);
-		if (namespaceAware != null)
-			domTree.setNamespaceAware(namespaceAwareValue);
-
-	    // register this object on all relevant managers and in the context
-	    context.setGlobal(idValue, domTree);
-	    context.getDataModel().addDescriptorProvider(domTree, context.isValidate());
-	    resourceManager.addResource(domTree);
-    	return true;
-    }
+    // register this object on all relevant managers and in the context
+    context.setGlobal(idValue, domTree);
+    context.getDataModel().addDescriptorProvider(domTree, context.isValidate());
+    resourceManager.addResource(domTree);
+    return true;
+  }
 
 }

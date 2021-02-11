@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<setup>
+    <if test="com.rapiddweller.common.SystemInfo.isLinux()">
+        <echo>Running under Linux</echo>
+    </if>
+    <if test="com.rapiddweller.common.SystemInfo.isWindows()">
+        <then>
+            <execute type="shell">dir</execute>
+        </then>
+        <else>
+            <execute type="shell">ls</execute>
+        </else>
+    </if>
+    <if test="!context.contains('stage')">
+        <echo>No stage defined, falling back to 'dev'</echo>
+        <setting name="stage" value="dev"/>
+    </if>
+    <if test="!context.contains('stage')">
+        <error>No stage has been set</error>
+    </if>
+
+
+    <generate type="test" count="10" consumer="ConsoleExporter">
+        <id name="identifier" type="long"/>
+        <id name="identifier2" type="long" generator="new IncrementalIdGenerator(100)"/>
+        <while test="this.identifier == 5">
+            <echo>add 10 to this.identifier</echo>
+            <execute type="ben">this.identifier = this.identifier + 10</execute>
+            <wait duration="1000"/>
+        </while>
+    </generate>
+</setup>

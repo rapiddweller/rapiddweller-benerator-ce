@@ -35,68 +35,84 @@ package com.rapiddweller.domain.finance;
  */
 public class Bank {
 
-    /**
-     * The Bank Identification Number
-     */
-    private final String bin;
+  /**
+   * The Bank Identification Number
+   */
+  private final String bin;
 
-    /**
-     * The name of the bank
-     */
-    private final String name;
+  /**
+   * The name of the bank
+   */
+  private final String name;
 
-    /**
-     * The national bank code
-     */
-    private final String bankCode;
+  /**
+   * The national bank code
+   */
+  private final String bankCode;
 
-    /**
-     * The international Bank Identifier Code
-     */
-    private final String bic;
+  /**
+   * The international Bank Identifier Code
+   */
+  private final String bic;
 
-    // Constructor -----------------------------------------------------------------------------------------------------
+  // Constructor -----------------------------------------------------------------------------------------------------
 
-    public Bank(String name, String bankCode, String bic, String bin) {
-        this.name = name;
-        this.bankCode = bankCode;
-        this.bic = bic;
-        this.bin = bin;
-    }
+  /**
+   * Instantiates a new Bank.
+   *
+   * @param name     the name
+   * @param bankCode the bank code
+   * @param bic      the bic
+   * @param bin      the bin
+   */
+  public Bank(String name, String bankCode, String bic, String bin) {
+    this.name = name;
+    this.bankCode = bankCode;
+    this.bic = bic;
+    this.bin = bin;
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    /**
-     * @return the name of the bank
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets name.
+   *
+   * @return the name of the bank
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * @return the national bank code
-     */
-    public String getBankCode() {
-        return bankCode;
-    }
+  /**
+   * Gets bank code.
+   *
+   * @return the national bank code
+   */
+  public String getBankCode() {
+    return bankCode;
+  }
 
-    /**
-     * @return the international Bank Identifier Code
-     */
-    public String getBic() {
-        return bic;
-    }
+  /**
+   * Gets bic.
+   *
+   * @return the international Bank Identifier Code
+   */
+  public String getBic() {
+    return bic;
+  }
 
-    /**
-     * @return the Bank Identification Number
-     */
-    public String getBin() {
-        return bin;
-    }
+  /**
+   * Gets bin.
+   *
+   * @return the Bank Identification Number
+   */
+  public String getBin() {
+    return bin;
+  }
 
-    @Override
-    public String toString() {
-        return bankCode + ' ' + name + "(BIC:" + bic + ')';
-    }
+  @Override
+  public String toString() {
+    return bankCode + ' ' + name + "(BIC:" + bic + ')';
+  }
 
 }

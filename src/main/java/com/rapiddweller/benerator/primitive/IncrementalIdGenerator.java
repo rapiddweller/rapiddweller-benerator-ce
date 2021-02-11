@@ -26,65 +26,95 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Generates unique long values incrementally.<br/><br/>
  * Created: 14.11.2009 06:49:49
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class IncrementalIdGenerator extends ThreadSafeNonNullGenerator<Long> {
-	
-	private long increment;
-	private volatile AtomicLong cursor = new AtomicLong();
-	
-	// constructors ----------------------------------------------------------------------------------------------------
 
-	public IncrementalIdGenerator() {
-	    this(1, 1);
-    }
+  private long increment;
+  private final AtomicLong cursor = new AtomicLong();
 
-	public IncrementalIdGenerator(long initial) {
-	    this(initial, 1);
-    }
+  // constructors ----------------------------------------------------------------------------------------------------
 
-	public IncrementalIdGenerator(long initial, long increment) {
-	    setInitial(initial);
-	    this.increment = increment;
-    }
-	
-	// properties ------------------------------------------------------------------------------------------------------
+  /**
+   * Instantiates a new Incremental id generator.
+   */
+  public IncrementalIdGenerator() {
+    this(1, 1);
+  }
 
-	public long getCursor() {
-		return cursor.get();
-	}
-	
-	public void setInitial(long initial) {
-    	this.cursor.set(initial);
-    }
+  /**
+   * Instantiates a new Incremental id generator.
+   *
+   * @param initial the initial
+   */
+  public IncrementalIdGenerator(long initial) {
+    this(initial, 1);
+  }
 
-	public void setIncrement(long increment) {
-    	this.increment = increment;
-    }
+  /**
+   * Instantiates a new Incremental id generator.
+   *
+   * @param initial   the initial
+   * @param increment the increment
+   */
+  public IncrementalIdGenerator(long initial, long increment) {
+    setInitial(initial);
+    this.increment = increment;
+  }
 
-	// Generator interface implementation ------------------------------------------------------------------------------
-	
-	@Override
-	public Class<Long> getGeneratedType() {
-	    return Long.class;
-    }
-	
-	@Override
-	public Long generate() {
-	    return cursor.getAndAdd(increment);
-    }
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[current=" + cursor.get() + ", increment=" + increment + "]";
-	}
-	
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets cursor.
+   *
+   * @return the cursor
+   */
+  public long getCursor() {
+    return cursor.get();
+  }
+
+  /**
+   * Sets initial.
+   *
+   * @param initial the initial
+   */
+  public void setInitial(long initial) {
+    this.cursor.set(initial);
+  }
+
+  /**
+   * Sets increment.
+   *
+   * @param increment the increment
+   */
+  public void setIncrement(long increment) {
+    this.increment = increment;
+  }
+
+  // Generator interface implementation ------------------------------------------------------------------------------
+
+  @Override
+  public Class<Long> getGeneratedType() {
+    return Long.class;
+  }
+
+  @Override
+  public Long generate() {
+    return cursor.getAndAdd(increment);
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[current=" + cursor.get() + ", increment=" + increment + "]";
+  }
+
 }

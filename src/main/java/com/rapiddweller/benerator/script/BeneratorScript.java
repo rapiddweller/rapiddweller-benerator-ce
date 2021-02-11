@@ -26,43 +26,50 @@
 
 package com.rapiddweller.benerator.script;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.formats.script.AbstractScript;
-import com.rapiddweller.formats.script.Script;
-import com.rapiddweller.formats.script.ScriptException;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.format.script.AbstractScript;
+import com.rapiddweller.format.script.Script;
+import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.script.Expression;
 
 /**
  * {@link Script} implementation for BeneratorScript.<br/>
  * <br/>
  * Created at 09.10.2009 06:48:01
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class BeneratorScript extends AbstractScript {
-	
-	private Expression<?> expression;
-	private String text;
-	
-    public BeneratorScript(Expression<?> expression, String text) {
-	    this.expression = expression;
-	    this.text = text;
-    }
 
-	@Override
-    public Object evaluate(Context context) throws ScriptException {
-		if (expression == null)
-			return null;
-		try {
-			return expression.evaluate(context);
-		} catch (Exception e) {
-			throw new ScriptException("Error in script: " + text, e);
-		}
-    }
+  private final Expression<?> expression;
+  private final String text;
 
-	@Override
-	public String toString() {
-		return text;
-	}
+  /**
+   * Instantiates a new Benerator script.
+   *
+   * @param expression the expression
+   * @param text       the text
+   */
+  public BeneratorScript(Expression<?> expression, String text) {
+    this.expression = expression;
+    this.text = text;
+  }
+
+  @Override
+  public Object evaluate(Context context) throws ScriptException {
+    if (expression == null) {
+      return null;
+    }
+    try {
+      return expression.evaluate(context);
+    } catch (Exception e) {
+      throw new ScriptException("Error in script: " + text, e);
+    }
+  }
+
+  @Override
+  public String toString() {
+    return text;
+  }
 }

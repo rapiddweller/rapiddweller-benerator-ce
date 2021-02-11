@@ -26,33 +26,39 @@
 
 package com.rapiddweller.benerator.engine.expression;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.converter.LiteralParser;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.converter.LiteralParser;
 import com.rapiddweller.script.expression.UnaryExpression;
 
 /**
- * Expression that evaluates a text as a literal; if it encounters a script expression 
+ * Expression that evaluates a text as a literal; if it encounters a script expression
  * (like {settings.base}) it evaluates the script and parses its result.<br/>
  * <br/>
  * Created at 23.07.2009 14:34:42
+ *
+ * @author Volker Bergmann
  * @see LiteralParser
  * @since 0.6.0
- * @author Volker Bergmann
  */
-
 public class ScriptableLiteral extends UnaryExpression<Object> {
 
-    public ScriptableLiteral(String textOrScript) {
-	    super(ScriptableLiteral.class.getSimpleName(), new ScriptableExpression(textOrScript, null));
-    }
+  /**
+   * Instantiates a new Scriptable literal.
+   *
+   * @param textOrScript the text or script
+   */
+  public ScriptableLiteral(String textOrScript) {
+    super(ScriptableLiteral.class.getSimpleName(), new ScriptableExpression(textOrScript, null));
+  }
 
-    @Override
-	public Object evaluate(Context context) {
-		Object feed = term.evaluate(context);
-		if (feed instanceof String)
-			return LiteralParser.parse((String) feed);
-		else
-			return feed;
+  @Override
+  public Object evaluate(Context context) {
+    Object feed = term.evaluate(context);
+    if (feed instanceof String) {
+      return LiteralParser.parse((String) feed);
+    } else {
+      return feed;
     }
+  }
 
 }

@@ -35,66 +35,88 @@ import com.rapiddweller.benerator.distribution.SequenceManager;
  * A generator proxy that forwards the output of another generator with a random number of repetitions.<br/>
  * <br/>
  * Created: 18.08.2007 17:08:10
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  */
 public class RepeatGeneratorProxy<E> extends CardinalGenerator<E, E> {
 
-    private Integer repCount;
-    private Integer totalReps;
-    private E currentValue;
+  private Integer repCount;
+  private Integer totalReps;
+  private E currentValue;
 
-    public RepeatGeneratorProxy() {
-        this(null, 0, 3);
-    }
+  /**
+   * Instantiates a new Repeat generator proxy.
+   */
+  public RepeatGeneratorProxy() {
+    this(null, 0, 3);
+  }
 
-    public RepeatGeneratorProxy(Generator<E> source, int minRepetitions, int maxRepetitions) {
-        this(source, minRepetitions, maxRepetitions, 1, SequenceManager.RANDOM_SEQUENCE);
-    }
+  /**
+   * Instantiates a new Repeat generator proxy.
+   *
+   * @param source         the source
+   * @param minRepetitions the min repetitions
+   * @param maxRepetitions the max repetitions
+   */
+  public RepeatGeneratorProxy(Generator<E> source, int minRepetitions, int maxRepetitions) {
+    this(source, minRepetitions, maxRepetitions, 1, SequenceManager.RANDOM_SEQUENCE);
+  }
 
-    public RepeatGeneratorProxy(Generator<E> source, int minRepetitions, int maxRepetitions, 
-    		int repetitionGranularity, Distribution repetitionDistribution) {
-        super(source, false, minRepetitions, maxRepetitions, repetitionGranularity, repetitionDistribution);
-    }
+  /**
+   * Instantiates a new Repeat generator proxy.
+   *
+   * @param source                 the source
+   * @param minRepetitions         the min repetitions
+   * @param maxRepetitions         the max repetitions
+   * @param repetitionGranularity  the repetition granularity
+   * @param repetitionDistribution the repetition distribution
+   */
+  public RepeatGeneratorProxy(Generator<E> source, int minRepetitions, int maxRepetitions,
+                              int repetitionGranularity, Distribution repetitionDistribution) {
+    super(source, false, minRepetitions, maxRepetitions, repetitionGranularity, repetitionDistribution);
+  }
 
-    @Override
-	public Class<E> getGeneratedType() {
-    	return getSource().getGeneratedType();
-    }
-    
-    @Override
-	public void init(GeneratorContext context) {
-        super.init(context);
-        resetMembers();
-    }
+  @Override
+  public Class<E> getGeneratedType() {
+    return getSource().getGeneratedType();
+  }
 
-	private void resetMembers() {
-	    repCount = -1;
-	    totalReps = -1;
-    }
+  @Override
+  public void init(GeneratorContext context) {
+    super.init(context);
+    resetMembers();
+  }
 
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-        assertInitialized();
-        if (repCount == -1 || repCount >= totalReps) {
-    	    wrapper = getSource().generate(wrapper);
-    	    if (wrapper == null)
-    	    	return null;
-    	    else
-    	    	currentValue = wrapper.unwrap();
-    	    repCount = 0;
-    	    totalReps = generateCardinal();
-        } else {
-            wrapper.wrap(currentValue);
-            repCount++;
-        }
-        return wrapper.wrap(currentValue);
+  private void resetMembers() {
+    repCount = -1;
+    totalReps = -1;
+  }
+
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    assertInitialized();
+    if (repCount == -1 || repCount >= totalReps) {
+      wrapper = getSource().generate(wrapper);
+      if (wrapper == null) {
+        return null;
+      } else {
+        currentValue = wrapper.unwrap();
+      }
+      repCount = 0;
+      totalReps = generateCardinal();
+    } else {
+      wrapper.wrap(currentValue);
+      repCount++;
     }
-	
-	@Override
-	public void reset() {
-	    super.reset();
-	    cardinalGenerator.reset();
-	    resetMembers();
-	}
+    return wrapper.wrap(currentValue);
+  }
+
+  @Override
+  public void reset() {
+    super.reset();
+    cardinalGenerator.reset();
+    resetMembers();
+  }
 
 }

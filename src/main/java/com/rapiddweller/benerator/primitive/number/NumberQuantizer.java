@@ -26,54 +26,77 @@
 
 package com.rapiddweller.benerator.primitive.number;
 
-import javax.validation.constraints.NotNull;
-
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.anno.Nullable;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.anno.Nullable;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.script.math.ArithmeticEngine;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * A quantizer for arbitrary number types.<br/><br/>
  * Created: 05.07.2011 08:19:20
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class NumberQuantizer<E extends Number> extends ThreadSafeConverter<Number, E> {
 
-	private E min;
-	private E granularity;
-	private Class<E> numberType;
+  private final E min;
+  private final E granularity;
+  private final Class<E> numberType;
 
-	public NumberQuantizer(@Nullable E min, @Nullable E granularity, @NotNull Class<E> numberType) {
-	    super(Number.class, numberType);
-	    Assert.notNull(numberType, "numberType");
-	    this.min = min;
-	    this.granularity = granularity;
-	    this.numberType = numberType;
-    }
+  /**
+   * Instantiates a new Number quantizer.
+   *
+   * @param min         the min
+   * @param granularity the granularity
+   * @param numberType  the number type
+   */
+  public NumberQuantizer(@Nullable E min, @Nullable E granularity, @NotNull Class<E> numberType) {
+    super(Number.class, numberType);
+    Assert.notNull(numberType, "numberType");
+    this.min = min;
+    this.granularity = granularity;
+    this.numberType = numberType;
+  }
 
-	@Override
-	public E convert(Number sourceValue) throws ConversionException {
-		return quantize(sourceValue, min, granularity, numberType);
-    }
+  @Override
+  public E convert(Number sourceValue) throws ConversionException {
+    return quantize(sourceValue, min, granularity, numberType);
+  }
 
-	@SuppressWarnings("unchecked")
-	public static <T extends Number> T quantize(Number sourceValue, T min, T granularity, Class<T> numberType) throws ConversionException {
-		T value = NumberToNumberConverter.convert(sourceValue, numberType);
-		if (granularity == null)
-			return value;
-		ArithmeticEngine engine = ArithmeticEngine.defaultInstance();
-		T base = value;
-		if (min != null)
-			base = (T) engine.subtract(value, min);
-		long ofs = ((Number) engine.divide(base, granularity)).longValue();
-		Number result = (Number) engine.multiply(ofs, granularity);
-		if (min !=  null)
-			result = (Number) engine.add(result, min);
-		return NumberToNumberConverter.convert(result, numberType);
+  /**
+   * Quantize t.
+   *
+   * @param <T>         the type parameter
+   * @param sourceValue the source value
+   * @param min         the min
+   * @param granularity the granularity
+   * @param numberType  the number type
+   * @return the t
+   * @throws ConversionException the conversion exception
+   */
+  @SuppressWarnings("unchecked")
+  public static <T extends Number> T quantize(Number sourceValue, T min, T granularity, Class<T> numberType) throws ConversionException {
+    T value = NumberToNumberConverter.convert(sourceValue, numberType);
+    if (granularity == null) {
+      return value;
     }
+    ArithmeticEngine engine = ArithmeticEngine.defaultInstance();
+    T base = value;
+    if (min != null) {
+      base = (T) engine.subtract(value, min);
+    }
+    long ofs = ((Number) engine.divide(base, granularity)).longValue();
+    Number result = (Number) engine.multiply(ofs, granularity);
+    if (min != null) {
+      result = (Number) engine.add(result, min);
+    }
+    return NumberToNumberConverter.convert(result, numberType);
+  }
 
 }

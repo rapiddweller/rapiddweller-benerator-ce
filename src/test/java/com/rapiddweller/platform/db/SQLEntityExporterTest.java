@@ -26,63 +26,72 @@
 
 package com.rapiddweller.platform.db;
 
-import static org.junit.Assert.*;
+import com.rapiddweller.benerator.test.ModelTest;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ReaderLineIterator;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.model.data.Entity;
+import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.File;
 
-import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ReaderLineIterator;
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.model.data.Entity;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link SQLEntityExporter}.<br/><br/>
  * Created: 18.02.2010 15:24:05
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class SQLEntityExporterTest extends ModelTest {
-	
-	private static final String FILENAME = "target" + File.separator 
-		+ SQLEntityExporterTest.class.getSimpleName() + ".sql";
 
-	@Test(expected = ConfigurationError.class)
-	public void testWithoutDialect() throws Exception {
-		SQLEntityExporter exporter = new SQLEntityExporter(FILENAME);
-		try {
-			Entity alice = createEntity("Person", "name", "Alice", "birthDate", TimeUtil.date(1987, 11, 31), "score", 23);
-			exporter.startProductConsumption(alice);
-		} finally {
-			exporter.close();
-			FileUtil.deleteIfExists(new File(FILENAME));
-		}
-	}
-	
-	@Test
-	public void testNormal() throws Exception {
-		try {
-			Entity alice = createEntity("Person", "name", "Alice", "birthDate", TimeUtil.date(1987, 11, 31), "score", 23);
-			Entity bob = createEntity("Person", "name", "Bob", "birthDate", TimeUtil.date(1977, 11, 31), "score", 34);
-			SQLEntityExporter exporter = new SQLEntityExporter(FILENAME);
-			exporter.setDialect("hsql");
-			exporter.startProductConsumption(alice);
-			exporter.startProductConsumption(bob);
-			exporter.close();
-			BufferedReader reader = IOUtil.getReaderForURI(FILENAME);
-			ReaderLineIterator iterator = new ReaderLineIterator(reader);
-			assertTrue(iterator.hasNext());
-			assertEquals("insert into \"Person\" (name, birthDate, score) values ('Alice', '1987-12-31', 23);", iterator.next());
-			assertTrue(iterator.hasNext());
-			assertEquals("insert into \"Person\" (name, birthDate, score) values ('Bob', '1977-12-31', 34);", iterator.next());
-			assertFalse(iterator.hasNext());
-		} finally {
-			FileUtil.deleteIfExists(new File(FILENAME));
-		}
-	}
-	
+  private static final String FILENAME = "target" + File.separator
+      + SQLEntityExporterTest.class.getSimpleName() + ".sql";
+
+  /**
+   * Test without dialect.
+   */
+  @Test(expected = ConfigurationError.class)
+  public void testWithoutDialect() {
+    try (SQLEntityExporter exporter = new SQLEntityExporter(FILENAME)) {
+      Entity alice = createEntity("Person", "name", "Alice", "birthDate", TimeUtil.date(1987, 11, 31), "score", 23);
+      exporter.startProductConsumption(alice);
+    } finally {
+      FileUtil.deleteIfExists(new File(FILENAME));
+    }
+  }
+
+  /**
+   * Test normal.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testNormal() throws Exception {
+    try {
+      Entity alice = createEntity("Person", "name", "Alice", "birthDate", TimeUtil.date(1987, 11, 31), "score", 23);
+      Entity bob = createEntity("Person", "name", "Bob", "birthDate", TimeUtil.date(1977, 11, 31), "score", 34);
+      SQLEntityExporter exporter = new SQLEntityExporter(FILENAME);
+      exporter.setDialect("hsql");
+      exporter.startProductConsumption(alice);
+      exporter.startProductConsumption(bob);
+      exporter.close();
+      BufferedReader reader = IOUtil.getReaderForURI(FILENAME);
+      ReaderLineIterator iterator = new ReaderLineIterator(reader);
+      assertTrue(iterator.hasNext());
+      assertEquals("insert into \"Person\" (name, birthDate, score) values ('Alice', '1987-12-31', 23);", iterator.next());
+      assertTrue(iterator.hasNext());
+      assertEquals("insert into \"Person\" (name, birthDate, score) values ('Bob', '1977-12-31', 34);", iterator.next());
+      assertFalse(iterator.hasNext());
+    } finally {
+      FileUtil.deleteIfExists(new File(FILENAME));
+    }
+  }
+
 }

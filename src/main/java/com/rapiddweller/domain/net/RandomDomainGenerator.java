@@ -41,32 +41,37 @@ import static com.rapiddweller.benerator.util.GeneratorUtil.generateNonNull;
  * @author Volker Bergmann
  * @since 0.5.2
  */
-public class RandomDomainGenerator extends CompositeGenerator<String> implements NonNullGenerator<String> {
+public class RandomDomainGenerator extends CompositeGenerator<String>
+    implements NonNullGenerator<String> {
 
-    private final RegexStringGenerator nameGenerator;
-    private final TopLevelDomainGenerator tldGenerator;
+  private final RegexStringGenerator nameGenerator;
+  private final TopLevelDomainGenerator tldGenerator;
 
-    public RandomDomainGenerator() {
-        super(String.class);
-        this.nameGenerator = registerComponent(new RegexStringGenerator("[a-z]{4,12}"));
-        this.tldGenerator = registerComponent(new TopLevelDomainGenerator());
-    }
+  /**
+   * Instantiates a new Random domain generator.
+   */
+  public RandomDomainGenerator() {
+    super(String.class);
+    this.nameGenerator =
+        registerComponent(new RegexStringGenerator("[a-z]{4,12}"));
+    this.tldGenerator = registerComponent(new TopLevelDomainGenerator());
+  }
 
-    @Override
-    public synchronized void init(GeneratorContext context) {
-        nameGenerator.init(context);
-        tldGenerator.init(context);
-        super.init(context);
-    }
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    nameGenerator.init(context);
+    tldGenerator.init(context);
+    super.init(context);
+  }
 
-    @Override
-    public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
-        return wrapper.wrap(generate());
-    }
+  @Override
+  public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
+    return wrapper.wrap(generate());
+  }
 
-    @Override
-    public String generate() {
-        return nameGenerator.generate() + '.' + generateNonNull(tldGenerator);
-    }
+  @Override
+  public String generate() {
+    return nameGenerator.generate() + '.' + generateNonNull(tldGenerator);
+  }
 
 }

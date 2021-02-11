@@ -26,10 +26,6 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
-import java.sql.Time;
-import java.util.Calendar;
-import java.util.Date;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.NonNullGenerator;
@@ -38,117 +34,199 @@ import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.model.data.Uniqueness;
+
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Creates DateTimes with separate date and time distribution characteristics.<br/><br/>
  * Created: 29.02.2008 18:19:55
- * @since 0.5.0
+ *
  * @author Volker Bergmann
+ * @since 0.5.0
  */
 public class DateTimeGenerator extends CompositeGenerator<Date> implements NonNullGenerator<Date> {
-    
-    private DayGenerator dateGenerator;
-    private Generator<Long> timeOffsetGenerator;
-    
-    Date minDate;
-    Date maxDate;
-    String dateGranularity;
-    Distribution dateDistribution;
-    
-    long minTime;
-    long maxTime;
-    long timeGranularity;
-    Distribution timeDistribution;
-	private WrapperProvider<Long> timeWrapperProvider = new WrapperProvider<Long>();
-    
-    public DateTimeGenerator() {
-        this(
-            TimeUtil.add(TimeUtil.today(), Calendar.YEAR, -1), 
-            TimeUtil.today(), 
-            TimeUtil.time(9, 0), 
-            TimeUtil.time(17, 0));
-    }
 
-    public DateTimeGenerator(Date minDate, Date maxDate, Time minTime, Time maxTime) {
-    	super(Date.class);
-        setMinDate(minDate);
-        setMaxDate(maxDate);
-        setMinTime(minTime);
-        setMaxTime(maxTime);
-        setDateDistribution(SequenceManager.RANDOM_SEQUENCE);
-        setTimeDistribution(SequenceManager.RANDOM_SEQUENCE);
-        setDateGranularity("00-00-01");
-        setTimeGranularity(TimeUtil.time(0, 1));
-    }
+  private DayGenerator dateGenerator;
+  private Generator<Long> timeOffsetGenerator;
 
-    // properties ------------------------------------------------------------------------------------------------------
+  /**
+   * The Min date.
+   */
+  Date minDate;
+  /**
+   * The Max date.
+   */
+  Date maxDate;
+  /**
+   * The Date granularity.
+   */
+  String dateGranularity;
+  /**
+   * The Date distribution.
+   */
+  Distribution dateDistribution;
 
-    public void setMinDate(Date minDate) {
-        this.minDate = minDate;
-    }
-    
-    public void setMaxDate(Date maxDate) {
-        this.maxDate = maxDate;
-    }
+  /**
+   * The Min time.
+   */
+  long minTime;
+  /**
+   * The Max time.
+   */
+  long maxTime;
+  /**
+   * The Time granularity.
+   */
+  long timeGranularity;
+  /**
+   * The Time distribution.
+   */
+  Distribution timeDistribution;
+  private final WrapperProvider<Long> timeWrapperProvider = new WrapperProvider<>();
 
-    public void setDateGranularity(String dateGranularity) {
-    	this.dateGranularity = dateGranularity;
-    }
-    
-    public void setDateDistribution(Distribution distribution) {
-        this.dateDistribution = distribution;
-    }
-    
-    public void setMinTime(Time minTime) {
-        this.minTime = TimeUtil.millisSinceOwnEpoch(minTime);
-    }
-    
-    public void setMaxTime(Time maxTime) {
-        this.maxTime = TimeUtil.millisSinceOwnEpoch(maxTime);
-    }
-    
-    public void setTimeGranularity(Time timeGranularity) {
-        this.timeGranularity = TimeUtil.millisSinceOwnEpoch(timeGranularity);
-    }
-    
-    public void setTimeDistribution(Distribution distribution) {
-        this.timeDistribution = distribution;
-    }
+  /**
+   * Instantiates a new Date time generator.
+   */
+  public DateTimeGenerator() {
+    this(
+        TimeUtil.add(TimeUtil.today(), Calendar.YEAR, -1),
+        TimeUtil.today(),
+        TimeUtil.time(9, 0),
+        TimeUtil.time(17, 0));
+  }
 
-    // Generator interface ---------------------------------------------------------------------------------------------
-    
-    @Override
-    public void init(GeneratorContext context) {
-    	assertNotInitialized();
-    	this.dateGenerator = registerComponent(
-    			new DayGenerator(minDate, maxDate, dateDistribution, false));
-    	dateGenerator.setGranularity(dateGranularity);
-    	this.dateGenerator.init(context);
-    	this.timeOffsetGenerator = registerComponent(context.getGeneratorFactory().createNumberGenerator(
-    			Long.class, minTime, true, maxTime, true, timeGranularity, timeDistribution, Uniqueness.NONE));
-    	this.timeOffsetGenerator.init(context);
-        super.init(context);
-    }
+  /**
+   * Instantiates a new Date time generator.
+   *
+   * @param minDate the min date
+   * @param maxDate the max date
+   * @param minTime the min time
+   * @param maxTime the max time
+   */
+  public DateTimeGenerator(Date minDate, Date maxDate, Time minTime, Time maxTime) {
+    super(Date.class);
+    setMinDate(minDate);
+    setMaxDate(maxDate);
+    setMinTime(minTime);
+    setMaxTime(maxTime);
+    setDateDistribution(SequenceManager.RANDOM_SEQUENCE);
+    setTimeDistribution(SequenceManager.RANDOM_SEQUENCE);
+    setDateGranularity("00-00-01");
+    setTimeGranularity(TimeUtil.time(0, 1));
+  }
 
-	@Override
-	public ProductWrapper<Date> generate(ProductWrapper<Date> wrapper) {
-		Date result = generate();
-		return (result != null ? wrapper.wrap(result) : null);
-    }
+  // properties ------------------------------------------------------------------------------------------------------
 
-	@Override
-	public Date generate() {
-    	assertInitialized();
-    	Date dateGeneration = dateGenerator.generate();
-    	if (dateGeneration == null)
-    		return null;
-    	ProductWrapper<Long> timeWrapper = timeOffsetGenerator.generate(timeWrapperProvider.get());
-    	if (timeWrapper == null)
-    		return null;
-    	long timeOffsetGeneration = timeWrapper.unwrap();
-		return new Date(dateGeneration.getTime() + timeOffsetGeneration);
-	}
+  /**
+   * Sets min date.
+   *
+   * @param minDate the min date
+   */
+  public void setMinDate(Date minDate) {
+    this.minDate = minDate;
+  }
+
+  /**
+   * Sets max date.
+   *
+   * @param maxDate the max date
+   */
+  public void setMaxDate(Date maxDate) {
+    this.maxDate = maxDate;
+  }
+
+  /**
+   * Sets date granularity.
+   *
+   * @param dateGranularity the date granularity
+   */
+  public void setDateGranularity(String dateGranularity) {
+    this.dateGranularity = dateGranularity;
+  }
+
+  /**
+   * Sets date distribution.
+   *
+   * @param distribution the distribution
+   */
+  public void setDateDistribution(Distribution distribution) {
+    this.dateDistribution = distribution;
+  }
+
+  /**
+   * Sets min time.
+   *
+   * @param minTime the min time
+   */
+  public void setMinTime(Time minTime) {
+    this.minTime = TimeUtil.millisSinceOwnEpoch(minTime);
+  }
+
+  /**
+   * Sets max time.
+   *
+   * @param maxTime the max time
+   */
+  public void setMaxTime(Time maxTime) {
+    this.maxTime = TimeUtil.millisSinceOwnEpoch(maxTime);
+  }
+
+  /**
+   * Sets time granularity.
+   *
+   * @param timeGranularity the time granularity
+   */
+  public void setTimeGranularity(Time timeGranularity) {
+    this.timeGranularity = TimeUtil.millisSinceOwnEpoch(timeGranularity);
+  }
+
+  /**
+   * Sets time distribution.
+   *
+   * @param distribution the distribution
+   */
+  public void setTimeDistribution(Distribution distribution) {
+    this.timeDistribution = distribution;
+  }
+
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    this.dateGenerator = registerComponent(
+        new DayGenerator(minDate, maxDate, dateDistribution, false));
+    dateGenerator.setGranularity(dateGranularity);
+    this.dateGenerator.init(context);
+    this.timeOffsetGenerator = registerComponent(context.getGeneratorFactory().createNumberGenerator(
+        Long.class, minTime, true, maxTime, true, timeGranularity, timeDistribution, Uniqueness.NONE));
+    this.timeOffsetGenerator.init(context);
+    super.init(context);
+  }
+
+  @Override
+  public ProductWrapper<Date> generate(ProductWrapper<Date> wrapper) {
+    Date result = generate();
+    return (result != null ? wrapper.wrap(result) : null);
+  }
+
+  @Override
+  public Date generate() {
+    assertInitialized();
+    Date dateGeneration = dateGenerator.generate();
+    if (dateGeneration == null) {
+      return null;
+    }
+    ProductWrapper<Long> timeWrapper = timeOffsetGenerator.generate(timeWrapperProvider.get());
+    if (timeWrapper == null) {
+      return null;
+    }
+    long timeOffsetGeneration = timeWrapper.unwrap();
+    return new Date(dateGeneration.getTime() + timeOffsetGeneration);
+  }
 
 }

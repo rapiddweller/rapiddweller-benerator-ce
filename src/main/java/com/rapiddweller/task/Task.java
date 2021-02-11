@@ -26,9 +26,9 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.ThreadAware;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.ThreadAware;
 
 import java.io.Closeable;
 
@@ -46,19 +46,28 @@ import java.io.Closeable;
  */
 public interface Task extends ThreadAware, Closeable {
 
-    /**
-     * @return the name of the task.
-     */
-    String getTaskName();
+  /**
+   * Gets task name.
+   *
+   * @return the name of the task.
+   */
+  String getTaskName();
 
-    /**
-     * Executes the task's work, possibly interacting with the context.
-     */
-    TaskResult execute(Context context, ErrorHandler errorHandler);
+  /**
+   * Executes the task's work, possibly interacting with the context.
+   *
+   * @param context      the context
+   * @param errorHandler the error handler
+   * @return the task result
+   */
+  TaskResult execute(Context context, ErrorHandler errorHandler);
 
-    void pageFinished();
+  /**
+   * Page finished.
+   */
+  void pageFinished();
 
-    @Override
-    void close();
+  @Override
+  void close();
 
 }

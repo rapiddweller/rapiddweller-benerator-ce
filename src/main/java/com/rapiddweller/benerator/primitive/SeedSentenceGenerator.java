@@ -26,63 +26,81 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import java.io.IOException;
-
 import com.rapiddweller.benerator.sample.SeedGenerator;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ReaderLineIterator;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ReaderLineIterator;
+import com.rapiddweller.common.StringUtil;
+
+import java.io.IOException;
 
 /**
  * Generates sentences based on a seed sentence set.<br/>
  * <br/>
  * Created at 16.07.2009 20:02:32
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class SeedSentenceGenerator extends NonNullGeneratorWrapper<String[], String> {
 
-    private static final int DEFAULT_DEPTH = 4;
+  private static final int DEFAULT_DEPTH = 4;
 
-	public SeedSentenceGenerator(String seedUri) throws IOException {
-		this(seedUri, DEFAULT_DEPTH);
-	}
+  /**
+   * Instantiates a new Seed sentence generator.
+   *
+   * @param seedUri the seed uri
+   * @throws IOException the io exception
+   */
+  public SeedSentenceGenerator(String seedUri) throws IOException {
+    this(seedUri, DEFAULT_DEPTH);
+  }
 
-    public SeedSentenceGenerator(String seedUri, int depth) throws IOException {
-		super(new SeedGenerator<String>(String.class, depth));
-		ReaderLineIterator iterator = new ReaderLineIterator(IOUtil.getReaderForURI(seedUri));
-		while (iterator.hasNext()) {
-			String line = iterator.next();
-			if (StringUtil.isEmpty(line))
-				continue;
-	    	((SeedGenerator<String>) getSource()).addSample(line.split("\\s"));
-		}
+  /**
+   * Instantiates a new Seed sentence generator.
+   *
+   * @param seedUri the seed uri
+   * @param depth   the depth
+   * @throws IOException the io exception
+   */
+  public SeedSentenceGenerator(String seedUri, int depth) throws IOException {
+    super(new SeedGenerator<>(String.class, depth));
+    ReaderLineIterator iterator = new ReaderLineIterator(IOUtil.getReaderForURI(seedUri));
+    while (iterator.hasNext()) {
+      String line = iterator.next();
+      if (StringUtil.isEmpty(line)) {
+        continue;
+      }
+      ((SeedGenerator<String>) getSource()).addSample(line.split("\\s"));
     }
+  }
 
-	@Override
-	public String generate() {
-	    return toString(generateFromNotNullSource());
-    }
-	
-    @Override
-	public Class<String> getGeneratedType() {
-	    return String.class;
-    }
+  @Override
+  public String generate() {
+    return toString(generateFromNotNullSource());
+  }
 
-	// helpers ---------------------------------------------------------------------------------------------------------
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
 
-    private static String toString(String[] tokens) {
-	    StringBuilder builder = new StringBuilder();
-	    for (String token : tokens)
-	    	builder.append(token).append(' ');
-	    return builder.toString();
-    }
+  // helpers ---------------------------------------------------------------------------------------------------------
 
-    public void printState() {
-	    System.out.println(getClass().getSimpleName());
-	    ((SeedGenerator<String>) getSource()).printState("  ");
+  private static String toString(String[] tokens) {
+    StringBuilder builder = new StringBuilder();
+    for (String token : tokens) {
+      builder.append(token).append(' ');
     }
+    return builder.toString();
+  }
+
+  /**
+   * Print state.
+   */
+  public void printState() {
+    System.out.println(getClass().getSimpleName());
+    ((SeedGenerator<String>) getSource()).printState("  ");
+  }
 
 }

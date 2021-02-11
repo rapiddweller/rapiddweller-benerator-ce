@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.engine.expression;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Context;
+import com.rapiddweller.common.Context;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.DynamicExpression;
 
@@ -37,23 +37,29 @@ import com.rapiddweller.script.expression.DynamicExpression;
  * {@link Expression} implementation that evaluates to a {@link Generator}.<br/>
  * <br/>
  * Created at 23.07.2009 15:17:04
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class GeneratorExpression<E> extends DynamicExpression<E> {
 
-	private Generator<E> generator;
-	private WrapperProvider<E> wrapperProvider = new WrapperProvider<E>();
-	
-    public GeneratorExpression(Generator<E> generator) {
-	    this.generator = generator;
-    }
+  private final Generator<E> generator;
+  private final WrapperProvider<E> wrapperProvider = new WrapperProvider<>();
 
-	@Override
-	public E evaluate(Context context) {
-		ProductWrapper<E> result = generator.generate(wrapperProvider.get());
-		return (result != null ? result.unwrap() : null);
-    }
+  /**
+   * Instantiates a new Generator expression.
+   *
+   * @param generator the generator
+   */
+  public GeneratorExpression(Generator<E> generator) {
+    this.generator = generator;
+  }
+
+  @Override
+  public E evaluate(Context context) {
+    ProductWrapper<E> result = generator.generate(wrapperProvider.get());
+    return (result != null ? result.unwrap() : null);
+  }
 
 }

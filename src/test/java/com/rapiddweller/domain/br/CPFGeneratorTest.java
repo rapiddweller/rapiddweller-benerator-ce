@@ -26,37 +26,48 @@
 
 package com.rapiddweller.domain.br;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link CPFGenerator}.<br/><br/>
  * Created: 17.10.2009 08:23:42
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class CPFGeneratorTest extends GeneratorClassTest {
 
-	public CPFGeneratorTest() {
-	    super(CPFGenerator.class);
+  /**
+   * Instantiates a new Cpf generator test.
+   */
+  public CPFGeneratorTest() {
+    super(CPFGenerator.class);
+  }
+
+  /**
+   * Test by validator.
+   */
+  @Test
+  public void testByValidator() {
+    expectGenerations(new CPFGenerator(), 100, new CPFValidator());
+  }
+
+  /**
+   * Test formatted number generation.
+   */
+  @Test
+  public void testFormattedNumberGeneration() {
+    CPFGenerator generator = new CPFGenerator(true);
+    CPFValidator validator = new CPFValidator(true);
+    for (int i = 0; i < 100; i++) {
+      String cpf = generator.generate();
+      assertEquals(14, cpf.length());
+      assertTrue(validator.valid(cpf));
     }
+  }
 
-	@Test
-	public void testByValidator() {
-		expectGenerations(new CPFGenerator(), 100, new CPFValidator());
-	}
-
-	@Test
-	public void testFormattedNumberGeneration() {
-		CPFGenerator generator = new CPFGenerator(true);
-		CPFValidator validator = new CPFValidator(true);
-		for (int i = 0; i < 100; i++) {
-			String cpf = generator.generate();
-			assertEquals(14, cpf.length());
-			assertTrue(validator.valid(cpf));
-		}
-	}
-	
 }

@@ -30,9 +30,9 @@ import com.rapiddweller.domain.person.PersonGenerator;
 import com.rapiddweller.domain.person.Person;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.file.FileBuilder;
-import com.rapiddweller.commons.DocumentWriter;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.format.Alignment;
+import com.rapiddweller.common.DocumentWriter;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.format.Alignment;
 import org.databene.document.fixedwidth.BeanFixedWidthWriter;
 import org.databene.document.fixedwidth.FixedWidthColumnDescriptor;
 
@@ -47,31 +47,45 @@ import java.io.*;
  */
 public class PersonFixedWidthDemo {
 
-    private static final String FILE_NAME = "persons.fcw";
-    private static final int LENGTH = 5;
+  private static final String FILE_NAME = "persons.fcw";
+  private static final int LENGTH = 5;
 
-    public static void main(String[] args) throws IOException {
-        Writer out = null;
-        try {
-            FixedWidthColumnDescriptor[] descriptors = new FixedWidthColumnDescriptor[]{
-                    new FixedWidthColumnDescriptor("salutation", 8, Alignment.LEFT),
-                    new FixedWidthColumnDescriptor("title", 10, Alignment.LEFT),
-                    new FixedWidthColumnDescriptor("givenName", 20, Alignment.LEFT),
-                    new FixedWidthColumnDescriptor("familyName", 20, Alignment.LEFT)
-            };
-            //out = new BufferedWriter(new FileWriter(FILE_NAME));
-            out = new OutputStreamWriter(System.out);
-            DocumentWriter<Person> writer = new BeanFixedWidthWriter<Person>(out, descriptors);
-            System.out.println("Running...");
-            long startMillis = System.currentTimeMillis();
-            PersonGenerator generator = new PersonGenerator();
-            generator.init(new DefaultBeneratorContext());
-            FileBuilder.build(generator, LENGTH, writer);
-            long elapsedTime = System.currentTimeMillis() - startMillis;
-            System.out.println("Created file " + FILE_NAME + " with " + LENGTH + " entries " +
-                    "within " + (elapsedTime / 1000) + "s (" + (LENGTH * 1000L / elapsedTime) + " entries per second)");
-        } finally {
-            IOUtil.close(out);
-        }
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   * @throws IOException the io exception
+   */
+  public static void main(String[] args) throws IOException {
+    Writer out = null;
+    try {
+      FixedWidthColumnDescriptor[] descriptors =
+          new FixedWidthColumnDescriptor[] {
+              new FixedWidthColumnDescriptor("salutation", 8,
+                  Alignment.LEFT),
+              new FixedWidthColumnDescriptor("title", 10,
+                  Alignment.LEFT),
+              new FixedWidthColumnDescriptor("givenName", 20,
+                  Alignment.LEFT),
+              new FixedWidthColumnDescriptor("familyName", 20,
+                  Alignment.LEFT)
+          };
+      //out = new BufferedWriter(new FileWriter(FILE_NAME));
+      out = new OutputStreamWriter(System.out);
+      DocumentWriter<Person> writer =
+          new BeanFixedWidthWriter<Person>(out, descriptors);
+      System.out.println("Running...");
+      long startMillis = System.currentTimeMillis();
+      PersonGenerator generator = new PersonGenerator();
+      generator.init(new DefaultBeneratorContext());
+      FileBuilder.build(generator, LENGTH, writer);
+      long elapsedTime = System.currentTimeMillis() - startMillis;
+      System.out.println("Created file " + FILE_NAME + " with " + LENGTH +
+          " entries " +
+          "within " + (elapsedTime / 1000) + "s (" +
+          (LENGTH * 1000L / elapsedTime) + " entries per second)");
+    } finally {
+      IOUtil.close(out);
     }
+  }
 }

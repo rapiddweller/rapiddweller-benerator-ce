@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup>
+    <import platforms="multi"/>
+    <import domains="address, net, organization, person, product, finance"/>
+    <iterate type="P" source="products.ent.csv" consumer="Auto">
+        <attribute name="name" type="string" script="this.name" converter="CaseConverter"/>
+    </iterate>
+</setup>

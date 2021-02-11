@@ -26,75 +26,96 @@
 
 package com.rapiddweller.platform.file;
 
+import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.IOUtil;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
 
-import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.IOUtil;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link FileJoiner}.<br/>
  * <br/>
  * Created at 16.09.2009 16:32:45
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class FileJoinerTest extends FileTest {
 
-	@Test
-	public void testDefault() throws Exception {
-		check(1, false, false, "ABC123");
-	}
+  /**
+   * Test default.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testDefault() throws Exception {
+    check(1, false, false, "ABC123");
+  }
 
-	@Test
-	public void testAppendTrue() throws Exception {
-		check(2, true, false, "ABC123ABC123");
-	}
+  /**
+   * Test append true.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testAppendTrue() throws Exception {
+    check(2, true, false, "ABC123ABC123");
+  }
 
-	@Test
-	public void testAppendFalse() throws Exception {
-		check(2, false, false, "ABC123");
-	}
+  /**
+   * Test append false.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testAppendFalse() throws Exception {
+    check(2, false, false, "ABC123");
+  }
 
-	@Test
-	public void testDeleteSources() throws Exception {
-		check(1, false, true, "ABC123");
-	}
+  /**
+   * Test delete sources.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testDeleteSources() throws Exception {
+    check(1, false, true, "ABC123");
+  }
 
-	// helpers ---------------------------------------------------------------------------------------------------------
-	
-    private void check(int executionCount, boolean append, boolean deleteSources, String result) throws IOException {
-	    File sourceFile1 = null;
-		File sourceFile2 = null;
-		File destFile = null;
-		Context context = new DefaultBeneratorContext();
-		FileJoiner joiner = new FileJoiner();
-		try {
-			sourceFile1 = createSource1();
-			sourceFile2 = createSource2();
-			destFile = File.createTempFile(prefix(), ".txt", new File("target"));
-			joiner.setAppend(append);
-			joiner.setSources(new String[] { "target" + File.separator + sourceFile1.getName(), "target" + File.separator + sourceFile2.getName() });
-			joiner.setDestination("target" + File.separator + destFile.getName());
-			joiner.setDeleteSources(deleteSources);
-			for (int i = 0; i < executionCount; i++)
-				joiner.execute(context, ErrorHandler.getDefault());
-			assertEquals(deleteSources, !sourceFile1.exists());
-			assertEquals(deleteSources, !sourceFile2.exists());
-			assertEquals(result, IOUtil.getContentOfURI(destFile.getAbsolutePath()));
-		} finally {
-			FileUtil.deleteIfExists(sourceFile1);
-			FileUtil.deleteIfExists(sourceFile2);
-			FileUtil.deleteIfExists(destFile);
-			IOUtil.close(joiner);
-		}
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  private void check(int executionCount, boolean append, boolean deleteSources, String result) throws IOException {
+    File sourceFile1 = null;
+    File sourceFile2 = null;
+    File destFile = null;
+    Context context = new DefaultBeneratorContext();
+    FileJoiner joiner = new FileJoiner();
+    try {
+      sourceFile1 = createSource1();
+      sourceFile2 = createSource2();
+      destFile = File.createTempFile(prefix(), ".txt", new File("target"));
+      joiner.setAppend(append);
+      joiner.setSources(new String[] {"target" + File.separator + sourceFile1.getName(), "target" + File.separator + sourceFile2.getName()});
+      joiner.setDestination("target" + File.separator + destFile.getName());
+      joiner.setDeleteSources(deleteSources);
+      for (int i = 0; i < executionCount; i++) {
+        joiner.execute(context, ErrorHandler.getDefault());
+      }
+      assertEquals(deleteSources, !sourceFile1.exists());
+      assertEquals(deleteSources, !sourceFile2.exists());
+      assertEquals(result, IOUtil.getContentOfURI(destFile.getAbsolutePath()));
+    } finally {
+      FileUtil.deleteIfExists(sourceFile1);
+      FileUtil.deleteIfExists(sourceFile2);
+      FileUtil.deleteIfExists(destFile);
+      IOUtil.close(joiner);
     }
+  }
 
 }

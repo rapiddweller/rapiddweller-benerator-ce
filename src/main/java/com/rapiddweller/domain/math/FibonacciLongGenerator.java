@@ -42,35 +42,42 @@ import com.rapiddweller.benerator.primitive.number.RecurrenceRelationNumberGener
  * @author Volker Bergmann
  * @since 0.6.0
  */
+public class FibonacciLongGenerator
+    extends RecurrenceRelationNumberGenerator<Long> {
 
-public class FibonacciLongGenerator extends RecurrenceRelationNumberGenerator<Long> {
+  private final boolean unique;
 
-    private final boolean unique;
+  /**
+   * Instantiates a new Fibonacci long generator.
+   *
+   * @param min    the min
+   * @param max    the max
+   * @param unique the unique
+   */
+  public FibonacciLongGenerator(Long min, Long max, boolean unique) {
+    super(Long.class, 2, min, max);
+    this.unique = unique;
+  }
 
-    public FibonacciLongGenerator(Long min, Long max, boolean unique) {
-        super(Long.class, 2, min, max);
-        this.unique = unique;
+  // RecurrenceRelationNumberGenerator interface implementation ------------------------------------------------------
+
+  @Override
+  protected Long aN() {
+    return aN(-1) + aN(-2);
+  }
+
+  @Override
+  protected Long a0(int n) {
+    return (n == 0 ? 0L : 1L);
+  }
+
+  @Override
+  protected void resetMembers() {
+    super.resetMembers();
+    if (unique) {
+      generate();
+      generate();
     }
-
-    // RecurrenceRelationNumberGenerator interface implementation ------------------------------------------------------
-
-    @Override
-    protected Long aN() {
-        return aN(-1) + aN(-2);
-    }
-
-    @Override
-    protected Long a0(int n) {
-        return (n == 0 ? 0L : 1L);
-    }
-
-    @Override
-    protected void resetMembers() {
-        super.resetMembers();
-        if (unique) {
-            generate();
-            generate();
-        }
-    }
+  }
 
 }

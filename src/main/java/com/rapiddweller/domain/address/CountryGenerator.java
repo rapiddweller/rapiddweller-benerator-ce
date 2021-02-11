@@ -43,52 +43,73 @@ import com.rapiddweller.benerator.wrapper.WeighingGeneratorWrapper;
  *
  * @author Volker Bergmann
  */
-public class CountryGenerator extends AbstractDatasetGenerator<Country> implements NonNullGenerator<Country> {
+public class CountryGenerator extends AbstractDatasetGenerator<Country>
+    implements NonNullGenerator<Country> {
 
-    private static final String REGION = "/com/rapiddweller/dataset/region";
+  private static final String REGION = "/com/rapiddweller/dataset/region";
 
-    // Constructors ----------------------------------------------------------------------------------------------------
+  // Constructors ----------------------------------------------------------------------------------------------------
 
-    public CountryGenerator() {
-        this("world");
-    }
+  /**
+   * Instantiates a new Country generator.
+   */
+  public CountryGenerator() {
+    this("world");
+  }
 
-    public CountryGenerator(String datasetName) {
-        super(Country.class, REGION, datasetName, true);
-    }
+  /**
+   * Instantiates a new Country generator.
+   *
+   * @param datasetName the dataset name
+   */
+  public CountryGenerator(String datasetName) {
+    super(Country.class, REGION, datasetName, true);
+  }
 
-    @Override
-    protected boolean isAtomic(Dataset dataset) {
-        Country country = Country.getInstance(dataset.getName(), false);
-        return (country != null);
-    }
+  @Override
+  protected boolean isAtomic(Dataset dataset) {
+    Country country = Country.getInstance(dataset.getName(), false);
+    return (country != null);
+  }
 
-    @Override
-    protected WeightedGenerator<Country> createGeneratorForAtomicDataset(Dataset dataset) {
-        WeightedDatasetGenerator<Country> result;
-        Country country = Country.getInstance(dataset.getName(), false);
-        result = createGeneratorForCountry(country);
-        supportedDatasets.add(dataset.getName());
-        return result;
-    }
+  @Override
+  protected WeightedGenerator<Country> createGeneratorForAtomicDataset(
+      Dataset dataset) {
+    WeightedDatasetGenerator<Country> result;
+    Country country = Country.getInstance(dataset.getName(), false);
+    result = createGeneratorForCountry(country);
+    supportedDatasets.add(dataset.getName());
+    return result;
+  }
 
-    protected WeightedDatasetGenerator<Country> createGeneratorForCountry(Country country) {
-        ConstantGenerator<Country> coreGenerator = new ConstantGenerator<Country>(country);
-        WeightedGenerator<Country> generator = new WeighingGeneratorWrapper<Country>(coreGenerator, country.getPopulation());
-        totalWeight += generator.getWeight();
-        return new AtomicDatasetGenerator<Country>(generator, nesting, country.getIsoCode());
-    }
+  /**
+   * Create generator for country weighted dataset generator.
+   *
+   * @param country the country
+   * @return the weighted dataset generator
+   */
+  protected WeightedDatasetGenerator<Country> createGeneratorForCountry(
+      Country country) {
+    ConstantGenerator<Country> coreGenerator =
+        new ConstantGenerator<>(country);
+    WeightedGenerator<Country> generator =
+        new WeighingGeneratorWrapper<>(coreGenerator,
+            country.getPopulation());
+    totalWeight += generator.getWeight();
+    return new AtomicDatasetGenerator<>(generator, nesting,
+        country.getIsoCode());
+  }
 
-    @Override
-    public Country generate() {
-        return GeneratorUtil.generateNonNull(this);
-    }
+  @Override
+  public Country generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
 
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[" + getDataset() + "]";
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + getDataset() + "]";
+  }
 
 }

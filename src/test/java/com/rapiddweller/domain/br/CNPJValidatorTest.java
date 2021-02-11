@@ -26,56 +26,75 @@
 
 package com.rapiddweller.domain.br;
 
-import static org.junit.Assert.*;
-
-import com.rapiddweller.commons.validator.SimpleValidatorTest;
+import com.rapiddweller.common.validator.SimpleValidatorTest;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the CPNJValidator.<br/><br/>
  * Created: 17.10.2009 08:24:46
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class CNPJValidatorTest extends SimpleValidatorTest<CharSequence> {
 
-	public CNPJValidatorTest() {
-	    super(new CNPJValidator());
-    }
+  /**
+   * Instantiates a new Cnpj validator test.
+   */
+  public CNPJValidatorTest() {
+    super(new CNPJValidator());
+  }
 
-	@Test
-	public void testValidPlainNumbers() {
-		assertValid("16701716000156");
-		assertValid("01679152000125");
-	}
+  /**
+   * Test valid plain numbers.
+   */
+  @Test
+  public void testValidPlainNumbers() {
+    assertValid("16701716000156");
+    assertValid("01679152000125");
+  }
 
-	@Test
-	public void testValidFormattedNumbers() {
-		CNPJValidator validator = new CNPJValidator(true);
-		assertTrue(validator.valid("16.701.716/0001-56"));
-		assertTrue(validator.valid("01.679.152/0001-25"));
-		assertTrue(validator.valid("16701716000156"));
-		assertTrue(validator.valid("01679152000125"));
-	}
+  /**
+   * Test valid formatted numbers.
+   */
+  @Test
+  public void testValidFormattedNumbers() {
+    CNPJValidator validator = new CNPJValidator(true);
+    assertTrue(validator.valid("16.701.716/0001-56"));
+    assertTrue(validator.valid("01.679.152/0001-25"));
+    assertTrue(validator.valid("16701716000156"));
+    assertTrue(validator.valid("01679152000125"));
+  }
 
-	@Test
-	public void testInvalidFormattedNumbers() {
-		assertInvalid("16.701.716-0001-56");
-		assertInvalid("01/679.152/0001-25");
-	}
+  /**
+   * Test invalid formatted numbers.
+   */
+  @Test
+  public void testInvalidFormattedNumbers() {
+    assertInvalid("16.701.716-0001-56");
+    assertInvalid("01/679.152/0001-25");
+  }
 
-	@Test
-	public void testIllegalNumbers() {
-		assertInvalid(null);
-		assertInvalid("");
-		assertInvalid("0");
-		assertInvalid("1234567890123456789");
-	}
-	
-	@Test
-	public void testInvalidNumbers() {
-		assertInvalid("16701716000157"); // ultimate verification digit wrong
-		assertInvalid("16701716000166"); // penultimate verification digit wrong
-	}
+  /**
+   * Test illegal numbers.
+   */
+  @Test
+  public void testIllegalNumbers() {
+    assertInvalid(null);
+    assertInvalid("");
+    assertInvalid("0");
+    assertInvalid("1234567890123456789");
+  }
+
+  /**
+   * Test invalid numbers.
+   */
+  @Test
+  public void testInvalidNumbers() {
+    assertInvalid("16701716000157"); // ultimate verification digit wrong
+    assertInvalid("16701716000166"); // penultimate verification digit wrong
+  }
 
 }

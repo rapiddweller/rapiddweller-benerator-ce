@@ -26,37 +26,54 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
+
+import java.util.List;
 
 /**
  * Executes all sub statements sequentially.<br/><br/>
  * Created: 20.02.2010 08:00:24
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class SequentialStatement extends CompositeStatement {
 
-	public SequentialStatement() {
-	    this(null);
-    }
+  /**
+   * Instantiates a new Sequential statement.
+   */
+  public SequentialStatement() {
+    this(null);
+  }
 
-	public SequentialStatement(List<Statement> subStatements) {
-	    super(subStatements);
-    }
+  /**
+   * Instantiates a new Sequential statement.
+   *
+   * @param subStatements the sub statements
+   */
+  public SequentialStatement(List<Statement> subStatements) {
+    super(subStatements);
+  }
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-		return executeSubStatements(context);
-    }
+  @Override
+  public boolean execute(BeneratorContext context) {
+    return executeSubStatements(context);
+  }
 
-	protected boolean executeSubStatements(BeneratorContext context) {
-		for (Statement subStatement : subStatements)
-	    	if (!subStatement.execute(context))
-	    		return false;
-		return true;
-	}
+  /**
+   * Execute sub statements boolean.
+   *
+   * @param context the context
+   * @return the boolean
+   */
+  protected boolean executeSubStatements(BeneratorContext context) {
+    for (Statement subStatement : subStatements) {
+      if (!subStatement.execute(context)) {
+        return false;
+      }
+    }
+    return true;
+  }
 
 }

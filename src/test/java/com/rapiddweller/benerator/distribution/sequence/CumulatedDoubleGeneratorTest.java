@@ -27,51 +27,64 @@
 package com.rapiddweller.benerator.distribution.sequence;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 import org.junit.Test;
 
 /**
  * Tests the {@link CumulatedDoubleGenerator}.
  * Created: 07.06.2006 20:23:39
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class CumulatedDoubleGeneratorTest extends GeneratorClassTest {
 
-    public CumulatedDoubleGeneratorTest() {
-        super(CumulatedDoubleGenerator.class);
-    }
+  /**
+   * Instantiates a new Cumulated double generator test.
+   */
+  public CumulatedDoubleGeneratorTest() {
+    super(CumulatedDoubleGenerator.class);
+  }
 
-    @Test
-    public void testSingle() {
-        checkProductSet(createAndInit(0, 0), 100, CollectionUtil.toSet( 0.));
-        checkProductSet(createAndInit(-1, -1), 100, CollectionUtil.toSet(-1.));
-        checkProductSet(createAndInit( 1,  1), 100, CollectionUtil.toSet( 1.));
-        checkProductSet(createAndInit( 1,  1, 1), 100, CollectionUtil.toSet(1.));
-    }
+  /**
+   * Test single.
+   */
+  @Test
+  public void testSingle() {
+    checkProductSet(createAndInit(0, 0), 100, CollectionUtil.toSet(0.));
+    checkProductSet(createAndInit(-1, -1), 100, CollectionUtil.toSet(-1.));
+    checkProductSet(createAndInit(1, 1), 100, CollectionUtil.toSet(1.));
+    checkProductSet(createAndInit(1, 1, 1), 100, CollectionUtil.toSet(1.));
+  }
 
-    @Test
-    public void testRange() {
-        checkProductSet(createAndInit( 0,  1, 1), 1000, CollectionUtil.toSet( 0.,  1.));
-        checkProductSet(createAndInit( 1,  2, 1), 1000, CollectionUtil.toSet( 1.,  2.));
-        checkProductSet(createAndInit(-2, -1, 1), 1000, CollectionUtil.toSet(-2., -1.));
-        checkProductSet(createAndInit(-1,  0, 1), 1000, CollectionUtil.toSet(-1.,  0.));
-        checkProductSet(createAndInit(-1,  1, 1), 1000, CollectionUtil.toSet(-1.,  0., 1.));
-    }
+  /**
+   * Test range.
+   */
+  @Test
+  public void testRange() {
+    checkProductSet(createAndInit(0, 1, 1), 1000, CollectionUtil.toSet(0., 1.));
+    checkProductSet(createAndInit(1, 2, 1), 1000, CollectionUtil.toSet(1., 2.));
+    checkProductSet(createAndInit(-2, -1, 1), 1000, CollectionUtil.toSet(-2., -1.));
+    checkProductSet(createAndInit(-1, 0, 1), 1000, CollectionUtil.toSet(-1., 0.));
+    checkProductSet(createAndInit(-1, 1, 1), 1000, CollectionUtil.toSet(-1., 0., 1.));
+  }
 
-    @Test
-    public void testGranularity() {
-        checkProductSet(createAndInit( 1,  3, 2), 100, CollectionUtil.toSet( 1.,  3.));
-        checkProductSet(createAndInit(-3, -1, 2), 100, CollectionUtil.toSet(-3., -1.));
-        checkProductSet(createAndInit(-1,  1, 2), 100, CollectionUtil.toSet(-1.,  1.));
-    }
-    
-	private CumulatedDoubleGenerator createAndInit(int min, int max) {
-	    return initialize(new CumulatedDoubleGenerator(min, max));
-    }
+  /**
+   * Test granularity.
+   */
+  @Test
+  public void testGranularity() {
+    checkProductSet(createAndInit(1, 3, 2), 100, CollectionUtil.toSet(1., 3.));
+    checkProductSet(createAndInit(-3, -1, 2), 100, CollectionUtil.toSet(-3., -1.));
+    checkProductSet(createAndInit(-1, 1, 2), 100, CollectionUtil.toSet(-1., 1.));
+  }
 
-	private CumulatedDoubleGenerator createAndInit(int min, int max, int granularity) {
-	    return initialize(new CumulatedDoubleGenerator(min, max, granularity));
-    }
+  private CumulatedDoubleGenerator createAndInit(int min, int max) {
+    return initialize(new CumulatedDoubleGenerator(min, max));
+  }
+
+  private CumulatedDoubleGenerator createAndInit(int min, int max, int granularity) {
+    return initialize(new CumulatedDoubleGenerator(min, max, granularity));
+  }
 
 }

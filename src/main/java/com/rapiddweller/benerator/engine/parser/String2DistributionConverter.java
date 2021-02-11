@@ -28,44 +28,50 @@ package com.rapiddweller.benerator.engine.parser;
 
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.context.ContextAware;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
-import com.rapiddweller.formats.script.ScriptUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.context.ContextAware;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
+import com.rapiddweller.format.script.ScriptUtil;
 
 /**
- * Parses a string and interprets it as a {@link Distribution} spec, 
+ * Parses a string and interprets it as a {@link Distribution} spec,
  * supporting the predefined sequences, like 'random' and 'cumulated'.<br/><br/>
  * Created: 04.05.2010 06:43:01
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 public class String2DistributionConverter extends ThreadSafeConverter<String, Distribution> implements ContextAware {
-	
-	private Context context;
 
-	public String2DistributionConverter() {
-	    super(String.class, Distribution.class);
-    }
+  private Context context;
 
-	@Override
-	public Distribution convert(String stringOrScript) throws ConversionException {
-		Object sourceValue = ScriptUtil.parseUnspecificText(stringOrScript).evaluate(context);
-		Distribution result;
-		if (sourceValue instanceof String) {
-			String spec = (String) sourceValue;
-			result = SequenceManager.getRegisteredSequence(spec, false);
-			if (result == null)
-				result = (Distribution) context.get(spec);
-		} else
-			result = (Distribution) sourceValue;
-	    return result;
-    }
+  /**
+   * Instantiates a new String 2 distribution converter.
+   */
+  public String2DistributionConverter() {
+    super(String.class, Distribution.class);
+  }
 
-	@Override
-	public void setContext(Context context) {
-	    this.context = context;
+  @Override
+  public Distribution convert(String stringOrScript) throws ConversionException {
+    Object sourceValue = ScriptUtil.parseUnspecificText(stringOrScript).evaluate(context);
+    Distribution result;
+    if (sourceValue instanceof String) {
+      String spec = (String) sourceValue;
+      result = SequenceManager.getRegisteredSequence(spec, false);
+      if (result == null) {
+        result = (Distribution) context.get(spec);
+      }
+    } else {
+      result = (Distribution) sourceValue;
     }
+    return result;
+  }
+
+  @Override
+  public void setContext(Context context) {
+    this.context = context;
+  }
 
 }

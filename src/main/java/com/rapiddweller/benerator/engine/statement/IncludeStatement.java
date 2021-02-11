@@ -26,83 +26,112 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import java.io.IOException;
-
 import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.parser.DefaultEntryConverter;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.formats.script.ScriptConverterForStrings;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.platform.xml.XMLSchemaDescriptorProvider;
 import com.rapiddweller.script.Expression;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 
 /**
  * Executes an &lt;include/&gt; from an XML descriptor file.<br/>
  * <br/>
  * Created at 23.07.2009 07:18:54
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class IncludeStatement implements Statement {
-	
-	private static Logger logger = LogManager.getLogger(IncludeStatement.class);
 
-	private Expression<String> uriEx;
-	
-    public IncludeStatement(Expression<String> uri) {
-    	this.uriEx = uri;
-    }
-    
-	public Expression<String> getUri() {
-    	return uriEx;
-    }
+  private static final Logger logger = LogManager.getLogger(IncludeStatement.class);
 
-	public void setUri(Expression<String> uri) {
-    	this.uriEx = uri;
-    }
+  private Expression<String> uriEx;
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-		String uri = context.resolveRelativeUri(uriEx.evaluate(context));
-		String lcUri = uri.toLowerCase();
-        try {
-			if (lcUri.endsWith(".properties"))
-	            includeProperties(uri, context);
-			else if (BeneratorUtil.isDescriptorFilePath(uri))
-				includeDescriptor(uri, context);
-			else if (lcUri.endsWith(".xsd"))
-				includeXmlSchema(uri, context);
-			else
-				throw new ConfigurationError("Not a supported import file type: " + uri);
-	    	return true;
-        } catch (IOException e) {
-            throw new ConfigurationError("Error processing " + uri, e);
-        }
-	}
+  /**
+   * Instantiates a new Include statement.
+   *
+   * @param uri the uri
+   */
+  public IncludeStatement(Expression<String> uri) {
+    this.uriEx = uri;
+  }
 
-	public static void includeProperties(String uri, BeneratorContext context) throws IOException {
-        logger.debug("Including properties file: " + uri);
-        ScriptConverterForStrings preprocessor = new ScriptConverterForStrings(context);
-        DefaultEntryConverter converter = new DefaultEntryConverter(preprocessor, context, true);
-        IOUtil.readProperties(uri, converter);
-    }
+  /**
+   * Gets uri.
+   *
+   * @return the uri
+   */
+  public Expression<String> getUri() {
+    return uriEx;
+  }
 
-	public static void includeXmlSchema(String uri, BeneratorContext context) {
-        logger.debug("Including XML Schema: " + uri);
-        new XMLSchemaDescriptorProvider(uri, context).close();
-    }
+  /**
+   * Sets uri.
+   *
+   * @param uri the uri
+   */
+  public void setUri(Expression<String> uri) {
+    this.uriEx = uri;
+  }
 
-    private static void includeDescriptor(String uri, BeneratorContext context) throws IOException {
-        logger.debug("Including Benerator descriptor file: " + uri);
-		DescriptorRunner runner = new DescriptorRunner(uri, context);
-		runner.runWithoutShutdownHook();
-		runner.close();
+  @Override
+  public boolean execute(BeneratorContext context) {
+    String uri = context.resolveRelativeUri(uriEx.evaluate(context));
+    String lcUri = uri.toLowerCase();
+    try {
+      if (lcUri.endsWith(".properties")) {
+        includeProperties(uri, context);
+      } else if (BeneratorUtil.isDescriptorFilePath(uri)) {
+        includeDescriptor(uri, context);
+      } else if (lcUri.endsWith(".xsd")) {
+        includeXmlSchema(uri, context);
+      } else {
+        throw new ConfigurationError("Not a supported import file type: " + uri);
+      }
+      return true;
+    } catch (IOException e) {
+      throw new ConfigurationError("Error processing " + uri, e);
     }
+  }
+
+  /**
+   * Include properties.
+   *
+   * @param uri     the uri
+   * @param context the context
+   * @throws IOException the io exception
+   */
+  public static void includeProperties(String uri, BeneratorContext context) throws IOException {
+    logger.debug("Including properties file: " + uri);
+    ScriptConverterForStrings preprocessor = new ScriptConverterForStrings(context);
+    DefaultEntryConverter converter = new DefaultEntryConverter(preprocessor, context, true);
+    IOUtil.readProperties(uri, converter);
+  }
+
+  /**
+   * Include xml schema.
+   *
+   * @param uri     the uri
+   * @param context the context
+   */
+  public static void includeXmlSchema(String uri, BeneratorContext context) {
+    logger.debug("Including XML Schema: " + uri);
+    new XMLSchemaDescriptorProvider(uri, context).close();
+  }
+
+  private static void includeDescriptor(String uri, BeneratorContext context) throws IOException {
+    logger.debug("Including Benerator descriptor file: " + uri);
+    DescriptorRunner runner = new DescriptorRunner(uri, context);
+    runner.runWithoutShutdownHook();
+    runner.close();
+  }
 
 }

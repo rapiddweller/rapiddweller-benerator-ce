@@ -29,17 +29,18 @@ package com.rapiddweller.benerator.util;
 import com.rapiddweller.benerator.Generator;
 
 /**
- * Parent class for {@link Generator} implementations that 
+ * Parent class for {@link Generator} implementations that
  * create method parameters as {@link Object} arrays.<br/><br/>
  * Created: 08.07.2011 18:20:24
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public abstract class UnsafeMethodParamsGenerator extends UnsafeGenerator<Object[]> {
 
-	@Override
-	public Class<Object[]> getGeneratedType() {
-		return Object[].class;
-	}
+  @Override
+  public Class<Object[]> getGeneratedType() {
+    return Object[].class;
+  }
 
 }

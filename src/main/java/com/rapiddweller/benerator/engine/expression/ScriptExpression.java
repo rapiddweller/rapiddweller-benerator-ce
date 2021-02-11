@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.engine.expression;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.formats.script.Script;
-import com.rapiddweller.formats.script.ScriptUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.format.script.Script;
+import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.DynamicExpression;
@@ -36,48 +36,75 @@ import com.rapiddweller.script.expression.DynamicExpression;
 /**
  * Expression that evaluates a script.<br/><br/>
  * Created: 27.10.2009 13:48:11
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ScriptExpression<E> extends DynamicExpression<E> {
 
-	private Script script;
-	private Expression<E> defaultValueExpression;
+  private final Script script;
+  private final Expression<E> defaultValueExpression;
 
-    public ScriptExpression(String script) {
-    	this(ScriptUtil.parseScriptText(script), (E) null);
-    }
+  /**
+   * Instantiates a new Script expression.
+   *
+   * @param script the script
+   */
+  public ScriptExpression(String script) {
+    this(ScriptUtil.parseScriptText(script), (E) null);
+  }
 
-    public ScriptExpression(Script script) {
-    	this(script, (E) null);
-    }
+  /**
+   * Instantiates a new Script expression.
+   *
+   * @param script the script
+   */
+  public ScriptExpression(Script script) {
+    this(script, (E) null);
+  }
 
-    public ScriptExpression(Script script, E defaultValue) {
-    	this(script, (defaultValue != null ? new ConstantExpression<E>(defaultValue) : null));
-    }
+  /**
+   * Instantiates a new Script expression.
+   *
+   * @param script       the script
+   * @param defaultValue the default value
+   */
+  public ScriptExpression(Script script, E defaultValue) {
+    this(script, (defaultValue != null ? new ConstantExpression<>(defaultValue) : null));
+  }
 
-    private ScriptExpression(Script script, Expression<E> defaultValueExpression) {
-    	this.script = script;
-    	this.defaultValueExpression = defaultValueExpression;
-    }
-    
-    public static <T> Expression<T> createWithDefaultExpression(
-    		Script script, Expression<T> defaultValueExpression) {
-    	return new ScriptExpression<T>(script, defaultValueExpression);
-    }
+  private ScriptExpression(Script script, Expression<E> defaultValueExpression) {
+    this.script = script;
+    this.defaultValueExpression = defaultValueExpression;
+  }
 
-	@Override
-	@SuppressWarnings("unchecked")
-    public E evaluate(Context context) {
-		if (script == null)
-			return (defaultValueExpression != null ? defaultValueExpression.evaluate(context) : null);
-		else
-			return (E) script.evaluate(context);
-    }
+  /**
+   * Create with default expression expression.
+   *
+   * @param <T>                    the type parameter
+   * @param script                 the script
+   * @param defaultValueExpression the default value expression
+   * @return the expression
+   */
+  public static <T> Expression<T> createWithDefaultExpression(
+      Script script, Expression<T> defaultValueExpression) {
+    return new ScriptExpression<>(script, defaultValueExpression);
+  }
 
-	@Override
-	public String toString() {
-		return script.toString();
-	}
-	
+  @Override
+  @SuppressWarnings("unchecked")
+  public E evaluate(Context context) {
+    if (script == null) {
+      return (defaultValueExpression != null ? defaultValueExpression.evaluate(context) : null);
+    } else {
+      return (E) script.evaluate(context);
+    }
+  }
+
+  @Override
+  public String toString() {
+    return script.toString();
+  }
+
 }

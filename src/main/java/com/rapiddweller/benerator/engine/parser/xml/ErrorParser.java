@@ -26,33 +26,39 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ErrorStatement;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.StringExpression;
 import org.w3c.dom.Element;
 
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ERROR;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableElementText;
+
 /**
  * Parses Benerator's &lt;error&gt; descriptor XML element and maps it to an {@link ErrorStatement}.<br/><br/>
  * Created: 12.01.2011 09:03:58
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public class ErrorParser extends AbstractBeneratorDescriptorParser {
 
-	public ErrorParser() {
-	    super(EL_ERROR, null, CollectionUtil.toSet(ATT_TYPE));
-    }
+  /**
+   * Instantiates a new Error parser.
+   */
+  public ErrorParser() {
+    super(EL_ERROR, null, CollectionUtil.toSet(ATT_TYPE));
+  }
 
-	@Override
-	public ErrorStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-        Expression<String> messageEx = new StringExpression(parseScriptableElementText(element, true));
-		Expression<Integer> codeEx = parseIntAttribute(ATT_TYPE, element);
-		return new ErrorStatement(messageEx, codeEx);
-    }
+  @Override
+  public ErrorStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    Expression<String> messageEx = new StringExpression(parseScriptableElementText(element, true));
+    Expression<Integer> codeEx = parseIntAttribute(ATT_TYPE, element);
+    return new ErrorStatement(messageEx, codeEx);
+  }
 
 }

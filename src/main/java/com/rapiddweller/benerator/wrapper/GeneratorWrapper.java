@@ -27,108 +27,138 @@
 package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.GeneratorState;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
-import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.util.AbstractGenerator;
 import com.rapiddweller.benerator.util.WrapperProvider;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.NullSafeComparator;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.NullSafeComparator;
 
 /**
  * Abstract generator class that wraps another generator object (in a <i>source</i> property)
  * and delegates life cycle control to it.<br/>
  * <br/>
  * Created: 12.12.2006 19:13:55
- * @since 0.1
+ *
+ * @param <S> the type parameter
+ * @param <P> the type parameter
  * @author Volker Bergmann
+ * @since 0.1
  */
 public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
 
-    private Generator<S> source;
-    private WrapperProvider<S> sourceWrapperProvider = new WrapperProvider<S>();
+  private Generator<S> source;
+  private final WrapperProvider<S> sourceWrapperProvider = new WrapperProvider<>();
 
-    public GeneratorWrapper(Generator<S> source) {
-        this.source = source;
+  /**
+   * Instantiates a new Generator wrapper.
+   *
+   * @param source the source
+   */
+  public GeneratorWrapper(Generator<S> source) {
+    this.source = source;
+  }
+
+  // config properties -----------------------------------------------------------------------------------------------
+
+  /**
+   * Returns the source generator
+   *
+   * @return the source
+   */
+  public Generator<S> getSource() {
+    return source;
+  }
+
+  /**
+   * Sets the source generator
+   *
+   * @param source the source
+   */
+  public void setSource(Generator<S> source) {
+    this.source = source;
+  }
+
+  /**
+   * Generate from source product wrapper.
+   *
+   * @return the product wrapper
+   */
+  protected ProductWrapper<S> generateFromSource() {
+    return source.generate(getSourceWrapper());
+  }
+
+  /**
+   * Gets source wrapper.
+   *
+   * @return the source wrapper
+   */
+  protected ProductWrapper<S> getSourceWrapper() {
+    return sourceWrapperProvider.get();
+  }
+
+  // Generator interface implementation ------------------------------------------------------------------------------
+
+  @Override
+  public boolean isThreadSafe() {
+    return source.isThreadSafe();
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return source.isParallelizable();
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    assertNotInitialized();
+    if (source == null) {
+      throw new InvalidGeneratorSetupException("source", "is null");
     }
-
-    // config properties -----------------------------------------------------------------------------------------------
-
-    /** Returns the source generator */
-    public Generator<S> getSource() {
-        return source;
+    synchronized (source) {
+      if (!source.wasInitialized()) {
+        source.init(context);
+      }
     }
+    super.init(context);
+  }
 
-    /** Sets the source generator */
-    public void setSource(Generator<S> source) {
-        this.source = source;
-    }
-    
-    protected ProductWrapper<S> generateFromSource() {
-		return source.generate(getSourceWrapper());
-    }
+  @Override
+  public void reset() {
+    super.reset();
+    source.reset();
+  }
 
-    protected ProductWrapper<S> getSourceWrapper() {
-    	return sourceWrapperProvider.get();
-    }
+  @Override
+  public void close() {
+    super.close();
+    IOUtil.close(source);
+  }
 
-    // Generator interface implementation ------------------------------------------------------------------------------
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-	@Override
-	public boolean isThreadSafe() {
-	    return source.isThreadSafe();
+  @Override
+  public boolean equals(Object other) {
+    if (this == other) {
+      return true;
     }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+    GeneratorWrapper<?, ?> that = (GeneratorWrapper<?, ?>) other;
+    return NullSafeComparator.equals(this.source, that.source);
+  }
 
-    @Override
-	public boolean isParallelizable() {
-	    return source.isParallelizable();
-    }
+  @Override
+  public int hashCode() {
+    return source.hashCode();
+  }
 
-    @Override
-    public synchronized void init(GeneratorContext context) {
-    	assertNotInitialized();
-        if (source == null)
-            throw new InvalidGeneratorSetupException("source", "is null");
-        synchronized (source) {
-        	if (!source.wasInitialized())
-        		source.init(context);
-        }
-        super.init(context);
-    }
-
-	@Override
-    public void reset() {
-		super.reset();
-        source.reset();
-    }
-
-    @Override
-    public void close() {
-    	super.close();
-        IOUtil.close(source);
-    }
-    
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public boolean equals(Object other) {
-	    if (this == other)
-		    return true;
-	    if (other == null || getClass() != other.getClass())
-		    return false;
-	    GeneratorWrapper<?,?> that = (GeneratorWrapper<?,?>) other;
-	    return NullSafeComparator.equals(this.source, that.source);
-    }
-    
-	@Override
-    public int hashCode() {
-	    return source.hashCode();
-    }
-
-	@Override
-	public String toString() {
-	    return (state != GeneratorState.CREATED ? BeanUtil.toString(this) : getClass().getSimpleName());
-	}
+  @Override
+  public String toString() {
+    return (state != GeneratorState.CREATED ? BeanUtil.toString(this) : getClass().getSimpleName());
+  }
 
 }

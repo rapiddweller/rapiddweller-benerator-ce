@@ -34,22 +34,20 @@ package com.rapiddweller.domain.lang;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class LanguageResourceBundle_de extends LanguageResourceBundle {
 
-    @Override
-    protected Object[][] getContents() {
-        return new Object[][]{
-                {"definite.article.singular.0", "der"},
-                {"definite.article.singular.1", "die"},
-                {"definite.article.singular.2", "das"},
-                {"definite.article.plural.0", "die"},
-                {"definite.article.plural.1", "die"},
-                {"definite.article.plural.2", "die"},
-                {"indefinite.article.singular.0", "ein"},
-                {"indefinite.article.singular.1", "eine"},
-                {"indefinite.article.singular.2", "ein"},
-        };
-    }
+  @Override
+  protected Object[][] getContents() {
+    return new Object[][] {
+        {"definite.article.singular.0", "der"},
+        {"definite.article.singular.1", "die"},
+        {"definite.article.singular.2", "das"},
+        {"definite.article.plural.0", "die"},
+        {"definite.article.plural.1", "die"},
+        {"definite.article.plural.2", "die"},
+        {"indefinite.article.singular.0", "ein"},
+        {"indefinite.article.singular.1", "eine"},
+        {"indefinite.article.singular.2", "ein"}};
+  }
 
 }

@@ -31,45 +31,54 @@ import com.rapiddweller.benerator.Generator;
 /**
  * Generator proxy which forwards a limited number of products from another generator.<br/><br/>
  * Created: 23.04.2010 17:59:14
- * @since 0.6.1
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 public class NShotGeneratorProxy<E> extends GeneratorProxy<E> {
 
-    private long shots;
+  private final long shots;
 
-    private long remainingShots;
+  private long remainingShots;
 
-    public NShotGeneratorProxy(Generator<E> source, long shots) {
-        super(source);
-        this.shots = shots;
-        this.remainingShots = shots;
-    }
+  /**
+   * Instantiates a new N shot generator proxy.
+   *
+   * @param source the source
+   * @param shots  the shots
+   */
+  public NShotGeneratorProxy(Generator<E> source, long shots) {
+    super(source);
+    this.shots = shots;
+    this.remainingShots = shots;
+  }
 
-    @Override
-    public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-        if (remainingShots <= 0 || (wrapper = super.generate(wrapper)) == null)
-            return null;
-        this.remainingShots--;
-        return wrapper;
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    if (remainingShots <= 0 || (wrapper = super.generate(wrapper)) == null) {
+      return null;
     }
+    this.remainingShots--;
+    return wrapper;
+  }
 
-    @Override
-    public void reset() {
-        super.reset();
-        remainingShots = shots;
-    }
+  @Override
+  public void reset() {
+    super.reset();
+    remainingShots = shots;
+  }
 
-    @Override
-    public void close() {
-        super.close();
-        remainingShots = 0;
-    }
-    
-    @Override
-    public String toString() {
-    	return getClass().getSimpleName() + '[' + (shots - remainingShots) + '/' + shots + ", " + getSource() + ']';
-    }
-    
+  @Override
+  public void close() {
+    super.close();
+    remainingShots = 0;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + (shots - remainingShots) + '/' + shots + ", " + getSource() + ']';
+  }
+
 }
 

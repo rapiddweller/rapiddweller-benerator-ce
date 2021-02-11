@@ -26,51 +26,68 @@
 
 package com.rapiddweller.benerator.engine.expression;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
-import com.rapiddweller.commons.Context;
+import com.rapiddweller.common.Context;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests the {@link ScriptableExpression}.<br/><br/>
  * Created: 06.08.2011 20:28:51
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class ScriptableExpressionTest {
 
-	private Context context;
+  private Context context;
 
-	@Before
-	public void setUpContext() {
-		this.context = new DefaultBeneratorContext();
-		this.context.set("user", "myself");
-	}
-	
-	@Test
-	public void testEmpty() {
-		ScriptableExpression expression = new ScriptableExpression(null, null);
-		assertEquals(null, expression.evaluate(context));
-	}
-	
-	@Test
-	public void testDefault() {
-		ScriptableExpression expression = new ScriptableExpression(null, "Hi there");
-		assertEquals("Hi there", expression.evaluate(context));
-	}
-	
-	@Test
-	public void testText() {
-		ScriptableExpression expression = new ScriptableExpression("Hello World", null);
-		assertEquals("Hello World", expression.evaluate(context));
-	}
-	
-	@Test
-	public void testScript() {
-		ScriptableExpression expression = new ScriptableExpression("{'Hi ' + user}", "???");
-		assertEquals("Hi myself", expression.evaluate(context));
-	}
-	
+  /**
+   * Sets up context.
+   */
+  @Before
+  public void setUpContext() {
+    this.context = new DefaultBeneratorContext();
+    this.context.set("user", "myself");
+  }
+
+  /**
+   * Test empty.
+   */
+  @Test
+  public void testEmpty() {
+    ScriptableExpression expression = new ScriptableExpression(null, null);
+    assertNull(expression.evaluate(context));
+  }
+
+  /**
+   * Test default.
+   */
+  @Test
+  public void testDefault() {
+    ScriptableExpression expression = new ScriptableExpression(null, "Hi there");
+    assertEquals("Hi there", expression.evaluate(context));
+  }
+
+  /**
+   * Test text.
+   */
+  @Test
+  public void testText() {
+    ScriptableExpression expression = new ScriptableExpression("Hello World", null);
+    assertEquals("Hello World", expression.evaluate(context));
+  }
+
+  /**
+   * Test script.
+   */
+  @Test
+  public void testScript() {
+    ScriptableExpression expression = new ScriptableExpression("{'Hi ' + user}", "???");
+    assertEquals("Hi myself", expression.evaluate(context));
+  }
+
 }

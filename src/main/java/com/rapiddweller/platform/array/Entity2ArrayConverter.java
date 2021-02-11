@@ -26,10 +26,10 @@
 
 package com.rapiddweller.platform.array;
 
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.commons.ArrayFormat;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
 
 /**
  * Converts an Entity's features values to an array of objects.<br/>
@@ -40,36 +40,47 @@ import com.rapiddweller.commons.converter.ThreadSafeConverter;
  */
 public class Entity2ArrayConverter extends ThreadSafeConverter<Entity, Object[]> {
 
-    private String[] featureNames;
+  private String[] featureNames;
 
-    public Entity2ArrayConverter() {
-        this(null);
-    }
+  /**
+   * Instantiates a new Entity 2 array converter.
+   */
+  public Entity2ArrayConverter() {
+    this(null);
+  }
 
-    public Entity2ArrayConverter(String[] featureNames) {
-        super(Entity.class, Object[].class);
-        this.featureNames = featureNames;
-    }
+  /**
+   * Instantiates a new Entity 2 array converter.
+   *
+   * @param featureNames the feature names
+   */
+  public Entity2ArrayConverter(String[] featureNames) {
+    super(Entity.class, Object[].class);
+    this.featureNames = featureNames;
+  }
 
-    @Override
-    public Object[] convert(Entity entity) {
-        if (entity == null)
-            return null;
-        if (featureNames == null)
-            initFeatureNamesFromTemplate(entity);
-        Object[] result = new Object[featureNames.length];
-        for (int i = 0; i < featureNames.length; i++)
-            result[i] = entity.getComponent(featureNames[i]);
-        return result;
+  @Override
+  public Object[] convert(Entity entity) {
+    if (entity == null) {
+      return null;
     }
+    if (featureNames == null) {
+      initFeatureNamesFromTemplate(entity);
+    }
+    Object[] result = new Object[featureNames.length];
+    for (int i = 0; i < featureNames.length; i++) {
+      result[i] = entity.getComponent(featureNames[i]);
+    }
+    return result;
+  }
 
-    private void initFeatureNamesFromTemplate(Entity entity) {
-        this.featureNames = CollectionUtil.toArray(entity.getComponents().keySet());
-    }
+  private void initFeatureNamesFromTemplate(Entity entity) {
+    this.featureNames = CollectionUtil.toArray(entity.getComponents().keySet());
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[" + ArrayFormat.format(featureNames) + "]";
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + ArrayFormat.format(featureNames) + "]";
+  }
 
 }

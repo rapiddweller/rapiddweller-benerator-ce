@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 
 <setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,18 +20,18 @@
         <attribute name="items" type="short" min="1" max="27"/>
 
         <consumer class="FixedWidthEntityExporter">
-            <property name="uri" value="transactions.fcw"/>
+            <property name="uri" value="target/transactions.fcw"/>
             <property name="columns" value="id[8r0],ean_code[13],price[8r0],items[4r0]"/>
         </consumer>
     </generate>
 
     <echo>Generated data:</echo>
-    <if test="com.rapiddweller.commons.SystemInfo.isWindows()">
+    <if test="com.rapiddweller.common.SystemInfo.isWindows()">
         <then>
-            <execute type="shell">cmd /C type transactions.fcw</execute>
+            <execute type="shell">cmd /C type target/transactions.fcw</execute>
         </then>
         <else>
-            <execute type="shell">cat transactions.fcw</execute>
+            <execute type="shell">cat target/transactions.fcw</execute>
         </else>
     </if>
 

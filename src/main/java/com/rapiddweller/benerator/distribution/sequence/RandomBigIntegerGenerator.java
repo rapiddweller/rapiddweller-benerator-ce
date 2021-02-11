@@ -26,75 +26,101 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
-import java.math.BigInteger;
-
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.PropertyMessage;
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 
+import java.math.BigInteger;
+
 /**
  * Generates random {@link BigInteger} with a uniform distribution.<br/>
  * <br/>
  * Created at 23.06.2009 23:26:06
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class RandomBigIntegerGenerator extends ThreadSafeNonNullGenerator<BigInteger> {
 
-    private static final BigInteger DEFAULT_MIN = BigInteger.valueOf(Long.MIN_VALUE);
-	private static final BigInteger DEFAULT_MAX = BigInteger.valueOf(Long.MAX_VALUE);
-	private static final BigInteger DEFAULT_GRNULARITY = BigInteger.valueOf(1);
+  private static final BigInteger DEFAULT_MIN = BigInteger.valueOf(Long.MIN_VALUE);
+  private static final BigInteger DEFAULT_MAX = BigInteger.valueOf(Long.MAX_VALUE);
+  private static final BigInteger DEFAULT_GRNULARITY = BigInteger.valueOf(1);
 
-    private BigInteger min;
-    private BigInteger max;
-    private BigInteger granularity;
-    
-    // constructors ----------------------------------------------------------------------------------------------------
+  private final BigInteger min;
+  private final BigInteger max;
+  private final BigInteger granularity;
 
-    public RandomBigIntegerGenerator() {
-    	this(DEFAULT_MIN, DEFAULT_MAX);
+  // constructors ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Instantiates a new Random big integer generator.
+   */
+  public RandomBigIntegerGenerator() {
+    this(DEFAULT_MIN, DEFAULT_MAX);
+  }
+
+  /**
+   * Instantiates a new Random big integer generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public RandomBigIntegerGenerator(BigInteger min, BigInteger max) {
+    this(min, max, DEFAULT_GRNULARITY);
+  }
+
+  /**
+   * Instantiates a new Random big integer generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   */
+  public RandomBigIntegerGenerator(BigInteger min, BigInteger max, BigInteger granularity) {
+    this.min = min;
+    this.max = max;
+    this.granularity = granularity;
+  }
+
+  // Generator implementation ----------------------------------------------------------------------------------------
+
+  @Override
+  public Class<BigInteger> getGeneratedType() {
+    return BigInteger.class;
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    if (BigInteger.ZERO.compareTo(granularity) == 0) {
+      throw new InvalidGeneratorSetupException(getClass().getSimpleName() + ".granularity may not be 0");
     }
+    super.init(context);
+  }
 
-    public RandomBigIntegerGenerator(BigInteger min, BigInteger max) {
-        this(min, max, DEFAULT_GRNULARITY);
-    }
+  @Override
+  public BigInteger generate() {
+    return generate(min, max, granularity);
+  }
 
-    public RandomBigIntegerGenerator(BigInteger min, BigInteger max, BigInteger granularity) {
-        this.min = min;
-        this.max = max;
-        this.granularity = granularity;
-    }
+  // public convenience method ---------------------------------------------------------------------------------------
 
-    // Generator implementation ----------------------------------------------------------------------------------------
-
-    @Override
-	public Class<BigInteger> getGeneratedType() {
-	    return BigInteger.class;
+  /**
+   * Generate big integer.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   * @return the big integer
+   */
+  public static BigInteger generate(BigInteger min, BigInteger max, BigInteger granularity) {
+    if (min.compareTo(max) > 0) {
+      throw new InvalidGeneratorSetupException(
+          new PropertyMessage("min", "greater than max"),
+          new PropertyMessage("max", "less than min"));
     }
-
-    @Override
-    public synchronized void init(GeneratorContext context) {
-    	if (BigInteger.ZERO.compareTo(granularity) == 0)
-    		throw new InvalidGeneratorSetupException(getClass().getSimpleName() + ".granularity may not be 0");
-        super.init(context);
-    }
-    
-	@Override
-	public BigInteger generate() {
-        return generate(min, max, granularity);
-    }
-    
-    // public convenience method ---------------------------------------------------------------------------------------
-
-    public static BigInteger generate(BigInteger min, BigInteger max, BigInteger granularity) {
-        if (min.compareTo(max) > 0)
-            throw new InvalidGeneratorSetupException(
-                    new PropertyMessage("min", "greater than max"),
-                    new PropertyMessage("max", "less than min"));
-        long range = max.subtract(min).divide(granularity).longValue();
-        return min.add(BigInteger.valueOf(RandomLongGenerator.generate(0, range, 1)).multiply(granularity));
-    }
+    long range = max.subtract(min).divide(granularity).longValue();
+    return min.add(BigInteger.valueOf(RandomLongGenerator.generate(0, range, 1)).multiply(granularity));
+  }
 
 }

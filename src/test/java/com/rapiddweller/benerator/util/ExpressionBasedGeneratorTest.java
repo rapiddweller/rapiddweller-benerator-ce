@@ -35,17 +35,21 @@ import org.junit.Test;
 /**
  * Tests the {@link ExpressionBasedGenerator}.<br/><br/>
  * Created: 28.03.2010 12:33:00
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ExpressionBasedGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void test() {
-		Expression<Integer> expression = ExpressionUtil.constant(1);
-		Generator<Integer> generator = new ExpressionBasedGenerator<Integer>(expression, Integer.class);
-		expectGeneratedSequence(generator, 1, 1, 1, 1).withContinuedAvailability();
-		generator.close();
-	}
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    Expression<Integer> expression = ExpressionUtil.constant(1);
+    Generator<Integer> generator = new ExpressionBasedGenerator<>(expression, Integer.class);
+    expectGeneratedSequence(generator, 1, 1, 1, 1).withContinuedAvailability();
+    generator.close();
+  }
 
 }

@@ -31,32 +31,38 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 /**
  * Generates an array of fixed size filled with nulls.<br/><br/>
  * Created: 30.04.2010 08:36:00
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 public class BlankArrayGenerator extends ThreadSafeNonNullGenerator<Object[]> {
 
-    private static final Class<Object[]> GENERATED_TYPE = Object[].class;
+  private static final Class<Object[]> GENERATED_TYPE = Object[].class;
 
-    private int length;
+  private final int length;
 
-    public BlankArrayGenerator(int length) {
-        this.length = length;
-    }
+  /**
+   * Instantiates a new Blank array generator.
+   *
+   * @param length the length
+   */
+  public BlankArrayGenerator(int length) {
+    this.length = length;
+  }
 
-	@Override
-	public Class<Object[]> getGeneratedType() {
-        return GENERATED_TYPE;
-    }
+  @Override
+  public Class<Object[]> getGeneratedType() {
+    return GENERATED_TYPE;
+  }
 
-	@Override
-	public Object[] generate() {
-        return new Object[length];
-    }
+  @Override
+  public Object[] generate() {
+    return new Object[length];
+  }
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + '[' + length + ']';
-	}
-	
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + length + ']';
+  }
+
 }

@@ -29,11 +29,17 @@ package com.rapiddweller.benerator.xml;
 /**
  * Test bean with a name property of value 'Bob'.<br/><br/>
  * Created: 29.03.2008 09:11:26
- * @since 0.5.0
+ *
  * @author Volker Bergmann
+ * @since 0.5.0
  */
 public class Bob {
-    public String getName() {
-        return "Bob";
-    }
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return "Bob";
+  }
 }

@@ -29,44 +29,53 @@ package com.rapiddweller.benerator.wrapper;
 import com.rapiddweller.benerator.ConstantTestGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 /**
  * Tests the {@link ConvertingGenerator}.<br/><br/>
  * Created: 11.10.2006 23:12:21
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class ConvertingGeneratorTest extends GeneratorTest {
 
-    @Test
-    public void test() {
-        ConstantTestGenerator<Integer> source = new ConstantTestGenerator<Integer>(1);
-        TestConverter converter = new TestConverter();
-        ConvertingGenerator<Integer, String> generator = new ConvertingGenerator<Integer, String>(source, converter);
-        assertEquals("constructor", source.getLastMethodCall());
-        assertEquals("1", GeneratorUtil.generateNonNull(generator));
-        assertEquals("1", GeneratorUtil.generateNonNull(generator));
-        assertTrue(generator.getSource() == source);
-        generator.reset();
-        assertEquals("reset", source.getLastMethodCall());
-        generator.close();
-        assertEquals("close", source.getLastMethodCall());
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    ConstantTestGenerator<Integer> source = new ConstantTestGenerator<>(1);
+    TestConverter converter = new TestConverter();
+    ConvertingGenerator<Integer, String> generator = new ConvertingGenerator<>(source, converter);
+    assertEquals("constructor", source.getLastMethodCall());
+    assertEquals("1", GeneratorUtil.generateNonNull(generator));
+    assertEquals("1", GeneratorUtil.generateNonNull(generator));
+    assertSame(generator.getSource(), source);
+    generator.reset();
+    assertEquals("reset", source.getLastMethodCall());
+    generator.close();
+    assertEquals("close", source.getLastMethodCall());
+  }
+
+  private static class TestConverter extends ThreadSafeConverter<Integer, String> {
+
+    /**
+     * Instantiates a new Test converter.
+     */
+    public TestConverter() {
+      super(Integer.class, String.class);
     }
 
-    private static class TestConverter extends ThreadSafeConverter<Integer, String> {
-
-		public TestConverter() {
-			super(Integer.class, String.class);
-		}
-
-		@Override
-		public String convert(Integer sourceValue) throws ConversionException {
-            return String.valueOf(sourceValue);
-        }
+    @Override
+    public String convert(Integer sourceValue) throws ConversionException {
+      return String.valueOf(sourceValue);
     }
-    
+  }
+
 }

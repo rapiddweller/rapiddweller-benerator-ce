@@ -32,29 +32,39 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.benerator.wrapper.SingleSourceArrayGenerator;
 
 /**
- * Creates a stochastic number of instances of a type. The number of elements is determined by the values 
- * minCount, maxCount, countDistribution. 
- * If the number of items is not one, an array of respective size is returned, 
+ * Creates a stochastic number of instances of a type. The number of elements is determined by the values
+ * minCount, maxCount, countDistribution.
+ * If the number of items is not one, an array of respective size is returned,
  * otherwise a single object.<br/><br/>
  * Created: 06.03.2008 15:43:54
- * @since 0.5.0
+ *
+ * @param <S> the type parameter
  * @author Volker Bergmann
+ * @since 0.5.0
  */
 public class SimplifyingSingleSourceArrayGenerator<S> extends SingleSourceArrayGenerator<S, Object> {
-    
-    public SimplifyingSingleSourceArrayGenerator(Generator<S> source, NonNullGenerator<Integer> countGenerator) {
-        super(source, source.getGeneratedType(), countGenerator);
+
+  /**
+   * Instantiates a new Simplifying single source array generator.
+   *
+   * @param source         the source
+   * @param countGenerator the count generator
+   */
+  public SimplifyingSingleSourceArrayGenerator(Generator<S> source, NonNullGenerator<Integer> countGenerator) {
+    super(source, source.getGeneratedType(), countGenerator);
+  }
+
+  @Override
+  public ProductWrapper<Object> generate(ProductWrapper<Object> wrapper) {
+    Object[] array = (Object[]) super.generate();
+    if (array == null) {
+      return null;
     }
-    
-	@Override
-	public ProductWrapper<Object> generate(ProductWrapper<Object> wrapper) {
-		Object[] array = (Object[]) super.generate();
-		if (array == null)
-			return null;
-        if (array.length == 1)
-            return wrapper.wrap(array[0]);
-        else
-        	return wrapper.wrap(array);
+    if (array.length == 1) {
+      return wrapper.wrap(array[0]);
+    } else {
+      return wrapper.wrap(array);
     }
+  }
 
 }

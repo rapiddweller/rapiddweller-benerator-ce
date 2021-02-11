@@ -27,20 +27,21 @@
 package com.rapiddweller.benerator.engine.expression.context;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.commons.Context;
+import com.rapiddweller.common.Context;
 import com.rapiddweller.script.expression.DynamicExpression;
 
 /**
  * Evaluates to the default page size of the {@link BeneratorContext}.<br/><br/>
  * Created: 26.10.2009 06:57:20
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class DefaultPageSizeExpression extends DynamicExpression<Long> {
 
-	@Override
-	public Long evaluate(Context context) {
-        return ((BeneratorContext) context).getDefaultPageSize();
-    }
+  @Override
+  public Long evaluate(Context context) {
+    return ((BeneratorContext) context).getDefaultPageSize();
+  }
 
 }

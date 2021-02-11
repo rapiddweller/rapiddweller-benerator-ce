@@ -27,40 +27,51 @@
 package com.rapiddweller.domain.person;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import java.util.Locale;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link SalutationProvider}.<br/><br/>
  * Created: 09.06.2006 22:14:08
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class SalutationProviderTest {
 
-	@Test
-    public void testWesternLocales() {
-        check(Locale.GERMAN,  "Frau", "Herr");
-        check(Locale.FRENCH,  "Mme",  "M.");
-        check(Locale.ENGLISH, "Mrs.", "Mr.");
-    }
-    
-	@Test
-    public void testCyrillicLocales() {
-        check(new Locale("ru"), "Госпожа", "Господин");
-        check(new Locale("cs"), "Paní", "Pan");
-    }
+  /**
+   * Test western locales.
+   */
+  @Test
+  public void testWesternLocales() {
+    check(Locale.GERMAN, "Frau", "Herr");
+    check(Locale.FRENCH, "Mme", "M.");
+    check(Locale.ENGLISH, "Mrs.", "Mr.");
+  }
 
-	@Test
-    public void testFallback() {
-        check(new Locale("xx"), "Mrs.", "Mr.");
-    }
+  /**
+   * Test cyrillic locales.
+   */
+  @Test
+  public void testCyrillicLocales() {
+    check(new Locale("ru"), "Госпожа", "Господин");
+    check(new Locale("cs"), "Paní", "Pan");
+  }
 
-    private static void check(Locale locale, String femaleSalutation, String maleSalutation) {
-        SalutationProvider provider = new SalutationProvider(locale);
-        assertEquals(femaleSalutation, provider.salutation(Gender.FEMALE));
-        assertEquals(maleSalutation, provider.salutation(Gender.MALE));
-    }
-    
+  /**
+   * Test fallback.
+   */
+  @Test
+  public void testFallback() {
+    check(new Locale("xx"), "Mrs.", "Mr.");
+  }
+
+  private static void check(Locale locale, String femaleSalutation, String maleSalutation) {
+    SalutationProvider provider = new SalutationProvider(locale);
+    assertEquals(femaleSalutation, provider.salutation(Gender.FEMALE));
+    assertEquals(maleSalutation, provider.salutation(Gender.MALE));
+  }
+
 }

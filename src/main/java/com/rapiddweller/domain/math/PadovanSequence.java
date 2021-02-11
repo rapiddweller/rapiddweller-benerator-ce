@@ -39,12 +39,13 @@ import com.rapiddweller.benerator.distribution.Sequence;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class PadovanSequence extends LongBasedSequence {
 
-    @Override
-    protected NonNullGenerator<Long> createLongGenerator(Long min, Long max, Long granularity, boolean unique) {
-        return new PadovanLongGenerator(min, max, unique);
-    }
+  @Override
+  protected NonNullGenerator<Long> createLongGenerator(Long min, Long max,
+                                                       Long granularity,
+                                                       boolean unique) {
+    return new PadovanLongGenerator(min, max, unique);
+  }
 
 }

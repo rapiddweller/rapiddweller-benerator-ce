@@ -26,31 +26,36 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import static com.rapiddweller.benerator.util.GeneratorUtil.*;
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.ConstantTestGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import org.junit.Test;
 
+import static com.rapiddweller.benerator.util.GeneratorUtil.generateNonNull;
+import static com.rapiddweller.benerator.util.GeneratorUtil.init;
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link ByteArrayGenerator}.<br/><br/>
  * Created: 29.07.2011 12:48:32
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class ByteArrayGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void test() {
-		ConstantTestGenerator<Byte> source = new ConstantTestGenerator<Byte>((byte) 1);
-		ByteArrayGenerator generator = new ByteArrayGenerator(source, 2, 2);
-		init(generator);
-		byte[] result = generateNonNull(generator);
-		assertEquals(2, result.length);
-		assertEquals(1, result[0]);
-		assertEquals(1, result[1]);
-		close(generator);
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    ConstantTestGenerator<Byte> source = new ConstantTestGenerator<>((byte) 1);
+    ByteArrayGenerator generator = new ByteArrayGenerator(source, 2, 2);
+    init(generator);
+    byte[] result = generateNonNull(generator);
+    assertEquals(2, result.length);
+    assertEquals(1, result[0]);
+    assertEquals(1, result[1]);
+    close(generator);
+  }
+
 }

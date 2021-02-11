@@ -28,10 +28,10 @@ package com.rapiddweller.platform.csv;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.DataSourceProvider;
+import com.rapiddweller.common.Converter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntitySource;
-import com.rapiddweller.commons.Converter;
 
 /**
  * {@link EntitySource} implementation which creates {@link Iterable}s that iterate through CSV files.<br/><br/>
@@ -42,23 +42,35 @@ import com.rapiddweller.commons.Converter;
  */
 public class CSVEntitySourceProvider implements DataSourceProvider<Entity> {
 
-    private final ComplexTypeDescriptor entityType;
-    private final Converter<String, ?> converter;
-    private final char separator;
-    private final String encoding;
+  private final ComplexTypeDescriptor entityType;
+  private final Converter<String, ?> converter;
+  private final char separator;
+  private final String encoding;
 
-    public CSVEntitySourceProvider(ComplexTypeDescriptor entityType, Converter<String, ?> converter, char separator, String encoding) {
-        this.entityType = entityType;
-        this.converter = converter;
-        this.separator = separator;
-        this.encoding = encoding;
-    }
+  /**
+   * Instantiates a new Csv entity source provider.
+   *
+   * @param entityType the entity type
+   * @param converter  the converter
+   * @param separator  the separator
+   * @param encoding   the encoding
+   */
+  public CSVEntitySourceProvider(ComplexTypeDescriptor entityType,
+                                 Converter<String, ?> converter,
+                                 char separator, String encoding) {
+    this.entityType = entityType;
+    this.converter = converter;
+    this.separator = separator;
+    this.encoding = encoding;
+  }
 
-    @Override
-    public EntitySource create(String id, BeneratorContext context) {
-        CSVEntitySource iterable = new CSVEntitySource(id, entityType, encoding, converter, separator);
-        iterable.setContext(context);
-        return iterable;
-    }
+  @Override
+  public EntitySource create(String id, BeneratorContext context) {
+    CSVEntitySource iterable =
+        new CSVEntitySource(id, entityType, encoding, converter,
+            separator);
+    iterable.setContext(context);
+    return iterable;
+  }
 
 }

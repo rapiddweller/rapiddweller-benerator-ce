@@ -32,30 +32,42 @@ import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
  * Exponential function. a * e^bx.<br/>
  * <br/>
  * Created: 04.09.2006 23:25:20
+ *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class ExponentialFunction extends AbstractWeightFunction {
 
-    private double scale;
-    private double frequency;
+  private final double scale;
+  private final double frequency;
 
-    public ExponentialFunction(double frequency) {
-        this(1, frequency);
-    }
+  /**
+   * Instantiates a new Exponential function.
+   *
+   * @param frequency the frequency
+   */
+  public ExponentialFunction(double frequency) {
+    this(1, frequency);
+  }
 
-    public ExponentialFunction(double scale, double frequency) {
-        this.frequency = frequency;
-        this.scale = scale;
-    }
+  /**
+   * Instantiates a new Exponential function.
+   *
+   * @param scale     the scale
+   * @param frequency the frequency
+   */
+  public ExponentialFunction(double scale, double frequency) {
+    this.frequency = frequency;
+    this.scale = scale;
+  }
 
-    @Override
-	public double value(double param) {
-        return scale * Math.exp(frequency * param);
-    }
+  @Override
+  public double value(double param) {
+    return scale * Math.exp(frequency * param);
+  }
 
-    @Override
-	public String toString() {
-        return scale + "e^(" + frequency + "x)";
-    }
+  @Override
+  public String toString() {
+    return scale + "e^(" + frequency + "x)";
+  }
 }

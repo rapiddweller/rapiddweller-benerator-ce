@@ -32,15 +32,15 @@ import com.rapiddweller.benerator.Generator;
  * Abstract parent class for {@link Generator}s that generate Long values.<br/>
  * <br/>
  * Created at 06.07.2009 08:00:30
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public abstract class LongGenerator implements Generator<Long> {
 
-    @Override
-	public Class<Long> getGeneratedType() {
-	    return Long.class;
-    }
+  @Override
+  public Class<Long> getGeneratedType() {
+    return Long.class;
+  }
 
 }

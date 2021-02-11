@@ -30,8 +30,15 @@ package com.rapiddweller.benerator.distribution;
  * Common interface for weight functions.<br/>
  * <br/>
  * Created: 10.06.2006 05:27:38
+ *
  * @author Volker Bergmann
  */
 public interface WeightFunction extends Weight {
-    double value(double param);
+  /**
+   * Value double.
+   *
+   * @param param the param
+   * @return the double
+   */
+  double value(double param);
 }

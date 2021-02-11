@@ -26,40 +26,56 @@
 
 package com.rapiddweller.benerator.util;
 
-import java.util.Iterator;
-
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.util.DataIteratorProxy;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.util.DataIteratorProxy;
 import com.rapiddweller.script.Expression;
+
+import java.util.Iterator;
 
 /**
  * {@link Iterator} proxy which filters its source's output with a (boolean) filter expression.<br/><br/>
  * Created: 08.03.2011 11:51:51
- * @since 0.5.8
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.5.8
  */
 public class FilterExIterator<E> extends DataIteratorProxy<E> {
-	
-	Expression<Boolean> filterEx;
-	Context context;
 
-	public FilterExIterator(DataIterator<E> source, Expression<Boolean> filterEx, Context context) {
-		super(source);
-		this.filterEx = filterEx;
-		this.context = context;
-	}
+  /**
+   * The Filter ex.
+   */
+  final Expression<Boolean> filterEx;
+  /**
+   * The Context.
+   */
+  final Context context;
 
-	@Override
-	public DataContainer<E> next(DataContainer<E> wrapper) {
-		DataContainer<E> tmp;
-		while ((tmp = super.next(wrapper)) != null) {
-			context.set("_candidate", tmp.getData());
-			if (filterEx.evaluate(context))
-				return tmp;
-		}
-		return null;
-	}
-	
+  /**
+   * Instantiates a new Filter ex iterator.
+   *
+   * @param source   the source
+   * @param filterEx the filter ex
+   * @param context  the context
+   */
+  public FilterExIterator(DataIterator<E> source, Expression<Boolean> filterEx, Context context) {
+    super(source);
+    this.filterEx = filterEx;
+    this.context = context;
+  }
+
+  @Override
+  public DataContainer<E> next(DataContainer<E> wrapper) {
+    DataContainer<E> tmp;
+    while ((tmp = super.next(wrapper)) != null) {
+      context.set("_candidate", tmp.getData());
+      if (filterEx.evaluate(context)) {
+        return tmp;
+      }
+    }
+    return null;
+  }
+
 }

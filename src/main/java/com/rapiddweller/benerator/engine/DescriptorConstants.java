@@ -26,157 +26,532 @@
 
 package com.rapiddweller.benerator.engine;
 
-import java.util.Collection;
+import com.rapiddweller.common.CollectionUtil;
 
-import com.rapiddweller.commons.CollectionUtil;
+import java.util.Collection;
 
 /**
  * Collects element and attribute names used in Benerator's XML descriptor files.<br/>
  * <br/>
  * Created at 24.07.2009 07:39:19
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public interface DescriptorConstants {
-	
-    static final String EL_SETUP = "setup";
-    
-    static final String ATT_DEFAULT_SCRIPT = "defaultScript";
-    static final String ATT_DEFAULT_NULL = "defaultNull";
-    static final String ATT_DEFAULT_ENCODING = "defaultEncoding";
-    static final String ATT_DEFAULT_LINE_SEPARATOR = "defaultLineSeparator";
-    static final String ATT_DEFAULT_TIME_ZONE = "defaultTimeZone";
-    static final String ATT_DEFAULT_LOCALE = "defaultLocale";
-    static final String ATT_DEFAULT_DATASET = "defaultDataset";
-    static final String ATT_DEFAULT_PAGE_SIZE = "defaultPageSize";
-    static final String ATT_DEFAULT_SEPARATOR = "defaultSeparator";
-    static final String ATT_DEFAULT_ONE_TO_ONE = "defaultOneToOne";
-    static final String ATT_DEFAULT_ERR_HANDLER = "defaultErrorHandler";
-    static final String ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES = "acceptUnknownSimpleTypes";
-    static final String ATT_GENERATOR_FACTORY = "generatorFactory";
-    static final String ATT_DEFAULT_IMPORTS = "defaultImports";
-    
-    static final String EL_IF = "if";
-    static final String EL_THEN = "then";
-    static final String EL_ELSE = "else";
-    static final String EL_WHILE = "while";
-    static final String EL_BEAN = "bean";
-    static final String EL_PROPERTY = "property";
-	static final String EL_GENERATE = "generate";
-	static final String EL_ITERATE = "iterate";
-	static final String EL_CONSUMER = "consumer";
-	static final String EL_COMMENT = "comment";
-    static final String EL_DEFAULT_COMPONENTS = "defaultComponents";
-    static final String EL_EVALUATE = "evaluate";
-    static final String EL_EXECUTE = "execute";
-    static final String EL_DATABASE = "database";
-    static final String EL_MEMSTORE = "memstore";
-    static final String EL_DOMTREE = "domtree";
-    static final String EL_ECHO = "echo";
-    static final String EL_ERROR = "error";
-    static final String EL_IMPORT = "import";
-    static final String EL_INCLUDE = "include";
-    static final String EL_SETTING = "setting";
-    static final String EL_RUN_TASK = "run-task";
-    static final String EL_VARIABLE = "variable";
-    static final String EL_VALUE = "value";
-    static final String EL_REFERENCE = "reference";
-    static final String EL_ID = "id";
-    static final String EL_COMPOSITE_ID = "composite-id";
-    static final String EL_PART = "part";
-    static final String EL_ATTRIBUTE = "attribute";
-    static final String EL_WAIT = "wait";
 
-    static final String EL_TRANSCODING_TASK = "transcodingTask";
-    static final String EL_TRANSCODE = "transcode";
-    static final String EL_CASCADE = "cascade";
-    static final String ATT_TABLE = "table";
+  /**
+   * The constant EL_SETUP.
+   */
+  String EL_SETUP = "setup";
 
-	static final String ATT_PASSWORD = "password";
-	static final String ATT_USER = "user";
-	static final String ATT_DRIVER = "driver";
-	static final String ATT_URL = "url";
-	static final String ATT_ID = EL_ID;
-	static final String ATT_MESSAGE = "message";
-	static final String ATT_SELECTOR = "selector";
-	static final String ATT_SOURCE = "source";
-	static final String ATT_SEGMENT = "segment";
-	static final String ATT_FORMAT = "format";
-	static final String ATT_OFFSET = "offset";
-    static final String ATT_REF = "ref";
-    static final String ATT_VALUE = "value";
-    static final String ATT_DEFAULT = "default";
-    static final String ATT_NAME = "name";
-    static final String ATT_ON_ERROR = "onError";
-    static final String ATT_CONSUMER = "consumer";
-    static final String ATT_THREADS = "threads";
-    static final String ATT_PAGESIZE = "pageSize";
-    static final String ATT_PAGER = "pager";
-    
-    static final String ATT_COUNT = "count";
-    static final String ATT_MIN_COUNT = "minCount";
-    static final String ATT_MAX_COUNT = "maxCount";
-    static final String ATT_COUNT_DISTRIBUTION = "countDistribution";
-    
-    static final String ATT_ASSERT = "assert";
-    static final String ATT_TYPE = "type";
-    static final String ATT_CONTAINER = "container";
-    static final String ATT_OPTIMIZE = "optimize";
-    static final String ATT_INVALIDATE = "invalidate";
-    static final String ATT_ENCODING = "encoding";
-    static final String ATT_TARGET = "target";
-    static final String ATT_URI = "uri";
-    static final String ATT_READ_ONLY = "readOnly";
-    static final String ATT_LAZY = "lazy";
-    static final String ATT_ACC_UNK_COL_TYPES = "acceptUnknownColumnTypes";
-    static final String ATT_FETCH_SIZE = "fetchSize";
-    static final String ATT_BATCH = "batch";
-    static final String ATT_META_CACHE = "metaCache";
-    static final String ATT_CATALOG = "catalog";
-    static final String ATT_SCHEMA = "schema";
-    static final String ATT_ENVIRONMENT = "environment";
-    static final String ATT_TABLE_FILTER = "tableFilter";
-    static final String ATT_INCL_TABLES = "includeTables";
-    static final String ATT_EXCL_TABLES = "excludeTables";
-    static final String ATT_TEST = "test";
-    static final String ATT_DURATION = "duration";
-    static final String ATT_MIN = "min";
-    static final String ATT_MAX = "max";
-    static final String ATT_GRANULARITY = "granularity";
-    static final String ATT_DISTRIBUTION = "distribution";
-    static final String ATT_STATS = "stats";
-	static final String ATT_TEMPLATE = "template";
-	static final String ATT_GENERATOR = "generator";
-	static final String ATT_VALIDATOR = "validator";
-	static final String ATT_CONVERTER = "converter";
-	static final String ATT_NULL_QUOTA = "nullQuota";
-	static final String ATT_UNIQUE = "unique";
-	static final String ATT_CYCLIC = "cyclic";
-	static final String ATT_SEPARATOR = "separator";
-	static final String ATT_SUB_SELECTOR = "subSelector";
-	static final String ATT_DATASET = "dataset";
-	static final String ATT_NESTING = "nesting";
-    static final String ATT_LOCALE = "locale";
-	static final String ATT_FILTER = "filter";
-	
-    static final String ATT_CLASS = "class";
-    static final String ATT_SPEC = "spec";
+  /**
+   * The constant ATT_DEFAULT_SCRIPT.
+   */
+  String ATT_DEFAULT_SCRIPT = "defaultScript";
+  /**
+   * The constant ATT_DEFAULT_NULL.
+   */
+  String ATT_DEFAULT_NULL = "defaultNull";
+  /**
+   * The constant ATT_DEFAULT_ENCODING.
+   */
+  String ATT_DEFAULT_ENCODING = "defaultEncoding";
+  /**
+   * The constant ATT_DEFAULT_LINE_SEPARATOR.
+   */
+  String ATT_DEFAULT_LINE_SEPARATOR = "defaultLineSeparator";
+  /**
+   * The constant ATT_DEFAULT_TIME_ZONE.
+   */
+  String ATT_DEFAULT_TIME_ZONE = "defaultTimeZone";
+  /**
+   * The constant ATT_DEFAULT_LOCALE.
+   */
+  String ATT_DEFAULT_LOCALE = "defaultLocale";
+  /**
+   * The constant ATT_DEFAULT_DATASET.
+   */
+  String ATT_DEFAULT_DATASET = "defaultDataset";
+  /**
+   * The constant ATT_DEFAULT_PAGE_SIZE.
+   */
+  String ATT_DEFAULT_PAGE_SIZE = "defaultPageSize";
+  /**
+   * The constant ATT_DEFAULT_SEPARATOR.
+   */
+  String ATT_DEFAULT_SEPARATOR = "defaultSeparator";
+  /**
+   * The constant ATT_DEFAULT_ONE_TO_ONE.
+   */
+  String ATT_DEFAULT_ONE_TO_ONE = "defaultOneToOne";
+  /**
+   * The constant ATT_DEFAULT_ERR_HANDLER.
+   */
+  String ATT_DEFAULT_ERR_HANDLER = "defaultErrorHandler";
+  /**
+   * The constant ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES.
+   */
+  String ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES = "acceptUnknownSimpleTypes";
+  /**
+   * The constant ATT_GENERATOR_FACTORY.
+   */
+  String ATT_GENERATOR_FACTORY = "generatorFactory";
+  /**
+   * The constant ATT_DEFAULT_IMPORTS.
+   */
+  String ATT_DEFAULT_IMPORTS = "defaultImports";
 
-    static final String ATT_DEFAULTS = "defaults";
-    static final String ATT_PLATFORMS = "platforms";
-    static final String ATT_DOMAINS = "domains";
+  /**
+   * The constant EL_IF.
+   */
+  String EL_IF = "if";
+  /**
+   * The constant EL_THEN.
+   */
+  String EL_THEN = "then";
+  /**
+   * The constant EL_ELSE.
+   */
+  String EL_ELSE = "else";
+  /**
+   * The constant EL_WHILE.
+   */
+  String EL_WHILE = "while";
+  /**
+   * The constant EL_BEAN.
+   */
+  String EL_BEAN = "bean";
+  /**
+   * The constant EL_PROPERTY.
+   */
+  String EL_PROPERTY = "property";
+  /**
+   * The constant EL_GENERATE.
+   */
+  String EL_GENERATE = "generate";
+  /**
+   * The constant EL_ITERATE.
+   */
+  String EL_ITERATE = "iterate";
+  /**
+   * The constant EL_CONSUMER.
+   */
+  String EL_CONSUMER = "consumer";
+  /**
+   * The constant EL_COMMENT.
+   */
+  String EL_COMMENT = "comment";
+  /**
+   * The constant EL_DEFAULT_COMPONENTS.
+   */
+  String EL_DEFAULT_COMPONENTS = "defaultComponents";
+  /**
+   * The constant EL_EVALUATE.
+   */
+  String EL_EVALUATE = "evaluate";
+  /**
+   * The constant EL_EXECUTE.
+   */
+  String EL_EXECUTE = "execute";
+  /**
+   * The constant EL_DATABASE.
+   */
+  String EL_DATABASE = "database";
+  /**
+   * The constant EL_MEMSTORE.
+   */
+  String EL_MEMSTORE = "memstore";
+  /**
+   * The constant EL_DOMTREE.
+   */
+  String EL_DOMTREE = "domtree";
+  /**
+   * The constant EL_ECHO.
+   */
+  String EL_ECHO = "echo";
+  /**
+   * The constant EL_ERROR.
+   */
+  String EL_ERROR = "error";
+  /**
+   * The constant EL_IMPORT.
+   */
+  String EL_IMPORT = "import";
+  /**
+   * The constant EL_INCLUDE.
+   */
+  String EL_INCLUDE = "include";
+  /**
+   * The constant EL_SETTING.
+   */
+  String EL_SETTING = "setting";
+  /**
+   * The constant EL_RUN_TASK.
+   */
+  String EL_RUN_TASK = "run-task";
+  /**
+   * The constant EL_VARIABLE.
+   */
+  String EL_VARIABLE = "variable";
+  /**
+   * The constant EL_VALUE.
+   */
+  String EL_VALUE = "value";
+  /**
+   * The constant EL_REFERENCE.
+   */
+  String EL_REFERENCE = "reference";
+  /**
+   * The constant EL_ID.
+   */
+  String EL_ID = "id";
+  /**
+   * The constant EL_COMPOSITE_ID.
+   */
+  String EL_COMPOSITE_ID = "composite-id";
+  /**
+   * The constant EL_PART.
+   */
+  String EL_PART = "part";
+  /**
+   * The constant EL_ATTRIBUTE.
+   */
+  String EL_ATTRIBUTE = "attribute";
+  /**
+   * The constant EL_WAIT.
+   */
+  String EL_WAIT = "wait";
 
-    static final String ATT_DEFAULT_SOURCE = "defaultSource";
-    static final String ATT_IDENTITY = "identity";
-    
-    static final String ATT_NAMESPACE_AWARE = "namespaceAware";
-    static final String ATT_INPUT_URI = "inputUri";
-    static final String ATT_OUTPUT_URI = "outputUri";
+  /**
+   * The constant EL_TRANSCODING_TASK.
+   */
+  String EL_TRANSCODING_TASK = "transcodingTask";
+  /**
+   * The constant EL_TRANSCODE.
+   */
+  String EL_TRANSCODE = "transcode";
+  /**
+   * The constant EL_CASCADE.
+   */
+  String EL_CASCADE = "cascade";
+  /**
+   * The constant ATT_TABLE.
+   */
+  String ATT_TABLE = "table";
 
-    static final Collection<String> CREATE_ENTITIES_EXT_SETUP = CollectionUtil
-		.toSet(ATT_PAGESIZE, ATT_THREADS, ATT_CONSUMER, ATT_ON_ERROR);
+  /**
+   * The constant ATT_PASSWORD.
+   */
+  String ATT_PASSWORD = "password";
+  /**
+   * The constant ATT_USER.
+   */
+  String ATT_USER = "user";
+  /**
+   * The constant ATT_DRIVER.
+   */
+  String ATT_DRIVER = "driver";
+  /**
+   * The constant ATT_URL.
+   */
+  String ATT_URL = "url";
+  /**
+   * The constant ATT_ID.
+   */
+  String ATT_ID = EL_ID;
+  /**
+   * The constant ATT_MESSAGE.
+   */
+  String ATT_MESSAGE = "message";
+  /**
+   * The constant ATT_SELECTOR.
+   */
+  String ATT_SELECTOR = "selector";
+  /**
+   * The constant ATT_SOURCE.
+   */
+  String ATT_SOURCE = "source";
+  /**
+   * The constant ATT_SEGMENT.
+   */
+  String ATT_SEGMENT = "segment";
+  /**
+   * The constant ATT_FORMAT.
+   */
+  String ATT_FORMAT = "format";
+  /**
+   * The constant ATT_OFFSET.
+   */
+  String ATT_OFFSET = "offset";
+  /**
+   * The constant ATT_REF.
+   */
+  String ATT_REF = "ref";
+  /**
+   * The constant ATT_VALUE.
+   */
+  String ATT_VALUE = "value";
+  /**
+   * The constant ATT_DEFAULT.
+   */
+  String ATT_DEFAULT = "default";
+  /**
+   * The constant ATT_NAME.
+   */
+  String ATT_NAME = "name";
+  /**
+   * The constant ATT_ON_ERROR.
+   */
+  String ATT_ON_ERROR = "onError";
+  /**
+   * The constant ATT_CONSUMER.
+   */
+  String ATT_CONSUMER = "consumer";
+  /**
+   * The constant ATT_THREADS.
+   */
+  String ATT_THREADS = "threads";
+  /**
+   * The constant ATT_PAGESIZE.
+   */
+  String ATT_PAGESIZE = "pageSize";
+  /**
+   * The constant ATT_PAGER.
+   */
+  String ATT_PAGER = "pager";
 
-	static final Collection<String> COMPONENT_TYPES = CollectionUtil.toSet(EL_ATTRIBUTE, EL_ID, EL_REFERENCE, EL_PART);
+  /**
+   * The constant ATT_COUNT.
+   */
+  String ATT_COUNT = "count";
+  /**
+   * The constant ATT_MIN_COUNT.
+   */
+  String ATT_MIN_COUNT = "minCount";
+  /**
+   * The constant ATT_MAX_COUNT.
+   */
+  String ATT_MAX_COUNT = "maxCount";
+  /**
+   * The constant ATT_COUNT_DISTRIBUTION.
+   */
+  String ATT_COUNT_DISTRIBUTION = "countDistribution";
+
+  /**
+   * The constant ATT_ASSERT.
+   */
+  String ATT_ASSERT = "assert";
+  /**
+   * The constant ATT_TYPE.
+   */
+  String ATT_TYPE = "type";
+  /**
+   * The constant ATT_CONTAINER.
+   */
+  String ATT_CONTAINER = "container";
+  /**
+   * The constant ATT_OPTIMIZE.
+   */
+  String ATT_OPTIMIZE = "optimize";
+  /**
+   * The constant ATT_INVALIDATE.
+   */
+  String ATT_INVALIDATE = "invalidate";
+  /**
+   * The constant ATT_ENCODING.
+   */
+  String ATT_ENCODING = "encoding";
+  /**
+   * The constant ATT_TARGET.
+   */
+  String ATT_TARGET = "target";
+  /**
+   * The constant ATT_URI.
+   */
+  String ATT_URI = "uri";
+  /**
+   * The constant ATT_READ_ONLY.
+   */
+  String ATT_READ_ONLY = "readOnly";
+  /**
+   * The constant ATT_LAZY.
+   */
+  String ATT_LAZY = "lazy";
+  /**
+   * The constant ATT_ACC_UNK_COL_TYPES.
+   */
+  String ATT_ACC_UNK_COL_TYPES = "acceptUnknownColumnTypes";
+  /**
+   * The constant ATT_FETCH_SIZE.
+   */
+  String ATT_FETCH_SIZE = "fetchSize";
+  /**
+   * The constant ATT_BATCH.
+   */
+  String ATT_BATCH = "batch";
+  /**
+   * The constant ATT_META_CACHE.
+   */
+  String ATT_META_CACHE = "metaCache";
+  /**
+   * The constant ATT_CATALOG.
+   */
+  String ATT_CATALOG = "catalog";
+  /**
+   * The constant ATT_SCHEMA.
+   */
+  String ATT_SCHEMA = "schema";
+  /**
+   * The constant ATT_ENVIRONMENT.
+   */
+  String ATT_ENVIRONMENT = "environment";
+  /**
+   * The constant ATT_TABLE_FILTER.
+   */
+  String ATT_TABLE_FILTER = "tableFilter";
+  /**
+   * The constant ATT_INCL_TABLES.
+   */
+  String ATT_INCL_TABLES = "includeTables";
+  /**
+   * The constant ATT_EXCL_TABLES.
+   */
+  String ATT_EXCL_TABLES = "excludeTables";
+  /**
+   * The constant ATT_TEST.
+   */
+  String ATT_TEST = "test";
+  /**
+   * The constant ATT_DURATION.
+   */
+  String ATT_DURATION = "duration";
+  /**
+   * The constant ATT_MIN.
+   */
+  String ATT_MIN = "min";
+  /**
+   * The constant ATT_MAX.
+   */
+  String ATT_MAX = "max";
+  /**
+   * The constant ATT_GRANULARITY.
+   */
+  String ATT_GRANULARITY = "granularity";
+  /**
+   * The constant ATT_DISTRIBUTION.
+   */
+  String ATT_DISTRIBUTION = "distribution";
+  /**
+   * The constant ATT_STATS.
+   */
+  String ATT_STATS = "stats";
+  /**
+   * The constant ATT_TEMPLATE.
+   */
+  String ATT_TEMPLATE = "template";
+  /**
+   * The constant ATT_GENERATOR.
+   */
+  String ATT_GENERATOR = "generator";
+  /**
+   * The constant ATT_VALIDATOR.
+   */
+  String ATT_VALIDATOR = "validator";
+  /**
+   * The constant ATT_CONVERTER.
+   */
+  String ATT_CONVERTER = "converter";
+  /**
+   * The constant ATT_NULL_QUOTA.
+   */
+  String ATT_NULL_QUOTA = "nullQuota";
+  /**
+   * The constant ATT_UNIQUE.
+   */
+  String ATT_UNIQUE = "unique";
+  /**
+   * The constant ATT_CYCLIC.
+   */
+  String ATT_CYCLIC = "cyclic";
+  /**
+   * The constant ATT_SEPARATOR.
+   */
+  String ATT_SEPARATOR = "separator";
+  /**
+   * The constant ATT_SUB_SELECTOR.
+   */
+  String ATT_SUB_SELECTOR = "subSelector";
+  /**
+   * The constant ATT_DATASET.
+   */
+  String ATT_DATASET = "dataset";
+  /**
+   * The constant ATT_NESTING.
+   */
+  String ATT_NESTING = "nesting";
+  /**
+   * The constant ATT_LOCALE.
+   */
+  String ATT_LOCALE = "locale";
+  /**
+   * The constant ATT_FILTER.
+   */
+  String ATT_FILTER = "filter";
+
+  /**
+   * The constant ATT_CLASS.
+   */
+  String ATT_CLASS = "class";
+  /**
+   * The constant ATT_SPEC.
+   */
+  String ATT_SPEC = "spec";
+
+  /**
+   * The constant ATT_DEFAULTS.
+   */
+  String ATT_DEFAULTS = "defaults";
+  /**
+   * The constant ATT_PLATFORMS.
+   */
+  String ATT_PLATFORMS = "platforms";
+  /**
+   * The constant ATT_DOMAINS.
+   */
+  String ATT_DOMAINS = "domains";
+
+  /**
+   * The constant ATT_DEFAULT_SOURCE.
+   */
+  String ATT_DEFAULT_SOURCE = "defaultSource";
+  /**
+   * The constant ATT_IDENTITY.
+   */
+  String ATT_IDENTITY = "identity";
+
+  /**
+   * The constant ATT_NAMESPACE_AWARE.
+   */
+  String ATT_NAMESPACE_AWARE = "namespaceAware";
+  /**
+   * The constant ATT_INPUT_URI.
+   */
+  String ATT_INPUT_URI = "inputUri";
+  /**
+   * The constant ATT_OUTPUT_URI.
+   */
+  String ATT_OUTPUT_URI = "outputUri";
+
+  /**
+   * The Create entities ext setup.
+   */
+  Collection<String> CREATE_ENTITIES_EXT_SETUP = CollectionUtil
+      .toSet(ATT_PAGESIZE, ATT_THREADS, ATT_CONSUMER, ATT_ON_ERROR);
+
+  /**
+   * The Component types.
+   */
+  Collection<String> COMPONENT_TYPES = CollectionUtil.toSet(EL_ATTRIBUTE, EL_ID, EL_REFERENCE, EL_PART);
 
 }

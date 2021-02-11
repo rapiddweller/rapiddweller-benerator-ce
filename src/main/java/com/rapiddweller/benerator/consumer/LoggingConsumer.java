@@ -27,38 +27,39 @@
 package com.rapiddweller.benerator.consumer;
 
 import com.rapiddweller.benerator.Consumer;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A {@link Consumer} that logs the entities that it receives at info level.<br/>
  * <br/>
  * Created: 26.08.2007 14:52:40
- * @since 0.4.0
+ *
  * @author Volker Bergmann
+ * @since 0.4.0
  */
 public class LoggingConsumer extends AbstractConsumer {
 
-    private static final Logger LOGGER = LogManager.getLogger(LoggingConsumer.class);
+  private static final Logger LOGGER = LogManager.getLogger(LoggingConsumer.class);
 
-    @Override
-	public void startProductConsumption(Object object) {
-        LOGGER.info("startConsuming({})", object);
-    }
-    
-    @Override
-    public void finishProductConsumption(Object object) {
-        LOGGER.info("finishConsuming({})", object);
-    }
+  @Override
+  public void startProductConsumption(Object object) {
+    LOGGER.info("startConsuming({})", object);
+  }
 
-    @Override
-    public void flush() {
-        LOGGER.info("flush()");
-    }
+  @Override
+  public void finishProductConsumption(Object object) {
+    LOGGER.info("finishConsuming({})", object);
+  }
 
-    @Override
-    public void close() {
-        LOGGER.info("close()");
-    }
+  @Override
+  public void flush() {
+    LOGGER.info("flush()");
+  }
+
+  @Override
+  public void close() {
+    LOGGER.info("close()");
+  }
 
 }

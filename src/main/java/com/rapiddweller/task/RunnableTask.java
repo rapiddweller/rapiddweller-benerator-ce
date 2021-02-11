@@ -26,33 +26,38 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.context.ContextAware;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.context.ContextAware;
 
 /**
  * Wraps a Runnable in a Task.<br/>
  * <br/>
  *
  * @author Volker Bergmann
- * @since 0.2
- * Created: 06.07.2007 07:31:50
+ * @since 0.2  Created: 06.07.2007 07:31:50
  */
 public class RunnableTask extends AbstractTask {
 
-    private final Runnable runnable;
+  private final Runnable runnable;
 
-    public RunnableTask(Runnable runnable) {
-        super(runnable.getClass().getSimpleName());
-        this.runnable = runnable;
-    }
+  /**
+   * Instantiates a new Runnable task.
+   *
+   * @param runnable the runnable
+   */
+  public RunnableTask(Runnable runnable) {
+    super(runnable.getClass().getSimpleName());
+    this.runnable = runnable;
+  }
 
-    @Override
-    public TaskResult execute(Context context, ErrorHandler errorHandler) {
-        if (runnable instanceof ContextAware)
-            ((ContextAware) runnable).setContext(context);
-        runnable.run();
-        return TaskResult.EXECUTING;
+  @Override
+  public TaskResult execute(Context context, ErrorHandler errorHandler) {
+    if (runnable instanceof ContextAware) {
+      ((ContextAware) runnable).setContext(context);
     }
+    runnable.run();
+    return TaskResult.EXECUTING;
+  }
 
 }

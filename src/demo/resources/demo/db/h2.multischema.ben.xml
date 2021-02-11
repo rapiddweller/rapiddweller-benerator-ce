@@ -1,0 +1,70 @@
+<setup>
+    <import domains="person,net,product"/>
+    <import platforms="db"/>
+
+    <comment>setting default values</comment>
+    <setting name="stage" default="development"/>
+    <setting name="database" default="h2"/>
+    <setting name="dbUrl" default="jdbc:h2:mem:benerator"/>
+    <setting name="dbDriver" default="org.h2.Driver"/>
+    <setting name="dbSchema" default="public"/>
+    <setting name="dbUser" default="sa"/>
+    <setting name="dbPassword" default="12312312321312312312312312321"/>
+    <setting name="dbBatch" default="true"/>
+
+    <comment>log the settings to the console</comment>
+    <echo>{ftl:encoding:${context.defaultEncoding} default pageSize:${context.defaultPageSize}}</echo>
+    <echo>{ftl:JDBC URL: ${dbUrl}}</echo>
+
+    <comment>define a database that will be referred by the id 'db' subsequently</comment>
+    <database id="db"
+              url="{dbUrl}"
+              driver="{dbDriver}"
+              schema="{dbSchema}"
+              user="{dbUser}"
+              password="{dbPassword}"
+              batch="{dbBatch}"
+    />
+
+    <execute type="sql" target="db" uri="script/h2.multischema.sql"/>
+
+    <database id="schema1" url="{dbUrl}" driver="{dbDriver}" schema="schema1"
+              user="{dbUser}" password="{dbPassword}" batch="{dbBatch}" includeTables="#all"/>
+    <database id="schema3" url="{dbUrl}" driver="{dbDriver}" schema="schema3"
+              user="{dbUser}" password="{dbPassword}" batch="{dbBatch}"/>
+
+    <generate type="db_manufacturer" count="100" consumer="schema3" pageSize="100">
+        <id name="id" generator="IncrementGenerator"/>
+        <attribute name="name" pattern="[A-Z][A-Z]{5,12}"/>
+    </generate>
+    <generate type="db_Category" count="10" consumer="schema1">
+        <id name="id" generator="IncrementGenerator"/>
+    </generate>
+    <generate type="db_product" count="100" consumer="schema1">
+        <id name="ean_code" generator="EANGenerator"/>
+        <attribute name="price" pattern="[1-9]{1,2}"/>
+        <attribute name="name" pattern="[A-Z][A-Z]{5,12}"/>
+        <attribute name="notes" pattern="[A-Z][\n][a-z][0-9]{1,256}"/>
+        <attribute name="description" pattern="[A-Z][\n][a-z][0-9]{1,256}"/>
+        <reference name="manufacturer_id" source="schema3" targetType="db_manufacturer"/>
+    </generate>
+
+    <iterate name="CAT_TRANS" type="db_Category" source="schema1" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="CAT_TRANS.counter != 10">
+        <error>{ftl: ${CAT_TRANS.counter} items}</error>
+    </if>
+    <iterate name="PROD_TRANS" type="db_product" source="schema1" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="PROD_TRANS.counter != 100">
+        <error>{ftl: ${PROD_TRANS.counter} items}</error>
+    </if>
+    <iterate name="MAN_TRANS" type="db_manufacturer" source="schema3" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="MAN_TRANS.counter != 100">
+        <error>{ftl: ${MAN_TRANS.counter} items}</error>
+    </if>
+</setup>

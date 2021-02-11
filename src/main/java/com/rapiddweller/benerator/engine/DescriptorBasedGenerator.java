@@ -26,36 +26,45 @@
 
 package com.rapiddweller.benerator.engine;
 
-import java.io.IOException;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.converter.ConverterManager;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.converter.ConverterManager;
+
+import java.io.IOException;
 
 /**
  * Provides easy programmatic access to generators defined in an XML descriptor file.<br/><br/>
  * Created: 23.02.2010 12:06:44
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class DescriptorBasedGenerator extends GeneratorProxy<Object> {
-	
-	private DescriptorRunner descriptorRunner;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-    public DescriptorBasedGenerator(String uri, String generatorName, BeneratorContext context) throws IOException {
-		super(Object.class);
-		ConverterManager.getInstance().setContext(context);
-		descriptorRunner = new DescriptorRunner(uri, context);
-		BeneratorRootStatement rootStatement = descriptorRunner.parseDescriptorFile();
-		super.setSource((Generator) rootStatement.getGenerator(generatorName, context));
-	}
-	
-	@Override
-	public void close() {
-		IOUtil.close(descriptorRunner);
-		IOUtil.close(getSource());
-	}
-	
+  private final DescriptorRunner descriptorRunner;
+
+  /**
+   * Instantiates a new Descriptor based generator.
+   *
+   * @param uri           the uri
+   * @param generatorName the generator name
+   * @param context       the context
+   * @throws IOException the io exception
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public DescriptorBasedGenerator(String uri, String generatorName, BeneratorContext context) throws IOException {
+    super(Object.class);
+    ConverterManager.getInstance().setContext(context);
+    descriptorRunner = new DescriptorRunner(uri, context);
+    BeneratorRootStatement rootStatement = descriptorRunner.parseDescriptorFile();
+    super.setSource((Generator) rootStatement.getGenerator(generatorName, context));
+  }
+
+  @Override
+  public void close() {
+    IOUtil.close(descriptorRunner);
+    IOUtil.close(getSource());
+  }
+
 }

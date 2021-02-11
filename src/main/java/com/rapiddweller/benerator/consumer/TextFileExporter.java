@@ -26,172 +26,270 @@
 
 package com.rapiddweller.benerator.consumer;
 
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.SystemInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.SystemInfo;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 /**
  * Parent class for Exporters that export data to a text file.<br/>
  * <br/>
  * Created: 11.07.2008 09:50:46
- * @since 0.5.4
+ *
  * @author Volker Bergmann
+ * @since 0.5.4
  */
 public class TextFileExporter extends FormattingConsumer implements FileExporter {
 
-    private static final Logger LOG = LogManager.getLogger(TextFileExporter.class);
+  private static final Logger LOG = LogManager.getLogger(TextFileExporter.class);
 
-    // attributes ------------------------------------------------------------------------------------------------------
+  // attributes ------------------------------------------------------------------------------------------------------
 
-    protected String uri;
-    protected String encoding;
-    protected String lineSeparator;
-    protected boolean append;
-    protected boolean wasAppended;
+  /**
+   * The Uri.
+   */
+  protected String uri;
+  /**
+   * The Encoding.
+   */
+  protected String encoding;
+  /**
+   * The Line separator.
+   */
+  protected String lineSeparator;
+  /**
+   * The Append.
+   */
+  protected boolean append;
+  /**
+   * The Was appended.
+   */
+  protected boolean wasAppended;
 
-    protected PrintWriter printer;
+  /**
+   * The Printer.
+   */
+  protected PrintWriter printer;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public TextFileExporter() {
-    	this(null, null, null);
+  /**
+   * Instantiates a new Text file exporter.
+   */
+  public TextFileExporter() {
+    this(null, null, null);
+  }
+
+  /**
+   * Instantiates a new Text file exporter.
+   *
+   * @param uri the uri
+   */
+  public TextFileExporter(String uri) {
+    this(uri, null, null);
+  }
+
+  /**
+   * Instantiates a new Text file exporter.
+   *
+   * @param uri           the uri
+   * @param encoding      the encoding
+   * @param lineSeparator the line separator
+   */
+  public TextFileExporter(String uri, String encoding, String lineSeparator) {
+    this.uri = (uri != null ? uri : "export.txt");
+    this.encoding = (encoding != null ? encoding : SystemInfo.getFileEncoding());
+    this.lineSeparator = (lineSeparator != null ? lineSeparator : SystemInfo.getLineSeparator());
+    this.append = false;
+  }
+
+  // callback interface for child classes ----------------------------------------------------------------------------
+
+  /**
+   * This method is called after printer initialization and before writing the first data entry.
+   * Overwrite this method in child classes e.g. for writing a file header.
+   *
+   * @param data the first data item to write to the file
+   */
+  protected void postInitPrinter(Object data) {
+    // overwrite this in child classes, e.g. for writing a file header
+  }
+
+  /**
+   * Writes the data to the output file.
+   * It uses the parent class settings for rendering the object.
+   * Overwrite this in a child class for custom output format.
+   *
+   * @param data the data object to output
+   */
+  protected void startConsumingImpl(Object data) {
+    printer.print(plainConverter.convert(data));
+    println();
+  }
+
+  /**
+   * This method is called after writing the last data entry and before closing the underlying printer.
+   * Overwrite this method in child classes e.g. for writing a file footer.
+   */
+  protected void preClosePrinter() {
+    // overwrite this in child classes, e.g. for writing a file footer
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  @Override
+  public String getUri() {
+    return uri;
+  }
+
+  /**
+   * Sets uri.
+   *
+   * @param uri the uri
+   */
+  public void setUri(String uri) {
+    this.uri = uri;
+  }
+
+  /**
+   * Gets encoding.
+   *
+   * @return the encoding
+   */
+  public String getEncoding() {
+    return encoding;
+  }
+
+  /**
+   * Sets encoding.
+   *
+   * @param encoding the encoding
+   */
+  public void setEncoding(String encoding) {
+    this.encoding = encoding;
+  }
+
+  /**
+   * Gets line separator.
+   *
+   * @return the line separator
+   */
+  public String getLineSeparator() {
+    return lineSeparator;
+  }
+
+  /**
+   * Sets line separator.
+   *
+   * @param lineSeparator the line separator
+   */
+  public void setLineSeparator(String lineSeparator) {
+    this.lineSeparator = lineSeparator;
+  }
+
+  /**
+   * Is append boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isAppend() {
+    return append;
+  }
+
+  /**
+   * Sets append.
+   *
+   * @param append the append
+   */
+  public void setAppend(boolean append) {
+    this.append = append;
+  }
+
+  // Consumer interface ----------------------------------------------------------------------------------------------
+
+  @Override
+  public final synchronized void startProductConsumption(Object data) {
+    try {
+      if (printer == null) {
+        initPrinter(data);
+      }
+      startConsumingImpl(data);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
-    
-    public TextFileExporter(String uri) {
-    	this(uri, null, null);
+  }
+
+  @Override
+  public void flush() {
+    if (printer != null) {
+      printer.flush();
     }
-    
-    public TextFileExporter(String uri, String encoding, String lineSeparator) {
-    	this.uri = (uri != null ? uri : "export.txt");
-        this.encoding = (encoding != null ? encoding : SystemInfo.getFileEncoding());
-        this.lineSeparator = (lineSeparator != null ? lineSeparator : SystemInfo.getLineSeparator());
-        this.append = false;
-    }
-    
-    // callback interface for child classes ----------------------------------------------------------------------------
+  }
 
-    /**
-     * This method is called after printer initialization and before writing the first data entry.
-     * Overwrite this method in child classes e.g. for writing a file header.
-     * @param data the first data item to write to the file
-     */
-    protected void postInitPrinter(Object data) {
-    	// overwrite this in child classes, e.g. for writing a file header
-    }
-
-    /**
-     * Writes the data to the output file. 
-     * It uses the parent class settings for rendering the object.
-     * Overwrite this in a child class for custom output formats.
-     * @param data the data object to output
-     */
-    protected void startConsumingImpl(Object data) {
-    	printer.print(plainConverter.convert(data));
-    	println();
-    }
-
-    /**
-     * This method is called after writing the last data entry and before closing the underlying printer.
-     * Overwrite this method in child classes e.g. for writing a file footer.
-     */
-    protected void preClosePrinter() {
-    	// overwrite this in child classes, e.g. for writing a file footer
-    }
-
-    // properties ------------------------------------------------------------------------------------------------------
-
-    @Override
-	public String getUri() {
-        return uri;
-    }
-
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-    
-    public String getEncoding() {
-    	return encoding;
-    }
-
-    public void setEncoding(String encoding) {
-        this.encoding = encoding;
-    }
-
-    public String getLineSeparator() {
-		return lineSeparator;
-	}
-
-	public void setLineSeparator(String lineSeparator) {
-		this.lineSeparator = lineSeparator;
-	}
-	
-	public boolean isAppend() {
-		return append;
-	}
-
-	public void setAppend(boolean append) {
-		this.append = append;
-	}
-
-    // Consumer interface ----------------------------------------------------------------------------------------------
-
-	@Override
-	public final synchronized void startProductConsumption(Object data) {
+  @Override
+  public void close() {
+    try {
+      if (printer == null) {
         try {
-            if (printer == null)
-                initPrinter(data);
-            startConsumingImpl(data);
+          initPrinter(null);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+          LOG.error("Error initializing empty file", e);
         }
+      }
+      preClosePrinter();
+    } finally {
+      assert printer != null;
+      printer.close();
+    }
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  /**
+   * Init printer.
+   *
+   * @param data the data
+   * @throws IOException the io exception
+   */
+  protected void initPrinter(Object data) throws IOException {
+    if (uri == null) {
+      throw new ConfigurationError("Property 'uri' not set on bean " + getClass().getName());
+    }
+    wasAppended = (append && IOUtil.isURIAvailable(uri));
+
+    // check if path exists, if not make sure it exists
+    File directory = new File(uri);
+    if (!wasAppended
+        && directory.getParent() != null
+        && !directory.isDirectory()
+        && !directory.getParentFile().exists()) {
+      boolean result = directory.getParentFile().mkdirs();
+      if (!result) {
+        throw new ConfigurationError("filepath does not exists and can not be created ...");
+      }
     }
 
-	@Override
-	public void flush() {
-        if (printer != null)
-            printer.flush();
-    }
+    printer = IOUtil.getPrinterForURI(uri, encoding, append, lineSeparator, true);
+    postInitPrinter(data);
+  }
 
-    @Override
-	public void close() {
-        try {
-	        if (printer == null) {
-	        	try {
-			        initPrinter(null);
-	        	} catch (IOException e) {
-	        		LOG.error("Error initializing empty file", e);
-	        	}
-	        }
-	        preClosePrinter();
-        } finally {
-	        printer.close();
-        }
-    }
+  /**
+   * Println.
+   */
+  protected void println() {
+    printer.print(lineSeparator);
+  }
 
-	// private helpers -------------------------------------------------------------------------------------------------
-    
-    protected void initPrinter(Object data) throws IOException {
-        if (uri == null)
-            throw new ConfigurationError("Property 'uri' not set on bean " + getClass().getName());
-        wasAppended = (append && IOUtil.isURIAvailable(uri));
-        printer = IOUtil.getPrinterForURI(uri, encoding, append, lineSeparator, true);
-        postInitPrinter(data);
-    }
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    protected void println() {
-    	printer.print(lineSeparator);
-	}
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-	@Override
-	public String toString() {
-        return getClass().getSimpleName() + "[" + uri + "]";
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + uri + "]";
+  }
 
 }

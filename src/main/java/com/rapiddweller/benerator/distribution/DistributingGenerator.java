@@ -31,31 +31,40 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 
 /**
- * General purpose generator proxy which is supposed to work with any distribution. 
+ * General purpose generator proxy which is supposed to work with any distribution.
  * The behavior on a reset is up to the generator created by the distribution.<br/>
  * <br/>
  * Created: 22.03.2010 10:45:48
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class DistributingGenerator<E> extends GeneratorProxy<E> {
-	
-	private Generator<E> dataProvider;
-	private Distribution distribution;
-	private boolean unique;
 
-	public DistributingGenerator(Generator<E> dataProvider, Distribution distribution, boolean unique) {
-		super(dataProvider.getGeneratedType());
-		this.dataProvider = dataProvider;
-		this.distribution = distribution;
-		this.unique = unique;
-    }
-	
-	@Override
-	public void init(GeneratorContext context) {
-		dataProvider.init(context);
-		setSource(distribution.applyTo(dataProvider, unique));
-	    super.init(context);
-	}
-	
+  private final Generator<E> dataProvider;
+  private final Distribution distribution;
+  private final boolean unique;
+
+  /**
+   * Instantiates a new Distributing generator.
+   *
+   * @param dataProvider the data provider
+   * @param distribution the distribution
+   * @param unique       the unique
+   */
+  public DistributingGenerator(Generator<E> dataProvider, Distribution distribution, boolean unique) {
+    super(dataProvider.getGeneratedType());
+    this.dataProvider = dataProvider;
+    this.distribution = distribution;
+    this.unique = unique;
+  }
+
+  @Override
+  public void init(GeneratorContext context) {
+    dataProvider.init(context);
+    setSource(distribution.applyTo(dataProvider, unique));
+    super.init(context);
+  }
+
 }

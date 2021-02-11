@@ -26,11 +26,11 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.Validator;
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 import javax.validation.ConstraintValidatorContext;
 import java.io.IOException;
@@ -44,36 +44,52 @@ import java.util.regex.Pattern;
  * @author Volker Bergmann
  * @since 0.6.4
  */
-public class PostalCodeValidator extends AbstractConstraintValidator<PostalCode, String> {
+public class PostalCodeValidator
+    extends AbstractConstraintValidator<PostalCode, String> {
 
-    Pattern pattern;
+  /**
+   * The Pattern.
+   */
+  Pattern pattern;
 
-    public PostalCodeValidator() {
-        this(Country.getDefault().getIsoCode());
+  /**
+   * Instantiates a new Postal code validator.
+   */
+  public PostalCodeValidator() {
+    this(Country.getDefault().getIsoCode());
+  }
+
+  /**
+   * Instantiates a new Postal code validator.
+   *
+   * @param countryCode the country code
+   */
+  public PostalCodeValidator(String countryCode) {
+    setCountry(countryCode);
+  }
+
+  @Override
+  public void initialize(PostalCode params) {
+    setCountry(params.country());
+  }
+
+  private void setCountry(String countryCode) {
+    try {
+      Map<String, String> formats = IOUtil.readProperties(
+          "/com/rapiddweller/domain/address/postalCodeFormat.properties",
+          Encodings.UTF_8);
+      pattern = Pattern.compile(formats.get(countryCode));
+    } catch (IOException e) {
+      throw new ConfigurationError(
+          "Error initializing " + getClass().getSimpleName() +
+              " with country code '" + countryCode + "'");
     }
+  }
 
-    public PostalCodeValidator(String countryCode) {
-        setCountry(countryCode);
-    }
-
-    @Override
-    public void initialize(PostalCode params) {
-        setCountry(params.country());
-    }
-
-    private void setCountry(String countryCode) {
-        try {
-            Map<String, String> formats = IOUtil.readProperties("/com/rapiddweller/domain/address/postalCodeFormat.properties", Encodings.UTF_8);
-            pattern = Pattern.compile(formats.get(countryCode));
-        } catch (IOException e) {
-            throw new ConfigurationError("Error initializing " + getClass().getSimpleName() +
-                    " with country code '" + countryCode + "'");
-        }
-    }
-
-    @Override
-    public boolean isValid(String candidate, ConstraintValidatorContext context) {
-        return (candidate != null && pattern.matcher(candidate).matches());
-    }
+  @Override
+  public boolean isValid(String candidate,
+                         ConstraintValidatorContext context) {
+    return (candidate != null && pattern.matcher(candidate).matches());
+  }
 
 }

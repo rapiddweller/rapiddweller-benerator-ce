@@ -26,92 +26,130 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.Validator;
+import org.junit.Test;
+
+import javax.validation.Constraint;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import javax.validation.Constraint;
-
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.Validator;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link DayOfWeekValidator}.<br/>
  * <br/>
  * Created at 26.09.2009 08:48:03
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class DayOfWeekValidatorTest {
 
-	public void testDefault() {
-		check(new DayOfWeekValidator(), true, true, true, true, true, true, true);
-	}
+  /**
+   * Test default.
+   */
+  @Test
+  public void testDefault() {
+    check(new DayOfWeekValidator(), true, true, true, true, true, true, true);
+  }
 
-	@Test
-	public void testWeekend() {
-		DayOfWeekValidator validator = new DayOfWeekValidator();
-		validator.setWeekdaysAccepted(false);
-		check(validator, false, false, false, false, false, true, true);
-	}
+  /**
+   * Test weekend.
+   */
+  @Test
+  public void testWeekend() {
+    DayOfWeekValidator validator = new DayOfWeekValidator();
+    validator.setWeekdaysAccepted(false);
+    check(validator, false, false, false, false, false, true, true);
+  }
 
-	@Test
-	public void testWeekdays() {
-		DayOfWeekValidator validator = new DayOfWeekValidator();
-		validator.setWeekendsAccepted(false);
-		check(validator, true, true, true, true, true, false, false);
-	}
+  /**
+   * Test weekdays.
+   */
+  @Test
+  public void testWeekdays() {
+    DayOfWeekValidator validator = new DayOfWeekValidator();
+    validator.setWeekendsAccepted(false);
+    check(validator, true, true, true, true, true, false, false);
+  }
 
-	@Test
-	public void testExplicitly() {
-		DayOfWeekValidator validator = new DayOfWeekValidator();
-		validator.setDaysOfWeekAccepted(true, false, true, false, true, false, true);
-		check(validator, true, false, true, false, true, false, true);
-	}
-	
-	@Test
-	public void testAnnotation() throws Exception {
-		DayOfWeek validationAnnotation = Dummy.class.getField("date").getAnnotation(DayOfWeek.class);
-		// instantiate validator from annotation info
-		Constraint validatorAnnotation = DayOfWeek.class.getAnnotation(Constraint.class);
-		Class<?>[] validatorClass = validatorAnnotation.validatedBy();
-		DayOfWeekValidator validator = (DayOfWeekValidator) BeanUtil.newInstance(validatorClass[0]);
-		validator.initialize(validationAnnotation);
-		// test
-		check(validator, true, false, true, false, false, false, false);
-	}
-	
-	// private helper method -------------------------------------------------------------------------------------------
+  /**
+   * Test explicitly.
+   */
+  @Test
+  public void testExplicitly() {
+    DayOfWeekValidator validator = new DayOfWeekValidator();
+    validator.setDaysOfWeekAccepted(true, false, true, false, true, false, true);
+    check(validator, true, false, true, false, true, false, true);
+  }
 
-    private static void check(Validator<Date> validator, 
-    		boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday,
-            boolean saturday, boolean sunday) {
-	    Calendar cal = new GregorianCalendar();
-	    for (int i = 0; i < 7; i++) {
-	    	int javaDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-	    	boolean expectedResult;
-	    	switch (javaDayOfWeek) {
-		    	case Calendar.MONDAY:    expectedResult = monday;    break;
-		    	case Calendar.TUESDAY:   expectedResult = tuesday;   break;
-		    	case Calendar.WEDNESDAY: expectedResult = wednesday; break;
-		    	case Calendar.THURSDAY:  expectedResult = thursday;  break;
-		    	case Calendar.FRIDAY:    expectedResult = friday;    break;
-		    	case Calendar.SATURDAY:  expectedResult = saturday;  break;
-		    	case Calendar.SUNDAY:    expectedResult = sunday;    break;
-		    	default: throw new RuntimeException();
-	    	}
-	    	assertEquals("Check failed for " + cal, expectedResult, validator.valid(cal.getTime()));
-	    	cal.add(Calendar.DATE, 1);
-	    }
+  /**
+   * Test annotation.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testAnnotation() throws Exception {
+    DayOfWeek validationAnnotation = Dummy.class.getField("date").getAnnotation(DayOfWeek.class);
+    // instantiate validator from annotation info
+    Constraint validatorAnnotation = DayOfWeek.class.getAnnotation(Constraint.class);
+    Class<?>[] validatorClass = validatorAnnotation.validatedBy();
+    DayOfWeekValidator validator = (DayOfWeekValidator) BeanUtil.newInstance(validatorClass[0]);
+    validator.initialize(validationAnnotation);
+    // test
+    check(validator, true, false, true, false, false, false, false);
+  }
+
+  // private helper method -------------------------------------------------------------------------------------------
+
+  private static void check(Validator<Date> validator,
+                            boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday,
+                            boolean saturday, boolean sunday) {
+    Calendar cal = new GregorianCalendar();
+    for (int i = 0; i < 7; i++) {
+      int javaDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+      boolean expectedResult;
+      switch (javaDayOfWeek) {
+        case Calendar.MONDAY:
+          expectedResult = monday;
+          break;
+        case Calendar.TUESDAY:
+          expectedResult = tuesday;
+          break;
+        case Calendar.WEDNESDAY:
+          expectedResult = wednesday;
+          break;
+        case Calendar.THURSDAY:
+          expectedResult = thursday;
+          break;
+        case Calendar.FRIDAY:
+          expectedResult = friday;
+          break;
+        case Calendar.SATURDAY:
+          expectedResult = saturday;
+          break;
+        case Calendar.SUNDAY:
+          expectedResult = sunday;
+          break;
+        default:
+          throw new RuntimeException();
+      }
+      assertEquals("Check failed for " + cal, expectedResult, validator.valid(cal.getTime()));
+      cal.add(Calendar.DATE, 1);
     }
-	
-    class Dummy {
-    	@DayOfWeek(daysOfWeekAccepted = { DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY }) 
-    	public Date date;
-    }
-    
+  }
+
+  /**
+   * The type Dummy.
+   */
+  static class Dummy {
+    /**
+     * The Date.
+     */
+    @DayOfWeek(daysOfWeekAccepted = {DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY})
+    public Date date;
+  }
+
 }

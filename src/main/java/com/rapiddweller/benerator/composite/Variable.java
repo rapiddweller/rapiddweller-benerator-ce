@@ -33,45 +33,56 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 /**
  * Wraps variable name and generator functionality.<br/><br/>
  * Created: 07.08.2011 16:24:10
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class Variable<E> extends AbstractGeneratorComponent<E> {
-	
-	private String name;
-	
-	public Variable(String name, Generator<?> source, String scope) {
-		super(source, scope);
-		this.name = name;
-	}
 
-	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" }) 
-	public boolean execute(BeneratorContext context) {
-		assertInitialized(); 
-		ProductWrapper<?> productWrapper = source.generate(new ProductWrapper());
-		if (productWrapper == null) {
-			context.remove(name);
-            return false;
-		}
-        context.set(name, productWrapper.unwrap());
-        return true;
-	}
-	
-	// Closeable interface implementation ------------------------------------------------------------------------------
-	
-	@Override
-	public void close() {
-		if (context != null) // if the variable has not been used (count="0"), it has not been initialized
-			context.remove(name);
-		super.close();
-	}
+  private final String name;
 
-	// java.lang.Object overrides --------------------------------------------------------------------------------------
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[" + name + ":" + source + "]";
-	}
+  /**
+   * Instantiates a new Variable.
+   *
+   * @param name   the name
+   * @param source the source
+   * @param scope  the scope
+   */
+  public Variable(String name, Generator<?> source, String scope) {
+    super(source, scope);
+    this.name = name;
+  }
+
+  @Override
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public boolean execute(BeneratorContext context) {
+    assertInitialized();
+    ProductWrapper<?> productWrapper = source.generate(new ProductWrapper());
+    if (productWrapper == null) {
+      context.remove(name);
+      return false;
+    }
+    context.set(name, productWrapper.unwrap());
+    return true;
+  }
+
+  // Closeable interface implementation ------------------------------------------------------------------------------
+
+  @Override
+  public void close() {
+    if (context != null) // if the variable has not been used (count="0"), it has not been initialized
+    {
+      context.remove(name);
+    }
+    super.close();
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + name + ":" + source + "]";
+  }
 
 }

@@ -29,9 +29,16 @@ package com.rapiddweller.benerator.archetype;
 /**
  * Provides informations where to put which source file types in a project.<br/><br/>
  * Created: 04.04.2010 11:40:17
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public interface FolderLayout {
-	public String mapSubFolder(String path);
+  /**
+   * Map sub folder string.
+   *
+   * @param path the path
+   * @return the string
+   */
+  String mapSubFolder(String path);
 }

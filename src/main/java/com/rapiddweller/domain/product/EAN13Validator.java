@@ -26,7 +26,7 @@
 
 package com.rapiddweller.domain.product;
 
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 import javax.validation.ConstraintValidatorContext;
 
@@ -39,13 +39,14 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class EAN13Validator extends AbstractConstraintValidator<EAN13, String> {
 
-    private final EANValidator checksumValidator = new EANValidator();
+  private final EANValidator checksumValidator = new EANValidator();
 
-    @Override
-    public boolean isValid(String number, ConstraintValidatorContext context) {
-        if (number == null || number.length() != 13)
-            return false;
-        return checksumValidator.valid(number);
+  @Override
+  public boolean isValid(String number, ConstraintValidatorContext context) {
+    if (number == null || number.length() != 13) {
+      return false;
     }
+    return checksumValidator.valid(number);
+  }
 
 }

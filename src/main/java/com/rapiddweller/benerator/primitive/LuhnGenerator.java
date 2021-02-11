@@ -31,67 +31,118 @@ import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.util.LuhnUtil;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.StringUtil;
 
 /**
  * Generates numbers that pass a Luhn test.<br/><br/>
  * Created: 18.10.2009 10:08:09
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class LuhnGenerator extends NonNullGeneratorProxy<String> {
-	
-	protected String prefix;
-	protected int minLength;
-	protected int maxLength;
-	protected int lengthGranularity;
-	protected Distribution lengthDistribution;
-	
-	public LuhnGenerator() {
-	    this("", 16);
-    }
-	
-	public LuhnGenerator(String prefix, int length) {
-	    this(prefix, length, length, 1, null);
-    }
 
-	public LuhnGenerator(String prefix, int minLength, int maxLength, int lengthGranularity, Distribution lengthDistribution) {
-	    super(String.class);
-	    this.prefix = prefix;
-	    this.minLength = minLength;
-	    this.maxLength = maxLength;
-	    this.lengthGranularity = 1;
-	    this.lengthDistribution = lengthDistribution;
-    }
+  /**
+   * The Prefix.
+   */
+  protected String prefix;
+  /**
+   * The Min length.
+   */
+  protected int minLength;
+  /**
+   * The Max length.
+   */
+  protected int maxLength;
+  /**
+   * The Length granularity.
+   */
+  protected final int lengthGranularity;
+  /**
+   * The Length distribution.
+   */
+  protected final Distribution lengthDistribution;
 
-	public void setPrefix(String prefix) {
-    	this.prefix = prefix;
-    }
+  /**
+   * Instantiates a new Luhn generator.
+   */
+  public LuhnGenerator() {
+    this("", 16);
+  }
 
-	public void setMinLength(int minLength) {
-    	this.minLength = minLength;
-    }
+  /**
+   * Instantiates a new Luhn generator.
+   *
+   * @param prefix the prefix
+   * @param length the length
+   */
+  public LuhnGenerator(String prefix, int length) {
+    this(prefix, length, length, 1, null);
+  }
 
-	public void setMaxLength(int maxLength) {
-    	this.maxLength = maxLength;
-    }
+  /**
+   * Instantiates a new Luhn generator.
+   *
+   * @param prefix             the prefix
+   * @param minLength          the min length
+   * @param maxLength          the max length
+   * @param lengthGranularity  the length granularity
+   * @param lengthDistribution the length distribution
+   */
+  public LuhnGenerator(String prefix, int minLength, int maxLength, int lengthGranularity, Distribution lengthDistribution) {
+    super(String.class);
+    this.prefix = prefix;
+    this.minLength = minLength;
+    this.maxLength = maxLength;
+    this.lengthGranularity = 1;
+    this.lengthDistribution = lengthDistribution;
+  }
 
-	@Override
-	public synchronized void init(GeneratorContext context) {
-		super.setSource(new RandomVarLengthStringGenerator("\\d", minLength, maxLength, lengthGranularity, lengthDistribution));
-	    super.init(context);
-	}
-	
-	@Override
-    public String generate() throws IllegalGeneratorStateException {
-		String number = super.generate();
-		if (!StringUtil.isEmpty(prefix))
-			number = prefix + number.substring(prefix.length());
-		char checkDigit = LuhnUtil.requiredCheckDigit(number);
-		if (StringUtil.lastChar(number) == checkDigit)
-			return number;
-		else
-			return number.substring(0, number.length() - 1) + checkDigit;
+  /**
+   * Sets prefix.
+   *
+   * @param prefix the prefix
+   */
+  public void setPrefix(String prefix) {
+    this.prefix = prefix;
+  }
+
+  /**
+   * Sets min length.
+   *
+   * @param minLength the min length
+   */
+  public void setMinLength(int minLength) {
+    this.minLength = minLength;
+  }
+
+  /**
+   * Sets max length.
+   *
+   * @param maxLength the max length
+   */
+  public void setMaxLength(int maxLength) {
+    this.maxLength = maxLength;
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    super.setSource(new RandomVarLengthStringGenerator("\\d", minLength, maxLength, lengthGranularity, lengthDistribution));
+    super.init(context);
+  }
+
+  @Override
+  public String generate() throws IllegalGeneratorStateException {
+    String number = super.generate();
+    if (!StringUtil.isEmpty(prefix)) {
+      number = prefix + number.substring(prefix.length());
     }
+    char checkDigit = LuhnUtil.requiredCheckDigit(number);
+    if (StringUtil.lastChar(number) == checkDigit) {
+      return number;
+    } else {
+      return number.substring(0, number.length() - 1) + checkDigit;
+    }
+  }
 
 }

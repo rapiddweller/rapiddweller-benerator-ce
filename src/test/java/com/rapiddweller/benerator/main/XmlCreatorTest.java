@@ -26,61 +26,76 @@
 
 package com.rapiddweller.benerator.main;
 
-import static org.junit.Assert.*;
+import com.rapiddweller.common.xml.XMLUtil;
+import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import java.io.IOException;
 
-import org.junit.Test;
-
-import com.rapiddweller.commons.xml.XMLUtil;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link XmlCreator}.<br/><br/>
  * Created at 05.05.2008 16:53:29
- * @since 0.5.3
+ *
  * @author Volker Bergmann
+ * @since 0.5.3
  */
 public class XmlCreatorTest {
 
-	private static final String SIMPLE_ELEMENT_FILE = "com/rapiddweller/platform/xml/simple-element-test.xsd";
-	private static final String ENUM_FILE = "com/rapiddweller/platform/xml/enum-test.xsd";
-	private static final String CARDINALITY_FILE = "com/rapiddweller/platform/xml/cardinality-test.xsd";
+  private static final String SIMPLE_ELEMENT_FILE = "com/rapiddweller/platform/xml/simple-element-test.xsd";
+  private static final String ENUM_FILE = "com/rapiddweller/platform/xml/enum-test.xsd";
+  private static final String CARDINALITY_FILE = "com/rapiddweller/platform/xml/cardinality-test.xsd";
 
-	// tests -----------------------------------------------------------------------------------------------------------
+  // tests -----------------------------------------------------------------------------------------------------------
 
-	@Test
-	public void testSimpleTypeElement() throws IOException {
-        createXMLFile(SIMPLE_ELEMENT_FILE, "root", "target/simpleType.xml");
-    }
-	
-	@Test
-	public void testEnum() throws IOException {
-		for (int i = 0; i < 10; i++) {
-	        Document doc = createXMLFile(ENUM_FILE, "address", "target/enum.xml");
-	        Element address = doc.getDocumentElement();
-	        String box = address.getAttribute("box");
-	        assertTrue("".equals(box) || "0203".equals(box));
-		}
-    }
+  /**
+   * Test simple type element.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void testSimpleTypeElement() throws IOException {
+    createXMLFile(SIMPLE_ELEMENT_FILE, "root", "target/simpleType.xml");
+  }
 
-	@Test
-	public void testCardinalities() throws IOException {
-		for (int i = 0; i < 10; i++) {
-	        Document doc = createXMLFile(CARDINALITY_FILE, "outer", "target/cardinalities.xml");
-	        Element outer = doc.getDocumentElement();
-	        Element[] inners = XMLUtil.getChildElements(outer);
-	        assertTrue("Expected 3-5 inners, found: " + inners.length, inners.length >= 3 && inners.length <= 5);
-		}
-	}
-	
-	// helpers ---------------------------------------------------------------------------------------------------------
-	
-    private static Document createXMLFile(String schemaUri, String root, String filename) throws IOException {
-    	String[] args = new String[] { schemaUri, root, filename, "1" };
-        XmlCreator.main(args);
-        return XMLUtil.parse(filename);
+  /**
+   * Test enum.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void testEnum() throws IOException {
+    for (int i = 0; i < 10; i++) {
+      Document doc = createXMLFile(ENUM_FILE, "address", "target/enum.xml");
+      Element address = doc.getDocumentElement();
+      String box = address.getAttribute("box");
+      assertTrue("".equals(box) || "0203".equals(box));
     }
-    
+  }
+
+  /**
+   * Test cardinalities.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void testCardinalities() throws IOException {
+    for (int i = 0; i < 10; i++) {
+      Document doc = createXMLFile(CARDINALITY_FILE, "outer", "target/cardinalities.xml");
+      Element outer = doc.getDocumentElement();
+      Element[] inners = XMLUtil.getChildElements(outer);
+      assertTrue("Expected 3-5 inners, found: " + inners.length, inners.length >= 3 && inners.length <= 5);
+    }
+  }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  private static Document createXMLFile(String schemaUri, String root, String filename) throws IOException {
+    String[] args = new String[] {schemaUri, root, filename, "1"};
+    XmlCreator.main(args);
+    return XMLUtil.parse(filename);
+  }
+
 }

@@ -26,40 +26,46 @@
 
 package com.rapiddweller.benerator.engine;
 
-import static org.junit.Assert.assertEquals;
-
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.SystemInfo;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.platform.fixedwidth.FixedWidthEntityExporter;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Integration tests for the {@link FixedWidthEntityExporter}.<br/><br/>
  * Created: 25.03.2014 10:44:49
- * @since 0.9.2
+ *
  * @author Volker Bergmann
+ * @since 0.9.2
  */
-
+@SuppressWarnings("CheckStyle")
 public class FixedWidthFileIntegrationTest extends BeneratorIntegrationTest {
 
-	@Test
-	public void testNullColumns() throws Exception {
-		String fileName = "target/" + getClass().getName() + ".fcw";
-		parseAndExecute(
-			"<setup>" +
-			"<bean id='fcw' class='FixedWidthEntityExporter'>" + 
-			"	<property name='uri' value='" + fileName + "'/>" + 
-			"	<property name='columns' value='x[3],y[1]'/>" + 
-			"</bean>" +
-			"<generate type='t' count='1' consumer='fcw'>" +
-	    	"	<attribute name='x' type='string' nullQuota='1' />" + 
-	    	"	<attribute name='y' type='string' constant='Y' />" + 
-	    	"</generate>" +
-	    	"</setup>");
-		String content = IOUtil.getContentOfURI(fileName);
-		assertEquals("   Y" + SystemInfo.getLineSeparator(), content);
-		
-	}
+  /**
+   * Test null columns.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testNullColumns() throws Exception {
+    String fileName = "target/" + getClass().getName() + ".fcw";
+    parseAndExecute(
+        "<setup>" +
+            "<bean id='fcw' class='FixedWidthEntityExporter'>" +
+            "	<property name='uri' value='" + fileName + "'/>" +
+            "	<property name='columns' value='x[3],y[1]'/>" +
+            "</bean>" +
+            "<generate type='t' count='1' consumer='fcw'>" +
+            "	<attribute name='x' type='string' nullQuota='1' />" +
+            "	<attribute name='y' type='string' constant='Y' />" +
+            "</generate>" +
+            "</setup>");
+    String content = IOUtil.getContentOfURI(fileName);
+    assertEquals("   Y" + SystemInfo.getLineSeparator(), content);
+
+  }
 
 }

@@ -26,8 +26,8 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.MessageHolder;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.MessageHolder;
+import com.rapiddweller.common.StringUtil;
 
 /**
  * Exception which indicates that a required Task is unavailable.<br/><br/>
@@ -38,44 +38,70 @@ import com.rapiddweller.commons.StringUtil;
  */
 public class TaskUnavailableException extends TaskException {
 
-    private static final long serialVersionUID = -2073389311048962081L;
+  private static final long serialVersionUID = -2073389311048962081L;
 
-    private final Task task;
-    private final long requiredCount;
-    private final long actualCount;
+  private final Task task;
+  private final long requiredCount;
+  private final long actualCount;
 
-    public TaskUnavailableException(Task task, long requiredCount, long actualCount) {
-        super(renderMessage(task, requiredCount, actualCount));
-        this.task = task;
-        this.requiredCount = requiredCount;
-        this.actualCount = actualCount;
+  /**
+   * Instantiates a new Task unavailable exception.
+   *
+   * @param task          the task
+   * @param requiredCount the required count
+   * @param actualCount   the actual count
+   */
+  public TaskUnavailableException(Task task, long requiredCount,
+                                  long actualCount) {
+    super(renderMessage(task, requiredCount, actualCount));
+    this.task = task;
+    this.requiredCount = requiredCount;
+    this.actualCount = actualCount;
+  }
+
+  private static String renderMessage(Task task, long requiredCount,
+                                      long actualCount) {
+    StringBuilder builder = new StringBuilder("Task ").append(task);
+    if (actualCount == 0) {
+      builder.append(" not available");
+    } else {
+      builder.append(" could be executed only ").append(actualCount)
+          .append(" times, required minimum: ").append(requiredCount);
     }
-
-    private static String renderMessage(Task task, long requiredCount, long actualCount) {
-        StringBuilder builder = new StringBuilder("Task ").append(task);
-        if (actualCount == 0)
-            builder.append(" not available");
-        else
-            builder.append(" could be executed only ").append(actualCount)
-                    .append(" times, required minimum: ").append(requiredCount);
-        if (task instanceof MessageHolder) {
-            String message = ((MessageHolder) task).getMessage();
-            if (!StringUtil.isEmpty(message))
-                builder.append(". ").append(message);
-        }
-        return builder.toString();
+    if (task instanceof MessageHolder) {
+      String message = ((MessageHolder) task).getMessage();
+      if (!StringUtil.isEmpty(message)) {
+        builder.append(". ").append(message);
+      }
     }
+    return builder.toString();
+  }
 
-    public long getRequiredCount() {
-        return requiredCount;
-    }
+  /**
+   * Gets required count.
+   *
+   * @return the required count
+   */
+  public long getRequiredCount() {
+    return requiredCount;
+  }
 
-    public long getActualCount() {
-        return actualCount;
-    }
+  /**
+   * Gets actual count.
+   *
+   * @return the actual count
+   */
+  public long getActualCount() {
+    return actualCount;
+  }
 
-    public Task getTask() {
-        return task;
-    }
+  /**
+   * Gets task.
+   *
+   * @return the task
+   */
+  public Task getTask() {
+    return task;
+  }
 
 }

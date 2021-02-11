@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 
 <setup
@@ -34,10 +34,6 @@
     <comment>setting default values</comment>
     <setting name="stage" default="development"/>
     <setting name="database" default="postgres"/>
-    <setting name="dbCatalog" default=""/>
-    <setting name="dbSchema" default=""/>
-    <setting name="dbPassword" default=""/>
-    <setting name="dbBatch" default="false"/>
 
     <comment>import stage and database specific properties</comment>
     <include
@@ -52,13 +48,13 @@
     <echo>{ftl: ${items_per_order} items per order}</echo>
     <echo>{ftl:encoding:${context.defaultEncoding} default pageSize:${context.defaultPageSize}}</echo>
     <echo>{ftl:JDBC URL: ${dbUrl}}</echo>
-    
+
     <comment>define a database that will be referred by the id 'db' subsequently</comment>
-    <database id="db" url="{dbUrl}" driver="{dbDriver}" catalog="{dbCatalog}" schema="{dbSchema}"
+    <database id="db" url="{dbUrl}" driver="{dbDriver}" schema="{dbSchema}"
               user="{dbUser}" password="{dbPassword}" batch="{dbBatch}"/>
 
     <comment>drop the current tables/sequences if they exist and recreate them</comment>
-    <execute uri="{ftl:${database}/drop_tables.${database}.sql}" target="db" onError="ignore"/>
+    <execute uri="{ftl:${database}/drop_tables.${database}.sql}" target="db" onError="fatal"/>
     <execute uri="{ftl:${database}/create_tables.${database}.sql}" target="db"/>
 
     <bean id="idGen" spec="new IncrementGenerator(1000)"/>

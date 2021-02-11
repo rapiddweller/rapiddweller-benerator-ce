@@ -26,69 +26,65 @@
 
 package com.rapiddweller.benerator.engine;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Benerator integration test for array generation.<br/><br/>
  * Created: 08.08.2011 16:57:47
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class ArrayGenerationIntegrationTest extends BeneratorIntegrationTest {
 
-	private ConsumerMock consumer;
+  private ConsumerMock consumer;
 
-	@Before
-	public void setUpConsumer() throws Exception {
-		consumer = new ConsumerMock(true);
-		context.setGlobal("cons", consumer);
-	}
-	
-	@Test
-	public void testSimpleCase() {
-		parseAndExecute(
-				"<generate count='2' consumer='cons'>" +
-				"	<value type='int' constant='3'/>" +
-				"	<value type='string' constant='x'/>" +
-				"</generate>");
-		List<Object[]> products = getConsumedEntities();
-		assertEquals(2, products.size());
-		for (Object[] product : products) {
-			assertEquals(2, product.length);
-			assertEquals(3, product[0]);
-			assertEquals("x", product[1]);
-		}
-	}
-	/* TODO v0.7.1 make it work
-	@Test
-	public void testVariable() {
-		parseAndExecute(
-				"<generate count='2' consumer='cons'>" +
-				"	<variable name='aVar' constant='4' />" +
-				"	<value type='int' script='aVar'/>" +
-				"	<value type='string' constant='x'/>" +
-				"</generate>");
-		List<Object[]> products = getConsumedEntities();
-		assertEquals(2, products.size());
-		for (Object[] product : products) {
-			assertEquals(2, product.length);
-			assertEquals(4, product[0]);
-			assertEquals("x", product[1]);
-		}
-	}
-	*/
-	
-	// helpers ---------------------------------------------------------------------------------------------------------
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected List<Object[]> getConsumedEntities() {
-		return (List) consumer.getProducts();
-	}
+  /**
+   * Sets up consumer.
+   */
+  @Before
+  public void setUpConsumer() {
+    consumer = new ConsumerMock(true);
+    context.setGlobal("cons", consumer);
+  }
+
+  /**
+   * Test simple case.
+   */
+  @SuppressWarnings("checkstyle:FileTabCharacter")
+  @Test
+  public void testSimpleCase() {
+    parseAndExecute(
+        "<generate count='2' consumer='cons'>" +
+            "	<value type='int' constant='3'/>" +
+            "	<value type='string' constant='x'/>" +
+            "</generate>");
+    List<Object[]> products = getConsumedEntities();
+    assertEquals(2, products.size());
+    for (Object[] product : products) {
+      assertEquals(2, product.length);
+      assertEquals(3, product[0]);
+      assertEquals("x", product[1]);
+    }
+  }
+
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets consumed entities.
+   *
+   * @return the consumed entities
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  protected List<Object[]> getConsumedEntities() {
+    return (List) consumer.getProducts();
+  }
 }

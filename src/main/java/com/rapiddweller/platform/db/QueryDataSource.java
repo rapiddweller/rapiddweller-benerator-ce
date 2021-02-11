@@ -26,17 +26,17 @@
 
 package com.rapiddweller.platform.db;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.converter.NoOpConverter;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.script.ScriptConverterForStrings;
-import com.rapiddweller.formats.util.AbstractDataSource;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.converter.NoOpConverter;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.script.ScriptConverterForStrings;
+import com.rapiddweller.format.util.AbstractDataSource;
 import com.rapiddweller.jdbacl.QueryDataIterator;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -51,44 +51,63 @@ import java.sql.ResultSet;
  */
 public class QueryDataSource extends AbstractDataSource<ResultSet> {
 
-    private static final Logger LOGGER = LogManager.getLogger(QueryIterable.class);
+  private static final Logger LOGGER =
+      LogManager.getLogger(QueryIterable.class);
 
-    private final Connection connection;
-    private final String query;
-    private final int fetchSize;
+  private final Connection connection;
+  private final String query;
+  private final int fetchSize;
 
-    private final Converter<String, ?> queryPreprocessor;
-    private String renderedQuery;
+  private final Converter<String, ?> queryPreprocessor;
+  private String renderedQuery;
 
-    public QueryDataSource(Connection connection, String query, int fetchSize, Context context) {
-        super(ResultSet.class);
-        if (connection == null)
-            throw new IllegalStateException("'connection' is null");
-        if (StringUtil.isEmpty(query))
-            throw new IllegalStateException("'query' is empty or null");
-        this.connection = connection;
-        this.query = query;
-        this.fetchSize = fetchSize;
-        if (context != null)
-            this.queryPreprocessor = new ScriptConverterForStrings(context);
-        else
-            this.queryPreprocessor = new NoOpConverter<String>();
-        LOGGER.debug("Constructed QueryIterable: {}", query);
+  /**
+   * Instantiates a new Query data source.
+   *
+   * @param connection the connection
+   * @param query      the query
+   * @param fetchSize  the fetch size
+   * @param context    the context
+   */
+  public QueryDataSource(Connection connection, String query, int fetchSize,
+                         Context context) {
+    super(ResultSet.class);
+    if (connection == null) {
+      throw new IllegalStateException("'connection' is null");
     }
-
-    public String getQuery() {
-        return query;
+    if (StringUtil.isEmpty(query)) {
+      throw new IllegalStateException("'query' is empty or null");
     }
-
-    @Override
-    public DataIterator<ResultSet> iterator() {
-        renderedQuery = queryPreprocessor.convert(query).toString();
-        return new QueryDataIterator(renderedQuery, connection, fetchSize);
+    this.connection = connection;
+    this.query = query;
+    this.fetchSize = fetchSize;
+    if (context != null) {
+      this.queryPreprocessor = new ScriptConverterForStrings(context);
+    } else {
+      this.queryPreprocessor = new NoOpConverter<>();
     }
+    LOGGER.debug("Constructed QueryIterable: {}", query);
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + (renderedQuery != null ? renderedQuery : query) + ']';
-    }
+  /**
+   * Gets query.
+   *
+   * @return the query
+   */
+  public String getQuery() {
+    return query;
+  }
+
+  @Override
+  public DataIterator<ResultSet> iterator() {
+    renderedQuery = queryPreprocessor.convert(query).toString();
+    return new QueryDataIterator(renderedQuery, connection, fetchSize);
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' +
+        (renderedQuery != null ? renderedQuery : query) + ']';
+  }
 
 }

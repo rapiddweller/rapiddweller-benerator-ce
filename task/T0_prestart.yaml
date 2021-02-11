@@ -1,0 +1,142 @@
+# (c) rapiddweller GmbH 2020
+---
+- name: Start
+  hosts: localhost
+  vars:
+    project_dir: "{{lookup('env','PWD')}}"
+    network: rddnet
+    supported_services:
+      postgres:
+        name: postgres_local
+        docker_image: postgres:latest
+        network: "{{ network }}"
+        volumes:
+          - ./scripts/:/docker-entrypoint-initdb.d/
+        env: {
+          POSTGRESQL_DATABASE: benerator,
+          POSTGRESQL_USERNAME: benerator,
+          POSTGRESQL_PASSWORD: benerator,
+          POSTGRES_PASSWORD: benerator,
+          POSTGRES_HOST_AUTH_METHOD: trust
+        }
+        published_ports:
+          - "35432:5432"
+      mysql:
+        name: mysql_local
+        docker_image: bitnami/mysql:latest
+        network: "{{ network }}"
+        env: {
+          ALLOW_EMPTY_PASSWORD: 'true',
+          MYSQL_USER: benerator,
+          MYSQL_PASSWORD: benerator,
+          MYSQL_DATABASE: benerator
+        }
+        published_ports:
+          - "33306:3306"
+      mssql:
+        name: mssql_local
+        docker_image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        network: "{{ network }}"
+        env: {
+          ACCEPT_EULA: Y,
+          SA_PASSWORD: Benerator123!
+        }
+        published_ports:
+          - "31433:1433"
+      oracle:
+        name: oracle_local
+        docker_image: oracleinanutshell/oracle-xe-11g
+        network: "{{ network }}"
+        env: {
+          ORACLE_ALLOW_REMOTE: 'true',
+          ORACLE_ENABLE_XDB: 'true',
+          # user: XDB PW: xdb
+        }
+        published_ports:
+          - "31521:1521"
+      db2:
+        name: db2_local
+        docker_image: ibmcom/db2
+        network: "{{ network }}"
+        env: {
+          LICENSE: 'accept',
+          DB2INSTANCE: benerator,
+          DB2INST1_PASSWORD: benerator,
+          DBNAME: benerator,
+          SAMPLEDB: 'true',
+        }
+        published_ports:
+          - "50000:50000"
+      firebird:
+        name: firebird_local
+        docker_image: jacobalberty/firebird
+        network: "{{ network }}"
+        env: {
+          ISC_PASSWORD: 'benerator',
+          FIREBIRD_DATABASE: 'benerator',
+          FIREBIRD_USER: 'benerator',
+          FIREBIRD_PASSWORD: 'benerator',
+        }
+        published_ports:
+          - "33050:3050"
+      hsqldb:
+        name: hsqldb_local
+        docker_image: blacklabelops/hsqldb
+        network: "{{ network }}"
+        env: {
+          HSQLDB_USER: 'benerator',
+          HSQLDB_PASSWORD: 'benerator',
+          HSQLDB_DATABASE_NAME: 'benerator',
+          HSQLDB_DATABASE_ALIAS: 'benerator'
+        }
+        published_ports:
+          - "39001:9001"
+
+
+  tasks:
+    - name: Supported Services
+      debug:
+        msg: "Hello, {{ item.key }}!"
+      with_dict: "{{ supported_services }}"
+
+    - name: Project Dir
+      debug:
+        msg: "{{ project_dir }}"
+
+    - name: Delete default containers
+      docker_container:
+        name: "{{ item.value.name }}"
+        image: "{{ item.value.docker_image }}"
+        state: absent
+      with_dict: "{{  supported_services  }}"
+      tags:
+        - clean
+
+    - name: delete network
+      docker_network:
+        name: "{{ network }}"
+        state: absent
+        force: yes
+      tags:
+        - clean
+
+    - name: create network
+      docker_network:
+        name: "{{ network }}"
+      tags:
+        - create
+
+    - name: Create default containers
+      docker_container:
+        name: "{{ item.value.name }}"
+        image: "{{ item.value.docker_image }}"
+        networks:
+          - name: "{{ network }}"
+        purge_networks: yes
+        published_ports: "{{ item.value.published_ports }}"
+        env: "{{ item.value.env }}"
+        volumes: "{{ item.value.volumes | default(omit) }}"
+        state: started
+      with_dict: "{{  supported_services  }}"
+      tags:
+        - create

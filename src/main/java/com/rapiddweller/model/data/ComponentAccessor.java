@@ -26,7 +26,7 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.Accessor;
+import com.rapiddweller.common.Accessor;
 
 /**
  * Accesses a component of an entity specified by the component name.<br/>
@@ -35,14 +35,19 @@ import com.rapiddweller.commons.Accessor;
  */
 public class ComponentAccessor implements Accessor<Entity, Object> {
 
-    private final String componentName;
+  private final String componentName;
 
-    public ComponentAccessor(String componentName) {
-        this.componentName = componentName;
-    }
+  /**
+   * Instantiates a new Component accessor.
+   *
+   * @param componentName the component name
+   */
+  public ComponentAccessor(String componentName) {
+    this.componentName = componentName;
+  }
 
-    @Override
-    public Object getValue(Entity target) {
-        return target.getComponent(componentName);
-    }
+  @Override
+  public Object getValue(Entity target) {
+    return target.getComponent(componentName);
+  }
 }

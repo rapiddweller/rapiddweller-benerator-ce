@@ -26,131 +26,162 @@
 
 package com.rapiddweller.benerator.sample;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.UnsafeNonNullGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.ParseException;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.ParseException;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.WeightedTransition;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Generates states as configured by a state machine.<br/>
  * <br/>
  * Created at 17.07.2009 05:41:47
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class StateGenerator<E> extends UnsafeNonNullGenerator<E> {
-	
-	private Class<E> generatedType;
-	private Map<E, AttachedWeightSampleGenerator<E>> transitionsGenerators;
-	private E nextState;
-	
-	// initialization --------------------------------------------------------------------------------------------------
 
-    public StateGenerator() {
-	    this((String) null);
-    }
-    
-    @SuppressWarnings("unchecked")
-    public StateGenerator(String transitionSpec) {
-	    this((Class<E>) Object.class);
-	    setTransitions(transitionSpec);
-    }
-    
-    public StateGenerator(Class<E> generatedType) {
-	    this.generatedType = generatedType;
-	    this.transitionsGenerators = new HashMap<E, AttachedWeightSampleGenerator<E>>();
-	    this.nextState = null;
-    }
-    
-    @SuppressWarnings("unchecked")
-    public void setTransitions(String transitionSpec) {
-		if (StringUtil.isEmpty(transitionSpec)) {
-			transitionsGenerators.clear();
-			return;
-		}
-    	try {
-    		WeightedTransition[] ts = DatabeneScriptParser.parseTransitionList(transitionSpec);
-	    	for (WeightedTransition t : ts)
-	    		addTransition((E) t.getFrom(), (E) t.getTo(), t.getWeight());
-    	} catch (ParseException e) {
-    		throw new ConfigurationError("Error parsing state machine specification: " + transitionSpec, e);
-        }
-    }
+  private final Class<E> generatedType;
+  private final Map<E, AttachedWeightSampleGenerator<E>> transitionsGenerators;
+  private E nextState;
 
-    public void addTransition(E from, E to, double weight) {
-    	AttachedWeightSampleGenerator<E> subGenerator = transitionsGenerators.get(from);
-    	if (subGenerator == null) {
-    		subGenerator = new AttachedWeightSampleGenerator<E>(generatedType);
-    		transitionsGenerators.put(from, subGenerator);
-    	}
-    	subGenerator.addSample(to, weight);
-    }
-    
-    // Generator interface implementation ------------------------------------------------------------------------------
+  // initialization --------------------------------------------------------------------------------------------------
 
-    @Override
-	public Class<E> getGeneratedType() {
-	    return generatedType;
-    }
-    
-    @Override
-    public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
-    	assertNotInitialized();
-        boolean hasEndTransition = false;
-        for (AttachedWeightSampleGenerator<E> tmp : transitionsGenerators.values())
-        	if (tmp.containsSample(null)) {
-        		hasEndTransition = true;
-        		break;
-        	}
-        if (!hasEndTransition)
-        	throw new InvalidGeneratorSetupException("No final state defined for " + this);
-    	for (Generator<E> tmp : transitionsGenerators.values())
-    		tmp.init(context);
-    	AttachedWeightSampleGenerator<E> gen = this.transitionsGenerators.get(null);
-        nextState = gen.generate(getResultWrapper()).unwrap();
-        super.init(context);
-    }
-	
-	@Override
-	public E generate() {
-    	if (nextState == null)
-    		return null;
-    	E result = nextState;
-    	AttachedWeightSampleGenerator<E> transitionGenerator = transitionsGenerators.get(nextState);
-	    ProductWrapper<E> wrapper = transitionGenerator.generate(getResultWrapper());
-		nextState = (wrapper != null ? wrapper.unwrap() : null);
-		return result;
-    }
+  /**
+   * Instantiates a new State generator.
+   */
+  public StateGenerator() {
+    this((String) null);
+  }
 
-    @Override
-    public void reset() throws IllegalGeneratorStateException {
-    	AttachedWeightSampleGenerator<E> transitionGenerator = this.transitionsGenerators.get(null);
-	    ProductWrapper<E> wrapper = transitionGenerator.generate(getResultWrapper());
-		nextState = (wrapper != null ? wrapper.unwrap() : null);
-        super.reset();
+  /**
+   * Instantiates a new State generator.
+   *
+   * @param transitionSpec the transition spec
+   */
+  @SuppressWarnings("unchecked")
+  public StateGenerator(String transitionSpec) {
+    this((Class<E>) Object.class);
+    setTransitions(transitionSpec);
+  }
+
+  /**
+   * Instantiates a new State generator.
+   *
+   * @param generatedType the generated type
+   */
+  public StateGenerator(Class<E> generatedType) {
+    this.generatedType = generatedType;
+    this.transitionsGenerators = new HashMap<>();
+    this.nextState = null;
+  }
+
+  /**
+   * Sets transitions.
+   *
+   * @param transitionSpec the transition spec
+   */
+  @SuppressWarnings("unchecked")
+  public void setTransitions(String transitionSpec) {
+    if (StringUtil.isEmpty(transitionSpec)) {
+      transitionsGenerators.clear();
+      return;
     }
-    
-    @Override
-    public void close() {
-    	super.close();
+    try {
+      WeightedTransition[] ts = DatabeneScriptParser.parseTransitionList(transitionSpec);
+      for (WeightedTransition t : ts) {
+        addTransition((E) t.getFrom(), (E) t.getTo(), t.getWeight());
+      }
+    } catch (ParseException e) {
+      throw new ConfigurationError("Error parsing state machine specification: " + transitionSpec, e);
     }
-    
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-    
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + transitionsGenerators;
+  }
+
+  /**
+   * Add transition.
+   *
+   * @param from   the from
+   * @param to     the to
+   * @param weight the weight
+   */
+  public void addTransition(E from, E to, double weight) {
+    AttachedWeightSampleGenerator<E> subGenerator = transitionsGenerators.get(from);
+    if (subGenerator == null) {
+      subGenerator = new AttachedWeightSampleGenerator<>(generatedType);
+      transitionsGenerators.put(from, subGenerator);
     }
+    subGenerator.addSample(to, weight);
+  }
+
+  // Generator interface implementation ------------------------------------------------------------------------------
+
+  @Override
+  public Class<E> getGeneratedType() {
+    return generatedType;
+  }
+
+  @Override
+  public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
+    assertNotInitialized();
+    boolean hasEndTransition = false;
+    for (AttachedWeightSampleGenerator<E> tmp : transitionsGenerators.values()) {
+      if (tmp.containsSample(null)) {
+        hasEndTransition = true;
+        break;
+      }
+    }
+    if (!hasEndTransition) {
+      throw new InvalidGeneratorSetupException("No final state defined for " + this);
+    }
+    for (Generator<E> tmp : transitionsGenerators.values()) {
+      tmp.init(context);
+    }
+    AttachedWeightSampleGenerator<E> gen = this.transitionsGenerators.get(null);
+    nextState = gen.generate(getResultWrapper()).unwrap();
+    super.init(context);
+  }
+
+  @Override
+  public E generate() {
+    if (nextState == null) {
+      return null;
+    }
+    E result = nextState;
+    AttachedWeightSampleGenerator<E> transitionGenerator = transitionsGenerators.get(nextState);
+    ProductWrapper<E> wrapper = transitionGenerator.generate(getResultWrapper());
+    nextState = (wrapper != null ? wrapper.unwrap() : null);
+    return result;
+  }
+
+  @Override
+  public void reset() throws IllegalGeneratorStateException {
+    AttachedWeightSampleGenerator<E> transitionGenerator = this.transitionsGenerators.get(null);
+    ProductWrapper<E> wrapper = transitionGenerator.generate(getResultWrapper());
+    nextState = (wrapper != null ? wrapper.unwrap() : null);
+    super.reset();
+  }
+
+  @Override
+  public void close() {
+    super.close();
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + transitionsGenerators;
+  }
 
 }

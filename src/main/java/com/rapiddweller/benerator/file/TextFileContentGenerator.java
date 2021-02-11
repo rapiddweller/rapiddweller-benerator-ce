@@ -26,32 +26,33 @@
 
 package com.rapiddweller.benerator.file;
 
-import java.io.IOException;
-
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
+
+import java.io.IOException;
 
 /**
  * Provides file contents as {@link String}s.<br/><br/>
  * Created: 24.02.2010 07:31:05
+ *
  * @since 0.6.0
  */
 public class TextFileContentGenerator extends FileContentGenerator<String> {
 
-	@Override
-	public Class<String> getGeneratedType() {
-	    return String.class;
-    }
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
 
-	@Override
-	public String generate() {
-		assertInitialized();
-		try {
-	        String absolutePath = generateFromSource().unwrap().getAbsolutePath();
-			return IOUtil.getContentOfURI(absolutePath);
-        } catch (IOException e) {
-        	throw new IllegalGeneratorStateException(e);
-        }
+  @Override
+  public String generate() {
+    assertInitialized();
+    try {
+      String absolutePath = generateFromSource().unwrap().getAbsolutePath();
+      return IOUtil.getContentOfURI(absolutePath);
+    } catch (IOException e) {
+      throw new IllegalGeneratorStateException(e);
     }
+  }
 
 }

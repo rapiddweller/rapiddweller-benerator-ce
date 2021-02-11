@@ -29,32 +29,46 @@ package com.rapiddweller.benerator.sample;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests the {@link ConstantGenerator}.<br/><br/>
  * Created: 11.10.2006 23:07:35
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class ConstantGeneratorTest extends GeneratorClassTest {
 
-    public ConstantGeneratorTest() {
-        super(ConstantGenerator.class);
-    }
+  /**
+   * Instantiates a new Constant generator test.
+   */
+  public ConstantGeneratorTest() {
+    super(ConstantGenerator.class);
+  }
 
-    @Test
-    public void testNull() {
-        ConstantGenerator<String> generator = new ConstantGenerator<>(null, String.class);
-        for (int i = 0; i < 100; i++)
-            assertNull(GeneratorUtil.generateNullable(generator));
+  /**
+   * Test null.
+   */
+  @Test
+  public void testNull() {
+    ConstantGenerator<String> generator = new ConstantGenerator<>(null, String.class);
+    for (int i = 0; i < 100; i++) {
+      assertNull(GeneratorUtil.generateNullable(generator));
     }
+  }
 
-    @Test    
-    public void testString() {
-        ConstantGenerator<String> generator = new ConstantGenerator<>("Alice");
-        for (int i = 0; i < 100; i++)
-            assertEquals("Alice", GeneratorUtil.generateNonNull(generator));
+  /**
+   * Test string.
+   */
+  @Test
+  public void testString() {
+    ConstantGenerator<String> generator = new ConstantGenerator<>("Alice");
+    for (int i = 0; i < 100; i++) {
+      assertEquals("Alice", GeneratorUtil.generateNonNull(generator));
     }
-    
+  }
+
 }

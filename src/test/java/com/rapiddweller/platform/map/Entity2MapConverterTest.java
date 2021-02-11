@@ -26,29 +26,34 @@
 
 package com.rapiddweller.platform.map;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import com.rapiddweller.benerator.test.ModelTest;
+import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.commons.CollectionUtil;
+import org.junit.Test;
 
 import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the Entity2MapConverter.<br/>
  * <br/>
  * Created: 29.08.2007 19:09:05
+ *
  * @author Volker Bergmann
  */
 public class Entity2MapConverterTest extends ModelTest {
-	
-	@Test
-    public void test() {
-        ComplexTypeDescriptor descriptor = createComplexType("Person");
-        Entity entity = new Entity(descriptor, "name", "Alice", "age", 23);
-        Map<?,?> map = CollectionUtil.buildMap("name", "Alice", "age", 23);
-        assertEquals(map, new Entity2MapConverter().convert(entity));
-    }
-	
+
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    ComplexTypeDescriptor descriptor = createComplexType("Person");
+    Entity entity = new Entity(descriptor, "name", "Alice", "age", 23);
+    Map<?, ?> map = CollectionUtil.buildMap("name", "Alice", "age", 23);
+    assertEquals(map, new Entity2MapConverter().convert(entity));
+  }
+
 }

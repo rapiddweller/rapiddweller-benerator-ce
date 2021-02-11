@@ -26,279 +26,343 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import java.io.Closeable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.composite.ComponentBuilder;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.CurrentProductGeneration;
 import com.rapiddweller.benerator.engine.LifeCycleHolder;
-import com.rapiddweller.benerator.engine.ScopedLifeCycleHolder;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.ResourceManagerSupport;
+import com.rapiddweller.benerator.engine.ScopedLifeCycleHolder;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.StatementUtil;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.MessageHolder;
-import com.rapiddweller.commons.Resettable;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.MessageHolder;
+import com.rapiddweller.common.Resettable;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.Task;
 import com.rapiddweller.task.TaskResult;
 
+import java.io.Closeable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * Task that creates one data set instance per run() invocation and sends it to the specified consumer.<br/><br/>
  * Created: 01.02.2008 14:39:11
+ *
  * @author Volker Bergmann
  */
 public class GenerateAndConsumeTask implements Task, PageListener, ResourceManager, MessageHolder {
 
-	private String taskName;
-    private BeneratorContext context;
-    private ResourceManager resourceManager;
-    
-    protected List<Statement> statements;
-    private List<ScopedLifeCycleHolder> scopeds;
-    private Expression<Consumer> consumerExpr;
+  private final String taskName;
+  private BeneratorContext context;
+  private final ResourceManager resourceManager;
 
-    private volatile AtomicBoolean initialized;
-    private Consumer consumer;
-    private String message;
-	private String productName;
-    
-    public GenerateAndConsumeTask(String taskName, String productName) {
-    	this.taskName = taskName;
-    	this.productName = productName;
-        this.resourceManager = new ResourceManagerSupport();
-        this.initialized = new AtomicBoolean(false);
-    	this.statements = new ArrayList<Statement>();
-    	this.scopeds = new ArrayList<ScopedLifeCycleHolder>();
-    }
+  /**
+   * The Statements.
+   */
+  protected final List<Statement> statements;
+  private final List<ScopedLifeCycleHolder> scopeds;
+  private Expression<Consumer> consumerExpr;
 
-    // interface -------------------------------------------------------------------------------------------------------
+  private final AtomicBoolean initialized;
+  private Consumer consumer;
+  private String message;
+  private final String productName;
 
-    public void addStatement(Statement statement) {
-    	this.statements.add(statement);
-    }
-    
-    public void setStatements(List<Statement> statements) {
-    	this.statements.clear();
-    	for (Statement statement : statements)
-    		this.addStatement(statement);
-    }
-    
-    public ResourceManager getResourceManager() {
-		return resourceManager;
-	}
+  /**
+   * Instantiates a new Generate and consume task.
+   *
+   * @param taskName    the task name
+   * @param productName the product name
+   */
+  public GenerateAndConsumeTask(String taskName, String productName) {
+    this.taskName = taskName;
+    this.productName = productName;
+    this.resourceManager = new ResourceManagerSupport();
+    this.initialized = new AtomicBoolean(false);
+    this.statements = new ArrayList<>();
+    this.scopeds = new ArrayList<>();
+  }
 
-	public void setConsumer(Expression<Consumer> consumerExpr) {
-        this.consumerExpr = consumerExpr;
-	}
-    
-    public Consumer getConsumer() {
-    	return consumer;
-    }
-	
-	public void init(BeneratorContext context) {
-	    synchronized (initialized) {
-	    	if (!initialized.get()) {
-	    		this.context = context;
-	    		this.consumer = ExpressionUtil.evaluate(consumerExpr, context);
-    			resourceManager.addResource(consumer);
-	    		injectConsumptionStart();
-	    		injectConsumptionEnd();
-	    		initialized.set(true);
-	        	initStatements(context);
-	        	checkScopes(statements, context);
-	    	}
-	    }
-    }
+  // interface -------------------------------------------------------------------------------------------------------
 
-	public String getProductName() {
-		return productName;
-	}
+  /**
+   * Add statement.
+   *
+   * @param statement the statement
+   */
+  public void addStatement(Statement statement) {
+    this.statements.add(statement);
+  }
 
-	public ProductWrapper<?> getRecentProduct() {
-		return context.getCurrentProduct();
-	}
+  /**
+   * Sets statements.
+   *
+   * @param statements the statements
+   */
+  public void setStatements(List<Statement> statements) {
+    this.statements.clear();
+    for (Statement statement : statements) {
+      this.addStatement(statement);
+    }
+  }
 
-    // Task interface implementation -----------------------------------------------------------------------------------
-    
-	@Override
-	public String getTaskName() {
-	    return taskName;
-    }
+  /**
+   * Gets resource manager.
+   *
+   * @return the resource manager
+   */
+  public ResourceManager getResourceManager() {
+    return resourceManager;
+  }
 
-    @Override
-	public boolean isThreadSafe() {
-        return false;
-    }
-    
-    @Override
-	public boolean isParallelizable() {
-        return false;
-    }
-    
-    @Override
-	public TaskResult execute(Context ctx, ErrorHandler errorHandler) {
-    	message = null;
-    	if (!initialized.get())
-    		init((BeneratorContext) ctx);
-    	try {
-    		boolean success = true;
-        	for (int i = 0; i < statements.size(); i++) {
-        		Statement statement = statements.get(i);
-				success &= statement.execute(context);
-				if (!success && (statement instanceof ValidationStatement)) {
-					i = -1; // if the product is not valid, restart with the first statement
-					success = true;
-					continue;
-				}
-				if (!success) {
-					if (statement instanceof MessageHolder)
-						this.message = ((MessageHolder) statement).getMessage();
-					break;
-				}
-			}
-        	if (success)
-        		BeneratorMonitor.INSTANCE.countGenerations(1);
-        	enqueueResets(statements);
-	        Thread.yield();
-	        return (success ? TaskResult.EXECUTING : TaskResult.UNAVAILABLE);
-    	} catch (Exception e) {
-			errorHandler.handleError("Error in execution of task " + getTaskName(), e);
-    		return TaskResult.EXECUTING; // stay available if the ErrorHandler has not canceled execution
-    	}
-    }
-    
-    public void reset() {
-		for (Statement statement : statements) {
-			statement = StatementUtil.getRealStatement(statement, context);
-		    if (statement instanceof ScopedLifeCycleHolder) {
-		    	@SuppressWarnings("resource")
-				ScopedLifeCycleHolder holder = (ScopedLifeCycleHolder) statement;
-				holder.resetIfNeeded();
-		    } else if (statement instanceof Resettable) {
-		    	((Resettable) statement).reset();
-		    }
-		}
-    }
+  /**
+   * Sets consumer.
+   *
+   * @param consumerExpr the consumer expr
+   */
+  public void setConsumer(Expression<Consumer> consumerExpr) {
+    this.consumerExpr = consumerExpr;
+  }
 
-	@Override
-	public void close() {
-        // close sub statements
-        for (Statement statement : statements) {
-			statement = StatementUtil.getRealStatement(statement, context);
-		    if (statement instanceof Closeable)
-		    	IOUtil.close((Closeable) statement);
-		}
-        // close resource manager
-        resourceManager.close();
-    }
-    
-    
-    // PageListener interface ------------------------------------------------------------------------------------------
-    
-	@Override
-	public void pageStarting() {
-		// nothing special to do on page start
-	}
-    
-    @Override
-	public void pageFinished() {
-    	IOUtil.flush(consumer);
-    }
-    
+  /**
+   * Gets consumer.
+   *
+   * @return the consumer
+   */
+  public Consumer getConsumer() {
+    return consumer;
+  }
 
-    // ResourceManager interface ---------------------------------------------------------------------------------------
-    
-	@Override
-	public boolean addResource(Closeable resource) {
-	    return resourceManager.addResource(resource);
+  /**
+   * Init.
+   *
+   * @param context the context
+   */
+  public void init(BeneratorContext context) {
+    synchronized (initialized) {
+      if (!initialized.get()) {
+        this.context = context;
+        this.consumer = ExpressionUtil.evaluate(consumerExpr, context);
+        resourceManager.addResource(consumer);
+        injectConsumptionStart();
+        injectConsumptionEnd();
+        initialized.set(true);
+        initStatements(context);
+        checkScopes(statements, context);
+      }
     }
-	
-	// MessageHolder interface -----------------------------------------------------------------------------------------
-	
-	@Override
-	public String getMessage() {
-	    return message;
+  }
+
+  /**
+   * Gets product name.
+   *
+   * @return the product name
+   */
+  public String getProductName() {
+    return productName;
+  }
+
+  /**
+   * Gets recent product.
+   *
+   * @return the recent product
+   */
+  public ProductWrapper<?> getRecentProduct() {
+    return context.getCurrentProduct();
+  }
+
+  // Task interface implementation -----------------------------------------------------------------------------------
+
+  @Override
+  public String getTaskName() {
+    return taskName;
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return false;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
+
+  @Override
+  public TaskResult execute(Context ctx, ErrorHandler errorHandler) {
+    message = null;
+    if (!initialized.get()) {
+      init((BeneratorContext) ctx);
     }
-	
-	// java.lang.Object overrides --------------------------------------------------------------------------------------
-    
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '(' + taskName + ')';
+    try {
+      boolean success = true;
+      for (int i = 0; i < statements.size(); i++) {
+        Statement statement = statements.get(i);
+        success &= statement.execute(context);
+        if (!success && (statement instanceof ValidationStatement)) {
+          i = -1; // if the product is not valid, restart with the first statement
+          success = true;
+          continue;
+        }
+        if (!success) {
+          if (statement instanceof MessageHolder) {
+            this.message = ((MessageHolder) statement).getMessage();
+          }
+          break;
+        }
+      }
+      if (success) {
+        BeneratorMonitor.INSTANCE.countGenerations(1);
+      }
+      enqueueResets(statements);
+      Thread.yield();
+      return (success ? TaskResult.EXECUTING : TaskResult.UNAVAILABLE);
+    } catch (Exception e) {
+      errorHandler.handleError("Error in execution of task " + getTaskName(), e);
+      return TaskResult.EXECUTING; // stay available if the ErrorHandler has not canceled execution
     }
+  }
 
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private void injectConsumptionStart() {
-		// find last sub member generation...
-		int lastMemberIndex = - 1;
-		for (int i = statements.size() - 1; i >= 0; i--) {
-			Statement statement = statements.get(i);
-			if (statement instanceof ComponentBuilder || statement instanceof CurrentProductGeneration 
-					|| statement instanceof ValidationStatement || statement instanceof ConversionStatement) {
-				lastMemberIndex = i;
-				break;
-			}
-		}
-		// ...and insert consumption start statement immediately after that one
-		ConsumptionStatement consumption = new ConsumptionStatement(consumer, true, false);
-		statements.add(lastMemberIndex + 1, consumption);
-	}
-
-	private void injectConsumptionEnd() {
-		// find last sub generation statement...
-		int lastSubGenIndex = statements.size() - 1;
-		for (int i = statements.size() - 1; i >= 0; i--) {
-			Statement statement = statements.get(i);
-			if (statement instanceof GenerateOrIterateStatement) {
-				lastSubGenIndex = i;
-				break;
-			}
-		}
-		// ...and insert consumption finish statement immediately after that one
-		ConsumptionStatement consumption = new ConsumptionStatement(consumer, false, true);
-		statements.add(lastSubGenIndex + 1, consumption);
-	}
-
-	public void initStatements(BeneratorContext context) {
-		for (Statement statement : statements) {
-			statement = StatementUtil.getRealStatement(statement, context);
-			if (statement instanceof LifeCycleHolder)
-			    ((LifeCycleHolder) statement).init(context);
-		}
-	}
-
-    private void checkScopes(List<Statement> statements, BeneratorContext scopeContext) {
-        for (Statement statement : statements) {
-			statement = StatementUtil.getRealStatement(statement, scopeContext);
-		    if (statement instanceof ScopedLifeCycleHolder) {
-		    	ScopedLifeCycleHolder holder = (ScopedLifeCycleHolder) statement;
-		    	String scope = holder.getScope();
-		    	if (scope == null || productName.equals(scope))
-		    		scopeds.add(holder);
-		    } else if (statement instanceof GenerateOrIterateStatement) {
-		    	@SuppressWarnings("resource")
-				GenerateOrIterateStatement subGenerate = (GenerateOrIterateStatement) statement;
-		    	checkScopes(subGenerate.getTask().statements, subGenerate.getChildContext());
-		    }
-		}
+  /**
+   * Reset.
+   */
+  public void reset() {
+    for (Statement statement : statements) {
+      statement = StatementUtil.getRealStatement(statement, context);
+      if (statement instanceof ScopedLifeCycleHolder) {
+        ScopedLifeCycleHolder holder = (ScopedLifeCycleHolder) statement;
+        holder.resetIfNeeded();
+      } else if (statement instanceof Resettable) {
+        ((Resettable) statement).reset();
+      }
     }
+  }
 
-    private void enqueueResets(List<Statement> statements) {
-    	for (ScopedLifeCycleHolder scoped : scopeds)
-    		scoped.setResetNeeded(true);
+  @Override
+  public void close() {
+    // close sub statements
+    for (Statement statement : statements) {
+      statement = StatementUtil.getRealStatement(statement, context);
+      if (statement instanceof Closeable) {
+        IOUtil.close((Closeable) statement);
+      }
     }
+    // close resource manager
+    resourceManager.close();
+  }
+
+
+  // PageListener interface ------------------------------------------------------------------------------------------
+
+  @Override
+  public void pageStarting() {
+    // nothing special to do on page start
+  }
+
+  @Override
+  public void pageFinished() {
+    IOUtil.flush(consumer);
+  }
+
+
+  // ResourceManager interface ---------------------------------------------------------------------------------------
+
+  @Override
+  public boolean addResource(Closeable resource) {
+    return resourceManager.addResource(resource);
+  }
+
+  // MessageHolder interface -----------------------------------------------------------------------------------------
+
+  @Override
+  public String getMessage() {
+    return message;
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '(' + taskName + ')';
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private void injectConsumptionStart() {
+    // find last sub member generation...
+    int lastMemberIndex = -1;
+    for (int i = statements.size() - 1; i >= 0; i--) {
+      Statement statement = statements.get(i);
+      if (statement instanceof ComponentBuilder || statement instanceof CurrentProductGeneration
+          || statement instanceof ValidationStatement || statement instanceof ConversionStatement) {
+        lastMemberIndex = i;
+        break;
+      }
+    }
+    // ...and insert consumption start statement immediately after that one
+    ConsumptionStatement consumption = new ConsumptionStatement(consumer, true, false);
+    statements.add(lastMemberIndex + 1, consumption);
+  }
+
+  private void injectConsumptionEnd() {
+    // find last sub generation statement...
+    int lastSubGenIndex = statements.size() - 1;
+    for (int i = statements.size() - 1; i >= 0; i--) {
+      Statement statement = statements.get(i);
+      if (statement instanceof GenerateOrIterateStatement) {
+        lastSubGenIndex = i;
+        break;
+      }
+    }
+    // ...and insert consumption finish statement immediately after that one
+    ConsumptionStatement consumption = new ConsumptionStatement(consumer, false, true);
+    statements.add(lastSubGenIndex + 1, consumption);
+  }
+
+  /**
+   * Init statements.
+   *
+   * @param context the context
+   */
+  public void initStatements(BeneratorContext context) {
+    for (Statement statement : statements) {
+      statement = StatementUtil.getRealStatement(statement, context);
+      if (statement instanceof LifeCycleHolder) {
+        ((LifeCycleHolder) statement).init(context);
+      }
+    }
+  }
+
+  private void checkScopes(List<Statement> statements, BeneratorContext scopeContext) {
+    for (Statement statement : statements) {
+      statement = StatementUtil.getRealStatement(statement, scopeContext);
+      if (statement instanceof ScopedLifeCycleHolder) {
+        ScopedLifeCycleHolder holder = (ScopedLifeCycleHolder) statement;
+        String scope = holder.getScope();
+        if (scope == null || productName.equals(scope)) {
+          scopeds.add(holder);
+        }
+      } else if (statement instanceof GenerateOrIterateStatement) {
+        GenerateOrIterateStatement subGenerate = (GenerateOrIterateStatement) statement;
+        checkScopes(subGenerate.getTask().statements, subGenerate.getChildContext());
+      }
+    }
+  }
+
+  private void enqueueResets(List<Statement> statements) {
+    for (ScopedLifeCycleHolder scoped : scopeds) {
+      scoped.setResetNeeded(true);
+    }
+  }
 
 }

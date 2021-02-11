@@ -33,63 +33,89 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
  * Long Generator that implements a 'step' Long Sequence.<br/>
  * <br/>
  * Created: 26.07.2007 18:36:45
+ *
  * @author Volker Bergmann
  */
 public class StepLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
-	private long increment;
-	private long initial;
-	
-    private long next;
+  private long increment;
+  private final long initial;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  private long next;
 
-    public StepLongGenerator() {
-        this(Long.MIN_VALUE, Long.MAX_VALUE);
+  // constructors ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Instantiates a new Step long generator.
+   */
+  public StepLongGenerator() {
+    this(Long.MIN_VALUE, Long.MAX_VALUE);
+  }
+
+  /**
+   * Instantiates a new Step long generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public StepLongGenerator(long min, long max) {
+    this(min, max, 1);
+  }
+
+  /**
+   * Instantiates a new Step long generator.
+   *
+   * @param min       the min
+   * @param max       the max
+   * @param increment the increment
+   */
+  public StepLongGenerator(long min, long max, long increment) {
+    this(min, max, increment, null);
+  }
+
+  /**
+   * Instantiates a new Step long generator.
+   *
+   * @param min       the min
+   * @param max       the max
+   * @param increment the increment
+   * @param initial   the initial
+   */
+  public StepLongGenerator(long min, Long max, long increment, Long initial) {
+    super(Long.class, min, max, Math.abs(increment));
+    this.increment = increment;
+    this.initial = (initial != null ? initial : (increment >= 0 ? min : max));
+    reset();
+  }
+
+  @Override
+  public void setGranularity(Long granularity) {
+    super.setGranularity(granularity);
+    this.increment = granularity;
+  }
+
+  // Generator implementation ----------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    reset();
+    super.init(context);
+  }
+
+  @Override
+  public synchronized Long generate() {
+    if ((increment == 0 || (increment > 0 && (max == null || next <= max)) || (increment < 0 && next >= min))) {
+      long value = next;
+      next += increment;
+      return value;
+    } else {
+      return null;
     }
+  }
 
-    public StepLongGenerator(long min, long max) {
-        this(min, max, 1);
-    }
-
-    public StepLongGenerator(long min, long max, long increment) {
-        this(min, max, increment, null);
-    }
-
-    public StepLongGenerator(long min, Long max, long increment, Long initial) {
-        super(Long.class, min, max, Math.abs(increment));
-        this.increment = increment;
-        this.initial = (initial != null ? initial : (increment >= 0 ? min : max));
-        reset();
-    }
-    
-    @Override
-    public void setGranularity(Long granularity) {
-        super.setGranularity(granularity);
-        this.increment = granularity;
-    }
-
-    // Generator implementation ----------------------------------------------------------------------------------------
-
-    @Override
-	public void init(GeneratorContext context) {
-        reset();
-		super.init(context);
-    }
-
-	@Override
-	public synchronized Long generate() {
-        if ((increment == 0 || (increment > 0 && (max == null || next <= max)) || (increment < 0 && next >= min))) {
-        	long value = next;
-		    next += increment;
-	        return value;
-        } else
-        	return null;
-    }
-
-    @Override
-	public synchronized void reset() {
-		next = initial;
-	}
+  @Override
+  public synchronized void reset() {
+    next = initial;
+  }
 
 }

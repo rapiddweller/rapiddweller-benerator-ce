@@ -29,7 +29,7 @@ package com.rapiddweller.domain.net;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.sample.WeightedCSVSampleGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 
 /**
  * A TopLevelDomainGenerator.<br/><br/>
@@ -38,20 +38,24 @@ import com.rapiddweller.commons.Encodings;
  * @author Volker Bergmann
  * @since 0.5.2
  */
-public class TopLevelDomainGenerator extends WeightedCSVSampleGenerator<String> implements NonNullGenerator<String> {
+public class TopLevelDomainGenerator extends WeightedCSVSampleGenerator<String>
+    implements NonNullGenerator<String> {
 
-    public TopLevelDomainGenerator() {
-        super("/com/rapiddweller/domain/net/tld.csv", Encodings.UTF_8);
-    }
+  /**
+   * Instantiates a new Top level domain generator.
+   */
+  public TopLevelDomainGenerator() {
+    super("/com/rapiddweller/domain/net/tld.csv", Encodings.UTF_8);
+  }
 
-    @Override
-    public String generate() {
-        return GeneratorUtil.generateNonNull(this);
-    }
+  @Override
+  public String generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 
 }

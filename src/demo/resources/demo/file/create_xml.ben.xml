@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 
 <setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -8,7 +8,7 @@
     <import domains="person"/>
 
     <bean id="xml" class="com.rapiddweller.platform.xml.XMLEntityExporter">
-        <property name="uri" value="customers.xml"/>
+        <property name="uri" value="target/customers.xml"/>
     </bean>
 
     <generate type="customers" count="1" consumer="xml">
@@ -27,7 +27,7 @@
                 <generate type="address" count="2" consumer="xml">
                     <variable name="addr" generator="com.rapiddweller.domain.address.AddressGenerator"/>
                     <attribute name="line1" script="ftl:${addr.street} ${addr.houseNumber}"/>
-                    <attribute name="line2" script="ftl:${addr.zipCode} ${addr.city}"/>
+                    <attribute name="line2" script="ftl:${addr.postalCode} ${addr.city}"/>
                     <attribute name="line3" script="addr.country"/>
                 </generate>
             </generate>

@@ -26,39 +26,53 @@
 
 package com.rapiddweller.domain.organization;
 
-import static com.rapiddweller.benerator.util.GeneratorUtil.*;
-import static org.junit.Assert.*;
-
-import java.util.HashSet;
-import java.util.Set;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import org.junit.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import static com.rapiddweller.benerator.util.GeneratorUtil.init;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Tests the {@link LegalFormGenerator}.<br/><br/>
  * Created: 24.08.2011 00:45:53
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class LegalFormGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void testDE() {
-		LegalFormGenerator generator = new LegalFormGenerator("DE");
-		init(generator);
-		Set<String> generatedSet = generatedSet(generator, 200);
-		assertTrue(generatedSet.contains("GmbH"));
-		assertFalse(generatedSet.contains("llc"));
-		close(generator);
-	}
+  /**
+   * Test de.
+   */
+  @Test
+  public void testDE() {
+    LegalFormGenerator generator = new LegalFormGenerator("DE");
+    init(generator);
+    Set<String> generatedSet = generatedSet(generator, 200);
+    assertTrue(generatedSet.contains("GmbH"));
+    assertFalse(generatedSet.contains("llc"));
+    close(generator);
+  }
 
-	protected static Set<String> generatedSet(LegalFormGenerator generator, int n) {
-		Set<String> result = new HashSet<String>();
-		ProductWrapper<String> wrapper = new ProductWrapper<String>();
-		for (int i = 0; i < n; i++)
-			result.add(generator.generate(wrapper ).unwrap());
-		return result;
-	}
-	
+  /**
+   * Generated set set.
+   *
+   * @param generator the generator
+   * @param n         the n
+   * @return the set
+   */
+  protected static Set<String> generatedSet(LegalFormGenerator generator, int n) {
+    Set<String> result = new HashSet<>();
+    ProductWrapper<String> wrapper = new ProductWrapper<>();
+    for (int i = 0; i < n; i++) {
+      result.add(generator.generate(wrapper).unwrap());
+    }
+    return result;
+  }
+
 }

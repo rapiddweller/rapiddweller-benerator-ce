@@ -26,157 +26,182 @@
 
 package com.rapiddweller.platform.xml;
 
-import java.util.regex.Pattern;
-
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.TypeDescriptor;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.regex.Pattern;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the XMLSchemaNativeTypeProvider.<br/><br/>
  * Created: 21.03.2008 09:44:43
- * @since 0.5.0
+ *
  * @author Volker Bergmann
+ * @since 0.5.0
  */
 public class XMLSchemaNativeTypeProviderTest {
-    
-    private XMLNativeTypeDescriptorProvider provider = new XMLNativeTypeDescriptorProvider("xsd", new DataModel());
 
-    @Test
-    public void testDurationType() {
-        checkIllegalValues("duration", 
-                "PDT");
-        checkLegalValues("duration", 
-                "P3D", 
-                "-P3D", 
-                "PT6M", 
-                "P2MT", 
-                "-P1Y2M3DT5H6M7S", 
-                "P100D");
-    }
+  private final XMLNativeTypeDescriptorProvider provider = new XMLNativeTypeDescriptorProvider("xsd", new DataModel());
 
-    @Test
-    public void testGYearMonthType() {
-        checkIllegalValues("gYearMonth", 
-                "A-B", 
-                "2000", 
-                "01-12", 
-                "2000-13", 
-                "2000-1", 
-                "2000-00");
-        checkLegalValues("gYearMonth", 
-                "2000-01", 
-                "2000-12", 
-                "1970-01", 
-                "1969-12", 
-                "0001-12", 
-                "-2004-01", 
-                "10000-01", 
-                "-10000-01");
-    }
+  /**
+   * Test duration type.
+   */
+  @Test
+  public void testDurationType() {
+    checkIllegalValues("duration",
+        "PDT");
+    checkLegalValues("duration",
+        "P3D",
+        "-P3D",
+        "PT6M",
+        "P2MT",
+        "-P1Y2M3DT5H6M7S",
+        "P100D");
+  }
 
-    @Test
-    public void testGYearType() {
-        checkIllegalValues("gYear", 
-                "A", 
-                "-",
-                "10",
-                "999");
-        checkLegalValues("gYear", 
-                "1969", 
-                "1970", 
-                "1971", 
-                "1999", 
-                "2000", 
-                "2001",
-                "0001",
-                "-0001",
-                "10000",
-                "-10000");
-    }
+  /**
+   * Test g year month type.
+   */
+  @Test
+  public void testGYearMonthType() {
+    checkIllegalValues("gYearMonth",
+        "A-B",
+        "2000",
+        "01-12",
+        "2000-13",
+        "2000-1",
+        "2000-00");
+    checkLegalValues("gYearMonth",
+        "2000-01",
+        "2000-12",
+        "1970-01",
+        "1969-12",
+        "0001-12",
+        "-2004-01",
+        "10000-01",
+        "-10000-01");
+  }
 
-    @Test
-    public void testGMonthType() {
-        checkIllegalValues("gMonth", 
-                "A", 
-                "-",
-                "1",
-                "00",
-                "13");
-        checkLegalValues("gMonth", 
-                "01", 
-                "12");
-    }
+  /**
+   * Test g year type.
+   */
+  @Test
+  public void testGYearType() {
+    checkIllegalValues("gYear",
+        "A",
+        "-",
+        "10",
+        "999");
+    checkLegalValues("gYear",
+        "1969",
+        "1970",
+        "1971",
+        "1999",
+        "2000",
+        "2001",
+        "0001",
+        "-0001",
+        "10000",
+        "-10000");
+  }
 
-    @Test
-    public void testGDayType() {
-        checkIllegalValues("gDay", 
-                "A", 
-                "-",
-                "1",
-                "00",
-                "32");
-        checkLegalValues("gDay", 
-                "01", 
-                "31");
-    }
+  /**
+   * Test g month type.
+   */
+  @Test
+  public void testGMonthType() {
+    checkIllegalValues("gMonth",
+        "A",
+        "-",
+        "1",
+        "00",
+        "13");
+    checkLegalValues("gMonth",
+        "01",
+        "12");
+  }
 
-    @Test
-    public void testGMonthDayType() {
-        checkIllegalValues("gMonthDay", 
-                "0-1", 
-                "1-1", 
-                "1-0", 
-                "1-32",
-                "01-1", 
-                "1-01");
-        checkLegalValues("gMonthDay",
-                "12-31", 
-                "01-01");
-    }
+  /**
+   * Test g day type.
+   */
+  @Test
+  public void testGDayType() {
+    checkIllegalValues("gDay",
+        "A",
+        "-",
+        "1",
+        "00",
+        "32");
+    checkLegalValues("gDay",
+        "01",
+        "31");
+  }
 
-    @Test
-    public void testHexBinaryType() {
-        checkIllegalValues("hexBinary", 
-                "0", 
-                "AG");
-        checkLegalValues("hexBinary", 
-                "",
-                "0123456789ABCDEF", 
-                "0123456789abcdef", 
-                "00", 
-                "FF", 
-                "ff");
-    }
+  /**
+   * Test g month day type.
+   */
+  @Test
+  public void testGMonthDayType() {
+    checkIllegalValues("gMonthDay",
+        "0-1",
+        "1-1",
+        "1-0",
+        "1-32",
+        "01-1",
+        "1-01");
+    checkLegalValues("gMonthDay",
+        "12-31",
+        "01-01");
+  }
 
-    @Test
-    public void testBase64BinaryType() {
-        checkIllegalValues("base64Binary", 
-                "?"); 
-        checkLegalValues("base64Binary",
-                "",
-                "VGVzdA==", 
-                "SGVsbG8gV29ybGQh");
-    }
-    
-    // private helpers -------------------------------------------------------------------------------------------------
+  /**
+   * Test hex binary type.
+   */
+  @Test
+  public void testHexBinaryType() {
+    checkIllegalValues("hexBinary",
+        "0",
+        "AG");
+    checkLegalValues("hexBinary",
+        "",
+        "0123456789ABCDEF",
+        "0123456789abcdef",
+        "00",
+        "FF",
+        "ff");
+  }
 
-    private void checkLegalValues(String typeName, String... values) {
-        checkPatterns(typeName, true, values);
-    }
+  /**
+   * Test base 64 binary type.
+   */
+  @Test
+  public void testBase64BinaryType() {
+    checkIllegalValues("base64Binary",
+        "?");
+    checkLegalValues("base64Binary",
+        "",
+        "VGVzdA==",
+        "SGVsbG8gV29ybGQh");
+  }
 
-    private void checkIllegalValues(String typeName, String... values) {
-        checkPatterns(typeName, false, values);
-    }
+  // private helpers -------------------------------------------------------------------------------------------------
 
-    private void checkPatterns(String typeName, boolean expectedMatch, String... values) {
-        TypeDescriptor type = provider.getTypeDescriptor(typeName);
-        Pattern p = Pattern.compile(type.getPattern());
-        for (String pattern : values) {
-            String errorMessage = "Value assumed to be " + (expectedMatch ? "legal" : "illegal") + " for type '" + typeName + "': " + pattern;
-            assertEquals(errorMessage, expectedMatch, p.matcher(pattern).matches());
-        }
+  private void checkLegalValues(String typeName, String... values) {
+    checkPatterns(typeName, true, values);
+  }
+
+  private void checkIllegalValues(String typeName, String... values) {
+    checkPatterns(typeName, false, values);
+  }
+
+  private void checkPatterns(String typeName, boolean expectedMatch, String... values) {
+    TypeDescriptor type = provider.getTypeDescriptor(typeName);
+    Pattern p = Pattern.compile(type.getPattern());
+    for (String pattern : values) {
+      String errorMessage = "Value assumed to be " + (expectedMatch ? "legal" : "illegal") + " for type '" + typeName + "': " + pattern;
+      assertEquals(errorMessage, expectedMatch, p.matcher(pattern).matches());
     }
+  }
 }

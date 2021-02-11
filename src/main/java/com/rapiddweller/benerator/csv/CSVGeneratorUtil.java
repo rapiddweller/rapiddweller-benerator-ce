@@ -27,10 +27,10 @@
 package com.rapiddweller.benerator.csv;
 
 import com.rapiddweller.benerator.dataset.DatasetUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.csv.CSVLineIterator;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.csv.CSVLineIterator;
 import com.rapiddweller.script.WeightedSample;
 
 import java.io.IOException;
@@ -46,43 +46,79 @@ import java.util.List;
  */
 public class CSVGeneratorUtil {
 
-    public static <T> List<WeightedSample<T>> parseDatasetFiles(
-            String datasetName, char separator, String nesting, String filenamePattern,
-            String encoding, Converter<String, T> converter) {
-        String[] dataFilenames;
-        if (nesting == null || datasetName == null)
-            dataFilenames = new String[]{filenamePattern};
-        else
-            dataFilenames = DatasetUtil.getDataFiles(filenamePattern, datasetName, nesting);
-        List<WeightedSample<T>> samples = new ArrayList<WeightedSample<T>>();
-        for (String dataFilename : dataFilenames)
-            parseFile(dataFilename, separator, encoding, converter, samples);
-        return samples;
+  /**
+   * Parse dataset files list.
+   *
+   * @param <T>             the type parameter
+   * @param datasetName     the dataset name
+   * @param separator       the separator
+   * @param nesting         the nesting
+   * @param filenamePattern the filename pattern
+   * @param encoding        the encoding
+   * @param converter       the converter
+   * @return the list
+   */
+  public static <T> List<WeightedSample<T>> parseDatasetFiles(
+      String datasetName, char separator, String nesting, String filenamePattern,
+      String encoding, Converter<String, T> converter) {
+    String[] dataFilenames;
+    if (nesting == null || datasetName == null) {
+      dataFilenames = new String[] {filenamePattern};
+    } else {
+      dataFilenames = DatasetUtil.getDataFiles(filenamePattern, datasetName, nesting);
     }
-
-    public static <T> List<WeightedSample<T>> parseFile(String filename, char separator, String encoding,
-                                                        Converter<String, T> converter) {
-        return parseFile(filename, separator, encoding, converter, new ArrayList<WeightedSample<T>>());
+    List<WeightedSample<T>> samples = new ArrayList<>();
+    for (String dataFilename : dataFilenames) {
+      parseFile(dataFilename, separator, encoding, converter, samples);
     }
+    return samples;
+  }
 
-    public static <T> List<WeightedSample<T>> parseFile(String filename, char separator, String encoding,
-                                                        Converter<String, T> converter, List<WeightedSample<T>> samples) {
-        try {
-            CSVLineIterator iterator = new CSVLineIterator(filename, separator, encoding);
-            DataContainer<String[]> container = new DataContainer<String[]>();
-            while ((container = iterator.next(container)) != null) {
-                String[] tokens = container.getData();
-                if (tokens.length == 0)
-                    continue;
-                double weight = (tokens.length < 2 || tokens[1] == null || tokens[1].trim().length() == 0 ? 1. : Double.parseDouble(tokens[1].trim()));
-                T value = converter.convert(tokens[0]);
-                WeightedSample<T> sample = new WeightedSample<T>(value, weight);
-                samples.add(sample);
-            }
-            return samples;
-        } catch (IOException e) {
-            throw new ConfigurationError(e);
+  /**
+   * Parse file list.
+   *
+   * @param <T>       the type parameter
+   * @param filename  the filename
+   * @param separator the separator
+   * @param encoding  the encoding
+   * @param converter the converter
+   * @return the list
+   */
+  public static <T> List<WeightedSample<T>> parseFile(String filename, char separator, String encoding,
+                                                      Converter<String, T> converter) {
+    return parseFile(filename, separator, encoding, converter, new ArrayList<>());
+  }
+
+  /**
+   * Parse file list.
+   *
+   * @param <T>       the type parameter
+   * @param filename  the filename
+   * @param separator the separator
+   * @param encoding  the encoding
+   * @param converter the converter
+   * @param samples   the samples
+   * @return the list
+   */
+  public static <T> List<WeightedSample<T>> parseFile(String filename, char separator, String encoding,
+                                                      Converter<String, T> converter, List<WeightedSample<T>> samples) {
+    try {
+      CSVLineIterator iterator = new CSVLineIterator(filename, separator, encoding);
+      DataContainer<String[]> container = new DataContainer<>();
+      while ((container = iterator.next(container)) != null) {
+        String[] tokens = container.getData();
+        if (tokens.length == 0) {
+          continue;
         }
+        double weight = (tokens.length < 2 || tokens[1] == null || tokens[1].trim().length() == 0 ? 1. : Double.parseDouble(tokens[1].trim()));
+        T value = converter.convert(tokens[0]);
+        WeightedSample<T> sample = new WeightedSample<>(value, weight);
+        samples.add(sample);
+      }
+      return samples;
+    } catch (IOException e) {
+      throw new ConfigurationError(e);
     }
+  }
 
 }

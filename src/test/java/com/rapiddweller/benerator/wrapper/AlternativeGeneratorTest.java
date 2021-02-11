@@ -26,75 +26,88 @@
 
 package com.rapiddweller.benerator.wrapper;
 
+import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.sequence.RandomIntegerGenerator;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.sample.SequenceGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.benerator.Generator;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link AlternativeGenerator}.<br/>
  * <br/>
  * Created: 11.10.2006 23:10:34
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class AlternativeGeneratorTest extends GeneratorTest {
 
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testNonUnique() {
-        Generator<Integer> source1 = new RandomIntegerGenerator(-2, -1);
-        Generator<Integer> source2 = new RandomIntegerGenerator(1, 2);
-        AlternativeGenerator<Integer> generator = new AlternativeGenerator<Integer>(Integer.class, source1, source2);
-        generator.init(context);
-        for (int i = 0; i < 100; i++) {
-			int product = GeneratorUtil.generateNonNull(generator);
-            assertTrue((-2 <= product && product <= -1) || (1 <= product && product <= 2));
-        }
+  /**
+   * Test non unique.
+   */
+  @Test
+  public void testNonUnique() {
+    Generator<Integer> source1 = new RandomIntegerGenerator(-2, -1);
+    Generator<Integer> source2 = new RandomIntegerGenerator(1, 2);
+    AlternativeGenerator<Integer> generator = new AlternativeGenerator<>(Integer.class, source1, source2);
+    generator.init(context);
+    for (int i = 0; i < 100; i++) {
+      int product = GeneratorUtil.generateNonNull(generator);
+      assertTrue((-2 <= product && product <= -1) || (1 <= product && product <= 2));
     }
-    
-    @Test
-    public void testUniqueOneShotAlternatives() {
-        expectUniquelyGeneratedSet(initialize(generator(0)), 0).withCeasedAvailability();
-        expectUniquelyGeneratedSet(initialize(generator(0, 1, 2)), 0, 1, 2).withCeasedAvailability();
-    }
+  }
 
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testUniqueMultiAlternatives() {
-        Generator<Integer>[] gens = new Generator[2];
-        gens[0] = new NShotGeneratorProxy<Integer>(new ConstantGenerator<Integer>(2), 1);
-        gens[1] = generator(0, 1);
-        Generator<Integer> generator = new AlternativeGenerator<Integer>(Integer.class, gens);
-        generator.init(context);
-        expectUniquelyGeneratedSet(generator, 0, 1, 2).withCeasedAvailability();
-    }
+  /**
+   * Test unique one shot alternatives.
+   */
+  @Test
+  public void testUniqueOneShotAlternatives() {
+    expectUniquelyGeneratedSet(initialize(generator(0)), 0).withCeasedAvailability();
+    expectUniquelyGeneratedSet(initialize(generator(0, 1, 2)), 0, 1, 2).withCeasedAvailability();
+  }
 
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testUniqueManyAlternatives() {
-        Generator<Integer>[] gens = new Generator[2];
-        gens[0] = new SequenceGenerator<Integer>(Integer.class, 0, 2, 4, 6, 8);
-        gens[1] = new SequenceGenerator<Integer>(Integer.class, 1, 3, 5, 7, 9);
-        Generator<Integer> generator = new AlternativeGenerator<Integer>(Integer.class, gens);
-        generator.init(context);
-        expectUniqueGenerations(generator, 10).withCeasedAvailability();
-    }
-    
-    // helpers ---------------------------------------------------------------------------------------------------------
+  /**
+   * Test unique multi alternatives.
+   */
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testUniqueMultiAlternatives() {
+    Generator<Integer>[] gens = new Generator[2];
+    gens[0] = new NShotGeneratorProxy<>(new ConstantGenerator<>(2), 1);
+    gens[1] = generator(0, 1);
+    Generator<Integer> generator = new AlternativeGenerator<>(Integer.class, gens);
+    generator.init(context);
+    expectUniquelyGeneratedSet(generator, 0, 1, 2).withCeasedAvailability();
+  }
 
-    @SuppressWarnings("unchecked")
-    private static Generator<Integer> generator(int ... values) {
-        Generator<Integer>[] gens = new Generator[values.length];
-        for (int i = 0; i < values.length; i++)
-            gens[i] = new NShotGeneratorProxy<Integer>(new ConstantGenerator<Integer>(values[i]), 1);
-        AlternativeGenerator<Integer> result = new AlternativeGenerator<Integer>(Integer.class, gens);
-		return result;
+  /**
+   * Test unique many alternatives.
+   */
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testUniqueManyAlternatives() {
+    Generator<Integer>[] gens = new Generator[2];
+    gens[0] = new SequenceGenerator<>(Integer.class, 0, 2, 4, 6, 8);
+    gens[1] = new SequenceGenerator<>(Integer.class, 1, 3, 5, 7, 9);
+    Generator<Integer> generator = new AlternativeGenerator<>(Integer.class, gens);
+    generator.init(context);
+    expectUniqueGenerations(generator, 10).withCeasedAvailability();
+  }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  @SuppressWarnings("unchecked")
+  private static Generator<Integer> generator(int... values) {
+    Generator<Integer>[] gens = new Generator[values.length];
+    for (int i = 0; i < values.length; i++) {
+      gens[i] = new NShotGeneratorProxy<>(new ConstantGenerator<>(values[i]), 1);
     }
-    
+    return new AlternativeGenerator<>(Integer.class, gens);
+  }
+
 
 }

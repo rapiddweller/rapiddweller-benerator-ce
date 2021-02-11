@@ -32,23 +32,37 @@ import com.rapiddweller.benerator.util.GeneratorUtil;
 /**
  * Generates data from a base of non-null sample values.<br/><br/>
  * Created: 03.08.2011 10:30:24
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class NonNullSampleGenerator<E> extends SampleGenerator<E> implements NonNullGenerator<E> {
 
-    @SafeVarargs
-	public NonNullSampleGenerator(Class<E> generatedType, E ... values) {
-    	super(generatedType, values);
-    }
-    
-    public NonNullSampleGenerator(Class<E> generatedType, Iterable<E> values) {
-		super(generatedType, values);
-	}
+  /**
+   * Instantiates a new Non null sample generator.
+   *
+   * @param generatedType the generated type
+   * @param values        the values
+   */
+  @SafeVarargs
+  public NonNullSampleGenerator(Class<E> generatedType, E... values) {
+    super(generatedType, values);
+  }
 
-	@Override
-	public E generate() {
-    	return GeneratorUtil.generateNonNull(this);
-    }
-    
+  /**
+   * Instantiates a new Non null sample generator.
+   *
+   * @param generatedType the generated type
+   * @param values        the values
+   */
+  public NonNullSampleGenerator(Class<E> generatedType, Iterable<E> values) {
+    super(generatedType, values);
+  }
+
+  @Override
+  public E generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
+
 }

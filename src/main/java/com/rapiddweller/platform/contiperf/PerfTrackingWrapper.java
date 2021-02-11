@@ -43,49 +43,83 @@ import java.io.Closeable;
  */
 public abstract class PerfTrackingWrapper implements Closeable {
 
-    private PerformanceTracker tracker;
-    private final PerformanceRequirement requirement;
-    private ReportContext context;
+  private PerformanceTracker tracker;
+  private final PerformanceRequirement requirement;
+  private ReportContext context;
 
-    public PerfTrackingWrapper() {
-        this(null); // allow for lazy PerfromanceTracker initialization
+  /**
+   * Instantiates a new Perf tracking wrapper.
+   */
+  public PerfTrackingWrapper() {
+    this(null); // allow for lazy PerfromanceTracker initialization
+  }
+
+  /**
+   * Instantiates a new Perf tracking wrapper.
+   *
+   * @param tracker the tracker
+   */
+  public PerfTrackingWrapper(PerformanceTracker tracker) {
+    this.tracker = tracker;
+    this.requirement = new PerformanceRequirement();
+    this.context = new BeneratorCpfReportContext();
+    context.addReportModule(new ConsoleReportModule());
+  }
+
+  /**
+   * Gets invoker.
+   *
+   * @return the invoker
+   */
+  protected abstract Invoker getInvoker();
+
+  /**
+   * Sets max.
+   *
+   * @param max the max
+   */
+  public void setMax(int max) {
+    requirement.setMax(max);
+  }
+
+  /**
+   * Sets percentiles.
+   *
+   * @param percentilesSpec the percentiles spec
+   */
+  public void setPercentiles(String percentilesSpec) {
+    requirement.setPercentiles(percentilesSpec);
+  }
+
+  /**
+   * Sets context.
+   *
+   * @param context the context
+   */
+  public void setContext(ReportContext context) {
+    this.context = context;
+  }
+
+  /**
+   * Gets or create tracker.
+   *
+   * @return the or create tracker
+   */
+  public PerformanceTracker getOrCreateTracker() {
+    if (tracker == null) {
+      // the tracker is initialized lazily for allowing the class to be first constructed in a simple way
+      // and then be configured by calling the property setters.
+      Invoker invoker = getInvoker();
+      tracker = new PerformanceTracker(invoker, requirement, context);
     }
+    return tracker;
+  }
 
-    public PerfTrackingWrapper(PerformanceTracker tracker) {
-        this.tracker = tracker;
-        this.requirement = new PerformanceRequirement();
-        this.context = new BeneratorCpfReportContext();
-        context.addReportModule(new ConsoleReportModule());
+  @Override
+  public void close() {
+    if (tracker.isTrackingStarted()) {
+      tracker.stopTracking();
     }
-
-    protected abstract Invoker getInvoker();
-
-    public void setMax(int max) {
-        requirement.setMax(max);
-    }
-
-    public void setPercentiles(String percentilesSpec) {
-        requirement.setPercentiles(percentilesSpec);
-    }
-
-    public void setContext(ReportContext context) {
-        this.context = context;
-    }
-
-    public PerformanceTracker getOrCreateTracker() {
-        if (tracker == null) {
-            // the tracker is initialized lazily for allowing the class to be first constructed in a simple way
-            // and then be configured by calling the property setters.
-            Invoker invoker = getInvoker();
-            tracker = new PerformanceTracker(invoker, requirement, context);
-        }
-        return tracker;
-    }
-
-    @Override
-    public void close() {
-        if (tracker.isTrackingStarted())
-            tracker.stopTracking();
-    }
+  }
 
 }

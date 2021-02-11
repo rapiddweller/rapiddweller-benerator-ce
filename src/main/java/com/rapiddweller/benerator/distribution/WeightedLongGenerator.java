@@ -32,113 +32,161 @@ import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.distribution.function.ConstantFunction;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 
-import java.util.Random;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Long Generator that supports a weight function.<br/>
  * <br/>
  * Created: 18.06.2006 15:00:41
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class WeightedLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
-    private WeightFunction function;
+  private WeightFunction function;
 
-    private Random randomizer;
-    private float[] probSum;
+  private final Random randomizer;
+  private float[] probSum;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public WeightedLongGenerator() {
-        this(Long.MIN_VALUE, Long.MAX_VALUE);
+  /**
+   * Instantiates a new Weighted long generator.
+   */
+  public WeightedLongGenerator() {
+    this(Long.MIN_VALUE, Long.MAX_VALUE);
+  }
+
+  /**
+   * Instantiates a new Weighted long generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public WeightedLongGenerator(long min, long max) {
+    this(min, max, 1);
+  }
+
+  /**
+   * Instantiates a new Weighted long generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   */
+  public WeightedLongGenerator(long min, long max, long granularity) {
+    this(min, max, granularity, new ConstantFunction(1));
+  }
+
+  /**
+   * Instantiates a new Weighted long generator.
+   *
+   * @param min      the min
+   * @param max      the max
+   * @param function the function
+   */
+  public WeightedLongGenerator(long min, long max, WeightFunction function) {
+    this(min, max, 1, function);
+  }
+
+  /**
+   * Instantiates a new Weighted long generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   * @param function    the function
+   */
+  public WeightedLongGenerator(long min, long max, long granularity, WeightFunction function) {
+    super(Long.class, min, max, granularity);
+    this.function = function;
+    this.randomizer = new Random();
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets distribution.
+   *
+   * @return the distribution
+   */
+  public Distribution getDistribution() {
+    return function;
+  }
+
+  /**
+   * Sets distribution.
+   *
+   * @param distribution the distribution
+   */
+  public void setDistribution(Distribution distribution) {
+    if (!(distribution instanceof WeightFunction)) {
+      throw new IllegalArgumentException("Function expected, found: " + distribution);
     }
+    this.function = (WeightFunction) distribution;
+  }
 
-    public WeightedLongGenerator(long min, long max) {
-        this(min, max, 1);
+  // Generator implementation ----------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    normalize();
+    super.init(context);
+  }
+
+  @Override
+  public Long generate() {
+    assertInitialized();
+    float random = randomizer.nextFloat();
+    long n = intervallNoOfRandom(random);
+    return min + n * granularity;
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private long intervallNoOfRandom(float random) {
+    int i = Arrays.binarySearch(probSum, random);
+    if (i < 0) {
+      i = -i - 1;
     }
-
-    public WeightedLongGenerator(long min, long max, long granularity) {
-        this(min, max, granularity, new ConstantFunction(1));
+    if (i >= probSum.length) {
+      return probSum.length - 1;
     }
+    return i;
+  }
 
-    public WeightedLongGenerator(long min, long max, WeightFunction function) {
-        this(min, max, 1, function);
+  private void normalize() {
+    int sampleCount = (int) ((max - min) / granularity) + 1;
+    if (sampleCount > 100000) {
+      throw new InvalidGeneratorSetupException("granularity", "too small, resulting in a set of " + sampleCount + " samples");
     }
-
-    public WeightedLongGenerator(long min, long max, long granularity, WeightFunction function) {
-        super(Long.class, min, max, granularity);
-        this.function = function;
-        this.randomizer = new Random();
-    }
-
-    // properties ------------------------------------------------------------------------------------------------------
-
-    public Distribution getDistribution() {
-        return function;
-    }
-
-    public void setDistribution(Distribution distribution) {
-        if (!(distribution instanceof WeightFunction))
-            throw new IllegalArgumentException("Function expected, found: " + distribution);
-        this.function = (WeightFunction) distribution;
-    }
-
-    // Generator implementation ----------------------------------------------------------------------------------------
-
-    @Override
-	public void init(GeneratorContext context) {
-        normalize();
-        super.init(context);
-    }
-
-	@Override
-	public Long generate() {
-    	assertInitialized();
-        float random = randomizer.nextFloat();
-        long n = intervallNoOfRandom(random);
-        return min + n * granularity;
-    }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private long intervallNoOfRandom(float random) {
-        int i = Arrays.binarySearch(probSum, random);
-        if (i < 0)
-            i = - i - 1;
-        if (i >= probSum.length)
-            return probSum.length - 1;
-        return i;
-    }
-
-    private void normalize() {
-        int sampleCount = (int) ((max - min) / granularity) + 1;
-        if (sampleCount > 100000)
-            throw new InvalidGeneratorSetupException("granularity", "too small, resulting in a set of " + sampleCount + " samples");
-        probSum = new float[sampleCount];
-        if (sampleCount == 1)
-            probSum[0] = 1;
-        else {
-            double sum = 0;
-            for (int i = 0; i < sampleCount; i++) {
-                long dx = (max - min) / (sampleCount - 1);
-                long x = min + i * dx;
-                sum += function.value(x);
-                probSum[i] = (float) sum;
-            }
-            if (sum == 0) {
-            	sum = 1;
-                float avgProp = (float)1./sampleCount;
-                for (int i = 0; i < sampleCount; i++)
-                    probSum[i] = (i + 1) * avgProp;
-            } else if (sum < 0)
-                throw new IllegalGeneratorStateException(
-                        "Invalid WeightFunction: Sum is negative (" + sum + ") for " + function);
-            for (int i = 0; i < sampleCount; i++) {
-                probSum[i] /= (float) sum;
-            }
+    probSum = new float[sampleCount];
+    if (sampleCount == 1) {
+      probSum[0] = 1;
+    } else {
+      double sum = 0;
+      for (int i = 0; i < sampleCount; i++) {
+        long dx = (max - min) / (sampleCount - 1);
+        long x = min + i * dx;
+        sum += function.value(x);
+        probSum[i] = (float) sum;
+      }
+      if (sum == 0) {
+        sum = 1;
+        float avgProp = (float) 1. / sampleCount;
+        for (int i = 0; i < sampleCount; i++) {
+          probSum[i] = (i + 1) * avgProp;
         }
+      } else if (sum < 0) {
+        throw new IllegalGeneratorStateException(
+            "Invalid WeightFunction: Sum is negative (" + sum + ") for " + function);
+      }
+      for (int i = 0; i < sampleCount; i++) {
+        probSum[i] /= (float) sum;
+      }
     }
+  }
 
 }

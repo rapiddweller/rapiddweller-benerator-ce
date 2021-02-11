@@ -26,131 +26,181 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
-import java.math.BigDecimal;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.wrapper.SkipGeneratorProxy;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.MathUtil;
-import com.rapiddweller.commons.NumberUtil;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.MathUtil;
+import com.rapiddweller.common.NumberUtil;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
 
-import static com.rapiddweller.commons.NumberUtil.*;
+import java.math.BigDecimal;
+
+import static com.rapiddweller.common.NumberUtil.toDouble;
+import static com.rapiddweller.common.NumberUtil.toInteger;
+import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
  * Random Walk {@link Sequence} implementation that supports a variable step width.<br/>
  * <br/>
  * Created at 30.06.2009 07:48:40
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class RandomWalkSequence extends Sequence {
-	
-	private static final BigDecimal ONE = BigDecimal.ONE;
-	private static final BigDecimal MINUS_ONE = BigDecimal.ZERO.subtract(ONE);
 
-	private static final boolean DEFAULT_BUFFERED = false;
-	
-	private BigDecimal initial;
-	private BigDecimal minStep;
-	private BigDecimal maxStep;
-	private boolean buffered;
-	
-	// constructors ----------------------------------------------------------------------------------------------------
+  private static final BigDecimal ONE = BigDecimal.ONE;
+  private static final BigDecimal MINUS_ONE = BigDecimal.ZERO.subtract(ONE);
 
-    public RandomWalkSequence() {
-	    this(MINUS_ONE, ONE);
-    }
+  private static final boolean DEFAULT_BUFFERED = false;
+  private final boolean buffered;
+  private BigDecimal initial;
+  private BigDecimal minStep;
+  private BigDecimal maxStep;
 
-    public RandomWalkSequence(BigDecimal minStep, BigDecimal maxStep) {
-	    this(minStep, maxStep, null);
-    }
-    
-    public RandomWalkSequence(BigDecimal minStep, BigDecimal maxStep, BigDecimal initial) {
-	    this(minStep, maxStep, initial, DEFAULT_BUFFERED);
-    }
-    
-    public RandomWalkSequence(BigDecimal minStep, BigDecimal maxStep, BigDecimal initial, boolean buffered) {
-	    this.minStep = minStep;
-	    this.maxStep = maxStep;
-	    this.initial = initial;
-	    this.buffered = buffered;
-    }
-    
-	public void setMinStep(BigDecimal minStep) {
-		this.minStep = minStep;
-	}
-	
-	public void setMaxStep(BigDecimal maxStep) {
-		this.maxStep = maxStep;
-	}
+  // constructors ----------------------------------------------------------------------------------------------------
 
-	public void setInitial(BigDecimal initial) {
-		this.initial = initial;
-	}
-	
-	
-	
-    // Distribution interface implementation ---------------------------------------------------------------------------
+  /**
+   * Instantiates a new Random walk sequence.
+   */
+  public RandomWalkSequence() {
+    this(MINUS_ONE, ONE);
+  }
 
-    @Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
-    	if (max == null)
-    		max = NumberUtil.maxValue(numberType);
-    	NonNullGenerator<? extends Number> base;
-		if (BeanUtil.isIntegralNumberType(numberType))
-			base = createLongGenerator(toLong(min), toLong(max), toLong(granularity), unique);
-		else
-			base = createDoubleGenerator(toDouble(min), toDouble(max), toDouble(granularity), unique);
-		return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
-    }
-    
-    @Override
-    public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-        if (buffered || MathUtil.between(0L, toLong(minStep), toLong(maxStep)))
-        	return super.applyTo(source, unique);
-        else
-	        return applySkipGenerator(source, unique);
-    }
+  /**
+   * Instantiates a new Random walk sequence.
+   *
+   * @param minStep the min step
+   * @param maxStep the max step
+   */
+  public RandomWalkSequence(BigDecimal minStep, BigDecimal maxStep) {
+    this(minStep, maxStep, null);
+  }
 
-	private <T> Generator<T> applySkipGenerator(Generator<T> source, boolean unique) {
-		int minStepI = toInteger(minStep);
-		if (unique && minStepI <= 0)
-			throw new ConfigurationError("Cannot generate unique values when minStep=" + minStep);
-	    return new SkipGeneratorProxy<T>(source, minStepI, toInteger(maxStep));
-    }
-    
-    // helper methods --------------------------------------------------------------------------------------------------
+  /**
+   * Instantiates a new Random walk sequence.
+   *
+   * @param minStep the min step
+   * @param maxStep the max step
+   * @param initial the initial
+   */
+  public RandomWalkSequence(BigDecimal minStep, BigDecimal maxStep, BigDecimal initial) {
+    this(minStep, maxStep, initial, DEFAULT_BUFFERED);
+  }
 
-	private <T> NonNullGenerator<? extends Number> createDoubleGenerator(double min, double max, double granularity, boolean unique) {
-	    if (unique && MathUtil.rangeIncludes(0., min, max)) // check if uniqueness requirements can be met
-	    	throw new InvalidGeneratorSetupException("Cannot guarantee uniqueness for [min=" + min + ",max=" + max + "]");
-	    return new RandomWalkDoubleGenerator(
-	    		toDouble(min), toDouble(max), toDouble(granularity), toDouble(minStep), toDouble(maxStep));
-    }
+  /**
+   * Instantiates a new Random walk sequence.
+   *
+   * @param minStep  the min step
+   * @param maxStep  the max step
+   * @param initial  the initial
+   * @param buffered the buffered
+   */
+  public RandomWalkSequence(BigDecimal minStep, BigDecimal maxStep, BigDecimal initial, boolean buffered) {
+    this.minStep = minStep;
+    this.maxStep = maxStep;
+    this.initial = initial;
+    this.buffered = buffered;
+  }
 
-	private <T> NonNullGenerator<? extends Number> createLongGenerator(long min, long max, long granularity, boolean unique) {
-	    if (unique && MathUtil.rangeIncludes(0, min, max)) // check if uniqueness requirements can be met
-	    	throw new InvalidGeneratorSetupException("Cannot guarantee uniqueness for [min=" + min + ",max=" + max + "]");
-	    return new RandomWalkLongGenerator(
-	    		min, max, toLong(granularity), toLong(initial(min, max, Long.class)), toLong(minStep), toLong(maxStep));
-    }
+  /**
+   * Sets min step.
+   *
+   * @param minStep the min step
+   */
+  public void setMinStep(BigDecimal minStep) {
+    this.minStep = minStep;
+  }
 
-    private <T extends Number> T initial(T min, T max, Class<T> numberType) {
-    	if (initial != null)
-    		return NumberToNumberConverter.convert(initial, numberType);
-    	if (minStep.doubleValue() > 0)
-    		return min;
-		if (maxStep.doubleValue() > 0)
-			return NumberToNumberConverter.convert((min.doubleValue() + max.doubleValue()) / 2, numberType);
-		else
-			return max;
+  /**
+   * Sets max step.
+   *
+   * @param maxStep the max step
+   */
+  public void setMaxStep(BigDecimal maxStep) {
+    this.maxStep = maxStep;
+  }
+
+  /**
+   * Sets initial.
+   *
+   * @param initial the initial
+   */
+  public void setInitial(BigDecimal initial) {
+    this.initial = initial;
+  }
+
+
+  // Distribution interface implementation ---------------------------------------------------------------------------
+
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
+    if (max == null) {
+      max = NumberUtil.maxValue(numberType);
     }
+    NonNullGenerator<? extends Number> base;
+    if (BeanUtil.isIntegralNumberType(numberType)) {
+      base = createLongGenerator(toLong(min), toLong(max), toLong(granularity), unique);
+    } else {
+      base = createDoubleGenerator(toDouble(min), toDouble(max), toDouble(granularity), unique);
+    }
+    return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
+  }
+
+  @Override
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    if (buffered || MathUtil.between(0L, toLong(minStep), toLong(maxStep))) {
+      return super.applyTo(source, unique);
+    } else {
+      return applySkipGenerator(source, unique);
+    }
+  }
+
+  private <T> Generator<T> applySkipGenerator(Generator<T> source, boolean unique) {
+    int minStepI = toInteger(minStep);
+    if (unique && minStepI <= 0) {
+      throw new ConfigurationError("Cannot generate unique values when minStep=" + minStep);
+    }
+    return new SkipGeneratorProxy<>(source, minStepI, toInteger(maxStep));
+  }
+
+  // helper methods --------------------------------------------------------------------------------------------------
+
+  private <T> NonNullGenerator<? extends Number> createDoubleGenerator(double min, double max, double granularity, boolean unique) {
+    if (unique && MathUtil.rangeIncludes(0., min, max)) {
+      // check if uniqueness requirements can be met
+      throw new InvalidGeneratorSetupException("Cannot guarantee uniqueness for [min=" + min + ",max=" + max + "]");
+    }
+    return new RandomWalkDoubleGenerator(
+        toDouble(min), toDouble(max), toDouble(granularity), toDouble(minStep), toDouble(maxStep));
+  }
+
+  private <T> NonNullGenerator<? extends Number> createLongGenerator(long min, long max, long granularity, boolean unique) {
+    if (unique && MathUtil.rangeIncludes(0, min, max)) {
+      // check if uniqueness requirements can be met
+      throw new InvalidGeneratorSetupException("Cannot guarantee uniqueness for [min=" + min + ",max=" + max + "]");
+    }
+    return new RandomWalkLongGenerator(
+        min, max, toLong(granularity), toLong(initial(min, max, Long.class)), toLong(minStep), toLong(maxStep));
+  }
+
+  private <T extends Number> T initial(T min, T max, Class<T> numberType) {
+    if (initial != null) {
+      return NumberToNumberConverter.convert(initial, numberType);
+    }
+    if (minStep.doubleValue() > 0) {
+      return min;
+    }
+    if (maxStep.doubleValue() > 0) {
+      return NumberToNumberConverter.convert((min.doubleValue() + max.doubleValue()) / 2, numberType);
+    } else {
+      return max;
+    }
+  }
 
 }

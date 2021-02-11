@@ -26,7 +26,7 @@
 
 package com.rapiddweller.domain.person;
 
-import com.rapiddweller.commons.converter.PropertyResourceBundleConverter;
+import com.rapiddweller.common.converter.PropertyResourceBundleConverter;
 
 import java.util.Locale;
 
@@ -40,23 +40,43 @@ import java.util.Locale;
  */
 public class SalutationProvider {
 
-    private static final String BASE_NAME = "/com/rapiddweller/domain/person/salutation";
+  private static final String BASE_NAME =
+      "/com/rapiddweller/domain/person/salutation";
 
-    private PropertyResourceBundleConverter converter;
+  private PropertyResourceBundleConverter converter;
 
-    public SalutationProvider() {
-        this(Locale.getDefault());
-    }
+  /**
+   * Instantiates a new Salutation provider.
+   */
+  public SalutationProvider() {
+    this(Locale.getDefault());
+  }
 
-    public SalutationProvider(Locale locale) {
-        setLocale(locale);
-    }
+  /**
+   * Instantiates a new Salutation provider.
+   *
+   * @param locale the locale
+   */
+  public SalutationProvider(Locale locale) {
+    setLocale(locale);
+  }
 
-    public void setLocale(Locale locale) {
-        this.converter = new PropertyResourceBundleConverter(BASE_NAME, locale);
-    }
+  /**
+   * Sets locale.
+   *
+   * @param locale the locale
+   */
+  public void setLocale(Locale locale) {
+    this.converter = new PropertyResourceBundleConverter(BASE_NAME, locale);
+  }
 
-    public String salutation(Gender gender) {
-        return converter.convert(gender.name());
-    }
+  /**
+   * Salutation string.
+   *
+   * @param gender the gender
+   * @return the string
+   */
+  public String salutation(Gender gender) {
+    return converter.convert(gender.name());
+  }
 }

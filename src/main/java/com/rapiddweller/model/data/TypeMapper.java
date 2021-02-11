@@ -37,32 +37,52 @@ import java.util.Map;
  */
 public class TypeMapper {
 
-    private final Map<String, Class<?>> abstractToConcrete;
-    private final Map<Class<?>, String> concreteToAbstract;
+  private final Map<String, Class<?>> abstractToConcrete;
+  private final Map<Class<?>, String> concreteToAbstract;
 
-    /**
-     * @param typeMappings name-class pairs that list the mappings to be defined
-     */
-    public TypeMapper(Object... typeMappings) {
-        this.abstractToConcrete = new HashMap<String, Class<?>>();
-        this.concreteToAbstract = new HashMap<Class<?>, String>();
-        for (int i = 0; i < typeMappings.length; i += 2) {
-            String abstractType = (String) typeMappings[i];
-            Object concreteType = typeMappings[i + 1];
-            map(abstractType, (Class<?>) concreteType);
-        }
+  /**
+   * Instantiates a new Type mapper.
+   *
+   * @param typeMappings name-class pairs that list the mappings to be defined
+   */
+  public TypeMapper(Object... typeMappings) {
+    this.abstractToConcrete = new HashMap<>();
+    this.concreteToAbstract = new HashMap<>();
+    for (int i = 0; i < typeMappings.length; i += 2) {
+      String abstractType = (String) typeMappings[i];
+      Object concreteType = typeMappings[i + 1];
+      map(abstractType, (Class<?>) concreteType);
     }
+  }
 
-    public void map(String abstractType, Class<?> concreteType) {
-        abstractToConcrete.put(abstractType, concreteType);
-        concreteToAbstract.put(concreteType, abstractType);
-    }
+  /**
+   * Map.
+   *
+   * @param abstractType the abstract type
+   * @param concreteType the concrete type
+   */
+  public void map(String abstractType, Class<?> concreteType) {
+    abstractToConcrete.put(abstractType, concreteType);
+    concreteToAbstract.put(concreteType, abstractType);
+  }
 
-    public Class<?> concreteType(String abstractType) {
-        return abstractToConcrete.get(abstractType);
-    }
+  /**
+   * Concrete type class.
+   *
+   * @param abstractType the abstract type
+   * @return the class
+   */
+  public Class<?> concreteType(String abstractType) {
+    return abstractToConcrete.get(abstractType);
+  }
 
-    public String abstractType(Class<?> concreteType) {
-        return concreteToAbstract.get(concreteType);
-    }
+  /**
+   * Abstract type string.
+   *
+   * @param concreteType the concrete type
+   * @return the string
+   */
+  public String abstractType(Class<?> concreteType) {
+    return concreteToAbstract.get(concreteType);
+  }
 }

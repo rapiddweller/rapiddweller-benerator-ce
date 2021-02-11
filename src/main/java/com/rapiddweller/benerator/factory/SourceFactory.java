@@ -31,89 +31,116 @@ import com.rapiddweller.benerator.dataset.DatasetUtil;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.IteratingGenerator;
-import com.rapiddweller.commons.iterator.TextLineIterable;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.csv.CSVCellSource;
-import com.rapiddweller.formats.csv.CSVSource;
-import com.rapiddweller.formats.xls.XLSLineSource;
+import com.rapiddweller.common.iterator.TextLineIterable;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.csv.CSVCellSource;
+import com.rapiddweller.format.csv.CSVSource;
+import com.rapiddweller.format.xls.XLSLineSource;
 import com.rapiddweller.model.data.Uniqueness;
 
 /**
  * Factory class for source-related {@link Generator}s.<br/><br/>
  * Created: 06.08.2011 13:11:11
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class SourceFactory {
 
-    // source generators -----------------------------------------------------------------------------------------------
+  // source generators -----------------------------------------------------------------------------------------------
 
-    /**
-     * Creates a generator that iterates through the cells of a CSV file.
-     *
-     * @param uri         the uri of the CSV file
-     * @param separator   the cell separator used in the CSV file
-     * @return a generator of the desired characteristics
-     */
-    public static Generator<String> createCSVCellGenerator(String uri, char separator, String encoding) {
-        return new DataSourceGenerator<String>(new CSVCellSource(uri, separator));
-    }
+  /**
+   * Creates a generator that iterates through the cells of a CSV file.
+   *
+   * @param uri       the uri of the CSV file
+   * @param separator the cell separator used in the CSV file
+   * @param encoding  the encoding
+   * @return a generator of the desired characteristics
+   */
+  public static Generator<String> createCSVCellGenerator(String uri, char separator, String encoding) {
+    return new DataSourceGenerator<>(new CSVCellSource(uri, separator));
+  }
 
-    public static Generator<String[]> createCSVGenerator(String uri, char separator, String encoding, 
-    		boolean ignoreEmptyLines, boolean rowBased) {
-        return new DataSourceGenerator<String[]>(new CSVSource(uri, separator, encoding, ignoreEmptyLines, rowBased));
-    }
+  /**
+   * Create csv generator generator.
+   *
+   * @param uri              the uri
+   * @param separator        the separator
+   * @param encoding         the encoding
+   * @param ignoreEmptyLines the ignore empty lines
+   * @param rowBased         the row based
+   * @return the generator
+   */
+  public static Generator<String[]> createCSVGenerator(String uri, char separator, String encoding,
+                                                       boolean ignoreEmptyLines, boolean rowBased) {
+    return new DataSourceGenerator<>(new CSVSource(uri, separator, encoding, ignoreEmptyLines, rowBased));
+  }
 
-    /**
-     * Creates a generator that creates lines from a CSV file as String arrays.
-     *
-     * @param uri              the uri of the CSV file
-     * @param separator        the cell separator used in the CSV file
-     * @param encoding 
-     * @param ignoreEmptyLines flag whether to leave out empty lines
-     * @return a generator of the desired characteristics
-     */
-    public static Generator<String[]> createCSVLineGenerator(String uri, char separator, String encoding, 
-    		boolean ignoreEmptyLines) {
-        return new DataSourceGenerator<String[]>(new CSVSource(uri, separator, encoding, ignoreEmptyLines, true));
-    }
+  /**
+   * Creates a generator that creates lines from a CSV file as String arrays.
+   *
+   * @param uri              the uri of the CSV file
+   * @param separator        the cell separator used in the CSV file
+   * @param encoding         encoding what the generator should use
+   * @param ignoreEmptyLines flag whether to leave out empty lines
+   * @return a generator of the desired characteristics
+   */
+  public static Generator<String[]> createCSVLineGenerator(String uri, char separator, String encoding,
+                                                           boolean ignoreEmptyLines) {
+    return new DataSourceGenerator<>(new CSVSource(uri, separator, encoding, ignoreEmptyLines, true));
+  }
 
-    /**
-     * Creates a generator that creates lines from a XLS file as {@link Object} arrays.
-     * @param uri the uri of the XLS file
-     * @return a generator of the desired characteristics
-     */
-    public static Generator<Object[]> createXLSLineGenerator(String uri) {
-        return new DataSourceGenerator<Object[]>(new XLSLineSource(uri));
-    }
+  /**
+   * Creates a generator that creates lines from a XLS file as {@link Object} arrays.
+   *
+   * @param uri the uri of the XLS file
+   * @return a generator of the desired characteristics
+   */
+  public static Generator<Object[]> createXLSLineGenerator(String uri) {
+    return new DataSourceGenerator<>(new XLSLineSource(uri));
+  }
 
-    /**
-     * Creates a generator that iterates through the lines of a text file.
-     * @param uri         the URI of the text file
-     * @return a generator of the desired characteristics
-     */
-    public static Generator<String> createTextLineGenerator(String uri) {
-        return new IteratingGenerator<String>(new TextLineIterable(uri));
-    }
+  /**
+   * Creates a generator that iterates through the lines of a text file.
+   *
+   * @param uri the URI of the text file
+   * @return a generator of the desired characteristics
+   */
+  public static Generator<String> createTextLineGenerator(String uri) {
+    return new IteratingGenerator<>(new TextLineIterable(uri));
+  }
 
-    @SuppressWarnings("unchecked")
-	public static <T> Generator<T> createRawSourceGenerator(String nesting, String dataset,
-            String sourceName, DataSourceProvider<T> factory, Class<T> generatedType, BeneratorContext context) {
-	    Generator<T> generator;
-		if (dataset != null && nesting != null) {
-		    String[] uris = DatasetUtil.getDataFiles(sourceName, dataset, nesting);
-            Generator<T>[] sources = new Generator[uris.length];
-            for (int i = 0; i < uris.length; i++) {
-            	DataSource<T> source = factory.create(uris[i], context);
-                sources[i] = new DataSourceGenerator<T>(source);
-            }
-			generator = context.getGeneratorFactory().createAlternativeGenerator(generatedType, sources, Uniqueness.NONE);
-		} else {
-		    // iterate over (possibly large) data file
-			DataSource<T> source = factory.create(sourceName, context);
-		    generator = new DataSourceGenerator<T>(source);
-		}
-		return generator;
+  /**
+   * Create raw source generator generator.
+   *
+   * @param <T>           the type parameter
+   * @param nesting       the nesting
+   * @param dataset       the dataset
+   * @param sourceName    the source name
+   * @param factory       the factory
+   * @param generatedType the generated type
+   * @param context       the context
+   * @return the generator
+   */
+  @SuppressWarnings("unchecked")
+  public static <T> Generator<T> createRawSourceGenerator(String nesting, String dataset,
+                                                          String sourceName, DataSourceProvider<T> factory, Class<T> generatedType,
+                                                          BeneratorContext context) {
+    Generator<T> generator;
+    if (dataset != null && nesting != null) {
+      String[] uris = DatasetUtil.getDataFiles(sourceName, dataset, nesting);
+      Generator<T>[] sources = new Generator[uris.length];
+      for (int i = 0; i < uris.length; i++) {
+        DataSource<T> source = factory.create(uris[i], context);
+        sources[i] = new DataSourceGenerator<>(source);
+      }
+      generator = context.getGeneratorFactory().createAlternativeGenerator(generatedType, sources, Uniqueness.NONE);
+    } else {
+      // iterate over (possibly large) data file
+      DataSource<T> source = factory.create(sourceName, context);
+      generator = new DataSourceGenerator<>(source);
     }
+    return generator;
+  }
 
 }

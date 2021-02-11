@@ -32,29 +32,36 @@ import com.rapiddweller.benerator.Generator;
  * Converts the {@link Number} products of another {@link Generator} to {@link Integer}.<br/>
  * <br/>
  * Created at 23.06.2009 22:58:26
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class AsIntegerGeneratorWrapper<E extends Number> extends GeneratorWrapper<E, Integer> {
 
-    public AsIntegerGeneratorWrapper(Generator<E> source) {
-	    super(source);
-    }
+  /**
+   * Instantiates a new As integer generator wrapper.
+   *
+   * @param source the source
+   */
+  public AsIntegerGeneratorWrapper(Generator<E> source) {
+    super(source);
+  }
 
-	@Override
-	public Class<Integer> getGeneratedType() {
-	    return Integer.class;
-    }
+  @Override
+  public Class<Integer> getGeneratedType() {
+    return Integer.class;
+  }
 
-	@Override
-	public ProductWrapper<Integer> generate(ProductWrapper<Integer> wrapper) {
-    	assertInitialized();
-    	ProductWrapper<E> tmp = generateFromSource();
-    	if (tmp == null)
-    		return null;
-	    E unwrappedValue = tmp.unwrap();
-		return wrapper.wrap(unwrappedValue != null ? unwrappedValue.intValue() : null);
+  @Override
+  public ProductWrapper<Integer> generate(ProductWrapper<Integer> wrapper) {
+    assertInitialized();
+    ProductWrapper<E> tmp = generateFromSource();
+    if (tmp == null) {
+      return null;
     }
+    E unwrappedValue = tmp.unwrap();
+    return wrapper.wrap(unwrappedValue != null ? unwrappedValue.intValue() : null);
+  }
 
 }

@@ -26,43 +26,55 @@
 
 package com.rapiddweller.benerator.util;
 
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ReaderLineIterator;
+import org.junit.Test;
+
 import java.io.IOException;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ReaderLineIterator;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the LineShuffler.<br/><br/>
  * Created: 22.07.2007 08:16:23
+ *
  * @author Volker Bergmann
  */
 public class LineShufflerTest {
 
-	@Test
-    public void testShuffleList() {
-        LineShuffler.shuffle(CollectionUtil.toList("1", "2", "3"));
-    }
+  /**
+   * Test shuffle list.
+   */
+  @Test
+  public void testShuffleList() {
+    LineShuffler.shuffle(CollectionUtil.toList("1", "2", "3"));
+  }
 
-	@Test
-    public void testShuffleFile() throws IOException {
-    	boolean[] check = new boolean[3];
-        String outFile = "target/LineShufflerTest.txt";
-		LineShuffler.shuffle("com/rapiddweller/benerator/util/test.txt", outFile, 3);
-		ReaderLineIterator iterator = new ReaderLineIterator(IOUtil.getReaderForURI(outFile));
-		int count = 0;
-		while (iterator.hasNext()) {
-			count++;
-			int value = Integer.parseInt(iterator.next());
-			assertFalse(check[value]);
-			check[value] = true;
-		}
-		assertEquals(3, count);
-		for (boolean c : check)
-			assertTrue(c);
+  /**
+   * Test shuffle file.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void testShuffleFile() throws IOException {
+    boolean[] check = new boolean[3];
+    String outFile = "target/LineShufflerTest.txt";
+    LineShuffler.shuffle("com/rapiddweller/benerator/util/test.txt", outFile, 3);
+    ReaderLineIterator iterator = new ReaderLineIterator(IOUtil.getReaderForURI(outFile));
+    int count = 0;
+    while (iterator.hasNext()) {
+      count++;
+      int value = Integer.parseInt(iterator.next());
+      assertFalse(check[value]);
+      check[value] = true;
     }
-    
+    assertEquals(3, count);
+    for (boolean c : check) {
+      assertTrue(c);
+    }
+  }
+
 }

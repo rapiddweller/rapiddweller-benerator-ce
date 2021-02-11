@@ -28,31 +28,41 @@ package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.util.LuhnValidator;
-import com.rapiddweller.commons.validator.RegexValidator;
+import com.rapiddweller.common.validator.RegexValidator;
 import org.junit.Test;
 
 /**
  * Tests the {@link LuhnGenerator}.<br/><br/>
  * Created: 18.10.2009 10:26:47
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class LuhnGeneratorTest extends GeneratorClassTest {
 
-	public LuhnGeneratorTest() {
-	    super(LuhnGenerator.class);
-    }
+  /**
+   * Instantiates a new Luhn generator test.
+   */
+  public LuhnGeneratorTest() {
+    super(LuhnGenerator.class);
+  }
 
-	@Test
-	public void testDefault() {
-		expectGenerations(initialize(new LuhnGenerator()), 100, new LuhnValidator());
-	}
-	
-	@Test
-	public void testPrefix() {
-		expectGenerations(initialize(new LuhnGenerator("123", 4, 8, 4, null)), 100, 
-				new LuhnValidator(), 
-				new RegexValidator("123[0-9]{1,5}"));
-	}
-	
+  /**
+   * Test default.
+   */
+  @Test
+  public void testDefault() {
+    expectGenerations(initialize(new LuhnGenerator()), 100, new LuhnValidator());
+  }
+
+  /**
+   * Test prefix.
+   */
+  @Test
+  public void testPrefix() {
+    expectGenerations(initialize(new LuhnGenerator("123", 4, 8, 4, null)), 100,
+        new LuhnValidator(),
+        new RegexValidator("123[0-9]{1,5}"));
+  }
+
 }

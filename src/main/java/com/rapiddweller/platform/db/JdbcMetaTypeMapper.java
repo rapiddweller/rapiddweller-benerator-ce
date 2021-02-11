@@ -26,8 +26,8 @@
 
 package com.rapiddweller.platform.db;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.jdbacl.model.DBDataType;
 import com.rapiddweller.script.PrimitiveType;
 
@@ -44,60 +44,71 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class JdbcMetaTypeMapper {
 
-    private static final Map<Integer, PrimitiveType> TYPE_MAP;
+  private static final Map<Integer, PrimitiveType> TYPE_MAP;
 
-    static {
+  static {
 
-        TYPE_MAP = CollectionUtil.buildMap(
-                // Types.ARRAY is not supported
-                Types.BIGINT, PrimitiveType.LONG,
-                Types.BINARY, PrimitiveType.BINARY,
-                Types.BIT, PrimitiveType.BYTE,
-                Types.BLOB, PrimitiveType.BINARY,
-                Types.BOOLEAN, PrimitiveType.BOOLEAN,
-                Types.CHAR, PrimitiveType.STRING,
-                Types.CLOB, PrimitiveType.STRING,
-                Types.DATALINK, PrimitiveType.STRING, // TODO v1.0 test
-                Types.DATE, PrimitiveType.DATE,
-                Types.DECIMAL, PrimitiveType.BIG_DECIMAL,
-                // Types.DISTINCT is not supported
-                Types.DOUBLE, PrimitiveType.DOUBLE,
-                Types.FLOAT, PrimitiveType.FLOAT,
-                Types.INTEGER, PrimitiveType.INT,
-                Types.JAVA_OBJECT, PrimitiveType.OBJECT,
-                Types.LONGVARBINARY, PrimitiveType.BINARY,
-                Types.LONGVARCHAR, PrimitiveType.STRING,
-                // Types.NULL is not supported
-                Types.NUMERIC, PrimitiveType.DOUBLE,
-                Types.REAL, PrimitiveType.DOUBLE,
-                Types.REF, PrimitiveType.STRING, // TODO v1.0 test
-                Types.SMALLINT, PrimitiveType.SHORT,
-                // Types.STRUCT is not supported
-                Types.TIME, PrimitiveType.DATE,
-                Types.TIMESTAMP, PrimitiveType.TIMESTAMP,
-                Types.TINYINT, PrimitiveType.BYTE,
-                Types.VARBINARY, PrimitiveType.BINARY,
-                Types.VARCHAR, PrimitiveType.STRING,
-                Types.OTHER, PrimitiveType.LONG);
+    TYPE_MAP = CollectionUtil.buildMap(
+        // Types.ARRAY is not supported
+        Types.BIGINT, PrimitiveType.LONG,
+        Types.BINARY, PrimitiveType.BINARY,
+        Types.BIT, PrimitiveType.BYTE,
+        Types.BLOB, PrimitiveType.BINARY,
+        Types.BOOLEAN, PrimitiveType.BOOLEAN,
+        Types.CHAR, PrimitiveType.STRING,
+        Types.CLOB, PrimitiveType.STRING,
+        Types.DATALINK, PrimitiveType.STRING, // TODO v1.0 test
+        Types.DATE, PrimitiveType.DATE,
+        Types.DECIMAL, PrimitiveType.BIG_DECIMAL,
+        // Types.DISTINCT is not supported
+        Types.DOUBLE, PrimitiveType.DOUBLE,
+        Types.FLOAT, PrimitiveType.FLOAT,
+        Types.INTEGER, PrimitiveType.INT,
+        Types.JAVA_OBJECT, PrimitiveType.OBJECT,
+        Types.LONGVARBINARY, PrimitiveType.BINARY,
+        Types.LONGVARCHAR, PrimitiveType.STRING,
+        // Types.NULL is not supported
+        Types.NUMERIC, PrimitiveType.DOUBLE,
+        Types.REAL, PrimitiveType.DOUBLE,
+        Types.REF, PrimitiveType.STRING, // TODO v1.0 test
+        Types.SMALLINT, PrimitiveType.SHORT,
+        // Types.STRUCT is not supported
+        Types.TIME, PrimitiveType.DATE,
+        Types.TIMESTAMP, PrimitiveType.TIMESTAMP,
+        Types.TINYINT, PrimitiveType.BYTE,
+        Types.VARBINARY, PrimitiveType.BINARY,
+        Types.VARCHAR, PrimitiveType.STRING,
+        Types.OTHER, PrimitiveType.STRING);
+  }
+
+  /**
+   * Abstract type string.
+   *
+   * @param columnType    the column type
+   * @param acceptUnknown the accept unknown
+   * @return the string
+   */
+  public static String abstractType(DBDataType columnType,
+                                    boolean acceptUnknown) {
+    int jdbcType = columnType.getJdbcType();
+    PrimitiveType primitiveType = TYPE_MAP.get(jdbcType);
+    if (primitiveType != null) {
+      return primitiveType.getName();
+    } else {
+      String lcName = columnType.getName().toLowerCase();
+      if (lcName.startsWith("timestamp")) {
+        return PrimitiveType.TIMESTAMP.getName();
+      } else if (lcName.endsWith("char") || lcName.startsWith("xml")
+          || lcName.endsWith("varchar2") || lcName.endsWith("clob")) {
+        return PrimitiveType.STRING.getName();
+      } else if (!acceptUnknown) {
+        throw new ConfigurationError(
+            "Platform specific SQL type (" + jdbcType +
+                ") not mapped: " + columnType.getName());
+      } else {
+        return null;
+      }
     }
-
-    public static String abstractType(DBDataType columnType, boolean acceptUnknown) {
-        int jdbcType = columnType.getJdbcType();
-        PrimitiveType primitiveType = TYPE_MAP.get(jdbcType);
-        if (primitiveType != null)
-            return primitiveType.getName();
-        else {
-            String lcName = columnType.getName().toLowerCase();
-            if (lcName.startsWith("timestamp"))
-                return PrimitiveType.TIMESTAMP.getName();
-            else if (lcName.endsWith("char") || lcName.startsWith("xml")
-                    || lcName.endsWith("varchar2") || lcName.endsWith("clob"))
-                return PrimitiveType.STRING.getName();
-            else if (!acceptUnknown)
-                throw new ConfigurationError("Platform specific SQL type (" + jdbcType + ") not mapped: " + columnType.getName());
-            else
-                return null;
-        }
-    }
+  }
 
 }

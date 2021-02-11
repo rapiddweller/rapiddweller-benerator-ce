@@ -34,11 +34,11 @@ import com.rapiddweller.benerator.dataset.DatasetBasedGenerator;
 import com.rapiddweller.benerator.dataset.DatasetUtil;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.commons.StringUtil;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.StringUtil;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Locale;
 import java.util.Stack;
@@ -51,96 +51,127 @@ import java.util.Stack;
  * @author Volker Bergmann
  * @since 0.1
  */
-public class StreetNameGenerator extends GeneratorProxy<String> implements DatasetBasedGenerator<String>, NonNullGenerator<String> {
+public class StreetNameGenerator extends GeneratorProxy<String>
+    implements DatasetBasedGenerator<String>, NonNullGenerator<String> {
 
-    private static final Logger LOGGER = LogManager.getLogger(StreetNameGenerator.class);
+  private static final Logger LOGGER =
+      LogManager.getLogger(StreetNameGenerator.class);
 
-    private static final String REGION_NESTING = "com/rapiddweller/dataset/region";
-    private static final String FILENAME_PATTERN = "/com/rapiddweller/domain/address/street_{0}.csv";
+  private static final String REGION_NESTING =
+      "com/rapiddweller/dataset/region";
+  private static final String FILENAME_PATTERN =
+      "/com/rapiddweller/domain/address/street_{0}.csv";
 
-    private String datasetName;
+  private String datasetName;
 
-    // construction ----------------------------------------------------------------------------------------------------
+  // construction ----------------------------------------------------------------------------------------------------
 
-    public StreetNameGenerator() {
-        this(null);
+  /**
+   * Instantiates a new Street name generator.
+   */
+  public StreetNameGenerator() {
+    this(null);
+  }
+
+  /**
+   * Instantiates a new Street name generator.
+   *
+   * @param datasetName the dataset name
+   */
+  public StreetNameGenerator(String datasetName) {
+    super(String.class);
+    this.datasetName = datasetName;
+  }
+
+  // DatasetBasedGenerator interface implementation ------------------------------------------------------------------
+
+  private static Generator<String> createSource(String datasetName) {
+    return new WeightedDatasetCSVGenerator<>(String.class, FILENAME_PATTERN,
+        datasetName, REGION_NESTING, true, Encodings.UTF_8);
+  }
+
+  @Override
+  public String getNesting() {
+    return REGION_NESTING;
+  }
+
+  @Override
+  public String getDataset() {
+    return datasetName;
+  }
+
+  /**
+   * Sets dataset.
+   *
+   * @param datasetName the dataset name
+   */
+  public void setDataset(String datasetName) {
+    this.datasetName = datasetName;
+  }
+
+  @Override
+  public String generateForDataset(String dataset) {
+    return getSource().generateForDataset(dataset);
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    Stack<String> datasetOptions = new Stack<>();
+    datasetOptions.push(DatasetUtil.fallbackRegionName());
+    datasetOptions.push(DatasetUtil.defaultRegionName());
+    if (!StringUtil.isEmpty(datasetName)) {
+      datasetOptions.push(datasetName);
     }
+    init(datasetOptions, context);
+  }
 
-    public StreetNameGenerator(String datasetName) {
-        super(String.class);
-        this.datasetName = datasetName;
+  private void init(Stack<String> datasetOptions, GeneratorContext context) {
+    String currentOption = datasetOptions.pop();
+    try {
+      setSource(createSource(currentOption));
+      super.init(context);
+    } catch (Exception e) {
+      // if the call fails, try another option
+      if (datasetOptions.isEmpty()) {
+        throw new ConfigurationError(getClass().getSimpleName() +
+            " could not be initialized");
+      }
+      String nextOption = datasetOptions.peek();
+      LOGGER.error("Error initializing " + getClass().getSimpleName() +
+          " with dataset '" + currentOption + "': " +
+          e.getMessage() + ". Falling back to '" + nextOption + "'");
+      init(datasetOptions, context);
     }
+  }
 
-    // DatasetBasedGenerator interface implementation ------------------------------------------------------------------
+  @Override
+  public WeightedDatasetCSVGenerator<String> getSource() {
+    return (WeightedDatasetCSVGenerator<String>) super.getSource();
+  }
 
-    private static Generator<String> createSource(String datasetName) {
-        return new WeightedDatasetCSVGenerator<String>(String.class, FILENAME_PATTERN, datasetName, REGION_NESTING, true, Encodings.UTF_8);
+  @Override
+  public String generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  /**
+   * Generate for country and locale string.
+   *
+   * @param countryCode the country code
+   * @param language    the language
+   * @return the string
+   */
+  public String generateForCountryAndLocale(String countryCode,
+                                            Locale language) {
+    WeightedDatasetCSVGenerator<String> source = getSource();
+    String subset = countryCode + '_' + language.getLanguage();
+    if (source.supportsDataset(subset)) {
+      return source.generateForDataset(subset);
     }
-
-    @Override
-    public String getNesting() {
-        return REGION_NESTING;
-    }
-
-    @Override
-    public String getDataset() {
-        return datasetName;
-    }
-
-    public void setDataset(String datasetName) {
-        this.datasetName = datasetName;
-    }
-
-    @Override
-    public String generateForDataset(String dataset) {
-        return getSource().generateForDataset(dataset);
-    }
-
-    @Override
-    public synchronized void init(GeneratorContext context) {
-        Stack<String> datasetOptions = new Stack<String>();
-        datasetOptions.push(DatasetUtil.fallbackRegionName());
-        datasetOptions.push(DatasetUtil.defaultRegionName());
-        if (!StringUtil.isEmpty(datasetName))
-            datasetOptions.push(datasetName);
-        init(datasetOptions, context);
-    }
-
-    private void init(Stack<String> datasetOptions, GeneratorContext context) {
-        String currentOption = datasetOptions.pop();
-        try {
-            setSource(createSource(currentOption));
-            super.init(context);
-        } catch (Exception e) {
-            // if the call fails, try another option
-            if (datasetOptions.isEmpty())
-                throw new ConfigurationError(getClass().getSimpleName() + " could not be initialized");
-            String nextOption = datasetOptions.peek();
-            LOGGER.error("Error initializing " + getClass().getSimpleName() + " with dataset '" + currentOption + "': " +
-                    e.getMessage() + ". Falling back to '" + nextOption + "'");
-            init(datasetOptions, context);
-        }
-    }
-
-    @Override
-    public WeightedDatasetCSVGenerator<String> getSource() {
-        return (WeightedDatasetCSVGenerator<String>) super.getSource();
-    }
-
-    @Override
-    public String generate() {
-        return GeneratorUtil.generateNonNull(this);
-    }
-
-    // helpers ---------------------------------------------------------------------------------------------------------
-
-    public String generateForCountryAndLocale(String countryCode, Locale language) {
-        WeightedDatasetCSVGenerator<String> source = getSource();
-        String subset = countryCode + '_' + language.getLanguage();
-        if (source.supportsDataset(subset))
-            return source.generateForDataset(subset);
-        subset = countryCode;
-        return source.generateForDataset(countryCode);
-    }
+    subset = countryCode;
+    return source.generateForDataset(countryCode);
+  }
 
 }

@@ -32,49 +32,84 @@ import java.util.List;
 /**
  * Wraps a single anonymization to be applied to certain data nodes of different files.<br/><br/>
  * Created: 27.02.2014 14:12:00
- * @since 0.9.0
+ *
  * @author Volker Bergmann
+ * @since 0.9.0
  */
-
 public class Anonymization {
-	
-	private String varname;
-	
-	/** Characterizes the files and their data nodes to which to apply the anonymization. */
-	private List<Locator> locators;
-	
-	/** Key-value pairs of Benerator anonymization settings as they would appear in a descriptor file. */
-	private List<Setting> settings;
-	
-	public Anonymization(String varname) {
-		this.varname = varname;
-		this.locators = new ArrayList<Locator>();
-		this.settings = new ArrayList<Setting>();
-	}
-	
-	public String getVarname() {
-		return varname;
-	}
-	
-	public void addLocator(Locator locator) {
-		this.locators.add(locator);
-	}
-	
-	public List<Locator> getLocators() {
-		return locators;
-	}
-	
-	public void addSetting(String key, String value) {
-		this.settings.add(new Setting(key, value));
-	}
-	
-	public List<Setting> getSettings() {
-		return settings;
-	}
-	
-	@Override
-	public String toString() {
-		return varname;
-	}
-	
+
+  private final String varname;
+
+  /**
+   * Characterizes the files and their data nodes to which to apply the anonymization.
+   */
+  private final List<Locator> locators;
+
+  /**
+   * Key-value pairs of Benerator anonymization settings as they would appear in a descriptor file.
+   */
+  private final List<Setting> settings;
+
+  /**
+   * Instantiates a new Anonymization.
+   *
+   * @param varname the varname
+   */
+  public Anonymization(String varname) {
+    this.varname = varname;
+    this.locators = new ArrayList<>();
+    this.settings = new ArrayList<>();
+  }
+
+  /**
+   * Gets varname.
+   *
+   * @return the varname
+   */
+  public String getVarname() {
+    return varname;
+  }
+
+  /**
+   * Add locator.
+   *
+   * @param locator the locator
+   */
+  public void addLocator(Locator locator) {
+    this.locators.add(locator);
+  }
+
+  /**
+   * Gets locators.
+   *
+   * @return the locators
+   */
+  public List<Locator> getLocators() {
+    return locators;
+  }
+
+  /**
+   * Add setting.
+   *
+   * @param key   the key
+   * @param value the value
+   */
+  public void addSetting(String key, String value) {
+    this.settings.add(new Setting(key, value));
+  }
+
+  /**
+   * Gets settings.
+   *
+   * @return the settings
+   */
+  public List<Setting> getSettings() {
+    return settings;
+  }
+
+  @Override
+  public String toString() {
+    return varname;
+  }
+
 }

@@ -26,29 +26,35 @@
 
 package com.rapiddweller.benerator.engine;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Closes resources if system shutdown happens normally or enforced.<br/><br/>
  * Created: 22.02.2010 07:39:37
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class BeneratorShutdownHook extends Thread {
 
-	private static final Logger logger = LogManager.getLogger(BeneratorShutdownHook.class);
-	
-	private ResourceManager resourceManager;
-	
-	public BeneratorShutdownHook(ResourceManager resourceManager) {
-	    this.resourceManager = resourceManager;
-    }
+  private static final Logger logger = LogManager.getLogger(BeneratorShutdownHook.class);
 
-	@Override
-	public void run() {
-		resourceManager.close();
-		logger.info("Benerator shutdown completed");
-	}
-	
+  private final ResourceManager resourceManager;
+
+  /**
+   * Instantiates a new Benerator shutdown hook.
+   *
+   * @param resourceManager the resource manager
+   */
+  public BeneratorShutdownHook(ResourceManager resourceManager) {
+    this.resourceManager = resourceManager;
+  }
+
+  @Override
+  public void run() {
+    resourceManager.close();
+    logger.info("Benerator shutdown completed");
+  }
+
 }

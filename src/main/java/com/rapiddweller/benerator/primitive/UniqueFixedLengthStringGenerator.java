@@ -29,8 +29,8 @@ package com.rapiddweller.benerator.primitive;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ArrayFormat;
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.CollectionUtil;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -39,63 +39,80 @@ import java.util.TreeSet;
  * Generates unique strings of fixed length.<br/>
  * <br/>
  * Created: 15.11.2007 14:07:49
+ *
  * @author Volker Bergmann
  */
 public class UniqueFixedLengthStringGenerator extends NonNullGeneratorWrapper<int[], String> {
 
-    public static final Set<Character> DEFAULT_CHAR_SET
-            = CollectionUtil.toSet('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
-    private static final int DEFAULT_LENGTH = 4;
-    private static final boolean DEFAULT_ORDERED = false;
+  /**
+   * The constant DEFAULT_CHAR_SET.
+   */
+  public static final Set<Character> DEFAULT_CHAR_SET
+      = CollectionUtil.toSet('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+  private static final int DEFAULT_LENGTH = 4;
+  private static final boolean DEFAULT_ORDERED = false;
 
-    private char[] digitSymbols;
-    private int length;
-    private boolean ordered;
-    
-    public UniqueFixedLengthStringGenerator() {
-        this(DEFAULT_CHAR_SET, DEFAULT_LENGTH, DEFAULT_ORDERED);
-    }
+  private final char[] digitSymbols;
+  private final int length;
+  private final boolean ordered;
 
-    public UniqueFixedLengthStringGenerator(Set<Character> chars, int length, boolean ordered) {
-    	super(null);
-        this.digitSymbols = CollectionUtil.toCharArray(new TreeSet<Character>(chars));
-        this.length = length;
-        this.ordered = ordered;
-    }
+  /**
+   * Instantiates a new Unique fixed length string generator.
+   */
+  public UniqueFixedLengthStringGenerator() {
+    this(DEFAULT_CHAR_SET, DEFAULT_LENGTH, DEFAULT_ORDERED);
+  }
 
-    // Generator interface ---------------------------------------------------------------------------------------------
+  /**
+   * Instantiates a new Unique fixed length string generator.
+   *
+   * @param chars   the chars
+   * @param length  the length
+   * @param ordered the ordered
+   */
+  public UniqueFixedLengthStringGenerator(Set<Character> chars, int length, boolean ordered) {
+    super(null);
+    this.digitSymbols = CollectionUtil.toCharArray(new TreeSet<>(chars));
+    this.length = length;
+    this.ordered = ordered;
+  }
 
-	@Override
-	public Class<String> getGeneratedType() {
-	    return String.class;
-    }
+  // Generator interface ---------------------------------------------------------------------------------------------
 
-    @Override
-    public synchronized void init(GeneratorContext context) {
-    	assertNotInitialized();
-    	if (ordered)
-    		setSource(new IncrementalIntsGenerator(digitSymbols.length, length));
-    	else
-    		setSource(new UniqueIntsGenerator(digitSymbols.length, length));
-        super.init(context);
-    }
-    
-	@Override
-	public String generate() {
-		ProductWrapper<int[]> wrapper = generateFromSource();
-		if (wrapper == null)
-			return null;
-		int[] ordinals = wrapper.unwrap();
-		char[] buffer = new char[length];
-		for (int i = 0; i < length; i++)
-			buffer[i] = digitSymbols[ordinals[i]];
-        return String.valueOf(buffer);
-    }
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[length=" + length + ", charset=" +
-                ArrayFormat.formatChars(",", digitSymbols) + ']'; 
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    assertNotInitialized();
+    if (ordered) {
+      setSource(new IncrementalIntsGenerator(digitSymbols.length, length));
+    } else {
+      setSource(new UniqueIntsGenerator(digitSymbols.length, length));
     }
+    super.init(context);
+  }
+
+  @Override
+  public String generate() {
+    ProductWrapper<int[]> wrapper = generateFromSource();
+    if (wrapper == null) {
+      return null;
+    }
+    int[] ordinals = wrapper.unwrap();
+    char[] buffer = new char[length];
+    for (int i = 0; i < length; i++) {
+      buffer[i] = digitSymbols[ordinals[i]];
+    }
+    return String.valueOf(buffer);
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[length=" + length + ", charset=" +
+        ArrayFormat.formatChars(",", digitSymbols) + ']';
+  }
 
 }

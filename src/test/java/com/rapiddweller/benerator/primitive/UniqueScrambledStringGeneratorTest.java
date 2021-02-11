@@ -26,37 +26,42 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests the {@link UniqueScrambledStringGenerator}.<br/><br/>
  * Created: 11.03.2013 22:03:47
- * @since 0.8.1
+ *
  * @author Volker Bergmann
+ * @since 0.8.1
  */
 public class UniqueScrambledStringGeneratorTest extends GeneratorTest {
-	
-	@Test
-	public void test() {
-		for (int n = 1; n < 5; n++) {
-			UniqueScrambledStringGenerator generator = new UniqueScrambledStringGenerator(CollectionUtil.toSet('0', '1'), n, n + 1);
-			generator.init(new DefaultBeneratorContext());
-			for (int i = 0; i < 30; i++) {
-				int exp = (int) Math.round(Math.pow(2, n)) + (int) Math.round(Math.pow(2, n + 1));
-				for (int c = 0; c < exp; c++) {
-					assertNotNull(generator.generate());
-				}
-				assertNull(generator.generate());
-				generator.reset();
-			}
-			
-		}
-		
-	}
-	
+
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    for (int n = 1; n < 5; n++) {
+      UniqueScrambledStringGenerator generator = new UniqueScrambledStringGenerator(CollectionUtil.toSet('0', '1'), n, n + 1);
+      generator.init(new DefaultBeneratorContext());
+      for (int i = 0; i < 30; i++) {
+        int exp = (int) Math.round(Math.pow(2, n)) + (int) Math.round(Math.pow(2, n + 1));
+        for (int c = 0; c < exp; c++) {
+          assertNotNull(generator.generate());
+        }
+        assertNull(generator.generate());
+        generator.reset();
+      }
+
+    }
+
+  }
+
 }

@@ -30,18 +30,29 @@ package com.rapiddweller.benerator.parser;
  * Helper bean for testing.<br/>
  * <br/>
  * Created at 12.10.2009 15:03:12
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class SomeBean {
-	public int n;
-	
-	public SomeBean() {
-		this(1);
-	}
+  /**
+   * The N.
+   */
+  public final int n;
 
-    public SomeBean(int n) {
-    	this.n = n;
-    }
+  /**
+   * Instantiates a new Some bean.
+   */
+  public SomeBean() {
+    this(1);
+  }
+
+  /**
+   * Instantiates a new Some bean.
+   *
+   * @param n the n
+   */
+  public SomeBean(int n) {
+    this.n = n;
+  }
 }

@@ -34,18 +34,22 @@ import org.junit.Test;
 /**
  * Tests the {@link EquivalenceStringGenerator}.<br/><br/>
  * Created: 08.07.2011 06:52:44
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class EquivalenceStringGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void test() {
-		EquivalenceStringGenerator<Character> generator = new EquivalenceStringGenerator<Character>(
-				new SequenceTestGenerator<Character>('a', 'b'),
-				WrapperFactory.asNonNullGenerator(new SequenceTestGenerator<Integer>(1, 3)));
-		generator.init(context);
-		expectGeneratedSequence(generator, "a", "b", "aaa", "bbb");
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    EquivalenceStringGenerator<Character> generator = new EquivalenceStringGenerator<>(
+        new SequenceTestGenerator<>('a', 'b'),
+        WrapperFactory.asNonNullGenerator(new SequenceTestGenerator<>(1, 3)));
+    generator.init(context);
+    expectGeneratedSequence(generator, "a", "b", "aaa", "bbb");
+  }
+
 }

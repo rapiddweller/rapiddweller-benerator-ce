@@ -26,17 +26,22 @@
 
 package com.rapiddweller.platform.csv;
 
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.Patterns;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.Tabular;
+import com.rapiddweller.common.converter.ArrayConverter;
+import com.rapiddweller.common.converter.ConverterChain;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.csv.CSVLineIterator;
+import com.rapiddweller.format.util.ConvertingDataIterator;
+import com.rapiddweller.format.util.OrthogonalArrayIterator;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.array.Array2EntityConverter;
-import com.rapiddweller.commons.*;
-import com.rapiddweller.commons.converter.ArrayConverter;
-import com.rapiddweller.commons.converter.ConverterChain;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.csv.CSVLineIterator;
-import com.rapiddweller.formats.util.ConvertingDataIterator;
-import com.rapiddweller.formats.util.OrthogonalArrayIterator;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -54,124 +59,184 @@ import java.util.List;
  */
 public class CSVEntityIterator implements DataIterator<Entity>, Tabular {
 
-    private final String uri;
-    private final char separator;
-    private final String encoding;
-    private String[] columns;
-    private final Converter<String, ?> preprocessor;
-    private boolean expectingHeader;
-    private boolean rowBased;
+  private final String uri;
+  private final char separator;
+  private final String encoding;
+  private String[] columns;
+  private final Converter<String, ?> preprocessor;
+  private boolean expectingHeader;
+  private boolean rowBased;
 
-    private DataIterator<Entity> source;
+  private DataIterator<Entity> source;
 
-    private boolean initialized;
-    private final ComplexTypeDescriptor entityDescriptor;
+  private boolean initialized;
+  private final ComplexTypeDescriptor entityDescriptor;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public CSVEntityIterator(String uri, ComplexTypeDescriptor descriptor, Converter<String, ?> preprocessor, char separator, String encoding) throws FileNotFoundException {
-        if (!IOUtil.isURIAvailable(uri))
-            throw new FileNotFoundException("URI not found: " + uri);
-        this.uri = uri;
-        this.preprocessor = preprocessor;
-        this.separator = separator;
-        this.encoding = encoding;
-        this.entityDescriptor = descriptor;
-        this.initialized = false;
-        this.expectingHeader = true;
-        this.rowBased = (descriptor != null && descriptor.isRowBased() != null ? descriptor.isRowBased() : true);
+  /**
+   * Instantiates a new Csv entity iterator.
+   *
+   * @param uri          the uri
+   * @param descriptor   the descriptor
+   * @param preprocessor the preprocessor
+   * @param separator    the separator
+   * @param encoding     the encoding
+   * @throws FileNotFoundException the file not found exception
+   */
+  public CSVEntityIterator(String uri, ComplexTypeDescriptor descriptor,
+                           Converter<String, ?> preprocessor, char separator,
+                           String encoding) throws FileNotFoundException {
+    if (!IOUtil.isURIAvailable(uri)) {
+      throw new FileNotFoundException("URI not found: " + uri);
     }
+    this.uri = uri;
+    this.preprocessor = preprocessor;
+    this.separator = separator;
+    this.encoding = encoding;
+    this.entityDescriptor = descriptor;
+    this.initialized = false;
+    this.expectingHeader = true;
+    this.rowBased = (descriptor != null && descriptor.isRowBased() != null ?
+        descriptor.isRowBased() : true);
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    public static List<Entity> parseAll(String uri, char separator, String encoding, ComplexTypeDescriptor descriptor,
-                                        Converter<String, String> preprocessor, Patterns patterns) throws FileNotFoundException {
-        List<Entity> list = new ArrayList<Entity>();
-        CSVEntityIterator iterator = new CSVEntityIterator(uri, descriptor, preprocessor, separator, encoding);
-        DataContainer<Entity> container = new DataContainer<Entity>();
-        while ((container = iterator.next(container)) != null)
-            list.add(container.getData());
-        return list;
+  /**
+   * Parse all list.
+   *
+   * @param uri          the uri
+   * @param separator    the separator
+   * @param encoding     the encoding
+   * @param descriptor   the descriptor
+   * @param preprocessor the preprocessor
+   * @param patterns     the patterns
+   * @return the list
+   * @throws FileNotFoundException the file not found exception
+   */
+  public static List<Entity> parseAll(String uri, char separator,
+                                      String encoding,
+                                      ComplexTypeDescriptor descriptor,
+                                      Converter<String, String> preprocessor,
+                                      Patterns patterns)
+      throws FileNotFoundException {
+    List<Entity> list = new ArrayList<>();
+    CSVEntityIterator iterator =
+        new CSVEntityIterator(uri, descriptor, preprocessor, separator,
+            encoding);
+    DataContainer<Entity> container = new DataContainer<>();
+    while ((container = iterator.next(container)) != null) {
+      list.add(container.getData());
     }
+    return list;
+  }
 
-    public void setExpectingHeader(boolean expectHeader) {
-        this.expectingHeader = expectHeader;
+  /**
+   * Sets expecting header.
+   *
+   * @param expectHeader the expect header
+   */
+  public void setExpectingHeader(boolean expectHeader) {
+    this.expectingHeader = expectHeader;
+  }
+
+  /**
+   * Is row based boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isRowBased() {
+    return rowBased;
+  }
+
+  /**
+   * Sets row based.
+   *
+   * @param rowBased the row based
+   */
+  public void setRowBased(boolean rowBased) {
+    this.rowBased = rowBased;
+  }
+
+  @Override
+  public String[] getColumnNames() {
+    return columns;
+  }
+
+  // DataIterator interface ------------------------------------------------------------------------------------------
+
+  /**
+   * Sets columns.
+   *
+   * @param columns the columns
+   */
+  public void setColumns(String[] columns) {
+    this.expectingHeader = false;
+    if (ArrayUtil.isEmpty(columns)) {
+      this.columns = null;
+    } else {
+      this.columns = columns.clone();
+      StringUtil.trimAll(this.columns);
     }
+  }
 
-    public boolean isRowBased() {
-        return rowBased;
+  @Override
+  public Class<Entity> getType() {
+    return Entity.class;
+  }
+
+  @Override
+  public DataContainer<Entity> next(DataContainer<Entity> container) {
+    assureInitialized();
+    return source.next(container);
+  }
+
+  @Override
+  public void close() {
+    IOUtil.close(source);
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[uri=" + uri + ", encoding=" +
+        encoding + ", separator=" + separator +
+        ", entityName=" + entityDescriptor.getName() + "]";
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private void assureInitialized() {
+    if (!initialized) {
+      init();
+      initialized = true;
     }
+  }
 
-    public void setRowBased(boolean rowBased) {
-        this.rowBased = rowBased;
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private void init() {
+    try {
+      DataIterator<String[]> cellIterator;
+      cellIterator = new CSVLineIterator(uri, separator, true, encoding);
+      if (!rowBased) {
+        cellIterator = new OrthogonalArrayIterator<>(cellIterator);
+      }
+      if (expectingHeader) {
+        setColumns(cellIterator.next(new DataContainer<>()).getData());
+      }
+      Converter<String[], Object[]> arrayConverter =
+          new ArrayConverter(String.class, Object.class,
+              preprocessor);
+      Array2EntityConverter a2eConverter =
+          new Array2EntityConverter(entityDescriptor, columns, true);
+      Converter<String[], Entity> converter =
+          new ConverterChain<>(arrayConverter, a2eConverter);
+      this.source = new ConvertingDataIterator<>(cellIterator, converter);
+    } catch (IOException e) {
+      throw new RuntimeException("Error in processing " + uri, e);
     }
-
-    @Override
-    public String[] getColumnNames() {
-        return columns;
-    }
-
-    // DataIterator interface ------------------------------------------------------------------------------------------
-
-    public void setColumns(String[] columns) {
-        this.expectingHeader = false;
-        if (ArrayUtil.isEmpty(columns))
-            this.columns = null;
-        else {
-            this.columns = columns.clone();
-            StringUtil.trimAll(this.columns);
-        }
-    }
-
-    @Override
-    public Class<Entity> getType() {
-        return Entity.class;
-    }
-
-    @Override
-    public DataContainer<Entity> next(DataContainer<Entity> container) {
-        assureInitialized();
-        return source.next(container);
-    }
-
-    @Override
-    public void close() {
-        IOUtil.close(source);
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[uri=" + uri + ", encoding=" + encoding + ", separator=" + separator +
-                ", entityName=" + entityDescriptor.getName() + "]";
-    }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private void assureInitialized() {
-        if (!initialized) {
-            init();
-            initialized = true;
-        }
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private void init() {
-        try {
-            DataIterator<String[]> cellIterator;
-            cellIterator = new CSVLineIterator(uri, separator, true, encoding);
-            if (!rowBased)
-                cellIterator = new OrthogonalArrayIterator<String>(cellIterator);
-            if (expectingHeader)
-                setColumns(cellIterator.next(new DataContainer<String[]>()).getData());
-            Converter<String[], Object[]> arrayConverter = new ArrayConverter(String.class, Object.class, preprocessor);
-            Array2EntityConverter a2eConverter = new Array2EntityConverter(entityDescriptor, columns, true);
-            Converter<String[], Entity> converter = new ConverterChain<String[], Entity>(arrayConverter, a2eConverter);
-            this.source = new ConvertingDataIterator<String[], Entity>(cellIterator, converter);
-        } catch (IOException e) {
-            throw new RuntimeException("Error in processing " + uri, e);
-        }
-    }
+  }
 
 }

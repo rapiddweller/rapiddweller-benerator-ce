@@ -26,16 +26,16 @@
 
 package com.rapiddweller.platform.fixedwidth;
 
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.AccessingConverter;
+import com.rapiddweller.common.converter.ConverterChain;
+import com.rapiddweller.common.converter.FormatFormatConverter;
+import com.rapiddweller.format.fixedwidth.FixedWidthColumnDescriptor;
+import com.rapiddweller.format.fixedwidth.FixedWidthUtil;
 import com.rapiddweller.model.data.ComponentAccessor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.AccessingConverter;
-import com.rapiddweller.commons.converter.ConverterChain;
-import com.rapiddweller.commons.converter.FormatFormatConverter;
-import com.rapiddweller.formats.fixedwidth.FixedWidthColumnDescriptor;
-import com.rapiddweller.formats.fixedwidth.FixedWidthUtil;
 
 import java.io.PrintWriter;
 import java.text.ParseException;
@@ -48,32 +48,45 @@ import java.util.Locale;
  * @author Volker Bergmann
  * @since 0.9.0
  */
-
 public class FWRecordFormatter {
 
-    private final Converter<Entity, String>[] converters;
+  private final Converter<Entity, String>[] converters;
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public FWRecordFormatter(String columnFormatList, String nullString, Locale locale) {
-        Assert.notNull(columnFormatList, "columnFormatList");
-        try {
-            FixedWidthColumnDescriptor[] descriptors = FixedWidthUtil.parseBeanColumnsSpec(columnFormatList, "", nullString, locale).getColumnDescriptors();
-            this.converters = new Converter[descriptors.length];
-            for (int i = 0; i < descriptors.length; i++) {
-                FixedWidthColumnDescriptor descriptor = descriptors[i];
-                ConverterChain<Entity, String> chain = new ConverterChain<Entity, String>();
-                chain.addComponent(new AccessingConverter<Entity, Object>(Entity.class, Object.class, new ComponentAccessor(descriptor.getName())));
-                chain.addComponent(new FormatFormatConverter(String.class, descriptor.getFormat(), true));
-                this.converters[i] = chain;
-            }
-        } catch (ParseException e) {
-            throw new ConfigurationError("Invalid column definition: " + columnFormatList, e);
-        }
+  /**
+   * Instantiates a new Fw record formatter.
+   *
+   * @param columnFormatList the column format list
+   * @param nullString       the null string
+   * @param locale           the locale
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public FWRecordFormatter(String columnFormatList, String nullString, Locale locale) {
+    Assert.notNull(columnFormatList, "columnFormatList");
+    try {
+      FixedWidthColumnDescriptor[] descriptors = FixedWidthUtil.parseBeanColumnsSpec(columnFormatList, "", nullString, locale).getColumnDescriptors();
+      this.converters = new Converter[descriptors.length];
+      for (int i = 0; i < descriptors.length; i++) {
+        FixedWidthColumnDescriptor descriptor = descriptors[i];
+        ConverterChain<Entity, String> chain = new ConverterChain<>();
+        chain.addComponent(new AccessingConverter<>(Entity.class, Object.class, new ComponentAccessor(descriptor.getName())));
+        chain.addComponent(new FormatFormatConverter(String.class, descriptor.getFormat(), true));
+        this.converters[i] = chain;
+      }
+    } catch (ParseException e) {
+      throw new ConfigurationError("Invalid column definition: " + columnFormatList, e);
     }
+  }
 
-    public void format(Entity entity, PrintWriter printer) {
-        for (Converter<Entity, String> converter : converters)
-            printer.print(converter.convert(entity));
+  /**
+   * Format.
+   *
+   * @param entity  the entity
+   * @param printer the printer
+   */
+  public void format(Entity entity, PrintWriter printer) {
+    for (Converter<Entity, String> converter : converters) {
+      printer.print(converter.convert(entity));
     }
+  }
 
 }

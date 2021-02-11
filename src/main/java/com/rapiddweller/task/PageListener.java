@@ -35,7 +35,13 @@ package com.rapiddweller.task;
  * @since 0.3
  */
 public interface PageListener {
-    void pageStarting();
+  /**
+   * Page starting.
+   */
+  void pageStarting();
 
-    void pageFinished();
+  /**
+   * Page finished.
+   */
+  void pageFinished();
 }

@@ -26,11 +26,6 @@
 
 package com.rapiddweller.platform.memstore;
 
-import static org.junit.Assert.*;
-
-import java.util.Collection;
-import java.util.List;
-
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -38,172 +33,203 @@ import com.rapiddweller.model.data.Entity;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collection;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Integration test for the {@link MemStore} class.<br/><br/>
  * Created: 08.03.2011 16:06:12
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class MemStoreIntegrationTest extends BeneratorIntegrationTest {
 
-	private MemStore src; 
-	private MemStore dst; 
-	private ConsumerMock consumer;
-	
-	@Before
-	public void setUpConsumerAndDescriptor() throws Exception {
-		consumer = new ConsumerMock(true);
-		context.setGlobal("cons", consumer);
+  private MemStore dst;
+  private ConsumerMock consumer;
 
-		// create source store and prefill it
-		src = new MemStore("src", context.getDataModel());
-		context.setGlobal("src", src);
-		ComplexTypeDescriptor descriptor = createComplexType("product");
-		descriptor.addComponent(createId("id", "int"));
-		for (int i = 3; i < 6; i++)
-			src.store(new Entity(descriptor, "id", i));
-		context.getDataModel().addDescriptorProvider(src);
+  /**
+   * Sets up consumer and descriptor.
+   */
+  @Before
+  public void setUpConsumerAndDescriptor() {
+    consumer = new ConsumerMock(true);
+    context.setGlobal("cons", consumer);
 
-		// create dest store
-		dst = new MemStore("dst", context.getDataModel());
-		context.setGlobal("dst", dst);
-	}
+    // create source store and prefill it
+    MemStore src = new MemStore("src", context.getDataModel());
+    context.setGlobal("src", src);
+    ComplexTypeDescriptor descriptor = createComplexType("product");
+    descriptor.addComponent(createId("id", "int"));
+    for (int i = 3; i < 6; i++) {
+      src.store(new Entity(descriptor, "id", i));
+    }
+    context.getDataModel().addDescriptorProvider(src);
 
-	
-	
-	// test methods ----------------------------------------------------------------------------------------------------
+    // create dest store
+    dst = new MemStore("dst", context.getDataModel());
+    context.setGlobal("dst", dst);
+  }
 
-	@Test
-	public void testStore() {
-		MemStore.ignoreClose = true;
-		parseAndExecute(
-			"<generate type='product' count='3' consumer='dst'>" +
-			"	<id name='id' type='int' />" +
-			"</generate>"
-		);
-		Collection<Entity> products = dst.getEntities("product");
-		assertEquals(3, products.size());
-		int index = 1;
-		for (Entity product : products) {
-			assertNotNull(product);
-			assertEquals(index, product.get("id"));
-			index++;
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testIterate() {
-		MemStore.ignoreClose = false;
-		parseAndExecute("<iterate source='src' type='product' consumer='cons'/>");
-		List<Entity> products = (List<Entity>) consumer.getProducts();
-		assertEquals(3, products.size());
-		int index = 3;
-		for (Entity product : products) {
-			assertNotNull(product);
-			assertEquals(index, product.get("id"));
-			index++;
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testIterateWithSelector() {
-		MemStore.ignoreClose = false;
-		parseAndExecute("<iterate source='src' type='product' selector='_candidate.id == 4' consumer='cons'/>");
-		List<Entity> products = (List<Entity>) consumer.getProducts();
-		assertEquals(1, products.size());
-		assertEquals(4, products.get(0).get("id"));
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testVariable() {
-		MemStore.ignoreClose = false;
-		context.setDefaultOneToOne(true);
-		parseAndExecute(
-			"<generate type='order' consumer='cons'>" +
-			"	<variable name='p' source='src' type='product'/>" +
-			"	<id name='id' type='int' />" +
-			"	<attribute name='prod_id' type='int' script='p.id' />" +
-			"</generate>"
-		);
-		List<Entity> orders = (List<Entity>) consumer.getProducts();
-		assertEquals(3, orders.size());
-		int index = 1;
-		for (Entity order : orders) {
-			assertNotNull(order);
-			assertEquals(index, order.get("id"));
-			assertEquals(index + 2, order.get("prod_id"));
-			index++;
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testAttribute() {
-		MemStore.ignoreClose = false;
-		parseAndExecute(
-			"<generate type='order' consumer='cons'>" +
-			"	<id name='id' type='int' />" +
-			"	<attribute name='product' source='src' type='product' />" +
-			"</generate>"
-		);
-		Collection<Entity> orders = (List<Entity>) consumer.getProducts();
-		assertEquals(3, orders.size());
-		int index = 1;
-		for (Entity order : orders) {
-			assertNotNull(order);
-			assertEquals(index, order.get("id"));
-			Entity product = (Entity) order.get("product");
-			assertEquals(index + 2, product.get("id"));
-			index++;
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testReference() {
-		MemStore.ignoreClose = false;
-		parseAndExecute(
-			"<generate type='order' consumer='cons'>" +
-			"	<id name='id' type='int' />" +
-			"	<reference name='product_id' type='int' source='src' targetType='product' selector='_candidate!=5' unique='true'/>" +
-			"</generate>"
-		);
-		Collection<Entity> orders = (List<Entity>) consumer.getProducts();
-		assertEquals(2, orders.size());
-		int index = 1;
-		for (Entity order : orders) {
-			assertNotNull(order);
-			assertEquals(index, order.get("id"));
-			int product = (Integer) order.get("product_id");
-			assertTrue(product >= 3 && product < 5);
-			index++;
-		}
-	}
-	
-	@Test
-	public void testIntegration() {
-		MemStore.ignoreClose = true;
-		parseAndExecute(
-			"<setup>" +
-			"	<memstore id='store'/>" +
-			"	<generate type='product' count='100' consumer='store'>" +
-			"		<id name='id' type='int' />" +
-			"		<attribute name='name' pattern='[A-Z][a-z]{3,8}' />" +
-			"	</generate>" + 
-			"</setup>"
-		);
-		MemStore store = (MemStore) context.get("store");
-		Collection<Entity> products = store.getEntities("product");
-		assertEquals(100, products.size());
-		int index = 1;
-		for (Entity order : products) {
-			assertNotNull(order);
-			assertEquals(index, order.get("id"));
-			index++;
-		}
-	}
-	
+
+  // test methods ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Test store.
+   */
+  @Test
+  public void testStore() {
+    MemStore.ignoreClose = true;
+    parseAndExecute(
+        "<generate type='product' count='3' consumer='dst'>" +
+            "	<id name='id' type='int' />" +
+            "</generate>"
+    );
+    Collection<Entity> products = dst.getEntities("product");
+    assertEquals(3, products.size());
+    int index = 1;
+    for (Entity product : products) {
+      assertNotNull(product);
+      assertEquals(index, product.get("id"));
+      index++;
+    }
+  }
+
+  /**
+   * Test iterate.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testIterate() {
+    MemStore.ignoreClose = false;
+    parseAndExecute("<iterate source='src' type='product' consumer='cons'/>");
+    List<Entity> products = (List<Entity>) consumer.getProducts();
+    assertEquals(3, products.size());
+    int index = 3;
+    for (Entity product : products) {
+      assertNotNull(product);
+      assertEquals(index, product.get("id"));
+      index++;
+    }
+  }
+
+  /**
+   * Test iterate with selector.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testIterateWithSelector() {
+    MemStore.ignoreClose = false;
+    parseAndExecute("<iterate source='src' type='product' selector='_candidate.id == 4' consumer='cons'/>");
+    List<Entity> products = (List<Entity>) consumer.getProducts();
+    assertEquals(1, products.size());
+    assertEquals(4, products.get(0).get("id"));
+  }
+
+  /**
+   * Test variable.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testVariable() {
+    MemStore.ignoreClose = false;
+    context.setDefaultOneToOne(true);
+    parseAndExecute(
+        "<generate type='order' consumer='cons'>" +
+            "	<variable name='p' source='src' type='product'/>" +
+            "	<id name='id' type='int' />" +
+            "	<attribute name='prod_id' type='int' script='p.id' />" +
+            "</generate>"
+    );
+    List<Entity> orders = (List<Entity>) consumer.getProducts();
+    assertEquals(3, orders.size());
+    int index = 1;
+    for (Entity order : orders) {
+      assertNotNull(order);
+      assertEquals(index, order.get("id"));
+      assertEquals(index + 2, order.get("prod_id"));
+      index++;
+    }
+  }
+
+  /**
+   * Test attribute.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testAttribute() {
+    MemStore.ignoreClose = false;
+    parseAndExecute(
+        "<generate type='order' consumer='cons'>" +
+            "	<id name='id' type='int' />" +
+            "	<attribute name='product' source='src' type='product' />" +
+            "</generate>"
+    );
+    Collection<Entity> orders = (List<Entity>) consumer.getProducts();
+    assertEquals(3, orders.size());
+    int index = 1;
+    for (Entity order : orders) {
+      assertNotNull(order);
+      assertEquals(index, order.get("id"));
+      Entity product = (Entity) order.get("product");
+      assertEquals(index + 2, product.get("id"));
+      index++;
+    }
+  }
+
+  /**
+   * Test reference.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testReference() {
+    MemStore.ignoreClose = false;
+    parseAndExecute(
+        "<generate type='order' consumer='cons'>" +
+            "	<id name='id' type='int' />" +
+            "	<reference name='product_id' type='int' source='src' targetType='product' selector='_candidate!=5' unique='true'/>" +
+            "</generate>"
+    );
+    Collection<Entity> orders = (List<Entity>) consumer.getProducts();
+    assertEquals(2, orders.size());
+    int index = 1;
+    for (Entity order : orders) {
+      assertNotNull(order);
+      assertEquals(index, order.get("id"));
+      int product = (Integer) order.get("product_id");
+      assertTrue(product >= 3 && product < 5);
+      index++;
+    }
+  }
+
+  /**
+   * Test integration.
+   */
+  @Test
+  public void testIntegration() {
+    MemStore.ignoreClose = true;
+    parseAndExecute(
+        "<setup>" +
+            "	<memstore id='store'/>" +
+            "	<generate type='product' count='100' consumer='store'>" +
+            "		<id name='id' type='int' />" +
+            "		<attribute name='name' pattern='[A-Z][a-z]{3,8}' />" +
+            "	</generate>" +
+            "</setup>"
+    );
+    MemStore store = (MemStore) context.get("store");
+    Collection<Entity> products = store.getEntities("product");
+    assertEquals(100, products.size());
+    int index = 1;
+    for (Entity order : products) {
+      assertNotNull(order);
+      assertEquals(index, order.get("id"));
+      index++;
+    }
+  }
+
 }

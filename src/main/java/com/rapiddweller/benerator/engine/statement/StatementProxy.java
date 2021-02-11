@@ -26,44 +26,60 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import java.io.Closeable;
-import java.io.IOException;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
+
+import java.io.Closeable;
+import java.io.IOException;
 
 /**
  * Proxy for a {@link Statement}.<br/><br/>
  * Created: 27.10.2009 16:06:04
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class StatementProxy implements Statement, Closeable {
-	
-	protected Statement realStatement;
 
-	public StatementProxy(Statement realStatement) {
-	    this.realStatement = realStatement;
+  /**
+   * The Real statement.
+   */
+  protected Statement realStatement;
+
+  /**
+   * Instantiates a new Statement proxy.
+   *
+   * @param realStatement the real statement
+   */
+  public StatementProxy(Statement realStatement) {
+    this.realStatement = realStatement;
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    return realStatement.execute(context);
+  }
+
+  /**
+   * Gets real statement.
+   *
+   * @param context the context
+   * @return the real statement
+   */
+  public Statement getRealStatement(BeneratorContext context) {
+    return realStatement;
+  }
+
+  @Override
+  public void close() throws IOException {
+    if (realStatement instanceof Closeable) {
+      ((Closeable) realStatement).close();
     }
+  }
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-	    return realStatement.execute(context);
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + realStatement + "]";
+  }
 
-	public Statement getRealStatement(BeneratorContext context) {
-	    return realStatement;
-    }
-
-	@Override
-	public void close() throws IOException {
-		if (realStatement instanceof Closeable)
-			((Closeable) realStatement).close();
-	}
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[" + realStatement + "]";
-	}
-	
 }

@@ -26,62 +26,76 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Tests the {@link BeanParser}.<br/><br/>
  * Created: 30.10.2009 19:02:25
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class BeanParserAndStatementTest extends BeneratorIntegrationTest {
 
-	@Test
-    public void testParseBeanClass() throws Exception {
-		String xml = "<bean id='id' class='" + BeanMock.class.getName() + "' />";
-		BeneratorContext context = parseAndExecute(xml);
-		Object bean = context.get("id");
-		assertNotNull(bean);
-		assertEquals(BeanMock.class, bean.getClass());
-		assertEquals(0, ((BeanMock) bean).lastValue);
-		assertNotNull(((BeanMock) bean).getContext());
-	}
+  /**
+   * Test parse bean class.
+   */
+  @Test
+  public void testParseBeanClass() {
+    String xml = "<bean id='id' class='" + BeanMock.class.getName() + "' />";
+    BeneratorContext context = parseAndExecute(xml);
+    Object bean = context.get("id");
+    assertNotNull(bean);
+    assertEquals(BeanMock.class, bean.getClass());
+    assertEquals(0, ((BeanMock) bean).lastValue);
+    assertNotNull(((BeanMock) bean).getContext());
+  }
 
-	@Test
-	public void testParseBeanSpec() throws Exception {
-		String xml = "<bean id='id' spec='new " + BeanMock.class.getName() + "(2)' />";
-		BeneratorContext context = parseAndExecute(xml);
-		Object bean = context.get("id");
-		assertNotNull(bean);
-		assertEquals(BeanMock.class, bean.getClass());
-		assertEquals(2, ((BeanMock) bean).lastValue);
-		assertNotNull(((BeanMock) bean).getContext());
-	}
-	
-	@Test
-	public void testStringProperty() throws Exception {
-		String xml = 
-				"<bean id='id' class='" + BeanMock.class.getName() + "'>" +
-				"	<property name='text' value='xxx' />" + 
-				"</bean>";
-		BeneratorContext context = parseAndExecute(xml);
-		BeanMock bean = (BeanMock) context.get("id");
-		assertEquals("xxx", bean.getText());
-	}
-	
-	@Test
-	public void testEmptyStringProperty() throws Exception {
-		String xml = 
-				"<bean id='id' class='" + BeanMock.class.getName() + "'>" +
-				"	<property name='text' value='' />" + 
-				"</bean>";
-		BeneratorContext context = parseAndExecute(xml);
-		BeanMock bean = (BeanMock) context.get("id");
-		assertEquals("", bean.getText());
-	}
-	
+  /**
+   * Test parse bean spec.
+   */
+  @Test
+  public void testParseBeanSpec() {
+    String xml = "<bean id='id' spec='new " + BeanMock.class.getName() + "(2)' />";
+    BeneratorContext context = parseAndExecute(xml);
+    Object bean = context.get("id");
+    assertNotNull(bean);
+    assertEquals(BeanMock.class, bean.getClass());
+    assertEquals(2, ((BeanMock) bean).lastValue);
+    assertNotNull(((BeanMock) bean).getContext());
+  }
+
+  /**
+   * Test string property.
+   */
+  @Test
+  public void testStringProperty() {
+    String xml =
+        "<bean id='id' class='" + BeanMock.class.getName() + "'>" +
+            "	<property name='text' value='xxx' />" +
+            "</bean>";
+    BeneratorContext context = parseAndExecute(xml);
+    BeanMock bean = (BeanMock) context.get("id");
+    assertEquals("xxx", bean.getText());
+  }
+
+  /**
+   * Test empty string property.
+   */
+  @Test
+  public void testEmptyStringProperty() {
+    String xml =
+        "<bean id='id' class='" + BeanMock.class.getName() + "'>" +
+            "	<property name='text' value='' />" +
+            "</bean>";
+    BeneratorContext context = parseAndExecute(xml);
+    BeanMock bean = (BeanMock) context.get("id");
+    assertEquals("", bean.getText());
+  }
+
 }

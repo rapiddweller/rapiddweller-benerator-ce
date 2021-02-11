@@ -26,10 +26,10 @@
 
 package com.rapiddweller.platform.db;
 
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.jdbacl.ColumnInfo;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.DataModel;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.jdbacl.ColumnInfo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,47 +44,66 @@ import java.util.List;
  */
 public class DefaultDBSystem extends DBSystem {
 
-    private final ConnectionHolder connectionHolder;
+  private final ConnectionHolder connectionHolder;
 
-    public DefaultDBSystem(String id, String environment, DataModel dataModel) {
-        super(id, environment, dataModel);
-        this.connectionHolder = new ConnectionHolder(this);
-    }
+  /**
+   * Instantiates a new Default db system.
+   *
+   * @param id          the id
+   * @param environment the environment
+   * @param dataModel   the data model
+   */
+  public DefaultDBSystem(String id, String environment, DataModel dataModel) {
+    super(id, environment, dataModel);
+    this.connectionHolder = new ConnectionHolder(this);
+  }
 
-    public DefaultDBSystem(String id, String url, String driver, String user,
-                           String password, DataModel dataModel) {
-        super(id, url, driver, user, password, dataModel);
-        this.connectionHolder = new ConnectionHolder(this);
-    }
+  /**
+   * Instantiates a new Default db system.
+   *
+   * @param id        the id
+   * @param url       the url
+   * @param driver    the driver
+   * @param user      the user
+   * @param password  the password
+   * @param dataModel the data model
+   */
+  public DefaultDBSystem(String id, String url, String driver, String user,
+                         String password, DataModel dataModel) {
+    super(id, url, driver, user, password, dataModel);
+    this.connectionHolder = new ConnectionHolder(this);
+  }
 
-    @Override
-    public void flush() {
-        logger.debug("flush()");
-        connectionHolder.commit();
-    }
+  @Override
+  public void flush() {
+    logger.debug("flush()");
+    connectionHolder.commit();
+  }
 
-    @Override
-    public void close() {
-        logger.debug("close()");
-        flush();
-        IOUtil.close(connectionHolder);
-        super.close();
-    }
+  @Override
+  public void close() {
+    logger.debug("close()");
+    flush();
+    IOUtil.close(connectionHolder);
+    super.close();
+  }
 
-    @Override
-    public Connection getConnection() {
-        return connectionHolder.getConnection();
-    }
+  @Override
+  public Connection getConnection() {
+    return connectionHolder.getConnection();
+  }
 
-    @Override
-    protected PreparedStatement getSelectByPKStatement(ComplexTypeDescriptor descriptor) {
-        return connectionHolder.getSelectByPKStatement(descriptor);
-    }
+  @Override
+  protected PreparedStatement getSelectByPKStatement(
+      ComplexTypeDescriptor descriptor) {
+    return connectionHolder.getSelectByPKStatement(descriptor);
+  }
 
-    @Override
-    protected PreparedStatement getStatement(ComplexTypeDescriptor descriptor,
-                                             boolean insert, List<ColumnInfo> columnInfos) {
-        return connectionHolder.getStatement(descriptor, insert, columnInfos);
-    }
+  @Override
+  protected PreparedStatement getStatement(ComplexTypeDescriptor descriptor,
+                                           boolean insert,
+                                           List<ColumnInfo> columnInfos) {
+    return connectionHolder.getStatement(descriptor, insert, columnInfos);
+  }
 
 }

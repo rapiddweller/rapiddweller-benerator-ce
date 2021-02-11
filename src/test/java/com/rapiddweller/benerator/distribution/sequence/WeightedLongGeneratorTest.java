@@ -31,39 +31,49 @@ import com.rapiddweller.benerator.distribution.WeightedLongGenerator;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import org.junit.Test;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Tests the {@link WeightedLongGenerator}.<br/><br/>
  * Created: 18.06.2006 15:04:17
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class WeightedLongGeneratorTest extends GeneratorClassTest {
 
-    public WeightedLongGeneratorTest() {
-        super(WeightedLongGenerator.class);
-    }
+  /**
+   * Instantiates a new Weighted long generator test.
+   */
+  public WeightedLongGeneratorTest() {
+    super(WeightedLongGenerator.class);
+  }
 
-    @Test
-    public void testRandomSequence() throws IllegalGeneratorStateException {
-        checkUniformDistribution(-2,  2, 1, 10000, 0.1, -2, -1, 0, 1, 2);
-        checkUniformDistribution(-2,  2, 2, 10000, 0.1, -2, 0, 2);
-        checkUniformDistribution( 1,  5, 2, 10000, 0.1, 1, 3, 5);
-        checkUniformDistribution(-5, -1, 2, 10000, 0.1, -5, -3, -1);
-    }
+  /**
+   * Test random sequence.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void testRandomSequence() throws IllegalGeneratorStateException {
+    checkUniformDistribution(-2, 2, 1, 10000, 0.1, -2, -1, 0, 1, 2);
+    checkUniformDistribution(-2, 2, 2, 10000, 0.1, -2, 0, 2);
+    checkUniformDistribution(1, 5, 2, 10000, 0.1, 1, 3, 5);
+    checkUniformDistribution(-5, -1, 2, 10000, 0.1, -5, -3, -1);
+  }
 
-    // private helpers -------------------------------------------------------------------------------------------------
+  // private helpers -------------------------------------------------------------------------------------------------
 
-    private void checkUniformDistribution(int min, int max, int granularity,
-                                          int iterations, double tolerance, int ... expectedValuesAsInt) {
-        Set<Long> expectedValues = new HashSet<Long>(expectedValuesAsInt.length);
-        for (int i : expectedValuesAsInt)
-            expectedValues.add((long)i);
-        WeightedLongGenerator generator = new WeightedLongGenerator(min, max, granularity);
-        generator.init(context);
-        checkEqualDistribution(generator, iterations, tolerance, expectedValues);
+  private void checkUniformDistribution(int min, int max, int granularity,
+                                        int iterations, double tolerance, int... expectedValuesAsInt) {
+    Set<Long> expectedValues = new HashSet<>(expectedValuesAsInt.length);
+    for (int i : expectedValuesAsInt) {
+      expectedValues.add((long) i);
     }
+    WeightedLongGenerator generator = new WeightedLongGenerator(min, max, granularity);
+    generator.init(context);
+    checkEqualDistribution(generator, iterations, tolerance, expectedValues);
+  }
 
 }

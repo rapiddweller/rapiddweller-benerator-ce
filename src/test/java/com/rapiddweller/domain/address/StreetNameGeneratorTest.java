@@ -28,46 +28,110 @@ package com.rapiddweller.domain.address;
 
 import com.rapiddweller.benerator.dataset.DatasetUtil;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
+import com.rapiddweller.domain.person.FamilyNameGenerator;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 /**
  * Tests the {@link StreetNameGenerator}.<br/><br/>
  * Created: 12.06.2007 06:46:33
+ *
  * @author Volker Bergmann
  */
 public class StreetNameGeneratorTest extends GeneratorClassTest {
 
-    public StreetNameGeneratorTest() {
-        super(StreetNameGenerator.class);
-    }
+  /**
+   * Test constructor.
+   */
+  @Test
+  public void testConstructor() {
+    StreetNameGenerator actualStreetNameGenerator = new StreetNameGenerator();
+    assertNull(actualStreetNameGenerator.getDataset());
+    Class<?> expectedGeneratedType = String.class;
+    assertSame(expectedGeneratedType, actualStreetNameGenerator.getGeneratedType());
+    assertNull(actualStreetNameGenerator.getSource());
+  }
 
-    @Test
-    public void test_DE() {
-        StreetNameGenerator generator = new StreetNameGenerator("DE");
-        generator.init(context);
-        for (int i = 0; i < 10; i++) {
-	        String product = generator.generate();
-	        assertNotNull(product);
-        }
-        generator.close();
+  /**
+   * Test constructor 2.
+   */
+  @Test
+  public void testConstructor2() {
+    StreetNameGenerator actualStreetNameGenerator = new StreetNameGenerator("Dataset Name");
+    assertEquals("Dataset Name", actualStreetNameGenerator.getDataset());
+    Class<?> expectedGeneratedType = String.class;
+    assertSame(expectedGeneratedType, actualStreetNameGenerator.getGeneratedType());
+    assertNull(actualStreetNameGenerator.getSource());
+  }
+
+  /**
+   * Test set dataset.
+   */
+  @Test
+  public void testSetDataset() {
+    StreetNameGenerator streetNameGenerator = new StreetNameGenerator();
+    streetNameGenerator.setDataset("Dataset Name");
+    assertEquals("Dataset Name", streetNameGenerator.getDataset());
+  }
+
+  /**
+   * Test get source.
+   */
+  @Test
+  public void testGetSource() {
+    assertNull((new StreetNameGenerator()).getSource());
+  }
+
+  /**
+   * Test get source 2.
+   */
+  @Test
+  public void testGetSource2() {
+    StreetNameGenerator streetNameGenerator = new StreetNameGenerator();
+    FamilyNameGenerator familyNameGenerator = new FamilyNameGenerator();
+    streetNameGenerator.setSource(familyNameGenerator);
+    assertSame(familyNameGenerator, streetNameGenerator.getSource());
+  }
+
+  /**
+   * Instantiates a new Street name generator test.
+   */
+  public StreetNameGeneratorTest() {
+    super(StreetNameGenerator.class);
+  }
+
+  /**
+   * Test de.
+   */
+  @Test
+  public void test_DE() {
+    StreetNameGenerator generator = new StreetNameGenerator("DE");
+    generator.init(context);
+    for (int i = 0; i < 10; i++) {
+      String product = generator.generate();
+      assertNotNull(product);
     }
-    
-    @Test
-    public void test_AU() {
-    	DatasetUtil.runInRegion(Country.AUSTRALIA.getIsoCode(), new Runnable() {
-			@Override
-			public void run() {
-		        StreetNameGenerator generator = new StreetNameGenerator();
-		        generator.init(context);
-		        for (int i = 0; i < 10; i++) {
-	                String product = generator.generate();
-	                assertNotNull(product);
-                }
-		        generator.close();
-            }
-    	});
-    }
-    
+    generator.close();
+  }
+
+  /**
+   * Test au.
+   */
+  @Test
+  public void test_AU() {
+    DatasetUtil.runInRegion(Country.AUSTRALIA.getIsoCode(), () -> {
+      StreetNameGenerator generator = new StreetNameGenerator();
+      generator.init(context);
+      for (int i = 0; i < 10; i++) {
+        String product = generator.generate();
+        assertNotNull(product);
+      }
+      generator.close();
+    });
+  }
+
 }

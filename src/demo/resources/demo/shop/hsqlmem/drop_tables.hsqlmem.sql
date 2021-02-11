@@ -24,19 +24,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-DROP TABLE db_order_item;
+DROP TABLE "db_order_item";
 COMMIT;
-DROP TABLE db_order;
+DROP TABLE "db_order";
 COMMIT;
-DROP TABLE db_customer;
+DROP TABLE "db_customer";
 COMMIT;
-DROP TABLE db_user;
+DROP TABLE "db_user";
 COMMIT;
-DROP TABLE db_role;
+DROP TABLE "db_role";
 COMMIT;
-DROP TABLE db_product;
+DROP TABLE "db_product";
 COMMIT;
-DROP TABLE db_category;
+DROP TABLE "db_category";
 COMMIT;
 DROP SEQUENCE seq_id_gen;
 COMMIT;

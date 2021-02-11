@@ -2,36 +2,36 @@
 
 
 <xs:schema
-		xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		xmlns:ben="https://www.benerator.de/schema/benerator-1.0.0.xsd"
-		xmlns="http://databene.org/shop-0.6.0.xsd"
-		targetNamespace="http://databene.org/shop-0.6.0.xsd"
-		elementFormDefault="qualified">
-		
-	<xs:element name="outer">
-		<xs:complexType>
-			<xs:sequence maxOccurs="unbounded">
-				<xs:element ref="inner">
-					<xs:annotation>
-						<xs:appinfo>
-							<ben:part minCount="3" maxCount="5"/>
-						</xs:appinfo>
-					</xs:annotation>
-				</xs:element>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:ben="https://www.benerator.de/schema/benerator-1.0.0.xsd"
+        xmlns="http://databene.org/shop-0.6.0.xsd"
+        targetNamespace="http://databene.org/shop-0.6.0.xsd"
+        elementFormDefault="qualified">
 
-	<xs:element name="inner">
-		<xs:complexType>
-	        <xs:attribute name="name" type="xs:string" use="required">
-				<xs:annotation>
-					<xs:appinfo>
-						<ben:attribute pattern="[A-Z][a-z]{5,12}"/>
-					</xs:appinfo>
-				</xs:annotation>
-	        </xs:attribute>
-	    </xs:complexType>
-	</xs:element>
+    <xs:element name="outer">
+        <xs:complexType>
+            <xs:sequence maxOccurs="unbounded">
+                <xs:element ref="inner">
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <ben:part minCount="3" maxCount="5"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="inner">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <ben:attribute pattern="[A-Z][a-z]{5,12}"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
 
 </xs:schema>

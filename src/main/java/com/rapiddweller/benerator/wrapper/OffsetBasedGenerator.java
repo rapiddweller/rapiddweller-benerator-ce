@@ -32,42 +32,59 @@ import com.rapiddweller.benerator.GeneratorContext;
 /**
  * {@link Generator} proxy which hides the first products of its source generator.<br/><br/>
  * Created: 23.07.2011 10:00:49
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class OffsetBasedGenerator<E> extends GeneratorProxy<E> {
 
-	private int offset;
+  private final int offset;
 
-	public OffsetBasedGenerator() {
-		this(null, 0);
-	}
+  /**
+   * Instantiates a new Offset based generator.
+   */
+  public OffsetBasedGenerator() {
+    this(null, 0);
+  }
 
-	public OffsetBasedGenerator(Generator<E> source, int offset) {
-		super(source);
-		this.offset = offset;
-	}
-	
-	public int getOffset() {
-		return offset;
-	}
-	
-	@Override
-	public synchronized void init(GeneratorContext context) {
-		super.init(context);
-		advanceToOffset();
-	}
+  /**
+   * Instantiates a new Offset based generator.
+   *
+   * @param source the source
+   * @param offset the offset
+   */
+  public OffsetBasedGenerator(Generator<E> source, int offset) {
+    super(source);
+    this.offset = offset;
+  }
 
-	@Override
-	public void reset() {
-		super.reset();
-		advanceToOffset();
-	}
-	
-	private void advanceToOffset() {
-		ProductWrapper<E> wrapper = getSourceWrapper();
-		for (int i = 0; i < offset; i++)
-			super.generate(wrapper);
-	}
-	
+  /**
+   * Gets offset.
+   *
+   * @return the offset
+   */
+  public int getOffset() {
+    return offset;
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    super.init(context);
+    advanceToOffset();
+  }
+
+  @Override
+  public void reset() {
+    super.reset();
+    advanceToOffset();
+  }
+
+  private void advanceToOffset() {
+    ProductWrapper<E> wrapper = getSourceWrapper();
+    for (int i = 0; i < offset; i++) {
+      super.generate(wrapper);
+    }
+  }
+
 }

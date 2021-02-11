@@ -26,54 +26,70 @@
 
 package com.rapiddweller.benerator.consumer;
 
-import java.util.Stack;
-
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.model.data.ComponentNameMapper;
 import com.rapiddweller.model.data.Entity;
 
+import java.util.Stack;
+
 /**
  * Proxy to a {@link Consumer} which maps attribute names of the entities.<br/><br/>
  * Created: 22.02.2010 19:42:16
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class MappingEntityConsumer extends ConsumerProxy {
-	
-	private ComponentNameMapper mapper;
-	private Stack<Entity> stack;
 
-	public MappingEntityConsumer() {
-	    this(null, null);
+  private final ComponentNameMapper mapper;
+  private final Stack<Entity> stack;
+
+  /**
+   * Instantiates a new Mapping entity consumer.
+   */
+  public MappingEntityConsumer() {
+    this(null, null);
+  }
+
+  /**
+   * Instantiates a new Mapping entity consumer.
+   *
+   * @param target      the target
+   * @param mappingSpec the mapping spec
+   */
+  public MappingEntityConsumer(Consumer target, String mappingSpec) {
+    super(target);
+    this.mapper = new ComponentNameMapper(mappingSpec);
+    stack = new Stack<>();
+  }
+
+  /**
+   * Sets mappings.
+   *
+   * @param mappingSpec the mapping spec
+   */
+  public void setMappings(String mappingSpec) {
+    this.mapper.setMappings(mappingSpec);
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  @Override
+  public void startConsuming(ProductWrapper<?> wrapper) {
+    Object object = wrapper.unwrap();
+    if (!(object instanceof Entity)) {
+      throw new IllegalArgumentException("Expected Entity");
     }
+    Entity entity = (Entity) object;
+    Entity output = mapper.convert(entity);
+    stack.push(output);
+    target.startConsuming(((ProductWrapper) wrapper).wrap(output));
+  }
 
-	public MappingEntityConsumer(Consumer target, String mappingSpec) {
-		super(target);
-	    this.mapper = new ComponentNameMapper(mappingSpec);
-	    stack = new Stack<Entity>();
-    }
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  @Override
+  public void finishConsuming(ProductWrapper<?> wrapper) {
+    super.finishConsuming(((ProductWrapper) wrapper).wrap(stack.pop()));
+  }
 
-	public void setMappings(String mappingSpec) {
-		this.mapper.setMappings(mappingSpec);
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public void startConsuming(ProductWrapper<?> wrapper) {
-		Object object = wrapper.unwrap();
-		if (!(object instanceof Entity))
-			throw new IllegalArgumentException("Expected Entity");
-		Entity entity = (Entity) object;
-		Entity output = mapper.convert(entity);
-		stack.push(output);
-		target.startConsuming(((ProductWrapper) wrapper).wrap(output));
-    }
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public void finishConsuming(ProductWrapper<?> wrapper) {
-		super.finishConsuming(((ProductWrapper) wrapper).wrap(stack.pop()));
-	}
-	
 }

@@ -27,8 +27,8 @@
 package com.rapiddweller.model.data;
 
 import com.rapiddweller.benerator.primitive.ValueMapper;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 import java.util.Map;
 
@@ -41,30 +41,44 @@ import java.util.Map;
  */
 public class ComponentNameMapper extends ThreadSafeConverter<Entity, Entity> {
 
-    private final ValueMapper nameMapper;
+  private final ValueMapper nameMapper;
 
-    public ComponentNameMapper() {
-        this(null);
-    }
+  /**
+   * Instantiates a new Component name mapper.
+   */
+  public ComponentNameMapper() {
+    this(null);
+  }
 
-    public ComponentNameMapper(String mappingSpec) {
-        super(Entity.class, Entity.class);
-        this.nameMapper = new ValueMapper(mappingSpec, true);
-    }
+  /**
+   * Instantiates a new Component name mapper.
+   *
+   * @param mappingSpec the mapping spec
+   */
+  public ComponentNameMapper(String mappingSpec) {
+    super(Entity.class, Entity.class);
+    this.nameMapper = new ValueMapper(mappingSpec, true);
+  }
 
-    public void setMappings(String mappingSpec) {
-        nameMapper.setMappings(mappingSpec);
-    }
+  /**
+   * Sets mappings.
+   *
+   * @param mappingSpec the mapping spec
+   */
+  public void setMappings(String mappingSpec) {
+    nameMapper.setMappings(mappingSpec);
+  }
 
-    @Override
-    public Entity convert(Entity input) throws ConversionException {
-        Entity output = new Entity(input.descriptor());
-        for (Map.Entry<String, Object> component : input.getComponents().entrySet()) {
-            String inCptName = component.getKey();
-            String outCptName = (String) nameMapper.convert(inCptName);
-            output.setComponent(outCptName, input.get(inCptName));
-        }
-        return output;
+  @Override
+  public Entity convert(Entity input) throws ConversionException {
+    Entity output = new Entity(input.descriptor());
+    for (Map.Entry<String, Object> component : input.getComponents()
+        .entrySet()) {
+      String inCptName = component.getKey();
+      String outCptName = (String) nameMapper.convert(inCptName);
+      output.setComponent(outCptName, input.get(inCptName));
     }
+    return output;
+  }
 
 }

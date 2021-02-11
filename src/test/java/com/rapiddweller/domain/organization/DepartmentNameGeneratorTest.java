@@ -26,46 +26,49 @@
 
 package com.rapiddweller.domain.organization;
 
-import static org.junit.Assert.*;
+import com.rapiddweller.benerator.test.GeneratorClassTest;
+import com.rapiddweller.common.LocaleUtil;
+import org.junit.Test;
 
 import java.util.Locale;
 
-import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.LocaleUtil;
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests the {@link DepartmentNameGenerator}.<br/>
  * <br/>
  * Created: 14.10.2009 10:44:23
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class DepartmentNameGeneratorTest extends GeneratorClassTest {
-	
-	public DepartmentNameGeneratorTest() {
-	    super(DepartmentNameGenerator.class);
-    }
 
-	@Test
-	public void testLocales() {
-		Runnable runner = new Runnable() {
-			@Override
-			@SuppressWarnings("synthetic-access")
-			public void run() {
-				logger.debug("Checking Locale " + Locale.getDefault());
-				DepartmentNameGenerator generator = new DepartmentNameGenerator();
-				generator.init(context);
-				for (int i = 0; i < 100; i++) {
-					String product = generator.generate();
-					logger.debug(product);
-					assertNotNull(product);
-				}
-            }
-		};
-		LocaleUtil.runInLocale(Locale.US, runner);
-		LocaleUtil.runInLocale(Locale.GERMAN, runner);
-		LocaleUtil.runInLocale(new Locale("XX"), runner);
-	}
-	
+  /**
+   * Instantiates a new Department name generator test.
+   */
+  public DepartmentNameGeneratorTest() {
+    super(DepartmentNameGenerator.class);
+  }
+
+  /**
+   * Test locales.
+   */
+  @Test
+  public void testLocales() {
+    Runnable runner = () -> {
+      logger.debug("Checking Locale " + Locale.getDefault());
+      DepartmentNameGenerator generator = new DepartmentNameGenerator();
+      generator.init(context);
+      for (int i = 0; i < 100; i++) {
+        String product = generator.generate();
+        logger.debug(product);
+        assertNotNull(product);
+      }
+    };
+    LocaleUtil.runInLocale(Locale.US, runner);
+    LocaleUtil.runInLocale(Locale.GERMAN, runner);
+    LocaleUtil.runInLocale(new Locale("XX"), runner);
+  }
+
 }

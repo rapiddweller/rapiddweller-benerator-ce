@@ -26,8 +26,8 @@
 
 package com.rapiddweller.platform.map;
 
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,25 +42,36 @@ import java.util.Map;
 @SuppressWarnings("rawtypes")
 public class Entity2MapConverter extends ThreadSafeConverter<Entity, Map> {
 
-    public Entity2MapConverter() {
-        super(Entity.class, Map.class);
-    }
+  /**
+   * Instantiates a new Entity 2 map converter.
+   */
+  public Entity2MapConverter() {
+    super(Entity.class, Map.class);
+  }
 
-    public static Map<String, Object> convertEntity(Entity sourceValue) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        for (Map.Entry<String, Object> entry : sourceValue.getComponents().entrySet())
-            map.put(entry.getKey(), entry.getValue());
-        return map;
+  /**
+   * Convert entity map.
+   *
+   * @param sourceValue the source value
+   * @return the map
+   */
+  public static Map<String, Object> convertEntity(Entity sourceValue) {
+    Map<String, Object> map = new HashMap<>();
+    for (Map.Entry<String, Object> entry : sourceValue.getComponents()
+        .entrySet()) {
+      map.put(entry.getKey(), entry.getValue());
     }
+    return map;
+  }
 
-    @Override
-    public Class<Map> getTargetType() {
-        return Map.class;
-    }
+  @Override
+  public Class<Map> getTargetType() {
+    return Map.class;
+  }
 
-    @Override
-    public Map<String, Object> convert(Entity sourceValue) {
-        return convertEntity(sourceValue);
-    }
+  @Override
+  public Map<String, Object> convert(Entity sourceValue) {
+    return convertEntity(sourceValue);
+  }
 
 }

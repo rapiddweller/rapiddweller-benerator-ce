@@ -39,72 +39,124 @@ import java.util.Properties;
  */
 public class InitialContext {
 
-    private String url;
-    private String factory;
-    private String user;
-    private String password;
+  private String url;
+  private String factory;
+  private String user;
+  private String password;
 
-    private javax.naming.InitialContext realContext;
+  private javax.naming.InitialContext realContext;
 
-    public InitialContext() {
+  /**
+   * Instantiates a new Initial context.
+   */
+  public InitialContext() {
+  }
+
+  /**
+   * Gets url.
+   *
+   * @return the url
+   */
+  public String getUrl() {
+    return url;
+  }
+
+  /**
+   * Sets url.
+   *
+   * @param url the url
+   */
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  /**
+   * Gets factory.
+   *
+   * @return the factory
+   */
+  public String getFactory() {
+    return factory;
+  }
+
+  /**
+   * Sets factory.
+   *
+   * @param factory the factory
+   */
+  public void setFactory(String factory) {
+    this.factory = factory;
+  }
+
+  /**
+   * Gets user.
+   *
+   * @return the user
+   */
+  public String getUser() {
+    return user;
+  }
+
+  /**
+   * Sets user.
+   *
+   * @param user the user
+   */
+  public void setUser(String user) {
+    this.user = user;
+  }
+
+  /**
+   * Gets password.
+   *
+   * @return the password
+   */
+  public String getPassword() {
+    return password;
+  }
+
+  /**
+   * Sets password.
+   *
+   * @param password the password
+   */
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  // interface -------------------------------------------------------------------------------------------------------
+
+  /**
+   * Lookup object.
+   *
+   * @param name the name
+   * @return the object
+   * @throws NamingException the naming exception
+   */
+  public Object lookup(String name) throws NamingException {
+    return getRealContext().lookup(name);
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private javax.naming.InitialContext getRealContext() throws NamingException {
+    if (realContext == null) {
+      init();
     }
+    return realContext;
+  }
 
-    public String getUrl() {
-        return url;
+  private void init() throws NamingException {
+    if (factory != null) {
+      Properties p = new Properties();
+      p.setProperty(Context.INITIAL_CONTEXT_FACTORY, factory);
+      p.setProperty(Context.PROVIDER_URL, url);
+      p.setProperty(Context.SECURITY_PRINCIPAL, user);
+      p.setProperty(Context.SECURITY_CREDENTIALS, password);
+      realContext = new javax.naming.InitialContext(p);
+    } else {
+      realContext = new javax.naming.InitialContext();
     }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getFactory() {
-        return factory;
-    }
-
-    public void setFactory(String factory) {
-        this.factory = factory;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    // interface -------------------------------------------------------------------------------------------------------
-
-    public Object lookup(String name) throws NamingException {
-        return getRealContext().lookup(name);
-    }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private javax.naming.InitialContext getRealContext() throws NamingException {
-        if (realContext == null)
-            init();
-        return realContext;
-    }
-
-    private void init() throws NamingException {
-        if (factory != null) {
-            Properties p = new Properties();
-            p.setProperty(Context.INITIAL_CONTEXT_FACTORY, factory);
-            p.setProperty(Context.PROVIDER_URL, url);
-            p.setProperty(Context.SECURITY_PRINCIPAL, user);
-            p.setProperty(Context.SECURITY_CREDENTIALS, password);
-            realContext = new javax.naming.InitialContext(p);
-        } else
-            realContext = new javax.naming.InitialContext();
-    }
+  }
 
 }

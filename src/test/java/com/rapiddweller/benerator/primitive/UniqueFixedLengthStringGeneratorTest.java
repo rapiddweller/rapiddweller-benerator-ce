@@ -27,81 +27,115 @@
 package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 import org.junit.Test;
 
 /**
  * Tests the UniqueFixedLengthStringGenerator.<br/>
  * <br/>
  * Created: 15.11.2007 14:30:28
+ *
  * @author Volker Bergmann
  */
 public class UniqueFixedLengthStringGeneratorTest extends GeneratorClassTest {
 
-    public UniqueFixedLengthStringGeneratorTest() {
-        super(UniqueFixedLengthStringGenerator.class);
-    }
-    
-    @Test
-    public void testZeroLength() {
-        expectGeneratedSequence(createAndInit(0, false), "").withCeasedAvailability();
-    }
+  /**
+   * Instantiates a new Unique fixed length string generator test.
+   */
+  public UniqueFixedLengthStringGeneratorTest() {
+    super(UniqueFixedLengthStringGenerator.class);
+  }
 
-    @Test
-    public void testConstantDigit() {
-        expectGeneratedSequence(createAndInit(1, false, '0'), "0").withCeasedAvailability();
-    }
+  /**
+   * Test zero length.
+   */
+  @Test
+  public void testZeroLength() {
+    expectGeneratedSequence(createAndInit(0, false), "").withCeasedAvailability();
+  }
 
-    @Test
-    public void testTwoBinaryDigitsOrdered() {
-    	expectGeneratedSequence(createAndInit(2, true, '0', '1'), "00", "01", "10", "11").withCeasedAvailability();
-    }
+  /**
+   * Test constant digit.
+   */
+  @Test
+  public void testConstantDigit() {
+    expectGeneratedSequence(createAndInit(1, false, '0'), "0").withCeasedAvailability();
+  }
 
-    @Test
-    public void testTwoBinaryDigitsScrambled() {
-    	expectGeneratedSequence(createAndInit(2, false, '0', '1'), "10", "01", "11", "00").withCeasedAvailability();
-    }
+  /**
+   * Test two binary digits ordered.
+   */
+  @Test
+  public void testTwoBinaryDigitsOrdered() {
+    expectGeneratedSequence(createAndInit(2, true, '0', '1'), "00", "01", "10", "11").withCeasedAvailability();
+  }
 
-    @Test
-    public void testOneBinaryDigit() {
-    	expectUniquelyGeneratedSet(createAndInit(1, false, '0', '1'), "0", "1").withCeasedAvailability();
-        expectUniqueProducts(createAndInit(1, false, '0', '1'), 2).withCeasedAvailability();
-    }
+  /**
+   * Test two binary digits scrambled.
+   */
+  @Test
+  public void testTwoBinaryDigitsScrambled() {
+    expectGeneratedSequence(createAndInit(2, false, '0', '1'), "10", "01", "11", "00").withCeasedAvailability();
+  }
 
-    @Test
-    public void testTwoBinaryDigits() {
-    	expectUniquelyGeneratedSet(createAndInit(2, true, '0', '1'), "00", "01", "10", "11").withCeasedAvailability();
-        expectUniqueProducts(createAndInit(2, true, '0', '1'), 4).withCeasedAvailability();
-    }
+  /**
+   * Test one binary digit.
+   */
+  @Test
+  public void testOneBinaryDigit() {
+    expectUniquelyGeneratedSet(createAndInit(1, false, '0', '1'), "0", "1").withCeasedAvailability();
+    expectUniqueProducts(createAndInit(1, false, '0', '1'), 2).withCeasedAvailability();
+  }
 
-    @Test
-    public void testThreeBinaryDigits() {
-    	expectUniquelyGeneratedSet(createAndInit(3, true, '0', '1'), 
-    			"000", "001", "010", "011", "100", "101", "110", "111"
-    			).withCeasedAvailability();
-        expectUniqueProducts(createAndInit(3, true, '0', '1'), 8).withCeasedAvailability();
-    }
+  /**
+   * Test two binary digits.
+   */
+  @Test
+  public void testTwoBinaryDigits() {
+    expectUniquelyGeneratedSet(createAndInit(2, true, '0', '1'), "00", "01", "10", "11").withCeasedAvailability();
+    expectUniqueProducts(createAndInit(2, true, '0', '1'), 4).withCeasedAvailability();
+  }
 
-    @Test
-    public void testTwoAlphaDigits() {
-    	expectUniquelyGeneratedSet(createAndInit(2, false, 'A', 'O'), "AA", "AO", "OA", "OO").withCeasedAvailability();
-        expectUniqueProducts(createAndInit(2, false, 'A', 'O'), 4).withCeasedAvailability();
-        expectUniqueProducts(createAndInit(2, false, 'A', 'B', 'C'), 9).withCeasedAvailability();
-    }
+  /**
+   * Test three binary digits.
+   */
+  @Test
+  public void testThreeBinaryDigits() {
+    expectUniquelyGeneratedSet(createAndInit(3, true, '0', '1'),
+        "000", "001", "010", "011", "100", "101", "110", "111"
+    ).withCeasedAvailability();
+    expectUniqueProducts(createAndInit(3, true, '0', '1'), 8).withCeasedAvailability();
+  }
 
-    @Test
-    public void testLongString() {
-        expectUniqueProducts(createAndInit(4, false, 'A', 'E', 'I', 'O', 'U'), 625).withCeasedAvailability();
-    }
+  /**
+   * Test two alpha digits.
+   */
+  @Test
+  public void testTwoAlphaDigits() {
+    expectUniquelyGeneratedSet(createAndInit(2, false, 'A', 'O'), "AA", "AO", "OA", "OO").withCeasedAvailability();
+    expectUniqueProducts(createAndInit(2, false, 'A', 'O'), 4).withCeasedAvailability();
+    expectUniqueProducts(createAndInit(2, false, 'A', 'B', 'C'), 9).withCeasedAvailability();
+  }
 
-    @Test
-    public void testMany() {
-        UniqueFixedLengthStringGenerator generator = createAndInit(7, false, '0', '9', '2', '6', '4', '5', '3', '7', '8', '1');
-        expectUniqueProducts(generator, 1000).withContinuedAvailability();
-    }
+  /**
+   * Test long string.
+   */
+  @Test
+  public void testLongString() {
+    expectUniqueProducts(createAndInit(4, false, 'A', 'E', 'I', 'O', 'U'), 625).withCeasedAvailability();
+  }
 
-    private UniqueFixedLengthStringGenerator createAndInit(int length, boolean ordered, Character... chars) {
-    	return initialize(new UniqueFixedLengthStringGenerator(CollectionUtil.toSet(chars), length, ordered));
-    }
-    
+  /**
+   * Test many.
+   */
+  @Test
+  public void testMany() {
+    UniqueFixedLengthStringGenerator generator = createAndInit(7, false, '0', '9', '2', '6', '4', '5', '3', '7', '8', '1');
+    expectUniqueProducts(generator, 1000).withContinuedAvailability();
+  }
+
+  private UniqueFixedLengthStringGenerator createAndInit(int length, boolean ordered, Character... chars) {
+    return initialize(new UniqueFixedLengthStringGenerator(CollectionUtil.toSet(chars), length, ordered));
+  }
+
 }

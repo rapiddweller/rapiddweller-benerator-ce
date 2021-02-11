@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.SpeechUtil;
+import com.rapiddweller.common.SpeechUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 
@@ -36,33 +36,45 @@ import com.rapiddweller.script.expression.ExpressionUtil;
  * Prints out a message to the console.<br/>
  * <br/>
  * Created at 22.07.2009 07:13:28
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class EchoStatement implements Statement {
-	
-	private final Expression<String> messageEx;
-	private final Expression<String> typeEx;
 
-    public EchoStatement(Expression<String> messageEx, Expression<String> typeEx) {
-	    this.messageEx = messageEx;
-	    this.typeEx = typeEx;
-    }
+  private final Expression<String> messageEx;
+  private final Expression<String> typeEx;
 
-	public Expression<?> getExpression() {
-    	return messageEx;
-    }
+  /**
+   * Instantiates a new Echo statement.
+   *
+   * @param messageEx the message ex
+   * @param typeEx    the type ex
+   */
+  public EchoStatement(Expression<String> messageEx, Expression<String> typeEx) {
+    this.messageEx = messageEx;
+    this.typeEx = typeEx;
+  }
 
-	@Override
-	public boolean execute(BeneratorContext context) {
-		String message = ExpressionUtil.evaluate(messageEx, context);
-		String type = ExpressionUtil.evaluate(typeEx, context);
-		if ("speech".equals(type) && SpeechUtil.speechSupported())
-			SpeechUtil.say(message);
-		else
-			System.out.println(message);
-    	return true;
+  /**
+   * Gets expression.
+   *
+   * @return the expression
+   */
+  public Expression<?> getExpression() {
+    return messageEx;
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    String message = ExpressionUtil.evaluate(messageEx, context);
+    String type = ExpressionUtil.evaluate(typeEx, context);
+    if ("speech".equals(type) && SpeechUtil.speechSupported()) {
+      SpeechUtil.say(message);
+    } else {
+      System.out.println(message);
     }
+    return true;
+  }
 
 }

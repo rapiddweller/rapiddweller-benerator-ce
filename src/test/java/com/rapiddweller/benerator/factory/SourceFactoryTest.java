@@ -26,45 +26,59 @@
 
 package com.rapiddweller.benerator.factory;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertNull;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests the {@link SourceFactory}.<br/><br/>
  * Created: 06.08.2011 13:13:19
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class SourceFactoryTest extends GeneratorTest {
 
-    @Test
-    public void testGetCSVCellGenerator() {
-        Generator<String> generator = SourceFactory.createCSVCellGenerator("file://com/rapiddweller/csv/names-abc.csv", ',', Encodings.UTF_8);
-        generator.init(context);
-        assertEquals("Alice", nextProduct(generator));
-        assertEquals("Bob", nextProduct(generator));
-        assertEquals("Charly", nextProduct(generator));
-        assertNull(generator.generate(new ProductWrapper<String>()));
-    }
+  /**
+   * Test get csv cell generator.
+   */
+  @Test
+  public void testGetCSVCellGenerator() {
+    Generator<String> generator = SourceFactory.createCSVCellGenerator("file://com/rapiddweller/csv/names-abc.csv", ',', Encodings.UTF_8);
+    generator.init(context);
+    assertEquals("Alice", nextProduct(generator));
+    assertEquals("Bob", nextProduct(generator));
+    assertEquals("Charly", nextProduct(generator));
+    assertNull(generator.generate(new ProductWrapper<>()));
+  }
 
-    @Test
-    public void testGetArraySourceGenerator() {
-        Generator<String[]> generator = SourceFactory.createCSVLineGenerator(
-                "file://com/rapiddweller/csv/names-abc.csv", ',', Encodings.UTF_8, true);
-        generator.init(context);
-        assertEqualArrays(new String[] { "Alice", "Bob" }, nextProduct(generator));
-        assertEqualArrays(new String[] { "Charly"}, nextProduct(generator));
-        assertNull(generator.generate(new ProductWrapper<String[]>()));
-    }
+  /**
+   * Test get array source generator.
+   */
+  @Test
+  public void testGetArraySourceGenerator() {
+    Generator<String[]> generator = SourceFactory.createCSVLineGenerator(
+        "file://com/rapiddweller/csv/names-abc.csv", ',', Encodings.UTF_8, true);
+    generator.init(context);
+    assertEqualArrays(new String[] {"Alice", "Bob"}, nextProduct(generator));
+    assertEqualArrays(new String[] {"Charly"}, nextProduct(generator));
+    assertNull(generator.generate(new ProductWrapper<>()));
+  }
 
-	protected <T> T nextProduct(Generator<T> generator) {
-		return generator.generate(new ProductWrapper<T>()).unwrap();
-	}
+  /**
+   * Next product t.
+   *
+   * @param <T>       the type parameter
+   * @param generator the generator
+   * @return the t
+   */
+  protected <T> T nextProduct(Generator<T> generator) {
+    return generator.generate(new ProductWrapper<>()).unwrap();
+  }
 
 }

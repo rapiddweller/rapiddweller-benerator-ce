@@ -3,17 +3,17 @@
 
 <dbsanity>
 
-	<identity table="ROLE"    type="unique-key" columns="NAME" />
-	
-	<identity table="USER"    type="unique-key" columns="NAME" />
-	
-	<identity table="COUNTRY" type="nk-pk-query">
-		select NAME, ID from COUNTRY
-	</identity>
-	
-	<identity table="STATE"   type="sub-nk-pk-query" parents="COUNTRY">
-		select NAME, ID from STATE
-		where COUNTRY_FK = ?
-	</identity>
-	
+    <identity table="ROLE" type="unique-key" columns="NAME"/>
+
+    <identity table="USER" type="unique-key" columns="NAME"/>
+
+    <identity table="COUNTRY" type="nk-pk-query">
+        select NAME, ID from COUNTRY
+    </identity>
+
+    <identity table="STATE" type="sub-nk-pk-query" parents="COUNTRY">
+        select NAME, ID from STATE
+        where COUNTRY_FK = ?
+    </identity>
+
 </dbsanity>

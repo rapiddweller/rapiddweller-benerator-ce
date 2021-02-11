@@ -26,41 +26,60 @@
 
 package com.rapiddweller.benerator.test;
 
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.UnsafeConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.UnsafeConverter;
 
 /**
  * Mock implementation of the {@link Converter} interface.<br/>
  * <br/>
  * Created at 29.12.2008 07:24:19
- * @since 0.5.7
+ *
  * @author Volker Bergmann
+ * @since 0.5.7
  */
-
 public class ConverterMock extends UnsafeConverter<Integer, Integer> {
 
-	public int increment;
-	
-	public ConverterMock() {
-		this(1);
-	}
+  /**
+   * The Increment.
+   */
+  public int increment;
 
-	public ConverterMock(int increment) {
-		super(Integer.class, Integer.class);
-		this.increment = increment;
-		latestInstance = this;
-	}
+  /**
+   * Instantiates a new Converter mock.
+   */
+  public ConverterMock() {
+    this(1);
+  }
 
-	public void setIncrement(int increment) {
-		this.increment = increment;
-	}
+  /**
+   * Instantiates a new Converter mock.
+   *
+   * @param increment the increment
+   */
+  public ConverterMock(int increment) {
+    super(Integer.class, Integer.class);
+    this.increment = increment;
+    latestInstance = this;
+  }
 
-	@Override
-	public Integer convert(Integer sourceValue) throws ConversionException {
-		return sourceValue + increment;
-	}
-	
-	public static ConverterMock latestInstance;
-	
+  /**
+   * Sets increment.
+   *
+   * @param increment the increment
+   */
+  public void setIncrement(int increment) {
+    this.increment = increment;
+  }
+
+  @Override
+  public Integer convert(Integer sourceValue) throws ConversionException {
+    return sourceValue + increment;
+  }
+
+  /**
+   * The constant latestInstance.
+   */
+  public static ConverterMock latestInstance;
+
 }

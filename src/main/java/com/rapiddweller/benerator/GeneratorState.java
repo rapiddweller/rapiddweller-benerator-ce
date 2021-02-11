@@ -29,9 +29,21 @@ package com.rapiddweller.benerator;
 /**
  * The state of a generator.<br/><br/>
  * Created: 24.02.2010 12:13:24
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public enum GeneratorState {
-	CREATED, RUNNING, CLOSED
+  /**
+   * Created generator state.
+   */
+  CREATED,
+  /**
+   * Running generator state.
+   */
+  RUNNING,
+  /**
+   * Closed generator state.
+   */
+  CLOSED
 }

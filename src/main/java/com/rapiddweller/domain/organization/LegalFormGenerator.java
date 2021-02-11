@@ -28,7 +28,7 @@ package com.rapiddweller.domain.organization;
 
 import com.rapiddweller.benerator.csv.WeightedDatasetCSVGenerator;
 import com.rapiddweller.benerator.dataset.DatasetUtil;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 
 /**
  * Generates the abbreviated strings for legal forms of organizations.<br/><br/>
@@ -39,10 +39,17 @@ import com.rapiddweller.commons.Encodings;
  */
 public class LegalFormGenerator extends WeightedDatasetCSVGenerator<String> {
 
-    private static final String PATH_PATTERN = "/com/rapiddweller/domain/organization/legalForm_{0}.csv";
+  private static final String PATH_PATTERN =
+      "/com/rapiddweller/domain/organization/legalForm_{0}.csv";
 
-    public LegalFormGenerator(String dataset) {
-        super(String.class, PATH_PATTERN, dataset, DatasetUtil.REGION_NESTING, true, Encodings.UTF_8);
-    }
+  /**
+   * Instantiates a new Legal form generator.
+   *
+   * @param dataset the dataset
+   */
+  public LegalFormGenerator(String dataset) {
+    super(String.class, PATH_PATTERN, dataset, DatasetUtil.REGION_NESTING,
+        true, Encodings.UTF_8);
+  }
 
 }

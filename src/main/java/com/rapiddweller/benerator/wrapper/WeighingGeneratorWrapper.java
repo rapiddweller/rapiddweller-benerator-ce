@@ -33,26 +33,40 @@ import com.rapiddweller.benerator.WeightedGenerator;
  * Wraps an ordinary {@link Generator} with a {@link WeightedGenerator} interface
  * requiring an explicit weight setting.<br/><br/>
  * Created: 29.08.2011 22:34:03
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class WeighingGeneratorWrapper<E> extends GeneratorProxy<E> implements WeightedGenerator<E> {
-	
-	private double weight;
 
-	public WeighingGeneratorWrapper(Class<E> generatedType, double weight) {
-		super(generatedType);
-		this.weight = weight;
-	}
+  private final double weight;
 
-	public WeighingGeneratorWrapper(Generator<E> source, double weight) {
-		super(source);
-		this.weight = weight;
-	}
+  /**
+   * Instantiates a new Weighing generator wrapper.
+   *
+   * @param generatedType the generated type
+   * @param weight        the weight
+   */
+  public WeighingGeneratorWrapper(Class<E> generatedType, double weight) {
+    super(generatedType);
+    this.weight = weight;
+  }
 
-	@Override
-	public double getWeight() {
-		return weight;
-	}
-	
+  /**
+   * Instantiates a new Weighing generator wrapper.
+   *
+   * @param source the source
+   * @param weight the weight
+   */
+  public WeighingGeneratorWrapper(Generator<E> source, double weight) {
+    super(source);
+    this.weight = weight;
+  }
+
+  @Override
+  public double getWeight() {
+    return weight;
+  }
+
 }

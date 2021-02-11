@@ -26,8 +26,8 @@
 
 package com.rapiddweller.domain.finance;
 
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 import com.rapiddweller.domain.address.CountryCode2Validator;
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
 
 import javax.validation.ConstraintValidatorContext;
 
@@ -43,20 +43,23 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class IBANValidator extends AbstractConstraintValidator<IBAN, String> {
 
-    private final CountryCode2Validator countryCodeValidator = new CountryCode2Validator();
+  private final CountryCode2Validator countryCodeValidator =
+      new CountryCode2Validator();
 
-    @Override
-    public boolean isValid(String iban, ConstraintValidatorContext context) {
-        // check length
-        if (iban == null || iban.length() < 15 || iban.length() > 32)
-            return false;
-        // check country code
-        String countryCode = iban.substring(0, 2);
-        if (!countryCodeValidator.valid(countryCode))
-            return false;
-        // check checksum
-        int checksum = IBANUtil.checksum(iban);
-        return (checksum == 1);
+  @Override
+  public boolean isValid(String iban, ConstraintValidatorContext context) {
+    // check length
+    if (iban == null || iban.length() < 15 || iban.length() > 32) {
+      return false;
     }
+    // check country code
+    String countryCode = iban.substring(0, 2);
+    if (!countryCodeValidator.valid(countryCode)) {
+      return false;
+    }
+    // check checksum
+    int checksum = IBANUtil.checksum(iban);
+    return (checksum == 1);
+  }
 
 }

@@ -26,89 +26,106 @@
 
 package com.rapiddweller.benerator.consumer;
 
+import com.rapiddweller.benerator.test.ModelTest;
+import com.rapiddweller.common.Patterns;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.converter.TimestampFormatter;
+import com.rapiddweller.model.data.Entity;
+import org.junit.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.commons.Patterns;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.converter.TimestampFormatter;
-import com.rapiddweller.model.data.Entity;
-
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link ConsoleExporter}.<br/><br/>
  * Created at 11.04.2008 06:58:53
- * @since 0.5.2
+ *
  * @author Volker Bergmann
+ * @since 0.5.2
  */
 public class ConsoleExporterTest extends ModelTest {
-	
-	private static final String LF = SystemInfo.getLineSeparator();
 
-	@Test
-	public void testSimpleTypes() {
-		check("Test" + LF, "Test");
-		check("1" + LF, 1);
-		check("1" + LF, 1.);
-		check("true" + LF, true);
-	}
+  private static final String LF = SystemInfo.getLineSeparator();
 
-	@Test
-	public void testDate() {
-		Date date = new Date(((60 + 2) * 60 + 3) * 1000);
-		check(new SimpleDateFormat("yyyy-MM-dd").format(date) + LF, date);
-	}
+  /**
+   * Test simple types.
+   */
+  @Test
+  public void testSimpleTypes() {
+    check("Test" + LF, "Test");
+    check("1" + LF, 1);
+    check("1" + LF, 1.);
+    check("true" + LF, true);
+  }
 
-	@Test
-	public void testTimestamp() {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		TimestampFormatter formatter = new TimestampFormatter(Patterns.DEFAULT_DATETIME_SECONDS_PATTERN + '.');
-		check(formatter.format(timestamp) + LF, timestamp);
-	}
-	
-	@Test
-	public void testEntity() {
-		Entity entity = createEntity("e", "i", 3, "d", 5., "s", "sss");
-		check("e[i=3, d=5, s=sss]" + LF, entity);
-	}
-	
-	@Test
-	public void testLimit() {
-		Entity entity = createEntity("e", "i", 3, "d", 5., "s", "sss");
-		check(new ConsoleExporter(1L), "e[i=3, d=5, s=sss]" + LF + '.', entity, entity);
-	}
-	
-	@Test
-	public void testIndent() {
-		Entity entity = createEntity("e", "i", 3, "d", 5., "s", "sss");
-		check(new ConsoleExporter(-1L, "xxx"), "xxxe[i=3, d=5, s=sss]" + LF, entity);
-	}
-	
-	// helpers ---------------------------------------------------------------------------------------------------------
+  /**
+   * Test date.
+   */
+  @Test
+  public void testDate() {
+    Date date = new Date(((60 + 2) * 60 + 3) * 1000);
+    check(new SimpleDateFormat("yyyy-MM-dd").format(date) + LF, date);
+  }
 
-	private static void check(String expectedOut, Object... ins) {
-		check(new ConsoleExporter(), expectedOut, ins);
-	}
-	
-	private static void check(ConsoleExporter exporter, String expectedOut, Object... ins) {
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		exporter.setOut(new PrintStream(stream));
-		try {
-			for (Object in : ins) {
-				exporter.startProductConsumption(in);
-				exporter.finishProductConsumption(in);
-			}
-			exporter.flush();
-			assertEquals(expectedOut, stream.toString());
-		} finally {
-			exporter.close();
-		}
-	}
-	
+  /**
+   * Test timestamp.
+   */
+  @Test
+  public void testTimestamp() {
+    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+    TimestampFormatter formatter = new TimestampFormatter(Patterns.DEFAULT_DATETIME_SECONDS_PATTERN + '.');
+    check(formatter.format(timestamp) + LF, timestamp);
+  }
+
+  /**
+   * Test entity.
+   */
+  @Test
+  public void testEntity() {
+    Entity entity = createEntity("e", "i", 3, "d", 5., "s", "sss");
+    check("e[i=3, d=5, s=sss]" + LF, entity);
+  }
+
+  /**
+   * Test limit.
+   */
+  @Test
+  public void testLimit() {
+    Entity entity = createEntity("e", "i", 3, "d", 5., "s", "sss");
+    check(new ConsoleExporter(1L), "e[i=3, d=5, s=sss]" + LF + '.', entity, entity);
+  }
+
+  /**
+   * Test indent.
+   */
+  @Test
+  public void testIndent() {
+    Entity entity = createEntity("e", "i", 3, "d", 5., "s", "sss");
+    check(new ConsoleExporter(-1L, "xxx"), "xxxe[i=3, d=5, s=sss]" + LF, entity);
+  }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  private static void check(String expectedOut, Object... ins) {
+    check(new ConsoleExporter(), expectedOut, ins);
+  }
+
+  private static void check(ConsoleExporter exporter, String expectedOut, Object... ins) {
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    exporter.setOut(new PrintStream(stream));
+    try (exporter) {
+      for (Object in : ins) {
+        exporter.startProductConsumption(in);
+        exporter.finishProductConsumption(in);
+      }
+      exporter.flush();
+      assertEquals(expectedOut, stream.toString());
+    }
+  }
+
 }

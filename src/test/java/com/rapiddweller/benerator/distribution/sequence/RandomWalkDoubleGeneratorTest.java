@@ -29,72 +29,98 @@ package com.rapiddweller.benerator.distribution.sequence;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
+import org.junit.Test;
 
 import java.util.Set;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link RandomWalkLongGenerator}.<br/><br/>
  * Created: 18.06.2006 09:11:19
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class RandomWalkDoubleGeneratorTest extends GeneratorClassTest {
 
-    public RandomWalkDoubleGeneratorTest() {
-        super(RandomWalkDoubleGenerator.class);
-    }
+  /**
+   * Instantiates a new Random walk double generator test.
+   */
+  public RandomWalkDoubleGeneratorTest() {
+    super(RandomWalkDoubleGenerator.class);
+  }
 
-    @Test
-    public void testGreaterSimple() {
-        RandomWalkDoubleGenerator simpleGenerator = initialize(new RandomWalkDoubleGenerator(1, 5, 1, 1, 1));
-        expectGeneratedSequence(simpleGenerator, 1., 2., 3.);
-    }
+  /**
+   * Test greater simple.
+   */
+  @Test
+  public void testGreaterSimple() {
+    RandomWalkDoubleGenerator simpleGenerator = initialize(new RandomWalkDoubleGenerator(1, 5, 1, 1, 1));
+    expectGeneratedSequence(simpleGenerator, 1., 2., 3.);
+  }
 
-    @Test
-    public void testGreaterOdd() {
-        RandomWalkDoubleGenerator oddGenerator = initialize(new RandomWalkDoubleGenerator(1, 5, 2, 2, 2));
-        expectGeneratedSequence(oddGenerator, 1., 3., 5.);
-    }
+  /**
+   * Test greater odd.
+   */
+  @Test
+  public void testGreaterOdd() {
+    RandomWalkDoubleGenerator oddGenerator = initialize(new RandomWalkDoubleGenerator(1, 5, 2, 2, 2));
+    expectGeneratedSequence(oddGenerator, 1., 3., 5.);
+  }
 
-    @Test
-    public void testGreaterOrEquals() {
-        RandomWalkDoubleGenerator generator = initialize(new RandomWalkDoubleGenerator(1, 5, 2, 0, 2));
-        Set<Double> space = CollectionUtil.toSet(1., 3., 5.);
-        assertProductSpace(space, generator);
-    }
+  /**
+   * Test greater or equals.
+   */
+  @Test
+  public void testGreaterOrEquals() {
+    RandomWalkDoubleGenerator generator = initialize(new RandomWalkDoubleGenerator(1, 5, 2, 0, 2));
+    Set<Double> space = CollectionUtil.toSet(1., 3., 5.);
+    assertProductSpace(space, generator);
+  }
 
-    @Test
-    public void testEquals() {
-        RandomWalkDoubleGenerator generator = initialize(new RandomWalkDoubleGenerator(1, 5, 2, 0, 0));
-        expectGeneratedSequence(generator, 3., 3., 3.);
-    }
+  /**
+   * Test equals.
+   */
+  @Test
+  public void testEquals() {
+    RandomWalkDoubleGenerator generator = initialize(new RandomWalkDoubleGenerator(1, 5, 2, 0, 0));
+    expectGeneratedSequence(generator, 3., 3., 3.);
+  }
 
-    @Test
-    public void testLessOrEquals() {
-        RandomWalkDoubleGenerator generator = initialize(new RandomWalkDoubleGenerator(1, 5, 2, -2, 0));
-        Set<Double> space = CollectionUtil.toSet(1., 3., 5.);
-        assertProductSpace(space, generator);
-    }
+  /**
+   * Test less or equals.
+   */
+  @Test
+  public void testLessOrEquals() {
+    RandomWalkDoubleGenerator generator = initialize(new RandomWalkDoubleGenerator(1, 5, 2, -2, 0));
+    Set<Double> space = CollectionUtil.toSet(1., 3., 5.);
+    assertProductSpace(space, generator);
+  }
 
-    @Test
-    public void testLess() {
-        RandomWalkDoubleGenerator generator = initialize(new RandomWalkDoubleGenerator(1, 5, 2, -2, -2));
-        expectGeneratedSequence(generator, 5., 3., 1.);
-    }
+  /**
+   * Test less.
+   */
+  @Test
+  public void testLess() {
+    RandomWalkDoubleGenerator generator = initialize(new RandomWalkDoubleGenerator(1, 5, 2, -2, -2));
+    expectGeneratedSequence(generator, 5., 3., 1.);
+  }
 
-    @Test
-    public void testLessOrGreater() {
-        RandomWalkDoubleGenerator generator = initialize(new RandomWalkDoubleGenerator(1, 5, 2, -2, 2));
-        Set<Double> space = CollectionUtil.toSet(1., 3., 5.);
-        assertProductSpace(space, generator);
-    }
+  /**
+   * Test less or greater.
+   */
+  @Test
+  public void testLessOrGreater() {
+    RandomWalkDoubleGenerator generator = initialize(new RandomWalkDoubleGenerator(1, 5, 2, -2, 2));
+    Set<Double> space = CollectionUtil.toSet(1., 3., 5.);
+    assertProductSpace(space, generator);
+  }
 
-    private static void assertProductSpace(Set<Double> space, Generator<Double> generator) {
-    	Double product = generator.generate(new ProductWrapper<Double>()).unwrap();
-		assertTrue("Expected one of " + space + ", but found " + product, space.contains(product));
-    }
+  private static void assertProductSpace(Set<Double> space, Generator<Double> generator) {
+    Double product = generator.generate(new ProductWrapper<>()).unwrap();
+    assertTrue("Expected one of " + space + ", but found " + product, space.contains(product));
+  }
 
 }

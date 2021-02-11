@@ -36,25 +36,42 @@ import com.rapiddweller.model.data.Entity;
  */
 public class CategoryValidator extends EntityValidator {
 
-    private CategoryIdValidator idValidator = new CategoryIdValidator();
+  private CategoryIdValidator idValidator = new CategoryIdValidator();
 
-    public CategoryValidator() {
-        this("category");
-    }
+  /**
+   * Instantiates a new Category validator.
+   */
+  public CategoryValidator() {
+    this("category");
+  }
 
-    public CategoryValidator(String entityName) {
-        super(entityName);
-    }
+  /**
+   * Instantiates a new Category validator.
+   *
+   * @param entityName the entity name
+   */
+  public CategoryValidator(String entityName) {
+    super(entityName);
+  }
 
-    @Override
-    public boolean valid(Entity category) {
-        if (!super.valid(category))
-            return false;
-        if (!idValidator.isValid((String) category.get("id"), null))
-            return false;
-        if (category.get("name") == null)
-            return false;
-        String parent = (String) category.get("parent_id");
-        return (parent == null || parent.length() == 4);
+  /**
+   * Valid boolean.
+   *
+   * @param category the category
+   * @return the boolean
+   */
+  @Override
+  public boolean valid(Entity category) {
+    if (!super.valid(category)) {
+      return false;
     }
+    if (!idValidator.isValid((String) category.get("id"), null)) {
+      return false;
+    }
+    if (category.get("name") == null) {
+      return false;
+    }
+    String parent = (String) category.get("parent_id");
+    return (parent == null || parent.length() == 4);
+  }
 }

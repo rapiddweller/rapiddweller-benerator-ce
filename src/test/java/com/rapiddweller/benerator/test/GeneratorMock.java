@@ -34,37 +34,56 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  * Mock implementation of the {@link Generator} interface.<br/>
  * <br/>
  * Created at 29.12.2008 07:11:25
- * @since 0.5.7
+ *
  * @author Volker Bergmann
+ * @since 0.5.7
  */
-
 public class GeneratorMock extends UnsafeGenerator<Integer> {
-	
-	public int value;
 
-	public GeneratorMock() {
-		this(1);
-	}
+  /**
+   * The Value.
+   */
+  public int value;
 
-	public GeneratorMock(int value) {
-		this.value = value;
-		latestInstance = this;
-	}
+  /**
+   * Instantiates a new Generator mock.
+   */
+  public GeneratorMock() {
+    this(1);
+  }
 
-	public void setValue(int value) {
-		this.value = value;
-	}
+  /**
+   * Instantiates a new Generator mock.
+   *
+   * @param value the value
+   */
+  public GeneratorMock(int value) {
+    this.value = value;
+    latestInstance = this;
+  }
 
-    @Override
-	public Class<Integer> getGeneratedType() {
-	    return Integer.class;
-    }
-	
-	@Override
-	public ProductWrapper<Integer> generate(ProductWrapper<Integer> wrapper) {
-		return wrapper.wrap(value);
-	}
+  /**
+   * Sets value.
+   *
+   * @param value the value
+   */
+  public void setValue(int value) {
+    this.value = value;
+  }
 
-	public static GeneratorMock latestInstance = null;
+  @Override
+  public Class<Integer> getGeneratedType() {
+    return Integer.class;
+  }
+
+  @Override
+  public ProductWrapper<Integer> generate(ProductWrapper<Integer> wrapper) {
+    return wrapper.wrap(value);
+  }
+
+  /**
+   * The constant latestInstance.
+   */
+  public static GeneratorMock latestInstance = null;
 
 }

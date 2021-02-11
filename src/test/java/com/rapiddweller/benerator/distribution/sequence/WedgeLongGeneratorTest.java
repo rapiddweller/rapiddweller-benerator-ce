@@ -32,40 +32,53 @@ import org.junit.Test;
 /**
  * Tests the {@link WedgeLongGenerator}.<br/><br/>
  * Created: 13.11.2007 13:10:39
+ *
  * @author Volker Bergmann
  */
 public class WedgeLongGeneratorTest extends GeneratorClassTest {
 
-    public WedgeLongGeneratorTest() {
-        super(WedgeLongGenerator.class);
-    }
+  /**
+   * Instantiates a new Wedge long generator test.
+   */
+  public WedgeLongGeneratorTest() {
+    super(WedgeLongGenerator.class);
+  }
 
-    @Test
-    public void testInstantiation() throws Exception {
-        new WedgeLongGenerator(0, 10, 1);
-    }
+  /**
+   * Test instantiation.
+   */
+  @Test
+  public void testInstantiation() {
+    new WedgeLongGenerator(0, 10, 1);
+  }
 
-    @Test
-    public void testGranularity1() throws Exception {
-        expectGeneratedSequence(create( 1,  3, 1),  1L,  3L,  2L).withCeasedAvailability();
-        expectGeneratedSequence(create( 1,  4, 1),  1L,  4L,  2L,  3L).withCeasedAvailability();
-        expectGeneratedSequence(create(-3, -1, 1), -3L, -1L, -2L).withCeasedAvailability();
-        expectGeneratedSequence(create(-4, -1, 1), -4L, -1L, -3L, -2L).withCeasedAvailability();
-        expectGeneratedSequence(create(-1,  1, 1), -1L,  1L,  0L).withCeasedAvailability();
-        expectGeneratedSequence(create(-1,  2, 1), -1L,  2L,  0L,  1L).withCeasedAvailability();
-        expectGeneratedSequence(create( 0,  5, 1), 0L, 5L, 1L, 4L, 2L, 3L).withCeasedAvailability();
-    }
+  /**
+   * Test granularity 1.
+   */
+  @Test
+  public void testGranularity1() {
+    expectGeneratedSequence(create(1, 3, 1), 1L, 3L, 2L).withCeasedAvailability();
+    expectGeneratedSequence(create(1, 4, 1), 1L, 4L, 2L, 3L).withCeasedAvailability();
+    expectGeneratedSequence(create(-3, -1, 1), -3L, -1L, -2L).withCeasedAvailability();
+    expectGeneratedSequence(create(-4, -1, 1), -4L, -1L, -3L, -2L).withCeasedAvailability();
+    expectGeneratedSequence(create(-1, 1, 1), -1L, 1L, 0L).withCeasedAvailability();
+    expectGeneratedSequence(create(-1, 2, 1), -1L, 2L, 0L, 1L).withCeasedAvailability();
+    expectGeneratedSequence(create(0, 5, 1), 0L, 5L, 1L, 4L, 2L, 3L).withCeasedAvailability();
+  }
 
-    @Test
-    public void testGranularity5() throws Exception {
-        expectGeneratedSequence(create(  1, 11, 5),   1L, 11L,  6L).withCeasedAvailability();
-        expectGeneratedSequence(create(  1, 16, 5),   1L, 16L,  6L, 11L).withCeasedAvailability();
-        expectGeneratedSequence(create(-11, -1, 5), -11L, -1L, -6L).withCeasedAvailability();
-        expectGeneratedSequence(create(-16, -1, 5), -16L, -1L, -11L, -6L).withCeasedAvailability();
-        expectGeneratedSequence(create(-11,  4, 5), -11L,  4L,  -6L, -1L).withCeasedAvailability();
-    }
+  /**
+   * Test granularity 5.
+   */
+  @Test
+  public void testGranularity5() {
+    expectGeneratedSequence(create(1, 11, 5), 1L, 11L, 6L).withCeasedAvailability();
+    expectGeneratedSequence(create(1, 16, 5), 1L, 16L, 6L, 11L).withCeasedAvailability();
+    expectGeneratedSequence(create(-11, -1, 5), -11L, -1L, -6L).withCeasedAvailability();
+    expectGeneratedSequence(create(-16, -1, 5), -16L, -1L, -11L, -6L).withCeasedAvailability();
+    expectGeneratedSequence(create(-11, 4, 5), -11L, 4L, -6L, -1L).withCeasedAvailability();
+  }
 
-    private WedgeLongGenerator create(long min, long max, long granularity) {
-    	return initialize(new WedgeLongGenerator(min, max, granularity));
-    }
+  private WedgeLongGenerator create(long min, long max, long granularity) {
+    return initialize(new WedgeLongGenerator(min, max, granularity));
+  }
 }

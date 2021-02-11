@@ -26,45 +26,49 @@
 
 package com.rapiddweller.platform.contiperf;
 
-import static org.junit.Assert.*;
+import com.rapiddweller.benerator.test.ConsumerMock;
+import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.stat.LatencyCounter;
+import org.junit.Test;
 
 import java.io.PrintWriter;
 
-import com.rapiddweller.benerator.test.ConsumerMock;
-import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.stat.LatencyCounter;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link PerfTrackingConsumer}.<br/><br/>
  * Created: 14.03.2010 11:53:48
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class PerfTrackingConsumerTest {
 
-	private static final int MAX_LATENCY = 80;
-	private static final int MIN_LATENCY = 40;
+  private static final int MAX_LATENCY = 80;
+  private static final int MIN_LATENCY = 40;
 
-	@Test
-	public void test() {
-		ConsumerMock mock = new ConsumerMock(false, 1, MIN_LATENCY, MAX_LATENCY);
-		PerfTrackingConsumer tracker = new PerfTrackingConsumer();
-		try {
-			tracker.setTarget(mock);
-			for (int i = 0; i < 10; i++) {
-				tracker.startConsuming(new ProductWrapper<Object>().wrap(null));
-				tracker.finishConsuming(new ProductWrapper<Object>().wrap(null));
-			}
-			LatencyCounter counter = tracker.getOrCreateTracker().getCounters()[0];
-			counter.printSummary(new PrintWriter(System.out), 90, 95);
-			assertTrue(counter.minLatency() >= MIN_LATENCY - 10);
-			assertTrue(counter.averageLatency() > MIN_LATENCY - 10);
-			assertTrue(counter.averageLatency() < MAX_LATENCY + 10);
-		} finally {
-			IOUtil.close(tracker);
-		}
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    ConsumerMock mock = new ConsumerMock(false, 1, MIN_LATENCY, MAX_LATENCY);
+    PerfTrackingConsumer tracker = new PerfTrackingConsumer();
+    try {
+      tracker.setTarget(mock);
+      for (int i = 0; i < 10; i++) {
+        tracker.startConsuming(new ProductWrapper<>().wrap(null));
+        tracker.finishConsuming(new ProductWrapper<>().wrap(null));
+      }
+      LatencyCounter counter = tracker.getOrCreateTracker().getCounters()[0];
+      counter.printSummary(new PrintWriter(System.out), 90, 95);
+      assertTrue(counter.minLatency() >= MIN_LATENCY - 10);
+      assertTrue(counter.averageLatency() > MIN_LATENCY - 10);
+      assertTrue(counter.averageLatency() < MAX_LATENCY + 10);
+    } finally {
+      IOUtil.close(tracker);
+    }
+  }
+
 }

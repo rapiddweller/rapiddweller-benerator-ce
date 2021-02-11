@@ -26,8 +26,8 @@
 
 package com.rapiddweller.platform.edi;
 
+import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.platform.template.DefaultTemplateRecord;
-import com.rapiddweller.commons.converter.AnyConverter;
 
 import java.util.List;
 import java.util.Map;
@@ -39,35 +39,39 @@ import java.util.Map;
  * @author Volker Bergmann
  * @since TODO version
  */
-
 public class EdiTemplateRecord extends DefaultTemplateRecord {
 
-    @Override
-    public Object get(String name) {
-        if ("recursiveSegmentCount".equals(name))
-            return calculateRecursiveSegmentCount();
-        else
-            return super.get(name);
+  @Override
+  public Object get(String name) {
+    if ("recursiveSegmentCount".equals(name)) {
+      return calculateRecursiveSegmentCount();
+    } else {
+      return super.get(name);
     }
+  }
 
-    private int calculateRecursiveSegmentCount() {
-        int sum = getBaseSegmentCount();
-        for (Map.Entry<String, ?> component : components.entrySet()) {
-            if (component.getValue() instanceof List) {
-                for (Object listItem : (List<?>) component.getValue())
-                    if (listItem instanceof EdiTemplateRecord)
-                        sum += ((EdiTemplateRecord) listItem).calculateRecursiveSegmentCount();
-            }
+  private int calculateRecursiveSegmentCount() {
+    int sum = getBaseSegmentCount();
+    for (Map.Entry<String, ?> component : components.entrySet()) {
+      if (component.getValue() instanceof List) {
+        for (Object listItem : (List<?>) component.getValue()) {
+          if (listItem instanceof EdiTemplateRecord) {
+            sum += ((EdiTemplateRecord) listItem)
+                .calculateRecursiveSegmentCount();
+          }
         }
-        return sum;
+      }
     }
+    return sum;
+  }
 
-    private int getBaseSegmentCount() {
-        Object baseSegmentCountSpec = get("baseSegmentCount");
-        if (baseSegmentCountSpec != null)
-            return AnyConverter.convert(baseSegmentCountSpec, Integer.class);
-        else
-            return 0;
+  private int getBaseSegmentCount() {
+    Object baseSegmentCountSpec = get("baseSegmentCount");
+    if (baseSegmentCountSpec != null) {
+      return AnyConverter.convert(baseSegmentCountSpec, Integer.class);
+    } else {
+      return 0;
     }
+  }
 
 }

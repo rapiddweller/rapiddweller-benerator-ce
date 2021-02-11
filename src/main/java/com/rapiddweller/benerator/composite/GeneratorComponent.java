@@ -28,16 +28,18 @@ package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.engine.ScopedLifeCycleHolder;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.MessageHolder;
-import com.rapiddweller.commons.ThreadAware;
+import com.rapiddweller.common.MessageHolder;
+import com.rapiddweller.common.ThreadAware;
 
 /**
  * Common parent interface for components that are used in composite data generation.<br/><br/>
  * Created: 07.08.2011 16:26:44
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public interface GeneratorComponent<E> extends Statement, ScopedLifeCycleHolder, MessageHolder, ThreadAware {
-	@Override
-	void close();
+  @Override
+  void close();
 }

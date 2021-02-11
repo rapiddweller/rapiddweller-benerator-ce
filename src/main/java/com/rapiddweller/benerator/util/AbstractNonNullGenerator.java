@@ -32,18 +32,20 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 /**
  * Abstract implementation of the NonNullGenerator.<br/><br/>
  * Created: 26.07.2011 17:35:35
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public abstract class AbstractNonNullGenerator<E> extends AbstractGenerator<E> implements NonNullGenerator<E> {
 
-	@Override
-	public final ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-		E result = generate();
-		return (result != null ? wrapper.wrap(result) : null);
-	}
-	
-	@Override
-	public abstract E generate();
-	
+  @Override
+  public final ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    E result = generate();
+    return (result != null ? wrapper.wrap(result) : null);
+  }
+
+  @Override
+  public abstract E generate();
+
 }

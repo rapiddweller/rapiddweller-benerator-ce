@@ -33,34 +33,46 @@ import com.rapiddweller.benerator.engine.Statement;
 /**
  * Causes the thread to sleep for a certain number of milliseconds.<br/><br/>
  * Created: 21.02.2010 07:46:50
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class WaitStatement implements Statement {
-	
-	private NonNullGenerator<Long> durationGenerator;
-	private boolean generatorInitialized = false;
 
-	public WaitStatement(NonNullGenerator<Long> durationGenerator) {
-	    this.durationGenerator = durationGenerator;
+  private final NonNullGenerator<Long> durationGenerator;
+  private boolean generatorInitialized = false;
+
+  /**
+   * Instantiates a new Wait statement.
+   *
+   * @param durationGenerator the duration generator
+   */
+  public WaitStatement(NonNullGenerator<Long> durationGenerator) {
+    this.durationGenerator = durationGenerator;
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    try {
+      Thread.sleep(generateDuration(context));
+      return true;
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
     }
-	
-	@Override
-	public boolean execute(BeneratorContext context) {
-		try {
-	        Thread.sleep(generateDuration(context));
-	    	return true;
-        } catch (InterruptedException e) {
-	        throw new RuntimeException(e);
-        }
-	}
+  }
 
-	public int generateDuration(BeneratorContext context) {
-		if (!generatorInitialized) {
-			durationGenerator.init(context);
-			generatorInitialized = true;
-		}
-		return durationGenerator.generate().intValue();
-	}
-	
+  /**
+   * Generate duration int.
+   *
+   * @param context the context
+   * @return the int
+   */
+  public int generateDuration(BeneratorContext context) {
+    if (!generatorInitialized) {
+      durationGenerator.init(context);
+      generatorInitialized = true;
+    }
+    return durationGenerator.generate().intValue();
+  }
+
 }

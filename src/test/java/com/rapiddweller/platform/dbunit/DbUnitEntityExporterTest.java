@@ -26,73 +26,88 @@
 
 package com.rapiddweller.platform.dbunit;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-
 import com.rapiddweller.benerator.test.ModelTest;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.io.File;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link DbUnitEntityExporter}.<br/><br/>
  * Created: 05.11.2009 07:23:45
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class DbUnitEntityExporterTest extends ModelTest {
 
-	private static final String FILENAME = "target/" + DbUnitEntityExporterTest.class.getName() + ".dbunit.xml";
-	private Entity ALICE;
-	private Entity BOB;
+  private static final String FILENAME = "target/" + DbUnitEntityExporterTest.class.getName() + ".dbunit.xml";
+  private Entity ALICE;
+  private Entity BOB;
 
-	@Before
-	public void setUpExpectedEntities() {
-		ALICE = createEntity("Person", "name", "Alice", "age", 23);
-		BOB = createEntity("Person", "name", "Bob", "age", 34);
-	}
-	
-	@Test
-	public void test() throws Exception {
-		DbUnitEntityExporter exporter = new DbUnitEntityExporter(FILENAME);
-		exporter.startProductConsumption(ALICE);
-		exporter.startProductConsumption(BOB);
-		exporter.finishProductConsumption(BOB);
-		exporter.finishProductConsumption(ALICE);
-		exporter.close();
-		Document doc = XMLUtil.parse(FILENAME);
-		Element root = doc.getDocumentElement();
-		Element[] children = XMLUtil.getChildElements(root);
-		assertEquals(2, children.length);
-		assertPerson(children[0], "Alice", 23);
-		assertPerson(children[1], "Bob",   34);
-		FileUtil.deleteIfExists(new File(FILENAME));
-	}
+  /**
+   * Sets up expected entities.
+   */
+  @Before
+  public void setUpExpectedEntities() {
+    ALICE = createEntity("Person", "name", "Alice", "age", 23);
+    BOB = createEntity("Person", "name", "Bob", "age", 34);
+  }
 
-	@Test
-	public void testClosingTwice() throws Exception {
-		DbUnitEntityExporter exporter = new DbUnitEntityExporter(FILENAME);
-		exporter.startProductConsumption(ALICE);
-		exporter.finishProductConsumption(ALICE);
-		exporter.close();
-		exporter.close();
-	}
+  /**
+   * Test.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void test() throws Exception {
+    DbUnitEntityExporter exporter = new DbUnitEntityExporter(FILENAME);
+    exporter.startProductConsumption(ALICE);
+    exporter.startProductConsumption(BOB);
+    exporter.finishProductConsumption(BOB);
+    exporter.finishProductConsumption(ALICE);
+    exporter.close();
+    Document doc = XMLUtil.parse(FILENAME);
+    Element root = doc.getDocumentElement();
+    Element[] children = XMLUtil.getChildElements(root);
+    assertEquals(2, children.length);
+    assertPerson(children[0], "Alice", 23);
+    assertPerson(children[1], "Bob", 34);
+    FileUtil.deleteIfExists(new File(FILENAME));
+  }
 
-	@Test
-	public void testUnusedClose() throws Exception {
-		DbUnitEntityExporter exporter = new DbUnitEntityExporter(FILENAME);
-		exporter.close();
-	}
+  /**
+   * Test closing twice.
+   */
+  @Test
+  public void testClosingTwice() {
+    DbUnitEntityExporter exporter = new DbUnitEntityExporter(FILENAME);
+    exporter.startProductConsumption(ALICE);
+    exporter.finishProductConsumption(ALICE);
+    exporter.close();
+    exporter.close();
+  }
 
-	private static void assertPerson(Element element, String name, int age) {
-	    assertEquals("Person", element.getNodeName());
-		assertEquals(name, element.getAttribute("name"));
-		assertEquals(String.valueOf(age), element.getAttribute("age"));
-    }
-	
+  /**
+   * Test unused close.
+   */
+  @Test
+  public void testUnusedClose() {
+    DbUnitEntityExporter exporter = new DbUnitEntityExporter(FILENAME);
+    exporter.close();
+  }
+
+  private static void assertPerson(Element element, String name, int age) {
+    assertEquals("Person", element.getNodeName());
+    assertEquals(name, element.getAttribute("name"));
+    assertEquals(String.valueOf(age), element.getAttribute("age"));
+  }
+
 }

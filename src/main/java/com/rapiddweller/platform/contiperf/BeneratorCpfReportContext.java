@@ -39,8 +39,11 @@ import com.rapiddweller.contiperf.report.ReportContext;
  */
 public class BeneratorCpfReportContext extends ReportContext {
 
-    public BeneratorCpfReportContext() {
-        super(Config.instance().getReportFolder(), PerfTestFailure.class);
-    }
+  /**
+   * Instantiates a new Benerator cpf report context.
+   */
+  public BeneratorCpfReportContext() {
+    super(Config.instance().getReportFolder(), PerfTestFailure.class);
+  }
 
 }

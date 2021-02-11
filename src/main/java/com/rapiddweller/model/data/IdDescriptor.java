@@ -26,28 +26,52 @@
 
 package com.rapiddweller.model.data;
 
+/**
+ * The type Id descriptor.
+ */
 public class IdDescriptor extends ComponentDescriptor {
 
-    public IdDescriptor(String name, DescriptorProvider provider) {
-        this(name, provider, (String) null);
-    }
+  /**
+   * Instantiates a new Id descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   */
+  public IdDescriptor(String name, DescriptorProvider provider) {
+    this(name, provider, (String) null);
+  }
 
-    public IdDescriptor(String name, DescriptorProvider provider, String type) {
-        super(name, provider, type);
-    }
+  /**
+   * Instantiates a new Id descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   * @param type     the type
+   */
+  public IdDescriptor(String name, DescriptorProvider provider, String type) {
+    super(name, provider, type);
+  }
 
-    public IdDescriptor(String name, DescriptorProvider provider, TypeDescriptor type) {
-        super(name, provider, type);
-    }
+  /**
+   * Instantiates a new Id descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   * @param type     the type
+   */
+  public IdDescriptor(String name, DescriptorProvider provider,
+                      TypeDescriptor type) {
+    super(name, provider, type);
+  }
 
-    @Override
-    public Uniqueness getUniqueness() {
-        return Uniqueness.ORDERED;
-    }
+  @Override
+  public Uniqueness getUniqueness() {
+    return Uniqueness.ORDERED;
+  }
 
-    @Override
-    public Boolean isUnique() {
-        return true;
-    }
+  @Override
+  public Boolean isUnique() {
+    return true;
+  }
 
 }

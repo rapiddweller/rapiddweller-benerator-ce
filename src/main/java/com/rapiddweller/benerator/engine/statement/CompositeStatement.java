@@ -26,61 +26,92 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
+import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.common.Element;
+import com.rapiddweller.common.Visitor;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.Element;
-import com.rapiddweller.commons.Visitor;
-
 /**
  * Combines other statements to a composite statement.<br/><br/>
  * Created: 27.10.2009 15:59:21
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public abstract class CompositeStatement extends AbstractStatement implements Closeable, Element<Statement> {
-	
-	protected List<Statement> subStatements = new ArrayList<Statement>();
 
-	public CompositeStatement() {
-		this(null);
+  /**
+   * The Sub statements.
+   */
+  protected List<Statement> subStatements = new ArrayList<>();
+
+  /**
+   * Instantiates a new Composite statement.
+   */
+  public CompositeStatement() {
+    this(null);
+  }
+
+  /**
+   * Instantiates a new Composite statement.
+   *
+   * @param subStatements the sub statements
+   */
+  public CompositeStatement(List<Statement> subStatements) {
+    this.subStatements = (subStatements != null ? subStatements : new ArrayList<>());
+  }
+
+  /**
+   * Gets sub statements.
+   *
+   * @return the sub statements
+   */
+  public List<Statement> getSubStatements() {
+    return subStatements;
+  }
+
+  /**
+   * Add sub statement.
+   *
+   * @param subStatement the sub statement
+   */
+  public void addSubStatement(Statement subStatement) {
+    subStatements.add(subStatement);
+  }
+
+  /**
+   * Sets sub statements.
+   *
+   * @param subStatements the sub statements
+   */
+  public void setSubStatements(List<Statement> subStatements) {
+    this.subStatements = subStatements;
+  }
+
+  @Override
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public void accept(Visitor<Statement> visitor) {
+    visitor.visit(this);
+    for (Statement subStatement : subStatements) {
+      if (subStatement instanceof Element) {
+        ((Element) subStatement).accept(visitor);
+      } else {
+        visitor.visit(subStatement);
+      }
     }
+  }
 
-	public CompositeStatement(List<Statement> subStatements) {
-		this.subStatements = (subStatements != null ? subStatements : new ArrayList<Statement>());
+  @Override
+  public void close() throws IOException {
+    for (Statement subStatement : subStatements) {
+      if (subStatement instanceof Closeable) {
+        ((Closeable) subStatement).close();
+      }
     }
+  }
 
-	public List<Statement> getSubStatements() {
-		return subStatements;
-	}
-	
-	public void addSubStatement(Statement subStatement) {
-		subStatements.add(subStatement);
-	}
-	
-	public void setSubStatements(List<Statement> subStatements) {
-		this.subStatements = subStatements;
-	}
-	
-	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-    public void accept(Visitor<Statement> visitor) {
-		visitor.visit(this);
-	    for (Statement subStatement : subStatements)
-	    	if (subStatement instanceof Element)
-	    		((Element) subStatement).accept(visitor);
-	    	else
-	    		visitor.visit(subStatement);
-    }
-
-	@Override
-	public void close() throws IOException {
-		for (Statement subStatement : subStatements)
-			if (subStatement instanceof Closeable)
-				((Closeable) subStatement).close();
-	}
-	
 }

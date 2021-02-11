@@ -26,73 +26,103 @@
 
 package com.rapiddweller.benerator.archetype;
 
+import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.ReaderLineIterator;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.rapiddweller.commons.ArrayBuilder;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.ReaderLineIterator;
-
 /**
  * Looks up and manages Benerator archetypes.<br/><br/>
  * Created at 18.02.2009 07:35:52
- * @since 0.5.9
+ *
  * @author Volker Bergmann
+ * @since 0.5.9
  */
-
 public class ArchetypeManager {
-	
-    static final String ARCHETYPE_FOLDER = "/com/rapiddweller/benerator/archetype";
-	static final String ARCHETYPES_INDEX = ARCHETYPE_FOLDER + "/archetypes.txt";
-	static final String ARCHETYPES_INDEX_URL = ArchetypeManager.class.getResource(ARCHETYPES_INDEX).toString();
-	static final URL ARCHETYPE_FOLDER_URL;
 
-	static {
-		try {
-	        ARCHETYPE_FOLDER_URL = new URL(ARCHETYPES_INDEX_URL.substring(0, ARCHETYPES_INDEX_URL.lastIndexOf('/')));
-        } catch (MalformedURLException e) {
-	        throw new ConfigurationError(e);
-        }
-	}
-	
-    private Archetype[] archetypes;
-	
-    private ArchetypeManager() {
-    	try {
-	        // read archetypes in the order specified in the file 'archetypes.txt'
-	        ReaderLineIterator iterator = new ReaderLineIterator(IOUtil.getReaderForURI(ARCHETYPES_INDEX));
-	        ArrayBuilder<Archetype> builder = new ArrayBuilder<Archetype>(Archetype.class);
-	        while (iterator.hasNext()) {
-	        	String name = iterator.next();
-	        	URL archUrl = new URL(ARCHETYPE_FOLDER_URL.toString() + "/" + name);
-	        	Archetype archetype = new Archetype(archUrl);
-	        	builder.add(archetype);
-	        }
-	        this.archetypes = builder.toArray();
-        } catch (IOException e) {
-        	throw new ConfigurationError("Error parsing archetype definitions", e);
-        }
-	}
+  /**
+   * The Archetype folder.
+   */
+  static final String ARCHETYPE_FOLDER = "/com/rapiddweller/benerator/archetype";
+  /**
+   * The Archetypes index.
+   */
+  static final String ARCHETYPES_INDEX = ARCHETYPE_FOLDER + "/archetypes.txt";
+  /**
+   * The Archetypes index url.
+   */
+  static final String ARCHETYPES_INDEX_URL = ArchetypeManager.class.getResource(ARCHETYPES_INDEX).toString();
+  /**
+   * The Archetype folder url.
+   */
+  static final URL ARCHETYPE_FOLDER_URL;
 
-	public Archetype[] getArchetypes() {
-    	return archetypes;
+  static {
+    try {
+      ARCHETYPE_FOLDER_URL = new URL(ARCHETYPES_INDEX_URL.substring(0, ARCHETYPES_INDEX_URL.lastIndexOf('/')));
+    } catch (MalformedURLException e) {
+      throw new ConfigurationError(e);
     }
-	
-	private static ArchetypeManager instance;
-	
-	public static ArchetypeManager getInstance() {
-		if (instance == null)
-			instance = new ArchetypeManager();
-		return instance;
-	}
+  }
 
-    public Archetype getDefaultArchetype() {
-	    for (Archetype candidate : archetypes)
-	    	if ("simple".equals(candidate.getId()))
-	    		return candidate;
-	    return archetypes[0];
+  private final Archetype[] archetypes;
+
+  private ArchetypeManager() {
+    try {
+      // read archetypes in the order specified in the file 'archetypes.txt'
+      ReaderLineIterator iterator = new ReaderLineIterator(IOUtil.getReaderForURI(ARCHETYPES_INDEX));
+      ArrayBuilder<Archetype> builder = new ArrayBuilder<>(Archetype.class);
+      while (iterator.hasNext()) {
+        String name = iterator.next();
+        URL archUrl = new URL(ARCHETYPE_FOLDER_URL.toString() + "/" + name);
+        Archetype archetype = new Archetype(archUrl);
+        builder.add(archetype);
+      }
+      this.archetypes = builder.toArray();
+    } catch (IOException e) {
+      throw new ConfigurationError("Error parsing archetype definitions", e);
     }
-    
+  }
+
+  /**
+   * Get archetypes archetype [ ].
+   *
+   * @return the archetype [ ]
+   */
+  public Archetype[] getArchetypes() {
+    return archetypes;
+  }
+
+  private static ArchetypeManager instance;
+
+  /**
+   * Gets instance.
+   *
+   * @return the instance
+   */
+  public static ArchetypeManager getInstance() {
+    if (instance == null) {
+      instance = new ArchetypeManager();
+    }
+    return instance;
+  }
+
+  /**
+   * Gets default archetype.
+   *
+   * @return the default archetype
+   */
+  public Archetype getDefaultArchetype() {
+    for (Archetype candidate : archetypes) {
+      if ("simple".equals(candidate.getId())) {
+        return candidate;
+      }
+    }
+    return archetypes[0];
+  }
+
 }

@@ -29,124 +29,161 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.platform.db.DBSystem;
 import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Executes a &lt;database/&gt; from an XML descriptor.<br/>
  * <br/>
  * Created at 23.07.2009 07:13:02
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class DefineDatabaseStatement implements Statement {
-	
-	private static Logger logger = LogManager.getLogger(DefineDatabaseStatement.class);
-	
-	private Expression<String>  id;
-	private Expression<String>  environment;
-	private Expression<String>  url;
-	private Expression<String>  driver;
-	private Expression<String>  user;
-	private Expression<String>  password;
-	private Expression<String>  catalog;
-	private Expression<String>  schema;
-	private Expression<Boolean> metaCache;
-	private Expression<String>  tableFilter;
-	private Expression<String>  includeTables;
-	private Expression<String>  excludeTables;
-	private Expression<Boolean> batch;
-	private Expression<Integer> fetchSize;
-	private Expression<Boolean> readOnly;
-	private Expression<Boolean> lazy;
-	private Expression<Boolean> acceptUnknownColumnTypes;
-	private ResourceManager     resourceManager;
-	
-	public DefineDatabaseStatement(Expression<String> id, Expression<String> environment, 
-			Expression<String> url, Expression<String> driver, Expression<String> user, Expression<String> password, 
-			Expression<String> catalog, Expression<String> schema, Expression<Boolean> metaCache, 
-			Expression<String> tableFilter, Expression<String> includeTables, Expression<String> excludeTables, 
-			Expression<Boolean> batch, Expression<Integer> fetchSize, Expression<Boolean> readOnly, Expression<Boolean> lazy,
-			Expression<Boolean> acceptUnknownColumnTypes, ResourceManager resourceManager) {
-		if (id == null)
-			throw new ConfigurationError("No database id defined");
-		this.id = id;
-		this.environment = environment;
-	    this.url = url;
-	    this.driver = driver;
-	    this.user = user;
-	    this.password = password;
-	    this.catalog = catalog;
-	    this.schema = schema;
-	    this.metaCache = metaCache;
-	    this.tableFilter = tableFilter;
-	    this.includeTables = includeTables;
-	    this.excludeTables = excludeTables;
-	    this.batch = batch;
-	    this.fetchSize = fetchSize;
-	    this.readOnly = readOnly;
-	    this.lazy = lazy;
-	    this.acceptUnknownColumnTypes = acceptUnknownColumnTypes;
-	    this.resourceManager = resourceManager;
+
+  private static final Logger logger = LogManager.getLogger(DefineDatabaseStatement.class);
+
+  private final Expression<String> id;
+  private final Expression<String> environment;
+  private final Expression<String> url;
+  private final Expression<String> driver;
+  private final Expression<String> user;
+  private final Expression<String> password;
+  private final Expression<String> catalog;
+  private final Expression<String> schema;
+  private final Expression<Boolean> metaCache;
+  private final Expression<String> tableFilter;
+  private final Expression<String> includeTables;
+  private final Expression<String> excludeTables;
+  private final Expression<Boolean> batch;
+  private final Expression<Integer> fetchSize;
+  private final Expression<Boolean> readOnly;
+  private final Expression<Boolean> lazy;
+  private final Expression<Boolean> acceptUnknownColumnTypes;
+  private final ResourceManager resourceManager;
+
+  /**
+   * Instantiates a new Define database statement.
+   *
+   * @param id                       the id
+   * @param environment              the environment
+   * @param url                      the url
+   * @param driver                   the driver
+   * @param user                     the user
+   * @param password                 the password
+   * @param catalog                  the catalog
+   * @param schema                   the schema
+   * @param metaCache                the meta cache
+   * @param tableFilter              the table filter
+   * @param includeTables            the include tables
+   * @param excludeTables            the exclude tables
+   * @param batch                    the batch
+   * @param fetchSize                the fetch size
+   * @param readOnly                 the read only
+   * @param lazy                     the lazy
+   * @param acceptUnknownColumnTypes the accept unknown column types
+   * @param resourceManager          the resource manager
+   */
+  public DefineDatabaseStatement(Expression<String> id, Expression<String> environment,
+                                 Expression<String> url, Expression<String> driver, Expression<String> user, Expression<String> password,
+                                 Expression<String> catalog, Expression<String> schema, Expression<Boolean> metaCache,
+                                 Expression<String> tableFilter, Expression<String> includeTables, Expression<String> excludeTables,
+                                 Expression<Boolean> batch, Expression<Integer> fetchSize, Expression<Boolean> readOnly, Expression<Boolean> lazy,
+                                 Expression<Boolean> acceptUnknownColumnTypes, ResourceManager resourceManager) {
+    if (id == null) {
+      throw new ConfigurationError("No database id defined");
+    }
+    this.id = id;
+    this.environment = environment;
+    this.url = url;
+    this.driver = driver;
+    this.user = user;
+    this.password = password;
+    this.catalog = catalog;
+    this.schema = schema;
+    this.metaCache = metaCache;
+    this.tableFilter = tableFilter;
+    this.includeTables = includeTables;
+    this.excludeTables = excludeTables;
+    this.batch = batch;
+    this.fetchSize = fetchSize;
+    this.readOnly = readOnly;
+    this.lazy = lazy;
+    this.acceptUnknownColumnTypes = acceptUnknownColumnTypes;
+    this.resourceManager = resourceManager;
+  }
+
+  @Override
+  @SuppressWarnings("deprecation")
+  public boolean execute(BeneratorContext context) {
+    logger.debug("Instantiating database with id '" + id + "'");
+    String idValue = id.evaluate(context);
+
+    // DB config is based on the (optional) environment setting
+    DBSystem db = accessDatabase(idValue, ExpressionUtil.evaluate(environment, context), context.getDataModel());
+
+    // The user may override single or all settings from the environment configuration
+    String urlValue = ExpressionUtil.evaluate(url, context);
+    if (urlValue != null) {
+      db.setUrl(urlValue);
+    }
+    String driverValue = ExpressionUtil.evaluate(driver, context);
+    if (driverValue != null) {
+      db.setDriver(driverValue);
+    }
+    String userValue = ExpressionUtil.evaluate(user, context);
+    if (userValue != null) {
+      db.setUser(userValue);
+    }
+    String passwordValue = ExpressionUtil.evaluate(password, context);
+    if (passwordValue != null) {
+      db.setPassword(passwordValue);
+    }
+    String catalogValue = ExpressionUtil.evaluate(catalog, context);
+    if (catalogValue != null) {
+      db.setCatalog(catalogValue);
+    }
+    String schemaValue = ExpressionUtil.evaluate(schema, context);
+    if (schemaValue != null) {
+      db.setSchema(schemaValue);
     }
 
-	@Override
-	@SuppressWarnings("deprecation")
-    public boolean execute(BeneratorContext context) {
-	    logger.debug("Instantiating database with id '" + id + "'");
-	    String idValue = id.evaluate(context);
-	    
-	    // DB config is based on the (optional) environment setting
-		DBSystem db = accessDatabase(idValue, ExpressionUtil.evaluate(environment, context), context.getDataModel());
-		
-		// The user may override single or all settings from the environment configuration
-		String urlValue = ExpressionUtil.evaluate(url, context);
-		if (urlValue != null)
-			db.setUrl(urlValue);
-		String driverValue = ExpressionUtil.evaluate(driver, context);
-		if (driverValue != null)
-			db.setDriver(driverValue);
-		String userValue = ExpressionUtil.evaluate(user, context);
-		if (userValue != null)
-			db.setUser(userValue);
-		String passwordValue = ExpressionUtil.evaluate(password, context);
-		if (passwordValue != null)
-			db.setPassword(passwordValue);
-		String catalogValue = ExpressionUtil.evaluate(catalog, context);
-		if (catalogValue != null)
-			db.setCatalog(catalogValue);
-		String schemaValue = ExpressionUtil.evaluate(schema, context);
-		if (schemaValue != null)
-			db.setSchema(schemaValue);
-		
-		// apply all other settings without further validation
-		db.setMetaDataCache(ExpressionUtil.evaluate(metaCache, context));
-		db.setTableFilter(ExpressionUtil.evaluate(tableFilter, context));
-	    db.setIncludeTables(ExpressionUtil.evaluate(includeTables, context));
-	    db.setExcludeTables(ExpressionUtil.evaluate(excludeTables, context));
-	    db.setBatch(ExpressionUtil.evaluate(batch, context));
-	    db.setFetchSize(ExpressionUtil.evaluate(fetchSize, context));
-	    db.setReadOnly(ExpressionUtil.evaluate(readOnly, context));
-	    Boolean isLazy = ExpressionUtil.evaluate(lazy, context);
-		db.setLazy(isLazy);
-	    db.setAcceptUnknownColumnTypes(ExpressionUtil.evaluate(acceptUnknownColumnTypes, context));
+    // apply all other settings without further validation
+    db.setMetaDataCache(ExpressionUtil.evaluate(metaCache, context));
+    db.setTableFilter(ExpressionUtil.evaluate(tableFilter, context));
+    db.setIncludeTables(ExpressionUtil.evaluate(includeTables, context));
+    db.setExcludeTables(ExpressionUtil.evaluate(excludeTables, context));
+    db.setBatch(ExpressionUtil.evaluate(batch, context));
+    db.setFetchSize(ExpressionUtil.evaluate(fetchSize, context));
+    db.setReadOnly(ExpressionUtil.evaluate(readOnly, context));
+    Boolean isLazy = ExpressionUtil.evaluate(lazy, context);
+    db.setLazy(isLazy);
+    db.setAcceptUnknownColumnTypes(ExpressionUtil.evaluate(acceptUnknownColumnTypes, context));
 
-	    // register this object on all relevant managers and in the context
-	    context.setGlobal(idValue, db);
-	    context.getDataModel().addDescriptorProvider(db, context.isValidate() && !isLazy);
-	    resourceManager.addResource(db);
-    	return true;
-    }
+    // register this object on all relevant managers and in the context
+    context.setGlobal(idValue, db);
+    context.getDataModel().addDescriptorProvider(db, context.isValidate() && !isLazy);
+    resourceManager.addResource(db);
+    return true;
+  }
 
-	protected DBSystem accessDatabase(String id, String environment, DataModel dataModel) {
-		return new DefaultDBSystem(id, environment, dataModel);
-	}
+  /**
+   * Access database db system.
+   *
+   * @param id          the id
+   * @param environment the environment
+   * @param dataModel   the data model
+   * @return the db system
+   */
+  protected DBSystem accessDatabase(String id, String environment, DataModel dataModel) {
+    return new DefaultDBSystem(id, environment, dataModel);
+  }
 
 }

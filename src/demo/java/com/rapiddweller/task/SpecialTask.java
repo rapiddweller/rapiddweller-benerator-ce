@@ -26,8 +26,8 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.task.AbstractTask;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -42,11 +42,19 @@ import org.apache.logging.log4j.LogManager;
  */
 public class SpecialTask extends AbstractTask {
 
-    private static final Logger logger = LogManager.getLogger(SpecialTask.class);
+  private static final Logger logger =
+      LogManager.getLogger(SpecialTask.class);
 
-    public TaskResult execute(Context context, ErrorHandler errorHandler) {
-        logger.info("I'm special");
-        return TaskResult.EXECUTING;
-    }
+  /**
+   * Execute task result.
+   *
+   * @param context      the context
+   * @param errorHandler the error handler
+   * @return the task result
+   */
+  public TaskResult execute(Context context, ErrorHandler errorHandler) {
+    logger.info("I'm special");
+    return TaskResult.EXECUTING;
+  }
 
 }

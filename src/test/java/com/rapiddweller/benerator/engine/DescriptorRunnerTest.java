@@ -26,96 +26,117 @@
 
 package com.rapiddweller.benerator.engine;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
 import com.rapiddweller.benerator.consumer.FileExporter;
 import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.IOUtil;
-
+import com.rapiddweller.common.IOUtil;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link DescriptorRunner}.<br/>
  * <br/>
  * Created at 13.03.2009 07:16:55
- * @since 0.5.8
+ *
  * @author Volker Bergmann
+ * @since 0.5.8
  */
-
+@SuppressWarnings("CheckStyle")
 public class DescriptorRunnerTest extends ModelTest {
 
-    private static final String EXPORT_FILE_URI = "test-uri.txt";
+  private static final String EXPORT_FILE_URI = "test-uri.txt";
 
-    @Test
-	public void testProgrammaticInvocation() throws IOException {
-		DescriptorRunner runner = new DescriptorRunner(
-				"string://<setup>" +
-				"	<generate type='Person' count='1' consumer='myConsumer'>" +
-				"		<attribute name='name' constant='Alice'/>" +
-				"	</generate>" +
-				"</setup>", new DefaultBeneratorContext());
-		try {
-			BeneratorContext context = runner.getContext();
-			context.importDefaults();
-			context.setValidate(false);
-			MyConsumer myConsumer = new MyConsumer();
-			context.setGlobal("myConsumer", myConsumer);
-			runner.run();
-			assertEquals(1, myConsumer.products.size());
-			assertEquals(createEntity("Person", "name", "Alice"), myConsumer.products.get(0));
-		} finally {
-			IOUtil.close(runner);
-		}
-	}
-	
-    @Test
-	public void testGetGeneratedFiles() {
-		DescriptorRunner runner = new DescriptorRunner("string://<setup/>", new DefaultBeneratorContext());
-		try {
-			runner.addResource(new TestExporter());
-			List<String> generatedFiles = runner.getGeneratedFiles();
-			assertEquals(1, generatedFiles.size());
-			assertEquals(EXPORT_FILE_URI, generatedFiles.get(0));
-		} finally {
-			IOUtil.close(runner);
-		}
-	}
-	
-	
-	
-	static class TestExporter implements FileExporter {
+  /**
+   * Test programmatic invocation.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void testProgrammaticInvocation() throws IOException {
+    DescriptorRunner runner = new DescriptorRunner(
+        "string://<setup>" +
+            "	<generate type='Person' count='1' consumer='myConsumer'>" +
+            "		<attribute name='name' constant='Alice'/>" +
+            "	</generate>" +
+            "</setup>", new DefaultBeneratorContext());
+    try {
+      BeneratorContext context = runner.getContext();
+      context.importDefaults();
+      context.setValidate(false);
+      MyConsumer myConsumer = new MyConsumer();
+      context.setGlobal("myConsumer", myConsumer);
+      runner.run();
+      assertEquals(1, myConsumer.products.size());
+      assertEquals(createEntity("Person", "name", "Alice"), myConsumer.products.get(0));
+    } finally {
+      IOUtil.close(runner);
+    }
+  }
 
-        @Override
-		public String getUri() {
-	        return EXPORT_FILE_URI;
-        }
+  /**
+   * Test get generated files.
+   */
+  @Test
+  public void testGetGeneratedFiles() {
+    DescriptorRunner runner = new DescriptorRunner("string://<setup/>", new DefaultBeneratorContext());
+    try {
+      runner.addResource(new TestExporter());
+      List<String> generatedFiles = runner.getGeneratedFiles();
+      assertEquals(1, generatedFiles.size());
+      assertEquals(EXPORT_FILE_URI, generatedFiles.get(0));
+    } finally {
+      IOUtil.close(runner);
+    }
+  }
 
-        @Override
-		public void startConsuming(ProductWrapper<?> object) { }
-        
-        @Override
-		public void finishConsuming(ProductWrapper<?> object) { }
-        
-        @Override
-		public void flush() { }
-        
-        @Override
-		public void close() { }
-	}
-	
-	static class MyConsumer extends AbstractConsumer {
-		
-		List<Object> products = new ArrayList<Object>();
 
-        @Override
-		public void startProductConsumption(Object object) {
-	        products.add(object);
-        }
-	}
+  /**
+   * The type Test exporter.
+   */
+  static class TestExporter implements FileExporter {
+
+    @Override
+    public String getUri() {
+      return EXPORT_FILE_URI;
+    }
+
+    @Override
+    public void startConsuming(ProductWrapper<?> object) {
+    }
+
+    @Override
+    public void finishConsuming(ProductWrapper<?> object) {
+    }
+
+    @Override
+    public void flush() {
+    }
+
+    @Override
+    public void close() {
+    }
+  }
+
+  /**
+   * The type My consumer.
+   */
+  static class MyConsumer extends AbstractConsumer {
+
+    /**
+     * The Products.
+     */
+    final List<Object> products = new ArrayList<>();
+
+    @Override
+    public void startProductConsumption(Object object) {
+      products.add(object);
+    }
+  }
 
 }

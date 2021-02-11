@@ -26,51 +26,58 @@
 
 package com.rapiddweller.benerator.engine;
 
+import com.rapiddweller.common.IOUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.rapiddweller.commons.IOUtil;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-
 /**
  * Provides a standard implementation of the {@link ResourceManager} interface.<br/>
  * <br/>
  * Created at 25.09.2009 09:19:41
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
+public class ResourceManagerSupport implements ResourceManager {
 
-public class ResourceManagerSupport implements ResourceManager{
+  private static final Logger LOGGER = LogManager.getLogger(ResourceManagerSupport.class);
 
-	private static final Logger LOGGER = LogManager.getLogger(ResourceManagerSupport.class);
-	
-	private List<Closeable> resources = new ArrayList<Closeable>();
+  private final List<Closeable> resources = new ArrayList<>();
 
-	@Override
-	public boolean addResource(Closeable resource) {
-		if (resources.contains(resource))
-			return false;
-	    return resources.add(resource);
+  @Override
+  public boolean addResource(Closeable resource) {
+    if (resources.contains(resource)) {
+      return false;
     }
-	
-	public Collection<? extends Closeable> getResources() {
-		return resources;
-	}
+    return resources.add(resource);
+  }
 
-    @Override
-	public void close() {
-		LOGGER.debug("Closing resources: {}", this);
-		for (int i = resources.size() - 1; i >= 0; i--)
-			IOUtil.close(resources.get(i));
-    	resources.clear();
-    }
+  /**
+   * Gets resources.
+   *
+   * @return the resources
+   */
+  public Collection<? extends Closeable> getResources() {
+    return resources;
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + resources;
+  @Override
+  public void close() {
+    LOGGER.debug("Closing resources: {}", this);
+    for (int i = resources.size() - 1; i >= 0; i--) {
+      IOUtil.close(resources.get(i));
     }
-    
+    resources.clear();
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + resources;
+  }
+
 }

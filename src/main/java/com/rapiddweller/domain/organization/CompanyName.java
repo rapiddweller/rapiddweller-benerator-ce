@@ -36,67 +36,125 @@ package com.rapiddweller.domain.organization;
  */
 public class CompanyName {
 
-    private String shortName;
-    private String sector;
-    private String location;
-    private String legalForm;
+  private String shortName;
+  private String sector;
+  private String location;
+  private String legalForm;
 
-    private String datasetName;
+  private String datasetName;
 
-    public String getShortName() {
-        return shortName;
+  /**
+   * Gets short name.
+   *
+   * @return the short name
+   */
+  public String getShortName() {
+    return shortName;
+  }
+
+  /**
+   * Sets short name.
+   *
+   * @param shortName the short name
+   */
+  public void setShortName(String shortName) {
+    this.shortName = shortName;
+  }
+
+  /**
+   * Gets sector.
+   *
+   * @return the sector
+   */
+  public String getSector() {
+    return sector;
+  }
+
+  /**
+   * Sets sector.
+   *
+   * @param sector the sector
+   */
+  public void setSector(String sector) {
+    this.sector = sector;
+  }
+
+  /**
+   * Gets location.
+   *
+   * @return the location
+   */
+  public String getLocation() {
+    return location;
+  }
+
+  /**
+   * Sets location.
+   *
+   * @param location the location
+   */
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  /**
+   * Gets legal form.
+   *
+   * @return the legal form
+   */
+  public String getLegalForm() {
+    return legalForm;
+  }
+
+  /**
+   * Sets legal form.
+   *
+   * @param legalForm the legal form
+   */
+  public void setLegalForm(String legalForm) {
+    this.legalForm = legalForm;
+  }
+
+  /**
+   * Gets dataset name.
+   *
+   * @return the dataset name
+   */
+  public String getDatasetName() {
+    return datasetName;
+  }
+
+  /**
+   * Sets dataset name.
+   *
+   * @param datasetName the dataset name
+   */
+  public void setDatasetName(String datasetName) {
+    this.datasetName = datasetName;
+  }
+
+  /**
+   * Gets full name.
+   *
+   * @return the full name
+   */
+  public String getFullName() {
+    StringBuilder builder = new StringBuilder(shortName);
+    if (sector != null) {
+      builder.append(' ').append(sector);
     }
-
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
+    if (location != null) {
+      builder.append(' ').append(location);
     }
-
-    public String getSector() {
-        return sector;
+    if (location != null) {
+      builder.append(' ').append(legalForm);
     }
+    return builder.toString();
+  }
 
-    public void setSector(String sector) {
-        this.sector = sector;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getLegalForm() {
-        return legalForm;
-    }
-
-    public void setLegalForm(String legalForm) {
-        this.legalForm = legalForm;
-    }
-
-    public String getDatasetName() {
-        return datasetName;
-    }
-
-    public void setDatasetName(String datasetName) {
-        this.datasetName = datasetName;
-    }
-
-    public String getFullName() {
-        StringBuilder builder = new StringBuilder(shortName);
-        if (sector != null)
-            builder.append(' ').append(sector);
-        if (location != null)
-            builder.append(' ').append(location);
-        if (location != null)
-            builder.append(' ').append(legalForm);
-        return builder.toString();
-    }
-
-    @Override
-    public String toString() {
-        return getFullName();
-    }
+  @Override
+  public String toString() {
+    return getFullName();
+  }
 
 }

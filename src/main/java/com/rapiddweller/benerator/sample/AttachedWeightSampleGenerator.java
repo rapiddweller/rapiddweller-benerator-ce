@@ -32,180 +32,247 @@ import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
 import com.rapiddweller.benerator.distribution.WeightFunction;
 import com.rapiddweller.benerator.distribution.WeightedLongGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.NullSafeComparator;
+import com.rapiddweller.common.NullSafeComparator;
 import com.rapiddweller.script.WeightedSample;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Generates values from a weighted or non-weighted set of samples.<br/>
  * <br/>
  * Created: 07.06.2006 19:04:08
- * @since 0.1
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.1
  */
-public class AttachedWeightSampleGenerator<E> extends AbstractSampleGenerator<E> implements WeightedGenerator<E> { 
-	
-    /** Keeps the Sample information */
-    List<WeightedSample<? extends E>> samples = new ArrayList<>();
-    
-    /** Generator for choosing a List index of the sample list */
-    private final WeightedLongGenerator indexGenerator = new WeightedLongGenerator(0, 0, 1, new SampleWeightFunction());
-    
-    private double totalWeight;
+public class AttachedWeightSampleGenerator<E> extends AbstractSampleGenerator<E> implements WeightedGenerator<E> {
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  /**
+   * Keeps the Sample information
+   */
+  final List<WeightedSample<? extends E>> samples = new ArrayList<>();
 
-    /** Initializes the generator to an empty sample list */
-    public AttachedWeightSampleGenerator(Class<E> generatedType) {
-        this(generatedType, (E[]) null);
+  /**
+   * Generator for choosing a List index of the sample list
+   */
+  private final WeightedLongGenerator indexGenerator = new WeightedLongGenerator(0, 0, 1, new SampleWeightFunction());
+
+  private double totalWeight;
+
+  // constructors ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Initializes the generator to an empty sample list
+   *
+   * @param generatedType the generated type
+   */
+  public AttachedWeightSampleGenerator(Class<E> generatedType) {
+    this(generatedType, (E[]) null);
+  }
+
+  /**
+   * Initializes the generator to an unweighted sample list
+   *
+   * @param generatedType the generated type
+   * @param values        the values
+   */
+  @SafeVarargs
+  public AttachedWeightSampleGenerator(Class<E> generatedType, E... values) {
+    super(generatedType);
+    setValues(values);
+  }
+
+  /**
+   * Initializes the generator to an unweighted sample list
+   *
+   * @param generatedType the generated type
+   * @param values        the values
+   */
+  public AttachedWeightSampleGenerator(Class<E> generatedType, Iterable<E> values) {
+    super(generatedType);
+    setValues(values);
+  }
+
+  // samples property ------------------------------------------------------------------------------------------------
+
+  /**
+   * returns the sample list
+   *
+   * @return the samples
+   */
+  public List<WeightedSample<? extends E>> getSamples() {
+    return samples;
+  }
+
+  /**
+   * Sets the sample list to the specified weighted values
+   *
+   * @param samples the samples
+   */
+  @SafeVarargs
+  public final void setSamples(WeightedSample<? extends E>... samples) {
+    this.samples.clear();
+    for (WeightedSample<? extends E> sample : samples) {
+      addSample(sample);
     }
+  }
 
-    /** Initializes the generator to an unweighted sample list */
-    @SafeVarargs
-    public AttachedWeightSampleGenerator(Class<E> generatedType, E ... values) {
-    	super(generatedType);
-        setValues(values);
+  /**
+   * Adds weighted values to the sample list
+   *
+   * @param samples the samples
+   */
+  public void setSamples(Collection<WeightedSample<E>> samples) {
+    this.samples.clear();
+    if (samples != null) {
+      for (WeightedSample<E> sample : samples) {
+        addSample(sample);
+      }
     }
+  }
 
-    /** Initializes the generator to an unweighted sample list */
-    public AttachedWeightSampleGenerator(Class<E> generatedType, Iterable<E> values) {
-    	super(generatedType);
-        setValues(values);
+  /**
+   * Adds weighted values to the sample list
+   *
+   * @param <T>    the type parameter
+   * @param value  the value
+   * @param weight the weight
+   */
+  public <T extends E> void addSample(T value, double weight) {
+    addSample(new WeightedSample<E>(value, weight));
+    totalWeight += weight;
+  }
+
+  /**
+   * Adds a weighted value to the sample list
+   *
+   * @param sample the sample
+   */
+  public void addSample(WeightedSample<? extends E> sample) {
+    samples.add(sample);
+    totalWeight += sample.getWeight();
+  }
+
+  // values property -------------------------------------------------------------------------------------------------
+
+  /**
+   * Adds an unweighted value to the sample list
+   */
+  @Override
+  public <T extends E> void addValue(T value) {
+    samples.add(new WeightedSample<E>(value, 1));
+    totalWeight += 1;
+  }
+
+  @Override
+  public void clear() {
+    this.samples.clear();
+  }
+
+  // Generator implementation ----------------------------------------------------------------------------------------
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Class<E> getGeneratedType() {
+    if (samples.size() == 0) {
+      return (Class<E>) String.class;
     }
+    return (Class<E>) samples.get(0).getClass();
+  }
 
-    // samples property ------------------------------------------------------------------------------------------------
-
-    /** returns the sample list */
-    public List<WeightedSample<? extends E>> getSamples() {
-        return samples;
+  /**
+   * Initializes all attributes
+   */
+  @Override
+  public void init(GeneratorContext context) {
+    normalize();
+    if (samples.size() > 0) {
+      indexGenerator.setMax((long) (samples.size() - 1));
+      indexGenerator.init(context);
     }
+    super.init(context);
+  }
 
-    /** Sets the sample list to the specified weighted values */
-    @SafeVarargs
-    public final void setSamples(WeightedSample<? extends E>... samples) {
-        this.samples.clear();
-        for (WeightedSample<? extends E> sample : samples)
-            addSample(sample);
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    assertInitialized();
+    if (samples.size() == 0) {
+      return null;
     }
+    int index = indexGenerator.generate().intValue();
+    WeightedSample<? extends E> sample = samples.get(index);
+    return wrapper.wrap(sample.getValue());
+  }
 
-    /** Adds weighted values to the sample list */
-    public void setSamples(Collection<WeightedSample<E>> samples) {
-        this.samples.clear();
-        if (samples != null)
-            for (WeightedSample<E> sample : samples)
-            	addSample(sample);
+  // implementation --------------------------------------------------------------------------------------------------
+
+  /**
+   * normalizes the sample weights to a sum of 1
+   */
+  private void normalize() {
+    if (totalWeight == 0) {
+      for (WeightedSample<? extends E> sample : samples) {
+        sample.setWeight(1);
+      }
+      totalWeight = samples.size();
     }
+  }
 
-    /** Adds weighted values to the sample list */
-    public <T extends E> void addSample(T value, double weight) {
-        addSample(new WeightedSample<E>(value, weight));
-        totalWeight += weight;
+  @Override
+  public double getWeight() {
+    return totalWeight;
+  }
+
+  @Override
+  public long getVariety() {
+    return samples.size();
+  }
+
+  /**
+   * Contains sample boolean.
+   *
+   * @param searchedValue the searched value
+   * @return the boolean
+   */
+  public boolean containsSample(E searchedValue) {
+    for (WeightedSample<? extends E> sample : samples) {
+      if (NullSafeComparator.equals(searchedValue, sample.getValue())) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    /** Adds a weighted value to the sample list */
-    public void addSample(WeightedSample<? extends E> sample) {
-        samples.add(sample);
-        totalWeight += sample.getWeight();
-    }
+  /**
+   * Weight function that evaluates the weights that are stored in the sample list.
+   */
+  class SampleWeightFunction extends AbstractWeightFunction {
 
-    // values property -------------------------------------------------------------------------------------------------
-
-    /** Adds an unweighted value to the sample list */
+    /**
+     * @see WeightFunction#value(double)
+     */
     @Override
-    public <T extends E> void addValue(T value) {
-        samples.add(new WeightedSample<E>(value, 1));
-        totalWeight += 1;
+    public double value(double param) {
+      return samples.get((int) param).getWeight();
     }
 
-    @Override
-    public void clear() {
-    	this.samples.clear();
-    }
-    
-    // Generator implementation ----------------------------------------------------------------------------------------
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Class<E> getGeneratedType() {
-    	if (samples.size() == 0)
-    		return (Class<E>) String.class;
-        return (Class<E>) samples.get(0).getClass();
-    }
-
-    /** Initializes all attributes */
-    @Override
-    public void init(GeneratorContext context) {
-        normalize();
-        if (samples.size() > 0) {
-	        indexGenerator.setMax((long) (samples.size() - 1));
-	        indexGenerator.init(context);
-        }
-        super.init(context);
-    }
-
-    @Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-    	assertInitialized();
-        if (samples.size() == 0)
-            return null;
-        int index = indexGenerator.generate().intValue();
-        WeightedSample<? extends E> sample = samples.get(index);
-        return wrapper.wrap(sample.getValue());
-    }
-
-    // implementation --------------------------------------------------------------------------------------------------
-
-    /** normalizes the sample weights to a sum of 1 */
-    private void normalize() {
-    	if (totalWeight == 0) {
-	        for (WeightedSample<? extends E> sample : samples)
-	        	sample.setWeight(1);
-	        totalWeight = samples.size();
-    	}
-    }
-
-	@Override
-	public double getWeight() {
-		return totalWeight;
-	}
-
-	@Override
-	public long getVariety() {
-		return samples.size();
-	}
-    
-	public boolean containsSample(E searchedValue) {
-		for (WeightedSample<? extends E> sample : samples)
-			if (NullSafeComparator.equals(searchedValue, sample.getValue()))
-				return true;
-		return false;
-	}
-
-    /** Weight function that evaluates the weights that are stored in the sample list. */
-
-    class SampleWeightFunction extends AbstractWeightFunction {
-
-        /** @see WeightFunction#value(double) */
-        @Override
-		public double value(double param) {
-            return samples.get((int) param).getWeight();
-        }
-
-        /** creates a String representation */
-        @Override
-        public String toString() {
-            return getClass().getSimpleName();
-        }
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
+    /**
+     * creates a String representation
+     */
     @Override
     public String toString() {
-        return getClass().getSimpleName();
+      return getClass().getSimpleName();
     }
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 
 }

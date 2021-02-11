@@ -27,10 +27,10 @@
 package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.FileBasedEntitySource;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.formats.DataIterator;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
@@ -45,38 +45,49 @@ import javax.xml.stream.XMLStreamReader;
  */
 public class DbUnitEntitySource extends FileBasedEntitySource {
 
-    Boolean flat;
+  /**
+   * The Flat.
+   */
+  Boolean flat;
 
-    public DbUnitEntitySource(String uri, BeneratorContext context) {
-        super(uri, context);
-    }
+  /**
+   * Instantiates a new Db unit entity source.
+   *
+   * @param uri     the uri
+   * @param context the context
+   */
+  public DbUnitEntitySource(String uri, BeneratorContext context) {
+    super(uri, context);
+  }
 
-    private static Boolean isFlat(String uri) {
-        try {
-            XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory.createXMLStreamReader(IOUtil.getInputStreamForURI(uri));
-            DbUnitUtil.skipRootElement(reader);
-            DbUnitUtil.skipNonStartTags(reader);
-            return !"table".equals(reader.getLocalName());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+  private static Boolean isFlat(String uri) {
+    try {
+      XMLInputFactory factory = XMLInputFactory.newInstance();
+      XMLStreamReader reader = factory.createXMLStreamReader(IOUtil.getInputStreamForURI(uri));
+      DbUnitUtil.skipRootElement(reader);
+      DbUnitUtil.skipNonStartTags(reader);
+      return !"table".equals(reader.getLocalName());
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    @Override
-    public DataIterator<Entity> iterator() {
-        String resolvedUri = resolveUri();
-        if (flat == null)
-            flat = isFlat(resolvedUri);
-        if (flat)
-            return new FlatDbUnitEntityIterator(resolvedUri, context);
-        else
-            return new NestedDbUnitEntityIterator(resolvedUri, context);
+  @Override
+  public DataIterator<Entity> iterator() {
+    String resolvedUri = resolveUri();
+    if (flat == null) {
+      flat = isFlat(resolvedUri);
     }
+    if (flat) {
+      return new FlatDbUnitEntityIterator(resolvedUri, context);
+    } else {
+      return new NestedDbUnitEntityIterator(resolvedUri, context);
+    }
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + uri + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + uri + ']';
+  }
 
 }

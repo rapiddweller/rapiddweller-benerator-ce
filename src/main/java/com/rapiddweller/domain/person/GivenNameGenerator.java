@@ -31,8 +31,8 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.csv.WeightedDatasetCSVGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.util.SharedGenerator;
+import com.rapiddweller.common.Encodings;
 import com.rapiddweller.domain.address.Country;
-import com.rapiddweller.commons.Encodings;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -46,69 +46,102 @@ import java.util.Map;
  * @author Volker Bergmann
  * @since 0.1
  */
-public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String> implements NonNullGenerator<String> {
+public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String>
+    implements NonNullGenerator<String> {
 
-    // default instance management -------------------------------------------------------------------------------------
+  // default instance management -------------------------------------------------------------------------------------
 
-    private static final Map<String, Generator<String>> defaultInstances = new HashMap<String, Generator<String>>();
+  private static final Map<String, Generator<String>> defaultInstances =
+      new HashMap<>();
 
-    public GivenNameGenerator() {
-        this(Locale.getDefault().getCountry(), Gender.MALE);
+  /**
+   * Instantiates a new Given name generator.
+   */
+  public GivenNameGenerator() {
+    this(Locale.getDefault().getCountry(), Gender.MALE);
+  }
+
+  // constructors ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Instantiates a new Given name generator.
+   *
+   * @param datasetName the dataset name
+   * @param gender      the gender
+   */
+  public GivenNameGenerator(String datasetName, Gender gender) {
+    this(datasetName,
+        "/com/rapiddweller/dataset/region",
+        "/com/rapiddweller/domain/person/givenName",
+        gender);
+  }
+
+  /**
+   * Instantiates a new Given name generator.
+   *
+   * @param datasetName the dataset name
+   * @param nesting     the nesting
+   * @param baseName    the base name
+   * @param gender      the gender
+   */
+  public GivenNameGenerator(String datasetName, String nesting,
+                            String baseName, Gender gender) {
+    super(String.class, genderBaseName(baseName, gender) + "_{0}.csv",
+        datasetName, nesting, true, Encodings.UTF_8);
+    logger.debug(
+        "Instantiated GivenNameGenerator for dataset '{}' and gender '{}'",
+        datasetName, gender);
+  }
+
+  /**
+   * Shared instance generator.
+   *
+   * @param datasetName the dataset name
+   * @param gender      the gender
+   * @return the generator
+   */
+  public static Generator<String> sharedInstance(String datasetName,
+                                                 Gender gender) {
+    String key = datasetName + '-' + gender;
+    Generator<String> instance = defaultInstances.get(key);
+    if (instance == null) {
+      instance = new SharedGenerator<>(
+          new GivenNameGenerator(datasetName, gender));
+      defaultInstances.put(key, instance);
     }
+    return instance;
+  }
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // public methods --------------------------------------------------------------------------------------------------
 
-    public GivenNameGenerator(String datasetName, Gender gender) {
-        this(datasetName,
-                "/com/rapiddweller/dataset/region",
-                "/com/rapiddweller/domain/person/givenName",
-                gender);
+  private static String genderBaseName(String baseName, Gender gender) {
+    if (gender == Gender.FEMALE) {
+      return baseName + "_female";
+    } else if (gender == Gender.MALE) {
+      return baseName + "_male";
+    } else {
+      throw new IllegalArgumentException("Gender: " + gender);
     }
+  }
 
-    public GivenNameGenerator(String datasetName, String nesting, String baseName, Gender gender) {
-        super(String.class, genderBaseName(baseName, gender) + "_{0}.csv", datasetName, nesting, true, Encodings.UTF_8);
-        logger.debug("Instantiated GivenNameGenerator for dataset '{}' and gender '{}'", datasetName, gender);
-    }
+  // NonNullGenerator interface implementation -----------------------------------------------------------------------
 
-    public static Generator<String> sharedInstance(String datasetName, Gender gender) {
-        String key = datasetName + '-' + gender;
-        Generator<String> instance = defaultInstances.get(key);
-        if (instance == null) {
-            instance = new SharedGenerator<String>(new GivenNameGenerator(datasetName, gender));
-            defaultInstances.put(key, instance);
-        }
-        return instance;
-    }
+  @Override
+  public double getWeight() {
+    Country country = Country.getInstance(datasetName);
+    return (country != null ? country.getPopulation() : super.getWeight());
+  }
 
-    // public methods --------------------------------------------------------------------------------------------------
+  // private helpers -------------------------------------------------------------------------------------------------
 
-    private static String genderBaseName(String baseName, Gender gender) {
-        if (gender == Gender.FEMALE)
-            return baseName + "_female";
-        else if (gender == Gender.MALE)
-            return baseName + "_male";
-        else
-            throw new IllegalArgumentException("Gender: " + gender);
-    }
+  @Override
+  public String generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
 
-    // NonNullGenerator interface implementation -----------------------------------------------------------------------
-
-    @Override
-    public double getWeight() {
-        Country country = Country.getInstance(datasetName);
-        return (country != null ? country.getPopulation() : super.getWeight());
-    }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    @Override
-    public String generate() {
-        return GeneratorUtil.generateNonNull(this);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[" + datasetName + "]";
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + datasetName + "]";
+  }
 
 }

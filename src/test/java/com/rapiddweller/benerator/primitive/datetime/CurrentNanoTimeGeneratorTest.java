@@ -26,36 +26,42 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
-import java.lang.annotation.Annotation;
+import com.rapiddweller.benerator.test.GeneratorClassTest;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
+import org.junit.Test;
 
 import javax.validation.ConstraintValidatorContext;
-
-import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
-import org.junit.Test;
+import java.lang.annotation.Annotation;
 
 /**
  * Tests the CurrentNanoTimeGenerator.<br/>
  * <br/>
  * Created: 19.11.2007 20:43:45
+ *
  * @author Volker Bergmann
  * @since 0.3.03
  */
 public class CurrentNanoTimeGeneratorTest extends GeneratorClassTest {
 
-    public CurrentNanoTimeGeneratorTest() {
-        super(CurrentNanoTimeGenerator.class);
-    }
+  /**
+   * Instantiates a new Current nano time generator test.
+   */
+  public CurrentNanoTimeGeneratorTest() {
+    super(CurrentNanoTimeGenerator.class);
+  }
 
-    @Test
-    public void testProducts() {
-        expectGenerations(new CurrentNanoTimeGenerator(), 10, new AbstractConstraintValidator<Annotation, Long>() {
-			@Override
-			public boolean isValid(Long generatedNanos, ConstraintValidatorContext context) {
-                long nanoTime = System.nanoTime();
-                return Math.abs(nanoTime - generatedNanos) < 500000000L;
-            }
-        });
-    }
-    
+  /**
+   * Test products.
+   */
+  @Test
+  public void testProducts() {
+    expectGenerations(new CurrentNanoTimeGenerator(), 10, new AbstractConstraintValidator<Annotation, Long>() {
+      @Override
+      public boolean isValid(Long generatedNanos, ConstraintValidatorContext context) {
+        long nanoTime = System.nanoTime();
+        return Math.abs(nanoTime - generatedNanos) < 500000000L;
+      }
+    });
+  }
+
 }

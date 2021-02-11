@@ -36,11 +36,27 @@ import java.util.Set;
  * @author Volker Bergmann
  * @since 0.9.7
  */
-
 public interface TemplateRecord {
-    Object get(String name);
+  /**
+   * Get object.
+   *
+   * @param name the name
+   * @return the object
+   */
+  Object get(String name);
 
-    void set(String name, Object value);
+  /**
+   * Set.
+   *
+   * @param name  the name
+   * @param value the value
+   */
+  void set(String name, Object value);
 
-    Set<Map.Entry<String, Object>> entrySet();
+  /**
+   * Entry set set.
+   *
+   * @return the set
+   */
+  Set<Map.Entry<String, Object>> entrySet();
 }

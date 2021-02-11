@@ -26,33 +26,33 @@
 
 package com.rapiddweller.benerator.primitive.number;
 
-import java.util.LinkedList;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.commons.converter.AnyConverter;
+import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.domain.math.FibonacciLongGenerator;
+
+import java.util.LinkedList;
 
 /**
  * Parent class for Number Generators that calculate numbers recursively.
- * Child classes can define recursive sequences easily by defining a depth and 
- * implementing the methods {@link #a0(int)} and {@link #aN()}.<br><br/> 
- * 
+ * Child classes can define recursive sequences easily by defining a depth and
+ * implementing the methods {@link #a0(int)} and {@link #aN()}.<br><br/>
+ * <p>
  * The recursion depth needs to be specified in the constructor call,
- * {@link #a0(int)} needs to return the predefined initial value(s) of the 
- * sequence (f0, f1, ...) and {@link #aN()} implements the recursion 
+ * {@link #a0(int)} needs to return the predefined initial value(s) of the
+ * sequence (f0, f1, ...) and {@link #aN()} implements the recursion
  * (fN = f(f(n-1), f(n-2), ...).<br/><br/>
- * 
+ * <p>
  * Example: The Fibonacci sequence is defined recursively by
  * <ul>
  *   <li><code>F(0) = 1</code></li>
  *   <li><code>F(1) = 1</code></li>
  *   <li><code>F(n) = F(n-1) + F(n-2)</code></li>
  * </ul>
- * 
+ * <p>
  * For a Generator of Long values, this translates to an implementation with<br/><br/>
- * <pre>depth = 2</code>
- *  
+ * <pre><code>depth = 2</code>
+ *
  * protected Long aN() {
  *     return aN(-1) + aN(-2);
  * }
@@ -61,107 +61,150 @@ import com.rapiddweller.domain.math.FibonacciLongGenerator;
  *     return (n == 0 ? 0L : 1L);
  * }
  * </pre>
- * 
+ * <p>
  * Have a look at the {@link FibonacciLongGenerator} source code for the complete implementation.
  * <br/><br/>
  * Created: 13.10.2009 19:07:27
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public abstract class RecurrenceRelationNumberGenerator<E extends Number> extends AbstractNonNullNumberGenerator<E> {
 
-	private final int depth;
-	private final LinkedList<E> recentProducts;
-	private int n;
+  private final int depth;
+  private final LinkedList<E> recentProducts;
+  private int number;
 
-    public RecurrenceRelationNumberGenerator(Class<E> targetType, int depth, E min, E max) {
-    	super(targetType, min, max, AnyConverter.convert(1, targetType));
-    	this.depth = depth;
-    	this.recentProducts = new LinkedList<E>();
-    	this.n = 0;
-	    resetMembers();
-    }
-    
-    public int getDepth() {
-    	return depth;
-    }
+  /**
+   * Instantiates a new Recurrence relation number generator.
+   *
+   * @param targetType the target type
+   * @param depth      the depth
+   * @param min        the min
+   * @param max        the max
+   */
+  public RecurrenceRelationNumberGenerator(Class<E> targetType, int depth, E min, E max) {
+    super(targetType, min, max, AnyConverter.convert(1, targetType));
+    this.depth = depth;
+    this.recentProducts = new LinkedList<>();
+    this.number = 0;
+    resetMembers();
+  }
 
-    public int getN() {
-    	return n;
-    }
-    
-    // generator interface ---------------------------------------------------------------------------------------------
+  /**
+   * Gets depth.
+   *
+   * @return the depth
+   */
+  public int getDepth() {
+    return depth;
+  }
 
-    @Override
-    public void init(GeneratorContext context) {
-        super.init(context);
-        resetMembers();
-    }
-    
-    @Override
-	@SuppressWarnings("unchecked")
-    public synchronized E generate() {
-    	E next = calculateNext();
-    	Comparable<E> c = (Comparable<E>) next;
-    	if (max != null && !(c.compareTo(min) >= 0 && c.compareTo(max) <= 0))
-    		return null;
-	    if (n >= depth)
-	    	recentProducts.removeLast();
-	    n++;
-	    recentProducts.push(next);
-	    return next;
-    }
+  /**
+   * Gets n.
+   *
+   * @return the n
+   */
+  public int getNumber() {
+    return number;
+  }
 
-	/** See {@link Generator#reset()} */
-	@Override
-    public void reset() {
-	    resetMembers();
-	    super.reset();
-    }
+  // generator interface ---------------------------------------------------------------------------------------------
 
-	/** See {@link Generator#close()} */
-	@Override
-	public void close() {
-	    recentProducts.clear();
-		super.close();
-	}
-	
-	// interface to be implemented / used by child classes -------------------------------------------------------------
-	
-	/**
-	 * Must be implemented by child classes to return the seed values of the recurrence relation.
-	 * These are the initial values which are defined as constants (a(0)..a(depth-1)). 
-	 */
-	protected abstract E a0(int n);
-	
-	/**
-	 * Must be implemented by child classes to implement the recurrence relation.
-	 * It needs to use the {@link #aN(int)} method to retrieve the most recent calculated values.
-	 */
-	protected abstract E aN();
-	
-	/**
-	 * Provides the most recent calculated values. The index is the relative index, 
-	 * <code>-1</code> stands for <code>a(N-1)</code>.
-	 */
-	protected final E aN(int offset) {
-		return recentProducts.get(- offset - 1);
-	}
+  @Override
+  public void init(GeneratorContext context) {
+    super.init(context);
+    resetMembers();
+  }
 
-	// helper methods --------------------------------------------------------------------------------------------------
-	
-	protected void resetMembers() {
-	    recentProducts.clear();
-	    n = 0;
+  @Override
+  @SuppressWarnings("unchecked")
+  public synchronized E generate() {
+    E next = calculateNext();
+    Comparable<E> c = (Comparable<E>) next;
+    if (max != null && !(c.compareTo(min) >= 0 && c.compareTo(max) <= 0)) {
+      return null;
     }
+    if (number >= depth) {
+      recentProducts.removeLast();
+    }
+    number++;
+    recentProducts.push(next);
+    return next;
+  }
 
-	protected E calculateNext() {
-	    E result;
-	    if (n < depth)
-	    	result = a0(n);
-	    else
-	    	result = aN();
-	    return result;
+  /**
+   * See {@link Generator#reset()}
+   */
+  @Override
+  public void reset() {
+    resetMembers();
+    super.reset();
+  }
+
+  /**
+   * See {@link Generator#close()}
+   */
+  @Override
+  public void close() {
+    recentProducts.clear();
+    super.close();
+  }
+
+  // interface to be implemented / used by child classes -------------------------------------------------------------
+
+  /**
+   * Must be implemented by child classes to return the seed values of the recurrence relation.
+   * These are the initial values which are defined as constants (a(0)..a(depth-1)).
+   *
+   * @param n the n
+   * @return the e
+   */
+  protected abstract E a0(int n);
+
+  /**
+   * Must be implemented by child classes to implement the recurrence relation.
+   * It needs to use the {@link #aN(int)} method to retrieve the most recent calculated values.
+   *
+   * @return the e
+   */
+  protected abstract E aN();
+
+  /**
+   * Provides the most recent calculated values. The index is the relative index,
+   * <code>-1</code> stands for <code>a(N-1)</code>.
+   *
+   * @param offset the offset
+   * @return the e
+   */
+  protected final E aN(int offset) {
+    return recentProducts.get(-offset - 1);
+  }
+
+  // helper methods --------------------------------------------------------------------------------------------------
+
+  /**
+   * Reset members.
+   */
+  protected void resetMembers() {
+    recentProducts.clear();
+    number = 0;
+  }
+
+  /**
+   * Calculate next e.
+   *
+   * @return the e
+   */
+  protected E calculateNext() {
+    E result;
+    if (number < depth) {
+      result = a0(number);
+    } else {
+      result = aN();
     }
+    return result;
+  }
 
 }

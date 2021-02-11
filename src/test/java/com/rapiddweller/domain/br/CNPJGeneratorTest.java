@@ -26,39 +26,49 @@
 
 package com.rapiddweller.domain.br;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link CNPJGenerator}.<br/><br/>
  * Created: 17.10.2009 08:24:59
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class CNPJGeneratorTest extends GeneratorClassTest {
 
-	public CNPJGeneratorTest() {
-	    super(CNPJGenerator.class);
-    }
+  /**
+   * Instantiates a new Cnpj generator test.
+   */
+  public CNPJGeneratorTest() {
+    super(CNPJGenerator.class);
+  }
 
-	@Test
-	public void testByValidator() {
-		expectGenerations(initialize(new CNPJGenerator()), 100, new CNPJValidator());
-	}
-	
-	@Test
-	public void testFormattedNumberGeneration() {
-		CNPJGenerator generator = new CNPJGenerator(true);
-		generator.init(context);
-		CNPJValidator validator = new CNPJValidator(true);
-		for (int i = 0; i < 100; i++) {
-			String cnpj = generator.generate();
-			assertEquals(18, cnpj.length());
-			assertTrue(validator.valid(cnpj));
-		}
-	}
-	
+  /**
+   * Test by validator.
+   */
+  @Test
+  public void testByValidator() {
+    expectGenerations(initialize(new CNPJGenerator()), 100, new CNPJValidator());
+  }
+
+  /**
+   * Test formatted number generation.
+   */
+  @Test
+  public void testFormattedNumberGeneration() {
+    CNPJGenerator generator = new CNPJGenerator(true);
+    generator.init(context);
+    CNPJValidator validator = new CNPJValidator(true);
+    for (int i = 0; i < 100; i++) {
+      String cnpj = generator.generate();
+      assertEquals(18, cnpj.length());
+      assertTrue(validator.valid(cnpj));
+    }
+  }
+
 }

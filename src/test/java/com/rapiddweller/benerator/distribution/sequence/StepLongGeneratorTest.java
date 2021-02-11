@@ -33,35 +33,54 @@ import org.junit.Test;
 /**
  * Tests the {@link StepLongGenerator}.<br/><br/>
  * Created: 26.07.2007 18:11:19
+ *
  * @author Volker Bergmann
  */
 public class StepLongGeneratorTest extends GeneratorClassTest {
 
-    public StepLongGeneratorTest() {
-        super(StepLongGenerator.class);
-    }
+  /**
+   * Instantiates a new Step long generator test.
+   */
+  public StepLongGeneratorTest() {
+    super(StepLongGenerator.class);
+  }
 
-    @Test
-    public void testIncrement() throws IllegalGeneratorStateException {
-        StepLongGenerator simpleGenerator = new StepLongGenerator(1, 5, 1);
-        expectGeneratedSequence(simpleGenerator, 1L, 2L, 3L, 4L, 5L).withCeasedAvailability();
-        StepLongGenerator oddGenerator = new StepLongGenerator(1, 5, 2);
-        expectGeneratedSequence(oddGenerator, 1L, 3L, 5L).withCeasedAvailability();
-    }
+  /**
+   * Test increment.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void testIncrement() throws IllegalGeneratorStateException {
+    StepLongGenerator simpleGenerator = new StepLongGenerator(1, 5, 1);
+    expectGeneratedSequence(simpleGenerator, 1L, 2L, 3L, 4L, 5L).withCeasedAvailability();
+    StepLongGenerator oddGenerator = new StepLongGenerator(1, 5, 2);
+    expectGeneratedSequence(oddGenerator, 1L, 3L, 5L).withCeasedAvailability();
+  }
 
-    @Test
-    public void testDecrement() throws IllegalGeneratorStateException {
-        StepLongGenerator simpleGenerator = new StepLongGenerator(1, 5, -1);
-        expectGeneratedSequence(simpleGenerator, 5L, 4L, 3L, 2L, 1L).withCeasedAvailability();
-        StepLongGenerator oddGenerator = new StepLongGenerator(1, 5, -2);
-        expectGeneratedSequence(oddGenerator, 5L, 3L, 1L).withCeasedAvailability();
-    }
+  /**
+   * Test decrement.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void testDecrement() throws IllegalGeneratorStateException {
+    StepLongGenerator simpleGenerator = new StepLongGenerator(1, 5, -1);
+    expectGeneratedSequence(simpleGenerator, 5L, 4L, 3L, 2L, 1L).withCeasedAvailability();
+    StepLongGenerator oddGenerator = new StepLongGenerator(1, 5, -2);
+    expectGeneratedSequence(oddGenerator, 5L, 3L, 1L).withCeasedAvailability();
+  }
 
-    @Test
-    public void testGranularity() throws IllegalGeneratorStateException {
-        StepLongGenerator simpleGenerator = new StepLongGenerator(1, 5);
-        simpleGenerator.setGranularity(2L);
-        expectGeneratedSequence(simpleGenerator, 1L, 3L, 5L).withCeasedAvailability();
-    }
+  /**
+   * Test granularity.
+   *
+   * @throws IllegalGeneratorStateException the illegal generator state exception
+   */
+  @Test
+  public void testGranularity() throws IllegalGeneratorStateException {
+    StepLongGenerator simpleGenerator = new StepLongGenerator(1, 5);
+    simpleGenerator.setGranularity(2L);
+    expectGeneratedSequence(simpleGenerator, 1L, 3L, 5L).withCeasedAvailability();
+  }
 
 }

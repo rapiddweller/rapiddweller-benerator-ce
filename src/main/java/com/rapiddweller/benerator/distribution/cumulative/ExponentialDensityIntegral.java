@@ -31,30 +31,37 @@ import com.rapiddweller.benerator.distribution.CumulativeDistributionFunction;
 /**
  * Inverse of the integral of the probability density f(x) = a e^{-ax} (x {@literal >} 0),
  * which resolves to F^{-1}(x) = - log(1 - x) / a.
- * See <a href="http://www.stat.wisc.edu/~larget/math496/random2.html">Random 
+ * See <a href="http://www.stat.wisc.edu/~larget/math496/random2.html">Random
  * Number Generation from Non-uniform Distributions</a>.<br/><br/>
  * Created: 12.03.2010 15:41:21
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ExponentialDensityIntegral extends CumulativeDistributionFunction {
 
-	private double a;
-	
-	public ExponentialDensityIntegral(double a) {
-		if (a <= 0)
-			throw new IllegalArgumentException("a must be greater than zero, but is " + a);
-	    this.a = a;
-    }
+  private final double a;
 
-	@Override
-    public double cumulativeProbability(double value) {
-	    return 1 - Math.exp(-a * value);
+  /**
+   * Instantiates a new Exponential density integral.
+   *
+   * @param a the a
+   */
+  public ExponentialDensityIntegral(double a) {
+    if (a <= 0) {
+      throw new IllegalArgumentException("a must be greater than zero, but is " + a);
     }
+    this.a = a;
+  }
 
-	@Override
-	public double inverse(double probability) {
-		return - Math.log(1 - probability) / a;
-	}
+  @Override
+  public double cumulativeProbability(double value) {
+    return 1 - Math.exp(-a * value);
+  }
+
+  @Override
+  public double inverse(double probability) {
+    return -Math.log(1 - probability) / a;
+  }
 
 }

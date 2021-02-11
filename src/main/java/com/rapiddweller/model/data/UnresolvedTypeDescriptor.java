@@ -35,12 +35,26 @@ package com.rapiddweller.model.data;
  */
 public class UnresolvedTypeDescriptor extends TypeDescriptor {
 
-    public UnresolvedTypeDescriptor(String name, DescriptorProvider provider) {
-        this(name, provider, null);
-    }
+  /**
+   * Instantiates a new Unresolved type descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   */
+  public UnresolvedTypeDescriptor(String name, DescriptorProvider provider) {
+    this(name, provider, null);
+  }
 
-    public UnresolvedTypeDescriptor(String name, DescriptorProvider provider, String parentName) {
-        super(name, provider, parentName);
-    }
+  /**
+   * Instantiates a new Unresolved type descriptor.
+   *
+   * @param name       the name
+   * @param provider   the provider
+   * @param parentName the parent name
+   */
+  public UnresolvedTypeDescriptor(String name, DescriptorProvider provider,
+                                  String parentName) {
+    super(name, provider, parentName);
+  }
 
 }

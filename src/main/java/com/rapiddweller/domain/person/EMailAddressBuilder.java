@@ -28,16 +28,16 @@ package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.sample.NonNullSampleGenerator;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.ThreadAware;
+import com.rapiddweller.common.converter.CaseConverter;
+import com.rapiddweller.common.converter.ConverterChain;
 import com.rapiddweller.domain.net.DomainGenerator;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.ThreadAware;
-import com.rapiddweller.commons.converter.CaseConverter;
-import com.rapiddweller.commons.converter.ConverterChain;
-import com.rapiddweller.formats.text.DelocalizingConverter;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.format.text.DelocalizingConverter;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -51,88 +51,118 @@ import java.util.Locale;
  */
 public class EMailAddressBuilder implements ThreadAware {
 
-    private final Logger logger = LogManager.getLogger(getClass()); // Logger is not static in order to adopt sub classes
+  private final DomainGenerator domainGenerator;
+  private final CaseConverter caseConverter;
+  private final Converter<String, String> nameConverter;
+  private final NonNullSampleGenerator<Character> joinGenerator;
 
-    private final DomainGenerator domainGenerator;
-    private final CaseConverter caseConverter;
-    private final Converter<String, String> nameConverter;
-    private final NonNullSampleGenerator<Character> joinGenerator;
+  // constructor -----------------------------------------------------------------------------------------------------
 
-    // constructor -----------------------------------------------------------------------------------------------------
-
-    public EMailAddressBuilder(String dataset) {
-        logger.debug("Creating instance of {} for dataset {}", getClass(), dataset);
-        this.domainGenerator = new DomainGenerator(dataset);
-        this.caseConverter = new CaseConverter(false);
-        try {
-            this.nameConverter = new ConverterChain<String, String>(
-                    new DelocalizingConverter(),
-                    caseConverter);
-        } catch (IOException e) {
-            throw new ConfigurationError("Error in Converter setup", e);
-        }
-        this.joinGenerator = new NonNullSampleGenerator<Character>(Character.class, '_', '.', '0', '1');
+  /**
+   * Instantiates a new E mail address builder.
+   *
+   * @param dataset the dataset
+   */
+  public EMailAddressBuilder(String dataset) {
+    // Logger is not static in order to adopt sub classes
+    Logger logger = LogManager.getLogger(getClass());
+    logger.debug("Creating instance of {} for dataset {}", getClass(),
+        dataset);
+    this.domainGenerator = new DomainGenerator(dataset);
+    this.caseConverter = new CaseConverter(false);
+    try {
+      this.nameConverter = new ConverterChain<>(
+          new DelocalizingConverter(),
+          caseConverter);
+    } catch (IOException e) {
+      throw new ConfigurationError("Error in Converter setup", e);
     }
+    this.joinGenerator =
+        new NonNullSampleGenerator<>(Character.class, '_', '.', '0',
+            '1');
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    public void setDataset(String datasetName) {
-        domainGenerator.setDataset(datasetName);
+  /**
+   * Sets dataset.
+   *
+   * @param datasetName the dataset name
+   */
+  public void setDataset(String datasetName) {
+    domainGenerator.setDataset(datasetName);
+  }
+
+  /**
+   * Sets locale.
+   *
+   * @param locale the locale
+   */
+  public void setLocale(Locale locale) {
+    caseConverter.setLocale(locale);
+  }
+
+  // generator-like interface ----------------------------------------------------------------------------------------
+
+  /**
+   * Init.
+   *
+   * @param context the context
+   */
+  public void init(GeneratorContext context) {
+    domainGenerator.init(context);
+    joinGenerator.init(context);
+  }
+
+  /**
+   * Generate string.
+   *
+   * @param givenName  the given name
+   * @param familyName the family name
+   * @return the string
+   */
+  public String generate(String givenName, String familyName) {
+    String given = nameConverter.convert(givenName);
+    String family = nameConverter.convert(familyName);
+    String domain = domainGenerator.generate();
+    Character join = joinGenerator.generate();
+    switch (join) {
+      case '.':
+        return given + '.' + family + '@' + domain;
+      case '_':
+        return given + '_' + family + '@' + domain;
+      case '0':
+        return given + family + '@' + domain;
+      case '1':
+        return given.charAt(0) + family + '@' + domain;
+      default:
+        throw new ConfigurationError("Invalid join strategy: " + join);
     }
+  }
 
-    public void setLocale(Locale locale) {
-        caseConverter.setLocale(locale);
-    }
+  // ThreadAware interface implementation ----------------------------------------------------------------------------
 
-    // generator-like interface ----------------------------------------------------------------------------------------
+  @Override
+  public boolean isParallelizable() {
+    return domainGenerator.isParallelizable()
+        && caseConverter.isParallelizable()
+        && nameConverter.isParallelizable()
+        && joinGenerator.isParallelizable();
+  }
 
-    public void init(GeneratorContext context) {
-        domainGenerator.init(context);
-        joinGenerator.init(context);
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return domainGenerator.isThreadSafe()
+        && caseConverter.isThreadSafe()
+        && nameConverter.isThreadSafe()
+        && joinGenerator.isThreadSafe();
+  }
 
-    public String generate(String givenName, String familyName) {
-        String given = nameConverter.convert(givenName);
-        String family = nameConverter.convert(familyName);
-        String domain = domainGenerator.generate();
-        Character join = joinGenerator.generate();
-        switch (join) {
-            case '.':
-                return given + '.' + family + '@' + domain;
-            case '_':
-                return given + '_' + family + '@' + domain;
-            case '0':
-                return given + family + '@' + domain;
-            case '1':
-                return given.charAt(0) + family + '@' + domain;
-            default:
-                throw new ConfigurationError("Invalid join strategy: " + join);
-        }
-    }
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    // ThreadAware interface implementation ----------------------------------------------------------------------------
-
-    @Override
-    public boolean isParallelizable() {
-        return domainGenerator.isParallelizable()
-                && caseConverter.isParallelizable()
-                && nameConverter.isParallelizable()
-                && joinGenerator.isParallelizable();
-    }
-
-    @Override
-    public boolean isThreadSafe() {
-        return domainGenerator.isThreadSafe()
-                && caseConverter.isThreadSafe()
-                && nameConverter.isThreadSafe()
-                && joinGenerator.isThreadSafe();
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return BeanUtil.toString(this);
-    }
+  @Override
+  public String toString() {
+    return BeanUtil.toString(this);
+  }
 
 }

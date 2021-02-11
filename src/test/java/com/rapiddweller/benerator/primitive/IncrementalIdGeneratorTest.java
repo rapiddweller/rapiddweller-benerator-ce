@@ -26,53 +26,64 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import static org.junit.Assert.assertEquals;
+import com.rapiddweller.benerator.test.GeneratorClassTest;
+import org.junit.Test;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.rapiddweller.benerator.test.GeneratorClassTest;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link IncrementalIdGenerator}.<br/><br/>
  * Created: 14.11.2009 07:23:34
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class IncrementalIdGeneratorTest extends GeneratorClassTest {
 
-	public IncrementalIdGeneratorTest() {
-	    super(IncrementalIdGenerator.class);
-    }
+  /**
+   * Instantiates a new Incremental id generator test.
+   */
+  public IncrementalIdGeneratorTest() {
+    super(IncrementalIdGenerator.class);
+  }
 
-	@Test
-	public void testLifeCycle() {
-		IncrementalIdGenerator generator = new IncrementalIdGenerator();
-		generator.init(context);
-		assertEquals(1L, generator.generate().longValue());
-		generator.reset();
-		assertEquals(2L, generator.generate().longValue());
-	}
-	
-	@Test
-	public void testMultiThreading() throws Exception {
-		final IncrementGenerator generator = new IncrementGenerator(0);
-		generator.init(context);
-		ExecutorService service = Executors.newCachedThreadPool();
-		Runnable runner = new Runnable() {
-			@Override
-			public void run() {
-				for (int i = 0; i < 500; i++)
-					generator.generate();
-            }
-		};
-		for (int i = 0; i < 20; i++)
-			service.execute(runner);
-		service.shutdown();
-		service.awaitTermination(2, TimeUnit.SECONDS);
-		assertEquals(10000L, generator.cursor.get());
-	}
-	
+  /**
+   * Test life cycle.
+   */
+  @Test
+  public void testLifeCycle() {
+    IncrementalIdGenerator generator = new IncrementalIdGenerator();
+    generator.init(context);
+    assertEquals(1L, generator.generate().longValue());
+    generator.reset();
+    assertEquals(2L, generator.generate().longValue());
+  }
+
+  /**
+   * Test multi threading.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testMultiThreading() throws Exception {
+    final IncrementGenerator generator = new IncrementGenerator(0);
+    generator.init(context);
+    ExecutorService service = Executors.newCachedThreadPool();
+    Runnable runner = () -> {
+      for (int i = 0; i < 500; i++) {
+        generator.generate();
+      }
+    };
+    for (int i = 0; i < 20; i++) {
+      service.execute(runner);
+    }
+    service.shutdown();
+    service.awaitTermination(2, TimeUnit.SECONDS);
+    assertEquals(10000L, generator.cursor.get());
+  }
+
 }

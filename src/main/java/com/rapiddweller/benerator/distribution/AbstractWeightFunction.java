@@ -29,45 +29,46 @@ package com.rapiddweller.benerator.distribution;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.BeanUtil;
+import com.rapiddweller.common.BeanUtil;
 
 /**
  * Abstract implementation of the {@link WeightFunction} interface.<br/>
  * <br/>
  * Created at 30.06.2009 07:13:49
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public abstract class AbstractWeightFunction implements WeightFunction {
 
-    @Override
-	@SuppressWarnings("unchecked")
-    public <T extends Number> NonNullGenerator<T> createNumberGenerator(
-    		Class<T> numberType, T min, T max, T granularity, boolean unique) {
-    	if (Long.class.equals(numberType))
-    		return (NonNullGenerator<T>) createLongGenerator(min, max, granularity);
-    	else if (Double.class.equals(numberType))
-    		return (NonNullGenerator<T>) createDoubleGenerator(min, max, granularity);
-    	else if (BeanUtil.isIntegralNumberType(numberType))
-    		return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, createLongGenerator(min, max, granularity), min, granularity);
-    	else
-    		return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, createDoubleGenerator(min, max, granularity), min, granularity);
+  @Override
+  @SuppressWarnings("unchecked")
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(
+      Class<T> numberType, T min, T max, T granularity, boolean unique) {
+    if (Long.class.equals(numberType)) {
+      return (NonNullGenerator<T>) createLongGenerator(min, max, granularity);
+    } else if (Double.class.equals(numberType)) {
+      return (NonNullGenerator<T>) createDoubleGenerator(min, max, granularity);
+    } else if (BeanUtil.isIntegralNumberType(numberType)) {
+      return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, createLongGenerator(min, max, granularity), min, granularity);
+    } else {
+      return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, createDoubleGenerator(min, max, granularity), min, granularity);
     }
+  }
 
-    @Override
-	public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-	    return new IndexBasedSampleGeneratorProxy<T>(source, this, unique);
-    }
-    
-    // helper methods --------------------------------------------------------------------------------------------------
+  @Override
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    return new IndexBasedSampleGeneratorProxy<>(source, this, unique);
+  }
 
-	private <T extends Number> WeightedLongGenerator createLongGenerator(T min, T max, T granularity) {
-	    return new WeightedLongGenerator(min.longValue(), max.longValue(), granularity.longValue(), this);
-    }
+  // helper methods --------------------------------------------------------------------------------------------------
 
-	private <T extends Number> NonNullGenerator<Double> createDoubleGenerator(T min, T max, T granularity) {
-	    return new WeightedDoubleGenerator(min.doubleValue(), max.doubleValue(), granularity.doubleValue(), this);
-    }
+  private <T extends Number> WeightedLongGenerator createLongGenerator(T min, T max, T granularity) {
+    return new WeightedLongGenerator(min.longValue(), max.longValue(), granularity.longValue(), this);
+  }
+
+  private <T extends Number> NonNullGenerator<Double> createDoubleGenerator(T min, T max, T granularity) {
+    return new WeightedDoubleGenerator(min.doubleValue(), max.doubleValue(), granularity.doubleValue(), this);
+  }
 
 }

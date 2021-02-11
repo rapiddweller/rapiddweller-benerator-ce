@@ -26,40 +26,46 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Wraps a Task and logs its execution time.<br/>
  * <br/>
  * Created: 06.07.2007 06:49:20
  *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.2
  */
 public class TimedTask<E extends Task> extends TaskProxy<E> {
 
-    private static final Logger logger = LogManager.getLogger(TimedTask.class);
+  private static final Logger logger = LogManager.getLogger(TimedTask.class);
 
-    public TimedTask(E realTask) {
-        super(realTask);
-    }
+  /**
+   * Instantiates a new Timed task.
+   *
+   * @param realTask the real task
+   */
+  public TimedTask(E realTask) {
+    super(realTask);
+  }
 
-    @Override
-    public TaskResult execute(Context context, ErrorHandler errorHandler) {
-        long startTime = System.currentTimeMillis();
-        TaskResult result = super.execute(context, errorHandler);
-        logger.info("Executing " + realTask + " took " +
-                (System.currentTimeMillis() - startTime) + " ms");
-        return result;
-    }
+  @Override
+  public TaskResult execute(Context context, ErrorHandler errorHandler) {
+    long startTime = System.currentTimeMillis();
+    TaskResult result = super.execute(context, errorHandler);
+    logger.info("Executing " + realTask + " took " +
+        (System.currentTimeMillis() - startTime) + " ms");
+    return result;
+  }
 
-    @Override
-    public Object clone() {
-        return new TimedTask<E>(BeanUtil.clone(realTask));
-    }
+  @Override
+  public Object clone() {
+    return new TimedTask<>(BeanUtil.clone(realTask));
+  }
 
 }

@@ -26,15 +26,16 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.ArrayBuilder;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.collection.ListBasedSet;
-import com.rapiddweller.commons.collection.NamedValueList;
+import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.collection.ListBasedSet;
+import com.rapiddweller.common.collection.NamedValueList;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -45,138 +46,243 @@ import java.util.Set;
  * @author Volker Bergmann
  * @since 0.5.0
  */
-public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHolder {
+public class ComplexTypeDescriptor extends TypeDescriptor
+    implements VariableHolder {
 
-    public static final String __SIMPLE_CONTENT = "__SIMPLE_CONTENT";
+  /**
+   * The constant __SIMPLE_CONTENT.
+   */
+  public static final String __SIMPLE_CONTENT = "__SIMPLE_CONTENT";
 
-    private NamedValueList<InstanceDescriptor> parts;
+  private NamedValueList<InstanceDescriptor> parts;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public ComplexTypeDescriptor(String name, DescriptorProvider provider) {
-        this(name, provider, (String) null);
+  /**
+   * Instantiates a new Complex type descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   */
+  public ComplexTypeDescriptor(String name, DescriptorProvider provider) {
+    this(name, provider, (String) null);
+  }
+
+  /**
+   * Instantiates a new Complex type descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   * @param parent   the parent
+   */
+  public ComplexTypeDescriptor(String name, DescriptorProvider provider,
+                               ComplexTypeDescriptor parent) {
+    super(name, provider, parent);
+    init();
+  }
+
+  /**
+   * Instantiates a new Complex type descriptor.
+   *
+   * @param name       the name
+   * @param provider   the provider
+   * @param parentName the parent name
+   */
+  public ComplexTypeDescriptor(String name, DescriptorProvider provider,
+                               String parentName) {
+    super(name, provider, parentName);
+    init();
+  }
+
+  // component handling ----------------------------------------------------------------------------------------------
+
+  /**
+   * Add part.
+   *
+   * @param part the part
+   */
+  public void addPart(InstanceDescriptor part) {
+    if (part instanceof ComponentDescriptor) {
+      addComponent((ComponentDescriptor) part);
+    } else {
+      addVariable((VariableDescriptor) part);
     }
+  }
 
-    public ComplexTypeDescriptor(String name, DescriptorProvider provider, ComplexTypeDescriptor parent) {
-        super(name, provider, parent);
-        init();
+  /**
+   * Add component.
+   *
+   * @param descriptor the descriptor
+   */
+  public void addComponent(ComponentDescriptor descriptor) {
+    String componentName = descriptor.getName();
+    if (parent != null &&
+        ((ComplexTypeDescriptor) parent).getComponent(componentName) !=
+            null) {
+      descriptor.setParent(((ComplexTypeDescriptor) parent)
+          .getComponent(componentName));
     }
+    parts.add(componentName, descriptor);
+  }
 
-    public ComplexTypeDescriptor(String name, DescriptorProvider provider, String parentName) {
-        super(name, provider, parentName);
-        init();
+  /**
+   * Sets component.
+   *
+   * @param component the component
+   */
+  public void setComponent(ComponentDescriptor component) {
+    String componentName = component.getName();
+    if (parent != null &&
+        ((ComplexTypeDescriptor) parent).getComponent(componentName) !=
+            null) {
+      component.setParent(((ComplexTypeDescriptor) parent)
+          .getComponent(componentName));
     }
+    parts.set(componentName, component);
+  }
 
-    // component handling ----------------------------------------------------------------------------------------------
-
-    public void addPart(InstanceDescriptor part) {
-        if (part instanceof ComponentDescriptor)
-            addComponent((ComponentDescriptor) part);
-        else
-            addVariable((VariableDescriptor) part);
+  /**
+   * Gets component.
+   *
+   * @param name the name
+   * @return the component
+   */
+  public ComponentDescriptor getComponent(String name) {
+    for (InstanceDescriptor part : parts.values()) {
+      if (StringUtil.equalsIgnoreCase(part.getName(), name) &&
+          part instanceof ComponentDescriptor) {
+        return (ComponentDescriptor) part;
+      }
     }
-
-    public void addComponent(ComponentDescriptor descriptor) {
-        String componentName = descriptor.getName();
-        if (parent != null && ((ComplexTypeDescriptor) parent).getComponent(componentName) != null)
-            descriptor.setParent(((ComplexTypeDescriptor) parent).getComponent(componentName));
-        parts.add(componentName, descriptor);
+    if (getParent() != null) {
+      return ((ComplexTypeDescriptor) getParent()).getComponent(name);
     }
+    return null;
+  }
 
-    public void setComponent(ComponentDescriptor component) {
-        String componentName = component.getName();
-        if (parent != null && ((ComplexTypeDescriptor) parent).getComponent(componentName) != null)
-            component.setParent(((ComplexTypeDescriptor) parent).getComponent(componentName));
-        parts.set(componentName, component);
+  /**
+   * Gets parts.
+   *
+   * @return the parts
+   */
+  public List<InstanceDescriptor> getParts() {
+    NamedValueList<InstanceDescriptor> result =
+        NamedValueList.createCaseInsensitiveList();
+
+    for (InstanceDescriptor ccd : parts.values()) {
+      result.add(ccd.getName(), ccd);
     }
-
-    public ComponentDescriptor getComponent(String name) {
-        for (InstanceDescriptor part : parts.values())
-            if (StringUtil.equalsIgnoreCase(part.getName(), name) && part instanceof ComponentDescriptor)
-                return (ComponentDescriptor) part;
-        if (getParent() != null)
-            return ((ComplexTypeDescriptor) getParent()).getComponent(name);
-        return null;
-    }
-
-    public List<InstanceDescriptor> getParts() {
-        NamedValueList<InstanceDescriptor> result = NamedValueList.createCaseInsensitiveList();
-
-        for (InstanceDescriptor ccd : parts.values())
-            result.add(ccd.getName(), ccd);
-        if (getParent() != null) {
-            List<InstanceDescriptor> parentParts = ((ComplexTypeDescriptor) getParent()).getParts();
-            for (InstanceDescriptor pcd : parentParts) {
-                String name = pcd.getName();
-                if (pcd instanceof ComponentDescriptor && !parts.containsName(name)) {
-                    InstanceDescriptor ccd = parts.someValueOfName(name);
-                    if (ccd != null)
-                        result.add(name, ccd);
-                    else
-                        result.add(name, pcd);
-                }
-            }
+    if (getParent() != null) {
+      List<InstanceDescriptor> parentParts =
+          ((ComplexTypeDescriptor) getParent()).getParts();
+      for (InstanceDescriptor pcd : parentParts) {
+        String name = pcd.getName();
+        if (pcd instanceof ComponentDescriptor &&
+            !parts.containsName(name)) {
+          InstanceDescriptor ccd = parts.someValueOfName(name);
+          result.add(name, Objects.requireNonNullElse(ccd, pcd));
         }
-        return result.values();
+      }
     }
+    return result.values();
+  }
 
-    public List<ComponentDescriptor> getComponents() {
-        List<ComponentDescriptor> result = new ArrayList<ComponentDescriptor>();
-        for (InstanceDescriptor instance : getParts())
-            if (instance instanceof ComponentDescriptor)
-                result.add((ComponentDescriptor) instance);
-        return result;
+  /**
+   * Gets components.
+   *
+   * @return the components
+   */
+  public List<ComponentDescriptor> getComponents() {
+    List<ComponentDescriptor> result = new ArrayList<>();
+    for (InstanceDescriptor instance : getParts()) {
+      if (instance instanceof ComponentDescriptor) {
+        result.add((ComponentDescriptor) instance);
+      }
     }
+    return result;
+  }
 
-    public Collection<InstanceDescriptor> getDeclaredParts() {
-        Set<InstanceDescriptor> declaredDescriptors = new ListBasedSet<InstanceDescriptor>(parts.size());
-        for (InstanceDescriptor d : parts.values())
-            declaredDescriptors.add(d);
-        return declaredDescriptors;
+  /**
+   * Gets declared parts.
+   *
+   * @return the declared parts
+   */
+  public Collection<InstanceDescriptor> getDeclaredParts() {
+    Set<InstanceDescriptor> declaredDescriptors =
+        new ListBasedSet<>(parts.size());
+    declaredDescriptors.addAll(parts.values());
+    return declaredDescriptors;
+  }
+
+  /**
+   * Is declared component boolean.
+   *
+   * @param componentName the component name
+   * @return the boolean
+   */
+  public boolean isDeclaredComponent(String componentName) {
+    return parts.containsName(componentName);
+  }
+
+  /**
+   * Get id component names string [ ].
+   *
+   * @return the string [ ]
+   */
+  public String[] getIdComponentNames() {
+    ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
+    for (ComponentDescriptor descriptor : getComponents()) {
+      if (descriptor instanceof IdDescriptor) {
+        builder.add(descriptor.getName());
+      }
     }
+    return builder.toArray();
+  }
 
-    public boolean isDeclaredComponent(String componentName) {
-        return parts.containsName(componentName);
+  /**
+   * Gets reference components.
+   *
+   * @return the reference components
+   */
+  public List<ReferenceDescriptor> getReferenceComponents() {
+    return CollectionUtil.extractItemsOfExactType(ReferenceDescriptor.class,
+        getComponents());
+  }
+
+  @Override
+  public void addVariable(VariableDescriptor variable) {
+    parts.add(variable.getName(), variable);
+  }
+
+  // construction helper methods -------------------------------------------------------------------------------------
+
+  /**
+   * With component complex type descriptor.
+   *
+   * @param componentDescriptor the component descriptor
+   * @return the complex type descriptor
+   */
+  public ComplexTypeDescriptor withComponent(
+      ComponentDescriptor componentDescriptor) {
+    addComponent(componentDescriptor);
+    return this;
+  }
+
+  @Override
+  protected void init() {
+    super.init();
+    this.parts = new NamedValueList<>(NamedValueList.INSENSITIVE);
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    if (parts.size() == 0) {
+      return super.toString();
     }
-
-    public String[] getIdComponentNames() {
-        ArrayBuilder<String> builder = new ArrayBuilder<String>(String.class);
-        for (ComponentDescriptor descriptor : getComponents())
-            if (descriptor instanceof IdDescriptor)
-                builder.add(descriptor.getName());
-        return builder.toArray();
-    }
-
-    public List<ReferenceDescriptor> getReferenceComponents() {
-        return CollectionUtil.extractItemsOfExactType(ReferenceDescriptor.class, getComponents());
-    }
-
-    @Override
-    public void addVariable(VariableDescriptor variable) {
-        parts.add(variable.getName(), variable);
-    }
-
-    // construction helper methods -------------------------------------------------------------------------------------
-
-    public ComplexTypeDescriptor withComponent(ComponentDescriptor componentDescriptor) {
-        addComponent(componentDescriptor);
-        return this;
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        this.parts = new NamedValueList<InstanceDescriptor>(NamedValueList.INSENSITIVE);
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        if (parts.size() == 0)
-            return super.toString();
-        //return new CompositeFormatter(false, false).render(super.toString() + '{', new CompositeAdapter(), "}");
-        return getName() + getParts();
-    }
+    //return new CompositeFormatter(false, false).render(super.toString() + '{', new CompositeAdapter(), "}");
+    return getName() + getParts();
+  }
 
 }

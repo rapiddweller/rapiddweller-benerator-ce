@@ -26,63 +26,69 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.NumberUtil;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.NumberUtil;
 
-import static com.rapiddweller.commons.NumberUtil.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+import static com.rapiddweller.common.NumberUtil.toBigDecimal;
+import static com.rapiddweller.common.NumberUtil.toBigInteger;
+import static com.rapiddweller.common.NumberUtil.toDouble;
+import static com.rapiddweller.common.NumberUtil.toInteger;
+import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
  * {@link Sequence} implementation that creates generators with a random uniform distribution.<br/>
  * <br/>
  * Created at 27.07.2009 06:31:25
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class RandomSequence extends Sequence {
 
-    @Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
-    	NonNullGenerator<? extends Number> base;
-    	if (unique) {
-    		return SequenceManager.EXPAND_SEQUENCE.createNumberGenerator(numberType, min, max, granularity, unique);
-    	} else if (BeanUtil.isIntegralNumberType(numberType)) {
-        	long lMax = (max != null ? max.longValue() :
-        			Math.min(RandomLongGenerator.DEFAULT_MAX, NumberUtil.maxValue(numberType).longValue()));
-			if (Integer.class.equals(numberType.getClass()))
-				base = new RandomIntegerGenerator(toInteger(min), toInteger(lMax), toInteger(granularity));
-			else if (BigInteger.class.equals(numberType.getClass()))
-				base = new RandomBigIntegerGenerator(toBigInteger(min), toBigInteger(lMax), toBigInteger(granularity));
-			else if (BigDecimal.class.equals(numberType.getClass()))
-				base = new RandomBigDecimalGenerator(toBigDecimal(min), toBigDecimal(lMax), toBigDecimal(granularity));
-			else
-				base = new RandomLongGenerator(toLong(min), lMax, toLong(granularity));
-    	} else {
-    		double dMax = (max != null ? max.doubleValue() : Long.MAX_VALUE);
-			base = new RandomDoubleGenerator(toDouble(min), dMax, toDouble(granularity));
-    	}
-		return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
-	}
-
-    @Override
-    public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-    	if (unique)
-    		return SequenceManager.EXPAND_SEQUENCE.applyTo(source, unique);
-    	else
-    		return super.applyTo(source, unique);
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
+    NonNullGenerator<? extends Number> base;
+    if (unique) {
+      return SequenceManager.EXPAND_SEQUENCE.createNumberGenerator(numberType, min, max, granularity, unique);
+    } else if (BeanUtil.isIntegralNumberType(numberType)) {
+      long lMax = (max != null ? max.longValue() :
+          Math.min(RandomLongGenerator.DEFAULT_MAX, NumberUtil.maxValue(numberType).longValue()));
+      if (Integer.class.equals(numberType.getClass())) {
+        base = new RandomIntegerGenerator(toInteger(min), toInteger(lMax), toInteger(granularity));
+      } else if (BigInteger.class.equals(numberType.getClass())) {
+        base = new RandomBigIntegerGenerator(toBigInteger(min), toBigInteger(lMax), toBigInteger(granularity));
+      } else if (BigDecimal.class.equals(numberType.getClass())) {
+        base = new RandomBigDecimalGenerator(toBigDecimal(min), toBigDecimal(lMax), toBigDecimal(granularity));
+      } else {
+        base = new RandomLongGenerator(toLong(min), lMax, toLong(granularity));
+      }
+    } else {
+      double dMax = (max != null ? max.doubleValue() : Long.MAX_VALUE);
+      base = new RandomDoubleGenerator(toDouble(min), dMax, toDouble(granularity));
     }
+    return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
+  }
 
-	@Override
-	public String toString() {
-	    return BeanUtil.toString(this);
-	}
-	
+  @Override
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    if (unique) {
+      return SequenceManager.EXPAND_SEQUENCE.applyTo(source, unique);
+    } else {
+      return super.applyTo(source, unique);
+    }
+  }
+
+  @Override
+  public String toString() {
+    return BeanUtil.toString(this);
+  }
+
 }

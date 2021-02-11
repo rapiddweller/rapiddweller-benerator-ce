@@ -27,15 +27,15 @@
 package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.commons.ArrayBuilder;
-import com.rapiddweller.commons.ArrayFormat;
-import com.rapiddweller.commons.ArrayUtil;
-import com.rapiddweller.commons.SyntaxError;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.script.ScriptUtil;
 
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
@@ -50,125 +50,163 @@ import javax.xml.stream.XMLStreamException;
  */
 public class NestedDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
 
-    private Table currentTable;
+  private Table currentTable;
 
-    public NestedDbUnitEntityIterator(String uri, BeneratorContext context) {
-        super(uri, context);
-        DbUnitUtil.skipRootElement(reader);
-        this.currentTable = null;
+  /**
+   * Instantiates a new Nested db unit entity iterator.
+   *
+   * @param uri     the uri
+   * @param context the context
+   */
+  public NestedDbUnitEntityIterator(String uri, BeneratorContext context) {
+    super(uri, context);
+    DbUnitUtil.skipRootElement(reader);
+    this.currentTable = null;
+  }
+
+  // DataIterator interface implementation ---------------------------------------------------------------------------
+
+  @Override
+  public DataContainer<Entity> next(DataContainer<Entity> container) {
+    try {
+      DbUnitUtil.skipNonStartTags(reader);
+      if (reader.getEventType() == XMLStreamConstants.END_DOCUMENT) {
+        return null;
+      }
+      String elementName = reader.getLocalName();
+      Row row;
+      if ("table".equals(elementName)) {
+        row = parseTableAndFirstRow();
+      } else if ("row".equals(elementName) || "column".equals(elementName)) {
+        row = parseRow();
+      } else {
+        throw new SyntaxError("Not an allowed element", "<" + elementName + ">");
+      }
+      if (row == null) {
+        return null;
+      }
+      ComplexTypeDescriptor descriptor = getType(row);
+      Entity result = new Entity(descriptor);
+      String[] cells = row.getValues();
+      for (int i = 0; i < cells.length; i++) {
+        String rowValue = String.valueOf(ScriptUtil.evaluate(cells[i], context));
+        result.setComponent(row.getColumnName(i), rowValue);
+      }
+      return container.setData(result);
+    } catch (XMLStreamException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private Row parseTableAndFirstRow() throws XMLStreamException {
+    String tableName = reader.getAttributeValue(null, "name");
+    currentTable = new Table(tableName);
+    parseColumns();
+    return parseRow();
+  }
+
+  /**
+   * Parse columns.
+   *
+   * @throws XMLStreamException the xml stream exception
+   */
+  protected void parseColumns() throws XMLStreamException {
+    String column;
+    while ((column = parseColumn()) != null) {
+      currentTable.addColumn(column);
+    }
+  }
+
+  private String parseColumn() throws XMLStreamException {
+    // format: <column>column_name</column>
+    // parse <column>
+    reader.nextTag();
+    if (!"column".equals(reader.getLocalName())) {
+      return null;
+    }
+    reader.next();
+    // parse column_name
+    String columnName = reader.getText();
+    // parse </column>
+    reader.next();
+    return columnName;
+  }
+
+  private Row parseRow() throws XMLStreamException {
+    if (reader.getEventType() != XMLStreamConstants.START_ELEMENT) {
+      return null;
+    }
+    if ("row".equals(reader.getLocalName())) {
+      reader.next();
+    }
+    return parseValues();
+  }
+
+  private Row parseValues() throws XMLStreamException {
+    String value;
+    ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
+    while ((value = parseValue()) != null) {
+      builder.add(value);
+    }
+    return new Row(currentTable.name, currentTable.getColumnNames(), builder.toArray());
+  }
+
+  private String parseValue() throws XMLStreamException {
+    // <value>cell_value</value>
+    // parse <value>
+    reader.nextTag();
+    if (!"value".equals(reader.getLocalName())) {
+      return null;
+    }
+    reader.next();
+    // parse cell_value
+    String columnName = reader.getText();
+    // parse </value>
+    reader.next();
+    return columnName;
+  }
+
+  private static class Table {
+    /**
+     * The Name.
+     */
+    protected final String name;
+    private String[] columnNames;
+
+    /**
+     * Instantiates a new Table.
+     *
+     * @param name the name
+     */
+    public Table(String name) {
+      this.name = name;
+      this.columnNames = null;
     }
 
-    // DataIterator interface implementation ---------------------------------------------------------------------------
+    /**
+     * Add column.
+     *
+     * @param column the column
+     */
+    public void addColumn(String column) {
+      this.columnNames = ArrayUtil.append(column, this.columnNames);
+    }
 
     @Override
-    public DataContainer<Entity> next(DataContainer<Entity> container) {
-        try {
-            DbUnitUtil.skipNonStartTags(reader);
-            if (reader.getEventType() == XMLStreamConstants.END_DOCUMENT)
-                return null;
-            String elementName = reader.getLocalName();
-            Row row;
-            if ("table".equals(elementName))
-                row = parseTableAndFirstRow();
-            else if ("row".equals(elementName) || "column".equals(elementName))
-                row = parseRow();
-            else
-                throw new SyntaxError("Not an allowed element", "<" + elementName + ">");
-            if (row == null)
-                return null;
-            ComplexTypeDescriptor descriptor = getType(row);
-            Entity result = new Entity(descriptor);
-            String[] cells = row.getValues();
-            for (int i = 0; i < cells.length; i++) {
-                String rowValue = String.valueOf(ScriptUtil.evaluate(cells[i], context));
-                result.setComponent(row.getColumnName(i), rowValue);
-            }
-            return container.setData(result);
-        } catch (XMLStreamException e) {
-            throw new RuntimeException(e);
-        }
+    public String toString() {
+      return name + '[' + ArrayFormat.format(columnNames) + ']';
     }
 
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private Row parseTableAndFirstRow() throws XMLStreamException {
-        String tableName = reader.getAttributeValue(null, "name");
-        currentTable = new Table(tableName);
-        parseColumns();
-        return parseRow();
+    /**
+     * Get column names string [ ].
+     *
+     * @return the string [ ]
+     */
+    public String[] getColumnNames() {
+      return columnNames;
     }
-
-    protected void parseColumns() throws XMLStreamException {
-        String column;
-        while ((column = parseColumn()) != null)
-            currentTable.addColumn(column);
-    }
-
-    private String parseColumn() throws XMLStreamException {
-        // format: <column>column_name</column>
-        // parse <column>
-        reader.nextTag();
-        if (!"column".equals(reader.getLocalName()))
-            return null;
-        reader.next();
-        // parse column_name
-        String columnName = reader.getText();
-        // parse </column>
-        reader.next();
-        return columnName;
-    }
-
-    private Row parseRow() throws XMLStreamException {
-        if (reader.getEventType() != XMLStreamConstants.START_ELEMENT)
-            return null;
-        if ("row".equals(reader.getLocalName()))
-            reader.next();
-        return parseValues();
-    }
-
-    private Row parseValues() throws XMLStreamException {
-        String value;
-        ArrayBuilder<String> builder = new ArrayBuilder<String>(String.class);
-        while ((value = parseValue()) != null)
-            builder.add(value);
-        return new Row(currentTable.name, currentTable.getColumnNames(), builder.toArray());
-    }
-
-    private String parseValue() throws XMLStreamException {
-        // <value>cell_value</value>
-        // parse <value>
-        reader.nextTag();
-        if (!"value".equals(reader.getLocalName()))
-            return null;
-        reader.next();
-        // parse cell_value
-        String columnName = reader.getText();
-        // parse </value>
-        reader.next();
-        return columnName;
-    }
-
-    private static class Table {
-        protected String name;
-        private String[] columnNames;
-
-        public Table(String name) {
-            this.name = name;
-            this.columnNames = null;
-        }
-
-        public void addColumn(String column) {
-            this.columnNames = ArrayUtil.append(column, this.columnNames);
-        }
-
-        @Override
-        public String toString() {
-            return name + '[' + ArrayFormat.format(columnNames) + ']';
-        }
-
-        public String[] getColumnNames() {
-            return columnNames;
-        }
-    }
+  }
 
 }

@@ -31,7 +31,9 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
@@ -42,7 +44,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 @Documented
 @Constraint(validatedBy = CreditCardNumberValidator.class)
 @Target({METHOD, FIELD, TYPE})

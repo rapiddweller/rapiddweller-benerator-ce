@@ -28,47 +28,56 @@ package com.rapiddweller.benerator.storage;
 
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
-import com.rapiddweller.commons.ThreadAware;
+import com.rapiddweller.common.ThreadAware;
 
 /**
  * Stores an Entity in the associated {@link StorageSystem}. It replaces the class SystemProcessor.<br/>
  * <br/>
  * Created: 29.01.2008 09:35:07
- * @since 0.4.0
+ *
  * @author Volker Bergmann
+ * @since 0.4.0
  */
 public abstract class StorageSystemConsumer extends AbstractConsumer implements ThreadAware {
 
-    protected final StorageSystem system;
+  /**
+   * The System.
+   */
+  protected final StorageSystem system;
 
-    protected StorageSystemConsumer(StorageSystem system) {
-        this.system = system;
-    }
-    
-    @Override
-	public boolean isThreadSafe() {
-    	return (system instanceof ThreadAware && ((ThreadAware) system).isThreadSafe());
-    }
-    
-    @Override
-	public boolean isParallelizable() {
-    	return (system instanceof ThreadAware && ((ThreadAware) system).isParallelizable());
-    }
-    
-    @Override
-    public void flush() {
-        system.flush();
-    }
+  /**
+   * Instantiates a new Storage system consumer.
+   *
+   * @param system the system
+   */
+  protected StorageSystemConsumer(StorageSystem system) {
+    this.system = system;
+  }
 
-    @Override
-    public void close() {
-        system.close();
-    }
-    
-    @Override
-    public String toString() {
-    	return getClass().getSimpleName() + "[" + system + "]";
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return (system instanceof ThreadAware && ((ThreadAware) system).isThreadSafe());
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return (system instanceof ThreadAware && ((ThreadAware) system).isParallelizable());
+  }
+
+  @Override
+  public void flush() {
+    system.flush();
+  }
+
+  @Override
+  public void close() {
+    system.close();
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + system + "]";
+  }
 
 }
 

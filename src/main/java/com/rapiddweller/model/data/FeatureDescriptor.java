@@ -26,13 +26,13 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.Named;
-import com.rapiddweller.commons.NullSafeComparator;
-import com.rapiddweller.commons.Operation;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.collection.OrderedNameMap;
-import com.rapiddweller.commons.converter.AnyConverter;
-import com.rapiddweller.commons.converter.ToStringConverter;
+import com.rapiddweller.common.Named;
+import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.Operation;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.collection.OrderedNameMap;
+import com.rapiddweller.common.converter.AnyConverter;
+import com.rapiddweller.common.converter.ToStringConverter;
 
 import java.util.List;
 
@@ -45,158 +45,302 @@ import java.util.List;
  */
 public class FeatureDescriptor implements Named {
 
-    public static final String NAME = "name";
-    protected OrderedNameMap<FeatureDetail<?>> details;
-    protected DescriptorProvider provider;
-    /**
-     * The name of the feature. It is stored redundantly in the {@link #details} map and the copy in
-     * this attribute is used for high-performance retrieval of the name.
-     */
-    private String name;
+  /**
+   * The constant NAME.
+   */
+  public static final String NAME = "name";
+  /**
+   * The Details.
+   */
+  protected OrderedNameMap<FeatureDetail<?>> details;
+  /**
+   * The Provider.
+   */
+  protected DescriptorProvider provider;
+  /**
+   * The name of the feature. It is stored redundantly in the {@link #details} map and the copy in
+   * this attribute is used for high-performance retrieval of the name.
+   */
+  private String name;
 
-    // constructor -----------------------------------------------------------------------------------------------------
+  // constructor -----------------------------------------------------------------------------------------------------
 
-    public FeatureDescriptor(String name, DescriptorProvider provider) {
-        if (provider == null)
-            throw new IllegalArgumentException("provider is null");
-        if (provider.getDataModel() == null)
-            throw new IllegalArgumentException("provider's data model is null");
-        this.details = new OrderedNameMap<FeatureDetail<?>>();
-        this.provider = provider;
-        this.addConstraint(NAME, String.class, null);
-        this.setName(name);
+  /**
+   * Instantiates a new Feature descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   */
+  public FeatureDescriptor(String name, DescriptorProvider provider) {
+    if (provider == null) {
+      throw new IllegalArgumentException("provider is null");
     }
-
-    // typed interface -------------------------------------------------------------------------------------------------
-
-    @Override
-    public String getName() {
-        return name;
+    if (provider.getDataModel() == null) {
+      throw new IllegalArgumentException("provider's data model is null");
     }
+    this.details = new OrderedNameMap<>();
+    this.provider = provider;
+    this.addConstraint(NAME, String.class, null);
+    this.setName(name);
+  }
 
-    public void setName(String name) {
-        this.name = name; // name is stored redundantly for better performance
-        setDetailValue(NAME, name);
+  // typed interface -------------------------------------------------------------------------------------------------
+
+  @Override
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(String name) {
+    this.name = name; // name is stored redundantly for better performance
+    setDetailValue(NAME, name);
+  }
+
+  /**
+   * Gets provider.
+   *
+   * @return the provider
+   */
+  public DescriptorProvider getProvider() {
+    return provider;
+  }
+
+  /**
+   * Gets data model.
+   *
+   * @return the data model
+   */
+  public DataModel getDataModel() {
+    return provider.getDataModel();
+  }
+
+  // generic detail access -------------------------------------------------------------------------------------------
+
+  /**
+   * Supports detail boolean.
+   *
+   * @param name the name
+   * @return the boolean
+   */
+  public boolean supportsDetail(String name) {
+    return details.containsKey(name);
+  }
+
+  /**
+   * Gets declared detail value.
+   *
+   * @param name the name
+   * @return the declared detail value
+   */
+  public Object getDeclaredDetailValue(
+      String name) { // TODO v0.8 remove method? It does not differ from getDetailValue any more
+    return getConfiguredDetail(name).getValue();
+  }
+
+  /**
+   * Gets detail value.
+   *
+   * @param name the name
+   * @return the detail value
+   */
+  public Object getDetailValue(
+      String name) { // TODO v0.8 remove generic feature access?
+    return this.getConfiguredDetail(name).getValue();
+  }
+
+  /**
+   * Sets detail value.
+   *
+   * @param detailName  the detail name
+   * @param detailValue the detail value
+   */
+  public void setDetailValue(String detailName, Object detailValue) {
+    if ("name"
+        .equals(detailName)) {
+      // name is stored redundantly for better performance
+      this.name = (String) detailValue;
     }
-
-    public DescriptorProvider getProvider() {
-        return provider;
+    FeatureDetail<Object> detail = getConfiguredDetail(detailName);
+    Class<Object> detailType = detail.getType();
+    if (detailValue != null &&
+        !detailType.isAssignableFrom(detailValue.getClass())) {
+      detailValue = AnyConverter.convert(detailValue, detailType);
     }
+    detail.setValue(detailValue);
+  }
 
-    public DataModel getDataModel() {
-        return provider.getDataModel();
+  /**
+   * Gets details.
+   *
+   * @return the details
+   */
+  public List<FeatureDetail<?>> getDetails() {
+    return details.values();
+  }
+
+  // java.lang overrides ---------------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    String name = getName();
+    if (StringUtil.isEmpty(name)) {
+      name = "anonymous";
     }
+    return renderDetails(new StringBuilder(name)).toString();
+  }
 
-    // generic detail access -------------------------------------------------------------------------------------------
-
-    public boolean supportsDetail(String name) {
-        return details.containsKey(name);
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    public Object getDeclaredDetailValue(String name) { // TODO v0.8 remove method? It does not differ from getDetailValue any more
-        return getConfiguredDetail(name).getValue();
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
-
-    public Object getDetailValue(String name) { // TODO v0.8 remove generic feature access?
-        return this.getConfiguredDetail(name).getValue();
+    final FeatureDescriptor that = (FeatureDescriptor) o;
+    for (FeatureDetail<?> detail : details.values()) {
+      String detailName = detail.getName();
+      if (!NullSafeComparator
+          .equals(detail.getValue(),
+              that.getDetailValue(detailName))) {
+        return false;
+      }
     }
+    return true;
+  }
 
-    public void setDetailValue(String detailName, Object detailValue) {
-        if ("name".equals(detailName)) // name is stored redundantly for better performance
-            this.name = (String) detailValue;
-        FeatureDetail<Object> detail = getConfiguredDetail(detailName);
-        Class<Object> detailType = detail.getType();
-        if (detailValue != null && !detailType.isAssignableFrom(detailValue.getClass()))
-            detailValue = AnyConverter.convert(detailValue, detailType);
-        detail.setValue(detailValue);
-    }
+  @Override
+  public int hashCode() {
+    return getClass().hashCode() * 29 + details.hashCode();
+  }
 
-    public List<FeatureDetail<?>> getDetails() {
-        return details.values();
-    }
+  // helpers ---------------------------------------------------------------------------------------------------------
 
-    // java.lang overrides ---------------------------------------------------------------------------------------------
+  /**
+   * Render details string.
+   *
+   * @return the string
+   */
+  protected String renderDetails() {
+    return renderDetails(new StringBuilder()).toString();
+  }
 
-    @Override
-    public String toString() {
-        String name = getName();
-        if (StringUtil.isEmpty(name))
-            name = "anonymous";
-        return renderDetails(new StringBuilder(name)).toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        final FeatureDescriptor that = (FeatureDescriptor) o;
-        for (FeatureDetail<?> detail : details.values()) {
-            String detailName = detail.getName();
-            if (!NullSafeComparator.equals(detail.getValue(), that.getDetailValue(detailName)))
-                return false;
+  /**
+   * Render details string builder.
+   *
+   * @param builder the builder
+   * @return the string builder
+   */
+  protected StringBuilder renderDetails(StringBuilder builder) {
+    builder.append("[");
+    boolean empty = true;
+    for (FeatureDetail<?> descriptor : details.values()) {
+      if (descriptor.getValue() != null &&
+          !NAME.equals(descriptor.getName())) {
+        if (!empty) {
+          builder.append(", ");
         }
-        return true;
+        empty = false;
+        builder.append(descriptor.getName()).append("=");
+        builder.append(ToStringConverter
+            .convert(descriptor.getValue(), "[null]"));
+      }
     }
+    return builder.append("]");
+  }
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode() * 29 + details.hashCode();
+  /**
+   * Gets detail type.
+   *
+   * @param detailName the detail name
+   * @return the detail type
+   */
+  protected Class<?> getDetailType(String detailName) {
+    FeatureDetail<?> detail = details.get(detailName);
+    if (detail == null) {
+      throw new UnsupportedOperationException(
+          "Feature detail not supported: " + detailName);
     }
+    return detail.getType();
+  }
 
-    // helpers ---------------------------------------------------------------------------------------------------------
+  /**
+   * Add config.
+   *
+   * @param <T>  the type parameter
+   * @param name the name
+   * @param type the type
+   */
+  protected <T> void addConfig(String name, Class<T> type) {
+    addConfig(name, type, false);
+  }
 
-    protected String renderDetails() {
-        return renderDetails(new StringBuilder()).toString();
+  /**
+   * Add config.
+   *
+   * @param <T>        the type parameter
+   * @param name       the name
+   * @param type       the type
+   * @param deprecated the deprecated
+   */
+  protected <T> void addConfig(String name, Class<T> type,
+                               boolean deprecated) {
+    addDetail(name, type, false, deprecated, null);
+  }
+
+  /**
+   * Add constraint.
+   *
+   * @param <T>        the type parameter
+   * @param name       the name
+   * @param type       the type
+   * @param combinator the combinator
+   */
+  protected <T> void addConstraint(String name, Class<T> type,
+                                   Operation<T, T> combinator) {
+    addDetail(name, type, true, false, combinator);
+  }
+
+  /**
+   * Add detail.
+   *
+   * @param <T>        the type parameter
+   * @param detailName the detail name
+   * @param detailType the detail type
+   * @param constraint the constraint
+   * @param deprecated the deprecated
+   * @param combinator the combinator
+   */
+  protected <T> void addDetail(String detailName, Class<T> detailType,
+                               boolean constraint,
+                               boolean deprecated,
+                               Operation<T, T> combinator) {
+    this.details.put(detailName,
+        new FeatureDetail<>(detailName, detailType, constraint,
+            combinator));
+  }
+
+  // generic property access -----------------------------------------------------------------------------------------
+
+  /**
+   * Gets configured detail.
+   *
+   * @param <T>  the type parameter
+   * @param name the name
+   * @return the configured detail
+   */
+  @SuppressWarnings("unchecked")
+  public <T> FeatureDetail<T> getConfiguredDetail(String name) {
+    if (!supportsDetail(name)) {
+      throw new UnsupportedOperationException("Feature detail '" + name +
+          "' not supported in feature type: " + getClass().getName());
     }
-
-    protected StringBuilder renderDetails(StringBuilder builder) {
-        builder.append("[");
-        boolean empty = true;
-        for (FeatureDetail<?> descriptor : details.values())
-            if (descriptor.getValue() != null && !NAME.equals(descriptor.getName())) {
-                if (!empty)
-                    builder.append(", ");
-                empty = false;
-                builder.append(descriptor.getName()).append("=");
-                builder.append(ToStringConverter.convert(descriptor.getValue(), "[null]"));
-            }
-        return builder.append("]");
-    }
-
-    protected Class<?> getDetailType(String detailName) {
-        FeatureDetail<?> detail = details.get(detailName);
-        if (detail == null)
-            throw new UnsupportedOperationException("Feature detail not supported: " + detailName);
-        return detail.getType();
-    }
-
-    protected <T> void addConfig(String name, Class<T> type) {
-        addConfig(name, type, false);
-    }
-
-    protected <T> void addConfig(String name, Class<T> type, boolean deprecated) {
-        addDetail(name, type, false, deprecated, null);
-    }
-
-    protected <T> void addConstraint(String name, Class<T> type, Operation<T, T> combinator) {
-        addDetail(name, type, true, false, combinator);
-    }
-
-    protected <T> void addDetail(String detailName, Class<T> detailType, boolean constraint,
-                                 boolean deprecated, Operation<T, T> combinator) {
-        this.details.put(detailName, new FeatureDetail<T>(detailName, detailType, constraint, combinator));
-    }
-
-    // generic property access -----------------------------------------------------------------------------------------
-
-    @SuppressWarnings("unchecked")
-    public <T> FeatureDetail<T> getConfiguredDetail(String name) {
-        if (!supportsDetail(name))
-            throw new UnsupportedOperationException("Feature detail '" + name +
-                    "' not supported in feature type: " + getClass().getName());
-        return (FeatureDetail<T>) details.get(name);
-    }
+    return (FeatureDetail<T>) details.get(name);
+  }
 
 }

@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.engine.expression.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStringAttribute;
-
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.StorageSystem;
@@ -38,97 +35,121 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.parser.xml.BeanParser;
 import com.rapiddweller.benerator.storage.StorageSystemInserter;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.Escalator;
-import com.rapiddweller.commons.LoggerEscalator;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.Escalator;
+import com.rapiddweller.common.LoggerEscalator;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.expression.DynamicExpression;
 import org.w3c.dom.Element;
 
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CLASS;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CONSUMER;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAME;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_REF;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SPEC;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_CONSUMER;
+import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStringAttribute;
+
 /**
  * Parses a {@link Consumer} specification in an XML element in a descriptor file.<br/><br/>
  * Created at 24.07.2009 07:21:16
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class XMLConsumerExpression extends DynamicExpression<Consumer> {
-	
-	private Escalator escalator;
 
-	private Element entityElement;
-	private boolean consumersExpected;
-	private ResourceManager resourceManager;
+  private final Escalator escalator;
 
-    public XMLConsumerExpression(Element entityElement, boolean consumersExpected, ResourceManager resourceManager) {
-    	this.entityElement = entityElement;
-    	this.consumersExpected = consumersExpected;
-		this.escalator = new LoggerEscalator();
-		this.resourceManager = resourceManager;
+  private final Element entityElement;
+  private final boolean consumersExpected;
+  private final ResourceManager resourceManager;
+
+  /**
+   * Instantiates a new Xml consumer expression.
+   *
+   * @param entityElement     the entity element
+   * @param consumersExpected the consumers expected
+   * @param resourceManager   the resource manager
+   */
+  public XMLConsumerExpression(Element entityElement, boolean consumersExpected, ResourceManager resourceManager) {
+    this.entityElement = entityElement;
+    this.consumersExpected = consumersExpected;
+    this.escalator = new LoggerEscalator();
+    this.resourceManager = resourceManager;
+  }
+
+  @Override
+  public Consumer evaluate(Context context) {
+    BeneratorContext beneratorContext = (BeneratorContext) context;
+    ConsumerChain consumerChain = new ConsumerChain();
+
+    // parse consumer attribute
+    if (entityElement.hasAttribute(ATT_CONSUMER)) {
+      String consumerSpec = parseStringAttribute(entityElement, ATT_CONSUMER, context);
+      BeanSpec[] beanSpecs = DatabeneScriptParser.resolveBeanSpecList(consumerSpec, beneratorContext);
+      for (BeanSpec beanSpec : beanSpecs) {
+        addConsumer(beanSpec, beneratorContext, consumerChain);
+      }
     }
 
-    @Override
-	public Consumer evaluate(Context context) {
-		BeneratorContext beneratorContext = (BeneratorContext) context;
-		ConsumerChain consumerChain = new ConsumerChain();
-		
-		// parse consumer attribute
-		if (entityElement.hasAttribute(ATT_CONSUMER)) {
-			String consumerSpec = parseStringAttribute(entityElement, ATT_CONSUMER, context);
-			BeanSpec[] beanSpecs = DatabeneScriptParser.resolveBeanSpecList(consumerSpec, beneratorContext);
-			for (BeanSpec beanSpec : beanSpecs) {
-				addConsumer(beanSpec, beneratorContext, consumerChain);
-			}
-		}
-		
-		// parse consumer sub elements
-		Element[] consumerElements = XMLUtil.getChildElements(entityElement, true, EL_CONSUMER);
-		for (int i = 0; i < consumerElements.length; i++) {
-			Element consumerElement = consumerElements[i];
-			BeanSpec beanSpec;
-			if (consumerElement.hasAttribute(ATT_REF)) {
-				String ref = parseStringAttribute(consumerElement, ATT_REF, context);
-				beanSpec = BeanSpec.createReference(beneratorContext.get(ref));
-			} else if (consumerElement.hasAttribute(ATT_CLASS) || consumerElement.hasAttribute(ATT_SPEC)) {
-				beanSpec = BeanParser.resolveBeanExpression(consumerElement, beneratorContext);
-			} else
-				throw new UnsupportedOperationException(
-						"Can't handle " + XMLUtil.formatShort(consumerElement));
-			addConsumer(beanSpec, beneratorContext, consumerChain);
-		}
-		
-		if (consumerChain.componentCount() == 0 && consumersExpected) {
-			String entityName = parseStringAttribute(entityElement, ATT_NAME, context, false);
-			escalator.escalate("No consumers defined for " + entityName, this, null);
-		}
-		for (Consumer consumer : consumerChain.getComponents())
-			resourceManager.addResource(consumer);
-		return (consumerChain.componentCount() == 1 ? consumerChain.getComponent(0) : consumerChain);
-	}
+    // parse consumer sub elements
+    Element[] consumerElements = XMLUtil.getChildElements(entityElement, true, EL_CONSUMER);
+    for (Element consumerElement : consumerElements) {
+      BeanSpec beanSpec;
+      if (consumerElement.hasAttribute(ATT_REF)) {
+        String ref = parseStringAttribute(consumerElement, ATT_REF, context);
+        beanSpec = BeanSpec.createReference(beneratorContext.get(ref));
+      } else if (consumerElement.hasAttribute(ATT_CLASS) || consumerElement.hasAttribute(ATT_SPEC)) {
+        beanSpec = BeanParser.resolveBeanExpression(consumerElement, beneratorContext);
+      } else {
+        throw new UnsupportedOperationException(
+            "Can't handle " + XMLUtil.formatShort(consumerElement));
+      }
+      addConsumer(beanSpec, beneratorContext, consumerChain);
+    }
 
-    @SuppressWarnings("resource")
-	public static void addConsumer(BeanSpec beanSpec, BeneratorContext context, ConsumerChain chain) {
-    	Consumer consumer;
-    	Object bean = beanSpec.getBean();
-    	// check consumer type
-    	if (bean instanceof Consumer) {
-    		consumer = (Consumer) bean;
-    	} else if (bean instanceof StorageSystem) {
-    		consumer = new StorageSystemInserter((StorageSystem) bean);
-    	} else
-    		throw new UnsupportedOperationException("Consumer type not supported: " + BeanUtil.simpleClassName(bean));
-    	consumer = BeneratorFactory.getInstance().configureConsumer(consumer, context);
-    	if (beanSpec.isReference())
-    		consumer = new NonClosingConsumerProxy(consumer);
-    	chain.addComponent(consumer);
-	}
+    if (consumerChain.componentCount() == 0 && consumersExpected) {
+      String entityName = parseStringAttribute(entityElement, ATT_NAME, context, false);
+      escalator.escalate("No consumers defined for " + entityName, this, null);
+    }
+    for (Consumer consumer : consumerChain.getComponents()) {
+      resourceManager.addResource(consumer);
+    }
+    return (consumerChain.componentCount() == 1 ? consumerChain.getComponent(0) : consumerChain);
+  }
 
-	@Override
-	public String toString() {
-	    return getClass().getSimpleName() + '(' + XMLUtil.formatShort(entityElement) + ')';
-	}
-	
+  /**
+   * Add consumer.
+   *
+   * @param beanSpec the bean spec
+   * @param context  the context
+   * @param chain    the chain
+   */
+  public static void addConsumer(BeanSpec beanSpec, BeneratorContext context, ConsumerChain chain) {
+    Consumer consumer;
+    Object bean = beanSpec.getBean();
+    // check consumer type
+    if (bean instanceof Consumer) {
+      consumer = (Consumer) bean;
+    } else if (bean instanceof StorageSystem) {
+      consumer = new StorageSystemInserter((StorageSystem) bean);
+    } else {
+      throw new UnsupportedOperationException("Consumer type not supported: " + BeanUtil.simpleClassName(bean));
+    }
+    consumer = BeneratorFactory.getInstance().configureConsumer(consumer, context);
+    if (beanSpec.isReference()) {
+      consumer = new NonClosingConsumerProxy(consumer);
+    }
+    chain.addComponent(consumer);
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '(' + XMLUtil.formatShort(entityElement) + ')';
+  }
+
 }

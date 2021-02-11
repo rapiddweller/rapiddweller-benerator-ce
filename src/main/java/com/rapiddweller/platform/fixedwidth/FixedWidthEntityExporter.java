@@ -27,13 +27,13 @@
 package com.rapiddweller.platform.fixedwidth;
 
 import com.rapiddweller.benerator.consumer.TextFileExporter;
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.commons.ArrayFormat;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.collection.OrderedNameMap;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Locale;
 import java.util.Map;
@@ -47,103 +47,142 @@ import java.util.Map;
  */
 public class FixedWidthEntityExporter extends TextFileExporter {
 
-    private static final Logger LOGGER = LogManager.getLogger(FixedWidthEntityExporter.class);
+  private static final Logger LOGGER = LogManager.getLogger(FixedWidthEntityExporter.class);
 
-    private final Map<String, String> formats;
-    private Map<String, FWRecordFormatter> formatters;
+  private final Map<String, String> formats;
+  private Map<String, FWRecordFormatter> formatters;
 
-    private Locale locale;
+  private Locale locale;
 
-    public FixedWidthEntityExporter() {
-        this("export.fcw", null);
+  /**
+   * Instantiates a new Fixed width entity exporter.
+   */
+  public FixedWidthEntityExporter() {
+    this("export.fcw", null);
+  }
+
+  /**
+   * Instantiates a new Fixed width entity exporter.
+   *
+   * @param uri              the uri
+   * @param columnFormatList the column format list
+   */
+  public FixedWidthEntityExporter(String uri, String columnFormatList) {
+    this(uri, null, columnFormatList);
+  }
+
+  /**
+   * Instantiates a new Fixed width entity exporter.
+   *
+   * @param uri              the uri
+   * @param encoding         the encoding
+   * @param columnFormatList the column format list
+   */
+  public FixedWidthEntityExporter(String uri, String encoding, String columnFormatList) {
+    super(uri, encoding, null);
+    this.uri = uri;
+    this.formats = OrderedNameMap.createCaseInsensitiveMap();
+    this.formatters = null;
+    this.locale = Locale.US;
+    setColumns(columnFormatList);
+    setDecimalPattern("0.##");
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Sets locale.
+   *
+   * @param locale the locale
+   */
+  public void setLocale(Locale locale) {
+    this.locale = locale;
+  }
+
+  /**
+   * Sets columns.
+   *
+   * @param columnFormatList the column format list
+   */
+  public void setColumns(String columnFormatList) {
+    if (columnFormatList != null) {
+      this.formats.put("*", columnFormatList);
+    } else {
+      this.formats.clear();
     }
+  }
 
-    public FixedWidthEntityExporter(String uri, String columnFormatList) {
-        this(uri, null, columnFormatList);
+  /**
+   * Gets formats.
+   *
+   * @return the formats
+   */
+  public Map<String, String> getFormats() {
+    return formats;
+  }
+
+  // Consumer interface ----------------------------------------------------------------------------------------------
+
+  @Override
+  public void flush() {
+    if (printer != null) {
+      printer.flush();
     }
+  }
 
-    public FixedWidthEntityExporter(String uri, String encoding, String columnFormatList) {
-        super(uri, encoding, null);
-        this.uri = uri;
-        this.formats = OrderedNameMap.createCaseInsensitiveMap();
-        this.formatters = null;
-        this.locale = Locale.US;
-        setColumns(columnFormatList);
-        setDecimalPattern("0.##");
+  @Override
+  public void close() {
+    IOUtil.close(printer);
+  }
+
+  // Callback methods for TextFileExporter ---------------------------------------------------------------------------
+
+  @Override
+  protected void postInitPrinter(Object object) {
+    if (this.formats.isEmpty()) {
+      throw new ConfigurationError("No format(s) set on " + getClass().getName());
     }
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
+  @Override
+  protected void startConsumingImpl(Object object) {
+    LOGGER.debug("exporting {}", object);
+    if (!(object instanceof Entity)) {
+      throw new IllegalArgumentException("Expected Entity");
     }
+    Entity entity = (Entity) object;
+    getFormatter(entity.type()).format(entity, printer);
+    printer.print(lineSeparator);
+  }
 
-    public void setColumns(String columnFormatList) {
-        if (columnFormatList != null)
-            this.formats.put("*", columnFormatList);
-        else
-            this.formats.clear();
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private FWRecordFormatter getFormatter(String type) {
+    if (this.formatters == null) {
+      initFormatters();
     }
-
-    public Map<String, String> getFormats() {
-        return formats;
+    FWRecordFormatter formatter = formatters.get(type);
+    if (formatter == null) {
+      formatter = formatters.get("*");
     }
-
-    // Consumer interface ----------------------------------------------------------------------------------------------
-
-    @Override
-    public void flush() {
-        if (printer != null)
-            printer.flush();
+    if (formatter == null) {
+      throw new ConfigurationError("No format defined for type " + type);
     }
+    return formatter;
+  }
 
-    @Override
-    public void close() {
-        IOUtil.close(printer);
+  private void initFormatters() {
+    this.formatters = OrderedNameMap.createCaseInsensitiveMap();
+    for (Map.Entry<String, String> entry : this.formats.entrySet()) {
+      this.formatters.put(entry.getKey(), new FWRecordFormatter(entry.getValue(), getNullString(), locale));
     }
+  }
 
-    // Callback methods for TextFileExporter ---------------------------------------------------------------------------
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    @Override
-    protected void postInitPrinter(Object object) {
-        if (this.formats.isEmpty())
-            throw new ConfigurationError("No format(s) set on " + getClass().getName());
-    }
-
-    @Override
-    protected void startConsumingImpl(Object object) {
-        LOGGER.debug("exporting {}", object);
-        if (!(object instanceof Entity))
-            throw new IllegalArgumentException("Expected Entity");
-        Entity entity = (Entity) object;
-        getFormatter(entity.type()).format(entity, printer);
-        printer.print(lineSeparator);
-    }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private FWRecordFormatter getFormatter(String type) {
-        if (this.formatters == null)
-            initFormatters();
-        FWRecordFormatter formatter = formatters.get(type);
-        if (formatter == null)
-            formatter = formatters.get("*");
-        if (formatter == null)
-            throw new ConfigurationError("No format defined for type " + type);
-        return formatter;
-    }
-
-    private void initFormatters() {
-        this.formatters = OrderedNameMap.createCaseInsensitiveMap();
-        for (Map.Entry<String, String> entry : this.formats.entrySet())
-            this.formatters.put(entry.getKey(), new FWRecordFormatter(entry.getValue(), getNullString(), locale));
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + ArrayFormat.format() + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + ArrayFormat.format() + ']';
+  }
 
 }

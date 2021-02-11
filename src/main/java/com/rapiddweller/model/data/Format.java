@@ -27,12 +27,23 @@
 package com.rapiddweller.model.data;
 
 /**
- * Enumeration for import formats.<br/><br/>
+ * Enumeration for import format.<br/><br/>
  * Created: 25.01.2013 08:42:13
  *
  * @author Volker Bergmann
  * @since 0.8.0
  */
 public enum Format {
-    formatted, raw, globalDefault
+  /**
+   * Formatted format.
+   */
+  formatted,
+  /**
+   * Raw format.
+   */
+  raw,
+  /**
+   * Global default format.
+   */
+  globalDefault
 }

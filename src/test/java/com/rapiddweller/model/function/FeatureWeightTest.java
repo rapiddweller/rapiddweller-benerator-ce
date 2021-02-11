@@ -26,28 +26,32 @@
 
 package com.rapiddweller.model.function;
 
+import com.rapiddweller.benerator.distribution.FeatureWeight;
+import com.rapiddweller.common.CollectionUtil;
+import org.junit.Test;
+
 import java.util.Map;
 
-import com.rapiddweller.benerator.distribution.FeatureWeight;
-import com.rapiddweller.commons.CollectionUtil;
-
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the EntityAttributeWeightFunction.<br/><br/>
  * Created at 27.04.2008 17:41:49
- * @since 0.5.2
+ *
  * @author Volker Bergmann
+ * @since 0.5.2
  */
 public class FeatureWeightTest {
-	
-	@Test
-	public void test() {
-		FeatureWeight weighter = new FeatureWeight("age");
-		assertEquals("age", weighter.getWeightFeature());
-		Map<?,?> map = CollectionUtil.buildMap("name", "Alice", "age", "23");
-		assertEquals(23., weighter.weight(map), 0);
-	}
-	
+
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    FeatureWeight weighter = new FeatureWeight("age");
+    assertEquals("age", weighter.getWeightFeature());
+    Map<?, ?> map = CollectionUtil.buildMap("name", "Alice", "age", "23");
+    assertEquals(23., weighter.weight(map), 0);
+  }
+
 }

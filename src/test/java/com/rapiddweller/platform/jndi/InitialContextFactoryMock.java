@@ -26,7 +26,7 @@
 
 package com.rapiddweller.platform.jndi;
 
-import java.util.Hashtable;
+import com.rapiddweller.benerator.factory.ConsumerMock;
 
 import javax.naming.Binding;
 import javax.naming.Context;
@@ -35,154 +35,154 @@ import javax.naming.NameClassPair;
 import javax.naming.NameParser;
 import javax.naming.NamingEnumeration;
 import javax.naming.spi.InitialContextFactory;
-
-import com.rapiddweller.benerator.factory.ConsumerMock;
+import java.util.Hashtable;
 
 /**
  * Helper class for mocking JNDI functionality.<br/><br/>
  * Created: 21.10.2009 20:03:01
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class InitialContextFactoryMock implements InitialContextFactory, Context {
-	
-	@Override
-	public Context getInitialContext(Hashtable<?, ?> environment) {
-		return this;
-    }
-	
-	@Override
-	public Object addToEnvironment(String s, Object obj) {
-        return null;
-    }
 
-	@Override
-	public void bind(Name name, Object obj) {
-    }
+  @Override
+  public Context getInitialContext(Hashtable<?, ?> environment) {
+    return this;
+  }
 
-	@Override
-	public void bind(String s, Object obj) {
-    }
+  @Override
+  public Object addToEnvironment(String s, Object obj) {
+    return null;
+  }
 
-	@Override
-	public void close() {
-    }
+  @Override
+  public void bind(Name name, Object obj) {
+  }
 
-	@Override
-	public Name composeName(Name name, Name name1) {
-        return null;
-    }
+  @Override
+  public void bind(String s, Object obj) {
+  }
 
-	@Override
-	public String composeName(String s, String s1) {
-        return null;
-    }
+  @Override
+  public void close() {
+  }
 
-	@Override
-	public Context createSubcontext(Name name) {
-        return null;
-    }
+  @Override
+  public Name composeName(Name name, Name name1) {
+    return null;
+  }
 
-	@Override
-	public Context createSubcontext(String s) {
-        return null;
-    }
+  @Override
+  public String composeName(String s, String s1) {
+    return null;
+  }
 
-	@Override
-	public void destroySubcontext(Name name) {
-    }
+  @Override
+  public Context createSubcontext(Name name) {
+    return null;
+  }
 
-	@Override
-	public void destroySubcontext(String s) {
-    }
+  @Override
+  public Context createSubcontext(String s) {
+    return null;
+  }
 
-	@Override
-	public Hashtable<?, ?> getEnvironment() {
-        return null;
-    }
+  @Override
+  public void destroySubcontext(Name name) {
+  }
 
-	@Override
-	public String getNameInNamespace() {
-        return null;
-    }
+  @Override
+  public void destroySubcontext(String s) {
+  }
 
-	@Override
-	public NameParser getNameParser(Name name) {
-        return null;
-    }
+  @Override
+  public Hashtable<?, ?> getEnvironment() {
+    return null;
+  }
 
-	@Override
-	public NameParser getNameParser(String s) {
-        return null;
-    }
+  @Override
+  public String getNameInNamespace() {
+    return null;
+  }
 
-	@Override
-	public NamingEnumeration<NameClassPair> list(Name name) {
-        return null;
-    }
+  @Override
+  public NameParser getNameParser(Name name) {
+    return null;
+  }
 
-	@Override
-	public NamingEnumeration<NameClassPair> list(String s) {
-        return null;
-    }
+  @Override
+  public NameParser getNameParser(String s) {
+    return null;
+  }
 
-	@Override
-	public NamingEnumeration<Binding> listBindings(Name name) {
-        return null;
-    }
+  @Override
+  public NamingEnumeration<NameClassPair> list(Name name) {
+    return null;
+  }
 
-	@Override
-	public NamingEnumeration<Binding> listBindings(String s) {
-        return null;
-    }
+  @Override
+  public NamingEnumeration<NameClassPair> list(String s) {
+    return null;
+  }
 
-	@Override
-	public Object lookup(Name name) {
-        return new ConsumerMock();
-    }
+  @Override
+  public NamingEnumeration<Binding> listBindings(Name name) {
+    return null;
+  }
 
-	@Override
-	public Object lookup(String s) {
-        return new ConsumerMock();
-    }
+  @Override
+  public NamingEnumeration<Binding> listBindings(String s) {
+    return null;
+  }
 
-	@Override
-	public Object lookupLink(Name name) {
-        return null;
-    }
+  @Override
+  public Object lookup(Name name) {
+    return new ConsumerMock();
+  }
 
-	@Override
-	public Object lookupLink(String s) {
-        return null;
-    }
+  @Override
+  public Object lookup(String s) {
+    return new ConsumerMock();
+  }
 
-	@Override
-	public void rebind(Name name, Object obj) {
-    }
+  @Override
+  public Object lookupLink(Name name) {
+    return null;
+  }
 
-	@Override
-	public void rebind(String s, Object obj) {
-    }
+  @Override
+  public Object lookupLink(String s) {
+    return null;
+  }
 
-	@Override
-	public Object removeFromEnvironment(String s) {
-        return null;
-    }
+  @Override
+  public void rebind(Name name, Object obj) {
+  }
 
-	@Override
-	public void rename(Name name, Name name1) {
-    }
+  @Override
+  public void rebind(String s, Object obj) {
+  }
 
-	@Override
-	public void rename(String s, String s1) {
-    }
+  @Override
+  public Object removeFromEnvironment(String s) {
+    return null;
+  }
 
-	@Override
-	public void unbind(Name name) {
-    }
+  @Override
+  public void rename(Name name, Name name1) {
+  }
 
-	@Override
-	public void unbind(String s) {
-    }
-	
+  @Override
+  public void rename(String s, String s1) {
+  }
+
+  @Override
+  public void unbind(Name name) {
+  }
+
+  @Override
+  public void unbind(String s) {
+  }
+
 }

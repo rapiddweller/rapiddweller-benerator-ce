@@ -31,76 +31,107 @@ import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 
 /**
- * Long Generator that implements a 'shuffle' Long Sequence: 
- * It starts with min and produced numbers by continuously incrementing the cursor 
- * by a fix <code>increment</code> value; when <code>max</code> is reached, it 
+ * Long Generator that implements a 'shuffle' Long Sequence:
+ * It starts with min and produced numbers by continuously incrementing the cursor
+ * by a fix <code>increment</code> value; when <code>max</code> is reached, it
  * repeats the procedure starting by min+granularity, later min+2*granularity and so on.
  * The generated numbers are unique as long as the generator is not reset.<br/>
  * <br/>
  * Created: 18.06.2006 14:40:29
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class ShuffleLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
-    private long increment;
-    private Long next;
+  private long increment;
+  private Long next;
 
-    public ShuffleLongGenerator() {
-        this(Long.MIN_VALUE, Long.MAX_VALUE);
+  /**
+   * Instantiates a new Shuffle long generator.
+   */
+  public ShuffleLongGenerator() {
+    this(Long.MIN_VALUE, Long.MAX_VALUE);
+  }
+
+  /**
+   * Instantiates a new Shuffle long generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public ShuffleLongGenerator(long min, long max) {
+    this(min, max, 2, 1);
+  }
+
+  /**
+   * Instantiates a new Shuffle long generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   * @param increment   the increment
+   */
+  public ShuffleLongGenerator(long min, long max, long granularity, long increment) {
+    super(Long.class, min, max, granularity);
+    this.increment = increment;
+    reset();
+  }
+
+  // config properties -----------------------------------------------------------------------------------------------
+
+  /**
+   * Gets increment.
+   *
+   * @return the increment
+   */
+  public long getIncrement() {
+    return increment;
+  }
+
+  /**
+   * Sets increment.
+   *
+   * @param increment the increment
+   */
+  public void setIncrement(long increment) {
+    this.increment = increment;
+  }
+
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    if (granularity <= 0) {
+      throw new InvalidGeneratorSetupException("Granularity must be greater than zero, but is " + granularity);
     }
-
-    public ShuffleLongGenerator(long min, long max) {
-        this(min, max, 2, 1);
+    if (min < max && increment <= 0) {
+      throw new InvalidGeneratorSetupException("Unsupported increment value: " + increment);
     }
+    next = min;
+    super.init(context);
+  }
 
-    public ShuffleLongGenerator(long min, long max, long granularity, long increment) {
-        super(Long.class, min, max, granularity);
-        this.increment = increment;
-        reset();
+  @Override
+  public synchronized Long generate() {
+    assertInitialized();
+    if (next == null) {
+      return null;
     }
-
-    // config properties -----------------------------------------------------------------------------------------------
-
-    public long getIncrement() {
-        return increment;
+    long result = next;
+    if (next + increment <= max) {
+      next += increment;
+    } else {
+      long newOffset = (next - min + granularity) % increment;
+      next = (newOffset > 0 ? min + newOffset : null);
     }
+    return result;
+  }
 
-    public void setIncrement(long increment) {
-        this.increment = increment;
-    }
-
-    // Generator interface ---------------------------------------------------------------------------------------------
-
-    @Override
-	public void init(GeneratorContext context) {
-        assertNotInitialized();
-        if (granularity <= 0)
-            throw new InvalidGeneratorSetupException("Granularity must be greater than zero, but is " + granularity);
-        if (min < max && increment <= 0)
-            throw new InvalidGeneratorSetupException("Unsupported increment value: " + increment);
-        next = min;
-        super.init(context);
-    }
-
-	@Override
-	public synchronized Long generate() {
-        assertInitialized();
-        if (next == null)
-        	return null;
-        long result = next;
-        if (next + increment <= max)
-        	next += increment;
-        else {
-        	long newOffset = (next - min + granularity) % increment;
-        	next = (newOffset > 0 ? min + newOffset : null);
-        }
-        return result;
-    }
-    
-    @Override
-    public synchronized void reset() {
-    	this.next = min;
-    }
+  @Override
+  public synchronized void reset() {
+    this.next = min;
+  }
 
 }

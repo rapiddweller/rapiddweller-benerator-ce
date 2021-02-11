@@ -32,30 +32,52 @@ import java.util.List;
 /**
  * Wraps the complete configuration of a multi-file anonymization.<br/><br/>
  * Created: 27.02.2014 14:10:16
- * @since 0.9.0
+ *
  * @author Volker Bergmann
+ * @since 0.9.0
  */
-
 public class AnonymizationSetup {
-	
-	List<String> files;
-	List<Anonymization> anonymizations;
-	
-	public AnonymizationSetup(List<String> files, List<Anonymization> anonymizations) {
-		this.files = files;
-		this.anonymizations = anonymizations;
-	}
-	
-	public List<String> getFiles() {
-		return files;
-	}
-	
-	public List<Anonymization> getAnonymizations() {
-		return anonymizations;
-	}
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + anonymizations.toString() + files.toString();
-	}
+
+  /**
+   * The Files.
+   */
+  final List<String> files;
+  /**
+   * The Anonymizations.
+   */
+  final List<Anonymization> anonymizations;
+
+  /**
+   * Instantiates a new Anonymization setup.
+   *
+   * @param files          the files
+   * @param anonymizations the anonymizations
+   */
+  public AnonymizationSetup(List<String> files, List<Anonymization> anonymizations) {
+    this.files = files;
+    this.anonymizations = anonymizations;
+  }
+
+  /**
+   * Gets files.
+   *
+   * @return the files
+   */
+  public List<String> getFiles() {
+    return files;
+  }
+
+  /**
+   * Gets anonymizations.
+   *
+   * @return the anonymizations
+   */
+  public List<Anonymization> getAnonymizations() {
+    return anonymizations;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + anonymizations.toString() + files.toString();
+  }
 }

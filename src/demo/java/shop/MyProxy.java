@@ -29,7 +29,7 @@ package shop;
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.consumer.ConsumerProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -40,38 +40,62 @@ import org.apache.logging.log4j.LogManager;
  */
 public class MyProxy extends ConsumerProxy {
 
-    private static Logger logger = LogManager.getLogger(MyProxy.class);
+  private static Logger logger = LogManager.getLogger(MyProxy.class);
 
-    public MyProxy() {
-        this(null);
-    }
+  /**
+   * Instantiates a new My proxy.
+   */
+  public MyProxy() {
+    this(null);
+  }
 
-    public MyProxy(Consumer target) {
-        super(target);
-    }
+  /**
+   * Instantiates a new My proxy.
+   *
+   * @param target the target
+   */
+  public MyProxy(Consumer target) {
+    super(target);
+  }
 
-    // Consumer interface ----------------------------------------------------------------------------------------------
+  // Consumer interface ----------------------------------------------------------------------------------------------
 
-    @Override
-    public void startConsuming(ProductWrapper<?> wrapper) {
-        logger.info(wrapper.toString());
-        target.startConsuming(wrapper);
-    }
+  /**
+   * Start consuming.
+   *
+   * @param wrapper the wrapper
+   */
+  @Override
+  public void startConsuming(ProductWrapper<?> wrapper) {
+    logger.info(wrapper.toString());
+    target.startConsuming(wrapper);
+  }
 
-    @Override
-    public void finishConsuming(ProductWrapper<?> wrapper) {
-        logger.info(wrapper.toString());
-        target.finishConsuming(wrapper);
-    }
+  /**
+   * Finish consuming.
+   *
+   * @param wrapper the wrapper
+   */
+  @Override
+  public void finishConsuming(ProductWrapper<?> wrapper) {
+    logger.info(wrapper.toString());
+    target.finishConsuming(wrapper);
+  }
 
-    @Override
-    public void flush() {
-        target.flush();
-    }
+  /**
+   * Flush.
+   */
+  @Override
+  public void flush() {
+    target.flush();
+  }
 
-    @Override
-    public void close() {
-        IOUtil.close(target);
-    }
+  /**
+   * Close.
+   */
+  @Override
+  public void close() {
+    IOUtil.close(target);
+  }
 
 }

@@ -26,50 +26,62 @@
 
 package com.rapiddweller.benerator.xml;
 
-import static org.junit.Assert.*;
+import com.rapiddweller.benerator.file.XMLFileGenerator;
+import com.rapiddweller.benerator.test.GeneratorTest;
+import com.rapiddweller.benerator.util.GeneratorUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.xml.XMLUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import java.io.File;
 import java.io.IOException;
 
-import com.rapiddweller.benerator.file.XMLFileGenerator;
-import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.xml.XMLUtil;
-import org.junit.Test;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests the XMLFileGenerator.<br/><br/>
  * Created: 06.03.2008 11:16:45
- * @since 0.5.0
+ *
  * @author Volker Bergmann
+ * @since 0.5.0
  */
 public class XMLFileGeneratorTest extends GeneratorTest {
-    
-	private static final String SIMPLE_ELEMENT_TEST_XSD = "com/rapiddweller/platform/xml/simple-element-test.xsd";
-	private static final String BEAN_TEST_XSD = "com/rapiddweller/benerator/xml/bean_test.xsd";
-    //private static final String VARIABLE_TEST_XSD = "com/rapiddweller/benerator/xml/variable_test.xsd";
 
-    private static final Logger logger = LogManager.getLogger(XMLFileGeneratorTest.class);
-    
-    @Test
-    public void testSimpleTypeElement() throws IOException {
-        createXMLFile(SIMPLE_ELEMENT_TEST_XSD, "root", "target/simple-element-test.xml");
-    }
-    
-    @Test
-    public void testBean() throws IOException {
-        Document document = createXMLFile(BEAN_TEST_XSD, "root", "target/bean_test.xml");
-        Element root = document.getDocumentElement();
-        assertEquals("root", root.getNodeName());
-        Element[] children = XMLUtil.getChildElements(root);
-        assertEquals(1, children.length);
-        assertElementNameAndText(children[0], "result", "OK");
-    }
+  private static final String SIMPLE_ELEMENT_TEST_XSD = "com/rapiddweller/platform/xml/simple-element-test.xsd";
+  private static final String BEAN_TEST_XSD = "com/rapiddweller/benerator/xml/bean_test.xsd";
+  //private static final String VARIABLE_TEST_XSD = "com/rapiddweller/benerator/xml/variable_test.xsd";
+
+  private static final Logger logger = LogManager.getLogger(XMLFileGeneratorTest.class);
+
+  /**
+   * Test simple type element.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void testSimpleTypeElement() throws IOException {
+    createXMLFile(SIMPLE_ELEMENT_TEST_XSD, "root", "target/simple-element-test.xml");
+  }
+
+  /**
+   * Test bean.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void testBean() throws IOException {
+    Document document = createXMLFile(BEAN_TEST_XSD, "root", "target/bean_test.xml");
+    Element root = document.getDocumentElement();
+    assertEquals("root", root.getNodeName());
+    Element[] children = XMLUtil.getChildElements(root);
+    assertEquals(1, children.length);
+    assertElementNameAndText(children[0], "result", "OK");
+  }
 	
     /* TODO v0.8 support variables in XML Schema-based generation
     @Test
@@ -83,26 +95,25 @@ public class XMLFileGeneratorTest extends GeneratorTest {
         assertEquals("Alice", root.getAttribute("entity_att"));
     }
     */
-    
-    // private helpers -------------------------------------------------------------------------------------------------
 
-    private static void assertElementNameAndText(Element child, String name, String text) {
-        assertNotNull(child);
-        assertEquals(name, child.getNodeName());
-        assertEquals(text, XMLUtil.getText(child));
-    }
+  // private helpers -------------------------------------------------------------------------------------------------
 
-    private Document createXMLFile(String schemaUri, String root, String filename) throws IOException {
-    	context.setContextUri(IOUtil.getParentUri(schemaUri));
-        XMLFileGenerator generator = new XMLFileGenerator(schemaUri, root, filename);
-        generator.init(context);
-        File file = GeneratorUtil.generateNonNull(generator);
-        assertNotNull(file);
-        logger.debug("Generated " + file);
-        generator.close();
-        // validate the generated file
-        Document document = XMLUtil.parse(file.getAbsolutePath());
-        return document;
-    }
+  private static void assertElementNameAndText(Element child, String name, String text) {
+    assertNotNull(child);
+    assertEquals(name, child.getNodeName());
+    assertEquals(text, XMLUtil.getText(child));
+  }
+
+  private Document createXMLFile(String schemaUri, String root, String filename) throws IOException {
+    context.setContextUri(IOUtil.getParentUri(schemaUri));
+    XMLFileGenerator generator = new XMLFileGenerator(schemaUri, root, filename);
+    generator.init(context);
+    File file = GeneratorUtil.generateNonNull(generator);
+    assertNotNull(file);
+    logger.debug("Generated " + file);
+    generator.close();
+    // validate the generated file
+    return XMLUtil.parse(file.getAbsolutePath());
+  }
 
 }

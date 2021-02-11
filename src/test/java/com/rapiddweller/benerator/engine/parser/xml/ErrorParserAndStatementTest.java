@@ -26,33 +26,40 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.BeneratorError;
 import com.rapiddweller.benerator.engine.statement.ErrorStatement;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import org.junit.Test;
 
+import static org.junit.Assert.assertNull;
+
 /**
  * Tests the {@link ErrorParser} and the {@link ErrorStatement}.<br/><br/>
  * Created: 12.01.2011 08:58:34
- * @since o.6.4
+ *
  * @author Volker Bergmann
+ * @since o.6.4
  */
 public class ErrorParserAndStatementTest extends BeneratorIntegrationTest {
 
-	@Test(expected = BeneratorError.class)
-	public void testNoInfo() {
-		ErrorStatement statement = (ErrorStatement) parse("<error/>");
-		assertNull(statement.messageEx.evaluate(context));
-		assertNull(statement.codeEx.evaluate(context));
-		statement.execute(context);
-	}
-	
-	@Test(expected = BeneratorError.class)
-	public void testExecute() {
-		ErrorStatement statement = (ErrorStatement) parse("<error>Something bad happened</error>");
-		statement.execute(context);
-	}
-	
+  /**
+   * Test no info.
+   */
+  @Test(expected = BeneratorError.class)
+  public void testNoInfo() {
+    ErrorStatement statement = (ErrorStatement) parse("<error/>");
+    assertNull(statement.messageEx.evaluate(context));
+    assertNull(statement.codeEx.evaluate(context));
+    statement.execute(context);
+  }
+
+  /**
+   * Test execute.
+   */
+  @Test(expected = BeneratorError.class)
+  public void testExecute() {
+    ErrorStatement statement = (ErrorStatement) parse("<error>Something bad happened</error>");
+    statement.execute(context);
+  }
+
 }

@@ -31,19 +31,21 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 /**
  * Provides a {@link ThreadLocal} implementation that wraps a {@link ProductWrapper} for reuse.<br/><br/>
  * Created: 16.02.2010 10:59:31
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class WrapperProvider<E> extends ThreadLocal<ProductWrapper<E>> {
 
-	@Override
-	protected ProductWrapper<E> initialValue() {
-	    return new ProductWrapper<E>();
-	}
-	
-	@Override
-	public String toString() {
-	    return get().toString();
-	}
-	
+  @Override
+  protected ProductWrapper<E> initialValue() {
+    return new ProductWrapper<>();
+  }
+
+  @Override
+  public String toString() {
+    return get().toString();
+  }
+
 }

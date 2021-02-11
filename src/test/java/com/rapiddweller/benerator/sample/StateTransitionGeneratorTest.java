@@ -26,111 +26,129 @@
 
 package com.rapiddweller.benerator.sample;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.script.Transition;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link StateTransitionGenerator}.<br/>
  * <br/>
  * Created at 17.07.2009 08:15:03
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class StateTransitionGeneratorTest extends GeneratorTest {
 
-	@Test
-    public void testDeterministicSequence() {
-		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<Integer>(Integer.class);
-		generator.addTransition(null, 1, 1.);
-		generator.addTransition(1, 2, 1.);
-		generator.addTransition(2, null, 1.);
-		generator.init(context);
-		expectGeneratedSequence(generator, 
-				new Transition(null,    1), 
-				new Transition(   1,    2),
-				new Transition(   2,    null)
-			).withCeasedAvailability();
-	}
-	
-	/** Tests a setup that generates Sequences null->1, (1->2, 2->1)* */
-	@Test
-    public void testRandomSequence() {
-		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<Integer>(Integer.class);
-		generator.addTransition(null, 1, 1.);
-		generator.addTransition(1, 2, 1.);
-		generator.addTransition(2, 1, 0.5);
-		generator.addTransition(2, null, 0.5);
-		generator.init(context);
-		for (int n = 0; n < 10; n++) {
-			List<Transition> products = GeneratorUtil.allProducts(generator);
-			assertTrue("Expected an odd number of products, but found: " + products.size(), products.size() % 2 == 1);
-			assertEquals(new Transition(null, 1), products.get(0));
-			for (int i = 1; i < products.size() - 1; i++) {
-				int oldState = 1 + ((i - 1) % 2);
-				int newState = 1 + (i % 2);
-				assertEquals(new Transition(oldState, newState), products.get(i));
-			}
-			assertEquals(new Transition(2, null), CollectionUtil.lastElement(products));
-			generator.reset();
-		}
-	}
-	
-	/** Tests a setup that generates Sequences 1*, e.g. (1), (1, 1), (1, 1, 1), ... */
-	@Test
-    public void testRecursion() {
-		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<Integer>(Integer.class);
-		generator.addTransition(null, 1, 1.);
-		generator.addTransition(1, 1, 0.5);
-		generator.addTransition(1, null, 0.5);
-		generator.init(context);
-		checkRecursion(generator);
-	}
+  /**
+   * Test deterministic sequence.
+   */
+  @Test
+  public void testDeterministicSequence() {
+    StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<>(Integer.class);
+    generator.addTransition(null, 1, 1.);
+    generator.addTransition(1, 2, 1.);
+    generator.addTransition(2, null, 1.);
+    generator.init(context);
+    expectGeneratedSequence(generator,
+        new Transition(null, 1),
+        new Transition(1, 2),
+        new Transition(2, null)
+    ).withCeasedAvailability();
+  }
 
-	/** Tests the textual specification of transitions */
-	@Test
-    public void testTextualSpec() {
-		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<Integer>(
-				Integer.class, "null->1, 1->1^0.5, 1->null^0.5");
-		generator.addTransition(null, 1, 1.);
-		generator.addTransition(1, 1, 0.5);
-		generator.addTransition(1, null, 0.5);
-		generator.init(context);
-		checkRecursion(generator);
-	}
-	
-	@Test(expected = InvalidGeneratorSetupException.class)
-	public void testNoInitialState() {
-		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<Integer>(Integer.class);
-		generator.addTransition(1, 2, 0.6);
-		generator.init(context);
-	}
-	
-	@Test(expected = InvalidGeneratorSetupException.class)
-	public void testNoFinalState() {
-		StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<Integer>(Integer.class);
-		generator.addTransition(null, 1, 0.6);
-		generator.init(context);
-	}
-	
-	// private helpers -------------------------------------------------------------------------------------------------
-	
-	private static void checkRecursion(StateTransitionGenerator<Integer> generator) {
-	    for (int n = 0; n < 10; n++) {
-			List<Transition> products = GeneratorUtil.allProducts(generator);
-			assertEquals(new Transition(null, 1), products.get(0));
-			for (int i = 1; i < products.size() - 1; i++)
-				assertEquals(new Transition(1, 1), products.get(i));
-			assertEquals(new Transition(1, null), CollectionUtil.lastElement(products));
-			generator.reset();
-		}
+  /**
+   * Tests a setup that generates Sequences null->1, (1->2, 2->1)*
+   */
+  @Test
+  public void testRandomSequence() {
+    StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<>(Integer.class);
+    generator.addTransition(null, 1, 1.);
+    generator.addTransition(1, 2, 1.);
+    generator.addTransition(2, 1, 0.5);
+    generator.addTransition(2, null, 0.5);
+    generator.init(context);
+    for (int n = 0; n < 10; n++) {
+      List<Transition> products = GeneratorUtil.allProducts(generator);
+      assertEquals("Expected an odd number of products, but found: " +
+          products.size(), 1, products.size() % 2);
+      assertEquals(new Transition(null, 1), products.get(0));
+      for (int i = 1; i < products.size() - 1; i++) {
+        int oldState = 1 + ((i - 1) % 2);
+        int newState = 1 + (i % 2);
+        assertEquals(new Transition(oldState, newState), products.get(i));
+      }
+      assertEquals(new Transition(2, null), CollectionUtil.lastElement(products));
+      generator.reset();
     }
-	
+  }
+
+  /**
+   * Tests a setup that generates Sequences 1*, e.g. (1), (1, 1), (1, 1, 1), ...
+   */
+  @Test
+  public void testRecursion() {
+    StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<>(Integer.class);
+    generator.addTransition(null, 1, 1.);
+    generator.addTransition(1, 1, 0.5);
+    generator.addTransition(1, null, 0.5);
+    generator.init(context);
+    checkRecursion(generator);
+  }
+
+  /**
+   * Tests the textual specification of transitions
+   */
+  @Test
+  public void testTextualSpec() {
+    StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<>(
+        Integer.class, "null->1, 1->1^0.5, 1->null^0.5");
+    generator.addTransition(null, 1, 1.);
+    generator.addTransition(1, 1, 0.5);
+    generator.addTransition(1, null, 0.5);
+    generator.init(context);
+    checkRecursion(generator);
+  }
+
+  /**
+   * Test no initial state.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testNoInitialState() {
+    StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<>(Integer.class);
+    generator.addTransition(1, 2, 0.6);
+    generator.init(context);
+  }
+
+  /**
+   * Test no final state.
+   */
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void testNoFinalState() {
+    StateTransitionGenerator<Integer> generator = new StateTransitionGenerator<>(Integer.class);
+    generator.addTransition(null, 1, 0.6);
+    generator.init(context);
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private static void checkRecursion(StateTransitionGenerator<Integer> generator) {
+    for (int n = 0; n < 10; n++) {
+      List<Transition> products = GeneratorUtil.allProducts(generator);
+      assertEquals(new Transition(null, 1), products.get(0));
+      for (int i = 1; i < products.size() - 1; i++) {
+        assertEquals(new Transition(1, 1), products.get(i));
+      }
+      assertEquals(new Transition(1, null), CollectionUtil.lastElement(products));
+      generator.reset();
+    }
+  }
+
 }

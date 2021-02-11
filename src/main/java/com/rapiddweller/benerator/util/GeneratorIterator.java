@@ -26,56 +26,68 @@
 
 package com.rapiddweller.benerator.util;
 
-import java.io.Closeable;
-import java.util.Iterator;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
+
+import java.io.Closeable;
+import java.util.Iterator;
 
 /**
  * Wraps a {@link Generator} with an {@link Iterator} interface.<br/>
  * <br/>
  * Created at 21.07.2009 10:09:55
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class GeneratorIterator<E> implements Iterator<E>, Closeable {
-	
-	private Generator<E> source;
-	private E next;
-	private WrapperProvider<E> wrapperProvider = new WrapperProvider<E>();
-	
-	public GeneratorIterator(Generator<E> source) {
-		this.source = source;
-		this.next = fetchNext(source);
-	}
 
-    @Override
-	public boolean hasNext() {
-	    return next != null;
-    }
+  private final Generator<E> source;
+  private E next;
+  private final WrapperProvider<E> wrapperProvider = new WrapperProvider<>();
 
-    @Override
-	public E next() {
-    	E result = next;
-    	next = source.generate(wrapperProvider.get()).unwrap();
-	    return result;
-    }
+  /**
+   * Instantiates a new Generator iterator.
+   *
+   * @param source the source
+   */
+  public GeneratorIterator(Generator<E> source) {
+    this.source = source;
+    this.next = fetchNext(source);
+  }
 
-    @Override
-	public void remove() {
-	    throw new UnsupportedOperationException("removal is not supported by " + getClass());
-    }
+  @Override
+  public boolean hasNext() {
+    return next != null;
+  }
 
-    @Override
-	public void close() {
-        source.close();
-    }
-    
-	protected E fetchNext(Generator<E> source) {
-		ProductWrapper<E> wrapper = source.generate(wrapperProvider.get());
-		return (wrapper != null ? wrapper.unwrap() : null);
-	}
+  @Override
+  public E next() {
+    E result = next;
+    next = source.generate(wrapperProvider.get()).unwrap();
+    return result;
+  }
+
+  @Override
+  public void remove() {
+    throw new UnsupportedOperationException("removal is not supported by " + getClass());
+  }
+
+  @Override
+  public void close() {
+    source.close();
+  }
+
+  /**
+   * Fetch next e.
+   *
+   * @param source the source
+   * @return the e
+   */
+  protected E fetchNext(Generator<E> source) {
+    ProductWrapper<E> wrapper = source.generate(wrapperProvider.get());
+    return (wrapper != null ? wrapper.unwrap() : null);
+  }
 
 }

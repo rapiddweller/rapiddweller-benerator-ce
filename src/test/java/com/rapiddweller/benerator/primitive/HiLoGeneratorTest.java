@@ -31,27 +31,37 @@ import org.junit.Test;
 
 /**
  * Tests the HiLoGenerator.
- * @since 0.3.04
+ *
  * @author Volker Bergmann
+ * @since 0.3.04
  */
 public class HiLoGeneratorTest extends GeneratorClassTest {
 
-    public HiLoGeneratorTest() {
-        super(HiLoGenerator.class);
-    }
+  /**
+   * Instantiates a new Hi lo generator test.
+   */
+  public HiLoGeneratorTest() {
+    super(HiLoGenerator.class);
+  }
 
-    @Test
-    public void test2() {
-        HiLoGenerator generator = new HiLoGenerator(new IncrementGenerator(), 2);
-        generator.init(context);
-        expectGeneratedSequence(generator, 3L, 4L, 5L, 6L, 7L, 8L);
-    }
+  /**
+   * Test 2.
+   */
+  @Test
+  public void test2() {
+    HiLoGenerator generator = new HiLoGenerator(new IncrementGenerator(), 2);
+    generator.init(context);
+    expectGeneratedSequence(generator, 3L, 4L, 5L, 6L, 7L, 8L);
+  }
 
-    @Test
-    public void test100() {
-        HiLoGenerator generator = new HiLoGenerator(new IncrementGenerator(), 100);
-        generator.init(context);
-        expectGeneratedSequence(generator, 101L, 102L, 103L);
-    }
+  /**
+   * Test 100.
+   */
+  @Test
+  public void test100() {
+    HiLoGenerator generator = new HiLoGenerator(new IncrementGenerator(), 100);
+    generator.init(context);
+    expectGeneratedSequence(generator, 101L, 102L, 103L);
+  }
 
 }

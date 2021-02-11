@@ -26,31 +26,38 @@
 
 package com.rapiddweller.benerator.csv;
 
+import com.rapiddweller.common.Encodings;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.csv.CSVCellIterator;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import com.rapiddweller.commons.Encodings;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.csv.CSVCellIterator;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests the {@link CSVCellIterator}.<br/><br/>
  * Created: 11.10.2006 23:14:33
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class CSVCellIteratorTest {
 
-	@Test
-    public void test() throws IOException {
-        CSVCellIterator iterator = new CSVCellIterator("com/rapiddweller/csv/names-abc.csv", ',', Encodings.UTF_8);
-        DataContainer<String> container = new DataContainer<String>();
-        assertEquals("Alice",  iterator.next(container).getData());
-        assertEquals("Bob",    iterator.next(container).getData());
-        assertEquals("Charly", iterator.next(container).getData());
-        assertNull(iterator.next(container));
-    }
-	
+  /**
+   * Test.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void test() throws IOException {
+    CSVCellIterator iterator = new CSVCellIterator("com/rapiddweller/csv/names-abc.csv", ',', Encodings.UTF_8);
+    DataContainer<String> container = new DataContainer<>();
+    assertEquals("Alice", iterator.next(container).getData());
+    assertEquals("Bob", iterator.next(container).getData());
+    assertEquals("Charly", iterator.next(container).getData());
+    assertNull(iterator.next(container));
+  }
+
 }

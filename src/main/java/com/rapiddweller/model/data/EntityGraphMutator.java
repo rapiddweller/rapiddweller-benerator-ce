@@ -26,10 +26,10 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Mutator;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.UpdateFailedException;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Mutator;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.UpdateFailedException;
 
 /**
  * Builds and mutates graphs of entities.<br/><br/>
@@ -40,35 +40,51 @@ import com.rapiddweller.commons.UpdateFailedException;
  */
 public class EntityGraphMutator implements Mutator {
 
-    private final String featureName;
-    private final ComplexTypeDescriptor descriptor;
+  private final String featureName;
+  private final ComplexTypeDescriptor descriptor;
 
-    public EntityGraphMutator(String featureName, ComplexTypeDescriptor descriptor) {
-        this.featureName = featureName;
-        this.descriptor = descriptor;
-    }
+  /**
+   * Instantiates a new Entity graph mutator.
+   *
+   * @param featureName the feature name
+   * @param descriptor  the descriptor
+   */
+  public EntityGraphMutator(String featureName,
+                            ComplexTypeDescriptor descriptor) {
+    this.featureName = featureName;
+    this.descriptor = descriptor;
+  }
 
-    @Override
-    public void setValue(Object target, Object value) throws UpdateFailedException {
-        Entity entity = (Entity) target;
-        setFeature(featureName, value, entity, descriptor);
-    }
+  @Override
+  public void setValue(Object target, Object value)
+      throws UpdateFailedException {
+    Entity entity = (Entity) target;
+    setFeature(featureName, value, entity, descriptor);
+  }
 
-    private void setFeature(String featureName, Object value, Entity entity, ComplexTypeDescriptor descriptor) {
-        if (featureName.contains(".")) {
-            String[] subPaths = StringUtil.splitOnFirstSeparator(featureName, '.');
-            ComponentDescriptor subComponent = descriptor.getComponent(subPaths[0]);
-            if (subComponent == null)
-                throw new ConfigurationError("Component '" + subPaths[0] + "' not found in type " + descriptor.getName());
-            ComplexTypeDescriptor subType = (ComplexTypeDescriptor) subComponent.getTypeDescriptor();
-            Entity subEntity = (Entity) entity.get(subPaths[0]);
-            if (subEntity == null) {
-                subEntity = new Entity(subType);
-                entity.setComponent(subPaths[0], subEntity);
-            }
-            setFeature(subPaths[1], value, subEntity, subType);
-        } else
-            entity.setComponent(featureName, value);
+  private void setFeature(String featureName, Object value, Entity entity,
+                          ComplexTypeDescriptor descriptor) {
+    if (featureName.contains(".")) {
+      String[] subPaths =
+          StringUtil.splitOnFirstSeparator(featureName, '.');
+      ComponentDescriptor subComponent =
+          descriptor.getComponent(subPaths[0]);
+      if (subComponent == null) {
+        throw new ConfigurationError(
+            "Component '" + subPaths[0] + "' not found in type " +
+                descriptor.getName());
+      }
+      ComplexTypeDescriptor subType =
+          (ComplexTypeDescriptor) subComponent.getTypeDescriptor();
+      Entity subEntity = (Entity) entity.get(subPaths[0]);
+      if (subEntity == null) {
+        subEntity = new Entity(subType);
+        entity.setComponent(subPaths[0], subEntity);
+      }
+      setFeature(subPaths[1], value, subEntity, subType);
+    } else {
+      entity.setComponent(featureName, value);
     }
+  }
 
 }

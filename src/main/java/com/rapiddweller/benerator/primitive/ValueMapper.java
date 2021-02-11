@@ -26,105 +26,128 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.AnyConverter;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.WeightedTransition;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Converter implementation that maps input values in a 'Map' style.<br/><br/>
  * Created: 24.10.2009 09:05:58
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ValueMapper implements Converter {
 
-	private Map mappings;
-	private boolean lenient;
-	private Class<?> targetType;
-	private Class<?> sourceType;
-	
-	public ValueMapper() {
-	    init(null, false);
-	}
+  private Map mappings;
+  private boolean lenient;
+  private Class<?> targetType;
+  private Class<?> sourceType;
 
-	public ValueMapper(String mappingSpec) {
-		this(mappingSpec, false);
-	}
+  /**
+   * Instantiates a new Value mapper.
+   */
+  public ValueMapper() {
+    init(null, false);
+  }
 
-	public ValueMapper(String mappingSpec, boolean lenient) {
-		init(mappingSpec, lenient);
-	}
+  /**
+   * Instantiates a new Value mapper.
+   *
+   * @param mappingSpec the mapping spec
+   */
+  public ValueMapper(String mappingSpec) {
+    this(mappingSpec, false);
+  }
 
-	private void init(String mappingSpec, boolean lenient) {
-	    this.mappings = new HashMap<Object, Object>();
-		setMappings(mappingSpec);
-		this.lenient = lenient;
+  /**
+   * Instantiates a new Value mapper.
+   *
+   * @param mappingSpec the mapping spec
+   * @param lenient     the lenient
+   */
+  public ValueMapper(String mappingSpec, boolean lenient) {
+    init(mappingSpec, lenient);
+  }
+
+  private void init(String mappingSpec, boolean lenient) {
+    this.mappings = new HashMap<>();
+    setMappings(mappingSpec);
+    this.lenient = lenient;
+  }
+
+  /**
+   * Sets mappings.
+   *
+   * @param mappingSpec the mapping spec
+   */
+  public void setMappings(String mappingSpec) {
+    if (mappingSpec != null) {
+      WeightedTransition[] tl = DatabeneScriptParser.parseTransitionList(mappingSpec);
+      for (WeightedTransition t : tl) {
+        mappings.put(t.getFrom(), t.getTo());
+      }
+      sourceType = BeanUtil.commonSubType(mappings.keySet());
+      targetType = BeanUtil.commonSuperType(mappings.values());
+    } else {
+      sourceType = Object.class;
+      mappings.clear();
     }
+  }
 
-	public void setMappings(String mappingSpec) {
-		if (mappingSpec != null) {
-			WeightedTransition[] tl = DatabeneScriptParser.parseTransitionList(mappingSpec);
-			for (WeightedTransition t : tl)
-				mappings.put(t.getFrom(), t.getTo());
-			sourceType = BeanUtil.commonSubType(mappings.keySet());
-			targetType = BeanUtil.commonSuperType(mappings.values());
-		} else {
-			sourceType = Object.class;
-			mappings.clear();
-		}
-	}
-	
-	@Override
-	public Class getSourceType() {
-	    return sourceType;
-	}
-	
-	@Override
-	public Class<?> getTargetType() {
-	    return targetType;
-    }
-	
-	@Override
-	public Object convert(Object sourceValue) throws ConversionException {
-		sourceValue = AnyConverter.convert(sourceValue, sourceType);
-		if (!mappings.containsKey(sourceValue))
-			if (lenient)
-				return sourceValue;
-			else
-				throw new IllegalArgumentException("Cannot convert value: " + sourceValue);
-		else 
-			return mappings.get(sourceValue);
-    }
+  @Override
+  public Class getSourceType() {
+    return sourceType;
+  }
 
-	@Override
-	public String toString() {
-	    return getClass().getSimpleName() + mappings;
-	}
+  @Override
+  public Class<?> getTargetType() {
+    return targetType;
+  }
 
-	@Override
-	public boolean isParallelizable() {
-	    return true;
+  @Override
+  public Object convert(Object sourceValue) throws ConversionException {
+    sourceValue = AnyConverter.convert(sourceValue, sourceType);
+    if (!mappings.containsKey(sourceValue)) {
+      if (lenient) {
+        return sourceValue;
+      } else {
+        throw new IllegalArgumentException("Cannot convert value: " + sourceValue);
+      }
+    } else {
+      return mappings.get(sourceValue);
     }
+  }
 
-	@Override
-	public boolean isThreadSafe() {
-	    return true;
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + mappings;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return true;
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public Object clone() {
+    try {
+      return super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new RuntimeException(e);
     }
-	
-	@Override
-    public Object clone() {
-		try {
-	        return super.clone();
-        } catch (CloneNotSupportedException e) {
-        	throw new RuntimeException(e);
-        }
-	}
-	
+  }
+
 }

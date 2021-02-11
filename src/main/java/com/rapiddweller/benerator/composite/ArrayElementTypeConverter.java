@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.composite;
 
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.AbstractConverter;
-import com.rapiddweller.commons.converter.AnyConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.AbstractConverter;
+import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
@@ -38,55 +38,63 @@ import com.rapiddweller.script.PrimitiveType;
 /**
  * Converts an array's elements to the types defined in a related {@link ArrayTypeDescriptor}.<br/><br/>
  * Created: 05.05.2010 15:36:41
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
-public class ArrayElementTypeConverter extends AbstractConverter<Object[], Object[]>{
+public class ArrayElementTypeConverter extends AbstractConverter<Object[], Object[]> {
 
-	private ArrayTypeDescriptor type;
+  private final ArrayTypeDescriptor type;
 
-	public ArrayElementTypeConverter(ArrayTypeDescriptor type) {
-		super(Object[].class, Object[].class);
-		this.type = type;
-	}
+  /**
+   * Instantiates a new Array element type converter.
+   *
+   * @param type the type
+   */
+  public ArrayElementTypeConverter(ArrayTypeDescriptor type) {
+    super(Object[].class, Object[].class);
+    this.type = type;
+  }
 
-	@Override
-	public Object[] convert(Object[] array) throws ConversionException {
-		if (array == null)
-			return null;
-		for (int i = 0; i < array.length; i++) {
-			ArrayElementDescriptor elementDescriptor = type.getElement(i, true);
-			if (elementDescriptor != null) {
-				TypeDescriptor elementType = elementDescriptor.getTypeDescriptor();
-				Object elementValue = array[i];
-				if (elementType instanceof SimpleTypeDescriptor) {
-					PrimitiveType primitive = ((SimpleTypeDescriptor) elementType).getPrimitiveType();
-					if (primitive == null)
-						primitive = PrimitiveType.STRING;
-			        Class<?> javaType = primitive.getJavaType();
-			        Object javaValue = AnyConverter.convert(elementValue, javaType);
-			        array[i] = javaValue;
-				} else {
-					array[i] = elementValue;
-				}
-			}
-		}
-		return array;
-	}
-
-	@Override
-	public boolean isParallelizable() {
-	    return false;
+  @Override
+  public Object[] convert(Object[] array) throws ConversionException {
+    if (array == null) {
+      return null;
     }
-
-	@Override
-	public boolean isThreadSafe() {
-	    return false;
+    for (int i = 0; i < array.length; i++) {
+      ArrayElementDescriptor elementDescriptor = type.getElement(i, true);
+      if (elementDescriptor != null) {
+        TypeDescriptor elementType = elementDescriptor.getTypeDescriptor();
+        Object elementValue = array[i];
+        if (elementType instanceof SimpleTypeDescriptor) {
+          PrimitiveType primitive = ((SimpleTypeDescriptor) elementType).getPrimitiveType();
+          if (primitive == null) {
+            primitive = PrimitiveType.STRING;
+          }
+          Class<?> javaType = primitive.getJavaType();
+          Object javaValue = AnyConverter.convert(elementValue, javaType);
+          array[i] = javaValue;
+        } else {
+          array[i] = elementValue;
+        }
+      }
     }
+    return array;
+  }
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[" + type + "]";
-	}
-	
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return false;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + type + "]";
+  }
+
 }

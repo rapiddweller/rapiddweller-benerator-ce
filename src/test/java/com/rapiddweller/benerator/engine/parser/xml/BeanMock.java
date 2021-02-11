@@ -26,45 +26,80 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.context.ContextHolder;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.context.ContextHolder;
 
 /**
  * JavaBean Mock class for testing.<br/><br/>
  * Created: 30.10.2009 08:16:45
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class BeanMock extends ContextHolder {
 
-	public int invocationCount;
-	public int lastValue;
-	private String text;
-	
-	public BeanMock() {
-	    this(0);
-    }
+  /**
+   * The Invocation count.
+   */
+  public int invocationCount;
+  /**
+   * The Last value.
+   */
+  public int lastValue;
+  private String text;
 
-	public BeanMock(int lastValue) {
-	    this.lastValue = lastValue;
-	    this.invocationCount = 0;
-    }
-	
-	public String getText() {
-		return text;
-	}
-	
-	public void setText(String text) {
-		this.text = text;
-	}
+  /**
+   * Instantiates a new Bean mock.
+   */
+  public BeanMock() {
+    this(0);
+  }
 
-	public Context getContext() {
-		return context;
-	}
-	
-	public void invoke(int value) {
-		lastValue = value;
-		invocationCount++;
-	}
-	
+  /**
+   * Instantiates a new Bean mock.
+   *
+   * @param lastValue the last value
+   */
+  public BeanMock(int lastValue) {
+    this.lastValue = lastValue;
+    this.invocationCount = 0;
+  }
+
+  /**
+   * Gets text.
+   *
+   * @return the text
+   */
+  public String getText() {
+    return text;
+  }
+
+  /**
+   * Sets text.
+   *
+   * @param text the text
+   */
+  public void setText(String text) {
+    this.text = text;
+  }
+
+  /**
+   * Gets context.
+   *
+   * @return the context
+   */
+  public Context getContext() {
+    return context;
+  }
+
+  /**
+   * Invoke.
+   *
+   * @param value the value
+   */
+  public void invoke(int value) {
+    lastValue = value;
+    invocationCount++;
+  }
+
 }

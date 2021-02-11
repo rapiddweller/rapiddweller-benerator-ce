@@ -26,71 +26,93 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.MessageHolder;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.MessageHolder;
 
 /**
  * Wraps a Task and forwards invocations.<br/>
  * <br/>
  * Created: 06.07.2007 06:36:22
  *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.2
  */
-public abstract class TaskProxy<E extends Task> extends AbstractTask implements Cloneable, MessageHolder {
+public abstract class TaskProxy<E extends Task> extends AbstractTask
+    implements Cloneable, MessageHolder {
 
-    protected E realTask;
+  /**
+   * The Real task.
+   */
+  protected E realTask;
 
-    public TaskProxy(E realTask) {
-        setRealTask(realTask);
-    }
+  /**
+   * Instantiates a new Task proxy.
+   *
+   * @param realTask the real task
+   */
+  public TaskProxy(E realTask) {
+    setRealTask(realTask);
+  }
 
-    public E getRealTask() {
-        return realTask;
-    }
+  /**
+   * Gets real task.
+   *
+   * @return the real task
+   */
+  public E getRealTask() {
+    return realTask;
+  }
 
-    public void setRealTask(E realTask) {
-        this.realTask = realTask;
-        setTaskName(realTask != null ? realTask.getClass().getSimpleName() : "undefined");
-    }
+  /**
+   * Sets real task.
+   *
+   * @param realTask the real task
+   */
+  public void setRealTask(E realTask) {
+    this.realTask = realTask;
+    setTaskName(realTask != null ? realTask.getClass().getSimpleName() :
+        "undefined");
+  }
 
-    @Override
-    public TaskResult execute(Context context, ErrorHandler errorHandler) {
-        return realTask.execute(context, errorHandler);
-    }
+  @Override
+  public TaskResult execute(Context context, ErrorHandler errorHandler) {
+    return realTask.execute(context, errorHandler);
+  }
 
-    @Override
-    public void pageFinished() {
-        realTask.pageFinished();
-    }
+  @Override
+  public void pageFinished() {
+    realTask.pageFinished();
+  }
 
-    @Override
-    public boolean isThreadSafe() {
-        return realTask.isThreadSafe();
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return realTask.isThreadSafe();
+  }
 
-    @Override
-    public boolean isParallelizable() {
-        return realTask.isParallelizable();
-    }
+  @Override
+  public boolean isParallelizable() {
+    return realTask.isParallelizable();
+  }
 
-    @Override
-    public String getMessage() {
-        return (realTask instanceof MessageHolder ? ((MessageHolder) realTask).getMessage() : null);
-    }
+  @Override
+  public String getMessage() {
+    return (realTask instanceof MessageHolder ?
+        ((MessageHolder) realTask).getMessage() : null);
+  }
 
-    @Override
-    public void close() {
-        realTask.close();
-    }
+  @Override
+  public void close() {
+    realTask.close();
+  }
 
-    @Override
-    public abstract Object clone();
+  @Override
+  public abstract Object clone();
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + realTask.toString() + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + realTask.toString() + ']';
+  }
 
 }

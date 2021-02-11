@@ -30,52 +30,56 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 import org.junit.Test;
 
 
 /**
  * Tests the {@link SequencedDatasetCSVGenerator}.<br/><br/>
  * Created: 18.02.2010 00:09:59
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class SequencedDatasetCSVGeneratorTest extends GeneratorTest {
-	
-	private static final String FILENAME_PATTERN = "com/rapiddweller/benerator/csv/city_{0}.csv";
-	private static final String NESTING = "com/rapiddweller/benerator/csv/area";
-	private static final char SEPARATOR = ',';
-	private static final String ENCODING = Encodings.UTF_8;
-	private static final Sequence DISTRIBUTION = SequenceManager.STEP_SEQUENCE;
 
-	private static final String NORTH_AMERICA = "north_america";
-	private static final String SOUTH_AMERICA = "south_america";
-	private static final String ANGLO_AMERICA = "anglo_america";
-	private static final String LATIN_AMERICA = "latin_america";
-	private static final String AMERICA = "america";
-	
-	private static final String SAO_PAOLO = "Sao Pãolo";
-	private static final String BRASILIA = "Brasilia";
-	private static final String MEXICO = "Mexico";
-	private static final String VILLAHERMOSA = "Villahermosa";
-	private static final String NEW_YORK = "New York";
-	private static final String SAN_FRANCISCO = "San Francisco";
+  private static final String FILENAME_PATTERN = "com/rapiddweller/benerator/csv/city_{0}.csv";
+  private static final String NESTING = "com/rapiddweller/benerator/csv/area";
+  private static final char SEPARATOR = ',';
+  private static final String ENCODING = Encodings.UTF_8;
+  private static final Sequence DISTRIBUTION = SequenceManager.STEP_SEQUENCE;
 
-	@Test
-	public void test() {
-		expectUniquelyGeneratedSet(createDatasetGenerator(NORTH_AMERICA), NEW_YORK, SAN_FRANCISCO, MEXICO, VILLAHERMOSA);
-		expectUniquelyGeneratedSet(createDatasetGenerator(SOUTH_AMERICA), SAO_PAOLO, BRASILIA);
-		expectUniquelyGeneratedSet(createDatasetGenerator(ANGLO_AMERICA), NEW_YORK, SAN_FRANCISCO);
-		expectUniquelyGeneratedSet(createDatasetGenerator(LATIN_AMERICA), MEXICO, VILLAHERMOSA, SAO_PAOLO, BRASILIA);
-		expectUniquelyGeneratedSet(createDatasetGenerator(AMERICA), NEW_YORK, SAN_FRANCISCO, MEXICO, VILLAHERMOSA, SAO_PAOLO, BRASILIA);
+  private static final String NORTH_AMERICA = "north_america";
+  private static final String SOUTH_AMERICA = "south_america";
+  private static final String ANGLO_AMERICA = "anglo_america";
+  private static final String LATIN_AMERICA = "latin_america";
+  private static final String AMERICA = "america";
 
-	}
+  private static final String SAO_PAOLO = "Sao Pãolo";
+  private static final String BRASILIA = "Brasilia";
+  private static final String MEXICO = "Mexico";
+  private static final String VILLAHERMOSA = "Villahermosa";
+  private static final String NEW_YORK = "New York";
+  private static final String SAN_FRANCISCO = "San Francisco";
 
-	private Generator<String> createDatasetGenerator(String datasetName) {
-	    SequencedDatasetCSVGenerator<String> generator = new SequencedDatasetCSVGenerator<String>(
-				FILENAME_PATTERN, SEPARATOR, datasetName, NESTING, DISTRIBUTION, ENCODING, context);
-	    generator.init(context);
-		return generator;
-    }
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    expectUniquelyGeneratedSet(createDatasetGenerator(NORTH_AMERICA), NEW_YORK, SAN_FRANCISCO, MEXICO, VILLAHERMOSA);
+    expectUniquelyGeneratedSet(createDatasetGenerator(SOUTH_AMERICA), SAO_PAOLO, BRASILIA);
+    expectUniquelyGeneratedSet(createDatasetGenerator(ANGLO_AMERICA), NEW_YORK, SAN_FRANCISCO);
+    expectUniquelyGeneratedSet(createDatasetGenerator(LATIN_AMERICA), MEXICO, VILLAHERMOSA, SAO_PAOLO, BRASILIA);
+    expectUniquelyGeneratedSet(createDatasetGenerator(AMERICA), NEW_YORK, SAN_FRANCISCO, MEXICO, VILLAHERMOSA, SAO_PAOLO, BRASILIA);
+
+  }
+
+  private Generator<String> createDatasetGenerator(String datasetName) {
+    SequencedDatasetCSVGenerator<String> generator = new SequencedDatasetCSVGenerator<>(
+        FILENAME_PATTERN, SEPARATOR, datasetName, NESTING, DISTRIBUTION, ENCODING, context);
+    generator.init(context);
+    return generator;
+  }
 
 }

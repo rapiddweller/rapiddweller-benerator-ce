@@ -26,130 +26,165 @@
 
 package com.rapiddweller.benerator.engine;
 
+import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.engine.statement.GenerateAndConsumeTask;
+import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
+import com.rapiddweller.benerator.engine.statement.IncludeStatement;
+import com.rapiddweller.benerator.engine.statement.SequentialStatement;
+import com.rapiddweller.benerator.engine.statement.StatementProxy;
+import com.rapiddweller.benerator.wrapper.NShotGeneratorProxy;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Visitor;
+import com.rapiddweller.script.DatabeneScriptParser;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.engine.statement.GenerateAndConsumeTask;
-import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
-import com.rapiddweller.benerator.engine.statement.IncludeStatement;
-import com.rapiddweller.benerator.engine.statement.LazyStatement;
-import com.rapiddweller.benerator.engine.statement.SequentialStatement;
-import com.rapiddweller.benerator.engine.statement.StatementProxy;
-import com.rapiddweller.benerator.wrapper.NShotGeneratorProxy;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.script.Expression;
-import com.rapiddweller.commons.Visitor;
-import com.rapiddweller.script.expression.ExpressionUtil;
-import com.rapiddweller.script.DatabeneScriptParser;
-
 /**
  * The root {@link Statement} for executing descriptor file based data generation.<br/><br/>
  * Created: 24.10.2009 11:08:46
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class BeneratorRootStatement extends SequentialStatement {
 
-	private Map<String, String> attributes;
-	
-    public BeneratorRootStatement(Map<String, String> attributes) {
-    	this.attributes = new HashMap<String, String>(attributes);
-	}
+  private final Map<String, String> attributes;
 
-    @Override
-    public boolean execute(BeneratorContext context) {
-    	mapAttributesTo(context);
-    	if (context.isDefaultImports())
-    		context.importDefaults();
-    	super.execute(context);
-    	return true;
+  /**
+   * Instantiates a new Benerator root statement.
+   *
+   * @param attributes the attributes
+   */
+  public BeneratorRootStatement(Map<String, String> attributes) {
+    this.attributes = new HashMap<>(attributes);
+  }
+
+  @Override
+  public boolean execute(BeneratorContext context) {
+    mapAttributesTo(context);
+    if (context.isDefaultImports()) {
+      context.importDefaults();
+    }
+    super.execute(context);
+    return true;
+  }
+
+  /**
+   * Gets generator.
+   *
+   * @param name    the name
+   * @param context the context
+   * @return the generator
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public Generator<?> getGenerator(String name, BeneratorContext context) {
+    GenerateOrIterateStatement statement = getGeneratorStatement(name, context);
+    Generator<?> generator = new TaskBasedGenerator(statement.getTask());
+    return new NShotGeneratorProxy(generator, statement.generateCount(context));
+  }
+
+  /**
+   * Gets generator statement.
+   *
+   * @param name    the name
+   * @param context the context
+   * @return the generator statement
+   */
+  public GenerateOrIterateStatement getGeneratorStatement(String name, BeneratorContext context) {
+    BeneratorVisitor visitor = new BeneratorVisitor(name, context);
+    accept(visitor);
+    GenerateOrIterateStatement statement = visitor.getResult();
+    if (statement == null) {
+      throw new IllegalArgumentException("Generator not found: " + name);
+    }
+    return statement;
+  }
+
+  /**
+   * Map attributes to.
+   *
+   * @param context the context
+   */
+  protected void mapAttributesTo(BeneratorContext context) {
+    for (Entry<String, String> attribute : attributes.entrySet()) {
+      String key = attribute.getKey();
+      String value = attribute.getValue();
+      Object result;
+      if ("generatorFactory".equals(key)) {
+        result = DatabeneScriptParser.parseBeanSpec(value).evaluate(context);
+      } else {
+        result = value;
+      }
+      BeanUtil.setPropertyValue(context, key, result, true, true);
+    }
+  }
+
+  /**
+   * The type Benerator visitor.
+   */
+  static class BeneratorVisitor implements Visitor<Statement> {
+
+    private final String name;
+    private final BeneratorContext context;
+    private GenerateOrIterateStatement result;
+
+    /**
+     * Instantiates a new Benerator visitor.
+     *
+     * @param name    the name
+     * @param context the context
+     */
+    public BeneratorVisitor(String name, BeneratorContext context) {
+      this.name = name;
+      this.context = context;
     }
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-    public Generator<?> getGenerator(String name, BeneratorContext context) {
-    	GenerateOrIterateStatement statement = getGeneratorStatement(name, context);
-    	Generator<?> generator = new TaskBasedGenerator(statement.getTask());
-		return new NShotGeneratorProxy(generator, statement.generateCount(context));
-	}
+    /**
+     * Gets result.
+     *
+     * @return the result
+     */
+    public GenerateOrIterateStatement getResult() {
+      return result;
+    }
 
-    public GenerateOrIterateStatement getGeneratorStatement(String name, BeneratorContext context) {
-    	BeneratorVisitor visitor = new BeneratorVisitor(name, context);
-    	accept(visitor);
-    	GenerateOrIterateStatement statement = visitor.getResult();
-		if (statement == null)
-    		throw new IllegalArgumentException("Generator not found: " + name);
-    	return statement;
-	}
-
-	protected void mapAttributesTo(BeneratorContext context) {
-		for (Entry<String, String> attribute : attributes.entrySet()) {
-    		String key = attribute.getKey();
-			String value = attribute.getValue();
-			Object result;
-			if ("generatorFactory".equals(key))
-    			result = DatabeneScriptParser.parseBeanSpec(value).evaluate(context);
-			else 
-				result = value;
-			BeanUtil.setPropertyValue(context, key, result, true, true);
-    	}
-	}
-    
-	class BeneratorVisitor implements Visitor<Statement> {
-		
-		private String name;
-		private BeneratorContext context;
-		private GenerateOrIterateStatement result;
-		
-		public BeneratorVisitor(String name, BeneratorContext context) {
-	        this.name = name;
-	        this.context = context;
+    @Override
+    public void visit(Statement statement) {
+      if (result != null) {
+        return;
+      }
+      if (statement instanceof GenerateOrIterateStatement) {
+        GenerateOrIterateStatement generatorStatement = (GenerateOrIterateStatement) statement;
+        GenerateAndConsumeTask target = generatorStatement.getTask();
+        if (name.equals(target.getTaskName())) {
+          result = generatorStatement;
         }
-
-		public GenerateOrIterateStatement getResult() {
-        	return result;
+      } else if (statement instanceof StatementProxy) {
+        visit(((StatementProxy) statement).getRealStatement(context));
+      } else if (statement instanceof IncludeStatement) {
+        String uri = ((IncludeStatement) statement).getUri().evaluate(context);
+        if (uri != null && uri.toLowerCase().endsWith(".xml")) {
+          DescriptorRunner descriptorRunner = new DescriptorRunner(context.resolveRelativeUri(uri), context);
+          try {
+            BeneratorRootStatement rootStatement = descriptorRunner.parseDescriptorFile();
+            result = rootStatement.getGeneratorStatement(name, context);
+          } catch (IOException e) {
+            throw new ConfigurationError("error parsing file " + uri, e);
+          }
         }
+      } else if (!(statement instanceof BeneratorRootStatement)) {
+        statement.execute(context);
+      }
+    }
+  }
 
-		@Override
-		public void visit(Statement statement) {
-			if (result != null)
-				return;
-			if (statement instanceof GenerateOrIterateStatement) {
-				GenerateOrIterateStatement generatorStatement = (GenerateOrIterateStatement) statement;
-				GenerateAndConsumeTask target = generatorStatement.getTask();
-				if (name.equals(target.getTaskName())) {
-					result = generatorStatement;
-					return;
-				}
-			} else if (statement instanceof StatementProxy)
-				visit(((StatementProxy) statement).getRealStatement(context));
-			else if (statement instanceof LazyStatement) {
-	            Expression<Statement> targetExpression = ((LazyStatement) statement).getTargetExpression();
-	            visit(ExpressionUtil.evaluate(targetExpression, context));
-            } else if (statement instanceof IncludeStatement) {
-                String uri = ((IncludeStatement) statement).getUri().evaluate(context);
-                if (uri != null && uri.toLowerCase().endsWith(".xml")) {
-	                @SuppressWarnings("resource")
-					DescriptorRunner descriptorRunner = new DescriptorRunner(context.resolveRelativeUri(uri), context);
-	            	try {
-		                BeneratorRootStatement rootStatement = descriptorRunner.parseDescriptorFile();
-		                result = rootStatement.getGeneratorStatement(name, context);
-		                return;
-	                } catch (IOException e) {
-		                throw new ConfigurationError("error parsing file " + uri, e);
-	                }
-                }
-            } else if (!(statement instanceof BeneratorRootStatement))
-            	statement.execute(context);
-        }
-	}
-	
-	@Override
-	public String toString() {
-	    return "root";
-	}
-	
+  @Override
+  public String toString() {
+    return "root";
+  }
+
 }

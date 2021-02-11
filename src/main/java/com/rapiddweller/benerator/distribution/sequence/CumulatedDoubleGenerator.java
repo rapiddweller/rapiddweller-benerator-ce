@@ -33,40 +33,61 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
 /**
  * Double Generator that implements a 'cumulated' Double Sequence.<br/>
  * Created: 07.06.2006 19:33:37<br/>
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class CumulatedDoubleGenerator extends AbstractNonNullNumberGenerator<Double> {
-	
-    RandomDoubleGenerator baseGen;
 
-    public CumulatedDoubleGenerator() {
-        this(Long.MIN_VALUE, Long.MAX_VALUE);
-    }
+  /**
+   * The Base gen.
+   */
+  RandomDoubleGenerator baseGen;
 
-    public CumulatedDoubleGenerator(double min, double max) {
-        this(min, max, 1);
-    }
+  /**
+   * Instantiates a new Cumulated double generator.
+   */
+  public CumulatedDoubleGenerator() {
+    this(Long.MIN_VALUE, Long.MAX_VALUE);
+  }
 
-    public CumulatedDoubleGenerator(double min, double max, double granularity) {
-        super(Double.class, min, max, granularity);
-    }
-    
-    @Override
-    public void init(GeneratorContext context) {
-    	if (granularity == 0.)
-    		throw new InvalidGeneratorSetupException(getClass().getSimpleName() + ".granularity may not be 0");
-        super.init(context);
-        baseGen = new RandomDoubleGenerator(min, max, granularity);
-        baseGen.init(context);
-    }
+  /**
+   * Instantiates a new Cumulated double generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public CumulatedDoubleGenerator(double min, double max) {
+    this(min, max, 1);
+  }
 
-	@Override
-	public Double generate() {
-    	assertInitialized();
-        double exactValue = (baseGen.generate() + baseGen.generate() + baseGen.generate() + 
-        		baseGen.generate() + baseGen.generate()) / 5.;
-        return min + (int)(Math.round((exactValue - min) / granularity)) * granularity;
+  /**
+   * Instantiates a new Cumulated double generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   */
+  public CumulatedDoubleGenerator(double min, double max, double granularity) {
+    super(Double.class, min, max, granularity);
+  }
+
+  @Override
+  public void init(GeneratorContext context) {
+    if (granularity == 0.) {
+      throw new InvalidGeneratorSetupException(getClass().getSimpleName() + ".granularity may not be 0");
     }
+    super.init(context);
+    baseGen = new RandomDoubleGenerator(min, max, granularity);
+    baseGen.init(context);
+  }
+
+  @Override
+  public Double generate() {
+    assertInitialized();
+    double exactValue = (baseGen.generate() + baseGen.generate() + baseGen.generate() +
+        baseGen.generate() + baseGen.generate()) / 5.;
+    return min + (int) (Math.round((exactValue - min) / granularity)) * granularity;
+  }
 
 }

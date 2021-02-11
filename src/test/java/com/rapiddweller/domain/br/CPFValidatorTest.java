@@ -26,49 +26,65 @@
 
 package com.rapiddweller.domain.br;
 
-import static org.junit.Assert.*;
-
-import com.rapiddweller.commons.validator.SimpleValidatorTest;
+import com.rapiddweller.common.validator.SimpleValidatorTest;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link CPFValidator}.<br/><br/>
  * Created: 17.10.2009 08:25:15
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class CPFValidatorTest extends SimpleValidatorTest<String> {
 
-	public CPFValidatorTest() {
-	    super(new CPFValidator());
-    }
+  /**
+   * Instantiates a new Cpf validator test.
+   */
+  public CPFValidatorTest() {
+    super(new CPFValidator());
+  }
 
-	@Test
-	public void testValidPlainSamples() {
-		assertValid("04303340790");
-	}
-	
-	@Test
-	public void testValidFormattedSamples() {
-		CPFValidator validator = new CPFValidator(true);
-		assertTrue(validator.valid("043.033.407-90"));
-		assertTrue(validator.valid("04303340790"));
-	}
-	
-	@Test
-	public void testIllegalSamples() {
-		assertInvalid(null);
-		assertInvalid("");
-		assertInvalid("12");
-		assertInvalid("1234567890123456789");
-	}
-	
-	@Test
-	public void testInvalidSamples() {
-		assertInvalid("04303340791"); // last check digit wrong
-		assertInvalid("04303340780"); // first check digit wrong
-		assertInvalid("043.033.407-91"); // last check digit wrong
-		assertInvalid("043.033.407-80"); // first check digit wrong
-	}
-	
+  /**
+   * Test valid plain samples.
+   */
+  @Test
+  public void testValidPlainSamples() {
+    assertValid("04303340790");
+  }
+
+  /**
+   * Test valid formatted samples.
+   */
+  @Test
+  public void testValidFormattedSamples() {
+    CPFValidator validator = new CPFValidator(true);
+    assertTrue(validator.valid("043.033.407-90"));
+    assertTrue(validator.valid("04303340790"));
+  }
+
+  /**
+   * Test illegal samples.
+   */
+  @Test
+  public void testIllegalSamples() {
+    assertInvalid(null);
+    assertInvalid("");
+    assertInvalid("12");
+    assertInvalid("1234567890123456789");
+  }
+
+  /**
+   * Test invalid samples.
+   */
+  @Test
+  public void testInvalidSamples() {
+    assertInvalid("04303340791"); // last check digit wrong
+    assertInvalid("04303340780"); // first check digit wrong
+    assertInvalid("043.033.407-91"); // last check digit wrong
+    assertInvalid("043.033.407-80"); // first check digit wrong
+  }
+
 }

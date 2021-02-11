@@ -26,42 +26,75 @@
 
 package com.rapiddweller.benerator.file;
 
+import com.rapiddweller.benerator.test.GeneratorTest;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.IOUtil;
+
 import java.io.File;
 import java.io.IOException;
-
-import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.IOUtil;
 
 /**
  * Parent class for tests that relate to file and folder hierarchies.<br/><br/>
  * Created: 24.02.2010 10:24:38
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public abstract class FileContentGeneratorTest extends GeneratorTest {
 
-	protected static final File ROOT_DIR = new File("target" + File.separator + "filetest");
-	protected static final File SUB_DIR = new File(ROOT_DIR, "sub");
-	protected static final File ROOT_DIR_FILE = new File(ROOT_DIR, "fr.txt");
-	protected static final File SUB_DIR_FILE = new File(SUB_DIR, "fs.txt");
-	protected static final String ROOT_DIR_FILE_CONTENT = "rfc";
-	protected static final String SUB_DIR_FILE_CONTENT = "sfc";
-	protected static final byte[] ROOT_DIR_FILE_CONTENT_ARRAY = ROOT_DIR_FILE_CONTENT.getBytes();
-	protected static final byte[] SUB_DIR_FILE_CONTENT_ARRAY = SUB_DIR_FILE_CONTENT.getBytes();
+  /**
+   * The constant ROOT_DIR.
+   */
+  protected static final File ROOT_DIR = new File("target" + File.separator + "filetest");
+  /**
+   * The constant SUB_DIR.
+   */
+  protected static final File SUB_DIR = new File(ROOT_DIR, "sub");
+  /**
+   * The constant ROOT_DIR_FILE.
+   */
+  protected static final File ROOT_DIR_FILE = new File(ROOT_DIR, "fr.txt");
+  /**
+   * The constant SUB_DIR_FILE.
+   */
+  protected static final File SUB_DIR_FILE = new File(SUB_DIR, "fs.txt");
+  /**
+   * The constant ROOT_DIR_FILE_CONTENT.
+   */
+  protected static final String ROOT_DIR_FILE_CONTENT = "rfc";
+  /**
+   * The constant SUB_DIR_FILE_CONTENT.
+   */
+  protected static final String SUB_DIR_FILE_CONTENT = "sfc";
+  /**
+   * The constant ROOT_DIR_FILE_CONTENT_ARRAY.
+   */
+  protected static final byte[] ROOT_DIR_FILE_CONTENT_ARRAY = ROOT_DIR_FILE_CONTENT.getBytes();
+  /**
+   * The constant SUB_DIR_FILE_CONTENT_ARRAY.
+   */
+  protected static final byte[] SUB_DIR_FILE_CONTENT_ARRAY = SUB_DIR_FILE_CONTENT.getBytes();
 
-	protected void createTestFolders() throws IOException {
-		FileUtil.ensureDirectoryExists(ROOT_DIR);
-		FileUtil.ensureDirectoryExists(SUB_DIR);
-	    IOUtil.writeTextFile(ROOT_DIR_FILE.getAbsolutePath(), ROOT_DIR_FILE_CONTENT);
-		IOUtil.writeTextFile(SUB_DIR_FILE.getAbsolutePath(), SUB_DIR_FILE_CONTENT);
-    }
+  /**
+   * Create test folders.
+   *
+   * @throws IOException the io exception
+   */
+  protected void createTestFolders() throws IOException {
+    FileUtil.ensureDirectoryExists(ROOT_DIR);
+    FileUtil.ensureDirectoryExists(SUB_DIR);
+    IOUtil.writeTextFile(ROOT_DIR_FILE.getAbsolutePath(), ROOT_DIR_FILE_CONTENT);
+    IOUtil.writeTextFile(SUB_DIR_FILE.getAbsolutePath(), SUB_DIR_FILE_CONTENT);
+  }
 
-	protected void removeTestFolders() {
-	    FileUtil.deleteIfExists(SUB_DIR_FILE);
-	    FileUtil.deleteIfExists(SUB_DIR);
-	    FileUtil.deleteIfExists(ROOT_DIR_FILE);
-	    FileUtil.deleteIfExists(ROOT_DIR);
-    }
+  /**
+   * Remove test folders.
+   */
+  protected void removeTestFolders() {
+    FileUtil.deleteIfExists(SUB_DIR_FILE);
+    FileUtil.deleteIfExists(SUB_DIR);
+    FileUtil.deleteIfExists(ROOT_DIR_FILE);
+    FileUtil.deleteIfExists(ROOT_DIR);
+  }
 
 }

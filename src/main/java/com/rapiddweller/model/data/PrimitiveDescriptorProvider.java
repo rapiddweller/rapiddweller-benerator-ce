@@ -37,20 +37,37 @@ import com.rapiddweller.script.PrimitiveType;
  */
 public class PrimitiveDescriptorProvider extends DefaultDescriptorProvider {
 
-    public static final String NAMESPACE = "ben";
+  /**
+   * The constant NAMESPACE.
+   */
+  public static final String NAMESPACE = "ben";
 
-    public PrimitiveDescriptorProvider(DataModel dataModel) {
-        super(NAMESPACE, dataModel);
-        for (PrimitiveType type : PrimitiveType.getInstances())
-            addTypeDescriptor(new SimpleTypeDescriptor(type.getName(), this, type.getName()));
-        addTypeDescriptor(new ComplexTypeDescriptor("entity", this));
+  /**
+   * Instantiates a new Primitive descriptor provider.
+   *
+   * @param dataModel the data model
+   */
+  public PrimitiveDescriptorProvider(DataModel dataModel) {
+    super(NAMESPACE, dataModel);
+    for (PrimitiveType type : PrimitiveType.getInstances()) {
+      addTypeDescriptor(new SimpleTypeDescriptor(type.getName(), this,
+          type.getName()));
     }
+    addTypeDescriptor(new ComplexTypeDescriptor("entity", this));
+  }
 
-    public SimpleTypeDescriptor getPrimitiveTypeDescriptor(Class<? extends Object> javaType) {
-        PrimitiveType type = PrimitiveType.findByJavaType(javaType);
-        if (type != null)
-            return (SimpleTypeDescriptor) getTypeDescriptor(type.getName());
-        return null;
+  /**
+   * Gets primitive type descriptor.
+   *
+   * @param javaType the java type
+   * @return the primitive type descriptor
+   */
+  public SimpleTypeDescriptor getPrimitiveTypeDescriptor(Class<?> javaType) {
+    PrimitiveType type = PrimitiveType.findByJavaType(javaType);
+    if (type != null) {
+      return (SimpleTypeDescriptor) getTypeDescriptor(type.getName());
     }
+    return null;
+  }
 
 }

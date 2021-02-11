@@ -26,83 +26,115 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * Generates random {@link BigDecimal}s with a uniform distribution.
  * <br/>
  * Created at 23.06.2009 23:36:15
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class RandomBigDecimalGenerator extends ThreadSafeNonNullGenerator<BigDecimal> {
 
-	private static final BigDecimal DEFAULT_MIN = BigDecimal.valueOf(Double.MIN_VALUE);
-	private static final BigDecimal DEFAULT_MAX = BigDecimal.valueOf(Double.MAX_VALUE);
-	private static final BigDecimal DEFAULT_GRANULARITY = BigDecimal.valueOf(1);
-	
-	private BigDecimal min;
-	private BigDecimal max;
-	private BigDecimal granularity;
-	private BigDecimal range;
+  private static final BigDecimal DEFAULT_MIN = BigDecimal.valueOf(Double.MIN_VALUE);
+  private static final BigDecimal DEFAULT_MAX = BigDecimal.valueOf(Double.MAX_VALUE);
+  private static final BigDecimal DEFAULT_GRANULARITY = BigDecimal.valueOf(1);
 
-    public RandomBigDecimalGenerator() {
-        this(DEFAULT_MIN, DEFAULT_MAX);
+  private final BigDecimal min;
+  private final BigDecimal max;
+  private final BigDecimal granularity;
+  private final BigDecimal range;
+
+  /**
+   * Instantiates a new Random big decimal generator.
+   */
+  public RandomBigDecimalGenerator() {
+    this(DEFAULT_MIN, DEFAULT_MAX);
+  }
+
+  /**
+   * Instantiates a new Random big decimal generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public RandomBigDecimalGenerator(BigDecimal min, BigDecimal max) {
+    this(min, max, DEFAULT_GRANULARITY);
+  }
+
+  /**
+   * Instantiates a new Random big decimal generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   */
+  public RandomBigDecimalGenerator(BigDecimal min, BigDecimal max, BigDecimal granularity) {
+    this.min = min;
+    this.max = max;
+    this.granularity = granularity;
+    BigDecimal tmp = max.subtract(min).divide(granularity);
+    tmp = tmp.setScale(0, RoundingMode.DOWN);
+    this.range = tmp.multiply(granularity);
+  }
+
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public Class<BigDecimal> getGeneratedType() {
+    return BigDecimal.class;
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    if (BigDecimal.ONE.compareTo(granularity) == 0) {
+      throw new InvalidGeneratorSetupException(getClass().getSimpleName() + ".granularity may not be 0");
     }
+    super.init(context);
+  }
 
-    public RandomBigDecimalGenerator(BigDecimal min, BigDecimal max) {
-        this(min, max, DEFAULT_GRANULARITY);
-    }
+  @Override
+  public BigDecimal generate() {
+    long n = range.divide(granularity).longValue();
+    BigDecimal i = BigDecimal.valueOf(RandomUtil.randomLong(0, n));
+    return min.add(i.multiply(granularity));
+  }
 
-    public RandomBigDecimalGenerator(BigDecimal min, BigDecimal max, BigDecimal granularity) {
-        this.min = min;
-        this.max = max;
-        this.granularity = granularity;
-        BigDecimal tmp = max.subtract(min).divide(granularity);
-        tmp = tmp.setScale(0, RoundingMode.DOWN);
-        this.range = tmp.multiply(granularity);
-    }
+  // properties ------------------------------------------------------------------------------------------------------
 
-    // Generator interface ---------------------------------------------------------------------------------------------
+  /**
+   * Gets min.
+   *
+   * @return the min
+   */
+  public BigDecimal getMin() {
+    return min;
+  }
 
-	@Override
-	public Class<BigDecimal> getGeneratedType() {
-    	return BigDecimal.class;
-    }
+  /**
+   * Gets max.
+   *
+   * @return the max
+   */
+  public BigDecimal getMax() {
+    return max;
+  }
 
-	@Override
-	public synchronized void init(GeneratorContext context) {
-    	if (BigDecimal.ONE.compareTo(granularity) == 0)
-    		throw new InvalidGeneratorSetupException(getClass().getSimpleName() + ".granularity may not be 0");
-	    super.init(context);
-	}
-	
-	@Override
-	public BigDecimal generate() {
-        long n = range.divide(granularity).longValue();
-        BigDecimal i = BigDecimal.valueOf(RandomUtil.randomLong(0, n));
-		return min.add(i.multiply(granularity));
-    }
-
-    // properties ------------------------------------------------------------------------------------------------------
-
-    public BigDecimal getMin() {
-    	return min;
-    }
-
-	public BigDecimal getMax() {
-    	return max;
-    }
-
-	public BigDecimal getGranularity() {
-    	return granularity;
-    }
+  /**
+   * Gets granularity.
+   *
+   * @return the granularity
+   */
+  public BigDecimal getGranularity() {
+    return granularity;
+  }
 
 }

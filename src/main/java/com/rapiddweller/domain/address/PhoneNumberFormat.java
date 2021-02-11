@@ -55,80 +55,94 @@ import java.text.ParsePosition;
  */
 public class PhoneNumberFormat extends Format {
 
-    private static final long serialVersionUID = -7235352934060711517L;
+  private static final long serialVersionUID = -7235352934060711517L;
 
-    private final String pattern;
+  private final String pattern;
 
-    public PhoneNumberFormat(String pattern) {
-        this.pattern = pattern;
+  /**
+   * Instantiates a new Phone number format.
+   *
+   * @param pattern the pattern
+   */
+  public PhoneNumberFormat(String pattern) {
+    this.pattern = pattern;
+  }
+
+  @Override
+  public StringBuffer format(Object obj, StringBuffer toAppendTo,
+                             FieldPosition pos) {
+    PhoneNumber number = (PhoneNumber) obj;
+    for (int i = 0; i < pattern.length(); i++) {
+      char c = pattern.charAt(i);
+      switch (c) {
+        case 'c':
+          toAppendTo.append(number.getCountryCode());
+          break;
+        case 'a':
+          toAppendTo.append(number.getAreaCode());
+          break;
+        case 'l':
+          toAppendTo.append(number.getLocalNumber());
+          break;
+        default:
+          toAppendTo.append(c);
+      }
     }
+    return toAppendTo;
+  }
 
-    @Override
-    public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-        PhoneNumber number = (PhoneNumber) obj;
-        for (int i = 0; i < pattern.length(); i++) {
-            char c = pattern.charAt(i);
-            switch (c) {
-                case 'c':
-                    toAppendTo.append(number.getCountryCode());
-                    break;
-                case 'a':
-                    toAppendTo.append(number.getAreaCode());
-                    break;
-                case 'l':
-                    toAppendTo.append(number.getLocalNumber());
-                    break;
-                default:
-                    toAppendTo.append(c);
-            }
-        }
-        return toAppendTo;
+  @Override
+  public Object parseObject(String source, ParsePosition pos) {
+    PhoneNumber number = new PhoneNumber();
+    for (int i = 0; i < pattern.length(); i++) {
+      char c = pattern.charAt(i);
+      switch (c) {
+        case 'c':
+          number.setCountryCode(parseDigits(source, pos));
+          break;
+        case 'a':
+          number.setAreaCode(parseDigits(source, pos));
+          break;
+        case 'l':
+          number.setLocalNumber(parseDigits(source, pos));
+          break;
+        default:
+          if (source.charAt(pos.getIndex()) != c) {
+            throw new IllegalArgumentException(
+                "Pattern '" + pattern +
+                    "' is not matched by String: " +
+                    source);
+          }
+          pos.setIndex(pos.getIndex() + 1);
+      }
     }
+    return number;
+  }
 
-    @Override
-    public Object parseObject(String source, ParsePosition pos) {
-        PhoneNumber number = new PhoneNumber();
-        for (int i = 0; i < pattern.length(); i++) {
-            char c = pattern.charAt(i);
-            switch (c) {
-                case 'c':
-                    number.setCountryCode(parseDigits(source, pos));
-                    break;
-                case 'a':
-                    number.setAreaCode(parseDigits(source, pos));
-                    break;
-                case 'l':
-                    number.setLocalNumber(parseDigits(source, pos));
-                    break;
-                default:
-                    if (source.charAt(pos.getIndex()) != c)
-                        throw new IllegalArgumentException("Pattern '" + pattern + "' is not matched by String: " + source);
-                    pos.setIndex(pos.getIndex() + 1);
-            }
-        }
-        return number;
+  @Override
+  public Object parseObject(String source) throws ParseException {
+    try {
+      return super.parseObject(source);
+    } catch (IllegalArgumentException e) {
+      throw new ParseException(e.getMessage(), -1);
     }
+  }
 
-    @Override
-    public Object parseObject(String source) throws ParseException {
-        try {
-            return super.parseObject(source);
-        } catch (IllegalArgumentException e) {
-            throw new ParseException(e.getMessage(), -1);
-        }
+  private String parseDigits(String source, ParsePosition pos) {
+    if (pos.getIndex() >= source.length()) {
+      throw new IllegalArgumentException(
+          "Text cannot be parsed unambiguously as phone number with pattern: " +
+              pattern);
     }
-
-    private String parseDigits(String source, ParsePosition pos) {
-        if (pos.getIndex() >= source.length())
-            throw new IllegalArgumentException("Text cannot be parsed unambiguously as phone number with pattern: " + pattern);
-        int start = pos.getIndex();
-        int end;
-        for (end = start; end < source.length(); end++) {
-            char c = source.charAt(end);
-            if (!Character.isDigit(c))
-                break;
-        }
-        pos.setIndex(end);
-        return source.substring(start, end);
+    int start = pos.getIndex();
+    int end;
+    for (end = start; end < source.length(); end++) {
+      char c = source.charAt(end);
+      if (!Character.isDigit(c)) {
+        break;
+      }
     }
+    pos.setIndex(end);
+    return source.substring(start, end);
+  }
 }

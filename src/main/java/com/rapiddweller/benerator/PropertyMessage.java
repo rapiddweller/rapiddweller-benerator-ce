@@ -33,37 +33,45 @@ package com.rapiddweller.benerator;
  */
 public class PropertyMessage {
 
-    private final String property;
-    private final String message;
+  private final String property;
+  private final String message;
 
-    public PropertyMessage(String property, String message) {
-        this.property = property;
-        this.message = message;
+  /**
+   * Instantiates a new Property message.
+   *
+   * @param property the property
+   * @param message  the message
+   */
+  public PropertyMessage(String property, String message) {
+    this.property = property;
+    this.message = message;
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-    
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        final PropertyMessage that = (PropertyMessage) o;
-        return (this.property.equals(that.property) && this.message.equals(that.message));
-
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    final PropertyMessage that = (PropertyMessage) o;
+    return (this.property.equals(that.property) && this.message.equals(that.message));
 
-    @Override
-    public int hashCode() {
-        int result;
-        result = property.hashCode();
-        result = 29 * result + message.hashCode();
-        return result;
-    }
+  }
 
-    @Override
-    public String toString() {
-        return "'" + property + "' " + message;
-    }
+  @Override
+  public int hashCode() {
+    int result;
+    result = property.hashCode();
+    result = 29 * result + message.hashCode();
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "'" + property + "' " + message;
+  }
 }

@@ -26,12 +26,6 @@
 
 package com.rapiddweller.benerator.factory;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.distribution.sequence.RandomDoubleGenerator;
@@ -39,121 +33,153 @@ import com.rapiddweller.benerator.sample.AttachedWeightSampleGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.converter.FormatFormatConverter;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.converter.FormatFormatConverter;
 import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.WeightedSample;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link FactoryUtil} class.<br/>
  * <br/>
  * Created at 01.07.2009 07:10:51
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class FactoryUtilTest extends GeneratorTest {
-	
-	@Test
-	public void testGetDistribution_default() {
-		SimpleTypeDescriptor descriptor = createSimpleType("myType");
-		assertNull(FactoryUtil.getDistribution(descriptor.getDistribution(), Uniqueness.NONE, false, context));
-		assertEquals(SequenceManager.EXPAND_SEQUENCE, 
-				FactoryUtil.getDistribution(descriptor.getDistribution(), Uniqueness.SIMPLE, true, context));
-	}
-	
-	@Test
-	public void testCreateDynamicCountGenerator_default() {
-		// given an instance descriptor without limits defined
-		InstanceDescriptor descriptor = createInstance("inst");
-		// when creating a count generator for this
-		Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 1L, 1L, false, context);
-		countGenerator.init(context);
-		// then it is supposed to only generate null values for indicating an unlimited count
-		expectGeneratedSet(countGenerator, 100, new Long[] { null });
-	}
-	
-	@Test
-	public void testCreateDynamicCountGenerator_distributed() {
-		InstanceDescriptor descriptor = createInstance("inst").withMinCount(2).withMaxCount(4);
-		Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 1L, 1L, false, context);
-		countGenerator.init(context);
-		expectGeneratedSet(countGenerator, 100, 2L, 3L, 4L).withContinuedAvailability();
-	}
-	
-	@Test
-	public void testCreateDynamicCountGenerator_minMax() {
-		InstanceDescriptor descriptor = createInstance("inst").withMinCount(2).withMaxCount(3);
-		Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 1L, 1L, false, context);
-		countGenerator.init(context);
-		expectGeneratedSet(countGenerator, 20, 2L, 3L).withContinuedAvailability();
-	}
-	
-	@Test
-	public void testCreateDynamicCountGenerator_min() {
-		// given an instance descriptor with just a lower limit defined
-		InstanceDescriptor descriptor = createInstance("inst").withMinCount(6);
-		// when creating a count generator for this
-		Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 1L, 1L, false, context);
-		countGenerator.init(context);
-		// then it is supposed to only generate null values for indicating an unlimited count
-		expectGeneratedSet(countGenerator, 100, new Long[] { null });
-	}
-	
 
-    // formatting generators -------------------------------------------------------------------------------------------
+  /**
+   * Test get distribution default.
+   */
+  @Test
+  public void testGetDistribution_default() {
+    SimpleTypeDescriptor descriptor = createSimpleType("myType");
+    assertNull(FactoryUtil.getDistribution(descriptor.getDistribution(), Uniqueness.NONE, false, context));
+    assertEquals(SequenceManager.EXPAND_SEQUENCE,
+        FactoryUtil.getDistribution(descriptor.getDistribution(), Uniqueness.SIMPLE, true, context));
+  }
 
-    @Test
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void testGetConvertingGenerator() {
-        Generator<Double> source = new RandomDoubleGenerator(0, 9);
-        NumberFormat format = DecimalFormat.getInstance();
-        format.setMinimumFractionDigits(0);
-        format.setMaximumFractionDigits(2);
-        Generator<String> generator = WrapperFactory.applyConverter(
-                source, new FormatFormatConverter(Object.class, format, false));
-        initAndUseGenerator(generator);
-    }
+  /**
+   * Test create dynamic count generator default.
+   */
+  @Test
+  public void testCreateDynamicCountGenerator_default() {
+    // given an instance descriptor without limits defined
+    InstanceDescriptor descriptor = createInstance("inst");
+    // when creating a count generator for this
+    Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 1L, 1L, false, context);
+    countGenerator.init(context);
+    // then it is supposed to only generate null values for indicating an unlimited count
+    expectGeneratedSet(countGenerator, 100, new Long[] {null});
+  }
 
-    @Test
-    public void testGetMessageGenerator() {
-        List<String> salutations = Arrays.asList("Hello", "Hi");
-        AttachedWeightSampleGenerator<String> salutationGenerator = new AttachedWeightSampleGenerator<String>(String.class, salutations);
-        List<String> names = Arrays.asList("Alice", "Bob", "Charly");
-        AttachedWeightSampleGenerator<String> nameGenerator = new AttachedWeightSampleGenerator<String>(String.class, names);
-        String pattern = "{0} {1}";
-        Generator<String> generator = WrapperFactory.createMessageGenerator(pattern, 0, 12, salutationGenerator, nameGenerator);
-        generator.init(context);
-        ProductWrapper<String> wrapper = new ProductWrapper<String>();
-        for (int i = 0; i < 10; i++) {
-            String message = generator.generate(wrapper).unwrap();
-            StringTokenizer tokenizer = new StringTokenizer(message, " ");
-            assertEquals(2, tokenizer.countTokens());
-            assertTrue(salutations.contains(tokenizer.nextToken()));
-            assertTrue(names.contains(tokenizer.nextToken()));
-        }
-    }
-    
-	@SuppressWarnings("unchecked")
-    @Test
-    public void testExtractValues() {
-		List<Integer> values = FactoryUtil.extractValues(CollectionUtil.toList(
-    			new WeightedSample<Integer>(1, 1),
-    			new WeightedSample<Integer>(null, 2)));
-    	assertEquals(CollectionUtil.toList(1, null), values);
-    }
+  /**
+   * Test create dynamic count generator distributed.
+   */
+  @Test
+  public void testCreateDynamicCountGenerator_distributed() {
+    InstanceDescriptor descriptor = createInstance("inst").withMinCount(2).withMaxCount(4);
+    Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 1L, 1L, false, context);
+    countGenerator.init(context);
+    expectGeneratedSet(countGenerator, 100, 2L, 3L, 4L).withContinuedAvailability();
+  }
 
-    private <T> void initAndUseGenerator(Generator<T> generator) {
-    	generator.init(context);
-        for (int i = 0; i < 5; i++) {
-            T product = generator.generate(new ProductWrapper<T>()).unwrap();
-        	assertNotNull("Generator unexpectedly invalid: " + generator.toString(), product);
-        }
+  /**
+   * Test create dynamic count generator min max.
+   */
+  @Test
+  public void testCreateDynamicCountGenerator_minMax() {
+    InstanceDescriptor descriptor = createInstance("inst").withMinCount(2).withMaxCount(3);
+    Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 1L, 1L, false, context);
+    countGenerator.init(context);
+    expectGeneratedSet(countGenerator, 20, 2L, 3L).withContinuedAvailability();
+  }
+
+  /**
+   * Test create dynamic count generator min.
+   */
+  @Test
+  public void testCreateDynamicCountGenerator_min() {
+    // given an instance descriptor with just a lower limit defined
+    InstanceDescriptor descriptor = createInstance("inst").withMinCount(6);
+    // when creating a count generator for this
+    Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 1L, 1L, false, context);
+    countGenerator.init(context);
+    // then it is supposed to only generate null values for indicating an unlimited count
+    expectGeneratedSet(countGenerator, 100, new Long[] {null});
+  }
+
+
+  // formatting generators -------------------------------------------------------------------------------------------
+
+  /**
+   * Test get converting generator.
+   */
+  @Test
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public void testGetConvertingGenerator() {
+    Generator<Double> source = new RandomDoubleGenerator(0, 9);
+    NumberFormat format = DecimalFormat.getInstance();
+    format.setMinimumFractionDigits(0);
+    format.setMaximumFractionDigits(2);
+    Generator<String> generator = WrapperFactory.applyConverter(
+        source, new FormatFormatConverter(Object.class, format, false));
+    initAndUseGenerator(generator);
+  }
+
+  /**
+   * Test get message generator.
+   */
+  @Test
+  public void testGetMessageGenerator() {
+    List<String> salutations = Arrays.asList("Hello", "Hi");
+    AttachedWeightSampleGenerator<String> salutationGenerator = new AttachedWeightSampleGenerator<>(String.class, salutations);
+    List<String> names = Arrays.asList("Alice", "Bob", "Charly");
+    AttachedWeightSampleGenerator<String> nameGenerator = new AttachedWeightSampleGenerator<>(String.class, names);
+    String pattern = "{0} {1}";
+    Generator<String> generator = WrapperFactory.createMessageGenerator(pattern, 0, 12, salutationGenerator, nameGenerator);
+    generator.init(context);
+    ProductWrapper<String> wrapper = new ProductWrapper<>();
+    for (int i = 0; i < 10; i++) {
+      String message = generator.generate(wrapper).unwrap();
+      StringTokenizer tokenizer = new StringTokenizer(message, " ");
+      assertEquals(2, tokenizer.countTokens());
+      assertTrue(salutations.contains(tokenizer.nextToken()));
+      assertTrue(names.contains(tokenizer.nextToken()));
     }
+  }
+
+  /**
+   * Test extract values.
+   */
+  @Test
+  public void testExtractValues() {
+    List<Integer> values = FactoryUtil.extractValues(CollectionUtil.toList(
+        new WeightedSample<>(1, 1),
+        new WeightedSample<>(null, 2)));
+    assertEquals(CollectionUtil.toList(1, null), values);
+  }
+
+  private <T> void initAndUseGenerator(Generator<T> generator) {
+    generator.init(context);
+    for (int i = 0; i < 5; i++) {
+      T product = generator.generate(new ProductWrapper<>()).unwrap();
+      assertNotNull("Generator unexpectedly invalid: " + generator, product);
+    }
+  }
 
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 
 <setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -9,11 +9,11 @@
         <property name="minDate" value="2007-06-21"/>
         <property name="maxDate" value="2007-09-21"/>
         <property name="dateGranularity" value="0000-00-01"/>
-        <property name="dateDistribution" value="{new RandomSequence()}"/>
+        <property name="dateDistribution" value="random"/>
         <property name="minTime" value="09:00:00"/>
         <property name="maxTime" value="17:00:00"/>
         <property name="timeGranularity" value="00:00:01"/>
-        <property name="timeDistribution" value="{new CumulatedSequence()}"/>
+        <property name="timeDistribution" value="cumulated"/>
     </bean>
 
     <generate type="test" count="10" consumer="ConsoleExporter">

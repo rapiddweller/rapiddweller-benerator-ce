@@ -32,34 +32,55 @@ import com.rapiddweller.benerator.distribution.SequenceManager;
 
 /**
  * Creates arrays of random length filled with random bytes.
+ *
  * @author Volker Bergmann
  * @since 0.3.04
  */
 public class ByteArrayGenerator extends SingleSourceArrayGenerator<Byte, byte[]> {
-	
-    // constructors ----------------------------------------------------------------------------------------------------
 
-    public ByteArrayGenerator() {
-        this(null, 0, 30);
-    }
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public ByteArrayGenerator(Generator<Byte> source, int minLength, int maxLength) {
-        this(source, minLength, maxLength, SequenceManager.RANDOM_SEQUENCE);
-    }
+  /**
+   * Instantiates a new Byte array generator.
+   */
+  public ByteArrayGenerator() {
+    this(null, 0, 30);
+  }
 
-    public ByteArrayGenerator(Generator<Byte> source, int minLength, int maxLength, Distribution distribution) {
-        super(source, byte.class, minLength, maxLength, distribution);
-    }
+  /**
+   * Instantiates a new Byte array generator.
+   *
+   * @param source    the source
+   * @param minLength the min length
+   * @param maxLength the max length
+   */
+  public ByteArrayGenerator(Generator<Byte> source, int minLength, int maxLength) {
+    this(source, minLength, maxLength, SequenceManager.RANDOM_SEQUENCE);
+  }
 
-    @Override
-    public ProductWrapper<byte[]> generate(ProductWrapper<byte[]> wrapper) {
-        Integer length = generateCardinal();
-        if (length == null)
-        	return null;
-        byte[] array = new byte[length.intValue()];
-        for (int i = 0; i < length; i++)
-            array[i] = generateFromSource().unwrap();
-        return wrapper.wrap(array);
+  /**
+   * Instantiates a new Byte array generator.
+   *
+   * @param source       the source
+   * @param minLength    the min length
+   * @param maxLength    the max length
+   * @param distribution the distribution
+   */
+  public ByteArrayGenerator(Generator<Byte> source, int minLength, int maxLength, Distribution distribution) {
+    super(source, byte.class, minLength, maxLength, distribution);
+  }
+
+  @Override
+  public ProductWrapper<byte[]> generate(ProductWrapper<byte[]> wrapper) {
+    Integer length = generateCardinal();
+    if (length == null) {
+      return null;
     }
-    
+    byte[] array = new byte[length];
+    for (int i = 0; i < length; i++) {
+      array[i] = generateFromSource().unwrap();
+    }
+    return wrapper.wrap(array);
+  }
+
 }

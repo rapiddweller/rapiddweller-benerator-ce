@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.test;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.ParseUtil;
+import com.rapiddweller.common.ParseUtil;
 import junit.framework.AssertionFailedError;
 import org.junit.Test;
 
@@ -37,66 +37,96 @@ import org.junit.Test;
  * Provides methods for testing generators and standard tests that act on generically created generator instances.<br/>
  * <br/>
  * Created: 13.11.2007 13:13:07
+ *
  * @author Volker Bergmann
  */
 public abstract class GeneratorClassTest extends GeneratorTest {
 
-    @SuppressWarnings("rawtypes")
-	protected Class<? extends Generator> generatorClass;
+  /**
+   * The Generator class.
+   */
+  @SuppressWarnings("rawtypes")
+  protected final Class<? extends Generator> generatorClass;
 
-    @SuppressWarnings("rawtypes")
-	public GeneratorClassTest(Class<? extends Generator> generatorClass) {
-        this.generatorClass = generatorClass;
+  /**
+   * Instantiates a new Generator class test.
+   *
+   * @param generatorClass the generator class
+   */
+  @SuppressWarnings("rawtypes")
+  public GeneratorClassTest(Class<? extends Generator> generatorClass) {
+    this.generatorClass = generatorClass;
+  }
+
+  // test methods that apply for all Generators ----------------------------------------------------------------------
+
+  /**
+   * Test default constructor.
+   *
+   * @throws Throwable the throwable
+   */
+  @Test
+  public void testDefaultConstructor() throws Throwable {
+    generatorClass.getDeclaredConstructor().newInstance();
+  }
+
+  /**
+   * Test to string.
+   *
+   * @throws Throwable the throwable
+   */
+  @Test
+  public void testToString() throws Throwable {
+    Generator<?> generator = generatorClass.getDeclaredConstructor().newInstance();
+    assertCustomToStringMethod(generator);
+    try {
+      initialize(generator);
+    } catch (Exception e) {
+      // if the default instance is invalid, further tests make no sense
+      return;
     }
+    generator.toString();
+    generator.close();
+    generator.toString();
+  }
 
-    // test methods that apply for all Generators ----------------------------------------------------------------------
-
-    @Test
-    public void testDefaultConstructor() throws Throwable {
-        generatorClass.getDeclaredConstructor().newInstance();
+  /**
+   * Test default generation if valid.
+   *
+   * @throws Throwable the throwable
+   */
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  @Test
+  public void testDefaultGenerationIfValid() throws Throwable {
+    Generator<?> generator = generatorClass.getDeclaredConstructor().newInstance();
+    boolean valid = true;
+    try {
+      generator.init(context);
+    } catch (InvalidGeneratorSetupException e) {
+      // that's OK, not every Generator is available from default constructor
+      valid = false;
     }
-
-    @Test
-    public void testToString() throws Throwable {
-        Generator<?> generator = generatorClass.getDeclaredConstructor().newInstance();
-        assertCustomToStringMethod(generator);
-        try {
-	        initialize(generator);
-        } catch (Exception e) {
-        	// if the default instance is invalid, further tests make no sense
-	        return;
-        }
-        generator.toString();
-        generator.close();
-        generator.toString();
+    if (valid) { // must be outside of catch block, else exceptions would be ignored
+      generator.generate(new ProductWrapper());
     }
+  }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test
-    public void testDefaultGenerationIfValid() throws Throwable {
-        Generator<?> generator = generatorClass.getDeclaredConstructor().newInstance();
-        boolean valid = true;
-        try {
-            generator.init(context);
-        } catch (InvalidGeneratorSetupException e) {
-            // that's OK, not every Generator is available from default constructor
-            valid = false;
-        }
-        if (valid) { // must be outside of catch block, else exceptions would be ignored
-            generator.generate(new ProductWrapper());
-        }
-    }
+  // helpers ---------------------------------------------------------------------------------------------------------
 
-    // helpers ---------------------------------------------------------------------------------------------------------
-    
-    protected void assertCustomToStringMethod(Generator<?> generator) {
-        String s = generator.toString();
-        String className = generator.getClass().getName();
-        if (s.startsWith(className) && s.length() >= className.length() + 2
-                && s.charAt(className.length()) == '@'
-                && ParseUtil.isHex(s.substring(className.length() + 1)))
-            throw new AssertionFailedError("The toString() method of class " + generator.getClass() +
-                    " is not customized");
+  /**
+   * Assert custom to string method.
+   *
+   * @param generator the generator
+   */
+  protected void assertCustomToStringMethod(Generator<?> generator) {
+    String s = generator.toString();
+    String className = generator.getClass().getName();
+    if (s.startsWith(className) && s.length() >= className.length() + 2
+        && s.charAt(className.length()) == '@'
+        && ParseUtil.isHex(s.substring(className.length() + 1))) {
+      throw new AssertionFailedError("The toString() method of class " + generator.getClass() +
+          " is not customized");
     }
+  }
 
 }

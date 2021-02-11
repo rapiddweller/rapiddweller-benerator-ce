@@ -30,45 +30,66 @@ package com.rapiddweller.platform;
  * Simple JavaBean for testing, it holds only a 'name' property.<br/>
  * <br/>
  * Created: 04.08.2007 13:43:27
+ *
  * @author Volker Bergmann
  */
 public class RoleBean {
 
-    private String name;
+  private String name;
 
-    public RoleBean() {
-        this(null);
-    }
+  /**
+   * Instantiates a new Role bean.
+   */
+  public RoleBean() {
+    this(null);
+  }
 
-    public RoleBean(String name) {
-        this.name = name;
-    }
+  /**
+   * Instantiates a new Role bean.
+   *
+   * @param name the name
+   */
+  public RoleBean(String name) {
+    this.name = name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        return (name.equals(((RoleBean)o).name));
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    return (name.equals(((RoleBean) o).name));
+  }
 
-    @Override
-    public int hashCode() {
-        return name.hashCode();
-    }
+  @Override
+  public int hashCode() {
+    return name.hashCode();
+  }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-    
+  @Override
+  public String toString() {
+    return name;
+  }
+
 }

@@ -31,41 +31,50 @@ import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.file.FileBuilder;
 import com.rapiddweller.domain.person.PersonGenerator;
 import com.rapiddweller.domain.person.Person;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 
 import java.io.*;
 
 /**
- * Demonstrates how to use a FreeMarker script for formatting JavaBeans in custom file formats, e.g. XML.<br/>
+ * Demonstrates how to use a FreeMarker script for formatting JavaBeans in custom file format, e.g. XML.<br/>
  * <br/>
  * Created: 07.06.2007 12:04:39
  */
 public class PersonXMLBuilderDemo {
-    private static final String FILE_NAME = "target/persons.xml";
-    private static final int LENGTH = 10;
+  private static final String FILE_NAME = "target/persons.xml";
+  private static final int LENGTH = 10;
 
-    public static void main(String[] args) throws IOException {
-        Writer out = null;
-        try {
-            //out = new BufferedWriter(new FileWriter(FILE_NAME));
-            out = new OutputStreamWriter(System.out);
-            ScriptedDocumentWriter<Person> writer = new ScriptedDocumentWriter<Person>(
-                    out,
-                    "com/rapiddweller/benerator/xmlHeader.ftl",
-                    "com/rapiddweller/benerator/xmlPart.ftl",
-                    "com/rapiddweller/benerator/xmlFooter.ftl"
-            );
-            System.out.println("Running...");
-            long startMillis = System.currentTimeMillis();
-            PersonGenerator generator = new PersonGenerator();
-            generator.init(new DefaultBeneratorContext());
-            FileBuilder.build(generator, LENGTH, writer);
-            long elapsedTime = System.currentTimeMillis() - startMillis;
-            System.out.println("Created file " + FILE_NAME + " with " + LENGTH + " entries " +
-                    "within " + (elapsedTime / 1000) + "s (" + (LENGTH * 1000L / elapsedTime) +
-                    " entries per second)");
-        } finally {
-            IOUtil.close(out);
-        }
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   * @throws IOException the io exception
+   */
+  public static void main(String[] args) throws IOException {
+    Writer out = null;
+    try {
+      //out = new BufferedWriter(new FileWriter(FILE_NAME));
+      out = new OutputStreamWriter(System.out);
+      ScriptedDocumentWriter<Person> writer =
+          new ScriptedDocumentWriter<Person>(
+              out,
+              "com/rapiddweller/benerator/xmlHeader.ftl",
+              "com/rapiddweller/benerator/xmlPart.ftl",
+              "com/rapiddweller/benerator/xmlFooter.ftl"
+          );
+      System.out.println("Running...");
+      long startMillis = System.currentTimeMillis();
+      PersonGenerator generator = new PersonGenerator();
+      generator.init(new DefaultBeneratorContext());
+      FileBuilder.build(generator, LENGTH, writer);
+      long elapsedTime = System.currentTimeMillis() - startMillis;
+      System.out.println("Created file " + FILE_NAME + " with " + LENGTH +
+          " entries " +
+          "within " + (elapsedTime / 1000) + "s (" +
+          (LENGTH * 1000L / elapsedTime) +
+          " entries per second)");
+    } finally {
+      IOUtil.close(out);
     }
+  }
 }

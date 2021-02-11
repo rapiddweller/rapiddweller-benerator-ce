@@ -28,12 +28,16 @@ package com.rapiddweller.platform.csv;
 
 import com.rapiddweller.benerator.consumer.TextFileExporter;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.commons.*;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
 import java.util.List;
@@ -49,166 +53,268 @@ import java.util.List;
  */
 public class CSVEntityExporter extends TextFileExporter {
 
-    private static final Logger logger = LogManager.getLogger(CSVEntityExporter.class);
+  private static final Logger logger =
+      LogManager.getLogger(CSVEntityExporter.class);
 
-    // defaults --------------------------------------------------------------------------------------------------------
+  // defaults --------------------------------------------------------------------------------------------------------
 
-    private static final String DEFAULT_LINE_SEPARATOR = "\r\n"; // as defined by RFC 4180
-    private static final String DEFAULT_URI = "export.csv";
+  private static final String DEFAULT_LINE_SEPARATOR = "\r\n";
+  // as defined by RFC 4180
+  private static final String DEFAULT_URI = "export.csv";
 
-    // configuration attributes ----------------------------------------------------------------------------------------
+  // configuration attributes ----------------------------------------------------------------------------------------
 
-    private String[] columns;
-    private boolean headless;
-    private boolean endWithNewLine;
-    private char separator;
-    private boolean quoteEmpty;
+  private String[] columns;
+  private boolean headless;
+  private boolean endWithNewLine;
+  private char separator;
+  private boolean quoteEmpty;
 
-    // state attributes ------------------------------------------------------------------------------------------------
+  // state attributes ------------------------------------------------------------------------------------------------
 
-    private boolean lfRequired;
+  private boolean lfRequired;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public CSVEntityExporter() {
-        this(DEFAULT_URI);
+  /**
+   * Instantiates a new Csv entity exporter.
+   */
+  public CSVEntityExporter() {
+    this(DEFAULT_URI);
+  }
+
+  /**
+   * Instantiates a new Csv entity exporter.
+   *
+   * @param uri the uri
+   */
+  public CSVEntityExporter(String uri) {
+    this(uri, (String) null);
+  }
+
+  /**
+   * Instantiates a new Csv entity exporter.
+   *
+   * @param uri         the uri
+   * @param columnsSpec the columns spec
+   */
+  public CSVEntityExporter(String uri, String columnsSpec) {
+    this(uri, columnsSpec,
+        DefaultBeneratorContext.getDefaultCellSeparator(), null,
+        DEFAULT_LINE_SEPARATOR);
+  }
+
+  /**
+   * Instantiates a new Csv entity exporter.
+   *
+   * @param uri           the uri
+   * @param columnsSpec   the columns spec
+   * @param separator     the separator
+   * @param encoding      the encoding
+   * @param lineSeparator the line separator
+   */
+  public CSVEntityExporter(String uri, String columnsSpec, char separator,
+                           String encoding, String lineSeparator) {
+    super(uri, encoding, lineSeparator);
+    if (columnsSpec != null) {
+      setColumns(ArrayFormat.parse(columnsSpec, ",", String.class));
     }
+    this.separator = separator;
+    this.quoteEmpty = true;
+  }
 
-    public CSVEntityExporter(String uri) {
-        this(uri, (String) null);
+  /**
+   * Instantiates a new Csv entity exporter.
+   *
+   * @param descriptor the descriptor
+   */
+  public CSVEntityExporter(ComplexTypeDescriptor descriptor) {
+    this(descriptor.getName() + ".csv", descriptor);
+  }
+
+  /**
+   * Instantiates a new Csv entity exporter.
+   *
+   * @param uri        the uri
+   * @param descriptor the descriptor
+   */
+  public CSVEntityExporter(String uri, ComplexTypeDescriptor descriptor) {
+    this(uri, descriptor, DefaultBeneratorContext.getDefaultCellSeparator(),
+        null, DEFAULT_LINE_SEPARATOR);
+  }
+
+  /**
+   * Instantiates a new Csv entity exporter.
+   *
+   * @param uri           the uri
+   * @param descriptor    the descriptor
+   * @param separator     the separator
+   * @param encoding      the encoding
+   * @param lineSeparator the line separator
+   */
+  public CSVEntityExporter(String uri, ComplexTypeDescriptor descriptor,
+                           char separator, String encoding,
+                           String lineSeparator) {
+    super(uri, encoding, lineSeparator);
+    Collection<ComponentDescriptor> componentDescriptors =
+        descriptor.getComponents();
+    List<String> componentNames =
+        BeanUtil.extractProperties(componentDescriptors, "name");
+    this.columns = CollectionUtil.toArray(componentNames, String.class);
+    this.endWithNewLine = false;
+    this.separator = separator;
+  }
+
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Sets columns.
+   *
+   * @param columns the columns
+   */
+  public void setColumns(String[] columns) {
+    if (ArrayUtil.isEmpty(columns)) {
+      this.columns = null;
+    } else {
+      this.columns = columns.clone();
+      StringUtil.trimAll(this.columns);
     }
+  }
 
-    public CSVEntityExporter(String uri, String columnsSpec) {
-        this(uri, columnsSpec, DefaultBeneratorContext.getDefaultCellSeparator(), null, DEFAULT_LINE_SEPARATOR);
+  /**
+   * Sets separator.
+   *
+   * @param separator the separator
+   */
+  public void setSeparator(char separator) {
+    this.separator = separator;
+  }
+
+  /**
+   * Is headless boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isHeadless() {
+    return headless;
+  }
+
+  /**
+   * Sets headless.
+   *
+   * @param headless the headless
+   */
+  public void setHeadless(boolean headless) {
+    this.headless = headless;
+  }
+
+  /**
+   * Is end with new line boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isEndWithNewLine() {
+    return endWithNewLine;
+  }
+
+  /**
+   * Sets end with new line.
+   *
+   * @param endWithNewLine the end with new line
+   */
+  public void setEndWithNewLine(boolean endWithNewLine) {
+    this.endWithNewLine = endWithNewLine;
+  }
+
+  /**
+   * Is quote empty boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isQuoteEmpty() {
+    return quoteEmpty;
+  }
+
+  /**
+   * Sets quote empty.
+   *
+   * @param quoteEmpty the quote empty
+   */
+  public void setQuoteEmpty(boolean quoteEmpty) {
+    this.quoteEmpty = quoteEmpty;
+  }
+
+  // Callback methods for parent class functionality -----------------------------------------------------------------
+
+  @Override
+  protected void startConsumingImpl(Object object) {
+    logger.debug("exporting {}", object);
+    if (!(object instanceof Entity)) {
+      throw new IllegalArgumentException("Expecting entity");
     }
-
-    public CSVEntityExporter(String uri, String columnsSpec, char separator, String encoding, String lineSeparator) {
-        super(uri, encoding, lineSeparator);
-        if (columnsSpec != null)
-            setColumns(ArrayFormat.parse(columnsSpec, ",", String.class));
-        this.separator = separator;
-        this.quoteEmpty = true;
+    Entity entity = (Entity) object;
+    if (lfRequired) {
+      println();
+    } else {
+      lfRequired = true;
     }
-
-    public CSVEntityExporter(ComplexTypeDescriptor descriptor) {
-        this(descriptor.getName() + ".csv", descriptor);
-    }
-
-    public CSVEntityExporter(String uri, ComplexTypeDescriptor descriptor) {
-        this(uri, descriptor, DefaultBeneratorContext.getDefaultCellSeparator(), null, DEFAULT_LINE_SEPARATOR);
-    }
-
-    public CSVEntityExporter(String uri, ComplexTypeDescriptor descriptor, char separator, String encoding, String lineSeparator) {
-        super(uri, encoding, lineSeparator);
-        Collection<ComponentDescriptor> componentDescriptors = descriptor.getComponents();
-        List<String> componentNames = BeanUtil.extractProperties(componentDescriptors, "name");
-        this.columns = CollectionUtil.toArray(componentNames, String.class);
-        this.endWithNewLine = false;
-        this.separator = separator;
-    }
-
-
-    // properties ------------------------------------------------------------------------------------------------------
-
-    public void setColumns(String[] columns) {
-        if (ArrayUtil.isEmpty(columns))
-            this.columns = null;
-        else {
-            this.columns = columns.clone();
-            StringUtil.trimAll(this.columns);
+    for (int i = 0; i < columns.length; i++) {
+      if (i > 0) {
+        printer.print(separator);
+      }
+      Object value = entity.getComponent(columns[i]);
+      String out;
+      if (value == null) {
+        out = getNullString();
+      } else {
+        out = plainConverter.convert(value);
+        if (out.length() == 0 && quoteEmpty) {
+          out = "\"\"";
+        } else if (out.indexOf(separator) >= 0) {
+          out = '"' + out + '"';
         }
+      }
+      printer.print(out);
     }
+  }
 
-    public void setSeparator(char separator) {
-        this.separator = separator;
+  @Override
+  protected void postInitPrinter(Object object) {
+    Entity entity = (Entity) object;
+    // determine columns from entity, if they have not been predefined
+    if (columns == null && entity != null) {
+      columns = CollectionUtil.toArray(entity.getComponents().keySet());
     }
+    printHeaderRow();
+  }
 
-    public boolean isHeadless() {
-        return headless;
+  @Override
+  protected void preClosePrinter() {
+    if (endWithNewLine) {
+      println();
     }
+  }
 
-    public void setHeadless(boolean headless) {
-        this.headless = headless;
-    }
 
-    public boolean isEndWithNewLine() {
-        return endWithNewLine;
-    }
+  // private helpers -------------------------------------------------------------------------------------------------
 
-    public void setEndWithNewLine(boolean endWithNewLine) {
-        this.endWithNewLine = endWithNewLine;
-    }
-
-    public boolean isQuoteEmpty() {
-        return quoteEmpty;
-    }
-
-    public void setQuoteEmpty(boolean quoteEmpty) {
-        this.quoteEmpty = quoteEmpty;
-    }
-
-    // Callback methods for parent class functionality -----------------------------------------------------------------
-
-    @Override
-    protected void startConsumingImpl(Object object) {
-        logger.debug("exporting {}", object);
-        if (!(object instanceof Entity))
-            throw new IllegalArgumentException("Expecting entity");
-        Entity entity = (Entity) object;
-        if (lfRequired)
-            println();
-        else
-            lfRequired = true;
-        for (int i = 0; i < columns.length; i++) {
-            if (i > 0)
-                printer.print(separator);
-            Object value = entity.getComponent(columns[i]);
-            String out;
-            if (value == null)
-                out = getNullString();
-            else {
-                out = plainConverter.convert(value);
-                if (out.length() == 0 && quoteEmpty)
-                    out = "\"\"";
-                else if (out.indexOf(separator) >= 0)
-                    out = '"' + out + '"';
-            }
-            printer.print(out);
+  private void printHeaderRow() {
+    if (!wasAppended && !headless && columns != null) {
+      if (wasAppended && !endWithNewLine) {
+        println();
+      }
+      for (int i = 0; i < columns.length; i++) {
+        if (i > 0) {
+          printer.print(separator);
         }
+        printer.print(columns[i]);
+      }
+      lfRequired = true;
+    } else {
+      lfRequired = (wasAppended && !endWithNewLine);
     }
-
-    @Override
-    protected void postInitPrinter(Object object) {
-        Entity entity = (Entity) object;
-        // determine columns from entity, if they have not been predefined
-        if (columns == null && entity != null)
-            columns = CollectionUtil.toArray(entity.getComponents().keySet());
-        printHeaderRow();
-    }
-
-    @Override
-    protected void preClosePrinter() {
-        if (endWithNewLine)
-            println();
-    }
-
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    private void printHeaderRow() {
-        if (!wasAppended && !headless && columns != null) {
-            if (wasAppended && !endWithNewLine)
-                println();
-            for (int i = 0; i < columns.length; i++) {
-                if (i > 0)
-                    printer.print(separator);
-                printer.print(columns[i]);
-            }
-            lfRequired = true;
-        } else {
-            lfRequired = (wasAppended && !endWithNewLine);
-        }
-    }
+  }
 
 
 }

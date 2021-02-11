@@ -26,26 +26,30 @@
 
 package com.rapiddweller.benerator.engine;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link BeneratorMonitor}.<br/><br/>
  * Created: 27.07.2010 21:32:22
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class BeneratorMonitorTest {
 
-	@Test
-	public void testGenerationCount() throws Exception {
-		BeneratorMonitor monitor = BeneratorMonitor.INSTANCE;
-		monitor.setTotalGenerationCount(0);
-		assertEquals(0L, monitor.getTotalGenerationCount());
-		monitor.countGenerations(100);
-		monitor.countGenerations(89);
-		assertEquals(189, monitor.getTotalGenerationCount());
-	}
+  /**
+   * Test generation count.
+   */
+  @Test
+  public void testGenerationCount() {
+    BeneratorMonitor monitor = BeneratorMonitor.INSTANCE;
+    monitor.setTotalGenerationCount(0);
+    assertEquals(0L, monitor.getTotalGenerationCount());
+    monitor.countGenerations(100);
+    monitor.countGenerations(89);
+    assertEquals(189, monitor.getTotalGenerationCount());
+  }
 
 }

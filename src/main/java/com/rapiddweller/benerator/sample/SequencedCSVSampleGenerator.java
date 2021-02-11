@@ -30,16 +30,16 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.NoOpConverter;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.csv.CSVLineIterator;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.NoOpConverter;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.csv.CSVLineIterator;
 
-import java.io.IOException;
 import java.io.FileNotFoundException;
-import java.util.List;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sample Generator for values that are read from a CSV file.
@@ -51,87 +51,129 @@ import java.util.ArrayList;
  *   Bravo,lsdknac
  *   Charly,fuv
  * </pre>
- *
+ * <p>
  * <br/>
  * Created: 26.07.2007 18:10:33
+ *
+ * @param <E> the type parameter
  * @see AttachedWeightSampleGenerator
  */
 public class SequencedCSVSampleGenerator<E> extends GeneratorProxy<E> {
 
-    /** The URI to read the samples from */
-    private String uri;
+  /**
+   * The URI to read the samples from
+   */
+  private String uri;
 
-    /** The converter to create instances from the CSV cell strings */
-    private Converter<String, E> converter;
+  /**
+   * The converter to create instances from the CSV cell strings
+   */
+  private final Converter<String, E> converter;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public SequencedCSVSampleGenerator() {
-        this((String)null);
+  /**
+   * Instantiates a new Sequenced csv sample generator.
+   */
+  public SequencedCSVSampleGenerator() {
+    this((String) null);
+  }
+
+  /**
+   * Instantiates a new Sequenced csv sample generator.
+   *
+   * @param uri the uri
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public SequencedCSVSampleGenerator(String uri) {
+    this(uri, new NoOpConverter());
+  }
+
+  /**
+   * Instantiates a new Sequenced csv sample generator.
+   *
+   * @param converter the converter
+   */
+  public SequencedCSVSampleGenerator(Converter<String, E> converter) {
+    this(null, converter);
+  }
+
+  /**
+   * Instantiates a new Sequenced csv sample generator.
+   *
+   * @param uri       the uri
+   * @param converter the converter
+   */
+  public SequencedCSVSampleGenerator(String uri, Converter<String, E> converter) {
+    super(new SampleGenerator<>(converter.getTargetType()));
+    this.converter = converter;
+    if (uri != null && uri.trim().length() > 0) {
+      setUri(uri);
     }
+  }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public SequencedCSVSampleGenerator(String uri) {
-        this(uri, new NoOpConverter());
-    }
+  // configuration properties ----------------------------------------------------------------------------------------
 
-    public SequencedCSVSampleGenerator(Converter<String, E> converter) {
-        this(null, converter);
-    }
+  /**
+   * Gets uri.
+   *
+   * @return the uri
+   */
+  public String getUri() {
+    return uri;
+  }
 
-    public SequencedCSVSampleGenerator(String uri, Converter<String, E> converter) {
-        super(new SampleGenerator<E>(converter.getTargetType()));
-        this.converter = converter;
-        if (uri != null && uri.trim().length() > 0)
-            setUri(uri);
-    }
+  /**
+   * Sets uri.
+   *
+   * @param uri the uri
+   */
+  public void setUri(String uri) {
+    this.uri = uri;
+  }
 
-    // configuration properties ----------------------------------------------------------------------------------------
+  /**
+   * test support method
+   *
+   * @param value the value
+   */
+  void addValue(E value) {
+    ((SampleGenerator<E>) getSource()).addValue(value);
+    // do not set dirty flag, otherwise this value would be c�eared
+  }
 
-    public String getUri() {
-        return uri;
-    }
+  // Generator interface ---------------------------------------------------------------------------------------------
 
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-
-    /** test support method */
-    void addValue(E value) {
-        ((SampleGenerator<E>) getSource()).addValue(value);
-        // do not set dirty flag, otherwise this value would be c�eared
-    }
-
-    // Generator interface ---------------------------------------------------------------------------------------------
-
-    @Override
-    public void init(GeneratorContext context) {
-        try {
-        	if (uri == null)
-        		throw new InvalidGeneratorSetupException("uri is not set");
-            CSVLineIterator parser = new CSVLineIterator(uri);
-            List<E> samples = new ArrayList<E>();
-            DataContainer<String[]> container = new DataContainer<String[]>();
-            while ((container = parser.next(container)) != null) {
-            	String[] tokens = container.getData();
-                if (tokens.length > 0)
-                    samples.add(converter.convert(tokens[0]));
-            }
-            ((SampleGenerator<E>) getSource()).setValues(samples);
-        	super.init(context);
-        } catch (FileNotFoundException e) {
-            throw new InvalidGeneratorSetupException("uri", "not found: " + uri);
-        } catch (IOException e) {
-            throw new IllegalGeneratorStateException(e); // file access was interrupted, no fail-over
-        } catch (ConversionException e) {
-            throw new InvalidGeneratorSetupException("URI content not valid", e);
+  @Override
+  public void init(GeneratorContext context) {
+    try {
+      if (uri == null) {
+        throw new InvalidGeneratorSetupException("uri is not set");
+      }
+      CSVLineIterator parser = new CSVLineIterator(uri);
+      List<E> samples = new ArrayList<>();
+      DataContainer<String[]> container = new DataContainer<>();
+      while ((container = parser.next(container)) != null) {
+        String[] tokens = container.getData();
+        if (tokens.length > 0) {
+          samples.add(converter.convert(tokens[0]));
         }
+      }
+      ((SampleGenerator<E>) getSource()).setValues(samples);
+      super.init(context);
+    } catch (FileNotFoundException e) {
+      throw new InvalidGeneratorSetupException("uri", "not found: " + uri);
+    } catch (IOException e) {
+      throw new IllegalGeneratorStateException(e); // file access was interrupted, no fail-over
+    } catch (ConversionException e) {
+      throw new InvalidGeneratorSetupException("URI content not valid", e);
     }
+  }
 
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[source=" + getSource() + ", converter=" + converter + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[source=" + getSource() + ", converter=" + converter + ']';
+  }
 }

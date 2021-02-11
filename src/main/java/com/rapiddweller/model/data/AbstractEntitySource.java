@@ -27,9 +27,9 @@
 package com.rapiddweller.model.data;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.context.ContextAware;
-import com.rapiddweller.formats.util.AbstractDataSource;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.context.ContextAware;
+import com.rapiddweller.format.util.AbstractDataSource;
 
 /**
  * Abstract implementation of {@link EntitySource}
@@ -40,18 +40,24 @@ import com.rapiddweller.formats.util.AbstractDataSource;
  * @author Volker Bergmann
  * @since 0.5.8
  */
+public abstract class AbstractEntitySource extends AbstractDataSource<Entity>
+    implements EntitySource, ContextAware {
 
-public abstract class AbstractEntitySource extends AbstractDataSource<Entity> implements EntitySource, ContextAware {
+  /**
+   * The Context.
+   */
+  protected BeneratorContext context;
 
-    protected BeneratorContext context;
+  /**
+   * Instantiates a new Abstract entity source.
+   */
+  public AbstractEntitySource() {
+    super(Entity.class);
+  }
 
-    public AbstractEntitySource() {
-        super(Entity.class);
-    }
-
-    @Override
-    public void setContext(Context ctx) {
-        this.context = (BeneratorContext) ctx;
-    }
+  @Override
+  public void setContext(Context ctx) {
+    this.context = (BeneratorContext) ctx;
+  }
 
 }

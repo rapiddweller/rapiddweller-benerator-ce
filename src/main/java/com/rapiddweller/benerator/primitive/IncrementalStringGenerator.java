@@ -26,38 +26,48 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import java.util.Set;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.wrapper.GeneratorChain;
-import com.rapiddweller.commons.ArrayBuilder;
+import com.rapiddweller.common.ArrayBuilder;
+
+import java.util.Set;
 
 /**
  * Creates Strings in an incremental manner.<br/><br/>
  * Created: 02.08.2011 10:34:08
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class IncrementalStringGenerator extends GeneratorChain<String> implements NonNullGenerator<String> {
 
-	public IncrementalStringGenerator(Set<Character> chars, int minLength, int maxLength, int lengthGranularity) {
-		super(String.class, false, createSources(chars, minLength, maxLength, lengthGranularity));
-	}
-	
-	@Override
-	public String generate() {
-		return GeneratorUtil.generateNonNull(this);
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static Generator<? extends String>[] createSources(Set<Character> chars, int minLength, int maxLength, 
-			int lengthGranularity) {
-		ArrayBuilder<Generator> builder = new ArrayBuilder<Generator>(Generator.class);
-		for (int i = minLength; i <= maxLength; i += lengthGranularity)
-			builder.add(new UniqueFixedLengthStringGenerator(chars, i, true));
-		return builder.toArray();
-	}
+  /**
+   * Instantiates a new Incremental string generator.
+   *
+   * @param chars             the chars
+   * @param minLength         the min length
+   * @param maxLength         the max length
+   * @param lengthGranularity the length granularity
+   */
+  public IncrementalStringGenerator(Set<Character> chars, int minLength, int maxLength, int lengthGranularity) {
+    super(String.class, false, createSources(chars, minLength, maxLength, lengthGranularity));
+  }
+
+  @Override
+  public String generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private static Generator<? extends String>[] createSources(Set<Character> chars, int minLength, int maxLength,
+                                                             int lengthGranularity) {
+    ArrayBuilder<Generator> builder = new ArrayBuilder<>(Generator.class);
+    for (int i = minLength; i <= maxLength; i += lengthGranularity) {
+      builder.add(new UniqueFixedLengthStringGenerator(chars, i, true));
+    }
+    return builder.toArray();
+  }
 
 }

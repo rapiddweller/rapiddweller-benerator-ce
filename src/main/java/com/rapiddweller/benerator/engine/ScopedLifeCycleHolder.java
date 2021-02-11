@@ -29,16 +29,42 @@ package com.rapiddweller.benerator.engine;
 /**
  * Common interface of classes with a prepare method.<br/><br/>
  * Created: 02.09.2011 10:27:09
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public interface ScopedLifeCycleHolder extends LifeCycleHolder {
-	
-	String getScope();
-	void setScope(String scope);
-	
-	boolean isResetNeeded();
-	void setResetNeeded(boolean resetNeeded);
-	
-	void resetIfNeeded();
+
+  /**
+   * Gets scope.
+   *
+   * @return the scope
+   */
+  String getScope();
+
+  /**
+   * Sets scope.
+   *
+   * @param scope the scope
+   */
+  void setScope(String scope);
+
+  /**
+   * Is reset needed boolean.
+   *
+   * @return the boolean
+   */
+  boolean isResetNeeded();
+
+  /**
+   * Sets reset needed.
+   *
+   * @param resetNeeded the reset needed
+   */
+  void setResetNeeded(boolean resetNeeded);
+
+  /**
+   * Reset if needed.
+   */
+  void resetIfNeeded();
 }

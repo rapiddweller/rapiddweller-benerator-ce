@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 
 <setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -11,7 +11,7 @@
         <attribute name="salutation" values="'Hello','Hi','Howdy'"/>
         <attribute name="name" values="'Alice','Bob','Charly'"/>
         <consumer class="CSVEntityExporter">
-            <property name="uri" value="greetings.csv"/>
+            <property name="uri" value="target/greetings.csv"/>
             <property name="columns" value="salutation,name"/>
         </consumer>
     </generate>

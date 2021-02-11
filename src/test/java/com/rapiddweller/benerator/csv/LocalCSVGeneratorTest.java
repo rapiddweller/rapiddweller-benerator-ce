@@ -26,48 +26,56 @@
 
 package com.rapiddweller.benerator.csv;
 
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.Encodings;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-
-import java.util.Set;
-import java.util.Locale;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.Encodings;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.Locale;
+import java.util.Set;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link LocalCSVGenerator}.<br/><br/>
  * Created: 14.06.2007 07:01:53
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class LocalCSVGeneratorTest extends GeneratorTest {
 
-    private static final String CSV_LOCAL_FILENAME = "com/rapiddweller/benerator/csv/local-names";
+  private static final String CSV_LOCAL_FILENAME = "com/rapiddweller/benerator/csv/local-names";
 
-    @Test
-    public void testEnglish() {
-        Set<String> enNames = CollectionUtil.toSet("Alice", "Bob", "Charly");
-        LocalCSVGenerator<String> enGen = new LocalCSVGenerator<String>(String.class, 
-        		CSV_LOCAL_FILENAME, Locale.ENGLISH, ".csv", Encodings.UTF_8);
-        enGen.init(context);
-        for (int i = 0; i < 10; i++) {
-            String name = GeneratorUtil.generateNonNull(enGen);
-            assertTrue(enNames.contains(name));
-        }
+  /**
+   * Test english.
+   */
+  @Test
+  public void testEnglish() {
+    Set<String> enNames = CollectionUtil.toSet("Alice", "Bob", "Charly");
+    LocalCSVGenerator<String> enGen = new LocalCSVGenerator<>(String.class,
+        CSV_LOCAL_FILENAME, Locale.ENGLISH, ".csv", Encodings.UTF_8);
+    enGen.init(context);
+    for (int i = 0; i < 10; i++) {
+      String name = GeneratorUtil.generateNonNull(enGen);
+      assertTrue(enNames.contains(name));
     }
+  }
 
-    @Test
-    public void testGerman() {
-        Set<String> deNames = CollectionUtil.toSet("Elise", "Robert", "Karl");
-        LocalCSVGenerator<String> deGen = new LocalCSVGenerator<String>(String.class, 
-        		CSV_LOCAL_FILENAME, Locale.GERMAN, ".csv", Encodings.UTF_8);
-        deGen.init(context);
-        for (int i = 0; i < 10; i++) {
-            String name = GeneratorUtil.generateNonNull(deGen);
-            assertTrue(deNames.contains(name));
-        }
+  /**
+   * Test german.
+   */
+  @Test
+  public void testGerman() {
+    Set<String> deNames = CollectionUtil.toSet("Elise", "Robert", "Karl");
+    LocalCSVGenerator<String> deGen = new LocalCSVGenerator<>(String.class,
+        CSV_LOCAL_FILENAME, Locale.GERMAN, ".csv", Encodings.UTF_8);
+    deGen.init(context);
+    for (int i = 0; i < 10; i++) {
+      String name = GeneratorUtil.generateNonNull(deGen);
+      assertTrue(deNames.contains(name));
     }
-    
+  }
+
 }

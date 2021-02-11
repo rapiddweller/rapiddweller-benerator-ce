@@ -36,16 +36,41 @@ package com.rapiddweller.model.data;
  */
 public abstract class ComponentDescriptor extends InstanceDescriptor {
 
-    public ComponentDescriptor(String name, DescriptorProvider provider, String typeName) {
-        this(name, provider, typeName, null);
-    }
+  /**
+   * Instantiates a new Component descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   * @param typeName the type name
+   */
+  public ComponentDescriptor(String name, DescriptorProvider provider,
+                             String typeName) {
+    this(name, provider, typeName, null);
+  }
 
-    public ComponentDescriptor(String name, DescriptorProvider provider, TypeDescriptor localType) {
-        this(name, provider, null, localType);
-    }
+  /**
+   * Instantiates a new Component descriptor.
+   *
+   * @param name      the name
+   * @param provider  the provider
+   * @param localType the local type
+   */
+  public ComponentDescriptor(String name, DescriptorProvider provider,
+                             TypeDescriptor localType) {
+    this(name, provider, null, localType);
+  }
 
-    protected ComponentDescriptor(String name, DescriptorProvider provider, String typeName, TypeDescriptor localType) {
-        super(name, provider, typeName, localType);
-    }
+  /**
+   * Instantiates a new Component descriptor.
+   *
+   * @param name      the name
+   * @param provider  the provider
+   * @param typeName  the type name
+   * @param localType the local type
+   */
+  protected ComponentDescriptor(String name, DescriptorProvider provider,
+                                String typeName, TypeDescriptor localType) {
+    super(name, provider, typeName, localType);
+  }
 
 }

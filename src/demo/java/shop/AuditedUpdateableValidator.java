@@ -28,8 +28,8 @@ package shop;
 
 import java.util.Date;
 
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.Validator;
 import com.rapiddweller.model.data.Entity;
 
 /**
@@ -40,15 +40,23 @@ import com.rapiddweller.model.data.Entity;
  */
 public class AuditedUpdateableValidator implements Validator<Entity> {
 
-    private static AuditedValidator parent = new AuditedValidator();
+  private static AuditedValidator parent = new AuditedValidator();
 
-    public boolean valid(Entity object) {
-        if (!parent.valid(object))
-            return false;
-        String updater = (String) object.getComponent("updated_by");
-        if (StringUtil.isEmpty(updater))
-            return false;
-        Date mutationDate = (Date) object.getComponent("updated_at");
-        return (mutationDate != null);
+  /**
+   * Valid boolean.
+   *
+   * @param object the object
+   * @return the boolean
+   */
+  public boolean valid(Entity object) {
+    if (!parent.valid(object)) {
+      return false;
     }
+    String updater = (String) object.getComponent("updated_by");
+    if (StringUtil.isEmpty(updater)) {
+      return false;
+    }
+    Date mutationDate = (Date) object.getComponent("updated_at");
+    return (mutationDate != null);
+  }
 }

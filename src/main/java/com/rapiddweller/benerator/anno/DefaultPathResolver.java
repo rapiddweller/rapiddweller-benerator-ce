@@ -29,19 +29,20 @@ package com.rapiddweller.benerator.anno;
 /**
  * Default implementation of the {@link PathResolver} interface which returns the URI as it is.<br/><br/>
  * Created: 12.12.2011 12:44:15
- * @since 0.7.4
+ *
  * @author Volker Bergmann
+ * @since 0.7.4
  */
 public class DefaultPathResolver extends AbstractPathResolver {
 
-	@Override
-	public String getPathFor(String uri, Class<?> testClass) {
-		return uri;
-	}
-	
-	@Override
-	public String toString() {
-		return getClass().getName();
-	}
-	
+  @Override
+  public String getPathFor(String uri, Class<?> testClass) {
+    return uri;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getName();
+  }
+
 }

@@ -40,23 +40,29 @@ import com.rapiddweller.contiperf.Invoker;
  */
 public class ConsumerInvoker implements Invoker {
 
-    private final String id;
-    private final Consumer consumer;
+  private final String id;
+  private final Consumer consumer;
 
-    public ConsumerInvoker(String id, Consumer consumer) {
-        this.id = id;
-        this.consumer = consumer;
-    }
+  /**
+   * Instantiates a new Consumer invoker.
+   *
+   * @param id       the id
+   * @param consumer the consumer
+   */
+  public ConsumerInvoker(String id, Consumer consumer) {
+    this.id = id;
+    this.consumer = consumer;
+  }
 
-    @Override
-    public String getId() {
-        return id;
-    }
+  @Override
+  public String getId() {
+    return id;
+  }
 
-    @Override
-    public Object invoke(Object[] args) throws Exception {
-        consumer.startConsuming(new ProductWrapper<Object>().wrap(args));
-        return null;
-    }
+  @Override
+  public Object invoke(Object[] args) {
+    consumer.startConsuming(new ProductWrapper<>().wrap(args));
+    return null;
+  }
 
 }

@@ -26,8 +26,8 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
 
 /**
  * Task implementation that executes a series of other tasks consecutively.<br/>
@@ -37,26 +37,40 @@ import com.rapiddweller.commons.ErrorHandler;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class SequentialTask extends CompositeTask {
 
-    public SequentialTask(Task... subTasks) {
-        super(subTasks);
-    }
+  /**
+   * Instantiates a new Sequential task.
+   *
+   * @param subTasks the sub tasks
+   */
+  public SequentialTask(Task... subTasks) {
+    super(subTasks);
+  }
 
-    @Override
-    public TaskResult execute(Context context, ErrorHandler errorHandler) {
-        TaskResult result = TaskResult.EXECUTING;
-        for (Task subTask : subTasks) {
-            TaskResult subResult = runSubTask(subTask, context, errorHandler);
-            if (subResult != TaskResult.EXECUTING)
-                result = subResult;
-        }
-        return result;
+  @Override
+  public TaskResult execute(Context context, ErrorHandler errorHandler) {
+    TaskResult result = TaskResult.EXECUTING;
+    for (Task subTask : subTasks) {
+      TaskResult subResult = runSubTask(subTask, context, errorHandler);
+      if (subResult != TaskResult.EXECUTING) {
+        result = subResult;
+      }
     }
+    return result;
+  }
 
-    protected TaskResult runSubTask(Task subTask, Context context, ErrorHandler errorHandler) {
-        return subTask.execute(context, errorHandler);
-    }
+  /**
+   * Run sub task task result.
+   *
+   * @param subTask      the sub task
+   * @param context      the context
+   * @param errorHandler the error handler
+   * @return the task result
+   */
+  protected TaskResult runSubTask(Task subTask, Context context,
+                                  ErrorHandler errorHandler) {
+    return subTask.execute(context, errorHandler);
+  }
 
 }

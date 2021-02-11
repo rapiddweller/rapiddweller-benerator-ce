@@ -10,7 +10,7 @@
     </skin>
 
     <body>
-        <menu ref="modules" />
-        <menu ref="reports" />
+        <menu ref="modules"/>
+        <menu ref="reports"/>
     </body>
 </project>

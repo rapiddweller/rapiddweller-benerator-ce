@@ -26,45 +26,61 @@
 
 package com.rapiddweller.benerator.consumer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.rapiddweller.benerator.Consumer;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * {@link Consumer} implementation that stores all consumed objects in a {@link List}.<br/><br/>
  * Created: 23.01.2011 08:17:14
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ListConsumer extends AbstractConsumer {
-	
-	private static int DEFAULT_CAPACITY = 10;
-	
-	private List consumedData;
 
-	public ListConsumer() {
-		this(DEFAULT_CAPACITY);
-	}
+  private static final int DEFAULT_CAPACITY = 10;
 
-	public ListConsumer(int capacity) {
-		this.consumedData = new ArrayList(capacity);
-	}
+  private final List consumedData;
 
-	@Override
-	public void startProductConsumption(Object data) {
-		this.consumedData.add(data);
-	}
+  /**
+   * Instantiates a new List consumer.
+   */
+  public ListConsumer() {
+    this(DEFAULT_CAPACITY);
+  }
 
-	public List getConsumedData() {
-		return consumedData;
-	}
+  /**
+   * Instantiates a new List consumer.
+   *
+   * @param capacity the capacity
+   */
+  public ListConsumer(int capacity) {
+    this.consumedData = new ArrayList(capacity);
+  }
 
-	public void clear() {
-		this.consumedData.clear();
-	}
-	
+  @Override
+  public void startProductConsumption(Object data) {
+    this.consumedData.add(data);
+  }
+
+  /**
+   * Gets consumed data.
+   *
+   * @return the consumed data
+   */
+  public List getConsumedData() {
+    return consumedData;
+  }
+
+  /**
+   * Clear.
+   */
+  public void clear() {
+    this.consumedData.clear();
+  }
+
 }

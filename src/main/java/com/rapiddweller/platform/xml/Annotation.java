@@ -26,7 +26,7 @@
 
 package com.rapiddweller.platform.xml;
 
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import org.w3c.dom.Element;
 
 /**
@@ -38,43 +38,59 @@ import org.w3c.dom.Element;
  */
 public class Annotation {
 
-    private final String documentation;
-    private final Element appInfo;
+  private final String documentation;
+  private final Element appInfo;
 
-    public Annotation(Element element) {
-        this(getDocumentation(element), getAppInfo(element));
-    }
+  /**
+   * Instantiates a new Annotation.
+   *
+   * @param element the element
+   */
+  public Annotation(Element element) {
+    this(getDocumentation(element), getAppInfo(element));
+  }
 
-    public Annotation(String documentation, Element appInfo) {
-        this.documentation = documentation;
-        this.appInfo = appInfo;
-    }
+  /**
+   * Instantiates a new Annotation.
+   *
+   * @param documentation the documentation
+   * @param appInfo       the app info
+   */
+  public Annotation(String documentation, Element appInfo) {
+    this.documentation = documentation;
+    this.appInfo = appInfo;
+  }
 
-    // interface -------------------------------------------------------------------------------------------------------
+  // interface -------------------------------------------------------------------------------------------------------
 
-    private static Element getAppInfo(Element element) {
-        return XMLUtil.getChildElement(element, false, false, "appinfo");
-    }
+  private static Element getAppInfo(Element element) {
+    return XMLUtil.getChildElement(element, false, false, "appinfo");
+  }
 
-    private static String getDocumentation(Element element) {
-        Element docElement = XMLUtil.getChildElement(element, false, false, "documentation");
-        return XMLUtil.getText(docElement);
-    }
+  private static String getDocumentation(Element element) {
+    Element docElement =
+        XMLUtil.getChildElement(element, false, false, "documentation");
+    return XMLUtil.getText(docElement);
+  }
 
-    // private helpers -------------------------------------------------------------------------------------------------
+  // private helpers -------------------------------------------------------------------------------------------------
 
-    /**
-     * @return the documentation
-     */
-    public String getDocumentation() {
-        return documentation;
-    }
+  /**
+   * Gets documentation.
+   *
+   * @return the documentation
+   */
+  public String getDocumentation() {
+    return documentation;
+  }
 
-    /**
-     * @return the appInfo
-     */
-    public Element getAppInfo() {
-        return appInfo;
-    }
+  /**
+   * Gets app info.
+   *
+   * @return the appInfo
+   */
+  public Element getAppInfo() {
+    return appInfo;
+  }
 
 }

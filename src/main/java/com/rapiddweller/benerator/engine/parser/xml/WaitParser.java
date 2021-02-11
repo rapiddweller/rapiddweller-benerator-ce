@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.Statement;
@@ -37,49 +34,62 @@ import com.rapiddweller.benerator.factory.FactoryUtil;
 import com.rapiddweller.benerator.primitive.DynamicLongGenerator;
 import com.rapiddweller.benerator.util.ExpressionBasedGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
-import com.rapiddweller.model.data.Uniqueness;
 import org.w3c.dom.Element;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DISTRIBUTION;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DURATION;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_GRANULARITY;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_MAX;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_MIN;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_WAIT;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseLongAttribute;
 
 /**
  * Parses a 'wait' element.<br/><br/>
  * Created: 21.02.2010 08:07:59
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class WaitParser extends AbstractBeneratorDescriptorParser {
 
-	public WaitParser() {
-	    super(EL_WAIT, null, CollectionUtil.toSet(ATT_DURATION, ATT_MIN, ATT_MAX, ATT_GRANULARITY, ATT_DISTRIBUTION));
+  /**
+   * Instantiates a new Wait parser.
+   */
+  public WaitParser() {
+    super(EL_WAIT, null, CollectionUtil.toSet(ATT_DURATION, ATT_MIN, ATT_MAX, ATT_GRANULARITY, ATT_DISTRIBUTION));
+  }
+
+  @Override
+  public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+
+    // check attribute combinations
+    assertAtLeastOneAttributeIsSet(element, ATT_DURATION, ATT_MIN, ATT_MAX);
+    excludeAttributes(element, ATT_DURATION, ATT_MIN);
+    excludeAttributes(element, ATT_DURATION, ATT_MAX);
+
+    // check for constant value
+    Expression<Long> duration = parseLongAttribute(ATT_DURATION, element, null);
+    if (duration != null) {
+      ExpressionBasedGenerator<Long> base = new ExpressionBasedGenerator<>(duration, Long.class);
+      return new WaitStatement(WrapperFactory.asNonNullGenerator(base));
     }
 
-	@Override
-	public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-		
-		// check attribute combinations
-		assertAtLeastOneAttributeIsSet(element, ATT_DURATION, ATT_MIN, ATT_MAX);
-		excludeAttributes(element, ATT_DURATION, ATT_MIN);
-		excludeAttributes(element, ATT_DURATION, ATT_MAX);
-		
-		// check for constant value
-		Expression<Long> duration  = parseLongAttribute(ATT_DURATION, element, null);
-		if (duration != null) {
-			ExpressionBasedGenerator<Long> base = new ExpressionBasedGenerator<Long>(duration, Long.class);
-			return new WaitStatement(WrapperFactory.asNonNullGenerator(base));
-		}
-		
-		// check for distribution
-		Expression<Long> min  = parseLongAttribute(ATT_MIN, element, null);
-		Expression<Long> max  = parseLongAttribute(ATT_MAX, element, null);
-		Expression<Long> granularity  = parseLongAttribute(ATT_GRANULARITY, element, null);
-		String distSpec  = getAttribute(ATT_DISTRIBUTION, element);
-		Expression<Distribution> distribution 
-			= FactoryUtil.getDistributionExpression(distSpec, Uniqueness.NONE, false);
-		Generator<Long> durationGenerator = new DynamicLongGenerator(min, max, granularity, 
-				distribution, ExpressionUtil.constant(false));
-	    return new WaitStatement(WrapperFactory.asNonNullGenerator(durationGenerator));
-    }
+    // check for distribution
+    Expression<Long> min = parseLongAttribute(ATT_MIN, element, null);
+    Expression<Long> max = parseLongAttribute(ATT_MAX, element, null);
+    Expression<Long> granularity = parseLongAttribute(ATT_GRANULARITY, element, null);
+    String distSpec = getAttribute(ATT_DISTRIBUTION, element);
+    Expression<Distribution> distribution
+        = FactoryUtil.getDistributionExpression(distSpec, Uniqueness.NONE, false);
+    Generator<Long> durationGenerator = new DynamicLongGenerator(min, max, granularity,
+        distribution, ExpressionUtil.constant(false));
+    return new WaitStatement(WrapperFactory.asNonNullGenerator(durationGenerator));
+  }
 
 }

@@ -26,49 +26,53 @@
 
 package com.rapiddweller.benerator.util;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.engine.BeneratorOpts;
 import com.rapiddweller.benerator.primitive.IncrementGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.SysUtil;
+import com.rapiddweller.common.SysUtil;
 import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link GeneratorUtil} class.<br/><br/>
  * Created: 30.07.2010 18:54:13
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class GeneratorUtilTest extends GeneratorTest {
 
-	@Test
-	public void testAllProducts_defaultCacheSize() {
-		Generator<Long> source = new IncrementGenerator(1, 1, 120000);
-		source.init(context);
-		List<Long> products = GeneratorUtil.allProducts(source);
-		assertEquals(100000, products.size());
-		assertEquals(1L, products.get(0).longValue());
-		assertEquals(100000L, products.get(99999).longValue());
-	}
-	
-	@Test
-	public void testAllProducts_cacheSizeOverride() {
-		SysUtil.runWithSystemProperty(BeneratorOpts.OPTS_CACHE_SIZE, "2", new Runnable() {
-			@Override
-			public void run() {
-				SequenceTestGenerator<Integer> source = new SequenceTestGenerator<Integer>(1, 2, 3, 4);
-				source.init(context);
-				List<Integer> products = GeneratorUtil.allProducts(source);
-				assertEquals(2, products.size());
-				assertEquals(1, products.get(0).intValue());
-				assertEquals(2, products.get(1).intValue());
-            }
-		});
-	}
-	
+  /**
+   * Test all products default cache size.
+   */
+  @Test
+  public void testAllProducts_defaultCacheSize() {
+    Generator<Long> source = new IncrementGenerator(1, 1, 120000);
+    source.init(context);
+    List<Long> products = GeneratorUtil.allProducts(source);
+    assertEquals(100000, products.size());
+    assertEquals(1L, products.get(0).longValue());
+    assertEquals(100000L, products.get(99999).longValue());
+  }
+
+  /**
+   * Test all products cache size override.
+   */
+  @Test
+  public void testAllProducts_cacheSizeOverride() {
+    SysUtil.runWithSystemProperty(BeneratorOpts.OPTS_CACHE_SIZE, "2", () -> {
+      SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2, 3, 4);
+      source.init(context);
+      List<Integer> products = GeneratorUtil.allProducts(source);
+      assertEquals(2, products.size());
+      assertEquals(1, products.get(0).intValue());
+      assertEquals(2, products.get(1).intValue());
+    });
+  }
+
 }

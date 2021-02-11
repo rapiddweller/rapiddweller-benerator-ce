@@ -30,60 +30,110 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- * Mimics a {@link java.lang.reflect.Method} but allows overwriting annotations. 
- * This can be used to support annotations of external libraries by replacing 
+ * Mimics a {@link java.lang.reflect.Method} but allows overwriting annotations.
+ * This can be used to support annotations of external libraries by replacing
  * them with their Benerator equivalents.<br/><br/>
  * Created: 05.04.2013 09:48:49
- * @since 0.8.2
+ *
  * @author Volker Bergmann
+ * @since 0.8.2
  */
-
 public class MethodDescriptor {
-	
-	private Method method;
-	private Annotation[] annotations;
-	private Annotation[][] parameterAnnotations;
 
-	public MethodDescriptor(Method method) {
-		this.method = method;
-		this.annotations = method.getAnnotations();
-		this.parameterAnnotations = method.getParameterAnnotations();
-	}
+  private final Method method;
+  private Annotation[] annotations;
+  private final Annotation[][] parameterAnnotations;
 
-	public String getName() {
-		return method.getName();
-	}
+  /**
+   * Instantiates a new Method descriptor.
+   *
+   * @param method the method
+   */
+  public MethodDescriptor(Method method) {
+    this.method = method;
+    this.annotations = method.getAnnotations();
+    this.parameterAnnotations = method.getParameterAnnotations();
+  }
 
-	public Class<?> getDeclaringClass() {
-		return method.getDeclaringClass();
-	}
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return method.getName();
+  }
 
-	public Annotation[] getAnnotations() {
-		return annotations;
-	}
-	
-	public void setAnnotations(Annotation[] annotations) {
-		this.annotations = annotations;
-	}
+  /**
+   * Gets declaring class.
+   *
+   * @return the declaring class
+   */
+  public Class<?> getDeclaringClass() {
+    return method.getDeclaringClass();
+  }
 
-	@SuppressWarnings("unchecked")
-	public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
-		for (Annotation a : annotations)
-			if (annotationType.isAssignableFrom(a.getClass()))
-				return (T) a;
-		return null;
-	}
+  /**
+   * Get annotations annotation [ ].
+   *
+   * @return the annotation [ ]
+   */
+  public Annotation[] getAnnotations() {
+    return annotations;
+  }
 
-	public Class<?>[] getParameterTypes() {
-		return method.getParameterTypes();
-	}
+  /**
+   * Sets annotations.
+   *
+   * @param annotations the annotations
+   */
+  public void setAnnotations(Annotation[] annotations) {
+    this.annotations = annotations;
+  }
 
-	public Annotation[][] getParameterAnnotations() {
-		return parameterAnnotations;
-	}
-	
-	public void setParameterAnnotations(int paramIndex, Annotation[] annotations) {
-		this.parameterAnnotations[paramIndex] = annotations;
-	}
-	
+  /**
+   * Gets annotation.
+   *
+   * @param <T>            the type parameter
+   * @param annotationType the annotation type
+   * @return the annotation
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    for (Annotation a : annotations) {
+      if (annotationType.isAssignableFrom(a.getClass())) {
+        return (T) a;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Get parameter types class [ ].
+   *
+   * @return the class [ ]
+   */
+  public Class<?>[] getParameterTypes() {
+    return method.getParameterTypes();
+  }
+
+  /**
+   * Get parameter annotations annotation [ ] [ ].
+   *
+   * @return the annotation [ ] [ ]
+   */
+  public Annotation[][] getParameterAnnotations() {
+    return parameterAnnotations;
+  }
+
+  /**
+   * Sets parameter annotations.
+   *
+   * @param paramIndex  the param index
+   * @param annotations the annotations
+   */
+  public void setParameterAnnotations(int paramIndex, Annotation[] annotations) {
+    this.parameterAnnotations[paramIndex] = annotations;
+  }
+
 }

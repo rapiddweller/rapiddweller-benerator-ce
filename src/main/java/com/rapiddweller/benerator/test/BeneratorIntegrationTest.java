@@ -26,64 +26,99 @@
 
 package com.rapiddweller.benerator.test;
 
-import java.io.IOException;
-
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManagerSupport;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.w3c.dom.Element;
 
+import java.io.IOException;
+
 /**
  * Parent class for Benerator integration tests.<br/><br/>
  * Created: 10.08.2010 07:07:42
- * @since 0.6.4
+ *
  * @author Volker Bergmann
+ * @since 0.6.4
  */
 public abstract class BeneratorIntegrationTest extends GeneratorTest {
-	
-	protected ResourceManagerSupport resourceManager;
-	
-	@Before
-	public void setUpEnvironment() throws Exception {
-		System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, ",");
-		this.resourceManager = new ResourceManagerSupport();
-	}
 
-	@After
-	public void tearDown() {
-		this.resourceManager.close();
-		System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, ",");
-	}
+  /**
+   * The Resource manager.
+   */
+  protected ResourceManagerSupport resourceManager;
 
-	protected BeneratorContext parseAndExecuteFile(String filename) throws IOException {
-		String xml = IOUtil.getContentOfURI(filename);
-		return parseAndExecute(xml);
-    }
+  /**
+   * Sets up environment.
+   */
+  @Before
+  public void setUpEnvironment() {
+    System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, ",");
+    this.resourceManager = new ResourceManagerSupport();
+  }
 
-	protected BeneratorContext parseAndExecuteRoot(String xml) {
-		context = BeneratorFactory.getInstance().createContext(".");
-	    Statement statement = parse(xml);
-		statement.execute(context);
-		return context;
-    }
+  /**
+   * Tear down.
+   */
+  @After
+  public void tearDown() {
+    this.resourceManager.close();
+    System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, ",");
+  }
 
-	public BeneratorContext parseAndExecute(String xml) {
-	    Statement statement = parse(xml);
-		statement.execute(context);
-		return context;
-    }
+  /**
+   * Parse and execute file benerator context.
+   *
+   * @param filename the filename
+   * @return the benerator context
+   * @throws IOException the io exception
+   */
+  protected BeneratorContext parseAndExecuteFile(String filename) throws IOException {
+    String xml = IOUtil.getContentOfURI(filename);
+    return parseAndExecute(xml);
+  }
 
-	public Statement parse(String xml) {
-		Element element = XMLUtil.parseStringAsElement(xml);
-		BeneratorParseContext parsingContext = BeneratorFactory.getInstance().createParseContext(resourceManager);
-		return parsingContext.parseElement(element, null);
-	}
-	
+  /**
+   * Parse and execute root benerator context.
+   *
+   * @param xml the xml
+   * @return the benerator context
+   */
+  protected BeneratorContext parseAndExecuteRoot(String xml) {
+    context = BeneratorFactory.getInstance().createContext(".");
+    Statement statement = parse(xml);
+    statement.execute(context);
+    return context;
+  }
+
+  /**
+   * Parse and execute benerator context.
+   *
+   * @param xml the xml
+   * @return the benerator context
+   */
+  public BeneratorContext parseAndExecute(String xml) {
+    Statement statement = parse(xml);
+    statement.execute(context);
+    return context;
+  }
+
+  /**
+   * Parse statement.
+   *
+   * @param xml the xml
+   * @return the statement
+   */
+  public Statement parse(String xml) {
+    Element element = XMLUtil.parseStringAsElement(xml);
+    BeneratorParseContext parsingContext = BeneratorFactory.getInstance().createParseContext(resourceManager);
+    return parsingContext.parseElement(element, null);
+  }
+
 }

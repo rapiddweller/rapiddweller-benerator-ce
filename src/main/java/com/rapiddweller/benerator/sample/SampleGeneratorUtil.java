@@ -26,24 +26,33 @@
 
 package com.rapiddweller.benerator.sample;
 
+import com.rapiddweller.script.WeightedSample;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.rapiddweller.script.WeightedSample;
 
 /**
  * Provides utility methods for sample-based generators.<br/><br/>
  * Created: 17.02.2010 23:57:20
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class SampleGeneratorUtil {
 
-	public static <T> List<T> extractValues(List<WeightedSample<T>> weightedSamples) {
-	    List<T> result = new ArrayList<T>(weightedSamples.size());
-        for (WeightedSample<T> sample : weightedSamples)
-        	result.add(sample.getValue());
-        return result;
+  /**
+   * Extract values list.
+   *
+   * @param <T>             the type parameter
+   * @param weightedSamples the weighted samples
+   * @return the list
+   */
+  public static <T> List<T> extractValues(List<WeightedSample<T>> weightedSamples) {
+    List<T> result = new ArrayList<>(weightedSamples.size());
+    for (WeightedSample<T> sample : weightedSamples) {
+      result.add(sample.getValue());
     }
+    return result;
+  }
 
 }

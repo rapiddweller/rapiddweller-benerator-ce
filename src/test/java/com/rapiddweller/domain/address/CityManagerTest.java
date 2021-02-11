@@ -26,32 +26,69 @@
 
 package com.rapiddweller.domain.address;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.util.regex.Pattern;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link CityManager}.<br/><br/>
  * Created: 11.02.2010 18:27:23
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class CityManagerTest {
 
-	@Test
-	public void testGenerateGermanCity() throws Exception {
-		assertNotNull(Country.GERMANY.generateCity());
-	}
-	
-	@Test
-	public void testGermanAreaCodes() throws Exception {
-		Pattern pattern = Pattern.compile("\\d{2,5}");
-		for (City city : Country.GERMANY.getCities()) {
-			String areaCode = city.getAreaCode();
-			assertTrue("Illegal area code: " + areaCode, pattern.matcher(areaCode).matches());
-		}
-	}
-	
+  /**
+   * Test city helper constructor.
+   */
+  @Test
+  public void testCityHelperConstructor() {
+    CityId cityId = new CityId("Name", "Name Extension");
+    CityManager.CityHelper actualCityHelper = new CityManager.CityHelper(new State(), cityId,
+        new String[] {"foo", "foo", "foo"}, "Area Code");
+    assertEquals("Name Extension", actualCityHelper.getNameExtension());
+    assertEquals("Area Code", actualCityHelper.getAreaCode());
+    assertEquals(3, actualCityHelper.getPostalCodes().length);
+    assertNull(actualCityHelper.getCountry());
+    assertEquals("Name", actualCityHelper.getName());
+  }
+
+  /**
+   * Test city helper set postal code.
+   */
+  @Test
+  public void testCityHelperSetPostalCode() {
+    CityId cityId = new CityId("Name", "Name Extension");
+    CityManager.CityHelper cityHelper = new CityManager.CityHelper(new State(), cityId,
+        new String[] {"foo", "foo", "foo"}, "Area Code");
+    cityHelper.setPostalCode("Postal Code");
+    assertEquals("Postal Code", cityHelper.getPostalCode());
+  }
+
+  /**
+   * Test generate german city.
+   */
+  @Test
+  public void testGenerateGermanCity() {
+    assertNotNull(Country.GERMANY.generateCity());
+  }
+
+  /**
+   * Test german area codes.
+   */
+  @Test
+  public void testGermanAreaCodes() {
+    Pattern pattern = Pattern.compile("\\d{2,5}");
+    for (City city : Country.GERMANY.getCities()) {
+      String areaCode = city.getAreaCode();
+      assertTrue("Illegal area code: " + areaCode, pattern.matcher(areaCode).matches());
+    }
+  }
+
 }

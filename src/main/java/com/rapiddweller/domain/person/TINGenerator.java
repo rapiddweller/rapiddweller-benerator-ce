@@ -40,48 +40,49 @@ import java.util.Random;
  */
 public class TINGenerator extends ThreadSafeNonNullGenerator<String> {
 
-    private final Random random = new Random();
+  private final Random random = new Random();
 
-    @Override
-    public Class<String> getGeneratedType() {
-        return String.class;
-    }
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
 
-    @Override
-    public String generate() {
-        char[] buffer = new char[10];
-        // create a 10-digit string of which each digit is used at most once
-        boolean[] digitsUsed = new boolean[10];
-        int doubleCount = 0;
-        for (int i = 0; i < 10; i++) {
-            boolean done = true;
-            do {
-                int digit = random.nextInt(10);
-                if (!digitsUsed[digit]) {
-                    buffer[i] = (char) ('0' + digit);
-                    digitsUsed[digit] = true;
-                    done = true;
-                } else if (doubleCount == 0) {
-                    buffer[i] = (char) ('0' + digit);
-                    doubleCount++;
-                    done = true;
-                } else
-                    done = false;
-            } while (!done);
+  @Override
+  public String generate() {
+    char[] buffer = new char[10];
+    // create a 10-digit string of which each digit is used at most once
+    boolean[] digitsUsed = new boolean[10];
+    int doubleCount = 0;
+    for (int i = 0; i < 10; i++) {
+      boolean done = true;
+      do {
+        int digit = random.nextInt(10);
+        if (!digitsUsed[digit]) {
+          buffer[i] = (char) ('0' + digit);
+          digitsUsed[digit] = true;
+          done = true;
+        } else if (doubleCount == 0) {
+          buffer[i] = (char) ('0' + digit);
+          doubleCount++;
+          done = true;
+        } else {
+          done = false;
         }
-        // assure there is a double digit
-        if (doubleCount == 0) {
-            int i = random.nextInt(10);
-            int j;
-            do {
-                j = random.nextInt(10);
-            } while (j == i);
-            buffer[j] = buffer[i];
-        }
-        // append checksum
-        String s = String.valueOf(buffer);
-        int checksum = TINValidator.calculateChecksum(s);
-        return s + (char) (checksum + '0');
+      } while (!done);
     }
+    // assure there is a double digit
+    if (doubleCount == 0) {
+      int i = random.nextInt(10);
+      int j;
+      do {
+        j = random.nextInt(10);
+      } while (j == i);
+      buffer[j] = buffer[i];
+    }
+    // append checksum
+    String s = String.valueOf(buffer);
+    int checksum = TINValidator.calculateChecksum(s);
+    return s + (char) (checksum + '0');
+  }
 
 }

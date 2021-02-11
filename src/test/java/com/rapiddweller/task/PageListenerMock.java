@@ -31,43 +31,60 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Mock for the {@link PageListener} interface to be used for testing.<br/><br/>
  * Created: 26.10.2009 07:48:08
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class PageListenerMock implements PageListener {
-	
-	public int id;
-	
-	public static volatile AtomicInteger startCount = new AtomicInteger();
-	public static volatile AtomicInteger finishCount = new AtomicInteger();
 
-	public PageListenerMock(int id) {
-	    this.id = id;
-    }
+  /**
+   * The Id.
+   */
+  public final int id;
 
-	@Override
-	public void pageStarting() {
-	    startCount.incrementAndGet();
-    }
+  /**
+   * The constant startCount.
+   */
+  public static final AtomicInteger startCount = new AtomicInteger();
+  /**
+   * The constant finishCount.
+   */
+  public static final AtomicInteger finishCount = new AtomicInteger();
 
-	@Override
-	public void pageFinished() {
-	    finishCount.incrementAndGet();
-    }
+  /**
+   * Instantiates a new Page listener mock.
+   *
+   * @param id the id
+   */
+  public PageListenerMock(int id) {
+    this.id = id;
+  }
 
-	@Override
-    public int hashCode() {
-	    return id;
-    }
+  @Override
+  public void pageStarting() {
+    startCount.incrementAndGet();
+  }
 
-	@Override
-    public boolean equals(Object obj) {
-	    if (this == obj)
-		    return true;
-	    if (obj == null || this.getClass() != obj.getClass())
-		    return false;
-	    PageListenerMock that = (PageListenerMock) obj;
-	    return (this.id == that.id);
+  @Override
+  public void pageFinished() {
+    finishCount.incrementAndGet();
+  }
+
+  @Override
+  public int hashCode() {
+    return id;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
+    if (obj == null || this.getClass() != obj.getClass()) {
+      return false;
+    }
+    PageListenerMock that = (PageListenerMock) obj;
+    return (this.id == that.id);
+  }
 
 }

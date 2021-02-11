@@ -26,44 +26,73 @@
 
 package com.rapiddweller.benerator.file;
 
-import java.io.File;
-
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
+
+import java.io.File;
 
 /**
  * Abstract parent class for generators that generate products based on concrete files.<br/><br/>
  * Created: 24.02.2010 08:45:14
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public abstract class FileContentGenerator<E> extends NonNullGeneratorWrapper<File, E> {
 
-	protected String uri;
-	protected String filter;
-	protected boolean recursive;
-	
-	public FileContentGenerator() {
-	    super(null);
-    }
+  /**
+   * The Uri.
+   */
+  protected String uri;
+  /**
+   * The Filter.
+   */
+  protected String filter;
+  /**
+   * The Recursive.
+   */
+  protected boolean recursive;
 
-	public void setUri(String uri) {
-    	this.uri = uri;
-    }
+  /**
+   * Instantiates a new File content generator.
+   */
+  public FileContentGenerator() {
+    super(null);
+  }
 
-	public void setFilter(String filter) {
-    	this.filter = filter;
-    }
+  /**
+   * Sets uri.
+   *
+   * @param uri the uri
+   */
+  public void setUri(String uri) {
+    this.uri = uri;
+  }
 
-	public void setRecursive(boolean recursive) {
-    	this.recursive = recursive;
-    }
+  /**
+   * Sets filter.
+   *
+   * @param filter the filter
+   */
+  public void setFilter(String filter) {
+    this.filter = filter;
+  }
 
-	@Override
-    public void init(GeneratorContext context) {
-		assertNotInitialized();
-	    setSource(new FileGenerator(uri, filter, recursive, true, false));
-	    super.init(context);
-    }
+  /**
+   * Sets recursive.
+   *
+   * @param recursive the recursive
+   */
+  public void setRecursive(boolean recursive) {
+    this.recursive = recursive;
+  }
+
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    setSource(new FileGenerator(uri, filter, recursive, true, false));
+    super.init(context);
+  }
 
 }

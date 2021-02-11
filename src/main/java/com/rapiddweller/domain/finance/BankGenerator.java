@@ -40,42 +40,50 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  * @author Volker Bergmann
  * @since 0.5.4
  */
-public class BankGenerator extends CompositeGenerator<Bank> implements NonNullGenerator<Bank> {
+public class BankGenerator extends CompositeGenerator<Bank>
+    implements NonNullGenerator<Bank> {
 
-    private final RandomVarLengthStringGenerator bankCodeGenerator;
-    private final RegexStringGenerator nameGenerator;
-    private final RegexStringGenerator bicGenerator;
-    private final RandomVarLengthStringGenerator binGenerator;
+  private final RandomVarLengthStringGenerator bankCodeGenerator;
+  private final RegexStringGenerator nameGenerator;
+  private final RegexStringGenerator bicGenerator;
+  private final RandomVarLengthStringGenerator binGenerator;
 
-    public BankGenerator() {
-        super(Bank.class);
-        this.bankCodeGenerator = registerComponent(new RandomVarLengthStringGenerator("\\d", 8));
-        this.nameGenerator = registerComponent(new RegexStringGenerator("(Deutsche Bank|Dresdner Bank|Commerzbank|Spardabank|HVB)"));
-        this.bicGenerator = registerComponent(new RegexStringGenerator("[A-Z]{4}DE[A-Z0-9]{2}"));
-        this.binGenerator = registerComponent(new RandomVarLengthStringGenerator("\\d", 4));
-    }
+  /**
+   * Instantiates a new Bank generator.
+   */
+  public BankGenerator() {
+    super(Bank.class);
+    this.bankCodeGenerator =
+        registerComponent(new RandomVarLengthStringGenerator("\\d", 8));
+    this.nameGenerator = registerComponent(new RegexStringGenerator(
+        "(Deutsche Bank|Dresdner Bank|Commerzbank|Spardabank|HVB)"));
+    this.bicGenerator = registerComponent(
+        new RegexStringGenerator("[A-Z]{4}DE[A-Z0-9]{2}"));
+    this.binGenerator =
+        registerComponent(new RandomVarLengthStringGenerator("\\d", 4));
+  }
 
-    @Override
-    public synchronized void init(GeneratorContext context) {
-        bankCodeGenerator.init(context);
-        nameGenerator.init(context);
-        bicGenerator.init(context);
-        binGenerator.init(context);
-        super.init(context);
-    }
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    bankCodeGenerator.init(context);
+    nameGenerator.init(context);
+    bicGenerator.init(context);
+    binGenerator.init(context);
+    super.init(context);
+  }
 
-    @Override
-    public ProductWrapper<Bank> generate(ProductWrapper<Bank> wrapper) {
-        return wrapper.wrap(generate());
-    }
+  @Override
+  public ProductWrapper<Bank> generate(ProductWrapper<Bank> wrapper) {
+    return wrapper.wrap(generate());
+  }
 
-    @Override
-    public Bank generate() {
-        String name = nameGenerator.generate();
-        String bankCode = bankCodeGenerator.generate();
-        String bic = bicGenerator.generate();
-        String bin = binGenerator.generate();
-        return new Bank(name, bankCode, bic, bin);
-    }
+  @Override
+  public Bank generate() {
+    String name = nameGenerator.generate();
+    String bankCode = bankCodeGenerator.generate();
+    String bic = bicGenerator.generate();
+    String bin = binGenerator.generate();
+    return new Bank(name, bankCode, bic, bin);
+  }
 
 }

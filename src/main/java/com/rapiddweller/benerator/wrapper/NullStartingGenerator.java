@@ -34,35 +34,42 @@ import com.rapiddweller.benerator.InvalidGeneratorSetupException;
  * {@link Generator} implementation which wraps a source {@link Generator}
  * but generates a null value before forwarding the products of the source.<br/><br/>
  * Created: 04.07.2011 13:18:03
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class NullStartingGenerator<E> extends GeneratorProxy<E> {
-	
-	private boolean nullUsed;
-	
-	public NullStartingGenerator(Generator<E> source) {
-		super(source);
-		this.nullUsed = false;
-	}
-	
-	@Override
-	public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
-		super.init(context);
-	}
-	
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-		if (!nullUsed) {
-			this.nullUsed = true;
-			return wrapper.wrap(null);
-		}
-		return super.generate(wrapper);
-	}
-	
-	@Override
-	public void reset() {
-		nullUsed = false;
-		super.reset();
-	}
+
+  private boolean nullUsed;
+
+  /**
+   * Instantiates a new Null starting generator.
+   *
+   * @param source the source
+   */
+  public NullStartingGenerator(Generator<E> source) {
+    super(source);
+    this.nullUsed = false;
+  }
+
+  @Override
+  public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
+    super.init(context);
+  }
+
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    if (!nullUsed) {
+      this.nullUsed = true;
+      return wrapper.wrap(null);
+    }
+    return super.generate(wrapper);
+  }
+
+  @Override
+  public void reset() {
+    nullUsed = false;
+    super.reset();
+  }
 }

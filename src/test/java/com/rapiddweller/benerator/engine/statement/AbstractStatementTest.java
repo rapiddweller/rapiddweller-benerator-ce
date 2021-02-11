@@ -34,16 +34,23 @@ import org.junit.Before;
 /**
  * Parent class for {@link Statement} tests.<br/><br/>
  * Created: 02.09.2011 16:44:08
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public abstract class AbstractStatementTest {
-	
-	protected BeneratorContext context;
-	
-	@Before
-	public void setUpContext() {
-		this.context = new DefaultBeneratorContext();
-	}
+
+  /**
+   * The Context.
+   */
+  protected BeneratorContext context;
+
+  /**
+   * Sets up context.
+   */
+  @Before
+  public void setUpContext() {
+    this.context = new DefaultBeneratorContext();
+  }
 
 }

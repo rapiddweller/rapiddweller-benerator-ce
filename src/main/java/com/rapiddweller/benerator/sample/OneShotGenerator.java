@@ -35,61 +35,74 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  * Returns a value only once and then becomes unavailable immediately.<br/>
  * <br/>
  * Created at 23.09.2009 00:20:03
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class OneShotGenerator<E> extends ThreadSafeGenerator<E> {
 
-	private E value;
-	private Class<E> generatedType;
-	private boolean used;
-	
-    @SuppressWarnings("unchecked")
-	public OneShotGenerator(E value) {
-	    this(value, (Class<E>) value.getClass());
-    }
+  private E value;
+  private final Class<E> generatedType;
+  private boolean used;
 
-    public OneShotGenerator(E value, Class<E> generatedType) {
-	    this.value = value;
-	    this.generatedType = generatedType;
-	    this.used = false;
-    }
+  /**
+   * Instantiates a new One shot generator.
+   *
+   * @param value the value
+   */
+  @SuppressWarnings("unchecked")
+  public OneShotGenerator(E value) {
+    this(value, (Class<E>) value.getClass());
+  }
 
-    @Override
-    public void close() {
-    	used = true;
-	    value = null;
-	    super.close();
-    }
+  /**
+   * Instantiates a new One shot generator.
+   *
+   * @param value         the value
+   * @param generatedType the generated type
+   */
+  public OneShotGenerator(E value, Class<E> generatedType) {
+    this.value = value;
+    this.generatedType = generatedType;
+    this.used = false;
+  }
 
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-	    if (used)
-	    	return null;
-	    used = true;
-	    return wrapper.wrap(value);
-    }
+  @Override
+  public void close() {
+    used = true;
+    value = null;
+    super.close();
+  }
 
-    @Override
-	public Class<E> getGeneratedType() {
-	    return generatedType;
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    if (used) {
+      return null;
     }
+    used = true;
+    return wrapper.wrap(value);
+  }
 
-    @Override
-    public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
-	    super.init(context);
-    }
+  @Override
+  public Class<E> getGeneratedType() {
+    return generatedType;
+  }
 
-    @Override
-    public void reset() {
-	    used = false;
-	    super.reset();
-    }
+  @Override
+  public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
+    super.init(context);
+  }
 
-    @Override
-    public String toString() {
-    	return getClass().getSimpleName() + '[' + value + ']';
-    }
+  @Override
+  public void reset() {
+    used = false;
+    super.reset();
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + value + ']';
+  }
 
 }

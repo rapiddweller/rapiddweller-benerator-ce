@@ -39,12 +39,19 @@ import java.util.Locale;
  */
 public class PersonDemo {
 
-    public static void main(String[] args) {
-        PersonGenerator generator = new PersonGenerator("world", Locale.ENGLISH);
-        init(generator);
-        for (int i = 0; i < 100; i++)
-            System.out.println(generateNonNull(generator));
-        close(generator);
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   */
+  public static void main(String[] args) {
+    PersonGenerator generator =
+        new PersonGenerator("world", Locale.ENGLISH);
+    init(generator);
+    for (int i = 0; i < 100; i++) {
+      System.out.println(generateNonNull(generator));
     }
+    close(generator);
+  }
 
 }

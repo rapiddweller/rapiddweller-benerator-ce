@@ -30,51 +30,73 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 
 /**
- * {@link GeneratorProxy} implementation which implements the {@link NonNullGenerator} interface and 
+ * {@link GeneratorProxy} implementation which implements the {@link NonNullGenerator} interface and
  * supports its implementors as source {@link Generator}.<br/><br/>
  * Created: 27.07.2011 11:57:17
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public abstract class NonNullGeneratorProxy<E> extends GeneratorProxy<E> implements NonNullGenerator<E> {
-	
-    // constructors ----------------------------------------------------------------------------------------------------
 
-    public NonNullGeneratorProxy(Class<E> generatedType) {
-        super(generatedType);
-    }
-    
-    public NonNullGeneratorProxy(NonNullGenerator<E> source) {
-        super(source);
-    }
-    
-    /** Returns the source generator */
-    @Override
-	public NonNullGenerator<E> getSource() {
-        return (NonNullGenerator<E>) super.getSource();
-    }
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    /** Sets the source generator */
-    @Override
-	public void setSource(Generator<E> source) {
-    	if (!(source instanceof NonNullGenerator))
-    		throw new IllegalArgumentException("Not a NonNullGenerator: " + source);
-        super.setSource(source);
-    }
-    
-    protected final E generateFromNotNullSource() {
-		return getSource().generate();
-    }
+  /**
+   * Instantiates a new Non null generator proxy.
+   *
+   * @param generatedType the generated type
+   */
+  public NonNullGeneratorProxy(Class<E> generatedType) {
+    super(generatedType);
+  }
 
-	@Override
-	public final ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-		E result = generate();
-		return (result != null ? wrapper.wrap(result) : null);
-	}
+  /**
+   * Instantiates a new Non null generator proxy.
+   *
+   * @param source the source
+   */
+  public NonNullGeneratorProxy(NonNullGenerator<E> source) {
+    super(source);
+  }
 
-	@Override
-	public E generate() {
-		return generateFromNotNullSource();
-	}
+  /**
+   * Returns the source generator
+   */
+  @Override
+  public NonNullGenerator<E> getSource() {
+    return (NonNullGenerator<E>) super.getSource();
+  }
+
+  /**
+   * Sets the source generator
+   */
+  @Override
+  public void setSource(Generator<E> source) {
+    if (!(source instanceof NonNullGenerator)) {
+      throw new IllegalArgumentException("Not a NonNullGenerator: " + source);
+    }
+    super.setSource(source);
+  }
+
+  /**
+   * Generate from not null source e.
+   *
+   * @return the e
+   */
+  protected final E generateFromNotNullSource() {
+    return getSource().generate();
+  }
+
+  @Override
+  public final ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    E result = generate();
+    return (result != null ? wrapper.wrap(result) : null);
+  }
+
+  @Override
+  public E generate() {
+    return generateFromNotNullSource();
+  }
 
 }

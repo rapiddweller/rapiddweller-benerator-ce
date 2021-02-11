@@ -27,85 +27,103 @@
 package com.rapiddweller.benerator.distribution.sequence;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link CumulatedLongGenerator}
  * Created: 07.06.2006 20:23:39
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class CumulatedLongGeneratorTest extends GeneratorClassTest {
 
-    private static Logger logger = LogManager.getLogger(CumulatedLongGeneratorTest.class);
+  private static final Logger logger = LogManager.getLogger(CumulatedLongGeneratorTest.class);
 
-    public CumulatedLongGeneratorTest() {
-        super(CumulatedLongGenerator.class);
+  /**
+   * Instantiates a new Cumulated long generator test.
+   */
+  public CumulatedLongGeneratorTest() {
+    super(CumulatedLongGenerator.class);
+  }
+
+  // tests -----------------------------------------------------------------------------------------------------------
+
+  /**
+   * Test instantiation.
+   */
+  @Test
+  public void testInstantiation() {
+    new CumulatedLongGenerator(0, 10);
+  }
+
+  /**
+   * Test average.
+   */
+  @Test
+  public void testAverage() {
+    checkAverage(0, 1, 0.5);
+    checkAverage(1, 2, 1.5);
+    checkAverage(0, 2, 1);
+    checkAverage(0, 50, 25);
+  }
+
+  /**
+   * Test distribution.
+   */
+  @Test
+  public void testDistribution() {
+    checkDistribution(0, 1, 1000);
+    checkDistribution(0, 5, 10000);
+  }
+
+  /**
+   * Test range.
+   */
+  @Test
+  public void testRange() {
+    long min = -10;
+    long max = CumulatedLongGenerator.DEFAULT_MAX;
+    CumulatedLongGenerator generator = new CumulatedLongGenerator(min, max);
+    generator.init(context);
+    expectRange(generator, 1000, min, max);
+  }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  private void checkAverage(int min, int max, double average) {
+    CumulatedLongGenerator g = new CumulatedLongGenerator(min, max);
+    g.init(context);
+    assertEquals(average, g.average(), 0.1);
+  }
+
+  private void checkDistribution(int min, int max, int n) {
+    logger.debug("checkDistribution(" + min + ", " + max + ", " + n + ")");
+    CumulatedLongGenerator g = new CumulatedLongGenerator(min, max);
+    g.init(context);
+    int[] sampleCount = new int[max - min + 1];
+    for (int i = 0; i < n; i++) {
+      int sample = g.generate().intValue();
+      sampleCount[sample - min]++;
     }
-
-    // tests -----------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void testInstantiation() throws Exception {
-        new CumulatedLongGenerator(0, 10);
+    assert (sampleCount[0] > 0);
+    assert (sampleCount[sampleCount.length - 1] > 0);
+    for (int i = 0; i <= sampleCount.length / 2; i++) {
+      int c1 = sampleCount[i];
+      int c2 = sampleCount[sampleCount.length - 1 - i];
+      int threshold = n * 2 / sampleCount.length / sampleCount.length;
+      if (c1 > threshold && c2 > threshold) {
+        float ratio = (float) c1 / c2;
+        boolean check = (ratio > 0.8 && ratio < 1.2);
+        logger.debug((i + " " + c1 + " " + ratio + " " + check));
+        assertTrue("Distribution expected to be symmetric", check);
+      }
     }
+  }
 
-    @Test
-    public void testAverage() throws Exception {
-        checkAverage(0, 1, 0.5);
-        checkAverage(1, 2, 1.5);
-        checkAverage(0, 2, 1);
-        checkAverage(0, 50, 25);
-    }
-
-    @Test
-    public void testDistribution() throws Exception {
-        checkDistribution(0, 1, 1000);
-        checkDistribution(0, 5, 10000);
-    }
-
-    @Test
-    public void testRange() throws Exception {
-    	long min = -10;
-        long max = CumulatedLongGenerator.DEFAULT_MAX;
-		CumulatedLongGenerator generator = new CumulatedLongGenerator(min, max);
-        generator.init(context);
-        expectRange(generator, 1000, min, max);
-    }
-
-    // helpers ---------------------------------------------------------------------------------------------------------
-
-    private void checkAverage(int min, int max, double average) {
-        CumulatedLongGenerator g = new CumulatedLongGenerator(min, max);
-        g.init(context);
-        assertEquals(average, g.average(), 0.1);
-    }
-
-    private void checkDistribution(int min, int max, int n) {
-        logger.debug("checkDistribution(" + min + ", " + max + ", " + n + ")");
-        CumulatedLongGenerator g = new CumulatedLongGenerator(min, max);
-        g.init(context);
-        int[] sampleCount = new int[max - min + 1];
-        for (int i = 0; i < n; i++) {
-            int sample = g.generate().intValue();
-            sampleCount[sample - min]++;
-        }
-        assert(sampleCount[0] > 0);
-        assert(sampleCount[sampleCount.length - 1] > 0);
-        for (int i = 0; i <= sampleCount.length / 2; i++) {
-            int c1 = sampleCount[i];
-            int c2 = sampleCount[sampleCount.length - 1 - i];
-            int threshold = n * 2 / sampleCount.length / sampleCount.length;
-            if (c1 > threshold && c2 > threshold) {
-                float ratio = (float)c1/c2;
-                boolean check = (ratio > 0.8 && ratio < 1.2);
-                logger.debug((i + " " + c1 + " " + ratio + " " + check));
-                assertTrue("Distribution expected to be symmetric", check);
-            }
-        }
-    }
-    
 }

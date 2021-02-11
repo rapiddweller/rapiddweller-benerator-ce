@@ -31,63 +31,88 @@ import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
-import com.rapiddweller.commons.StringUtil;
+import com.rapiddweller.common.StringUtil;
 
 /**
  * Generates values based on a database query.<br/>
  * <br/>
  * Created at 06.07.2009 08:02:21
  *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 @SuppressWarnings("rawtypes")
 public class QueryGenerator<E> extends GeneratorProxy<E> {
 
-    private StorageSystem target;
-    private String selector;
-    private final boolean simplifying;
+  private StorageSystem target;
+  private String selector;
+  private final boolean simplifying;
 
-    public QueryGenerator() {
-        this(null, null, true);
+  /**
+   * Instantiates a new Query generator.
+   */
+  public QueryGenerator() {
+    this(null, null, true);
+  }
+
+  /**
+   * Instantiates a new Query generator.
+   *
+   * @param selector    the selector
+   * @param target      the target
+   * @param simplifying the simplifying
+   */
+  @SuppressWarnings("unchecked")
+  public QueryGenerator(String selector, StorageSystem target,
+                        boolean simplifying) {
+    super((Class<E>) Object.class);
+    this.target = target;
+    this.selector = selector;
+    this.simplifying = simplifying;
+  }
+
+  /**
+   * Sets target.
+   *
+   * @param storage the storage
+   */
+  public void setTarget(StorageSystem storage) {
+    this.target = storage;
+  }
+
+  /**
+   * Sets selector.
+   *
+   * @param selector the selector
+   */
+  public void setSelector(String selector) {
+    this.selector = selector;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public void init(GeneratorContext context)
+      throws InvalidGeneratorSetupException {
+
+    // check preconditions
+    assertNotInitialized();
+    if (target == null) {
+      throw new InvalidGeneratorSetupException("source is null");
+    }
+    if (StringUtil.isEmpty(selector)) {
+      throw new InvalidGeneratorSetupException("no query defined");
     }
 
-    @SuppressWarnings("unchecked")
-    public QueryGenerator(String selector, StorageSystem target, boolean simplifying) {
-        super((Class<E>) Object.class);
-        this.target = target;
-        this.selector = selector;
-        this.simplifying = simplifying;
-    }
+    // initialize
+    setSource(new DataSourceGenerator(
+        target.query(selector, simplifying, context)));
+    super.init(context);
+  }
 
-    public void setTarget(StorageSystem storage) {
-        this.target = storage;
-    }
-
-    public void setSelector(String selector) {
-        this.selector = selector;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
-
-        // check preconditions
-        assertNotInitialized();
-        if (target == null)
-            throw new InvalidGeneratorSetupException("source is null");
-        if (StringUtil.isEmpty(selector))
-            throw new InvalidGeneratorSetupException("no query defined");
-
-        // initialize
-        setSource(new DataSourceGenerator(target.query(selector, simplifying, context)));
-        super.init(context);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[" + selector + "]";
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + selector + "]";
+  }
 
 }

@@ -32,65 +32,84 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
 /**
  * Generates 'Double' values for the 'wedge' sequence.<br/><br/>
  * Created: 13.02.2010 13:06:27
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class WedgeDoubleGenerator extends AbstractNonNullNumberGenerator<Double> {
 
-    private Double cursor;
-    private double end;
+  private Double cursor;
+  private double end;
 
-    public WedgeDoubleGenerator() {
-        this(Long.MIN_VALUE, Long.MAX_VALUE);
+  /**
+   * Instantiates a new Wedge double generator.
+   */
+  public WedgeDoubleGenerator() {
+    this(Long.MIN_VALUE, Long.MAX_VALUE);
+  }
+
+  /**
+   * Instantiates a new Wedge double generator.
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public WedgeDoubleGenerator(double min, double max) {
+    this(min, max, 1);
+  }
+
+  /**
+   * Instantiates a new Wedge double generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   */
+  public WedgeDoubleGenerator(double min, double max, double granularity) {
+    super(Double.class, min, max, granularity);
+    this.cursor = min;
+  }
+
+  // generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    cursor = min;
+    max = min + (max - min) / granularity * granularity;
+    double steps = (max - min) / granularity + 1;
+    end = min + Math.floor(steps / 2) * granularity;
+    super.init(context);
+  }
+
+  @Override
+  public Double generate() {
+    assertInitialized();
+    if (cursor == null) {
+      return null;
     }
-
-    public WedgeDoubleGenerator(double min, double max) {
-        this(min, max, 1);
+    double result = cursor;
+    if (Math.abs(cursor - end) < granularity / 2) {
+      cursor = null;
+    } else {
+      cursor = max - cursor + min;
+      if (cursor < end) {
+        cursor += granularity;
+      }
     }
+    return result;
+  }
 
-    public WedgeDoubleGenerator(double min, double max, double granularity) {
-        super(Double.class, min, max, granularity);
-        this.cursor = min;
-    }
+  @Override
+  public synchronized void reset() {
+    super.reset();
+    this.cursor = min;
+  }
 
-    // generator interface ---------------------------------------------------------------------------------------------
+  @Override
+  public synchronized void close() {
+    super.close();
+    this.cursor = null;
+  }
 
-    @Override
-	public void init(GeneratorContext context) {
-    	assertNotInitialized();
-        cursor = min;
-        max = min + (max - min) / granularity * granularity;
-        double steps = (max - min) / granularity + 1;
-        end = min + Math.floor(steps / 2) * granularity;
-        super.init(context);
-    }
-
-	@Override
-	public Double generate() {
-        assertInitialized();
-        if (cursor == null)
-            return null;
-        double result = cursor;
-        if (Math.abs(cursor - end) < granularity / 2)
-            cursor = null;
-        else {
-            cursor = max - cursor + min;
-            if (cursor < end)
-                cursor += granularity;
-        }
-        return result;
-    }
-
-    @Override
-	public synchronized void reset() {
-        super.reset();
-        this.cursor = min;
-    }
-
-    @Override
-	public synchronized void close() {
-        super.close();
-        this.cursor = null;
-    }
-    
 }

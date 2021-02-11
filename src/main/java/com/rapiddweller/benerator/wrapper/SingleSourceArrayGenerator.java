@@ -26,69 +26,90 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import java.lang.reflect.Array;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
-import com.rapiddweller.commons.ArrayUtil;
+import com.rapiddweller.common.ArrayUtil;
+
+import java.lang.reflect.Array;
 
 /**
  * Assembles the output of a source generator into an array of random length.<br/>
  * <br/>
  * Created: 26.08.2006 09:37:55
- * @since 0.1
+ *
+ * @param <S> the type parameter
+ * @param <P> the type parameter
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class SingleSourceArrayGenerator<S, P> extends CardinalGenerator<S, P> implements NonNullGenerator<P> {
 
-    private Class<S> componentType;
-    private Class<P> generatedType;
+  private final Class<S> componentType;
+  private final Class<P> generatedType;
 
+  /**
+   * Instantiates a new Single source array generator.
+   *
+   * @param source             the source
+   * @param componentType      the component type
+   * @param minLength          the min length
+   * @param maxLength          the max length
+   * @param lengthDistribution the length distribution
+   */
+  @SuppressWarnings("unchecked")
+  public SingleSourceArrayGenerator(Generator<S> source, Class<S> componentType,
+                                    int minLength, int maxLength, Distribution lengthDistribution) {
+    super(source, false, minLength, maxLength, 1, SequenceManager.RANDOM_SEQUENCE);
+    this.componentType = componentType;
+    this.generatedType = ArrayUtil.arrayType(componentType);
+  }
+
+  /**
+   * Instantiates a new Single source array generator.
+   *
+   * @param source          the source
+   * @param componentType   the component type
+   * @param lengthGenerator the length generator
+   */
+  @SuppressWarnings("unchecked")
+  public SingleSourceArrayGenerator(Generator<S> source, Class<S> componentType,
+                                    NonNullGenerator<Integer> lengthGenerator) {
+    super(source, false, lengthGenerator);
+    this.componentType = componentType;
+    this.generatedType = ArrayUtil.arrayType(componentType);
+  }
+
+  // configuration properties ----------------------------------------------------------------------------------------
+
+  @Override
+  public Class<P> getGeneratedType() {
+    return generatedType;
+  }
+
+  @Override
+  public ProductWrapper<P> generate(ProductWrapper<P> wrapper) {
+    return wrapper.wrap(generate());
+  }
+
+  @Override
+  public P generate() {
+    Integer size = generateCardinal();
+    if (size == null) {
+      return null;
+    }
+    // the following works for primitive types as well as for objects
     @SuppressWarnings("unchecked")
-	public SingleSourceArrayGenerator(Generator<S> source, Class<S> componentType,  
-    		int minLength, int maxLength, Distribution lengthDistribution) {
-        super(source, false, minLength, maxLength, 1, SequenceManager.RANDOM_SEQUENCE);
-        this.componentType = componentType;
-        this.generatedType = ArrayUtil.arrayType(componentType);
+    P array = (P) ArrayUtil.newInstance(componentType, size);
+    for (int i = 0; i < size; i++) {
+      ProductWrapper<S> component = generateFromSource();
+      if (component == null) {
+        return null;
+      }
+      Array.set(array, i, component.unwrap());
     }
-
-    @SuppressWarnings("unchecked")
-	public SingleSourceArrayGenerator(Generator<S> source, Class<S> componentType, 
-			NonNullGenerator<Integer> lengthGenerator) {
-        super(source, false, lengthGenerator);
-        this.componentType = componentType;
-        this.generatedType = ArrayUtil.arrayType(componentType);
-    }
-
-    // configuration properties ----------------------------------------------------------------------------------------
-
-    @Override
-	public Class<P> getGeneratedType() {
-        return generatedType;
-    }
-
-	@Override
-	public ProductWrapper<P> generate(ProductWrapper<P> wrapper) {
-        return wrapper.wrap(generate());
-    }
-
-	@Override
-	public P generate() {
-    	Integer size = generateCardinal();
-    	if (size == null)
-    		return null;
-    	// the following works for primitive types as well as for objects
-        @SuppressWarnings("unchecked")
-		P array = (P) ArrayUtil.newInstance(componentType, size.intValue());
-        for (int i = 0; i < size; i++) {
-            ProductWrapper<S> component = generateFromSource();
-            if (component == null)
-            	return null;
-			Array.set(array, i, component.unwrap());
-        } 
-        return array;
-	}
+    return array;
+  }
 
 }

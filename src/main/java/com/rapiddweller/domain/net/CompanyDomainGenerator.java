@@ -28,16 +28,16 @@ package com.rapiddweller.domain.net;
 
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.util.AbstractNonNullGenerator;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.domain.organization.CompanyName;
 import com.rapiddweller.domain.organization.CompanyNameGenerator;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
-import com.rapiddweller.formats.text.DelocalizingConverter;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.format.text.DelocalizingConverter;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
@@ -52,76 +52,99 @@ import static com.rapiddweller.benerator.util.GeneratorUtil.generateNonNull;
  */
 public class CompanyDomainGenerator extends AbstractNonNullGenerator<String> {
 
-    private static final Logger LOGGER = LogManager.getLogger(CompanyDomainGenerator.class);
+  private static final Logger LOGGER =
+      LogManager.getLogger(CompanyDomainGenerator.class);
 
-    private final CompanyNameGenerator companyNameGenerator;
-    private final TopLevelDomainGenerator tldGenerator;
-    private final Converter<String, String> normalizer;
+  private final CompanyNameGenerator companyNameGenerator;
+  private final TopLevelDomainGenerator tldGenerator;
+  private final Converter<String, String> normalizer;
 
-    public CompanyDomainGenerator() {
-        this(Country.getDefault().getIsoCode());
-    }
+  /**
+   * Instantiates a new Company domain generator.
+   */
+  public CompanyDomainGenerator() {
+    this(Country.getDefault().getIsoCode());
+  }
 
-    public CompanyDomainGenerator(String datasetName) {
-        LOGGER.debug("Creating instance of {} for dataset {}", getClass(), datasetName);
-        companyNameGenerator = new CompanyNameGenerator(false, false, false, datasetName);
-        tldGenerator = new TopLevelDomainGenerator();
-        normalizer = new Normalizer();
-    }
+  /**
+   * Instantiates a new Company domain generator.
+   *
+   * @param datasetName the dataset name
+   */
+  public CompanyDomainGenerator(String datasetName) {
+    LOGGER.debug("Creating instance of {} for dataset {}", getClass(),
+        datasetName);
+    companyNameGenerator =
+        new CompanyNameGenerator(false, false, false, datasetName);
+    tldGenerator = new TopLevelDomainGenerator();
+    normalizer = new Normalizer();
+  }
 
-    public void setDataset(String datasetName) {
-        companyNameGenerator.setDataset(datasetName);
+  /**
+   * Sets dataset.
+   *
+   * @param datasetName the dataset name
+   */
+  public void setDataset(String datasetName) {
+    companyNameGenerator.setDataset(datasetName);
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    companyNameGenerator.init(context);
+    tldGenerator.init(context);
+    super.init(context);
+  }
+
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
+
+  @Override
+  public String generate() {
+    CompanyName name = generateNonNull(companyNameGenerator);
+    String tld = generateNonNull(tldGenerator);
+    return normalizer.convert(name.getShortName()) + '.' + tld;
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return companyNameGenerator.isThreadSafe() &&
+        tldGenerator.isThreadSafe() && normalizer.isThreadSafe();
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return companyNameGenerator.isParallelizable() &&
+        tldGenerator.isParallelizable() &&
+        normalizer.isParallelizable();
+  }
+
+  private static final class Normalizer
+      extends ThreadSafeConverter<String, String> {
+
+    private final DelocalizingConverter delocalizer;
+
+    /**
+     * Instantiates a new Normalizer.
+     */
+    public Normalizer() {
+      super(String.class, String.class);
+      try {
+        this.delocalizer = new DelocalizingConverter();
+      } catch (IOException e) {
+        throw new ConfigurationError(e);
+      }
     }
 
     @Override
-    public synchronized void init(GeneratorContext context) {
-        companyNameGenerator.init(context);
-        tldGenerator.init(context);
-        super.init(context);
+    public String convert(String sourceValue) {
+      sourceValue = StringUtil.normalizeSpace(sourceValue);
+      sourceValue = delocalizer.convert(sourceValue);
+      sourceValue = sourceValue.replace(' ', '-');
+      return sourceValue.toLowerCase();
     }
-
-    @Override
-    public Class<String> getGeneratedType() {
-        return String.class;
-    }
-
-    @Override
-    public String generate() {
-        CompanyName name = generateNonNull(companyNameGenerator);
-        String tld = generateNonNull(tldGenerator);
-        return normalizer.convert(name.getShortName()) + '.' + tld;
-    }
-
-    @Override
-    public boolean isThreadSafe() {
-        return companyNameGenerator.isThreadSafe() && tldGenerator.isThreadSafe() && normalizer.isThreadSafe();
-    }
-
-    @Override
-    public boolean isParallelizable() {
-        return companyNameGenerator.isParallelizable() && tldGenerator.isParallelizable() && normalizer.isParallelizable();
-    }
-
-    private static final class Normalizer extends ThreadSafeConverter<String, String> {
-
-        private final DelocalizingConverter delocalizer;
-
-        public Normalizer() {
-            super(String.class, String.class);
-            try {
-                this.delocalizer = new DelocalizingConverter();
-            } catch (IOException e) {
-                throw new ConfigurationError(e);
-            }
-        }
-
-        @Override
-        public String convert(String sourceValue) {
-            sourceValue = StringUtil.normalizeSpace(sourceValue);
-            sourceValue = delocalizer.convert(sourceValue);
-            sourceValue = sourceValue.replace(' ', '-');
-            return sourceValue.toLowerCase();
-        }
-    }
+  }
 
 }

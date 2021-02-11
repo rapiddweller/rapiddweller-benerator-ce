@@ -26,31 +26,48 @@
 
 package com.rapiddweller.benerator.primitive;
 
+import javax.validation.Constraint;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import javax.validation.Constraint;
-
 /**
- * Annotation to mark a JavaBean field that may not contain an 'unluck number'.<br/> 
+ * Annotation to mark a JavaBean field that may not contain an 'unluck number'.<br/>
  * <br/>
  * Created at 03.07.2009 17:55:40
+ *
+ * @author Volker Bergmann
  * @see UnluckyNumberValidator
  * @since 0.6.0
- * @author Volker Bergmann
  */
-
 @Documented
 @Constraint(validatedBy = UnluckyNumberValidator.class)
-@Target({ METHOD, FIELD, TYPE })
+@Target({METHOD, FIELD, TYPE})
 @Retention(RUNTIME)
 public @interface UnluckyNumber {
-	boolean luckyNumberRequired() default false;
-	int[] unluckyNumbers() default { };
-	int[] luckyNumbers() default { };
+  /**
+   * Lucky number required boolean.
+   *
+   * @return the boolean
+   */
+  boolean luckyNumberRequired() default false;
+
+  /**
+   * Unlucky numbers int [ ].
+   *
+   * @return the int [ ]
+   */
+  int[] unluckyNumbers() default {};
+
+  /**
+   * Lucky numbers int [ ].
+   *
+   * @return the int [ ]
+   */
+  int[] luckyNumbers() default {};
 }

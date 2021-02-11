@@ -26,8 +26,8 @@
 
 package com.rapiddweller.benerator.engine.expression;
 
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.formats.script.ScriptUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.DynamicExpression;
@@ -35,45 +35,60 @@ import com.rapiddweller.script.expression.DynamicExpression;
 /**
  * Evaluates a string which may be a script (indicated by {}).<br/><br/>
  * Created: 19.02.2010 10:39:29
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ScriptableExpression extends DynamicExpression<Object> {
 
-	private String scriptOrText;
-	private Expression<?> defaultValueExpression;
-	private boolean isScript;
+  private final String scriptOrText;
+  private final Expression<?> defaultValueExpression;
+  private final boolean isScript;
 
-    public ScriptableExpression(String scriptOrText, Object defaultValue) {
-    	this(scriptOrText, (defaultValue != null ? new ConstantExpression<Object>(defaultValue) : null));
-    }
+  /**
+   * Instantiates a new Scriptable expression.
+   *
+   * @param scriptOrText the script or text
+   * @param defaultValue the default value
+   */
+  public ScriptableExpression(String scriptOrText, Object defaultValue) {
+    this(scriptOrText, (defaultValue != null ? new ConstantExpression<>(defaultValue) : null));
+  }
 
-    private ScriptableExpression(String scriptOrText, Expression<?> defaultValueExpression) {
-    	this.defaultValueExpression = defaultValueExpression;
-    	this.isScript = ScriptUtil.isScript(scriptOrText);
-		this.scriptOrText = scriptOrText;
-    }
-    
-    public static Expression<?> createWithDefaultExpression(
-    		String scriptOrText, Expression<?> defaultValueExpression) {
-    	return new ScriptableExpression(scriptOrText, defaultValueExpression);
-    }
+  private ScriptableExpression(String scriptOrText, Expression<?> defaultValueExpression) {
+    this.defaultValueExpression = defaultValueExpression;
+    this.isScript = ScriptUtil.isScript(scriptOrText);
+    this.scriptOrText = scriptOrText;
+  }
 
-    @Override
-	public Object evaluate(Context context) {
-    	Object result;
-		if (scriptOrText == null)
-			result = (defaultValueExpression != null ? defaultValueExpression.evaluate(context) : null);
-		else if (isScript)
-			result = ScriptUtil.evaluate(scriptOrText, context);
-		else
-			result = scriptOrText;
-		return result;
-    }
+  /**
+   * Create with default expression expression.
+   *
+   * @param scriptOrText           the script or text
+   * @param defaultValueExpression the default value expression
+   * @return the expression
+   */
+  public static Expression<?> createWithDefaultExpression(
+      String scriptOrText, Expression<?> defaultValueExpression) {
+    return new ScriptableExpression(scriptOrText, defaultValueExpression);
+  }
 
-	@Override
-	public String toString() {
-		return (ScriptUtil.isScript(scriptOrText) ? scriptOrText : "'" + scriptOrText + "'");
-	}
-	
+  @Override
+  public Object evaluate(Context context) {
+    Object result;
+    if (scriptOrText == null) {
+      result = (defaultValueExpression != null ? defaultValueExpression.evaluate(context) : null);
+    } else if (isScript) {
+      result = ScriptUtil.evaluate(scriptOrText, context);
+    } else {
+      result = scriptOrText;
+    }
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return (ScriptUtil.isScript(scriptOrText) ? scriptOrText : "'" + scriptOrText + "'");
+  }
+
 }

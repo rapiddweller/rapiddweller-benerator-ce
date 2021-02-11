@@ -33,87 +33,111 @@ import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.engine.BeneratorOpts;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 
-import static com.rapiddweller.commons.NumberUtil.*;
+import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
- * {@link Sequence} implementation that makes use of Benerator's {@link ExpandGeneratorProxy} 
+ * {@link Sequence} implementation that makes use of Benerator's {@link ExpandGeneratorProxy}
  * for distributing data of unlimited volume in a unique or non-unique manner.<br/>
  * <br/>
  * Created: 13.12.2009 08:59:34
- * @since 0.6.0
+ *
  * @author Volker Bergmann
  * @see ExpandGeneratorProxy
+ * @since 0.6.0
  */
 public class ExpandSequence extends Sequence {
 
-	private Integer cacheSize;
-	private Integer bucketSize;
-	private Float duplicationQuota;
-	
-	// construction ----------------------------------------------------------------------------------------------------
-	
-    public ExpandSequence() {
-	    this(ExpandGeneratorProxy.DEFAULT_DUPLICATION_QUOTA);
-    }
+  private final Integer cacheSize;
+  private final Integer bucketSize;
+  private final Float duplicationQuota;
 
-    public ExpandSequence(Float duplicationQuota) {
-	    this(BeneratorOpts.getCacheSize(), 
-	    	 duplicationQuota, 
-	    	 ExpandGeneratorProxy.defaultBucketSize(BeneratorOpts.getCacheSize()));
-    }
+  // construction ----------------------------------------------------------------------------------------------------
 
-	public ExpandSequence(Integer cacheSize, Integer bucketSize) {
-	    this(cacheSize, ExpandGeneratorProxy.DEFAULT_DUPLICATION_QUOTA, bucketSize);
-    }
+  /**
+   * Instantiates a new Expand sequence.
+   */
+  public ExpandSequence() {
+    this(ExpandGeneratorProxy.DEFAULT_DUPLICATION_QUOTA);
+  }
 
-	public ExpandSequence(Integer cacheSize, Float duplicationQuota, Integer bucketSize) {
-	    this.cacheSize = cacheSize;
-	    this.duplicationQuota = duplicationQuota;
-	    this.bucketSize = bucketSize;
-    }
-	
-	// Distribution interface implementation ---------------------------------------------------------------------------
+  /**
+   * Instantiates a new Expand sequence.
+   *
+   * @param duplicationQuota the duplication quota
+   */
+  public ExpandSequence(Float duplicationQuota) {
+    this(BeneratorOpts.getCacheSize(),
+        duplicationQuota,
+        ExpandGeneratorProxy.defaultBucketSize(BeneratorOpts.getCacheSize()));
+  }
 
-	@Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(
-			Class<T> numberType, T min, T max, T granularity, boolean unique) {
-		NonNullGenerator<T> source = SequenceManager.STEP_SEQUENCE.createNumberGenerator(numberType, min, max, granularity, unique);
-		int cacheSize = cacheSize(min, max, granularity);
-		return WrapperFactory.asNonNullGenerator(
-				new ExpandGeneratorProxy<T>(source, duplicationQuota(unique), cacheSize, bucketSize(cacheSize)));
-	}
+  /**
+   * Instantiates a new Expand sequence.
+   *
+   * @param cacheSize  the cache size
+   * @param bucketSize the bucket size
+   */
+  public ExpandSequence(Integer cacheSize, Integer bucketSize) {
+    this(cacheSize, ExpandGeneratorProxy.DEFAULT_DUPLICATION_QUOTA, bucketSize);
+  }
 
-	@Override
-	public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-	    int cacheSize = cacheSize();
-		return new ExpandGeneratorProxy<T>(source, duplicationQuota(unique), cacheSize, bucketSize(cacheSize));
-	}
-	
-	// helpers ---------------------------------------------------------------------------------------------------------
-	
-	private float duplicationQuota(boolean unique) {
-		if (unique)
-			return 0;
-		return (duplicationQuota != null ? duplicationQuota : ExpandGeneratorProxy.DEFAULT_DUPLICATION_QUOTA);
-    }
+  /**
+   * Instantiates a new Expand sequence.
+   *
+   * @param cacheSize        the cache size
+   * @param duplicationQuota the duplication quota
+   * @param bucketSize       the bucket size
+   */
+  public ExpandSequence(Integer cacheSize, Float duplicationQuota, Integer bucketSize) {
+    this.cacheSize = cacheSize;
+    this.duplicationQuota = duplicationQuota;
+    this.bucketSize = bucketSize;
+  }
 
-	private int bucketSize(int cacheSize) {
-		return (bucketSize != null ? bucketSize : ExpandGeneratorProxy.defaultBucketSize(cacheSize));
-    }
+  // Distribution interface implementation ---------------------------------------------------------------------------
 
-	private int cacheSize() {
-		return (cacheSize != null ? cacheSize : BeneratorOpts.getCacheSize());
-    }
-	
-	private <T extends Number> int cacheSize(T min, T max, T granularity) {
-		if (cacheSize != null)
-			return cacheSize;
-		long volume = volume(toLong(min), toLong(max), toLong(granularity));
-		return (int) Math.min(BeneratorOpts.getCacheSize(), volume);
-	}
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(
+      Class<T> numberType, T min, T max, T granularity, boolean unique) {
+    NonNullGenerator<T> source = SequenceManager.STEP_SEQUENCE.createNumberGenerator(numberType, min, max, granularity, unique);
+    int cacheSize = cacheSize(min, max, granularity);
+    return WrapperFactory.asNonNullGenerator(
+        new ExpandGeneratorProxy<>(source, duplicationQuota(unique), cacheSize, bucketSize(cacheSize)));
+  }
 
-	private static <T extends Number> long volume(long min, long max, long granularity) {
-	    return (max - min + granularity - 1) / granularity;
+  @Override
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    int cacheSize = cacheSize();
+    return new ExpandGeneratorProxy<>(source, duplicationQuota(unique), cacheSize, bucketSize(cacheSize));
+  }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
+
+  private float duplicationQuota(boolean unique) {
+    if (unique) {
+      return 0;
     }
-    
+    return (duplicationQuota != null ? duplicationQuota : ExpandGeneratorProxy.DEFAULT_DUPLICATION_QUOTA);
+  }
+
+  private int bucketSize(int cacheSize) {
+    return (bucketSize != null ? bucketSize : ExpandGeneratorProxy.defaultBucketSize(cacheSize));
+  }
+
+  private int cacheSize() {
+    return (cacheSize != null ? cacheSize : BeneratorOpts.getCacheSize());
+  }
+
+  private <T extends Number> int cacheSize(T min, T max, T granularity) {
+    if (cacheSize != null) {
+      return cacheSize;
+    }
+    long volume = volume(toLong(min), toLong(max), toLong(granularity));
+    return (int) Math.min(BeneratorOpts.getCacheSize(), volume);
+  }
+
+  private static <T extends Number> long volume(long min, long max, long granularity) {
+    return (max - min + granularity - 1) / granularity;
+  }
+
 }

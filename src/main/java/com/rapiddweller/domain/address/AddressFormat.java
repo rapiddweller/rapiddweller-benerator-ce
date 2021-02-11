@@ -26,14 +26,14 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.context.DefaultContext;
-import com.rapiddweller.commons.converter.UnsafeConverter;
-import com.rapiddweller.formats.script.Script;
-import com.rapiddweller.formats.script.ScriptException;
-import com.rapiddweller.formats.script.freemarker.FreeMarkerScriptFactory;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.context.DefaultContext;
+import com.rapiddweller.common.converter.UnsafeConverter;
+import com.rapiddweller.format.script.Script;
+import com.rapiddweller.format.script.ScriptException;
+import com.rapiddweller.format.script.freemarker.FreeMarkerScriptFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -50,54 +50,98 @@ import java.util.Map.Entry;
  */
 public class AddressFormat {
 
-    static final Map<String, AddressFormat> instances = new HashMap<String, AddressFormat>();
-    private static final String CONFIG_FILE = "/com/rapiddweller/domain/address/addressFormat.properties";
-    public static final AddressFormat US = getInstance("US");
-    public static final AddressFormat AU = getInstance("AU");
-    public static final AddressFormat DE = getInstance("DE");
-    public static final AddressFormat BE = getInstance("BE");
-    private static final FreeMarkerScriptFactory SCRIPT_FACTORY = new FreeMarkerScriptFactory();
-    private final String pattern;
-    private final Script script;
+  /**
+   * The Instances.
+   */
+  static final Map<String, AddressFormat> instances = new HashMap<>();
+  private static final String CONFIG_FILE =
+      "/com/rapiddweller/domain/address/addressFormat.properties";
+  /**
+   * The constant US.
+   */
+  public static final AddressFormat US = getInstance("US");
+  /**
+   * The constant AU.
+   */
+  public static final AddressFormat AU = getInstance("AU");
+  /**
+   * The constant DE.
+   */
+  public static final AddressFormat DE = getInstance("DE");
+  /**
+   * The constant BE.
+   */
+  public static final AddressFormat BE = getInstance("BE");
+  private static final FreeMarkerScriptFactory SCRIPT_FACTORY =
+      new FreeMarkerScriptFactory();
+  private final String pattern;
+  private final Script script;
 
-    public AddressFormat(String pattern) {
-        this.pattern = pattern;
-        script = SCRIPT_FACTORY.parseText(pattern);
-    }
+  /**
+   * Instantiates a new Address format.
+   *
+   * @param pattern the pattern
+   */
+  public AddressFormat(String pattern) {
+    this.pattern = pattern;
+    script = SCRIPT_FACTORY.parseText(pattern);
+  }
 
-    @SuppressWarnings("rawtypes")
-    public static AddressFormat getInstance(String country) {
-        if (instances.size() == 0) {
-            try {
-                IOUtil.readProperties(CONFIG_FILE, new UnsafeConverter<Map.Entry, Map.Entry>(Map.Entry.class, Map.Entry.class) {
-                    @Override
-                    public Entry convert(Entry entry) {
-                        String pt = (String) entry.getValue();
-                        instances.put((String) entry.getKey(), new AddressFormat(pt));
-                        return entry;
-                    }
-                });
-            } catch (IOException e) {
-                throw new ConfigurationError("Error while processing AddressFormat configuration", e);
-            }
-        }
-        return instances.get(country);
+  /**
+   * Gets instance.
+   *
+   * @param country the country
+   * @return the instance
+   */
+  @SuppressWarnings("rawtypes")
+  public static AddressFormat getInstance(String country) {
+    if (instances.size() == 0) {
+      try {
+        IOUtil.readProperties(CONFIG_FILE,
+            new UnsafeConverter<>(Map.Entry.class,
+                Map.Entry.class) {
+              @Override
+              public Entry convert(Entry entry) {
+                String pt = (String) entry.getValue();
+                instances.put((String) entry.getKey(),
+                    new AddressFormat(pt));
+                return entry;
+              }
+            });
+      } catch (IOException e) {
+        throw new ConfigurationError(
+            "Error while processing AddressFormat configuration",
+            e);
+      }
     }
+    return instances.get(country);
+  }
 
-    public String getPattern() {
-        return pattern;
-    }
+  /**
+   * Gets pattern.
+   *
+   * @return the pattern
+   */
+  public String getPattern() {
+    return pattern;
+  }
 
-    public String format(Address address) {
-        try {
-            Context context = new DefaultContext();
-            context.set("address", address);
-            StringWriter out = new StringWriter();
-            script.execute(context, out);
-            return out.toString();
-        } catch (IOException e) {
-            throw new ScriptException("Error during script processing", e);
-        }
+  /**
+   * Format string.
+   *
+   * @param address the address
+   * @return the string
+   */
+  public String format(Address address) {
+    try {
+      Context context = new DefaultContext();
+      context.set("address", address);
+      StringWriter out = new StringWriter();
+      script.execute(context, out);
+      return out.toString();
+    } catch (IOException e) {
+      throw new ScriptException("Error during script processing", e);
     }
+  }
 
 }

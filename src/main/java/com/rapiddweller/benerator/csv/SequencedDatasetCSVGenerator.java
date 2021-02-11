@@ -26,46 +26,70 @@
 
 package com.rapiddweller.benerator.csv;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.Sequence;
-import com.rapiddweller.benerator.sample.SampleGeneratorUtil;
 import com.rapiddweller.benerator.sample.SampleGenerator;
+import com.rapiddweller.benerator.sample.SampleGeneratorUtil;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.formats.script.ScriptConverterForStrings;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.script.WeightedSample;
+
+import java.util.List;
 
 /**
  * Generates values from a dataset based on a {@link Sequence}.<br/><br/>
  * Created: 17.02.2010 23:22:52
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class SequencedDatasetCSVGenerator<E> extends GeneratorProxy<E> {
-	
-    @SuppressWarnings("unchecked")
-	public SequencedDatasetCSVGenerator(String filenamePattern, char separator, String datasetName, String nesting,
-            Distribution distribution, String encoding, Context context) {
-        this(filenamePattern, separator, datasetName, nesting, distribution, encoding, 
-        		(Converter<String, E>) new ScriptConverterForStrings(context));
-    }
 
-	@SuppressWarnings("unchecked")
-    public SequencedDatasetCSVGenerator(String filenamePattern, char separator, String datasetName, String nesting,
-            Distribution distribution, String encoding, Converter<String, E> preprocessor) {
-		super((Class<E>) Object.class);
-        List<E> samples = parseFiles(datasetName, separator, nesting, filenamePattern, encoding, preprocessor);
-		setSource(new SampleGenerator<E>((Class<E>) samples.get(0).getClass(), distribution, false, samples));
-    }
+  /**
+   * Instantiates a new Sequenced dataset csv generator.
+   *
+   * @param filenamePattern the filename pattern
+   * @param separator       the separator
+   * @param datasetName     the dataset name
+   * @param nesting         the nesting
+   * @param distribution    the distribution
+   * @param encoding        the encoding
+   * @param context         the context
+   */
+  @SuppressWarnings("unchecked")
+  public SequencedDatasetCSVGenerator(String filenamePattern, char separator, String datasetName, String nesting,
+                                      Distribution distribution, String encoding, Context context) {
+    this(filenamePattern, separator, datasetName, nesting, distribution, encoding,
+        (Converter<String, E>) new ScriptConverterForStrings(context));
+  }
 
-	private static <T> List<T> parseFiles(String datasetName, char separator, String nesting, String filenamePattern,
-            String encoding, Converter<String, T> preprocessor) {
-        List<WeightedSample<T>> weightedSamples = CSVGeneratorUtil.parseDatasetFiles(
-        		datasetName, separator, nesting, filenamePattern, encoding, preprocessor);
-        return SampleGeneratorUtil.extractValues(weightedSamples);
-    }
+  /**
+   * Instantiates a new Sequenced dataset csv generator.
+   *
+   * @param filenamePattern the filename pattern
+   * @param separator       the separator
+   * @param datasetName     the dataset name
+   * @param nesting         the nesting
+   * @param distribution    the distribution
+   * @param encoding        the encoding
+   * @param preprocessor    the preprocessor
+   */
+  @SuppressWarnings("unchecked")
+  public SequencedDatasetCSVGenerator(String filenamePattern, char separator, String datasetName, String nesting,
+                                      Distribution distribution, String encoding, Converter<String, E> preprocessor) {
+    super((Class<E>) Object.class);
+    List<E> samples = parseFiles(datasetName, separator, nesting, filenamePattern, encoding, preprocessor);
+    setSource(new SampleGenerator<>((Class<E>) samples.get(0).getClass(), distribution, false, samples));
+  }
+
+  private static <T> List<T> parseFiles(String datasetName, char separator, String nesting, String filenamePattern,
+                                        String encoding, Converter<String, T> preprocessor) {
+    List<WeightedSample<T>> weightedSamples = CSVGeneratorUtil.parseDatasetFiles(
+        datasetName, separator, nesting, filenamePattern, encoding, preprocessor);
+    return SampleGeneratorUtil.extractValues(weightedSamples);
+  }
 
 }

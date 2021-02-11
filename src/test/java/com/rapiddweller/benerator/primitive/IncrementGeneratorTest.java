@@ -26,56 +26,71 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import static org.junit.Assert.*;
+import com.rapiddweller.benerator.test.GeneratorClassTest;
+import org.junit.Test;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.rapiddweller.benerator.test.GeneratorClassTest;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link IncrementGenerator}.<br/><br/>
  * Created: 14.11.2009 06:38:34
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class IncrementGeneratorTest extends GeneratorClassTest {
 
-	public IncrementGeneratorTest() {
-	    super(IncrementGenerator.class);
-    }
+  /**
+   * Instantiates a new Increment generator test.
+   */
+  public IncrementGeneratorTest() {
+    super(IncrementGenerator.class);
+  }
 
-	@Test
-	public void testIncrementAndMax() {
-		IncrementGenerator generator = new IncrementGenerator(10, 20, 60);
-		expectGeneratedSequence(generator, 10L, 30L, 50L).withCeasedAvailability();
-		generator = new IncrementGenerator(10, 20, 50);
-		expectGeneratedSequence(generator, 10L, 30L, 50L).withCeasedAvailability();
-	}
-	
-	public void testDefaultMax() {
-		IncrementGenerator generator = new IncrementGenerator();
-		expectGeneratedSequence(generator, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L).withContinuedAvailability();
-	}
-	
-	@Test
-	public void testMultiThreading() throws Exception {
-		final IncrementGenerator generator = new IncrementGenerator(0);
-		ExecutorService service = Executors.newCachedThreadPool();
-		Runnable runner = new Runnable() {
-			@Override
-			public void run() {
-				for (int i = 0; i < 500; i++)
-					generator.generate();
-            }
-		};
-		for (int i = 0; i < 20; i++)
-			service.execute(runner);
-		service.shutdown();
-		service.awaitTermination(2, TimeUnit.SECONDS);
-		assertEquals(10000L, generator.cursor.get());
-	}
-	
+  /**
+   * Test increment and max.
+   */
+  @Test
+  public void testIncrementAndMax() {
+    IncrementGenerator generator = new IncrementGenerator(10, 20, 60);
+    expectGeneratedSequence(generator, 10L, 30L, 50L).withCeasedAvailability();
+    generator = new IncrementGenerator(10, 20, 50);
+    expectGeneratedSequence(generator, 10L, 30L, 50L).withCeasedAvailability();
+  }
+
+  /**
+   * Test default max.
+   */
+  @Test
+  public void testDefaultMax() {
+    IncrementGenerator generator = new IncrementGenerator();
+    expectGeneratedSequence(generator, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L).withContinuedAvailability();
+  }
+
+  /**
+   * Test multi threading.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testMultiThreading() throws Exception {
+    final IncrementGenerator generator = new IncrementGenerator(0);
+    ExecutorService service = Executors.newCachedThreadPool();
+    Runnable runner = () -> {
+      for (int i = 0; i < 500; i++) {
+        generator.generate();
+      }
+    };
+    for (int i = 0; i < 20; i++) {
+      service.execute(runner);
+    }
+    service.shutdown();
+    service.awaitTermination(2, TimeUnit.SECONDS);
+    assertEquals(10000L, generator.cursor.get());
+  }
+
 }

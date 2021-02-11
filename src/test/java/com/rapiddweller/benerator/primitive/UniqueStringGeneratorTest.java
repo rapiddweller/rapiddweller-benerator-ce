@@ -27,33 +27,40 @@
 package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.CollectionUtil;
 import org.junit.Test;
 
 /**
  * Tests the UniqueStringGenerator.<br/>
  * <br/>
  * Created: 16.11.2007 12:03:55
+ *
  * @author Volker Bergmann
  */
 public class UniqueStringGeneratorTest extends GeneratorClassTest {
 
-    public UniqueStringGeneratorTest() {
-        super(UniqueScrambledStringGenerator.class);
-    }
+  /**
+   * Instantiates a new Unique string generator test.
+   */
+  public UniqueStringGeneratorTest() {
+    super(UniqueScrambledStringGenerator.class);
+  }
 
-    @Test
-    public void testUniqueVolume() {
-        expectUniqueProducts(create(0, 1, '0', '1'),  3).withCeasedAvailability();
-        expectUniqueProducts(create(0, 2, '0', '1'),  7).withCeasedAvailability();
-        expectUniqueProducts(create(3, 4, '0', '1', '3'), 27 + 81).withCeasedAvailability();
-    }
+  /**
+   * Test unique volume.
+   */
+  @Test
+  public void testUniqueVolume() {
+    expectUniqueProducts(create(0, 1, '0', '1'), 3).withCeasedAvailability();
+    expectUniqueProducts(create(0, 2, '0', '1'), 7).withCeasedAvailability();
+    expectUniqueProducts(create(3, 4, '0', '1', '3'), 27 + 81).withCeasedAvailability();
+  }
 
-	private UniqueScrambledStringGenerator create(int minLength, int maxLength, char... chars) {
-	    UniqueScrambledStringGenerator generator = new UniqueScrambledStringGenerator(
-	    		CollectionUtil.toCharSet(chars), minLength, maxLength);
-	    generator.init(context);
-		return generator;
-    }
-    
+  private UniqueScrambledStringGenerator create(int minLength, int maxLength, char... chars) {
+    UniqueScrambledStringGenerator generator = new UniqueScrambledStringGenerator(
+        CollectionUtil.toCharSet(chars), minLength, maxLength);
+    generator.init(context);
+    return generator;
+  }
+
 }

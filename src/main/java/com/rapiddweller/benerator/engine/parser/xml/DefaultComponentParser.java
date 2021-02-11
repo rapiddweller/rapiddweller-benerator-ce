@@ -26,62 +26,79 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import java.util.Collection;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.parser.ModelParser;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import org.w3c.dom.Element;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+
+import java.util.Collection;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_DEFAULT_COMPONENTS;
 
 /**
  * Parses a &lt;defaultComponents&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:17:04
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class DefaultComponentParser extends AbstractBeneratorDescriptorParser {
 
-	static final Collection<String> COMPONENT_TYPES = CollectionUtil.toSet("attribute", "part", "id", "reference");
+  /**
+   * The Component types.
+   */
+  static final Collection<String> COMPONENT_TYPES = CollectionUtil.toSet("attribute", "part", "id", "reference");
 
-	public DefaultComponentParser() {
-		super(EL_DEFAULT_COMPONENTS, null, null, 
-			BeneratorRootStatement.class, IfStatement.class);
-	}
+  /**
+   * Instantiates a new Default component parser.
+   */
+  public DefaultComponentParser() {
+    super(EL_DEFAULT_COMPONENTS, null, null,
+        BeneratorRootStatement.class, IfStatement.class);
+  }
 
-	@Override
-	public XMLDefaultComponentsStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-		return new XMLDefaultComponentsStatement(element);
-	}
+  @Override
+  public XMLDefaultComponentsStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    return new XMLDefaultComponentsStatement(element);
+  }
 
-	class XMLDefaultComponentsStatement implements Statement {
-		
-		private Element element;
+  /**
+   * The type Xml default components statement.
+   */
+  static class XMLDefaultComponentsStatement implements Statement {
 
-	    public XMLDefaultComponentsStatement(Element element) {
-	    	this.element = element;
-	    }
+    private final Element element;
 
-		@Override
-		public boolean execute(BeneratorContext context) {
-			for (Element child : XMLUtil.getChildElements(element)) {
-				String childType = XMLUtil.localName(child);
-				if (COMPONENT_TYPES.contains(childType)) {
-					ModelParser parser = new ModelParser(context);
-					ComponentDescriptor component = parser.parseSimpleTypeComponent(child, null, null);
-					context.setDefaultComponentConfig(component);
-				} else
-					throw new ConfigurationError("Unexpected element: " + childType);
-			}
-	    	return true;
-		}
+    /**
+     * Instantiates a new Xml default components statement.
+     *
+     * @param element the element
+     */
+    public XMLDefaultComponentsStatement(Element element) {
+      this.element = element;
+    }
 
-	}
+    @Override
+    public boolean execute(BeneratorContext context) {
+      for (Element child : XMLUtil.getChildElements(element)) {
+        String childType = XMLUtil.localName(child);
+        if (COMPONENT_TYPES.contains(childType)) {
+          ModelParser parser = new ModelParser(context);
+          ComponentDescriptor component = parser.parseSimpleTypeComponent(child, null, null);
+          context.setDefaultComponentConfig(component);
+        } else {
+          throw new ConfigurationError("Unexpected element: " + childType);
+        }
+      }
+      return true;
+    }
+
+  }
 
 }

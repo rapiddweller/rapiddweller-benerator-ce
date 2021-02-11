@@ -35,24 +35,59 @@ package com.rapiddweller.model.data;
  */
 public class ArrayElementDescriptor extends ComponentDescriptor {
 
-    public ArrayElementDescriptor(int index, DescriptorProvider provider, String typeName, TypeDescriptor localType) {
-        super(String.valueOf(index), provider, typeName, localType);
-    }
+  /**
+   * Instantiates a new Array element descriptor.
+   *
+   * @param index     the index
+   * @param provider  the provider
+   * @param typeName  the type name
+   * @param localType the local type
+   */
+  public ArrayElementDescriptor(int index, DescriptorProvider provider,
+                                String typeName, TypeDescriptor localType) {
+    super(String.valueOf(index), provider, typeName, localType);
+  }
 
-    public ArrayElementDescriptor(int index, DescriptorProvider provider, String typeName) {
-        super(String.valueOf(index), provider, typeName);
-    }
+  /**
+   * Instantiates a new Array element descriptor.
+   *
+   * @param index    the index
+   * @param provider the provider
+   * @param typeName the type name
+   */
+  public ArrayElementDescriptor(int index, DescriptorProvider provider,
+                                String typeName) {
+    super(String.valueOf(index), provider, typeName);
+  }
 
-    public ArrayElementDescriptor(int index, DescriptorProvider provider, TypeDescriptor localType) {
-        super(String.valueOf(index), provider, localType);
-    }
+  /**
+   * Instantiates a new Array element descriptor.
+   *
+   * @param index     the index
+   * @param provider  the provider
+   * @param localType the local type
+   */
+  public ArrayElementDescriptor(int index, DescriptorProvider provider,
+                                TypeDescriptor localType) {
+    super(String.valueOf(index), provider, localType);
+  }
 
-    public int getIndex() {
-        return Integer.parseInt(getName());
-    }
+  /**
+   * Gets index.
+   *
+   * @return the index
+   */
+  public int getIndex() {
+    return Integer.parseInt(getName());
+  }
 
-    public void setIndex(int index) {
-        setName(String.valueOf(index));
-    }
+  /**
+   * Sets index.
+   *
+   * @param index the index
+   */
+  public void setIndex(int index) {
+    setName(String.valueOf(index));
+  }
 
 }

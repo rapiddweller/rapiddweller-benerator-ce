@@ -31,9 +31,9 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.primitive.RandomVarLengthStringGenerator;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.domain.address.Country;
-import com.rapiddweller.commons.LocaleUtil;
-import com.rapiddweller.commons.StringUtil;
 
 /**
  * Generates German {@link BankAccount}s with low validity requirements.<br/><br/>
@@ -42,46 +42,51 @@ import com.rapiddweller.commons.StringUtil;
  * @author Volker Bergmann
  * @since 0.5.4
  */
-public class BankAccountGenerator extends CompositeGenerator<BankAccount> implements NonNullGenerator<BankAccount> {
+public class BankAccountGenerator extends CompositeGenerator<BankAccount>
+    implements NonNullGenerator<BankAccount> {
 
-    private final String countryCode;
-    private final BankGenerator bankGenerator;
-    private final RandomVarLengthStringGenerator accountNumberGenerator;
+  private final String countryCode;
+  private final BankGenerator bankGenerator;
+  private final RandomVarLengthStringGenerator accountNumberGenerator;
 
-    public BankAccountGenerator() {
-        super(BankAccount.class);
-        LocaleUtil.getFallbackLocale();
-        this.countryCode = Country.getDefault().getIsoCode();
-        this.bankGenerator = registerComponent(new BankGenerator());
-        this.accountNumberGenerator = registerComponent(new RandomVarLengthStringGenerator("\\d", 10));
-    }
+  /**
+   * Instantiates a new Bank account generator.
+   */
+  public BankAccountGenerator() {
+    super(BankAccount.class);
+    LocaleUtil.getFallbackLocale();
+    this.countryCode = Country.getDefault().getIsoCode();
+    this.bankGenerator = registerComponent(new BankGenerator());
+    this.accountNumberGenerator = registerComponent(
+        new RandomVarLengthStringGenerator("\\d", 10));
+  }
 
-    @Override
-    public synchronized void init(GeneratorContext context) {
-        bankGenerator.init(context);
-        accountNumberGenerator.init(context);
-        super.init(context);
-    }
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    bankGenerator.init(context);
+    accountNumberGenerator.init(context);
+    super.init(context);
+  }
 
-    @Override
-    public ProductWrapper<BankAccount> generate(ProductWrapper<BankAccount> wrapper) {
-        return wrapper.wrap(generate());
-    }
+  @Override
+  public ProductWrapper<BankAccount> generate(
+      ProductWrapper<BankAccount> wrapper) {
+    return wrapper.wrap(generate());
+  }
 
-    @Override
-    public BankAccount generate() {
-        Bank bank = bankGenerator.generate();
-        String accountNumber = accountNumberGenerator.generate();
-        String iban = createIban(bank, accountNumber);
-        return new BankAccount(bank, accountNumber, iban);
-    }
+  @Override
+  public BankAccount generate() {
+    Bank bank = bankGenerator.generate();
+    String accountNumber = accountNumberGenerator.generate();
+    String iban = createIban(bank, accountNumber);
+    return new BankAccount(bank, accountNumber, iban);
+  }
 
-    private String createIban(Bank bank, String accountNumber) {
-        StringBuilder builder = new StringBuilder(countryCode);
-        builder.append("00");
-        builder.append(bank.getBankCode());
-        builder.append(StringUtil.padLeft(accountNumber, 10, '0'));
-        return IBANUtil.fixChecksum(builder.toString());
-    }
+  private String createIban(Bank bank, String accountNumber) {
+    String builder = countryCode + "00" +
+        bank.getBankCode() +
+        StringUtil.padLeft(accountNumber, 10, '0');
+    return IBANUtil.fixChecksum(builder);
+  }
 
 }

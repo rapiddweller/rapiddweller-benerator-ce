@@ -26,78 +26,93 @@
 
 package com.rapiddweller.benerator;
 
-import java.io.File;
-
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-
-import com.rapiddweller.commons.LogCategories;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.VMInfo;
-import com.rapiddweller.commons.ui.InfoPrinter;
-import com.rapiddweller.commons.version.VersionInfo;
-import com.rapiddweller.commons.version.VersionNumber;
+import com.rapiddweller.common.LogCategoriesConstants;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.VMInfo;
+import com.rapiddweller.common.ui.InfoPrinter;
+import com.rapiddweller.common.version.VersionInfo;
+import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.profile.Profiling;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.File;
 
 /**
  * Provides general utility methods for Benerator.<br/><br/>
  * Created: 01.02.2013 16:20:10
- * @since 0.8.0
+ *
  * @author Volker Bergmann
+ * @since 0.8.0
  */
 public class BeneratorUtil {
-	
-	private static final Logger CONFIG_LOGGER = LogManager.getLogger(LogCategories.CONFIG);
-	
-	public static boolean isDescriptorFilePath(String filePath) {
-		if (StringUtil.isEmpty(filePath))
-			return false;
-		String lcName = filePath.toLowerCase();
-		return ("benerator.xml".equals(filePath) || lcName.replace(File.separatorChar, '/').endsWith("/benerator.xml") || lcName.endsWith(".ben.xml"));
-	}
-	
-	public static void checkSystem(InfoPrinter printer) {
-		printVersionInfo(printer);
-		printer.printLines("Configured heap size limit: " + Runtime.getRuntime().maxMemory() / 1024 / 1024 + " MB");
-		try {
-			Class.forName("javax.script.ScriptEngine");
-		} catch (ClassNotFoundException e) {
-			CONFIG_LOGGER.error("You need to run benerator with Java 6 or greater!");
-			if (SystemInfo.isMacOsx())
-				CONFIG_LOGGER.error("Please check the manual for Java setup on Mac OS X.");
-			System.exit(BeneratorConstants.EXIT_CODE_ERROR);
-		}
-		VersionNumber javaVersion = VersionNumber.valueOf(VMInfo.getJavaVersion());
-		if (javaVersion.compareTo(VersionNumber.valueOf("1.6")) < 0)
-			CONFIG_LOGGER.warn("benerator is written for and tested under Java 6 - " +
-					"you managed to set up JSR 223, but may face other problems.");
-		if (Profiling.isEnabled())
-			CONFIG_LOGGER.warn("Profiling is active. This may lead to memory issues");
-	}
 
-	public static void printVersionInfo(InfoPrinter printer) {
-		VersionInfo version = VersionInfo.getInfo("benerator");
-		printer.printLines(
-			"Benerator " + version.getVersion() + " build " + version.getBuildNumber(),
-			"Java version " + VMInfo.getJavaVersion(),
-			"JVM " + VMInfo.getJavaVmName() + " " + VMInfo.getJavaVmVersion() + " (" + VMInfo.getJavaVmVendor() + ")",
-			"OS " + SystemInfo.getOsName() + " " + SystemInfo.getOsVersion() + " (" + SystemInfo.getOsArchitecture() + ")"
-		);
-        listScriptEngines(printer);
+  private static final Logger CONFIG_LOGGER = LogManager.getLogger(LogCategoriesConstants.CONFIG);
+
+  /**
+   * Is descriptor file path boolean.
+   *
+   * @param filePath the file path
+   * @return the boolean
+   */
+  public static boolean isDescriptorFilePath(String filePath) {
+    if (StringUtil.isEmpty(filePath)) {
+      return false;
     }
+    String lcName = filePath.toLowerCase();
+    return ("benerator.xml".equals(filePath) || lcName.replace(File.separatorChar, '/').endsWith("/benerator.xml") || lcName.endsWith(".ben.xml"));
+  }
 
-	private static void listScriptEngines(InfoPrinter printer) {
-    	printer.printLines("Installed JSR 223 Script Engines:");
-        for (ScriptEngineFactory engine : new ScriptEngineManager().getEngineFactories()) {
-			printer.printLines("- " + engine.getEngineName() + engine.getNames());
-        }
-	}
+  /**
+   * Check system.
+   *
+   * @param printer the printer
+   */
+  public static void checkSystem(InfoPrinter printer) {
+    printVersionInfo(printer);
+    printer.printLines("Configured heap size limit: " + Runtime.getRuntime().maxMemory() / 1024 / 1024 + " MB");
+    try {
+      Class.forName("javax.script.ScriptEngine");
+    } catch (ClassNotFoundException e) {
+      CONFIG_LOGGER.error("You need to run benerator with Java 6 or greater!");
+      if (SystemInfo.isMacOsx()) {
+        CONFIG_LOGGER.error("Please check the manual for Java setup on Mac OS X.");
+      }
+      System.exit(BeneratorConstants.EXIT_CODE_ERROR);
+    }
+    VersionNumber javaVersion = VersionNumber.valueOf(VMInfo.getJavaVersion());
+    if (javaVersion.compareTo(VersionNumber.valueOf("1.6")) < 0) {
+      CONFIG_LOGGER.warn("benerator is written for and tested under Java 6 - " +
+          "you managed to set up JSR 223, but may face other problems.");
+    }
+    if (Profiling.isEnabled()) {
+      CONFIG_LOGGER.warn("Profiling is active. This may lead to memory issues");
+    }
+  }
 
-	public static void logConfig(String config) {
-		CONFIG_LOGGER.info(config);
-	}
+  /**
+   * Print version info.
+   *
+   * @param printer the printer
+   */
+  public static void printVersionInfo(InfoPrinter printer) {
+    VersionInfo version = VersionInfo.getInfo("benerator");
+    printer.printLines(
+        "Benerator " + version.getVersion() + " build " + version.getBuildNumber(),
+        "Java version " + VMInfo.getJavaVersion(),
+        "JVM " + VMInfo.getJavaVmName() + " " + VMInfo.getJavaVmVersion() + " (" + VMInfo.getJavaVmVendor() + ")",
+        "OS " + SystemInfo.getOsName() + " " + SystemInfo.getOsVersion() + " (" + SystemInfo.getOsArchitecture() + ")"
+    );
+  }
+
+  /**
+   * Log config.
+   *
+   * @param config the config
+   */
+  public static void logConfig(String config) {
+    CONFIG_LOGGER.info(config);
+  }
 
 }

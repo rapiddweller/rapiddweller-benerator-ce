@@ -26,51 +26,58 @@
 
 package com.rapiddweller.benerator.archetype;
 
-import static org.junit.Assert.*;
+import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.StringUtil;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
 
-import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.commons.ArrayUtil;
-import com.rapiddweller.commons.FileUtil;
-import com.rapiddweller.commons.StringUtil;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link Archetype} class.<br/><br/>
  * Created: 02.04.2010 12:35:46
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ArchetypeTest {
 
-	@Ignore
-	@Test
-	public void testSimpleProjectArchetype() throws Exception {
-		// prepare
-		Archetype simple = new Archetype(new URL(ArchetypeManager.ARCHETYPE_FOLDER_URL.toString() + "/simple"));
-		File targetFolder = new File("target/simple");
-		FileUtil.deleteIfExists(targetFolder);
-		
-		// run
-		simple.copyFilesTo(targetFolder, new EclipseFolderLayout());
-		
-		// verify
-		String[] createdFiles = targetFolder.list();
-		// check that benerator.xml was copied from the archetype
-		assertTrue(ArrayUtil.contains("benerator.xml", createdFiles));
-		// check that benerator xsd was copied from the classpath
-		String schemaPath = StringUtil.splitOnLastSeparator(BeneratorFactory.getSchemaPathForCurrentVersion(), '/')[1];
-		assertTrue("File not found: " + schemaPath, ArrayUtil.contains(schemaPath, createdFiles));
-		// check that src/main/resources is mapped to src in Eclipse projects
-		File src = new File(targetFolder, "src");
-		assertTrue(src.exists());
-		assertTrue(src.isDirectory());
-		assertTrue(ArrayUtil.contains("log4j.xml", src.list())); 
-		// check that ARCHETYPE-INF was not copied
-		assertFalse(ArrayUtil.contains("ARCHETYPE-INF", createdFiles));
-	}
-	
+  /**
+   * Test simple project archetype.
+   *
+   * @throws Exception the exception
+   */
+  @Ignore
+  @Test
+  public void testSimpleProjectArchetype() throws Exception {
+    // prepare
+    Archetype simple = new Archetype(new URL(ArchetypeManager.ARCHETYPE_FOLDER_URL.toString() + "/simple"));
+    File targetFolder = new File("target/simple");
+    FileUtil.deleteIfExists(targetFolder);
+
+    // run
+    simple.copyFilesTo(targetFolder, new EclipseFolderLayout());
+
+    // verify
+    String[] createdFiles = targetFolder.list();
+    // check that benerator.xml was copied from the archetype
+    assertTrue(ArrayUtil.contains("benerator.xml", createdFiles));
+    // check that benerator xsd was copied from the classpath
+    String schemaPath = StringUtil.splitOnLastSeparator(BeneratorFactory.getSchemaPathForCurrentVersion(), '/')[1];
+    assertTrue("File not found: " + schemaPath, ArrayUtil.contains(schemaPath, createdFiles));
+    // check that src/main/resources is mapped to src in Eclipse projects
+    File src = new File(targetFolder, "src");
+    assertTrue(src.exists());
+    assertTrue(src.isDirectory());
+    assertTrue(ArrayUtil.contains("log4j.xml", src.list()));
+    // check that ARCHETYPE-INF was not copied
+    assertFalse(ArrayUtil.contains("ARCHETYPE-INF", createdFiles));
+  }
+
 }

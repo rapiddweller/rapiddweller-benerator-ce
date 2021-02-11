@@ -41,13 +41,11 @@ import java.util.List;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-
 public class NowMethod implements TemplateMethodModelEx {
 
-    @Override
-    @SuppressWarnings("rawtypes")
-    public TemplateModel exec(List args) {
-        return new SimpleDate(new Date(System.currentTimeMillis()));
-    }
+  @Override
+  public TemplateModel exec(List args) {
+    return new SimpleDate(new Date(System.currentTimeMillis()));
+  }
 
 }

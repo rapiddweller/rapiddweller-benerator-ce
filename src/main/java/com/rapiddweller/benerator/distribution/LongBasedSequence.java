@@ -28,25 +28,35 @@ package com.rapiddweller.benerator.distribution;
 
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import static com.rapiddweller.commons.NumberUtil.*;
+
+import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
- * Helper class that serves as parent for individual {@link Sequence} implementations 
+ * Helper class that serves as parent for individual {@link Sequence} implementations
  * that are based on a Long-value generator (Generator&lt;Long&gt;).<br/>
  * <br/>
  * Created at 03.07.2009 13:15:22
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public abstract class LongBasedSequence extends Sequence {
 
-    @Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
-    	NonNullGenerator<Long> source = createLongGenerator(toLong(min), toLong(max), toLong(granularity), unique);
-		return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, source, min, granularity);
-    }
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
+    NonNullGenerator<Long> source = createLongGenerator(toLong(min), toLong(max), toLong(granularity), unique);
+    return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, source, min, granularity);
+  }
 
-	protected abstract NonNullGenerator<Long> createLongGenerator(Long min, Long max, Long granularity, boolean unique);
-	
+  /**
+   * Create long generator non null generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   * @param unique      the unique
+   * @return the non null generator
+   */
+  protected abstract NonNullGenerator<Long> createLongGenerator(Long min, Long max, Long granularity, boolean unique);
+
 }

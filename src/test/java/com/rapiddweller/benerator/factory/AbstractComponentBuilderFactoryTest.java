@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.factory;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
@@ -43,126 +40,189 @@ import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.PartDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 /**
  * Abstract test parent class which provides utility methods for testing the {@link ComponentBuilderFactory}.<br/><br/>
  * Created: 15.07.2011 18:21:19
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public abstract class AbstractComponentBuilderFactoryTest extends GeneratorTest {
 
-	// private helpers -------------------------------------------------------------------------------------------------
-	
-	protected ComponentBuilder<Entity> createComponentBuilder(ComponentDescriptor component) {
-		return createComponentBuilder(component, new DefaultBeneratorContext());
-	}
-	
-	@SuppressWarnings("unchecked")
-    protected ComponentBuilder<Entity> createComponentBuilder(ComponentDescriptor component, BeneratorContext context) {
-		return (ComponentBuilder<Entity>) ComponentBuilderFactory.createComponentBuilder(component, Uniqueness.NONE, context);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public final class ComponentBuilderGenerator<E> extends AbstractGenerator<E> {
-		
-        @SuppressWarnings("rawtypes")
-		private ComponentBuilder builder;
-		private String componentName;
+  // private helpers -------------------------------------------------------------------------------------------------
 
-        @SuppressWarnings("rawtypes")
-		public ComponentBuilderGenerator(ComponentBuilder builder, String componentName) {
-			this.builder = builder;
-			this.componentName = componentName;
-		}
+  /**
+   * Create component builder component builder.
+   *
+   * @param component the component
+   * @return the component builder
+   */
+  protected ComponentBuilder<Entity> createComponentBuilder(ComponentDescriptor component) {
+    return createComponentBuilder(component, new DefaultBeneratorContext());
+  }
 
-		@Override
-        public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
-	        builder.init((BeneratorContext) context);
-	        super.init(context);
-        }
+  /**
+   * Create component builder component builder.
+   *
+   * @param component the component
+   * @param context   the context
+   * @return the component builder
+   */
+  @SuppressWarnings("unchecked")
+  protected ComponentBuilder<Entity> createComponentBuilder(ComponentDescriptor component, BeneratorContext context) {
+    return (ComponentBuilder<Entity>) ComponentBuilderFactory.createComponentBuilder(component, Uniqueness.NONE, context);
+  }
 
-        @Override
-		public Class<E> getGeneratedType() {
-	        return (Class<E>) Object.class;
-        }
+  /**
+   * The type Component builder generator.
+   *
+   * @param <E> the type parameter
+   */
+  @SuppressWarnings("unchecked")
+  public final class ComponentBuilderGenerator<E> extends AbstractGenerator<E> {
 
-		@Override
-		@SuppressWarnings("synthetic-access")
-        public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-			Entity entity = createEntity("Test");
-			context.setCurrentProduct(new ProductWrapper<Entity>(entity));
-			if (!builder.execute((BeneratorContext) context))
-				return null;
-			return wrapper.wrap((E) entity.get(componentName));
-		}
+    @SuppressWarnings("rawtypes")
+    private final ComponentBuilder builder;
+    private final String componentName;
 
-		@Override
-		public void reset() {
-			super.reset();
-			builder.reset();
-		}
-		
-		@Override
-		public void close() {
-			super.close();
-			builder.close();
-		}
-
-		@Override
-		public boolean isParallelizable() {
-	        return false;
-        }
-
-		@Override
-		public boolean isThreadSafe() {
-	        return false;
-        }
-
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-    protected <T> void expectUniqueSequence(PartDescriptor name, T... products) {
-		ComponentBuilder builder = createComponentBuilder(name);
-		Generator<T> helper = new ComponentBuilderGenerator(builder, name.getName());
-		helper.init(context);
-		expectGeneratedSequence(helper, products).withCeasedAvailability();
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-    protected <T> void expectUniqueSet(PartDescriptor name, T... products) {
-		ComponentBuilder builder = createComponentBuilder(name);
-		Generator<T> helper = new ComponentBuilderGenerator(builder, name.getName());
-		helper.init(context);
-		expectUniquelyGeneratedSet(helper, products).withCeasedAvailability();
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-    protected <T> void expectSet(PartDescriptor name, int n, T... products) {
-		ComponentBuilder builder = createComponentBuilder(name);
-		Generator<T> helper = new ComponentBuilderGenerator(builder, name.getName());
-		helper.init(context);
-		expectGeneratedSet(helper, n, products);
-	}
-	
-	/*
-	private <T> void expectSequence(PartDescriptor name, T... products) {
-		ComponentBuilder builder = createComponentBuilder(name);
-		Generator<T> helper = new ComponentBuilderGenerator(builder, name.getName());
-		expectGeneratedSet(helper, products).withContinuedAvailability();
-	}
-	*/
-
-	protected void expectNullGenerations(ComponentBuilderGenerator<String> gen, int n) {
-	    ProductWrapper<String> wrapper = new ProductWrapper<String>();
-	    for (int i = 0; i < n; i++) {
-	    	wrapper = gen.generate(wrapper);
-	    	assertNotNull(wrapper);
-	    	assertNull(wrapper.unwrap());
-	    }
+    /**
+     * Instantiates a new Component builder generator.
+     *
+     * @param builder       the builder
+     * @param componentName the component name
+     */
+    @SuppressWarnings("rawtypes")
+    public ComponentBuilderGenerator(ComponentBuilder builder, String componentName) {
+      this.builder = builder;
+      this.componentName = componentName;
     }
-	
-	enum TestEnum {
-		firstInstance
-	}
+
+    @Override
+    public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
+      builder.init((BeneratorContext) context);
+      super.init(context);
+    }
+
+    @Override
+    public Class<E> getGeneratedType() {
+      return (Class<E>) Object.class;
+    }
+
+    @Override
+    @SuppressWarnings("synthetic-access")
+    public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+      Entity entity = createEntity("Test");
+      context.setCurrentProduct(new ProductWrapper<>(entity));
+      if (!builder.execute((BeneratorContext) context)) {
+        return null;
+      }
+      return wrapper.wrap((E) entity.get(componentName));
+    }
+
+    @Override
+    public void reset() {
+      super.reset();
+      builder.reset();
+    }
+
+    @Override
+    public void close() {
+      super.close();
+      builder.close();
+    }
+
+    @Override
+    public boolean isParallelizable() {
+      return false;
+    }
+
+    @Override
+    public boolean isThreadSafe() {
+      return false;
+    }
+
+  }
+
+  /**
+   * Expect unique sequence.
+   *
+   * @param <T>      the type parameter
+   * @param name     the name
+   * @param products the products
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  protected <T> void expectUniqueSequence(PartDescriptor name, T... products) {
+    ComponentBuilder builder = createComponentBuilder(name);
+    Generator<T> helper = new ComponentBuilderGenerator(builder, name.getName());
+    helper.init(context);
+    expectGeneratedSequence(helper, products).withCeasedAvailability();
+  }
+
+  /**
+   * Expect unique set.
+   *
+   * @param <T>      the type parameter
+   * @param name     the name
+   * @param products the products
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  protected <T> void expectUniqueSet(PartDescriptor name, T... products) {
+    ComponentBuilder builder = createComponentBuilder(name);
+    Generator<T> helper = new ComponentBuilderGenerator(builder, name.getName());
+    helper.init(context);
+    expectUniquelyGeneratedSet(helper, products).withCeasedAvailability();
+  }
+
+  /**
+   * Expect set.
+   *
+   * @param <T>      the type parameter
+   * @param name     the name
+   * @param n        the n
+   * @param products the products
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  protected <T> void expectSet(PartDescriptor name, int n, T... products) {
+    ComponentBuilder builder = createComponentBuilder(name);
+    Generator<T> helper = new ComponentBuilderGenerator(builder, name.getName());
+    helper.init(context);
+    expectGeneratedSet(helper, n, products);
+  }
+
+
+//  private <T> void expectSequence(PartDescriptor name, T... products) {
+//    ComponentBuilder builder = createComponentBuilder(name);
+//    Generator<T> helper = new ComponentBuilderGenerator(builder, name.getName());
+//    expectGeneratedSet(helper, products).withContinuedAvailability();
+//  }
+
+
+  /**
+   * Expect null generations.
+   *
+   * @param gen the gen
+   * @param n   the n
+   */
+  protected void expectNullGenerations(ComponentBuilderGenerator<String> gen, int n) {
+    ProductWrapper<String> wrapper = new ProductWrapper<>();
+    for (int i = 0; i < n; i++) {
+      wrapper = gen.generate(wrapper);
+      assertNotNull(wrapper);
+      assertNull(wrapper.unwrap());
+    }
+  }
+
+  /**
+   * The enum Test enum.
+   */
+  enum TestEnum {
+    /**
+     * First instance test enum.
+     */
+    firstInstance
+  }
 
 }

@@ -30,75 +30,82 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.engine.statement.GenerateAndConsumeTask;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.ErrorHandler;
+import com.rapiddweller.common.ErrorHandler;
 
 /**
  * Wraps a {@link GenerateAndConsumeTask} with a {@link Generator} interface.<br/><br/>
  * Created: 01.09.2011 15:33:34
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class TaskBasedGenerator implements Generator<Object> {
-	
-	private GenerateAndConsumeTask task;
-	private GeneratorContext context;
-	private ErrorHandler errorHandler;
-	private boolean initialized;
 
-	public TaskBasedGenerator(GenerateAndConsumeTask task) {
-		this.task = task;
-		this.errorHandler = ErrorHandler.getDefault();
-	}
+  private final GenerateAndConsumeTask task;
+  private GeneratorContext context;
+  private final ErrorHandler errorHandler;
+  private boolean initialized;
 
-	@Override
-	public boolean isParallelizable() {
-		return task.isParallelizable();
-	}
+  /**
+   * Instantiates a new Task based generator.
+   *
+   * @param task the task
+   */
+  public TaskBasedGenerator(GenerateAndConsumeTask task) {
+    this.task = task;
+    this.errorHandler = ErrorHandler.getDefault();
+  }
 
-	@Override
-	public boolean isThreadSafe() {
-		return task.isThreadSafe();
-	}
+  @Override
+  public boolean isParallelizable() {
+    return task.isParallelizable();
+  }
 
-	@Override
-	public Class<Object> getGeneratedType() {
-		return Object.class;
-	}
+  @Override
+  public boolean isThreadSafe() {
+    return task.isThreadSafe();
+  }
 
-	@Override
-	public void init(GeneratorContext context) {
-		task.init((BeneratorContext) context);
-		this.context = context;
-		this.initialized = true;
-	}
+  @Override
+  public Class<Object> getGeneratedType() {
+    return Object.class;
+  }
 
-	@Override
-	public boolean wasInitialized() {
-		return initialized;
-	}
+  @Override
+  public void init(GeneratorContext context) {
+    task.init((BeneratorContext) context);
+    this.context = context;
+    this.initialized = true;
+  }
 
-	@Override
-	public ProductWrapper<Object> generate(ProductWrapper<Object> wrapper) {
-		task.execute(context, errorHandler);
-		ProductWrapper<?> currentProduct = task.getRecentProduct();
-		if (currentProduct == null)
-			return null;
-		return new ProductWrapper<Object>().wrap(currentProduct.unwrap());
-	}
+  @Override
+  public boolean wasInitialized() {
+    return initialized;
+  }
 
-	@Override
-	public void reset() {
-		task.reset();
-	}
+  @Override
+  public ProductWrapper<Object> generate(ProductWrapper<Object> wrapper) {
+    task.execute(context, errorHandler);
+    ProductWrapper<?> currentProduct = task.getRecentProduct();
+    if (currentProduct == null) {
+      return null;
+    }
+    return new ProductWrapper<>().wrap(currentProduct.unwrap());
+  }
 
-	@Override
-	public void close() {
-		task.close();
-	}
+  @Override
+  public void reset() {
+    task.reset();
+  }
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + '[' + task + ']';
-	}
-	
+  @Override
+  public void close() {
+    task.close();
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + task + ']';
+  }
+
 }

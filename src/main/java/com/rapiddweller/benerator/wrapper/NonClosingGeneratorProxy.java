@@ -32,22 +32,29 @@ import com.rapiddweller.benerator.engine.ResourceManager;
 
 /**
  * {@link Generator} proxy that prevents its delegate from being closed.
- * Note: Users of this class must ensure that the delegate is closed 
+ * Note: Users of this class must ensure that the delegate is closed
  * a different way (e.g. by a {@link ResourceManager}).<br/><br/>
  * Created: 13.04.2011 20:12:18
- * @since 0.6.6
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class NonClosingGeneratorProxy<E> extends GeneratorProxy<E> {
 
-	public NonClosingGeneratorProxy(Generator<E> source) {
-		super(source);
-	}
-	
-	@Override
-	public void close() {
-	    this.state = GeneratorState.CLOSED;
-		// Note: Don't close the source here! It must be closed elsewhere by its originator.
-	}
-	
+  /**
+   * Instantiates a new Non closing generator proxy.
+   *
+   * @param source the source
+   */
+  public NonClosingGeneratorProxy(Generator<E> source) {
+    super(source);
+  }
+
+  @Override
+  public void close() {
+    this.state = GeneratorState.CLOSED;
+    // Note: Don't close the source here! It must be closed elsewhere by its originator.
+  }
+
 }

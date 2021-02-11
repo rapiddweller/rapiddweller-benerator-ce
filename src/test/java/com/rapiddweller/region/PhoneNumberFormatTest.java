@@ -26,61 +26,77 @@
 
 package com.rapiddweller.region;
 
-import java.text.ParseException;
-
 import com.rapiddweller.domain.address.PhoneNumber;
 import com.rapiddweller.domain.address.PhoneNumberFormat;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.text.ParseException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Tests the {@link PhoneNumberFormat}.<br/><br/>
- * @since 0.4.0
+ *
  * @author Volker Bergmann
+ * @since 0.4.0
  */
 public class PhoneNumberFormatTest {
-    
-	@Test
-    public void testFormat() {
-        PhoneNumber number = new PhoneNumber("49", "1234", "5678");
-        assertEquals("formatting with pattern 'cal' failed for phone number: " + number, 
-                "4912345678", new PhoneNumberFormat("cal").format(number));
-    }
 
-	@Test
-    public void testParsingWithInvalidPattern() {
-        try {
-            new PhoneNumberFormat("cal").parseObject("4912345678");
-            fail("ParseException expected");
-        } catch (ParseException e) {
-            // this is the desired behavior
-        }
-    }
+  /**
+   * Test format.
+   */
+  @Test
+  public void testFormat() {
+    PhoneNumber number = new PhoneNumber("49", "1234", "5678");
+    assertEquals("formatting with pattern 'cal' failed for phone number: " + number,
+        "4912345678", new PhoneNumberFormat("cal").format(number));
+  }
 
-	@Test
-    public void testParsingInvalidNumber() {
-        try {
-            new PhoneNumberFormat("+c-a-l").parseObject("49(1234)5678");
-            fail("ParseException expected");
-        } catch (ParseException e) {
-            // this is the desired behavior
-        }
+  /**
+   * Test parsing with invalid pattern.
+   */
+  @Test
+  public void testParsingWithInvalidPattern() {
+    try {
+      new PhoneNumberFormat("cal").parseObject("4912345678");
+      fail("ParseException expected");
+    } catch (ParseException e) {
+      // this is the desired behavior
     }
+  }
 
-	@Test
-    public void testBijectiveNumbers() throws ParseException {
-        PhoneNumber n = new PhoneNumber("49", "1234", "5678");
-        check(n, "+c-a-l", "+49-1234-5678");
-        check(n, "00c(a)l", "0049(1234)5678");
+  /**
+   * Test parsing invalid number.
+   */
+  @Test
+  public void testParsingInvalidNumber() {
+    try {
+      new PhoneNumberFormat("+c-a-l").parseObject("49(1234)5678");
+      fail("ParseException expected");
+    } catch (ParseException e) {
+      // this is the desired behavior
     }
+  }
 
-    private static void check(PhoneNumber number, String pattern, String formatted) throws ParseException {
-        PhoneNumberFormat format = new PhoneNumberFormat(pattern);
-        assertEquals("formatting with pattern '" + pattern + "' failed for phone number: " + number, 
-                formatted, format.format(number));
-        assertEquals("parsing with pattern '" + pattern + "' failed for string: " + formatted, 
-                number, format.parseObject(formatted));
-    }
+  /**
+   * Test bijective numbers.
+   *
+   * @throws ParseException the parse exception
+   */
+  @Test
+  public void testBijectiveNumbers() throws ParseException {
+    PhoneNumber n = new PhoneNumber("49", "1234", "5678");
+    check(n, "+c-a-l", "+49-1234-5678");
+    check(n, "00c(a)l", "0049(1234)5678");
+  }
+
+  private static void check(PhoneNumber number, String pattern, String formatted) throws ParseException {
+    PhoneNumberFormat format = new PhoneNumberFormat(pattern);
+    assertEquals("formatting with pattern '" + pattern + "' failed for phone number: " + number,
+        formatted, format.format(number));
+    assertEquals("parsing with pattern '" + pattern + "' failed for string: " + formatted,
+        number, format.parseObject(formatted));
+  }
 
 }

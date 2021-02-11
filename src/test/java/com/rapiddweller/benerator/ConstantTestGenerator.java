@@ -26,73 +26,83 @@
 
 package com.rapiddweller.benerator;
 
-import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
 
 /**
  * Helper class for testing.<br/><br/>
  * Created: 16.12.2006 07:51:30
- * @since 0.1
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class ConstantTestGenerator<E> implements Generator<E> {
 
-    private final E value;
-    private String lastMethodCall;
-    private boolean initialized;
+  private final E value;
+  private String lastMethodCall;
+  private boolean initialized;
 
-    public ConstantTestGenerator(E value) {
-        this.value = value;
-        this.lastMethodCall = "constructor";
-        this.initialized = false;
-    }
+  /**
+   * Instantiates a new Constant test generator.
+   *
+   * @param value the value
+   */
+  public ConstantTestGenerator(E value) {
+    this.value = value;
+    this.lastMethodCall = "constructor";
+    this.initialized = false;
+  }
 
-    @Override
-	public void init(GeneratorContext context) {
-    	this.initialized = true;
-    }
+  @Override
+  public void init(GeneratorContext context) {
+    this.initialized = true;
+  }
 
-    @Override
-	@SuppressWarnings("unchecked")
-    public Class<E> getGeneratedType() {
-        return (value != null ? (Class<E>) value.getClass() : null);
-    }
+  @Override
+  @SuppressWarnings("unchecked")
+  public Class<E> getGeneratedType() {
+    return (value != null ? (Class<E>) value.getClass() : null);
+  }
 
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-        this.lastMethodCall = "generate";
-        return wrapper.wrap(value);
-    }
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    this.lastMethodCall = "generate";
+    return wrapper.wrap(value);
+  }
 
-    @Override
-	public boolean wasInitialized() {
-        return initialized;
-    }
+  @Override
+  public boolean wasInitialized() {
+    return initialized;
+  }
 
-    @Override
-	public void reset() {
-        this.lastMethodCall = "reset";
-    }
+  @Override
+  public void reset() {
+    this.lastMethodCall = "reset";
+  }
 
-    @Override
-	public void close() {
-        this.lastMethodCall = "close";
-    }
+  @Override
+  public void close() {
+    this.lastMethodCall = "close";
+  }
 
-    public String getLastMethodCall() {
-        return lastMethodCall;
-    }
+  /**
+   * Gets last method call.
+   *
+   * @return the last method call
+   */
+  public String getLastMethodCall() {
+    return lastMethodCall;
+  }
 
-	@Override
-	public boolean isParallelizable() {
-	    return true;
-    }
+  @Override
+  public boolean isParallelizable() {
+    return true;
+  }
 
-	@Override
-	public boolean isThreadSafe() {
-	    return true;
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
 
 }

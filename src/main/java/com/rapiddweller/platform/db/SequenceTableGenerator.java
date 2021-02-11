@@ -31,12 +31,13 @@ import com.rapiddweller.benerator.GeneratorState;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.util.UnsafeNonNullGenerator;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.script.ScriptUtil;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.jdbacl.DBUtil;
+import com.rapiddweller.jdbacl.SQLUtil;
 
 import java.io.Closeable;
 import java.sql.PreparedStatement;
@@ -44,222 +45,323 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
 /**
  * Uses a database table to fetch and increment values like a database sequence.<br/><br/>
  * Created: 09.08.2010 14:44:06
  *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.4
  */
-public class SequenceTableGenerator<E extends Number> extends UnsafeNonNullGenerator<E> {
+public class SequenceTableGenerator<E extends Number>
+    extends UnsafeNonNullGenerator<E> {
 
-    protected Long increment = 1L;
-    private String table;
-    private String column;
-    private DBSystem database;
-    private String selector;
-    private String query;
-    private IncrementorStrategy incrementorStrategy;
-    private PreparedStatement parameterizedAccessorStatement;
+  /**
+   * The Increment.
+   */
+  protected final Long increment = 1L;
+  private String table;
+  private String column;
+  private DBSystem database;
+  private String selector;
+  private String query;
+  private IncrementorStrategy incrementorStrategy;
+  private PreparedStatement parameterizedAccessorStatement;
 
-    public SequenceTableGenerator() {
-        this(null, null, null);
+  /**
+   * Instantiates a new Sequence table generator.
+   */
+  public SequenceTableGenerator() {
+    this(null, null, null);
+  }
+
+  /**
+   * Instantiates a new Sequence table generator.
+   *
+   * @param table  the table
+   * @param column the column
+   * @param db     the db
+   */
+  public SequenceTableGenerator(String table, String column, DBSystem db) {
+    this(table, column, db, null);
+  }
+
+  /**
+   * Instantiates a new Sequence table generator.
+   *
+   * @param table    the table
+   * @param column   the column
+   * @param db       the db
+   * @param selector the selector
+   */
+  public SequenceTableGenerator(String table, String column, DBSystem db,
+                                String selector) {
+    this.table = table;
+    this.column = column;
+    this.database = db;
+    this.selector = selector;
+  }
+
+  /**
+   * Sets table.
+   *
+   * @param table the table
+   */
+  public void setTable(String table) {
+    this.table = table;
+  }
+
+  /**
+   * Sets column.
+   *
+   * @param column the column
+   */
+  public void setColumn(String column) {
+    this.column = column;
+  }
+
+  /**
+   * Sets database.
+   *
+   * @param db the db
+   */
+  public void setDatabase(DBSystem db) {
+    this.database = db;
+  }
+
+  /**
+   * Sets selector.
+   *
+   * @param selector the selector
+   */
+  public void setSelector(String selector) {
+    this.selector = selector;
+  }
+
+  // Generator interface implementation ------------------------------------------------------------------------------
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public Class<E> getGeneratedType() {
+    return (Class<E>) Number.class;
+  }
+
+  @Override
+  public void init(GeneratorContext context)
+      throws InvalidGeneratorSetupException {
+    // check preconditions
+    assertNotInitialized();
+    if (database == null) {
+      throw new InvalidGeneratorSetupException("db is null");
     }
+    // initialize
 
-    public SequenceTableGenerator(String table, String column, DBSystem db) {
-        this(table, column, db, null);
+    query = SQLUtil.renderQuery(database.getCatalog(), database.getSchema(),
+        table, column, selector, database.getDialect());
+
+    incrementorStrategy = createIncrementor();
+    super.init(context);
+  }
+
+  private IncrementorStrategy createIncrementor() {
+    if (increment == null) {
+      return null;
     }
-
-    public SequenceTableGenerator(String table, String column, DBSystem db, String selector) {
-        this.table = table;
-        this.column = column;
-        this.database = db;
-        this.selector = selector;
+    String incrementorSql = "update " + table + " set " + column + " = ?";
+    if (selector != null) {
+      incrementorSql = ScriptUtil
+          .combineScriptableParts(incrementorSql, " where ",
+              selector);
     }
-
-    public void setTable(String table) {
-        this.table = table;
+    if (selector == null || !ScriptUtil.isScript(selector)) {
+      return new PreparedStatementStrategy(incrementorSql, database);
+    } else {
+      return new StatementStrategy(incrementorSql, database);
     }
+  }
 
-    public void setColumn(String column) {
-        this.column = column;
+  @Override
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public E generate() {
+    if (this.state == GeneratorState.CLOSED) {
+      return null;
     }
-
-    public void setDatabase(DBSystem db) {
-        this.database = db;
+    assertInitialized();
+    DataSource<?> iterable = database.query(query, true, context);
+    DataIterator<?> iterator = null;
+    E result;
+    try {
+      iterator = iterable.iterator();
+      DataContainer<?> container = iterator.next(new DataContainer());
+      if (container == null) {
+        close();
+        return null;
+      }
+      result = (E) container.getData();
+      incrementorStrategy
+          .run(result.longValue(), (BeneratorContext) context);
+    } finally {
+      IOUtil.close(iterator);
     }
+    return result;
+  }
 
-    public void setSelector(String selector) {
-        this.selector = selector;
+  /**
+   * Generate with params e.
+   *
+   * @param params the params
+   * @return the e
+   */
+  @SuppressWarnings({"unchecked", "cast"})
+  public E generateWithParams(Object... params) {
+    if (this.state == GeneratorState.CLOSED) {
+      return null;
     }
+    ResultSet resultSet = null;
+    E result = null;
+    try {
+      if (parameterizedAccessorStatement == null) {
+        String queryText = String.valueOf(
+            ScriptUtil.parseUnspecificText(query)
+                .evaluate(context));
+        parameterizedAccessorStatement =
+            database.getConnection().prepareStatement(queryText);
+      }
+      for (int i = 0; i < params.length; i++) {
+        parameterizedAccessorStatement.setObject(i + 1, params[i]);
+      }
+      resultSet = parameterizedAccessorStatement.executeQuery();
+      if (!resultSet.next()) {
+        close();
+        return null;
+      }
+      result = (E) resultSet.getObject(1);
+      incrementorStrategy
+          .run(result.longValue(), (BeneratorContext) context,
+              params);
+    } catch (SQLException e) {
+      throw new RuntimeException(
+          "Error fetching value in " + getClass().getSimpleName(), e);
+    } finally {
+      DBUtil.close(resultSet);
+    }
+    return result;
+  }
 
-    // Generator interface implementation ------------------------------------------------------------------------------
+  @Override
+  public void close() {
+    IOUtil.close(incrementorStrategy);
+    DBUtil.close(parameterizedAccessorStatement);
+    super.close();
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[" + selector + "]";
+  }
+
+  // IncrementorStrategy ---------------------------------------------------------------------------------------------
+
+  /**
+   * The interface Incrementor strategy.
+   */
+  interface IncrementorStrategy extends Closeable {
+    /**
+     * Run.
+     *
+     * @param currentValue the current value
+     * @param context      the context
+     * @param params       the params
+     */
+    void run(long currentValue, BeneratorContext context, Object... params);
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Class<E> getGeneratedType() {
-        return (Class<E>) Number.class;
+    void close();
+  }
+
+  /**
+   * The type Prepared statement strategy.
+   */
+  class PreparedStatementStrategy implements IncrementorStrategy {
+
+    private final PreparedStatement statement;
+
+    /**
+     * Instantiates a new Prepared statement strategy.
+     *
+     * @param incrementorSql the incrementor sql
+     * @param db             the db
+     */
+    public PreparedStatementStrategy(String incrementorSql, DBSystem db) {
+      try {
+        statement = db.getConnection().prepareStatement(incrementorSql);
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     @Override
-    public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
-        // check preconditions
-        assertNotInitialized();
-        if (database == null)
-            throw new InvalidGeneratorSetupException("db is null");
-
-        // initialize
-        query = "select " + column + " from " + table;
-        if (selector != null)
-            query = ScriptUtil.combineScriptableParts(query, " where ", selector);
-        incrementorStrategy = createIncrementor();
-        super.init(context);
-    }
-
-    private IncrementorStrategy createIncrementor() {
-        if (increment == null)
-            return null;
-        String incrementorSql = "update " + table + " set " + column + " = ?";
-        if (selector != null)
-            incrementorSql = ScriptUtil.combineScriptableParts(incrementorSql, " where ", selector);
-        if (selector == null || !ScriptUtil.isScript(selector))
-            return new PreparedStatementStrategy(incrementorSql, database);
-        else
-            return new StatementStrategy(incrementorSql, database);
-    }
-
-    @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public E generate() {
-        if (this.state == GeneratorState.CLOSED)
-            return null;
-        assertInitialized();
-        DataSource<?> iterable = database.query(query, true, context);
-        DataIterator<?> iterator = null;
-        E result;
-        try {
-            iterator = iterable.iterator();
-            DataContainer<?> container = iterator.next(new DataContainer());
-            if (container == null) {
-                close();
-                return null;
-            }
-            result = (E) container.getData();
-            incrementorStrategy.run(result.longValue(), (BeneratorContext) context);
-        } finally {
-            IOUtil.close(iterator);
+    public void run(long currentValue, BeneratorContext context,
+                    Object... params) {
+      try {
+        statement.setLong(1, currentValue + increment);
+        for (int i = 0; i < params.length; i++) {
+          statement.setObject(2 + i, params[i]);
         }
-        return result;
-    }
-
-    @SuppressWarnings({"unchecked", "cast"})
-    public E generateWithParams(Object... params) {
-        if (this.state == GeneratorState.CLOSED)
-            return null;
-        ResultSet resultSet = null;
-        E result = null;
-        try {
-            if (parameterizedAccessorStatement == null) {
-                String queryText = String.valueOf(ScriptUtil.parseUnspecificText(query).evaluate(context));
-                parameterizedAccessorStatement = database.getConnection().prepareStatement(queryText);
-            }
-            for (int i = 0; i < params.length; i++)
-                parameterizedAccessorStatement.setObject(i + 1, params[i]);
-            resultSet = parameterizedAccessorStatement.executeQuery();
-            if (!resultSet.next()) {
-                close();
-                return null;
-            }
-            result = (E) resultSet.getObject(1);
-            incrementorStrategy.run(result.longValue(), (BeneratorContext) context, params);
-        } catch (SQLException e) {
-            throw new RuntimeException("Error fetching value in " + getClass().getSimpleName(), e);
-        } finally {
-            DBUtil.close(resultSet);
-        }
-        return result;
+        statement.executeUpdate();
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     @Override
     public void close() {
-        IOUtil.close(incrementorStrategy);
-        DBUtil.close(parameterizedAccessorStatement);
-        super.close();
+      DBUtil.close(statement);
+    }
+  }
+
+  /**
+   * The type Statement strategy.
+   */
+  class StatementStrategy implements IncrementorStrategy {
+
+    private final Statement statement;
+    private final String sql;
+
+    /**
+     * Instantiates a new Statement strategy.
+     *
+     * @param sql the sql
+     * @param db  the db
+     */
+    public StatementStrategy(String sql, DBSystem db) {
+      try {
+        this.statement = db.getConnection().createStatement();
+        this.sql = sql;
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[" + selector + "]";
+    public void run(long currentValue, BeneratorContext context,
+                    Object... params) {
+      try {
+        String cmd = sql.replace("?",
+            String.valueOf(currentValue + increment));
+        cmd = ScriptUtil.parseUnspecificText(cmd).evaluate(context)
+            .toString();
+        statement.executeUpdate(cmd);
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
     }
 
-    // IncrementorStrategy ---------------------------------------------------------------------------------------------
-
-    interface IncrementorStrategy extends Closeable {
-        void run(long currentValue, BeneratorContext context, Object... params);
-
-        @Override
-        void close();
+    @Override
+    public void close() {
+      DBUtil.close(statement);
     }
-
-    class PreparedStatementStrategy implements IncrementorStrategy {
-
-        private final PreparedStatement statement;
-
-        public PreparedStatementStrategy(String incrementorSql, DBSystem db) {
-            try {
-                statement = db.getConnection().prepareStatement(incrementorSql);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public void run(long currentValue, BeneratorContext context, Object... params) {
-            try {
-                statement.setLong(1, currentValue + increment);
-                for (int i = 0; i < params.length; i++)
-                    statement.setObject(2 + i, params[i]);
-                statement.executeUpdate();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public void close() {
-            DBUtil.close(statement);
-        }
-    }
-
-    class StatementStrategy implements IncrementorStrategy {
-
-        private final Statement statement;
-        private final String sql;
-
-        public StatementStrategy(String sql, DBSystem db) {
-            try {
-                this.statement = db.getConnection().createStatement();
-                this.sql = sql;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public void run(long currentValue, BeneratorContext context, Object... params) {
-            try {
-                String cmd = sql.replace("?", String.valueOf(currentValue + increment));
-                cmd = ScriptUtil.parseUnspecificText(cmd).evaluate(context).toString();
-                statement.executeUpdate(cmd);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public void close() {
-            DBUtil.close(statement);
-        }
-    }
+  }
 
 }

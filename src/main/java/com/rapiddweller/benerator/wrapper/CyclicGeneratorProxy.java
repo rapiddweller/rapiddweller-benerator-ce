@@ -36,24 +36,32 @@ import com.rapiddweller.benerator.GeneratorState;
  * unavailable after a reset.<br/>
  * <br/>
  * Created: 18.08.2007 16:55:21
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  */
 public class CyclicGeneratorProxy<E> extends GeneratorProxy<E> {
-	
-    public CyclicGeneratorProxy(Generator<E> source) {
-        super(source);
-    }
 
-    @Override
-    public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-    	if (getSource() == null || state == GeneratorState.CLOSED)
-    		return null;
-    	ProductWrapper<E> test = super.generate(wrapper);
-        if (test == null) {
-            reset();
-            test = super.generate(wrapper);
-        }
-        return test;
+  /**
+   * Instantiates a new Cyclic generator proxy.
+   *
+   * @param source the source
+   */
+  public CyclicGeneratorProxy(Generator<E> source) {
+    super(source);
+  }
+
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    if (getSource() == null || state == GeneratorState.CLOSED) {
+      return null;
     }
-    
+    ProductWrapper<E> test = super.generate(wrapper);
+    if (test == null) {
+      reset();
+      test = super.generate(wrapper);
+    }
+    return test;
+  }
+
 }

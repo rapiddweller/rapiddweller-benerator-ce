@@ -26,51 +26,59 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.*;
-
-import java.util.Map;
-
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.MemStoreStatement;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import org.w3c.dom.Element;
+
+import java.util.Map;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ID;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_MEMSTORE;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getAttribute;
 
 /**
  * Parses a &lt;memstore%gt; statement.<br/><br/>
  * Created: 08.03.2011 13:28:55
- * @since 0.6.6
+ *
  * @author Volker Bergmann
+ * @since 0.6.6
  */
 public class MemStoreParser extends AbstractBeneratorDescriptorParser {
-	
-	public MemStoreParser() {
-	    super(EL_MEMSTORE, CollectionUtil.toSet(ATT_ID), null, BeneratorRootStatement.class, IfStatement.class);
-    }
 
-	@Override
-    public MemStoreStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-		checkAttributeSupport(XMLUtil.getAttributes(element));
-		try {
-			String id = getAttribute(ATT_ID, element);
-			return new MemStoreStatement(id, context.getResourceManager());
-		} catch (ConversionException e) {
-			throw new ConfigurationError(e);
-		}
-    }
+  /**
+   * Instantiates a new Mem store parser.
+   */
+  public MemStoreParser() {
+    super(EL_MEMSTORE, CollectionUtil.toSet(ATT_ID), null, BeneratorRootStatement.class, IfStatement.class);
+  }
 
-	private static void checkAttributeSupport(Map<String, String> attributes) {
-		if (StringUtil.isEmpty(attributes.get(ATT_ID)))
-			throw new ConfigurationError("No id specified for <store>");
-		for (String key : attributes.keySet())
-			if (!"id".equals(key))
-				throw new ConfigurationError("Not a supported attribute of <store>: " + key);
-	}
+  @Override
+  public MemStoreStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    checkAttributeSupport(XMLUtil.getAttributes(element));
+    try {
+      String id = getAttribute(ATT_ID, element);
+      return new MemStoreStatement(id, context.getResourceManager());
+    } catch (ConversionException e) {
+      throw new ConfigurationError(e);
+    }
+  }
+
+  private static void checkAttributeSupport(Map<String, String> attributes) {
+    if (StringUtil.isEmpty(attributes.get(ATT_ID))) {
+      throw new ConfigurationError("No id specified for <store>");
+    }
+    for (String key : attributes.keySet()) {
+      if (!"id".equals(key)) {
+        throw new ConfigurationError("Not a supported attribute of <store>: " + key);
+      }
+    }
+  }
 
 }

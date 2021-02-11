@@ -38,32 +38,54 @@ import com.rapiddweller.model.data.Entity;
  */
 public class OrderItemValidator extends EntityValidator {
 
-    private EANValidator eanValidator = new EANValidator();
+  private EANValidator eanValidator = new EANValidator();
 
-    public OrderItemValidator() {
-        this("order_item");
-    }
+  /**
+   * Instantiates a new Order item validator.
+   */
+  public OrderItemValidator() {
+    this("order_item");
+  }
 
-    public OrderItemValidator(String entityName) {
-        super(entityName);
-    }
+  /**
+   * Instantiates a new Order item validator.
+   *
+   * @param entityName the entity name
+   */
+  public OrderItemValidator(String entityName) {
+    super(entityName);
+  }
 
-    @Override
-    public boolean valid(Entity item) {
-        if (!super.valid(item))
-            return false;
-        if ((Number) item.getComponent("id") == null)
-            return false;
-        if ((Number) item.getComponent("order_id") == null)
-            return false;
-        Integer n = (Integer) item.getComponent("number_of_items");
-        if (n == null || n <= 0)
-            return false;
-        if (!eanValidator.isValid((String) item.getComponent("product_ean_code"), null))
-            return false;
-        Number totalPrice = (Number) item.getComponent("total_price");
-        if (totalPrice == null || totalPrice.doubleValue() < 0)
-            return false;
-        return true;
+  /**
+   * Valid boolean.
+   *
+   * @param item the item
+   * @return the boolean
+   */
+  @Override
+  public boolean valid(Entity item) {
+    if (!super.valid(item)) {
+      return false;
     }
+    if ((Number) item.getComponent("id") == null) {
+      return false;
+    }
+    if ((Number) item.getComponent("order_id") == null) {
+      return false;
+    }
+    Integer n = (Integer) item.getComponent("number_of_items");
+    if (n == null || n <= 0) {
+      return false;
+    }
+    if (!eanValidator
+        .isValid((String) item.getComponent("product_ean_code"),
+            null)) {
+      return false;
+    }
+    Number totalPrice = (Number) item.getComponent("total_price");
+    if (totalPrice == null || totalPrice.doubleValue() < 0) {
+      return false;
+    }
+    return true;
+  }
 }

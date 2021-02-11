@@ -26,34 +26,43 @@
 
 package com.rapiddweller.benerator.primitive.number;
 
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 /**
  * Quantizes integer numbers ({@link Byte}, {@link Short}, {@link Integer}, {@link Long})
  * to be <code>min</code> plus an integral multiple of <code>granularity</code>.<br/><br/>
  * Created: 15.03.2010 15:27:08
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class IntegralQuantizer<E extends Number> extends ThreadSafeConverter<E, E> {
-	
-	private long min;
-	private long granularity;
-	private NumberToNumberConverter<Long, E> converter;
 
-	public IntegralQuantizer(Class<E> numberType, Long min, long granularity) {
-	    super(numberType, numberType);
-	    this.min = (min != null ? min : 0L);
-	    this.granularity = granularity;
-	    this.converter = new NumberToNumberConverter<Long, E>(Long.class, numberType);
-    }
+  private final long min;
+  private final long granularity;
+  private final NumberToNumberConverter<Long, E> converter;
 
-	@Override
-	public E convert(E sourceValue) throws ConversionException {
-		long l = (sourceValue.longValue() - min) / granularity * granularity + min;
-	    return converter.convert(l);
-    }
+  /**
+   * Instantiates a new Integral quantizer.
+   *
+   * @param numberType  the number type
+   * @param min         the min
+   * @param granularity the granularity
+   */
+  public IntegralQuantizer(Class<E> numberType, Long min, long granularity) {
+    super(numberType, numberType);
+    this.min = (min != null ? min : 0L);
+    this.granularity = granularity;
+    this.converter = new NumberToNumberConverter<>(Long.class, numberType);
+  }
+
+  @Override
+  public E convert(E sourceValue) throws ConversionException {
+    long l = (sourceValue.longValue() - min) / granularity * granularity + min;
+    return converter.convert(l);
+  }
 
 }

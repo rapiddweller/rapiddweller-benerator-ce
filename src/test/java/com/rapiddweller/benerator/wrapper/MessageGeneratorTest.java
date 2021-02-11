@@ -26,28 +26,33 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import static com.rapiddweller.benerator.util.GeneratorUtil.*;
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.ConstantTestGenerator;
 import org.junit.Test;
+
+import static com.rapiddweller.benerator.util.GeneratorUtil.close;
+import static com.rapiddweller.benerator.util.GeneratorUtil.init;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link MessageGenerator}.<br/><br/>
  * Created: 28.07.2011 18:25:12
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class MessageGeneratorTest {
 
-	@Test
-	public void test() {
-		MessageGenerator generator = new MessageGenerator("Hello {0}{1}", 
-				new ConstantTestGenerator<String>("World"),
-				new ConstantTestGenerator<String>("!"));
-		init(generator);
-		assertEquals("Hello World!", generator.generate());
-		close(generator);
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    MessageGenerator generator = new MessageGenerator("Hello {0}{1}",
+        new ConstantTestGenerator<>("World"),
+        new ConstantTestGenerator<>("!"));
+    init(generator);
+    assertEquals("Hello World!", generator.generate());
+    close(generator);
+  }
+
 }

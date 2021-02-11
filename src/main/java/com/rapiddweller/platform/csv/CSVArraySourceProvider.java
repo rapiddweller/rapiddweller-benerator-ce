@@ -28,12 +28,12 @@ package com.rapiddweller.platform.csv;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.DataSourceProvider;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.ArrayConverter;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.csv.CSVSource;
-import com.rapiddweller.formats.util.ConvertingDataSource;
-import com.rapiddweller.formats.util.OffsetDataSource;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.ArrayConverter;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.csv.CSVSource;
+import com.rapiddweller.format.util.ConvertingDataSource;
+import com.rapiddweller.format.util.OffsetDataSource;
 
 /**
  * {@link DataSourceProvider} which creates array {@link Iterable}s for CSV files.<br/><br/>
@@ -44,27 +44,42 @@ import com.rapiddweller.formats.util.OffsetDataSource;
  */
 public class CSVArraySourceProvider implements DataSourceProvider<Object[]> {
 
-    private final Converter<String, ?> preprocessor;
-    private final boolean rowBased;
-    private final char separator;
-    private final String encoding;
+  private final Converter<String, ?> preprocessor;
+  private final boolean rowBased;
+  private final char separator;
+  private final String encoding;
 
-    public CSVArraySourceProvider(String type, Converter<String, ?> preprocessor, boolean rowBased, char separator, String encoding) {
-        this.preprocessor = preprocessor;
-        this.rowBased = rowBased;
-        this.separator = separator;
-        this.encoding = encoding;
-    }
+  /**
+   * Instantiates a new Csv array source provider.
+   *
+   * @param type         the type
+   * @param preprocessor the preprocessor
+   * @param rowBased     the row based
+   * @param separator    the separator
+   * @param encoding     the encoding
+   */
+  public CSVArraySourceProvider(String type,
+                                Converter<String, ?> preprocessor,
+                                boolean rowBased, char separator,
+                                String encoding) {
+    this.preprocessor = preprocessor;
+    this.rowBased = rowBased;
+    this.separator = separator;
+    this.encoding = encoding;
+  }
 
-    @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public DataSource<Object[]> create(String uri, BeneratorContext context) {
-        DataSource<String[]> source;
-        source = new CSVSource(uri, separator, encoding, true, rowBased);
-        Converter<String[], Object[]> converter = new ArrayConverter(String.class, Object.class, preprocessor);
-        DataSource<Object[]> result = new ConvertingDataSource<String[], Object[]>(source, converter);
-        result = new OffsetDataSource<Object[]>(result, 1); // offset = 1 in order to skip header row
-        return result;
-    }
+  @Override
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public DataSource<Object[]> create(String uri, BeneratorContext context) {
+    DataSource<String[]> source;
+    source = new CSVSource(uri, separator, encoding, true, rowBased);
+    Converter<String[], Object[]> converter =
+        new ArrayConverter(String.class, Object.class, preprocessor);
+    DataSource<Object[]> result =
+        new ConvertingDataSource<>(source, converter);
+    result = new OffsetDataSource<>(result,
+        1); // offset = 1 in order to skip header row
+    return result;
+  }
 
 }

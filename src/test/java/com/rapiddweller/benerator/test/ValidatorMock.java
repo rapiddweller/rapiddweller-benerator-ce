@@ -26,38 +26,57 @@
 
 package com.rapiddweller.benerator.test;
 
-import com.rapiddweller.commons.Validator;
+import com.rapiddweller.common.Validator;
 
 /**
  * Mock implementation of the {@link Validator} interface.<br/>
  * <br/>
  * Created at 29.12.2008 07:49:35
- * @since 0.5.7
+ *
  * @author Volker Bergmann
+ * @since 0.5.7
  */
-
 public class ValidatorMock implements Validator<Integer> {
-	
-	public static ValidatorMock latestInstance;
-	
-	public int value;
-	
-	public ValidatorMock() {
-		this(1);
-	}
-	
-	public ValidatorMock(int value) {
-		this.value = value;
-		latestInstance = this;
-	}
-	
-	public void setValue(int value) {
-		this.value = value;
-	}
 
-	@Override
-	public boolean valid(Integer candidate) {
-		return (candidate != null && value == candidate.intValue());
-	}
+  /**
+   * The constant latestInstance.
+   */
+  public static ValidatorMock latestInstance;
+
+  /**
+   * The Value.
+   */
+  public int value;
+
+  /**
+   * Instantiates a new Validator mock.
+   */
+  public ValidatorMock() {
+    this(1);
+  }
+
+  /**
+   * Instantiates a new Validator mock.
+   *
+   * @param value the value
+   */
+  public ValidatorMock(int value) {
+    this.value = value;
+    latestInstance = this;
+  }
+
+  /**
+   * Sets value.
+   *
+   * @param value the value
+   */
+  public void setValue(int value) {
+    this.value = value;
+  }
+
+  @Override
+  public boolean valid(Integer candidate) {
+    return (candidate != null && value == candidate);
+  }
 
 }

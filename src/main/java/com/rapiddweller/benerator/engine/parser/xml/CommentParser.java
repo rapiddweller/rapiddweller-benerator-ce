@@ -29,24 +29,28 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.CommentStatement;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import org.w3c.dom.Element;
 
 /**
  * Parses a &lt;comment&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:27:00
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class CommentParser extends AbstractBeneratorDescriptorParser {
 
-	public CommentParser() {
-	    super(DescriptorConstants.EL_COMMENT, null, null);
-    }
+  /**
+   * Instantiates a new Comment parser.
+   */
+  public CommentParser() {
+    super(DescriptorConstants.EL_COMMENT, null, null);
+  }
 
-	@Override
-	public CommentStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-	    return new CommentStatement(XMLUtil.getText(element).trim());
-    }
+  @Override
+  public CommentStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+    return new CommentStatement(XMLUtil.getText(element).trim());
+  }
 
 }

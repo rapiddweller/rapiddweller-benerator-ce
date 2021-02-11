@@ -35,23 +35,31 @@ import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
  */
 public class ConstantFunction extends AbstractWeightFunction {
 
-    private double value;
+  private final double value;
 
-    public ConstantFunction() {
-        this(1);
-    }
+  /**
+   * Instantiates a new Constant function.
+   */
+  public ConstantFunction() {
+    this(1);
+  }
 
-    public ConstantFunction(double value) {
-        this.value = value;
-    }
+  /**
+   * Instantiates a new Constant function.
+   *
+   * @param value the value
+   */
+  public ConstantFunction(double value) {
+    this.value = value;
+  }
 
-    @Override
-	public double value(double param) {
-        return value;
-    }
+  @Override
+  public double value(double param) {
+    return value;
+  }
 
-    @Override
-	public String toString() {
-        return getClass().getSimpleName() + '[' + value + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + value + ']';
+  }
 }

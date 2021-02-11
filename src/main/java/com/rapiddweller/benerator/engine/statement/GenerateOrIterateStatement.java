@@ -26,135 +26,228 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import java.io.Closeable;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.TaskExecutor;
 
+import java.io.Closeable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Creates a number of entities in parallel execution and a given page size.<br/><br/>
  * Created: 01.02.2008 14:43:15
+ *
  * @author Volker Bergmann
  */
 public class GenerateOrIterateStatement extends AbstractStatement implements Closeable, PageListener {
 
-	protected GenerateAndConsumeTask task;
-	protected Generator<Long> countGenerator;
-	protected Expression<Long> minCount;
-	protected Expression<Long> pageSize;
-	protected Expression<PageListener> pageListenerEx;
-	protected PageListener pageListener;
-	protected boolean infoLog;
-	protected boolean isSubCreator;
-	protected BeneratorContext context;
-	protected BeneratorContext childContext;
-	
-	public GenerateOrIterateStatement(String productName, Generator<Long> countGenerator, Expression<Long> minCount, 
-			Expression<Long> pageSize, Expression<PageListener> pageListenerEx,  
-			Expression<ErrorHandler> errorHandler, boolean infoLog, boolean isSubCreator, BeneratorContext context) {
-	    this.task = null;
-	    this.countGenerator = countGenerator;
-	    this.minCount = minCount;
-	    this.pageSize = pageSize;
-	    this.pageListenerEx = pageListenerEx;
-	    this.infoLog = infoLog;
-	    this.isSubCreator = isSubCreator;
-	    this.context = context;
-    	this.childContext = context.createSubContext(productName);
+  /**
+   * The Task.
+   */
+  protected GenerateAndConsumeTask task;
+  /**
+   * The Count generator.
+   */
+  protected final Generator<Long> countGenerator;
+  /**
+   * The Min count.
+   */
+  protected final Expression<Long> minCount;
+  /**
+   * The Page size.
+   */
+  protected final Expression<Long> pageSize;
+  /**
+   * The Page listener ex.
+   */
+  protected final Expression<PageListener> pageListenerEx;
+  /**
+   * The Page listener.
+   */
+  protected PageListener pageListener;
+  /**
+   * The Info log.
+   */
+  protected final boolean infoLog;
+  /**
+   * The Is sub creator.
+   */
+  protected final boolean isSubCreator;
+  /**
+   * The Context.
+   */
+  protected final BeneratorContext context;
+  /**
+   * The Child context.
+   */
+  protected final BeneratorContext childContext;
+
+  /**
+   * Instantiates a new Generate or iterate statement.
+   *
+   * @param productName    the product name
+   * @param countGenerator the count generator
+   * @param minCount       the min count
+   * @param pageSize       the page size
+   * @param pageListenerEx the page listener ex
+   * @param errorHandler   the error handler
+   * @param infoLog        the info log
+   * @param isSubCreator   the is sub creator
+   * @param context        the context
+   */
+  public GenerateOrIterateStatement(String productName, Generator<Long> countGenerator, Expression<Long> minCount,
+                                    Expression<Long> pageSize, Expression<PageListener> pageListenerEx,
+                                    Expression<ErrorHandler> errorHandler, boolean infoLog, boolean isSubCreator, BeneratorContext context) {
+    this.task = null;
+    this.countGenerator = countGenerator;
+    this.minCount = minCount;
+    this.pageSize = pageSize;
+    this.pageListenerEx = pageListenerEx;
+    this.infoLog = infoLog;
+    this.isSubCreator = isSubCreator;
+    this.context = context;
+    this.childContext = context.createSubContext(productName);
+  }
+
+  /**
+   * Sets task.
+   *
+   * @param task the task
+   */
+  public void setTask(GenerateAndConsumeTask task) {
+    this.task = task;
+  }
+
+  /**
+   * Gets task.
+   *
+   * @return the task
+   */
+  public GenerateAndConsumeTask getTask() {
+    return task;
+  }
+
+  /**
+   * Gets context.
+   *
+   * @return the context
+   */
+  public BeneratorContext getContext() {
+    return context;
+  }
+
+  /**
+   * Gets child context.
+   *
+   * @return the child context
+   */
+  public BeneratorContext getChildContext() {
+    return childContext;
+  }
+
+
+  // Statement interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public boolean execute(BeneratorContext ctx) {
+    if (!beInitialized(ctx)) {
+      task.reset();
     }
-
-	public void setTask(GenerateAndConsumeTask task) {
-		this.task = task;
-	}
-	
-	public GenerateAndConsumeTask getTask() {
-	    return task;
+    executeTask(generateCount(childContext), minCount.evaluate(childContext), pageSize.evaluate(childContext),
+        evaluatePageListeners(childContext), getErrorHandler(childContext));
+    if (!isSubCreator) {
+      close();
     }
-	
-	public BeneratorContext getContext() {
-		return context;
-	}
+    return true;
+  }
 
-	public BeneratorContext getChildContext() {
-		return childContext;
-	}
+  /**
+   * Generate count long.
+   *
+   * @param context the context
+   * @return the long
+   */
+  public Long generateCount(BeneratorContext context) {
+    beInitialized(context);
+    ProductWrapper<Long> count = countGenerator.generate(new ProductWrapper<>());
+    return (count != null ? count.unwrap() : null);
+  }
 
-    
-    
-	// Statement interface ---------------------------------------------------------------------------------------------
-	
-    @Override
-	public boolean execute(BeneratorContext ctx) {
-    	if (!beInitialized(ctx))
-    		task.reset();
-	    executeTask(generateCount(childContext), minCount.evaluate(childContext), pageSize.evaluate(childContext),
-				evaluatePageListeners(childContext), getErrorHandler(childContext));
-	    if (!isSubCreator)
-	    	close();
-    	return true;
+  @Override
+  public void close() {
+    task.close();
+    countGenerator.close();
+    if (pageListener instanceof Closeable) {
+      IOUtil.close((Closeable) pageListener);
     }
+  }
 
-	public Long generateCount(BeneratorContext context) {
-		beInitialized(context);
-	    ProductWrapper<Long> count = countGenerator.generate(new ProductWrapper<Long>());
-	    return (count != null ? count.unwrap() : null);
+  // PageListener interface implementation ---------------------------------------------------------------------------
+
+  @Override
+  public void pageStarting() {
+  }
+
+  @Override
+  public void pageFinished() {
+    getTask().pageFinished();
+  }
+
+
+  // internal helpers ------------------------------------------------------------------------------------------------
+
+  /**
+   * Evaluate page listeners list.
+   *
+   * @param context the context
+   * @return the list
+   */
+  protected List<PageListener> evaluatePageListeners(Context context) {
+    List<PageListener> listeners = new ArrayList<>();
+    if (pageListener != null) {
+      pageListener = pageListenerEx.evaluate(context);
+      if (pageListener != null) {
+        listeners.add(pageListener);
+      }
     }
+    return listeners;
+  }
 
-	@Override
-	public void close() {
-	    task.close();
-	    countGenerator.close();
-	    if (pageListener instanceof Closeable)
-	    	IOUtil.close((Closeable) pageListener);
+  /**
+   * Be initialized boolean.
+   *
+   * @param context the context
+   * @return the boolean
+   */
+  protected boolean beInitialized(BeneratorContext context) {
+    if (!countGenerator.wasInitialized()) {
+      countGenerator.init(childContext);
+      task.init(childContext);
+      return true;
     }
+    return false;
+  }
 
-    // PageListener interface implementation ---------------------------------------------------------------------------
-    
-	@Override
-	public void pageStarting() {
-	}
-
-	@Override
-	public void pageFinished() {
-		getTask().pageFinished();
-	}
-	
-	
-	
-	// internal helpers ------------------------------------------------------------------------------------------------
-
-	protected List<PageListener> evaluatePageListeners(Context context) {
-		List<PageListener> listeners = new ArrayList<PageListener>();
-		if (pageListener != null) {
-	        pageListener = pageListenerEx.evaluate(context);
-	        if (pageListener != null)
-	        	listeners.add(pageListener);
-        }
-	    return listeners;
-    }
-
-	protected boolean beInitialized(BeneratorContext context) {
-		if (!countGenerator.wasInitialized()) {
-	    	countGenerator.init(childContext);
-		    task.init(childContext);
-		    return true;
-		}
-		return false;
-	}
-
-	protected void executeTask(Long requestedExecutions, Long minExecutions, Long pageSizeValue, 
-			List<PageListener> pageListeners, ErrorHandler errorHandler) {
-		TaskExecutor.execute(task, childContext, requestedExecutions, minExecutions,
-	    		pageListeners, pageSizeValue, false, errorHandler, infoLog);
-	}
+  /**
+   * Execute task.
+   *
+   * @param requestedExecutions the requested executions
+   * @param minExecutions       the min executions
+   * @param pageSizeValue       the page size value
+   * @param pageListeners       the page listeners
+   * @param errorHandler        the error handler
+   */
+  protected void executeTask(Long requestedExecutions, Long minExecutions, Long pageSizeValue,
+                             List<PageListener> pageListeners, ErrorHandler errorHandler) {
+    TaskExecutor.execute(task, childContext, requestedExecutions, minExecutions,
+        pageListeners, pageSizeValue, false, errorHandler, infoLog);
+  }
 
 }

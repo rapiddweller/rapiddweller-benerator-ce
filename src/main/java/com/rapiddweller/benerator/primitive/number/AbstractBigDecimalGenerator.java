@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.primitive.number;
 
-import com.rapiddweller.commons.MathUtil;
+import com.rapiddweller.common.MathUtil;
 
 import java.math.BigDecimal;
 
@@ -34,42 +34,66 @@ import java.math.BigDecimal;
  * Wrapper for a LongGenerator that maps the generated Longs to BigDecimals.<br/>
  * <br/>
  * Created: 01.07.2006 17:43:29
+ *
  * @author Volker Bergmann
  */
-public abstract class AbstractBigDecimalGenerator extends AbstractNonNullNumberGenerator<BigDecimal> {
+public abstract class AbstractBigDecimalGenerator
+    extends AbstractNonNullNumberGenerator<BigDecimal> {
 
-    public static final BigDecimal DEFAULT_GRANULARITY = new BigDecimal("0.01");
+  /**
+   * The constant DEFAULT_GRANULARITY.
+   */
+  public static final BigDecimal DEFAULT_GRANULARITY = new BigDecimal("0.01");
 
-    private Integer fractionDigits;
+  private Integer fractionDigits;
 
-    /** Initializes the generator to create uniformly distributed random BigDecimals with granularity 1 */
-    public AbstractBigDecimalGenerator() {
-        this(new BigDecimal(Long.MIN_VALUE), new BigDecimal(Long.MAX_VALUE));
-    }
+  /**
+   * Initializes the generator to create uniformly distributed random BigDecimals with granularity 1
+   */
+  public AbstractBigDecimalGenerator() {
+    this(new BigDecimal(Long.MIN_VALUE), new BigDecimal(Long.MAX_VALUE));
+  }
 
-    /** Initializes the generator to create uniformly distributed random BigDecimals with granularity 1 */
-    public AbstractBigDecimalGenerator(BigDecimal min, BigDecimal max) {
-        this(min, max, DEFAULT_GRANULARITY);
-    }
+  /**
+   * Initializes the generator to create uniformly distributed random BigDecimals with granularity 1
+   *
+   * @param min the min
+   * @param max the max
+   */
+  public AbstractBigDecimalGenerator(BigDecimal min, BigDecimal max) {
+    this(min, max, DEFAULT_GRANULARITY);
+  }
 
-    /** Initializes the generator to create uniformly distributed random BigDecimals */
-    public AbstractBigDecimalGenerator(BigDecimal min, BigDecimal max, BigDecimal granularity) {
-        super(BigDecimal.class, min, max, granularity);
-    }
+  /**
+   * Initializes the generator to create uniformly distributed random BigDecimals
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   */
+  public AbstractBigDecimalGenerator(BigDecimal min, BigDecimal max,
+                                     BigDecimal granularity) {
+    super(BigDecimal.class, min, max, granularity);
+  }
 
-    // config properties -----------------------------------------------------------------------------------------------
+  // config properties -----------------------------------------------------------------------------------------------
 
-    @Override
-    public void setGranularity(BigDecimal granularity) {
-        super.setGranularity(granularity);
-        this.fractionDigits = Math.max(
-                MathUtil.fractionDigits(min.doubleValue()),
-                MathUtil.fractionDigits(granularity.doubleValue())
-            );
-    }
+  @Override
+  public void setGranularity(BigDecimal granularity) {
+    super.setGranularity(granularity);
+    this.fractionDigits = Math.max(
+        MathUtil.fractionDigits(min.doubleValue()),
+        MathUtil.fractionDigits(granularity.doubleValue())
+    );
+  }
 
-    public Integer getFractionDigits() {
-        return fractionDigits;
-    }
+  /**
+   * Gets fraction digits.
+   *
+   * @return the fraction digits
+   */
+  public Integer getFractionDigits() {
+    return fractionDigits;
+  }
 
 }

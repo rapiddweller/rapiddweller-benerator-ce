@@ -26,26 +26,264 @@
 
 package com.rapiddweller.domain.address;
 
+import org.junit.Rule;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.rules.ExpectedException;
+
+import java.util.Locale;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 /**
  * Tests the {@link City} class.<br/><br/>
  * Created at 02.05.2008 13:27:53
- * @since 0.5.3
+ *
  * @author Volker Bergmann
+ * @since 0.5.3
  */
 public class CityTest {
-	
-	@Test
-	public void testEquals() {
-		State bavaria = new State("BY");
-		City city = new City(bavaria, "Munich", null, null, "89");
-		assertNotEquals(null, city);
-		assertNotEquals(city, bavaria);
-		assertEquals(city, city);
-		assertEquals(city, new City(bavaria, "Munich", null, null, "89"));
-		assertNotEquals(city, new City(bavaria, "Nuremberg", null, null, "89"));
-	}
-	
+
+  /**
+   * The Thrown.
+   */
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+
+  /**
+   * Test constructor.
+   */
+  @Test
+  public void testConstructor() {
+    City actualCity = new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code");
+    assertEquals("Addition", actualCity.getNameExtension());
+    assertEquals("Area Code", actualCity.getAreaCode());
+    assertEquals(3, actualCity.getPostalCodes().length);
+    assertNull(actualCity.getCountry());
+    assertEquals("Name", actualCity.getName());
+  }
+
+  /**
+   * Test constructor 2.
+   */
+  @Test
+  public void testConstructor2() {
+    City actualCity = new City(new State(), "Name", "Addition", null, "Area Code");
+    assertEquals("Addition", actualCity.getNameExtension());
+    assertEquals("Area Code", actualCity.getAreaCode());
+    assertEquals(0, actualCity.getPostalCodes().length);
+    assertNull(actualCity.getCountry());
+    assertEquals("Name", actualCity.getName());
+  }
+
+  /**
+   * Test constructor 3.
+   */
+  @Test
+  public void testConstructor3() {
+    thrown.expect(IllegalArgumentException.class);
+    new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, null);
+  }
+
+  /**
+   * Test set name extension.
+   */
+  @Test
+  public void testSetNameExtension() {
+    City city = new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code");
+    city.setNameExtension("Name Extension");
+    assertEquals("Name Extension", city.getNameExtension());
+  }
+
+  /**
+   * Test set postal codes.
+   */
+  @Test
+  public void testSetPostalCodes() {
+    City city = new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code");
+    String[] stringArray = new String[] {"foo", "foo", "foo"};
+    city.setPostalCodes(stringArray);
+    assertSame(stringArray, city.getPostalCodes());
+  }
+
+  /**
+   * Test add postal code.
+   */
+  @Test
+  public void testAddPostalCode() {
+    City city = new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code");
+    city.addPostalCode("Postal Code");
+    assertEquals(4, city.getPostalCodes().length);
+  }
+
+  /**
+   * Testget postal codes.
+   */
+  @Test
+  public void testgetPostalCodes() {
+    assertEquals(3, (new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code"))
+        .getPostalCodes().length);
+  }
+
+  /**
+   * Test set zip codes.
+   */
+  @Test
+  public void testSetZipCodes() {
+    City city = new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code");
+    String[] stringArray = new String[] {"foo", "foo", "foo"};
+    city.setPostalCodes(stringArray);
+    assertSame(stringArray, city.getPostalCodes());
+  }
+
+  /**
+   * Test add zip code.
+   */
+  @Test
+  public void testAddZipCode() {
+    City city = new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code");
+    city.addPostalCode("21654");
+    assertEquals(4, city.getPostalCodes().length);
+  }
+
+  /**
+   * Test set area code.
+   */
+  @Test
+  public void testSetAreaCode() {
+    City city = new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code");
+    city.setAreaCode("4105551212");
+    assertEquals("4105551212", city.getAreaCode());
+  }
+
+  /**
+   * Test set state.
+   */
+  @Test
+  public void testSetState() {
+    City city = new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code");
+    city.setState(new State());
+    assertNull(city.getCountry());
+  }
+
+  /**
+   * Test get country.
+   */
+  @Test
+  public void testGetCountry() {
+    assertNull(
+        (new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code")).getCountry());
+    assertNull((new City(null, "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code")).getCountry());
+  }
+
+  /**
+   * Test get language.
+   */
+  @Test
+  public void testGetLanguage() {
+    assertNull((new City(null, "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code")).getLanguage());
+  }
+
+  /**
+   * Test get language 2.
+   */
+  @Test
+  public void testGetLanguage2() {
+    Locale locale = new Locale("en");
+    State state = new State();
+    state.setDefaultLanguageLocale(locale);
+    assertSame(locale,
+        (new City(state, "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code")).getLanguage());
+  }
+
+  /**
+   * Test get language 3.
+   */
+  @Test
+  public void testGetLanguage3() {
+    City city = new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code");
+    Locale locale = new Locale("en");
+    city.setLanguage(locale);
+    assertSame(locale, city.getLanguage());
+  }
+
+  /**
+   * Test set language.
+   */
+  @Test
+  public void testSetLanguage() {
+    City city = new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code");
+    Locale locale = new Locale("en");
+    city.setLanguage(locale);
+    assertSame(locale, city.getLanguage());
+  }
+
+  /**
+   * Test set population.
+   */
+  @Test
+  public void testSetPopulation() {
+    City city = new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code");
+    city.setPopulation(2);
+    assertEquals(2, city.getPopulation());
+  }
+
+  /**
+   * Test to string.
+   */
+  @Test
+  public void testToString() {
+    assertEquals("Name Addition",
+        (new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code")).toString());
+    assertEquals("Name ",
+        (new City(new State(), "Name", " ", new String[] {"foo", "foo", "foo"}, "Area Code")).toString());
+    assertEquals("Name",
+        (new City(new State(), "Name", "", new String[] {"foo", "foo", "foo"}, "Area Code")).toString());
+  }
+
+  /**
+   * Test equals 2.
+   */
+  @Test
+  public void testEquals2() {
+    assertNotEquals("o", (new City(new State(), "Name", "Addition",
+        new String[] {"foo", "foo", "foo"}, "Area Code")));
+  }
+
+  /**
+   * Test equals 3.
+   */
+  @Test
+  public void testEquals3() {
+    assertNotEquals(null, (new City(new State(), "Name", "Addition",
+        new String[] {"foo", "foo", "foo"}, "Area Code")));
+  }
+
+  /**
+   * Test hash code.
+   */
+  @Test
+  public void testHashCode() {
+    State state = new State();
+    state.setName("Name");
+    assertEquals(-1593670502,
+        (new City(state, "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code")).hashCode());
+  }
+
+  /**
+   * Test equals.
+   */
+  @Test
+  public void testEquals() {
+    State bavaria = new State("BY");
+    City city = new City(bavaria, "Munich", null, null, "89");
+    assertNotEquals(null, city);
+    assertNotEquals(city, bavaria);
+    assertEquals(city, city);
+    assertEquals(city, new City(bavaria, "Munich", null, null, "89"));
+    assertNotEquals(city, new City(bavaria, "Nuremberg", null, null, "89"));
+  }
+
 }

@@ -27,7 +27,7 @@
 package com.rapiddweller.domain.net;
 
 import com.rapiddweller.benerator.sample.WeightedCSVSampleGenerator;
-import com.rapiddweller.commons.Encodings;
+import com.rapiddweller.common.Encodings;
 
 /**
  * A WebmailDomainGenerator.<br/><br/>
@@ -38,12 +38,16 @@ import com.rapiddweller.commons.Encodings;
  */
 public class WebmailDomainGenerator extends WeightedCSVSampleGenerator<String> {
 
-    public WebmailDomainGenerator() {
-        super("/com/rapiddweller/domain/net/webmailDomain.csv", Encodings.UTF_8);
-    }
+  /**
+   * Instantiates a new Webmail domain generator.
+   */
+  public WebmailDomainGenerator() {
+    super("/com/rapiddweller/domain/net/webmailDomain.csv",
+        Encodings.UTF_8);
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 }

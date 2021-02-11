@@ -26,82 +26,104 @@
 
 package com.rapiddweller.benerator.util;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.collection.ObjectCounter;
+import com.rapiddweller.common.collection.ObjectCounter;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created: 11.10.2006 23:07:35
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class RandomUtilTest extends GeneratorTest {
-	
-	@Test	
-    public void testRandomInt() {
-        testEqualDistribution(0, 1, 0.1, 3000);
-        testEqualDistribution(0, 0, 0.1, 3000);
-        testEqualDistribution(-1, -1, 0.1, 3000);
-        testEqualDistribution(-1, 1, 0.1, 3000);
-    }
 
-	@Test	
-    public void testRandomLong() {
-        testEqualDistribution( 0L,  1L, 0.1, 3000);
-        testEqualDistribution( 0L,  0L, 0.1, 3000);
-        testEqualDistribution(-1L, -1L, 0.1, 3000);
-        testEqualDistribution(-1L,  1L, 0.1, 3000);
-    }
-	
-	@Test
-	public void testRandomFromLiteral() {
-		ObjectCounter<Object> counter = new ObjectCounter<Object>(2);
-		int n = 3000;
-		for (int i = 0; i < n; i++)
-			counter.count(RandomUtil.randomFromWeightLiteral("'A'^2,'B'^1"));
-		assertEquals(2, counter.getCounts().size());
-		assertEquals(n / 3. * 2., counter.getCount("A"), 100);
-		assertEquals(n / 3., counter.getCount("B"), 100);
-	}
-	
-	@Test
-	public void testRandomFromLiteral_empty() {
-		assertNull(RandomUtil.randomFromWeightLiteral(null));
-		assertNull(RandomUtil.randomFromWeightLiteral(""));
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void testRandomFromLiteral_negativeWeight() {
-		RandomUtil.randomFromWeightLiteral("1^-1,2^-2");
-	}
-	
-    // implementation --------------------------------------------------------------------------------------------------
+  /**
+   * Test random int.
+   */
+  @Test
+  public void testRandomInt() {
+    testEqualDistribution(0, 1, 0.1, 3000);
+    testEqualDistribution(0, 0, 0.1, 3000);
+    testEqualDistribution(-1, -1, 0.1, 3000);
+    testEqualDistribution(-1, 1, 0.1, 3000);
+  }
 
-    private static void testEqualDistribution(int min, int max, double tolerance, int iterations) {
-        List<Integer> list = new ArrayList<Integer>();
-        Set<Integer> expectedSet = new HashSet<Integer>(max - min + 1);
-        for (int i = min; i <= max; i++)
-            expectedSet.add(i);
-        for (int i = 0; i < iterations; i++)
-            list.add(RandomUtil.randomInt(min, max));
-        checkEqualDistribution(list, tolerance, expectedSet);
-    }
+  /**
+   * Test random long.
+   */
+  @Test
+  public void testRandomLong() {
+    testEqualDistribution(0L, 1L, 0.1, 3000);
+    testEqualDistribution(0L, 0L, 0.1, 3000);
+    testEqualDistribution(-1L, -1L, 0.1, 3000);
+    testEqualDistribution(-1L, 1L, 0.1, 3000);
+  }
 
-    private static void testEqualDistribution(long min, long max, double tolerance, int iterations) {
-        List<Long> list = new ArrayList<Long>();
-        Set<Long> expectedSet = new HashSet<Long>((int)(max - min + 1));
-        for (long i = min; i <= max; i++)
-            expectedSet.add(i);
-        for (int i = 0; i < iterations; i++)
-            list.add(RandomUtil.randomLong(min, max));
-        checkEqualDistribution(list, tolerance, expectedSet);
+  /**
+   * Test random from literal.
+   */
+  @Test
+  public void testRandomFromLiteral() {
+    ObjectCounter<Object> counter = new ObjectCounter<>(2);
+    int n = 3000;
+    for (int i = 0; i < n; i++) {
+      counter.count(RandomUtil.randomFromWeightLiteral("'A'^2,'B'^1"));
     }
-	
+    assertEquals(2, counter.getCounts().size());
+    assertEquals(n / 3. * 2., counter.getCount("A"), 100);
+    assertEquals(n / 3., counter.getCount("B"), 100);
+  }
+
+  /**
+   * Test random from literal empty.
+   */
+  @Test
+  public void testRandomFromLiteral_empty() {
+    assertNull(RandomUtil.randomFromWeightLiteral(null));
+    assertNull(RandomUtil.randomFromWeightLiteral(""));
+  }
+
+  /**
+   * Test random from literal negative weight.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testRandomFromLiteral_negativeWeight() {
+    RandomUtil.randomFromWeightLiteral("1^-1,2^-2");
+  }
+
+  // implementation --------------------------------------------------------------------------------------------------
+
+  private static void testEqualDistribution(int min, int max, double tolerance, int iterations) {
+    List<Integer> list = new ArrayList<>();
+    Set<Integer> expectedSet = new HashSet<>(max - min + 1);
+    for (int i = min; i <= max; i++) {
+      expectedSet.add(i);
+    }
+    for (int i = 0; i < iterations; i++) {
+      list.add(RandomUtil.randomInt(min, max));
+    }
+    checkEqualDistribution(list, tolerance, expectedSet);
+  }
+
+  private static void testEqualDistribution(long min, long max, double tolerance, int iterations) {
+    List<Long> list = new ArrayList<>();
+    Set<Long> expectedSet = new HashSet<>((int) (max - min + 1));
+    for (long i = min; i <= max; i++) {
+      expectedSet.add(i);
+    }
+    for (int i = 0; i < iterations; i++) {
+      list.add(RandomUtil.randomLong(min, max));
+    }
+    checkEqualDistribution(list, tolerance, expectedSet);
+  }
+
 }

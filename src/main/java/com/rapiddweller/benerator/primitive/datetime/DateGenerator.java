@@ -31,9 +31,9 @@ import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Period;
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.commons.converter.DateString2DurationConverter;
+import com.rapiddweller.common.Period;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.converter.DateString2DurationConverter;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -42,128 +42,175 @@ import java.util.GregorianCalendar;
  * creates date values by a LongGenerator.
  * <br/>
  * Created: 07.06.2006 22:54:28
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class DateGenerator extends NonNullGeneratorWrapper<Long, Date> {
-    
-    private DateString2DurationConverter dateConverter = new DateString2DurationConverter();
 
-    private long min;
-    private long max;
-    private long granularity;
-    private Distribution distribution;
-    private boolean unique;
-    
-    // constructors ----------------------------------------------------------------------------------------------------
+  private final DateString2DurationConverter dateConverter = new DateString2DurationConverter();
 
-    /** Initializes the generator to create days within about the last 80 years with a one-day resolution */
-    public DateGenerator() {
-        this(defaultStartDate(), currentDay(), Period.DAY.getMillis());
+  private long min;
+  private long max;
+  private long granularity;
+  private Distribution distribution;
+  private final boolean unique;
+
+  // constructors ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Initializes the generator to create days within about the last 80 years with a one-day resolution
+   */
+  public DateGenerator() {
+    this(defaultStartDate(), currentDay(), Period.DAY.getMillis());
+  }
+
+  /**
+   * Initializes the generator to create dates with a uniform distribution
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   */
+  public DateGenerator(Date min, Date max, long granularity) {
+    this(min, max, granularity, SequenceManager.RANDOM_SEQUENCE);
+  }
+
+  /**
+   * Initializes the generator to create dates of a Sequence or WeightFunction
+   *
+   * @param min          the min
+   * @param max          the max
+   * @param granularity  the granularity
+   * @param distribution the distribution
+   */
+  public DateGenerator(Date min, Date max, long granularity, Distribution distribution) {
+    this(min, max, granularity, distribution, false);
+  }
+
+  /**
+   * Initializes the generator to create dates of a Sequence or WeightFunction
+   *
+   * @param min          the min
+   * @param max          the max
+   * @param granularity  the granularity
+   * @param distribution the distribution
+   * @param unique       the unique
+   */
+  public DateGenerator(Date min, Date max, long granularity, Distribution distribution, boolean unique) {
+    super(null);
+    this.distribution = distribution;
+    this.min = (min != null ? min.getTime() : Long.MIN_VALUE);
+    this.max = (max != null ? max.getTime() : TimeUtil.date(TimeUtil.currentYear() + 10, 11, 31).getTime());
+    this.granularity = granularity;
+    this.unique = unique;
+    setSource(distribution.createNumberGenerator(Long.class, this.min, this.max, this.granularity, this.unique));
+  }
+
+  // config properties -----------------------------------------------------------------------------------------------
+
+  /**
+   * Sets the earliest date to generate
+   *
+   * @param min the min
+   */
+  public void setMin(Date min) {
+    this.min = min.getTime();
+  }
+
+  /**
+   * Sets the latest date to generate
+   *
+   * @param max the max
+   */
+  public void setMax(Date max) {
+    this.max = max.getTime();
+  }
+
+  /**
+   * Sets the date granularity in milliseconds
+   *
+   * @param granularity the granularity
+   */
+  public void setGranularity(String granularity) {
+    this.granularity = dateConverter.convert(granularity);
+  }
+
+  /**
+   * Sets the distribution to use
+   *
+   * @param distribution the distribution
+   */
+  public void setDistribution(Distribution distribution) {
+    this.distribution = distribution;
+  }
+
+  // source interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public Class<Date> getGeneratedType() {
+    return Date.class;
+  }
+
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    setSource(distribution.createNumberGenerator(Long.class, min, max, granularity, unique));
+    super.init(context);
+  }
+
+  /**
+   * Generates a Date by creating a millisecond value from the source generator and wrapping it into a Date
+   */
+  @Override
+  public Date generate() {
+    assertInitialized();
+    ProductWrapper<Long> tmp = generateFromSource();
+    if (tmp == null) {
+      return null;
     }
+    Long millis = tmp.unwrap();
+    return new Date(millis);
+  }
 
-    /** Initializes the generator to create dates with a uniform distribution */
-    public DateGenerator(Date min, Date max, long granularity) {
-        this(min, max, granularity, SequenceManager.RANDOM_SEQUENCE);
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return super.isThreadSafe() && dateConverter.isThreadSafe();
+  }
 
-    /** Initializes the generator to create dates of a Sequence or WeightFunction */
-    public DateGenerator(Date min, Date max, long granularity, Distribution distribution) {
-        this(min, max, granularity, distribution, false);
-    }
+  @Override
+  public boolean isParallelizable() {
+    return super.isParallelizable() && dateConverter.isParallelizable();
+  }
 
-    /** Initializes the generator to create dates of a Sequence or WeightFunction */
-    public DateGenerator(Date min, Date max, long granularity, Distribution distribution, boolean unique) {
-    	super(null);
-        this.distribution = distribution;
-		this.min = (min != null ? min.getTime() : Long.MIN_VALUE);
-		this.max = (max != null ? max.getTime() : TimeUtil.date(TimeUtil.currentYear() + 10, 11, 31).getTime());
-		this.granularity = granularity;
-		this.unique = unique;
-        setSource(distribution.createNumberGenerator(Long.class, this.min, this.max, this.granularity, this.unique));
-    }
+  // implementation --------------------------------------------------------------------------------------------------
 
-    // config properties -----------------------------------------------------------------------------------------------
+  /**
+   * Returns the default start date as 80 years ago
+   */
+  private static Date defaultStartDate() {
+    return new Date(currentDay().getTime() - 80L * 365 * Period.DAY.getMillis());
+  }
 
-    /** Sets the earliest date to generate */
-    public void setMin(Date min) {
-        this.min = min.getTime();
-    }
+  /**
+   * Returns the current day as Date value rounded to midnight
+   */
+  private static Date currentDay() {
+    GregorianCalendar calendar = new GregorianCalendar();
+    calendar.set(
+        calendar.get(GregorianCalendar.YEAR),
+        calendar.get(GregorianCalendar.MONTH),
+        calendar.get(GregorianCalendar.DAY_OF_MONTH),
+        0,
+        0,
+        0);
+    calendar.set(GregorianCalendar.MILLISECOND, 0);
+    return calendar.getTime();
+  }
 
-    /** Sets the latest date to generate */
-    public void setMax(Date max) {
-        this.max = max.getTime();
-    }
-
-    /** Sets the date granularity in milliseconds */
-    public void setGranularity(String granularity) {
-        this.granularity = dateConverter.convert(granularity);
-    }
-
-    /** Sets the distribution to use */
-    public void setDistribution(Distribution distribution) {
-        this.distribution = distribution;
-    }
-
-    // source interface ---------------------------------------------------------------------------------------------
-
-    @Override
-	public Class<Date> getGeneratedType() {
-        return Date.class;
-    }
-
-    @Override
-    public void init(GeneratorContext context) {
-    	assertNotInitialized();
-    	setSource(distribution.createNumberGenerator(Long.class, min, max, granularity, unique));
-		super.init(context);
-    }
-
-    /** Generates a Date by creating a millisecond value from the source generator and wrapping it into a Date */
-	@Override
-	public Date generate() {
-    	assertInitialized();
-        ProductWrapper<Long> tmp = generateFromSource();
-        if (tmp == null)
-        	return null;
-		Long millis = tmp.unwrap();
-        return new Date(millis);
-    }
-    
-    @Override
-    public boolean isThreadSafe() {
-        return super.isThreadSafe() && dateConverter.isThreadSafe();
-    }
-    
-    @Override
-    public boolean isParallelizable() {
-        return super.isParallelizable() && dateConverter.isParallelizable();
-    }
-
-    // implementation --------------------------------------------------------------------------------------------------
-
-    /** Returns the default start date as 80 years ago */
-    private static Date defaultStartDate() {
-        return new Date(currentDay().getTime() - 80L * 365 * Period.DAY.getMillis());
-    }
-
-    /** Returns the current day as Date value rounded to midnight */
-    private static Date currentDay() {
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.set(
-                calendar.get(GregorianCalendar.YEAR),
-                calendar.get(GregorianCalendar.MONTH),
-                calendar.get(GregorianCalendar.DAY_OF_MONTH),
-                0,
-                0,
-                0);
-        calendar.set(GregorianCalendar.MILLISECOND, 0);
-        return calendar.getTime();
-    }
-
-    @Override
-    public String toString() {
-    	return getClass().getSimpleName() + '[' + getSource() + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + getSource() + ']';
+  }
 
 }

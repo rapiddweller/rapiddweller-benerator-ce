@@ -26,97 +26,121 @@
 
 package com.rapiddweller.platform.xml;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.xml.XMLUtil;
-import com.rapiddweller.commons.xml.XPathUtil;
-import com.rapiddweller.formats.DataContainer;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.util.DataIteratorTestCase.NextHelper;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.common.xml.XPathUtil;
+import com.rapiddweller.format.DataContainer;
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.util.DataIteratorTestCase.NextHelper;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Tests the DOMTree.<br/><br/>
  * Created: 14.01.2014 17:58:07
- * @since 0.9.0
+ *
  * @author Volker Bergmann
+ * @since 0.9.0
  */
-
 public class DOMTreeTest {
-	
-	@Test
-	public void testQueryEntities() throws Exception {
-		BeneratorContext context = new DefaultBeneratorContext();
-		DOMTree tree = new DOMTree("com/rapiddweller/platform/xml/teamplayers.xml", context);
-		String outputUri = "target/test-classes/teamplayers2.xml";
-		tree.setOutputUri(outputUri);
-		// query all persons
-		DataSource<Entity> source = tree.queryEntities("person", "//person", context);
-		// verify all persons
-		DataIterator<Entity> iterator = source.iterator();
-		ComplexTypeDescriptor type = (ComplexTypeDescriptor) tree.getTypeDescriptor("person");
-		expectNextElements(iterator,
-			new Entity(type, "pnum", "1a", "name", "Alice", "city", "Atlanta", "age", "23"),
-			new Entity(type, "pnum", "1b", "name", "Bob", "city", "Boston", "age", "34"),
-			new Entity(type, "pnum", "2a", "name", "Charly", "city", "Cleveland", "age", "45"),
-			new Entity(type, "pnum", "2b", "name", "Otto", "city", "Oslo", "age", "89")
-		);
-		assertNull(iterator.next(new DataContainer<>()));
-		iterator.close();
-		
-		// set all cities to Berlin and update the DOMTree
-		iterator = source.iterator();
-		DataContainer<Entity> container = new DataContainer<>();
-		while ((container = iterator.next(container)) != null) {
-			Entity person = container.getData();
-			person.set("city", "Berlin");
-			tree.update(person);
-		}
-		iterator.close();
-		
-		// close the tree (saving the modified XML)
-		IOUtil.close(tree);
-		
-		// verify that the tree has been modified and saved correctly
-		Document doc2 = XMLUtil.parse(outputUri);
-		NodeList cityNodes = XPathUtil.queryNodes(doc2, "//city/text()");
-		assertEquals(4, cityNodes.getLength());
-		for (int i = 0; i < 4; i++)
-			assertEquals("Berlin", cityNodes.item(i).getTextContent());
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Test
-	public void testQueryAttributes() {
-		BeneratorContext context = new DefaultBeneratorContext();
-		DOMTree tree = new DOMTree("com/rapiddweller/platform/xml/teamplayers.xml", context);
-		tree.setOutputUri("target/test-classes/teamplayers3.xml");
-		DataSource<?> source = tree.query("//city", true, context);
-		DataIterator iterator = source.iterator();
-		expectNextElements(iterator, "Atlanta", "Boston", "Cleveland", "Oslo");
-		assertNull(iterator.next(new DataContainer<Entity>()));
-		IOUtil.close(tree);
-	}
-	
-	
-	
-	// private helpers -------------------------------------------------------------------------------------------------
-	
-	@SafeVarargs
-	private static <T> NextHelper expectNextElements(DataIterator<T> iterator, T... expectedValues) {
-		for (T expectedValue : expectedValues) {
-			Object actualValue = iterator.next(new DataContainer<>()).getData();
-			assertEquals(expectedValue, actualValue);
-		}
-		return new NextHelper(iterator);
-	}
-	
+
+  /**
+   * Test constructor.
+   */
+  @Test
+  public void testConstructor() {
+    DOMTree actualDomTree = new DOMTree();
+    assertNull(actualDomTree.getDataModel());
+    assertNull(actualDomTree.getInputUri());
+    assertTrue(actualDomTree.isNamespaceAware());
+    assertNull(actualDomTree.getId());
+    assertEquals(0, actualDomTree.getTypeDescriptors().length);
+    assertNull(actualDomTree.getOutputUri());
+  }
+
+  /**
+   * Test query entities.
+   *
+   * @throws Exception the exception
+   */
+  @Test
+  public void testQueryEntities() throws Exception {
+    BeneratorContext context = new DefaultBeneratorContext();
+    DOMTree tree = new DOMTree("com/rapiddweller/platform/xml/teamplayers.xml", context);
+    String outputUri = "target/test-classes/teamplayers2.xml";
+    tree.setOutputUri(outputUri);
+    // query all persons
+    DataSource<Entity> source = tree.queryEntities("person", "//person", context);
+    // verify all persons
+    DataIterator<Entity> iterator = source.iterator();
+    ComplexTypeDescriptor type = (ComplexTypeDescriptor) tree.getTypeDescriptor("person");
+    expectNextElements(iterator,
+        new Entity(type, "pnum", "1a", "name", "Alice", "city", "Atlanta", "age", "23"),
+        new Entity(type, "pnum", "1b", "name", "Bob", "city", "Boston", "age", "34"),
+        new Entity(type, "pnum", "2a", "name", "Charly", "city", "Cleveland", "age", "45"),
+        new Entity(type, "pnum", "2b", "name", "Otto", "city", "Oslo", "age", "89")
+    );
+    assertNull(iterator.next(new DataContainer<>()));
+    iterator.close();
+
+    // set all cities to Berlin and update the DOMTree
+    iterator = source.iterator();
+    DataContainer<Entity> container = new DataContainer<>();
+    while ((container = iterator.next(container)) != null) {
+      Entity person = container.getData();
+      person.set("city", "Berlin");
+      tree.update(person);
+    }
+    iterator.close();
+
+    // close the tree (saving the modified XML)
+    IOUtil.close(tree);
+
+    // verify that the tree has been modified and saved correctly
+    Document doc2 = XMLUtil.parse(outputUri);
+    NodeList cityNodes = XPathUtil.queryNodes(doc2, "//city/text()");
+    assertEquals(4, cityNodes.getLength());
+    for (int i = 0; i < 4; i++) {
+      assertEquals("Berlin", cityNodes.item(i).getTextContent());
+    }
+  }
+
+  /**
+   * Test query attributes.
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  @Test
+  public void testQueryAttributes() {
+    BeneratorContext context = new DefaultBeneratorContext();
+    DOMTree tree = new DOMTree("com/rapiddweller/platform/xml/teamplayers.xml", context);
+    tree.setOutputUri("target/test-classes/teamplayers3.xml");
+    DataSource<?> source = tree.query("//city", true, context);
+    DataIterator iterator = source.iterator();
+    expectNextElements(iterator, "Atlanta", "Boston", "Cleveland", "Oslo");
+    assertNull(iterator.next(new DataContainer<Entity>()));
+    IOUtil.close(tree);
+  }
+
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  @SafeVarargs
+  private static <T> void expectNextElements(DataIterator<T> iterator, T... expectedValues) {
+    for (T expectedValue : expectedValues) {
+      Object actualValue = iterator.next(new DataContainer<>()).getData();
+      assertEquals(expectedValue, actualValue);
+    }
+    new NextHelper(iterator);
+  }
+
 }

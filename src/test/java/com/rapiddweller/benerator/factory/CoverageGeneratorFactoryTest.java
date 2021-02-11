@@ -26,73 +26,93 @@
 
 package com.rapiddweller.benerator.factory;
 
-import java.util.Date;
-import java.util.Set;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.Period;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.Period;
+import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.model.data.Uniqueness;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.Date;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test the {@link CoverageGeneratorFactory}.<br/><br/>
  * Created: 21.08.2011 06:00:54
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class CoverageGeneratorFactoryTest extends GeneratorTest {
-	
-	private CoverageGeneratorFactory factory = new CoverageGeneratorFactory();
 
-	@Test
-	public void testCreateDateGenerator() {
-		Date AUGUST_20_2011 = TimeUtil.date(2011, 7, 20);
-		Date AUGUST_22_2011 = TimeUtil.date(2011, 7, 22);
-		Date AUGUST_24_2011 = TimeUtil.date(2011, 7, 24);
-		Generator<Date> generator = factory.createDateGenerator(
-				AUGUST_20_2011, AUGUST_24_2011, 2 * Period.DAY.getMillis(), null);
-		GeneratorUtil.init(generator);
-		expectGeneratedSequence(generator, AUGUST_20_2011, AUGUST_22_2011, AUGUST_24_2011);
-	}
-	
-	@Test
-	public void testCreateNumberGenerator() {
-		NonNullGenerator<Integer> generator = factory.createNumberGenerator(
-				Integer.class, 1, true, 5, true, 2, null, Uniqueness.NONE);
-		GeneratorUtil.init(generator);
-		expectGeneratedSequence(generator, 1, 3, 5);
-	}
-	
-	@Test
-	public void testCreateStringGenerator() {
-		NonNullGenerator<String> generator = factory.createStringGenerator(
-				CollectionUtil.toSet('A', 'B', 'C'), 1, 3, 2, null, Uniqueness.NONE);
-		GeneratorUtil.init(generator);
-		expectGeneratedSequence(generator, "A", "B", "C", "AAA", "BBB", "CCC");
-	}
-	
-	@Test
-	public void testDefaultSubSet() {
-		Set<Character> chars = CollectionUtil.toSet('A', 'B', 'C');
-		assertEquals(chars, factory.defaultSubSet(chars));
-	}
-	
-	@Test
-	public void testDefaultCounts() {
-		Set<Integer> defaultCounts = factory.defaultCounts(1, 5, 2);
-		assertEquals(CollectionUtil.toSet(1, 3, 5), defaultCounts);
-	}
-	
-	@Test
-	public void testDefaultDistribution() {
-		assertEquals(SequenceManager.STEP_SEQUENCE, factory.defaultDistribution(Uniqueness.NONE));
-	}
-	
+  private final CoverageGeneratorFactory factory = new CoverageGeneratorFactory();
+
+  /**
+   * Test create date generator.
+   */
+  @Test
+  public void testCreateDateGenerator() {
+    Date AUGUST_20_2011 = TimeUtil.date(2011, 7, 20);
+    Date AUGUST_22_2011 = TimeUtil.date(2011, 7, 22);
+    Date AUGUST_24_2011 = TimeUtil.date(2011, 7, 24);
+    Generator<Date> generator = factory.createDateGenerator(
+        AUGUST_20_2011, AUGUST_24_2011, 2 * Period.DAY.getMillis(), null);
+    GeneratorUtil.init(generator);
+    expectGeneratedSequence(generator, AUGUST_20_2011, AUGUST_22_2011, AUGUST_24_2011);
+  }
+
+  /**
+   * Test create number generator.
+   */
+  @Test
+  public void testCreateNumberGenerator() {
+    NonNullGenerator<Integer> generator = factory.createNumberGenerator(
+        Integer.class, 1, true, 5, true, 2, null, Uniqueness.NONE);
+    GeneratorUtil.init(generator);
+    expectGeneratedSequence(generator, 1, 3, 5);
+  }
+
+  /**
+   * Test create string generator.
+   */
+  @Test
+  public void testCreateStringGenerator() {
+    NonNullGenerator<String> generator = factory.createStringGenerator(
+        CollectionUtil.toSet('A', 'B', 'C'), 1, 3, 2, null, Uniqueness.NONE);
+    GeneratorUtil.init(generator);
+    expectGeneratedSequence(generator, "A", "B", "C", "AAA", "BBB", "CCC");
+  }
+
+  /**
+   * Test default sub set.
+   */
+  @Test
+  public void testDefaultSubSet() {
+    Set<Character> chars = CollectionUtil.toSet('A', 'B', 'C');
+    assertEquals(chars, factory.defaultSubSet(chars));
+  }
+
+  /**
+   * Test default counts.
+   */
+  @Test
+  public void testDefaultCounts() {
+    Set<Integer> defaultCounts = factory.defaultCounts(1, 5, 2);
+    assertEquals(CollectionUtil.toSet(1, 3, 5), defaultCounts);
+  }
+
+  /**
+   * Test default distribution.
+   */
+  @Test
+  public void testDefaultDistribution() {
+    assertEquals(SequenceManager.STEP_SEQUENCE, factory.defaultDistribution(Uniqueness.NONE));
+  }
+
 }

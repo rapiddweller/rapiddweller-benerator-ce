@@ -26,115 +26,132 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
-import static org.junit.Assert.*;
+import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.ConsumerMock;
+import com.rapiddweller.common.TimeUtil;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
-import com.rapiddweller.benerator.test.ConsumerMock;
-import com.rapiddweller.commons.TimeUtil;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the correct interaction of XML parser, 
+ * Tests the correct interaction of XML parser,
  * Benerator engine and {@link DateTimeGenerator}.<br/><br/>
  * Created: 04.05.2010 06:13:08
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 public class DateTimeIntegrationTest extends BeneratorIntegrationTest {
 
-	private static final Date MIN_DATE = TimeUtil.date(2008, 8, 29);
-	private static final Date MAX_DATE = TimeUtil.date(2008, 9,  3);
-	private static final int INDIVIDUAL_DATE_COUNT = 4;
-	
-	private ConsumerMock consumer;
-	
-	@Before
-	public void setUpContext() {
-		consumer = new ConsumerMock(true);
-		context.setGlobal("cons", consumer);
-	}
+  private static final Date MIN_DATE = TimeUtil.date(2008, 8, 29);
+  private static final Date MAX_DATE = TimeUtil.date(2008, 9, 3);
+  private static final int INDIVIDUAL_DATE_COUNT = 4;
 
-	
-	
-	// test methods ----------------------------------------------------------------------------------------------------
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testDateWithMinMaxAndGranularity() {
-		// create DateTimeGenerator from XML descriptor
-		parseAndExecute(
-			"<generate type='entity' count='500' consumer='cons'>" +
-        	"  <value type='date' min='2008-09-29' max='2008-10-02' granularity='0000-00-01'/>" +
-        	"</generate>");
-		List<Object[]> products = (List<Object[]>) consumer.getProducts();
-		HashSet<Date> usedDates = new HashSet<Date>();
-		for (Object[] product : products) {
-			Date date = (Date) product[0];
-			assertFalse(date.before(MIN_DATE));
-			assertFalse(date.after(MAX_DATE));
-			usedDates.add(date);
-		}
-		assertEquals(INDIVIDUAL_DATE_COUNT, usedDates.size());
-	}
+  private ConsumerMock consumer;
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testDateWithMinAndMax() {
-		// create DateTimeGenerator from XML descriptor
-		parseAndExecute(
-			"<generate type='entity' count='500' consumer='cons'>" +
-        	"  <value type='date' min='2008-09-29' max='2008-10-02' />" +
-        	"</generate>");
-		List<Object[]> products = (List<Object[]>) consumer.getProducts();
-		HashSet<Date> usedDates = new HashSet<Date>();
-		for (Object[] product : products) {
-			Date date = (Date) product[0];
-			assertFalse(date.before(MIN_DATE));
-			assertFalse(date.after(MAX_DATE));
-			usedDates.add(date);
-		}
-		assertEquals(INDIVIDUAL_DATE_COUNT, usedDates.size());
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testDateWithMin() {
-		// create DateTimeGenerator from XML descriptor
-		parseAndExecute(
-			"<generate type='entity' count='500' consumer='cons'>" +
-        	"  <value type='date' min='2008-09-29' />" +
-        	"</generate>");
-		List<Object[]> products = (List<Object[]>) consumer.getProducts();
-		HashSet<Date> usedDates = new HashSet<Date>();
-		for (Object[] product : products) {
-			Date date = (Date) product[0];
-			assertFalse(date.before(MIN_DATE));
-			usedDates.add(date);
-		}
-		assertTrue(usedDates.size() > 10);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testDateWithMax() {
-		// create DateTimeGenerator from XML descriptor
-		parseAndExecute(
-			"<generate type='entity' count='500' consumer='cons'>" +
-        	"  <value type='date' max='2008-10-02' />" +
-        	"</generate>");
-		List<Object[]> products = (List<Object[]>) consumer.getProducts();
-		HashSet<Date> usedDates = new HashSet<Date>();
-		for (Object[] product : products) {
-			Date date = (Date) product[0];
-			assertFalse(date.after(MAX_DATE));
-			usedDates.add(date);
-		}
-		assertTrue(usedDates.size() > 10);
-	}
-	
+  /**
+   * Sets up context.
+   */
+  @Before
+  public void setUpContext() {
+    consumer = new ConsumerMock(true);
+    context.setGlobal("cons", consumer);
+  }
+
+
+  // test methods ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Test date with min max and granularity.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testDateWithMinMaxAndGranularity() {
+    // create DateTimeGenerator from XML descriptor
+    parseAndExecute(
+        "<generate type='entity' count='500' consumer='cons'>" +
+            "  <value type='date' min='2008-09-29' max='2008-10-02' granularity='0000-00-01'/>" +
+            "</generate>");
+    List<Object[]> products = (List<Object[]>) consumer.getProducts();
+    HashSet<Date> usedDates = new HashSet<>();
+    for (Object[] product : products) {
+      Date date = (Date) product[0];
+      assertFalse(date.before(MIN_DATE));
+      assertFalse(date.after(MAX_DATE));
+      usedDates.add(date);
+    }
+    assertEquals(INDIVIDUAL_DATE_COUNT, usedDates.size());
+  }
+
+  /**
+   * Test date with min and max.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testDateWithMinAndMax() {
+    // create DateTimeGenerator from XML descriptor
+    parseAndExecute(
+        "<generate type='entity' count='500' consumer='cons'>" +
+            "  <value type='date' min='2008-09-29' max='2008-10-02' />" +
+            "</generate>");
+    List<Object[]> products = (List<Object[]>) consumer.getProducts();
+    HashSet<Date> usedDates = new HashSet<>();
+    for (Object[] product : products) {
+      Date date = (Date) product[0];
+      assertFalse(date.before(MIN_DATE));
+      assertFalse(date.after(MAX_DATE));
+      usedDates.add(date);
+    }
+    assertEquals(INDIVIDUAL_DATE_COUNT, usedDates.size());
+  }
+
+  /**
+   * Test date with min.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testDateWithMin() {
+    // create DateTimeGenerator from XML descriptor
+    parseAndExecute(
+        "<generate type='entity' count='500' consumer='cons'>" +
+            "  <value type='date' min='2008-09-29' />" +
+            "</generate>");
+    List<Object[]> products = (List<Object[]>) consumer.getProducts();
+    HashSet<Date> usedDates = new HashSet<>();
+    for (Object[] product : products) {
+      Date date = (Date) product[0];
+      assertFalse(date.before(MIN_DATE));
+      usedDates.add(date);
+    }
+    assertTrue(usedDates.size() > 10);
+  }
+
+  /**
+   * Test date with max.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testDateWithMax() {
+    // create DateTimeGenerator from XML descriptor
+    parseAndExecute(
+        "<generate type='entity' count='500' consumer='cons'>" +
+            "  <value type='date' max='2008-10-02' />" +
+            "</generate>");
+    List<Object[]> products = (List<Object[]>) consumer.getProducts();
+    HashSet<Date> usedDates = new HashSet<>();
+    for (Object[] product : products) {
+      Date date = (Date) product[0];
+      assertFalse(date.after(MAX_DATE));
+      usedDates.add(date);
+    }
+    assertTrue(usedDates.size() > 10);
+  }
+
 }

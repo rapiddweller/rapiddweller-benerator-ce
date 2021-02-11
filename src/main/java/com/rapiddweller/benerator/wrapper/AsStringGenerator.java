@@ -27,23 +27,37 @@
 package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.ConverterManager;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.ConverterManager;
 
 /**
  * Wraps another {@link Generator} and converts its products to {@link String}s.<br/><br/>
  * Created: 08.07.2011 11:27:54
- * @since 0.7.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.7.0
  */
-public class AsStringGenerator<E> extends ConvertingGenerator<E, String>{
+public class AsStringGenerator<E> extends ConvertingGenerator<E, String> {
 
-	public AsStringGenerator(Generator<E> source) {
-		super(source, createConverter(source));
-	}
+  /**
+   * Instantiates a new As string generator.
+   *
+   * @param source the source
+   */
+  public AsStringGenerator(Generator<E> source) {
+    super(source, createConverter(source));
+  }
 
-	protected static <T> Converter<T, String> createConverter(Generator<T> source) {
-		return ConverterManager.getInstance().createConverter(source.getGeneratedType(), String.class);
-	}
+  /**
+   * Create converter converter.
+   *
+   * @param <T>    the type parameter
+   * @param source the source
+   * @return the converter
+   */
+  protected static <T> Converter<T, String> createConverter(Generator<T> source) {
+    return ConverterManager.getInstance().createConverter(source.getGeneratedType(), String.class);
+  }
 
 }

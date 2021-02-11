@@ -26,8 +26,8 @@
 
 package com.rapiddweller.domain.br;
 
-import com.rapiddweller.commons.MathUtil;
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.MathUtil;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
@@ -46,66 +46,98 @@ import java.util.regex.Pattern;
  */
 public class CPFValidator extends AbstractConstraintValidator<CPF, String> {
 
-    private static final Pattern pattern = Pattern.compile("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}");
+  private static final Pattern pattern =
+      Pattern.compile("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}");
 
-    private boolean acceptingFormattedNumbers = true;
+  private boolean acceptingFormattedNumbers = true;
 
-    public CPFValidator() {
-        this(false);
+  /**
+   * Instantiates a new Cpf validator.
+   */
+  public CPFValidator() {
+    this(false);
+  }
+
+  /**
+   * Instantiates a new Cpf validator.
+   *
+   * @param acceptingFormattedNumbers the accepting formatted numbers
+   */
+  public CPFValidator(boolean acceptingFormattedNumbers) {
+    this.acceptingFormattedNumbers = acceptingFormattedNumbers;
+  }
+
+  /**
+   * Is accepting formatted numbers boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isAcceptingFormattedNumbers() {
+    return acceptingFormattedNumbers;
+  }
+
+  /**
+   * Sets accepting formatted numbers.
+   *
+   * @param acceptingFormattedNumbers the accepting formatted numbers
+   */
+  public void setAcceptingFormattedNumbers(
+      boolean acceptingFormattedNumbers) {
+    this.acceptingFormattedNumbers = acceptingFormattedNumbers;
+  }
+
+  @Override
+  public void initialize(CPF params) {
+    super.initialize(params);
+    acceptingFormattedNumbers = params.formatted();
+  }
+
+  @Override
+  public boolean isValid(String number, ConstraintValidatorContext context) {
+    // do simple checks first
+    if (number == null) {
+      return false;
     }
 
-    public CPFValidator(boolean acceptingFormattedNumbers) {
-        this.acceptingFormattedNumbers = acceptingFormattedNumbers;
+    if (number.length() == 14) {
+      if (acceptingFormattedNumbers &&
+          pattern.matcher(number).matches()) {
+        number = number.substring(0, 3) + number.substring(4, 7) +
+            number.substring(8, 11) + number.substring(12, 14);
+      } else {
+        return false;
+      }
     }
 
-    public boolean isAcceptingFormattedNumbers() {
-        return acceptingFormattedNumbers;
+    if (number.length() != 11) {
+      return false;
     }
 
-    public void setAcceptingFormattedNumbers(boolean acceptingFormattedNumbers) {
-        this.acceptingFormattedNumbers = acceptingFormattedNumbers;
+    // compute 1st verification digit
+    int v1 =
+        MathUtil.weightedSumOfDigits(number, 0, 10, 9, 8, 7, 6, 5, 4, 3,
+            2);
+    v1 = 11 - v1 % 11;
+    if (v1 >= 10) {
+      v1 = 0;
     }
 
-    @Override
-    public void initialize(CPF params) {
-        super.initialize(params);
-        acceptingFormattedNumbers = params.formatted();
+    // Check 1st verification digit
+    if (v1 != number.charAt(9) - '0') {
+      return false;
     }
 
-    @Override
-    public boolean isValid(String number, ConstraintValidatorContext context) {
-        // do simple checks first
-        if (number == null)
-            return false;
-
-        if (number.length() == 14)
-            if (acceptingFormattedNumbers && pattern.matcher(number).matches())
-                number = number.substring(0, 3) + number.substring(4, 7) + number.substring(8, 11) + number.substring(12, 14);
-            else
-                return false;
-
-        if (number.length() != 11)
-            return false;
-
-        // compute 1st verification digit
-        int v1 = MathUtil.weightedSumOfDigits(number, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2);
-        v1 = 11 - v1 % 11;
-        if (v1 >= 10)
-            v1 = 0;
-
-        // Check 1st verification digit
-        if (v1 != number.charAt(9) - '0')
-            return false;
-
-        // compute 2nd verification digit
-        int v2 = MathUtil.weightedSumOfDigits(number, 0, 11, 10, 9, 8, 7, 6, 5, 4, 3);
-        v2 += 2 * v1;
-        v2 = 11 - v2 % 11;
-        if (v2 >= 10)
-            v2 = 0;
-
-        // Check 2nd verification digit
-        return (v2 == number.charAt(10) - '0');
+    // compute 2nd verification digit
+    int v2 = MathUtil.weightedSumOfDigits(number, 0, 11, 10, 9, 8, 7, 6, 5,
+        4, 3);
+    v2 += 2 * v1;
+    v2 = 11 - v2 % 11;
+    if (v2 >= 10) {
+      v2 = 0;
     }
+
+    // Check 2nd verification digit
+    return (v2 == number.charAt(10) - '0');
+  }
 
 }

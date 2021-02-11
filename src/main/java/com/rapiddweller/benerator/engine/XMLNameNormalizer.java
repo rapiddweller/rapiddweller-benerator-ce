@@ -26,38 +26,50 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.commons.Assert;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 /**
- * Normalizes XML-valid names to Java-valid camel-case names, 
+ * Normalizes XML-valid names to Java-valid camel-case names,
  * e.g. default-script -{@literal >} defaultScript.<br/><br/>
  * Created: 26.10.2009 09:17:53
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class XMLNameNormalizer extends ThreadSafeConverter<String, String> {
 
-	public XMLNameNormalizer() {
-	    super(String.class, String.class);
-    }
-	
-	@Override
-	public String convert(String name) throws ConversionException {
-		return normalize(name);
-	}
+  /**
+   * Instantiates a new Xml name normalizer.
+   */
+  public XMLNameNormalizer() {
+    super(String.class, String.class);
+  }
 
-	public String normalize (String name) {
-		Assert.notNull(name, "name");
-		String[] tokens = StringUtil.tokenize(name, '-');
-		if (tokens.length == 1)
-			return name;
-		StringBuilder builder = new StringBuilder(tokens[0]);
-		for (int i = 1; i < tokens.length; i++)
-			builder.append(StringUtil.capitalize(tokens[i]));
-		return builder.toString();
-	}
+  @Override
+  public String convert(String name) throws ConversionException {
+    return normalize(name);
+  }
+
+  /**
+   * Normalize string.
+   *
+   * @param name the name
+   * @return the string
+   */
+  public String normalize(String name) {
+    Assert.notNull(name, "name");
+    String[] tokens = StringUtil.tokenize(name, '-');
+    if (tokens.length == 1) {
+      return name;
+    }
+    StringBuilder builder = new StringBuilder(tokens[0]);
+    for (int i = 1; i < tokens.length; i++) {
+      builder.append(StringUtil.capitalize(tokens[i]));
+    }
+    return builder.toString();
+  }
 
 }

@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.engine.task;
 
-import java.util.Iterator;
-import java.util.List;
-
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.consumer.ListConsumer;
@@ -36,90 +33,108 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.CurrentProductGeneration;
 import com.rapiddweller.benerator.engine.statement.GenerateAndConsumeTask;
 import com.rapiddweller.benerator.wrapper.IteratingGenerator;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.TypedIterable;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.TypedIterable;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.task.Task;
 import com.rapiddweller.task.test.AbstractTaskTest;
-
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.Iterator;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link GenerateAndConsumeTask}.<br/>
  * <br/>
  * Created at 25.07.2009 12:42:25
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class GenerateAndConsumeTaskTest extends AbstractTaskTest {
-	
-	protected Entity ALICE;
-	protected Entity BOB;
 
-    @Before
-    public void createPersons() {
-        ALICE = createEntity("Person", "name", "Alice");
-        BOB = createEntity("Person", "name", "Bob");
+  /**
+   * The Alice.
+   */
+  protected Entity ALICE;
+  /**
+   * The Bob.
+   */
+  protected Entity BOB;
+
+  /**
+   * Create persons.
+   */
+  @Before
+  public void createPersons() {
+    ALICE = createEntity("Person", "name", "Alice");
+    BOB = createEntity("Person", "name", "Bob");
+  }
+
+  // tests -----------------------------------------------------------------------------------------------------------
+
+  /**
+   * Test flat.
+   */
+  @Test
+  public void testFlat() {
+    // setup
+    final ListConsumer consumer = new ListConsumer();
+    Expression<Consumer> consumerExpr = new ConstantExpression<>(consumer);
+    GenerateAndConsumeTask task = new GenerateAndConsumeTask("tn", "tn");
+    Generator<Entity> source = new IteratingGenerator<>(new AB());
+    task.addStatement(new CurrentProductGeneration("in", source));
+    task.setConsumer(consumerExpr);
+    // test initial behavior
+    checkIteration(task, consumer);
+    consumer.clear();
+    // test reset()
+    task.reset();
+    checkIteration(task, consumer);
+    // close
+    task.close();
+    assertEquals("tn", task.getTaskName());
+  }
+
+  // test helpers ----------------------------------------------------------------------------------------------------
+
+  private void checkIteration(Task task, final ListConsumer consumer) {
+    BeneratorContext childContext = context.createSubContext("sub");
+    // check life cycle
+    executeStepAndAssertAvailability(task, childContext);
+    executeStepAndAssertAvailability(task, childContext);
+    executeStepAndAssertUnavailability(task, childContext);
+    // check output
+    assertEquals(2, consumer.getConsumedData().size());
+    assertEquals(ALICE, consumer.getConsumedData().get(0));
+    assertEquals(BOB, consumer.getConsumedData().get(1));
+  }
+
+  /**
+   * The type Ab.
+   */
+  class AB implements TypedIterable<Entity> {
+    private final List<Entity> ab = CollectionUtil.toList(ALICE, BOB);
+
+    @Override
+    public Class<Entity> getType() {
+      return Entity.class;
     }
-    
-    // tests -----------------------------------------------------------------------------------------------------------
 
-    @Test
-    public void testFlat() throws Exception {
-    	// setup
-		final ListConsumer consumer = new ListConsumer();
-		Expression<Consumer> consumerExpr = new ConstantExpression<Consumer>(consumer);
-		GenerateAndConsumeTask task = new GenerateAndConsumeTask("tn", "tn");
-		Generator<Entity> source = new IteratingGenerator<Entity>(new AB());
-		task.addStatement(new CurrentProductGeneration("in", source));
-		task.setConsumer(consumerExpr);
-		// test initial behavior
-		checkIteration(task, consumer);
-		consumer.clear();
-		// test reset()
-		task.reset();
-		checkIteration(task, consumer);
-		// close
-		task.close();
-		assertEquals("tn", task.getTaskName());
-	}
-
-    // test helpers ----------------------------------------------------------------------------------------------------
-
-	private void checkIteration(Task task, final ListConsumer consumer) {
-		BeneratorContext childContext = context.createSubContext("sub");
-		// check life cycle
-	    executeStepAndAssertAvailability(task, childContext);
-	    executeStepAndAssertAvailability(task, childContext);
-	    executeStepAndAssertUnavailability(task, childContext);
-		// check output
-		assertEquals(2, consumer.getConsumedData().size());
-		assertEquals(ALICE, consumer.getConsumedData().get(0));
-		assertEquals(BOB, consumer.getConsumedData().get(1));
+    @Override
+    public Iterator<Entity> iterator() {
+      return ab.iterator();
     }
-	
-	class AB implements TypedIterable<Entity> {
-		private final List<Entity> ab = CollectionUtil.toList(ALICE, BOB);
-		
-        @Override
-		public Class<Entity> getType() {
-	        return Entity.class;
-        }
-        
-        @Override
-		public Iterator<Entity> iterator() {
-	        return ab.iterator();
-        }
-        
-        @Override
-        public String toString() {
-        	return "AB";
-        }
-	}
+
+    @Override
+    public String toString() {
+      return "AB";
+    }
+  }
 
 }

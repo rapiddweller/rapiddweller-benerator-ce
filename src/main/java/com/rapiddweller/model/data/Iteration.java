@@ -32,5 +32,12 @@ package com.rapiddweller.model.data;
  * Created: 30.08.2006 21:53:09
  */
 public enum Iteration {
-    repeat, skip
+  /**
+   * Repeat iteration.
+   */
+  repeat,
+  /**
+   * Skip iteration.
+   */
+  skip
 }

@@ -32,62 +32,94 @@ import com.rapiddweller.benerator.Generator;
  * Uses n String generators and appends the output of each one in each generate() call.<br/>
  * <br/>
  * Created: 17.11.2007 17:33:21
+ *
  * @author Volker Bergmann
  */
 public class CompositeStringGenerator extends GeneratorWrapper<String[], String> {
-	
-	protected boolean unique;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  /**
+   * The Unique.
+   */
+  protected final boolean unique;
 
-    public CompositeStringGenerator() {
-        this(false);
+  // constructors ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Instantiates a new Composite string generator.
+   */
+  public CompositeStringGenerator() {
+    this(false);
+  }
+
+  /**
+   * Instantiates a new Composite string generator.
+   *
+   * @param unique  the unique
+   * @param sources the sources
+   */
+  @SafeVarargs
+  public CompositeStringGenerator(boolean unique, Generator<String>... sources) {
+    super(new MultiSourceArrayGenerator<>(String.class, unique, sources));
+    this.unique = unique;
+  }
+
+  /**
+   * Is unique boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isUnique() {
+    return unique;
+  }
+
+  /**
+   * Sets sources.
+   *
+   * @param sources the sources
+   */
+  public void setSources(Generator<String>[] sources) {
+    ((MultiSourceArrayGenerator<String>) getSource()).setSources(sources);
+  }
+
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public Class<String> getGeneratedType() {
+    return String.class;
+  }
+
+  @Override
+  public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
+    StringBuilder builder = new StringBuilder();
+    ProductWrapper<String[]> parts = generateFromSource();
+    if (parts == null) {
+      return null;
     }
-
-    @SafeVarargs
-    public CompositeStringGenerator(boolean unique, Generator<String>... sources) {
-        super(new MultiSourceArrayGenerator<>(String.class, unique, sources));
-        this.unique = unique;
+    for (String part : parts.unwrap()) {
+      builder.append(part);
     }
-    
-	public boolean isUnique() {
-		return unique;
-	}
+    return wrapper.wrap(builder.toString());
+  }
 
-	public void setSources(Generator<String>[] sources) {
-		((MultiSourceArrayGenerator<String>) getSource()).setSources(sources);
-	}
-	
-    // Generator interface ---------------------------------------------------------------------------------------------
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    @Override
-	public Class<String> getGeneratedType() {
-        return String.class;
-    }
+  @Override
+  public String toString() {
+    Generator<String[]> source = getSource();
+    return getClass().getSimpleName() + "[unique=" + unique + ", source=" + source + ']';
+  }
 
-	@Override
-	public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
-        StringBuilder builder = new StringBuilder();
-        ProductWrapper<String[]> parts = generateFromSource();
-        if (parts == null)
-        	return null;
-        for (String part : parts.unwrap())
-            builder.append(part);
-        return wrapper.wrap(builder.toString());
-    }
+  // private helpers -------------------------------------------------------------------------------------------------
 
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-        Generator<String[]> source = getSource();
-        return getClass().getSimpleName() + "[unique=" + unique + ", source=" + source + ']';
-    }
-
-    // private helpers -------------------------------------------------------------------------------------------------
-
-    protected static Generator<String[]> wrap(boolean unique, Generator<?>... sources) {
-        return new MultiSourceArrayGenerator<>(String.class, unique, WrapperFactory.asStringGenerators(sources));
-    }
+  /**
+   * Wrap generator.
+   *
+   * @param unique  the unique
+   * @param sources the sources
+   * @return the generator
+   */
+  protected static Generator<String[]> wrap(boolean unique, Generator<?>... sources) {
+    return new MultiSourceArrayGenerator<>(String.class, unique, WrapperFactory.asStringGenerators(sources));
+  }
 
 }

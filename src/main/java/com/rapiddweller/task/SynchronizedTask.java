@@ -26,9 +26,9 @@
 
 package com.rapiddweller.task;
 
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
 
 /**
  * {@link TaskProxy} implementation that add thread-safety to an unsafe
@@ -41,23 +41,29 @@ import com.rapiddweller.commons.ErrorHandler;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class SynchronizedTask extends TaskProxy {
 
-    public SynchronizedTask(Task realTask) {
-        super(realTask);
-    }
+  /**
+   * Instantiates a new Synchronized task.
+   *
+   * @param realTask the real task
+   */
+  public SynchronizedTask(Task realTask) {
+    super(realTask);
+  }
 
-    @Override
-    public synchronized TaskResult execute(Context context, ErrorHandler errorHandler) {
-        return super.execute(context, errorHandler);
-    }
+  @Override
+  public synchronized TaskResult execute(Context context,
+                                         ErrorHandler errorHandler) {
+    return super.execute(context, errorHandler);
+  }
 
-    @Override
-    public boolean isThreadSafe() {
-        return true;
-    }
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
 
-    @Override
-    public Object clone() {
-        return new SynchronizedTask(BeanUtil.clone(realTask));
-    }
+  @Override
+  public Object clone() {
+    return new SynchronizedTask(BeanUtil.clone(realTask));
+  }
 
 }

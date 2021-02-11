@@ -37,91 +37,107 @@ import org.junit.Test;
  * Tests the {@link UniqueMultiSourceArrayGenerator}.<br/>
  * <br/>
  * Created: 17.11.2007 13:39:04
+ *
  * @author Volker Bergmann
  */
 public class UniqueCompositeArrayGeneratorTest extends GeneratorTest {
 
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testInteger() {
-        Generator<Integer>[] sources = new Generator [] {
-                new SequenceTestGenerator<Integer>(0, 1),
-                new SequenceTestGenerator<Integer>(0, 1),
-                new SequenceTestGenerator<Integer>(0, 1)
-        };
-        UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<Integer>(Integer.class, sources);
-        generator.init(context);
-		expectUniqueProducts(generator,  8).withCeasedAvailability();
-    }
+  /**
+   * Test integer.
+   */
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testInteger() {
+    Generator<Integer>[] sources = new Generator[] {
+        new SequenceTestGenerator<>(0, 1),
+        new SequenceTestGenerator<>(0, 1),
+        new SequenceTestGenerator<>(0, 1)
+    };
+    UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<>(Integer.class, sources);
+    generator.init(context);
+    expectUniqueProducts(generator, 8).withCeasedAvailability();
+  }
 
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testString() {
-        Generator<String>[] sources = new Generator [] {
-            new OneShotGenerator<String>("x"),
-            new SequenceTestGenerator<String>("a", "b"),
-            new OneShotGenerator<String>("x")
-        };
-        UniqueMultiSourceArrayGenerator<String> generator = new UniqueMultiSourceArrayGenerator<String>(String.class, sources);
-        generator.init(context);
-		expectUniqueProducts(generator,  2).withCeasedAvailability();
-    }
+  /**
+   * Test string.
+   */
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testString() {
+    Generator<String>[] sources = new Generator[] {
+        new OneShotGenerator<>("x"),
+        new SequenceTestGenerator<>("a", "b"),
+        new OneShotGenerator<>("x")
+    };
+    UniqueMultiSourceArrayGenerator<String> generator = new UniqueMultiSourceArrayGenerator<>(String.class, sources);
+    generator.init(context);
+    expectUniqueProducts(generator, 2).withCeasedAvailability();
+  }
 
-	@SuppressWarnings("unchecked")
-    @Test
-	public void testNotNull() {
-        Generator<Integer>[] sources = new Generator [] {
-    		new SequenceGenerator<Integer>(Integer.class, 1, 2),
-    		new SequenceGenerator<Integer>(Integer.class, 3, 4)
-        };
-        UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<Integer>(Integer.class, sources);
-		generator.init(context);
-		expectGeneratedSequence(generator, 
-			new Integer[] { 1, 3 },
-			new Integer[] { 1, 4 },
-			new Integer[] { 2, 3 },
-			new Integer[] { 2, 4 }
-		);
-	}
-	
-	@SuppressWarnings("unchecked")
-    @Test
-	public void testNull() {
-        Generator<Integer>[] sources = new Generator [] {
-			new SequenceGenerator<Integer>(Integer.class, null, 1),
-			new SequenceGenerator<Integer>(Integer.class, null, 2)
-        };
-		UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<Integer>(
-				Integer.class, sources);
-		generator.init(context);
-		expectGeneratedSequence(generator, 
-			new Integer[] { null, null },
-			new Integer[] { null,    2 },
-			new Integer[] {    1, null },
-			new Integer[] {    1,    2 }
-		);
-	}
-	
-    @SuppressWarnings("unchecked")
-	@Test
-	public void testThreeDigits() {
-        Generator<Integer>[] sources = new Generator [] {
-			new SequenceGenerator<Integer>(Integer.class, 1, 2),
-			new SequenceGenerator<Integer>(Integer.class, 3, 4),
-			new SequenceGenerator<Integer>(Integer.class, 5, 6)
-        };
-		UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<Integer>(Integer.class, sources);
-		generator.init(context);
-		expectGeneratedSequence(generator, 
-			new Integer[] { 1, 3, 5 },
-			new Integer[] { 1, 3, 6 },
-			new Integer[] { 1, 4, 5 },
-			new Integer[] { 1, 4, 6 },
-			new Integer[] { 2, 3, 5 },
-			new Integer[] { 2, 3, 6 },
-			new Integer[] { 2, 4, 5 },
-			new Integer[] { 2, 4, 6 }
-		);
-	}
-	
+  /**
+   * Test not null.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testNotNull() {
+    Generator<Integer>[] sources = new Generator[] {
+        new SequenceGenerator<>(Integer.class, 1, 2),
+        new SequenceGenerator<>(Integer.class, 3, 4)
+    };
+    UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<>(Integer.class, sources);
+    generator.init(context);
+    expectGeneratedSequence(generator,
+        new Integer[] {1, 3},
+        new Integer[] {1, 4},
+        new Integer[] {2, 3},
+        new Integer[] {2, 4}
+    );
+  }
+
+  /**
+   * Test null.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testNull() {
+    Generator<Integer>[] sources = new Generator[] {
+        new SequenceGenerator<>(Integer.class, null, 1),
+        new SequenceGenerator<>(Integer.class, null, 2)
+    };
+    UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<>(
+        Integer.class, sources);
+    generator.init(context);
+    expectGeneratedSequence(generator,
+        new Integer[] {null, null},
+        new Integer[] {null, 2},
+        new Integer[] {1, null},
+        new Integer[] {1, 2}
+    );
+  }
+
+  /**
+   * Test three digits.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testThreeDigits() {
+    Generator<Integer>[] sources = new Generator[] {
+        new SequenceGenerator<>(Integer.class, 1, 2),
+        new SequenceGenerator<>(Integer.class, 3, 4),
+        new SequenceGenerator<>(Integer.class, 5, 6)
+    };
+    UniqueMultiSourceArrayGenerator<Integer> generator = new UniqueMultiSourceArrayGenerator<>(Integer.class, sources);
+    generator.init(context);
+    expectGeneratedSequence(generator,
+        new Integer[] {1, 3, 5},
+        new Integer[] {1, 3, 6},
+        new Integer[] {1, 4, 5},
+        new Integer[] {1, 4, 6},
+        new Integer[] {2, 3, 5},
+        new Integer[] {2, 3, 6},
+        new Integer[] {2, 4, 5},
+        new Integer[] {2, 4, 6}
+    );
+  }
+
 }

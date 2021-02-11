@@ -26,9 +26,6 @@
 
 package com.rapiddweller.benerator.sample;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.WeightedGenerator;
 import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
@@ -36,123 +33,164 @@ import com.rapiddweller.benerator.distribution.IndividualWeight;
 import com.rapiddweller.benerator.distribution.WeightFunction;
 import com.rapiddweller.benerator.distribution.WeightedLongGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Assert;
+import com.rapiddweller.common.Assert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Maps an {@link IndividualWeight} distribution to an {@link AbstractWeightFunction} and uses its capabilities
  * for providing distribution features based on the {@link IndividualWeight}'s characteristics.<br/>
  * <br/>
  * Created at 01.07.2009 11:48:23
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class IndividualWeightSampleGenerator<E> extends AbstractSampleGenerator<E> implements WeightedGenerator<E> {
-	
-    /** Keeps the Sample information */
-    List<E> samples = new ArrayList<E>();
-    
-    IndividualWeight<E> individualWeight;
-    
-	private double totalWeight;
 
-    /** Generator for choosing a List index of the sample list */
-    private WeightedLongGenerator indexGenerator;
+  /**
+   * Keeps the Sample information
+   */
+  final List<E> samples = new ArrayList<>();
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  /**
+   * The Individual weight.
+   */
+  final IndividualWeight<E> individualWeight;
 
-    /** Initializes the generator to an unweighted sample list */
-    public IndividualWeightSampleGenerator(Class<E> generatedType, IndividualWeight<E> individualWeight, E ... values) {
-    	super(generatedType);
-    	Assert.notNull(individualWeight, "individualWeight");
-        this.individualWeight = individualWeight;
-        setValues(values);
+  private double totalWeight;
+
+  /**
+   * Generator for choosing a List index of the sample list
+   */
+  private WeightedLongGenerator indexGenerator;
+
+  // constructors ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Initializes the generator to an unweighted sample list
+   *
+   * @param generatedType    the generated type
+   * @param individualWeight the individual weight
+   * @param values           the values
+   */
+  @SafeVarargs
+  public IndividualWeightSampleGenerator(Class<E> generatedType, IndividualWeight<E> individualWeight, E... values) {
+    super(generatedType);
+    Assert.notNull(individualWeight, "individualWeight");
+    this.individualWeight = individualWeight;
+    setValues(values);
+  }
+
+  /**
+   * Initializes the generator to an unweighted sample list
+   *
+   * @param generatedType    the generated type
+   * @param individualWeight the individual weight
+   * @param values           the values
+   */
+  public IndividualWeightSampleGenerator(Class<E> generatedType, IndividualWeight<E> individualWeight, Iterable<E> values) {
+    super(generatedType);
+    Assert.notNull(individualWeight, "individualWeight");
+    this.individualWeight = individualWeight;
+    setValues(values);
+  }
+
+  // samples property ------------------------------------------------------------------------------------------------
+
+  /**
+   * Sets the sample list to the specified weighted values
+   *
+   * @param samples the samples
+   */
+  @SafeVarargs
+  public final void setSamples(E... samples) {
+    this.samples.clear();
+    for (E sample : samples) {
+      addValue(sample);
     }
+  }
 
-    /** Initializes the generator to an unweighted sample list */
-    public IndividualWeightSampleGenerator(Class<E> generatedType, IndividualWeight<E> individualWeight, Iterable<E> values) {
-    	super(generatedType);
-    	Assert.notNull(individualWeight, "individualWeight");
-        this.individualWeight = individualWeight;
-        setValues(values);
+  // values property -------------------------------------------------------------------------------------------------
+
+  /**
+   * Adds an unweighted value to the sample list
+   */
+  @Override
+  public <T extends E> void addValue(T value) {
+    samples.add(value);
+    this.totalWeight += individualWeight.weight(value);
+  }
+
+  @Override
+  public long getVariety() {
+    return samples.size();
+  }
+
+  @Override
+  public double getWeight() {
+    return totalWeight;
+  }
+
+  @Override
+  public void clear() {
+    this.samples.clear();
+  }
+
+  // Generator implementation ----------------------------------------------------------------------------------------
+
+  /**
+   * Initializes all attributes
+   */
+  @Override
+  public void init(GeneratorContext context) {
+    assertNotInitialized();
+    indexGenerator = new WeightedLongGenerator(0, samples.size() - 1, 1, new SampleWeightFunction());
+    indexGenerator.init(context);
+    super.init(context);
+  }
+
+  @Override
+  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+    assertInitialized();
+    if (samples.size() == 0) {
+      return null;
     }
+    int index = indexGenerator.generate().intValue();
+    return wrapper.wrap(samples.get(index));
+  }
 
-    // samples property ------------------------------------------------------------------------------------------------
+  // implementation --------------------------------------------------------------------------------------------------
 
-    /** Sets the sample list to the specified weighted values */
-    public void setSamples(E ... samples) {
-        this.samples.clear();
-        for (E sample : samples)
-            addValue(sample);
-    }
+  /**
+   * Weight function that evaluates the weights that are stored in the sample list.
+   */
+  class SampleWeightFunction extends AbstractWeightFunction {
 
-    // values property -------------------------------------------------------------------------------------------------
-
-    /** Adds an unweighted value to the sample list */
+    /**
+     * @see WeightFunction#value(double)
+     */
     @Override
-    public <T extends E> void addValue(T value) {
-        samples.add(value);
-        this.totalWeight += individualWeight.weight(value);
+    public double value(double param) {
+      return individualWeight.weight(samples.get((int) param));
     }
 
-	@Override
-	public long getVariety() {
-		return samples.size();
-	}
-	
-	@Override
-	public double getWeight() {
-		return totalWeight;
-	}
-
-    @Override
-    public void clear() {
-    	this.samples.clear();
-    }
-    
-    // Generator implementation ----------------------------------------------------------------------------------------
-
-    /** Initializes all attributes */
-    @Override
-    public void init(GeneratorContext context) {
-    	assertNotInitialized();
-        indexGenerator = new WeightedLongGenerator(0, samples.size() - 1, 1, new SampleWeightFunction());
-        indexGenerator.init(context);
-        super.init(context);
-    }
-
-	@Override
-	public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-        assertInitialized();
-        if (samples.size() == 0)
-            return null;
-        int index = indexGenerator.generate().intValue();
-        return wrapper.wrap(samples.get(index));
-    }
-
-    // implementation --------------------------------------------------------------------------------------------------
-
-    /** Weight function that evaluates the weights that are stored in the sample list. */
-    class SampleWeightFunction extends AbstractWeightFunction {
-    	
-        /** @see WeightFunction#value(double) */
-        @Override
-		public double value(double param) {
-            return individualWeight.weight(samples.get((int) param));
-        }
-        
-        /** creates a String representation */
-        @Override
-        public String toString() {
-            return getClass().getSimpleName();
-        }
-    }
-
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
-
+    /**
+     * creates a String representation
+     */
     @Override
     public String toString() {
-        return getClass().getSimpleName();
+      return getClass().getSimpleName();
     }
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 
 }

@@ -26,91 +26,102 @@
 
 package com.rapiddweller.benerator.primitive.regex;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Tests the integration of regex-based string generation.<br/><br/>
  * Created: 04.04.2014 13:36:25
- * @since 0.9.3
+ *
  * @author Volker Bergmann
+ * @since 0.9.3
  */
-
 public class RegexIntegrationTest extends BeneratorIntegrationTest {
 
-	private ConsumerMock consumer;
-	
-	@Before
-	public void setUpContext() {
-		consumer = new ConsumerMock(true);
-		context.setGlobal("cons", consumer);
-	}
+  private ConsumerMock consumer;
 
-	
-	
-	// test methods ----------------------------------------------------------------------------------------------------
-	
-	@Test
-	public void testShortRegexGeneration() {
-		String regex = "[A-Z][A-Z ]{5,23}[A-Z]";
-		// create by regex from XML descriptor
-		parseAndExecute(
-			"<generate type='entity' count='100' consumer='cons'>" +
-        	"  <attribute name='text' pattern='" + regex + "'/>" +
-        	"</generate>");
-		@SuppressWarnings("unchecked")
-		List<Entity> products = (List<Entity>) consumer.getProducts();
-		for (Entity product : products) {
-			assertTrue(Pattern.matches(regex, (String) product.get("text")));
-		}
-		assertEquals(100, products.size());
-	}
-	
-	@Test
-	public void testLongRegexGeneration() {
-		String regex = "[A-Z][A-Z ]{100,2000}[A-Z]";
-		// create by regex from XML descriptor
-		parseAndExecute(
-			"<generate type='entity' count='100' consumer='cons'>" +
-        	"  <attribute name='text' pattern='" + regex + "'/>" +
-        	"</generate>");
-		@SuppressWarnings("unchecked")
-		List<Entity> products = (List<Entity>) consumer.getProducts();
-		for (Entity product : products) {
-			String text = (String) product.get("text");
-			System.out.println(text);
-			assertTrue(Pattern.matches(regex, text));
-		}
-		assertEquals(100, products.size());
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testUniqueRegexGeneration() {
-		String regex = "[A-Z][A-Z ]{10,12}[A-Z]";
-		// create by regex from XML descriptor
-		parseAndExecute(
-			"<generate type='entity' count='100' consumer='cons'>" +
-        	"  <attribute name='text' pattern='" + regex + "' unique='true' />" +
-        	"</generate>");
-		List<Entity> products = (List<Entity>) consumer.getProducts();
-		assertEquals(100, products.size());
-		HashSet<String> uniqueTexts = new HashSet<String>();
-		for (Entity product : products) {
-			String text = (String) product.get("text");
-			uniqueTexts.add(text);
-		}
-		assertEquals("Generation was not unique", 100, uniqueTexts.size());
-	}
-	
+  /**
+   * Sets up context.
+   */
+  @Before
+  public void setUpContext() {
+    consumer = new ConsumerMock(true);
+    context.setGlobal("cons", consumer);
+  }
+
+
+  // test methods ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Test short regex generation.
+   */
+  @Test
+  public void testShortRegexGeneration() {
+    String regex = "[A-Z][A-Z ]{5,23}[A-Z]";
+    // create by regex from XML descriptor
+    parseAndExecute(
+        "<generate type='entity' count='100' consumer='cons'>" +
+            "  <attribute name='text' pattern='" + regex + "'/>" +
+            "</generate>");
+    @SuppressWarnings("unchecked")
+    List<Entity> products = (List<Entity>) consumer.getProducts();
+    for (Entity product : products) {
+      assertTrue(Pattern.matches(regex, (String) product.get("text")));
+    }
+    assertEquals(100, products.size());
+  }
+
+  /**
+   * Test long regex generation.
+   */
+  @Test
+  public void testLongRegexGeneration() {
+    String regex = "[A-Z][A-Z ]{100,2000}[A-Z]";
+    // create by regex from XML descriptor
+    parseAndExecute(
+        "<generate type='entity' count='100' consumer='cons'>" +
+            "  <attribute name='text' pattern='" + regex + "'/>" +
+            "</generate>");
+    @SuppressWarnings("unchecked")
+    List<Entity> products = (List<Entity>) consumer.getProducts();
+    for (Entity product : products) {
+      String text = (String) product.get("text");
+      System.out.println(text);
+      assertTrue(Pattern.matches(regex, text));
+    }
+    assertEquals(100, products.size());
+  }
+
+  /**
+   * Test unique regex generation.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testUniqueRegexGeneration() {
+    String regex = "[A-Z][A-Z ]{10,12}[A-Z]";
+    // create by regex from XML descriptor
+    parseAndExecute(
+        "<generate type='entity' count='100' consumer='cons'>" +
+            "  <attribute name='text' pattern='" + regex + "' unique='true' />" +
+            "</generate>");
+    List<Entity> products = (List<Entity>) consumer.getProducts();
+    assertEquals(100, products.size());
+    HashSet<String> uniqueTexts = new HashSet<>();
+    for (Entity product : products) {
+      String text = (String) product.get("text");
+      uniqueTexts.add(text);
+    }
+    assertEquals("Generation was not unique", 100, uniqueTexts.size());
+  }
+
 }

@@ -30,32 +30,41 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.sample.IndividualWeightSampleGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.commons.ConfigurationError;
+import com.rapiddweller.common.ConfigurationError;
 
 /**
  * Distribution type that provides an individual weight for each object.<br/>
  * <br/>
  * Created at 27.04.2008 19:17:38
- * @since 0.5.2
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.5.2
  */
 public abstract class IndividualWeight<E> implements Weight {
-	
-	public abstract double weight(E object);
-	
-    @Override
-	public <T extends Number> NonNullGenerator<T> createNumberGenerator(
-    		Class<T> numberType, T min, T max, T granularity, boolean unique) {
-	    throw new UnsupportedOperationException("createGenerator() is not supported by " + getClass());
-    }
 
-    @Override
-	@SuppressWarnings("unchecked")
-    public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-    	if (unique)
-    		throw new ConfigurationError("Uniqueness is not supported by " + getClass());
-    	return new IndividualWeightSampleGenerator<T>(source.getGeneratedType(), (IndividualWeight<T>) this, 
-    			GeneratorUtil.allProducts(source));
+  /**
+   * Weight double.
+   *
+   * @param object the object
+   * @return the double
+   */
+  public abstract double weight(E object);
+
+  @Override
+  public <T extends Number> NonNullGenerator<T> createNumberGenerator(
+      Class<T> numberType, T min, T max, T granularity, boolean unique) {
+    throw new UnsupportedOperationException("createGenerator() is not supported by " + getClass());
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    if (unique) {
+      throw new ConfigurationError("Uniqueness is not supported by " + getClass());
     }
+    return new IndividualWeightSampleGenerator<>(source.getGeneratedType(), (IndividualWeight<T>) this,
+        GeneratorUtil.allProducts(source));
+  }
 
 }

@@ -35,8 +35,16 @@ package com.rapiddweller.model.data;
  */
 public class VariableDescriptor extends InstanceDescriptor {
 
-    public VariableDescriptor(String name, DescriptorProvider provider, String typeName) {
-        super(name, provider, typeName);
-    }
+  /**
+   * Instantiates a new Variable descriptor.
+   *
+   * @param name     the name
+   * @param provider the provider
+   * @param typeName the type name
+   */
+  public VariableDescriptor(String name, DescriptorProvider provider,
+                            String typeName) {
+    super(name, provider, typeName);
+  }
 
 }

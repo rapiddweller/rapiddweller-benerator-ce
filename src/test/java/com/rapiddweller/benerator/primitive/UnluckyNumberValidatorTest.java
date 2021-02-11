@@ -27,110 +27,135 @@
 package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.domain.address.Country;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link UnluckyNumberValidator}.<br/>
  * <br/>
  * Created at 03.07.2009 08:57:20
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class UnluckyNumberValidatorTest {
-	
-	private Country defaultCountry;
 
-	@Before
-	public void setUp() {
-		defaultCountry = Country.getDefault();
-	}
+  private Country defaultCountry;
 
-	@After
-	public void tearDown() {
-		Country.setDefault(defaultCountry);
-	}
-	
-	@Test
-	public void testIllegalNumbers() {
-		UnluckyNumberValidator validator = new UnluckyNumberValidator();
-		assertFalse(validator.isValid(null, null));
-		assertFalse(validator.isValid("", null));
-	}
-	
-	@Test
-	public void testGermany() {
-		Country.setDefault(Country.GERMANY);
-		UnluckyNumberValidator validator = new UnluckyNumberValidator();
-		assertFalse(validator.isValid("1133", null));
-		assertFalse(validator.isValid("7137", null));
-		assertTrue(validator.isValid("0123456789", null));
-		validator.setLuckyNumberRequired(true);
-		assertFalse(validator.isValid("1133", null));
-		assertFalse(validator.isValid("7137", null));
-		assertTrue(validator.isValid("0123456789", null));
-		assertFalse(validator.isValid("012345689", null));
-	}
-	
-	@Test
-	public void testItaly() {
-		Country.setDefault(Country.ITALY);
-		UnluckyNumberValidator validator = new UnluckyNumberValidator();
-		assertFalse(validator.isValid("1133", null));
-		assertFalse(validator.isValid("7137", null));
-		assertTrue(validator.isValid("0123456789", null));
-		validator.setLuckyNumberRequired(true);
-		assertFalse(validator.isValid("1133", null));
-		assertFalse(validator.isValid("7137", null));
-		assertTrue(validator.isValid("0123456789", null));
-		assertFalse(validator.isValid("012345689", null));
-	}
-	
-	@Test
-	public void testChina() {
-		Country.setDefault(Country.CHINA);
-		UnluckyNumberValidator validator = new UnluckyNumberValidator();
-		assertFalse(validator.isValid("141", null));
-		assertFalse(validator.isValid("848", null));
-		assertTrue( validator.isValid("012356789", null));
-		validator.setLuckyNumberRequired(true);
-		assertFalse(validator.isValid("141", null));
-		assertFalse(validator.isValid("848", null));
-		assertTrue(validator.isValid("012356789", null));
-		assertFalse(validator.isValid("0103567", null));
-	}
-	
-	@Test
-	public void testJapan() {
-		Country.setDefault(Country.JAPAN);
-		UnluckyNumberValidator validator = new UnluckyNumberValidator();
-		assertFalse(validator.isValid("141", null));
-		assertFalse(validator.isValid("848", null));
-		assertTrue(validator.isValid("01235678", null));
-		validator.setLuckyNumberRequired(true);
-		assertFalse(validator.isValid("141", null));
-		assertFalse(validator.isValid("848", null));
-		assertTrue(validator.isValid("01235678", null));
-		assertFalse(validator.isValid("0123567", null));
-	}
-	
-	@Test
-	public void testCustom() {
-		UnluckyNumberValidator validator = new UnluckyNumberValidator();
-		validator.setLuckyNumbers("0", "2", "4");
-		validator.setUnluckyNumbers("1", "3", "5");
-		assertFalse(validator.isValid("818", null));
-		assertFalse(validator.isValid("212", null));
-		assertTrue(validator.isValid("0246789", null));
-		validator.setLuckyNumberRequired(true);
-		assertFalse(validator.isValid("818", null));
-		assertFalse(validator.isValid("212", null));
-		assertTrue(validator.isValid("0246789", null));
-		assertFalse(validator.isValid("6789", null));
-	}
-	
+  /**
+   * Sets up.
+   */
+  @Before
+  public void setUp() {
+    defaultCountry = Country.getDefault();
+  }
+
+  /**
+   * Tear down.
+   */
+  @After
+  public void tearDown() {
+    Country.setDefault(defaultCountry);
+  }
+
+  /**
+   * Test illegal numbers.
+   */
+  @Test
+  public void testIllegalNumbers() {
+    UnluckyNumberValidator validator = new UnluckyNumberValidator();
+    assertFalse(validator.isValid(null, null));
+    assertFalse(validator.isValid("", null));
+  }
+
+  /**
+   * Test germany.
+   */
+  @Test
+  public void testGermany() {
+    Country.setDefault(Country.GERMANY);
+    UnluckyNumberValidator validator = new UnluckyNumberValidator();
+    assertFalse(validator.isValid("1133", null));
+    assertFalse(validator.isValid("7137", null));
+    assertTrue(validator.isValid("0123456789", null));
+    validator.setLuckyNumberRequired(true);
+    assertFalse(validator.isValid("1133", null));
+    assertFalse(validator.isValid("7137", null));
+    assertTrue(validator.isValid("0123456789", null));
+    assertFalse(validator.isValid("012345689", null));
+  }
+
+  /**
+   * Test italy.
+   */
+  @Test
+  public void testItaly() {
+    Country.setDefault(Country.ITALY);
+    UnluckyNumberValidator validator = new UnluckyNumberValidator();
+    assertFalse(validator.isValid("1133", null));
+    assertFalse(validator.isValid("7137", null));
+    assertTrue(validator.isValid("0123456789", null));
+    validator.setLuckyNumberRequired(true);
+    assertFalse(validator.isValid("1133", null));
+    assertFalse(validator.isValid("7137", null));
+    assertTrue(validator.isValid("0123456789", null));
+    assertFalse(validator.isValid("012345689", null));
+  }
+
+  /**
+   * Test china.
+   */
+  @Test
+  public void testChina() {
+    Country.setDefault(Country.CHINA);
+    UnluckyNumberValidator validator = new UnluckyNumberValidator();
+    assertFalse(validator.isValid("141", null));
+    assertFalse(validator.isValid("848", null));
+    assertTrue(validator.isValid("012356789", null));
+    validator.setLuckyNumberRequired(true);
+    assertFalse(validator.isValid("141", null));
+    assertFalse(validator.isValid("848", null));
+    assertTrue(validator.isValid("012356789", null));
+    assertFalse(validator.isValid("0103567", null));
+  }
+
+  /**
+   * Test japan.
+   */
+  @Test
+  public void testJapan() {
+    Country.setDefault(Country.JAPAN);
+    UnluckyNumberValidator validator = new UnluckyNumberValidator();
+    assertFalse(validator.isValid("141", null));
+    assertFalse(validator.isValid("848", null));
+    assertTrue(validator.isValid("01235678", null));
+    validator.setLuckyNumberRequired(true);
+    assertFalse(validator.isValid("141", null));
+    assertFalse(validator.isValid("848", null));
+    assertTrue(validator.isValid("01235678", null));
+    assertFalse(validator.isValid("0123567", null));
+  }
+
+  /**
+   * Test custom.
+   */
+  @Test
+  public void testCustom() {
+    UnluckyNumberValidator validator = new UnluckyNumberValidator();
+    validator.setLuckyNumbers("0", "2", "4");
+    validator.setUnluckyNumbers("1", "3", "5");
+    assertFalse(validator.isValid("818", null));
+    assertFalse(validator.isValid("212", null));
+    assertTrue(validator.isValid("0246789", null));
+    validator.setLuckyNumberRequired(true);
+    assertFalse(validator.isValid("818", null));
+    assertFalse(validator.isValid("212", null));
+    assertTrue(validator.isValid("0246789", null));
+    assertFalse(validator.isValid("6789", null));
+  }
+
 }

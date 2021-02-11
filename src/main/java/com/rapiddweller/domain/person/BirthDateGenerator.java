@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.primitive.datetime.DateGenerator;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
-import com.rapiddweller.commons.Period;
-import com.rapiddweller.commons.TimeUtil;
+import com.rapiddweller.common.Period;
+import com.rapiddweller.common.TimeUtil;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -46,54 +46,85 @@ import java.util.Date;
  */
 public class BirthDateGenerator extends NonNullGeneratorProxy<Date> {
 
-    private int minAgeYears;
-    private int maxAgeYears;
+  private int minAgeYears;
+  private int maxAgeYears;
 
-    public BirthDateGenerator() {
-        this(18, 80);
-    }
+  /**
+   * Instantiates a new Birth date generator.
+   */
+  public BirthDateGenerator() {
+    this(18, 80);
+  }
 
-    public BirthDateGenerator(int minAgeYears, int maxAgeYears) {
-        super(Date.class);
-        this.minAgeYears = minAgeYears;
-        this.maxAgeYears = maxAgeYears;
-    }
+  /**
+   * Instantiates a new Birth date generator.
+   *
+   * @param minAgeYears the min age years
+   * @param maxAgeYears the max age years
+   */
+  public BirthDateGenerator(int minAgeYears, int maxAgeYears) {
+    super(Date.class);
+    this.minAgeYears = minAgeYears;
+    this.maxAgeYears = maxAgeYears;
+  }
 
-    // properties ------------------------------------------------------------------------------------------------------
+  // properties ------------------------------------------------------------------------------------------------------
 
-    public int getMinAgeYears() {
-        return minAgeYears;
-    }
+  /**
+   * Gets min age years.
+   *
+   * @return the min age years
+   */
+  public int getMinAgeYears() {
+    return minAgeYears;
+  }
 
-    public void setMinAgeYears(int minAgeYears) {
-        this.minAgeYears = minAgeYears;
-    }
+  /**
+   * Sets min age years.
+   *
+   * @param minAgeYears the min age years
+   */
+  public void setMinAgeYears(int minAgeYears) {
+    this.minAgeYears = minAgeYears;
+  }
 
-    public int getMaxAgeYears() {
-        return maxAgeYears;
-    }
+  /**
+   * Gets max age years.
+   *
+   * @return the max age years
+   */
+  public int getMaxAgeYears() {
+    return maxAgeYears;
+  }
 
-    public void setMaxAgeYears(int maxAgeYears) {
-        this.maxAgeYears = maxAgeYears;
-    }
+  /**
+   * Sets max age years.
+   *
+   * @param maxAgeYears the max age years
+   */
+  public void setMaxAgeYears(int maxAgeYears) {
+    this.maxAgeYears = maxAgeYears;
+  }
 
-    // Generator interface ---------------------------------------------------------------------------------------------
+  // Generator interface ---------------------------------------------------------------------------------------------
 
-    @Override
-    public synchronized void init(GeneratorContext context) {
-        Calendar min = TimeUtil.calendar(TimeUtil.tomorrow());
-        min.add(Calendar.YEAR, -maxAgeYears - 1);
-        Calendar max = TimeUtil.calendar(TimeUtil.today());
-        max.add(Calendar.YEAR, -minAgeYears);
-        setSource(new DateGenerator(min.getTime(), max.getTime(), Period.DAY.getMillis(), SequenceManager.RANDOM_SEQUENCE));
-        super.init(context);
-    }
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    Calendar min = TimeUtil.calendar(TimeUtil.tomorrow());
+    min.add(Calendar.YEAR, -maxAgeYears - 1);
+    Calendar max = TimeUtil.calendar(TimeUtil.today());
+    max.add(Calendar.YEAR, -minAgeYears);
+    setSource(new DateGenerator(min.getTime(), max.getTime(),
+        Period.DAY.getMillis(), SequenceManager.RANDOM_SEQUENCE));
+    super.init(context);
+  }
 
-    // java.lang.Object overrides --------------------------------------------------------------------------------------
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "[minAgeYears=" + minAgeYears + ", maxAgeYears=" + maxAgeYears + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[minAgeYears=" + minAgeYears +
+        ", maxAgeYears=" + maxAgeYears + ']';
+  }
 
 }

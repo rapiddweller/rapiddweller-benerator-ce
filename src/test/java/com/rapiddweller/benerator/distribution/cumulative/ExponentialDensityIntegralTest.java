@@ -26,11 +26,6 @@
 
 package com.rapiddweller.benerator.distribution.cumulative;
 
-import static org.junit.Assert.*;
-
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
@@ -38,54 +33,73 @@ import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import org.junit.Test;
 
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Tests the {@link ExponentialDensityIntegral}.<br/><br/>
  * Created: 12.03.2010 15:50:44
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class ExponentialDensityIntegralTest extends GeneratorTest {
 
-	private ExponentialDensityIntegral fcn = new ExponentialDensityIntegral(0.5);
-	private BeneratorContext context = new DefaultBeneratorContext();
+  private final ExponentialDensityIntegral fcn = new ExponentialDensityIntegral(0.5);
+  private final BeneratorContext context = new DefaultBeneratorContext();
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testCreateDoubleGenerator_unique() {
-		fcn.createNumberGenerator(Double.class, 1., 4., 0.5, true);
-	}
-	
-	@Test
-	public void testCreateDoubleGenerator_notUnique() {
-		Generator<Double> generator = fcn.createNumberGenerator(Double.class, 1., 2., 0.5, false);
-		generator.init(context);
-		int n = 2000;
-		Map<Double, AtomicInteger> counts = super.countProducts(generator, n);
-		assertEquals(3, counts.size());
-		int lastCount = n + 1;
-		for (double d = 1; d <= 2; d += 0.5) {
-			int count = counts.get(d).intValue();
-			assertTrue(count < lastCount);
-			lastCount = count;
-		}
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void testApply_unique() {
-		Generator<String> source = new SequenceTestGenerator<String>("A", "B");
-		source.init(new DefaultBeneratorContext());
-		fcn.applyTo(source, true);
-	}
-	
-	@Test
-	public void testApply_notUnique() {
-		Generator<String> source = new SequenceTestGenerator<String>("A", "B");
-		source.init(new DefaultBeneratorContext());
-		Generator<String> generator = fcn.applyTo(source, false);
-		generator.init(context);
-		int n = 1000;
-		Map<String, AtomicInteger> counts = super.countProducts(generator, n);
-		assertEquals(2, counts.size());
-		assertTrue(counts.get("A").doubleValue() > counts.get("B").doubleValue());
-	}
-	
+  /**
+   * Test create double generator unique.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testCreateDoubleGenerator_unique() {
+    fcn.createNumberGenerator(Double.class, 1., 4., 0.5, true);
+  }
+
+  /**
+   * Test create double generator not unique.
+   */
+  @Test
+  public void testCreateDoubleGenerator_notUnique() {
+    Generator<Double> generator = fcn.createNumberGenerator(Double.class, 1., 2., 0.5, false);
+    generator.init(context);
+    int n = 2000;
+    Map<Double, AtomicInteger> counts = countProducts(generator, n);
+    assertEquals(3, counts.size());
+    int lastCount = n + 1;
+    for (double d = 1; d <= 2; d += 0.5) {
+      int count = counts.get(d).intValue();
+      assertTrue(count < lastCount);
+      lastCount = count;
+    }
+  }
+
+  /**
+   * Test apply unique.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testApply_unique() {
+    Generator<String> source = new SequenceTestGenerator<>("A", "B");
+    source.init(new DefaultBeneratorContext());
+    fcn.applyTo(source, true);
+  }
+
+  /**
+   * Test apply not unique.
+   */
+  @Test
+  public void testApply_notUnique() {
+    Generator<String> source = new SequenceTestGenerator<>("A", "B");
+    source.init(new DefaultBeneratorContext());
+    Generator<String> generator = fcn.applyTo(source, false);
+    generator.init(context);
+    int n = 1000;
+    Map<String, AtomicInteger> counts = countProducts(generator, n);
+    assertEquals(2, counts.size());
+    assertTrue(counts.get("A").doubleValue() > counts.get("B").doubleValue());
+  }
+
 }

@@ -28,11 +28,11 @@ package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
-import com.rapiddweller.commons.Accessor;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.StringUtil;
-import com.rapiddweller.commons.accessor.FeatureAccessor;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
+import com.rapiddweller.common.Accessor;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.accessor.FeatureAccessor;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.math.ArithmeticEngine;
 
@@ -40,49 +40,73 @@ import com.rapiddweller.script.math.ArithmeticEngine;
  * {@link Consumer} implementation which sums up the values of a 'feature' of all objects it consumes
  * and return the sum as 'sum' property of type 'type'.<br/><br/>
  * Created: 03.04.2010 07:41:42
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class AddingConsumer extends AbstractConsumer {
 
-	private Accessor<Object, Number> accessor;
-	
-	private Class<? extends Number> numberType;
-	
-    private Converter<Number, ? extends Number> converter;
-	
-	private Number sum;
-	
-	public AddingConsumer() {
-		this(null, null);
-	}
-	
-	public AddingConsumer(String feature, String type) {
-	    setFeature(feature);
-	    setType(type);
-    }
+  private Accessor<Object, Number> accessor;
 
-	public void setFeature(String feature) {
-		this.accessor = (feature != null ? new FeatureAccessor<Object, Number>(feature, true) : null);
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-    public void setType(String typeName) {
-		if (StringUtil.isEmpty(typeName))
-			typeName = "double";
-		this.numberType = (Class<? extends Number>) PrimitiveType.getInstance(typeName).getJavaType();
-		this.converter = new NumberToNumberConverter(Number.class, numberType);
-		this.sum = converter.convert(0);
-	}
-	
-	public Number getSum() {
-		return this.sum;
-	}
-	
-	@Override
-	public void startProductConsumption(Object object) {
-	    Number addend = converter.convert(accessor.getValue(object));
-	    this.sum = (Number) ArithmeticEngine.defaultInstance().add(sum, addend);
+  private Converter<Number, ? extends Number> converter;
+
+  private Number sum;
+
+  /**
+   * Instantiates a new Adding consumer.
+   */
+  public AddingConsumer() {
+    this(null, null);
+  }
+
+  /**
+   * Instantiates a new Adding consumer.
+   *
+   * @param feature the feature
+   * @param type    the type
+   */
+  public AddingConsumer(String feature, String type) {
+    setFeature(feature);
+    setType(type);
+  }
+
+  /**
+   * Sets feature.
+   *
+   * @param feature the feature
+   */
+  public void setFeature(String feature) {
+    this.accessor = (feature != null ? new FeatureAccessor<>(feature, true) : null);
+  }
+
+  /**
+   * Sets type.
+   *
+   * @param typeName the type name
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public void setType(String typeName) {
+    if (StringUtil.isEmpty(typeName)) {
+      typeName = "double";
     }
+    Class<? extends Number> numberType = (Class<? extends Number>) PrimitiveType.getInstance(typeName).getJavaType();
+    this.converter = new NumberToNumberConverter(Number.class, numberType);
+    this.sum = converter.convert(0);
+  }
+
+  /**
+   * Gets sum.
+   *
+   * @return the sum
+   */
+  public Number getSum() {
+    return this.sum;
+  }
+
+  @Override
+  public void startProductConsumption(Object object) {
+    Number addend = converter.convert(accessor.getValue(object));
+    this.sum = (Number) ArithmeticEngine.defaultInstance().add(sum, addend);
+  }
 
 }

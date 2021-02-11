@@ -34,17 +34,21 @@ import org.junit.Test;
 /**
  * Tests the {@link OffsetBasedGenerator}.<br/><br/>
  * Created: 23.07.2011 10:04:27
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class OffsetBasedGeneratorTest extends GeneratorTest {
 
-	@Test
-	public void test() {
-		Generator<Integer> source = new SequenceTestGenerator<Integer>(1, 2, 3);
-		Generator<Integer> generator = new OffsetBasedGenerator<Integer>(source, 1);
-		generator.init(context);
-		expectGeneratedSequence(generator, 2, 3).withCeasedAvailability();
-	}
-	
+  /**
+   * Test.
+   */
+  @Test
+  public void test() {
+    Generator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
+    Generator<Integer> generator = new OffsetBasedGenerator<>(source, 1);
+    generator.init(context);
+    expectGeneratedSequence(generator, 2, 3).withCeasedAvailability();
+  }
+
 }

@@ -31,40 +31,54 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
 
 /**
- * Abstract implementation of the Consumer interface. 
- * Custom implementations should rather inherit from this class 
+ * Abstract implementation of the Consumer interface.
+ * Custom implementations should rather inherit from this class
  * than implement the Consumer interface directly.
- * This increases the chance to keep custom consumers compatible 
+ * This increases the chance to keep custom consumers compatible
  * with future versions.<br/><br/>
  * Created: 25.01.2008 22:37:42
- * @since 0.4.0
+ *
  * @author Volker Bergmann
+ * @since 0.4.0
  */
 public abstract class AbstractConsumer implements Consumer {
-	
-	@Override
-	public void startConsuming(ProductWrapper<?> wrapper) {
-		startProductConsumption(wrapper.unwrap());
-	}
-	
-	@Override
-	public void finishConsuming(ProductWrapper<?> wrapper) {
-		finishProductConsumption(wrapper.unwrap());
-	}
 
-	public abstract void startProductConsumption(Object object);
-	
-	public void finishProductConsumption(Object object) { }
-	
-    @Override
-	public void flush() { }
-    
-    @Override
-	public void close() { }
-    
-    @Override
-    public String toString() {
-    	return getClass().getSimpleName();
-    }
-    
+  @Override
+  public void startConsuming(ProductWrapper<?> wrapper) {
+    startProductConsumption(wrapper.unwrap());
+  }
+
+  @Override
+  public void finishConsuming(ProductWrapper<?> wrapper) {
+    finishProductConsumption(wrapper.unwrap());
+  }
+
+  /**
+   * Start product consumption.
+   *
+   * @param object the object
+   */
+  public abstract void startProductConsumption(Object object);
+
+  /**
+   * Finish product consumption.
+   *
+   * @param object the object
+   */
+  public void finishProductConsumption(Object object) {
+  }
+
+  @Override
+  public void flush() {
+  }
+
+  @Override
+  public void close() {
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
+
 }

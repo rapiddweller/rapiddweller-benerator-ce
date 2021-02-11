@@ -26,11 +26,11 @@
 
 package com.rapiddweller.platform.db;
 
+import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.DataSource;
 import com.rapiddweller.model.data.AbstractEntitySource;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.formats.DataIterator;
-import com.rapiddweller.formats.DataSource;
 
 import java.sql.ResultSet;
 
@@ -42,23 +42,29 @@ import java.sql.ResultSet;
  */
 public class EntityResultSetDataSource extends AbstractEntitySource {
 
-    private final DataSource<ResultSet> source;
-    private final ComplexTypeDescriptor entityDescriptor;
+  private final DataSource<ResultSet> source;
+  private final ComplexTypeDescriptor entityDescriptor;
 
-    public EntityResultSetDataSource(DataSource<ResultSet> source,
-                                     ComplexTypeDescriptor entityDescriptor) {
-        this.source = source;
-        this.entityDescriptor = entityDescriptor;
-    }
+  /**
+   * Instantiates a new Entity result set data source.
+   *
+   * @param source           the source
+   * @param entityDescriptor the entity descriptor
+   */
+  public EntityResultSetDataSource(DataSource<ResultSet> source,
+                                   ComplexTypeDescriptor entityDescriptor) {
+    this.source = source;
+    this.entityDescriptor = entityDescriptor;
+  }
 
-    @Override
-    public DataIterator<Entity> iterator() {
-        return new ResultSetEntityIterator(source.iterator(), entityDescriptor);
-    }
+  @Override
+  public DataIterator<Entity> iterator() {
+    return new ResultSetEntityIterator(source.iterator(), entityDescriptor);
+  }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + '[' + source + ']';
-    }
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + '[' + source + ']';
+  }
 
 }

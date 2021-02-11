@@ -32,29 +32,36 @@ import com.rapiddweller.benerator.Generator;
  * Converts the {@link Number} products of another {@link Generator} to {@link Short}.<br/>
  * <br/>
  * Created at 23.06.2009 22:58:26
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
-
 public class AsShortGeneratorWrapper<E extends Number> extends GeneratorWrapper<E, Short> {
 
-    public AsShortGeneratorWrapper(Generator<E> source) {
-	    super(source);
-    }
+  /**
+   * Instantiates a new As short generator wrapper.
+   *
+   * @param source the source
+   */
+  public AsShortGeneratorWrapper(Generator<E> source) {
+    super(source);
+  }
 
-	@Override
-	public Class<Short> getGeneratedType() {
-	    return Short.class;
-    }
+  @Override
+  public Class<Short> getGeneratedType() {
+    return Short.class;
+  }
 
-	@Override
-	public ProductWrapper<Short> generate(ProductWrapper<Short> wrapper) {
-    	assertInitialized();
-	    ProductWrapper<E> tmp = generateFromSource();
-	    if (tmp == null)
-	    	return null;
-		E feed = tmp.unwrap();
-		return wrapper.wrap(feed.shortValue());
+  @Override
+  public ProductWrapper<Short> generate(ProductWrapper<Short> wrapper) {
+    assertInitialized();
+    ProductWrapper<E> tmp = generateFromSource();
+    if (tmp == null) {
+      return null;
     }
+    E feed = tmp.unwrap();
+    return wrapper.wrap(feed.shortValue());
+  }
 
 }

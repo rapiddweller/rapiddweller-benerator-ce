@@ -27,49 +27,65 @@
 package com.rapiddweller.benerator.distribution.sequence;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.CollectionUtil;
-import com.rapiddweller.commons.validator.ConstantValidator;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.validator.ConstantValidator;
 import org.junit.Test;
 
 /**
  * Tests the {@link RandomLongGenerator}.<br/>
  * <br/>
  * Created: 11.10.2006 23:03:30
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class RandomLongGeneratorTest extends GeneratorClassTest {
 
-    public RandomLongGeneratorTest() {
-        super(RandomLongGenerator.class);
-    }
-    
-    @Test
-    public void testZeroRange() {
-        RandomLongGenerator generator = new RandomLongGenerator(42L, 42L);
-        generator.init(context);
-        expectGenerations(generator, 3000, new ConstantValidator(42L));
-    }
+  /**
+   * Instantiates a new Random long generator test.
+   */
+  public RandomLongGeneratorTest() {
+    super(RandomLongGenerator.class);
+  }
 
-    @Test
-    public void testSimple() {
-        RandomLongGenerator generator = new RandomLongGenerator(0, 1L);
-        generator.init(context);
-        checkEqualDistribution(generator, 3000, 0.1, CollectionUtil.toSet(0L, 1L));
-    }
+  /**
+   * Test zero range.
+   */
+  @Test
+  public void testZeroRange() {
+    RandomLongGenerator generator = new RandomLongGenerator(42L, 42L);
+    generator.init(context);
+    expectGenerations(generator, 3000, new ConstantValidator(42L));
+  }
 
-    @Test
-    public void testGranularity() {
-        RandomLongGenerator generator = new RandomLongGenerator(-2, 2L, 2);
-        generator.init(context);
-        checkEqualDistribution(generator, 3000, 0.1, CollectionUtil.toSet(-2L, 0L, 2L));
-    }
+  /**
+   * Test simple.
+   */
+  @Test
+  public void testSimple() {
+    RandomLongGenerator generator = new RandomLongGenerator(0, 1L);
+    generator.init(context);
+    checkEqualDistribution(generator, 3000, 0.1, CollectionUtil.toSet(0L, 1L));
+  }
 
-    @Test
-    public void testGranularityOffset() {
-        RandomLongGenerator generator = new RandomLongGenerator(-1, 3L, 2);
-        generator.init(context);
-        checkEqualDistribution(generator, 3000, 0.1, CollectionUtil.toSet(-1L, 1L, 3L));
-    }
+  /**
+   * Test granularity.
+   */
+  @Test
+  public void testGranularity() {
+    RandomLongGenerator generator = new RandomLongGenerator(-2, 2L, 2);
+    generator.init(context);
+    checkEqualDistribution(generator, 3000, 0.1, CollectionUtil.toSet(-2L, 0L, 2L));
+  }
+
+  /**
+   * Test granularity offset.
+   */
+  @Test
+  public void testGranularityOffset() {
+    RandomLongGenerator generator = new RandomLongGenerator(-1, 3L, 2);
+    generator.init(context);
+    checkEqualDistribution(generator, 3000, 0.1, CollectionUtil.toSet(-1L, 1L, 3L));
+  }
 
 }

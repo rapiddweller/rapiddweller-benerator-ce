@@ -26,82 +26,107 @@
 
 package com.rapiddweller.benerator.composite;
 
-import java.util.List;
-
 import com.rapiddweller.benerator.engine.AbstractScopedLifeCycleHolder;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.util.RandomUtil;
-import com.rapiddweller.commons.ArrayFormat;
-import com.rapiddweller.commons.CollectionUtil;
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.CollectionUtil;
+
+import java.util.List;
 
 /**
  * Abstract parent class for all builders that relate to a group of components.<br/><br/>
  * Created at 09.05.2008 13:38:33
- * @since 0.5.4
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.5.4
  */
 public abstract class MultiComponentBuilder<E> extends AbstractScopedLifeCycleHolder implements ComponentBuilder<E> {
-	
-	protected ComponentBuilder<E>[] builders;
-	private List<ComponentBuilder<E>> availableBuilders;
-	protected String message;
 
-	public MultiComponentBuilder(ComponentBuilder<E>[] builders, String scope) {
-		super(scope);
-		this.builders = builders;
-		this.availableBuilders = CollectionUtil.toList(builders);
-	}
-	
-	@Override
-	public String getMessage() {
-		return message;
-	}
-	
-	// Generator interface ---------------------------------------------------------------------------------------------
+  /**
+   * The Builders.
+   */
+  protected final ComponentBuilder<E>[] builders;
+  private List<ComponentBuilder<E>> availableBuilders;
+  /**
+   * The Message.
+   */
+  protected String message;
 
-	@Override
-	public void init(BeneratorContext context) {
-		for (ComponentBuilder<E> builder : builders)
-			builder.init(context);
-	}
+  /**
+   * Instantiates a new Multi component builder.
+   *
+   * @param builders the builders
+   * @param scope    the scope
+   */
+  public MultiComponentBuilder(ComponentBuilder<E>[] builders, String scope) {
+    super(scope);
+    this.builders = builders;
+    this.availableBuilders = CollectionUtil.toList(builders);
+  }
 
-	@Override
-	public void reset() {
-		for (ComponentBuilder<E> builder : builders)
-			builder.reset();
-		this.availableBuilders = CollectionUtil.toList(builders);
-	}
+  @Override
+  public String getMessage() {
+    return message;
+  }
 
-	@Override
-	public void close() {
-		for (ComponentBuilder<E> builder : builders)
-			builder.close();
-		this.availableBuilders.clear();
-	}
-	
-	public boolean buildRandomComponent(BeneratorContext context) {
-		message = null;
-		if (availableBuilders.size() == 0) {
-			message = "No component available: " + this;
-			return false;
-		}
-		boolean success;
-		do {
-			int builderIndex = RandomUtil.randomIndex(availableBuilders);
-			success = availableBuilders.get(builderIndex).execute(context);
-			if (!success)
-				availableBuilders.remove(builderIndex);
-		} while (!success && availableBuilders.size() > 0);
-		if (!success)
-			message = "No component available: " + this;
-	    return success;
-	}
-	
-	// java.lang.Object overrides --------------------------------------------------------------------------------------
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + ArrayFormat.format(builders);
-	}
-	
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(BeneratorContext context) {
+    for (ComponentBuilder<E> builder : builders) {
+      builder.init(context);
+    }
+  }
+
+  @Override
+  public void reset() {
+    for (ComponentBuilder<E> builder : builders) {
+      builder.reset();
+    }
+    this.availableBuilders = CollectionUtil.toList(builders);
+  }
+
+  @Override
+  public void close() {
+    for (ComponentBuilder<E> builder : builders) {
+      builder.close();
+    }
+    this.availableBuilders.clear();
+  }
+
+  /**
+   * Build random component boolean.
+   *
+   * @param context the context
+   * @return the boolean
+   */
+  public boolean buildRandomComponent(BeneratorContext context) {
+    message = null;
+    if (availableBuilders.size() == 0) {
+      message = "No component available: " + this;
+      return false;
+    }
+    boolean success;
+    do {
+      int builderIndex = RandomUtil.randomIndex(availableBuilders);
+      success = availableBuilders.get(builderIndex).execute(context);
+      if (!success) {
+        availableBuilders.remove(builderIndex);
+      }
+    } while (!success && availableBuilders.size() > 0);
+    if (!success) {
+      message = "No component available: " + this;
+    }
+    return success;
+  }
+
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + ArrayFormat.format(builders);
+  }
+
 }

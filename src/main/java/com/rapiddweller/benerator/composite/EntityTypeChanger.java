@@ -26,36 +26,49 @@
 
 package com.rapiddweller.benerator.composite;
 
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 
 /**
- * Converts entities of arbitrary name to entities with a new name, 
+ * Converts entities of arbitrary name to entities with a new name,
  * keeping the attributes unchanged.<br/><br/>
  * Created: 09.07.2010 09:00:55
- * @since 0.6.3
+ *
  * @author Volker Bergmann
+ * @since 0.6.3
  */
 public class EntityTypeChanger extends ThreadSafeConverter<Entity, Entity> {
-	
-	private ComplexTypeDescriptor targetType;
-	
-	public EntityTypeChanger(ComplexTypeDescriptor targetType) {
-	    super(Entity.class, Entity.class);
-	    this.targetType = targetType;
-    }
 
-	@Override
-	public Entity convert(Entity entity) throws ConversionException {
-		return changeType(entity, targetType);
-    }
+  private final ComplexTypeDescriptor targetType;
 
-	public static Entity changeType(Entity entity, ComplexTypeDescriptor targetType) {
-	    Entity result = new Entity(targetType);
-	    result.setComponents(entity.getComponents());
-	    return result;
-	}
-	
+  /**
+   * Instantiates a new Entity type changer.
+   *
+   * @param targetType the target type
+   */
+  public EntityTypeChanger(ComplexTypeDescriptor targetType) {
+    super(Entity.class, Entity.class);
+    this.targetType = targetType;
+  }
+
+  @Override
+  public Entity convert(Entity entity) throws ConversionException {
+    return changeType(entity, targetType);
+  }
+
+  /**
+   * Change type entity.
+   *
+   * @param entity     the entity
+   * @param targetType the target type
+   * @return the entity
+   */
+  public static Entity changeType(Entity entity, ComplexTypeDescriptor targetType) {
+    Entity result = new Entity(targetType);
+    result.setComponents(entity.getComponents());
+    return result;
+  }
+
 }

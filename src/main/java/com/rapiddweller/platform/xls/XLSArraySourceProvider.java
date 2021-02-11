@@ -28,12 +28,12 @@ package com.rapiddweller.platform.xls;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.DataSourceProvider;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.converter.ArrayConverter;
-import com.rapiddweller.formats.DataSource;
-import com.rapiddweller.formats.util.ConvertingDataSource;
-import com.rapiddweller.formats.util.OffsetDataSource;
-import com.rapiddweller.formats.xls.XLSSource;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.converter.ArrayConverter;
+import com.rapiddweller.format.DataSource;
+import com.rapiddweller.format.util.ConvertingDataSource;
+import com.rapiddweller.format.util.OffsetDataSource;
+import com.rapiddweller.format.xls.XLSSource;
 
 /**
  * {@link DataSourceProvider} implementation which creates {@link XLSSource}s.<br/><br/>
@@ -44,27 +44,42 @@ import com.rapiddweller.formats.xls.XLSSource;
  */
 public class XLSArraySourceProvider implements DataSourceProvider<Object[]> {
 
-    private final boolean formatted;
-    private final Converter<?, ?> scriptConverter;
-    private final String emptyMarker;
-    private final String nullMarker;
-    private final boolean rowBased;
+  private final boolean formatted;
+  private final Converter<?, ?> scriptConverter;
+  private final String emptyMarker;
+  private final String nullMarker;
+  private final boolean rowBased;
 
-    public XLSArraySourceProvider(boolean formatted, Converter<?, ?> scriptConverter, String emptyMarker, String nullMarker, boolean rowBased) {
-        this.formatted = formatted;
-        this.scriptConverter = scriptConverter;
-        this.emptyMarker = emptyMarker;
-        this.nullMarker = nullMarker;
-        this.rowBased = rowBased;
-    }
+  /**
+   * Instantiates a new Xls array source provider.
+   *
+   * @param formatted       the formatted
+   * @param scriptConverter the script converter
+   * @param emptyMarker     the empty marker
+   * @param nullMarker      the null marker
+   * @param rowBased        the row based
+   */
+  public XLSArraySourceProvider(boolean formatted,
+                                Converter<?, ?> scriptConverter,
+                                String emptyMarker, String nullMarker,
+                                boolean rowBased) {
+    this.formatted = formatted;
+    this.scriptConverter = scriptConverter;
+    this.emptyMarker = emptyMarker;
+    this.nullMarker = nullMarker;
+    this.rowBased = rowBased;
+  }
 
-    @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public DataSource<Object[]> create(String uri, BeneratorContext context) {
-        DataSource<Object[]> source = new XLSSource(uri, formatted, emptyMarker, nullMarker, rowBased);
-        source = new OffsetDataSource<Object[]>(source, 1); // skip header row
-        Converter<Object[], Object[]> converter = new ArrayConverter(Object.class, Object.class, scriptConverter);
-        return new ConvertingDataSource<Object[], Object[]>(source, converter);
-    }
+  @Override
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public DataSource<Object[]> create(String uri, BeneratorContext context) {
+    DataSource<Object[]> source =
+        new XLSSource(uri, formatted, emptyMarker, nullMarker,
+            rowBased);
+    source = new OffsetDataSource<>(source, 1); // skip header row
+    Converter<Object[], Object[]> converter =
+        new ArrayConverter(Object.class, Object.class, scriptConverter);
+    return new ConvertingDataSource<>(source, converter);
+  }
 
 }

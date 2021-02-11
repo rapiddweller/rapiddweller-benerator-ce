@@ -26,41 +26,49 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static org.junit.Assert.*;
-
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.statement.WaitStatement;
-import com.rapiddweller.commons.xml.XMLUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.Test;
 import org.w3c.dom.Element;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests {@link WaitParser} and {@link WaitStatement}.<br/><br/>
  * Created: 21.02.2010 08:04:48
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class WaitParserAndStatementTest {
-	
-	@Test
-	public void testConstantDuration() throws Exception {
-		Element element = XMLUtil.parseStringAsElement("<wait duration='12'/>");
-		BeneratorContext context = new DefaultBeneratorContext();
-		WaitStatement statement = (WaitStatement) new WaitParser().parse(element, null, null);
-		assertEquals(12, statement.generateDuration(context));
-		statement.execute(context);
-	}
 
-	@Test
-	public void testDistributedDuration() throws Exception {
-		Element element = XMLUtil.parseStringAsElement(
-				"<wait min='11' max='25' granularity='2' distribution='step'/>");
-		BeneratorContext context = new DefaultBeneratorContext();
-		WaitStatement statement = (WaitStatement) new WaitParser().parse(element, null, null);
-		for (int i = 0; i < 5; i++)
-			assertEquals(11 + i * 2, statement.generateDuration(context));
-		statement.execute(context);
-	}
+  /**
+   * Test constant duration.
+   */
+  @Test
+  public void testConstantDuration() {
+    Element element = XMLUtil.parseStringAsElement("<wait duration='12'/>");
+    BeneratorContext context = new DefaultBeneratorContext();
+    WaitStatement statement = (WaitStatement) new WaitParser().parse(element, null, null);
+    assertEquals(12, statement.generateDuration(context));
+    statement.execute(context);
+  }
+
+  /**
+   * Test distributed duration.
+   */
+  @Test
+  public void testDistributedDuration() {
+    Element element = XMLUtil.parseStringAsElement(
+        "<wait min='11' max='25' granularity='2' distribution='step'/>");
+    BeneratorContext context = new DefaultBeneratorContext();
+    WaitStatement statement = (WaitStatement) new WaitParser().parse(element, null, null);
+    for (int i = 0; i < 5; i++) {
+      assertEquals(11 + i * 2, statement.generateDuration(context));
+    }
+    statement.execute(context);
+  }
 
 }

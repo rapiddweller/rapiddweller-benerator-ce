@@ -26,62 +26,63 @@
 
 package com.rapiddweller.benerator.factory;
 
-import java.util.Date;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.converter.NumberToNumberConverter;
 
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.commons.converter.NumberToNumberConverter;
+import java.util.Date;
 
 /**
  * {@link DefaultsProvider} implementation which creates gentle defaults, trying to provoke as little errors as possible.<br/><br/>
  * Created: 15.07.2011 21:16:59
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class GentleDefaultsProvider implements DefaultsProvider {
 
-	@Override
-	public <T extends Number> T defaultMin(Class<T> numberType) {
-		return NumberToNumberConverter.convert(1, numberType);
-	}
-	
-	@Override
-	public <T extends Number> T defaultMax(Class<T> numberType) {
-		return NumberToNumberConverter.convert(9, numberType);
-	}
-	
-	@Override
-	public <T extends Number> T defaultGranularity(Class<T> numberType) {
-		return NumberToNumberConverter.convert(1, numberType);
-	}
-	
-	@Override
-	public int defaultMinLength() {
-		return 1;
-	}
-	
-	@Override
-	public Integer defaultMaxLength() {
-		return 30;
-	}
-	
-	@Override
-	public boolean defaultNullable() {
-		return false;
-	}
-	
-	@Override
-	public double defaultNullQuota() {
-		return 1.;
-	}
+  @Override
+  public <T extends Number> T defaultMin(Class<T> numberType) {
+    return NumberToNumberConverter.convert(1, numberType);
+  }
 
-	@Override
-	public Date defaultMinDate() {
-		return TimeUtil.today();
-	}
+  @Override
+  public <T extends Number> T defaultMax(Class<T> numberType) {
+    return NumberToNumberConverter.convert(9, numberType);
+  }
 
-	@Override
-	public Date defaultMaxDate() {
-		return TimeUtil.addYears(TimeUtil.today(), 2);
-	}
+  @Override
+  public <T extends Number> T defaultGranularity(Class<T> numberType) {
+    return NumberToNumberConverter.convert(1, numberType);
+  }
+
+  @Override
+  public int defaultMinLength() {
+    return 1;
+  }
+
+  @Override
+  public Integer defaultMaxLength() {
+    return 30;
+  }
+
+  @Override
+  public boolean defaultNullable() {
+    return false;
+  }
+
+  @Override
+  public double defaultNullQuota() {
+    return 1.;
+  }
+
+  @Override
+  public Date defaultMinDate() {
+    return TimeUtil.today();
+  }
+
+  @Override
+  public Date defaultMaxDate() {
+    return TimeUtil.addYears(TimeUtil.today(), 2);
+  }
 
 }

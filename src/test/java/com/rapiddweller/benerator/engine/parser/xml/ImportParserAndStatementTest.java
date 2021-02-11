@@ -31,58 +31,74 @@ import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ImportStatement;
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.SyntaxError;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.SyntaxError;
 import org.junit.Test;
 
 /**
  * Tests {@link ImportParser} and {@link ImportStatement}.<br/><br/>
  * Created: 01.05.2010 07:24:25
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 public class ImportParserAndStatementTest extends BeneratorIntegrationTest {
-	
-	@Test(expected = ConfigurationError.class)
-	public void testNoImport() {
-		BeneratorContext context = new DefaultBeneratorContext();
-		try {
-			context.forName("IncrementGenerator");
-		} finally {
-			IOUtil.close(context);
-		}
-	}
-	
-	@Test
-	public void testDefaults() {
-		Statement statement = parse("<import defaults='true' />");
-		BeneratorContext context = new DefaultBeneratorContext();
-		statement.execute(context);
-		context.forName("IncrementGenerator");
-	}
-	
-	@Test
-	public void testPlatforms() {
-		Statement statement = parse("<import platforms='db, xml' />");
-		BeneratorContext context = new DefaultBeneratorContext();
-		statement.execute(context);
-		context.forName("DBSystem");
-		context.forName("XMLEntityExporter");
-	}
-	
-	@Test
-	public void testDomains() {
-		Statement statement = parse("<import domains='person, address' />");
-		BeneratorContext context = new DefaultBeneratorContext();
-		statement.execute(context);
-		context.forName("PersonGenerator");
-		context.forName("AddressGenerator");
-	}
-	
-	@Test(expected = SyntaxError.class)
-	public void testImportAttributeTypo() throws Exception {
-		parse("<import platmof='typo' />");
-	}
+
+  /**
+   * Test no import.
+   */
+  @Test(expected = ConfigurationError.class)
+  public void testNoImport() {
+    BeneratorContext context = new DefaultBeneratorContext();
+    try {
+      context.forName("IncrementGenerator");
+    } finally {
+      IOUtil.close(context);
+    }
+  }
+
+  /**
+   * Test defaults.
+   */
+  @Test
+  public void testDefaults() {
+    Statement statement = parse("<import defaults='true' />");
+    BeneratorContext context = new DefaultBeneratorContext();
+    statement.execute(context);
+    context.forName("IncrementGenerator");
+  }
+
+  /**
+   * Test platforms.
+   */
+  @Test
+  public void testPlatforms() {
+    Statement statement = parse("<import platforms='db, xml' />");
+    BeneratorContext context = new DefaultBeneratorContext();
+    statement.execute(context);
+    context.forName("DBSystem");
+    context.forName("XMLEntityExporter");
+  }
+
+  /**
+   * Test domains.
+   */
+  @Test
+  public void testDomains() {
+    Statement statement = parse("<import domains='person, address' />");
+    BeneratorContext context = new DefaultBeneratorContext();
+    statement.execute(context);
+    context.forName("PersonGenerator");
+    context.forName("AddressGenerator");
+  }
+
+  /**
+   * Test import attribute typo.
+   */
+  @Test(expected = SyntaxError.class)
+  public void testImportAttributeTypo() {
+    parse("<import platmof='typo' />");
+  }
 
 }

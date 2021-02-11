@@ -27,26 +27,33 @@
 package com.rapiddweller.benerator.primitive.datetime;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.commons.validator.ConstantValidator;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.validator.ConstantValidator;
 import org.junit.Test;
 
 /**
  * Tests the CurrentDateGenerator.<br/>
  * <br/>
  * Created: 19.11.2007 20:43:45
+ *
  * @author Volker Bergmann
  */
 public class CurrentDateGeneratorTest extends GeneratorClassTest {
 
-    public CurrentDateGeneratorTest() {
-        super(CurrentDateGenerator.class);
-    }
+  /**
+   * Instantiates a new Current date generator test.
+   */
+  public CurrentDateGeneratorTest() {
+    super(CurrentDateGenerator.class);
+  }
 
-    @Test
-    public void testProducts() {
-        ConstantValidator validator = new ConstantValidator(TimeUtil.today());
-		expectGenerations(new CurrentDateGenerator(), 10, validator);
-    }
-    
+  /**
+   * Test products.
+   */
+  @Test
+  public void testProducts() {
+    ConstantValidator validator = new ConstantValidator(TimeUtil.today());
+    expectGenerations(new CurrentDateGenerator(), 10, validator);
+  }
+
 }

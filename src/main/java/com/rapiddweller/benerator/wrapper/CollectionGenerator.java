@@ -29,88 +29,127 @@ package com.rapiddweller.benerator.wrapper;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
-import com.rapiddweller.commons.BeanUtil;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
+import com.rapiddweller.common.BeanUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Combines a a random number a source generator's products into a collection.<br/>
  * <br/>
  * Created: 07.07.2006 19:13:22
- * @since 0.1
+ *
+ * @param <C> the type parameter
+ * @param <I> the type parameter
  * @author Volker Bergmann
+ * @since 0.1
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class CollectionGenerator<C extends Collection, I> extends CardinalGenerator<I, C> {
 
-    /** The collection type to create */
-    private Class<C> collectionType;
+  /**
+   * The collection type to create
+   */
+  private Class<C> collectionType;
 
-    // constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-    public CollectionGenerator() {
-        this(((Class<C>)List.class), null, 0, 30, SequenceManager.RANDOM_SEQUENCE);
+  /**
+   * Instantiates a new Collection generator.
+   */
+  public CollectionGenerator() {
+    this(((Class<C>) List.class), null, 0, 30, SequenceManager.RANDOM_SEQUENCE);
+  }
+
+  /**
+   * Instantiates a new Collection generator.
+   *
+   * @param collectionType   the collection type
+   * @param source           the source
+   * @param minSize          the min size
+   * @param maxSize          the max size
+   * @param sizeDistribution the size distribution
+   */
+  public CollectionGenerator(Class<C> collectionType, Generator<I> source,
+                             int minSize, int maxSize, Distribution sizeDistribution) {
+    super(source, false, minSize, maxSize, 1, sizeDistribution);
+    this.collectionType = mapCollectionType(collectionType);
+  }
+
+  // configuration properties ----------------------------------------------------------------------------------------
+
+  /**
+   * Gets collection type.
+   *
+   * @return the collection type
+   */
+  public Class<C> getCollectionType() {
+    return collectionType;
+  }
+
+  /**
+   * Sets collection type.
+   *
+   * @param collectionType the collection type
+   */
+  public void setCollectionType(Class<C> collectionType) {
+    this.collectionType = collectionType;
+  }
+
+  // Generator interface ---------------------------------------------------------------------------------------------
+
+  /**
+   * ensures consistency of the state
+   */
+  @Override
+  public void init(GeneratorContext context) {
+    if (collectionType == null) {
+      throw new InvalidGeneratorSetupException("collectionType", "undefined");
     }
+    super.init(context);
+  }
 
-    public CollectionGenerator(Class<C> collectionType, Generator<I> source,
-    		int minSize, int maxSize, Distribution sizeDistribution) {
-        super(source, false, minSize, maxSize, 1, sizeDistribution);
-        this.collectionType = mapCollectionType(collectionType);
+  @Override
+  public Class<C> getGeneratedType() {
+    return collectionType;
+  }
+
+  @Override
+  public ProductWrapper<C> generate(ProductWrapper<C> wrapper) {
+    assertInitialized();
+    Integer size = generateCardinal();
+    if (size == null) {
+      return null;
     }
-
-    // configuration properties ----------------------------------------------------------------------------------------
-
-    public Class<C> getCollectionType() {
-        return collectionType;
+    C collection = BeanUtil.newInstance(collectionType);
+    for (int i = 0; i < size; i++) {
+      ProductWrapper<I> item = generateFromSource();
+      if (item == null) {
+        return null;
+      }
+      collection.add(item.unwrap());
     }
+    return wrapper.wrap(collection);
+  }
 
-    public void setCollectionType(Class<C> collectionType) {
-        this.collectionType = collectionType;
+  // implementation --------------------------------------------------------------------------------------------------
+
+  /**
+   * maps abstract collection types to concrete ones
+   */
+  private static <C extends Collection> Class<C> mapCollectionType(Class<C> collectionType) {
+    if (List.class.equals(collectionType)) {
+      return (Class<C>) ArrayList.class;
+    } else if (Set.class.equals(collectionType)) {
+      return (Class<C>) HashSet.class;
+    } else {
+      return collectionType;
     }
-
-    // Generator interface ---------------------------------------------------------------------------------------------
-
-    /** ensures consistency of the state */
-    @Override
-    public void init(GeneratorContext context) {
-        if (collectionType == null)
-            throw new InvalidGeneratorSetupException("collectionType", "undefined");
-        super.init(context);
-    }
-
-    @Override
-	public Class<C> getGeneratedType() {
-        return collectionType;
-    }
-
-	@Override
-	public ProductWrapper<C> generate(ProductWrapper<C> wrapper) {
-        assertInitialized();
-        Integer size = generateCardinal();
-        if (size == null)
-        	return null;
-        C collection = BeanUtil.newInstance(collectionType);
-        for (int i = 0; i < size; i++) {
-        	ProductWrapper<I> item = generateFromSource();
-        	if (item == null)
-        		return null;
-            collection.add(item.unwrap());
-        }
-        return wrapper.wrap(collection);
-    }
-
-    // implementation --------------------------------------------------------------------------------------------------
-
-    /** maps abstract collection types to concrete ones */
-    private static <C extends Collection> Class<C> mapCollectionType(Class<C> collectionType) {
-        if (List.class.equals(collectionType))
-            return (Class<C>) ArrayList.class;
-        else if (Set.class.equals(collectionType))
-            return (Class<C>) HashSet.class;
-        else
-            return collectionType;
-    }
+  }
 
 }

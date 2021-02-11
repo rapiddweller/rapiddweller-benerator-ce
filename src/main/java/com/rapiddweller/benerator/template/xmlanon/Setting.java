@@ -29,31 +29,47 @@ package com.rapiddweller.benerator.template.xmlanon;
 /**
  * Key-value pair for an anonymization setting.<br/><br/>
  * Created: 27.02.2014 14:10:51
- * @since 0.9.0
+ *
  * @author Volker Bergmann
+ * @since 0.9.0
  */
-
 public class Setting {
-	
-	private String key;
-	private String value;
-	
-	Setting(String key, String value) {
-		this.key = key;
-		this.value = value;
-	}
 
-	public String getKey() {
-		return key;
-	}
+  private final String key;
+  private final String value;
 
-	public String getValue() {
-		return value;
-	}
-	
-	@Override
-	public String toString() {
-		return key + "=\"" + value + '"';
-	}
-	
+  /**
+   * Instantiates a new Setting.
+   *
+   * @param key   the key
+   * @param value the value
+   */
+  Setting(String key, String value) {
+    this.key = key;
+    this.value = value;
+  }
+
+  /**
+   * Gets key.
+   *
+   * @return the key
+   */
+  public String getKey() {
+    return key;
+  }
+
+  /**
+   * Gets value.
+   *
+   * @return the value
+   */
+  public String getValue() {
+    return value;
+  }
+
+  @Override
+  public String toString() {
+    return key + "=\"" + value + '"';
+  }
+
 }

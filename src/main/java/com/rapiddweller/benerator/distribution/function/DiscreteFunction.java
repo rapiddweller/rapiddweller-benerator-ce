@@ -33,21 +33,27 @@ import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
  * On invocation it rounds the function argument to the floor
  * and returns the arrays value of that index.<br/><br/>
  * Created: 20.09.2006 19:04:00
+ *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class DiscreteFunction extends AbstractWeightFunction {
 
-    private double[] values;
+  private final double[] values;
 
-    public DiscreteFunction(double ... weights) {
-        this.values = weights;
-    }
+  /**
+   * Instantiates a new Discrete function.
+   *
+   * @param weights the weights
+   */
+  public DiscreteFunction(double... weights) {
+    this.values = weights;
+  }
 
-    @Override
-	public double value(double param) {
-        int index = (int) param;
-        return values[index];
-    }
-    
+  @Override
+  public double value(double param) {
+    int index = (int) param;
+    return values[index];
+  }
+
 }

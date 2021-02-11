@@ -29,12 +29,12 @@ package com.rapiddweller.benerator.sample;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.csv.CSVGeneratorUtil;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
-import com.rapiddweller.commons.Converter;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.converter.NoOpConverter;
+import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.script.WeightedSample;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -50,91 +50,148 @@ import java.util.List;
  * </pre>
  * <br/>
  * Created: 11.06.2006 20:49:33
- * @since 0.1
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
  * @see AttachedWeightSampleGenerator
+ * @since 0.1
  */
 public class WeightedCSVSampleGenerator<E> extends GeneratorProxy<E> {
-	
-	private static final Logger LOGGER = LogManager.getLogger(WeightedCSVSampleGenerator.class);
 
-    /** The URI to read the samples from */
-    protected String uri;
-    
-    protected char separator;
-    
-    private String encoding;
+  private static final Logger LOGGER = LogManager.getLogger(WeightedCSVSampleGenerator.class);
 
-    /** The converter to create instances from the CSV cell strings */
-    private Converter<String, E> converter;
-    
-    
-    
-    // constructors ----------------------------------------------------------------------------------------------------
+  /**
+   * The URI to read the samples from
+   */
+  protected String uri;
 
-    public WeightedCSVSampleGenerator(String url) {
-        this(url, SystemInfo.getFileEncoding());
+  /**
+   * The Separator.
+   */
+  protected char separator;
+
+  private String encoding;
+
+  /**
+   * The converter to create instances from the CSV cell strings
+   */
+  private final Converter<String, E> converter;
+
+
+  // constructors ----------------------------------------------------------------------------------------------------
+
+  /**
+   * Instantiates a new Weighted csv sample generator.
+   *
+   * @param url the url
+   */
+  public WeightedCSVSampleGenerator(String url) {
+    this(url, SystemInfo.getFileEncoding());
+  }
+
+  /**
+   * Instantiates a new Weighted csv sample generator.
+   *
+   * @param url      the url
+   * @param encoding the encoding
+   */
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public WeightedCSVSampleGenerator(String url, String encoding) {
+    this((Class<E>) String.class, url, encoding, new NoOpConverter());
+  }
+
+  /**
+   * Instantiates a new Weighted csv sample generator.
+   *
+   * @param targetType the target type
+   * @param uri        the uri
+   * @param encoding   the encoding
+   * @param converter  the converter
+   */
+  public WeightedCSVSampleGenerator(Class<E> targetType, String uri, String encoding, Converter<String, E> converter) {
+    super(targetType);
+    setSource(new AttachedWeightSampleGenerator<>(targetType));
+    this.converter = converter;
+    this.encoding = encoding;
+    this.separator = ',';
+    if (uri != null && uri.trim().length() > 0) {
+      this.uri = uri;
     }
+  }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public WeightedCSVSampleGenerator(String url, String encoding) {
-        this((Class<E>) String.class, url, encoding, new NoOpConverter());
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  /**
+   * Gets uri.
+   *
+   * @return the uri
+   */
+  public String getUri() {
+    return uri;
+  }
+
+  /**
+   * Sets uri.
+   *
+   * @param uri the uri
+   */
+  public void setUri(String uri) {
+    this.uri = uri;
+  }
+
+  /**
+   * Gets separator.
+   *
+   * @return the separator
+   */
+  public char getSeparator() {
+    return separator;
+  }
+
+  /**
+   * Sets separator.
+   *
+   * @param separator the separator
+   */
+  public void setSeparator(char separator) {
+    this.separator = separator;
+  }
+
+  /**
+   * Gets encoding.
+   *
+   * @return the encoding
+   */
+  public String getEncoding() {
+    return encoding;
+  }
+
+  /**
+   * Sets encoding.
+   *
+   * @param encoding the encoding
+   */
+  public void setEncoding(String encoding) {
+    this.encoding = encoding;
+  }
+
+
+  // generator interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) {
+    List<WeightedSample<E>> samples = CSVGeneratorUtil.parseFile(uri, separator, encoding, converter);
+    AttachedWeightSampleGenerator<E> awSource = (AttachedWeightSampleGenerator<E>) getSource();
+    if (samples.size() > 0) {
+      for (WeightedSample<E> sample : samples) {
+        awSource.addSample(sample.getValue(), sample.getWeight());
+      }
+    } else {
+      awSource.clear();
+      LOGGER.warn("CSV file is empty: {}", uri);
     }
-
-	public WeightedCSVSampleGenerator(Class<E> targetType, String uri, String encoding, Converter<String, E> converter) {
-    	super(targetType);
-        setSource(new AttachedWeightSampleGenerator<E>(targetType));
-        this.converter = converter;
-        this.encoding = encoding;
-        this.separator = ',';
-        if (uri != null && uri.trim().length() > 0)
-            this.uri = uri;
-    }
-    
-    
-    
-    // properties ------------------------------------------------------------------------------------------------------
-
-	public String getUri() {
-		return uri;
-	}
-	
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
-
-	public char getSeparator() {
-		return separator;
-	}
-	
-	public void setSeparator(char separator) {
-		this.separator = separator;
-	}
-	
-	public String getEncoding() {
-		return encoding;
-	}
-	
-	public void setEncoding(String encoding) {
-		this.encoding = encoding;
-	}
-	
-	
-	
-    // generator interface ---------------------------------------------------------------------------------------------
-
-	@Override
-    public void init(GeneratorContext context) {
-        List<WeightedSample<E>> samples = CSVGeneratorUtil.parseFile(uri, separator, encoding, converter);
-        AttachedWeightSampleGenerator<E> awSource = (AttachedWeightSampleGenerator<E>) getSource();
-        if (samples.size() > 0) {
-        	for (WeightedSample<E> sample : samples)
-        		awSource.addSample(sample.getValue(), sample.getWeight());
-        } else {
-        	awSource.clear();
-        	LOGGER.warn("CSV file is empty: {}", uri);
-        }
-    	super.init(context);
-    }
+    super.init(context);
+  }
 
 }

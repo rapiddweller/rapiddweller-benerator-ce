@@ -26,78 +26,135 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGESIZE;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
-
-import java.util.Set;
-
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.ErrorHandlerExpression;
 import com.rapiddweller.benerator.engine.expression.context.DefaultPageSizeExpression;
 import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
 import com.rapiddweller.benerator.engine.statement.RunTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.formats.xml.AbstractXMLElementParser;
-import com.rapiddweller.formats.xml.ParseContext;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.format.xml.AbstractXMLElementParser;
+import com.rapiddweller.format.xml.ParseContext;
 import com.rapiddweller.script.Expression;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
+
+import java.util.Set;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGESIZE;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
 /**
  * Abstract parent class for Descriptor parsers.<br/><br/>
  * Created: 25.10.2009 00:43:18
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public abstract class AbstractBeneratorDescriptorParser extends AbstractXMLElementParser<Statement> {
-	
-	protected Logger logger = LogManager.getLogger(AbstractBeneratorDescriptorParser.class);
 
-	public AbstractBeneratorDescriptorParser(String elementName, 
-			Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
-		super(elementName, requiredAttributes, optionalAttributes, supportedParentTypes);
+  /**
+   * The Logger.
+   */
+  protected Logger logger = LogManager.getLogger(AbstractBeneratorDescriptorParser.class);
+
+  /**
+   * Instantiates a new Abstract benerator descriptor parser.
+   *
+   * @param elementName          the element name
+   * @param requiredAttributes   the required attributes
+   * @param optionalAttributes   the optional attributes
+   * @param supportedParentTypes the supported parent types
+   */
+  public AbstractBeneratorDescriptorParser(String elementName,
+                                           Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
+    super(elementName, requiredAttributes, optionalAttributes, supportedParentTypes);
+  }
+
+  /**
+   * Contains loop boolean.
+   *
+   * @param parentPath the parent path
+   * @return the boolean
+   */
+  public static boolean containsLoop(Statement[] parentPath) {
+    if (parentPath == null) {
+      return false;
     }
-
-	@Override
-	public final Statement doParse(Element element, Statement[] parentPath, ParseContext<Statement> context) {
-		return doParse(element, parentPath, (BeneratorParseContext) context);
-	}
-
-	public abstract Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context);
-	
-	public static boolean containsLoop(Statement[] parentPath) {
-		if (parentPath == null)
-			return false;
-		for (Statement statement : parentPath)
-			if (isLoop(statement))
-				return true;
-		return false;
-	}
-
-	public static boolean isLoop(Statement statement) {
-	    return (statement instanceof RunTaskStatement) 
-	    	|| (statement instanceof GenerateOrIterateStatement)
-	    	|| (statement instanceof WhileStatement);
+    for (Statement statement : parentPath) {
+      if (isLoop(statement)) {
+        return true;
+      }
     }
-	
-	public static boolean containsGeneratorStatement(Statement[] parentPath) {
-		if (parentPath == null)
-			return false;
-		for (Statement statement : parentPath)
-			if (statement instanceof GenerateOrIterateStatement)
-				return true;
-		return false;
-    }
+    return false;
+  }
 
-	protected Expression<ErrorHandler> parseOnErrorAttribute(Element element, String id) {
-	    return new ErrorHandlerExpression(id, parseScriptableStringAttribute(ATT_ON_ERROR, element));
-    }
+  /**
+   * Is loop boolean.
+   *
+   * @param statement the statement
+   * @return the boolean
+   */
+  public static boolean isLoop(Statement statement) {
+    return (statement instanceof RunTaskStatement)
+        || (statement instanceof GenerateOrIterateStatement)
+        || (statement instanceof WhileStatement);
+  }
 
-	protected Expression<Long> parsePageSize(Element element) {
-		return DescriptorParserUtil.parseLongAttribute(ATT_PAGESIZE, element, new DefaultPageSizeExpression());
-	}
+  /**
+   * Contains generator statement boolean.
+   *
+   * @param parentPath the parent path
+   * @return the boolean
+   */
+  public static boolean containsGeneratorStatement(Statement[] parentPath) {
+    if (parentPath == null) {
+      return false;
+    }
+    for (Statement statement : parentPath) {
+      if (statement instanceof GenerateOrIterateStatement) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public final Statement doParse(Element element, Statement[] parentPath, ParseContext<Statement> context) {
+    return doParse(element, parentPath, (BeneratorParseContext) context);
+  }
+
+  /**
+   * Do parse statement.
+   *
+   * @param element    the element
+   * @param parentPath the parent path
+   * @param context    the context
+   * @return the statement
+   */
+  public abstract Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context);
+
+  /**
+   * Parse on error attribute expression.
+   *
+   * @param element the element
+   * @param id      the id
+   * @return the expression
+   */
+  protected Expression<ErrorHandler> parseOnErrorAttribute(Element element, String id) {
+    return new ErrorHandlerExpression(id, parseScriptableStringAttribute(ATT_ON_ERROR, element));
+  }
+
+  /**
+   * Parse page size expression.
+   *
+   * @param element the element
+   * @return the expression
+   */
+  protected Expression<Long> parsePageSize(Element element) {
+    return DescriptorParserUtil.parseLongAttribute(ATT_PAGESIZE, element, new DefaultPageSizeExpression());
+  }
 
 }

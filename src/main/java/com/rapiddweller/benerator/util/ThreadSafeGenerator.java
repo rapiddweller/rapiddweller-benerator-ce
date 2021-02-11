@@ -29,28 +29,32 @@ package com.rapiddweller.benerator.util;
 /**
  * Parent class for Generators which are thread-safe.<br/><br/>
  * Created: 20.03.2010 10:29:03
- * @since 0.6.0
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public abstract class ThreadSafeGenerator<E> extends AbstractGenerator<E> {
 
-	/** 
-	 * Returns <code>true</code> to indicate thread-safety and may not be overwritten by child classes.
-	 * @return true to indicate thread-safety. 
-	 */
-	@Override
-	public final boolean isThreadSafe() {
-	    return true;
-    }
+  /**
+   * Returns <code>true</code> to indicate thread-safety and may not be overwritten by child classes.
+   *
+   * @return true to indicate thread-safety.
+   */
+  @Override
+  public final boolean isThreadSafe() {
+    return true;
+  }
 
-	/** 
-	 * Returns <code>true</code> to indicate parallelization support, 
-	 * but may be overwritten by child classes.
-	 * @return true to indicate parallelization support
-	 */
-	@Override
-	public boolean isParallelizable() {
-	    return true;
-    }
+  /**
+   * Returns <code>true</code> to indicate parallelization support,
+   * but may be overwritten by child classes.
+   *
+   * @return true to indicate parallelization support
+   */
+  @Override
+  public boolean isParallelizable() {
+    return true;
+  }
 
 }

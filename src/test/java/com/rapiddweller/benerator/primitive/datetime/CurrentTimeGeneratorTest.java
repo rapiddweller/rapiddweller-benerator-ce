@@ -27,41 +27,50 @@
 package com.rapiddweller.benerator.primitive.datetime;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.commons.TimeUtil;
-import com.rapiddweller.commons.validator.bean.AbstractConstraintValidator;
+import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 import org.junit.Test;
 
+import javax.validation.ConstraintValidatorContext;
 import java.lang.annotation.Annotation;
 import java.util.Date;
-
-import javax.validation.ConstraintValidatorContext;
 
 /**
  * Tests the CurrentTimeGenerator.<br/>
  * <br/>
  * Created: 19.11.2007 20:43:45
+ *
  * @author Volker Bergmann
  */
 public class CurrentTimeGeneratorTest extends GeneratorClassTest {
 
-    public CurrentTimeGeneratorTest() {
-        super(CurrentTimeGenerator.class);
-    }
+  /**
+   * Instantiates a new Current time generator test.
+   */
+  public CurrentTimeGeneratorTest() {
+    super(CurrentTimeGenerator.class);
+  }
 
-    @Test
-    public void testProducts() {
-        CurrentTimeGenerator generator = new CurrentTimeGenerator();
-        generator.init(context);
-		expectGenerations(generator, 10, new CurrentTimeValidator());
+  /**
+   * Test products.
+   */
+  @Test
+  public void testProducts() {
+    CurrentTimeGenerator generator = new CurrentTimeGenerator();
+    generator.init(context);
+    expectGenerations(generator, 10, new CurrentTimeValidator());
+  }
+
+  /**
+   * The type Current time validator.
+   */
+  static class CurrentTimeValidator extends AbstractConstraintValidator<Annotation, Date> {
+    @Override
+    public boolean isValid(Date date, ConstraintValidatorContext context) {
+      long currentTimeMillis = TimeUtil.currentTime().getTime();
+      long generatedTimeMillis = date.getTime();
+      return (Math.abs(currentTimeMillis - generatedTimeMillis) < 1000);
     }
-    
-    static class CurrentTimeValidator extends AbstractConstraintValidator<Annotation, Date> {
-        @Override
-		public boolean isValid(Date date, ConstraintValidatorContext context) {
-            long currentTimeMillis = TimeUtil.currentTime().getTime();
-			long generatedTimeMillis = date.getTime();
-			return (Math.abs(currentTimeMillis - generatedTimeMillis) < 1000);
-        }
-    }
+  }
 
 }

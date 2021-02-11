@@ -26,59 +26,71 @@
 
 package com.rapiddweller.benerator.primitive;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.commons.IOUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the {@link AddingConsumer}.<br/><br/>
  * Created: 04.04.2010 08:03:25
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class AddingConsumerTest extends GeneratorTest {
-	
-	private Entity ALICE;
-	private Entity METHUSALEM;
-	
-	@Before
-	public void setUpPersons() {
-		ALICE = createEntity("Person", "age", 23L); // long age
-		METHUSALEM = createEntity("Person", "age", 1024.); // double age
-	}
-	
-	@Test
-	public void testJavaInvocation() {
-		AddingConsumer consumer = new AddingConsumer();
-		try {
-			consumer.setFeature("age");
-			consumer.setType("int");
-			consumer.startProductConsumption(ALICE);
-			consumer.finishProductConsumption(ALICE);
-			consumer.startProductConsumption(METHUSALEM);
-			consumer.finishProductConsumption(METHUSALEM);
-			assertEquals(1047, consumer.getSum());
-		} finally {
-        	IOUtil.close(consumer);
-        }
 
-	}
-	
-	@Test
-	public void testBeneratorInvocation() throws IOException {
-		DescriptorRunner runner = new DescriptorRunner("com/rapiddweller/benerator/primitive/AddingConsumerTest.ben.xml", context);
-		try {
-			runner.run();
-		} finally {
-        	IOUtil.close(runner);
-        }
-	}
+  private Entity ALICE;
+  private Entity METHUSALEM;
+
+  /**
+   * Sets up persons.
+   */
+  @Before
+  public void setUpPersons() {
+    ALICE = createEntity("Person", "age", 23L); // long age
+    METHUSALEM = createEntity("Person", "age", 1024.); // double age
+  }
+
+  /**
+   * Test java invocation.
+   */
+  @Test
+  public void testJavaInvocation() {
+    AddingConsumer consumer = new AddingConsumer();
+    try {
+      consumer.setFeature("age");
+      consumer.setType("int");
+      consumer.startProductConsumption(ALICE);
+      consumer.finishProductConsumption(ALICE);
+      consumer.startProductConsumption(METHUSALEM);
+      consumer.finishProductConsumption(METHUSALEM);
+      assertEquals(1047, consumer.getSum());
+    } finally {
+      IOUtil.close(consumer);
+    }
+
+  }
+
+  /**
+   * Test benerator invocation.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void testBeneratorInvocation() throws IOException {
+    DescriptorRunner runner = new DescriptorRunner("com/rapiddweller/benerator/primitive/AddingConsumerTest.ben.xml", context);
+    try {
+      runner.run();
+    } finally {
+      IOUtil.close(runner);
+    }
+  }
 
 }

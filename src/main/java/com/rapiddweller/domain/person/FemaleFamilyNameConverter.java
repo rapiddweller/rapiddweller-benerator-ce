@@ -27,12 +27,12 @@
 package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.dataset.DatasetUtil;
-import com.rapiddweller.commons.ArrayBuilder;
-import com.rapiddweller.commons.ConversionException;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.converter.ThreadSafeConverter;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
@@ -45,41 +45,58 @@ import java.util.Map;
  * @author Volker Bergmann
  * @since 0.5.8
  */
+public class FemaleFamilyNameConverter
+    extends ThreadSafeConverter<String, String> {
 
-public class FemaleFamilyNameConverter extends ThreadSafeConverter<String, String> {
+  private static final Logger logger =
+      LogManager.getLogger(FemaleFamilyNameConverter.class);
+  private final String[][] mappings;
 
-    private static final Logger logger = LogManager.getLogger(FemaleFamilyNameConverter.class);
-    private final String[][] mappings;
+  /**
+   * Instantiates a new Female family name converter.
+   */
+  public FemaleFamilyNameConverter() {
+    this(null);
+  }
 
-    public FemaleFamilyNameConverter() {
-        this(null);
-    }
-
-    public FemaleFamilyNameConverter(String datasetName) {
-        super(String.class, String.class);
-        ArrayBuilder<String[]> builder = new ArrayBuilder<String[]>(String[].class);
-        try {
-            if (datasetName != null) {
-                String dataFileName = DatasetUtil.filenameOfDataset(datasetName,
-                        "/com/rapiddweller/domain/person/ffn_{0}.properties");
-                if (IOUtil.isURIAvailable(dataFileName)) {
-                    Map<String, String> props = IOUtil.readProperties(dataFileName);
-                    for (Map.Entry<String, String> entry : props.entrySet())
-                        builder.add(new String[]{entry.getKey(), entry.getValue()});
-                }
-            }
-        } catch (Exception e) {
-            logger.debug("No female family name conversion defined for dataset '" + datasetName + "'");
+  /**
+   * Instantiates a new Female family name converter.
+   *
+   * @param datasetName the dataset name
+   */
+  public FemaleFamilyNameConverter(String datasetName) {
+    super(String.class, String.class);
+    ArrayBuilder<String[]> builder = new ArrayBuilder<>(String[].class);
+    try {
+      if (datasetName != null) {
+        String dataFileName = DatasetUtil.filenameOfDataset(datasetName,
+            "/com/rapiddweller/domain/person/ffn_{0}.properties");
+        if (IOUtil.isURIAvailable(dataFileName)) {
+          Map<String, String> props =
+              IOUtil.readProperties(dataFileName);
+          for (Map.Entry<String, String> entry : props.entrySet()) {
+            builder.add(new String[] {entry.getKey(),
+                entry.getValue()});
+          }
         }
-        this.mappings = builder.toArray();
+      }
+    } catch (Exception e) {
+      logger.debug(
+          "No female family name conversion defined for dataset '" +
+              datasetName + "'");
     }
+    this.mappings = builder.toArray();
+  }
 
-    @Override
-    public String convert(String name) throws ConversionException {
-        for (String[] mapping : mappings)
-            if (mapping[0].length() == 0 || name.endsWith(mapping[0]))
-                return name.substring(0, name.length() - mapping[0].length()) + mapping[1];
-        return name;
+  @Override
+  public String convert(String name) throws ConversionException {
+    for (String[] mapping : mappings) {
+      if (mapping[0].length() == 0 || name.endsWith(mapping[0])) {
+        return name.substring(0, name.length() - mapping[0].length()) +
+            mapping[1];
+      }
     }
+    return name;
+  }
 
 }

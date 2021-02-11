@@ -30,41 +30,52 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Mutator;
-import org.apache.logging.log4j.Logger;
+import com.rapiddweller.common.Mutator;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Helper class for simple definition of custom {@link ComponentBuilder}s which uses a {@link Mutator}
  * Created: 30.04.2010 09:34:42
- * @since 0.6.1
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 public abstract class AbstractComponentBuilder<E> extends AbstractGeneratorComponent<E> implements ComponentBuilder<E> {
-	
-	private final Logger logger = LogManager.getLogger(getClass());
-	
-	protected Mutator mutator;
-	private WrapperProvider<Object> wrapperProvider = new WrapperProvider<Object>();
-	
-    public AbstractComponentBuilder(Generator<?> source, Mutator mutator, String scope) {
-		super(source, scope);
-		this.mutator = mutator;
-	}
 
-	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-    public boolean execute(BeneratorContext context) {
-		message = null;
-		Object target = context.getCurrentProduct().unwrap();
-		ProductWrapper<?> wrapper = source.generate((ProductWrapper) wrapperProvider.get());
-		logger.debug("execute(): {} := {}", mutator, wrapper);
-		if (wrapper == null) {
-			message = "Generator unavailable: " + source;
-			return false;
-		}
-		mutator.setValue(target, wrapper.unwrap());
-		return true;
-	}
+  /**
+   * The Mutator.
+   */
+  protected final Mutator mutator;
+  private final Logger logger = LogManager.getLogger(getClass());
+  private final WrapperProvider<Object> wrapperProvider = new WrapperProvider<>();
+
+  /**
+   * Instantiates a new Abstract component builder.
+   *
+   * @param source  the source
+   * @param mutator the mutator
+   * @param scope   the scope
+   */
+  public AbstractComponentBuilder(Generator<?> source, Mutator mutator, String scope) {
+    super(source, scope);
+    this.mutator = mutator;
+  }
+
+  @Override
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public boolean execute(BeneratorContext context) {
+    message = null;
+    Object target = context.getCurrentProduct().unwrap();
+    ProductWrapper<?> wrapper = source.generate((ProductWrapper) wrapperProvider.get());
+    logger.debug("execute(): {} := {}", mutator, wrapper);
+    if (wrapper == null) {
+      message = "Generator unavailable: " + source;
+      return false;
+    }
+    mutator.setValue(target, wrapper.unwrap());
+    return true;
+  }
 
 }

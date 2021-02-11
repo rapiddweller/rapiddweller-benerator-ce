@@ -31,23 +31,40 @@ package com.rapiddweller.benerator;
  * generator setup or use.<br/>
  * <br/>
  * Created: 07.06.2006 22:13:57
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class IllegalGeneratorStateException extends RuntimeException {
 
-	private static final long serialVersionUID = -1403141408933329080L;
+  private static final long serialVersionUID = -1403141408933329080L;
 
-	public IllegalGeneratorStateException(String message) {
-        super("Illegal Generator state: " + message);
-    }
+  /**
+   * Instantiates a new Illegal generator state exception.
+   *
+   * @param message the message
+   */
+  public IllegalGeneratorStateException(String message) {
+    super("Illegal Generator state: " + message);
+  }
 
-    public IllegalGeneratorStateException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  /**
+   * Instantiates a new Illegal generator state exception.
+   *
+   * @param message the message
+   * @param cause   the cause
+   */
+  public IllegalGeneratorStateException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-    public IllegalGeneratorStateException(Throwable cause) {
-        super("Illegal Generator state: ", cause);
-    }
-    
+  /**
+   * Instantiates a new Illegal generator state exception.
+   *
+   * @param cause the cause
+   */
+  public IllegalGeneratorStateException(Throwable cause) {
+    super("Illegal Generator state: ", cause);
+  }
+
 }

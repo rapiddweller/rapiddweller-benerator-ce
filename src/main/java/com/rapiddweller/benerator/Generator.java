@@ -26,11 +26,11 @@
 
 package com.rapiddweller.benerator;
 
-import java.io.Closeable;
-
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.Resettable;
-import com.rapiddweller.commons.ThreadAware;
+import com.rapiddweller.common.Resettable;
+import com.rapiddweller.common.ThreadAware;
+
+import java.io.Closeable;
 
 /**
  * This is the basic Generator interface, the mother of all generators.<br/>
@@ -57,29 +57,50 @@ import com.rapiddweller.commons.ThreadAware;
  * </ul>
  * <br/>
  * Created: 07.06.2006 18:51:28
- * @since 0.1
+ *
+ * @param <E> the type parameter
  * @author Volker Bergmann
+ * @since 0.1
  */
 public interface Generator<E> extends ThreadAware, Resettable, Closeable {
 
-    /** Declares the type of the objects returned by the generate() method. */
-    Class<E> getGeneratedType();
+  /**
+   * Declares the type of the objects returned by the generate() method.
+   *
+   * @return the generated type
+   */
+  Class<E> getGeneratedType();
 
-    void init(GeneratorContext context);
-    
-    boolean wasInitialized();
-    
-    /** Returns an instance of the generic type E, using the {@link ProductWrapper} 
-     *  instance provided as argument. 
-     *  The wrapper may wrap a null value as a regular generator product. 
-     *  If the generator is not available (any more), it returns null instead of 
-     *  the ProductWrapper instance. */
-    ProductWrapper<E> generate(ProductWrapper<E> wrapper);
+  /**
+   * Init.
+   *
+   * @param context the context
+   */
+  void init(GeneratorContext context);
 
-    /**
-     * Closes the generator. After invocation the state is <i>unavailable</i>.
-     */
-    @Override
-	void close();
+  /**
+   * Was initialized boolean.
+   *
+   * @return the boolean
+   */
+  boolean wasInitialized();
+
+  /**
+   * Returns an instance of the generic type E, using the {@link ProductWrapper}
+   * instance provided as argument.
+   * The wrapper may wrap a null value as a regular generator product.
+   * If the generator is not available (any more), it returns null instead of
+   * the ProductWrapper instance.
+   *
+   * @param wrapper the wrapper
+   * @return the product wrapper
+   */
+  ProductWrapper<E> generate(ProductWrapper<E> wrapper);
+
+  /**
+   * Closes the generator. After invocation the state is <i>unavailable</i>.
+   */
+  @Override
+  void close();
 
 }

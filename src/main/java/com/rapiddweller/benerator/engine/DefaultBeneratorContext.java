@@ -26,6 +26,39 @@
 
 package com.rapiddweller.benerator.engine;
 
+import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
+import com.rapiddweller.benerator.factory.DefaultsProvider;
+import com.rapiddweller.benerator.factory.GeneratorFactory;
+import com.rapiddweller.benerator.factory.StochasticGeneratorFactory;
+import com.rapiddweller.benerator.script.BeneratorScriptFactory;
+import com.rapiddweller.benerator.script.graaljs.GraalJsScriptFactory;
+import com.rapiddweller.benerator.script.graalpy.GraalPyScriptFactory;
+import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Context;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.Level;
+import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.bean.ClassCache;
+import com.rapiddweller.common.context.ContextStack;
+import com.rapiddweller.common.context.DefaultContext;
+import com.rapiddweller.common.context.SimpleContextStack;
+import com.rapiddweller.common.converter.ConverterManager;
+import com.rapiddweller.common.file.FileSuffixFilter;
+import com.rapiddweller.domain.address.Country;
+import com.rapiddweller.format.script.ScriptUtil;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.ComponentDescriptor;
+import com.rapiddweller.model.data.DataModel;
+import com.rapiddweller.model.data.DefaultDescriptorProvider;
+import com.rapiddweller.model.data.DescriptorProvider;
+import com.rapiddweller.model.data.TypeDescriptor;
+
 import java.io.File;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -34,500 +67,542 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
-import com.rapiddweller.benerator.factory.DefaultsProvider;
-import com.rapiddweller.benerator.factory.GeneratorFactory;
-import com.rapiddweller.benerator.factory.StochasticGeneratorFactory;
-import com.rapiddweller.benerator.script.BeneratorScriptFactory;
-import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.commons.BeanUtil;
-import com.rapiddweller.commons.ConfigurationError;
-import com.rapiddweller.commons.Context;
-import com.rapiddweller.commons.ErrorHandler;
-import com.rapiddweller.commons.IOUtil;
-import com.rapiddweller.commons.Level;
-import com.rapiddweller.commons.LocaleUtil;
-import com.rapiddweller.commons.NullSafeComparator;
-import com.rapiddweller.commons.SystemInfo;
-import com.rapiddweller.commons.bean.ClassCache;
-import com.rapiddweller.commons.context.ContextStack;
-import com.rapiddweller.commons.context.DefaultContext;
-import com.rapiddweller.commons.context.SimpleContextStack;
-import com.rapiddweller.commons.converter.ConverterManager;
-import com.rapiddweller.commons.file.FileSuffixFilter;
-import com.rapiddweller.domain.address.Country;
-import com.rapiddweller.formats.script.ScriptUtil;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.ComponentDescriptor;
-import com.rapiddweller.model.data.DataModel;
-import com.rapiddweller.model.data.DefaultDescriptorProvider;
-import com.rapiddweller.model.data.DescriptorProvider;
-import com.rapiddweller.model.data.TypeDescriptor;
-
 /**
  * Default implementation of {@link BeneratorContext}.<br/><br/>
  * Created: 02.09.2011 14:36:58
- * @since 0.7.0
+ *
  * @author Volker Bergmann
+ * @since 0.7.0
  */
 public class DefaultBeneratorContext implements BeneratorContext {
-	
-	// constants -------------------------------------------------------------------------------------------------------
-	
-    public static final String CELL_SEPARATOR_SYSPROP = "cell.separator";
- 	public static final char DEFAULT_CELL_SEPARATOR = ',';
- 	
- 	
- 	
- 	// attributes -------------------------------------------------------------------------------------------------------
- 	
-	private GeneratorFactory generatorFactory;
-    private DefaultContext settings;
-	private ClassCache classCache;
-	private ContextStack contextStack;
-	
-    protected String  defaultEncoding      = SystemInfo.getFileEncoding();
-    protected String  defaultDataset       = LocaleUtil.getDefaultCountryCode();
-    protected long    defaultPageSize      = 1;
-    protected boolean defaultNull          = true;
-    protected String  contextUri           = "./";
-    public    Long    maxCount             = null;
-    public    boolean defaultOneToOne      = false;
-    public    boolean defaultImports       = true;
-    public    boolean acceptUnknownSimpleTypes = false;
+
+  // constants -------------------------------------------------------------------------------------------------------
+
+  /**
+   * The constant CELL_SEPARATOR_SYSPROP.
+   */
+  public static final String CELL_SEPARATOR_SYSPROP = "cell.separator";
+  /**
+   * The constant DEFAULT_CELL_SEPARATOR.
+   */
+  public static final char DEFAULT_CELL_SEPARATOR = ',';
 
 
-    protected ComplexTypeDescriptor defaultComponent;
-    protected ExecutorService executorService;
+  // attributes -------------------------------------------------------------------------------------------------------
 
-	private ProductWrapper<?> currentProduct;
+  private GeneratorFactory generatorFactory;
+  private final DefaultContext settings;
+  private final ClassCache classCache;
+  private final ContextStack contextStack;
 
-	private DataModel dataModel;
-	private DefaultDescriptorProvider localDescriptorProvider;
-	
-	protected String currentProductName;
-	
-	
-	
-	// construction ----------------------------------------------------------------------------------------------------
-	
-    static {
-    	ScriptUtil.addFactory("ben", new BeneratorScriptFactory());
-    	ScriptUtil.setDefaultScriptEngine("ben");
-    	ConverterManager.getInstance().registerConverterClass(String2DistributionConverter.class); // TODO is this required any longer?
+  /**
+   * The Default encoding.
+   */
+  protected String defaultEncoding = SystemInfo.getFileEncoding();
+  /**
+   * The Default dataset.
+   */
+  protected String defaultDataset = LocaleUtil.getDefaultCountryCode();
+  /**
+   * The Default page size.
+   */
+  protected long defaultPageSize = 1;
+  /**
+   * The Default null.
+   */
+  protected boolean defaultNull = true;
+  /**
+   * The Context uri.
+   */
+  protected String contextUri = "./";
+  /**
+   * The Max count.
+   */
+  public Long maxCount = null;
+  /**
+   * The Default one to one.
+   */
+  public boolean defaultOneToOne = false;
+  /**
+   * The Default imports.
+   */
+  public boolean defaultImports = true;
+  /**
+   * The Accept unknown simple types.
+   */
+  public boolean acceptUnknownSimpleTypes = false;
+
+
+  /**
+   * The Default component.
+   */
+  protected ComplexTypeDescriptor defaultComponent;
+  /**
+   * The Executor service.
+   */
+  protected ExecutorService executorService;
+
+  private ProductWrapper<?> currentProduct;
+
+  private DataModel dataModel;
+  private final DefaultDescriptorProvider localDescriptorProvider;
+
+  /**
+   * The Current product name.
+   */
+  protected String currentProductName;
+
+
+  // construction ----------------------------------------------------------------------------------------------------
+
+  static {
+    ScriptUtil.addFactory("js", new GraalJsScriptFactory());
+    ScriptUtil.addFactory("py", new GraalPyScriptFactory());
+    ScriptUtil.addFactory("ben", new BeneratorScriptFactory());
+    ScriptUtil.setDefaultScriptEngine("ben");
+    ConverterManager.getInstance().registerConverterClass(String2DistributionConverter.class); // TODO is this required any longer?
+  }
+
+  /**
+   * Instantiates a new Default benerator context.
+   */
+  public DefaultBeneratorContext() {
+    this(".");
+  }
+
+  /**
+   * Instantiates a new Default benerator context.
+   *
+   * @param contextUri the context uri
+   */
+  public DefaultBeneratorContext(String contextUri) {
+    if (contextUri == null) {
+      throw new ConfigurationError("No context URI specified");
     }
-    
-	public DefaultBeneratorContext() {
-		this(".");
-	}
-	
-	public DefaultBeneratorContext(String contextUri) {
-		if (contextUri == null)
-			throw new ConfigurationError("No context URI specified");
-		this.contextUri = contextUri;
-		this.executorService = createExecutorService();
-		this.dataModel = new DataModel();
-		this.localDescriptorProvider = new DefaultDescriptorProvider("ctx", dataModel);
-		this.defaultComponent = new ComplexTypeDescriptor("benerator:defaultComponent", localDescriptorProvider);
-		this.generatorFactory = new StochasticGeneratorFactory();
-		settings = new DefaultContext();
-		this.contextStack = createContextStack(
-			new DefaultContext(java.lang.System.getenv()),
-			new DefaultContext(java.lang.System.getProperties()),
-			settings,
-			BeneratorFactory.getInstance().createGenerationContext()
-		);
-		set("context", this);
-		if (IOUtil.isFileUri(contextUri))
-			addLibFolderToClassLoader();
-		classCache = new ClassCache();
-	}
-	
-	
-	
-	// properties ------------------------------------------------------------------------------------------------------
-	
-	@Override
-	public GeneratorFactory getGeneratorFactory() {
-		return generatorFactory;
-	}
-
-	@Override
-	public void setGeneratorFactory(GeneratorFactory generatorFactory) {
-		this.generatorFactory = generatorFactory;
-	}
-	
-	@Override
-	public DescriptorProvider getLocalDescriptorProvider() {
-		return localDescriptorProvider;
-	}
-	
-	@Override
-	public void setDefaultsProvider(DefaultsProvider defaultsProvider) {
-		this.generatorFactory.setDefaultsProvider(defaultsProvider);
-	}
-	
-    @Override
-	public String getDefaultEncoding() {
-        return defaultEncoding;
+    this.contextUri = contextUri;
+    this.executorService = createExecutorService();
+    this.dataModel = new DataModel();
+    this.localDescriptorProvider = new DefaultDescriptorProvider("ctx", dataModel);
+    this.defaultComponent = new ComplexTypeDescriptor("benerator:defaultComponent", localDescriptorProvider);
+    this.generatorFactory = new StochasticGeneratorFactory();
+    settings = new DefaultContext();
+    this.contextStack = createContextStack(
+        new DefaultContext(java.lang.System.getenv()),
+        new DefaultContext(java.lang.System.getProperties()),
+        settings,
+        BeneratorFactory.getInstance().createGenerationContext()
+    );
+    set("context", this);
+    if (IOUtil.isFileUri(contextUri)) {
+      addLibFolderToClassLoader();
     }
-    
-    @Override
-	public void setDefaultEncoding(String defaultEncoding) {
-    	SystemInfo.setFileEncoding(defaultEncoding);
-        this.defaultEncoding = defaultEncoding;
+    classCache = new ClassCache();
+  }
+
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  @Override
+  public GeneratorFactory getGeneratorFactory() {
+    return generatorFactory;
+  }
+
+  @Override
+  public void setGeneratorFactory(GeneratorFactory generatorFactory) {
+    this.generatorFactory = generatorFactory;
+  }
+
+  @Override
+  public DescriptorProvider getLocalDescriptorProvider() {
+    return localDescriptorProvider;
+  }
+
+  @Override
+  public void setDefaultsProvider(DefaultsProvider defaultsProvider) {
+    this.generatorFactory.setDefaultsProvider(defaultsProvider);
+  }
+
+  @Override
+  public String getDefaultEncoding() {
+    return defaultEncoding;
+  }
+
+  @Override
+  public void setDefaultEncoding(String defaultEncoding) {
+    SystemInfo.setFileEncoding(defaultEncoding);
+    this.defaultEncoding = defaultEncoding;
+  }
+
+  @Override
+  public String getDefaultLineSeparator() {
+    return SystemInfo.getLineSeparator();
+  }
+
+  @Override
+  public void setDefaultLineSeparator(String defaultLineSeparator) {
+    SystemInfo.setLineSeparator(defaultLineSeparator);
+  }
+
+  @Override
+  public Locale getDefaultLocale() {
+    return Locale.getDefault();
+  }
+
+  @Override
+  public void setDefaultLocale(Locale defaultLocale) {
+    Locale.setDefault(defaultLocale);
+  }
+
+  @Override
+  public String getDefaultDataset() {
+    return defaultDataset;
+  }
+
+  @Override
+  public void setDefaultDataset(String defaultDataset) {
+    this.defaultDataset = defaultDataset;
+    Country country = Country.getInstance(defaultDataset, false);
+    if (country != null) {
+      Country.setDefault(country);
     }
-    
-    @Override
-	public String getDefaultLineSeparator() {
-		return SystemInfo.getLineSeparator();
-	}
+  }
 
-	@Override
-	public void setDefaultLineSeparator(String defaultLineSeparator) {
-    	SystemInfo.setLineSeparator(defaultLineSeparator);
-	}
+  @Override
+  public long getDefaultPageSize() {
+    return defaultPageSize;
+  }
 
-	@Override
-	public Locale getDefaultLocale() {
-		return Locale.getDefault();
-	}
+  @Override
+  public void setDefaultPageSize(long defaultPageSize) {
+    this.defaultPageSize = defaultPageSize;
+  }
 
-	@Override
-	public void setDefaultLocale(Locale defaultLocale) {
-		Locale.setDefault(defaultLocale);
-	}
+  @Override
+  public String getDefaultScript() {
+    return ScriptUtil.getDefaultScriptEngine();
+  }
 
-	@Override
-	public String getDefaultDataset() {
-		return defaultDataset;
-	}
+  @Override
+  public void setDefaultScript(String defaultScript) {
+    ScriptUtil.setDefaultScriptEngine(defaultScript);
+  }
 
-	@Override
-	public void setDefaultDataset(String defaultDataset) {
-		this.defaultDataset = defaultDataset;
-		Country country = Country.getInstance(defaultDataset, false);
-		if (country != null)
-			Country.setDefault(country);
-	}
+  @Override
+  public boolean isDefaultNull() {
+    return defaultNull;
+  }
 
-	@Override
-	public long getDefaultPageSize() {
-        return defaultPageSize;
+  @Override
+  public void setDefaultNull(boolean defaultNull) {
+    this.defaultNull = defaultNull;
+  }
+
+  @Override
+  public char getDefaultSeparator() {
+    return getDefaultCellSeparator();
+  }
+
+  @Override
+  public void setDefaultSeparator(char defaultSeparator) {
+    System.setProperty(CELL_SEPARATOR_SYSPROP, String.valueOf(defaultSeparator));
+  }
+
+  @Override
+  public ComponentDescriptor getDefaultComponentConfig(String name) {
+    return defaultComponent.getComponent(name);
+  }
+
+  @Override
+  public void setDefaultComponentConfig(ComponentDescriptor component) {
+    defaultComponent.addComponent(component);
+  }
+
+  @Override
+  public String getDefaultErrorHandler() {
+    return ErrorHandler.getDefaultLevel().name();
+  }
+
+  @Override
+  public void setDefaultErrorHandler(String defaultErrorHandler) {
+    ErrorHandler.setDefaultLevel(Level.valueOf(defaultErrorHandler));
+  }
+
+  @Override
+  public String getContextUri() {
+    return contextUri;
+  }
+
+  @Override
+  public void setContextUri(String contextUri) {
+    this.contextUri = contextUri;
+  }
+
+  @Override
+  public boolean isValidate() {
+    return BeneratorOpts.isValidating();
+  }
+
+  @Override
+  public void setValidate(boolean validate) {
+    BeneratorOpts.setValidating(validate);
+  }
+
+  @Override
+  public Long getMaxCount() {
+    return maxCount;
+  }
+
+  @Override
+  public void setMaxCount(Long maxCount) {
+    this.maxCount = maxCount;
+  }
+
+  @Override
+  public ExecutorService getExecutorService() {
+    return executorService;
+  }
+
+  @Override
+  public boolean isDefaultOneToOne() {
+    return defaultOneToOne;
+  }
+
+  @Override
+  public void setDefaultOneToOne(boolean defaultOneToOne) {
+    this.defaultOneToOne = defaultOneToOne;
+  }
+
+  @Override
+  public boolean isAcceptUnknownSimpleTypes() {
+    return acceptUnknownSimpleTypes;
+  }
+
+  @Override
+  public void setAcceptUnknownSimpleTypes(boolean acceptUnknownSimpleTypes) {
+    this.acceptUnknownSimpleTypes = acceptUnknownSimpleTypes;
+    dataModel.setAcceptUnknownPrimitives(acceptUnknownSimpleTypes);
+  }
+
+  /**
+   * Gets default cell separator.
+   *
+   * @return the default cell separator
+   */
+  public static char getDefaultCellSeparator() {
+    String tmp = System.getProperty(CELL_SEPARATOR_SYSPROP);
+    if (tmp == null) {
+      return DEFAULT_CELL_SEPARATOR;
     }
-    
-    @Override
-	public void setDefaultPageSize(long defaultPageSize) {
-        this.defaultPageSize = defaultPageSize;
+    if (tmp.length() != 1) {
+      throw new ConfigurationError("Cell separator has illegal length: '" + tmp + "'");
     }
-    
-    @Override
-	public String getDefaultScript() {
-        return ScriptUtil.getDefaultScriptEngine();
+    return tmp.charAt(0);
+  }
+
+  @Override
+  public DefaultsProvider getDefaultsProvider() {
+    return getGeneratorFactory().getDefaultsProvider();
+  }
+
+  @Override
+  public void setDefaultImports(boolean defaultImports) {
+    this.defaultImports = defaultImports;
+  }
+
+  @Override
+  public boolean isDefaultImports() {
+    return defaultImports;
+  }
+
+  @Override
+  public ProductWrapper<?> getCurrentProduct() {
+    return currentProduct;
+  }
+
+  @Override
+  public void setCurrentProduct(ProductWrapper<?> currentProduct) {
+    this.currentProduct = currentProduct;
+  }
+
+  @Override
+  public DataModel getDataModel() {
+    return dataModel;
+  }
+
+  @Override
+  public void setDataModel(DataModel dataModel) {
+    this.dataModel = dataModel;
+  }
+
+
+  // Context interface -----------------------------------------------------------------------------------------------
+
+  @Override
+  public Object get(String key) {
+    if (contextStack.contains(key)) {
+      return contextStack.get(key);
+    } else if (key.equalsIgnoreCase(currentProductName) || "this".equalsIgnoreCase(key)) {
+      return currentProduct.unwrap();
+    } else {
+      return null;
     }
-    
-    @Override
-	public void setDefaultScript(String defaultScript) {
-        ScriptUtil.setDefaultScriptEngine(defaultScript);
+  }
+
+  @Override
+  public void set(String key, Object value) {
+    contextStack.set(key, value);
+  }
+
+  @Override
+  public void remove(String key) {
+    contextStack.remove(key);
+  }
+
+  @Override
+  public Set<String> keySet() {
+    return contextStack.keySet();
+  }
+
+  @Override
+  public Set<Entry<String, Object>> entrySet() {
+    return contextStack.entrySet();
+  }
+
+  @Override
+  public boolean contains(String key) {
+    return (key != null && (key.equalsIgnoreCase(currentProductName) || "this".equalsIgnoreCase(key) || contextStack.contains(key)));
+  }
+
+
+  // class-loading interface -----------------------------------------------------------------------------------------
+
+  @Override
+  public Class<?> forName(String className) {
+    return classCache.forName(className);
+  }
+
+  @Override
+  public void importClass(String className) {
+    classCache.importClass(className);
+  }
+
+  @Override
+  public void importPackage(String packageName) {
+    classCache.importPackage(packageName);
+  }
+
+  @Override
+  public void importDefaults() {
+    // import frequently used Benerator packages
+    importPackage("com.rapiddweller.benerator.consumer");
+    importPackage("com.rapiddweller.benerator.primitive");
+    importPackage("com.rapiddweller.benerator.primitive.datetime");
+    importPackage("com.rapiddweller.benerator.distribution.sequence");
+    importPackage("com.rapiddweller.benerator.distribution.function");
+    importPackage("com.rapiddweller.benerator.distribution.cumulative");
+    importPackage("com.rapiddweller.benerator.sample");
+    // import ConsoleExporter and LoggingConsumer
+    importPackage("com.rapiddweller.model.consumer");
+    // import format, converters and validators from common
+    importPackage("com.rapiddweller.common.converter");
+    importPackage("com.rapiddweller.common.format");
+    importPackage("com.rapiddweller.common.validator");
+    // import standard platforms
+    importPackage("com.rapiddweller.platform.fixedwidth");
+    importPackage("com.rapiddweller.platform.csv");
+    importPackage("com.rapiddweller.platform.dbunit");
+    importPackage("com.rapiddweller.platform.xls");
+    importPackage("com.rapiddweller.platform.template");
+  }
+
+
+  // other interface methods -----------------------------------------------------------------------------------------
+
+  @Override
+  public void setGlobal(String name, Object value) {
+    settings.set(name, value);
+  }
+
+  @Override
+  public Object getGlobal(String name) {
+    return settings.get(name);
+  }
+
+  @Override
+  public void close() {
+    executorService.shutdownNow();
+  }
+
+  @Override
+  public void addLocalType(TypeDescriptor type) {
+    localDescriptorProvider.addTypeDescriptor(type);
+  }
+
+  @Override
+  public BeneratorContext createSubContext(String productName) {
+    return new DefaultBeneratorSubContext(productName, this);
+  }
+
+  /**
+   * Sets current product.
+   *
+   * @param currentProduct     the current product
+   * @param currentProductName the current product name
+   */
+  public void setCurrentProduct(ProductWrapper<?> currentProduct, String currentProductName) {
+    this.currentProductName = currentProductName;
+    setCurrentProduct(currentProduct);
+  }
+
+  @Override
+  public boolean hasProductNameInScope(String productName) {
+    return (NullSafeComparator.equals(this.currentProductName, productName));
+  }
+
+  @Override
+  public String resolveRelativeUri(String relativeUri) {
+    return IOUtil.resolveRelativeUri(relativeUri, contextUri);
+  }
+
+
+  // non-public helper methods ---------------------------------------------------------------------------------------
+
+  private void addLibFolderToClassLoader() {
+    File libFolder = new File(contextUri, "lib");
+    if (libFolder.exists()) {
+      Thread.currentThread().setContextClassLoader(BeanUtil.createDirectoryClassLoader(libFolder));
+      for (File jarFile : Objects.requireNonNull(libFolder.listFiles(new FileSuffixFilter("jar", false)))) {
+        ClassLoader classLoader = BeanUtil.createJarClassLoader(jarFile);
+        Thread.currentThread().setContextClassLoader(classLoader);
+      }
     }
-    
-    @Override
-	public boolean isDefaultNull() {
-        return defaultNull;
-    }
-    
-    @Override
-	public void setDefaultNull(boolean defaultNull) {
-        this.defaultNull = defaultNull;
-    }
-    
-	@Override
-	public char getDefaultSeparator() {
-		return getDefaultCellSeparator();
-	}
+  }
 
-	@Override
-	public void setDefaultSeparator(char defaultSeparator) {
-		System.setProperty(CELL_SEPARATOR_SYSPROP, String.valueOf(defaultSeparator));
-	}
+  /**
+   * Create executor service executor service.
+   *
+   * @return the executor service
+   */
+  protected ExecutorService createExecutorService() {
+    return Executors.newSingleThreadExecutor();
+  }
 
-	@Override
-	public ComponentDescriptor getDefaultComponentConfig(String name) {
-		return defaultComponent.getComponent(name);
-	}
+  /**
+   * Create context stack context stack.
+   *
+   * @param contexts the contexts
+   * @return the context stack
+   */
+  protected ContextStack createContextStack(Context... contexts) {
+    return new SimpleContextStack(contexts);
+  }
 
-	@Override
-	public void setDefaultComponentConfig(ComponentDescriptor component) {
-		defaultComponent.addComponent(component);
-	}
 
-	@Override
-	public String getDefaultErrorHandler() {
-		return ErrorHandler.getDefaultLevel().name();
-	}
+  // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-	@Override
-	public void setDefaultErrorHandler(String defaultErrorHandler) {
-		ErrorHandler.setDefaultLevel(Level.valueOf(defaultErrorHandler));
-	}
+  @Override
+  public String toString() {
+    return getClass() + "[" + currentProductName + "]";
+  }
 
-	@Override
-	public String getContextUri() {
-		return contextUri;
-	}
-
-	@Override
-	public void setContextUri(String contextUri) {
-		this.contextUri = contextUri;
-	}
-
-	@Override
-	public boolean isValidate() {
-		return BeneratorOpts.isValidating();
-	}
-
-	@Override
-	public void setValidate(boolean validate) {
-		BeneratorOpts.setValidating(validate);
-	}
-	
-	@Override
-	public Long getMaxCount() {
-		return maxCount;
-	}
-
-	@Override
-	public void setMaxCount(Long maxCount) {
-		this.maxCount = maxCount;
-	}
-	
-	@Override
-	public ExecutorService getExecutorService() {
-    	return executorService;
-    }
-
-	@Override
-	public boolean isDefaultOneToOne() {
-    	return defaultOneToOne;
-    }
-
-	@Override
-	public void setDefaultOneToOne(boolean defaultOneToOne) {
-    	this.defaultOneToOne = defaultOneToOne;
-    }
-
-	@Override
-	public boolean isAcceptUnknownSimpleTypes() {
-    	return acceptUnknownSimpleTypes;
-    }
-
-	@Override
-	public void setAcceptUnknownSimpleTypes(boolean acceptUnknownSimpleTypes) {
-    	this.acceptUnknownSimpleTypes = acceptUnknownSimpleTypes;
-    	dataModel.setAcceptUnknownPrimitives(acceptUnknownSimpleTypes);
-    }
-    
-	public static char getDefaultCellSeparator() {
-		String tmp = System.getProperty(CELL_SEPARATOR_SYSPROP);
-		if (tmp == null)
-			return DEFAULT_CELL_SEPARATOR;
-		if (tmp.length() != 1)
-			throw new ConfigurationError("Cell separator has illegal length: '" + tmp + "'");
-		return tmp.charAt(0);
-	}
-
-	@Override
-	public DefaultsProvider getDefaultsProvider() {
-		return getGeneratorFactory().getDefaultsProvider();
-	}
-
-	@Override
-	public void setDefaultImports(boolean defaultImports) {
-		this.defaultImports = defaultImports;
-	}
-	
-	@Override
-	public boolean isDefaultImports() {
-		return defaultImports;
-	}
-
-	@Override
-	public ProductWrapper<?> getCurrentProduct() {
-		return currentProduct;
-	}
-
-	@Override
-	public void setCurrentProduct(ProductWrapper<?> currentProduct) {
-		this.currentProduct = currentProduct;
-	}
-
-	@Override
-	public DataModel getDataModel() {
-		return dataModel;
-	}
-
-	@Override
-	public void setDataModel(DataModel dataModel) {
-		this.dataModel = dataModel;
-	}
-	
-	
-	
-	// Context interface -----------------------------------------------------------------------------------------------
-	
-	@Override
-	public Object get(String key) {
-		if (contextStack.contains(key))
-			return contextStack.get(key);
-		else if (key.equalsIgnoreCase(currentProductName) || "this".equalsIgnoreCase(key))
-			return currentProduct.unwrap();
-		else
-			return null;
-	}
-
-	@Override
-	public void set(String key, Object value) {
-		contextStack.set(key, value);
-	}
-
-	@Override
-	public void remove(String key) {
-		contextStack.remove(key);
-	}
-
-	@Override
-	public Set<String> keySet() {
-		return contextStack.keySet();
-	}
-
-	@Override
-	public Set<Entry<String, Object>> entrySet() {
-		return contextStack.entrySet();
-	}
-
-	@Override
-	public boolean contains(String key) {
-		return (key != null && (key.equalsIgnoreCase(currentProductName) || "this".equalsIgnoreCase(key) || contextStack.contains(key)));
-	}
-
-	
-	
-	// class-loading interface -----------------------------------------------------------------------------------------
-	
-    @Override
-	public Class<?> forName(String className) {
-		return classCache.forName(className);
-	}
-	
-	@Override
-	public void importClass(String className) {
-		classCache.importClass(className);
-	}
-
-	@Override
-	public void importPackage(String packageName) {
-		classCache.importPackage(packageName);
-	}
-
-	@Override
-	public void importDefaults() {
-		// import frequently used Benerator packages
-		importPackage("com.rapiddweller.benerator.consumer");
-		importPackage("com.rapiddweller.benerator.primitive");
-		importPackage("com.rapiddweller.benerator.primitive.datetime");
-		importPackage("com.rapiddweller.benerator.distribution.sequence");
-		importPackage("com.rapiddweller.benerator.distribution.function");
-		importPackage("com.rapiddweller.benerator.distribution.cumulative");
-		importPackage("com.rapiddweller.benerator.sample");
-		// import ConsoleExporter and LoggingConsumer
-		importPackage("com.rapiddweller.model.consumer");
-		// import formats, converters and validators from commons
-		importPackage("com.rapiddweller.commons.converter");
-		importPackage("com.rapiddweller.commons.format");
-		importPackage("com.rapiddweller.commons.validator");
-		// import standard platforms
-		importPackage("com.rapiddweller.platform.fixedwidth");
-		importPackage("com.rapiddweller.platform.csv");
-		importPackage("com.rapiddweller.platform.dbunit");
-		importPackage("com.rapiddweller.platform.xls");
-		importPackage("com.rapiddweller.platform.template");
-	}
-	
-	
-	
-	// other interface methods -----------------------------------------------------------------------------------------
-
-	@Override
-	public void setGlobal(String name, Object value) {
-		settings.set(name, value);
-	}
-	
-	@Override
-	public Object getGlobal(String name) {
-		return settings.get(name);
-	}
-	
-	@Override
-	public void close() {
-		executorService.shutdownNow();
-	}
-	
-	@Override
-	public void addLocalType(TypeDescriptor type) {
-		localDescriptorProvider.addTypeDescriptor(type);
-	}
-
-	@Override
-	public BeneratorContext createSubContext(String productName) {
-		return new DefaultBeneratorSubContext(productName, this);
-	}
-	
-	public void setCurrentProduct(ProductWrapper<?> currentProduct, String currentProductName) {
-		this.currentProductName = currentProductName;
-		setCurrentProduct(currentProduct);
-	}
-	
-	@Override
-	public boolean hasProductNameInScope(String productName) {
-		return (NullSafeComparator.equals(this.currentProductName, productName));
-	}
-	
-	@Override
-	public String resolveRelativeUri(String relativeUri) {
-	    return IOUtil.resolveRelativeUri(relativeUri, contextUri);
-    }
-
-	
-	
-	// non-public helper methods ---------------------------------------------------------------------------------------
-
-	private void addLibFolderToClassLoader() {
-		File libFolder = new File(contextUri, "lib");
-		if (libFolder.exists()) {
-			Thread.currentThread().setContextClassLoader(BeanUtil.createDirectoryClassLoader(libFolder));
-			for (File jarFile : Objects.requireNonNull(libFolder.listFiles(new FileSuffixFilter("jar", false)))) {
-				ClassLoader classLoader = BeanUtil.createJarClassLoader(jarFile);
-				Thread.currentThread().setContextClassLoader(classLoader);
-			}
-		}
-	}
-
-	protected ExecutorService createExecutorService() {
-		return Executors.newSingleThreadExecutor();
-	}
-
-	protected ContextStack createContextStack(Context... contexts) {
-		return new SimpleContextStack(contexts);
-	}
-	
-	
-	
-	// java.lang.Object overrides --------------------------------------------------------------------------------------
-	
-	@Override
-	public String toString() {
-		return getClass() + "[" + currentProductName + "]";
-	}
-	
 }

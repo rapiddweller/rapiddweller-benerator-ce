@@ -29,14 +29,15 @@ package com.rapiddweller.benerator.archetype;
 /**
  * Maven version of the {@link FolderLayout}.<br/><br/>
  * Created: 04.04.2010 11:41:08
- * @since 0.6.0
+ *
  * @author Volker Bergmann
+ * @since 0.6.0
  */
 public class MavenFolderLayout implements FolderLayout {
 
-	@Override
-	public String mapSubFolder(String path) {
-	    return path;
-    }
-	
+  @Override
+  public String mapSubFolder(String path) {
+    return path;
+  }
+
 }

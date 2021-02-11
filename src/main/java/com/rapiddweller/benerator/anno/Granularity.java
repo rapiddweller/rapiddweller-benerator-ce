@@ -34,11 +34,17 @@ import java.lang.annotation.Target;
 /**
  * Specifies the number granularity to use when generating number data for the annotated element.<br/><br/>
  * Created: 02.05.2010 19:05:02
- * @since 0.6.1
+ *
  * @author Volker Bergmann
+ * @since 0.6.1
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target( { ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER } )
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 public @interface Granularity {
-	double value();
+  /**
+   * Value double.
+   *
+   * @return the double
+   */
+  double value();
 }

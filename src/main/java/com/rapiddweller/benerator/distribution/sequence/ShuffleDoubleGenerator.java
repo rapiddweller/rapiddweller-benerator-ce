@@ -34,70 +34,95 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
  * Double Generator that implements a 'shuffle' Double Sequence.<br/>
  * <br/>
  * Created: 18.06.2006 14:40:29
- * @since 0.1
+ *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class ShuffleDoubleGenerator extends AbstractNonNullNumberGenerator<Double> {
 
-    private double increment;
-    private Double next;
+  private double increment;
+  private Double next;
 
-    public ShuffleDoubleGenerator() {
-        this(Double.MIN_VALUE, Double.MAX_VALUE, 2, 1);
+  /**
+   * Instantiates a new Shuffle double generator.
+   */
+  public ShuffleDoubleGenerator() {
+    this(Double.MIN_VALUE, Double.MAX_VALUE, 2, 1);
+  }
+
+  /**
+   * Instantiates a new Shuffle double generator.
+   *
+   * @param min         the min
+   * @param max         the max
+   * @param granularity the granularity
+   * @param increment   the increment
+   */
+  public ShuffleDoubleGenerator(double min, double max, double granularity, double increment) {
+    super(Double.class, min, max, granularity);
+    this.increment = increment;
+    reset();
+  }
+
+  // config properties -----------------------------------------------------------------------------------------------
+
+  @Override
+  public void setMin(Double min) {
+    super.setMin(min);
+    reset();
+  }
+
+  /**
+   * Gets increment.
+   *
+   * @return the increment
+   */
+  public double getIncrement() {
+    return increment;
+  }
+
+  /**
+   * Sets increment.
+   *
+   * @param increment the increment
+   */
+  public void setIncrement(double increment) {
+    this.increment = increment;
+  }
+
+  // source interface ---------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
+    if (granularity <= 0) {
+      throw new InvalidGeneratorSetupException("Granularity must be greater than zero, but is " + granularity);
     }
-
-    public ShuffleDoubleGenerator(double min, double max, double granularity, double increment) {
-        super(Double.class, min, max, granularity);
-        this.increment = increment;
-        reset();
+    if (min < max && increment <= 0) {
+      throw new InvalidGeneratorSetupException("Unsupported increment value: " + increment);
     }
+    next = min;
+    super.init(context);
+  }
 
-    // config properties -----------------------------------------------------------------------------------------------
-
-    @Override
-    public void setMin(Double min) {
-    	super.setMin(min);
-    	reset();
+  @Override
+  public synchronized Double generate() {
+    assertInitialized();
+    if (next == null) {
+      return null;
     }
-
-    public double getIncrement() {
-        return increment;
+    double result = next;
+    if (next + increment <= max) {
+      next += increment;
+    } else {
+      double newOffset = (next - min + granularity) % increment;
+      next = (newOffset > 0 ? min + newOffset : null);
     }
+    return result;
+  }
 
-    public void setIncrement(double increment) {
-        this.increment = increment;
-    }
+  @Override
+  public synchronized void reset() {
+    this.next = min;
+  }
 
-    // source interface ---------------------------------------------------------------------------------------------
-
-    @Override
-    public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
-        if (granularity <= 0)
-            throw new InvalidGeneratorSetupException("Granularity must be greater than zero, but is " + granularity);
-        if (min < max && increment <= 0)
-            throw new InvalidGeneratorSetupException("Unsupported increment value: " + increment);
-        next = min;
-		super.init(context);
-    }
-    
-	@Override
-	public synchronized Double generate() {
-    	assertInitialized();
-    	if (next == null)
-    		return null;
-        double result = next;
-        if (next + increment <= max)
-            next += increment;
-        else {
-            double newOffset = (next - min + granularity) % increment;
-			next = (newOffset > 0 ? min + newOffset : null);
-        }
-        return result;
-    }
-
-    @Override
-    public synchronized void reset() {
-        this.next = min;
-    }
-    
 }
