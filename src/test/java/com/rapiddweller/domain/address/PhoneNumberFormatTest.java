@@ -15,6 +15,7 @@ import static org.junit.Assert.assertSame;
  * The type Phone number format test.
  */
 public class PhoneNumberFormatTest {
+  // file deepcode ignore ApiMigration/test: testfile
   /**
    * The Thrown.
    */
@@ -26,6 +27,7 @@ public class PhoneNumberFormatTest {
    */
   @Test
   public void testFormat() {
+
     PhoneNumberFormat phoneNumberFormat = new PhoneNumberFormat("Pattern");
     FieldPosition pos = new FieldPosition(1);
     PhoneNumber obj = new PhoneNumber();

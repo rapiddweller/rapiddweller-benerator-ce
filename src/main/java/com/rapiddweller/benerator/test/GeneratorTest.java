@@ -433,6 +433,9 @@ public abstract class GeneratorTest extends ModelTest {
 
     for (int i = 0; i < expectedValueWeightPairs.length; i += 2) {
       Object value = expectedValueWeightPairs[i];
+      if (totalExpectedWeight == 0) {
+        totalExpectedWeight = 0.00000001;
+      }
       double expectedWeight = ((Number) expectedValueWeightPairs[i + 1]).doubleValue() / totalExpectedWeight;
       if (expectedWeight > 0) {
         assertTrue("Generated set does not contain value " + value, productSet.contains(value));
@@ -564,7 +567,9 @@ public abstract class GeneratorTest extends ModelTest {
               "Generated only " + i + " of " + expectedProducts.length + " expected values: " + observedSet,
           wrapper);
       T generation = wrapper.unwrap();
-      logger.debug("created " + format(generation));
+      if (logger.isDebugEnabled()) {
+        logger.debug("created " + format(generation));
+      }
       assertTrue("The generated value '" + format(generation) + "' was not in the expected set: " + expectedSet,
           expectedSet.contains(generation));
       observedSet.add(generation);
@@ -582,7 +587,9 @@ public abstract class GeneratorTest extends ModelTest {
       assertNotNull("Generator has gone unavailable after " + i + " products, " +
           "expected " + expectedProducts.length + " products. ", wrapper);
       T product = wrapper.unwrap();
-      logger.debug("created " + format(product));
+      if (logger.isDebugEnabled()) {
+        logger.debug("created " + format(product));
+      }
       assertTrue("Product is not unique: " + product, validator.valid(product));
       assertTrue("The generated value '" + format(product) + "' was not in the expected set: "
           + format(expectedSet), expectedSet.contains(product));
@@ -610,7 +617,9 @@ public abstract class GeneratorTest extends ModelTest {
               "required " + n + " but was " + i,
           wrapper);
       T product = wrapper.unwrap();
-      logger.debug("created " + format(product));
+      if (logger.isDebugEnabled()) {
+        logger.debug("created " + format(product));
+      }
       for (Validator<T> validator : validators) {
         assertTrue("The generated value '" + format(product) + "' is not valid according to " + validator +
                 ", failed after " + i + " generations",

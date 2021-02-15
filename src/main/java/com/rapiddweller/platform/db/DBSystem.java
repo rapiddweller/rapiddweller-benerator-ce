@@ -1084,8 +1084,10 @@ public abstract class DBSystem extends AbstractStorageSystem {
         descriptor.setNullable(nullable);
         complexType.setComponent(
             descriptor); // overwrite possible id descriptor for foreign keys
-        logger.debug("Parsed reference " + table.getName() + '.' +
-            descriptor);
+        if (logger.isDebugEnabled()) {
+          logger.debug("Parsed reference " + table.getName() + '.' +
+              descriptor);
+        }
       } else {
         // TODO v0.7.6 handle composite keys
       }
@@ -1254,6 +1256,13 @@ public abstract class DBSystem extends AbstractStorageSystem {
     throw new ObjectNotFoundException("Table " + tableName);
   }
 
+  /**
+   * Gets table.
+   *
+   * @param schemaName the schema name
+   * @param tableName  the table name
+   * @return the table
+   */
   public DBTable getTable(String schemaName, String tableName) {
     parseMetadataIfNecessary();
     DBTable table = findTableInConfiguredCatalogAndSchema(schemaName, tableName);

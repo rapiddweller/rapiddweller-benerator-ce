@@ -177,8 +177,7 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
       quantization = false;
       granularity = defaultsProvider.defaultGranularity(numberType);
     }
-    if (((Comparable<T>) min).compareTo(max) == 0) // if min==max then return min once
-    {
+    if (((Comparable<T>) min).compareTo(max) == 0) { // if min==max then return min once
       return WrapperFactory.asNonNullGenerator(new OneShotGenerator<>(min));
     }
     if (minInclusive == null) {

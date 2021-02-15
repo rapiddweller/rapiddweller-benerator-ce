@@ -313,17 +313,13 @@ public class ArrayTypeGeneratorFactoryTest extends GeneratorTest {
    * TODO v0.8 implement array mutation
    * public void testMutatingGeneration() {
    * Object[] MUTATED_ALICE = new Object[] { "Alice", 24 };
-   * <p>
    * // define descriptor
    * ArrayTypeDescriptor descriptor = createPersonDescriptor();
    * descriptor.setGenerator(PersonAttrArrayGenerator.class.getName());
    * descriptor.getElement(1).getLocalType(false).setScript("p[1] + 1");
-   * <p>
    * // create generator
-   * Generator<Object[]> generator = ArrayGeneratorFactory.createArrayGenerator(
-   * "p", descriptor, Uniqueness.NONE, context);
+   * Generator<Object[]> generator = ArrayGeneratorFactory.createArrayGenerator("p", descriptor, Uniqueness.NONE, context);
    * generator.init(context);
-   * <p>
    * // validate
    * for (int i = 0; i < 10; i++)
    * assertEqualArrays(MUTATED_ALICE, GeneratorUtil.generateNonNull(generator));

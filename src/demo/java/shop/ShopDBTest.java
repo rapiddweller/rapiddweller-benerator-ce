@@ -180,10 +180,14 @@ public class ShopDBTest {
     String command =
         "benerator -Ddatabase=" + database + " -Dstage=" + stage + " " +
             file;
-    logger.debug(command);
+    if (logger.isDebugEnabled()) {
+      logger.debug(command);
+    }
     Process process = Runtime.getRuntime().exec(command);
     IOUtil.transfer(process.getInputStream(), System.out);
     process.waitFor();
-    logger.debug(String.valueOf(process.exitValue()));
+    if (logger.isDebugEnabled()) {
+      logger.debug(String.valueOf(process.exitValue()));
+    }
   }
 }
