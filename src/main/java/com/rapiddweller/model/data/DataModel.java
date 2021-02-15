@@ -198,7 +198,9 @@ public class DataModel {
   }
 
   private void validate(TypeDescriptor type) {
-    logger.debug("validating " + type);
+    if (logger.isDebugEnabled()) {
+      logger.debug("validating " + type);
+    }
     if (type instanceof SimpleTypeDescriptor) {
       validate((SimpleTypeDescriptor) type);
     } else if (type instanceof ComplexTypeDescriptor) {

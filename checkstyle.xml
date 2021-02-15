@@ -59,9 +59,9 @@
 
     <!-- Checks for whitespace                               -->
     <!-- See http://checkstyle.org/config_whitespace.html -->
-    <module name="FileTabCharacter">
-        <property name="eachLine" value="true"/>
-    </module>
+<!--    <module name="FileTabCharacter">-->
+<!--        <property name="eachLine" value="true"/>-->
+<!--    </module>-->
 
     <module name="LineLength">
         <property name="fileExtensions" value="java"/>

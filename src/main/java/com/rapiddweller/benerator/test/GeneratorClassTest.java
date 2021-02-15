@@ -85,9 +85,13 @@ public abstract class GeneratorClassTest extends GeneratorTest {
       // if the default instance is invalid, further tests make no sense
       return;
     }
-    generator.toString();
+    if (logger.isDebugEnabled()) {
+      logger.debug(generator.toString());
+    }
     generator.close();
-    generator.toString();
+    if (logger.isDebugEnabled()) {
+      logger.debug(generator.toString());
+    }
   }
 
   /**

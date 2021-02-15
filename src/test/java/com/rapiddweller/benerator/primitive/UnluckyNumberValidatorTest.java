@@ -43,7 +43,7 @@ import static org.junit.Assert.assertTrue;
  * @since 0.6.0
  */
 public class UnluckyNumberValidatorTest {
-
+  // file deepcode ignore NullPassTo/test: it is testfile
   private Country defaultCountry;
 
   /**
@@ -68,6 +68,7 @@ public class UnluckyNumberValidatorTest {
   @Test
   public void testIllegalNumbers() {
     UnluckyNumberValidator validator = new UnluckyNumberValidator();
+
     assertFalse(validator.isValid(null, null));
     assertFalse(validator.isValid("", null));
   }

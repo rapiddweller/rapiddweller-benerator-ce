@@ -171,7 +171,6 @@ public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
   /**
    * Test db ref distribution.
    */
-// Test for bug #3025805
   @Test
   public void testDbRef_distribution() {
     parseAndExecute(

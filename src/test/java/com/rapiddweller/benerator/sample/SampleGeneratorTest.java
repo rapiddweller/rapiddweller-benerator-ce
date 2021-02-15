@@ -70,7 +70,9 @@ public class SampleGeneratorTest extends GeneratorClassTest {
       double measuredProbability = (float) count / n;
       double expectedProbability = 1. / samples.length;
       double ratio = measuredProbability / expectedProbability;
-      logger.debug(i + " " + count + " " + ratio);
+      if (logger.isDebugEnabled()) {
+        logger.debug(i + " " + count + " " + ratio);
+      }
       assertTrue(ratio > 0.9 && ratio < 1.1);
     }
   }

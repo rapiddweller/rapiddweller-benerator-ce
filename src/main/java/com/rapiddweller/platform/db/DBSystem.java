@@ -1084,8 +1084,10 @@ public abstract class DBSystem extends AbstractStorageSystem {
         descriptor.setNullable(nullable);
         complexType.setComponent(
             descriptor); // overwrite possible id descriptor for foreign keys
-        logger.debug("Parsed reference " + table.getName() + '.' +
-            descriptor);
+        if (logger.isDebugEnabled()) {
+          logger.debug("Parsed reference " + table.getName() + '.' +
+              descriptor);
+        }
       } else {
         // TODO v0.7.6 handle composite keys
       }
@@ -1163,7 +1165,12 @@ public abstract class DBSystem extends AbstractStorageSystem {
    */
   public List<ColumnInfo> getWriteColumnInfos(Entity entity, boolean insert) {
     String tableName = entity.type();
-    DBTable table = getTable(tableName);
+    DBTable table;
+    if (entity.descriptor instanceof LazyTableComplexTypeDescriptor) {
+      table = getTable(this.schemaName, tableName);
+    } else {
+      table = getTable(tableName);
+    }
     List<String> pkColumnNames =
         CollectionUtil.toList(table.getPKColumnNames());
     ComplexTypeDescriptor typeDescriptor =
@@ -1201,6 +1208,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
           }
         }
         String primitiveTypeName = primitiveType.getName();
+        // TODO Version 1.2.0 wrong entity information when table with same name exists in different schema and is part of context.
         DBColumn column = table.getColumn(name);
         DBDataType columnType = column.getType();
         int sqlType = columnType.getJdbcType();
@@ -1231,18 +1239,45 @@ public abstract class DBSystem extends AbstractStorageSystem {
    */
   public DBTable getTable(String tableName) {
     parseMetadataIfNecessary();
-    DBTable table = findTableInConfiguredCatalogAndSchema(tableName);
+    DBTable table = findTableInConfiguredCatalogAndSchema(schemaName, tableName);
     if (table != null) {
       return table;
+    } else {
+      table = findAnyTableOfName(tableName);
+      if (table != null) {
+        logger.warn("Table '" + tableName + "' not found " +
+            "in the expected catalog or schema." +
+            "I have taken it from catalog '" + table.getCatalog() +
+            "' and schema '" + table.getSchema() + "' instead. " +
+            "You better make sure this is right and fix the configuration");
+        return table;
+      }
     }
-    table = findAnyTableOfName(tableName);
+    throw new ObjectNotFoundException("Table " + tableName);
+  }
+
+  /**
+   * Gets table.
+   *
+   * @param schemaName the schema name
+   * @param tableName  the table name
+   * @return the table
+   */
+  public DBTable getTable(String schemaName, String tableName) {
+    parseMetadataIfNecessary();
+    DBTable table = findTableInConfiguredCatalogAndSchema(schemaName, tableName);
     if (table != null) {
-      logger.info("Table '" + tableName + "' not found " +
-          "in the expected catalog or schema." +
-          "I have taken it from catalog '" + table.getCatalog() +
-          "' and schema '" + table.getSchema() + "' instead. " +
-          "You better make sure this is right and fix the configuration");
       return table;
+    } else {
+      table = findAnyTableOfName(tableName);
+      if (table != null) {
+        logger.info("Table '" + tableName + "' not found " +
+            "in the expected catalog or schema." +
+            "I have taken it from catalog '" + table.getCatalog() +
+            "' and schema '" + table.getSchema() + "' instead. " +
+            "You better make sure this is right and fix the configuration");
+        return table;
+      }
     }
     throw new ObjectNotFoundException("Table " + tableName);
   }
@@ -1260,6 +1295,21 @@ public abstract class DBSystem extends AbstractStorageSystem {
   }
 
   private DBTable findTableInConfiguredCatalogAndSchema(String tableName) {
+    DBCatalog catalog = database.getCatalog(catalogName);
+    DBSchema dbSchema;
+    if (catalog == null) {
+      // logger.debug("no catalog set, try to get schema directly");
+      return database.getCatalog("benerator").getSchema(schemaName).getTable(tableName);
+    } else {
+      dbSchema = catalog.getSchema(schemaName);
+    }
+    if (dbSchema != null) {
+      return dbSchema.getTable(tableName);
+    }
+    return null;
+  }
+
+  private DBTable findTableInConfiguredCatalogAndSchema(String schemaName, String tableName) {
     DBSchema dbSchema;
     DBCatalog catalog = database.getCatalog(catalogName);
     if (catalog == null) {

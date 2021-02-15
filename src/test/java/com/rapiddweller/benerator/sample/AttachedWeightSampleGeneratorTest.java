@@ -67,8 +67,7 @@ public class AttachedWeightSampleGeneratorTest extends GeneratorTest {
     WeightedSample<Integer>[] samples = new WeightedSample[] {
         new WeightedSample<>(0, 0.1),
         new WeightedSample<>(1, 0.3),
-        new WeightedSample<>(2, 0.6)
-    };
+        new WeightedSample<>(2, 0.6)};
     AttachedWeightSampleGenerator<Integer> g = new AttachedWeightSampleGenerator<>(Integer.class);
     g.setSamples(samples);
     g.init(context);
@@ -84,7 +83,9 @@ public class AttachedWeightSampleGeneratorTest extends GeneratorTest {
       double measuredProbability = (float) count / n;
       double expectedProbability = samples2.get(i).getWeight();
       double ratio = measuredProbability / expectedProbability;
-      logger.debug(i + " " + count + " " + ratio);
+      if (logger.isDebugEnabled()) {
+        logger.debug(i + " " + count + " " + ratio);
+      }
       assertTrue(ratio > 0.9 && ratio < 1.1);
     }
   }

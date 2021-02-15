@@ -51,9 +51,9 @@
 
     <comment>define a database that will be referred by the id 'db' subsequently</comment>
     <database id="schema1" url="{dbUrl}" driver="{dbDriver}" schema="schema1"
-              user="{dbUser}" password="{dbPassword}" includeTables="#all"/>
+              user="{dbUser}" password="{dbPassword}" />
     <database id="schema2" url="{dbUrl}" driver="{dbDriver}" schema="schema2"
-              user="{dbUser}" password="{dbPassword}" includeTables="#all"/>
+              user="{dbUser}" password="{dbPassword}" />
 
     <comment>drop the current tables/sequences if they exist and recreate them</comment>
     <execute uri="postgres/drop_schemas.postgres_multischema.sql" target="schema1" onError="ignore"/>
@@ -101,7 +101,7 @@
 
     <comment>create customers</comment>
     <generate type="db_user" count="{customer_count}" consumer="schema1">
-        <variable name="person" generator="PersonGenerator" dataset="{country}" locale="{locale}"/>
+        <variable name="person" generator="PersonGenerator"/>
         <id name="id" generator="idGen"/>
         <attribute name="name" script="person.givenName + ' ' + person.familyName"/>
         <attribute name="email" generator="EMailAddressGenerator"/>
@@ -136,7 +136,8 @@
                   distribution="cumulated"/>
         <id name="id" generator="idGen"/>
         <attribute name="number_of_items" min="1" max="27" distribution="cumulated"/>
-        <reference name="order_id" source="schema1" selector="select id from db_order where id &gt; 1" cyclic="true"/>
+<!--        <reference name="order_id" source="schema1" selector="select id from schema1.db_order where id &gt; 1" cyclic="true"/>-->
+        <reference name="order_id" source="schema1" targetType="db_order"/>
         <reference name="product_ean_code" script="product[0]"/>
         <attribute name="total_price" constant="1000"/>
     </generate>

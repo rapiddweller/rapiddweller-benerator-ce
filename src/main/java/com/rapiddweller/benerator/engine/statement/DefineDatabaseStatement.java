@@ -123,7 +123,9 @@ public class DefineDatabaseStatement implements Statement {
   @Override
   @SuppressWarnings("deprecation")
   public boolean execute(BeneratorContext context) {
-    logger.debug("Instantiating database with id '" + id + "'");
+    if (logger.isDebugEnabled()) {
+      logger.debug("Instantiating database with id '" + id + "'");
+    }
     String idValue = id.evaluate(context);
 
     // DB config is based on the (optional) environment setting

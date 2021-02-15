@@ -210,6 +210,17 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
     parseAndExecuteFile("/demo/shop/postgres.multischema.ben.xml");
   }
 
+  /**
+   * Demo postgres multi schema with table with same name and different columns and foreign key in different schema
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoPostgresMultiSchemaDuplicatedTable() throws IOException {
+    context.setContextUri("/demo/shop");
+    parseAndExecuteFile("/demo/shop/postgres.multischema_duplicated_table.ben.xml");
+  }
+
 
   /**
    * Demo Mysql Shop
@@ -218,8 +229,16 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    */
   @Test
   public void DemoMysqlShop() throws IOException {
-    context.setContextUri("/demo/shop");
-    parseAndExecuteFile("/demo/shop/shop-mysql.ben.xml");
+    try {
+      context.setContextUri("/demo/shop");
+      parseAndExecuteFile("/demo/shop/shop-mysql.ben.xml");
+    } catch (java.lang.RuntimeException e) {
+      if (e.getMessage().contains("Connecting the database failed")) {
+        logger.info("no mysql database configured ...");
+      } else {
+        throw new RuntimeException("something else went wrong ...");
+      }
+    }
   }
 
   /**
@@ -289,6 +308,5 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
     context.setContextUri("/demo/shop");
     parseAndExecuteFile("/demo/shop/shop-h2.ben.xml");
   }
-
 
 }

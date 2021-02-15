@@ -180,7 +180,7 @@ public class ConsumerMock extends AbstractConsumer {
       try {
         Thread.sleep(minDelay + random.nextInt(delayDelta));
       } catch (InterruptedException e) {
-        // nothing to do
+        Thread.currentThread().interrupt();
       }
     }
   }
