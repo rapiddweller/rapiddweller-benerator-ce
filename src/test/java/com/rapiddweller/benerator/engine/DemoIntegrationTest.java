@@ -215,12 +215,24 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
+  @Ignore
   @Test
   public void DemoPostgresMultiSchemaDuplicatedTable() throws IOException {
     context.setContextUri("/demo/shop");
     parseAndExecuteFile("/demo/shop/postgres.multischema_duplicated_table.ben.xml");
   }
 
+  /**
+   * Demo Mssql Shop
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoMssqlShop() throws IOException {
+    context.setContextUri("/demo/shop");
+    parseAndExecuteFile("/demo/shop/shop-mssql.ben.xml");
+
+  }
 
   /**
    * Demo Mysql Shop
@@ -229,16 +241,9 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    */
   @Test
   public void DemoMysqlShop() throws IOException {
-    try {
-      context.setContextUri("/demo/shop");
-      parseAndExecuteFile("/demo/shop/shop-mysql.ben.xml");
-    } catch (java.lang.RuntimeException e) {
-      if (e.getMessage().contains("Connecting the database failed")) {
-        logger.info("no mysql database configured ...");
-      } else {
-        throw new RuntimeException("something else went wrong ...");
-      }
-    }
+    context.setContextUri("/demo/shop");
+    parseAndExecuteFile("/demo/shop/shop-mysql.ben.xml");
+
   }
 
   /**
