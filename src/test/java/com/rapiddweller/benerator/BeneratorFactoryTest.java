@@ -13,7 +13,7 @@ public class BeneratorFactoryTest {
    */
   @Test
   public void testGetSchemaPathForCurrentVersion() {
-    assertEquals("com/rapiddweller/benerator/benerator-1.1.1.xsd", BeneratorFactory.getSchemaPathForCurrentVersion());
+    assertEquals("com/rapiddweller/benerator/benerator-1.1.2.xsd", BeneratorFactory.getSchemaPathForCurrentVersion());
   }
 }
 
