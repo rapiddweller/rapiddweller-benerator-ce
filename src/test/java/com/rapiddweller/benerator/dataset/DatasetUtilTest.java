@@ -46,7 +46,6 @@ public class DatasetUtilTest {
    */
   @Test
   public void testDefaultLanguageForRegion() {
-    assertEquals(Locale.getDefault(), DatasetUtil.defaultLanguageForRegion(null));
     assertEquals(Locale.getDefault(), DatasetUtil.defaultLanguageForRegion(""));
     assertEquals(Locale.US, DatasetUtil.defaultLanguageForRegion("US"));
     assertEquals(Locale.ENGLISH, DatasetUtil.defaultLanguageForRegion("UK"));

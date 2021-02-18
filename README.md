@@ -9,6 +9,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/99c887d3153744e395f539551cdec103)](https://www.codacy.com/gh/rapiddweller/rapiddweller-benerator-ce/dashboard?utm_source=github.com&utm_medium=referral&utm_content=rapiddweller/rapiddweller-benerator-ce&utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/99c887d3153744e395f539551cdec103)](https://www.codacy.com/gh/rapiddweller/rapiddweller-benerator-ce/dashboard?utm_source=github.com&utm_medium=referral&utm_content=rapiddweller/rapiddweller-benerator-ce&utm_campaign=Badge_Coverage)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.rapiddweller/rapiddweller-benerator-ce/badge.svg)](https://search.maven.org/artifact/com.rapiddweller/rapiddweller-benerator-ce)
+[![deepcode](https://www.deepcode.ai/api/gh/badge?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF0Zm9ybTEiOiJnaCIsIm93bmVyMSI6InJhcGlkZHdlbGxlciIsInJlcG8xIjoicmFwaWRkd2VsbGVyLWJlbmVyYXRvci1jZSIsImluY2x1ZGVMaW50IjpmYWxzZSwiYXV0aG9ySWQiOjI3NDc5LCJpYXQiOjE2MTM0MDY4MDJ9.vzeClli_bSWw7QpOzE64spPdxR2lg62lTbpMeUhzji4)](https://www.deepcode.ai/app/gh/rapiddweller/rapiddweller-benerator-ce/_/dashboard?utm_content=gh%2Frapiddweller%2Frapiddweller-benerator-ce)
 
 # rapiddweller-benerator-ce
 
@@ -45,7 +46,7 @@ mvn -version
 1. Choose how to install:
 
    a) Download a Prebuilt Distribution from **Project Overview > Releases**
-   (current release is `1.1.0`, cp. rapiddweller-benerator-ce-1.1.0-jdk-11-dist.zip)
+   (current release is `1.1.1`, cp. rapiddweller-benerator-ce-1.1.1-jdk-11-dist.zip)
    and unzip the downloaded file in an appropriate directory, e.g.
    `/Developer/Applications` or `C:\Program Files\Development`.
 
@@ -57,10 +58,10 @@ mvn -version
 
    - Windows Details: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the User Variables section.
      Enter BENERATOR_HOME as name and the path as value
-     (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.0-jdk-11`). Click OK several times.
+     (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.1-jdk-11`). Click OK several times.
 
    - Mac/Unix/Linux Details: Add an entry that points to Benerator,
-     e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.1.0-jdk-11`
+     e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.1.1-jdk-11`
 
 3. On Unix/Linux/Mac systems: **Set permissions**  
    Open a shell on the installation's root directory and execute

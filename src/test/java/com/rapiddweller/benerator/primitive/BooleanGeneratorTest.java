@@ -76,7 +76,9 @@ public class BooleanGeneratorTest extends GeneratorClassTest {
         count[0]++;
       }
     }
-    logger.debug("prob=" + trueProbability + ", n=" + n + ", falseCount=" + count[0] + ", trueCount=" + count[1]);
+    if (logger.isDebugEnabled()) {
+      logger.debug("prob=" + trueProbability + ", n=" + n + ", falseCount=" + count[0] + ", trueCount=" + count[1]);
+    }
     float ratio = (float) count[1] / n;
     assertEquals(trueProbability, ratio, 0.1);
   }

@@ -193,11 +193,11 @@ public abstract class AbstractComponentBuilderFactoryTest extends GeneratorTest 
   }
 
 
-//  private <T> void expectSequence(PartDescriptor name, T... products) {
-//    ComponentBuilder builder = createComponentBuilder(name);
-//    Generator<T> helper = new ComponentBuilderGenerator(builder, name.getName());
-//    expectGeneratedSet(helper, products).withContinuedAvailability();
-//  }
+  //  private <T> void expectSequence(PartDescriptor name, T... products) {
+  //    ComponentBuilder builder = createComponentBuilder(name);
+  //    Generator<T> helper = new ComponentBuilderGenerator(builder, name.getName());
+  //    expectGeneratedSet(helper, products).withContinuedAvailability();
+  //  }
 
 
   /**

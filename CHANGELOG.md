@@ -2,6 +2,31 @@
 
 <!--lint disable no-duplicate-headings-->
 
+## 1.1.1
+
+### Release Highlights
+
+- improved way of handling databases with multi schema references
+
+### Important Notes
+
+- removed __includeTables="#all"__ tag, this is not necessary anymore, because there is a mechanism now to identify
+  related schemas automatically based on JDBC metadata.
+
+- **known Issue:** when you have two tables with identical name in different schemas, imported as Database connection in
+  your benerator context, for example: tableA in schema1 and tableA in schema2 ...
+  ```xml
+  <database id="schema1" url="{dbUrl}" driver="{dbDriver}" schema="schema1" user="{dbUser}" password="{dbPassword}" />
+  <database id="schema2" url="{dbUrl}" driver="{dbDriver}" schema="schema2" user="{dbUser}" password="{dbPassword}" />
+  ```  
+  ... the Benerator won't be able to identify the right table when it comes to persisting entities to database.
+
+### Breaking Changes
+
+N/A
+
+---
+
 ## 1.1.0
 
 ### Release Highlights
@@ -9,9 +34,9 @@
 - GraalVM Script engine support (https://www.graalvm.org/)
 - support for case-sensitive database names and multi schema references (for supported databases)
 - new MKDocs manual (https://www.benerator.de/ce/1.1.0/doc/)
-- several new DemoCases to show how to use ... 
-  - multi schema databases with references into foreign schemas 
-  - case-sensitive database names like "cataloG"."Schema"."PersoN" 
+- several new DemoCases to show how to use ...
+  - multi schema databases with references into foreign schemas
+  - case-sensitive database names like "cataloG"."Schema"."PersoN"
   - GraalVM Script engine
 
 ### Important Notes
@@ -42,8 +67,8 @@ N/A
 
 ## 1.0.0
 
-Adoption of rapiddweller-benerator-ce by [rapiddweller](https://rapiddweller.com). Project was hard forked, updated and tidied however no logical
-changes have occurred since databene-benerator v0.9.8 was released by Volker Bergmann.
+Adoption of rapiddweller-benerator-ce by [rapiddweller](https://rapiddweller.com). Project was hard forked, updated and
+tidied however no logical changes have occurred since databene-benerator v0.9.8 was released by Volker Bergmann.
 
 ### Release Highlights
 

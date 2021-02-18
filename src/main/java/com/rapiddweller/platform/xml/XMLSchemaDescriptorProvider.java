@@ -352,15 +352,13 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
         String typeName = element.getAttribute("type");
         if (!StringUtil.isEmpty(typeName)) {
           TypeDescriptor elementType = dataModel.getTypeDescriptor(typeName);
-          //noinspection DuplicateCondition
           if (elementType instanceof SimpleTypeDescriptor) {
             addTypeDescriptor(new SimpleTypeDescriptor(nameAttribute, this));
-          } else //noinspection DuplicateCondition
-            if (elementType instanceof SimpleTypeDescriptor) {
-              addTypeDescriptor(new ComplexTypeDescriptor(nameAttribute, this));
-            } else {
-              addTypeDescriptor(new UnresolvedTypeDescriptor(nameAttribute, this, typeName));
-            }
+          } else if (elementType instanceof ComplexTypeDescriptor) {
+            addTypeDescriptor(new ComplexTypeDescriptor(nameAttribute, this));
+          } else {
+            addTypeDescriptor(new UnresolvedTypeDescriptor(nameAttribute, this, typeName));
+          }
         } else if (XMLUtil.getChildElements(element, false, "complexType").length > 0) {
           addTypeDescriptor(new ComplexTypeDescriptor(nameAttribute, this));
         } else if (XMLUtil.getChildElements(element, false, SIMPLE_TYPE).length > 0) {

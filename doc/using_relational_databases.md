@@ -244,18 +244,19 @@ Single-Value-Table
 In the simplest case, you have a table which stores a single row with a single value:
 
 ```xml
+
 <setup>
-  <database id="db" environment="mydb"/>
-  
-  <bean id="sg" class="SequenceTableGenerator">
-    <property name="database" ref="db"/>
-    <property name="table" value="MY_TABLE"/>
-    <property name="column" value="SEQ_VALUE"/>
-  </bean>
-  <generate type="PERSON" count="100" consumer="db">
-    <id name="id" type="long" generator="sg"/>
-    ...
-  </generate>
+    <database id="db" environment="mydb"/>
+
+    <bean id="sg" class="SequenceTableGenerator">
+        <property name="database" ref="db"/>
+        <property name="table" value="MY_TABLE"/>
+        <property name="column" value="SEQ_VALUE"/>
+    </bean>
+    <generate type="PERSON" count="100" consumer="db">
+        <id name="id" type="long" generator="sg"/>
+        ...
+    </generate>
 </setup>
 ```
 
@@ -267,19 +268,20 @@ specified by a row in which the SEQ_ID column has the value '
 PERSON':
 
 ```xml
+
 <setup>
-  <database id="db" environment="mydb"/>
-  
-  <bean id="sg" class="SequenceTableGenerator">
-    <property name="database" ref="db"/>
-    <property name="table" value="MY_TABLE"/>
-    <property name="column" value="'SEQ_VALUE"/>
-    <property name="selector" value="SEQ_ID = 'PERSON'"/>
-  </bean>
-  
-  <generate type="PERSON" count="100" consumer="cons">
-    <id name="id" type="int" generator="sg"/>
-  </generate>
+    <database id="db" environment="mydb"/>
+
+    <bean id="sg" class="SequenceTableGenerator">
+        <property name="database" ref="db"/>
+        <property name="table" value="MY_TABLE"/>
+        <property name="column" value="'SEQ_VALUE"/>
+        <property name="selector" value="SEQ_ID = 'PERSON'"/>
+    </bean>
+
+    <generate type="PERSON" count="100" consumer="cons">
+        <id name="id" type="int" generator="sg"/>
+    </generate>
 </setup>
 ```
 
@@ -290,28 +292,30 @@ question mark (**?**) and must be invoked differently than the examples above, u
 generateWithParams(...)** method:
 
 ```xml
+
 <setup>
-  <database id="db" environment="mydb"/>
-  
-  <bean id="sg" class="SequenceTableGenerator">
-    <property name="database" ref="db"/>
-    <property name="table" value="MY_TABLE"/>
-    <property name="column" value="'SEQ_VALUE"/>
-    <property name="selector" value="MOD_ID = ? and ITEM_ID = ?"/>
-  </bean>
-  
-  
-  <generate type="PERSON" count="100" consumer="cons"> <!-- calculate mid and iid as required -->
-      <id name="id" type="int" script="sg.generateWithParams(mid, iid)"/>
-  </generate>
+    <database id="db" environment="mydb"/>
+
+    <bean id="sg" class="SequenceTableGenerator">
+        <property name="database" ref="db"/>
+        <property name="table" value="MY_TABLE"/>
+        <property name="column" value="'SEQ_VALUE"/>
+        <property name="selector" value="MOD_ID = ? and ITEM_ID = ?"/>
+    </bean>
+
+
+    <generate type="PERSON" count="100" consumer="cons"> <!-- calculate mid and iid as required -->
+        <id name="id" type="int" script="sg.generateWithParams(mid, iid)"/>
+    </generate>
 </setup>
 ```
 
 ## Handling of common Columns
 
 In many databases, you encounter common columns like auditing information 'created_by', 'created_at', 'updated_by', '
-updated_at' or optimistic locking columns. See '[Default Attribute Settings](data_generation_concepts.md#default-attribute-settings)' for instructions how to define a
-common default generation settings for these.
+updated_at' or optimistic locking columns.
+See '[Default Attribute Settings](data_generation_concepts.md#default-attribute-settings)' for instructions how to
+define a common default generation settings for these.
 
 ## Determining attribute values by a database query
 
@@ -375,11 +379,12 @@ table 'product') in different geographical regions and have a cross-reference ta
 products are available in which region:
 
 ```xml
+
 <generate name="example" type="ex" count="5" consumer="ConsoleExporter">
-  <attribute name="region" values="'americas','emea','asia'"/>
-  
-  <reference name="product" source="db"
-             subSelector="{{'select product_id from product_region where region_id = ' + this.region }}"  />
+    <attribute name="region" values="'americas','emea','asia'"/>
+
+    <reference name="product" source="db"
+               subSelector="{{'select product_id from product_region where region_id = ' + this.region }}"/>
 </generate>
 ```
 
@@ -391,8 +396,8 @@ first invocation and reuses it on each subsequent call.
 
 ### Automatic referencing
 
-**By default**, Benerator assumes that all relations are **one-to-one** as the most defensive choice. Thus, the following
-setup in which a table db_user references a table db_role will cause an error:
+**By default**, Benerator assumes that all relations are **one-to-one** as the most defensive choice. Thus, the
+following setup in which a table db_user references a table db_role will cause an error:
 
 ```xml
 
@@ -410,19 +415,20 @@ available!
 entries will be the number of role entries.
 
 In most cases you actually deal with many-to-one relationships and thus need to specify its characteristics explicitly,
-typically by using a distribution. Basically, a reference is defined by (column) **name**, (database) **source** and 
+typically by using a distribution. Basically, a reference is defined by (column) **name**, (database) **source** and
 **targetType** (referenced table):
 
 ```xml
+
 <setup>
-  <generate type="db_role" count="10" consumer="db"/>
-  
-  <generate type="db_user" count="100" consumer="db">
-  
-    <reference name="role_fk" targetType="db_role" source="db" distribution="random"/>
-  
-  </generate>
-  ...
+    <generate type="db_role" count="10" consumer="db"/>
+
+    <generate type="db_user" count="100" consumer="db">
+
+        <reference name="role_fk" targetType="db_role" source="db" distribution="random"/>
+
+    </generate>
+    ...
 </setup>
 ```
 
@@ -448,13 +454,15 @@ selector which will be evaluated by the target system and return a reference val
 be a SQL where clause or complete query:
 
 ```xml
+
 <setup>
-  <generate type="db_role" count="10" consumer="db"/>
-  
-  <generate type="db_user" count="100" consumer="db">
-  <reference name="role_fk" targetType="db_role" source="db" selector="role_name != 'admin'" distribution="random"/>
-  </generate>
-  ...
+    <generate type="db_role" count="10" consumer="db"/>
+
+    <generate type="db_user" count="100" consumer="db">
+        <reference name="role_fk" targetType="db_role" source="db" selector="role_name != 'admin'"
+                   distribution="random"/>
+    </generate>
+    ...
 </setup>
 ```
 
@@ -464,30 +472,32 @@ Besides selective referencing, you can use (almost) the full feature set of `<at
 references, e.g. constant, pattern, values, script, etc. You could, e.g., configure the use of each role type by itself:
 
 ```xml
+
 <setup>
-  <generate type="db_user" count="5" consumer="db">
-      <reference name="role_fk" constant="'admin'"/>
-      ...
-  </generate>
-  
-  <generate type="db_user" count="95" consumer="db">
-  <reference name="role_fk" constant="'customer'"/>
-  ...
-  </generate>
-  ...
+    <generate type="db_user" count="5" consumer="db">
+        <reference name="role_fk" constant="'admin'"/>
+        ...
+    </generate>
+
+    <generate type="db_user" count="95" consumer="db">
+        <reference name="role_fk" constant="'customer'"/>
+        ...
+    </generate>
+    ...
 </setup>
 ```
 
 ## Composite Keys
 
-Benerator does not provide an **automated** composite key handling, but you can configure it to handle them 
+Benerator does not provide an **automated** composite key handling, but you can configure it to handle them
 **explicitly**. The typical approach for this is a prototype query.
 
 ## Prototype Queries
 
-For the general idea of prototype-based generation, see '[Prototype-based Data Generation](data_generation_concepts.md#prototype-based-data-generation)'. In addition to the core features, the
-prototype approach is a good way to handle composite primary keys and composite foreign keys, since their components are
-available in combination.
+For the general idea of prototype-based generation,
+see '[Prototype-based Data Generation](data_generation_concepts.md#prototype-based-data-generation)'. In addition to the
+core features, the prototype approach is a good way to handle composite primary keys and composite foreign keys, since
+their components are available in combination.
 
 ### Prototype Queries on Entities
 
@@ -495,16 +505,17 @@ When querying entities, you specify the database to query as **source**, the whe
 the table which is queried as **type**. After that, you can access the results' attributes by their names:
 
 ```xml
+
 <generate name="example" type="ex" count="5" consumer="ConsoleExporter">
-  <variable name="_product"
-            type="MY_PRODUCT"
-            source="db"
-            selector="sysdate between VALID_FROM and VALID_TO"
-            distribution="random"/>
-  
-  <reference name="PRODUCT_ID" script="_product.PRODUCT_ID"/>
-  
-  <attribute name="ROUTING_TYPE" script="_product.ROUTING_TYPE"/>
+    <variable name="_product"
+              type="MY_PRODUCT"
+              source="db"
+              selector="sysdate between VALID_FROM and VALID_TO"
+              distribution="random"/>
+
+    <reference name="PRODUCT_ID" script="_product.PRODUCT_ID"/>
+
+    <attribute name="ROUTING_TYPE" script="_product.ROUTING_TYPE"/>
 </generate>
 ```
 
@@ -513,15 +524,15 @@ column values as array elements (indices are 0-based):
 
 ```xml
 
-<variable name="_product" source="db" 
+<variable name="_product" source="db"
           selector="select PRODUCT_ID, ROUTING_TYPE from MY_PRODUCT where sysdate between VALID_FROM and VALID_TO"
-          distribution="random" />
+          distribution="random"/>
 
 
 <generate name="example" type="ex" count="5" consumer="ConsoleExporter">
-  <reference name="PRODUCT_ID" script="_product[0]"/>
-  
-  <reference name="ROUTNG_TYPE" script="_product[1]"/>
+<reference name="PRODUCT_ID" script="_product[0]"/>
+
+<reference name="ROUTNG_TYPE" script="_product[1]"/>
 </generate>
 ```
 
@@ -560,9 +571,9 @@ db_order_items' total_price values and write it to the db_order's total_price co
 </iterate>
 ```
 
-The described update mechanism can also be used to anonymize production data – 
-see '[Production Data Anonymization](benerator_goals_features.md#production-data-anonymization)'. 
-For transferring user data from a source database 'sourcedb' to a target database 'testdb', you would write
+The described update mechanism can also be used to anonymize production data –
+see '[Production Data Anonymization](benerator_goals_features.md#production-data-anonymization)'. For transferring user
+data from a source database 'sourcedb' to a target database 'testdb', you would write
 
 ```xml
 
@@ -706,8 +717,8 @@ syntax:
 </transcodingTask>
 ```
 
-Each ROLE and USER gets a new primary key value, and the foreign key references from USER to ROLE are reassigned to match
-the new id values.
+Each ROLE and USER gets a new primary key value, and the foreign key references from USER to ROLE are reassigned to
+match the new id values.
 
 ### Cascaded Transcoding
 
@@ -765,8 +776,8 @@ you might have automatically assigned technical ids, an object with a given 'bus
 Bergmann') might have different 'technical' ids (primary keys of value e.g. 10 or 1000) in different databases. Thus,
 you need to provide Benerator with a description, which technical id relates to which business id in which database.
 
-There are several alternatives available: Let us start with one of the simplest, and most widely used in order 
-to give you an overview of the approach and then provide you with a complete list of possibilities.
+There are several alternatives available: Let us start with one of the simplest, and most widely used in order to give
+you an overview of the approach and then provide you with a complete list of possibilities.
 
 Let's assume the tables ROLE and USER each have a NAME column with unique identifiers. In this case, you can apply the
 unique-key identity mapping and store it in a file with the suffix .id.xml, e.g. identities.id.xml:
@@ -915,55 +926,39 @@ you would have related data distributed into different schema. In Benerator scri
 sources ...
 
 ```xml
+
 <setup>
-  
-  <database id="schema1"
-            url="{dbUrl}"
-            driver="{dbDriver}"
-            schema="schema1"
-            user="{dbUser}"
-            password="{dbPassword}"
-            batch="{dbBatch}"/>
-  
-  <database id="schema2"
-            url="{dbUrl}"
-            driver="{dbDriver}"
-            schema="schema2"
-            user="{dbUser}"
-            password="{dbPassword}"
-            batch="{dbBatch}"/>
-  
-  <database id="schema3"
-            url="{dbUrl}"
-            driver="{dbDriver}"
-            schema="schema3"
-            user="{dbUser}"
-            password="{dbPassword}"
-            batch="{dbBatch}"/>
-  ...
+
+    <database id="schema1"
+              url="{dbUrl}"
+              driver="{dbDriver}"
+              schema="schema1"
+              user="{dbUser}"
+              password="{dbPassword}"
+              batch="{dbBatch}"/>
+
+    <database id="schema2"
+              url="{dbUrl}"
+              driver="{dbDriver}"
+              schema="schema2"
+              user="{dbUser}"
+              password="{dbPassword}"
+              batch="{dbBatch}"/>
+
+    <database id="schema3"
+              url="{dbUrl}"
+              driver="{dbDriver}"
+              schema="schema3"
+              user="{dbUser}"
+              password="{dbPassword}"
+              batch="{dbBatch}"/>
+    ...
 </setup>
 ```
 
-when you try to fill one of the tables, Benerator scans your data source and checks if all references are accessible. 
-In this case, data source ***schema1*** has one table ***db_product*** with a foreign key reference into
-schema 3. This schema is not part of scope, and thus, would create an error message ...
-
-```shell
-[ERROR] com.rapiddweller.common.ObjectNotFoundException: Table db_manufacturer is referenced 
-by table db_product but not found in the database. Possibly it was filtered out?
-```
-
-In this situation you have two possibilities to address this issue. 
-
-1. You could create a view in schema 1 of table db_product in schema 3
-
-```sql
-CREATE VIEW schema1.db_product AS SELECT * FROM schema3.db_product;
-```
-
-This makes the target of reference visible for Benerator. 
-
-2. Alternatively, use the ***includeTable*** tag in the data source ...
+when you try to fill one of the tables, Benerator scans your data source and checks if all references are accessible. In
+this case, data source ***schema1*** has one table ***db_product*** with a foreign key reference into schema 3. The new
+mechanism is getting the foreign keys from your actual scope ...
 
 ```xml
 
@@ -973,8 +968,23 @@ This makes the target of reference visible for Benerator.
           schema="schema1"
           user="{dbUser}"
           password="{dbPassword}"
-          batch="{dbBatch}"
-          includeTable="#all"/> 
+          batch="{dbBatch}"/>
 ```
 
-This makes all schema's visible for data source ***schema1***.
+**schema1** in this case. It contains one foreign key into a foreign schema ('db_product') , based on this meta
+information, Benerator decides what else is necessary to import into your scope. In this case it would be **schema3**.
+_The flag includeTable="#all" is not necessary anymore!_
+
+#### Known issue
+
+There is one known limitation when it comes to multischema. If you have two table with same name in different schema and
+both schema imported into your Benerator context, like ...
+
+```xml
+<database id="schema1" url="{dbUrl}" driver="{dbDriver}" schema="schema1" user="{dbUser}" password="{dbPassword}" />
+<database id="schema2" url="{dbUrl}" driver="{dbDriver}" schema="schema2" user="{dbUser}" password="{dbPassword}" />
+```
+
+... you might get an Error because Benerator can't decide what table you want to access. There would be another
+workaround to exclude the table you won't need from your context by using
+`excludeTable="db_user"` ... unfortunately this doesn't work properly ( a fix will come in next minor release )

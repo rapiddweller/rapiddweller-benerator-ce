@@ -93,7 +93,9 @@ public class CompanyNameGeneratorTest extends GeneratorClassTest {
     generator.init(context);
     for (int i = 0; i < 100; i++) {
       CompanyName name = generator.generate();
-      logger.debug(name.toString());
+      if (logger.isDebugEnabled()) {
+        logger.debug(name.toString());
+      }
       assertNotNull(name);
       assertTrue(name.toString().length() > 1);
       System.out.println(name);
@@ -109,7 +111,9 @@ public class CompanyNameGeneratorTest extends GeneratorClassTest {
     generator.init(context);
     for (int i = 0; i < 100; i++) {
       CompanyName name = generator.generate();
-      logger.debug(name.toString());
+      if (logger.isDebugEnabled()) {
+        logger.debug(name.toString());
+      }
       assertNotNull(name);
       assertTrue(name.toString().length() > 1);
       System.out.println(name);
@@ -126,7 +130,9 @@ public class CompanyNameGeneratorTest extends GeneratorClassTest {
     generator.init(context);
     for (int i = 0; i < 100; i++) {
       CompanyName name = generator.generate();
-      logger.debug(name.toString());
+      if (logger.isDebugEnabled()) {
+        logger.debug(name.toString());
+      }
       assertNotNull(name);
       assertTrue(name.toString().length() > 1);
     }

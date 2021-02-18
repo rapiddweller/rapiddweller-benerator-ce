@@ -210,6 +210,28 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
     parseAndExecuteFile("/demo/shop/postgres.multischema.ben.xml");
   }
 
+  /**
+   * Demo postgres multi schema with table with same name and different columns and foreign key in different schema
+   *
+   * @throws IOException the io exception
+   */
+  @Test(expected = RuntimeException.class)
+  public void DemoPostgresMultiSchemaDuplicatedTableInBenCtx() throws IOException {
+    context.setContextUri("/demo/shop");
+    parseAndExecuteFile("/demo/shop/postgres.multischema_duplicated_table.ben.xml");
+  }
+
+  /**
+   * Demo Mssql Shop
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoMssqlShop() throws IOException {
+    context.setContextUri("/demo/shop");
+    parseAndExecuteFile("/demo/shop/shop-mssql.ben.xml");
+
+  }
 
   /**
    * Demo Mysql Shop
@@ -220,6 +242,7 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
   public void DemoMysqlShop() throws IOException {
     context.setContextUri("/demo/shop");
     parseAndExecuteFile("/demo/shop/shop-mysql.ben.xml");
+
   }
 
   /**
@@ -289,6 +312,5 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
     context.setContextUri("/demo/shop");
     parseAndExecuteFile("/demo/shop/shop-h2.ben.xml");
   }
-
 
 }

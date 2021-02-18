@@ -150,7 +150,7 @@ public class BeneratorMonitor implements BeneratorMonitorMBean {
           update();
         }
       } catch (InterruptedException e) {
-        e.printStackTrace();
+        Thread.currentThread().interrupt();
       }
     }
 

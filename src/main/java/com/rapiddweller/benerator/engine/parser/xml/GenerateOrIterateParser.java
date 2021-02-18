@@ -265,7 +265,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     InstanceDescriptor descriptor = mapDescriptorElement(element, context);
 
     // parse statement
-    Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, null, 1L, false, context);
+    Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 0L, 1L, false, context);
     Expression<Long> pageSize = parsePageSize(element);
     Expression<PageListener> pager = (Expression<PageListener>) DatabeneScriptParser.parseBeanSpec(
         element.getAttribute(ATT_PAGER));

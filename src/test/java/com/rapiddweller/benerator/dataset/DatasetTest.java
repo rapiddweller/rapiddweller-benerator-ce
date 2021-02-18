@@ -77,7 +77,9 @@ public class DatasetTest {
     assertTrue(atomicSubSets.contains(DatasetUtil.getDataset(REGION, "DE")));
     assertTrue(atomicSubSets.contains(DatasetUtil.getDataset(REGION, "AT")));
     String[] dataFiles = DatasetUtil.getDataFiles("com/rapiddweller/domain/person/familyName_{0}.csv", "europe", REGION);
-    logger.debug(ArrayFormat.format(dataFiles));
+    if (logger.isDebugEnabled()) {
+      logger.debug(ArrayFormat.format(dataFiles));
+    }
     assertTrue(ArrayUtil.contains("com/rapiddweller/domain/person/familyName_DE.csv", dataFiles));
   }
 

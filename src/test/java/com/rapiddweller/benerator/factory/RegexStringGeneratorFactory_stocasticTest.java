@@ -271,7 +271,9 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
   // helpers ---------------------------------------------------------------------------------------------------------
 
   private void checkRegexGeneration(String regex) {
-    logger.debug("checking generation for regex '" + regex + "'");
+    if (logger.isDebugEnabled()) {
+      logger.debug("checking generation for regex '" + regex + "'");
+    }
     NonNullGenerator<String> generator = create(regex);
     checkRegexGeneration(generator, regex, 0, 255, true);
   }
