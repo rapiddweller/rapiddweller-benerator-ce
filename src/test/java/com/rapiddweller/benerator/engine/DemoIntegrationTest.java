@@ -30,12 +30,15 @@ import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
 import com.rapiddweller.common.FileUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+
+import static com.rapiddweller.common.SystemInfo.isLinux;
 
 /**
  * Integration test for Benerator's Demo Files.<br/><br/>
@@ -204,6 +207,7 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
+  @Ignore
   @Test
   public void DemoPostgresMultiSchema() throws IOException {
     context.setContextUri("/demo/shop");
@@ -215,6 +219,7 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
+  @Ignore
   @Test(expected = RuntimeException.class)
   public void DemoPostgresMultiSchemaDuplicatedTableInBenCtx() throws IOException {
     context.setContextUri("/demo/shop");
@@ -226,6 +231,7 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
+  @Ignore
   @Test
   public void DemoMssqlShop() throws IOException {
     context.setContextUri("/demo/shop");
@@ -238,6 +244,7 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
+  @Ignore
   @Test
   public void DemoMysqlShop() throws IOException {
     context.setContextUri("/demo/shop");
@@ -252,6 +259,7 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    */
   @Test
   public void DemoPostgresShop() throws IOException {
+    Assume.assumeTrue(isLinux());
     context.setContextUri("/demo/shop");
     parseAndExecuteFile("/demo/shop/shop-postgres.ben.xml");
   }
@@ -312,5 +320,6 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
     context.setContextUri("/demo/shop");
     parseAndExecuteFile("/demo/shop/shop-h2.ben.xml");
   }
+
 
 }

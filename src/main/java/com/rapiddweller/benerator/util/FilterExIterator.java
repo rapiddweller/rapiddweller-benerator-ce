@@ -65,13 +65,14 @@ public class FilterExIterator<E> extends DataIteratorProxy<E> {
     this.filterEx = filterEx;
     this.context = context;
   }
-
+  // TODO V1.2 build a better Filter
   @Override
   public DataContainer<E> next(DataContainer<E> wrapper) {
     DataContainer<E> tmp;
     while ((tmp = super.next(wrapper)) != null) {
-      context.set("_candidate", tmp.getData());
-      if (filterEx.evaluate(context)) {
+      String _candidate = tmp.getData().toString();
+      String filter = String.valueOf(filterEx.evaluate(context));
+      if (_candidate.contains(filter)) {
         return tmp;
       }
     }

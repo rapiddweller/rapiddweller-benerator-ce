@@ -29,6 +29,11 @@ package com.rapiddweller.benerator.script;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.converter.GraalValueConverter;
+import com.rapiddweller.common.converter.AnyConverter;
+import com.rapiddweller.domain.address.Address;
+import com.rapiddweller.domain.address.City;
+import com.rapiddweller.domain.organization.CompanyName;
+import com.rapiddweller.domain.person.Person;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.model.data.Entity;
@@ -41,6 +46,7 @@ import org.graalvm.polyglot.proxy.ProxyObject;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -55,7 +61,13 @@ public class GraalScript implements Script {
 
   private final String text;
   private final String language;
-  private static final org.graalvm.polyglot.Context polyglotCtx = org.graalvm.polyglot.Context.newBuilder("js").allowAllAccess(true).build();
+  private static final org.graalvm.polyglot.Context polyglotCtx =
+      org.graalvm.polyglot.Context
+          .newBuilder("js")
+//          .allowHostAccess(HostAccess.ALL)
+//          //allows access to all Java classes
+//          .allowHostClassLookup(className -> true)
+          .allowAllAccess(true).build();
   private static final Logger LOGGER = LogManager.getLogger(GraalScript.class);
 
   /**
@@ -83,22 +95,29 @@ public class GraalScript implements Script {
 
   private void migrateBeneratorContext2GraalVM(Context context) {
     // add benerator context to graalvm script context
+    Object valueType;
     try {
-      for (String key : context.keySet()) {
-        Object valueType = context.get(key) != null ? context.get(key).getClass() : null;
+      for (Map.Entry<String, Object> entry : context.entrySet()) {
+        try {
+          valueType = entry.getValue() != null ? entry.getValue().getClass() : null;
+        } catch (NullPointerException e) {
+          LOGGER.fatal("Key {} produced NullPointerException, this should not happen!", entry.getKey());
+          continue;
+        }
         if (valueType == null) {
           continue;
         }
         // check if Entity Object
         if (Entity.class.equals(valueType)) {
-          LOGGER.debug("Entity found : {}", key);
-          Map<String, Object> map = new Entity2MapConverter().convert((Entity) context.get(key));
+          LOGGER.debug("Entity found : {}", entry.getKey());
+          Map<String, Object> map = new Entity2MapConverter().convert((Entity) entry.getValue());
           // to access items of map in polyglotCtx it is nessesary to create an ProxyObject
           // TODO: might should create an Entity2ProxyObjectConverter in 1.2.0
           ProxyObject proxy = ProxyObject.fromMap(map);
-          polyglotCtx.getBindings(this.language).putMember(key, proxy);
-        } else {
-          polyglotCtx.getBindings(this.language).putMember(key, context.get(key));
+          polyglotCtx.getBindings(this.language).putMember(entry.getKey(), proxy);
+        } else{
+          LOGGER.debug("{} found : {}", valueType.getClass(), entry.getKey());
+          polyglotCtx.getBindings(this.language).putMember(entry.getKey(), entry.getValue());
         }
       }
     } catch (NullPointerException e) {

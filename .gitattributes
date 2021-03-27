@@ -6,10 +6,18 @@
 # The above will handle all files NOT found below
 #
 
-# Java sources
-*.java          text diff=java
-*.gradle        text diff=java
-*.gradle.kts    text diff=java
+# sources
+*.cs     text diff=csharp eol=lf
+*.java   text diff=java eol=lf
+*.html   text diff=html eol=lf
+*.py     text diff=python eol=lf
+*.pl     text diff=perl eol=lf
+*.pm     text diff=perl eol=lf
+*.css    text eol=lf
+*.js     text eol=lf
+*.sql    text eol=lf
+*.gradle        text diff=java eol=lf
+*.gradle.kts    text diff=java eol=lf
 
 # These files are text and should be normalized (Convert crlf => lf)
 *.css           text diff=css
