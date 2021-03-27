@@ -9,11 +9,11 @@ Digits (0-9) and US-ASCII letters (A-Z, a-z) are supported as they are. Special 
 hexadecimal form:
 
 ```shell
-\0n The character with octal value 0n (0 `<= n `<= 7)
+\0n The character with octal value 0n (0 <= n <= 7)
 
-\0nn The character with octal value 0nn (0 `<= n `<= 7)
+\0nn The character with octal value 0nn (0 <= n <= 7)
 
-\0mnn The character with octal value 0mnn (0 `<= m `<= 3, 0 `<= n `<= 7)
+\0mnn The character with octal value 0mnn (0 <= m <= 3, 0 <= n <= 7)
 
 \xhh The character with hexadecimal value 0xhh
 

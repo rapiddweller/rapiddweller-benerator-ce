@@ -26,7 +26,7 @@ that match a regular expression. For example, for generating unique phone number
 
 ```xml
 
-<attribute name="phone" type="string"pattern="[1-9][0-9]{2}\-[0-9]{4}\-[0-9]{5}" unique="true" />
+<attribute name="phone" type="string" pattern="[1-9][0-9]{2}\-[0-9]{4}\-[0-9]{5}" unique="true" />
 ```
 
 For an introduction to regular expressions, read about '[Regular Expressions](regular_expression_support.md)'.
@@ -80,7 +80,8 @@ As an example, let's have a look the following code:
 
 ```xml
 <generate type="product" count="6" consumer="ConsoleExporter">
-    <attribute name="key1" type="int" />` `<attribute name="key2" type="int" />
+    <attribute name="key1" type="int" />
+    <attribute name="key2" type="int" />
 </generate>
 ```
 
