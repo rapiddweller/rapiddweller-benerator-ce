@@ -66,7 +66,9 @@ public class StepSequence extends Sequence {
   /**
    * Instantiates a new Step sequence.
    *
-   * @param delta the increment to choose for created generators.              When using null, the granularity parameter will be used to set the increment              in {@link #createNumberGenerator(Class, Number, Number, Number, boolean)}
+   * @param delta the increment to choose for created generators.
+   *              When using null, the granularity parameter will be used to set the increment
+   *              in {@link #createNumberGenerator(Class, Number, Number, Number, boolean)}
    */
   public StepSequence(BigDecimal delta) {
     this(delta, null);

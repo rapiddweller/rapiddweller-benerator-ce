@@ -378,9 +378,7 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
       Set<Entry<String, Object>> entrySet = new HashSet<>(parent.entrySet());
       entrySet.addAll(localContext.entrySet());
       return entrySet;
-    }
-
-    catch (NullPointerException e){
+    } catch (NullPointerException e) {
       return localContext.entrySet();
     }
 

@@ -112,8 +112,7 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     if (generator == null) {
       generator = createHeuristicGenerator(descriptor, instanceName, uniqueness, context);
     }
-    if (generator == null) // by now, we must have created a generator
-    {
+    if (generator == null) { // by now, we must have created a generator
       throw new ConfigurationError("Failed to create root generator for descriptor: " + descriptor);
     }
     return generator;
