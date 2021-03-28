@@ -29,11 +29,6 @@ package com.rapiddweller.benerator.script;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.converter.GraalValueConverter;
-import com.rapiddweller.common.converter.AnyConverter;
-import com.rapiddweller.domain.address.Address;
-import com.rapiddweller.domain.address.City;
-import com.rapiddweller.domain.organization.CompanyName;
-import com.rapiddweller.domain.person.Person;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.model.data.Entity;
@@ -46,7 +41,6 @@ import org.graalvm.polyglot.proxy.ProxyObject;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -64,9 +58,6 @@ public class GraalScript implements Script {
   private static final org.graalvm.polyglot.Context polyglotCtx =
       org.graalvm.polyglot.Context
           .newBuilder("js")
-//          .allowHostAccess(HostAccess.ALL)
-//          //allows access to all Java classes
-//          .allowHostClassLookup(className -> true)
           .allowAllAccess(true).build();
   private static final Logger LOGGER = LogManager.getLogger(GraalScript.class);
 
@@ -115,7 +106,7 @@ public class GraalScript implements Script {
           // TODO: might should create an Entity2ProxyObjectConverter in 1.2.0
           ProxyObject proxy = ProxyObject.fromMap(map);
           polyglotCtx.getBindings(this.language).putMember(entry.getKey(), proxy);
-        } else{
+        } else {
           LOGGER.debug("{} found : {}", valueType.getClass(), entry.getKey());
           polyglotCtx.getBindings(this.language).putMember(entry.getKey(), entry.getValue());
         }
