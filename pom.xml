@@ -450,7 +450,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${plugin_maven-surefire-plugin.version}</version>
                 <configuration>
-                    <argLine>-Xmx4096m</argLine>
                     <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
                 <dependencies>
