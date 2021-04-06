@@ -207,7 +207,6 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
-  @Ignore
   @Test
   public void DemoPostgresMultiSchema() throws IOException {
     context.setContextUri("/demo/shop");
@@ -219,7 +218,6 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
-  @Ignore
   @Test(expected = RuntimeException.class)
   public void DemoPostgresMultiSchemaDuplicatedTableInBenCtx() throws IOException {
     context.setContextUri("/demo/shop");
