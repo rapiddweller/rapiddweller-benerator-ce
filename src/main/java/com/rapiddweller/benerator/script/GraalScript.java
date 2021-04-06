@@ -57,7 +57,7 @@ public class GraalScript implements Script {
   private final String language;
   private static final org.graalvm.polyglot.Context polyglotCtx =
       org.graalvm.polyglot.Context
-          .newBuilder("js")
+          .newBuilder("js", "python")
           .allowAllAccess(true).build();
   private static final Logger LOGGER = LogManager.getLogger(GraalScript.class);
 

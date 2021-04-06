@@ -495,6 +495,8 @@
     <xs:element name="iterate">
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="echo" minOccurs="0"/>
+                <xs:element ref="if" minOccurs="0"/>
                 <xs:element ref="comment" minOccurs="0"/>
                 <xs:element ref="id" minOccurs="0"/>
                 <xs:element ref="attribute" minOccurs="0"/>

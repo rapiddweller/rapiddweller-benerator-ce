@@ -122,7 +122,7 @@
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
         <dependency_derbyclient.version>10.6.1.0</dependency_derbyclient.version>
         <dependency_freemarker.version>2.3.20</dependency_freemarker.version>
-        <dependency_graalvm.version>20.3.0</dependency_graalvm.version>
+        <dependency_graalvm.version>21.0.0.2</dependency_graalvm.version>
         <dependency_h2.version>1.4.200</dependency_h2.version>
         <dependency_hsqldb.version>1.8.0.7</dependency_hsqldb.version>
         <dependency_icu4j.version>67.1</dependency_icu4j.version>
