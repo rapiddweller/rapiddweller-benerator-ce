@@ -491,6 +491,7 @@ jobs:
       - run: cat $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
       - run: sleep 30s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/shop/postgres.multischema.ben.xml
 
   E2ET_mysql-adoptopenjdk11:
     runs-on: ubuntu-latest
