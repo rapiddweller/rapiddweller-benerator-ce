@@ -297,6 +297,7 @@ E2ET:shop:postgres-graalvm11:
     - cat $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
     - cd $ARTIFACT_FULLNAME/demo/shop
     - benerator shop-postgres.ben.xml
+    - benerator postgres.multischema.ben.xml
 
 ###################### Upload Binaries ######################
 

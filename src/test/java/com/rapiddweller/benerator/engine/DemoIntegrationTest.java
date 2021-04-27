@@ -195,7 +195,6 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
-  @Ignore
   @Test
   public void DemoH2MultiSchema() throws IOException {
     context.setContextUri("/demo/db");
