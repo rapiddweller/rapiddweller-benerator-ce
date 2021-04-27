@@ -187,8 +187,6 @@
                 <include>org.apache.commons:commons-compress:jar</include>
                 <include>org.apache.xmlbeans:xmlbeans:jar</include>
                 <include>commons-codec:commons-codec:jar</include>
-                <include>dom4j:dom4j:jar</include>
-                <include>stax:stax-api:jar</include>
                 <include>xerces:xercesImpl:jar</include>
                 <include>org.antlr:antlr-runtime:jar</include>
                 <include>org.freemarker:freemarker:jar</include>
