@@ -27,9 +27,12 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import org.junit.Assume;
 import org.junit.Test;
 
 import java.io.IOException;
+
+import static com.rapiddweller.common.SystemInfo.isLinux;
 
 /**
  * Integration test for Benerator's Script functionality.<br/><br/>
@@ -48,6 +51,7 @@ public class ManualExampleTest extends BeneratorIntegrationTest {
    */
   @Test
   public void example1() throws IOException {
+    Assume.assumeTrue(isLinux());
     context.setContextUri("/com/rapiddweller/benerator/engine/manual");
     parseAndExecuteFile("/com/rapiddweller/benerator/engine/manual/example.ben.xml");
   }

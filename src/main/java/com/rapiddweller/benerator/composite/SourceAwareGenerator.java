@@ -61,7 +61,8 @@ public class SourceAwareGenerator<E> extends GeneratorProxy<E> implements Messag
    * Instantiates a new Source aware generator.
    *
    * @param instanceName instance name for the generated entities.
-   * @param source       another Generator of entities that serves as Entity builder.                     It may construct empty Entities or may import them (so this may overwrite imported attributes).
+   * @param source       another Generator of entities that serves as Entity builder.
+   *                     It may construct empty Entities or may import them (so this may overwrite imported attributes).
    * @param components   the components
    * @param context      the context
    */

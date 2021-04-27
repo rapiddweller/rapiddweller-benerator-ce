@@ -113,7 +113,7 @@ public class SequenceManager {
    * @param required the required
    * @return the registered sequence
    */
-  public synchronized static Sequence getRegisteredSequence(String name, boolean required) {
+  public static synchronized Sequence getRegisteredSequence(String name, boolean required) {
     Sequence sequence = instances.get(name);
     if (sequence == null && required) {
       throw new ConfigurationError("Sequence not registered: " + name);
@@ -128,7 +128,7 @@ public class SequenceManager {
    * @param sequence the sequence
    * @return the sequence
    */
-  public synchronized static Sequence register(String name, Sequence sequence) {
+  public static synchronized Sequence register(String name, Sequence sequence) {
     instances.put(name, sequence);
     return sequence;
   }
@@ -138,7 +138,7 @@ public class SequenceManager {
    *
    * @return the collection
    */
-  public synchronized static Collection<Sequence> registeredSequences() {
+  public static synchronized Collection<Sequence> registeredSequences() {
     return instances.values();
   }
 

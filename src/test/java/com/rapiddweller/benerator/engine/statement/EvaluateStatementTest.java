@@ -35,7 +35,6 @@ import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.rapiddweller.script.expression.ExpressionUtil.constant;
@@ -75,7 +74,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
   /**
    * Test uri mapping.
    */
-  @Ignore
+
   @Test
   public void testUriMapping() {
     EvaluateStatement stmt = new EvaluateStatement(
@@ -92,7 +91,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
         null,
         null);
     stmt.execute(context);
-    assert (context.get("message") == "\"Hello World\"" || context.get("message") == "Hello World");
+    assertEquals(context.get("message"), "Hello World");
   }
 
   /**

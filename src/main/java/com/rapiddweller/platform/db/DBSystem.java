@@ -1138,7 +1138,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
           if (constraint.getColumnNames().length == 1) {
             descriptor.setUnique(true);
           } else {
-            logger.warn(
+            logger.debug(
                 "Automated uniqueness assurance on multiple columns is not provided yet: " +
                     constraint);
             // TODO v0.7.6 support uniqueness constraints on combination of columns

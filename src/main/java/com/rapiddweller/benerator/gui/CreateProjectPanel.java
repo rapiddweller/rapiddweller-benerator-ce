@@ -476,8 +476,8 @@ public class CreateProjectPanel extends JPanel {
   /**
    * The type Archetype renderer.
    */
-  static
-  class ArchetypeRenderer extends DefaultListCellRenderer {
+
+  static class ArchetypeRenderer extends DefaultListCellRenderer {
 
     private final Map<Archetype, Icon> icons = new HashMap<>(20);
 
