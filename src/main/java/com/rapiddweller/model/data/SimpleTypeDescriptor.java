@@ -116,7 +116,7 @@ public class SimpleTypeDescriptor extends TypeDescriptor {
    */
   public SimpleTypeDescriptor(String name, DescriptorProvider provider,
                               SimpleTypeDescriptor parent) {
-    this(name, provider, parent.getName());
+    this(name, provider, parent != null ? parent.getName() : null);
     this.parent = parent;
   }
 

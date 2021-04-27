@@ -121,7 +121,7 @@ public class Product {
     StringBuilder buffer = new StringBuilder();
     if (category != null) {
       if (category.getGroup() != null) {
-        buffer.append(category.getGroup().getName() + '/');
+        buffer.append(category.getGroup().getName()).append('/');
       }
       buffer.append(category.getName()).append('/');
     }
