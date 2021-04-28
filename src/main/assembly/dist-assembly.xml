@@ -158,7 +158,7 @@
             <unpack>false</unpack>
             <scope>provided</scope>
             <includes>
-                <include>net.sourceforge.jtds:jtds:jar</include>
+                <include>com.microsoft.sqlserver:mssql-jdbc:jar</include>
                 <include>com.ibm.icu:icu4j:jar</include>
                 <include>org.graalvm.*:*:jar</include>
                 <include>mysql:mysql-connector-java:jar</include>

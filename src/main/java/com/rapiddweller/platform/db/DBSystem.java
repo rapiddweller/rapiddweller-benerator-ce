@@ -957,7 +957,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   private void checkOracleDriverVersion(String driver) {
     if (driver != null && driver.contains("oracle")) {
-      Connection connection = null;
+      Connection connection;
       try {
         connection = getConnection();
         DatabaseMetaData metaData = connection.getMetaData();
