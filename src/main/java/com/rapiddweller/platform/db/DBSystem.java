@@ -61,7 +61,6 @@ import com.rapiddweller.jdbacl.model.DBUniqueConstraint;
 import com.rapiddweller.jdbacl.model.Database;
 import com.rapiddweller.jdbacl.model.cache.CachingDBImporter;
 import com.rapiddweller.jdbacl.model.jdbc.JDBCDBImporter;
-import com.rapiddweller.jdbacl.model.jdbc.JDBCMetaDataUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.DataModel;
@@ -993,10 +992,10 @@ public abstract class DBSystem extends AbstractStorageSystem {
   }
 
   private JDBCDBImporter createJDBCImporter() {
-    return JDBCMetaDataUtil
-        .getJDBCDBImporter(getConnection(), user, schemaName,
-            true, false, false, false, includeTables,
-            excludeTables);
+		JDBCDBImporter imp = new JDBCDBImporter(url, driver, user, password, catalogName, schemaName);
+		imp.setTableInclusionPattern(includeTables);
+		imp.setTableExclusionPattern(excludeTables);
+		return imp;
   }
 
   private QueryDataSource createQuery(String query, Context context,
