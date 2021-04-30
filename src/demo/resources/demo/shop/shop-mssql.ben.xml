@@ -34,9 +34,6 @@
     <comment>setting default values</comment>
     <setting name="stage" default="development"/>
     <setting name="database" default="sql_server"/>
-    <setting name="dbCatalog" default=""/>
-    <setting name="dbSchema" default=""/>
-    <setting name="dbPassword" default=""/>
     <setting name="dbBatch" default="false"/>
 
     <comment>import stage and database specific properties</comment>

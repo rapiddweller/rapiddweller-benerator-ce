@@ -174,8 +174,8 @@ jobs:
       - name: set db properties for mssql connetion
         run: |
           echo "
-          dbUrl=jdbc:jtds:sqlserver://mssql:1433;databaseName=master
-          dbDriver=net.sourceforge.jtds.jdbc.Driver
+          dbUrl=jdbc:sqlserver://mssql:1433
+          dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
           dbSchema=dbo
           dbUser=sa
           dbPassword=Benerator123!
