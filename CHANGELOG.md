@@ -2,6 +2,19 @@
 
 <!--lint disable no-duplicate-headings-->
 
+## 1.1.2
+
+### Release Highlights
+
+- improved way of migrating Benerator Objects as ProxyObject into GraalVM Context
+- further improvement of handling multi schema databases
+- upgarde to GraalVM 21
+- fix(RandomVarLengthStingGenerator): limit to 1000 character if there is no limit set in DB
+- switch to official Microsoft SQL Server JDBC Driver
+- further improvements docs
+
+---
+
 ## 1.1.1
 
 ### Release Highlights

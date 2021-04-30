@@ -71,8 +71,7 @@ public class Variable<E> extends AbstractGeneratorComponent<E> {
 
   @Override
   public void close() {
-    if (context != null) // if the variable has not been used (count="0"), it has not been initialized
-    {
+    if (context != null) { // if the variable has not been used (count="0"), it has not been initialized
       context.remove(name);
     }
     super.close();

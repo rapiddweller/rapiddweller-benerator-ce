@@ -116,7 +116,7 @@ public class SimpleTypeDescriptor extends TypeDescriptor {
    */
   public SimpleTypeDescriptor(String name, DescriptorProvider provider,
                               SimpleTypeDescriptor parent) {
-    this(name, provider, parent.getName());
+    this(name, provider, parent != null ? parent.getName() : null);
     this.parent = parent;
   }
 
@@ -518,37 +518,36 @@ public class SimpleTypeDescriptor extends TypeDescriptor {
 
   // generic property access -----------------------------------------------------------------------------------------
 
-/*
-    public void setDetail(String detailName, Object detailValue) {
-        Class<?> targetType = getDetailType(detailName);
-        if (targetType == Distribution.class && detailValue.getClass() == String.class)
-            detailValue = mapDistribution((String) detailValue);
-        else if (targetType == Converter.class && detailValue.getClass() == String.class)
-            detailValue = mapConverter((String) detailValue);
-        super.setDetailValue(detailName, detailValue);
-    }
-*/
+  /*
+      public void setDetail(String detailName, Object detailValue) {
+          Class<?> targetType = getDetailType(detailName);
+          if (targetType == Distribution.class && detailValue.getClass() == String.class)
+              detailValue = mapDistribution((String) detailValue);
+          else if (targetType == Converter.class && detailValue.getClass() == String.class)
+              detailValue = mapConverter((String) detailValue);
+          super.setDetailValue(detailName, detailValue);
+      }
+  */
 
-// private helpers -------------------------------------------------------------------------------------------------
-/*
-    private Converter<?, ?> mapConverter(String converterString) {
-        Object result = BeanUtil.newInstance(converterString);
-        if (result instanceof Format)
-            result = new ParseFormatConverter(Object.class, (Format) result);
-        else if (!(result instanceof Converter))
-            throw new ConfigurationError("Class is no Converter: " + result.getClass());
-        return (Converter<?, ?>) result;
-    }
-
-    private static Distribution mapDistribution(String distributionName) {
-        if (distributionName == null)
-            return null;
-        try {
-            return Sequence.getInstance(distributionName);
-        } catch (Exception e) {
-            return (Distribution) BeanUtil.newInstance(distributionName);
-        }
-    }
-*/
+  // private helpers -------------------------------------------------------------------------------------------------
+  ///
+  //    private Converter<?, ?> mapConverter(String converterString) {
+  //        Object result = BeanUtil.newInstance(converterString);
+  //        if (result instanceof Format)
+  //            result = new ParseFormatConverter(Object.class, (Format) result);
+  //        else if (!(result instanceof Converter))
+  //            throw new ConfigurationError("Class is no Converter: " + result.getClass());
+  //        return (Converter<?, ?>) result;
+  //    }
+  //
+  //    private static Distribution mapDistribution(String distributionName) {
+  //        if (distributionName == null)
+  //            return null;
+  //        try {
+  //            return Sequence.getInstance(distributionName);
+  //        } catch (Exception e) {
+  //            return (Distribution) BeanUtil.newInstance(distributionName);
+  //        }
+  //    }
 
 }

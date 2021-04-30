@@ -9,8 +9,6 @@
     <setting name="dbDriver" default="org.h2.Driver"/>
     <setting name="dbSchema" default="public"/>
     <setting name="dbUser" default="sa"/>
-    <setting name="dbPassword" default="12312312321312312312312312321"/>
-    <setting name="dbBatch" default="true"/>
 
     <comment>log the settings to the console</comment>
     <echo>{ftl:encoding:${context.defaultEncoding} default pageSize:${context.defaultPageSize}}</echo>
@@ -22,18 +20,16 @@
               driver="{dbDriver}"
               schema="{dbSchema}"
               user="{dbUser}"
-              password="{dbPassword}"
-              batch="{dbBatch}"
     />
 
     <execute type="sql" target="db" uri="script/h2.multischema.sql"/>
 
     <database id="schema1" url="{dbUrl}" driver="{dbDriver}" schema="schema1"
-              user="{dbUser}" password="{dbPassword}" batch="{dbBatch}" includeTables="#all"/>
+              user="{dbUser}"/>
     <database id="schema3" url="{dbUrl}" driver="{dbDriver}" schema="schema3"
-              user="{dbUser}" password="{dbPassword}" batch="{dbBatch}"/>
+              user="{dbUser}"/>
 
-    <generate type="db_manufacturer" count="100" consumer="schema3" pageSize="100">
+    <generate type="db_manufacturer" count="100" consumer="schema3">
         <id name="id" generator="IncrementGenerator"/>
         <attribute name="name" pattern="[A-Z][A-Z]{5,12}"/>
     </generate>

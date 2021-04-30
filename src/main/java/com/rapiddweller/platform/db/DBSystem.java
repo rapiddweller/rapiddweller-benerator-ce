@@ -957,7 +957,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   private void checkOracleDriverVersion(String driver) {
     if (driver != null && driver.contains("oracle")) {
-      Connection connection = null;
+      Connection connection;
       try {
         connection = getConnection();
         DatabaseMetaData metaData = connection.getMetaData();
@@ -994,7 +994,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   private JDBCDBImporter createJDBCImporter() {
     return JDBCMetaDataUtil
-        .getJDBCDBImporter(getConnection(), user, schemaName,
+        .getJDBCDBImporter(getConnection(), user, catalogName, schemaName,
             true, false, false, false, includeTables,
             excludeTables);
   }
@@ -1138,7 +1138,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
           if (constraint.getColumnNames().length == 1) {
             descriptor.setUnique(true);
           } else {
-            logger.warn(
+            logger.debug(
                 "Automated uniqueness assurance on multiple columns is not provided yet: " +
                     constraint);
             // TODO v0.7.6 support uniqueness constraints on combination of columns

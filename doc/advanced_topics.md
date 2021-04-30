@@ -354,8 +354,7 @@ city[name=Toronto]
 Benerator comes with a predefined nesting definition for geographical datasets, called 'region':
 
 ```properties
-europe=western_europe,central_europe,\
-
+europe=western_europe,central_europe,
 southern_europe,eastern_europe,northern_europe=
 western_europe=PT,ES,AD,FR,MC
 central_europe=BE,NL,LU,DE,CH,AT,LI

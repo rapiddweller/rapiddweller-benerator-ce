@@ -135,6 +135,7 @@ In the system initialization stage you typically use scripts for starting and in
 For starting a database with a shell script and initializing it with a SQL script, you could write:
 
 ```xml
+<setup>
 <execute type="shell">`sh ./startdb.sh &amp;`</execute>
 <execute target="db" type="sql" onError="warn">
 DROP TABLE db_user;
@@ -143,6 +144,7 @@ name varchar(30) NOT NULL,
 PRIMARY KEY (id),
 );
 </execute>
+</setup>
 ```
 
 As you see, scripts can be inlined or imported from files. See '[Scripting](scripting.md)' for a full introduction.
@@ -176,10 +178,12 @@ and is the most reliable source for reproducible data. Currently, the most conve
 several tables) and CSV (one file per table).
 
 ```xml
+<setup>
 <!-- import integration test data for all tables from one DbUnit file -->
 <iterate source="core.dbunit.xml" consumer="db" />
 <!-- import predefined products from a CSV file -->
 <iterate type="db_product" source="demo/shop/products.import.csv" encoding="utf-8" consumer="db" />
+</setup>
 ```
 
 Fixed column width files and SQL files can be used too. If you need to import data of other formats you can easily write a parser and use it directly
@@ -248,7 +252,7 @@ adding a new one, e.g. the configuration
 ```xml
 <generate type="db_user" count="100" consumer="db">
 <attribute name="active" values="0,1"/>
-<generate>
+</generate>
 ```
 
 will cause generation of 50% 0 and 50% 1 values.
@@ -533,6 +537,7 @@ New import formats can be supported by implementing the EntitySource interface w
 it by its id with a 'source' attribute, e.g.
 
 ```xml
+<setup>
 <bean id="products_file" class="com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource">
   <property name="uri" value="shop/products.import.fcw"/>
   <property name="entity" value="product"/>
@@ -540,6 +545,7 @@ it by its id with a 'source' attribute, e.g.
 </bean>
 
 <iterate type="product" source="products_file" consumer="ConsoleExporter"/>
+</setup>
 ```
 
 ## Consumers
@@ -573,21 +579,25 @@ Examples:
 The `<database>` declaration will be described later.
 
 ```xml
-<bean id="special" class="com.my.SpecialConsumer"/>
+<setup>
+<bean id="special" class="com.my.SpecialConsumer">
     <property name="format" value="uppercase"/>
 </bean>
 
 <generate type="db_product" consumer="db,special"/>
+</setup>
 ```
 
 or
 
 ```xml
-<bean id="special" class="com.my.SpecialConsumer"/>
+<setup>
+<bean id="special" class="com.my.SpecialConsumer">
     <property name="format" value="uppercase"/>
 </bean>
 
 <generate type="db_product" consumer="com.my.SpecialConsumer"/>
+</setup>
 ```
 
 ### Consumer Life Cycle
@@ -607,14 +617,16 @@ cycle:
 You will need to reuse some of the generated data for setting up (load) test clients. You can export data by simply defining an appropriate consumer:
 
 ```xml
+<setup>
 <import platforms="fixedwidth" />
 
-<generate type="db_product" **consumer="db">
+<generate type="db_product" consumer="db">
   <consumer class="FixedWidthEntityExporter">
     <property name="uri" value="products.fcw"/>
     <property name="properties" value="ean_code[13],name[30l],price[10r0]"/>
   </consumer>
 </generate>
+</setup>
 ```
 
 ## Post Processing Imported or Variable Data
@@ -635,7 +647,7 @@ You could also combine the approaches
 
 ```xml
 <iterate type="TX" source="tx.ent.csv" >
-    <id name="ID" **generator="IncrementalIdGenerator" />
+    <id name="ID" generator="IncrementalIdGenerator" />
 </iterate>
 ```
 
@@ -643,7 +655,7 @@ You could also combine the approaches
 
 ```xml
 <iterate type="TX" source="tx.ent.csv">
-    <attribute name="CARD" **script="TX.CARD == 'Y' ? 1 : 0" />
+    <attribute name="CARD" script="TX.CARD == 'Y' ? 1 : 0" />
 </iterate>
 ```
 
@@ -658,7 +670,7 @@ Example
 ```xml
 <iterate type="db_user" source="db">
     <variable name="p" generator="person" />
-    <attribute name="gender" **script="p.gender.name()" **map="'MALE'->`'m','FEMALE'->`'f'" />
+    <attribute name="gender" script="p.gender.name()" map="'MALE'->`'m','FEMALE'->`'f'" />
 </iterate>
 ```
 
@@ -670,7 +682,7 @@ For more intelligent/dynamic conversions, you can inject a converter, e.g. for c
 
 ```xml
 <iterate type="TX" source="tx.ent.csv">
-    <attribute name="PRODUCT" **script="{this.PRODUCT}" **converter="CaseConverter" />
+    <attribute name="PRODUCT" script="{this.PRODUCT}" converter="CaseConverter" />
 </iterate>
 ```
 
@@ -706,7 +718,7 @@ applied if the condition resolves to true:
 
 ```xml
 <iterate source="db1" type="customer" consumer="">
-    <attribute name="vat_no" **condition="this.vat_no != null" pattern="DE[1-9][0-9]{8}" unique="true" />
+    <attribute name="vat_no" condition="this.vat_no != null" pattern="DE[1-9][0-9]{8}" unique="true" />
 </iterate>
 ```
 
@@ -878,7 +890,7 @@ and e.g. create addresses with city names weighted by population, when specifyin
 
 ```xml
 <generate type="address" count="100" consumer="ConsoleExporter">
-<variable name="city_data" source="cities.ent.csv" **distribution="weighted[population]"/>
+<variable name="city_data" source="cities.ent.csv" distribution="weighted[population]"/>
 <id name="id" type="long" />
 <attribute name="city" script="city_data.name"/>
 </generate>
@@ -908,6 +920,7 @@ value for setting the db_customer id:
 Simple constraints, e.g. formats can be assured by defining an appropriate Generator or regular expression, e.g.
 
 ```xml
+<setup>
 <import domains="product" />
 <!-- create products of random attribs &amp; category -->
 <generate type="db_product" count="1000" pageSize="100">
@@ -915,6 +928,7 @@ Simple constraints, e.g. formats can be assured by defining an appropriate Gener
 <attribute name="name" pattern="[A-Z][A-Z]{5,12}"/>
 <consumer ref="db"/>
 </generate>
+</setup>
 ```
 
 ## Imposing multi-field-constraints
@@ -925,6 +939,7 @@ generator. On each generation run, an instance is generated and made available t
 a source path attribute:
 
 ```xml
+<setup>
 <import domains="person"/>
 <generate type="db_customer" consumer="db">
 <variable name="person" generator="PersonGenerator"/>
@@ -932,6 +947,7 @@ a source path attribute:
 <attribute name="first_name" script="person.givenName"/>
 <attribute name="last_name" script="person.familyName"/>
 </generate>
+</setup>
 ```
 
 The source path may be composed of property names, map keys and entity features, separated by a dot.
@@ -944,10 +960,10 @@ Usually most entities have common attribute names, e.g. for ids or audit data. Y
 <defaultComponents>
 <id name="ID" type="long" source="db" strategy="sequence" param="hibernate_sequence"/>
 <attribute name="VERSION" values="1"/>
-<attribute name="CREATED_AT" generator=currentDateGenerator"/>
-<attribute name="CREATED_BY" values="vbergmann"/>
+<attribute name="CREATED_AT" generator="currentDateGenerator"/>
+<attribute name="CREATED_BY" values="rapiddweller"/>
 <attribute name="UPDATED_AT" generator="currentDateGenerator"/>
-<attribute name="UPDATED_BY" values="vbergmann"/>
+<attribute name="UPDATED_BY" values="rapiddweller"/>
 </defaultComponents>
 ```
 
@@ -970,8 +986,9 @@ Arbitrary information may be queried from a system by a 'selector' attribute, wh
 
 ```xml
 <generate type="db_order" count="30" pageSize="100">
-  <reference name="customer_id" source="db" selector="select id from db_customer" _cyclic="true"_/>
-  <consumer ref="db"/>` `<!-- automatically chosen by Benerator -->
+  <reference name="customer_id" source="db" selector="select id from db_customer" cyclic="true" />
+  <consumer ref="db"/>
+  <!-- automatically chosen by Benerator -->
 </generate>
 ```
 
@@ -1131,7 +1148,7 @@ Other available severities are ignore, trace, debug, info, warn, error, which ma
 stop execution.
 
 ```xml
-<generate type="product" count="1000" **onError="fatal"** consumer="db">
+<generate type="product" count="1000" onError="fatal" consumer="db">
 <!-- component setup here -->
 </generate>
 ```

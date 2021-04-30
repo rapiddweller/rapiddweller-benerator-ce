@@ -57,7 +57,7 @@ public class ArchetypeTest {
   @Test
   public void testSimpleProjectArchetype() throws Exception {
     // prepare
-    Archetype simple = new Archetype(new URL(ArchetypeManager.ARCHETYPE_FOLDER_URL.toString() + "/simple"));
+    Archetype simple = new Archetype(new URL(ArchetypeManager.ARCHETYPE_FOLDER_URL + "/simple"));
     File targetFolder = new File("target/simple");
     FileUtil.deleteIfExists(targetFolder);
 
@@ -75,7 +75,7 @@ public class ArchetypeTest {
     File src = new File(targetFolder, "src");
     assertTrue(src.exists());
     assertTrue(src.isDirectory());
-    assertTrue(ArrayUtil.contains("log4j.xml", src.list()));
+    assertTrue(ArrayUtil.contains("log4j2.xml", src.list()));
     // check that ARCHETYPE-INF was not copied
     assertFalse(ArrayUtil.contains("ARCHETYPE-INF", createdFiles));
   }

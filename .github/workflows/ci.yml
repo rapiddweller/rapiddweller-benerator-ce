@@ -174,8 +174,9 @@ jobs:
       - name: set db properties for mssql connetion
         run: |
           echo "
-          dbUrl=jdbc:jtds:sqlserver://mssql:1433;databaseName=master
-          dbDriver=net.sourceforge.jtds.jdbc.Driver
+          dbUrl=jdbc:sqlserver://mssql:1433
+          dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
+          dbCatalog=master
           dbSchema=dbo
           dbUser=sa
           dbPassword=Benerator123!
@@ -491,6 +492,7 @@ jobs:
       - run: cat $ARTIFACT_FULLNAME/demo/shop/postgres/shop.postgres.properties
       - run: sleep 30s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-postgres.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/shop/postgres.multischema.ben.xml
 
   E2ET_mysql-adoptopenjdk11:
     runs-on: ubuntu-latest
@@ -582,8 +584,8 @@ jobs:
         run: benerator --version
       - run: |
           echo "
-          dbUrl=jdbc:jtds:sqlserver://mssql:1433;databaseName=master
-          dbDriver=net.sourceforge.jtds.jdbc.Driver
+          dbUrl=jdbc:sqlserver://mssql:1433
+          dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
           dbCatalog=master
           dbSchema=dbo
           dbUser=sa

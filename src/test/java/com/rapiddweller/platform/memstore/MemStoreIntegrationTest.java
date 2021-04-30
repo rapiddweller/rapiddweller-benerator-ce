@@ -131,6 +131,20 @@ public class MemStoreIntegrationTest extends BeneratorIntegrationTest {
   }
 
   /**
+   * Test iterate with selector.
+   */
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testIterateWithJsSelector() {
+    MemStore.ignoreClose = false;
+    parseAndExecute("<execute type='js'>let test = 2 </execute>");
+    parseAndExecute("<iterate source='src' type='product' selector='{js: _candidate.id == test + 1 + 1}' consumer='cons'/>");
+    List<Entity> products = (List<Entity>) consumer.getProducts();
+    assertEquals(1, products.size());
+    assertEquals(4, products.get(0).get("id"));
+  }
+
+  /**
    * Test variable.
    */
   @SuppressWarnings("unchecked")

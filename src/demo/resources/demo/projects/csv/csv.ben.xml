@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<setup xmlns="http://databene.org/benerator/0.7.0"
+<setup xmlns="https://www.benerator.de/schema/1.0.0"
 >
     <import domains="person"/>
     <import platforms="csv, multi"/>

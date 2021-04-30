@@ -10,17 +10,24 @@ The invocation syntax is as described for SQL invocation and inlining: You can i
   <database id="db" url="jdbc:hsqldb:mem:example" driver="org.hsqldb.jdbcDriver" user="sa" schema="PUBLIC"/>
   
   <execute type="js">
+    print('DB-URL' + db.getUrl());
+
+    // create user Alice
+    const Entity = Java.type('com.rapiddweller.model.data.Entity');
+
+    let alice = new Entity('db_user',context.getLocalDescriptorProvider());"); 
+    alice.set('id', 1); 
+    alice.set('name', 'Alice'); 
+    db.store(alice);
   
-  importPackage(com.rapiddweller.model.data);
+  // create user Bob 
+    let bob = new Entity('db_user', context.getLocalDescriptorProvider());
+    alice.set('id', 2);
+    alice.set('name', 'Bob');
+    db.store(bob);
   
-  print('DB-URL' + db.getUrl());
-  
-  // create user Alice var alice = new Entity('db_user'); alice.set('id', 1); alice.set('name', 'Alice'); db.store(alice);
-  
-  // create user Bob var bob = new Entity('db_user', 'id', '2', 'name', 'Bob'); db.store(bob);
-  
-  // persist everything db.flush();
-  
+  // persist everything 
+    db.flush();
   </execute>
 </setup>
 ```
@@ -31,7 +38,7 @@ used to store Entities created by the script. So, you can import objects of arbi
 Alternatively to inlining script text, you can put it in a script file and invoke this:
 
 ```xml
-<execute uri="test.js" />
+<execute type="js" uri="test.js" />
 ```
 
 You can bind a language of choice by using the mechanisms of GraalVM: Scripting for the Java Platform.

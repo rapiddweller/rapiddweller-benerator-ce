@@ -3,8 +3,8 @@
 
 <setup
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://databene.org/benerator/0.7.0"
-        xsi:schemaLocation="http://databene.org/benerator/0.7.0 http://databene.org/benerator-0.7.0.xsd">
+        xmlns="https://www.benerator.de/schema/1.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 http://benerator.de/schema/rapiddweller-benerator-ce-1.0.0.xsd">
 
     <comment>
         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -34,9 +34,6 @@
     <comment>setting default values</comment>
     <setting name="stage" default="development"/>
     <setting name="database" default="sql_server"/>
-    <setting name="dbCatalog" default=""/>
-    <setting name="dbSchema" default=""/>
-    <setting name="dbPassword" default=""/>
     <setting name="dbBatch" default="false"/>
 
     <comment>import stage and database specific properties</comment>
