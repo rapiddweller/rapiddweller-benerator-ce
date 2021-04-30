@@ -994,7 +994,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   private JDBCDBImporter createJDBCImporter() {
     return JDBCMetaDataUtil
-        .getJDBCDBImporter(getConnection(), user, schemaName,
+        .getJDBCDBImporter(getConnection(), user, catalogName, schemaName,
             true, false, false, false, includeTables,
             excludeTables);
   }
