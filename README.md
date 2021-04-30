@@ -46,7 +46,7 @@ mvn -version
 1. Choose how to install:
 
    a) Download a Prebuilt Distribution from **Project Overview > Releases**
-   (current release is `1.1.1`, cp. rapiddweller-benerator-ce-1.1.1-jdk-11-dist.zip)
+   (current release is `1.1.2`, cp. rapiddweller-benerator-ce-1.1.2-jdk-11-dist.zip)
    and unzip the downloaded file in an appropriate directory, e.g.
    `/Developer/Applications` or `C:\Program Files\Development`.
 
@@ -56,12 +56,12 @@ mvn -version
 2. Set **BENERATOR_HOME**  
    Create an environment variable BENERATOR_HOME that points to the path you extracted Benerator to.
 
-   - Windows Details: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the User Variables section.
-     Enter BENERATOR_HOME as name and the path as value
-     (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.1-jdk-11`). Click OK several times.
+   - Windows Details: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the
+     User Variables section. Enter BENERATOR_HOME as name and the path as value
+     (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.2-jdk-11`). Click OK several times.
 
    - Mac/Unix/Linux Details: Add an entry that points to Benerator,
-     e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.1.1-jdk-11`
+     e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.1.2-jdk-11`
 
 3. On Unix/Linux/Mac systems: **Set permissions**  
    Open a shell on the installation's root directory and execute
