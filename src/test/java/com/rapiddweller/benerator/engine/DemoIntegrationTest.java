@@ -31,7 +31,6 @@ import com.rapiddweller.common.FileUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assume;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -228,7 +227,7 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
-  @Ignore
+//  @Ignore
   @Test
   public void DemoMssqlShop() throws IOException {
     context.setContextUri("/demo/shop");
@@ -241,7 +240,7 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
-  @Ignore
+//  @Ignore
   @Test
   public void DemoMysqlShop() throws IOException {
     context.setContextUri("/demo/shop");
