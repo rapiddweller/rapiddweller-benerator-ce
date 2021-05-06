@@ -43,6 +43,7 @@ import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.platform.db.SQLEntityExporter;
 import com.rapiddweller.platform.dbunit.DbUnitEntityExporter;
 import com.rapiddweller.platform.xls.XLSEntityExporter;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -88,6 +89,10 @@ public class DBSnapshotTool {
    * The constant DB_SCHEMA.
    */
   public static final String DB_SCHEMA = "dbSchema";
+  /**
+   * The constant DB_CATALOG.
+   */
+  public static final String DB_CATALOG = "dbCatalog";
   /**
    * The constant DB_USER.
    */
@@ -141,13 +146,15 @@ public class DBSnapshotTool {
     String dbUser = System.getProperty(DB_USER);
     String dbPassword = System.getProperty(DB_PASSWORD);
     String dbSchema = System.getProperty(DB_SCHEMA);
+	String dbCatalog = System.getProperty(DB_CATALOG);
     String dialect = System.getProperty(DIALECT);
 
     logger.info("Exporting data of database '" + dbUrl + "' with driver '" + dbDriver + "' as user '" + dbUser
-        + "'" + (dbSchema != null ? " using schema '" + dbSchema + "'" : "")
+		+ "'" + (dbSchema != null ? " using schema '" + dbSchema + "'" : "") + "'"
+		+ (dbCatalog != null ? " using catalog '" + dbCatalog + "'" : "")
         + " in " + format + " format to file " + filename);
 
-    export(dbUrl, dbDriver, dbSchema, dbUser, dbPassword, filename, format, dialect);
+	export(dbUrl, dbDriver, dbSchema, dbCatalog, dbUser, dbPassword, filename, format, dialect);
   }
 
   private static String defaultFilename(String format) {
@@ -172,9 +179,9 @@ public class DBSnapshotTool {
    * @param format     the format
    * @param dialect    the dialect
    */
-  public static void export(String dbUrl, String dbDriver, String dbSchema,
+  public static void export(String dbUrl, String dbDriver, String dbSchema, String dbCatalog,
                             String dbUser, String dbPassword, String filename, String format, String dialect) {
-    export(dbUrl, dbDriver, dbSchema, dbUser, dbPassword, filename, SystemInfo.getFileEncoding(),
+	export(dbUrl, dbDriver, dbSchema, dbCatalog, dbUser, dbPassword, filename, SystemInfo.getFileEncoding(),
         format, dialect, null);
   }
 
@@ -192,7 +199,7 @@ public class DBSnapshotTool {
    * @param dialect    the dialect
    * @param monitor    the monitor
    */
-  public static void export(String dbUrl, String dbDriver, String dbSchema,
+  public static void export(String dbUrl, String dbDriver, String dbSchema, String dbCatalog,
                             String dbUser, String dbPassword, String filename, String encoding, String format, String dialect,
                             ProgressMonitor monitor) {
     if (dbUser == null) {
@@ -208,6 +215,9 @@ public class DBSnapshotTool {
       if (dbSchema != null) {
         db.setSchema(dbSchema);
       }
+	  if (dbCatalog != null) {
+		db.setCatalog(dbCatalog);
+	  }
       db.setDynamicQuerySupported(false);
 
       // create exporter
