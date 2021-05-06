@@ -86,6 +86,7 @@ public class Setup implements ObservableBean {
   private String dbDriver;
   private String dbPassword;
   private String dbSchema;
+  private String dbCatalog;
   private String dbUser;
 
   private File dropScriptFile;
@@ -503,6 +504,26 @@ public class Setup implements ObservableBean {
     String oldValue = this.dbSchema;
     this.dbSchema = dbSchema;
     changeSupport.firePropertyChange("dbSchema", oldValue, this.dbSchema);
+  }
+
+  /**
+   * Gets db catalog.
+   * 
+   * @return
+   */
+  public String getDbCatalog() {
+	return dbCatalog;
+  }
+
+  /**
+   * Sets db catalog.
+   * 
+   * @param dbCatalog the db catalog
+   */
+  public void setDbCatalog(String dbCatalog) {
+	String oldValue = this.dbCatalog;
+	this.dbCatalog = dbCatalog;
+	changeSupport.firePropertyChange("dbCatalog", oldValue, this.dbCatalog);
   }
 
   /**

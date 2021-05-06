@@ -26,6 +26,19 @@
 
 package com.rapiddweller.benerator.gui;
 
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CONSUMER;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAME;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ATTRIBUTE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_COMMENT;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_DATABASE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_EXECUTE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_GENERATE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ID;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_SETUP;
+
 import com.rapiddweller.benerator.archetype.FolderLayout;
 import com.rapiddweller.benerator.main.DBSnapshotTool;
 import com.rapiddweller.common.CollectionUtil;
@@ -71,19 +84,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CONSUMER;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAME;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ATTRIBUTE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_COMMENT;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_DATABASE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_EXECUTE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_GENERATE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ID;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_SETUP;
 
 /**
  * Creates benerator project archetypes.<br/>
@@ -145,6 +145,9 @@ public class ProjectBuilder implements Runnable {
     if (!StringUtil.isEmpty(setup.getDbSchema())) {
       attributes.put("schema", setup.getDbSchema());
     }
+	if (!StringUtil.isEmpty(setup.getDbCatalog())) {
+	  attributes.put("catalog", setup.getDbCatalog());
+	}
     attributes.put("user", setup.getDbUser());
     if (!StringUtil.isEmpty(setup.getDbPassword())) {
       attributes.put("password", setup.getDbPassword());
@@ -386,7 +389,7 @@ public class ProjectBuilder implements Runnable {
   private void createDbSnapshot() {
     String format = setup.getDbSnapshot();
     File file = setup.projectFile(setup.getDbSnapshotFile());
-    DBSnapshotTool.export(setup.getDbUrl(), setup.getDbDriver(), setup.getDbSchema(),
+	DBSnapshotTool.export(setup.getDbUrl(), setup.getDbDriver(), setup.getDbSchema(), setup.getDbCatalog(),
         setup.getDbUser(), setup.getDbPassword(), file.getAbsolutePath(), setup.getEncoding(), format,
         null, monitor);
   }
@@ -542,6 +545,9 @@ public class ProjectBuilder implements Runnable {
     if (setup.getDbSchema() != null) {
       db.setSchema(setup.getDbSchema());
     }
+	if (setup.getDbCatalog() != null) {
+	  db.setCatalog(setup.getDbCatalog());
+	}
     dataModel.addDescriptorProvider(db);
     return db;
   }
