@@ -64,7 +64,7 @@ public class WeightedCSVSampleGeneratorTest extends GeneratorTest {
     SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
     ParseFormatConverter<Date> converter = new ParseFormatConverter<>(Date.class, format, false);
     WeightedCSVSampleGenerator<Date> generator = new WeightedCSVSampleGenerator<>(
-        Date.class, FILE_PATH, Encodings.UTF_8, converter);
+        Date.class, FILE_PATH, Encodings.UTF_8, ',', converter);
     generator.init(context);
     // run test
     List<Date> expectedDates = CollectionUtil.toList(sdf.parse("01.02.2003"), sdf.parse("02.02.2003"),

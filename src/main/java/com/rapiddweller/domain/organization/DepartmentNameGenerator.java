@@ -63,7 +63,7 @@ public class DepartmentNameGenerator extends WeightedCSVSampleGenerator<String>
    * @param locale the locale
    */
   public DepartmentNameGenerator(Locale locale) {
-    super(uriForLocale(locale), Encodings.UTF_8);
+    super(uriForLocale(locale), Encodings.UTF_8, ',');
   }
 
   // properties ------------------------------------------------------------------------------------------------------

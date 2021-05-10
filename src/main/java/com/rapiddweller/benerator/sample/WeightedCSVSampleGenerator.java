@@ -68,7 +68,7 @@ public class WeightedCSVSampleGenerator<E> extends GeneratorProxy<E> {
   /**
    * The Separator.
    */
-  protected char separator;
+  private char separator;
 
   private String encoding;
 
@@ -86,7 +86,7 @@ public class WeightedCSVSampleGenerator<E> extends GeneratorProxy<E> {
    * @param url the url
    */
   public WeightedCSVSampleGenerator(String url) {
-    this(url, SystemInfo.getFileEncoding());
+    this(url, SystemInfo.getFileEncoding(), ',');
   }
 
   /**
@@ -96,8 +96,8 @@ public class WeightedCSVSampleGenerator<E> extends GeneratorProxy<E> {
    * @param encoding the encoding
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
-  public WeightedCSVSampleGenerator(String url, String encoding) {
-    this((Class<E>) String.class, url, encoding, new NoOpConverter());
+  public WeightedCSVSampleGenerator(String url, String encoding, char separator) {
+    this((Class<E>) String.class, url, encoding, separator, new NoOpConverter());
   }
 
   /**
@@ -108,12 +108,12 @@ public class WeightedCSVSampleGenerator<E> extends GeneratorProxy<E> {
    * @param encoding   the encoding
    * @param converter  the converter
    */
-  public WeightedCSVSampleGenerator(Class<E> targetType, String uri, String encoding, Converter<String, E> converter) {
+  public WeightedCSVSampleGenerator(Class<E> targetType, String uri, String encoding, char separator, Converter<String, E> converter) {
     super(targetType);
     setSource(new AttachedWeightSampleGenerator<>(targetType));
     this.converter = converter;
     this.encoding = encoding;
-    this.separator = ',';
+    this.separator = separator;
     if (uri != null && uri.trim().length() > 0) {
       this.uri = uri;
     }
