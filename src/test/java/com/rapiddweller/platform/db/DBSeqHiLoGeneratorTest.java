@@ -28,6 +28,7 @@ package com.rapiddweller.platform.db;
 
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -119,8 +120,8 @@ public class DBSeqHiLoGeneratorTest extends GeneratorTest {
   @Test
   public void testConstructor() {
     DBSeqHiLoGenerator actualDbSeqHiLoGenerator = new DBSeqHiLoGenerator("Name", 3);
-    assertEquals("DBSeqHiLoGenerator[100,DBSequenceGenerator[null]]", actualDbSeqHiLoGenerator.toString());
-    assertEquals(100, actualDbSeqHiLoGenerator.getMaxLo());
+    assertEquals("DBSeqHiLoGenerator[3,DBSequenceGenerator[null]]", actualDbSeqHiLoGenerator.toString());
+    assertEquals(3, actualDbSeqHiLoGenerator.getMaxLo());
   }
 
   /**
@@ -129,8 +130,8 @@ public class DBSeqHiLoGeneratorTest extends GeneratorTest {
   @Test
   public void testConstructor2() {
     DBSeqHiLoGenerator actualDbSeqHiLoGenerator = new DBSeqHiLoGenerator("log4jUl", 3);
-    assertEquals("DBSeqHiLoGenerator[100,DBSequenceGenerator[null]]", actualDbSeqHiLoGenerator.toString());
-    assertEquals(100, actualDbSeqHiLoGenerator.getMaxLo());
+    assertEquals("DBSeqHiLoGenerator[3,DBSequenceGenerator[null]]", actualDbSeqHiLoGenerator.toString());
+    assertEquals(3, actualDbSeqHiLoGenerator.getMaxLo());
   }
 
   private static void expectSequence(DBSeqHiLoGenerator generator, long... values) {
