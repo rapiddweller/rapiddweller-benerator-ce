@@ -45,7 +45,7 @@ public class DBSeqHiLoGenerator extends HiLoGenerator {
    * @param maxLo the max lo
    */
   public DBSeqHiLoGenerator(String name, int maxLo) {
-	this(name, maxLo, null);
+    this(name, 100, null);
   }
 
   /**
