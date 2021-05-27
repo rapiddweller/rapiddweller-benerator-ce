@@ -75,6 +75,7 @@ import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.TypeMapper;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -957,9 +958,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   private void checkOracleDriverVersion(String driver) {
     if (driver != null && driver.contains("oracle")) {
-      Connection connection;
-      try {
-        connection = getConnection();
+      try (Connection connection = createConnection()) {
         DatabaseMetaData metaData = connection.getMetaData();
         VersionNumber driverVersion =
             VersionNumber.valueOf(metaData.getDriverVersion());
@@ -970,8 +969,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
         }
       } catch (SQLException e) {
         throw new ConfigurationError(e);
-      } finally {
-        close();
       }
     }
   }
