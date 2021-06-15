@@ -110,6 +110,9 @@ There are various sources to get you started or extend your benerator knowledge:
 
 - Checkout the maintainer's website [www.benerator.de](https://www.benerator.de/) for additional support resources.
 
+**If there are still open questions and things are unclear because they are missing or insufficiently explained in our Benerator manual,
+please open an issue on github so we can expand our manual to make things clearer for you.**
+
 ## Table of Contents Manual
 
 Navigate to the sources for our generated mkdocs:
