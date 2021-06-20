@@ -32,7 +32,7 @@ jobs:
           ARTIFACT_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec);
           echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
           echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
-        if: startsWith(github.ref, 'refs/heads/')
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
       - name: set ARTIFACT_FULLNAME
         run: |
           echo "echo ARTIFACT_ID=${ARTIFACT_ID} >> \$GITHUB_ENV" >> dot.env
