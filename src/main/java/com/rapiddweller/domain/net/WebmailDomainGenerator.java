@@ -43,7 +43,7 @@ public class WebmailDomainGenerator extends WeightedCSVSampleGenerator<String> {
    */
   public WebmailDomainGenerator() {
     super("/com/rapiddweller/domain/net/webmailDomain.csv",
-        Encodings.UTF_8);
+        Encodings.UTF_8, ',');
   }
 
   @Override

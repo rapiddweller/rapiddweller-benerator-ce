@@ -2,6 +2,16 @@
 
 <!--lint disable no-duplicate-headings-->
 
+## 1.1.3
+
+### Release Highlights
+
+- improved JDBC metadata import
+- custom separator support for benerator weighting files
+- further improvements docs
+
+---
+
 ## 1.1.2
 
 ### Release Highlights

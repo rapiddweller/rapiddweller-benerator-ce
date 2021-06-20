@@ -90,7 +90,7 @@ public class LocalCSVGenerator<E> extends WeightedCSVSampleGenerator<E> {
    */
   public LocalCSVGenerator(Class<E> targetType, String baseName, Locale locale, String suffix, String encoding,
                            Converter<String, E> converter) {
-    super(targetType, availableUri(baseName, locale, suffix), encoding, converter);
+    super(targetType, availableUri(baseName, locale, suffix), encoding, ',', converter);
     this.baseName = baseName;
     this.locale = locale;
     this.suffix = suffix;

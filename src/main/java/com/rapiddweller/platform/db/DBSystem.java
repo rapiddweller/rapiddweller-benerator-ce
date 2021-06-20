@@ -1333,6 +1333,9 @@ public abstract class DBSystem extends AbstractStorageSystem {
         Object jdbcValue = entity.getComponent(info.name);
         if (info.type != null) {
           jdbcValue = AnyConverter.convert(jdbcValue, info.type);
+          if (info.type == String.class && jdbcValue != null) {
+            jdbcValue = jdbcValue.toString().replace("#{","{").replace("}#","}");
+          }
         }
         try {
           boolean criticalOracleType =

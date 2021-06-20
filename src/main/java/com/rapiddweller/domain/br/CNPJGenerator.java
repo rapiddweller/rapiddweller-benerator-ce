@@ -69,7 +69,7 @@ public class CNPJGenerator extends WeightedCSVSampleGenerator<String>
    * @param formatted the formatted
    */
   public CNPJGenerator(boolean formatted) {
-    super(LOCAL, Encodings.UTF_8);
+    super(LOCAL, Encodings.UTF_8, ',');
     this.random = new Random();
     this.formatted = formatted;
   }

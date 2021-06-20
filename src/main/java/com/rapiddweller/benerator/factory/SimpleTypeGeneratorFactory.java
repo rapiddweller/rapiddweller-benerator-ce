@@ -309,7 +309,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
       }
     } else if (sourceName.toLowerCase().endsWith(".wgt.csv") || distribution instanceof IndividualWeight) {
       generator = new WeightedCSVSampleGenerator(
-          Object.class, sourceUri, encoding, new ScriptConverterForStrings(context));
+          Object.class, sourceUri, encoding, separator, new ScriptConverterForStrings(context));
     } else {
       Generator<String[]> src = SourceFactory.createCSVGenerator(sourceUri, separator, encoding, true, rowBased);
       Converter<String[], Object> converterChain = new ConverterChain<>(

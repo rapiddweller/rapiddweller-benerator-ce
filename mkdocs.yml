@@ -97,8 +97,3 @@ extra:
       link: https://www.facebook.com/rapiddweller/
     - icon: fontawesome/brands/twitter-square
       link: https://twitter.com/intent/follow?screen_name=rapiddweller
-
-# Google Analytics
-google_analytics:
-  - !!python/object/apply:os.getenv [ "GOOGLE_ANALYTICS_KEY" ]
-  - auto

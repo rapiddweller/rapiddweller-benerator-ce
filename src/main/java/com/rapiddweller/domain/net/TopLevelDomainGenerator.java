@@ -45,7 +45,7 @@ public class TopLevelDomainGenerator extends WeightedCSVSampleGenerator<String>
    * Instantiates a new Top level domain generator.
    */
   public TopLevelDomainGenerator() {
-    super("/com/rapiddweller/domain/net/tld.csv", Encodings.UTF_8);
+    super("/com/rapiddweller/domain/net/tld.csv", Encodings.UTF_8, ',');
   }
 
   @Override
