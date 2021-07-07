@@ -31,6 +31,7 @@ import com.rapiddweller.common.FileUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assume;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -240,7 +241,6 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
-//  @Ignore
   @Test
   public void DemoMysqlShop() throws IOException {
     context.setContextUri("/demo/shop");
@@ -259,6 +259,32 @@ public class DemoIntegrationTest extends BeneratorIntegrationTest {
     context.setContextUri("/demo/shop");
     parseAndExecuteFile("/demo/shop/shop-postgres.ben.xml");
   }
+
+  /**
+   * Demo oracle shop.
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoOracleShop() throws IOException {
+    Assume.assumeTrue(isLinux());
+    context.setContextUri("/demo/shop");
+    parseAndExecuteFile("/demo/shop/shop-oracle.ben.xml");
+  }
+
+  /**
+   * Debugging
+   *
+   * @throws IOException the io exception
+   */
+  @Ignore
+  @Test
+  public void PostgresDebugging() throws IOException {
+    Assume.assumeTrue(isLinux());
+    context.setContextUri("/demo/WIP");
+    parseAndExecuteFile("/demo/WIP/benerator.xml");
+  }
+
 
   /**
    * Demo db composite key.

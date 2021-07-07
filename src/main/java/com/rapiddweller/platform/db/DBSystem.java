@@ -75,7 +75,6 @@ import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.TypeMapper;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -641,19 +640,18 @@ public abstract class DBSystem extends AbstractStorageSystem {
     String sql;
     if (StringUtil.isEmpty(selector)) {
       sql = "select * from " +
-          createCatSchTabString(catalogName, schemaName, type,
-              dialect);
+          createCatSchTabString(catalogName, schemaName, type, getDialect());
     } else if (StringUtil.startsWithIgnoreCase(selector, "select") ||
         StringUtil.startsWithIgnoreCase(selector, "'select")) {
       sql = selector;
     } else if (selector.startsWith("ftl:") || !script) {
       sql = "select * from " +
           createCatSchTabString(catalogName, schemaName, type,
-              dialect) + " WHERE " + selector;
+              getDialect()) + " WHERE " + selector;
     } else {
       sql = "'select * from " +
           createCatSchTabString(catalogName, schemaName, type,
-              dialect) + " WHERE ' + " + selector;
+              getDialect()) + " WHERE ' + " + selector;
     }
     if (script) {
       sql = '{' + sql + '}';
