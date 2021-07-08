@@ -266,39 +266,6 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  publish_jdk11:
-    runs-on: ubuntu-latest
-    needs: [ test_jdk11,build_jdk11 ]
-    container: maven:3.6-adoptopenjdk-11
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cache Maven packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Download dot.env
-        uses: actions/download-artifact@v2
-        with:
-          name: setup
-      - run: bash dot.env
-      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
-      - run: apt update && apt -y install gnupg
-      - name: generate key
-        run: gpg --batch --import <(echo "$GPG_PRIVATE_KEY_ENCODED" | base64 -d)
-        env:
-          GPG_PRIVATE_KEY_ENCODED: ${{ secrets.GPG_PRIVATE_KEY_ENCODED }}
-      - name: Publish package
-        run: mvn -s .m2/settings.xml  clean deploy -P release -Dmaven.test.skip=true -Dmaven.install.skip=true
-        env:
-          OSSRH_USERTOKEN: ${{ secrets.OSSRH_USERTOKEN }}
-          OSSRH_USERTOKEN_KEY: ${{ secrets.OSSRH_USERTOKEN_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-
   ###################### E2ET ######################
 
   E2ET_helper-scripts_jdk11:
@@ -608,7 +575,97 @@ jobs:
       - run: sleep 60s
       - run: benerator $BENERATOR_HOME/demo/shop/shop-mssql.ben.xml
 
-  ###################### Release ######################
+  E2ET_oracle-adoptopenjdk11:
+    runs-on: ubuntu-latest
+    container: maven:3.6-adoptopenjdk-11
+    needs: [ assembly_jdk11 ]
+    services:
+      # Label used to access the service container
+      oracle:
+        image: oracleinanutshell/oracle-xe-11g
+        # user: XDB PW: xdb
+        env:
+          ORACLE_ALLOW_REMOTE: 'true'
+          ORACLE_ENABLE_XDB: 'true'
+    steps:
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
+        with:
+          name: setup
+      - run: bash dot.env
+      - name: Download build_jdk11 for assembly
+        uses: actions/download-artifact@v2
+        with:
+          name: assembly_jdk11_test
+          path: target
+      - run: tar -xzf target/"$ARTIFACT_FULLNAME-dist.tar.gz"
+      - name: setup benerator env
+        run: |
+          echo SHELL=/bin/bash >> $GITHUB_ENV
+          echo BENERATOR_HOME=$PWD/$ARTIFACT_FULLNAME >> $GITHUB_ENV
+          echo $BENERATOR_HOME
+          echo PATH=$PWD/$ARTIFACT_FULLNAME/bin:$PATH >> $GITHUB_ENV
+      - name: set permission
+        run: chmod -R 777 $BENERATOR_HOME/bin/
+      - name: check if benerator is setup correctly
+        run: benerator --version
+      - name: set db properties for oracle connetion
+        run: |
+          echo "
+          dbUrl=jdbc:oracle:thin:@oracle:1521:XE
+          dbDriver=oracle.jdbc.driver.OracleDriver
+          dbUser=XDB
+          dbPassword=xdb
+          dbCatalog=XE
+          dbSchema=XDB
+          idStrategy=seqhilo
+          idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
+      - run: cat $ARTIFACT_FULLNAME/demo/shop/oracle/shop.oracle.properties
+      - run: sleep 60s
+      - run: benerator $BENERATOR_HOME/demo/oracle/shop-oracle.ben.xml
+
+  ###################### Release & Publish ######################
+
+  publish_jdk11:
+    runs-on: ubuntu-latest
+    needs:
+      - E2ET_oracle-adoptopenjdk11
+      - E2ET_mssql-adoptopenjdk11
+      - E2ET_mysql-adoptopenjdk11
+      - E2ET_postgresql-adoptopenjdk11
+      - E2ET_helper-scripts_jdk11
+      - E2ET_hsqlmem-adoptopenjdk11
+      - E2ET_db-adoptopenjdk11
+      - E2ET_script-adoptopenjdk11
+    container: maven:3.6-adoptopenjdk-11
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
+        with:
+          name: setup
+      - run: bash dot.env
+      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
+      - run: apt update && apt -y install gnupg
+      - name: generate key
+        run: gpg --batch --import <(echo "$GPG_PRIVATE_KEY_ENCODED" | base64 -d)
+        env:
+          GPG_PRIVATE_KEY_ENCODED: ${{ secrets.GPG_PRIVATE_KEY_ENCODED }}
+      - name: Publish package
+        run: mvn -s .m2/settings.xml  clean deploy -P release -Dmaven.test.skip=true -Dmaven.install.skip=true
+        env:
+          OSSRH_USERTOKEN: ${{ secrets.OSSRH_USERTOKEN }}
+          OSSRH_USERTOKEN_KEY: ${{ secrets.OSSRH_USERTOKEN_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
   release_jdk11:
     runs-on: ubuntu-latest

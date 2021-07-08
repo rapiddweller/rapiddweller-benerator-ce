@@ -146,5 +146,29 @@
                    selector="{{ftl:select sum(total_price) from db_order_item where order_id = ${db_order.id}}}"
                    cyclic="true"/>
     </iterate>
-
+    <echo>Check if enough data has been generated</echo>
+    <iterate type="db_order" source="db" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="db_order.counter != 301">
+        <error>{ftl: ${db_order.counter} items}</error>
+    </if>
+    <iterate type="db_order_item" source="db" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="db_order_item.counter != 1501">
+        <error>{ftl: ${db_order_item.counter} items}</error>
+    </if>
+    <iterate type="db_user" source="db" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="db_user.counter != 104">
+        <error>{ftl: ${db_user.counter} items}</error>
+    </if>
+    <iterate type="db_product" source="db" consumer="ConsoleExporter">
+        <attribute name="counter" type="int" generator="IncrementGenerator"/>
+    </iterate>
+    <if test="db_product.counter != 57">
+        <error>{ftl: ${db_product.counter} items}</error>
+    </if>
 </setup>
