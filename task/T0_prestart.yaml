@@ -20,7 +20,7 @@
           POSTGRES_HOST_AUTH_METHOD: trust
         }
         published_ports:
-          - "5432:5432"
+          - "35432:5432"
       mysql:
         name: mysql_local
         docker_image: bitnami/mysql:latest

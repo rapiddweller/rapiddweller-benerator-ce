@@ -166,6 +166,7 @@
                 <include>com.h2database:h2:jar</include>
                 <include>org.apache.derby:derbyclient:jar</include>
                 <include>org.postgresql:postgresql:jar</include>
+                <include>com.oracle.database.jdbc:ojdbc11:jar</include>
                 <include>org.firebirdsql.jdbc:jaybird:jar</include>
                 <include>javax.resource:connector-api:jar</include>
                 <include>org.apache.logging.log4j:log4j-api:jar</include>
