@@ -229,7 +229,7 @@ jobs:
           if-no-files-found: error
           retention-days: 5
 
-  ###################### Assembly and Deploy ######################
+  ###################### Assembly ######################
 
   assembly_jdk11:
     runs-on: ubuntu-latest
@@ -622,7 +622,7 @@ jobs:
           idParam=seq_id_gen" > $ARTIFACT_FULLNAME/demo/shop/oracle/shop.oracle.properties
       - run: cat $ARTIFACT_FULLNAME/demo/shop/oracle/shop.oracle.properties
       - run: sleep 60s
-      - run: benerator $BENERATOR_HOME/demo/oracle/shop-oracle.ben.xml
+      - run: benerator $BENERATOR_HOME/demo/shop/shop-oracle.ben.xml
 
   ###################### Release & Publish ######################
 
