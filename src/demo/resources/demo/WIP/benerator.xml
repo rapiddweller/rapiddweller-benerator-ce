@@ -15,5 +15,5 @@
     <database id="prod_temp" schema="temp" driver="org.postgresql.Driver" url="jdbc:postgresql://localhost:5432/prod" user="benerator"
               password="benerator" batch="true"/>
 
-    <iterate type="data_import" source="prod_temp" consumer="test_temp,prod" pageSize="1000"/>
+    <iterate type="data_import" source="prod_temp" consumer="test_temp" pageSize="1000"/>
 </setup>

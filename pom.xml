@@ -120,7 +120,7 @@
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
         <dependency_derbyclient.version>10.7.1.1</dependency_derbyclient.version>
         <dependency_freemarker.version>2.3.20</dependency_freemarker.version>
-        <dependency_graalvm.version>21.0.0.2</dependency_graalvm.version>
+        <dependency_graalvm.version>21.1.0</dependency_graalvm.version>
         <dependency_h2.version>1.4.200</dependency_h2.version>
         <dependency_hsqldb.version>1.8.0.7</dependency_hsqldb.version>
         <dependency_icu4j.version>67.1</dependency_icu4j.version>
@@ -265,19 +265,16 @@
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
             <version>${dependency_graalvm.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
             <version>${dependency_graalvm.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.sdk</groupId>
             <artifactId>graal-sdk</artifactId>
             <version>${dependency_graalvm.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.resource</groupId>
