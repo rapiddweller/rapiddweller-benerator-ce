@@ -11,39 +11,6 @@
     <name>${setup.projectName} data generation project</name>
     <description>Start XML file generation by typing 'mvn benerator:createxml' on the command line.</description>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.rapiddweller</groupId>
-            <artifactId>rapiddweller-benerator-ce</artifactId>
-            <version>${version.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.databene</groupId>
-            <artifactId>dbsanity</artifactId>
-            <version>${version.dependencies.dbsanity}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.rapiddweller</groupId>
-            <artifactId>rd-lib-jdbacl</artifactId>
-            <version>${version.dependencies.rd-lib-jdbacl}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.rapiddweller</groupId>
-            <artifactId>rd-lib-format</artifactId>
-            <version>${version.dependencies.format}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.rapiddweller</groupId>
-            <artifactId>rd-lib-common</artifactId>
-            <version>${version.dependencies.commons}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.rapiddweller</groupId>
-            <artifactId>rd-lib-contiperf</artifactId>
-            <version>${version.dependencies.contiperf}</version>
-        </dependency>
-    </dependencies>
-
     <build>
 
         <plugins>
@@ -59,8 +26,8 @@
             </plugin>
 
             <plugin>
-                <groupId>org.databene</groupId>
-                <artifactId>maven-benerator-plugin</artifactId>
+                <groupId>com.rapiddweller</groupId>
+                <artifactId>benerator-maven-plugin</artifactId>
                 <version>${version.version}</version>
                 <configuration>
                     <xmlSchema>transactions.xsd</xmlSchema>
@@ -78,13 +45,11 @@
                         <groupId>org.apache.logging.log4j</groupId>
                         <artifactId>log4j-api</artifactId>
                         <version>2.14.0</version>
-                        <scope>provided</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.logging.log4j</groupId>
                         <artifactId>log4j-core</artifactId>
                         <version>2.14.0</version>
-                        <scope>provided</scope>
                     </dependency>
                 </dependencies>
             </plugin>

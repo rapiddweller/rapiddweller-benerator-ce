@@ -2,8 +2,8 @@
 
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="https://www.benerator.de/schema/1.1.3"
-           xmlns="https://www.benerator.de/schema/1.1.3"
+           targetNamespace="https://www.benerator.de/schema/1.2.0"
+           xmlns="https://www.benerator.de/schema/1.2.0"
            elementFormDefault="qualified">
 
     <xs:annotation>
