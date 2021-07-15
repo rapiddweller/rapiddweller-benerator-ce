@@ -4,31 +4,37 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="https://www.benerator.de/schema/${version.version} benerator-${version.version}.xsd">
 
-    <comment>
+    <echo>
         Populates a database
-    </comment>
+    </echo>
 
-    <comment>defining a database that will be referred by the id 'db' later</comment>
+    <echo>defining a database that will be referred by the id 'db' later</echo>
     <database id="db"/>
 
-    <comment>Drop the testtable if it already exist. If it does not exist yet, the error message is ignored</comment>
-    <execute target="db" onError="ignore">
-        drop table testtable;
+
+    <echo>Drop the testtable if it already exist. If it does not exist yet, the error message is ignored</echo>
+    <execute target="db" type="sql" onError="ignore">
+        BEGIN TRANSACTION;
+        DROP TABLE IF EXISTS accounts;
+        END TRANSACTION;
     </execute>
 
-    <comment>Creating testtable</comment>
-    <execute target="db">
-        create table testtable (
-        id int not null,
-        n int not null,
-        primary key (id)
-        )
+    <echo>Creating testtable</echo>
+    <execute target="db" type="sql">
+        BEGIN TRANSACTION;
+        CREATE TABLE accounts (
+        user_id serial PRIMARY KEY,
+        username VARCHAR ( 50 ) UNIQUE NOT NULL,
+        password VARCHAR ( 50 ) NOT NULL,
+        email VARCHAR ( 255 ) UNIQUE NOT NULL,
+        created_on TIMESTAMP NOT NULL,
+        last_login TIMESTAMP
+        );
+        END TRANSACTION;
     </execute>
 
-    <comment>Generating 100 entries for testtable</comment>
-    <generate type="testtable" consumer="db,ConsoleExporter" count="100">
+    <echo>Generating 100 entries for testtable</echo>
+    <generate type="accounts" consumer="db,ConsoleExporter" count="100">
         <id name="id"/>
-        <attribute name="n" min="1" max="42" distribution="cumulated"/>
     </generate>
-
 </setup>
