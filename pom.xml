@@ -116,24 +116,24 @@
         <_rd_format_version>1.1.2-jdk-11</_rd_format_version>
         <_rd_jdbacl_version>1.1.7-jdk-11</_rd_jdbacl_version>
         <_rd_script_version>1.1.1-jdk-11</_rd_script_version>
+        <database_h2.version>1.4.200</database_h2.version>
+        <database_hsqldb.version>1.8.0.7</database_hsqldb.version>
+        <database_icu4j.version>67.1</database_icu4j.version>
+        <database_jaybird.version>4.0.1.java11</database_jaybird.version>
+        <database_mssqldb.version>9.2.1.jre11</database_mssqldb.version>
+        <database_oracle.version>21.1.0.0</database_oracle.version>
+        <database_mysql-connector-java.version>8.0.20</database_mysql-connector-java.version>
+        <database_postgresql.version>42.2.19</database_postgresql.version>
+        <database_derbyclient.version>10.7.1.1</database_derbyclient.version>
         <dependency_antlr-runtime.version>3.3</dependency_antlr-runtime.version>
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
-        <dependency_derbyclient.version>10.7.1.1</dependency_derbyclient.version>
-        <dependency_freemarker.version>2.3.20</dependency_freemarker.version>
-        <dependency_graalvm.version>21.1.0</dependency_graalvm.version>
-        <dependency_h2.version>1.4.200</dependency_h2.version>
-        <dependency_hsqldb.version>1.8.0.7</dependency_hsqldb.version>
-        <dependency_icu4j.version>67.1</dependency_icu4j.version>
-        <dependency_jaybird.version>4.0.1.java11</dependency_jaybird.version>
-        <dependency_mssqldb.version>9.2.1.jre11</dependency_mssqldb.version>
-        <dependency_oracle.version>21.1.0.0</dependency_oracle.version>
-        <dependency_junit.version>4.13.1</dependency_junit.version>
-        <dependency_log4j-api.version>2.14.0</dependency_log4j-api.version>
-        <dependency_log4j-core.version>2.14.0</dependency_log4j-core.version>
-        <dependency_mysql-connector-java.version>8.0.20</dependency_mysql-connector-java.version>
-        <dependency_postgresql.version>42.2.19</dependency_postgresql.version>
+        <logging_log4j-api.version>2.14.0</logging_log4j-api.version>
+        <logging_log4j-core.version>2.14.0</logging_log4j-core.version>
         <dependency_validation-api.version>2.0.1.Final</dependency_validation-api.version>
         <dependency_xml-apis.version>1.4.01</dependency_xml-apis.version>
+        <scriptengine_freemarker.version>2.3.20</scriptengine_freemarker.version>
+        <scriptengine_graalvm.version>21.1.0</scriptengine_graalvm.version>
+        <test_junit.version>4.13.1</test_junit.version>
         <java_source_version>11</java_source_version>
         <java_target_version>11</java_target_version>
         <plugin_jacoco-maven-plugin.version>0.8.6</plugin_jacoco-maven-plugin.version>
@@ -189,7 +189,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${dependency_junit.version}</version>
+            <version>${test_junit.version}</version>
         </dependency>
         <!--  ANTLR (ANother Tool for Language Recognition) is a powerful parser generator for reading, processing,
          executing, or translating structured text or binary files. It's widely used to build languages, tools, and
@@ -204,77 +204,77 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>${dependency_h2.version}</version>
+            <version>${database_h2.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derbyclient</artifactId>
-            <version>${dependency_derbyclient.version}</version>
+            <version>${database_derbyclient.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.firebirdsql.jdbc</groupId>
             <artifactId>jaybird</artifactId>
-            <version>${dependency_jaybird.version}</version>
+            <version>${database_jaybird.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>${dependency_mysql-connector-java.version}</version>
+            <version>${database_mysql-connector-java.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>${dependency_hsqldb.version}</version>
+            <version>${database_hsqldb.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
-            <version>${dependency_mssqldb.version}</version>
+            <version>${database_mssqldb.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc11</artifactId>
-            <version>${dependency_oracle.version}</version>
+            <version>${database_oracle.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${dependency_postgresql.version}</version>
+            <version>${database_postgresql.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
-            <version>${dependency_icu4j.version}</version>
+            <version>${database_icu4j.version}</version>
             <scope>provided</scope>
         </dependency>
         <!--  script handling -->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
-            <version>${dependency_freemarker.version}</version>
+            <version>${scriptengine_freemarker.version}</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
-            <version>${dependency_graalvm.version}</version>
+            <version>${scriptengine_graalvm.version}</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
-            <version>${dependency_graalvm.version}</version>
+            <version>${scriptengine_graalvm.version}</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.sdk</groupId>
             <artifactId>graal-sdk</artifactId>
-            <version>${dependency_graalvm.version}</version>
+            <version>${scriptengine_graalvm.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.resource</groupId>
@@ -297,13 +297,13 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>${dependency_log4j-api.version}</version>
+            <version>${logging_log4j-api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>${dependency_log4j-core.version}</version>
+            <version>${logging_log4j-core.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
