@@ -9,8 +9,6 @@ You can use the plugin to
 
 * Create XML files from an XML Schema file, supporting XML Schema annotations for generation setup.
 
-* Create database snapshots in Excel, SQL or DbUnit data file format.
-
 ## System Requirements
 
 * Maven 3.x or newer
@@ -19,21 +17,22 @@ You can use the plugin to
 
 ## Getting started
 
-What ever goal you want to accomplish with Maven Benerator Plugin, you need to create a Maven project first. If you are about to create a completely
+What ever goal you want to accomplish with Benerator Maven Plugin, you need to create a Maven project first. If you are about to create a completely
 new project, you may want to make use of Benerator's Maven Project Wizard. Otherwise you need to configure the benerator plugin in your project
 manually. The minimal configuration in Maven's pom.xml would be:
 
 ```xml
-<build>
-...
 
-<plugins>
-  <plugin> 
-    <groupId>org.databene</groupId>
-    <artifactId>maven-benerator-plugin</artifactId>
-    <version>0.8.1</version>
-  </plugin>
-</plugins>
+<build>
+  ...
+
+  <plugins>
+    <plugin>
+      <groupId>com.rapiddweller</groupId>
+      <artifactId>benerator-maven-plugin</artifactId>
+      <version>1.2.0</version>
+    </plugin>
+  </plugins>
 
 </build>
 ```
@@ -41,20 +40,15 @@ manually. The minimal configuration in Maven's pom.xml would be:
 In order to make use of a plugin, it must be listed as dependency, e.g. dbsanity4ben and mongo4ben:
 
 ```xml
+
 <dependencies>
 
   <dependency>
-    <groupId>org.databene</groupId>
-    <artifactId>dbsanity4ben</artifactId>
-    <version>0.9.4</version>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>${database_postgresql.version}</version>
   </dependency>
-
-  <dependency>
-    <groupId>org.databene</groupId>
-    <artifactId>mongo4ben</artifactId>
-    <version>0.1</version>
-  </dependency>
-...
+  ...
 </dependencies>
 ```
 
@@ -76,12 +70,12 @@ configuration, e.g.:
 ```xml
 
 <plugin>
-  <groupId>org.databene</groupId>
-  <artifactId>maven-benerator-plugin</artifactId>
-  <version>0.8.1</version>
+  <groupId>com.rapiddweller</groupId>
+  <artifactId>benerator-maven-plugin</artifactId>
+  <version>1.2.0</version>
 
   <configuration>
-    <encoding>iso-8859-1</encoding>
+    <encoding>utf-8</encoding>
     <scope>test</scope>
   </configuration>
 
@@ -119,31 +113,6 @@ mvn benerator:generate
 
 The db* configuration is available to scripts in your descriptor file as well, e.g. `<database url=“{dbUrl}“... />`
 
-## Creating database snapshots
-
-Use these `<configuration>` elements in your pom.xml:
-
-* dbDriver: the JDBC driver class to use, this setting is provided to benerator as variable dbDriver
-
-* dbUrl: the JDBC driver class to use, this setting is provided to benerator as variable dbUrl
-
-* dbSchema: the database schema to use, this setting is provided to benerator as variable dbSchema
-
-* dbUser: the database user name, this setting is provided to benerator as variable dbUser
-
-* dbPassword: the database user's passord, this setting is provided to benerator as variable dbPassword
-
-* snapshotFormat: The format in which to create the snapshot. Supported values: dbunit, sql, xls
-
-* snapshotDialect: When createing snapshots in SQL format, this defines the SQL dialect to use. Available values: db2, derby, firebird, hsql, h2,
-  oracle, postgres, sql_server
-
-* snapshotFilename: The file name to use for the snapshot
-
-Start snapshot creation by invoking the dbsnapshot goal:
-
-mvn benerator:dbsnapshot
-
 ## Creating XML files from XML Schema files
 
 Use these `<configuration>` elements in your pom.xml:
@@ -179,20 +148,20 @@ configuration (this requires Maven 2.0.9 or newer):
 
 <plugin>
 
-  <groupId>org.databene</groupId>
-  <artifactId>maven-benerator-plugin</artifactId>
-  <version>0.8.1</version>
-  
+  <groupId>com.rapiddweller</groupId>
+  <artifactId>benerator-maven-plugin</artifactId>
+  <version>1.2.0</version>
+
   <configuration>
     ...
   </configuration>
 
   <dependencies>
-    
+
     <dependency>
-      <groupId>oracle</groupId>
-      <artifactId>ojdbc</artifactId>
-      <version>1.4</version>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${database_postgresql.version}</version>
     </dependency>
 
   </dependencies>
@@ -206,6 +175,7 @@ In cooperative software development you are supposed to keep your individual con
 configurations on your local development systems. You can then specify them as profile properties in a Maven settings.xml file in your user directory.
 
 ```xml
+
 <profiles>
 
   <profile>
@@ -226,25 +196,27 @@ configurations on your local development systems. You can then specify them as p
 
 </profiles>
 ```
+
     You would then refer them in your pom.xml:
 
 ```xml
-    <plugin>
-      <groupId>org.databene</groupId>
-      <artifactId>maven-benerator-plugin</artifactId>
-      <version>0.8.1</version>
 
-      <configuration>
-        <descriptor>src/test/benerator/myproject.ben.xml</descriptor>
-        <encoding>ISO-8859-1</encoding>
-        <dbDriver>${database.driver}</dbDriver>
-        <dbUrl>${database.url}</dbUrl>
-        <dbUser>${database.user}</dbUser>
-        <dbPassword>${database.pwd}</dbPassword>
-        <dbSchema>${database.user}</dbSchema>
-      </configuration>
+<plugin>
+  <groupId>com.rapiddweller</groupId>
+  <artifactId>benerator-maven-plugin</artifactId>
+  <version>1.2.0</version>
 
-    </plugin>
+  <configuration>
+    <descriptor>src/test/benerator/myproject.ben.xml</descriptor>
+    <encoding>ISO-8859-1</encoding>
+    <dbDriver>${database.driver}</dbDriver>
+    <dbUrl>${database.url}</dbUrl>
+    <dbUser>${database.user}</dbUser>
+    <dbPassword>${database.pwd}</dbPassword>
+    <dbSchema>${database.user}</dbSchema>
+  </configuration>
+
+</plugin>
 ```
 
 ## Attaching the Mojo to the Build Lifecycle
@@ -258,9 +230,9 @@ You can also configure the benerator plugin to attach specific goals to a partic
   <plugins>
 
     <plugin>
-      <groupId>org.databene</groupId>
-      <artifactId>maven-benerator-plugin</artifactId>
-      <version>0.8.1</version>
+      <groupId>com.rapiddweller</groupId>
+      <artifactId>benerator-maven-plugin</artifactId>
+      <version>1.2.0</version>
 
       <executions>
 
@@ -285,3 +257,5 @@ lifecycle, please refer to the Build Lifecycle documentation.
 
 For more information, see Maven's "Guide to Configuring
 Plug-ins": [http://maven.apache.org/guides/mini/guide-configuring-plugins.html](http://maven.apache.org/guides/mini/guide-configuring-plugins.html)
+
+**Known Issues :** Exception after successful run ([#1](https://github.com/rapiddweller/benerator-maven-plugin/issues/1))
