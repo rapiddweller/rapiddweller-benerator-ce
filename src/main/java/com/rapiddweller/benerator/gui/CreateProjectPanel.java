@@ -48,7 +48,6 @@ import com.rapiddweller.common.ui.swing.delegate.PropertyFileField;
 import com.rapiddweller.common.ui.swing.delegate.PropertyPasswordField;
 import com.rapiddweller.common.ui.swing.delegate.PropertyTextField;
 import com.rapiddweller.jdbacl.JDBCDriverInfo;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -68,7 +67,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -259,8 +257,8 @@ public class CreateProjectPanel extends JPanel {
     dbPasswordField = createPasswordField(pane);
     pane.endRow();
 
-	dbCatalogField = createTextField("dbCatalog", pane);
-	pane.endRow();
+    dbCatalogField = createTextField("dbCatalog", pane);
+    pane.endRow();
 
     pane.addElement(new JLabel(""));
     testButton = createButton("testConnection", new TestConnectionListener());
@@ -379,7 +377,7 @@ public class CreateProjectPanel extends JPanel {
       dbDriverField.setEnabled(useDB);
       dbUserField.setEnabled(useDB);
       dbSchemaField.setEnabled(useDB);
-	  dbCatalogField.setEnabled(useDB);
+      dbCatalogField.setEnabled(useDB);
       dbPasswordField.setEnabled(useDB);
       testButton.setEnabled(useDB);
       dbSnapshotField.setEnabled(useDB);

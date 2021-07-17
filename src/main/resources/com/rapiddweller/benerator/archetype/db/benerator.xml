@@ -14,14 +14,11 @@
 
     <echo>Drop the testtable if it already exist. If it does not exist yet, the error message is ignored</echo>
     <execute target="db" type="sql" onError="ignore">
-        BEGIN TRANSACTION;
         DROP TABLE IF EXISTS accounts;
-        END TRANSACTION;
     </execute>
 
     <echo>Creating testtable</echo>
     <execute target="db" type="sql">
-        BEGIN TRANSACTION;
         CREATE TABLE accounts (
         user_id serial PRIMARY KEY,
         username VARCHAR ( 50 ) UNIQUE NOT NULL,
@@ -30,7 +27,6 @@
         created_on TIMESTAMP NOT NULL,
         last_login TIMESTAMP
         );
-        END TRANSACTION;
     </execute>
 
     <echo>Generating 100 entries for testtable</echo>

@@ -208,7 +208,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
       boolean success = true;
       for (int i = 0; i < statements.size(); i++) {
         Statement statement = statements.get(i);
-        success &= statement.execute(context);
+        success = statement.execute(context);
         if (!success && (statement instanceof ValidationStatement)) {
           i = -1; // if the product is not valid, restart with the first statement
           success = true;

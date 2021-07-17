@@ -48,7 +48,6 @@
                         <version>2.14.0</version>
                     </dependency>
                 </dependencies>
-
             </plugin>
 
         </plugins>
