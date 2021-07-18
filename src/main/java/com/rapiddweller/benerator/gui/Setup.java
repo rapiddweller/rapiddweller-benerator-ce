@@ -60,7 +60,11 @@ public class Setup implements ObservableBean {
   private static final String DEFAULT_GROUP_ID = "com.my";
   private static final String DEFAULT_PROJECT_VERSION = "1.0";
 
-  private static final String DEFAULT_DB_DRIVER = "oracle.jdbc.driver.OracleDriver";
+  private static final String DEFAULT_DB_URL = "jdbc:h2:mem:benerator";
+  private static final String DEFAULT_DB_DRIVER = "org.h2.Driver";
+  private static final String DEFAULT_DB_USER = "sa";
+  private static final String DEFAULT_DB_SCHEMA = "PUBLIC";
+  private static final String DEFAULT_DB_PASSWORD = "";
 
   private final PropertyChangeSupport changeSupport;
 
@@ -114,22 +118,12 @@ public class Setup implements ObservableBean {
     setLocale(Locale.getDefault().toString());
     setDataset(LocaleUtil.getDefaultCountryCode());
 
-    String url = System.getenv("DEFAULT_DATABASE");
-    if (!StringUtil.isEmpty(url)) {
-      for (JDBCDriverInfo candidate : JDBCDriverInfo.getInstances()) {
-        String prefix = candidate.getUrlPrefix();
-        if (url.startsWith(prefix)) {
-          setJdbcDriverType(candidate);
-          break;
-        }
-      }
-      if (jdbcDriverType == null) {
-        setJdbcDriverType(JDBCDriverInfo.HSQL);
-      }
-    }
-    setDbUrl(url);
+    setJdbcDriverType(JDBCDriverInfo.getInstance("H2"));
     setDbDriver(DEFAULT_DB_DRIVER);
-    setDbUser(SystemInfo.getUserName());
+    setDbUser(DEFAULT_DB_USER);
+    setDbPassword(DEFAULT_DB_PASSWORD);
+    setDbUrl(DEFAULT_DB_URL);
+    setDbSchema(DEFAULT_DB_SCHEMA);
     setDbSnapshot("dbunit");
     this.dbDependencies = new MavenDependency[0]; // TODO v0.8 handle maven dependencies
     if (archetype == null) {
@@ -508,22 +502,22 @@ public class Setup implements ObservableBean {
 
   /**
    * Gets db catalog.
-   * 
+   *
    * @return
    */
   public String getDbCatalog() {
-	return dbCatalog;
+    return dbCatalog;
   }
 
   /**
    * Sets db catalog.
-   * 
+   *
    * @param dbCatalog the db catalog
    */
   public void setDbCatalog(String dbCatalog) {
-	String oldValue = this.dbCatalog;
-	this.dbCatalog = dbCatalog;
-	changeSupport.firePropertyChange("dbCatalog", oldValue, this.dbCatalog);
+    String oldValue = this.dbCatalog;
+    this.dbCatalog = dbCatalog;
+    changeSupport.firePropertyChange("dbCatalog", oldValue, this.dbCatalog);
   }
 
   /**

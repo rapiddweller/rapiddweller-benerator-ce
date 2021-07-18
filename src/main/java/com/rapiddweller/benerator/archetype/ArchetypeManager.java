@@ -34,6 +34,7 @@ import com.rapiddweller.common.ReaderLineIterator;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 
 /**
  * Looks up and manages Benerator archetypes.<br/><br/>
@@ -55,7 +56,7 @@ public class ArchetypeManager {
   /**
    * The Archetypes index url.
    */
-  static final String ARCHETYPES_INDEX_URL = ArchetypeManager.class.getResource(ARCHETYPES_INDEX).toString();
+  static final String ARCHETYPES_INDEX_URL = Objects.requireNonNull(ArchetypeManager.class.getResource(ARCHETYPES_INDEX)).toString();
   /**
    * The Archetype folder url.
    */
