@@ -267,7 +267,7 @@ public class AnnotationMapperTest {
   @Test
   public void testFileSource() throws Exception {
     checkMethod("fileSourceMethod", String.class, "string",
-        "source", "customers.csv",
+        "source", "target/customers.csv",
         "dataset", "DE",
         "nesting", "region",
         "separator", ";",
@@ -281,7 +281,7 @@ public class AnnotationMapperTest {
    * @param name the name
    */
   public void fileSourceMethod(
-      @Source(uri = "customers.csv", dataset = "DE", nesting = "region", separator = ";",
+      @Source(uri = "target/customers.csv", dataset = "DE", nesting = "region", separator = ";",
           encoding = "UTF-8", filter = "candidate.age >= 18")
           String name) {
   }

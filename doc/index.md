@@ -20,11 +20,27 @@
 ## Summary
 
 [rapiddweller 'Benerator'](https://www.benerator.de) allows creating realistic and valid high-volume test data, 
-used for testing (unit/integration/load) and showcase setup.
+used for testing (unit/integration/load), training and showcase setup.
 
-Metadata constraints are imported from systems and/or configuration files. Data can be imported from and exported to files and systems, anonymized, or
-generated from scratch. Domain packages provide reusable generators for creating domain-specific data as names and addresses internationalizable in
-language and region. It is strongly customizable with plugins and configuration options.
+###Generate data synthetically
+Describe your data model on the most abstract level.
+Involve your business people or tester as no developer skills are necessary
+Write your own benerator extensions in Javascript, Python or Java
+Integrate your data generation processes into any CI Pipeline
+
+###Mask and obfuscate sensitive production data
+Define processes to anonymize or pseudonymize data on abstract level.
+Stay GDPR compliant with your data and protect the privacy of your customers.
+anonymize sensitive data for BI, test, development or training purposes
+Combine data from various sources (subsetting) and keep the data integrity
+
+###Migrate data
+Migrate and transform your data in multisystem landscapes.
+Reuse your testing data models to migrate production environments.
+Keep your data consistent and reliable in a microsystem architecture
+
+
+###requirements
 
 rapiddweller 'Benerator' is built for Java 11.
 

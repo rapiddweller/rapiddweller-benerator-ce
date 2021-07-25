@@ -622,7 +622,7 @@ You will need to reuse some of the generated data for setting up (load) test cli
 
 <generate type="db_product" consumer="db">
   <consumer class="FixedWidthEntityExporter">
-    <property name="uri" value="products.fcw"/>
+    <property name="uri" value="target/products.fcw"/>
     <property name="properties" value="ean_code[13],name[30l],price[10r0]"/>
   </consumer>
 </generate>

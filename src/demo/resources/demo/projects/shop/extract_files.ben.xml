@@ -15,13 +15,13 @@
 
     <iterate type="db_product" source="db">
         <consumer class="FixedWidthEntityExporter">
-            <property name="uri" value="products.fcw"/>
+            <property name="uri" value="target/products.fcw"/>
             <property name="properties" value="ean_code[13],name[30l],price[10r0]"/>
         </consumer>
     </iterate>
 
     <bean id="csv" class="CSVEntityExporter">
-        <property name="uri" value="customers.csv"/>
+        <property name="uri" value="target/customers.csv"/>
         <property name="properties" value="salutation,first_name,last_name"/>
     </bean>
 

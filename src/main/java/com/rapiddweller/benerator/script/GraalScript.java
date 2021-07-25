@@ -28,7 +28,6 @@ package com.rapiddweller.benerator.script;
 
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Context;
-import com.rapiddweller.common.converter.GraalValueConverter;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.model.data.Entity;
@@ -53,13 +52,13 @@ import java.util.Map;
  */
 public class GraalScript implements Script {
 
-  private final String text;
-  private final String language;
   private static final org.graalvm.polyglot.Context polyglotCtx =
       org.graalvm.polyglot.Context
           .newBuilder("js", "python")
           .allowAllAccess(true).build();
   private static final Logger LOGGER = LogManager.getLogger(GraalScript.class);
+  private final String text;
+  private final String language;
 
   /**
    * Instantiates a new Graal script.

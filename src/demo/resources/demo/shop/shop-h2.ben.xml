@@ -84,7 +84,7 @@
         <attribute name="price" type="big_decimal" min="0.49" max="99.99" granularity="0.10" distribution="cumulated"/>
         <!-- Export the generated products not only to the database, but also to a fixed column width file -->
         <consumer class="FixedWidthEntityExporter">
-            <property name="uri" value="products.fcw"/>
+            <property name="uri" value="target/products.fcw"/>
             <property name="columns" value="ean_code[13],name[30l],price[10.2r0]"/>
         </consumer>
     </generate>
@@ -115,7 +115,7 @@
             <attribute name="birth_date" nullable="false"/>
             <!-- Export the customers not only to the database, but their names and passwords to a CSV file -->
             <consumer class="CSVEntityExporter">
-                <property name="uri" value="customers.csv"/>
+                <property name="uri" value="target/customers.csv"/>
                 <property name="columns" value="id,password"/>
             </consumer>
         </generate>

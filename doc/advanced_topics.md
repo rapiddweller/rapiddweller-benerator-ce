@@ -38,7 +38,7 @@ example:
 ```xml
 <bean id="csv" class="CSVEntityExporter">
 
-    <property name="uri" value="customers.csv"/>
+    <property name="uri" value="target/customers.csv"/>
 
     <property name="columns" value="salutation,first_name,last_name"/>
 
