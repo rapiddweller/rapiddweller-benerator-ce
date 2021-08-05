@@ -147,6 +147,7 @@
         <plugin_maven-resources-plugin.version>2.6</plugin_maven-resources-plugin.version>
         <plugin_maven-site-plugin.version>3.9.1</plugin_maven-site-plugin.version>
         <plugin_maven-source-plugin.version>3.2.1</plugin_maven-source-plugin.version>
+        <plugin_maven-failsafe-plugin.version>3.0.0-M5</plugin_maven-failsafe-plugin.version>
         <plugin_maven-surefire-plugin.version>3.0.0-M5</plugin_maven-surefire-plugin.version>
         <plugin_maven-surefire-report-plugin.version>3.0.0-M5</plugin_maven-surefire-report-plugin.version>
         <plugin_nexus-staging-maven-plugin.version>1.6.8</plugin_nexus-staging-maven-plugin.version>
@@ -448,11 +449,32 @@
                 </executions>
             </plugin>
             <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${plugin_maven-failsafe-plugin.version}</version>
+                <configuration>
+                    <includes>
+                        <include>**/*IntegrationTest.class</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${plugin_maven-surefire-plugin.version}</version>
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
+                    <excludes>
+                        <exclude>**/*IntegrationTest*.class</exclude>
+                    </excludes>
                 </configuration>
                 <dependencies>
                     <dependency>
