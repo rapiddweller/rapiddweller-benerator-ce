@@ -227,7 +227,7 @@ public class TaskExecutor {
 
   private boolean workPending(Long maxInvocationCount,
                               long queuedInvocations) {
-    if (((StateTrackingTaskProxy<? extends Task>) target).isAvailable()) {
+    if (!((StateTrackingTaskProxy<? extends Task>) target).isAvailable()) {
       return false;
     }
     if (maxInvocationCount == null) {
