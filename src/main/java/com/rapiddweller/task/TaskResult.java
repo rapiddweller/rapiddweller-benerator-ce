@@ -34,16 +34,18 @@ package com.rapiddweller.task;
  * @since 0.6.0
  */
 public enum TaskResult {
-  /**
-   * Executing task result.
-   */
-  EXECUTING,
-  /**
-   * Finished task result.
-   */
-  FINISHED,
-  /**
-   * Unavailable task result.
-   */
-  UNAVAILABLE
+
+	/** Indicates that the task step was successful and that further invocations are possible or necessary. */
+	EXECUTING,
+
+	/** Indicates that the task step was successful and no further invocations shall be done. */
+	FINISHED,
+
+	/** Indicates that the task is not able to execute. */
+	UNAVAILABLE,
+
+	/** Indicates that the Task was called in a state other than EXECUTING,
+	*  thus was not available and skipped execution. */
+	SKIPPED
+
 }

@@ -33,11 +33,23 @@ import com.rapiddweller.common.ThreadAware;
 import java.io.Closeable;
 
 /**
- * Interface for the GoF 'Command' pattern.
- * General usage is to call the executeStep() method once or several times for executing the task's work.
- * After usage, close() must be called.
+ * Common Task interface based on the GoF 'Command' pattern with specific extensions,
+ * see https://en.wikipedia.org/wiki/Command_pattern.
+ * An implementation may require more than one call to the execute() method in order to complete its work.
+ * The method's return value signals to the framework if the task is still UNAVAILABLE, RUNNING or FINISHED.
+ * The framework will execute the task only as long as it returns the stats RUNNING
+ * and may decide to finish invocations before the task returns FINISHED or UNAVAILABE.
+ * The framework may impose page semantics (for eg. transactions) by calling the pageFinished()
+ * method after a group of invocations of the execute() method. Implementors may ignore that
+ * if it does not make sense for them.
+ * When a task is completed, the framework calls the close() method.<br/>
+ * <br/>
  * When implementing the Task interface, you should preferably inherit from
- * {@link AbstractTask}, this may compensate for future interface changes.<br/>
+ * {@link AbstractTask}, this may compensate for future interface changes.
+ * By implementing the {@link ThreadAware} interface the implementor can signal to a multithreaded execution framework
+ * if it is thread safe, unsafe or may be cloned and executed by one thread per cloned instance.
+ * may be cloned and
+ * <br/>
  * <br/>
  * Created: 06.07.2007 06:30:22
  *
@@ -46,28 +58,27 @@ import java.io.Closeable;
  */
 public interface Task extends ThreadAware, Closeable {
 
-  /**
-   * Gets task name.
-   *
-   * @return the name of the task.
-   */
-  String getTaskName();
+	/** Provides a task name for logging and debugging purposes. */
+	String getTaskName();
 
-  /**
-   * Executes the task's work, possibly interacting with the context.
-   *
-   * @param context      the context
-   * @param errorHandler the error handler
-   * @return the task result
-   */
-  TaskResult execute(Context context, ErrorHandler errorHandler);
+	/** Executes the task's work or at least one step of it.
+	 *  @return UNAVAILABLE if the task is not able to run,
+	 *     RUNNING if the invocation worked properly, but may require further invocations,
+	 *     FINISHED if the task has definitely completed its work
+	 *     or SKIPPED if it was called in a state in which it was not able to execute
+	 *     (having either finished or being unavailable before).
+	 *  @param context a Context object for retrieving variable values and storing results
+	 *  @param errorHandler an {@link ErrorHandler} which decides how to deal with exceptions
+	 */
+	TaskResult execute(Context context, ErrorHandler errorHandler);
 
-  /**
-   * Page finished.
-   */
-  void pageFinished();
+	/** Callback method for implementing paged execution (like for example paged transactions) */
+	void pageFinished();
 
-  @Override
-  void close();
+	/** Callback method which is called after the last call to the execute() method.
+     *  Its implementation is required to release all heavyweight resources that may lead to
+     *  eg. heap overflow or system resource shortage.*/
+	@Override
+	void close();
 
 }

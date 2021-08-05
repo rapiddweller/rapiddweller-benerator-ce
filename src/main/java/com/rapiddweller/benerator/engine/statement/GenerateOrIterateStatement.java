@@ -41,71 +41,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Creates a number of entities in parallel execution and a given page size.<br/><br/>
+ * Creates a number of entities in multithreaded execution and a given page size.<br/><br/>
  * Created: 01.02.2008 14:43:15
- *
+ * @since 1.0
  * @author Volker Bergmann
  */
 public class GenerateOrIterateStatement extends AbstractStatement implements Closeable, PageListener {
 
-  /**
-   * The Task.
-   */
-  protected GenerateAndConsumeTask task;
-  /**
-   * The Count generator.
-   */
+  // constant attributes -----------------------------------------------------------------------------------------------
+
   protected final Generator<Long> countGenerator;
-  /**
-   * The Min count.
-   */
   protected final Expression<Long> minCount;
-  /**
-   * The Page size.
-   */
   protected final Expression<Long> pageSize;
-  /**
-   * The Page listener ex.
-   */
   protected final Expression<PageListener> pageListenerEx;
-  /**
-   * The Page listener.
-   */
-  protected PageListener pageListener;
-  /**
-   * The Info log.
-   */
   protected final boolean infoLog;
-  /**
-   * The Is sub creator.
-   */
   protected final boolean isSubCreator;
-  /**
-   * The Context.
-   */
   protected final BeneratorContext context;
-  /**
-   * The Child context.
-   */
   protected final BeneratorContext childContext;
 
-  /**
-   * Instantiates a new Generate or iterate statement.
-   *
-   * @param productName    the product name
-   * @param countGenerator the count generator
-   * @param minCount       the min count
-   * @param pageSize       the page size
-   * @param pageListenerEx the page listener ex
-   * @param errorHandler   the error handler
-   * @param infoLog        the info log
-   * @param isSubCreator   the is sub creator
-   * @param context        the context
-   */
+
+  // mutable attributes ------------------------------------------------------------------------------------------------
+
+  protected GenerateAndConsumeTask task;
+  protected PageListener pageListener;
+
+  // constructor -------------------------------------------------------------------------------------------------------
+
   public GenerateOrIterateStatement(String productName, Generator<Long> countGenerator, Expression<Long> minCount,
                                     Expression<Long> pageSize, Expression<PageListener> pageListenerEx,
                                     Expression<ErrorHandler> errorHandler, boolean infoLog, boolean isSubCreator, BeneratorContext context) {
-    this.task = null;
     this.countGenerator = countGenerator;
     this.minCount = minCount;
     this.pageSize = pageSize;
@@ -114,40 +78,25 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
     this.isSubCreator = isSubCreator;
     this.context = context;
     this.childContext = context.createSubContext(productName);
+    this.task = null;
+    this.pageListener = null;
   }
 
-  /**
-   * Sets task.
-   *
-   * @param task the task
-   */
+
+  // properties --------------------------------------------------------------------------------------------------------
+
   public void setTask(GenerateAndConsumeTask task) {
     this.task = task;
   }
 
-  /**
-   * Gets task.
-   *
-   * @return the task
-   */
   public GenerateAndConsumeTask getTask() {
     return task;
   }
 
-  /**
-   * Gets context.
-   *
-   * @return the context
-   */
   public BeneratorContext getContext() {
     return context;
   }
 
-  /**
-   * Gets child context.
-   *
-   * @return the child context
-   */
   public BeneratorContext getChildContext() {
     return childContext;
   }
@@ -168,12 +117,6 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
     return true;
   }
 
-  /**
-   * Generate count long.
-   *
-   * @param context the context
-   * @return the long
-   */
   public Long generateCount(BeneratorContext context) {
     beInitialized(context);
     ProductWrapper<Long> count = countGenerator.generate(new ProductWrapper<>());
@@ -203,12 +146,6 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
 
   // internal helpers ------------------------------------------------------------------------------------------------
 
-  /**
-   * Evaluate page listeners list.
-   *
-   * @param context the context
-   * @return the list
-   */
   protected List<PageListener> evaluatePageListeners(Context context) {
     List<PageListener> listeners = new ArrayList<>();
     if (pageListener != null) {
@@ -220,12 +157,6 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
     return listeners;
   }
 
-  /**
-   * Be initialized boolean.
-   *
-   * @param context the context
-   * @return the boolean
-   */
   protected boolean beInitialized(BeneratorContext context) {
     if (!countGenerator.wasInitialized()) {
       countGenerator.init(childContext);
@@ -235,18 +166,9 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
     return false;
   }
 
-  /**
-   * Execute task.
-   *
-   * @param requestedExecutions the requested executions
-   * @param minExecutions       the min executions
-   * @param pageSizeValue       the page size value
-   * @param pageListeners       the page listeners
-   * @param errorHandler        the error handler
-   */
-  protected void executeTask(Long requestedExecutions, Long minExecutions, Long pageSizeValue,
+  protected void executeTask(Long reqExecutions, Long minExecutions, Long pageSizeValue,
                              List<PageListener> pageListeners, ErrorHandler errorHandler) {
-    TaskExecutor.execute(task, childContext, requestedExecutions, minExecutions,
+    TaskExecutor.execute(task, childContext, reqExecutions, minExecutions,
         pageListeners, pageSizeValue, false, errorHandler, infoLog);
   }
 

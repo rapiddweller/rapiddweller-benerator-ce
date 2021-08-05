@@ -62,28 +62,23 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class GenerateAndConsumeTask implements Task, PageListener, ResourceManager, MessageHolder {
 
+  // attributes --------------------------------------------------------------------------------------------------------
+
   private final String taskName;
-  private BeneratorContext context;
+  private final String productName;
   private final ResourceManager resourceManager;
 
-  /**
-   * The Statements.
-   */
-  protected final List<Statement> statements;
-  private final List<ScopedLifeCycleHolder> scopeds;
+  private BeneratorContext context;
+  protected List<Statement> statements;
+  private List<ScopedLifeCycleHolder> scopeds;
   private Expression<Consumer> consumerExpr;
-
-  private final AtomicBoolean initialized;
+  private AtomicBoolean initialized;
   private Consumer consumer;
   private String message;
-  private final String productName;
 
-  /**
-   * Instantiates a new Generate and consume task.
-   *
-   * @param taskName    the task name
-   * @param productName the product name
-   */
+
+  // constructor -------------------------------------------------------------------------------------------------------
+
   public GenerateAndConsumeTask(String taskName, String productName) {
     this.taskName = taskName;
     this.productName = productName;
@@ -93,22 +88,13 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     this.scopeds = new ArrayList<>();
   }
 
+
   // interface -------------------------------------------------------------------------------------------------------
 
-  /**
-   * Add statement.
-   *
-   * @param statement the statement
-   */
   public void addStatement(Statement statement) {
     this.statements.add(statement);
   }
 
-  /**
-   * Sets statements.
-   *
-   * @param statements the statements
-   */
   public void setStatements(List<Statement> statements) {
     this.statements.clear();
     for (Statement statement : statements) {
@@ -116,38 +102,18 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     }
   }
 
-  /**
-   * Gets resource manager.
-   *
-   * @return the resource manager
-   */
   public ResourceManager getResourceManager() {
     return resourceManager;
   }
 
-  /**
-   * Sets consumer.
-   *
-   * @param consumerExpr the consumer expr
-   */
   public void setConsumer(Expression<Consumer> consumerExpr) {
     this.consumerExpr = consumerExpr;
   }
 
-  /**
-   * Gets consumer.
-   *
-   * @return the consumer
-   */
   public Consumer getConsumer() {
     return consumer;
   }
 
-  /**
-   * Init.
-   *
-   * @param context the context
-   */
   public void init(BeneratorContext context) {
     synchronized (initialized) {
       if (!initialized.get()) {
@@ -163,20 +129,10 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     }
   }
 
-  /**
-   * Gets product name.
-   *
-   * @return the product name
-   */
   public String getProductName() {
     return productName;
   }
 
-  /**
-   * Gets recent product.
-   *
-   * @return the recent product
-   */
   public ProductWrapper<?> getRecentProduct() {
     return context.getCurrentProduct();
   }
@@ -233,9 +189,6 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     }
   }
 
-  /**
-   * Reset.
-   */
   public void reset() {
     for (Statement statement : statements) {
       statement = StatementUtil.getRealStatement(statement, context);
@@ -282,6 +235,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     return resourceManager.addResource(resource);
   }
 
+
   // MessageHolder interface -----------------------------------------------------------------------------------------
 
   @Override
@@ -289,12 +243,14 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     return message;
   }
 
+
   // java.lang.Object overrides --------------------------------------------------------------------------------------
 
   @Override
   public String toString() {
     return getClass().getSimpleName() + '(' + taskName + ')';
   }
+
 
   // private helpers -------------------------------------------------------------------------------------------------
 
@@ -329,11 +285,6 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     statements.add(lastSubGenIndex + 1, consumption);
   }
 
-  /**
-   * Init statements.
-   *
-   * @param context the context
-   */
   public void initStatements(BeneratorContext context) {
     for (Statement statement : statements) {
       statement = StatementUtil.getRealStatement(statement, context);

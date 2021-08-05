@@ -65,7 +65,7 @@ public class CurrentProductGeneration implements Statement, LifeCycleHolder {
   public boolean execute(BeneratorContext context) {
     ProductWrapper<Object> wrapper = source.generate(provider.get());
     context.setCurrentProduct(wrapper);
-    if (instanceName != null && wrapper != null) {
+    if (wrapper != null && instanceName != null) {
       BeneratorContext parent = ((BeneratorSubContext) context).getParent();
       parent.set(instanceName, wrapper.unwrap());
     }
