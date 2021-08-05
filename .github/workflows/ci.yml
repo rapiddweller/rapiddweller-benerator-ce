@@ -206,7 +206,7 @@ jobs:
 
   assembly_jdk11:
     runs-on: ubuntu-latest
-    needs: [ test_jdk11,build_jdk11,documentation_build ]
+    needs: [ test_jdk11,build_jdk11 ]
     container: maven:3.6-adoptopenjdk-11
     steps:
       - uses: actions/checkout@v2
