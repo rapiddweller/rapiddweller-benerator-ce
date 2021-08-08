@@ -29,17 +29,14 @@ package com.rapiddweller.benerator.main;
 import com.rapiddweller.benerator.gui.CreateProjectPanel;
 import com.rapiddweller.common.ui.I18NSupport;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -54,20 +51,13 @@ public class NewProjectWizard extends JFrame {
 
   private static final long serialVersionUID = -359209516189875124L;
 
-  /**
-   * The 18 n.
-   */
+
   final I18NSupport i18n;
-  /**
-   * The Main panel.
-   */
+
   final CreateProjectPanel mainPanel;
 
-  /**
-   * Instantiates a new New project wizard.
-   */
   public NewProjectWizard() {
-    setIcons("com/rapiddweller/benerator/gui/benerator{0}.png", 16, 32, 64, 128);
+    setIcons();
 
     i18n = new I18NSupport("com/rapiddweller/benerator/gui/benerator", Locale.getDefault());
     mainPanel = new CreateProjectPanel(i18n);
@@ -88,24 +78,27 @@ public class NewProjectWizard extends JFrame {
     setLocationRelativeTo(null);
   }
 
-  private void setIcons(String pattern, int... sizes) {
-    List<Image> images = new ArrayList<>();
-    for (int size : sizes) {
-      String name = MessageFormat.format(pattern, size);
-      images.add(new ImageIcon(name).getImage());
-    }
-
-    this.setIconImages(images);
-  }
-
-  /**
-   * The entry point of application.
-   *
-   * @param args the input arguments
-   * @throws Exception the exception
-   */
   public static void main(String[] args) throws Exception {
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     new NewProjectWizard().setVisible(true);
+  }
+
+  public boolean exists(String className) {
+    try {
+      Class.forName(className, false, null);
+      return true;
+    } catch (ClassNotFoundException exception) {
+      return false;
+    }
+  }
+
+  private void setIcons() {
+    Image img = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("appIcon.gif"));
+
+    if (exists("com.apple.eawt.Application")) {
+      com.apple.eawt.Application.getApplication().setDockIconImage(img);
+    } else {
+      this.setIconImage(img);
+    }
   }
 }
