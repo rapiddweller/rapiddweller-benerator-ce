@@ -34,6 +34,7 @@ import javax.swing.UIManager;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Image;
+import java.awt.Taskbar;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -83,22 +84,9 @@ public class NewProjectWizard extends JFrame {
     new NewProjectWizard().setVisible(true);
   }
 
-  public boolean exists(String className) {
-    try {
-      Class.forName(className, false, null);
-      return true;
-    } catch (ClassNotFoundException exception) {
-      return false;
-    }
-  }
-
   private void setIcons() {
     Image img = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("appIcon.gif"));
-
-    if (exists("com.apple.eawt.Application")) {
-      com.apple.eawt.Application.getApplication().setDockIconImage(img);
-    } else {
-      this.setIconImage(img);
-    }
+    Taskbar tb = Taskbar.getTaskbar();
+    tb.setIconImage(img);
   }
 }
