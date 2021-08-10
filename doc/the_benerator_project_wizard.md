@@ -33,7 +33,7 @@ benerator-wizard -Duser.language=en
 
 The dialog looks like this:
 
-![](assets/grafik20.png)
+![](assets/benerator_projectwizard.jpg)
 
 ## Configuring the project
 
