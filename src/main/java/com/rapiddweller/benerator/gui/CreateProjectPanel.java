@@ -210,7 +210,7 @@ public class CreateProjectPanel extends JPanel {
     TextArea marketing = new TextArea(i18n.getString("marketing"));
     marketing.setEditable(false);
     pane.addElement(empty);
-    pane.addElement(marketing);
+    pane.addElement(marketing, 3);
     pane.addSeparator();
 
 

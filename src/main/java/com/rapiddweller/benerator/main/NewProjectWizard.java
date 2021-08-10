@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.main;
 
 import com.rapiddweller.benerator.gui.CreateProjectPanel;
+import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.ui.I18NSupport;
 
 import javax.swing.JFrame;
@@ -39,6 +40,7 @@ import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Locale;
+
 
 /**
  * Main class for the benerator GUI.<br/>
@@ -86,7 +88,11 @@ public class NewProjectWizard extends JFrame {
 
   private void setIcons() {
     Image img = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("appIcon.gif"));
-    Taskbar tb = Taskbar.getTaskbar();
-    tb.setIconImage(img);
+    if (SystemInfo.isMacOsx()) {
+      Taskbar tb = Taskbar.getTaskbar();
+      tb.setIconImage(img);
+    } else {
+      this.setIconImage(img);
+    }
   }
 }
