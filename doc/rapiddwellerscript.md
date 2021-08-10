@@ -53,13 +53,13 @@ Benerator integration
 
 ### Comments
 
-Line comments start with // and include the rest of the line.
+Line comments start with `// and include the rest of the line.`
 
-Normal comments begin with /* and end with */
+Normal comments begin with `/*` and end with `*/`
 
 ### White Space
 
-Spaces, tabs, CR, LF, \u000C
+Spaces, tabs, CR, LF, `\u000C`
 
 ### Data Types
 
@@ -205,15 +205,15 @@ Subtraction: `-`
 
 ### Shift Operators
 
-Left shift: `<`< (in XML descriptor files use &lt;&lt;)
+Left shift: `<<` (in XML descriptor files use `&lt;&lt;`)
 
-Right shift: >`>` (in XML descriptor files use &gt;&gt;)
+Right shift: `>>` (in XML descriptor files use `&gt;&gt;`)
 
-Right shift: >`>`>` (in XML descriptor files use &gt;&gt;&gt;)
+Right shift: `>>` (in XML descriptor files use `&gt;&gt;&gt;`)
 
 ### Relation Operators
 
-`<=, `<, >`, =>` (in XML descriptor files use &lt;=, &lt;, &gt;, =&gt;)
+`<=`, `<`, `>`, `=>` (in XML descriptor files use `&lt;=`, `&lt;`, `&gt;`, `=&gt;`)
 
 ### Equality Operators
 
