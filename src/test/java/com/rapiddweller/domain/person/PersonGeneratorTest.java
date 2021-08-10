@@ -209,7 +209,7 @@ public class PersonGeneratorTest extends GeneratorClassTest {
     Set<Integer> agesUsed = new HashSet<>();
     for (int i = 0; i < 1000; i++) {
       Person person = generator.generate();
-      int age = TimeUtil.yearsBetween(person.getBirthDate(), today);
+      int age = person.getAge();
       assertTrue("Person is expected to be at least 18 years old, but is " + age + ", " +
               "birthDate=" + person.getBirthDate(),
           age >= 18);
