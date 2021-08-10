@@ -24,7 +24,7 @@ rapiddwellerScript uses many elements familiar from C-style languages like Java 
 ### Variable assignment
 
 ```xml
-<execute>`x = x + 1`</execute>
+<execute>x = x + 1</execute>
 ```
 
 ### Object construction

@@ -108,6 +108,7 @@ The Person class has the following properties:
 | familyName | String | Family name ('surname' in western countries) |
 | gender | Gender | Gender (MALE or FEMALE) |
 | birthDate | Date | Birth date |
+| age | Integer | actual age |
 | email | String | eMail address |
 | locale | Locale | Language of the person instance (used e.g. for salutation) |
 
