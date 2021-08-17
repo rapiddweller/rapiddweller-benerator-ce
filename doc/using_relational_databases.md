@@ -62,7 +62,8 @@ explicitly.
 ## Using Database Repositories
 
 For frequently-used databases it is more convenient to use a central database configuration repository. The repository
-is located in a folder 'databene' under your user home directory. You can define a database configuration with a name (
+is located in a folder 'rapiddweller' under your user home directory. You can define a database configuration with a
+name (
 e.g. 'mydb') by storing a correspondingly named properties file there assigning the suffix '.env.properties' (e.g. '
 mydb.env.properties', on Windows the file location would be `C:\Documents and Settings\<user_name>\mydb.env.properties`)
 . In the file you can configure the JDBC connection information with the keys db_url, db_driver, db_user, db_password
@@ -192,7 +193,10 @@ and/or called. In such cases, you can specify an alternative delimiter in an `<e
 When using a database as consumer in a `<generate>` or `<iterate>` element, the elements are _inserted_ by default. For
 information, how to _update_ entries, see the next chapter.
 
-<generate type="db_user" count="50000" consumer="db"></generate>
+```xml
+
+<generate type="db_user" count="50000" consumer="db"/>
+```
 
 If primary key generation should be performed by the database, you need to tell Benerator to ignore the field, setting
 the mode to 'ignored'

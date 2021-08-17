@@ -454,9 +454,7 @@ First, define a descriptor file, e.g.
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 
-<setup xmlns="[http://databene.org/benerator/0.8.](http://databene.org/benerator/0.6.0)1"
-       xmlns:xsi="[http://www.w3.org/2001/XMLSchema-instance](http://www.w3.org/2001/XMLSchema-instance)"
-       xsi:schemaLocation="[http://databene.org/benerator/0.8.](http://databene.org/benerator/0.6.0)1 http://databene.org/benerator-0.8.1.xsd">
+<setup>
 
     <generate type="address">
         <attribute name="city" values="'Munich', 'New York', 'Tokyo'"/>

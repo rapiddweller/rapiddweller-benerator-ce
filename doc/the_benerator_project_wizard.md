@@ -33,7 +33,7 @@ benerator-wizard -Duser.language=en
 
 The dialog looks like this:
 
-![](assets/grafik20.png)
+![](assets/benerator_projectwizard.jpg)
 
 ## Configuring the project
 
@@ -47,26 +47,10 @@ Then you can choose among a list of predefined project types:
 
 * **Generate CSV file**: Defines generation of a simple CSV file
 
-* **Generate fixed column width file**: Defines generation of a simple fix column width file
-
-* **Generate Excel(TM) document**: Defines generation of a simple Excel(TM) file
-
 * **Populate database**: Small project that defines a database, creates a table and populates it
-
-* **Reproduce &amp; scale existing database**: Creates a snapshot of the current database content and creates a descriptor which replays the snapshot
-  and defines templates for adding arbitrary volumes of data to each table.
 
 * **Shop example database**: Performs Definition and population of the Benerator shop database example for all database systems supported by Benerator:
   DB2, Derby, Firebird, HSQL, H2, Oracle, PostgreSQL and SQLServer.
-
-* **Generate simple XML file**: Defines generation of a simple XML file
-
-* **Create XML documents from XML Schema**: Uses an (annotated) XML Schema file for generating several XML files
-
-* **Create a database snapshot**: Configures database snapshot generation
-
-* **Write Benerator extensions**: Java project that provides you with sample implementations of Benerator's extension interfaces and makes them
-  cooperate in a descriptor file.
 
 You can optionally make the wizard create an Eclipse project configuration, too. This requires you to have Maven istalled.
 

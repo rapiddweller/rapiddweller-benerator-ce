@@ -11,7 +11,7 @@ dbsanity'.
 Import the plugin functionality to your Benerator project using
 
 ```xml
-<import platform="dbsanity" … />
+<import platform="dbsanity"/>
 ```
 
 Then you can call DB Sanity providing a reference to a database you have declared before:
