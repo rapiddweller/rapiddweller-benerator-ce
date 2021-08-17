@@ -273,4 +273,10 @@ public abstract class ModelTest {
     return new ArrayElementDescriptor(index, testDescriptorProvider, typeName);
   }
 
+  protected String testResourcePath(String fileName) {
+    return "src/test/resources/"
+        + this.getClass().getPackage().getName().replace('.', '/') + "/"
+        + fileName;
+  }
+
 }
