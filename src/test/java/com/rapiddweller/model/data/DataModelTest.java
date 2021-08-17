@@ -36,5 +36,12 @@ public class DataModelTest {
     assertNull((new DataModel()).getTypeDescriptor("ben", "com.rapiddweller.model.data.ArrayTypeDescriptor"));
     assertTrue((new DataModel()).getTypeDescriptor("ben", "date") instanceof SimpleTypeDescriptor);
   }
+
+  protected String testResourcePath(String fileName) {
+    return "src/test/resources/"
+        + this.getClass().getName().replace('.', '/')
+        + fileName;
+  }
+
 }
 
