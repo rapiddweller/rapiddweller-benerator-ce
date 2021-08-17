@@ -59,6 +59,8 @@ import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.Mode;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
+import com.rapiddweller.platform.Protocol;
+import com.rapiddweller.platform.Protocols;
 import com.rapiddweller.platform.csv.CSVEntitySourceProvider;
 import com.rapiddweller.platform.dbunit.DbUnitEntitySource;
 import com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource;
@@ -135,24 +137,32 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       generator = createSourceGeneratorFromObject(descriptor, context, sourceObject);
     } else {
       String segment = descriptor.getSegment();
-      if (DataFileUtil.isXmlDocument(sourceSpec)) {
-        generator = new DataSourceGenerator<>(new DbUnitEntitySource(sourceSpec, context));
-      } else if (DataFileUtil.isCsvDocument(sourceSpec)) {
-        generator = createCSVSourceGenerator(descriptor, context, sourceSpec);
-      } else if (DataFileUtil.isFixedColumnWidthFile(sourceSpec)) {
-        generator = createFixedColumnWidthSourceGenerator(descriptor, context, sourceSpec);
-      } else if (DataFileUtil.isExcelDocument(sourceSpec)) {
-        generator = createXLSSourceGenerator(descriptor, context, sourceSpec, segment);
-      } else {
-        try {
-          BeanSpec sourceBeanSpec = DatabeneScriptParser.resolveBeanSpec(sourceSpec, context);
-          sourceObject = sourceBeanSpec.getBean();
-          generator = createSourceGeneratorFromObject(descriptor, context, sourceObject);
-          if (sourceBeanSpec.isReference() && !(sourceObject instanceof StorageSystem)) {
-            generator = WrapperFactory.preventClosing(generator);
+      for (Protocol protocol : Protocols.all()) {
+        if (protocol.matchesUri(sourceSpec)) {
+          generator = createProtocolSourceGenerator(sourceSpec, protocol, descriptor, context);
+          break;
+        }
+      }
+      if (generator == null) {
+        if (DataFileUtil.isXmlDocument(sourceSpec)) {
+          generator = new DataSourceGenerator<>(new DbUnitEntitySource(sourceSpec, context));
+        } else if (DataFileUtil.isCsvDocument(sourceSpec)) {
+          generator = createCSVSourceGenerator(descriptor, context, sourceSpec);
+        } else if (DataFileUtil.isFixedColumnWidthFile(sourceSpec)) {
+          generator = createFixedColumnWidthSourceGenerator(descriptor, context, sourceSpec);
+        } else if (DataFileUtil.isExcelDocument(sourceSpec)) {
+          generator = createXLSSourceGenerator(descriptor, context, sourceSpec, segment);
+        } else {
+          try {
+            BeanSpec sourceBeanSpec = DatabeneScriptParser.resolveBeanSpec(sourceSpec, context);
+            sourceObject = sourceBeanSpec.getBean();
+            generator = createSourceGeneratorFromObject(descriptor, context, sourceObject);
+            if (sourceBeanSpec.isReference() && !(sourceObject instanceof StorageSystem)) {
+              generator = WrapperFactory.preventClosing(generator);
+            }
+          } catch (Exception e) {
+            throw new UnsupportedOperationException("Error resolving source: " + sourceSpec, e);
           }
-        } catch (Exception e) {
-          throw new UnsupportedOperationException("Error resolving source: " + sourceSpec, e);
         }
       }
     }
@@ -240,6 +250,12 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       throw new UnsupportedOperationException("Source type not supported: " + sourceObject.getClass());
     }
     return generator;
+  }
+
+  private static Generator<Entity> createProtocolSourceGenerator(String url, Protocol protocol,
+      ComplexTypeDescriptor complexType, BeneratorContext context) {
+    DataSourceProvider<Entity> fileProvider = protocol.provider(url, null, complexType, context);
+    return createEntitySourceGenerator(complexType, context, url, fileProvider);
   }
 
   private static Generator<Entity> createFixedColumnWidthSourceGenerator(
