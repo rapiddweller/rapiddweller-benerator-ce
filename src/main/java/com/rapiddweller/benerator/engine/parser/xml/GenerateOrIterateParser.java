@@ -143,9 +143,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 
   // DescriptorParser interface --------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Generate or iterate parser.
-   */
   public GenerateOrIterateParser() {
     super("", null, OPTIONAL_ATTRIBUTES);
   }
@@ -247,17 +244,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return statement;
   }
 
-  /**
-   * Parse generate generate or iterate statement.
-   *
-   * @param element        the element
-   * @param parentPath     the parent path
-   * @param parsingContext the parsing context
-   * @param context        the context
-   * @param infoLog        the info log
-   * @param nested         the nested
-   * @return the generate or iterate statement
-   */
   @SuppressWarnings("unchecked")
   public GenerateOrIterateStatement parseGenerate(Element element, Statement[] parentPath,
                                                   BeneratorParseContext parsingContext, BeneratorContext context, boolean infoLog, boolean nested) {
@@ -280,21 +266,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return statement;
   }
 
-  /**
-   * Create statement generate or iterate statement.
-   *
-   * @param productName    the product name
-   * @param countGenerator the count generator
-   * @param minCount       the min count
-   * @param pageSize       the page size
-   * @param pager          the pager
-   * @param infoLog        the info log
-   * @param nested         the nested
-   * @param element        the element
-   * @param errorHandler   the error handler
-   * @param context        the context
-   * @return the generate or iterate statement
-   */
   protected GenerateOrIterateStatement createStatement(String productName, Generator<Long> countGenerator,
                                                        Expression<Long> minCount, Expression<Long> pageSize,
                                                        Expression<PageListener> pager, boolean infoLog,
@@ -385,7 +356,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
       }
     } else { // make sure the <iterate> does not miss a 'source'
       if (StringUtil.isEmpty(element.getAttribute(ATT_SOURCE))) {
-        syntaxError("'source' mising in <iterate>", element);
+        syntaxError("'source' missing in <iterate>", element);
       }
     }
 
@@ -413,12 +384,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return task;
   }
 
-  /**
-   * Gets task name.
-   *
-   * @param descriptor the descriptor
-   * @return the task name
-   */
   protected String getTaskName(InstanceDescriptor descriptor) {
     String taskName = descriptor.getName();
     if (taskName == null) {
@@ -427,13 +392,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return taskName;
   }
 
-  /**
-   * Create task generate and consume task.
-   *
-   * @param taskName    the task name
-   * @param productName the product name
-   * @return the generate and consume task
-   */
   protected GenerateAndConsumeTask createTask(String taskName, String productName) {
     return new GenerateAndConsumeTask(taskName, productName);
   }
