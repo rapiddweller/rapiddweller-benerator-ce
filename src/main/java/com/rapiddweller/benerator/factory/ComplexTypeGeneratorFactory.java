@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.factory;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.StorageSystem;
+import com.rapiddweller.benerator.TypedEntitySource;
 import com.rapiddweller.benerator.composite.BlankEntityGenerator;
 import com.rapiddweller.benerator.composite.ComponentTypeConverter;
 import com.rapiddweller.benerator.composite.GeneratorComponent;
@@ -36,6 +37,7 @@ import com.rapiddweller.benerator.composite.SourceAwareGenerator;
 import com.rapiddweller.benerator.distribution.DistributingGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.TypedEntitySourceAdapter;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.util.FilteringGenerator;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
@@ -59,8 +61,8 @@ import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.Mode;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import com.rapiddweller.platform.Protocol;
-import com.rapiddweller.platform.Protocols;
+import com.rapiddweller.benerator.FileFormat;
+import com.rapiddweller.benerator.FileFormats;
 import com.rapiddweller.platform.csv.CSVEntitySourceProvider;
 import com.rapiddweller.platform.dbunit.DbUnitEntitySource;
 import com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource;
@@ -137,9 +139,9 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       generator = createSourceGeneratorFromObject(descriptor, context, sourceObject);
     } else {
       String segment = descriptor.getSegment();
-      for (Protocol protocol : Protocols.all()) {
-        if (protocol.matchesUri(sourceSpec)) {
-          generator = createProtocolSourceGenerator(sourceSpec, protocol, descriptor, context);
+      for (FileFormat format : FileFormats.all()) {
+        if (format.matchesUri(sourceSpec)) {
+          generator = createProtocolSourceGenerator(sourceSpec, format, descriptor, context);
           break;
         }
       }
@@ -238,6 +240,9 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       }
     } else if (sourceObject instanceof Generator) {
       generator = (Generator<Entity>) sourceObject;
+    } else if (sourceObject instanceof TypedEntitySource) {
+      TypedEntitySource dataSource = (TypedEntitySource) sourceObject;
+      generator = new DataSourceGenerator<Entity>(new TypedEntitySourceAdapter(dataSource, descriptor));
     } else if (sourceObject instanceof EntitySource) {
       generator = new DataSourceGenerator<>((EntitySource) sourceObject);
     } else if (sourceObject instanceof DataSource) {
@@ -252,9 +257,9 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     return generator;
   }
 
-  private static Generator<Entity> createProtocolSourceGenerator(String url, Protocol protocol,
+  private static Generator<Entity> createProtocolSourceGenerator(String url, FileFormat format,
       ComplexTypeDescriptor complexType, BeneratorContext context) {
-    DataSourceProvider<Entity> fileProvider = protocol.provider(url, null, complexType, context);
+    DataSourceProvider<Entity> fileProvider = format.provider(url, null, complexType, context);
     return createEntitySourceGenerator(complexType, context, url, fileProvider);
   }
 
