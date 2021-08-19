@@ -70,6 +70,7 @@
             <xs:element ref="include" minOccurs="0"/>
             <xs:element ref="setting" minOccurs="0"/>
             <xs:element ref="database" minOccurs="0"/>
+            <xs:element ref="jms-destination" minOccurs="0"/>
             <xs:element ref="domtree" minOccurs="0"/>
             <xs:element ref="bean" minOccurs="0"/>
             <xs:element ref="defaultComponents" minOccurs="0"/>
@@ -291,6 +292,48 @@
             <xs:attribute name="acceptUnknownColumnTypes" type="xs:string"/>
         </xs:complexType>
     </xs:element>
+
+    <!-- connects to a JMS destination -->
+    <!-- TODO move this to Benerator EE schema -->
+    <xs:element name="jms-destination">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="factory" type="xs:string" use="required"/>
+            <xs:attribute name="url" type="xs:string" use="required"/>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="type" type="jms-destination-type" use="required"/>
+            <xs:attribute name="format" type="jms-format" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="jms-destination-type">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="topic"/>
+                    <xs:enumeration value="queue"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="jms-format">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="map"/>
+                    <xs:enumeration value="json"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
 
     <!-- creates a DOM Tree -->
     <xs:element name="domtree">
