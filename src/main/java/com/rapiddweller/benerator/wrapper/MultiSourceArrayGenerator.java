@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.wrapper;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.ThreadUtil;
 
 /**
  * Keeps an array of generators, of which it combines the products to an array.<br/><br/>
@@ -57,6 +58,16 @@ public class MultiSourceArrayGenerator<S> extends GeneratorProxy<S[]> {
     this.componentType = componentType;
     this.unique = unique;
     this.sources = sources;
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return ThreadUtil.allThreadSafe(this.sources);
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return ThreadUtil.allParallelizable(this.sources);
   }
 
   /**
