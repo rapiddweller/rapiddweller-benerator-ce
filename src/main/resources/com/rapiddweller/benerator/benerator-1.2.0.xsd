@@ -296,6 +296,9 @@
     <!-- connects to a JMS destination -->
     <!-- TODO move this to Benerator EE schema -->
     <xs:element name="jms-destination">
+        <xs:annotation>
+            <xs:appinfo><version>EE</version></xs:appinfo>
+        </xs:annotation>
         <xs:complexType>
             <xs:attribute name="id" type="xs:string"/>
             <xs:attribute name="factory" type="xs:string" use="required"/>
@@ -307,6 +310,9 @@
     </xs:element>
 
     <xs:simpleType name="jms-destination-type">
+        <xs:annotation>
+            <xs:appinfo><version>EE</version></xs:appinfo>
+        </xs:annotation>
         <xs:union>
             <xs:simpleType>
                 <xs:restriction base="xs:string">
@@ -321,6 +327,9 @@
     </xs:simpleType>
 
     <xs:simpleType name="jms-format">
+        <xs:annotation>
+            <xs:appinfo><version>EE</version></xs:appinfo>
+        </xs:annotation>
         <xs:union>
             <xs:simpleType>
                 <xs:restriction base="xs:string">
