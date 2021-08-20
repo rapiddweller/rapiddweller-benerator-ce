@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.statement.RunTaskStatement;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.task.PageListenerMock;
 import com.rapiddweller.task.TaskMock;
 import org.junit.Before;
@@ -42,7 +42,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class RunTaskParserAndStatementTest extends BeneratorIntegrationTest {
+public class RunTaskParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Sets up task mock.

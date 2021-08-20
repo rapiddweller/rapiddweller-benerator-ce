@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.common.TimeUtil;
@@ -45,7 +45,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.8.0
  */
-public class XLSIntegrationTest extends BeneratorIntegrationTest {
+public class XLSIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test default.

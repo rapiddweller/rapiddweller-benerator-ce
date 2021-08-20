@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.engine.statement.EvaluateStatement;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -39,7 +39,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.6.6
  */
-public class EvaluateIntegrationTest extends BeneratorIntegrationTest {
+public class EvaluateIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test benerator script string literal.

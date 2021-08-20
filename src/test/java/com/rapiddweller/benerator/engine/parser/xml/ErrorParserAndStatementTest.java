@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorError;
 import com.rapiddweller.benerator.engine.statement.ErrorStatement;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNull;
@@ -40,7 +40,7 @@ import static org.junit.Assert.assertNull;
  * @author Volker Bergmann
  * @since o.6.4
  */
-public class ErrorParserAndStatementTest extends BeneratorIntegrationTest {
+public class ErrorParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test no info.

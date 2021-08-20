@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import org.junit.Assume;
 import org.junit.Test;
 
@@ -42,7 +42,7 @@ import static com.rapiddweller.common.SystemInfo.isLinux;
  * @author Alexander Kell
  * @since 1.1.0
  */
-public class ManualExampleTest extends BeneratorIntegrationTest {
+public class ManualExampleTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Example 1.

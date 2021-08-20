@@ -47,7 +47,7 @@ import java.io.IOException;
  * @author Volker Bergmann
  * @since 0.6.4
  */
-public abstract class BeneratorIntegrationTest extends GeneratorTest {
+public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
 
   /**
    * The Resource manager.

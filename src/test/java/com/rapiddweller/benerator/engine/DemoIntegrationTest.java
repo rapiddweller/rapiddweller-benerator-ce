@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.FileUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,7 +48,7 @@ import static com.rapiddweller.common.SystemInfo.isLinux;
  * @author Alexander Kell
  * @since 1.1.0
  */
-public class DemoIntegrationTest extends BeneratorIntegrationTest {
+public class DemoIntegrationTest extends AbstractBeneratorIntegrationTest {
   private static final Logger logger = LogManager.getLogger(DemoIntegrationTest.class);
 
   /**

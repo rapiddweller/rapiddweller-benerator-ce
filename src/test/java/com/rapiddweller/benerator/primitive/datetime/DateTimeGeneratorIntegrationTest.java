@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
 import com.rapiddweller.benerator.engine.statement.BeanStatement;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.common.converter.ConverterManager;
@@ -48,7 +48,7 @@ import static org.junit.Assert.assertNull;
  * @author Volker Bergmann
  * @since 0.6.1
  */
-public class DateTimeGeneratorIntegrationTest extends BeneratorIntegrationTest {
+public class DateTimeGeneratorIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Sets converter manager.

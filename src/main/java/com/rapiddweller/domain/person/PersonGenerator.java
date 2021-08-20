@@ -116,75 +116,35 @@ public class PersonGenerator extends CompositeGenerator<Person>
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets min age years.
-   *
-   * @param minAgeYears the min age years
-   */
   public void setMinAgeYears(int minAgeYears) {
     birthDateGenerator.setMinAgeYears(minAgeYears);
   }
 
-  /**
-   * Sets max age years.
-   *
-   * @param maxAgeYears the max age years
-   */
   public void setMaxAgeYears(int maxAgeYears) {
     birthDateGenerator.setMaxAgeYears(maxAgeYears);
   }
 
-  /**
-   * Gets female quota.
-   *
-   * @return the female quota
-   */
   public double getFemaleQuota() {
     return genderGen.getFemaleQuota();
   }
 
-  /**
-   * Sets female quota.
-   *
-   * @param femaleQuota the female quota
-   */
   public void setFemaleQuota(double femaleQuota) {
     this.genderGen.setFemaleQuota(femaleQuota);
   }
 
-  /**
-   * Gets noble quota.
-   *
-   * @return the noble quota
-   */
   public double getNobleQuota() {
     return maleNobilityTitleGen.getNobleQuota();
   }
 
-  /**
-   * Sets noble quota.
-   *
-   * @param nobleQuota the noble quota
-   */
   public void setNobleQuota(double nobleQuota) {
     maleNobilityTitleGen.setNobleQuota(nobleQuota);
     femaleNobilityTitleGen.setNobleQuota(nobleQuota);
   }
 
-  /**
-   * Gets locale.
-   *
-   * @return the locale
-   */
   public Locale getLocale() {
     return acadTitleGen.getLocale();
   }
 
-  /**
-   * Sets locale.
-   *
-   * @param locale the locale
-   */
   public void setLocale(Locale locale) {
     this.locale = locale;
   }
@@ -344,7 +304,7 @@ public class PersonGenerator extends CompositeGenerator<Person>
 
     birthDate.setTime(birthdate);
     if (birthDate.after(today)) {
-      return 0;
+      return age;
     }
 
     age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);

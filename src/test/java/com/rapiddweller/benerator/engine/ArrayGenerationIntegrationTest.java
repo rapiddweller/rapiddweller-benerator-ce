@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +42,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.7.0
  */
-public class ArrayGenerationIntegrationTest extends BeneratorIntegrationTest {
+public class ArrayGenerationIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   private ConsumerMock consumer;
 

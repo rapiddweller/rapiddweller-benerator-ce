@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.SyntaxError;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.Test;
@@ -43,7 +43,7 @@ import static org.junit.Assert.assertNull;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class IfParserAndStatementTest extends BeneratorIntegrationTest {
+public class IfParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test plain true.

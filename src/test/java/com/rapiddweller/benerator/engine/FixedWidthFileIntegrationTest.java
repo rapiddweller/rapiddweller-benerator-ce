@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.platform.fixedwidth.FixedWidthEntityExporter;
@@ -42,7 +42,7 @@ import static org.junit.Assert.assertEquals;
  * @since 0.9.2
  */
 @SuppressWarnings("CheckStyle")
-public class FixedWidthFileIntegrationTest extends BeneratorIntegrationTest {
+public class FixedWidthFileIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test null columns.

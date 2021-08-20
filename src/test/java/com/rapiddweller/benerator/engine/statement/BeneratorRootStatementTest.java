@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.factory.EquivalenceGeneratorFactory;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
@@ -52,7 +52,7 @@ import static org.junit.Assert.assertNotNull;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class BeneratorRootStatementTest extends BeneratorIntegrationTest {
+public class BeneratorRootStatementTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test generator factory config.

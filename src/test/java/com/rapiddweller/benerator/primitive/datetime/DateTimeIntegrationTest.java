@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.primitive.datetime;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.common.TimeUtil;
 import org.junit.Before;
@@ -48,7 +48,7 @@ import static org.junit.Assert.assertTrue;
  * @author Volker Bergmann
  * @since 0.6.1
  */
-public class DateTimeIntegrationTest extends BeneratorIntegrationTest {
+public class DateTimeIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   private static final Date MIN_DATE = TimeUtil.date(2008, 8, 29);
   private static final Date MAX_DATE = TimeUtil.date(2008, 9, 3);

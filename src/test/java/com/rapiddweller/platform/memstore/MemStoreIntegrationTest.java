@@ -26,7 +26,7 @@
 
 package com.rapiddweller.platform.memstore;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
@@ -47,7 +47,7 @@ import static org.junit.Assert.assertTrue;
  * @author Volker Bergmann
  * @since 0.6.6
  */
-public class MemStoreIntegrationTest extends BeneratorIntegrationTest {
+public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   private MemStore dst;
   private ConsumerMock consumer;

@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.SyntaxError;
 import org.junit.Test;
 
@@ -42,7 +42,7 @@ import static org.junit.Assert.assertTrue;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class SettingParserAndStatementTest extends BeneratorIntegrationTest {
+public class SettingParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test value.

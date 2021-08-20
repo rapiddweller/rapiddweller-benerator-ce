@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
 import com.rapiddweller.benerator.engine.statement.StatementProxy;
 import com.rapiddweller.benerator.engine.statement.TimedGeneratorStatement;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.platform.contiperf.PerfTrackingConsumer;
 import com.rapiddweller.stat.LatencyCounter;
@@ -46,7 +46,7 @@ import static org.junit.Assert.assertTrue;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class PerfTrackingConsumerIntegrationTest extends BeneratorIntegrationTest {
+public class PerfTrackingConsumerIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test nesting.

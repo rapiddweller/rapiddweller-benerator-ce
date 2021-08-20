@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.primitive.IncrementGenerator;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.benerator.test.PersonSource;
 import com.rapiddweller.common.CollectionUtil;
@@ -64,7 +64,7 @@ import static org.junit.Assert.assertTrue;
  * @since 0.6.0
  */
 @SuppressWarnings("CheckStyle")
-public class GenerateOrIterateParserAndStatementTest extends BeneratorIntegrationTest {
+public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test illegal nullable.

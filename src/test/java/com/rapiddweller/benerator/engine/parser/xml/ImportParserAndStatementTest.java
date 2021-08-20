@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ImportStatement;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SyntaxError;
@@ -43,7 +43,7 @@ import org.junit.Test;
  * @author Volker Bergmann
  * @since 0.6.1
  */
-public class ImportParserAndStatementTest extends BeneratorIntegrationTest {
+public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test no import.

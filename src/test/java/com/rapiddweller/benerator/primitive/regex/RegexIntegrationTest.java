@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.primitive.regex;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Before;
@@ -46,7 +46,7 @@ import static org.junit.Assert.assertTrue;
  * @author Volker Bergmann
  * @since 0.9.3
  */
-public class RegexIntegrationTest extends BeneratorIntegrationTest {
+public class RegexIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   private ConsumerMock consumer;
 

@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -40,7 +40,7 @@ import static org.junit.Assert.assertNotNull;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class BeanParserAndStatementTest extends BeneratorIntegrationTest {
+public class BeanParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test parse bean class.

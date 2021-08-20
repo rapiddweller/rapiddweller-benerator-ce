@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.SyntaxError;
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class IncludeParserAndStatementTest extends BeneratorIntegrationTest {
+public class IncludeParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   private static final String DESC_URI = "com/rapiddweller/benerator/engine/parser/xml/included.ben.xml";
   private static final String PROP_URI = "com/rapiddweller/benerator/engine/parser/xml/included.properties";

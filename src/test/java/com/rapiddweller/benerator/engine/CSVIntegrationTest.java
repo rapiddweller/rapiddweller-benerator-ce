@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.IOUtil;
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.6.5
  */
-public class CSVIntegrationTest extends BeneratorIntegrationTest {
+public class CSVIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test headless.

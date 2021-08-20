@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.primitive.datetime.CurrentDateTimeGenerator;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.TimeUtil;
@@ -53,7 +53,7 @@ import static org.junit.Assert.assertTrue;
  * @since 0.6.2
  */
 @SuppressWarnings("CheckStyle")
-public class DatabaseIntegrationTest extends BeneratorIntegrationTest {
+public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   private DefaultDBSystem db;
   private ConsumerMock consumer;
