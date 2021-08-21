@@ -35,6 +35,7 @@ import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.ProgrammerError;
 
 /**
  * Abstract generator class that wraps another generator object (in a <i>source</i> property)
@@ -52,49 +53,24 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
   private Generator<S> source;
   private final WrapperProvider<S> sourceWrapperProvider = new WrapperProvider<>();
 
-  /**
-   * Instantiates a new Generator wrapper.
-   *
-   * @param source the source
-   */
   public GeneratorWrapper(Generator<S> source) {
     this.source = source;
   }
 
   // config properties -----------------------------------------------------------------------------------------------
 
-  /**
-   * Returns the source generator
-   *
-   * @return the source
-   */
   public Generator<S> getSource() {
     return source;
   }
 
-  /**
-   * Sets the source generator
-   *
-   * @param source the source
-   */
   public void setSource(Generator<S> source) {
     this.source = source;
   }
 
-  /**
-   * Generate from source product wrapper.
-   *
-   * @return the product wrapper
-   */
   protected ProductWrapper<S> generateFromSource() {
     return source.generate(getSourceWrapper());
   }
 
-  /**
-   * Gets source wrapper.
-   *
-   * @return the source wrapper
-   */
   protected ProductWrapper<S> getSourceWrapper() {
     return sourceWrapperProvider.get();
   }
@@ -103,11 +79,21 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
 
   @Override
   public boolean isThreadSafe() {
+    if (source == null) {
+      throw new ProgrammerError("The object has not been initialized yet. " +
+          "Please make sure that " + getClass() + " overwrites isThreadSafe() " +
+          "in a manner that works before initialization");
+    }
     return source.isThreadSafe();
   }
 
   @Override
   public boolean isParallelizable() {
+    if (source == null) {
+      throw new ProgrammerError("The object has not been initialized yet. " +
+          "Please make sure that " + getClass() + " overwrites isParallelizable() " +
+          "in a manner that works before initialization");
+    }
     return source.isParallelizable();
   }
 
