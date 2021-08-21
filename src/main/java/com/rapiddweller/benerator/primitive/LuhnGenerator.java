@@ -126,6 +126,16 @@ public class LuhnGenerator extends NonNullGeneratorProxy<String> {
   }
 
   @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return true;
+  }
+
+  @Override
   public synchronized void init(GeneratorContext context) {
     super.setSource(new RandomVarLengthStringGenerator("\\d", minLength, maxLength, lengthGranularity, lengthDistribution));
     super.init(context);

@@ -219,6 +219,17 @@ public class RegexStringGenerator extends NonNullGeneratorProxy<String> {
 
   // Generator interface ---------------------------------------------------------------------------------------------
 
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return !isUnique();
+  }
+
   /**
    * ensures consistency of the generators state
    */

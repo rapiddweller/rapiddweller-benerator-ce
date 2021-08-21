@@ -31,6 +31,7 @@ import com.rapiddweller.benerator.util.AbstractNonNullGenerator;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.ThreadUtil;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.domain.organization.CompanyName;
@@ -110,15 +111,12 @@ public class CompanyDomainGenerator extends AbstractNonNullGenerator<String> {
 
   @Override
   public boolean isThreadSafe() {
-    return companyNameGenerator.isThreadSafe() &&
-        tldGenerator.isThreadSafe() && normalizer.isThreadSafe();
+    return ThreadUtil.allThreadSafe(companyNameGenerator, tldGenerator, normalizer);
   }
 
   @Override
   public boolean isParallelizable() {
-    return companyNameGenerator.isParallelizable() &&
-        tldGenerator.isParallelizable() &&
-        normalizer.isParallelizable();
+    return ThreadUtil.allParallelizable(companyNameGenerator, tldGenerator, normalizer);
   }
 
   private static final class Normalizer

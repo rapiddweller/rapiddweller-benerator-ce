@@ -214,6 +214,17 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
 
   // interface -------------------------------------------------------------------------------------------------------
 
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return true;
+  }
+
   @Override
   protected boolean isAtomic(Dataset dataset) {
     Country country = Country.getInstance(dataset.getName(), false);
