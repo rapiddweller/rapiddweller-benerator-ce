@@ -294,7 +294,6 @@
     </xs:element>
 
     <!-- connects to a JMS destination -->
-    <!-- TODO move this to Benerator EE schema -->
     <xs:element name="jms-destination">
         <xs:annotation>
             <xs:appinfo><version>EE</version></xs:appinfo>
@@ -538,6 +537,9 @@
             <xs:attribute name="maxCount" type="xs:string"/>
             <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attributeGroup ref="execution-attrs"/>
+            <xs:attribute name="threads" type="xs:int">
+                <xs:annotation><xs:appinfo><version>EE</version></xs:appinfo></xs:annotation>
+            </xs:attribute>
             <xs:attribute name="template" type="xs:string"/>
             <xs:attribute name="consumer" type="xs:string"/>
         </xs:complexType>
@@ -562,6 +564,9 @@
             </xs:sequence>
             <xs:attributeGroup ref="iterator-attrs"/>
             <xs:attributeGroup ref="execution-attrs"/>
+            <xs:attribute name="threads" type="xs:int">
+                <xs:annotation><xs:appinfo><version>EE</version></xs:appinfo></xs:annotation>
+            </xs:attribute>
             <xs:attribute name="template" type="xs:string"/>
             <xs:attribute name="consumer" type="xs:string"/>
         </xs:complexType>
