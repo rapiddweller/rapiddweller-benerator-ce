@@ -75,9 +75,9 @@ public class BeneratorMonitor implements BeneratorMonitorMBean {
   int currentThroughput;
 
   private BeneratorMonitor() {
-    ControlThread controlThread = new ControlThread();
-    controlThread.setDaemon(true);
-    controlThread.start();
+    BeneratorMonitorThread monitorThread = new BeneratorMonitorThread();
+    monitorThread.setDaemon(true);
+    monitorThread.start();
   }
 
   /**
@@ -139,7 +139,12 @@ public class BeneratorMonitor implements BeneratorMonitorMBean {
   /**
    * The type Control thread.
    */
-  class ControlThread extends Thread {
+  class BeneratorMonitorThread extends Thread {
+
+    protected BeneratorMonitorThread() {
+      super("Benerator-Monitor-Thread");
+    }
+
     @Override
     public void run() {
       try {
