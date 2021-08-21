@@ -78,14 +78,9 @@ public class DefaultBeneratorContext implements BeneratorContext {
 
   // constants -------------------------------------------------------------------------------------------------------
 
-  /**
-   * The constant CELL_SEPARATOR_SYSPROP.
-   */
   public static final String CELL_SEPARATOR_SYSPROP = "cell.separator";
-  /**
-   * The constant DEFAULT_CELL_SEPARATOR.
-   */
   public static final char DEFAULT_CELL_SEPARATOR = ',';
+  public static final String DEFAULT_CONTEXT_URI = ".";
 
 
   // attributes -------------------------------------------------------------------------------------------------------
@@ -95,62 +90,24 @@ public class DefaultBeneratorContext implements BeneratorContext {
   private final ClassCache classCache;
   private final ContextStack contextStack;
 
-  /**
-   * The Default encoding.
-   */
-  protected String defaultEncoding = SystemInfo.getFileEncoding();
-  /**
-   * The Default dataset.
-   */
-  protected String defaultDataset = LocaleUtil.getDefaultCountryCode();
-  /**
-   * The Default page size.
-   */
-  protected long defaultPageSize = 1;
-  /**
-   * The Default null.
-   */
-  protected boolean defaultNull = true;
-  /**
-   * The Context uri.
-   */
-  protected String contextUri = "./";
-  /**
-   * The Max count.
-   */
-  public Long maxCount = null;
-  /**
-   * The Default one to one.
-   */
-  public boolean defaultOneToOne = false;
-  /**
-   * The Default imports.
-   */
-  public boolean defaultImports = true;
-  /**
-   * The Accept unknown simple types.
-   */
-  public boolean acceptUnknownSimpleTypes = false;
+  protected String defaultEncoding;
+  protected String defaultDataset;
+  protected long defaultPageSize;
+  protected boolean defaultNull;
+  protected String contextUri;
+  public Long maxCount;
+  public boolean defaultOneToOne;
+  public boolean defaultImports;
+  public boolean acceptUnknownSimpleTypes;
 
-
-  /**
-   * The Default component.
-   */
   protected ComplexTypeDescriptor defaultComponent;
-  /**
-   * The Executor service.
-   */
   protected ExecutorService executorService;
 
+  protected String currentProductName;
   private ProductWrapper<?> currentProduct;
 
   private DataModel dataModel;
   private final DefaultDescriptorProvider localDescriptorProvider;
-
-  /**
-   * The Current product name.
-   */
-  protected String currentProductName;
 
 
   // construction ----------------------------------------------------------------------------------------------------
@@ -163,28 +120,29 @@ public class DefaultBeneratorContext implements BeneratorContext {
     ConverterManager.getInstance().registerConverterClass(String2DistributionConverter.class); // TODO is this required any longer?
   }
 
-  /**
-   * Instantiates a new Default benerator context.
-   */
   public DefaultBeneratorContext() {
-    this(".");
+    this(DEFAULT_CONTEXT_URI);
   }
 
-  /**
-   * Instantiates a new Default benerator context.
-   *
-   * @param contextUri the context uri
-   */
   public DefaultBeneratorContext(String contextUri) {
     if (contextUri == null) {
       throw new ConfigurationError("No context URI specified");
     }
     this.contextUri = contextUri;
+    this.defaultEncoding = SystemInfo.getFileEncoding();
+    this.defaultDataset = LocaleUtil.getDefaultCountryCode();
+    this.defaultPageSize = 1;
+    this.defaultNull = true;
+    this.maxCount = null;
+    this.defaultOneToOne = false;
+    this.defaultImports = true;
+    this.acceptUnknownSimpleTypes = false;
+
     this.executorService = createExecutorService();
     this.dataModel = new DataModel();
     this.localDescriptorProvider = new DefaultDescriptorProvider("ctx", dataModel);
     this.defaultComponent = new ComplexTypeDescriptor("benerator:defaultComponent", localDescriptorProvider);
-    this.generatorFactory = new StochasticGeneratorFactory();
+    this.generatorFactory = createGeneratorFactory();
     settings = new DefaultContext();
     this.contextStack = createContextStack(
         new DefaultContext(java.lang.System.getenv()),
@@ -197,6 +155,10 @@ public class DefaultBeneratorContext implements BeneratorContext {
       addLibFolderToClassLoader();
     }
     classCache = new ClassCache();
+  }
+
+  private StochasticGeneratorFactory createGeneratorFactory() {
+    return new StochasticGeneratorFactory();
   }
 
 
@@ -383,11 +345,6 @@ public class DefaultBeneratorContext implements BeneratorContext {
     dataModel.setAcceptUnknownPrimitives(acceptUnknownSimpleTypes);
   }
 
-  /**
-   * Gets default cell separator.
-   *
-   * @return the default cell separator
-   */
   public static char getDefaultCellSeparator() {
     String tmp = System.getProperty(CELL_SEPARATOR_SYSPROP);
     if (tmp == null) {
@@ -543,12 +500,6 @@ public class DefaultBeneratorContext implements BeneratorContext {
     return new DefaultBeneratorSubContext(productName, this);
   }
 
-  /**
-   * Sets current product.
-   *
-   * @param currentProduct     the current product
-   * @param currentProductName the current product name
-   */
   public void setCurrentProduct(ProductWrapper<?> currentProduct, String currentProductName) {
     this.currentProductName = currentProductName;
     setCurrentProduct(currentProduct);
@@ -578,21 +529,10 @@ public class DefaultBeneratorContext implements BeneratorContext {
     }
   }
 
-  /**
-   * Create executor service executor service.
-   *
-   * @return the executor service
-   */
   protected ExecutorService createExecutorService() {
     return Executors.newSingleThreadExecutor();
   }
 
-  /**
-   * Create context stack context stack.
-   *
-   * @param contexts the contexts
-   * @return the context stack
-   */
   protected ContextStack createContextStack(Context... contexts) {
     return new SimpleContextStack(contexts);
   }
