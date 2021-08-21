@@ -31,6 +31,7 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.sample.SampleGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
+import com.rapiddweller.common.ThreadUtil;
 
 import java.util.List;
 
@@ -61,6 +62,16 @@ public class IndexBasedSampleGeneratorProxy<E> extends GeneratorProxy<E> {
     this.dataProvider = dataProvider;
     this.distribution = distribution;
     this.unique = unique;
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return ThreadUtil.allThreadSafe(dataProvider, distribution);
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return ThreadUtil.allParallelizable(dataProvider, distribution);
   }
 
   @Override

@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.distribution;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
+import com.rapiddweller.common.ThreadUtil;
 
 /**
  * General purpose generator proxy which is supposed to work with any distribution.
@@ -46,18 +47,21 @@ public class DistributingGenerator<E> extends GeneratorProxy<E> {
   private final Distribution distribution;
   private final boolean unique;
 
-  /**
-   * Instantiates a new Distributing generator.
-   *
-   * @param dataProvider the data provider
-   * @param distribution the distribution
-   * @param unique       the unique
-   */
   public DistributingGenerator(Generator<E> dataProvider, Distribution distribution, boolean unique) {
     super(dataProvider.getGeneratedType());
     this.dataProvider = dataProvider;
     this.distribution = distribution;
     this.unique = unique;
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return ThreadUtil.allThreadSafe(dataProvider, distribution);
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return ThreadUtil.allParallelizable(dataProvider, distribution);
   }
 
   @Override
