@@ -70,6 +70,7 @@
             <xs:element ref="include" minOccurs="0"/>
             <xs:element ref="setting" minOccurs="0"/>
             <xs:element ref="database" minOccurs="0"/>
+            <xs:element ref="memstore" minOccurs="0"/>
             <xs:element ref="jms-destination" minOccurs="0"/>
             <xs:element ref="domtree" minOccurs="0"/>
             <xs:element ref="bean" minOccurs="0"/>
@@ -269,6 +270,12 @@
         <xs:attribute name="class" type="xs:string"/>
         <xs:attribute name="spec" type="xs:string"/>
     </xs:complexType>
+
+    <xs:element name="memstore">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
 
     <!-- connects to a database -->
     <xs:element name="database">
