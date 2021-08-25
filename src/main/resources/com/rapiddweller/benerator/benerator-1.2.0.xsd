@@ -72,6 +72,8 @@
             <xs:element ref="database" minOccurs="0"/>
             <xs:element ref="memstore" minOccurs="0"/>
             <xs:element ref="jms-destination" minOccurs="0"/>
+            <xs:element ref="kafka-importer" minOccurs="0"/>
+            <xs:element ref="kafka-exporter" minOccurs="0"/>
             <xs:element ref="domtree" minOccurs="0"/>
             <xs:element ref="bean" minOccurs="0"/>
             <xs:element ref="defaultComponents" minOccurs="0"/>
@@ -349,6 +351,81 @@
         </xs:union>
     </xs:simpleType>
 
+    <!-- imports from a Kafka topic -->
+    <xs:element name="kafka-importer">
+        <xs:annotation>
+            <xs:appinfo><version>EE</version></xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="bootstrapServers" type="xs:string" use="required"/>
+            <xs:attribute name="topic" type="xs:string" use="required"/>
+            <xs:attribute name="format" type="kafka-format" use="required"/>
+            <xs:attribute name="encoding" type="xs:string"/>
+            <xs:attribute name="keyDeserializer" type="xs:string"/>
+            <xs:attribute name="groupId" type="xs:string"/>
+            <xs:attribute name="autoOffsetReset" type="xs:boolean"/>
+            <xs:attribute name="enableAutoCommit" type="xs:boolean"/>
+            <xs:attribute name="autoCommitIntervalMs" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- exports to a Kafka topic -->
+    <xs:element name="kafka-exporter">
+        <xs:annotation>
+            <xs:appinfo><version>EE</version></xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="bootstrapServers" type="xs:string" use="required"/>
+            <xs:attribute name="topic" type="xs:string" use="required"/>
+            <xs:attribute name="format" type="kafka-format" use="required"/>
+            <xs:attribute name="encoding" type="xs:string"/>
+            <xs:attribute name="keySerializer" type="xs:string"/>
+            <xs:attribute name="acks" type="xs:int"/>
+            <xs:attribute name="bufferMemory" type="jms-format"/>
+            <xs:attribute name="compressionType" type="kafka-compression-type"/>
+            <xs:attribute name="retries" type="xs:int"/>
+            <xs:attribute name="batchSize" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="kafka-format">
+        <xs:annotation>
+            <xs:appinfo><version>EE</version></xs:appinfo>
+        </xs:annotation>
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="json"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="kafka-compression-type">
+        <xs:annotation>
+            <xs:appinfo><version>EE</version></xs:appinfo>
+        </xs:annotation>
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="gzip"/>
+                    <xs:enumeration value="snappy"/>
+                    <xs:enumeration value="lz4"/>
+                    <xs:enumeration value="zstd"/>
+                    <xs:enumeration value="uncompressed"/>
+                    <xs:enumeration value="producer"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
 
     <!-- creates a DOM Tree -->
     <xs:element name="domtree">
