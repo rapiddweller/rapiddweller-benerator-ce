@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator;
 
+import com.rapiddweller.benerator.main.Benerator;
 import com.rapiddweller.common.LogCategoriesConstants;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SystemInfo;
@@ -97,7 +98,7 @@ public class BeneratorUtil {
    * @param printer the printer
    */
   public static void printVersionInfo(InfoPrinter printer) {
-    VersionInfo version = VersionInfo.getInfo("benerator");
+    VersionInfo version = Benerator.getVersion();
     printer.printLines(
         "Benerator " + version.getVersion() + " build " + version.getBuildNumber(),
         "Java version " + VMInfo.getJavaVersion(),
