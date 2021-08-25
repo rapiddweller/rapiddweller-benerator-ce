@@ -80,6 +80,10 @@ public class Benerator {
     }
   }
 
+  public static VersionInfo getVersion() {
+    return VersionInfo.getInfo("benerator");
+  }
+
   private static void runFromCommandLine(String[] args) throws IOException {
     try {
       InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
