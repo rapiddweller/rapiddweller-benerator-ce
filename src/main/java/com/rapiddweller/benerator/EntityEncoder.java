@@ -36,5 +36,5 @@ import com.rapiddweller.model.data.Entity;
  * @since 1.2.0
  */
 public interface EntityEncoder {
-  String encode(Entity entity);
+  String encodeEntity(Entity entity);
 }
