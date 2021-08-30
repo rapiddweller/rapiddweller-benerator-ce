@@ -97,14 +97,14 @@ public abstract class AbstractStatement implements Statement {
     switch (mode) {
       case ASSERT_NOT_NULL:
         Assert.notNull(value, propertyName);
-        BeanUtil.setPropertyValue(bean, propertyName, value);
+        BeanUtil.setPropertyValue(bean, propertyName, value, false);
         break;
       case IF_NOT_NULL:
         if (value != null)
-          BeanUtil.setPropertyValue(bean, propertyName, value);
+          BeanUtil.setPropertyValue(bean, propertyName, value, false);
         break;
       default:
-        BeanUtil.setPropertyValue(bean, propertyName, value);
+        BeanUtil.setPropertyValue(bean, propertyName, value, false);
         break;
     }
     return value;
