@@ -269,7 +269,8 @@ public class Entity implements Composite {
 
   @Override
   public int hashCode() {
-    return descriptor.getName().hashCode() * 29 + components.hashCode();
+    int typeHash = (descriptor != null ? descriptor.getName().hashCode() : 0);
+    return typeHash * 29 + components.hashCode();
   }
 
   @Override
