@@ -362,6 +362,7 @@
             <xs:attribute name="topic" type="xs:string" use="required"/>
             <xs:attribute name="format" type="kafka-format" use="required"/>
             <xs:attribute name="encoding" type="xs:string"/>
+            <xs:attribute name="pageSize" type="xs:string"/>
             <xs:attribute name="keyDeserializer" type="xs:string"/>
             <xs:attribute name="groupId" type="xs:string"/>
             <xs:attribute name="autoOffsetReset" type="xs:boolean"/>
@@ -381,6 +382,7 @@
             <xs:attribute name="topic" type="xs:string" use="required"/>
             <xs:attribute name="format" type="kafka-format" use="required"/>
             <xs:attribute name="encoding" type="xs:string"/>
+            <xs:attribute name="keyAttribute" type="xs:string"/>
             <xs:attribute name="keySerializer" type="xs:string"/>
             <xs:attribute name="acks" type="xs:int"/>
             <xs:attribute name="bufferMemory" type="jms-format"/>
