@@ -27,47 +27,21 @@
 package com.rapiddweller.model.data;
 
 /**
- * Describes a component which is part of a {@link ComplexTypeDescriptor}.<br/>
- * <br/>
+ * Describes a component which is part of a {@link ComplexTypeDescriptor}.<br/><br/>
  * Created: 27.02.2008 16:28:22
- *
  * @author Volker Bergmann
  * @since 0.4.2
  */
 public abstract class ComponentDescriptor extends InstanceDescriptor {
 
-  /**
-   * Instantiates a new Component descriptor.
-   *
-   * @param name     the name
-   * @param provider the provider
-   * @param typeName the type name
-   */
-  public ComponentDescriptor(String name, DescriptorProvider provider,
-                             String typeName) {
+  public ComponentDescriptor(String name, DescriptorProvider provider, String typeName) {
     this(name, provider, typeName, null);
   }
 
-  /**
-   * Instantiates a new Component descriptor.
-   *
-   * @param name      the name
-   * @param provider  the provider
-   * @param localType the local type
-   */
-  public ComponentDescriptor(String name, DescriptorProvider provider,
-                             TypeDescriptor localType) {
+  public ComponentDescriptor(String name, DescriptorProvider provider, TypeDescriptor localType) {
     this(name, provider, null, localType);
   }
 
-  /**
-   * Instantiates a new Component descriptor.
-   *
-   * @param name      the name
-   * @param provider  the provider
-   * @param typeName  the type name
-   * @param localType the local type
-   */
   protected ComponentDescriptor(String name, DescriptorProvider provider,
                                 String typeName, TypeDescriptor localType) {
     super(name, provider, typeName, localType);

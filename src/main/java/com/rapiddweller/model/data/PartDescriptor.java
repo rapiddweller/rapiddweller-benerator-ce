@@ -37,65 +37,23 @@ import com.rapiddweller.script.Expression;
  */
 public class PartDescriptor extends ComponentDescriptor {
 
-  /**
-   * Instantiates a new Part descriptor.
-   *
-   * @param name     the name
-   * @param provider the provider
-   */
   public PartDescriptor(String name, DescriptorProvider provider) {
     this(name, provider, (TypeDescriptor) null);
   }
 
-  /**
-   * Instantiates a new Part descriptor.
-   *
-   * @param name     the name
-   * @param provider the provider
-   * @param type     the type
-   */
-  public PartDescriptor(String name, DescriptorProvider provider,
-                        String type) {
+  public PartDescriptor(String name, DescriptorProvider provider, String type) {
     this(name, provider, type, null, null, null);
   }
 
-  /**
-   * Instantiates a new Part descriptor.
-   *
-   * @param name      the name
-   * @param provider  the provider
-   * @param localType the local type
-   */
-  public PartDescriptor(String name, DescriptorProvider provider,
-                        TypeDescriptor localType) {
+  public PartDescriptor(String name, DescriptorProvider provider, TypeDescriptor localType) {
     this(name, provider, localType, null, null);
   }
 
-  /**
-   * Instantiates a new Part descriptor.
-   *
-   * @param name      the name
-   * @param provider  the provider
-   * @param localType the local type
-   * @param minCount  the min count
-   * @param maxCount  the max count
-   */
-  public PartDescriptor(String name, DescriptorProvider provider,
-                        TypeDescriptor localType, Expression<Long> minCount,
-                        Expression<Long> maxCount) {
+  public PartDescriptor(String name, DescriptorProvider provider, TypeDescriptor localType,
+                        Expression<Long> minCount, Expression<Long> maxCount) {
     this(name, provider, null, localType, minCount, maxCount);
   }
 
-  /**
-   * Instantiates a new Part descriptor.
-   *
-   * @param name      the name
-   * @param provider  the provider
-   * @param type      the type
-   * @param localType the local type
-   * @param minCount  the min count
-   * @param maxCount  the max count
-   */
   public PartDescriptor(String name, DescriptorProvider provider, String type,
                         TypeDescriptor localType, Expression<Long> minCount,
                         Expression<Long> maxCount) {

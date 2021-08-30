@@ -79,23 +79,11 @@ public class ModelParser {
   private final BeneratorContext context;
   private final DescriptorProvider descriptorProvider;
 
-  /**
-   * Instantiates a new Model parser.
-   *
-   * @param context the context
-   */
   public ModelParser(BeneratorContext context) {
     this.context = context;
     this.descriptorProvider = context.getLocalDescriptorProvider();
   }
 
-  /**
-   * Parse component component descriptor.
-   *
-   * @param element the element
-   * @param owner   the owner
-   * @return the component descriptor
-   */
   public ComponentDescriptor parseComponent(Element element, ComplexTypeDescriptor owner) {
     String elementName = XMLUtil.localName(element);
     if (EL_PART.equals(elementName)) {
@@ -108,14 +96,6 @@ public class ModelParser {
     }
   }
 
-  /**
-   * Parse simple type component component descriptor.
-   *
-   * @param element   the element
-   * @param owner     the owner
-   * @param component the component
-   * @return the component descriptor
-   */
   public ComponentDescriptor parseSimpleTypeComponent(
       Element element, ComplexTypeDescriptor owner, ComponentDescriptor component) {
     String name = XMLUtil.localName(element);
@@ -131,13 +111,6 @@ public class ModelParser {
     }
   }
 
-  /**
-   * Parse complex type complex type descriptor.
-   *
-   * @param ctElement  the ct element
-   * @param descriptor the descriptor
-   * @return the complex type descriptor
-   */
   public ComplexTypeDescriptor parseComplexType(Element ctElement, ComplexTypeDescriptor descriptor) {
     assertElementName(ctElement, "entity", "type");
     descriptor = new ComplexTypeDescriptor(descriptor.getName(), descriptorProvider, descriptor);
@@ -148,12 +121,6 @@ public class ModelParser {
     return descriptor;
   }
 
-  /**
-   * Parse complex type child.
-   *
-   * @param element    the element
-   * @param descriptor the descriptor
-   */
   public void parseComplexTypeChild(Element element, ComplexTypeDescriptor descriptor) {
     String childName = XMLUtil.localName(element);
     if ("variable".equals(childName)) {
@@ -163,14 +130,6 @@ public class ModelParser {
     }
   }
 
-  /**
-   * Parse attribute part descriptor.
-   *
-   * @param element    the element
-   * @param owner      the owner
-   * @param descriptor the descriptor
-   * @return the part descriptor
-   */
   public PartDescriptor parseAttribute(Element element, ComplexTypeDescriptor owner, ComponentDescriptor descriptor) {
     assertElementName(element, "attribute");
     PartDescriptor result;
@@ -193,14 +152,6 @@ public class ModelParser {
     return result;
   }
 
-  /**
-   * Parse part part descriptor.
-   *
-   * @param element    the element
-   * @param owner      the owner
-   * @param descriptor the descriptor
-   * @return the part descriptor
-   */
   public PartDescriptor parsePart(Element element, ComplexTypeDescriptor owner, ComponentDescriptor descriptor) {
     assertElementName(element, "part");
     PartDescriptor result;
@@ -240,11 +191,6 @@ public class ModelParser {
     return result;
   }
 
-  /**
-   * Apply default counts.
-   *
-   * @param descriptor the descriptor
-   */
   public void applyDefaultCounts(PartDescriptor descriptor) {
     if (descriptor.getDeclaredDetailValue("minCount") == null) {
       descriptor.setMinCount(new ConstantExpression<>(1L));
@@ -254,30 +200,11 @@ public class ModelParser {
     }
   }
 
-//    public SimpleTypeDescriptor parseSimpleType(Element element) {
-//        assertElementName(element, "type");
-//        return parseSimpleType(element, new SimpleTypeDescriptor(null, descriptorProvider, (String) null));
-//    }
-
-  /**
-   * Parse simple type simple type descriptor.
-   *
-   * @param element    the element
-   * @param descriptor the descriptor
-   * @return the simple type descriptor
-   */
   public SimpleTypeDescriptor parseSimpleType(Element element, SimpleTypeDescriptor descriptor) {
     assertElementName(element, "type");
     return mapTypeDetails(element, descriptor);
   }
 
-  /**
-   * Parse variable instance descriptor.
-   *
-   * @param varElement the var element
-   * @param owner      the owner
-   * @return the instance descriptor
-   */
   public InstanceDescriptor parseVariable(Element varElement, VariableHolder owner) {
     assertElementName(varElement, "variable");
     String type = StringUtil.emptyToNull(varElement.getAttribute("type"));
@@ -287,14 +214,6 @@ public class ModelParser {
     return variable;
   }
 
-  /**
-   * Parse simple type array element array element descriptor.
-   *
-   * @param element the element
-   * @param owner   the owner
-   * @param index   the index
-   * @return the array element descriptor
-   */
   public ArrayElementDescriptor parseSimpleTypeArrayElement(Element element, ArrayTypeDescriptor owner, int index) {
     ArrayElementDescriptor descriptor = new ArrayElementDescriptor(index, descriptorProvider, element.getAttribute("name"));
     mapInstanceDetails(element, false, descriptor);
@@ -436,6 +355,5 @@ public class ModelParser {
     }
     return mapInstanceDetails(element, false, result);
   }
-
 
 }

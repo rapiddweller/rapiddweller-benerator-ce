@@ -35,40 +35,11 @@ package com.rapiddweller.model.data;
  */
 public interface DescriptorProvider {
 
-  /**
-   * Gets data model.
-   *
-   * @return the data model
-   */
   DataModel getDataModel();
-
-  /**
-   * Sets data model.
-   *
-   * @param dataModel the data model
-   */
   void setDataModel(DataModel dataModel);
 
-  /**
-   * Gets id.
-   *
-   * @return the id
-   */
   String getId();
-
-  /**
-   * Get type descriptors type descriptor [ ].
-   *
-   * @return the type descriptor [ ]
-   */
   TypeDescriptor[] getTypeDescriptors();
-
-  /**
-   * Gets type descriptor.
-   *
-   * @param typeName the type name
-   * @return the type descriptor
-   */
   TypeDescriptor getTypeDescriptor(String typeName);
 
 }
