@@ -195,7 +195,7 @@ jobs:
           idStrategy=seqhilo
           idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
       - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
-      - run: mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent verify jacoco:report
+      - run: mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent verify -DskipITs=false jacoco:report
       - run: awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco/jacoco.csv
       - run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report
         shell: bash
