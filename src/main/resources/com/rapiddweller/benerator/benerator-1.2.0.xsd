@@ -798,7 +798,11 @@
         <xs:attribute name="dataset" type="xs:string"/>
         <xs:attribute name="nesting" type="xs:string"/>
         <xs:attribute name="locale" type="xs:string"/>
-        <xs:attribute name="filter" type="xs:string"/>
+        <xs:attribute name="filter" type="xs:string">
+            <xs:annotation>
+                <xs:appinfo><version>EE</version></xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
     </xs:attributeGroup>
 
     <xs:attributeGroup name="common-creator-attrs">
