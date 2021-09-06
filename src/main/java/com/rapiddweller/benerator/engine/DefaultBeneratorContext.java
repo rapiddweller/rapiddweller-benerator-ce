@@ -452,6 +452,7 @@ public class DefaultBeneratorContext implements BeneratorContext {
   public void importDefaults() {
     // import frequently used Benerator packages
     importPackage("com.rapiddweller.benerator.consumer");
+    importPackage("com.rapiddweller.benerator.converter");
     importPackage("com.rapiddweller.benerator.primitive");
     importPackage("com.rapiddweller.benerator.primitive.datetime");
     importPackage("com.rapiddweller.benerator.distribution.sequence");
