@@ -171,11 +171,17 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     if (generator.getGeneratedType() != Entity.class) {
       generator = new SimpleTypeEntityGenerator(generator, descriptor);
     }
-    if (descriptor.getFilter() != null) {
-      Expression<Boolean> filter
-          = new ScriptExpression<>(ScriptUtil.parseScriptText(descriptor.getFilter()));
-      generator = new FilteringGenerator<>(generator, filter);
-    }
+    generator = applyFilter(descriptor, generator);
+    generator = applyDistribution(descriptor, uniqueness, context, generator);
+    return generator;
+  }
+
+  protected Generator<Entity> applyFilter(ComplexTypeDescriptor descriptor, Generator<Entity> generator) {
+    return generator;
+  }
+
+  private Generator<Entity> applyDistribution(ComplexTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context,
+                                              Generator<Entity> generator) {
     Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
     if (distribution != null) {
       generator = new DistributingGenerator<>(generator, distribution, uniqueness.isUnique());
@@ -242,7 +248,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       generator = (Generator<Entity>) sourceObject;
     } else if (sourceObject instanceof TypedEntitySource) {
       TypedEntitySource dataSource = (TypedEntitySource) sourceObject;
-      generator = new DataSourceGenerator<Entity>(new TypedEntitySourceAdapter(dataSource, descriptor));
+      generator = new DataSourceGenerator<>(new TypedEntitySourceAdapter(dataSource, descriptor));
     } else if (sourceObject instanceof EntitySource) {
       generator = new DataSourceGenerator<>((EntitySource) sourceObject);
     } else if (sourceObject instanceof DataSource) {
