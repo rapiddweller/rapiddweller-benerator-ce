@@ -33,10 +33,8 @@ import com.rapiddweller.common.ThreadUtil;
 
 /**
  * General purpose generator proxy which is supposed to work with any distribution.
- * The behavior on a reset is up to the generator created by the distribution.<br/>
- * <br/>
+ * The behavior on a reset is up to the generator created by the distribution.<br/><br/>
  * Created: 22.03.2010 10:45:48
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -56,7 +54,12 @@ public class DistributingGenerator<E> extends GeneratorProxy<E> {
 
   @Override
   public boolean isThreadSafe() {
-    return ThreadUtil.allThreadSafe(dataProvider, distribution);
+    // The implementation of this class itself is thread safe.
+    // For the combination of this with a distribution and a dataProvider to bes thread-safe,
+    // the sequence must be thread-safe and either the dataProvider be thread-safe or the
+    // application of the distribution detached.
+    return ThreadUtil.isThreadSafe(distribution)
+        && (distribution.isApplicationDetached() || dataProvider.isThreadSafe());
   }
 
   @Override
