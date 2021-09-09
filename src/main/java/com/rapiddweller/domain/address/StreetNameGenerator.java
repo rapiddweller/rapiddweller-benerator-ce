@@ -44,40 +44,27 @@ import java.util.Locale;
 import java.util.Stack;
 
 /**
- * Generates a street name for a region.<br/>
- * <br/>
+ * Generates a street name for a region.<br/><br/>
  * Created: 12.06.2006 00:08:28
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class StreetNameGenerator extends GeneratorProxy<String>
     implements DatasetBasedGenerator<String>, NonNullGenerator<String> {
 
-  private static final Logger LOGGER =
-      LogManager.getLogger(StreetNameGenerator.class);
+  private static final Logger LOGGER = LogManager.getLogger(StreetNameGenerator.class);
 
-  private static final String REGION_NESTING =
-      "com/rapiddweller/dataset/region";
-  private static final String FILENAME_PATTERN =
-      "/com/rapiddweller/domain/address/street_{0}.csv";
+  private static final String REGION_NESTING = "com/rapiddweller/dataset/region";
+  private static final String FILENAME_PATTERN = "/com/rapiddweller/domain/address/street_{0}.csv";
 
   private String datasetName;
 
   // construction ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Street name generator.
-   */
   public StreetNameGenerator() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Street name generator.
-   *
-   * @param datasetName the dataset name
-   */
   public StreetNameGenerator(String datasetName) {
     super(String.class);
     this.datasetName = datasetName;
@@ -100,11 +87,6 @@ public class StreetNameGenerator extends GeneratorProxy<String>
     return datasetName;
   }
 
-  /**
-   * Sets dataset.
-   *
-   * @param datasetName the dataset name
-   */
   public void setDataset(String datasetName) {
     this.datasetName = datasetName;
   }
@@ -112,6 +94,16 @@ public class StreetNameGenerator extends GeneratorProxy<String>
   @Override
   public String generateForDataset(String dataset) {
     return getSource().generateForDataset(dataset);
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return true;
   }
 
   @Override
@@ -156,22 +148,14 @@ public class StreetNameGenerator extends GeneratorProxy<String>
 
   // helpers ---------------------------------------------------------------------------------------------------------
 
-  /**
-   * Generate for country and locale string.
-   *
-   * @param countryCode the country code
-   * @param language    the language
-   * @return the string
-   */
-  public String generateForCountryAndLocale(String countryCode,
-                                            Locale language) {
+  public String generateForCountryAndLocale(String countryCode, Locale language) {
     WeightedDatasetCSVGenerator<String> source = getSource();
     String subset = countryCode + '_' + language.getLanguage();
     if (source.supportsDataset(subset)) {
       return source.generateForDataset(subset);
     }
     subset = countryCode;
-    return source.generateForDataset(countryCode);
+    return source.generateForDataset(subset);
   }
 
 }
