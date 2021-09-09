@@ -388,6 +388,16 @@
             <artifactId>nexus-staging-maven-plugin</artifactId>
             <version>1.6.8</version>
             <type>maven-plugin</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.surefire</groupId>
