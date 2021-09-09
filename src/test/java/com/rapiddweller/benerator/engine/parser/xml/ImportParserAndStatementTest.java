@@ -31,10 +31,11 @@ import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ImportStatement;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SyntaxError;
 import org.junit.Test;
+
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests {@link ImportParser} and {@link ImportStatement}.<br/><br/>
@@ -45,22 +46,16 @@ import org.junit.Test;
  */
 public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test no import.
-   */
-  @Test(expected = ConfigurationError.class)
+  @Test
   public void testNoImport() {
     BeneratorContext context = new DefaultBeneratorContext();
     try {
-      context.forName("IncrementGenerator");
+      assertNull(context.forName("IncrementGenerator"));
     } finally {
       IOUtil.close(context);
     }
   }
 
-  /**
-   * Test defaults.
-   */
   @Test
   public void testDefaults() {
     Statement statement = parse("<import defaults='true' />");
@@ -69,9 +64,6 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
     context.forName("IncrementGenerator");
   }
 
-  /**
-   * Test platforms.
-   */
   @Test
   public void testPlatforms() {
     Statement statement = parse("<import platforms='db, xml' />");
@@ -81,9 +73,6 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
     context.forName("XMLEntityExporter");
   }
 
-  /**
-   * Test domains.
-   */
   @Test
   public void testDomains() {
     Statement statement = parse("<import domains='person, address' />");
@@ -93,9 +82,6 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
     context.forName("AddressGenerator");
   }
 
-  /**
-   * Test import attribute typo.
-   */
   @Test(expected = SyntaxError.class)
   public void testImportAttributeTypo() {
     parse("<import platmof='typo' />");
