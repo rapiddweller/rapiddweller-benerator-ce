@@ -36,6 +36,7 @@ import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.context.CaseInsensitiveContext;
 import com.rapiddweller.common.context.ContextAware;
+import com.rapiddweller.format.text.DelocalizingConverter;
 
 /**
  * Default implementation of the abstract {@link BeneratorFactory} class.<br/><br/>
@@ -88,6 +89,11 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
       ((ContextAware) consumer).setContext(context);
     }
     return consumer;
+  }
+
+  @Override
+  public Converter<String, String> createDelocalizingConverter() {
+    return new DelocalizingConverter();
   }
 
   @Override
