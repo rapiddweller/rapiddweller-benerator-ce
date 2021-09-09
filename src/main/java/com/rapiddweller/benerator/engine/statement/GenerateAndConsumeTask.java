@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.composite.ComponentBuilder;
+import com.rapiddweller.benerator.consumer.ConsumerChain;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.CurrentProductGeneration;
@@ -57,7 +58,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Task that creates one data set instance per run() invocation and sends it to the specified consumer.<br/><br/>
  * Created: 01.02.2008 14:39:11
- *
  * @author Volker Bergmann
  */
 public class GenerateAndConsumeTask implements Task, PageListener, ResourceManager, MessageHolder {
@@ -72,7 +72,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
   protected List<Statement> statements;
   private List<ScopedLifeCycleHolder> scopeds;
   private Expression<Consumer> consumerExpr;
-  private AtomicBoolean initialized;
+  private final AtomicBoolean initialized;
   private Consumer consumer;
   private String message;
 
@@ -120,8 +120,10 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
         this.context = context;
         this.consumer = ExpressionUtil.evaluate(consumerExpr, context);
         resourceManager.addResource(consumer);
-        injectConsumptionStart();
-        injectConsumptionEnd();
+        if (consumersExist()) {
+          injectConsumptionStart();
+          injectConsumptionEnd();
+        }
         initialized.set(true);
         initStatements(context);
         checkScopes(statements, context);
@@ -180,7 +182,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
       if (success) {
         BeneratorMonitor.INSTANCE.countGenerations(1);
       }
-      enqueueResets(statements);
+      enqueueResets();
       Thread.yield();
       return (success ? TaskResult.EXECUTING : TaskResult.UNAVAILABLE);
     } catch (Exception e) {
@@ -254,6 +256,14 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
 
   // private helpers -------------------------------------------------------------------------------------------------
 
+  private boolean consumersExist() {
+    if (consumer == null)
+      return false;
+    if (consumer instanceof ConsumerChain)
+      return (((ConsumerChain) consumer).getComponents().size() > 0);
+    return true;
+  }
+
   private void injectConsumptionStart() {
     // find last sub member generation...
     int lastMemberIndex = -1;
@@ -310,7 +320,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     }
   }
 
-  private void enqueueResets(List<Statement> statements) {
+  private void enqueueResets() {
     for (ScopedLifeCycleHolder scoped : scopeds) {
       scoped.setResetNeeded(true);
     }
