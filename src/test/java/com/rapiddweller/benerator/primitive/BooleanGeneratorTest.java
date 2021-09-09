@@ -28,8 +28,8 @@ package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -43,7 +43,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class BooleanGeneratorTest extends GeneratorClassTest {
 
-  private static final Logger logger = LogManager.getLogger(BooleanGeneratorTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(BooleanGeneratorTest.class);
 
   /**
    * Instantiates a new Boolean generator test.

@@ -26,8 +26,8 @@
 
 package com.rapiddweller.benerator.engine;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Closes resources if system shutdown happens normally or enforced.<br/><br/>
@@ -38,7 +38,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class BeneratorShutdownHook extends Thread {
 
-  private static final Logger logger = LogManager.getLogger(BeneratorShutdownHook.class);
+  private static final Logger logger = LoggerFactory.getLogger(BeneratorShutdownHook.class);
 
   private final ResourceManager resourceManager;
 

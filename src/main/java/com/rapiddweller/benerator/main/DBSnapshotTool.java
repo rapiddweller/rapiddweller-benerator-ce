@@ -44,8 +44,8 @@ import com.rapiddweller.platform.db.SQLEntityExporter;
 import com.rapiddweller.platform.dbunit.DbUnitEntityExporter;
 import com.rapiddweller.platform.xls.XLSEntityExporter;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Creates a snapshot of a database schema and exports it in DbUnit XML file format.
@@ -107,7 +107,7 @@ public class DBSnapshotTool {
   public static final String DIALECT = "dialect";
 
   // TODO v0.8 test with each database
-  private static final Logger logger = LogManager.getLogger(DBSnapshotTool.class);
+  private static final Logger logger = LoggerFactory.getLogger(DBSnapshotTool.class);
 
   /**
    * Supported formats string [ ].

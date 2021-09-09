@@ -60,8 +60,8 @@ import com.rapiddweller.model.data.UnresolvedTypeDescriptor;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -186,7 +186,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
   private static final String COMPLEX_CONTENT = "complexContent";
   private static final String SIMPLE_CONTENT = "simpleContent";
   private static final String ATTRIBUTE = "attribute";
-  private static final Logger LOGGER = LogManager.getLogger(XMLSchemaDescriptorProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(XMLSchemaDescriptorProvider.class);
 
   // attributes ------------------------------------------------------------------------------------------------------
   private BeneratorContext context;

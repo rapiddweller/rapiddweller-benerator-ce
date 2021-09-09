@@ -27,8 +27,8 @@
 package com.rapiddweller.benerator.distribution.sequence;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -43,7 +43,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class CumulatedLongGeneratorTest extends GeneratorClassTest {
 
-  private static final Logger logger = LogManager.getLogger(CumulatedLongGeneratorTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(CumulatedLongGeneratorTest.class);
 
   /**
    * Instantiates a new Cumulated long generator test.

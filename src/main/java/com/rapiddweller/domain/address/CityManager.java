@@ -36,8 +36,8 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.csv.BeanCSVWriter;
 import com.rapiddweller.format.csv.CSVLineIterator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -55,7 +55,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CityManager {
 
   private static final Logger LOGGER =
-      LogManager.getLogger(CityManager.class);
+      LoggerFactory.getLogger(CityManager.class);
 
   /**
    * Read cities.

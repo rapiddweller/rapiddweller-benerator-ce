@@ -31,8 +31,8 @@ import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.xml.XMLUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -56,7 +56,7 @@ public class XMLFileGeneratorTest extends GeneratorTest {
   private static final String BEAN_TEST_XSD = "com/rapiddweller/benerator/xml/bean_test.xsd";
   //private static final String VARIABLE_TEST_XSD = "com/rapiddweller/benerator/xml/variable_test.xsd";
 
-  private static final Logger logger = LogManager.getLogger(XMLFileGeneratorTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(XMLFileGeneratorTest.class);
 
   /**
    * Test simple type element.

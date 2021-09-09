@@ -34,8 +34,8 @@ import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.TypeDescriptor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -52,7 +52,7 @@ import java.util.concurrent.ExecutorService;
  */
 public abstract class AbstractBeneratorSubContext implements BeneratorSubContext {
 
-  private static final Logger LOGGER = LogManager.getLogger(AbstractBeneratorSubContext.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBeneratorSubContext.class);
   /**
    * The Parent.
    */

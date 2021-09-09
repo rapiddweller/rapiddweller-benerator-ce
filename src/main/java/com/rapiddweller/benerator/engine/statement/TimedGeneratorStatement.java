@@ -32,8 +32,8 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.common.time.ElapsedTimeFormatter;
 import com.rapiddweller.profile.Profiler;
 import com.rapiddweller.profile.Profiling;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Locale;
@@ -48,7 +48,7 @@ import java.util.Locale;
  */
 public class TimedGeneratorStatement extends StatementProxy {
 
-  private static final Logger logger = LogManager.getLogger(TimedGeneratorStatement.class);
+  private static final Logger logger = LoggerFactory.getLogger(TimedGeneratorStatement.class);
 
   private final String name;
   /**

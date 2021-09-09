@@ -36,8 +36,8 @@ import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.domain.organization.CompanyName;
 import com.rapiddweller.domain.organization.CompanyNameGenerator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 
@@ -52,7 +52,7 @@ import static com.rapiddweller.benerator.util.GeneratorUtil.generateNonNull;
 public class CompanyDomainGenerator extends AbstractNonNullGenerator<String> {
 
   private static final Logger LOGGER =
-      LogManager.getLogger(CompanyDomainGenerator.class);
+      LoggerFactory.getLogger(CompanyDomainGenerator.class);
 
   private final CompanyNameGenerator companyNameGenerator;
   private final TopLevelDomainGenerator tldGenerator;

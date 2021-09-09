@@ -63,8 +63,8 @@ import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.Expression;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.StreamTokenizer;
@@ -87,7 +87,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
   protected ComponentBuilderFactory() {
   }
 
-  private static final Logger LOGGER = LogManager.getLogger(ComponentBuilderFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComponentBuilderFactory.class);
 
   // factory methods for component generators ------------------------------------------------------------------------
 

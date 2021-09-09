@@ -36,8 +36,8 @@ import com.rapiddweller.common.log.LoggingInfoPrinter;
 import com.rapiddweller.common.ui.ApplicationUtil;
 import com.rapiddweller.common.ui.JavaApplication;
 import com.rapiddweller.common.version.VersionInfo;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
@@ -69,7 +69,7 @@ public class BeneratorGUI {
   /**
    * The constant LOGGER.
    */
-  protected static final Logger LOGGER = LogManager.getLogger(BeneratorGUI.class);
+  protected static final Logger LOGGER = LoggerFactory.getLogger(BeneratorGUI.class);
 
   /**
    * The Buffer file.

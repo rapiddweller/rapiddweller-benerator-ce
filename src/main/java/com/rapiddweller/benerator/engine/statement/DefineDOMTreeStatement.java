@@ -33,8 +33,8 @@ import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.platform.xml.DOMTree;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * {@link Statement} for creating a {@link DOMTree} element
@@ -46,7 +46,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class DefineDOMTreeStatement implements Statement {
 
-  private static final Logger logger = LogManager.getLogger(DefineDOMTreeStatement.class);
+  private static final Logger logger = LoggerFactory.getLogger(DefineDOMTreeStatement.class);
 
   private final ResourceManager resourceManager;
 

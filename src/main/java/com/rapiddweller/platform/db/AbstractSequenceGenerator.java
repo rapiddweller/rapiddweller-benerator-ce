@@ -31,8 +31,8 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 import com.rapiddweller.common.StringUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Abstract parent class for database-sequence-related {@link Generator}s.<br/><br/>
@@ -47,7 +47,7 @@ public abstract class AbstractSequenceGenerator
   /**
    * The Logger.
    */
-  protected final Logger logger = LogManager.getLogger(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
 
   /**
    * The Name.

@@ -36,8 +36,8 @@ import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.platform.xml.XMLSchemaDescriptorProvider;
 import com.rapiddweller.script.Expression;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 
@@ -51,7 +51,7 @@ import java.io.IOException;
  */
 public class IncludeStatement implements Statement {
 
-  private static final Logger logger = LogManager.getLogger(IncludeStatement.class);
+  private static final Logger logger = LoggerFactory.getLogger(IncludeStatement.class);
 
   private Expression<String> uriEx;
 

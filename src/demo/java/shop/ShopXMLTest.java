@@ -47,8 +47,8 @@ import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.platform.xml.XMLSchemaDescriptorProvider;
 import org.junit.Test;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Tests processing of the shop.xsd file.<br/>
@@ -60,7 +60,7 @@ import org.apache.logging.log4j.LogManager;
 public class ShopXMLTest extends GeneratorTest {
 
   private static final Logger logger =
-      LogManager.getLogger(ShopXMLTest.class);
+      LoggerFactory.getLogger(ShopXMLTest.class);
 
   /**
    * The Schema uri.

@@ -51,8 +51,8 @@ import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.ReferenceDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.platform.db.DBSystem;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.StreamTokenizer;
@@ -71,7 +71,7 @@ import static java.io.StreamTokenizer.TT_WORD;
  */
 public class CascadeStatement extends SequentialStatement implements CascadeParent {
 
-  private static final Logger LOGGER = LogManager.getLogger(CascadeStatement.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CascadeStatement.class);
 
   private static final String REF_SYNTAX_MESSAGE = "Expected Syntax: table(column1, column2, ...)";
 

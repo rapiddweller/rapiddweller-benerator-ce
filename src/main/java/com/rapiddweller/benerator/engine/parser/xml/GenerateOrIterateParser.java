@@ -66,8 +66,8 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.task.PageListener;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.w3c.dom.Element;
 
 import java.util.ArrayList;
@@ -126,7 +126,7 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStr
  */
 public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Logger logger = LogManager.getLogger(GenerateOrIterateParser.class);
+  private static final Logger logger = LoggerFactory.getLogger(GenerateOrIterateParser.class);
 
   private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
       ATT_COUNT, ATT_MIN_COUNT, ATT_MAX_COUNT, ATT_COUNT_DISTRIBUTION,

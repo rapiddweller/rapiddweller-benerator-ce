@@ -29,8 +29,8 @@ package com.rapiddweller.benerator.sample;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.script.WeightedSample;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.Test;
 
 import java.util.List;
@@ -46,7 +46,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class AttachedWeightSampleGeneratorTest extends GeneratorTest {
 
-  private static final Logger logger = LogManager.getLogger(AttachedWeightSampleGeneratorTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(AttachedWeightSampleGeneratorTest.class);
 
   /**
    * Test instantiation.

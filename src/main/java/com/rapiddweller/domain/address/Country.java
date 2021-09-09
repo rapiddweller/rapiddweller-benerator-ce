@@ -45,8 +45,8 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.csv.CSVEntitySource;
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ import java.util.Map;
  */
 public class Country {
 
-  private static final Logger LOGGER = LogManager.getLogger(Country.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Country.class);
   private static final String DEFAULT_PHONE_CODE = "[2-9][0-9][0-9]";
   private static final String DEFAULT_MOBILE_PHONE_PATTERN =
       "[1-9][0-9][0-9]";

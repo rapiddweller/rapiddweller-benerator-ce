@@ -32,8 +32,8 @@ import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.model.data.Entity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.Locale;
 import java.util.Map;
@@ -47,7 +47,7 @@ import java.util.Map;
  */
 public class FixedWidthEntityExporter extends TextFileExporter {
 
-  private static final Logger LOGGER = LogManager.getLogger(FixedWidthEntityExporter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FixedWidthEntityExporter.class);
 
   private final Map<String, String> formats;
   private Map<String, FWRecordFormatter> formatters;

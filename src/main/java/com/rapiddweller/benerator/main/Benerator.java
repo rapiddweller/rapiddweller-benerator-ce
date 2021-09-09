@@ -43,8 +43,8 @@ import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.contiperf.sensor.MemorySensor;
 import com.rapiddweller.format.text.KiloFormatter;
 import com.rapiddweller.jdbacl.DBUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 
@@ -57,7 +57,7 @@ import java.io.IOException;
  */
 public class Benerator {
 
-  private static final Logger LOGGER = LogManager.getLogger(Benerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Benerator.class);
 
   // methods ---------------------------------------------------------------------------------------------------------
 

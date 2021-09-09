@@ -29,8 +29,8 @@ package com.rapiddweller.task;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.task.AbstractTask;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Simple implementation of a Task that is single-threaded and does nothing but finding itself special
@@ -43,7 +43,7 @@ import org.apache.logging.log4j.LogManager;
 public class SpecialTask extends AbstractTask {
 
   private static final Logger logger =
-      LogManager.getLogger(SpecialTask.class);
+      LoggerFactory.getLogger(SpecialTask.class);
 
   /**
    * Execute task result.

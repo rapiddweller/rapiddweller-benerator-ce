@@ -39,8 +39,8 @@ import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AbstractXMLElementParser;
 import com.rapiddweller.format.xml.ParseContext;
 import com.rapiddweller.script.Expression;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.w3c.dom.Element;
 
 import java.util.Set;
@@ -57,7 +57,7 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public abstract class AbstractBeneratorDescriptorParser extends AbstractXMLElementParser<Statement> {
 
-  protected Logger logger = LogManager.getLogger(AbstractBeneratorDescriptorParser.class);
+  protected Logger logger = LoggerFactory.getLogger(AbstractBeneratorDescriptorParser.class);
 
   public AbstractBeneratorDescriptorParser(String elementName,
                                            Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {

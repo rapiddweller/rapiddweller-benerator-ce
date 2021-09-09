@@ -51,8 +51,8 @@ import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.platform.db.DBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -65,7 +65,7 @@ import java.util.List;
  */
 public class TranscodeStatement extends SequentialStatement implements CascadeParent {
 
-  private static final Logger LOGGER = LogManager.getLogger(TranscodeStatement.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TranscodeStatement.class);
 
   /**
    * The Type expression.

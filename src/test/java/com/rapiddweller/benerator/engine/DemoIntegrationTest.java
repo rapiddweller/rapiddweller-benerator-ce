@@ -28,8 +28,8 @@ package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.FileUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -49,7 +49,7 @@ import static com.rapiddweller.common.SystemInfo.isLinux;
  * @since 1.1.0
  */
 public class DemoIntegrationTest extends AbstractBeneratorIntegrationTest {
-  private static final Logger logger = LogManager.getLogger(DemoIntegrationTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(DemoIntegrationTest.class);
 
   /**
    * The Root.
@@ -153,7 +153,7 @@ public class DemoIntegrationTest extends AbstractBeneratorIntegrationTest {
       context.setContextUri("/demo/file");
       parseAndExecuteFile("/demo/file/create_dates.ben.xml");
     } catch (Exception e) {
-      logger.info(e);
+      logger.info("Error executing Demo", e);
     }
   }
 

@@ -30,8 +30,8 @@ import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ReaderLineIterator;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -51,7 +51,7 @@ public class LineShuffler {
   /**
    * The constant logger.
    */
-  public static final Logger logger = LogManager.getLogger(LineShuffler.class);
+  public static final Logger logger = LoggerFactory.getLogger(LineShuffler.class);
 
   /**
    * The entry point of application.

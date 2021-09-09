@@ -31,8 +31,8 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Mutator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Helper class for simple definition of custom {@link ComponentBuilder}s which uses a {@link Mutator}
@@ -48,7 +48,7 @@ public abstract class AbstractComponentBuilder<E> extends AbstractGeneratorCompo
    * The Mutator.
    */
   protected final Mutator mutator;
-  private final Logger logger = LogManager.getLogger(getClass());
+  private final Logger logger = LoggerFactory.getLogger(getClass());
   private final WrapperProvider<Object> wrapperProvider = new WrapperProvider<>();
 
   /**

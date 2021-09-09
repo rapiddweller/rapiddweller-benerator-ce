@@ -33,8 +33,8 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.MessageHolder;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -49,8 +49,8 @@ import java.util.List;
  */
 public class SourceAwareGenerator<E> extends GeneratorProxy<E> implements MessageHolder {
 
-  private static final Logger LOGGER = LogManager.getLogger(SourceAwareGenerator.class);
-  private static final Logger STATE_LOGGER = LogManager.getLogger(BeneratorConstants.STATE_LOGGER);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SourceAwareGenerator.class);
+  private static final Logger STATE_LOGGER = LoggerFactory.getLogger(BeneratorConstants.STATE_LOGGER);
 
   private final String instanceName;
   private E currentInstance;

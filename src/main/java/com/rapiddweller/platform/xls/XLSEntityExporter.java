@@ -37,8 +37,8 @@ import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.platform.csv.CSVEntityExporter;
 import com.rapiddweller.script.PrimitiveType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
@@ -69,7 +69,7 @@ public class XLSEntityExporter extends FormattingConsumer
     implements FileExporter {
 
   private static final Logger logger =
-      LogManager.getLogger(CSVEntityExporter.class);
+      LoggerFactory.getLogger(CSVEntityExporter.class);
 
   // defaults --------------------------------------------------------------------------------------------------------
 

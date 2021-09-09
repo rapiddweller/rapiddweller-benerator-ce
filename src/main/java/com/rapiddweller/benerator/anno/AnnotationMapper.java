@@ -67,8 +67,8 @@ import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import com.rapiddweller.platform.java.Entity2JavaConverter;
 import com.rapiddweller.script.DatabeneScriptParser;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.AssertTrue;
@@ -102,7 +102,7 @@ import java.util.Set;
  */
 public class AnnotationMapper extends DefaultDescriptorProvider {
 
-  private static final Logger LOGGER = LogManager.getLogger(AnnotationMapper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationMapper.class);
 
   private static final Set<String> STANDARD_METHODS;
 

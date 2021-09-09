@@ -46,8 +46,8 @@ import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.platform.xls.PlatformDescriptor;
 import com.rapiddweller.script.PrimitiveType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -67,7 +67,7 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
   /**
    * The Logger.
    */
-  protected final Logger logger = LogManager.getLogger(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
 
   /**
    * Create generator generator.

@@ -32,8 +32,8 @@ import com.rapiddweller.jdbacl.ColumnInfo;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.model.DBTable;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.Closeable;
 import java.sql.Connection;
@@ -52,7 +52,7 @@ import java.util.Map;
 public class ConnectionHolder implements Closeable {
 
   private static final Logger JDBC_LOGGER =
-      LogManager.getLogger(LogCategoriesConstants.JDBC);
+      LoggerFactory.getLogger(LogCategoriesConstants.JDBC);
   /**
    * The Insert statements.
    */

@@ -36,8 +36,8 @@ import com.rapiddweller.common.ThreadAware;
 import com.rapiddweller.common.converter.CaseConverter;
 import com.rapiddweller.common.converter.ConverterChain;
 import com.rapiddweller.domain.net.DomainGenerator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.Locale;
 
@@ -58,7 +58,7 @@ public class EMailAddressBuilder implements ThreadAware {
 
   public EMailAddressBuilder(String dataset) {
     // Logger is not static in order to adopt sub classes
-    Logger logger = LogManager.getLogger(getClass());
+    Logger logger = LoggerFactory.getLogger(getClass());
     logger.debug("Creating instance of {} for dataset {}", getClass(),
         dataset);
     this.domainGenerator = new DomainGenerator(dataset);

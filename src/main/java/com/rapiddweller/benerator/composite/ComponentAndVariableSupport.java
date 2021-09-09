@@ -34,8 +34,8 @@ import com.rapiddweller.common.MessageHolder;
 import com.rapiddweller.common.Resettable;
 import com.rapiddweller.common.ThreadAware;
 import com.rapiddweller.common.ThreadUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.Closeable;
 import java.util.ArrayList;
@@ -51,8 +51,8 @@ import java.util.List;
  */
 public class ComponentAndVariableSupport<E> implements ThreadAware, MessageHolder, Resettable, Closeable {
 
-  private static final Logger LOGGER = LogManager.getLogger(ComponentAndVariableSupport.class);
-  private static final Logger STATE_LOGGER = LogManager.getLogger(BeneratorConstants.STATE_LOGGER);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComponentAndVariableSupport.class);
+  private static final Logger STATE_LOGGER = LoggerFactory.getLogger(BeneratorConstants.STATE_LOGGER);
 
   private final String instanceName;
   private final List<GeneratorComponent<E>> components;

@@ -29,8 +29,8 @@ package com.rapiddweller.task;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Wraps a Task and logs its execution time.<br/>
@@ -43,7 +43,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class TimedTask<E extends Task> extends TaskProxy<E> {
 
-  private static final Logger logger = LogManager.getLogger(TimedTask.class);
+  private static final Logger logger = LoggerFactory.getLogger(TimedTask.class);
 
   /**
    * Instantiates a new Timed task.

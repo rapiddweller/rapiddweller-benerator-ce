@@ -45,8 +45,8 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.BeanConstruction;
 import com.rapiddweller.script.expression.DefaultConstruction;
 import com.rapiddweller.script.expression.ExpressionUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CLASS;
@@ -64,7 +64,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_PROPERTY;
  */
 public class BeanParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Logger logger = LogManager.getLogger(BeanParser.class);
+  private static final Logger logger = LoggerFactory.getLogger(BeanParser.class);
 
   /**
    * Instantiates a new Bean parser.

@@ -37,8 +37,8 @@ import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.StringUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.Locale;
 import java.util.Stack;
@@ -52,7 +52,7 @@ import java.util.Stack;
 public class StreetNameGenerator extends GeneratorProxy<String>
     implements DatasetBasedGenerator<String>, NonNullGenerator<String> {
 
-  private static final Logger LOGGER = LogManager.getLogger(StreetNameGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StreetNameGenerator.class);
 
   private static final String REGION_NESTING = "com/rapiddweller/dataset/region";
   private static final String FILENAME_PATTERN = "/com/rapiddweller/domain/address/street_{0}.csv";

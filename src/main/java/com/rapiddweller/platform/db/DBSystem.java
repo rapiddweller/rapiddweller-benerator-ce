@@ -75,8 +75,8 @@ import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.TypeMapper;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -116,7 +116,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   /**
    * The Logger.
    */
-  protected final Logger logger = LogManager.getLogger(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
   private final TypeMapper driverTypeMapper;
   private final AtomicInteger invalidationCount;
   /**

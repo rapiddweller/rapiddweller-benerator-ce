@@ -32,8 +32,8 @@ import com.rapiddweller.benerator.GeneratorState;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Abstract {@link Generator} implementation which holds a state and state management methods.<br/><br/>
@@ -48,7 +48,7 @@ public abstract class AbstractGenerator<E> implements Generator<E> {
   /**
    * The Logger.
    */
-  protected final Logger logger = LogManager.getLogger(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
   private final WrapperProvider<E> resultWrapperProvider;
   /**
    * The State.

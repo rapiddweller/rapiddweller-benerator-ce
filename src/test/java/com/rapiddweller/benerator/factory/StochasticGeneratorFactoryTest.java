@@ -43,8 +43,8 @@ import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.common.Period;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.WeightedSample;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -70,7 +70,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class StochasticGeneratorFactoryTest extends GeneratorTest {
 
-  private static final Logger logger = LogManager.getLogger(StochasticGeneratorFactoryTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(StochasticGeneratorFactoryTest.class);
 
   private final GeneratorFactory generatorFactory = new StochasticGeneratorFactory();
 

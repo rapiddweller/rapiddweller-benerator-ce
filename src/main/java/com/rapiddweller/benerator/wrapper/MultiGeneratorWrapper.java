@@ -34,8 +34,8 @@ import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ProgrammerError;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ import java.util.List;
  */
 public abstract class MultiGeneratorWrapper<S, P> extends AbstractGenerator<P> {
 
-  private static final Logger LOGGER = LogManager.getLogger(MultiGeneratorWrapper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultiGeneratorWrapper.class);
 
   /**
    * The Generated type.

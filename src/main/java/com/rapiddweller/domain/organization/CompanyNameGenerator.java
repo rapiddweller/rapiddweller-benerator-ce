@@ -53,8 +53,8 @@ import com.rapiddweller.domain.person.FamilyNameGenerator;
 import com.rapiddweller.domain.person.Gender;
 import com.rapiddweller.domain.person.GivenNameGenerator;
 import com.rapiddweller.format.text.NameNormalizer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -76,7 +76,7 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
    * The constant LOGGER.
    */
   protected static final Logger LOGGER =
-      LogManager.getLogger(CompanyNameGenerator.class);
+      LoggerFactory.getLogger(CompanyNameGenerator.class);
 
   private static final String ORG = "/com/rapiddweller/domain/organization/";
 

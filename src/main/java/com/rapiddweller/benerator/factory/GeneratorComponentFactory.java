@@ -35,8 +35,8 @@ import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.Mode;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.model.data.VariableDescriptor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Factory for {@link GeneratorComponent}s.<br/><br/>
@@ -47,7 +47,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class GeneratorComponentFactory {
 
-  private static final Logger LOGGER = LogManager.getLogger(GeneratorComponentFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GeneratorComponentFactory.class);
 
   /**
    * Create generator component generator component.

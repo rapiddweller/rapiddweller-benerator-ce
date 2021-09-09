@@ -33,8 +33,8 @@ import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.script.WeightedSample;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -58,7 +58,7 @@ import java.util.List;
  */
 public class WeightedCSVSampleGenerator<E> extends GeneratorProxy<E> {
 
-  private static final Logger LOGGER = LogManager.getLogger(WeightedCSVSampleGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WeightedCSVSampleGenerator.class);
 
   /**
    * The URI to read the samples from

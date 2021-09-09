@@ -47,8 +47,8 @@ import com.rapiddweller.common.ui.swing.delegate.PropertyFileField;
 import com.rapiddweller.common.ui.swing.delegate.PropertyPasswordField;
 import com.rapiddweller.common.ui.swing.delegate.PropertyTextField;
 import com.rapiddweller.jdbacl.JDBCDriverInfo;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -98,7 +98,7 @@ public class CreateProjectPanel extends JPanel {
   /**
    * The Logger.
    */
-  static final Logger logger = LogManager.getLogger(CreateProjectPanel.class);
+  static final Logger logger = LoggerFactory.getLogger(CreateProjectPanel.class);
 
   private static final String SETUP_FILE = "setup.ser";
 

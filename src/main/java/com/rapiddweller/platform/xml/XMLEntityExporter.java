@@ -35,8 +35,8 @@ import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -60,7 +60,7 @@ import java.util.Map;
  */
 public class XMLEntityExporter extends AbstractConsumer implements FileExporter {
 
-  private static final Logger LOGGER = LogManager.getLogger(XMLEntityExporter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(XMLEntityExporter.class);
 
   // defaults --------------------------------------------------------------------------------------------------------
 
