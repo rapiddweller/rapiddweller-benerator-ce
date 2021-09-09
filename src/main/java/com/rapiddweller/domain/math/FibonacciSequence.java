@@ -48,4 +48,8 @@ public class FibonacciSequence extends LongBasedSequence {
     return new FibonacciLongGenerator(min, max, unique);
   }
 
+  @Override
+  public boolean isApplicationDetached() {
+    return false;
+  }
 }

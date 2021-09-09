@@ -55,4 +55,9 @@ public class WedgeSequence extends Sequence {
     return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
   }
 
+  @Override
+  public boolean isApplicationDetached() {
+    return true;
+  }
+
 }

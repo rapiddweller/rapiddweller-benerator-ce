@@ -50,29 +50,16 @@ public class WeightedNumbers<E> extends Sequence {
 
   private WeightedSample<?>[] samples;
 
-  /**
-   * Instantiates a new Weighted numbers.
-   */
   public WeightedNumbers() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Weighted numbers.
-   *
-   * @param spec the spec
-   */
   public WeightedNumbers(String spec) {
     if (spec != null) {
       setSpec(spec);
     }
   }
 
-  /**
-   * Sets spec.
-   *
-   * @param spec the spec
-   */
   public void setSpec(String spec) {
     samples = DatabeneScriptParser.parseWeightedLiteralList(spec);
   }
@@ -93,11 +80,16 @@ public class WeightedNumbers<E> extends Sequence {
   }
 
   @Override
+  public boolean isApplicationDetached() {
+    return true;
+  }
+
+  @Override
   public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
     if (unique) {
       throw new ConfigurationError(getClass().getSimpleName() + " is not designed to generate unique values");
     }
-    return super.applyTo(source, unique);
+    return super.applyTo(source, false);
   }
 
 }

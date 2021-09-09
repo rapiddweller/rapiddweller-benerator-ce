@@ -106,6 +106,11 @@ public class ExpandSequence extends Sequence {
   }
 
   @Override
+  public boolean isApplicationDetached() {
+    return false;
+  }
+
+  @Override
   public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
     int cacheSize = cacheSize();
     return new ExpandGeneratorProxy<>(source, duplicationQuota(unique), cacheSize, bucketSize(cacheSize));

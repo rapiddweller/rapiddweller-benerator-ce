@@ -28,37 +28,40 @@ package com.rapiddweller.benerator.distribution;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
+import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
 /**
- * Parent interface for all distribution types.<br/>
- * <br/>
+ * Parent interface for all distribution types.
+ * Implementors of the Distribution interface are recommended to extend
+ * {@link AbstractDistribution} for forward compatibility.
+ * In order to migrate implementors of the {@link Distribution} interface before version 1.2.0,
+ * their <code>implements Distribution</code> directive should be changed to
+ * <code>extends AbstractDistribution</code>.<br/><br/>
  * Created: 11.09.2006 21:31:54
- *
  * @author Volker Bergmann
  * @version 0.1
  */
 public interface Distribution {
-  /**
-   * Create number generator non null generator.
-   *
-   * @param <T>         the type parameter
-   * @param numberType  the number type
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   * @param unique      the unique
-   * @return the non null generator
-   */
+
+  /** Creates a {@link Generator} which generates numbers according to this type of sequence. */
   <T extends Number> NonNullGenerator<T> createNumberGenerator(
       Class<T> numberType, T min, T max, T granularity, boolean unique);
 
-  /**
-   * Apply to generator.
-   *
-   * @param <T>    the type parameter
-   * @param source the source
-   * @param unique the unique
-   * @return the generator
-   */
+  /** Tells if the {@link Generator} created by {@link Distribution#applyTo(Generator, boolean)}
+   *  is detached from its source generator (which means that calls to its
+   *  {@link Generator#generate(ProductWrapper)}) method never forward calls to its source generator. */
+  boolean isApplicationDetached();
+
+  /** Creates a {@link Generator} which takes the elements created by the specified
+   *  <code>source</code> generator and provides them in an order specified by
+   *  this {@link Distribution} object.
+   *  Depending on the sequence implementation, that generator usually
+   *  <ol>
+   *    <li>either fetches all products by the source at initialization, buffer and iterate through them</li>
+   *    <li>or calls the source generator on demand</li>
+   *  </ol>
+   *  @param source the generator which provides the source elements to be distributed
+   *  @param unique specifies if the created generator must guarantee that no source element is repeated */
   <T> Generator<T> applyTo(Generator<T> source, boolean unique);
+
 }

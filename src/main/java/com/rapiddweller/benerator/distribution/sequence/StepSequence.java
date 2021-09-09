@@ -56,83 +56,45 @@ public class StepSequence extends Sequence {
   private final BigDecimal initial;
   private final BigDecimal limit;
 
-  /**
-   * Instantiates a new Step sequence.
-   */
+  /** Instantiates a new Step sequence.
+   *  With this default settings, the granularity parameter will be used to set the increment
+   *  in {@link #createNumberGenerator(Class, Number, Number, Number, boolean)} */
   public StepSequence() {
     this(null); // when using null, the granularity parameter will be used to set the increment in createGenerator
   }
 
-  /**
-   * Instantiates a new Step sequence.
-   *
-   * @param delta the increment to choose for created generators.
+  /** Instantiates a new Step sequence.
+   *  @param delta the increment to choose for created generators.
    *              When using null, the granularity parameter will be used to set the increment
-   *              in {@link #createNumberGenerator(Class, Number, Number, Number, boolean)}
-   */
+   *              in {@link #createNumberGenerator(Class, Number, Number, Number, boolean)} */
   public StepSequence(BigDecimal delta) {
     this(delta, null);
   }
 
-  /**
-   * Instantiates a new Step sequence.
-   *
-   * @param delta   the delta
-   * @param initial the initial
-   */
   public StepSequence(BigDecimal delta, BigDecimal initial) {
     this(delta, initial, null);
   }
 
-  /**
-   * Instantiates a new Step sequence.
-   *
-   * @param delta   the delta
-   * @param initial the initial
-   * @param limit   the limit
-   */
   public StepSequence(BigDecimal delta, BigDecimal initial, BigDecimal limit) {
     this.delta = delta;
     this.initial = initial;
     this.limit = limit;
   }
 
-  /**
-   * Sets delta.
-   *
-   * @param delta the delta
-   */
   public void setDelta(BigDecimal delta) {
     this.delta = delta;
   }
 
-  /**
-   * Gets delta.
-   *
-   * @return the delta
-   */
   public BigDecimal getDelta() {
     return delta;
   }
 
-  /**
-   * Gets initial.
-   *
-   * @return the initial
-   */
   public BigDecimal getInitial() {
     return initial;
   }
 
-  @Override
-  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-    int deltaToUse = (delta != null ? toInteger(delta) : 1);
-    if (delta != null && delta.longValue() < 0) {
-      return super.applyTo(source, unique);
-    } else {
-      return new SkipGeneratorProxy<>(source, deltaToUse, deltaToUse,
-          SequenceManager.RANDOM_SEQUENCE, toInteger(limit));
-    }
+  public boolean isDescending() {
+    return (delta != null && delta.longValue() < 0);
   }
 
   @Override
@@ -154,6 +116,22 @@ public class StepSequence extends Sequence {
           toDouble(min), toDouble(max), toDouble(deltaToUse), toDouble(initial));
     }
     return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
+  }
+
+  @Override
+  public boolean isApplicationDetached() {
+    return isDescending();
+  }
+
+  @Override
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    int deltaToUse = (delta != null ? toInteger(delta) : 1);
+    if (isDescending()) {
+      return super.applyTo(source, unique);
+    } else {
+      return new SkipGeneratorProxy<>(source, deltaToUse, deltaToUse,
+          SequenceManager.RANDOM_SEQUENCE, toInteger(limit));
+    }
   }
 
   private <T extends Number> Number deltaToUse(T granularity) {

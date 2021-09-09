@@ -33,6 +33,7 @@ import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.NumberUtil;
+import com.rapiddweller.common.ThreadAware;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -44,14 +45,22 @@ import static com.rapiddweller.common.NumberUtil.toInteger;
 import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
- * {@link Sequence} implementation that creates generators with a random uniform distribution.<br/>
- * <br/>
+ * {@link Sequence} implementation that creates generators with a random uniform distribution.<br/><br/>
  * Created at 27.07.2009 06:31:25
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class RandomSequence extends Sequence {
+public class RandomSequence extends Sequence implements ThreadAware {
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return true;
+  }
 
   @Override
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
@@ -61,11 +70,11 @@ public class RandomSequence extends Sequence {
     } else if (BeanUtil.isIntegralNumberType(numberType)) {
       long lMax = (max != null ? max.longValue() :
           Math.min(RandomLongGenerator.DEFAULT_MAX, NumberUtil.maxValue(numberType).longValue()));
-      if (Integer.class.equals(numberType.getClass())) {
+      if (Integer.class.equals(numberType)) {
         base = new RandomIntegerGenerator(toInteger(min), toInteger(lMax), toInteger(granularity));
-      } else if (BigInteger.class.equals(numberType.getClass())) {
+      } else if (BigInteger.class.equals(numberType)) {
         base = new RandomBigIntegerGenerator(toBigInteger(min), toBigInteger(lMax), toBigInteger(granularity));
-      } else if (BigDecimal.class.equals(numberType.getClass())) {
+      } else if (BigDecimal.class.equals(numberType)) {
         base = new RandomBigDecimalGenerator(toBigDecimal(min), toBigDecimal(lMax), toBigDecimal(granularity));
       } else {
         base = new RandomLongGenerator(toLong(min), lMax, toLong(granularity));
@@ -75,6 +84,11 @@ public class RandomSequence extends Sequence {
       base = new RandomDoubleGenerator(toDouble(min), dMax, toDouble(granularity));
     }
     return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
+  }
+
+  @Override
+  public boolean isApplicationDetached() {
+    return true;
   }
 
   @Override

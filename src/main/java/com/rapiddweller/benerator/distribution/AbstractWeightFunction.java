@@ -32,14 +32,12 @@ import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.BeanUtil;
 
 /**
- * Abstract implementation of the {@link WeightFunction} interface.<br/>
- * <br/>
+ * Abstract implementation of the {@link WeightFunction} interface.<br/><br/>
  * Created at 30.06.2009 07:13:49
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public abstract class AbstractWeightFunction implements WeightFunction {
+public abstract class AbstractWeightFunction extends AbstractDistribution implements WeightFunction {
 
   @Override
   @SuppressWarnings("unchecked")
@@ -54,6 +52,11 @@ public abstract class AbstractWeightFunction implements WeightFunction {
     } else {
       return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, createDoubleGenerator(min, max, granularity), min, granularity);
     }
+  }
+
+  @Override
+  public boolean isApplicationDetached() {
+    return true;
   }
 
   @Override

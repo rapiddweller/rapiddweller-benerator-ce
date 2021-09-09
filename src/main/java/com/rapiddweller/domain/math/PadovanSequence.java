@@ -48,4 +48,9 @@ public class PadovanSequence extends LongBasedSequence {
     return new PadovanLongGenerator(min, max, unique);
   }
 
+  @Override
+  public boolean isApplicationDetached() {
+    return true;
+  }
+
 }

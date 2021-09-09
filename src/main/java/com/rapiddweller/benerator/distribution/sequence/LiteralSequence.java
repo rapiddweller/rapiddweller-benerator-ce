@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.distribution.sequence;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.converter.NumberToNumberConverter;
 import com.rapiddweller.script.DatabeneScriptParser;
@@ -71,6 +72,8 @@ public class LiteralSequence extends Sequence {
       return new Number[0];
     }
     WeightedSample<?>[] samples = DatabeneScriptParser.parseWeightedLiteralList(spec);
+    if (samples == null)
+      throw new ConfigurationError("No samples provided in '" + spec + "'");
     Number[] result = new Number[samples.length];
     for (int i = 0; i < samples.length; i++) {
       result[i] = (Number) samples[i].getValue();
@@ -88,6 +91,11 @@ public class LiteralSequence extends Sequence {
       ts[i] = converter.convert(numbers[i]);
     }
     return WrapperFactory.asNonNullGenerator(new PredefinedSequenceGenerator<>((T[]) ts));
+  }
+
+  @Override
+  public boolean isApplicationDetached() {
+    return true;
   }
 
 }
