@@ -145,8 +145,8 @@ public class DBSnapshotTool {
     }
     String dbUser = System.getProperty(DB_USER);
     String dbPassword = System.getProperty(DB_PASSWORD);
+    String dbCatalog = System.getProperty(DB_CATALOG);
     String dbSchema = System.getProperty(DB_SCHEMA);
-	String dbCatalog = System.getProperty(DB_CATALOG);
     String dialect = System.getProperty(DIALECT);
 
     logger.info("Exporting data of database '" + dbUrl + "' with driver '" + dbDriver + "' as user '" + dbUser
@@ -154,7 +154,7 @@ public class DBSnapshotTool {
 		+ (dbCatalog != null ? " using catalog '" + dbCatalog + "'" : "")
         + " in " + format + " format to file " + filename);
 
-	export(dbUrl, dbDriver, dbSchema, dbCatalog, dbUser, dbPassword, filename, format, dialect);
+	export(dbUrl, dbDriver, dbCatalog, dbSchema, dbUser, dbPassword, filename, format, dialect);
   }
 
   private static String defaultFilename(String format) {
@@ -179,9 +179,9 @@ public class DBSnapshotTool {
    * @param format     the format
    * @param dialect    the dialect
    */
-  public static void export(String dbUrl, String dbDriver, String dbSchema, String dbCatalog,
+  public static void export(String dbUrl, String dbDriver, String dbCatalog, String dbSchema,
                             String dbUser, String dbPassword, String filename, String format, String dialect) {
-	export(dbUrl, dbDriver, dbSchema, dbCatalog, dbUser, dbPassword, filename, SystemInfo.getFileEncoding(),
+	export(dbUrl, dbDriver, dbCatalog, dbSchema, dbUser, dbPassword, filename, SystemInfo.getFileEncoding(),
         format, dialect, null);
   }
 
@@ -199,7 +199,7 @@ public class DBSnapshotTool {
    * @param dialect    the dialect
    * @param monitor    the monitor
    */
-  public static void export(String dbUrl, String dbDriver, String dbSchema, String dbCatalog,
+  public static void export(String dbUrl, String dbDriver, String dbCatalog, String dbSchema,
                             String dbUser, String dbPassword, String filename, String encoding, String format, String dialect,
                             ProgressMonitor monitor) {
     if (dbUser == null) {
