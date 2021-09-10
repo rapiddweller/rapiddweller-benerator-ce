@@ -32,10 +32,11 @@ import com.rapiddweller.common.accessor.FeatureAccessor;
 import com.rapiddweller.common.converter.AnyConverter;
 
 /**
- * Implements the IndividualWeight function for arbitrary feature names,
- * supporting e.g. properties, attributes, or Map keys.<br/><br/>
+ * Implements the {@link IndividualWeight} function in a manner that an arbitrary object feature value
+ * (eg. property, attribute or Map key) is used as weight definition.
+ * As an example you can use the 'population' property of a Java 'City' class to define that larger cities
+ * are generated more often than smaller cities.<br/><br/>
  * Created at 27.04.2008 17:23:45
- *
  * @author Volker Bergmann
  * @since 0.5.2
  */
@@ -48,18 +49,10 @@ public class FeatureWeight extends IndividualWeight<Object> {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Feature weight.
-   */
   public FeatureWeight() {
     this("weight");
   }
 
-  /**
-   * Instantiates a new Feature weight.
-   *
-   * @param feature the feature
-   */
   public FeatureWeight(String feature) {
     this.feature = feature;
     this.accessor = new FeatureAccessor<>(feature);
@@ -68,20 +61,10 @@ public class FeatureWeight extends IndividualWeight<Object> {
 
   // interface -------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets weight feature.
-   *
-   * @return the weight feature
-   */
   public String getWeightFeature() {
     return accessor.getFeatureName();
   }
 
-  /**
-   * Sets weight feature.
-   *
-   * @param weightFeature the weight feature
-   */
   public void setWeightFeature(String weightFeature) {
     this.accessor.setFeatureName(weightFeature);
   }
@@ -103,10 +86,7 @@ public class FeatureWeight extends IndividualWeight<Object> {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     final FeatureWeight that = (FeatureWeight) obj;
