@@ -60,18 +60,13 @@ import java.util.Set;
 /**
  * {@link GeneratorFactory} implementation that generates docile data in order to avoid functional failures
  * and combines them randomly and repetitively for generating large data volumes. Its primary purpose is
- * data generation for performance tests.<br/>
- * <br/>
+ * data generation for performance tests.<br/><br/>
  * Created: 04.07.2011 09:34:34
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public class StochasticGeneratorFactory extends GeneratorFactory {
 
-  /**
-   * Instantiates a new Stochastic generator factory.
-   */
   public StochasticGeneratorFactory() {
     super(new GentleDefaultsProvider());
   }

@@ -34,10 +34,8 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.DynamicExpression;
 
 /**
- * {@link Expression} implementation that evaluates to a {@link Generator}.<br/>
- * <br/>
+ * {@link Expression} implementation that evaluates to a {@link Generator}.<br/><br/>
  * Created at 23.07.2009 15:17:04
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -47,11 +45,6 @@ public class GeneratorExpression<E> extends DynamicExpression<E> {
   private final Generator<E> generator;
   private final WrapperProvider<E> wrapperProvider = new WrapperProvider<>();
 
-  /**
-   * Instantiates a new Generator expression.
-   *
-   * @param generator the generator
-   */
   public GeneratorExpression(Generator<E> generator) {
     this.generator = generator;
   }

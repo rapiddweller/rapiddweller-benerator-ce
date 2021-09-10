@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -35,7 +35,6 @@ import com.rapiddweller.common.ErrorHandler;
 /**
  * Wraps a {@link GenerateAndConsumeTask} with a {@link Generator} interface.<br/><br/>
  * Created: 01.09.2011 15:33:34
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
@@ -46,11 +45,6 @@ public class TaskBasedGenerator implements Generator<Object> {
   private final ErrorHandler errorHandler;
   private boolean initialized;
 
-  /**
-   * Instantiates a new Task based generator.
-   *
-   * @param task the task
-   */
   public TaskBasedGenerator(GenerateAndConsumeTask task) {
     this.task = task;
     this.errorHandler = ErrorHandler.getDefault();

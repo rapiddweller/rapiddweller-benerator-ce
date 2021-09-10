@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -31,30 +31,17 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.StringExpression;
 
 /**
- * {@link Expression} that resolves a script as {@link String}.<br/>
- * <br/>
+ * {@link Expression} that resolves a script as {@link String}.<br/><br/>
  * Created at 23.07.2009 09:14:30
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class StringScriptExpression extends StringExpression {
 
-  /**
-   * Instantiates a new String script expression.
-   *
-   * @param script the script
-   */
   public StringScriptExpression(String script) {
     this(script, null);
   }
 
-  /**
-   * Instantiates a new String script expression.
-   *
-   * @param script       the script
-   * @param defaultValue the default value
-   */
   public StringScriptExpression(String script, String defaultValue) {
     super(new ScriptExpression<>(ScriptUtil.parseScriptText(script), defaultValue));
   }

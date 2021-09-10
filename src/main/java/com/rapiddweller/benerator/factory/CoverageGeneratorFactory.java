@@ -42,7 +42,6 @@ import java.util.TreeSet;
  * {@link GeneratorFactory} implementation which creates data sets
  * that cover the full range of available data and combinations.<br/><br/>
  * Created: 04.07.2011 09:39:08
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
@@ -50,9 +49,6 @@ public class CoverageGeneratorFactory extends EquivalenceGeneratorFactory {
 
   private final SerialGeneratorFactory serialFactory;
 
-  /**
-   * Instantiates a new Coverage generator factory.
-   */
   public CoverageGeneratorFactory() {
     this.serialFactory = new SerialGeneratorFactory();
   }

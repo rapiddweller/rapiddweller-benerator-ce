@@ -32,73 +32,35 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.TypeConvertingExpression;
 
 /**
- * {@link Expression} implementation that evaluates a script.<br/>
- * <br/>
+ * {@link Expression} implementation that evaluates a script.<br/><br/>
  * Created at 22.07.2009 07:19:44
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class TypedScriptExpression<E> extends TypeConvertingExpression<E> {
 
-  /**
-   * Instantiates a new Typed script expression.
-   *
-   * @param script the script
-   */
   public TypedScriptExpression(String script) {
     this(script, null);
   }
 
-  /**
-   * Instantiates a new Typed script expression.
-   *
-   * @param script the script
-   */
   @SuppressWarnings("unchecked")
   public TypedScriptExpression(Script script) {
     this(script, (Class<E>) Object.class);
   }
 
-  /**
-   * Instantiates a new Typed script expression.
-   *
-   * @param script     the script
-   * @param resultType the result type
-   */
   public TypedScriptExpression(String script, Class<E> resultType) {
     this(ScriptUtil.parseScriptText(script), resultType);
   }
 
-  /**
-   * Instantiates a new Typed script expression.
-   *
-   * @param script     the script
-   * @param resultType the result type
-   */
   public TypedScriptExpression(Script script, Class<E> resultType) {
     this(script, resultType, (E) null);
   }
 
-  /**
-   * Instantiates a new Typed script expression.
-   *
-   * @param script       the script
-   * @param resultType   the result type
-   * @param defaultValue the default value
-   */
   public TypedScriptExpression(Script script, Class<E> resultType, E defaultValue) {
     super(new ScriptExpression<Object>(script, defaultValue), resultType);
   }
 
-  /**
-   * Instantiates a new Typed script expression.
-   *
-   * @param script       the script
-   * @param resultType   the result type
-   * @param defaultValue the default value
-   */
   public TypedScriptExpression(Script script, Class<E> resultType, Expression<?> defaultValue) {
     super(ScriptExpression.createWithDefaultExpression(script, defaultValue), resultType);
   }

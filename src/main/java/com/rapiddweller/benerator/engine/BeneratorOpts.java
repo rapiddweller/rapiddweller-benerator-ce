@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -31,46 +31,24 @@ import com.rapiddweller.common.StringUtil;
 /**
  * Provides support for Benerator's system property settings.<br/><br/>
  * Created: 30.07.2010 18:25:01
- *
  * @author Volker Bergmann
  * @since 0.6.3
  */
 public class BeneratorOpts {
 
-  /**
-   * The constant OPTS_VALIDATE.
-   */
   public static final String OPTS_VALIDATE = "benerator.validate";
-  /**
-   * The constant OPTS_CACHE_SIZE.
-   */
   public static final String OPTS_CACHE_SIZE = "benerator.cacheSize";
 
   private static final int DEFAULT_CACHE_SIZE = 100000;
 
-  /**
-   * Sets validating.
-   *
-   * @param validating the validating
-   */
   public static void setValidating(boolean validating) {
     System.setProperty(OPTS_VALIDATE, String.valueOf(validating));
   }
 
-  /**
-   * Is validating boolean.
-   *
-   * @return the boolean
-   */
   public static boolean isValidating() {
     return !("false".equals(System.getProperty(OPTS_VALIDATE)));
   }
 
-  /**
-   * Gets cache size.
-   *
-   * @return the cache size
-   */
   public static int getCacheSize() {
     return parseIntProperty(OPTS_CACHE_SIZE, DEFAULT_CACHE_SIZE);
   }

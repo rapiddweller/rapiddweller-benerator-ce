@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -36,15 +36,11 @@ import java.lang.management.ManagementFactory;
 /**
  * MBean implementation for monitoring Benerator.<br/><br/>
  * Created: 27.07.2010 21:15:28
- *
  * @author Volker Bergmann
  * @since 0.6.3
  */
 public class BeneratorMonitor implements BeneratorMonitorMBean, Closeable {
 
-  /**
-   * The constant INSTANCE.
-   */
   public static final BeneratorMonitor INSTANCE;
 
   static {

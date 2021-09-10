@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -35,7 +35,6 @@ import com.rapiddweller.script.Expression;
  * Generator proxy which takes the input of another Generator and only
  * passes it if a boolean expression evaluates to true.<br/><br/>
  * Created: 11.03.2010 14:23:53
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -44,12 +43,6 @@ public class FilteringGenerator<E> extends GeneratorProxy<E> {
 
   private final Expression<Boolean> filter;
 
-  /**
-   * Instantiates a new Filtering generator.
-   *
-   * @param source the source
-   * @param filter the filter
-   */
   public FilteringGenerator(Generator<E> source, Expression<Boolean> filter) {
     super(source);
     this.filter = filter;

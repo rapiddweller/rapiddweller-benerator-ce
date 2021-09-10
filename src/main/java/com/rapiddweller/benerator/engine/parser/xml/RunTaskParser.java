@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -62,7 +62,6 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 /**
  * Parses a run-task descriptor.<br/><br/>
  * Created: 25.10.2009 00:55:16
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -72,9 +71,6 @@ public class RunTaskParser extends AbstractBeneratorDescriptorParser {
       CollectionUtil.toSet(ATT_ID, ATT_CLASS, ATT_SPEC, ATT_COUNT, ATT_PAGESIZE, ATT_THREADS, ATT_PAGER, ATT_STATS, ATT_ON_ERROR);
   private static final DefaultPageSizeExpression DEFAULT_PAGE_SIZE = new DefaultPageSizeExpression();
 
-  /**
-   * Instantiates a new Run task parser.
-   */
   public RunTaskParser() {
     super(EL_RUN_TASK, null, OPTIONAL_ATTRIBUTES,
         BeneratorRootStatement.class, IfStatement.class, WhileStatement.class, GenerateOrIterateStatement.class);

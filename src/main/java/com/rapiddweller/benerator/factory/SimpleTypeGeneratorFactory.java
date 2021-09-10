@@ -78,27 +78,17 @@ import static com.rapiddweller.model.data.SimpleTypeDescriptor.MIN;
 import static com.rapiddweller.model.data.SimpleTypeDescriptor.PATTERN;
 
 /**
- * Creates generators of simple types.<br/>
- * <br/>
- *
+ * Creates generators of simple types.<br/><br/>
  * @author Volker Bergmann
  */
 public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeDescriptor> {
 
   private static final SimpleTypeGeneratorFactory INSTANCE = new SimpleTypeGeneratorFactory();
 
-  /**
-   * Gets instance.
-   *
-   * @return the instance
-   */
   public static SimpleTypeGeneratorFactory getInstance() {
     return INSTANCE;
   }
 
-  /**
-   * Instantiates a new Simple type generator factory.
-   */
   protected SimpleTypeGeneratorFactory() {
   }
 
@@ -130,14 +120,6 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     return generator;
   }
 
-  /**
-   * Create values generator generator.
-   *
-   * @param descriptor the descriptor
-   * @param uniqueness the uniqueness
-   * @param context    the context
-   * @return the generator
-   */
   protected static Generator<?> createValuesGenerator(
       SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
     PrimitiveType primitiveType = descriptor.getPrimitiveType();
@@ -157,14 +139,6 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     }
   }
 
-  /**
-   * Create pattern generator generator.
-   *
-   * @param type       the type
-   * @param uniqueness the uniqueness
-   * @param context    the context
-   * @return the generator
-   */
   protected static Generator<String> createPatternGenerator(SimpleTypeDescriptor type, Uniqueness uniqueness,
                                                             BeneratorContext context) {
     String pattern = type.getPattern();
@@ -175,13 +149,6 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     }
   }
 
-  /**
-   * Create constant generator generator.
-   *
-   * @param descriptor the descriptor
-   * @param context    the context
-   * @return the generator
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   protected static Generator<?> createConstantGenerator(
       SimpleTypeDescriptor descriptor, BeneratorContext context) {
@@ -489,16 +456,6 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
         lengthDistribution, uniqueness);
   }
 
-  /**
-   * Create restriction validator validator.
-   *
-   * @param <A>        the type parameter
-   * @param <T>        the type parameter
-   * @param descriptor the descriptor
-   * @param nullable   the nullable
-   * @param context    the context
-   * @return the validator
-   */
   @SuppressWarnings("unchecked")
   protected static <A extends Annotation, T> Validator<T> createRestrictionValidator(
       SimpleTypeDescriptor descriptor, boolean nullable, GeneratorFactory context) {

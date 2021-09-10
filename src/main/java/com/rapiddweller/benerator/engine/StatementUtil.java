@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -31,7 +31,6 @@ import com.rapiddweller.benerator.engine.statement.StatementProxy;
 /**
  * Provides utility methods for {@link Statement} processing.<br/><br/>
  * Created: 01.09.2011 16:50:54
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
@@ -40,13 +39,6 @@ public class StatementUtil {
   private StatementUtil() {
   }
 
-  /**
-   * Gets real statement.
-   *
-   * @param statement the statement
-   * @param context   the context
-   * @return the real statement
-   */
   public static Statement getRealStatement(Statement statement, BeneratorContext context) {
     while (statement instanceof StatementProxy) {
       statement = ((StatementProxy) statement).getRealStatement(context);

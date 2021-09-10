@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -35,15 +35,11 @@ import com.rapiddweller.common.converter.ThreadSafeConverter;
  * Normalizes XML-valid names to Java-valid camel-case names,
  * e.g. default-script -{@literal >} defaultScript.<br/><br/>
  * Created: 26.10.2009 09:17:53
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class XMLNameNormalizer extends ThreadSafeConverter<String, String> {
 
-  /**
-   * Instantiates a new Xml name normalizer.
-   */
   public XMLNameNormalizer() {
     super(String.class, String.class);
   }
@@ -53,12 +49,6 @@ public class XMLNameNormalizer extends ThreadSafeConverter<String, String> {
     return normalize(name);
   }
 
-  /**
-   * Normalize string.
-   *
-   * @param name the name
-   * @return the string
-   */
   public String normalize(String name) {
     Assert.notNull(name, "name");
     String[] tokens = StringUtil.tokenize(name, '-');

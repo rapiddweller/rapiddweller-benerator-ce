@@ -57,18 +57,13 @@ import java.util.TreeSet;
 
 /**
  * {@link GeneratorFactory} implementation which provides
- * serial value generation and parallel combinations.<br/>
- * <br/>
+ * serial value generation and parallel combinations.<br/><br/>
  * Created: 22.07.2011 10:14:36
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public class SerialGeneratorFactory extends GeneratorFactory {
 
-  /**
-   * Instantiates a new Serial generator factory.
-   */
   public SerialGeneratorFactory() {
     super(new MeanDefaultsProvider());
   }
@@ -175,14 +170,6 @@ public class SerialGeneratorFactory extends GeneratorFactory {
         new SequenceGenerator<>(Character.class, characters));
   }
 
-  /**
-   * Default counts set.
-   *
-   * @param minCount       the min count
-   * @param maxCount       the max count
-   * @param countPrecision the count precision
-   * @return the set
-   */
   protected Set<Integer> defaultCounts(int minCount, int maxCount, int countPrecision) {
     Set<Integer> result = new TreeSet<>();
     for (int i = minCount; i <= maxCount; i += countPrecision) {

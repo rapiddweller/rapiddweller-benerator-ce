@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -44,20 +44,13 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_DEFAULT_C
 /**
  * Parses a &lt;defaultComponents&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:17:04
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class DefaultComponentParser extends AbstractBeneratorDescriptorParser {
 
-  /**
-   * The Component types.
-   */
   static final Collection<String> COMPONENT_TYPES = CollectionUtil.toSet("attribute", "part", "id", "reference");
 
-  /**
-   * Instantiates a new Default component parser.
-   */
   public DefaultComponentParser() {
     super(EL_DEFAULT_COMPONENTS, null, null,
         BeneratorRootStatement.class, IfStatement.class);
@@ -68,18 +61,10 @@ public class DefaultComponentParser extends AbstractBeneratorDescriptorParser {
     return new XMLDefaultComponentsStatement(element);
   }
 
-  /**
-   * The type Xml default components statement.
-   */
   static class XMLDefaultComponentsStatement implements Statement {
 
     private final Element element;
 
-    /**
-     * Instantiates a new Xml default components statement.
-     *
-     * @param element the element
-     */
     public XMLDefaultComponentsStatement(Element element) {
       this.element = element;
     }

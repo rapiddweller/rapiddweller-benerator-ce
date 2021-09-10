@@ -33,22 +33,13 @@ import com.rapiddweller.format.xml.ParseContext;
 /**
  * {@link ParseContext} implementation for Benerator. It defines parsers for all the descriptor XML elements.<br/><br/>
  * Created: 14.12.2010 16:29:38
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class BeneratorParseContext extends ParseContext<Statement> {
 
-  /**
-   * The Resource manager.
-   */
   final ResourceManager resourceManager;
 
-  /**
-   * Instantiates a new Benerator parse context.
-   *
-   * @param resourceManager the resource manager
-   */
   public BeneratorParseContext(ResourceManager resourceManager) {
     super(Statement.class);
     this.resourceManager = resourceManager;
@@ -76,21 +67,10 @@ public class BeneratorParseContext extends ParseContext<Statement> {
     factory.addParser(new WhileParser());
   }
 
-  /**
-   * Gets resource manager.
-   *
-   * @return the resource manager
-   */
   public ResourceManager getResourceManager() {
     return resourceManager;
   }
 
-  /**
-   * Create sub context benerator parse context.
-   *
-   * @param resourceManager the resource manager
-   * @return the benerator parse context
-   */
   public BeneratorParseContext createSubContext(ResourceManager resourceManager) {
     return new BeneratorParseContext(resourceManager);
   }

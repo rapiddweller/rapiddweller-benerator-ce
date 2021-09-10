@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -35,70 +35,32 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 
 /**
- * Utility class for parsing benerator descriptors in XML format.<br/>
- * <br/>
+ * Utility class for parsing benerator descriptors in XML format.<br/><br/>
  * Created at 02.01.2009 17:27:31
- *
  * @author Volker Bergmann
  * @since 0.5.7
  */
 public class XmlDescriptorParser {
 
-  /**
-   * Private constructor for preventing instantiation of this utility class
-   */
   private XmlDescriptorParser() {
   }
 
   // attribute parsing -----------------------------------------------------------------------------------------------
 
-  /**
-   * Parse string attribute string.
-   *
-   * @param element the element
-   * @param name    the name
-   * @param context the context
-   * @return the string
-   */
   public static String parseStringAttribute(Element element, String name, Context context) {
     return parseStringAttribute(element, name, context, true);
   }
 
-  /**
-   * Parse string attribute string.
-   *
-   * @param element       the element
-   * @param name          the name
-   * @param context       the context
-   * @param resolveScript the resolve script
-   * @return the string
-   */
   public static String parseStringAttribute(Element element, String name, Context context, boolean resolveScript) {
     Object value = parseAttribute(element, name, context, resolveScript);
     return ToStringConverter.convert(value, null);
   }
 
-  /**
-   * Parse string attribute string.
-   *
-   * @param attribute the attribute
-   * @param context   the context
-   * @return the string
-   */
   public static String parseStringAttribute(Attr attribute, Context context) {
     Object value = resolveScript(attribute.getName(), attribute.getValue(), context);
     return StringUtil.unescape(ToStringConverter.convert(value, null));
   }
 
-  /**
-   * Parse int attribute int.
-   *
-   * @param element      the element
-   * @param name         the name
-   * @param context      the context
-   * @param defaultValue the default value
-   * @return the int
-   */
   public static int parseIntAttribute(Element element, String name, Context context, int defaultValue) {
     Object value = parseAttribute(element, name, context);
     if (value instanceof Number) {
@@ -110,15 +72,6 @@ public class XmlDescriptorParser {
     }
   }
 
-  /**
-   * Parse long attribute long.
-   *
-   * @param element      the element
-   * @param name         the name
-   * @param context      the context
-   * @param defaultValue the default value
-   * @return the long
-   */
   public static long parseLongAttribute(Element element, String name, Context context, long defaultValue) {
     Object value = parseAttribute(element, name, context);
     if (value instanceof Number) {
@@ -130,15 +83,6 @@ public class XmlDescriptorParser {
     }
   }
 
-  /**
-   * Parse boolean attribute boolean.
-   *
-   * @param element      the element
-   * @param name         the name
-   * @param context      the context
-   * @param defaultValue the default value
-   * @return the boolean
-   */
   public static boolean parseBooleanAttribute(Element element, String name,
                                               Context context, boolean defaultValue) {
     Object value = parseAttribute(element, name, context);
@@ -151,27 +95,10 @@ public class XmlDescriptorParser {
     }
   }
 
-  /**
-   * Parse attribute object.
-   *
-   * @param element the element
-   * @param name    the name
-   * @param context the context
-   * @return the object
-   */
   public static Object parseAttribute(Element element, String name, Context context) {
     return parseAttribute(element, name, context, true);
   }
 
-  /**
-   * Parse attribute object.
-   *
-   * @param element       the element
-   * @param name          the name
-   * @param context       the context
-   * @param resolveScript the resolve script
-   * @return the object
-   */
   public static Object parseAttribute(Element element, String name, Context context, boolean resolveScript) {
     String value = element.getAttribute(name);
     if (value != null && value.length() == 0) {
@@ -180,27 +107,12 @@ public class XmlDescriptorParser {
     return resolveScript(name, value, context);
   }
 
-  /**
-   * Parse attribute object.
-   *
-   * @param attribute the attribute
-   * @param context   the context
-   * @return the object
-   */
   public static Object parseAttribute(Attr attribute, Context context) {
     String name = attribute.getName();
     String value = attribute.getValue();
     return resolveScript(name, value, context);
   }
 
-  /**
-   * Resolve script object.
-   *
-   * @param name    the name
-   * @param value   the value
-   * @param context the context
-   * @return the object
-   */
   public static Object resolveScript(String name, String value, Context context) {
     if (value == null || "script".equals(name)) {
       return value;

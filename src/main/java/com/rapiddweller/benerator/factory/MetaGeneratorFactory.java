@@ -39,7 +39,6 @@ import com.rapiddweller.model.data.Uniqueness;
 /**
  * Facade class for the various {@link MetaGeneratorFactory} implementations.<br/><br/>
  * Created: 06.09.2011 07:30:48
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
@@ -47,14 +46,6 @@ public class MetaGeneratorFactory {
 
   private static final ArrayTypeGeneratorFactory arrayTypeGeneratorFactory = new ArrayTypeGeneratorFactory();
 
-  /**
-   * Create root generator generator.
-   *
-   * @param descriptor the descriptor
-   * @param uniqueness the uniqueness
-   * @param context    the context
-   * @return the generator
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static Generator<?> createRootGenerator(
       InstanceDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
@@ -67,16 +58,6 @@ public class MetaGeneratorFactory {
     return generator;
   }
 
-  /**
-   * Create type generator generator.
-   *
-   * @param type         the type
-   * @param instanceName the instance name
-   * @param nullable     the nullable
-   * @param uniqueness   the uniqueness
-   * @param context      the context
-   * @return the generator
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static Generator<?> createTypeGenerator(TypeDescriptor type, String instanceName,
                                                  boolean nullable, Uniqueness uniqueness, BeneratorContext context) {
@@ -84,12 +65,6 @@ public class MetaGeneratorFactory {
     return factory.createGenerator(type, instanceName, nullable, uniqueness, context);
   }
 
-  /**
-   * Factory for type generator factory.
-   *
-   * @param type the type
-   * @return the type generator factory
-   */
   protected static TypeGeneratorFactory<?> factoryFor(TypeDescriptor type) {
     if (type instanceof SimpleTypeDescriptor) {
       return BeneratorFactory.getInstance().getSimpleTypeGeneratorFactory();
@@ -102,13 +77,6 @@ public class MetaGeneratorFactory {
     }
   }
 
-  /**
-   * Create null generator generator.
-   *
-   * @param type    the type
-   * @param context the context
-   * @return the generator
-   */
   @SuppressWarnings({"rawtypes", "unchecked"})
   public static Generator<?> createNullGenerator(TypeDescriptor type, BeneratorContext context) {
     Class generatedType;

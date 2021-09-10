@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -36,7 +36,6 @@ import java.io.IOException;
 /**
  * Provides easy programmatic access to generators defined in an XML descriptor file.<br/><br/>
  * Created: 23.02.2010 12:06:44
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -44,14 +43,6 @@ public class DescriptorBasedGenerator extends GeneratorProxy<Object> {
 
   private final DescriptorRunner descriptorRunner;
 
-  /**
-   * Instantiates a new Descriptor based generator.
-   *
-   * @param uri           the uri
-   * @param generatorName the generator name
-   * @param context       the context
-   * @throws IOException the io exception
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public DescriptorBasedGenerator(String uri, String generatorName, BeneratorContext context) throws IOException {
     super(Object.class);

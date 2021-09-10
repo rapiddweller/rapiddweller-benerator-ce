@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -33,7 +33,6 @@ import com.rapiddweller.script.Expression;
  * Evaluates an {@link Expression} on each call to {@link ExpressionBasedGenerator#generate(ProductWrapper)}
  * and returns its results.<br/><br/>
  * Created: 27.03.2010 19:51:46
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -43,12 +42,6 @@ public class ExpressionBasedGenerator<E> extends ThreadSafeGenerator<E> {
   private final Expression<E> expression;
   private final Class<E> generatedType;
 
-  /**
-   * Instantiates a new Expression based generator.
-   *
-   * @param expression    the expression
-   * @param generatedType the generated type
-   */
   public ExpressionBasedGenerator(Expression<E> expression, Class<E> generatedType) {
     this.expression = expression;
     this.generatedType = generatedType;

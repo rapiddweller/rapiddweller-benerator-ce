@@ -60,7 +60,6 @@ import com.rapiddweller.script.Expression;
 /**
  * Creates array {@link Generator}s.<br/><br/>
  * Created: 29.04.2010 07:45:18
- *
  * @author Volker Bergmann
  * @since 0.6.1
  */
@@ -219,13 +218,6 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
     return result;
   }
 
-  /**
-   * Gets element of type or parents.
-   *
-   * @param arrayType the array type
-   * @param index     the index
-   * @return the element of type or parents
-   */
   protected ArrayElementDescriptor getElementOfTypeOrParents(ArrayTypeDescriptor arrayType, int index) {
     ArrayTypeDescriptor tmp = arrayType;
     ArrayElementDescriptor result;

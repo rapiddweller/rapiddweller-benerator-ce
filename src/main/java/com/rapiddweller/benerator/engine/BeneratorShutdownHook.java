@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 /**
  * Closes resources if system shutdown happens normally or enforced.<br/><br/>
  * Created: 22.02.2010 07:39:37
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -42,11 +41,6 @@ public class BeneratorShutdownHook extends Thread {
 
   private final ResourceManager resourceManager;
 
-  /**
-   * Instantiates a new Benerator shutdown hook.
-   *
-   * @param resourceManager the resource manager
-   */
   public BeneratorShutdownHook(ResourceManager resourceManager) {
     this.resourceManager = resourceManager;
   }

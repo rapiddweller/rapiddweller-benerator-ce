@@ -31,77 +31,17 @@ import java.util.Date;
 /**
  * Interface for all classes that provide default values for testing.<br/><br/>
  * Created: 15.07.2011 21:13:20
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public interface DefaultsProvider {
-  /**
-   * Default granularity t.
-   *
-   * @param <T>        the type parameter
-   * @param numberType the number type
-   * @return the t
-   */
   <T extends Number> T defaultGranularity(Class<T> numberType);
-
-  /**
-   * Default min t.
-   *
-   * @param <T>        the type parameter
-   * @param numberType the number type
-   * @return the t
-   */
   <T extends Number> T defaultMin(Class<T> numberType);
-
-  /**
-   * Default max t.
-   *
-   * @param <T>        the type parameter
-   * @param numberType the number type
-   * @return the t
-   */
   <T extends Number> T defaultMax(Class<T> numberType);
-
-  /**
-   * Default min length int.
-   *
-   * @return the int
-   */
   int defaultMinLength();
-
-  /**
-   * Default max length integer.
-   *
-   * @return the integer
-   */
   Integer defaultMaxLength();
-
-  /**
-   * Default nullable boolean.
-   *
-   * @return the boolean
-   */
   boolean defaultNullable();
-
-  /**
-   * Default null quota double.
-   *
-   * @return the double
-   */
   double defaultNullQuota();
-
-  /**
-   * Default min date date.
-   *
-   * @return the date
-   */
   Date defaultMinDate();
-
-  /**
-   * Default max date date.
-   *
-   * @return the date
-   */
   Date defaultMaxDate();
 }

@@ -51,36 +51,16 @@ public class DescriptorParserUtil {
 
   // direct data retrieval -------------------------------------------------------------------------------------------
 
-  /**
-   * Gets attribute.
-   *
-   * @param name    the name
-   * @param element the element
-   * @return the attribute
-   */
   public static String getAttribute(String name, Element element) {
     return (element.hasAttribute(name) ? element.getAttribute(name) : null);
   }
 
-  /**
-   * Gets element text.
-   *
-   * @param element the element
-   * @return the element text
-   */
   public static String getElementText(Element element) {
     return XMLUtil.getText(element);
   }
 
   // creating expressions for data retrieval -------------------------------------------------------------------------
 
-  /**
-   * Parse scriptable element text expression.
-   *
-   * @param element  the element
-   * @param unescape the unescape
-   * @return the expression
-   */
   public static Expression<String> parseScriptableElementText(Element element, boolean unescape) {
     Expression<String> result = new StringExpression(new ScriptableExpression(XMLUtil.getText(element), null));
     if (unescape) {
@@ -89,25 +69,10 @@ public class DescriptorParserUtil {
     return result;
   }
 
-  /**
-   * Parse scriptable string attribute expression.
-   *
-   * @param name    the name
-   * @param element the element
-   * @return the expression
-   */
   public static Expression<String> parseScriptableStringAttribute(String name, Element element) {
     return parseScriptableStringAttribute(name, element, true);
   }
 
-  /**
-   * Parse scriptable string attribute expression.
-   *
-   * @param name     the name
-   * @param element  the element
-   * @param unescape the unescape
-   * @return the expression
-   */
   public static Expression<String> parseScriptableStringAttribute(String name, Element element, boolean unescape) {
     String attribute = getAttribute(name, element);
     if (attribute == null) {
@@ -120,13 +85,6 @@ public class DescriptorParserUtil {
     return result;
   }
 
-  /**
-   * Parse scriptable string array attribute expression.
-   *
-   * @param name    the name
-   * @param element the element
-   * @return the expression
-   */
   public static Expression<String[]> parseScriptableStringArrayAttribute(String name, Element element) {
     String attribute = getAttribute(name, element);
     if (attribute == null) {
@@ -137,37 +95,14 @@ public class DescriptorParserUtil {
     return new ConvertingExpression<>(rawEx, new SplitStringConverter(','));
   }
 
-  /**
-   * Parse int attribute expression.
-   *
-   * @param name    the name
-   * @param element the element
-   * @return the expression
-   */
   public static Expression<Integer> parseIntAttribute(String name, Element element) {
     return new TypedScriptExpression<>(getAttribute(name, element), Integer.class);
   }
 
-  /**
-   * Parse int attribute expression.
-   *
-   * @param name         the name
-   * @param element      the element
-   * @param defaultValue the default value
-   * @return the expression
-   */
   public static Expression<Integer> parseIntAttribute(String name, Element element, int defaultValue) {
     return parseIntAttribute(name, element, new ConstantExpression<>(defaultValue));
   }
 
-  /**
-   * Parse int attribute expression.
-   *
-   * @param name         the name
-   * @param element      the element
-   * @param defaultValue the default value
-   * @return the expression
-   */
   public static Expression<Integer> parseIntAttribute(String name, Element element, Expression<Integer> defaultValue) {
     String attribute = getAttribute(name, element);
     if (StringUtil.isEmpty(attribute)) {
@@ -177,26 +112,10 @@ public class DescriptorParserUtil {
     }
   }
 
-  /**
-   * Parse long attribute expression.
-   *
-   * @param name         the name
-   * @param element      the element
-   * @param defaultValue the default value
-   * @return the expression
-   */
   public static Expression<Long> parseLongAttribute(String name, Element element, long defaultValue) {
     return parseLongAttribute(name, element, new ConstantExpression<>(defaultValue));
   }
 
-  /**
-   * Parse long attribute expression.
-   *
-   * @param name         the name
-   * @param element      the element
-   * @param defaultValue the default value
-   * @return the expression
-   */
   public static Expression<Long> parseLongAttribute(String name, Element element, Expression<Long> defaultValue) {
     String attribute = getAttribute(name, element);
     if (StringUtil.isEmpty(attribute)) {
@@ -206,25 +125,10 @@ public class DescriptorParserUtil {
     }
   }
 
-  /**
-   * Parse boolean expression attribute expression.
-   *
-   * @param name    the name
-   * @param element the element
-   * @return the expression
-   */
   public static Expression<Boolean> parseBooleanExpressionAttribute(String name, Element element) {
     return parseBooleanExpressionAttribute(name, element, null);
   }
 
-  /**
-   * Parse boolean expression attribute expression.
-   *
-   * @param name         the name
-   * @param element      the element
-   * @param defaultValue the default value
-   * @return the expression
-   */
   public static Expression<Boolean> parseBooleanExpressionAttribute(String name, Element element, Boolean defaultValue) {
     String attribute = getAttribute(name, element);
     if (StringUtil.isEmpty(attribute)) {
@@ -234,25 +138,11 @@ public class DescriptorParserUtil {
     }
   }
 
-  /**
-   * Parse attribute constant expression.
-   *
-   * @param name    the name
-   * @param element the element
-   * @return the constant expression
-   */
   public static ConstantExpression<String> parseAttribute(String name, Element element) {
     String attribute = getAttribute(name, element);
     return (attribute != null ? new ConstantExpression<>(attribute) : null);
   }
 
-  /**
-   * Parse script attribute expression.
-   *
-   * @param name    the name
-   * @param element the element
-   * @return the expression
-   */
   public static Expression<?> parseScriptAttribute(String name, Element element) {
     String rawAttribute = getAttribute(name, element);
     if (StringUtil.isEmpty(rawAttribute)) {

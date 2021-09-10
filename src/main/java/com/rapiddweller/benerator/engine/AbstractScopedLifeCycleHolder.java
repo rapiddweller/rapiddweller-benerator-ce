@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -28,10 +28,8 @@ package com.rapiddweller.benerator.engine;
 
 /**
  * Parent class for all generation components that can connect to the life cycle of a different component
- * (thus defining a 'scope').<br/>
- * <br/>
+ * (thus defining a 'scope').<br/><br/>
  * Created: 03.04.2012 19:28:48
- *
  * @author Volker Bergmann
  * @since 0.7.6
  */
@@ -40,11 +38,6 @@ public abstract class AbstractScopedLifeCycleHolder implements ScopedLifeCycleHo
   private String scope;
   private boolean resetNeeded;
 
-  /**
-   * Instantiates a new Abstract scoped life cycle holder.
-   *
-   * @param scope the scope
-   */
   public AbstractScopedLifeCycleHolder(String scope) {
     this.scope = scope;
     setResetNeeded(false);

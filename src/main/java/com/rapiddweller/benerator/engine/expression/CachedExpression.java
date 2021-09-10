@@ -45,11 +45,6 @@ public class CachedExpression<E> extends ExpressionProxy<E> {
   private boolean valid;
   private E cachedValue;
 
-  /**
-   * Instantiates a new Cached expression.
-   *
-   * @param realExpression the real expression
-   */
   public CachedExpression(Expression<E> realExpression) {
     super(realExpression);
     this.cachedValue = null;
@@ -65,9 +60,6 @@ public class CachedExpression<E> extends ExpressionProxy<E> {
     return cachedValue;
   }
 
-  /**
-   * Invalidate.
-   */
   public void invalidate() {
     valid = false;
   }

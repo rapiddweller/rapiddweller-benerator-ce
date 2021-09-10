@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,16 +29,9 @@ package com.rapiddweller.benerator.engine;
 /**
  * Parent interface for all statement implementations.<br/><br/>
  * Created: 27.10.2009 15:57:12
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public interface Statement {
-  /**
-   * Execute boolean.
-   *
-   * @param context the context
-   * @return the boolean
-   */
   boolean execute(BeneratorContext context);
 }

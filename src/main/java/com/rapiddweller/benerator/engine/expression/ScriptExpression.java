@@ -36,7 +36,6 @@ import com.rapiddweller.script.expression.DynamicExpression;
 /**
  * Expression that evaluates a script.<br/><br/>
  * Created: 27.10.2009 13:48:11
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -46,30 +45,14 @@ public class ScriptExpression<E> extends DynamicExpression<E> {
   private final Script script;
   private final Expression<E> defaultValueExpression;
 
-  /**
-   * Instantiates a new Script expression.
-   *
-   * @param script the script
-   */
   public ScriptExpression(String script) {
     this(ScriptUtil.parseScriptText(script), (E) null);
   }
 
-  /**
-   * Instantiates a new Script expression.
-   *
-   * @param script the script
-   */
   public ScriptExpression(Script script) {
     this(script, (E) null);
   }
 
-  /**
-   * Instantiates a new Script expression.
-   *
-   * @param script       the script
-   * @param defaultValue the default value
-   */
   public ScriptExpression(Script script, E defaultValue) {
     this(script, (defaultValue != null ? new ConstantExpression<>(defaultValue) : null));
   }
@@ -79,14 +62,6 @@ public class ScriptExpression<E> extends DynamicExpression<E> {
     this.defaultValueExpression = defaultValueExpression;
   }
 
-  /**
-   * Create with default expression expression.
-   *
-   * @param <T>                    the type parameter
-   * @param script                 the script
-   * @param defaultValueExpression the default value expression
-   * @return the expression
-   */
   public static <T> Expression<T> createWithDefaultExpression(
       Script script, Expression<T> defaultValueExpression) {
     return new ScriptExpression<>(script, defaultValueExpression);

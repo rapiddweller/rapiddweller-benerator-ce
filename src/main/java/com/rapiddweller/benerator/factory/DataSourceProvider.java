@@ -32,18 +32,10 @@ import com.rapiddweller.format.DataSource;
 /**
  * Interface for classes which provide {@link Iterable}s for iterating through data sources.<br/><br/>
  * Created: 05.05.2010 14:51:09
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.1
  */
 public interface DataSourceProvider<E> {
-  /**
-   * Create data source.
-   *
-   * @param id      the id
-   * @param context the context
-   * @return the data source
-   */
   DataSource<E> create(String id, BeneratorContext context);
 }

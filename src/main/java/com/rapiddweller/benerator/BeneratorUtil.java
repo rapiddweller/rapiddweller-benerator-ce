@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -43,7 +43,6 @@ import java.io.File;
 /**
  * Provides general utility methods for Benerator.<br/><br/>
  * Created: 01.02.2013 16:20:10
- *
  * @author Volker Bergmann
  * @since 0.8.0
  */
@@ -51,12 +50,6 @@ public class BeneratorUtil {
 
   private static final Logger CONFIG_LOGGER = LoggerFactory.getLogger(LogCategoriesConstants.CONFIG);
 
-  /**
-   * Is descriptor file path boolean.
-   *
-   * @param filePath the file path
-   * @return the boolean
-   */
   public static boolean isDescriptorFilePath(String filePath) {
     if (StringUtil.isEmpty(filePath)) {
       return false;
@@ -65,11 +58,6 @@ public class BeneratorUtil {
     return ("benerator.xml".equals(filePath) || lcName.replace(File.separatorChar, '/').endsWith("/benerator.xml") || lcName.endsWith(".ben.xml"));
   }
 
-  /**
-   * Check system.
-   *
-   * @param printer the printer
-   */
   public static void checkSystem(InfoPrinter printer) {
     printVersionInfo(printer);
     printer.printLines("Configured heap size limit: " + Runtime.getRuntime().maxMemory() / 1024 / 1024 + " MB");
@@ -92,11 +80,6 @@ public class BeneratorUtil {
     }
   }
 
-  /**
-   * Print version info.
-   *
-   * @param printer the printer
-   */
   public static void printVersionInfo(InfoPrinter printer) {
     VersionInfo version = Benerator.getVersion();
     printer.printLines(
@@ -107,11 +90,6 @@ public class BeneratorUtil {
     );
   }
 
-  /**
-   * Log config.
-   *
-   * @param config the config
-   */
   public static void logConfig(String config) {
     CONFIG_LOGGER.info(config);
   }

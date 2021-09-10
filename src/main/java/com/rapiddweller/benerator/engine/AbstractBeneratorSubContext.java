@@ -46,29 +46,16 @@ import java.util.concurrent.ExecutorService;
 /**
  * Abstract implementation of the {@link BeneratorSubContext} interface.<br/><br/>
  * Created: 26.01.2013 13:14:37
- *
  * @author Volker Bergmann
  * @since 0.8.0
  */
 public abstract class AbstractBeneratorSubContext implements BeneratorSubContext {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBeneratorSubContext.class);
-  /**
-   * The Parent.
-   */
   protected final BeneratorContext parent;
-  /**
-   * The Current product name.
-   */
   protected final String currentProductName;
   private final Context localContext;
 
-  /**
-   * Instantiates a new Abstract benerator sub context.
-   *
-   * @param productName the product name
-   * @param parent      the parent
-   */
   public AbstractBeneratorSubContext(String productName, BeneratorContext parent) {
     this.currentProductName = productName;
     this.parent = parent;

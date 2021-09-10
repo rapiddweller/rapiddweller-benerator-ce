@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -36,10 +36,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Provides a standard implementation of the {@link ResourceManager} interface.<br/>
- * <br/>
+ * Provides a standard implementation of the {@link ResourceManager} interface.<br/><br/>
  * Created at 25.09.2009 09:19:41
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -57,11 +55,6 @@ public class ResourceManagerSupport implements ResourceManager {
     return resources.add(resource);
   }
 
-  /**
-   * Gets resources.
-   *
-   * @return the resources
-   */
   public Collection<? extends Closeable> getResources() {
     return resources;
   }
