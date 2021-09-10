@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -38,8 +38,6 @@ import com.rapiddweller.benerator.distribution.DistributingGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.TypedEntitySourceAdapter;
-import com.rapiddweller.benerator.engine.expression.ScriptExpression;
-import com.rapiddweller.benerator.util.FilteringGenerator;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.EntityPartSource;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
@@ -69,7 +67,6 @@ import com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource;
 import com.rapiddweller.platform.xls.XLSEntitySourceProvider;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
-import com.rapiddweller.script.Expression;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -210,16 +207,6 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     return Entity.class;
   }
 
-  /**
-   * Create mutating entity generator generator.
-   *
-   * @param name            the name
-   * @param descriptor      the descriptor
-   * @param ownerUniqueness the owner uniqueness
-   * @param context         the context
-   * @param source          the source
-   * @return the generator
-   */
   @SuppressWarnings("unchecked")
   public static Generator<?> createMutatingEntityGenerator(String name, ComplexTypeDescriptor descriptor,
                                                            Uniqueness ownerUniqueness, BeneratorContext context, Generator<?> source) {
@@ -323,14 +310,6 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     return new SimpleTypeEntityGenerator(generator, complexType);
   }
 
-  /**
-   * Create mutating generator components list.
-   *
-   * @param descriptor      the descriptor
-   * @param ownerUniqueness the owner uniqueness
-   * @param context         the context
-   * @return the list
-   */
   @SuppressWarnings("unchecked")
   public static List<GeneratorComponent<Entity>> createMutatingGeneratorComponents(ComplexTypeDescriptor descriptor,
                                                                                    Uniqueness ownerUniqueness, BeneratorContext context) {
@@ -340,7 +319,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
           part.getMode() != Mode.ignored && !ComplexTypeDescriptor.__SIMPLE_CONTENT.equals(part.getName())) {
         try {
           GeneratorComponent<Entity> generatorComponent =
-              (GeneratorComponent<Entity>) GeneratorComponentFactory.createGeneratorComponent(part, ownerUniqueness, context);
+              (GeneratorComponent<Entity>) GeneratorComponentFactory.createGeneratorComponent(part, ownerUniqueness, false, context);
           generatorComponents.add(generatorComponent);
         } catch (Exception e) {
           throw new ConfigurationError("Error creating component builder for " + part, e);

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -33,26 +33,19 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 /**
  * Uses a {@link Generator} to create the currently processed object.<br/><br/>
  * Created: 01.09.2011 19:03:38
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public class CurrentProductGeneration implements Statement, LifeCycleHolder {
 
   private final String instanceName;
-  private final Generator<Object> source;
-  private final WrapperProvider<Object> provider;
+  private final Generator<?> source;
+  private final WrapperProvider<?> provider;
 
-  /**
-   * Instantiates a new Current product generation.
-   *
-   * @param instanceName the instance name
-   * @param source       the source
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public CurrentProductGeneration(String instanceName, Generator<?> source) {
     this.instanceName = instanceName;
-    this.source = (Generator) source;
+    this.source = (Generator<?>) source;
     this.provider = new WrapperProvider<>();
   }
 
@@ -63,7 +56,7 @@ public class CurrentProductGeneration implements Statement, LifeCycleHolder {
 
   @Override
   public boolean execute(BeneratorContext context) {
-    ProductWrapper<Object> wrapper = source.generate(provider.get());
+    ProductWrapper<?> wrapper = source.generate((ProductWrapper) provider.get());
     context.setCurrentProduct(wrapper);
     if (wrapper != null && instanceName != null) {
       BeneratorContext parent = ((BeneratorSubContext) context).getParent();

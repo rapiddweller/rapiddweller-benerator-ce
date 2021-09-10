@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -49,27 +49,21 @@ public class GeneratorComponentFactory {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GeneratorComponentFactory.class);
 
-  /**
-   * Create generator component generator component.
-   *
-   * @param descriptor      the descriptor
-   * @param ownerUniqueness the owner uniqueness
-   * @param context         the context
-   * @return the generator component
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
-  public static GeneratorComponent<?> createGeneratorComponent(InstanceDescriptor descriptor, Uniqueness ownerUniqueness, BeneratorContext context) {
+  public static GeneratorComponent<?> createGeneratorComponent(InstanceDescriptor descriptor, Uniqueness ownerUniqueness,
+                                                               boolean iterationMode, BeneratorContext context) {
     if (descriptor.getMode() == Mode.ignored) {
       LOGGER.debug("Ignoring {}", descriptor);
       return null;
     }
     if (descriptor instanceof ComponentDescriptor) {
-      return ComponentBuilderFactory.createComponentBuilder((ComponentDescriptor) descriptor, ownerUniqueness, context);
+      return ComponentBuilderFactory.createComponentBuilder(
+          (ComponentDescriptor) descriptor, ownerUniqueness, iterationMode, context);
     } else if (descriptor instanceof VariableDescriptor) {
       return new Variable(descriptor.getName(), VariableGeneratorFactory.createGenerator((VariableDescriptor) descriptor, context),
           descriptor.getTypeDescriptor().getScope());
     } else if (descriptor instanceof ArrayElementDescriptor) {
-      return ComponentBuilderFactory.createComponentBuilder((ArrayElementDescriptor) descriptor, ownerUniqueness, context);
+      return ComponentBuilderFactory.createComponentBuilder((ArrayElementDescriptor) descriptor, ownerUniqueness, iterationMode, context);
     } else {
       throw new UnsupportedOperationException("Not a supported generator compnent type: " + descriptor.getClass());
     }

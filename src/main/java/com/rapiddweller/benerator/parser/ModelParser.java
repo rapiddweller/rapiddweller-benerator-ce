@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -84,7 +84,7 @@ public class ModelParser {
     this.descriptorProvider = context.getLocalDescriptorProvider();
   }
 
-  public ComponentDescriptor parseComponent(Element element, ComplexTypeDescriptor owner) {
+  public ComponentDescriptor parseComponentGeneration(Element element, ComplexTypeDescriptor owner) {
     String elementName = XMLUtil.localName(element);
     if (EL_PART.equals(elementName)) {
       return parsePart(element, owner, null);
@@ -186,14 +186,16 @@ public class ModelParser {
       owner.addComponent(result);
     }
     for (Element childElement : XMLUtil.getChildElements(element)) {
-      parseComponent(childElement, (ComplexTypeDescriptor) result.getLocalType(true));
+      parseComponentGeneration(childElement, (ComplexTypeDescriptor) result.getLocalType(true));
+      // TODO the result is not processed, this will stop part evaluation at a depth of 2
     }
     return result;
   }
 
   public void applyDefaultCounts(PartDescriptor descriptor) {
     if (descriptor.getDeclaredDetailValue("minCount") == null) {
-      descriptor.setMinCount(new ConstantExpression<>(1L));
+      long min = (descriptor.getTypeDescriptor() instanceof ComplexTypeDescriptor ? 0 : 1);
+      descriptor.setMinCount(new ConstantExpression<>(min));
     }
     if (descriptor.getDeclaredDetailValue("maxCount") == null) {
       descriptor.setMaxCount(new ConstantExpression<>(1L));

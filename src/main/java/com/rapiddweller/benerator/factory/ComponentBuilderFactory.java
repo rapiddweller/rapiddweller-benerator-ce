@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -76,14 +76,10 @@ import java.util.HashSet;
 /**
  * Creates {@link ComponentBuilder}s.<br/><br/>
  * Created: 14.10.2007 22:16:34
- *
  * @author Volker Bergmann
  */
 public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
-  /**
-   * Instantiates a new Component builder factory.
-   */
   protected ComponentBuilderFactory() {
   }
 
@@ -91,27 +87,19 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
   // factory methods for component generators ------------------------------------------------------------------------
 
-  /**
-   * Create component builder component builder.
-   *
-   * @param descriptor      the descriptor
-   * @param ownerUniqueness the owner uniqueness
-   * @param context         the context
-   * @return the component builder
-   */
   public static ComponentBuilder<?> createComponentBuilder(
-      ComponentDescriptor descriptor, Uniqueness ownerUniqueness, BeneratorContext context) {
+      ComponentDescriptor descriptor, Uniqueness ownerUniqueness, boolean iterationMode, BeneratorContext context) {
     LOGGER.debug("createComponentBuilder({})", descriptor.getName());
 
     ComponentBuilder<?> result = null;
     if (descriptor instanceof ArrayElementDescriptor) {
-      result = createPartBuilder(descriptor, ownerUniqueness, context);
+      result = createPartBuilder(descriptor, ownerUniqueness, iterationMode, context);
     } else if (descriptor instanceof PartDescriptor) {
       TypeDescriptor type = descriptor.getTypeDescriptor();
       if (type instanceof AlternativeGroupDescriptor) {
-        result = createAlternativeGroupBuilder((AlternativeGroupDescriptor) type, ownerUniqueness, context);
+        result = createAlternativeGroupBuilder((AlternativeGroupDescriptor) type, ownerUniqueness, iterationMode, context);
       } else {
-        result = createPartBuilder(descriptor, ownerUniqueness, context);
+        result = createPartBuilder(descriptor, ownerUniqueness, iterationMode, context);
       }
     } else if (descriptor instanceof ReferenceDescriptor) {
       result = createReferenceBuilder((ReferenceDescriptor) descriptor, context);
@@ -124,13 +112,6 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     return result;
   }
 
-  /**
-   * Create script builder component builder.
-   *
-   * @param component the component
-   * @param context   the context
-   * @return the component builder
-   */
   protected static ComponentBuilder<?> createScriptBuilder(ComponentDescriptor component, BeneratorContext context) {
     TypeDescriptor type = component.getTypeDescriptor();
     if (type == null) {
@@ -149,31 +130,32 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   private static ComponentBuilder<?> createAlternativeGroupBuilder(
-      AlternativeGroupDescriptor type, Uniqueness ownerUniqueness, BeneratorContext context) {
+      AlternativeGroupDescriptor type, Uniqueness ownerUniqueness, boolean iterationMode, BeneratorContext context) {
     int i = 0;
     Collection<ComponentDescriptor> components = type.getComponents();
     ComponentBuilder<?>[] builders = new ComponentBuilder[components.size()];
     for (ComponentDescriptor component : components) {
-      builders[i++] = createComponentBuilder(component, ownerUniqueness, context);
+      builders[i++] = createComponentBuilder(component, ownerUniqueness, iterationMode, context);
     }
     return new AlternativeComponentBuilder(builders, type.getScope());
   }
 
   private static ComponentBuilder<?> createPartBuilder(
-      ComponentDescriptor part, Uniqueness ownerUniqueness, BeneratorContext context) {
+      ComponentDescriptor part, Uniqueness ownerUniqueness, boolean iterationMode, BeneratorContext context) {
+    ComponentBuilder<?> result = null;
     Generator<?> generator = createSingleInstanceGenerator(part, ownerUniqueness, context);
-    generator = createMultiplicityWrapper(part, generator, context);
+    if (iterationMode) {
+      generator = createMultiplicityWrapper(part, generator, context);
+      result = builderFromGenerator(generator, part, context);
+    } else {
+      generator = createMultiplicityWrapper(part, generator, context); // TODO remove
+      result = builderFromGenerator(generator, part, context); // TODO remove
+      // TODO implement result = partModifier(generator, part, context);
+    }
     LOGGER.debug("Created {}", generator);
-    return builderFromGenerator(generator, part, context);
+    return result;
   }
 
-  /**
-   * Create reference builder component builder.
-   *
-   * @param descriptor the descriptor
-   * @param context    the context
-   * @return the component builder
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   static ComponentBuilder<?> createReferenceBuilder(ReferenceDescriptor descriptor, BeneratorContext context) {
     SimpleTypeDescriptor typeDescriptor = (SimpleTypeDescriptor) descriptor.getTypeDescriptor();
@@ -266,13 +248,10 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     return builderFromGenerator(generator, descriptor, context);
   }
 
-  /**
-   * helper method to check for selectors of individual fields like "select x from y" or
-   * "{'select x from y where id=' + z}". For such selectors it returns true, otherwise false
-   *
-   * @param selector the selector
-   * @return the boolean
-   */
+  /** Helper method to check for selectors of individual fields like "select x from y" or
+   *  "{'select x from y where id=' + z}". For such selectors it returns true, otherwise false
+   *  @param selector the selector
+   *  @return the boolean */
   protected static boolean isIndividualSelector(String selector) {
     if (selector == null) {
       return false;
@@ -295,13 +274,6 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
   // non-public helpers ----------------------------------------------------------------------------------------------
 
-  /**
-   * Wrap with condition component builder.
-   *
-   * @param descriptor the descriptor
-   * @param builder    the builder
-   * @return the component builder
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   static ComponentBuilder<?> wrapWithCondition(ComponentDescriptor descriptor, ComponentBuilder<?> builder) {
     if (builder == null) {
@@ -320,14 +292,6 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     }
   }
 
-  /**
-   * Create id builder component builder.
-   *
-   * @param id              the id
-   * @param ownerUniqueness the owner uniqueness
-   * @param context         the context
-   * @return the component builder
-   */
   static ComponentBuilder<?> createIdBuilder(IdDescriptor id, Uniqueness ownerUniqueness, BeneratorContext context) {
     Generator<?> generator = createSingleInstanceGenerator(id, Uniqueness.ORDERED, context);
     if (generator != null) {
@@ -356,23 +320,16 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     }
   }
 
-  /**
-   * Create multiplicity wrapper generator.
-   *
-   * @param instance  the instance
-   * @param generator the generator
-   * @param context   the context
-   * @return the generator
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
-  static Generator<Object> createMultiplicityWrapper(
+  static Generator<?> createMultiplicityWrapper(
       ComponentDescriptor instance, Generator<?> generator, BeneratorContext context) {
     if (generator == null) {
       return null;
     }
     String container = instance.getContainer();
     if (container == null) {
-      Generator<Long> longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, 1L, 1L, true, context);
+      long defaultMinCount = (instance.getTypeDescriptor() instanceof ComplexTypeDescriptor ? 0 : 1);
+      Generator<Long> longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, defaultMinCount, 1L, true, context);
       NonNullGenerator<Integer> countGenerator = WrapperFactory.asNonNullGenerator(
           new AsIntegerGeneratorWrapper<Number>((Generator) longCountGenerator));
       return new SimplifyingSingleSourceArrayGenerator(generator, countGenerator);

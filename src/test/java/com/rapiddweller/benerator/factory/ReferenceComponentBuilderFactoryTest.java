@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -61,9 +61,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
 
-  /**
-   * Test script.
-   */
   @SuppressWarnings("rawtypes")
   @Test
   public void testScript() {
@@ -77,9 +74,6 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
     assertEquals(8, entity.get("ref"));
   }
 
-  /**
-   * Test null quota one.
-   */
   @SuppressWarnings("rawtypes")
   @Test
   public void testNullQuotaOne() {
@@ -92,9 +86,6 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
     assertNull(entity.get("ref"));
   }
 
-  /**
-   * Test nullable.
-   */
   @SuppressWarnings("rawtypes")
   @Test
   public void testNullable() {
@@ -108,9 +99,6 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
     assertNull(entity.get("ref"));
   }
 
-  /**
-   * Test generator.
-   */
   @SuppressWarnings("rawtypes")
   @Test
   public void testGenerator() {
@@ -124,9 +112,6 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
     assertEquals(42, entity.get("ref"));
   }
 
-  /**
-   * Test constant.
-   */
   @SuppressWarnings("rawtypes")
   @Test
   public void testConstant() {
@@ -140,9 +125,6 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
     assertEquals(3, entity.get("ref"));
   }
 
-  /**
-   * Test sample.
-   */
   @SuppressWarnings("rawtypes")
   @Test
   public void testSample() {
@@ -158,27 +140,18 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
 
   // tests that resolve the target type ------------------------------------------------------------------------------
 
-  /**
-   * Test missing type.
-   */
   @Test(expected = ConfigurationError.class)
   public void testMissingType() {
     ReferenceDescriptor ref = createTargetTypeDescriptor("ref", null, "Storage");
     createAndInitBuilder(ref);
   }
 
-  /**
-   * Test missing source.
-   */
   @Test(expected = ConfigurationError.class)
   public void testMissingSource() {
     ReferenceDescriptor ref = createTargetTypeDescriptor("ref", "Referee", null);
     createAndInitBuilder(ref);
   }
 
-  /**
-   * Test single ref.
-   */
   @Test
   @SuppressWarnings({"null", "rawtypes"})
   public void testSingleRef() {
@@ -192,9 +165,6 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
     assertTrue("Alice".equals(entity.get("ref")) || "Bob".equals(entity.get("ref")));
   }
 
-  /**
-   * Test multi ref.
-   */
   @Test
   @SuppressWarnings({"null", "rawtypes"})
   public void testMultiRef() {
@@ -225,30 +195,17 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
     StorageSystemMock storageSystem = new StorageSystemMock(ref.getDataModel());
     context.getDataModel().addDescriptorProvider(storageSystem);
     context.setGlobal(storageSystem.getId(), storageSystem);
-    ComponentBuilder<?> builder = ComponentBuilderFactory.createComponentBuilder(ref, Uniqueness.NONE, context);
+    ComponentBuilder<?> builder = ComponentBuilderFactory.createComponentBuilder(ref, Uniqueness.NONE, false, context);
     builder.init(context);
     return builder;
   }
 
-  /**
-   * Create person entity entity.
-   *
-   * @return the entity
-   */
   public Entity createPersonEntity() {
     return new Entity("Person", testDescriptorProvider);
   }
 
-  /**
-   * The type Storage system mock.
-   */
   public static class StorageSystemMock extends DefaultDescriptorProvider implements StorageSystem {
 
-    /**
-     * Instantiates a new Storage system mock.
-     *
-     * @param dataModel the data model
-     */
     public StorageSystemMock(DataModel dataModel) {
       super("Storage", dataModel);
       super.addTypeDescriptor(new ComplexTypeDescriptor("Person", this));
