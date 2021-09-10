@@ -50,7 +50,7 @@ public class VariableTest {
     assertTrue(actualVariable.isParallelizable());
     assertFalse(actualVariable.isResetNeeded());
     assertEquals("Scope", actualVariable.getScope());
-    assertEquals("Variable[Name:CompositeDatasetGenerator]", actualVariable.toString());
+    assertEquals("Variable[Name:CompositeDatasetGenerator[WeightedGeneratorGenerator[]]]", actualVariable.toString());
   }
 }
 

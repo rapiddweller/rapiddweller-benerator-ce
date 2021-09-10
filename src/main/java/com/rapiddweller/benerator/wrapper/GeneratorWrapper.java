@@ -144,7 +144,9 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
 
   @Override
   public String toString() {
-    return (state != GeneratorState.CREATED ? BeanUtil.toString(this) : getClass().getSimpleName());
+    return (state != GeneratorState.CREATED
+        ? BeanUtil.toString(this, true)
+        : getClass().getSimpleName() + "[" + source + "]");
   }
 
 }
