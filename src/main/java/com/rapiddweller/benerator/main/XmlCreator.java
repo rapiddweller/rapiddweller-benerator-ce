@@ -43,7 +43,6 @@ import java.text.MessageFormat;
 /**
  * Main class for generating XML files from the command line.<br/><br/>
  * Created: 28.03.2008 16:52:49
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
@@ -51,11 +50,6 @@ public class XmlCreator {
 
   private static final Logger logger = LoggerFactory.getLogger(XmlCreator.class);
 
-  /**
-   * The entry point of application.
-   *
-   * @param args additional args you can add
-   */
   public static void main(String[] args) {
     if (args.length < 3) {
       printHelp();
@@ -72,15 +66,6 @@ public class XmlCreator {
     createXMLFiles(schemaUri, root, pattern, fileCount, propertiesFiles);
   }
 
-  /**
-   * Create xml files.
-   *
-   * @param schemaUri       the schema uri
-   * @param root            the root
-   * @param pattern         the pattern
-   * @param fileCount       the file count
-   * @param propertiesFiles the properties files
-   */
   public static void createXMLFiles(String schemaUri, String root,
                                     String pattern, long fileCount, String[] propertiesFiles) {
     logParams(schemaUri, root, pattern, fileCount);

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,21 +29,14 @@ package com.rapiddweller.benerator.wrapper;
 import com.rapiddweller.benerator.Generator;
 
 /**
- * Converts the {@link Number} products of another {@link Generator} to {@link Integer}.<br/>
- * <br/>
+ * Converts the {@link Number} products of another {@link Generator} to {@link Integer}.<br/><br/>
  * Created at 23.06.2009 22:58:26
- *
- * @param <E> the type parameter
+ * @param <E> the type of the generated objects
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class AsIntegerGeneratorWrapper<E extends Number> extends GeneratorWrapper<E, Integer> {
 
-  /**
-   * Instantiates a new As integer generator wrapper.
-   *
-   * @param source the source
-   */
   public AsIntegerGeneratorWrapper(Generator<E> source) {
     super(source);
   }
