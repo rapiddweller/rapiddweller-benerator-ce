@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -84,10 +84,8 @@ import static com.rapiddweller.model.data.SimpleTypeDescriptor.MAX_LENGTH;
 import static com.rapiddweller.model.data.SimpleTypeDescriptor.PATTERN;
 
 /**
- * Utility class for parsing and combining descriptor settings.<br/>
- * <br/>
+ * Utility class for parsing and combining descriptor settings.<br/><br/>
  * Created at 31.12.2008 09:28:28
- *
  * @author Volker Bergmann
  * @since 0.5.7
  */
@@ -96,13 +94,6 @@ public class DescriptorUtil {
   private DescriptorUtil() {
   }
 
-  /**
-   * Convert type object.
-   *
-   * @param sourceValue the source value
-   * @param targetType  the target type
-   * @return the object
-   */
   public static Object convertType(Object sourceValue, SimpleTypeDescriptor targetType) {
     if (sourceValue == null) {
       return null;
@@ -115,26 +106,12 @@ public class DescriptorUtil {
     return AnyConverter.convert(sourceValue, javaType);
   }
 
-  /**
-   * Is wrapped simple type boolean.
-   *
-   * @param complexType the complex type
-   * @return the boolean
-   */
   public static boolean isWrappedSimpleType(ComplexTypeDescriptor complexType) {
     List<ComponentDescriptor> components = complexType.getComponents();
     return (components.size() == 1
         && ComplexTypeDescriptor.__SIMPLE_CONTENT.equals(components.get(0).getName()));
   }
 
-  /**
-   * Create converting generator generator.
-   *
-   * @param descriptor the descriptor
-   * @param generator  the generator
-   * @param context    the context
-   * @return the generator
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static Generator<?> createConvertingGenerator(TypeDescriptor descriptor,
                                                        Generator<?> generator, BeneratorContext context) {
@@ -148,13 +125,6 @@ public class DescriptorUtil {
     return generator;
   }
 
-  /**
-   * Gets generator by name.
-   *
-   * @param descriptor the descriptor
-   * @param context    the context
-   * @return the generator by name
-   */
   public static Generator<?> getGeneratorByName(TypeDescriptor descriptor, BeneratorContext context) {
     try {
       Generator<?> generator = null;
@@ -176,13 +146,6 @@ public class DescriptorUtil {
     }
   }
 
-  /**
-   * Gets validator.
-   *
-   * @param validatorSpec the validator spec
-   * @param context       the context
-   * @return the validator
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static Validator getValidator(String validatorSpec, BeneratorContext context) {
     try {
@@ -222,13 +185,6 @@ public class DescriptorUtil {
     }
   }
 
-  /**
-   * Gets converter.
-   *
-   * @param converterSpec the converter spec
-   * @param context       the context
-   * @return the converter
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static Converter getConverter(String converterSpec, BeneratorContext context) {
     try {
@@ -264,12 +220,6 @@ public class DescriptorUtil {
     }
   }
 
-  /**
-   * Gets pattern as date format.
-   *
-   * @param descriptor the descriptor
-   * @return the pattern as date format
-   */
   public static DateFormat getPatternAsDateFormat(TypeDescriptor descriptor) {
     String pattern = descriptor.getPattern();
     if (pattern != null) {
@@ -279,13 +229,6 @@ public class DescriptorUtil {
     }
   }
 
-  /**
-   * Gets uniqueness.
-   *
-   * @param descriptor the descriptor
-   * @param context    the context
-   * @return the uniqueness
-   */
   public static Uniqueness getUniqueness(InstanceDescriptor descriptor, BeneratorContext context) {
     if (descriptor instanceof IdDescriptor) {
       return Uniqueness.ORDERED;
@@ -296,13 +239,6 @@ public class DescriptorUtil {
     }
   }
 
-  /**
-   * Is unique boolean.
-   *
-   * @param descriptor the descriptor
-   * @param context    the context
-   * @return the boolean
-   */
   public static boolean isUnique(InstanceDescriptor descriptor, BeneratorContext context) {
     Boolean unique = descriptor.isUnique();
     if (unique == null) {
@@ -311,13 +247,6 @@ public class DescriptorUtil {
     return unique;
   }
 
-  /**
-   * Gets separator.
-   *
-   * @param descriptor the descriptor
-   * @param context    the context
-   * @return the separator
-   */
   public static char getSeparator(TypeDescriptor descriptor, BeneratorContext context) {
     char separator = (context != null ? context.getDefaultSeparator() : ',');
     if (!StringUtil.isEmpty(descriptor.getSeparator())) {
@@ -329,13 +258,10 @@ public class DescriptorUtil {
     return separator;
   }
 
-  /**
-   * Calculates the 'count' value.
-   *
-   * @param descriptor the descriptor
-   * @return the 'count' value. If a global 'maxCount' was set too, it returns the minimum of 'count' and 'maxCount'.
-   * If no 'count' value was specified, it returns null.
-   */
+  /** Calculates the 'count' value.
+   *  @param descriptor the descriptor
+   *  @return the 'count' value. If a global 'maxCount' was set too, it returns the minimum of 'count' and 'maxCount'.
+   *  If no 'count' value was specified, it returns null. */
   @SuppressWarnings("unchecked")
   public static Expression<Long> getCount(InstanceDescriptor descriptor) {
     Expression<Long> result = descriptor.getCount();
@@ -348,23 +274,14 @@ public class DescriptorUtil {
     return result;
   }
 
-  /**
-   * Gets min count.
-   *
-   * @param descriptor the descriptor
-   * @return the min count
-   */
   public static Expression<Long> getMinCount(InstanceDescriptor descriptor) {
     return getMinCount(descriptor, 1L);
   }
 
-  /**
-   * Gets min count.
-   *
-   * @param descriptor the descriptor
-   * @param defaultMin the default min
-   * @return the min count
-   */
+  /** Calculates the 'minCount' value.
+   *  @param descriptor the descriptor
+   *  @return the 'minCount' value. If a global 'maxCount' was set too, it returns the minimum of 'minCount' and 'maxCount'.
+   *  If no 'minCount' value was specified, it returns the value of the 'defaultMin' parameter. */
   @SuppressWarnings("unchecked")
   public static Expression<Long> getMinCount(InstanceDescriptor descriptor, Long defaultMin) {
     Expression<Long> result = null;
@@ -384,13 +301,6 @@ public class DescriptorUtil {
     return result;
   }
 
-  /**
-   * Gets max count.
-   *
-   * @param descriptor the descriptor
-   * @param defaultMax the default max
-   * @return the max count
-   */
   @SuppressWarnings("unchecked")
   public static Expression<Long> getMaxCount(InstanceDescriptor descriptor, Long defaultMax) {
     Expression<Long> result = null;
@@ -414,24 +324,12 @@ public class DescriptorUtil {
     return new GlobalMaxCountExpression();
   }
 
-  /**
-   * Gets count granularity.
-   *
-   * @param descriptor the descriptor
-   * @return the count granularity
-   */
   public static Expression<Long> getCountGranularity(InstanceDescriptor descriptor) {
     return (descriptor.getCountGranularity() != null ?
         descriptor.getCountGranularity() :
         new ConstantExpression<>(1L));
   }
 
-  /**
-   * Create string script converter converter.
-   *
-   * @param context the context
-   * @return the converter
-   */
   public static Converter<String, String> createStringScriptConverter(BeneratorContext context) {
     return new ConverterChain<>(
         new ScriptConverterForStrings(context),
@@ -439,41 +337,29 @@ public class DescriptorUtil {
     );
   }
 
-  /**
-   * Create dynamic count generator generator.
-   *
-   * @param descriptor the descriptor
-   * @param defaultMin the default min
-   * @param defaultMax the default max
-   * @param resetToMin the reset to min
-   * @param context    the context
-   * @return the generator
-   */
   public static Generator<Long> createDynamicCountGenerator(final InstanceDescriptor descriptor,
                                                             Long defaultMin, Long defaultMax, boolean resetToMin, BeneratorContext context) {
     Expression<Long> count = DescriptorUtil.getCount(descriptor);
     if (count != null) {
-      return new ExpressionBasedGenerator<>(count, Long.class);
+      if (count.isConstant()) {
+        return new ConstantGenerator<>(count.evaluate(context));
+      } else {
+        return new ExpressionBasedGenerator<>(count, Long.class);
+      }
     } else {
       final Expression<Long> minCount = DescriptorUtil.getMinCount(descriptor, defaultMin);
       final Expression<Long> maxCount = DescriptorUtil.getMaxCount(descriptor, defaultMax);
       final Expression<Long> countGranularity = DescriptorUtil.getCountGranularity(descriptor);
-      if (minCount.isConstant()) {
-        if (maxCount.isConstant() && descriptor.getCountDistribution() == null) {
-          // if minCount and maxCount are constants of the same value,
-          // then create a generator for a constant value
-          Long minCountValue = minCount.evaluate(context);
-          Long maxCountValue = maxCount.evaluate(context);
-          if (NullSafeComparator.equals(minCountValue, maxCountValue)) {
-            return new ConstantGenerator<>(minCountValue);
-          }
-        } else {
-          // if there is only a maxCount specified, then assume that
-          // the user actually wants to generate maxCount items but accepts less
-          return new ExpressionBasedGenerator<>(maxCount, Long.class);
+      if (minCount.isConstant() && maxCount.isConstant()) {
+        // if minCount and maxCount are constants of the same value,
+        // then create a generator for a constant value
+        Long minCountValue = minCount.evaluate(context);
+        Long maxCountValue = maxCount.evaluate(context);
+        if (NullSafeComparator.equals(minCountValue, maxCountValue)) {
+          return new ConstantGenerator<>(minCountValue);
         }
       }
-      // if no simplification was found yet, then create a fully featured distributed count generator
+      // if no simplification was found above, then create a fully featured distributed count generator
       final Expression<Distribution> countDistribution =
           FactoryUtil.getDistributionExpression(descriptor.getCountDistribution(), Uniqueness.NONE, true);
       return new DynamicCountGenerator(minCount, maxCount, countGranularity, countDistribution,
@@ -481,15 +367,6 @@ public class DescriptorUtil {
     }
   }
 
-  /**
-   * Gets number detail.
-   *
-   * @param <T>        the type parameter
-   * @param descriptor the descriptor
-   * @param detailName the detail name
-   * @param targetType the target type
-   * @return the number detail
-   */
   public static <T extends Number> T getNumberDetail(SimpleTypeDescriptor descriptor, String detailName, Class<T> targetType) {
     try {
       String detailValue = (String) descriptor.getDetailValue(detailName);
@@ -499,13 +376,6 @@ public class DescriptorUtil {
     }
   }
 
-  /**
-   * Parse component config.
-   *
-   * @param element the element
-   * @param type    the type
-   * @param context the context
-   */
   public static void parseComponentConfig(Element element, TypeDescriptor type, BeneratorContext context) {
     // parse child elements
     ModelParser parser = new ModelParser(context);
@@ -515,20 +385,13 @@ public class DescriptorUtil {
       if (EL_VARIABLE.equals(childType)) {
         parser.parseVariable(child, (VariableHolder) type);
       } else if (COMPONENT_TYPES.contains(childType)) {
-        parser.parseComponent(child, (ComplexTypeDescriptor) type);
+        parser.parseComponentGeneration(child, (ComplexTypeDescriptor) type);
       } else if (EL_VALUE.equals(childType)) {
         parser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, valueCount++);
       }
     }
   }
 
-  /**
-   * Is nullable boolean.
-   *
-   * @param descriptor the descriptor
-   * @param context    the context
-   * @return the boolean
-   */
   public static boolean isNullable(InstanceDescriptor descriptor, BeneratorContext context) {
     Boolean nullable = descriptor.isNullable();
     if (nullable != null) {
@@ -548,13 +411,6 @@ public class DescriptorUtil {
     return context.getDefaultsProvider().defaultNullable();
   }
 
-  /**
-   * Should nullify each nullable boolean.
-   *
-   * @param descriptor the descriptor
-   * @param context    the context
-   * @return the boolean
-   */
   public static boolean shouldNullifyEachNullable(
       InstanceDescriptor descriptor, BeneratorContext context) {
     // nullQuota == 1?
@@ -576,28 +432,12 @@ public class DescriptorUtil {
 
   // helpers ---------------------------------------------------------------------------------------------------------
 
-  /**
-   * Wrap with proxy generator.
-   *
-   * @param <T>        the type parameter
-   * @param generator  the generator
-   * @param descriptor the descriptor
-   * @return the generator
-   */
   protected static <T> Generator<T> wrapWithProxy(Generator<T> generator, TypeDescriptor descriptor) {
     generator = processOffset(generator, descriptor);
     generator = processCyclic(generator, descriptor);
     return generator;
   }
 
-  /**
-   * Process cyclic generator.
-   *
-   * @param <T>        the type parameter
-   * @param generator  the generator
-   * @param descriptor the descriptor
-   * @return the generator
-   */
   public static <T> Generator<T> processCyclic(Generator<T> generator,
                                                TypeDescriptor descriptor) {
     boolean cyclic = descriptor.isCyclic() != null && descriptor.isCyclic();
@@ -607,14 +447,6 @@ public class DescriptorUtil {
     return generator;
   }
 
-  /**
-   * Process offset generator.
-   *
-   * @param <T>        the type parameter
-   * @param generator  the generator
-   * @param descriptor the descriptor
-   * @return the generator
-   */
   public static <T> Generator<T> processOffset(Generator<T> generator, TypeDescriptor descriptor) {
     int offset = getOffset(descriptor);
     if (offset > 0) {
@@ -623,23 +455,11 @@ public class DescriptorUtil {
     return generator;
   }
 
-  /**
-   * Gets offset.
-   *
-   * @param descriptor the descriptor
-   * @return the offset
-   */
   protected static int getOffset(TypeDescriptor descriptor) {
     Integer offset = descriptor.getOffset();
     return (offset != null ? offset : 0);
   }
 
-  /**
-   * Gets min length.
-   *
-   * @param descriptor the descriptor
-   * @return the min length
-   */
   protected static Integer getMinLength(SimpleTypeDescriptor descriptor) {
     Integer minLength = descriptor.getMinLength();
     if (minLength == null) {
@@ -648,13 +468,6 @@ public class DescriptorUtil {
     return minLength;
   }
 
-  /**
-   * Gets max length.
-   *
-   * @param descriptor       the descriptor
-   * @param defaultsProvider the defaults provider
-   * @return the max length
-   */
   protected static Integer getMaxLength(SimpleTypeDescriptor descriptor, DefaultsProvider defaultsProvider) {
     // evaluate max length
     Integer maxLength = (Integer) descriptor.getDeclaredDetailValue(MAX_LENGTH);
@@ -668,13 +481,6 @@ public class DescriptorUtil {
     return maxLength;
   }
 
-  /**
-   * Create null quota one generator generator.
-   *
-   * @param descriptor the descriptor
-   * @param context    the context
-   * @return the generator
-   */
   public static Generator<?> createNullQuotaOneGenerator(InstanceDescriptor descriptor, BeneratorContext context) {
     // check if nullQuota is 1
     Double nullQuota = descriptor.getNullQuota();
@@ -685,13 +491,6 @@ public class DescriptorUtil {
     }
   }
 
-  /**
-   * Derive type type descriptor.
-   *
-   * @param name       the name
-   * @param parentType the parent type
-   * @return the type descriptor
-   */
   public static TypeDescriptor deriveType(String name, TypeDescriptor parentType) {
     if (parentType instanceof SimpleTypeDescriptor) {
       return new SimpleTypeDescriptor(name, parentType.getProvider(), (SimpleTypeDescriptor) parentType);
@@ -704,9 +503,6 @@ public class DescriptorUtil {
     }
   }
 
-  /**
-   * The type Global max count expression.
-   */
   static class GlobalMaxCountExpression implements Expression<Long> {
     @Override
     public boolean isConstant() {
@@ -716,6 +512,11 @@ public class DescriptorUtil {
     @Override
     public Long evaluate(Context context) {
       return ((BeneratorContext) context).getMaxCount();
+    }
+
+    @Override
+    public String toString() {
+      return getClass().getSimpleName();
     }
   }
 
