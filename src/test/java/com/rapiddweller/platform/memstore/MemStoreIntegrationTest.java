@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -52,9 +52,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   private MemStore dst;
   private ConsumerMock consumer;
 
-  /**
-   * Sets up consumer and descriptor.
-   */
+  /** Sets up source, consumer and descriptor. */
   @Before
   public void setUpConsumerAndDescriptor() {
     consumer = new ConsumerMock(true);
@@ -78,9 +76,6 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   // test methods ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Test store.
-   */
   @Test
   public void testStore() {
     MemStore.ignoreClose = true;
@@ -99,9 +94,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     }
   }
 
-  /**
-   * Test iterate.
-   */
+  /** Test iteration. */
   @SuppressWarnings("unchecked")
   @Test
   public void testIterate() {
@@ -117,9 +110,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     }
   }
 
-  /**
-   * Test iterate with selector.
-   */
+  /** Test iteration with rapiddweller script selector. */
   @SuppressWarnings("unchecked")
   @Test
   public void testIterateWithSelector() {
@@ -130,9 +121,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     assertEquals(4, products.get(0).get("id"));
   }
 
-  /**
-   * Test iterate with selector.
-   */
+  /** Test iterate with JavaScript selector. */
   @SuppressWarnings("unchecked")
   @Test
   public void testIterateWithJsSelector() {
@@ -144,9 +133,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     assertEquals(4, products.get(0).get("id"));
   }
 
-  /**
-   * Test variable.
-   */
+  /** Test variable evaluation. */
   @SuppressWarnings("unchecked")
   @Test
   public void testVariable() {
@@ -170,17 +157,15 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     }
   }
 
-  /**
-   * Test attribute.
-   */
+  /** Test sub part generation. */
   @SuppressWarnings("unchecked")
   @Test
-  public void testAttribute() {
+  public void testPart() {
     MemStore.ignoreClose = false;
     parseAndExecute(
         "<generate type='order' consumer='cons'>" +
             "	<id name='id' type='int' />" +
-            "	<attribute name='product' source='src' type='product' />" +
+            "	<part name='product' type='product' source='src' count='1'/>" +
             "</generate>"
     );
     Collection<Entity> orders = (List<Entity>) consumer.getProducts();
@@ -195,9 +180,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     }
   }
 
-  /**
-   * Test reference.
-   */
+  /** Test reference generation. */
   @SuppressWarnings("unchecked")
   @Test
   public void testReference() {
@@ -220,9 +203,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     }
   }
 
-  /**
-   * Test integration.
-   */
+  /** Test integration. */
   @Test
   public void testIntegration() {
     MemStore.ignoreClose = true;
