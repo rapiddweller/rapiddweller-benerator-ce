@@ -36,8 +36,6 @@
                 <include>org.postgresql:postgresql:jar</include>
                 <include>org.firebirdsql.jdbc:jaybird:jar</include>
                 <include>javax.resource:connector-api:jar</include>
-                <include>org.apache.logging.log4j:log4j-api:jar</include>
-                <include>org.apache.logging.log4j:log4j-core:jar</include>
             </includes>
         </dependencySet>
         <dependencySet>
@@ -60,6 +58,8 @@
                 <include>org.freemarker:freemarker:jar</include>
                 <include>javax.validation:validation-api:jar</include>
                 <include>xml-apis:xml-apis:jar</include>
+                <include>org.apache.logging.log4j:*:jar</include>
+                <include>org.slf4j:*:jar</include>
             </includes>
         </dependencySet>
     </dependencySets>
