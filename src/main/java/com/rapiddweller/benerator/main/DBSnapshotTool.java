@@ -229,7 +229,7 @@ public class DBSnapshotTool {
         if (dialect == null) {
           dialect = db.getDialect().getSystem();
         }
-        exporter = new SQLEntityExporter(filename, encoding, lineSeparator, dialect);
+        exporter = new SQLEntityExporter(filename,dialect,lineSeparator,encoding);
       } else {
         throw new IllegalArgumentException("Unknown format: " + format);
       }
