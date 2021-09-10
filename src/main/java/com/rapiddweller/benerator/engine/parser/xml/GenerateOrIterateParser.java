@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -282,6 +282,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     if (infoLog) {
       logger.debug("{}", descriptor);
     }
+    boolean iterationMode = (EL_ITERATE.equals(element.getNodeName()));
 
     String taskName = getTaskName(descriptor);
     BeneratorContext context = statement.getContext();
@@ -308,7 +309,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
       if (EL_VARIABLE.equals(childName)) {
         componentDescriptor = parser.parseVariable(child, (VariableHolder) type);
       } else if (COMPONENT_TYPES.contains(childName)) {
-        componentDescriptor = parser.parseComponent(child, (ComplexTypeDescriptor) type);
+        componentDescriptor = parser.parseComponentGeneration(child, (ComplexTypeDescriptor) type);
         handledMembers.add(componentDescriptor.getName().toLowerCase());
       } else if (EL_VALUE.equals(childName)) {
         componentDescriptor = parser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, arrayIndex++);
@@ -316,7 +317,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
       // handle non-member/variable child elements
       if (componentDescriptor != null) {
         GeneratorComponent<?> componentGenerator = GeneratorComponentFactory.createGeneratorComponent(
-            componentDescriptor, Uniqueness.NONE, childContext);
+            componentDescriptor, Uniqueness.NONE, iterationMode, childContext);
         if (componentGenerator != null) {
           statements.add(componentGenerator);
         }
@@ -350,7 +351,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
             continue;
           }
           GeneratorComponent<?> componentGenerator = GeneratorComponentFactory.createGeneratorComponent(
-              component, Uniqueness.NONE, childContext);
+              component, Uniqueness.NONE, iterationMode, childContext);
           statements.add(insertionIndex++, componentGenerator);
         }
       }
