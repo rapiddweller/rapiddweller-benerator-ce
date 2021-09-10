@@ -389,7 +389,7 @@ public class ProjectBuilder implements Runnable {
   private void createDbSnapshot() {
     String format = setup.getDbSnapshot();
     File file = setup.projectFile(setup.getDbSnapshotFile());
-    DBSnapshotTool.export(setup.getDbUrl(), setup.getDbDriver(), setup.getDbSchema(), setup.getDbCatalog(),
+    DBSnapshotTool.export(setup.getDbUrl(), setup.getDbDriver(), setup.getDbCatalog(), setup.getDbSchema(),
         setup.getDbUser(), setup.getDbPassword(), file.getAbsolutePath(), setup.getEncoding(), format,
         null, monitor);
   }
@@ -590,7 +590,7 @@ public class ProjectBuilder implements Runnable {
       component.setNullable(null);
     }
 
-    String elementName = null;
+    String elementName;
     if (component instanceof PartDescriptor) {
       elementName = EL_ATTRIBUTE;
     } else if (component instanceof ReferenceDescriptor) {
