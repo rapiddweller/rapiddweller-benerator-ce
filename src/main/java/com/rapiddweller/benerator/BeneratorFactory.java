@@ -26,18 +26,23 @@
 
 package com.rapiddweller.benerator;
 
+import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.ResourceManager;
+import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
 import com.rapiddweller.benerator.factory.SimpleTypeGeneratorFactory;
+import com.rapiddweller.benerator.primitive.VarLengthStringGenerator;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.version.VersionInfo;
+
+import java.util.Set;
 
 /**
  * Abstract factory class for extending Benerator.<br/><br/>
@@ -90,6 +95,8 @@ public abstract class BeneratorFactory {
 
   public abstract Context createGenerationContext();
 
+  public abstract GenerationInterceptor getGenerationInterceptor();
+
   public abstract ComplexTypeGeneratorFactory getComplexTypeGeneratorFactory();
 
   public abstract SimpleTypeGeneratorFactory getSimpleTypeGeneratorFactory();
@@ -101,4 +108,16 @@ public abstract class BeneratorFactory {
   public abstract Consumer configureConsumer(Consumer consumer, BeneratorContext context);
 
   public abstract Converter<String,String> createDelocalizingConverter();
+
+  public abstract VarLengthStringGenerator createVarLengthStringGenerator(
+      String charSetPattern, int minLength, int maxLength);
+
+  public abstract VarLengthStringGenerator createVarLengthStringGenerator(
+      String charSetPattern, int minLength, int maxLength, int lengthGranularity, Distribution lengthDistribution);
+
+  public abstract VarLengthStringGenerator createVarLengthStringGenerator(
+      Set<Character> charSet, int minLength, int maxLength, int lengthGranularity, Distribution lengthDistribution);
+
+  public abstract RandomProvider getRandomProvider();
+
 }
