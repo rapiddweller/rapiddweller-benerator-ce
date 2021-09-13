@@ -34,44 +34,22 @@ import com.rapiddweller.common.converter.NumberToNumberConverter;
 
 /**
  * Abstract parent class for all number generators.
- * It hosts a distribution and defines abstract properties to be implemented by child classes.<br/>
- * <br/>
+ * It hosts a distribution and defines abstract properties to be implemented by child classes.<br/><br/>
  * Created: 10.09.2006 19:47:32
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.1
  */
 public abstract class AbstractNonNullNumberGenerator<E extends Number> extends AbstractNonNullGenerator<E> {
 
-  /**
-   * The Generated type.
-   */
   protected final Class<E> generatedType;
 
-  /**
-   * The Min.
-   */
   protected E min;
-  /**
-   * The Max.
-   */
   protected E max;
-  /**
-   * The Granularity.
-   */
   protected E granularity;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Abstract non null number generator.
-   *
-   * @param generatedType the generated type
-   * @param min           the min
-   * @param max           the max
-   * @param granularity   the granularity
-   */
   public AbstractNonNullNumberGenerator(Class<E> generatedType, E min, E max, E granularity) {
     this.generatedType = generatedType;
     setMin(min);
@@ -81,56 +59,26 @@ public abstract class AbstractNonNullNumberGenerator<E extends Number> extends A
 
   // config properties -----------------------------------------------------------------------------------------------
 
-  /**
-   * Gets min.
-   *
-   * @return the min
-   */
   public E getMin() {
     return NumberToNumberConverter.convert(min, generatedType);
   }
 
-  /**
-   * Sets min.
-   *
-   * @param min the min
-   */
   public void setMin(E min) {
     this.min = min;
   }
 
-  /**
-   * Gets max.
-   *
-   * @return the max
-   */
   public E getMax() {
     return NumberToNumberConverter.convert(max, generatedType);
   }
 
-  /**
-   * Sets max.
-   *
-   * @param max the max
-   */
   public void setMax(E max) {
     this.max = max;
   }
 
-  /**
-   * Gets granularity.
-   *
-   * @return the granularity
-   */
   public E getGranularity() {
     return NumberToNumberConverter.convert(granularity, generatedType);
   }
 
-  /**
-   * Sets granularity.
-   *
-   * @param granularity the granularity
-   */
   public void setGranularity(E granularity) {
     this.granularity = granularity;
   }
