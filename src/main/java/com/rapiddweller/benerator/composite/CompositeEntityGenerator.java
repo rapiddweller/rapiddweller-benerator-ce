@@ -33,44 +33,34 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.MessageHolder;
+import com.rapiddweller.model.data.Entity;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import java.util.List;
 
 /**
- * {@link Generator} proxy that combines a 'source' entity generator
- * with variable support and ComponentBuilders.<br/><br/>
+ * {@link Generator} that takes a (genrated or imported) 'source' {@link Entity} from a source generator
+ * and applies a list of {@link GenerationStep}s to evaluate variables and generate or overwrite
+ * the source entity's properties.
  * Created: 29.08.2010 09:59:03
- *
- * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.4
  */
-public class SourceAwareGenerator<E> extends GeneratorProxy<E> implements MessageHolder {
+public class CompositeEntityGenerator extends GeneratorProxy<Entity> implements MessageHolder {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SourceAwareGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CompositeEntityGenerator.class);
   private static final Logger STATE_LOGGER = LoggerFactory.getLogger(BeneratorConstants.STATE_LOGGER);
 
   private final String instanceName;
-  private E currentInstance;
-  private String message;
-  private final ComponentAndVariableSupport<E> support;
+  //private String message;
+  private final GenerationStepSupport<Entity> support;
 
-  /**
-   * Instantiates a new Source aware generator.
-   *
-   * @param instanceName instance name for the generated entities.
-   * @param source       another Generator of entities that serves as Entity builder.
-   *                     It may construct empty Entities or may import them (so this may overwrite imported attributes).
-   * @param components   the components
-   * @param context      the context
-   */
-  public SourceAwareGenerator(String instanceName, Generator<E> source,
-                              List<GeneratorComponent<E>> components, BeneratorContext context) {
+  public CompositeEntityGenerator(String instanceName, Generator<Entity> source,
+                                  List<GenerationStep<Entity>> components, BeneratorContext context) {
     super(source);
     this.instanceName = instanceName;
-    this.support = new ComponentAndVariableSupport<>(instanceName, components, context);
+    this.support = new GenerationStepSupport<>(instanceName, components, context);
     this.context = context;
   }
 
@@ -84,12 +74,13 @@ public class SourceAwareGenerator<E> extends GeneratorProxy<E> implements Messag
 
   @SuppressWarnings("null")
   @Override
-  public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
+  public ProductWrapper<Entity> generate(ProductWrapper<Entity> wrapper) {
     wrapper = getSource().generate(wrapper);
     boolean available = (wrapper != null);
     if (!available) {
       STATE_LOGGER.debug("Source for entity '{}' is not available: {}", instanceName, getSource());
     }
+    Entity currentInstance = null;
     if (available) {
       currentInstance = wrapper.unwrap();
       if (instanceName != null) {
@@ -123,10 +114,10 @@ public class SourceAwareGenerator<E> extends GeneratorProxy<E> implements Messag
 
   @Override
   public String getMessage() {
-    if (message != null) {
-      return message;
-    }
-    Generator<E> source = getSource();
+    //if (message != null) {
+    //  return message;
+    //}
+    Generator<Entity> source = getSource();
     if (source instanceof MessageHolder && ((MessageHolder) source).getMessage() != null) {
       return ((MessageHolder) source).getMessage();
     }

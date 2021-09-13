@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.factory;
 
-import com.rapiddweller.benerator.composite.GeneratorComponent;
+import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.composite.Variable;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
@@ -39,19 +39,18 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 /**
- * Factory for {@link GeneratorComponent}s.<br/><br/>
+ * Factory for {@link GenerationStep}s.<br/><br/>
  * Created: 08.08.2011 12:04:39
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
-public class GeneratorComponentFactory {
+public class GenerationStepFactory {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(GeneratorComponentFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GenerationStepFactory.class);
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  public static GeneratorComponent<?> createGeneratorComponent(InstanceDescriptor descriptor, Uniqueness ownerUniqueness,
-                                                               boolean iterationMode, BeneratorContext context) {
+  public static GenerationStep<?> createGeneratorComponent(InstanceDescriptor descriptor, Uniqueness ownerUniqueness,
+                                                           boolean iterationMode, BeneratorContext context) {
     if (descriptor.getMode() == Mode.ignored) {
       LOGGER.debug("Ignoring {}", descriptor);
       return null;

@@ -27,74 +27,35 @@
 package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
-import com.rapiddweller.benerator.engine.AbstractScopedLifeCycleHolder;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 
 /**
  * Abstract implementation of the GeneratorComponent interface which manages a source Generator
  * and a Context reference.<br/><br/>
  * Created: 31.08.2011 12:56:22
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.7.0
  */
-public abstract class AbstractGeneratorComponent<E> extends AbstractScopedLifeCycleHolder implements GeneratorComponent<E> {
+public abstract class SourcedGenerationStep<E> extends AbstractGenerationStep<E> implements GenerationStep<E> {
 
-  /**
-   * The Source.
-   */
-  protected final Generator<?> source;
-  /**
-   * The Context.
-   */
-  protected GeneratorContext context;
-  /**
-   * The Message.
-   */
-  protected String message;
+  protected Generator<?> source;
 
-  /**
-   * Instantiates a new Abstract generator component.
-   *
-   * @param source the source
-   * @param scope  the scope
-   */
-  public AbstractGeneratorComponent(Generator<?> source, String scope) {
+  public SourcedGenerationStep(Generator<?> source, String scope) {
     super(scope);
     this.source = source;
   }
 
-  /**
-   * Gets source.
-   *
-   * @return the source
-   */
   public Generator<?> getSource() {
     return source;
-  }
-
-  @Override
-  public String getMessage() {
-    return message;
-  }
-
-  /**
-   * Assert initialized.
-   */
-  protected void assertInitialized() {
-    if (!source.wasInitialized()) {
-      throw new IllegalGeneratorStateException("Generator component was not initialized: " + this);
-    }
   }
 
   // GeneratorComponent interface implementation ---------------------------------------------------------------------
 
   @Override
   public void init(BeneratorContext context) {
-    this.context = context;
+    super.init(context);
     source.init(context);
   }
 
@@ -116,6 +77,12 @@ public abstract class AbstractGeneratorComponent<E> extends AbstractScopedLifeCy
   @Override
   public boolean isThreadSafe() {
     return source.isThreadSafe();
+  }
+
+  protected void assertInitialized() {
+    if (!source.wasInitialized()) {
+      throw new IllegalGeneratorStateException("Generation step was not initialized: " + this);
+    }
   }
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------

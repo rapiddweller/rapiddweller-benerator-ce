@@ -33,6 +33,8 @@ import com.rapiddweller.benerator.composite.AlternativeComponentBuilder;
 import com.rapiddweller.benerator.composite.ArrayElementBuilder;
 import com.rapiddweller.benerator.composite.ComponentBuilder;
 import com.rapiddweller.benerator.composite.ConditionalComponentBuilder;
+import com.rapiddweller.benerator.composite.GenerationStep;
+import com.rapiddweller.benerator.composite.PartModifier;
 import com.rapiddweller.benerator.composite.PlainEntityComponentBuilder;
 import com.rapiddweller.benerator.composite.SimplifyingSingleSourceArrayGenerator;
 import com.rapiddweller.benerator.distribution.DistributingGenerator;
@@ -42,8 +44,10 @@ import com.rapiddweller.benerator.distribution.sequence.ExpandSequence;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.primitive.ScriptGenerator;
+import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.wrapper.AsIntegerGeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
+import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.benerator.wrapper.SingleSourceArrayGenerator;
 import com.rapiddweller.benerator.wrapper.SingleSourceCollectionGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
@@ -56,6 +60,7 @@ import com.rapiddweller.model.data.AlternativeGroupDescriptor;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
+import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.IdDescriptor;
 import com.rapiddweller.model.data.PartDescriptor;
 import com.rapiddweller.model.data.ReferenceDescriptor;
@@ -72,6 +77,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Creates {@link ComponentBuilder}s.<br/><br/>
@@ -143,17 +149,22 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
   private static ComponentBuilder<?> createPartBuilder(
       ComponentDescriptor part, Uniqueness ownerUniqueness, boolean iterationMode, BeneratorContext context) {
     ComponentBuilder<?> result = null;
-    Generator<?> generator = createSingleInstanceGenerator(part, ownerUniqueness, context);
-    if (iterationMode) {
+    if (iterationMode && part.getTypeDescriptor() instanceof ComplexTypeDescriptor) {
+      result = createPartModifier(part, context);
+    } else {
+      Generator<?> generator = createSingleInstanceGenerator(part, ownerUniqueness, context);
       generator = createMultiplicityWrapper(part, generator, context);
       result = builderFromGenerator(generator, part, context);
-    } else {
-      generator = createMultiplicityWrapper(part, generator, context); // TODO remove
-      result = builderFromGenerator(generator, part, context); // TODO remove
-      // TODO implement result = partModifier(generator, part, context);
     }
-    LOGGER.debug("Created {}", generator);
+    LOGGER.debug("Created {}", result);
     return result;
+  }
+
+  private static PartModifier createPartModifier(ComponentDescriptor part, BeneratorContext context) {
+    ComplexTypeDescriptor typeDescriptor = (ComplexTypeDescriptor) part.getTypeDescriptor();
+    List<GenerationStep<Entity>> components =
+        ComplexTypeGeneratorFactory.createMutatingGeneratorComponents(typeDescriptor, Uniqueness.NONE, context);
+    return new PartModifier(part.getName(), components, typeDescriptor.getScope(), context);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
@@ -330,9 +341,14 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     if (container == null) {
       long defaultMinCount = (instance.getTypeDescriptor() instanceof ComplexTypeDescriptor ? 0 : 1);
       Generator<Long> longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, defaultMinCount, 1L, true, context);
-      NonNullGenerator<Integer> countGenerator = WrapperFactory.asNonNullGenerator(
-          new AsIntegerGeneratorWrapper<Number>((Generator) longCountGenerator));
-      return new SimplifyingSingleSourceArrayGenerator(generator, countGenerator);
+      if (longCountGenerator instanceof ConstantGenerator
+          && longCountGenerator.generate(new ProductWrapper<Long>()).unwrap() == 1L) {
+        return generator;
+      } else {
+        NonNullGenerator<Integer> countGenerator = WrapperFactory.asNonNullGenerator(
+            new AsIntegerGeneratorWrapper<Number>((Generator) longCountGenerator));
+        return new SimplifyingSingleSourceArrayGenerator(generator, countGenerator);
+      }
     }
     // handle container
     Generator<Long> longCountGenerator;

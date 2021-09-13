@@ -56,7 +56,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Task that creates one data set instance per run() invocation and sends it to the specified consumer.<br/><br/>
+ * Task that creates Entities and sends them to the specified consumer.<br/><br/>
  * Created: 01.02.2008 14:39:11
  * @author Volker Bergmann
  */
@@ -70,7 +70,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
 
   private BeneratorContext context;
   protected List<Statement> statements;
-  private List<ScopedLifeCycleHolder> scopeds;
+  private final List<ScopedLifeCycleHolder> scopeds;
   private Expression<Consumer> consumerExpr;
   private final AtomicBoolean initialized;
   private Consumer consumer;

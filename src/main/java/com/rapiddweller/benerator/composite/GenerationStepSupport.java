@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -44,65 +44,43 @@ import java.util.List;
 /**
  * Offers support for entity or array component generation with or without variable generation.<br/><br/>
  * Created: 13.01.2011 10:52:43
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.4
  */
-public class ComponentAndVariableSupport<E> implements ThreadAware, MessageHolder, Resettable, Closeable {
+public class GenerationStepSupport<E> implements ThreadAware, MessageHolder, Resettable, Closeable {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ComponentAndVariableSupport.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GenerationStepSupport.class);
   private static final Logger STATE_LOGGER = LoggerFactory.getLogger(BeneratorConstants.STATE_LOGGER);
 
   private final String instanceName;
-  private final List<GeneratorComponent<E>> components;
+  private final List<GenerationStep<E>> steps;
   private String message;
 
-  /**
-   * Instantiates a new Component and variable support.
-   *
-   * @param instanceName the instance name
-   * @param components   the components
-   * @param context      the context
-   */
-  public ComponentAndVariableSupport(String instanceName, List<GeneratorComponent<E>> components,
-                                     GeneratorContext context) {
+  public GenerationStepSupport(String instanceName, List<GenerationStep<E>> steps, GeneratorContext context) {
     this.instanceName = instanceName;
-    this.components = (components != null ? components : new ArrayList<>());
+    this.steps = (steps != null ? steps : new ArrayList<>());
   }
 
-  /**
-   * Init.
-   *
-   * @param context the context
-   */
   public void init(BeneratorContext context) {
-    for (GeneratorComponent<?> component : components) {
-      component.init(context);
+    for (GenerationStep<?> step : steps) {
+      step.init(context);
     }
   }
 
-  /**
-   * Apply boolean.
-   *
-   * @param target  the target
-   * @param context the context
-   * @return the boolean
-   */
   public boolean apply(E target, BeneratorContext context) {
     BeneratorContext subContext = context.createSubContext(instanceName);
     subContext.setCurrentProduct(new ProductWrapper<>(target));
-    for (GeneratorComponent<E> component : components) {
+    for (GenerationStep<E> step : steps) {
       try {
-        if (!component.execute(subContext)) {
-          message = "Component generator for '" + instanceName +
-              "' is not available any longer: " + component;
+        if (!step.execute(subContext)) {
+          message = "generation step for '" + instanceName + "' is not available any longer: " + step;
           STATE_LOGGER.debug(message);
           return false;
         }
       } catch (Exception e) {
         throw new RuntimeException("Failure in generation of '" + instanceName + "', " +
-            "Failed component: " + component, e);
+            "Failed step: " + step, e);
       }
     }
     LOGGER.debug("Generated {}", target);
@@ -112,15 +90,15 @@ public class ComponentAndVariableSupport<E> implements ThreadAware, MessageHolde
 
   @Override
   public void reset() {
-    for (GeneratorComponent<E> component : components) {
-      component.reset();
+    for (GenerationStep<E> step : steps) {
+      step.reset();
     }
   }
 
   @Override
   public void close() {
-    for (GeneratorComponent<E> component : components) {
-      component.close();
+    for (GenerationStep<E> step : steps) {
+      step.close();
     }
   }
 
@@ -134,12 +112,12 @@ public class ComponentAndVariableSupport<E> implements ThreadAware, MessageHolde
 
   @Override
   public boolean isParallelizable() {
-    return ThreadUtil.allParallelizable(components);
+    return ThreadUtil.allParallelizable(steps);
   }
 
   @Override
   public boolean isThreadSafe() {
-    return ThreadUtil.allThreadSafe(components);
+    return ThreadUtil.allThreadSafe(steps);
   }
 
 
@@ -147,7 +125,7 @@ public class ComponentAndVariableSupport<E> implements ThreadAware, MessageHolde
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + components;
+    return getClass().getSimpleName() + steps;
   }
 
 }

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -34,30 +34,17 @@ import com.rapiddweller.model.data.Entity;
 /**
  * Builds a plain (atomic) component that is supposed to have a name.<br/><br/>
  * Created at 09.05.2008 07:20:43
- *
  * @author Volker Bergmann
  * @since 0.5.4
  */
 public class PlainEntityComponentBuilder extends AbstractComponentBuilder<Entity> {
 
-  /**
-   * Instantiates a new Plain entity component builder.
-   *
-   * @param name   the name
-   * @param source the source
-   * @param scope  the scope
-   */
   public PlainEntityComponentBuilder(String name, Generator<?> source, String scope) {
-    super(source, new Mutator_(name), scope);
+    super(source, new EntityPropertyMutator(name), scope);
   }
 
-  /**
-   * Gets name.
-   *
-   * @return the name
-   */
   public String getName() {
-    return ((Mutator_) mutator).name;
+    return ((EntityPropertyMutator) mutator).name;
   }
 
   @Override
@@ -65,19 +52,12 @@ public class PlainEntityComponentBuilder extends AbstractComponentBuilder<Entity
     return getClass().getSimpleName() + '{' + getName() + ", " + source + '}';
   }
 
-  private static class Mutator_ implements Mutator {
 
-    /**
-     * The Name.
-     */
+  private static class EntityPropertyMutator implements Mutator {
+
     final String name;
 
-    /**
-     * Instantiates a new Mutator.
-     *
-     * @param name the name
-     */
-    public Mutator_(String name) {
+    public EntityPropertyMutator(String name) {
       this.name = name;
     }
 

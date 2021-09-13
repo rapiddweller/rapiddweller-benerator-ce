@@ -26,8 +26,8 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import com.rapiddweller.benerator.composite.ComponentAndVariableSupport;
-import com.rapiddweller.benerator.composite.GeneratorComponent;
+import com.rapiddweller.benerator.composite.GenerationStepSupport;
+import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
 import com.rapiddweller.common.ArrayBuilder;
@@ -65,7 +65,6 @@ import static java.io.StreamTokenizer.TT_WORD;
  * Cascades the 'transcode' operation to all entities configured to be related
  * to the currently transcoded entity.<br/><br/>
  * Created: 18.04.2011 07:14:34
- *
  * @author Volker Bergmann
  * @since 0.6.6
  */
@@ -78,22 +77,9 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
   private final CascadeParent parent;
   private final Reference ref;
   private Entity currentEntity;
-  /**
-   * The Type expression.
-   */
   final MutatingTypeExpression typeExpression;
-  /**
-   * The Type.
-   */
   ComplexTypeDescriptor type;
 
-  /**
-   * Instantiates a new Cascade statement.
-   *
-   * @param ref            the ref
-   * @param typeExpression the type expression
-   * @param parent         the parent
-   */
   public CascadeStatement(String ref, MutatingTypeExpression typeExpression, CascadeParent parent) {
     this.typeExpression = typeExpression;
     this.ref = Reference.parse(ref);
@@ -110,9 +96,9 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
     LOGGER.debug("Cascading transcode from " + parent.currentEntity().type() + " to " + tableName);
 
     // iterate rows
-    List<GeneratorComponent<Entity>> generatorComponents =
+    List<GenerationStep<Entity>> generatorComponents =
         ComplexTypeGeneratorFactory.createMutatingGeneratorComponents(type, Uniqueness.NONE, context);
-    ComponentAndVariableSupport<Entity> cavs = new ComponentAndVariableSupport<>(tableName,
+    GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(tableName,
         generatorComponents, context);
     cavs.init(context);
 
@@ -167,7 +153,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
 
   // implementation --------------------------------------------------------------------------------------------------
 
-  private void mutateAndTranscodeEntity(Entity sourceEntity, IdentityModel identity, ComponentAndVariableSupport<Entity> cavs,
+  private void mutateAndTranscodeEntity(Entity sourceEntity, IdentityModel identity, GenerationStepSupport<Entity> cavs,
                                         BeneratorContext context) {
     Object sourcePK = sourceEntity.idComponentValues();
     boolean mapNk = parent.needsNkMapping(sourceEntity.type());
@@ -233,9 +219,6 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
     this.currentEntity = null;
   }
 
-  /**
-   * The type Reference.
-   */
   public static class Reference {
 
     private final String refererTableName;
@@ -247,25 +230,11 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
     private DBTable refereeTable;
     private DBTable targetTable;
 
-    /**
-     * Instantiates a new Reference.
-     *
-     * @param refererTableName the referer table name
-     * @param columnNames      the column names
-     */
     public Reference(String refererTableName, String[] columnNames) {
       this.refererTableName = refererTableName;
       this.columnNames = columnNames;
     }
 
-    /**
-     * Gets target table name.
-     *
-     * @param parentTable the parent table
-     * @param db          the db
-     * @param context     the context
-     * @return the target table name
-     */
     public String getTargetTableName(String parentTable, DBSystem db, BeneratorContext context) {
       if (!parentTable.equals(refererTableName)) {
         return refererTableName;
@@ -275,14 +244,6 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
       }
     }
 
-    /**
-     * Resolve references data iterator.
-     *
-     * @param currentEntity the current entity
-     * @param db            the db
-     * @param context       the context
-     * @return the data iterator
-     */
     public DataIterator<Entity> resolveReferences(Entity currentEntity, DBSystem db, BeneratorContext context) {
       initIfNecessary(currentEntity.type(), db, context);
       DBTable parentTable = database.getTable(currentEntity.type());
@@ -307,15 +268,6 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
       this.targetTable = (parentTable.equalsIgnoreCase(refereeTable.getName()) ? refererTable : refereeTable);
     }
 
-    /**
-     * Resolve to many reference data iterator.
-     *
-     * @param fromEntity the from entity
-     * @param fk         the fk
-     * @param db         the db
-     * @param context    the context
-     * @return the data iterator
-     */
     DataIterator<Entity> resolveToManyReference(
         Entity fromEntity, DBForeignKeyConstraint fk, DBSystem db, BeneratorContext context) {
       StringBuilder selector = new StringBuilder();
@@ -331,15 +283,6 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
       return db.queryEntities(fk.getTable().getName(), selector.toString(), context).iterator();
     }
 
-    /**
-     * Resolve to one reference data iterator.
-     *
-     * @param fromEntity the from entity
-     * @param fk         the fk
-     * @param db         the db
-     * @param context    the context
-     * @return the data iterator
-     */
     DataIterator<Entity> resolveToOneReference(
         Entity fromEntity, DBForeignKeyConstraint fk, DBSystem db, BeneratorContext context) {
       StringBuilder selector = new StringBuilder();
@@ -355,12 +298,6 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
       return db.queryEntities(fk.getRefereeTable().getName(), selector.toString(), context).iterator();
     }
 
-    /**
-     * Parse reference.
-     *
-     * @param refSpec the ref spec
-     * @return the reference
-     */
     @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     static Reference parse(String refSpec) {
       StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(refSpec));

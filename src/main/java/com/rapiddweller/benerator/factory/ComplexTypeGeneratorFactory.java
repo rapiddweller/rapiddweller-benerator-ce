@@ -31,9 +31,9 @@ import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.TypedEntitySource;
 import com.rapiddweller.benerator.composite.BlankEntityGenerator;
 import com.rapiddweller.benerator.composite.ComponentTypeConverter;
-import com.rapiddweller.benerator.composite.GeneratorComponent;
+import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.composite.SimpleTypeEntityGenerator;
-import com.rapiddweller.benerator.composite.SourceAwareGenerator;
+import com.rapiddweller.benerator.composite.CompositeEntityGenerator;
 import com.rapiddweller.benerator.distribution.DistributingGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.BeneratorContext;
@@ -198,11 +198,11 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
   }
 
   @SuppressWarnings("unchecked")
-  public static Generator<?> createMutatingEntityGenerator(String name, ComplexTypeDescriptor descriptor,
+  public static Generator<Entity> createMutatingEntityGenerator(String name, ComplexTypeDescriptor descriptor,
                                                            Uniqueness ownerUniqueness, BeneratorContext context, Generator<?> source) {
-    List<GeneratorComponent<Entity>> generatorComponent =
+    List<GenerationStep<Entity>> generatorComponent =
         createMutatingGeneratorComponents(descriptor, ownerUniqueness, context);
-    return new SourceAwareGenerator<>(name, (Generator<Entity>) source, generatorComponent, context);
+    return new CompositeEntityGenerator(name, (Generator<Entity>) source, generatorComponent, context);
   }
 
   // private helpers -------------------------------------------------------------------------------------------------
@@ -301,15 +301,15 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
   }
 
   @SuppressWarnings("unchecked")
-  public static List<GeneratorComponent<Entity>> createMutatingGeneratorComponents(ComplexTypeDescriptor descriptor,
-                                                                                   Uniqueness ownerUniqueness, BeneratorContext context) {
-    List<GeneratorComponent<Entity>> generatorComponents = new ArrayList<>();
+  public static List<GenerationStep<Entity>> createMutatingGeneratorComponents(ComplexTypeDescriptor descriptor,
+                                                                               Uniqueness ownerUniqueness, BeneratorContext context) {
+    List<GenerationStep<Entity>> generatorComponents = new ArrayList<>();
     for (InstanceDescriptor part : descriptor.getDeclaredParts()) {
       if (!(part instanceof ComponentDescriptor) ||
           part.getMode() != Mode.ignored && !ComplexTypeDescriptor.__SIMPLE_CONTENT.equals(part.getName())) {
         try {
-          GeneratorComponent<Entity> generatorComponent =
-              (GeneratorComponent<Entity>) GeneratorComponentFactory.createGeneratorComponent(part, ownerUniqueness, false, context);
+          GenerationStep<Entity> generatorComponent =
+              (GenerationStep<Entity>) GenerationStepFactory.createGeneratorComponent(part, ownerUniqueness, false, context);
           generatorComponents.add(generatorComponent);
         } catch (Exception e) {
           throw new ConfigurationError("Error creating component builder for " + part, e);

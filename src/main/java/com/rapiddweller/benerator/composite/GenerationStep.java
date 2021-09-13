@@ -34,12 +34,11 @@ import com.rapiddweller.common.ThreadAware;
 /**
  * Common parent interface for components that are used in composite data generation.<br/><br/>
  * Created: 07.08.2011 16:26:44
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.7.0
  */
-public interface GeneratorComponent<E> extends Statement, ScopedLifeCycleHolder, MessageHolder, ThreadAware {
+public interface GenerationStep<E> extends Statement, ScopedLifeCycleHolder, MessageHolder, ThreadAware {
   @Override
   void close();
 }
