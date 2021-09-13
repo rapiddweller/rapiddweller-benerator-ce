@@ -28,9 +28,16 @@ package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Consumer;
+import com.rapiddweller.benerator.RandomProvider;
+import com.rapiddweller.benerator.distribution.Distribution;
+import com.rapiddweller.benerator.engine.parser.DefaultGenerationInterceptor;
+import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
 import com.rapiddweller.benerator.factory.SimpleTypeGeneratorFactory;
+import com.rapiddweller.benerator.primitive.DefaultVarLengthStringGenerator;
+import com.rapiddweller.benerator.primitive.VarLengthStringGenerator;
+import com.rapiddweller.benerator.util.DefaultRandomProvider;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.Validator;
@@ -38,18 +45,34 @@ import com.rapiddweller.common.context.CaseInsensitiveContext;
 import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.format.text.DelocalizingConverter;
 
+import java.util.Set;
+
 /**
  * Default implementation of the abstract {@link BeneratorFactory} class.<br/><br/>
  * Created: 08.09.2010 15:45:25
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class DefaultBeneratorFactory extends BeneratorFactory {
 
+  private final RandomProvider randomProvider;
+
+  public DefaultBeneratorFactory() {
+    this(new DefaultRandomProvider());
+  }
+
+  public DefaultBeneratorFactory(RandomProvider randomProvider) {
+    this.randomProvider = randomProvider;
+  }
+
   @Override
   public BeneratorContext createContext(String contextUri) {
     return new DefaultBeneratorContext();
+  }
+
+  @Override
+  public GenerationInterceptor getGenerationInterceptor() {
+    return new DefaultGenerationInterceptor();
   }
 
   @Override
@@ -94,6 +117,29 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
   @Override
   public Converter<String, String> createDelocalizingConverter() {
     return new DelocalizingConverter();
+  }
+
+  @Override
+  public VarLengthStringGenerator createVarLengthStringGenerator(
+      String charSetPattern, int minLength, int maxLength) {
+    return new DefaultVarLengthStringGenerator(charSetPattern, minLength, maxLength, 1);
+  }
+
+  @Override
+  public VarLengthStringGenerator createVarLengthStringGenerator(
+      String charSetPattern, int minLength, int maxLength, int lengthGranularity, Distribution lengthDistribution) {
+    return new DefaultVarLengthStringGenerator(charSetPattern, minLength, maxLength, lengthGranularity, lengthDistribution);
+  }
+
+  @Override
+  public VarLengthStringGenerator createVarLengthStringGenerator(
+      Set<Character> charSet, int minLength, int maxLength, int lengthGranularity, Distribution lengthDistribution) {
+    return new DefaultVarLengthStringGenerator(charSet, minLength, maxLength, lengthGranularity, lengthDistribution);
+  }
+
+  @Override
+  public RandomProvider getRandomProvider() {
+    return randomProvider;
   }
 
   @Override

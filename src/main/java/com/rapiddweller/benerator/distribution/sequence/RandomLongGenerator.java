@@ -26,57 +26,36 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.PropertyMessage;
+import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
-import com.rapiddweller.benerator.util.RandomUtil;
 
 /**
- * Long Generator that implements a 'random' Long Sequence.<br/>
- * <br/>
+ * Long Generator that implements a 'random' Long Sequence.<br/><br/>
  * Created: 03.09.2006 09:53:01
- *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public class RandomLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
-  /**
-   * The constant DEFAULT_MIN.
-   */
   public static final long DEFAULT_MIN = Long.MIN_VALUE / 2 + 1;
-  /**
-   * The constant DEFAULT_MAX.
-   */
   public static final long DEFAULT_MAX = Long.MAX_VALUE / 2 - 1;
   private static final long DEFAULT_GRANULARITY = 1;
+  private static final RandomProvider random = BeneratorFactory.getInstance().getRandomProvider();
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Random long generator.
-   */
   public RandomLongGenerator() {
     this(DEFAULT_MIN, DEFAULT_MAX);
   }
 
-  /**
-   * Instantiates a new Random long generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public RandomLongGenerator(long min, Long max) {
     this(min, max, DEFAULT_GRANULARITY);
   }
 
-  /**
-   * Instantiates a new Random long generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   */
   public RandomLongGenerator(long min, Long max, long granularity) {
     super(Long.class, min, max, granularity);
   }
@@ -103,20 +82,12 @@ public class RandomLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
   // public convenience method ---------------------------------------------------------------------------------------
 
-  /**
-   * Generate long.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   * @return the long
-   */
   public static long generate(long min, long max, long granularity) {
     if (min == max) {
       return min;
     }
     long range = (max - min) / granularity;
-    return min + RandomUtil.randomLong(0, range) * granularity;
+    return min + random.randomLong(0, range) * granularity;
   }
 
 }

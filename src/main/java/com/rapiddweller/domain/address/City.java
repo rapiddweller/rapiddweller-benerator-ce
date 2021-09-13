@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -26,7 +26,10 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.benerator.primitive.RandomVarLengthStringGenerator;
+import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.util.WrapperProvider;
+import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Escalator;
 import com.rapiddweller.common.LoggerEscalator;
@@ -38,18 +41,17 @@ import java.util.Locale;
 /**
  * Represents a city.<br/><br/>
  * Created: 11.06.2006 08:19:23
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class City {
 
   private static final Escalator escalator = new LoggerEscalator();
-  private static final RandomVarLengthStringGenerator localNumberGenerator;
+  private static final Generator<String> localNumberGenerator;
 
   static {
-    localNumberGenerator =
-        new RandomVarLengthStringGenerator("\\d", 7, 8, 1);
+    localNumberGenerator = BeneratorFactory.getInstance()
+        .createVarLengthStringGenerator("[0-9]", 7, 8);
     localNumberGenerator.init(null);
   }
 
@@ -60,16 +62,8 @@ public class City {
   private State state;
   private Locale language;
   private int population;
+  private final WrapperProvider<String> swp = new WrapperProvider<>();
 
-  /**
-   * Instantiates a new City.
-   *
-   * @param state       the state
-   * @param name        the name
-   * @param addition    the addition
-   * @param postalCodes the postal codes
-   * @param areaCode    the area code
-   */
   public City(State state, String name, String addition, String[] postalCodes,
               String areaCode) {
     if (areaCode == null) {
@@ -82,57 +76,26 @@ public class City {
     this.areaCode = areaCode;
   }
 
-  /**
-   * Gets name extension.
-   *
-   * @return the name extension
-   */
   public String getNameExtension() {
     return nameExtension;
   }
 
-  /**
-   * Sets name extension.
-   *
-   * @param nameExtension the name extension
-   */
   public void setNameExtension(String nameExtension) {
     this.nameExtension = nameExtension;
   }
 
-  /**
-   * Get postal codes string [ ].
-   *
-   * @return the string [ ]
-   */
   public String[] getPostalCodes() {
     return postalCodes;
   }
 
-  /**
-   * Sets postal codes.
-   *
-   * @param postalCodes the postal codes
-   */
   public void setPostalCodes(String[] postalCodes) {
     this.postalCodes = postalCodes;
   }
 
-  /**
-   * Add postal code.
-   *
-   * @param postalCode the postal code
-   */
   public void addPostalCode(String postalCode) {
     postalCodes = ArrayUtil.append(postalCode, postalCodes);
   }
 
-  /**
-   * Get zip codes string [ ].
-   *
-   * @return the string [ ]
-   * @deprecated use property postalCodes
-   */
   @Deprecated
   public String[] getZipCodes() {
     escalator.escalate(
@@ -141,12 +104,6 @@ public class City {
     return getPostalCodes();
   }
 
-  /**
-   * Sets zip codes.
-   *
-   * @param zipCodes the zip codes
-   * @deprecated use property postalCodes
-   */
   @Deprecated
   public void setZipCodes(String[] zipCodes) {
     escalator.escalate(
@@ -155,12 +112,6 @@ public class City {
     this.postalCodes = zipCodes;
   }
 
-  /**
-   * Add zip code.
-   *
-   * @param zipCode the zip code
-   * @deprecated use property postalCodes
-   */
   @Deprecated
   public void addZipCode(String zipCode) {
     escalator.escalate(
@@ -169,65 +120,30 @@ public class City {
     postalCodes = ArrayUtil.append(zipCode, postalCodes);
   }
 
-  /**
-   * Gets area code.
-   *
-   * @return the area code
-   */
   public String getAreaCode() {
     return areaCode;
   }
 
-  /**
-   * Sets area code.
-   *
-   * @param phoneCode the phone code
-   */
   public void setAreaCode(String phoneCode) {
     this.areaCode = phoneCode;
   }
 
-  /**
-   * Gets state.
-   *
-   * @return the state
-   */
   public State getState() {
     return state;
   }
 
-  /**
-   * Sets state.
-   *
-   * @param state the state
-   */
   public void setState(State state) {
     this.state = state;
   }
 
-  /**
-   * Gets country.
-   *
-   * @return the country
-   */
   public Country getCountry() {
     return (state != null ? state.getCountry() : null);
   }
 
-  /**
-   * Gets name.
-   *
-   * @return the name
-   */
   public String getName() {
     return name;
   }
 
-  /**
-   * Gets language.
-   *
-   * @return the language
-   */
   public Locale getLanguage() {
     if (language != null) {
       return language;
@@ -239,50 +155,30 @@ public class City {
     return (country != null ? country.getDefaultLanguageLocale() : null);
   }
 
-  /**
-   * Sets language.
-   *
-   * @param language the language
-   */
   public void setLanguage(Locale language) {
     this.language = language;
   }
 
-  /**
-   * Gets population.
-   *
-   * @return the population
-   */
   public int getPopulation() {
     return population;
   }
 
-  /**
-   * Sets population.
-   *
-   * @param population the population
-   */
   public void setPopulation(int population) {
     this.population = population;
   }
 
-  /**
-   * Generate mobile number phone number.
-   *
-   * @return the phone number
-   */
   public PhoneNumber generateMobileNumber() {
     return getCountry().generateMobileNumber(this);
   }
 
-  /**
-   * Generate landline number phone number.
-   *
-   * @return the phone number
-   */
   public PhoneNumber generateLandlineNumber() {
     return new PhoneNumber(getCountry().getPhoneCode(), areaCode,
-        localNumberGenerator.generate());
+        generateString(localNumberGenerator));
+  }
+
+  private String generateString(Generator<String> generator) {
+    ProductWrapper<String> wrapper = generator.generate(swp.get());
+    return (wrapper != null ? wrapper.unwrap() : null);
   }
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------

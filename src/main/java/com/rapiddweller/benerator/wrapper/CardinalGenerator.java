@@ -34,81 +34,36 @@ import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.util.WrapperProvider;
 
 /**
- * Combines a a random number a source generator's products into a collection.<br/>
- * <br/>
+ * Combines a random number a source generator's products into a collection.<br/><br/>
  * Created: 06.03.2008 16:08:22
- *
  * @param <S> the type parameter
  * @param <P> the type parameter
  * @author Volker Bergmann
  */
 public abstract class CardinalGenerator<S, P> extends GeneratorWrapper<S, P> {
 
-  /**
-   * Generator that determines the cardinality of generation
-   */
+  /** Generator that determines the cardinality of generation. */
   protected NonNullGenerator<Integer> cardinalGenerator;
-  /**
-   * The Resetting cardinal.
-   */
   final boolean resettingCardinal;
 
-  /**
-   * The Min cardinal.
-   */
   int minCardinal;
-  /**
-   * The Max cardinal.
-   */
   int maxCardinal;
-  /**
-   * The Cardinal granularity.
-   */
   int cardinalGranularity;
-  /**
-   * The Cardinal distribution.
-   */
   Distribution cardinalDistribution;
-  /**
-   * The Cardinal wrapper provider.
-   */
   final WrapperProvider<Integer> cardinalWrapperProvider = new WrapperProvider<>();
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Cardinal generator.
-   *
-   * @param source            the source
-   * @param resettingCardinal the resetting cardinal
-   * @param cardinalGenerator the cardinal generator
-   */
   public CardinalGenerator(Generator<S> source, boolean resettingCardinal, NonNullGenerator<Integer> cardinalGenerator) {
     super(source);
     this.cardinalGenerator = cardinalGenerator;
     this.resettingCardinal = resettingCardinal;
   }
 
-  /**
-   * Instantiates a new Cardinal generator.
-   *
-   * @param source                     the source
-   * @param resettingCardinalGenerator the resetting cardinal generator
-   */
   public CardinalGenerator(Generator<S> source, boolean resettingCardinalGenerator) {
     this(source, resettingCardinalGenerator, 0, 30, 1, SequenceManager.RANDOM_SEQUENCE);
   }
 
-  /**
-   * Instantiates a new Cardinal generator.
-   *
-   * @param source                     the source
-   * @param resettingCardinalGenerator the resetting cardinal generator
-   * @param minCardinal                the min cardinal
-   * @param maxCardinal                the max cardinal
-   * @param cardinalGranularity        the cardinal granularity
-   * @param cardinalDistribution       the cardinal distribution
-   */
   public CardinalGenerator(Generator<S> source, boolean resettingCardinalGenerator,
                            int minCardinal, int maxCardinal, int cardinalGranularity, Distribution cardinalDistribution) {
     super(source);
@@ -121,9 +76,7 @@ public abstract class CardinalGenerator<S, P> extends GeneratorWrapper<S, P> {
 
   // Generator interface ---------------------------------------------------------------------------------------------
 
-  /**
-   * ensures consistency of the state
-   */
+  /** ensures consistency of the state */
   @Override
   public void init(GeneratorContext context) {
     if (cardinalGenerator == null) {
@@ -144,11 +97,6 @@ public abstract class CardinalGenerator<S, P> extends GeneratorWrapper<S, P> {
 
   // helpers ---------------------------------------------------------------------------------------------------------
 
-  /**
-   * Generate cardinal integer.
-   *
-   * @return the integer
-   */
   protected Integer generateCardinal() {
     ProductWrapper<Integer> wrapper = generateCardinalWrapper();
     if (wrapper == null) {
@@ -157,11 +105,6 @@ public abstract class CardinalGenerator<S, P> extends GeneratorWrapper<S, P> {
     return wrapper.unwrap();
   }
 
-  /**
-   * Generate cardinal wrapper product wrapper.
-   *
-   * @return the product wrapper
-   */
   protected ProductWrapper<Integer> generateCardinalWrapper() {
     return cardinalGenerator.generate(cardinalWrapperProvider.get());
   }

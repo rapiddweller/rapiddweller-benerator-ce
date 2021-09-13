@@ -32,20 +32,16 @@ import org.junit.Test;
 import static com.rapiddweller.benerator.util.GeneratorUtil.init;
 
 /**
- * Tests the {@link RandomVarLengthStringGenerator}.<br/><br/>
+ * Tests the {@link DefaultVarLengthStringGenerator}.<br/><br/>
  * Created: 01.08.2011 08:28:47
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
-public class RandomVarLengthStringGeneratorTest extends GeneratorTest {
+public class DefaultVarLengthStringGeneratorTest extends GeneratorTest {
 
-  /**
-   * Test.
-   */
   @Test
-  public void test() {
-    RandomVarLengthStringGenerator generator = new RandomVarLengthStringGenerator("x", 3);
+  public void test_xxx() {
+    DefaultVarLengthStringGenerator generator = new DefaultVarLengthStringGenerator("x", 3);
     init(generator);
     expectGeneratedSequence(generator, "xxx", "xxx").withContinuedAvailability();
     close(generator);

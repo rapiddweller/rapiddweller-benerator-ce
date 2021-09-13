@@ -26,9 +26,11 @@
 
 package com.rapiddweller.domain.finance;
 
+import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.NonNullGenerator;
-import com.rapiddweller.benerator.primitive.RandomVarLengthStringGenerator;
+import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.LocaleUtil;
@@ -38,7 +40,6 @@ import com.rapiddweller.domain.address.Country;
 /**
  * Generates German {@link BankAccount}s with low validity requirements.<br/><br/>
  * Created at 24.06.2008 08:36:32
- *
  * @author Volker Bergmann
  * @since 0.5.4
  */
@@ -47,18 +48,17 @@ public class BankAccountGenerator extends CompositeGenerator<BankAccount>
 
   private final String countryCode;
   private final BankGenerator bankGenerator;
-  private final RandomVarLengthStringGenerator accountNumberGenerator;
+  private final Generator<String> accountNumberGenerator;
+  private final WrapperProvider<String> wp;
 
-  /**
-   * Instantiates a new Bank account generator.
-   */
   public BankAccountGenerator() {
     super(BankAccount.class);
     LocaleUtil.getFallbackLocale();
     this.countryCode = Country.getDefault().getIsoCode();
     this.bankGenerator = registerComponent(new BankGenerator());
-    this.accountNumberGenerator = registerComponent(
-        new RandomVarLengthStringGenerator("\\d", 10));
+    this.accountNumberGenerator = registerComponent(BeneratorFactory.getInstance()
+        .createVarLengthStringGenerator("[0-9]", 10, 10));
+    this.wp = new WrapperProvider<>();
   }
 
   @Override
@@ -77,7 +77,7 @@ public class BankAccountGenerator extends CompositeGenerator<BankAccount>
   @Override
   public BankAccount generate() {
     Bank bank = bankGenerator.generate();
-    String accountNumber = accountNumberGenerator.generate();
+    String accountNumber = accountNumberGenerator.generate(wp.get()).unwrap();
     String iban = createIban(bank, accountNumber);
     return new BankAccount(bank, accountNumber, iban);
   }

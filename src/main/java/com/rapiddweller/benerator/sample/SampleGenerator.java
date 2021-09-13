@@ -26,12 +26,13 @@
 
 package com.rapiddweller.benerator.sample;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.NonNullGenerator;
+import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
-import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
@@ -59,6 +60,8 @@ public class SampleGenerator<E> extends AbstractSampleGenerator<E> {
 
   /** Generates an index based on the {@link #distribution}. */
   private NonNullGenerator<Integer> indexGenerator;
+
+  private static final RandomProvider random = BeneratorFactory.getInstance().getRandomProvider();
 
 
   // constructors ----------------------------------------------------------------------------------------------------
@@ -181,12 +184,12 @@ public class SampleGenerator<E> extends AbstractSampleGenerator<E> {
   /** Convenience utility method that chooses one sample out of a list with uniform random distribution. */
   @SafeVarargs
   public static <T> T generate(T... samples) {
-    return samples[RandomUtil.randomInt(0, samples.length - 1)];
+    return samples[random.randomInt(samples.length)];
   }
 
   /** Convenience utility method that chooses one sample out of a list with uniform random distribution. */
   public static <T> T generate(List<T> samples) {
-    return samples.get(RandomUtil.randomInt(0, samples.size() - 1));
+    return samples.get(random.randomInt(samples.size()));
   }
 
 

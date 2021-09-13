@@ -134,7 +134,7 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     Generator<T> generator = generatorFactory.createNumberGenerator(type, min, true, max, true, granularity, sequence, Uniqueness.NONE);
     generator.init(context);
     ProductWrapper<T> wrapper = new ProductWrapper<>();
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 1000; i++) {
       T n = generator.generate(wrapper).unwrap();
       assertNotNull("Generator not available: " + generator, n);
       if (min != null) {

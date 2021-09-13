@@ -26,7 +26,8 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
-import com.rapiddweller.benerator.util.RandomUtil;
+import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.RandomProvider;
 
 import java.util.ArrayList;
 
@@ -39,10 +40,8 @@ import java.util.ArrayList;
  * it and replace the internal value with the new feed value. When the source is no longer
  * available, a call to randomElement() will return the last value from the buffer and remove
  * it (avoiding expensive shift operations that would result from choosing value from a random
- * position).<br/>
- * <br/>
+ * position).<br/><br/>
  * Created: 10.12.2009 15:10:33
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -50,63 +49,34 @@ import java.util.ArrayList;
 class ValueBucket<E> {
 
   private final ArrayList<E> buffer;
+  private final RandomProvider random;
 
-  /**
-   * Instantiates a new Value bucket.
-   *
-   * @param capacity the capacity
-   */
   public ValueBucket(int capacity) {
     buffer = new ArrayList<>();
+    this.random = BeneratorFactory.getInstance().getRandomProvider();
   }
 
   // interface -------------------------------------------------------------------------------------------------------
 
-  /**
-   * Is empty boolean.
-   *
-   * @return the boolean
-   */
   public boolean isEmpty() {
     return buffer.isEmpty();
   }
 
-  /**
-   * Add.
-   *
-   * @param feed the feed
-   */
   public void add(E feed) {
     buffer.add(feed);
   }
 
-  /**
-   * Gets random element.
-   *
-   * @return the random element
-   */
   public synchronized E getRandomElement() {
-    return buffer.get(RandomUtil.randomIndex(buffer));
+    return buffer.get(random.randomIndex(buffer));
   }
 
-  /**
-   * Gets and replace random element.
-   *
-   * @param feed the feed
-   * @return the and replace random element
-   */
   public synchronized E getAndReplaceRandomElement(E feed) {
-    int index = RandomUtil.randomIndex(buffer);
+    int index = random.randomIndex(buffer);
     E result = buffer.get(index);
     buffer.set(index, feed);
     return result;
   }
 
-  /**
-   * Gets and remove random element.
-   *
-   * @return the and remove random element
-   */
   public synchronized E getAndRemoveRandomElement() {
     int lastIndex = buffer.size() - 1;
     E result = buffer.get(lastIndex);
@@ -114,11 +84,6 @@ class ValueBucket<E> {
     return result;
   }
 
-  /**
-   * Size int.
-   *
-   * @return the int
-   */
   public int size() {
     return buffer.size();
   }

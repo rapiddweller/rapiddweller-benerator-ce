@@ -26,10 +26,11 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
+import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.engine.BeneratorOpts;
-import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
@@ -51,144 +52,71 @@ import java.util.List;
  * to reduce the used bucket size without shifting elements. If a bucket is empty, it is removed.<br/>
  * The buckets were introduced for quickly freeing RAM after usage and for allowing a more erratic
  * behavior in the phase when no more source data is available and elements are taken from bucket end
- * to beginning.
- * <br/>
- * <br/>
+ * to beginning.<br/><br/>
  * Created: 10.12.2009 11:32:35
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class ExpandGeneratorProxy<E> extends GeneratorProxy<E> {
 
-  /**
-   * The constant MIN_BUCKET_SIZE.
-   */
   public static final int MIN_BUCKET_SIZE = 10;
-  /**
-   * The constant DEFAULT_DUPLICATION_QUOTA.
-   */
   public static final float DEFAULT_DUPLICATION_QUOTA = 0;
 
   private float duplicationQuota;
   private int cacheSize;
   private int bucketSize;
   private List<ValueBucket<E>> buckets;
+  private RandomProvider random;
 
   // construction ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Expand generator proxy.
-   *
-   * @param source           the source
-   * @param duplicationQuota the duplication quota
-   */
   public ExpandGeneratorProxy(Generator<E> source, float duplicationQuota) {
     this(source, duplicationQuota, BeneratorOpts.getCacheSize());
   }
 
-  /**
-   * Instantiates a new Expand generator proxy.
-   *
-   * @param source           the source
-   * @param duplicationQuota the duplication quota
-   * @param cacheSize        the cache size
-   */
   public ExpandGeneratorProxy(Generator<E> source, float duplicationQuota, int cacheSize) {
     this(source, duplicationQuota, BeneratorOpts.getCacheSize(), defaultBucketSize(cacheSize));
   }
 
-  /**
-   * Instantiates a new Expand generator proxy.
-   *
-   * @param source           the source
-   * @param duplicationQuota the duplication quota
-   * @param cacheSize        the cache size
-   * @param bucketSize       the bucket size
-   */
   public ExpandGeneratorProxy(Generator<E> source, float duplicationQuota, int cacheSize, int bucketSize) {
     super(source);
     this.duplicationQuota = duplicationQuota;
     this.cacheSize = cacheSize;
     this.bucketSize = bucketSize;
+    this.random = BeneratorFactory.getInstance().getRandomProvider();
   }
 
-  /**
-   * Unique proxy expand generator proxy.
-   *
-   * @param <T>        the type parameter
-   * @param source     the source
-   * @param cacheSize  the cache size
-   * @param bucketSize the bucket size
-   * @return the expand generator proxy
-   */
   public static <T> ExpandGeneratorProxy<T> uniqueProxy(Generator<T> source, int cacheSize, int bucketSize) {
     return new ExpandGeneratorProxy<>(source, 0, cacheSize, bucketSize);
   }
 
-  /**
-   * Default bucket size int.
-   *
-   * @param cacheSize the cache size
-   * @return the int
-   */
   public static int defaultBucketSize(int cacheSize) {
     return Math.max((int) Math.sqrt(cacheSize), MIN_BUCKET_SIZE);
   }
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets cache size.
-   *
-   * @return the cache size
-   */
   public int getCacheSize() {
     return cacheSize;
   }
 
-  /**
-   * Sets cache size.
-   *
-   * @param cacheSize the cache size
-   */
   public void setCacheSize(int cacheSize) {
     this.cacheSize = cacheSize;
   }
 
-  /**
-   * Gets duplication quota.
-   *
-   * @return the duplication quota
-   */
   public float getDuplicationQuota() {
     return duplicationQuota;
   }
 
-  /**
-   * Sets duplication quota.
-   *
-   * @param duplicationQuota the duplication quota
-   */
   public void setDuplicationQuota(float duplicationQuota) {
     this.duplicationQuota = duplicationQuota;
   }
 
-  /**
-   * Gets bucket size.
-   *
-   * @return the bucket size
-   */
   public int getBucketSize() {
     return bucketSize;
   }
 
-  /**
-   * Sets bucket size.
-   *
-   * @param bucketSize the bucket size
-   */
   public void setBucketSize(int bucketSize) {
     this.bucketSize = bucketSize;
   }
@@ -207,9 +135,9 @@ public class ExpandGeneratorProxy<E> extends GeneratorProxy<E> {
     if (buckets.isEmpty()) {
       return null;
     }
-    int bucketIndex = RandomUtil.randomIndex(buckets);
+    int bucketIndex = random.randomIndex(buckets);
     ValueBucket<E> bucket = buckets.get(bucketIndex);
-    if (duplicationQuota > 0 && RandomUtil.randomProbability() < duplicationQuota) {
+    if (duplicationQuota > 0 && random.randomProbability() < duplicationQuota) {
       return wrapper.wrap(bucket.getRandomElement());
     } else {
       ProductWrapper<E> feed = super.generate(wrapper);
@@ -234,9 +162,6 @@ public class ExpandGeneratorProxy<E> extends GeneratorProxy<E> {
 
   // helpers ---------------------------------------------------------------------------------------------------------
 
-  /**
-   * Print state.
-   */
   public void printState() {
     for (ValueBucket<E> bucket : buckets) {
       System.out.println(bucket);
@@ -252,7 +177,7 @@ public class ExpandGeneratorProxy<E> extends GeneratorProxy<E> {
     }
     ProductWrapper<E> wrapper;
     for (int i = 0; i < cacheSize && (wrapper = generateFromSource()) != null; i++) {
-      int bucketIndex = RandomUtil.randomIndex(infantry);
+      int bucketIndex = random.randomIndex(infantry);
       ValueBucket<E> bucket = infantry.get(bucketIndex);
       E feed = wrapper.unwrap();
       bucket.add(feed);

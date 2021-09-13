@@ -26,10 +26,11 @@
 
 package com.rapiddweller.benerator.dataset;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
+import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.WeightedGenerator;
-import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
@@ -54,37 +55,15 @@ import java.util.Set;
  */
 public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> implements DatasetBasedGenerator<E> {
 
-  /**
-   * The Supported datasets.
-   */
   protected final Set<String> supportedDatasets;
-  /**
-   * The Fallback.
-   */
   protected final boolean fallback;
-  /**
-   * The Nesting.
-   */
   protected String nesting;
-  /**
-   * The Dataset name.
-   */
   protected String datasetName;
-  /**
-   * The Total weight.
-   */
   protected double totalWeight;
+  protected RandomProvider random;
 
   // constructor -----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Abstract dataset generator.
-   *
-   * @param generatedType the generated type
-   * @param nesting       the nesting
-   * @param datasetName   the dataset name
-   * @param fallback      the fallback
-   */
   public AbstractDatasetGenerator(Class<E> generatedType, String nesting, String datasetName, boolean fallback) {
     super(generatedType);
     this.nesting = nesting;
@@ -93,14 +72,9 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
     this.supportedDatasets = new HashSet<>();
     this.supportedDatasets.add(datasetName);
     this.totalWeight = 0;
+    this.random = BeneratorFactory.getInstance().getRandomProvider();
   }
 
-  /**
-   * Supports dataset boolean.
-   *
-   * @param datasetName the dataset name
-   * @return the boolean
-   */
   public boolean supportsDataset(String datasetName) {
     return supportedDatasets.contains(datasetName);
   }
@@ -112,11 +86,6 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
     return nesting;
   }
 
-  /**
-   * Sets nesting.
-   *
-   * @param nesting the nesting
-   */
   public void setNesting(String nesting) {
     this.nesting = nesting;
   }
@@ -126,22 +95,12 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
     return datasetName;
   }
 
-  /**
-   * Sets dataset.
-   *
-   * @param datasetName the dataset name
-   */
   public void setDataset(String datasetName) {
     this.datasetName = datasetName;
     this.supportedDatasets.clear();
     this.supportedDatasets.add(datasetName);
   }
 
-  /**
-   * Gets weight.
-   *
-   * @return the weight
-   */
   public double getWeight() {
     return totalWeight;
   }
@@ -164,15 +123,10 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
     }
   }
 
-  /**
-   * Random dataset string.
-   *
-   * @return the string
-   */
   public String randomDataset() {
     if (getSource() instanceof CompositeDatasetGenerator) {
       Dataset dataset = DatasetUtil.getDataset(nesting, datasetName);
-      return RandomUtil.randomElement(dataset.getSubSets()).getName();
+      return random.randomElement(dataset.getSubSets()).getName();
     } else {
       return datasetName;
     }
@@ -181,14 +135,6 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
 
   // helper methods --------------------------------------------------------------------------------------------------
 
-  /**
-   * Create dataset generator weighted dataset generator.
-   *
-   * @param dataset  the dataset
-   * @param required the required
-   * @param fallback the fallback
-   * @return the weighted dataset generator
-   */
   protected WeightedDatasetGenerator<E> createDatasetGenerator(Dataset dataset, boolean required, boolean fallback) {
     WeightedDatasetGenerator<E> generator = null;
     if (!isAtomic(dataset)) {
@@ -203,23 +149,10 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
     return generator;
   }
 
-  /**
-   * Is atomic boolean.
-   *
-   * @param dataset the dataset
-   * @return the boolean
-   */
   protected boolean isAtomic(Dataset dataset) {
     return dataset.isAtomic();
   }
 
-  /**
-   * Create composite dataset generator composite dataset generator.
-   *
-   * @param dataset  the dataset
-   * @param fallback the fallback
-   * @return the composite dataset generator
-   */
   protected CompositeDatasetGenerator<E> createCompositeDatasetGenerator(Dataset dataset, boolean fallback) {
     CompositeDatasetGenerator<E> generator = new CompositeDatasetGenerator<>(nesting, dataset.getName(), fallback);
     for (Dataset subSet : dataset.getSubSets()) {
@@ -235,13 +168,6 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
     }
   }
 
-  /**
-   * Create atomic dataset generator atomic dataset generator.
-   *
-   * @param dataset  the dataset
-   * @param required the required
-   * @return the atomic dataset generator
-   */
   protected AtomicDatasetGenerator<E> createAtomicDatasetGenerator(Dataset dataset, boolean required) {
     WeightedGenerator<E> generator = createGeneratorForAtomicDataset(dataset);
     if (generator != null) {
@@ -255,12 +181,6 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
     }
   }
 
-  /**
-   * Create generator for atomic dataset weighted generator.
-   *
-   * @param dataset the dataset
-   * @return the weighted generator
-   */
   protected abstract WeightedGenerator<E> createGeneratorForAtomicDataset(Dataset dataset);
 
   @Override

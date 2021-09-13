@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -26,6 +26,8 @@
 
 package com.rapiddweller.benerator.util;
 
+import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ReaderLineIterator;
 import com.rapiddweller.common.StringUtil;
@@ -42,23 +44,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Reads a text file, shuffles its lines and writes it to another file.<br/>
- * <br/>
+ * Reads a text file, shuffles its lines and writes it to another file.<br/><br/>
  * Created: 16.07.2007 20:29:10
  */
 public class LineShuffler {
 
-  /**
-   * The constant logger.
-   */
   public static final Logger logger = LoggerFactory.getLogger(LineShuffler.class);
+  private static final RandomProvider random = BeneratorFactory.getInstance().getRandomProvider();
 
-  /**
-   * The entry point of application.
-   *
-   * @param args the input arguments
-   * @throws IOException the io exception
-   */
   public static void main(String[] args) throws IOException {
     if (args.length < 2) {
       printHelp();
@@ -70,14 +63,6 @@ public class LineShuffler {
     shuffle(inFilename, outFilename, bufferSize);
   }
 
-  /**
-   * Shuffle.
-   *
-   * @param inFilename  the in filename
-   * @param outFilename the out filename
-   * @param bufferSize  the buffer size
-   * @throws IOException the io exception
-   */
   public static void shuffle(String inFilename, String outFilename, int bufferSize) throws IOException {
     logger.info("shuffling " + inFilename + " and writing to " + outFilename + " (max. " + bufferSize + " lines)");
     ReaderLineIterator iterator = new ReaderLineIterator(new BufferedReader(IOUtil.getReaderForURI(inFilename)));
@@ -86,20 +71,15 @@ public class LineShuffler {
     save(lines, outFilename);
   }
 
-  /**
-   * Shuffle.
-   *
-   * @param lines the lines
-   */
   public static void shuffle(List<String> lines) {
     int size = lines.size();
     //Generator<Integer> indexGenerator = new IntegerGenerator(0, size - 1, 1, Sequence.RANDOM);
     int iterations = size / 2;
     for (int i = 0; i < iterations; i++) {
-      int i1 = RandomUtil.randomInt(0, size - 1);
+      int i1 = random.randomInt(size);
       int i2;
       do {
-        i2 = RandomUtil.randomInt(0, size - 1);
+        i2 = random.randomInt(size);
       } while (i1 == i2);
       String tmp = lines.get(i1);
       lines.set(i1, lines.get(i2));

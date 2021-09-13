@@ -26,9 +26,10 @@
 
 package com.rapiddweller.benerator.composite;
 
+import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.engine.AbstractScopedLifeCycleHolder;
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.CollectionUtil;
 
@@ -37,29 +38,17 @@ import java.util.List;
 /**
  * Abstract parent class for all builders that relate to a group of components.<br/><br/>
  * Created at 09.05.2008 13:38:33
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.5.4
  */
 public abstract class MultiComponentBuilder<E> extends AbstractScopedLifeCycleHolder implements ComponentBuilder<E> {
 
-  /**
-   * The Builders.
-   */
+  protected RandomProvider random;
   protected final ComponentBuilder<E>[] builders;
   private List<ComponentBuilder<E>> availableBuilders;
-  /**
-   * The Message.
-   */
   protected String message;
 
-  /**
-   * Instantiates a new Multi component builder.
-   *
-   * @param builders the builders
-   * @param scope    the scope
-   */
   public MultiComponentBuilder(ComponentBuilder<E>[] builders, String scope) {
     super(scope);
     this.builders = builders;
@@ -75,6 +64,7 @@ public abstract class MultiComponentBuilder<E> extends AbstractScopedLifeCycleHo
 
   @Override
   public void init(BeneratorContext context) {
+    random = BeneratorFactory.getInstance().getRandomProvider();
     for (ComponentBuilder<E> builder : builders) {
       builder.init(context);
     }
@@ -96,12 +86,6 @@ public abstract class MultiComponentBuilder<E> extends AbstractScopedLifeCycleHo
     this.availableBuilders.clear();
   }
 
-  /**
-   * Build random component boolean.
-   *
-   * @param context the context
-   * @return the boolean
-   */
   public boolean buildRandomComponent(BeneratorContext context) {
     message = null;
     if (availableBuilders.size() == 0) {
@@ -110,7 +94,7 @@ public abstract class MultiComponentBuilder<E> extends AbstractScopedLifeCycleHo
     }
     boolean success;
     do {
-      int builderIndex = RandomUtil.randomIndex(availableBuilders);
+      int builderIndex = random.randomIndex(availableBuilders);
       success = availableBuilders.get(builderIndex).execute(context);
       if (!success) {
         availableBuilders.remove(builderIndex);

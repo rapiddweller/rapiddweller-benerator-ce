@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.factory;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorProvider;
 import com.rapiddweller.benerator.NonNullGenerator;
@@ -33,7 +34,6 @@ import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.primitive.BooleanGenerator;
 import com.rapiddweller.benerator.primitive.IncrementalStringGenerator;
-import com.rapiddweller.benerator.primitive.RandomVarLengthStringGenerator;
 import com.rapiddweller.benerator.primitive.UniqueScrambledStringGenerator;
 import com.rapiddweller.benerator.sample.AttachedWeightSampleGenerator;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
@@ -155,7 +155,7 @@ public class StochasticGeneratorFactory extends GeneratorFactory {
     } else if (uniqueness.isUnique()) {
       return new UniqueScrambledStringGenerator(chars, minLength, maxLength);
     } else {
-      return new RandomVarLengthStringGenerator(
+      return BeneratorFactory.getInstance().createVarLengthStringGenerator(
           chars, minLength, maxLength, lengthGranularity, lengthDistribution);
     }
   }

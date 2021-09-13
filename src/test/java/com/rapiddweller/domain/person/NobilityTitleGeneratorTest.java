@@ -40,7 +40,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {NobilityTitleGenerator}.<br/><br/>
  * Created: 11.02.2010 12:55:50
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */

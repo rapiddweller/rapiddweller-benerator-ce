@@ -24,9 +24,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.rapiddweller.benerator.util;
+package com.rapiddweller.benerator.test;
 
+import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.test.GeneratorTest;
+import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.common.collection.ObjectCounter;
 import org.junit.Test;
 
@@ -39,16 +41,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
+ * Abstract class for testing {@link RandomProvider} implementations.<br/><br/>
  * Created: 11.10.2006 23:07:35
- *
  * @author Volker Bergmann
  * @since 0.1
  */
-public class RandomUtilTest extends GeneratorTest {
+public abstract class AbstractRandomProviderTest extends GeneratorTest {
 
-  /**
-   * Test random int.
-   */
+  protected abstract RandomProvider getRandom();
+
   @Test
   public void testRandomInt() {
     testEqualDistribution(0, 1, 0.1, 3000);
@@ -57,9 +58,6 @@ public class RandomUtilTest extends GeneratorTest {
     testEqualDistribution(-1, 1, 0.1, 3000);
   }
 
-  /**
-   * Test random long.
-   */
   @Test
   public void testRandomLong() {
     testEqualDistribution(0L, 1L, 0.1, 3000);
@@ -68,9 +66,6 @@ public class RandomUtilTest extends GeneratorTest {
     testEqualDistribution(-1L, 1L, 0.1, 3000);
   }
 
-  /**
-   * Test random from literal.
-   */
   @Test
   public void testRandomFromLiteral() {
     ObjectCounter<Object> counter = new ObjectCounter<>(2);
@@ -83,18 +78,12 @@ public class RandomUtilTest extends GeneratorTest {
     assertEquals(n / 3., counter.getCount("B"), 100);
   }
 
-  /**
-   * Test random from literal empty.
-   */
   @Test
   public void testRandomFromLiteral_empty() {
     assertNull(RandomUtil.randomFromWeightLiteral(null));
     assertNull(RandomUtil.randomFromWeightLiteral(""));
   }
 
-  /**
-   * Test random from literal negative weight.
-   */
   @Test(expected = IllegalArgumentException.class)
   public void testRandomFromLiteral_negativeWeight() {
     RandomUtil.randomFromWeightLiteral("1^-1,2^-2");
@@ -102,26 +91,28 @@ public class RandomUtilTest extends GeneratorTest {
 
   // implementation --------------------------------------------------------------------------------------------------
 
-  private static void testEqualDistribution(int min, int max, double tolerance, int iterations) {
+  private void testEqualDistribution(int min, int max, double tolerance, int iterations) {
     List<Integer> list = new ArrayList<>();
     Set<Integer> expectedSet = new HashSet<>(max - min + 1);
     for (int i = min; i <= max; i++) {
       expectedSet.add(i);
     }
+    RandomProvider random = getRandom();
     for (int i = 0; i < iterations; i++) {
-      list.add(RandomUtil.randomInt(min, max));
+      list.add(random.randomInt(min, max));
     }
     checkEqualDistribution(list, tolerance, expectedSet);
   }
 
-  private static void testEqualDistribution(long min, long max, double tolerance, int iterations) {
+  private void testEqualDistribution(long min, long max, double tolerance, int iterations) {
     List<Long> list = new ArrayList<>();
     Set<Long> expectedSet = new HashSet<>((int) (max - min + 1));
     for (long i = min; i <= max; i++) {
       expectedSet.add(i);
     }
+    RandomProvider random = getRandom();
     for (int i = 0; i < iterations; i++) {
-      list.add(RandomUtil.randomLong(min, max));
+      list.add(random.randomLong(min, max));
     }
     checkEqualDistribution(list, tolerance, expectedSet);
   }

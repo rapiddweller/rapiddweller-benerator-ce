@@ -38,72 +38,36 @@ import java.util.Set;
 /**
  * Generates {@link String}s composed of numerical digits.<br/><br/>
  * Created: 16.10.2009 07:31:16
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class RandomVarLengthStringGenerator extends LengthGenerator<Character, String>
+public class DefaultVarLengthStringGenerator extends LengthGenerator<Character, String>
     implements VarLengthStringGenerator {
 
   private String pattern;
   private Locale locale;
   private Set<Character> chars;
 
-  /**
-   * Instantiates a new Random var length string generator.
-   */
-  public RandomVarLengthStringGenerator() {
+  public DefaultVarLengthStringGenerator() {
     this("[0-9]", 8);
   }
 
-  /**
-   * Instantiates a new Random var length string generator.
-   *
-   * @param pattern the pattern
-   * @param length  the length
-   */
-  public RandomVarLengthStringGenerator(String pattern, int length) {
+  public DefaultVarLengthStringGenerator(String pattern, int length) {
     this(pattern, length, length, 1);
   }
 
-  /**
-   * Instantiates a new Random var length string generator.
-   *
-   * @param pattern           the pattern
-   * @param minLength         the min length
-   * @param maxLength         the max length
-   * @param lengthGranularity the length granularity
-   */
-  public RandomVarLengthStringGenerator(String pattern, int minLength, int maxLength, int lengthGranularity) {
+  public DefaultVarLengthStringGenerator(String pattern, int minLength, int maxLength, int lengthGranularity) {
     this(pattern, minLength, maxLength, lengthGranularity, null);
   }
 
-  /**
-   * Instantiates a new Random var length string generator.
-   *
-   * @param pattern            the pattern
-   * @param minLength          the min length
-   * @param maxLength          the max length
-   * @param lengthGranularity  the length granularity
-   * @param lengthDistribution the length distribution
-   */
-  public RandomVarLengthStringGenerator(String pattern, int minLength, int maxLength,
-                                        int lengthGranularity, Distribution lengthDistribution) {
+  public DefaultVarLengthStringGenerator(String pattern, int minLength, int maxLength,
+                                         int lengthGranularity, Distribution lengthDistribution) {
     super(null, true, minLength, maxLength, lengthGranularity, lengthDistribution);
     this.pattern = pattern;
   }
 
-  /**
-   * Instantiates a new Random var length string generator.
-   *
-   * @param chars              the chars
-   * @param minLength          the min length
-   * @param maxLength          the max length
-   * @param lengthGranularity  the length granularity
-   * @param lengthDistribution the length distribution
-   */
-  public RandomVarLengthStringGenerator(Set<Character> chars, int minLength, int maxLength,
-                                        int lengthGranularity, Distribution lengthDistribution) {
+  public DefaultVarLengthStringGenerator(Set<Character> chars, int minLength, int maxLength,
+                                         int lengthGranularity, Distribution lengthDistribution) {
     super(null, true, minLength, maxLength, lengthGranularity, lengthDistribution);
     this.chars = chars;
   }
@@ -111,57 +75,27 @@ public class RandomVarLengthStringGenerator extends LengthGenerator<Character, S
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets pattern.
-   *
-   * @return the pattern
-   */
   public String getPattern() {
     return pattern;
   }
 
-  /**
-   * Sets pattern.
-   *
-   * @param charSet the char set
-   */
   public void setPattern(String charSet) {
     this.pattern = charSet;
     this.chars = null;
   }
 
-  /**
-   * Gets locale.
-   *
-   * @return the locale
-   */
   public Locale getLocale() {
     return locale;
   }
 
-  /**
-   * Sets locale.
-   *
-   * @param locale the locale
-   */
   public void setLocale(Locale locale) {
     this.locale = locale;
   }
 
-  /**
-   * Gets chars.
-   *
-   * @return the chars
-   */
   public Set<Character> getChars() {
     return chars;
   }
 
-  /**
-   * Sets chars.
-   *
-   * @param chars the chars
-   */
   public void setChars(Set<Character> chars) {
     this.chars = chars;
     this.pattern = null;
