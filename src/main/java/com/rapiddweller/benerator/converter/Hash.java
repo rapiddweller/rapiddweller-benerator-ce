@@ -3,6 +3,7 @@
 package com.rapiddweller.benerator.converter;
 
 import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.ThreadAware;
 
@@ -23,6 +24,7 @@ public class Hash implements Converter<Object,String>, ThreadAware {
 
   private String type;
   private HashFormat format;
+  private ThreadLocal<MessageDigest> md;
 
   public Hash() {
     this("MD5", HashFormat.hex);
@@ -31,6 +33,17 @@ public class Hash implements Converter<Object,String>, ThreadAware {
   public Hash(String type, HashFormat format) {
     this.type = type;
     this.format = format;
+    this.md = ThreadLocal.withInitial(() -> getMessageDigest(this.type));
+  }
+
+  public static MessageDigest getMessageDigest(String type) {
+    if (type == null)
+      throw new ConfigurationError("No hash type specified");
+    try {
+      return MessageDigest.getInstance(type);
+    } catch (NoSuchAlgorithmException e) {
+      throw new ConfigurationError(e);
+    }
   }
 
   public String getType() {
@@ -60,21 +73,14 @@ public class Hash implements Converter<Object,String>, ThreadAware {
   }
 
   @Override
-  public synchronized String convert(Object sourceValue) throws ConversionException {
-    try {
-      MessageDigest md = MessageDigest.getInstance(type);
-      String sourceText = (sourceValue != null ? sourceValue.toString() : "");
-      md.update(sourceText.getBytes(StandardCharsets.UTF_8));
-      byte[] digest = md.digest();
-      String result;
-      switch (format) {
-        case hex:    result = DatatypeConverter.printHexBinary(digest); break;
-        case base64: result = DatatypeConverter.printBase64Binary(digest); break;
-        default:     throw new ConversionException("Unsupported format: " + format);
-      }
-      return result;
-    } catch (NoSuchAlgorithmException e) {
-      throw new ConversionException("Error applying hash", e);
+  public String convert(Object sourceValue) throws ConversionException {
+    String sourceText = (sourceValue != null ? sourceValue.toString() : "");
+    md.get().update(sourceText.getBytes(StandardCharsets.UTF_8));
+    byte[] digest = md.get().digest();
+    switch (format) {
+      case hex:    return DatatypeConverter.printHexBinary(digest);
+      case base64: return DatatypeConverter.printBase64Binary(digest);
+      default:     throw new ConversionException("Unsupported format: " + format);
     }
   }
 
