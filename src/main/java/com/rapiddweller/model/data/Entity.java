@@ -26,6 +26,7 @@
 
 package com.rapiddweller.model.data;
 
+import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Composite;
 import com.rapiddweller.common.CompositeFormatter;
 import com.rapiddweller.common.ConfigurationError;
@@ -33,54 +34,36 @@ import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import com.rapiddweller.script.PrimitiveType;
+import com.rapiddweller.common.ArrayUtil;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Instance of a composite data type as described by a {@link ComplexTypeDescriptor}.<br/>
- * <br/>
+ * Instance of a composite data type as described by a {@link ComplexTypeDescriptor}.<br/><br/>
  * Created: 20.08.2007 19:20:22
- *
  * @author Volker Bergmann
  * @since 0.3
  */
 public class Entity implements Composite {
 
-  /**
-   * The Descriptor.
-   */
   public final ComplexTypeDescriptor descriptor;
   private OrderedNameMap<Object> components;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Entity.
-   *
-   * @param name               the name
-   * @param descriptorProvider the descriptor provider
-   */
   public Entity(String name, DescriptorProvider descriptorProvider) {
     this(new ComplexTypeDescriptor(name, descriptorProvider));
   }
 
-  /**
-   * Instantiates a new Entity.
-   *
-   * @param name                   the name
-   * @param descriptorProvider     the descriptor provider
-   * @param componentKeyValuePairs the component key value pairs
-   */
   public Entity(String name, DescriptorProvider descriptorProvider,
                 Object... componentKeyValuePairs) {
     this(new ComplexTypeDescriptor(name, descriptorProvider),
         componentKeyValuePairs);
   }
 
-  /**
-   * Instantiates a new Entity.
-   *
-   * @param descriptor             the name of the entity, it may be null
-   * @param componentKeyValuePairs content of Entity column and value
-   */
   public Entity(ComplexTypeDescriptor descriptor,
                 Object... componentKeyValuePairs) {
     this.descriptor = descriptor;
@@ -91,43 +74,25 @@ public class Entity implements Composite {
     }
   }
 
-  /**
-   * Instantiates a new Entity.
-   *
-   * @param prototype the prototype
-   */
   public Entity(Entity prototype) {
     this.descriptor = prototype.descriptor;
-    this.components = new OrderedNameMap<>(prototype.components);
+    copyComponentsFrom(prototype);
   }
 
   // interface -------------------------------------------------------------------------------------------------------
 
-  /**
-   * Type string.
-   *
-   * @return the string
-   */
   public String type() {
     return (descriptor != null ? descriptor.getName() : null);
   }
 
-  /**
-   * Descriptor complex type descriptor.
-   *
-   * @return the complex type descriptor
-   */
   public ComplexTypeDescriptor descriptor() {
     return descriptor;
   }
 
-  /**
-   * Allows for generic 'map-like' access to component values, e.g. by FreeMarker.
-   *
-   * @param componentName the name of the component whose value to return.
-   * @return the value of the specified component.
-   * @since 0.4.0
-   */
+  /** Allows for generic 'map-like' access to component values, e.g. by FreeMarker.
+   *  @param componentName the name of the component whose value to return.
+   *  @return the value of the specified component.
+   *  @since 0.4.0 */
   public Object get(String componentName) {
     return getComponent(componentName);
   }
@@ -137,12 +102,6 @@ public class Entity implements Composite {
     return components.get(componentName);
   }
 
-  /**
-   * Component is set boolean.
-   *
-   * @param componentName the component name
-   * @return the boolean
-   */
   public boolean componentIsSet(String componentName) {
     return components.containsKey(componentName);
   }
@@ -152,21 +111,10 @@ public class Entity implements Composite {
     return components;
   }
 
-  /**
-   * Sets components.
-   *
-   * @param components the components
-   */
   public void setComponents(OrderedNameMap<Object> components) {
     this.components = components;
   }
 
-  /**
-   * Set.
-   *
-   * @param componentName the component name
-   * @param component     the component
-   */
   public void set(String componentName, Object component) {
     setComponent(componentName, component);
   }
@@ -177,50 +125,28 @@ public class Entity implements Composite {
     if (descriptor != null) {
       componentDescriptor = descriptor.getComponent(componentName);
     }
-    if (componentDescriptor != null && componentDescriptor
-        .getTypeDescriptor() instanceof SimpleTypeDescriptor) {
-      SimpleTypeDescriptor componentType =
-          (SimpleTypeDescriptor) componentDescriptor
-              .getTypeDescriptor();
+    if (componentDescriptor != null && componentDescriptor.getTypeDescriptor() instanceof SimpleTypeDescriptor) {
+      SimpleTypeDescriptor componentType = (SimpleTypeDescriptor) componentDescriptor.getTypeDescriptor();
       PrimitiveType primitiveType = componentType.getPrimitiveType();
       if (primitiveType == null) {
         primitiveType = PrimitiveType.STRING;
       }
-      BeanDescriptorProvider beanProvider =
-          descriptor.getDataModel().getBeanDescriptorProvider();
-      Class<?> javaType =
-          beanProvider.concreteType(primitiveType.getName());
+      BeanDescriptorProvider beanProvider = descriptor.getDataModel().getBeanDescriptorProvider();
+      Class<?> javaType = beanProvider.concreteType(primitiveType.getName());
       component = AnyConverter.convert(component, javaType);
     }
-    String internalComponentName =
-        componentDescriptor != null ? componentDescriptor.getName() :
-            componentName;
+    String internalComponentName = componentDescriptor != null ? componentDescriptor.getName() : componentName;
     components.put(internalComponentName, component);
   }
 
-  /**
-   * Remove.
-   *
-   * @param componentName the component name
-   */
   public void remove(String componentName) {
     removeComponent(componentName);
   }
 
-  /**
-   * Remove component.
-   *
-   * @param componentName the component name
-   */
   public void removeComponent(String componentName) {
     components.remove(componentName);
   }
 
-  /**
-   * Id component values object.
-   *
-   * @return the object
-   */
   public Object idComponentValues() {
     ComplexTypeDescriptor entityDescriptor = descriptor;
     if (entityDescriptor == null) {
@@ -236,12 +162,6 @@ public class Entity implements Composite {
     }
   }
 
-  /**
-   * Component values object.
-   *
-   * @param idComponentNames the id component names
-   * @return the object
-   */
   public Object componentValues(String[] idComponentNames) {
     Object[] result = new Object[idComponentNames.length];
     for (int i = 0; i < idComponentNames.length; i++) {
@@ -249,6 +169,53 @@ public class Entity implements Composite {
     }
     return result;
   }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private void copyComponentsFrom(Entity prototype) {
+    this.components = new OrderedNameMap<>(prototype.components);
+    for (Map.Entry<String, Object> component : this.components.entrySet()) {
+      Object value = component.getValue();
+      component.setValue(copyOrSelf(value));
+    }
+  }
+
+  private Object copyOrSelf(Object value) {
+    if (value == null|| BeanUtil.isImmutable(value.getClass())) {
+      return value;
+    }
+    Class<?> valueClass = value.getClass();
+    if (value instanceof Entity) {
+      return new Entity((Entity) value);
+    } else if (valueClass.isArray()) {
+      return copyArray(value);
+    } else if (value instanceof List) {
+      return copyList((List<?>) value);
+    } else {
+      throw new RuntimeException("Don't know how to handle " + valueClass);
+    }
+  }
+
+  private Object copyArray(Object array) {
+    if (array == null)
+      return null;
+    Class<Object> componentType = ArrayUtil.componentType(array);
+    int length = Array.getLength(array);
+    Object result = Array.newInstance(componentType, length);
+    for (int i = 0; i < length; i++){
+      Array.set(result, i, copyOrSelf(Array.get(array, i)));
+    }
+    return result;
+  }
+
+  private Object copyList(List<?> list) {
+    List result = new ArrayList(list.size());
+    for (Object element : list) {
+      result.add(copyOrSelf(element));
+    }
+    return result;
+  }
+
 
   // java.lang.overrides ---------------------------------------------------------------------------------------------
 
