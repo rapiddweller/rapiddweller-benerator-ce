@@ -43,10 +43,8 @@ import java.io.Writer;
 import java.util.Map;
 
 /**
- * Provides {@link Script} functionality based on GraalVM: Scripting for the Java platform.
- * <p>
+ * Provides {@link Script} functionality based on GraalVM: Scripting for the Java platform.<br/><br/>
  * Created at 30.12.2020
- *
  * @author Alexander Kell
  * @since 1.1.0
  */
@@ -60,13 +58,6 @@ public class GraalScript implements Script {
   private final String text;
   private final String language;
 
-  /**
-   * Instantiates a new Graal script.
-   *
-   * @param text         the text
-   * @param scriptEngine the script engine
-   * @param languageId   the language id
-   */
   public GraalScript(String text, Engine scriptEngine, String languageId) {
     Assert.notEmpty(text, "text");
     Assert.notNull(scriptEngine, "engine");

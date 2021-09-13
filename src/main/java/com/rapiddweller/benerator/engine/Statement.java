@@ -27,11 +27,18 @@
 package com.rapiddweller.benerator.engine;
 
 /**
- * Parent interface for all statement implementations.<br/><br/>
+ * Parent interface for classes that can do data input, processing, output
+ * and exchange through a {@link BeneratorContext}.<br/><br/>
  * Created: 27.10.2009 15:57:12
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public interface Statement {
+
+  /** Performs what the statement is designed for.
+   * @param context a {@link BeneratorContext} object for accessing data from and providing data for other components.
+   * @return true if the statement can be executed once more, otherwise false.
+   */
   boolean execute(BeneratorContext context);
+
 }

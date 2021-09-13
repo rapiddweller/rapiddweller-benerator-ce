@@ -46,8 +46,13 @@ public class MetaGeneratorFactory {
 
   private static final ArrayTypeGeneratorFactory arrayTypeGeneratorFactory = new ArrayTypeGeneratorFactory();
 
+  /** Creates a 'base generator' based on an {@link com.rapiddweller.model.data.InstanceDescriptor}
+   *  and applies some basic configuration. If the descriptor has a 'source' feature, the base generator
+   *  will iterate a {@link com.rapiddweller.format.DataSource}, otherwise it will evaluate a 'script',
+   *  look up a generator 'ref' or create an 'empty' generator:
+   *  {{@link com.rapiddweller.benerator.composite.BlankEntityGenerator}}. */
   @SuppressWarnings({"unchecked", "rawtypes"})
-  public static Generator<?> createRootGenerator(
+  public static Generator<?> createBaseGenerator(
       InstanceDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
     boolean nullable = DescriptorUtil.isNullable(descriptor, context);
     String instanceName = descriptor.getName();

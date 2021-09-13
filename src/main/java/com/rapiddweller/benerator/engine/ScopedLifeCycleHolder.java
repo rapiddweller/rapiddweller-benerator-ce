@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,42 +29,16 @@ package com.rapiddweller.benerator.engine;
 /**
  * Common interface of classes with a prepare method.<br/><br/>
  * Created: 02.09.2011 10:27:09
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public interface ScopedLifeCycleHolder extends LifeCycleHolder {
 
-  /**
-   * Gets scope.
-   *
-   * @return the scope
-   */
   String getScope();
-
-  /**
-   * Sets scope.
-   *
-   * @param scope the scope
-   */
   void setScope(String scope);
 
-  /**
-   * Is reset needed boolean.
-   *
-   * @return the boolean
-   */
   boolean isResetNeeded();
-
-  /**
-   * Sets reset needed.
-   *
-   * @param resetNeeded the reset needed
-   */
   void setResetNeeded(boolean resetNeeded);
 
-  /**
-   * Reset if needed.
-   */
   void resetIfNeeded();
 }

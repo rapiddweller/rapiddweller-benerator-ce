@@ -57,10 +57,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * Provides methods for testing generators.<br/>
- * <br/>
+ * Provides methods for testing generators.<br/><br/>
  * Created: 15.11.2007 14:46:31
- *
  * @author Volker Bergmann
  */
 public abstract class GeneratorTest extends ModelTest {
@@ -69,44 +67,19 @@ public abstract class GeneratorTest extends ModelTest {
 
   // helper methods for this and child classes -----------------------------------------------------------------------
 
-  /**
-   * Initialize t.
-   *
-   * @param <T>       the type parameter
-   * @param <U>       the type parameter
-   * @param generator the generator
-   * @return the t
-   */
   public <T extends Generator<U>, U> T initialize(T generator) {
     generator.init(context);
     return generator;
   }
 
-  /**
-   * Close.
-   *
-   * @param generator the generator
-   */
   public void close(Generator<?> generator) {
     IOUtil.close(generator);
   }
 
-  /**
-   * Sets current product.
-   *
-   * @param product     the product
-   * @param productName the product name
-   */
   public void setCurrentProduct(Object product, String productName) {
     ((DefaultBeneratorContext) context).setCurrentProduct(new ProductWrapper<>(product), productName);
   }
 
-  /**
-   * Print products.
-   *
-   * @param generator the generator
-   * @param n         the n
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void printProducts(Generator<?> generator, int n) {
     ProductWrapper wrapper = new ProductWrapper();
@@ -120,14 +93,6 @@ public abstract class GeneratorTest extends ModelTest {
     }
   }
 
-  /**
-   * Count products map.
-   *
-   * @param <T>       the type parameter
-   * @param generator the generator
-   * @param n         the n
-   * @return the map
-   */
   public static <T> Map<T, AtomicInteger> countProducts(Generator<T> generator, int n) {
     ObjectCounter<T> counter = new ObjectCounter<>(Math.min(n, 1000));
     ProductWrapper<T> wrapper = new ProductWrapper<>();
@@ -142,27 +107,12 @@ public abstract class GeneratorTest extends ModelTest {
     return counter.getCounts();
   }
 
-  /**
-   * Assert equal arrays.
-   *
-   * @param <T>      the type parameter
-   * @param expected the expected
-   * @param actual   the actual
-   */
   protected static <T> void assertEqualArrays(T expected, T actual) {
     ArrayFormat format = new ArrayFormat();
     assertTrue("Expected " + format.format(expected) + ", found: " + format.format(actual),
         ArrayUtil.equals(expected, actual));
   }
 
-  /**
-   * Expect generated sequence helper.
-   *
-   * @param <T>       the type parameter
-   * @param generator the generator
-   * @param products  the products
-   * @return the helper
-   */
   @SafeVarargs
   protected static <T> Helper expectGeneratedSequence(Generator<T> generator, T... products) {
     expectGeneratedSequenceOnce(generator, products);
@@ -171,15 +121,6 @@ public abstract class GeneratorTest extends ModelTest {
     return new Helper(generator);
   }
 
-  /**
-   * Expect generated set helper.
-   *
-   * @param <T>         the type parameter
-   * @param generator   the generator
-   * @param invocations the invocations
-   * @param products    the products
-   * @return the helper
-   */
   @SafeVarargs
   protected final <T> Helper expectGeneratedSet(Generator<T> generator, int invocations, T... products) {
     expectGeneratedSetOnce(generator, invocations, products);
@@ -188,14 +129,6 @@ public abstract class GeneratorTest extends ModelTest {
     return new Helper(generator);
   }
 
-  /**
-   * Expect uniquely generated set helper.
-   *
-   * @param <T>       the type parameter
-   * @param generator the generator
-   * @param products  the products
-   * @return the helper
-   */
   @SafeVarargs
   protected final <T> Helper expectUniquelyGeneratedSet(Generator<T> generator, T... products) {
     expectUniquelyGeneratedSetOnce(generator, products);
@@ -204,14 +137,6 @@ public abstract class GeneratorTest extends ModelTest {
     return new Helper(generator);
   }
 
-  /**
-   * Expect unique products helper.
-   *
-   * @param <T>       the type parameter
-   * @param generator the generator
-   * @param n         the n
-   * @return the helper
-   */
   protected <T> Helper expectUniqueProducts(Generator<T> generator, int n) {
     expectUniqueProductsOnce(generator, n);
     generator.reset();
@@ -219,15 +144,6 @@ public abstract class GeneratorTest extends ModelTest {
     return new Helper(generator);
   }
 
-  /**
-   * Expect generations helper.
-   *
-   * @param <T>        the type parameter
-   * @param generator  the generator
-   * @param n          the n
-   * @param validators the validators
-   * @return the helper
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   protected <T> Helper expectGenerations(Generator<T> generator, int n, Validator... validators) {
     expectGenerationsOnce(generator, n, validators);
@@ -241,14 +157,6 @@ public abstract class GeneratorTest extends ModelTest {
     return new Helper(generator);
   }
 
-  /**
-   * Expect unique generations helper.
-   *
-   * @param <T>       the type parameter
-   * @param generator the generator
-   * @param n         the n
-   * @return the helper
-   */
   protected <T> Helper expectUniqueGenerations(Generator<T> generator, int n) {
     expectUniqueGenerationsOnce(generator, n);
     generator.reset();
@@ -256,15 +164,6 @@ public abstract class GeneratorTest extends ModelTest {
     return new Helper(generator);
   }
 
-  /**
-   * Expect range.
-   *
-   * @param <T>       the type parameter
-   * @param generator the generator
-   * @param n         the n
-   * @param min       the min
-   * @param max       the max
-   */
   protected <T extends Comparable<T>> void expectRange(Generator<T> generator, int n, T min, T max) {
     expectRangeOnce(generator, n, min, max);
     generator.reset();
@@ -272,42 +171,19 @@ public abstract class GeneratorTest extends ModelTest {
     new Helper(generator);
   }
 
-  /**
-   * Format string.
-   *
-   * @param <T>     the type parameter
-   * @param product the product
-   * @return the string
-   */
   protected <T> String format(T product) {
     return ToStringConverter.convert(product, "[null]");
   }
 
-  /**
-   * Assert unavailable.
-   *
-   * @param generator the generator
-   */
   @SuppressWarnings({"rawtypes", "unchecked"})
   public static void assertUnavailable(Generator<?> generator) {
     assertNull("Generator " + generator + " is expected to be unavailable", generator.generate(new ProductWrapper()));
   }
 
-  /**
-   * Assert available.
-   *
-   * @param generator the generator
-   */
   public static void assertAvailable(Generator<?> generator) {
     assertAvailable("Generator " + generator + " is expected to be available", generator);
   }
 
-  /**
-   * Assert available.
-   *
-   * @param message   the message
-   * @param generator the generator
-   */
   @SuppressWarnings({"rawtypes", "unchecked"})
   public static void assertAvailable(String message, Generator<?> generator) {
     assertNotNull(message, generator.generate(new ProductWrapper()));
@@ -315,18 +191,6 @@ public abstract class GeneratorTest extends ModelTest {
 
   // Number generator tests ------------------------------------------------------------------------------------------
 
-  /**
-   * Check equal distribution.
-   *
-   * @param <T>            the type parameter
-   * @param generatorClass the generator class
-   * @param min            the min
-   * @param max            the max
-   * @param granularity    the granularity
-   * @param iterations     the iterations
-   * @param tolerance      the tolerance
-   * @param expectedValues the expected values
-   */
   @SafeVarargs
   public static <T extends Number> void checkEqualDistribution(
       Class<? extends AbstractNonNullNumberGenerator<T>> generatorClass, T min, T max, T granularity,
@@ -335,18 +199,6 @@ public abstract class GeneratorTest extends ModelTest {
     checkDistribution(generatorClass, min, max, granularity, iterations, true, tolerance, expectedSet);
   }
 
-  /**
-   * Check equal distribution.
-   *
-   * @param <T>            the type parameter
-   * @param generatorClass the generator class
-   * @param min            the min
-   * @param max            the max
-   * @param granularity    the granularity
-   * @param iterations     the iterations
-   * @param tolerance      the tolerance
-   * @param expectedSet    the expected set
-   */
   public static <T extends Number> void checkEqualDistribution(
       Class<? extends AbstractNonNullNumberGenerator<T>> generatorClass, T min, T max, T granularity,
       int iterations, double tolerance, Set<T> expectedSet) {
@@ -370,28 +222,11 @@ public abstract class GeneratorTest extends ModelTest {
 
   // unspecific generator tests --------------------------------------------------------------------------------------
 
-  /**
-   * Check equal distribution.
-   *
-   * @param <E>         the type parameter
-   * @param generator   the generator
-   * @param iterations  the iterations
-   * @param tolerance   the tolerance
-   * @param expectedSet the expected set
-   */
   public static <E> void checkEqualDistribution(
       Generator<E> generator, int iterations, double tolerance, Set<E> expectedSet) {
     checkDistribution(generator, iterations, true, tolerance, expectedSet);
   }
 
-  /**
-   * Check product set.
-   *
-   * @param <T>         the type parameter
-   * @param generator   the generator
-   * @param iterations  the iterations
-   * @param expectedSet the expected set
-   */
   public static <T> void checkProductSet(Generator<T> generator, int iterations, Set<T> expectedSet) {
     checkDistribution(generator, iterations, false, 0, expectedSet);
   }
@@ -406,13 +241,6 @@ public abstract class GeneratorTest extends ModelTest {
     checkDistribution(counter, equalDistribution, tolerance, expectedSet);
   }
 
-  /**
-   * Expect relative weights.
-   *
-   * @param generator                the generator
-   * @param iterations               the iterations
-   * @param expectedValueWeightPairs the expected value weight pairs
-   */
   @SuppressWarnings({"rawtypes", "unchecked"})
   protected static void expectRelativeWeights(Generator<?> generator, int iterations, Object... expectedValueWeightPairs) {
     ObjectCounter<Object> counter = new ObjectCounter<>(expectedValueWeightPairs.length / 2);
@@ -450,14 +278,6 @@ public abstract class GeneratorTest extends ModelTest {
 
   // collection checks -----------------------------------------------------------------------------------------------
 
-  /**
-   * Check equal distribution.
-   *
-   * @param <E>         the type parameter
-   * @param collection  the collection
-   * @param tolerance   the tolerance
-   * @param expectedSet the expected set
-   */
   public static <E> void checkEqualDistribution(Collection<E> collection, double tolerance, Set<E> expectedSet) {
     checkDistribution(collection, true, tolerance, expectedSet);
   }
@@ -473,14 +293,6 @@ public abstract class GeneratorTest extends ModelTest {
 
   // counter checks --------------------------------------------------------------------------------------------------
 
-  /**
-   * Check equal distribution.
-   *
-   * @param <E>         the type parameter
-   * @param counter     the counter
-   * @param tolerance   the tolerance
-   * @param expectedSet the expected set
-   */
   public static <E> void checkEqualDistribution(
       ObjectCounter<E> counter, double tolerance, Set<E> expectedSet) {
     checkDistribution(counter, true, tolerance, expectedSet);
@@ -496,24 +308,13 @@ public abstract class GeneratorTest extends ModelTest {
     }
   }
 
-  /**
-   * The type Helper.
-   */
   public static class Helper {
     private final Generator<?> generator;
 
-    /**
-     * Instantiates a new Helper.
-     *
-     * @param generator the generator
-     */
     public Helper(Generator<?> generator) {
       this.generator = generator;
     }
 
-    /**
-     * With ceased availability.
-     */
     public void withCeasedAvailability() {
       try {
         assertUnavailable(generator);
@@ -522,9 +323,6 @@ public abstract class GeneratorTest extends ModelTest {
       }
     }
 
-    /**
-     * With continued availability.
-     */
     public void withContinuedAvailability() {
       assertAvailable(generator);
     }
@@ -532,13 +330,6 @@ public abstract class GeneratorTest extends ModelTest {
 
   // private helpers -------------------------------------------------------------------------------------------------
 
-  /**
-   * Expect generated sequence once.
-   *
-   * @param <T>       the type parameter
-   * @param generator the generator
-   * @param products  the products
-   */
   @SafeVarargs
   protected static <T> void expectGeneratedSequenceOnce(Generator<T> generator, T... products) {
     int count = 0;
@@ -643,15 +434,6 @@ public abstract class GeneratorTest extends ModelTest {
     }
   }
 
-  /**
-   * Expect range once.
-   *
-   * @param <T>       the type parameter
-   * @param generator the generator
-   * @param n         the n
-   * @param min       the min
-   * @param max       the max
-   */
   protected <T extends Comparable<T>> void expectRangeOnce(Generator<T> generator, int n, T min, T max) {
     ProductWrapper<T> wrapper = new ProductWrapper<>();
     for (int i = 0; i < n; i++) {
@@ -663,12 +445,6 @@ public abstract class GeneratorTest extends ModelTest {
     }
   }
 
-  /**
-   * Assert components.
-   *
-   * @param entity         the entity
-   * @param nameValuePairs the name value pairs
-   */
   public static void assertComponents(Entity entity, Object... nameValuePairs) {
     for (int i = 0; i < nameValuePairs.length; i += 2) {
       String name = (String) nameValuePairs[i];
