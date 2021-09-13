@@ -633,7 +633,8 @@ its unique id, but the order_item should have a sequence number which represents
 When running this descriptor, the output is (after indenting and formatting):
 
 ```shell
-order[id=1]order_item[id=1, order_id=1, item_no=1, product=Pgbxll, count=2]
+order[id=1]
+order_item[id=1, order_id=1, item_no=1, product=Pgbxll, count=2]
 order_item[id=2, order_id=1, item_no=2, product=Pmce, count=1]order[id=2]
 order_item[id=3, order_id=2, item_no=1, product=Entlkzkjv, count=2]
 order_item[id=4, order_id=2, item_no=2, product=Jgqp, count=3]
