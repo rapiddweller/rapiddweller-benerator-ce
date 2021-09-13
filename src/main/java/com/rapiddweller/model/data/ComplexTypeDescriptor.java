@@ -108,6 +108,12 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
       }
     }
     if (getParent() != null) {
+    /* TODO is this a feasible shortcut of the above?
+    InstanceDescriptor part = parts.someValueOfName(name);
+    if (part instanceof ComponentDescriptor) {
+      return (ComponentDescriptor) part;
+    }
+     */
       return ((ComplexTypeDescriptor) getParent()).getComponent(name);
     }
     return null;
