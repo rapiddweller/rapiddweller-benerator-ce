@@ -32,6 +32,7 @@ import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
+import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.IOUtil;
@@ -40,6 +41,8 @@ import com.rapiddweller.common.log.LoggingInfoPrinter;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
 import com.rapiddweller.common.ui.InfoPrinter;
 import com.rapiddweller.common.version.VersionInfo;
+import com.rapiddweller.common.version.VersionNumber;
+import com.rapiddweller.common.version.VersionNumberParser;
 import com.rapiddweller.contiperf.sensor.MemorySensor;
 import com.rapiddweller.format.text.KiloFormatter;
 import com.rapiddweller.jdbacl.DBUtil;
@@ -49,10 +52,8 @@ import org.slf4j.Logger;
 import java.io.IOException;
 
 /**
- * Parses and executes a benerator setup file.<br/>
- * <br/>
+ * Parses and executes a benerator setup file.<br/><br/>
  * Created: 14.08.2007 19:14:28
- *
  * @author Volker Bergmann
  */
 public class Benerator {
@@ -61,12 +62,6 @@ public class Benerator {
 
   // methods ---------------------------------------------------------------------------------------------------------
 
-  /**
-   * The entry point of application.
-   *
-   * @param args the input arguments
-   * @throws IOException the io exception
-   */
   public static void main(String[] args) throws IOException {
     VersionInfo.getInfo("benerator").verifyDependencies();
     if (
@@ -80,8 +75,12 @@ public class Benerator {
     }
   }
 
-  public static VersionInfo getVersion() {
-    return VersionInfo.getInfo("benerator");
+  public String getVersion() {
+    return "Benerator " + getEdition() + " " + VersionInfo.getInfo("benerator").getVersion();
+  }
+
+  public VersionNumber getVersionNumber() {
+    return new VersionNumberParser().parse(VersionInfo.getInfo("benerator").getVersion());
   }
 
   private static void runFromCommandLine(String[] args) throws IOException {
@@ -96,13 +95,6 @@ public class Benerator {
     }
   }
 
-  /**
-   * Run file.
-   *
-   * @param filename the filename
-   * @param printer  the printer
-   * @throws IOException the io exception
-   */
   public static void runFile(String filename, InfoPrinter printer) throws IOException {
     BeneratorMonitor.INSTANCE.reset();
     MemorySensor memProfiler = MemorySensor.getInstance();
@@ -125,6 +117,15 @@ public class Benerator {
     InfoPrinter console = new ConsoleInfoPrinter();
     BeneratorUtil.printVersionInfo(console);
     System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+  }
+
+  public static boolean isCommunityEdition() {
+    BeneratorFactory factory = BeneratorFactory.getInstance();
+    return (DefaultBeneratorFactory.COMMUNITY_EDITION.equals(getEdition()));
+  }
+
+  public static String getEdition() {
+    return BeneratorFactory.getInstance().getEdition();
   }
 
 }

@@ -89,6 +89,8 @@ public abstract class BeneratorFactory {
     return XML_SCHEMA_PATH;
   }
 
+  public abstract String getEdition();
+
   public abstract BeneratorContext createContext(String contextUri);
 
   public abstract BeneratorParseContext createParseContext(ResourceManager resourceManager);

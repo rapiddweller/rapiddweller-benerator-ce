@@ -55,6 +55,8 @@ import java.util.Set;
  */
 public class DefaultBeneratorFactory extends BeneratorFactory {
 
+  public static final String COMMUNITY_EDITION = "Community Edition";
+
   private final RandomProvider randomProvider;
 
   public DefaultBeneratorFactory() {
@@ -63,6 +65,11 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
 
   public DefaultBeneratorFactory(RandomProvider randomProvider) {
     this.randomProvider = randomProvider;
+  }
+
+  @Override
+  public String getEdition() {
+    return COMMUNITY_EDITION;
   }
 
   @Override
