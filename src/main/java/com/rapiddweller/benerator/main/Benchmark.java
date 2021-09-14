@@ -4,6 +4,7 @@ package com.rapiddweller.benerator.main;
 
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.TextUtil;
@@ -15,13 +16,13 @@ import org.hsqldb.lib.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.ZonedDateTime;
 import java.util.Locale;
+import java.util.TreeSet;
 
 /**
  * Performs benchmark tests on Benerator.<br/><br/>
@@ -74,15 +75,18 @@ public class Benchmark {
 
     // parse min duration (secs)
     int minDurationSecs = DEFAULT_MIN_DURATION_SECS;
-    int minDurIndex = ArrayUtil.indexOf("--minDurationSecs", args);
+    int minDurIndex = ArrayUtil.indexOf("--minSecs", args);
     if (minDurIndex >= 0 && args.length > minDurIndex + 1)
       minDurationSecs = Integer.parseInt(args[minDurIndex + 1]);
 
     // parse 'half cores' spec
-    boolean halfCores = (ArrayUtil.contains("--halfCores", args));
+    int maxThreads = 0;
+    int maxThreadsIndex = ArrayUtil.indexOf("--maxThreads", args);
+    if (maxThreadsIndex >= 0 && args.length > maxThreadsIndex + 1)
+      maxThreads = Integer.parseInt(args[maxThreadsIndex + 1]);
 
     // run
-    new Benchmark(DEFAULT_SETUPS, mainClassName, minDurationSecs, halfCores).run();
+    new Benchmark(DEFAULT_SETUPS, mainClassName, minDurationSecs, maxThreads).run();
   }
 
 
@@ -92,25 +96,23 @@ public class Benchmark {
   private final VersionNumber versionNumber;
   private final Setup[] setups;
   private final int minDurationSecs;
-  private final int cores;
+  private final int maxThreads;
 
 
   // constructor -----------------------------------------------------------------------------------------------------
 
-  public Benchmark(Setup[] setups, String mainClassName, int minDurationSecs, boolean halfCores) {
-    // log configuration settings
-    logger.debug("Main class {}", mainClassName);
-    logger.debug("Min. duration: {} s", minDurationSecs);
-    if (halfCores) {
-      logger.debug("Assuming half the reported number of cores");
-    }
+  public Benchmark(Setup[] setups, String mainClassName, int minDurationSecs, int maxThreads) {
     // apply configuration settings
     this.setups = setups;
     this.benerator = (Benerator) BeanUtil.newInstance(mainClassName);
     this.versionNumber = benerator.getVersionNumber();
     this.minDurationSecs = minDurationSecs;
     int reportedCores = Runtime.getRuntime().availableProcessors();
-    this.cores = (halfCores ? reportedCores / 2 : reportedCores);
+    this.maxThreads = (maxThreads > 0 ? maxThreads : reportedCores * 3 / 2);
+    // log configuration settings
+    logger.debug("Main class {}", mainClassName);
+    logger.debug("Min. duration: {} s", minDurationSecs);
+    logger.debug("Max threads: {}", maxThreads);
   }
 
 
@@ -142,14 +144,14 @@ public class Benchmark {
         "Example: benerator-benchmark --ce --minDurationSecs 30 --halfCores",
         "",
         "Options:",
-        "--ce                    run on Benerator Community Edition (default on CE)",
-        "--ee                    run on Benerator Enterprise Edition (default on EE,",
-        "                        only available on Enterprice Edition)",
-        "--minDurationSecs n     Choose generation count to have a test execution time",
-        "                        of at least n seconds (default: 30)",
-        "--halfCores             Assume that the effective number of cores is only half",
-        "                        as large as reported by the system (default: false)",
-        "--help                  print this help"
+        "--ce              run on Benerator Community Edition (default on CE)",
+        "--ee              run on Benerator Enterprise Edition (default on EE,",
+        "                  only available on Enterprice Edition)",
+        "--minSecs n       Choose generation count to have a test execution time",
+        "                  of at least n seconds (default: 30)",
+        "--maxThreads k    Use only up to k cores for testing",
+        "                  (default: slightly more than the number of cores)",
+        "--help            print this help"
     );
   }
 
@@ -181,7 +183,7 @@ public class Benchmark {
     String osInfo = SystemInfo.getOsName() + " " + SystemInfo.getOsVersion() + " " + SystemInfo.getOsArchitecture();
     String[] title = {
         "Benchmark throughput of " + benerator.getVersion(),
-        "on a " + osInfo + " system with " + cores + " cores",
+        "on a " + osInfo + " system with " + Runtime.getRuntime().availableProcessors() + " cores",
         "Java version " + VMInfo.getJavaVersion(),
         "JVM " + VMInfo.getJavaVmName() + " " + VMInfo.getJavaVmVersion() +" (" + VMInfo.getJavaVmVendor() + ")",
         "Date/Time: " + ZonedDateTime.now(),
@@ -200,19 +202,18 @@ public class Benchmark {
   }
 
   private int[] chooseThreadCounts() {
-    if (benerator.isCommunityEdition()) {
+    if (benerator.isCommunityEdition() || maxThreads == 1) {
       return new int[] { 1 };
-    } else if (cores == 1) {
-      return new int[] { 1, 2 };
-    } else if (cores == 2) {
-      return new int[] { 1, 2, 3 };
-    } else if (cores <= 4) {
-      return new int[] { 1, 2, 4, 6 };
-    } else if (cores <= 8) {
-      return new int[] { 1, 2, 4, 6, 8, 10 };
-    } else {
-      return new int[] { 1, cores / 4, cores / 2, cores, cores * 3 / 2 };
     }
+    TreeSet<Integer> set = new TreeSet<>();
+    for (int i = 1; i < maxThreads; i *= 2)
+        set.add(i);
+    set.add(maxThreads);
+    int[] result = new int[set.size()];
+    int i = 0;
+    for (int n : set)
+      result[i++] = n;
+    return result;
   }
 
   private void runSetup(Setup setup, int[] threadCounts, Object[] tableRow) throws IOException {
