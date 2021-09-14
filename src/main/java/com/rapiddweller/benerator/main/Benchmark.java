@@ -11,9 +11,11 @@ import com.rapiddweller.common.VMInfo;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.common.version.VersionNumberParser;
+import org.hsqldb.lib.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -250,15 +252,16 @@ public class Benchmark {
   }
 
   private static Execution runTest(String fileName, int count, int threads, Benerator benerator) throws IOException {
-    //System.out.println("Testing " + fileName + " w/ count " + count + " w/ " + threads + " thread(s)");
+    logger.debug("Testing " + fileName + " with count " + count + " and " + threads + " thread(s)");
     String xml = IOUtil.getContentOfURI("com/rapiddweller/benerator/benchmark/" + fileName);
     xml = xml.replace("{count}", "count=\"" + count + "\"");
     xml = xml.replace("{threads}", (Benerator.isCommunityEdition() ? "" : "threads=\"" + threads + "\""));
-    //System.out.println(xml);
-    IOUtil.writeTextFile("benchmark.ben.xml", xml);
+    String filename = "benchmark.ben.xml";
+    IOUtil.writeTextFile(filename, xml);
     long t0 = System.currentTimeMillis();
-    benerator.main(new String[] { "benchmark.ben.xml" });
+    benerator.main(new String[] {filename});
     long t1 = System.currentTimeMillis();
+    FileUtil.delete(filename);
     return new Execution(fileName, count, threads, t1 - t0);
   }
 
