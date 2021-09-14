@@ -1,0 +1,32 @@
+<setup defaultDataset='US'>
+    <import domains='address,person,finance'/>
+
+    <memstore id='mem'/>
+
+    <generate type='Person' count='1' consumer='mem'> <!--consumer="ConsoleExporter"-->
+        <attribute name='streetAndNumber' constant="Main Street 1"/>
+        <attribute name='zip'       constant='12345'/>
+        <attribute name='city'      constant='Grandville'/>
+        <attribute name='email'     constant='alison.harris@yahoo.com'/>
+        <attribute name='firstName' constant='Alison'/>
+        <attribute name='midName'   constant='Emma'/>
+        <attribute name='lastName'  constant='Harris'/>
+        <attribute name='workPhone' constant='123456789'/>
+        <attribute name='CardExpdt' constant='03/25'/>
+        <attribute name='Cardno'    constant='1234567890123456'/>
+    </generate>
+
+    <iterate type='Person' source="mem" distribution="random" {count} pageSize='100000' {threads}> <!--consumer="ConsoleExporter"-->
+        <attribute name='streetAndNumber' constant="xxxxx"/>
+        <attribute name='zip'       constant='xxxxx'/>
+        <attribute name='city'      constant='xxxxx'/>
+
+        <attribute name='email'     constant='xxxxx'/>
+        <attribute name='midName'   constant='xxxxx'/>
+        <attribute name='lastName'  constant='xxxxx'/>
+        <attribute name='workPhone' constant='xxxxx'/>
+
+        <attribute name='CardExpdt' constant='xxxxx'/>
+        <attribute name='Cardno'    constant='xxxxx'/>
+    </iterate>
+</setup>

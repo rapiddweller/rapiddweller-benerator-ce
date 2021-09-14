@@ -1,0 +1,34 @@
+<setup defaultDataset='US'>
+    <import domains='address,person,finance'/>
+
+    <memstore id='mem'/>
+
+    <generate type='Person' count='1' consumer='mem'> <!--consumer="ConsoleExporter"-->
+        <attribute name='streetAndNumber' constant="Main Street 1"/>
+        <attribute name='zip' constant='12345'/>
+        <attribute name='city' constant='Grandville'/>
+        <attribute name='email' constant='alison.harris@yahoo.com'/>
+        <attribute name='firstName' constant='Alison'/>
+        <attribute name='midName' constant='Emma'/>
+        <attribute name='lastName' constant='Harris'/>
+        <attribute name='workPhone' constant='123456789'/>
+        <attribute name='CardExpdt' constant='03/25'/>
+        <attribute name='Cardno' constant='1234567890123456'/>
+    </generate>
+
+    <iterate type='Person' source="mem" distribution="random" {count} pageSize='100000' {threads}> <!--consumer="ConsoleExporter"-->
+        <variable name='addr' generator='AddressGenerator'/>
+        <attribute name='streetAndNumber' script="addr.street + ' ' + addr.houseNumber"/>
+        <attribute name='zip' script='addr.postalCode'/>
+        <attribute name='city' script='addr.city'/>
+
+        <variable name='p' generator='PersonGenerator'/>
+        <attribute name='email' script='p.email'/>
+        <attribute name='midName' script='p.secondGivenName'/>
+        <attribute name='lastName' script='p.familyName'/>
+        <attribute name='workPhone' script='addr.officePhone'/>
+
+        <attribute name='CardExpdt' constant='xx/xx'/>
+        <attribute name='Cardno' generator='CreditCardNumberGenerator'/>
+    </iterate>
+</setup>
