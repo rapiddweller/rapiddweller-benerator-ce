@@ -131,9 +131,13 @@ A benchmark run on the same system with Benerator Enterprise Edition yields the 
 +------------------------------+----------+-----------+-----------+-----------+
 ```
 
-As you can see, with additional threads comes additional performance, 
-but after a certain level of concurrency is reached, performace does not improve 
-or may even deteriorate seriously.
+Note that we not only have improved the performance of the Community Edition, 
+but optimized the Enterprise Edition to be even several times faster than 
+the Community Edition.
+
+For your performance optimization in Enterprise Edition, note that with additional 
+threads comes additional performance, but after a certain level of concurrency 
+is reached, performance does not improve or even can deteriorate seriously.
 
 The sweet spot where you have optimum performance with low concurrency usually 
 is where the number of threads equals the number of cores, or is only slightly larger. 
