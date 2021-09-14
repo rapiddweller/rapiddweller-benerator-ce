@@ -35,6 +35,7 @@
         <fileSet>
             <directory>src/main/script</directory>
             <outputDirectory>bin</outputDirectory>
+            <fileMode>0744</fileMode>
             <includes>
                 <include>*</include>
             </includes>
