@@ -30,6 +30,7 @@ import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Composite;
 import com.rapiddweller.common.CompositeFormatter;
 import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.NullSafeComparator;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
@@ -216,6 +217,26 @@ public class Entity implements Composite {
     return result;
   }
 
+  public boolean equalsIgnoringDescriptor(Entity that) {
+    if (this == that) {
+      return true;
+    }
+    if (this.getComponents().size() != that.getComponents().size()) {
+      return false;
+    }
+    for (Map.Entry<String, Object> entry : this.getComponents().entrySet()) {
+      Object thisValue = entry.getValue();
+      Object thatValue = that.getComponent(entry.getKey());
+      if (thisValue instanceof Entity) {
+        if (!((Entity) thisValue).equalsIgnoringDescriptor((Entity) thatValue)) {
+          return false;
+        }
+      } else if (!NullSafeComparator.equals(entry.getValue(), thatValue)) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   // java.lang.overrides ---------------------------------------------------------------------------------------------
 
@@ -228,9 +249,19 @@ public class Entity implements Composite {
       return false;
     }
     final Entity that = (Entity) o;
-    if (!this.descriptor.getName().equals(that.descriptor.getName())) {
+    // the following comparison looks strange, but is needed before I can compare the descriptor names
+    // in order to exclude that any of both descriptors is null
+    if (this.descriptor == null) {
+      if (that.descriptor != null) {
+        return false;
+      }
+    } else if (that.descriptor == null) {
+      return false; // we can only be here if (this.descriptor != null)
+    } else if (!NullSafeComparator.equals(this.descriptor.getName(), that.descriptor.getName())) {
+      // both descriptors are not null, so I can compare their names
       return false;
     }
+    // NOTE: the contents of the descriptors are not compared
     return this.components.equalsIgnoreOrder(that.components);
   }
 
