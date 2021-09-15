@@ -623,7 +623,7 @@ tasks, pageSize="1000" is a reasonable setting:
 <generate type="user" count="1000000" pageSize="1000" consumer="db"/>
 ```
 
-For further hints on improving performance, refer to the '[Performance](benerator_performance_tuning.md)' section.
+For further hints on improving performance, refer to the '[Performance](performance_tuning.md)' section.
 
 If you are nesting creation loops, you can set the transaction control for each level separately:
 

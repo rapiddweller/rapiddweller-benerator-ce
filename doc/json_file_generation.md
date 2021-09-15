@@ -1,8 +1,8 @@
-# Processing and creating CSV Files
+# JSON File Generation and Anonymization (Enterprise Edition)
 
-## Iterating entity data from a CSV file
+## Iterating entity data from a JSON file
 
-You can iterate entity data from a CSV file by assigning the file with the extension '.ent.csv' and specifying the file
+You can iterate entity data from a JSON file by assigning the file with the extension '.ent.csv' and specifying the file
 name as 'source' in an `<iterate>` statement, e.g. for printing the data to the console:
 
 ```xml

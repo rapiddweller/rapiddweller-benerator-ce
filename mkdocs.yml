@@ -69,9 +69,12 @@ nav:
   - Quick tour through the descriptor file format: quick_tour_through_the_descriptor_file_format.md
   - Data Generation Concepts: data_generation_concepts.md
   - Regular Expression Support: regular_expression_support.md
-  - Processing and creating CSV Files: processing_and_creating_csv_files.md
+  - CSV File Generation/Anonymization: csv_file_generation.md
+  - JSON File Generation/Anonymization (Enterprise Edition): json_file_generation.md
   - Using Relational Databases: using_relational_databases.md
   - Generating XML Files: generating_xml_files.md
+  - Message Queue Access (Enterprise Edition): message_queue_access.md
+  - Kafka Access: kafka_access.md
   - Advanced Topics: advanced_topics.md
   - Generating Unique Data: generating_unique_data.md
   - Scripting: scripting.md

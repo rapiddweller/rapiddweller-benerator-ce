@@ -123,9 +123,12 @@ Navigate to the sources for our generated mkdocs:
 - [Quick tour through the descriptor file format](doc/quick_tour_through_the_descriptor_file_format.md)
 - [Data Generation Concepts](doc/data_generation_concepts.md)
 - [Regular Expression Support](doc/regular_expression_support.md)
-- [Processing and creating CSV Files](doc/processing_and_creating_csv_files.md)
+- [CSV File Generation/Anonymization](doc/csv_file_generation.md)
+- [JSON File Generation/Anonymization (Enterprise Edition)](doc/json_file_generation.md)
 - [Using Relational Databases](doc/using_relational_databases.md)
 - [Generating XML Files](doc/generating_xml_files.md)
+- [Message Queue Access (Enterprise Edition)](doc/message_queue_access.md)
+- [Kafka Access](doc/kafka_access.md)
 - [Advanced Topics](doc/advanced_topics.md)
 - [Generating Unique Data](doc/generating_unique_data.md)
 - [Scripting](doc/scripting.md)
@@ -139,7 +142,7 @@ Navigate to the sources for our generated mkdocs:
 - [Using Benerator as Load Generator](doc/using_benerator_as_load_generator.md)
 - [Troubleshooting](doc/troubleshooting.md)
 - [Monitoring Benerator](doc/monitoring_benerator.md)
-- [Benerator Performance Tuning](doc/benerator_performance_tuning.md)
+- [Benerator Performance Tuning](doc/performance_tuning.md)
 
 ## Development Quick Start (only Linux and Mac OS X)
 
