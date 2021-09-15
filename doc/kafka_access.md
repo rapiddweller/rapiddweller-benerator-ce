@@ -24,8 +24,8 @@ For exporting data, a ```<kafka-exporter>``` is used:
 
 ```xml
 <setup>
-    <kafka-exporter id='exporter' bootstrap.servers='202.61.250.124:9094' topic='kafka-demo' format='json'/>
-    <generate type='person' count='100' threads='2' consumer='exporter'>
+    <kafka-exporter id='exporter' bootstrap.servers='localhost:9094' topic='kafka-demo' format='json'/>
+    <generate type='person' count='10' consumer='exporter'>
         <attribute name="name" pattern="Alice|Bob|Charly"/>
         <attribute name="age" type="int" min="18" max="67"/>
     </generate>
@@ -37,16 +37,15 @@ For exporting data, a ```<kafka-exporter>``` is used:
 For exporting data, a ```<kafka-importer>``` is used:
 
 ```xml
-<kafka-importer id='importer' bootstrap.servers='202.61.250.124:9094' topic='kafka-demo' format='json' page.size='10'/>
-<iterate source='importer' type='person' count='100' threads='2' consumer='ConsoleExporter'>
-    <attribute name='lastName' pattern="'xxxxx"/>
-    <part name='car'>
-        <attribute name="maker" pattern="xxx"/>
-    </part>
-</iterate>
+<kafka-importer id='importer' bootstrap.servers='localhost:9094' topic='kafka-demo' format='json'/>
+<iterate source='importer' type='person' count='100' threads='2' consumer='ConsoleExporter'/>
 ```
 
 ## Advanced configuration
+
+TODO page.size
+
+TODO check code for elementary Benerator configs
 
 Benerator supports all configuration properties of Kafka 2.8.
 For an in-depth explanation of these, please have a look at 
