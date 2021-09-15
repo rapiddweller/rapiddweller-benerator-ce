@@ -85,7 +85,7 @@ nav:
   - Using Benerator as Load Generator: using_benerator_as_load_generator.md
   - Troubleshooting: troubleshooting.md
   - Monitoring Benerator: monitoring_benerator.md
-  - Benerator Performance Tuning: benerator_performance_tuning.md
+  - Benerator Performance Tuning: performance_tuning.md
 
 extra:
   social:
