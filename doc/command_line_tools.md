@@ -57,17 +57,28 @@ You need the following VM parameters to configure database access. Use them like
 | dbPassword | user password |
 | dbSchema | Name of the schema to extract (defaults to the user name) |
 
-## Benchmark
 
-Benerator provides a Benchmark tool to assess and compare the performance of different hard- and software systems.
-It performs a list of predefined typical generation and anonymization tasks and measures the performance.
+## Benchmark Tool
 
-To invoke it with standard settings, just open a text console or terminal and enter
+Benerator provides a Benchmark Tool to assess and compare the performance 
+of typical generation or anonymization approach. 
+
+It is of special use for you if you want to assess the generation/anonymization 
+performance of different hard- and software settings, like number sof cores, 
+operating system, Java virtual machine, system software configuration and 
+Benerator Enterprise Edition's multithreading configuration.
+
+The different benchmarks used performs a list of predefined typical generation 
+and anonymization tasks. 
+
+To invoke the Benchmark Tool with standard settings, just open a text console 
+or terminal and enter
 
 `benerator-benchmark`
 
 Then the benchmark runs for a few minutes and prints a measurement summary.
-In Benerator Consumer Edition, only single-threaded execution is supported, so the report will look small like this:
+In Benerator Consumer Edition, only single-threaded execution is supported, 
+so the report will look small like this:
 
 ```bash
 +---------------------------------------------------------------------------+
@@ -105,7 +116,8 @@ For a Benerator Enerprise Edition installation running on a machine with several
 the benchmark is executed for several characteristic threading settings in order to 
 find the sweet spot of threading settings. 
 
-A benchmark run on the same system with Benerator Enterprise Edition yields the following result:
+A benchmark run on the same system with Benerator Enterprise Edition yields 
+the following result:
 
 ```bash
 +-----------------------------------------------------------------------------+
