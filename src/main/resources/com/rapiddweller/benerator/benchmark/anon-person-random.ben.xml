@@ -20,18 +20,18 @@
     </generate>
 
     <iterate type='Person' source="mem" distribution="random" {count} pageSize='100000' {threads}> <!--consumer="ConsoleExporter"-->
-        <attribute name='streetAndNumber' converter="JavaHash"/>
-        <attribute name='zip'             converter='JavaHash'/>
-        <attribute name='city'            converter='JavaHash'/>
+        <attribute name='streetAndNumber' type='string' minLength='5' maxLength='18'/>
+        <attribute name='zip'             type='string' minLength='5' maxLength='18'/>
+        <attribute name='city'            type='string' minLength='5' maxLength='18'/>
 
-        <attribute name='email'           converter='JavaHash'/>
-        <attribute name='workPhone'       converter='JavaHash'/>
+        <attribute name='email'           type='string' minLength='10' maxLength='25'/>
+        <attribute name='workPhone'       type='string' minLength='8' maxLength='12'/>
 
-        <attribute name='firstName'       converter='JavaHash'/>
-        <attribute name='midName'         converter='JavaHash'/>
-        <attribute name='lastName'        converter='JavaHash'/>
+        <attribute name='firstName'       type='string' minLength='2' maxLength='14'/>
+        <attribute name='midName'         type='string' minLength='2' maxLength='14'/>
+        <attribute name='lastName'        type='string' minLength='2' maxLength='14'/>
 
-        <attribute name='CardExp'         converter='JavaHash'/>
-        <attribute name='Cardno'          converter='JavaHash'/>
+        <attribute name='CardExp'         type='string' minLength='5' maxLength='18'/>
+        <attribute name='Cardno'          type='string' minLength='5' maxLength='18'/>
     </iterate>
 </setup>

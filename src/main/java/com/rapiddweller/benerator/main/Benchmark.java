@@ -41,10 +41,12 @@ public class Benchmark {
   public static final String EE_BENERATOR = "com.rapiddweller.benerator_ee.main.EEBenerator";
 
   private static final Setup[] DEFAULT_SETUPS = {
-      new Setup("gen-string.ben.xml", "1.2.0", 100000),
+      new Setup("gen-string.ben.xml", "1.2_.0", 100000),
       new Setup("gen-person.ben.xml", "1.2.0", 80000),
       new Setup("anon-person-showcase.ben.xml", "1.2.0", 100000),
+      new Setup("anon-person-regex.ben.xml", "1.2.0", 1500000),
       new Setup("anon-person-hash.ben.xml", "1.2.0", 1500000),
+      new Setup("anon-person-random.ben.xml", "1.2.0", 1500000),
       new Setup("anon-person-constant.ben.xml", "1.2.0", 8000000)
   };
 

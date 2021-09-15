@@ -20,18 +20,18 @@
     </generate>
 
     <iterate type='Person' source="mem" distribution="random" {count} pageSize='100000' {threads}> <!--consumer="ConsoleExporter"-->
-        <attribute name='streetAndNumber' converter="JavaHash"/>
-        <attribute name='zip'             converter='JavaHash'/>
-        <attribute name='city'            converter='JavaHash'/>
+        <attribute name='streetAndNumber' pattern='[A-Z][a-z]{4,10} Street [1-9][0-9]?'/>
+        <attribute name='zip'             pattern='[0-9]{5}'/>
+        <attribute name='city'            pattern='[A-Z][a-z]{4,15}'/>
 
-        <attribute name='email'           converter='JavaHash'/>
-        <attribute name='workPhone'       converter='JavaHash'/>
+        <attribute name='email'           pattern='[a-z]{4,10}@[a-z]{4,10}\\.(com|org|net)'/>
+        <attribute name='workPhone'       pattern='[0-9]{8,12}'/>
 
-        <attribute name='firstName'       converter='JavaHash'/>
-        <attribute name='midName'         converter='JavaHash'/>
-        <attribute name='lastName'        converter='JavaHash'/>
+        <attribute name='firstName'       pattern='[A-Z][a-z]{1,8}'/>
+        <attribute name='midName'         pattern='[A-Z][a-z]{1,8}'/>
+        <attribute name='lastName'        pattern='[A-Z][a-z]{1,12}'/>
 
-        <attribute name='CardExp'         converter='JavaHash'/>
-        <attribute name='Cardno'          converter='JavaHash'/>
+        <attribute name='CardExp'         pattern='([1-9])|(1[0-2])/2[1-9]'/>
+        <attribute name='Cardno'          pattern='[0-9]{16}'/>
     </iterate>
 </setup>
