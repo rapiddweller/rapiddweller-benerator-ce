@@ -24,7 +24,7 @@
         <attribute name='zip'             pattern='[0-9]{5}'/>
         <attribute name='city'            pattern='[A-Z][a-z]{4,15}'/>
 
-        <attribute name='email'           pattern='[a-z]{4,10}@[a-z]{4,10}\\.(com|org|net)'/>
+        <attribute name='email'           pattern='[a-z]{4,10}@[a-z]{4,10}\.(com|org|net)'/>
         <attribute name='workPhone'       pattern='[0-9]{8,12}'/>
 
         <attribute name='firstName'       pattern='[A-Z][a-z]{1,8}'/>
