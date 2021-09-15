@@ -29,19 +29,13 @@ e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.2.0`). Click OK s
 Benerator comes with open source JDBC drivers (for connecting to a database). No extra installation is necessary for
 them:
 
-• Microsoft SQL Server Driver (MS SQL Server)
-
-• MySQL Connector
-
-• HSQL DB
-
-• H2 DB
-
-• Derby Client
-
-• PostgreSQL
-
-• Jaybird (Firebird DB)
+- Microsoft SQL Server Driver (MS SQL Server)
+- MySQL Connector
+- HSQL DB
+- H2 DB
+- Derby Client
+- PostgreSQL
+- Jaybird (Firebird DB)
 
 However, if you need to use a closed source database driver, the vendor usually requires you to accept usage conditions before you can download and
 install their driver. So, if you are using Oracle DB or DB2, get the JDBC drivers from these sites:
@@ -57,14 +51,6 @@ copy the contained file db2jcc.jar to Benerator's lib directory.
 Troubleshooting is simpler if you make use of log4j's configuration capabilities. If you do not know (or care) about logging, simply skip this step.
 Otherwise put a custom log4j2.xml file into the BENERATOR_HOME/lib directory.
 
-## On Unix/Linux/Mac systems: Set permissions
-
-Open a shell on the installation's root directory and execute
-
-```shell
-chmod a+x bin/*.sh
-```
-
 ## Mac OS X configuration
 
 On Mac OS X you need to provide benerator with an explicit configuration of the JAVA_HOME path. See http://developer.apple.com/qa/qa2001/qa1170.html
@@ -79,7 +65,7 @@ export JAVA_HOME=/Library/Java/Home
 If it does not work or if you need to use different Java versions, it is easier to 'hard-code' JAVA_HOME like this:
 
 ```shell
-export  JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home/ 
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home/ 
 ```
 
 ## Verifying the settings
@@ -95,10 +81,8 @@ Benerator 1.2.0-jdk-11 build 1
 Java version 11.0.9
 JVM OpenJDK 64-Bit Server VM 11.0.9+11 (AdoptOpenJDK)
 OS Linux 5.9.16-050916-generic (amd64)
-
-// Benerator will then launch and print out version information about itself, 
-// the Java version it uses, the operating system.
 ```
-
 </div>
 
+Benerator will then launch and print out version information about itself,
+the Java version it uses, the operating system.
