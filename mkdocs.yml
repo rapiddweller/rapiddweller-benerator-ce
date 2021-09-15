@@ -74,7 +74,7 @@ nav:
   - Using Relational Databases: using_relational_databases.md
   - Generating XML Files: generating_xml_files.md
   - Message Queue Access (Enterprise Edition): message_queue_access.md
-  - Kafka Access: kafka_access.md
+  - Kafka Access (Enterprise Edition): kafka_access.md
   - Advanced Topics: advanced_topics.md
   - Generating Unique Data: generating_unique_data.md
   - Scripting: scripting.md

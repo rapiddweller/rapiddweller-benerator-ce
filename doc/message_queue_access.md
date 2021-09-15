@@ -1,4 +1,4 @@
-# Message Queue Access
+# Message Queue Access (Enterprise Edition)
 
 Virtually any system that supports access via a JMS interface, 
 can be used for data import or export in Benerator. 

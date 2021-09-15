@@ -1,4 +1,4 @@
-# Kafka Access
+# Kafka Access (Enterprise Edition)
 
 Benerator can read from and write to Kafka queues.
 
