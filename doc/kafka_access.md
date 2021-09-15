@@ -1,19 +1,53 @@
 # Kafka Access
 
-TODO
+Benerator can read from and write to Kafka queues.
+
 
 ## Basic configuration
 
-TODO
+The basic configuration elements which need to be provided for any kind of Kafka connector are
+
+| Name | Description |
+| --- | --- |
+| id | the internal id by which the Kafka connector can be accessed in Benerator |
+| bootstrap.servers | See [https://kafka.apache.org/documentation/#producerconfigs_bootstrap.servers]
+| topic | The name of the Kafka queue to connect to |
+| format | The message format used in this queue. Currently, only 'json' is supported |
+
+Depending of the system you want to connect to, 
+you might need to provide [Advanced configuration].
+
 
 ## Export
 
-TODO
+For exporting data, a ```<kafka-exporter>``` is used:
 
+```xml
+<setup>
+    <kafka-exporter id='exporter' bootstrap.servers='202.61.250.124:9094' topic='kafka-demo' format='json'/>
+    <generate type='person' count='100' threads='2' consumer='exporter'>
+        <attribute name="name" pattern="Alice|Bob|Charly"/>
+        <attribute name="age" type="int" min="18" max="67"/>
+    </generate>
+</setup>
+
+```
 ## Import
 
-TODO
+For exporting data, a ```<kafka-importer>``` is used:
+
+```xml
+<kafka-importer id='importer' bootstrap.servers='202.61.250.124:9094' topic='kafka-demo' format='json' page.size='10'/>
+<iterate source='importer' type='person' count='100' threads='2' consumer='ConsoleExporter'>
+    <attribute name='lastName' pattern="'xxxxx"/>
+    <part name='car'>
+        <attribute name="maker" pattern="xxx"/>
+    </part>
+</iterate>
+```
 
 ## Advanced configuration
 
-TODO
+Benerator supports all configuration properties of Kafka 2.8.
+For an in-depth explanation of these, please have a look at 
+[https://kafka.apache.org/documentation/]

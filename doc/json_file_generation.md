@@ -2,58 +2,45 @@
 
 ## Iterating entity data from a JSON file
 
-You can iterate entity data from a JSON file by assigning the file with the extension '.ent.csv' and specifying the file
-name as 'source' in an `<iterate>` statement, e.g. for printing the data to the console:
+You can iterate entity data from a JSON file by assigning the file with the extension 
+'.json' and specifying the file name as 'source' in an `<iterate>` statement, 
+e.g. for printing the data to the console:
 
 ```xml
 
-<iterate type="user" source="user.ent.csv" consumer="ConsoleExporter"/>
+<iterate type="user" source="users.json" consumer="ConsoleExporter"/>
 ```
 
-This way, you need to have a CSV file which uses column headers and the default column separator (which is comma by
-default and can be set globally in the root element's defaultSeparator attribute, e.g. to a
-semicolon: `<setup defaultSeparator=";">`)
+An example source file 'users.json' may look like this:
 
-If the CSV file does not have headers or uses another separator or file encoding that deviates from the default, you
-need to configure the CSV import component (CSVEntitySource) explicitly with a `<bean>` statement and refer it later:
+```json
+[
+    {
+        "name":"Alice",
+        "age":23
+    },
+    {
+        "name":"Bob",
+        "age":34
+    },
+    {
+        "name":"Charly",
+        "age":45
+    }
+]
+```
 
+
+## Creating JSON files
+
+Generated data is exproted to a JSON file by defining a consumer like this:```consumer="new JsonFileExporter('gen-persons.json')"```
 ```xml
-
+<?xml version="1.0" encoding="UTF-8"?>
 <setup>
-
-    <bean id="in" class="CSVEntitySource">
-        <property name="uri" value="headless-in.csv"/>
-        <property name="separator" value=";"/>
-        <property name="encoding" value="UTF-8"/>
-        <property name="columns" value="name,age"/>
-    </bean>
-
-    <iterate type="user" source="in" consumer="ConsoleExporter"/>
+    <generate type="person" count="5" consumer="new JsonFileExporter('gen-persons.json')">
+        <attribute name="name" pattern="Alice|Bob|Charly"/>
+        <attribute name="age" type="int" min="18" max="67"/>
+    </generate>
 </setup>
 ```
 
-For CSV files without header, you need to specify a comma-separated list of column names in the 'columns' property.
-
-## Creating CSV files
-
-For creating a CSV file you must always take the same approach as above: Defining a bean with its properties and
-refering it as consumer:
-
-```xml
-
-<setup>
-
-    <bean id="out" class="CSVEntityExporter">
-        <property name="uri" value="target/headless-out.csv"/>
-        <property name="columns" value="name, age, check"/>
-    </bean>
-
-    <generate type="product" count="200" consumer="out"/>
-</setup>
-```
-
-See the component documentation of
-
-CSVEntityExporter
-
-for more details.

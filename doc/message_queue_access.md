@@ -74,7 +74,8 @@ So, here is an example setup which
         url='vm://localhost?broker.persistent=false' name='newUsers' type='topic' format='json' />
     
     <generate type='person' count='10' consumer='userQueue'>
-        <attribute name='firstName' pattern='Alice|Bob|Charly'/>
+        <attribute name="name" pattern="Alice|Bob|Charly"/>
+        <attribute name="age" type="int" min="18" max="67"/>
     </generate>
     
     <iterate source='myqueue' type='person' count='10' consumer='ConsoleExporter' />
