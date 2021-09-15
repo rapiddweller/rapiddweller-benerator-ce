@@ -310,6 +310,12 @@ The following converter classes are located in the package **com.rapiddweller.co
 
 * **LiteralParser**: Parses strings as numbers, strings, dates and times
 
+* **MD5Hash**, **SHA1Hash**, **SHA256Hash**: Convert any data to a hexadecimal hash code
+
+* **MD5HashBase64**, **SHA1HashBase64**, **SHA256HashBase64**: Convert any data to a hash code in Base64 format
+
+* **JavaHash**: Convert any data to a hexadecimal hash code. This implementation is faster than the hash converters above
+
 * **MessageConverter**: Converts an object, wrapping it with a message string, using a java.text.MessageFormat
 
 * **PropertyResourceBundleConverter**: Uses a Java PropertyResourceBundle to translate keywords to translations in a given Java Locale
