@@ -137,6 +137,25 @@ Then your report may look like this (when combined with field reduction):
 +-------------------------------------+-----------+-----------+
 ```
 
+### Comparing Anonymization Tracking Performance
+
+Which approach performs better is heavily dependent on the properties of your individual data structures.
+
+A rule of thumb: For projects for large data structures, the fields restriction approach performs better,
+for projects with smaller data structures the sampling approach.
+
+A non-represantative example project with large data objects of which only a small number of fields 
+needed to be anonymized, exhibited the following performance:
+
+| Method                            | Performance |
+| ---                               |        ---: |
+| No Anonymization Tracking         |    120 ME/h |
+| 10% Samples alone                 |     56 ME/h |
+| Field restriction alone           |     65 ME/h |
+| Field Restriction and 10% Samples |     75 ME/h |
+
+ME/h stands for million entities per hour.
+
 
 ## 'condition'
 
