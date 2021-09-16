@@ -89,6 +89,7 @@
             <xs:element ref="wait" minOccurs="0"/>
             <xs:element ref="beep" minOccurs="0"/>
             <xs:element ref="dbsanity" minOccurs="0"/>
+            <xs:element ref="anon-check" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -1003,5 +1004,11 @@
             <xs:minInclusive value="1"/>
         </xs:restriction>
     </xs:simpleType>
+
+    <xs:complexType name="anon-check" type="xs:string" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+            <xs:appinfo><version>EE</version></xs:appinfo>
+        </xs:annotation>
+    </xs:complexType>
 
 </xs:schema>
