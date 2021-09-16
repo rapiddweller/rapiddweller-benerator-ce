@@ -66,8 +66,8 @@ public class Benerator {
       "  if [filename] is left out, it defaults to benerator.xml",
       "",
       "Options:",
-      "  -v,--version    Display system and version information",
-      "  -h,--help       Display help information",
+      "  -v,--version           Display system and version information",
+      "  -h,--help              Display help information",
   };
 
   // main ------------------------------------------------------------------------------------------------------------
