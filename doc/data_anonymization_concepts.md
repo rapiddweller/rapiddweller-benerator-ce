@@ -30,7 +30,115 @@ attributes:
 
 ![](assets/grafik14.png)
 
-## Anonimization Conditions
+
+## Anonymization Report (Enterprise Edition)
+
+For compliance checking, Enterprise Edition provides an anonymization Tracker.
+It is activated on the command line by calling 
+
+```benerator --anonreport```
+
+and creates a report listing each field name and which percentage of its occurrences 
+were changed in anonymization. The report is exported to a tab-separated CSV file named 
+```anonymization-report.csv``` and to the console:
+
+```
++-------------------------------------------------------------+
+| Anonymization Report:                                       |
+| Date/Time  2021-09-16 21:59:58 MESZ                         |
+| Anonymized 500000 entities                                  |
+| Checked    500000 entities (100%)                           |
++-------------------------------------+-----------+-----------+
+| Field                               | # Checked | % Changed |
++-------------------------------------+-----------+-----------+
+| order.street                        |   500,000 |    100.0% |
++-------------------------------------+-----------+-----------+
+| order.city                          |   500,000 |     99.3% |
++-------------------------------------+-----------+-----------+
+| order.cardno                        |   500,000 |       all |
++-------------------------------------+-----------+-----------+
+| order.date                          |   500,000 |      none |
++-------------------------------------+-----------+-----------+
+| order.express                       |   500,000 |      none |
++-------------------------------------+-----------+-----------+
+| order.gift                          |   500,000 |      none |
++-------------------------------------+-----------+-----------+
+```
+
+When anonymizing large amounts of complex data structures, you will notice that this 
+tracking has a substantial performance impact, which may slow down performance 
+by a factor of 10 or more. There are two combinable approaches to address this:
+
+1. reducing the check to the fields which are relevant for privacy
+2. Partial anonymization checking
+
+
+### Reducing the check to relevant fields
+
+Anonymization is not done for fun but for privacy protection, so it is legitimate to 
+reduce the anonymization check to the fields which are relevant for this purpose. 
+In most applications, sensitive data is only a small part of all data and 
+anonymization checking overhead is strongly reduced.
+
+This restriction is defined by listing the fields to be checked in an 
+```<anon-check>``` element:
+
+```xml
+<anon-check>street, city, cardno</anon-check>
+```
+
+You will then notice faster execution and a shorter report 
+(restricted to the fields above):
+
+```
++-------------------------------------------------------------+
+| Anonymization Report:                                       |
+| Date/Time  2021-09-16 21:59:58 MESZ                         |
+| Anonymized 500,000 entities                                 |
+| Checked    500,000 entities (100%)                          |
++-------------------------------------+-----------+-----------+
+| Field                               | # Checked | % Changed |
++-------------------------------------+-----------+-----------+
+| order.street                        |   500,000 |    100.0% |
++-------------------------------------+-----------+-----------+
+| order.city                          |   500,000 |     99.3% |
++-------------------------------------+-----------+-----------+
+| order.cardno                        |   500,000 |       all |
++-------------------------------------+-----------+-----------+
+```
+
+
+### Anonymization Sample Checking
+
+If the reduction of fields to check is not fast enough (or undesired), 
+you can additionally (or alternatively) reduce the checks to random samples of the 
+anonymized data. In order to do so, you specify the percentage of data samples 
+to be checked as command line argument on the Benerator call, for example a 
+sample size of 10% of all data would be checked when specifying
+
+```benerator --anonreport 10```
+
+Then your report may look like this (when combined with field reduction):
+
+```
++-------------------------------------------------------------+
+| Anonymization Report:                                       |
+| Date/Time  2021-09-16 21:59:58 MESZ                         |
+| Anonymized 500,000 entities                                 |
+| Checked    50,075 entities (10%)                            |
++-------------------------------------+-----------+-----------+
+| Field                               | # Checked | % Changed |
++-------------------------------------+-----------+-----------+
+| order.street                        |    50,075 |    100.0% |
++-------------------------------------+-----------+-----------+
+| order.city                          |    50,075 |     99.3% |
++-------------------------------------+-----------+-----------+
+| order.cardno                        |    50,075 |       all |
++-------------------------------------+-----------+-----------+
+```
+
+
+## 'condition'
 
 When anoymizing or importing data, you may need to match multi-field-constraints of the form 
 "if field A is set then field B must be set and field C must be null“. It many cases, 
