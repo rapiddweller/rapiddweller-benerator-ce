@@ -150,6 +150,7 @@ needed to be anonymized, exhibited the following performance:
 | Method                            | Performance |
 | ---                               |        ---: |
 | No Anonymization Tracking         |    120 ME/h |
+| Full Anonymization Tracking       |     10 ME/h |
 | 10% Samples alone                 |     56 ME/h |
 | Field restriction alone           |     65 ME/h |
 | Field Restriction and 10% Samples |     75 ME/h |
