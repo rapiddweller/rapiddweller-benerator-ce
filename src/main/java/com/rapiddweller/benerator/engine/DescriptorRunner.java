@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -48,10 +48,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Parses and executes a benerator descriptor file.<br/>
- * <br/>
+ * Parses and executes a benerator descriptor file.<br/><br/>
  * Created at 26.02.2009 15:51:59
- *
  * @author Volker Bergmann
  * @since 0.5.8
  */
