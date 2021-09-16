@@ -60,19 +60,35 @@ public class Benerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Benerator.class);
 
-  // methods ---------------------------------------------------------------------------------------------------------
+  protected static final String[] CE_CLI_HELP = {
+      "Usage benerator [options] [filename]",
+      "",
+      "  if [filename] is left out, it defaults to benerator.xml",
+      "",
+      "Options:",
+      "  -v,--version    Display system and version information",
+      "  -h,--help       Display help information",
+  };
+
+  // main ------------------------------------------------------------------------------------------------------------
 
   public static void main(String[] args) throws IOException {
     VersionInfo.getInfo("benerator").verifyDependencies();
-    if (
-        ArrayUtil.contains("--version", args) ||
-            ArrayUtil.contains("-v", args) ||
-            ArrayUtil.contains("-version", args)
-    ) {
-      printVersionInfoAndExit();
-    } else {
-      runFromCommandLine(args);
-    }
+    checkVersionAndHelpOpts(args, CE_CLI_HELP);
+    String filename = (args.length > 0 ? args[0] : "benerator.xml");
+    new Benerator().runFile(filename);
+  }
+
+
+  // info properties -------------------------------------------------------------------------------------------------
+
+  public static boolean isCommunityEdition() {
+    BeneratorFactory factory = BeneratorFactory.getInstance();
+    return (DefaultBeneratorFactory.COMMUNITY_EDITION.equals(getEdition()));
+  }
+
+  public static String getEdition() {
+    return BeneratorFactory.getInstance().getEdition();
   }
 
   public String getVersion() {
@@ -83,10 +99,13 @@ public class Benerator {
     return new VersionNumberParser().parse(VersionInfo.getInfo("benerator").getVersion());
   }
 
-  private static void runFromCommandLine(String[] args) throws IOException {
+
+  //  operational interface ------------------------------------------------------------------------------------------
+
+  private void runFile(String filename) throws IOException {
+    // Run descriptor file
     try {
       InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
-      String filename = (args.length > 0 ? args[0] : "benerator.xml");
       runFile(filename, printer);
       DBUtil.assertAllDbResourcesClosed(false);
     } catch (BeneratorError e) {
@@ -95,7 +114,7 @@ public class Benerator {
     }
   }
 
-  public static void runFile(String filename, InfoPrinter printer) throws IOException {
+  public void runFile(String filename, InfoPrinter printer) throws IOException {
     BeneratorMonitor.INSTANCE.reset();
     MemorySensor memProfiler = MemorySensor.getInstance();
     memProfiler.reset();
@@ -113,19 +132,33 @@ public class Benerator {
     BeneratorUtil.logConfig("Max. committed heap size: " + new KiloFormatter(1024).format(memProfiler.getMaxCommittedHeapSize()) + "B");
   }
 
-  private static void printVersionInfoAndExit() {
-    InfoPrinter console = new ConsoleInfoPrinter();
-    BeneratorUtil.printVersionInfo(console);
-    System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+
+  // helper methods --------------------------------------------------------------------------------------------------
+
+  protected static void checkVersionAndHelpOpts(String[] args, String[] help) {
+    // check for version flag
+    if (containsVersionFlag(args)) {
+      BeneratorUtil.printVersionInfo(new ConsoleInfoPrinter());
+      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+    }
+    // check for help flag
+    if (containsHelpFlag(args)) {
+      ConsoleInfoPrinter.printHelp(help);
+      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+    }
   }
 
-  public static boolean isCommunityEdition() {
-    BeneratorFactory factory = BeneratorFactory.getInstance();
-    return (DefaultBeneratorFactory.COMMUNITY_EDITION.equals(getEdition()));
+  private static boolean containsVersionFlag(String[] args) {
+    return ArrayUtil.contains("--version", args)
+        || ArrayUtil.contains("-v", args)
+        || ArrayUtil.contains("-version", args);
   }
 
-  public static String getEdition() {
-    return BeneratorFactory.getInstance().getEdition();
+  private static boolean containsHelpFlag(String[] args) {
+    return ArrayUtil.contains("--help", args)
+        || ArrayUtil.contains("-h", args)
+        || ArrayUtil.contains("-help", args);
   }
+
 
 }
