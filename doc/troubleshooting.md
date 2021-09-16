@@ -31,11 +31,11 @@ reached.
 
 ## Logging
 
-benerator logs its event using apache commons-logging. That service forwards output to Apache log4j or to the native JDK 1.4 logging. For avoiding
-version conflicts with your environment, benerator uses JDK 1.4 logging by default, but for troubleshooting it is useful to switch to Log4j as the
-underlying logging implementation and fine-tune log messages for tracking down your problem. In order to use log4j, download the binary of a new
-version (e.g. log4j 1.2.15) from the Apache log4j 1.2 website, uncompress it and put the jar file log4j-1.2.15.jar into benerator's lib directory.
-Edit the log4j.xml file in your BENERATOR_HOME/bin directory to adapt the log levels for interesting categories:
+Benerator logs its event using slf4j as a logging facade to integrate with the logging tools used 
+by libraries which are used by Benerator. As logging uimplementation, Apache Log4j 2 is used. 
+For troubleshooting it is useful to chack and fine-tune logging configuration for tracking down
+your issue. This is done by editing the log4j2.xml file in your BENERATOR_HOME/bin directory. 
+Some interesting logging categories to start with:
 
 Set a category to debug for getting detailed information about its execution. The most important log categories are:
 
@@ -85,57 +85,33 @@ You will then get a list of schemas as Benerator scans the database metadata, e.
 
 ```sql
 06:03:45,203 DEBUG [DBSystem] parsing metadata...
-
 06:03:45,203 DEBUG [JDBC] opening connection to jdbc:oracle:thin:@10.37.129.3:1521:XE
-
 06:03:45,226 DEBUG [JDBC] Created connection #4: oracle.jdbc.driver.T4CConnection@741827d1
-
 06:03:45,385 DEBUG [JDBC] opening connection to jdbc:oracle:thin:@10.37.129.3:1521:XE
-
 06:03:45,417 INFO [JDBCDBImporter] Importing database metadata. Be patient, this may take some time...
-
 06:03:45,417 DEBUG [JDBCDBImporter] Product name: Oracle
-
 06:03:45,419 INFO [JDBCDBImporter] Importing catalogs
-
 06:03:45,430 INFO [JDBCDBImporter] Importing schemas
-
 06:03:45,438 DEBUG [JDBCDBImporter] found schema ANONYMOUS
-
 06:03:45,438 DEBUG [JDBCDBImporter] found schema DBSNMP
-
 06:03:45,438 DEBUG [JDBCDBImporter] found schema DIP
-
 06:03:45,438 DEBUG [JDBCDBImporter] found schema FLOWS_FILES
-
 06:03:45,439 DEBUG [JDBCDBImporter] found schema FLOWS_020100
-
 06:03:45,439 DEBUG [JDBCDBImporter] found schema HR
-
 06:03:45,439 DEBUG [JDBCDBImporter] found schema MDSYS
-
 06:03:45,440 DEBUG [JDBCDBImporter] found schema OUTLN
-
 06:03:45,440 DEBUG [JDBCDBImporter] found schema SHOP
-
 06:03:45,440 DEBUG [JDBCDBImporter] importing schema SHOP
-
 06:03:45,441 DEBUG [JDBCDBImporter] found schema SYS
-
 06:03:45,441 DEBUG [JDBCDBImporter] found schema SYSTEM
-
 06:03:45,441 DEBUG [JDBCDBImporter] found schema TSMSYS
-
 06:03:45,441 DEBUG [JDBCDBImporter] found schema XDB
 ```
 
 Cross checking this with your access information should make it easy to figure out which one is appropriate in your case.
 
-See the
+See the [Usual Database Settings].
 
-Usual Database Settings
-
-.
 
 ## Constraint Violations
 
@@ -238,3 +214,9 @@ db_schema=Z
 ```
 
 Note: On most systems (e.g. Oracle, HSQL) no catalog needs to be specified.
+
+
+## Method isApplicationDetached() not found in class Xyz
+
+See [Migration from 1.1.x to 1.2.0]
+
