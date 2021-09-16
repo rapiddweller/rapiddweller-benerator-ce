@@ -154,7 +154,7 @@ quickstart by using the helper scripts.
 If you want to install Benerator permanently into your system, you have to modify your environment file or your `~/.profile`  
 and add ENV variable `BENERATOR_HOME` and `PATH=$BENERATOR_HOME/bin:$PATH`
 
-to execute the scripts you have can do ...
+to execute the scripts you can do ...
 
 `bash script/1_install_mvn_dependencies.sh`  
 `source script/2_setup_benerator.sh`  
