@@ -5,7 +5,8 @@
 The core goals of Benerator are
 
 - Generation of data that satisfies complex data validity requirements
-- Efficient generation of large data volumes
+- Anonymization of production data for showcases and serious performance testing projects
+- Efficient generation of large data volumes, scaling up to companies with billions of customers and Big Data projects
 - Early applicability in projects
 - Little maintenance effort with ongoing implementation through configuration by exception
 - Wide and easy customizability
@@ -90,6 +91,7 @@ and Benerator can easily scale over multiple machines using a Kafka cluster.
 Improvements against the Community Edition are
 - Improved performance on single threading
 - Multithreaded data generation and anonymization
+- Anonymization Reporting supports you in compliance checking
 - Benerator UI: An integrated graphical development environment with editing support and task management UI
 - JSON support
 - JMS support: ActiveMQ, RabbitMQ and more
