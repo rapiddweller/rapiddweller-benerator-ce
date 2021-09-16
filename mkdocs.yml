@@ -68,6 +68,7 @@ nav:
   - The Benerator Project Wizard: the_benerator_project_wizard.md
   - Quick tour through the descriptor file format: quick_tour_through_the_descriptor_file_format.md
   - Data Generation Concepts: data_generation_concepts.md
+  - Data Anonymization Concepts: data_anonymization_concepts.md
   - Regular Expression Support: regular_expression_support.md
   - CSV File Generation/Anonymization: csv_file_generation.md
   - JSON File Generation/Anonymization (Enterprise Edition): json_file_generation.md
@@ -89,6 +90,7 @@ nav:
   - Troubleshooting: troubleshooting.md
   - Monitoring Benerator: monitoring_benerator.md
   - Benerator Performance Tuning: performance_tuning.md
+  - Migrating Benerator Projects: migrating_benerator_projects.md
 
 extra:
   social:
