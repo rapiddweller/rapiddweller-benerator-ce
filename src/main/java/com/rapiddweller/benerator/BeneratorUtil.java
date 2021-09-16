@@ -83,14 +83,25 @@ public class BeneratorUtil {
     VersionInfo version = VersionInfo.getInfo("benerator");
     printer.printLines(
         "Benerator " + version.getVersion() + " build " + version.getBuildNumber(),
-        "Java version " + VMInfo.getJavaVersion(),
-        "JVM " + VMInfo.getJavaVmName() + " " + VMInfo.getJavaVmVersion() + " (" + VMInfo.getJavaVmVendor() + ")",
-        "OS " + SystemInfo.getOsName() + " " + SystemInfo.getOsVersion() + " (" + SystemInfo.getOsArchitecture() + ")"
+        "Java version: " + VMInfo.getJavaVersion(),
+        "JVM product:  " + getJVMInfo(),
+        "System:       " + getOsWithCoresInfo()
     );
+  }
+
+  public static String getJVMInfo() {
+    return VMInfo.getJavaVmName() + " " + VMInfo.getJavaVmVersion() + " (" + VMInfo.getJavaVmVendor() + ")";
   }
 
   public static void logConfig(String config) {
     CONFIG_LOGGER.info(config);
   }
 
+  public static String getOsWithCoresInfo() {
+    return getOsInfo() + " with " + Runtime.getRuntime().availableProcessors() + " cores";
+  }
+
+  private static String getOsInfo() {
+    return SystemInfo.getOsName() + " " + SystemInfo.getOsVersion() + " " + SystemInfo.getOsArchitecture();
+  }
 }

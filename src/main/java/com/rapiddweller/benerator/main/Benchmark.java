@@ -2,11 +2,10 @@
 
 package com.rapiddweller.benerator.main;
 
+import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.TextUtil;
 import com.rapiddweller.common.VMInfo;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
@@ -182,12 +181,11 @@ public class Benchmark {
 
   private String[] createAndPrintTitle() {
     printHorizontalLine();
-    String osInfo = SystemInfo.getOsName() + " " + SystemInfo.getOsVersion() + " " + SystemInfo.getOsArchitecture();
     String[] title = {
         "Benchmark throughput of " + benerator.getVersion(),
-        "on a " + osInfo + " system with " + Runtime.getRuntime().availableProcessors() + " cores",
+        "on a " + BeneratorUtil.getOsWithCoresInfo(),
         "Java version " + VMInfo.getJavaVersion(),
-        "JVM " + VMInfo.getJavaVmName() + " " + VMInfo.getJavaVmVersion() +" (" + VMInfo.getJavaVmVendor() + ")",
+        "" + BeneratorUtil.getJVMInfo(),
         "Date/Time: " + ZonedDateTime.now(),
         "",
         "Numbers are million entities generated per hour"
