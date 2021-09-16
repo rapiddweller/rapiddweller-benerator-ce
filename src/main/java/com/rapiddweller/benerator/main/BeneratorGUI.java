@@ -60,50 +60,26 @@ import java.io.IOException;
 /**
  * Small Swing application for editing and running Benerator descriptors.<br/><br/>
  * Created: 31.05.2010 08:05:35
- *
  * @author Volker Bergmann
  * @since 0.6.3
  */
 public class BeneratorGUI {
 
-  /**
-   * The constant LOGGER.
-   */
-  protected static final Logger LOGGER = LoggerFactory.getLogger(BeneratorGUI.class);
+  protected static final Logger logger = LoggerFactory.getLogger(BeneratorGUI.class);
 
-  /**
-   * The Buffer file.
-   */
   static final File BUFFER_FILE = new File(BeneratorGUI.class.getSimpleName() + ".txt");
 
-  /**
-   * The entry point of application.
-   *
-   * @param args the input arguments
-   * @throws Exception the exception
-   */
   public static void main(String[] args) throws Exception {
-    ApplicationUtil.prepareNativeLAF("Benerator GUI");
+    //ApplicationUtil.prepareNativeLAF("Benerator GUI"); // Not supported bby OpenJDK
     BeneratorGUIFrame appAndFrame = new BeneratorGUIFrame();
-    ApplicationUtil.configureApplication(appAndFrame);
+    //ApplicationUtil.configureApplication(appAndFrame); // Not supported bby OpenJDK
     appAndFrame.setVisible(true);
   }
 
-  /**
-   * The type Benerator gui frame.
-   */
   public static class BeneratorGUIFrame extends JFrame implements JavaApplication {
 
-    /**
-     * The Text.
-     */
     final JTextArea text;
 
-    /**
-     * Instantiates a new Benerator gui frame.
-     *
-     * @throws IOException the io exception
-     */
     public BeneratorGUIFrame() throws IOException {
       super("Benerator GUI");
       Container contentPane = getContentPane();
@@ -165,9 +141,6 @@ public class BeneratorGUI {
 
     private class RunAction extends AbstractAction {
 
-      /**
-       * Instantiates a new Run action.
-       */
       public RunAction() {
         super("Run");
       }
@@ -179,10 +152,10 @@ public class BeneratorGUI {
           file = File.createTempFile("benerator-", ".ben.xml");
           CharSequence builder = createXML();
           IOUtil.writeTextFile(file.getAbsolutePath(), builder.toString());
-          Benerator.runFile(file.getAbsolutePath(), new LoggingInfoPrinter(LogCategoriesConstants.CONFIG));
+          new Benerator().runFile(file.getAbsolutePath(), new LoggingInfoPrinter(LogCategoriesConstants.CONFIG));
         } catch (BeneratorError e) {
           System.err.println("Error: " + e.getMessage());
-          LOGGER.error(e.getMessage());
+          logger.error(e.getMessage());
         } catch (Exception e) {
           e.printStackTrace();
         } finally {
