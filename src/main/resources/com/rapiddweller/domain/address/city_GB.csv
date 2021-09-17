@@ -1,0 +1,1000 @@
+state.country.isoCode;state.id;name;population;areaCode
+GB;ENG;London;8907918;20
+GB;ENG;Birmingham;1153717;121
+GB;SCT;Glasgow;612040;141
+GB;ENG;Liverpool;579256;151
+GB;ENG;Bristol;571922;117
+GB;ENG;Manchester;554400;161
+GB;ENG;Sheffield;544402;114
+GB;ENG;Leeds;503388;113
+GB;SCT;Edinburgh;488050;131
+GB;ENG;Leicester;470965;116
+GB;ENG;Coventry;369127;24
+GB;ENG;Bradford;361046;1274
+GB;WLS;Cardiff;350558;29
+GB;NIR;Belfast;328937;28
+GB;ENG;Nottingham;311823;115
+GB;ENG;Kingston upon Hull;288671;1482
+GB;ENG;Newcastle upon Tyne;281842;191
+GB;ENG;Stoke-on-Trent;277051;1782
+GB;ENG;Southampton;269231;23
+GB;ENG;Derby;263933;1332
+GB;ENG;Portsmouth;248479;23
+GB;ENG;Brighton;241999;1273
+GB;ENG;Plymouth;241179;1752
+GB;ENG;Northampton;229815;1604
+GB;ENG;Reading;229274;118
+GB;ENG;Luton;222907;1582
+GB;ENG;Wolverhampton;218255;1902
+GB;ENG;Bolton;202369;1204
+GB;SCT;Aberdeen;200680;1224
+GB;ENG;Bournemouth;198727;1202
+GB;ENG;Norwich;195761;1603
+GB;ENG;Swindon;191314;1793
+GB;WLS;Swansea;184436;1792
+GB;ENG;Milton Keynes;184105;1908
+GB;ENG;Southend-on-Sea;183809;1702
+GB;ENG;Middlesbrough;176991;1642
+GB;ENG;Peterborough;175680;1733
+GB;ENG;Sunderland;175031;191
+GB;ENG;Warrington;172068;1925
+GB;ENG;Huddersfield;170269;1484
+GB;ENG;Slough;164046;1753
+GB;ENG;Oxford;163967;1865
+GB;ENG;York;161994;1904
+GB;ENG;Poole;158762;1202
+GB;ENG;Ipswich;150334;1473
+GB;ENG;Telford;149377;1952
+GB;ENG;Cambridge;149023;1223
+GB;SCT;Dundee;148280;1382
+GB;ENG;Gloucester;146667;1452
+GB;ENG;Blackpool;145722;1253
+GB;ENG;Birkenhead;144756;151
+GB;ENG;Watford;140902;1923
+GB;ENG;Sale;137915;161
+GB;ENG;Colchester;134176;1206
+GB;WLS;Newport;133353;1633
+GB;ENG;Solihull;127289;121
+GB;ENG;High Wycombe;124073;1494
+GB;ENG;Exeter;123379;1392
+GB;ENG;Gateshead;122088;191
+GB;ENG;Blackburn;119707;1254
+GB;ENG;Cheltenham;117843;1242
+GB;ENG;Maidstone;117626;1622
+GB;ENG;Chelmsford;116997;1245
+GB;ENG;Salford;116361;161
+GB;ENG;Basildon;115269;1268
+GB;ENG;Doncaster;114900;1302
+GB;ENG;Basingstoke;114329;1256
+GB;ENG;Worthing;114212;1903
+GB;ENG;Eastbourne;113646;1323
+GB;ENG;Crawley;111856;1293
+GB;ENG;Rochdale;111733;1706
+GB;ENG;Rotherham;110751;1709
+GB;ENG;Stockport;110000;161
+GB;ENG;Gillingham;108880;1634
+GB;ENG;Sutton Coldfield;108330;121
+GB;ENG;Woking;107611;1483
+GB;ENG;Wigan;106686;1942
+GB;ENG;Lincoln;105447;1522
+GB;ENG;Oldham;105402;161
+GB;ENG;Wakefield;104757;1924
+GB;ENG;St Helens;104641;1744
+GB;ENG;Worcester;103769;1905
+GB;ENG;Hemel Hempstead;101849;1442
+GB;ENG;Bath;101106;1225
+GB;ENG;Preston;99198;1772
+GB;ENG;Barnsley;96878;1226
+GB;ENG;Stevenage;93944;1438
+GB;ENG;Hastings;93592;1424
+GB;ENG;Southport;93426;1704
+GB;ENG;Darlington;92988;1325
+GB;ENG;Bedford;92405;1234
+GB;ENG;Halifax;91338;1422
+GB;ENG;Hartlepool;89610;1429
+GB;ENG;Chesterfield;89181;1246
+GB;ENG;Nuneaton;89001;24
+GB;ENG;Grimsby;88500;1472
+GB;ENG;Weston-super-Mare;87983;1934
+GB;ENG;Chester;87593;1244
+GB;ENG;St Albans;86961;1727
+GB;ENG;Harlow;86321;1279
+GB;ENG;Guildford;85208;1483
+GB;ENG;Aylesbury;84890;1296
+GB;ENG;Stockton-on-Tees;84290;1642
+GB;ENG;Dudley;83608;1384
+GB;ENG;Bracknell;83491;1344
+GB;NIR;Derry/Londonderry;83125;28
+GB;ENG;Redditch;82974;1527
+GB;ENG;Batley;82873;1924
+GB;ENG;Scunthorpe;82472;1724
+GB;ENG;Burnley;82149;1282
+GB;ENG;Eastleigh;82062;23
+GB;ENG;Mansfield;81816;1623
+GB;ENG;Chatham;80039;1634
+GB;ENG;Bury;79647;1635
+GB;ENG;Newcastle-under-Lyme;78919;1782
+GB;ENG;West Bromwich;77997;121
+GB;SCT;Paisley;77220;141
+GB;ENG;South Shields;76498;191
+GB;ENG;Burton upon Trent;75931;1283
+GB;ENG;Rugby;75128;1788
+GB;SCT;East Kilbride;75120;1355
+GB;ENG;Carlisle;74915;1228
+GB;ENG;Harrogate;74426;1423
+GB;ENG;Gosport;73996;23
+GB;ENG;Grays;73892;1375
+GB;ENG;Shrewsbury;73838;1743
+GB;ENG;Ashford;73753;1233
+GB;ENG;Tamworth;73716;1827
+GB;ENG;Crewe;73578;1270
+GB;ENG;Lowestoft;73315;1502
+GB;ENG;Atherton;72176;1942
+GB;ENG;Walsall;71655;1922
+GB;ENG;Stafford;70447;1785
+GB;ENG;Cannock;69473;1543
+GB;ENG;Bognor Regis;69345;
+GB;ENG;Walton-on-Thames;68645;
+GB;ENG;Tynemouth;68530;
+GB;ENG;Bamber Bridge;68368;
+GB;ENG;Maidenhead;67441;1628
+GB;ENG;Washington;67044;
+GB;ENG;Paignton;66878;
+GB;ENG;Filton;66706;
+GB;ENG;Rochester;66452;
+GB;ENG;Farnborough;66402;
+GB;ENG;Dewsbury;65935;
+GB;ENG;Loughborough;65635;1509
+GB;NIR;Newtownabbey;65555;28
+GB;ENG;Margate;64757;
+GB;ENG;Stourbridge;64246;
+GB;NIR;Craigavon;64193;28
+GB;ENG;Hereford;63689;1432
+GB;ENG;Widnes;63365;
+GB;ENG;Canterbury;62767;1227
+GB;ENG;Taunton;62479;1823
+GB;ENG;Runcorn;61723;1928
+GB;WLS;Wrexham;61548;1978
+GB;ENG;Scarborough;61525;1723
+GB;NIR;Bangor;61401;28
+GB;ENG;Ellesmere Port;61383;
+GB;ENG;Wallasey;61043;
+GB;ENG;Corby;60576;
+GB;ENG;Royal Tunbridge Wells;60570;
+GB;ENG;Kettering;59564;1536
+GB;ENG;Halesowen;59299;
+GB;ENG;Aldershot;58562;1252
+GB;ENG;Littlehampton;58357;
+GB;ENG;Bebington;58055;
+GB;ENG;Gravesend;58036;1474
+GB;ENG;Kidderminster;57697;1562
+GB;SCT;Livingston;57030;
+GB;WLS;Barry;56892;1446
+GB;ENG;Royal Leamington Spa;56732;
+GB;ENG;Macclesfield;56654;1625
+GB;ENG;Christchurch;56061;
+GB;ENG;Altrincham;55531;
+GB;ENG;Weymouth;55174;
+GB;ENG;Brentwood;54885;1277
+GB;SCT;Hamilton;54080;
+GB;ENG;Ewell;53801;
+GB;ENG;Clacton-on-Sea;53398;1255
+GB;ENG;Keighley;53252;1535
+GB;ENG;Beeston;53148;
+GB;SCT;Dunfermline;53100;1383
+GB;ENG;Willenhall;53012;
+GB;ENG;Folkestone;52954;1303
+GB;ENG;Smethwick;52841;
+GB;ENG;Esher;52732;1372
+GB;ENG;Sittingbourne;52553;1795
+GB;ENG;Wellingborough;52441;1933
+GB;ENG;Bootle;51964;
+GB;ENG;Durham;51837;191
+GB;ENG;Welwyn Garden City;51264;1707
+GB;ENG;Bloxwich;51135;
+GB;WLS;Neath;50973;1639
+GB;SCT;Cumbernauld;50920;
+GB;ENG;Kingswinford;50888;
+GB;ENG;Lancaster;50849;1524
+GB;ENG;Shoreham-by-Sea;50719;
+GB;ENG;Torquay;50645;1803
+GB;ENG;Horsham;50399;1403
+GB;ENG;Carlton;50257;
+GB;SCT;Kirkcaldy;50010;1592
+GB;ENG;Crosby;49887;
+GB;ENG;King’s Lynn;49000;1553
+GB;ENG;Horndean;48851;
+GB;ENG;Hinckley;48841;1455
+GB;ENG;Swadlincote;48738;
+GB;ENG;Winchester;48530;1962
+GB;WLS;Bridgend;48417;1656
+GB;ENG;Yeovil;48303;1935
+GB;ENG;Sutton-in-Ashfield;48137;
+GB;ENG;West Bridgford;47670;
+GB;SCT;Perth;47430;1738
+GB;ENG;Havant;47376;
+GB;SCT;Inverness;47290;1463
+GB;ENG;Ashton-under-Lyne;47237;
+GB;ENG;Banbury;47230;1295
+GB;WLS;Cwmbrân;47133;
+GB;ENG;Cheshunt;46992;
+GB;ENG;Northwich;46897;1606
+GB;SCT;Ayr;46780;1292
+GB;SCT;Kilmarnock;46770;1563
+GB;ENG;Wokingham;46745;
+GB;ENG;Salisbury;46309;1722
+GB;ENG;Andover;46224;1264
+GB;NIR;Lisburn;45410;28
+GB;ENG;Boston;44914;1205
+GB;ENG;Hatfield;44821;
+GB;WLS;Llanelli;44812;1554
+GB;WLS;Merthyr Tydfil;44807;1685
+GB;ENG;Wallsend;44791;
+GB;ENG;Tipton;44766;
+GB;ENG;Grantham;44520;1476
+GB;ENG;Dover;44430;1304
+GB;ENG;Barrow-in-Furness;44407;1229
+GB;ENG;Bexhill-on-Sea;44317;
+GB;ENG;Lytham St Annes;44208;
+GB;ENG;Bridgwater;44095;1278
+GB;ENG;Middleton;43998;
+GB;SCT;Coatbridge;43960;1236
+GB;ENG;Hoddesdon;43823;
+GB;ENG;Braintree;43506;1376
+GB;ENG;Fareham;43480;1329
+GB;ENG;Trowbridge;43362;
+GB;ENG;Worksop;43173;1909
+GB;ENG;Kirkby;43136;
+GB;ENG;Jarrow;43111;
+GB;SCT;Greenock;42680;1475
+GB;ENG;Ramsgate;42632;
+GB;ENG;Urmston;42279;
+GB;ENG;Castleford;42219;
+GB;ENG;Bury St Edmunds;41940;1284
+GB;WLS;Caerphilly;41905;
+GB;ENG;Newbury;41883;
+GB;ENG;Leighton Buzzard;41814;1525
+GB;ENG;Fleet;41233;
+GB;ENG;Tonbridge;40968;
+GB;ENG;Eccles;40936;
+GB;ENG;Great Yarmouth;40883;1493
+GB;ENG;Herne Bay;40450;
+GB;ENG;Bishop’s Stortford;40089;
+GB;ENG;Leyland;39579;
+GB;ENG;Ilkeston;39555;
+GB;ENG;Camberley;39541;1276
+GB;ENG;Abingdon-on-Thames;39494;1235
+GB;ENG;Arnold;39446;
+GB;ENG;Newark-on-Trent;39370;1636
+GB;ENG;Aldridge;39348;
+GB;ENG;Long Eaton;39348;
+GB;ENG;Bletchley;39304;
+GB;ENG;Cleethorpes;39188;
+GB;ENG;Blyth;38794;
+GB;ENG;Canvey Island;38602;
+GB;ENG;Chorley;38557;
+GB;SCT;Glenrothes;38510;
+GB;ENG;Prescot;38321;
+GB;ENG;Great Malvern;38026;
+GB;WLS;Port Talbot;37900;
+GB;ENG;Longbenton;37858;
+GB;ENG;Haywards Heath;37683;1444
+GB;SCT;Stirling;37610;1786
+GB;ENG;Chester-le-Street;37543;
+GB;ENG;Woodley;37484;
+GB;ENG;Redcar;37480;
+GB;ENG;Borehamwood;37425;
+GB;SCT;Airdrie;37410;
+GB;ENG;Wilmslow;37400;
+GB;ENG;Redhill;37383;1737
+GB;ENG;Whitley Bay;37058;
+GB;ENG;Accrington;36336;
+GB;ENG;Hitchin;36202;1462
+GB;ENG;Coalville;36166;1530
+GB;ENG;Denton;36100;
+GB;ENG;Wath-upon-Dearne;35988;
+GB;ENG;Chippenham;35919;1249
+GB;ENG;Chadderton;35902;
+GB;SCT;Falkirk;35850;1324
+GB;ENG;Exmouth;35438;
+GB;ENG;Fulwood;35364;
+GB;ENG;Rowley Regis;35325;
+GB;ENG;Hyde;35199;
+GB;ENG;Bromsgrove;35193;
+GB;ENG;Romiley;35144;
+GB;ENG;Spalding;35135;1775
+GB;ENG;Bridlington;35085;1262
+GB;ENG;Hucknall;34924;
+GB;ENG;Billericay;34894;
+GB;ENG;Skelmersdale;34813;1695
+GB;ENG;Epsom;34791;
+GB;ENG;Billingham;34779;
+GB;ENG;Wickford;34722;
+GB;ENG;Letchworth Garden City;34697;
+GB;ENG;Wisbech;34250;1945
+GB;ENG;Stroud;34173;
+GB;SCT;Irvine;34090;
+GB;ENG;Pudsey;33899;
+GB;ENG;Brighouse;33883;
+GB;ENG;Lichfield;33816;
+GB;ENG;Whitstable;33505;
+GB;ENG;Morecambe;33491;
+GB;SCT;Dumfries;33440;1387
+GB;ENG;Glossop;33240;1457
+GB;ENG;Dunstable;33035;
+GB;ENG;Leatherhead;32994;
+GB;ENG;St Neots;32832;
+GB;ENG;Bicester;32789;1869
+GB;ENG;Warwick;32718;1926
+GB;ENG;Loughton;32660;
+GB;SCT;Motherwell;32590;1698
+GB;ENG;Bilston;32381;
+GB;ENG;Windsor;32207;
+GB;ENG;Barnstaple;32161;1271
+GB;ENG;Rushden;32124;
+GB;ENG;Burgess Hill;31889;
+GB;ENG;Chichester;31831;1243
+GB;ENG;Brierley Hill;31814;
+GB;ENG;Deal;31639;
+GB;ENG;Sevenoaks;31402;1732
+GB;ENG;Sedgley;31313;
+GB;ENG;Radcliffe;31267;
+GB;ENG;Bedworth;31222;
+GB;SCT;Rutherglen;31190;
+GB;ENG;Harpenden;31167;
+GB;ENG;Beverley;30964;
+GB;WLS;Pontypridd;30910;1443
+GB;WLS;Aberdare;30831;
+GB;ENG;Winsford;30751;
+GB;ENG;Nelson;30702;
+GB;ENG;Yate;30626;
+GB;ENG;Witney;30310;1993
+GB;SCT;Wishaw;30290;
+GB;ENG;East Grinstead;30251;1342
+GB;ENG;Pontefract;30221;1977
+GB;ENG;Weybridge;30145;1932
+GB;ENG;Didcot;30078;
+GB;ENG;Heywood;29748;
+GB;ENG;Northfleet;29716;
+GB;ENG;Morley;29673;
+GB;ENG;Stratford-upon-Avon;29565;1789
+GB;ENG;Totton;29552;
+GB;NIR;Ballymena;29467;28
+GB;ENG;Heswall;29467;
+GB;WLS;Penarth;29388;
+GB;ENG;Kendal;29385;1539
+GB;SCT;Cambuslang;29100;
+GB;ENG;Stanford-le-Hope;29064;
+GB;WLS;Pontypool;28868;1495
+GB;ENG;Hertford;28860;
+GB;ENG;Shipley;28833;
+GB;ENG;Ashford;28676;
+GB;ENG;Burntwood;28610;
+GB;ENG;Ashton-in-Makerfield;28397;
+GB;ENG;Kirkby-in-Ashfield;28250;
+GB;WLS;Colwyn Bay;28142;1492
+GB;SCT;Bearsden;28120;
+GB;ENG;Egham;28043;
+GB;NIR;Newtownards;28039;28
+GB;ENG;Ashington;27993;
+GB;NIR;Carrickfergus;27903;28
+GB;ENG;Farnworth;27855;
+GB;ENG;Haverhill;27747;1440
+GB;ENG;Stretford;27533;
+GB;ENG;Darwen;27462;
+GB;ENG;Melton Mowbray;27408;1664
+GB;ENG;Evesham;27382;1386
+GB;ENG;Frome;27372;1373
+GB;ENG;Cramlington;27344;
+GB;ENG;Thetford;27269;1842
+GB;ENG;Bentley;27110;
+GB;ENG;Ditton;27078;
+GB;ENG;Farnham;27056;
+GB;ENG;Stalybridge;27000;
+GB;ENG;Ferndown;26983;
+GB;ENG;Newton Abbot;26951;1626
+GB;ENG;Peterlee;26930;
+GB;NIR;Newry;26893;28
+GB;ENG;Staines-upon-Thames;26889;
+GB;ENG;Bushey;26641;
+GB;ENG;Witham;26633;
+GB;SCT;Newton Mearns;26600;
+GB;ENG;Hedge End;26399;
+GB;ENG;Heanor;26357;
+GB;SCT;Clydebank;26320;
+GB;ENG;Portishead;26286;
+GB;ENG;Congleton;26250;1260
+GB;ENG;Kidsgrove;26223;
+GB;ENG;Thatcham;26217;
+GB;ENG;Ormskirk;26121;
+GB;WLS;Rhyl;25994;1745
+GB;ENG;Huntingdon;25908;1480
+GB;ENG;Thornaby-on-Tees;25876;
+GB;ENG;Newton Aycliffe;25859;
+GB;ENG;Newport;25773;
+GB;ENG;Maghull;25736;
+GB;ENG;St Austell;25663;1726
+GB;ENG;Fleetwood;25659;
+GB;ENG;Corsett;25637;
+GB;ENG;Plymstock;25610;
+GB;ENG;Swinton;25554;
+GB;ENG;Oldbury;25488;
+GB;ENG;Market Harborough;25446;1858
+GB;ENG;Bishop Auckland;25445;1388
+GB;ENG;Wednesfield;25422;
+GB;ENG;Cheadle Hulme;25383;
+GB;ENG;Rickmansworth;25380;
+GB;ENG;Stubbington;25363;
+GB;ENG;Horley;25253;
+GB;ENG;Skegness;25221;1754
+GB;ENG;Wombwell;25197;
+GB;ENG;Daventry;24983;1327
+GB;ENG;Ryde;24811;
+GB;SCT;Elgin;24760;1343
+GB;ENG;Gorleston-on-Sea;24726;
+GB;ENG;Hindley;24700;
+GB;NIR;Coleraine;24630;28
+GB;ENG;Broadstairs;24543;
+GB;ENG;Windlesham;24527;
+GB;ENG;Rugeley;24487;1889
+GB;ENG;Amersham;24485;
+GB;ENG;Felixstowe;24408;1394
+GB;ENG;Golborne;24219;
+GB;ENG;Droylsden;24180;
+GB;ENG;Rawtenstall;24155;
+GB;WLS;Blackwood;24145;
+GB;ENG;Westhoughton;24116;
+GB;ENG;Belper;24101;
+GB;ENG;Burnham-on-Sea;24065;
+GB;ENG;Falmouth;23968;1326
+GB;SCT;Arbroath;23940;1241
+GB;ENG;Droitwich Spa;23880;
+GB;ENG;Newton-le-Willows;23822;
+GB;ENG;Chesham;23708;
+GB;ENG;Whitehaven;23668;1946
+GB;SCT;Bishopbriggs;23540;
+GB;ENG;Potters Bar;23537;
+GB;ENG;Seaford;23463;
+GB;ENG;Sudbury;23456;1787
+GB;ENG;Godalming;23410;
+GB;ENG;Reigate;23391;
+GB;ENG;Formby;23365;
+GB;NIR;Antrim;23353;28
+GB;ENG;Alfreton;23316;
+GB;ENG;Coseley;23283;
+GB;ENG;Royton;23259;
+GB;ENG;Retford;23247;1777
+GB;ENG;Clifton;23147;
+GB;ENG;Caterham;23013;1883
+GB;SCT;Bathgate;22920;1506
+GB;ENG;Bingley;22895;
+GB;ENG;Gainsborough;22841;1427
+GB;ENG;Buxton;22661;1298
+GB;ENG;Chapeltown;22649;
+GB;ENG;Seaham;22579;
+GB;SCT;Renfrew;22570;
+GB;ENG;Swanscombe;22321;
+GB;ENG;Ingleby Barwick;22256;
+GB;ENG;Workington;22186;1900
+GB;ENG;Holmfirth;22147;
+GB;ENG;Goole;22101;1405
+GB;ENG;Truro;22092;1872
+GB;ENG;Hailsham;22057;
+GB;ENG;Camborne;21985;
+GB;ENG;Newquay;21889;1637
+GB;ENG;Crowborough;21876;
+GB;ENG;Ossett;21871;
+GB;ENG;Normanton;21846;
+GB;ENG;Maldon;21810;1621
+GB;ENG;South Ockenden;21794;
+GB;ENG;Stanley;21700;
+GB;ENG;March;21669;
+GB;ENG;Kenilworth;21490;
+GB;ENG;Gatley;21482;
+GB;ENG;Berkhamsted;21435;
+GB;ENG;Walkden;21399;
+GB;SCT;Kirkintilloch;21380;
+GB;ENG;Ampthill;21339;
+GB;ENG;Stowmarket;21312;1449
+GB;ENG;Dereham;21246;1362
+GB;ENG;Kempston;21156;
+GB;ENG;Whitefield;21147;
+GB;ENG;Dukinfield;21139;
+GB;ENG;Clevedon;21117;1275
+GB;ENG;Brownhills;21100;
+GB;ENG;Redruth;21083;1209
+GB;ENG;Gerrards Cross;21004;
+GB;ENG;Newmarket;20977;1638
+GB;ENG;Minster;20968;
+GB;ENG;Dronfield;20927;
+GB;ENG;Tewkesbury;20876;
+GB;ENG;Harwich;20864;
+GB;SCT;Musselburgh;20840;
+GB;ENG;Sandhurst;20758;
+GB;ENG;Dorchester;20633;1305
+GB;SCT;Dumbarton;20560;1389
+GB;ENG;Stamford;20558;1780
+GB;ENG;Faversham;20468;
+GB;ENG;New Milton;20466;
+GB;ENG;Hythe;20454;
+GB;ENG;Dinnington;20433;
+GB;ENG;Irlam;20426;
+GB;ENG;Stourport-on-Severn;20422;
+GB;ENG;Darlaston;20319;
+GB;SCT;Belshill;20290;
+GB;ENG;Ely;20255;1353
+GB;WLS;Buckley;20232;
+GB;ENG;Biggleswade;20221;
+GB;ENG;Portslade-by-Sea;20198;
+GB;ENG;Tiverton;20150;1884
+GB;ENG;Peacehaven;20025;
+GB;ENG;Ware;20004;1920
+GB;ENG;Earl Shilton;19988;
+GB;ENG;Leek;19967;1538
+GB;ENG;Oswestry;19850;1691
+GB;ENG;Bideford;19827;1237
+GB;ENG;Mirfield;19815;
+GB;ENG;Ripley;19776;1773
+GB;WLS;Ystrad Mynach;19775;
+GB;ENG;Emsworth;19762;
+GB;ENG;Horwich;19742;
+GB;ENG;Hazel Grove;19715;
+GB;ENG;Hebburn;19685;
+GB;NIR;Omagh;19682;28
+GB;ENG;Melksham;19681;
+GB;ENG;Kesgrave;19588;
+GB;ENG;Yarm-Eaglescliffe;19570;
+GB;ENG;Thornton;19550;
+GB;ENG;Rothwell;19504;
+GB;ENG;Sandbach;19482;
+GB;ENG;Horsforth;19469;
+GB;ENG;Wantage;19397;
+GB;ENG;Wednesbury;19366;
+GB;ENG;Frimley;19302;
+GB;SCT;Peterhead;19270;1779
+GB;ENG;Alton;19268;1420
+GB;ENG;Waltham Abbey;19258;
+GB;ENG;Selby;19224;1757
+GB;ENG;Yeadon;19163;
+GB;ENG;Eastwood;19058;
+GB;ENG;Rawmarsh;18953;
+GB;ENG;Spennymoor;18917;
+GB;ENG;Devizes;18907;1380
+GB;ENG;Adwick-le-Street;18858;
+GB;ENG;Colne;18814;
+GB;WLS;Maesteg;18729;
+GB;ENG;Failsworth;18726;
+GB;NIR;Larne;18705;28
+GB;ENG;Mansfield Woodhouse;18682;
+GB;ENG;Cobham;18675;
+GB;ENG;Litherland;18668;
+GB;ENG;Great Wyrley;18608;
+GB;ENG;Marple;18593;
+GB;WLS;Bangor;18476;1248
+GB;ENG;Shaw;18401;
+GB;ENG;Hoyland;18318;
+GB;ENG;Rochford;18301;
+GB;ENG;Biddulph;18198;
+GB;WLS;Ebbw Vale;18170;
+GB;ENG;Liversedge;18165;
+GB;ENG;Calne;18089;
+GB;ENG;Nantwich;18003;
+GB;ENG;Sleaford;17983;1529
+GB;ENG;Houghton Regis;17962;
+GB;WLS;Tonypandy;17960;
+GB;ENG;Lewes;17880;
+GB;ENG;Westbury;17860;
+GB;ENG;Warminster;17816;1985
+GB;ENG;Poulton-le-Fylde;17752;
+GB;ENG;Ramsbottom;17746;
+GB;ENG;Addlestone;17740;
+GB;ENG;Dorking;17616;1306
+GB;SCT;Barrhead;17610;
+GB;SCT;St Andrews;17580;1334
+GB;SCT;Bonnyrigg;17530;
+GB;ENG;Hale;17481;
+GB;ENG;Romsey;17472;1794
+GB;ENG;Bramhall;17424;
+GB;WLS;Shotton;17346;
+GB;ENG;Guisborough;17301;1287
+GB;ENG;Keynsham;17293;
+GB;ENG;Swanley;17138;
+GB;ENG;St Ives;17024;
+GB;ENG;Northallerton;17002;1609
+GB;ENG;Louth;16991;
+GB;ENG;Bedlington;16987;
+GB;WLS;Gorseinon;16983;
+GB;ENG;Brixham;16977;
+GB;ENG;Cirencester;16971;1285
+GB;WLS;Prestatyn;16960;
+GB;ENG;Royston;16911;
+GB;SCT;Blantyre;16900;
+GB;ENG;North Hykeham;16895;
+GB;WLS;Connah’s Quay;16843;
+GB;ENG;Saffron Walden;16719;1799
+GB;NIR;Banbridge;16653;28
+GB;SCT;Grangemouth;16650;
+GB;ENG;Tyldesley;16615;
+GB;ENG;Heysham;16600;
+GB;ENG;Haydock;16574;
+GB;ENG;Stone;16571;
+GB;ENG;Ryton;16564;
+GB;WLS;Aberystwyth;16522;1970
+GB;ENG;Carterton;16519;
+GB;ENG;Stapleford;16497;
+GB;SCT;Kilwinning;16460;
+GB;ENG;Haslingden;16399;
+GB;ENG;Hartley;16394;
+GB;ENG;Maltby;16333;
+GB;ENG;Penzance;16320;1736
+GB;ENG;Uckfield;16287;1825
+GB;ENG;Wimborne Minster;16259;
+GB;ENG;South Woodham;16239;
+GB;WLS;Carmarthen;16192;1267
+GB;ENG;Ripon;16181;1765
+GB;ENG;Whickham;16162;
+GB;ENG;Elland;16153;
+GB;ENG;Bourne;16145;1778
+GB;SCT;Penicuik;16120;1968
+GB;SCT;Johnstone;16090;1505
+GB;ENG;Nailsea;16011;
+GB;ENG;Clitheroe;15974;1200
+GB;ENG;Conisborough;15952;
+GB;ENG;South Normanton;15925;
+GB;ENG;Saltash;15919;
+GB;ENG;South Hayling;15885;
+GB;ENG;Lymington;15861;1590
+GB;ENG;Baildon;15836;
+GB;SCT;Viewpark;15770;
+GB;ENG;Bodmin;15681;1208
+GB;ENG;Matlock;15647;
+GB;ENG;Tadley;15630;
+GB;ENG;Teignmouth;15597;
+GB;WLS;Porthcawl;15581;
+GB;ENG;Knaresborough;15557;
+GB;ENG;Dursley;15556;1453
+GB;ENG;Mexborough;15541;
+GB;ENG;Taverham;15519;
+GB;SCT;Erskine;15510;
+GB;ENG;Penrith;15494;1768
+GB;SCT;Broxburn;15440;
+GB;ENG;Hythe;15411;
+GB;ENG;Staveley;15407;
+GB;ENG;Mildenhall;15378;
+GB;WLS;Llandudno;15375;
+GB;NIR;Dundonald;15365;28
+GB;ENG;Frampton Cotterell;15279;
+GB;ENG;Kidlington;15277;
+GB;ENG;Wymondham;15267;1953
+GB;ENG;Petersfield;15246;1730
+GB;ENG;Neston;15202;
+GB;ENG;Swallownest;15189;
+GB;ENG;Poynton;15146;
+GB;ENG;Skipton;15047;1756
+GB;ENG;Ilkley;15033;
+GB;ENG;Bishop’s Cleeve;15032;
+GB;WLS;Haverfordwest;15032;
+GB;ENG;Bordon;15025;
+GB;NIR;Newtownbreda;15005;28
+GB;WLS;Tredegar;15000;
+GB;WLS;Risca;14944;
+GB;ENG;West Kirby;14925;
+GB;ENG;Cottingham;14885;
+GB;ENG;Blaydon;14858;
+GB;ENG;Newport Pagnell;14857;
+GB;ENG;Marlow;14839;
+GB;ENG;Buckingham;14777;1280
+GB;SCT;Borrowstounness;14760;
+GB;ENG;Garforth;14752;
+GB;NIR;Armagh;14749;28
+GB;SCT;Larkhall;14740;
+GB;SCT;Prestwick;14720;
+GB;SCT;Troon;14710;
+GB;ENG;Morpeth;14698;1670
+GB;WLS;Flint;14690;
+GB;ENG;Beaconsfield;14650;
+GB;ENG;Chertsey;14627;
+GB;SCT;Port Glasgow;14620;
+GB;ENG;Yateley;14593;
+GB;WLS;Porth;14587;
+GB;ENG;Armthorpe;14550;
+GB;ENG;Cowes;14544;
+GB;ENG;Knottingley;14516;
+GB;ENG;Hessle;14491;
+GB;ENG;Ashtead;14474;
+GB;SCT;Alloa;14420;1259
+GB;ENG;Market Deeping;14398;
+GB;WLS;Pyle;14361;
+GB;ENG;Dunscroft;14360;
+GB;NIR;Dungannon;14332;28
+GB;ENG;Ringwood;14325;1425
+GB;ENG;Otley;14301;
+GB;ENG;Crowthorne;14292;
+GB;ENG;Houghton-le-Spring;14292;
+GB;SCT;Forfar;14230;1307
+GB;ENG;Beccles;14167;
+GB;ENG;Brackley;14161;
+GB;ENG;Middlewich;14138;
+GB;WLS;Church Village;14124;
+GB;ENG;Newhaven;14019;
+GB;ENG;Innsworth;14007;
+GB;ENG;Shepshed;13969;
+GB;WLS;Milford Haven;13959;1646
+GB;ENG;Bacup;13893;
+GB;ENG;Syston;13861;
+GB;ENG;Cheadle;13848;
+GB;ENG;Ashby-de-la-Zouch;13803;
+GB;NIR;Enniskillen;13790;28
+GB;ENG;Chard;13784;1460
+GB;SCT;Rosyth;13780;
+GB;ENG;Narborough;13757;
+GB;ENG;Verwood;13745;
+GB;SCT;Hawick;13740;1450
+GB;ENG;Hurstpierpoint;13729;
+GB;ENG;Uppermill;13704;
+GB;ENG;Street;13702;
+GB;ENG;Corsham;13685;
+GB;SCT;Helensburgh;13640;1436
+GB;SCT;Inverurie;13640;1467
+GB;ENG;Wombourne;13628;
+GB;ENG;Oxted;13606;
+GB;ENG;Blackfield;13594;
+GB;ENG;Bridport;13590;1308
+GB;WLS;Llantrisant;13590;
+GB;SCT;Mayfield;13570;
+GB;ENG;Alsager;13550;
+GB;ENG;Midsomer Norton;13539;
+GB;ENG;Birstall;13532;
+GB;ENG;Chorleywood;13514;
+GB;ENG;Standish;13502;
+GB;ENG;Berwick-upon-Tweed;13479;1289
+GB;ENG;Whetstone;13463;
+GB;ENG;Tilbury;13413;
+GB;WLS;Abergavenny;13402;1873
+GB;SCT;Dalkieth;13400;
+GB;ENG;Haslemere;13384;1428
+GB;WLS;Rhosllanerchrugog;13384;
+GB;ENG;Saltdean;13382;
+GB;SCT;Carluke;13320;
+GB;ENG;Clay Cross;13303;
+GB;ENG;New Rossington;13295;
+GB;ENG;Knutsford;13286;1565
+GB;ENG;Sheerness;13270;
+GB;SCT;Linlithgow;13260;
+GB;ENG;Mountsorrel;13239;
+GB;WLS;Rhondda;13233;
+GB;ENG;Brough;13227;
+GB;ENG;Newport;13184;
+GB;SCT;Fraserburgh;13180;1346
+GB;ENG;Sidmouth;13179;
+GB;NIR;Strabane;13147;28
+GB;ENG;Uttoxeter;13105;
+GB;ENG;Driffield;13049;1377
+GB;ENG;Whitby;13029;1947
+GB;SCT;Galashiels;13000;1896
+GB;ENG;Ince-in-Makerfield;12964;
+GB;ENG;Whittlesley;12959;
+GB;SCT;Milngavie;12940;
+GB;ENG;Lees;12938;
+GB;ENG;Stocksbridge;12909;
+GB;ENG;Bridgnorth;12893;1746
+GB;ENG;Dawlish;12814;
+GB;WLS;Pontardawe;12801;
+GB;ENG;Royal Wootton Bassett;12792;
+GB;ENG;Cudworth;12786;
+GB;ENG;Kirkham;12774;
+GB;ENG;Catterick Garrison;12673;
+GB;ENG;Heckmondwike;12658;
+GB;SCT;Saltcoats;12640;
+GB;ENG;New Mills;12581;1663
+GB;ENG;Mablethorpe;12577;
+GB;ENG;Little Lever;12556;
+GB;SCT;Armadale;12550;
+GB;ENG;Guiseley;12545;1943
+GB;ENG;North Walsham;12514;1692
+GB;ENG;Tavistock;12504;1822
+GB;ENG;Wellington;12497;
+GB;WLS;Llandudno Junction;12496;
+GB;WLS;Chepstow;12451;1291
+GB;ENG;Walton-on-the-Naze;12429;
+GB;ENG;Hetton-le-Hole;12406;
+GB;ENG;Blandford Forum;12362;
+GB;SCT;Giffnock;12300;
+GB;SCT;Westhill;12290;
+GB;ENG;Tring;12267;
+GB;ENG;Market Drayton;12218;1630
+GB;ENG;Littleborough;12148;
+GB;SCT;Tranent;12140;1875
+GB;ENG;Halstead;12127;
+GB;ENG;Todmorden;12115;
+GB;SCT;Montrose;12100;1674
+GB;NIR;Limavady;12047;28
+GB;ENG;Minehead;12043;1643
+GB;ENG;Bolsover;12014;
+GB;ENG;Thorne;11971;
+GB;ENG;Lymm;11950;
+GB;ENG;Downham Market;11937;1366
+GB;ENG;Thornbury;11919;
+GB;ENG;Cleckheaton;11901;
+GB;ENG;Sandown;11899;
+GB;ENG;Southwick;11876;
+GB;WLS;Sarn Aberkenfig;11848;
+GB;WLS;Bargoed;11825;
+GB;ENG;Helston;11818;
+GB;ENG;Sandy;11777;1767
+GB;ENG;Haxby;11771;
+GB;ENG;Shirebrook;11750;
+GB;ENG;Ivybridge;11727;
+GB;WLS;Holyhead;11715;1407
+GB;ENG;Kimberley;11715;
+GB;ENG;Codsall;11674;
+GB;ENG;Barton-upon-Humber;11659;
+GB;ENG;Featherstone;11655;
+GB;SCT;Cowdenbeath;11640;
+GB;ENG;Henley-on-Thames;11633;1491
+GB;ENG;Woodbridge;11628;
+GB;WLS;Caldicot;11623;
+GB;NIR;Cookstown;11620;28
+GB;ENG;Gillingham;11585;
+GB;ENG;Thame;11571;1844
+GB;ENG;Snodland;11551;
+GB;ENG;Attleborough;11518;
+GB;ENG;Honiton;11516;1404
+GB;ENG;Desbrorough;11445;
+GB;ENG;Leominster;11417;1568
+GB;ENG;Oswaldtwistle;11393;
+GB;ENG;Southborough;11380;
+GB;ENG;Hexham;11371;1434
+GB;SCT;Carnoustie;11360;
+GB;ENG;Ross-on-Wye;11360;1989
+GB;ENG;Ulverston;11358;
+GB;NIR;Holywood;11332;28
+GB;WLS;Newtown;11319;
+GB;ENG;Atherstone;11312;
+GB;ENG;Tidworth;11304;
+GB;ENG;Cinderford;11302;
+GB;ENG;Kearsley;11289;
+GB;WLS;Mountain Ash;11289;
+GB;SCT;Largs;11260;
+GB;ENG;Cheadle;11223;
+GB;ENG;Epping;11185;
+GB;SCT;Stonehaven;11170;1569
+GB;ENG;Wetherby;11166;1937
+GB;ENG;Amesbury;11149;1980
+GB;ENG;Oakham;11136;1572
+GB;ENG;Mossley;11103;
+GB;ENG;Ilfracombe;11068;
+GB;ENG;Immingham;11056;
+GB;SCT;Larbert;11050;
+GB;ENG;Prudhoe;11035;1661
+GB;ENG;Wells;11035;
+GB;ENG;Chigwell;11034;
+GB;ENG;Chatteris;11000;1354
+GB;ENG;South Elmsall;10991;
+GB;ENG;Banstead;10931;
+GB;NIR;Downpatrick;10874;28
+GB;SCT;Whitburn;10860;
+GB;ENG;Kingsteignton;10857;
+GB;ENG;Great Harwood;10851;
+GB;ENG;Hoylake;10840;
+GB;ENG;Annfield Plain;10808;
+GB;ENG;Diss;10800;1379
+GB;SCT;Methill;10800;
+GB;ENG;Northam;10782;
+GB;WLS;Abertillery;10774;
+GB;ENG;Cleveleys;10732;
+GB;ENG;Catshill;10718;
+GB;ENG;Penistone;10693;
+GB;ENG;Shepton Mallet;10689;1749
+GB;SCT;Androssan;10670;
+GB;ENG;Baldock;10670;
+GB;ENG;Swanage;10624;
+GB;ENG;New Ollerton;10623;
+GB;ENG;Platts Bridge;10614;
+GB;ENG;Royston;10613;1763
+GB;ENG;Sawbridgeworth;10607;
+GB;ENG;Waltham Cross;10595;
+GB;ENG;Polegate;10576;
+GB;WLS;Ystradgynlais;10559;
+GB;ENG;Thirsk;10554;1845
+GB;ENG;Ludlow;10537;1584
+GB;ENG;Lutterworth;10528;
+GB;ENG;Horbury;10501;
+GB;WLS;Monmouth;10486;1600
+GB;ENG;Selsey;10486;
+GB;ENG;Ponteland;10480;
+GB;SCT;Prestonpans;10410;
+GB;ENG;St Blazey;10397;
+GB;NIR;Ballymoney;10393;28
+GB;SCT;Gourock;10350;
+GB;ENG;North Ascot;10324;
+GB;ENG;Penryn;10321;
+GB;SCT;Stranraer;10320;1776
+GB;ENG;Chadwell St Mary;10282;
+GB;ENG;Brierfield;10257;
+GB;ENG;Barnoldswick;10241;
+GB;ENG;Milnrow;10224;
+GB;ENG;Bingham;10220;
+GB;SCT;Ellon;10200;1358
+GB;ENG;Cranleigh;10181;
+GB;ENG;Soham;10176;
+GB;ENG;Westergate;10153;
+GB;WLS;Mold;10142;1352
+GB;ENG;Radstock;10117;
+GB;SCT;Forres;10100;1309
+GB;SCT;Kilsyth;10080;
+GB;ENG;Cambourne;10076;
+GB;SCT;Dalgety Bay;10050;
+GB;ENG;Whitchurch;9968;1948
+GB;ENG;Brandon;9967;
+GB;SCT;Nairn;9960;1667
+GB;ENG;New Romney;9941;
+GB;ENG;Polesworth;9931;
+GB;ENG;Woodingdean;9931;
+GB;NIR;Ballyclare;9919;28
+GB;WLS;Holywell;9911;
+GB;ENG;Sandiacre;9911;
+GB;ENG;Shildon;9908;
+GB;ENG;Adlington;9868;
+GB;SCT;Clarkston;9860;
+GB;ENG;North Walney;9838;
+GB;WLS;Caernarfon;9815;1286
+GB;ENG;Sherborne;9815;
+GB;SCT;Stenhousemuir;9740;
+GB;ENG;Kippax;9731;
+GB;ENG;Towcester;9721;
+GB;WLS;Pembroke Dock;9716;
+GB;ENG;Bulford Camp;9701;
+GB;ENG;Warlingham;9679;
+GB;ENG;St Ives;9650;
+GB;WLS;Newbridge;9640;
+GB;ENG;Bradford on Avon;9638;
+GB;WLS;Tonyrefail;9579;
+GB;ENG;Crook;9546;
+GB;WLS;Kinmel Bay;9544;
+GB;ENG;Maryport;9517;
+GB;ENG;Brandon;9484;
+GB;ENG;Wideopen;9467;
+GB;ENG;Burton Latimer;9459;
+GB;ENG;Liskeard;9453;1579
+GB;ENG;Ferryhill;9445;
+GB;ENG;Watton;9417;
+GB;ENG;Yaxley;9412;
+GB;SCT;Dunblane;9410;
+GB;ENG;Killamarsh;9391;
+GB;ENG;Market Warsop;9386;
+GB;ENG;Cockermouth;9382;
+GB;ENG;Hemsworth;9350;
+GB;SCT;South Queensferry;9350;
+GB;WLS;Pencoed;9342;
+GB;ENG;North Wingfield;9336;
+GB;WLS;Abergele;9333;
+GB;WLS;Pontarddulais;9316;
+GB;ENG;Sileby;9314;
+GB;WLS;Pontllanfraith;9291;
+GB;ENG;Worsbrough;9259;
+GB;SCT;Stevenston;9230;
+GB;ENG;Shanklin;9229;
+GB;ENG;Frodsham;9227;
+GB;ENG;Tiptree;9220;
+GB;ENG;Lydney;9209;1594
+GB;ENG;Southwater;9206;
+GB;ENG;Ledbury;9202;1531
+GB;ENG;Worsley;9178;
+GB;SCT;Haddington;9130;
+GB;ENG;Aveley;9107;
+GB;SCT;Portlethen;9090;
+GB;NIR;Comber;9078;28
+GB;SCT;Bonhill;9050;
+GB;SCT;Lanark;9050;1555
+GB;SCT;Leven;9040;
+GB;SCT;Dunbar;9030;1368
+GB;SCT;Blairgowrie;9020;1250
+GB;SCT;Cupar;9020;
+GB;ENG;Longton;9002;
+GB;ENG;Thurnscoe;8987;
+GB;ENG;Pocklington;8972;1759
+GB;ENG;Burscough;8960;
+GB;ENG;Broughton Astley;8950;
+GB;SCT;Peebles;8940;1721
+GB;ENG;Caister-on-Sea;8898;
