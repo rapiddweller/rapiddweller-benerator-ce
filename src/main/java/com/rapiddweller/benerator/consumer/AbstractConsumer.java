@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -37,7 +37,6 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  * This increases the chance to keep custom consumers compatible
  * with future versions.<br/><br/>
  * Created: 25.01.2008 22:37:42
- *
  * @author Volker Bergmann
  * @since 0.4.0
  */
@@ -53,18 +52,8 @@ public abstract class AbstractConsumer implements Consumer {
     finishProductConsumption(wrapper.unwrap());
   }
 
-  /**
-   * Start product consumption.
-   *
-   * @param object the object
-   */
   public abstract void startProductConsumption(Object object);
 
-  /**
-   * Finish product consumption.
-   *
-   * @param object the object
-   */
   public void finishProductConsumption(Object object) {
   }
 

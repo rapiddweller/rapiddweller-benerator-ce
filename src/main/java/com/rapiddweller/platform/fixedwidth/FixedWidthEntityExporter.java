@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -39,10 +39,8 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Exports Entities to fixed-width files.<br/>
- * <br/>
+ * Exports Entities to fixed-width files.<br/><br/>
  * Created: 26.08.2007 06:17:41
- *
  * @author Volker Bergmann
  */
 public class FixedWidthEntityExporter extends TextFileExporter {
@@ -54,30 +52,14 @@ public class FixedWidthEntityExporter extends TextFileExporter {
 
   private Locale locale;
 
-  /**
-   * Instantiates a new Fixed width entity exporter.
-   */
   public FixedWidthEntityExporter() {
     this("export.fcw", null);
   }
 
-  /**
-   * Instantiates a new Fixed width entity exporter.
-   *
-   * @param uri              the uri
-   * @param columnFormatList the column format list
-   */
   public FixedWidthEntityExporter(String uri, String columnFormatList) {
     this(uri, null, columnFormatList);
   }
 
-  /**
-   * Instantiates a new Fixed width entity exporter.
-   *
-   * @param uri              the uri
-   * @param encoding         the encoding
-   * @param columnFormatList the column format list
-   */
   public FixedWidthEntityExporter(String uri, String encoding, String columnFormatList) {
     super(uri, encoding, null);
     this.uri = uri;
@@ -90,20 +72,10 @@ public class FixedWidthEntityExporter extends TextFileExporter {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets locale.
-   *
-   * @param locale the locale
-   */
   public void setLocale(Locale locale) {
     this.locale = locale;
   }
 
-  /**
-   * Sets columns.
-   *
-   * @param columnFormatList the column format list
-   */
   public void setColumns(String columnFormatList) {
     if (columnFormatList != null) {
       this.formats.put("*", columnFormatList);
@@ -112,11 +84,6 @@ public class FixedWidthEntityExporter extends TextFileExporter {
     }
   }
 
-  /**
-   * Gets formats.
-   *
-   * @return the formats
-   */
   public Map<String, String> getFormats() {
     return formats;
   }

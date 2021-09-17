@@ -61,7 +61,6 @@ import java.util.Set;
 /**
  * Exports entities to Excel sheets.<br/><br/>
  * Created at 07.05.2008 13:31:15
- *
  * @author Volker Bergmann
  * @since 0.5.3
  */
@@ -82,18 +81,10 @@ public class XLSEntityExporter extends FormattingConsumer
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Xls entity exporter.
-   */
   public XLSEntityExporter() {
     this(DEFAULT_URI);
   }
 
-  /**
-   * Instantiates a new Xls entity exporter.
-   *
-   * @param uri the uri
-   */
   public XLSEntityExporter(String uri) {
     this.uri = uri;
     setDatePattern("m/d/yy");
@@ -116,11 +107,6 @@ public class XLSEntityExporter extends FormattingConsumer
 
   // Consumer interface ----------------------------------------------------------------------------------------------
 
-  /**
-   * Sets uri.
-   *
-   * @param uri the uri
-   */
   public void setUri(String uri) {
     this.uri = uri;
   }
