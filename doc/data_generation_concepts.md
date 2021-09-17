@@ -274,31 +274,44 @@ all available namespaces.
 A Benerator identifier (variable, entity or bean name) may contain only ASCII letters, numbers and underscores (no dot !) and is defined using
 a `<setting>` element - either in the descriptor file, e.g.
 
-`<setting name="user_count" value="1000000"/>`
+```xml
+<setting name="user_count" value="1000000"/>
+```
 
 or in a properties file, e.g. myproject.properties:
 
+```
 user_count="1000000
+```
 
 which is then included in the descriptor file:
 
-`<include uri="myproject.properties"/>`
+```xml
+<include uri="myproject.properties"/>
+```
 
 Of course you can evaluate variables for defining other variables as well by using a script expression:
 
-`<setting name="event_count" value="{user_count * 10}"/>`
+```xml
+<setting name="event_count" value="{user_count * 10}"/>`
+```
 
 A property can also refer to another element of the generation context:
 
-`<setting name="limit" ref="maxCount"/>`
-
+```xml
+<setting name="limit" ref="maxCount"/>
+```
 And it can be set calling a generator object:
 
-`<setting name="fileNumber" source="new DBSequenceGenerator('my_seq', db)"/>`
+```xml
+<setting name="fileNumber" source="new DBSequenceGenerator('my_seq', db)"/>
+```
 
 You can define default values for properties. If no property value has been defined before, the property is set to this value:
 
-`<setting name="stage" default="development" />`
+```xml
+<setting name="stage" default="development" />
+```
 
 ## Benerator Components
 
