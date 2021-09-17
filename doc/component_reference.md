@@ -466,7 +466,7 @@ A Consumer consumes generated data and usually is used for exporting or persisti
 
 ### JavaInvoker
 
-| Class Name | DbUnitEntityExporter |
+| Class Name | JavaInvoker |
 | --- | --- |
 | Import | `<import platforms="java"/>` |
 | Class Description | Maps entity components to method parameters and invokes a method on a Java object with these parameters. |
@@ -589,7 +589,6 @@ Helmut Schmidt 10226.14
 | Class Description | Exports entities to Excel XLS files. For using this exporter you need to add the Apache POI library to the Benerator's lib directory. |
 | Property | Property Description | Default Value |
 | uri | The URI of the file to create | "export.xls" |
-| columns | A comma-separated list of column names |  |
 | nullString | Text to represent _null_ values | "" |
 
 ### CSVEntityExporter

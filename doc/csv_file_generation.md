@@ -37,7 +37,7 @@ For CSV files without header, you need to specify a comma-separated list of colu
 ## Creating CSV files
 
 For creating a CSV file you must always take the same approach as above: Defining a bean with its properties and
-refering it as consumer:
+referring it as consumer:
 
 ```xml
 

@@ -147,13 +147,13 @@ for projects with smaller data structures the sampling approach.
 A non-represantative example project with large data objects of which only a small number of fields 
 needed to be anonymized, exhibited the following performance:
 
-| Method                            | Performance |
-| ---                               |        ---: |
-| No Anonymization Tracking         |    120 ME/h |
-| Full Anonymization Tracking       |     10 ME/h |
-| 10% Samples alone                 |     56 ME/h |
-| Field restriction alone           |     65 ME/h |
-| Field Restriction and 10% Samples |     75 ME/h |
+| Method                             | Performance |
+| ---                                |        ---: |
+| No anonymization tracking          |    120 ME/h |
+| Full anonymization tracking        |     10 ME/h |
+| 10% samples tracking               |     56 ME/h |
+| Restricted fields tracking         |     65 ME/h |
+| Restricted fields and 10% samples  |     75 ME/h |
 
 ME/h stands for million entities per hour.
 
