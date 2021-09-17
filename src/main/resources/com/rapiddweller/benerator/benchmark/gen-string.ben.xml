@@ -1,5 +1,5 @@
 <setup>
-    <generate type="data" {count} pageSize="100000" {threads}>
+    <generate type="data" {count} {threads} pageSize="100000">
         <attribute name="col1"  type="string" minLength="100" maxLength="200"/>
         <attribute name="col2"  type="string" minLength="100" maxLength="200"/>
         <attribute name="col3"  type="string" minLength="100" maxLength="200"/>

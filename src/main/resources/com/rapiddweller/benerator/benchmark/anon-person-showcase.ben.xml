@@ -19,7 +19,7 @@
         <attribute name='Cardno'          constant='1234567890123456'/>
     </generate>
 
-    <iterate type='Person' source="mem" distribution="random" {count} pageSize='100000' {threads}> <!--consumer="ConsoleExporter"-->
+    <iterate type='Person' source="mem" distribution="random" {count} {threads} pageSize='100000'> <!--consumer="ConsoleExporter"-->
         <variable name='addr'             generator='AddressGenerator'/>
         <attribute name='streetAndNumber' script="addr.street + ' ' + addr.houseNumber"/>
         <attribute name='zip'             script='addr.postalCode'/>

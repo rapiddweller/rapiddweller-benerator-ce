@@ -19,7 +19,7 @@
         <attribute name='Cardno'          constant='1234567890123456'/>
     </generate>
 
-    <iterate type='Person' source="mem" distribution="random" {count} pageSize='100000' {threads}> <!--consumer="ConsoleExporter"-->
+    <iterate type='Person' source="mem" distribution="random" {count} {threads} pageSize='100000'> <!--consumer="ConsoleExporter"-->
         <attribute name='streetAndNumber' pattern='[A-Z][a-z]{4,10} Street [1-9][0-9]?'/>
         <attribute name='zip'             pattern='[0-9]{5}'/>
         <attribute name='city'            pattern='[A-Z][a-z]{4,15}'/>

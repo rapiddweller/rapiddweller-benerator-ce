@@ -8,6 +8,7 @@ import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.TextUtil;
 import com.rapiddweller.common.VMInfo;
+import com.rapiddweller.common.format.Alignment;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.common.version.VersionNumberParser;
@@ -35,18 +36,23 @@ public class Benchmark {
 
   private static final Logger logger = LoggerFactory.getLogger(Benchmark.class);
 
-  public static final int DEFAULT_MIN_DURATION_SECS = 30;
+  public static final int DEFAULT_MIN_DURATION_SECS = 10;
 
   public static final String EE_BENERATOR = "com.rapiddweller.benerator_ee.main.EEBenerator";
 
   private static final Setup[] DEFAULT_SETUPS = {
-      new Setup("gen-string.ben.xml", "1.2_.0", 100000),
-      new Setup("gen-person.ben.xml", "1.2.0", 80000),
-      new Setup("anon-person-showcase.ben.xml", "1.2.0", 100000),
-      new Setup("anon-person-regex.ben.xml", "1.2.0", 1500000),
-      new Setup("anon-person-hash.ben.xml", "1.2.0", 1500000),
-      new Setup("anon-person-random.ben.xml", "1.2.0", 1500000),
-      new Setup("anon-person-constant.ben.xml", "1.2.0", 8000000)
+      new Setup("gen-string.ben.xml", false, "1.2.0", 100000),
+      new Setup("gen-person.ben.xml", false, "1.2.0", 80000),
+      new Setup("anon-person-showcase.ben.xml", false, "1.2.0", 100000),
+      new Setup("anon-person-regex.ben.xml", false, "1.2.0", 1500000),
+      new Setup("anon-person-hash.ben.xml", false, "1.2.0", 1500000),
+      new Setup("anon-person-random.ben.xml", false, "1.2.0", 1500000),
+      new Setup("anon-person-constant.ben.xml", false, "1.2.0", 8000000),
+      new Setup("file-out-csv.ben.xml", false, "1.2.0", 1000000),
+      new Setup("file-out-json.ben.xml", true, "1.2.0", 1000000),
+      new Setup("file-out-dbunit.ben.xml", false, "1.2.0", 1000000),
+      new Setup("file-out-fixedwidth.ben.xml", false, "1.2.0", 500000),
+      new Setup("file-out-xml.ben.xml", false, "1.2.0", 500000),
   };
 
   private static final NumberFormat PF = new DecimalFormat("#,##0", DecimalFormatSymbols.getInstance(Locale.US));
@@ -132,7 +138,12 @@ public class Benchmark {
     printHorizontalLine();
     // Pretty-print results in a text table
     System.out.println();
-    System.out.print(TextUtil.formatLinedTable(title, table));
+    int cols = table[0].length;
+    Alignment[] alignments = new Alignment[cols];
+    alignments[0] = Alignment.LEFT;
+    for (int i = 1; i < cols; i++)
+      alignments[i] = Alignment.RIGHT;
+    System.out.print(TextUtil.formatLinedTable(title, table, alignments));
   }
 
 
@@ -149,7 +160,7 @@ public class Benchmark {
         "--ee              run on Benerator Enterprise Edition (default on EE,",
         "                  only available on Enterprice Edition)",
         "--minSecs n       Choose generation count to have a test execution time",
-        "                  of at least n seconds (default: 30)",
+        "                  of at least n seconds (default: 10)",
         "--maxThreads k    Use only up to k cores for testing",
         "                  (default: slightly more than the number of cores)",
         "--help            print this help"
@@ -188,7 +199,7 @@ public class Benchmark {
         "" + BeneratorUtil.getJVMInfo(),
         "Date/Time: " + ZonedDateTime.now(),
         "",
-        "Numbers are million entities generated per hour"
+        "Numbers are reported in million entities generated per hour"
     };
     for (String line : title)
       System.out.println(line);
@@ -220,7 +231,8 @@ public class Benchmark {
     System.out.println("Running " + setup.fileName);
     tableRow[0] = setup.fileName;
     for (int iT = 0; iT < threadCounts.length; iT++) {
-      if (versionNumber.compareTo(setup.requiredVersion) >= 0) {
+      if (versionNumber.compareTo(setup.requiredVersion) >= 0
+          && (!setup.reqEE || !benerator.isCommunityEdition())) {
         int threads = threadCounts[iT];
         Execution execution = runWithMinDuration(setup.fileName, minDurationSecs, setup.count, threads, benerator);
         double eps = (double) execution.count / execution.duration * 1000.;
@@ -257,22 +269,25 @@ public class Benchmark {
     String xml = IOUtil.getContentOfURI("com/rapiddweller/benerator/benchmark/" + fileName);
     xml = xml.replace("{count}", "count=\"" + count + "\"");
     xml = xml.replace("{threads}", (Benerator.isCommunityEdition() ? "" : "threads=\"" + threads + "\""));
-    String filename = "benchmark.ben.xml";
+    String filename = "__benchmark.ben.xml";
     IOUtil.writeTextFile(filename, xml);
     long t0 = System.currentTimeMillis();
     benerator.main(new String[] {filename});
     long t1 = System.currentTimeMillis();
     FileUtil.delete(filename);
+    FileUtil.delete("__benchmark.out");
     return new Execution(fileName, count, threads, t1 - t0);
   }
 
   public static class Setup {
     public String fileName;
+    public boolean reqEE;
     public VersionNumber requiredVersion;
     public int count;
 
-    public Setup(String fileName, String requiredVersion, int count) {
+    public Setup(String fileName, boolean reqEE,  String requiredVersion, int count) {
       this.fileName = fileName;
+      this.reqEE = reqEE;
       this.requiredVersion = new VersionNumberParser().parse(requiredVersion);
       this.count = count;
     }
