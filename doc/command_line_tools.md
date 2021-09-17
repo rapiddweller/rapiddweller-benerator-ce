@@ -83,24 +83,38 @@ so the report will look small like this:
 ```bash
 +---------------------------------------------------------------------------+
 | Benchmark throughput of Benerator Community Edition 1.2.0-jdk-11-SNAPSHOT |
-| on a Mac OS X 11.4 aarch64 system with 4 cores                            |
+| on a Mac OS X 11.4 x86_64 with 8 cores                                    |
 | Java version 11.0.11                                                      |
-| JVM OpenJDK 64-Bit Server VM 11.0.11+9-LTS (Azul Systems, Inc.)           |
-| Date/Time: 2021-09-14T17:20:11.228901+02:00[Europe/Berlin]                |
+| OpenJDK 64-Bit Server VM 11.0.11+9 (AdoptOpenJDK)                         |
+| Date/Time: 2021-09-17T10:41:43.510603+02:00[Europe/Berlin]                |
 |                                                                           |
-| Numbers are million entities generated per hour                           |
+| Numbers are reported in million entities generated per hour               |
 +----------------------------------------------------------------+----------+
 | Benchmark                                                      | 1 Thread |
 +----------------------------------------------------------------+----------+
-| gen-string.ben.xml                                             |       59 |
+| gen-string.ben.xml                                             |       37 |
 +----------------------------------------------------------------+----------+
-| gen-person.ben.xml                                             |      124 |
+| gen-person.ben.xml                                             |       26 |
 +----------------------------------------------------------------+----------+
-| anon-person-showcase.ben.xml                                   |      121 |
+| anon-person-showcase.ben.xml                                   |       31 |
 +----------------------------------------------------------------+----------+
-| anon-person-hash.ben.xml                                       |      562 |
+| anon-person-regex.ben.xml                                      |      346 |
 +----------------------------------------------------------------+----------+
-| anon-person-constant.ben.xml                                   |    3,944 |
+| anon-person-hash.ben.xml                                       |      386 |
++----------------------------------------------------------------+----------+
+| anon-person-random.ben.xml                                     |      576 |
++----------------------------------------------------------------+----------+
+| anon-person-constant.ben.xml                                   |    2,210 |
++----------------------------------------------------------------+----------+
+| file-out-csv.ben.xml                                           |      923 |
++----------------------------------------------------------------+----------+
+| file-out-json.ben.xml                                          |      N/A |
++----------------------------------------------------------------+----------+
+| file-out-dbunit.ben.xml                                        |      576 |
++----------------------------------------------------------------+----------+
+| file-out-fixedwidth.ben.xml                                    |      436 |
++----------------------------------------------------------------+----------+
+| file-out-xml.ben.xml                                           |      518 |
 +----------------------------------------------------------------+----------+
 ```
 
@@ -122,24 +136,38 @@ the following result:
 ```bash
 +-----------------------------------------------------------------------------+
 | Benchmark throughput of Benerator Enterprise Edition 1.2.0-jdk-11-SNAPSHOT  |
-| on a Mac OS X 11.4 aarch64 system with 8 cores                              |
+| on a Mac OS X 11.4 x86_64 with 8 cores                                      |
 | Java version 11.0.11                                                        |
-| JVM OpenJDK 64-Bit Server VM 11.0.11+9-LTS (Azul Systems, Inc.)             |
-| Date/Time: 2021-09-14T17:52:27.582424+02:00[Europe/Berlin]                  |
+| OpenJDK 64-Bit Server VM 11.0.11+9 (AdoptOpenJDK)                           |
+| Date/Time: 2021-09-17T10:09:44.460364+02:00[Europe/Berlin]                  |
 |                                                                             |
-| Numbers are million entities generated per hour                             |
+| Numbers are reported in million entities generated per hour                 |
 +------------------------------+----------+-----------+-----------+-----------+
 | Benchmark                    | 1 Thread | 2 Threads | 4 Threads | 6 Threads |
 +------------------------------+----------+-----------+-----------+-----------+
-| gen-string.ben.xml           |      339 |       495 |     1,007 |       992 |
+| gen-string.ben.xml           |      243 |       379 |       809 |       747 |
 +------------------------------+----------+-----------+-----------+-----------+
-| gen-person.ben.xml           |      167 |       307 |       361 |       267 |
+| gen-person.ben.xml           |       88 |       162 |       249 |       193 |
 +------------------------------+----------+-----------+-----------+-----------+
-| anon-person-showcase.ben.xml |      164 |       265 |       348 |       250 |
+| anon-person-showcase.ben.xml |       83 |       165 |       241 |       187 |
 +------------------------------+----------+-----------+-----------+-----------+
-| anon-person-hash.ben.xml     |    1,305 |     1,557 |     1,388 |     1,457 |
+| anon-person-regex.ben.xml    |      684 |     1,008 |     1,145 |       794 |
 +------------------------------+----------+-----------+-----------+-----------+
-| anon-person-constant.ben.xml |    3,866 |     4,898 |     2,326 |     1,960 |
+| anon-person-hash.ben.xml     |      923 |     1,344 |     1,142 |     1,187 |
++------------------------------+----------+-----------+-----------+-----------+
+| anon-person-random.ben.xml   |    1,250 |     1,655 |     1,254 |     1,274 |
++------------------------------+----------+-----------+-----------+-----------+
+| anon-person-constant.ben.xml |    1,926 |     2,533 |     1,522 |     1,503 |
++------------------------------+----------+-----------+-----------+-----------+
+| file-out-csv.ben.xml         |      946 |       755 |       584 |       621 |
++------------------------------+----------+-----------+-----------+-----------+
+| file-out-json.ben.xml        |      680 |       553 |       478 |       426 |
++------------------------------+----------+-----------+-----------+-----------+
+| file-out-dbunit.ben.xml      |      527 |       432 |       323 |       334 |
++------------------------------+----------+-----------+-----------+-----------+
+| file-out-fixedwidth.ben.xml  |      454 |       339 |       247 |       248 |
++------------------------------+----------+-----------+-----------+-----------+
+| file-out-xml.ben.xml         |      527 |       408 |       304 |       308 |
 +------------------------------+----------+-----------+-----------+-----------+
 ```
 
@@ -171,7 +199,7 @@ The command line options are as follows:
 | --- | --- | --- |
 | --ce | Run on Benerator Community Edition (CE) | This is the default on CE |
 | --ee | Run on Benerator Enterprise Edition (EE) | This is the default on EE and only available on EE |
-| --minSecs n | Choose a workload to have the benchmark run at least n seconds | 30 |
+| --minSecs n | Choose a workload to have the benchmark run at least n seconds | 10 |
 | --maxThreads k | Use only up to k cores for testing | a bit more than the number of reported cores |
 | --help | print this help |
 
@@ -179,7 +207,15 @@ A **--minSecs** settings of 30 requires the benchmark to run with a workload
 that needs at least 30 seconds to process. It is advisable to choose times 
 which are sufficiently large that the fix initialization time of Benerator 
 has less impact on the measurement and that JVM hot spot optimizers get some 
-time to make Benerator run even more efficiently.
+time to make Benerator run even more efficiently. 
+If --minSecs is not specified, a default of 10 seconds is used, which is too 
+short for optimum measurements, but was chosen as a defensive measure to 
+save your system's hard drive space: The file generation benchmarks could easily 
+fill up a terabyte of hard disk space in a few minutes. 
+Even on standard developer hardware, a file export of one minute can produce 
+a file of a size of 10 Gigabytes. Generated files are deleted automatically 
+after each benchmark run, but take care not to fill up your disk during a 
+benchmark run.
 
 By default, the Benchmark tool test thread settings from single-threaded to a concurrency 
 slightly larger than the number of cores of the system it is running on. Unfortunately, 
