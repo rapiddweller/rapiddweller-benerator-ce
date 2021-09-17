@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -41,10 +41,8 @@ import java.beans.PropertyDescriptor;
 import java.io.Closeable;
 
 /**
- * {@link Task} implementation that instantiates a JavaBean.<br/>
- * <br/>
+ * {@link Task} implementation that instantiates a JavaBean.<br/><br/>
  * Created at 24.07.2009 07:00:52
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -54,13 +52,6 @@ public class BeanStatement extends SequentialStatement {
   private final Expression<?> constructionExpression;
   private final ResourceManager resourceManager;
 
-  /**
-   * Instantiates a new Bean statement.
-   *
-   * @param id                     the id
-   * @param constructionExpression the construction expression
-   * @param resourceManager        the resource manager
-   */
   public BeanStatement(String id, Expression<?> constructionExpression, ResourceManager resourceManager) {
     this.id = id;
     this.constructionExpression = constructionExpression;

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -43,53 +43,30 @@ import java.io.IOException;
 /**
  * Parent class for Benerator integration tests.<br/><br/>
  * Created: 10.08.2010 07:07:42
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
 
-  /**
-   * The Resource manager.
-   */
   protected ResourceManagerSupport resourceManager;
 
-  /**
-   * Sets up environment.
-   */
   @Before
   public void setUpEnvironment() {
     System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, ",");
     this.resourceManager = new ResourceManagerSupport();
   }
 
-  /**
-   * Tear down.
-   */
   @After
   public void tearDown() {
     this.resourceManager.close();
     System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, ",");
   }
 
-  /**
-   * Parse and execute file benerator context.
-   *
-   * @param filename the filename
-   * @return the benerator context
-   * @throws IOException the io exception
-   */
   protected BeneratorContext parseAndExecuteFile(String filename) throws IOException {
     String xml = IOUtil.getContentOfURI(filename);
     return parseAndExecute(xml);
   }
 
-  /**
-   * Parse and execute root benerator context.
-   *
-   * @param xml the xml
-   * @return the benerator context
-   */
   protected BeneratorContext parseAndExecuteRoot(String xml) {
     context = BeneratorFactory.getInstance().createContext(".");
     Statement statement = parse(xml);
@@ -97,24 +74,12 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
     return context;
   }
 
-  /**
-   * Parse and execute benerator context.
-   *
-   * @param xml the xml
-   * @return the benerator context
-   */
   public BeneratorContext parseAndExecute(String xml) {
     Statement statement = parse(xml);
     statement.execute(context);
     return context;
   }
 
-  /**
-   * Parse statement.
-   *
-   * @param xml the xml
-   * @return the statement
-   */
   public Statement parse(String xml) {
     Element element = XMLUtil.parseStringAsElement(xml);
     BeneratorParseContext parsingContext = BeneratorFactory.getInstance().createParseContext(resourceManager);
