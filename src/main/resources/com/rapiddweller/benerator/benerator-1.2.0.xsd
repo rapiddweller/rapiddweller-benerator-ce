@@ -306,7 +306,11 @@
     <!-- connects to a JMS destination -->
     <xs:element name="jms-destination">
         <xs:annotation>
-            <xs:appinfo><version>EE</version></xs:appinfo>
+            <xs:appinfo>
+                <edition>EE</edition>
+                <since>1.2.0</since>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en"></xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:attribute name="id" type="xs:string"/>
@@ -320,7 +324,11 @@
 
     <xs:simpleType name="jms-destination-type">
         <xs:annotation>
-            <xs:appinfo><version>EE</version></xs:appinfo>
+            <xs:appinfo>
+                <edition>EE</edition>
+                <since>1.2.0</since>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en"></xs:documentation>
         </xs:annotation>
         <xs:union>
             <xs:simpleType>
@@ -337,7 +345,11 @@
 
     <xs:simpleType name="jms-format">
         <xs:annotation>
-            <xs:appinfo><version>EE</version></xs:appinfo>
+            <xs:appinfo>
+                <edition>EE</edition>
+                <since>1.2.0</since>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en"></xs:documentation>
         </xs:annotation>
         <xs:union>
             <xs:simpleType>
@@ -355,7 +367,11 @@
     <!-- imports from a Kafka topic -->
     <xs:element name="kafka-importer">
         <xs:annotation>
-            <xs:appinfo><version>EE</version></xs:appinfo>
+            <xs:appinfo>
+                <edition>EE</edition>
+                <since>1.2.0</since>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en"></xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:attributeGroup ref="kafka-common-attrs"/>
@@ -386,7 +402,11 @@
     <!-- exports to a Kafka topic -->
     <xs:element name="kafka-exporter">
         <xs:annotation>
-            <xs:appinfo><version>EE</version></xs:appinfo>
+            <xs:appinfo>
+                <edition>EE</edition>
+                <since>1.2.0</since>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en"></xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:attributeGroup ref="kafka-common-attrs"/>
@@ -790,7 +810,11 @@
             <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attributeGroup ref="execution-attrs"/>
             <xs:attribute name="threads" type="xs:int">
-                <xs:annotation><xs:appinfo><version>EE</version></xs:appinfo></xs:annotation>
+                <xs:appinfo>
+                    <edition>EE</edition>
+                    <since>1.2.0</since>
+                </xs:appinfo>
+                <xs:documentation xml:lang="en"></xs:documentation>
             </xs:attribute>
             <xs:attribute name="template" type="xs:string"/>
             <xs:attribute name="consumer" type="xs:string"/>
@@ -817,7 +841,11 @@
             <xs:attributeGroup ref="iterator-attrs"/>
             <xs:attributeGroup ref="execution-attrs"/>
             <xs:attribute name="threads" type="xs:int">
-                <xs:annotation><xs:appinfo><version>EE</version></xs:appinfo></xs:annotation>
+                <xs:appinfo>
+                    <edition>EE</edition>
+                    <since>1.2.0</since>
+                </xs:appinfo>
+                <xs:documentation xml:lang="en"></xs:documentation>
             </xs:attribute>
             <xs:attribute name="template" type="xs:string"/>
             <xs:attribute name="consumer" type="xs:string"/>
@@ -966,7 +994,11 @@
         <xs:attribute name="locale" type="xs:string"/>
         <xs:attribute name="filter" type="xs:string">
             <xs:annotation>
-                <xs:appinfo><version>EE</version></xs:appinfo>
+                <xs:appinfo>
+                    <edition>EE</edition>
+                    <since>1.2.0</since>
+                </xs:appinfo>
+                <xs:documentation xml:lang="en"></xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
@@ -1005,10 +1037,17 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="anon-check" type="xs:string" minOccurs="0" maxOccurs="1">
+    <xs:complexType name="anon-check">
         <xs:annotation>
-            <xs:appinfo><version>EE</version></xs:appinfo>
+            <xs:appinfo>
+                <edition>EE</edition>
+                <since>1.2.0</since>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en"></xs:documentation>
         </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string"/>
+        </xs:simpleContent>
     </xs:complexType>
 
 </xs:schema>
