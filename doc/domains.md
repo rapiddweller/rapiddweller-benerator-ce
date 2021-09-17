@@ -164,11 +164,13 @@ The Person class has the following properties:
 
 The following countries are supported:
 
-| country | code | remarks |
-| --- | --- | --- |
-| Germany | DE | Valid ZIP codes and area codes, no assurance that the street exists in this city or the local phone number has the appropriate length |
-| USA | US | Valid ZIP codes and area codes, no assurance that the street exists in this city. |
-| Brazil | BR | Valid ZIP codes and area codes, no assurance that the street exists in this city or the local phone number has the appropriate length |
+| country        | code | remarks |
+| ---            | ---  | --- |
+| USA            |  US  | Valid ZIP codes and area codes, no assurance that the street exists in this city. |
+| United Kingdom |  GB  | Valid area codes, no postcodes, no assurance that the street exists in this city or the local phone number has the appropriate length. Contributions are welcome |
+| Germany        |  DE  | Valid ZIP codes and area codes, no assurance that the street exists in this city or the local phone number has the appropriate length |
+| Switzerland    |  CH  | Valid ZIP codes and area codes, no assurance that the street exists in this city or the local phone number has the appropriate length |
+| Brazil         |  BR  | Valid ZIP codes and area codes, no assurance that the street exists in this city or the local phone number has the appropriate length |
 
 ## net domain
 
