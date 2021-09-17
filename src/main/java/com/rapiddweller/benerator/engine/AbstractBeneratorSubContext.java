@@ -225,6 +225,11 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
   }
 
   @Override
+  public Class<?> forName(String className, boolean required) {
+    return parent.forName(className, required);
+  }
+
+  @Override
   public ExecutorService getExecutorService() {
     return parent.getExecutorService();
   }

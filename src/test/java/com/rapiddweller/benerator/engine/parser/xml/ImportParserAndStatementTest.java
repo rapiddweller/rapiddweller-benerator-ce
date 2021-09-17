@@ -31,6 +31,7 @@ import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ImportStatement;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SyntaxError;
 import org.junit.Test;
@@ -40,17 +41,16 @@ import static org.junit.Assert.assertNull;
 /**
  * Tests {@link ImportParser} and {@link ImportStatement}.<br/><br/>
  * Created: 01.05.2010 07:24:25
- *
  * @author Volker Bergmann
  * @since 0.6.1
  */
 public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
-  @Test
+  @Test(expected = ConfigurationError.class)
   public void testNoImport() {
     BeneratorContext context = new DefaultBeneratorContext();
     try {
-      assertNull(context.forName("IncrementGenerator"));
+      context.forName("IncrementGenerator");
     } finally {
       IOUtil.close(context);
     }

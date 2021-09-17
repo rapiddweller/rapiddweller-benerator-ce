@@ -439,6 +439,11 @@ public class DefaultBeneratorContext implements BeneratorContext {
   }
 
   @Override
+  public Class<?> forName(String className, boolean required) {
+    return classCache.forName(className, required);
+  }
+
+  @Override
   public void importClass(String className) {
     classCache.importClass(className);
   }

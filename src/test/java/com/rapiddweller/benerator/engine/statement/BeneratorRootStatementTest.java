@@ -34,6 +34,7 @@ import com.rapiddweller.benerator.factory.EquivalenceGeneratorFactory;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
@@ -97,7 +98,7 @@ public class BeneratorRootStatementTest extends AbstractBeneratorIntegrationTest
     context.forName("ConsoleExporter");
   }
 
-  @Test
+  @Test(expected = ConfigurationError.class)
   public void testDefaultImports_false() {
     // given that defaults import is disabled
     String xml = "<setup defaultImports='false'/>";
@@ -105,7 +106,7 @@ public class BeneratorRootStatementTest extends AbstractBeneratorIntegrationTest
     BeneratorContext context = parseAndExecuteRoot(xml);
     // then the default imports have not been applied,
     // and com.rapiddweller.benerator.consumer.ConsoleExporter cannot be found
-    assertNull(context.forName("ConsoleExporter"));
+    context.forName("ConsoleExporter");
   }
 
   // helpers ---------------------------------------------------------------------------------------------------------
