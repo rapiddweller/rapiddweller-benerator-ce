@@ -114,5 +114,27 @@ your configuration could look like this:
 />
 ```
 
-Remember that you can hide your password from the XML setup file by using the 
-properties file mechanism, see [Inclusion of properties files].
+If the Benerator file is shared, but your access individual, 
+then remember that you can hide your password from the XML setup file by using the 
+properties file mechanism in your user folder, see [`<setting>` and Benerator identifiers]:
+
+Local file kafka.properties:
+```
+truststore_password=test1234
+keystore_password=test1234
+ssl_password=test1234
+```
+
+Shared file benerator.xml:
+```xml
+<include uri="kafka.properties"/>
+<kafka-importer id='importer' bootstrap.servers='localhost:9094' topic='kafka-demo' format='json'
+        security.protocol='SSL'
+        ssl.truststore.location='/var/private/ssl/kafka.client.truststore.jks' 
+        ssl.truststore.password='{truststore_password}'
+        ssl.keystore.location='/var/private/ssl/kafka.client.keystore.jks'
+        ssl.keystore.password='{keystore_password}'
+        ssl.key.password='{ssl_password}'
+/>
+```
+
