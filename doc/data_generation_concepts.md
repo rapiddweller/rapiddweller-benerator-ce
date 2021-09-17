@@ -293,7 +293,7 @@ which is then included in the descriptor file:
 Of course you can evaluate variables for defining other variables as well by using a script expression:
 
 ```xml
-<setting name="event_count" value="{user_count * 10}"/>`
+<setting name="event_count" value="{user_count * 10}"/>
 ```
 
 A property can also refer to another element of the generation context:
