@@ -1,0 +1,18 @@
+release notes rapiddweller-benerator-ce 1.2.0
+==============================================
+
+summary
+-------
+
+
+changes
+-------
+- Added method to the Distribution interface, introduced AbstractDistribution class to compensate this for implementors.
+
+enhancements
+------------
+- New address domain package for United Kingdom (GB)
+- Supporting custom random implementations, see class RandomSupport
+
+bug fixes
+---------
