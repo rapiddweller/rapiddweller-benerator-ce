@@ -46,25 +46,16 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Reads and persists city files in CSV format (column header = property name).<br/>
- * <br/>
+ * Reads and persists city files in CSV format (column header = property name).<br/><br/>
  * Created: 28.07.2007 15:21:12
- *
  * @author Volker Bergmann
  */
 public class CityManager {
 
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(CityManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CityManager.class);
 
-  /**
-   * Read cities.
-   *
-   * @param country the country
-   */
   public static void readCities(Country country) {
-    String filename = "/com/rapiddweller/domain/address/city_" +
-        country.getIsoCode() + ".csv";
+    String filename = "/com/rapiddweller/domain/address/city_" + country.getIsoCode() + ".csv";
     if (IOUtil.isURIAvailable(filename)) {
       readCities(country, filename, new HashMap<>());
     } else {
@@ -72,13 +63,6 @@ public class CityManager {
     }
   }
 
-  /**
-   * Read cities.
-   *
-   * @param country  the country
-   * @param filename the filename
-   * @param defaults the defaults
-   */
   public static void readCities(Country country, String filename,
                                 Map<String, String> defaults) {
     try {
@@ -143,15 +127,7 @@ public class CityManager {
     return state;
   }
 
-  /**
-   * Create city id city id.
-   *
-   * @param instance   the instance
-   * @param lineNumber the line number
-   * @return the city id
-   */
-  protected static CityId createCityId(Map<String, String> instance,
-                                       int lineNumber) {
+  protected static CityId createCityId(Map<String, String> instance, int lineNumber) {
     CityId cityId;
     if (!StringUtil.isEmpty(instance.get("municipality"))) {
       cityId = new CityId(instance.get("municipality"), null);
@@ -180,10 +156,10 @@ public class CityManager {
       String areaCode = getValue(instance, "areaCode", defaults);
       if (StringUtil.isEmpty(areaCode)) {
         warnCount.incrementAndGet();
-        LOGGER.warn("areaCode is not provided for city: '" + cityId);
+        LOGGER.warn("Dropping city {} since no areaCode is provided", cityId);
+        return;
       }
-      city = new CityHelper(state, cityId, new String[] {postalCode},
-          areaCode);
+      city = new CityHelper(state, cityId, new String[] {postalCode}, areaCode);
       if (!StringUtil.isEmpty(lang)) {
         city.setLanguage(LocaleUtil.getLocale(lang));
       }
@@ -193,13 +169,6 @@ public class CityManager {
     }
   }
 
-  /**
-   * Persist cities.
-   *
-   * @param country  the country
-   * @param filename the filename
-   * @throws IOException the io exception
-   */
   public static void persistCities(Country country, String filename)
       throws IOException {
     // persist city data in standard format
@@ -230,41 +199,20 @@ public class CityManager {
     return value;
   }
 
-  /**
-   * The type City helper.
-   */
   public static class CityHelper extends City {
 
     private String postalCode;
 
-    /**
-     * Instantiates a new City helper.
-     *
-     * @param state    the state
-     * @param cityId   the city id
-     * @param zipCodes the zip codes
-     * @param areaCode the area code
-     */
     public CityHelper(State state, CityId cityId, String[] zipCodes,
                       String areaCode) {
       super(state, cityId.getName(), cityId.getNameExtension(), zipCodes,
           areaCode);
     }
 
-    /**
-     * Gets postal code.
-     *
-     * @return the postal code
-     */
     public String getPostalCode() {
       return postalCode;
     }
 
-    /**
-     * Sets postal code.
-     *
-     * @param postalCode the postal code
-     */
     public void setPostalCode(String postalCode) {
       this.postalCode = postalCode;
     }
