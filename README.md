@@ -117,17 +117,16 @@ please open an issue on github so we can expand our manual to make things cleare
 
 Navigate to the sources for our generated mkdocs:
 
-- [Goals and Features](doc/benerator_goals_features.md)
+- [Goals and Features](doc/introduction_to_benerator.md)
 - [Installation](doc/installation.md)
 - [The Benerator Project Wizard](doc/the_benerator_project_wizard.md)
 - [Quick tour through the descriptor file format](doc/quick_tour_through_the_descriptor_file_format.md)
 - [Data Generation Concepts](doc/data_generation_concepts.md)
 - [Data Anonymization Concepts](doc/data_anonymization_concepts.md)
 - [Regular Expression Support](doc/regular_expression_support.md)
-- [CSV File Generation/Anonymization](doc/csv_file_generation.md)
-- [JSON File Generation/Anonymization (Enterprise Edition)](doc/json_file_generation.md)
+- [Data File Processing](doc/data_file_processing.md)
+- [XML File Processing](doc/xml_file_processing.md)
 - [Using Relational Databases](doc/using_relational_databases.md)
-- [Generating XML Files](doc/generating_xml_files.md)
 - [Message Queue Access (Enterprise Edition)](doc/message_queue_access.md)
 - [Kafka Access (Enterprise Edition)](doc/kafka_access.md)
 - [Advanced Topics](doc/advanced_topics.md)

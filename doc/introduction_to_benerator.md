@@ -1,4 +1,4 @@
-# Goals and Features <br />Introduction to Benerator
+# Introduction to Benerator
 
 ## Goals
 

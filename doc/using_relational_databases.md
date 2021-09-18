@@ -576,7 +576,7 @@ db_order_items' total_price values and write it to the db_order's total_price co
 ```
 
 The described update mechanism can also be used to anonymize production data –
-see '[Production Data Anonymization](benerator_goals_features.md#production-data-anonymization)'. For transferring user
+see '[Production Data Anonymization](introduction_to_benerator.md#production-data-anonymization)'. For transferring user
 data from a source database 'sourcedb' to a target database 'testdb', you would write
 
 ```xml
