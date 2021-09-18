@@ -35,10 +35,8 @@ import com.rapiddweller.model.data.EntitySource;
 import com.rapiddweller.model.data.FileBasedEntitySource;
 
 /**
- * Implements an {@link EntitySource} that reads Entities from an Excel sheet.<br/>
- * <br/>
+ * Implements an {@link EntitySource} that reads Entities from an Excel sheet.<br/><br/>
  * Created at 27.01.2009 21:31:54
- *
  * @author Volker Bergmann
  * @since 0.5.7
  */
@@ -51,15 +49,6 @@ public class XLSEntitySource extends FileBasedEntitySource {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Xls entity source.
-   *
-   * @param uri          the uri
-   * @param preprocessor the preprocessor
-   * @param entityType   the entity type
-   * @param sheetName    the sheet name
-   * @param formatted    the formatted
-   */
   public XLSEntitySource(String uri, Converter<String, ?> preprocessor,
                          ComplexTypeDescriptor entityType, String sheetName,
                          boolean formatted) {
