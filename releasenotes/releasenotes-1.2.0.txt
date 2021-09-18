@@ -11,6 +11,8 @@ changes
 
 enhancements
 ------------
+- Improved Bnerator engine performance
+- Strongly improved and extended Benerator Manual
 - New address domain package for United Kingdom (GB)
 - Supporting custom random implementations, see class RandomSupport
 
