@@ -88,8 +88,7 @@ public class BeanParserAndStatementTest extends AbstractBeneratorIntegrationTest
 
   @Test(expected = SyntaxError.class)
   public void testNoId() {
-    String xml = "<bean class='" + BeanMock.class.getName() + "'/>";
-    parse(xml);
+    parse("<bean class='" + BeanMock.class.getName() + "'/>");
   }
 
 }

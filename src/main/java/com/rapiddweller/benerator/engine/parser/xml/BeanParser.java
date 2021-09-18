@@ -146,9 +146,6 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
     try {
       String id = element.getAttribute(ATT_ID);
       Expression<?> bean = parseBeanExpression(element);
-      if (id == null) {
-        throw new SyntaxError("bean id is missing", XMLUtil.format(element));
-      }
       return new BeanStatement(id, bean, context.getResourceManager());
     } catch (ConversionException e) {
       throw new ConfigurationError(e);
