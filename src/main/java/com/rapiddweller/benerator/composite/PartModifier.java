@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Of the current product, it takes a part of name 'partName' and multiplicity > 1 (like array or collection)
+ * Of the current product, it takes a part of name 'partName' and multiplicity greater than 1 (like array or collection)
  * and applies some generation steps to them in order to overwrite/anonymize data.<br/><br/>
  * Created: 11.09.2021 09:58:53
  * @author Volker Bergmann
