@@ -69,15 +69,11 @@ You can use the PersonGenerator like this:
 
 to get output similar to this:
 
-```bash
+```
 user[salutation=Mr, name=David Morel]
-
 user[salutation=Mr, name=Robert Robert]
-
 user[salutation=Mr, name=Eric Morel]
-
 user[salutation=Mr, name=Patrick Lefebvre]
-
 user[salutation=Mme, name=Helene Fournier]
 ```
 
@@ -200,15 +196,11 @@ If you use the CompanyNameGenerator like this:
 
 you get output like this:
 
-```bash
+```
 company[name=Belanda Aktiengesellschaft &amp; Co. KG]
-
 company[name=MyWare Technologies GmbH]
-
 company[name=WebBox AG]
-
 company[name=Altis AG]
-
 company[name=Ernst Fischer Technik GmbH]
 ```
 

@@ -72,6 +72,7 @@ nav:
   - Regular Expression Support: regular_expression_support.md
   - CSV File Generation/Anonymization: data_file_processing.md
   - XML File Processing: xml_file_processing.md
+  - Distribution Concepts: distribution.md
   - Using Relational Databases: using_relational_databases.md
   - Message Queue Access (Enterprise Edition): message_queue_access.md
   - Kafka Access (Enterprise Edition): kafka_access.md

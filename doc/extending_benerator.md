@@ -145,6 +145,27 @@ Attention: Take into account, that the parameter may become zero: When using the
 function will be called with zero-based indexes as argument. So, if you want to use a 10,000-element CSV-file weighted by a custom WeightFunction, it
 must be able to produce useful values from 0 to 9,999.
 
+TODO
+
+## Applying a Weight Function
+
+You can weigh any arbitrary imported or numeric data by a Weight Function. A Weight Function is defined by a class that implements the interface
+com.rapiddweller.model.function.WeightFunction:
+
+```
+public interface WeightFunction extends Weight {
+
+double value(double param);
+    ...
+}
+```
+
+When using a weight function, Benerator will serve data items in random order and as often as implied by the function value. Benerator automatically
+evaluates the full applicable number range (as defined by numerical min/max or number of objects to choose from) and normalize the weights. There is
+no need to provide a pre-normalized distribution function. You may define custom Weight Functions by implementing the WeightFunction interface.
+
+
+
 ## Custom CumulativeDistributionFunctions
 
 TODO (in a later version of the manual)

@@ -20,16 +20,35 @@ attributes:
 
 ```xml
 <iterate source="prod_db" type="db_customer" consumer="test_db">
-  <variable name="person" generator="com.rapiddweller.domain.person.PersonGenerator"/>
-  <attribute name="salutation" script="person.salutation" />
-  <attribute name="first_name" script="person.givenName" />
-  <attribute name="last_name" script="person.familyName" />
-  <attribute name="birth_date" nullable="false" />
+    <variable name="person" generator="com.rapiddweller.domain.person.PersonGenerator"/>
+    <attribute name="salutation" script="person.salutation" />
+    <attribute name="first_name" script="person.givenName" />
+    <attribute name="last_name" script="person.familyName" />
+    <attribute name="birth_date" nullable="false" />
 </iterate>
 ```
 
 ![](assets/grafik14.png)
 
+
+## Import filtering
+
+You can choose a subset of the available data by using 
+- features of the source system like a select statement for a ```<database>``` or ```memstore```
+- a 'filter' expression for any kind of data source (Enterprise Edition only).
+
+### &lt;Iterate filter&gt; Option (Enterprise Edition)
+
+In order to filter data import from any source, use a filter expression. 
+Within it you can use the variable _candidate to access the data entity 
+that is a candidate to import and return true in order to accept it or 
+false in order to drop it.
+
+An example for iterating through orders only of high priority:
+
+```xml
+<iterate source="orders.xls" type="order" filter="_candidate.priority == 'high'" consumer="ConsoleExporter"/>
+```
 
 ## Anonymization Report (Enterprise Edition)
 
@@ -182,8 +201,8 @@ e.g. formatting a date as string). Converters can be applied to entities as well
 
 ```xml
 <generate type="TRANSACTION" consumer="db">
-  <id name="ID" type="long" strategy="increment" param="1000" />
-  <attribute name="PRODUCT" source="{TRANSACTION.PRODUCT}" converter="CaseConverter"/>
+    <id name="ID" type="long" strategy="increment" param="1000" />
+    <attribute name="PRODUCT" source="{TRANSACTION.PRODUCT}" converter="CaseConverter"/>
 </generate>
 ```
 

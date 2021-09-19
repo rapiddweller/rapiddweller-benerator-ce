@@ -136,14 +136,14 @@ For starting a database with a shell script and initializing it with a SQL scrip
 
 ```xml
 <setup>
-<execute type="shell">`sh ./startdb.sh &amp;`</execute>
-<execute target="db" type="sql" onError="warn">
-DROP TABLE db_user;
-CREATE TABLE db_user (id int NOT NULL,
-name varchar(30) NOT NULL,
-PRIMARY KEY (id),
-);
-</execute>
+    <execute type="shell">`sh ./startdb.sh &amp;`</execute>
+    <execute target="db" type="sql" onError="warn">
+        DROP TABLE db_user;
+        CREATE TABLE db_user (id int NOT NULL,
+        name varchar(30) NOT NULL,
+        PRIMARY KEY (id),
+        );
+    </execute>
 </setup>
 ```
 
@@ -179,10 +179,10 @@ several tables) and CSV (one file per table).
 
 ```xml
 <setup>
-<!-- import integration test data for all tables from one DbUnit file -->
-<iterate source="core.dbunit.xml" consumer="db" />
-<!-- import predefined products from a CSV file -->
-<iterate type="db_product" source="demo/shop/products.import.csv" encoding="utf-8" consumer="db" />
+    <!-- import integration test data for all tables from one DbUnit file -->
+    <iterate source="core.dbunit.xml" consumer="db" />
+    <!-- import predefined products from a CSV file -->
+    <iterate type="db_product" source="demo/shop/products.import.csv" encoding="utf-8" consumer="db" />
 </setup>
 ```
 
@@ -251,7 +251,7 @@ adding a new one, e.g. the configuration
 
 ```xml
 <generate type="db_user" count="100" consumer="db">
-<attribute name="active" values="0,1"/>
+    <attribute name="active" values="0,1"/>
 </generate>
 ```
 
@@ -335,8 +335,8 @@ You ca define global components in a Spring-like syntax:
 
 ```xml
 <bean id="helper" class="com.my.Helper">
-  <property name="min" value="5"/>
-  <property name="max" value="23"/>
+    <property name="min" value="5"/>
+    <property name="max" value="23"/>
 </bean>
 ```
 
@@ -482,8 +482,8 @@ can query it e.g. by a script expression like person.familyName:
 
 ```xml
 <generate type="customer" consumer="ConsoleExporter">
-  <variable name="person" generator="PersonGenerator" />
-  <attribute name="lastName" script="person.familyName" />
+    <variable name="person" generator="PersonGenerator" />
+    <attribute name="lastName" script="person.familyName" />
 </generate>
 ```
 
@@ -551,13 +551,13 @@ it by its id with a 'source' attribute, e.g.
 
 ```xml
 <setup>
-<bean id="products_file" class="com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource">
-  <property name="uri" value="shop/products.import.fcw"/>
-  <property name="entity" value="product"/>
-  <property name="properties" value="ean_code[13],name[30],price[8r0]"/>
-</bean>
-
-<iterate type="product" source="products_file" consumer="ConsoleExporter"/>
+    <bean id="products_file" class="com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource">
+        <property name="uri" value="shop/products.import.fcw"/>
+        <property name="entity" value="product"/>
+        <property name="properties" value="ean_code[13],name[30],price[8r0]"/>
+    </bean>
+    
+    <iterate type="product" source="products_file" consumer="ConsoleExporter"/>
 </setup>
 ```
 
@@ -573,9 +573,9 @@ consumer sub element has the same syntax as a `<bean>` element, e.g.
 
 ```xml
 <generate type="db_product">
-  <consumer class="com.my.SpecialConsumer">
-      <property name="format" value="uppercase"/>
-  </consumer>
+    <consumer class="com.my.SpecialConsumer">
+        <property name="format" value="uppercase"/>
+    </consumer>
 </generate>
 ```
 
@@ -593,11 +593,11 @@ The `<database>` declaration will be described later.
 
 ```xml
 <setup>
-<bean id="special" class="com.my.SpecialConsumer">
-    <property name="format" value="uppercase"/>
-</bean>
-
-<generate type="db_product" consumer="db,special"/>
+    <bean id="special" class="com.my.SpecialConsumer">
+        <property name="format" value="uppercase"/>
+    </bean>
+    
+    <generate type="db_product" consumer="db,special"/>
 </setup>
 ```
 
@@ -605,11 +605,11 @@ or
 
 ```xml
 <setup>
-<bean id="special" class="com.my.SpecialConsumer">
-    <property name="format" value="uppercase"/>
-</bean>
-
-<generate type="db_product" consumer="com.my.SpecialConsumer"/>
+    <bean id="special" class="com.my.SpecialConsumer">
+        <property name="format" value="uppercase"/>
+    </bean>
+    
+    <generate type="db_product" consumer="com.my.SpecialConsumer"/>
 </setup>
 ```
 
@@ -627,18 +627,16 @@ cycle:
 
 ## Exporting Data to Files
 
-You will need to reuse some of the generated data for setting up (load) test clients. You can export data by simply defining an appropriate consumer:
+You will need to reuse some of the generated data for setting up (load) test clients. 
+You can export data by simply defining an appropriate consumer:
 
 ```xml
 <setup>
-<import platforms="fixedwidth" />
+    <import platforms="xls"/>
 
-<generate type="db_product" consumer="db">
-  <consumer class="FixedWidthEntityExporter">
-    <property name="uri" value="target/products.fcw"/>
-    <property name="properties" value="ean_code[13],name[30l],price[10r0]"/>
-  </consumer>
-</generate>
+    <generate type="db_product" consumer="new XLSEntityConsumer('prod.xls')">
+        ...
+    </generate>
 </setup>
 ```
 
@@ -745,105 +743,6 @@ Data generation stops if either the limit count is reached or a component genera
 
 If you have problems with unexpectedly low numbers of generated entities you can set the log category `com.rapiddweller.benerator.STATE` to debug level.
 
-## Using Predefined Entities
-
-When iterating predefined entities (e.g. imported from file or database), Benerator's default behaviour is to serve each item exactly once and in the
-order as provided. You can change that behaviour in many ways, but need to be aware of the iterated data volume:
-
-For small data sets (`< 100,000 items) you can apply a distribution method (see Section 3.29, “Applying a Weight Function” or Section 3.30, “Applying
-a Sequence”). This will cause Benerator to load all available instances into memory and serve them as specified by the distribution: A WeightFunction
-will tell Benerator how often to serve an instance of a certain list index, a Sequence will tell each index consecutively. Depending on the Sequence,
-data can be provided uniquely or weighted.
-
-For big data sets (>` 100,000 items) you need to be more conservative, since the data volume is not supposed to fit into main memory. You have two
-options here: cyclic iteration and proxy iteration. Actually, both types can be combined.
-
-## Iterating Predefined Entities Consecutively
-
-By default, imported entities are processed consecutively and only once.
-
-When setting cyclic="true" Benerator serves the imported data consecutively too but does not stop when it reaches the end. Instead it restarts
-iteration. Beware: For SQL queries this means that the query is reissued, so it may have a different result set than the former invocation.
-
-When using a distribution, you can manipulate what happens with the original data, e.g. by dropping or repeating data.
-
-## Applying a Weight Function
-
-You can weigh any arbitrary imported or numeric data by a Weight Function. A Weight Function is defined by a class that implements the interface
-com.rapiddweller.model.function.WeightFunction:
-
-public interface WeightFunction extends Weight {
-
-double value(double param);
-
-}
-
-When using a weight function, Benerator will serve data items in random order and as often as implied by the function value. Benerator automatically
-evaluates the full applicable number range (as defined by numerical min/max or number of objects to choose from) and normalize the weights. There is
-no need to provide a pre-normalized distribution function. You may define custom Weight Functions by implementing the WeightFunction interface.
-
-## Applying a Sequence
-
-A Sequence is basically a number generator. It can provide a custom random algorithm, a custom weighted number generator or a unique number generation
-algorithm.
-
-For a list of predefined sequences, see _Section 8.3, “Sequences”_. The definition of a custom sequence is described in _Section 9.5, “Custom
-Sequences”_.
-
-## Importing Weights
-
-When importing data from data sources, you have additional options for specifying weights. They are different when importing simple data or entities.
-
-### Importing primitive data weights
-
-When importing primitive data from a CSV file, each value is expected to be in an extra row. If a row has more than one column, the content of the
-second column is interpreted as weight. If there is no such column, a weight of 1 is assumed. Benerator automatically normalizes over all data
-objects, so there is no need to care about manual weight normalization. Remember to use a filename that indicates the weight character, using a suffix
-like '.wgt.csv' or 'wgt.xls'.
-
-If you, for example, create a CSV file roles.wgt.csv:
-
-customer,7
-
-clerk,2
-
-admin,1
-
-and use it in an configuration like this:
-
-```xml
-<generate type="user" count="100">
-<attribute name="role" source="roles.wgt.csv" />
-</generate>
-```
-
-this will create 100 users of which about 70 will have the role 'customer', 20 'clerk' and 10 'admin'.
-
-### Weighing imported entities by attribute
-
-when importing entities, an entity attribute can be chosen to represent the weight by specifying distribution="
-weighted[attribute-name]". Remember to indicate, that the source file contains entity data by using the correct file suffix, e.g. '.ent.csv' or '
-.ent.xls'
-
-Example: If you are importing cities and want to weigh them by their population, you can define a CSV file cities.ent.csv:
-
-name,population
-
-New York,8274527
-
-Los Angeles,3834340
-
-San Francisco,764976
-
-and e.g. create addresses with city names weighted by population, when specifying
-
-```xml
-<generate type="address" count="100" consumer="ConsoleExporter">
-<variable name="city_data" source="cities.ent.csv" distribution="weighted[population]"/>
-<id name="id" type="long" />
-<attribute name="city" script="city_data.name"/>
-</generate>
-```
 
 ## Nesting Entities
 
@@ -855,11 +754,11 @@ value for setting the db_customer id:
 
 ```xml
 <generate type="db_user" count="10" consumer="db">
-<id name="id" strategy="increment" />
-...
+    <id name="id" strategy="increment" />
+    ...
 <generate type="db_customer" count="1" consumer="db">
-<attribute name="id" script="{db_user.id}" />`
-...
+    <attribute name="id" script="{db_user.id}" />`
+    ...
 </generate>
 </generate>
 ```
@@ -870,13 +769,12 @@ Simple constraints, e.g. formats can be assured by defining an appropriate Gener
 
 ```xml
 <setup>
-<import domains="product" />
-<!-- create products of random attribs &amp; category -->
-<generate type="db_product" count="1000" pageSize="100">
-<attribute name="ean_code" generator="EANGenerator"/>
-<attribute name="name" pattern="[A-Z][A-Z]{5,12}"/>
-<consumer ref="db"/>
-</generate>
+    <import domains="product" consumer="db"/>
+    <!-- create products of random attribs and category -->
+    <generate type="db_product" count="1000" pageSize="100">
+        <attribute name="ean_code" generator="EANGenerator"/>
+        <attribute name="name" pattern="[A-Z][A-Z]{5,12}"/>
+    </generate>
 </setup>
 ```
 
@@ -889,13 +787,13 @@ a source path attribute:
 
 ```xml
 <setup>
-<import domains="person"/>
-<generate type="db_customer" consumer="db">
-<variable name="person" generator="PersonGenerator"/>
-<attribute name="salutation" script="person.salutation"/>
-<attribute name="first_name" script="person.givenName"/>
-<attribute name="last_name" script="person.familyName"/>
-</generate>
+    <import domains="person"/>
+    <generate type="db_customer" consumer="db">
+        <variable name="person" generator="PersonGenerator"/>
+        <attribute name="salutation" script="person.salutation"/>
+        <attribute name="first_name" script="person.givenName"/>
+        <attribute name="last_name" script="person.familyName"/>
+    </generate>
 </setup>
 ```
 
@@ -907,27 +805,29 @@ Usually most entities have common attribute names, e.g. for ids or audit data. Y
 
 ```xml
 <defaultComponents>
-<id name="ID" type="long" source="db" strategy="sequence" param="hibernate_sequence"/>
-<attribute name="VERSION" values="1"/>
-<attribute name="CREATED_AT" generator="currentDateGenerator"/>
-<attribute name="CREATED_BY" values="rapiddweller"/>
-<attribute name="UPDATED_AT" generator="currentDateGenerator"/>
-<attribute name="UPDATED_BY" values="rapiddweller"/>
+    <id name="ID" type="long" source="db" strategy="sequence" param="hibernate_sequence"/>
+    <attribute name="VERSION" values="1"/>
+    <attribute name="CREATED_AT" generator="currentDateGenerator"/>
+    <attribute name="CREATED_BY" values="rapiddweller"/>
+    <attribute name="UPDATED_AT" generator="currentDateGenerator"/>
+    <attribute name="UPDATED_BY" values="rapiddweller"/>
 </defaultComponents>
 ```
 
 If a table has a column which is not configured in the Benerator descriptor but as defaultComponent, Benerator uses the defaultComponent config. If no
 defaultComponent config exists, Benerator falls back to a useful standard setting.
 
+
 ## Settings
 
 You can define global settings in the descriptor file:
 
-`<setting name="my_name" value="Volker" />`
+```<setting name="my_name" value="Volker" />```
 
 or import several of them from a properties file:
 
-`<include uri="my.properties" />`
+```<include uri="my.properties" />```
+
 
 ## Querying Information from a System
 
@@ -935,39 +835,26 @@ Arbitrary information may be queried from a system by a 'selector' attribute, wh
 
 ```xml
 <generate type="db_order" count="30" pageSize="100">
-  <reference name="customer_id" source="db" selector="select id from db_customer" cyclic="true" />
-  <consumer ref="db"/>
-  <!-- automatically chosen by Benerator -->
+    <reference name="customer_id" source="db" selector="select id from db_customer" cyclic="true" />
+    <consumer ref="db"/>
+    <!-- automatically chosen by Benerator -->
 </generate>
 ```
 
 Using cyclic="true", the result set will be re-iterated from the beginning when it has reached the end.
 
-You may apply a distribution as well:
+You may apply a distribution as well.
+The result set of a selector might be quite large, 
+so take care, which distribution to apply, see [Distribution Concepts]:
 
 ```xml
 <generate type="db_order_item" count="100" pageSize="100">
-  <attribute name="number_of_items" min="1" max="27" distribution="cumulated"/>
-  <reference name="order_id" source="db" selector="select id from db_order" cyclic="true"/>
-  <reference name="product_id" source="db" selector="select ean_code from db_product" distribution="random"/>
-  <consumer ref="db"/>
+    <attribute name="number_of_items" min="1" max="27" distribution="cumulated"/>
+    <reference name="order_id" source="db" selector="select id from db_order" cyclic="true"/>
+    <reference name="product_id" source="db" selector="select ean_code from db_product" distribution="random"/>
+    <consumer ref="db"/>
 </generate>
 ```
-
-The result set of a selector might be quite large, so take care, which distribution to apply:
-
-When using weights, the complete result set is loaded into RAM. Such a distribution should not be applied to result sets of more than 100.000
-elements (this applies for most sequences as well). A WeightFunction should be restricted to at most 10.000 elements.
-
-'Unlimited' sequences are
-
-* 'expand'
-
-* 'randomWalk'
-
-* 'repeat'
-
-* 'step'
 
 You can use script expressions in your selectors, e.g.
 
@@ -982,10 +869,10 @@ Example:
 
 ```xml
 <generate type="shop" count="10">
-  <attribute name="country" values="DE,AT,CH"/>
-  <generate type="product" count="100" consumer="db">
-    <attribute name="ean_code" source="db" selector="{{ftl:select ean_code from db_product where country='${shop.country}'}}"/>
-  </generate>
+    <attribute name="country" values="DE,AT,CH"/>
+    <generate type="product" count="100" consumer="db">
+        <attribute name="ean_code" source="db" selector="{{ftl:select ean_code from db_product where country='${shop.country}'}}"/>
+    </generate>
 </generate>
 ```
 
@@ -1026,16 +913,11 @@ Example:
 ## Scripts
 
 Scripts are supported in
-
-* descriptor files
-
-* properties files
-
-* DbUnit XML files
-
-* CSV files
-
-* Fixed column width files
+- descriptor files
+- properties files
+- DbUnit XML files
+- CSV files
+- Fixed column width files
 
 A script is denoted by curly braces, e.g. {'Hi, I am ' + my_name}. This syntax will use the default script engine for rendering the text as, e.g. 'Hi,
 I am Volker'. The default script engine is set writing `<setup defaultScript="...">` in the decriptor file's root element. If you want to use
@@ -1049,29 +931,20 @@ If you need to dynamically calculate data at runtime, use a script attribute, e.
 In the 'script' attribute, curly braces are not necessary.
 
 Using scripts you can access
-
-* environment variables, e.g. JAVA_HOME
-
-* JVM parameters, e.g. benerator.validate
-
-* any JavaBean globally declared in the Benerator setup, e.g. db
-
-* the last generated entity of each type, e.g. db_user
-
-* the entity currently being generated and its attributes, e.g. this.id
-
-* entities generated in outer `<generate>` elements
-
-* helper variables in the `<generate>` element, e.g. person.familyName
-
-* predefined or custom FreeMarker methods (when using FreeMarker as script language)
-
-* Static Java methods and attributes, e.g. System.getProperty('user.home')
-
-* instance methods and attributes on objects in the context, e.g. db.system
+- environment variables, e.g. JAVA_HOME
+- JVM parameters, e.g. benerator.validate
+- any JavaBean globally declared in the Benerator setup, e.g. db
+- the last generated entity of each type, e.g. db_user
+- the entity currently being generated and its attributes, e.g. this.id
+- entities generated in outer `<generate>` elements
+- helper variables in the `<generate>` element, e.g. person.familyName
+- predefined or custom FreeMarker methods (when using FreeMarker as script language)
+- Static Java methods and attributes, e.g. System.getProperty('user.home')
+- instance methods and attributes on objects in the context, e.g. db.system
 
 Variable names used in scripting may not contain points - a point always implies resolution of a local feature of an object, e.g. person.familyName
 resolves the familyName attribute/property/key of a person.
+
 
 ### this
 
@@ -1080,8 +953,8 @@ dependencies to each other:
 
 ```xml
 <generate type="product">
-  <id name="id" />
-  <attribute name="code" script="'ID#' + this.id" />
+    <id name="id" />
+    <attribute name="code" script="'ID#' + this.id" />
 </generate>
 ```
 
@@ -1098,7 +971,7 @@ stop execution.
 
 ```xml
 <generate type="product" count="1000" onError="fatal" consumer="db">
-<!-- component setup here -->
+    <!-- component setup here -->
 </generate>
 ```
 
@@ -1110,7 +983,7 @@ errordata.csv' and postprocess it:
 
 ```xml
 <generate type="product" count="1000" consumer="**new BadDataConsumer(new CSVExporter('errors.csv'),** **db.inserter())">
-<!-- component setup here -->
+    <!-- component setup here -->
 </generate>
 ```
 

@@ -214,34 +214,29 @@ size** property. |
 | Class | FibonacciSequence |
 | --- | --- |
 | Description | Generates numbers based on the Fibonacci Sequence |
-| Default Instance | fibonacci: |
+| Default Instance | fibonacci |
 
 | Class | PadovanSequence |
 | --- | --- |
 | Description | Generates numbers based on the Padovan Sequence |
 | Default Instance | padovan |
 
-### CumulativeDistributionFunction
-
-The CumulativeDistributionFunction is another special case of a Distribution, which allows for continuous value generation as opposed to Sequence and
-WeightFunction.
-
-### ExponentialDensityIntegral
-
-Inverse of the integral of the probability density f(x) = a e^{-ax} (x >` 0), which resolves to F^{-1}(x) = - log(1 - x)
-/ a.
 
 ### Weight Functions
 
-Weight funtions are another special case of Distributions. They are based on a function which is supposed to allow contibuous value generation, but
-since Benerator needs to perform a numerical integration for deriving random values, a granularity must be applied. This way, the generated value set
-is quantized. Another drawback of the approach is that fine-grained generation is memory-consuming and slow.
+Weight funtions are another special case of Distributions. 
+They are based on a function which is supposed to allow contibuous value generation, 
+but since Benerator needs to perform a numerical integration for deriving random values, 
+a granularity must be applied. This way, the generated value set is quantized. 
+Another drawback of the approach is that fine-grained generation is memory-consuming and slow.
 
-Thus, it is recommended to avoid weight functions if possible and choose a similar Sequence or CumulativeDistributionFunction instead.
+Thus, it is recommended to avoid weight functions if possible and choose a similar 
+Sequence or CumulativeDistributionFunction instead.
 
-### GaussianFunction
 
-This implements the well-known Gaussian Function.
+#### GaussianFunction
+
+Implements the well-known Gaussian Function.
 
 Full class name: com.rapiddweller.benerator.distribution.function.GaussianFunction
 
@@ -251,12 +246,12 @@ Example:
 
 ```xml
 <import class="com.rapiddweller.benerator.distribution.function.*"/>
-...
+    ...
 <attribute name="price" type="big_decimal" min="0.1" max="99.90" granularity="0.1"
            distribution="new GaussianFunction(50,20)"/>
 ```
 
-### ExponentialFunction
+#### ExponentialFunction
 
 The Exponential Function.
 
@@ -268,11 +263,11 @@ Example:
 
 ```xml
 <import class="com.rapiddweller.benerator.distribution.function.*"/>
-...
+    ...
 <attribute name="category" type="char" values="A,B,C" distribution="new ExponentialFunction(0.5)"/>
 ```
 
-### DiscreteFunction
+#### DiscreteFunction
 
 Discrete Function that specifies an explicit weight for each possible value
 
@@ -284,11 +279,21 @@ Example:
 
 ```xml
 <import class="com.rapiddweller.benerator.distribution.function.*"/>
-
-...
-
+    ...
 <attribute name="rating" type="int" min="1", max="3" distribution="new DiscreteFunction(1, 2, 1)"/>
 ```
+
+### CumulativeDistributionFunction
+
+The CumulativeDistributionFunction is another special case of a Distribution, which allows for continuous value generation as opposed to Sequence and
+WeightFunction.
+
+### ExponentialDensityIntegral
+
+Inverse of the integral of the probability density f(x) = a e^{-ax} (x >` 0), which resolves to F^{-1}(x) = - log(1 - x)
+/ a.
+
+
 
 ## Converters
 
@@ -371,13 +376,14 @@ NoiseInducer example:
 
 ```xml
 <bean id="inducer" class="com.rapiddweller.benerator.primitive.number.NoiseInducer">
-  <property name="minNoise" value="-0.2"/>
-  <property name="maxNoise" value="0.2"/>
-  <property name="noiseGranularity" value="0.01"/>
-  <property name="noiseDistribution" value="cumulated"/>
-  <property name="relative" value="true"/>
-</bean><generate count="5" consumer="ConsoleExporter">
-<attribute name="x" type="int" constant="100" converter="inducer"/>
+    <property name="minNoise" value="-0.2"/>
+    <property name="maxNoise" value="0.2"/>
+    <property name="noiseGranularity" value="0.01"/>
+    <property name="noiseDistribution" value="cumulated"/>
+    <property name="relative" value="true"/>
+</bean>
+<generate count="5" consumer="ConsoleExporter">
+    <attribute name="x" type="int" constant="100" converter="inducer"/>
 </generate>
 ```
 
@@ -385,13 +391,9 @@ produces the result:
 
 ```bash
 entity[x=99]
-
 entity[x=105]
-
 entity[x=92]
-
 entity[x=104]
-
 entity[x=99]
 ```
 
@@ -573,11 +575,9 @@ third, a points column, padded to 5 columns using zeros, having two fraction dig
 
 and would be rendered like this:
 
-```bash
+```
 Alice Hamilton 2310.05
-
 Bob Durand 4601.23
-
 Helmut Schmidt 10226.14
 ```
 

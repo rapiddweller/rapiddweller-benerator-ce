@@ -126,6 +126,7 @@ Navigate to the sources for our generated mkdocs:
 - [Regular Expression Support](doc/regular_expression_support.md)
 - [Data File Processing](doc/data_file_processing.md)
 - [XML File Processing](doc/xml_file_processing.md)
+- [Distribution Concepts](doc/distribution.md)
 - [Using Relational Databases](doc/using_relational_databases.md)
 - [Message Queue Access (Enterprise Edition)](doc/message_queue_access.md)
 - [Kafka Access (Enterprise Edition)](doc/kafka_access.md)
