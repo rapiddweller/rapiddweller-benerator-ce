@@ -29,6 +29,8 @@ package com.rapiddweller.benerator.archetype;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,6 +53,8 @@ import java.util.Properties;
  */
 public class Archetype implements Serializable {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(Archetype.class);
+
   private static final long serialVersionUID = 2552120042802481049L;
 
   private final String id;
@@ -58,11 +62,7 @@ public class Archetype implements Serializable {
   private final URL iconUrl;
   private final String description;
 
-  /**
-   * Instantiates a new Archetype.
-   *
-   * @param url the url
-   */
+
   public Archetype(URL url) {
     try {
       String urlString = url.toString();
@@ -103,29 +103,14 @@ public class Archetype implements Serializable {
     return (desc != null ? desc : id);
   }
 
-  /**
-   * Gets id.
-   *
-   * @return the id
-   */
   public String getId() {
     return id;
   }
 
-  /**
-   * Gets description.
-   *
-   * @return the description
-   */
   public String getDescription() {
     return description;
   }
 
-  /**
-   * Gets icon url.
-   *
-   * @return the icon url
-   */
   public URL getIconURL() {
     return iconUrl;
   }
@@ -158,7 +143,10 @@ public class Archetype implements Serializable {
   private void copySourceDirectory(File targetFolder, String subFolder, FolderLayout layout) throws IOException {
     URL srcUrl = new URL(url.toString() + '/' + subFolder);
     targetFolder = new File(targetFolder, layout.mapSubFolder(subFolder));
-    targetFolder.mkdir();
+    boolean successfulCreated = targetFolder.mkdir();
+    if (!successfulCreated) {
+      LOGGER.debug("Archetype Target Folder has not been created.");
+    }
     if (IOUtil.listResources(srcUrl).length > 0) {
       IOUtil.copyDirectory(srcUrl, targetFolder, null);
     }
