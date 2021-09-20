@@ -35,8 +35,8 @@ Production data can be easily extracted from production systems. Tables can be i
 
 ## State of the Benerator
 
-Benerator is developed and continuously extended and improved since June 2006\. Benerator is mainly used and tested best for data file and database
-data generation, for these applications Benerator should help you for almost all your data generation needs out of the box - and extending Benerator
+Benerator is developed and continuously extended and improved since June 2006\. Benerator is mainly used and tested best for the data file and database
+data generation, for these applications Benerator should help you with almost all your data generation needs out of the box - and extending Benerator
 for specific needs is easy.
 
 XML-Schema, on the other hand, allows for an extraordinarily wide range of features. Benerator's XML support is limited to features that are useful
@@ -69,30 +69,31 @@ Benerator was tested with and provides examples for
 
 ### Benerator Community Edition (CE)
 
-Benerator started as an open source project and is committed to further improve and extend
+Benerator started as an open-source project and is committed to further improve and extend
 with and from the feedback of its user base and its contributors.
-It is the most powerful open source data generator and competitive with all commercial
+It is the most powerful open-source data generator and is competitive with all commercial
 products.
 
 However, it has two historic limitations:
 - No neat graphical user interface
 - Only single-threaded generation and anonymization
 
-Despite of that, Benerator Community Edition has an impressive performance
+Despite that, Benerator Community Edition has an impressive performance. 
 
-###Benerator Enterprise Edition (EE)
+### Benerator Enterprise Edition (EE)
 
 Extends Benerator Community Edition and improves it in many respects. 
-With highly optimized engine and generation-related components 
+With highly-optimized engine and generation-related components 
 and with multithreaded execution support, its performance on a single
 machine is about 10x the performance of the Community Edition 
-and Benerator can easily scale over multiple machines using a Kafka cluster.
+and Benerator can easily scale over multiple machines in your private cloud / cluster setup.
 
 Improvements against the Community Edition are
+
 - Improved performance on single threading
 - Multithreaded data generation and anonymization
 - Anonymization Reporting supports you in compliance checking
-- Benerator UI: An integrated graphical development environment with editing support and task management UI
+- Benerator UI: An integrated graphical development environment with editing support, project and task management
 - JSON support
 - JMS support: ActiveMQ, RabbitMQ and more
 - Kafka support

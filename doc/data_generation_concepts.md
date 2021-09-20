@@ -34,7 +34,7 @@ Entities can have
 * an arbitrary number of simple-type attributes (like database tables or XML attributes). They can have a cardinality >`
   1, too (like arrays of simple types)
 
-* sub components of entity type (like XML sub elements)
+* sub-components of entity type (like XML sub-elements)
 
 * a body of simple type (like XML simpleType elements, files or JMS messages)
 
@@ -69,7 +69,7 @@ Benerator abstracts simple types too. These are the predefined simple types:
 | binary | Types.BLOB | 2004 | byte[] |
 | (heuristic) | Types.OTHER | 1111 | (heuristic) |
 
-Oracle's NCHAR, NVARCHAR2 and NCLOB types are treated like strings.
+Oracle's NCHAR, NVARCHAR2 and NCLOB types are treated as strings.
 
 The following JDBC types are not supported: DATALINK (70), NULL (0), DISTINCT (2001), STRUCT (2002), ARRAY (2003), REF (
 2006). If you need them, create an issue or get in touch.
@@ -78,7 +78,7 @@ The following JDBC types are not supported: DATALINK (70), NULL (0), DISTINCT (2
 
 ### Distribution Concept
 
-There are two special issues which often remain unaddressed in testing:
+There are two special issues that often remain unaddressed in testing:
 
 * using realistic probability distributions (e.g. popularity of shop items)
 
@@ -151,7 +151,7 @@ As you see, scripts can be inlined or imported from files. See '[Scripting](scri
 
 ### Precondition Checking Stage
 
-Complex data generation is often split up int several stages of which each has its own preconditions. For example, if you want to generate orders for
+Complex data generation is often split up into several stages of which each has its own preconditions. For example, if you want to generate orders for
 all kinds of products, you may want to assure that at least one product of each category is defined in the system.
 
 The simplest way to perform precondition checks is the `<evaluate>` element, e.g. checking for categories without product:
@@ -159,14 +159,14 @@ The simplest way to perform precondition checks is the `<evaluate>` element, e.g
 `<evaluate assert="{js:result == 0}" target="db">` select count(*) from db_category left join db_product on db_product.category_id = db_category.id
 where db_product.category_id is null`</evaluate>`
 
-The `<evaluate>` element works as follows: First it evaluates a script the same way like a `<execute>` element does – In this example, the 'select'
+The `<evaluate>` element works as follows: First, it evaluates a script the same way like an `<execute>` element does – In this example, the 'select'
 query is performed on the database. Then the result into a variable named 'result' and the '
 assert' condition is evaluated which checks the value of the result and returns true or false. if the assertion resolves to 'false', Benerator raises
 an error.
 
 In this example, an error is raised if there is a category without any product assigned.
 
-You can use an arbitrary expression language for performing the check. Like in `<execute>`, a prefix with colon can be used to indicate the script
+You can use an arbitrary expression language for performing the check. Like in `<execute>`, a prefix with a colon can be used to indicate the script
 language. You can optionally add an 'id' attribute which will make Benerator put the evaluation result into the context with this id.
 
 You can also call DB Sanity for verifying the preconditions, see '[DB Sanity](using_db_sanity.md)'.
@@ -201,7 +201,7 @@ If your system has complex business logic (typically workflows), you will encoun
 application business logic than by a pure descriptor-based generation.
 
 For example, you might need to generate performance test data for a mortgage application: People may apply for a mortgage, enter information about
-their house, incomes and expenses, their application is rated by some rule set, and the mortgages finally is granted or rejected. Then you have complex
+their house, incomes and expenses, their application is rated by some rule set, and the mortgages finally are granted or rejected. Then you have complex
 logic (rating) that is not necessarily useful to be reproduced for data generation. It is easiest to call the business logic directly.
 
 This can be done in two ways:
@@ -259,14 +259,14 @@ will cause generation of 50% 0 and 50% 1 values.
 
 ### Case Sensitivity
 
-Benerator has a heuristic case-sensitivity: It needs to combine metadata from different types of systems of which some may be case-sensitive, some may
-not. So Benerator first assumes case-sensitivity when looking for a type. If the type is found in the same capitalization, this information used. If
+Benerator has heuristic case sensitivity: It needs to combine metadata from different types of systems of which some may be case-sensitive, some may
+not. So Benerator first assumes case sensitivity when looking for a type. If the type is found in the same capitalization, this information is used. If
 it is not found, Benerator falls back to searching the type in a case-insensitive manner.
 
 ### Namespaces
 
 Benerator has a heuristic namespace support, similar to case-sensitivity handling: when looking up a descriptor by name, Benerator first searches the
-name in its assigned namespace. If the type is found there, this information used. If it is not found, Benerator falls back to searching the type in
+name in its assigned namespace. If the type is found there, this information is used. If it is not found, Benerator falls back to searching the type in
 all available namespaces.
 
 ### `<setting>` and Benerator identifiers
@@ -317,14 +317,14 @@ You can define default values for properties. If no property value has been defi
 
 ![](assets/grafik8.png)
 
-Entities as well as their attributes can be imported from storage systems , data files or specific generators . They then serve as prototypes of which
+Entities, as well as their attributes, can be imported from storage systems, data files, or specific generators. They then serve as prototypes of which
 attributes may be overwritten by another generator ( overriding generator ), e.g. for anonymization.
 
-Alternatively, entities may be generated completely synthetically .
+Alternatively, entities may be generated completely synthetically.
 
 Entities and each entity attribute can be converted by a specific Converter object.
 
-Validators assure validity of the generated entities and attributes. All entities that fail validation are discarded.
+Validators assure the validity of the generated entities and attributes. All entities that fail validation are discarded.
 
 Finally, generated data is consumed by storing it in a storage system (e.g. database), writing it to a data file or using it in a custom Consumer
 implementation.
@@ -346,7 +346,7 @@ helper' in this case).
 ## Instantiating Local Components
 
 The following chapters will introduce you to the usage of each component type available in Benerator. They have common styles of definition and
-referral. If a component needs to be reused in different places, you would create it with a `<bean>` element and apply referral to use it. If you do
+referral. If a component needs to be reused in different places, you would create it with a `<bean>` element and apply a referral to use it. If you do
 not need to reuse one component in different places, there are more concise inline instantiation styles available:
 
 * default construction
@@ -361,7 +361,7 @@ Any class can be instantiated and made available to Benerator by using a bean el
 
 `<attribute name="number" generator="helper"/>`
 
-This is called referral.
+This is called _referral_.
 
 ### Default Construction
 
@@ -412,7 +412,7 @@ Now have a look at an example for generating credit cards in a database:
 
 ![](assets/grafik9.png)
 
-Benerator reads the metadata for the table credit_card from a database. This results in descriptive metadata , saying that a credit_card entity has
+Benerator reads the metadata for the table credit_card from a database. This results in descriptive metadata, saying that a credit_card entity has
 three attributes: issuer and number of type string and validUntil of type date. All of them may not be null and the issuer attribute has a maximum
 length of 20 characters, the number of 16 characters.
 
@@ -430,7 +430,7 @@ We can improve the credit card example from above by adding own, constructive me
 
 ![](assets/grafik10.png)
 
-This way we can already satisfy simple validation algorithms, but not yet sophisticated ones that performs a checksum validation.
+This way we can already satisfy simple validation algorithms, but not yet sophisticated ones that perform a checksum validation.
 
 For a complete reference of metadata configuration, see Section 3.38, “Attribute Metadata Reference”, Section 3.25, “Generating IDs” and Section 3.26,
 “Resolving Relations”
@@ -449,7 +449,7 @@ validators, see Section 9.7, “Custom Validators”.
 ## Prototype-based Data Generation
 
 The examples above are satisfactory for almost all cases, but if you need to satisfy very difficult validity conditions you need ultimate control over
-generation. For our credit card example, you might have a validator module that connects to the credit card company and validates if the account
+a generation. For our credit card example, you might have a validator module that connects to the credit card company and validates if the account
 really exists
 
 ![](assets/grafik12.png)
@@ -468,7 +468,7 @@ a case you typically define a file with known credit card numbers to use:
 
 You can use different types of data sources for templates:
 
-* Files : CSV, fixed column width files, DbUnit. For importing data of custom file formats or from other sources, see Section 9.9, “Custom
+* Files: CSV, fixed column width files, DbUnit. For importing data of custom file formats or from other sources, see Section 9.9, “Custom
   EntitySources”
 
 * Storage Systems: Relational databases For importing data of proprietary storage systems, see Section 9.12, “Custom StorageSystems”
@@ -477,7 +477,7 @@ You can use different types of data sources for templates:
 
 When importing entities from a data source you will need to map data in some way. This is where the variable concept comes in: You can define
 a `<variable>` as an auxiliary generator inside a `<generate>` descriptor and assign it a name (e.g. 'person'). In each entity generation this
-generator will provide a new generated object under the assigned name ('person'). So, if you want to access a part of a composite generated object you
+generator will provide a newly generated object under the assigned name ('person'). So, if you want to access a part of a composite generated object you
 can query it e.g. by a script expression like person.familyName:
 
 ```xml
@@ -487,7 +487,7 @@ can query it e.g. by a script expression like person.familyName:
 </generate>
 ```
 
-For defining a variable, you can use the same syntax elements like for an attribute. But the type of data that the variable can generate is much less
+For defining a variable, you can use the same syntax elements as for an attribute. But the type of data that the variable can generate is much less
 restricted. A variable may
 
 * use an EntitySource or Generator that creates entity objects.
@@ -500,7 +500,7 @@ restricted. A variable may
 
 ## Combining components and variables
 
-Starting with Benerator 0.7, sub elements of a `<generate>` loop are evaluated in the order in which they appear in the descriptor file, in earlier
+Starting with Benerator 0.7, sub-elements of a `<generate>` loop are evaluated in the order in which they appear in the descriptor file, in earlier
 versions they were reordered before processing. When nesting `<generate>` loops be aware, that each instance of the outer loop is consumed before a
 sub-generate is called, so it does not make sense to define an `<attribute>`, `<id>` or `<reference>` after the sub-generate statement.
 
@@ -519,13 +519,13 @@ password@server/dir/file;type=i
 
 ## Protocols
 
-Currently Benerator supports only file URIs for reading and writing and HTTP and FTP URIs for reading. Support of further protocols is possible and
+Currently, Benerator supports only file URIs for reading and writing and HTTP and FTP URIs for reading. Support of further protocols is possible and
 planned for future releases.
 
 ## Relative URIs
 
 Relative URIs are resolved in a HTML hypertext manner: A relative URL is interpreted relative to a 'base URI' which is the path of the Benerator
-descriptor file. If file lookup fails, Benerator searches the file relative to the current directory. If that fails to, Benerator tries to retrieve
+descriptor file. If file lookup fails, Benerator searches the file relative to the current directory. If that fails, Benerator tries to retrieve
 the file from the Java classpath.
 
 Benerator recognizes absolute paths under Windows (e.g. C:\test) and Unix (/test or ~/test). When in doubt, mark the URL as file URL: file:///C:/test
@@ -564,7 +564,7 @@ it by its id with a 'source' attribute, e.g.
 ## Consumers
 
 Consumers are the objects that finally receive the data after creation, conversion and validation. Consumers can be files, storage systems or custom
-JavaBeans that implement the Consumer interface. They are not supposed to mutate generated data. That is reserved to Converters.
+JavaBeans that implement the Consumer interface. They are not supposed to mutate generated data. That is reserved for Converters.
 
 ### Specifying Consumers
 
@@ -615,13 +615,13 @@ or
 
 ### Consumer Life Cycle
 
-In most cases Consumers relate to heavyweight system resources, so it is important to know their life cycle. There are two different types of life
+In most cases, Consumers relate to heavyweight system resources, so it is important to know their life cycle. There are two different types of the life
 cycle:
 
-* Global Consumer: A consumer defined as a `<bean>` has a global scope (thus is called 'global consumer') and is closed when Benerator finishes. So
-  you can use the same consumer instance for consuming output of several different `<generate>` and `<iterate>` blocks.
+* Global Consumer: A consumer defined as a `<bean>` has global scope (thus is called 'global consumer') and is closed when Benerator finishes. So
+  you can use the same consumer instance for consuming the output of several different `<generate>` and `<iterate>` blocks.
 
-* Local Consumer: A consumer defined 'on the fly' in a generate/iterate block (by 'new', class name or `<consumer>`) has a local scope and is
+* Local Consumer: A consumer-defined 'on the fly' in a generate/iterate block (by 'new', class name or `<consumer>`) has a local scope and is
   immediately closed when its generate/iterate block finishes. If you want to generate a file and iterate through it afterwards you need to have it
   closed before. The most simple way to assure this is to use a local consumer in file generation.
 
@@ -699,9 +699,9 @@ For more intelligent/dynamic conversions, you can inject a converter, e.g. for c
 
 ## Validators
 
-Validators assist you in assuring validity of generated data. Validators can be applied to attributes and full entities. They intercept in data
+Validators assist you in assuring the validity of generated data. Validators can be applied to attributes and full entities. They intercept in data
 generation: If a generated item is invalid, it will be discarded and regenerated transparently. This is a cheap way of fulfilling complex constraints
-which are only partially known: If you have a class or system that can validate this data, you can set up a heuristic generation which has a high
+which are only partially known: If you have a class or system that can validate this data, you can set up a heuristic generation that has a high
 probability of succeeding and simply discard the invalid ones. If the ratio of invalid objects is more than 99%, Benerator will give you a warning
 since this is likely to impact generation performance. If the ratio rises to 99.9%, Benerator will terminate with an exception.
 
@@ -733,7 +733,7 @@ mapped to a commit).
 
 There are different ways of determining or limiting the number of generated entities:
 
-* the count attribute specifies a fix number of instances to create
+* the count attribute specifies a fixed number of instances to create
 
 * the minCount, maxCount and countDistribution attributes let Benerator choose an instance count with the specified characteristics.
 
@@ -781,8 +781,8 @@ Simple constraints, e.g. formats can be assured by defining an appropriate Gener
 ## Imposing multi-field-constraints
 
 For supporting multi-field-constraints, you can use a prototype-based approach: Provide a Generator by a variable element. This generator creates
-prototype objects (or object graphs) which are used as prototype. They may be Entities, JavaBeans or Maps. For example, this may be an importing
-generator. On each generation run, an instance is generated and made available to the other sub generators. They can use the entity or sub elements by
+prototype objects (or object graphs) that are used as prototypes. They may be Entities, JavaBeans or Maps. For example, this may be an importing
+generator. On each generation run, an instance is generated and made available to the other sub generators. They can use the entity or sub-elements by
 a source path attribute:
 
 ```xml
@@ -814,7 +814,7 @@ Usually most entities have common attribute names, e.g. for ids or audit data. Y
 </defaultComponents>
 ```
 
-If a table has a column which is not configured in the Benerator descriptor but as defaultComponent, Benerator uses the defaultComponent config. If no
+If a table has a column that is not configured in the Benerator descriptor but as defaultComponent, Benerator uses the defaultComponent config. If no
 defaultComponent config exists, Benerator falls back to a useful standard setting.
 
 
@@ -920,7 +920,7 @@ Scripts are supported in
 - Fixed column width files
 
 A script is denoted by curly braces, e.g. {'Hi, I am ' + my_name}. This syntax will use the default script engine for rendering the text as, e.g. 'Hi,
-I am Volker'. The default script engine is set writing `<setup defaultScript="...">` in the decriptor file's root element. If you want to use
+I am Volker'. The default script engine is set writing `<setup defaultScript="...">` in the descriptor file's root element. If you want to use
 different script engines at the same time, you can differ them by prepending the scripting engine id, e.g. {ftl:Hi, I am ${my_name}} or {ben:'Hi, I
 am ' + my_name}. Scripts in Benerator descriptors are evaluated while parsing.
 
@@ -987,4 +987,4 @@ errordata.csv' and postprocess it:
 </generate>
 ```
 
-Note that this cannot work properly with a database which uses batch processing (see '[Using Databases](using_relational_databases.md)').
+Note that this cannot work properly with a database that uses batch processing (see '[Using Databases](using_relational_databases.md)').
