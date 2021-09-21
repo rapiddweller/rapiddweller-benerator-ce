@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -46,8 +46,11 @@ import com.rapiddweller.common.version.VersionNumberParser;
 import com.rapiddweller.contiperf.sensor.MemorySensor;
 import com.rapiddweller.format.text.KiloFormatter;
 import com.rapiddweller.jdbacl.DBUtil;
+import org.apache.logging.slf4j.Log4jLoggerFactory;
+import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.impl.StaticLoggerBinder;
 
 import java.io.IOException;
 
@@ -58,7 +61,7 @@ import java.io.IOException;
  */
 public class Benerator {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Benerator.class);
+  private static final Logger logger = LoggerFactory.getLogger(Benerator.class);
 
   protected static final String[] CE_CLI_HELP = {
       "Usage benerator [options] [filename]",
@@ -75,7 +78,11 @@ public class Benerator {
   public static void main(String[] args) throws IOException {
     VersionInfo.getInfo("benerator").verifyDependencies();
     checkVersionAndHelpOpts(args, CE_CLI_HELP);
-    String filename = (args.length > 0 ? args[0] : "benerator.xml");
+    int fileIndex = 0;
+    while (fileIndex < args.length && args[fileIndex].startsWith("-")) {
+      fileIndex++;
+    }
+    String filename = (fileIndex < args.length ? args[fileIndex] : "benerator.xml");
     new Benerator().runFile(filename);
   }
 
@@ -109,7 +116,7 @@ public class Benerator {
       runFile(filename, printer);
       DBUtil.assertAllDbResourcesClosed(false);
     } catch (BeneratorError e) {
-      LOGGER.error(e.getMessage(), e);
+      logger.error(e.getMessage(), e);
       System.exit(e.getCode());
     }
   }
@@ -159,6 +166,5 @@ public class Benerator {
         || ArrayUtil.contains("-h", args)
         || ArrayUtil.contains("-help", args);
   }
-
 
 }
