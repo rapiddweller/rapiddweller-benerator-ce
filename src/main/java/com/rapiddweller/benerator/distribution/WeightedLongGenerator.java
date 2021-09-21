@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -36,10 +36,8 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
- * Long Generator that supports a weight function.<br/>
- * <br/>
+ * Long Generator that supports a weight function.<br/><br/>
  * Created: 18.06.2006 15:00:41
- *
  * @author Volker Bergmann
  * @since 0.1
  */
@@ -52,53 +50,22 @@ public class WeightedLongGenerator extends AbstractNonNullNumberGenerator<Long> 
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Weighted long generator.
-   */
   public WeightedLongGenerator() {
     this(Long.MIN_VALUE, Long.MAX_VALUE);
   }
 
-  /**
-   * Instantiates a new Weighted long generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public WeightedLongGenerator(long min, long max) {
     this(min, max, 1);
   }
 
-  /**
-   * Instantiates a new Weighted long generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   */
   public WeightedLongGenerator(long min, long max, long granularity) {
     this(min, max, granularity, new ConstantFunction(1));
   }
 
-  /**
-   * Instantiates a new Weighted long generator.
-   *
-   * @param min      the min
-   * @param max      the max
-   * @param function the function
-   */
   public WeightedLongGenerator(long min, long max, WeightFunction function) {
     this(min, max, 1, function);
   }
 
-  /**
-   * Instantiates a new Weighted long generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   * @param function    the function
-   */
   public WeightedLongGenerator(long min, long max, long granularity, WeightFunction function) {
     super(Long.class, min, max, granularity);
     this.function = function;
@@ -107,20 +74,10 @@ public class WeightedLongGenerator extends AbstractNonNullNumberGenerator<Long> 
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets distribution.
-   *
-   * @return the distribution
-   */
   public Distribution getDistribution() {
     return function;
   }
 
-  /**
-   * Sets distribution.
-   *
-   * @param distribution the distribution
-   */
   public void setDistribution(Distribution distribution) {
     if (!(distribution instanceof WeightFunction)) {
       throw new IllegalArgumentException("Function expected, found: " + distribution);
