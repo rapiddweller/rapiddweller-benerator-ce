@@ -163,7 +163,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
   private static PartModifier createPartModifier(ComponentDescriptor part, BeneratorContext context) {
     ComplexTypeDescriptor typeDescriptor = (ComplexTypeDescriptor) part.getTypeDescriptor();
     List<GenerationStep<Entity>> components =
-        ComplexTypeGeneratorFactory.createMutatingGeneratorComponents(typeDescriptor, Uniqueness.NONE, context);
+        ComplexTypeGeneratorFactory.createMutatingGenerationSteps(typeDescriptor, Uniqueness.NONE, context);
     return new PartModifier(part.getName(), components, typeDescriptor.getScope(), context);
   }
 
@@ -355,7 +355,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     if (instance.getLocalType().getSource() != null) {
       longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, null, null, true, context);
     } else {
-      longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, 1L, 1L, true, context);
+      longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, null, null, true, context);
     }
     NonNullGenerator<Integer> countGenerator = WrapperFactory.asNonNullGenerator(
         new AsIntegerGeneratorWrapper<Number>((Generator) longCountGenerator));

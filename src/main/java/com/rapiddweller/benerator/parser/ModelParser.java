@@ -193,9 +193,9 @@ public class ModelParser {
   }
 
   public void applyDefaultCounts(PartDescriptor descriptor) {
-    if (descriptor.getDeclaredDetailValue("minCount") == null) {
-      long min = (descriptor.getTypeDescriptor() instanceof ComplexTypeDescriptor ? 0 : 1);
-      descriptor.setMinCount(new ConstantExpression<>(min));
+    if (descriptor.getDeclaredDetailValue("minCount") == null
+        && descriptor.getTypeDescriptor() instanceof SimpleTypeDescriptor) {
+      descriptor.setMinCount(new ConstantExpression<Long>(1L));
     }
     if (descriptor.getDeclaredDetailValue("maxCount") == null) {
       descriptor.setMaxCount(new ConstantExpression<>(1L));
