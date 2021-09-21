@@ -36,6 +36,7 @@ import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.profile.Profiling;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.impl.StaticLoggerBinder;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
@@ -61,8 +62,13 @@ public class BeneratorUtil {
   }
 
   public static void checkSystem(InfoPrinter printer) {
+    // print general Benerator version and system information
     printVersionInfo(printer);
+    // Print Slf4j binding info
+    printer.printLines("Using Slf4j binding: " + StaticLoggerBinder.getSingleton().getLoggerFactoryClassStr());
+    // Print heap info
     printer.printLines("Configured heap size limit: " + Runtime.getRuntime().maxMemory() / 1024 / 1024 + " MB");
+    // Check script engine
     try {
       Class.forName("javax.script.ScriptEngine");
     } catch (ClassNotFoundException e) {
@@ -72,11 +78,13 @@ public class BeneratorUtil {
       }
       System.exit(BeneratorConstants.EXIT_CODE_ERROR);
     }
+    // Check Java version
     VersionNumber javaVersion = VersionNumber.valueOf(VMInfo.getJavaVersion());
     if (javaVersion.compareTo(VersionNumber.valueOf("1.6")) < 0) {
       CONFIG_LOGGER.warn("benerator is written for and tested under Java 6 - " +
           "you managed to set up JSR 223, but may face other problems.");
     }
+    // Check profiling setting
     if (Profiling.isEnabled()) {
       CONFIG_LOGGER.warn("Profiling is active. This may lead to memory issues");
     }
