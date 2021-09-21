@@ -253,7 +253,11 @@ public abstract class GeneratorTest extends ModelTest {
         counter.count(wrapper.unwrap());
       }
     }
-    Set<Object> productSet = counter.objectSet();
+    expectRelativeWeights(counter, expectedValueWeightPairs);
+  }
+
+  protected static void expectRelativeWeights(ObjectCounter counter, Object... expectedValueWeightPairs) {
+    Set<?> productSet = counter.objectSet();
     double totalExpectedWeight = 0;
     for (int i = 1; i < expectedValueWeightPairs.length; i += 2) {
       totalExpectedWeight += ((Number) expectedValueWeightPairs[i]).doubleValue();
