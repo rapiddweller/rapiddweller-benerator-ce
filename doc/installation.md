@@ -7,7 +7,7 @@ Download Benerator from:
 [https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/)
 
 You should download the most recent version of the rapiddweller-benerator-dist archive from the download page, e.g.
-_rapiddweller-benerator-ce-1.2.0-jdk-11-dist.zip_ .
+_rapiddweller-benerator-ce-1.3.0-jdk-11-dist.zip_ .
 
 ## Unzip Benerator
 
@@ -26,7 +26,7 @@ e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.2.0`). Click OK s
 
 ## Optional: Install JDBC drivers
 
-Benerator comes with open source JDBC drivers (for connecting to a database). No extra installation is necessary for
+Benerator comes with open-source JDBC drivers (for connecting to a database). No extra installation is necessary for
 them:
 
 - Microsoft SQL Server Driver (MS SQL Server)
@@ -49,7 +49,7 @@ copy the contained file db2jcc.jar to Benerator's lib directory.
 ## Optional: Set up log4j2
 
 Troubleshooting is simpler if you make use of log4j's configuration capabilities. If you do not know (or care) about logging, simply skip this step.
-Otherwise put a custom log4j2.xml file into the BENERATOR_HOME/lib directory.
+Otherwise, put a custom log4j2.xml file into the BENERATOR_HOME/lib directory.
 
 ## Mac OS X configuration
 

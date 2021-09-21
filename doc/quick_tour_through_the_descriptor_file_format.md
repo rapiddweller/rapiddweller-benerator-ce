@@ -93,7 +93,7 @@ A setting is explicitely defined using a setting element:
 
 ## `<import>`
 
-Benerator has lots of plugin interfaces, but is agnostic of most implementors. So you need to explicitly import what you need.
+Benerator has lots of plugin interfaces but is agnostic of most implementors. So you need to explicitly import what you need.
 
 The following packages are imported by default (providing, for example, the ConsoleExporter):
 
@@ -127,12 +127,12 @@ Imports must be the first elements used in a descriptor file.
 
 When using a Benerator plugin or another library, you need to make sure that Benerator finds its binary. There are three alternatives:
 
-1. Putting the associated jar file(s) into the lib folder of your Benerator installation. This way it is avaliable for all data generation projects on
-   your machine. If you work in a team where everyone in familiar with Benerator and the toolset is not based on Maven, this is generally the
+1. Putting the associated jar file(s) into the lib folder of your Benerator installation. This way it is available for all data generation projects on
+   your machine. If you work in a team where everyone is familiar with Benerator and the toolset is not based on Maven, this is generally the
    preferred approach.
 
-2. Create a sub folder named lib under the data generation project folder and put the jar file(s) there. When distributing the project to be executed
-   on machines with plain Benerator installations, distribute the full folder content including the lib sub folder.
+2. Create a subfolder named lib under the data generation project folder and put the jar file(s) there. When distributing the project to be executed
+   on machines with plain Benerator installations, distribute the full folder content including the lib subfolder.
 
 3. When using Maven to run Benerator, simply create the necessary Maven dependencies and Maven will acquire all needed libraries dynamically. Read
    more about this in '[Maven Benerator Plugin](maven_benerator_plugin.md)' 
@@ -146,8 +146,8 @@ data to be generated. For now, all generated data are 'entities' (composite data
 <generate type="Person" count="10" consumer="ConsoleExporter"/>
 ```
 
-This will make Benerator generate 10 'Person' Entities and send it to a ConsoleExporter that prints out the persons to the console. But what is a
-Person? Benerator will figure it out by itself, if it knows e.g. a database with a 'PERSON' table, an XML schema with a 'Person' element or any
+This will make Benerator generate 10 'Person' Entities and send them to a ConsoleExporter that prints out the persons to the console. But what is a
+Person? Benerator will figure it out by itself if it knows e.g. a database with a 'PERSON' table, an XML schema with a 'Person' element, or any
 other 'DescriptorProvider'. Benerator will generate database-valid or XML-Schema-valid data automatically. More about this later.
 
 Let us start without DescriptorProviders, manually putting together what we need.
@@ -192,7 +192,7 @@ String attribute generation can be configured using the "pattern" attribute with
 </generate>
 ```
 
-You can find a detailed description about Benerator's regular expression support 
+You can find a detailed description of Benerator's regular expression support 
 in '[Regular Expression Support](regular_expression_support.md)'.
 
 ## `<iterate>`
@@ -210,7 +210,7 @@ filter the data to iterate through.
 
 ## "offset"
 
-In whatever type of data generation or iteration, an **offset** can applied to skip the heading entries of a data source, e.g.
+In whatever type of data generation or iteration, an **offset** can be applied to skip the heading entries of a data source, e.g.
 
 ```xml
 <iterate type="Person" source="persons.csv" offset="10"/>
@@ -260,7 +260,7 @@ The `<execute>` element serves to execute different kinds of code. One option is
 
 The program output is printed to the console.
 
-Note that some windows shell commands are only available in the command line interpreter. In order to invoke them, you need to call cmd /C, e.g.
+Note that some windows shell commands are only available in the command-line interpreter. In order to invoke them, you need to call cmd /C, e.g.
 
 ```xml
 <execute type="shell">cmd /C type myGeneratedFile.csv</execute>
@@ -296,7 +296,7 @@ the operating system. If no exit code is specified, Benerator uses -1.
 
 ## `<if>`
 
-Evaluates a script expression and executes sub elements depending on the result.
+Evaluates a script expression and executes sub-elements depending on the result.
 
 Either a decision to execute something or not:
 
@@ -353,7 +353,7 @@ The `<while>` element executes sub elements as long as a boolean 'test' expressi
 
 ## `<id>` - Generating unique identifiers
 
-For marking an entity member as identifier, it is declared with an `<id>` element, e.g.
+For marking an entity member as an identifier, it is declared with an `<id>` element, e.g.
 
 ```xml
 <id name="identifier" type="long"/>
