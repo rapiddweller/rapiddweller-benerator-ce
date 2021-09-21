@@ -42,7 +42,7 @@ public class Benchmark {
 
   private static final Setup[] DEFAULT_SETUPS = {
       new Setup("gen-string.ben.xml", false, "1.2.0", 100000),
-      new Setup("gen-person.ben.xml", false, "1.2.0", 80000),
+      new Setup("gen-person-showcase.ben.xml", false, "1.2.0", 80000),
       new Setup("anon-person-showcase.ben.xml", false, "1.2.0", 100000),
       new Setup("anon-person-regex.ben.xml", false, "1.2.0", 1500000),
       new Setup("anon-person-hash.ben.xml", false, "1.2.0", 1500000),
@@ -194,9 +194,10 @@ public class Benchmark {
     printHorizontalLine();
     String[] title = {
         "Benchmark throughput of " + benerator.getVersion(),
-        "on a " + BeneratorUtil.getOsWithCoresInfo(),
+        "on a " + BeneratorUtil.getOsInfo(),
+        "with " + BeneratorUtil.getCpuAndMemInfo(),
         "Java version " + VMInfo.getJavaVersion(),
-        "" + BeneratorUtil.getJVMInfo(),
+        BeneratorUtil.getJVMInfo(),
         "Date/Time: " + ZonedDateTime.now(),
         "",
         "Numbers are reported in million entities generated per hour"
@@ -267,8 +268,8 @@ public class Benchmark {
   private static Execution runTest(String fileName, int count, int threads, Benerator benerator) throws IOException {
     logger.debug("Testing " + fileName + " with count " + count + " and " + threads + " thread(s)");
     String xml = IOUtil.getContentOfURI("com/rapiddweller/benerator/benchmark/" + fileName);
-    xml = xml.replace("{count}", "count=\"" + count + "\"");
-    xml = xml.replace("{threads}", (Benerator.isCommunityEdition() ? "" : "threads=\"" + threads + "\""));
+    xml = xml.replace("{count}", String.valueOf(count));
+    xml = xml.replace("{threads}", String.valueOf(threads));
     String filename = "__benchmark.ben.xml";
     IOUtil.writeTextFile(filename, xml);
     long t0 = System.currentTimeMillis();

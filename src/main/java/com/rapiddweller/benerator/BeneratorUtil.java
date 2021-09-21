@@ -37,7 +37,10 @@ import com.rapiddweller.profile.Profiling;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 import java.io.File;
+import java.lang.management.ManagementFactory;
 
 /**
  * Provides general utility methods for Benerator.<br/><br/>
@@ -85,7 +88,8 @@ public class BeneratorUtil {
         "Benerator " + version.getVersion() + " build " + version.getBuildNumber(),
         "Java version: " + VMInfo.getJavaVersion(),
         "JVM product:  " + getJVMInfo(),
-        "System:       " + getOsWithCoresInfo()
+        "System:       " + getOsInfo(),
+        "CPU & RAM:    " + getCpuAndMemInfo()
     );
   }
 
@@ -97,11 +101,33 @@ public class BeneratorUtil {
     CONFIG_LOGGER.info(config);
   }
 
-  public static String getOsWithCoresInfo() {
-    return getOsInfo() + " with " + Runtime.getRuntime().availableProcessors() + " cores";
+  public static String getCpuAndMemInfo() {
+    int availableProcessors = Runtime.getRuntime().availableProcessors();
+    String result = availableProcessors + " cores";
+    long memGb = getMemGB();
+    if (memGb > 0) {
+      result += " and " + memGb + " GB RAM";
+    }
+    long maxMemMB = Runtime.getRuntime().maxMemory() / 1024 / 1024;
+    if (maxMemMB >= 1024)
+      result += ", max " + (maxMemMB / 1024) + " GB of RAM for this process";
+    else
+      result += ", max " + maxMemMB + " MB of RAM for this process";
+    return result;
   }
 
-  private static String getOsInfo() {
+  public static int getMemGB() {
+    try {
+      MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+      ObjectName osName = new ObjectName("java.lang", "type", "OperatingSystem");
+      return ((int) ((Long) mBeanServer.getAttribute(osName, "TotalPhysicalMemorySize") / 1024 / 1024 / 1024));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return -1;
+    }
+  }
+
+  public static String getOsInfo() {
     return SystemInfo.getOsName() + " " + SystemInfo.getOsVersion() + " " + SystemInfo.getOsArchitecture();
   }
 }

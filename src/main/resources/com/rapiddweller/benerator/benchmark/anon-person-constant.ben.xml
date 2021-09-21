@@ -4,7 +4,7 @@
     <memstore id='mem'/>
 
     <generate type='Person' count='1' consumer='mem'> <!--consumer="ConsoleExporter"-->
-        <attribute name='streetAndNumber' constant="Main Street 1"/>
+        <attribute name='streetAndNumber' constant='Main Street 1'/>
         <attribute name='zip'             constant='12345'/>
         <attribute name='city'            constant='Grandville'/>
 
@@ -19,8 +19,8 @@
         <attribute name='Cardno'          constant='1234567890123456'/>
     </generate>
 
-    <iterate type='Person' source="mem" distribution="random" {count} {threads} pageSize='100000'> <!--consumer="ConsoleExporter"-->
-        <attribute name='streetAndNumber' constant="xxxxx"/>
+    <iterate type='Person' source='mem' distribution='random' count='{count}' threads='{threads}' pageSize='100000'> <!--consumer="ConsoleExporter"-->
+        <attribute name='streetAndNumber' constant='xxxxx'/>
         <attribute name='zip'             constant='xxxxx'/>
         <attribute name='city'            constant='xxxxx'/>
 
@@ -32,7 +32,7 @@
         <attribute name='lastName'        constant='xxxxx'/>
         <attribute name='workPhone'       constant='xxxxx'/>
 
-        <attribute name='CardExp'       constant='xxxxx'/>
+        <attribute name='CardExp'         constant='xxxxx'/>
         <attribute name='Cardno'          constant='xxxxx'/>
     </iterate>
 </setup>
