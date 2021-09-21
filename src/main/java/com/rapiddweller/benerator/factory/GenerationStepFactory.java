@@ -49,8 +49,8 @@ public class GenerationStepFactory {
   private static final Logger LOGGER = LoggerFactory.getLogger(GenerationStepFactory.class);
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  public static GenerationStep<?> createGeneratorComponent(InstanceDescriptor descriptor, Uniqueness ownerUniqueness,
-                                                           boolean iterationMode, BeneratorContext context) {
+  public static GenerationStep<?> createGenerationStep(InstanceDescriptor descriptor, Uniqueness ownerUniqueness,
+                                                       boolean iterationMode, BeneratorContext context) {
     if (descriptor.getMode() == Mode.ignored) {
       LOGGER.debug("Ignoring {}", descriptor);
       return null;

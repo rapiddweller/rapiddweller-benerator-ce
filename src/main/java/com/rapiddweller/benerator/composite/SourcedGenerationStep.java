@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 
 /**
- * Abstract implementation of the GeneratorComponent interface which manages a source Generator
+ * Abstract implementation of the {@link GenerationStep} interface which manages a source Generator
  * and a Context reference.<br/><br/>
  * Created: 31.08.2011 12:56:22
  * @param <E> the type parameter
@@ -51,7 +51,7 @@ public abstract class SourcedGenerationStep<E> extends AbstractGenerationStep<E>
     return source;
   }
 
-  // GeneratorComponent interface implementation ---------------------------------------------------------------------
+  // GenerationStep interface implementation -------------------------------------------------------------------------
 
   @Override
   public void init(BeneratorContext context) {

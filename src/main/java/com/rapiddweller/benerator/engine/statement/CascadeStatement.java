@@ -96,10 +96,9 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
     LOGGER.debug("Cascading transcode from " + parent.currentEntity().type() + " to " + tableName);
 
     // iterate rows
-    List<GenerationStep<Entity>> generatorComponents =
-        ComplexTypeGeneratorFactory.createMutatingGeneratorComponents(type, Uniqueness.NONE, context);
-    GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(tableName,
-        generatorComponents, context);
+    List<GenerationStep<Entity>> generationSteps =
+        ComplexTypeGeneratorFactory.createMutatingGenerationSteps(type, Uniqueness.NONE, context);
+    GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(tableName, generationSteps, context);
     cavs.init(context);
 
     DataIterator<Entity> iterator = ref.resolveReferences(parent.currentEntity(), source, context);

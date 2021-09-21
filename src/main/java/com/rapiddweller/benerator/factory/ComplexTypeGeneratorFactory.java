@@ -200,9 +200,9 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
   @SuppressWarnings("unchecked")
   public static Generator<Entity> createMutatingEntityGenerator(String name, ComplexTypeDescriptor descriptor,
                                                            Uniqueness ownerUniqueness, BeneratorContext context, Generator<?> source) {
-    List<GenerationStep<Entity>> generatorComponent =
-        createMutatingGeneratorComponents(descriptor, ownerUniqueness, context);
-    return new CompositeEntityGenerator(name, (Generator<Entity>) source, generatorComponent, context);
+    List<GenerationStep<Entity>> generationSteps =
+        createMutatingGenerationSteps(descriptor, ownerUniqueness, context);
+    return new CompositeEntityGenerator(name, (Generator<Entity>) source, generationSteps, context);
   }
 
   // private helpers -------------------------------------------------------------------------------------------------
@@ -301,22 +301,22 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
   }
 
   @SuppressWarnings("unchecked")
-  public static List<GenerationStep<Entity>> createMutatingGeneratorComponents(ComplexTypeDescriptor descriptor,
-                                                                               Uniqueness ownerUniqueness, BeneratorContext context) {
-    List<GenerationStep<Entity>> generatorComponents = new ArrayList<>();
+  public static List<GenerationStep<Entity>> createMutatingGenerationSteps(ComplexTypeDescriptor descriptor,
+                                                                           Uniqueness ownerUniqueness, BeneratorContext context) {
+    List<GenerationStep<Entity>> generationSteps = new ArrayList<>();
     for (InstanceDescriptor part : descriptor.getDeclaredParts()) {
       if (!(part instanceof ComponentDescriptor) ||
           part.getMode() != Mode.ignored && !ComplexTypeDescriptor.__SIMPLE_CONTENT.equals(part.getName())) {
         try {
-          GenerationStep<Entity> generatorComponent =
-              (GenerationStep<Entity>) GenerationStepFactory.createGeneratorComponent(part, ownerUniqueness, false, context);
-          generatorComponents.add(generatorComponent);
+          GenerationStep<Entity> generationStep =
+              (GenerationStep<Entity>) GenerationStepFactory.createGenerationStep(part, ownerUniqueness, true, context);
+          generationSteps.add(generationStep);
         } catch (Exception e) {
           throw new ConfigurationError("Error creating component builder for " + part, e);
         }
       }
     }
-    return generatorComponents;
+    return generationSteps;
   }
 
   private static Generator<Entity> createEntitySourceGenerator(ComplexTypeDescriptor complexType,

@@ -156,10 +156,10 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
     // iterate rows
     String selector = ExpressionUtil.evaluate(selectorEx, context);
     DataSource<Entity> iterable = source.queryEntities(tableName, selector, context);
-    List<GenerationStep<Entity>> generatorComponents =
-        ComplexTypeGeneratorFactory.createMutatingGeneratorComponents(type, Uniqueness.NONE, context);
+    List<GenerationStep<Entity>> generationSteps =
+        ComplexTypeGeneratorFactory.createMutatingGenerationSteps(type, Uniqueness.NONE, context);
     GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(
-        tableName, generatorComponents, context);
+        tableName, generationSteps, context);
     try {
       cavs.init(context);
       DataIterator<Entity> iterator = iterable.iterator();

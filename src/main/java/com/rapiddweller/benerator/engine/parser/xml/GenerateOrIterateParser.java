@@ -319,8 +319,9 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     Element[] childElements = XMLUtil.getChildElements(element);
     Set<String> handledMembers = new HashSet<>();
     for (Element child : childElements) {
-      String childName = XMLUtil.localName(child);
+
       // first parse the component descriptor...
+      String childName = XMLUtil.localName(child);
       InstanceDescriptor componentDescriptor = null;
       if (EL_VARIABLE.equals(childName)) {
         componentDescriptor = parser.parseVariable(child, (VariableHolder) type);
@@ -330,23 +331,25 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
       } else if (EL_VALUE.equals(childName)) {
         componentDescriptor = parser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, arrayIndex++);
       }
+
       // ...handle non-member/variable child elements
       if (componentDescriptor != null) {
-        GenerationStep<?> componentGenerator = GenerationStepFactory.createGeneratorComponent(
+        GenerationStep<?> componentGenerator = GenerationStepFactory.createGenerationStep(
             componentDescriptor, Uniqueness.NONE, iterationMode, childContext);
         if (componentGenerator != null) {
           statements.add(componentGenerator);
         }
       } else if (!EL_CONSUMER.equals(childName)) {
+        // parse and set up consumer definition
         interceptor.generationComplete(base, iterationMode, statements);
         completionReported = true;
-        // parse consumer definition
         Statement[] subPath = parseContext.createSubPath(parentPath, statement);
         Statement subStatement = parseContext.parseChildElement(child, subPath);
         statements.add(subStatement);
       }
     }
-    if (!completionReported) { // if there is no consumer, completion has not yet been reported
+    if (!completionReported) {
+      // if there is no consumer, completion has not yet been reported
       interceptor.generationComplete(base, iterationMode, statements);
       completionReported = true;
     }
@@ -374,7 +377,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
           if (handledMembers.contains(componentName.toLowerCase())) {
             continue;
           }
-          GenerationStep<?> componentGenerator = GenerationStepFactory.createGeneratorComponent(
+          GenerationStep<?> componentGenerator = GenerationStepFactory.createGenerationStep(
               component, Uniqueness.NONE, iterationMode, childContext);
           statements.add(insertionIndex++, componentGenerator);
         }
