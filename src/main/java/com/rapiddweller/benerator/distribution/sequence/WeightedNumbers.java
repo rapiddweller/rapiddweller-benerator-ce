@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -41,7 +41,6 @@ import com.rapiddweller.script.WeightedSample;
  * for example "1^3,2^7" would cause generation of 30% '1' values and
  * 70% '2' values.<br/><br/>
  * Created: 02.06.2010 07:27:36
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.3
