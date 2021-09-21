@@ -37,10 +37,12 @@ public class PartModifier extends AbstractGenerationStep<Entity> implements Comp
     if (wrapper != null) {
       Object part = ((Entity) wrapper.unwrap()).getComponent(partName);
       Iterator<Entity> iterator = null;
-      if (part.getClass().isArray()) {
-        iterator = ArrayUtil.iterator((Entity[]) part);
-      } else if (part instanceof Collection) {
-        iterator = ((Collection) part).iterator();
+      if (part != null) {
+        if (part.getClass().isArray()) {
+          iterator = ArrayUtil.iterator((Entity[]) part);
+        } else if (part instanceof Collection) {
+          iterator = ((Collection) part).iterator();
+        }
       }
       if (iterator != null) {
         while (iterator.hasNext()) {
