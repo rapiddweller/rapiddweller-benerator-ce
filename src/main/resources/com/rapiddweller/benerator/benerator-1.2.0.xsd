@@ -310,7 +310,7 @@
                 <edition>EE</edition>
                 <since>1.2.0</since>
             </xs:appinfo>
-            <xs:documentation xml:lang="en"></xs:documentation>
+            <xs:documentation xml:lang="en">Defines a JMS queue or topic to read data from or write data to.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:attribute name="id" type="xs:string"/>
@@ -323,13 +323,6 @@
     </xs:element>
 
     <xs:simpleType name="jms-destination-type">
-        <xs:annotation>
-            <xs:appinfo>
-                <edition>EE</edition>
-                <since>1.2.0</since>
-            </xs:appinfo>
-            <xs:documentation xml:lang="en"></xs:documentation>
-        </xs:annotation>
         <xs:union>
             <xs:simpleType>
                 <xs:restriction base="xs:string">
@@ -349,7 +342,7 @@
                 <edition>EE</edition>
                 <since>1.2.0</since>
             </xs:appinfo>
-            <xs:documentation xml:lang="en"></xs:documentation>
+            <xs:documentation xml:lang="en">Data format to use for JMS messages</xs:documentation>
         </xs:annotation>
         <xs:union>
             <xs:simpleType>
@@ -371,7 +364,7 @@
                 <edition>EE</edition>
                 <since>1.2.0</since>
             </xs:appinfo>
-            <xs:documentation xml:lang="en"></xs:documentation>
+            <xs:documentation xml:lang="en">Imports data from a Kafka queue.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:attributeGroup ref="kafka-common-attrs"/>
@@ -406,7 +399,7 @@
                 <edition>EE</edition>
                 <since>1.2.0</since>
             </xs:appinfo>
-            <xs:documentation xml:lang="en"></xs:documentation>
+            <xs:documentation xml:lang="en">Exports data to a Kafka queue</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:attributeGroup ref="kafka-common-attrs"/>
@@ -748,8 +741,7 @@
                 <xs:extension base="bean-type">
                     <xs:attributeGroup ref="execution-attrs"/>
                     <xs:attribute name="threads" type="xs:string"/>
-                    <!-- TODO v0.8 support min/maxCount? -->
-                    <xs:attribute name="pager" type="xs:string"/> <!--  TODO v0.7 move 'pager' to 'executor-attrs'? -->
+                    <xs:attribute name="pager" type="xs:string"/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -809,13 +801,7 @@
             <xs:attribute name="maxCount" type="xs:string"/>
             <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attributeGroup ref="execution-attrs"/>
-            <xs:attribute name="threads" type="xs:int">
-                <xs:appinfo>
-                    <edition>EE</edition>
-                    <since>1.2.0</since>
-                </xs:appinfo>
-                <xs:documentation xml:lang="en"></xs:documentation>
-            </xs:attribute>
+            <xs:attribute name="threads" type="xs:int"/>
             <xs:attribute name="template" type="xs:string"/>
             <xs:attribute name="consumer" type="xs:string"/>
         </xs:complexType>
@@ -840,13 +826,7 @@
             </xs:sequence>
             <xs:attributeGroup ref="iterator-attrs"/>
             <xs:attributeGroup ref="execution-attrs"/>
-            <xs:attribute name="threads" type="xs:int">
-                <xs:appinfo>
-                    <edition>EE</edition>
-                    <since>1.2.0</since>
-                </xs:appinfo>
-                <xs:documentation xml:lang="en"></xs:documentation>
-            </xs:attribute>
+            <xs:attribute name="threads" type="xs:int"/>
             <xs:attribute name="template" type="xs:string"/>
             <xs:attribute name="consumer" type="xs:string"/>
         </xs:complexType>
@@ -998,7 +978,7 @@
                     <edition>EE</edition>
                     <since>1.2.0</since>
                 </xs:appinfo>
-                <xs:documentation xml:lang="en"></xs:documentation>
+                <xs:documentation xml:lang="en">Filters data import with a script expression.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
@@ -1037,17 +1017,19 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="anon-check">
+    <xs:element name="anon-check">
         <xs:annotation>
             <xs:appinfo>
                 <edition>EE</edition>
                 <since>1.2.0</since>
             </xs:appinfo>
-            <xs:documentation xml:lang="en"></xs:documentation>
+            <xs:documentation xml:lang="en">Columns for which to verify anonymization.</xs:documentation>
         </xs:annotation>
-        <xs:simpleContent>
-            <xs:extension base="xs:string"/>
-        </xs:simpleContent>
-    </xs:complexType>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string"/>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
 
 </xs:schema>

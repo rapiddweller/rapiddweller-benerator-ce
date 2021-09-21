@@ -106,6 +106,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_STATS;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SUB_SELECTOR;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TEMPLATE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_THREADS;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_UNIQUE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_VALIDATOR;
@@ -130,6 +131,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 
   private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
       ATT_COUNT, ATT_MIN_COUNT, ATT_MAX_COUNT, ATT_COUNT_DISTRIBUTION,
+      ATT_THREADS,
       ATT_PAGESIZE, ATT_STATS, ATT_ON_ERROR,
       ATT_TEMPLATE, ATT_CONSUMER,
       ATT_NAME, ATT_TYPE, ATT_CONTAINER, ATT_GENERATOR, ATT_VALIDATOR,
@@ -292,6 +294,8 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
       }
     }
 
+    checkThreads(element);
+
     // get core date
     descriptor.setNullable(false);
     String taskName = getTaskName(descriptor);
@@ -399,6 +403,23 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     task.setConsumer(consumer);
 
     return task;
+  }
+
+  protected void checkThreads(Element element) {
+    String threads = DescriptorParserUtil.getAttribute(ATT_THREADS, element);
+    if (threads != null) {
+      boolean warn = false;
+      try {
+        int n = Integer.parseInt(threads);
+        warn = (n != 1);
+      } catch (NumberFormatException e) {
+        warn = true;
+      }
+      if (warn) {
+        logger.warn("Benerator CE does not support multithreaded generation or iteration: " +
+            "Ignoring threads='" + threads + "'.");
+      }
+    }
   }
 
   protected String getTaskName(InstanceDescriptor descriptor) {
