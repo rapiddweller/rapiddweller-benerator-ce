@@ -65,7 +65,7 @@ public class BeneratorUtil {
     // print general Benerator version and system information
     printVersionInfo(printer);
     // Print Slf4j binding info
-    printer.printLines("Using Slf4j binding: " + StaticLoggerBinder.getSingleton().getLoggerFactoryClassStr());
+    printer.printLines("Slf4j binding: " + StaticLoggerBinder.getSingleton().getLoggerFactoryClassStr());
     // Print heap info
     printer.printLines("Configured heap size limit: " + Runtime.getRuntime().maxMemory() / 1024 / 1024 + " MB");
     // Check script engine
@@ -94,10 +94,10 @@ public class BeneratorUtil {
     VersionInfo version = VersionInfo.getInfo("benerator");
     printer.printLines(
         "Benerator " + version.getVersion() + " build " + version.getBuildNumber(),
-        "Java version: " + VMInfo.getJavaVersion(),
-        "JVM product:  " + getJVMInfo(),
-        "System:       " + getOsInfo(),
-        "CPU & RAM:    " + getCpuAndMemInfo()
+        "Java version:  " + VMInfo.getJavaVersion(),
+        "JVM product:   " + getJVMInfo(),
+        "System:        " + getOsInfo(),
+        "CPU & RAM:     " + getCpuAndMemInfo()
     );
   }
 
