@@ -6,11 +6,8 @@ You can instantiate JavaBeans by an intuitive syntax like this:
 
 ```xml
 <bean id="helper" class="com.my.Helper">
-
     <property name="min" value="5"/>
-
     <property name="max" value="23"/>
-
 </bean>
 ```
 
@@ -37,29 +34,19 @@ example:
 
 ```xml
 <bean id="csv" class="CSVEntityExporter">
-
     <property name="uri" value="target/customers.csv"/>
-
     <property name="columns" value="salutation,first_name,last_name"/>
-
 </bean>
 
 <bean id="proxy" class="shop.MyProxy">
-
-<property name="target" ref="csv"/>
-
+    <property name="target" ref="csv"/>
 </bean>
 
 <bean id="log_csv" class="ConsumerChain">
-
-<property name="components">
-
-    <bean class="LoggingConsumer"/>
-
-    <idref bean="proxy"/>
-
-</property>
-
+    <property name="components">
+        <bean class="LoggingConsumer"/>
+        <idref bean="proxy"/>
+    </property>
 </bean>
 ```
 
@@ -118,15 +105,10 @@ Benerator provides an InitialContext class in the JNDI platform package. It can 
 <import platforms="jndi"/>
 
 <bean id="ctx" class="InitialContext">
-
-<property name="factory" value="..."/>
-
-<property name="url" value="..."/>
-
-<property name="user" value="..."/>
-
-<property name="password" value="..."/>
-
+    <property name="factory" value="..."/>
+    <property name="url" value="..."/>
+    <property name="user" value="..."/>
+    <property name="password" value="..."/>
 </bean>
 
 <bean id="ejb" spec="ctx.lookup('cons')"/>
@@ -142,15 +124,11 @@ finally query its 'sum' property value with a script expression:
 <bean id="adder" spec="new AddingConsumer('_txn_amount_', 'long')"/>
 
 <generate type="deb_transactions" count="100" consumer="ConsoleExporter, adder">
-
-<attribute name="_txn_amount_" type="long" min="1" max="100" distribution="random"/>
-
+    <attribute name="_txn_amount_" type="long" min="1" max="100" distribution="random"/>
 </generate>
 
 <generate type="trailer_record" count="1" consumer="ConsoleExporter">
-
-<attribute name="total" script="adder.sum"/>
-
+    <attribute name="total" script="adder.sum"/>
 </generate>
 ```
 
@@ -160,9 +138,7 @@ Arbitrary information may be queried from a system by a 'selector' attribute, wh
 
 ```xml
 <generate type="db_order" count="30" pageSize="100" consumer="db">
-
     <attribute name="customer_id" source="db" selector="select id from db_customer" cyclic="true"/>
-
 </generate>
 ```
 
@@ -179,18 +155,13 @@ Example:
 
 ```xml
 <generate type="shop" count="10">
-
     <attribute name="country" values="DE,AT,CH"/>
-
     <generate type="product" count="100" consumer="db">
-        
         <attribute name="ean_code" 
                    source="db" 
                    selector="{{ftl:select ean_code from db_product where country='${shop.country}'}}"
                    />
-        
     </generate>
-
 </generate>
 ```
 
@@ -208,11 +179,8 @@ You can use it as a consumer for storing data (in this case products):
 
 ```xml
 <generate type="product" count="10" consumer="store,ConsoleExporter">
-
     <id name="id" type="int"/>
-
     <attribute name="name" pattern="[A-Z][a-z]{4,12}"/>
-
 </generate>
 ```
 
@@ -220,13 +188,9 @@ Afterwards you can query the generated products for referencing them in generate
 
 ```xml
 <generate type="order" count="10" consumer="ConsoleExporter">
-
     <variable name="product" source="store" type="product"/>
-
     <id name="id" type="int"/>
-
     <attribute name="product_id" script="product.id"/>
-
 </generate>
 ```
 
@@ -319,13 +283,9 @@ You can now use this setup to generate city names for any of the specified regio
 <echo message="north american cities:"/>
 
 <generate type="city" consumer="exporter" count="10">
-
-<attribute name="name" unique="true"
-
-           source="city_{0}.csv" encoding="UTF-8"
-
-           dataset="north_america" nesting="area"/>
-
+    <attribute name="name" unique="true"
+               source="city_{0}.csv" encoding="UTF-8"
+               dataset="north_america" nesting="area"/>
 </generate>
 ```
 
@@ -335,17 +295,11 @@ north american cities:
 
 ```shell
 city[name=Mexico]
-
 city[name=Los Angeles]
-
 city[name=San Francisco]
-
 city[name=New York]
-
 city[name=Villahermosa]
-
 city[name=Ottawa]
-
 city[name=Toronto]
 ```
 
@@ -378,19 +332,13 @@ properties of other JavaBean-instantiated generators or specifying it as 'source
 
 ```xml
 <!-- creates a text generator /-->
-
 <bean id="textGen" class="RegexStringGenerator">
-
     <property name="pattern" value="([a-z]{3,8}[ ])*[a-z]{3,8}\."/>
-
 </bean>
 
-        <!-- wraps the text generator and creates messages /-->
-
+<!-- wraps the text generator and creates messages /-->
 <generate type="message" count="10" consumer="LoggingConsumer">
-
-<attribute name="text" source="textGen" converter="MessageConverter" pattern="Message: ''{0}''"/>
-
+    <attribute name="text" source="textGen" converter="MessageConverter" pattern="Message: ''{0}''"/>
 </generate>
 ```
 
@@ -404,15 +352,10 @@ For executing descriptor files do the following:
 
 ```java
 // create an instance of the Descriptor runner specifying the descriptor file
-
 DescriptorRunner runner = new DescriptorRunner("path/to/file/benerator.xml");
-
 BeneratorContext context = runner.getContext();
-
 // use the BeneratorContext to set locale, file encoding, ... as you need
-
 context.setValidate(false);
-
 runner.run();
 ```
 
@@ -423,25 +366,21 @@ instantiate it and register it with the BeneratorContext:
 
 ```java
 DescriptorRunner runner = new DescriptorRunner("path/to/file/benerator.xml");
-
 BeneratorContext context = runner.getContext();
-
 context.setValidate(false);
-
 MyConsumer myConsumer = new MyConsumer();
-
 context.set("myConsumer", myConsumer); // add a custom Consumer
-
 runner.run();
+```
 
 A simplistic implementation could simply write entities to the console, e.g.
 
+```java
 class MyConsumer extends AbstractConsumer`<Entity>` {
-
-List`<Entity>` products = new ArrayList`<Entity>`();
-
-public void startConsuming(Entity entity) { products.add(entity); }
-
+    List`<Entity>` products = new ArrayList`<Entity>`();
+    public void startConsuming(Entity entity) { 
+      products.add(entity); 
+    }
 }
 ```
 
@@ -453,7 +392,6 @@ First, define a descriptor file, e.g.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-
 <setup>
 
     <generate type="address">
@@ -467,17 +405,11 @@ Then you can get the address generator from Benerator by calling:
 
 ```java
 BeneratorContext context = new BeneratorContext();
-
 Generator`<?>` generator = new DescriptorBasedGenerator("benerator.xml", "address", context);
-
 generator.init(context);
-
 ProductWrapper wrapper = new ProductWrapper();
-
 for (int i = 0; i `< 10; i++)
-
-System.out.println(generator.generate(wrapper));
-
+    System.out.println(generator.generate(wrapper));
 generator.close();
 ```
 
@@ -492,11 +424,8 @@ Such a class can be instantiated and invoked with a similar syntax like any Java
 
 ```xml
 <run-task class="com.my.SpecialTask">
-
     <property name="uri" value="base.csv"/>
-
     <property name="db" ref="db"/>
-
 </run-task>
 ```
 
@@ -511,9 +440,7 @@ the total number of execution over all threads is the page size. For this, The e
 
 ```xml
 <run-task class="my.SpecialTask" count="1000" pageSize="100" pager="my.PagingStrategy">
-
     <property name="message" value="I'm special"/>
-
 </run-task>
 ```
 
@@ -558,11 +485,8 @@ shop, a default order structure should be created. You would then define the ord
 
 ```xml
 <dataset>
-
     <db_order_item order_id="{db_order.id}" number_of_items="2" product_ean_code="8076800195057" total_price="2.40"/>
-
     <db_order_item order_id="{db_order.id}" number_of_items="1" product_ean_code="8006550301040" total_price="8.70"/>
-
 </dataset>
 ```
 
@@ -570,19 +494,12 @@ and then create an order for each customer that imports its sub structure from t
 
 ```xml
 <generate type="db_order" consumer="db">
-
     <id name="id"/>
-
     <reference name="customer_id"/>
-
     <iterate type="db_order_item" source="demo/shop/default_order.dbunit.xml" consumer="db">
-
         <id name="id"/>
-
         <reference name="order_fk" script="db_order.id"/>
-
     </iterate>
-
 </generate>
 ```
 
@@ -595,11 +512,8 @@ elements for configuring the generated components:
 
 ```xml
 <generate type="array" count="5" consumer="ConsoleExporter">
-
     <value type="string" pattern="[A-Z]{5}"/>
-
     <value type="int" min="1" max="42"/>
-
 </generate>
 ```
 

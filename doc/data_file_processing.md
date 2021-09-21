@@ -1,8 +1,8 @@
 # Data File Processing
 
-# CSV Import and Export
+## CSV Import and Export
 
-## Iterating entity data from a CSV file
+### Iterating entity data from a CSV file
 
 You can iterate entity data from a CSV file by assigning the file with the extension '.ent.csv' and specifying the file
 name as 'source' in an `<iterate>` statement, e.g. for printing the data to the console:
@@ -36,7 +36,7 @@ need to configure the CSV import component (CSVEntitySource) explicitly with a `
 
 For CSV files without header, you need to specify a comma-separated list of column names in the 'columns' property.
 
-## Creating CSV files
+### Creating CSV files
 
 For creating a CSV file you must always take the same approach as above: Defining a bean with its properties and
 referring it as consumer:
@@ -63,14 +63,14 @@ See the component documentation of [CSVEntityExporter] for more details.
 When choosing to include Excel files in your data generation/anonymization, always be aware, 
 that its data capacity is limited to 65,535 rows.
 
-## Iterating Entity Data from an Excel(TM) File
+### Iterating Entity Data from an Excel(TM) File
 
 ```xml
 <iterate type="product" source="products.xls" consumer="ConsoleExporter"/>
 ```
 
 
-## Creating Excel(TM) Files
+### Creating Excel(TM) Files
 
 ```xml
 <generate type="product" count="7" consumer="new XLSEntityExporter('products.xls')">
@@ -145,7 +145,7 @@ platform package 'fixedwidth' and make use of a similar configuration API:
     </bean>
 ```
 
-## Iterating Entity Data of a Fixed Column Width File
+### Iterating Entity Data of a Fixed Column Width File
 
 For iterating data of Fixed Column Width files, you need to provide one more 
 configuration detail than the example above: the 'entity' property tells 
@@ -166,7 +166,7 @@ Benerator as which entity type to interpret the file content.
 ```
 
 
-## Creating Fixed Column Width File
+### Creating Fixed Column Width File
 ```xml
 <setup>
     <import platforms="fixedwidth"/>

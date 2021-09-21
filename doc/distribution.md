@@ -63,6 +63,16 @@ Example:
 <attribute name="n" type="int" distribution="new WeightedNumbers('1^70,3^30')"/>
 ```
 
+When using WeightedNumbers to determine the cardinality of an Entity part which is a container,
+then the container type must be declared. Typical settings are `container='array'` 
+or, in some cases, `container='list'`: 
+
+```xml
+<part name='y' container='array' countDistribution="new WeightedNumbers('0^70,1^20,2^10')">
+  <attribute name='z' pattern='AAA'/>
+</part>
+```
+
 
 ## Distributing other data than numbers
 

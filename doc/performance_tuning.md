@@ -80,15 +80,10 @@ structures with 'relational' structures, e.g. replacing this code:
 
 ```xml
 <generate name="db_customer" count="1000000" consumer="db">
-
     <generate name="db_order" minCount="0" maxCount="20 " consumer="db">
-
         <attribute name="customer_fk" script="{db_customer.id}"/>
-
         ...
-
     </generate>
-
 </generate>
 ```
 
@@ -98,11 +93,8 @@ with something like:
 <generate name="db_customer" count="1000000" consumer="db" />
 
 <generate name="db_order" count="10000000" consumer="db">
-
     <reference name="customer_fk" source="db" targetType="db_customer" distribution="random" />
-
     ...
-
 </generate>
 ```
 
