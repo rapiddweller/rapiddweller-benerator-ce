@@ -33,8 +33,9 @@ Each JMS provider supports individual URL formats, some with variants for differ
 Please refer to the according JMS library documentation for details. 
 Some JMS API providers use the word URI instead of URL, but don't let that confuse you.
 
-For detailed information on ActiveMQ URL formats, see [https://activemq.apache.org/configuring-transports],
-for RabbitMQ, see [https://www.rabbitmq.com/jms-client.html].
+For detailed information on ActiveMQ URL formats, 
+see the [ActiveMQ web page](https://activemq.apache.org/configuring-transports),
+for RabbitMQ, see the [RabbitMQ web page](https://www.rabbitmq.com/jms-client.html).
 
 
 ## Export

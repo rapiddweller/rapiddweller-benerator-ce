@@ -26,7 +26,7 @@ transformation afterwards, for example invoked with an `execute` directive:
 A consumer writes any created entity to a file in DbUnit XML format. 
 Use this if you only need a DbUnit file or want a simple,
 flat XML-based export for import in other tools. 
-See the [Component Reference] for more information.
+See the [Component Reference](component_reference.md) for more information.
 
 ```xml
 <setup>
@@ -60,7 +60,7 @@ For nested XML elements use the following consumer:
 A consumer which is more powerful than the DbUnitEntityExporter: 
 It renders each simple-type entity attribute as an XML attribute 
 and each sub entity as nested XML element.
-See the [Component Reference] for more information.
+See the [Component Reference](component_reference.md) for more information.
 
 The example shows how to nest generation configuration
 

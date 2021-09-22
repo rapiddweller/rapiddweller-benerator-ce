@@ -845,7 +845,7 @@ Using cyclic="true", the result set will be re-iterated from the beginning when 
 
 You may apply a distribution as well.
 The result set of a selector might be quite large, 
-so take care, which distribution to apply, see [Distribution Concepts]:
+so take care, which distribution to apply, see [Distribution Concepts](distribution.md):
 
 ```xml
 <generate type="db_order_item" count="100" pageSize="100">

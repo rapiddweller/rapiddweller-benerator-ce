@@ -37,3 +37,7 @@ your code will not be compatible with Benerator 1.2.0.
 Good news is that this is easily fixed: Edit the Java code of your 
 custom distribution class and replace the ```ìmplements Distribution```
 directive with ```extends AbstractDistribution```.
+
+In case you programmed a custom Sequence, you have two options: 
+1. If the sequence fetches and caches all generator data in its applyTo() method, then have ```extends DetachedSequence```
+2. else implement the applyTo() method appropriately.

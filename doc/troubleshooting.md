@@ -218,5 +218,5 @@ Note: On most systems (e.g. Oracle, HSQL) no catalog needs to be specified.
 
 ## Method isApplicationDetached() not found in class Xyz
 
-See [Migration from 1.1.x to 1.2.0]
+See [Migration from 1.1.x to 1.2.0](migrating_benerator_projects.md#migration-from-11x-to-120)
 

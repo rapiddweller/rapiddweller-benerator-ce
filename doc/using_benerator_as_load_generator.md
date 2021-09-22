@@ -14,14 +14,16 @@ Performance of task execution can be tracked, setting a stats attribute to true:
 The performance of consumer invocations can be tracked, using the PerfTrackingConsumer class:
 
 ```xml
-<import platforms="contiperf" />
-
-<bean id="myWS" spec="new MyWebServiceConsumer(...)"/>
-
-<generate type="params" count="10000">
-    <value type="int" min="100" max="10000" distribution="random"/>
-    <consumer spec='new PerfTrackingConsumer(myWS)'/>
-</generate>
+<setup>
+    <import platforms="contiperf" />
+    
+    <bean id="myWS" spec="new MyWebServiceConsumer(...)"/>
+    
+    <generate type="params" count="10000">
+        <value type="int" min="100" max="10000" distribution="random"/>
+        <consumer spec='new PerfTrackingConsumer(myWS)'/>
+    </generate>
+</setup>
 ```
 
 ## JavaInvoker

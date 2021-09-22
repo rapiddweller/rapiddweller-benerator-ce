@@ -54,7 +54,7 @@ referring it as consumer:
 </setup>
 ```
 
-See the component documentation of [CSVEntityExporter] for more details.
+See the [Component Reference](component_reference.md#csventityexporter) for more details.
 
 
 

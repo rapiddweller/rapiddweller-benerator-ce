@@ -100,17 +100,14 @@ If each value is unique, the combination of them is unique too. The following se
 
 The generated values are:
 
+```text
 product[key1=1, key2=1]
-
 product[key1=2, key2=2]
-
 product[key1=3, key2=3]
-
 product[key1=4, key2=4]
-
 product[key1=5, key2=5]
-
 product[key1=6, key2=6]
+```
 
 ### Cartesian Product
 
@@ -134,17 +131,14 @@ one would add an outer 'dummy' loop and create helper variables x and y in a way
 
 The generated values are:
 
+```text
 product[key1=1, key2=1]
-
 product[key1=1, key2=2]
-
 product[key1=1, key2=3]
-
 product[key1=2, key2=1]
-
 product[key1=2, key2=2]
-
 product[key1=2, key2=3]
+```
 
 ### Prototype Approach
 
@@ -158,7 +152,8 @@ You can use the prototype approach for getting unique compsite keys: A variable'
 </generate>
 ```
 
-The most frequent application of this approach is the generation of unique database references using a prototype query. See '[Prototype Queries](using_relational_databases.md#prototype-queries)'
+The most frequent application of this approach is the generation of unique database references using a prototype query. 
+See '[Prototype Queries](using_relational_databases.md#prototype-queries)'
 
 ## Achieving local uniqueness
 

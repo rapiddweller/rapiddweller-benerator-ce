@@ -35,8 +35,10 @@ A Sequence is basically a number generator. It can provide a custom random algor
 a custom weighted number generator or a unique number generation algorithm.
 
 The Sequences used most often are 'random', 'increment' and 'cumulated'. 
-For a complete list of predefined sequences, see [TODO], 
-for defining a custom Sequence, see [TODO].
+For a complete list of predefined sequences, 
+see the [Component Reference](component_reference.md#sequences), 
+for defining a custom Sequence, 
+see [Extending Beneratoe](extending_benerator.md#custom-sequences).
 
 
 ## Weight Functions
@@ -45,8 +47,10 @@ A weight function basically is a mathematical function that tells which weight
 to apply to which number.
 The most frequently used weight functions are 'GaussianFunction' 
 and 'ExponentialFunction'.
-For a complete list of predefined weight functions, see [TODO],
-for defining a custom weight function, see [TODO].
+For a complete list of predefined weight functions, 
+see the [Component Reference](component_reference.md#weight-functions),
+for defining a custom weight function, 
+see [Extending Benerator](extending_benerator.md#custom-weightfunctions).
 
 
 ## WeightedNumbers
@@ -185,5 +189,8 @@ a weight function should be restricted to at most 10.000 elements.
 - repeat
 - step
 
-For the complete list of predefined Distributions, see [Component Reference], for programming custom 
-Distributions, see [Custom Sequences] and [Custom WeightFunctions].
+For the complete list of predefined Distributions, 
+see the [Component Reference](component_reference.md#distributions), 
+for programming custom Distributions, 
+see [Custom Sequences](extending_benerator.md#custom-sequences) 
+and [Custom WeightFunctions](extending_benerator.md#custom-weightfunctions).

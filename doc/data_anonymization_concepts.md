@@ -4,14 +4,14 @@
 
 The approach for anonymizing production data is to ```<iterate>``` over existing data and
 overwrite data fields with privacy concerns making use of all the features you learned above  
-in [Data Generation Concepts]. 
+in [Data Generation Concepts](data_generation_concepts.md). 
 
 If you need to assure multi-field-dependencies when overwriting, 
 you can choose a prototype-base approach: import data from one source and merge it with
 prototypes that are generated or imported from another source.
 
 When importing data for functional and performance testing, you may need to add a 
-[Data Postprocessing Stage]. 
+[Data Postprocessing Stage](data_generation_concepts.md#data-postprocessing-stage). 
 
 In the following example, customers are imported from a database table in a production database (prod_db), anonymized and exported to a test
 database (test_db). All attributes that are not overwritten, will be exported as is. Since customer names and birth dates need to be anonymized, a

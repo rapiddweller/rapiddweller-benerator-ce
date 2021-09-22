@@ -10,12 +10,12 @@ The basic configuration elements which need to be provided for any kind of Kafka
 | Name | Description |
 | --- | --- |
 | id | the internal id by which the Kafka connector can be accessed in Benerator |
-| bootstrap.servers | See [https://kafka.apache.org/documentation/#producerconfigs_bootstrap.servers]
+| bootstrap.servers | See the original [Kafka Documentation](https://kafka.apache.org/documentation/#producerconfigs_bootstrap.servers)
 | topic | The name of the Kafka queue to connect to |
 | format | The message format used in this queue. Currently, only 'json' is supported |
 
 Depending of the system you want to connect to, 
-you might need to provide [Advanced configuration].
+you might need to provide [Advanced configuration](#advanced-configuration).
 
 
 ## Export
@@ -48,8 +48,8 @@ For exporting data, a ```<kafka-importer>``` is used:
 ### Kafka properties
 
 Benerator supports all configuration properties of Kafka 2.8.
-For an in-depth explanation of these, please have a look at 
-[https://kafka.apache.org/documentation/]
+For an in-depth explanation of these, please have a look at the 
+[Kafka Documentation](https://kafka.apache.org/documentation/)
 
 ### encoding
 
@@ -116,7 +116,8 @@ your configuration could look like this:
 
 If the Benerator file is shared, but your access individual, 
 then remember that you can hide your password from the XML setup file by using the 
-properties file mechanism in your user folder, see [`<setting>` and Benerator identifiers]:
+properties file mechanism in your user folder, see 
+[&lt;setting&gt; and Benerator identifiers](data_generation_concepts.md#setting-and-benerator-identifiers):
 
 Local file kafka.properties:
 ```

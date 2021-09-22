@@ -5,7 +5,8 @@
 Benerator Enterprise Edition enables you to generate and anonymize data concurrently,
 in multiple threads. More than this, its engine and many specialized data generators 
 had significant performance improvements compared to the Community Edition. 
-See the section [Benchmark Tool] to get some performance comparisons.
+See the [Benchmark Tool Documentations](command_line_tools.md#benchmark-tool) 
+to get some performance comparisons.
 
 ## pageSize (database and other transactional systems only)
 
@@ -226,7 +227,7 @@ For example, a setup like this
 
 produces results like this
 
-```
+```text
 Person[
     streetAndNumber Hxpji Street 3
     zip             27200
@@ -245,7 +246,8 @@ You see that usually regex expressions are a viable approach for generating code
 zip codes and phone numbers, but relatively poor for name-like data, but often acceptable.
 
 In order to get an idea of the costs of different anonymization approaches,
-check the performance numbers in the section [Benchmark Tool] or run it on
+check the performance numbers in the 
+[Benchmark Tool Documentation](command_line_tools.md#benchmark-tool) or run it on
 your system to get an individual insight in your machine's capabilities.
 
 
