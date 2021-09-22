@@ -48,7 +48,7 @@ import java.util.Map;
  * @author Volker Bergmann
  * @since 0.3
  */
-public class Entity implements Composite {
+public class Entity implements Composite, Cloneable {
 
   public final ComplexTypeDescriptor descriptor;
   private OrderedNameMap<Object> components;
@@ -269,6 +269,11 @@ public class Entity implements Composite {
   public int hashCode() {
     int typeHash = (descriptor != null ? descriptor.getName().hashCode() : 0);
     return typeHash * 29 + components.hashCode();
+  }
+
+  @Override
+  public Entity clone() throws CloneNotSupportedException {
+    return new Entity(this);
   }
 
   @Override
