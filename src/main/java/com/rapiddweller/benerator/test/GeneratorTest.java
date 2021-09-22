@@ -43,6 +43,7 @@ import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.common.validator.UniqueValidator;
 import com.rapiddweller.model.data.Entity;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -297,6 +298,12 @@ public abstract class GeneratorTest extends ModelTest {
 
   // counter checks --------------------------------------------------------------------------------------------------
 
+  public static void assertEqualCardinalityDistribution(
+      Collection<Entity> entities, String partName, double tolerance, Integer... expectedCounts) {
+    ObjectCounter<Integer> counter = countPartCounts(entities, partName, expectedCounts);
+    checkDistribution(counter, true, tolerance, CollectionUtil.toSet(expectedCounts));
+  }
+
   public static <E> void checkEqualDistribution(
       ObjectCounter<E> counter, double tolerance, Set<E> expectedSet) {
     checkDistribution(counter, true, tolerance, expectedSet);
@@ -305,6 +312,7 @@ public abstract class GeneratorTest extends ModelTest {
   private static <E> void checkDistribution(
       ObjectCounter<E> counter, boolean equalDistribution, double tolerance, Set<E> expectedSet) {
     if (equalDistribution) {
+      assertEquals(expectedSet, counter.objectSet());
       assertTrue("Distribution is not equal: " + counter, counter.equalDistribution(tolerance));
     }
     if (expectedSet != null) {
@@ -333,6 +341,25 @@ public abstract class GeneratorTest extends ModelTest {
   }
 
   // private helpers -------------------------------------------------------------------------------------------------
+
+  private static ObjectCounter<Integer> countPartCounts(Collection<Entity> entities, String partName, Integer... expectedCounts) {
+    ObjectCounter<Integer> counter = new ObjectCounter<Integer>(expectedCounts.length);
+    for (Entity entity : entities) {
+      Object partValue = entity.get(partName);
+      int partCount;
+      if (partValue == null) {
+        partCount = 0;
+      } else if (partValue instanceof Collection) {
+        partCount = ((Collection) partValue).size();
+      } else if (partValue.getClass().isArray()) {
+        partCount = Array.getLength(partValue);
+      } else {
+        partCount = 1;
+      }
+      counter.count(partCount);
+    }
+    return counter;
+  }
 
   @SafeVarargs
   protected static <T> void expectGeneratedSequenceOnce(Generator<T> generator, T... products) {
