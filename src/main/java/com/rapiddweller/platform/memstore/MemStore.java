@@ -76,6 +76,13 @@ public class MemStore extends AbstractStorageSystem {
     return id;
   }
 
+  public int getEntityCount() {
+    int result = 0;
+    for (List<Entity> list : entitiesByType.values())
+      result += list.size();
+    return result;
+  }
+
   @Override
   public DataSource<Entity> queryEntities(String entityType, String selector, Context context) {
     Map<?, Entity> idMap = getOrCreateIdMapForType(entityType);
