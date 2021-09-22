@@ -50,27 +50,17 @@ import java.util.Map;
 /**
  * Simple heap-based implementation of the AbstractStorageSystem interface.<br/><br/>
  * Created: 07.03.2011 14:41:40
- *
  * @author Volker Bergmann
  * @since 0.6.6
  */
 public class MemStore extends AbstractStorageSystem {
 
-  /**
-   * The Ignore close.
-   */
   static boolean ignoreClose = false; // for testing
 
   private final String id;
   private final OrderedNameMap<ComplexTypeDescriptor> types;
   private final Map<String, Map<Object, Entity>> typeMap;
 
-  /**
-   * Instantiates a new Mem store.
-   *
-   * @param id        the id
-   * @param dataModel the data model
-   */
   public MemStore(String id, DataModel dataModel) {
     this.setDataModel(dataModel);
     this.types = OrderedNameMap.createCaseInsensitiveMap();
@@ -151,9 +141,6 @@ public class MemStore extends AbstractStorageSystem {
     }
   }
 
-  /**
-   * Print content.
-   */
   public void printContent() {
     for (Map.Entry<String, Map<Object, Entity>> typeEntry : typeMap.entrySet()) {
       System.out.println(typeEntry.getKey() + ':');
@@ -172,12 +159,6 @@ public class MemStore extends AbstractStorageSystem {
     return idMap;
   }
 
-  /**
-   * Gets entities.
-   *
-   * @param entityType the entity type
-   * @return the entities
-   */
   public Collection<Entity> getEntities(String entityType) {
     return typeMap.get(entityType).values();
   }
