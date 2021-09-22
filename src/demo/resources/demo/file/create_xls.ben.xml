@@ -25,8 +25,8 @@
     <memstore id="mem"/>
     <iterate type="transaction" source="target/transactions.out.xlsx" consumer="mem"/>
 
-    <if test="mem.entityCount != transaction_count">
-        <error>{ftl: ${mem.entityCount} transaction instead of ${transaction_count}}</error>
+    <if test="mem.totalEntityCount() != transaction_count">
+        <error>{ftl: ${mem.totalEntityCount()} transaction instead of ${transaction_count}}</error>
     </if>
     <echo>{ftl: ${transaction_count} transactions have been processed successfully}</echo>
 </setup>

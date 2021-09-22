@@ -76,11 +76,15 @@ public class MemStore extends AbstractStorageSystem {
     return id;
   }
 
-  public int getEntityCount() {
+  public int totalEntityCount() {
     int result = 0;
     for (List<Entity> list : entitiesByType.values())
       result += list.size();
     return result;
+  }
+
+  public int entityCount(String type) {
+    return entitiesByType.get(type).size();
   }
 
   @Override
