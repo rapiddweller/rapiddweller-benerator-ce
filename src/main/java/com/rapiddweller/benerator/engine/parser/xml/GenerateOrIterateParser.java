@@ -127,7 +127,7 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStr
  */
 public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Logger logger = LoggerFactory.getLogger(GenerateOrIterateParser.class);
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
 
   private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
       ATT_COUNT, ATT_MIN_COUNT, ATT_MAX_COUNT, ATT_COUNT_DISTRIBUTION,
@@ -294,7 +294,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
       }
     }
 
-    checkThreads(element);
+    checkThreads(element, parentPath);
 
     // get core date
     descriptor.setNullable(false);
@@ -408,7 +408,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return task;
   }
 
-  protected void checkThreads(Element element) {
+  protected void checkThreads(Element element, Statement[] parentPath) {
     String threads = DescriptorParserUtil.getAttribute(ATT_THREADS, element);
     if (threads != null) {
       boolean warn = false;
