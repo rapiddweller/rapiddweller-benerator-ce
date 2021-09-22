@@ -128,12 +128,6 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
 
   @Override
   public VarLengthStringGenerator createVarLengthStringGenerator(
-      String charSetPattern, int minLength, int maxLength) {
-    return new DefaultVarLengthStringGenerator(charSetPattern, minLength, maxLength, 1);
-  }
-
-  @Override
-  public VarLengthStringGenerator createVarLengthStringGenerator(
       String charSetPattern, int minLength, int maxLength, int lengthGranularity, Distribution lengthDistribution) {
     return new DefaultVarLengthStringGenerator(charSetPattern, minLength, maxLength, lengthGranularity, lengthDistribution);
   }

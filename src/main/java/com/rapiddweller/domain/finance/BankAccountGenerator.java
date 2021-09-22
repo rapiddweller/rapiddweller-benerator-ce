@@ -57,7 +57,7 @@ public class BankAccountGenerator extends CompositeGenerator<BankAccount>
     this.countryCode = Country.getDefault().getIsoCode();
     this.bankGenerator = registerComponent(new BankGenerator());
     this.accountNumberGenerator = registerComponent(BeneratorFactory.getInstance()
-        .createVarLengthStringGenerator("[0-9]", 10, 10));
+        .createVarLengthStringGenerator("[0-9]", 10, 10, 1, null));
     this.wp = new WrapperProvider<>();
   }
 

@@ -51,7 +51,7 @@ public class City {
 
   static {
     localNumberGenerator = BeneratorFactory.getInstance()
-        .createVarLengthStringGenerator("[0-9]", 7, 8);
+        .createVarLengthStringGenerator("[0-9]", 7, 8, 1, null);
     localNumberGenerator.init(null);
   }
 

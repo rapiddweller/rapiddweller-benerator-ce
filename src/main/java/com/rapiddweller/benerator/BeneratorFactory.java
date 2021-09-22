@@ -112,9 +112,6 @@ public abstract class BeneratorFactory {
   public abstract Converter<String,String> createDelocalizingConverter();
 
   public abstract VarLengthStringGenerator createVarLengthStringGenerator(
-      String charSetPattern, int minLength, int maxLength);
-
-  public abstract VarLengthStringGenerator createVarLengthStringGenerator(
       String charSetPattern, int minLength, int maxLength, int lengthGranularity, Distribution lengthDistribution);
 
   public abstract VarLengthStringGenerator createVarLengthStringGenerator(

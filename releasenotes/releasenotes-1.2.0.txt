@@ -3,18 +3,17 @@ release notes rapiddweller-benerator-ce 1.2.0
 
 summary
 -------
-
-
-changes
--------
-- Added method to the Distribution interface, introduced AbstractDistribution class to compensate this for implementors.
+Benerator CE 1.2.0 enhances performance and documentation and fixes some bugs
 
 enhancements
 ------------
-- Improved Bnerator engine performance
-- Strongly improved and extended Benerator Manual
-- New address domain package for United Kingdom (GB)
-- Supporting custom random implementations, see class RandomSupport
+- Improved Benerator engine performance by 20%
+- Improved and extended Benerator Manual
+- Added address domain package for United Kingdom (GB)
+- Supporting custom random implementations
 
-bug fixes
----------
+changes
+-------
+- Redesigned the Distribution class hierarchy, introduced the AbstractDistribution
+  and DetachedSequence classes to compensate this for implementors. Se the manual's
+  migration guide what to do if you programmed custom Distributions.

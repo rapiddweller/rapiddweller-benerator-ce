@@ -195,7 +195,7 @@ public class Country {
     this.mobilePrefixGenerator = new RegexStringGenerator(mobileCodePattern);
     this.mobilePrefixGenerator.init(null);
     this.localNumberGenerator = BeneratorFactory.getInstance()
-        .createVarLengthStringGenerator("[0-9]", 7, 7);
+        .createVarLengthStringGenerator("[0-9]", 7, 7, 1, null);
     this.localNumberGenerator.init(null);
     this.name = (name != null ? name :
         countryLocale.getDisplayCountry(Locale.US));

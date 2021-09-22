@@ -133,7 +133,7 @@ public class AddressGenerator extends CompositeGenerator<Address>
         registerComponent(new StreetNameGenerator(dataset));
     streetNameGenerator.init(context);
     localPhoneNumberGenerator = BeneratorFactory.getInstance()
-        .createVarLengthStringGenerator("[0-9]", 10, 10);
+        .createVarLengthStringGenerator("[0-9]", 10, 10, 1, null);
     localPhoneNumberGenerator.init(context);
   }
 

@@ -53,14 +53,14 @@ public class BankGenerator extends CompositeGenerator<Bank>
   public BankGenerator() {
     super(Bank.class);
     this.bankCodeGenerator = BeneratorFactory.getInstance()
-        .createVarLengthStringGenerator("[0-9]", 8, 8);
+        .createVarLengthStringGenerator("[0-9]", 8, 8, 1, null);
     this.nameGenerator = registerComponent(new RegexStringGenerator(
         "(Deutsche Bank|Dresdner Bank|Commerzbank|Spardabank|HVB)"));
     this.bicGenerator = registerComponent(
         new RegexStringGenerator("[A-Z]{4}DE[A-Z0-9]{2}"));
     this.binGenerator =
         registerComponent(BeneratorFactory.getInstance()
-            .createVarLengthStringGenerator("[0-9]", 4, 4));
+            .createVarLengthStringGenerator("[0-9]", 4, 4, 1, null));
     wp = new WrapperProvider<>();
   }
 
