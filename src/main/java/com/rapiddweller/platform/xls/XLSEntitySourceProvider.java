@@ -36,27 +36,20 @@ import com.rapiddweller.model.data.EntitySource;
 /**
  * {@link DataSourceProvider} implementation which creates XLS entity sources.<br/><br/>
  * Created: 05.05.2010 15:08:03
- *
  * @author Volker Bergmann
  * @since 0.6.1
  */
 public class XLSEntitySourceProvider implements DataSourceProvider<Entity> {
 
   private final ComplexTypeDescriptor entityType;
+  private final String sheet;
   private final Converter<String, ?> scriptConverter;
   private final boolean formatted;
 
-  /**
-   * Instantiates a new Xls entity source provider.
-   *
-   * @param entityType      the entity type
-   * @param formatted       the formatted
-   * @param scriptConverter the script converter
-   */
-  public XLSEntitySourceProvider(ComplexTypeDescriptor entityType,
-                                 boolean formatted,
-                                 Converter<String, ?> scriptConverter) {
+  public XLSEntitySourceProvider(ComplexTypeDescriptor entityType, String sheet,
+                                 boolean formatted, Converter<String, ?> scriptConverter) {
     this.entityType = entityType;
+    this.sheet = sheet;
     this.scriptConverter = scriptConverter;
     this.formatted = formatted;
   }
@@ -64,8 +57,7 @@ public class XLSEntitySourceProvider implements DataSourceProvider<Entity> {
   @Override
   public EntitySource create(String uri, BeneratorContext context) {
     XLSEntitySource source =
-        new XLSEntitySource(uri, scriptConverter, entityType,
-            entityType.getSegment(), formatted);
+        new XLSEntitySource(uri, scriptConverter, entityType, sheet, formatted);
     source.setContext(context);
     return source;
   }
