@@ -163,7 +163,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
   private static PartModifier createPartModifier(ComponentDescriptor part, BeneratorContext context) {
     ComplexTypeDescriptor typeDescriptor = (ComplexTypeDescriptor) part.getTypeDescriptor();
     List<GenerationStep<Entity>> components =
-        ComplexTypeGeneratorFactory.createMutatingGenerationSteps(typeDescriptor, Uniqueness.NONE, context);
+        ComplexTypeGeneratorFactory.createMutatingGenerationSteps(typeDescriptor, true, Uniqueness.NONE, context);
     return new PartModifier(part.getName(), components, typeDescriptor.getScope(), context);
   }
 

@@ -97,7 +97,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
 
     // iterate rows
     List<GenerationStep<Entity>> generationSteps =
-        ComplexTypeGeneratorFactory.createMutatingGenerationSteps(type, Uniqueness.NONE, context);
+        ComplexTypeGeneratorFactory.createMutatingGenerationSteps(type, false, Uniqueness.NONE, context);
     GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(tableName, generationSteps, context);
     cavs.init(context);
 

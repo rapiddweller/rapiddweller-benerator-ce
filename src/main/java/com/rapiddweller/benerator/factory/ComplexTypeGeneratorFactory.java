@@ -44,6 +44,7 @@ import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.SyntaxError;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.fixedwidth.FixedWidthColumnDescriptor;
 import com.rapiddweller.format.fixedwidth.FixedWidthRowTypeDescriptor;
@@ -73,7 +74,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Creates entity generators from entity metadata.<br/><br/>
+ * Creates {@link Entity} {@link Generator}s from entity metadata ({@link ComplexTypeDescriptor}s.<br/><br/>
  * Created: 08.09.2007 07:45:40
  * @author Volker Bergmann
  */
@@ -89,10 +90,10 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
   }
 
   @Override
-  protected Generator<?> applyComponentBuilders(Generator<?> generator, ComplexTypeDescriptor descriptor,
+  protected Generator<?> applyComponentBuilders(Generator<?> source, boolean iterationMode, ComplexTypeDescriptor descriptor,
                                                 String instanceName, Uniqueness uniqueness, BeneratorContext context) {
-    generator = createMutatingEntityGenerator(instanceName, descriptor, uniqueness, context, generator);
-    return super.applyComponentBuilders(generator, descriptor, instanceName, uniqueness, context);
+    source = createMutatingEntityGenerator(instanceName, descriptor, uniqueness, context, source, iterationMode);
+    return super.applyComponentBuilders(source, iterationMode, descriptor, instanceName, uniqueness, context);
   }
 
   @Override
@@ -103,9 +104,9 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     if (sourceSpec == null) {
       return null;
     }
-    Object sourceObject = null;
+    Object sourceObject;
     if (ScriptUtil.isScript(sourceSpec)) {
-      Object tmp = ScriptUtil.evaluate(sourceSpec, context); // TODO v0.8 When to resolve scripts?
+      Object tmp = ScriptUtil.evaluate(sourceSpec, context);
       if (tmp instanceof String) {
         sourceSpec = (String) tmp;
         sourceObject = context.get(sourceSpec);
@@ -144,16 +145,22 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
         } else {
           try {
             BeanSpec sourceBeanSpec = DatabeneScriptParser.resolveBeanSpec(sourceSpec, context);
-            sourceObject = sourceBeanSpec.getBean();
-            generator = createSourceGeneratorFromObject(descriptor, context, sourceObject);
-            if (sourceBeanSpec.isReference() && !(sourceObject instanceof StorageSystem)) {
-              generator = WrapperFactory.preventClosing(generator);
+            if (sourceBeanSpec != null) {
+              sourceObject = sourceBeanSpec.getBean();
+              generator = createSourceGeneratorFromObject(descriptor, context, sourceObject);
+              if (sourceBeanSpec.isReference() && !(sourceObject instanceof StorageSystem)) {
+                generator = WrapperFactory.preventClosing(generator);
+              }
             }
           } catch (Exception e) {
             throw new UnsupportedOperationException("Error resolving source: " + sourceSpec, e);
           }
         }
       }
+    }
+
+    if (generator == null) {
+      throw new SyntaxError("Unable to resolve source", "source='" + sourceSpec + "'");
     }
     if (generator.getGeneratedType() != Entity.class) {
       generator = new SimpleTypeEntityGenerator(generator, descriptor);
@@ -199,9 +206,9 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
 
   @SuppressWarnings("unchecked")
   public static Generator<Entity> createMutatingEntityGenerator(String name, ComplexTypeDescriptor descriptor,
-                                                           Uniqueness ownerUniqueness, BeneratorContext context, Generator<?> source) {
+      Uniqueness ownerUniqueness, BeneratorContext context, Generator<?> source, boolean iterationMode) {
     List<GenerationStep<Entity>> generationSteps =
-        createMutatingGenerationSteps(descriptor, ownerUniqueness, context);
+        createMutatingGenerationSteps(descriptor, iterationMode, ownerUniqueness, context);
     return new CompositeEntityGenerator(name, (Generator<Entity>) source, generationSteps, context);
   }
 
@@ -288,7 +295,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       ComplexTypeDescriptor complexType, BeneratorContext context, String sourceName, String segment) {
     ScriptConverterForStrings converter = new ScriptConverterForStrings(context);
     boolean formatted = isFormatted(complexType);
-    XLSEntitySourceProvider fileProvider = new XLSEntitySourceProvider(complexType, formatted, converter);
+    XLSEntitySourceProvider fileProvider = new XLSEntitySourceProvider(complexType, segment, formatted, converter);
     return createEntitySourceGenerator(complexType, context, sourceName, fileProvider);
   }
 
@@ -301,15 +308,15 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
   }
 
   @SuppressWarnings("unchecked")
-  public static List<GenerationStep<Entity>> createMutatingGenerationSteps(ComplexTypeDescriptor descriptor,
-                                                                           Uniqueness ownerUniqueness, BeneratorContext context) {
+  public static List<GenerationStep<Entity>> createMutatingGenerationSteps(
+      ComplexTypeDescriptor descriptor, boolean iterationMode, Uniqueness ownerUniqueness, BeneratorContext context) {
     List<GenerationStep<Entity>> generationSteps = new ArrayList<>();
     for (InstanceDescriptor part : descriptor.getDeclaredParts()) {
       if (!(part instanceof ComponentDescriptor) ||
           part.getMode() != Mode.ignored && !ComplexTypeDescriptor.__SIMPLE_CONTENT.equals(part.getName())) {
         try {
           GenerationStep<Entity> generationStep =
-              (GenerationStep<Entity>) GenerationStepFactory.createGenerationStep(part, ownerUniqueness, true, context);
+              (GenerationStep<Entity>) GenerationStepFactory.createGenerationStep(part, ownerUniqueness, iterationMode, context);
           generationSteps.add(generationStep);
         } catch (Exception e) {
           throw new ConfigurationError("Error creating component builder for " + part, e);

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -127,7 +127,7 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
-  protected Generator<?> applyComponentBuilders(Generator<?> generator, ArrayTypeDescriptor descriptor, String instanceName,
+  protected Generator<?> applyComponentBuilders(Generator<?> generator, boolean iterationMode, ArrayTypeDescriptor descriptor, String instanceName,
                                                 Uniqueness uniqueness, BeneratorContext context) {
     Generator[] generators;
     // create synthetic element generators if necessary
@@ -137,7 +137,7 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
           Object.class, generators, uniqueness);
     }
     // ... and don't forget to support the parent class' functionality
-    generator = super.applyComponentBuilders(generator, descriptor, instanceName, uniqueness, context);
+    generator = super.applyComponentBuilders(generator, iterationMode, descriptor, instanceName, uniqueness, context);
     return generator;
   }
 

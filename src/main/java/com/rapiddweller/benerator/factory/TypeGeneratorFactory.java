@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.factory;
 
 import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.composite.BlankEntityGenerator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.primitive.ValueMapper;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
@@ -69,7 +70,8 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
                                       boolean nullable, Uniqueness uniqueness, BeneratorContext context) {
     logger.debug("createGenerator({})", descriptor.getName());
     Generator<?> generator = createRootGenerator(descriptor, instanceName, nullable, uniqueness, context);
-    generator = applyComponentBuilders(generator, descriptor, instanceName, uniqueness, context);
+    boolean iterationMode = !(generator instanceof BlankEntityGenerator);
+    generator = applyComponentBuilders(generator, iterationMode, descriptor, instanceName, uniqueness, context);
     generator = wrapWithPostprocessors(generator, descriptor, context);
     generator = applyOffsetAndCyclic(generator, descriptor, instanceName, uniqueness, context);
     logger.debug("Created {}", generator);
@@ -137,7 +139,7 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return generator;
   }
 
-  protected Generator<?> applyComponentBuilders(Generator<?> generator, E descriptor, String instanceName,
+  protected Generator<?> applyComponentBuilders(Generator<?> generator, boolean iterationMode, E descriptor, String instanceName,
                                                 Uniqueness uniqueness, BeneratorContext context) {
     return generator;
   }
