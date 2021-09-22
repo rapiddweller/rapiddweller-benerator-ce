@@ -38,7 +38,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link XmlCreator}.<br/><br/>
  * Created at 05.05.2008 16:53:29
- *
  * @author Volker Bergmann
  * @since 0.5.3
  */
@@ -50,21 +49,11 @@ public class XmlCreatorTest {
 
   // tests -----------------------------------------------------------------------------------------------------------
 
-  /**
-   * Test simple type element.
-   *
-   * @throws IOException the io exception
-   */
   @Test
   public void testSimpleTypeElement() throws IOException {
     createXMLFile(SIMPLE_ELEMENT_FILE, "root", "target/simpleType.xml");
   }
 
-  /**
-   * Test enum.
-   *
-   * @throws IOException the io exception
-   */
   @Test
   public void testEnum() throws IOException {
     for (int i = 0; i < 10; i++) {
@@ -75,11 +64,6 @@ public class XmlCreatorTest {
     }
   }
 
-  /**
-   * Test cardinalities.
-   *
-   * @throws IOException the io exception
-   */
   @Test
   public void testCardinalities() throws IOException {
     for (int i = 0; i < 10; i++) {

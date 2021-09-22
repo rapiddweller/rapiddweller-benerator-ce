@@ -46,7 +46,6 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Tests the XMLFileGenerator.<br/><br/>
  * Created: 06.03.2008 11:16:45
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
@@ -54,25 +53,15 @@ public class XMLFileGeneratorTest extends GeneratorTest {
 
   private static final String SIMPLE_ELEMENT_TEST_XSD = "com/rapiddweller/platform/xml/simple-element-test.xsd";
   private static final String BEAN_TEST_XSD = "com/rapiddweller/benerator/xml/bean_test.xsd";
-  //private static final String VARIABLE_TEST_XSD = "com/rapiddweller/benerator/xml/variable_test.xsd";
+
 
   private static final Logger logger = LoggerFactory.getLogger(XMLFileGeneratorTest.class);
 
-  /**
-   * Test simple type element.
-   *
-   * @throws IOException the io exception
-   */
   @Test
   public void testSimpleTypeElement() throws IOException {
     createXMLFile(SIMPLE_ELEMENT_TEST_XSD, "root", "target/simple-element-test.xml");
   }
 
-  /**
-   * Test bean.
-   *
-   * @throws IOException the io exception
-   */
   @Test
   public void testBean() throws IOException {
     Document document = createXMLFile(BEAN_TEST_XSD, "root", "target/bean_test.xml");
@@ -82,19 +71,6 @@ public class XMLFileGeneratorTest extends GeneratorTest {
     assertEquals(1, children.length);
     assertElementNameAndText(children[0], "result", "OK");
   }
-	
-    /* TODO v0.8 support variables in XML Schema-based generation
-    @Test
-    public void testVariables() throws IOException {
-        Document document = createXMLFile(VARIABLE_TEST_XSD, "root", "target/variable_test.xml");
-        Element root = document.getDocumentElement();
-        assertEquals("root", root.getNodeName());
-        assertEquals(0, root.getChildNodes().getLength());
-        assertEquals("OK", root.getAttribute("string_att"));
-        assertEquals("Bob", root.getAttribute("bean_att"));
-        assertEquals("Alice", root.getAttribute("entity_att"));
-    }
-    */
 
   // private helpers -------------------------------------------------------------------------------------------------
 
