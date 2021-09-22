@@ -23,7 +23,7 @@ public class PartIntegrationTest extends AbstractBeneratorIntegrationTest {
     String xml =
               "<setup>\n"
             + "    <memstore id='mem'/>\n"
-            + "    <generate type='person' count='1000' consumer='mem'>\n"
+            + "    <generate type='person' count='5000' consumer='mem'>\n"
             + "        <part name='children' minCount='3' maxCount='5'>\n"
             + "        </part>\n"
             + "    </generate>\n"
@@ -39,7 +39,7 @@ public class PartIntegrationTest extends AbstractBeneratorIntegrationTest {
     String xml =
               "<setup>\n"
             + "    <memstore id='mem'/>\n"
-            + "    <generate type='person' count='1000' consumer='mem'>\n"
+            + "    <generate type='person' count='5000' consumer='mem'>\n"
             + "        <part name='children' maxCount='2'>\n"
             + "        </part>\n"
             + "    </generate>\n"
