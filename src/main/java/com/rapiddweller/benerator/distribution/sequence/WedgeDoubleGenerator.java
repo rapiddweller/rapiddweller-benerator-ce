@@ -32,7 +32,6 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
 /**
  * Generates 'Double' values for the 'wedge' sequence.<br/><br/>
  * Created: 13.02.2010 13:06:27
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -41,30 +40,14 @@ public class WedgeDoubleGenerator extends AbstractNonNullNumberGenerator<Double>
   private Double cursor;
   private double end;
 
-  /**
-   * Instantiates a new Wedge double generator.
-   */
   public WedgeDoubleGenerator() {
     this(Long.MIN_VALUE, Long.MAX_VALUE);
   }
 
-  /**
-   * Instantiates a new Wedge double generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public WedgeDoubleGenerator(double min, double max) {
     this(min, max, 1);
   }
 
-  /**
-   * Instantiates a new Wedge double generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   */
   public WedgeDoubleGenerator(double min, double max, double granularity) {
     super(Double.class, min, max, granularity);
     this.cursor = min;

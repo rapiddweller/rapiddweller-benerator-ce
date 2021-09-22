@@ -32,10 +32,8 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Long Generator that implements a 'wedge' Long Sequence.<br/>
- * <br/>
+ * Long Generator that implements a 'wedge' Long Sequence.<br/><br/>
  * Created: 13.11.2007 12:54:29
- *
  * @author Volker Bergmann
  */
 public class WedgeLongGenerator extends AbstractNonNullNumberGenerator<Long> {
@@ -43,30 +41,14 @@ public class WedgeLongGenerator extends AbstractNonNullNumberGenerator<Long> {
   private AtomicLong next;
   private long end;
 
-  /**
-   * Instantiates a new Wedge long generator.
-   */
   public WedgeLongGenerator() {
     this(Long.MIN_VALUE, Long.MAX_VALUE);
   }
 
-  /**
-   * Instantiates a new Wedge long generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public WedgeLongGenerator(long min, long max) {
     this(min, max, 1);
   }
 
-  /**
-   * Instantiates a new Wedge long generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   */
   public WedgeLongGenerator(long min, long max, long granularity) {
     super(Long.class, min, max, granularity);
     this.next = new AtomicLong(min);

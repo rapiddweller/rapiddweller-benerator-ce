@@ -33,10 +33,8 @@ import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
  * Helper class that serves as parent for individual {@link Sequence} implementations
- * that are based on a Long-value generator (Generator&lt;Long&gt;).<br/>
- * <br/>
+ * that are based on a Long-value generator (Generator&lt;Long&gt;).<br/><br/>
  * Created at 03.07.2009 13:15:22
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -48,15 +46,6 @@ public abstract class LongBasedSequence extends Sequence {
     return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, source, min, granularity);
   }
 
-  /**
-   * Create long generator non null generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   * @param unique      the unique
-   * @return the non null generator
-   */
   protected abstract NonNullGenerator<Long> createLongGenerator(Long min, Long max, Long granularity, boolean unique);
 
 }

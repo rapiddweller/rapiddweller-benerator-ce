@@ -33,26 +33,15 @@ import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 
 /**
- * Long Generator that implements a 'randomWalk' Long Sequence.<br/>
- * <br/>
+ * Long Generator that implements a 'randomWalk' Long Sequence.<br/><br/>
  * Created: 13.06.2006 07:36:45
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class RandomWalkLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
-  /**
-   * The Min increment.
-   */
   final long minIncrement;
-  /**
-   * The Max increment.
-   */
   final long maxIncrement;
-  /**
-   * The Increment distribution.
-   */
   final Distribution incrementDistribution;
 
   private long initial;
@@ -62,60 +51,22 @@ public class RandomWalkLongGenerator extends AbstractNonNullNumberGenerator<Long
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Random walk long generator.
-   */
   public RandomWalkLongGenerator() {
     this(Long.MIN_VALUE, Long.MAX_VALUE);
   }
 
-  /**
-   * Instantiates a new Random walk long generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public RandomWalkLongGenerator(long min, long max) {
     this(min, max, 1, 2);
   }
 
-  /**
-   * Instantiates a new Random walk long generator.
-   *
-   * @param min          the min
-   * @param max          the max
-   * @param minIncrement the min increment
-   * @param maxIncrement the max increment
-   */
   public RandomWalkLongGenerator(long min, long max, long minIncrement, long maxIncrement) {
     this(min, max, 1, min, minIncrement, maxIncrement, SequenceManager.RANDOM_SEQUENCE);
   }
 
-  /**
-   * Instantiates a new Random walk long generator.
-   *
-   * @param min          the min
-   * @param max          the max
-   * @param granularity  the granularity
-   * @param initial      the initial
-   * @param minIncrement the min increment
-   * @param maxIncrement the max increment
-   */
   public RandomWalkLongGenerator(long min, long max, long granularity, long initial, long minIncrement, long maxIncrement) {
     this(min, max, granularity, initial, minIncrement, maxIncrement, SequenceManager.RANDOM_SEQUENCE);
   }
 
-  /**
-   * Instantiates a new Random walk long generator.
-   *
-   * @param min                   the min
-   * @param max                   the max
-   * @param granularity           the granularity
-   * @param initial               the initial
-   * @param minIncrement          the min increment
-   * @param maxIncrement          the max increment
-   * @param incrementDistribution the increment distribution
-   */
   public RandomWalkLongGenerator(long min, long max, long granularity, long initial,
                                  long minIncrement, long maxIncrement, Distribution incrementDistribution) {
     super(Long.class, min, max, granularity);
@@ -127,20 +78,10 @@ public class RandomWalkLongGenerator extends AbstractNonNullNumberGenerator<Long
 
   // config properties -----------------------------------------------------------------------------------------------
 
-  /**
-   * Gets next.
-   *
-   * @return the next
-   */
   public long getNext() {
     return next;
   }
 
-  /**
-   * Sets next.
-   *
-   * @param next the next
-   */
   public void setNext(long next) {
     this.next = next;
   }

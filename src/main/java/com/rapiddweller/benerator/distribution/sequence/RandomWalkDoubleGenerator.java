@@ -30,10 +30,8 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 
 /**
- * Double Generator that implements a 'randomWalk' Double Sequence.<br/>
- * <br/>
+ * Double Generator that implements a 'randomWalk' Double Sequence.<br/><br/>
  * Created: 13.06.2006 07:36:45
- *
  * @author Volker Bergmann
  */
 public class RandomWalkDoubleGenerator extends AbstractNonNullNumberGenerator<Double> {
@@ -42,45 +40,19 @@ public class RandomWalkDoubleGenerator extends AbstractNonNullNumberGenerator<Do
 
   private final RandomDoubleGenerator incrementGenerator;
 
-  /**
-   * Instantiates a new Random walk double generator.
-   */
   public RandomWalkDoubleGenerator() {
     this(Double.MIN_VALUE, Double.MAX_VALUE);
   }
 
-  /**
-   * Instantiates a new Random walk double generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public RandomWalkDoubleGenerator(double min, double max) {
     this(min, max, 1, 1);
   }
 
-  /**
-   * Instantiates a new Random walk double generator.
-   *
-   * @param min          the min
-   * @param max          the max
-   * @param minIncrement the min increment
-   * @param maxIncrement the max increment
-   */
   public RandomWalkDoubleGenerator(double min, double max, double minIncrement, double maxIncrement) {
     super(Double.class, min, max, 1.);
     incrementGenerator = new RandomDoubleGenerator(minIncrement, maxIncrement);
   }
 
-  /**
-   * Instantiates a new Random walk double generator.
-   *
-   * @param min          the min
-   * @param max          the max
-   * @param granularity  the granularity
-   * @param minIncrement the min increment
-   * @param maxIncrement the max increment
-   */
   public RandomWalkDoubleGenerator(double min, double max, double granularity, double minIncrement, double maxIncrement) {
     super(Double.class, min, max, granularity);
     incrementGenerator = new RandomDoubleGenerator(minIncrement, maxIncrement, granularity);
@@ -88,30 +60,15 @@ public class RandomWalkDoubleGenerator extends AbstractNonNullNumberGenerator<Do
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets granularity.
-   *
-   * @param granularity the granularity
-   */
   public void setGranularity(double granularity) {
     super.setGranularity(granularity);
     incrementGenerator.setGranularity(granularity);
   }
 
-  /**
-   * Gets next.
-   *
-   * @return the next
-   */
   public double getNext() {
     return next;
   }
 
-  /**
-   * Sets next.
-   *
-   * @param next the next
-   */
   public void setNext(double next) {
     this.next = next;
   }

@@ -35,7 +35,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * {@link Generator} class for use by the {@link LiteralSequence}.<br/><br/>
  * Created: 03.06.2010 08:48:44
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.3
@@ -46,11 +45,6 @@ public class PredefinedSequenceGenerator<E extends Number> extends ThreadSafeGen
   private final E[] numbers;
   private final AtomicInteger cursor;
 
-  /**
-   * Instantiates a new Predefined sequence generator.
-   *
-   * @param numbers the numbers
-   */
   @SuppressWarnings("unchecked")
   public PredefinedSequenceGenerator(E... numbers) {
     this.numbers = numbers;

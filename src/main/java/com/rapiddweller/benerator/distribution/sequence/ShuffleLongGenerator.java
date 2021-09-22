@@ -35,10 +35,8 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
  * It starts with min and produced numbers by continuously incrementing the cursor
  * by a fix <code>increment</code> value; when <code>max</code> is reached, it
  * repeats the procedure starting by min+granularity, later min+2*granularity and so on.
- * The generated numbers are unique as long as the generator is not reset.<br/>
- * <br/>
+ * The generated numbers are unique as long as the generator is not reset.<br/><br/>
  * Created: 18.06.2006 14:40:29
- *
  * @author Volker Bergmann
  * @since 0.1
  */
@@ -47,31 +45,14 @@ public class ShuffleLongGenerator extends AbstractNonNullNumberGenerator<Long> {
   private long increment;
   private Long next;
 
-  /**
-   * Instantiates a new Shuffle long generator.
-   */
   public ShuffleLongGenerator() {
     this(Long.MIN_VALUE, Long.MAX_VALUE);
   }
 
-  /**
-   * Instantiates a new Shuffle long generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public ShuffleLongGenerator(long min, long max) {
     this(min, max, 2, 1);
   }
 
-  /**
-   * Instantiates a new Shuffle long generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   * @param increment   the increment
-   */
   public ShuffleLongGenerator(long min, long max, long granularity, long increment) {
     super(Long.class, min, max, granularity);
     this.increment = increment;
@@ -80,20 +61,10 @@ public class ShuffleLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
   // config properties -----------------------------------------------------------------------------------------------
 
-  /**
-   * Gets increment.
-   *
-   * @return the increment
-   */
   public long getIncrement() {
     return increment;
   }
 
-  /**
-   * Sets increment.
-   *
-   * @param increment the increment
-   */
   public void setIncrement(long increment) {
     this.increment = increment;
   }

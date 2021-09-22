@@ -30,10 +30,8 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 
 /**
- * Long Generator that implements a 'step' Long Sequence.<br/>
- * <br/>
+ * Long Generator that implements a 'step' Long Sequence.<br/><br/>
  * Created: 26.07.2007 18:36:45
- *
  * @author Volker Bergmann
  */
 public class StepLongGenerator extends AbstractNonNullNumberGenerator<Long> {
@@ -45,42 +43,18 @@ public class StepLongGenerator extends AbstractNonNullNumberGenerator<Long> {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Step long generator.
-   */
   public StepLongGenerator() {
     this(Long.MIN_VALUE, Long.MAX_VALUE);
   }
 
-  /**
-   * Instantiates a new Step long generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public StepLongGenerator(long min, long max) {
     this(min, max, 1);
   }
 
-  /**
-   * Instantiates a new Step long generator.
-   *
-   * @param min       the min
-   * @param max       the max
-   * @param increment the increment
-   */
   public StepLongGenerator(long min, long max, long increment) {
     this(min, max, increment, null);
   }
 
-  /**
-   * Instantiates a new Step long generator.
-   *
-   * @param min       the min
-   * @param max       the max
-   * @param increment the increment
-   * @param initial   the initial
-   */
   public StepLongGenerator(long min, Long max, long increment, Long initial) {
     super(Long.class, min, max, Math.abs(increment));
     this.increment = increment;

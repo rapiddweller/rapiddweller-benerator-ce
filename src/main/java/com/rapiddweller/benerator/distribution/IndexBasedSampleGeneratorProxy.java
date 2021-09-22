@@ -39,7 +39,6 @@ import java.util.List;
  * Internal generator which reads all products of a source generator and provides them with an index-based strategy.
  * Reevaluates source on reset.<br/><br/>
  * Created: 21.07.2010 01:57:31
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.3
@@ -50,13 +49,6 @@ public class IndexBasedSampleGeneratorProxy<E> extends GeneratorProxy<E> {
   private final Distribution distribution;
   private final boolean unique;
 
-  /**
-   * Instantiates a new Index based sample generator proxy.
-   *
-   * @param dataProvider the data provider
-   * @param distribution the distribution
-   * @param unique       the unique
-   */
   public IndexBasedSampleGeneratorProxy(Generator<E> dataProvider, Distribution distribution, boolean unique) {
     super(dataProvider.getGeneratedType());
     this.dataProvider = dataProvider;
