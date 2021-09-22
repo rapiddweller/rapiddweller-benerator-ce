@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -43,10 +43,8 @@ import static com.rapiddweller.common.NumberUtil.toInteger;
 import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
- * Creates numbers by continuously incrementing a base value by a constant amount.<br/>
- * <br/>
+ * Creates numbers by continuously incrementing a base value by a constant amount.<br/><br/>
  * Created at 30.06.2009 09:55:20
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -127,7 +125,7 @@ public class StepSequence extends Sequence {
   public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
     int deltaToUse = (delta != null ? toInteger(delta) : 1);
     if (isDescending()) {
-      return super.applyTo(source, unique);
+      return SequenceUtil.applySequenceDetached(this, source, unique);
     } else {
       return new SkipGeneratorProxy<>(source, deltaToUse, deltaToUse,
           SequenceManager.RANDOM_SEQUENCE, toInteger(limit));

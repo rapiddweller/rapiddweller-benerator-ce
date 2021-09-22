@@ -45,10 +45,8 @@ import static com.rapiddweller.common.NumberUtil.toInteger;
 import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
- * Random Walk {@link Sequence} implementation that supports a variable step width.<br/>
- * <br/>
+ * Random Walk {@link Sequence} implementation that supports a variable step width.<br/><br/>
  * Created at 30.06.2009 07:48:40
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -69,26 +67,14 @@ public class RandomWalkSequence extends Sequence {
     this(MINUS_ONE, ONE);
   }
 
-  /** Instantiates a new Random walk sequence.
-   *  @param minStep the minimum step size
-   *  @param maxStep the maximum step size */
   public RandomWalkSequence(BigDecimal minStep, BigDecimal maxStep) {
     this(minStep, maxStep, null);
   }
 
-  /** Instantiates a new Random walk sequence.
-   *  @param minStep the minimum step size
-   *  @param maxStep the maximum step size
-   *  @param initial the initial value */
   public RandomWalkSequence(BigDecimal minStep, BigDecimal maxStep, BigDecimal initial) {
     this(minStep, maxStep, initial, DEFAULT_BUFFERED);
   }
 
-  /** Instantiates a new Random walk sequence.
-   *  @param minStep the minimum step size
-   *  @param maxStep the maximum step size
-   *  @param initial the initial value
-   *  @param buffered flag indicating whether the products shall be buffered */
   public RandomWalkSequence(BigDecimal minStep, BigDecimal maxStep, BigDecimal initial, boolean buffered) {
     this.minStep = minStep;
     this.maxStep = maxStep;
@@ -133,7 +119,7 @@ public class RandomWalkSequence extends Sequence {
   @Override
   public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
     if (buffered || MathUtil.between(0L, toLong(minStep), toLong(maxStep))) {
-      return super.applyTo(source, unique);
+      return SequenceUtil.applySequenceDetached(this, source, unique);
     } else {
       return applySkipGenerator(source, unique);
     }

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.distribution;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
+import com.rapiddweller.benerator.wrapper.CloningEntityGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
 /**
@@ -52,14 +53,19 @@ public interface Distribution {
    *  {@link Generator#generate(ProductWrapper)}) method never forward calls to its source generator. */
   boolean isApplicationDetached();
 
-  /** Creates a {@link Generator} which takes the elements created by the specified
-   *  <code>source</code> generator and provides them in an order specified by
-   *  this {@link Distribution} object.
-   *  Depending on the sequence implementation, that generator usually
+  /** Creates a {@link Generator} which takes the elements created by the source generator
+   *  and provides them in an order specified by this {@link Sequence} object.
+   *  Depending on the sequence implementation, that generator may eg.
    *  <ol>
-   *    <li>either fetches all products by the source at initialization, buffer and iterate through them</li>
-   *    <li>or calls the source generator on demand</li>
+   *    <li>either fetch all products by the source at once, buffer and iterate through them</li>
+   *    <li>or call the source generator on demand</li>
    *  </ol>
+   *  This (default) implementation uses the first alternative but may be overwritten by child classes.
+   *  <p/>
+   *  Attention: When applying a distribution to an entity data import (eg. serving as a seed for anonymized data),
+   *  then an imported entity could first get manipulated by a generator and then served to another
+   *  generator which assumes it is an original import, so the distribution needs to provide a clone.
+   *  This can be done by wrapping the base distribution algorithm with a {@link CloningEntityGenerator}.
    *  @param source the generator which provides the source elements to be distributed
    *  @param unique specifies if the created generator must guarantee that no source element is repeated */
   <T> Generator<T> applyTo(Generator<T> source, boolean unique);

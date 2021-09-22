@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -24,31 +24,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.rapiddweller.benerator.distribution;
+package com.rapiddweller.benerator.distribution.sequence;
 
-import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.distribution.Sequence;
 
 /**
- * Abstract implementation of the {@link Distribution} interface.
- * Implementors of the Distribution interface are recommended to inherit from this class
- * for optimal forward compatibility.
- * In order to migrate implementors of the {@link Distribution} interface before version 1.2.0,
- * their <code>implements Distribution</code> directive should be changed to
- * <code>extends AbstractDistribution</code>.<br/><br/>
- * Created: 09.09.2021 13:51:17
+ * Parent class for detached {@link Sequence} implementations.
+ * They have in common that they always use a cache to distribute non-number data.<br/><br/>
+ * Created: 22.09.2021 12:17:00
  * @author Volker Bergmann
  * @since 1.2.0
  */
-public abstract class AbstractDistribution implements Distribution {
+public abstract class DetachedSequence extends Sequence {
 
   @Override
   public boolean isApplicationDetached() {
-    return false;
+    return true;
   }
 
   @Override
-  public String toString() {
-    return BeanUtil.toString(this);
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    return SequenceUtil.applySequenceDetached(this, source, unique);
   }
 
 }

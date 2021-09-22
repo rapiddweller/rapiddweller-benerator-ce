@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -24,31 +24,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.rapiddweller.benerator.distribution;
+package com.rapiddweller.benerator.wrapper;
 
-import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.common.ProgrammerError;
+import com.rapiddweller.model.data.Entity;
 
 /**
- * Abstract implementation of the {@link Distribution} interface.
- * Implementors of the Distribution interface are recommended to inherit from this class
- * for optimal forward compatibility.
- * In order to migrate implementors of the {@link Distribution} interface before version 1.2.0,
- * their <code>implements Distribution</code> directive should be changed to
- * <code>extends AbstractDistribution</code>.<br/><br/>
- * Created: 09.09.2021 13:51:17
+ * Wraps a {@link com.rapiddweller.benerator.Generator} and clones its products.
+ * This is useful for wrapping Generators which iterate several times over
+ * the same base dataset.<br/><br/>
+ * Created: 22.09.2021 10:58:27
  * @author Volker Bergmann
  * @since 1.2.0
  */
-public abstract class AbstractDistribution implements Distribution {
+public class CloningEntityGenerator extends GeneratorProxy<Entity> {
 
-  @Override
-  public boolean isApplicationDetached() {
-    return false;
+  public CloningEntityGenerator(Generator<Entity> source) {
+    super(source);
   }
 
   @Override
-  public String toString() {
-    return BeanUtil.toString(this);
+  public ProductWrapper<Entity> generate(ProductWrapper<Entity> wrapper) {
+    wrapper = super.generate(wrapper);
+    if (wrapper == null) {
+      return null;
+    }
+    try {
+      return wrapper.wrap(wrapper.unwrap().clone());
+    } catch (CloneNotSupportedException e) {
+      throw new ProgrammerError("Error cloning an entity", e);
+    }
   }
-
 }

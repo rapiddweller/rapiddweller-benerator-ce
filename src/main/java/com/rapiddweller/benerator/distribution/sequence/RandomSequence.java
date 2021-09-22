@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -96,7 +96,7 @@ public class RandomSequence extends Sequence implements ThreadAware {
     if (unique) {
       return SequenceManager.EXPAND_SEQUENCE.applyTo(source, unique);
     } else {
-      return super.applyTo(source, unique);
+      return SequenceUtil.applySequenceDetached(this, source, unique);
     }
   }
 

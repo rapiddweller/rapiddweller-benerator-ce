@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -39,14 +39,12 @@ import static com.rapiddweller.common.NumberUtil.toDouble;
 import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
- * {@link Sequence} implementation for an efficient bell-like distribution.<br/>
- * <br/>
+ * {@link Sequence} implementation for an efficient bell-like distribution.<br/><br/>
  * Created at 23.09.2009 18:59:30
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class CumulatedSequence extends Sequence {
+public class CumulatedSequence extends DetachedSequence {
 
   @Override
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {

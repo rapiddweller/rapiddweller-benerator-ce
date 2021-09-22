@@ -40,7 +40,7 @@ import static com.rapiddweller.common.NumberUtil.toLong;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class BitReverseSequence extends Sequence {
+public class BitReverseSequence extends DetachedSequence {
 
   @Override
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(
@@ -54,4 +54,5 @@ public class BitReverseSequence extends Sequence {
   public boolean isApplicationDetached() {
     return true;
   }
+
 }

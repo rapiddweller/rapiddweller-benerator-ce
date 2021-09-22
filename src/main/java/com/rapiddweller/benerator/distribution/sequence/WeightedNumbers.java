@@ -88,7 +88,7 @@ public class WeightedNumbers<E> extends Sequence {
     if (unique) {
       throw new ConfigurationError(getClass().getSimpleName() + " is not designed to generate unique values");
     }
-    return super.applyTo(source, false);
+    return SequenceUtil.applySequenceDetached(this, source, false);
   }
 
 }
