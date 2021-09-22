@@ -105,8 +105,8 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
   // Statement interface ---------------------------------------------------------------------------------------------
 
   @Override
-  public boolean execute(BeneratorContext ctx) {
-    if (!beInitialized(ctx)) {
+  public boolean execute(BeneratorContext context) {
+    if (!beInitialized(context)) {
       task.reset();
     }
     executeTask(generateCount(childContext), minCount.evaluate(childContext), pageSize.evaluate(childContext),

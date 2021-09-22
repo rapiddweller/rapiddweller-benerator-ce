@@ -33,21 +33,15 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 
 /**
- * Instantiates an entity without initializing any components.<br/>
- * <br/>
+ * Instantiates an entity without initializing any components.<br/><br/>
  * Created: 01.09.2007 07:39:52
- *
  * @author Volker Bergmann
  */
 public class BlankEntityGenerator extends ThreadSafeGenerator<Entity> {
 
   private final ComplexTypeDescriptor descriptor;
 
-  /**
-   * Instantiates a new Blank entity generator.
-   *
-   * @param descriptor the descriptor
-   */
+
   public BlankEntityGenerator(ComplexTypeDescriptor descriptor) {
     Assert.notNull(descriptor, "descriptor");
     this.descriptor = descriptor;
