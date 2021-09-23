@@ -7,7 +7,7 @@ Benerator CE 1.2.0 enhances performance and documentation and fixes some bugs
 
 enhancements
 ------------
-- Improved Benerator engine performance by 20%
+- Improved Benerator engine performance by 55-110%
 - Improved and extended Benerator Manual
 - Added address domain package for United Kingdom (GB)
 - Supporting custom random implementations
