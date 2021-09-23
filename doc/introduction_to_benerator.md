@@ -67,6 +67,30 @@ Benerator was tested with and provides examples for
 
 ## Benerator Editions
 
+Benerator comes in different editions which differ by feature set, scalability and performance:
+
+### Performance Comparison
+The results below show Benerator's generation and anonymization performance on a plain 
+MacBook Air (2020) with standard equipment and Azul Java Virtual Machine 
+(CE = Community Edition, EE = Enterprise Edition):
+
+| Benchmark | CE 1.1.2 | CE 1.2.0 | EE 1.2.0 / 1 Thread | EE 1.2.0 / 4 Threads | 
+| --- | ---: | ---: | ---: | ---: |
+| gen-string.ben.xml           |    37 |    58 |   336 | 1,095 |
+| gen-person-showcase.ben.xml  |    26 |   119 |   111 |   327 |
+| anon-person-showcase.ben.xml |    31 |   120 |   113 |   328 |
+| anon-person-regex.ben.xml    |   346 |   537 |   838 | 1,381 |
+| anon-person-hash.ben.xml     |   386 |   500 | 1,299 | 1,287 |
+| anon-person-random.ben.xml   |   576 |   838 | 1,514 | 1,736 |
+| anon-person-constant.ben.xml | 2,210 | 2,745 | 2,646 | 2,162 |
+
+The numbers are million entities generated/anonymized per hour.
+Compared to CE 1.1.2's generation engine,
+CE 1.2.0 is 1.5-2 times faster 
+and EE 1.2.0 with 4 threads is roughly 4 times faster 
+and scales further with the number of CPUs on your machine.
+
+
 ### Benerator Community Edition (CE)
 
 Benerator started as an open-source project and is committed to further improve and extend
@@ -78,7 +102,7 @@ However, it has two historic limitations:
 - No neat graphical user interface
 - Only single-threaded generation and anonymization
 
-Despite that, Benerator Community Edition has an impressive performance. 
+Though, Benerator Community Edition still has an impressive performance. 
 
 ### Benerator Enterprise Edition (EE)
 
