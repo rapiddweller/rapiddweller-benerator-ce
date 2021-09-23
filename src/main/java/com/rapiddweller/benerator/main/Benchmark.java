@@ -47,12 +47,14 @@ public class Benchmark {
       new Setup("anon-person-regex.ben.xml", false, "1.2.0", 1500000),
       new Setup("anon-person-hash.ben.xml", false, "1.2.0", 1500000),
       new Setup("anon-person-random.ben.xml", false, "1.2.0", 1500000),
-      new Setup("anon-person-constant.ben.xml", false, "1.2.0", 8000000),
+      new Setup("anon-person-constant.ben.xml", false, "1.2.0", 8000000)
+      /* TODO version 1.3.0
       new Setup("file-out-csv.ben.xml", false, "1.2.0", 1000000),
       new Setup("file-out-json.ben.xml", true, "1.2.0", 1000000),
       new Setup("file-out-dbunit.ben.xml", false, "1.2.0", 1000000),
       new Setup("file-out-fixedwidth.ben.xml", false, "1.2.0", 500000),
       new Setup("file-out-xml.ben.xml", false, "1.2.0", 500000),
+      */
   };
 
   private static final NumberFormat PF = new DecimalFormat("#,##0", DecimalFormatSymbols.getInstance(Locale.US));
