@@ -78,9 +78,9 @@ or terminal and enter
 
 Then the benchmark runs for a few minutes and prints a measurement summary.
 In Benerator Consumer Edition, only single-threaded execution is supported, 
-so the report will look small like this:
+so the report will look something like this:
 
-```bash
+```text
 +---------------------------------------------------------------------------+
 | Benchmark throughput of Benerator Community Edition 1.2.0-jdk-11-SNAPSHOT |
 | on a Mac OS X 11.4 x86_64 with 8 cores                                    |
@@ -106,16 +106,6 @@ so the report will look small like this:
 +----------------------------------------------------------------+----------+
 | anon-person-constant.ben.xml                                   |    2,210 |
 +----------------------------------------------------------------+----------+
-| file-out-csv.ben.xml                                           |      923 |
-+----------------------------------------------------------------+----------+
-| file-out-json.ben.xml                                          |      N/A |
-+----------------------------------------------------------------+----------+
-| file-out-dbunit.ben.xml                                        |      576 |
-+----------------------------------------------------------------+----------+
-| file-out-fixedwidth.ben.xml                                    |      436 |
-+----------------------------------------------------------------+----------+
-| file-out-xml.ben.xml                                           |      518 |
-+----------------------------------------------------------------+----------+
 ```
 
 In the header the system settings are reported, then each of the following rows 
@@ -133,7 +123,7 @@ find the sweet spot of threading settings.
 A benchmark run on the same system with Benerator Enterprise Edition yields 
 the following result:
 
-```bash
+```text
 +-----------------------------------------------------------------------------+
 | Benchmark throughput of Benerator Enterprise Edition 1.2.0-jdk-11-SNAPSHOT  |
 | on a Mac OS X 11.4 x86_64 with 8 cores                                      |
@@ -158,16 +148,6 @@ the following result:
 | anon-person-random.ben.xml   |    1,250 |     1,655 |     1,254 |     1,274 |
 +------------------------------+----------+-----------+-----------+-----------+
 | anon-person-constant.ben.xml |    1,926 |     2,533 |     1,522 |     1,503 |
-+------------------------------+----------+-----------+-----------+-----------+
-| file-out-csv.ben.xml         |      946 |       755 |       584 |       621 |
-+------------------------------+----------+-----------+-----------+-----------+
-| file-out-json.ben.xml        |      680 |       553 |       478 |       426 |
-+------------------------------+----------+-----------+-----------+-----------+
-| file-out-dbunit.ben.xml      |      527 |       432 |       323 |       334 |
-+------------------------------+----------+-----------+-----------+-----------+
-| file-out-fixedwidth.ben.xml  |      454 |       339 |       247 |       248 |
-+------------------------------+----------+-----------+-----------+-----------+
-| file-out-xml.ben.xml         |      527 |       408 |       304 |       308 |
 +------------------------------+----------+-----------+-----------+-----------+
 ```
 
