@@ -5,11 +5,11 @@ generation:
 
 ## Naming
 
-Business objects are called _entity_ in this book, their contained simple type data are _attributes_.
+Business objects are called _entity_ in this manual, their contained simple type data are _attributes_.
 
 ## Entity Data
 
-Benerator generates entities in a platform-independent manner (internally using the class `com.rapiddweller.model.data.Entity`. An entity will be
+Benerator generates entities in a platform-independent manner (internally using the class `com.rapiddweller.model.data.Entity`). An entity will be
 interpreted individually depending on the target system. It can be mapped to
 
 * relational data (DB)
@@ -90,7 +90,7 @@ For these purposes, rapiddweller Benerator provides several interfaces, which ex
 
 * Sequence
 
-For a list of predefined distributions, see Section 8.2, “Distributions”.
+For a list of predefined distributions, see '[Distributions](component_reference.md#distributions)'.
 
 ## Generation Stages
 
@@ -103,7 +103,7 @@ The result of data generation typically consists of
 ![](assets/grafik6.png)
 
 This approach has the advantage of supporting different test types with the same generation setup: It is essential for performance tests to have a
-unit- and integration-tested system and you can strongly simplify the testing procedure by reusing data definitions from unit- and integration tests
+unit- and integration-tested system, and you can strongly simplify the testing procedure by reusing data definitions from unit- and integration tests
 as core data for a mass data generation.
 
 Regarding the technical steps involved, a generation process employs up to six stages for each system involved:
@@ -159,7 +159,7 @@ The simplest way to perform precondition checks is the `<evaluate>` element, e.g
 `<evaluate assert="{js:result == 0}" target="db">` select count(*) from db_category left join db_product on db_product.category_id = db_category.id
 where db_product.category_id is null`</evaluate>`
 
-The `<evaluate>` element works as follows: First, it evaluates a script the same way like an `<execute>` element does – In this example, the 'select'
+The `<evaluate>` element works as follows: First, it evaluates a script the same way as an `<execute>` element does – In this example, the 'select'
 query is performed on the database. Then the result into a variable named 'result' and the '
 assert' condition is evaluated which checks the value of the result and returns true or false. if the assertion resolves to 'false', Benerator raises
 an error.
@@ -340,7 +340,7 @@ You ca define global components in a Spring-like syntax:
 </bean>
 ```
 
-For details on this syntax and other variants, see the section “JavaBeans and the Benerator Context”. You can refer to such an object by its id ('
+For details on this syntax and other variants, see the section “[JavaBeans and the Benerator Context](advanced_topics.md#javabeans-and-the-benerator-context)”. You can refer to such an object by its id ('
 helper' in this case).
 
 ## Instantiating Local Components
@@ -373,8 +373,8 @@ public no-argument constructor for being instantiated this way:
 ### Parameterized Construction
 
 You can as well specify the 'new' keyword, a class name and constructor parameters. Benerator will then search a constructor with matching parameters
-and invoke it. If the class has several constructors with the same number of parameters Benerator might choose the wrong one, so it is good practice
-to have just one constructor for each possible number of parameters.
+and invoke it. If the class has several constructors with the same number of parameters Benerator might choose the wrong one, so it is good 
+practice having just one constructor for each possible number of parameters.
 
 `<attribute name="number" generator="new com.my.Helper(5, 23)"/>`
 
@@ -393,7 +393,7 @@ one of an enumeration of values. They can be defined as a comma-separated list:
 
 `<attribute name="issuer" values="'AMEX','VISA'" />`
 
-For a list of descriptive attribute metadata, see Section 3.38, “Attribute Metadata Reference” Descriptive metadata can be imported automatically from
+For a list of descriptive attribute metadata, see '[Attribute Metadata Reference](data_generation_concepts.md#attribute-metadata-reference)' on how Descriptive metadata can be imported automatically from
 database schema metadata and be used for automatic database-valid data generation:
 
 ## Default Data Generation
@@ -432,8 +432,9 @@ We can improve the credit card example from above by adding own, constructive me
 
 This way we can already satisfy simple validation algorithms, but not yet sophisticated ones that perform a checksum validation.
 
-For a complete reference of metadata configuration, see Section 3.38, “Attribute Metadata Reference”, Section 3.25, “Generating IDs” and Section 3.26,
-“Resolving Relations”
+For a complete reference of metadata configuration, see '[Attribute Metadata Reference](data_generation_concepts.md#attribute-metadata-reference)',
+'[ID Generators](using_relational_databases.md#database-related-id-generators)' and 
+'[Resolving Database Relations](using_relational_databases.md#resolving-database-relations)'.
 
 ## Validating Data Generation
 
@@ -444,7 +445,7 @@ component and include it in Benerator's data generation:
 ![](assets/grafik11.png)
 
 Your setup will then create random credit card setups and the credit card validator will discard the invalid ones. For the definition of custom
-validators, see Section 9.7, “Custom Validators”.
+validators, see '[Custom Validators](extending_benerator.md#custom-validators)'.
 
 ## Prototype-based Data Generation
 
@@ -454,7 +455,8 @@ really exists
 
 ![](assets/grafik12.png)
 
-You can generate prototypes with custom generators or import them as samples (See Section 3.11, “Sample-based Data Generation”).
+You can generate prototypes with custom generators or import them as samples, 
+see '[Sample-based Data Generation](data_generation_concepts.md#sample-based-data-generation)'.
 
 ## Sample-based Data Generation
 
@@ -468,10 +470,11 @@ a case you typically define a file with known credit card numbers to use:
 
 You can use different types of data sources for templates:
 
-* Files: CSV, fixed column width files, DbUnit. For importing data of custom file formats or from other sources, see Section 9.9, “Custom
-  EntitySources”
+* Files: CSV, fixed column width files, DbUnit. For importing data of custom file formats or from other sources, 
+see '[Custom EntitySources](extending_benerator.md#custom-entitysources)'
 
-* Storage Systems: Relational databases For importing data of proprietary storage systems, see Section 9.12, “Custom StorageSystems”
+* Storage Systems: Relational databases For importing data of proprietary storage systems, see e.g.
+'[Memstore](advanced_topics.md#the-memstore)'
 
 ## Variables
 
@@ -533,7 +536,7 @@ or file:///test.
 
 ## Importing Entities
 
-Entities can be imported from 'system's, files or other generators. A typical application is to (re)use a DBUnit setup file from your (hopefully
+Entities can be imported from 'systems, files or other generators. A typical application is to (re)use a DBUnit setup file from your (hopefully
 existing ;-) unit tests:
 
 `<iterate source="shop/shop.dbunit.xml" consumer="db"/>`
@@ -619,10 +622,10 @@ In most cases, Consumers relate to heavyweight system resources, so it is import
 cycle:
 
 * Global Consumer: A consumer defined as a `<bean>` has global scope (thus is called 'global consumer') and is closed when Benerator finishes. So
-  you can use the same consumer instance for consuming the output of several different `<generate>` and `<iterate>` blocks.
+  you can use the same consumer instance for consuming the output of several `<generate>` and `<iterate>` blocks.
 
 * Local Consumer: A consumer-defined 'on the fly' in a generate/iterate block (by 'new', class name or `<consumer>`) has a local scope and is
-  immediately closed when its generate/iterate block finishes. If you want to generate a file and iterate through it afterwards you need to have it
+  immediately closed when its generate/iterate block finishes. If you want to generate a file and iterate through it afterward, you need to have it
   closed before. The most simple way to assure this is to use a local consumer in file generation.
 
 ## Exporting Data to Files
@@ -778,9 +781,9 @@ Simple constraints, e.g. formats can be assured by defining an appropriate Gener
 </setup>
 ```
 
-## Imposing multi-field-constraints
+## Imposing multi-field constraints
 
-For supporting multi-field-constraints, you can use a prototype-based approach: Provide a Generator by a variable element. This generator creates
+For supporting multi-field constraints, you can use a prototype-based approach: Provide a Generator by a variable element. This generator creates
 prototype objects (or object graphs) that are used as prototypes. They may be Entities, JavaBeans or Maps. For example, this may be an importing
 generator. On each generation run, an instance is generated and made available to the other sub generators. They can use the entity or sub-elements by
 a source path attribute:
@@ -845,7 +848,7 @@ Using cyclic="true", the result set will be re-iterated from the beginning when 
 
 You may apply a distribution as well.
 The result set of a selector might be quite large, 
-so take care, which distribution to apply, see [Distribution Concepts](distribution.md):
+so take care, which distribution to apply, see '[Distribution Concepts](distribution.md)':
 
 ```xml
 <generate type="db_order_item" count="100" pageSize="100">
