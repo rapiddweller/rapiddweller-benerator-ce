@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.composite.ComponentBuilder;
+import com.rapiddweller.benerator.consumer.ConsumerChain;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.CurrentProductGeneration;
@@ -55,35 +56,29 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Task that creates one data set instance per run() invocation and sends it to the specified consumer.<br/><br/>
+ * Task that creates Entities and sends them to the specified consumer.<br/><br/>
  * Created: 01.02.2008 14:39:11
- *
  * @author Volker Bergmann
  */
 public class GenerateAndConsumeTask implements Task, PageListener, ResourceManager, MessageHolder {
 
+  // attributes --------------------------------------------------------------------------------------------------------
+
   private final String taskName;
-  private BeneratorContext context;
+  private final String productName;
   private final ResourceManager resourceManager;
 
-  /**
-   * The Statements.
-   */
-  protected final List<Statement> statements;
+  private BeneratorContext context;
+  protected List<Statement> statements;
   private final List<ScopedLifeCycleHolder> scopeds;
   private Expression<Consumer> consumerExpr;
-
   private final AtomicBoolean initialized;
   private Consumer consumer;
   private String message;
-  private final String productName;
 
-  /**
-   * Instantiates a new Generate and consume task.
-   *
-   * @param taskName    the task name
-   * @param productName the product name
-   */
+
+  // constructor -------------------------------------------------------------------------------------------------------
+
   public GenerateAndConsumeTask(String taskName, String productName) {
     this.taskName = taskName;
     this.productName = productName;
@@ -93,22 +88,13 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     this.scopeds = new ArrayList<>();
   }
 
+
   // interface -------------------------------------------------------------------------------------------------------
 
-  /**
-   * Add statement.
-   *
-   * @param statement the statement
-   */
   public void addStatement(Statement statement) {
     this.statements.add(statement);
   }
 
-  /**
-   * Sets statements.
-   *
-   * @param statements the statements
-   */
   public void setStatements(List<Statement> statements) {
     this.statements.clear();
     for (Statement statement : statements) {
@@ -116,46 +102,28 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     }
   }
 
-  /**
-   * Gets resource manager.
-   *
-   * @return the resource manager
-   */
   public ResourceManager getResourceManager() {
     return resourceManager;
   }
 
-  /**
-   * Sets consumer.
-   *
-   * @param consumerExpr the consumer expr
-   */
   public void setConsumer(Expression<Consumer> consumerExpr) {
     this.consumerExpr = consumerExpr;
   }
 
-  /**
-   * Gets consumer.
-   *
-   * @return the consumer
-   */
   public Consumer getConsumer() {
     return consumer;
   }
 
-  /**
-   * Init.
-   *
-   * @param context the context
-   */
   public void init(BeneratorContext context) {
     synchronized (initialized) {
       if (!initialized.get()) {
         this.context = context;
         this.consumer = ExpressionUtil.evaluate(consumerExpr, context);
         resourceManager.addResource(consumer);
-        injectConsumptionStart();
-        injectConsumptionEnd();
+        if (consumersExist()) {
+          injectConsumptionStart();
+          injectConsumptionEnd();
+        }
         initialized.set(true);
         initStatements(context);
         checkScopes(statements, context);
@@ -163,20 +131,10 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     }
   }
 
-  /**
-   * Gets product name.
-   *
-   * @return the product name
-   */
   public String getProductName() {
     return productName;
   }
 
-  /**
-   * Gets recent product.
-   *
-   * @return the recent product
-   */
   public ProductWrapper<?> getRecentProduct() {
     return context.getCurrentProduct();
   }
@@ -208,7 +166,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
       boolean success = true;
       for (int i = 0; i < statements.size(); i++) {
         Statement statement = statements.get(i);
-        success &= statement.execute(context);
+        success = statement.execute(context);
         if (!success && (statement instanceof ValidationStatement)) {
           i = -1; // if the product is not valid, restart with the first statement
           success = true;
@@ -224,7 +182,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
       if (success) {
         BeneratorMonitor.INSTANCE.countGenerations(1);
       }
-      enqueueResets(statements);
+      enqueueResets();
       Thread.yield();
       return (success ? TaskResult.EXECUTING : TaskResult.UNAVAILABLE);
     } catch (Exception e) {
@@ -233,9 +191,6 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     }
   }
 
-  /**
-   * Reset.
-   */
   public void reset() {
     for (Statement statement : statements) {
       statement = StatementUtil.getRealStatement(statement, context);
@@ -282,12 +237,14 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     return resourceManager.addResource(resource);
   }
 
+
   // MessageHolder interface -----------------------------------------------------------------------------------------
 
   @Override
   public String getMessage() {
     return message;
   }
+
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------
 
@@ -296,7 +253,16 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     return getClass().getSimpleName() + '(' + taskName + ')';
   }
 
+
   // private helpers -------------------------------------------------------------------------------------------------
+
+  private boolean consumersExist() {
+    if (consumer == null)
+      return false;
+    if (consumer instanceof ConsumerChain)
+      return (((ConsumerChain) consumer).getComponents().size() > 0);
+    return true;
+  }
 
   private void injectConsumptionStart() {
     // find last sub member generation...
@@ -329,11 +295,6 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     statements.add(lastSubGenIndex + 1, consumption);
   }
 
-  /**
-   * Init statements.
-   *
-   * @param context the context
-   */
   public void initStatements(BeneratorContext context) {
     for (Statement statement : statements) {
       statement = StatementUtil.getRealStatement(statement, context);
@@ -359,7 +320,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     }
   }
 
-  private void enqueueResets(List<Statement> statements) {
+  private void enqueueResets() {
     for (ScopedLifeCycleHolder scoped : scopeds) {
       scoped.setResetNeeded(true);
     }

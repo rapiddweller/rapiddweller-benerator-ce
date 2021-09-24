@@ -62,10 +62,8 @@ import java.util.LinkedList;
  * }
  * </pre>
  * <p>
- * Have a look at the {@link FibonacciLongGenerator} source code for the complete implementation.
- * <br/><br/>
+ * Have a look at the {@link FibonacciLongGenerator} source code for the complete implementation.<br/><br/>
  * Created: 13.10.2009 19:07:27
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -76,14 +74,6 @@ public abstract class RecurrenceRelationNumberGenerator<E extends Number> extend
   private final LinkedList<E> recentProducts;
   private int number;
 
-  /**
-   * Instantiates a new Recurrence relation number generator.
-   *
-   * @param targetType the target type
-   * @param depth      the depth
-   * @param min        the min
-   * @param max        the max
-   */
   public RecurrenceRelationNumberGenerator(Class<E> targetType, int depth, E min, E max) {
     super(targetType, min, max, AnyConverter.convert(1, targetType));
     this.depth = depth;
@@ -92,20 +82,10 @@ public abstract class RecurrenceRelationNumberGenerator<E extends Number> extend
     resetMembers();
   }
 
-  /**
-   * Gets depth.
-   *
-   * @return the depth
-   */
   public int getDepth() {
     return depth;
   }
 
-  /**
-   * Gets n.
-   *
-   * @return the n
-   */
   public int getNumber() {
     return number;
   }
@@ -123,7 +103,7 @@ public abstract class RecurrenceRelationNumberGenerator<E extends Number> extend
   public synchronized E generate() {
     E next = calculateNext();
     Comparable<E> c = (Comparable<E>) next;
-    if (max != null && !(c.compareTo(min) >= 0 && c.compareTo(max) <= 0)) {
+    if ((min != null && c.compareTo(min) < 0) || (max != null && c.compareTo(max) > 0)) {
       return null;
     }
     if (number >= depth) {
@@ -134,18 +114,14 @@ public abstract class RecurrenceRelationNumberGenerator<E extends Number> extend
     return next;
   }
 
-  /**
-   * See {@link Generator#reset()}
-   */
+  /** See {@link Generator#reset()} */
   @Override
   public void reset() {
     resetMembers();
     super.reset();
   }
 
-  /**
-   * See {@link Generator#close()}
-   */
+  /** See {@link Generator#close()} */
   @Override
   public void close() {
     recentProducts.clear();
@@ -154,49 +130,27 @@ public abstract class RecurrenceRelationNumberGenerator<E extends Number> extend
 
   // interface to be implemented / used by child classes -------------------------------------------------------------
 
-  /**
-   * Must be implemented by child classes to return the seed values of the recurrence relation.
-   * These are the initial values which are defined as constants (a(0)..a(depth-1)).
-   *
-   * @param n the n
-   * @return the e
-   */
+  /** Must be implemented by child classes to return the seed values of the recurrence relation.
+   *  These are the initial values which are defined as constants (a(0)..a(depth-1)). */
   protected abstract E a0(int n);
 
-  /**
-   * Must be implemented by child classes to implement the recurrence relation.
-   * It needs to use the {@link #aN(int)} method to retrieve the most recent calculated values.
-   *
-   * @return the e
-   */
+  /** Must be implemented by child classes to implement the recurrence relation.
+   * It needs to use the {@link #aN(int)} method to retrieve the most recent calculated values. */
   protected abstract E aN();
 
-  /**
-   * Provides the most recent calculated values. The index is the relative index,
-   * <code>-1</code> stands for <code>a(N-1)</code>.
-   *
-   * @param offset the offset
-   * @return the e
-   */
+  /** Provides the most recent calculated values. The index is the relative index,
+   * <code>-1</code> stands for <code>a(N-1)</code>. */
   protected final E aN(int offset) {
     return recentProducts.get(-offset - 1);
   }
 
   // helper methods --------------------------------------------------------------------------------------------------
 
-  /**
-   * Reset members.
-   */
   protected void resetMembers() {
     recentProducts.clear();
     number = 0;
   }
 
-  /**
-   * Calculate next e.
-   *
-   * @return the e
-   */
   protected E calculateNext() {
     E result;
     if (number < depth) {

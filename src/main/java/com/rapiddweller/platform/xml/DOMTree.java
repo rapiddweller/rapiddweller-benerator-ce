@@ -41,8 +41,8 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.script.PrimitiveType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -65,7 +65,7 @@ import java.util.List;
  */
 public class DOMTree extends AbstractStorageSystem implements ContextAware {
 
-  private static final Logger LOGGER = LogManager.getLogger(DOMTree.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DOMTree.class);
 
   private String id;
   private String inputUri;

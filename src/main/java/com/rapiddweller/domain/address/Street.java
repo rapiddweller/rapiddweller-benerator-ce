@@ -26,95 +26,54 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.benerator.util.RandomUtil;
-
-import java.util.Random;
+import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.RandomProvider;
 
 /**
- * Represents a street and serves as generator for house numbers.<br/>
- * <br/>
+ * Represents a street and serves as generator for house numbers.<br/><br/>
  * Created: 11.06.2006 08:09:21
+ * @author Volker Bergmann
+ * @since 0.1
  */
 public class Street {
+
+  private static final RandomProvider random = BeneratorFactory.getInstance().getRandomProvider();
 
   private final City city;
   private String name;
   private int maxHouseNumber;
-  private final Random random;
 
-  /**
-   * Instantiates a new Street.
-   *
-   * @param city the city
-   * @param name the name
-   */
   public Street(City city, String name) {
     this(city, name, 50);
   }
 
-  /**
-   * Instantiates a new Street.
-   *
-   * @param city           the city
-   * @param name           the name
-   * @param maxHouseNumber the max house number
-   */
   public Street(City city, String name, int maxHouseNumber) {
     this.city = city;
     this.name = name;
     this.maxHouseNumber = maxHouseNumber;
-    this.random = new Random();
   }
 
-  /**
-   * Gets name.
-   *
-   * @return the name
-   */
   public String getName() {
     return name;
   }
 
-  /**
-   * Sets name.
-   *
-   * @param name the name
-   */
   public void setName(String name) {
     this.name = name;
   }
 
-  /**
-   * Gets max house number.
-   *
-   * @return the max house number
-   */
   public int getMaxHouseNumber() {
     return maxHouseNumber;
   }
 
-  /**
-   * Sets max house number.
-   *
-   * @param maxHouseNumber the max house number
-   */
   public void setMaxHouseNumber(int maxHouseNumber) {
     this.maxHouseNumber = maxHouseNumber;
   }
 
-  /**
-   * Generate house number with postal code string [ ].
-   *
-   * @return the string [ ]
-   */
   public String[] generateHouseNumberWithPostalCode() {
     return new String[] {
-        String.valueOf(random(1, maxHouseNumber)),
-        RandomUtil.randomElement(city.getPostalCodes())
+        String.valueOf(random.randomInt(1, maxHouseNumber)),
+        random.randomElement(city.getPostalCodes())
     };
   }
 
-  private int random(int min, int max) {
-    return min + random.nextInt(max - min + 1);
-  }
 }

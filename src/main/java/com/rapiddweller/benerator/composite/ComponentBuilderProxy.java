@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -33,23 +33,14 @@ import com.rapiddweller.common.Assert;
 /**
  * Proxy class for a {@link ComponentBuilder}.<br/><br/>
  * Created: 11.10.2010 11:10:51
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class ComponentBuilderProxy<E> extends AbstractScopedLifeCycleHolder implements ComponentBuilder<E> {
 
-  /**
-   * The Source.
-   */
   protected final ComponentBuilder<E> source;
 
-  /**
-   * Instantiates a new Component builder proxy.
-   *
-   * @param source the source
-   */
   public ComponentBuilderProxy(ComponentBuilder<E> source) {
     super(source.getScope());
     Assert.notNull(source, "source");

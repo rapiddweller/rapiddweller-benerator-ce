@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.distribution.sequence;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.converter.NumberToNumberConverter;
 import com.rapiddweller.script.DatabeneScriptParser;
@@ -36,28 +37,19 @@ import com.rapiddweller.script.WeightedSample;
 
 /**
  * {@link Sequence} implementation that provides values specified in a comma-separated value list,
- * use like "new PredefinedSequence('A', 'B', 'C')" or "new PredefinedSequence(5, 7, 11)".<br/><br/>
+ * use like "new LiteralSequence('A', 'B', 'C')" or "new LiteralSequence(5, 7, 11)".<br/><br/>
  * Created: 03.06.2010 08:40:27
- *
  * @author Volker Bergmann
  * @since 0.6.3
  */
-public class LiteralSequence extends Sequence {
+public class LiteralSequence extends DetachedSequence {
 
   private Number[] numbers;
 
-  /**
-   * Instantiates a new Literal sequence.
-   */
   protected LiteralSequence() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Literal sequence.
-   *
-   * @param spec the spec
-   */
   protected LiteralSequence(String spec) {
     setSpec(spec);
   }
@@ -71,6 +63,8 @@ public class LiteralSequence extends Sequence {
       return new Number[0];
     }
     WeightedSample<?>[] samples = DatabeneScriptParser.parseWeightedLiteralList(spec);
+    if (samples == null)
+      throw new ConfigurationError("No samples provided in '" + spec + "'");
     Number[] result = new Number[samples.length];
     for (int i = 0; i < samples.length; i++) {
       result[i] = (Number) samples[i].getValue();
@@ -88,6 +82,11 @@ public class LiteralSequence extends Sequence {
       ts[i] = converter.convert(numbers[i]);
     }
     return WrapperFactory.asNonNullGenerator(new PredefinedSequenceGenerator<>((T[]) ts));
+  }
+
+  @Override
+  public boolean isApplicationDetached() {
+    return true;
   }
 
 }

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -48,9 +48,6 @@ import static org.junit.Assert.assertNotNull;
  */
 public class ComponentBuilderFactory_IdTest extends AbstractComponentBuilderFactoryTest {
 
-  /**
-   * Test default.
-   */
   @Test
   public void testDefault() {
     IdDescriptor id = createId("id", "int");
@@ -61,10 +58,8 @@ public class ComponentBuilderFactory_IdTest extends AbstractComponentBuilderFact
     assertEquals(1, entity.get("id"));
   }
 
-  /**
-   * Tests UUID generation
-   * <id name="id" strategy="uuid"/>
-   */
+  /** Tests UUID generation
+   *  &lt;id name="id" strategy="uuid"/&gt; */
   @Test
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void testUuid() {
@@ -78,10 +73,8 @@ public class ComponentBuilderFactory_IdTest extends AbstractComponentBuilderFact
     expectUniqueGenerations(helper, 10);
   }
 
-  /**
-   * Tests 'increment' id generation with unspecified type
-   * <id name="id" strategy="increment"/>
-   */
+  /** Tests 'increment' id generation with unspecified type
+   *  &lt;id name="id" strategy="increment"/&gt; */
   @Test
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void testIncrementIdWithoutType() {
@@ -95,10 +88,8 @@ public class ComponentBuilderFactory_IdTest extends AbstractComponentBuilderFact
     expectGeneratedSequenceOnce(helper, 1L, 2L, 3L, 4L);
   }
 
-  /**
-   * Tests id generation with unspecified type and strategy
-   * <id name="id"/>
-   */
+  /** Tests id generation with unspecified type and strategy
+   *  &lt;id name="id"/&gt; */
   @Test
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void testDefaultIdGeneration() {
@@ -111,10 +102,8 @@ public class ComponentBuilderFactory_IdTest extends AbstractComponentBuilderFact
     assertNotNull(helper.generate(new ProductWrapper<>()));
   }
 
-  /**
-   * Tests 'increment' id generation with 'byte' type
-   * <id name="id" type="byte" strategy="increment"/>
-   */
+  /** Tests 'increment' id generation with 'byte' type
+   *  &lt;id name="id" type="byte" strategy="increment"/&gt; */
   @Test
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void testIncrementByteId() {
@@ -131,7 +120,7 @@ public class ComponentBuilderFactory_IdTest extends AbstractComponentBuilderFact
   @SuppressWarnings("unchecked")
   private ComponentBuilder<Entity> createAndInitBuilder(IdDescriptor id) {
     ComponentBuilder<Entity> builder = (ComponentBuilder<Entity>) ComponentBuilderFactory.createComponentBuilder(
-        id, Uniqueness.NONE, context);
+        id, Uniqueness.NONE, false, context);
     builder.init(context);
     return builder;
   }

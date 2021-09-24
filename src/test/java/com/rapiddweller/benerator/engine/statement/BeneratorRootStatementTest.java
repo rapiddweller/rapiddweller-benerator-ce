@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.factory.EquivalenceGeneratorFactory;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
@@ -44,19 +44,16 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests the {@link BeneratorRootStatement}.<br/><br/>
  * Created: 24.10.2009 11:22:25
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class BeneratorRootStatementTest extends BeneratorIntegrationTest {
+public class BeneratorRootStatementTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test generator factory config.
-   */
   @Test
   public void testGeneratorFactoryConfig() {
     Map<String, String> attributes = CollectionUtil.buildMap(
@@ -70,29 +67,16 @@ public class BeneratorRootStatementTest extends BeneratorIntegrationTest {
     }
   }
 
-  /**
-   * Test get generator simple.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testGetGenerator_simple() throws Exception {
     check("com/rapiddweller/benerator/engine/statement/simple.ben.xml");
   }
 
-  /**
-   * Test get generator include.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testGetGenerator_include() throws Exception {
     check("com/rapiddweller/benerator/engine/statement/including.ben.xml");
   }
 
-  /**
-   * Test default imports default.
-   */
   @Test
   public void testDefaultImports_default() {
     // given the default settings
@@ -104,9 +88,6 @@ public class BeneratorRootStatementTest extends BeneratorIntegrationTest {
     context.forName("ConsoleExporter");
   }
 
-  /**
-   * Test default imports true.
-   */
   @Test
   public void testDefaultImports_true() {
     // given that defaults import is requested explicitly
@@ -117,9 +98,6 @@ public class BeneratorRootStatementTest extends BeneratorIntegrationTest {
     context.forName("ConsoleExporter");
   }
 
-  /**
-   * Test default imports false.
-   */
   @Test(expected = ConfigurationError.class)
   public void testDefaultImports_false() {
     // given that defaults import is disabled

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,20 +29,12 @@ package com.rapiddweller.benerator.engine;
 import java.io.Closeable;
 
 /**
- * Parent interface for classes that manage resources.<br/>
- * <br/>
+ * Parent interface for classes that manage resources.<br/><br/>
  * Created at 24.09.2009 16:45:56
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public interface ResourceManager extends Closeable {
-  /**
-   * Add resource boolean.
-   *
-   * @param resource the resource
-   * @return the boolean
-   */
   boolean addResource(Closeable resource);
 
   @Override

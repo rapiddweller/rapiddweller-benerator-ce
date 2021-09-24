@@ -31,10 +31,8 @@ import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 
 /**
- * Double Generator that implements a 'shuffle' Double Sequence.<br/>
- * <br/>
+ * Double Generator that implements a 'shuffle' Double Sequence.<br/><br/>
  * Created: 18.06.2006 14:40:29
- *
  * @author Volker Bergmann
  * @since 0.1
  */
@@ -43,21 +41,10 @@ public class ShuffleDoubleGenerator extends AbstractNonNullNumberGenerator<Doubl
   private double increment;
   private Double next;
 
-  /**
-   * Instantiates a new Shuffle double generator.
-   */
   public ShuffleDoubleGenerator() {
     this(Double.MIN_VALUE, Double.MAX_VALUE, 2, 1);
   }
 
-  /**
-   * Instantiates a new Shuffle double generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   * @param increment   the increment
-   */
   public ShuffleDoubleGenerator(double min, double max, double granularity, double increment) {
     super(Double.class, min, max, granularity);
     this.increment = increment;
@@ -72,20 +59,10 @@ public class ShuffleDoubleGenerator extends AbstractNonNullNumberGenerator<Doubl
     reset();
   }
 
-  /**
-   * Gets increment.
-   *
-   * @return the increment
-   */
   public double getIncrement() {
     return increment;
   }
 
-  /**
-   * Sets increment.
-   *
-   * @param increment the increment
-   */
   public void setIncrement(double increment) {
     this.increment = increment;
   }

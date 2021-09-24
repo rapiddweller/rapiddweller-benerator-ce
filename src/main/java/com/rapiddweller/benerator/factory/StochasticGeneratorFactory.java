@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.factory;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorProvider;
 import com.rapiddweller.benerator.NonNullGenerator;
@@ -33,7 +34,6 @@ import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.primitive.BooleanGenerator;
 import com.rapiddweller.benerator.primitive.IncrementalStringGenerator;
-import com.rapiddweller.benerator.primitive.RandomVarLengthStringGenerator;
 import com.rapiddweller.benerator.primitive.UniqueScrambledStringGenerator;
 import com.rapiddweller.benerator.sample.AttachedWeightSampleGenerator;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
@@ -60,18 +60,13 @@ import java.util.Set;
 /**
  * {@link GeneratorFactory} implementation that generates docile data in order to avoid functional failures
  * and combines them randomly and repetitively for generating large data volumes. Its primary purpose is
- * data generation for performance tests.<br/>
- * <br/>
+ * data generation for performance tests.<br/><br/>
  * Created: 04.07.2011 09:34:34
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public class StochasticGeneratorFactory extends GeneratorFactory {
 
-  /**
-   * Instantiates a new Stochastic generator factory.
-   */
   public StochasticGeneratorFactory() {
     super(new GentleDefaultsProvider());
   }
@@ -160,7 +155,7 @@ public class StochasticGeneratorFactory extends GeneratorFactory {
     } else if (uniqueness.isUnique()) {
       return new UniqueScrambledStringGenerator(chars, minLength, maxLength);
     } else {
-      return new RandomVarLengthStringGenerator(
+      return BeneratorFactory.getInstance().createVarLengthStringGenerator(
           chars, minLength, maxLength, lengthGranularity, lengthDistribution);
     }
   }

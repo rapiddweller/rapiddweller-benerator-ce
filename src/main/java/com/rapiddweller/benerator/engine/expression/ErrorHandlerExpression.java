@@ -35,10 +35,8 @@ import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 
 /**
- * Parses an <code>onError</code> attribute in an XML descriptor element.<br/>
- * <br/>
+ * Parses an <code>onError</code> attribute in an XML descriptor element.<br/><br/>
  * Created at 24.07.2009 08:42:51
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -47,12 +45,6 @@ public class ErrorHandlerExpression extends DynamicExpression<ErrorHandler> {
   private final String category;
   private final Expression<String> levelExpr;
 
-  /**
-   * Instantiates a new Error handler expression.
-   *
-   * @param category  the category
-   * @param levelExpr the level expr
-   */
   public ErrorHandlerExpression(String category, Expression<String> levelExpr) {
     this.levelExpr = levelExpr;
     this.category = category;

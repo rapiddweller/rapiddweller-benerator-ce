@@ -29,8 +29,8 @@ package com.rapiddweller.platform.db;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +51,7 @@ import static org.junit.Assert.assertNotNull;
 public class DBSeqHiLoGeneratorTest extends GeneratorTest {
 
   private static final String SEQUENCE_NAME = "seq_id_gen";
-  private static final Logger logger = LogManager.getLogger(DBSeqHiLoGeneratorTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(DBSeqHiLoGeneratorTest.class);
 
   private DefaultDBSystem db;
 

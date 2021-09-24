@@ -34,8 +34,8 @@ import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.TypeDescriptor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -46,29 +46,16 @@ import java.util.concurrent.ExecutorService;
 /**
  * Abstract implementation of the {@link BeneratorSubContext} interface.<br/><br/>
  * Created: 26.01.2013 13:14:37
- *
  * @author Volker Bergmann
  * @since 0.8.0
  */
 public abstract class AbstractBeneratorSubContext implements BeneratorSubContext {
 
-  private static final Logger LOGGER = LogManager.getLogger(AbstractBeneratorSubContext.class);
-  /**
-   * The Parent.
-   */
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBeneratorSubContext.class);
   protected final BeneratorContext parent;
-  /**
-   * The Current product name.
-   */
   protected final String currentProductName;
   private final Context localContext;
 
-  /**
-   * Instantiates a new Abstract benerator sub context.
-   *
-   * @param productName the product name
-   * @param parent      the parent
-   */
   public AbstractBeneratorSubContext(String productName, BeneratorContext parent) {
     this.currentProductName = productName;
     this.parent = parent;
@@ -235,6 +222,11 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
   @Override
   public Class<?> forName(String className) {
     return parent.forName(className);
+  }
+
+  @Override
+  public Class<?> forName(String className, boolean required) {
+    return parent.forName(className, required);
   }
 
   @Override

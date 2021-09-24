@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import com.rapiddweller.platform.db.DBSystem;
@@ -46,7 +46,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class ExecuteParserAndStatementTest extends BeneratorIntegrationTest {
+public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test bean invocation.

@@ -34,10 +34,8 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 import java.math.BigInteger;
 
 /**
- * Generates random {@link BigInteger} with a uniform distribution.<br/>
- * <br/>
+ * Generates random {@link BigInteger} with a uniform distribution.<br/><br/>
  * Created at 23.06.2009 23:26:06
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -53,30 +51,14 @@ public class RandomBigIntegerGenerator extends ThreadSafeNonNullGenerator<BigInt
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Random big integer generator.
-   */
   public RandomBigIntegerGenerator() {
     this(DEFAULT_MIN, DEFAULT_MAX);
   }
 
-  /**
-   * Instantiates a new Random big integer generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public RandomBigIntegerGenerator(BigInteger min, BigInteger max) {
     this(min, max, DEFAULT_GRNULARITY);
   }
 
-  /**
-   * Instantiates a new Random big integer generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   */
   public RandomBigIntegerGenerator(BigInteger min, BigInteger max, BigInteger granularity) {
     this.min = min;
     this.max = max;
@@ -105,14 +87,6 @@ public class RandomBigIntegerGenerator extends ThreadSafeNonNullGenerator<BigInt
 
   // public convenience method ---------------------------------------------------------------------------------------
 
-  /**
-   * Generate big integer.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   * @return the big integer
-   */
   public static BigInteger generate(BigInteger min, BigInteger max, BigInteger granularity) {
     if (min.compareTo(max) > 0) {
       throw new InvalidGeneratorSetupException(

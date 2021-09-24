@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,10 +29,8 @@ package com.rapiddweller.benerator.distribution;
 import com.rapiddweller.benerator.Generator;
 
 /**
- * Common parent class for all {@link Generator}s that are based on weights.<br/>
- * <br/>
+ * Common parent class for all {@link Generator}s that are based on weights.<br/><br/>
  * Created at 30.06.2009 07:06:31
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */

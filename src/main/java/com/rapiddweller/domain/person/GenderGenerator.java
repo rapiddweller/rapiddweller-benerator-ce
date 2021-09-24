@@ -69,6 +69,17 @@ public class GenderGenerator extends NonNullGeneratorProxy<Gender> {
 
   // Generator interface implementation ------------------------------------------------------------------------------
 
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return true;
+  }
+
   @Override
   public Class<Gender> getGeneratedType() {
     return Gender.class;

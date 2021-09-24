@@ -41,7 +41,6 @@ import java.util.List;
  * proportional to its assigned weight. If a source generator becomes unavailable, its weight is
  * ignored.<br/><br/>
  * Created: 09.03.2011 07:59:04
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.6
@@ -52,9 +51,6 @@ public class WeightedGeneratorGenerator<E> extends MultiGeneratorWrapper<E, Gene
   private AttachedWeightSampleGenerator<Integer> indexGenerator;
   private double totalWeight;
 
-  /**
-   * Instantiates a new Weighted generator generator.
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public WeightedGeneratorGenerator() {
     super((Class) Generator.class);
@@ -67,11 +63,6 @@ public class WeightedGeneratorGenerator<E> extends MultiGeneratorWrapper<E, Gene
     return totalWeight;
   }
 
-  /**
-   * Gets source weights.
-   *
-   * @return the source weights
-   */
   public List<Double> getSourceWeights() {
     return sourceWeights;
   }
@@ -81,12 +72,6 @@ public class WeightedGeneratorGenerator<E> extends MultiGeneratorWrapper<E, Gene
     addSource(source, 1.);
   }
 
-  /**
-   * Add source.
-   *
-   * @param source the source
-   * @param weight the weight
-   */
   public synchronized void addSource(Generator<? extends E> source, Double weight) {
     if (weight == null) {
       weight = 1.;

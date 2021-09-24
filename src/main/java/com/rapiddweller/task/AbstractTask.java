@@ -38,38 +38,19 @@ public abstract class AbstractTask implements Task {
 
   private final boolean threadSafe;
   private final boolean parallelizable;
-  /**
-   * The Task name.
-   */
   protected String taskName;
 
   // constructor -----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Abstract task.
-   */
   protected AbstractTask() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Abstract task.
-   *
-   * @param taskName the task name
-   */
   protected AbstractTask(String taskName) {
     this(taskName, false, false);
   }
 
-  /**
-   * Instantiates a new Abstract task.
-   *
-   * @param taskName       the task name
-   * @param threadSafe     the thread safe
-   * @param parallelizable the parallelizable
-   */
-  protected AbstractTask(String taskName, boolean threadSafe,
-                         boolean parallelizable) {
+  protected AbstractTask(String taskName, boolean threadSafe, boolean parallelizable) {
     if (taskName == null) {
       taskName = getClass().getSimpleName();
     }
@@ -85,11 +66,6 @@ public abstract class AbstractTask implements Task {
     return taskName;
   }
 
-  /**
-   * Sets task name.
-   *
-   * @param taskName the task name
-   */
   public void setTaskName(String taskName) {
     this.taskName = taskName;
   }

@@ -36,10 +36,8 @@ import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.ConfigurationError;
 
 /**
- * Distribution that repeats consecutive elements or numbers.<br/>
- * <br/>
+ * Distribution that repeats consecutive elements or numbers.<br/><br/>
  * Created at 01.07.2009 15:40:02
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -52,31 +50,14 @@ public class RepeatSequence extends Sequence {
 
   private static Distribution stepSequence = new StepSequence();
 
-  /**
-   * Instantiates a new Repeat sequence.
-   */
   public RepeatSequence() {
     this(0, 3);
   }
 
-  /**
-   * Instantiates a new Repeat sequence.
-   *
-   * @param minRepetitions the min repetitions
-   * @param maxRepetitions the max repetitions
-   */
   public RepeatSequence(int minRepetitions, int maxRepetitions) {
     this(minRepetitions, maxRepetitions, 1, SequenceManager.RANDOM_SEQUENCE);
   }
 
-  /**
-   * Instantiates a new Repeat sequence.
-   *
-   * @param minRepetitions         the min repetitions
-   * @param maxRepetitions         the max repetitions
-   * @param repetitionGranularity  the repetition granularity
-   * @param repetitionDistribution the repetition distribution
-   */
   public RepeatSequence(int minRepetitions, int maxRepetitions, int repetitionGranularity,
                         Distribution repetitionDistribution) {
     this.minRepetitions = minRepetitions;
@@ -84,6 +65,9 @@ public class RepeatSequence extends Sequence {
     this.repetitionGranularity = repetitionGranularity;
     this.repetitionDistribution = repetitionDistribution;
   }
+
+
+  // Distribution interface implementation -----------------------------------------------------------------------------
 
   @Override
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(
@@ -98,6 +82,11 @@ public class RepeatSequence extends Sequence {
     }
     Generator<T> source = stepSequence.createNumberGenerator(numberType, min, max, granularity, unique);
     return WrapperFactory.asNonNullGenerator(applyTo(source, unique));
+  }
+
+  @Override
+  public boolean isApplicationDetached() {
+    return false;
   }
 
   @Override

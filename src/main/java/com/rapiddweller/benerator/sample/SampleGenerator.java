@@ -26,178 +26,91 @@
 
 package com.rapiddweller.benerator.sample;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.NonNullGenerator;
+import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
-import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Generates values from a non-weighted list of samples, applying an explicitly defined distribution.<br/>
- * <br/>
+ * Generates values from a non-weighted list of samples, applying an explicitly defined distribution.<br/><br/>
  * Created: 07.06.2006 19:04:08
- *
- * @param <E> the type parameter
+ * @param <E> the type of the generated objects
  * @author Volker Bergmann
  * @since 0.1
  */
 public class SampleGenerator<E> extends AbstractSampleGenerator<E> {
 
-  /**
-   * Keeps the Sample information
-   */
-  private final List<E> samples = new ArrayList<>();
+  /** Holds the Sample information. */
+  private final List<E> samples;
 
-  /**
-   * Sequence for choosing a List index of the sample list
-   */
+  /** {@link Distribution} for choosing a List index of the sample list. */
   private final Distribution distribution;
 
-  /**
-   * Sequence for choosing a List index of the sample list
-   */
-  private NonNullGenerator<Integer> indexGenerator = null;
-
+  /** Requires the generator to use each index only one times if set to true. */
   private boolean unique;
+
+  /** Generates an index based on the {@link #distribution}. */
+  private NonNullGenerator<Integer> indexGenerator;
+
+  private static final RandomProvider random = BeneratorFactory.getInstance().getRandomProvider();
+
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Sample generator.
-   */
   public SampleGenerator() {
     this(null);
   }
 
-  /**
-   * Initializes the generator to an empty sample list
-   *
-   * @param generatedType the generated type
-   */
   public SampleGenerator(Class<E> generatedType) {
     this(generatedType, new ArrayList<>());
   }
 
-  /**
-   * Initializes the generator to a sample list
-   *
-   * @param generatedType the generated type
-   * @param values        the values
-   */
+  /** Initializes the generator with a sample list. */
   @SafeVarargs
   public SampleGenerator(Class<E> generatedType, E... values) {
-    super(generatedType);
+    this(generatedType, SequenceManager.RANDOM_SEQUENCE, values);
     setValues(values);
-    this.distribution = SequenceManager.RANDOM_SEQUENCE;
   }
 
-  /**
-   * Initializes the generator to a sample list
-   *
-   * @param generatedType the generated type
-   * @param distribution  the distribution
-   * @param values        the values
-   */
+  /** Initializes the generator with a sample list. */
   @SafeVarargs
   public SampleGenerator(Class<E> generatedType, Distribution distribution, E... values) {
-    super(generatedType);
-    this.distribution = distribution;
-    setValues(values);
+    this(generatedType, distribution, false, CollectionUtil.toList(values));
   }
 
-  /**
-   * Initializes the generator to a sample list
-   *
-   * @param generatedType the generated type
-   * @param values        the values
-   */
+  /** Initializes the generator with a sample list. */
   public SampleGenerator(Class<E> generatedType, Iterable<E> values) {
-    super(generatedType);
-    setValues(values);
-    this.distribution = SequenceManager.RANDOM_SEQUENCE;
+    this(generatedType, SequenceManager.RANDOM_SEQUENCE, false, values);
   }
 
-  /**
-   * Initializes the generator to a sample list
-   *
-   * @param generatedType the generated type
-   * @param distribution  the distribution
-   * @param unique        the unique
-   * @param values        the values
-   */
+  /** Initializes the generator with a sample list. */
   public SampleGenerator(Class<E> generatedType, Distribution distribution, boolean unique, Iterable<E> values) {
     super(generatedType);
+    this.samples = new ArrayList<>();
     this.distribution = distribution;
     this.unique = unique;
+    this.indexGenerator = null;
     setValues(values);
   }
+
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Convenience utility method that chooses one sample out of a list with uniform random distribution
-   *
-   * @param <T>     the type parameter
-   * @param samples the samples
-   * @return the t
-   */
-  @SafeVarargs
-  public static <T> T generate(T... samples) {
-    return samples[RandomUtil.randomInt(0, samples.length - 1)];
-  }
-
-  /**
-   * Convenience utility method that chooses one sample out of a list with uniform random distribution
-   *
-   * @param <T>     the type parameter
-   * @param samples the samples
-   * @return the t
-   */
-  public static <T> T generate(List<T> samples) {
-    return samples.get(RandomUtil.randomInt(0, samples.size() - 1));
-  }
-
-
-  /**
-   * Is unique boolean.
-   *
-   * @return the boolean
-   */
   public boolean isUnique() {
     return unique;
   }
 
-  /**
-   * Sets unique.
-   *
-   * @param unique the unique
-   */
   public void setUnique(boolean unique) {
     this.unique = unique;
-  }
-
-  /**
-   * Contains boolean.
-   *
-   * @param <T>   the type parameter
-   * @param value the value
-   * @return the boolean
-   */
-  public <T extends E> boolean contains(E value) {
-    return samples.contains(value);
-  }
-
-  // Generator implementation ----------------------------------------------------------------------------------------
-
-  @Override
-  public void clear() {
-    this.samples.clear();
   }
 
   @Override
@@ -205,9 +118,31 @@ public class SampleGenerator<E> extends AbstractSampleGenerator<E> {
     return samples.size();
   }
 
-  /**
-   * Initializes all attributes
-   */
+  public boolean contains(E value) {
+    return samples.contains(value);
+  }
+
+
+  // interface ---------------------------------------------------------------------------------------------------------
+
+  @Override
+  public void clear() {
+    this.samples.clear();
+  }
+
+  @Override
+  public <T extends E> void addValue(T value) {
+    if (unique && this.contains(value)) {
+      throw new ConfigurationError("Trying to add a duplicate value (" + value + ") " +
+          "to unique generator: " + this);
+    }
+    samples.add(value);
+  }
+
+
+  // Generator implementation ------------------------------------------------------------------------------------------
+
+  /** Initializes all attributes */
   @Override
   public void init(GeneratorContext context) {
     assertNotInitialized();
@@ -220,19 +155,6 @@ public class SampleGenerator<E> extends AbstractSampleGenerator<E> {
     super.init(context);
   }
 
-
-  /**
-   * Adds a value to the sample list
-   */
-  @Override
-  public <T extends E> void addValue(T value) {
-    if (unique && this.contains(value)) {
-      throw new ConfigurationError("Trying to add a duplicate value (" + value + ") " +
-          "to unique generator: " + this);
-    }
-    samples.add(value);
-  }
-
   @Override
   public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
     assertInitialized();
@@ -243,7 +165,6 @@ public class SampleGenerator<E> extends AbstractSampleGenerator<E> {
       return null;
     }
   }
-  // static interface ------------------------------------------------------------------------------------------------
 
   @Override
   public void reset() {
@@ -257,7 +178,22 @@ public class SampleGenerator<E> extends AbstractSampleGenerator<E> {
     super.close();
   }
 
-  // java.lang.Object overrides --------------------------------------------------------------------------------------
+
+  // static utility methods --------------------------------------------------------------------------------------------
+
+  /** Convenience utility method that chooses one sample out of a list with uniform random distribution. */
+  @SafeVarargs
+  public static <T> T generate(T... samples) {
+    return samples[random.randomInt(samples.length)];
+  }
+
+  /** Convenience utility method that chooses one sample out of a list with uniform random distribution. */
+  public static <T> T generate(List<T> samples) {
+    return samples.get(random.randomInt(samples.size()));
+  }
+
+
+  // java.lang.Object overrides ----------------------------------------------------------------------------------------
 
   @Override
   public String toString() {

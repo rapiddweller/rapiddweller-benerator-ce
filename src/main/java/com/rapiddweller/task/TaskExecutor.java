@@ -30,8 +30,8 @@ import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.contiperf.PerformanceTracker;
 import com.rapiddweller.platform.contiperf.PerfTrackingTaskProxy;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -46,7 +46,7 @@ import java.util.List;
 public class TaskExecutor {
 
   private static final Logger LOGGER =
-      LogManager.getLogger(TaskExecutor.class);
+      LoggerFactory.getLogger(TaskExecutor.class);
 
   private final Task target;
   private final Context context;
@@ -227,7 +227,7 @@ public class TaskExecutor {
 
   private boolean workPending(Long maxInvocationCount,
                               long queuedInvocations) {
-    if (((StateTrackingTaskProxy<? extends Task>) target).isAvailable()) {
+    if (!((StateTrackingTaskProxy<? extends Task>) target).isAvailable()) {
       return false;
     }
     if (maxInvocationCount == null) {

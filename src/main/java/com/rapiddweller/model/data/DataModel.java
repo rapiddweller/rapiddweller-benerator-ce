@@ -29,8 +29,8 @@ package com.rapiddweller.model.data;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import com.rapiddweller.script.PrimitiveType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,15 +44,12 @@ import java.util.Map;
  */
 public class DataModel {
 
-  private final Logger logger = LogManager.getLogger(DataModel.class);
+  private final Logger logger = LoggerFactory.getLogger(DataModel.class);
 
   private final Map<String, DescriptorProvider> providers;
 
   private boolean acceptUnknownPrimitives;
 
-  /**
-   * Instantiates a new Data model.
-   */
   public DataModel() {
     this.acceptUnknownPrimitives = false;
     this.providers = new HashMap<>();
@@ -70,32 +67,15 @@ public class DataModel {
     return null;
   }
 
-  /**
-   * Sets accept unknown primitives.
-   *
-   * @param acceptUnknownPrimitives the accept unknown primitives
-   */
   public void setAcceptUnknownPrimitives(boolean acceptUnknownPrimitives) {
     this.acceptUnknownPrimitives = acceptUnknownPrimitives;
   }
 
-  /**
-   * Add descriptor provider.
-   *
-   * @param provider the provider
-   */
   public void addDescriptorProvider(DescriptorProvider provider) {
     addDescriptorProvider(provider, true);
   }
 
-  /**
-   * Add descriptor provider.
-   *
-   * @param provider the provider
-   * @param validate the validate
-   */
-  public void addDescriptorProvider(DescriptorProvider provider,
-                                    boolean validate) {
+  public void addDescriptorProvider(DescriptorProvider provider, boolean validate) {
     providers.put(provider.getId(), provider);
     provider.setDataModel(this);
     if (validate) {
@@ -103,31 +83,14 @@ public class DataModel {
     }
   }
 
-  /**
-   * Gets descriptor provider.
-   *
-   * @param id the id
-   * @return the descriptor provider
-   */
   public DescriptorProvider getDescriptorProvider(String id) {
     return providers.get(id);
   }
 
-  /**
-   * Remove descriptor provider.
-   *
-   * @param id the id
-   */
   public void removeDescriptorProvider(String id) {
     providers.remove(id);
   }
 
-  /**
-   * Gets type descriptor.
-   *
-   * @param typeId the type id
-   * @return the type descriptor
-   */
   public TypeDescriptor getTypeDescriptor(String typeId) {
     if (typeId == null) {
       return null;
@@ -142,13 +105,6 @@ public class DataModel {
     return getTypeDescriptor(namespace, name);
   }
 
-  /**
-   * Gets type descriptor.
-   *
-   * @param namespace the namespace
-   * @param name      the name
-   * @return the type descriptor
-   */
   public TypeDescriptor getTypeDescriptor(String namespace, String name) {
     if (name == null) {
       return null;
@@ -186,9 +142,6 @@ public class DataModel {
 
   // private helpers -------------------------------------------------------------------------------------------------
 
-  /**
-   * Validate.
-   */
   public void validate() {
     for (DescriptorProvider provider : providers.values()) {
       for (TypeDescriptor desc : provider.getTypeDescriptors()) {
@@ -243,12 +196,6 @@ public class DataModel {
     }
   }
 
-  /**
-   * Gets primitive type descriptor.
-   *
-   * @param javaType the java type
-   * @return the primitive type descriptor
-   */
   public SimpleTypeDescriptor getPrimitiveTypeDescriptor(Class<?> javaType) {
     PrimitiveDescriptorProvider primitiveProvider =
         (PrimitiveDescriptorProvider) providers
@@ -256,11 +203,6 @@ public class DataModel {
     return primitiveProvider.getPrimitiveTypeDescriptor(javaType);
   }
 
-  /**
-   * Gets bean descriptor provider.
-   *
-   * @return the bean descriptor provider
-   */
   public BeanDescriptorProvider getBeanDescriptorProvider() {
     return (BeanDescriptorProvider) providers
         .get(BeanDescriptorProvider.NAMESPACE);

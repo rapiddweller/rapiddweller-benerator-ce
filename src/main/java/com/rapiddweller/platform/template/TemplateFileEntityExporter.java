@@ -42,8 +42,8 @@ import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.model.data.Entity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,7 +62,7 @@ import java.util.Stack;
  */
 public class TemplateFileEntityExporter implements Consumer, ContextAware {
 
-  private static final Logger LOGGER = LogManager.getLogger(TemplateFileEntityExporter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TemplateFileEntityExporter.class);
 
 
   // attributes ------------------------------------------------------------------------------------------------------

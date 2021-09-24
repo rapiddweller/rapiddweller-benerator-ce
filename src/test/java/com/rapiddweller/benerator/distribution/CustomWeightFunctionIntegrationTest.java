@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.distribution;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
@@ -44,7 +44,7 @@ import static org.junit.Assert.fail;
  * @author Volker Bergmann
  * @since 0.6.3
  */
-public class CustomWeightFunctionIntegrationTest extends BeneratorIntegrationTest {
+public class CustomWeightFunctionIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * The Xml.

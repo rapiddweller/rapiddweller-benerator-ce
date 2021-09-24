@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -26,35 +26,14 @@
 
 package com.rapiddweller.benerator.distribution;
 
-import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
-
 /**
- * Provides access to specific Sequence number Generators.<br/>
- * <br/>
+ * Parent class for sequence-based number Generators.
+ * Depending on the class and the configuration,
+ * a sequence may be able to generate unique numbers.<br/><br/>
  * Created: 11.09.2006 21:12:57
- *
  * @author Volker Bergmann
  * @since 0.1
  */
-public abstract class Sequence implements Distribution {
-
-  // interface -------------------------------------------------------------------------------------------------------
-
-  @Override
-  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-    if (source == null) {
-      throw new ConfigurationError("No source provided");
-    }
-    return new IndexBasedSampleGeneratorProxy<>(source, this, unique);
-  }
-
-  // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-  @Override
-  public String toString() {
-    return BeanUtil.toString(this);
-  }
+public abstract class Sequence extends AbstractDistribution {
 
 }

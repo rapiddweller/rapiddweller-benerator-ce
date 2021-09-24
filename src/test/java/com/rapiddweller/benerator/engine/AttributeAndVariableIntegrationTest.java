@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.benerator.test.PersonSource;
 import com.rapiddweller.model.data.Entity;
@@ -45,7 +45,7 @@ import static org.junit.Assert.assertEquals;
  * @since 0.6.4
  */
 @SuppressWarnings("ALL")
-public class AttributeAndVariableIntegrationTest extends BeneratorIntegrationTest {
+public class AttributeAndVariableIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   private ConsumerMock consumer;
 

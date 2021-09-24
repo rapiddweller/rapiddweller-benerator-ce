@@ -36,10 +36,8 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
- * Double Generator that supports a weight function.<br/>
- * <br/>
+ * Double Generator that supports a weight function.<br/><br/>
  * Created: 11.06.2006 21:33:41
- *
  * @author Volker Bergmann
  * @since 0.1
  */
@@ -53,32 +51,16 @@ public class WeightedDoubleGenerator extends AbstractNonNullNumberGenerator<Doub
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Weighted double generator.
-   */
   public WeightedDoubleGenerator() {
     this(0, 0, 1, new ConstantFunction(1));
   }
 
-  /**
-   * Instantiates a new Weighted double generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   * @param function    the function
-   */
   public WeightedDoubleGenerator(double min, double max, double granularity, WeightFunction function) {
     super(Double.class, min, max, granularity);
     this.function = function;
     this.random = new Random();
   }
 
-  /**
-   * Gets distribution.
-   *
-   * @return the distribution
-   */
   public Distribution getDistribution() {
     return function;
   }

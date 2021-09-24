@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -32,6 +32,7 @@ import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
+import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.IOUtil;
@@ -40,66 +41,87 @@ import com.rapiddweller.common.log.LoggingInfoPrinter;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
 import com.rapiddweller.common.ui.InfoPrinter;
 import com.rapiddweller.common.version.VersionInfo;
+import com.rapiddweller.common.version.VersionNumber;
+import com.rapiddweller.common.version.VersionNumberParser;
 import com.rapiddweller.contiperf.sensor.MemorySensor;
 import com.rapiddweller.format.text.KiloFormatter;
 import com.rapiddweller.jdbacl.DBUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.slf4j.Log4jLoggerFactory;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.impl.StaticLoggerBinder;
 
 import java.io.IOException;
 
 /**
- * Parses and executes a benerator setup file.<br/>
- * <br/>
+ * Parses and executes a benerator setup file.<br/><br/>
  * Created: 14.08.2007 19:14:28
- *
  * @author Volker Bergmann
  */
 public class Benerator {
 
-  private static final Logger LOGGER = LogManager.getLogger(Benerator.class);
+  private static final Logger logger = LoggerFactory.getLogger(Benerator.class);
 
-  // methods ---------------------------------------------------------------------------------------------------------
+  protected static final String[] CE_CLI_HELP = {
+      "Usage benerator [options] [filename]",
+      "",
+      "  if [filename] is left out, it defaults to benerator.xml",
+      "",
+      "Options:",
+      "  -v,--version           Display system and version information",
+      "  -h,--help              Display help information",
+  };
 
-  /**
-   * The entry point of application.
-   *
-   * @param args the input arguments
-   * @throws IOException the io exception
-   */
+  // main ------------------------------------------------------------------------------------------------------------
+
   public static void main(String[] args) throws IOException {
     VersionInfo.getInfo("benerator").verifyDependencies();
-    if (
-        ArrayUtil.contains("--version", args) ||
-            ArrayUtil.contains("-v", args) ||
-            ArrayUtil.contains("-version", args)
-    ) {
-      printVersionInfoAndExit();
-    } else {
-      runFromCommandLine(args);
+    checkVersionAndHelpOpts(args, CE_CLI_HELP);
+    int fileIndex = 0;
+    while (fileIndex < args.length && args[fileIndex].startsWith("-")) {
+      fileIndex++;
     }
+    String filename = (fileIndex < args.length ? args[fileIndex] : "benerator.xml");
+    new Benerator().runFile(filename);
   }
 
-  private static void runFromCommandLine(String[] args) throws IOException {
+
+  // info properties -------------------------------------------------------------------------------------------------
+
+  public static boolean isCommunityEdition() {
+    BeneratorFactory factory = BeneratorFactory.getInstance();
+    return (DefaultBeneratorFactory.COMMUNITY_EDITION.equals(getEdition()));
+  }
+
+  public static String getEdition() {
+    return BeneratorFactory.getInstance().getEdition();
+  }
+
+  public String getVersion() {
+    return "Benerator " + getEdition() + " " + VersionInfo.getInfo("benerator").getVersion();
+  }
+
+  public VersionNumber getVersionNumber() {
+    return new VersionNumberParser().parse(VersionInfo.getInfo("benerator").getVersion());
+  }
+
+
+  //  operational interface ------------------------------------------------------------------------------------------
+
+  private void runFile(String filename) throws IOException {
+    // Run descriptor file
     try {
       InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
-      String filename = (args.length > 0 ? args[0] : "benerator.xml");
       runFile(filename, printer);
       DBUtil.assertAllDbResourcesClosed(false);
     } catch (BeneratorError e) {
-      LOGGER.error(e.getMessage(), e);
+      logger.error(e.getMessage(), e);
       System.exit(e.getCode());
     }
   }
 
-  /**
-   * Run file.
-   *
-   * @param filename the filename
-   * @param printer  the printer
-   * @throws IOException the io exception
-   */
-  public static void runFile(String filename, InfoPrinter printer) throws IOException {
+  public void runFile(String filename, InfoPrinter printer) throws IOException {
     BeneratorMonitor.INSTANCE.reset();
     MemorySensor memProfiler = MemorySensor.getInstance();
     memProfiler.reset();
@@ -117,10 +139,32 @@ public class Benerator {
     BeneratorUtil.logConfig("Max. committed heap size: " + new KiloFormatter(1024).format(memProfiler.getMaxCommittedHeapSize()) + "B");
   }
 
-  private static void printVersionInfoAndExit() {
-    InfoPrinter console = new ConsoleInfoPrinter();
-    BeneratorUtil.printVersionInfo(console);
-    System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+
+  // helper methods --------------------------------------------------------------------------------------------------
+
+  protected static void checkVersionAndHelpOpts(String[] args, String[] help) {
+    // check for version flag
+    if (containsVersionFlag(args)) {
+      BeneratorUtil.printVersionInfo(new ConsoleInfoPrinter());
+      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+    }
+    // check for help flag
+    if (containsHelpFlag(args)) {
+      ConsoleInfoPrinter.printHelp(help);
+      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+    }
+  }
+
+  private static boolean containsVersionFlag(String[] args) {
+    return ArrayUtil.contains("--version", args)
+        || ArrayUtil.contains("-v", args)
+        || ArrayUtil.contains("-version", args);
+  }
+
+  private static boolean containsHelpFlag(String[] args) {
+    return ArrayUtil.contains("--help", args)
+        || ArrayUtil.contains("-h", args)
+        || ArrayUtil.contains("-help", args);
   }
 
 }

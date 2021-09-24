@@ -27,8 +27,8 @@
 package com.rapiddweller.benerator.consumer;
 
 import com.rapiddweller.benerator.Consumer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * A {@link Consumer} that logs the entities that it receives at info level.<br/>
@@ -40,7 +40,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class LoggingConsumer extends AbstractConsumer {
 
-  private static final Logger LOGGER = LogManager.getLogger(LoggingConsumer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LoggingConsumer.class);
 
   @Override
   public void startProductConsumption(Object object) {

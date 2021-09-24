@@ -63,18 +63,10 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAME;
 /**
  * Provides utility methods for Generator factories.<br/><br/>
  * Created: 08.03.2008 09:39:05
- *
  * @author Volker Bergmann
  */
 public class FactoryUtil {
 
-  /**
-   * Map details to bean properties.
-   *
-   * @param descriptor the descriptor
-   * @param bean       the bean
-   * @param context    the context
-   */
   public static void mapDetailsToBeanProperties(FeatureDescriptor descriptor, Object bean, Context context) {
     for (FeatureDetail<?> detail : descriptor.getDetails()) {
       if (!ATT_NAME.equals(detail.getName())) {
@@ -83,14 +75,6 @@ public class FactoryUtil {
     }
   }
 
-  /**
-   * Map detail to bean property.
-   *
-   * @param descriptor the descriptor
-   * @param detailName the detail name
-   * @param bean       the bean
-   * @param context    the context
-   */
   public static void mapDetailToBeanProperty(FeatureDescriptor descriptor, String detailName, Object bean, Context context) {
     Object detailValue = descriptor.getDetailValue(detailName);
     if (detailValue instanceof Expression) {
@@ -99,14 +83,6 @@ public class FactoryUtil {
     setBeanProperty(bean, detailName, detailValue, context);
   }
 
-  /**
-   * Sets bean property.
-   *
-   * @param bean        the bean
-   * @param detailName  the detail name
-   * @param detailValue the detail value
-   * @param context     the context
-   */
   public static void setBeanProperty(Object bean, String detailName, Object detailValue, Context context) {
     if (detailValue != null && BeanUtil.hasProperty(bean.getClass(), detailName)) {
       try {
@@ -124,9 +100,19 @@ public class FactoryUtil {
   }
 
   /**
-   * Extracts distribution information from the descriptor.
+   * Extracts distribution information from the descriptor. The <code>spec</code> is the central configuration:
+   * <ol>
+   *   <li>if not specified, the setup's default distribution method is used</li>
+   *   <li>If a spec is defined, it checks for a definition of format <code>weighted['featureName']</code>
+   *       to use an object's feature as definition of its weight</li>
+   *   <li>if none was found above it checks for a definition of format <code>weighted</code>
+   *       and assumes th related objects have a feature of name 'weight' to define their weight</li>
+   *   <li>if none was found above, it looks a variable (or <code>bean</code>) of that name (specified earlier in the setup)</li>
+   *   <li>if none was found above, it asks the {@link SequenceManager} for a {@link com.rapiddweller.benerator.distribution.Sequence} of that name</li>
+   *   <li>if none was found above, it tries to evaluate the spec as a script expression like <code>'new Random(2,8)'</code></li>
+   * </ol>
    *
-   * @param spec       the textual representation of the distribution
+   * @param spec       the textual representation of the distribution, see method doc
    * @param uniqueness tells if a unique distribution is requested
    * @param required   if set the method will never return null
    * @param context    the {@link BeneratorContext}
@@ -145,6 +131,13 @@ public class FactoryUtil {
       }
     }
 
+    // check for 'weighted' distribution
+    if (spec.startsWith("weighted[") && spec.endsWith("]")) {
+      return new FeatureWeight(spec.substring("weighted[".length(), spec.length() - 1).trim());
+    } else if ("weighted".equals(spec)) {
+      return new AttachedWeight();
+    }
+
     // check for context reference
     Object contextObject = context.get(spec);
     if (contextObject != null) {
@@ -153,13 +146,6 @@ public class FactoryUtil {
       } else {
         throw new ConfigurationError("Not a distribution: " + spec + "=" + contextObject);
       }
-    }
-
-    // check for 'weighted' distribution
-    if (spec.startsWith("weighted[") && spec.endsWith("]")) {
-      return new FeatureWeight(spec.substring("weighted[".length(), spec.length() - 1).trim());
-    } else if ("weighted".equals(spec)) {
-      return new AttachedWeight();
     }
 
     // check for default sequence reference
@@ -178,14 +164,6 @@ public class FactoryUtil {
   }
 
 
-  /**
-   * Gets distribution expression.
-   *
-   * @param spec       the spec
-   * @param uniqueness the uniqueness
-   * @param required   the required
-   * @return the distribution expression
-   */
   public static Expression<Distribution> getDistributionExpression(
       final String spec, final Uniqueness uniqueness, final boolean required) {
     return new DynamicExpression<>() {
@@ -198,13 +176,6 @@ public class FactoryUtil {
     };
   }
 
-  /**
-   * Full locale char set set.
-   *
-   * @param pattern the pattern
-   * @param locale  the locale
-   * @return the set
-   */
   public static Set<Character> fullLocaleCharSet(String pattern, Locale locale) {
     Set<Character> chars;
     if (pattern != null) {
@@ -219,22 +190,10 @@ public class FactoryUtil {
     return chars;
   }
 
-  /**
-   * Default locale locale.
-   *
-   * @return the locale
-   */
   public static Locale defaultLocale() {
     return Locale.getDefault();
   }
 
-  /**
-   * Extract values list.
-   *
-   * @param <T>     the type parameter
-   * @param samples the samples
-   * @return the list
-   */
   public static <T> List<T> extractValues(Collection<WeightedSample<T>> samples) {
     List<T> values = new ArrayList<>(samples.size());
     for (WeightedSample<T> sample : samples) {
@@ -243,12 +202,6 @@ public class FactoryUtil {
     return values;
   }
 
-  /**
-   * Create script generator generator.
-   *
-   * @param scriptText the script text
-   * @return the generator
-   */
   public static Generator<?> createScriptGenerator(String scriptText) {
     Script script = ScriptUtil.parseScriptText(scriptText);
     return new ScriptGenerator(script);

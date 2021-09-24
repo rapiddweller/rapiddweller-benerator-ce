@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.ConnectFailedException;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.DataContainer;
@@ -53,7 +53,7 @@ import static org.junit.Assert.assertNull;
  * @author Volker Bergmann
  * @since 0.6.4
  */
-public class TranscodingIntegrationTest extends BeneratorIntegrationTest {
+public class TranscodingIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   private static final String PARENT_FOLDER = "src/test/resources/com/rapiddweller/benerator/engine/transcode";
   private static final String DESCRIPTOR1_FILE_NAME = PARENT_FOLDER + "/transcode_to_empty_target.ben.xml";

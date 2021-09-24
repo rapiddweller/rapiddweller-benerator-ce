@@ -35,8 +35,8 @@ import com.rapiddweller.benerator.wrapper.GeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.Resettable;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ import java.util.List;
  */
 public class GeneratorUtil {
 
-  private static final Logger LOGGER = LogManager.getLogger(GeneratorUtil.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GeneratorUtil.class);
 
   /**
    * Init.

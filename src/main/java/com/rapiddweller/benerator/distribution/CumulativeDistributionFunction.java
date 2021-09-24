@@ -44,39 +44,14 @@ import java.util.Random;
  * See <a href="http://www.stat.wisc.edu/~larget/math496/random2.html">Random
  * Number Generation from Non-uniform Distributions</a>.<br/><br/>
  * Created: 12.03.2010 13:31:16
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public abstract class CumulativeDistributionFunction implements Distribution {
+public abstract class CumulativeDistributionFunction extends AbstractDistribution {
 
-  /**
-   * Cumulative probability double.
-   *
-   * @param value the value
-   * @return the double
-   */
   public abstract double cumulativeProbability(double value);
 
-  /**
-   * Inverse double.
-   *
-   * @param probability the probability
-   * @return the double
-   */
-  public abstract double inverse(double probability);
-
-  @Override
-  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-    if (unique) {
-      throw new IllegalArgumentException(this + " cannot generate unique values");
-    }
-    List<T> allProducts = GeneratorUtil.allProducts(source);
-    if (allProducts.size() == 1) {
-      return new ConstantGenerator<>(allProducts.get(0));
-    }
-    return new SampleGenerator<>(source.getGeneratedType(), this, unique, allProducts);
-  }
+   public abstract double inverse(double probability);
 
   @Override
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(
@@ -88,6 +63,23 @@ public abstract class CumulativeDistributionFunction implements Distribution {
   }
 
   @Override
+  public boolean isApplicationDetached() {
+    return true;
+  }
+
+  @Override
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    if (unique) {
+      throw new IllegalArgumentException(this + " is not designed to generate unique values");
+    }
+    List<T> allProducts = GeneratorUtil.allProducts(source);
+    if (allProducts.size() == 1) {
+      return new ConstantGenerator<>(allProducts.get(0));
+    }
+    return new SampleGenerator<>(source.getGeneratedType(), this, unique, allProducts);
+  }
+
+  @Override
   public String toString() {
     return getClass().getSimpleName();
   }
@@ -95,8 +87,7 @@ public abstract class CumulativeDistributionFunction implements Distribution {
   /**
    * Generates numbers according to an {@link CumulativeDistributionFunction}.<br/><br/>
    * Created: 12.03.2010 14:37:33
-   *
-   * @param <E> the type parameter
+   * @param <E> the type of generated numbers
    * @author Volker Bergmann
    * @since 0.6.0
    */

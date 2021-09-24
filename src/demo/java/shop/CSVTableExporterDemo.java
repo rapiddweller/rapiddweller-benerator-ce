@@ -38,8 +38,8 @@ import com.rapiddweller.platform.db.DBSystem;
 import org.databene.webdecs.DataContainer;
 import org.databene.webdecs.DataIterator;
 import org.databene.webdecs.DataSource;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The type Csv table exporter demo.
@@ -52,7 +52,7 @@ public class CSVTableExporterDemo {
   private static final String PASSWORD = null;
 
   private static Logger logger =
-      LogManager.getLogger(CSVTableExporterDemo.class);
+      LoggerFactory.getLogger(CSVTableExporterDemo.class);
 
   /**
    * The entry point of application.

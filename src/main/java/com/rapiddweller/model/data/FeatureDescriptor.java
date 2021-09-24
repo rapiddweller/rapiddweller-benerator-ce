@@ -26,6 +26,7 @@
 
 package com.rapiddweller.model.data;
 
+import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Named;
 import com.rapiddweller.common.NullSafeComparator;
 import com.rapiddweller.common.Operation;
@@ -39,45 +40,22 @@ import java.util.List;
 /**
  * Common parent class of all descriptors.<br/><br/>
  * Created: 17.07.2006 21:30:45
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class FeatureDescriptor implements Named {
 
-  /**
-   * The constant NAME.
-   */
   public static final String NAME = "name";
-  /**
-   * The Details.
-   */
+
   protected OrderedNameMap<FeatureDetail<?>> details;
-  /**
-   * The Provider.
-   */
   protected DescriptorProvider provider;
-  /**
-   * The name of the feature. It is stored redundantly in the {@link #details} map and the copy in
-   * this attribute is used for high-performance retrieval of the name.
-   */
   private String name;
 
   // constructor -----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Feature descriptor.
-   *
-   * @param name     the name
-   * @param provider the provider
-   */
   public FeatureDescriptor(String name, DescriptorProvider provider) {
-    if (provider == null) {
-      throw new IllegalArgumentException("provider is null");
-    }
-    if (provider.getDataModel() == null) {
-      throw new IllegalArgumentException("provider's data model is null");
-    }
+    Assert.notNull(provider, "provider");
+    Assert.notNull(provider.getDataModel(), "provider's data model");
     this.details = new OrderedNameMap<>();
     this.provider = provider;
     this.addConstraint(NAME, String.class, null);
@@ -91,74 +69,35 @@ public class FeatureDescriptor implements Named {
     return name;
   }
 
-  /**
-   * Sets name.
-   *
-   * @param name the name
-   */
   public void setName(String name) {
     this.name = name; // name is stored redundantly for better performance
     setDetailValue(NAME, name);
   }
 
-  /**
-   * Gets provider.
-   *
-   * @return the provider
-   */
   public DescriptorProvider getProvider() {
     return provider;
   }
 
-  /**
-   * Gets data model.
-   *
-   * @return the data model
-   */
   public DataModel getDataModel() {
     return provider.getDataModel();
   }
 
   // generic detail access -------------------------------------------------------------------------------------------
 
-  /**
-   * Supports detail boolean.
-   *
-   * @param name the name
-   * @return the boolean
-   */
   public boolean supportsDetail(String name) {
     return details.containsKey(name);
   }
 
-  /**
-   * Gets declared detail value.
-   *
-   * @param name the name
-   * @return the declared detail value
-   */
   public Object getDeclaredDetailValue(
       String name) { // TODO v0.8 remove method? It does not differ from getDetailValue any more
     return getConfiguredDetail(name).getValue();
   }
 
-  /**
-   * Gets detail value.
-   *
-   * @param name the name
-   * @return the detail value
-   */
   public Object getDetailValue(
       String name) { // TODO v0.8 remove generic feature access?
     return this.getConfiguredDetail(name).getValue();
   }
 
-  /**
-   * Sets detail value.
-   *
-   * @param detailName  the detail name
-   * @param detailValue the detail value
-   */
   public void setDetailValue(String detailName, Object detailValue) {
     if ("name"
         .equals(detailName)) {
@@ -174,11 +113,6 @@ public class FeatureDescriptor implements Named {
     detail.setValue(detailValue);
   }
 
-  /**
-   * Gets details.
-   *
-   * @return the details
-   */
   public List<FeatureDetail<?>> getDetails() {
     return details.values();
   }
@@ -221,21 +155,10 @@ public class FeatureDescriptor implements Named {
 
   // helpers ---------------------------------------------------------------------------------------------------------
 
-  /**
-   * Render details string.
-   *
-   * @return the string
-   */
   protected String renderDetails() {
     return renderDetails(new StringBuilder()).toString();
   }
 
-  /**
-   * Render details string builder.
-   *
-   * @param builder the builder
-   * @return the string builder
-   */
   protected StringBuilder renderDetails(StringBuilder builder) {
     builder.append("[");
     boolean empty = true;
@@ -254,12 +177,6 @@ public class FeatureDescriptor implements Named {
     return builder.append("]");
   }
 
-  /**
-   * Gets detail type.
-   *
-   * @param detailName the detail name
-   * @return the detail type
-   */
   protected Class<?> getDetailType(String detailName) {
     FeatureDetail<?> detail = details.get(detailName);
     if (detail == null) {
@@ -269,53 +186,20 @@ public class FeatureDescriptor implements Named {
     return detail.getType();
   }
 
-  /**
-   * Add config.
-   *
-   * @param <T>  the type parameter
-   * @param name the name
-   * @param type the type
-   */
   protected <T> void addConfig(String name, Class<T> type) {
     addConfig(name, type, false);
   }
 
-  /**
-   * Add config.
-   *
-   * @param <T>        the type parameter
-   * @param name       the name
-   * @param type       the type
-   * @param deprecated the deprecated
-   */
   protected <T> void addConfig(String name, Class<T> type,
                                boolean deprecated) {
     addDetail(name, type, false, deprecated, null);
   }
 
-  /**
-   * Add constraint.
-   *
-   * @param <T>        the type parameter
-   * @param name       the name
-   * @param type       the type
-   * @param combinator the combinator
-   */
   protected <T> void addConstraint(String name, Class<T> type,
                                    Operation<T, T> combinator) {
     addDetail(name, type, true, false, combinator);
   }
 
-  /**
-   * Add detail.
-   *
-   * @param <T>        the type parameter
-   * @param detailName the detail name
-   * @param detailType the detail type
-   * @param constraint the constraint
-   * @param deprecated the deprecated
-   * @param combinator the combinator
-   */
   protected <T> void addDetail(String detailName, Class<T> detailType,
                                boolean constraint,
                                boolean deprecated,
@@ -327,13 +211,6 @@ public class FeatureDescriptor implements Named {
 
   // generic property access -----------------------------------------------------------------------------------------
 
-  /**
-   * Gets configured detail.
-   *
-   * @param <T>  the type parameter
-   * @param name the name
-   * @return the configured detail
-   */
   @SuppressWarnings("unchecked")
   public <T> FeatureDetail<T> getConfiguredDetail(String name) {
     if (!supportsDetail(name)) {

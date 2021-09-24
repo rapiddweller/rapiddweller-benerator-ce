@@ -27,8 +27,8 @@
 package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
@@ -42,7 +42,7 @@ import static org.junit.Assert.assertNotNull;
  */
 public class EMailAddressGeneratorTest extends GeneratorClassTest {
 
-  private static final Logger logger = LogManager.getLogger(EMailAddressGeneratorTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(EMailAddressGeneratorTest.class);
 
   /**
    * Instantiates a new E mail address generator test.

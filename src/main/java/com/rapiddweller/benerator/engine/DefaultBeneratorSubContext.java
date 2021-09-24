@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -31,7 +31,6 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 /**
  * Sub context version of the {@link BeneratorContext}.<br/><br/>
  * Created: 02.09.2011 14:35:59
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
@@ -39,12 +38,6 @@ public class DefaultBeneratorSubContext extends AbstractBeneratorSubContext {
 
   private ProductWrapper<?> currentProduct;
 
-  /**
-   * Instantiates a new Default benerator sub context.
-   *
-   * @param productName the product name
-   * @param parent      the parent
-   */
   public DefaultBeneratorSubContext(String productName, BeneratorContext parent) {
     super(productName, parent);
   }

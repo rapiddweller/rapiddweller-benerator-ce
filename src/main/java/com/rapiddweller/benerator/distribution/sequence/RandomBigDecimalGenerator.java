@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -26,19 +26,18 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
-import com.rapiddweller.benerator.util.RandomUtil;
+import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * Generates random {@link BigDecimal}s with a uniform distribution.
- * <br/>
+ * Generates random {@link BigDecimal}s with a uniform distribution.<br/>
  * Created at 23.06.2009 23:36:15
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -53,30 +52,16 @@ public class RandomBigDecimalGenerator extends ThreadSafeNonNullGenerator<BigDec
   private final BigDecimal granularity;
   private final BigDecimal range;
 
-  /**
-   * Instantiates a new Random big decimal generator.
-   */
+  private RandomProvider random;
+
   public RandomBigDecimalGenerator() {
     this(DEFAULT_MIN, DEFAULT_MAX);
   }
 
-  /**
-   * Instantiates a new Random big decimal generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public RandomBigDecimalGenerator(BigDecimal min, BigDecimal max) {
     this(min, max, DEFAULT_GRANULARITY);
   }
 
-  /**
-   * Instantiates a new Random big decimal generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   */
   public RandomBigDecimalGenerator(BigDecimal min, BigDecimal max, BigDecimal granularity) {
     this.min = min;
     this.max = max;
@@ -84,6 +69,7 @@ public class RandomBigDecimalGenerator extends ThreadSafeNonNullGenerator<BigDec
     BigDecimal tmp = max.subtract(min).divide(granularity);
     tmp = tmp.setScale(0, RoundingMode.DOWN);
     this.range = tmp.multiply(granularity);
+    this.random = BeneratorFactory.getInstance().getRandomProvider();
   }
 
   // Generator interface ---------------------------------------------------------------------------------------------
@@ -104,35 +90,20 @@ public class RandomBigDecimalGenerator extends ThreadSafeNonNullGenerator<BigDec
   @Override
   public BigDecimal generate() {
     long n = range.divide(granularity).longValue();
-    BigDecimal i = BigDecimal.valueOf(RandomUtil.randomLong(0, n));
+    BigDecimal i = BigDecimal.valueOf(random.randomLong(0, n));
     return min.add(i.multiply(granularity));
   }
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets min.
-   *
-   * @return the min
-   */
   public BigDecimal getMin() {
     return min;
   }
 
-  /**
-   * Gets max.
-   *
-   * @return the max
-   */
   public BigDecimal getMax() {
     return max;
   }
 
-  /**
-   * Gets granularity.
-   *
-   * @return the granularity
-   */
   public BigDecimal getGranularity() {
     return granularity;
   }

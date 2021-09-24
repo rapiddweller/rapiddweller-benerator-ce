@@ -29,21 +29,14 @@ package com.rapiddweller.benerator.wrapper;
 import com.rapiddweller.benerator.Generator;
 
 /**
- * Converts the {@link Number} products of another {@link Generator} to {@link Byte}.<br/>
- * <br/>
+ * Converts the {@link Number} products of another {@link Generator} to {@link Byte}.<br/><br/>
  * Created at 23.06.2009 22:58:26
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class AsByteGeneratorWrapper<E extends Number> extends GeneratorWrapper<E, Byte> {
 
-  /**
-   * Instantiates a new As byte generator wrapper.
-   *
-   * @param source the source
-   */
   public AsByteGeneratorWrapper(Generator<E> source) {
     super(source);
   }

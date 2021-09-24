@@ -14,20 +14,22 @@ Performance of task execution can be tracked, setting a stats attribute to true:
 The performance of consumer invocations can be tracked, using the PerfTrackingConsumer class:
 
 ```xml
-<import platforms="contiperf" />
-
-<bean id="myWS" spec="new MyWebServiceConsumer(...)"/>
-
-<generate type="params" count="10000">
-  <value type="int" min="100" max="10000" distribution="random"/>
-  <consumer spec='new PerfTrackingConsumer(myWS)'/>
-</generate>
+<setup>
+    <import platforms="contiperf" />
+    
+    <bean id="myWS" spec="new MyWebServiceConsumer(...)"/>
+    
+    <generate type="params" count="10000">
+        <value type="int" min="100" max="10000" distribution="random"/>
+        <consumer spec='new PerfTrackingConsumer(myWS)'/>
+    </generate>
+</setup>
 ```
 
 ## JavaInvoker
 
-To aid you calling Java code from Benerator, there is a Helper class, JavaInvoker, which implements the Consumer interface and calls a Java method,
-which is declared by its name, on a Java object. The data of the generated entity is automatically:
+To aid you in calling Java code from Benerator, there is a Helper class, JavaInvoker, which implements the Consumer interface and calls a Java method,
+which is declared by its name, on a Java object. The data of the generated entity is automatic:
 
 ```xml
 <bean id="service" spec="..." />
@@ -35,17 +37,17 @@ which is declared by its name, on a Java object. The data of the generated entit
 <bean id="invoker" spec="new JavaInvoker(ejb, 'enrolCustomer')" />
 ```
 
-For tracking invocation performance, you need to add the PerfTrackingConsumer:
+For tracking invocation performance, you need to add the `PerfTrackingConsumer`:
 
 ```xml
 <bean id="enrolCustomer" class="PerfTrackingConsumer" >
-  <property name="target" value="{invoker}" />
+    <property name="target" value="{invoker}" />
 </bean>
 ```
 
 ## Checking performance requirements
 
-You can as well define performance requirements using properties of the class PerfTrackingConsumer:
+You can as well define performance requirements using properties of the class `PerfTrackingConsumer`:
 
 | Property | Description |
 | --- | --- |
@@ -61,10 +63,9 @@ An example for the properties described above:
 <import class="com.rapiddweller.contiperf.report.ConsoleReportModule" />
 
 <bean id="enrolCustomer" class="PerfTrackingConsumer" >
-  <property name="target" value="{invoker}" />
-  <property name="executionLogger" value="{new ConsoleExecutionLogger()}" />
-  <property name="max" value="5000" />
-  <property name="percentiles" value="90:5000, 95:7000"/>
+    <property name="target" value="{invoker}" />
+    <property name="executionLogger" value="{new ConsoleExecutionLogger()}" />
+    <property name="max" value="5000" />
+    <property name="percentiles" value="90:5000, 95:7000"/>
 </bean>
 ```
-

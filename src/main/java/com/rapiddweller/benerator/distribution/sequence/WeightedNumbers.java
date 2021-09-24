@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -41,7 +41,6 @@ import com.rapiddweller.script.WeightedSample;
  * for example "1^3,2^7" would cause generation of 30% '1' values and
  * 70% '2' values.<br/><br/>
  * Created: 02.06.2010 07:27:36
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.3
@@ -50,29 +49,16 @@ public class WeightedNumbers<E> extends Sequence {
 
   private WeightedSample<?>[] samples;
 
-  /**
-   * Instantiates a new Weighted numbers.
-   */
   public WeightedNumbers() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Weighted numbers.
-   *
-   * @param spec the spec
-   */
   public WeightedNumbers(String spec) {
     if (spec != null) {
       setSpec(spec);
     }
   }
 
-  /**
-   * Sets spec.
-   *
-   * @param spec the spec
-   */
   public void setSpec(String spec) {
     samples = DatabeneScriptParser.parseWeightedLiteralList(spec);
   }
@@ -93,11 +79,16 @@ public class WeightedNumbers<E> extends Sequence {
   }
 
   @Override
+  public boolean isApplicationDetached() {
+    return true;
+  }
+
+  @Override
   public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
     if (unique) {
       throw new ConfigurationError(getClass().getSimpleName() + " is not designed to generate unique values");
     }
-    return super.applyTo(source, unique);
+    return SequenceUtil.applySequenceDetached(this, source, false);
   }
 
 }

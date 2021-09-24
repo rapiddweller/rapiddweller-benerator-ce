@@ -63,15 +63,19 @@ markdown_extensions:
 # Page tree
 nav:
   - Home: index.md
-  - Goals and Features: benerator_goals_features.md
+  - Goals and Features: introduction_to_benerator.md
   - Installation: installation.md
   - The Benerator Project Wizard: the_benerator_project_wizard.md
   - Quick tour through the descriptor file format: quick_tour_through_the_descriptor_file_format.md
   - Data Generation Concepts: data_generation_concepts.md
+  - Data Anonymization Concepts: data_anonymization_concepts.md
   - Regular Expression Support: regular_expression_support.md
-  - Processing and creating CSV Files: processing_and_creating_csv_files.md
+  - CSV File Generation/Anonymization: data_file_processing.md
+  - XML File Processing: xml_file_processing.md
+  - Distribution Concepts: distribution.md
   - Using Relational Databases: using_relational_databases.md
-  - Generating XML Files: generating_xml_files.md
+  - Message Queue Access (Enterprise Edition): message_queue_access.md
+  - Kafka Access (Enterprise Edition): kafka_access.md
   - Advanced Topics: advanced_topics.md
   - Generating Unique Data: generating_unique_data.md
   - Scripting: scripting.md
@@ -85,7 +89,8 @@ nav:
   - Using Benerator as Load Generator: using_benerator_as_load_generator.md
   - Troubleshooting: troubleshooting.md
   - Monitoring Benerator: monitoring_benerator.md
-  - Benerator Performance Tuning: benerator_performance_tuning.md
+  - Benerator Performance Tuning: performance_tuning.md
+  - Migrating Benerator Projects: migrating_benerator_projects.md
 
 extra:
   social:

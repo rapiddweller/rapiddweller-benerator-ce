@@ -32,7 +32,6 @@ import com.rapiddweller.script.expression.DynamicExpression;
 /**
  * Represents and resolves a reference to an object in a {@link Context}.<br/><br/>
  * Created: 25.10.2009 09:33:35
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -40,11 +39,6 @@ public class ContextReference extends DynamicExpression<Object> {
 
   private final String ref;
 
-  /**
-   * Instantiates a new Context reference.
-   *
-   * @param ref the ref
-   */
   public ContextReference(String ref) {
     this.ref = ref;
   }

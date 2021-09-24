@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.Consumer;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.platform.template.TemplateFileEntityExporter;
 import org.junit.Test;
@@ -39,7 +39,7 @@ import org.junit.Test;
  * @author Volker Bergmann
  * @since 0.9.7
  */
-public class TemplateFileEntityExporterIntegrationTest extends BeneratorIntegrationTest {
+public class TemplateFileEntityExporterIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test countries.

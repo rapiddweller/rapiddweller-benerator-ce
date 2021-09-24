@@ -29,55 +29,15 @@ package com.rapiddweller.benerator.engine;
 /**
  * MBean interface for monitoring Benerator.<br/><br/>
  * Created: 27.07.2010 21:48:46
- *
  * @author Volker Bergmann
  * @since 0.6.3
  */
 public interface BeneratorMonitorMBean {
-  /**
-   * Gets total generation count.
-   *
-   * @return the total generation count
-   */
   long getTotalGenerationCount();
-
-  /**
-   * Gets current throughput.
-   *
-   * @return the current throughput
-   */
   long getCurrentThroughput();
-
-  /**
-   * Gets open connection count.
-   *
-   * @return the open connection count
-   */
   int getOpenConnectionCount();
-
-  /**
-   * Gets open result set count.
-   *
-   * @return the open result set count
-   */
   int getOpenResultSetCount();
-
-  /**
-   * Gets open statement count.
-   *
-   * @return the open statement count
-   */
   int getOpenStatementCount();
-
-  /**
-   * Gets open prepared statement count.
-   *
-   * @return the open prepared statement count
-   */
   int getOpenPreparedStatementCount();
-
-  /**
-   * Reset.
-   */
   void reset();
 }

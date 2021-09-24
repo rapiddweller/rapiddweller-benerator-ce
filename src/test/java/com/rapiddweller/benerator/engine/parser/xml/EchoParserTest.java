@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.statement.EchoStatement;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -35,42 +35,29 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the {@link EchoParser}.<br/><br/>
  * Created: 11.02.2010 15:16:48
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class EchoParserTest extends BeneratorIntegrationTest {
+public class EchoParserTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test simple message attribute.
-   */
   @Test
   public void testSimpleMessageAttribute() {
     EchoStatement statement = (EchoStatement) parse("<echo message='Hello' />");
     assertEquals("Hello", statement.getExpression().evaluate(context));
   }
 
-  /**
-   * Test simple element text.
-   */
   @Test
   public void testSimpleElementText() {
     EchoStatement statement = (EchoStatement) parse("<echo>Hello</echo>");
     assertEquals("Hello", statement.getExpression().evaluate(context));
   }
 
-  /**
-   * Test escaped message attribute.
-   */
   @Test
   public void testEscapedMessageAttribute() {
     EchoStatement statement = (EchoStatement) parse("<echo message=\"\\'Test\\'\" />");
     assertEquals("'Test'", statement.getExpression().evaluate(context));
   }
 
-  /**
-   * Test escaped element text.
-   */
   @Test
   public void testEscapedElementText() {
     EchoStatement statement = (EchoStatement) parse("<echo>\\'Test\\'</echo>");

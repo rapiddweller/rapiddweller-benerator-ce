@@ -33,41 +33,21 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
 /**
  * Double Generator that implements a 'cumulated' Double Sequence.<br/>
  * Created: 07.06.2006 19:33:37<br/>
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class CumulatedDoubleGenerator extends AbstractNonNullNumberGenerator<Double> {
 
-  /**
-   * The Base gen.
-   */
-  RandomDoubleGenerator baseGen;
+  private RandomDoubleGenerator baseGen;
 
-  /**
-   * Instantiates a new Cumulated double generator.
-   */
   public CumulatedDoubleGenerator() {
     this(Long.MIN_VALUE, Long.MAX_VALUE);
   }
 
-  /**
-   * Instantiates a new Cumulated double generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public CumulatedDoubleGenerator(double min, double max) {
     this(min, max, 1);
   }
 
-  /**
-   * Instantiates a new Cumulated double generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   */
   public CumulatedDoubleGenerator(double min, double max, double granularity) {
     super(Double.class, min, max, granularity);
   }

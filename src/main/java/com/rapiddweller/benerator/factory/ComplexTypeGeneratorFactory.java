@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -28,22 +28,23 @@ package com.rapiddweller.benerator.factory;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.StorageSystem;
+import com.rapiddweller.benerator.TypedEntitySource;
 import com.rapiddweller.benerator.composite.BlankEntityGenerator;
 import com.rapiddweller.benerator.composite.ComponentTypeConverter;
-import com.rapiddweller.benerator.composite.GeneratorComponent;
+import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.composite.SimpleTypeEntityGenerator;
-import com.rapiddweller.benerator.composite.SourceAwareGenerator;
+import com.rapiddweller.benerator.composite.CompositeEntityGenerator;
 import com.rapiddweller.benerator.distribution.DistributingGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.benerator.engine.expression.ScriptExpression;
-import com.rapiddweller.benerator.util.FilteringGenerator;
+import com.rapiddweller.benerator.engine.TypedEntitySourceAdapter;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.EntityPartSource;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.SyntaxError;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.fixedwidth.FixedWidthColumnDescriptor;
 import com.rapiddweller.format.fixedwidth.FixedWidthRowTypeDescriptor;
@@ -59,49 +60,40 @@ import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.Mode;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
+import com.rapiddweller.benerator.FileFormat;
+import com.rapiddweller.benerator.FileFormats;
 import com.rapiddweller.platform.csv.CSVEntitySourceProvider;
 import com.rapiddweller.platform.dbunit.DbUnitEntitySource;
 import com.rapiddweller.platform.fixedwidth.FixedWidthEntitySource;
 import com.rapiddweller.platform.xls.XLSEntitySourceProvider;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
-import com.rapiddweller.script.Expression;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Creates entity generators from entity metadata.<br/>
- * <br/>
+ * Creates {@link Entity} {@link Generator}s from entity metadata ({@link ComplexTypeDescriptor}s.<br/><br/>
  * Created: 08.09.2007 07:45:40
- *
  * @author Volker Bergmann
  */
 public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTypeDescriptor> {
 
   private static final ComplexTypeGeneratorFactory INSTANCE = new ComplexTypeGeneratorFactory();
 
-  /**
-   * Gets instance.
-   *
-   * @return the instance
-   */
   public static ComplexTypeGeneratorFactory getInstance() {
     return INSTANCE;
   }
 
-  /**
-   * Instantiates a new Complex type generator factory.
-   */
   protected ComplexTypeGeneratorFactory() {
   }
 
   @Override
-  protected Generator<?> applyComponentBuilders(Generator<?> generator, ComplexTypeDescriptor descriptor,
+  protected Generator<?> applyComponentBuilders(Generator<?> source, boolean iterationMode, ComplexTypeDescriptor descriptor,
                                                 String instanceName, Uniqueness uniqueness, BeneratorContext context) {
-    generator = createMutatingEntityGenerator(instanceName, descriptor, uniqueness, context, generator);
-    return super.applyComponentBuilders(generator, descriptor, instanceName, uniqueness, context);
+    source = createMutatingEntityGenerator(instanceName, descriptor, uniqueness, context, source, iterationMode);
+    return super.applyComponentBuilders(source, iterationMode, descriptor, instanceName, uniqueness, context);
   }
 
   @Override
@@ -112,9 +104,9 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     if (sourceSpec == null) {
       return null;
     }
-    Object sourceObject = null;
+    Object sourceObject;
     if (ScriptUtil.isScript(sourceSpec)) {
-      Object tmp = ScriptUtil.evaluate(sourceSpec, context); // TODO v0.8 When to resolve scripts?
+      Object tmp = ScriptUtil.evaluate(sourceSpec, context);
       if (tmp instanceof String) {
         sourceSpec = (String) tmp;
         sourceObject = context.get(sourceSpec);
@@ -135,35 +127,55 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       generator = createSourceGeneratorFromObject(descriptor, context, sourceObject);
     } else {
       String segment = descriptor.getSegment();
-      if (DataFileUtil.isXmlDocument(sourceSpec)) {
-        generator = new DataSourceGenerator<>(new DbUnitEntitySource(sourceSpec, context));
-      } else if (DataFileUtil.isCsvDocument(sourceSpec)) {
-        generator = createCSVSourceGenerator(descriptor, context, sourceSpec);
-      } else if (DataFileUtil.isFixedColumnWidthFile(sourceSpec)) {
-        generator = createFixedColumnWidthSourceGenerator(descriptor, context, sourceSpec);
-      } else if (DataFileUtil.isExcelDocument(sourceSpec)) {
-        generator = createXLSSourceGenerator(descriptor, context, sourceSpec, segment);
-      } else {
-        try {
-          BeanSpec sourceBeanSpec = DatabeneScriptParser.resolveBeanSpec(sourceSpec, context);
-          sourceObject = sourceBeanSpec.getBean();
-          generator = createSourceGeneratorFromObject(descriptor, context, sourceObject);
-          if (sourceBeanSpec.isReference() && !(sourceObject instanceof StorageSystem)) {
-            generator = WrapperFactory.preventClosing(generator);
-          }
-        } catch (Exception e) {
-          throw new UnsupportedOperationException("Error resolving source: " + sourceSpec, e);
+      for (FileFormat format : FileFormats.all()) {
+        if (format.matchesUri(sourceSpec)) {
+          generator = createProtocolSourceGenerator(sourceSpec, format, descriptor, context);
+          break;
         }
       }
+      if (generator == null) {
+        if (DataFileUtil.isXmlDocument(sourceSpec)) {
+          generator = new DataSourceGenerator<>(new DbUnitEntitySource(sourceSpec, context));
+        } else if (DataFileUtil.isCsvDocument(sourceSpec)) {
+          generator = createCSVSourceGenerator(descriptor, context, sourceSpec);
+        } else if (DataFileUtil.isFixedColumnWidthFile(sourceSpec)) {
+          generator = createFixedColumnWidthSourceGenerator(descriptor, context, sourceSpec);
+        } else if (DataFileUtil.isExcelDocument(sourceSpec)) {
+          generator = createXLSSourceGenerator(descriptor, context, sourceSpec, segment);
+        } else {
+          try {
+            BeanSpec sourceBeanSpec = DatabeneScriptParser.resolveBeanSpec(sourceSpec, context);
+            if (sourceBeanSpec != null) {
+              sourceObject = sourceBeanSpec.getBean();
+              generator = createSourceGeneratorFromObject(descriptor, context, sourceObject);
+              if (sourceBeanSpec.isReference() && !(sourceObject instanceof StorageSystem)) {
+                generator = WrapperFactory.preventClosing(generator);
+              }
+            }
+          } catch (Exception e) {
+            throw new UnsupportedOperationException("Error resolving source: " + sourceSpec, e);
+          }
+        }
+      }
+    }
+
+    if (generator == null) {
+      throw new SyntaxError("Unable to resolve source", "source='" + sourceSpec + "'");
     }
     if (generator.getGeneratedType() != Entity.class) {
       generator = new SimpleTypeEntityGenerator(generator, descriptor);
     }
-    if (descriptor.getFilter() != null) {
-      Expression<Boolean> filter
-          = new ScriptExpression<>(ScriptUtil.parseScriptText(descriptor.getFilter()));
-      generator = new FilteringGenerator<>(generator, filter);
-    }
+    generator = applyFilter(descriptor, generator);
+    generator = applyDistribution(descriptor, uniqueness, context, generator);
+    return generator;
+  }
+
+  protected Generator<Entity> applyFilter(ComplexTypeDescriptor descriptor, Generator<Entity> generator) {
+    return generator;
+  }
+
+  private Generator<Entity> applyDistribution(ComplexTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context,
+                                              Generator<Entity> generator) {
     Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
     if (distribution != null) {
       generator = new DistributingGenerator<>(generator, distribution, uniqueness.isUnique());
@@ -192,22 +204,12 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     return Entity.class;
   }
 
-  /**
-   * Create mutating entity generator generator.
-   *
-   * @param name            the name
-   * @param descriptor      the descriptor
-   * @param ownerUniqueness the owner uniqueness
-   * @param context         the context
-   * @param source          the source
-   * @return the generator
-   */
   @SuppressWarnings("unchecked")
-  public static Generator<?> createMutatingEntityGenerator(String name, ComplexTypeDescriptor descriptor,
-                                                           Uniqueness ownerUniqueness, BeneratorContext context, Generator<?> source) {
-    List<GeneratorComponent<Entity>> generatorComponent =
-        createMutatingGeneratorComponents(descriptor, ownerUniqueness, context);
-    return new SourceAwareGenerator<>(name, (Generator<Entity>) source, generatorComponent, context);
+  public static Generator<Entity> createMutatingEntityGenerator(String name, ComplexTypeDescriptor descriptor,
+      Uniqueness ownerUniqueness, BeneratorContext context, Generator<?> source, boolean iterationMode) {
+    List<GenerationStep<Entity>> generationSteps =
+        createMutatingGenerationSteps(descriptor, iterationMode, ownerUniqueness, context);
+    return new CompositeEntityGenerator(name, (Generator<Entity>) source, generationSteps, context);
   }
 
   // private helpers -------------------------------------------------------------------------------------------------
@@ -228,6 +230,9 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       }
     } else if (sourceObject instanceof Generator) {
       generator = (Generator<Entity>) sourceObject;
+    } else if (sourceObject instanceof TypedEntitySource) {
+      TypedEntitySource dataSource = (TypedEntitySource) sourceObject;
+      generator = new DataSourceGenerator<>(new TypedEntitySourceAdapter(dataSource, descriptor));
     } else if (sourceObject instanceof EntitySource) {
       generator = new DataSourceGenerator<>((EntitySource) sourceObject);
     } else if (sourceObject instanceof DataSource) {
@@ -240,6 +245,12 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       throw new UnsupportedOperationException("Source type not supported: " + sourceObject.getClass());
     }
     return generator;
+  }
+
+  private static Generator<Entity> createProtocolSourceGenerator(String url, FileFormat format,
+      ComplexTypeDescriptor complexType, BeneratorContext context) {
+    DataSourceProvider<Entity> fileProvider = format.provider(url, null, complexType, context);
+    return createEntitySourceGenerator(complexType, context, url, fileProvider);
   }
 
   private static Generator<Entity> createFixedColumnWidthSourceGenerator(
@@ -284,7 +295,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       ComplexTypeDescriptor complexType, BeneratorContext context, String sourceName, String segment) {
     ScriptConverterForStrings converter = new ScriptConverterForStrings(context);
     boolean formatted = isFormatted(complexType);
-    XLSEntitySourceProvider fileProvider = new XLSEntitySourceProvider(complexType, formatted, converter);
+    XLSEntitySourceProvider fileProvider = new XLSEntitySourceProvider(complexType, segment, formatted, converter);
     return createEntitySourceGenerator(complexType, context, sourceName, fileProvider);
   }
 
@@ -296,31 +307,23 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     return new SimpleTypeEntityGenerator(generator, complexType);
   }
 
-  /**
-   * Create mutating generator components list.
-   *
-   * @param descriptor      the descriptor
-   * @param ownerUniqueness the owner uniqueness
-   * @param context         the context
-   * @return the list
-   */
   @SuppressWarnings("unchecked")
-  public static List<GeneratorComponent<Entity>> createMutatingGeneratorComponents(ComplexTypeDescriptor descriptor,
-                                                                                   Uniqueness ownerUniqueness, BeneratorContext context) {
-    List<GeneratorComponent<Entity>> generatorComponents = new ArrayList<>();
+  public static List<GenerationStep<Entity>> createMutatingGenerationSteps(
+      ComplexTypeDescriptor descriptor, boolean iterationMode, Uniqueness ownerUniqueness, BeneratorContext context) {
+    List<GenerationStep<Entity>> generationSteps = new ArrayList<>();
     for (InstanceDescriptor part : descriptor.getDeclaredParts()) {
       if (!(part instanceof ComponentDescriptor) ||
           part.getMode() != Mode.ignored && !ComplexTypeDescriptor.__SIMPLE_CONTENT.equals(part.getName())) {
         try {
-          GeneratorComponent<Entity> generatorComponent =
-              (GeneratorComponent<Entity>) GeneratorComponentFactory.createGeneratorComponent(part, ownerUniqueness, context);
-          generatorComponents.add(generatorComponent);
+          GenerationStep<Entity> generationStep =
+              (GenerationStep<Entity>) GenerationStepFactory.createGenerationStep(part, ownerUniqueness, iterationMode, context);
+          generationSteps.add(generationStep);
         } catch (Exception e) {
           throw new ConfigurationError("Error creating component builder for " + part, e);
         }
       }
     }
-    return generatorComponents;
+    return generationSteps;
   }
 
   private static Generator<Entity> createEntitySourceGenerator(ComplexTypeDescriptor complexType,

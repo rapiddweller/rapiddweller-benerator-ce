@@ -50,14 +50,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class StringGeneratorTest extends GeneratorTest {
 
-  /**
-   * The constant N.
-   */
   public static final int N = 500;
 
-  /**
-   * Test default.
-   */
   @Test
   public void testDefault() {
     StringGenerator generator = initialize(new StringGenerator());
@@ -66,9 +60,6 @@ public class StringGeneratorTest extends GeneratorTest {
         new RegexValidator("\\w{1,8}"));
   }
 
-  /**
-   * Test pattern.
-   */
   @Test
   public void testPattern() {
     StringGenerator generator = new StringGenerator();
@@ -81,9 +72,6 @@ public class StringGeneratorTest extends GeneratorTest {
         "AAA", "AAB", "ABA", "ABB", "BAA", "BAB", "BBA", "BBB");
   }
 
-  /**
-   * Test prefix.
-   */
   @Test
   public void testPrefix() {
     StringGenerator generator = new StringGenerator();
@@ -96,9 +84,6 @@ public class StringGeneratorTest extends GeneratorTest {
         new PrefixValidator("pp"));
   }
 
-  /**
-   * Test suffix.
-   */
   @Test
   public void testSuffix() {
     StringGenerator generator = new StringGenerator();
@@ -111,9 +96,6 @@ public class StringGeneratorTest extends GeneratorTest {
         new SuffixValidator("ss"));
   }
 
-  /**
-   * Test prefix and suffix.
-   */
   @Test
   public void testPrefixAndSuffix() {
     StringGenerator generator = new StringGenerator();
@@ -128,9 +110,6 @@ public class StringGeneratorTest extends GeneratorTest {
         new SuffixValidator("ss"));
   }
 
-  /**
-   * Test min initial.
-   */
   @Test
   public void testMinInitial() {
     StringGenerator generator = new StringGenerator();
@@ -144,9 +123,6 @@ public class StringGeneratorTest extends GeneratorTest {
         new PrefixValidator("9"));
   }
 
-  /**
-   * Test prefix and min initial.
-   */
   @Test
   public void testPrefixAndMinInitial() {
     StringGenerator generator = new StringGenerator();
@@ -161,9 +137,6 @@ public class StringGeneratorTest extends GeneratorTest {
         new PrefixValidator("pp9"));
   }
 
-  /**
-   * Test min initial and suffix.
-   */
   @Test
   public void testMinInitialAndSuffix() {
     StringGenerator generator = new StringGenerator();
@@ -179,9 +152,6 @@ public class StringGeneratorTest extends GeneratorTest {
         new SuffixValidator("ss"));
   }
 
-  /**
-   * Test prefix min initial and suffix.
-   */
   @Test
   public void testPrefixMinInitialAndSuffix() {
     StringGenerator generator = new StringGenerator();
@@ -198,9 +168,6 @@ public class StringGeneratorTest extends GeneratorTest {
         new SuffixValidator("ss"));
   }
 
-  /**
-   * Test german locale.
-   */
   @Test
   public void testGermanLocale() {
     StringGenerator generator = new StringGenerator();
@@ -214,9 +181,6 @@ public class StringGeneratorTest extends GeneratorTest {
         new UmlautValidator());
   }
 
-  /**
-   * Test length limit non unique.
-   */
   @Test
   public void testLengthLimit_nonUnique() {
     StringGenerator generator = new StringGenerator();
@@ -227,9 +191,6 @@ public class StringGeneratorTest extends GeneratorTest {
     expectGenerations(generator, 100, new StringLengthValidator(5, 1000));
   }
 
-  /**
-   * Test length limit unique.
-   */
   @Test
   public void testLengthLimit_unique() {
     StringGenerator generator = new StringGenerator();
@@ -242,9 +203,6 @@ public class StringGeneratorTest extends GeneratorTest {
     expectGenerations(generator, 100, new StringLengthValidator(5, 1000));
   }
 
-  /**
-   * Test length limit ordered.
-   */
   @Test
   public void testLengthLimit_ordered() {
     StringGenerator generator = new StringGenerator();
@@ -257,9 +215,6 @@ public class StringGeneratorTest extends GeneratorTest {
     expectGenerations(generator, 100, new StringLengthValidator(5, 1000));
   }
 
-  /**
-   * Test length granularity.
-   */
   @Test
   public void testLengthGranularity() {
     StringGenerator generator = new StringGenerator();
@@ -273,9 +228,6 @@ public class StringGeneratorTest extends GeneratorTest {
     expectGenerations(generator, 100, new LengthsValidator());
   }
 
-  /**
-   * Test length distribution.
-   */
   @Test
   public void testLengthDistribution() {
     StringGenerator generator = new StringGenerator();
@@ -299,9 +251,6 @@ public class StringGeneratorTest extends GeneratorTest {
     generator.close();
   }
 
-  /**
-   * Test non unique.
-   */
   @Test
   public void testNonUnique() {
     StringGenerator generator = new StringGenerator();
@@ -311,14 +260,11 @@ public class StringGeneratorTest extends GeneratorTest {
     generator.setUnique(false);
     generator.setOrdered(false);
     initialize(generator);
-    expectGeneratedSet(generator, 100,
+    expectGeneratedSet(generator, 3000,
         "AA", "AB", "BA", "BB",
         "AAA", "AAB", "ABA", "ABB", "BAA", "BAB", "BBA", "BBB");
   }
 
-  /**
-   * Test unique unordered.
-   */
   @Test
   public void testUniqueUnordered() {
     StringGenerator generator = new StringGenerator();
@@ -333,9 +279,6 @@ public class StringGeneratorTest extends GeneratorTest {
         "AAA", "AAB", "ABA", "ABB", "BAA", "BAB", "BBA", "BBB");
   }
 
-  /**
-   * Test unique ordered.
-   */
   @Test
   public void testUniqueOrdered() {
     StringGenerator generator = new StringGenerator();
@@ -350,9 +293,6 @@ public class StringGeneratorTest extends GeneratorTest {
         "AAA", "AAB", "ABA", "ABB", "BAA", "BAB", "BBA", "BBB");
   }
 
-  /**
-   * The type Umlaut validator.
-   */
   public static class UmlautValidator implements Validator<String> {
     private final Set<Character> allowedValues = CollectionUtil.toSet('Ä', 'ä', 'Ö', 'ö', 'Ü', 'ü', 'ß');
 
@@ -367,15 +307,11 @@ public class StringGeneratorTest extends GeneratorTest {
     }
   }
 
-  /**
-   * The type Lengths validator.
-   */
   public static class LengthsValidator implements Validator<String> {
     @Override
     public boolean valid(String value) {
       return value.length() == 500 || value.length() == 750 || value.length() == 1000;
     }
-
   }
 
 }

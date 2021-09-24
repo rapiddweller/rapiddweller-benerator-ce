@@ -35,14 +35,12 @@ import static com.rapiddweller.common.NumberUtil.toLong;
 /**
  * {@link Sequence} implementation for a distribution that creates the bit-reverses (r)
  * of a continuous series, e.g. r(1), r(2), r(3), ...; the numbers produced by a related
- * generator are unique as long as the generator is not reset.<br/>
- * <br/>
+ * generator are unique as long as the generator is not reset.<br/><br/>
  * Created at 23.09.2009 18:59:30
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class BitReverseSequence extends Sequence {
+public class BitReverseSequence extends DetachedSequence {
 
   @Override
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(
@@ -50,6 +48,11 @@ public class BitReverseSequence extends Sequence {
     long lMax = (max != null ? max.longValue() : BitReverseLongGenerator.MAX_INDEX_RANGE + toLong(min));
     NonNullGenerator<? extends Number> base = new BitReverseLongGenerator(toLong(min), lMax, toLong(granularity));
     return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
+  }
+
+  @Override
+  public boolean isApplicationDetached() {
+    return true;
   }
 
 }

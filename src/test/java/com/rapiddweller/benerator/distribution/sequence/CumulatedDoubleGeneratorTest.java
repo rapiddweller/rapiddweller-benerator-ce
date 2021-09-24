@@ -33,22 +33,15 @@ import org.junit.Test;
 /**
  * Tests the {@link CumulatedDoubleGenerator}.
  * Created: 07.06.2006 20:23:39
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class CumulatedDoubleGeneratorTest extends GeneratorClassTest {
 
-  /**
-   * Instantiates a new Cumulated double generator test.
-   */
   public CumulatedDoubleGeneratorTest() {
     super(CumulatedDoubleGenerator.class);
   }
 
-  /**
-   * Test single.
-   */
   @Test
   public void testSingle() {
     checkProductSet(createAndInit(0, 0), 100, CollectionUtil.toSet(0.));
@@ -57,9 +50,6 @@ public class CumulatedDoubleGeneratorTest extends GeneratorClassTest {
     checkProductSet(createAndInit(1, 1, 1), 100, CollectionUtil.toSet(1.));
   }
 
-  /**
-   * Test range.
-   */
   @Test
   public void testRange() {
     checkProductSet(createAndInit(0, 1, 1), 1000, CollectionUtil.toSet(0., 1.));
@@ -69,9 +59,6 @@ public class CumulatedDoubleGeneratorTest extends GeneratorClassTest {
     checkProductSet(createAndInit(-1, 1, 1), 1000, CollectionUtil.toSet(-1., 0., 1.));
   }
 
-  /**
-   * Test granularity.
-   */
   @Test
   public void testGranularity() {
     checkProductSet(createAndInit(1, 3, 2), 100, CollectionUtil.toSet(1., 3.));

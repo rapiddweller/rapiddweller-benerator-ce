@@ -70,6 +70,17 @@ public class BirthDateGenerator extends NonNullGeneratorProxy<Date> {
 
   // properties ------------------------------------------------------------------------------------------------------
 
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return true;
+  }
+
   /**
    * Gets min age years.
    *

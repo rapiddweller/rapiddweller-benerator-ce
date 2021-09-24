@@ -47,14 +47,6 @@ public class CSVEntitySourceProvider implements DataSourceProvider<Entity> {
   private final char separator;
   private final String encoding;
 
-  /**
-   * Instantiates a new Csv entity source provider.
-   *
-   * @param entityType the entity type
-   * @param converter  the converter
-   * @param separator  the separator
-   * @param encoding   the encoding
-   */
   public CSVEntitySourceProvider(ComplexTypeDescriptor entityType,
                                  Converter<String, ?> converter,
                                  char separator, String encoding) {
@@ -65,12 +57,12 @@ public class CSVEntitySourceProvider implements DataSourceProvider<Entity> {
   }
 
   @Override
-  public EntitySource create(String id, BeneratorContext context) {
-    CSVEntitySource iterable =
-        new CSVEntitySource(id, entityType, encoding, converter,
+  public EntitySource create(String uri, BeneratorContext context) {
+    CSVEntitySource source =
+        new CSVEntitySource(uri, entityType, encoding, converter,
             separator);
-    iterable.setContext(context);
-    return iterable;
+    source.setContext(context);
+    return source;
   }
 
 }

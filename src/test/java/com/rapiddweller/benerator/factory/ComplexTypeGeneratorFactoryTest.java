@@ -159,7 +159,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
     for (int i = 0; i < n; i++) {
       counter.count(GeneratorUtil.generateNonNull(generator));
     }
-    assertEquals(n * 24. / (24. + 89.), counter.getCount(alice), n / 20);
+    assertEquals(n * 24. / (24. + 89.), counter.getCount(alice), n / 20.);
   }
 
   /**
@@ -195,25 +195,6 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
   }
 
   // other tests -----------------------------------------------------------------------------------------------------
-
-  /**
-   * Test filtered import.
-   */
-  @Test
-  public void testFilteredImport() {
-    ComplexTypeDescriptor twenType = createComplexType("Twen");
-    twenType.setSource("personSource");
-    twenType.setFilter("_candidate.age < 30 && _candidate.age >= 20");
-    InstanceDescriptor twen = createInstance("twen", twenType);
-    PersonSource source = new PersonSource();
-    source.setContext(context);
-    context.set("personSource", source);
-    Generator<Entity> generator = createGenerator(twen);
-    generator.init(context);
-    Entity person1 = GeneratorUtil.generateNonNull(generator);
-    assertEquals(source.createAlice(), person1);
-    assertUnavailable(generator);
-  }
 
   // private helpers -------------------------------------------------------------------------------------------------
 

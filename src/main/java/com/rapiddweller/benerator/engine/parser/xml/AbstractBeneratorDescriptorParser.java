@@ -32,12 +32,15 @@ import com.rapiddweller.benerator.engine.expression.context.DefaultPageSizeExpre
 import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
 import com.rapiddweller.benerator.engine.statement.RunTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
+import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AbstractXMLElementParser;
 import com.rapiddweller.format.xml.ParseContext;
 import com.rapiddweller.script.Expression;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.w3c.dom.Element;
 
 import java.util.Set;
@@ -49,36 +52,18 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 /**
  * Abstract parent class for Descriptor parsers.<br/><br/>
  * Created: 25.10.2009 00:43:18
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public abstract class AbstractBeneratorDescriptorParser extends AbstractXMLElementParser<Statement> {
 
-  /**
-   * The Logger.
-   */
-  protected Logger logger = LogManager.getLogger(AbstractBeneratorDescriptorParser.class);
+  protected Logger logger = LoggerFactory.getLogger(AbstractBeneratorDescriptorParser.class);
 
-  /**
-   * Instantiates a new Abstract benerator descriptor parser.
-   *
-   * @param elementName          the element name
-   * @param requiredAttributes   the required attributes
-   * @param optionalAttributes   the optional attributes
-   * @param supportedParentTypes the supported parent types
-   */
   public AbstractBeneratorDescriptorParser(String elementName,
                                            Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
     super(elementName, requiredAttributes, optionalAttributes, supportedParentTypes);
   }
 
-  /**
-   * Contains loop boolean.
-   *
-   * @param parentPath the parent path
-   * @return the boolean
-   */
   public static boolean containsLoop(Statement[] parentPath) {
     if (parentPath == null) {
       return false;
@@ -91,24 +76,12 @@ public abstract class AbstractBeneratorDescriptorParser extends AbstractXMLEleme
     return false;
   }
 
-  /**
-   * Is loop boolean.
-   *
-   * @param statement the statement
-   * @return the boolean
-   */
   public static boolean isLoop(Statement statement) {
     return (statement instanceof RunTaskStatement)
         || (statement instanceof GenerateOrIterateStatement)
         || (statement instanceof WhileStatement);
   }
 
-  /**
-   * Contains generator statement boolean.
-   *
-   * @param parentPath the parent path
-   * @return the boolean
-   */
   public static boolean containsGeneratorStatement(Statement[] parentPath) {
     if (parentPath == null) {
       return false;
@@ -126,35 +99,31 @@ public abstract class AbstractBeneratorDescriptorParser extends AbstractXMLEleme
     return doParse(element, parentPath, (BeneratorParseContext) context);
   }
 
-  /**
-   * Do parse statement.
-   *
-   * @param element    the element
-   * @param parentPath the parent path
-   * @param context    the context
-   * @return the statement
-   */
   public abstract Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context);
 
-  /**
-   * Parse on error attribute expression.
-   *
-   * @param element the element
-   * @param id      the id
-   * @return the expression
-   */
-  protected Expression<ErrorHandler> parseOnErrorAttribute(Element element, String id) {
+  protected static Expression<ErrorHandler> parseOnErrorAttribute(Element element, String id) {
     return new ErrorHandlerExpression(id, parseScriptableStringAttribute(ATT_ON_ERROR, element));
   }
 
-  /**
-   * Parse page size expression.
-   *
-   * @param element the element
-   * @return the expression
-   */
-  protected Expression<Long> parsePageSize(Element element) {
+  protected static Expression<Long> parsePageSize(Element element) {
     return DescriptorParserUtil.parseLongAttribute(ATT_PAGESIZE, element, new DefaultPageSizeExpression());
+  }
+
+  protected static <T> T mapXmlAttrsToBeanProperties(Element element, T bean) {
+    for (String attrName : XMLUtil.getAttributes(element).keySet()) {
+      Expression<String> expression = parseScriptableStringAttribute(attrName, element);
+      String propertyName = normalizeAttributeName(attrName);
+      BeanUtil.setPropertyValue(bean, propertyName, expression, true);
+    }
+    return bean;
+  }
+
+  protected static String normalizeAttributeName(String attrName) {
+    String[] tokens = attrName.split("\\.");
+    StringBuilder builder = new StringBuilder(tokens[0]);
+    for (int i = 1; i < tokens.length; i++)
+      builder.append(StringUtil.capitalize(tokens[i]));
+    return builder.toString();
   }
 
 }

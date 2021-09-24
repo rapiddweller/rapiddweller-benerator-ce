@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -38,7 +38,6 @@ import com.rapiddweller.format.script.ScriptUtil;
  * Parses a string and interprets it as a {@link Distribution} spec,
  * supporting the predefined sequences, like 'random' and 'cumulated'.<br/><br/>
  * Created: 04.05.2010 06:43:01
- *
  * @author Volker Bergmann
  * @since 0.6.1
  */
@@ -46,9 +45,6 @@ public class String2DistributionConverter extends ThreadSafeConverter<String, Di
 
   private Context context;
 
-  /**
-   * Instantiates a new String 2 distribution converter.
-   */
   public String2DistributionConverter() {
     super(String.class, Distribution.class);
   }

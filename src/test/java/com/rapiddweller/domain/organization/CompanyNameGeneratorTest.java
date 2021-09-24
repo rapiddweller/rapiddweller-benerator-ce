@@ -28,8 +28,8 @@ package com.rapiddweller.domain.organization;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.common.ConfigurationError;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
@@ -43,7 +43,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class CompanyNameGeneratorTest extends GeneratorClassTest {
 
-  private static final Logger logger = LogManager.getLogger(CompanyNameGeneratorTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(CompanyNameGeneratorTest.class);
 
   /**
    * Instantiates a new Company name generator test.

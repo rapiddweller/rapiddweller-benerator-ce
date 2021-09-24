@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -28,35 +28,36 @@ package com.rapiddweller.benerator.distribution.sequence;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
+import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.GeneratorTest;
+import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.collection.ObjectCounter;
+import com.rapiddweller.model.data.Entity;
+import com.rapiddweller.platform.memstore.MemStore;
 import org.junit.Test;
+
+import java.util.Collection;
+import java.util.List;
+
+import static org.junit.Assert.fail;
 
 /**
  * Tests the {@link WeightedNumbers} sequence.<br/><br/>
  * Created: 02.06.2010 08:10:28
- *
  * @author Volker Bergmann
  * @since 0.6.3
  */
-public class WeightedNumbersTest extends GeneratorTest {
+public class WeightedNumbersTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * The Int dist.
-   */
   final WeightedNumbers<Integer> intDist = new WeightedNumbers<>("0^0,1^3,2^2,3^1");
 
-  /**
-   * Test create generator unique.
-   */
   @Test(expected = ConfigurationError.class)
   public void testCreateGenerator_unique() {
     intDist.createNumberGenerator(Integer.class, 0, 3, 1, true);
   }
 
-  /**
-   * Test create generator non unique.
-   */
   @Test
   public void testCreateGenerator_nonUnique() {
     Generator<Integer> generator = intDist.createNumberGenerator(Integer.class, 0, 3, 1, false);
@@ -64,30 +65,61 @@ public class WeightedNumbersTest extends GeneratorTest {
     expectRelativeWeights(generator, 3000, 0, 0, 1, 3, 2, 2, 3, 1);
   }
 
-  /**
-   * Test apply null.
-   */
   @Test(expected = ConfigurationError.class)
   public void testApply_null() {
     intDist.applyTo(null, true);
   }
 
-  /**
-   * Test apply unique.
-   */
   @Test(expected = ConfigurationError.class)
   public void testApply_unique() {
     intDist.applyTo(new SequenceTestGenerator<>("X", "A", "B", "C"), true);
   }
 
-  /**
-   * Test apply non unique.
-   */
   @Test
   public void testApply_nonUnique() {
     Generator<String> generator = intDist.applyTo(new SequenceTestGenerator<>("X", "A", "B", "C"), false);
     generator.init(context);
     expectRelativeWeights(generator, 3000, "X", 0, "A", 3, "B", 2, "C", 1);
+  }
+
+  @Test
+  public void test_xml_attrib() {
+    int N = 5000;
+    String xml = "<setup>\n"
+        + "  <memstore id='mem'/>\n"
+        + "  <generate type='x' count='" + N + "' consumer='mem'>\n"
+        + "    <id name='id' type='int'/>\n"
+        + "    <attribute name='y' type='int' distribution=\"new WeightedNumbers('0^70,1^20,2^10')\"/>\n"
+        + "  </generate>\n"
+        + "</setup>";
+    BeneratorContext context = parseAndExecute(xml);
+    MemStore mem = (MemStore) context.get("mem");
+    ObjectCounter<Integer> counter = new ObjectCounter<>(3);
+    for (Entity entity : mem.getEntities("x")) {
+      counter.count((Integer) entity.getComponent("y"));
+    }
+    expectRelativeWeights(counter, 0, 70, 1, 20, 2, 10);
+  }
+
+  @Test
+  public void test_xml_parts() {
+    int N = 5000;
+    String xml = "<setup>\n"
+        + "  <memstore id='mem'/>\n"
+        + "  <generate type='x' count='" + N + "' consumer='mem'>\n"
+        + "    <id name='id' type='int'/>\n"
+        + "    <part name='y' container='array' countDistribution=\"new WeightedNumbers('0^70,1^20,2^10')\">\n"
+        + "      <attribute name='z' pattern='AAA'/>\n"
+        + "    </part>\n"
+        + "  </generate>\n"
+        + "</setup>";
+    BeneratorContext context = parseAndExecute(xml);
+    MemStore mem = (MemStore) context.get("mem");
+    ObjectCounter<Integer> counter = new ObjectCounter<>(3);
+    for (Entity entity : mem.getEntities("x")) {
+      counter.count(((Entity[]) entity.getComponent("y")).length);
+    }
+    expectRelativeWeights(counter, 0, 70, 1, 20, 2, 10);
   }
 
 }

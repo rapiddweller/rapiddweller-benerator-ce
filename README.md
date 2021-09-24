@@ -117,15 +117,19 @@ please open an issue on github so we can expand our manual to make things cleare
 
 Navigate to the sources for our generated mkdocs:
 
-- [Goals and Features](doc/benerator_goals_features.md)
+- [Goals and Features](doc/introduction_to_benerator.md)
 - [Installation](doc/installation.md)
 - [The Benerator Project Wizard](doc/the_benerator_project_wizard.md)
 - [Quick tour through the descriptor file format](doc/quick_tour_through_the_descriptor_file_format.md)
 - [Data Generation Concepts](doc/data_generation_concepts.md)
+- [Data Anonymization Concepts](doc/data_anonymization_concepts.md)
 - [Regular Expression Support](doc/regular_expression_support.md)
-- [Processing and creating CSV Files](doc/processing_and_creating_csv_files.md)
+- [Data File Processing](doc/data_file_processing.md)
+- [XML File Processing](doc/xml_file_processing.md)
+- [Distribution Concepts](doc/distribution.md)
 - [Using Relational Databases](doc/using_relational_databases.md)
-- [Generating XML Files](doc/generating_xml_files.md)
+- [Message Queue Access (Enterprise Edition)](doc/message_queue_access.md)
+- [Kafka Access (Enterprise Edition)](doc/kafka_access.md)
 - [Advanced Topics](doc/advanced_topics.md)
 - [Generating Unique Data](doc/generating_unique_data.md)
 - [Scripting](doc/scripting.md)
@@ -139,7 +143,8 @@ Navigate to the sources for our generated mkdocs:
 - [Using Benerator as Load Generator](doc/using_benerator_as_load_generator.md)
 - [Troubleshooting](doc/troubleshooting.md)
 - [Monitoring Benerator](doc/monitoring_benerator.md)
-- [Benerator Performance Tuning](doc/benerator_performance_tuning.md)
+- [Benerator Performance Tuning](doc/performance_tuning.md)
+- [Migrating Benerator Projects](doc/migrating_benerator_projects.md)
 
 ## Development Quick Start (only Linux and Mac OS X)
 
@@ -149,7 +154,7 @@ quickstart by using the helper scripts.
 If you want to install Benerator permanently into your system, you have to modify your environment file or your `~/.profile`  
 and add ENV variable `BENERATOR_HOME` and `PATH=$BENERATOR_HOME/bin:$PATH`
 
-to execute the scripts you have can do ...
+to execute the scripts you can do ...
 
 `bash script/1_install_mvn_dependencies.sh`  
 `source script/2_setup_benerator.sh`  

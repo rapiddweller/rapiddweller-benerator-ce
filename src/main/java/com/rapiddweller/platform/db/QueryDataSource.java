@@ -35,8 +35,8 @@ import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.format.util.AbstractDataSource;
 import com.rapiddweller.jdbacl.QueryDataIterator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -52,7 +52,7 @@ import java.sql.ResultSet;
 public class QueryDataSource extends AbstractDataSource<ResultSet> {
 
   private static final Logger LOGGER =
-      LogManager.getLogger(QueryIterable.class);
+      LoggerFactory.getLogger(QueryIterable.class);
 
   private final Connection connection;
   private final String query;

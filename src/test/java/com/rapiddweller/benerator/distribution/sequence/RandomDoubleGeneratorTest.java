@@ -33,49 +33,33 @@ import org.junit.Test;
 /**
  * Tests the {@link RandomDoubleGenerator}.<br/><br/>
  * Created: 11.10.2006 23:03:30
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class RandomDoubleGeneratorTest extends GeneratorClassTest {
 
-  /**
-   * Instantiates a new Random double generator test.
-   */
   public RandomDoubleGeneratorTest() {
     super(RandomDoubleGenerator.class);
   }
 
-  /**
-   * Test simple.
-   */
   @Test
   public void testSimple() {
     RandomDoubleGenerator generator = new RandomDoubleGenerator(0, 1, 1);
     checkEqualDistribution(generator, 1000, 0.15, CollectionUtil.toSet(0., 1.));
   }
 
-  /**
-   * Test granularity.
-   */
   @Test
   public void testGranularity() {
     RandomDoubleGenerator generator = new RandomDoubleGenerator(-2, 2, 2);
     checkEqualDistribution(generator, 5000, 0.15, CollectionUtil.toSet(-2., 0., 2.));
   }
 
-  /**
-   * Test granularity offset.
-   */
   @Test
   public void testGranularityOffset() {
     RandomDoubleGenerator generator = new RandomDoubleGenerator(-1, 3, 2);
     checkEqualDistribution(generator, 5000, 0.15, CollectionUtil.toSet(-1., 1., 3.));
   }
 
-  /**
-   * Test fractional granularity.
-   */
   @Test
   public void testFractionalGranularity() {
     RandomDoubleGenerator generator = new RandomDoubleGenerator(-0.5, 0.5, 0.5);

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,13 +29,14 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.composite.GeneratorComponent;
+import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.CurrentProductGeneration;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.CachedExpression;
 import com.rapiddweller.benerator.engine.expression.xml.XMLConsumerExpression;
+import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
 import com.rapiddweller.benerator.engine.statement.ConversionStatement;
 import com.rapiddweller.benerator.engine.statement.GenerateAndConsumeTask;
 import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
@@ -43,7 +44,7 @@ import com.rapiddweller.benerator.engine.statement.LazyStatement;
 import com.rapiddweller.benerator.engine.statement.TimedGeneratorStatement;
 import com.rapiddweller.benerator.engine.statement.ValidationStatement;
 import com.rapiddweller.benerator.factory.DescriptorUtil;
-import com.rapiddweller.benerator.factory.GeneratorComponentFactory;
+import com.rapiddweller.benerator.factory.GenerationStepFactory;
 import com.rapiddweller.benerator.factory.MetaGeneratorFactory;
 import com.rapiddweller.benerator.parser.ModelParser;
 import com.rapiddweller.common.CollectionUtil;
@@ -66,8 +67,8 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.task.PageListener;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.w3c.dom.Element;
 
 import java.util.ArrayList;
@@ -105,6 +106,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_STATS;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SUB_SELECTOR;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TEMPLATE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_THREADS;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_UNIQUE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_VALIDATOR;
@@ -120,16 +122,16 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStr
 /**
  * Parses a &lt;generate&gt; or &lt;update&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 01:05:18
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Logger logger = LogManager.getLogger(GenerateOrIterateParser.class);
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
 
   private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
       ATT_COUNT, ATT_MIN_COUNT, ATT_MAX_COUNT, ATT_COUNT_DISTRIBUTION,
+      ATT_THREADS,
       ATT_PAGESIZE, ATT_STATS, ATT_ON_ERROR,
       ATT_TEMPLATE, ATT_CONSUMER,
       ATT_NAME, ATT_TYPE, ATT_CONTAINER, ATT_GENERATOR, ATT_VALIDATOR,
@@ -143,9 +145,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 
   // DescriptorParser interface --------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Generate or iterate parser.
-   */
   public GenerateOrIterateParser() {
     super("", null, OPTIONAL_ATTRIBUTES);
   }
@@ -247,17 +246,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return statement;
   }
 
-  /**
-   * Parse generate generate or iterate statement.
-   *
-   * @param element        the element
-   * @param parentPath     the parent path
-   * @param parsingContext the parsing context
-   * @param context        the context
-   * @param infoLog        the info log
-   * @param nested         the nested
-   * @return the generate or iterate statement
-   */
   @SuppressWarnings("unchecked")
   public GenerateOrIterateStatement parseGenerate(Element element, Statement[] parentPath,
                                                   BeneratorParseContext parsingContext, BeneratorContext context, boolean infoLog, boolean nested) {
@@ -280,21 +268,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return statement;
   }
 
-  /**
-   * Create statement generate or iterate statement.
-   *
-   * @param productName    the product name
-   * @param countGenerator the count generator
-   * @param minCount       the min count
-   * @param pageSize       the page size
-   * @param pager          the pager
-   * @param infoLog        the info log
-   * @param nested         the nested
-   * @param element        the element
-   * @param errorHandler   the error handler
-   * @param context        the context
-   * @return the generate or iterate statement
-   */
   protected GenerateOrIterateStatement createStatement(String productName, Generator<Long> countGenerator,
                                                        Expression<Long> minCount, Expression<Long> pageSize,
                                                        Expression<PageListener> pager, boolean infoLog,
@@ -307,56 +280,82 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
   @SuppressWarnings({"unchecked", "rawtypes"})
   private GenerateAndConsumeTask parseTask(Element element, Statement[] parentPath, GenerateOrIterateStatement statement,
                                            BeneratorParseContext parseContext, InstanceDescriptor descriptor, boolean infoLog) {
-    descriptor.setNullable(false);
+    // log
     if (infoLog) {
       logger.debug("{}", descriptor);
     }
 
+    // check preconditions
+    boolean iterationMode = (EL_ITERATE.equals(element.getNodeName()));
+    if (iterationMode) {
+      // make sure the <iterate> has a 'source'
+      if (StringUtil.isEmpty(element.getAttribute(ATT_SOURCE))) {
+        syntaxError("'source' missing in <iterate>", element);
+      }
+    }
+
+    checkThreads(element, parentPath);
+
+    // get core date
+    descriptor.setNullable(false);
     String taskName = getTaskName(descriptor);
     BeneratorContext context = statement.getContext();
     BeneratorContext childContext = statement.getChildContext();
     String productName = getNameOrType(element);
 
-    // calculate statements
-    List<Statement> statements = new ArrayList<>();
-
     // create base generator
-    Generator<?> base = MetaGeneratorFactory.createRootGenerator(descriptor, Uniqueness.NONE, context);
+    GenerationInterceptor interceptor = BeneratorFactory.getInstance().getGenerationInterceptor();
+    List<Statement> statements = new ArrayList<>();
+    interceptor.entityGenerationStarting(taskName, iterationMode, statements);
+    Generator<?> base = MetaGeneratorFactory.createBaseGenerator(descriptor, Uniqueness.NONE, context);
     statements.add(new CurrentProductGeneration(productName, base));
+    interceptor.componentGenerationStarting(base, iterationMode, statements);
 
     // handle sub elements
+    boolean completionReported = false; // checks if the interceptor.generationComplete() has been called
     ModelParser parser = new ModelParser(childContext);
     TypeDescriptor type = descriptor.getTypeDescriptor();
     int arrayIndex = 0;
     Element[] childElements = XMLUtil.getChildElements(element);
     Set<String> handledMembers = new HashSet<>();
     for (Element child : childElements) {
+
+      // first parse the component descriptor...
       String childName = XMLUtil.localName(child);
-      // handle configured member/variable elements
       InstanceDescriptor componentDescriptor = null;
       if (EL_VARIABLE.equals(childName)) {
         componentDescriptor = parser.parseVariable(child, (VariableHolder) type);
       } else if (COMPONENT_TYPES.contains(childName)) {
-        componentDescriptor = parser.parseComponent(child, (ComplexTypeDescriptor) type);
+        componentDescriptor = parser.parseComponentGeneration(child, (ComplexTypeDescriptor) type);
         handledMembers.add(componentDescriptor.getName().toLowerCase());
       } else if (EL_VALUE.equals(childName)) {
         componentDescriptor = parser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, arrayIndex++);
       }
-      // handle non-member/variable child elements
+
+      // ...handle non-member/variable child elements
       if (componentDescriptor != null) {
-        GeneratorComponent<?> componentGenerator = GeneratorComponentFactory.createGeneratorComponent(
-            componentDescriptor, Uniqueness.NONE, childContext);
+        GenerationStep<?> componentGenerator = GenerationStepFactory.createGenerationStep(
+            componentDescriptor, Uniqueness.NONE, iterationMode, childContext);
         if (componentGenerator != null) {
           statements.add(componentGenerator);
         }
       } else if (!EL_CONSUMER.equals(childName)) {
+        // parse and set up consumer definition
+        interceptor.generationComplete(base, iterationMode, statements);
+        completionReported = true;
         Statement[] subPath = parseContext.createSubPath(parentPath, statement);
         Statement subStatement = parseContext.parseChildElement(child, subPath);
         statements.add(subStatement);
       }
     }
-    // if element is a <generate> then add missing members defined in parent descriptors
-    if (EL_GENERATE.equals(element.getNodeName())) {
+    if (!completionReported) {
+      // if there is no consumer, completion has not yet been reported
+      interceptor.generationComplete(base, iterationMode, statements);
+      completionReported = true;
+    }
+
+    if (!iterationMode) {
+      // on <generate>, add missing members defined in parent descriptors
       if (!StringUtil.isEmpty(element.getAttribute(ATT_SOURCE))) {
         syntaxError("'source' not allowed in <generate>", element);
       }
@@ -366,7 +365,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
         int insertionIndex = statements.size() - 1;
         for (; insertionIndex >= 0; insertionIndex--) {
           Statement tmp = statements.get(insertionIndex);
-          if (tmp instanceof GeneratorComponent || tmp instanceof CurrentProductGeneration) {
+          if (tmp instanceof GenerationStep || tmp instanceof CurrentProductGeneration) {
             break;
           }
         }
@@ -378,14 +377,10 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
           if (handledMembers.contains(componentName.toLowerCase())) {
             continue;
           }
-          GeneratorComponent<?> componentGenerator = GeneratorComponentFactory.createGeneratorComponent(
-              component, Uniqueness.NONE, childContext);
+          GenerationStep<?> componentGenerator = GenerationStepFactory.createGenerationStep(
+              component, Uniqueness.NONE, iterationMode, childContext);
           statements.add(insertionIndex++, componentGenerator);
         }
-      }
-    } else { // make sure the <iterate> does not miss a 'source'
-      if (StringUtil.isEmpty(element.getAttribute(ATT_SOURCE))) {
-        syntaxError("'source' mising in <iterate>", element);
       }
     }
 
@@ -413,12 +408,23 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return task;
   }
 
-  /**
-   * Gets task name.
-   *
-   * @param descriptor the descriptor
-   * @return the task name
-   */
+  protected void checkThreads(Element element, Statement[] parentPath) {
+    String threads = DescriptorParserUtil.getAttribute(ATT_THREADS, element);
+    if (threads != null) {
+      boolean warn = false;
+      try {
+        int n = Integer.parseInt(threads);
+        warn = (n != 1);
+      } catch (NumberFormatException e) {
+        warn = true;
+      }
+      if (warn) {
+        logger.warn("Benerator CE does not support multithreaded generation or iteration: " +
+            "Ignoring threads='" + threads + "'.");
+      }
+    }
+  }
+
   protected String getTaskName(InstanceDescriptor descriptor) {
     String taskName = descriptor.getName();
     if (taskName == null) {
@@ -427,13 +433,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return taskName;
   }
 
-  /**
-   * Create task generate and consume task.
-   *
-   * @param taskName    the task name
-   * @param productName the product name
-   * @return the generate and consume task
-   */
   protected GenerateAndConsumeTask createTask(String taskName, String productName) {
     return new GenerateAndConsumeTask(taskName, productName);
   }

@@ -55,64 +55,21 @@ public class SequenceManager {
 
   private static final Map<String, Sequence> instances = new HashMap<>();
 
-  /**
-   * The constant RANDOM_SEQUENCE.
-   */
   public static final Sequence RANDOM_SEQUENCE = register("random", new RandomSequence());
-  /**
-   * The constant SHUFFLE_SEQUENCE.
-   */
   public static final Sequence SHUFFLE_SEQUENCE = register("shuffle", new ShuffleSequence());
-  /**
-   * The constant CUMULATED_SEQUENCE.
-   */
   public static final Sequence CUMULATED_SEQUENCE = register("cumulated", new CumulatedSequence());
-  /**
-   * The constant RANDOM_WALK_SEQUENCE.
-   */
   public static final Sequence RANDOM_WALK_SEQUENCE = register("randomWalk", new RandomWalkSequence());
-  /**
-   * The constant STEP_SEQUENCE.
-   */
   public static final Sequence STEP_SEQUENCE = register("step", new StepSequence());
-  /**
-   * The constant INCREMENT_SEQUENCE.
-   */
   public static final Sequence INCREMENT_SEQUENCE = register("increment", new StepSequence(BigDecimal.ONE));
-  /**
-   * The constant WEDGE_SEQUENCE.
-   */
   public static final Sequence WEDGE_SEQUENCE = register("wedge", new WedgeSequence());
-  /**
-   * The constant BIT_REVERSE_SEQUENCE.
-   */
   public static final Sequence BIT_REVERSE_SEQUENCE = register("bitreverse", new BitReverseSequence());
-  /**
-   * The constant EXPAND_SEQUENCE.
-   */
   public static final Sequence EXPAND_SEQUENCE = register("expand", new ExpandSequence());
-  /**
-   * The constant FIBONACCI_SEQUENCE.
-   */
   public static final Sequence FIBONACCI_SEQUENCE = register("fibonacci", new FibonacciSequence());
-  /**
-   * The constant PADOVAN_SEQUENCE.
-   */
   public static final Sequence PADOVAN_SEQUENCE = register("padovan", new PadovanSequence());
-  /**
-   * The constant SINGLE_SEQUENCE.
-   */
   public static final Sequence SINGLE_SEQUENCE = register("head", new HeadSequence());
 
   // Construction & lookup -------------------------------------------------------------------------------------------
 
-  /**
-   * Gets registered sequence.
-   *
-   * @param name     the name
-   * @param required the required
-   * @return the registered sequence
-   */
   public static synchronized Sequence getRegisteredSequence(String name, boolean required) {
     Sequence sequence = instances.get(name);
     if (sequence == null && required) {
@@ -121,23 +78,11 @@ public class SequenceManager {
     return sequence;
   }
 
-  /**
-   * Register sequence.
-   *
-   * @param name     the name
-   * @param sequence the sequence
-   * @return the sequence
-   */
   public static synchronized Sequence register(String name, Sequence sequence) {
     instances.put(name, sequence);
     return sequence;
   }
 
-  /**
-   * Registered sequences collection.
-   *
-   * @return the collection
-   */
   public static synchronized Collection<Sequence> registeredSequences() {
     return instances.values();
   }

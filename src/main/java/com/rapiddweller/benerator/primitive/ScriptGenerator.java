@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.util.ThreadSafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Creates {@link Object}s based on a Script.<br/><br/>
@@ -42,7 +42,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class ScriptGenerator extends ThreadSafeGenerator<Object> {
 
-  private static final Logger LOGGER = LogManager.getLogger(ScriptGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScriptGenerator.class);
 
   private final Script script;
 

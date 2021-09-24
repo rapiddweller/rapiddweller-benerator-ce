@@ -35,8 +35,8 @@ import com.rapiddweller.platform.db.DBSystem;
 import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Executes a &lt;database/&gt; from an XML descriptor.<br/>
@@ -48,7 +48,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class DefineDatabaseStatement implements Statement {
 
-  private static final Logger logger = LogManager.getLogger(DefineDatabaseStatement.class);
+  private static final Logger logger = LoggerFactory.getLogger(DefineDatabaseStatement.class);
 
   private final Expression<String> id;
   private final Expression<String> environment;

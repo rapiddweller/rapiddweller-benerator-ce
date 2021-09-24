@@ -28,13 +28,12 @@ package com.rapiddweller.benerator.script;
 
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Context;
-import com.rapiddweller.common.converter.GraalValueConverter;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.map.Entity2MapConverter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.proxy.ProxyObject;
@@ -44,30 +43,21 @@ import java.io.Writer;
 import java.util.Map;
 
 /**
- * Provides {@link Script} functionality based on GraalVM: Scripting for the Java platform.
- * <p>
+ * Provides {@link Script} functionality based on GraalVM: Scripting for the Java platform.<br/><br/>
  * Created at 30.12.2020
- *
  * @author Alexander Kell
  * @since 1.1.0
  */
 public class GraalScript implements Script {
 
-  private final String text;
-  private final String language;
   private static final org.graalvm.polyglot.Context polyglotCtx =
       org.graalvm.polyglot.Context
           .newBuilder("js", "python")
           .allowAllAccess(true).build();
-  private static final Logger LOGGER = LogManager.getLogger(GraalScript.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GraalScript.class);
+  private final String text;
+  private final String language;
 
-  /**
-   * Instantiates a new Graal script.
-   *
-   * @param text         the text
-   * @param scriptEngine the script engine
-   * @param languageId   the language id
-   */
   public GraalScript(String text, Engine scriptEngine, String languageId) {
     Assert.notEmpty(text, "text");
     Assert.notNull(scriptEngine, "engine");
@@ -92,7 +82,7 @@ public class GraalScript implements Script {
         try {
           valueType = entry.getValue() != null ? entry.getValue().getClass() : null;
         } catch (NullPointerException e) {
-          LOGGER.fatal("Key {} produced NullPointerException, this should not happen!", entry.getKey());
+          LOGGER.error("Key {} produced NullPointerException, this should not happen!", entry.getKey());
           continue;
         }
         if (valueType == null) {
@@ -103,7 +93,7 @@ public class GraalScript implements Script {
           LOGGER.debug("Entity found : {}", entry.getKey());
           Map<String, Object> map = new Entity2MapConverter().convert((Entity) entry.getValue());
           // to access items of map in polyglotCtx it is nessesary to create an ProxyObject
-          // TODO: might should create an Entity2ProxyObjectConverter in 1.2.0
+          // TODO: might should create an Entity2ProxyObjectConverter in 2.1.0
           ProxyObject proxy = ProxyObject.fromMap(map);
           polyglotCtx.getBindings(this.language).putMember(entry.getKey(), proxy);
         } else {
@@ -112,7 +102,7 @@ public class GraalScript implements Script {
         }
       }
     } catch (NullPointerException e) {
-      LOGGER.fatal("Context {} was NULL, this should not happen!", context);
+      LOGGER.error("Context {} was NULL, this should not happen!", context);
     }
   }
 

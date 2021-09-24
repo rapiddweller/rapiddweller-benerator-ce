@@ -24,7 +24,7 @@ Benerator contains the following common predefined and platform-independent gene
 
 ### Database-related Generators
 
-See 'Using databases'
+See **'[Using Relational Databases](using_relational_databases.md)'**.
 
 ### simple type generators
 
@@ -97,7 +97,7 @@ See 'Using databases'
 
 ### Seed Based Generators
 
-* **SeedWordGenerator**: Generates new word based on rules derived from a dictionary.
+* **SeedWordGenerator**: Generates new words based on rules derived from a dictionary.
 
 * **SeedSentenceGenerator**: Generates sentences based on rules derived from a text file.
 
@@ -107,7 +107,7 @@ A Distribution describes stochastic properties for distributing the data that Be
 implement and introduce custom implementations. The most important types of distribution are _Sequence_, _WeightFunction_ and _
 CumulativeDistributionFunction_.
 
-A Distribution implements a common concept for generating numbers or taking values from a data source and providing them in a rearragned order or
+A Distribution implements a common concept for generating numbers or taking values from a data source and providing them in a rearranged order or
 distribution with similar semantics as the number generation feature.
 
 As an example, a 'Skip2' sequence might generate numbers with an increment of 2: 1, 3, 5, 7,… When it is used to redistribute given data item1, item2,
@@ -132,9 +132,9 @@ If this makes you run into an OutOfMemoryError, check the '
 
 ### Sequences
 
-Sequences reflect the idea of a mathematical sequence. They primary focus in number generation, but they can be applied for data redestribution as
-well. Most sequences have a default instance which can be used by their literal, e.g. distribution="random" uses the 'random' literal for the
-Distribution defined in the class RandomSequence.
+Sequences reflect the idea of a mathematical sequence. They primarily focus in number generation, but they can be applied for data redistribution as
+well. Most sequences have a default instance which can be used by their literal, e.g. `distribution="random"` uses the 'random' literal for the
+distribution defined in the class RandomSequence.
 
 | Class | RandomSequence |
 | --- | --- |
@@ -172,7 +172,7 @@ maxStep** is added on each subsequent invocation |
 
 | Class | WedgeSequence |
 | --- | --- |
-| Description | Starting with first the lowest, then the highest available number, this alternatively provides increasing small numbers and decreasing large numbers until they converge in the middle and the Sequence becomes unavailable. So generation is unique. For a number range 1..7, the generated numbers would be: 1, 7, 2, 6, 3, 5, 4. |
+| Description | Starting with first the lowest, then the highest available number, this alternatively provides increasing small numbers and decreasing large numbers until they converge in the middle and the Sequence becomes unavailable. So this generation is unique. For a number range 1..7, the generated numbers would be: 1, 7, 2, 6, 3, 5, 4. |
 | Default Instance | wedge |
 
 | Class | BitReverseSequence |
@@ -206,7 +206,7 @@ size** property. |
 
 | Class | WeightedNumbers |
 | --- | --- |
-| Description | Creates numbers based on a weighted-number literal , e.g. '1^70, 3^30' for generating 70% '1' values and 30% '3' values. This is a convenient and simple approach for controling parent-child cardinalities in nested data generation. |
+| Description | Creates numbers based on a weighted-number literal , e.g. '1^70, 3^30' for generating 70% '1' values and 30% '3' values. This is a convenient and simple approach for controlling parent-child cardinalities in nested data generation. |
 | Default Instance | – |
 | Property | Property Description | Default Value |
 | spec | A weighted-number literal. It lists weighted values in a comma-separated list. Each weighted value is specified by the numeric value followed by a circumflex (^) and the weight value, for example '1^70,3^30' | – |
@@ -214,12 +214,74 @@ size** property. |
 | Class | FibonacciSequence |
 | --- | --- |
 | Description | Generates numbers based on the Fibonacci Sequence |
-| Default Instance | fibonacci: |
+| Default Instance | fibonacci |
 
 | Class | PadovanSequence |
 | --- | --- |
 | Description | Generates numbers based on the Padovan Sequence |
 | Default Instance | padovan |
+
+
+### Weight Functions
+
+Weight functions are another special case of Distributions. 
+They are based on a function which is supposed to allow continuous value generation, 
+but since Benerator needs to perform a numerical integration for deriving random values, 
+a granularity must be applied. This way, the generated value set is quantized. 
+Another drawback of the approach is that fine-grained generation is memory-consuming and slow.
+
+Thus, it is recommended to avoid weight functions if possible and choose a similar 
+Sequence or CumulativeDistributionFunction instead.
+
+
+#### GaussianFunction
+
+Implements the well-known Gaussian Function.
+
+Full class name: `com.rapiddweller.benerator.distribution.function.GaussianFunction`
+
+Parameters: `average [, deviation]`
+
+Example:
+
+```xml
+<import class="com.rapiddweller.benerator.distribution.function.*"/>
+    ...
+<attribute name="price" type="big_decimal" min="0.1" max="99.90" granularity="0.1"
+           distribution="new GaussianFunction(50,20)"/>
+```
+
+#### ExponentialFunction
+
+The Exponential Function.
+
+Full class name: `com.rapiddweller.benerator.distribution.function.ExponentialFunction`
+
+Parameters: `[scale,] frequency`
+
+Example:
+
+```xml
+<import class="com.rapiddweller.benerator.distribution.function.*"/>
+    ...
+<attribute name="category" type="char" values="A,B,C" distribution="new ExponentialFunction(0.5)"/>
+```
+
+#### DiscreteFunction
+
+Discrete Function that specifies an explicit weight for each possible value
+
+Full class name: `com.rapiddweller.benerator.distribution.function.DiscreteFunction`
+
+Parameters: `weight1 [, weight2 [, weight3 ...]]`
+
+Example:
+
+```xml
+<import class="com.rapiddweller.benerator.distribution.function.*"/>
+    ...
+<attribute name="rating" type="int" min="1", max="3" distribution="new DiscreteFunction(1, 2, 1)"/>
+```
 
 ### CumulativeDistributionFunction
 
@@ -231,64 +293,6 @@ WeightFunction.
 Inverse of the integral of the probability density f(x) = a e^{-ax} (x >` 0), which resolves to F^{-1}(x) = - log(1 - x)
 / a.
 
-### Weight Functions
-
-Weight funtions are another special case of Distributions. They are based on a function which is supposed to allow contibuous value generation, but
-since Benerator needs to perform a numerical integration for deriving random values, a granularity must be applied. This way, the generated value set
-is quantized. Another drawback of the approach is that fine-grained generation is memory-consuming and slow.
-
-Thus, it is recommended to avoid weight functions if possible and choose a similar Sequence or CumulativeDistributionFunction instead.
-
-### GaussianFunction
-
-This implements the well-known Gaussian Function.
-
-Full class name: com.rapiddweller.benerator.distribution.function.GaussianFunction
-
-Parameters: average [, deviation]
-
-Example:
-
-```xml
-<import class="com.rapiddweller.benerator.distribution.function.*"/>
-...
-<attribute name="price" type="big_decimal" min="0.1" max="99.90" granularity="0.1"
-           distribution="new GaussianFunction(50,20)"/>
-```
-
-### ExponentialFunction
-
-The Exponential Function.
-
-Full class name: com.rapiddweller.benerator.distribution.function.ExponentialFunction
-
-Parameters: [scale,] frequency
-
-Example:
-
-```xml
-<import class="com.rapiddweller.benerator.distribution.function.*"/>
-...
-<attribute name="category" type="char" values="A,B,C" distribution="new ExponentialFunction(0.5)"/>
-```
-
-### DiscreteFunction
-
-Discrete Function that specifies an explicit weight for each possible value
-
-Full class name: com.rapiddweller.benerator.distribution.function.DiscreteFunction
-
-Parameters: weight1 [, weight2 [, weight3 ...]]
-
-Example:
-
-```xml
-<import class="com.rapiddweller.benerator.distribution.function.*"/>
-
-...
-
-<attribute name="rating" type="int" min="1", max="3" distribution="new DiscreteFunction(1, 2, 1)"/>
-```
 
 ## Converters
 
@@ -309,6 +313,12 @@ The following converter classes are located in the package **com.rapiddweller.co
 * **ToUpperCaseConverter**: Converts strings to uppercase
 
 * **LiteralParser**: Parses strings as numbers, strings, dates and times
+
+* **MD5Hash**, **SHA1Hash**, **SHA256Hash**: Convert any data to a hexadecimal hash code
+
+* **MD5HashBase64**, **SHA1HashBase64**, **SHA256HashBase64**: Convert any data to a hash code in Base64 format
+
+* **JavaHash**: Convert any data to a hexadecimal hash code. This implementation is faster than the hash converters above
 
 * **MessageConverter**: Converts an object, wrapping it with a message string, using a java.text.MessageFormat
 
@@ -365,13 +375,14 @@ NoiseInducer example:
 
 ```xml
 <bean id="inducer" class="com.rapiddweller.benerator.primitive.number.NoiseInducer">
-  <property name="minNoise" value="-0.2"/>
-  <property name="maxNoise" value="0.2"/>
-  <property name="noiseGranularity" value="0.01"/>
-  <property name="noiseDistribution" value="cumulated"/>
-  <property name="relative" value="true"/>
-</bean><generate count="5" consumer="ConsoleExporter">
-<attribute name="x" type="int" constant="100" converter="inducer"/>
+    <property name="minNoise" value="-0.2"/>
+    <property name="maxNoise" value="0.2"/>
+    <property name="noiseGranularity" value="0.01"/>
+    <property name="noiseDistribution" value="cumulated"/>
+    <property name="relative" value="true"/>
+</bean>
+<generate count="5" consumer="ConsoleExporter">
+    <attribute name="x" type="int" constant="100" converter="inducer"/>
 </generate>
 ```
 
@@ -379,13 +390,9 @@ produces the result:
 
 ```bash
 entity[x=99]
-
 entity[x=105]
-
 entity[x=92]
-
 entity[x=104]
-
 entity[x=99]
 ```
 
@@ -401,7 +408,7 @@ Beware that the java.text.Format classes are not thread-safe!
 
 ### Domain Validators
 
-For the validators from the domains see '[Domains](domains.md)'
+For the validators from the domains see **'[Domains](domains.md)'**.
 
 ### Common validators
 
@@ -460,7 +467,7 @@ A Consumer consumes generated data and usually is used for exporting or persisti
 
 ### JavaInvoker
 
-| Class Name | DbUnitEntityExporter |
+| Class Name | JavaInvoker |
 | --- | --- |
 | Import | `<import platforms="java"/>` |
 | Class Description | Maps entity components to method parameters and invokes a method on a Java object with these parameters. |
@@ -567,11 +574,9 @@ third, a points column, padded to 5 columns using zeros, having two fraction dig
 
 and would be rendered like this:
 
-```bash
+```
 Alice Hamilton 2310.05
-
 Bob Durand 4601.23
-
 Helmut Schmidt 10226.14
 ```
 
@@ -583,7 +588,6 @@ Helmut Schmidt 10226.14
 | Class Description | Exports entities to Excel XLS files. For using this exporter you need to add the Apache POI library to the Benerator's lib directory. |
 | Property | Property Description | Default Value |
 | uri | The URI of the file to create | "export.xls" |
-| columns | A comma-separated list of column names |  |
 | nullString | Text to represent _null_ values | "" |
 
 ### CSVEntityExporter

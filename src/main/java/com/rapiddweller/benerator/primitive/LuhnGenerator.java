@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.primitive;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.distribution.Distribution;
@@ -36,59 +37,25 @@ import com.rapiddweller.common.StringUtil;
 /**
  * Generates numbers that pass a Luhn test.<br/><br/>
  * Created: 18.10.2009 10:08:09
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class LuhnGenerator extends NonNullGeneratorProxy<String> {
 
-  /**
-   * The Prefix.
-   */
   protected String prefix;
-  /**
-   * The Min length.
-   */
   protected int minLength;
-  /**
-   * The Max length.
-   */
   protected int maxLength;
-  /**
-   * The Length granularity.
-   */
   protected final int lengthGranularity;
-  /**
-   * The Length distribution.
-   */
   protected final Distribution lengthDistribution;
 
-  /**
-   * Instantiates a new Luhn generator.
-   */
   public LuhnGenerator() {
     this("", 16);
   }
 
-  /**
-   * Instantiates a new Luhn generator.
-   *
-   * @param prefix the prefix
-   * @param length the length
-   */
   public LuhnGenerator(String prefix, int length) {
     this(prefix, length, length, 1, null);
   }
 
-  /**
-   * Instantiates a new Luhn generator.
-   *
-   * @param prefix             the prefix
-   * @param minLength          the min length
-   * @param maxLength          the max length
-   * @param lengthGranularity  the length granularity
-   * @param lengthDistribution the length distribution
-   */
   public LuhnGenerator(String prefix, int minLength, int maxLength, int lengthGranularity, Distribution lengthDistribution) {
     super(String.class);
     this.prefix = prefix;
@@ -98,36 +65,32 @@ public class LuhnGenerator extends NonNullGeneratorProxy<String> {
     this.lengthDistribution = lengthDistribution;
   }
 
-  /**
-   * Sets prefix.
-   *
-   * @param prefix the prefix
-   */
   public void setPrefix(String prefix) {
     this.prefix = prefix;
   }
 
-  /**
-   * Sets min length.
-   *
-   * @param minLength the min length
-   */
   public void setMinLength(int minLength) {
     this.minLength = minLength;
   }
 
-  /**
-   * Sets max length.
-   *
-   * @param maxLength the max length
-   */
   public void setMaxLength(int maxLength) {
     this.maxLength = maxLength;
   }
 
   @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return true;
+  }
+
+  @Override
   public synchronized void init(GeneratorContext context) {
-    super.setSource(new RandomVarLengthStringGenerator("\\d", minLength, maxLength, lengthGranularity, lengthDistribution));
+    super.setSource(BeneratorFactory.getInstance()
+        .createVarLengthStringGenerator("[0-9]", minLength, maxLength, lengthGranularity, lengthDistribution));
     super.init(context);
   }
 

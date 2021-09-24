@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.common.xml.XPathUtil;
@@ -45,7 +45,7 @@ import static org.junit.Assert.assertTrue;
  * @author Volker Bergmann
  * @since 0.9.0
  */
-public class XmlIntegrationTest extends BeneratorIntegrationTest {
+public class XmlIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test anonymization.

@@ -35,8 +35,8 @@ import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
@@ -57,7 +57,7 @@ import static org.junit.Assert.fail;
  */
 public class AddressGeneratorTest extends GeneratorClassTest {
 
-  private static final Logger LOGGER = LogManager.getLogger(AddressGeneratorTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AddressGeneratorTest.class);
 
   /**
    * Instantiates a new Address generator test.

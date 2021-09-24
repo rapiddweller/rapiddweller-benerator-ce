@@ -38,6 +38,8 @@ import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 
 import java.lang.reflect.Array;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,7 +47,6 @@ import java.util.Map;
  * This is used for e.g. importing Entities from file with String component values and
  * converting them to the correct target type.<br/><br/>
  * Created at 06.05.2008 11:34:46
- *
  * @author Volker Bergmann
  * @since 0.5.3
  */
@@ -63,14 +64,6 @@ public class ComponentTypeConverter extends AbstractConverter<Entity, Entity> {
     this.type = type;
   }
 
-  /**
-   * Convert entity.
-   *
-   * @param entity the entity
-   * @param type   the type
-   * @return the entity
-   * @throws ConversionException the conversion exception
-   */
   public static Entity convert(Entity entity, ComplexTypeDescriptor type) throws ConversionException {
     if (entity == null) {
       return null;
@@ -92,6 +85,13 @@ public class ComponentTypeConverter extends AbstractConverter<Entity, Entity> {
           ArrayBuilder<Entity> builder = new ArrayBuilder<>(Entity.class, n);
           for (int i = 0; i < n; i++) {
             Entity item = (Entity) Array.get(componentValue, i);
+            builder.add(convert(item, (ComplexTypeDescriptor) componentType));
+          }
+          components.put(componentName, builder.toArray());
+        } else if (componentValue instanceof Collection) {
+          Collection<Entity> collection = (Collection<Entity>) componentValue;
+          ArrayBuilder<Entity> builder = new ArrayBuilder<>(Entity.class, collection.size());
+          for (Entity item : collection) {
             builder.add(convert(item, (ComplexTypeDescriptor) componentType));
           }
           components.put(componentName, builder.toArray());

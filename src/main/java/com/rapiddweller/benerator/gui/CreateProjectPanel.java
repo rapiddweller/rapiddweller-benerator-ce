@@ -32,7 +32,6 @@ import com.rapiddweller.benerator.archetype.ArchetypeManager;
 import com.rapiddweller.benerator.archetype.MavenFolderLayout;
 import com.rapiddweller.benerator.main.DBSnapshotTool;
 import com.rapiddweller.common.ArrayUtil;
-import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.common.ui.FileOperation;
@@ -48,9 +47,8 @@ import com.rapiddweller.common.ui.swing.delegate.PropertyFileField;
 import com.rapiddweller.common.ui.swing.delegate.PropertyPasswordField;
 import com.rapiddweller.common.ui.swing.delegate.PropertyTextField;
 import com.rapiddweller.jdbacl.JDBCDriverInfo;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -68,15 +66,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -101,13 +98,13 @@ public class CreateProjectPanel extends JPanel {
   /**
    * The Logger.
    */
-  static final Logger logger = LogManager.getLogger(CreateProjectPanel.class);
+  static final Logger logger = LoggerFactory.getLogger(CreateProjectPanel.class);
 
   private static final String SETUP_FILE = "setup.ser";
 
   private static final long serialVersionUID = 167461075459757736L;
 
-  private static final int WIDE = 30;
+  private static final int WIDE = 45;
 
   /**
    * The Setup.
@@ -206,17 +203,21 @@ public class CreateProjectPanel extends JPanel {
 
   private Component createPropertiesPane() { // TODO v0.8 simplify using AlignedPropertyPane
     AlignedPane pane = AlignedPane.createVerticalPane(4);
+    ImageIcon icon = createImageIcon("appIcon.gif", "RD");
+    JLabel beneratorIcon = new JLabel(icon, JLabel.CENTER);
+    pane.add(beneratorIcon);
+    JLabel empty = new JLabel("");
+    TextArea marketing = new TextArea(i18n.getString("marketing"));
+    marketing.setEditable(false);
+    pane.addElement(empty);
+    pane.addElement(marketing, 3);
+    pane.addSeparator();
+
 
     // project name
     createTextField("projectName", pane);
     folderField = new PropertyFileField(setup, "projectFolder", WIDE,
         FileTypeSupport.directoriesOnly, FileOperation.SAVE);
-    folderField.addActionListener(e -> {
-      File folder = CreateProjectPanel.this.folderField.getFile();
-      if (!setup.isOverwrite() && folder.exists() && !FileUtil.isEmptyFolder(folder)) {
-        showErrors(i18n.getString("error.projectFolderNotEmpty"));
-      }
-    });
 
     // archetype
     archetypeField = createComboBox("archetype", null, pane, (Object[]) ArchetypeManager.getInstance().getArchetypes());
@@ -259,8 +260,8 @@ public class CreateProjectPanel extends JPanel {
     dbPasswordField = createPasswordField(pane);
     pane.endRow();
 
-	dbCatalogField = createTextField("dbCatalog", pane);
-	pane.endRow();
+    dbCatalogField = createTextField("dbCatalog", pane);
+    pane.endRow();
 
     pane.addElement(new JLabel(""));
     testButton = createButton("testConnection", new TestConnectionListener());
@@ -288,6 +289,20 @@ public class CreateProjectPanel extends JPanel {
 
     archetypeListener.actionPerformed(null);
     return pane;
+  }
+
+  /**
+   * Returns an ImageIcon, or null if the path was invalid.
+   */
+  protected ImageIcon createImageIcon(String path,
+                                      String description) {
+    java.net.URL imgURL = getClass().getResource(path);
+    if (imgURL != null) {
+      return new ImageIcon(imgURL, description);
+    } else {
+      System.err.println("Couldn't find file: " + path);
+      return null;
+    }
   }
 
   private void createCheckBox(String propertyName, Container pane) {
@@ -322,6 +337,7 @@ public class CreateProjectPanel extends JPanel {
     pane.addElement(label, textfield);
     return textfield;
   }
+
 
   private JTextField createPasswordField(AlignedPane pane) {
     PropertyPasswordField pwfield = new PropertyPasswordField(setup, "dbPassword", WIDE / 2);
@@ -379,7 +395,7 @@ public class CreateProjectPanel extends JPanel {
       dbDriverField.setEnabled(useDB);
       dbUserField.setEnabled(useDB);
       dbSchemaField.setEnabled(useDB);
-	  dbCatalogField.setEnabled(useDB);
+      dbCatalogField.setEnabled(useDB);
       dbPasswordField.setEnabled(useDB);
       testButton.setEnabled(useDB);
       dbSnapshotField.setEnabled(useDB);

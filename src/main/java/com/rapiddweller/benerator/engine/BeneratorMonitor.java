@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -30,20 +30,17 @@ import com.rapiddweller.jdbacl.DBUtil;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
+import java.io.Closeable;
 import java.lang.management.ManagementFactory;
 
 /**
  * MBean implementation for monitoring Benerator.<br/><br/>
  * Created: 27.07.2010 21:15:28
- *
  * @author Volker Bergmann
  * @since 0.6.3
  */
-public class BeneratorMonitor implements BeneratorMonitorMBean {
+public class BeneratorMonitor implements BeneratorMonitorMBean, Closeable {
 
-  /**
-   * The constant INSTANCE.
-   */
   public static final BeneratorMonitor INSTANCE;
 
   static {
@@ -57,34 +54,23 @@ public class BeneratorMonitor implements BeneratorMonitorMBean {
     }
   }
 
-  /**
-   * The Latest time stamp.
-   */
+  private boolean active;
   long latestTimeStamp;
-  /**
-   * The Latest generation count.
-   */
-  long latestGenerationCount = 0;
-  /**
-   * The Total generation count.
-   */
-  long totalGenerationCount = 0;
-  /**
-   * The Current throughput.
-   */
+  long latestGenerationCount;
+  long totalGenerationCount;
   int currentThroughput;
 
   private BeneratorMonitor() {
-    ControlThread controlThread = new ControlThread();
-    controlThread.setDaemon(true);
-    controlThread.start();
+    this.active = true;
+    this.latestTimeStamp = 0;
+    this.latestGenerationCount = 0;
+    this.totalGenerationCount = 0;
+    this.currentThroughput = 0;
+    BeneratorMonitorThread monitorThread = new BeneratorMonitorThread();
+    monitorThread.setDaemon(true);
+    monitorThread.start();
   }
 
-  /**
-   * Count generations.
-   *
-   * @param newGenerations the new generations
-   */
   public synchronized void countGenerations(int newGenerations) {
     totalGenerationCount += newGenerations;
   }
@@ -99,11 +85,6 @@ public class BeneratorMonitor implements BeneratorMonitorMBean {
     return currentThroughput;
   }
 
-  /**
-   * Sets total generation count.
-   *
-   * @param totalGenerationCount the total generation count
-   */
   public void setTotalGenerationCount(long totalGenerationCount) {
     this.totalGenerationCount = totalGenerationCount;
   }
@@ -136,16 +117,22 @@ public class BeneratorMonitor implements BeneratorMonitorMBean {
     this.currentThroughput = 0;
   }
 
-  /**
-   * The type Control thread.
-   */
-  class ControlThread extends Thread {
+  @Override
+  public void close() {
+    this.active = false;
+  }
+
+  class BeneratorMonitorThread extends Thread {
+
+    protected BeneratorMonitorThread() {
+      super("Benerator-Monitor-Thread");
+    }
+
     @Override
     public void run() {
       try {
         latestTimeStamp = System.nanoTime();
-        //noinspection InfiniteLoopStatement
-        while (true) {
+        while (active) {
           Thread.sleep(500);
           update();
         }
@@ -154,9 +141,6 @@ public class BeneratorMonitor implements BeneratorMonitorMBean {
       }
     }
 
-    /**
-     * Update.
-     */
     public void update() {
       long currentGenerationCount = totalGenerationCount;
       long currentTime = System.nanoTime();

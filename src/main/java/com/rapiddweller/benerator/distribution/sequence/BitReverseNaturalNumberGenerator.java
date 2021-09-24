@@ -31,10 +31,8 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 import com.rapiddweller.common.NumberUtil;
 
 /**
- * Long Generator that implements a 'bitreverse' Long Sequence.<br/>
- * <br/>
+ * Long Generator that implements a 'bitreverse' Long Sequence.<br/><br/>
  * Created: 13.11.2007 14:39:29
- *
  * @author Volker Bergmann
  */
 public class BitReverseNaturalNumberGenerator extends ThreadSafeNonNullGenerator<Long> {
@@ -44,18 +42,10 @@ public class BitReverseNaturalNumberGenerator extends ThreadSafeNonNullGenerator
   private int bitsUsed;
   private long maxCursor;
 
-  /**
-   * Instantiates a new Bit reverse natural number generator.
-   */
   public BitReverseNaturalNumberGenerator() {
     this(Long.MAX_VALUE);
   }
 
-  /**
-   * Instantiates a new Bit reverse natural number generator.
-   *
-   * @param max the max
-   */
   public BitReverseNaturalNumberGenerator(long max) {
     this.max = max;
   }
@@ -67,11 +57,6 @@ public class BitReverseNaturalNumberGenerator extends ThreadSafeNonNullGenerator
     return Long.class;
   }
 
-  /**
-   * Sets max.
-   *
-   * @param max the max
-   */
   public void setMax(Long max) {
     if (max < 0) {
       throw new IllegalArgumentException("No negative min supported, was: " + max);

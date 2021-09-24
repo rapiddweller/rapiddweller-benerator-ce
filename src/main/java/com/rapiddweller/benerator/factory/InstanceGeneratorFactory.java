@@ -36,36 +36,23 @@ import com.rapiddweller.model.data.Mode;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
- * Creates entity generators from entity metadata.<br/>
- * <br/>
+ * Creates entity generators from entity metadata.<br/><br/>
  * Created: 08.09.2007 07:45:40
- *
  * @author Volker Bergmann
  */
 public class InstanceGeneratorFactory {
 
-  private static final Logger LOGGER = LogManager.getLogger(InstanceGeneratorFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InstanceGeneratorFactory.class);
 
   // protected constructor for preventing instantiation --------------------------------------------------------------
 
-  /**
-   * Instantiates a new Instance generator factory.
-   */
   protected InstanceGeneratorFactory() {
   }
 
-  /**
-   * Create single instance generator generator.
-   *
-   * @param descriptor      the descriptor
-   * @param ownerUniqueness the owner uniqueness
-   * @param context         the context
-   * @return the generator
-   */
   public static Generator<?> createSingleInstanceGenerator(
       InstanceDescriptor descriptor, Uniqueness ownerUniqueness, BeneratorContext context) {
     // check if nullQuota is 1
@@ -113,14 +100,6 @@ public class InstanceGeneratorFactory {
     return generator;
   }
 
-  /**
-   * Create configured default generator generator.
-   *
-   * @param componentName   the component name
-   * @param ownerUniqueness the owner uniqueness
-   * @param context         the context
-   * @return the generator
-   */
   public static Generator<?> createConfiguredDefaultGenerator(String componentName, Uniqueness ownerUniqueness, BeneratorContext context) {
     ComponentDescriptor defaultConfig = context.getDefaultComponentConfig(componentName);
     if (defaultConfig != null) {
@@ -129,13 +108,6 @@ public class InstanceGeneratorFactory {
     return null;
   }
 
-  /**
-   * Create null generator generator.
-   *
-   * @param descriptor the descriptor
-   * @param context    the context
-   * @return the generator
-   */
   protected static Generator<?> createNullGenerator(InstanceDescriptor descriptor, BeneratorContext context) {
     Class<?> generatedType;
     TypeDescriptor typeDescriptor = descriptor.getTypeDescriptor();

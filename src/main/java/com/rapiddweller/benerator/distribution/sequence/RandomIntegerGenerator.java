@@ -34,10 +34,8 @@ import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerato
 import java.util.Random;
 
 /**
- * Creates random {@link Integer} values with a uniform distribution.<br/>
- * <br/>
+ * Creates random {@link Integer} values with a uniform distribution.<br/><br/>
  * Created at 24.06.2009 00:57:52
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -51,30 +49,14 @@ public class RandomIntegerGenerator extends AbstractNonNullNumberGenerator<Integ
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Random integer generator.
-   */
   public RandomIntegerGenerator() {
     this(DEFAULT_MIN, DEFAULT_MAX);
   }
 
-  /**
-   * Instantiates a new Random integer generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public RandomIntegerGenerator(int min, int max) {
     this(min, max, DEFAULT_GRANULARITY);
   }
 
-  /**
-   * Instantiates a new Random integer generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   */
   public RandomIntegerGenerator(int min, int max, int granularity) {
     super(Integer.class, min, max, granularity);
   }
@@ -96,14 +78,6 @@ public class RandomIntegerGenerator extends AbstractNonNullNumberGenerator<Integ
 
   // public convenience method ---------------------------------------------------------------------------------------
 
-  /**
-   * Generate int.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   * @return the int
-   */
   public static int generate(int min, int max, int granularity) {
     if (min > max) {
       throw new InvalidGeneratorSetupException(new PropertyMessage("min", "greater than max"));

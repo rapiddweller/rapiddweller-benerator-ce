@@ -26,12 +26,15 @@
 
 package com.rapiddweller.benerator;
 
+import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.ResourceManager;
+import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
 import com.rapiddweller.benerator.factory.SimpleTypeGeneratorFactory;
+import com.rapiddweller.benerator.primitive.VarLengthStringGenerator;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
@@ -39,29 +42,22 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.version.VersionInfo;
 
+import java.util.Set;
+
 /**
  * Abstract factory class for extending Benerator.<br/><br/>
  * Created: 08.09.2010 15:43:11
- *
  * @author Volker Bergmann
  * @see DefaultBeneratorFactory
  * @since 0.6.4
  */
 public abstract class BeneratorFactory {
 
-  /**
-   * The constant BENERATOR_FACTORY_PROPERTY.
-   */
   public static final String BENERATOR_FACTORY_PROPERTY = "benerator.factory";
   private static String XML_SCHEMA_PATH = null;
 
   private static BeneratorFactory instance;
 
-  /**
-   * Gets instance.
-   *
-   * @return the instance
-   */
   public static BeneratorFactory getInstance() {
     if (instance == null) {
       String configuredClass = System.getProperty(BENERATOR_FACTORY_PROPERTY);
@@ -73,11 +69,6 @@ public abstract class BeneratorFactory {
     return instance;
   }
 
-  /**
-   * Gets schema path for current version.
-   *
-   * @return the schema path for current version
-   */
   public static synchronized String getSchemaPathForCurrentVersion() {
     if (XML_SCHEMA_PATH == null) {
       String version = VersionInfo.getInfo("benerator").getVersion();
@@ -98,71 +89,34 @@ public abstract class BeneratorFactory {
     return XML_SCHEMA_PATH;
   }
 
-  /**
-   * Create context benerator context.
-   *
-   * @param contextUri the context uri
-   * @return the benerator context
-   */
+  public abstract String getEdition();
+
   public abstract BeneratorContext createContext(String contextUri);
 
-  /**
-   * Create parse context benerator parse context.
-   *
-   * @param resourceManager the resource manager
-   * @return the benerator parse context
-   */
   public abstract BeneratorParseContext createParseContext(ResourceManager resourceManager);
 
-  /**
-   * Create generation context context.
-   *
-   * @return the context
-   */
   public abstract Context createGenerationContext();
 
-  /**
-   * Gets complex type generator factory.
-   *
-   * @return the complex type generator factory
-   */
+  public abstract GenerationInterceptor getGenerationInterceptor();
+
   public abstract ComplexTypeGeneratorFactory getComplexTypeGeneratorFactory();
 
-  /**
-   * Gets simple type generator factory.
-   *
-   * @return the simple type generator factory
-   */
   public abstract SimpleTypeGeneratorFactory getSimpleTypeGeneratorFactory();
 
-  /**
-   * Configure converter converter.
-   *
-   * @param <S>       the type parameter
-   * @param <T>       the type parameter
-   * @param converter the converter
-   * @param context   the context
-   * @return the converter
-   */
   public abstract <S, T> Converter<S, T> configureConverter(Converter<S, T> converter, BeneratorContext context);
 
-  /**
-   * Configure validator validator.
-   *
-   * @param <T>       the type parameter
-   * @param validator the validator
-   * @param context   the context
-   * @return the validator
-   */
   public abstract <T> Validator<T> configureValidator(Validator<T> validator, BeneratorContext context);
 
-  /**
-   * Configure consumer consumer.
-   *
-   * @param consumer the consumer
-   * @param context  the context
-   * @return the consumer
-   */
   public abstract Consumer configureConsumer(Consumer consumer, BeneratorContext context);
+
+  public abstract Converter<String,String> createDelocalizingConverter();
+
+  public abstract VarLengthStringGenerator createVarLengthStringGenerator(
+      String charSetPattern, int minLength, int maxLength, int lengthGranularity, Distribution lengthDistribution);
+
+  public abstract VarLengthStringGenerator createVarLengthStringGenerator(
+      Set<Character> charSet, int minLength, int maxLength, int lengthGranularity, Distribution lengthDistribution);
+
+  public abstract RandomProvider getRandomProvider();
 
 }

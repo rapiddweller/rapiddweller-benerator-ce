@@ -27,7 +27,8 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
+import com.rapiddweller.common.SyntaxError;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -36,15 +37,11 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Tests the {@link BeanParser}.<br/><br/>
  * Created: 30.10.2009 19:02:25
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class BeanParserAndStatementTest extends BeneratorIntegrationTest {
+public class BeanParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test parse bean class.
-   */
   @Test
   public void testParseBeanClass() {
     String xml = "<bean id='id' class='" + BeanMock.class.getName() + "' />";
@@ -56,9 +53,6 @@ public class BeanParserAndStatementTest extends BeneratorIntegrationTest {
     assertNotNull(((BeanMock) bean).getContext());
   }
 
-  /**
-   * Test parse bean spec.
-   */
   @Test
   public void testParseBeanSpec() {
     String xml = "<bean id='id' spec='new " + BeanMock.class.getName() + "(2)' />";
@@ -70,9 +64,6 @@ public class BeanParserAndStatementTest extends BeneratorIntegrationTest {
     assertNotNull(((BeanMock) bean).getContext());
   }
 
-  /**
-   * Test string property.
-   */
   @Test
   public void testStringProperty() {
     String xml =
@@ -84,9 +75,6 @@ public class BeanParserAndStatementTest extends BeneratorIntegrationTest {
     assertEquals("xxx", bean.getText());
   }
 
-  /**
-   * Test empty string property.
-   */
   @Test
   public void testEmptyStringProperty() {
     String xml =
@@ -96,6 +84,11 @@ public class BeanParserAndStatementTest extends BeneratorIntegrationTest {
     BeneratorContext context = parseAndExecute(xml);
     BeanMock bean = (BeanMock) context.get("id");
     assertEquals("", bean.getText());
+  }
+
+  @Test(expected = SyntaxError.class)
+  public void testNoId() {
+    parse("<bean class='" + BeanMock.class.getName() + "'/>");
   }
 
 }

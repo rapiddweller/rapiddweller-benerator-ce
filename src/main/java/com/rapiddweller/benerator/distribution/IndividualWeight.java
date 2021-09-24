@@ -33,28 +33,25 @@ import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.common.ConfigurationError;
 
 /**
- * Distribution type that provides an individual weight for each object.<br/>
- * <br/>
+ * Distribution type that provides an individual weight for each object.<br/><br/>
  * Created at 27.04.2008 19:17:38
- *
- * @param <E> the type parameter
+ * @param <E> the type of the generated objects
  * @author Volker Bergmann
  * @since 0.5.2
  */
-public abstract class IndividualWeight<E> implements Weight {
+public abstract class IndividualWeight<E> extends AbstractDistribution implements Weight {
 
-  /**
-   * Weight double.
-   *
-   * @param object the object
-   * @return the double
-   */
   public abstract double weight(E object);
 
   @Override
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(
       Class<T> numberType, T min, T max, T granularity, boolean unique) {
     throw new UnsupportedOperationException("createGenerator() is not supported by " + getClass());
+  }
+
+  @Override
+  public boolean isApplicationDetached() {
+    return true;
   }
 
   @Override

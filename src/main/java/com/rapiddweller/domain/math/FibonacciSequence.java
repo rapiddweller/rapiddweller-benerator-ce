@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -26,26 +26,35 @@
 
 package com.rapiddweller.domain.math;
 
+import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.LongBasedSequence;
 import com.rapiddweller.benerator.distribution.Sequence;
+import com.rapiddweller.benerator.distribution.sequence.SequenceUtil;
 
 /**
  * {@link Sequence}-based implementation of the
- * <a href="http://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci Sequence</a><br/>
- * <br/>
+ * <a href="http://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci Sequence</a><br/><br/>
  * Created at 03.07.2009 10:43:09
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class FibonacciSequence extends LongBasedSequence {
 
   @Override
-  protected NonNullGenerator<Long> createLongGenerator(Long min, Long max,
-                                                       Long granularity,
-                                                       boolean unique) {
+  protected NonNullGenerator<Long> createLongGenerator(
+      Long min, Long max, Long granularity, boolean unique) {
     return new FibonacciLongGenerator(min, max, unique);
+  }
+
+  @Override
+  public boolean isApplicationDetached() {
+    return false;
+  }
+
+  @Override
+  public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
+    return SequenceUtil.applySequenceDetached(this, source, unique);
   }
 
 }

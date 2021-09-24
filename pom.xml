@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rapiddweller</groupId>
     <artifactId>rapiddweller-benerator-ce</artifactId>
-    <version>1.2.0-jdk-11-SNAPSHOT</version>
+    <version>2.0.0-jdk-11-SNAPSHOT</version>
     <name>rapiddweller Benerator</name>
     <description>
         rapiddweller 'Benerator' is a software solution to
@@ -111,54 +111,75 @@
     </developers>
 
     <properties>
-        <_rd_common_version>1.1.1-jdk-11</_rd_common_version>
-        <_rd_contiperf_version>2.4.0-jdk-11</_rd_contiperf_version>
-        <_rd_format_version>1.1.2-jdk-11</_rd_format_version>
-        <_rd_jdbacl_version>1.1.7-jdk-11</_rd_jdbacl_version>
-        <_rd_script_version>1.1.1-jdk-11</_rd_script_version>
+        <skipTests>false</skipTests>
+        <skipITs>true</skipITs>
+        <skipUTs>${skipTests}</skipUTs>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <_rd_common_version>1.1.3-jdk-11</_rd_common_version>
+        <_rd_contiperf_version>2.5.0-jdk-11</_rd_contiperf_version>
+        <_rd_format_version>1.1.4-jdk-11</_rd_format_version>
+        <_rd_jdbacl_version>1.1.11-jdk-11</_rd_jdbacl_version>
+        <_rd_script_version>1.1.3-jdk-11</_rd_script_version>
+        <database_derbyclient.version>10.7.1.1</database_derbyclient.version>
+        <database_h2.version>1.4.200</database_h2.version>
+        <database_hsqldb.version>1.8.0.7</database_hsqldb.version>
+        <database_icu4j.version>67.1</database_icu4j.version>
+        <database_jaybird.version>4.0.1.java11</database_jaybird.version>
+        <database_mssqldb.version>9.2.1.jre11</database_mssqldb.version>
+        <database_mysql-connector-java.version>8.0.20</database_mysql-connector-java.version>
+        <database_oracle.version>21.1.0.0</database_oracle.version>
+        <database_postgresql.version>42.2.23</database_postgresql.version>
         <dependency_antlr-runtime.version>3.3</dependency_antlr-runtime.version>
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
-        <dependency_derbyclient.version>10.7.1.1</dependency_derbyclient.version>
-        <dependency_freemarker.version>2.3.20</dependency_freemarker.version>
-        <dependency_graalvm.version>21.1.0</dependency_graalvm.version>
-        <dependency_h2.version>1.4.200</dependency_h2.version>
-        <dependency_hsqldb.version>1.8.0.7</dependency_hsqldb.version>
-        <dependency_icu4j.version>67.1</dependency_icu4j.version>
-        <dependency_jaybird.version>4.0.1.java11</dependency_jaybird.version>
-        <dependency_mssqldb.version>9.2.1.jre11</dependency_mssqldb.version>
-        <dependency_oracle.version>21.1.0.0</dependency_oracle.version>
-        <dependency_junit.version>4.13.1</dependency_junit.version>
-        <dependency_log4j-api.version>2.14.0</dependency_log4j-api.version>
-        <dependency_log4j-core.version>2.14.0</dependency_log4j-core.version>
-        <dependency_mysql-connector-java.version>8.0.20</dependency_mysql-connector-java.version>
-        <dependency_postgresql.version>42.2.19</dependency_postgresql.version>
         <dependency_validation-api.version>2.0.1.Final</dependency_validation-api.version>
         <dependency_xml-apis.version>1.4.01</dependency_xml-apis.version>
-        <java_source_version>11</java_source_version>
-        <java_target_version>11</java_target_version>
-        <plugin_jacoco-maven-plugin.version>0.8.6</plugin_jacoco-maven-plugin.version>
-        <plugin_maven-assembly-plugin.version>3.3.0</plugin_maven-assembly-plugin.version>
-        <plugin_maven-compiler-plugin.version>3.8.1</plugin_maven-compiler-plugin.version>
-        <plugin_maven-deploy-plugin.version>3.0.0-M1</plugin_maven-deploy-plugin.version>
-        <plugin_maven-gpg-plugin.version>1.6</plugin_maven-gpg-plugin.version>
-        <plugin_maven-jar-plugin.version>2.5</plugin_maven-jar-plugin.version>
-        <plugin_maven-javadoc-plugin.version>3.2.0</plugin_maven-javadoc-plugin.version>
-        <plugin_maven-jxr-plugin.version>3.0.0</plugin_maven-jxr-plugin.version>
-        <plugin_maven-pmd-plugin.version>3.14.0</plugin_maven-pmd-plugin.version>
-        <plugin_maven-project-info-reports-plugin.version>3.1.1</plugin_maven-project-info-reports-plugin.version>
-        <plugin_maven-resources-plugin.version>2.6</plugin_maven-resources-plugin.version>
-        <plugin_maven-site-plugin.version>3.9.1</plugin_maven-site-plugin.version>
-        <plugin_maven-source-plugin.version>3.2.1</plugin_maven-source-plugin.version>
-        <plugin_maven-surefire-plugin.version>3.0.0-M5</plugin_maven-surefire-plugin.version>
-        <plugin_maven-surefire-report-plugin.version>3.0.0-M5</plugin_maven-surefire-report-plugin.version>
-        <plugin_nexus-staging-maven-plugin.version>1.6.8</plugin_nexus-staging-maven-plugin.version>
-        <plugin_surefire-api.version>3.0.0-M5</plugin_surefire-api.version>
-        <plugin_surefire-junit4.version>3.0.0-M5</plugin_surefire-junit4.version>
-        <plugin_versions-maven-plugin.version>2.8.1</plugin_versions-maven-plugin.version>
+        <dependency_slf4j.version>1.7.32</dependency_slf4j.version>
+        <dependency_log4j.version>2.14.1</dependency_log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <scriptengine_freemarker.version>2.3.20</scriptengine_freemarker.version>
+        <scriptengine_graalvm.version>21.1.0</scriptengine_graalvm.version>
+        <test_junit.version>4.13.2</test_junit.version>
     </properties>
 
     <dependencies>
+        <!--  databases -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${database_h2.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>${database_icu4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>${database_mssqldb.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc11</artifactId>
+            <version>${database_oracle.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.firebirdsql.jdbc</groupId>
+            <artifactId>jaybird</artifactId>
+            <version>${database_jaybird.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${database_mysql-connector-java.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- rapiddweller dependencies -->
         <dependency>
             <groupId>com.rapiddweller</groupId>
@@ -185,96 +206,11 @@
             <artifactId>rd-lib-script</artifactId>
             <version>${_rd_script_version}</version>
         </dependency>
-        <!--  test framework -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${dependency_junit.version}</version>
-        </dependency>
-        <!--  ANTLR (ANother Tool for Language Recognition) is a powerful parser generator for reading, processing,
-         executing, or translating structured text or binary files. It's widely used to build languages, tools, and
-          frameworks. From a grammar, ANTLR generates a parser that can build and walk parse trees. -->
-        <dependency>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr</artifactId>
-            <version>${dependency_antlr-runtime.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--  databases -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${dependency_h2.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derbyclient</artifactId>
-            <version>${dependency_derbyclient.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.firebirdsql.jdbc</groupId>
-            <artifactId>jaybird</artifactId>
-            <version>${dependency_jaybird.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${dependency_mysql-connector-java.version}</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>${dependency_hsqldb.version}</version>
+            <version>${database_hsqldb.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <version>${dependency_mssqldb.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc11</artifactId>
-            <version>${dependency_oracle.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${dependency_postgresql.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ibm.icu</groupId>
-            <artifactId>icu4j</artifactId>
-            <version>${dependency_icu4j.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--  script handling -->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>${dependency_freemarker.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.graalvm.js</groupId>
-            <artifactId>js-scriptengine</artifactId>
-            <version>${dependency_graalvm.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.graalvm.js</groupId>
-            <artifactId>js</artifactId>
-            <version>${dependency_graalvm.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.graalvm.sdk</groupId>
-            <artifactId>graal-sdk</artifactId>
-            <version>${dependency_graalvm.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.resource</groupId>
@@ -287,25 +223,82 @@
             <artifactId>validation-api</artifactId>
             <version>${dependency_validation-api.version}</version>
         </dependency>
+        <!--  test framework -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${test_junit.version}</version>
+        </dependency>
+        <!--  ANTLR (ANother Tool for Language Recognition) is a powerful parser generator for reading, processing,
+         executing, or translating structured text or binary files. It's widely used to build languages, tools, and
+          frameworks. From a grammar, ANTLR generates a parser that can build and walk parse trees. -->
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr</artifactId>
+            <version>${dependency_antlr-runtime.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>${database_derbyclient.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${dependency_slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${dependency_log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${dependency_log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${dependency_log4j.version}</version>
+        </dependency>
+        <!--  script handling -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${scriptengine_freemarker.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js-scriptengine</artifactId>
+            <version>${scriptengine_graalvm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js</artifactId>
+            <version>${scriptengine_graalvm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.sdk</groupId>
+            <artifactId>graal-sdk</artifactId>
+            <version>${scriptengine_graalvm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${database_postgresql.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <!--  xml handling -->
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
             <version>${dependency_xml-apis.version}</version>
         </dependency>
-        <!-- logging -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${dependency_log4j-api.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${dependency_log4j-core.version}</version>
-            <scope>provided</scope>
-        </dependency>
+
     </dependencies>
 
     <build>
@@ -327,7 +320,6 @@
                     <include>**/*.ftl</include>
                 </includes>
                 <excludes>
-                    <exclude>log4j.xml</exclude>
                     <exclude>**/version.properties</exclude>
                 </excludes>
             </resource>
@@ -365,7 +357,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>${plugin_maven-assembly-plugin.version}</version>
+                <version>3.3.0</version>
                 <configuration>
                     <descriptors>
                         <descriptor>src/main/assembly/dist-assembly.xml</descriptor>
@@ -375,8 +367,39 @@
                 </configuration>
             </plugin>
             <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <skipTests>${skipUTs}</skipTests>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                    <excludes>
+                        <exclude>**/*IntegrationTest*.class</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <includes>
+                        <include>**/*IntegrationTest.class</include>
+                    </includes>
+                    <skipTests>${skipTests}</skipTests>
+                    <skipITs>${skipITs}</skipITs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>${plugin_maven-jar-plugin.version}</version>
+                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -389,29 +412,26 @@
             </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>${plugin_maven-resources-plugin.version}</version>
+                <version>3.2.0</version>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${plugin_maven-compiler-plugin.version}</version>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>${java_source_version}</source>
-                    <target>${java_target_version}</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>${plugin_maven-deploy-plugin.version}</version>
+                <version>3.0.0-M1</version>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${plugin_maven-javadoc-plugin.version}</version>
+                <version>3.3.0</version>
                 <configuration>
                     <doclint>none</doclint>
-                    <source>${java_source_version}</source>
+                    <source>${maven.compiler.source}</source>
                     <detectJavaApiLink>false</detectJavaApiLink>
                 </configuration>
                 <executions>
@@ -424,9 +444,8 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>${plugin_maven-site-plugin.version}</version>
+                <version>3.9.1</version>
                 <executions>
                     <execution>
                         <id>create-site</id>
@@ -437,9 +456,8 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>${plugin_maven-source-plugin.version}</version>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -450,34 +468,14 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${plugin_maven-surefire-plugin.version}</version>
-                <configuration>
-                    <useSystemClassLoader>false</useSystemClassLoader>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit4</artifactId>
-                        <version>${plugin_maven-surefire-plugin.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-api</artifactId>
-                        <version>${plugin_maven-surefire-plugin.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>${plugin_versions-maven-plugin.version}</version>
+                <version>2.8.1</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${plugin_jacoco-maven-plugin.version}</version>
+                <version>0.8.7</version>
                 <configuration>
                     <excludes>
                         <exclude>com/rapiddweller/task/**/*</exclude>
@@ -520,33 +518,21 @@
     <reporting>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>${plugin_maven-surefire-plugin.version}</version>
+                <version>3.0.0-M5</version>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${plugin_maven-pmd-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jxr-plugin</artifactId>
-                <version>${plugin_maven-jxr-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${plugin_maven-javadoc-plugin.version}</version>
                 <configuration>
                     <doclint>none</doclint>
-                    <source>${java_source_version}</source>
+                    <source>${maven.compiler.source}</source>
                     <detectJavaApiLink>false</detectJavaApiLink>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -559,7 +545,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>${plugin_maven-project-info-reports-plugin.version}</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -583,7 +568,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>${plugin_maven-source-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -596,7 +580,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${plugin_maven-javadoc-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -609,7 +592,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${plugin_maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -629,7 +611,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>${plugin_nexus-staging-maven-plugin.version}</version>
+                        <version>1.6.8</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
@@ -676,5 +658,4 @@
         <connection>scm:git:git://github.com/rapiddweller/rapiddweller-benerator-ce.git</connection>
         <developerConnection>scm:git:git://github.com/rapiddweller/rapiddweller-benerator-ce.git</developerConnection>
     </scm>
-
 </project>

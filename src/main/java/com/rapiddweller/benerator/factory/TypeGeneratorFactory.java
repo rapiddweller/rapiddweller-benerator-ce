@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.factory;
 
 import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.composite.BlankEntityGenerator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.primitive.ValueMapper;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
@@ -46,8 +47,8 @@ import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.platform.xls.PlatformDescriptor;
 import com.rapiddweller.script.PrimitiveType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,49 +58,26 @@ import static com.rapiddweller.model.data.TypeDescriptor.PATTERN;
 /**
  * Creates generators of type instances.<br/><br/>
  * Created: 05.03.2008 16:51:44
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.5.0
  */
 public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
 
-  /**
-   * The Logger.
-   */
-  protected final Logger logger = LogManager.getLogger(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-  /**
-   * Create generator generator.
-   *
-   * @param descriptor   the descriptor
-   * @param instanceName the instance name
-   * @param nullable     the nullable
-   * @param uniqueness   the uniqueness
-   * @param context      the context
-   * @return the generator
-   */
   public Generator<?> createGenerator(E descriptor, String instanceName,
                                       boolean nullable, Uniqueness uniqueness, BeneratorContext context) {
     logger.debug("createGenerator({})", descriptor.getName());
     Generator<?> generator = createRootGenerator(descriptor, instanceName, nullable, uniqueness, context);
-    generator = applyComponentBuilders(generator, descriptor, instanceName, uniqueness, context);
+    boolean iterationMode = !(generator instanceof BlankEntityGenerator);
+    generator = applyComponentBuilders(generator, iterationMode, descriptor, instanceName, uniqueness, context);
     generator = wrapWithPostprocessors(generator, descriptor, context);
     generator = applyOffsetAndCyclic(generator, descriptor, instanceName, uniqueness, context);
     logger.debug("Created {}", generator);
     return generator;
   }
 
-  /**
-   * Create root generator generator.
-   *
-   * @param descriptor   the descriptor
-   * @param instanceName the instance name
-   * @param nullable     the nullable
-   * @param uniqueness   the uniqueness
-   * @param context      the context
-   * @return the generator
-   */
   public Generator<?> createRootGenerator(E descriptor, String instanceName,
                                           boolean nullable, Uniqueness uniqueness, BeneratorContext context) {
     Generator<?> generator = createExplicitGenerator(descriptor, uniqueness, context);
@@ -118,14 +96,6 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return generator;
   }
 
-  /**
-   * Create explicit generator generator.
-   *
-   * @param type       the type
-   * @param uniqueness the uniqueness
-   * @param context    the context
-   * @return the generator
-   */
   protected Generator<?> createExplicitGenerator(
       E type, Uniqueness uniqueness, BeneratorContext context) {
     Generator<?> generator = DescriptorUtil.getGeneratorByName(type, context);
@@ -138,46 +108,14 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return generator;
   }
 
-  /**
-   * Gets generated type.
-   *
-   * @param descriptor the descriptor
-   * @return the generated type
-   */
   protected abstract Class<?> getGeneratedType(E descriptor);
 
-  /**
-   * Create source generator generator.
-   *
-   * @param descriptor the descriptor
-   * @param uniqueness the uniqueness
-   * @param context    the context
-   * @return the generator
-   */
   protected abstract Generator<?> createSourceGenerator(
       E descriptor, Uniqueness uniqueness, BeneratorContext context);
 
-  /**
-   * Create specific generator generator.
-   *
-   * @param descriptor   the descriptor
-   * @param instanceName the instance name
-   * @param nullable     the nullable
-   * @param uniqueness   the uniqueness
-   * @param context      the context
-   * @return the generator
-   */
   protected abstract Generator<?> createSpecificGenerator(E descriptor, String instanceName,
                                                           boolean nullable, Uniqueness uniqueness, BeneratorContext context);
 
-  /**
-   * Create inherited generator generator.
-   *
-   * @param type       the type
-   * @param uniqueness the uniqueness
-   * @param context    the context
-   * @return the generator
-   */
   @SuppressWarnings("unchecked")
   protected Generator<?> createInheritedGenerator(
       E type, Uniqueness uniqueness, BeneratorContext context) {
@@ -191,28 +129,9 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return null;
   }
 
-  /**
-   * Create heuristic generator generator.
-   *
-   * @param descriptor   the descriptor
-   * @param instanceName the instance name
-   * @param uniqueness   the uniqueness
-   * @param context      the context
-   * @return the generator
-   */
   protected abstract Generator<?> createHeuristicGenerator(E descriptor, String instanceName,
                                                            Uniqueness uniqueness, BeneratorContext context);
 
-  /**
-   * Apply offset and cyclic generator.
-   *
-   * @param generator    the generator
-   * @param descriptor   the descriptor
-   * @param instanceName the instance name
-   * @param uniqueness   the uniqueness
-   * @param context      the context
-   * @return the generator
-   */
   protected Generator<?> applyOffsetAndCyclic(Generator<?> generator, E descriptor, String instanceName,
                                               Uniqueness uniqueness, BeneratorContext context) {
     generator = DescriptorUtil.processOffset(generator, descriptor);
@@ -220,27 +139,11 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return generator;
   }
 
-  /**
-   * Apply component builders generator.
-   *
-   * @param generator    the generator
-   * @param descriptor   the descriptor
-   * @param instanceName the instance name
-   * @param uniqueness   the uniqueness
-   * @param context      the context
-   * @return the generator
-   */
-  protected Generator<?> applyComponentBuilders(Generator<?> generator, E descriptor, String instanceName,
+  protected Generator<?> applyComponentBuilders(Generator<?> generator, boolean iterationMode, E descriptor, String instanceName,
                                                 Uniqueness uniqueness, BeneratorContext context) {
     return generator;
   }
 
-  /**
-   * Create script generator generator.
-   *
-   * @param descriptor the descriptor
-   * @return the generator
-   */
   protected static Generator<?> createScriptGenerator(TypeDescriptor descriptor) {
     String scriptText = descriptor.getScript();
     if (scriptText != null) {
@@ -249,14 +152,6 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return null;
   }
 
-  /**
-   * Create validating generator generator.
-   *
-   * @param descriptor the descriptor
-   * @param generator  the generator
-   * @param context    the context
-   * @return the generator
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   protected static Generator<?> createValidatingGenerator(
       TypeDescriptor descriptor, Generator<?> generator, BeneratorContext context) {
@@ -267,14 +162,6 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return generator;
   }
 
-  /**
-   * Create converting generator generator.
-   *
-   * @param descriptor the descriptor
-   * @param generator  the generator
-   * @param context    the context
-   * @return the generator
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static Generator<?> createConvertingGenerator(TypeDescriptor descriptor, Generator generator, BeneratorContext context) {
     Converter<?, ?> converter = DescriptorUtil.getConverter(descriptor.getConverter(), context);
@@ -287,15 +174,6 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return generator;
   }
 
-  /**
-   * Wrap with postprocessors generator.
-   *
-   * @param <E>        the type parameter
-   * @param generator  the generator
-   * @param descriptor the descriptor
-   * @param context    the context
-   * @return the generator
-   */
   @SuppressWarnings("unchecked")
   static <E> Generator<E> wrapWithPostprocessors(Generator<E> generator, TypeDescriptor descriptor, BeneratorContext context) {
     generator = (Generator<E>) createConvertingGenerator(descriptor, generator, context);
@@ -308,13 +186,6 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return generator;
   }
 
-  /**
-   * Create mapping generator generator.
-   *
-   * @param descriptor the descriptor
-   * @param generator  the generator
-   * @return the generator
-   */
   static Generator<?> createMappingGenerator(
       SimpleTypeDescriptor descriptor, Generator<?> generator) {
     if (descriptor == null || descriptor.getMap() == null) {
@@ -325,13 +196,6 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return WrapperFactory.applyConverter(generator, mapper);
   }
 
-  /**
-   * Create type converting generator generator.
-   *
-   * @param descriptor the descriptor
-   * @param generator  the generator
-   * @return the generator
-   */
   static Generator<?> createTypeConvertingGenerator(
       SimpleTypeDescriptor descriptor, Generator<?> generator) {
     if (descriptor == null || descriptor.getPrimitiveType() == null) {
@@ -341,13 +205,6 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return (converter != null ? WrapperFactory.applyConverter(generator, converter) : generator);
   }
 
-  /**
-   * Create converter converter.
-   *
-   * @param descriptor the descriptor
-   * @param sourceType the source type
-   * @return the converter
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static Converter<?, ?> createConverter(SimpleTypeDescriptor descriptor, Class<?> sourceType) {
     PrimitiveType primitiveType = descriptor.getPrimitiveType();
@@ -379,22 +236,10 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return converter;
   }
 
-  /**
-   * Should nullify each nullable boolean.
-   *
-   * @param context the context
-   * @return the boolean
-   */
   protected boolean shouldNullifyEachNullable(BeneratorContext context) {
     return (context.getGeneratorFactory().getDefaultsProvider().defaultNullQuota() == 1.);
   }
 
-  /**
-   * Is formatted boolean.
-   *
-   * @param type the type
-   * @return the boolean
-   */
   protected static boolean isFormatted(TypeDescriptor type) {
     Format format = type.getFormat();
     if (format == Format.formatted) {

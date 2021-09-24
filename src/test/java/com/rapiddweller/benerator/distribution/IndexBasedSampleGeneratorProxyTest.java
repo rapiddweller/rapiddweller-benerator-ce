@@ -76,7 +76,12 @@ public class IndexBasedSampleGeneratorProxyTest extends GeneratorTest {
   /**
    * The type Test distribution.
    */
-  public static class TestDistribution implements Distribution {
+  public static class TestDistribution extends AbstractDistribution {
+
+    @Override
+    public boolean isApplicationDetached() {
+      return true;
+    }
 
     @Override
     public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {

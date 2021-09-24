@@ -28,10 +28,13 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.CachedExpression;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.Level;
 import com.rapiddweller.script.Expression;
+import com.rapiddweller.script.expression.ExpressionUtil;
 
 /**
  * Abstract implementation of the Statement interface.<br/><br/>
@@ -46,30 +49,16 @@ public abstract class AbstractStatement implements Statement {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Abstract statement.
-   */
   protected AbstractStatement() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Abstract statement.
-   *
-   * @param errorHandler the error handler
-   */
   protected AbstractStatement(Expression<ErrorHandler> errorHandler) {
     this.errorHandler = errorHandler;
   }
 
   // Task interface --------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets error handler.
-   *
-   * @param context the context
-   * @return the error handler
-   */
   public ErrorHandler getErrorHandler(Context context) {
     if (errorHandler == null) {
       return new ErrorHandler(getClass().getName(), Level.fatal);
@@ -79,36 +68,46 @@ public abstract class AbstractStatement implements Statement {
 
   // helpers ---------------------------------------------------------------------------------------------------------
 
-  /**
-   * Handle error.
-   *
-   * @param message the message
-   * @param context the context
-   */
   protected void handleError(String message, Context context) {
     getErrorHandler(context).handleError(message);
   }
 
-  /**
-   * Handle error.
-   *
-   * @param message the message
-   * @param context the context
-   * @param t       the t
-   */
   protected void handleError(String message, Context context, Throwable t) {
     getErrorHandler(context).handleError(message, t);
   }
 
-  /**
-   * Cache expression.
-   *
-   * @param <T>        the type parameter
-   * @param expression the expression
-   * @return the expression
-   */
   protected static <T> Expression<T> cache(Expression<T> expression) {
     return (expression != null ? new CachedExpression<>(expression) : null);
+  }
+
+  protected static Object setIfNotNull(Expression<?> expression, Context context, Object bean, String propertyName) {
+    return set(expression, context, bean, propertyName, SetMode.IF_NOT_NULL);
+  }
+
+  protected static Object setAssertNotNull(Expression<?> expression, Context context, Object bean, String propertyName) {
+    return set(expression, context, bean, propertyName, SetMode.ASSERT_NOT_NULL);
+  }
+
+  protected static Object set(Expression<?> expression, Context context, Object bean, String propertyName) {
+    return set(expression, context, bean, propertyName, SetMode.SIMPLE);
+  }
+
+  protected static Object set(Expression<?> expression, Context context, Object bean, String propertyName, SetMode mode) {
+    Object value = ExpressionUtil.evaluate(expression, context);
+    switch (mode) {
+      case ASSERT_NOT_NULL:
+        Assert.notNull(value, propertyName);
+        BeanUtil.setPropertyValue(bean, propertyName, value, false);
+        break;
+      case IF_NOT_NULL:
+        if (value != null)
+          BeanUtil.setPropertyValue(bean, propertyName, value, false);
+        break;
+      default:
+        BeanUtil.setPropertyValue(bean, propertyName, value, false);
+        break;
+    }
+    return value;
   }
 
   @Override
@@ -116,4 +115,7 @@ public abstract class AbstractStatement implements Statement {
     return getClass().getSimpleName();
   }
 
+  enum SetMode {
+    SIMPLE, IF_NOT_NULL, ASSERT_NOT_NULL
+  }
 }

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -37,8 +37,8 @@ import com.rapiddweller.common.time.ElapsedTimeFormatter;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.profile.Profiler;
 import com.rapiddweller.profile.Profiling;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -48,21 +48,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Parses and executes a benerator descriptor file.<br/>
- * <br/>
+ * Parses and executes a benerator descriptor file.<br/><br/>
  * Created at 26.02.2009 15:51:59
- *
  * @author Volker Bergmann
  * @since 0.5.8
  */
 public class DescriptorRunner implements ResourceManager {
 
-  /**
-   * The constant LOCALE_VM_PARAM.
-   */
-  public static final String LOCALE_VM_PARAM = "benerator.locale";
-
-  private static final Logger LOGGER = LogManager.getLogger(DescriptorRunner.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DescriptorRunner.class);
 
   // attributes ------------------------------------------------------------------------------------------------------
 
@@ -70,27 +63,15 @@ public class DescriptorRunner implements ResourceManager {
 
   private final BeneratorContext context;
 
-  /**
-   * The Factory.
-   */
   final BeneratorFactory factory;
   private List<String> generatedFiles;
 
   private final ResourceManagerSupport resourceManager = new ResourceManagerSupport();
-  /**
-   * The Start time.
-   */
   long startTime = 0;
 
 
   // constructor -----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Descriptor runner.
-   *
-   * @param uri     the uri
-   * @param context the context
-   */
   public DescriptorRunner(String uri, BeneratorContext context) {
     this.uri = uri;
     this.context = context;
@@ -99,29 +80,16 @@ public class DescriptorRunner implements ResourceManager {
     ConverterManager.getInstance().setContext(context);
   }
 
-  /**
-   * Reset monitor.
-   */
   public static void resetMonitor() {
     BeneratorMonitor.INSTANCE.reset();
   }
 
   // interface -------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets context.
-   *
-   * @return the context
-   */
   public BeneratorContext getContext() {
     return context;
   }
 
-  /**
-   * Run.
-   *
-   * @throws IOException the io exception
-   */
   public void run() throws IOException {
     Runtime runtime = Runtime.getRuntime();
     BeneratorShutdownHook hook = new BeneratorShutdownHook(this);
@@ -133,21 +101,10 @@ public class DescriptorRunner implements ResourceManager {
     }
   }
 
-  /**
-   * Run without shutdown hook.
-   *
-   * @throws IOException the io exception
-   */
   public void runWithoutShutdownHook() throws IOException {
     execute(parseDescriptorFile());
   }
 
-  /**
-   * Parse descriptor file benerator root statement.
-   *
-   * @return the benerator root statement
-   * @throws IOException the io exception
-   */
   public BeneratorRootStatement parseDescriptorFile() throws IOException {
     Document document = XMLUtil.parse(uri);
     Element root = document.getDocumentElement();
@@ -159,11 +116,6 @@ public class DescriptorRunner implements ResourceManager {
     return statement;
   }
 
-  /**
-   * Execute.
-   *
-   * @param rootStatement the root statement
-   */
   public void execute(BeneratorRootStatement rootStatement) {
     try {
       startTime = System.currentTimeMillis();
@@ -190,11 +142,6 @@ public class DescriptorRunner implements ResourceManager {
     }
   }
 
-  /**
-   * Gets generated files.
-   *
-   * @return the generated files
-   */
   public List<String> getGeneratedFiles() {
     return generatedFiles;
   }
@@ -227,6 +174,7 @@ public class DescriptorRunner implements ResourceManager {
       message += " in " + ElapsedTimeFormatter.format(elapsedTime) + " (~" + RoundedNumberFormat.format(throughput, 0) + " p.h.)";
     }
     LOGGER.info(message);
+    System.out.println(message); // TODO remove
   }
 
 

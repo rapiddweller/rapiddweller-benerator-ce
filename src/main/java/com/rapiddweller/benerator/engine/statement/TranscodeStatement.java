@@ -26,8 +26,8 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import com.rapiddweller.benerator.composite.ComponentAndVariableSupport;
-import com.rapiddweller.benerator.composite.GeneratorComponent;
+import com.rapiddweller.benerator.composite.GenerationStepSupport;
+import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
@@ -51,70 +51,34 @@ import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.platform.db.DBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.List;
 
 /**
  * {@link Statement} that transcodes a database table.<br/><br/>
  * Created: 08.09.2010 16:23:56
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class TranscodeStatement extends SequentialStatement implements CascadeParent {
 
-  private static final Logger LOGGER = LogManager.getLogger(TranscodeStatement.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TranscodeStatement.class);
 
-  /**
-   * The Type expression.
-   */
   final Expression<ComplexTypeDescriptor> typeExpression;
-  /**
-   * The Source ex.
-   */
   final Expression<DBSystem> sourceEx;
-  /**
-   * The Selector ex.
-   */
   final Expression<String> selectorEx;
-  /**
-   * The Target ex.
-   */
   final Expression<DBSystem> targetEx;
-  /**
-   * The Page size ex.
-   */
   final Expression<Long> pageSizeEx;
-  /**
-   * The Error handler ex.
-   */
   final Expression<ErrorHandler> errorHandlerEx;
-  /**
-   * The Parent.
-   */
   final TranscodingTaskStatement parent;
 
-  /**
-   * The Source.
-   */
   DBSystem source;
   private DBSystem target;
 
   private Entity currentEntity;
 
-  /**
-   * Instantiates a new Transcode statement.
-   *
-   * @param typeExpression the type expression
-   * @param parent         the parent
-   * @param sourceEx       the source ex
-   * @param selectorEx     the selector ex
-   * @param targetEx       the target ex
-   * @param pageSizeEx     the page size ex
-   * @param errorHandlerEx the error handler ex
-   */
   public TranscodeStatement(MutatingTypeExpression typeExpression, TranscodingTaskStatement parent,
                             Expression<DBSystem> sourceEx, Expression<String> selectorEx, Expression<DBSystem> targetEx,
                             Expression<Long> pageSizeEx, Expression<ErrorHandler> errorHandlerEx) {
@@ -192,10 +156,10 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
     // iterate rows
     String selector = ExpressionUtil.evaluate(selectorEx, context);
     DataSource<Entity> iterable = source.queryEntities(tableName, selector, context);
-    List<GeneratorComponent<Entity>> generatorComponents =
-        ComplexTypeGeneratorFactory.createMutatingGeneratorComponents(type, Uniqueness.NONE, context);
-    ComponentAndVariableSupport<Entity> cavs = new ComponentAndVariableSupport<>(
-        tableName, generatorComponents, context);
+    List<GenerationStep<Entity>> generationSteps =
+        ComplexTypeGeneratorFactory.createMutatingGenerationSteps(type, false, Uniqueness.NONE, context);
+    GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(
+        tableName, generationSteps, context);
     try {
       cavs.init(context);
       DataIterator<Entity> iterator = iterable.iterator();

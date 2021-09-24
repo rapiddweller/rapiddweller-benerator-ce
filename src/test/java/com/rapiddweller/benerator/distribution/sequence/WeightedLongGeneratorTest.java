@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -37,24 +37,15 @@ import java.util.Set;
 /**
  * Tests the {@link WeightedLongGenerator}.<br/><br/>
  * Created: 18.06.2006 15:04:17
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class WeightedLongGeneratorTest extends GeneratorClassTest {
 
-  /**
-   * Instantiates a new Weighted long generator test.
-   */
   public WeightedLongGeneratorTest() {
     super(WeightedLongGenerator.class);
   }
 
-  /**
-   * Test random sequence.
-   *
-   * @throws IllegalGeneratorStateException the illegal generator state exception
-   */
   @Test
   public void testRandomSequence() throws IllegalGeneratorStateException {
     checkUniformDistribution(-2, 2, 1, 10000, 0.1, -2, -1, 0, 1, 2);

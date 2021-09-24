@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -34,28 +34,25 @@ import com.rapiddweller.common.ui.InfoPrinter;
 import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.profile.Profiling;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.impl.StaticLoggerBinder;
 
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 import java.io.File;
+import java.lang.management.ManagementFactory;
 
 /**
  * Provides general utility methods for Benerator.<br/><br/>
  * Created: 01.02.2013 16:20:10
- *
  * @author Volker Bergmann
  * @since 0.8.0
  */
 public class BeneratorUtil {
 
-  private static final Logger CONFIG_LOGGER = LogManager.getLogger(LogCategoriesConstants.CONFIG);
+  private static final Logger CONFIG_LOGGER = LoggerFactory.getLogger(LogCategoriesConstants.CONFIG);
 
-  /**
-   * Is descriptor file path boolean.
-   *
-   * @param filePath the file path
-   * @return the boolean
-   */
   public static boolean isDescriptorFilePath(String filePath) {
     if (StringUtil.isEmpty(filePath)) {
       return false;
@@ -64,14 +61,14 @@ public class BeneratorUtil {
     return ("benerator.xml".equals(filePath) || lcName.replace(File.separatorChar, '/').endsWith("/benerator.xml") || lcName.endsWith(".ben.xml"));
   }
 
-  /**
-   * Check system.
-   *
-   * @param printer the printer
-   */
   public static void checkSystem(InfoPrinter printer) {
+    // print general Benerator version and system information
     printVersionInfo(printer);
+    // Print Slf4j binding info
+    printer.printLines("Slf4j binding: " + StaticLoggerBinder.getSingleton().getLoggerFactoryClassStr());
+    // Print heap info
     printer.printLines("Configured heap size limit: " + Runtime.getRuntime().maxMemory() / 1024 / 1024 + " MB");
+    // Check script engine
     try {
       Class.forName("javax.script.ScriptEngine");
     } catch (ClassNotFoundException e) {
@@ -81,38 +78,64 @@ public class BeneratorUtil {
       }
       System.exit(BeneratorConstants.EXIT_CODE_ERROR);
     }
+    // Check Java version
     VersionNumber javaVersion = VersionNumber.valueOf(VMInfo.getJavaVersion());
     if (javaVersion.compareTo(VersionNumber.valueOf("1.6")) < 0) {
       CONFIG_LOGGER.warn("benerator is written for and tested under Java 6 - " +
           "you managed to set up JSR 223, but may face other problems.");
     }
+    // Check profiling setting
     if (Profiling.isEnabled()) {
       CONFIG_LOGGER.warn("Profiling is active. This may lead to memory issues");
     }
   }
 
-  /**
-   * Print version info.
-   *
-   * @param printer the printer
-   */
   public static void printVersionInfo(InfoPrinter printer) {
     VersionInfo version = VersionInfo.getInfo("benerator");
     printer.printLines(
         "Benerator " + version.getVersion() + " build " + version.getBuildNumber(),
-        "Java version " + VMInfo.getJavaVersion(),
-        "JVM " + VMInfo.getJavaVmName() + " " + VMInfo.getJavaVmVersion() + " (" + VMInfo.getJavaVmVendor() + ")",
-        "OS " + SystemInfo.getOsName() + " " + SystemInfo.getOsVersion() + " (" + SystemInfo.getOsArchitecture() + ")"
+        "Java version:  " + VMInfo.getJavaVersion(),
+        "JVM product:   " + getJVMInfo(),
+        "System:        " + getOsInfo(),
+        "CPU & RAM:     " + getCpuAndMemInfo()
     );
   }
 
-  /**
-   * Log config.
-   *
-   * @param config the config
-   */
+  public static String getJVMInfo() {
+    return VMInfo.getJavaVmName() + " " + VMInfo.getJavaVmVersion() + " (" + VMInfo.getJavaVmVendor() + ")";
+  }
+
   public static void logConfig(String config) {
     CONFIG_LOGGER.info(config);
   }
 
+  public static String getCpuAndMemInfo() {
+    int availableProcessors = Runtime.getRuntime().availableProcessors();
+    String result = availableProcessors + " cores";
+    long memGb = getMemGB();
+    if (memGb > 0) {
+      result += " and " + memGb + " GB RAM";
+    }
+    long maxMemMB = Runtime.getRuntime().maxMemory() / 1024 / 1024;
+    if (maxMemMB >= 1024)
+      result += ", max " + (maxMemMB / 1024) + " GB of RAM for this process";
+    else
+      result += ", max " + maxMemMB + " MB of RAM for this process";
+    return result;
+  }
+
+  public static int getMemGB() {
+    try {
+      MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+      ObjectName osName = new ObjectName("java.lang", "type", "OperatingSystem");
+      return ((int) ((Long) mBeanServer.getAttribute(osName, "TotalPhysicalMemorySize") / 1024 / 1024 / 1024));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return -1;
+    }
+  }
+
+  public static String getOsInfo() {
+    return SystemInfo.getOsName() + " " + SystemInfo.getOsVersion() + " " + SystemInfo.getOsArchitecture();
+  }
 }

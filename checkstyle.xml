@@ -57,12 +57,6 @@
         <property name="fileNamePattern" value="module\-info\.java$"/>
     </module>
 
-    <!-- Checks for whitespace                               -->
-    <!-- See http://checkstyle.org/config_whitespace.html -->
-<!--    <module name="FileTabCharacter">-->
-<!--        <property name="eachLine" value="true"/>-->
-<!--    </module>-->
-
     <module name="LineLength">
         <property name="fileExtensions" value="java"/>
         <property name="max" value="150"/>
@@ -70,6 +64,7 @@
     </module>
 
     <module name="TreeWalker">
+        <module name="SuppressionCommentFilter"/>
         <module name="OuterTypeFilename"/>
         <module name="IllegalTokenText">
             <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>
@@ -298,33 +293,10 @@
             <property name="target"
                       value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
         </module>
-        <module name="JavadocMethod">
-            <property name="allowMissingParamTags" value="true"/>
-            <property name="allowMissingReturnTag" value="true"/>
-            <property name="allowedAnnotations" value="Override, Test"/>
-            <property name="tokens" value="METHOD_DEF, CTOR_DEF, ANNOTATION_FIELD_DEF, COMPACT_CTOR_DEF"/>
-        </module>
-        <module name="MissingJavadocMethod">
-            <property name="scope" value="public"/>
-            <property name="minLineCount" value="2"/>
-            <property name="allowedAnnotations" value="Override, Test"/>
-            <property name="tokens" value="METHOD_DEF, CTOR_DEF, ANNOTATION_FIELD_DEF,
-                                   COMPACT_CTOR_DEF"/>
-        </module>
-        <module name="MissingJavadocType">
-            <property name="scope" value="protected"/>
-            <property name="tokens"
-                      value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF,
-                      RECORD_DEF, ANNOTATION_DEF"/>
-            <property name="excludeScope" value="nothing"/>
-        </module>
         <module name="MethodName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
             <message key="name.invalidPattern"
                      value="Method name ''{0}'' must match pattern ''{1}''."/>
-        </module>
-        <module name="SingleLineJavadoc">
-            <property name="ignoreInlineTags" value="false"/>
         </module>
         <module name="EmptyCatchBlock">
             <property name="exceptionVariableName" value="expected"/>

@@ -38,8 +38,8 @@ import com.rapiddweller.platform.db.DBSystem;
 import org.databene.webdecs.DataContainer;
 import org.databene.webdecs.DataIterator;
 import org.junit.Test;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Map;
@@ -53,7 +53,7 @@ public class ShopDBTest {
 
   private static final String BENERATOR_FILE = "demo/shop/shop.ben.xml";
 
-  private static final Logger logger = LogManager.getLogger(ShopDBTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(ShopDBTest.class);
 
   /**
    * Test hsql in mem.

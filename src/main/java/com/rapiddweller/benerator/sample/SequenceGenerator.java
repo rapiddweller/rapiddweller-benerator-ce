@@ -29,8 +29,8 @@ package com.rapiddweller.benerator.sample;
 import com.rapiddweller.benerator.util.ThreadSafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.CollectionUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,7 +46,7 @@ import java.util.List;
  */
 public class SequenceGenerator<E> extends ThreadSafeGenerator<E> {
 
-  private static final Logger logger = LogManager.getLogger(SequenceGenerator.class);
+  private static final Logger logger = LoggerFactory.getLogger(SequenceGenerator.class);
 
   private final Class<E> productType;
   private List<E> values;

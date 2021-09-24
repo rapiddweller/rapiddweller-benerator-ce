@@ -29,10 +29,9 @@ package com.rapiddweller.benerator.composite;
 /**
  * Common interface for all component builders.<br/><br/>
  * Created at 09.05.2008 13:14:15
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.5.4
  */
-public interface ComponentBuilder<E> extends GeneratorComponent<E> {
+public interface ComponentBuilder<E> extends GenerationStep<E> {
 }

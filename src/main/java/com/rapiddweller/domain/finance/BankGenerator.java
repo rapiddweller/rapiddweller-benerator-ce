@@ -26,41 +26,42 @@
 
 package com.rapiddweller.domain.finance;
 
+import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.NonNullGenerator;
-import com.rapiddweller.benerator.primitive.RandomVarLengthStringGenerator;
 import com.rapiddweller.benerator.primitive.RegexStringGenerator;
+import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
 /**
  * Generates {@link BankAccount}s with low validity requirements.<br/><br/>
  * Created at 23.06.2008 11:08:48
- *
  * @author Volker Bergmann
  * @since 0.5.4
  */
 public class BankGenerator extends CompositeGenerator<Bank>
     implements NonNullGenerator<Bank> {
 
-  private final RandomVarLengthStringGenerator bankCodeGenerator;
-  private final RegexStringGenerator nameGenerator;
-  private final RegexStringGenerator bicGenerator;
-  private final RandomVarLengthStringGenerator binGenerator;
+  private final Generator<String> bankCodeGenerator;
+  private final Generator<String> nameGenerator;
+  private final Generator<String> bicGenerator;
+  private final Generator<String> binGenerator;
+  private WrapperProvider<String> wp;
 
-  /**
-   * Instantiates a new Bank generator.
-   */
   public BankGenerator() {
     super(Bank.class);
-    this.bankCodeGenerator =
-        registerComponent(new RandomVarLengthStringGenerator("\\d", 8));
+    this.bankCodeGenerator = BeneratorFactory.getInstance()
+        .createVarLengthStringGenerator("[0-9]", 8, 8, 1, null);
     this.nameGenerator = registerComponent(new RegexStringGenerator(
         "(Deutsche Bank|Dresdner Bank|Commerzbank|Spardabank|HVB)"));
     this.bicGenerator = registerComponent(
         new RegexStringGenerator("[A-Z]{4}DE[A-Z0-9]{2}"));
     this.binGenerator =
-        registerComponent(new RandomVarLengthStringGenerator("\\d", 4));
+        registerComponent(BeneratorFactory.getInstance()
+            .createVarLengthStringGenerator("[0-9]", 4, 4, 1, null));
+    wp = new WrapperProvider<>();
   }
 
   @Override
@@ -79,11 +80,16 @@ public class BankGenerator extends CompositeGenerator<Bank>
 
   @Override
   public Bank generate() {
-    String name = nameGenerator.generate();
-    String bankCode = bankCodeGenerator.generate();
-    String bic = bicGenerator.generate();
-    String bin = binGenerator.generate();
+    String name = generate(nameGenerator);
+    String bankCode = generate(bankCodeGenerator);
+    String bic = generate(bicGenerator);
+    String bin = generate(binGenerator);
     return new Bank(name, bankCode, bic, bin);
+  }
+
+  private String generate(Generator<String> generator) {
+    ProductWrapper<String> result = generator.generate(wp.get());
+    return (result != null ? result.unwrap() : null);
   }
 
 }

@@ -69,18 +69,13 @@ import java.util.TreeSet;
 /**
  * {@link GeneratorFactory} implementation which creates minimal data sets for
  * <a href="http://en.wikipedia.org/wiki/Equivalence_partitioning">Equivalence Partitioning</a>
- * and <a href="http://en.wikipedia.org/wiki/Boundary_value_analysis">Boundary-value analysis</a> Tests.<br/>
- * <br/>
+ * and <a href="http://en.wikipedia.org/wiki/Boundary_value_analysis">Boundary-value analysis</a> Tests.<br/><br/>
  * Created: 04.07.2011 09:39:38
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public class EquivalenceGeneratorFactory extends GeneratorFactory {
 
-  /**
-   * Instantiates a new Equivalence generator factory.
-   */
   public EquivalenceGeneratorFactory() {
     super(new MeanDefaultsProvider());
   }
@@ -135,14 +130,6 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
     return new SequenceGenerator<>(Date.class, values);
   }
 
-  /**
-   * Mid date date.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   * @return the date
-   */
   Date midDate(Date min, Date max, long granularity) {
     int segmentNo = (int) ((max.getTime() - min.getTime()) / granularity / 2);
     long millisOffset = segmentNo * granularity;
@@ -275,14 +262,6 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
         new SequenceGenerator<>(Character.class, defaultSubSet(characters)));
   }
 
-  /**
-   * Default counts set.
-   *
-   * @param minParts          the min parts
-   * @param maxParts          the max parts
-   * @param lengthGranularity the length granularity
-   * @return the set
-   */
   protected Set<Integer> defaultCounts(int minParts, int maxParts, int lengthGranularity) {
     Set<Integer> lengths = new TreeSet<>();
     lengths.add(minParts);
@@ -334,12 +313,6 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
     return result;
   }
 
-  /**
-   * Add selection.
-   *
-   * @param ofChars the of chars
-   * @param toChars the to chars
-   */
   protected void addSelection(Set<Character> ofChars, Set<Character> toChars) {
     if (ofChars.size() == 0) {
       return;
@@ -386,37 +359,13 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
     return 0.5;
   }
 
-  /**
-   * The type Value set.
-   *
-   * @param <T> the type parameter
-   */
   static class ValueSet<T extends Number> {
 
-    /**
-     * The Number range.
-     */
     final Interval<T> numberRange;
-    /**
-     * The Granularity.
-     */
     final T granularity;
-    /**
-     * The Number type.
-     */
     final Class<T> numberType;
     private final TreeSet<T> set;
 
-    /**
-     * Instantiates a new Value set.
-     *
-     * @param min          the min
-     * @param minInclusive the min inclusive
-     * @param max          the max
-     * @param maxInclusive the max inclusive
-     * @param granularity  the granularity
-     * @param numberType   the number type
-     */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public ValueSet(T min, boolean minInclusive, T max, boolean maxInclusive, T granularity, Class<T> numberType) {
       this.set = new TreeSet<>();
@@ -425,20 +374,10 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
       this.numberType = numberType;
     }
 
-    /**
-     * Gets all.
-     *
-     * @return the all
-     */
     public Collection<T> getAll() {
       return set;
     }
 
-    /**
-     * Add if viable.
-     *
-     * @param value the value
-     */
     public void addIfViable(Number value) {
       T numberToAdd = NumberToNumberConverter.convert(value, numberType);
       if (numberRange.contains(numberToAdd)) {

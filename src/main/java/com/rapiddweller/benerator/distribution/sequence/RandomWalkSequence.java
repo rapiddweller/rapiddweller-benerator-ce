@@ -45,10 +45,8 @@ import static com.rapiddweller.common.NumberUtil.toInteger;
 import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
- * Random Walk {@link Sequence} implementation that supports a variable step width.<br/>
- * <br/>
+ * Random Walk {@link Sequence} implementation that supports a variable step width.<br/><br/>
  * Created at 30.06.2009 07:48:40
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -65,42 +63,18 @@ public class RandomWalkSequence extends Sequence {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Random walk sequence.
-   */
   public RandomWalkSequence() {
     this(MINUS_ONE, ONE);
   }
 
-  /**
-   * Instantiates a new Random walk sequence.
-   *
-   * @param minStep the min step
-   * @param maxStep the max step
-   */
   public RandomWalkSequence(BigDecimal minStep, BigDecimal maxStep) {
     this(minStep, maxStep, null);
   }
 
-  /**
-   * Instantiates a new Random walk sequence.
-   *
-   * @param minStep the min step
-   * @param maxStep the max step
-   * @param initial the initial
-   */
   public RandomWalkSequence(BigDecimal minStep, BigDecimal maxStep, BigDecimal initial) {
     this(minStep, maxStep, initial, DEFAULT_BUFFERED);
   }
 
-  /**
-   * Instantiates a new Random walk sequence.
-   *
-   * @param minStep  the min step
-   * @param maxStep  the max step
-   * @param initial  the initial
-   * @param buffered the buffered
-   */
   public RandomWalkSequence(BigDecimal minStep, BigDecimal maxStep, BigDecimal initial, boolean buffered) {
     this.minStep = minStep;
     this.maxStep = maxStep;
@@ -108,29 +82,14 @@ public class RandomWalkSequence extends Sequence {
     this.buffered = buffered;
   }
 
-  /**
-   * Sets min step.
-   *
-   * @param minStep the min step
-   */
   public void setMinStep(BigDecimal minStep) {
     this.minStep = minStep;
   }
 
-  /**
-   * Sets max step.
-   *
-   * @param maxStep the max step
-   */
   public void setMaxStep(BigDecimal maxStep) {
     this.maxStep = maxStep;
   }
 
-  /**
-   * Sets initial.
-   *
-   * @param initial the initial
-   */
   public void setInitial(BigDecimal initial) {
     this.initial = initial;
   }
@@ -153,9 +112,14 @@ public class RandomWalkSequence extends Sequence {
   }
 
   @Override
+  public boolean isApplicationDetached() {
+    return buffered;
+  }
+
+  @Override
   public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
     if (buffered || MathUtil.between(0L, toLong(minStep), toLong(maxStep))) {
-      return super.applyTo(source, unique);
+      return SequenceUtil.applySequenceDetached(this, source, unique);
     } else {
       return applySkipGenerator(source, unique);
     }
@@ -171,7 +135,7 @@ public class RandomWalkSequence extends Sequence {
 
   // helper methods --------------------------------------------------------------------------------------------------
 
-  private <T> NonNullGenerator<? extends Number> createDoubleGenerator(double min, double max, double granularity, boolean unique) {
+  private NonNullGenerator<Double> createDoubleGenerator(double min, double max, double granularity, boolean unique) {
     if (unique && MathUtil.rangeIncludes(0., min, max)) {
       // check if uniqueness requirements can be met
       throw new InvalidGeneratorSetupException("Cannot guarantee uniqueness for [min=" + min + ",max=" + max + "]");

@@ -34,6 +34,7 @@ import com.rapiddweller.common.ReaderLineIterator;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 
 /**
  * Looks up and manages Benerator archetypes.<br/><br/>
@@ -44,22 +45,15 @@ import java.net.URL;
  */
 public class ArchetypeManager {
 
-  /**
-   * The Archetype folder.
-   */
+
   static final String ARCHETYPE_FOLDER = "/com/rapiddweller/benerator/archetype";
-  /**
-   * The Archetypes index.
-   */
+
   static final String ARCHETYPES_INDEX = ARCHETYPE_FOLDER + "/archetypes.txt";
-  /**
-   * The Archetypes index url.
-   */
-  static final String ARCHETYPES_INDEX_URL = ArchetypeManager.class.getResource(ARCHETYPES_INDEX).toString();
-  /**
-   * The Archetype folder url.
-   */
+
+  static final String ARCHETYPES_INDEX_URL = Objects.requireNonNull(ArchetypeManager.class.getResource(ARCHETYPES_INDEX)).toString();
+
   static final URL ARCHETYPE_FOLDER_URL;
+  private static ArchetypeManager instance;
 
   static {
     try {
@@ -71,7 +65,7 @@ public class ArchetypeManager {
 
   private final Archetype[] archetypes;
 
-  private ArchetypeManager() {
+  public ArchetypeManager() {
     try {
       // read archetypes in the order specified in the file 'archetypes.txt'
       ReaderLineIterator iterator = new ReaderLineIterator(IOUtil.getReaderForURI(ARCHETYPES_INDEX));
@@ -88,22 +82,6 @@ public class ArchetypeManager {
     }
   }
 
-  /**
-   * Get archetypes archetype [ ].
-   *
-   * @return the archetype [ ]
-   */
-  public Archetype[] getArchetypes() {
-    return archetypes;
-  }
-
-  private static ArchetypeManager instance;
-
-  /**
-   * Gets instance.
-   *
-   * @return the instance
-   */
   public static ArchetypeManager getInstance() {
     if (instance == null) {
       instance = new ArchetypeManager();
@@ -111,11 +89,10 @@ public class ArchetypeManager {
     return instance;
   }
 
-  /**
-   * Gets default archetype.
-   *
-   * @return the default archetype
-   */
+  public Archetype[] getArchetypes() {
+    return archetypes;
+  }
+
   public Archetype getDefaultArchetype() {
     for (Archetype candidate : archetypes) {
       if ("simple".equals(candidate.getId())) {

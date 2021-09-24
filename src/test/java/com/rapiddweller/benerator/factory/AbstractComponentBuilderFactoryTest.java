@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -54,33 +54,15 @@ public abstract class AbstractComponentBuilderFactoryTest extends GeneratorTest 
 
   // private helpers -------------------------------------------------------------------------------------------------
 
-  /**
-   * Create component builder component builder.
-   *
-   * @param component the component
-   * @return the component builder
-   */
   protected ComponentBuilder<Entity> createComponentBuilder(ComponentDescriptor component) {
     return createComponentBuilder(component, new DefaultBeneratorContext());
   }
 
-  /**
-   * Create component builder component builder.
-   *
-   * @param component the component
-   * @param context   the context
-   * @return the component builder
-   */
   @SuppressWarnings("unchecked")
   protected ComponentBuilder<Entity> createComponentBuilder(ComponentDescriptor component, BeneratorContext context) {
-    return (ComponentBuilder<Entity>) ComponentBuilderFactory.createComponentBuilder(component, Uniqueness.NONE, context);
+    return (ComponentBuilder<Entity>) ComponentBuilderFactory.createComponentBuilder(component, Uniqueness.NONE, false, context);
   }
 
-  /**
-   * The type Component builder generator.
-   *
-   * @param <E> the type parameter
-   */
   @SuppressWarnings("unchecked")
   public final class ComponentBuilderGenerator<E> extends AbstractGenerator<E> {
 
@@ -88,12 +70,6 @@ public abstract class AbstractComponentBuilderFactoryTest extends GeneratorTest 
     private final ComponentBuilder builder;
     private final String componentName;
 
-    /**
-     * Instantiates a new Component builder generator.
-     *
-     * @param builder       the builder
-     * @param componentName the component name
-     */
     @SuppressWarnings("rawtypes")
     public ComponentBuilderGenerator(ComponentBuilder builder, String componentName) {
       this.builder = builder;
@@ -146,13 +122,6 @@ public abstract class AbstractComponentBuilderFactoryTest extends GeneratorTest 
 
   }
 
-  /**
-   * Expect unique sequence.
-   *
-   * @param <T>      the type parameter
-   * @param name     the name
-   * @param products the products
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   protected <T> void expectUniqueSequence(PartDescriptor name, T... products) {
     ComponentBuilder builder = createComponentBuilder(name);
@@ -161,13 +130,6 @@ public abstract class AbstractComponentBuilderFactoryTest extends GeneratorTest 
     expectGeneratedSequence(helper, products).withCeasedAvailability();
   }
 
-  /**
-   * Expect unique set.
-   *
-   * @param <T>      the type parameter
-   * @param name     the name
-   * @param products the products
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   protected <T> void expectUniqueSet(PartDescriptor name, T... products) {
     ComponentBuilder builder = createComponentBuilder(name);
@@ -176,14 +138,6 @@ public abstract class AbstractComponentBuilderFactoryTest extends GeneratorTest 
     expectUniquelyGeneratedSet(helper, products).withCeasedAvailability();
   }
 
-  /**
-   * Expect set.
-   *
-   * @param <T>      the type parameter
-   * @param name     the name
-   * @param n        the n
-   * @param products the products
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   protected <T> void expectSet(PartDescriptor name, int n, T... products) {
     ComponentBuilder builder = createComponentBuilder(name);
@@ -200,12 +154,6 @@ public abstract class AbstractComponentBuilderFactoryTest extends GeneratorTest 
   //  }
 
 
-  /**
-   * Expect null generations.
-   *
-   * @param gen the gen
-   * @param n   the n
-   */
   protected void expectNullGenerations(ComponentBuilderGenerator<String> gen, int n) {
     ProductWrapper<String> wrapper = new ProductWrapper<>();
     for (int i = 0; i < n; i++) {
@@ -215,13 +163,7 @@ public abstract class AbstractComponentBuilderFactoryTest extends GeneratorTest 
     }
   }
 
-  /**
-   * The enum Test enum.
-   */
   enum TestEnum {
-    /**
-     * First instance test enum.
-     */
     firstInstance
   }
 

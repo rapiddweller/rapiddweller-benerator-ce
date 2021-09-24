@@ -37,12 +37,12 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Exports generated objects to the standard output.<br/><br/>
  * Created: 27.02.2008 11:40:37
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
 public class ConsoleExporter extends FormattingConsumer {
 
+  private boolean printingIdCode;
   private Long limit;
   private String indent;
 
@@ -52,29 +52,20 @@ public class ConsoleExporter extends FormattingConsumer {
 
   // Constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Console exporter.
-   */
   public ConsoleExporter() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Console exporter.
-   *
-   * @param limit the limit
-   */
   public ConsoleExporter(Long limit) {
     this(limit, "");
   }
 
-  /**
-   * Instantiates a new Console exporter.
-   *
-   * @param limit  the limit
-   * @param indent the indent
-   */
   public ConsoleExporter(Long limit, String indent) {
+    this(limit, indent, false);
+  }
+
+  public ConsoleExporter(Long limit, String indent, boolean printingIdCode) {
+    this.printingIdCode = printingIdCode;
     this.limit = limit;
     this.indent = indent;
     this.counters = new HashMap<>();
@@ -97,38 +88,18 @@ public class ConsoleExporter extends FormattingConsumer {
     compositeFormatter.setTimestampPattern(timestampPattern);
   }
 
-  /**
-   * Sets limit.
-   *
-   * @param limit the limit
-   */
   public void setLimit(Long limit) {
     this.limit = limit;
   }
 
-  /**
-   * Sets indent.
-   *
-   * @param indent the indent
-   */
   public void setIndent(String indent) {
     this.indent = indent;
   }
 
-  /**
-   * Sets flat.
-   *
-   * @param flat the flat
-   */
   public void setFlat(boolean flat) {
     this.compositeFormatter.setFlat(flat);
   }
 
-  /**
-   * Sets out.
-   *
-   * @param out the out
-   */
   public void setOut(PrintStream out) {
     this.out = out;
   }
@@ -137,6 +108,9 @@ public class ConsoleExporter extends FormattingConsumer {
 
   @Override
   public void startProductConsumption(Object object) {
+    if (printingIdCode) {
+      out.print(System.identityHashCode(object) + " ");
+    }
     if (object instanceof Entity) {
       String entityType = ((Entity) object).type();
       AtomicLong counter = counters.get(entityType);

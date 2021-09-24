@@ -1,0 +1,1035 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="https://www.benerator.de/schema/2.0.0"
+           xmlns="https://www.benerator.de/schema/2.0.0"
+           elementFormDefault="qualified">
+
+    <xs:annotation>
+        <xs:documentation>The Benerator schema describes the generation setup for Benerator.</xs:documentation>
+        <xs:appinfo/>
+    </xs:annotation>
+
+    <xs:simpleType name="script-expression-type">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\{.*\}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="errorhandler-type">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="fatal"/>
+                    <xs:enumeration value="error"/>
+                    <xs:enumeration value="warn"/>
+                    <xs:enumeration value="info"/>
+                    <xs:enumeration value="debug"/>
+                    <xs:enumeration value="trace"/>
+                    <xs:enumeration value="ignore"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+
+    <!-- The document root. -->
+    <xs:element name="setup">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="block-statement">
+                    <xs:attribute name="defaultScript" type="xs:string"/>
+                    <xs:attribute name="defaultNull" type="xs:boolean"/>
+                    <xs:attribute name="defaultEncoding" type="xs:string"/>
+                    <xs:attribute name="defaultLineSeparator" type="xs:string"/>
+                    <xs:attribute name="defaultTimeZone" type="xs:string"/>
+                    <xs:attribute name="defaultLocale" type="xs:string"/>
+                    <xs:attribute name="defaultDataset" type="xs:string"/>
+                    <xs:attribute name="defaultPageSize" type="xs:long"/>
+                    <xs:attribute name="defaultSeparator" type="xs:string"/>
+                    <xs:attribute name="defaultOneToOne" type="xs:boolean"/>
+                    <xs:attribute name="defaultErrorHandler" type="errorhandler-type"/>
+                    <xs:attribute name="defaultImports" type="xs:boolean"/>
+                    <xs:attribute name="maxCount" type="xs:long"/>
+                    <xs:attribute name="generatorFactory" type="xs:string"/>
+                    <xs:attribute name="acceptUnknownSimpleTypes" type="xs:string"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="block-statement">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="import" minOccurs="0"/>
+            <xs:element ref="template" minOccurs="0"/>
+            <xs:element ref="comment" minOccurs="0"/>
+            <xs:element ref="include" minOccurs="0"/>
+            <xs:element ref="setting" minOccurs="0"/>
+            <xs:element ref="database" minOccurs="0"/>
+            <xs:element ref="memstore" minOccurs="0"/>
+            <xs:element ref="jms-destination" minOccurs="0"/>
+            <xs:element ref="kafka-importer" minOccurs="0"/>
+            <xs:element ref="kafka-exporter" minOccurs="0"/>
+            <xs:element ref="domtree" minOccurs="0"/>
+            <xs:element ref="bean" minOccurs="0"/>
+            <xs:element ref="defaultComponents" minOccurs="0"/>
+            <xs:element ref="generate" minOccurs="0"/>
+            <xs:element ref="iterate" minOccurs="0"/>
+            <xs:element ref="run-task" minOccurs="0"/>
+            <xs:element ref="execute" minOccurs="0"/>
+            <xs:element ref="evaluate" minOccurs="0"/>
+            <xs:element ref="echo" minOccurs="0"/>
+            <xs:element ref="error" minOccurs="0"/>
+            <xs:element ref="if" minOccurs="0"/>
+            <xs:element ref="while" minOccurs="0"/>
+            <xs:element ref="wait" minOccurs="0"/>
+            <xs:element ref="beep" minOccurs="0"/>
+            <xs:element ref="dbsanity" minOccurs="0"/>
+            <xs:element ref="anon-check" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:element name="comment" type="xs:string"/>
+
+    <!-- Imports classes. -->
+    <xs:element name="import">
+        <xs:complexType>
+            <xs:attribute name="class" type="xs:string"/>
+            <xs:attribute name="domains" type="xs:string"/>
+            <xs:attribute name="platforms" type="xs:string"/>
+            <xs:attribute name="defaults" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Transcoding features. -->
+    <xs:element name="transcodingTask">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="transcode" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="identity" type="xs:string"/>
+            <xs:attribute name="defaultSource" type="xs:string"/>
+            <xs:attribute name="target" type="xs:string"/>
+            <xs:attribute name="pageSize" type="xs:string"/>
+            <xs:attribute name="onError" type="errorhandler-type"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="transcode">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="id" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="variable" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="source" type="xs:string"/>
+            <xs:attribute name="selector" type="xs:string"/>
+            <xs:attribute name="target" type="xs:string"/>
+            <xs:attribute name="pageSize" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Includes a properties file. -->
+    <xs:element name="include">
+        <xs:complexType>
+            <xs:attribute name="uri" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="while">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="block-statement">
+                    <xs:attribute name="test" type="xs:string"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="if">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="block-statement">
+                    <xs:sequence>
+                        <xs:element ref="then" minOccurs="0" maxOccurs="1"/>
+                        <xs:element ref="else" minOccurs="0" maxOccurs="1"/>
+                    </xs:sequence>
+                    <xs:attribute name="test" type="xs:string"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="then" type="block-statement"/>
+
+    <xs:element name="else" type="block-statement"/>
+
+    <!-- Outputs a message to the console. -->
+    <xs:element name="echo">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="message" type="xs:string"/>
+                    <xs:attribute name="type" type="xs:string"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Outputs a message to the console. -->
+    <xs:element name="error">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="code" type="xs:string"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Waits for a configurable number of milliseconds. -->
+    <xs:element name="wait">
+        <xs:complexType>
+            <xs:attribute name="duration" type="xs:string"/>
+            <xs:attribute name="min" type="xs:string"/>
+            <xs:attribute name="max" type="xs:string"/>
+            <xs:attribute name="granularity" type="xs:string"/>
+            <xs:attribute name="distribution" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Emit a beep. -->
+    <xs:element name="beep"/>
+
+    <xs:element name="dbsanity">
+        <xs:complexType>
+            <xs:attribute name="environment" type="xs:string" use="required"/>
+            <xs:attribute name="appVersion" type="xs:string"/>
+            <xs:attribute name="in" type="xs:string"/>
+            <xs:attribute name="out" type="xs:string"/>
+            <xs:attribute name="tables" type="xs:NMTOKENS"/>
+            <xs:attribute name="skin" type="dbsanity-skin"/>
+            <xs:attribute name="locale" type="xs:string"/>
+            <xs:attribute name="mode" type="dbsanity-mode"/>
+            <xs:attribute name="onError" type="errorhandler-type"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="dbsanity-skin">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="online"/>
+                    <xs:enumeration value="offline"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="dbsanity-mode">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="default"/>
+                    <xs:enumeration value="silent"/>
+                    <xs:enumeration value="verbose"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <!-- Instantiates a JavaBean of the given class.
+         If the 'id' is set, the bean is put into the context with that name.
+         If the JavaBean itself has a property named 'id', this one is set to the value specified here. -->
+    <xs:element name="bean">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="bean-type">
+                    <xs:attribute name="id" type="xs:string" use="required"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="bean-type">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="class" type="xs:string"/>
+        <xs:attribute name="spec" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:element name="memstore">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- connects to a database -->
+    <xs:element name="database">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="environment" type="xs:string"/>
+            <xs:attribute name="url" type="xs:string"/>
+            <xs:attribute name="driver" type="xs:string"/>
+            <xs:attribute name="user" type="xs:string"/>
+            <xs:attribute name="password" type="xs:string"/>
+            <xs:attribute name="catalog" type="xs:string"/>
+            <xs:attribute name="schema" type="xs:string"/>
+            <xs:attribute name="tableFilter" type="xs:string"/>
+            <xs:attribute name="includeTables" type="xs:string"/>
+            <xs:attribute name="excludeTables" type="xs:string"/>
+            <xs:attribute name="batch" type="xs:string"/>
+            <xs:attribute name="fetchSize" type="xs:string"/>
+            <xs:attribute name="readOnly" type="xs:string"/>
+            <xs:attribute name="lazy" type="xs:string"/>
+            <xs:attribute name="metaCache" type="xs:string"/>
+            <xs:attribute name="acceptUnknownColumnTypes" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- connects to a JMS destination -->
+    <xs:element name="jms-destination">
+        <xs:annotation>
+            <xs:appinfo>
+                <edition>EE</edition>
+                <since>2.0.0</since>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en">Defines a JMS queue or topic to read data from or write data to.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="factory" type="xs:string" use="required"/>
+            <xs:attribute name="url" type="xs:string" use="required"/>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="type" type="jms-destination-type" use="required"/>
+            <xs:attribute name="format" type="jms-format" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="jms-destination-type">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="topic"/>
+                    <xs:enumeration value="queue"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="jms-format">
+        <xs:annotation>
+            <xs:appinfo>
+                <edition>EE</edition>
+                <since>2.0.0</since>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en">Data format to use for JMS messages</xs:documentation>
+        </xs:annotation>
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="map"/>
+                    <xs:enumeration value="json"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <!-- imports from a Kafka topic -->
+    <xs:element name="kafka-importer">
+        <xs:annotation>
+            <xs:appinfo>
+                <edition>EE</edition>
+                <since>2.0.0</since>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en">Imports data from a Kafka queue.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="kafka-common-attrs"/>
+            <xs:attribute name="page.size" type="xs:int"/>
+            <xs:attribute name="key.deserializer" type="xs:string"/>
+            <xs:attribute name="group.id" type="xs:string"/>
+            <xs:attribute name="auto.offset.reset" type="kafka-auto-offset-reset-type"/>
+            <xs:attribute name="enable.auto.commit" type="xs:boolean"/>
+            <xs:attribute name="auto.commit.interval.ms" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="allow.auto.create.topics" type="xs:boolean"/>
+            <xs:attribute name="check.crcs" type="xs:boolean"/>
+            <xs:attribute name="client.rack" type="xs:string"/>
+            <xs:attribute name="default.api.timeout.ms" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="exclude.internal.topics" type="xs:boolean"/>
+            <xs:attribute name="fetch.max.bytes" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="fetch.max.wait.ms" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="fetch.min.bytes" type="xs:int"/>
+            <xs:attribute name="group.instance.id" type="xs:string"/>
+            <xs:attribute name="heartbeat.interval.ms" type="xs:int"/>
+            <xs:attribute name="isolation.level" type="kafka-isolation-level-type"/>
+            <xs:attribute name="max.partition.fetch.bytes" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="max.poll.interval.ms" type="xs:positiveInteger"/>
+            <xs:attribute name="max.poll.records" type="xs:positiveInteger"/>
+            <xs:attribute name="partition.assignment.strategy" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- exports to a Kafka topic -->
+    <xs:element name="kafka-exporter">
+        <xs:annotation>
+            <xs:appinfo>
+                <edition>EE</edition>
+                <since>2.0.0</since>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en">Exports data to a Kafka queue</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="kafka-common-attrs"/>
+            <xs:attribute name="key.attribute" type="xs:string"/>
+            <xs:attribute name="key.serializer" type="xs:string"/>
+            <xs:attribute name="acks" type="kafka-acks-type"/>
+            <xs:attribute name="buffer.memory" type="jms-format"/>
+            <xs:attribute name="compression.type" type="kafka-compression-type"/>
+            <xs:attribute name="retries" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="batch.size" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="delivery.timeout.ms" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="enable.idempotence" type="xs:boolean"/>
+            <xs:attribute name="linger.ms" type="nonNegativeLong"/>
+            <xs:attribute name="max.block.ms" type="nonNegativeLong"/>
+            <xs:attribute name="max.in.flight.requests.per.connection" type="xs:positiveInteger"/>
+            <xs:attribute name="max.request.size" type="xs:nonNegativeInteger"/>
+            <xs:attribute name="metadata.max.idle.ms" type="nonNegativeLong"/>
+            <xs:attribute name="partitioner.class" type="xs:string"/>
+            <xs:attribute name="transaction.timeout.ms" type="xs:int"/>
+            <xs:attribute name="transactional.id" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:attributeGroup name="kafka-common-attrs">
+        <xs:attribute name="id" type="xs:string"/>
+        <xs:attribute name="bootstrap.servers" type="xs:string" use="required"/>
+        <xs:attribute name="topic" type="xs:string" use="required"/>
+        <xs:attribute name="format" type="kafka-format" use="required"/>
+        <xs:attribute name="encoding" type="xs:string"/>
+        <xs:attribute name="client.dns.lookup" type="kafka-client-dns-lookup-type"/>
+        <xs:attribute name="client.id" type="xs:string"/>
+        <xs:attribute name="connections.max.idle.ms" type="xs:long"/>
+        <xs:attribute name="socket.connection.setup.timeout.max.ms" type="xs:long"/>
+        <xs:attribute name="socket.connection.setup.timeout.ms" type="xs:long"/>
+        <xs:attribute name="interceptor.classes" type="xs:string"/>
+        <xs:attribute name="metadata.max.age.ms" type="nonNegativeLong"/>
+        <xs:attribute name="metric.reporters" type="xs:string"/>
+        <xs:attribute name="metrics.num.samples" type="xs:positiveInteger"/>
+        <xs:attribute name="metrics.recording.level" type="kafka-recording-level-type"/>
+        <xs:attribute name="metrics.sample.window.ms" type="nonNegativeLong"/>
+        <xs:attribute name="receive.buffer.bytes" type="xs:int"/>
+        <xs:attribute name="reconnect.backoff.max.ms" type="nonNegativeLong"/>
+        <xs:attribute name="reconnect.backoff.ms" type="nonNegativeLong"/>
+        <xs:attribute name="request.timeout.ms" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="retry.backoff.ms" type="nonNegativeLong"/>
+        <xs:attribute name="send.buffer.bytes" type="xs:int"/>
+        <xs:attribute name="security.protocol" type="kafka-security-protocol-type"/>
+        <xs:attribute name="security.providers" type="xs:string"/>
+        <xs:attribute name="sasl.mechanism" type="xs:string"/>
+        <xs:attribute name="sasl.client.callback.handler.class" type="xs:string"/>
+        <xs:attribute name="sasl.jaas.config" type="xs:string"/>
+        <xs:attribute name="sasl.kerberos.service.name" type="xs:string"/>
+        <xs:attribute name="sasl.kerberos.ticket.renew.jitter" type="xs:double"/>
+        <xs:attribute name="sasl.kerberos.kinit.cmd" type="xs:string"/>
+        <xs:attribute name="sasl.kerberos.min.time.before.relogin" type="xs:long"/>
+        <xs:attribute name="sasl.kerberos.ticket.renew.window.factor" type="xs:double"/>
+        <xs:attribute name="sasl.login.callback.handler.class" type="xs:string"/>
+        <xs:attribute name="sasl.login.class" type="xs:string"/>
+        <xs:attribute name="sasl.login.refresh.buffer.seconds" type="xs:short"/>
+        <xs:attribute name="sasl.login.refresh.min.period.seconds" type="xs:short"/>
+        <xs:attribute name="sasl.login.refresh.window.factor" type="xs:double"/>
+        <xs:attribute name="sasl.login.refresh.window.jitter" type="xs:double"/>
+        <xs:attribute name="ssl.engine.factory.class" type="xs:string"/>
+        <xs:attribute name="ssl.enabled.protocols" type="xs:string"/>
+        <xs:attribute name="ssl.protocol" type="xs:string"/>
+        <xs:attribute name="ssl.provider" type="xs:string"/>
+        <xs:attribute name="ssl.secure.random.implementation" type="xs:string"/>
+        <xs:attribute name="ssl.cipher.suites" type="xs:string"/>
+        <xs:attribute name="ssl.endpoint.identification.algorithm" type="xs:string"/>
+        <xs:attribute name="ssl.truststore.location" type="xs:string"/>
+        <xs:attribute name="ssl.truststore.password" type="xs:string"/>
+        <xs:attribute name="ssl.truststore.type" type="xs:string"/>
+        <xs:attribute name="ssl.truststore.certificates" type="xs:string"/>
+        <xs:attribute name="ssl.key.password" type="xs:string"/>
+        <xs:attribute name="ssl.keymanager.algorithm" type="xs:string"/>
+        <xs:attribute name="ssl.keystore.location" type="xs:string"/>
+        <xs:attribute name="ssl.keystore.type" type="xs:string"/>
+        <xs:attribute name="ssl.keystore.key" type="xs:string"/>
+        <xs:attribute name="ssl.keystore.password" type="xs:string"/>
+        <xs:attribute name="ssl.keystore.certificate.chain" type="xs:string"/>
+        <xs:attribute name="ssl.trustmanager.algorithm" type="xs:string"/>
+    </xs:attributeGroup>
+
+    <xs:simpleType name="kafka-format">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="json"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="kafka-compression-type">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="gzip"/>
+                    <xs:enumeration value="snappy"/>
+                    <xs:enumeration value="lz4"/>
+                    <xs:enumeration value="zstd"/>
+                    <xs:enumeration value="uncompressed"/>
+                    <xs:enumeration value="producer"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="kafka-client-dns-lookup-type">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="default"/>
+                    <xs:enumeration value="use_all_dns_ips"/>
+                    <xs:enumeration value="resolve_canonical_bootstrap_servers_only"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="kafka-recording-level-type">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="INFO"/>
+                    <xs:enumeration value="DEBUG"/>
+                    <xs:enumeration value="TRACE"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="kafka-security-protocol-type">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="PLAINTEXT"/>
+                    <xs:enumeration value="SSL"/>
+                    <xs:enumeration value="SASL_PLAINTEXT"/>
+                    <xs:enumeration value="SASL_SSL"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="kafka-auto-offset-reset-type">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="latest"/>
+                    <xs:enumeration value="earliest"/>
+                    <xs:enumeration value="none"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="kafka-isolation-level-type">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="read_committed"/>
+                    <xs:enumeration value="read_uncommitted"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="kafka-acks-type">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="all"/>
+                    <xs:enumeration value="-1"/>
+                    <xs:enumeration value="0"/>
+                    <xs:enumeration value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+
+
+
+    <!-- creates a DOM Tree -->
+    <xs:element name="domtree">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="inputUri" type="xs:string" use="required"/>
+            <xs:attribute name="outputUri" type="xs:string"/>
+            <xs:attribute name="namespaceAware" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="execute-type">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="uri" type="xs:string"/>
+                <xs:attribute name="encoding" type="xs:string"/>
+                <xs:attribute name="target" type="xs:string"/>
+                <xs:attribute name="separator" type="xs:string"/>
+                <xs:attribute name="type" type="data-type"/>
+                <xs:attribute name="onError" type="errorhandler-type"/>
+                <xs:attribute name="optimize" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="data-type">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="boolean"/>
+                    <xs:enumeration value="byte"/>
+                    <xs:enumeration value="short"/>
+                    <xs:enumeration value="int"/>
+                    <xs:enumeration value="long"/>
+                    <xs:enumeration value="big_integer"/>
+                    <xs:enumeration value="float"/>
+                    <xs:enumeration value="double"/>
+                    <xs:enumeration value="big_decimal"/>
+                    <xs:enumeration value="boolean"/>
+                    <xs:enumeration value="char"/>
+                    <xs:enumeration value="date"/>
+                    <xs:enumeration value="timestamp"/>
+                    <xs:enumeration value="string"/>
+                    <xs:enumeration value="object"/>
+                    <xs:enumeration value="binary"/>
+                    <xs:enumeration value="entity"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="xs:string"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+
+    <!-- executes a script, e.g. SQL -->
+    <xs:element name="execute" type="execute-type"/>
+
+    <!-- evaluates a script, e.g. SQL -->
+    <xs:element name="evaluate">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="execute-type">
+                    <xs:attribute name="id" type="xs:string"/>
+                    <xs:attribute name="assert" type="xs:string"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Declares a JavaBean to be used as consumer, either by referencing an object from the context (ref)
+         or by instantiating a JavaBean like with the &lt;bean&gt; tag. -->
+    <xs:element name="consumer">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="bean-type">
+                    <xs:attribute name="ref" type="xs:string"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="setting"> <!-- TODO unify with property -->
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="bean" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="idref" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string"/>
+            <xs:attribute name="value" type="xs:string"/>
+            <xs:attribute name="default" type="xs:string"/>
+            <xs:attribute name="ref" type="xs:string"/>
+            <xs:attribute name="source" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Sets a JavaBean's property to the simple property specified as 'value' attribute
+         or to the object stored in the context with the 'ref'. -->
+    <xs:element name="property">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="bean" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="idref" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string"/>
+            <xs:attribute name="value" type="xs:string"/>
+            <xs:attribute name="default" type="xs:string"/>
+            <xs:attribute name="ref" type="xs:string"/>
+            <xs:attribute name="source" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Represents a reference to a JavaBean (of the name specified by the 'bean' attribute) from the context. -->
+    <xs:element name="idref">
+        <xs:complexType>
+            <xs:attribute name="bean" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Instantiates and executes a JavaBean that implements the Task interface.
+         Properties are handled like in the &lt;bean&gt; tag.
+         The task is executed 'count' times in a number of 'threads' parallel threads.
+         Invocations are executed in groups of size 'pageSize'. -->
+    <xs:element name="run-task">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="bean-type">
+                    <xs:attributeGroup ref="execution-attrs"/>
+                    <xs:attribute name="threads" type="xs:string"/>
+                    <xs:attribute name="pager" type="xs:string"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="defaultComponents">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="id" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="template"> <!-- TODO v0.8 keep this? -->
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="comment" minOccurs="0"/>
+                <xs:element ref="id" minOccurs="0"/>
+                <xs:element ref="compositeId" minOccurs="0"/>
+                <xs:element ref="attribute" minOccurs="0"/>
+                <xs:element ref="reference" minOccurs="0"/>
+                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="variable" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string"/>
+            <xs:attribute name="type" type="data-type"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Creates entities. If a 'count' is provided the corresponding number of entities is created.
+         If no count is provided, entities are created as long as each involved generator is available. -->
+    <xs:element name="generate">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="comment" minOccurs="0"/>
+                <xs:element ref="value" minOccurs="0"/>
+                <xs:element ref="id" minOccurs="0"/>
+                <xs:element ref="compositeId" minOccurs="0"/>
+                <xs:element ref="attribute" minOccurs="0"/>
+                <xs:element ref="reference" minOccurs="0"/>
+                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="variable" minOccurs="0"/>
+                <xs:element ref="consumer" minOccurs="0"/>
+                <xs:element ref="generate" minOccurs="0"/>
+                <xs:element ref="iterate" minOccurs="0"/>
+                <xs:element ref="execute" minOccurs="0"/>
+                <xs:element ref="wait" minOccurs="0"/>
+                <xs:element ref="if" minOccurs="0"/>
+                <xs:element ref="while" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="generator-attrs"/>
+            <xs:attribute name="minCount" type="xs:string"/>
+            <xs:attribute name="maxCount" type="xs:string"/>
+            <xs:attribute name="countDistribution" type="xs:string"/>
+            <xs:attributeGroup ref="execution-attrs"/>
+            <xs:attribute name="threads" type="xs:int"/>
+            <xs:attribute name="template" type="xs:string"/>
+            <xs:attribute name="consumer" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Updates entities. -->
+    <xs:element name="iterate">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="echo" minOccurs="0"/>
+                <xs:element ref="if" minOccurs="0"/>
+                <xs:element ref="comment" minOccurs="0"/>
+                <xs:element ref="id" minOccurs="0"/>
+                <xs:element ref="attribute" minOccurs="0"/>
+                <xs:element ref="reference" minOccurs="0"/>
+                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="variable" minOccurs="0"/>
+                <xs:element ref="consumer" minOccurs="0"/>
+                <xs:element ref="generate" minOccurs="0"/>
+                <xs:element ref="iterate" minOccurs="0"/>
+                <xs:element ref="execute" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="iterator-attrs"/>
+            <xs:attributeGroup ref="execution-attrs"/>
+            <xs:attribute name="threads" type="xs:int"/>
+            <xs:attribute name="template" type="xs:string"/>
+            <xs:attribute name="consumer" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:attributeGroup name="execution-attrs">
+        <xs:attribute name="count" type="xs:string"/>
+        <xs:attribute name="pageSize" type="xs:string"/>
+        <xs:attribute name="stats" type="xs:string"/>
+        <xs:attribute name="onError" type="errorhandler-type"/>
+    </xs:attributeGroup>
+
+    <!-- Defines a variable that is recreated by a generator on each entity creation -->
+    <xs:element name="variable">
+        <xs:complexType>
+            <xs:attributeGroup ref="component-generator-attrs"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="value">
+        <xs:complexType>
+            <xs:attributeGroup ref="component-generator-attrs"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="attribute">
+        <xs:complexType>
+            <xs:attributeGroup ref="component-generator-attrs"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="part">
+        <xs:complexType>
+            <xs:attributeGroup ref="component-generator-attrs"/>
+            <xs:attribute name="container">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="list"/>
+                        <xs:enumeration value="set"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Defines an ID generator. -->
+    <xs:element name="id">
+        <xs:complexType>
+            <xs:attributeGroup ref="component-generator-attrs"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="compositeId">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="compositeReference" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="reference">
+        <xs:complexType>
+            <xs:attributeGroup ref="reference-generator-attrs"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="compositeReference">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="compositeReference" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:attributeGroup name="reference-generator-attrs">
+        <xs:attributeGroup ref="component-generator-attrs"/>
+        <xs:attribute name="targetType" type="xs:string"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="component-generator-attrs">
+        <xs:attributeGroup ref="simple-type-generator-attrs"/>
+        <xs:attributeGroup ref="iterator-only-attrs"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="simple-type-generator-attrs">
+        <xs:attributeGroup ref="generator-attrs"/>
+
+        <xs:attribute name="condition" type="xs:string"/>
+        <xs:attribute name="uniqueKey" type="xs:string"/>
+
+        <xs:attribute name="nullable" type="xs:string"/>
+        <xs:attribute name="mode" type="xs:string"/>
+
+        <!-- boolean generator setup -->
+        <xs:attribute name="trueQuota" type="xs:string"/>
+
+        <!-- number generator setup -->
+        <xs:attribute name="min" type="xs:string"/>
+        <xs:attribute name="minInclusive" type="xs:string"/>
+        <xs:attribute name="max" type="xs:string"/>
+        <xs:attribute name="maxInclusive" type="xs:string"/>
+        <xs:attribute name="granularity" type="xs:string"/>
+
+        <!-- String generator setup -->
+        <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="script" type="xs:string"/>
+        <xs:attribute name="minLength" type="xs:string"/>
+        <xs:attribute name="maxLength" type="xs:string"/>
+
+        <!-- Sample-based generator setup -->
+        <xs:attribute name="constant" type="xs:string"/>
+        <xs:attribute name="values" type="xs:string"/>
+
+        <xs:attribute name="map" type="xs:string"/>
+
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="generator-attrs">
+        <xs:attributeGroup ref="common-creator-attrs"/>
+        <xs:attribute name="generator" type="xs:string"/>
+        <xs:attribute name="validator" type="xs:string"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="iterator-attrs">
+        <xs:attributeGroup ref="common-creator-attrs"/>
+        <xs:attributeGroup ref="iterator-only-attrs"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="iterator-only-attrs">
+        <xs:attribute name="source" type="xs:string"/>
+        <xs:attribute name="separator" type="xs:string"/>
+        <xs:attribute name="format" type="format-type"/>
+        <xs:attribute name="rowBased" type="xs:string"/>
+        <xs:attribute name="emptyMarker" type="xs:string"/>
+        <xs:attribute name="encoding" type="xs:string"/>
+        <xs:attribute name="segment" type="xs:string"/>
+        <xs:attribute name="selector" type="xs:string"/>
+        <xs:attribute name="subSelector" type="xs:string"/>
+        <xs:attribute name="dataset" type="xs:string"/>
+        <xs:attribute name="nesting" type="xs:string"/>
+        <xs:attribute name="locale" type="xs:string"/>
+        <xs:attribute name="filter" type="xs:string">
+            <xs:annotation>
+                <xs:appinfo>
+                    <edition>EE</edition>
+                    <since>2.0.0</since>
+                </xs:appinfo>
+                <xs:documentation xml:lang="en">Filters data import with a script expression.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="common-creator-attrs">
+        <!-- elementary definitions -->
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="type" type="data-type"/>
+        <xs:attribute name="scope" type="xs:string"/>
+
+        <!-- wrappers -->
+        <xs:attribute name="converter" type="xs:string"/>
+        <xs:attribute name="nullQuota" type="xs:string"/>
+        <xs:attribute name="unique" type="xs:string"/>
+        <xs:attribute name="distribution" type="xs:string"/>
+        <xs:attribute name="cyclic" type="xs:string"/>
+        <xs:attribute name="offset" type="xs:string"/>
+    </xs:attributeGroup>
+
+    <xs:simpleType name="format-type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="formatted"/>
+            <xs:enumeration value="raw"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="nonNegativeLong">
+        <xs:restriction base="xs:long">
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="positiveLong">
+        <xs:restriction base="xs:long">
+            <xs:minInclusive value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="anon-check">
+        <xs:annotation>
+            <xs:appinfo>
+                <edition>EE</edition>
+                <since>2.0.0</since>
+            </xs:appinfo>
+            <xs:documentation xml:lang="en">Columns for which to verify anonymization.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string"/>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

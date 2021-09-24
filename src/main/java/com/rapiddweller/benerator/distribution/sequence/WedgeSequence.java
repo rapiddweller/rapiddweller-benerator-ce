@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -36,15 +36,18 @@ import static com.rapiddweller.common.NumberUtil.toLong;
 
 /**
  * {@link Sequence} implementation that creates Number {@link Generator} with a wedge distribution.
- * The number sequences a related generator produces is unique as long as the generator is not reset.<br/>
- * <br/>
+ * The number sequences a related generator produces is unique as long as the generator is not reset.<br/><br/>
  * Created at 23.09.2009 18:59:30
- *
  * @author Volker Bergmann
  * @see WedgeLongGenerator
  * @since 0.6.0
  */
-public class WedgeSequence extends Sequence {
+public class WedgeSequence extends DetachedSequence {
+
+  @Override
+  public boolean isApplicationDetached() {
+    return true;
+  }
 
   @Override
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
@@ -53,6 +56,6 @@ public class WedgeSequence extends Sequence {
     }
     NonNullGenerator<? extends Number> base = new WedgeLongGenerator(toLong(min), toLong(max), toLong(granularity));
     return WrapperFactory.asNonNullNumberGeneratorOfType(numberType, base, min, granularity);
-  }
+    }
 
 }

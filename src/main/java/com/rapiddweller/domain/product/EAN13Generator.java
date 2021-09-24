@@ -103,6 +103,17 @@ public class EAN13Generator extends NonNullGeneratorWrapper<String, String> {
 
   // Generator interface ---------------------------------------------------------------------------------------------
 
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return true;
+  }
+
   @Override
   public Class<String> getGeneratedType() {
     return String.class;

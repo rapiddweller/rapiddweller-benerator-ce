@@ -37,6 +37,8 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.domain.address.Country;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -114,75 +116,35 @@ public class PersonGenerator extends CompositeGenerator<Person>
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets min age years.
-   *
-   * @param minAgeYears the min age years
-   */
   public void setMinAgeYears(int minAgeYears) {
     birthDateGenerator.setMinAgeYears(minAgeYears);
   }
 
-  /**
-   * Sets max age years.
-   *
-   * @param maxAgeYears the max age years
-   */
   public void setMaxAgeYears(int maxAgeYears) {
     birthDateGenerator.setMaxAgeYears(maxAgeYears);
   }
 
-  /**
-   * Gets female quota.
-   *
-   * @return the female quota
-   */
   public double getFemaleQuota() {
     return genderGen.getFemaleQuota();
   }
 
-  /**
-   * Sets female quota.
-   *
-   * @param femaleQuota the female quota
-   */
   public void setFemaleQuota(double femaleQuota) {
     this.genderGen.setFemaleQuota(femaleQuota);
   }
 
-  /**
-   * Gets noble quota.
-   *
-   * @return the noble quota
-   */
   public double getNobleQuota() {
     return maleNobilityTitleGen.getNobleQuota();
   }
 
-  /**
-   * Sets noble quota.
-   *
-   * @param nobleQuota the noble quota
-   */
   public void setNobleQuota(double nobleQuota) {
     maleNobilityTitleGen.setNobleQuota(nobleQuota);
     femaleNobilityTitleGen.setNobleQuota(nobleQuota);
   }
 
-  /**
-   * Gets locale.
-   *
-   * @return the locale
-   */
   public Locale getLocale() {
     return acadTitleGen.getLocale();
   }
 
-  /**
-   * Sets locale.
-   *
-   * @param locale the locale
-   */
   public void setLocale(Locale locale) {
     this.locale = locale;
   }
@@ -237,7 +199,9 @@ public class PersonGenerator extends CompositeGenerator<Person>
         (Gender.MALE.equals(person.getGender()) ? maleNobilityTitleGen :
             femaleNobilityTitleGen);
     person.setNobilityTitle(generateNullable(nobTitleGenerator));
-    person.setBirthDate(generateNullable(birthDateGenerator));
+    Date birthdate = generateNullable(birthDateGenerator);
+    person.setBirthDate(birthdate);
+    person.setAge(this.getAge(birthdate));
     person.setEmail(emailGenerator.generate(givenName, familyName));
     return person;
   }
@@ -330,6 +294,32 @@ public class PersonGenerator extends CompositeGenerator<Person>
         registerAndInitComponent(new FamilyNameGenerator(datasetName));
     emailGenerator = new EMailAddressBuilder(datasetName);
     emailGenerator.init(context);
+  }
+
+  private Integer getAge(Date birthdate) {
+    Calendar today = Calendar.getInstance();
+    Calendar birthDate = Calendar.getInstance();
+
+    int age = 0;
+
+    birthDate.setTime(birthdate);
+    if (birthDate.after(today)) {
+      return age;
+    }
+
+    age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
+
+    // If birth date is greater than todays date (after 2 days adjustment of leap year) then decrement age one year
+    if ((birthDate.get(Calendar.DAY_OF_YEAR) - today.get(Calendar.DAY_OF_YEAR) > 3) ||
+        (birthDate.get(Calendar.MONTH) > today.get(Calendar.MONTH))) {
+      age--;
+
+      // If birth date and todays date are of same month and birth day of month is greater than todays day of month then decrement age
+    } else if ((birthDate.get(Calendar.MONTH) == today.get(Calendar.MONTH)) &&
+        (birthDate.get(Calendar.DAY_OF_MONTH) > today.get(Calendar.DAY_OF_MONTH))) {
+      age--;
+    }
+    return age;
   }
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------

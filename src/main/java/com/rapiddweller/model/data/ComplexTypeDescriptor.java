@@ -46,61 +46,31 @@ import java.util.Set;
  * @author Volker Bergmann
  * @since 0.5.0
  */
-public class ComplexTypeDescriptor extends TypeDescriptor
-    implements VariableHolder {
+public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHolder {
 
-  /**
-   * The constant __SIMPLE_CONTENT.
-   */
   public static final String __SIMPLE_CONTENT = "__SIMPLE_CONTENT";
 
   private NamedValueList<InstanceDescriptor> parts;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Complex type descriptor.
-   *
-   * @param name     the name
-   * @param provider the provider
-   */
   public ComplexTypeDescriptor(String name, DescriptorProvider provider) {
     this(name, provider, (String) null);
   }
 
-  /**
-   * Instantiates a new Complex type descriptor.
-   *
-   * @param name     the name
-   * @param provider the provider
-   * @param parent   the parent
-   */
-  public ComplexTypeDescriptor(String name, DescriptorProvider provider,
-                               ComplexTypeDescriptor parent) {
+  public ComplexTypeDescriptor(String name, DescriptorProvider provider, ComplexTypeDescriptor parent) {
     super(name, provider, parent);
     init();
   }
 
-  /**
-   * Instantiates a new Complex type descriptor.
-   *
-   * @param name       the name
-   * @param provider   the provider
-   * @param parentName the parent name
-   */
-  public ComplexTypeDescriptor(String name, DescriptorProvider provider,
-                               String parentName) {
+  public ComplexTypeDescriptor(String name, DescriptorProvider provider, String parentName) {
     super(name, provider, parentName);
     init();
   }
 
+
   // component handling ----------------------------------------------------------------------------------------------
 
-  /**
-   * Add part.
-   *
-   * @param part the part
-   */
   public void addPart(InstanceDescriptor part) {
     if (part instanceof ComponentDescriptor) {
       addComponent((ComponentDescriptor) part);
@@ -109,44 +79,27 @@ public class ComplexTypeDescriptor extends TypeDescriptor
     }
   }
 
-  /**
-   * Add component.
-   *
-   * @param descriptor the descriptor
-   */
-  public void addComponent(ComponentDescriptor descriptor) {
-    String componentName = descriptor.getName();
-    if (parent != null &&
-        ((ComplexTypeDescriptor) parent).getComponent(componentName) !=
-            null) {
-      descriptor.setParent(((ComplexTypeDescriptor) parent)
-          .getComponent(componentName));
-    }
-    parts.add(componentName, descriptor);
+  public void addComponent(ComponentDescriptor component) {
+    linkToParentTypeComponent(component);
+    parts.add(component.getName(), component);
   }
 
-  /**
-   * Sets component.
-   *
-   * @param component the component
-   */
   public void setComponent(ComponentDescriptor component) {
-    String componentName = component.getName();
-    if (parent != null &&
-        ((ComplexTypeDescriptor) parent).getComponent(componentName) !=
-            null) {
-      component.setParent(((ComplexTypeDescriptor) parent)
-          .getComponent(componentName));
-    }
-    parts.set(componentName, component);
+    linkToParentTypeComponent(component);
+    parts.set(component.getName(), component);
   }
 
-  /**
-   * Gets component.
-   *
-   * @param name the name
-   * @return the component
-   */
+  /** Searches the parent type descriptor for a component of the same name and,
+   *  if one exists, assigns that one as this component's parent descriptor. */
+  private void linkToParentTypeComponent(ComponentDescriptor component) {
+    if (parent != null) {
+      ComponentDescriptor parentComp = ((ComplexTypeDescriptor) this.parent).getComponent(component.getName());
+      if (parentComp != null) {
+        component.setParent(parentComp);
+      }
+    }
+  }
+
   public ComponentDescriptor getComponent(String name) {
     for (InstanceDescriptor part : parts.values()) {
       if (StringUtil.equalsIgnoreCase(part.getName(), name) &&
@@ -155,16 +108,17 @@ public class ComplexTypeDescriptor extends TypeDescriptor
       }
     }
     if (getParent() != null) {
+    /* TODO is this a feasible shortcut of the above?
+    InstanceDescriptor part = parts.someValueOfName(name);
+    if (part instanceof ComponentDescriptor) {
+      return (ComponentDescriptor) part;
+    }
+     */
       return ((ComplexTypeDescriptor) getParent()).getComponent(name);
     }
     return null;
   }
 
-  /**
-   * Gets parts.
-   *
-   * @return the parts
-   */
   public List<InstanceDescriptor> getParts() {
     NamedValueList<InstanceDescriptor> result =
         NamedValueList.createCaseInsensitiveList();
@@ -187,11 +141,6 @@ public class ComplexTypeDescriptor extends TypeDescriptor
     return result.values();
   }
 
-  /**
-   * Gets components.
-   *
-   * @return the components
-   */
   public List<ComponentDescriptor> getComponents() {
     List<ComponentDescriptor> result = new ArrayList<>();
     for (InstanceDescriptor instance : getParts()) {
@@ -202,33 +151,16 @@ public class ComplexTypeDescriptor extends TypeDescriptor
     return result;
   }
 
-  /**
-   * Gets declared parts.
-   *
-   * @return the declared parts
-   */
   public Collection<InstanceDescriptor> getDeclaredParts() {
-    Set<InstanceDescriptor> declaredDescriptors =
-        new ListBasedSet<>(parts.size());
+    Set<InstanceDescriptor> declaredDescriptors = new ListBasedSet<>(parts.size());
     declaredDescriptors.addAll(parts.values());
     return declaredDescriptors;
   }
 
-  /**
-   * Is declared component boolean.
-   *
-   * @param componentName the component name
-   * @return the boolean
-   */
   public boolean isDeclaredComponent(String componentName) {
     return parts.containsName(componentName);
   }
 
-  /**
-   * Get id component names string [ ].
-   *
-   * @return the string [ ]
-   */
   public String[] getIdComponentNames() {
     ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
     for (ComponentDescriptor descriptor : getComponents()) {
@@ -239,11 +171,6 @@ public class ComplexTypeDescriptor extends TypeDescriptor
     return builder.toArray();
   }
 
-  /**
-   * Gets reference components.
-   *
-   * @return the reference components
-   */
   public List<ReferenceDescriptor> getReferenceComponents() {
     return CollectionUtil.extractItemsOfExactType(ReferenceDescriptor.class,
         getComponents());
@@ -256,14 +183,7 @@ public class ComplexTypeDescriptor extends TypeDescriptor
 
   // construction helper methods -------------------------------------------------------------------------------------
 
-  /**
-   * With component complex type descriptor.
-   *
-   * @param componentDescriptor the component descriptor
-   * @return the complex type descriptor
-   */
-  public ComplexTypeDescriptor withComponent(
-      ComponentDescriptor componentDescriptor) {
+  public ComplexTypeDescriptor withComponent(ComponentDescriptor componentDescriptor) {
     addComponent(componentDescriptor);
     return this;
   }
@@ -281,7 +201,6 @@ public class ComplexTypeDescriptor extends TypeDescriptor
     if (parts.size() == 0) {
       return super.toString();
     }
-    //return new CompositeFormatter(false, false).render(super.toString() + '{', new CompositeAdapter(), "}");
     return getName() + getParts();
   }
 

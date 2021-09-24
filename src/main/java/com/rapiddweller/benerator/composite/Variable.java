@@ -33,22 +33,14 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 /**
  * Wraps variable name and generator functionality.<br/><br/>
  * Created: 07.08.2011 16:24:10
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.7.0
  */
-public class Variable<E> extends AbstractGeneratorComponent<E> {
+public class Variable<E> extends SourcedGenerationStep<E> {
 
   private final String name;
 
-  /**
-   * Instantiates a new Variable.
-   *
-   * @param name   the name
-   * @param source the source
-   * @param scope  the scope
-   */
   public Variable(String name, Generator<?> source, String scope) {
     super(source, scope);
     this.name = name;

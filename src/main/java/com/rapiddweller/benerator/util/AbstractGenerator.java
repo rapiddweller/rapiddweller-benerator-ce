@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -32,36 +32,23 @@ import com.rapiddweller.benerator.GeneratorState;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Abstract {@link Generator} implementation which holds a state and state management methods.<br/><br/>
  * Created: 24.02.2010 12:28:05
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public abstract class AbstractGenerator<E> implements Generator<E> {
 
-  /**
-   * The Logger.
-   */
-  protected final Logger logger = LogManager.getLogger(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
   private final WrapperProvider<E> resultWrapperProvider;
-  /**
-   * The State.
-   */
   protected GeneratorState state;
-  /**
-   * The Context.
-   */
   protected GeneratorContext context;
 
-  /**
-   * Instantiates a new Abstract generator.
-   */
   public AbstractGenerator() {
     this.state = GeneratorState.CREATED;
     this.resultWrapperProvider = new WrapperProvider<>();
@@ -90,9 +77,6 @@ public abstract class AbstractGenerator<E> implements Generator<E> {
 
   // internal helpers ------------------------------------------------------------------------------------------------
 
-  /**
-   * Assert not initialized.
-   */
   protected final void assertNotInitialized() {
     if (state != GeneratorState.CREATED) {
       if (state == GeneratorState.RUNNING) {
@@ -103,9 +87,6 @@ public abstract class AbstractGenerator<E> implements Generator<E> {
     }
   }
 
-  /**
-   * Assert initialized.
-   */
   protected final void assertInitialized() {
     if (state == GeneratorState.CREATED) {
       throw new IllegalGeneratorStateException("Generator has not been initialized: " + this);
@@ -115,11 +96,6 @@ public abstract class AbstractGenerator<E> implements Generator<E> {
     }
   }
 
-  /**
-   * Gets result wrapper.
-   *
-   * @return the result wrapper
-   */
   protected ProductWrapper<E> getResultWrapper() {
     return resultWrapperProvider.get();
   }

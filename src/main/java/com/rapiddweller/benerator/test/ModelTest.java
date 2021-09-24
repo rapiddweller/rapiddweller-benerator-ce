@@ -40,8 +40,8 @@ import com.rapiddweller.model.data.PartDescriptor;
 import com.rapiddweller.model.data.ReferenceDescriptor;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.Before;
 
 /**
@@ -56,7 +56,7 @@ public abstract class ModelTest {
   /**
    * The Logger.
    */
-  protected final Logger logger = LogManager.getLogger(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
 
   /**
    * The Context.
@@ -271,6 +271,12 @@ public abstract class ModelTest {
    */
   protected ArrayElementDescriptor createArrayElement(int index, String typeName) {
     return new ArrayElementDescriptor(index, testDescriptorProvider, typeName);
+  }
+
+  protected String testResourcePath(String fileName) {
+    return "src/test/resources/"
+        + this.getClass().getPackage().getName().replace('.', '/') + "/"
+        + fileName;
   }
 
 }

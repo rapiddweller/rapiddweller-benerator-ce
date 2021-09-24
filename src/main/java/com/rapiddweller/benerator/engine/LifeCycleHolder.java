@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -38,10 +38,5 @@ import java.io.Closeable;
  * @since 0.7.6
  */
 public interface LifeCycleHolder extends Resettable, Closeable {
-  /**
-   * Init.
-   *
-   * @param context the context
-   */
   void init(BeneratorContext context);
 }

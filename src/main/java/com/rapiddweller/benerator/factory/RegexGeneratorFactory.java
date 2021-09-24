@@ -51,35 +51,16 @@ import com.rapiddweller.model.data.Uniqueness;
 import java.util.Objects;
 
 /**
- * Creates generators for regular expressions and their sub parts.<br/>
- * <br/>
+ * Creates generators for regular expressions and their sub parts.<br/><br/>
  * Created: 17.11.2007 16:30:09
- *
  * @author Volker Bergmann
  */
 public class RegexGeneratorFactory {
 
-  /**
-   * Create non null generator.
-   *
-   * @param pattern the pattern
-   * @param factory the factory
-   * @return the non null generator
-   */
   public static NonNullGenerator<String> create(String pattern, GeneratorFactory factory) {
     return create(pattern, 0, null, Uniqueness.NONE, factory);
   }
 
-  /**
-   * Create non null generator.
-   *
-   * @param pattern    the pattern
-   * @param minLength  the min length
-   * @param maxLength  the max length
-   * @param uniqueness the uniqueness
-   * @param factory    the factory
-   * @return the non null generator
-   */
   public static NonNullGenerator<String> create(String pattern, int minLength, Integer maxLength,
                                                 Uniqueness uniqueness, GeneratorFactory factory) {
     if (pattern == null) {
@@ -91,16 +72,6 @@ public class RegexGeneratorFactory {
 
   // private helpers -------------------------------------------------------------------------------------------------
 
-  /**
-   * Create from object non null generator.
-   *
-   * @param part       the part
-   * @param minLength  the min length
-   * @param maxLength  the max length
-   * @param uniqueness the uniqueness
-   * @param factory    the factory
-   * @return the non null generator
-   */
   static NonNullGenerator<String> createFromObject(RegexPart part, int minLength, Integer maxLength,
                                                    Uniqueness uniqueness, GeneratorFactory factory) {
     if (part instanceof Factor) {
@@ -156,16 +127,6 @@ public class RegexGeneratorFactory {
     return WrapperFactory.asNonNullGenerator(new ConcatenatingGenerator(partGenerator));
   }
 
-  /**
-   * Create component generators non null generator [ ].
-   *
-   * @param parts              the parts
-   * @param maxComponentLength the max component length
-   * @param maxTotalLength     the max total length
-   * @param uniqueness         the uniqueness
-   * @param factory            the factory
-   * @return the non null generator [ ]
-   */
   @SuppressWarnings("rawtypes")
   static NonNullGenerator[] createComponentGenerators(RegexPart[] parts, Integer maxComponentLength,
                                                       Integer maxTotalLength, Uniqueness uniqueness, GeneratorFactory factory) {

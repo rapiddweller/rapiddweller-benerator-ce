@@ -51,8 +51,8 @@ import com.rapiddweller.platform.db.DBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.task.TaskException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -72,7 +72,7 @@ import java.util.Map.Entry;
  */
 public class EvaluateStatement implements Statement {
 
-  private static final Logger logger = LogManager.getLogger(EvaluateStatement.class);
+  private static final Logger logger = LoggerFactory.getLogger(EvaluateStatement.class);
 
   private static final String SHELL = "shell";
 

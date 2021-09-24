@@ -31,33 +31,22 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Mutator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Helper class for simple definition of custom {@link ComponentBuilder}s which uses a {@link Mutator}
  * Created: 30.04.2010 09:34:42
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.1
  */
-public abstract class AbstractComponentBuilder<E> extends AbstractGeneratorComponent<E> implements ComponentBuilder<E> {
+public abstract class AbstractComponentBuilder<E> extends SourcedGenerationStep<E> implements ComponentBuilder<E> {
 
-  /**
-   * The Mutator.
-   */
   protected final Mutator mutator;
-  private final Logger logger = LogManager.getLogger(getClass());
+  private final Logger logger = LoggerFactory.getLogger(getClass());
   private final WrapperProvider<Object> wrapperProvider = new WrapperProvider<>();
 
-  /**
-   * Instantiates a new Abstract component builder.
-   *
-   * @param source  the source
-   * @param mutator the mutator
-   * @param scope   the scope
-   */
   public AbstractComponentBuilder(Generator<?> source, Mutator mutator, String scope) {
     super(source, scope);
     this.mutator = mutator;

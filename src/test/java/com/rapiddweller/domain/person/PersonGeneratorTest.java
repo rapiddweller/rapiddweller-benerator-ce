@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.domain.address.Country;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.Test;
 
 import java.util.Date;
@@ -53,7 +53,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class PersonGeneratorTest extends GeneratorClassTest {
 
-  private static final Logger logger = LogManager.getLogger(PersonGeneratorTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(PersonGeneratorTest.class);
 
   /**
    * Instantiates a new Person generator test.
@@ -209,7 +209,7 @@ public class PersonGeneratorTest extends GeneratorClassTest {
     Set<Integer> agesUsed = new HashSet<>();
     for (int i = 0; i < 1000; i++) {
       Person person = generator.generate();
-      int age = TimeUtil.yearsBetween(person.getBirthDate(), today);
+      int age = person.getAge();
       assertTrue("Person is expected to be at least 18 years old, but is " + age + ", " +
               "birthDate=" + person.getBirthDate(),
           age >= 18);

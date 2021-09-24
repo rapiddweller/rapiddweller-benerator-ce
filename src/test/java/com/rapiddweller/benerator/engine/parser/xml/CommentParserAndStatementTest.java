@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.statement.CommentStatement;
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.Test;
 import org.w3c.dom.Element;
@@ -41,7 +41,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class CommentParserAndStatementTest extends BeneratorIntegrationTest {
+public class CommentParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Test value.

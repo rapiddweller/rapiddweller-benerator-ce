@@ -31,8 +31,8 @@ import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.Map;
 
@@ -49,7 +49,7 @@ public class FemaleFamilyNameConverter
     extends ThreadSafeConverter<String, String> {
 
   private static final Logger logger =
-      LogManager.getLogger(FemaleFamilyNameConverter.class);
+      LoggerFactory.getLogger(FemaleFamilyNameConverter.class);
   private final String[][] mappings;
 
   /**

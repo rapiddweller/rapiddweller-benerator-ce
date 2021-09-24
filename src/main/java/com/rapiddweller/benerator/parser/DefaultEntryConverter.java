@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -41,7 +41,6 @@ import java.util.Map;
  * Converts Map entries by first applying a preprocessor to the value,
  * then (if possible) converting the result to a number or boolean.<br/><br/>
  * Created: 01.02.2008 14:40:43
- *
  * @author Volker Bergmann
  * @since 0.4.0
  */
@@ -53,22 +52,10 @@ public class DefaultEntryConverter extends AbstractConverter<Map.Entry, Map.Entr
   private final LiteralParser stringParser;
   private final boolean putEntriesToContext;
 
-  /**
-   * Instantiates a new Default entry converter.
-   *
-   * @param context the context
-   */
   public DefaultEntryConverter(BeneratorContext context) {
     this(new NoOpConverter(), context, false);
   }
 
-  /**
-   * Instantiates a new Default entry converter.
-   *
-   * @param preprocessor        the preprocessor
-   * @param context             the context
-   * @param putEntriesToContext the put entries to context
-   */
   public DefaultEntryConverter(Converter<?, ?> preprocessor, BeneratorContext context, boolean putEntriesToContext) {
     super(Map.Entry.class, Map.Entry.class);
     this.preprocessor = preprocessor;

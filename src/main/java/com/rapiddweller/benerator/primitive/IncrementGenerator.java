@@ -32,8 +32,7 @@ import com.rapiddweller.common.ConfigurationError;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Generates long values by continuously incrementing a base (min) value.
- *
+ * Generates long values by continuously incrementing a base (min) value.<br/><br/>
  * @author Volker Bergmann
  * @since 0.3.04
  */
@@ -48,47 +47,23 @@ public class IncrementGenerator extends ThreadSafeNonNullGenerator<Long> {
   private long max;
   private long increment;
 
-  /**
-   * The Cursor.
-   */
   @SuppressWarnings("CanBeFinal")
   volatile AtomicLong cursor = new AtomicLong();
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Increment generator.
-   */
   public IncrementGenerator() {
     this(DEFAULT_MIN);
   }
 
-  /**
-   * Instantiates a new Increment generator.
-   *
-   * @param min the min
-   */
   public IncrementGenerator(long min) {
     this(min, 1);
   }
 
-  /**
-   * Instantiates a new Increment generator.
-   *
-   * @param min       the min
-   * @param increment the increment
-   */
   public IncrementGenerator(long min, long increment) {
     this(min, increment, DEFAULT_MAX);
   }
 
-  /**
-   * Instantiates a new Increment generator.
-   *
-   * @param min       the min
-   * @param increment the increment
-   * @param max       the max
-   */
   public IncrementGenerator(long min, long increment, long max) {
     setMin(min);
     setIncrement(increment);
@@ -97,57 +72,27 @@ public class IncrementGenerator extends ThreadSafeNonNullGenerator<Long> {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets min.
-   *
-   * @return the min
-   */
   public Long getMin() {
     return min;
   }
 
-  /**
-   * Sets min.
-   *
-   * @param min the min
-   */
   public void setMin(Long min) {
     this.min = min;
     this.cursor.set(min);
   }
 
-  /**
-   * Gets max.
-   *
-   * @return the max
-   */
   public long getMax() {
     return max;
   }
 
-  /**
-   * Sets max.
-   *
-   * @param max the max
-   */
   public void setMax(long max) {
     this.max = max;
   }
 
-  /**
-   * Gets increment.
-   *
-   * @return the increment
-   */
   public long getIncrement() {
     return increment;
   }
 
-  /**
-   * Sets increment.
-   *
-   * @param increment the increment
-   */
   public void setIncrement(long increment) {
     if (increment < 1) {
       throw new ConfigurationError("increment must be a positive number, but was " + increment);
@@ -164,11 +109,8 @@ public class IncrementGenerator extends ThreadSafeNonNullGenerator<Long> {
 
   @Override
   public Long generate() {
-    if (cursor.get() <= max) {
-      return cursor.getAndAdd(increment);
-    } else {
-      return null;
-    }
+    long result = cursor.getAndAdd(increment);
+    return (result <= max ? result : null);
   }
 
   @Override

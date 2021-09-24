@@ -26,68 +26,45 @@
 
 package com.rapiddweller.domain.address;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.NonNullGenerator;
-import com.rapiddweller.benerator.primitive.RandomVarLengthStringGenerator;
+import com.rapiddweller.benerator.primitive.VarLengthStringGenerator;
 import com.rapiddweller.benerator.wrapper.CompositeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
 /**
- * Generates {@link Address} objects.<br/>
- * <br/>
+ * Generates {@link Address} objects.<br/><br/>
  * Created: 11.06.2006 08:07:40
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class AddressGenerator extends CompositeGenerator<Address>
     implements NonNullGenerator<Address> {
 
-  /**
-   * The Local phone number generator.
-   */
-  RandomVarLengthStringGenerator localPhoneNumberGenerator;
+  VarLengthStringGenerator localPhoneNumberGenerator;
   private String dataset;
   private CityGenerator cityGenerator;
   private StreetNameGenerator streetNameGenerator;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Address generator.
-   */
   public AddressGenerator() {
     this(Country.getDefault().getIsoCode());
   }
 
-  /**
-   * Instantiates a new Address generator.
-   *
-   * @param dataset the dataset
-   */
   public AddressGenerator(String dataset) {
     super(Address.class);
-    logger.debug("Instantiated AddressGenerator with dataset '{}'",
-        dataset);
+    logger.debug("Instantiated AddressGenerator with dataset '{}'", dataset);
     setDataset(dataset);
   }
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets country.
-   *
-   * @param country the country
-   */
   public void setCountry(Country country) {
     setDataset(country.getIsoCode());
   }
 
-  /**
-   * Sets dataset.
-   *
-   * @param dataset the dataset
-   */
   public void setDataset(String dataset) {
     this.dataset = dataset;
   }
@@ -155,8 +132,8 @@ public class AddressGenerator extends CompositeGenerator<Address>
     streetNameGenerator =
         registerComponent(new StreetNameGenerator(dataset));
     streetNameGenerator.init(context);
-    localPhoneNumberGenerator =
-        new RandomVarLengthStringGenerator("\\d", 10);
+    localPhoneNumberGenerator = BeneratorFactory.getInstance()
+        .createVarLengthStringGenerator("[0-9]", 10, 10, 1, null);
     localPhoneNumberGenerator.init(context);
   }
 

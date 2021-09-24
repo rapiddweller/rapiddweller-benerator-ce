@@ -26,9 +26,10 @@
 
 package com.rapiddweller.domain.person;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
+import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.csv.LocalCSVGenerator;
-import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Encodings;
@@ -42,7 +43,6 @@ import java.util.Locale;
  * and noble ranks</a> and <a href="http://en.wikipedia.org/wiki/Nobility">Nobility</a> for further
  * information on the domain.<br/><br/>
  * Created: 11.02.2010 12:04:01
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -54,24 +54,17 @@ public class NobilityTitleGenerator extends GeneratorProxy<String> {
   private Gender gender;
   private Locale locale;
   private float nobleQuota = 0.005f;
+  private final RandomProvider random;
 
-  /**
-   * Instantiates a new Nobility title generator.
-   */
   public NobilityTitleGenerator() {
     this(Gender.MALE, Locale.getDefault());
   }
 
-  /**
-   * Instantiates a new Nobility title generator.
-   *
-   * @param gender the gender
-   * @param locale the locale
-   */
   public NobilityTitleGenerator(Gender gender, Locale locale) {
     super(String.class);
     this.gender = gender;
     this.locale = locale;
+    this.random = BeneratorFactory.getInstance().getRandomProvider();
   }
 
   // properties ------------------------------------------------------------------------------------------------------
@@ -92,49 +85,24 @@ public class NobilityTitleGenerator extends GeneratorProxy<String> {
     }
   }
 
-  /**
-   * Sets gender.
-   *
-   * @param gender the gender
-   */
   public void setGender(Gender gender) {
     this.gender = gender;
   }
 
-  /**
-   * Gets locale.
-   *
-   * @return the locale
-   */
   public Locale getLocale() {
     return locale;
   }
 
-  /**
-   * Sets locale.
-   *
-   * @param locale the locale
-   */
   public void setLocale(Locale locale) {
     this.locale = locale;
   }
 
   // Generator interface implementation ------------------------------------------------------------------------------
 
-  /**
-   * Gets noble quota.
-   *
-   * @return the noble quota
-   */
   public double getNobleQuota() {
     return nobleQuota;
   }
 
-  /**
-   * Sets noble quota.
-   *
-   * @param nobleQuota the noble quota
-   */
   public void setNobleQuota(double nobleQuota) {
     this.nobleQuota = (float) nobleQuota;
   }
@@ -143,7 +111,7 @@ public class NobilityTitleGenerator extends GeneratorProxy<String> {
 
   @Override
   public ProductWrapper<String> generate(ProductWrapper<String> wrapper) {
-    if (RandomUtil.randomProbability() < getNobleQuota()) {
+    if (random.randomProbability() < getNobleQuota()) {
       return super.generate(wrapper);
     } else {
       return wrapper.wrap("");

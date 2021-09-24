@@ -26,56 +26,45 @@
 
 package com.rapiddweller.benerator.distribution.sequence;
 
+import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
-import com.rapiddweller.benerator.util.RandomUtil;
 
 /**
- * Double Generator that implements a 'random' Double Sequence.<br/>
- * <br/>
+ * Double Generator that implements a 'random' Double Sequence.<br/><br/>
  * Created: 11.06.2006 07:55:54
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class RandomDoubleGenerator extends AbstractNonNullNumberGenerator<Double> {
 
-  /**
-   * Instantiates a new Random double generator.
-   */
+  private RandomProvider random;
+
   public RandomDoubleGenerator() {
     this(Double.MIN_VALUE, Double.MAX_VALUE);
   }
 
-  /**
-   * Instantiates a new Random double generator.
-   *
-   * @param min the min
-   * @param max the max
-   */
   public RandomDoubleGenerator(double min, double max) {
     this(min, max, 1);
   }
 
-  /**
-   * Instantiates a new Random double generator.
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   */
   public RandomDoubleGenerator(double min, double max, double granularity) {
     super(Double.class, min, max, granularity);
+    this.random = BeneratorFactory.getInstance().getRandomProvider();
   }
 
   // Generator interface ---------------------------------------------------------------------------------------------
 
   @Override
   public Double generate() {
-    if (granularity == 0) {
-      return min + Math.random() * (max - min);
+    // generate an offset value which will include 'max' if a granularity is defined.
+    // Otherwise granularity is 0 and its addition does not matter.
+    double offset = random.randomDouble() * (max - min + granularity);
+    if (granularity > 0) {
+      // if generation is granular, then apply it to the offset (not the base!)
+      offset = Math.floor(offset / granularity) * granularity;
     }
-    int n = (int) ((max - min) / granularity);
-    return min + RandomUtil.randomInt(0, n) * granularity;
+    return min + offset;
   }
 
 }

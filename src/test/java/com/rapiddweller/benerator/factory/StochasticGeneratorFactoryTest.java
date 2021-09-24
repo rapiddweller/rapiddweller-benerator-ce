@@ -43,8 +43,8 @@ import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.common.Period;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.WeightedSample;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -64,21 +64,17 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link StochasticGeneratorFactory}.<br/><br/>
  * Created: 24.08.2006 07:03:03
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class StochasticGeneratorFactoryTest extends GeneratorTest {
 
-  private static final Logger logger = LogManager.getLogger(StochasticGeneratorFactoryTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(StochasticGeneratorFactoryTest.class);
 
   private final GeneratorFactory generatorFactory = new StochasticGeneratorFactory();
 
   // boolean source -----------------------------------------------------------------------------------------------
 
-  /**
-   * Test get boolean generator.
-   */
   @Test
   public void testGetBooleanGenerator() {
     initAndUseGenerator(generatorFactory.createBooleanGenerator(0.5));
@@ -86,9 +82,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
 
   // number generators -----------------------------------------------------------------------------------------------
 
-  /**
-   * Test get number generator.
-   */
   @Test
   public void testGetNumberGenerator() {
     checkNumberGenerator(Byte.class, (byte) -10, (byte) 10, (byte) 1);
@@ -101,9 +94,7 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     checkNumberGenerator(BigDecimal.class, new BigDecimal(-10), new BigDecimal(10), new BigDecimal(1));
   }
 
-  /**
-   * Test get number generator without max.
-   */
+  /*
   @Test
   public void testGetNumberGeneratorWithoutMax() {
     checkNumberGenerator(Byte.class, (byte) -10, null, (byte) 1);
@@ -115,7 +106,7 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     checkNumberGenerator(Float.class, (float) -10, null, (float) 1);
     checkNumberGenerator(BigDecimal.class, new BigDecimal(-10), null, new BigDecimal(1));
   }
-
+  */
 
   private <T extends Number> void checkNumberGenerator(Class<T> type, T min, T max, T granularity) {
     for (Sequence sequence : SequenceManager.registeredSequences()) {
@@ -134,10 +125,15 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     Generator<T> generator = generatorFactory.createNumberGenerator(type, min, true, max, true, granularity, sequence, Uniqueness.NONE);
     generator.init(context);
     ProductWrapper<T> wrapper = new ProductWrapper<>();
-    for (int i = 0; i < 5; i++) {
-      T n = generator.generate(wrapper).unwrap();
+    for (int i = 0; i < 30; i++) {
+      wrapper = generator.generate(wrapper);
+      if (wrapper == null)
+        break;
+      T n = wrapper.unwrap();
       assertNotNull("Generator not available: " + generator, n);
       if (min != null) {
+        if (n.doubleValue() < min.doubleValue()) // TODO remove
+          System.out.print("");
         assertTrue("Generated value (" + n + ") is smaller than min (" + min + ") using sequence '" + sequence + "'",
             n.doubleValue() >= min.doubleValue());
       }
@@ -166,9 +162,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
 
   // sample source ------------------------------------------------------------------------------------------------
 
-  /**
-   * Test get sample generator.
-   */
   @Test
   public void testGetSampleGenerator() {
     List<Integer> samples = new ArrayList<>();
@@ -181,9 +174,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
 
   // date source --------------------------------------------------------------------------------------------------
 
-  /**
-   * Test get date generator by distribution type.
-   */
   @Test
   public void testGetDateGeneratorByDistributionType() {
     for (Sequence sequence : SequenceManager.registeredSequences()) {
@@ -191,9 +181,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     }
   }
 
-  /**
-   * Test get date generator by distribution function.
-   */
   @Test
   public void testGetDateGeneratorByDistributionFunction() {
     Date min = date(2006, 0, 1);
@@ -210,9 +197,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
 
   // text source --------------------------------------------------------------------------------------------------
 
-  /**
-   * Test get character generator by locale.
-   */
   @Test
   public void testGetCharacterGeneratorByLocale() {
     checkCharacterGeneratorOfLocale(Locale.GERMANY);
@@ -245,9 +229,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     }
   }
 
-  /**
-   * Test get character generator by regex.
-   */
   @Test
   public void testGetCharacterGeneratorByRegex() {
     String pattern = "[A-Za-z0-1]";
@@ -255,9 +236,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     initAndUseGenerator(generator);
   }
 
-  /**
-   * Test get character generator by set.
-   */
   @Test
   public void testGetCharacterGeneratorBySet() {
     Set<Character> set = new CharSet('A', 'Z').getSet();
@@ -265,9 +243,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     initAndUseGenerator(generator);
   }
 
-  /**
-   * Test get regex generator.
-   */
   @Test
   public void testGetRegexGenerator() {
 //      checkRegexGenerator(null, 0, 0, true);
@@ -276,9 +251,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
     checkRegexGeneration("12345678901234567890123456789012", 1, null, false);
   }
 
-  /**
-   * Test get unique regex generator.
-   */
   @Test
   public void testGetUniqueRegexGenerator() {
     Generator<String> generator = generatorFactory.createRegexStringGenerator("[0-9]{3}", 3, 3, Uniqueness.SIMPLE);
@@ -294,9 +266,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
 
   // weighted sample source ---------------------------------------------------------------------------------------
 
-  /**
-   * Test get weighted sample generator by values.
-   */
   @Test
   public void testGetWeightedSampleGeneratorByValues() {
     List<WeightedSample<Integer>> samples = new ArrayList<>();
@@ -310,9 +279,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
   }
 
 
-  /**
-   * Test get heterogenous array generator.
-   */
   @Test
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void testGetHeterogenousArrayGenerator() {

@@ -26,6 +26,7 @@
 
 package com.rapiddweller.domain.address;
 
+import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.WeightedGenerator;
 import com.rapiddweller.benerator.dataset.AbstractDatasetGenerator;
@@ -36,10 +37,8 @@ import com.rapiddweller.benerator.sample.IndividualWeightSampleGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 
 /**
- * Generates {@link City} objects.<br/>
- * <br/>
+ * Generates {@link City} objects.<br/><br/>
  * Created: 14.10.2007 21:24:25
- *
  * @author Volker Bergmann
  */
 public class CityGenerator extends AbstractDatasetGenerator<City>
@@ -47,13 +46,29 @@ public class CityGenerator extends AbstractDatasetGenerator<City>
 
   private static final String REGION = "/com/rapiddweller/dataset/region";
 
-  /**
-   * Instantiates a new City generator.
-   *
-   * @param dataset the dataset
-   */
+  public CityGenerator() {
+    this(null);
+  }
+
   public CityGenerator(String dataset) {
     super(City.class, REGION, dataset, true);
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return true;
+  }
+
+  @Override
+  public synchronized void init(GeneratorContext context) {
+    if (getDataset() == null)
+      setDataset(context.getDefaultDataset());
+    super.init(context);
   }
 
   @Override
@@ -64,11 +79,9 @@ public class CityGenerator extends AbstractDatasetGenerator<City>
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
-  protected WeightedGenerator<City> createGeneratorForAtomicDataset(
-      Dataset dataset) {
+  protected WeightedGenerator<City> createGeneratorForAtomicDataset(Dataset dataset) {
     IndividualWeightSampleGenerator<City> generator =
-        new IndividualWeightSampleGenerator<City>(
-            City.class,
+        new IndividualWeightSampleGenerator<City>(City.class,
             (IndividualWeight) new FeatureWeight("population"));
     Country country = Country.getInstance(dataset.getName());
     country.checkCities();

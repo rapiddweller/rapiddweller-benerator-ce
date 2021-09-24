@@ -30,8 +30,8 @@ import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.xml.XMLUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.Map;
 
@@ -44,7 +44,7 @@ import java.util.Map;
 public class DefaultDescriptorProvider implements DescriptorProvider {
 
   private static final Logger logger =
-      LogManager.getLogger(DefaultDescriptorProvider.class);
+      LoggerFactory.getLogger(DefaultDescriptorProvider.class);
   /**
    * The Type map.
    */

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import org.junit.Assume;
 import org.junit.Test;
 
@@ -35,20 +35,13 @@ import java.io.IOException;
 import static com.rapiddweller.common.SystemInfo.isLinux;
 
 /**
- * Integration test for Benerator's Script functionality.<br/><br/>
- * <p>
+ * Integration test for Benerator's Script functionality.<br/><br/><p>
  * Created at 30.12.2020
- *
  * @author Alexander Kell
  * @since 1.1.0
  */
-public class ManualExampleTest extends BeneratorIntegrationTest {
+public class ManualExampleTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Example 1.
-   *
-   * @throws IOException the io exception
-   */
   @Test
   public void example1() throws IOException {
     Assume.assumeTrue(isLinux());

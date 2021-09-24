@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -34,25 +34,16 @@ import junit.framework.AssertionFailedError;
 import org.junit.Test;
 
 /**
- * Provides methods for testing generators and standard tests that act on generically created generator instances.<br/>
- * <br/>
+ * Provides methods for testing generators and standard tests that act on generically created generator instances.
+ * <br/><br/>
  * Created: 13.11.2007 13:13:07
- *
  * @author Volker Bergmann
  */
 public abstract class GeneratorClassTest extends GeneratorTest {
 
-  /**
-   * The Generator class.
-   */
   @SuppressWarnings("rawtypes")
   protected final Class<? extends Generator> generatorClass;
 
-  /**
-   * Instantiates a new Generator class test.
-   *
-   * @param generatorClass the generator class
-   */
   @SuppressWarnings("rawtypes")
   public GeneratorClassTest(Class<? extends Generator> generatorClass) {
     this.generatorClass = generatorClass;
@@ -60,21 +51,11 @@ public abstract class GeneratorClassTest extends GeneratorTest {
 
   // test methods that apply for all Generators ----------------------------------------------------------------------
 
-  /**
-   * Test default constructor.
-   *
-   * @throws Throwable the throwable
-   */
   @Test
   public void testDefaultConstructor() throws Throwable {
     generatorClass.getDeclaredConstructor().newInstance();
   }
 
-  /**
-   * Test to string.
-   *
-   * @throws Throwable the throwable
-   */
   @Test
   public void testToString() throws Throwable {
     Generator<?> generator = generatorClass.getDeclaredConstructor().newInstance();
@@ -94,11 +75,6 @@ public abstract class GeneratorClassTest extends GeneratorTest {
     }
   }
 
-  /**
-   * Test default generation if valid.
-   *
-   * @throws Throwable the throwable
-   */
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Test
   public void testDefaultGenerationIfValid() throws Throwable {
@@ -117,11 +93,6 @@ public abstract class GeneratorClassTest extends GeneratorTest {
 
   // helpers ---------------------------------------------------------------------------------------------------------
 
-  /**
-   * Assert custom to string method.
-   *
-   * @param generator the generator
-   */
   protected void assertCustomToStringMethod(Generator<?> generator) {
     String s = generator.toString();
     String className = generator.getClass().getName();

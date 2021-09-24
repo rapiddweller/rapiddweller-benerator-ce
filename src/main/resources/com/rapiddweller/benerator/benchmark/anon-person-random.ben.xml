@@ -1,0 +1,37 @@
+<setup defaultDataset='US'>
+    <import domains='address,person,finance'/>
+
+    <memstore id='mem'/>
+
+    <generate type='Person' count='1' consumer='mem'> <!--consumer="ConsoleExporter"-->
+        <attribute name='streetAndNumber' constant='Main Street 1'/>
+        <attribute name='zip'             constant='12345'/>
+        <attribute name='city'            constant='Grandville'/>
+
+        <attribute name='email'           constant='alison.harris@yahoo.com'/>
+        <attribute name='workPhone'       constant='123456789'/>
+
+        <attribute name='firstName'       constant='Alison'/>
+        <attribute name='midName'         constant='Emma'/>
+        <attribute name='lastName'        constant='Harris'/>
+
+        <attribute name='CardExp'         constant='03/25'/>
+        <attribute name='Cardno'          constant='1234567890123456'/>
+    </generate>
+
+    <iterate type='Person' source='mem' distribution='random' count='{count}' threads='{threads}' pageSize='100000'> <!--consumer="ConsoleExporter"-->
+        <attribute name='streetAndNumber' type='string' minLength='5' maxLength='18'/>
+        <attribute name='zip'             type='string' minLength='5' maxLength='18'/>
+        <attribute name='city'            type='string' minLength='5' maxLength='18'/>
+
+        <attribute name='email'           type='string' minLength='10' maxLength='25'/>
+        <attribute name='workPhone'       type='string' minLength='8' maxLength='12'/>
+
+        <attribute name='firstName'       type='string' minLength='2' maxLength='14'/>
+        <attribute name='midName'         type='string' minLength='2' maxLength='14'/>
+        <attribute name='lastName'        type='string' minLength='2' maxLength='14'/>
+
+        <attribute name='CardExp'         type='string' minLength='5' maxLength='18'/>
+        <attribute name='Cardno'          type='string' minLength='5' maxLength='18'/>
+    </iterate>
+</setup>

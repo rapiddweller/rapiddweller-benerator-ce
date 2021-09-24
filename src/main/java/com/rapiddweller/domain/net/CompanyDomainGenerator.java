@@ -26,18 +26,18 @@
 
 package com.rapiddweller.domain.net;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.util.AbstractNonNullGenerator;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.ThreadUtil;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.domain.organization.CompanyName;
 import com.rapiddweller.domain.organization.CompanyNameGenerator;
-import com.rapiddweller.format.text.DelocalizingConverter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 
@@ -46,31 +46,22 @@ import static com.rapiddweller.benerator.util.GeneratorUtil.generateNonNull;
 /**
  * Generates web domains for companies.<br/><br/>
  * Created at 23.04.2008 23:04:10
- *
  * @author Volker Bergmann
  * @since 0.5.2
  */
 public class CompanyDomainGenerator extends AbstractNonNullGenerator<String> {
 
   private static final Logger LOGGER =
-      LogManager.getLogger(CompanyDomainGenerator.class);
+      LoggerFactory.getLogger(CompanyDomainGenerator.class);
 
   private final CompanyNameGenerator companyNameGenerator;
   private final TopLevelDomainGenerator tldGenerator;
   private final Converter<String, String> normalizer;
 
-  /**
-   * Instantiates a new Company domain generator.
-   */
   public CompanyDomainGenerator() {
     this(Country.getDefault().getIsoCode());
   }
 
-  /**
-   * Instantiates a new Company domain generator.
-   *
-   * @param datasetName the dataset name
-   */
   public CompanyDomainGenerator(String datasetName) {
     LOGGER.debug("Creating instance of {} for dataset {}", getClass(),
         datasetName);
@@ -80,11 +71,6 @@ public class CompanyDomainGenerator extends AbstractNonNullGenerator<String> {
     normalizer = new Normalizer();
   }
 
-  /**
-   * Sets dataset.
-   *
-   * @param datasetName the dataset name
-   */
   public void setDataset(String datasetName) {
     companyNameGenerator.setDataset(datasetName);
   }
@@ -110,32 +96,22 @@ public class CompanyDomainGenerator extends AbstractNonNullGenerator<String> {
 
   @Override
   public boolean isThreadSafe() {
-    return companyNameGenerator.isThreadSafe() &&
-        tldGenerator.isThreadSafe() && normalizer.isThreadSafe();
+    return ThreadUtil.allThreadSafe(companyNameGenerator, tldGenerator, normalizer);
   }
 
   @Override
   public boolean isParallelizable() {
-    return companyNameGenerator.isParallelizable() &&
-        tldGenerator.isParallelizable() &&
-        normalizer.isParallelizable();
+    return ThreadUtil.allParallelizable(companyNameGenerator, tldGenerator, normalizer);
   }
 
   private static final class Normalizer
       extends ThreadSafeConverter<String, String> {
 
-    private final DelocalizingConverter delocalizer;
+    private final Converter<String,String> delocalizer;
 
-    /**
-     * Instantiates a new Normalizer.
-     */
     public Normalizer() {
       super(String.class, String.class);
-      try {
-        this.delocalizer = new DelocalizingConverter();
-      } catch (IOException e) {
-        throw new ConfigurationError(e);
-      }
+      this.delocalizer = BeneratorFactory.getInstance().createDelocalizingConverter();
     }
 
     @Override

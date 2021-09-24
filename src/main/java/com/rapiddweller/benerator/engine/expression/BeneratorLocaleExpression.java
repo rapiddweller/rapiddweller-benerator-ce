@@ -44,11 +44,6 @@ public class BeneratorLocaleExpression implements Expression<Locale> {
 
   private final Expression<String> provider;
 
-  /**
-   * Instantiates a new Benerator locale expression.
-   *
-   * @param codeProvider the code provider
-   */
   public BeneratorLocaleExpression(Expression<String> codeProvider) {
     this.provider = codeProvider;
   }

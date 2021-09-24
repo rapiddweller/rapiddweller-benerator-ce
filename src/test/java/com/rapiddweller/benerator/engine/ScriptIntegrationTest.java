@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
-import com.rapiddweller.benerator.test.BeneratorIntegrationTest;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -39,7 +39,7 @@ import java.io.IOException;
  * @author Alexander Kell
  * @since 1.1.0
  */
-public class ScriptIntegrationTest extends BeneratorIntegrationTest {
+public class ScriptIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   /**
    * Script in file.

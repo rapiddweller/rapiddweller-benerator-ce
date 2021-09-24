@@ -38,15 +38,11 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the {@link DistributingGenerator}.<br/><br/>
  * Created: 21.07.2010 06:54:40
- *
  * @author Volker Bergmann
  * @since 0.6.3
  */
 public class DistributingGeneratorTest extends GeneratorTest {
 
-  /**
-   * Test.
-   */
   @Test
   public void test() {
     SequenceTestGenerator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);
@@ -63,10 +59,7 @@ public class DistributingGeneratorTest extends GeneratorTest {
     assertEquals(1, source.closeCount);
   }
 
-  /**
-   * The type Test distribution.
-   */
-  public static class TestDistribution implements Distribution {
+  public static class TestDistribution extends AbstractDistribution {
 
     @Override
     public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {

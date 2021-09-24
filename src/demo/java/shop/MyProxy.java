@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.consumer.ConsumerProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.IOUtil;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Simple {@link Consumer} proxy implementation that logs an entity before it is forwarded to the target consumer.<br/>
@@ -40,7 +40,7 @@ import org.apache.logging.log4j.LogManager;
  */
 public class MyProxy extends ConsumerProxy {
 
-  private static Logger logger = LogManager.getLogger(MyProxy.class);
+  private static Logger logger = LoggerFactory.getLogger(MyProxy.class);
 
   /**
    * Instantiates a new My proxy.

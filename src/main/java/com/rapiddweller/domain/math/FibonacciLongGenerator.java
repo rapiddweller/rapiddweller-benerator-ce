@@ -38,22 +38,13 @@ import com.rapiddweller.benerator.primitive.number.RecurrenceRelationNumberGener
  * </ul>
  * <br/>
  * Created at 03.07.2009 10:44:56
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class FibonacciLongGenerator
-    extends RecurrenceRelationNumberGenerator<Long> {
+public class FibonacciLongGenerator extends RecurrenceRelationNumberGenerator<Long> {
 
   private final boolean unique;
 
-  /**
-   * Instantiates a new Fibonacci long generator.
-   *
-   * @param min    the min
-   * @param max    the max
-   * @param unique the unique
-   */
   public FibonacciLongGenerator(Long min, Long max, boolean unique) {
     super(Long.class, 2, min, max);
     this.unique = unique;

@@ -35,7 +35,6 @@ import com.rapiddweller.script.expression.DynamicExpression;
 /**
  * Evaluates a string which may be a script (indicated by {}).<br/><br/>
  * Created: 19.02.2010 10:39:29
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -45,12 +44,6 @@ public class ScriptableExpression extends DynamicExpression<Object> {
   private final Expression<?> defaultValueExpression;
   private final boolean isScript;
 
-  /**
-   * Instantiates a new Scriptable expression.
-   *
-   * @param scriptOrText the script or text
-   * @param defaultValue the default value
-   */
   public ScriptableExpression(String scriptOrText, Object defaultValue) {
     this(scriptOrText, (defaultValue != null ? new ConstantExpression<>(defaultValue) : null));
   }
@@ -61,13 +54,6 @@ public class ScriptableExpression extends DynamicExpression<Object> {
     this.scriptOrText = scriptOrText;
   }
 
-  /**
-   * Create with default expression expression.
-   *
-   * @param scriptOrText           the script or text
-   * @param defaultValueExpression the default value expression
-   * @return the expression
-   */
   public static Expression<?> createWithDefaultExpression(
       String scriptOrText, Expression<?> defaultValueExpression) {
     return new ScriptableExpression(scriptOrText, defaultValueExpression);

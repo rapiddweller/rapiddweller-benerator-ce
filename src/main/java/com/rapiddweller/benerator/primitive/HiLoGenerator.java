@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.util.AbstractNonNullGenerator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Combines the output of a 'slow' generator (e.g. a remote hiGenerator)
@@ -42,7 +42,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class HiLoGenerator extends AbstractNonNullGenerator<Long> {
 
-  private static final Logger logger = LogManager.getLogger(HiLoGenerator.class);
+  private static final Logger logger = LoggerFactory.getLogger(HiLoGenerator.class);
 
   /**
    * The constant DEFAULT_MAX_LO.

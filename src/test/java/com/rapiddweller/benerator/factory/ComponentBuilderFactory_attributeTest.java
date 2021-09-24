@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -51,10 +51,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the {@link ComponentBuilderFactory} class for all useful attribute setups.<br/>
- * <br/>
+ * Tests the {@link ComponentBuilderFactory} class for all useful attribute setups.<br/><br/>
  * Created: 10.08.2007 12:40:41
- *
  * @author Volker Bergmann
  */
 public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuilderFactoryTest {
@@ -74,9 +72,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 
   // script ----------------------------------------------------------------------------------------------------------
 
-  /**
-   * Test script attribute.
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void testScriptAttribute() {
@@ -91,9 +86,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     }
   }
 
-  /**
-   * Test null script attribute.
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void testNullScriptAttribute() {
@@ -108,9 +100,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     }
   }
 
-  /**
-   * Test script with converter attribute.
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void testScriptWithConverterAttribute() {
@@ -126,9 +115,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     }
   }
 
-  /**
-   * Test enum name script attribute.
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void testEnumNameScriptAttribute() {
@@ -147,9 +133,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 
   // constant --------------------------------------------------------------------------------------------------------
 
-  /**
-   * Test empty constant attribute.
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void testEmptyConstantAttribute() {
@@ -165,9 +148,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     }
   }
 
-  /**
-   * Test constant on nullable attribute.
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void testConstantOnNullableAttribute() {
@@ -187,9 +167,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 
   // values ----------------------------------------------------------------------------------------------------------
 
-  /**
-   * Test multi values attribute.
-   */
   @Test
   public void testMultiValuesAttribute() {
     String componentName = "name";
@@ -199,9 +176,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     expectSet(name, 300, "A", "B", null);
   }
 
-  /**
-   * Test single values attribute.
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void testSingleValuesAttribute() {
@@ -217,9 +191,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     }
   }
 
-  /**
-   * Test empty values attribute.
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void testEmptyValuesAttribute() {
@@ -237,9 +208,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 
   // pattern ---------------------------------------------------------------------------------------------------------
 
-  /**
-   * Test pattern attribute.
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void testPatternAttribute() {
@@ -254,9 +222,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     expectGenerations(helper, 20, new StringValidator(charValidator, 2, 4));
   }
 
-  /**
-   * Test empty pattern attribute.
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void testEmptyPatternAttribute() {
@@ -274,18 +239,12 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 
   // csv string source -----------------------------------------------------------------------------------------------
 
-  /**
-   * Test csv string attribute.
-   */
   @Test
   public void testCSVStringAttribute() {
     PartDescriptor name = createCSVStringAttributeDescriptor();
     expectUniqueSequence(name, "Alice", "Bob", "Charly");
   }
 
-  /**
-   * Test csv string attribute step.
-   */
   @Test
   public void testCSVStringAttributeStep() {
     PartDescriptor name = createCSVStringAttributeDescriptor();
@@ -294,9 +253,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     expectUniqueSequence(name, "Alice", "Bob", "Charly");
   }
 
-  /**
-   * Test csv string attribute unique.
-   */
   @Test
   public void testCSVStringAttributeUnique() {
     PartDescriptor name = createCSVStringAttributeDescriptor();
@@ -304,9 +260,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     expectUniqueSet(name, "Alice", "Bob", "Charly");
   }
 
-  /**
-   * Test csv string attribute random unique.
-   */
   @Test
   public void testCSVStringAttributeRandomUnique() {
     PartDescriptor name = createCSVStringAttributeDescriptor();
@@ -315,9 +268,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     expectUniqueSet(name, "Alice", "Bob", "Charly");
   }
 
-  /**
-   * Test csv string attribute empty weighted.
-   */
   @Test
   public void testCSVStringAttributeEmptyWeighted() {
     PartDescriptor name = createCSVStringAttributeDescriptor(EMPTY_WGT_CSV, ",");
@@ -343,9 +293,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 
   // nullQuota == 1 evaluation ---------------------------------------------------------------------------------------
 
-  /**
-   * Test null quota one reference.
-   */
   @Test
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void testNullQuotaOneReference() {
@@ -357,9 +304,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     expectNullGenerations(helper, 10);
   }
 
-  /**
-   * Test null quota one attribute.
-   */
   @Test
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void testNullQuotaOneAttribute() {
@@ -373,9 +317,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 
   // Id Descriptor tests ---------------------------------------------------------------------------------------------
 
-  /**
-   * Test alternative.
-   */
   @Test
   @SuppressWarnings({"cast", "rawtypes"})
   public void testAlternative() {
@@ -385,7 +326,7 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     SimpleTypeDescriptor typeB = createSimpleType("B", "string").withValues("'2'");
     alternativeType.addComponent(createPart("b", typeB));
     PartDescriptor part = createPart(null, alternativeType);
-    ComponentBuilder builder = ComponentBuilderFactory.createComponentBuilder(part, Uniqueness.SIMPLE, context);
+    ComponentBuilder builder = ComponentBuilderFactory.createComponentBuilder(part, Uniqueness.SIMPLE, false, context);
     builder.init(context);
     Entity entity = createEntity();
     setCurrentProduct(entity, "e");
@@ -393,9 +334,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     assertTrue("1".equals(entity.get("a")) || "2".equals(entity.get("b")));
   }
 
-  /**
-   * Test map.
-   */
   @SuppressWarnings("rawtypes")
   @Test
   public void testMap() {
@@ -405,7 +343,7 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     part.setMaxCount(new ConstantExpression<>(1L));
     ((SimpleTypeDescriptor) part.getLocalType(false)).setMap("1->'A',2->'B'");
     part.getLocalType(false).setGenerator("com.rapiddweller.benerator.primitive.IncrementGenerator");
-    ComponentBuilder builder = ComponentBuilderFactory.createComponentBuilder(part, Uniqueness.NONE, context);
+    ComponentBuilder builder = ComponentBuilderFactory.createComponentBuilder(part, Uniqueness.NONE, false, context);
     builder.init(context);
     Entity entity = createEntity();
     setCurrentProduct(entity, "e");
@@ -417,9 +355,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
 
   // test date and time generation -----------------------------------------------------------------------------------
 
-  /**
-   * Test date min max.
-   */
   @Test
   public void testDateMinMax() {
     String componentName = "part";
@@ -441,11 +376,6 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
     expectGenerations(helper, 100, validator);
   }
 
-  /**
-   * Create entity entity.
-   *
-   * @return the entity
-   */
 /*
       @Test
       public void testGenerator() {

@@ -7,7 +7,7 @@ Download Benerator from:
 [https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/)
 
 You should download the most recent version of the rapiddweller-benerator-dist archive from the download page, e.g.
-_rapiddweller-benerator-ce-1.1.2-jdk-11-dist.zip_ .
+_rapiddweller-benerator-ce-1.3.0-jdk-11-dist.zip_ .
 
 ## Unzip Benerator
 
@@ -19,29 +19,23 @@ Create an environment variable BENERATOR_HOME that points to the path you extrac
 
 **Windows Details**: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the
 User Variables section. Enter BENERATOR_HOME as name and the path as value (
-e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.2`). Click OK several times.
+e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-2.0.0`). Click OK several times.
 
 **Mac/Unix/Linux Details**: Open the file .profile in your user directory. Add an entry that points to benerator, e.g.:
-`export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.0.0`
+`export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-2.0.0`
 
 ## Optional: Install JDBC drivers
 
-Benerator comes with open source JDBC drivers (for connecting to a database). No extra installation is necessary for
+Benerator comes with open-source JDBC drivers (for connecting to a database). No extra installation is necessary for
 them:
 
-• Microsoft SQL Server Driver (MS SQL Server)
-
-• MySQL Connector
-
-• HSQL DB
-
-• H2 DB
-
-• Derby Client
-
-• PostgreSQL
-
-• Jaybird (Firebird DB)
+- Microsoft SQL Server Driver (MS SQL Server)
+- MySQL Connector
+- HSQL DB
+- H2 DB
+- Derby Client
+- PostgreSQL
+- Jaybird (Firebird DB)
 
 However, if you need to use a closed source database driver, the vendor usually requires you to accept usage conditions before you can download and
 install their driver. So, if you are using Oracle DB or DB2, get the JDBC drivers from these sites:
@@ -55,15 +49,7 @@ copy the contained file db2jcc.jar to Benerator's lib directory.
 ## Optional: Set up log4j2
 
 Troubleshooting is simpler if you make use of log4j's configuration capabilities. If you do not know (or care) about logging, simply skip this step.
-Otherwise put a custom log4j2.xml file into the BENERATOR_HOME/lib directory.
-
-## On Unix/Linux/Mac systems: Set permissions
-
-Open a shell on the installation's root directory and execute
-
-```shell
-chmod a+x bin/*.sh
-```
+Otherwise, put a custom log4j2.xml file into the BENERATOR_HOME/lib directory.
 
 ## Mac OS X configuration
 
@@ -79,7 +65,7 @@ export JAVA_HOME=/Library/Java/Home
 If it does not work or if you need to use different Java versions, it is easier to 'hard-code' JAVA_HOME like this:
 
 ```shell
-export  JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home/ 
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home/ 
 ```
 
 ## Verifying the settings
@@ -91,14 +77,12 @@ On any OS, open a console window (shell,cmd or powershell) and type ...
 ```shell
 $ benerator -–version
 
-Benerator 1.1.2-jdk-11 build 1
+Benerator 2.0.0-jdk-11 build 1
 Java version 11.0.9
 JVM OpenJDK 64-Bit Server VM 11.0.9+11 (AdoptOpenJDK)
 OS Linux 5.9.16-050916-generic (amd64)
-
-// Benerator will then launch and print out version information about itself, 
-// the Java version it uses, the operating system.
 ```
-
 </div>
 
+Benerator will then launch and print out version information about itself,
+the Java version it uses, the operating system.

@@ -26,6 +26,7 @@
 
 package com.rapiddweller.domain.person;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.sample.NonNullSampleGenerator;
 import com.rapiddweller.common.BeanUtil;
@@ -35,17 +36,14 @@ import com.rapiddweller.common.ThreadAware;
 import com.rapiddweller.common.converter.CaseConverter;
 import com.rapiddweller.common.converter.ConverterChain;
 import com.rapiddweller.domain.net.DomainGenerator;
-import com.rapiddweller.format.text.DelocalizingConverter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
-import java.io.IOException;
 import java.util.Locale;
 
 /**
  * Generates email addresses for a random domain by a given person name.<br/><br/>
  * Created: 22.02.2010 12:16:11
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -58,25 +56,16 @@ public class EMailAddressBuilder implements ThreadAware {
 
   // constructor -----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new E mail address builder.
-   *
-   * @param dataset the dataset
-   */
   public EMailAddressBuilder(String dataset) {
     // Logger is not static in order to adopt sub classes
-    Logger logger = LogManager.getLogger(getClass());
+    Logger logger = LoggerFactory.getLogger(getClass());
     logger.debug("Creating instance of {} for dataset {}", getClass(),
         dataset);
     this.domainGenerator = new DomainGenerator(dataset);
     this.caseConverter = new CaseConverter(false);
-    try {
-      this.nameConverter = new ConverterChain<>(
-          new DelocalizingConverter(),
-          caseConverter);
-    } catch (IOException e) {
-      throw new ConfigurationError("Error in Converter setup", e);
-    }
+    this.nameConverter = new ConverterChain<>(
+        BeneratorFactory.getInstance().createDelocalizingConverter(),
+        caseConverter);
     this.joinGenerator =
         new NonNullSampleGenerator<>(Character.class, '_', '.', '0',
             '1');
@@ -84,43 +73,21 @@ public class EMailAddressBuilder implements ThreadAware {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets dataset.
-   *
-   * @param datasetName the dataset name
-   */
   public void setDataset(String datasetName) {
     domainGenerator.setDataset(datasetName);
   }
 
-  /**
-   * Sets locale.
-   *
-   * @param locale the locale
-   */
   public void setLocale(Locale locale) {
     caseConverter.setLocale(locale);
   }
 
   // generator-like interface ----------------------------------------------------------------------------------------
 
-  /**
-   * Init.
-   *
-   * @param context the context
-   */
   public void init(GeneratorContext context) {
     domainGenerator.init(context);
     joinGenerator.init(context);
   }
 
-  /**
-   * Generate string.
-   *
-   * @param givenName  the given name
-   * @param familyName the family name
-   * @return the string
-   */
   public String generate(String givenName, String familyName) {
     String given = nameConverter.convert(givenName);
     String family = nameConverter.convert(familyName);
