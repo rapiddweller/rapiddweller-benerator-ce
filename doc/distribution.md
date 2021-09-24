@@ -142,6 +142,29 @@ and use it in a configuration like this:
 this will create 100 users of which about 70 will have the role `customer`, 20 `clerk` and 10 `admin`.
 
 
+#### Alternative Delimiters for importing weights
+
+By default, the semicolon is the delimiter between commands: Benerator splits imports commands by their delimiter. The 
+default separator can be overwritten by the property  `separator` e.g. `separator="|"`:
+
+```xml
+<generate type="user" count="100">
+    <attribute name="role" source="roles.wgt.csv" separator="|" />
+</generate>
+```
+
+It is also possible to specify the separator for the whole project in your `<setup>` node as
+
+```xml
+<setup defaultSeparator="|">
+    
+    <generate type="user" count="100">
+        <attribute name="role" source="roles.wgt.csv" />
+    </generate>
+
+</setup>
+```
+
 ### Weighing imported entities by attribute
 
 When importing entities, one entity attribute can be chosen to represent the weight
@@ -168,7 +191,6 @@ and e.g. create addresses with city names weighted by population, when specifyin
     <attribute name="city" script="city_data.name"/>
 </generate>
 ```
-
 
 ## Distributing unweighted Data
 
