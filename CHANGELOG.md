@@ -23,13 +23,13 @@
 ### Important Notes
 
 - Redesigned the Distribution class hierarchy, introduced the AbstractDistribution
-  and DetachedSequence classes to compensate this for implementors. See the manual's
-  [Migration Guide](/doc/migrating_benerator_projects.md#migration-from-11x-to-120) what to do if you programmed custom Distributions.
+  and DetachedSequence classes to compensate this for implementors. 
 
 
 ### Breaking Changes
 
-N/A
+- See the manual's
+[Migration Guide](/doc/migrating_benerator_projects.md#migration-from-11x-to-200)what to do if you programmed custom Distributions.
 
 ---
 

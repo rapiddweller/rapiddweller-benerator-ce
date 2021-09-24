@@ -25,7 +25,7 @@ against changes, if you inherit from a child class of this interface
 instead of implementing it directly.
 
 
-## Migration from 1.1.x to 1.2.0
+## Migration from 1.1.x to 2.0.0
 
 If you did not program custom implementations of Benerator's interfaces 
 or classes, existing projects are supposed to work like before (but faster).
