@@ -36,7 +36,7 @@ benerator myproject.ben.xml -Dbenerator.validate=false
 
 ## DB Snapshot Tool
 
-The DbSnaphotTool creates a snapshot of a full database schema and stores it in a DbUnit XML file. It is invoked from the command line in Windows by
+The DbSnapshotTool creates a snapshot of a full database schema and stores it in a DbUnit XML file. It is invoked from the command line in Windows by
 calling
 
 `snapshot [VM-params] export-filename.dbunit.xml`
@@ -45,9 +45,11 @@ or, on Unix and Mac OS X systems,
 
 `sh snapshot [VM-params] export-filename.dbunit.xml`
 
-If the export filename is left out, the snapshot will be stored in a file called snapshot.dbunit.xml.
+If the export filename is left out, the snapshot will be stored in a file called `snapshot.dbunit.xml`.
 
-You need the following VM parameters to configure database access. Use them like -Ddb.user=me:
+You need the following VM parameters to configure database access. 
+
+Use them like `-Ddb.user=me`:
 
 | Parameter | Description |
 | --- | --- |
@@ -61,14 +63,14 @@ You need the following VM parameters to configure database access. Use them like
 ## Benchmark Tool
 
 Benerator provides a Benchmark Tool to assess and compare the performance 
-of typical generation or anonymization approach. 
+of a typical generation or anonymization approaches. 
 
 It is of special use for you if you want to assess the generation/anonymization 
-performance of different hard- and software settings, like number sof cores, 
+performance of different hard- and software settings, like numbers of cores, 
 operating system, Java virtual machine, system software configuration and 
 Benerator Enterprise Edition's multithreading configuration.
 
-The different benchmarks used performs a list of predefined typical generation 
+The different benchmarks used perform a list of predefined typical generation 
 and anonymization tasks. 
 
 To invoke the Benchmark Tool with standard settings, just open a text console 
@@ -109,18 +111,18 @@ so the report will look something like this:
 ```
 
 In the header the system settings are reported, then each of the following rows 
-displays the benchmark name and its performance, measured in million entities 
+displays the benchmark name and its performance, measured in a million entities 
 generated per hour. 
-This means for example that the anon-person-constant.ben.xml anonymizes 
+This means for example that the `anon-person-constant.ben.xml` anonymizes 
 3,944 million = 3.944 billion data sets per hour running in a single thread.
 
 The performance numbers above have been measured on a plain Macbook Air M1 of 2020.
 
-For a Benerator Enerprise Edition installation running on a machine with several cores, 
+For a Benerator Enterprise Edition installation running on a machine with several cores, 
 the benchmark is executed for several characteristic threading settings in order to 
 find the sweet spot of threading settings. 
 
-A benchmark run on the same system with Benerator Enterprise Edition yields 
+A benchmark runs on the same system with Benerator Enterprise Edition yields 
 the following result:
 
 ```text
@@ -156,13 +158,13 @@ but optimized the Enterprise Edition to be even several times faster than
 the Community Edition.
 
 For your performance optimization in Enterprise Edition, note that with additional 
-threads comes additional performance, but after a certain level of concurrency 
+threads' comes additional performance, but after a certain level of concurrency 
 is reached, performance does not improve or even can deteriorate seriously.
 
 The sweet spot where you have optimum performance with low concurrency usually 
 is where the number of threads equals the number of cores, or is only slightly larger. 
 As you might guess from the performance, the test laptop has 4 cores. 
-Actually it has more, but its 4 high performance cores are the only ones which matter 
+Actually, it has more, but its 4 high-performance cores are the only ones that matter 
 for generation and anonymization performance.
 
 The Benchmark Tool has some command line parameters to configure its test runs. 
@@ -186,7 +188,7 @@ The command line options are as follows:
 A **--minSecs** settings of 30 requires the benchmark to run with a workload 
 that needs at least 30 seconds to process. It is advisable to choose times 
 which are sufficiently large that the fix initialization time of Benerator 
-has less impact on the measurement and that JVM hot spot optimizers get some 
+has less impact on the measurement and that JVM hotspot optimizers get some 
 time to make Benerator run even more efficiently. 
 If --minSecs is not specified, a default of 10 seconds is used, which is too 
 short for optimum measurements, but was chosen as a defensive measure to 
@@ -197,21 +199,21 @@ a file of a size of 10 Gigabytes. Generated files are deleted automatically
 after each benchmark run, but take care not to fill up your disk during a 
 benchmark run.
 
-By default, the Benchmark tool test thread settings from single-threaded to a concurrency 
+By default, the Benchmark tool tests thread settings from single-threaded to a concurrency 
 slightly larger than the number of cores of the system it is running on. Unfortunately, 
 some systems report a higher number of cores than are available for our tests.
 For example a Macbook Air M1 of 2020 reports to have 8 cores, but only 4 of them are high 
-performance cores, 4 are efficiency cores which do not contribute performance to for 
-Benerator. So a setting of **--maxTreads 6** makes the Benchmark go up only to 6 threads 
+performance cores, 4 are efficiency cores which do not contribute performance to 
+Benerator. So a setting of `--maxTreads 6` makes the Benchmark go up only to 6 threads 
 instead of 10 threads it would have taken by default.
 
 The reports above have been created using
 
-```benerator-benchmark --ce --minDurationSecs 30 --maxThreads 6```
+`benerator-benchmark --ce --minDurationSecs 30 --maxThreads 6`
 
 ## XML Creator
 
-The XMLCreator reads a XML Schema file and creates a number of XML files that comply to the schema. It can read XML annotations which provide
+The XMLCreator reads a XML Schema file and creates a number of XML files that comply with the schema. It can read XML annotations which provide
 benerator configuration in the XML schema file. It is invoked from the command line and has the following parameter order:
 
 ```bash
@@ -243,5 +245,5 @@ or, on Unix and Mac OS X systems,
 sh myschema.xsd product-list products-{0}.xml 10000 perftest.properties
 ```
 
-for generation 10,000 XML files that comply to the XML Schema definition in file myschema.xsd and have product-list as root element. The files will be
-named products-1.xml, products-2.xml, products-3.xml, ...
+for generation 10,000 XML files that comply with the XML Schema definition in file `myschema.xsd` and have product-list as root element. The files will be
+named `products-1.xml`, `products-2.xml`, `products-3.xml`, ...

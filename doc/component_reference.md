@@ -224,8 +224,8 @@ size** property. |
 
 ### Weight Functions
 
-Weight funtions are another special case of Distributions. 
-They are based on a function which is supposed to allow contibuous value generation, 
+Weight functions are another special case of Distributions. 
+They are based on a function which is supposed to allow continuous value generation, 
 but since Benerator needs to perform a numerical integration for deriving random values, 
 a granularity must be applied. This way, the generated value set is quantized. 
 Another drawback of the approach is that fine-grained generation is memory-consuming and slow.
