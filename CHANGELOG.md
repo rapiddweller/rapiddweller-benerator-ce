@@ -2,21 +2,30 @@
 
 <!--lint disable no-duplicate-headings-->
 
-## 1.2.0
+## 2.0.0
 
 ### Release Highlights
 
-- Improved Benerator engine performance
-- Strongly improved and extended Benerator Manual
-- New address domain package for the United Kingdom (GB)
-- Supporting custom random implementations, see class RandomSupport
-- Improved Benerator Wizard
-- Add Benchmark Tool and [Performance Tuning](/doc/performance_tuning.md) section in Manual
+- Improved Benerator engine performance by 55-110% in average
+- Added address domain package for the United Kingdom (GB)
+- Supporting custom random implementations
+- Reworked Benerator archetypes
+- Improved JDBC metadata import
+- Improved/reworked Benerator Project Wizard
+- Improved/reworked Benerator Maven Plugin
+- Add custom separator support for Benerator weighting files
 - Add new [Hash Converters](/doc/component_reference.md#rapiddweller-converters)
+- Add Benchmark Tool and [Performance Tuning](/doc/performance_tuning.md) section in Manual
+- Extend PersonGenerator with attribute age 
+- Update Graalvm to 21.1.0
+- Improved and extended Benerator Manual
 
 ### Important Notes
 
-- Added method to the Distribution interface, introduced AbstractDistribution class to compensate this for implementors.
+- Redesigned the Distribution class hierarchy, introduced the AbstractDistribution
+  and DetachedSequence classes to compensate this for implementors. See the manual's
+  [Migration Guide](/doc/migrating_benerator_projects.md#migration-from-11x-to-120) what to do if you programmed custom Distributions.
+
 
 ### Breaking Changes
 
