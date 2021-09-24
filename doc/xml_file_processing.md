@@ -1,9 +1,11 @@
 # Generating XML Files
 
-Benerator offers several different options to generate XML files. 
-They come in two different flavours: 
+Benerator offers several options to generate XML files.
+
+They come in two different flavors: 
+
 1. Explicit XML construction: You manually compose and configure XML generation
-2. Implicit (schema-dased) XML definition: You provide an XML Schema file and Benerator figures out the rest
+2. Implicit (schema-based) XML definition: You provide an XML Schema file and Benerator figures out the rest
 
 ## Explicit XML construction
 
@@ -11,6 +13,7 @@ With explicit XML construction, you manually define data generation and nesting.
 An XML consumer then simply outputs them as XML file.
 
 Two such XML consumers are provided with Benerator:
+
 - DbUnitEntityExporter
 - XMLEntityExporter
 
@@ -26,7 +29,7 @@ transformation afterwards, for example invoked with an `execute` directive:
 A consumer writes any created entity to a file in DbUnit XML format. 
 Use this if you only need a DbUnit file or want a simple,
 flat XML-based export for import in other tools. 
-See the [Component Reference](component_reference.md) for more information.
+See the '[Component Reference](component_reference.md)' for more information.
 
 ```xml
 <setup>
@@ -39,7 +42,9 @@ See the [Component Reference](component_reference.md) for more information.
     </generate>
 </setup>
 ```
+
 Running this setup creates an XML file like this:
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
@@ -59,10 +64,10 @@ For nested XML elements use the following consumer:
 ### XMLEntityExporter
 A consumer which is more powerful than the DbUnitEntityExporter: 
 It renders each simple-type entity attribute as an XML attribute 
-and each sub entity as nested XML element.
-See the [Component Reference](component_reference.md) for more information.
+and each sub-entity as a nested XML element.
+See the '[Component Reference](component_reference.md)' for more information.
 
-The example shows how to nest generation configuration
+The example shows how to nest generation configuration:
 
 ```xml
 <setup>
@@ -98,7 +103,7 @@ for the following result:
 ### Using data types from XML schema files
 
 Including an XML schema in a classic descriptor file makes its data types available for explicit data generation.
-This can be used with the DbUnitExporter as well for the XmlExporter
+This can be used with the DbUnitExporter as well for the XmlExporter:
 
 ```xml
 <include uri="shop.xsd" />
@@ -106,9 +111,7 @@ This can be used with the DbUnitExporter as well for the XmlExporter
 <generate type="product" count="5" consumer="ConsoleExporter"/>
 ```
 
-
-
-## Implicit (schema-dased) XML definition
+## Implicit (schema-based) XML definition
 
 This is the most powerful XML generation approach:
 An XML schema file is used as the central definition for data generation. 
@@ -119,20 +122,20 @@ This makes data generation almost as versatile as with the classic descriptor-fi
 More than that, you can generate an arbitrary number of XML files with one program call.
 
 Since XML schema offers a very wide range of options, Benerator concentrates on features 
-usually needed for data files, but does not yet support the complete schema feature set.
-If you are interested in improvements, please email us at Rapiddweller.
+usually needed for data files but does not yet support the complete schema feature set.
+If you are interested in improvements, please email us at [team@rapiddweller.com](mailto:team@rapiddweller.com).
 
 ### Introduction
 
 For the first trials, use a simple XML Schema file. We are beginning without annotations and save the following XML Schema with the name
-transactions.xsd:
+`transactions.xsd`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-           xmlns:ben="http://databene.org/benerator-1.2.0.xsd"
-           xmlns="http://databene.org/shop-0.8.1.xsd"
-           targetNamespace="http://databene.org/shop-0.8.1.xsd"
+           xmlns:ben="https://www.benerator.de/schema/benerator-1.2.0.xsd"
+           xmlns="https://www.benerator.de/shop-0.8.1.xsd"
+           targetNamespace="https://www.benerator.de/shop-0.8.1.xsd"
            elementFormDefault="qualified">`
 
     <xs:element name="transactions">
@@ -181,10 +184,10 @@ On Unix systems type:
 createXML transactions.xsd transactions tx-{0}.xml 2
 ```
 
-This tells Benerator to generate 2 xml files named 'tx-1.xml' and 'tx-2.xml' based on the schema file 'transactions.xsd' using the 'transactions'
+This tells Benerator to generate 2 xml files named `tx-1.xml` and `tx-2.xml` based on the schema file `transactions.xsd` using the `transactions`
 element as root element.
 
-Open one of the generated files and you will see the following content:
+Open one of the generated files, and you will see the following content:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -193,11 +196,11 @@ Open one of the generated files and you will see the following content:
 ```
 
 So, what did Benerator do wrong? Nothing, it is a perfectly schema-valid document. Since minOccurs of the transaction ref is zero, Benerator takes the
-easy choice: Remember: One of Benerator's strengths is to configure generation of valid data as easy as possible and in project stages as early as
-possible. With the chosen approach, you need to spend less time for explicitly configuring element removal which are not yet supported by your
+easy choice: Remember: One of Benerator's strengths is to configure the generation of valid data as easily as possible and in project stages as early as
+possible. With the chosen approach, you need to spend less time explicitly configuring element removal which is not yet supported by your
 application.
 
-For configuring the generation of `<transaction>` elements, you need to add an annotation to your schema. The 'ref' configuration in the 'sequence' is
+For configuring the generation of `<transaction>` elements, you need to add an annotation to your schema. The `ref` configuration in the `sequence` is
 the right place to configure cardinalities of included sub elements:
 
 ```xml
@@ -216,7 +219,7 @@ the right place to configure cardinalities of included sub elements:
 </xs:element>
 ```
 
-Run Benerator again and you will notice, that Benerator generated files like this one, each containing 5 to 10 transactions:
+Run Benerator again, and you will notice, that Benerator generated files like the following, each containing 5 to 10 transactions:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -237,7 +240,7 @@ data, though taking the easy way of defaulting to integral numbers.
 
 ### Configuring Attribute Generation
 
-Now it is time to configure the attribute details. Let us start by declaring the 'id' attribute as ID
+Now it is time to configure the attribute details. Let us start by declaring the `id` attribute as ID:
 
 ```xml
 <xs:attribute name="id" type="xs:long" use="required">
@@ -264,7 +267,7 @@ Shorter random comments are generated based on a regular expression:
 </xs:attribute>
 ```
 
-You can configure number generation for the 'items' attribute by setting min, max, resolution and distribution values:
+You can configure number generation for the `items` attribute by setting `min`, `max`, `resolution` and `distribution` values:
 
 ```xml
 <xs:attribute name="items">
@@ -276,7 +279,7 @@ You can configure number generation for the 'items' attribute by setting min, ma
 </xs:attribute>
 ```
 
-This makes benerator create 'items' numbers from 1 to 27 with a cumulated distribution which has its maximum at 14.
+This makes benerator create `items` numbers from 1 to 27 with a cumulated distribution which has its maximum at 14.
 
 
 ### Using `<variables>` in XML Schema
@@ -294,7 +297,7 @@ example, use a CSV file with product definitions, containing EAN and price for e
 ...
 ```
 
-For each generation of a transaction, the `<variable>` is called to generated a new helper object, in this case providing a CSV data line with product
+For each generation of a transaction, the `<variable>` is called to generate a new helper object, in this case providing a CSV data line with product
 data. The contents of this data are mapped using script expressions:
 
 ```xml
@@ -317,7 +320,8 @@ data. The contents of this data are mapped using script expressions:
 </xs:attribute>
 ```
 
-Using a CSV file with product definitions:
+Using a CSV file with product definitions
+
 ```
 ean_code,name,category_id,price,manufacturer
 8000353006386,Limoncello Liqueur,DRNK/ALCO,9.85,Luxardo
@@ -341,9 +345,9 @@ we finally get a satisfactory result:
 </transactions>
 ```
 
-You might as well want to calculate the total price. You can easily do so using a script expression, e.g. script="
-this.price * this.items". Note that the elements are evaluated and generated in the order in which they are declared, so the 'total sum' field must be
-defined after the used terms 'price' and 'items'.
+You might as well want to calculate the total price. You can easily do so using a script expression, e.g. `script="
+this.price * this.items"`. Note that the elements are evaluated and generated in the order in which they are declared, so the `total sum` field must be
+defined after the used terms `price` and `items`.
 
 
 ### Importing Properties File Data
@@ -366,11 +370,11 @@ You can import settings from properties files by placing `<include>`s in the sch
 The current XML schema limitations are:
 
 - No support for recursion of the same element type, e.g. categories containing other categories
-- No support for mixed content. benerator is concerned with generation of data structures, while mixed-type documents generally apply for natural-language documents.
+- No support for mixed content. Benerator is concerned with the generation of data structures, while mixed-type documents generally apply to natural-language documents.
 - groups are not supported
-- sequences may not have maxOccurs > 1
+- sequences may not have `maxOccurs > 1`
 - namespace support is only rudimentary, problems may arise on different types with equal names
-- schema include is not supported yet
+- schema `include` is not supported yet
 - ids and idrefs are not resolved automatically
 
 
@@ -380,7 +384,7 @@ Almost the full feature set of Benerator descriptor files is available for XML S
 If you know the Benerator descriptor file syntax well, it is a straightforward and relatively simple process 
 to annotate XML Schema files. 
 
-However, if you just need to export XML-formatted data and write an own XML parser for importing the data 
+However, if you just need to export XML-formatted data and write your own XML parser for importing the data 
 somewhere else, you might prefer to use the DbUnitEntityExporter (flat structure) or 
 XMLEntityExporter (hierarchical structure), possibly in combination with an XSL transformation.
 

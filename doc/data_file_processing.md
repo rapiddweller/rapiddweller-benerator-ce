@@ -34,7 +34,7 @@ need to configure the CSV import component (CSVEntitySource) explicitly with a `
 </setup>
 ```
 
-For CSV files without header, you need to specify a comma-separated list of column names in the 'columns' property.
+For CSV files without a header, you need to specify a comma-separated list of column names in the 'columns' property.
 
 ### Creating CSV files
 
@@ -58,19 +58,19 @@ See the [Component Reference](component_reference.md#csventityexporter) for more
 
 
 
-## Excel(TM) File Processing
+## Excel&#8482; File Processing
 
 When choosing to include Excel files in your data generation/anonymization, always be aware, 
 that its data capacity is limited to 65,535 rows.
 
-### Iterating Entity Data from an Excel(TM) File
+### Iterating Entity Data from an Excel&#8482; File
 
 ```xml
 <iterate type="product" source="products.xls" consumer="ConsoleExporter"/>
 ```
 
 
-### Creating Excel(TM) Files
+### Creating Excel&#8482; Files
 
 ```xml
 <generate type="product" count="7" consumer="new XLSEntityExporter('products.xls')">
@@ -96,11 +96,11 @@ A product list my look like this:
 1347354927249 Lindt Chocolate     2.75
 2335882183280 Sanbitter           6.75
 9071782830384 Beluga Caviar     100.00
-9965715556715 Black Truffels     85.75
+9965715556715 Black Truffles     85.75
 ```    
 
-Note that, since a column header may require the column to be too wide, it often is left out.
-Beyond its width, each column may have have additional formatting requirements:
+Note that, since a column header may require the column to be too wide, it is often left out.
+Beyond its width, each column may have additional formatting requirements:
 - Alignment: Left, right, centered
 - Fixed number of fraction Digits
 - Padding character (for example '0' for numbers)
@@ -112,7 +112,7 @@ Another way to format the above data may be
 1347354927249 Lindt Chocolate__ 002.75
 2335882183280 Sanbitter________ 006.75
 9071782830384 Beluga Caviar____ 100.00
-9965715556715 Black Truffels___ 085.75
+9965715556715 Black Truffles___ 085.75
 ```    
 
 Benerator supports column format definition in a short syntax:
@@ -127,11 +127,14 @@ Benerator supports column format definition in a short syntax:
 | alignment       | l for left, c for centered, r for right       | l                |
 | pad character   | a character used to reach the column width, usually a space character or sometimes 0 for numbers | &lt;space&gt; |
 
-Examples
-- name[16l] : Print the name left-aligned with 16 characters (padding spaces at the right)
-- price[8.2r0] : Print the price right-aligned with a total of 8 characters (5 integer digits + the decimal point + 2 fraction digits), padded at the left using zeros. Example: 00033.25
+Examples:
 
-The complete columns configuration is expressed as a comma-separated list of column specifications.
+- `name[16l]` : Print the name left-aligned with 16 characters (padding spaces at the right)
+
+- `price[8.2r0]` : Print the price right-aligned with a total of 8 characters (5 integer digits + the decimal point + 2 fraction digits), 
+padded at the left using zeros. Example: `00033.25`
+
+The complete columns' configuration is expressed as a comma-separated list of column specifications.
 
 The FCW support classes FixedWidthEntitySource and FixedWidthEntityExporter are in the 
 platform package 'fixedwidth' and make use of a similar configuration API:
@@ -231,7 +234,9 @@ An example source file 'users.json' may look like this:
 
 ### Creating JSON files
 
-Generated data is exproted to a JSON file by defining a consumer like this:```consumer="new JsonFileExporter('gen-persons.json')"```
+Generated data is exported to a JSON file by defining a consumer like this: 
+`consumer="new JsonFileExporter('gen-persons.json')"`
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <setup>
@@ -241,4 +246,3 @@ Generated data is exproted to a JSON file by defining a consumer like this:```co
     </generate>
 </setup>
 ```
-

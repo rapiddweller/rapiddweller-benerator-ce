@@ -15,7 +15,9 @@ hexadecimal form:
 \xhh The character with hexadecimal value 0xhh
 \uhhhh The character with hexadecimal value 0xhhhh
 ```
-For control codes in general there is a special notation
+
+For control codes in general there is a special notation:
+
 ```shell
 \cx The control character corresponding to x (e.g. \cA for Ctrl-A)
 ```
@@ -71,7 +73,7 @@ There are some popular predefined character classes:
 \w 		A word character: [a-zA-Z_0-9]
 \W 		A non-word character: [^\w]
 ```
-Quantifiers can be used to specify how many characters of a class (or other regular expression construct) should appear:
+Quantifiers can be used to specify how many characters of a class (or other regular expression constructs) should appear:
 ```shell
 X?		X, once or not at all
 X*		X, zero or more times
@@ -89,7 +91,7 @@ X|Y 	Either X or Y
 (X) 	X, as a group
 ```
 
-## Frequently asked Questions
+## Frequently Asked Questions
 
 For generating characters which appear in your language, but not in English (like German umlauts), you can use their unicode representation (e.g.
 \u00FC for 'ü').
@@ -97,7 +99,7 @@ For generating characters which appear in your language, but not in English (lik
 Different implementations of regular expression parsers exist and many have slight differences. So, if you take a regular expression that worked on
 one parser and run it on another one, you may get an error message. Benerator users that do not construct a regular expression by themselves, but
 simply take on 'from the internet' observe the same effect: The most frequent fault is if someone wants to generate a character that has a special
-meaning in a regular expression and does not escape it with a backslash, e.g. \., \\, \-, \|, \[, \], \{, \}, …
+meaning in a regular expression and does not escape it with a backslash, e.g. `\., \\, \-, \|, \[, \], \{, \}, …`
 
-An example: Some regex parsers recognize that the expression [A-]X could resolve to AX or A-. While others (like Benerator's parser) diagnose a
-malformed character class (a missing character behind the minus) and report an error. You can resolve this by escaping the minus sign: [A\-]X.
+An example: Some regex parsers recognize that the expression `[A-]X` could resolve to `AX` or `A-`. While others (like Benerator's parser) diagnose a
+malformed character class (a missing character behind the minus) and report an error. You can resolve this by escaping the minus sign: `[A\-]X`.
