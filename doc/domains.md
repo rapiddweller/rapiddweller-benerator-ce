@@ -51,7 +51,7 @@ The person domain has three major components:
 ### PersonGenerator
 
 Creates Person beans to be used for prototype-based data generation. It can be configured with dataset and locale property. The generated Person
-JavaBeans exhibits the properties salutation, title (both locale-dependend), givenName, familyName (both dataset-dependent), gender and birthDate. If
+JavaBeans exhibits the properties _salutation_, _title_ (both locale-dependent), _givenName_, _familyName_ (both dataset-dependent), _gender_, _birthDate_, _age_. If
 the chosen dataset definition provides name weights, benerator generates person names according to their statistical probability. Of course, gender,
 salutation and givenName are consistent.
 
@@ -83,7 +83,7 @@ The PersonGenerator can be configured with several properties:
 
 | Property | Description | Default Value |
 | --- | --- | --- |
-| dataset | Either a region name or the two-letter-ISO-code of a country, e.g. US for the USA. See [Advanced Topics > Region nesting](advanced_topics.md) | The user's default country | 
+| dataset | Either a region name or the two-letter-ISO-code of a country, e.g. US for the USA. See '[Advanced Topics > Region nesting](advanced_topics.md#region-nesting)' | The user's default country | 
 | locale | Two-letter-ISO-code of the language in which to create salutation and titles, e.g. en for English | The user's default language | 
 | minAgeYears | The minimum age of generated persons | 15 | 
 | maxAgeYears | The maximum age of generated persons | 105 | 
@@ -140,7 +140,7 @@ The Person class has the following properties:
 * **AddressGenerator**: Generates addresses that match simple validity checks: The City exists, the ZIP code matches and the phone number area codes
   are right. The street names are random, so most addresses will not stand validation of real existence.
 
-* **PhoneNumberGenerator**: Generates land line telephone numbers for a country
+* **PhoneNumberGenerator**: Generates landline telephone numbers for a country
 
 * **MobilePhoneNumberGenerator**: Generates mobile phone numbers for a country
 
@@ -256,7 +256,7 @@ The product package provides you with Generator classes for EAN codes:
 
 * **EAN13**: Annotation that marks a Java attribute or property as 13-digit-EAN for bean validation
 
-* **EAN13Validator**: Validates 13-difit EAN codes
+* **EAN13Validator**: Validates 13-digit EAN codes
 
 * **EANGenerator**: Generates both 8-digit and 13-digit EAN codes
 
@@ -274,7 +274,7 @@ Provides classes specific to Brazil:
 
 * **CPNJGenerator**: Generates CPNJs
 
-* **CPNJValidator**: Validates CPNJs and can be used as Databene validator and as ConstraintValidator in Java Bean Validation (JSR 303)
+* **CPNJValidator**: Validates CPNJs and can be used as Benerator validator and as ConstraintValidator in Java Bean Validation (JSR 303)
 
 * **CPF**: Annotation to mark a Java attribute or property as a CPF (Cadastro de Pessoa Fisica)
 
@@ -290,5 +290,5 @@ Provides classes specific for the United States of America:
 
 * **SSNGenerator**: Generates Social Security Numbers
 
-* **SSNValidator**: Validates Social Security Numbers and can be used as Databene validator and as ConstraintValidator in Java Bean Validation (JSR
+* **SSNValidator**: Validates Social Security Numbers and can be used as Benerator validator and as ConstraintValidator in Java Bean Validation (JSR
   303)

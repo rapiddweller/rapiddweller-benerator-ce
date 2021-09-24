@@ -1,6 +1,6 @@
 # Monitoring Benerator
 
-You can monitor Benerator using a JMX client, for example JConsole.
+You can monitor Benerator using a JMX client, for example, JConsole.
 
 The following properties can be monitored:
 
@@ -30,9 +30,9 @@ The last four properties (**Open...**) for database resource monitoring and data
 
 5. benerator – monitor – Attributes
 
-6. Select the attribute TotalGenerationCount or CurrentTroughput and the value is displayed on the right
+6. Select the attribute TotalGenerationCount or CurrentThroughput and the value is displayed on the right
 
-7. Double clicking the number opens a chart that displays the value's evolution over time
+7. Double-clicking the number opens a chart that displays the value's evolution over time
 
 ![](assets/grafik21.png)
 

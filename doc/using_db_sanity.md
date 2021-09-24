@@ -5,7 +5,7 @@ end. For detailed information about DB Sanity, check its project homepage: [http
 functionality in Benerator, download and install dbsanity4ben from [https://sourceforge.net/projects/dbsanity/files/](https://sourceforge.net/projects/dbsanity/files/).
 
 For calling DB Sanity in a Benerator descriptor file, you define the checks and put them into a single XML file or distribute them over several ones
-and put them into a sub directory of your Benerator project, typically called '
+and put them into a subdirectory of your Benerator project, typically called '
 dbsanity'.
 
 Import the plugin functionality to your Benerator project using

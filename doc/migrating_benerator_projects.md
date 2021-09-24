@@ -1,16 +1,15 @@
 # Migrating Benerator Projects
 
-
 ## Guidelines
 
-We try to keep execution behaviour and programming interfaces as stable 
-as possible between releases. However, if we consider a behaviour as 
+We try to keep execution behaviur and programming interfaces as stable 
+as possible between releases. However, if we consider a behavior as 
 wrong, we do change it. 
 
 If you experience generation behaviour changes between Benerator releases, 
 please check this migration guide section in its newest version. 
-Often, we will provide a flag in the ```<setup>``` attributes which 
-makes Benerator keep previous behaviour.
+Often, we will provide a flag in the `<setup>` attributes which 
+make Benerator keep previous behavior.
 
 
 ## General Advice For Developers of Custom Components 
@@ -31,13 +30,14 @@ If you did not program custom implementations of Benerator's interfaces
 or classes, existing projects are supposed to work like before (but faster).
 
 If you programmed a custom distribution by implementing the Distribution 
-**directly** (and did not inherit from a child class), bad news is that 
-your code will not be compatible with Benerator 1.2.0.
+**directly** (and did not inherit from a child class), the bad news is that 
+your code will not be compatible with Benerator 2.0.0.
 
-Good news is that this is easily fixed: Edit the Java code of your 
+The good news is that this is easily fixed: Edit the Java code of your 
 custom distribution class and replace the ```ìmplements Distribution```
 directive with ```extends AbstractDistribution```.
 
 In case you programmed a custom Sequence, you have two options: 
+
 1. If the sequence fetches and caches all generator data in its applyTo() method, then have ```extends DetachedSequence```
 2. else implement the applyTo() method appropriately.

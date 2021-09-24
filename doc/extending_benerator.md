@@ -5,16 +5,16 @@ are
 
 * **Generator** generates attribute data or entities with specific characteristics
 
-* **Sequence** lets you define own random or sequence algorithms
+* **Sequence** lets you define your own random or sequence algorithms
 
-* **WeightFunction** allows you to provide a weight function which determines the probability of a certain value.
+* **WeightFunction** allows you to provide a weight function that determines the probability of a certain value.
 
-* **CumulativeDistributionFunction** allows you to provide a weight function which determines the probability of a certain value.
+* **CumulativeDistributionFunction** allows you to provide a weight function that determines the probability of a certain value.
 
 * **Converter** converts data of one type to another and can be used to support custom data classes, data formats or message formats.
 
 * **Validator** validates previously defined data and tells if it is valid. This is useful for low-knowledge data generation where you have e.g. a
-  validation library or system but little knowledge how to construct valid data. In this case you can generate random data and let the validator
+  validation library or system but little knowledge how to construct valid data. In this case, you can generate random data and let the validator
   decide, which to accept.
 
 * **Consumer** receives the generated data and is typically used to store it in a file or system.
@@ -49,7 +49,7 @@ the Benerator generation process.
 
 * **ProductWrapper`<E>` generate(ProductWrapper`<E>` wrapper)**: Generates an instance of the generic type E and uses the wrapper provided by the
   caller to return it to the client. If the method is called in an inappropriate state (
-  created or closed), it throws an IllegalGeneratorStateException. If the generator is not available any more, the method returns null.
+  created or closed), it throws an IllegalGeneratorStateException. If the generator is not available anymore, the method returns null.
 
 * **void reset()**: Resets the generator to the initial state. When called, the Generator is expected to act as if '
   restarted'. After invocation the state has to be available.
@@ -70,7 +70,7 @@ Generators have the following life cycle:
 * **running**: Generator construction is done and the generator is available. The user may use the Generator calling the generate() method.
 
 * **closed**: The Generator may become unavailable automatically if its value space is depleted or manually when close()
-  has been invoked. The Generator may be reset to the running state again by calling reset() . When being closed , the generator must be in a state in
+  has been invoked. The Generator may be reset to the running state again by calling reset() . When being closed, the generator must be in a state in
   which it can be safely garbage collected.
 
 ### Helper classes for custom Generators
@@ -81,12 +81,12 @@ It is recommendable to make your custom generator extend one of the following cl
 
 * **UnsafeGenerator**: Implements state handling and declares to be neither thread-safe nor parallelizable
 
-* **ThreadSafeGenerator**: Implements state handling and declares to be thread-safe and parallelizable
+* **ThreadSafeGenerator**: Implements state handling and declare to be thread-safe and parallelizable
 
 When deriving a custom generator, prefer delegation to inheritance. This simplifies code maintenance and life cycle handling. Abstract Generator
 implementations which already implement delegate handling are provided by the following classes:
 
-* **GeneratorWrapper**: Wraps another generator of different product type
+* **GeneratorWrapper**: Wraps another generator of different product types
 
 * **GeneratorProxy**: Wraps another generator of the same product type
 
@@ -102,11 +102,13 @@ You can define custom functions in Java which will be called by FreeMarker, e.g.
 See the FreeMarker documentation at http://freemarker.sourceforge.net/docs/pgui_datamodel_method.html for some more details. The Java implementation
 of the class could be something similar to this:
 
+```java
 public class HelloWorldMethod implements TemplateMethodModel {
 
 public TemplateModel exec(List args) throws TemplateModelException {return new SimpleString("Hello " + args[0]);}
 
 }
+```
 
 A descriptor file would need to instantiate the class, before it can be called:
 
@@ -128,7 +130,7 @@ Sequence, one inherits the data redistribution feature defined in this class and
 The method needs to be implemented in a way that it creates and returns a new Generator component, which generates numbers of the given numberType
 with a numerical value of at least min and at most max and a granularity, such that each generated value x is x = min + n * granularity, with n being
 an integral number. If the caller of this method indicated that it requires unique number generation and the Sequence is not capable of generating
-unique numbers, the method is requires to throw a com.rapiddweller.ConfigurationError.
+unique numbers, the method is requires to throw a `com.rapiddweller.ConfigurationError`.
 
 ## Custom WeightFunctions
 
@@ -137,22 +139,47 @@ probability density. When applied to collections or arrays, the function will ev
 
 For defining your own WeightFunction, you just need to implement the WeightFunction interface:
 
-package com.rapiddweller.model.function;
-
+```java
 public interface WeightFunction extends Distribution { double value(double param);}
+```
 
 Attention: Take into account, that the parameter may become zero: When using the Function for weighing the entries of an import file or a list, the
 function will be called with zero-based indexes as argument. So, if you want to use a 10,000-element CSV-file weighted by a custom WeightFunction, it
 must be able to produce useful values from 0 to 9,999.
 
-TODO
+Example:
+
+```java
+public class GaussianFunction extends com.rapiddweller.benerator.distribution.AbstractWeightFunction {
+
+  private final double average;
+
+  private final double deviation;
+
+  private final double scale;
+
+  public GaussianFunction(double average, double deviation) {
+    this.average = average;
+    this.deviation = deviation;
+    this.scale = 1. / deviation / Math.sqrt(2 * Math.PI);
+  }
+
+  @Override
+  public double value(double param) {
+    double x = (param - average) / deviation;
+    return scale * Math.exp(-0.5 * x * x);
+  }
+
+}
+```
+
 
 ## Applying a Weight Function
 
 You can weigh any arbitrary imported or numeric data by a Weight Function. A Weight Function is defined by a class that implements the interface
-com.rapiddweller.model.function.WeightFunction:
+`com.rapiddweller.model.function.WeightFunction`:
 
-```
+```java
 public interface WeightFunction extends Weight {
 
 double value(double param);
@@ -163,12 +190,6 @@ double value(double param);
 When using a weight function, Benerator will serve data items in random order and as often as implied by the function value. Benerator automatically
 evaluates the full applicable number range (as defined by numerical min/max or number of objects to choose from) and normalize the weights. There is
 no need to provide a pre-normalized distribution function. You may define custom Weight Functions by implementing the WeightFunction interface.
-
-
-
-## Custom CumulativeDistributionFunctions
-
-TODO (in a later version of the manual)
 
 ## Custom Converters
 

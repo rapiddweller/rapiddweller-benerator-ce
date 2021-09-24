@@ -6,9 +6,9 @@ The benerator configuration file is XML based. An XML schema is provided. The do
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<setup xmlns="[https://www.benerator.de/schema/1.2.0](https://www.benerator.de/schema/1.2.0)"
+<setup xmlns="[https://www.benerator.de/schema/2.0.0](https://www.benerator.de/schema/2.0.0)"
 	   xmlns:xsi="[http://www.w3.org/2001/XMLSchema-instance](http://www.w3.org/2001/XMLSchema-instance)"
-	   xsi:schemaLocation="https://www.benerator.de/schema/1.2.0 https://www.benerator.de/schema/rapiddweller-benerator-ce-1.2.0.xsd">
+	   xsi:schemaLocation="https://www.benerator.de/schema/2.0.0 https://www.benerator.de/schema/rapiddweller-benerator-ce-2.0.0.xsd">
 	<!-- content here -->
 </setup>
 ```
@@ -62,7 +62,7 @@ and include the properties file in the benerator descriptor file:
 <include uri="my.properties"/>
 ```
 
-This way you can easily use different settings in different environments (see Section 4.7, “Staging”).
+This way you can easily use different settings in different environments (see '[Staging](advanced_topics.md#staging)').
 
 File entries that do not begin with 'benerator“ are simply put into the generation context and can be used to configure generation behavior.
 
@@ -85,7 +85,7 @@ evaluated:
 
 * context variables
 
-A setting is explicitely defined using a setting element:
+A setting is explicitly defined using a setting element:
 
 ```xml
 <setting name="threshold" value="5"/>

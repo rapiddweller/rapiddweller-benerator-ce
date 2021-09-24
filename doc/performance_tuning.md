@@ -10,21 +10,21 @@ to get some performance comparisons.
 
 ## pageSize (database and other transactional systems only)
 
-'pageSize' is Benerator's abstraction of a kind of bracket put around a group of data object, 
+'pageSize' is Benerator's abstraction of a kind of bracket put around a group of data objects, 
 for databases and Kafka usually this bracket is mapped to a transaction. 
 For example a pageSize of 10 for a database means that each group of 10 objects is committed 
-to the database in one transaction. Transactions incur processing overhead, so perfomrnace 
+to the database in one transaction. Transactions incur processing overhead, so performance 
 improves if the number of transactions is reduced. This is achieved by using a larger pageSize.
   
-By default Benerator uses a defensive pageSize of 1, processing each entity in an own transaction, 
+By default, Benerator uses a defensive pageSize of 1, processing each entity in an own transaction, 
 because this simplifies error diagnosis when working out a generation/anonymization process. 
-But this has a tremendous impact on performance. When configuration is complete and you need 
+But this has a tremendous impact on performance. When configuration is complete, and you need 
 larger performance, use a large pagesize for critical `<generate>` and `<iterate>` elements, e.g. 
 `<generate type="db_user" count="1000000" consumer="db" pagesize="1000">`
 
 ## JDBC batch (database only)
 
-JDBC batches provide for significantly better database insertion performance than standard operation. In Benerator this is turned of by default, since
+JDBC batches provide for significantly better database insertion performance than standard operation. In Benerator this is turned off by default, since
 error messages that arise from bad generation setup are much harder to analyze in batch mode. When you are finished with defining data generation and
 need performance for mass data, you can activate batch operation by the batch attribute of the database element:
 
@@ -32,8 +32,8 @@ need performance for mass data, you can activate batch operation by the batch at
 <database ... batch="true" />
 ```
 
-Benerator is optimized for performance. Thus you may get problems when combining nested `<generate>` elements with batching. It typically results in
-exceptions that indicate violation of a foreign-key constraint.
+Benerator is optimized for performance. Thus, you may get problems when combining nested `<generate>` elements with batching. It typically results in
+exceptions that indicate a violation of a foreign-key constraint.
 
 ## Query fetch size (database only)
 
@@ -52,7 +52,7 @@ attributes of the database element:
 
 This is especially useful if the database is accessed over a slow network connection and 
 query result sets are at least as large as the fetch size and are iterated to a relevant extent. 
-When setting the fetch size to value that is too high, performance may actually decrease.
+When setting the fetch size to a value that is too high, performance may actually decrease.
 
 
 ## Restrict logging
@@ -60,7 +60,7 @@ When setting the fetch size to value that is too high, performance may actually 
 Logging data generation/anonymization details may deteriorate performance tremendously.
 Benerator is shipped with efficient logging settings, but if you changed the settings
 in the process of debugging your data generation/anonymization, make sure to increase
-log filters to 'info' level.
+log filters to `info` level.
 A high level like 'error' usually do not have a performance impact, but may hide issues
 which are reported using 'warn', so you should not be too restrictive about logging.
 
@@ -68,7 +68,7 @@ which are reported using 'warn', so you should not be too restrictive about logg
 ## Id Generation
 
 The most efficient id generation strategy is increment since it works without connecting the database. It works fine for multithreaded generation,
-too. But for concurrent execution of multiple Benerator processes or continuation of a cancelled generation process you need an id generation that is
+too. But for concurrent execution of multiple Benerator processes or continuation of a canceled generation process you need an id generation that is
 unique among several runs. The most efficient id strategies with such behavior are seqhilo (database-based) and uuid (universally unique string id).
 
 
@@ -112,7 +112,7 @@ versions of a product may also exhibit notably different
 performance. 
 
 Unfortunately, there is not an optimal JVM and version for 
-any task you mihjt want to perform: Some JVMs will perform 
+any task you might want to perform: Some JVMs will perform 
 significantly faster in single threaded execution but others 
 will be better in multithreaded execution.
 
@@ -141,7 +141,7 @@ offers in enterprise computing.
 When using other script languages than rapiddwellerScript, the scripts expressions 
 are parsed at runtime, thus are significantly slower than compiled code. 
 For performing CPU-intensive operations or excessive looping, use rapiddwellerScript 
-or program a Java task (See Manual Section 10, “Custom Tasks”).
+or program a Java task (See '[Custom Tasks](extending_benerator.md#custom-tasks)').
 
 
 ## Parsing (Oracle) metadata
@@ -154,8 +154,8 @@ Using regular expressions in the `<database>`'s excludeTables and includeTables 
 If metadata retrieval still takes too long, you can use `<database... metaCache="true" />` for storing metadata in a cache file on your local hard
 drive.
 
-When Benerator executes SQL with an `<execute>` statement, it analyzes if the database structure is modified. In that case, the cached database meta
-data is invalidated and reparsed when they are needed the next time. If you are certain that the change is irrelevant to subsequent generations steps,
+When Benerator executes SQL with an `<execute>` statement, it analyzes if the database structure is modified. In that case, the cached database 
+metadata is invalidated and parsed again when they are needed the next time. If you are certain that the change is irrelevant to subsequent generations steps,
 you can suppress the invalidation by
 
 `<execute invalidate="false">`ALTER TABLE...`</execute>`.
@@ -164,7 +164,7 @@ you can suppress the invalidation by
 ## Anonymization Algorithms
 
 Different anonymization algorithms have different performance:
-An anonymization which takes care of consistency and 'pretty' output
+An anonymization that takes care of consistency and 'pretty' output
 useful for showcases must be slower than a stupid one which overwrites
 the imported data with purely random data.
 
@@ -174,7 +174,7 @@ consistency errors and program failure in the target system if they have
 not been assessed properly.
 This is what prototype-based generation was invented for!
 
-Only **after** you have set up an anonymization that fits consistency
+Only **after** you have set up anonymization that fits consistency
 requirements, checked for other JVMs, have applied other performance
 improvement strategies, maybe tried scaling over multiple threads
 in Enterprise Edition, you may fiddle around with anonymization
@@ -190,12 +190,12 @@ Here some anonymization approaches in the order of increasing performance:
 | random    | poor                   | passable               |   9   |
 | constant  | poor                   | poor                   |  14   |
 
-For showcase generation, in which a user is faced with the anonymization results,
+For showcase generation, in which a user is faced with anonymization results,
 only a prototype or regex approach makes sense.
 
 When anonymizing data for performance tests, one concern is how good the results of
-the chosen anonymizaion match the real world's data characteristics, especially
-for field used in caches and indexes. A constant approach will make indexes and
+the chosen anonymization match the real world's data characteristics, especially
+for fields used in caches and indexes. A constant approach will make indexes and
 caches useless as well as the performance test results.
 
 Using Regex, Hash or Random will provide you with a bigger diversity of data
@@ -205,6 +205,7 @@ You see that the generation of constants is super-fast but useless in most cases
 
 In many cases, a regular expression is a good compromise between anonymization
 performance and applicability for showcases and performance tests.
+
 For example, a setup like this
 
 ```xml
@@ -248,16 +249,22 @@ zip codes and phone numbers, but relatively poor for name-like data, but often a
 In order to get an idea of the costs of different anonymization approaches,
 check the performance numbers in the 
 [Benchmark Tool Documentation](command_line_tools.md#benchmark-tool) or run it on
-your system to get an individual insight in your machine's capabilities.
+your system to get an individual insight into your machine's capabilities.
 
 
 ## Distributed Generation
 
-You can distribute generation over several machines. In oder to do so you will need two types of descriptor files: First an initialization descriptor
-that initializes the systems and generates the deterministic core data, Second a mass data description file. The initialization file will need to run
+You can distribute generation over several machines. In oder to do so you will need two types of descriptor files: 
+
+First an initialization descriptor
+that initializes the systems and generates the deterministic core data, 
+
+Second a mass data description file. The initialization file will need to run
 first on a single machine, then the mass data file can be executed on multiple processes or machines concurrently. For mass data generation you will
 need to take special care:
-Choose an id generation strategy that is able to create unique ids under these circumstances (see Section 24, “Generating IDs”).
+
+Choose an id generation strategy that is able to create unique ids under these circumstances 
+(see '[Generating IDs](generating_unique_data.md#id-generation)').
 
 
 ## Distributed Anonymization
@@ -272,4 +279,4 @@ via another Kafka queue and Kafka connector.
 
 ## Ask the experts
 
-Feel free to contact us for assistance on performance improvement: team@rapiddweller.com
+Feel free to contact us for assistance on performance improvement: **[team@rapiddweller.com](mailto:team@rapiddweller.com)**.

@@ -28,8 +28,8 @@ The performance of consumer invocations can be tracked, using the PerfTrackingCo
 
 ## JavaInvoker
 
-To aid you calling Java code from Benerator, there is a Helper class, JavaInvoker, which implements the Consumer interface and calls a Java method,
-which is declared by its name, on a Java object. The data of the generated entity is automatically:
+To aid you in calling Java code from Benerator, there is a Helper class, JavaInvoker, which implements the Consumer interface and calls a Java method,
+which is declared by its name, on a Java object. The data of the generated entity is automatic:
 
 ```xml
 <bean id="service" spec="..." />
@@ -37,7 +37,7 @@ which is declared by its name, on a Java object. The data of the generated entit
 <bean id="invoker" spec="new JavaInvoker(ejb, 'enrolCustomer')" />
 ```
 
-For tracking invocation performance, you need to add the PerfTrackingConsumer:
+For tracking invocation performance, you need to add the `PerfTrackingConsumer`:
 
 ```xml
 <bean id="enrolCustomer" class="PerfTrackingConsumer" >
@@ -47,7 +47,7 @@ For tracking invocation performance, you need to add the PerfTrackingConsumer:
 
 ## Checking performance requirements
 
-You can as well define performance requirements using properties of the class PerfTrackingConsumer:
+You can as well define performance requirements using properties of the class `PerfTrackingConsumer`:
 
 | Property | Description |
 | --- | --- |
@@ -69,4 +69,3 @@ An example for the properties described above:
     <property name="percentiles" value="90:5000, 95:7000"/>
 </bean>
 ```
-

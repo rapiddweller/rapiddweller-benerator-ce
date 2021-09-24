@@ -24,7 +24,7 @@ Benerator contains the following common predefined and platform-independent gene
 
 ### Database-related Generators
 
-See 'Using databases'
+See **'[Using Relational Databases](using_relational_databases.md)'**.
 
 ### simple type generators
 
@@ -97,7 +97,7 @@ See 'Using databases'
 
 ### Seed Based Generators
 
-* **SeedWordGenerator**: Generates new word based on rules derived from a dictionary.
+* **SeedWordGenerator**: Generates new words based on rules derived from a dictionary.
 
 * **SeedSentenceGenerator**: Generates sentences based on rules derived from a text file.
 
@@ -107,7 +107,7 @@ A Distribution describes stochastic properties for distributing the data that Be
 implement and introduce custom implementations. The most important types of distribution are _Sequence_, _WeightFunction_ and _
 CumulativeDistributionFunction_.
 
-A Distribution implements a common concept for generating numbers or taking values from a data source and providing them in a rearragned order or
+A Distribution implements a common concept for generating numbers or taking values from a data source and providing them in a rearranged order or
 distribution with similar semantics as the number generation feature.
 
 As an example, a 'Skip2' sequence might generate numbers with an increment of 2: 1, 3, 5, 7,… When it is used to redistribute given data item1, item2,
@@ -132,9 +132,9 @@ If this makes you run into an OutOfMemoryError, check the '
 
 ### Sequences
 
-Sequences reflect the idea of a mathematical sequence. They primary focus in number generation, but they can be applied for data redestribution as
-well. Most sequences have a default instance which can be used by their literal, e.g. distribution="random" uses the 'random' literal for the
-Distribution defined in the class RandomSequence.
+Sequences reflect the idea of a mathematical sequence. They primarily focus in number generation, but they can be applied for data redistribution as
+well. Most sequences have a default instance which can be used by their literal, e.g. `distribution="random"` uses the 'random' literal for the
+distribution defined in the class RandomSequence.
 
 | Class | RandomSequence |
 | --- | --- |
@@ -172,7 +172,7 @@ maxStep** is added on each subsequent invocation |
 
 | Class | WedgeSequence |
 | --- | --- |
-| Description | Starting with first the lowest, then the highest available number, this alternatively provides increasing small numbers and decreasing large numbers until they converge in the middle and the Sequence becomes unavailable. So generation is unique. For a number range 1..7, the generated numbers would be: 1, 7, 2, 6, 3, 5, 4. |
+| Description | Starting with first the lowest, then the highest available number, this alternatively provides increasing small numbers and decreasing large numbers until they converge in the middle and the Sequence becomes unavailable. So this generation is unique. For a number range 1..7, the generated numbers would be: 1, 7, 2, 6, 3, 5, 4. |
 | Default Instance | wedge |
 
 | Class | BitReverseSequence |
@@ -206,7 +206,7 @@ size** property. |
 
 | Class | WeightedNumbers |
 | --- | --- |
-| Description | Creates numbers based on a weighted-number literal , e.g. '1^70, 3^30' for generating 70% '1' values and 30% '3' values. This is a convenient and simple approach for controling parent-child cardinalities in nested data generation. |
+| Description | Creates numbers based on a weighted-number literal , e.g. '1^70, 3^30' for generating 70% '1' values and 30% '3' values. This is a convenient and simple approach for controlling parent-child cardinalities in nested data generation. |
 | Default Instance | – |
 | Property | Property Description | Default Value |
 | spec | A weighted-number literal. It lists weighted values in a comma-separated list. Each weighted value is specified by the numeric value followed by a circumflex (^) and the weight value, for example '1^70,3^30' | – |
@@ -238,9 +238,9 @@ Sequence or CumulativeDistributionFunction instead.
 
 Implements the well-known Gaussian Function.
 
-Full class name: com.rapiddweller.benerator.distribution.function.GaussianFunction
+Full class name: `com.rapiddweller.benerator.distribution.function.GaussianFunction`
 
-Parameters: average [, deviation]
+Parameters: `average [, deviation]`
 
 Example:
 
@@ -255,9 +255,9 @@ Example:
 
 The Exponential Function.
 
-Full class name: com.rapiddweller.benerator.distribution.function.ExponentialFunction
+Full class name: `com.rapiddweller.benerator.distribution.function.ExponentialFunction`
 
-Parameters: [scale,] frequency
+Parameters: `[scale,] frequency`
 
 Example:
 
@@ -271,9 +271,9 @@ Example:
 
 Discrete Function that specifies an explicit weight for each possible value
 
-Full class name: com.rapiddweller.benerator.distribution.function.DiscreteFunction
+Full class name: `com.rapiddweller.benerator.distribution.function.DiscreteFunction`
 
-Parameters: weight1 [, weight2 [, weight3 ...]]
+Parameters: `weight1 [, weight2 [, weight3 ...]]`
 
 Example:
 
@@ -292,7 +292,6 @@ WeightFunction.
 
 Inverse of the integral of the probability density f(x) = a e^{-ax} (x >` 0), which resolves to F^{-1}(x) = - log(1 - x)
 / a.
-
 
 
 ## Converters
@@ -409,7 +408,7 @@ Beware that the java.text.Format classes are not thread-safe!
 
 ### Domain Validators
 
-For the validators from the domains see '[Domains](domains.md)'
+For the validators from the domains see **'[Domains](domains.md)'**.
 
 ### Common validators
 

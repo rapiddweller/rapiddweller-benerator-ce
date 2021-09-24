@@ -979,7 +979,7 @@ _The flag includeTable="#all" is not necessary anymore!_
 
 #### Known issue
 
-There is one known limitation when it comes to multischema. If there are two tables with the same name in different 
+There is a known limitation when it comes to multischema. If there are two tables with the same name in different 
 schemas and both schemas are imported into your Benerator context, like 
 
 ```xml
@@ -987,6 +987,11 @@ schemas and both schemas are imported into your Benerator context, like
 <database id="schema2" url="{dbUrl}" driver="{dbDriver}" schema="schema2" user="{dbUser}" password="{dbPassword}" />
 ```
 
-... you might get an error because Benerator can't decide which table you want to access. There would be another
-workaround to exclude the table you won't need from your context by using
-`excludeTable="db_user"` ... unfortunately this doesn't work properly ( a fix will come in next minor release ).
+you might get an error because Benerator can't decide which table you want to access. 
+
+As workaround exclude one of the conflicting table by using `excludeTable="db_user"` as below:
+
+```xml
+<database id="schema1" url="{dbUrl}" driver="{dbDriver}" schema="schema1" user="{dbUser}" password="{dbPassword}" />
+<database id="schema2" url="{dbUrl}" driver="{dbDriver}" schema="schema2" user="{dbUser}" password="{dbPassword}" excludeTable="db_user"/>
+```

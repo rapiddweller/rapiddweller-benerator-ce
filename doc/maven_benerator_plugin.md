@@ -18,7 +18,7 @@ You can use the plugin to
 ## Getting started
 
 What ever goal you want to accomplish with Benerator Maven Plugin, you need to create a Maven project first. If you are about to create a completely
-new project, you may want to make use of Benerator's Maven Project Wizard. Otherwise you need to configure the benerator plugin in your project
+new project, you may want to make use of Benerator's Maven Project Wizard. Otherwise, you need to configure the benerator plugin in your project
 manually. The minimal configuration in Maven's pom.xml would be:
 
 ```xml
@@ -30,7 +30,7 @@ manually. The minimal configuration in Maven's pom.xml would be:
     <plugin>
       <groupId>com.rapiddweller</groupId>
       <artifactId>benerator-maven-plugin</artifactId>
-      <version>1.2.0</version>
+      <version>2.0.0</version>
     </plugin>
   </plugins>
 
@@ -52,13 +52,13 @@ In order to make use of a plugin, it must be listed as dependency, e.g. dbsanity
 </dependencies>
 ```
 
-When using proprietary database drivers (e.g. Oracle), you need to fetch and store them in your Maven repository manually and stated as depenency in
+When using proprietary database drivers (e.g. Oracle), you need to fetch and store them in your Maven repository manually and stated them as dependency in
 the pom.xml.
 
 The default descriptor path points to the file benerator.xml in the project's base directory. So put your benerator.xml into this directory and invoke
 from the command line:
 
-mvn benerator:generate
+`mvn benerator:generate`
 
 Voilà!
 
@@ -72,7 +72,7 @@ configuration, e.g.:
 <plugin>
   <groupId>com.rapiddweller</groupId>
   <artifactId>benerator-maven-plugin</artifactId>
-  <version>1.2.0</version>
+  <version>2.0.0</version>
 
   <configuration>
     <encoding>utf-8</encoding>
@@ -109,7 +109,7 @@ The configuration elements available for descriptor file execution are:
 
 You can invoke descriptor file execution by calling the **generate** goal from the command line or your IDE:
 
-mvn benerator:generate
+`mvn benerator:generate`
 
 The db* configuration is available to scripts in your descriptor file as well, e.g. `<database url=“{dbUrl}“... />`
 
@@ -127,16 +127,16 @@ Use these `<configuration>` elements in your pom.xml:
 
 Then invoke XML file generation using the **createxml** goal:
 
-mvn benerator:createxml
+`mvn benerator:createxml`
 
 ## Creating a project assembly
 
 For being able to port a Maven project to a location in which no Maven installation is available or possible, you can make the plugin collect all
 dependencies in one directory and create a classpath file. Call
 
-mvn benerator:assembly
+`mvn benerator:assembly`
 
-and you will find the project files, all dependent binaries and a classpath.txt file in the directory target/assembly. The classpath.txt helps you to
+and you will find the project files, all dependent binaries and a `classpath.txt `file in the directory `target/assembly`. The classpath.txt helps you to
 set up a classpath definition for your target execution environment more easily.
 
 ## Extending the classpath
@@ -150,7 +150,7 @@ configuration (this requires Maven 2.0.9 or newer):
 
   <groupId>com.rapiddweller</groupId>
   <artifactId>benerator-maven-plugin</artifactId>
-  <version>1.2.0</version>
+  <version>2.0.0</version>
 
   <configuration>
     ...
@@ -171,7 +171,7 @@ configuration (this requires Maven 2.0.9 or newer):
 
 ## Profile-based configuration
 
-In cooperative software development you are supposed to keep your individual configuration private. E.g. you might have individual database
+In cooperative software development, you are supposed to keep your individual configuration private. E.g. you might have individual database
 configurations on your local development systems. You can then specify them as profile properties in a Maven settings.xml file in your user directory.
 
 ```xml
@@ -204,7 +204,7 @@ configurations on your local development systems. You can then specify them as p
 <plugin>
   <groupId>com.rapiddweller</groupId>
   <artifactId>benerator-maven-plugin</artifactId>
-  <version>1.2.0</version>
+  <version>2.0.0</version>
 
   <configuration>
     <descriptor>src/test/benerator/myproject.ben.xml</descriptor>
@@ -232,7 +232,7 @@ You can also configure the benerator plugin to attach specific goals to a partic
     <plugin>
       <groupId>com.rapiddweller</groupId>
       <artifactId>benerator-maven-plugin</artifactId>
-      <version>1.2.0</version>
+      <version>2.0.0</version>
 
       <executions>
 

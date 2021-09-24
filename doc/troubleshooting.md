@@ -2,17 +2,17 @@
 
 ## (Out of) Memory
 
-If you get an OutOfMemoryError, first increase the Java heap size by an -Xmx environment setting (e.g. by adding -Xmx1024m to the BENERATOR_OPTS in
+If you get an OutOfMemoryError, first increase the Java heap size by a `-Xmx environment` setting (e.g. by adding `-Xmx1024m` to the `BENERATOR_OPTS` in
 the script files).
 
-Another potential cause for OutOfMemoryErrors is application of distributions to very large data sets. Most sequences and all other types of
+Another potential cause for OutOfMemoryErrors is the application of distributions to very large data sets. Most sequences and all other types of
 distribution require the source data to fit into RAM. So either use an 'unlimited' sequence like 'expand', 'repeat' or 'randomWalk' or simply repeat
 data set iteration by adding cyclic="true" to the configuration.
 
 ## temp Directory
 
-On some environments, the temp directory has a very restrictive disk quota. If you need more space for data generation, you can specify another
-directory by the -Djava.io.tmpdir environment setting (e.g. by adding -Djava.io.tmpdir=/User/me/mytemp to the BENERATOR_OPTS in the script files)
+In some environments, the temp directory has a very restrictive disk quota. If you need more space for data generation, you can specify another
+directory by the `-Djava.io.tmpdir` environment setting (e.g. by adding `-Djava.io.tmpdir=/User/me/mytemp` to the `BENERATOR_OPTS` in the script files)
 
 ## File Encoding
 
@@ -20,10 +20,10 @@ If no file encoding was specified, benerator uses the default file encoding of t
 info (like XML).
 
 If all used files have the same encoding and it is different to your system's encoding, you can change set benerator's default encoding by the
--Dfile.encoding environment setting (e.g. by adding -Dfile.encoding=iso-8859-1 to the BENERATOR_OPTS in the script files)
+-Dfile.encoding environment setting (e.g. by adding `-Dfile.encoding=iso-8859-1` to the `BENERATOR_OPTS` in the script files)
 
-When generating data in heterogeneous environments, it is good practice to set the defaultEncoding property of the benerator descriptor file's root
-element. If only single files have a different encoding, you can specify an encoding properts for all built-in file importers and file-based
+When generating data in heterogeneous environments, it is good practice setting the defaultEncoding property of the benerator descriptor file's root
+element. If only single files have a different encoding, you can specify an encoding property for all built-in file importers and file-based
 consumers.
 
 A typical error that may arise from wrong file encoding configuration is that file import (e.g. for a CSV file) stops before the end of file is
@@ -32,9 +32,9 @@ reached.
 ## Logging
 
 Benerator logs its event using slf4j as a logging facade to integrate with the logging tools used 
-by libraries which are used by Benerator. As logging uimplementation, Apache Log4j 2 is used. 
-For troubleshooting it is useful to chack and fine-tune logging configuration for tracking down
-your issue. This is done by editing the log4j2.xml file in your BENERATOR_HOME/bin directory. 
+by libraries which are used by Benerator. As logging implementation, Apache Log4j 2 is used. 
+For troubleshooting, it is useful to check and fine-tune logging configuration for tracking down
+your issue. This is done by editing the `log4j2.xml` file in your `BENERATOR_HOME/bin` directory. 
 Some interesting logging categories to start with:
 
 Set a category to debug for getting detailed information about its execution. The most important log categories are:
@@ -59,11 +59,11 @@ Set a category to debug for getting detailed information about its execution. Th
 When configuring data generation you are likely to encounter error messages.
 
 Depending on the settings it may be difficult to find out what caused the problem. For tracking database-related errors, set batch="false" in
-your `<database>` setup and use pagesize="1" in the `<generate>`. These are default settings, so you do not need to specify them explicitly if you did
+your `<database>` setup and use `pagesize="1"` in the `<generate>`. These are default settings, so you do not need to specify them explicitly if you did
 not change the default.
 
 If that alone does not help, set the log category `com.rapiddweller.benerator.main` to debug level to find out which element caused the error. If there
-is a stack trace, check it to get a hint which part of the element's generation went wrong. If that does not help, remove one attribute/reference/id
+is a stack trace, check it to get a hint of which part of the element's generation went wrong. If that does not help, remove one attribute/reference/id
 after the other for finding the actual troublemaker. If you still cannot solve the problem, post a message in the benerator forum. You can check out
 the benerator sources from the SVN source repository, open it in Eclipse and debug through the code.
 
@@ -79,7 +79,7 @@ Usually can fix this by choosing the right schema for your database, e.g.
 ```
 
 If you are not sure which schema is applicable in your case, edit the logging configuration in log4j.xml (as described above) and set the category **
-com.rapiddweller.platform.db** to **debug**.
+`com.rapiddweller.platform.db`** to **debug**.
 
 You will then get a list of schemas as Benerator scans the database metadata, e.g. for an Oracle system:
 
@@ -108,15 +108,15 @@ You will then get a list of schemas as Benerator scans the database metadata, e.
 06:03:45,441 DEBUG [JDBCDBImporter] found schema XDB
 ```
 
-Cross checking this with your access information should make it easy to figure out which one is appropriate in your case.
+Cross-checking this with your access information should make it easy to figure out which one is appropriate in your case.
 
-See the [Usual Database Settings].
+See the '[Usual Database Settings](using_relational_databases.md#usual-database-settings)'.
 
 
 ## Constraint Violations
 
 Some constraint violations may arise when using database batch with nested create-entities. Switch batch off. If the problem does not occur any more,
-stick with non-batch generation. Otherwise you need further investigation. When using Oracle, a constraint violation typically looks like this:
+stick with non-batch generation. Otherwise, you need further investigation. When using Oracle, a constraint violation typically looks like this:
 
 ```java
 java.sql.SQLException: ORA-00001: Unique Constraint (MYSCHEMA.SYS_C0011664) violated
@@ -152,18 +152,18 @@ and
 [http://kr.forums.oracle.com/forums/thread.jspa?threadID=554236](http://kr.forums.oracle.com/forums/thread.jspa?threadID=554236)
 .
 
-The solution is using the newest JDBC driver, at least 10.2.0.4 or 11.0\. BTW: It is backwards compatible with the Oracle 9 databases.
+The solution is using the newest JDBC driver, at least `10.2.0.4` or `11.0`\. BTW: It is backward compatible with the Oracle 9 databases.
 
 ## Time is cut off in Oracle dates
 
 Oracle changed back and forth the mapping of internal types to JDBC times in Oracle 8 and 11, the mapping in Oracle 9 and 10 is wrong,
 see [http://www.oracle.com/technetwork/database/enterprise-edition/jdbc-faq-090281.html#08_00](http://www.oracle.com/technetwork/database/enterprise-edition/jdbc-faq-090281.html#08_00)
-. In order to fix the behaviour, use the newest available Oracle 11 JDBC driver you can get, it is backwards compatible down to Oracle 9 and provides
+. In order to fix the behaviour, use the newest available Oracle 11 JDBC driver you can get, it is backward compatible down to Oracle 9 and provides
 a proper mapping of the date type for all Oracle database versions.
 
 ## Composite Keys
 
-Benerator expects single-valued ids. It does not automatically support composite keys and composie references
+Benerator expects single-valued ids. It does not automatically support composite keys and composite references.
 
 Since composite keys typically have a business meaning, most composite keys cannot be automatically generated. So there is no need to support this.
 
@@ -174,18 +174,18 @@ If you encounter a composite key, manually configure how to create each key comp
 For a beginner it is sometimes confusing, how Benerator handles imported Excel sheets. For this task it completely relies on the cell type configured
 in the original sheet. So if you have a Date cell in the Excel sheet and format it as number or text, benerator will interpret it as double or string.
 
-Another popular error comes from columns that contain long code numbers and have the the default format: They are imported as numbers and e.g. leading
+Another popular error comes from columns that contain long code numbers and have the default format: They are imported as numbers and e.g. leading
 zeros are lost. In such case explicitly format the column as text in Excel.
 
-Apache POI represents all numbers as variables of type 'double'. So there are numbers which are simple in decimal format but not so in binary: when
-importing the number 1.95 from an Excel sheet, the user gets a value of 1.95000000002\. For now you need to round the values yourself, e.g. by a
+Apache POI represents all numbers as variables of type `double`. So there are numbers which are simple in decimal format but not so in binary: when
+importing the number 1.95 from an Excel sheet, the user gets a value of 1.95000000002\. For now, you need to round the values yourself, e.g. by a
 converter.
 
 ## Number Generation on Oracle
 
 When generating very large decimal values (> 1.000.000.000) in an Oracle database you may observe that smaller numbers are written to the database,
 losing some trailing zeros or even cutting the whole number to a decimal with one prefix digit and several fractional digits. This results from a bug
-in Oracles older JDBC drivers and can be fixed by using the newest driver version (note that you can even use 11.x JDBC drivers for 10.x databases).
+in Oracles older JDBC drivers and can be fixed by using the newest driver version (note that you can even use `11.x` JDBC drivers for `10.x` databases).
 
 ## Unknown Column Type
 
@@ -205,7 +205,7 @@ e.g.
 <database … catalog="main" schema="Z" />
 ```
 
-or your environment configuration, e.g. xyz.env.properties:
+or your environment configuration, e.g. `xyz.env.properties`:
 
 ```properties
 db_catalog=main
@@ -218,5 +218,5 @@ Note: On most systems (e.g. Oracle, HSQL) no catalog needs to be specified.
 
 ## Method isApplicationDetached() not found in class Xyz
 
-See [Migration from 1.1.x to 1.2.0](migrating_benerator_projects.md#migration-from-11x-to-120)
+See **'[Migration from 1.1.x to 2.0.0](migrating_benerator_projects.md#migration-from-11x-to-200)'**.
 

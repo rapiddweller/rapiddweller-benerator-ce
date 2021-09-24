@@ -74,7 +74,7 @@ The results below show Benerator's generation and anonymization performance on a
 MacBook Air (2020) with standard equipment and Azul Java Virtual Machine 
 (CE = Community Edition, EE = Enterprise Edition):
 
-| Benchmark | CE 1.1.2 | CE 1.2.0 | EE 1.2.0 / 1 Thread | EE 1.2.0 / 4 Threads | 
+| Benchmark | CE 1.1.2 | CE 2.0.0 | EE 2.0.0 / 1 Thread | EE 2.0.0 / 4 Threads | 
 | --- | ---: | ---: | ---: | ---: |
 | gen-string.ben.xml           |    37 |    58 |   336 | 1,095 |
 | gen-person-showcase.ben.xml  |    26 |   119 |   111 |   327 |
@@ -86,8 +86,8 @@ MacBook Air (2020) with standard equipment and Azul Java Virtual Machine
 
 The numbers are million entities generated/anonymized per hour.
 Compared to CE 1.1.2's generation engine,
-CE 1.2.0 is 1.5-2 times faster 
-and EE 1.2.0 with 4 threads is roughly 4 times faster 
+CE 2.0.0 is 1.5-2 times faster 
+and EE 2.0.0 with 4 threads is roughly 4 times faster 
 and scales further with the number of CPUs on your machine.
 
 
