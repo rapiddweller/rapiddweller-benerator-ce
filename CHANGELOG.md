@@ -2,6 +2,28 @@
 
 <!--lint disable no-duplicate-headings-->
 
+## 1.2.0
+
+### Release Highlights
+
+- Improved Benerator engine performance
+- Strongly improved and extended Benerator Manual
+- New address domain package for the United Kingdom (GB)
+- Supporting custom random implementations, see class RandomSupport
+- Improved Benerator Wizard
+- Add Benchmark Tool and [Performance Tuning](/doc/performance_tuning.md) section in Manual
+- Add new [Hash Converters](/doc/component_reference.md#rapiddweller-converters)
+
+### Important Notes
+
+- Added method to the Distribution interface, introduced AbstractDistribution class to compensate this for implementors.
+
+### Breaking Changes
+
+N/A
+
+---
+
 ## 1.1.3
 
 ### Release Highlights

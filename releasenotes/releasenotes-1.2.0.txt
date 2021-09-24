@@ -9,8 +9,11 @@ enhancements
 ------------
 - Improved Benerator engine performance by 55-110%
 - Improved and extended Benerator Manual
-- Added address domain package for United Kingdom (GB)
+- Added address domain package for the United Kingdom (GB)
 - Supporting custom random implementations
+- Improved Benerator Wizard
+- Add Benchmark Tool and Performance Tuning section in Manual
+- Add new Hash Converters
 
 changes
 -------
