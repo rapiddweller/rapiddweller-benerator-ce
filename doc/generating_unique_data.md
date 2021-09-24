@@ -18,7 +18,7 @@ Most → Sequences are able to generate unique numbers. Just apply a unique="tru
 
 ### Uniqueness with Regular Expression
 
-There are ID generators which generate UUID strings, but in most cases you have constraints on string length and 
+There are ID generators that generate UUID strings, but in most cases, you have constraints on string length and 
 character select which require you to have something more individual and configurable.
 
 One of the best general approaches is to use Benerator's feature to generate unique strings 
@@ -34,8 +34,13 @@ For an introduction to regular expressions, read about '[Regular Expressions](re
 ### Making Strings unique
 
 Sometimes you have less strict constraints on the strings you want to make unique. A good example is a common derivation of user names from their real
-names which takes the first letter of the first name and appends the last name. This might lead to non-unique results, since John Smith and Joshua
-Smith would get the same user name jsmith. The usual solution is to append a number to make the string for the second jsmith unique again: jsmith2\.
+names which takes the first letter of the first name and appends the last name. 
+
+This might lead to non-unique results, since John Smith and Joshua
+Smith would get the same user name jsmith. 
+
+The usual solution is to append a number to make the string for the second jsmith unique again: jsmith2\.
+
 This is exactly, what the UniqueStringConverter does:
 
 ```xml
@@ -46,11 +51,11 @@ This is exactly, what the UniqueStringConverter does:
 </generate>
 ```
 
-Note: The UniqueStringConverter keeps all used strings in memory, so when generating some billion strings, you might get memory problems.
+Note: The `UniqueStringConverter` keeps all used strings in memory, so when generating some billion strings, you might get memory problems.
 
 ## Removing Duplicate Values
 
-If you need a more individual generation algorithm of which you do not know (or care) how to make it unique, you can append a UniqueValidator to
+If you need a more individual generation algorithm of which you do not know (or care) how to make it unique, you can append a `UniqueValidator` to
 filter out duplicate values.
 
 ```xml
@@ -58,7 +63,7 @@ filter out duplicate values.
 <attribute name="code" pattern="[A-Z]{6,12}" validator="UniqueValidator"/>
 ```
 
-Note: The UniqueValidator keeps all used strings in memory, so when generating some billion strings, you might get memory problems.
+Note: The `UniqueValidator` keeps all used strings in memory, so when generating some billion strings, you might get memory problems.
 
 ## Unique iteration through a source
 
@@ -68,7 +73,7 @@ When iterating data from a data source and requiring uniqueness, you need to ass
 <attribute name="code" type="string" source="codes.csv" />
 ```
 
-When applying a distribution to the iterated data, configure unique="true" for assuring that the distribution does not repeat itself:
+When applying a distribution to the iterated data, `configure unique="true"` for assuring that the distribution does not repeat itself:
 
 ```xml
 <attribute name="code" type="string" source="codes.csv" distribution="random" unique="true" />
@@ -85,7 +90,7 @@ As an example, let's have a look the following code:
 </generate>
 ```
 
-If we need to generate unique combinations of key1 and key2 we have differrent alternatives:
+If we need to generate unique combinations of key1 and key2 we have different alternatives:
 
 ### Simplistic Approach
 
@@ -113,9 +118,9 @@ product[key1=6, key2=6]
 
 For generating unique composite keys the most convenient way is to create a cartesian product of unique components by nesting two creation loops.
 
-For making the combination of key1 and key2 in the following descriptor unique:
+For making the combination of `key1` and `key2` in the following descriptor unique:
 
-one would add an outer 'dummy' loop and create helper variables x and y in a way that they can be combined like in a cartesian product:
+one would add an outer 'dummy' loop and create helper variables `x` and `y` in a way that they can be combined like in a cartesian product:
 
 ```xml
 <generate type="dummy" count="2">
@@ -142,7 +147,7 @@ product[key1=2, key2=3]
 
 ### Prototype Approach
 
-You can use the prototype approach for getting unique compsite keys: A variable's generation algorithm needs to assure uniqueness of the combination:
+You can use the prototype approach for getting unique composite keys: A variable's generation algorithm needs to assure uniqueness of the combination:
 
 ```xml
 <generate type="product" count="6" consumer="ConsoleExporter">
@@ -157,8 +162,8 @@ See '[Prototype Queries](using_relational_databases.md#prototype-queries)'
 
 ## Achieving local uniqueness
 
-Sometimes values need to have uniqueness of an identity component of a 'child' entity only in the context of another ('
-parent') item.
+Sometimes values need to have uniqueness of an identity component of a 'child' entity only in the context of another 
+(`parent`) item.
 
 One simple solution is of course to have it globally unique.
 

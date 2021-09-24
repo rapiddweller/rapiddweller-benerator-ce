@@ -30,17 +30,17 @@ JSON-formatted messages may be configured as
 The internal id 'orderQueue' will later be used to access the queue for reading or writing.
 
 Each JMS provider supports individual URL formats, some with variants for different purposes. 
-Please refer to the according JMS library documentation for details. 
+Please refer to the JMS library documentation for details. 
 Some JMS API providers use the word URI instead of URL, but don't let that confuse you.
 
 For detailed information on ActiveMQ URL formats, 
-see the [ActiveMQ web page](https://activemq.apache.org/configuring-transports),
-for RabbitMQ, see the [RabbitMQ web page](https://www.rabbitmq.com/jms-client.html).
+see the '[ActiveMQ web page](https://activemq.apache.org/configuring-transports)',
+for RabbitMQ, see the '[RabbitMQ web page](https://www.rabbitmq.com/jms-client.html)'.
 
 
 ## Export
 
-In order to export data, the JMS destination defined above can be used as consumer:
+In order to export data, the JMS destination defined above can be used as `consumer`:
 
 ```xml
     <generate type='person' count='10' consumer='userQueue'>
@@ -59,14 +59,15 @@ In order to export data, the JMS destination defined above can be used as consum
 ## Playground
 
 For getting acquainted with JMS access and play around on an offline system, you can use 
-temporary ActivMQ queues which are available without the hassle of installing ActivMQ 
-on your system. When using the URL ```'vm://localhost?broker.persistent=false'```, 
-the driver itself creates a n in-process queue and you can experiment with writing data 
+temporary ActiveMQ queues which are available without the hassle of installing ActiveMQ 
+on your system. When using the URL `vm://localhost?broker.persistent=false`, 
+the driver itself creates an n in-process queue, and you can experiment with writing data 
 to it and retrieving it again.
 
 So, here is an example setup which 
+
 1. defines a queue
-2. &lt;generate&gt;s person data ands sends it to an ActiveMQ topic,
+2. &lt;generate&gt;s person data and sends it to an ActiveMQ topic,
 3. then &lt;iterate&gt;s the queue and prints the retrieved person data to the console
 
 ```xml

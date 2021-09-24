@@ -340,7 +340,7 @@ You ca define global components in a Spring-like syntax:
 </bean>
 ```
 
-For details on this syntax and other variants, see the section “[JavaBeans and the Benerator Context](advanced_topics.md#javabeans-and-the-benerator-context)”. You can refer to such an object by its id ('
+For details on this syntax and other variants, see the section '[JavaBeans and the Benerator Context](advanced_topics.md#javabeans-and-the-benerator-context)'. You can refer to such an object by its id ('
 helper' in this case).
 
 ## Instantiating Local Components

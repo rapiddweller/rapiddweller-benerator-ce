@@ -63,15 +63,15 @@ Spaces, tabs, CR, LF, `\u000C`
 
 ### Data Types
 
-Signed integral numbers: long, int, short, byte, big_integer
+Signed integral numbers: `long`, `int`, `short`, `byte`, `big_integer`
 
-Signed floating point numbers: double, float, big_decimal
+Signed floating point numbers: `double`, `float`, `big_decimal`
 
-Alpha: string, char
+Alpha: `string`, `char`
 
-Date/time: date, timestamp
+Date/time: `date`, `timestamp`
 
-Other: boolean, object (Java object), binary (byte[])
+Other: `boolean`, _object (Java object)_, _binary (byte[])_
 
 ### Identifiers
 

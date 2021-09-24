@@ -29,7 +29,7 @@ setup, but this can be applied to beans and consumers as well.
 
 Note: You may implement the System interface for connecting to other system types like SAP or Siebel systems.
 
-JavaBeans may refer each other (see proxy.target) and may have collection or attribute properties (see log_csv.components) as shown in the following
+JavaBeans may refer each other (see `proxy.target`) and may have collection or attribute properties (see `log_csv.components`) as shown in the following
 example:
 
 ```xml
@@ -54,7 +54,7 @@ You can use all inline construction styles in a spec attribute, too.
 
 You can invoke methods on beans using rapiddwellerScript:
 
-`<execute>`myBean.init(47 + 11)`</execute>`
+`<execute>myBean.init(47 + 11)</execute>`
 
 ## Importing Java classes
 
@@ -81,7 +81,7 @@ The following alternative works as well and imports all classes of the com.my pa
 ```
 
 Domains can be imported as well. For the built-in Benerator domains, only the domain name is necessary, for custom domains, the fully qualified name
-of the domain's top level package. For a built-in domain:
+    of the domain's top-level package. For a built-in domain:
 
 ```xml
 <import domains="person"/>
@@ -99,7 +99,7 @@ For a custom domain:
 
 ## Looking up services/objects via JNDI
 
-Benerator provides an InitialContext class in the JNDI platform package. It can be used to locate objects and make them available in Benerator:
+Benerator provides an `InitialContext` class in the JNDI platform package. It can be used to locate objects and make them available in Benerator:
 
 ```xml
 <import platforms="jndi"/>
@@ -134,7 +134,7 @@ finally query its 'sum' property value with a script expression:
 
 ## Querying information from a system
 
-Arbitrary information may be queried from a system by a 'selector' attribute, which is system-dependent. For a database SQL is used:
+Arbitrary information may be queried from a system by a `selector` attribute, which is system-dependent. For a database SQL is used:
 
 ```xml
 <generate type="db_order" count="30" pageSize="100" consumer="db">
@@ -144,7 +144,7 @@ Arbitrary information may be queried from a system by a 'selector' attribute, wh
 
 You can use script expressions in your selectors, e.g.
 
-selector="{ftl:select ean_code from db_product where country='${country}'}"
+`selector="{ftl:select ean_code from db_product where country='${country}'}"`
 
 The script is resolved immediately before the first generation and then reused. If you need dynamic queries, that are re-evaluated, you can specify
 them with double brackets:
@@ -201,12 +201,12 @@ You can use a distribution:
 
 `<variable name="product" source="store" type="product" distribution="random"/>`
 
-A simple form of query is supported by a 'selector' element. Its content must be a script expression that serves as a filter. The expression is
-consecutively evaluated on each element (as candidate) and has to return true, if the candidate is accepted, otherwise false. 
+A simple form of query is supported by a `selector` element. Its content must be a script expression that serves as a filter. The expression is
+consecutively evaluated on each element (as candidate) and has to return `true` if the candidate is accepted, otherwise `false`. 
 
 **IMPORTANT**: The script only can access each candidate by using the keyword **_candidate**.
 
-As an example, here is a query which only returns products whose name starts with 'A':
+As an example, here is a query which only returns products whose name starts with '**A**':
 
 ```xml
 <variable name="product" source="store" type="product" selector="_candidate.name.startsWith('A')"/>
@@ -214,9 +214,9 @@ As an example, here is a query which only returns products whose name starts wit
 
 ## Datasets
 
-You can define datasets and combine them to supersets. This mechanism lets you also define parallel and overlapping hierarchies of nested datasets.
+You can define datasets and combine them with supersets. This mechanism lets you also define parallel and overlapping hierarchies of nested datasets.
 
-Definition of a hierarchies is separated from the definition of dataset values for a concrete topic. So you can define a dataset grouping for regions,
+Definition of hierarchies is separated from the definition of dataset values for a concrete topic. So you can define a dataset grouping for regions,
 mapping continents, countries, states and departments and apply this grouping to define and combine sets of e.g. cities, person names or products.
 
 We will apply the mechanism here for cities in geographical regions. You can find the example files in the distribution's directory demo/dataset/
@@ -241,7 +241,7 @@ america=north_america,south_america
 
 The simple datasets would be defined in CSV files:
 
-cities_US.csv:
+`cities_US.csv`:
 
 ```
 San Francisco
@@ -251,7 +251,7 @@ Los Angeles
 New York
 ```
 
-cities_CA.csv:
+`cities_CA.csv`:
 
 ```
 Ottawa
@@ -328,7 +328,7 @@ australia=AU,NZ
 ## Chaining generators
 
 Generators can be chained, composed, or reused in different contexts. You can do so by instantiating a generator as JavaBean and referring it in
-properties of other JavaBean-instantiated generators or specifying it as 'source' attribute like an importer.
+properties of other JavaBean-instantiated generators or specifying it as `source` attribute like an importer.
 
 ```xml
 <!-- creates a text generator /-->
@@ -418,7 +418,7 @@ generator.close();
 In many cases, data generation based on the descriptor file format may be too complex and a script based generation too slow.
 
 In these cases you can provide a custom class that implements the com.rapiddweller.task.Task interface and can be invoked from the Benerator
-descriptor file. For example you could write a Task implementation that calls business logic for triggering complex operations on business objects.
+descriptor file. For example, you could write a Task implementation that calls business logic for triggering complex operations on business objects.
 
 Such a class can be instantiated and invoked with a similar syntax like any JavaBean, e.g.:
 
@@ -429,12 +429,13 @@ Such a class can be instantiated and invoked with a similar syntax like any Java
 </run-task>
 ```
 
-You can instantiate and initialize a task like a `<bean>` (see _JavaBeans and the Benerator Context_). Tasks can be executed in pages, ensuring that
+You can instantiate and initialize a task like a `<bean>` 
+(see '[JavaBeans and the Benerator Context](advanced_topics.md#javabeans-and-the-benerator-context)'). Tasks can be executed in pages, ensuring that
 the total number of execution over all threads is the page size. For this, The element run-task also supports the attributes
 
 * count : the total number of times the Task is executed (defaults to 1)
 
-* pageSize : the number of invocations to execute together (defaults to 1), e.g. for grouping pageSize invocations to a single transaction.
+* pageSize : the number of invocations to execute together (defaults to 1), e.g. for grouping pageSize invocations to a single transaction
 
 * pager: injects a class (implementing the PageListener interface) to perform custom paging operations (like flushing data to file or database)
 
@@ -461,7 +462,7 @@ db_password={user.name}
 db_schema={user.name}
 ```
 
-and perftest.properties:
+and `perftest.properties`:
 
 ```properties
 user_count=1000000
@@ -646,13 +647,13 @@ package[id=6, order_id=2, order_pkg_no=3]
 
 ### Global scope
 
-Using scope="/", any component can be configured to have global scope which means that it is never reset. This can also be used as a performance
+Using `scope="/"`, any component can be configured to have global scope which means that it is never reset. This can also be used as a performance
 improvement for resource-heavy database queries combined with a caching distribution.
 
 ## Composite Data Generation
 
 For databases, flat data generation is used: Each generated entity stands for itself and is persisted without a context. Nesting `<generate>` elements
-only corresponds to a concept of loop and sub loop, not to a hierarchical nesting of data. First the top level element is created and sent to its
+only correspond to a concept of loop and sub-loop, not to a hierarchical nesting of data. First, the top-level element is created and sent to its
 consumer(s) then its child elements are generated and sent to their consumer(s). It is up to the consumer(s) to create and track context and interpret
 the generated data in a hierarchical manner.
 
@@ -661,7 +662,7 @@ differently: All nested elements are generated until the full tree is built and 
 The consumer can then scan through the entity tree and do its job.
 
 This is what the `<part>` element has been introduced for. It takes the same parameters as the `<generate>` element, but does not call a consumer with
-the generated data, but puts them into a collection which is set as the parent entity's property.
+the generated data, but puts them into a collection that is set as the parent entity's property.
 
 For example,
 
@@ -688,9 +689,9 @@ Supported settings for the part's container attribute are:
 
 * array
 
-The default is 'list'.
+The default is `list`.
 
 ## Composite Data Iteration
 
-Using a data source which provides hierarchical data, nested collection components (like user.addresses in the previous example) can be iterated
+Using a data source which provides hierarchical data, nested collection components (like `user.addresses` in the previous example) can be iterated
 explicitly, specifying the root component as **source** and providing the component **name**.

@@ -2,7 +2,6 @@
 
 Benerator can read from and write to Kafka queues.
 
-
 ## Basic configuration
 
 The basic configuration elements which need to be provided for any kind of Kafka connector are
@@ -14,7 +13,7 @@ The basic configuration elements which need to be provided for any kind of Kafka
 | topic | The name of the Kafka queue to connect to |
 | format | The message format used in this queue. Currently, only 'json' is supported |
 
-Depending of the system you want to connect to, 
+Depending on the system you want to connect to, 
 you might need to provide [Advanced configuration](#advanced-configuration).
 
 
@@ -34,7 +33,7 @@ For exporting data, a ```<kafka-exporter>``` is used:
 ```
 ## Import
 
-For exporting data, a ```<kafka-importer>``` is used:
+For importing data, a ```<kafka-importer>``` is used:
 
 ```xml
 <setup>
@@ -49,12 +48,13 @@ For exporting data, a ```<kafka-importer>``` is used:
 
 Benerator supports all configuration properties of Kafka 2.8.
 For an in-depth explanation of these, please have a look at the 
-[Kafka Documentation](https://kafka.apache.org/documentation/)
+'[Kafka Documentation](https://kafka.apache.org/documentation/)'.
 
 ### encoding
 
 By default, Benerator uses UTF-8 encoding to read and write JSON. 
-If you need to use another encoding like UTF-16, specify it as ```encoding``` parameter:
+
+If you need to use another encoding like UTF-16, specify it as `encoding` parameter:
 
 ```xml
 <kafka-exporter id='exporter' bootstrap.servers='localhost:9094' topic='kafka-demo' 
@@ -90,7 +90,7 @@ Example:
 ```
 
 For a better match with benerator's pageSize approach, you can use this in a Kafka-Importer too, 
-eg. for committing messages in groups of 10,000:
+e.g. for committing messages in groups of 10,000:
 
 ```xml
 <kafka-importer id='importer' bootstrap.servers='localhost:9094' topic='kafka-demo' format='json' 
@@ -117,7 +117,7 @@ your configuration could look like this:
 If the Benerator file is shared, but your access individual, 
 then remember that you can hide your password from the XML setup file by using the 
 properties file mechanism in your user folder, see 
-[&lt;setting&gt; and Benerator identifiers](data_generation_concepts.md#setting-and-benerator-identifiers):
+'[&lt;setting&gt; and Benerator identifiers](data_generation_concepts.md#setting-and-benerator-identifiers)':
 
 Local file kafka.properties:
 ```
@@ -127,6 +127,7 @@ ssl_password=test1234
 ```
 
 Shared file benerator.xml:
+
 ```xml
 <include uri="kafka.properties"/>
 <kafka-importer id='importer' bootstrap.servers='localhost:9094' topic='kafka-demo' format='json'
@@ -138,4 +139,3 @@ Shared file benerator.xml:
         ssl.key.password='{ssl_password}'
 />
 ```
-

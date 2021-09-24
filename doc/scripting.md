@@ -1,7 +1,7 @@
 # Scripting
 
-Benerator supports arbitrary scripting languages that are supported by Java and has an own scripting language rapiddwellerScript which is designed
-specifically for the purpose of data generation.
+Benerator supports arbitrary scripting languages that are supported by Java and has its own scripting language 
+**rapiddwellerScript** which is designed specifically for the purpose of data generation.
 
 The invocation syntax is as described for SQL invocation and inlining: You can include the script inline like this:
 
@@ -41,7 +41,7 @@ Alternatively to inlining script text, you can put it in a script file and invok
 <execute type="js" uri="test.js" />
 ```
 
-You can bind a language of choice by using the mechanisms of GraalVM: Scripting for the Java Platform.
+You can bind a language of choice by using the mechanisms of _GraalVM_: Scripting for the Java Platform.
 
 With rapiddweller Benerator, GraalVM[js] implementation is shipped. For all other platforms 
 and languages you need to configure language support.
@@ -56,7 +56,7 @@ The following attributes are available for the `<execute>` element:
 
 * target: a target to execute the script on, typically a database for a SQL script
 
-* onError: How to handle errors. One of (ignore, trace, debug, info, warn, error, fatal. fatal causes 
+* onError: How to handle errors. One of (`ignore`, `trace`, `debug`, `info`, `warn`, `error`, `fatal`. fatal causes 
   Benerator to cancel execution in case of an error.
 
 * optimize: boolean flag that tells Benerator whether it may optimize script execution for the sake of performance. 
@@ -113,9 +113,8 @@ in your Benerator script are valid for the whole runtime.
 ## Shell scripting
 
 You can call shell files or issue shell commands. When in-lining shell commands, script expressions will be resolved. 
-So you could, for example, use global properties for setting parameters of a sqlplus call:
+So you could, for example, use global properties for setting parameters of a _sqlplus_ call:
 
 ```xml
 <execute type="shell">{ftl:sqlplus ${dbUser}/${dbPassword}@${database} @create_tables.sql}</execute>
 ```
-
