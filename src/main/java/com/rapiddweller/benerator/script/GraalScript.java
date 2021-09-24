@@ -93,7 +93,7 @@ public class GraalScript implements Script {
           LOGGER.debug("Entity found : {}", entry.getKey());
           Map<String, Object> map = new Entity2MapConverter().convert((Entity) entry.getValue());
           // to access items of map in polyglotCtx it is nessesary to create an ProxyObject
-          // TODO: might should create an Entity2ProxyObjectConverter in 1.2.0
+          // TODO: might should create an Entity2ProxyObjectConverter in 2.1.0
           ProxyObject proxy = ProxyObject.fromMap(map);
           polyglotCtx.getBindings(this.language).putMember(entry.getKey(), proxy);
         } else {

@@ -37,7 +37,7 @@ import com.rapiddweller.model.data.Entity;
  * Provides utility methods for {@link Sequence}s.<br/><br/>
  * Created: 22.09.2021 11:48:26
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class SequenceUtil {
 

@@ -11,7 +11,7 @@ import java.util.List;
  * Implements the {@link GenerationInterceptor} interface without features.<br/><br/>
  * Created: 13.09.2021 10:45:11
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class DefaultGenerationInterceptor implements GenerationInterceptor {
 

@@ -1203,7 +1203,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
           }
         }
         String primitiveTypeName = primitiveType.getName();
-        // TODO Version 1.2.0 wrong entity information when table with same name exists in different schema and is part of context.
+        // TODO Version 2.1.0 wrong entity information when table with same name exists in different schema and is part of context.
         DBColumn column = table.getColumn(name);
         DBDataType columnType = column.getType();
         int sqlType = columnType.getJdbcType();

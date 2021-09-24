@@ -10,7 +10,7 @@ import com.rapiddweller.common.ThreadAware;
  * Converts an object into a hex representation of its hash code.<br/><br/>
  * Created: 13.09.2021 15:43:54
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class JavaHash implements Converter<Object,String>, ThreadAware {
 

@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  * Tests the {@link MD5Hash}.<br/><br/>
  * Created: 06.09.2021 14:35:58
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class MD5HashTest extends AbstractHashTest {
 

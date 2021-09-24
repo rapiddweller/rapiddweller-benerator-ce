@@ -37,7 +37,7 @@ import java.util.Map;
  * Created: 17.08.2021 10:48:53
  *
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class FileFormats {
 

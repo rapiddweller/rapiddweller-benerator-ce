@@ -2,8 +2,8 @@
 
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="https://www.benerator.de/schema/1.2.0"
-           xmlns="https://www.benerator.de/schema/1.2.0"
+           targetNamespace="https://www.benerator.de/schema/2.0.0"
+           xmlns="https://www.benerator.de/schema/2.0.0"
            elementFormDefault="qualified">
 
     <xs:annotation>
@@ -308,7 +308,7 @@
         <xs:annotation>
             <xs:appinfo>
                 <edition>EE</edition>
-                <since>1.2.0</since>
+                <since>2.0.0</since>
             </xs:appinfo>
             <xs:documentation xml:lang="en">Defines a JMS queue or topic to read data from or write data to.</xs:documentation>
         </xs:annotation>
@@ -340,7 +340,7 @@
         <xs:annotation>
             <xs:appinfo>
                 <edition>EE</edition>
-                <since>1.2.0</since>
+                <since>2.0.0</since>
             </xs:appinfo>
             <xs:documentation xml:lang="en">Data format to use for JMS messages</xs:documentation>
         </xs:annotation>
@@ -362,7 +362,7 @@
         <xs:annotation>
             <xs:appinfo>
                 <edition>EE</edition>
-                <since>1.2.0</since>
+                <since>2.0.0</since>
             </xs:appinfo>
             <xs:documentation xml:lang="en">Imports data from a Kafka queue.</xs:documentation>
         </xs:annotation>
@@ -397,7 +397,7 @@
         <xs:annotation>
             <xs:appinfo>
                 <edition>EE</edition>
-                <since>1.2.0</since>
+                <since>2.0.0</since>
             </xs:appinfo>
             <xs:documentation xml:lang="en">Exports data to a Kafka queue</xs:documentation>
         </xs:annotation>
@@ -976,7 +976,7 @@
             <xs:annotation>
                 <xs:appinfo>
                     <edition>EE</edition>
-                    <since>1.2.0</since>
+                    <since>2.0.0</since>
                 </xs:appinfo>
                 <xs:documentation xml:lang="en">Filters data import with a script expression.</xs:documentation>
             </xs:annotation>
@@ -1021,7 +1021,7 @@
         <xs:annotation>
             <xs:appinfo>
                 <edition>EE</edition>
-                <since>1.2.0</since>
+                <since>2.0.0</since>
             </xs:appinfo>
             <xs:documentation xml:lang="en">Columns for which to verify anonymization.</xs:documentation>
         </xs:annotation>

@@ -14,7 +14,7 @@ import java.util.Collection;
  * Tests different &lt;part&gt; configuration options.<br/><br/>
  * Created: 21.09.2021 21:44:46
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class PartIntegrationTest extends AbstractBeneratorIntegrationTest {
 

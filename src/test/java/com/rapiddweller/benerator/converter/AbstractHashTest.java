@@ -6,7 +6,7 @@ package com.rapiddweller.benerator.converter;
  * Parent class for hash tests.<br/><br/>
  * Created: 06.09.2021 14:35:17
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public abstract class AbstractHashTest {
 

@@ -11,7 +11,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
  * Abstract implementation of the {@link GenerationStep} interface.<br/><br/>
  * Created: 11.09.2021 13:24:37
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public abstract class AbstractGenerationStep<E> extends AbstractScopedLifeCycleHolder implements GenerationStep<E> {
 

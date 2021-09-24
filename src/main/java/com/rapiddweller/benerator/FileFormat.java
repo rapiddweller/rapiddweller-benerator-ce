@@ -36,7 +36,7 @@ import com.rapiddweller.model.data.Entity;
  * Interface for classes that can recognize, read and  write file formats.<br/><br/>
  * Created: 16.08.2021 12:34:53
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public interface FileFormat extends Named {
 

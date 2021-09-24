@@ -28,7 +28,7 @@ import java.util.TreeSet;
  * Performs benchmark tests on Benerator.<br/><br/>
  * Created: 13.09.2021 22:21:59
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class Benchmark {
 
@@ -41,19 +41,19 @@ public class Benchmark {
   public static final String EE_BENERATOR = "com.rapiddweller.benerator_ee.main.EEBenerator";
 
   private static final Setup[] DEFAULT_SETUPS = {
-      new Setup("gen-string.ben.xml", false, "1.2.0", 100000),
-      new Setup("gen-person-showcase.ben.xml", false, "1.2.0", 80000),
-      new Setup("anon-person-showcase.ben.xml", false, "1.2.0", 100000),
-      new Setup("anon-person-regex.ben.xml", false, "1.2.0", 1500000),
-      new Setup("anon-person-hash.ben.xml", false, "1.2.0", 1500000),
-      new Setup("anon-person-random.ben.xml", false, "1.2.0", 1500000),
-      new Setup("anon-person-constant.ben.xml", false, "1.2.0", 8000000)
-      /* TODO version 1.3.0
-      new Setup("file-out-csv.ben.xml", false, "1.2.0", 1000000),
-      new Setup("file-out-json.ben.xml", true, "1.2.0", 1000000),
-      new Setup("file-out-dbunit.ben.xml", false, "1.2.0", 1000000),
-      new Setup("file-out-fixedwidth.ben.xml", false, "1.2.0", 500000),
-      new Setup("file-out-xml.ben.xml", false, "1.2.0", 500000),
+      new Setup("gen-string.ben.xml", false, "2.0.0", 100000),
+      new Setup("gen-person-showcase.ben.xml", false, "2.0.0", 80000),
+      new Setup("anon-person-showcase.ben.xml", false, "2.0.0", 100000),
+      new Setup("anon-person-regex.ben.xml", false, "2.0.0", 1500000),
+      new Setup("anon-person-hash.ben.xml", false, "2.0.0", 1500000),
+      new Setup("anon-person-random.ben.xml", false, "2.0.0", 1500000),
+      new Setup("anon-person-constant.ben.xml", false, "2.0.0", 8000000)
+      /* TODO version 2.1.0
+      new Setup("file-out-csv.ben.xml", false, "2.0.0", 1000000),
+      new Setup("file-out-json.ben.xml", true, "2.0.0", 1000000),
+      new Setup("file-out-dbunit.ben.xml", false, "2.0.0", 1000000),
+      new Setup("file-out-fixedwidth.ben.xml", false, "2.0.0", 500000),
+      new Setup("file-out-xml.ben.xml", false, "2.0.0", 500000),
       */
   };
 

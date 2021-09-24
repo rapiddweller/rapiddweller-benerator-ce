@@ -39,7 +39,7 @@ import java.io.Closeable;
  * Created: 18.08.2009 20:39:53
  *
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public interface TypedEntitySource extends Closeable {
   DataIterator<Entity> iterator(ComplexTypeDescriptor type);

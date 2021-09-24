@@ -18,7 +18,7 @@ import java.util.Random;
  * Default implementation of the {@link RandomProvider} interface.<br/><br/>
  * Created: 12.09.2021 08:55:55
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class DefaultRandomProvider implements RandomProvider {
 

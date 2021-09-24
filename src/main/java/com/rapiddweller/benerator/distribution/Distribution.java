@@ -35,7 +35,7 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
  * Parent interface for all distribution types.
  * Implementors of the Distribution interface are recommended to extend
  * {@link AbstractDistribution} for forward compatibility.
- * In order to migrate implementors of the {@link Distribution} interface before version 1.2.0,
+ * In order to migrate implementors of the {@link Distribution} interface before version 2.0.0,
  * their <code>implements Distribution</code> directive should be changed to
  * <code>extends AbstractDistribution</code>.<br/><br/>
  * Created: 11.09.2006 21:31:54

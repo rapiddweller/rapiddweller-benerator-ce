@@ -36,7 +36,7 @@ import com.rapiddweller.model.data.Entity;
  * the same base dataset.<br/><br/>
  * Created: 22.09.2021 10:58:27
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class CloningEntityGenerator extends GeneratorProxy<Entity> {
 

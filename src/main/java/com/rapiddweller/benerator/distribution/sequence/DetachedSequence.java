@@ -34,7 +34,7 @@ import com.rapiddweller.benerator.distribution.Sequence;
  * They have in common that they always use a cache to distribute non-number data.<br/><br/>
  * Created: 22.09.2021 12:17:00
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public abstract class DetachedSequence extends Sequence {
 

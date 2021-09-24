@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
  * <code>format</code> may be 'hex' or 'base64'.<br/><br/>
  * Created: 02.09.2021 20:50:51
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class Hash implements Converter<Object,String>, ThreadAware {
 

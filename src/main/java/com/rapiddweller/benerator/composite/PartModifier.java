@@ -16,7 +16,7 @@ import java.util.List;
  * and applies some generation steps to them in order to overwrite/anonymize data.<br/><br/>
  * Created: 11.09.2021 09:58:53
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class PartModifier extends AbstractGenerationStep<Entity> implements ComponentBuilder<Entity> {
 

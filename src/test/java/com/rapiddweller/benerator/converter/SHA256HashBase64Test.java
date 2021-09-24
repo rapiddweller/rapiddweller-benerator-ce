@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  * Tests the SHA256HashBase64.<br/><br/>
  * Created: 06.09.2021 14:43:19
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class SHA256HashBase64Test extends AbstractHashTest {
 

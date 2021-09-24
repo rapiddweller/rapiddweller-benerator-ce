@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
  * Created: 02.09.2021 21:19:28
  *
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class HashTest extends AbstractHashTest {
 

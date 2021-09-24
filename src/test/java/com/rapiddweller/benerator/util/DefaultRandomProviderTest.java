@@ -9,7 +9,7 @@ import com.rapiddweller.benerator.test.AbstractRandomProviderTest;
  * Tests the {@link DefaultRandomProvider}.<br/><br/>
  * Created: 13.09.2021 03:17:38
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class DefaultRandomProviderTest extends AbstractRandomProviderTest {
 

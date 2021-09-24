@@ -10,7 +10,7 @@ import java.util.List;
  * Service provider interface for custom implementation of random functions.<br/><br/>
  * Created: 12.09.2021 08:54:13
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public interface RandomProvider {
   long randomLong(long min, long maxInclusive);

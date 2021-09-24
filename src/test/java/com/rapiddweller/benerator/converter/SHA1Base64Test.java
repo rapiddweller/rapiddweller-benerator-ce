@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  * Tests the {@link SHA1HashBase64}.<br/><br/>
  * Created: 06.09.2021 14:40:40
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class SHA1Base64Test extends AbstractHashTest {
 

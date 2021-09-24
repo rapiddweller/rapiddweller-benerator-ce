@@ -12,7 +12,7 @@ import java.util.List;
  * of an Entity generation setup are being processed.<br/><br/>
  * Created: 13.09.2021 10:42:36
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public interface GenerationInterceptor {
   void entityGenerationStarting(String taskName, boolean iterationMode, List<Statement> statements);

@@ -37,7 +37,7 @@ import com.rapiddweller.model.data.Entity;
  * Created: 18.08.2009 20:15:53
  *
  * @author Volker Bergmann
- * @since 1.2.0
+ * @since 2.0.0
  */
 public class TypedEntitySourceAdapter implements DataSource<Entity> {
 
