@@ -29,7 +29,8 @@
 ### Breaking Changes
 
 - See the manual's
-[Migration Guide](/doc/migrating_benerator_projects.md#migration-from-11x-to-200)what to do if you programmed custom Distributions.
+[Migration Guide](/doc/migrating_benerator_projects.md#migration-from-11x-to-200) 
+what to do if you programmed custom Distributions.
 
 ---
 
