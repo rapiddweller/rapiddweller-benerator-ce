@@ -2,20 +2,20 @@
 
 ## The Basic Idea
 
-The approach for anonymizing production data is to ```<iterate>``` over existing data and
-overwrite data fields with privacy concerns making use of all the features you learned above  
-in [Data Generation Concepts](data_generation_concepts.md). 
+The approach for anonymizing (also obfuscating) production data is to `<iterate>` over existing data and
+overwrite data fields with privacy concerns making use of all the features you learned 
+in '[Data Generation Concepts](data_generation_concepts.md)'. 
 
 If you need to assure multi-field-dependencies when overwriting, 
-you can choose a prototype-base approach: import data from one source and merge it with
+you can choose a prototype-based approach: import data from one source and merge it with
 prototypes that are generated or imported from another source.
 
-When importing data for functional and performance testing, you may need to add a 
-[Data Postprocessing Stage](data_generation_concepts.md#data-postprocessing-stage). 
+When importing data for functional and performance testing, you may need to add 
+a '[Data Postprocessing Stage](data_generation_concepts.md#data-postprocessing-stage)'.
 
 In the following example, customers are imported from a database table in a production database (prod_db), anonymized and exported to a test
-database (test_db). All attributes that are not overwritten, will be exported as is. Since customer names and birth dates need to be anonymized, a
-prototype generator (...PersonGenerator) is used to generate prototypes (named person) whose attributes are used to overwrite production customer
+database (test_db). All attributes that are not overwritten, will be exported as is. Since customer names and birthdates need to be anonymized, a
+prototype generator ('[PersonGenerator](domains.md#persongenerator)') is used to generate prototypes (named person) whose attributes are used to overwrite production customer
 attributes:
 
 ```xml
@@ -40,7 +40,7 @@ You can choose a subset of the available data by using
 ### &lt;Iterate filter&gt; Option (Enterprise Edition)
 
 In order to filter data import from any source, use a filter expression. 
-Within it you can use the variable _candidate to access the data entity 
+Within it, you can use the variable _candidate to access the data entity 
 that is a candidate to import and return true in order to accept it or 
 false in order to drop it.
 
@@ -96,7 +96,7 @@ by a factor of 10 or more. There are two combinable approaches to address this:
 
 Anonymization is not done for fun but for privacy protection, so it is legitimate to 
 reduce the anonymization check to the fields which are relevant for this purpose. 
-In most applications, sensitive data is only a small part of all data and 
+In most applications, sensitive data is only a small part of all data, and 
 anonymization checking overhead is strongly reduced.
 
 This restriction is defined by listing the fields to be checked in an 
@@ -160,10 +160,10 @@ Then your report may look like this (when combined with field reduction):
 
 Which approach performs better is heavily dependent on the properties of your individual data structures.
 
-A rule of thumb: For projects for large data structures, the fields restriction approach performs better,
+A rule of thumb: For projects with large data structures, the fields restriction approach performs better,
 for projects with smaller data structures the sampling approach.
 
-A non-represantative example project with large data objects of which only a small number of fields 
+A non-representative example project with large data objects of which only a small number of fields 
 needed to be anonymized, exhibited the following performance:
 
 | Method                             | Performance |
@@ -174,13 +174,13 @@ needed to be anonymized, exhibited the following performance:
 | Restricted fields tracking         |     65 ME/h |
 | Restricted fields and 10% samples  |     75 ME/h |
 
-ME/h stands for million entities per hour.
+ME/h stands for a million entities per hour.
 
 
 ## 'condition'
 
-When anoymizing or importing data, you may need to match multi-field-constraints of the form 
-"if field A is set then field B must be set and field C must be null“. It many cases, 
+When anonymizing or importing data, you may need to match multi-field constraints of the form 
+"if field A is set then field B must be set and field C must be null“. In many cases, 
 an easy solution is to import data, mutate only non-null fields and leave null-valued fields 
 as they are. 
 
