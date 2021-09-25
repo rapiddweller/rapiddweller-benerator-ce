@@ -52,34 +52,6 @@ jobs:
 
   ###################### Test / Build ######################
 
-  build_jdk11:
-    runs-on: ubuntu-latest
-    needs:
-      - setup
-    container: maven:3.6-adoptopenjdk-11
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cache Maven packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Download dot.env
-        uses: actions/download-artifact@v2
-        with:
-          name: setup
-      - run: bash dot.env
-      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
-      - run: mvn $MAVEN_CLI_OPTS clean package -Dmaven.test.skip=true
-      - name: Upload build artifact for assembly
-        uses: actions/upload-artifact@v2
-        with:
-          name: build_jdk11
-          path: target/*.jar
-          if-no-files-found: error
-          retention-days: 5
-
   sonar:
     runs-on: ubuntu-latest
     needs:
@@ -215,4 +187,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify -DskipITs=false -Dmaven.test.skip=false org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=rapiddweller_rapiddweller-benerator-ce
+        run: mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent verify -DskipITs=false jacoco:report org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=rapiddweller_rapiddweller-benerator-ce -Dsonar.junit.reportPaths=target/site/jacoco/jacoco.xml
