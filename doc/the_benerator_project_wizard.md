@@ -1,6 +1,6 @@
 # The Benerator Project Wizard
 
-The Penerator Project Wizard helps you to easily and quickly set up any kind of Benerator project:
+The Benerator Project Wizard helps you to easily and quickly set up any kind of Benerator project:
 
 * Descriptor file-driven data generation
 
@@ -25,7 +25,7 @@ benerator-wizard
 ```
 
 Depending on your language settings, the GUI welcomes you with an English or German dialog (contributions of translations are welcome). You can
-override the default language settings by using Java's user.language system property, e.g.
+override the default language settings by using Java's `user.language` system property, e.g.
 
 ```shell
 benerator-wizard -Duser.language=en
@@ -54,10 +54,10 @@ Then you can choose among a list of predefined project types:
 
 You can optionally make the wizard create an Eclipse project configuration, too. This requires you to have Maven installed.
 
-If necessary, specify the database connection settings and test if they are right by clicking 'Test Connection'.
+If necessary, specify the database connection settings and test if they are right by clicking `Test Connection`.
 
-When reproducing an existing database or creating a database snapshot, choose a snapshot file format: 'DBUnit file', '
-Excel(TM) document', or 'SQL file'. In all other cases, choose 'None'.
+When reproducing an existing database or creating a database snapshot, choose a snapshot file format: `DBUnit file`, `
+Excel(TM) document`, or `SQL file`. In all other cases, choose `None`.
 
 When reproducing an existing database, you need to provide Benerator with the DDL files for creating and dropping the related tables and sequences ('
 create tables' script and 'drop tables' script).
@@ -67,12 +67,13 @@ the system it is executed on.
 
 ## Creating and running the project
 
-Finally, press 'Create' for creating the project. The wizard then configures the project in the specified project folder.
+Finally, press `Create` for creating the project. The wizard then configures the project in the specified project folder.
 
 Look into the project folder and read the readme.txt file. This contains individual instructions for your project: What further configuration steps
 are eventually necessary (e.g. proprietary database drivers), how to invoke Benerator for this special project type, and how to go on with
 customizations.
 
-The easiest way to run the generated project is to run the Maven Benerator Plugin as described in the generated readme.txt files. The project wizard
-creates all necessary files for you to execute the created projects immediately (except for proprietary database drivers: Oracle or DB2). However, you can also invoke Benerator directly from the command line, but have to take care
+The easiest way to run the generated project is to run the Maven Benerator Plugin as described in the generated `readme.txt` files. The project wizard
+creates all necessary files for you to execute the created projects immediately (except for proprietary database drivers: Oracle or DB2). 
+However, you can also invoke Benerator directly from the command line, but you have to take care
 of compiling custom Java classes in the project for yourself.
