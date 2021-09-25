@@ -13,14 +13,14 @@
 # rapiddweller-benerator-ce
 
 [rapiddweller 'Benerator'](https://www.benerator.de) is a software solution to
-generate, anonymize, pseudonymize and migrate data for development,
+generate, obfuscate (anonymize / pseudonymize) and migrate data for development,
 testing and training purposes.
 
 ## Introduction
 
 [rapiddweller 'Benerator'](https://www.benerator.de) allows creating realistic and valid high-volume test data, used for testing (unit/integration/load) and showcase setup.
 
-Metadata constraints are imported from systems and/or configuration files. Data can be imported from and exported to files and systems, anonymized, or
+Metadata constraints are imported from systems and/or configuration files. Data can be imported from and exported to files and systems, obfuscated, or
 generated from scratch. Domain packages provide reusable generators for creating domain-specific data as names and addresses internationalizable in
 language and region. It is strongly customizable with plugins and configuration options.
 
@@ -45,7 +45,7 @@ mvn -version
 1. Choose how to install:
 
    a) Download a Prebuilt Distribution from **Project Overview > Releases**
-   (current release is `1.1.2`, cp. rapiddweller-benerator-ce-1.1.2-jdk-11-dist.zip)
+   (current release is `2.0.0`, cp. rapiddweller-benerator-ce-2.0.0-jdk-11-dist.zip)
    and unzip the downloaded file in an appropriate directory, e.g.
    `/Developer/Applications` or `C:\Program Files\Development`.
 
@@ -57,10 +57,10 @@ mvn -version
 
    - Windows Details: Open the System Control Panel, choose Advanced Settings - Environment Variables. Choose New in the
      User Variables section. Enter BENERATOR_HOME as name and the path as value
-     (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-1.1.2-jdk-11`). Click OK several times.
+     (e.g. `C:\Program Files\Development\rapiddweller-benerator-ce-2.0.0-jdk-11`). Click OK several times.
 
    - Mac/Unix/Linux Details: Add an entry that points to Benerator,
-     e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-1.1.2-jdk-11`
+     e.g.: `export BENERATOR_HOME=/Developer/Applications/rapiddweller-benerator-ce-2.0.0-jdk-11`
 
 3. On Unix/Linux/Mac systems: **Set permissions**  
    Open a shell on the installation's root directory and execute
@@ -68,7 +68,8 @@ mvn -version
 
 4. Mac OS X configuration **Set JAVA_HOME**
    On Mac OS X you need to provide benerator with an explicit configuration of the JAVA_HOME path.
-   See http://developer.apple.com/qa/qa2001/qa1170.html for a good introduction to the OS X way of setting up Java. It is based on aliases
+   See [http://developer.apple.com/qa/qa2001/qa1170.html](http://developer.apple.com/qa/qa2001/qa1170.html) 
+   for a good introduction to the OS X way of setting up Java. It is based on aliases
    conventions. If you are not familiar with that, you should read the article. If Java 8 (or newer) is the default version you will use, you can
    simply define JAVA_HOME by adding the following line to your .profile: in your user directory:
    `export JAVA_HOME=/Library/Java/Home`
@@ -110,7 +111,7 @@ There are various sources to get you started or extend your benerator knowledge:
 - Checkout the maintainer's website [www.benerator.de](https://www.benerator.de/) for additional support resources.
 
 **If there are still open questions and things are unclear because they are missing or insufficiently explained in our Benerator manual,
-please open an issue on github so we can expand our manual to make things clearer for you.**
+please open an issue on GitHub, so we can expand our manual to make things clearer for you.**
 
 ## Table of Contents Manual
 
@@ -184,7 +185,7 @@ to execute the scripts you can do ...
 
 If you would like to reach out to the maintainers, contact us via our
 [Contact-Form](https://www.benerator.de/contact-us) or email us at
-[solution.benerator@rapiddweller.com](mailto://solution.benerator@rapiddweller.com).
+[solution.benerator@rapiddweller.com](mailto:solution.benerator@rapiddweller.com).
 
 ## Contributing
 
