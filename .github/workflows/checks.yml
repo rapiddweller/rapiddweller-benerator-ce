@@ -1,0 +1,216 @@
+on:
+  push:
+
+env:
+  MAVEN_CLI_OPTS: "--batch-mode --update-snapshots"
+  JAVA_JDKVERSION_TAG: "jdk-11"
+  SET_VERSION: |
+    ARTIFACT_ID=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec);
+    echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV;
+jobs:
+  ###################### Setup ######################
+  setup:
+    runs-on: ubuntu-latest
+    container: maven:3.6-adoptopenjdk-11
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - run: export
+      - uses: actions/checkout@v2
+      - name: set ARTIFACT_ID
+        run: |
+          ARTIFACT_ID=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec);
+          echo "ARTIFACT_ID=$ARTIFACT_ID" >> $GITHUB_ENV;
+      - name: set RELEASE version
+        run: |
+          ARTIFACT_VERSION=${GITHUB_REF/refs\/tags\//}-$JAVA_JDKVERSION_TAG;
+          echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
+          echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
+        if: startsWith(github.ref, 'refs/tags/')
+      - name: set SNAPSHOT version
+        run: |
+          ARTIFACT_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec);
+          echo ARTIFACT_VERSION=$ARTIFACT_VERSION  >> $GITHUB_ENV;
+          echo ARTIFACT_FULLNAME=$ARTIFACT_ID-$ARTIFACT_VERSION >> $GITHUB_ENV;
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+      - name: set ARTIFACT_FULLNAME
+        run: |
+          echo "echo ARTIFACT_ID=${ARTIFACT_ID} >> \$GITHUB_ENV" >> dot.env
+          echo "echo ARTIFACT_VERSION=${ARTIFACT_VERSION} >> \$GITHUB_ENV" >> dot.env
+          echo "echo ARTIFACT_FULLNAME=${ARTIFACT_FULLNAME} >> \$GITHUB_ENV" >> dot.env
+      - run: export
+      - name: Upload setupfile
+        uses: actions/upload-artifact@v2
+        with:
+          name: setup
+          path: dot.env
+          if-no-files-found: error
+          retention-days: 1
+
+  ###################### Test / Build ######################
+
+  build_jdk11:
+    runs-on: ubuntu-latest
+    needs:
+      - setup
+    container: maven:3.6-adoptopenjdk-11
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
+        with:
+          name: setup
+      - run: bash dot.env
+      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
+      - run: mvn $MAVEN_CLI_OPTS clean package -Dmaven.test.skip=true
+      - name: Upload build artifact for assembly
+        uses: actions/upload-artifact@v2
+        with:
+          name: build_jdk11
+          path: target/*.jar
+          if-no-files-found: error
+          retention-days: 5
+
+  sonar:
+    runs-on: ubuntu-latest
+    needs:
+      - setup
+    defaults:
+      run:
+        shell: bash
+    container: maven:3.6-adoptopenjdk-11
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres:12.2-alpine
+        # Provide the password for postgres
+        env:
+          DB_HOST: postgres
+          DB_PORT: "5432"
+          DB_CONNECTION: "postgres"
+          # postgres
+          POSTGRES_DB: "benerator"
+          POSTGRES_USER: "root"
+          POSTGRES_PASSWORD: "Benerator123!"
+          POSTGRES_HOST_AUTH_METHOD: trust
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      # Label used to access the service container
+      mysql:
+        # Docker Hub image
+        image: mysql
+        # Provide the password for postgres
+        env:
+          DB_HOST: "mysql"
+          DB_PORT: "3306"
+          DB_CONNECTION: "mysql"
+          # mysql
+          MYSQL_ROOT_USER: "root"
+          MYSQL_ROOT_PASSWORD: "Benerator123!"
+          MYSQL_DATABASE: "benerator"
+      # Label used to access the service container
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        # Provide the password for postgres
+        env:
+          DB_HOST: "mssql"
+          DB_PORT: "1433"
+          DB_CONNECTION: "mssql"
+          # mysql
+          ACCEPT_EULA: Y,
+          SA_PASSWORD: Benerator123!
+      # Label used to access the service container
+      oracle:
+        image: oracleinanutshell/oracle-xe-11g
+        # user: XDB PW: xdb
+        env:
+          ORACLE_ALLOW_REMOTE: 'true'
+          ORACLE_ENABLE_XDB: 'true'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Download dot.env
+        uses: actions/download-artifact@v2
+        with:
+          name: setup
+      - run: bash dot.env
+      - name: set db properties for postgres connetion
+        run: |
+          echo "
+          dbUrl=jdbc:postgresql://postgres:5432/benerator
+          dbDriver=org.postgresql.Driver
+          dbUser=root
+          dbPassword=Benerator123!
+          dbCatalog=benerator
+          dbSchema=public
+          idStrategy=increment
+          idParam=1010" > src/demo/resources/demo/shop/postgres/shop.postgres.properties
+      - name: set db properties for mysql connetion
+        run: |
+          echo "
+          dbUrl=jdbc:mysql://mysql:3306/benerator
+          dbDriver=com.mysql.cj.jdbc.Driver
+          dbCatalog=benerator
+          dbUser=root
+          dbPassword=Benerator123!
+          idStrategy=increment
+          idParam=1010" > src/demo/resources/demo/shop/mysql/shop.mysql.properties
+      - name: set db properties for mssql connetion
+        run: |
+          echo "
+          dbUrl=jdbc:sqlserver://mssql:1433
+          dbDriver=com.microsoft.sqlserver.jdbc.SQLServerDriver
+          dbCatalog=master
+          dbSchema=dbo
+          dbUser=sa
+          dbPassword=Benerator123!
+          idStrategy=increment
+          idParam=1010" > src/demo/resources/demo/shop/sql_server/shop.sql_server.properties
+      - name: set db properties for oracle connetion
+        run: |
+          echo "
+          dbUrl=jdbc:oracle:thin:@oracle:1521:XE
+          dbDriver=oracle.jdbc.driver.OracleDriver
+          dbUser=XDB
+          dbPassword=xdb
+          dbCatalog=XE
+          dbSchema=XDB
+          idStrategy=seqhilo
+          idParam=seq_id_gen" > src/demo/resources/demo/shop/oracle/shop.oracle.properties
+      - run: mvn versions:set -DnewVersion=$ARTIFACT_VERSION
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify -DskipITs=false -Dmaven.test.skip=false org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=rapiddweller_rapiddweller-benerator-ce
