@@ -1,4 +1,11 @@
-on: [ push, pull_request ]
+on:
+  push:
+    tags:
+      - 1.*
+      - 2.*
+      - 3.*
+    branches:
+      - development
 
 env:
   MAVEN_CLI_OPTS: "--batch-mode --update-snapshots"
