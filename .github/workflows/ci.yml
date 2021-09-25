@@ -1,7 +1,9 @@
 on:
   push:
     tags:
-      - *
+      - 1.*
+      - 2.*
+      - 3.*
   pull_request:
     branches:
       - development
