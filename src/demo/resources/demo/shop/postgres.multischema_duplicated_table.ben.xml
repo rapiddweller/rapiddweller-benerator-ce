@@ -54,7 +54,7 @@
     <database id="schema1" url="{dbUrl}" driver="{dbDriver}" schema="schema1"
               user="{dbUser}" password="{dbPassword}" />
     <database id="schema2" url="{dbUrl}" driver="{dbDriver}" schema="schema2"
-              user="{dbUser}" password="{dbPassword}" />
+              user="{dbUser}" password="{dbPassword}"/>
 
     <comment>drop the current tables/sequences if they exist and recreate them</comment>
     <execute uri="postgres/drop_schemas.postgres_multischema.sql" target="schema1" onError="ignore"/>
@@ -106,6 +106,7 @@
         <attribute name="name" script="person.givenName + ' ' + person.familyName"/>
         <attribute name="email" generator="EMailAddressGenerator"/>
         <attribute name="password" pattern="[A-Za-z0-9]{8,12}"/>
+        <attribute name="active" type="boolean" constant="true"/>
         <reference name="role_id" source="schema1" targetType="db_role"/>
         <generate type="db_customer" count="1" consumer="schema1">
             <id name="id" script="db_user.id"/>

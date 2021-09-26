@@ -217,7 +217,7 @@ public class DemoIntegrationTest extends AbstractBeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
-  @Test(expected = RuntimeException.class)
+  @Test()
   public void DemoPostgresMultiSchemaDuplicatedTableInBenCtx() throws IOException {
     context.setContextUri("/demo/shop");
     parseAndExecuteFile("/demo/shop/postgres.multischema_duplicated_table.ben.xml");
