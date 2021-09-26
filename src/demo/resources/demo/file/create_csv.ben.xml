@@ -9,7 +9,7 @@
     <import platforms="csv"/>
 
     <generate type="transaction" count="100" consumer="new CSVEntityExporter('target/create_csv.csv')">
-        <variable name="product" type="entity" source="./products.ent.csv" distribution="random"/>
+        <variable name="product" type="entity" source="products.ent.csv" distribution="random"/>
         <id name="id" type="long"/>
         <attribute name="comment" pattern="[A-Z][a-z]{5,12}"/>
         <attribute name="ean_code" script="product.ean_code"/>
