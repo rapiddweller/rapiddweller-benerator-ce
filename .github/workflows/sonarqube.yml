@@ -187,17 +187,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: run UT and IT and genrate report
-        run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=false
-      - name: Upload testreports
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report
-          path: |
-            target/site/jacoco-merged-test-coverage-report/jacoco.xml
-            target/site/jacoco-unit-test-coverage-report/jacoco.xml
-            target/site/jacoco-integration-test-coverage-report/jacoco.xml
-          if-no-files-found: error
-          retention-days: 1
+        run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
       - name: analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
