@@ -117,7 +117,7 @@
         <skipITs>true</skipITs>
         <skipUTs>${skipTests}</skipUTs>
         <sonar.organization>rapiddweller</sonar.organization>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/jacoco-merged-test-coverage-report/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco-merged-test-coverage-report/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <maven.compiler.source>11</maven.compiler.source>
