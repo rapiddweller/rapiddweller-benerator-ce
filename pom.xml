@@ -116,16 +116,6 @@
         <skipTests>false</skipTests>
         <skipITs>true</skipITs>
         <skipUTs>${skipTests}</skipUTs>
-        <sonar.organization>rapiddweller</sonar.organization>
-        <sonar.coverage.jacoco.xmlReportPaths>
-            ${project.basedir}/target/site/jacoco-merged-test-coverage-report/jacoco.xml
-        </sonar.coverage.jacoco.xmlReportPaths>
-        <jacoco.version>0.8.6</jacoco.version>
-        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
-        <sonar.language>java</sonar.language>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <_rd_common_version>1.1.3-jdk-11</_rd_common_version>
