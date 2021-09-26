@@ -7,7 +7,7 @@
     </if>
     <if test="com.rapiddweller.common.SystemInfo.isWindows()">
         <then>
-            <execute type="shell">dir</execute>
+            <execute type="shell">CMD /c dir</execute>
         </then>
         <else>
             <execute type="shell">ls</execute>

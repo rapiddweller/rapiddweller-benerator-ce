@@ -34,7 +34,6 @@ import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.junit.Assume;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,10 +41,7 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.sql.Connection;
 
-import static com.rapiddweller.common.SystemInfo.isLinux;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Tests the DBSnapshotTool.<br/><br/>
@@ -88,7 +84,7 @@ public class DBSnaphotToolTest {
    */
   @Test
   public void testHsqlDbUnitSnapshot() throws Exception {
-    Assume.assumeTrue(isLinux());
+//    Assume.assumeTrue(isLinux());
     // prepare DB
     String db = getClass().getSimpleName();
     Connection connection = HSQLUtil.connectInMemoryDB(db);
@@ -118,7 +114,7 @@ public class DBSnaphotToolTest {
    */
   @Test
   public void testHsqlXlsSnapshot() throws Exception {
-    Assume.assumeTrue(isLinux());
+//    Assume.assumeTrue(isLinux());
     // prepare DB
     String db = getClass().getSimpleName();
     Connection connection = HSQLUtil.connectInMemoryDB(db);

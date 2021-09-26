@@ -1,4 +1,4 @@
-<setup>
+<setup defaultDataset="US" defaultLocale="en_US">
     <import domains="person,net,product"/>
     <import platforms="db"/>
 

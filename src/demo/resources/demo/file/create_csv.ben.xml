@@ -2,8 +2,9 @@
 
 
 <setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="https://www.benerator.de/schema/1.0.0"
-       xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
+       xmlns="https://www.benerator.de/schema/2.0.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/2.0.0 https://www.benerator.de/schema/benerator-2.0.0.xsd"
+       defaultDataset="US" defaultLocale="en_US">
 
     <import platforms="csv"/>
 
@@ -19,7 +20,7 @@
     <echo>Generated data:</echo>
     <if test="com.rapiddweller.common.SystemInfo.isWindows()">
         <then>
-            <execute type="shell">cmd /C type target/create_csv.csv</execute>
+            <execute type="shell">cmd /C dir</execute>
         </then>
         <else>
             <execute type="shell">cat target/create_csv.csv</execute>

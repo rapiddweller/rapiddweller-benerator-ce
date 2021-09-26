@@ -1,7 +1,8 @@
 <setup
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="https://www.benerator.de/schema/1.0.0"
-        xsi:schemaLocation="https://www.benerator.de/schema/1.0.0 https://www.benerator.de/schema/benerator-1.0.0.xsd">
+        xmlns="https://www.benerator.de/schema/2.0.0"
+        xsi:schemaLocation="https://www.benerator.de/schema/2.0.0 https://www.benerator.de/schema/benerator-2.0.0.xsd"
+        defaultDataset="US" defaultLocale="en_US">
 
     <comment>
         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -104,7 +105,7 @@
             <attribute name="salutation" script="person.salutation"/>
             <attribute name="first_name" script="person.givenName"/>
             <attribute name="last_name" script="person.familyName"/>
-            <attribute name="birth_date" nullable="false"/>
+            <attribute name="birth_date" script="person.birthDate"/>
             <!-- Export the customers not only to the database, but their names and passwords to a CSV file -->
             <consumer class="CSVEntityExporter">
                 <property name="uri" value="target/customers.csv"/>

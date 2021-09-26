@@ -135,6 +135,7 @@
         <database_jaybird.version>4.0.1.java11</database_jaybird.version>
         <database_mssqldb.version>9.2.1.jre11</database_mssqldb.version>
         <database_mysql-connector-java.version>8.0.20</database_mysql-connector-java.version>
+        <database_mariadb-java-client.version>2.7.4</database_mariadb-java-client.version>
         <database_oracle.version>21.1.0.0</database_oracle.version>
         <database_postgresql.version>42.2.23</database_postgresql.version>
         <dependency_antlr-runtime.version>3.3</dependency_antlr-runtime.version>
@@ -179,6 +180,12 @@
             <groupId>org.firebirdsql.jdbc</groupId>
             <artifactId>jaybird</artifactId>
             <version>${database_jaybird.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>${database_mariadb-java-client.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -363,6 +370,54 @@
         </testResources>
         <plugins>
             <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <configuration>
+                    <excludes>
+                        <exclude>com/rapiddweller/task/**/*</exclude>
+                        <exclude>com/rapiddweller/benerator/template/**/*</exclude>
+                        <exclude>com/rapiddweller/benerator/gui/**/*</exclude>
+                        <exclude>com/rapiddweller/benerator/anno/**/*</exclude>
+                        <exclude>com/rapiddweller/benerator/wrapper/**/*</exclude>
+                        <exclude>com/rapiddweller/benerator/engine/AbstractBeneratorSubContext.class</exclude>
+                        <exclude>com/rapiddweller/benerator/main/Benerator.class</exclude>
+                        <exclude>com/rapiddweller/benerator/main/Benchmark.class</exclude>
+                        <exclude>com/rapiddweller/benerator/main/DBSnapshotTool.class</exclude>
+                        <exclude>com/rapiddweller/benerator/main/BeneratorGUI.class</exclude>
+                        <exclude>com/rapiddweller/benerator/main/BeneratorGUI.BeneratorGUIFrame.class</exclude>
+                        <exclude>com/rapiddweller/benerator/main/NewProjectWizard.class</exclude>
+                        <exclude>com/rapiddweller/benerator/main/TemplateRunner.class</exclude>
+                        <exclude>com/rapiddweller/domain/address/Address.class</exclude>
+                        <exclude>com/rapiddweller/domain/address/CityManager.class</exclude>
+                        <exclude>com/rapiddweller/domain/address/AddressFormat.class</exclude>
+                        <exclude>com/rapiddweller/benerator/archetype/**/*</exclude>
+                        <exclude>com/rapiddweller/platform/xml/XMLSchemaDescriptorProvider.class</exclude>
+                        <exclude>com/rapiddweller/benerator/factory/**/*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>prepare-agent-integration</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                        <configuration>
+                            <propertyName>failsafeArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
@@ -382,6 +437,7 @@
                     <excludes>
                         <exclude>**/*IntegrationTest*.class</exclude>
                     </excludes>
+                    <argLine>${surefireArgLine}</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -401,6 +457,10 @@
                             <goal>integration-test</goal>
                             <goal>verify</goal>
                         </goals>
+                        <configuration>
+                            <!-- Sets the VM argument line used when integration tests are run. -->
+                            <argLine>${failsafeArgLine}</argLine>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -479,47 +539,7 @@
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.8.1</version>
             </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
-                <configuration>
-                    <excludes>
-                        <exclude>com/rapiddweller/task/**/*</exclude>
-                        <exclude>com/rapiddweller/benerator/template/**/*</exclude>
-                        <exclude>com/rapiddweller/benerator/gui/**/*</exclude>
-                        <exclude>com/rapiddweller/benerator/anno/**/*</exclude>
-                        <exclude>com/rapiddweller/benerator/wrapper/**/*</exclude>
-                        <exclude>com/rapiddweller/benerator/engine/AbstractBeneratorSubContext.class</exclude>
-                        <exclude>com/rapiddweller/benerator/main/Benerator.class</exclude>
-                        <exclude>com/rapiddweller/benerator/main/BeneratorGUI.class</exclude>
-                        <exclude>com/rapiddweller/benerator/main/BeneratorGUI.BeneratorGUIFrame.class</exclude>
-                        <exclude>com/rapiddweller/benerator/main/NewProjectWizard.class</exclude>
-                        <exclude>com/rapiddweller/benerator/main/TemplateRunner.class</exclude>
-                        <exclude>com/rapiddweller/domain/address/Address.class</exclude>
-                        <exclude>com/rapiddweller/domain/address/CityManager.class</exclude>
-                        <exclude>com/rapiddweller/domain/address/AddressFormat.class</exclude>
-                        <exclude>com/rapiddweller/benerator/archetype/**/*</exclude>
-                        <exclude>com/rapiddweller/platform/xml/XMLSchemaDescriptorProvider.class</exclude>
-                        <exclude>com/rapiddweller/benerator/factory/**/*</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>jacoco-initialize</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-site</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
         </plugins>
     </build>
 

@@ -30,7 +30,6 @@ import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.StringUtil;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -53,7 +52,6 @@ public class ArchetypeTest {
    *
    * @throws Exception the exception
    */
-  @Ignore
   @Test
   public void testSimpleProjectArchetype() throws Exception {
     // prepare
