@@ -190,4 +190,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn $MAVEN_CLI_OPTS clean org.jacoco:jacoco-maven-plugin:prepare-agent verify -DskipITs=false jacoco:report org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=rapiddweller_rapiddweller-benerator-ce
+        run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=false org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=rapiddweller_rapiddweller-benerator-ce
