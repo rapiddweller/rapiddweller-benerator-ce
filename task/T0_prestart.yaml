@@ -13,11 +13,9 @@
         volumes:
           - ./scripts/:/docker-entrypoint-initdb.d/
         env: {
-          POSTGRESQL_DATABASE: benerator,
-          POSTGRESQL_USERNAME: benerator,
-          POSTGRESQL_PASSWORD: benerator,
-          POSTGRES_PASSWORD: benerator,
-          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: benerator,
+          POSTGRES_USER: benerator,
+          POSTGRES_PASSWORD: benerator
         }
         published_ports:
           - "35432:5432"
@@ -26,46 +24,46 @@
         docker_image: mariadb
         network: "{{ network }}"
         env: {
-          MYSQL_ROOT_PASSWORD: benerator,
+          MARIADB_ROOT_PASSWORD: benerator,
           MARIADB_DATABASE: benerator,
           MARIADB_USER: benerator
         }
         published_ports:
           - "33306:3306"
-#      mssql:
-#        name: mssql_local
-#        docker_image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
-#        network: "{{ network }}"
-#        env: {
-#          ACCEPT_EULA: Y,
-#          SA_PASSWORD: Benerator123!
-#        }
-#        published_ports:
-#          - "31433:1433"
-#      oracle:
-#        name: oracle_local
-#        docker_image: oracleinanutshell/oracle-xe-11g
-#        network: "{{ network }}"
-#        env: {
-#          ORACLE_ALLOW_REMOTE: 'true',
-#          ORACLE_ENABLE_XDB: 'true',
-#          # user: XDB PW: xdb
-#        }
-#        published_ports:
-#          - "31521:1521"
-#      db2:
-#        name: db2_local
-#        docker_image: ibmcom/db2
-#        network: "{{ network }}"
-#        env: {
-#          LICENSE: 'accept',
-#          DB2INSTANCE: benerator,
-#          DB2INST1_PASSWORD: benerator,
-#          DBNAME: benerator,
-#          SAMPLEDB: 'true',
-#        }
-#        published_ports:
-#          - "50000:50000"
+      mssql:
+        name: mssql_local
+        docker_image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        network: "{{ network }}"
+        env: {
+          ACCEPT_EULA: Y,
+          SA_PASSWORD: Benerator123!
+        }
+        published_ports:
+          - "31433:1433"
+      oracle:
+        name: oracle_local
+        docker_image: oracleinanutshell/oracle-xe-11g
+        network: "{{ network }}"
+        env: {
+          ORACLE_ALLOW_REMOTE: 'true',
+          ORACLE_ENABLE_XDB: 'true',
+          # user: XDB PW: xdb
+        }
+        published_ports:
+          - "31521:1521"
+      db2:
+        name: db2_local
+        docker_image: ibmcom/db2
+        network: "{{ network }}"
+        env: {
+          LICENSE: 'accept',
+          DB2INSTANCE: benerator,
+          DB2INST1_PASSWORD: benerator,
+          DBNAME: benerator,
+          SAMPLEDB: 'true',
+        }
+        published_ports:
+          - "50000:50000"
       firebird:
         name: firebird_local
         docker_image: jacobalberty/firebird

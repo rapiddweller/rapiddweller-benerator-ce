@@ -28,11 +28,11 @@ package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.FileUtil;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -195,7 +195,6 @@ public class DemoIntegrationTest extends AbstractBeneratorIntegrationTest {
    *
    * @throws IOException the io exception
    */
-  @Ignore
   @Test
   public void DemoH2MultiSchema() throws IOException {
     context.setContextUri("/demo/db");
@@ -256,7 +255,7 @@ public class DemoIntegrationTest extends AbstractBeneratorIntegrationTest {
    */
   @Test
   public void DemoPostgresShop() throws IOException {
-    Assume.assumeTrue(isLinux());
+//    Assume.assumeTrue(isLinux());
     context.setContextUri("/demo/shop");
     parseAndExecuteFile("/demo/shop/shop-postgres.ben.xml");
   }
@@ -268,7 +267,7 @@ public class DemoIntegrationTest extends AbstractBeneratorIntegrationTest {
    */
   @Test
   public void DemoOracleShop() throws IOException {
-    Assume.assumeTrue(isLinux());
+//    Assume.assumeTrue(isLinux());
     context.setContextUri("/demo/shop");
     parseAndExecuteFile("/demo/shop/shop-oracle.ben.xml");
   }
