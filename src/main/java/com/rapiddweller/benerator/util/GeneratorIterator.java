@@ -31,6 +31,7 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
 import java.io.Closeable;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Wraps a {@link Generator} with an {@link Iterator} interface.<br/>
@@ -66,6 +67,9 @@ public class GeneratorIterator<E> implements Iterator<E>, Closeable {
   public E next() {
     E result = next;
     next = source.generate(wrapperProvider.get()).unwrap();
+    if (next == null)
+      throw new NoSuchElementException("No more elements to generate in " + source + ". " +
+          "Query hasNext() before calling next()");
     return result;
   }
 

@@ -45,21 +45,17 @@ import java.util.List;
 /**
  * Exports Entities to a CSV file.
  * The default line separator is CR LF according to RFC 4180.
- * It can be set explicitly by <code>setLineSeparator()</code>.<br/>
- * <br/>
+ * It can be set explicitly by <code>setLineSeparator()</code>.<br/><br/>
  * Created: 21.08.2007 21:16:59
- *
  * @author Volker Bergmann
  */
 public class CSVEntityExporter extends TextFileExporter {
 
-  private static final Logger logger =
-      LoggerFactory.getLogger(CSVEntityExporter.class);
+  private static final Logger logger = LoggerFactory.getLogger(CSVEntityExporter.class);
 
   // defaults --------------------------------------------------------------------------------------------------------
 
-  private static final String DEFAULT_LINE_SEPARATOR = "\r\n";
-  // as defined by RFC 4180
+  private static final String DEFAULT_LINE_SEPARATOR = "\r\n"; // as defined by RFC 4180
   private static final String DEFAULT_URI = "export.csv";
 
   // configuration attributes ----------------------------------------------------------------------------------------
@@ -76,43 +72,20 @@ public class CSVEntityExporter extends TextFileExporter {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Csv entity exporter.
-   */
   public CSVEntityExporter() {
     this(DEFAULT_URI);
   }
 
-  /**
-   * Instantiates a new Csv entity exporter.
-   *
-   * @param uri the uri
-   */
   public CSVEntityExporter(String uri) {
     this(uri, (String) null);
   }
 
-  /**
-   * Instantiates a new Csv entity exporter.
-   *
-   * @param uri         the uri
-   * @param columnsSpec the columns spec
-   */
   public CSVEntityExporter(String uri, String columnsSpec) {
     this(uri, columnsSpec,
         DefaultBeneratorContext.getDefaultCellSeparator(), null,
         DEFAULT_LINE_SEPARATOR);
   }
 
-  /**
-   * Instantiates a new Csv entity exporter.
-   *
-   * @param uri           the uri
-   * @param columnsSpec   the columns spec
-   * @param separator     the separator
-   * @param encoding      the encoding
-   * @param lineSeparator the line separator
-   */
   public CSVEntityExporter(String uri, String columnsSpec, char separator,
                            String encoding, String lineSeparator) {
     super(uri, encoding, lineSeparator);
@@ -123,35 +96,15 @@ public class CSVEntityExporter extends TextFileExporter {
     this.quoteEmpty = true;
   }
 
-  /**
-   * Instantiates a new Csv entity exporter.
-   *
-   * @param descriptor the descriptor
-   */
   public CSVEntityExporter(ComplexTypeDescriptor descriptor) {
     this(descriptor.getName() + ".csv", descriptor);
   }
 
-  /**
-   * Instantiates a new Csv entity exporter.
-   *
-   * @param uri        the uri
-   * @param descriptor the descriptor
-   */
   public CSVEntityExporter(String uri, ComplexTypeDescriptor descriptor) {
     this(uri, descriptor, DefaultBeneratorContext.getDefaultCellSeparator(),
         null, DEFAULT_LINE_SEPARATOR);
   }
 
-  /**
-   * Instantiates a new Csv entity exporter.
-   *
-   * @param uri           the uri
-   * @param descriptor    the descriptor
-   * @param separator     the separator
-   * @param encoding      the encoding
-   * @param lineSeparator the line separator
-   */
   public CSVEntityExporter(String uri, ComplexTypeDescriptor descriptor,
                            char separator, String encoding,
                            String lineSeparator) {
@@ -168,11 +121,6 @@ public class CSVEntityExporter extends TextFileExporter {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets columns.
-   *
-   * @param columns the columns
-   */
   public void setColumns(String[] columns) {
     if (ArrayUtil.isEmpty(columns)) {
       this.columns = null;
@@ -182,65 +130,30 @@ public class CSVEntityExporter extends TextFileExporter {
     }
   }
 
-  /**
-   * Sets separator.
-   *
-   * @param separator the separator
-   */
   public void setSeparator(char separator) {
     this.separator = separator;
   }
 
-  /**
-   * Is headless boolean.
-   *
-   * @return the boolean
-   */
   public boolean isHeadless() {
     return headless;
   }
 
-  /**
-   * Sets headless.
-   *
-   * @param headless the headless
-   */
   public void setHeadless(boolean headless) {
     this.headless = headless;
   }
 
-  /**
-   * Is end with new line boolean.
-   *
-   * @return the boolean
-   */
   public boolean isEndWithNewLine() {
     return endWithNewLine;
   }
 
-  /**
-   * Sets end with new line.
-   *
-   * @param endWithNewLine the end with new line
-   */
   public void setEndWithNewLine(boolean endWithNewLine) {
     this.endWithNewLine = endWithNewLine;
   }
 
-  /**
-   * Is quote empty boolean.
-   *
-   * @return the boolean
-   */
   public boolean isQuoteEmpty() {
     return quoteEmpty;
   }
 
-  /**
-   * Sets quote empty.
-   *
-   * @param quoteEmpty the quote empty
-   */
   public void setQuoteEmpty(boolean quoteEmpty) {
     this.quoteEmpty = quoteEmpty;
   }
@@ -301,9 +214,6 @@ public class CSVEntityExporter extends TextFileExporter {
 
   private void printHeaderRow() {
     if (!wasAppended && !headless && columns != null) {
-      if (wasAppended && !endWithNewLine) {
-        println();
-      }
       for (int i = 0; i < columns.length; i++) {
         if (i > 0) {
           printer.print(separator);

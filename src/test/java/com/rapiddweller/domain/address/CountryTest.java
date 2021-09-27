@@ -32,18 +32,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Tests the {@link Country} class.<br/>
- * <br/>
+ * Tests the {@link Country} class.<br/><br/>
  * Created at 26.08.2008 11:46:32
- *
  * @author Volker Bergmann
  * @since 0.5.5
  */
 public class CountryTest {
 
-  /**
-   * Test instances.
-   */
   @Test
   public void testInstances() {
     assertEquals(Country.GERMANY, Country.getInstance("DE"));

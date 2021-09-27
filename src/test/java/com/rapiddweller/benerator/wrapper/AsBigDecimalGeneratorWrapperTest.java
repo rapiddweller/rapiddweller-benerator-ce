@@ -34,6 +34,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -54,11 +55,15 @@ public class AsBigDecimalGeneratorWrapperTest {
     AsBigDecimalGeneratorWrapper<Double> wrapper
         = new AsBigDecimalGeneratorWrapper<>(source, BigDecimal.ZERO, new BigDecimal("0.01"));
     wrapper.init(new DefaultBeneratorContext());
-    assertEquals(new BigDecimal("0.12"), GeneratorUtil.generateNonNull(wrapper));
-    assertEquals(new BigDecimal("1.23"), GeneratorUtil.generateNonNull(wrapper));
-    assertEquals(new BigDecimal("12.34"), GeneratorUtil.generateNonNull(wrapper));
-    assertEquals(new BigDecimal("123.40"), GeneratorUtil.generateNonNull(wrapper));
-    assertEquals(new BigDecimal("1234.56"), GeneratorUtil.generateNonNull(wrapper));
+    assertEqualValues("0.12", GeneratorUtil.generateNonNull(wrapper));
+    assertEqualValues("1.23", GeneratorUtil.generateNonNull(wrapper));
+    assertEqualValues("12.34", GeneratorUtil.generateNonNull(wrapper));
+    assertEqualValues("123.40", GeneratorUtil.generateNonNull(wrapper));
+    assertEqualValues("1234.56", GeneratorUtil.generateNonNull(wrapper));
+  }
+
+  private void assertEqualValues(String expected, BigDecimal actual) {
+    assertEquals(0, new BigDecimal(expected).compareTo(actual));
   }
 
 }

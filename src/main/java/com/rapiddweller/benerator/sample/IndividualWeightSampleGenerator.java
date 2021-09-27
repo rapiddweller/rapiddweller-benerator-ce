@@ -30,7 +30,6 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.WeightedGenerator;
 import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
 import com.rapiddweller.benerator.distribution.IndividualWeight;
-import com.rapiddweller.benerator.distribution.WeightFunction;
 import com.rapiddweller.benerator.distribution.WeightedLongGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Assert;
@@ -40,42 +39,27 @@ import java.util.List;
 
 /**
  * Maps an {@link IndividualWeight} distribution to an {@link AbstractWeightFunction} and uses its capabilities
- * for providing distribution features based on the {@link IndividualWeight}'s characteristics.<br/>
- * <br/>
+ * for providing distribution features based on the {@link IndividualWeight}'s characteristics.<br/><br/>
  * Created at 01.07.2009 11:48:23
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class IndividualWeightSampleGenerator<E> extends AbstractSampleGenerator<E> implements WeightedGenerator<E> {
 
-  /**
-   * Keeps the Sample information
-   */
+  /** Holds the Sample information */
   final List<E> samples = new ArrayList<>();
 
-  /**
-   * The Individual weight.
-   */
   final IndividualWeight<E> individualWeight;
 
   private double totalWeight;
 
-  /**
-   * Generator for choosing a List index of the sample list
-   */
+  /** Generator for choosing a List index of the sample list */
   private WeightedLongGenerator indexGenerator;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Initializes the generator to an unweighted sample list
-   *
-   * @param generatedType    the generated type
-   * @param individualWeight the individual weight
-   * @param values           the values
-   */
+  /** Initializes the generator to an unweighted sample list */
   @SafeVarargs
   public IndividualWeightSampleGenerator(Class<E> generatedType, IndividualWeight<E> individualWeight, E... values) {
     super(generatedType);
@@ -84,13 +68,7 @@ public class IndividualWeightSampleGenerator<E> extends AbstractSampleGenerator<
     setValues(values);
   }
 
-  /**
-   * Initializes the generator to an unweighted sample list
-   *
-   * @param generatedType    the generated type
-   * @param individualWeight the individual weight
-   * @param values           the values
-   */
+  /** Initializes the generator to an unweighted sample list */
   public IndividualWeightSampleGenerator(Class<E> generatedType, IndividualWeight<E> individualWeight, Iterable<E> values) {
     super(generatedType);
     Assert.notNull(individualWeight, "individualWeight");
@@ -100,11 +78,8 @@ public class IndividualWeightSampleGenerator<E> extends AbstractSampleGenerator<
 
   // samples property ------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets the sample list to the specified weighted values
-   *
-   * @param samples the samples
-   */
+  /** Sets the sample list to the specified weighted values
+   *  @param samples the samples */
   @SafeVarargs
   public final void setSamples(E... samples) {
     this.samples.clear();
@@ -141,13 +116,11 @@ public class IndividualWeightSampleGenerator<E> extends AbstractSampleGenerator<
 
   // Generator implementation ----------------------------------------------------------------------------------------
 
-  /**
-   * Initializes all attributes
-   */
+  /** Initializes all attributes */
   @Override
   public void init(GeneratorContext context) {
     assertNotInitialized();
-    indexGenerator = new WeightedLongGenerator(0, samples.size() - 1, 1, new SampleWeightFunction());
+    indexGenerator = new WeightedLongGenerator(0, samples.size() - 1L, 1L, new SampleWeightFunction());
     indexGenerator.init(context);
     super.init(context);
   }
@@ -155,12 +128,13 @@ public class IndividualWeightSampleGenerator<E> extends AbstractSampleGenerator<
   @Override
   public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
     assertInitialized();
-    if (samples.size() == 0) {
+    if (samples.isEmpty()) {
       return null;
     }
     int index = indexGenerator.generate().intValue();
     return wrapper.wrap(samples.get(index));
   }
+
 
   // implementation --------------------------------------------------------------------------------------------------
 
@@ -169,17 +143,13 @@ public class IndividualWeightSampleGenerator<E> extends AbstractSampleGenerator<
    */
   class SampleWeightFunction extends AbstractWeightFunction {
 
-    /**
-     * @see WeightFunction#value(double)
-     */
+    /** @see com.rapiddweller.benerator.distribution.WeightFunction#value(double) */
     @Override
     public double value(double param) {
       return individualWeight.weight(samples.get((int) param));
     }
 
-    /**
-     * creates a String representation
-     */
+    /** creates a String representation */
     @Override
     public String toString() {
       return getClass().getSimpleName();

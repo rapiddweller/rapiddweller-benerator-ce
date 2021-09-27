@@ -45,19 +45,18 @@ import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.array.Array2EntityConverter;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Iterates a single sheet of an XLS document and maps its rows to entities.<br/><br/>
  * Created: 23.06.2014 17:20:19
- *
  * @author Volker Bergmann
  * @since 0.9.5
  */
@@ -81,43 +80,18 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Single sheet xls entity iterator.
-   *
-   * @param uri          the uri
-   * @param sheetName    the sheet name
-   * @param preprocessor the preprocessor
-   * @param entityType   the entity type
-   * @param context      the context
-   * @param rowBased     the row based
-   * @param formatted    the formatted
-   * @param emptyMarker  the empty marker
-   * @throws InvalidFormatException the invalid format exception
-   * @throws IOException            the io exception
-   */
   public SingleSheetXLSEntityIterator(String uri, String sheetName,
                                       Converter<String, ?> preprocessor,
                                       ComplexTypeDescriptor entityType,
                                       BeneratorContext context,
                                       boolean rowBased, boolean formatted,
                                       String emptyMarker)
-      throws InvalidFormatException, IOException {
+      throws IOException {
     this(loadSheet(uri, sheetName), preprocessor, entityType, context,
         rowBased, formatted, emptyMarker);
     this.uri = uri;
   }
 
-  /**
-   * Instantiates a new Single sheet xls entity iterator.
-   *
-   * @param sheet            the sheet
-   * @param preprocessor     the preprocessor
-   * @param entityDescriptor the entity descriptor
-   * @param context          the context
-   * @param rowBased         the row based
-   * @param formatted        the formatted
-   * @param emptyMarker      the empty marker
-   */
   public SingleSheetXLSEntityIterator(Sheet sheet,
                                       Converter<String, ?> preprocessor,
                                       ComplexTypeDescriptor entityDescriptor,
@@ -173,45 +147,18 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
 
   // DataIterator interface implementation ---------------------------------------------------------------------------
 
-  /**
-   * Parse all list.
-   *
-   * @param uri          the uri
-   * @param sheetName    the sheet name
-   * @param preprocessor the preprocessor
-   * @param type         the type
-   * @param context      the context
-   * @param rowBased     the row based
-   * @param formatted    the formatted
-   * @param emptyMarker  the empty marker
-   * @return the list
-   * @throws IOException            the io exception
-   * @throws InvalidFormatException the invalid format exception
-   */
   public static List<Entity> parseAll(String uri, String sheetName,
                                       Converter<String, ?> preprocessor,
                                       ComplexTypeDescriptor type,
                                       BeneratorContext context,
                                       boolean rowBased, boolean formatted,
                                       String emptyMarker)
-      throws IOException, InvalidFormatException {
+      throws IOException {
     Sheet sheet = loadSheet(uri, sheetName);
     return parseAll(sheet, preprocessor, type, context, rowBased, formatted,
         emptyMarker);
   }
 
-  /**
-   * Parse all list.
-   *
-   * @param sheet        the sheet
-   * @param preprocessor the preprocessor
-   * @param type         the type
-   * @param context      the context
-   * @param rowBased     the row based
-   * @param formatted    the formatted
-   * @param emptyMarker  the empty marker
-   * @return the list
-   */
   public static List<Entity> parseAll(Sheet sheet,
                                       Converter<String, ?> preprocessor,
                                       ComplexTypeDescriptor type,
@@ -231,26 +178,25 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
 
   private static Sheet loadSheet(String uri, String sheetName)
       throws IOException {
-    Workbook workbook =
-        WorkbookFactory.create(IOUtil.getInputStreamForURI(uri));
-    Sheet sheet = workbook.getSheet(sheetName);
-    if (sheet == null) {
-      throw new ConfigurationError(
-          "Sheet '" + sheetName + "' not found in file " + uri);
+    try (InputStream stream = IOUtil.getInputStreamForURI(uri)) {
+      try (Workbook workbook = WorkbookFactory.create(stream)) {
+        Sheet sheet = workbook.getSheet(sheetName);
+        if (sheet == null) {
+          throw new ConfigurationError("Sheet '" + sheetName + "' not found in file " + uri);
+        }
+        return sheet;
+      }
     }
-    return sheet;
   }
 
 
   // convenience methods ---------------------------------------------------------------------------------------------
 
   private static String[] normalizeHeaders(Object[] rawHeaders) {
-    String[] headers = (String[]) ConverterManager
-        .convertAll(rawHeaders, new ToStringConverter(), String.class);
+    String[] headers = (String[]) ConverterManager.convertAll(rawHeaders, new ToStringConverter(), String.class);
     StringUtil.trimAll(headers);
     int lastNonEmptyIndex = headers.length - 1;
-    while (lastNonEmptyIndex >= 0 &&
-        StringUtil.isEmpty(headers[lastNonEmptyIndex])) {
+    while (lastNonEmptyIndex >= 0 && StringUtil.isEmpty(headers[lastNonEmptyIndex])) {
       lastNonEmptyIndex--;
     }
     if (lastNonEmptyIndex < headers.length - 1) {
@@ -301,8 +247,7 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
   private DataIterator<Object[]> createRawIterator(Sheet sheet,
                                                    boolean rowBased,
                                                    Converter<String, ?> preprocessor) {
-    XLSLineIterator iterator =
-        new XLSLineIterator(sheet, false, formatted, preprocessor);
+    XLSLineIterator iterator = new XLSLineIterator(sheet, false, formatted, preprocessor);
     if (emptyMarker != null) {
       iterator.setEmptyMarker(emptyMarker);
     }
@@ -314,8 +259,7 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
 
   private ComplexTypeDescriptor createDescriptor(String entityTypeName) {
     ComplexTypeDescriptor descriptor;
-    descriptor = new ComplexTypeDescriptor(entityTypeName,
-        context.getLocalDescriptorProvider());
+    descriptor = new ComplexTypeDescriptor(entityTypeName, context.getLocalDescriptorProvider());
     context.addLocalType(descriptor);
     return descriptor;
   }
@@ -324,12 +268,9 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
     String colRefPrefix = PlatformDescriptor.getCollectionReferencePrefix();
     for (int i = 0; i < rawData.length; i++) {
       Object cellValue = rawData[i];
-      if (cellValue instanceof String &&
-          ((String) cellValue).startsWith(colRefPrefix)) {
-        String tabName =
-            ((String) cellValue).substring(colRefPrefix.length());
-        ComponentDescriptor component =
-            entityDescriptor.getComponent(headers[i]);
+      if (cellValue instanceof String && ((String) cellValue).startsWith(colRefPrefix)) {
+        String tabName = ((String) cellValue).substring(colRefPrefix.length());
+        ComponentDescriptor component = entityDescriptor.getComponent(headers[i]);
         ComplexTypeDescriptor componentType = (component != null ?
             (ComplexTypeDescriptor) component.getTypeDescriptor() :
             null);
@@ -340,23 +281,19 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
 
   private Entity[] mapTabToArray(String tabName, ComplexTypeDescriptor type) {
     Sheet sheet = getSheet(tabName);
-    List<Entity> elements =
-        parseAll(sheet, preprocessor, type, context, rowBased,
-            formatted, emptyMarker);
+    List<Entity> elements = parseAll(sheet, preprocessor, type, context, rowBased, formatted, emptyMarker);
     return CollectionUtil.toArray(elements, Entity.class);
   }
 
   private Sheet getSheet(String tabName) {
     for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
       Sheet candidate = workbook.getSheetAt(i);
-      if (candidate.getSheetName().trim()
-          .equalsIgnoreCase(tabName.trim())) {
+      if (candidate.getSheetName().trim().equalsIgnoreCase(tabName.trim())) {
         return candidate;
       }
     }
     // tab not found
-    throw new ConfigurationError("Tab '" + tabName + "' not found" +
-        (uri != null ? " in " + uri : ""));
+    throw new ConfigurationError("Tab '" + tabName + "' not found" + (uri != null ? " in " + uri : ""));
   }
 
 
