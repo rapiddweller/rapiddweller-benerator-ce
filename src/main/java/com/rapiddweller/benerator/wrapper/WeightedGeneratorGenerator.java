@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.sample.AttachedWeightSampleGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.Weighted;
 
 import java.util.ArrayList;
@@ -116,7 +117,7 @@ public class WeightedGeneratorGenerator<E> extends MultiGeneratorWrapper<E, Gene
   @Override
   public synchronized void close() {
     super.close();
-    indexGenerator.close();
+    IOUtil.close(indexGenerator);
   }
 
 }
