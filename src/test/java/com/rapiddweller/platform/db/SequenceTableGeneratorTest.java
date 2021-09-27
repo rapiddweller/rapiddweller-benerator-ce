@@ -45,20 +45,13 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the {@link SequenceTableGenerator}.<br/><br/>
  * Created: 09.08.2010 14:51:40
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class SequenceTableGeneratorTest extends GeneratorTest {
 
-  /**
-   * The Db.
-   */
   static DefaultDBSystem db;
 
-  /**
-   * Sets db.
-   */
   @BeforeClass
   public static void setupDB() {
     db = new DefaultDBSystem("db", HSQLUtil.getInMemoryURL(SequenceTableGeneratorTest.class.getSimpleName()), HSQLUtil.DRIVER, "sa", null,
@@ -68,27 +61,18 @@ public class SequenceTableGeneratorTest extends GeneratorTest {
     db.execute("insert into TT (id1, id2, value) values (2, 3, 2000)");
   }
 
-  /**
-   * Sets table.
-   */
   @Before
   public void setupTable() {
     db.execute("update TT set value = 1000 where id1 = 1 and id2 = 2");
     db.execute("update TT set value = 2000 where id1 = 2 and id2 = 3");
   }
 
-  /**
-   * Close db.
-   */
   @AfterClass
   public static void closeDB() {
     db.execute("drop table TT");
     IOUtil.close(db);
   }
 
-  /**
-   * Test static.
-   */
   @Test
   public void testStatic() {
     SequenceTableGenerator<Integer> generator = null;
@@ -105,9 +89,6 @@ public class SequenceTableGeneratorTest extends GeneratorTest {
     }
   }
 
-  /**
-   * Test dynamic selector.
-   */
   @Test
   public void testDynamicSelector() {
     SequenceTableGenerator<Integer> generator = null;
@@ -130,9 +111,6 @@ public class SequenceTableGeneratorTest extends GeneratorTest {
     }
   }
 
-  /**
-   * Test parameterized selector.
-   */
   @Test
   public void testParameterizedSelector() {
     SequenceTableGenerator<Integer> generator = null;
@@ -148,11 +126,6 @@ public class SequenceTableGeneratorTest extends GeneratorTest {
     }
   }
 
-  /**
-   * Test integration.
-   *
-   * @throws Exception the exception
-   */
   @SuppressWarnings("unchecked")
   @Test
   public void testIntegration() throws Exception {

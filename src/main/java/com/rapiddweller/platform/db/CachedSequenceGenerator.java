@@ -38,7 +38,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * This saves database round trips but limits execution to a single
  * client.<br/><br/>
  * Created: 11.11.2009 18:35:26
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -46,19 +45,10 @@ public class CachedSequenceGenerator extends AbstractSequenceGenerator {
 
   private AtomicLong cacheValue;
 
-  /**
-   * Instantiates a new Cached sequence generator.
-   */
   public CachedSequenceGenerator() {
     this(null, null);
   }
 
-  /**
-   * Instantiates a new Cached sequence generator.
-   *
-   * @param name     the name
-   * @param database the database
-   */
   public CachedSequenceGenerator(String name, DBSystem database) {
     super(name, database);
   }

@@ -438,13 +438,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   }
 
   private static Generator<String> createStringGenerator(SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
-    // evaluate max length
-    Integer maxLength = null;
-    SimpleTypeDescriptor tmp = descriptor;
-    while (maxLength == null && tmp != null) {
-      maxLength = tmp.getMaxLength();
-      tmp = tmp.getParent();
-    }
+    Integer maxLength = evaluateMaxLength(descriptor);
 
     // check pattern against null
     String pattern = ToStringConverter.convert(descriptor.getDetailValue(PATTERN), null);
@@ -459,8 +453,18 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
         lengthDistribution, uniqueness);
   }
 
+  private static Integer evaluateMaxLength(SimpleTypeDescriptor descriptor) {
+    Integer maxLength = null;
+    SimpleTypeDescriptor tmp = descriptor;
+    while (maxLength == null && tmp != null) {
+      maxLength = tmp.getMaxLength();
+      tmp = tmp.getParent();
+    }
+    return maxLength;
+  }
+
   @SuppressWarnings("unchecked")
-  protected static <A extends Annotation, T> Validator<T> createRestrictionValidator(
+  protected static <T> Validator<T> createRestrictionValidator(
       SimpleTypeDescriptor descriptor, boolean nullable, GeneratorFactory context) {
     if ((descriptor.getMinLength() != null || descriptor.getMaxLength() != null) && "string".equals(descriptor.getName())) {
       Integer minLength = DescriptorUtil.getMinLength(descriptor);

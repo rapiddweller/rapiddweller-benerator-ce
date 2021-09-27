@@ -69,6 +69,7 @@ import java.util.Map;
 public class Country {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Country.class);
+  private static final String COUNTRY_CSV = "/com/rapiddweller/domain/address/country.csv";
   private static final RandomProvider RANDOM = BeneratorFactory.getInstance().getRandomProvider();
   private static final String DEFAULT_PHONE_CODE = "[2-9][0-9][0-9]";
   private static final String DEFAULT_MOBILE_PHONE_PATTERN = "[1-9][0-9][0-9]";
@@ -257,41 +258,27 @@ public class Country {
   }
 
   private static void parseConfigFile() {
-    CSVLineIterator iterator = null;
-    try {
-      String fileName = "/com/rapiddweller/domain/address/country.csv";
-      iterator = new CSVLineIterator(fileName, ',', true);
-      LOGGER.debug("Parsing country setup file {}", fileName);
+    try (CSVLineIterator iterator = new CSVLineIterator(COUNTRY_CSV, ',', true)) {
+      LOGGER.debug("Parsing country setup file {}", COUNTRY_CSV);
       DataContainer<String[]> container = new DataContainer<>();
       while ((container = iterator.next(container)) != null) {
         String[] cells = container.getData();
         String isoCode = cells[0];
-        String defaultLocale =
-            (cells.length > 1 && !StringUtil.isEmpty(cells[1]) ?
-                cells[1].trim() : "en");
-        String phoneCode =
-            (cells.length > 2 && !StringUtil.isEmpty(cells[2]) ?
-                cells[2].trim() : null);
-        String mobilCodePattern =
-            (cells.length > 3 && !StringUtil.isEmpty(cells[3]) ?
-                cells[3].trim() : DEFAULT_MOBILE_PHONE_PATTERN);
-        String name = (cells.length > 4 ? cells[4].trim() : null);
-        int population =
-            (cells.length > 5 ? Integer.parseInt(cells[5].trim()) :
-                1000000);
-        Country country =
-            new Country(isoCode, defaultLocale, population,
-                phoneCode, mobilCodePattern, name);
+        String defaultLocale = cellValueOrDefault(cells, 1, "en");
+        String phoneCode = cellValueOrDefault(cells, 2, null);
+        String mobilCodePattern = cellValueOrDefault(cells, 3, DEFAULT_MOBILE_PHONE_PATTERN);
+        String name = cellValueOrDefault(cells, 4, null);
+        int population = Integer.parseInt(cellValueOrDefault(cells, 5, "1000000"));
+        Country country = new Country(isoCode, defaultLocale, population, phoneCode, mobilCodePattern, name);
         LOGGER.debug("Parsed country {}", country);
       }
     } catch (IOException e) {
-      throw new ConfigurationError(
-          "Country definition file could not be processed. ", e);
-    } finally {
-      if (iterator != null) {
-        iterator.close();
-      }
+      throw new ConfigurationError("Error processing Country definition file. ", e);
     }
+  }
+
+  private static String cellValueOrDefault(String[] cells, int index, String defaultValue) {
+    return (cells.length > index && !StringUtil.isEmpty(cells[index]) ? cells[index].trim() : defaultValue);
   }
 
   private void importStates() {
@@ -402,17 +389,16 @@ public class Country {
   }
 
   public PhoneNumber generateMobileNumber(City city) {
-    String localNumber = generateString(localNumberGenerator);
     String mobilePrefix = mobilePrefixGenerator.generate();
+    String localNumber = generateString(localNumberGenerator);
+    if (localNumber == null)
+      return null;
     if (mobilePhoneCityRelated) {
-      return new PhoneNumber(phoneCode,
-          city != null ? city.getAreaCode() : null,
-          mobilePrefix +
-              localNumber.substring(mobilePrefix.length()));
+      String cityCode = city != null ? city.getAreaCode() : null;
+      localNumber = mobilePrefix + localNumber.substring(mobilePrefix.length());
+      return new PhoneNumber(phoneCode, cityCode, localNumber);
     } else {
-      return new PhoneNumber(phoneCode,
-          mobilePrefix,
-          localNumber);
+      return new PhoneNumber(phoneCode, mobilePrefix, localNumber);
     }
   }
 

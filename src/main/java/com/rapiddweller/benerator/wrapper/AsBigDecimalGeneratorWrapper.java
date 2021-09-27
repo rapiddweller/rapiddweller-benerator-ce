@@ -31,12 +31,12 @@ import com.rapiddweller.common.MathUtil;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Converts the {@link Number} products of another {@link Generator} to {@link BigDecimal}.<br/>
- * <br/>
+ * Converts the {@link Number} products of another {@link Generator} to {@link BigDecimal}.<br/><br/>
  * Created at 23.06.2009 22:58:26
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -44,23 +44,12 @@ import java.math.MathContext;
 public class AsBigDecimalGeneratorWrapper<E extends Number> extends GeneratorWrapper<E, BigDecimal> {
 
   private int fractionDigits;
+  private static Map<Integer, MathContext> contexts = new HashMap<>();
 
-  /**
-   * Instantiates a new As big decimal generator wrapper.
-   *
-   * @param source the source
-   */
   public AsBigDecimalGeneratorWrapper(Generator<E> source) {
     this(source, null, null);
   }
 
-  /**
-   * Instantiates a new As big decimal generator wrapper.
-   *
-   * @param source      the source
-   * @param min         the min
-   * @param granularity the granularity
-   */
   public AsBigDecimalGeneratorWrapper(Generator<E> source, BigDecimal min, BigDecimal granularity) {
     super(source);
     if (granularity != null) {
@@ -86,11 +75,25 @@ public class AsBigDecimalGeneratorWrapper<E extends Number> extends GeneratorWra
     if (tmp == null) {
       return null;
     }
-    E feed = tmp.unwrap();
-    double d = feed.doubleValue();
-    int prefixDigits = (Math.floor(d) == 0. ? 0 : MathUtil.prefixDigitCount(d));
-    MathContext mathcontext = new MathContext(prefixDigits + fractionDigits);
-    return wrapper.wrap(new BigDecimal(d, mathcontext));
+    String s = tmp.unwrap().toString();
+    return wrapper.wrap(createBigDecimal(s));
+  }
+
+  private BigDecimal createBigDecimal(String s) {
+    int prefixDigits = countPrefixDigits(s);
+    MathContext mathcontext = getMathContext(prefixDigits + fractionDigits);
+    return new BigDecimal(s, mathcontext);
+  }
+
+  private MathContext getMathContext(int totalDigits) {
+    return contexts.computeIfAbsent(totalDigits, k -> new MathContext(totalDigits));
+  }
+
+  private static int countPrefixDigits(String s) {
+    int sepIndex = s.indexOf('.');
+    if (s.startsWith("-"))
+      sepIndex--;
+    return (sepIndex > 0 && s.charAt(sepIndex - 1) == '0' ? sepIndex - 1 : sepIndex);
   }
 
 }

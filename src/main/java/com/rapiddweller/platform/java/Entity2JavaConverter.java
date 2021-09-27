@@ -39,27 +39,16 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Converts entities and entity arrays to Java beans and bean arrays.<br/>
- * <br/>
+ * Converts entities and entity arrays to Java beans and bean arrays.<br/><br/>
  * Created: 29.08.2007 08:50:24
- *
  * @author Volker Bergmann
  */
 public class Entity2JavaConverter extends ThreadSafeConverter<Object, Object> {
 
-  /**
-   * Instantiates a new Entity 2 java converter.
-   */
   public Entity2JavaConverter() {
     super(Object.class, Object.class);
   }
 
-  /**
-   * Convert any object.
-   *
-   * @param entityOrArray the entity or array
-   * @return the object
-   */
   public static Object convertAny(Object entityOrArray) {
     if (entityOrArray == null) {
       return null;
@@ -72,13 +61,6 @@ public class Entity2JavaConverter extends ThreadSafeConverter<Object, Object> {
     }
   }
 
-  /**
-   * Convert any object.
-   *
-   * @param entityOrArray the entity or array
-   * @param targetType    the target type
-   * @return the object
-   */
   public static Object convertAny(Object entityOrArray, Class<?> targetType) {
     if (entityOrArray == null) {
       return null;
@@ -136,7 +118,7 @@ public class Entity2JavaConverter extends ThreadSafeConverter<Object, Object> {
     }
     if (propertyType.isArray()) {
       return propertyType.getComponentType();
-    } else if (Collection.class.isAssignableFrom(propertyType)) {
+    } else if (Collection.class.isAssignableFrom(propertyType) && propertyDescriptor != null) {
       return getCollectionType(propertyDescriptor);
     } else {
       return propertyType;

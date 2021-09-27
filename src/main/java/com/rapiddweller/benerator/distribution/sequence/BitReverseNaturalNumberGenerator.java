@@ -105,7 +105,7 @@ public class BitReverseNaturalNumberGenerator extends ThreadSafeNonNullGenerator
   private void initMembers() {
     cursor = 0;
     bitsUsed = NumberUtil.bitsUsed(max);
-    this.maxCursor = (1 << bitsUsed) + 1;
+    this.maxCursor = (1 << bitsUsed) + 1L;
   }
 
   private long cursorReversed() {

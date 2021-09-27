@@ -49,7 +49,6 @@ import java.sql.Statement;
 /**
  * Uses a database table to fetch and increment values like a database sequence.<br/><br/>
  * Created: 09.08.2010 14:44:06
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.4
@@ -57,10 +56,7 @@ import java.sql.Statement;
 public class SequenceTableGenerator<E extends Number>
     extends UnsafeNonNullGenerator<E> {
 
-  /**
-   * The Increment.
-   */
-  protected final Long increment = 1L;
+  protected long increment;
   private String table;
   private String column;
   private DBSystem database;
@@ -69,74 +65,41 @@ public class SequenceTableGenerator<E extends Number>
   private IncrementorStrategy incrementorStrategy;
   private PreparedStatement parameterizedAccessorStatement;
 
-  /**
-   * Instantiates a new Sequence table generator.
-   */
   public SequenceTableGenerator() {
     this(null, null, null);
   }
 
-  /**
-   * Instantiates a new Sequence table generator.
-   *
-   * @param table  the table
-   * @param column the column
-   * @param db     the db
-   */
   public SequenceTableGenerator(String table, String column, DBSystem db) {
     this(table, column, db, null);
   }
 
-  /**
-   * Instantiates a new Sequence table generator.
-   *
-   * @param table    the table
-   * @param column   the column
-   * @param db       the db
-   * @param selector the selector
-   */
   public SequenceTableGenerator(String table, String column, DBSystem db,
                                 String selector) {
     this.table = table;
     this.column = column;
     this.database = db;
     this.selector = selector;
+    this.increment = 1L;
   }
 
-  /**
-   * Sets table.
-   *
-   * @param table the table
-   */
   public void setTable(String table) {
     this.table = table;
   }
 
-  /**
-   * Sets column.
-   *
-   * @param column the column
-   */
   public void setColumn(String column) {
     this.column = column;
   }
 
-  /**
-   * Sets database.
-   *
-   * @param db the db
-   */
   public void setDatabase(DBSystem db) {
     this.database = db;
   }
 
-  /**
-   * Sets selector.
-   *
-   * @param selector the selector
-   */
   public void setSelector(String selector) {
     this.selector = selector;
+  }
+
+  public void setIncrement(long increment) {
+    this.increment = increment;
   }
 
   // Generator interface implementation ------------------------------------------------------------------------------
@@ -165,9 +128,6 @@ public class SequenceTableGenerator<E extends Number>
   }
 
   private IncrementorStrategy createIncrementor() {
-    if (increment == null) {
-      return null;
-    }
     String incrementorSql = "update " + table + " set " + column + " = ?";
     if (selector != null) {
       incrementorSql = ScriptUtil
@@ -199,20 +159,13 @@ public class SequenceTableGenerator<E extends Number>
         return null;
       }
       result = (E) container.getData();
-      incrementorStrategy
-          .run(result.longValue(), (BeneratorContext) context);
+      incrementorStrategy.run(result.longValue(), (BeneratorContext) context);
     } finally {
       IOUtil.close(iterator);
     }
     return result;
   }
 
-  /**
-   * Generate with params e.
-   *
-   * @param params the params
-   * @return the e
-   */
   @SuppressWarnings({"unchecked", "cast"})
   public E generateWithParams(Object... params) {
     if (this.state == GeneratorState.CLOSED) {
@@ -263,36 +216,18 @@ public class SequenceTableGenerator<E extends Number>
 
   // IncrementorStrategy ---------------------------------------------------------------------------------------------
 
-  /**
-   * The interface Incrementor strategy.
-   */
   interface IncrementorStrategy extends Closeable {
-    /**
-     * Run.
-     *
-     * @param currentValue the current value
-     * @param context      the context
-     * @param params       the params
-     */
     void run(long currentValue, BeneratorContext context, Object... params);
 
     @Override
     void close();
   }
 
-  /**
-   * The type Prepared statement strategy.
-   */
+
   class PreparedStatementStrategy implements IncrementorStrategy {
 
     private final PreparedStatement statement;
 
-    /**
-     * Instantiates a new Prepared statement strategy.
-     *
-     * @param incrementorSql the incrementor sql
-     * @param db             the db
-     */
     public PreparedStatementStrategy(String incrementorSql, DBSystem db) {
       try {
         statement = db.getConnection().prepareStatement(incrementorSql);
@@ -321,20 +256,12 @@ public class SequenceTableGenerator<E extends Number>
     }
   }
 
-  /**
-   * The type Statement strategy.
-   */
+
   class StatementStrategy implements IncrementorStrategy {
 
     private final Statement statement;
     private final String sql;
 
-    /**
-     * Instantiates a new Statement strategy.
-     *
-     * @param sql the sql
-     * @param db  the db
-     */
     public StatementStrategy(String sql, DBSystem db) {
       try {
         this.statement = db.getConnection().createStatement();
