@@ -47,9 +47,8 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the {@link SequencedCSVSampleGenerator}.<br/>
+ * Tests the {@link SequencedCSVSampleGenerator}.<br/><br/>
  * Created: 26.07.2007 18:16:11
- *
  * @author Volker Bergmann
  */
 public class SequencedCSVSampleGeneratorTest extends GeneratorClassTest {
