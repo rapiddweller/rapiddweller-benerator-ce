@@ -372,29 +372,6 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.7</version>
-                <configuration>
-                    <excludes>
-                        <exclude>com/rapiddweller/task/**/*</exclude>
-                        <exclude>com/rapiddweller/benerator/template/**/*</exclude>
-                        <exclude>com/rapiddweller/benerator/gui/**/*</exclude>
-                        <exclude>com/rapiddweller/benerator/anno/**/*</exclude>
-                        <exclude>com/rapiddweller/benerator/wrapper/**/*</exclude>
-                        <exclude>com/rapiddweller/benerator/engine/AbstractBeneratorSubContext.class</exclude>
-                        <exclude>com/rapiddweller/benerator/main/Benerator.class</exclude>
-                        <exclude>com/rapiddweller/benerator/main/Benchmark.class</exclude>
-                        <exclude>com/rapiddweller/benerator/main/DBSnapshotTool.class</exclude>
-                        <exclude>com/rapiddweller/benerator/main/BeneratorGUI.class</exclude>
-                        <exclude>com/rapiddweller/benerator/main/BeneratorGUI.BeneratorGUIFrame.class</exclude>
-                        <exclude>com/rapiddweller/benerator/main/NewProjectWizard.class</exclude>
-                        <exclude>com/rapiddweller/benerator/main/TemplateRunner.class</exclude>
-                        <exclude>com/rapiddweller/domain/address/Address.class</exclude>
-                        <exclude>com/rapiddweller/domain/address/CityManager.class</exclude>
-                        <exclude>com/rapiddweller/domain/address/AddressFormat.class</exclude>
-                        <exclude>com/rapiddweller/benerator/archetype/**/*</exclude>
-                        <exclude>com/rapiddweller/platform/xml/XMLSchemaDescriptorProvider.class</exclude>
-                        <exclude>com/rapiddweller/benerator/factory/**/*</exclude>
-                    </excludes>
-                </configuration>
                 <executions>
                     <execution>
                         <id>before-unit-test-execution</id>
@@ -488,8 +465,9 @@
                     <skipTests>${skipUTs}</skipTests>
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <excludes>
-                        <exclude>**/*DemoIntegrationTest*.class</exclude>
+                        <exclude>**/*ShopDemoIntegrationExtDBTest*.class</exclude>
                     </excludes>
+                    <!--suppress UnresolvedMavenProperty -->
                     <argLine>${surefire.jacoco.args}</argLine>
                 </configuration>
             </plugin>
@@ -498,7 +476,7 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <includes>
-                        <include>**/*DemoIntegrationTest.class</include>
+                        <include>**/*ShopDemoIntegrationExtDBTest.class</include>
                     </includes>
                     <skipTests>${skipTests}</skipTests>
                     <skipITs>${skipITs}</skipITs>
@@ -511,6 +489,7 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
+                            <!--suppress UnresolvedMavenProperty -->
                             <argLine>${failsafe.jacoco.args}</argLine>
                         </configuration>
                     </execution>
