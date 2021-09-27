@@ -31,78 +31,37 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 import com.rapiddweller.common.StringUtil;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 
 /**
  * Abstract parent class for database-sequence-related {@link Generator}s.<br/><br/>
  * Created: 24.07.2011 06:16:59
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
-public abstract class AbstractSequenceGenerator
-    extends ThreadSafeNonNullGenerator<Long> {
+public abstract class AbstractSequenceGenerator extends ThreadSafeNonNullGenerator<Long> {
 
-  /**
-   * The Logger.
-   */
-  protected final Logger logger = LoggerFactory.getLogger(getClass());
-
-  /**
-   * The Name.
-   */
   protected String name;
-  /**
-   * The Database.
-   */
   protected DBSystem database;
 
-  /**
-   * Instantiates a new Abstract sequence generator.
-   *
-   * @param name     the name
-   * @param database the database
-   */
-  public AbstractSequenceGenerator(String name, DBSystem database) {
+  protected AbstractSequenceGenerator(String name, DBSystem database) {
     this.name = name;
     this.database = database;
   }
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets name.
-   *
-   * @return the name
-   */
   public String getName() {
     return name;
   }
 
-  /**
-   * Sets name.
-   *
-   * @param name the name
-   */
   public void setName(String name) {
     this.name = name;
   }
 
-  /**
-   * Gets database.
-   *
-   * @return the database
-   */
   public DBSystem getDatabase() {
     return database;
   }
 
-  /**
-   * Sets database.
-   *
-   * @param database the database
-   */
   public void setDatabase(DBSystem database) {
     this.database = database;
   }
@@ -115,25 +74,18 @@ public abstract class AbstractSequenceGenerator
   }
 
   @Override
-  public synchronized void init(GeneratorContext context) {
+  public void init(GeneratorContext context) {
     if (database == null) {
-      throw new InvalidGeneratorSetupException(
-          "No 'source' database defined");
+      throw new InvalidGeneratorSetupException("No 'source' database defined");
     }
     if (StringUtil.isEmpty(name)) {
-      throw new InvalidGeneratorSetupException(
-          "No sequence 'name' defined");
+      throw new InvalidGeneratorSetupException("No sequence 'name' defined");
     }
     super.init(context);
   }
 
   // helpers ---------------------------------------------------------------------------------------------------------
 
-  /**
-   * Fetch sequence value long.
-   *
-   * @return the long
-   */
   protected long fetchSequenceValue() {
     return database.nextSequenceValue(name);
   }
