@@ -42,6 +42,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Objects;
 
 import static com.rapiddweller.jdbacl.dialect.HSQLUtil.DEFAULT_PASSWORD;
 import static com.rapiddweller.jdbacl.dialect.HSQLUtil.DEFAULT_USER;
@@ -109,10 +110,12 @@ public class DBSystemTest {
     try {
       // test drop w/ readOnly in createStatement
       Statement statement = null;
+
+      connection = db.createConnection();
+      statement = connection.createStatement();
+
       try {
-        connection = db.createConnection();
-        statement = connection.createStatement();
-        statement.execute("drop table Test");
+        Objects.requireNonNull(statement).execute("drop table Test");
         fail("Exception expected in execute()");
       } catch (Exception e) {
         // That's the required behavior!
@@ -128,6 +131,8 @@ public class DBSystemTest {
       } catch (Exception e) {
         // That's the required behavior!
       }
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
     } finally {
       DBUtil.close(connection);
     }
