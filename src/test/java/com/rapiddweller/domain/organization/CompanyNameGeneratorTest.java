@@ -38,55 +38,36 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the CompanyNameGenerator.<br/><br/>
  * Created: 14.03.2008 08:31:26
- *
  * @author Volker Bergmann
  */
 public class CompanyNameGeneratorTest extends GeneratorClassTest {
 
   private static final Logger logger = LoggerFactory.getLogger(CompanyNameGeneratorTest.class);
 
-  /**
-   * Instantiates a new Company name generator test.
-   */
   public CompanyNameGeneratorTest() {
     super(CompanyNameGenerator.class);
   }
 
-  /**
-   * Test germany.
-   */
   @Test
   public void testGermany() {
     check("DE");
   }
 
-  /**
-   * Test usa.
-   */
   @Test
   public void testUSA() {
     check("US");
   }
 
-  /**
-   * Test brazil.
-   */
   @Test
   public void testBrazil() {
     check("BR");
   }
 
-  /**
-   * Test xx.
-   */
   @Test(expected = ConfigurationError.class)
   public void testXX() {
     check("XX");
   }
 
-  /**
-   * Test generate for dach.
-   */
   @Test
   public void testGenerateForDACH() {
     CompanyNameGenerator generator = new CompanyNameGenerator("dach");
@@ -102,9 +83,6 @@ public class CompanyNameGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test world.
-   */
   @Test
   public void testWorld() {
     CompanyNameGenerator generator = new CompanyNameGenerator("world");
@@ -120,11 +98,6 @@ public class CompanyNameGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Check.
-   *
-   * @param dataset the dataset
-   */
   public void check(String dataset) {
     CompanyNameGenerator generator = new CompanyNameGenerator(dataset);
     generator.init(context);

@@ -41,15 +41,11 @@ import static org.junit.Assert.assertSame;
 /**
  * Tests the {@link CountryGenerator}.<br/><br/>
  * Created: 12.06.2007 06:46:13
- *
  * @author Volker Bergmann
  * @since 0.2
  */
 public class CountryGeneratorTest extends GeneratorClassTest {
 
-  /**
-   * Test constructor.
-   */
   @Test
   public void testConstructor() {
     CountryGenerator actualCountryGenerator = new CountryGenerator();
@@ -61,9 +57,6 @@ public class CountryGeneratorTest extends GeneratorClassTest {
     assertEquals(0.0, actualCountryGenerator.getWeight(), 0.0);
   }
 
-  /**
-   * Test constructor 2.
-   */
   @Test
   public void testConstructor2() {
     CountryGenerator actualCountryGenerator = new CountryGenerator("Dataset Name");
@@ -75,16 +68,10 @@ public class CountryGeneratorTest extends GeneratorClassTest {
     assertEquals(0.0, actualCountryGenerator.getWeight(), 0.0);
   }
 
-  /**
-   * Instantiates a new Country generator test.
-   */
   public CountryGeneratorTest() {
     super(CountryGenerator.class);
   }
 
-  /**
-   * Test default generation.
-   */
   @Test
   public void testDefaultGeneration() {
     CountryGenerator generator = new CountryGenerator();
@@ -96,9 +83,6 @@ public class CountryGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test weights for dach.
-   */
   @Test
   public void testWeightsForDACH() {
     CountryGenerator generator = new CountryGenerator("dach");

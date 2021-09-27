@@ -29,11 +29,11 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.common.ThreadUtil;
 
 /**
  * Causes the thread to sleep for a certain number of milliseconds.<br/><br/>
  * Created: 21.02.2010 07:46:50
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -42,31 +42,16 @@ public class WaitStatement implements Statement {
   private final NonNullGenerator<Long> durationGenerator;
   private boolean generatorInitialized = false;
 
-  /**
-   * Instantiates a new Wait statement.
-   *
-   * @param durationGenerator the duration generator
-   */
   public WaitStatement(NonNullGenerator<Long> durationGenerator) {
     this.durationGenerator = durationGenerator;
   }
 
   @Override
   public boolean execute(BeneratorContext context) {
-    try {
-      Thread.sleep(generateDuration(context));
-      return true;
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
+    ThreadUtil.sleep(generateDuration(context));
+    return true;
   }
 
-  /**
-   * Generate duration int.
-   *
-   * @param context the context
-   * @return the int
-   */
   public int generateDuration(BeneratorContext context) {
     if (!generatorInitialized) {
       durationGenerator.init(context);

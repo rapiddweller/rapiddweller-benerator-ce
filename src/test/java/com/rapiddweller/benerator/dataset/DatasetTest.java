@@ -41,7 +41,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link Dataset} features.<br/><br/>
  * Created: 21.03.2008 14:20:59
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
@@ -50,23 +49,14 @@ public class DatasetTest {
   private static final Logger logger = LoggerFactory.getLogger(DatasetTest.class);
 
   private static final String REGION = "com/rapiddweller/dataset/region";
-  /**
-   * The constant TYPE.
-   */
   public static final String TYPE = "test";
 
-  /**
-   * Test atomic set.
-   */
   @Test
   public void testAtomicSet() {
     Dataset set = DatasetUtil.getDataset(REGION, "DE");
     assertEquals("DE", set.getName());
   }
 
-  /**
-   * Test nested set.
-   */
   @Test
   public void testNestedSet() {
     Dataset eu = DatasetUtil.getDataset(REGION, "europe");

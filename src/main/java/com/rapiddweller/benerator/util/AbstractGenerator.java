@@ -49,13 +49,13 @@ public abstract class AbstractGenerator<E> implements Generator<E> {
   protected GeneratorState state;
   protected GeneratorContext context;
 
-  public AbstractGenerator() {
+  protected AbstractGenerator() {
     this.state = GeneratorState.CREATED;
     this.resultWrapperProvider = new WrapperProvider<>();
   }
 
   @Override
-  public synchronized void init(GeneratorContext context) {
+  public void init(GeneratorContext context) {
     this.context = context;
     this.state = GeneratorState.RUNNING;
   }

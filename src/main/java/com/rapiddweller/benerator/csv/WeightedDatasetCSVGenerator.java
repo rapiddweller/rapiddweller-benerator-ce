@@ -79,8 +79,8 @@ public class WeightedDatasetCSVGenerator<E> extends AbstractDatasetGenerator<E> 
     this(generatedType, filenamePattern, ',', datasetName, nesting, fallback, encoding, (Converter<String, E>) new NoOpConverter());
   }
 
-  public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, char separator, String datasetName, String nesting,
-                                     boolean fallback,
+  public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, char separator,
+                                     String datasetName, String nesting, boolean fallback,
                                      String encoding, Converter<String, E> converter) {
     super(generatedType, nesting, datasetName, fallback);
     this.filenamePattern = filenamePattern;
@@ -110,8 +110,10 @@ public class WeightedDatasetCSVGenerator<E> extends AbstractDatasetGenerator<E> 
       for (WeightedSample<E> sample : samples) {
         generator.addSample(sample.getValue(), sample.getWeight());
       }
-      if (samples.size() > 0) {
+      if (!samples.isEmpty()) {
         return new AtomicDatasetGenerator<>(generator, filename, dataset.getName());
+      } else {
+        generator.close();
       }
     }
     return null;

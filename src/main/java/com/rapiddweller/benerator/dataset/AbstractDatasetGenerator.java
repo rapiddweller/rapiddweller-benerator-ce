@@ -64,7 +64,7 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
 
   // constructor -----------------------------------------------------------------------------------------------------
 
-  public AbstractDatasetGenerator(Class<E> generatedType, String nesting, String datasetName, boolean fallback) {
+  protected AbstractDatasetGenerator(Class<E> generatedType, String nesting, String datasetName, boolean fallback) {
     super(generatedType);
     this.nesting = nesting;
     this.datasetName = datasetName;
@@ -161,9 +161,10 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
         generator.addSubDataset(subGenerator, subGenerator.getWeight());
       }
     }
-    if (generator.getSource().getSources().size() > 0) {
+    if (!generator.getSource().getSources().isEmpty()) {
       return generator;
     } else {
+      generator.close();
       return null;
     }
   }

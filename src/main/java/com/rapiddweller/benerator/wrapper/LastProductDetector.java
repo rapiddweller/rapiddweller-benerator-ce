@@ -30,10 +30,8 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 
 /**
- * Wraps another {@link Generator}, finds out which is the last generated object and tags that with "last"="true".<br/>
- * <br/>
+ * Wraps another {@link Generator}, finds out which is the last generated object and tags that with "last"="true".<br/><br/>
  * Created: 12.09.2011 12:06:26
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @see ProductWrapper#getTag(String) ProductWrapper#getTag(String)
@@ -43,17 +41,12 @@ public class LastProductDetector<E> extends GeneratorProxy<E> {
 
   private ProductWrapper<E> next;
 
-  /**
-   * Instantiates a new Last product detector.
-   *
-   * @param source the source
-   */
   public LastProductDetector(Generator<E> source) {
     super(source);
   }
 
   @Override
-  public synchronized void init(GeneratorContext context) {
+  public void init(GeneratorContext context) {
     super.init(context);
     this.next = generateFromSource();
   }

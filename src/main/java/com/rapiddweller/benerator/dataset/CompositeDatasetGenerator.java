@@ -34,8 +34,7 @@ import com.rapiddweller.benerator.wrapper.WeightedGeneratorGenerator;
 /**
  * {@link DatasetBasedGenerator} implementation which bases on a composite dataset.<br/><br/>
  * Created: 09.03.2011 11:01:04
- *
- * @param <E> the type parameter
+ * @param <E> the type of generated data
  * @author Volker Bergmann
  * @since 0.6.6
  */
@@ -46,13 +45,6 @@ public class CompositeDatasetGenerator<E> extends GeneratorWrapper<Generator<E>,
   private final boolean performFallback;
   private DatasetBasedGenerator<E> fallbackGenerator;
 
-  /**
-   * Instantiates a new Composite dataset generator.
-   *
-   * @param nesting     the nesting
-   * @param datasetName the dataset name
-   * @param fallback    the fallback
-   */
   public CompositeDatasetGenerator(String nesting, String datasetName, boolean fallback) {
     super(new WeightedGeneratorGenerator<>());
     this.nesting = nesting;
@@ -67,12 +59,6 @@ public class CompositeDatasetGenerator<E> extends GeneratorWrapper<Generator<E>,
     return (WeightedGeneratorGenerator<E>) super.getSource();
   }
 
-  /**
-   * Add sub dataset.
-   *
-   * @param generator the generator
-   * @param weight    the weight
-   */
   public void addSubDataset(DatasetBasedGenerator<E> generator, double weight) {
     getSource().addSource(generator, weight);
   }
@@ -167,12 +153,8 @@ public class CompositeDatasetGenerator<E> extends GeneratorWrapper<Generator<E>,
           // try each atomic data subset (this makes the first atomic subset the main one)
           createFallbackGeneratorFor(datasetInstance);
           if (fallbackGenerator == null) {
-            if (required) {
               throw new IllegalArgumentException("Unable to find sub generator for data subset " +
                   requestedDataset + " in " + this);
-            } else {
-              logger.warn("Falling back to data set '{}'", fallbackGenerator.getDataset());
-            }
           }
         }
         return fallbackGenerator;
