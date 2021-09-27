@@ -68,7 +68,7 @@ public class UniqueIntsGenerator extends NonNullGeneratorProxy<int[]> {
     assertNotInitialized();
     int length = getLength();
     int radix = getRadix();
-    try (NonNullGenerator<Long> colGen = new BitReverseNaturalNumberGenerator(length - 1)) {
+    try (NonNullGenerator<Long> colGen = new BitReverseNaturalNumberGenerator((long) length - 1)) {
       colGen.init(context);
       for (int i = 0; i < length; i++) {
         this.displayColumn[i] = colGen.generate().intValue();
