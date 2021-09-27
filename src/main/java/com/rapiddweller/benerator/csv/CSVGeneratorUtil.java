@@ -29,7 +29,6 @@ package com.rapiddweller.benerator.csv;
 import com.rapiddweller.benerator.dataset.DatasetUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
-import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.csv.CSVLineIterator;
 import com.rapiddweller.script.WeightedSample;
