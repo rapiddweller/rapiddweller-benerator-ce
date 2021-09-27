@@ -36,7 +36,6 @@ import java.util.Set;
 /**
  * Defines a data set that may be nested.<br/><br/>
  * Created: 21.03.2008 12:31:13
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
@@ -52,12 +51,6 @@ public class Dataset implements Named {
 
   // constructor -----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Dataset.
-   *
-   * @param type the type
-   * @param name the name
-   */
   Dataset(String type, String name) {
     if (type == null) {
       throw new IllegalArgumentException("type is null");
@@ -74,11 +67,6 @@ public class Dataset implements Named {
 
   // interface -------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets type.
-   *
-   * @return the type
-   */
   public String getType() {
     return type;
   }
@@ -88,61 +76,31 @@ public class Dataset implements Named {
     return name;
   }
 
-  /**
-   * Add parent.
-   *
-   * @param parent the parent
-   */
   public void addParent(Dataset parent) {
     this.parents.add(parent);
   }
 
-  /**
-   * Gets parents.
-   *
-   * @return the parents
-   */
   public Set<Dataset> getParents() {
     return parents;
   }
 
-  /**
-   * Add sub set.
-   *
-   * @param subSet the sub set
-   */
   public void addSubSet(Dataset subSet) {
     subSets.add(subSet);
     subSet.addParent(this);
   }
 
-  /**
-   * Gets sub sets.
-   *
-   * @return the sub sets
-   */
   public List<Dataset> getSubSets() {
     return subSets;
   }
 
-  /**
-   * Is atomic boolean.
-   *
-   * @return the boolean
-   */
   public boolean isAtomic() {
     return subSets.isEmpty();
   }
 
-  /**
-   * All atomic sub sets list.
-   *
-   * @return the list
-   */
   public List<Dataset> allAtomicSubSets() {
     List<Dataset> atomicSubSets = new ArrayList<>();
     for (Dataset subSet : subSets) {
-      if (subSet.getSubSets().size() == 0) {
+      if (subSet.getSubSets().isEmpty()) {
         atomicSubSets.add(subSet);
       } else {
         atomicSubSets.addAll(subSet.allAtomicSubSets());
@@ -151,18 +109,14 @@ public class Dataset implements Named {
     return atomicSubSets;
   }
 
-  /**
-   * Contains boolean.
-   *
-   * @param searchedChildName the searched child name
-   * @return the boolean
-   */
   public boolean contains(String searchedChildName) {
     for (Dataset subSet : subSets) {
       if (searchedChildName.equals(subSet.getName())) {
         return true;
       }
-      return subSet.contains(searchedChildName);
+      if (subSet.contains(searchedChildName)) {
+        return true;
+      }
     }
     return false;
   }

@@ -8,6 +8,7 @@ import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.ThreadAware;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.Closeable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -20,7 +21,7 @@ import java.security.NoSuchAlgorithmException;
  * @author Volker Bergmann
  * @since 2.0.0
  */
-public class Hash implements Converter<Object,String>, ThreadAware {
+public class Hash implements Converter<Object,String>, ThreadAware, Closeable {
 
   private String type;
   private HashFormat format;
@@ -92,6 +93,11 @@ public class Hash implements Converter<Object,String>, ThreadAware {
   @Override
   public boolean isThreadSafe() {
     return true;
+  }
+
+  @Override
+  public void close() {
+    md.remove();
   }
 
   public enum HashFormat {

@@ -39,10 +39,8 @@ import com.rapiddweller.common.ProgrammerError;
 
 /**
  * Abstract generator class that wraps another generator object (in a <i>source</i> property)
- * and delegates life cycle control to it.<br/>
- * <br/>
+ * and delegates life cycle control to it.<br/><br/>
  * Created: 12.12.2006 19:13:55
- *
  * @param <S> the type parameter
  * @param <P> the type parameter
  * @author Volker Bergmann
@@ -53,7 +51,7 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
   private Generator<S> source;
   private final WrapperProvider<S> sourceWrapperProvider = new WrapperProvider<>();
 
-  public GeneratorWrapper(Generator<S> source) {
+  protected GeneratorWrapper(Generator<S> source) {
     this.source = source;
   }
 
@@ -98,7 +96,7 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
   }
 
   @Override
-  public synchronized void init(GeneratorContext context) {
+  public void init(GeneratorContext context) {
     assertNotInitialized();
     if (source == null) {
       throw new InvalidGeneratorSetupException("source", "is null");
