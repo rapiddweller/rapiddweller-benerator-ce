@@ -86,13 +86,13 @@ public class SimpleMultiSourceArrayGenerator<S> extends MultiGeneratorWrapper<S,
   }
 
   @Override
-  public synchronized void reset() {
+  public void reset() {
     super.reset();
     this.available = true;
   }
 
   @Override
-  public synchronized void close() {
+  public void close() {
     super.close();
     this.available = false;
   }

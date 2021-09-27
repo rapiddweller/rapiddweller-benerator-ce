@@ -97,19 +97,19 @@ public class WeightedLongGenerator extends AbstractNonNullNumberGenerator<Long> 
   public Long generate() {
     assertInitialized();
     float random = randomizer.nextFloat();
-    long n = intervallNoOfRandom(random);
+    long n = intervalNoOfRandom(random);
     return min + n * granularity;
   }
 
   // private helpers -------------------------------------------------------------------------------------------------
 
-  private long intervallNoOfRandom(float random) {
+  private long intervalNoOfRandom(float random) {
     int i = Arrays.binarySearch(probSum, random);
     if (i < 0) {
       i = -i - 1;
     }
     if (i >= probSum.length) {
-      return probSum.length - 1;
+      return probSum.length - 1L;
     }
     return i;
   }

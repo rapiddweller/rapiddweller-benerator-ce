@@ -50,6 +50,7 @@ import com.rapiddweller.script.PrimitiveType;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+import javax.annotation.Nullable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -144,6 +145,7 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return generator;
   }
 
+  @Nullable
   protected static Generator<?> createScriptGenerator(TypeDescriptor descriptor) {
     String scriptText = descriptor.getScript();
     if (scriptText != null) {

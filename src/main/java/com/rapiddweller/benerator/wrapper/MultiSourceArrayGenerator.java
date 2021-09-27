@@ -34,7 +34,6 @@ import com.rapiddweller.common.ThreadUtil;
 /**
  * Keeps an array of generators, of which it combines the products to an array.<br/><br/>
  * Created: 28.07.2010 19:10:53
- *
  * @param <S> the type parameter
  * @author Volker Bergmann
  * @since 0.1
@@ -45,13 +44,6 @@ public class MultiSourceArrayGenerator<S> extends GeneratorProxy<S[]> {
   private boolean unique;
   private Generator<? extends S>[] sources;
 
-  /**
-   * Instantiates a new Multi source array generator.
-   *
-   * @param componentType the component type
-   * @param unique        the unique
-   * @param sources       the sources
-   */
   @SuppressWarnings("unchecked")
   public MultiSourceArrayGenerator(Class<S> componentType, boolean unique, Generator<? extends S>... sources) {
     super(ArrayUtil.arrayType(componentType));
@@ -70,35 +62,20 @@ public class MultiSourceArrayGenerator<S> extends GeneratorProxy<S[]> {
     return ThreadUtil.allParallelizable(this.sources);
   }
 
-  /**
-   * Sets unique.
-   *
-   * @param unique the unique
-   */
   public void setUnique(boolean unique) {
     this.unique = unique;
   }
 
-  /**
-   * Get sources generator [ ].
-   *
-   * @return the generator [ ]
-   */
   public Generator<? extends S>[] getSources() {
     return sources;
   }
 
-  /**
-   * Sets sources.
-   *
-   * @param sources the sources
-   */
   public void setSources(Generator<? extends S>[] sources) {
     this.sources = sources;
   }
 
   @Override
-  public synchronized void init(GeneratorContext context) {
+  public void init(GeneratorContext context) {
     if (unique) {
       super.setSource(new UniqueMultiSourceArrayGenerator<>(componentType, sources));
     } else {

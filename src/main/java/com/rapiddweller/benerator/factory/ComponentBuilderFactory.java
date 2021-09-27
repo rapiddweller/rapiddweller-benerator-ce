@@ -180,9 +180,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       return builderFromGenerator(createNullGenerator(descriptor, context), descriptor, context);
     }
 
-    // TODO use SimpleTypeGeneratorFactory?
-    Generator<?> generator = null;
-    generator = DescriptorUtil.getGeneratorByName(typeDescriptor, context);
+    Generator<?> generator = DescriptorUtil.getGeneratorByName(typeDescriptor, context);
     if (generator == null) {
       generator = SimpleTypeGeneratorFactory.createScriptGenerator(typeDescriptor);
     }
@@ -351,12 +349,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       }
     }
     // handle container
-    Generator<Long> longCountGenerator;
-    if (instance.getLocalType().getSource() != null) {
-      longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, null, null, true, context);
-    } else {
-      longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, null, null, true, context);
-    }
+    Generator<Long> longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, null, null, true, context);
     NonNullGenerator<Integer> countGenerator = WrapperFactory.asNonNullGenerator(
         new AsIntegerGeneratorWrapper<Number>((Generator) longCountGenerator));
     switch (container) {

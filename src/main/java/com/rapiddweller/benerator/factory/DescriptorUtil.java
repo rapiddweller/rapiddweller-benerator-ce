@@ -72,6 +72,7 @@ import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.script.expression.MinExpression;
 import org.w3c.dom.Element;
 
+import javax.annotation.Nullable;
 import javax.validation.ConstraintValidator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -337,6 +338,7 @@ public class DescriptorUtil {
     );
   }
 
+  @Nullable
   public static Generator<Long> createDynamicCountGenerator(final InstanceDescriptor descriptor,
                                                             Long defaultMin, Long defaultMax, boolean resetToMin, BeneratorContext context) {
     Expression<Long> count = DescriptorUtil.getCount(descriptor);
@@ -367,6 +369,7 @@ public class DescriptorUtil {
     }
   }
 
+  @Nullable
   public static <T extends Number> T getNumberDetail(SimpleTypeDescriptor descriptor, String detailName, Class<T> targetType) {
     try {
       String detailValue = (String) descriptor.getDetailValue(detailName);

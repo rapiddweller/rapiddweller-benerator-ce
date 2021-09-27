@@ -66,6 +66,7 @@ import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.PrimitiveType;
 
+import javax.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -120,6 +121,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     return generator;
   }
 
+  @Nullable
   protected static Generator<?> createValuesGenerator(
       SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
     PrimitiveType primitiveType = descriptor.getPrimitiveType();
@@ -150,6 +152,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
+  @Nullable
   protected static Generator<?> createConstantGenerator(
       SimpleTypeDescriptor descriptor, BeneratorContext context) {
     Generator<?> generator = null;

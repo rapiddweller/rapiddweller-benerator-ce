@@ -101,10 +101,8 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
     if (source == null) {
       throw new InvalidGeneratorSetupException("source", "is null");
     }
-    synchronized (source) {
-      if (!source.wasInitialized()) {
-        source.init(context);
-      }
+    if (!source.wasInitialized()) {
+      source.init(context);
     }
     super.init(context);
   }

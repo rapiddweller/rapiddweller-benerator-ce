@@ -32,7 +32,6 @@ import com.rapiddweller.benerator.GeneratorContext;
 /**
  * {@link Generator} proxy which hides the first products of its source generator.<br/><br/>
  * Created: 23.07.2011 10:00:49
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.7.0
@@ -41,35 +40,21 @@ public class OffsetBasedGenerator<E> extends GeneratorProxy<E> {
 
   private final int offset;
 
-  /**
-   * Instantiates a new Offset based generator.
-   */
   public OffsetBasedGenerator() {
     this(null, 0);
   }
 
-  /**
-   * Instantiates a new Offset based generator.
-   *
-   * @param source the source
-   * @param offset the offset
-   */
   public OffsetBasedGenerator(Generator<E> source, int offset) {
     super(source);
     this.offset = offset;
   }
 
-  /**
-   * Gets offset.
-   *
-   * @return the offset
-   */
   public int getOffset() {
     return offset;
   }
 
   @Override
-  public synchronized void init(GeneratorContext context) {
+  public void init(GeneratorContext context) {
     super.init(context);
     advanceToOffset();
   }
