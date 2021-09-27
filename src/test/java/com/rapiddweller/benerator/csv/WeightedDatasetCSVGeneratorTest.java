@@ -37,7 +37,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the DatasetCSVGenerator.<br/><br/>
  * Created: 21.03.2008 16:58:20
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
@@ -46,9 +45,6 @@ public class WeightedDatasetCSVGeneratorTest extends GeneratorTest {
   private static final String FAMILY_NAME = "com/rapiddweller/domain/person/familyName";
   private static final String REGION = "com/rapiddweller/dataset/region";
 
-  /**
-   * Test de.
-   */
   @Test
   public void testDE() {
     WeightedDatasetCSVGenerator<String> source = new WeightedDatasetCSVGenerator<>(
@@ -64,9 +60,6 @@ public class WeightedDatasetCSVGeneratorTest extends GeneratorTest {
     assertTrue(mueller);
   }
 
-  /**
-   * Test europe.
-   */
   @Test
   public void testEurope() {
     WeightedDatasetCSVGenerator<String> source = new WeightedDatasetCSVGenerator<>(
