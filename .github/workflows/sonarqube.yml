@@ -14,8 +14,6 @@ jobs:
 
   sonar:
     runs-on: ubuntu-latest
-    needs:
-      - setup
     defaults:
       run:
         shell: bash
