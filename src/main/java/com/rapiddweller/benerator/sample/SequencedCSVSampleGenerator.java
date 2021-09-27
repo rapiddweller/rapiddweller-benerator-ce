@@ -54,56 +54,32 @@ import java.util.List;
  * <p>
  * <br/>
  * Created: 26.07.2007 18:10:33
- *
  * @param <E> the type parameter
  * @see AttachedWeightSampleGenerator
  */
 public class SequencedCSVSampleGenerator<E> extends GeneratorProxy<E> {
 
-  /**
-   * The URI to read the samples from
-   */
+  /** The URI to read the samples from */
   private String uri;
 
-  /**
-   * The converter to create instances from the CSV cell strings
-   */
+  /** The converter to create instances from the CSV cell strings */
   private final Converter<String, E> converter;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Sequenced csv sample generator.
-   */
   public SequencedCSVSampleGenerator() {
     this((String) null);
   }
 
-  /**
-   * Instantiates a new Sequenced csv sample generator.
-   *
-   * @param uri the uri
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public SequencedCSVSampleGenerator(String uri) {
     this(uri, new NoOpConverter());
   }
 
-  /**
-   * Instantiates a new Sequenced csv sample generator.
-   *
-   * @param converter the converter
-   */
   public SequencedCSVSampleGenerator(Converter<String, E> converter) {
     this(null, converter);
   }
 
-  /**
-   * Instantiates a new Sequenced csv sample generator.
-   *
-   * @param uri       the uri
-   * @param converter the converter
-   */
   public SequencedCSVSampleGenerator(String uri, Converter<String, E> converter) {
     super(new SampleGenerator<>(converter.getTargetType()));
     this.converter = converter;
@@ -114,29 +90,14 @@ public class SequencedCSVSampleGenerator<E> extends GeneratorProxy<E> {
 
   // configuration properties ----------------------------------------------------------------------------------------
 
-  /**
-   * Gets uri.
-   *
-   * @return the uri
-   */
   public String getUri() {
     return uri;
   }
 
-  /**
-   * Sets uri.
-   *
-   * @param uri the uri
-   */
   public void setUri(String uri) {
     this.uri = uri;
   }
 
-  /**
-   * test support method
-   *
-   * @param value the value
-   */
   void addValue(E value) {
     ((SampleGenerator<E>) getSource()).addValue(value);
     // do not set dirty flag, otherwise this value would be cleared
@@ -146,11 +107,10 @@ public class SequencedCSVSampleGenerator<E> extends GeneratorProxy<E> {
 
   @Override
   public void init(GeneratorContext context) {
-    try {
-      if (uri == null) {
-        throw new InvalidGeneratorSetupException("uri is not set");
-      }
-      CSVLineIterator parser = new CSVLineIterator(uri);
+    if (uri == null) {
+      throw new InvalidGeneratorSetupException("uri is not set");
+    }
+    try (CSVLineIterator parser = new CSVLineIterator(uri)) {
       List<E> samples = new ArrayList<>();
       DataContainer<String[]> container = new DataContainer<>();
       while ((container = parser.next(container)) != null) {

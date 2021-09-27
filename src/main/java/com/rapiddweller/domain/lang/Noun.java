@@ -39,10 +39,8 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * Represents a Noun.<br/>
- * <br/>
+ * Represents a Noun.<br/><br/>
  * Created at 15.07.2009 22:46:33
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -54,14 +52,6 @@ public class Noun {
   private final String plural;
   private final int gender;
 
-  /**
-   * Instantiates a new Noun.
-   *
-   * @param singular the singular
-   * @param plural   the plural
-   * @param gender   the gender
-   * @param language the language
-   */
   public Noun(String singular, String plural, int gender, Language language) {
     this.singular = singular;
     this.plural = plural;
@@ -69,55 +59,36 @@ public class Noun {
     this.language = language;
   }
 
-  /**
-   * Gets instances.
-   *
-   * @param locale the locale
-   * @return the instances
-   * @throws IOException the io exception
-   */
   public static Collection<Noun> getInstances(Locale locale)
       throws IOException {
     Language language = Language.getInstance(locale);
     Set<Noun> nouns = new HashSet<>(500);
-    String url = LocaleUtil
-        .availableLocaleUrl("/com/rapiddweller/domain/lang/noun",
-            locale, ".csv");
-    CSVLineIterator iterator = new CSVLineIterator(url, ',', true);
-    DataContainer<String[]> container = new DataContainer<>();
-    while ((container = iterator.next(container)) != null) {
-      String[] line = container.getData();
-      String singular =
-          (StringUtil.isEmpty(line[0]) ? null : line[0].trim());
-      String plural;
-      if (line.length > 1 && !StringUtil.isEmpty(line[1])) {
-        plural = line[1].trim();
-        if (plural.startsWith("-")) {
-          plural = singular + plural.substring(1);
+    String url = LocaleUtil.availableLocaleUrl("/com/rapiddweller/domain/lang/noun", locale, ".csv");
+    try (CSVLineIterator iterator = new CSVLineIterator(url, ',', true)) {
+      DataContainer<String[]> container = new DataContainer<>();
+      while ((container = iterator.next(container)) != null) {
+        String[] line = container.getData();
+        String singular = (StringUtil.isEmpty(line[0]) ? null : line[0].trim());
+        String plural;
+        if (line.length > 1 && !StringUtil.isEmpty(line[1])) {
+          plural = line[1].trim();
+          if (plural.startsWith("-")) {
+            plural = singular + plural.substring(1);
+          }
+        } else {
+          plural = null;
         }
-      } else {
-        plural = null;
+        int gender = (line.length >= 3 ? Integer.parseInt(line[2]) : 0);
+        nouns.add(new Noun(singular, plural, gender, language));
       }
-      int gender = (line.length >= 3 ? Integer.parseInt(line[2]) : 0);
-      nouns.add(new Noun(singular, plural, gender, language));
+      return nouns;
     }
-    return nouns;
   }
 
-  /**
-   * Gets singular.
-   *
-   * @return the singular
-   */
   public String getSingular() {
     return singular;
   }
 
-  /**
-   * Gets plural.
-   *
-   * @return the plural
-   */
   public String getPlural() {
     return plural;
   }

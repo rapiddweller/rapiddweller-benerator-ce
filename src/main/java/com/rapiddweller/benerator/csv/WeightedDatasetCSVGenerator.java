@@ -45,10 +45,8 @@ import java.util.List;
 /**
  * Generates data from a csv file set that is organized as {@link Dataset}.
  * For different regions, different CSV versions may be provided by appending region suffixes,
- * similar to the JDK ResourceBundle handling.<br/>
- * <br/>
+ * similar to the JDK ResourceBundle handling.<br/><br/>
  * Created: 21.03.2008 16:32:04
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.5.0
@@ -57,84 +55,30 @@ public class WeightedDatasetCSVGenerator<E> extends AbstractDatasetGenerator<E> 
 
   private static final Logger LOGGER = LoggerFactory.getLogger(WeightedDatasetCSVGenerator.class);
 
-  /**
-   * The Filename pattern.
-   */
   protected String filenamePattern;
-  /**
-   * The Encoding.
-   */
   protected final String encoding;
-  /**
-   * The Separator.
-   */
   protected final char separator;
-  /**
-   * The Converter.
-   */
   protected final Converter<String, E> converter;
 
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Weighted dataset csv generator.
-   *
-   * @param generatedType   the generated type
-   * @param filenamePattern the filename pattern
-   * @param datasetName     the dataset name
-   * @param nesting         the nesting
-   * @param fallback        the fallback
-   */
   public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, String datasetName, String nesting, boolean fallback) {
     this(generatedType, filenamePattern, ',', datasetName, nesting, fallback, SystemInfo.getFileEncoding());
   }
 
-  /**
-   * Instantiates a new Weighted dataset csv generator.
-   *
-   * @param generatedType   the generated type
-   * @param filenamePattern the filename pattern
-   * @param separator       the separator
-   * @param datasetName     the dataset name
-   * @param nesting         the nesting
-   * @param fallback        the fallback
-   * @param encoding        the encoding
-   */
   @SuppressWarnings({"unchecked", "cast", "rawtypes"})
   public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, char separator, String datasetName, String nesting,
                                      boolean fallback, String encoding) {
     this(generatedType, filenamePattern, separator, datasetName, nesting, fallback, encoding, (Converter<String, E>) new NoOpConverter());
   }
 
-  /**
-   * Instantiates a new Weighted dataset csv generator.
-   *
-   * @param generatedType   the generated type
-   * @param filenamePattern the filename pattern
-   * @param datasetName     the dataset name
-   * @param nesting         the nesting
-   * @param fallback        the fallback
-   * @param encoding        the encoding
-   */
   @SuppressWarnings({"cast", "unchecked", "rawtypes"})
   public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, String datasetName, String nesting, boolean fallback,
                                      String encoding) {
     this(generatedType, filenamePattern, ',', datasetName, nesting, fallback, encoding, (Converter<String, E>) new NoOpConverter());
   }
 
-  /**
-   * Instantiates a new Weighted dataset csv generator.
-   *
-   * @param generatedType   the generated type
-   * @param filenamePattern the filename pattern
-   * @param separator       the separator
-   * @param datasetName     the dataset name
-   * @param nesting         the nesting
-   * @param fallback        the fallback
-   * @param encoding        the encoding
-   * @param converter       the converter
-   */
   public WeightedDatasetCSVGenerator(Class<E> generatedType, String filenamePattern, char separator, String datasetName, String nesting,
                                      boolean fallback,
                                      String encoding, Converter<String, E> converter) {
@@ -148,20 +92,10 @@ public class WeightedDatasetCSVGenerator<E> extends AbstractDatasetGenerator<E> 
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets filename pattern.
-   *
-   * @param filenamePattern the filename pattern
-   */
   public void setFilenamePattern(String filenamePattern) {
     this.filenamePattern = filenamePattern;
   }
 
-  /**
-   * Gets filename pattern.
-   *
-   * @return the filename pattern
-   */
   public String getFilenamePattern() {
     return filenamePattern;
   }

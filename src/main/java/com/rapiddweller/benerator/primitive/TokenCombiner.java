@@ -51,63 +51,27 @@ import java.util.Set;
  * and combines the cells by taking a cell value from a random row for each column
  * and concatenating them to a string.<br/><br/>
  * Created: 01.08.2010 14:48:50
- *
  * @author Volker Bergmann
  * @since 0.6.3
  */
 public class TokenCombiner extends GeneratorProxy<String> implements NonNullGenerator<String> {
 
-  /**
-   * The Uri.
-   */
   protected String uri;
   private boolean unique;
-  /**
-   * The Separator.
-   */
   protected char separator = ',';
-  /**
-   * The Encoding.
-   */
   protected String encoding = Encodings.UTF_8;
-  /**
-   * The Exclude seed.
-   */
   protected boolean excludeSeed = false;
 
-  /**
-   * The Seed.
-   */
   protected final Set<String> seed = new HashSet<>();
 
-  /**
-   * Instantiates a new Token combiner.
-   *
-   * @param uri the uri
-   */
   public TokenCombiner(String uri) {
     this(uri, false);
   }
 
-  /**
-   * Instantiates a new Token combiner.
-   *
-   * @param uri    the uri
-   * @param unique the unique
-   */
   public TokenCombiner(String uri, boolean unique) {
     this(uri, unique, ',', SystemInfo.getFileEncoding(), false);
   }
 
-  /**
-   * Instantiates a new Token combiner.
-   *
-   * @param uri         the uri
-   * @param unique      the unique
-   * @param separator   the separator
-   * @param encoding    the encoding
-   * @param excludeSeed the exclude seed
-   */
   public TokenCombiner(String uri, boolean unique, char separator, String encoding, boolean excludeSeed) {
     super(String.class);
     this.uri = uri;
@@ -117,47 +81,22 @@ public class TokenCombiner extends GeneratorProxy<String> implements NonNullGene
     this.excludeSeed = excludeSeed;
   }
 
-  /**
-   * Sets uri.
-   *
-   * @param uri the uri
-   */
   public void setUri(String uri) {
     this.uri = uri;
   }
 
-  /**
-   * Sets unique.
-   *
-   * @param unique the unique
-   */
   public void setUnique(boolean unique) {
     this.unique = unique;
   }
 
-  /**
-   * Sets separator.
-   *
-   * @param separator the separator
-   */
   public void setSeparator(char separator) {
     this.separator = separator;
   }
 
-  /**
-   * Sets encoding.
-   *
-   * @param encoding the encoding
-   */
   public void setEncoding(String encoding) {
     this.encoding = encoding;
   }
 
-  /**
-   * Sets exclude seed.
-   *
-   * @param excludeSeed the exclude seed
-   */
   public void setExcludeSeed(boolean excludeSeed) {
     this.excludeSeed = excludeSeed;
   }
@@ -179,16 +118,8 @@ public class TokenCombiner extends GeneratorProxy<String> implements NonNullGene
   }
 
 
-  /**
-   * The type Simple token combinator.
-   */
   protected class SimpleTokenCombinator extends CompositeStringGenerator {
 
-    /**
-     * Instantiates a new Simple token combinator.
-     *
-     * @param unique the unique
-     */
     SimpleTokenCombinator(boolean unique) {
       super(unique);
     }
@@ -196,10 +127,9 @@ public class TokenCombiner extends GeneratorProxy<String> implements NonNullGene
     @Override
     @SuppressWarnings("unchecked")
     public void init(GeneratorContext context) {
-      try {
+      String absoluteUri = context.resolveRelativeUri(uri);
+      try (CSVLineIterator iterator = new CSVLineIterator(absoluteUri, separator, true, encoding)) {
         NonNullSampleGenerator<String>[] sources = null;
-        String absoluteUri = context.resolveRelativeUri(uri);
-        CSVLineIterator iterator = new CSVLineIterator(absoluteUri, separator, true, encoding);
         int tokenCount = -1;
         DataContainer<String[]> container = new DataContainer<>();
         while ((container = iterator.next(container)) != null) {

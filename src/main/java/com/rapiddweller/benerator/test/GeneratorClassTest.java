@@ -78,16 +78,17 @@ public abstract class GeneratorClassTest extends GeneratorTest {
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Test
   public void testDefaultGenerationIfValid() throws Throwable {
-    Generator<?> generator = generatorClass.getDeclaredConstructor().newInstance();
-    boolean valid = true;
-    try {
-      generator.init(context);
-    } catch (InvalidGeneratorSetupException e) {
-      // that's OK, not every Generator is available from default constructor
-      valid = false;
-    }
-    if (valid) { // must be outside of catch block, else exceptions would be ignored
-      generator.generate(new ProductWrapper());
+    try (Generator<?> generator = generatorClass.getDeclaredConstructor().newInstance()) {
+      boolean valid = true;
+      try {
+        generator.init(context);
+      } catch (InvalidGeneratorSetupException e) {
+        // that's OK, not every Generator is available from default constructor
+        valid = false;
+      }
+      if (valid) { // must be outside of catch block, else exceptions would be ignored
+        generator.generate(new ProductWrapper());
+      }
     }
   }
 

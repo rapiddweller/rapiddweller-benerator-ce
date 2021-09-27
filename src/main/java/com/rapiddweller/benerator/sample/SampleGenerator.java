@@ -36,6 +36,7 @@ import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.IOUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,7 +175,7 @@ public class SampleGenerator<E> extends AbstractSampleGenerator<E> {
 
   @Override
   public void close() {
-    indexGenerator.close();
+    IOUtil.close(indexGenerator);
     super.close();
   }
 

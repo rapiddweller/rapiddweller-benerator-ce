@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.csv;
 import com.rapiddweller.benerator.dataset.DatasetUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.csv.CSVLineIterator;
 import com.rapiddweller.script.WeightedSample;
@@ -40,24 +41,11 @@ import java.util.List;
 /**
  * Provides CSV-related utility methods.<br/><br/>
  * Created: 17.02.2010 23:20:35
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class CSVGeneratorUtil {
 
-  /**
-   * Parse dataset files list.
-   *
-   * @param <T>             the type parameter
-   * @param datasetName     the dataset name
-   * @param separator       the separator
-   * @param nesting         the nesting
-   * @param filenamePattern the filename pattern
-   * @param encoding        the encoding
-   * @param converter       the converter
-   * @return the list
-   */
   public static <T> List<WeightedSample<T>> parseDatasetFiles(
       String datasetName, char separator, String nesting, String filenamePattern,
       String encoding, Converter<String, T> converter) {
@@ -74,36 +62,14 @@ public class CSVGeneratorUtil {
     return samples;
   }
 
-  /**
-   * Parse file list.
-   *
-   * @param <T>       the type parameter
-   * @param filename  the filename
-   * @param separator the separator
-   * @param encoding  the encoding
-   * @param converter the converter
-   * @return the list
-   */
   public static <T> List<WeightedSample<T>> parseFile(String filename, char separator, String encoding,
                                                       Converter<String, T> converter) {
     return parseFile(filename, separator, encoding, converter, new ArrayList<>());
   }
 
-  /**
-   * Parse file list.
-   *
-   * @param <T>       the type parameter
-   * @param filename  the filename
-   * @param separator the separator
-   * @param encoding  the encoding
-   * @param converter the converter
-   * @param samples   the samples
-   * @return the list
-   */
   public static <T> List<WeightedSample<T>> parseFile(String filename, char separator, String encoding,
                                                       Converter<String, T> converter, List<WeightedSample<T>> samples) {
-    try {
-      CSVLineIterator iterator = new CSVLineIterator(filename, separator, encoding);
+    try (CSVLineIterator iterator = new CSVLineIterator(filename, separator, encoding)) {
       DataContainer<String[]> container = new DataContainer<>();
       while ((container = iterator.next(container)) != null) {
         String[] tokens = container.getData();
