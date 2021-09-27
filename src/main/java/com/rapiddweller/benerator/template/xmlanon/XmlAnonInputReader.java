@@ -41,13 +41,13 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Reads XLS documents for a multi-file XML anonymization.<br/><br/>
  * Created: 06.03.2014 08:25:43
- *
  * @author Volker Bergmann
  * @since 0.9.0
  */
@@ -61,7 +61,10 @@ public class XmlAnonInputReader implements TemplateInputReader {
   }
 
   private static AnonymizationSetup parseXls(String xlsUri) throws IOException {
-    Workbook workbook = WorkbookFactory.create(IOUtil.getInputStreamForURI(xlsUri));
+    Workbook workbook = null;
+    try (InputStream in = IOUtil.getInputStreamForURI(xlsUri)) {
+      workbook = WorkbookFactory.create(in);
+    }
     Sheet sheet = workbook.getSheetAt(0);
 
     // parse header information

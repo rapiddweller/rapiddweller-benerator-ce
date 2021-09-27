@@ -65,83 +65,41 @@ import static com.rapiddweller.benerator.util.GeneratorUtil.generateNullable;
 /**
  * Generates company names.<br/><br/>
  * Created: 14.03.2008 08:26:44
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
 public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
     implements NonNullGenerator<CompanyName> {
 
-  /**
-   * The constant LOGGER.
-   */
   protected static final Logger LOGGER =
       LoggerFactory.getLogger(CompanyNameGenerator.class);
 
   private static final String ORG = "/com/rapiddweller/domain/organization/";
 
-  /**
-   * The constant locationGenerators.
-   */
   protected static final Map<String, Generator<String>> locationGenerators =
       new HashMap<>();
 
-  /**
-   * The Dataset name.
-   */
   protected final String datasetName;
-  /**
-   * The Sector.
-   */
   protected boolean sector;
-  /**
-   * The Location.
-   */
   protected boolean location;
-  /**
-   * The Legal form.
-   */
   protected boolean legalForm;
 
 
   // Constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Company name generator.
-   */
   public CompanyNameGenerator() {
     this(true, true, true);
   }
 
-  /**
-   * Instantiates a new Company name generator.
-   *
-   * @param sector    the sector
-   * @param location  the location
-   * @param legalForm the legal form
-   */
   public CompanyNameGenerator(boolean sector, boolean location,
                               boolean legalForm) {
     this(sector, location, legalForm, Country.getDefault().getIsoCode());
   }
 
-  /**
-   * Instantiates a new Company name generator.
-   *
-   * @param dataset the dataset
-   */
   public CompanyNameGenerator(String dataset) {
     this(true, true, true, dataset);
   }
 
-  /**
-   * Instantiates a new Company name generator.
-   *
-   * @param sector      the sector
-   * @param location    the location
-   * @param legalForm   the legal form
-   * @param datasetName the dataset name
-   */
   public CompanyNameGenerator(boolean sector, boolean location,
                               boolean legalForm, String datasetName) {
     super(CompanyName.class, DatasetUtil.REGION_NESTING, datasetName, true);
@@ -157,56 +115,26 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
 
   // properties -----------------------------------------------------------------------------------------------------------
 
-  /**
-   * Is sector boolean.
-   *
-   * @return the boolean
-   */
   public boolean isSector() {
     return sector;
   }
 
-  /**
-   * Sets sector.
-   *
-   * @param sector the sector
-   */
   public void setSector(boolean sector) {
     this.sector = sector;
   }
 
-  /**
-   * Is location boolean.
-   *
-   * @return the boolean
-   */
   public boolean isLocation() {
     return location;
   }
 
-  /**
-   * Sets location.
-   *
-   * @param location the location
-   */
   public void setLocation(boolean location) {
     this.location = location;
   }
 
-  /**
-   * Is legal form boolean.
-   *
-   * @return the boolean
-   */
   public boolean isLegalForm() {
     return legalForm;
   }
 
-  /**
-   * Sets legal form.
-   *
-   * @param legalForm the legal form
-   */
   public void setLegalForm(boolean legalForm) {
     this.legalForm = legalForm;
   }
@@ -251,9 +179,6 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
 
   // helper class ----------------------------------------------------------------------------------------------------
 
-  /**
-   * The type Country company name generator.
-   */
   class CountryCompanyNameGenerator
       extends ThreadSafeNonNullGenerator<CompanyName>
       implements WeightedGenerator<CompanyName> {
@@ -264,11 +189,6 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
     private WeightedDatasetCSVGenerator<String> legalFormGenerator;
     private Generator<String> locationGenerator;
 
-    /**
-     * Instantiates a new Country company name generator.
-     *
-     * @param country the country
-     */
     public CountryCompanyNameGenerator(Country country) {
       Assert.notNull(country, "country");
       this.country = country;
@@ -294,12 +214,6 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
       }
     }
 
-    /**
-     * Init with dataset.
-     *
-     * @param datasetToUse the dataset to use
-     * @param context      the context
-     */
     public void initWithDataset(String datasetToUse,
                                 GeneratorContext context) {
       createAndInitLocationGenerator(datasetToUse);

@@ -80,41 +80,40 @@ public class CityManager {
                                    Map<String, String> defaults)
       throws IOException {
     LOGGER.debug("Parsing city definitions in file {}", filename);
-    CSVLineIterator iterator =
-        new CSVLineIterator(filename, ';', Encodings.UTF_8);
-    DataContainer<String[]> container = new DataContainer<>();
-    String[] header = iterator.next(container).getData();
-    AtomicInteger warnCount = new AtomicInteger();
-    while ((container = iterator.next(container)) != null) {
-      String[] cells = container.getData();
-      if (cells.length == 0) {
-        continue;
-      }
-      if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug(ArrayFormat.format(";", cells));
-      }
-      if (cells.length == 1) {
-        continue;
-      }
-      Map<String, String> instance = new HashMap<>();
-      for (int i = 0; i < cells.length; i++) {
-        instance.put(header[i], cells[i]);
-      }
-      LOGGER.debug("{}", instance);
+    try (CSVLineIterator iterator = new CSVLineIterator(filename, ';', Encodings.UTF_8)) {
+      DataContainer<String[]> container = new DataContainer<>();
+      String[] header = iterator.next(container).getData();
+      AtomicInteger warnCount = new AtomicInteger();
+      while ((container = iterator.next(container)) != null) {
+        String[] cells = container.getData();
+        if (cells.length == 0) {
+          continue;
+        }
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug(ArrayFormat.format(";", cells));
+        }
+        if (cells.length == 1) {
+          continue;
+        }
+        Map<String, String> instance = new HashMap<>();
+        for (int i = 0; i < cells.length; i++) {
+          instance.put(header[i], cells[i]);
+        }
+        LOGGER.debug("{}", instance);
 
-      String stateId = instance.get("state.id");
-      String stateName = instance.get("state.name");
-      State state = getOrCreateState(stateId, stateName, country);
+        String stateId = instance.get("state.id");
+        String stateName = instance.get("state.name");
+        State state = getOrCreateState(stateId, stateName, country);
 
-      int lineNumber = iterator.lineCount();
-      CityId cityId = createCityId(instance, lineNumber);
-      getOrCreateCity(cityId, state, instance, defaults, warnCount);
+        int lineNumber = iterator.lineCount();
+        CityId cityId = createCityId(instance, lineNumber);
+        getOrCreateCity(cityId, state, instance, defaults, warnCount);
+      }
+      return warnCount.get();
     }
-    return warnCount.get();
   }
 
-  private static State getOrCreateState(String stateId, String stateName,
-                                        Country country) {
+  private static State getOrCreateState(String stateId, String stateName, Country country) {
     State state = country.getState(stateId);
     if (state == null) {
       state = new State(stateId);
@@ -144,10 +143,8 @@ public class CityManager {
     return cityId;
   }
 
-  private static void getOrCreateCity(CityId cityId, State state,
-                                      Map<String, String> instance,
-                                      Map<String, String> defaults,
-                                      AtomicInteger warnCount) {
+  private static void getOrCreateCity(CityId cityId, State state, Map<String, String> instance,
+                                      Map<String, String> defaults, AtomicInteger warnCount) {
     // create/setup city
     CityHelper city = (CityHelper) state.getCity(cityId);
     String postalCode = instance.get("postalCode");
@@ -172,20 +169,19 @@ public class CityManager {
   public static void persistCities(Country country, String filename)
       throws IOException {
     // persist city data in standard format
-    BeanCSVWriter<City> writer =
+    try (BeanCSVWriter<City> writer =
         new BeanCSVWriter<>(new FileWriter(filename), ';',
-            "state.country.isoCode", "state.id", "name",
-            "nameExtension",
-            "zipCode", "areaCode", "language");
-    for (State state : country.getStates()) {
-      for (City city : state.getCities()) {
-        for (String zipCode : city.getPostalCodes()) {
-          ((CityHelper) city).setPostalCode(zipCode);
-          writer.writeElement(city);
+            "state.country.isoCode", "state.id", "name", "nameExtension",
+            "zipCode", "areaCode", "language")) {
+      for (State state : country.getStates()) {
+        for (City city : state.getCities()) {
+          for (String zipCode : city.getPostalCodes()) {
+            ((CityHelper) city).setPostalCode(zipCode);
+            writer.writeElement(city);
+          }
         }
       }
     }
-    writer.close();
   }
 
   // private helpers -------------------------------------------------------------------------------------------------

@@ -179,7 +179,7 @@ public class Country {
   private final int population;
   private Map<String, State> states;
   private CityGenerator cityGenerator;
-  private boolean citiesInitialized = false;
+  private volatile boolean citiesInitialized = false;
   private WrapperProvider<String> swp = new WrapperProvider<>();
 
   private Country(String isoCode, String defaultLanguage, int population,
@@ -296,30 +296,27 @@ public class Country {
 
   private void importStates() {
     this.states = new OrderedNameMap<>();
-    String filename =
-        "/com/rapiddweller/domain/address/state_" + isoCode + ".csv";
+    String filename = "/com/rapiddweller/domain/address/state_" + isoCode + ".csv";
     if (!IOUtil.isURIAvailable(filename)) {
       LOGGER.debug("No states defined for {}", this);
       return;
     }
     ComplexTypeDescriptor stateDescriptor =
-        (ComplexTypeDescriptor) new BeanDescriptorProvider()
-            .getTypeDescriptor(State.class.getName());
-    CSVEntitySource source =
-        new CSVEntitySource(filename, stateDescriptor, Encodings.UTF_8);
+        (ComplexTypeDescriptor) new BeanDescriptorProvider().getTypeDescriptor(State.class.getName());
+    CSVEntitySource source = new CSVEntitySource(filename, stateDescriptor, Encodings.UTF_8);
     source.setContext(new DefaultBeneratorContext());
-    DataIterator<Entity> iterator = source.iterator();
-    DataContainer<Entity> container = new DataContainer<>();
-    while ((container = iterator.next(container)) != null) {
-      Entity entity = container.getData();
-      State state = new State();
-      mapProperty("id", entity, state, true);
-      mapProperty("name", entity, state, true);
-      mapProperty("defaultLanguage", entity, state, false);
-      state.setCountry(this);
-      addState(state);
+    try (DataIterator<Entity> iterator = source.iterator()) {
+      DataContainer<Entity> container = new DataContainer<>();
+      while ((container = iterator.next(container)) != null) {
+        Entity entity = container.getData();
+        State state = new State();
+        mapProperty("id", entity, state, true);
+        mapProperty("name", entity, state, true);
+        mapProperty("defaultLanguage", entity, state, false);
+        state.setCountry(this);
+        addState(state);
+      }
     }
-    IOUtil.close(iterator);
   }
 
   public String getIsoCode() {

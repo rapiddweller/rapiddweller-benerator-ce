@@ -34,7 +34,6 @@ import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
 /**
  * Creates unique pseudo-random int arrays.<br/><br/>
  * Created: 01.08.2011 17:00:57
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
@@ -45,12 +44,6 @@ public class UniqueIntsGenerator extends NonNullGeneratorProxy<int[]> {
   private final int[] digitOffsets;
   private int cycleCounter;
 
-  /**
-   * Instantiates a new Unique ints generator.
-   *
-   * @param radix  the radix
-   * @param length the length
-   */
   public UniqueIntsGenerator(int radix, int length) {
     super(new IncrementalIntsGenerator(radix, length));
     this.displayColumn = new int[length];
@@ -62,20 +55,10 @@ public class UniqueIntsGenerator extends NonNullGeneratorProxy<int[]> {
     return (IncrementalIntsGenerator) super.getSource();
   }
 
-  /**
-   * Gets radix.
-   *
-   * @return the radix
-   */
   public int getRadix() {
     return getSource().getRadix();
   }
 
-  /**
-   * Gets length.
-   *
-   * @return the length
-   */
   public int getLength() {
     return getSource().getLength();
   }
@@ -85,14 +68,15 @@ public class UniqueIntsGenerator extends NonNullGeneratorProxy<int[]> {
     assertNotInitialized();
     int length = getLength();
     int radix = getRadix();
-    NonNullGenerator<Long> colGen = new BitReverseNaturalNumberGenerator(length - 1);
-    colGen.init(context);
-    for (int i = 0; i < length; i++) {
-      this.displayColumn[i] = colGen.generate().intValue();
-      this.digitOffsets[i] = (length - 1 - this.displayColumn[i]) % radix;
+    try (NonNullGenerator<Long> colGen = new BitReverseNaturalNumberGenerator(length - 1)) {
+      colGen.init(context);
+      for (int i = 0; i < length; i++) {
+        this.displayColumn[i] = colGen.generate().intValue();
+        this.digitOffsets[i] = (length - 1 - this.displayColumn[i]) % radix;
+      }
+      resetMembers();
+      super.init(context);
     }
-    resetMembers();
-    super.init(context);
   }
 
   @Override

@@ -209,16 +209,17 @@ public abstract class GeneratorTest extends ModelTest {
   private static <T extends Number> void checkDistribution(
       Class<? extends AbstractNonNullNumberGenerator<T>> generatorClass, T min, T max, T granularity,
       int iterations, boolean equalDistribution, double tolerance, Set<T> expectedSet) {
-    AbstractNonNullNumberGenerator<T> generator = BeanUtil.newInstance(generatorClass);
-    generator.setMin(min);
-    generator.setMax(max);
-    generator.setGranularity(granularity);
-    ObjectCounter<T> counter = new ObjectCounter<>(expectedSet != null ? expectedSet.size() : 10);
-    ProductWrapper<T> wrapper = new ProductWrapper<>();
-    for (int i = 0; i < iterations; i++) {
-      counter.count(generator.generate(wrapper).unwrap());
+    try (AbstractNonNullNumberGenerator<T> generator = BeanUtil.newInstance(generatorClass)) {
+      generator.setMin(min);
+      generator.setMax(max);
+      generator.setGranularity(granularity);
+      ObjectCounter<T> counter = new ObjectCounter<>(expectedSet != null ? expectedSet.size() : 10);
+      ProductWrapper<T> wrapper = new ProductWrapper<>();
+      for (int i = 0; i < iterations; i++) {
+        counter.count(generator.generate(wrapper).unwrap());
+      }
+      checkDistribution(counter, equalDistribution, tolerance, expectedSet);
     }
-    checkDistribution(counter, equalDistribution, tolerance, expectedSet);
   }
 
   // unspecific generator tests --------------------------------------------------------------------------------------

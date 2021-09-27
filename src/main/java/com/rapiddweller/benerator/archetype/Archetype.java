@@ -47,7 +47,6 @@ import java.util.Properties;
 /**
  * Represents a Benerator project archetype.<br/><br/>
  * Created at 18.02.2009 07:34:50
- *
  * @author Volker Bergmann
  * @since 0.5.9
  */
@@ -79,8 +78,7 @@ public class Archetype implements Serializable {
   private static String resolveDescription(String id, URL infoUrl) throws IOException {
     URL descriptionUrl = new URL(infoUrl.toString() + "/description.properties");
     String desc = null;
-    try {
-      InputStream descriptionFileStream = descriptionUrl.openStream();
+    try (InputStream descriptionFileStream = descriptionUrl.openStream()) {
       Properties descriptions = new Properties();
       descriptions.load(descriptionFileStream);
       // try to get the name in the user's default locale...
@@ -95,7 +93,6 @@ public class Archetype implements Serializable {
           desc = values.iterator().next().toString();
         }
       }
-      descriptionFileStream.close();
     } catch (FileNotFoundException e) {
       // no description file defined
     }
@@ -115,13 +112,6 @@ public class Archetype implements Serializable {
     return iconUrl;
   }
 
-  /**
-   * Copy files to.
-   *
-   * @param targetFolder the target folder
-   * @param layout       the layout
-   * @throws IOException the io exception
-   */
   public void copyFilesTo(File targetFolder, FolderLayout layout) throws IOException {
     copyNonSourceFilesTo(targetFolder);
     copySourceFilesTo(targetFolder, layout);
@@ -158,11 +148,11 @@ public class Archetype implements Serializable {
     if (schemaUrl == null) {
       throw new FileNotFoundException("File not found: " + xmlSchemaPath);
     }
-    InputStream in = schemaUrl.openStream();
-    File file = new File(targetFolder, xmlSchemaPath.substring(xmlSchemaPath.lastIndexOf('/')));
-    OutputStream out = new FileOutputStream(file);
-    IOUtil.transfer(in, out);
-    in.close();
+    try (InputStream in = schemaUrl.openStream()) {
+      File file = new File(targetFolder, xmlSchemaPath.substring(xmlSchemaPath.lastIndexOf('/')));
+      OutputStream out = new FileOutputStream(file);
+      IOUtil.transfer(in, out);
+    }
   }
 
   @Override
