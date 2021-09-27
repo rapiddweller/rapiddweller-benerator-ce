@@ -91,8 +91,13 @@ public class AsBigDecimalGeneratorWrapper<E extends Number> extends GeneratorWra
 
   private static int countPrefixDigits(String s) {
     int sepIndex = s.indexOf('.');
-    if (s.startsWith("-"))
-      sepIndex--;
+    if (sepIndex >= 0) {
+      if (s.startsWith("-")) {
+        sepIndex--;
+      }
+    } else {
+      sepIndex = 0;
+    }
     return (sepIndex > 0 && s.charAt(sepIndex - 1) == '0' ? sepIndex - 1 : sepIndex);
   }
 
