@@ -2,20 +2,23 @@
   <a href="https://benerator.de"><img width="300" height="300" src="https://github.com/rapiddweller/rapiddweller-benerator-ce/raw/development/doc/assets/benerator-icon.png" alt="Benerator"></a>
 </p>
 <p align="center">
-    <em>Benerator, the smart way to generate data</em>
+    <em>Benerator, the smart way to handle data</em>
 </p>
 
-
 ![.github/workflows/ci.yml](https://github.com/rapiddweller/rapiddweller-benerator-ce/workflows/.github/workflows/ci.yml/badge.svg)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/99c887d3153744e395f539551cdec103)](https://www.codacy.com/gh/rapiddweller/rapiddweller-benerator-ce/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rapiddweller/rapiddweller-benerator-ce&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/99c887d3153744e395f539551cdec103)](https://www.codacy.com/gh/rapiddweller/rapiddweller-benerator-ce/dashboard?utm_source=github.com&utm_medium=referral&utm_content=rapiddweller/rapiddweller-benerator-ce&utm_campaign=Badge_Coverage)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rapiddweller_rapiddweller-benerator-ce&metric=coverage)](https://sonarcloud.io/dashboard?id=rapiddweller_rapiddweller-benerator-ce)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=rapiddweller_rapiddweller-benerator-ce&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=rapiddweller_rapiddweller-benerator-ce)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=rapiddweller_rapiddweller-benerator-ce&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=rapiddweller_rapiddweller-benerator-ce)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=rapiddweller_rapiddweller-benerator-ce&metric=security_rating)](https://sonarcloud.io/dashboard?id=rapiddweller_rapiddweller-benerator-ce)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.rapiddweller/rapiddweller-benerator-ce/badge.svg)](https://search.maven.org/artifact/com.rapiddweller/rapiddweller-benerator-ce)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=rapiddweller_rapiddweller-benerator-ce&metric=alert_status)](https://sonarcloud.io/dashboard?id=rapiddweller_rapiddweller-benerator-ce)
 
 
 # rapiddweller 'Benerator'
 
-[rapiddweller 'Benerator'](https://www.benerator.de) is a software solution to **generate**, **anonymize**, 
-**pseudonymize** and **migrate** data for development, testing and training purposes.
+[rapiddweller 'Benerator'](https://www.benerator.de) is a software solution to
+**generate**, **obfuscate** (**anonymize** / **pseudonymize**) and **migrate** data for development,
+testing and training purposes.
 
 ## Summary
 
