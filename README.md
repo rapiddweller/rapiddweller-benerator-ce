@@ -8,8 +8,10 @@
 ![.github/workflows/ci.yml](https://github.com/rapiddweller/rapiddweller-benerator-ce/workflows/.github/workflows/ci.yml/badge.svg)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rapiddweller_rapiddweller-benerator-ce&metric=coverage)](https://sonarcloud.io/dashboard?id=rapiddweller_rapiddweller-benerator-ce)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=rapiddweller_rapiddweller-benerator-ce&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=rapiddweller_rapiddweller-benerator-ce)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=rapiddweller_rapiddweller-benerator-ce&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=rapiddweller_rapiddweller-benerator-ce)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=rapiddweller_rapiddweller-benerator-ce&metric=security_rating)](https://sonarcloud.io/dashboard?id=rapiddweller_rapiddweller-benerator-ce)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.rapiddweller/rapiddweller-benerator-ce/badge.svg)](https://search.maven.org/artifact/com.rapiddweller/rapiddweller-benerator-ce)
+
 # rapiddweller-benerator-ce
 
 [rapiddweller 'Benerator'](https://www.benerator.de) is a software solution to
