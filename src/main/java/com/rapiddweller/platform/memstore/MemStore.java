@@ -34,6 +34,7 @@ import com.rapiddweller.common.Context;
 import com.rapiddweller.common.OrderedMap;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.collection.OrderedNameMap;
+import com.rapiddweller.common.ui.InfoPrinter;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.util.DataSourceFromIterable;
@@ -158,23 +159,18 @@ public class MemStore extends AbstractStorageSystem {
     }
   }
 
-  public void printContent() {
+  public void printContent(InfoPrinter printer) {
     for (Map.Entry<String, List<Entity>> typeEntry : entitiesByType.entrySet()) {
-      System.out.println(typeEntry.getKey() + ':');
+      printer.printLines(typeEntry.getKey() + ':');
       int index = 0;
       for (Entity entity : typeEntry.getValue()) {
-        System.out.println(index++ + ": " + entity);
+        printer.printLines(index++ + ": " + entity);
       }
     }
   }
 
   private Map<Object, Entity> getOrCreateIdMapForType(String entityType) {
-    Map<Object, Entity> idMap = entitiesByIdByType.get(entityType);
-    if (idMap == null) {
-      idMap = new OrderedMap<>();
-      entitiesByIdByType.put(entityType, idMap);
-    }
-    return idMap;
+    return entitiesByIdByType.computeIfAbsent(entityType, k -> new OrderedMap<>());
   }
 
   public List<Entity> getEntities(String entityType) {

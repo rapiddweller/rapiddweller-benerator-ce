@@ -275,12 +275,7 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
     if (PrimitiveType.getInstance(typeName) != null) {
       return null;
     }
-    ComplexTypeDescriptor type = types.get(typeName);
-    if (type == null) {
-      type = new ComplexTypeDescriptor(typeName, this);
-      types.put(typeName, type);
-    }
-    return type;
+    return types.computeIfAbsent(typeName, k -> new ComplexTypeDescriptor(typeName, this));
   }
 
 
@@ -311,8 +306,6 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
       this.document =
           XMLUtil.parse(resolveUri(inputUri), namespaceAware, null,
               null, null);
-      System.out.println(
-          this.document.getDocumentElement().getNamespaceURI());
     } catch (IOException e) {
       throw new RuntimeException("Error parsing " + inputUri, e);
     }

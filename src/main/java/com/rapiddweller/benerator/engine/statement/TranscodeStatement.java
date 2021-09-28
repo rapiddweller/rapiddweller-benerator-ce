@@ -34,7 +34,6 @@ import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
-import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.DataSource;
@@ -64,7 +63,7 @@ import java.util.List;
  */
 public class TranscodeStatement extends SequentialStatement implements CascadeParent {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(TranscodeStatement.class);
+  private static final Logger logger = LoggerFactory.getLogger(TranscodeStatement.class);
 
   final Expression<ComplexTypeDescriptor> typeExpression;
   final Expression<DBSystem> sourceEx;
@@ -151,15 +150,14 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
     ComplexTypeDescriptor type = typeExpression.evaluate(context);
     IdentityModel identity = getIdentityProvider().getIdentity(type.getName(), false);
     String tableName = type.getName();
-    LOGGER.info("Starting transcoding of {} from {} to {}", tableName, source.getId(), target.getId());
+    logger.info("Starting transcoding of {} from {} to {}", tableName, source.getId(), target.getId());
 
     // iterate rows
     String selector = ExpressionUtil.evaluate(selectorEx, context);
     DataSource<Entity> iterable = source.queryEntities(tableName, selector, context);
     List<GenerationStep<Entity>> generationSteps =
         ComplexTypeGeneratorFactory.createMutatingGenerationSteps(type, false, Uniqueness.NONE, context);
-    GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(tableName, generationSteps);
-    try {
+    try (GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(tableName, generationSteps)) {
       cavs.init(context);
       DataIterator<Entity> iterator = iterable.iterator();
       mapper.registerSource(source.getId(), source.getConnection());
@@ -179,7 +177,7 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
         transcodeForeignKeys(targetEntity, source, context);
         mapper.store(source.getId(), identity, nk, sourcePK, targetPK);
         target.store(targetEntity);
-        LOGGER.debug("transcoded {} to {}", sourceEntity, targetEntity);
+        logger.debug("transcoded {} to {}", sourceEntity, targetEntity);
         cascade(sourceEntity, context);
         rowCount++;
         if (rowCount % pageSize == 0) {
@@ -187,9 +185,7 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
         }
       }
       target.flush();
-      LOGGER.info("Finished transcoding {} rows of table {}", source.countEntities(tableName), tableName);
-    } finally {
-      IOUtil.close(cavs);
+      logger.info("Finished transcoding {} rows of table {}", source.countEntities(tableName), tableName);
     }
   }
 

@@ -31,20 +31,22 @@ import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Counts frequencies of atoms and provides random atoms with the same frequency.<br/>
- * <br/>
+ * Counts frequencies of atoms and provides random atoms with the same frequency.<br/><br/>
  * Created at 12.07.2009 07:51:04
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class SeedManager<E> {
+
+  private static final Logger logger = LoggerFactory.getLogger(SeedManager.class);
 
   private final Map<E, SeedManager<E>> successors;
   private int weight;
@@ -56,12 +58,6 @@ public class SeedManager<E> {
 
   // constructor and properties --------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Seed manager.
-   *
-   * @param generatedType the generated type
-   * @param depth         the depth
-   */
   public SeedManager(Class<E> generatedType, int depth) {
     this.generatedType = generatedType;
     this.weight = 0;
@@ -70,41 +66,20 @@ public class SeedManager<E> {
     this.wrapperProvider = new WrapperProvider<>();
   }
 
-  /**
-   * Gets depth.
-   *
-   * @return the depth
-   */
   public int getDepth() {
     return depth;
   }
 
-  /**
-   * Gets weight.
-   *
-   * @return the weight
-   */
   public double getWeight() {
     return weight;
   }
 
   // functional interface --------------------------------------------------------------------------------------------
 
-  /**
-   * Gets generated type.
-   *
-   * @return the generated type
-   */
   public Class<E> getGeneratedType() {
     return generatedType;
   }
 
-  /**
-   * Add sequence.
-   *
-   * @param startIndex the start index
-   * @param sequence   the sequence
-   */
   @SafeVarargs
   public final void addSequence(int startIndex, E... sequence) {
     weight++;
@@ -113,9 +88,6 @@ public class SeedManager<E> {
     }
   }
 
-  /**
-   * Init.
-   */
   public void init() {
     if (initialized) {
       throw new IllegalGeneratorStateException("Already initialized: " + this);
@@ -130,11 +102,6 @@ public class SeedManager<E> {
     helper.init(null);
   }
 
-  /**
-   * Random atom e.
-   *
-   * @return the e
-   */
   public E randomAtom() {
     if (!initialized) {
       init();
@@ -142,12 +109,6 @@ public class SeedManager<E> {
     return helper.generate(getWrapper()).unwrap();
   }
 
-  /**
-   * Gets successor.
-   *
-   * @param atom the atom
-   * @return the successor
-   */
   public SeedManager<E> getSuccessor(E atom) {
     SeedManager<E> result = successors.get(atom);
     if (result == null) {
@@ -157,22 +118,14 @@ public class SeedManager<E> {
     return result;
   }
 
-  /**
-   * Print state.
-   */
   public void printState() {
     printState("");
   }
 
-  /**
-   * Print state.
-   *
-   * @param indent the indent
-   */
   public void printState(String indent) {
     for (Map.Entry<E, SeedManager<E>> entry : successors.entrySet()) {
       SeedManager<E> successor = entry.getValue();
-      System.out.println(indent + entry.getKey() + '[' + successor.getWeight() + ']');
+      logger.debug("{}{}[{}]", indent, entry.getKey(), successor.getWeight());
       successor.printState("  " + indent);
     }
   }
