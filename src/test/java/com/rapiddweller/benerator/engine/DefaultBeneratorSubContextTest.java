@@ -127,7 +127,7 @@ public class DefaultBeneratorSubContextTest {
     assertEquals(parent.getExecutorService(), child.getExecutorService());
     checkParentDelegation("defaultImports", true, false);
     checkParentDelegation("acceptUnknownSimpleTypes", true, false);
-    checkParentDelegation("defaultErrorHandler", "error", "warn");
+    checkParentDelegation("defaultErrorHandler", "error", "warn", "fatal");
     checkParentDelegation("defaultDataset", "BR", "US");
     checkParentDelegation("defaultLocale", Locale.GERMAN, Locale.ENGLISH);
     checkParentDelegation("defaultLineSeparator", "\r\n", "\n");
