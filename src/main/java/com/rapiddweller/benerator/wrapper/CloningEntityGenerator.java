@@ -27,7 +27,6 @@
 package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.common.ProgrammerError;
 import com.rapiddweller.model.data.Entity;
 
 /**
@@ -50,10 +49,6 @@ public class CloningEntityGenerator extends GeneratorProxy<Entity> {
     if (wrapper == null) {
       return null;
     }
-    try {
-      return wrapper.wrap(wrapper.unwrap().clone());
-    } catch (CloneNotSupportedException e) {
-      throw new ProgrammerError("Error cloning an entity", e);
-    }
+    return wrapper.wrap(new Entity(wrapper.unwrap()));
   }
 }
