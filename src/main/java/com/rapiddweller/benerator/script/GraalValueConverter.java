@@ -58,6 +58,8 @@ public class GraalValueConverter extends ThreadSafeConverter<Value, Object> {
   public static Object value2JavaConverter(Value value) {
     if (value.fitsInInt()) {
       return value.asInt();
+    } else if (value.hasArrayElements()) {
+      return getArrayFromValue(value);
     } else if (value.fitsInLong()) {
       return value.asLong();
     } else if (value.fitsInFloat()) {
@@ -76,8 +78,6 @@ public class GraalValueConverter extends ThreadSafeConverter<Value, Object> {
       return value.asDate();
     } else if (value.isNativePointer()) {
       return value.asNativePointer();
-    } else if (value.hasArrayElements()) {
-      return getArrayFromValue(value);
     } else {
       return null;
     }
