@@ -42,7 +42,6 @@ import java.util.Locale;
  * {Task} implementation that acts as a proxy to another tasks, forwards calls to it,
  * measures execution times and logs them.<br/><br/>
  * Created at 23.07.2009 06:55:46
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -51,21 +50,10 @@ public class TimedGeneratorStatement extends StatementProxy {
   private static final Logger logger = LoggerFactory.getLogger(TimedGeneratorStatement.class);
 
   private final String name;
-  /**
-   * The Profiler path.
-   */
   final List<String> profilerPath;
   private final boolean logging;
   private final ElapsedTimeFormatter elapsedTimeFormatter;
 
-  /**
-   * Instantiates a new Timed generator statement.
-   *
-   * @param name          the name
-   * @param realStatement the real statement
-   * @param profilerPath  the profiler path
-   * @param logging       the logging
-   */
   public TimedGeneratorStatement(String name, Statement realStatement, List<String> profilerPath, boolean logging) {
     super(realStatement);
     this.name = name;
@@ -83,13 +71,12 @@ public class TimedGeneratorStatement extends StatementProxy {
     long dt = System.currentTimeMillis() - t0;
     if (logging) {
       if (dc == 0) {
-        logger.info("No data created for '" + name + "' setup");
+        logger.info("No data created for '{}' setup", name);
       } else if (dt > 0) {
-        logger.info("Created " + dc + " data sets from '"
-            + name + "' setup in " + elapsedTimeFormatter.convert(dt)
-            + " (" + (dc * 1000 / dt) + "/s)");
+        logger.info("Created {} data sets from '{}' setup in {} ({}/s)",
+            dc, name, elapsedTimeFormatter.convert(dt), dc * 1000 / dt);
       } else {
-        logger.info("Created " + dc + " '" + name + "' data set(s)");
+        logger.info("Created {} '{}' data set(s)", dc, name);
       }
     }
     if (Profiling.isEnabled()) {

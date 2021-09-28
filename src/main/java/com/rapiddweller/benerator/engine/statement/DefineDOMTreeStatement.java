@@ -40,7 +40,6 @@ import org.slf4j.Logger;
  * {@link Statement} for creating a {@link DOMTree} element
  * and assigning it with context and resource manager.<br/><br/>
  * Created: 16.01.2014 16:07:06
- *
  * @author Volker Bergmann
  * @since 0.9.0
  */
@@ -55,15 +54,6 @@ public class DefineDOMTreeStatement implements Statement {
   private final Expression<String> outputUri;
   private final Expression<Boolean> namespaceAware;
 
-  /**
-   * Instantiates a new Define dom tree statement.
-   *
-   * @param id              the id
-   * @param inputUri        the input uri
-   * @param outputUri       the output uri
-   * @param namespaceAware  the namespace aware
-   * @param resourceManager the resource manager
-   */
   public DefineDOMTreeStatement(Expression<String> id, Expression<String> inputUri,
                                 Expression<String> outputUri, Expression<Boolean> namespaceAware, ResourceManager resourceManager) {
     if (id == null) {
@@ -78,7 +68,7 @@ public class DefineDOMTreeStatement implements Statement {
 
   @Override
   public boolean execute(BeneratorContext context) {
-    logger.debug("Instantiating database with id '" + id + "'");
+    logger.debug("Instantiating database with id '{}'", id);
     String idValue = id.evaluate(context);
     String inputUriValue = ExpressionUtil.evaluate(inputUri, context);
     DOMTree domTree = new DOMTree(inputUriValue, context);

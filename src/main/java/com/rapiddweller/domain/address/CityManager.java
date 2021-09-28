@@ -54,12 +54,16 @@ public class CityManager {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CityManager.class);
 
+  private CityManager() {
+    // private constructor to prevent instantiation
+  }
+
   public static void readCities(Country country) {
     String filename = "/com/rapiddweller/domain/address/city_" + country.getIsoCode() + ".csv";
     if (IOUtil.isURIAvailable(filename)) {
       readCities(country, filename, new HashMap<>());
     } else {
-      LOGGER.warn("File not found: " + filename);
+      LOGGER.warn("File not found: {}", filename);
     }
   }
 
@@ -68,7 +72,7 @@ public class CityManager {
     try {
       int warnCount = parseCityFile(country, filename, defaults);
       if (warnCount > 0) {
-        LOGGER.warn(warnCount + " warnings");
+        LOGGER.warn("{} warnings", warnCount);
       }
     } catch (IOException e) {
       throw new ConfigurationError(

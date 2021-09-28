@@ -32,7 +32,6 @@ import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.jdbacl.DatabaseDialectManager;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.platform.csv.CSVEntityExporter;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -42,14 +41,12 @@ import java.util.Set;
 /**
  * Exports Entities to a SQL file.<br/><br/>
  * Created: 12.07.2008 09:43:59
- *
  * @author Volker Bergmann
  * @since 0.5.4
  */
 public class SQLEntityExporter extends TextFileExporter {
 
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(CSVEntityExporter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SQLEntityExporter.class);
 
   // defaults --------------------------------------------------------------------------------------------------------
 
@@ -63,51 +60,24 @@ public class SQLEntityExporter extends TextFileExporter {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Sql entity exporter.
-   */
   public SQLEntityExporter() {
     this(DEFAULT_URI);
   }
 
-  /**
-   * Instantiates a new Sql entity exporter.
-   *
-   * @param uri the uri
-   */
   public SQLEntityExporter(String uri) {
     this(uri, null);
   }
 
-  /**
-   * Instantiates a new Sql entity exporter.
-   *
-   * @param uri     the uri
-   * @param dialect the dialect
-   */
   public SQLEntityExporter(String uri, String dialect) {
     this(uri, dialect, null, null);
   }
 
-  /**
-   * Instantiates a new Sql entity exporter.
-   *
-   * @param uri           the uri
-   * @param dialect       the dialect
-   * @param lineSeparator the line separator
-   * @param encoding      the encoding
-   */
   public SQLEntityExporter(String uri, String dialect, String lineSeparator,
                            String encoding) {
     super(uri, encoding, lineSeparator);
     setDialect(dialect);
   }
 
-  /**
-   * Sets dialect.
-   *
-   * @param dialectName the dialect name
-   */
   public void setDialect(String dialectName) {
     this.dialectName = dialectName;
     if (dialectName != null) {
@@ -116,11 +86,6 @@ public class SQLEntityExporter extends TextFileExporter {
     }
   }
 
-  /**
-   * Sets version.
-   *
-   * @param version the version
-   */
   public void setVersion(String version) {
     this.dialectVersion = VersionNumber.valueOf(version);
     if (this.dialectName != null) {
@@ -151,12 +116,6 @@ public class SQLEntityExporter extends TextFileExporter {
     // nothing special to do
   }
 
-  /**
-   * Create sql insert string.
-   *
-   * @param entity the entity
-   * @return the string
-   */
   String createSQLInsert(Entity entity) {
     String table = entity.type();
     StringBuilder builder = new StringBuilder("insert into ");
@@ -190,7 +149,7 @@ public class SQLEntityExporter extends TextFileExporter {
     }
     builder.append(");");
     String sql = builder.toString();
-    LOGGER.debug("built SQL statement: " + sql);
+    LOGGER.debug("built SQL statement: {}", sql);
     return sql;
   }
 

@@ -45,6 +45,10 @@ import java.util.List;
  */
 public class CSVGeneratorUtil {
 
+  private CSVGeneratorUtil() {
+    // private constructor to prevent instantiation
+  }
+
   public static <T> List<WeightedSample<T>> parseDatasetFiles(
       String datasetName, char separator, String nesting, String filenamePattern,
       String encoding, Converter<String, T> converter) {

@@ -35,13 +35,16 @@ import java.util.Map;
 /**
  * Manages {@link FileFormat}s<br/><br/>
  * Created: 17.08.2021 10:48:53
- *
  * @author Volker Bergmann
  * @since 2.0.0
  */
 public class FileFormats {
 
   private static final Map<String, FileFormat> INSTANCES = new HashMap<String, FileFormat>();
+
+  private FileFormats() {
+    // private constructor to prevent instantiation
+  }
 
   public static void register(FileFormat instance) {
     INSTANCES.put(instance.getName(), instance);

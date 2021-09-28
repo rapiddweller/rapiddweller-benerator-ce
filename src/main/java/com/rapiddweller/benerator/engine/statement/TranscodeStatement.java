@@ -151,15 +151,14 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
     ComplexTypeDescriptor type = typeExpression.evaluate(context);
     IdentityModel identity = getIdentityProvider().getIdentity(type.getName(), false);
     String tableName = type.getName();
-    LOGGER.info("Starting transcoding of " + tableName + " from " + source.getId() + " to " + target.getId());
+    LOGGER.info("Starting transcoding of {} from {} to {}", tableName, source.getId(), target.getId());
 
     // iterate rows
     String selector = ExpressionUtil.evaluate(selectorEx, context);
     DataSource<Entity> iterable = source.queryEntities(tableName, selector, context);
     List<GenerationStep<Entity>> generationSteps =
         ComplexTypeGeneratorFactory.createMutatingGenerationSteps(type, false, Uniqueness.NONE, context);
-    GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(
-        tableName, generationSteps, context);
+    GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(tableName, generationSteps);
     try {
       cavs.init(context);
       DataIterator<Entity> iterator = iterable.iterator();
@@ -188,7 +187,7 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
         }
       }
       target.flush();
-      LOGGER.info("Finished transcoding " + source.countEntities(tableName) + " rows of table " + tableName);
+      LOGGER.info("Finished transcoding {} rows of table {}", source.countEntities(tableName), tableName);
     } finally {
       IOUtil.close(cavs);
     }

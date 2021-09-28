@@ -47,7 +47,6 @@ import java.util.Map;
 /**
  * Manages {@link Sequence}s.<br/><br/>
  * Created: 17.02.2010 13:36:17
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -69,6 +68,10 @@ public class SequenceManager {
   public static final Sequence SINGLE_SEQUENCE = register("head", new HeadSequence());
 
   // Construction & lookup -------------------------------------------------------------------------------------------
+
+  private SequenceManager() {
+    // private constructor to prevent instantiation
+  }
 
   public static synchronized Sequence getRegisteredSequence(String name, boolean required) {
     Sequence sequence = instances.get(name);

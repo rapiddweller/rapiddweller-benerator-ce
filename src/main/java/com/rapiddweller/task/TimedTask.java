@@ -33,10 +33,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 /**
- * Wraps a Task and logs its execution time.<br/>
- * <br/>
+ * Wraps a Task and logs its execution time.<br/><br/>
  * Created: 06.07.2007 06:49:20
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.2
@@ -45,11 +43,6 @@ public class TimedTask<E extends Task> extends TaskProxy<E> {
 
   private static final Logger logger = LoggerFactory.getLogger(TimedTask.class);
 
-  /**
-   * Instantiates a new Timed task.
-   *
-   * @param realTask the real task
-   */
   public TimedTask(E realTask) {
     super(realTask);
   }
@@ -58,8 +51,7 @@ public class TimedTask<E extends Task> extends TaskProxy<E> {
   public TaskResult execute(Context context, ErrorHandler errorHandler) {
     long startTime = System.currentTimeMillis();
     TaskResult result = super.execute(context, errorHandler);
-    logger.info("Executing " + realTask + " took " +
-        (System.currentTimeMillis() - startTime) + " ms");
+    logger.info("Executing {} took {} ms", realTask, System.currentTimeMillis() - startTime);
     return result;
   }
 

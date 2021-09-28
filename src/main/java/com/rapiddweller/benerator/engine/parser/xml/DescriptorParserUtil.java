@@ -43,11 +43,14 @@ import org.w3c.dom.Element;
 /**
  * Provides utility methods for XML descriptor parsing.<br/><br/>
  * Created: 19.02.2010 09:32:33
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class DescriptorParserUtil {
+
+  private DescriptorParserUtil() {
+    // private constructor to prevent instantiation
+  }
 
   // direct data retrieval -------------------------------------------------------------------------------------------
 

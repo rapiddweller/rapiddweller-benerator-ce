@@ -67,6 +67,10 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAME;
  */
 public class FactoryUtil {
 
+  private FactoryUtil() {
+    // private constructor to prevent instantiation
+  }
+
   public static void mapDetailsToBeanProperties(FeatureDescriptor descriptor, Object bean, Context context) {
     for (FeatureDetail<?> detail : descriptor.getDetails()) {
       if (!ATT_NAME.equals(detail.getName())) {

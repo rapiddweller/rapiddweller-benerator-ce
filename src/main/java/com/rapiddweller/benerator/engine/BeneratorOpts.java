@@ -41,6 +41,10 @@ public class BeneratorOpts {
 
   private static final int DEFAULT_CACHE_SIZE = 100000;
 
+  private BeneratorOpts() {
+    // private constructor to prevent instantiation
+  }
+
   public static void setValidating(boolean validating) {
     System.setProperty(OPTS_VALIDATE, String.valueOf(validating));
   }

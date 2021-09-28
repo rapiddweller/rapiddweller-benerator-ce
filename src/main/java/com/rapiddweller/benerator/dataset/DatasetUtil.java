@@ -44,32 +44,24 @@ import java.util.concurrent.Callable;
 /**
  * Creates and manages {@link Dataset}s.<br/><br/>
  * Created: 21.03.2008 13:46:54
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
 public class DatasetUtil {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DatasetUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(DatasetUtil.class);
 
-  /**
-   * The constant REGION_NESTING.
-   */
   public static final String REGION_NESTING = "/com/rapiddweller/dataset/region";
 
   private static String defaultRegionName;
   private static Dataset defaultRegion;
 
-  /**
-   * The constant types.
-   */
   protected static final Map<String, Map<String, Dataset>> types = new HashMap<>();
 
-  /**
-   * Default region dataset.
-   *
-   * @return the dataset
-   */
+  private DatasetUtil() {
+    // private constructor to prevent instantiation
+  }
+
   public static Dataset defaultRegion() {
     if (defaultRegion == null) {
       defaultRegion = DatasetUtil.getDataset("region", defaultRegionName());
@@ -77,11 +69,6 @@ public class DatasetUtil {
     return defaultRegion;
   }
 
-  /**
-   * Default region name string.
-   *
-   * @return the string
-   */
   public static String defaultRegionName() {
     if (defaultRegionName == null) {
       defaultRegionName = Country.getDefault().getIsoCode();
@@ -89,22 +76,10 @@ public class DatasetUtil {
     return defaultRegionName;
   }
 
-  /**
-   * Fallback region name string.
-   *
-   * @return the string
-   */
   public static String fallbackRegionName() {
     return Country.getFallback().getIsoCode();
   }
 
-  /**
-   * Gets dataset.
-   *
-   * @param nesting the nesting
-   * @param name    the name
-   * @return the dataset
-   */
   public static Dataset getDataset(String nesting, String name) {
     Map<String, Dataset> sets = types.get(nesting);
     if (sets == null) {
@@ -113,14 +88,6 @@ public class DatasetUtil {
     return getDataset(nesting, name, sets);
   }
 
-  /**
-   * Get data files string [ ].
-   *
-   * @param filenamePattern the filename pattern
-   * @param datasetName     the dataset name
-   * @param nesting         the nesting
-   * @return the string [ ]
-   */
   public static String[] getDataFiles(String filenamePattern, String datasetName, String nesting) {
     Dataset dataset = getDataset(nesting, datasetName);
     ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
@@ -137,30 +104,17 @@ public class DatasetUtil {
         if (IOUtil.isURIAvailable(filename)) {
           builder.add(filename);
         } else {
-          LOGGER.warn("Data file not found: " + filename);
+          logger.warn("Data file not found: {}", filename);
         }
       }
     }
     return builder.toArray();
   }
 
-  /**
-   * Filename of dataset string.
-   *
-   * @param datasetName     the dataset name
-   * @param filenamePattern the filename pattern
-   * @return the string
-   */
   public static String filenameOfDataset(String datasetName, String filenamePattern) {
     return MessageFormat.format(filenamePattern, datasetName);
   }
 
-  /**
-   * Run in region.
-   *
-   * @param regionName the region name
-   * @param task       the task
-   */
   public static void runInRegion(String regionName, Runnable task) {
     String realDefaultRegionName = defaultRegionName;
     defaultRegionName = regionName;
@@ -173,15 +127,6 @@ public class DatasetUtil {
     }
   }
 
-  /**
-   * Call in region t.
-   *
-   * @param <T>        the type parameter
-   * @param regionName the region name
-   * @param task       the task
-   * @return the t
-   * @throws Exception the exception
-   */
   public static <T> T callInRegion(String regionName, Callable<T> task) throws Exception {
     String realDefaultRegionName = defaultRegionName;
     defaultRegionName = regionName;
@@ -225,12 +170,6 @@ public class DatasetUtil {
     }
   }
 
-  /**
-   * Default language for region locale.
-   *
-   * @param datasetName the dataset name
-   * @return the locale
-   */
   public static Locale defaultLanguageForRegion(String datasetName) {
     if (StringUtil.isEmpty(datasetName)) {
       return Locale.getDefault();

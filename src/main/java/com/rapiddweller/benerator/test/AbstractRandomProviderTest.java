@@ -27,7 +27,6 @@
 package com.rapiddweller.benerator.test;
 
 import com.rapiddweller.benerator.RandomProvider;
-import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.common.collection.ObjectCounter;
 import org.junit.Test;

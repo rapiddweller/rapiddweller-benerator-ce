@@ -53,6 +53,10 @@ public class BeneratorUtil {
 
   private static final Logger CONFIG_LOGGER = LoggerFactory.getLogger(LogCategoriesConstants.CONFIG);
 
+  private BeneratorUtil() {
+    // private constructor to prevent instantiation
+  }
+
   public static boolean isDescriptorFilePath(String filePath) {
     if (StringUtil.isEmpty(filePath)) {
       return false;

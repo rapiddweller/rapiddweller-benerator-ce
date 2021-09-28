@@ -26,7 +26,6 @@
 
 package com.rapiddweller.benerator;
 
-import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 
@@ -35,7 +34,6 @@ import java.util.List;
 /**
  * Common interface for classes which encode entities.<br/><br/>
  * Created: 17.08.2021 10:48:53
- *
  * @author Volker Bergmann
  * @since 2.0.0
  */

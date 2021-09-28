@@ -63,10 +63,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Executes an &lt;evaluate/&gt; from an XML descriptor.<br/>
- * <br/>
+ * Executes an &lt;evaluate/&gt; from an XML descriptor.<br/><br/>
  * Created at 23.07.2009 17:59:36
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -86,71 +84,19 @@ public class EvaluateStatement implements Statement {
     }
   }
 
-  /**
-   * The Evaluate.
-   */
   boolean evaluate;
-  /**
-   * The Id ex.
-   */
   Expression<String> idEx;
-  /**
-   * The Text ex.
-   */
   Expression<String> textEx;
-  /**
-   * The Uri ex.
-   */
   Expression<String> uriEx;
-  /**
-   * The Type ex.
-   */
   Expression<String> typeEx;
-  /**
-   * The Target object ex.
-   */
   Expression<?> targetObjectEx;
-  /**
-   * The Separator ex.
-   */
   Expression<Character> separatorEx;
-  /**
-   * The On error ex.
-   */
   Expression<String> onErrorEx;
-  /**
-   * The Encoding ex.
-   */
   Expression<String> encodingEx;
-  /**
-   * The Optimize ex.
-   */
   Expression<Boolean> optimizeEx;
-  /**
-   * The Invalidate ex.
-   */
   Expression<Boolean> invalidateEx;
-  /**
-   * The Assertion ex.
-   */
   Expression<?> assertionEx;
 
-  /**
-   * Instantiates a new Evaluate statement.
-   *
-   * @param evaluate       the evaluate
-   * @param idEx           the id ex
-   * @param textEx         the text ex
-   * @param uriEx          the uri ex
-   * @param typeEx         the type ex
-   * @param targetObjectEx the target object ex
-   * @param separatorEx    the separator ex
-   * @param onErrorEx      the on error ex
-   * @param encodingEx     the encoding ex
-   * @param optimizeEx     the optimize ex
-   * @param invalidateEx   the invalidate ex
-   * @param assertionEx    the assertion ex
-   */
   public EvaluateStatement(boolean evaluate, Expression<String> idEx, Expression<String> textEx,
                            Expression<String> uriEx, Expression<String> typeEx, Expression<?> targetObjectEx,
                            Expression<Character> separatorEx, Expression<String> onErrorEx, Expression<String> encodingEx,
@@ -169,11 +115,6 @@ public class EvaluateStatement implements Statement {
     this.assertionEx = assertionEx;
   }
 
-  /**
-   * Gets text ex.
-   *
-   * @return the text ex
-   */
   public Expression<String> getTextEx() {
     return textEx;
   }
@@ -318,7 +259,7 @@ public class EvaluateStatement implements Statement {
     Assert.instanceOf(targetObject, DBSystem.class, "target");
     DBSystem db = (DBSystem) targetObject;
     if (uri != null) {
-      logger.info("Executing script " + uri);
+      logger.info("Executing script {}", uri);
     } else if (text != null) {
       logger.info("Executing inline script");
     } else {

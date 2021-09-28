@@ -2,7 +2,6 @@
 
 package com.rapiddweller.benerator.composite;
 
-import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.engine.AbstractScopedLifeCycleHolder;
 import com.rapiddweller.benerator.engine.BeneratorContext;

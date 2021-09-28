@@ -57,6 +57,10 @@ import java.util.Objects;
  */
 public class RegexGeneratorFactory {
 
+  private RegexGeneratorFactory() {
+    // private constructor to prevent instantiation
+  }
+
   public static NonNullGenerator<String> create(String pattern, GeneratorFactory factory) {
     return create(pattern, 0, null, Uniqueness.NONE, factory);
   }
@@ -101,7 +105,7 @@ public class RegexGeneratorFactory {
       return createCharSetGenerator(((RegexCharClass) object).getCharSet(), minQuant, maxQuant, minLength, maxLength,
           uniqueness, factory);
     } else if (object instanceof Sequence) {
-      return createFromSequence((Sequence) object, minQuant, maxQuant, minLength, maxLength, uniqueness, factory);
+      return createFromSequence((Sequence) object, maxLength, uniqueness, factory);
     } else if (object instanceof Group) {
       return createFromGroup((Group) object, minQuant, maxQuant, minLength, maxLength, uniqueness, factory);
     } else if (object instanceof Choice) {
@@ -117,8 +121,9 @@ public class RegexGeneratorFactory {
   }
 
   @SuppressWarnings("unchecked")
-  private static NonNullGenerator<String> createFromSequence(Sequence sequence, int minCount, Integer maxCount,
-                                                             int minLength, Integer maxLength, Uniqueness uniqueness, GeneratorFactory factory) {
+  private static NonNullGenerator<String> createFromSequence(
+      Sequence sequence, Integer maxLength,
+      Uniqueness uniqueness, GeneratorFactory factory) {
     RegexPart[] parts = sequence.getFactors();
     Generator<String>[] componentGenerators = createComponentGenerators(
         parts, maxLength, maxLength, uniqueness, factory);

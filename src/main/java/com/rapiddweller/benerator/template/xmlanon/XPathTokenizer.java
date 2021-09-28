@@ -32,18 +32,15 @@ import java.util.List;
 /**
  * Tokenizes XPath expressions.<br/><br/>
  * Created: 27.02.2014 15:01:24
- *
  * @author Volker Bergmann
  * @since 0.9.0
  */
 public class XPathTokenizer {
 
-  /**
-   * Tokenize list.
-   *
-   * @param path the path
-   * @return the list
-   */
+  private XPathTokenizer() {
+    // private constructor to prevent instantiation
+  }
+
   public static List<String> tokenize(String path) {
     ArrayList<String> list = new ArrayList<>();
     int depth = 0;
@@ -76,14 +73,6 @@ public class XPathTokenizer {
     return list;
   }
 
-  /**
-   * Merge string.
-   *
-   * @param tokens the tokens
-   * @param from   the from
-   * @param to     the to
-   * @return the string
-   */
   public static String merge(List<String> tokens, int from, int to) {
     StringBuilder builder = new StringBuilder();
     for (int i = from; i <= to; i++) {
@@ -95,12 +84,6 @@ public class XPathTokenizer {
     return builder.toString();
   }
 
-  /**
-   * Node name string.
-   *
-   * @param token the token
-   * @return the string
-   */
   public static String nodeName(String token) {
     int sep = token.indexOf('[');
     if (sep < 0) {

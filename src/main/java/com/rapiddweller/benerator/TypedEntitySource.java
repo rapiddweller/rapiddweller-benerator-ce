@@ -27,10 +27,8 @@
 package com.rapiddweller.benerator;
 
 import com.rapiddweller.format.DataIterator;
-import com.rapiddweller.format.DataSource;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.model.data.EntitySource;
 
 import java.io.Closeable;
 

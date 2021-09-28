@@ -29,7 +29,6 @@ package com.rapiddweller.benerator.wrapper;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
-import com.rapiddweller.common.Assert;
 
 /**
  * Wraps another Generator of same product type.<br/><br/>

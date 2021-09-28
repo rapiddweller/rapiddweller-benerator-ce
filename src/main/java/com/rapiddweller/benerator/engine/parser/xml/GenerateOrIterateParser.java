@@ -259,8 +259,8 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
         element.getAttribute(ATT_PAGER));
     Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_NAME));
     Expression<Long> minCount = DescriptorUtil.getMinCount(descriptor, 0L);
-    GenerateOrIterateStatement statement = createStatement(getTaskName(descriptor), countGenerator, minCount, pageSize, pager, infoLog,
-        nested, element, errorHandler, context);
+    GenerateOrIterateStatement statement = createStatement(getTaskName(descriptor),
+        countGenerator, minCount, pageSize, pager, infoLog, nested, errorHandler, context);
 
     // parse task and sub statements
     GenerateAndConsumeTask task = parseTask(element, parentPath, statement, parsingContext, descriptor, infoLog);
@@ -270,8 +270,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 
   protected GenerateOrIterateStatement createStatement(String productName, Generator<Long> countGenerator,
                                                        Expression<Long> minCount, Expression<Long> pageSize,
-                                                       Expression<PageListener> pager, boolean infoLog,
-                                                       boolean nested, Element element,
+                                                       Expression<PageListener> pager, boolean infoLog, boolean nested,
                                                        Expression<ErrorHandler> errorHandler, BeneratorContext context) {
     return new GenerateOrIterateStatement(productName, countGenerator, minCount, pageSize, pager,
         errorHandler, infoLog, nested, context);
@@ -420,7 +419,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
       }
       if (warn) {
         logger.warn("Benerator CE does not support multithreaded generation or iteration: " +
-            "Ignoring threads='" + threads + "'.");
+            "Ignoring threads='{}'.", threads);
       }
     }
   }

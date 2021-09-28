@@ -46,6 +46,10 @@ public class MetaGeneratorFactory {
 
   private static final ArrayTypeGeneratorFactory arrayTypeGeneratorFactory = new ArrayTypeGeneratorFactory();
 
+  private MetaGeneratorFactory() {
+    // private constructor to prevent instantiation
+  }
+
   /** Creates a 'base generator' based on an {@link com.rapiddweller.model.data.InstanceDescriptor}
    *  and applies some basic configuration. If the descriptor has a 'source' feature, the base generator
    *  will iterate a {@link com.rapiddweller.format.DataSource}, otherwise it will evaluate a 'script',

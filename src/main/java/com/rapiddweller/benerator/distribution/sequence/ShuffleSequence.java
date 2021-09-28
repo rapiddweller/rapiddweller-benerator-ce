@@ -55,7 +55,7 @@ public class ShuffleSequence extends DetachedSequence {
   }
 
   public ShuffleSequence(BigDecimal increment) {
-    this.increment = null;
+    this.increment = increment;
   }
 
   @Override

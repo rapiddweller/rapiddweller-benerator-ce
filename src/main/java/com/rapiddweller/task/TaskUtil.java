@@ -29,20 +29,15 @@ package com.rapiddweller.task;
 /**
  * Provides utility methods for {@link Task}s.<br/><br/>
  * Created: 08.07.2010 16:59:29
- *
  * @author Volker Bergmann
  * @since 0.6.3
  */
 public class TaskUtil {
 
-  /**
-   * Unwrap t.
-   *
-   * @param <T>  the type parameter
-   * @param task the task
-   * @param type the type
-   * @return the t
-   */
+  private TaskUtil() {
+    // private constructor to prevent instantiation
+  }
+
   @SuppressWarnings("unchecked")
   public static <T extends Task> T unwrap(Task task, Class<T> type) {
     //changed task to task.getClass()

@@ -57,7 +57,7 @@ public class GenerationStepSupport<E> implements ThreadAware, MessageHolder, Res
   private final List<GenerationStep<E>> steps;
   private String message;
 
-  public GenerationStepSupport(String instanceName, List<GenerationStep<E>> steps, GeneratorContext context) {
+  public GenerationStepSupport(String instanceName, List<GenerationStep<E>> steps) {
     this.instanceName = instanceName;
     this.steps = (steps != null ? steps : new ArrayList<>());
   }

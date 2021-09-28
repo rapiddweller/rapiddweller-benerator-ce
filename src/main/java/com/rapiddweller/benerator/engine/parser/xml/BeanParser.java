@@ -84,7 +84,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
         throw new ConfigurationError("Error parsing bean spec: " + beanSpec, e);
       }
     } else if (!StringUtil.isEmpty(beanClass)) {
-      logger.debug("Instantiating bean of class " + beanClass + " (id=" + id + ")");
+      logger.debug("Instantiating bean of class {} (id={})", beanClass, id);
       instantiation = new DefaultConstruction(beanClass);
     } else {
       syntaxError("bean definition is missing 'class' or 'spec' attribute", element);
@@ -110,7 +110,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
         throw new ConfigurationError("Error parsing bean spec: " + beanSpecString, e);
       }
     } else if (!StringUtil.isEmpty(beanClass)) {
-      logger.debug("Instantiating bean of class " + beanClass + " (id=" + id + ")");
+      logger.debug("Instantiating bean of class {} (id={})", beanClass, id);
       instantiation = new DefaultConstruction<>(beanClass);
     } else {
       throw new ConfigurationError("Syntax error in definition of bean " + id);
