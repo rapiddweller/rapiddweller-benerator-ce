@@ -30,13 +30,13 @@ public class GeneratorTestTest extends GeneratorTest {
 
   @Test
   public void testEqualDistribution_ellipse() {
-    checkEqualDistribution(RandomLongGenerator.class, 0L, 3L, 1L, 1000, 0.1,
+    checkEqualDistribution(RandomLongGenerator.class, 0L, 3L, 1L, 10000, 0.1,
         0L, 1L, 2L, 3L);
   }
 
   @Test
   public void testEqualDistribution_set() {
-    checkEqualDistribution(RandomLongGenerator.class, 0L, 3L, 1L, 1000, 0.1,
+    checkEqualDistribution(RandomLongGenerator.class, 0L, 3L, 1L, 10000, 0.1,
         CollectionUtil.toSet(0L, 1L, 2L, 3L));
   }
 
