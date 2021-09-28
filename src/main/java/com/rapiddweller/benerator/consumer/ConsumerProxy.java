@@ -33,23 +33,14 @@ import com.rapiddweller.common.ThreadAware;
 /**
  * Parent class for {@link Consumer}s that serve as proxy to other Consumers.<br/><br/>
  * Created: 22.10.2009 16:18:07
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public abstract class ConsumerProxy implements Consumer, ThreadAware {
 
-  /**
-   * The Target.
-   */
   protected Consumer target;
 
-  /**
-   * Instantiates a new Consumer proxy.
-   *
-   * @param target the target
-   */
-  public ConsumerProxy(Consumer target) {
+  protected ConsumerProxy(Consumer target) {
     this.target = target;
   }
 
@@ -63,20 +54,10 @@ public abstract class ConsumerProxy implements Consumer, ThreadAware {
     return false;
   }
 
-  /**
-   * Gets target.
-   *
-   * @return the target
-   */
   public Consumer getTarget() {
     return target;
   }
 
-  /**
-   * Sets target.
-   *
-   * @param target the target
-   */
   public void setTarget(Consumer target) {
     this.target = target;
   }

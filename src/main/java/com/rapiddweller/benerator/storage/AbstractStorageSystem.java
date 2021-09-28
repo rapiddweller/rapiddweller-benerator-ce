@@ -36,24 +36,16 @@ import com.rapiddweller.model.data.DataModel;
  * When writing a custom implementation of SystemStorage interface,
  * inherit from this class for assuring future compatibility.
  * If the interface would change in future versions, the future
- * version of this class will try to compensate.<br/>
- * <br/>
+ * version of this class will try to compensate.<br/><br/>
  * Created: 27.01.2008 07:25:39
- *
  * @author Volker Bergmann
  * @since 0.4.0
  */
 public abstract class AbstractStorageSystem implements StorageSystem {
 
-  /**
-   * The Data model.
-   */
   protected DataModel dataModel;
 
-  /**
-   * Instantiates a new Abstract storage system.
-   */
-  public AbstractStorageSystem() {
+  protected AbstractStorageSystem() {
     this.dataModel = null;
   }
 
@@ -72,11 +64,6 @@ public abstract class AbstractStorageSystem implements StorageSystem {
     throw new UnsupportedOperationException("execute() not supported by " + this);
   }
 
-  /**
-   * Updater consumer.
-   *
-   * @return the consumer
-   */
   public Consumer updater() {
     return new StorageSystemUpdater(this);
   }

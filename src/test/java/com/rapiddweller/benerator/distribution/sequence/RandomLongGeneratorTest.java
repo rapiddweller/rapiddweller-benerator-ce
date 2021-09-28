@@ -32,25 +32,17 @@ import com.rapiddweller.common.validator.ConstantValidator;
 import org.junit.Test;
 
 /**
- * Tests the {@link RandomLongGenerator}.<br/>
- * <br/>
+ * Tests the {@link RandomLongGenerator}.<br/><br/>
  * Created: 11.10.2006 23:03:30
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class RandomLongGeneratorTest extends GeneratorClassTest {
 
-  /**
-   * Instantiates a new Random long generator test.
-   */
   public RandomLongGeneratorTest() {
     super(RandomLongGenerator.class);
   }
 
-  /**
-   * Test zero range.
-   */
   @Test
   public void testZeroRange() {
     RandomLongGenerator generator = new RandomLongGenerator(42L, 42L);
@@ -58,9 +50,6 @@ public class RandomLongGeneratorTest extends GeneratorClassTest {
     expectGenerations(generator, 3000, new ConstantValidator(42L));
   }
 
-  /**
-   * Test simple.
-   */
   @Test
   public void testSimple() {
     RandomLongGenerator generator = new RandomLongGenerator(0, 1L);
@@ -68,9 +57,6 @@ public class RandomLongGeneratorTest extends GeneratorClassTest {
     checkEqualDistribution(generator, 3000, 0.1, CollectionUtil.toSet(0L, 1L));
   }
 
-  /**
-   * Test granularity.
-   */
   @Test
   public void testGranularity() {
     RandomLongGenerator generator = new RandomLongGenerator(-2, 2L, 2);
@@ -78,14 +64,17 @@ public class RandomLongGeneratorTest extends GeneratorClassTest {
     checkEqualDistribution(generator, 3000, 0.1, CollectionUtil.toSet(-2L, 0L, 2L));
   }
 
-  /**
-   * Test granularity offset.
-   */
   @Test
   public void testGranularityOffset() {
     RandomLongGenerator generator = new RandomLongGenerator(-1, 3L, 2);
     generator.init(context);
     checkEqualDistribution(generator, 3000, 0.1, CollectionUtil.toSet(-1L, 1L, 3L));
+  }
+
+  @Test
+  public void testEqualDistribution() {
+    checkEqualDistribution(RandomLongGenerator.class, 0L, 3L, 1L, 1000, 0.1,
+        0L, 1L, 2L, 3L);
   }
 
 }

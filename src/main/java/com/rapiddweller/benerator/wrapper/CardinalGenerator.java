@@ -54,17 +54,17 @@ public abstract class CardinalGenerator<S, P> extends GeneratorWrapper<S, P> {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  public CardinalGenerator(Generator<S> source, boolean resettingCardinal, NonNullGenerator<Integer> cardinalGenerator) {
+  protected CardinalGenerator(Generator<S> source, boolean resettingCardinal, NonNullGenerator<Integer> cardinalGenerator) {
     super(source);
     this.cardinalGenerator = cardinalGenerator;
     this.resettingCardinal = resettingCardinal;
   }
 
-  public CardinalGenerator(Generator<S> source, boolean resettingCardinalGenerator) {
+  protected CardinalGenerator(Generator<S> source, boolean resettingCardinalGenerator) {
     this(source, resettingCardinalGenerator, 0, 30, 1, SequenceManager.RANDOM_SEQUENCE);
   }
 
-  public CardinalGenerator(Generator<S> source, boolean resettingCardinalGenerator,
+  protected CardinalGenerator(Generator<S> source, boolean resettingCardinalGenerator,
                            int minCardinal, int maxCardinal, int cardinalGranularity, Distribution cardinalDistribution) {
     super(source);
     this.minCardinal = minCardinal;

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -31,45 +31,24 @@ import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.MessageHolder;
 
 /**
- * Wraps a Task and forwards invocations.<br/>
- * <br/>
+ * Wraps a Task and forwards invocations.<br/><br/>
  * Created: 06.07.2007 06:36:22
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.2
  */
-public abstract class TaskProxy<E extends Task> extends AbstractTask
-    implements Cloneable, MessageHolder {
+public abstract class TaskProxy<E extends Task> extends AbstractTask implements Cloneable, MessageHolder {
 
-  /**
-   * The Real task.
-   */
   protected E realTask;
 
-  /**
-   * Instantiates a new Task proxy.
-   *
-   * @param realTask the real task
-   */
-  public TaskProxy(E realTask) {
+  protected TaskProxy(E realTask) {
     setRealTask(realTask);
   }
 
-  /**
-   * Gets real task.
-   *
-   * @return the real task
-   */
   public E getRealTask() {
     return realTask;
   }
 
-  /**
-   * Sets real task.
-   *
-   * @param realTask the real task
-   */
   public void setRealTask(E realTask) {
     this.realTask = realTask;
     setTaskName(realTask != null ? realTask.getClass().getSimpleName() :

@@ -31,11 +31,10 @@ import com.rapiddweller.common.converter.NumberToNumberConverter;
 import java.math.BigInteger;
 
 /**
- * Wrapper for a LongGenerator that maps the generated Longs to BigIntegers.<br/>
- * <br/>
+ * Wrapper for a LongGenerator that maps the generated Longs to BigIntegers.<br/><br/>
  * Created: 07.06.2006 19:04:08
- *
  * @author Volker Bergmann
+ * @since 0.1
  */
 public abstract class AbstractBigIntegerGenerator extends AbstractNonNullNumberGenerator<BigInteger> {
 
@@ -49,31 +48,19 @@ public abstract class AbstractBigIntegerGenerator extends AbstractNonNullNumberG
       (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff}
   );
 
-  /**
-   * Initializes the generator to create uniformly distributed random BigIntegers with granularity 1
-   */
-  public AbstractBigIntegerGenerator() {
+  /** Initializes the generator to create uniformly distributed random BigIntegers with granularity 1 */
+  protected AbstractBigIntegerGenerator() {
     this(DEFAULT_MIN, DEFAULT_MAX);
   }
 
-  /**
-   * Initializes the generator to create uniformly distributed random BigIntegers with granularity 1
-   *
-   * @param min the min
-   * @param max the max
-   */
-  public AbstractBigIntegerGenerator(BigInteger min, BigInteger max) {
+  /** Initializes the generator to create uniformly distributed random BigIntegers with granularity 1 */
+  protected AbstractBigIntegerGenerator(BigInteger min, BigInteger max) {
     this(min, max, NumberToNumberConverter.convert(1, BigInteger.class));
   }
 
-  /**
-   * Initializes the generator to create uniformly distributed random BigIntegers with the specified granularity
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   */
-  public AbstractBigIntegerGenerator(BigInteger min, BigInteger max, BigInteger granularity) {
+  /** Initializes the generator to create uniformly distributed random BigIntegers with the specified granularity */
+  protected AbstractBigIntegerGenerator(BigInteger min, BigInteger max, BigInteger granularity) {
     super(BigInteger.class, min, max, granularity);
   }
+
 }

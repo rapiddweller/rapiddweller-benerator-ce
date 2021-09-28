@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -33,7 +33,6 @@ import java.util.Collection;
 /**
  * Generates values from a list of samples.<br/><br/>
  * Created: 29.04.2008 07:30:08
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.5.2
@@ -42,12 +41,7 @@ public abstract class AbstractSampleGenerator<E> extends ThreadSafeGenerator<E> 
 
   private final Class<E> generatedType;
 
-  /**
-   * Instantiates a new Abstract sample generator.
-   *
-   * @param generatedType the generated type
-   */
-  public AbstractSampleGenerator(Class<E> generatedType) {
+  protected AbstractSampleGenerator(Class<E> generatedType) {
     this.generatedType = generatedType;
   }
 
@@ -56,12 +50,7 @@ public abstract class AbstractSampleGenerator<E> extends ThreadSafeGenerator<E> 
     return generatedType;
   }
 
-  /**
-   * Adds values to the sample list
-   *
-   * @param <T>    the type parameter
-   * @param values the values
-   */
+  /** Adds values to the sample list */
   public <T extends E> void setValues(Iterable<T> values) {
     clear();
     if (values != null) {
@@ -71,12 +60,7 @@ public abstract class AbstractSampleGenerator<E> extends ThreadSafeGenerator<E> 
     }
   }
 
-  /**
-   * Sets the sample list to the specified values
-   *
-   * @param <T>    the type parameter
-   * @param values the values
-   */
+  /** Sets the sample list to the specified values */
   @SafeVarargs
   public final <T extends E> void setValues(T... values) {
     clear();
@@ -87,12 +71,7 @@ public abstract class AbstractSampleGenerator<E> extends ThreadSafeGenerator<E> 
     }
   }
 
-  /**
-   * Adds values to the sample list
-   *
-   * @param <T>    the type parameter
-   * @param values the values
-   */
+  /** Adds values to the sample list */
   @SafeVarargs
   public final <T extends E> void addValues(T... values) {
     if (values != null) {
@@ -102,12 +81,7 @@ public abstract class AbstractSampleGenerator<E> extends ThreadSafeGenerator<E> 
     }
   }
 
-  /**
-   * Adds values to the sample list
-   *
-   * @param <T>    the type parameter
-   * @param values the values
-   */
+  /** Adds values to the sample list */
   public <T extends E> void addValues(Collection<T> values) {
     if (values != null) {
       for (T value : values) {
@@ -116,24 +90,12 @@ public abstract class AbstractSampleGenerator<E> extends ThreadSafeGenerator<E> 
     }
   }
 
-  /**
-   * Adds a value to the sample list
-   *
-   * @param <T>   the type parameter
-   * @param value the value
-   */
+  /** Adds a value to the sample list */
   public abstract <T extends E> void addValue(T value);
 
-  /**
-   * Removes all values from the sample list
-   */
+  /** Removes all values from the sample list */
   public abstract void clear();
 
-  /**
-   * Gets variety.
-   *
-   * @return the variety
-   */
   public abstract long getVariety();
 
 }

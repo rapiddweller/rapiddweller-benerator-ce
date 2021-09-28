@@ -29,56 +29,35 @@ package com.rapiddweller.benerator.util;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Validator;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 
 /**
- * Provides an abstract implementation of a generator that validates its generated values.<br/>
- * <br/>
+ * Provides an abstract implementation of a generator that validates its generated values.<br/><br/>
  * Created: 23.09.2006 00:03:04
- *
  * @param <P> the type parameter
  * @author Volker Bergmann
  * @since 0.1
  */
 public abstract class ValidatingGenerator<P> extends AbstractGenerator<P> {
 
-  /**
-   * The Logger
-   */
-  private static final Logger logger = LoggerFactory.getLogger(ValidatingGenerator.class);
-
-  /**
-   * The number of invalid consecutive generations that causes a warning
-   */
+  /** The number of invalid consecutive generations that causes a warning */
   public static final int WARNING_THRESHOLD = 100;
 
-  /**
-   * The number of invalid consecutive generations that causes an exception
-   */
+  /** The number of invalid consecutive generations that causes an exception */
   public static final int ERROR_THRESHOLD = 1000;
 
-  /**
-   * The validator used for validation
-   */
+  /** The validator used for validation */
   protected final Validator<P> validator;
 
-  /**
-   * Constructor that takes the validator
-   *
-   * @param validator the validator
-   */
-  public ValidatingGenerator(Validator<P> validator) {
+  /** Constructor that takes the validator */
+  protected ValidatingGenerator(Validator<P> validator) {
     this.validator = validator;
   }
 
-  /**
-   * Generator implementation that calls generateImpl() to generate values
-   * and validator.validate() in order to validate them.
-   * Consecutive invalid values are counted. If this count reaches the
-   * WARNING_THRESHOLD value, a warning is logged, if the count reaches the
-   * ERROR_THRESHOLD, an exception is raised.
-   */
+  /** Generator implementation that calls generateImpl() to generate values
+   *  and validator.validate() in order to validate them.
+   *  Consecutive invalid values are counted. If this count reaches the
+   *  WARNING_THRESHOLD value, a warning is logged, if the count reaches the
+   *  ERROR_THRESHOLD, an exception is raised. */
   @Override
   public ProductWrapper<P> generate(ProductWrapper<P> wrapper) {
     boolean valid;
@@ -99,18 +78,13 @@ public abstract class ValidatingGenerator<P> extends AbstractGenerator<P> {
       }
     } while (!valid);
     if (count >= WARNING_THRESHOLD) {
-      logger.warn("Inefficient generation: needed " + count + " tries to generate a valid value. ");
+      logger.warn("Inefficient generation: needed {}} tries to generate a valid value. ", count);
     }
     return wrapper.wrap(product);
   }
 
-  /**
-   * Callback method that does the job of creating values.
-   * This is to be implemented by child classes.
-   *
-   * @param wrapper the wrapper
-   * @return the product wrapper
-   */
+  /** Callback method that does the job of creating values.
+   *  This is to be implemented by child classes */
   protected abstract ProductWrapper<P> doGenerate(ProductWrapper<P> wrapper);
 
 }

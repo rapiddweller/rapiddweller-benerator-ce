@@ -43,53 +43,26 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  * <code>target</code> and <code>irrelevantColumns</code>,
  * <code>pageSize</code> and <code>onError</code>.<br/><br/>
  * Created: 11.09.2010 07:12:55
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public abstract class AbstractTranscodeParser extends AbstractBeneratorDescriptorParser {
 
-  /**
-   * Instantiates a new Abstract transcode parser.
-   *
-   * @param elementName          the element name
-   * @param requiredAttributes   the required attributes
-   * @param optionalAttributes   the optional attributes
-   * @param supportedParentTypes the supported parent types
-   */
-  public AbstractTranscodeParser(String elementName,
+  protected AbstractTranscodeParser(String elementName,
                                  Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
     super(elementName, requiredAttributes, optionalAttributes, supportedParentTypes);
   }
 
-  /**
-   * Parse target expression.
-   *
-   * @param element the element
-   * @return the expression
-   */
   @SuppressWarnings("unchecked")
   protected Expression<DBSystem> parseTarget(Element element) {
     return (Expression<DBSystem>) parseScriptAttribute("target", element);
   }
 
-  /**
-   * Parse source expression.
-   *
-   * @param element the element
-   * @return the expression
-   */
   @SuppressWarnings("unchecked")
   protected Expression<DBSystem> parseSource(Element element) {
     return (Expression<DBSystem>) parseScriptAttribute("source", element);
   }
 
-  /**
-   * Parse irrelevant columns expression.
-   *
-   * @param element the element
-   * @return the expression
-   */
   protected Expression<String[]> parseIrrelevantColumns(Element element) {
     return new ConvertingExpression<>(
         parseAttribute("irrelevantColumns", element), new SplitStringConverter(','));

@@ -38,7 +38,7 @@ public abstract class AbstractScopedLifeCycleHolder implements ScopedLifeCycleHo
   private String scope;
   private boolean resetNeeded;
 
-  public AbstractScopedLifeCycleHolder(String scope) {
+  protected AbstractScopedLifeCycleHolder(String scope) {
     this.scope = scope;
     setResetNeeded(false);
   }
