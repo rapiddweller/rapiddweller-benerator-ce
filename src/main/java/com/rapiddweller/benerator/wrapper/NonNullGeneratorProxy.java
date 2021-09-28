@@ -33,7 +33,6 @@ import com.rapiddweller.benerator.NonNullGenerator;
  * {@link GeneratorProxy} implementation which implements the {@link NonNullGenerator} interface and
  * supports its implementors as source {@link Generator}.<br/><br/>
  * Created: 27.07.2011 11:57:17
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.7.0
@@ -42,35 +41,19 @@ public abstract class NonNullGeneratorProxy<E> extends GeneratorProxy<E> impleme
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Non null generator proxy.
-   *
-   * @param generatedType the generated type
-   */
-  public NonNullGeneratorProxy(Class<E> generatedType) {
+  protected NonNullGeneratorProxy(Class<E> generatedType) {
     super(generatedType);
   }
 
-  /**
-   * Instantiates a new Non null generator proxy.
-   *
-   * @param source the source
-   */
-  public NonNullGeneratorProxy(NonNullGenerator<E> source) {
+  protected NonNullGeneratorProxy(NonNullGenerator<E> source) {
     super(source);
   }
 
-  /**
-   * Returns the source generator
-   */
   @Override
   public NonNullGenerator<E> getSource() {
     return (NonNullGenerator<E>) super.getSource();
   }
 
-  /**
-   * Sets the source generator
-   */
   @Override
   public void setSource(Generator<E> source) {
     if (!(source instanceof NonNullGenerator)) {
@@ -79,11 +62,6 @@ public abstract class NonNullGeneratorProxy<E> extends GeneratorProxy<E> impleme
     super.setSource(source);
   }
 
-  /**
-   * Generate from not null source e.
-   *
-   * @return the e
-   */
   protected final E generateFromNotNullSource() {
     return getSource().generate();
   }

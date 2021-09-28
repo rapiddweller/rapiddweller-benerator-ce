@@ -38,56 +38,29 @@ import java.util.List;
 /**
  * Combines other statements to a composite statement.<br/><br/>
  * Created: 27.10.2009 15:59:21
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public abstract class CompositeStatement extends AbstractStatement implements Closeable, Element<Statement> {
 
-  /**
-   * The Sub statements.
-   */
   protected List<Statement> subStatements = new ArrayList<>();
 
-  /**
-   * Instantiates a new Composite statement.
-   */
-  public CompositeStatement() {
+  protected CompositeStatement() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Composite statement.
-   *
-   * @param subStatements the sub statements
-   */
-  public CompositeStatement(List<Statement> subStatements) {
+  protected CompositeStatement(List<Statement> subStatements) {
     this.subStatements = (subStatements != null ? subStatements : new ArrayList<>());
   }
 
-  /**
-   * Gets sub statements.
-   *
-   * @return the sub statements
-   */
   public List<Statement> getSubStatements() {
     return subStatements;
   }
 
-  /**
-   * Add sub statement.
-   *
-   * @param subStatement the sub statement
-   */
   public void addSubStatement(Statement subStatement) {
     subStatements.add(subStatement);
   }
 
-  /**
-   * Sets sub statements.
-   *
-   * @param subStatements the sub statements
-   */
   public void setSubStatements(List<Statement> subStatements) {
     this.subStatements = subStatements;
   }

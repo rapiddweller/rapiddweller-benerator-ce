@@ -44,37 +44,24 @@ import java.util.List;
 /**
  * Provides utility methods for data generation.<br/><br/>
  * Created: 19.11.2007 15:27:50
- *
  * @author Volker Bergmann
  */
 public class GeneratorUtil {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GeneratorUtil.class);
 
-  /**
-   * Init.
-   *
-   * @param generator the generator
-   */
-  public static void init(Generator<?> generator) {
-    init(generator, BeneratorFactory.getInstance().createContext("."));
+  private GeneratorUtil() {
+    // private constructor to prevent instantiation of this class
   }
 
-  /**
-   * Init.
-   *
-   * @param generator the generator
-   * @param context   the context
-   */
+  public static void init(Generator<?> generator) {
+    init(generator, BeneratorFactory.getInstance().createRootContext("."));
+  }
+
   public static void init(Generator<?> generator, GeneratorContext context) {
     generator.init(context);
   }
 
-  /**
-   * Close.
-   *
-   * @param generator the generator
-   */
   public static void close(Generator<?> generator) {
     IOUtil.close(generator);
   }
@@ -82,10 +69,6 @@ public class GeneratorUtil {
   /**
    * Calls a {@link Generator}'s {@link Generator#generate(ProductWrapper)} method and returns its unwrapped result,
    * allowing <code>null<code> values as generation results, but requiring the generator to be available.
-   *
-   * @param <T>       the type parameter
-   * @param generator the generator
-   * @return the t
    */
   public static <T> T generateNullable(Generator<T> generator) {
     ProductWrapper<T> wrapper = generator.generate(GeneratorUtil.getWrapper());
@@ -99,10 +82,6 @@ public class GeneratorUtil {
    * Calls a {@link Generator}'s {@link Generator#generate(ProductWrapper)} method and returns its unwrapped result,
    * signaling generator unavailability with a <code>null</code> value and requiring the Generator
    * not to create <code>null</code> values as result.
-   *
-   * @param <T>       the type parameter
-   * @param generator the generator
-   * @return the t
    */
   public static <T> T generateNonNull(Generator<T> generator) {
     ProductWrapper<T> wrapper = generator.generate(GeneratorUtil.getWrapper());
@@ -116,23 +95,10 @@ public class GeneratorUtil {
     return result;
   }
 
-  /**
-   * Gets wrapper.
-   *
-   * @param <T> the type parameter
-   * @return the wrapper
-   */
   protected static <T> ProductWrapper<T> getWrapper() {
     return new ProductWrapper<>();
   }
 
-  /**
-   * All products list.
-   *
-   * @param <T>       the type parameter
-   * @param generator the generator
-   * @return the list
-   */
   public static <T> List<T> allProducts(Generator<T> generator) {
     List<T> list = new ArrayList<>();
     int count = 0;
@@ -142,9 +108,8 @@ public class GeneratorUtil {
       count++;
       if (count > cacheSize) {
         LOGGER.error("Data set of generator has reached the cache limit and will be reduced to its size " +
-            "of " + cacheSize + " elements). " +
-            "If that is not acceptable then choose a distribution that does not cache data sets " +
-            "or increase the cache size. Concerned generator: " + generator);
+            "of {} elements). If that is not acceptable then choose a distribution that does not cache data sets " +
+            "or increase the cache size. Concerned generator: {}", cacheSize, generator);
         break;
       }
       list.add(wrapper.unwrap());
@@ -152,13 +117,6 @@ public class GeneratorUtil {
     return list;
   }
 
-  /**
-   * Common target type of class.
-   *
-   * @param <T>     the type parameter
-   * @param sources the sources
-   * @return the class
-   */
   @SuppressWarnings("unchecked")
   public static <T> Class<T> commonTargetTypeOf(Generator<T>... sources) {
     if (sources.length == 0) {
@@ -174,35 +132,18 @@ public class GeneratorUtil {
     return type;
   }
 
-  /**
-   * Init all.
-   *
-   * @param generators the generators
-   * @param context    the context
-   */
   public static void initAll(Generator<?>[] generators, GeneratorContext context) {
     for (Generator<?> generator : generators) {
       generator.init(context);
     }
   }
 
-  /**
-   * Reset all.
-   *
-   * @param resettables the resettables
-   */
   public static void resetAll(Resettable[] resettables) {
     for (Resettable resettable : resettables) {
       resettable.reset();
     }
   }
 
-  /**
-   * Unwrap generator.
-   *
-   * @param generator the generator
-   * @return the generator
-   */
   public static Generator<?> unwrap(Generator<?> generator) {
     Generator<?> result = generator;
     while (result instanceof GeneratorWrapper) {

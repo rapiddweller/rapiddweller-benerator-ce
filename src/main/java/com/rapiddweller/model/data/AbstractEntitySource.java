@@ -33,25 +33,16 @@ import com.rapiddweller.format.util.AbstractDataSource;
 
 /**
  * Abstract implementation of {@link EntitySource}
- * to be used as parent class for custom implementations.<br/>
- * <br/>
+ * to be used as parent class for custom implementations.<br/><br/>
  * Created at 03.03.2009 17:12:16
- *
  * @author Volker Bergmann
  * @since 0.5.8
  */
-public abstract class AbstractEntitySource extends AbstractDataSource<Entity>
-    implements EntitySource, ContextAware {
+public abstract class AbstractEntitySource extends AbstractDataSource<Entity> implements EntitySource, ContextAware {
 
-  /**
-   * The Context.
-   */
   protected BeneratorContext context;
 
-  /**
-   * Instantiates a new Abstract entity source.
-   */
-  public AbstractEntitySource() {
+  protected AbstractEntitySource() {
     super(Entity.class);
   }
 

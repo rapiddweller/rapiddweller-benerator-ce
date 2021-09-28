@@ -37,7 +37,6 @@ import java.io.Closeable;
 /**
  * Common parent class for Benerator runners that support performance tracking.<br/><br/>
  * Created: 14.03.2010 10:59:00
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -47,64 +46,31 @@ public abstract class PerfTrackingWrapper implements Closeable {
   private final PerformanceRequirement requirement;
   private ReportContext context;
 
-  /**
-   * Instantiates a new Perf tracking wrapper.
-   */
-  public PerfTrackingWrapper() {
+  protected PerfTrackingWrapper() {
     this(null); // allow for lazy PerfromanceTracker initialization
   }
 
-  /**
-   * Instantiates a new Perf tracking wrapper.
-   *
-   * @param tracker the tracker
-   */
-  public PerfTrackingWrapper(PerformanceTracker tracker) {
+  protected PerfTrackingWrapper(PerformanceTracker tracker) {
     this.tracker = tracker;
     this.requirement = new PerformanceRequirement();
     this.context = new BeneratorCpfReportContext();
     context.addReportModule(new ConsoleReportModule());
   }
 
-  /**
-   * Gets invoker.
-   *
-   * @return the invoker
-   */
   protected abstract Invoker getInvoker();
 
-  /**
-   * Sets max.
-   *
-   * @param max the max
-   */
   public void setMax(int max) {
     requirement.setMax(max);
   }
 
-  /**
-   * Sets percentiles.
-   *
-   * @param percentilesSpec the percentiles spec
-   */
   public void setPercentiles(String percentilesSpec) {
     requirement.setPercentiles(percentilesSpec);
   }
 
-  /**
-   * Sets context.
-   *
-   * @param context the context
-   */
   public void setContext(ReportContext context) {
     this.context = context;
   }
 
-  /**
-   * Gets or create tracker.
-   *
-   * @return the or create tracker
-   */
   public PerformanceTracker getOrCreateTracker() {
     if (tracker == null) {
       // the tracker is initialized lazily for allowing the class to be first constructed in a simple way

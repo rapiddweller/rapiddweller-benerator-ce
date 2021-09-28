@@ -31,62 +31,32 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 /**
  * Parent class for {@link EntitySource}s that import entities from files.<br/><br/>
  * Created: 12.03.2010 11:05:13
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public abstract class FileBasedEntitySource extends AbstractEntitySource {
 
-  /**
-   * The Uri.
-   */
   protected String uri;
 
-  /**
-   * Instantiates a new File based entity source.
-   *
-   * @param uri the uri
-   */
-  public FileBasedEntitySource(String uri) {
+  protected FileBasedEntitySource(String uri) {
     this(uri, null);
   }
 
-  /**
-   * Instantiates a new File based entity source.
-   *
-   * @param uri     the uri
-   * @param context the context
-   */
-  public FileBasedEntitySource(String uri, BeneratorContext context) {
+  protected FileBasedEntitySource(String uri, BeneratorContext context) {
     this.uri = uri;
     this.context = context;
   }
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets uri.
-   *
-   * @return the uri
-   */
   public String getUri() {
     return uri;
   }
 
-  /**
-   * Sets uri.
-   *
-   * @param uri the uri
-   */
   public void setUri(String uri) {
     this.uri = uri;
   }
 
-  /**
-   * Resolve uri string.
-   *
-   * @return the string
-   */
   protected String resolveUri() {
     return context.resolveRelativeUri(uri);
   }

@@ -10,12 +10,14 @@ import com.rapiddweller.common.TextUtil;
 import com.rapiddweller.common.VMInfo;
 import com.rapiddweller.common.format.Alignment;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
+import com.rapiddweller.common.ui.InfoPrinter;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.common.version.VersionNumberParser;
-import org.hsqldb.lib.FileUtil;
+import com.rapiddweller.common.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -38,23 +40,25 @@ public class Benchmark {
 
   public static final int DEFAULT_MIN_DURATION_SECS = 10;
 
-  public static final String EE_BENERATOR = "com.rapiddweller.benerator_ee.main.EEBenerator";
+  private static final String EE_BENERATOR = "com.rapiddweller.benerator_ee.main.EEBenerator";
+
+  private static final String V200 = "2.0.0";
+  private static final String V210 = "2.1.0";
 
   private static final Setup[] DEFAULT_SETUPS = {
-      new Setup("gen-string.ben.xml", false, "2.0.0", 100000),
-      new Setup("gen-person-showcase.ben.xml", false, "2.0.0", 80000),
-      new Setup("anon-person-showcase.ben.xml", false, "2.0.0", 100000),
-      new Setup("anon-person-regex.ben.xml", false, "2.0.0", 1500000),
-      new Setup("anon-person-hash.ben.xml", false, "2.0.0", 1500000),
-      new Setup("anon-person-random.ben.xml", false, "2.0.0", 1500000),
-      new Setup("anon-person-constant.ben.xml", false, "2.0.0", 8000000)
-      /* TODO version 2.1.0
-      new Setup("file-out-csv.ben.xml", false, "2.0.0", 1000000),
-      new Setup("file-out-json.ben.xml", true, "2.0.0", 1000000),
-      new Setup("file-out-dbunit.ben.xml", false, "2.0.0", 1000000),
-      new Setup("file-out-fixedwidth.ben.xml", false, "2.0.0", 500000),
-      new Setup("file-out-xml.ben.xml", false, "2.0.0", 500000),
-      */
+      new Setup("gen-string.ben.xml", false, V200, 100000),
+      new Setup("gen-person-showcase.ben.xml", false, V200, 80000),
+      new Setup("anon-person-showcase.ben.xml", false, V200, 100000),
+      new Setup("anon-person-regex.ben.xml", false, V200, 1500000),
+      new Setup("anon-person-hash.ben.xml", false, V200, 1500000),
+      new Setup("anon-person-random.ben.xml", false, V200, 1500000),
+      new Setup("anon-person-constant.ben.xml", false, V200, 8000000),
+      // TODO 2.1.0 measure in/out performance
+      new Setup("file-out-csv.ben.xml", false, V210, 1000000),
+      new Setup("file-out-json.ben.xml", true, V210, 1000000),
+      new Setup("file-out-dbunit.ben.xml", false, V210, 1000000),
+      new Setup("file-out-fixedwidth.ben.xml", false, V210, 500000),
+      new Setup("file-out-xml.ben.xml", false, V210, 500000)
   };
 
   private static final NumberFormat PF = new DecimalFormat("#,##0", DecimalFormatSymbols.getInstance(Locale.US));
@@ -63,6 +67,7 @@ public class Benchmark {
   // main ------------------------------------------------------------------------------------------------------------
 
   public static void main(String[] args) throws IOException {
+    InfoPrinter printer = new ConsoleInfoPrinter();
     if (ArrayUtil.indexOf("--help", args) >= 0 || ArrayUtil.indexOf("-h", args) >= 0) {
       printHelp();
       System.exit(0);
@@ -71,7 +76,7 @@ public class Benchmark {
     boolean ee;
     if (ArrayUtil.indexOf("--ee", args) >= 0) {
       if (!isEEAvailable()) {
-        System.err.println("Benerator Enterprice Edition is not avaliable on this installation");
+        printer.printLines("Benerator Enterprice Edition is not avaliable on this installation");
         System.exit(-1);
       }
       ee = true;
@@ -95,7 +100,7 @@ public class Benchmark {
       maxThreads = Integer.parseInt(args[maxThreadsIndex + 1]);
 
     // run
-    new Benchmark(DEFAULT_SETUPS, mainClassName, minDurationSecs, maxThreads).run();
+    new Benchmark(DEFAULT_SETUPS, mainClassName, minDurationSecs, maxThreads).run(printer);
   }
 
 
@@ -127,25 +132,25 @@ public class Benchmark {
 
   // interface -------------------------------------------------------------------------------------------------------
 
-  public void run() throws IOException {
-    String[] title = createAndPrintTitle();
+  public void run(InfoPrinter printer) throws IOException {
+    String[] title = createAndPrintTitle(printer);
     int[] threadCounts = chooseThreadCounts();
     Object[][] table = createTable(threadCounts);
     // perform tests
     for (int iS = 0; iS < setups.length; iS++) {
       Object[] tableRow = table[iS + 1];
-      printHorizontalLine();
-      runSetup(setups[iS], threadCounts, tableRow);
+      printHorizontalLine(printer);
+      runSetup(setups[iS], threadCounts, tableRow, printer);
     }
-    printHorizontalLine();
+    printHorizontalLine(printer);
     // Pretty-print results in a text table
-    System.out.println();
+    printer.printLines("");
     int cols = table[0].length;
     Alignment[] alignments = new Alignment[cols];
     alignments[0] = Alignment.LEFT;
     for (int i = 1; i < cols; i++)
       alignments[i] = Alignment.RIGHT;
-    System.out.print(TextUtil.formatLinedTable(title, table, alignments));
+    printer.printLines(TextUtil.formatLinedTable(title, table, alignments));
   }
 
 
@@ -192,8 +197,8 @@ public class Benchmark {
     return table;
   }
 
-  private String[] createAndPrintTitle() {
-    printHorizontalLine();
+  private String[] createAndPrintTitle(InfoPrinter printer) {
+    printHorizontalLine(printer);
     String[] title = {
         "Benchmark throughput of " + benerator.getVersion(),
         "on a " + BeneratorUtil.getOsInfo(),
@@ -204,15 +209,14 @@ public class Benchmark {
         "",
         "Numbers are reported in million entities generated per hour"
     };
-    for (String line : title)
-      System.out.println(line);
+    printer.printLines(title);
     for (String line : title)
       logger.debug("{}", line);
     return title;
   }
 
-  private static void printHorizontalLine() {
-    System.out.println("--------------------------------------------------------------------------");
+  private static void printHorizontalLine(InfoPrinter printer) {
+    printer.printLines("--------------------------------------------------------------------------");
   }
 
   private int[] chooseThreadCounts() {
@@ -230,8 +234,8 @@ public class Benchmark {
     return result;
   }
 
-  private void runSetup(Setup setup, int[] threadCounts, Object[] tableRow) throws IOException {
-    System.out.println("Running " + setup.fileName);
+  private void runSetup(Setup setup, int[] threadCounts, Object[] tableRow, InfoPrinter printer) throws IOException {
+    printer.printLines("Running " + setup.fileName);
     tableRow[0] = setup.fileName;
     for (int iT = 0; iT < threadCounts.length; iT++) {
       if (versionNumber.compareTo(setup.requiredVersion) >= 0
@@ -240,9 +244,10 @@ public class Benchmark {
         Execution execution = runWithMinDuration(setup.fileName, minDurationSecs, setup.count, threads, benerator);
         double eps = (double) execution.count / execution.duration * 1000.;
         double meph = 3600. * eps / 1000000.;
-        System.out.print(execution.filename + " with " + threads + (threads > 1 ? " threads: " : " thread:  "));
-        System.out.print(execution.count + " E / " + execution.duration + " ms ");
-        System.out.println(" -> " + PF.format(meph) + " ME/h");
+        String message = execution.filename + " with " + threads + (threads > 1 ? " threads: " : " thread:  ");
+        message += execution.count + " E / " + execution.duration + " ms ";
+        message += " -> " + PF.format(meph) + " ME/h";
+        printer.printLines(message);
         tableRow[iT + 1] = Math.floor(execution.entitiesPerHour());
       } else {
         tableRow[iT + 1] = "N/A";
@@ -268,25 +273,25 @@ public class Benchmark {
   }
 
   private static Execution runTest(String fileName, int count, int threads, Benerator benerator) throws IOException {
-    logger.debug("Testing " + fileName + " with count " + count + " and " + threads + " thread(s)");
+    logger.debug("Testing {} with count {} and {} thread(s)", fileName, count, threads);
     String xml = IOUtil.getContentOfURI("com/rapiddweller/benerator/benchmark/" + fileName);
     xml = xml.replace("{count}", String.valueOf(count));
     xml = xml.replace("{threads}", String.valueOf(threads));
     String filename = "__benchmark.ben.xml";
     IOUtil.writeTextFile(filename, xml);
     long t0 = System.currentTimeMillis();
-    benerator.main(new String[] {filename});
+    benerator.runFile(filename);
     long t1 = System.currentTimeMillis();
-    FileUtil.delete(filename);
-    FileUtil.delete("__benchmark.out");
+    FileUtil.deleteIfExists(new File(filename));
+    FileUtil.deleteIfExists(new File("__benchmark.out"));
     return new Execution(fileName, count, threads, t1 - t0);
   }
 
   public static class Setup {
-    public String fileName;
-    public boolean reqEE;
-    public VersionNumber requiredVersion;
-    public int count;
+    public final String fileName;
+    public final boolean reqEE;
+    public final VersionNumber requiredVersion;
+    public final int count;
 
     public Setup(String fileName, boolean reqEE,  String requiredVersion, int count) {
       this.fileName = fileName;
@@ -297,10 +302,10 @@ public class Benchmark {
   }
 
   public static class Execution {
-    public String filename;
-    public int count;
-    public int threads;
-    public long duration;
+    public final String filename;
+    public final int count;
+    public final int threads;
+    public final long duration;
 
     public Execution(String filename, int count, int threads, long duration) {
       this.filename = filename;

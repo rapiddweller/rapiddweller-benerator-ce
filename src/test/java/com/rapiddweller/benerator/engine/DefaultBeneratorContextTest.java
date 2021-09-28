@@ -41,9 +41,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
- * Tests the {@link BeneratorContext}.<br/><br/>
+ * Tests the {@link DefaultBeneratorContext}.<br/><br/>
  * Created: 31.03.2010 15:15:07
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -51,9 +50,6 @@ public class DefaultBeneratorContextTest {
 
   private static final String OFF_CLASSPATH_RESOURCES_FOLDER = "src/test/offCpResources";
 
-  /**
-   * Test defaults.
-   */
   @Test
   public void testDefaults() {
     BeneratorContext context = new DefaultBeneratorContext();
@@ -70,9 +66,6 @@ public class DefaultBeneratorContextTest {
     context.close();
   }
 
-  /**
-   * Test sys prop access.
-   */
   @Test
   public void testSysPropAccess() {
     BeneratorContext context = new DefaultBeneratorContext();
@@ -80,9 +73,6 @@ public class DefaultBeneratorContextTest {
     context.close();
   }
 
-  /**
-   * Test class in jar in lib folder.
-   */
   @Test
   public void testClassInJarInLibFolder() {
     BeneratorContext context = new DefaultBeneratorContext(OFF_CLASSPATH_RESOURCES_FOLDER);
@@ -93,11 +83,6 @@ public class DefaultBeneratorContextTest {
     context.close();
   }
 
-  /**
-   * Test resource in jar in lib folder.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testResourceInJarInLibFolder() throws Exception {
     String XLS_RESOURCE_NAME = "xls/xls_in_jar.xls";
@@ -111,9 +96,6 @@ public class DefaultBeneratorContextTest {
     context.close();
   }
 
-  /**
-   * Test class file in lib folder.
-   */
   @Test
   public void testClassFileInLibFolder() {
     BeneratorContext context = new DefaultBeneratorContext(OFF_CLASSPATH_RESOURCES_FOLDER);

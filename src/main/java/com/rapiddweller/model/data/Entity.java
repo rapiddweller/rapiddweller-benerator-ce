@@ -31,6 +31,7 @@ import com.rapiddweller.common.Composite;
 import com.rapiddweller.common.CompositeFormatter;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.ProgrammerError;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
@@ -48,7 +49,7 @@ import java.util.Map;
  * @author Volker Bergmann
  * @since 0.3
  */
-public class Entity implements Composite, Cloneable {
+public class Entity implements Composite {
 
   public final ComplexTypeDescriptor descriptor;
   private OrderedNameMap<Object> components;
@@ -182,7 +183,7 @@ public class Entity implements Composite, Cloneable {
   }
 
   private Object copyOrSelf(Object value) {
-    if (value == null|| BeanUtil.isImmutable(value.getClass())) {
+    if (value == null || BeanUtil.isImmutable(value.getClass())) {
       return value;
     }
     Class<?> valueClass = value.getClass();
@@ -191,9 +192,9 @@ public class Entity implements Composite, Cloneable {
     } else if (valueClass.isArray()) {
       return copyArray(value);
     } else if (value instanceof List) {
-      return copyList((List<?>) value);
+      return copyList((List<Object>) value);
     } else {
-      throw new RuntimeException("Don't know how to handle " + valueClass);
+      throw new ProgrammerError("Don't know how to handle " + valueClass);
     }
   }
 
@@ -209,8 +210,8 @@ public class Entity implements Composite, Cloneable {
     return result;
   }
 
-  private Object copyList(List<?> list) {
-    List result = new ArrayList(list.size());
+  private Object copyList(List<Object> list) {
+    List<Object> result = new ArrayList<>(list.size());
     for (Object element : list) {
       result.add(copyOrSelf(element));
     }
@@ -221,21 +222,44 @@ public class Entity implements Composite, Cloneable {
     if (this == that) {
       return true;
     }
+    if (that == null) {
+      return false;
+    }
     if (this.getComponents().size() != that.getComponents().size()) {
       return false;
     }
     for (Map.Entry<String, Object> entry : this.getComponents().entrySet()) {
       Object thisValue = entry.getValue();
       Object thatValue = that.getComponent(entry.getKey());
-      if (thisValue instanceof Entity) {
-        if (!((Entity) thisValue).equalsIgnoringDescriptor((Entity) thatValue)) {
-          return false;
-        }
-      } else if (!NullSafeComparator.equals(entry.getValue(), thatValue)) {
+      if (!equalIgnoringDescriptor(thisValue, thatValue))
         return false;
-      }
     }
     return true;
+  }
+
+  private static boolean equalIgnoringDescriptor(Object o1, Object o2) {
+    if (o1 == null) {
+      return (o2 == null);
+    } else if (o2 == null) {
+      return false;
+    } else if (o1 instanceof Entity) {
+      return (((Entity) o1).equalsIgnoringDescriptor((Entity) o2));
+    } else if (o1.getClass().isArray()) {
+      if (!o2.getClass().isArray()) {
+        return false;
+      }
+      if (Array.getLength(o1) != Array.getLength(o2)) {
+        return false;
+      }
+      for (int i = 0; i < Array.getLength(o1); i++) {
+        if (!equalIgnoringDescriptor(Array.get(o1, i), Array.get(o2, i))) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      return NullSafeComparator.equals(o1, o2);
+    }
   }
 
   // java.lang.overrides ---------------------------------------------------------------------------------------------
@@ -249,31 +273,30 @@ public class Entity implements Composite, Cloneable {
       return false;
     }
     final Entity that = (Entity) o;
-    // the following comparison looks strange, but is needed before I can compare the descriptor names
-    // in order to exclude that any of both descriptors is null
-    if (this.descriptor == null) {
-      if (that.descriptor != null) {
-        return false;
-      }
-    } else if (that.descriptor == null) {
-      return false; // we can only be here if (this.descriptor != null)
-    } else if (!NullSafeComparator.equals(this.descriptor.getName(), that.descriptor.getName())) {
-      // both descriptors are not null, so I can compare their names
-      return false;
+    if (!equalDescriptors(this, that)) {
+      return false; // we can only be here if this.descriptor is not null
     }
-    // NOTE: the contents of the descriptors are not compared
-    return this.components.equalsIgnoreOrder(that.components);
+    return equalIgnoringDescriptor(this, that);
+  }
+
+  private static boolean equalDescriptors(Entity e1, Entity e2) {
+    // the following comparison looks strange, but is needed before I can compare the descriptor names
+    // in order to exclude e2 any of both descriptors is null
+    if (e1.descriptor == null) {
+      return (e2.descriptor == null);
+    } else if (e2.descriptor == null) {
+      return false;
+    } else {
+      // both descriptors are not null, so I can compare their names
+      return NullSafeComparator.equals(e1.descriptor.getName(), e2.descriptor.getName());
+      // NOTE: the contents of the descriptors are not compared
+    }
   }
 
   @Override
   public int hashCode() {
     int typeHash = (descriptor != null ? descriptor.getName().hashCode() : 0);
     return typeHash * 29 + components.hashCode();
-  }
-
-  @Override
-  public Entity clone() throws CloneNotSupportedException {
-    return new Entity(this);
   }
 
   @Override

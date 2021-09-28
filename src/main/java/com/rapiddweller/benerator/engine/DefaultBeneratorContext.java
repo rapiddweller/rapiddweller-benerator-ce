@@ -70,11 +70,10 @@ import java.util.concurrent.Executors;
 /**
  * Default implementation of {@link BeneratorContext}.<br/><br/>
  * Created: 02.09.2011 14:36:58
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
-public class DefaultBeneratorContext implements BeneratorContext {
+public class DefaultBeneratorContext implements BeneratorRootContext {
 
   // constants -------------------------------------------------------------------------------------------------------
 
@@ -95,10 +94,10 @@ public class DefaultBeneratorContext implements BeneratorContext {
   protected long defaultPageSize;
   protected boolean defaultNull;
   protected String contextUri;
-  public Long maxCount;
-  public boolean defaultOneToOne;
-  public boolean defaultImports;
-  public boolean acceptUnknownSimpleTypes;
+  protected Long maxCount;
+  protected boolean defaultOneToOne;
+  protected boolean defaultImports;
+  protected boolean acceptUnknownSimpleTypes;
 
   protected ComplexTypeDescriptor defaultComponent;
   protected ExecutorService executorService;

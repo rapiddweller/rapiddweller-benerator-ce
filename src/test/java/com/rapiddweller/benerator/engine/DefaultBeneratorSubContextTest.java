@@ -27,39 +27,47 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.domain.person.GivenNameGenerator;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Locale;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link DefaultBeneratorSubContext}.<br/><br/>
  * Created: 15.02.2012 05:35:10
- *
  * @author Volker Bergmann
  * @since 0.8.0
  */
 @SuppressWarnings("resource")
-public class BeneratorSubContextTest {
+public class DefaultBeneratorSubContextTest {
 
-  /**
-   * Test get parent.
-   */
+  private static final String CONTEXT_URI = "~/benerator";
+
+  private BeneratorContext parent;
+  private BeneratorSubContext child;
+
+  @Before
+  public void setUp() {
+    this.parent = new DefaultBeneratorContext(CONTEXT_URI);
+    this.parent.setGlobal("globalVar", "globalValue");
+    this.child = new DefaultBeneratorSubContext("person", parent);
+  }
+
   @Test
   public void testGetParent() {
-    DefaultBeneratorContext parent = new DefaultBeneratorContext();
-    DefaultBeneratorSubContext child = (DefaultBeneratorSubContext) parent.createSubContext("sub");
     assertSame(parent, child.getParent());
   }
 
-  /**
-   * Test scoped get and set.
-   */
   @Test
   public void testScopedGetAndSet() {
-    DefaultBeneratorContext parent = new DefaultBeneratorContext();
-    DefaultBeneratorSubContext child = (DefaultBeneratorSubContext) parent.createSubContext("sub");
     // verify that child settings are not available in parent
     child.set("c", 2);
     assertNull(parent.get("c"));
@@ -75,9 +83,6 @@ public class BeneratorSubContextTest {
     assertEquals(4, child.get("x"));
   }
 
-  /**
-   * Test current product.
-   */
   @Test
   public void testCurrentProduct() {
     BeneratorContext root = new DefaultBeneratorContext();
@@ -97,6 +102,87 @@ public class BeneratorSubContextTest {
     assertEquals(pp, parent.getCurrentProduct());
     assertEquals(pp.unwrap(), parent.get("this"));
     assertEquals(cp.unwrap(), child.get("sub"));
+  }
+
+  @Test
+  public void testGlobal() {
+    assertEquals("globalValue", child.get("globalVar"));
+    assertTrue(child.contains("globalVar"));
+  }
+
+  @Test
+  public void testContextUri() {
+    assertEquals(CONTEXT_URI, parent.getContextUri());
+    assertEquals(CONTEXT_URI, child.getContextUri());
+  }
+
+  @Test
+  public void testForName() {
+    assertEquals(java.lang.Object.class, child.forName("java.lang.Object"));
+  }
+
+  @Test
+  public void testParentDelegation() {
+    checkParentDelegation("validate", true, false);
+    assertEquals(parent.getExecutorService(), child.getExecutorService());
+    checkParentDelegation("defaultImports", true, false);
+    checkParentDelegation("acceptUnknownSimpleTypes", true, false);
+    checkParentDelegation("defaultErrorHandler", "error", "warn", "fatal");
+    checkParentDelegation("defaultDataset", "BR", "US");
+    checkParentDelegation("defaultLocale", Locale.GERMAN, Locale.ENGLISH);
+    checkParentDelegation("defaultLineSeparator", "\r\n", "\n");
+  }
+
+  public void checkParentDelegation(String propertyName, Object... values) {
+    assertEquals(BeanUtil.getPropertyValue(parent, propertyName), BeanUtil.getPropertyValue(child, propertyName));
+    for (Object value : values) {
+      BeanUtil.setPropertyValue(parent, propertyName, value);
+      assertEquals(value, BeanUtil.getPropertyValue(parent, propertyName));
+      assertEquals(value, BeanUtil.getPropertyValue(child, propertyName));
+    }
+  }
+
+  @Test
+  public void testImportPackage() {
+    parent.importPackage("com.rapiddweller.domain.person");
+    assertEquals(GivenNameGenerator.class, child.forName("GivenNameGenerator"));
+  }
+
+  @Test
+  public void testImportClass() {
+    parent.importClass("com.rapiddweller.domain.address.Address");
+    assertEquals(com.rapiddweller.domain.address.Address.class, child.forName("Address"));
+  }
+
+  @Test
+  public void testImportDefaults() {
+    parent.importDefaults();
+    assertTrue(child.isDefaultImports());
+    assertEquals(com.rapiddweller.benerator.consumer.ConsoleExporter.class,
+        child.forName("ConsoleExporter"));
+  }
+
+  @Test
+  public void testToString() {
+    assertEquals("DefaultBeneratorSubContext(person)", child.toString());
+  }
+
+  @Test
+  public void testContains() {
+    assertTrue(child.contains("globalVar"));
+    assertTrue(child.contains("line.separator"));
+  }
+
+  @Test
+  public void testKeySet() {
+    Set<String> keySet = child.keySet();
+    assertTrue(keySet.contains("globalVar"));
+    assertTrue(keySet.contains("line.separator"));
+  }
+
+  @Test
+  public void testGetNull() {
+    assertNull(child.get(null));
   }
 
 }

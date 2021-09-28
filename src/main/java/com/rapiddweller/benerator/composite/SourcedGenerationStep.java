@@ -42,7 +42,7 @@ public abstract class SourcedGenerationStep<E> extends AbstractGenerationStep<E>
 
   protected Generator<?> source;
 
-  public SourcedGenerationStep(Generator<?> source, String scope) {
+  protected SourcedGenerationStep(Generator<?> source, String scope) {
     super(scope);
     this.source = source;
   }

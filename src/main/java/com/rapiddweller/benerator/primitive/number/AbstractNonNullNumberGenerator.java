@@ -50,7 +50,7 @@ public abstract class AbstractNonNullNumberGenerator<E extends Number> extends A
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  public AbstractNonNullNumberGenerator(Class<E> generatedType, E min, E max, E granularity) {
+  protected AbstractNonNullNumberGenerator(Class<E> generatedType, E min, E max, E granularity) {
     this.generatedType = generatedType;
     setMin(min);
     setMax(max);

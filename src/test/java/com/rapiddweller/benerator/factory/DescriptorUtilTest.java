@@ -32,6 +32,7 @@ import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.FeatureWeight;
 import com.rapiddweller.benerator.distribution.WeightFunction;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.test.ConverterMock;
 import com.rapiddweller.benerator.test.GeneratorMock;
@@ -65,28 +66,20 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the {@link DescriptorUtil} class.<br/>
- * <br/>
+ * Tests the {@link DescriptorUtil} class.<br/><br/>
  * Created at 31.12.2008 09:29:38
- *
  * @author Volker Bergmann
  * @since 0.5.7
  */
 public class DescriptorUtilTest extends ModelTest {
 
-  private BeneratorContext context;
+  private BeneratorRootContext context;
 
-  /**
-   * Sets up context.
-   */
   @Before
   public void setUpContext() {
     context = new DefaultBeneratorContext();
   }
 
-  /**
-   * Tear down.
-   */
   @After
   public void tearDown() {
     ConverterMock.latestInstance = null;
@@ -94,9 +87,6 @@ public class DescriptorUtilTest extends ModelTest {
 
   // instantiation tests ---------------------------------------------------------------------------------------------
 
-  /**
-   * Test convert type.
-   */
   @Test
   public void testConvertType() {
     // test string parsing
@@ -140,9 +130,6 @@ public class DescriptorUtilTest extends ModelTest {
     }
   }
 
-  /**
-   * Test get converter.
-   */
   @Test
   public void testGetConverter() {
 
@@ -162,9 +149,6 @@ public class DescriptorUtilTest extends ModelTest {
     checkGetConverter("c", new ConverterMock(3), "c, new " + ConverterMock.class.getName() + "(5)", 9);
   }
 
-  /**
-   * Test get validator.
-   */
   @Test
   public void testGetValidator() {
 
@@ -188,9 +172,6 @@ public class DescriptorUtilTest extends ModelTest {
     checkGetValidator(null, null, "new " + JSR303ConstraintValidatorMock.class.getName() + "(2)", 2);
   }
 
-  /**
-   * Test get generator by name.
-   */
   @Test
   public void testGetGeneratorByName() {
     // test bean reference
@@ -208,9 +189,6 @@ public class DescriptorUtilTest extends ModelTest {
 
   // distribution tests ----------------------------------------------------------------------------------------------
 
-  /**
-   * Test get distribution for weight function.
-   */
   @Test
   public void testGetDistributionForWeightFunction() {
     // test bean reference
@@ -226,9 +204,6 @@ public class DescriptorUtilTest extends ModelTest {
     checkGetWeightFunction(null, null, "new " + WeightFunctionMock.class.getName() + "{value=3}", 3);
   }
 
-  /**
-   * Test get distribution weighted simple.
-   */
   @Test
   public void testGetDistributionWeighted_simple() { // testing 'weighted'
     SimpleTypeDescriptor descriptor = createSimpleType("myType").withDistribution("weighted");
@@ -236,9 +211,6 @@ public class DescriptorUtilTest extends ModelTest {
     assertTrue(distribution instanceof AttachedWeight);
   }
 
-  /**
-   * Test get distribution weighted property.
-   */
   @Test
   public void testGetDistributionWeighted_property() { // testing 'weighted[population]'
     SimpleTypeDescriptor descriptor2 = createSimpleType("myType").withDistribution("weighted[population]");
@@ -247,9 +219,6 @@ public class DescriptorUtilTest extends ModelTest {
     assertEquals("population", ((FeatureWeight) distribution2).getWeightFeature());
   }
 
-  /**
-   * Test is wrapped simple type.
-   */
   @Test
   public void testIsWrappedSimpleType() {
     // test wrapped simple type
@@ -266,9 +235,6 @@ public class DescriptorUtilTest extends ModelTest {
 
   // configuration tests ---------------------------------------------------------------------------------------------
 
-  /**
-   * Test get pattern as date format.
-   */
   @Test
   public void testGetPatternAsDateFormat() {
     Date date = TimeUtil.date(2000, 0, 2);
@@ -280,9 +246,6 @@ public class DescriptorUtilTest extends ModelTest {
     assertEquals("00-01-02", format.format(date));
   }
 
-  /**
-   * Test is unique.
-   */
   @Test
   public void testIsUnique() {
     assertFalse(DescriptorUtil.isUnique(createInstance("test"), context));
@@ -292,9 +255,6 @@ public class DescriptorUtilTest extends ModelTest {
         .isUnique(createInstance("test").withUnique(true), context));
   }
 
-  /**
-   * Test get separator.
-   */
   @Test
   public void testGetSeparator() {
     try {
@@ -307,9 +267,6 @@ public class DescriptorUtilTest extends ModelTest {
     }
   }
 
-  /**
-   * Test get min count.
-   */
   @Test
   public void testGetMinCount() {
     // default
@@ -327,9 +284,6 @@ public class DescriptorUtilTest extends ModelTest {
     assertEquals(0, DescriptorUtil.getMinCount(createInstance("x")).evaluate(context).intValue());
   }
 
-  /**
-   * Test get max count.
-   */
   @Test
   public void testGetMaxCount() {
     // default

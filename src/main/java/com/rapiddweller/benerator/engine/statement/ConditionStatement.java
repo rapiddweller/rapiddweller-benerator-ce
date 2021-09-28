@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -34,31 +34,17 @@ import java.io.Closeable;
 /**
  * {@link CompositeStatement} that holds a condition expression.<br/><br/>
  * Created: 19.02.2010 09:08:00
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public abstract class ConditionStatement implements Statement, Closeable {
 
-  /**
-   * The Condition.
-   */
   protected final Expression<Boolean> condition;
 
-  /**
-   * Instantiates a new Condition statement.
-   *
-   * @param condition the condition
-   */
-  public ConditionStatement(Expression<Boolean> condition) {
+  protected ConditionStatement(Expression<Boolean> condition) {
     this.condition = condition;
   }
 
-  /**
-   * Gets condidition.
-   *
-   * @return the condidition
-   */
   public Expression<Boolean> getCondidition() {
     return condition;
   }

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -27,10 +27,8 @@
 package com.rapiddweller.model.data;
 
 /**
- * Abstraction for all elements that can provide descriptors for entities.<br/>
- * <br/>
+ * Abstraction for all elements that can provide descriptors for entities.<br/><br/>
  * Created: 25.08.2007 21:51:26
- *
  * @author Volker Bergmann
  */
 public interface DescriptorProvider {

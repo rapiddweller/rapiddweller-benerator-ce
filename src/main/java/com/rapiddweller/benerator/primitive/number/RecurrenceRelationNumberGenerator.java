@@ -74,7 +74,7 @@ public abstract class RecurrenceRelationNumberGenerator<E extends Number> extend
   private final LinkedList<E> recentProducts;
   private int number;
 
-  public RecurrenceRelationNumberGenerator(Class<E> targetType, int depth, E min, E max) {
+  protected RecurrenceRelationNumberGenerator(Class<E> targetType, int depth, E min, E max) {
     super(targetType, min, max, AnyConverter.convert(1, targetType));
     this.depth = depth;
     this.recentProducts = new LinkedList<>();

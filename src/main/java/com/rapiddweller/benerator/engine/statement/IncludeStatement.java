@@ -42,10 +42,8 @@ import org.slf4j.Logger;
 import java.io.IOException;
 
 /**
- * Executes an &lt;include/&gt; from an XML descriptor file.<br/>
- * <br/>
+ * Executes an &lt;include/&gt; from an XML descriptor file.<br/><br/>
  * Created at 23.07.2009 07:18:54
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -55,29 +53,14 @@ public class IncludeStatement implements Statement {
 
   private Expression<String> uriEx;
 
-  /**
-   * Instantiates a new Include statement.
-   *
-   * @param uri the uri
-   */
   public IncludeStatement(Expression<String> uri) {
     this.uriEx = uri;
   }
 
-  /**
-   * Gets uri.
-   *
-   * @return the uri
-   */
   public Expression<String> getUri() {
     return uriEx;
   }
 
-  /**
-   * Sets uri.
-   *
-   * @param uri the uri
-   */
   public void setUri(Expression<String> uri) {
     this.uriEx = uri;
   }
@@ -102,36 +85,23 @@ public class IncludeStatement implements Statement {
     }
   }
 
-  /**
-   * Include properties.
-   *
-   * @param uri     the uri
-   * @param context the context
-   * @throws IOException the io exception
-   */
   public static void includeProperties(String uri, BeneratorContext context) throws IOException {
-    logger.debug("Including properties file: " + uri);
+    logger.debug("Including properties file: {}", uri);
     ScriptConverterForStrings preprocessor = new ScriptConverterForStrings(context);
     DefaultEntryConverter converter = new DefaultEntryConverter(preprocessor, context, true);
     IOUtil.readProperties(uri, converter);
   }
 
-  /**
-   * Include xml schema.
-   *
-   * @param uri     the uri
-   * @param context the context
-   */
   public static void includeXmlSchema(String uri, BeneratorContext context) {
-    logger.debug("Including XML Schema: " + uri);
+    logger.debug("Including XML Schema: {}", uri);
     new XMLSchemaDescriptorProvider(uri, context).close();
   }
 
   private static void includeDescriptor(String uri, BeneratorContext context) throws IOException {
-    logger.debug("Including Benerator descriptor file: " + uri);
-    DescriptorRunner runner = new DescriptorRunner(uri, context);
-    runner.runWithoutShutdownHook();
-    runner.close();
+    logger.debug("Including Benerator descriptor file: {}", uri);
+    try (DescriptorRunner runner = new DescriptorRunner(uri, context.createSubContext(uri))) {
+      runner.runWithoutShutdownHook();
+    }
   }
 
 }

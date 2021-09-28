@@ -62,11 +62,11 @@ public abstract class MultiGeneratorWrapper<S, P> extends AbstractGenerator<P> {
   private final RandomProvider random;
 
   @SafeVarargs
-  public MultiGeneratorWrapper(Class<P> generatedType, Generator<? extends S>... sources) {
+  protected MultiGeneratorWrapper(Class<P> generatedType, Generator<? extends S>... sources) {
     this(generatedType, CollectionUtil.toList(sources));
   }
 
-  public MultiGeneratorWrapper(Class<P> generatedType, List<Generator<? extends S>> sources) {
+  protected MultiGeneratorWrapper(Class<P> generatedType, List<Generator<? extends S>> sources) {
     this.generatedType = generatedType;
     this.sources = new ArrayList<>();
     this.availableSources = new ArrayList<>();

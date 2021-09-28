@@ -43,12 +43,12 @@ public abstract class GeneratorProxy<E> extends GeneratorWrapper<E, E> {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  public GeneratorProxy(Class<E> generatedType) {
+  protected GeneratorProxy(Class<E> generatedType) {
     super(null);
     this.generatedType = generatedType;
   }
 
-  public GeneratorProxy(Generator<E> source) {
+  protected GeneratorProxy(Generator<E> source) {
     super(source);
     if (source == null) {
       throw new InvalidGeneratorSetupException("source is null");

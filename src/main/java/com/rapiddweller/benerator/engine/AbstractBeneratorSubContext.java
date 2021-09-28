@@ -34,8 +34,6 @@ import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.TypeDescriptor;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -51,12 +49,11 @@ import java.util.concurrent.ExecutorService;
  */
 public abstract class AbstractBeneratorSubContext implements BeneratorSubContext {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBeneratorSubContext.class);
   protected final BeneratorContext parent;
   protected final String currentProductName;
   private final Context localContext;
 
-  public AbstractBeneratorSubContext(String productName, BeneratorContext parent) {
+  protected AbstractBeneratorSubContext(String productName, BeneratorContext parent) {
     this.currentProductName = productName;
     this.parent = parent;
     this.localContext = BeneratorFactory.getInstance().createGenerationContext();
@@ -67,16 +64,17 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
     return parent;
   }
 
+  // simple delegates ------------------------------------------------------------------------------------------------
+
+
+  @Override
+  public void setContextUri(String contextUri) {
+    parent.setContextUri(contextUri);
+  }
+
   @Override
   public String getDefaultEncoding() {
     return parent.getDefaultEncoding();
-  }
-
-  // simple delegates ------------------------------------------------------------------------------------------------
-
-  @Override
-  public void setDefaultEncoding(String defaultEncoding) {
-    parent.setDefaultEncoding(defaultEncoding);
   }
 
   @Override
@@ -85,18 +83,8 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
   }
 
   @Override
-  public void setDefaultLineSeparator(String defaultLineSeparator) {
-    parent.setDefaultLineSeparator(defaultLineSeparator);
-  }
-
-  @Override
   public Locale getDefaultLocale() {
     return parent.getDefaultLocale();
-  }
-
-  @Override
-  public void setDefaultLocale(Locale defaultLocale) {
-    parent.setDefaultLocale(defaultLocale);
   }
 
   @Override
@@ -110,18 +98,8 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
   }
 
   @Override
-  public void setDefaultDataset(String defaultDataset) {
-    parent.setDefaultDataset(defaultDataset);
-  }
-
-  @Override
   public long getDefaultPageSize() {
     return parent.getDefaultPageSize();
-  }
-
-  @Override
-  public void setDefaultPageSize(long defaultPageSize) {
-    parent.setDefaultPageSize(defaultPageSize);
   }
 
   @Override
@@ -130,18 +108,8 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
   }
 
   @Override
-  public void setDefaultScript(String defaultScript) {
-    parent.setDefaultScript(defaultScript);
-  }
-
-  @Override
   public boolean isDefaultNull() {
     return parent.isDefaultNull();
-  }
-
-  @Override
-  public void setDefaultNull(boolean defaultNull) {
-    parent.setDefaultNull(defaultNull);
   }
 
   @Override
@@ -150,18 +118,8 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
   }
 
   @Override
-  public void setDefaultSeparator(char defaultSeparator) {
-    parent.setDefaultSeparator(defaultSeparator);
-  }
-
-  @Override
   public String getDefaultErrorHandler() {
     return parent.getDefaultErrorHandler();
-  }
-
-  @Override
-  public void setDefaultErrorHandler(String defaultErrorHandler) {
-    parent.setDefaultErrorHandler(defaultErrorHandler);
   }
 
   @Override
@@ -170,28 +128,13 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
   }
 
   @Override
-  public void setContextUri(String contextUri) {
-    parent.setContextUri(contextUri);
-  }
-
-  @Override
   public boolean isValidate() {
     return parent.isValidate();
   }
 
   @Override
-  public void setValidate(boolean validate) {
-    parent.setValidate(validate);
-  }
-
-  @Override
   public Long getMaxCount() {
     return parent.getMaxCount();
-  }
-
-  @Override
-  public void setMaxCount(Long maxCount) {
-    parent.setMaxCount(maxCount);
   }
 
   @Override
@@ -280,28 +223,13 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
   }
 
   @Override
-  public void setDefaultOneToOne(boolean defaultOneToOne) {
-    parent.setDefaultOneToOne(defaultOneToOne);
-  }
-
-  @Override
   public boolean isAcceptUnknownSimpleTypes() {
     return parent.isAcceptUnknownSimpleTypes();
   }
 
   @Override
-  public void setAcceptUnknownSimpleTypes(boolean acceptUnknownSimpleTypes) {
-    parent.setAcceptUnknownSimpleTypes(acceptUnknownSimpleTypes);
-  }
-
-  @Override
   public boolean isDefaultImports() {
     return parent.isDefaultImports();
-  }
-
-  @Override
-  public void setDefaultImports(boolean defaultImports) {
-    parent.setDefaultImports(defaultImports);
   }
 
   @Override

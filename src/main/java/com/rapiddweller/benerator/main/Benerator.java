@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.BeneratorError;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.BeneratorUtil;
-import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
+import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.common.ArrayUtil;
@@ -46,11 +46,8 @@ import com.rapiddweller.common.version.VersionNumberParser;
 import com.rapiddweller.contiperf.sensor.MemorySensor;
 import com.rapiddweller.format.text.KiloFormatter;
 import com.rapiddweller.jdbacl.DBUtil;
-import org.apache.logging.slf4j.Log4jLoggerFactory;
-import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-import org.slf4j.impl.StaticLoggerBinder;
 
 import java.io.IOException;
 
@@ -62,6 +59,8 @@ import java.io.IOException;
 public class Benerator {
 
   private static final Logger logger = LoggerFactory.getLogger(Benerator.class);
+
+  public static final String BENERATOR_KEY = "benerator";
 
   protected static final String[] CE_CLI_HELP = {
       "Usage benerator [options] [filename]",
@@ -76,7 +75,7 @@ public class Benerator {
   // main ------------------------------------------------------------------------------------------------------------
 
   public static void main(String[] args) throws IOException {
-    VersionInfo.getInfo("benerator").verifyDependencies();
+    VersionInfo.getInfo(BENERATOR_KEY).verifyDependencies();
     checkVersionAndHelpOpts(args, CE_CLI_HELP);
     int fileIndex = 0;
     while (fileIndex < args.length && args[fileIndex].startsWith("-")) {
@@ -89,8 +88,7 @@ public class Benerator {
 
   // info properties -------------------------------------------------------------------------------------------------
 
-  public static boolean isCommunityEdition() {
-    BeneratorFactory factory = BeneratorFactory.getInstance();
+  public boolean isCommunityEdition() {
     return (DefaultBeneratorFactory.COMMUNITY_EDITION.equals(getEdition()));
   }
 
@@ -99,17 +97,17 @@ public class Benerator {
   }
 
   public String getVersion() {
-    return "Benerator " + getEdition() + " " + VersionInfo.getInfo("benerator").getVersion();
+    return "Benerator " + getEdition() + " " + VersionInfo.getInfo(BENERATOR_KEY).getVersion();
   }
 
   public VersionNumber getVersionNumber() {
-    return new VersionNumberParser().parse(VersionInfo.getInfo("benerator").getVersion());
+    return new VersionNumberParser().parse(VersionInfo.getInfo(BENERATOR_KEY).getVersion());
   }
 
 
   //  operational interface ------------------------------------------------------------------------------------------
 
-  private void runFile(String filename) throws IOException {
+  public void runFile(String filename) throws IOException {
     // Run descriptor file
     try {
       InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
@@ -129,7 +127,7 @@ public class Benerator {
       printer.printLines("Running file " + filename);
       BeneratorUtil.checkSystem(printer);
     }
-    BeneratorContext context = BeneratorFactory.getInstance().createContext(IOUtil.getParentUri(filename));
+    BeneratorRootContext context = BeneratorFactory.getInstance().createRootContext(IOUtil.getParentUri(filename));
     DescriptorRunner runner = new DescriptorRunner(filename, context);
     try {
       runner.run();

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -37,34 +37,17 @@ import com.rapiddweller.common.converter.ThreadSafeConverter;
 /**
  * {@link Converter} implementation which makes use of a {@link Generator}.<br/><br/>
  * Created: 27.07.2011 08:44:40
- *
- * @param <S> the type parameter
- * @param <G> the type parameter
- * @param <T> the type parameter
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public abstract class GeneratingConverter<S, G, T> extends ThreadSafeConverter<S, T> implements ContextAware {
 
-  /**
-   * The Generator.
-   */
   protected Generator<G> generator;
-  /**
-   * The Context.
-   */
   protected GeneratorContext context;
   private final WrapperProvider<G> wrapperProvider;
   private boolean initialized;
 
-  /**
-   * Instantiates a new Generating converter.
-   *
-   * @param sourceType the source type
-   * @param targetType the target type
-   * @param generator  the generator
-   */
-  public GeneratingConverter(Class<S> sourceType, Class<T> targetType, Generator<G> generator) {
+  protected GeneratingConverter(Class<S> sourceType, Class<T> targetType, Generator<G> generator) {
     super(sourceType, targetType);
     this.wrapperProvider = new WrapperProvider<>();
     this.generator = generator;
@@ -92,19 +75,8 @@ public abstract class GeneratingConverter<S, G, T> extends ThreadSafeConverter<S
     return doConvert(sourceValue);
   }
 
-  /**
-   * Do convert t.
-   *
-   * @param sourceValue the source value
-   * @return the t
-   */
   protected abstract T doConvert(S sourceValue);
 
-  /**
-   * Initialize.
-   *
-   * @param sourceValue the source value
-   */
   protected void initialize(S sourceValue) {
     if (context == null) {
       throw new IllegalStateException("Context has not been injected in " + this);
@@ -112,12 +84,8 @@ public abstract class GeneratingConverter<S, G, T> extends ThreadSafeConverter<S
     generator.init(context);
   }
 
-  /**
-   * Generate product wrapper.
-   *
-   * @return the product wrapper
-   */
   protected ProductWrapper<G> generate() {
     return generator.generate(wrapperProvider.get());
   }
+
 }

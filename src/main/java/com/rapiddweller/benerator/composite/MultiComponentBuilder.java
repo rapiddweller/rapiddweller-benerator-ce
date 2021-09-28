@@ -49,7 +49,7 @@ public abstract class MultiComponentBuilder<E> extends AbstractScopedLifeCycleHo
   private List<ComponentBuilder<E>> availableBuilders;
   protected String message;
 
-  public MultiComponentBuilder(ComponentBuilder<E>[] builders, String scope) {
+  protected MultiComponentBuilder(ComponentBuilder<E>[] builders, String scope) {
     super(scope);
     this.builders = builders;
     this.availableBuilders = CollectionUtil.toList(builders);

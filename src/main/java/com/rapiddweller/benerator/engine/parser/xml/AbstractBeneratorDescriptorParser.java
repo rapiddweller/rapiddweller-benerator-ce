@@ -59,7 +59,7 @@ public abstract class AbstractBeneratorDescriptorParser extends AbstractXMLEleme
 
   protected Logger logger = LoggerFactory.getLogger(AbstractBeneratorDescriptorParser.class);
 
-  public AbstractBeneratorDescriptorParser(String elementName,
+  protected AbstractBeneratorDescriptorParser(String elementName,
                                            Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
     super(elementName, requiredAttributes, optionalAttributes, supportedParentTypes);
   }

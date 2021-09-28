@@ -18,7 +18,7 @@ public abstract class AbstractGenerationStep<E> extends AbstractScopedLifeCycleH
   protected String message;
   protected GeneratorContext context;
 
-  public AbstractGenerationStep(String scope) {
+  protected AbstractGenerationStep(String scope) {
     super(scope);
   }
 

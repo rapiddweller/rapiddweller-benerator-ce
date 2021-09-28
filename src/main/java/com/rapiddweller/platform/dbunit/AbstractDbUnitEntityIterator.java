@@ -41,34 +41,18 @@ import javax.xml.stream.XMLStreamReader;
 /**
  * Abstract parent class for classes that iterate DbUnit files and provide their content as {@link Entity}.<br/><br/>
  * Created: 20.09.2011 08:07:44
- *
  * @author Volker Bergmann
  * @since 0.7.1
  */
 public abstract class AbstractDbUnitEntityIterator implements DataIterator<Entity> {
 
-  /**
-   * The Logger.
-   */
   protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-  /**
-   * The Context.
-   */
   protected BeneratorContext context;
 
-  /**
-   * The Reader.
-   */
   protected XMLStreamReader reader;
 
-  /**
-   * Instantiates a new Abstract db unit entity iterator.
-   *
-   * @param uri     the uri
-   * @param context the context
-   */
-  public AbstractDbUnitEntityIterator(String uri, BeneratorContext context) {
+  protected AbstractDbUnitEntityIterator(String uri, BeneratorContext context) {
     try {
       this.context = context;
       XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -99,12 +83,6 @@ public abstract class AbstractDbUnitEntityIterator implements DataIterator<Entit
 
   // non-public helpers ----------------------------------------------------------------------------------------------
 
-  /**
-   * Gets type.
-   *
-   * @param row the row
-   * @return the type
-   */
   protected ComplexTypeDescriptor getType(Row row) {
     String name = row.getTableName();
     ComplexTypeDescriptor type = (ComplexTypeDescriptor) context.getDataModel().getTypeDescriptor(name);

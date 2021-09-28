@@ -31,45 +31,24 @@ import com.rapiddweller.benerator.NonNullGenerator;
 /**
  * {@link GeneratorWrapper} for {@link NonNullGenerator}s.<br/><br/>
  * Created: 27.07.2011 11:30:51
- *
- * @param <S> the type parameter
- * @param <P> the type parameter
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public abstract class NonNullGeneratorWrapper<S, P> extends GeneratorWrapper<S, P> implements NonNullGenerator<P> {
 
-  /**
-   * Instantiates a new Non null generator wrapper.
-   *
-   * @param source the source
-   */
-  public NonNullGeneratorWrapper(NonNullGenerator<S> source) {
+  protected NonNullGeneratorWrapper(NonNullGenerator<S> source) {
     super(source);
   }
 
-  /**
-   * Returns the source generator
-   */
   @Override
   public NonNullGenerator<S> getSource() {
     return (NonNullGenerator<S>) super.getSource();
   }
 
-  /**
-   * Sets the source generator
-   *
-   * @param source the source
-   */
   public void setSource(NonNullGenerator<S> source) {
     super.setSource(source);
   }
 
-  /**
-   * Generate from not null source s.
-   *
-   * @return the s
-   */
   protected final S generateFromNotNullSource() {
     return getSource().generate();
   }

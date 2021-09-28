@@ -39,39 +39,23 @@ import java.util.Set;
 /**
  * Formats {@link Person} objects.<br/><br/>
  * Created: 22.02.2010 12:41:37
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public abstract class PersonFormatter
     extends ThreadSafeConverter<Person, String> {
 
-  /**
-   * The constant WESTERN.
-   */
   public static final PersonFormatter WESTERN = new Western();
-  /**
-   * The constant EASTERN.
-   */
   public static final PersonFormatter EASTERN = new Eastern();
   private static final Set<Locale> EASTERN_LOCALES = CollectionUtil.toSet(
       Locales.CHINESE, Locales.JAPANESE, Locales.KOREAN, Locales.THAI,
       Locales.VIETNAMESE
   );
 
-  /**
-   * Instantiates a new Person formatter.
-   */
-  public PersonFormatter() {
+  protected PersonFormatter() {
     super(Person.class, String.class);
   }
 
-  /**
-   * Gets instance.
-   *
-   * @param locale the locale
-   * @return the instance
-   */
   public static PersonFormatter getInstance(Locale locale) {
     return (EASTERN_LOCALES.contains(LocaleUtil.language(locale)) ?
         EASTERN : WESTERN);
@@ -82,20 +66,8 @@ public abstract class PersonFormatter
     return format(person);
   }
 
-  /**
-   * Format string.
-   *
-   * @param person the person
-   * @return the string
-   */
   public abstract String format(Person person);
 
-  /**
-   * Append separated.
-   *
-   * @param part    the part
-   * @param builder the builder
-   */
   protected void appendSeparated(String part, StringBuilder builder) {
     if (!StringUtil.isEmpty(part)) {
       if (builder.length() > 0) {
@@ -105,9 +77,6 @@ public abstract class PersonFormatter
     }
   }
 
-  /**
-   * The type Western.
-   */
   static class Western extends PersonFormatter {
 
     @Override
@@ -122,9 +91,6 @@ public abstract class PersonFormatter
     }
   }
 
-  /**
-   * The type Eastern.
-   */
   static class Eastern extends PersonFormatter {
 
     @Override

@@ -29,14 +29,11 @@ package com.rapiddweller.benerator.engine;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.factory.DefaultsProvider;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
-import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.script.ScriptContext;
-
-import java.util.Locale;
 
 /**
  * A {@link BeneratorContext}.<br/><br/>
@@ -46,57 +43,23 @@ import java.util.Locale;
  */
 public interface BeneratorContext extends GeneratorContext, ScriptContext {
 
-  // simple configuration properties ---------------------------------------------------------------------------------
-
-  void setDefaultEncoding(String defaultEncoding);
-
-  void setDefaultLineSeparator(String defaultLineSeparator);
-
-  void setDefaultLocale(Locale defaultLocale);
-
-  void setDefaultDataset(String defaultDataset);
-
-  void setDefaultPageSize(long defaultPageSize);
-
-  void setDefaultScript(String defaultScript);
-
-  void setDefaultNull(boolean defaultNull);
-
-  void setDefaultSeparator(char defaultSeparator);
-
-  void setDefaultErrorHandler(String defaultErrorHandler);
-
   void setContextUri(String contextUri);
 
-  void setValidate(boolean validate);
-
-  void setMaxCount(Long maxCount);
+  // simple configuration properties ---------------------------------------------------------------------------------
 
   boolean isDefaultImports();
 
-  void setDefaultImports(boolean defaultImports);
-
   boolean isDefaultOneToOne();
-
-  void setDefaultOneToOne(boolean defaultOneToOne);
 
   boolean isAcceptUnknownSimpleTypes();
 
-  void setAcceptUnknownSimpleTypes(boolean acceptUnknownSimpleTypes);
-
   // import handling -------------------------------------------------------------------------------------------------
-
-  @Override
-  void importClass(String className);
 
   void importPackage(String packageName);
 
   void importDefaults();
 
   // service provider sharing ----------------------------------------------------------------------------------------
-
-  @Override
-  GeneratorFactory getGeneratorFactory();
 
   void setGeneratorFactory(GeneratorFactory generatorFactory);
 
@@ -119,12 +82,6 @@ public interface BeneratorContext extends GeneratorContext, ScriptContext {
   // data management -------------------------------------------------------------------------------------------------
 
   void setGlobal(String name, Object value);
-
-  @Override
-  ProductWrapper<?> getCurrentProduct();
-
-  @Override
-  void setCurrentProduct(ProductWrapper<?> currentProduct);
 
   boolean hasProductNameInScope(String productName);
 

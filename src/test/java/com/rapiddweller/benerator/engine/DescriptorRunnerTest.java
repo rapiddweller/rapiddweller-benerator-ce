@@ -40,10 +40,8 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests the {@link DescriptorRunner}.<br/>
- * <br/>
+ * Tests the {@link DescriptorRunner}.<br/><br/>
  * Created at 13.03.2009 07:16:55
- *
  * @author Volker Bergmann
  * @since 0.5.8
  */
@@ -52,21 +50,16 @@ public class DescriptorRunnerTest extends ModelTest {
 
   private static final String EXPORT_FILE_URI = "test-uri.txt";
 
-  /**
-   * Test programmatic invocation.
-   *
-   * @throws IOException the io exception
-   */
   @Test
   public void testProgrammaticInvocation() throws IOException {
+    DefaultBeneratorContext context = new DefaultBeneratorContext();
     DescriptorRunner runner = new DescriptorRunner(
         "string://<setup>" +
             "	<generate type='Person' count='1' consumer='myConsumer'>" +
             "		<attribute name='name' constant='Alice'/>" +
             "	</generate>" +
-            "</setup>", new DefaultBeneratorContext());
+            "</setup>", context);
     try {
-      BeneratorContext context = runner.getContext();
       context.importDefaults();
       context.setValidate(false);
       MyConsumer myConsumer = new MyConsumer();
@@ -79,9 +72,6 @@ public class DescriptorRunnerTest extends ModelTest {
     }
   }
 
-  /**
-   * Test get generated files.
-   */
   @Test
   public void testGetGeneratedFiles() {
     DescriptorRunner runner = new DescriptorRunner("string://<setup/>", new DefaultBeneratorContext());
@@ -96,9 +86,6 @@ public class DescriptorRunnerTest extends ModelTest {
   }
 
 
-  /**
-   * The type Test exporter.
-   */
   static class TestExporter implements FileExporter {
 
     @Override
@@ -123,14 +110,8 @@ public class DescriptorRunnerTest extends ModelTest {
     }
   }
 
-  /**
-   * The type My consumer.
-   */
   static class MyConsumer extends AbstractConsumer {
 
-    /**
-     * The Products.
-     */
     final List<Object> products = new ArrayList<>();
 
     @Override

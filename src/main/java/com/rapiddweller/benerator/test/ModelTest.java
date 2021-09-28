@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.test;
 
 import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -47,228 +47,93 @@ import org.junit.Before;
 /**
  * Abstract parent class for all tests which rely on a {@link DataModel}.<br/><br/>
  * Created: 09.12.2011 22:21:24
- *
  * @author Volker Bergmann
  * @since 0.7.4
  */
 public abstract class ModelTest {
 
-  /**
-   * The Logger.
-   */
   protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-  /**
-   * The Context.
-   */
-  public BeneratorContext context;
-  /**
-   * The Data model.
-   */
+  protected BeneratorRootContext context;
   protected DataModel dataModel;
-  /**
-   * The Test descriptor provider.
-   */
   protected DefaultDescriptorProvider testDescriptorProvider;
 
-  /**
-   * Sets up context and descriptor provider.
-   */
   @Before
   public void setUpContextAndDescriptorProvider() {
-    this.context = BeneratorFactory.getInstance().createContext(".");
+    this.context = (BeneratorRootContext) BeneratorFactory.getInstance().createRootContext(".");
     this.context.importDefaults();
     this.dataModel = context.getDataModel();
     this.testDescriptorProvider = new DefaultDescriptorProvider("test", context.getDataModel());
   }
 
-  /**
-   * Create complex type complex type descriptor.
-   *
-   * @param name the name
-   * @return the complex type descriptor
-   */
   protected ComplexTypeDescriptor createComplexType(String name) {
     return new ComplexTypeDescriptor(name, testDescriptorProvider);
   }
 
-  /**
-   * Create complex type complex type descriptor.
-   *
-   * @param name       the name
-   * @param parentType the parent type
-   * @return the complex type descriptor
-   */
   protected ComplexTypeDescriptor createComplexType(String name, ComplexTypeDescriptor parentType) {
     return new ComplexTypeDescriptor(name, testDescriptorProvider, parentType);
   }
 
-  /**
-   * Create part descriptor part descriptor.
-   *
-   * @param componentName the component name
-   * @return the part descriptor
-   */
   protected PartDescriptor createPartDescriptor(String componentName) {
     return new PartDescriptor(componentName, testDescriptorProvider);
   }
 
-  /**
-   * Create entity entity.
-   *
-   * @param entityType                 the entity type
-   * @param componentNameAndValuePairs the component name and value pairs
-   * @return the entity
-   */
   protected Entity createEntity(String entityType, Object... componentNameAndValuePairs) {
     return new Entity(entityType, testDescriptorProvider, componentNameAndValuePairs);
   }
 
-  /**
-   * Create part part descriptor.
-   *
-   * @param partName the part name
-   * @return the part descriptor
-   */
   protected PartDescriptor createPart(String partName) {
     return new PartDescriptor(partName, testDescriptorProvider);
   }
 
-  /**
-   * Create part part descriptor.
-   *
-   * @param partName the part name
-   * @param typeName the type name
-   * @return the part descriptor
-   */
   protected PartDescriptor createPart(String partName, String typeName) {
     return new PartDescriptor(partName, testDescriptorProvider, typeName);
   }
 
-  /**
-   * Create part part descriptor.
-   *
-   * @param partName the part name
-   * @param type     the type
-   * @return the part descriptor
-   */
   protected PartDescriptor createPart(String partName, TypeDescriptor type) {
     return new PartDescriptor(partName, testDescriptorProvider, type);
   }
 
-  /**
-   * Create simple type simple type descriptor.
-   *
-   * @param name the name
-   * @return the simple type descriptor
-   */
   protected SimpleTypeDescriptor createSimpleType(String name) {
     return new SimpleTypeDescriptor(name, testDescriptorProvider);
   }
 
-  /**
-   * Create simple type simple type descriptor.
-   *
-   * @param name       the name
-   * @param parentName the parent name
-   * @return the simple type descriptor
-   */
   protected SimpleTypeDescriptor createSimpleType(String name, String parentName) {
     return new SimpleTypeDescriptor(name, testDescriptorProvider, parentName);
   }
 
-  /**
-   * Create reference reference descriptor.
-   *
-   * @param name     the name
-   * @param typeName the type name
-   * @return the reference descriptor
-   */
   protected ReferenceDescriptor createReference(String name, String typeName) {
     return new ReferenceDescriptor(name, testDescriptorProvider, typeName);
   }
 
-  /**
-   * Create instance instance descriptor.
-   *
-   * @param name the name
-   * @return the instance descriptor
-   */
   protected InstanceDescriptor createInstance(String name) {
     return new InstanceDescriptor(name, testDescriptorProvider);
   }
 
-  /**
-   * Create instance instance descriptor.
-   *
-   * @param name the name
-   * @param type the type
-   * @return the instance descriptor
-   */
   protected InstanceDescriptor createInstance(String name, TypeDescriptor type) {
     return new InstanceDescriptor(name, testDescriptorProvider, type);
   }
 
-  /**
-   * Create id id descriptor.
-   *
-   * @param name the name
-   * @return the id descriptor
-   */
   protected IdDescriptor createId(String name) {
     return new IdDescriptor(name, testDescriptorProvider);
   }
 
-  /**
-   * Create id id descriptor.
-   *
-   * @param name the name
-   * @param type the type
-   * @return the id descriptor
-   */
   protected IdDescriptor createId(String name, String type) {
     return new IdDescriptor(name, testDescriptorProvider, type);
   }
 
-  /**
-   * Create id id descriptor.
-   *
-   * @param name the name
-   * @param type the type
-   * @return the id descriptor
-   */
   protected IdDescriptor createId(String name, TypeDescriptor type) {
     return new IdDescriptor(name, testDescriptorProvider, type);
   }
 
-  /**
-   * Create array type array type descriptor.
-   *
-   * @param name the name
-   * @return the array type descriptor
-   */
   protected ArrayTypeDescriptor createArrayType(String name) {
     return new ArrayTypeDescriptor(name, testDescriptorProvider);
   }
 
-  /**
-   * Create array type array type descriptor.
-   *
-   * @param name   the name
-   * @param parent the parent
-   * @return the array type descriptor
-   */
   protected ArrayTypeDescriptor createArrayType(String name, ArrayTypeDescriptor parent) {
     return new ArrayTypeDescriptor(name, testDescriptorProvider, parent);
   }
 
-  /**
-   * Create array element array element descriptor.
-   *
-   * @param index    the index
-   * @param typeName the type name
-   * @return the array element descriptor
-   */
   protected ArrayElementDescriptor createArrayElement(int index, String typeName) {
     return new ArrayElementDescriptor(index, testDescriptorProvider, typeName);
   }
