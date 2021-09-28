@@ -37,7 +37,6 @@ import static org.junit.Assert.assertEquals;
 /**
  * Integration test for {@link IncludeParser} and {@link IncludeStatement}.<br/><br/>
  * Created: 12.03.2010 10:37:04
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -46,9 +45,6 @@ public class IncludeParserAndStatementTest extends AbstractBeneratorIntegrationT
   private static final String DESC_URI = "com/rapiddweller/benerator/engine/parser/xml/included.ben.xml";
   private static final String PROP_URI = "com/rapiddweller/benerator/engine/parser/xml/included.properties";
 
-  /**
-   * Test include properties file.
-   */
   @Test
   public void testIncludePropertiesFile() {
     Statement statement = parse("<include uri='" + PROP_URI + "' />");
@@ -56,9 +52,6 @@ public class IncludeParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals("done", context.get("incProp"));
   }
 
-  /**
-   * Test include descriptor file.
-   */
   @Test
   public void testIncludeDescriptorFile() {
     Statement statement = parse("<include uri='" + DESC_URI + "' />");
@@ -66,9 +59,6 @@ public class IncludeParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals("done", context.get("incProp"));
   }
 
-  /**
-   * Test attribute typo.
-   */
   @Test(expected = SyntaxError.class)
   public void testAttributeTypo() {
     parse("<include urr='bla.bla' />");

@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.factory.ConsumerMock;
 import com.rapiddweller.benerator.test.GeneratorTest;
@@ -43,7 +44,6 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Tests access to Benerator's InitialContext in descriptor file.<br/><br/>
  * Created: 21.10.2009 19:25:37
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -61,9 +61,6 @@ public class InitialContextTest extends GeneratorTest {
       "</generate>" +
       "</setup>";
 
-  /**
-   * Test.
-   */
   @Test
   public void test() {
     SysUtil.runWithSystemProperty("jndi.properties", "com/rapiddweller/benerator/engine/jndi.properties",
@@ -71,7 +68,7 @@ public class InitialContextTest extends GeneratorTest {
           ConsumerMock.lastInstance = null;
           DescriptorRunner runner = new DescriptorRunner(DESCRIPTOR_XML, context);
           try {
-            BeneratorContext context = runner.getContext();
+            BeneratorRootContext context = (BeneratorRootContext) runner.getContext();
             context.setValidate(false);
             runner.run();
             assertNotNull("Consumer was not invoked", ConsumerMock.lastInstance.lastProduct);

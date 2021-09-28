@@ -29,6 +29,7 @@ package com.rapiddweller.benerator;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Context;
+import com.rapiddweller.common.bean.ClassProvider;
 
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -36,150 +37,49 @@ import java.util.concurrent.ExecutorService;
 /**
  * Provides configuration and variable space for {@link Generator}s.<br/><br/>
  * Created: 14.03.2010 13:14:00
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public interface GeneratorContext extends Context {
+public interface GeneratorContext extends Context, ClassProvider {
 
   // global properties -----------------------------------------------------------------------------------------------
 
-  /**
-   * Gets default encoding.
-   *
-   * @return the default encoding
-   */
   String getDefaultEncoding();
 
-  /**
-   * Gets default line separator.
-   *
-   * @return the default line separator
-   */
   String getDefaultLineSeparator();
 
-  /**
-   * Gets default locale.
-   *
-   * @return the default locale
-   */
   Locale getDefaultLocale();
 
-  /**
-   * Gets default dataset.
-   *
-   * @return the default dataset
-   */
   String getDefaultDataset();
 
-  /**
-   * Gets default page size.
-   *
-   * @return the default page size
-   */
   long getDefaultPageSize();
 
-  /**
-   * Gets default script.
-   *
-   * @return the default script
-   */
   String getDefaultScript();
 
-  /**
-   * Is default null boolean.
-   *
-   * @return the boolean
-   */
   boolean isDefaultNull();
 
-  /**
-   * Gets default separator.
-   *
-   * @return the default separator
-   */
   char getDefaultSeparator();
 
-  /**
-   * Gets default error handler.
-   *
-   * @return the default error handler
-   */
   String getDefaultErrorHandler();
 
-  /**
-   * Gets context uri.
-   *
-   * @return the context uri
-   */
   String getContextUri();
 
-  /**
-   * Is validate boolean.
-   *
-   * @return the boolean
-   */
   boolean isValidate();
 
-  /**
-   * Gets max count.
-   *
-   * @return the max count
-   */
   Long getMaxCount();
 
   // other features --------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets generator factory.
-   *
-   * @return the generator factory
-   */
   GeneratorFactory getGeneratorFactory();
 
-  /**
-   * Gets global.
-   *
-   * @param name the name
-   * @return the global
-   */
   Object getGlobal(String name);
 
-  /**
-   * For name class.
-   *
-   * @param className the class name
-   * @return the class
-   */
-  Class<?> forName(String className);
-
-  /**
-   * Gets executor service.
-   *
-   * @return the executor service
-   */
   ExecutorService getExecutorService();
 
-  /**
-   * Resolve relative uri string.
-   *
-   * @param relativeUri the relative uri
-   * @return the string
-   */
   String resolveRelativeUri(String relativeUri);
 
-  /**
-   * Gets current product.
-   *
-   * @return the current product
-   */
   ProductWrapper<?> getCurrentProduct();
 
-  /**
-   * Sets current product.
-   *
-   * @param currentProduct the current product
-   */
   void setCurrentProduct(ProductWrapper<?> currentProduct);
 
 }

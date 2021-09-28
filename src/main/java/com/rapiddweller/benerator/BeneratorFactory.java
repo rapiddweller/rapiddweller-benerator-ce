@@ -28,6 +28,7 @@ package com.rapiddweller.benerator;
 
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
@@ -54,7 +55,7 @@ import java.util.Set;
 public abstract class BeneratorFactory {
 
   public static final String BENERATOR_FACTORY_PROPERTY = "benerator.factory";
-  private static String XML_SCHEMA_PATH = null;
+  private static String xmlSchemaPath = null;
 
   private static BeneratorFactory instance;
 
@@ -70,7 +71,7 @@ public abstract class BeneratorFactory {
   }
 
   public static synchronized String getSchemaPathForCurrentVersion() {
-    if (XML_SCHEMA_PATH == null) {
+    if (xmlSchemaPath == null) {
       String version = VersionInfo.getInfo("benerator").getVersion();
       if (version.endsWith("-SNAPSHOT")) {
         version = version.substring(0, version.length() - "-SNAPSHOT".length());
@@ -84,14 +85,14 @@ public abstract class BeneratorFactory {
       if (version.endsWith("--project-version--")) {
         version = "local";
       }
-      XML_SCHEMA_PATH = "com/rapiddweller/benerator/benerator-" + version + ".xsd";
+      xmlSchemaPath = "com/rapiddweller/benerator/benerator-" + version + ".xsd";
     }
-    return XML_SCHEMA_PATH;
+    return xmlSchemaPath;
   }
 
   public abstract String getEdition();
 
-  public abstract BeneratorContext createContext(String contextUri);
+  public abstract BeneratorRootContext createRootContext(String contextUri);
 
   public abstract BeneratorParseContext createParseContext(ResourceManager resourceManager);
 

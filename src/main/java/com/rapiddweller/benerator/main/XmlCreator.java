@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.main;
 
 import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.benerator.file.XMLFileGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ArrayUtil;
@@ -70,7 +70,7 @@ public class XmlCreator {
                                     String pattern, long fileCount, String[] propertiesFiles) {
     logParams(schemaUri, root, pattern, fileCount);
     long start = System.currentTimeMillis();
-    BeneratorContext context = BeneratorFactory.getInstance().createContext(IOUtil.getParentUri(schemaUri));
+    BeneratorRootContext context = BeneratorFactory.getInstance().createRootContext(IOUtil.getParentUri(schemaUri));
     XMLFileGenerator fileGenerator = new XMLFileGenerator(schemaUri, root, pattern, propertiesFiles);
     try (fileGenerator) {
       fileGenerator.init(context);
@@ -80,19 +80,21 @@ public class XmlCreator {
           throw new RuntimeException("Unable to create the expected number of files. " +
               "Created " + i + " of " + fileCount + " files");
         }
-        logger.info("created file: " + file);
+        logger.info("created file: {}", file);
       }
     }
     long duration = System.currentTimeMillis() - start;
-    logger.info("Finished after " + duration + " ms");
+    logger.info("Finished after {} ms", duration);
   }
 
   private static void logParams(String schemaUri, String root, String pattern, long fileCount) {
     if (logger.isDebugEnabled()) {
       if (fileCount > 1) {
-        logger.debug("Creating " + fileCount + " XML files for schema " + schemaUri + " with root " + root + " and pattern " + pattern);
+        logger.debug("Creating {} XML files for schema {} with root {} and pattern {}",
+            fileCount, schemaUri, root, pattern);
       } else {
-        logger.debug("Creating XML file " + MessageFormat.format(pattern, fileCount) + " for schema " + schemaUri + " with root " + root);
+        logger.debug("Creating XML file {}} for schema {}} with root {}",
+            MessageFormat.format(pattern, fileCount), schemaUri, root);
       }
     }
   }

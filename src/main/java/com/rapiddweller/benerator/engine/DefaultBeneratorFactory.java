@@ -73,7 +73,7 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
   }
 
   @Override
-  public BeneratorContext createContext(String contextUri) {
+  public BeneratorRootContext createRootContext(String contextUri) {
     return new DefaultBeneratorContext();
   }
 
