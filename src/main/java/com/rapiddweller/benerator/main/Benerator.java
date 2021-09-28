@@ -88,7 +88,7 @@ public class Benerator {
 
   // info properties -------------------------------------------------------------------------------------------------
 
-  public static boolean isCommunityEdition() {
+  public boolean isCommunityEdition() {
     return (DefaultBeneratorFactory.COMMUNITY_EDITION.equals(getEdition()));
   }
 
