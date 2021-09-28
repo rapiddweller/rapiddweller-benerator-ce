@@ -17,7 +17,7 @@
 # rapiddweller 'Benerator'
 
 [rapiddweller 'Benerator'](https://www.benerator.de) is a software solution to
-generate, obfuscate (anonymize / pseudonymize) and migrate data for development,
+**generate**, **obfuscate** (**anonymize** / **pseudonymize**) and **migrate** data for development,
 testing and training purposes.
 
 ## Summary
