@@ -37,7 +37,6 @@ import java.util.Map;
 
 /**
  * Default implementation of the DescriptorProvider interface.<br/><br/>
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
@@ -45,37 +44,16 @@ public class DefaultDescriptorProvider implements DescriptorProvider {
 
   private static final Logger logger =
       LoggerFactory.getLogger(DefaultDescriptorProvider.class);
-  /**
-   * The Type map.
-   */
+
   protected final Map<String, TypeDescriptor> typeMap;
   private final boolean redefinable;
-  /**
-   * The Data model.
-   */
   protected DataModel dataModel;
-  /**
-   * The Id.
-   */
   protected String id;
 
-  /**
-   * Instantiates a new Default descriptor provider.
-   *
-   * @param id        the id
-   * @param dataModel the data model
-   */
   public DefaultDescriptorProvider(String id, DataModel dataModel) {
     this(id, dataModel, false);
   }
 
-  /**
-   * Instantiates a new Default descriptor provider.
-   *
-   * @param id          the id
-   * @param dataModel   the data model
-   * @param redefinable the redefinable
-   */
   public DefaultDescriptorProvider(String id, DataModel dataModel,
                                    boolean redefinable) {
     this.typeMap = new OrderedNameMap<>();
@@ -86,19 +64,13 @@ public class DefaultDescriptorProvider implements DescriptorProvider {
     }
   }
 
-  /**
-   * Add type descriptor.
-   *
-   * @param descriptor the descriptor
-   */
   public void addTypeDescriptor(TypeDescriptor descriptor) {
     if (!redefinable && typeMap.get(descriptor.getName()) != null) {
       throw new ConfigurationError(
           "Type has already been defined: " + descriptor.getName());
     }
     typeMap.put(descriptor.getName(), descriptor);
-    logger.debug("added " + descriptor.getClass().getSimpleName() + ": " +
-        descriptor);
+    logger.debug("added {}: {}", descriptor, descriptor.getClass().getSimpleName());
   }
 
   @Override
@@ -131,4 +103,5 @@ public class DefaultDescriptorProvider implements DescriptorProvider {
   public String toString() {
     return getClass().getSimpleName() + '(' + id + ')';
   }
+
 }
