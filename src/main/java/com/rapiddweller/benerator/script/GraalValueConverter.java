@@ -56,21 +56,32 @@ public class GraalValueConverter extends ThreadSafeConverter<Value, Object> {
    * @return the object
    */
   public static Object value2JavaConverter(Value value) {
-    return value.fitsInInt() ? value.asInt() :
-        value.fitsInLong() ? value.asLong() :
-            value.fitsInFloat() ? value.asFloat() :
-                value.fitsInByte() ? value.asByte() :
-                    value.fitsInDouble() ? value.asDouble() :
-                        value.fitsInFloat() ? value.asFloat() :
-                            value.isString() ? value.asString() :
-                                value.isHostObject() ? value.asHostObject() :
-                                    value.isBoolean() ? value.asBoolean() :
-                                        value.isDate() ? value.asDate() :
-                                            value.isNativePointer() ? value.asNativePointer() :
-                                                value.hasArrayElements() ?
-                                                    getArrayFromValue(value) :
-                                                    value.canExecute() ? null :
-                                                        null;
+    if (value.fitsInInt()) {
+      return value.asInt();
+    } else if (value.hasArrayElements()) {
+      return getArrayFromValue(value);
+    } else if (value.fitsInLong()) {
+      return value.asLong();
+    } else if (value.fitsInFloat()) {
+      return value.asFloat();
+    } else if (value.fitsInByte()) {
+      return value.asByte();
+    } else if (value.fitsInDouble()) {
+      return value.asDouble();
+    } else if (value.isString()) {
+      return value.asString();
+    } else if (value.isHostObject()) {
+      return value.asHostObject();
+    } else if (value.isBoolean()) {
+      return value.asBoolean();
+    } else if (value.isDate()) {
+      return value.asDate();
+    } else if (value.isNativePointer()) {
+      return value.asNativePointer();
+    } else {
+      return null;
+    }
+
   }
 
   private static Object getArrayFromValue(Value val) {
