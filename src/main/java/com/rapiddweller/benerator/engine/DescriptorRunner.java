@@ -128,8 +128,8 @@ public class DescriptorRunner implements ResourceManager {
         Profiler.defaultInstance().printSummary();
       }
       List<String> generations = getGeneratedFiles();
-      if (generations.size() > 0) {
-        LOGGER.info("Generated file(s): " + generations);
+      if (!generations.isEmpty()) {
+        LOGGER.info("Generated file(s): {}", generations);
       }
     } catch (Throwable t) {
       if (ExceptionUtil.containsException(OutOfMemoryError.class, t) && Profiling.isEnabled()) {
@@ -174,7 +174,6 @@ public class DescriptorRunner implements ResourceManager {
       message += " in " + ElapsedTimeFormatter.format(elapsedTime) + " (~" + RoundedNumberFormat.format(throughput, 0) + " p.h.)";
     }
     LOGGER.info(message);
-    System.out.println(message); // TODO remove
   }
 
 
