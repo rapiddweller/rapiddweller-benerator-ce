@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -28,6 +28,8 @@ package com.rapiddweller.domain.address;
 
 import org.junit.Test;
 
+import java.util.Locale;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -45,6 +47,18 @@ public class CountryTest {
     assertEquals(Country.US, Country.getInstance("US"));
     assertEquals(Country.UNITED_KINGDOM, Country.getInstance("GB"));
     assertNotNull(Country.getInstance("SO"));
+  }
+
+  @Test
+  public void testUS() {
+    assertEquals("US", Country.US.getIsoCode());
+    assertEquals(Locale.US, Country.US.getDefaultLanguageLocale());
+  }
+
+  @Test
+  public void testDE() {
+    assertEquals("DE", Country.GERMANY.getIsoCode());
+    assertEquals(Locale.GERMANY, Country.GERMANY.getDefaultLanguageLocale());
   }
 
 }

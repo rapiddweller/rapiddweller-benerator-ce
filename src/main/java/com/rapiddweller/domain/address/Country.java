@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -74,6 +74,10 @@ public class Country {
   private static final String DEFAULT_PHONE_CODE = "[2-9][0-9][0-9]";
   private static final String DEFAULT_MOBILE_PHONE_PATTERN = "[1-9][0-9][0-9]";
   private static final Map<String, Country> instances = new HashMap<>(250);
+
+  static {
+    parseConfigFile();
+  }
 
   public static final Country GERMANY = getInstance("DE");
   public static final Country AUSTRIA = getInstance("AT");
@@ -161,12 +165,7 @@ public class Country {
   private static Country defaultCountry;
 
   static {
-    parseConfigFile();
-  }
-
-  static {
-    defaultCountry =
-        Country.getInstance(LocaleUtil.getDefaultCountryCode());
+    defaultCountry = Country.getInstance(LocaleUtil.getDefaultCountryCode());
   }
 
   private final String isoCode;
@@ -181,7 +180,7 @@ public class Country {
   private Map<String, State> states;
   private CityGenerator cityGenerator;
   private volatile boolean citiesInitialized = false;
-  private WrapperProvider<String> swp = new WrapperProvider<>();
+  private final WrapperProvider<String> swp = new WrapperProvider<>();
 
   private Country(String isoCode, String defaultLanguage, int population,
                   String phoneCode, String mobileCodePattern,
@@ -220,7 +219,7 @@ public class Country {
 
   /** Retrieves a country from the country configuration file.
    *  @param isoCode the ISO code of the country to retrieve
-   *  @return if it is a predfined country, an instance with the configured data is returned, else one with the specified ISO code and default settings
+   *  @return if it is a predefined country, an instance with the configured data is returned, else one with the specified ISO code and default settings
    * , e.g. phoneCode 'UNKNOWN'. */
   public static Country getInstance(String isoCode) {
     return getInstance(isoCode, true);
