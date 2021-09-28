@@ -237,22 +237,25 @@ For implementing ConstraintValidators, see the Bean Validation documentation.
 
 ### com.rapiddweller.common.Validator
 
-For implementing the com.rapiddweller.common.Validator interface, a custom validator must implement the method boolean valid(E object) method
-returning true for a valid object, false for an invalid one.
+For implementing the `com.rapiddweller.common.Validator` interface, a custom validator must implement the method boolean valid(E object) method
+returning `true` for a valid object, `false` for an invalid one.
 
 It is recommended to inherit a custom Validator from the class com.rapiddweller.common.validator.AbstractValidator. If the Validator interface will
 change in future versions, the AbstractValidator will try to compensate for implementations of the old interface. Thus, a simple validator
 implementation which checks that an object is not null would be:
 
+```java
 public class NotNullValidator`<E>` extends com.rapiddweller.common.validator.AbstractValidator`<E>` {
 
 public boolean valid(E object) { return (object != null); }
 
 }
+```
+
 
 ### Implementing both interfaces
 
-If you inherit a custom Validator from com.rapiddweller.common.validator.bean.AbstractConstraintValidator, it implements both interfaces.
+If you inherit a custom Validator from `com.rapiddweller.common.validator.bean.AbstractConstraintValidator`, it implements both interfaces.
 
 ## Custom Consumers
 
