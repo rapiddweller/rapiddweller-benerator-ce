@@ -107,7 +107,7 @@ public class Benerator {
 
   //  operational interface ------------------------------------------------------------------------------------------
 
-  private void runFile(String filename) throws IOException {
+  public void runFile(String filename) throws IOException {
     // Run descriptor file
     try {
       InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
