@@ -78,7 +78,7 @@ public abstract class ValidatingGenerator<P> extends AbstractGenerator<P> {
       }
     } while (!valid);
     if (count >= WARNING_THRESHOLD) {
-      logger.warn("Inefficient generation: needed {}} tries to generate a valid value. ", count);
+      logger.warn("Inefficient generation: needed {} tries to generate a valid value. ", count);
     }
     return wrapper.wrap(product);
   }
