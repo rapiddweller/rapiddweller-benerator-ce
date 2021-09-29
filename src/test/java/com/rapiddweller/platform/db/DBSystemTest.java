@@ -35,6 +35,7 @@ import com.rapiddweller.format.DataSource;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.Entity;
+import com.rapiddweller.platform.ABCTest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,16 +45,8 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Objects;
 
-import static com.rapiddweller.jdbacl.dialect.HSQLUtil.DEFAULT_PASSWORD;
-import static com.rapiddweller.jdbacl.dialect.HSQLUtil.DEFAULT_USER;
-import static com.rapiddweller.jdbacl.dialect.HSQLUtil.DRIVER;
-import static com.rapiddweller.jdbacl.dialect.HSQLUtil.IN_MEMORY_URL_PREFIX;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static com.rapiddweller.jdbacl.dialect.HSQLUtil.*;
+import static org.junit.Assert.*;
 
 /**
  * Tests {@link DefaultDBSystem}.<br/>
@@ -63,7 +56,7 @@ import static org.junit.Assert.fail;
  * @author Volker Bergmann
  * @since 0.5.6
  */
-public class DBSystemTest {
+public class DBSystemTest extends ABCTest {
 
   /**
    * Test read write.
@@ -77,6 +70,8 @@ public class DBSystemTest {
 
     // test update w/o readOnly
     db.update(new Entity("Test", db, "ID", 1, "NAME", "Bob"));
+
+    assertNotNull(db);
   }
 
   /**
@@ -218,10 +213,29 @@ public class DBSystemTest {
    */
   @Test
   public void testUpdater() throws Exception {
+
     db.execute("insert into TEST (ID, NAME) values (1, 'Alice')");
     db.execute("insert into TEST (ID, NAME) values (2, 'Bob')");
     Consumer updater = db.updater();
     // update (1, Alice) to (1, Charly)
+    assertEquals("DefaultDBSystem[sa@jdbc:hsqldb:mem:benerator]", db.toString());
+    assertEquals("hsql", db.getSystem());
+    assertEquals(1, db.invalidationCount());
+    assertEquals("ConvertingDataSource[QueryDataSource[SELECT \"ID\" FROM \"PUBLIC\".\"TEST\" where SELECT * FROM TEST] -> ResultSetConverter]", db.queryEntityIds("TEST", "SELECT * FROM TEST", null).toString());
+    assertEquals(2, db.countEntities("TEST"));
+    assertEquals("TEST[ID=1, NAME=Alice]", db.queryEntityById("TEST", 1).toString());
+    assertNull(db.getCatalog());
+    assertEquals("PUBLIC", db.getSchema());
+    assertNull(db.getPassword());
+    assertEquals(".*", db.getIncludeTables());
+    assertNull(db.getExcludeTables());
+    assertFalse(db.isMetaDataCache());
+    assertEquals(100, db.getFetchSize());
+    assertTrue(db.isLazy());
+    db.getTypeDescriptors();
+    db.setAcceptUnknownColumnTypes(true);
+    db.queryEntityById("TEST", 1);
+    db.getTable("TEST");
     Entity entity1 = new Entity("TEST", db, "ID", 1, "NAME", "Charly");
     ProductWrapper<Entity> wrapper = new ProductWrapper<>();
     updater.startConsuming(wrapper.wrap(entity1));
@@ -235,6 +249,7 @@ public class DBSystemTest {
     assertEquals(2, storedData.size());
     assertArrayEquals(new Object[] {1, "Charly"}, storedData.get(0));
     assertArrayEquals(new Object[] {2, "Otto"}, storedData.get(1));
+    db.close();
   }
 
   /**
