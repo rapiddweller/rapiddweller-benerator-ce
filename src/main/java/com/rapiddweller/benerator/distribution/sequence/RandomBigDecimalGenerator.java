@@ -43,9 +43,9 @@ import java.math.RoundingMode;
  */
 public class RandomBigDecimalGenerator extends ThreadSafeNonNullGenerator<BigDecimal> {
 
-  private static final BigDecimal DEFAULT_MIN = BigDecimal.valueOf(Double.MIN_VALUE);
-  private static final BigDecimal DEFAULT_MAX = BigDecimal.valueOf(Double.MAX_VALUE);
-  private static final BigDecimal DEFAULT_GRANULARITY = BigDecimal.valueOf(1);
+  private static final BigDecimal DEFAULT_MIN = new BigDecimal("-1000000000");
+  private static final BigDecimal DEFAULT_MAX = new BigDecimal("1000000000");
+  private static final BigDecimal DEFAULT_GRANULARITY = BigDecimal.ONE;
 
   private final BigDecimal min;
   private final BigDecimal max;
@@ -81,7 +81,7 @@ public class RandomBigDecimalGenerator extends ThreadSafeNonNullGenerator<BigDec
 
   @Override
   public synchronized void init(GeneratorContext context) {
-    if (BigDecimal.ONE.compareTo(granularity) == 0) {
+    if (BigDecimal.ZERO.compareTo(granularity) == 0) {
       throw new InvalidGeneratorSetupException(getClass().getSimpleName() + ".granularity may not be 0");
     }
     super.init(context);
