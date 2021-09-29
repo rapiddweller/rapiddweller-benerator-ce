@@ -8,6 +8,7 @@ import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.model.data.Entity;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,14 +22,37 @@ import java.util.List;
 public class PartModifier extends AbstractGenerationStep<Entity> implements ComponentBuilder<Entity> {
 
   private final String partName;
-  private final GenerationStepSupport support;
+  private final GenerationStepSupport<Entity> support;
 
   public PartModifier(String partName, List<GenerationStep<Entity>> generationSteps, String scope,
                       BeneratorContext context) {
     super(scope);
     this.partName = partName;
-    this.support = new GenerationStepSupport(partName, generationSteps);
+    this.support = new GenerationStepSupport<>(partName, generationSteps);
     this.support.init(context);
+  }
+
+  // properties ------------------------------------------------------------------------------------------------------
+
+  public String getPartName() {
+    return partName;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return support.isParallelizable();
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return support.isThreadSafe();
+  }
+
+  // interface -------------------------------------------------------------------------------------------------------
+
+  @Override
+  public void init(BeneratorContext context) {
+    support.init(context);
   }
 
   @Override
@@ -36,18 +60,22 @@ public class PartModifier extends AbstractGenerationStep<Entity> implements Comp
     ProductWrapper<?> wrapper = context.getCurrentProduct();
     if (wrapper != null) {
       Object part = ((Entity) wrapper.unwrap()).getComponent(partName);
-      Iterator<Entity> iterator = null;
       if (part != null) {
-        if (part.getClass().isArray()) {
-          iterator = ArrayUtil.iterator((Entity[]) part);
-        } else if (part instanceof Collection) {
-          iterator = ((Collection) part).iterator();
-        }
-      }
-      if (iterator != null) {
-        while (iterator.hasNext()) {
-          Entity entity = iterator.next();
-          support.apply(entity, context);
+        if (part instanceof Entity) {
+          support.apply((Entity) part, context);
+        } else {
+          Iterator<Entity> iterator = null;
+          if (part.getClass().isArray()) {
+            iterator = ArrayUtil.iterator((Entity[]) part);
+          } else if (part instanceof Collection) {
+            iterator = ((Collection) part).iterator();
+          }
+          if (iterator != null) {
+            while (iterator.hasNext()) {
+              Entity entity = iterator.next();
+              support.apply(entity, context);
+            }
+          }
         }
       }
     }
@@ -55,28 +83,13 @@ public class PartModifier extends AbstractGenerationStep<Entity> implements Comp
   }
 
   @Override
-  public void close() {
-
-  }
-
-  @Override
-  public void init(BeneratorContext context) {
-
-  }
-
-  @Override
   public void reset() {
-
+    support.reset();
   }
 
   @Override
-  public boolean isParallelizable() {
-    return false;
-  }
-
-  @Override
-  public boolean isThreadSafe() {
-    return true;
+  public void close() {
+    support.close();
   }
 
 }
