@@ -28,15 +28,10 @@ package com.rapiddweller.benerator.util;
 
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.RandomProvider;
-import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.script.DatabeneScriptParser;
-import com.rapiddweller.script.WeightedSample;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Provides utility functions for generating numbers in an interval.<br/><br/>
@@ -47,6 +42,10 @@ import java.util.Random;
 public class RandomUtil {
 
   private static final RandomProvider random = BeneratorFactory.getInstance().getRandomProvider();
+
+  private RandomUtil() {
+    // private constructor to prevent instantiation
+  }
 
   public static long randomLong(long min, long max) {
     return random.randomLong(min, max);

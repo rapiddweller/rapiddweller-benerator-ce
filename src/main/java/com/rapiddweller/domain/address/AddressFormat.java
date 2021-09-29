@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -42,96 +42,54 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Formats Address objects as String.<br/>
- * <br/>
+ * Formats Address objects as String.<br/><br/>
  * Created: 06.04.2008 14:15:25
- *
  * @author Volker Bergmann
  */
 public class AddressFormat {
 
-  /**
-   * The Instances.
-   */
+  private static final FreeMarkerScriptFactory SCRIPT_FACTORY = new FreeMarkerScriptFactory();
+
   static final Map<String, AddressFormat> instances = new HashMap<>();
-  private static final String CONFIG_FILE =
-      "/com/rapiddweller/domain/address/addressFormat.properties";
-  /**
-   * The constant US.
-   */
+  private static final String CONFIG_FILE = "/com/rapiddweller/domain/address/addressFormat.properties";
+
   public static final AddressFormat US = getInstance("US");
-  /**
-   * The constant AU.
-   */
   public static final AddressFormat AU = getInstance("AU");
-  /**
-   * The constant DE.
-   */
   public static final AddressFormat DE = getInstance("DE");
-  /**
-   * The constant BE.
-   */
   public static final AddressFormat BE = getInstance("BE");
-  private static final FreeMarkerScriptFactory SCRIPT_FACTORY =
-      new FreeMarkerScriptFactory();
+
   private final String pattern;
   private final Script script;
 
-  /**
-   * Instantiates a new Address format.
-   *
-   * @param pattern the pattern
-   */
   public AddressFormat(String pattern) {
     this.pattern = pattern;
     script = SCRIPT_FACTORY.parseText(pattern);
   }
 
-  /**
-   * Gets instance.
-   *
-   * @param country the country
-   * @return the instance
-   */
   @SuppressWarnings("rawtypes")
   public static AddressFormat getInstance(String country) {
-    if (instances.size() == 0) {
+    if (instances.isEmpty()) {
       try {
         IOUtil.readProperties(CONFIG_FILE,
-            new UnsafeConverter<>(Map.Entry.class,
-                Map.Entry.class) {
+            new UnsafeConverter<>(Map.Entry.class, Map.Entry.class) {
               @Override
               public Entry convert(Entry entry) {
                 String pt = (String) entry.getValue();
-                instances.put((String) entry.getKey(),
-                    new AddressFormat(pt));
+                instances.put((String) entry.getKey(), new AddressFormat(pt));
                 return entry;
               }
             });
       } catch (IOException e) {
-        throw new ConfigurationError(
-            "Error while processing AddressFormat configuration",
-            e);
+        throw new ConfigurationError("Error while processing AddressFormat configuration", e);
       }
     }
     return instances.get(country);
   }
 
-  /**
-   * Gets pattern.
-   *
-   * @return the pattern
-   */
   public String getPattern() {
     return pattern;
   }
 
-  /**
-   * Format string.
-   *
-   * @param address the address
-   * @return the string
-   */
   public String format(Address address) {
     try {
       Context context = new DefaultContext();

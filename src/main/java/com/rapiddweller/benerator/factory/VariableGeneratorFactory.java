@@ -47,6 +47,10 @@ import static com.rapiddweller.model.data.TypeDescriptor.PATTERN;
  */
 public class VariableGeneratorFactory {
 
+  private VariableGeneratorFactory() {
+    // private constructor to prevent instantiation
+  }
+
   public static Generator<?> createGenerator(
       VariableDescriptor descriptor, BeneratorContext context) {
     Generator<?> generator = null;

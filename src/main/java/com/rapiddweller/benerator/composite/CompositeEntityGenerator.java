@@ -60,7 +60,7 @@ public class CompositeEntityGenerator extends GeneratorProxy<Entity> implements 
                                   List<GenerationStep<Entity>> components, BeneratorContext context) {
     super(source);
     this.instanceName = instanceName;
-    this.support = new GenerationStepSupport<>(instanceName, components, context);
+    this.support = new GenerationStepSupport<>(instanceName, components);
     this.context = context;
   }
 

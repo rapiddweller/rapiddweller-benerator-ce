@@ -28,7 +28,6 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ConfigurationError;
@@ -63,14 +62,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Executes an &lt;evaluate/&gt; from an XML descriptor.<br/>
- * <br/>
+ * Executes an &lt;evaluate/&gt; from an XML descriptor.<br/><br/>
  * Created at 23.07.2009 17:59:36
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class EvaluateStatement implements Statement {
+public class EvaluateStatement extends AbstractStatement {
 
   private static final Logger logger = LoggerFactory.getLogger(EvaluateStatement.class);
 
@@ -86,75 +83,24 @@ public class EvaluateStatement implements Statement {
     }
   }
 
-  /**
-   * The Evaluate.
-   */
-  boolean evaluate;
-  /**
-   * The Id ex.
-   */
-  Expression<String> idEx;
-  /**
-   * The Text ex.
-   */
-  Expression<String> textEx;
-  /**
-   * The Uri ex.
-   */
-  Expression<String> uriEx;
-  /**
-   * The Type ex.
-   */
-  Expression<String> typeEx;
-  /**
-   * The Target object ex.
-   */
-  Expression<?> targetObjectEx;
-  /**
-   * The Separator ex.
-   */
-  Expression<Character> separatorEx;
-  /**
-   * The On error ex.
-   */
-  Expression<String> onErrorEx;
-  /**
-   * The Encoding ex.
-   */
-  Expression<String> encodingEx;
-  /**
-   * The Optimize ex.
-   */
-  Expression<Boolean> optimizeEx;
-  /**
-   * The Invalidate ex.
-   */
-  Expression<Boolean> invalidateEx;
-  /**
-   * The Assertion ex.
-   */
-  Expression<?> assertionEx;
+  protected boolean evaluate;
+  protected Expression<String> idEx;
+  protected Expression<String> textEx;
+  protected Expression<String> uriEx;
+  protected Expression<String> typeEx;
+  protected Expression<?> targetObjectEx;
+  protected Expression<Character> separatorEx;
+  protected Expression<String> onErrorEx;
+  protected Expression<String> encodingEx;
+  protected Expression<Boolean> optimizeEx;
+  protected Expression<Boolean> invalidateEx;
+  protected Expression<?> assertionEx;
 
-  /**
-   * Instantiates a new Evaluate statement.
-   *
-   * @param evaluate       the evaluate
-   * @param idEx           the id ex
-   * @param textEx         the text ex
-   * @param uriEx          the uri ex
-   * @param typeEx         the type ex
-   * @param targetObjectEx the target object ex
-   * @param separatorEx    the separator ex
-   * @param onErrorEx      the on error ex
-   * @param encodingEx     the encoding ex
-   * @param optimizeEx     the optimize ex
-   * @param invalidateEx   the invalidate ex
-   * @param assertionEx    the assertion ex
-   */
-  public EvaluateStatement(boolean evaluate, Expression<String> idEx, Expression<String> textEx,
-                           Expression<String> uriEx, Expression<String> typeEx, Expression<?> targetObjectEx,
-                           Expression<Character> separatorEx, Expression<String> onErrorEx, Expression<String> encodingEx,
-                           Expression<Boolean> optimizeEx, Expression<Boolean> invalidateEx, Expression<?> assertionEx) {
+  public EvaluateStatement(
+      boolean evaluate, Expression<String> idEx, Expression<String> textEx,
+     Expression<String> uriEx, Expression<String> typeEx, Expression<?> targetObjectEx,
+     Expression<Character> separatorEx, Expression<String> onErrorEx, Expression<String> encodingEx,
+     Expression<Boolean> optimizeEx, Expression<Boolean> invalidateEx, Expression<?> assertionEx) {
     this.evaluate = evaluate;
     this.idEx = idEx;
     this.textEx = textEx;
@@ -169,104 +115,129 @@ public class EvaluateStatement implements Statement {
     this.assertionEx = assertionEx;
   }
 
-  /**
-   * Gets text ex.
-   *
-   * @return the text ex
-   */
-  public Expression<String> getTextEx() {
-    return textEx;
-  }
-
   @Override
   public boolean execute(BeneratorContext context) {
     try {
-      String onErrorValue = ExpressionUtil.evaluate(onErrorEx, context);
-      if (onErrorValue == null) {
-        onErrorValue = "fatal";
-      }
-
-      String typeValue = ExpressionUtil.evaluate(typeEx, context);
-      // if type is not defined, derive it from the file extension
-      String uriValue = ExpressionUtil.evaluate(uriEx, context);
-      if (typeEx == null && uriEx != null) {
-        typeValue = mapExtensionOf(uriValue);
-        if ("winshell".equals(typeValue)) {
-          if (!SystemInfo.isWindows()) {
-            throw new ConfigurationError("Need Windows to run file: " + uriValue);
-          } else {
-            typeValue = SHELL;
-          }
-        } else if ("unixshell".equals(typeValue)) {
-          if (SystemInfo.isWindows()) {
-            throw new ConfigurationError("Need Unix system to run file: " + uriValue);
-          } else {
-            typeValue = SHELL;
-          }
-        }
-      }
-      if (uriValue != null) {
-        uriValue = context.resolveRelativeUri(uriValue);
-      }
+      String onErrorValue = ExpressionUtil.evaluateWithDefault(onErrorEx, "fatal", context);
+      String uriValue = evaluateUri(context);
       Object targetObject = ExpressionUtil.evaluate(targetObjectEx, context);
-      if (typeValue == null && targetObject instanceof DBSystem) {
-        typeValue = "sql";
-      }
-      if (typeValue == null && targetObject instanceof StorageSystem) {
-        typeValue = "execute";
-      }
+      String typeValue = evaluateType(context, uriValue, targetObject);
       String encoding = ExpressionUtil.evaluate(encodingEx, context);
+      String text = ExpressionUtil.evaluate(textEx, context);
 
       // run
       Object result = null;
-      String text = ExpressionUtil.evaluate(textEx, context);
       if ("sql".equals(typeValue)) {
-        Character separator = ExpressionUtil.evaluate(separatorEx, context);
-        if (separator == null) {
-          separator = ';';
-        }
-        boolean optimize = (optimizeEx != null ? optimizeEx.evaluate(context) : false);
-        Boolean invalidate = (invalidateEx != null ? invalidateEx.evaluate(context) : null);
-        DBExecutionResult executionResult = runSql(uriValue, targetObject, onErrorValue, encoding,
-            text, separator, optimize, invalidate);
-        result = (executionResult != null ? executionResult.result : null);
+        result = evaluateAsSql(context, onErrorValue, uriValue, targetObject, encoding, text);
       } else if (SHELL.equals(typeValue)) {
         result = runShell(uriValue, text, onErrorValue);
       } else if ("execute".equals(typeValue)) {
         result = ((StorageSystem) targetObject).execute(text);
       } else {
-        if (typeValue == null) {
-          typeValue = context.getDefaultScript();
-        }
-        if (!StringUtil.isEmpty(uriValue)) {
-          text = IOUtil.getContentOfURI(uriValue);
-        }
-        result = runScript(text, typeValue, onErrorValue, context);
+        result = evaluateAsScript(context, onErrorValue, uriValue, typeValue, text);
       }
       context.setGlobal("result", result);
-      Object assertionValue = ExpressionUtil.evaluate(assertionEx, context);
-      if (assertionValue instanceof String) {
-        assertionValue = LiteralParser.parse((String) assertionValue);
-      }
-      if (assertionValue != null && !(assertionValue instanceof String && ((String) assertionValue).length() == 0)) {
-        if (assertionValue instanceof Boolean) {
-          if (!(Boolean) assertionValue) {
-            getErrorHandler(onErrorValue).handleError("Assertion failed: '" + assertionEx + "'");
-          }
-        } else {
-          if (!BeanUtil.equalsIgnoreType(assertionValue, result)) {
-            getErrorHandler(onErrorValue).handleError("Assertion failed. Expected: '" + assertionValue + "', found: '" + result + "'");
-          }
-        }
-      }
-      String idValue = ExpressionUtil.evaluate(idEx, context);
-      if (idValue != null) {
-        context.setGlobal(idValue, result);
-      }
+      evaluateAssertion(result, onErrorValue, context);
+      exportResultWithId(result, context);
       return true;
     } catch (ConversionException | IOException e) {
       throw new ConfigurationError(e);
     }
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private void exportResultWithId(Object result, BeneratorContext context) {
+    String idValue = ExpressionUtil.evaluate(idEx, context);
+    if (idValue != null) {
+      context.setGlobal(idValue, result);
+    }
+  }
+
+  private void evaluateAssertion(Object result, String onErrorValue, BeneratorContext context) {
+    Object assertionValue = ExpressionUtil.evaluate(assertionEx, context);
+    if (assertionValue instanceof String) {
+      assertionValue = LiteralParser.parse((String) assertionValue);
+    }
+    if (assertionValue != null && !(assertionValue instanceof String && ((String) assertionValue).length() == 0)) {
+      if (assertionValue instanceof Boolean) {
+        if (!(boolean) assertionValue) {
+          getErrorHandler(onErrorValue).handleError("Assertion failed: '" + assertionEx + "'");
+        }
+      } else {
+        if (!BeanUtil.equalsIgnoreType(assertionValue, result)) {
+          getErrorHandler(onErrorValue).handleError("Assertion failed. Expected: '" + assertionValue + "', found: '" + result + "'");
+        }
+      }
+    }
+  }
+
+  private Object evaluateAsSql(BeneratorContext context, String onErrorValue, String uriValue, Object targetObject, String encoding, String text) {
+    Object result;
+    Character separator = ExpressionUtil.evaluate(separatorEx, context);
+    if (separator == null) {
+      separator = ';';
+    }
+    boolean optimize = ExpressionUtil.evaluateWithDefault(optimizeEx, false, context);
+    Boolean invalidate = ExpressionUtil.evaluate(invalidateEx, context);
+    DBExecutionResult executionResult = runSql(uriValue, targetObject, onErrorValue, encoding,
+        text, separator, optimize, invalidate);
+    result = (executionResult != null ? executionResult.result : null);
+    return result;
+  }
+
+  private Object evaluateAsScript(BeneratorContext context, String onErrorValue, String uriValue, String typeValue, String text) throws IOException {
+    Object result;
+    if (typeValue == null) {
+      typeValue = context.getDefaultScript();
+    }
+    if (!StringUtil.isEmpty(uriValue)) {
+      text = IOUtil.getContentOfURI(uriValue);
+    }
+    result = runScript(text, typeValue, onErrorValue, context);
+    return result;
+  }
+
+  private String evaluateUri(BeneratorContext context) {
+    String uriValue = ExpressionUtil.evaluate(uriEx, context);
+    if (uriValue != null) {
+      uriValue = context.resolveRelativeUri(uriValue);
+    }
+    return uriValue;
+  }
+
+  private String evaluateType(BeneratorContext context, String uriValue, Object targetObject) {
+    String typeValue = ExpressionUtil.evaluate(typeEx, context);
+    if (typeValue == null && uriEx != null) {
+      typeValue = mapExtensionOf(uriValue); // if type is not defined, derive it from the file extension
+      typeValue = checkOs(uriValue, typeValue); // for shell scripts, check the OS
+    }
+    if (typeValue == null) {
+      if (targetObject instanceof DBSystem) {
+        typeValue = "sql";
+      } else if (targetObject instanceof StorageSystem) {
+        typeValue = "execute";
+      }
+    }
+    return typeValue;
+  }
+
+  private String checkOs(String uriValue, String typeValue) {
+    // TODO Support winshell and unixshell as altervatives?
+    if ("winshell".equals(typeValue)) {
+      if (!SystemInfo.isWindows()) {
+        throw new ConfigurationError("Need Windows to run file: " + uriValue);
+      } else {
+        typeValue = SHELL;
+      }
+    } else if ("unixshell".equals(typeValue)) {
+      if (SystemInfo.isWindows()) {
+        throw new ConfigurationError("Need Unix system to run file: " + uriValue);
+      } else {
+        typeValue = SHELL;
+      }
+    }
+    return typeValue;
   }
 
   private static String mapExtensionOf(String uri) {
@@ -310,15 +281,16 @@ public class EvaluateStatement implements Statement {
     return LiteralParser.parse(output);
   }
 
-  private DBExecutionResult runSql(String uri, Object targetObject, String onError,
-                                   String encoding, String text, char separator, boolean optimize, Boolean invalidate) {
+  private DBExecutionResult runSql(
+      String uri, Object targetObject, String onError, String encoding, String text,
+      char separator, boolean optimize, Boolean invalidate) {
     if (targetObject == null) {
       throw new ConfigurationError("Please specify the 'target' database to execute the SQL script");
     }
     Assert.instanceOf(targetObject, DBSystem.class, "target");
     DBSystem db = (DBSystem) targetObject;
     if (uri != null) {
-      logger.info("Executing script " + uri);
+      logger.info("Executing script {}", uri);
     } else if (text != null) {
       logger.info("Executing inline script");
     } else {

@@ -37,7 +37,6 @@ import java.util.Map;
 
 /**
  * Maps JDBC types to benerator types.
- *
  * @author Volker Bergmann
  * @since 0.3.04
  */
@@ -81,13 +80,10 @@ public class JdbcMetaTypeMapper {
         Types.OTHER, PrimitiveType.STRING);
   }
 
-  /**
-   * Abstract type string.
-   *
-   * @param columnType    the column type
-   * @param acceptUnknown the accept unknown
-   * @return the string
-   */
+  private JdbcMetaTypeMapper() {
+    // private constructor to prevent instantiation
+  }
+
   public static String abstractType(DBDataType columnType,
                                     boolean acceptUnknown) {
     int jdbcType = columnType.getJdbcType();

@@ -39,7 +39,6 @@ import com.rapiddweller.model.data.TypeDescriptor;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,11 +53,6 @@ public class ComponentTypeConverter extends AbstractConverter<Entity, Entity> {
 
   private final ComplexTypeDescriptor type;
 
-  /**
-   * Instantiates a new Component type converter.
-   *
-   * @param type the type
-   */
   public ComponentTypeConverter(ComplexTypeDescriptor type) {
     super(Entity.class, Entity.class);
     this.type = type;

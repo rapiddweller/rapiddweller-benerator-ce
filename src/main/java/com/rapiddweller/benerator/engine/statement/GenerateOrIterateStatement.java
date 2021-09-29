@@ -70,6 +70,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
   public GenerateOrIterateStatement(String productName, Generator<Long> countGenerator, Expression<Long> minCount,
                                     Expression<Long> pageSize, Expression<PageListener> pageListenerEx,
                                     Expression<ErrorHandler> errorHandler, boolean infoLog, boolean isSubCreator, BeneratorContext context) {
+    super(errorHandler);
     this.countGenerator = countGenerator;
     this.minCount = minCount;
     this.pageSize = pageSize;

@@ -46,6 +46,10 @@ import com.rapiddweller.model.data.Uniqueness;
  */
 public class SourceFactory {
 
+  private SourceFactory() {
+    // private constructor to prevent instantiation
+  }
+
   // source generators -----------------------------------------------------------------------------------------------
 
   /** Creates a generator that iterates through the cells of a CSV file.

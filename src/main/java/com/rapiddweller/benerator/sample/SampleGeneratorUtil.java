@@ -34,19 +34,15 @@ import java.util.List;
 /**
  * Provides utility methods for sample-based generators.<br/><br/>
  * Created: 17.02.2010 23:57:20
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class SampleGeneratorUtil {
 
-  /**
-   * Extract values list.
-   *
-   * @param <T>             the type parameter
-   * @param weightedSamples the weighted samples
-   * @return the list
-   */
+  private SampleGeneratorUtil() {
+    // private constructor to prevent instantiation
+  }
+
   public static <T> List<T> extractValues(List<WeightedSample<T>> weightedSamples) {
     List<T> result = new ArrayList<>(weightedSamples.size());
     for (WeightedSample<T> sample : weightedSamples) {

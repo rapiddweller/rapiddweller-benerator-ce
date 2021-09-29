@@ -39,14 +39,12 @@ import java.util.List;
 /**
  * Single-threaded non-locking {@link Task} executor.<br/><br/>
  * Created: 19.12.2012 09:54:56
- *
  * @author Volker Bergmann
  * @since 0.8.0
  */
 public class TaskExecutor {
 
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(TaskExecutor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TaskExecutor.class);
 
   private final Task target;
   private final Context context;
@@ -73,19 +71,6 @@ public class TaskExecutor {
     this.infoLog = infoLog;
   }
 
-  /**
-   * Execute.
-   *
-   * @param task                 the task
-   * @param context              the context
-   * @param requestedInvocations the requested invocations
-   * @param minInvocations       the min invocations
-   * @param pageListeners        the page listeners
-   * @param pageSize             the page size
-   * @param stats                the stats
-   * @param errorHandler         the error handler
-   * @param infoLog              the info log
-   */
   public static void execute(Task task, Context context,
                              Long requestedInvocations, Long minInvocations,
                              List<PageListener> pageListeners, long pageSize,
@@ -154,8 +139,7 @@ public class TaskExecutor {
           countValue);
     }
     if (tracker != null) {
-      tracker.getCounters()[0]
-          .printSummary(new PrintWriter(System.out), 90, 95);
+      tracker.getCounters()[0].printSummary(new PrintWriter(System.out), 90, 95);
     }
   }
 
@@ -192,13 +176,6 @@ public class TaskExecutor {
     return actualCount;
   }
 
-  /**
-   * Current page size long.
-   *
-   * @param requestedInvocations the requested invocations
-   * @param queuedInvocations    the queued invocations
-   * @return the long
-   */
   protected long currentPageSize(Long requestedInvocations,
                                  long queuedInvocations) {
     if (pageSize > 0) {
@@ -238,8 +215,7 @@ public class TaskExecutor {
 
   private void pageStarting(int currentPageNo) {
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("Starting page " + (currentPageNo + 1) + " of " +
-          getTaskName() + " with pageSize=" + pageSize);
+      LOGGER.debug("Starting page {} of {} with pageSize={}", currentPageNo + 1, getTaskName(), pageSize);
     }
     if (pageListeners != null) {
       for (PageListener listener : pageListeners) {

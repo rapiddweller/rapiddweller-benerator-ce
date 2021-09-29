@@ -70,7 +70,7 @@ import static java.io.StreamTokenizer.TT_WORD;
  */
 public class CascadeStatement extends SequentialStatement implements CascadeParent {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CascadeStatement.class);
+  private static final Logger logger = LoggerFactory.getLogger(CascadeStatement.class);
 
   private static final String REF_SYNTAX_MESSAGE = "Expected Syntax: table(column1, column2, ...)";
 
@@ -93,12 +93,12 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
     getType(source, context);
     IdentityModel identity = parent.getIdentityProvider().getIdentity(type.getName(), false);
     String tableName = type.getName();
-    LOGGER.debug("Cascading transcode from " + parent.currentEntity().type() + " to " + tableName);
+    logger.debug("Cascading transcode from {} to {}", parent.currentEntity().type(), tableName);
 
     // iterate rows
     List<GenerationStep<Entity>> generationSteps =
         ComplexTypeGeneratorFactory.createMutatingGenerationSteps(type, false, Uniqueness.NONE, context);
-    GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(tableName, generationSteps, context);
+    GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(tableName, generationSteps);
     cavs.init(context);
 
     DataIterator<Entity> iterator = ref.resolveReferences(parent.currentEntity(), source, context);
@@ -168,7 +168,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
     transcodeForeignKeys(targetEntity, source, context);
     mapper.store(source.getId(), identity, nk, sourcePK, targetPK);
     getTarget(context).store(targetEntity);
-    LOGGER.debug("transcoded {} to {}", sourceEntity, targetEntity);
+    logger.debug("transcoded {} to {}", sourceEntity, targetEntity);
     cascade(sourceEntity, context);
   }
 

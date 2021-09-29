@@ -48,6 +48,10 @@ public class GenerationStepFactory {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GenerationStepFactory.class);
 
+  private GenerationStepFactory() {
+    // private constructor to prevent instantiation
+  }
+
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static GenerationStep<?> createGenerationStep(InstanceDescriptor descriptor, Uniqueness ownerUniqueness,
                                                        boolean iterationMode, BeneratorContext context) {

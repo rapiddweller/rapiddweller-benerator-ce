@@ -29,7 +29,6 @@ package com.rapiddweller.benerator.sample;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.WeightedGenerator;
 import com.rapiddweller.benerator.distribution.AbstractWeightFunction;
-import com.rapiddweller.benerator.distribution.WeightFunction;
 import com.rapiddweller.benerator.distribution.WeightedLongGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.NullSafeComparator;

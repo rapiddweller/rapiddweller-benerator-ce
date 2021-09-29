@@ -41,6 +41,10 @@ import com.rapiddweller.model.data.Entity;
  */
 public class SequenceUtil {
 
+  private SequenceUtil() {
+    // private constructor to prevent instantiation
+  }
+
   /** Creates a {@link Generator} which fetches all the elements created by the source generator,
    *  puts them in a cache and serves the cached elements by generating index numbers with the
    *  associated number generator.

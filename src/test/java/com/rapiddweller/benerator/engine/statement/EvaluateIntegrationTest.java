@@ -24,7 +24,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.rapiddweller.benerator.engine;
+package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.statement.EvaluateStatement;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
@@ -35,28 +35,21 @@ import static org.junit.Assert.assertEquals;
 /**
  * Integration test for the &lt;evaluate&gt; statement.<br/><br/>
  * Created: 24.03.2011 11:54:43
- *
  * @author Volker Bergmann
  * @since 0.6.6
  */
 public class EvaluateIntegrationTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test benerator script string literal.
-   */
   @Test
   public void testBeneratorScriptStringLiteral() {
     parseAndExecute("<evaluate id='result'>'TEST'</evaluate>");
     assertEquals("TEST", context.get("result"));
   }
 
-  /**
-   * Test benerator script string literal with quotes.
-   */
   @Test
   public void testBeneratorScriptStringLiteralWithQuotes() {
     EvaluateStatement statement = (EvaluateStatement) parse("<evaluate id='result'>'\\'TEST\\''</evaluate>");
-    assertEquals("'\\'TEST\\''", statement.getTextEx().evaluate(context));
+    assertEquals("'\\'TEST\\''", statement.textEx.evaluate(context));
     statement.execute(context);
     assertEquals("'TEST'", context.get("result"));
   }

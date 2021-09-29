@@ -104,6 +104,7 @@ public abstract class GeneratorFactory {
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(
       Class<T> numberType, T min, Boolean minInclusive, T max, Boolean maxInclusive, T granularity,
       Distribution distribution, Uniqueness uniqueness) {
+    // TODO support minInclusive and maxInclusive
     Assert.notNull(numberType, "numberType");
     if (min != null && min.equals(max)) {
       return WrapperFactory.asNonNullGenerator(new ConstantGenerator<>(min));

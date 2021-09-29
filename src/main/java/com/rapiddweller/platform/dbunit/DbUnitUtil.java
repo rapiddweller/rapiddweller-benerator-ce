@@ -33,17 +33,15 @@ import javax.xml.stream.XMLStreamReader;
 /**
  * Provides utility methods for DbUnit files.<br/><br/>
  * Created: 21.09.2011 15:09:03
- *
  * @author Volker Bergmann
  * @since 0.7.1
  */
 public class DbUnitUtil {
 
-  /**
-   * Skip root element.
-   *
-   * @param reader the reader
-   */
+  private DbUnitUtil() {
+    // private constructor to prevent instantiation
+  }
+
   public static void skipRootElement(XMLStreamReader reader) {
     try {
       while (reader.hasNext()) {
@@ -57,11 +55,6 @@ public class DbUnitUtil {
     }
   }
 
-  /**
-   * Skip non start tags.
-   *
-   * @param reader the reader
-   */
   public static void skipNonStartTags(XMLStreamReader reader) {
     // skip non-start-tags
     try {

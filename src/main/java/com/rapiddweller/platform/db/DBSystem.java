@@ -100,7 +100,6 @@ import static com.rapiddweller.jdbacl.SQLUtil.renderQuery;
 /**
  * Abstract class that serves as parent for classes which connect to databases using JDBC.<br/><br/>
  * Created: 07.01.2013 08:11:25
- *
  * @author Volker Bergmann
  * @since 0.8.0
  */
@@ -112,36 +111,14 @@ public abstract class DBSystem extends AbstractStorageSystem {
   private static final TypeDescriptor[] EMPTY_TYPE_DESCRIPTOR_ARRAY =
       new TypeDescriptor[0];
 
-
-  /**
-   * The Logger.
-   */
   protected final Logger logger = LoggerFactory.getLogger(getClass());
   private final TypeMapper driverTypeMapper;
   private final AtomicInteger invalidationCount;
-  /**
-   * The Batch.
-   */
   protected boolean batch;
-  /**
-   * The Read only.
-   */
   protected boolean readOnly;
-  /**
-   * The Database.
-   */
   protected Database database;
-  /**
-   * The Importer.
-   */
   protected DBMetaDataImporter importer;
-  /**
-   * The Tables.
-   */
   protected Map<String, DBTable> tables;
-  /**
-   * The Dialect.
-   */
   protected DatabaseDialect dialect;
   private String id;
   private String environment;
@@ -161,16 +138,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
   private boolean dynamicQuerySupported;
   private boolean connectedBefore;
 
-  /**
-   * Instantiates a new Db system.
-   *
-   * @param id        the id
-   * @param url       the url
-   * @param driver    the driver
-   * @param user      the user
-   * @param password  the password
-   * @param dataModel the data model
-   */
   public DBSystem(String id, String url, String driver, String user,
                   String password, DataModel dataModel) {
     this(id, dataModel);
@@ -181,13 +148,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
     checkOracleDriverVersion(driver);
   }
 
-  /**
-   * Instantiates a new Db system.
-   *
-   * @param id          the id
-   * @param environment the environment
-   * @param dataModel   the data model
-   */
   public DBSystem(String id, String environment, DataModel dataModel) {
     this(id, dataModel);
     setEnvironment(environment);
@@ -250,20 +210,10 @@ public abstract class DBSystem extends AbstractStorageSystem {
     return id;
   }
 
-  /**
-   * Sets id.
-   *
-   * @param id the id
-   */
   public void setId(String id) {
     this.id = id;
   }
 
-  /**
-   * Gets environment.
-   *
-   * @return the environment
-   */
   public String getEnvironment() {
     return (environment != null ? environment : user);
   }
@@ -284,246 +234,111 @@ public abstract class DBSystem extends AbstractStorageSystem {
     this.password = connectData.password;
   }
 
-  /**
-   * Gets driver.
-   *
-   * @return the driver
-   */
   public String getDriver() {
     return driver;
   }
 
-  /**
-   * Sets driver.
-   *
-   * @param driver the driver
-   */
   public void setDriver(String driver) {
     this.driver = driver;
   }
 
-  /**
-   * Gets url.
-   *
-   * @return the url
-   */
   public String getUrl() {
     return url;
   }
 
-  /**
-   * Sets url.
-   *
-   * @param url the url
-   */
   public void setUrl(String url) {
     this.url = url;
   }
 
-  /**
-   * Gets user.
-   *
-   * @return the user
-   */
   public String getUser() {
     return user;
   }
 
-  /**
-   * Sets user.
-   *
-   * @param user the user
-   */
   public void setUser(String user) {
     this.user = user;
   }
 
-  /**
-   * Gets password.
-   *
-   * @return the password
-   */
   public String getPassword() {
     return password;
   }
 
-  /**
-   * Sets password.
-   *
-   * @param password the password
-   */
   public void setPassword(String password) {
     this.password = StringUtil.emptyToNull(password);
   }
 
-  /**
-   * Gets catalog.
-   *
-   * @return the catalog
-   */
   public String getCatalog() {
     return catalogName;
   }
 
-  /**
-   * Sets catalog.
-   *
-   * @param catalog the catalog
-   */
   public void setCatalog(String catalog) {
     this.catalogName = catalog;
   }
 
-  /**
-   * Gets schema.
-   *
-   * @return the schema
-   */
   public String getSchema() {
     return schemaName;
   }
 
-  /**
-   * Sets schema.
-   *
-   * @param schema the schema
-   */
   public void setSchema(String schema) {
     this.schemaName = StringUtil.emptyToNull(StringUtil.trim(schema));
   }
 
-  /**
-   * Sets table filter.
-   *
-   * @param tableFilter the table filter
-   */
   @Deprecated
   public void setTableFilter(String tableFilter) {
     setIncludeTables(tableFilter);
   }
 
-  /**
-   * Gets include tables.
-   *
-   * @return the include tables
-   */
   public String getIncludeTables() {
     return includeTables;
   }
 
-  /**
-   * Sets include tables.
-   *
-   * @param includeTables the include tables
-   */
   public void setIncludeTables(String includeTables) {
     this.includeTables = includeTables;
   }
 
-  /**
-   * Gets exclude tables.
-   *
-   * @return the exclude tables
-   */
   public String getExcludeTables() {
     return excludeTables;
   }
 
-  /**
-   * Sets exclude tables.
-   *
-   * @param excludeTables the exclude tables
-   */
   public void setExcludeTables(String excludeTables) {
     this.excludeTables = excludeTables;
   }
 
-  /**
-   * Is meta data cache boolean.
-   *
-   * @return the boolean
-   */
   public boolean isMetaDataCache() {
     return metaDataCache;
   }
 
-  /**
-   * Sets meta data cache.
-   *
-   * @param metaDataCache the meta data cache
-   */
   public void setMetaDataCache(boolean metaDataCache) {
     this.metaDataCache = metaDataCache;
   }
 
-  /**
-   * Is batch boolean.
-   *
-   * @return the boolean
-   */
   public boolean isBatch() {
     return batch;
   }
 
-  /**
-   * Sets batch.
-   *
-   * @param batch the batch
-   */
   public void setBatch(boolean batch) {
     this.batch = batch;
   }
 
-  /**
-   * Gets fetch size.
-   *
-   * @return the fetch size
-   */
   public int getFetchSize() {
     return fetchSize;
   }
 
-  /**
-   * Sets fetch size.
-   *
-   * @param fetchSize the fetch size
-   */
   public void setFetchSize(int fetchSize) {
     this.fetchSize = fetchSize;
   }
 
-  /**
-   * Is read only boolean.
-   *
-   * @return the boolean
-   */
   public boolean isReadOnly() {
     return readOnly;
   }
 
-  /**
-   * Sets read only.
-   *
-   * @param readOnly the read only
-   */
   public void setReadOnly(boolean readOnly) {
     this.readOnly = readOnly;
   }
 
-  /**
-   * Is lazy boolean.
-   *
-   * @return the boolean
-   */
   public boolean isLazy() {
     return lazy;
   }
 
-  /**
-   * Sets lazy.
-   *
-   * @param lazy the lazy
-   */
   public void setLazy(boolean lazy) {
     this.lazy = lazy;
   }
@@ -531,20 +346,10 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   // DescriptorProvider interface ------------------------------------------------------------------------------------
 
-  /**
-   * Sets dynamic query supported.
-   *
-   * @param dynamicQuerySupported the dynamic query supported
-   */
   public void setDynamicQuerySupported(boolean dynamicQuerySupported) {
     this.dynamicQuerySupported = dynamicQuerySupported;
   }
 
-  /**
-   * Sets accept unknown column types.
-   *
-   * @param acceptUnknownColumnTypes the accept unknown column types
-   */
   public void setAcceptUnknownColumnTypes(boolean acceptUnknownColumnTypes) {
     this.acceptUnknownColumnTypes = acceptUnknownColumnTypes;
   }
@@ -585,8 +390,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   public void update(Entity entity) {
     if (readOnly) {
       throw new IllegalStateException(
-          "Tried to update table '" + entity.type() + "' " +
-              "though database '" + id + "' is read-only");
+          "Tried to update table '" + entity.type() + "' though database '" + id + "' is read-only");
     }
     logger.debug("Updating {}", entity);
     persistOrUpdate(entity, false);
@@ -600,13 +404,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
     IOUtil.close(importer);
   }
 
-  /**
-   * Query entity by id entity.
-   *
-   * @param tableName the table name
-   * @param id        the id
-   * @return the entity
-   */
   public Entity queryEntityById(String tableName, Object id) {
     try {
       logger.debug("queryEntityById({}, {})", tableName, id);
@@ -661,12 +458,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
         (ComplexTypeDescriptor) getTypeDescriptor(type));
   }
 
-  /**
-   * Count entities long.
-   *
-   * @param tableName the table name
-   * @return the long
-   */
   public long countEntities(String tableName) {
     logger.debug("countEntities({})", tableName);
     String query = "select count(*) from " +
@@ -727,68 +518,29 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   // database-specific interface -------------------------------------------------------------------------------------
 
-  /**
-   * Inserter consumer.
-   *
-   * @return the consumer
-   */
   public Consumer inserter() {
     return new StorageSystemInserter(this);
   }
 
-  /**
-   * Inserter consumer.
-   *
-   * @param tableName the table name
-   * @return the consumer
-   */
   public Consumer inserter(String tableName) {
     return new StorageSystemInserter(this,
         (ComplexTypeDescriptor) getTypeDescriptor(tableName));
   }
 
-  /**
-   * Gets connection.
-   *
-   * @return the connection
-   */
   public abstract Connection getConnection();
 
-  /**
-   * Gets select by pk statement.
-   *
-   * @param descriptor the descriptor
-   * @return the select by pk statement
-   */
   protected abstract PreparedStatement getSelectByPKStatement(
       ComplexTypeDescriptor descriptor);
 
-  /**
-   * Table exists boolean.
-   *
-   * @param tableName the table name
-   * @return the boolean
-   */
   public boolean tableExists(String tableName) {
     logger.debug("tableExists({})", tableName);
     return (getTypeDescriptor(tableName) != null);
   }
 
-  /**
-   * Create sequence.
-   *
-   * @param name the name
-   * @throws SQLException the sql exception
-   */
   public void createSequence(String name) throws SQLException {
     getDialect().createSequence(name, 1, getConnection());
   }
 
-  /**
-   * Drop sequence.
-   *
-   * @param name the name
-   */
   public void dropSequence(String name) {
     execute(getDialect().renderDropSequence(name));
   }
@@ -803,35 +555,17 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
   }
 
-  /**
-   * Next sequence value long.
-   *
-   * @param sequenceName the sequence name
-   * @return the long
-   */
   public long nextSequenceValue(String sequenceName) {
     return DBUtil
         .queryLong(getDialect().renderFetchSequenceValue(sequenceName),
             getConnection());
   }
 
-  /**
-   * Sets sequence value.
-   *
-   * @param sequenceName the sequence name
-   * @param value        the value
-   * @throws SQLException the sql exception
-   */
   public void setSequenceValue(String sequenceName, long value)
       throws SQLException {
     getDialect().setNextSequenceValue(sequenceName, value, getConnection());
   }
 
-  /**
-   * Create connection connection.
-   *
-   * @return the connection
-   */
   protected Connection createConnection() {
     try {
       Connection connection =
@@ -850,9 +584,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
   }
 
-  /**
-   * Invalidate.
-   */
   public void invalidate() {
     typeDescriptors = null;
     tables = null;
@@ -871,18 +602,10 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
   }
 
-  /**
-   * Invalidation count int.
-   *
-   * @return the int
-   */
   public int invalidationCount() {
     return invalidationCount.get();
   }
 
-  /**
-   * Parse meta data.
-   */
   public void parseMetaData() {
     this.tables = new HashMap<>();
     this.typeDescriptors = OrderedNameMap.createCaseIgnorantMap();
@@ -901,11 +624,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
   }
 
-  /**
-   * Gets dialect.
-   *
-   * @return the dialect
-   */
   public DatabaseDialect getDialect() {
     if (dialect == null) {
       try {
@@ -926,22 +644,12 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   // java.lang.Object overrides ------------------------------------------------------------------
 
-  /**
-   * Gets system.
-   *
-   * @return the system
-   */
   public String getSystem() {
     return getDialect().getSystem();
   }
 
   // private helpers ------------------------------------------------------------------------------
 
-  /**
-   * Gets db meta data.
-   *
-   * @return the db meta data
-   */
   public Database getDbMetaData() {
     if (database == null) {
       fetchDbMetaData();
@@ -1000,14 +708,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
         (dynamicQuerySupported ? context : null));
   }
 
-  /**
-   * Gets statement.
-   *
-   * @param descriptor  the descriptor
-   * @param insert      the insert
-   * @param columnInfos the column infos
-   * @return the statement
-   */
   protected abstract PreparedStatement getStatement(
       ComplexTypeDescriptor descriptor, boolean insert,
       List<ColumnInfo> columnInfos);
@@ -1026,13 +726,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
     typeDescriptors.put(tableName, complexType);
   }
 
-  /**
-   * Map table to complex type descriptor complex type descriptor.
-   *
-   * @param table       the table
-   * @param complexType the complex type
-   * @return the complex type descriptor
-   */
   public ComplexTypeDescriptor mapTableToComplexTypeDescriptor(DBTable table,
                                                                ComplexTypeDescriptor complexType) {
     // process primary keys
@@ -1080,8 +773,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
         complexType.setComponent(
             descriptor); // overwrite possible id descriptor for foreign keys
         if (logger.isDebugEnabled()) {
-          logger.debug("Parsed reference " + table.getName() + '.' +
-              descriptor);
+          logger.debug("Parsed reference {}}.{}", table.getName(), descriptor);
         }
       } else {
         // TODO v0.7.6 handle composite keys
@@ -1134,13 +826,12 @@ public abstract class DBSystem extends AbstractStorageSystem {
             descriptor.setUnique(true);
           } else {
             logger.debug(
-                "Automated uniqueness assurance on multiple columns is not provided yet: " +
-                    constraint);
+                "Automated uniqueness assurance on multiple columns is not provided yet: {}", constraint);
             // TODO v0.7.6 support uniqueness constraints on combination of columns
           }
         }
         logger.debug(
-            "parsed attribute " + columnId + ": " + descriptor);
+            "parsed attribute {}: {}", columnId, descriptor);
         complexType.addComponent(descriptor);
       } catch (Exception e) {
         throw new ConfigurationError(
@@ -1151,13 +842,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
     return complexType;
   }
 
-  /**
-   * Gets write column infos.
-   *
-   * @param entity the entity
-   * @param insert the insert
-   * @return the write column infos
-   */
   public List<ColumnInfo> getWriteColumnInfos(Entity entity, boolean insert) {
     String tableName = entity.type();
     DBTable table;
@@ -1226,12 +910,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
   }
 
-  /**
-   * Gets table.
-   *
-   * @param tableName the table name
-   * @return the table
-   */
   public DBTable getTable(String tableName) {
     parseMetadataIfNecessary();
     DBTable table = findTableInConfiguredCatalogAndSchema(schemaName, tableName);
@@ -1240,24 +918,17 @@ public abstract class DBSystem extends AbstractStorageSystem {
     } else {
       table = findAnyTableOfName(tableName);
       if (table != null) {
-        logger.warn("Table '" + tableName + "' not found " +
+        logger.warn("Table '{}' not found " +
             "in the expected catalog or schema." +
-            "I have taken it from catalog '" + table.getCatalog() +
-            "' and schema '" + table.getSchema() + "' instead. " +
-            "You better make sure this is right and fix the configuration");
+            "I have taken it from catalog '{}' and schema '{}' instead. " +
+            "You better make sure this is right and fix the configuration",
+            tableName, table.getCatalog(), table.getSchema());
         return table;
       }
     }
     throw new ObjectNotFoundException("Table " + tableName);
   }
 
-  /**
-   * Gets table.
-   *
-   * @param schemaName the schema name
-   * @param tableName  the table name
-   * @return the table
-   */
   public DBTable getTable(String schemaName, String tableName) {
     parseMetadataIfNecessary();
     DBTable table = findTableInConfiguredCatalogAndSchema(schemaName, tableName);
@@ -1266,11 +937,11 @@ public abstract class DBSystem extends AbstractStorageSystem {
     } else {
       table = findAnyTableOfName(tableName);
       if (table != null) {
-        logger.info("Table '" + tableName + "' not found " +
+        logger.info("Table '{}' not found " +
             "in the expected catalog or schema." +
-            "I have taken it from catalog '" + table.getCatalog() +
-            "' and schema '" + table.getSchema() + "' instead. " +
-            "You better make sure this is right and fix the configuration");
+            "I have taken it from catalog '{}' and schema '{}' instead. " +
+            "You better make sure this is right and fix the configuration",
+            tableName, table.getCatalog(), table.getSchema());
         return table;
       }
     }

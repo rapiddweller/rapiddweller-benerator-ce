@@ -38,7 +38,6 @@ import org.slf4j.Logger;
  * {@link Statement} that instantiates a {@link MemStore}
  * and registers it in the {@link BeneratorContext}.<br/><br/>
  * Created: 08.03.2011 13:30:45
- *
  * @author Volker Bergmann
  * @since 0.6.6
  */
@@ -47,17 +46,8 @@ public class MemStoreStatement implements Statement {
   private static final Logger logger = LoggerFactory.getLogger(DefineDatabaseStatement.class);
 
   private final String id;
-  /**
-   * The Resource manager.
-   */
   ResourceManager resourceManager;
 
-  /**
-   * Instantiates a new Mem store statement.
-   *
-   * @param id              the id
-   * @param resourceManager the resource manager
-   */
   public MemStoreStatement(String id, ResourceManager resourceManager) {
     if (id == null) {
       throw new ConfigurationError("No store id defined");
@@ -68,7 +58,7 @@ public class MemStoreStatement implements Statement {
 
   @Override
   public boolean execute(BeneratorContext context) {
-    logger.debug("Instantiating store with id '" + id + "'");
+    logger.debug("Instantiating store with id '{}'", id);
     MemStore store = new MemStore(id, context.getDataModel());
     // register this object on all relevant managers and in the context
     context.setGlobal(id, store);

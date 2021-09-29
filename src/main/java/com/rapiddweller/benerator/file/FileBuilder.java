@@ -33,23 +33,16 @@ import com.rapiddweller.common.DocumentWriter;
 import java.io.IOException;
 
 /**
- * Calls a Generator several times and writes its output to a DocumentWriter.<br/>
- * <br/>
+ * Calls a Generator several times and writes its output to a DocumentWriter.<br/><br/>
  * Created: 08.06.2007 17:53:50
- *
  * @author Volker Bergmann
  */
 public class FileBuilder {
 
-  /**
-   * Build.
-   *
-   * @param <T>       the type parameter
-   * @param generator the generator
-   * @param length    the length
-   * @param writer    the writer
-   * @throws IOException the io exception
-   */
+  private FileBuilder() {
+    // private constructor to prevent instantiation
+  }
+
   public static <T> void build(Generator<T> generator, int length, DocumentWriter<T> writer) throws IOException {
     writer.setVariable("part_count", length);
     ProductWrapper<T> wrapper = new ProductWrapper<>();

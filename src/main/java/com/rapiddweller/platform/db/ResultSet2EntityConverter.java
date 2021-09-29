@@ -41,23 +41,16 @@ import java.sql.SQLException;
 /**
  * Converts a SQL {@link ResultSet} to a Benerator {@link Entity}.<br/><br/>
  * Created: 24.08.2010 12:29:56
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class ResultSet2EntityConverter {
 
-  /**
-   * Convert entity.
-   *
-   * @param resultSet  the result set
-   * @param descriptor the descriptor
-   * @return the entity
-   * @throws SQLException the sql exception
-   */
-  public static Entity convert(ResultSet resultSet,
-                               ComplexTypeDescriptor descriptor)
-      throws SQLException {
+  private ResultSet2EntityConverter() {
+    // private constructor to prevent instantiation
+  }
+
+  public static Entity convert(ResultSet resultSet, ComplexTypeDescriptor descriptor) throws SQLException {
     Entity entity = new Entity(descriptor);
     ResultSetMetaData metaData = resultSet.getMetaData();
     int columnCount = metaData.getColumnCount();
@@ -65,25 +58,19 @@ public class ResultSet2EntityConverter {
       String columnName = metaData.getColumnName(columnIndex);
       String typeName = null;
       if (descriptor != null) {
-        ComponentDescriptor component =
-            descriptor.getComponent(columnName);
+        ComponentDescriptor component = descriptor.getComponent(columnName);
         if (component != null) {
-          SimpleTypeDescriptor type = (SimpleTypeDescriptor) component
-              .getTypeDescriptor();
+          SimpleTypeDescriptor type = (SimpleTypeDescriptor) component.getTypeDescriptor();
           PrimitiveType primitiveType = type.getPrimitiveType();
-          typeName =
-              (primitiveType != null ? primitiveType.getName() :
-                  "string");
+          typeName = (primitiveType != null ? primitiveType.getName() : "string");
         } else {
           typeName = "string";
         }
       } else {
         typeName = "string";
       }
-      DataModel dataModel =
-          (descriptor != null ? descriptor.getDataModel() : null);
-      Object javaValue =
-          javaValue(resultSet, columnIndex, typeName, dataModel);
+      DataModel dataModel = (descriptor != null ? descriptor.getDataModel() : null);
+      Object javaValue = javaValue(resultSet, columnIndex, typeName, dataModel);
       entity.setComponent(columnName, javaValue);
     }
     return entity;
@@ -104,8 +91,7 @@ public class ResultSet2EntityConverter {
     Object driverValue = resultSet.getObject(columnIndex);
     Object javaValue = driverValue;
     if (dataModel != null) {
-      Class<?> javaType = dataModel.getBeanDescriptorProvider()
-          .concreteType(primitiveType);
+      Class<?> javaType = dataModel.getBeanDescriptorProvider().concreteType(primitiveType);
       javaValue = AnyConverter.convert(driverValue, javaType);
     }
     return javaValue;

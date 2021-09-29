@@ -31,10 +31,8 @@ import com.rapiddweller.common.StringUtil;
 import java.math.BigDecimal;
 
 /**
- * Provides utility methods for IBAN processing.<br/>
- * <br/>
+ * Provides utility methods for IBAN processing.<br/><br/>
  * Created at 12.07.2008 16:07:21
- *
  * @author Volker Bergmann
  * @since 0.5.4
  */
@@ -42,12 +40,10 @@ public class IBANUtil {
 
   private static final BigDecimal NINETYSEVEN = BigDecimal.valueOf(97);
 
-  /**
-   * Checksum int.
-   *
-   * @param iban the iban
-   * @return the int
-   */
+  private IBANUtil() {
+    // private constructor to prevent instantiation
+  }
+
   public static int checksum(String iban) {
     String tmp = (iban.substring(4) + iban.substring(0, 4)).toUpperCase();
     StringBuilder digits = new StringBuilder();
@@ -67,12 +63,6 @@ public class IBANUtil {
     return n.remainder(NINETYSEVEN).intValue();
   }
 
-  /**
-   * Fix checksum string.
-   *
-   * @param ibanTemplate the iban template
-   * @return the string
-   */
   public static String fixChecksum(String ibanTemplate) {
     int remainder = IBANUtil.checksum(ibanTemplate);
     String pp = StringUtil.padLeft(String.valueOf(98 - remainder), 2, '0');

@@ -27,7 +27,7 @@ public class PartModifier extends AbstractGenerationStep<Entity> implements Comp
                       BeneratorContext context) {
     super(scope);
     this.partName = partName;
-    this.support = new GenerationStepSupport(partName, generationSteps, context);
+    this.support = new GenerationStepSupport(partName, generationSteps);
     this.support.init(context);
   }
 

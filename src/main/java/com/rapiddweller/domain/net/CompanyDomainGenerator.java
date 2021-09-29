@@ -39,8 +39,6 @@ import com.rapiddweller.domain.organization.CompanyNameGenerator;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import java.io.IOException;
-
 import static com.rapiddweller.benerator.util.GeneratorUtil.generateNonNull;
 
 /**
