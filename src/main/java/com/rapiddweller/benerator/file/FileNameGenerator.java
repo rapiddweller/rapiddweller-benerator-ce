@@ -29,36 +29,42 @@ package com.rapiddweller.benerator.file;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
- * Generates file and/or directory names out of a directory.<br/><br/>
+ * Scans a folder or file system tree and provides a random element
+ * of this structure at each call to {@link #generate()}.
+ * The file selection can be reduced to only <b>files</b> or <b>folders</b> or both,
+ * the scan may be flat or <b>recursive</b>, a regular expression may be used
+ * to <b>filter</b> for names and the file name format may be local,
+ * absolute or canonical<br/><br/>
  * Created: 24.02.2010 06:30:22
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class FileNameGenerator extends NonNullGeneratorWrapper<File, String> {
 
-  /**
-   * Instantiates a new File name generator.
-   */
+  private FileNameType fileNameType;
+
+  /** Default constructor initializing the generator to scan all file types recursively
+   *  starting at the working directory without filtering and provide their absolute paths. */
   public FileNameGenerator() {
     this(".", null, false, true, false);
   }
 
-  /**
-   * Instantiates a new File name generator.
-   *
-   * @param rootUri   the root uri
-   * @param filter    the filter
-   * @param recursive the recursive
-   * @param files     the files
-   * @param folders   the folders
-   */
-  public FileNameGenerator(String rootUri, String filter, boolean recursive, boolean files, boolean folders) {
+  /** Constructor for backwards compatibility which uses {@link FileNameType#ABSOLUTE}. */
+  public FileNameGenerator(
+      String rootUri, String filter, boolean recursive, boolean files, boolean folders) {
+    this(rootUri, filter, FileNameType.ABSOLUTE, recursive, files, folders);
+  }
+
+  /** Full constructor */
+  public FileNameGenerator(String rootUri, String filter, FileNameType fileNameType,
+                           boolean recursive, boolean files, boolean folders) {
     super(new FileGenerator(rootUri, filter, recursive, folders, files));
     setRootUri(rootUri);
     setFilter(filter);
+    setFileNameType(fileNameType);
     setRecursive(recursive);
     setFolders(folders);
     setFiles(files);
@@ -66,56 +72,38 @@ public class FileNameGenerator extends NonNullGeneratorWrapper<File, String> {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets root uri.
-   *
-   * @param rootUri the root uri
-   */
+  /** Sets the root folder for the file system scan. */
   public void setRootUri(String rootUri) {
     ((FileGenerator) getSource()).setRootUri(rootUri);
   }
 
-  /**
-   * Sets filter.
-   *
-   * @param filter the filter
-   */
+  /** Sets a regular expression for filtering file names.
+   *  It is only applied to the local file names, not to composite paths. */
   public void setFilter(String filter) {
     ((FileGenerator) getSource()).setFilter(filter);
   }
 
-  /**
-   * Sets files.
-   *
-   * @param files the files
-   */
+  /** Sets the type of file name to generate. @see {@link FileNameType} */
+  public void setFileNameType(FileNameType fileNameType) {
+    this.fileNameType = fileNameType;
+  }
+
+  /** If set to true, files are included, otherwise not */
   public void setFiles(boolean files) {
     ((FileGenerator) getSource()).setFiles(files);
   }
 
-  /**
-   * Sets folders.
-   *
-   * @param folders the folders
-   */
+  /** If set to true, folders are included, otherwise not */
   public void setFolders(boolean folders) {
     ((FileGenerator) getSource()).setFolders(folders);
   }
 
-  /**
-   * Sets recursive.
-   *
-   * @param recursive the recursive
-   */
+  /** If set to true, the file system is scanned recursively, otherwise just the root uri */
   public void setRecursive(boolean recursive) {
     ((FileGenerator) getSource()).setRecursive(recursive);
   }
 
-  /**
-   * Sets unique.
-   *
-   * @param unique the unique
-   */
+  /** If set to true, the generator assures, each file is generated only once. */
   public void setUnique(boolean unique) {
     ((FileGenerator) getSource()).setUnique(unique);
   }
@@ -130,7 +118,29 @@ public class FileNameGenerator extends NonNullGeneratorWrapper<File, String> {
 
   @Override
   public String generate() {
-    return generateFromSource().unwrap().getAbsolutePath();
+    File file = generateFromSource().unwrap();
+    switch (fileNameType) {
+      case CANONICAL: return canonicalPath(file);
+      case LOCAL: return file.getName();
+      default: return file.getAbsolutePath();
+    }
+  }
+
+  private String canonicalPath(File file) {
+    try {
+      return file.getCanonicalPath();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public enum FileNameType {
+    /** Represents the absolute file name, @see {@link File#getAbsolutePath()}. */
+    ABSOLUTE,
+    /** Represents the canonical file name, @see {{@link File#getCanonicalPath()}}. */
+    CANONICAL,
+    /** Represents the local file name, @see {@link File#getName()}. */
+    LOCAL
   }
 
 }
