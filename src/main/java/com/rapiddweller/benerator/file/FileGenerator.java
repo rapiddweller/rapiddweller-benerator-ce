@@ -39,7 +39,6 @@ import java.io.File;
 /**
  * Generates {@link File} objects which represent files and/or directories in a parent directory.<br/><br/>
  * Created: 24.02.2010 10:47:44
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -51,22 +50,10 @@ public class FileGenerator extends NonNullSampleGenerator<File> {
   private boolean folders;
   private boolean files;
 
-  /**
-   * Instantiates a new File generator.
-   */
   public FileGenerator() {
     this(".", null, false, false, true);
   }
 
-  /**
-   * Instantiates a new File generator.
-   *
-   * @param rootUri   the root uri
-   * @param filter    the filter
-   * @param recursive the recursive
-   * @param files     the files
-   * @param folders   the folders
-   */
   public FileGenerator(String rootUri, String filter, boolean recursive, boolean files, boolean folders) {
     super(File.class);
     this.rootUri = rootUri;
@@ -78,56 +65,26 @@ public class FileGenerator extends NonNullSampleGenerator<File> {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets root uri.
-   *
-   * @param rootUri the root uri
-   */
   public void setRootUri(String rootUri) {
     this.rootUri = rootUri;
   }
 
-  /**
-   * Sets filter.
-   *
-   * @param filter the filter
-   */
   public void setFilter(String filter) {
     this.filter = filter;
   }
 
-  /**
-   * Sets recursive.
-   *
-   * @param recursive the recursive
-   */
   public void setRecursive(boolean recursive) {
     this.recursive = recursive;
   }
 
-  /**
-   * Sets folders.
-   *
-   * @param folders the folders
-   */
   public void setFolders(boolean folders) {
     this.folders = folders;
   }
 
-  /**
-   * Sets files.
-   *
-   * @param files the files
-   */
   public void setFiles(boolean files) {
     this.files = files;
   }
 
-  /**
-   * Sets context.
-   *
-   * @param context the context
-   */
   public void setContext(Context context) {
     this.context = (BeneratorContext) context;
   }
