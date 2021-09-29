@@ -34,7 +34,6 @@ import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
-import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SyntaxError;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
@@ -93,21 +92,23 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
     getType(source, context);
     IdentityModel identity = parent.getIdentityProvider().getIdentity(type.getName(), false);
     String tableName = type.getName();
-    logger.debug("Cascading transcode from {} to {}", parent.currentEntity().type(), tableName);
+    if (logger.isDebugEnabled()) {
+      logger.debug("Cascading transcode from {} to {}", parent.currentEntity().type(), tableName);
+    }
 
     // iterate rows
     List<GenerationStep<Entity>> generationSteps =
         ComplexTypeGeneratorFactory.createMutatingGenerationSteps(type, false, Uniqueness.NONE, context);
-    GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(tableName, generationSteps);
-    cavs.init(context);
-
-    DataIterator<Entity> iterator = ref.resolveReferences(parent.currentEntity(), source, context);
-    DataContainer<Entity> container = new DataContainer<>();
-    while ((container = iterator.next(container)) != null) {
-      mutateAndTranscodeEntity(container.getData(), identity, cavs, context);
+    try (GenerationStepSupport<Entity> support = new GenerationStepSupport<>(tableName, generationSteps)) {
+      support.init(context);
+      try (DataIterator<Entity> iterator = ref.resolveReferences(parent.currentEntity(), source, context)) {
+        DataContainer<Entity> container = new DataContainer<>();
+        while ((container = iterator.next(container)) != null) {
+          mutateAndTranscodeEntity(container.getData(), identity, support, context);
+        }
+      }
+      return true;
     }
-    IOUtil.close(iterator);
-    return true;
   }
 
   @Override
@@ -144,7 +145,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
   public ComplexTypeDescriptor getType(DBSystem db, BeneratorContext context) {
     if (type == null) {
       String parentType = parent.getType(db, context).getName();
-      typeExpression.setTypeName(ref.getTargetTableName(parentType, db, context));
+      typeExpression.setTypeName(ref.getTargetTableName(parentType, db));
       type = typeExpression.evaluate(context);
     }
     return type;
@@ -152,8 +153,8 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
 
   // implementation --------------------------------------------------------------------------------------------------
 
-  private void mutateAndTranscodeEntity(Entity sourceEntity, IdentityModel identity, GenerationStepSupport<Entity> cavs,
-                                        BeneratorContext context) {
+  private void mutateAndTranscodeEntity(
+      Entity sourceEntity, IdentityModel identity, GenerationStepSupport<Entity> support, BeneratorContext context) {
     Object sourcePK = sourceEntity.idComponentValues();
     boolean mapNk = parent.needsNkMapping(sourceEntity.type());
     String nk = null;
@@ -163,7 +164,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
       nk = mapper.getNaturalKey(source.getId(), identity, sourcePK);
     }
     Entity targetEntity = new Entity(sourceEntity);
-    cavs.apply(targetEntity, context);
+    support.apply(targetEntity, context);
     Object targetPK = targetEntity.idComponentValues();
     transcodeForeignKeys(targetEntity, source, context);
     mapper.store(source.getId(), identity, nk, sourcePK, targetPK);
@@ -234,17 +235,17 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
       this.columnNames = columnNames;
     }
 
-    public String getTargetTableName(String parentTable, DBSystem db, BeneratorContext context) {
+    public String getTargetTableName(String parentTable, DBSystem db) {
       if (!parentTable.equals(refererTableName)) {
         return refererTableName;
       } else {
-        initIfNecessary(parentTable, db, context);
+        initIfNecessary(parentTable, db);
         return targetTable.getName();
       }
     }
 
     public DataIterator<Entity> resolveReferences(Entity currentEntity, DBSystem db, BeneratorContext context) {
-      initIfNecessary(currentEntity.type(), db, context);
+      initIfNecessary(currentEntity.type(), db);
       DBTable parentTable = database.getTable(currentEntity.type());
       if (parentTable.equals(refereeTable)) {
         return resolveToManyReference(currentEntity, fk, db, context); // including self-recursion
@@ -256,7 +257,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
       }
     }
 
-    private void initIfNecessary(String parentTable, DBSystem db, BeneratorContext context) {
+    private void initIfNecessary(String parentTable, DBSystem db) {
       if (this.database != null) {
         return;
       }
@@ -311,12 +312,12 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
         String tableName = tokenizer.sval;
 
         // parse column names
-        if ((token = tokenizer.nextToken()) != '(') {
+        if ((tokenizer.nextToken()) != '(') {
           throw new SyntaxError(REF_SYNTAX_MESSAGE, refSpec);
         }
         ArrayBuilder<String> columnNames = new ArrayBuilder<>(String.class);
         do {
-          if ((token = tokenizer.nextToken()) != TT_WORD) {
+          if ((tokenizer.nextToken()) != TT_WORD) {
             throw new SyntaxError(REF_SYNTAX_MESSAGE, refSpec);
           }
           columnNames.add(tokenizer.sval);
