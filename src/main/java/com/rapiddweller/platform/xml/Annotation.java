@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,35 +29,25 @@ package com.rapiddweller.platform.xml;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.w3c.dom.Element;
 
+import java.util.List;
+
 /**
  * Represents an XML annotation with a documentation String and an appInfo element.<br/><br/>
  * Created: 27.02.2008 09:51:45
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
 public class Annotation {
 
-  private final String documentation;
+  private final String[] documentations;
   private final Element appInfo;
 
-  /**
-   * Instantiates a new Annotation.
-   *
-   * @param element the element
-   */
   public Annotation(Element element) {
-    this(getDocumentation(element), getAppInfo(element));
+    this(parseDocumentations(element), getAppInfo(element));
   }
 
-  /**
-   * Instantiates a new Annotation.
-   *
-   * @param documentation the documentation
-   * @param appInfo       the app info
-   */
-  public Annotation(String documentation, Element appInfo) {
-    this.documentation = documentation;
+  public Annotation(String[] documentations, Element appInfo) {
+    this.documentations = documentations;
     this.appInfo = appInfo;
   }
 
@@ -67,28 +57,21 @@ public class Annotation {
     return XMLUtil.getChildElement(element, false, false, "appinfo");
   }
 
-  private static String getDocumentation(Element element) {
-    Element docElement =
-        XMLUtil.getChildElement(element, false, false, "documentation");
-    return XMLUtil.getText(docElement);
+  private static String[] parseDocumentations(Element element) {
+    Element[] docElems = XMLUtil.getChildElements(element, false, "documentation");
+    String[] result = new String[docElems.length];
+    for (int i = 0; i < result.length; i++) {
+      result[i] = XMLUtil.getText(docElems[i]);
+    }
+    return result;
   }
 
   // private helpers -------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets documentation.
-   *
-   * @return the documentation
-   */
-  public String getDocumentation() {
-    return documentation;
+  public String[] getDocumentations() {
+    return documentations;
   }
 
-  /**
-   * Gets app info.
-   *
-   * @return the appInfo
-   */
   public Element getAppInfo() {
     return appInfo;
   }
