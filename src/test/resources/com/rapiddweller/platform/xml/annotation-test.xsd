@@ -28,6 +28,8 @@
 
     <xs:element name="complex-type" type="person">
         <xs:annotation>
+            <xs:documentation xml:lang="en">Person data type</xs:documentation>
+            <xs:documentation xml:lang="de">Personendatentyp</xs:documentation>
             <xs:appinfo>
                 <ben:type source="person.csv"/>
             </xs:appinfo>
