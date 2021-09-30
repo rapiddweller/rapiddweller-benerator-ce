@@ -46,7 +46,6 @@ import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.accessor.GraphAccessor;
 import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.common.converter.ArrayElementExtractor;
@@ -55,7 +54,6 @@ import com.rapiddweller.common.converter.ConverterChain;
 import com.rapiddweller.common.converter.DateString2DurationConverter;
 import com.rapiddweller.common.converter.LiteralParser;
 import com.rapiddweller.common.converter.ToStringConverter;
-import com.rapiddweller.common.validator.StringLengthValidator;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.format.util.DataFileUtil;
@@ -67,7 +65,6 @@ import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.PrimitiveType;
 
 import javax.annotation.Nullable;
-import java.lang.annotation.Annotation;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.Date;
@@ -301,7 +298,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     Generator<Object[]> src = SourceFactory.createXLSLineGenerator(sourceName);
     Converter<Object[], Object> converterChain = new ConverterChain<>(
         new ArrayElementExtractor<>(Object.class, 0),
-        new ConditionalConverter(argument -> (argument instanceof String),
+        new ConditionalConverter(String.class::isInstance,
             new ScriptConverterForStrings(context)));
     generator = WrapperFactory.applyConverter(src, converterChain);
     if (distribution != null) {
@@ -366,7 +363,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   private static Generator<?> createByteArrayGenerator(SimpleTypeDescriptor descriptor, BeneratorContext context) {
     Generator<Byte> byteGenerator = new AsByteGeneratorWrapper<>(new RandomIntegerGenerator(-128, 127, 1));
     return new ByteArrayGenerator(byteGenerator,
-        DescriptorUtil.getMinLength(descriptor), DescriptorUtil.getMaxLength(descriptor, context.getDefaultsProvider()));
+        DescriptorUtil.getMinLength(descriptor), DescriptorUtil.getMaxLength(descriptor, context.getDefaultsProvider().defaultMaxLength()));
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
@@ -438,7 +435,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   }
 
   private static Generator<String> createStringGenerator(SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
-    Integer maxLength = evaluateMaxLength(descriptor);
+    Integer maxLength = DescriptorUtil.getMaxLength(descriptor, null);
 
     // check pattern against null
     String pattern = ToStringConverter.convert(descriptor.getDetailValue(PATTERN), null);
@@ -451,27 +448,6 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     GeneratorFactory factory = context.getGeneratorFactory();
     return factory.createStringGenerator(pattern, locale, minLength, maxLength, lengthGranularity,
         lengthDistribution, uniqueness);
-  }
-
-  private static Integer evaluateMaxLength(SimpleTypeDescriptor descriptor) {
-    Integer maxLength = null;
-    SimpleTypeDescriptor tmp = descriptor;
-    while (maxLength == null && tmp != null) {
-      maxLength = tmp.getMaxLength();
-      tmp = tmp.getParent();
-    }
-    return maxLength;
-  }
-
-  @SuppressWarnings("unchecked")
-  protected static <T> Validator<T> createRestrictionValidator(
-      SimpleTypeDescriptor descriptor, boolean nullable, GeneratorFactory context) {
-    if ((descriptor.getMinLength() != null || descriptor.getMaxLength() != null) && "string".equals(descriptor.getName())) {
-      Integer minLength = DescriptorUtil.getMinLength(descriptor);
-      Integer maxLength = DescriptorUtil.getMaxLength(descriptor, context.getDefaultsProvider());
-      return (Validator<T>) new StringLengthValidator(minLength, maxLength, nullable);
-    }
-    return null;
   }
 
 }
