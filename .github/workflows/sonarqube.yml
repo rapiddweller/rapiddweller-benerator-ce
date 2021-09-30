@@ -1,16 +1,21 @@
 on:
+
   push:
     branches:
       - development
     branches-ignore:
       # dependabot
-      - 'dependabot/**'
+      - 'rapiddweller/dependabot/**'
+    paths-ignore:
+      - '**.md'
   pull_request:
     branches:
       - development
     branches-ignore:
       # dependabot
-      - 'dependabot/**'
+      - 'rapiddweller/dependabot/**'
+    paths-ignore:
+      - '**.md'
 
 env:
   MAVEN_CLI_OPTS: "--batch-mode --update-snapshots"
