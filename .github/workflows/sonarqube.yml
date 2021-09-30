@@ -47,7 +47,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: run UT genrate report
-        run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=false
+        run: mvn $MAVEN_CLI_OPTS clean verify -DskipITs=true
       - name: analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
