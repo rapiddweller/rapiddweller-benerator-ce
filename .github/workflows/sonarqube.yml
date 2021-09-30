@@ -3,17 +3,11 @@ on:
   push:
     branches:
       - development
-    branches-ignore:
-      # dependabot
-      - 'rapiddweller/dependabot/**'
     paths-ignore:
       - '**.md'
   pull_request:
     branches:
       - development
-    branches-ignore:
-      # dependabot
-      - 'rapiddweller/dependabot/**'
     paths-ignore:
       - '**.md'
 
