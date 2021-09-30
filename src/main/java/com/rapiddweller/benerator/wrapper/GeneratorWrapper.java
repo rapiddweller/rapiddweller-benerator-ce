@@ -34,7 +34,6 @@ import com.rapiddweller.benerator.util.AbstractGenerator;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.NullSafeComparator;
 import com.rapiddweller.common.ProgrammerError;
 
 /**
@@ -120,23 +119,6 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
   }
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------
-
-  @Override
-  public boolean equals(Object other) {
-    if (this == other) {
-      return true;
-    }
-    if (other == null || getClass() != other.getClass()) {
-      return false;
-    }
-    GeneratorWrapper<?, ?> that = (GeneratorWrapper<?, ?>) other;
-    return NullSafeComparator.equals(this.source, that.source);
-  }
-
-  @Override
-  public int hashCode() {
-    return source.hashCode();
-  }
 
   @Override
   public String toString() {
