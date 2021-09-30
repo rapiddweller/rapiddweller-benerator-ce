@@ -483,6 +483,7 @@ public class DescriptorUtil {
     return maxLength;
   }
 
+  @Nullable
   public static Generator<?> createNullQuotaOneGenerator(InstanceDescriptor descriptor, BeneratorContext context) {
     // check if nullQuota is 1
     Double nullQuota = descriptor.getNullQuota();
