@@ -468,6 +468,8 @@ public class DescriptorUtil {
     return minLength;
   }
 
+  /** Scans the {@link SimpleTypeDescriptor} hierarchy from bottom to top (child -> parent)
+   *  and returns the first maxLength setting it finds. If none is found, it returns the defaultValue. */
   public static Integer getMaxLength(SimpleTypeDescriptor descriptor, Integer defaultValue) {
     Integer maxLength = null;
     SimpleTypeDescriptor tmp = descriptor;
