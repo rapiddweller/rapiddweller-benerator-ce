@@ -29,7 +29,12 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.script.expression.BitwiseOrExpression;
 import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Parent class for {@link Statement} tests.<br/><br/>
@@ -40,17 +45,44 @@ import org.junit.Before;
  */
 public abstract class AbstractStatementTest {
 
-  /**
-   * The Context.
-   */
-  protected BeneratorContext context;
+    /**
+     * The Context.
+     */
+    protected BeneratorContext context;
 
-  /**
-   * Sets up context.
-   */
-  @Before
-  public void setUpContext() {
-    this.context = new DefaultBeneratorContext();
-  }
+    /**
+     * Sets up context.
+     */
+    @Before
+    public void setUpContext() {
+        this.context = new DefaultBeneratorContext();
+    }
+
+    @Test
+    public void testCache() {
+        BitwiseOrExpression term1 = new BitwiseOrExpression(null, null);
+
+        BitwiseOrExpression term11 = new BitwiseOrExpression(term1, new BitwiseOrExpression(null, null));
+
+        BitwiseOrExpression term12 = new BitwiseOrExpression(null, null);
+
+        BitwiseOrExpression term13 = new BitwiseOrExpression(term11,
+                new BitwiseOrExpression(term12, new BitwiseOrExpression(null, null)));
+
+        BitwiseOrExpression term14 = new BitwiseOrExpression(null, null);
+
+        BitwiseOrExpression term15 = new BitwiseOrExpression(term14, new BitwiseOrExpression(null, null));
+
+        BitwiseOrExpression term16 = new BitwiseOrExpression(null, null);
+
+        assertTrue(AbstractStatement.<Object>cache(new BitwiseOrExpression(term13,
+                new BitwiseOrExpression(term15, new BitwiseOrExpression(term16, new BitwiseOrExpression(null,
+                        null))))) instanceof com.rapiddweller.benerator.engine.expression.CachedExpression);
+    }
+
+    @Test
+    public void testCache2() {
+        assertNull(AbstractStatement.<Object>cache(null));
+    }
 
 }

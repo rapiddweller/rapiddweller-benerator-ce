@@ -26,16 +26,12 @@
 
 package com.rapiddweller.platform.db;
 
-import com.rapiddweller.common.Context;
-import com.rapiddweller.common.Converter;
-import com.rapiddweller.common.HeavyweightIterable;
-import com.rapiddweller.common.HeavyweightIterator;
-import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.*;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.jdbacl.QueryIterator;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -49,8 +45,7 @@ import java.sql.ResultSet;
  */
 public class QueryIterable implements HeavyweightIterable<ResultSet> {
 
-  private static final Logger logger =
-      LoggerFactory.getLogger(QueryIterable.class);
+  private static final Logger logger = LoggerFactory.getLogger(QueryIterable.class);
 
   private final Connection connection;
   private final String query;
