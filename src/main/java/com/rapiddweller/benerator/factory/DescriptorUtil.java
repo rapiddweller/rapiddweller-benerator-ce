@@ -74,6 +74,7 @@ import org.w3c.dom.Element;
 
 import javax.annotation.Nullable;
 import javax.validation.ConstraintValidator;
+import javax.validation.constraints.NotNull;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -268,9 +269,7 @@ public class DescriptorUtil {
     Expression<Long> result = descriptor.getCount();
     if (result != null) {
       Expression<Long> globalMaxCount = getGlobalMaxCount();
-      if (globalMaxCount != null) {
-        result = new MinExpression<>(result, globalMaxCount);
-      }
+      result = new MinExpression<>(result, globalMaxCount);
     }
     return result;
   }
@@ -338,7 +337,7 @@ public class DescriptorUtil {
     );
   }
 
-  @Nullable
+  @NotNull
   public static Generator<Long> createDynamicCountGenerator(final InstanceDescriptor descriptor,
                                                             Long defaultMin, Long defaultMax, boolean resetToMin, BeneratorContext context) {
     Expression<Long> count = DescriptorUtil.getCount(descriptor);
@@ -405,11 +404,9 @@ public class DescriptorUtil {
       return true;
     }
     TypeDescriptor typeDescriptor = descriptor.getTypeDescriptor();
-    if (descriptor.getNullQuota() == null && typeDescriptor != null) {
-      // if nullability is not specified, but a source or generator, then do not generate nulls
-      if (typeDescriptor.getSource() != null || typeDescriptor.getGenerator() != null) {
-        return false;
-      }
+    if (descriptor.getNullQuota() == null && typeDescriptor != null
+          && (typeDescriptor.getSource() != null || typeDescriptor.getGenerator() != null)) {
+      return false;
     }
     return context.getDefaultsProvider().defaultNullable();
   }
@@ -471,19 +468,22 @@ public class DescriptorUtil {
     return minLength;
   }
 
-  protected static Integer getMaxLength(SimpleTypeDescriptor descriptor, DefaultsProvider defaultsProvider) {
-    // evaluate max length
-    Integer maxLength = (Integer) descriptor.getDeclaredDetailValue(MAX_LENGTH);
+  /** Scans the {@link SimpleTypeDescriptor} hierarchy from bottom to top (child -> parent)
+   *  and returns the first maxLength setting it finds. If none is found, it returns the defaultValue. */
+  public static Integer getMaxLength(SimpleTypeDescriptor descriptor, Integer defaultValue) {
+    Integer maxLength = null;
+    SimpleTypeDescriptor tmp = descriptor;
+    while (maxLength == null && tmp != null) {
+      maxLength = (Integer) tmp.getDeclaredDetailValue(MAX_LENGTH);
+      tmp = tmp.getParent();
+    }
     if (maxLength == null) {
-      // maxLength was not set in this descriptor, so check the default value
-      maxLength = descriptor.getMaxLength();
-      if (maxLength == null) {
-        maxLength = defaultsProvider.defaultMaxLength();
-      }
+      maxLength = defaultValue;
     }
     return maxLength;
   }
 
+  @Nullable
   public static Generator<?> createNullQuotaOneGenerator(InstanceDescriptor descriptor, BeneratorContext context) {
     // check if nullQuota is 1
     Double nullQuota = descriptor.getNullQuota();

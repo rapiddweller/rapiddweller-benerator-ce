@@ -93,7 +93,7 @@ public class XmlCreator {
         logger.debug("Creating {} XML files for schema {} with root {} and pattern {}",
             fileCount, schemaUri, root, pattern);
       } else {
-        logger.debug("Creating XML file {}} for schema {}} with root {}",
+        logger.debug("Creating XML file {} for schema {} with root {}",
             MessageFormat.format(pattern, fileCount), schemaUri, root);
       }
     }

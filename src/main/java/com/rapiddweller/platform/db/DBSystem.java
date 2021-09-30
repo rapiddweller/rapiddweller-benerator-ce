@@ -773,7 +773,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
         complexType.setComponent(
             descriptor); // overwrite possible id descriptor for foreign keys
         if (logger.isDebugEnabled()) {
-          logger.debug("Parsed reference {}}.{}", table.getName(), descriptor);
+          logger.debug("Parsed reference {}.{}", table.getName(), descriptor);
         }
       } else {
         // TODO v0.7.6 handle composite keys

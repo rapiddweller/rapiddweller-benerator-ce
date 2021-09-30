@@ -33,9 +33,11 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 
 /**
- * Generates Entities that wrap a content of simple type.<br/><br/>
+ * Generates {@link Entity} instances that wrap a content of simple type.
+ * The simple type is provided by a source {@link Generator}, which generates
+ * content of simple type, which is the put into a pseudo-attribute which
+ * is named after {@link ComplexTypeDescriptor#__SIMPLE_CONTENT}.<br/><br/>
  * Created at 11.05.2008 23:37:42
- *
  * @author Volker Bergmann
  * @since 0.5.4
  */
@@ -43,12 +45,6 @@ public class SimpleTypeEntityGenerator extends GeneratorWrapper<Object, Entity> 
 
   private final ComplexTypeDescriptor complexType;
 
-  /**
-   * Instantiates a new Simple type entity generator.
-   *
-   * @param source      the source
-   * @param complexType the complex type
-   */
   @SuppressWarnings("unchecked")
   public SimpleTypeEntityGenerator(Generator<?> source, ComplexTypeDescriptor complexType) {
     super((Generator<Object>) source);
