@@ -46,7 +46,7 @@ import org.slf4j.Logger;
  */
 public class InstanceGeneratorFactory {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(InstanceGeneratorFactory.class);
+  private static final Logger logger = LoggerFactory.getLogger(InstanceGeneratorFactory.class);
 
   // protected constructor for preventing instantiation --------------------------------------------------------------
 
@@ -55,6 +55,13 @@ public class InstanceGeneratorFactory {
 
   public static Generator<?> createSingleInstanceGenerator(
       InstanceDescriptor descriptor, Uniqueness ownerUniqueness, BeneratorContext context) {
+
+    // check 'ignored' setting
+    if (descriptor.getMode() == Mode.ignored) {
+      logger.debug("Ignoring descriptor {}", descriptor);
+      return null;
+    }
+
     // check if nullQuota is 1
     Generator<?> generator = DescriptorUtil.createNullQuotaOneGenerator(descriptor, context);
     if (generator != null) {
@@ -69,12 +76,6 @@ public class InstanceGeneratorFactory {
 
     // check nullability
     boolean nullable = DescriptorUtil.isNullable(descriptor, context);
-
-    // check 'ignored' setting
-    if (descriptor.getMode() == Mode.ignored) {
-      LOGGER.debug("Ignoring descriptor {}", descriptor);
-      return null;
-    }
 
     // create an appropriate generator
     TypeDescriptor type = descriptor.getTypeDescriptor();
