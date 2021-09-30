@@ -127,20 +127,20 @@
         <_rd_format_version>1.1.5-jdk-11-SNAPSHOT</_rd_format_version>
         <_rd_jdbacl_version>1.1.11-jdk-11</_rd_jdbacl_version>
         <_rd_script_version>1.1.4-jdk-11-SNAPSHOT</_rd_script_version>
-        <database_derbyclient.version>10.7.1.1</database_derbyclient.version>
+        <database_derbyclient.version>10.15.2.0</database_derbyclient.version>
         <database_h2.version>1.4.200</database_h2.version>
         <database_hsqldb.version>1.8.0.7</database_hsqldb.version>
         <database_icu4j.version>67.1</database_icu4j.version>
         <database_jaybird.version>4.0.1.java11</database_jaybird.version>
-        <database_mssqldb.version>9.2.1.jre11</database_mssqldb.version>
-        <database_mysql-connector-java.version>8.0.20</database_mysql-connector-java.version>
+        <database_mssqldb.version>9.4.0.jre11</database_mssqldb.version>
+        <database_mysql-connector-java.version>8.0.26</database_mysql-connector-java.version>
         <database_mariadb-java-client.version>2.7.4</database_mariadb-java-client.version>
         <database_oracle.version>21.1.0.0</database_oracle.version>
         <database_postgresql.version>42.2.23</database_postgresql.version>
-        <dependency_antlr-runtime.version>3.3</dependency_antlr-runtime.version>
+        <dependency_antlr-runtime.version>3.5.2</dependency_antlr-runtime.version>
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
         <dependency_validation-api.version>2.0.1.Final</dependency_validation-api.version>
-        <dependency_xml-apis.version>1.4.01</dependency_xml-apis.version>
+        <dependency_xml-apis.version>2.0.2</dependency_xml-apis.version>
         <dependency_slf4j.version>1.7.32</dependency_slf4j.version>
         <dependency_log4j.version>2.14.1</dependency_log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -241,6 +241,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${test_junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.8.0</version>
+            <scope>test</scope>
         </dependency>
         <!--  ANTLR (ANother Tool for Language Recognition) is a powerful parser generator for reading, processing,
          executing, or translating structured text or binary files. It's widely used to build languages, tools, and

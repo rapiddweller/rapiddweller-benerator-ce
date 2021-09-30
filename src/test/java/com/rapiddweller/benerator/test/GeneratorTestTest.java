@@ -24,7 +24,7 @@ public class GeneratorTestTest extends GeneratorTest {
     BufferedInfoPrinter printer = new BufferedInfoPrinter();
     SequenceGenerator<Integer> generator = new SequenceGenerator<>(Integer.class, 1, 2, 3, 4);
     printProducts(generator, 4, printer);
-    String expected = "1" + SystemInfo.LF + "2" + SystemInfo.LF + "3" + SystemInfo.LF + "4" + SystemInfo.LF;
+    String expected = "1" + SystemInfo.getLineSeparator() + "2" + SystemInfo.getLineSeparator() + "3" + SystemInfo.getLineSeparator() + "4" + SystemInfo.getLineSeparator();
     assertEquals(expected, printer.toString());
   }
 

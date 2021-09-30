@@ -6,6 +6,8 @@ on:
       - 3.*
     branches:
       - development
+    paths-ignore:
+      - '**.md'
 
 env:
   MAVEN_CLI_OPTS: "--batch-mode --update-snapshots"

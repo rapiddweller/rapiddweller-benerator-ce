@@ -7,10 +7,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Tests the {@link FileNameGenerator}.<br/><br/>
@@ -87,7 +84,7 @@ public class FileNameGeneratorTest extends GeneratorTest {
     assertEquals(String.class, g.getGeneratedType());
     List<String> products = generate(g, 100);
     for (String file : products) {
-      assertTrue(file, file.endsWith("/com"));
+      assertTrue(file, file.endsWith("com"));
       assertNotEquals("com", file);
     }
   }
@@ -99,7 +96,7 @@ public class FileNameGeneratorTest extends GeneratorTest {
     assertEquals(String.class, g.getGeneratedType());
     List<String> products = generate(g, 100);
     for (String file : products) {
-      assertTrue(file, file.endsWith("/com"));
+      assertTrue(file, file.endsWith("com"));
       assertNotEquals("com", file);
     }
   }

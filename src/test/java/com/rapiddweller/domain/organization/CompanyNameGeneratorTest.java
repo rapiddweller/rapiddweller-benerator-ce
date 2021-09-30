@@ -28,21 +28,56 @@ package com.rapiddweller.domain.organization;
 
 import com.rapiddweller.benerator.test.GeneratorClassTest;
 import com.rapiddweller.common.ConfigurationError;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Tests the CompanyNameGenerator.<br/><br/>
  * Created: 14.03.2008 08:31:26
+ *
  * @author Volker Bergmann
  */
 public class CompanyNameGeneratorTest extends GeneratorClassTest {
 
   private static final Logger logger = LoggerFactory.getLogger(CompanyNameGeneratorTest.class);
+
+  @Test
+  public void testConstructor() {
+    CompanyNameGenerator actualCompanyNameGenerator = new CompanyNameGenerator("Dataset");
+    assertEquals("Dataset", actualCompanyNameGenerator.getDataset());
+    assertTrue(actualCompanyNameGenerator.isSector());
+    assertTrue(actualCompanyNameGenerator.isLocation());
+    assertTrue(actualCompanyNameGenerator.isLegalForm());
+    assertEquals(0.0, actualCompanyNameGenerator.getWeight(), 0.0);
+    assertNull(actualCompanyNameGenerator.getSource());
+    assertEquals("/com/rapiddweller/dataset/region", actualCompanyNameGenerator.getNesting());
+    Class<?> expectedGeneratedType = CompanyName.class;
+    assertSame(expectedGeneratedType, actualCompanyNameGenerator.getGeneratedType());
+  }
+
+  @Test
+  public void testConstructor2() {
+    CompanyNameGenerator actualCompanyNameGenerator = new CompanyNameGenerator(true, true, true, "Dataset Name");
+    actualCompanyNameGenerator.setLegalForm(false);
+    actualCompanyNameGenerator.setLocation(false);
+    actualCompanyNameGenerator.setSector(false);
+    assertEquals("class com.rapiddweller.domain.organization.CompanyName", actualCompanyNameGenerator.getGeneratedType().toString());
+    assertEquals("CompanyNameGenerator[/com/rapiddweller/dataset/region:Dataset Name]", actualCompanyNameGenerator.toString());
+    assertEquals("Dataset Name", actualCompanyNameGenerator.getDataset());
+    assertFalse(actualCompanyNameGenerator.isSector());
+    assertFalse(actualCompanyNameGenerator.isLocation());
+    assertFalse(actualCompanyNameGenerator.isLegalForm());
+    assertTrue(actualCompanyNameGenerator.isThreadSafe());
+    assertTrue(actualCompanyNameGenerator.isParallelizable());
+    assertEquals(0.0, actualCompanyNameGenerator.getWeight(), 0.0);
+    assertNull(actualCompanyNameGenerator.getSource());
+    assertEquals("/com/rapiddweller/dataset/region", actualCompanyNameGenerator.getNesting());
+    Class<?> expectedGeneratedType = CompanyName.class;
+    assertSame(expectedGeneratedType, actualCompanyNameGenerator.getGeneratedType());
+  }
 
   public CompanyNameGeneratorTest() {
     super(CompanyNameGenerator.class);
