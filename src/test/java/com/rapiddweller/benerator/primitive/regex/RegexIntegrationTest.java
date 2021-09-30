@@ -42,7 +42,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the integration of regex-based string generation.<br/><br/>
  * Created: 04.04.2014 13:36:25
- *
  * @author Volker Bergmann
  * @since 0.9.3
  */
@@ -50,9 +49,6 @@ public class RegexIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   private ConsumerMock consumer;
 
-  /**
-   * Sets up context.
-   */
   @Before
   public void setUpContext() {
     consumer = new ConsumerMock(true);
@@ -62,9 +58,6 @@ public class RegexIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   // test methods ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Test short regex generation.
-   */
   @Test
   public void testShortRegexGeneration() {
     String regex = "[A-Z][A-Z ]{5,23}[A-Z]";
@@ -81,9 +74,6 @@ public class RegexIntegrationTest extends AbstractBeneratorIntegrationTest {
     assertEquals(100, products.size());
   }
 
-  /**
-   * Test long regex generation.
-   */
   @Test
   public void testLongRegexGeneration() {
     String regex = "[A-Z][A-Z ]{100,2000}[A-Z]";
@@ -102,9 +92,6 @@ public class RegexIntegrationTest extends AbstractBeneratorIntegrationTest {
     assertEquals(100, products.size());
   }
 
-  /**
-   * Test unique regex generation.
-   */
   @SuppressWarnings("unchecked")
   @Test
   public void testUniqueRegexGeneration() {
