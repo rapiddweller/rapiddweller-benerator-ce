@@ -36,10 +36,12 @@ import com.rapiddweller.benerator.primitive.datetime.DateGenerator;
 import com.rapiddweller.benerator.sample.AttachedWeightSampleGenerator;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.sample.SequenceGenerator;
+import com.rapiddweller.benerator.wrapper.ValidatingNonNullGeneratorProxy;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.validator.NumberRangeValidator;
 import com.rapiddweller.common.validator.StringLengthValidator;
 import com.rapiddweller.format.regex.RegexParser;
 import com.rapiddweller.format.regex.RegexPart;
@@ -104,7 +106,6 @@ public abstract class GeneratorFactory {
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(
       Class<T> numberType, T min, Boolean minInclusive, T max, Boolean maxInclusive, T granularity,
       Distribution distribution, Uniqueness uniqueness) {
-    // TODO support minInclusive and maxInclusive
     Assert.notNull(numberType, "numberType");
     if (min != null && min.equals(max)) {
       return WrapperFactory.asNonNullGenerator(new ConstantGenerator<>(min));
@@ -122,7 +123,9 @@ public abstract class GeneratorFactory {
         distribution = defaultDistribution(uniqueness);
       }
     }
-    return distribution.createNumberGenerator(numberType, min, max, granularity, uniqueness.isUnique());
+    NonNullGenerator<T> generator = distribution.createNumberGenerator(numberType, min, max, granularity, uniqueness.isUnique());
+    generator = applyExclusiveBorderValidation(min, minInclusive, max, maxInclusive, generator);
+    return generator;
   }
 
   // sample source ------------------------------------------------------------------------------------------------
@@ -285,5 +288,27 @@ public abstract class GeneratorFactory {
   public abstract Distribution defaultDistribution(Uniqueness uniqueness);
 
   protected abstract Distribution defaultLengthDistribution(Uniqueness uniqueness, boolean required);
+
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private static <T extends Number> NonNullGenerator<T> applyExclusiveBorderValidation(
+    T min, Boolean minInclusive, T max, Boolean maxInclusive, NonNullGenerator<T> generator) {
+    if (minInclusive == null) {
+      minInclusive = true;
+    }
+    if (maxInclusive == null) {
+      maxInclusive = true;
+    }
+    if (!minInclusive || !maxInclusive) {
+      Class<T> generatedType = generator.getGeneratedType();
+      if (min != null && max != null && min.doubleValue() == max.doubleValue()) {
+        throw new ConfigurationError("min == max (" + min + ") and at a border value is excluded in ");
+      }
+      generator = new ValidatingNonNullGeneratorProxy<T>(generator, new NumberRangeValidator<T>(
+          min, minInclusive, max, maxInclusive));
+    }
+    return generator;
+  }
 
 }
