@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -34,10 +34,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Wraps a {@link Generator} with an {@link Iterator} interface.<br/>
- * <br/>
+ * Wraps a {@link Generator} with an {@link Iterator} interface.<br/><br/>
  * Created at 21.07.2009 10:09:55
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -47,29 +45,26 @@ public class GeneratorIterator<E> implements Iterator<E>, Closeable {
   private final Generator<E> source;
   private E next;
   private final WrapperProvider<E> wrapperProvider = new WrapperProvider<>();
+  private boolean hasNext;
 
-  /**
-   * Instantiates a new Generator iterator.
-   *
-   * @param source the source
-   */
   public GeneratorIterator(Generator<E> source) {
     this.source = source;
-    this.next = fetchNext(source);
+    fetchNext();
   }
 
   @Override
   public boolean hasNext() {
-    return next != null;
+    return hasNext;
   }
 
   @Override
   public E next() {
-    E result = next;
-    next = source.generate(wrapperProvider.get()).unwrap();
-    if (next == null)
+    if (!hasNext) {
       throw new NoSuchElementException("No more elements to generate in " + source + ". " +
           "Query hasNext() before calling next()");
+    }
+    E result = next;
+    fetchNext();
     return result;
   }
 
@@ -83,15 +78,15 @@ public class GeneratorIterator<E> implements Iterator<E>, Closeable {
     source.close();
   }
 
-  /**
-   * Fetch next e.
-   *
-   * @param source the source
-   * @return the e
-   */
-  protected E fetchNext(Generator<E> source) {
+  private void fetchNext() {
     ProductWrapper<E> wrapper = source.generate(wrapperProvider.get());
-    return (wrapper != null ? wrapper.unwrap() : null);
+    if (wrapper != null) {
+      this.next = wrapper.unwrap();
+      this.hasNext = true;
+    } else {
+      this.next = null;
+      this.hasNext = false;
+    }
   }
 
 }
