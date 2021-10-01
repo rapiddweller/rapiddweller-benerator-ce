@@ -35,6 +35,7 @@ import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.Filter;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.Resettable;
 import com.rapiddweller.common.Validator;
@@ -51,6 +52,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -133,6 +135,50 @@ public abstract class GeneratorTest extends ModelTest {
       }
     }
     return counter.getCounts();
+  }
+
+  public static void assertTrueQuota(Collection<Entity> entities, String componentName, double expectedQuota, double tolerance) {
+    assertMatchQuota(entities, componentName, expectedQuota, tolerance, Boolean.TRUE::equals);
+  }
+
+  public static void assertNullQuota(Collection<Entity> entities, String componentName, double expectedQuota, double tolerance) {
+    assertMatchQuota(entities, componentName, expectedQuota, tolerance, Objects::isNull);
+  }
+
+  public static void assertAllMatch(
+      Collection<Entity> entities, String componentName, double tolerance, Filter<Object> matcher) {
+    assertMatchQuota(entities, componentName, 1., tolerance, matcher);
+  }
+
+  public static void assertMatchQuota(Collection<Entity> entities, String componentName, double expectedQuota,
+                                      double tolerance, Filter<Object> matcher) {
+    int matchCount = 0;
+    for (Entity entity : entities) {
+      Object component = entity.get(componentName);
+      if (matcher.accept(component)) {
+        matchCount++;
+      }
+    }
+    double actualQuota = (double) matchCount / entities.size();
+    assertEquals(expectedQuota, actualQuota, tolerance);
+  }
+
+  public static void assertEqualCardinalityDistribution(
+      Collection<Entity> entities, String partName, double tolerance, Integer... expectedCounts) {
+    ObjectCounter<Integer> counter = countPartCounts(entities, partName);
+    checkDistribution(counter, true, tolerance, CollectionUtil.toSet(expectedCounts));
+  }
+
+  public static void assertEqualLengthDistribution(
+      Collection<Entity> entities, String partName, double tolerance, Integer... expectedLengths) {
+    ObjectCounter<Integer> counter = countPartLengths(entities, partName);
+    checkDistribution(counter, true, tolerance, CollectionUtil.toSet(expectedLengths));
+  }
+
+  public static void assertEqualDistribution(
+      Collection<Entity> entities, String partName, double tolerance, Object... expectedValues) {
+    ObjectCounter<Object> counter = countPartValues(entities, partName);
+    assertEqualDistribution(counter, tolerance, expectedValues);
   }
 
   protected static <T> void assertEqualArrays(T expected, T actual) {
@@ -256,8 +302,8 @@ public abstract class GeneratorTest extends ModelTest {
 
   // unspecific generator tests --------------------------------------------------------------------------------------
 
-  public static <E> void checkEqualDistribution(
-      Generator<E> generator, int iterations, double tolerance, Set<E> expectedSet) {
+  public static <T> void checkEqualDistribution(
+      Generator<T> generator, int iterations, double tolerance, Set<T> expectedSet) {
     checkDistribution(generator, iterations, true, tolerance, expectedSet);
   }
 
@@ -317,14 +363,24 @@ public abstract class GeneratorTest extends ModelTest {
 
   // collection checks -----------------------------------------------------------------------------------------------
 
-  public static <E> void checkEqualDistribution(Collection<E> collection, double tolerance, Set<E> expectedSet) {
+  public static <T> void checkEqualDistribution(Collection<T> collection, double tolerance, Set<T> expectedSet) {
     checkDistribution(collection, true, tolerance, expectedSet);
   }
 
-  public static <E> void checkDistribution(
-      Collection<E> collection, boolean equalDistribution, double tolerance, Set<E> expectedSet) {
-    ObjectCounter<E> counter = new ObjectCounter<>(expectedSet != null ? expectedSet.size() : 10);
-    for (E object : collection) {
+  public static void assertEqualLengthDistribution(Collection<String> collection, double tolerance,
+                                                   Integer... expectedValues) {
+    ObjectCounter<Integer> counter = new ObjectCounter<>();
+    for (String object : collection) {
+      counter.count(object.length());
+    }
+    Set<Integer> expectedSet = (expectedValues != null ? CollectionUtil.toSet(expectedValues) : null);
+    checkDistribution(counter, true, tolerance, expectedSet);
+  }
+
+  public static <T> void checkDistribution(
+      Collection<T> collection, boolean equalDistribution, double tolerance, Set<T> expectedSet) {
+    ObjectCounter<T> counter = new ObjectCounter<>(expectedSet != null ? expectedSet.size() : 10);
+    for (T object : collection) {
       counter.count(object);
     }
     checkDistribution(counter, equalDistribution, tolerance, expectedSet);
@@ -332,19 +388,17 @@ public abstract class GeneratorTest extends ModelTest {
 
   // counter checks --------------------------------------------------------------------------------------------------
 
-  public static void assertEqualCardinalityDistribution(
-      Collection<Entity> entities, String partName, double tolerance, Integer... expectedCounts) {
-    ObjectCounter<Integer> counter = countPartCounts(entities, partName, expectedCounts);
-    checkDistribution(counter, true, tolerance, CollectionUtil.toSet(expectedCounts));
-  }
-
-  public static <E> void checkEqualDistribution(
-      ObjectCounter<E> counter, double tolerance, Set<E> expectedSet) {
+  public static <T> void checkEqualDistribution(
+      ObjectCounter<T> counter, double tolerance, Set<T> expectedSet) {
     checkDistribution(counter, true, tolerance, expectedSet);
   }
 
-  private static <E> void checkDistribution(
-      ObjectCounter<E> counter, boolean equalDistribution, double tolerance, Set<E> expectedSet) {
+  public static <T> void assertEqualDistribution(ObjectCounter<T> counter, double tolerance, T... expectedValues) {
+    checkDistribution(counter, true, tolerance, CollectionUtil.toSet(expectedValues));
+  }
+
+  private static <T> void checkDistribution(
+      ObjectCounter<T> counter, boolean equalDistribution, double tolerance, Set<T> expectedSet) {
     if (equalDistribution) {
       assertEquals(expectedSet, counter.objectSet());
       assertTrue("Distribution is not equal: " + counter, counter.equalDistribution(tolerance));
@@ -376,8 +430,8 @@ public abstract class GeneratorTest extends ModelTest {
 
   // private helpers -------------------------------------------------------------------------------------------------
 
-  private static ObjectCounter<Integer> countPartCounts(Collection<Entity> entities, String partName, Integer... expectedCounts) {
-    ObjectCounter<Integer> counter = new ObjectCounter<>(expectedCounts.length);
+  private static ObjectCounter<Integer> countPartCounts(Collection<Entity> entities, String partName) {
+    ObjectCounter<Integer> counter = new ObjectCounter<>();
     for (Entity entity : entities) {
       Object partValue = entity.get(partName);
       int partCount;
@@ -391,6 +445,29 @@ public abstract class GeneratorTest extends ModelTest {
         partCount = 1;
       }
       counter.count(partCount);
+    }
+    return counter;
+  }
+
+  private static ObjectCounter<Integer> countPartLengths(Collection<Entity> entities, String partName) {
+    ObjectCounter<Integer> counter = new ObjectCounter<>();
+    for (Entity entity : entities) {
+      Object partValue = entity.get(partName);
+      if (partValue != null) {
+        if (partValue instanceof String) {
+          counter.count(((String) partValue).length());
+        } else {
+          throw new IllegalArgumentException("Expected String, found " + partValue.getClass());
+        }
+      }
+    }
+    return counter;
+  }
+
+  private static ObjectCounter<Object> countPartValues(Collection<Entity> entities, String partName) {
+    ObjectCounter<Object> counter = new ObjectCounter<>();
+    for (Entity entity : entities) {
+      counter.count(entity.get(partName));
     }
     return counter;
   }
