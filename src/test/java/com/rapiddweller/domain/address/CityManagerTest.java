@@ -26,14 +26,15 @@
 
 package com.rapiddweller.domain.address;
 
+import com.rapiddweller.common.ParseException;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Tests the {@link CityManager}.<br/><br/>
@@ -44,51 +45,128 @@ import static org.junit.Assert.assertTrue;
  */
 public class CityManagerTest {
 
-  /**
-   * Test city helper constructor.
-   */
-  @Test
-  public void testCityHelperConstructor() {
-    CityId cityId = new CityId("Name", "Name Extension");
-    CityManager.CityHelper actualCityHelper = new CityManager.CityHelper(new State(), cityId,
-        new String[] {"foo", "foo", "foo"}, "Area Code");
-    assertEquals("Name Extension", actualCityHelper.getNameExtension());
-    assertEquals("Area Code", actualCityHelper.getAreaCode());
-    assertEquals(3, actualCityHelper.getPostalCodes().length);
-    assertNull(actualCityHelper.getCountry());
-    assertEquals("Name", actualCityHelper.getName());
-  }
-
-  /**
-   * Test city helper set postal code.
-   */
-  @Test
-  public void testCityHelperSetPostalCode() {
-    CityId cityId = new CityId("Name", "Name Extension");
-    CityManager.CityHelper cityHelper = new CityManager.CityHelper(new State(), cityId,
-        new String[] {"foo", "foo", "foo"}, "Area Code");
-    cityHelper.setPostalCode("Postal Code");
-    assertEquals("Postal Code", cityHelper.getPostalCode());
-  }
-
-  /**
-   * Test generate german city.
-   */
-  @Test
-  public void testGenerateGermanCity() {
-    assertNotNull(Country.GERMANY.generateCity());
-  }
-
-  /**
-   * Test german area codes.
-   */
-  @Test
-  public void testGermanAreaCodes() {
-    Pattern pattern = Pattern.compile("\\d{2,5}");
-    for (City city : Country.GERMANY.getCities()) {
-      String areaCode = city.getAreaCode();
-      assertTrue("Illegal area code: " + areaCode, pattern.matcher(areaCode).matches());
+    @Test
+    public void testCityHelperConstructor2() {
+        State state = new State();
+        CityManager.CityHelper actualCityHelper = new CityManager.CityHelper(state, new CityId("Name", "Name Extension"),
+                new String[]{"foo", "foo", "foo"}, "Area Code");
+        actualCityHelper.setPostalCode("Postal Code");
+        assertEquals("Postal Code", actualCityHelper.getPostalCode());
     }
-  }
+
+    @Test
+    public void testCreateCityId() {
+        assertThrows(ParseException.class, () -> CityManager.createCityId(new HashMap<String, String>(1), 2));
+    }
+
+    @Test
+    public void testCreateCityId2() {
+        HashMap hashMap = new HashMap();
+        hashMap.put((String) "nameExtension", "foo");
+        hashMap.put((String) "city", "foo");
+        hashMap.put((String) "name", "foo");
+        hashMap.put((String) "municipality", "foo");
+        CityId actualCreateCityIdResult = CityManager.createCityId(hashMap, 1);
+        assertEquals("foo", actualCreateCityIdResult.getName());
+        assertNull(actualCreateCityIdResult.getNameExtension());
+    }
+
+    @Test
+    public void testCreateCityId3() {
+        HashMap hashMap = new HashMap();
+        hashMap.put((String) "nameExtension", "foo");
+        hashMap.put((String) "city", "foo");
+        hashMap.put((String) "name", "foo");
+        CityId actualCreateCityIdResult = CityManager.createCityId(hashMap, 1);
+        assertEquals("foo", actualCreateCityIdResult.getName());
+        assertNull(actualCreateCityIdResult.getNameExtension());
+    }
+
+    @Test
+    public void testCreateCityId4() {
+        HashMap hashMap = new HashMap();
+        hashMap.put((String) "nameExtension", "foo");
+        hashMap.put((String) "name", "foo");
+        CityId actualCreateCityIdResult = CityManager.createCityId(hashMap, 1);
+        assertEquals("foo", actualCreateCityIdResult.getName());
+        assertEquals("foo", actualCreateCityIdResult.getNameExtension());
+    }
+
+    @Test
+    public void testCreateCityId5() {
+        HashMap<String, String> stringStringMap = new HashMap<String, String>(1);
+        stringStringMap.put("municipality", "");
+        assertThrows(ParseException.class, () -> CityManager.createCityId(stringStringMap, 2));
+    }
+
+    /**
+     * Test city helper constructor.
+     */
+    @Test
+    public void testCityHelperConstructor() {
+        CityId cityId = new CityId("Name", "Name Extension");
+        CityManager.CityHelper actualCityHelper = new CityManager.CityHelper(new State(), cityId,
+                new String[]{"foo", "foo", "foo"}, "Area Code");
+        assertEquals("Name Extension", actualCityHelper.getNameExtension());
+        assertEquals("Area Code", actualCityHelper.getAreaCode());
+        assertEquals(3, actualCityHelper.getPostalCodes().length);
+        assertNull(actualCityHelper.getCountry());
+        assertEquals("Name", actualCityHelper.getName());
+    }
+
+    /**
+     * Test city helper set postal code.
+     */
+    @Test
+    public void testCityHelperSetPostalCode() {
+        CityId cityId = new CityId("Name", "Name Extension");
+        CityManager.CityHelper cityHelper = new CityManager.CityHelper(new State(), cityId,
+                new String[]{"foo", "foo", "foo"}, "Area Code");
+        cityHelper.setPostalCode("Postal Code");
+        assertEquals("Postal Code", cityHelper.getPostalCode());
+    }
+
+    /**
+     * Test generate german city.
+     */
+    @Test
+    public void testGenerateGermanCity() {
+        assertNotNull(Country.GERMANY.generateCity());
+    }
+
+    /**
+     * Test german area codes.
+     */
+    @Test
+    public void testGermanAreaCodes() {
+        Pattern pattern = Pattern.compile("\\d{2,5}");
+        for (City city : Country.GERMANY.getCities()) {
+            String areaCode = city.getAreaCode();
+            assertTrue("Illegal area code: " + areaCode, pattern.matcher(areaCode).matches());
+        }
+    }
+
+    @Test
+    public void testCreateCityReadFromFile() throws IOException {
+        CityManager.persistCities(Country.UNITED_KINGDOM, "target/test_city.csv");
+        HashMap map = new HashMap();
+        map.put("state.country.isoCode", "state.country.isoCode");
+        map.put("state.id", "state.id");
+        map.put("name", "name");
+        map.put("nameExtension", "nameExtension");
+        map.put("areaCode", "areaCode");
+        map.put("language", "language");
+        CityManager.readCities(Country.AFGHANISTAN, "target/test_city.csv", map);
+        assertTrue(new File("target/test_city.csv").exists());
+    }
+
+    @Test
+    public void testyReadFromNullFile() {
+        HashMap map = new HashMap();
+        assertThrows(com.rapiddweller.common.ConfigurationError.class, () ->CityManager.readCities(Country.AFGHANISTAN, "/", map));
+        assertThrows(com.rapiddweller.common.ConfigurationError.class, () ->CityManager.readCities(Country.AFGHANISTAN, null, map));
+    }
+
+
 
 }
