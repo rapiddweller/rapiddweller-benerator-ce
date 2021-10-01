@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -26,75 +26,52 @@
 
 package com.rapiddweller.benerator.wrapper;
 
-import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.util.ValidatingGenerator;
+import com.rapiddweller.benerator.IllegalGeneratorStateException;
+import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.common.Validator;
 
 /**
  * Generator proxy that uses another generator for creating values and filters out invalid ones.<br/><br/>
- * Created: 29.08.2006 08:27:11
- * @param <E> the type parameter
- * @see ValidatingGenerator
+ * Created: 01.10.2021 09:25:24
+ * @author Volker Bergmann
+ * @since 2.1.0
  */
-public class ValidatingGeneratorProxy<E> extends ValidatingGenerator<E> {
-
-  /** The source generator to use */
-  protected final Generator<E> source;
+public class ValidatingNonNullGeneratorProxy<E> extends ValidatingGeneratorProxy<E> implements NonNullGenerator<E> {
 
   /** Constructor with the source generator and the validator to use */
-  public ValidatingGeneratorProxy(Generator<E> source, Validator<E> validator) {
-    super(validator);
-    this.source = source;
+  public ValidatingNonNullGeneratorProxy(NonNullGenerator<E> source, Validator<E> validator) {
+    super(source, validator);
   }
 
   // Generator & ValidatingGenerator implementation ------------------------------------------------------------------
 
+  /** Generator implementation that calls generateImpl() to generate values
+   *  and validator.validate() in order to validate them.
+   *  Consecutive invalid values are counted. If this count reaches the
+   *  WARNING_THRESHOLD value, a warning is logged, if the count reaches the
+   *  ERROR_THRESHOLD, an exception is raised. */
   @Override
-  public Class<E> getGeneratedType() {
-    return source.getGeneratedType();
-  }
-
-  /** Callback method implementation from ValidatingGenerator.
-   *  This calls the source's generate() method and returns its result. */
-  @Override
-  protected ProductWrapper<E> doGenerate(ProductWrapper<E> wrapper) {
-    return source.generate(wrapper);
-  }
-
-  @Override
-  public void init(GeneratorContext context) {
-    source.init(context);
-    super.init(context);
-  }
-
-  /** Calls the reset() method on the source generator */
-  @Override
-  public void reset() {
-    source.reset();
-    super.reset();
-  }
-
-  /** Calls the close() method on the source generator */
-  @Override
-  public void close() {
-    source.close();
-    super.close();
-  }
-
-  @Override
-  public boolean isThreadSafe() {
-    return source.isThreadSafe();
-  }
-
-  @Override
-  public boolean isParallelizable() {
-    return source.isParallelizable();
-  }
-
-  @Override
-  public String toString() {
-    return getClass().getSimpleName() + '[' + source + ']';
+  public E generate() {
+    boolean valid;
+    int count = 0;
+    E product;
+    do {
+      product = ((NonNullGenerator<E>) source).generate();
+      if (product == null) {
+        return null;
+      }
+      valid = validator.valid(product);
+      count++;
+      if (count >= ERROR_THRESHOLD) {
+        throw new IllegalGeneratorStateException("Aborting generation, because of " + ERROR_THRESHOLD
+            + " consecutive invalid generations. Validator is: " + validator +
+            ". Last attempt was: " + product);
+      }
+    } while (!valid);
+    if (count >= WARNING_THRESHOLD) {
+      logger.warn("Inefficient generation: needed {} tries to generate a valid value. ", count);
+    }
+    return product;
   }
 
 }
