@@ -122,7 +122,7 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
     Entity entity = createPersonEntity();
     setCurrentProduct(entity, "e");
     generator.execute(context);
-    assertEquals(3, entity.get("ref"));
+    assertEquals("3", entity.get("ref"));
   }
 
   @SuppressWarnings("rawtypes")
