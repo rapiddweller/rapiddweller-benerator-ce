@@ -159,6 +159,10 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
       generator = new ConstantGenerator<>("");
     } else if (constant != null) {
       Object value = LiteralParser.parse(constant);
+      PrimitiveType primitiveType = descriptor.getPrimitiveType();
+      if (primitiveType != null) {
+        value = AnyConverter.convert(value, primitiveType.getJavaType());
+      }
       generator = new ConstantGenerator(value);
     }
     return generator;
