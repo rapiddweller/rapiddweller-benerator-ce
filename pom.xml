@@ -129,14 +129,14 @@
         <_rd_script_version>1.1.4-jdk-11-SNAPSHOT</_rd_script_version>
         <database_derbyclient.version>10.15.2.0</database_derbyclient.version>
         <database_h2.version>1.4.200</database_h2.version>
-        <database_hsqldb.version>1.8.0.7</database_hsqldb.version>
-        <database_icu4j.version>67.1</database_icu4j.version>
+        <database_hsqldb.version>1.8.0.10</database_hsqldb.version>
+        <database_icu4j.version>69.1</database_icu4j.version>
         <database_jaybird.version>4.0.1.java11</database_jaybird.version>
         <database_mssqldb.version>9.4.0.jre11</database_mssqldb.version>
         <database_mysql-connector-java.version>8.0.26</database_mysql-connector-java.version>
         <database_mariadb-java-client.version>2.7.4</database_mariadb-java-client.version>
-        <database_oracle.version>21.1.0.0</database_oracle.version>
-        <database_postgresql.version>42.2.23</database_postgresql.version>
+        <database_oracle.version>21.3.0.0</database_oracle.version>
+        <database_postgresql.version>42.2.24</database_postgresql.version>
         <dependency_antlr-runtime.version>3.5.2</dependency_antlr-runtime.version>
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
         <dependency_validation-api.version>2.0.1.Final</dependency_validation-api.version>
@@ -145,7 +145,7 @@
         <dependency_log4j.version>2.14.1</dependency_log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scriptengine_freemarker.version>2.3.20</scriptengine_freemarker.version>
-        <scriptengine_graalvm.version>21.1.0</scriptengine_graalvm.version>
+        <scriptengine_graalvm.version>21.2.0</scriptengine_graalvm.version>
         <test_junit.version>4.13.2</test_junit.version>
     </properties>
 
