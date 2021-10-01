@@ -26,18 +26,12 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.common.ArrayFormat;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.Encodings;
-import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.LocaleUtil;
-import com.rapiddweller.common.ParseException;
-import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.*;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.csv.BeanCSVWriter;
 import com.rapiddweller.format.csv.CSVLineIterator;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -74,7 +68,7 @@ public class CityManager {
       if (warnCount > 0) {
         LOGGER.warn("{} warnings", warnCount);
       }
-    } catch (IOException e) {
+    } catch (IOException | NullPointerException e) {
       throw new ConfigurationError(
           "Error reading cities file: " + filename, e);
     }
@@ -176,7 +170,7 @@ public class CityManager {
     try (BeanCSVWriter<City> writer =
         new BeanCSVWriter<>(new FileWriter(filename), ';',
             "state.country.isoCode", "state.id", "name", "nameExtension",
-            "zipCode", "areaCode", "language")) {
+            "postalCode", "areaCode", "language")) {
       for (State state : country.getStates()) {
         for (City city : state.getCities()) {
           for (String zipCode : city.getPostalCodes()) {
