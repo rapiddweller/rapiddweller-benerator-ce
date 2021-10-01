@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.composite.GenerationStepSupport;
 import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
+import com.rapiddweller.benerator.factory.GenerationStepFactory;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
@@ -156,7 +156,7 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
     String selector = ExpressionUtil.evaluate(selectorEx, context);
     DataSource<Entity> iterable = source.queryEntities(tableName, selector, context);
     List<GenerationStep<Entity>> generationSteps =
-        ComplexTypeGeneratorFactory.createMutatingGenerationSteps(type, false, Uniqueness.NONE, context);
+        GenerationStepFactory.createMutatingGenerationSteps(type, false, Uniqueness.NONE, context);
     try (GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(tableName, generationSteps)) {
       cavs.init(context);
       DataIterator<Entity> iterator = iterable.iterator();

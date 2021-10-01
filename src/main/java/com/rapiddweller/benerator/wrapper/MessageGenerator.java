@@ -40,66 +40,39 @@ import java.text.MessageFormat;
 import java.util.List;
 
 /**
- * Assembles the output of several source generators by a java.text.MessageFormat.<br/>
- * <br/>
+ * Assembles the output of several source generators by a java.text.MessageFormat.<br/><br/>
  * Created: 08.06.2006 21:48:08
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class MessageGenerator extends ValidatingGenerator<String> implements NonNullGenerator<String> {
 
-  /**
-   * Pattern of the MessageFormat to use.
-   *
-   * @see MessageFormat
-   */
+  /** Pattern of the MessageFormat to use.
+   *  @see MessageFormat */
   private String pattern;
 
-  /**
-   * minimum length of the generated String
-   */
+  /** minimum length of the generated String */
   private int minLength;
 
-  /**
-   * maximum length of the generated String
-   */
+  /** maximum length of the generated String */
   private int maxLength;
 
-  /**
-   * provides the objects to format
-   */
+  /** provides the objects to format */
   private final SimpleMultiSourceArrayGenerator<?> helper;
 
   private final WrapperProvider<Object[]> sourceWrapperProvider;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets minLength to 0, maxLength to 30 and all other values empty.
-   */
+  /** Sets minLength to 0, maxLength to 30 and all other values empty. */
   public MessageGenerator() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Message generator.
-   *
-   * @param pattern the pattern
-   * @param sources the sources
-   */
   public MessageGenerator(String pattern, Generator<?>... sources) {
     this(pattern, 0, 30, sources);
   }
 
-  /**
-   * Initializes Generator
-   *
-   * @param pattern   the pattern
-   * @param minLength the min length
-   * @param maxLength the max length
-   * @param sources   the sources
-   */
   public MessageGenerator(String pattern, int minLength, int maxLength, Generator<?>... sources) {
     super(new StringLengthValidator());
     this.pattern = pattern;
@@ -111,69 +84,34 @@ public class MessageGenerator extends ValidatingGenerator<String> implements Non
 
   // config properties -----------------------------------------------------------------------------------------------
 
-  /**
-   * Returns the pattern property
-   *
-   * @return the pattern
-   */
   public String getPattern() {
     return pattern;
   }
 
-  /**
-   * Sets the pattern property
-   *
-   * @param pattern the pattern
-   */
   public void setPattern(String pattern) {
     this.pattern = pattern;
   }
 
-  /**
-   * Gets min length.
-   *
-   * @return the min length
-   */
-  /* Returns the minimum length of the generated String */
+  /** Returns the minimum length of the String to be generated */
   public int getMinLength() {
     return minLength;
   }
 
-  /**
-   * Sets min length.
-   *
-   * @param minLength the min length
-   */
-  /* Sets the minimum length of the generated String */
+  /** Sets the minimum length of the String to be generated */
   public void setMinLength(int minLength) {
     this.minLength = minLength;
   }
 
-  /**
-   * Gets max length.
-   *
-   * @return the max length
-   */
-  /* Returns the maximum length of the generated String */
+  /** Returns the maximum length of the String to be generated */
   public int getMaxLength() {
     return maxLength;
   }
 
-  /**
-   * Sets max length.
-   *
-   * @param maxLength the max length
-   */
-  /* Sets the maximum length of the generated String */
+  /** Sets the maximum length of the String to be generated */
   public void setMaxLength(int maxLength) {
     this.maxLength = maxLength;
   }
 
-  /**
-   * Sets the source generators
-   *
-   * @param sources the sources
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public void setSources(Generator<?>[] sources) {
     this.helper.setSources((List) CollectionUtil.toList(sources));
@@ -181,9 +119,7 @@ public class MessageGenerator extends ValidatingGenerator<String> implements Non
 
   // generator interface ---------------------------------------------------------------------------------------------
 
-  /**
-   * ensures consistency of the generator's state
-   */
+  /** Ensures consistency of the generator's state */
   @Override
   public void init(GeneratorContext context) {
     if (pattern == null) {
@@ -206,9 +142,7 @@ public class MessageGenerator extends ValidatingGenerator<String> implements Non
     return GeneratorUtil.generateNonNull(this);
   }
 
-  /**
-   * Implementation of ValidatingGenerator's generation callback method
-   */
+  /** Implementation of ValidatingGenerator's generation callback method */
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
   protected ProductWrapper<String> doGenerate(ProductWrapper<String> wrapper) {
@@ -221,9 +155,7 @@ public class MessageGenerator extends ValidatingGenerator<String> implements Non
     }
   }
 
-  /**
-   * @see Generator#reset()
-   */
+  /** @see Generator#reset() */
   @Override
   public void reset() {
     helper.reset();
@@ -240,9 +172,7 @@ public class MessageGenerator extends ValidatingGenerator<String> implements Non
     return helper.isThreadSafe();
   }
 
-  /**
-   * @see Generator#close()
-   */
+  /**  @see Generator#close() */
   @Override
   public void close() {
     helper.close();
@@ -255,9 +185,7 @@ public class MessageGenerator extends ValidatingGenerator<String> implements Non
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-  /**
-   * Returns a String representation of the generator
-   */
+  /** Returns a String representation of the generator */
   @Override
   public String toString() {
     return getClass().getSimpleName() + "[pattern='" + pattern + "', " + minLength + "<=length<=" + maxLength + "]";

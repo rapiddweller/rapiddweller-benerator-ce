@@ -89,14 +89,13 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
   protected ComponentBuilderFactory() {
   }
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ComponentBuilderFactory.class);
+  private static final Logger logger = LoggerFactory.getLogger(ComponentBuilderFactory.class);
 
   // factory methods for component generators ------------------------------------------------------------------------
 
   public static ComponentBuilder<?> createComponentBuilder(
       ComponentDescriptor descriptor, Uniqueness ownerUniqueness, boolean iterationMode, BeneratorContext context) {
-    LOGGER.debug("createComponentBuilder({})", descriptor.getName());
-
+    logger.debug("createComponentBuilder({})", descriptor.getName());
     ComponentBuilder<?> result = null;
     if (descriptor instanceof ArrayElementDescriptor) {
       result = createPartBuilder(descriptor, ownerUniqueness, iterationMode, context);
@@ -156,14 +155,14 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       generator = createMultiplicityWrapper(part, generator, context);
       result = builderFromGenerator(generator, part, context);
     }
-    LOGGER.debug("Created {}", result);
+    logger.debug("Created {}", result);
     return result;
   }
 
   private static PartModifier createPartModifier(ComponentDescriptor part, BeneratorContext context) {
     ComplexTypeDescriptor typeDescriptor = (ComplexTypeDescriptor) part.getTypeDescriptor();
     List<GenerationStep<Entity>> components =
-        ComplexTypeGeneratorFactory.createMutatingGenerationSteps(typeDescriptor, true, Uniqueness.NONE, context);
+        GenerationStepFactory.createMutatingGenerationSteps(typeDescriptor, true, Uniqueness.NONE, context);
     return new PartModifier(part.getName(), components, typeDescriptor.getScope(), context);
   }
 
@@ -248,8 +247,8 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
     // check multiplicity
     generator = ComponentBuilderFactory.createMultiplicityWrapper(descriptor, generator, context);
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("Created " + generator);
+    if (logger.isDebugEnabled()) {
+      logger.debug("Created " + generator);
     }
 
     // check 'cyclic' config
@@ -304,7 +303,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
   static ComponentBuilder<?> createIdBuilder(IdDescriptor id, Uniqueness ownerUniqueness, BeneratorContext context) {
     Generator<?> generator = createSingleInstanceGenerator(id, Uniqueness.ORDERED, context);
     if (generator != null) {
-      LOGGER.debug("Created {}", generator);
+      logger.debug("Created {}", generator);
     }
     return builderFromGenerator(generator, id, context);
   }

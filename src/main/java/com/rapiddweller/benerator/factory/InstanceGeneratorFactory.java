@@ -39,6 +39,8 @@ import com.rapiddweller.model.data.Uniqueness;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+import javax.annotation.Nullable;
+
 /**
  * Creates entity generators from entity metadata.<br/><br/>
  * Created: 08.09.2007 07:45:40
@@ -53,6 +55,7 @@ public class InstanceGeneratorFactory {
   protected InstanceGeneratorFactory() {
   }
 
+  @Nullable
   public static Generator<?> createSingleInstanceGenerator(
       InstanceDescriptor descriptor, Uniqueness ownerUniqueness, BeneratorContext context) {
 
@@ -101,6 +104,7 @@ public class InstanceGeneratorFactory {
     return generator;
   }
 
+  @Nullable
   public static Generator<?> createConfiguredDefaultGenerator(String componentName, Uniqueness ownerUniqueness, BeneratorContext context) {
     ComponentDescriptor defaultConfig = context.getDefaultComponentConfig(componentName);
     if (defaultConfig != null) {
