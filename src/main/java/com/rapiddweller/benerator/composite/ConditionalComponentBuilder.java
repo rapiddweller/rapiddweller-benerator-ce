@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -33,7 +33,6 @@ import com.rapiddweller.script.Expression;
 /**
  * {@link ComponentBuilder} which executes only if a condition expression evaluates to 'true'.<br/><br/>
  * Created: 11.10.2010 11:15:14
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.4
@@ -42,12 +41,6 @@ public class ConditionalComponentBuilder<E> extends ComponentBuilderProxy<E> {
 
   private final Expression<?> condition;
 
-  /**
-   * Instantiates a new Conditional component builder.
-   *
-   * @param source    the source
-   * @param condition the condition
-   */
   public ConditionalComponentBuilder(ComponentBuilder<E> source, Expression<?> condition) {
     super(source);
     Assert.notNull(condition, "condition");
@@ -63,7 +56,7 @@ public class ConditionalComponentBuilder<E> extends ComponentBuilderProxy<E> {
     if (!(conditionResult instanceof Boolean)) {
       throw new IllegalArgumentException("Condition does not resolve to a boolean value: " + condition);
     }
-    if ((Boolean) conditionResult) {
+    if ((boolean) conditionResult) {
       return source.execute(context);
     } else {
       return true;

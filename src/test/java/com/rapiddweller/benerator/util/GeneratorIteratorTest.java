@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -27,66 +27,55 @@
 package com.rapiddweller.benerator.util;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.benerator.sample.SequenceGenerator;
+import org.junit.Test;
 
-import java.io.Closeable;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 /**
- * Wraps a {@link Generator} with an {@link Iterator} interface.<br/><br/>
- * Created at 21.07.2009 10:09:55
- * @param <E> the type parameter
+ * Tests the {@link GeneratorIterator}.<br/><br/>
+ * Created: 01.10.2021 22:50:39
  * @author Volker Bergmann
- * @since 0.6.0
+ * @since 2.1.0
  */
-public class GeneratorIterator<E> implements Iterator<E>, Closeable {
+public class GeneratorIteratorTest {
 
-  private final Generator<E> source;
-  private E next;
-  private final WrapperProvider<E> wrapperProvider = new WrapperProvider<>();
-  private boolean hasNext;
-
-  public GeneratorIterator(Generator<E> source) {
-    this.source = source;
-    fetchNext();
-  }
-
-  @Override
-  public boolean hasNext() {
-    return hasNext;
-  }
-
-  @Override
-  public E next() {
-    if (!hasNext) {
-      throw new NoSuchElementException("No more elements to generate in " + source + ". " +
-          "Query hasNext() before calling next()");
+  @Test
+  public void testCycle() {
+    Generator<Integer> gen = new SequenceGenerator<>(Integer.class,1, 2);
+    GeneratorIterator<Integer> iter = new GeneratorIterator<>(gen);
+    assertTrue(iter.hasNext());
+    assertEquals(1, (int) iter.next());
+    assertTrue(iter.hasNext());
+    assertEquals(2, (int) iter.next());
+    assertFalse(iter.hasNext());
+    try {
+      iter.next();
+      fail("Expected NoSuchElementException");
+    } catch (NoSuchElementException e) {
+      // this is expected
     }
-    E result = next;
-    fetchNext();
-    return result;
+    iter.close();
   }
 
-  @Override
-  public void remove() {
-    throw new UnsupportedOperationException("removal is not supported by " + getClass());
-  }
-
-  @Override
-  public void close() {
-    source.close();
-  }
-
-  private void fetchNext() {
-    ProductWrapper<E> wrapper = source.generate(wrapperProvider.get());
-    if (wrapper != null) {
-      this.next = wrapper.unwrap();
-      this.hasNext = true;
-    } else {
-      this.next = null;
-      this.hasNext = false;
+  @Test
+  public void testRemove() {
+    Generator<Integer> gen = new SequenceGenerator<>(Integer.class,1, 2);
+    GeneratorIterator<Integer> iter = new GeneratorIterator<>(gen);
+    assertTrue(iter.hasNext());
+    assertEquals(1, (int) iter.next());
+    try {
+      iter.remove();
+      fail("Expected UnsupportedOperationException");
+    } catch (UnsupportedOperationException e) {
+      // this is expected
     }
+    iter.close();
   }
 
 }
