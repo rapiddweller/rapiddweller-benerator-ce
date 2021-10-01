@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.composite.GenerationStepSupport;
 import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
+import com.rapiddweller.benerator.factory.GenerationStepFactory;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.ConfigurationError;
@@ -98,7 +98,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
 
     // iterate rows
     List<GenerationStep<Entity>> generationSteps =
-        ComplexTypeGeneratorFactory.createMutatingGenerationSteps(type, false, Uniqueness.NONE, context);
+        GenerationStepFactory.createMutatingGenerationSteps(type, false, Uniqueness.NONE, context);
     try (GenerationStepSupport<Entity> support = new GenerationStepSupport<>(tableName, generationSteps)) {
       support.init(context);
       try (DataIterator<Entity> iterator = ref.resolveReferences(parent.currentEntity(), source, context)) {

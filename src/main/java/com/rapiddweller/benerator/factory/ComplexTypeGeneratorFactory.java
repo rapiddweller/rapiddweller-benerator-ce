@@ -53,11 +53,8 @@ import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.util.DataFileUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntitySource;
-import com.rapiddweller.model.data.InstanceDescriptor;
-import com.rapiddweller.model.data.Mode;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.benerator.FileFormat;
@@ -70,7 +67,6 @@ import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -208,7 +204,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
   public static Generator<Entity> createMutatingEntityGenerator(String name, ComplexTypeDescriptor descriptor,
       Uniqueness ownerUniqueness, BeneratorContext context, Generator<?> source, boolean iterationMode) {
     List<GenerationStep<Entity>> generationSteps =
-        createMutatingGenerationSteps(descriptor, iterationMode, ownerUniqueness, context);
+        GenerationStepFactory.createMutatingGenerationSteps(descriptor, iterationMode, ownerUniqueness, context);
     return new CompositeEntityGenerator(name, (Generator<Entity>) source, generationSteps, context);
   }
 
@@ -240,7 +236,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       if (!Entity.class.isAssignableFrom(dataSource.getType())) {
         throw new UnsupportedOperationException("Not a supported data type to iterate: " + dataSource.getType());
       }
-      generator = new DataSourceGenerator<Entity>(dataSource);
+      generator = new DataSourceGenerator<>(dataSource);
     } else {
       throw new UnsupportedOperationException("Source type not supported: " + sourceObject.getClass());
     }
@@ -305,25 +301,6 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     Generator<?> generator = MetaGeneratorFactory.createTypeGenerator(
         contentType, complexType.getName(), false, ownerUniqueness, context);
     return new SimpleTypeEntityGenerator(generator, complexType);
-  }
-
-  @SuppressWarnings("unchecked")
-  public static List<GenerationStep<Entity>> createMutatingGenerationSteps(
-      ComplexTypeDescriptor descriptor, boolean iterationMode, Uniqueness ownerUniqueness, BeneratorContext context) {
-    List<GenerationStep<Entity>> generationSteps = new ArrayList<>();
-    for (InstanceDescriptor part : descriptor.getDeclaredParts()) {
-      if (!(part instanceof ComponentDescriptor) ||
-          part.getMode() != Mode.ignored && !ComplexTypeDescriptor.__SIMPLE_CONTENT.equals(part.getName())) {
-        try {
-          GenerationStep<Entity> generationStep =
-              (GenerationStep<Entity>) GenerationStepFactory.createGenerationStep(part, ownerUniqueness, iterationMode, context);
-          generationSteps.add(generationStep);
-        } catch (Exception e) {
-          throw new ConfigurationError("Error creating component builder for " + part, e);
-        }
-      }
-    }
-    return generationSteps;
   }
 
   private static Generator<Entity> createEntitySourceGenerator(ComplexTypeDescriptor complexType,

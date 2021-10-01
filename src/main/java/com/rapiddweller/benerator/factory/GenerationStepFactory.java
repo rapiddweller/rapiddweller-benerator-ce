@@ -29,14 +29,20 @@ package com.rapiddweller.benerator.factory;
 import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.composite.Variable;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
+import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.Mode;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.model.data.VariableDescriptor;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Factory for {@link GenerationStep}s.<br/><br/>
@@ -50,6 +56,25 @@ public class GenerationStepFactory {
 
   private GenerationStepFactory() {
     // private constructor to prevent instantiation
+  }
+
+  @SuppressWarnings("unchecked")
+  public static List<GenerationStep<Entity>> createMutatingGenerationSteps(
+      ComplexTypeDescriptor descriptor, boolean iterationMode, Uniqueness ownerUniqueness, BeneratorContext context) {
+    List<GenerationStep<Entity>> generationSteps = new ArrayList<>();
+    for (InstanceDescriptor part : descriptor.getDeclaredParts()) {
+      if (!(part instanceof ComponentDescriptor) ||
+          part.getMode() != Mode.ignored && !ComplexTypeDescriptor.__SIMPLE_CONTENT.equals(part.getName())) {
+        try {
+          GenerationStep<Entity> generationStep =
+              (GenerationStep<Entity>) createGenerationStep(part, ownerUniqueness, iterationMode, context);
+          generationSteps.add(generationStep);
+        } catch (Exception e) {
+          throw new ConfigurationError("Error creating component builder for " + part, e);
+        }
+      }
+    }
+    return generationSteps;
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
