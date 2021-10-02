@@ -29,33 +29,18 @@ package com.rapiddweller.platform.java;
 import com.rapiddweller.platform.PersonBean;
 
 /**
- * TODO Document class.<br/><br/>
+ * Helper class for testing.<br/><br/>
  * Created: 13.05.2014 11:52:54
- *
  * @author Volker Bergmann
- * @since TODO version
  */
 public class ChildBean extends PersonBean {
 
-  /**
-   * The Child no.
-   */
   public int childNo;
 
-  /**
-   * Instantiates a new Child bean.
-   */
   public ChildBean() {
     this(null, 0, 0);
   }
 
-  /**
-   * Instantiates a new Child bean.
-   *
-   * @param name    the name
-   * @param age     the age
-   * @param childNo the child no
-   */
   public ChildBean(String name, int age, int childNo) {
     super(name, age);
     this.childNo = childNo;
