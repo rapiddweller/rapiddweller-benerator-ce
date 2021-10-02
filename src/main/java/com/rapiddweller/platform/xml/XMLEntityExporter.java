@@ -225,6 +225,13 @@ public class XMLEntityExporter extends AbstractConsumer implements FileExporter 
 
       out = new FileOutputStream(uri);
       handler.setResult(new StreamResult(out));
+
+      // bug fix: the following extra call to start/endDocument fixes the bug,
+      // that in normal invocation no line separator is inserted after the <?xml?> header
+      handler.startDocument();
+      handler.endDocument();
+      // end of bug fix
+
       handler.startDocument();
     } catch (TransformerConfigurationException e) {
       throw new ConfigurationError(e);
