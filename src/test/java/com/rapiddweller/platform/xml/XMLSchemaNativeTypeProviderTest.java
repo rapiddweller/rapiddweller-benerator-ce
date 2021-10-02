@@ -37,7 +37,6 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the XMLSchemaNativeTypeProvider.<br/><br/>
  * Created: 21.03.2008 09:44:43
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
@@ -45,9 +44,6 @@ public class XMLSchemaNativeTypeProviderTest {
 
   private final XMLNativeTypeDescriptorProvider provider = new XMLNativeTypeDescriptorProvider("xsd", new DataModel());
 
-  /**
-   * Test duration type.
-   */
   @Test
   public void testDurationType() {
     checkIllegalValues("duration",
@@ -61,9 +57,6 @@ public class XMLSchemaNativeTypeProviderTest {
         "P100D");
   }
 
-  /**
-   * Test g year month type.
-   */
   @Test
   public void testGYearMonthType() {
     checkIllegalValues("gYearMonth",
@@ -84,9 +77,6 @@ public class XMLSchemaNativeTypeProviderTest {
         "-10000-01");
   }
 
-  /**
-   * Test g year type.
-   */
   @Test
   public void testGYearType() {
     checkIllegalValues("gYear",
@@ -107,9 +97,6 @@ public class XMLSchemaNativeTypeProviderTest {
         "-10000");
   }
 
-  /**
-   * Test g month type.
-   */
   @Test
   public void testGMonthType() {
     checkIllegalValues("gMonth",
@@ -123,9 +110,6 @@ public class XMLSchemaNativeTypeProviderTest {
         "12");
   }
 
-  /**
-   * Test g day type.
-   */
   @Test
   public void testGDayType() {
     checkIllegalValues("gDay",
@@ -139,9 +123,6 @@ public class XMLSchemaNativeTypeProviderTest {
         "31");
   }
 
-  /**
-   * Test g month day type.
-   */
   @Test
   public void testGMonthDayType() {
     checkIllegalValues("gMonthDay",
@@ -156,9 +137,6 @@ public class XMLSchemaNativeTypeProviderTest {
         "01-01");
   }
 
-  /**
-   * Test hex binary type.
-   */
   @Test
   public void testHexBinaryType() {
     checkIllegalValues("hexBinary",
@@ -173,9 +151,6 @@ public class XMLSchemaNativeTypeProviderTest {
         "ff");
   }
 
-  /**
-   * Test base 64 binary type.
-   */
   @Test
   public void testBase64BinaryType() {
     checkIllegalValues("base64Binary",

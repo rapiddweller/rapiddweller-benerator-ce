@@ -692,7 +692,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="setting"> <!-- TODO unify with property -->
+    <xs:element name="setting">
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
@@ -759,7 +759,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="template"> <!-- TODO v0.8 keep this? -->
+    <xs:element name="template">
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="comment" minOccurs="0"/>

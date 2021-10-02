@@ -57,7 +57,6 @@ import java.util.Locale;
 /**
  * Generates XML files.<br/>
  * <br/>
- *
  * @author Volker Bergmann
  */
 public class XMLFileGenerator extends UnsafeGenerator<File> {
@@ -70,14 +69,6 @@ public class XMLFileGenerator extends UnsafeGenerator<File> {
   private Generator<String> fileNameGenerator;
   private Generator<?> contentGenerator;
 
-  /**
-   * Instantiates a new Xml file generator.
-   *
-   * @param schemaUri       the schema uri
-   * @param root            the root
-   * @param filenamePattern the filename pattern
-   * @param propertiesFiles the properties files
-   */
   public XMLFileGenerator(String schemaUri, String root, String filenamePattern, String... propertiesFiles) {
     this.schemaUri = schemaUri;
     this.encoding = SystemInfo.getFileEncoding();
@@ -104,7 +95,7 @@ public class XMLFileGenerator extends UnsafeGenerator<File> {
     // parse properties files
     try {
       for (String propertiesFile : propertiesFiles) {
-        IncludeStatement.includeProperties(propertiesFile, beneratorContext);
+        IncludeStatement.includePropertiesFile(propertiesFile, beneratorContext);
       }
     } catch (IOException e) {
       throw new InvalidGeneratorSetupException(e);

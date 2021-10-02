@@ -376,7 +376,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="setting"> <!-- TODO unify with property -->
+    <xs:element name="setting">
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
@@ -425,8 +425,7 @@
                 <xs:extension base="bean-type">
                     <xs:attributeGroup ref="execution-attrs"/>
                     <xs:attribute name="threads" type="xs:string"/>
-                    <!-- TODO v0.8 support min/maxCount? -->
-                    <xs:attribute name="pager" type="xs:string"/> <!--  TODO v0.7 move 'pager' to 'executor-attrs'? -->
+                    <xs:attribute name="pager" type="xs:string"/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -444,7 +443,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="template"> <!-- TODO v0.8 keep this? -->
+    <xs:element name="template">
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="comment" minOccurs="0"/>

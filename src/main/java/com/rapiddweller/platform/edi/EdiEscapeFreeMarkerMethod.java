@@ -33,7 +33,6 @@ import java.util.List;
 /**
  * Provides Edifact character escaping in FreeMarker templates.<br/><br/>
  * Created: 30.06.2014 11:14:26
- *
  * @author Volker Bergmann
  * @since 0.9.7
  */
@@ -44,74 +43,34 @@ public class EdiEscapeFreeMarkerMethod implements TemplateMethodModelEx {
   private char escapeChar = '?';
   private char segmentSeparator = '\'';
 
-  /**
-   * Gets component separator.
-   *
-   * @return the component separator
-   */
   public char getComponentSeparator() {
     return componentSeparator;
   }
 
-  /**
-   * Sets component separator.
-   *
-   * @param componentSeparator the component separator
-   */
   public void setComponentSeparator(char componentSeparator) {
     this.componentSeparator = componentSeparator;
   }
 
-  /**
-   * Gets element separator.
-   *
-   * @return the element separator
-   */
   public char getElementSeparator() {
     return elementSeparator;
   }
 
-  /**
-   * Sets element separator.
-   *
-   * @param elementSeparator the element separator
-   */
   public void setElementSeparator(char elementSeparator) {
     this.elementSeparator = elementSeparator;
   }
 
-  /**
-   * Gets escape char.
-   *
-   * @return the escape char
-   */
   public char getEscapeChar() {
     return escapeChar;
   }
 
-  /**
-   * Sets escape char.
-   *
-   * @param escapeChar the escape char
-   */
   public void setEscapeChar(char escapeChar) {
     this.escapeChar = escapeChar;
   }
 
-  /**
-   * Gets segment separator.
-   *
-   * @return the segment separator
-   */
   public char getSegmentSeparator() {
     return segmentSeparator;
   }
 
-  /**
-   * Sets segment separator.
-   *
-   * @param segmentSeparator the segment separator
-   */
   public void setSegmentSeparator(char segmentSeparator) {
     this.segmentSeparator = segmentSeparator;
   }

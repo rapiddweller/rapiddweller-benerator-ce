@@ -296,8 +296,7 @@
             <xs:complexContent>
                 <xs:extension base="bean-type">
                     <xs:attributeGroup ref="execution-attrs"/>
-                    <!-- TODO v0.7 support min/maxCount? -->
-                    <xs:attribute name="pager" type="xs:string"/> <!--  TODO v0.7 move 'pager' to 'executor-attrs'? -->
+                    <xs:attribute name="pager" type="xs:string"/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

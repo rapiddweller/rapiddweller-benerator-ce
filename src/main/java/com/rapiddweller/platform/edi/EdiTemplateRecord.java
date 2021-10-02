@@ -33,11 +33,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO Document class.<br/><br/>
+ * Represents an Edifact template record.<br/><br/>
  * Created: 30.06.2014 11:14:26
- *
  * @author Volker Bergmann
- * @since TODO version
+ * @since 0.9.7
  */
 public class EdiTemplateRecord extends DefaultTemplateRecord {
 

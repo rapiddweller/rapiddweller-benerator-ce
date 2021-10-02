@@ -49,7 +49,7 @@ import java.io.IOException;
  */
 public class IncludeStatement implements Statement {
 
-  private static final Logger logger = LoggerFactory.getLogger(IncludeStatement.class);
+  protected Logger logger = LoggerFactory.getLogger(getClass());
 
   private Expression<String> uriEx;
 
@@ -85,23 +85,27 @@ public class IncludeStatement implements Statement {
     }
   }
 
-  public static void includeProperties(String uri, BeneratorContext context) throws IOException {
+  protected void includeProperties(String uri, BeneratorContext context) throws IOException {
     logger.debug("Including properties file: {}", uri);
-    ScriptConverterForStrings preprocessor = new ScriptConverterForStrings(context);
-    DefaultEntryConverter converter = new DefaultEntryConverter(preprocessor, context, true);
-    IOUtil.readProperties(uri, converter);
+    includePropertiesFile(uri, context);
   }
 
-  public static void includeXmlSchema(String uri, BeneratorContext context) {
+  protected void includeXmlSchema(String uri, BeneratorContext context) {
     logger.debug("Including XML Schema: {}", uri);
     new XMLSchemaDescriptorProvider(uri, context).close();
   }
 
-  private static void includeDescriptor(String uri, BeneratorContext context) throws IOException {
+  protected void includeDescriptor(String uri, BeneratorContext context) throws IOException {
     logger.debug("Including Benerator descriptor file: {}", uri);
     try (DescriptorRunner runner = new DescriptorRunner(uri, context.createSubContext(uri))) {
       runner.runWithoutShutdownHook();
     }
+  }
+
+  public static void includePropertiesFile(String uri, BeneratorContext context) throws IOException {
+    ScriptConverterForStrings preprocessor = new ScriptConverterForStrings(context);
+    DefaultEntryConverter converter = new DefaultEntryConverter(preprocessor, context, true);
+    IOUtil.readProperties(uri, converter);
   }
 
 }
