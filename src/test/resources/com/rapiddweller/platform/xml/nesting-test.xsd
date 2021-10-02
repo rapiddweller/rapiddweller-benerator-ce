@@ -18,13 +18,6 @@
     <xs:element name="root">
         <xs:complexType>
             <xs:sequence>
-                <!-- testing minOccurs and maxOccurs -->
-                <xs:element name="occ-default" type="number-regex"/>
-                <xs:element name="occ-minZero" type="number-regex" minOccurs="0"/>
-                <xs:element name="occ-maxUnbounded" type="number-regex" maxOccurs="unbounded"/>
-                <xs:element name="occ-two" type="number-regex" minOccurs="2" maxOccurs="2"/>
-                <xs:element name="occ-minZero-maxUnbounded" type="number-regex" minOccurs="0" maxOccurs="unbounded"/>
-                <!-- testing nesting -->
                 <xs:element ref="c1" minOccurs="2" maxOccurs="2"/>
                 <xs:element name="number" type="number-regex" minOccurs="1" maxOccurs="1"/>
                 <xs:element ref="c2" maxOccurs="unbounded">
