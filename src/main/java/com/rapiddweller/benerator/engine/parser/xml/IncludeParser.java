@@ -45,20 +45,13 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_INCLUDE;
 /**
  * Parses an {@literal <}include{@literal >} element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:32:02
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class IncludeParser extends AbstractBeneratorDescriptorParser {
 
-  /**
-   * The Required attributes.
-   */
   static final Set<String> REQUIRED_ATTRIBUTES = CollectionUtil.toSet(ATT_URI);
 
-  /**
-   * Instantiates a new Include parser.
-   */
   public IncludeParser() {
     super(EL_INCLUDE, REQUIRED_ATTRIBUTES, null,
         BeneratorRootStatement.class, IfStatement.class);
@@ -68,6 +61,10 @@ public class IncludeParser extends AbstractBeneratorDescriptorParser {
   public IncludeStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
     String uriAttr = element.getAttribute(DescriptorConstants.ATT_URI);
     Expression<String> uriEx = new StringExpression(new ScriptableExpression(uriAttr, null));
+    return createStatement(uriEx);
+  }
+
+  protected IncludeStatement createStatement(Expression<String> uriEx) {
     return new IncludeStatement(uriEx);
   }
 
