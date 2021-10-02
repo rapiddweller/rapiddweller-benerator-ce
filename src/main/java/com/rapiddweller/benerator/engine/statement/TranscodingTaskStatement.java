@@ -59,54 +59,20 @@ import java.util.Map.Entry;
  * Groups {@link TranscodeStatement}s and provides common features like
  * {@link IdentityProvider} and {@link KeyMapper} objects.<br/><br/>
  * Created: 10.09.2010 18:25:18
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class TranscodingTaskStatement extends SequentialStatement {
 
-  /**
-   * The Source ex.
-   */
   final Expression<DBSystem> sourceEx;
-  /**
-   * The Target ex.
-   */
   final Expression<DBSystem> targetEx;
-  /**
-   * The Identity ex.
-   */
   final Expression<String> identityEx;
-  /**
-   * The Page size ex.
-   */
   final Expression<Long> pageSizeEx;
-  /**
-   * The Error handler expression.
-   */
   final Expression<ErrorHandler> errorHandlerExpression;
-  /**
-   * The Identity provider.
-   */
   final IdentityProvider identityProvider;
-  /**
-   * The Mapper.
-   */
   KeyMapper mapper;
-  /**
-   * The Table nk requirements.
-   */
   final Map<String, Boolean> tableNkRequirements = OrderedNameMap.createCaseIgnorantMap();
 
-  /**
-   * Instantiates a new Transcoding task statement.
-   *
-   * @param sourceEx               the source ex
-   * @param targetEx               the target ex
-   * @param identityEx             the identity ex
-   * @param pageSizeEx             the page size ex
-   * @param errorHandlerExpression the error handler expression
-   */
   public TranscodingTaskStatement(Expression<DBSystem> sourceEx, Expression<DBSystem> targetEx, Expression<String> identityEx,
                                   Expression<Long> pageSizeEx, Expression<ErrorHandler> errorHandlerExpression) {
     this.sourceEx = cache(sourceEx);
@@ -117,56 +83,26 @@ public class TranscodingTaskStatement extends SequentialStatement {
     this.identityProvider = new IdentityProvider();
   }
 
-  /**
-   * Gets source ex.
-   *
-   * @return the source ex
-   */
   public Expression<DBSystem> getSourceEx() {
     return sourceEx;
   }
 
-  /**
-   * Gets target ex.
-   *
-   * @return the target ex
-   */
   public Expression<DBSystem> getTargetEx() {
     return targetEx;
   }
 
-  /**
-   * Gets page size ex.
-   *
-   * @return the page size ex
-   */
   public Expression<Long> getPageSizeEx() {
     return pageSizeEx;
   }
 
-  /**
-   * Gets error handler ex.
-   *
-   * @return the error handler ex
-   */
   public Expression<ErrorHandler> getErrorHandlerEx() {
     return errorHandlerExpression;
   }
 
-  /**
-   * Gets identity provider.
-   *
-   * @return the identity provider
-   */
   public IdentityProvider getIdentityProvider() {
     return identityProvider;
   }
 
-  /**
-   * Gets key mapper.
-   *
-   * @return the key mapper
-   */
   KeyMapper getKeyMapper() {
     return mapper;
   }
@@ -193,7 +129,7 @@ public class TranscodingTaskStatement extends SequentialStatement {
       Boolean required = req.getValue();
       IdentityModel identity = identityProvider.getIdentity(tableName, false);
       if (identity == null) {
-        if (required) {
+        if (required != null && required) {
           throw new ConfigurationError("For transcoding, an identity definition of table '" + tableName + "' is required");
         } else {
           DBTable table = target.getDbMetaData().getTable(tableName);
@@ -255,12 +191,6 @@ public class TranscodingTaskStatement extends SequentialStatement {
     return target;
   }
 
-  /**
-   * Needs nk mapping boolean.
-   *
-   * @param tableName the table name
-   * @return the boolean
-   */
   public boolean needsNkMapping(String tableName) {
     Boolean required = tableNkRequirements.get(tableName);
     if (required == null) {

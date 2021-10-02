@@ -254,10 +254,6 @@ public abstract class GeneratorFactory {
   // collection generators -------------------------------------------------------------------------------------------
 
   /** Creates a generator that reads products of an array of generators and combines them in an array.
-   *  @param <T>           the type parameter
-   *  @param componentType the component type
-   *  @param sources       the source generators
-   *  @param uniqueness    the uniqueness
    *  @return a generator of the desired characteristics */
   public abstract <T> Generator<T[]> createCompositeArrayGenerator(
       Class<T> componentType, Generator<T>[] sources, Uniqueness uniqueness);
@@ -265,9 +261,6 @@ public abstract class GeneratorFactory {
   // wrappers --------------------------------------------------------------------------------------------------------
 
   /** Creates a generator that returns a single value.
-   *  @param <T>    the type parameter
-   *  @param value  the value to return
-   *  @param unique the unique
    *  @return a generator that returns a constant value. */
   public abstract <T> Generator<T> createSingleValueGenerator(T value, boolean unique);
 

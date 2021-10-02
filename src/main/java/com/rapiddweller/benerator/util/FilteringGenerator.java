@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.util;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.common.SyntaxError;
 import com.rapiddweller.script.Expression;
 
 /**
@@ -54,7 +55,11 @@ public class FilteringGenerator<E> extends GeneratorProxy<E> {
     while ((feed = super.generate(wrapper)) != null) {
       E candidate = feed.unwrap();
       context.set("_candidate", candidate);
-      if (filter.evaluate(context)) {
+      Boolean evaluation = filter.evaluate(context);
+      if (evaluation == null) {
+        throw new SyntaxError("filter expression is null", null);
+      }
+      if (evaluation) {
         return wrapper.wrap(candidate);
       }
     }
