@@ -45,10 +45,6 @@ public abstract class NonNullGeneratorWrapper<S, P> extends GeneratorWrapper<S, 
     return (NonNullGenerator<S>) super.getSource();
   }
 
-  public void setSource(NonNullGenerator<S> source) {
-    super.setSource(source);
-  }
-
   protected final S generateFromNotNullSource() {
     return getSource().generate();
   }

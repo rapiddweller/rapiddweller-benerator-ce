@@ -37,23 +37,14 @@ import com.rapiddweller.benerator.primitive.number.RecurrenceRelationNumberGener
  * </ul>
  * <br/>
  * Created at 03.07.2009 13:22:41
- *
  * @author Volker Bergmann
  * @see PadovanSequence
  * @since 0.6.0
  */
-public class PadovanLongGenerator
-    extends RecurrenceRelationNumberGenerator<Long> {
+public class PadovanLongGenerator extends RecurrenceRelationNumberGenerator<Long> {
 
   private final boolean unique;
 
-  /**
-   * Instantiates a new Padovan long generator.
-   *
-   * @param min    the min
-   * @param max    the max
-   * @param unique the unique
-   */
   public PadovanLongGenerator(Long min, Long max, boolean unique) {
     super(Long.class, 3, min, max);
     this.unique = unique;
@@ -69,11 +60,6 @@ public class PadovanLongGenerator
   @Override
   protected Long aN() {
     return aN(-2) + aN(-3);
-  }
-
-  @Override
-  public void reset() {
-    super.reset();
   }
 
   @Override

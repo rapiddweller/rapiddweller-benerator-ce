@@ -27,14 +27,11 @@
 package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 
 /**
  * {@link Generator} implementation which wraps a source {@link Generator}
  * but generates a null value before forwarding the products of the source.<br/><br/>
  * Created: 04.07.2011 13:18:03
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.7.0
@@ -43,19 +40,9 @@ public class NullStartingGenerator<E> extends GeneratorProxy<E> {
 
   private boolean nullUsed;
 
-  /**
-   * Instantiates a new Null starting generator.
-   *
-   * @param source the source
-   */
   public NullStartingGenerator(Generator<E> source) {
     super(source);
     this.nullUsed = false;
-  }
-
-  @Override
-  public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
-    super.init(context);
   }
 
   @Override
