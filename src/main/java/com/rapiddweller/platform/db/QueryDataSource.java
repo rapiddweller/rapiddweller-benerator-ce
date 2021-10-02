@@ -45,14 +45,12 @@ import java.sql.ResultSet;
  * {@link DataSource} implementation which is able to resolve script expressions, performs a query and
  * provides the result of a query as a {@link DataIterator} of {@link ResultSet} objects.<br/><br/>
  * Created: 03.08.2011 19:55:52
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public class QueryDataSource extends AbstractDataSource<ResultSet> {
 
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(QueryIterable.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(QueryDataSource.class);
 
   private final Connection connection;
   private final String query;
@@ -61,14 +59,6 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> {
   private final Converter<String, ?> queryPreprocessor;
   private String renderedQuery;
 
-  /**
-   * Instantiates a new Query data source.
-   *
-   * @param connection the connection
-   * @param query      the query
-   * @param fetchSize  the fetch size
-   * @param context    the context
-   */
   public QueryDataSource(Connection connection, String query, int fetchSize,
                          Context context) {
     super(ResultSet.class);
@@ -89,11 +79,6 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> {
     LOGGER.debug("Constructed QueryIterable: {}", query);
   }
 
-  /**
-   * Gets query.
-   *
-   * @return the query
-   */
   public String getQuery() {
     return query;
   }

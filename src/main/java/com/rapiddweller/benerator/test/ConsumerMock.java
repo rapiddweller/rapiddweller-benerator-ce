@@ -52,14 +52,18 @@ public class ConsumerMock extends AbstractConsumer {
   public static final String FLUSH = "fl";
   public static final String CLOSE = "cl";
 
-  public static final Map<Integer, ConsumerMock> instances = new HashMap<>();
+  protected static final Map<Integer, ConsumerMock> instances = new HashMap<>();
+
+  public static ConsumerMock getInstance(int id) {
+    return instances.get(id);
+  }
 
   private final int id;
   private final int minDelay;
   private final int delayDelta;
 
   private final boolean storeProducts;
-  public List<Object> products;
+  List<Object> products;
   public final List<String> invocations;
 
   public final AtomicInteger startConsumingCount = new AtomicInteger();

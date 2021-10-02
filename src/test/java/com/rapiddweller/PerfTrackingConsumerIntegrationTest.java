@@ -62,7 +62,7 @@ public class PerfTrackingConsumerIntegrationTest extends AbstractBeneratorIntegr
             "	</consumer>" +
             "</generate>");
     statement.execute(context);
-    ConsumerMock consumerMock = ConsumerMock.instances.get(0);
+    ConsumerMock consumerMock = ConsumerMock.getInstance(0);
     assertEquals(10, consumerMock.startConsumingCount.get());
     checkStats(statement);
   }
@@ -77,7 +77,7 @@ public class PerfTrackingConsumerIntegrationTest extends AbstractBeneratorIntegr
             "	<consumer spec='new com.rapiddweller.platform.contiperf.PerfTrackingConsumer(new com.rapiddweller.benerator.test.ConsumerMock(false, 0, 50, 100))'/>" +
             "</generate>");
     statement.execute(context);
-    ConsumerMock consumerMock = ConsumerMock.instances.get(0);
+    ConsumerMock consumerMock = ConsumerMock.getInstance(0);
     assertEquals(10, consumerMock.startConsumingCount.get());
     checkStats(statement);
   }

@@ -33,36 +33,20 @@ import com.rapiddweller.common.UpdateFailedException;
 /**
  * {@link ComponentBuilder} implementation which builds array elements.<br/><br/>
  * Created: 30.04.2010 09:57:50
- *
  * @author Volker Bergmann
  * @since 0.6.1
  */
 public class ArrayElementBuilder extends AbstractComponentBuilder<Object[]> {
 
-  /**
-   * Instantiates a new Array element builder.
-   *
-   * @param index  the index
-   * @param source the source
-   * @param scope  the scope
-   */
   public ArrayElementBuilder(int index, Generator<?> source, String scope) {
-    super(source, new Mutator_(index), scope);
+    super(source, new MutatorImpl(index), scope);
   }
 
-  private static class Mutator_ implements Mutator {
+  private static class MutatorImpl implements Mutator {
 
-    /**
-     * The Index.
-     */
     final int index;
 
-    /**
-     * Instantiates a new Mutator.
-     *
-     * @param index the index
-     */
-    public Mutator_(int index) {
+    public MutatorImpl(int index) {
       this.index = index;
     }
 

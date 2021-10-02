@@ -45,7 +45,7 @@ public class CurrentProductGeneration implements Statement, LifeCycleHolder {
   @SuppressWarnings({"unchecked", "rawtypes"})
   public CurrentProductGeneration(String instanceName, Generator<?> source) {
     this.instanceName = instanceName;
-    this.source = (Generator<?>) source;
+    this.source = source;
     this.provider = new WrapperProvider<>();
   }
 

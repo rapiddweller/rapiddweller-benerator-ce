@@ -72,7 +72,7 @@ public class SimpleMultiSourceArrayGenerator<S> extends MultiGeneratorWrapper<S,
     S[] array = (S[]) Array.newInstance(componentType, availableSourceCount());
     for (int i = 0; i < array.length; i++) {
       try {
-        ProductWrapper<S> productWrapper = (ProductWrapper<S>) sources.get(i).generate((ProductWrapper) getSourceWrapper());
+        ProductWrapper<S> productWrapper = sources.get(i).generate((ProductWrapper) getSourceWrapper());
         if (productWrapper == null) {
           available = false;
           return null;

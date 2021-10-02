@@ -35,7 +35,6 @@ import com.rapiddweller.format.xls.XLSUtil;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
-import com.rapiddweller.platform.csv.CSVEntityExporter;
 import com.rapiddweller.script.PrimitiveType;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -64,11 +63,9 @@ import java.util.Set;
  * @author Volker Bergmann
  * @since 0.5.3
  */
-public class XLSEntityExporter extends FormattingConsumer
-    implements FileExporter {
+public class XLSEntityExporter extends FormattingConsumer implements FileExporter {
 
-  private static final Logger logger =
-      LoggerFactory.getLogger(CSVEntityExporter.class);
+  private static final Logger logger = LoggerFactory.getLogger(XLSEntityExporter.class);
 
   // defaults --------------------------------------------------------------------------------------------------------
 
