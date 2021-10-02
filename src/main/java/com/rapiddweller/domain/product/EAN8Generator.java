@@ -30,6 +30,8 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
 import com.rapiddweller.model.data.Uniqueness;
 
+import java.util.Locale;
+
 /**
  * Generates 8-digit EAN codes.<br/>
  * <br/>
@@ -125,7 +127,7 @@ public class EAN8Generator extends NonNullGeneratorWrapper<String, String> {
   public synchronized void init(GeneratorContext context) {
     Uniqueness uniqueness = Uniqueness.instance(unique, ordered);
     setSource(context.getGeneratorFactory()
-        .createRegexStringGenerator("[0-9]{7}", 7, 7, uniqueness));
+        .createRegexStringGenerator("[0-9]{7}", Locale.ENGLISH, 7, 7, uniqueness));
     super.init(context);
   }
 

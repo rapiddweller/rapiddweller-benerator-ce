@@ -318,7 +318,7 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
   }
 
   private NonNullGenerator<String> create(String pattern, int maxLimit, Uniqueness uniqueness) {
-    NonNullGenerator<String> generator = RegexGeneratorFactory.create(pattern, 0, null, uniqueness,
+    NonNullGenerator<String> generator = RegexGeneratorFactory.create(pattern, Locale.ENGLISH, 0, null, uniqueness,
         new StochasticGeneratorFactory());
     generator.init(context);
     return generator;

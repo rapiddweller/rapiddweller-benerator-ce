@@ -215,7 +215,7 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
   }
 
   private NonNullGenerator<String> createGenerator(String pattern, int minLength, Integer maxLength) {
-    NonNullGenerator<String> generator = RegexGeneratorFactory.create(pattern, minLength, maxLength,
+    NonNullGenerator<String> generator = RegexGeneratorFactory.create(pattern, Locale.ENGLISH, minLength, maxLength,
         Uniqueness.NONE, new EquivalenceGeneratorFactory());
     generator.init(context);
     return generator;

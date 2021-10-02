@@ -37,27 +37,21 @@ import com.rapiddweller.model.data.Uniqueness;
 import java.util.Locale;
 
 /**
- * Generates Strings that comply to a regular expression.<br/>
- * <br/>
+ * Generates Strings that comply to a regular expression.<br/><br/>
  * Created: 18.07.2006 19:32:52
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class RegexStringGenerator extends NonNullGeneratorProxy<String> {
 
-  /**
-   * Optional String representation of a regular expression
-   */
+  /** Optional String representation of a regular expression */
   private String pattern;
 
   private boolean unique;
 
   private boolean ordered;
 
-  /**
-   * The locale from which to choose letters
-   */
+  /** The locale from which to choose letters */
   private Locale locale;
 
   private int minLength;
@@ -66,48 +60,27 @@ public class RegexStringGenerator extends NonNullGeneratorProxy<String> {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Initializes the generator to an empty regular expression, a maxQuantity of 30 and the fallback locale
-   */
+  /** Initializes the generator to an empty regular expression, a maxQuantity of 30 and the fallback locale. */
   public RegexStringGenerator() {
     this(30);
   }
 
-  /**
-   * Initializes the generator to an empty regular expression and the fallback locale
-   *
-   * @param maxLength the max length
-   */
+  /** Initializes the generator to an empty regular expression and the fallback locale. */
   public RegexStringGenerator(int maxLength) {
     this(null, maxLength);
   }
 
-  /**
-   * Initializes the generator to a maxQuantity of 30 and the fallback locale
-   *
-   * @param pattern the pattern
-   */
+  /** Initializes the generator to a maxQuantity of 30 and the fallback locale. */
   public RegexStringGenerator(String pattern) {
     this(pattern, 30);
   }
 
-  /**
-   * Initializes the generator to the fallback locale
-   *
-   * @param pattern   the pattern
-   * @param maxLength the max length
-   */
+  /** Initializes the generator to the fallback locale. */
   public RegexStringGenerator(String pattern, int maxLength) {
     this(pattern, maxLength, false);
   }
 
-  /**
-   * Initializes the generator with the String representation of a regular expression
-   *
-   * @param pattern   the pattern
-   * @param maxLength the max length
-   * @param unique    the unique
-   */
+  /** Initializes the generator with the String representation of a regular expression. */
   public RegexStringGenerator(String pattern, Integer maxLength, boolean unique) {
     super(String.class);
     this.pattern = pattern;
@@ -118,101 +91,48 @@ public class RegexStringGenerator extends NonNullGeneratorProxy<String> {
 
   // config properties -----------------------------------------------------------------------------------------------
 
-  /**
-   * Sets the String representation of the regular expression
-   *
-   * @return the pattern
-   */
+  /** Sets the String representation of the regular expression. */
   public String getPattern() {
     return pattern;
   }
 
-  /**
-   * Returns the String representation of the regular expression
-   *
-   * @param pattern the pattern
-   */
+  /** Returns the String representation of the regular expression. */
   public void setPattern(String pattern) {
     this.pattern = pattern;
   }
 
-  /**
-   * Is unique boolean.
-   *
-   * @return the boolean
-   */
   public boolean isUnique() {
     return unique;
   }
 
-  /**
-   * Sets unique.
-   *
-   * @param unique the unique
-   */
   public void setUnique(boolean unique) {
     this.unique = unique;
   }
 
-  /**
-   * Is ordered boolean.
-   *
-   * @return the boolean
-   */
   public boolean isOrdered() {
     return ordered;
   }
 
-  /**
-   * Sets ordered.
-   *
-   * @param ordered the ordered
-   */
   public void setOrdered(boolean ordered) {
     this.ordered = ordered;
   }
 
-  /**
-   * Gets locale.
-   *
-   * @return the locale
-   */
   public Locale getLocale() {
     return locale;
   }
 
-  /**
-   * Sets locale.
-   *
-   * @param locale the locale
-   */
   public void setLocale(Locale locale) {
     this.locale = locale;
   }
 
-  /**
-   * Gets min length.
-   *
-   * @return the min length
-   */
   public int getMinLength() {
     return minLength;
   }
 
-  /**
-   * Sets min length.
-   *
-   * @param minLength the min length
-   */
   public void setMinLength(int minLength) {
     this.minLength = minLength;
   }
 
-  /**
-   * Gets max length.
-   *
-   * @return the max length
-   */
   public int getMaxLength() {
     return maxLength;
   }
@@ -230,13 +150,11 @@ public class RegexStringGenerator extends NonNullGeneratorProxy<String> {
     return !isUnique();
   }
 
-  /**
-   * ensures consistency of the generators state
-   */
+  /** Ensures consistency of the generator's state. */
   @Override
   public void init(GeneratorContext context) {
     Generator<String> tmp = getGeneratorFactory(context).createRegexStringGenerator(
-        pattern, minLength, maxLength, Uniqueness.instance(unique, ordered));
+        pattern, locale, minLength, maxLength, Uniqueness.instance(unique, ordered));
     try {
       setSource(tmp);
       super.init(context);
@@ -245,12 +163,6 @@ public class RegexStringGenerator extends NonNullGeneratorProxy<String> {
     }
   }
 
-  /**
-   * Gets generator factory.
-   *
-   * @param context the context
-   * @return the generator factory
-   */
   protected GeneratorFactory getGeneratorFactory(GeneratorContext context) {
     return (context != null ? context.getGeneratorFactory() : new StochasticGeneratorFactory());
   }
