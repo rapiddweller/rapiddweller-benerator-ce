@@ -96,6 +96,7 @@ public class City {
     postalCodes = ArrayUtil.append(postalCode, postalCodes);
   }
 
+  /** @deprecated Property 'zipCode' is deprecated and replaced with 'postalCode' */
   @Deprecated
   public String[] getZipCodes() {
     escalator.escalate(
@@ -104,6 +105,7 @@ public class City {
     return getPostalCodes();
   }
 
+  /** @deprecated Property 'zipCode' is deprecated and replaced with 'postalCode' */
   @Deprecated
   public void setZipCodes(String[] zipCodes) {
     escalator.escalate(
@@ -112,6 +114,7 @@ public class City {
     this.postalCodes = zipCodes;
   }
 
+  /** @deprecated Property 'zipCode' is deprecated and replaced with 'postalCode' */
   @Deprecated
   public void addZipCode(String zipCode) {
     escalator.escalate(

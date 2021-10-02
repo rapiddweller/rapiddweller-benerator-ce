@@ -26,16 +26,12 @@
 
 package com.rapiddweller.benerator.sample;
 
-import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.ThreadSafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
 /**
- * Returns a value only once and then becomes unavailable immediately.<br/>
- * <br/>
+ * Returns a value only once and then becomes unavailable immediately.<br/><br/>
  * Created at 23.09.2009 00:20:03
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -46,22 +42,11 @@ public class OneShotGenerator<E> extends ThreadSafeGenerator<E> {
   private final Class<E> generatedType;
   private boolean used;
 
-  /**
-   * Instantiates a new One shot generator.
-   *
-   * @param value the value
-   */
   @SuppressWarnings("unchecked")
   public OneShotGenerator(E value) {
     this(value, (Class<E>) value.getClass());
   }
 
-  /**
-   * Instantiates a new One shot generator.
-   *
-   * @param value         the value
-   * @param generatedType the generated type
-   */
   public OneShotGenerator(E value, Class<E> generatedType) {
     this.value = value;
     this.generatedType = generatedType;
@@ -87,11 +72,6 @@ public class OneShotGenerator<E> extends ThreadSafeGenerator<E> {
   @Override
   public Class<E> getGeneratedType() {
     return generatedType;
-  }
-
-  @Override
-  public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
-    super.init(context);
   }
 
   @Override

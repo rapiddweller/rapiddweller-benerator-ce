@@ -156,7 +156,7 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
       encoding = context.getDefaultEncoding();
     }
     char separator = DescriptorUtil.getSeparator(arrayType, context);
-    boolean rowBased = (arrayType.isRowBased() != null ? arrayType.isRowBased() : true);
+    boolean rowBased = (arrayType.isRowBased() == null || arrayType.isRowBased());
     DataSourceProvider<Object[]> factory =
         new CSVArraySourceProvider(arrayType.getName(), new ScriptConverterForStrings(context), rowBased, separator, encoding);
     Generator<Object[]> generator =
@@ -167,7 +167,7 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
   private Generator<Object[]> createXLSSourceGenerator(
       ArrayTypeDescriptor arrayType, BeneratorContext context, String sourceName) {
     logger.debug("createXLSSourceGenerator({})", arrayType);
-    boolean rowBased = (arrayType.isRowBased() != null ? arrayType.isRowBased() : true);
+    boolean rowBased = (arrayType.isRowBased() == null || arrayType.isRowBased());
     String emptyMarker = arrayType.getEmptyMarker();
     String nullMarker = arrayType.getNullMarker();
     boolean formatted = isFormatted(arrayType);

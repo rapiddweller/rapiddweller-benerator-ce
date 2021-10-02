@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -43,7 +43,7 @@ import com.rapiddweller.benerator.util.WrapperProvider;
 public abstract class CardinalGenerator<S, P> extends GeneratorWrapper<S, P> {
 
   /** Generator that determines the cardinality of generation. */
-  protected NonNullGenerator<Integer> cardinalGenerator;
+  protected NonNullGenerator<Integer> cardinalityGenerator;
   final boolean resettingCardinal;
 
   int minCardinal;
@@ -54,9 +54,9 @@ public abstract class CardinalGenerator<S, P> extends GeneratorWrapper<S, P> {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  protected CardinalGenerator(Generator<S> source, boolean resettingCardinal, NonNullGenerator<Integer> cardinalGenerator) {
+  protected CardinalGenerator(Generator<S> source, boolean resettingCardinal, NonNullGenerator<Integer> cardinalityGenerator) {
     super(source);
-    this.cardinalGenerator = cardinalGenerator;
+    this.cardinalityGenerator = cardinalityGenerator;
     this.resettingCardinal = resettingCardinal;
   }
 
@@ -79,10 +79,10 @@ public abstract class CardinalGenerator<S, P> extends GeneratorWrapper<S, P> {
   /** ensures consistency of the state */
   @Override
   public void init(GeneratorContext context) {
-    if (cardinalGenerator == null) {
-      cardinalGenerator = cardinalDistribution.createNumberGenerator(Integer.class, minCardinal, maxCardinal, cardinalGranularity, false);
+    if (cardinalityGenerator == null) {
+      cardinalityGenerator = cardinalDistribution.createNumberGenerator(Integer.class, minCardinal, maxCardinal, cardinalGranularity, false);
     }
-    cardinalGenerator.init(context);
+    cardinalityGenerator.init(context);
     super.init(context);
   }
 
@@ -90,7 +90,7 @@ public abstract class CardinalGenerator<S, P> extends GeneratorWrapper<S, P> {
   public void reset() {
     assertInitialized();
     if (resettingCardinal) {
-      cardinalGenerator.reset();
+      cardinalityGenerator.reset();
     }
     super.reset();
   }
@@ -106,7 +106,7 @@ public abstract class CardinalGenerator<S, P> extends GeneratorWrapper<S, P> {
   }
 
   protected ProductWrapper<Integer> generateCardinalWrapper() {
-    return cardinalGenerator.generate(cardinalWrapperProvider.get());
+    return cardinalityGenerator.generate(cardinalWrapperProvider.get());
   }
 
 }

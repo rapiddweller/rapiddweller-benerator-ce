@@ -36,11 +36,14 @@ import com.rapiddweller.benerator.distribution.function.GaussianFunction;
 import com.rapiddweller.benerator.distribution.sequence.HeadSequence;
 import com.rapiddweller.benerator.sample.AttachedWeightSampleGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
+import com.rapiddweller.benerator.wrapper.NShotGeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.CharSet;
 import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.common.Period;
+import com.rapiddweller.domain.math.FibonacciSequence;
+import com.rapiddweller.domain.math.PadovanSequence;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.WeightedSample;
 import org.slf4j.LoggerFactory;
@@ -177,7 +180,14 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
   @Test
   public void testGetDateGeneratorByDistributionType() {
     for (Sequence sequence : SequenceManager.registeredSequences()) {
-      generatorFactory.createDateGenerator(date(2006, 0, 1), date(2006, 11, 31), Period.DAY.getMillis(), sequence);
+      Generator<Date> generator = generatorFactory.createDateGenerator(
+          date(2006, 0, 1), date(2010, 11, 31), Period.DAY.getMillis(), sequence);
+      System.out.println(sequence);
+      if (!(sequence instanceof HeadSequence)
+          && !(sequence instanceof FibonacciSequence)
+          && !(sequence instanceof PadovanSequence)) {
+        initAndUseGenerator(generator);
+      }
     }
   }
 
@@ -253,13 +263,15 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
 
   @Test
   public void testGetUniqueRegexGenerator() {
-    Generator<String> generator = generatorFactory.createRegexStringGenerator("[0-9]{3}", 3, 3, Uniqueness.SIMPLE);
+    Generator<String> generator = generatorFactory.createRegexStringGenerator(
+        "[0-9]{3}", Locale.ENGLISH, 3, 3, Uniqueness.SIMPLE);
     generator.init(context);
     expectUniqueGenerations(generator, 1000).withCeasedAvailability();
   }
 
   private void checkRegexGeneration(String pattern, int minLength, Integer maxLength, boolean nullable) {
-    NonNullGenerator<String> generator = generatorFactory.createRegexStringGenerator(pattern, minLength, maxLength, Uniqueness.NONE);
+    NonNullGenerator<String> generator = generatorFactory.createRegexStringGenerator(
+        pattern, Locale.ENGLISH, minLength, maxLength, Uniqueness.NONE);
     generator.init(context);
     RegexStringGeneratorFactory_stocasticTest.checkRegexGeneration(generator, pattern, minLength, maxLength, nullable);
   }
@@ -337,7 +349,11 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
   private <T> void initAndUseGenerator(Generator<T> generator) {
     generator.init(context);
     for (int i = 0; i < 5; i++) {
-      T product = generator.generate(new ProductWrapper<>()).unwrap();
+      ProductWrapper<T> wrapper = generator.generate(new ProductWrapper<>());
+      if (wrapper == null) {
+        throw new IllegalStateException("Generator not available: " + generator);
+      }
+      T product = wrapper.unwrap();
       assertNotNull("Generator unexpectedly invalid: " + generator, product);
     }
   }

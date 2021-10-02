@@ -43,7 +43,7 @@ import org.slf4j.Logger;
  */
 public class MemStoreStatement implements Statement {
 
-  private static final Logger logger = LoggerFactory.getLogger(DefineDatabaseStatement.class);
+  private static final Logger logger = LoggerFactory.getLogger(MemStoreStatement.class);
 
   private final String id;
   ResourceManager resourceManager;

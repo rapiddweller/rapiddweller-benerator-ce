@@ -59,16 +59,12 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link GenerateOrIterateParser}.<br/><br/>
  * Created: 10.11.2009 15:08:46
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 @SuppressWarnings("CheckStyle")
 public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test illegal nullable.
-   */
   @Test(expected = SyntaxError.class)
   public void testIllegalNullable() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
@@ -79,9 +75,6 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     statement.execute(context);
   }
 
-  /**
-   * Test paging.
-   */
   @Test
   public void testPaging() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
@@ -97,9 +90,6 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(100L, BeneratorMonitor.INSTANCE.getTotalGenerationCount());
   }
 
-  /**
-   * Test converter.
-   */
   @Test
   public void testConverter() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
@@ -123,9 +113,6 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(3L, BeneratorMonitor.INSTANCE.getTotalGenerationCount());
   }
 
-  /**
-   * Test validator.
-   */
   @Test
   public void testValidator() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
@@ -150,9 +137,6 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(3L, BeneratorMonitor.INSTANCE.getTotalGenerationCount());
   }
 
-  /**
-   * Test array.
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Test
   public void testArray() {
@@ -176,9 +160,6 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(42, array2[1]);
   }
 
-  /**
-   * Test generate page size 2.
-   */
   @Test
   public void testGeneratePageSize2() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
@@ -201,9 +182,6 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(4L, BeneratorMonitor.INSTANCE.getTotalGenerationCount());
   }
 
-  /**
-   * Test generate page size 0.
-   */
   @Test
   public void testGeneratePageSize0() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
@@ -223,9 +201,6 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(4L, BeneratorMonitor.INSTANCE.getTotalGenerationCount());
   }
 
-  /**
-   * Test simple sub generate.
-   */
   @Test
   public void testSimpleSubGenerate() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
@@ -239,7 +214,7 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     statement.execute(context);
     assertEquals(3, outerConsumer.startConsumingCount.get());
     assertEquals(0, outerConsumer.closeCount.get());
-    ConsumerMock innerConsumer = ConsumerMock.instances.get(2);
+    ConsumerMock innerConsumer = ConsumerMock.getInstance(2);
     assertEquals(6, innerConsumer.startConsumingCount.get());
     assertTrue(innerConsumer.flushCount.get() > 0);
     assertEquals(0, outerConsumer.closeCount.get());
@@ -247,9 +222,6 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(9L, BeneratorMonitor.INSTANCE.getTotalGenerationCount());
   }
 
-  /**
-   * Test sub generate life cycle.
-   */
   @Test
   public void testSubGenerateLifeCycle() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
@@ -261,22 +233,19 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
             "</generate>"
     );
     statement.execute(context);
-    ConsumerMock innerConsumer = ConsumerMock.instances.get(0);
-    assertEquals(6, innerConsumer.products.size());
-    assertEquals(1, ((Entity) innerConsumer.products.get(0)).get("x"));
-    assertEquals(2, ((Entity) innerConsumer.products.get(1)).get("x"));
-    assertEquals(1, ((Entity) innerConsumer.products.get(2)).get("x"));
-    assertEquals(2, ((Entity) innerConsumer.products.get(3)).get("x"));
-    assertEquals(1, ((Entity) innerConsumer.products.get(4)).get("x"));
-    assertEquals(2, ((Entity) innerConsumer.products.get(5)).get("x"));
+    ConsumerMock innerConsumer = ConsumerMock.getInstance(0);
+    assertEquals(6, innerConsumer.getProducts().size());
+    assertEquals(1, ((Entity) innerConsumer.getProducts().get(0)).get("x"));
+    assertEquals(2, ((Entity) innerConsumer.getProducts().get(1)).get("x"));
+    assertEquals(1, ((Entity) innerConsumer.getProducts().get(2)).get("x"));
+    assertEquals(2, ((Entity) innerConsumer.getProducts().get(3)).get("x"));
+    assertEquals(1, ((Entity) innerConsumer.getProducts().get(4)).get("x"));
+    assertEquals(2, ((Entity) innerConsumer.getProducts().get(5)).get("x"));
     assertTrue(innerConsumer.flushCount.get() > 0);
     assertTrue(innerConsumer.closeCount.get() > 0);
     assertEquals(9L, BeneratorMonitor.INSTANCE.getTotalGenerationCount());
   }
 
-  /**
-   * Test sub generate page size 2.
-   */
   @Test
   public void testSubGeneratePageSize2() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
@@ -313,9 +282,6 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(10L, BeneratorMonitor.INSTANCE.getTotalGenerationCount());
   }
 
-  /**
-   * Test sub generate page size 0.
-   */
   @Test
   public void testSubGeneratePageSize0() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
@@ -343,9 +309,7 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(4L, BeneratorMonitor.INSTANCE.getTotalGenerationCount());
   }
 
-  /**
-   * Tests a sub loop that derives its loop length from a parent attribute.
-   */
+  /** Tests a sub loop that derives its loop length from a parent attribute. */
   @Test
   public void testSubGenerateParentRef() {
     Statement statement = parse(
@@ -357,20 +321,18 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     context.setGlobal("cons", consumer);
     statement.execute(context);
     assertEquals(9, consumer.startConsumingCount.get());
-    assertOuter(1, consumer.products.get(0));
-    assertEquals(createEntity("inner"), consumer.products.get(1));
-    assertOuter(2, consumer.products.get(2));
-    assertEquals(createEntity("inner"), consumer.products.get(3));
-    assertEquals(createEntity("inner"), consumer.products.get(4));
-    assertOuter(3, consumer.products.get(5));
-    assertEquals(createEntity("inner"), consumer.products.get(6));
-    assertEquals(createEntity("inner"), consumer.products.get(7));
-    assertEquals(createEntity("inner"), consumer.products.get(8));
+    assertOuter(1, consumer.getProducts().get(0));
+    assertEquals(createEntity("inner"), consumer.getProducts().get(1));
+    assertOuter(2, consumer.getProducts().get(2));
+    assertEquals(createEntity("inner"), consumer.getProducts().get(3));
+    assertEquals(createEntity("inner"), consumer.getProducts().get(4));
+    assertOuter(3, consumer.getProducts().get(5));
+    assertEquals(createEntity("inner"), consumer.getProducts().get(6));
+    assertEquals(createEntity("inner"), consumer.getProducts().get(7));
+    assertEquals(createEntity("inner"), consumer.getProducts().get(8));
   }
 
-  /**
-   * Tests a combination of variable and attribute with the same name.
-   */
+  /** Tests a combination of variable and attribute with the same name. */
   @Test
   public void testVariableOfSameNameAsAttribute() {
     Statement statement = parse(
@@ -382,9 +344,9 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     context.setGlobal("cons", consumer);
     statement.execute(context);
     assertEquals(3, consumer.startConsumingCount.get());
-    assertOuter(2, consumer.products.get(0));
-    assertOuter(3, consumer.products.get(1));
-    assertOuter(4, consumer.products.get(2));
+    assertOuter(2, consumer.getProducts().get(0));
+    assertOuter(3, consumer.getProducts().get(1));
+    assertOuter(4, consumer.getProducts().get(2));
   }
 
   private static void assertOuter(int n, Object object) {
@@ -394,9 +356,7 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(n, ((Integer) entity.get("n")).intValue());
   }
 
-  /**
-   * Tests the nesting of an &lt;execute&gt; element within a &lt;generate&gt; element
-   */
+  /** Tests the nesting of an &lt;execute&gt; element within a &lt;generate&gt; element */
   @Test
   public void testSubExecute() {
     Statement statement = parse(
@@ -411,9 +371,7 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(2, bean.lastValue);
   }
 
-  /**
-   * Tests iterating an {@link EntitySource}
-   */
+  /** Tests iterating an {@link EntitySource} */
   @Test
   public void testIterate() {
     Statement statement = parse("<iterate type='Person' source='personSource' consumer='cons' />");
@@ -423,13 +381,11 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     ConsumerMock consumer = new ConsumerMock(true);
     context.setGlobal("cons", consumer);
     statement.execute(context);
-    assertEquals(2, consumer.products.size());
-    assertEquals(source.createPersons(), consumer.products);
+    assertEquals(2, consumer.getProducts().size());
+    assertEquals(source.createPersons(), consumer.getProducts());
   }
 
-  /**
-   * Tests pure {@link Entity} generation
-   */
+  /** Tests pure {@link Entity} generation */
   @Test
   public void testGenerate() {
     Statement statement = parse("<generate type='Person' count='2' consumer='cons' />");
@@ -440,9 +396,6 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(2, consumer.finishConsumingCount.get());
   }
 
-  /**
-   * Tests DB update
-   */
   @Test
   public void testDBUpdate() {
     // create DB
@@ -481,9 +434,6 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     }
   }
 
-  /**
-   * Test generate with offset.
-   */
   @Test
   public void testGenerateWithOffset() {
     Statement statement = parse(
@@ -494,14 +444,11 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     context.setGlobal("cons", consumer);
     statement.execute(context);
     assertEquals(3, consumer.startConsumingCount.get());
-    assertArrayEquals(new Object[] {3}, (Object[]) consumer.products.get(0));
-    assertArrayEquals(new Object[] {4}, (Object[]) consumer.products.get(1));
-    assertArrayEquals(new Object[] {5}, (Object[]) consumer.products.get(2));
+    assertArrayEquals(new Object[] {3}, (Object[]) consumer.getProducts().get(0));
+    assertArrayEquals(new Object[] {4}, (Object[]) consumer.getProducts().get(1));
+    assertArrayEquals(new Object[] {5}, (Object[]) consumer.getProducts().get(2));
   }
 
-  /**
-   * Test iterate with offset.
-   */
   @Test
   public void testIterateWithOffset() {
     Generator<Integer[]> source = new SequenceTestGenerator<>(
@@ -516,14 +463,11 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     context.setGlobal("cons", consumer);
     statement.execute(context);
     assertEquals(3, consumer.startConsumingCount.get());
-    assertArrayEquals(new Object[] {3}, (Object[]) consumer.products.get(0));
-    assertArrayEquals(new Object[] {4}, (Object[]) consumer.products.get(1));
-    assertArrayEquals(new Object[] {5}, (Object[]) consumer.products.get(2));
+    assertArrayEquals(new Object[] {3}, (Object[]) consumer.getProducts().get(0));
+    assertArrayEquals(new Object[] {4}, (Object[]) consumer.getProducts().get(1));
+    assertArrayEquals(new Object[] {5}, (Object[]) consumer.getProducts().get(2));
   }
 
-  /**
-   * Test scope with attributes.
-   */
   @Test
   public void testScopeWithAttributes() {
     Statement statement = parse(
@@ -543,19 +487,16 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     context.setGlobal("cons", consumer);
     statement.execute(context);
     assertEquals(8, consumer.startConsumingCount.get());
-    assertComponents((Entity) consumer.products.get(0), "slash", 1, "a", 1, "b", 1, "c", 1, "def", 1);
-    assertComponents((Entity) consumer.products.get(1), "slash", 2, "a", 2, "b", 2, "c", 2, "def", 2);
-    assertComponents((Entity) consumer.products.get(2), "slash", 3, "a", 3, "b", 1, "c", 1, "def", 1);
-    assertComponents((Entity) consumer.products.get(3), "slash", 4, "a", 4, "b", 2, "c", 2, "def", 2);
-    assertComponents((Entity) consumer.products.get(4), "slash", 5, "a", 1, "b", 1, "c", 1, "def", 1);
-    assertComponents((Entity) consumer.products.get(5), "slash", 6, "a", 2, "b", 2, "c", 2, "def", 2);
-    assertComponents((Entity) consumer.products.get(6), "slash", 7, "a", 3, "b", 1, "c", 1, "def", 1);
-    assertComponents((Entity) consumer.products.get(7), "slash", 8, "a", 4, "b", 2, "c", 2, "def", 2);
+    assertComponents((Entity) consumer.getProducts().get(0), "slash", 1, "a", 1, "b", 1, "c", 1, "def", 1);
+    assertComponents((Entity) consumer.getProducts().get(1), "slash", 2, "a", 2, "b", 2, "c", 2, "def", 2);
+    assertComponents((Entity) consumer.getProducts().get(2), "slash", 3, "a", 3, "b", 1, "c", 1, "def", 1);
+    assertComponents((Entity) consumer.getProducts().get(3), "slash", 4, "a", 4, "b", 2, "c", 2, "def", 2);
+    assertComponents((Entity) consumer.getProducts().get(4), "slash", 5, "a", 1, "b", 1, "c", 1, "def", 1);
+    assertComponents((Entity) consumer.getProducts().get(5), "slash", 6, "a", 2, "b", 2, "c", 2, "def", 2);
+    assertComponents((Entity) consumer.getProducts().get(6), "slash", 7, "a", 3, "b", 1, "c", 1, "def", 1);
+    assertComponents((Entity) consumer.getProducts().get(7), "slash", 8, "a", 4, "b", 2, "c", 2, "def", 2);
   }
 
-  /**
-   * Test scope with variables.
-   */
   @Test
   public void testScopeWithVariables() {
     Statement statement = parse(
@@ -582,19 +523,16 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     context.setGlobal("cons", consumer);
     statement.execute(context);
     assertEquals(8, consumer.startConsumingCount.get());
-    assertComponents((Entity) consumer.products.get(0), "slash", 1, "a", 1, "b", 1, "c", 1, "def", 1);
-    assertComponents((Entity) consumer.products.get(1), "slash", 2, "a", 2, "b", 2, "c", 2, "def", 2);
-    assertComponents((Entity) consumer.products.get(2), "slash", 3, "a", 3, "b", 1, "c", 1, "def", 1);
-    assertComponents((Entity) consumer.products.get(3), "slash", 4, "a", 4, "b", 2, "c", 2, "def", 2);
-    assertComponents((Entity) consumer.products.get(4), "slash", 5, "a", 1, "b", 1, "c", 1, "def", 1);
-    assertComponents((Entity) consumer.products.get(5), "slash", 6, "a", 2, "b", 2, "c", 2, "def", 2);
-    assertComponents((Entity) consumer.products.get(6), "slash", 7, "a", 3, "b", 1, "c", 1, "def", 1);
-    assertComponents((Entity) consumer.products.get(7), "slash", 8, "a", 4, "b", 2, "c", 2, "def", 2);
+    assertComponents((Entity) consumer.getProducts().get(0), "slash", 1, "a", 1, "b", 1, "c", 1, "def", 1);
+    assertComponents((Entity) consumer.getProducts().get(1), "slash", 2, "a", 2, "b", 2, "c", 2, "def", 2);
+    assertComponents((Entity) consumer.getProducts().get(2), "slash", 3, "a", 3, "b", 1, "c", 1, "def", 1);
+    assertComponents((Entity) consumer.getProducts().get(3), "slash", 4, "a", 4, "b", 2, "c", 2, "def", 2);
+    assertComponents((Entity) consumer.getProducts().get(4), "slash", 5, "a", 1, "b", 1, "c", 1, "def", 1);
+    assertComponents((Entity) consumer.getProducts().get(5), "slash", 6, "a", 2, "b", 2, "c", 2, "def", 2);
+    assertComponents((Entity) consumer.getProducts().get(6), "slash", 7, "a", 3, "b", 1, "c", 1, "def", 1);
+    assertComponents((Entity) consumer.getProducts().get(7), "slash", 8, "a", 4, "b", 2, "c", 2, "def", 2);
   }
 
-  /**
-   * Test id ignored.
-   */
   @Test
   public void testIdIgnored() {
     Statement statement = parse(
@@ -607,13 +545,10 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     statement.execute(context);
     assertEquals(3, consumer.startConsumingCount.get());
     for (int i = 0; i < 3; i++) {
-      assertNull(((Entity) consumer.products.get(0)).get("id"));
+      assertNull(((Entity) consumer.getProducts().get(0)).get("id"));
     }
   }
 
-  /**
-   * Test attribute ignored.
-   */
   @Test
   public void testAttributeIgnored() {
     Statement statement = parse(
@@ -626,13 +561,10 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     statement.execute(context);
     assertEquals(3, consumer.startConsumingCount.get());
     for (int i = 0; i < 3; i++) {
-      assertNull(((Entity) consumer.products.get(0)).get("att"));
+      assertNull(((Entity) consumer.getProducts().get(0)).get("att"));
     }
   }
 
-  /**
-   * Test reference ignored.
-   */
   @Test
   public void testReferenceIgnored() {
     Statement statement = parse(
@@ -646,7 +578,7 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     statement.execute(context);
     assertEquals(3, consumer.startConsumingCount.get());
     for (int i = 0; i < 3; i++) {
-      assertNull(((Entity) consumer.products.get(0)).get("ref"));
+      assertNull(((Entity) consumer.getProducts().get(0)).get("ref"));
     }
   }
 

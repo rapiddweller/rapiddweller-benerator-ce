@@ -36,15 +36,11 @@ import java.math.BigDecimal;
 /**
  * Tests the {@link RepeatSequence}.<br/><br/>
  * Created: 12.02.2010 12:28:43
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class RepeatSequenceTest extends GeneratorTest {
 
-  /**
-   * Test create sequence.
-   */
   @Test
   public void testCreateSequence() {
     RepeatSequence sequence = createSequence122333();
@@ -53,9 +49,6 @@ public class RepeatSequenceTest extends GeneratorTest {
     expectGeneratedSequence(generator, 1, 2, 2, 3, 3, 3).withCeasedAvailability();
   }
 
-  /**
-   * Test apply to.
-   */
   @Test
   public void testApplyTo() {
     Generator<Integer> source = new SequenceTestGenerator<>(1, 2, 3);

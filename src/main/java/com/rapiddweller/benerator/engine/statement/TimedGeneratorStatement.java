@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -73,8 +73,10 @@ public class TimedGeneratorStatement extends StatementProxy {
       if (dc == 0) {
         logger.info("No data created for '{}' setup", name);
       } else if (dt > 0) {
-        logger.info("Created {} data sets from '{}' setup in {} ({}/s)",
-            dc, name, elapsedTimeFormatter.convert(dt), dc * 1000 / dt);
+        if (logger.isInfoEnabled()) {
+          logger.info("Created {} data sets from '{}' setup in {} ({}/s)",
+              dc, name, elapsedTimeFormatter.convert(dt), dc * 1000 / dt);
+        }
       } else {
         logger.info("Created {} '{}' data set(s)", dc, name);
       }

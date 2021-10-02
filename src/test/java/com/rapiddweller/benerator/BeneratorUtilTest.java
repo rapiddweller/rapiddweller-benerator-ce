@@ -48,11 +48,6 @@ public class BeneratorUtilTest {
   }
 
   @Test
-  public void testLogConfig() {
-    BeneratorUtil.logConfig("Test");
-  }
-
-  @Test
   public void getCpuAndMemInfo() {
     int availableProcessors = Runtime.getRuntime().availableProcessors();
     assertTrue(BeneratorUtil.getCpuAndMemInfo().startsWith(availableProcessors + " cores"));

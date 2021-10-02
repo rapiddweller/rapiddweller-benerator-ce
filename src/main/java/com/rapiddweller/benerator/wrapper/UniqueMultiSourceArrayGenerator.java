@@ -31,48 +31,31 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.ArrayUtil;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 
 import java.util.List;
 
 /**
  * Creates arrays of unique combinations of the output of other generators.
  * Each array element is filled from an own generator,
- * each used generator is supposed to generate unique values itself.<br/>
- * <br/>
+ * each used generator is supposed to generate unique values itself.<br/><br/>
  * Created: 17.11.2007 13:37:37
- *
  * @param <S> the type parameter
  * @author Volker Bergmann
  */
 public class UniqueMultiSourceArrayGenerator<S> extends MultiGeneratorWrapper<S, S[]> {
-
-  private static final Logger logger = LoggerFactory.getLogger(UniqueMultiSourceArrayGenerator.class);
 
   private final Class<S> componentType;
   private Object[] buffer;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Initializes the generator to an array of source generators
-   *
-   * @param componentType the component type
-   * @param sources       the sources
-   */
+  /** Initializes the generator to an array of source generators */
   @SuppressWarnings("unchecked")
   public UniqueMultiSourceArrayGenerator(Class<S> componentType, Generator<? extends S>... sources) {
     super(ArrayUtil.arrayType(componentType), sources);
     this.componentType = componentType;
   }
 
-  /**
-   * Instantiates a new Unique multi source array generator.
-   *
-   * @param componentType the component type
-   * @param sources       the sources
-   */
   @SuppressWarnings("unchecked")
   public UniqueMultiSourceArrayGenerator(Class<S> componentType, List<Generator<? extends S>> sources) {
     super(ArrayUtil.arrayType(componentType), sources);
@@ -89,7 +72,7 @@ public class UniqueMultiSourceArrayGenerator<S> extends MultiGeneratorWrapper<S,
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   private void init() {
-    if (sources.size() == 0) {
+    if (sources.isEmpty()) {
       throw new InvalidGeneratorSetupException("source", "is null");
     }
     buffer = ArrayUtil.newInstance(componentType, sources.size());
@@ -115,7 +98,7 @@ public class UniqueMultiSourceArrayGenerator<S> extends MultiGeneratorWrapper<S,
     S[] result = ArrayUtil.copyOfRange(buffer, 0, buffer.length, componentType);
     fetchNextArrayItem(buffer.length - 1);
     if (logger.isDebugEnabled()) {
-      logger.debug("generated: " + ArrayFormat.format(result));
+      logger.debug("generated: {}", ArrayFormat.format(result));
     }
     return wrapper.wrap(result);
   }

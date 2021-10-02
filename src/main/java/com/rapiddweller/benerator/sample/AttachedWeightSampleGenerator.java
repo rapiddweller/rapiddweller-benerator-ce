@@ -48,7 +48,7 @@ import java.util.List;
 public class AttachedWeightSampleGenerator<E> extends AbstractSampleGenerator<E> implements WeightedGenerator<E> {
 
   /** Keeps the Sample information */
-  final List<WeightedSample<? extends E>> samples = new ArrayList<>();
+  final List<WeightedSample<E>> samples = new ArrayList<>();
 
   /** Generator for choosing a List index of the sample list */
   private final WeightedLongGenerator indexGenerator = new WeightedLongGenerator(0, 0, 1, new SampleWeightFunction());
@@ -77,15 +77,15 @@ public class AttachedWeightSampleGenerator<E> extends AbstractSampleGenerator<E>
 
   // samples property ------------------------------------------------------------------------------------------------
 
-  public List<WeightedSample<? extends E>> getSamples() {
+  public List<WeightedSample<E>> getSamples() {
     return samples;
   }
 
   /** Sets the sample list to the specified weighted values */
   @SafeVarargs
-  public final void setSamples(WeightedSample<? extends E>... samples) {
+  public final void setSamples(WeightedSample<E>... samples) {
     this.samples.clear();
-    for (WeightedSample<? extends E> sample : samples) {
+    for (WeightedSample<E> sample : samples) {
       addSample(sample);
     }
   }
@@ -102,12 +102,12 @@ public class AttachedWeightSampleGenerator<E> extends AbstractSampleGenerator<E>
 
   /** Adds weighted values to the sample list */
   public <T extends E> void addSample(T value, double weight) {
-    addSample(new WeightedSample<E>(value, weight));
+    addSample(new WeightedSample<>(value, weight));
     totalWeight += weight;
   }
 
   /** Adds a weighted value to the sample list */
-  public void addSample(WeightedSample<? extends E> sample) {
+  public void addSample(WeightedSample<E> sample) {
     samples.add(sample);
     totalWeight += sample.getWeight();
   }
@@ -117,7 +117,7 @@ public class AttachedWeightSampleGenerator<E> extends AbstractSampleGenerator<E>
   /** Adds an unweighted value to the sample list */
   @Override
   public <T extends E> void addValue(T value) {
-    samples.add(new WeightedSample<E>(value, 1));
+    samples.add(new WeightedSample<>(value, 1));
     totalWeight += 1;
   }
 
@@ -131,7 +131,7 @@ public class AttachedWeightSampleGenerator<E> extends AbstractSampleGenerator<E>
   @SuppressWarnings("unchecked")
   @Override
   public Class<E> getGeneratedType() {
-    if (samples.size() == 0) {
+    if (samples.isEmpty()) {
       return (Class<E>) String.class;
     }
     return (Class<E>) samples.get(0).getClass();
@@ -141,7 +141,7 @@ public class AttachedWeightSampleGenerator<E> extends AbstractSampleGenerator<E>
   @Override
   public void init(GeneratorContext context) {
     normalize();
-    if (samples.size() > 0) {
+    if (!samples.isEmpty()) {
       indexGenerator.setMax((long) (samples.size() - 1));
       indexGenerator.init(context);
     }
@@ -151,7 +151,7 @@ public class AttachedWeightSampleGenerator<E> extends AbstractSampleGenerator<E>
   @Override
   public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
     assertInitialized();
-    if (samples.size() == 0) {
+    if (samples.isEmpty()) {
       return null;
     }
     int index = indexGenerator.generate().intValue();
@@ -193,7 +193,7 @@ public class AttachedWeightSampleGenerator<E> extends AbstractSampleGenerator<E>
   /** Weight function that evaluates the weights that are stored in the sample list. */
   class SampleWeightFunction extends AbstractWeightFunction {
 
-    /** @see WeightFunction#value(double) */
+    /** @see com.rapiddweller.benerator.distribution.WeightFunction#value(double) */
     @Override
     public double value(double param) {
       return samples.get((int) param).getWeight();

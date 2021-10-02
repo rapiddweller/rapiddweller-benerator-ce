@@ -27,7 +27,6 @@
 package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.BeneratorConstants;
-import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.MessageHolder;

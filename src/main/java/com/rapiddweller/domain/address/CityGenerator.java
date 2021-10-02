@@ -81,7 +81,7 @@ public class CityGenerator extends AbstractDatasetGenerator<City>
   @Override
   protected WeightedGenerator<City> createGeneratorForAtomicDataset(Dataset dataset) {
     IndividualWeightSampleGenerator<City> generator =
-        new IndividualWeightSampleGenerator<City>(City.class,
+        new IndividualWeightSampleGenerator<>(City.class,
             (IndividualWeight) new FeatureWeight("population"));
     Country country = Country.getInstance(dataset.getName());
     country.checkCities();

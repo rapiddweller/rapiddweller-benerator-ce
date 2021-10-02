@@ -91,7 +91,7 @@ public class DatasetUtil {
   public static String[] getDataFiles(String filenamePattern, String datasetName, String nesting) {
     Dataset dataset = getDataset(nesting, datasetName);
     ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
-    if (dataset.allAtomicSubSets().size() == 0) {
+    if (dataset.allAtomicSubSets().isEmpty()) {
       String filename = filenameOfDataset(datasetName, filenamePattern);
       if (IOUtil.isURIAvailable(filename)) {
         builder.add(filename);
@@ -142,12 +142,7 @@ public class DatasetUtil {
   // private helpers -------------------------------------------------------------------------------------------------
 
   private static Dataset getDataset(String type, String name, Map<String, Dataset> sets) {
-    Dataset dataset = sets.get(name);
-    if (dataset == null) {
-      dataset = new Dataset(type, name);
-      sets.put(name, dataset);
-    }
-    return dataset;
+    return sets.computeIfAbsent(name, k -> new Dataset(type, name));
   }
 
   private static synchronized Map<String, Dataset> parseDatasetTypeConfig(String nesting) {

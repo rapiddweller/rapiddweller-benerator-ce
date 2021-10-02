@@ -96,13 +96,12 @@ import java.util.Set;
 /**
  * Maps Java annotations to descriptor objects.<br/><br/>
  * Created: 29.04.2010 06:59:02
- *
  * @author Volker Bergmann
  * @since 0.6.1
  */
 public class AnnotationMapper extends DefaultDescriptorProvider {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationMapper.class);
+  private static final Logger logger = LoggerFactory.getLogger(AnnotationMapper.class);
 
   private static final Set<String> STANDARD_METHODS;
 
@@ -130,12 +129,6 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
 
   private final ArrayTypeGeneratorFactory arrayTypeGeneratorFactory;
 
-  /**
-   * Instantiates a new Annotation mapper.
-   *
-   * @param dataModel    the data model
-   * @param pathResolver the path resolver
-   */
   public AnnotationMapper(DataModel dataModel, PathResolver pathResolver) {
     super("anno", dataModel);
     this.dataModel = dataModel;
@@ -157,12 +150,6 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     return false;
   }
 
-  /**
-   * Explicitly mapped annotation boolean.
-   *
-   * @param annotation the annotation
-   * @return the boolean
-   */
   protected static boolean explicitlyMappedAnnotation(Annotation annotation) {
     return !EXPLICITLY_MAPPED_ANNOTATIONS
         .contains(annotation.annotationType());
@@ -418,13 +405,8 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     return value;
   }
 
-  /**
-   * Parses @{@link Database} and @{@link Bean} annotations attached to a class,
-   * initializes the related objects and puts them into the {@link BeneratorContext}
-   *
-   * @param annotations the annotations
-   * @param context     the context
-   */
+  /** Parses @{@link Database} and @{@link Bean} annotations attached to a class,
+   *  initializes the related objects and puts them into the {@link BeneratorContext}.*/
   public void parseClassAnnotations(Annotation[] annotations, BeneratorContext context) {
     for (Annotation annotation : annotations) {
       if (annotation instanceof Database) {
@@ -435,14 +417,8 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     }
   }
 
-  /**
-   * scans test class attributes for attributes with @{@link Source} annotation
-   * and initializes them with a value from the referred source object
-   *
-   * @param attribute the attribute
-   * @param context   the context
-   * @return the generator
-   */
+  /** Scans test class attributes for attributes with @{@link Source} annotation
+   *  and initializes them with a value from the referred source object. */
   public Generator<?> createAndInitAttributeGenerator(Field attribute, BeneratorContext context) {
     Source sourceAnno = attribute.getAnnotation(Source.class);
     if (sourceAnno != null) {
@@ -452,24 +428,10 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     }
   }
 
-  /**
-   * Create and init method params generator generator.
-   *
-   * @param testMethod the test method
-   * @param context    the context
-   * @return the generator
-   */
   public Generator<Object[]> createAndInitMethodParamsGenerator(Method testMethod, BeneratorContext context) {
     return createAndInitMethodParamsGenerator(new MethodDescriptor(testMethod), context);
   }
 
-  /**
-   * Create and init method params generator generator.
-   *
-   * @param testMethod the test method
-   * @param context    the context
-   * @return the generator
-   */
   public Generator<Object[]> createAndInitMethodParamsGenerator(MethodDescriptor testMethod, BeneratorContext context) {
     applyMethodGeneratorFactory(testMethod, context);
 
@@ -492,24 +454,11 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     return generator;
   }
 
-  /**
-   * Create method params type array type descriptor.
-   *
-   * @param testMethod the test method
-   * @return the array type descriptor
-   */
   protected ArrayTypeDescriptor createMethodParamsType(MethodDescriptor testMethod) {
     ArrayTypeDescriptor nativeType = createNativeParamsDescriptor(testMethod);
     return createConfiguredParamsDescriptor(testMethod, nativeType);
   }
 
-  /**
-   * Create method params instance descriptor instance descriptor.
-   *
-   * @param testMethod the test method
-   * @param type       the type
-   * @return the instance descriptor
-   */
   protected InstanceDescriptor createMethodParamsInstanceDescriptor(
       MethodDescriptor testMethod, ArrayTypeDescriptor type) {
     InstanceDescriptor instance = new InstanceDescriptor(testMethod.getName(), this, type);
@@ -519,12 +468,6 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     return instance;
   }
 
-  /**
-   * Create native params descriptor array type descriptor.
-   *
-   * @param testMethod the test method
-   * @return the array type descriptor
-   */
   protected ArrayTypeDescriptor createNativeParamsDescriptor(MethodDescriptor testMethod) {
     ArrayTypeDescriptor nativeDescriptor = new ArrayTypeDescriptor(testMethod.getName() + "_native", this);
     Class<?>[] paramTypes = testMethod.getParameterTypes();
@@ -571,12 +514,6 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     return type;
   }
 
-  /**
-   * Apply method generator factory.
-   *
-   * @param testMethod the test method
-   * @param context    the context
-   */
   protected void applyMethodGeneratorFactory(MethodDescriptor testMethod, BeneratorContext context) {
     boolean configured = applyGeneratorFactory(testMethod.getAnnotations(), context);
     if (!configured) {
@@ -592,13 +529,6 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     }
   }
 
-  /**
-   * Apply generator factory boolean.
-   *
-   * @param annotations the annotations
-   * @param context     the context
-   * @return the boolean
-   */
   protected boolean applyGeneratorFactory(Annotation[] annotations, BeneratorContext context) {
     boolean configured = false;
     for (Annotation annotation : annotations) {
@@ -624,12 +554,6 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     return configured;
   }
 
-  /**
-   * Apply method defaults provider.
-   *
-   * @param testMethod the test method
-   * @param context    the context
-   */
   protected void applyMethodDefaultsProvider(MethodDescriptor testMethod, BeneratorContext context) {
     // check if the method is annotated with an individual DefaultsProvider...
     boolean configured = applyDefaultsProvider(testMethod.getAnnotations(), context);
@@ -668,15 +592,6 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     return generator;
   }
 
-  /**
-   * Create generator generator.
-   *
-   * @param type       the type
-   * @param testMethod the test method
-   * @param uniqueness the uniqueness
-   * @param context    the context
-   * @return the generator
-   */
   @SuppressWarnings("unchecked")
   protected Generator<Object[]> createGenerator(ArrayTypeDescriptor type,
                                                 MethodDescriptor testMethod, Uniqueness uniqueness, BeneratorContext context) {
@@ -721,7 +636,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
           return generator;
       }
   */
-  private <T> void mapParamAnnotation(Annotation annotation, InstanceDescriptor descriptor, Class<?> testClass) {
+  private void mapParamAnnotation(Annotation annotation, InstanceDescriptor descriptor, Class<?> testClass) {
     Package annoPackage = annotation.annotationType().getPackage();
     if (BENERATOR_ANNO_PACKAGE.equals(annoPackage)) {
       mapBeneratorParamAnnotation(annotation, descriptor, testClass);
@@ -731,9 +646,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
   }
 
   private void mapBeneratorParamAnnotation(Annotation annotation, InstanceDescriptor instanceDescriptor, Class<?> testClass) {
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("mapDetails(" + annotation + ", " + instanceDescriptor + ")");
-    }
+    logger.debug("mapDetails({}, {})", annotation, instanceDescriptor);
     try {
       Class<?> annotationType = annotation.annotationType();
       if (annotationType == Unique.class) {

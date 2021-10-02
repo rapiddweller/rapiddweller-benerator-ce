@@ -71,8 +71,7 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
 
   private static final String ORG = "/com/rapiddweller/domain/organization/";
 
-  protected static final Map<String, Generator<String>> locationGenerators =
-      new HashMap<>();
+  protected static final Map<String, Generator<String>> locationGenerators = new HashMap<>();
 
   protected boolean sector;
   protected boolean location;
@@ -345,40 +344,39 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
     }
 
     private void createAndInitLocationGenerator(String datasetName) {
-      locationGenerator = locationGenerators.get(datasetName);
-      if (locationGenerator == null) {
-        double nullQuota = 0.8;
-        Country country = Country.getInstance(datasetName);
-        Generator<String> locationBaseGen;
-        if (location && country != null) {
-          try {
-            Generator<String> cityGen =
-                WrapperFactory.applyConverter(
-                    new CityGenerator(country.getIsoCode()),
-                    new PropertyAccessConverter("name"),
-                    new NameNormalizer());
-            if (DatasetUtil.getDataset(DatasetUtil.REGION_NESTING,
-                datasetName).isAtomic()) {
-              locationBaseGen =
-                  new AlternativeGenerator<>(String.class,
-                      new ConstantGenerator<>(
-                          country.getLocalName()),
-                      cityGen);
-            } else {
-              locationBaseGen = cityGen;
-            }
-          } catch (Exception e) {
-            logger.info("Cannot create location generator: {}", e.getMessage());
-            locationBaseGen = new ConstantGenerator<>(null);
+      this.locationGenerator = locationGenerators.computeIfAbsent(
+          datasetName, k -> createLocationGenerator(datasetName));
+    }
+
+    private Generator<String> createLocationGenerator(String datasetName) {
+      double nullQuota = 0.8;
+      Country country = Country.getInstance(datasetName);
+      Generator<String> locationBaseGen;
+      if (location && country != null) {
+        try {
+          Generator<String> cityGen =
+              WrapperFactory.applyConverter(
+                  new CityGenerator(country.getIsoCode()),
+                  new PropertyAccessConverter("name"),
+                  new NameNormalizer());
+          if (DatasetUtil.getDataset(DatasetUtil.REGION_NESTING, datasetName).isAtomic()) {
+            locationBaseGen =
+                new AlternativeGenerator<>(String.class,
+                    new ConstantGenerator<>(country.getLocalName()),
+                    cityGen);
+          } else {
+            locationBaseGen = cityGen;
           }
-        } else {
+        } catch (Exception e) {
+          logger.info("Cannot create location generator: {}", e.getMessage());
           locationBaseGen = new ConstantGenerator<>(null);
         }
-        locationGenerator =
-            WrapperFactory.injectNulls(locationBaseGen, nullQuota);
-        locationGenerator.init(context);
-        locationGenerators.put(datasetName, locationGenerator);
+      } else {
+        locationBaseGen = new ConstantGenerator<>(null);
       }
+      Generator<String> result = WrapperFactory.injectNulls(locationBaseGen, nullQuota);
+      result.init(context);
+      return result;
     }
 
   }

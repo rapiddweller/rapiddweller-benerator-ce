@@ -30,6 +30,8 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
 import com.rapiddweller.model.data.Uniqueness;
 
+import java.util.Locale;
+
 /**
  * Generates 13-digits EAN codes.<br/>
  * <br/>
@@ -124,7 +126,7 @@ public class EAN13Generator extends NonNullGeneratorWrapper<String, String> {
     assertNotInitialized();
     Uniqueness uniqueness = Uniqueness.instance(unique, ordered);
     setSource(context.getGeneratorFactory()
-        .createRegexStringGenerator("[0-9]{12}", 12, 12, uniqueness));
+        .createRegexStringGenerator("[0-9]{12}", Locale.ENGLISH, 12, 12, uniqueness));
     super.init(context);
   }
 

@@ -50,9 +50,10 @@ public class SequenceUtil {
    *  associated number generator.
    *  @param sequence the {@link Sequence} to apply.
    *  @param source the generator which provides the source elements to be distributed. */
+  @SuppressWarnings("unchecked")
   public static <T> Generator<T> applySequenceDetached(Sequence sequence, Generator<T> source, boolean unique) {
     Assert.notNull(source, "source");
-    Generator<T> generator = new IndexBasedSampleGeneratorProxy<T>(source, sequence, unique);
+    Generator<T> generator = new IndexBasedSampleGeneratorProxy<>(source, sequence, unique);
     if (Entity.class.equals(generator.getGeneratedType())) {
       // Attention: When applying a distribution to an entity data import (eg. serving as a seed for anonymized data),
       // then an imported entity could first get manipulated by a generator and then served to another

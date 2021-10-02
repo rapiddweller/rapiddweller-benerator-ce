@@ -39,10 +39,8 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Generates a given name for a person.<br/>
- * <br/>
+ * Generates a given name for a person.<br/><br/>
  * Created: 09.06.2006 21:13:09
- *
  * @author Volker Bergmann
  * @since 0.1
  */
@@ -54,21 +52,12 @@ public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String>
   private static final Map<String, Generator<String>> defaultInstances =
       new HashMap<>();
 
-  /**
-   * Instantiates a new Given name generator.
-   */
   public GivenNameGenerator() {
     this(Locale.getDefault().getCountry(), Gender.MALE);
   }
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Given name generator.
-   *
-   * @param datasetName the dataset name
-   * @param gender      the gender
-   */
   public GivenNameGenerator(String datasetName, Gender gender) {
     this(datasetName,
         "/com/rapiddweller/dataset/region",
@@ -76,16 +65,7 @@ public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String>
         gender);
   }
 
-  /**
-   * Instantiates a new Given name generator.
-   *
-   * @param datasetName the dataset name
-   * @param nesting     the nesting
-   * @param baseName    the base name
-   * @param gender      the gender
-   */
-  public GivenNameGenerator(String datasetName, String nesting,
-                            String baseName, Gender gender) {
+  public GivenNameGenerator(String datasetName, String nesting, String baseName, Gender gender) {
     super(String.class, genderBaseName(baseName, gender) + "_{0}.csv",
         datasetName, nesting, true, Encodings.UTF_8);
     logger.debug(
@@ -93,23 +73,10 @@ public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String>
         datasetName, gender);
   }
 
-  /**
-   * Shared instance generator.
-   *
-   * @param datasetName the dataset name
-   * @param gender      the gender
-   * @return the generator
-   */
-  public static Generator<String> sharedInstance(String datasetName,
-                                                 Gender gender) {
+  public static Generator<String> sharedInstance(String datasetName, Gender gender) {
     String key = datasetName + '-' + gender;
-    Generator<String> instance = defaultInstances.get(key);
-    if (instance == null) {
-      instance = new SharedGenerator<>(
-          new GivenNameGenerator(datasetName, gender));
-      defaultInstances.put(key, instance);
-    }
-    return instance;
+    return defaultInstances.computeIfAbsent(key, k -> new SharedGenerator<>(
+          new GivenNameGenerator(datasetName, gender)));
   }
 
   // public methods --------------------------------------------------------------------------------------------------

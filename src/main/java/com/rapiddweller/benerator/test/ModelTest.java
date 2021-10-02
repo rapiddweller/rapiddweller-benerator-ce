@@ -60,7 +60,7 @@ public abstract class ModelTest {
 
   @Before
   public void setUpContextAndDescriptorProvider() {
-    this.context = (BeneratorRootContext) BeneratorFactory.getInstance().createRootContext(".");
+    this.context = BeneratorFactory.getInstance().createRootContext(".");
     this.context.importDefaults();
     this.dataModel = context.getDataModel();
     this.testDescriptorProvider = new DefaultDescriptorProvider("test", context.getDataModel());

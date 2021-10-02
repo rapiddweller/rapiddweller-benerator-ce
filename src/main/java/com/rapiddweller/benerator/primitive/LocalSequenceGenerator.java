@@ -39,18 +39,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Local implementation of an increment {@link Generator} that behaves like a database sequence.<br/>
- * <br/>
+ * Local implementation of an increment {@link Generator} that behaves like a database sequence.<br/><br/>
  * Created at 29.05.2009 19:35:27
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class LocalSequenceGenerator extends NonNullGeneratorProxy<Long> {
 
-  /**
-   * The Filename.
-   */
   static final String FILENAME = LocalSequenceGenerator.class.getSimpleName() + ".properties";
 
   private static final Map<String, IncrementalIdGenerator> MAP
@@ -64,47 +59,23 @@ public class LocalSequenceGenerator extends NonNullGeneratorProxy<Long> {
     init();
   }
 
-  /**
-   * Instantiates a new Local sequence generator.
-   */
   public LocalSequenceGenerator() {
     this("default");
   }
 
-  /**
-   * Instantiates a new Local sequence generator.
-   *
-   * @param name the name
-   */
   public LocalSequenceGenerator(String name) {
     this(name, true);
   }
 
-  /**
-   * Instantiates a new Local sequence generator.
-   *
-   * @param name   the name
-   * @param cached the cached
-   */
   public LocalSequenceGenerator(String name, boolean cached) {
     super(getOrCreateSource(name, 1));
     this.cached = cached;
   }
 
-  /**
-   * Is cached boolean.
-   *
-   * @return the boolean
-   */
   public boolean isCached() {
     return cached;
   }
 
-  /**
-   * Sets cached.
-   *
-   * @param cached the cached
-   */
   public void setCached(boolean cached) {
     this.cached = cached;
   }
@@ -133,46 +104,24 @@ public class LocalSequenceGenerator extends NonNullGeneratorProxy<Long> {
 
   // static methods --------------------------------------------------------------------------------------------------
 
-  /**
-   * Reset all.
-   */
   public static void resetAll() {
     FileUtil.deleteIfExists(new File(FILENAME));
     invalidateInstances();
   }
 
-  /**
-   * Invalidate instances.
-   */
   public static void invalidateInstances() {
     MAP.clear();
     init();
   }
 
-  /**
-   * Next long.
-   *
-   * @param sequenceName the sequence name
-   * @return the long
-   */
   public static Long next(String sequenceName) {
     return next(sequenceName, 1);
   }
 
-  /**
-   * Next long.
-   *
-   * @param sequenceName the sequence name
-   * @param min          the min
-   * @return the long
-   */
   public static Long next(String sequenceName, long min) {
     return getOrCreateSource(sequenceName, min).generate();
   }
 
-  /**
-   * Persist.
-   */
   public static void persist() {
     Map<String, String> values = new HashMap<>();
     for (Map.Entry<String, IncrementalIdGenerator> entry : MAP.entrySet()) {
@@ -201,12 +150,7 @@ public class LocalSequenceGenerator extends NonNullGeneratorProxy<Long> {
   }
 
   private static NonNullGenerator<Long> getOrCreateSource(String name, long min) {
-    IncrementalIdGenerator generator = MAP.get(name);
-    if (generator == null) {
-      generator = new IncrementalIdGenerator(min);
-      MAP.put(name, generator);
-    }
-    return generator;
+    return MAP.computeIfAbsent(name, k -> new IncrementalIdGenerator(min));
   }
 
 }

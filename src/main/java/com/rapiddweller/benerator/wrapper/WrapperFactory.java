@@ -115,7 +115,7 @@ public class WrapperFactory {
   @SuppressWarnings({"rawtypes"})
   public static Generator<String> createMessageGenerator(
       String pattern, int minLength, int maxLength, Generator... sources) {
-    SimpleMultiSourceArrayGenerator<Object> source = new SimpleMultiSourceArrayGenerator<Object>(
+    SimpleMultiSourceArrayGenerator<Object> source = new SimpleMultiSourceArrayGenerator<>(
         Object.class, sources);
     Converter converter = new MessageConverter(pattern, null);
     Generator<String> generator = WrapperFactory.applyConverter(source, converter);

@@ -100,6 +100,7 @@ public class SeedManager<E> {
       helper.addSample(entry.getKey(), entry.getValue().getWeight());
     }
     helper.init(null);
+    this.initialized = true;
   }
 
   public E randomAtom() {
@@ -110,12 +111,7 @@ public class SeedManager<E> {
   }
 
   public SeedManager<E> getSuccessor(E atom) {
-    SeedManager<E> result = successors.get(atom);
-    if (result == null) {
-      result = new SeedManager<>(generatedType, depth - 1);
-      successors.put(atom, result);
-    }
-    return result;
+    return successors.computeIfAbsent(atom, k -> new SeedManager<>(generatedType, depth - 1));
   }
 
   public void printState() {

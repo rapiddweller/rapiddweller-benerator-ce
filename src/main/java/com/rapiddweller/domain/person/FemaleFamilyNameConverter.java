@@ -38,10 +38,8 @@ import java.util.Map;
 
 /**
  * Can convert the male form of a family name to the female form by a suffix mapping.
- * This is used for generating names in some slavic languages.<br/>
- * <br/>
+ * This is used for generating names in some slavic languages.<br/><br/>
  * Created at 15.03.2009 18:06:55
- *
  * @author Volker Bergmann
  * @since 0.5.8
  */
@@ -52,18 +50,10 @@ public class FemaleFamilyNameConverter
       LoggerFactory.getLogger(FemaleFamilyNameConverter.class);
   private final String[][] mappings;
 
-  /**
-   * Instantiates a new Female family name converter.
-   */
   public FemaleFamilyNameConverter() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Female family name converter.
-   *
-   * @param datasetName the dataset name
-   */
   public FemaleFamilyNameConverter(String datasetName) {
     super(String.class, String.class);
     ArrayBuilder<String[]> builder = new ArrayBuilder<>(String[].class);
@@ -81,9 +71,7 @@ public class FemaleFamilyNameConverter
         }
       }
     } catch (Exception e) {
-      logger.debug(
-          "No female family name conversion defined for dataset '" +
-              datasetName + "'");
+      logger.debug("No female family name conversion defined for dataset '{}'", datasetName);
     }
     this.mappings = builder.toArray();
   }

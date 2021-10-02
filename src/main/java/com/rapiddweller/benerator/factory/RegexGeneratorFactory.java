@@ -48,6 +48,7 @@ import com.rapiddweller.format.regex.RegexString;
 import com.rapiddweller.format.regex.Sequence;
 import com.rapiddweller.model.data.Uniqueness;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -62,15 +63,15 @@ public class RegexGeneratorFactory {
   }
 
   public static NonNullGenerator<String> create(String pattern, GeneratorFactory factory) {
-    return create(pattern, 0, null, Uniqueness.NONE, factory);
+    return create(pattern, Locale.getDefault(), 0, null, Uniqueness.NONE, factory);
   }
 
-  public static NonNullGenerator<String> create(String pattern, int minLength, Integer maxLength,
+  public static NonNullGenerator<String> create(String pattern, Locale locale, int minLength, Integer maxLength,
                                                 Uniqueness uniqueness, GeneratorFactory factory) {
     if (pattern == null) {
       throw new IllegalArgumentException("Not a regular expression: null");
     }
-    RegexPart regex = new RegexParser().parseRegex(pattern);
+    RegexPart regex = new RegexParser(locale).parseRegex(pattern);
     return createFromObject(regex, minLength, maxLength, uniqueness, factory);
   }
 
@@ -165,7 +166,7 @@ public class RegexGeneratorFactory {
     GeneratorProvider<String> generatorProvider = () -> {
       final Generator[] altGens = createComponentGenerators(
           alternatives, maxLength, null, uniqueness, factory);
-      return new AlternativeGenerator<String>(String.class, altGens);
+      return new AlternativeGenerator<>(String.class, altGens);
     };
     return factory.createCompositeStringGenerator(generatorProvider, minCount, maxCount, uniqueness);
   }

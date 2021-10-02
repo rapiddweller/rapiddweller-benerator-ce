@@ -80,8 +80,7 @@ public class AddressGenerator extends CompositeGenerator<Address>
       logger.error("Error initializing members", e);
       Country fallBackCountry = Country.getFallback();
       if (!fallBackCountry.getIsoCode().equals(this.dataset)) {
-        logger.error("Cannot generate addresses for " + dataset +
-            ", falling back to " + fallBackCountry);
+        logger.error("Cannot generate addresses for {}, falling back to {}", dataset, fallBackCountry);
         setCountry(fallBackCountry);
         initMembers(context);
       } else {

@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.common.SyntaxError;
 import com.rapiddweller.script.Expression;
 
 import java.io.IOException;
@@ -37,7 +38,6 @@ import java.util.List;
 /**
  * 'While' loop statement.<br/><br/>
  * Created: 19.02.2010 09:15:11
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -45,38 +45,29 @@ public class WhileStatement extends ConditionStatement {
 
   private SequentialStatement statements;
 
-  /**
-   * Instantiates a new While statement.
-   *
-   * @param condition the condition
-   */
   public WhileStatement(Expression<Boolean> condition) {
     this(condition, new ArrayList<>());
   }
 
-  /**
-   * Instantiates a new While statement.
-   *
-   * @param condition  the condition
-   * @param statements the statements
-   */
   public WhileStatement(Expression<Boolean> condition, List<Statement> statements) {
     super(condition);
     setSubStatements(statements);
   }
 
-  /**
-   * Sets sub statements.
-   *
-   * @param statements the statements
-   */
   public void setSubStatements(List<Statement> statements) {
     this.statements = new SequentialStatement(statements);
   }
 
   @Override
   public boolean execute(BeneratorContext context) {
-    while (condition.evaluate(context)) {
+    while (true) {
+      Boolean evaluation = condition.evaluate(context);
+      if (evaluation == null) {
+        throw new SyntaxError("No condition in while statement", null);
+      }
+      if (!evaluation) {
+        break;
+      }
       if (!statements.execute(context)) {
         return false;
       }

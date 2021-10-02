@@ -36,18 +36,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Generates unique strings of fixed length.<br/>
- * <br/>
+ * Generates unique strings of fixed length.<br/><br/>
  * Created: 15.11.2007 14:07:49
- *
  * @author Volker Bergmann
  */
 public class UniqueFixedLengthStringGenerator extends NonNullGeneratorWrapper<int[], String> {
 
-  /**
-   * The constant DEFAULT_CHAR_SET.
-   */
-  public static final Set<Character> DEFAULT_CHAR_SET
+  private static final Set<Character> DEFAULT_CHAR_SET
       = CollectionUtil.toSet('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
   private static final int DEFAULT_LENGTH = 4;
   private static final boolean DEFAULT_ORDERED = false;
@@ -56,20 +51,10 @@ public class UniqueFixedLengthStringGenerator extends NonNullGeneratorWrapper<in
   private final int length;
   private final boolean ordered;
 
-  /**
-   * Instantiates a new Unique fixed length string generator.
-   */
   public UniqueFixedLengthStringGenerator() {
     this(DEFAULT_CHAR_SET, DEFAULT_LENGTH, DEFAULT_ORDERED);
   }
 
-  /**
-   * Instantiates a new Unique fixed length string generator.
-   *
-   * @param chars   the chars
-   * @param length  the length
-   * @param ordered the ordered
-   */
   public UniqueFixedLengthStringGenerator(Set<Character> chars, int length, boolean ordered) {
     super(null);
     this.digitSymbols = CollectionUtil.toCharArray(new TreeSet<>(chars));

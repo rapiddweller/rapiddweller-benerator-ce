@@ -34,7 +34,6 @@ import com.rapiddweller.common.bean.HashCodeBuilder;
 /**
  * Represents an address with phone numbers.<br/><br/>
  * Created: 11.06.2006 08:05:00
- *
  * @author Volker Bergmann
  * @since 0.1
  */
@@ -61,27 +60,10 @@ public class Address {
   private String co;
   private String poBox;
 
-  /**
-   * Instantiates a new Address.
-   */
   public Address() {
     this(null, null, null, null, null, null, null, null, null, null);
   }
 
-  /**
-   * Instantiates a new Address.
-   *
-   * @param street       the street
-   * @param houseNumber  the house number
-   * @param postalCode   the postal code
-   * @param city         the city
-   * @param state        the state
-   * @param country      the country
-   * @param privatePhone the private phone
-   * @param officePhone  the office phone
-   * @param mobilePhone  the mobile phone
-   * @param fax          the fax
-   */
   public Address(String street, String houseNumber, String postalCode,
                  City city, State state, Country country,
                  PhoneNumber privatePhone, PhoneNumber officePhone,
@@ -98,65 +80,31 @@ public class Address {
     this.fax = fax;
   }
 
-  /**
-   * Gets organization.
-   *
-   * @return the organization
-   */
   public String getOrganization() {
     return organization;
   }
 
-  /**
-   * Sets organization.
-   *
-   * @param organization the organization
-   */
   public void setOrganization(String organization) {
     this.organization = organization;
   }
 
-  /**
-   * Gets street.
-   *
-   * @return the street
-   */
   public String getStreet() {
     return street;
   }
 
-  /**
-   * Sets street.
-   *
-   * @param street the street
-   */
   public void setStreet(String street) {
     this.street = street;
   }
 
-  /**
-   * Gets house number.
-   *
-   * @return the house number
-   */
   public String getHouseNumber() {
     return houseNumber;
   }
 
-  /**
-   * Sets house number.
-   *
-   * @param houseNumber the house number
-   */
   public void setHouseNumber(String houseNumber) {
     this.houseNumber = houseNumber;
   }
 
-  /**
-   * Gets zip code.
-   *
-   * @return the zip code
-   */
+  /** @deprecated Property 'zipCode' is deprecated and replaced with 'postalCode' */
   @Deprecated
   public String getZipCode() {
     escalator.escalate(
@@ -165,11 +113,7 @@ public class Address {
     return getPostalCode();
   }
 
-  /**
-   * Sets zip code.
-   *
-   * @param zipCode the zip code
-   */
+  /** @deprecated Property 'zipCode' is deprecated and replaced with 'postalCode' */
   @Deprecated
   public void setZipCode(String zipCode) {
     escalator.escalate(
@@ -178,149 +122,72 @@ public class Address {
     setPostalCode(zipCode);
   }
 
-  /**
-   * Gets postal code.
-   *
-   * @return the postal code
-   */
   public String getPostalCode() {
     return postalCode;
   }
 
-  /**
-   * Sets postal code.
-   *
-   * @param postalCode the postal code
-   */
   public void setPostalCode(String postalCode) {
     this.postalCode = postalCode;
   }
 
-  /**
-   * Gets city.
-   *
-   * @return the city
-   */
   public City getCity() {
     return city;
   }
 
-  /**
-   * Sets city.
-   *
-   * @param city the city
-   */
   public void setCity(City city) {
     this.city = city;
   }
 
-  /**
-   * Gets state.
-   *
-   * @return the state
-   */
   public State getState() {
     return state;
   }
 
-  /**
-   * Sets state.
-   *
-   * @param state the state
-   */
   public void setState(State state) {
     this.state = state;
   }
 
-  /**
-   * Gets country.
-   *
-   * @return the country
-   */
   public Country getCountry() {
     return country;
   }
 
-  /**
-   * Sets country.
-   *
-   * @param country the country
-   */
   public void setCountry(Country country) {
     this.country = country;
   }
 
-  /**
-   * Gets private phone.
-   *
-   * @return the private phone
-   */
   public PhoneNumber getPrivatePhone() {
     return privatePhone;
   }
 
-  /**
-   * Sets private phone.
-   *
-   * @param privatePhone the private phone
-   */
   public void setPrivatePhone(PhoneNumber privatePhone) {
     this.privatePhone = privatePhone;
   }
 
-  /**
-   * Gets office phone.
-   *
-   * @return the office phone
-   */
   public PhoneNumber getOfficePhone() {
     return officePhone;
   }
 
-  /**
-   * Sets office phone.
-   *
-   * @param officePhone the office phone
-   */
   public void setOfficePhone(PhoneNumber officePhone) {
     this.officePhone = officePhone;
   }
 
-  /**
-   * Gets mobile phone.
-   *
-   * @return the mobile phone
-   */
   public PhoneNumber getMobilePhone() {
     return mobilePhone;
   }
 
-  /**
-   * Sets mobile phone.
-   *
-   * @param mobilePhone the mobile phone
-   */
   public void setMobilePhone(PhoneNumber mobilePhone) {
     this.mobilePhone = mobilePhone;
   }
 
-  /**
-   * Gets fax.
-   *
-   * @return the fax
-   */
   public PhoneNumber getFax() {
     return fax;
   }
 
-  /**
-   * Sets fax.
-   *
-   * @param fax the fax
-   */
   public void setFax(PhoneNumber fax) {
     this.fax = fax;
   }
+
+
+  // Override methods from java.lang.Object --------------------------------------------------------------------------
 
   @Override
   public String toString() {

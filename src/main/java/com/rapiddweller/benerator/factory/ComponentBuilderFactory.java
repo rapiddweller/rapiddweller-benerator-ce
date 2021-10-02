@@ -71,6 +71,8 @@ import com.rapiddweller.script.Expression;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
@@ -93,10 +95,11 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
   // factory methods for component generators ------------------------------------------------------------------------
 
+  @Nullable
   public static ComponentBuilder<?> createComponentBuilder(
       ComponentDescriptor descriptor, Uniqueness ownerUniqueness, boolean iterationMode, BeneratorContext context) {
     logger.debug("createComponentBuilder({})", descriptor.getName());
-    ComponentBuilder<?> result = null;
+    ComponentBuilder<?> result;
     if (descriptor instanceof ArrayElementDescriptor) {
       result = createPartBuilder(descriptor, ownerUniqueness, iterationMode, context);
     } else if (descriptor instanceof PartDescriptor) {
@@ -155,7 +158,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       generator = createMultiplicityWrapper(part, generator, context);
       result = builderFromGenerator(generator, part, context);
     }
-    logger.debug("Created {}", result);
+    logger.debug("Created part {}", result);
     return result;
   }
 
@@ -163,12 +166,11 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     ComplexTypeDescriptor typeDescriptor = (ComplexTypeDescriptor) part.getTypeDescriptor();
     List<GenerationStep<Entity>> components =
         GenerationStepFactory.createMutatingGenerationSteps(typeDescriptor, true, Uniqueness.NONE, context);
-    return new PartModifier(part.getName(), components, typeDescriptor.getScope(), context);
+    return new PartModifier(part.getName(), components, typeDescriptor.getScope());
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   static ComponentBuilder<?> createReferenceBuilder(ReferenceDescriptor descriptor, BeneratorContext context) {
-    SimpleTypeDescriptor typeDescriptor = (SimpleTypeDescriptor) descriptor.getTypeDescriptor();
 
     // check uniqueness
     boolean unique = DescriptorUtil.isUnique(descriptor, context);
@@ -179,16 +181,11 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       return builderFromGenerator(createNullGenerator(descriptor, context), descriptor, context);
     }
 
-    Generator<?> generator = DescriptorUtil.getGeneratorByName(typeDescriptor, context);
-    if (generator == null) {
-      generator = SimpleTypeGeneratorFactory.createScriptGenerator(typeDescriptor);
-    }
-    if (generator == null) {
-      generator = SimpleTypeGeneratorFactory.createConstantGenerator(typeDescriptor, context);
-    }
-    if (generator == null) {
-      generator = SimpleTypeGeneratorFactory.createValuesGenerator(typeDescriptor, uniqueness, context);
-    }
+    // checking explicit ref configuration
+    SimpleTypeDescriptor typeDescriptor = (SimpleTypeDescriptor) descriptor.getTypeDescriptor();
+    Generator<?> generator = createExplicitRefBuilder(context, uniqueness, typeDescriptor);
+
+    // if no explicit ref config has been found yet, it must be an implicit one, using a 'source' spec...
 
     // get distribution
     Distribution distribution = FactoryUtil.getDistribution(
@@ -196,49 +193,12 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
     // check source
     if (generator == null) {
-      // check target type
-      String targetTypeName = descriptor.getTargetType();
-      ComplexTypeDescriptor targetType = (ComplexTypeDescriptor) context.getDataModel().getTypeDescriptor(targetTypeName);
-      if (targetType == null) {
-        throw new ConfigurationError("Type not defined: " + targetTypeName);
-      }
-
-      // check targetComponent
-      String targetComponent = descriptor.getTargetComponent();
-
-      // check source
-      String sourceName = typeDescriptor.getSource();
-      if (sourceName == null) {
-        throw new ConfigurationError("'source' is not set for " + descriptor);
-      }
-      Object sourceObject = context.get(sourceName);
-      if (sourceObject instanceof StorageSystem) {
-        StorageSystem sourceSystem = (StorageSystem) sourceObject;
-        String selector = typeDescriptor.getSelector();
-        String subSelector = typeDescriptor.getSubSelector();
-        boolean subSelect = !StringUtil.isEmpty(subSelector);
-        String selectorToUse = (subSelect ? subSelector : selector);
-        if (isIndividualSelector(selectorToUse)) {
-          generator = new DataSourceGenerator(sourceSystem.query(selectorToUse, true, context));
-        } else {
-          generator = new DataSourceGenerator(sourceSystem.queryEntityIds(
-              targetTypeName, selectorToUse, context)); // TODO v0.7.2 query by targetComponent
-          if (selectorToUse == null && distribution == null) {
-            if (context.isDefaultOneToOne()) {
-              distribution = new ExpandSequence();
-            } else {
-              distribution = SequenceManager.RANDOM_SEQUENCE;
-            }
-          }
-        }
-        if (subSelect) {
-          generator = WrapperFactory.applyHeadCycler(generator);
-        }
+      if (typeDescriptor.getSource() != null) {
+        generator = createRefBuilderFromSource(descriptor, distribution, context);
       } else {
-        throw new ConfigurationError("Not a supported source type: " + sourceName);
+        throw new ConfigurationError("No source or explicit configuration for ref " + descriptor);
       }
     }
-
 
     // apply distribution if necessary
     if (distribution != null) {
@@ -247,13 +207,90 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
     // check multiplicity
     generator = ComponentBuilderFactory.createMultiplicityWrapper(descriptor, generator, context);
-    if (logger.isDebugEnabled()) {
-      logger.debug("Created " + generator);
-    }
+    logger.debug("Created  reference builder {}", generator);
 
     // check 'cyclic' config
     generator = DescriptorUtil.wrapWithProxy(generator, typeDescriptor);
     return builderFromGenerator(generator, descriptor, context);
+  }
+
+  @Nullable
+  private static Generator<?> createExplicitRefBuilder(BeneratorContext context, Uniqueness uniqueness, SimpleTypeDescriptor typeDescriptor) {
+    Generator<?> generator = DescriptorUtil.getGeneratorByName(typeDescriptor, context);
+    if (generator == null) {
+      generator = TypeGeneratorFactory.createScriptGenerator(typeDescriptor);
+    }
+    if (generator == null) {
+      generator = SimpleTypeGeneratorFactory.createConstantGenerator(typeDescriptor, context);
+    }
+    if (generator == null) {
+      generator = SimpleTypeGeneratorFactory.createValuesGenerator(typeDescriptor, uniqueness, context);
+    }
+    return generator;
+  }
+
+  private static Generator<?> createRefBuilderFromSource(
+      ReferenceDescriptor descriptor, Distribution distribution, BeneratorContext context) {
+
+    // check target type
+    String targetTypeName = descriptor.getTargetType();
+    ComplexTypeDescriptor targetType = (ComplexTypeDescriptor) context.getDataModel().getTypeDescriptor(targetTypeName);
+    if (targetType == null) {
+      throw new ConfigurationError("Type not defined: " + targetTypeName);
+    }
+
+    // check source
+    SimpleTypeDescriptor typeDescriptor = (SimpleTypeDescriptor) descriptor.getTypeDescriptor();
+    String sourceName = typeDescriptor.getSource();
+    if (sourceName == null) {
+      throw new ConfigurationError("'source' is not set for " + descriptor);
+    }
+
+    // analyse source object
+    Object sourceObject = context.get(sourceName);
+    if (sourceObject instanceof StorageSystem) {
+      return createRefBuilderForStorageSystem(descriptor, (StorageSystem) sourceObject, distribution, context);
+    } else {
+      throw new ConfigurationError("Not a supported source type: " + sourceName);
+    }
+  }
+
+  @NotNull @SuppressWarnings({"rawtypes", "unchecked"})
+  private static Generator<?> createRefBuilderForStorageSystem(
+      ReferenceDescriptor descriptor, StorageSystem sourceSystem, Distribution distribution,
+      BeneratorContext context) {
+    Generator<?> generator;
+    Distribution fallbackDist = null;
+    SimpleTypeDescriptor typeDescriptor = (SimpleTypeDescriptor) descriptor.getTypeDescriptor();
+    String selector = typeDescriptor.getSelector();
+    String subSelector = typeDescriptor.getSubSelector();
+    boolean subSelect = !StringUtil.isEmpty(subSelector);
+    String selectorToUse = (subSelect ? subSelector : selector);
+    if (isIndividualSelector(selectorToUse)) {
+      generator = new DataSourceGenerator(sourceSystem.query(selectorToUse, true, context));
+    } else {
+      String targetTypeName = descriptor.getTargetType();
+      generator = new DataSourceGenerator(sourceSystem.queryEntityIds(
+          targetTypeName, selectorToUse, context)); // TODO v0.7.2 query by targetComponent
+      if (selectorToUse == null && distribution == null) {
+        // if no explicit distribution was specified, then choose a default
+        if (context.isDefaultOneToOne()) {
+          fallbackDist = new ExpandSequence();
+        } else {
+          fallbackDist = SequenceManager.RANDOM_SEQUENCE;
+        }
+      }
+    }
+
+    // apply wrappers
+    if (subSelect) {
+      generator = WrapperFactory.applyHeadCycler(generator);
+    }
+    if (fallbackDist != null) {
+      boolean unique = DescriptorUtil.isUnique(descriptor, context);
+      generator = new DistributingGenerator(generator, fallbackDist, unique);
+    }
+    return generator;
   }
 
   /** Helper method to check for selectors of individual fields like "select x from y" or
@@ -303,7 +340,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
   static ComponentBuilder<?> createIdBuilder(IdDescriptor id, Uniqueness ownerUniqueness, BeneratorContext context) {
     Generator<?> generator = createSingleInstanceGenerator(id, Uniqueness.ORDERED, context);
     if (generator != null) {
-      logger.debug("Created {}", generator);
+      logger.debug("Created id builder {}", generator);
     }
     return builderFromGenerator(generator, id, context);
   }
@@ -339,7 +376,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       long defaultMinCount = (instance.getTypeDescriptor() instanceof ComplexTypeDescriptor ? 0 : 1);
       Generator<Long> longCountGenerator = DescriptorUtil.createDynamicCountGenerator(instance, defaultMinCount, 1L, true, context);
       if (longCountGenerator instanceof ConstantGenerator
-          && longCountGenerator.generate(new ProductWrapper<Long>()).unwrap() == 1L) {
+          && longCountGenerator.generate(new ProductWrapper<>()).unwrap() == 1L) {
         return generator;
       } else {
         NonNullGenerator<Integer> countGenerator = WrapperFactory.asNonNullGenerator(

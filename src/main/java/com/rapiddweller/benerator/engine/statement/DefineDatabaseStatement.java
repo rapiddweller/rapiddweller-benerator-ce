@@ -39,10 +39,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 /**
- * Executes a &lt;database/&gt; from an XML descriptor.<br/>
- * <br/>
+ * Executes a &lt;database/&gt; from an XML descriptor.<br/><br/>
  * Created at 23.07.2009 07:13:02
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -69,28 +67,6 @@ public class DefineDatabaseStatement implements Statement {
   private final Expression<Boolean> acceptUnknownColumnTypes;
   private final ResourceManager resourceManager;
 
-  /**
-   * Instantiates a new Define database statement.
-   *
-   * @param id                       the id
-   * @param environment              the environment
-   * @param url                      the url
-   * @param driver                   the driver
-   * @param user                     the user
-   * @param password                 the password
-   * @param catalog                  the catalog
-   * @param schema                   the schema
-   * @param metaCache                the meta cache
-   * @param tableFilter              the table filter
-   * @param includeTables            the include tables
-   * @param excludeTables            the exclude tables
-   * @param batch                    the batch
-   * @param fetchSize                the fetch size
-   * @param readOnly                 the read only
-   * @param lazy                     the lazy
-   * @param acceptUnknownColumnTypes the accept unknown column types
-   * @param resourceManager          the resource manager
-   */
   public DefineDatabaseStatement(Expression<String> id, Expression<String> environment,
                                  Expression<String> url, Expression<String> driver, Expression<String> user, Expression<String> password,
                                  Expression<String> catalog, Expression<String> schema, Expression<Boolean> metaCache,
@@ -123,9 +99,7 @@ public class DefineDatabaseStatement implements Statement {
   @Override
   @SuppressWarnings("deprecation")
   public boolean execute(BeneratorContext context) {
-    if (logger.isDebugEnabled()) {
-      logger.debug("Instantiating database with id '" + id + "'");
-    }
+    logger.debug("Instantiating database with id '{}'", id);
     String idValue = id.evaluate(context);
 
     // DB config is based on the (optional) environment setting

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -32,7 +32,6 @@ import com.rapiddweller.benerator.archetype.ArchetypeManager;
 import com.rapiddweller.benerator.archetype.MavenFolderLayout;
 import com.rapiddweller.benerator.main.DBSnapshotTool;
 import com.rapiddweller.common.ArrayUtil;
-import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.common.ui.FileOperation;
 import com.rapiddweller.common.ui.FileTypeSupport;
@@ -84,20 +83,15 @@ import java.util.Map;
 import java.util.zip.ZipException;
 
 /**
- * Lets the user enter benerator project data and
- * calls the ArchetypeBuilder for creating a new benerator project.<br/>
- * <br/>
+ * Lets the user enter Benerator project data and
+ * calls the ArchetypeBuilder for creating a new benerator project.<br/><br/>
  * Created at 17.07.2008 08:00:00
- *
  * @author Volker Bergmann
  * @since 0.5.6
  */
 @SuppressWarnings("rawtypes")
 public class CreateProjectPanel extends JPanel {
 
-  /**
-   * The Logger.
-   */
   static final Logger logger = LoggerFactory.getLogger(CreateProjectPanel.class);
 
   private static final String SETUP_FILE = "setup.ser";
@@ -106,76 +100,23 @@ public class CreateProjectPanel extends JPanel {
 
   private static final int WIDE = 45;
 
-  /**
-   * The Setup.
-   */
   final Setup setup;
-  /**
-   * The 18 n.
-   */
   final I18NSupport i18n;
-  /**
-   * The Folder field.
-   */
   PropertyFileField folderField;
-  /**
-   * The Create button.
-   */
   JButton createButton;
-  /**
-   * The Archetype field.
-   */
   JComboBox archetypeField;
-  /**
-   * The Db driver type field.
-   */
   JComboBox dbDriverTypeField;
-  /**
-   * The Db url field.
-   */
   JTextField dbUrlField;
-  /**
-   * The Db driver field.
-   */
   JTextField dbDriverField;
-  /**
-   * The Db user field.
-   */
   JTextField dbUserField;
-  /**
-   * The Db schema field.
-   */
   JTextField dbSchemaField;
-  /**
-   * The Db catalog field.
-   */
   JTextField dbCatalogField;
-  /**
-   * The Db password field.
-   */
   JTextField dbPasswordField;
-  /**
-   * The Db snapshot field.
-   */
   JComboBox dbSnapshotField;
-  /**
-   * The Test button.
-   */
   JButton testButton;
-  /**
-   * The Create tables field.
-   */
   PropertyFileField createTablesField;
-  /**
-   * The Drop tables field.
-   */
   PropertyFileField dropTablesField;
 
-  /**
-   * Instantiates a new Create project panel.
-   *
-   * @param i18n the 18 n
-   */
   public CreateProjectPanel(I18NSupport i18n) {
     super(new BorderLayout());
     this.setup = loadOrCreateSetup();
@@ -291,11 +232,8 @@ public class CreateProjectPanel extends JPanel {
     return pane;
   }
 
-  /**
-   * Returns an ImageIcon, or null if the path was invalid.
-   */
-  protected ImageIcon createImageIcon(String path,
-                                      String description) {
+  /** Returns an ImageIcon, or null if the path was invalid. */
+  protected ImageIcon createImageIcon(String path, String description) {
     java.net.URL imgURL = getClass().getResource(path);
     if (imgURL != null) {
       return new ImageIcon(imgURL, description);
@@ -352,9 +290,6 @@ public class CreateProjectPanel extends JPanel {
     return button;
   }
 
-  /**
-   * Exit.
-   */
   public void exit() {
     saveSetup();
     JFrame frame = (JFrame) SwingUtilities.getRoot(this);
@@ -362,11 +297,6 @@ public class CreateProjectPanel extends JPanel {
     System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
   }
 
-  /**
-   * Show errors.
-   *
-   * @param errors the errors
-   */
   void showErrors(Object... errors) {
     String[] messages = new String[errors.length];
     for (int i = 0; i < errors.length; i++) {
@@ -383,9 +313,6 @@ public class CreateProjectPanel extends JPanel {
   }
 
 
-  /**
-   * The type Archetype listener.
-   */
   class ArchetypeListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -411,17 +338,13 @@ public class CreateProjectPanel extends JPanel {
     }
   }
 
-  /**
-   * The type Creator.
-   */
   class Creator implements Runnable {
 
     @Override
     public void run() {
       try {
-        logger.info("Creating project " + setup.getProjectName() + " " +
-            "of type " + setup.getArchetype().getId() + " " +
-            "in " + setup.getProjectFolder());
+        logger.info("Creating project {} of type {} in {}",
+            setup.getProjectName(), setup.getArchetype().getId(), setup.getProjectFolder());
         createButton.setEnabled(false);
         String taskName = i18n.format("message.project.create", setup.getProjectName());
         String message = i18n.getString("message.project.initializing");
@@ -448,9 +371,6 @@ public class CreateProjectPanel extends JPanel {
 
   }
 
-  /**
-   * The type Test connection listener.
-   */
   class TestConnectionListener implements ActionListener {
 
     @Override
@@ -466,42 +386,25 @@ public class CreateProjectPanel extends JPanel {
   }
 
   private static Setup loadOrCreateSetup() {
-    ObjectInputStream in = null;
-    try {
-      in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(SETUP_FILE)));
+    try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(SETUP_FILE)))) {
       return (Setup) in.readObject();
     } catch (Exception e) {
       // if no serialized setup exists or loading fails, simply create a new one
       return new Setup();
-    } finally {
-      IOUtil.close(in);
     }
   }
 
   private void saveSetup() {
-    ObjectOutputStream out = null;
-    try {
-      out = new ObjectOutputStream(new FileOutputStream(SETUP_FILE));
+    try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(SETUP_FILE))) {
       out.writeObject(setup);
     } catch (Exception e) {
       e.printStackTrace();
-    } finally {
-      IOUtil.close(out);
     }
   }
 
-  /**
-   * Gets create button.
-   *
-   * @return the create button
-   */
   public JButton getCreateButton() {
     return createButton;
   }
-
-  /**
-   * The type Archetype renderer.
-   */
 
   static class ArchetypeRenderer extends DefaultListCellRenderer {
 
@@ -520,12 +423,7 @@ public class CreateProjectPanel extends JPanel {
     }
 
     private Icon getIcon(Archetype archetype) {
-      Icon icon = icons.get(archetype);
-      if (icon == null) {
-        icon = new ImageIcon(archetype.getIconURL());
-        icons.put(archetype, icon);
-      }
-      return icon;
+      return icons.computeIfAbsent(archetype, k -> new ImageIcon(archetype.getIconURL()));
     }
   }
 

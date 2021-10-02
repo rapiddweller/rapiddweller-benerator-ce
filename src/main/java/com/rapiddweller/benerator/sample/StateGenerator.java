@@ -42,10 +42,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Generates states as configured by a state machine.<br/>
- * <br/>
+ * Generates states as configured by a state machine.<br/><br/>
  * Created at 17.07.2009 05:41:47
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -58,40 +56,22 @@ public class StateGenerator<E> extends UnsafeNonNullGenerator<E> {
 
   // initialization --------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new State generator.
-   */
   public StateGenerator() {
     this((String) null);
   }
 
-  /**
-   * Instantiates a new State generator.
-   *
-   * @param transitionSpec the transition spec
-   */
   @SuppressWarnings("unchecked")
   public StateGenerator(String transitionSpec) {
     this((Class<E>) Object.class);
     setTransitions(transitionSpec);
   }
 
-  /**
-   * Instantiates a new State generator.
-   *
-   * @param generatedType the generated type
-   */
   public StateGenerator(Class<E> generatedType) {
     this.generatedType = generatedType;
     this.transitionsGenerators = new HashMap<>();
     this.nextState = null;
   }
 
-  /**
-   * Sets transitions.
-   *
-   * @param transitionSpec the transition spec
-   */
   @SuppressWarnings("unchecked")
   public void setTransitions(String transitionSpec) {
     if (StringUtil.isEmpty(transitionSpec)) {
@@ -108,19 +88,9 @@ public class StateGenerator<E> extends UnsafeNonNullGenerator<E> {
     }
   }
 
-  /**
-   * Add transition.
-   *
-   * @param from   the from
-   * @param to     the to
-   * @param weight the weight
-   */
   public void addTransition(E from, E to, double weight) {
-    AttachedWeightSampleGenerator<E> subGenerator = transitionsGenerators.get(from);
-    if (subGenerator == null) {
-      subGenerator = new AttachedWeightSampleGenerator<>(generatedType);
-      transitionsGenerators.put(from, subGenerator);
-    }
+    AttachedWeightSampleGenerator<E> subGenerator =
+        transitionsGenerators.computeIfAbsent(from, k -> new AttachedWeightSampleGenerator<>(generatedType));
     subGenerator.addSample(to, weight);
   }
 
@@ -170,11 +140,6 @@ public class StateGenerator<E> extends UnsafeNonNullGenerator<E> {
     ProductWrapper<E> wrapper = transitionGenerator.generate(getResultWrapper());
     nextState = (wrapper != null ? wrapper.unwrap() : null);
     super.reset();
-  }
-
-  @Override
-  public void close() {
-    super.close();
   }
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------

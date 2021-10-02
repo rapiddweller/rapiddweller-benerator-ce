@@ -38,28 +38,20 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the {@link AttachedWeightSampleGenerator}.<br/>
- * <br/>
+ * Tests the {@link AttachedWeightSampleGenerator}.<br/><br/>
  * Created: 07.06.2006 21:59:02
- *
  * @author Volker Bergmann
  */
 public class AttachedWeightSampleGeneratorTest extends GeneratorTest {
 
   private static final Logger logger = LoggerFactory.getLogger(AttachedWeightSampleGeneratorTest.class);
 
-  /**
-   * Test instantiation.
-   */
   @Test
   public void testInstantiation() {
     new AttachedWeightSampleGenerator<>(Integer.class);
     new AttachedWeightSampleGenerator<>(String.class);
   }
 
-  /**
-   * Test distribution.
-   */
   @Test
   @SuppressWarnings("unchecked")
   public void testDistribution() {
@@ -77,7 +69,7 @@ public class AttachedWeightSampleGeneratorTest extends GeneratorTest {
     for (int i = 0; i < n; i++) {
       sampleCount[g.generate(new ProductWrapper<>()).unwrap()]++;
     }
-    List<WeightedSample<? extends Integer>> samples2 = g.getSamples();
+    List<WeightedSample<Integer>> samples2 = g.getSamples();
     for (int i = 0; i < sampleCount.length; i++) {
       int count = sampleCount[i];
       double measuredProbability = (float) count / n;

@@ -37,7 +37,6 @@ import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -47,15 +46,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Iterates an Excel sheet and maps its rows to {@link Entity} instances.<br/>
- * <br/>
+ * Iterates an Excel sheet and maps its rows to {@link Entity} instances.<br/><br/>
  * Created at 27.01.2009 21:38:31
- *
  * @author Volker Bergmann
  * @since 0.5.8
  */
-public class AllSheetsXLSEntityIterator
-    implements DataIterator<Entity>, ContextAware {
+public class AllSheetsXLSEntityIterator implements DataIterator<Entity>, ContextAware {
 
   private final String uri;
 
@@ -75,63 +71,29 @@ public class AllSheetsXLSEntityIterator
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new All sheets xls entity iterator.
-   *
-   * @param uri the uri
-   * @throws IOException            the io exception
-   * @throws InvalidFormatException the invalid format exception
-   */
-  public AllSheetsXLSEntityIterator(String uri)
-      throws IOException, InvalidFormatException {
+  public AllSheetsXLSEntityIterator(String uri) throws IOException {
     this(uri, new NoOpConverter<>(), null, false);
   }
 
-  /**
-   * Instantiates a new All sheets xls entity iterator.
-   *
-   * @param uri              the uri
-   * @param preprocessor     the preprocessor
-   * @param entityDescriptor the entity descriptor
-   * @param formatted        the formatted
-   * @throws IOException the io exception
-   */
-  public AllSheetsXLSEntityIterator(String uri,
-                                    Converter<String, ?> preprocessor,
-                                    ComplexTypeDescriptor entityDescriptor,
-                                    boolean formatted)
+  public AllSheetsXLSEntityIterator(
+      String uri, Converter<String, ?> preprocessor, ComplexTypeDescriptor entityDescriptor, boolean formatted)
       throws IOException {
     this.uri = uri;
     this.preprocessor = preprocessor;
     this.entityDescriptor = entityDescriptor;
-    this.rowBased = (entityDescriptor != null &&
-        entityDescriptor.isRowBased() != null ?
-        entityDescriptor.isRowBased() : true);
+    this.rowBased = (entityDescriptor == null || entityDescriptor.isRowBased() == null || entityDescriptor.isRowBased());
     this.emptyMarker = (entityDescriptor != null &&
         entityDescriptor.getEmptyMarker() != null ?
         entityDescriptor.getEmptyMarker() : null);
-    this.workbook =
-        WorkbookFactory.create(IOUtil.getInputStreamForURI(uri));
+    this.workbook = WorkbookFactory.create(IOUtil.getInputStreamForURI(uri));
     this.sheetNo = -1;
     this.formatted = formatted;
   }
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Parse all list.
-   *
-   * @param uri          the uri
-   * @param preprocessor the preprocessor
-   * @param formatted    the formatted
-   * @return the list
-   * @throws IOException            the io exception
-   * @throws InvalidFormatException the invalid format exception
-   */
-  public static List<Entity> parseAll(String uri,
-                                      Converter<String, ?> preprocessor,
-                                      boolean formatted)
-      throws IOException, InvalidFormatException {
+  public static List<Entity> parseAll(String uri, Converter<String, ?> preprocessor, boolean formatted)
+      throws IOException {
     List<Entity> list = new ArrayList<>();
     AllSheetsXLSEntityIterator iterator =
         new AllSheetsXLSEntityIterator(uri, preprocessor, null,
@@ -144,11 +106,6 @@ public class AllSheetsXLSEntityIterator
     return list;
   }
 
-  /**
-   * Sets row based.
-   *
-   * @param rowBased the row based
-   */
   public void setRowBased(boolean rowBased) {
     this.rowBased = rowBased;
   }
@@ -156,11 +113,6 @@ public class AllSheetsXLSEntityIterator
 
   // ContextAware interface implementation ---------------------------------------------------------------------------
 
-  /**
-   * Gets uri.
-   *
-   * @return the uri
-   */
   public String getUri() {
     return uri;
   }

@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.util;
 
 import com.rapiddweller.common.Context;
+import com.rapiddweller.common.SyntaxError;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.util.DataIteratorProxy;
@@ -37,29 +38,15 @@ import java.util.Iterator;
 /**
  * {@link Iterator} proxy which filters its source's output with a (boolean) filter expression.<br/><br/>
  * Created: 08.03.2011 11:51:51
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.5.8
  */
 public class FilterExIterator<E> extends DataIteratorProxy<E> {
 
-  /**
-   * The Filter ex.
-   */
   final Expression<Boolean> filterEx;
-  /**
-   * The Context.
-   */
   final Context context;
 
-  /**
-   * Instantiates a new Filter ex iterator.
-   *
-   * @param source   the source
-   * @param filterEx the filter ex
-   * @param context  the context
-   */
   public FilterExIterator(DataIterator<E> source, Expression<Boolean> filterEx, Context context) {
     super(source);
     this.filterEx = filterEx;
@@ -72,7 +59,11 @@ public class FilterExIterator<E> extends DataIteratorProxy<E> {
     DataContainer<E> tmp;
     while ((tmp = super.next(wrapper)) != null) {
       context.set("_candidate", tmp.getData());
-      if (filterEx.evaluate(context)) {
+      Boolean evaluation = filterEx.evaluate(context);
+      if (evaluation == null) {
+        throw new SyntaxError("No filter expression", null);
+      }
+      if (evaluation) {
         return tmp;
       }
     }

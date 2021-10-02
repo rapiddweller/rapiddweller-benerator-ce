@@ -28,6 +28,7 @@ package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Before;
@@ -36,36 +37,29 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the {@link DbUnitEntityExporter}.<br/><br/>
  * Created: 05.11.2009 07:23:45
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class DbUnitEntityExporterTest extends ModelTest {
 
   private static final String FILENAME = "target/" + DbUnitEntityExporterTest.class.getName() + ".dbunit.xml";
+  private static final File FILE = new File(FILENAME);
   private Entity ALICE;
   private Entity BOB;
 
-  /**
-   * Sets up expected entities.
-   */
   @Before
   public void setUpExpectedEntities() {
     ALICE = createEntity("Person", "name", "Alice", "age", 23);
     BOB = createEntity("Person", "name", "Bob", "age", 34);
   }
 
-  /**
-   * Test.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void test() throws Exception {
     DbUnitEntityExporter exporter = new DbUnitEntityExporter(FILENAME);
@@ -80,29 +74,33 @@ public class DbUnitEntityExporterTest extends ModelTest {
     assertEquals(2, children.length);
     assertPerson(children[0], "Alice", 23);
     assertPerson(children[1], "Bob", 34);
-    FileUtil.deleteIfExists(new File(FILENAME));
+    FileUtil.deleteIfExists(FILE);
   }
 
-  /**
-   * Test closing twice.
-   */
   @Test
-  public void testClosingTwice() {
+  public void testClosingTwice() throws IOException {
     DbUnitEntityExporter exporter = new DbUnitEntityExporter(FILENAME);
     exporter.startProductConsumption(ALICE);
     exporter.finishProductConsumption(ALICE);
     exporter.close();
     exporter.close();
+    assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+        "<dataset>\n" +
+        "<Person name=\"Alice\" age=\"23\"/>\n" +
+        "</dataset>\n", IOUtil.getContentOfURI(FILENAME));
+    FileUtil.deleteIfExists(FILE);
   }
 
-  /**
-   * Test unused close.
-   */
   @Test
-  public void testUnusedClose() {
+  public void testUnusedClose() throws IOException {
     DbUnitEntityExporter exporter = new DbUnitEntityExporter(FILENAME);
     exporter.close();
+    assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+        "<dataset/>\n", IOUtil.getContentOfURI(FILENAME));
+    FileUtil.deleteIfExists(FILE);
   }
+
+  // helper method ---------------------------------------------------------------------------------------------------
 
   private static void assertPerson(Element element, String name, int age) {
     assertEquals("Person", element.getNodeName());

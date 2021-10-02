@@ -49,10 +49,8 @@ import java.util.List;
 
 /**
  * Iterates Entities in a CSV file.
- * When the property 'columns' is set, the CSV file is assumed to have no header row.<br/>
- * <br/>
+ * When the property 'columns' is set, the CSV file is assumed to have no header row.<br/><br/>
  * Created: 07.04.2008 09:49:08
- *
  * @author Volker Bergmann
  * @since 0.5.1
  */
@@ -86,8 +84,7 @@ public class CSVEntityIterator implements DataIterator<Entity>, Tabular {
     this.entityDescriptor = descriptor;
     this.initialized = false;
     this.expectingHeader = true;
-    this.rowBased = (descriptor != null && descriptor.isRowBased() != null ?
-        descriptor.isRowBased() : true);
+    this.rowBased = (descriptor == null || descriptor.isRowBased() == null || descriptor.isRowBased());
   }
 
   // properties ------------------------------------------------------------------------------------------------------
