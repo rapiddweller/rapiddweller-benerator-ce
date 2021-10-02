@@ -32,17 +32,12 @@ import com.rapiddweller.benerator.test.GeneratorTest;
 import org.junit.Test;
 
 /**
- * Tests the RepeatGeneratorProxy.<br/>
- * <br/>
+ * Tests the RepeatGeneratorProxy.<br/><br/>
  * Created: 01.09.2007 11:05:04
- *
  * @author Volker Bergmann
  */
 public class RepeatGeneratorProxyTest extends GeneratorTest {
 
-  /**
-   * Test non repeating.
-   */
   @Test
   public void testNonRepeating() {
     Generator<Integer> generator = new SequenceTestGenerator<>(1, 2);
@@ -51,9 +46,6 @@ public class RepeatGeneratorProxyTest extends GeneratorTest {
     expectGeneratedSequence(generator, 1, 2).withCeasedAvailability();
   }
 
-  /**
-   * Test one repetition.
-   */
   @Test
   public void testOneRepetition() {
     Generator<Integer> generator = new SequenceTestGenerator<>(1, 2);
