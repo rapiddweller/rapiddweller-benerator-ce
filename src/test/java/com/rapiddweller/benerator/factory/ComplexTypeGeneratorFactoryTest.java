@@ -61,7 +61,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
   @Before
   public void setUpPersons() {
     alice = createEntity("person", "name", "Alice", "age", "23");
-    otto = createEntity("person", "name", "Otto", "age", "89");
+    otto = createEntity("person", "name", "Otto", "age", "39");
   }
 
   // testing generator feature ---------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
     ComplexTypeDescriptor type = createComplexType("person");
     type.setSource(PERSON_CSV);
     Generator<Entity> generator = createGenerator(type);
-    context.set("ottos_age", 89);
+    context.set("ottos_age", 39);
     generator.init(context);
     expectGeneratedSequence(generator, alice, otto).withCeasedAvailability();
   }
@@ -96,7 +96,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
     ComplexTypeDescriptor type = createComplexType("person");
     type.setSource("{filepath}");
     Generator<Entity> generator = createGenerator(type);
-    context.set("ottos_age", 89);
+    context.set("ottos_age", 39);
     generator.init(context);
     expectGeneratedSequence(generator, alice, otto).withCeasedAvailability();
   }
@@ -117,7 +117,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
     type.setSource(PERSON_CSV);
     type.setCyclic(true);
     Generator<Entity> generator = createGenerator(type);
-    context.set("ottos_age", 89);
+    context.set("ottos_age", 39);
     generator.init(context);
     expectGeneratedSequence(generator, alice, otto, alice).withContinuedAvailability();
   }
@@ -128,7 +128,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
     type.setSource(PERSON_CSV);
     type.setDetailValue("distribution", "weighted[age]");
     Generator<Entity> generator = createGenerator(type);
-    context.set("ottos_age", "89");
+    context.set("ottos_age", "39");
     generator.init(context);
     expectGeneratedSet(generator, 20, alice, otto).withContinuedAvailability();
     ObjectCounter<Entity> counter = new ObjectCounter<>(2);
@@ -136,7 +136,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
     for (int i = 0; i < n; i++) {
       counter.count(GeneratorUtil.generateNonNull(generator));
     }
-    assertEquals(n * 24. / (24. + 89.), counter.getCount(alice), n / 20.);
+    assertEquals(n * 24. / (24. + 39.), counter.getCount(alice), n / 20.);
   }
 
   @Test
@@ -145,7 +145,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
     type.setSource(PERSON_CSV);
     type.setDistribution("new StepSequence(-1)");
     Generator<Entity> generator = createGenerator(type);
-    context.set("ottos_age", 89);
+    context.set("ottos_age", 39);
     generator.init(context);
     expectGeneratedSequence(generator, otto, alice).withCeasedAvailability();
   }
@@ -157,7 +157,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
     InstanceDescriptor instance = createInstance("person", type);
     instance.setUnique(true);
     Generator<Entity> generator = createGenerator(instance);
-    context.set("ottos_age", 89);
+    context.set("ottos_age", 39);
     generator.init(context);
     Entity person1 = GeneratorUtil.generateNonNull(generator);
     Entity person2 = GeneratorUtil.generateNonNull(generator);
