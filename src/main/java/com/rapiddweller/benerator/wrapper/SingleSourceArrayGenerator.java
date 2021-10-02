@@ -29,16 +29,13 @@ package com.rapiddweller.benerator.wrapper;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
-import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.common.ArrayUtil;
 
 import java.lang.reflect.Array;
 
 /**
- * Assembles the output of a source generator into an array of random length.<br/>
- * <br/>
+ * Assembles the output of a source generator into an array of random length.<br/> <br/>
  * Created: 26.08.2006 09:37:55
- *
  * @param <S> the type parameter
  * @param <P> the type parameter
  * @author Volker Bergmann
@@ -49,30 +46,16 @@ public class SingleSourceArrayGenerator<S, P> extends CardinalGenerator<S, P> im
   private final Class<S> componentType;
   private final Class<P> generatedType;
 
-  /**
-   * Instantiates a new Single source array generator.
-   *
-   * @param source             the source
-   * @param componentType      the component type
-   * @param minLength          the min length
-   * @param maxLength          the max length
-   * @param lengthDistribution the length distribution
-   */
+  /** Instantiates a new Single source array generator. */
   @SuppressWarnings("unchecked")
   public SingleSourceArrayGenerator(Generator<S> source, Class<S> componentType,
                                     int minLength, int maxLength, Distribution lengthDistribution) {
-    super(source, false, minLength, maxLength, 1, SequenceManager.RANDOM_SEQUENCE);
+    super(source, false, minLength, maxLength, 1, lengthDistribution);
     this.componentType = componentType;
     this.generatedType = ArrayUtil.arrayType(componentType);
   }
 
-  /**
-   * Instantiates a new Single source array generator.
-   *
-   * @param source          the source
-   * @param componentType   the component type
-   * @param lengthGenerator the length generator
-   */
+  /** Instantiates a new Single source array generator. */
   @SuppressWarnings("unchecked")
   public SingleSourceArrayGenerator(Generator<S> source, Class<S> componentType,
                                     NonNullGenerator<Integer> lengthGenerator) {
