@@ -39,10 +39,8 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Generates family names.<br/>
- * <br/>
+ * Generates family names.<br/><br/>
  * Created: 09.06.2006 22:03:56
- *
  * @author Volker Bergmann
  * @since 0.1
  */
@@ -51,36 +49,20 @@ public class FamilyNameGenerator extends WeightedDatasetCSVGenerator<String>
 
   // default instance management -------------------------------------------------------------------------------------
 
-  private static final Map<String, Generator<String>> defaultInstances =
-      new HashMap<>();
+  private static final Map<String, Generator<String>> defaultInstances = new HashMap<>();
 
-  /**
-   * Instantiates a new Family name generator.
-   */
   public FamilyNameGenerator() {
     this(Locale.getDefault().getCountry());
   }
 
   // Constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Family name generator.
-   *
-   * @param datasetName the dataset name
-   */
   public FamilyNameGenerator(String datasetName) {
     this(datasetName,
         "/com/rapiddweller/dataset/region",
         "/com/rapiddweller/domain/person/familyName_{0}.csv");
   }
 
-  /**
-   * Instantiates a new Family name generator.
-   *
-   * @param datasetName     the dataset name
-   * @param nesting         the nesting
-   * @param fileNamePattern the file name pattern
-   */
   public FamilyNameGenerator(String datasetName, String nesting,
                              String fileNamePattern) {
     super(String.class, fileNamePattern, datasetName, nesting, true,
@@ -89,20 +71,9 @@ public class FamilyNameGenerator extends WeightedDatasetCSVGenerator<String>
         datasetName);
   }
 
-  /**
-   * Shared instance generator.
-   *
-   * @param datasetName the dataset name
-   * @return the generator
-   */
   public static Generator<String> sharedInstance(String datasetName) {
-    Generator<String> instance = defaultInstances.get(datasetName);
-    if (instance == null) {
-      instance =
-          new SharedGenerator<>(new FamilyNameGenerator(datasetName));
-      defaultInstances.put(datasetName, instance);
-    }
-    return instance;
+    return defaultInstances.computeIfAbsent(
+        datasetName, k -> new SharedGenerator<>(new FamilyNameGenerator(datasetName)));
   }
 
   @Override

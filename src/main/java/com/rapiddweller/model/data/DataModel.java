@@ -38,7 +38,6 @@ import java.util.Map;
 /**
  * Merges and organizes entity definitions of different systems.<br/><br/>
  * Created: 25.08.2007 20:40:17
- *
  * @author Volker Bergmann
  * @since 0.3
  */
@@ -151,9 +150,7 @@ public class DataModel {
   }
 
   private void validate(TypeDescriptor type) {
-    if (logger.isDebugEnabled()) {
-      logger.debug("validating " + type);
-    }
+    logger.debug("validating {}", type);
     if (type instanceof SimpleTypeDescriptor) {
       validate((SimpleTypeDescriptor) type);
     } else if (type instanceof ComplexTypeDescriptor) {

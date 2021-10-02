@@ -42,7 +42,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class ConsoleExporter extends FormattingConsumer {
 
-  private boolean printingIdCode;
+  private final boolean printingIdCode;
   private Long limit;
   private String indent;
 
@@ -113,11 +113,7 @@ public class ConsoleExporter extends FormattingConsumer {
     }
     if (object instanceof Entity) {
       String entityType = ((Entity) object).type();
-      AtomicLong counter = counters.get(entityType);
-      if (counter == null) {
-        counter = new AtomicLong(0);
-        counters.put(entityType, counter);
-      }
+      AtomicLong counter = counters.computeIfAbsent(entityType, k ->new AtomicLong(0));
       long counterValue = counter.incrementAndGet();
       if (limit == null || limit < 0 || counterValue <= limit) {
         out.println(indent + compositeFormatter.render(entityType + '[', (Entity) object, "]"));

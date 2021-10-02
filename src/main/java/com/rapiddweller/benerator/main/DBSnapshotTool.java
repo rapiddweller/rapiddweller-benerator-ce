@@ -49,84 +49,37 @@ import org.slf4j.Logger;
 
 /**
  * Creates a snapshot of a database schema and exports it in DbUnit XML file format.
- *
  * @author Volker Bergmann
  * @since 0.3.04
  */
 public class DBSnapshotTool {
 
-  /**
-   * The constant DBUNIT_FORMAT.
-   */
   public static final String DBUNIT_FORMAT = "dbunit";
-  /**
-   * The constant XLS_FORMAT.
-   */
   public static final String XLS_FORMAT = "xls";
-  /**
-   * The constant SQL_FORMAT.
-   */
   public static final String SQL_FORMAT = "sql";
 
-  /**
-   * The constant DEFAULT_FORMAT.
-   */
   public static final String DEFAULT_FORMAT = DBUNIT_FORMAT;
 
-  /**
-   * The constant DB_PASSWORD.
-   */
   public static final String DB_PASSWORD = "dbPassword";
-  /**
-   * The constant DB_URL.
-   */
   public static final String DB_URL = "dbUrl";
-  /**
-   * The constant DB_DRIVER.
-   */
   public static final String DB_DRIVER = "dbDriver";
-  /**
-   * The constant DB_SCHEMA.
-   */
   public static final String DB_SCHEMA = "dbSchema";
-  /**
-   * The constant DB_CATALOG.
-   */
   public static final String DB_CATALOG = "dbCatalog";
-  /**
-   * The constant DB_USER.
-   */
   public static final String DB_USER = "dbUser";
-  /**
-   * The constant FORMAT.
-   */
   public static final String FORMAT = "format";
-  /**
-   * The constant DIALECT.
-   */
   public static final String DIALECT = "dialect";
 
   // TODO v0.8 test with each database
   private static final Logger logger = LoggerFactory.getLogger(DBSnapshotTool.class);
 
-  /**
-   * Supported formats string [ ].
-   *
-   * @return the string [ ]
-   */
   public static String[] supportedFormats() {
     return new String[] {
         DBUNIT_FORMAT, XLS_FORMAT, SQL_FORMAT
     };
   }
 
-  /**
-   * The entry point of application.
-   *
-   * @param args the input arguments
-   */
   public static void main(String[] args) {
-    logger.info("Starting " + DBSnapshotTool.class.getSimpleName());
+    logger.info("Starting {}", DBSnapshotTool.class.getSimpleName());
     String format = System.getProperty(FORMAT);
     if (format == null) {
       format = DEFAULT_FORMAT;
@@ -149,10 +102,9 @@ public class DBSnapshotTool {
     String dbSchema = System.getProperty(DB_SCHEMA);
     String dialect = System.getProperty(DIALECT);
 
-    logger.info("Exporting data of database '" + dbUrl + "' with driver '" + dbDriver + "' as user '" + dbUser
-		+ "'" + (dbSchema != null ? " using schema '" + dbSchema + "'" : "") + "'"
-		+ (dbCatalog != null ? " using catalog '" + dbCatalog + "'" : "")
-        + " in " + format + " format to file " + filename);
+    logger.info("Exporting data of database '{}}' with driver '{}' as user '{}'{}'{} in {} format to file {}",
+        dbUrl, dbDriver, dbUser, (dbSchema != null ? " using schema '" + dbSchema + "'" : ""),
+        (dbCatalog != null ? " using catalog '" + dbCatalog + "'" : ""), format, filename);
 
 	export(dbUrl, dbDriver, dbCatalog, dbSchema, dbUser, dbPassword, filename, format, dialect);
   }
@@ -167,38 +119,12 @@ public class DBSnapshotTool {
     }
   }
 
-  /**
-   * Export.
-   *
-   * @param dbUrl      the db url
-   * @param dbDriver   the db driver
-   * @param dbSchema   the db schema
-   * @param dbUser     the db user
-   * @param dbPassword the db password
-   * @param filename   the filename
-   * @param format     the format
-   * @param dialect    the dialect
-   */
   public static void export(String dbUrl, String dbDriver, String dbCatalog, String dbSchema,
                             String dbUser, String dbPassword, String filename, String format, String dialect) {
 	export(dbUrl, dbDriver, dbCatalog, dbSchema, dbUser, dbPassword, filename, SystemInfo.getFileEncoding(),
         format, dialect, null);
   }
 
-  /**
-   * Export.
-   *
-   * @param dbUrl      the db url
-   * @param dbDriver   the db driver
-   * @param dbSchema   the db schema
-   * @param dbUser     the db user
-   * @param dbPassword the db password
-   * @param filename   the filename
-   * @param encoding   the encoding
-   * @param format     the format
-   * @param dialect    the dialect
-   * @param monitor    the monitor
-   */
   public static void export(String dbUrl, String dbDriver, String dbCatalog, String dbSchema,
                             String dbUser, String dbPassword, String filename, String encoding, String format, String dialect,
                             ProgressMonitor monitor) {
@@ -265,10 +191,9 @@ public class DBSnapshotTool {
       long duration = System.currentTimeMillis() - startTime;
       if (count == 0) {
         logger.warn("No entities found for snapshot.");
-      } else {
-        logger.info("Exported " + NumberUtil.format(count, 0) + " entities in " +
-            RoundedNumberFormat.format(duration, 0) + " ms " +
-            "(" + RoundedNumberFormat.format(count * 3600000L / duration, 0) + " p.h.)");
+      } else if (logger.isInfoEnabled()) {
+        logger.info("Exported {} entities in {} ms ({} p.h.)", NumberUtil.format(count, 0),
+            RoundedNumberFormat.format(duration, 0), RoundedNumberFormat.format(count * 3600000L / duration, 0));
       }
     } finally {
       IOUtil.close(exporter);

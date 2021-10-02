@@ -37,10 +37,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 
 /**
- * Creates Iterators for stepping through query results.<br/>
- * <br/>
+ * Creates Iterators for stepping through query results.<br/><br/>
  * Created: 17.08.2007 18:48:20
- *
  * @author Volker Bergmann
  */
 public class QueryIterable implements HeavyweightIterable<ResultSet> {
@@ -54,14 +52,6 @@ public class QueryIterable implements HeavyweightIterable<ResultSet> {
   private final Converter<String, ?> queryPreprocessor;
   private String renderedQuery;
 
-  /**
-   * Instantiates a new Query iterable.
-   *
-   * @param connection the connection
-   * @param query      the query
-   * @param fetchSize  the fetch size
-   * @param context    the context
-   */
   public QueryIterable(Connection connection, String query, int fetchSize,
                        Context context) {
     if (connection == null) {
@@ -79,15 +69,10 @@ public class QueryIterable implements HeavyweightIterable<ResultSet> {
       this.queryPreprocessor = new NoOpConverter<>();
     }
     if (logger.isDebugEnabled()) {
-      logger.debug("Constructed QueryIterable: " + query);
+      logger.debug("Constructed QueryIterable: {}", query);
     }
   }
 
-  /**
-   * Gets query.
-   *
-   * @return the query
-   */
   public String getQuery() {
     return query;
   }

@@ -37,8 +37,6 @@ import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.StringUtil;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 
 import java.util.Locale;
 import java.util.Stack;
@@ -51,8 +49,6 @@ import java.util.Stack;
  */
 public class StreetNameGenerator extends GeneratorProxy<String>
     implements DatasetBasedGenerator<String>, NonNullGenerator<String> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(StreetNameGenerator.class);
 
   private static final String REGION_NESTING = "com/rapiddweller/dataset/region";
   private static final String FILENAME_PATTERN = "/com/rapiddweller/domain/address/street_{0}.csv";
@@ -129,9 +125,8 @@ public class StreetNameGenerator extends GeneratorProxy<String>
             " could not be initialized");
       }
       String nextOption = datasetOptions.peek();
-      LOGGER.error("Error initializing " + getClass().getSimpleName() +
-          " with dataset '" + currentOption + "': " +
-          e.getMessage() + ". Falling back to '" + nextOption + "'");
+      logger.error("Error initializing {} with dataset '{}': {}. Falling back to '{}'",
+          getClass().getSimpleName(), currentOption, e.getMessage(), nextOption);
       init(datasetOptions, context);
     }
   }

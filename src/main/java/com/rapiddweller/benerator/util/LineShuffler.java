@@ -64,7 +64,7 @@ public class LineShuffler {
   }
 
   public static void shuffle(String inFilename, String outFilename, int bufferSize) throws IOException {
-    logger.info("shuffling " + inFilename + " and writing to " + outFilename + " (max. " + bufferSize + " lines)");
+    logger.info("shuffling {} and writing to {} (max. {} lines)", inFilename, outFilename, bufferSize);
     ReaderLineIterator iterator = new ReaderLineIterator(new BufferedReader(IOUtil.getReaderForURI(inFilename)));
     List<String> lines = read(bufferSize, iterator);
     shuffle(lines);
@@ -73,7 +73,6 @@ public class LineShuffler {
 
   public static void shuffle(List<String> lines) {
     int size = lines.size();
-    //Generator<Integer> indexGenerator = new IntegerGenerator(0, size - 1, 1, Sequence.RANDOM);
     int iterations = size / 2;
     for (int i = 0; i < iterations; i++) {
       int i1 = random.randomInt(size);
@@ -98,7 +97,7 @@ public class LineShuffler {
         lines.add(line);
         lineCount++;
         if (lineCount % 100000 == 99999) {
-          logger.info("parsed " + lineCount + " lines");
+          logger.info("parsed {} lines", lineCount);
         }
       }
     }
@@ -106,14 +105,11 @@ public class LineShuffler {
   }
 
   private static void save(List<String> lines, String outputFilename) throws IOException {
-    logger.info("saving " + outputFilename + "...");
-    PrintWriter printer = new PrintWriter(new BufferedWriter(new FileWriter(outputFilename)));
-    try {
+    logger.info("saving {}...", outputFilename);
+    try (PrintWriter printer = new PrintWriter(new BufferedWriter(new FileWriter(outputFilename)))) {
       for (String line : lines) {
         printer.println(line);
       }
-    } finally {
-      IOUtil.close(printer);
     }
   }
 

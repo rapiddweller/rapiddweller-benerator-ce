@@ -282,6 +282,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     this.schemaName = StringUtil.emptyToNull(StringUtil.trim(schema));
   }
 
+  /** @deprecated  */
   @Deprecated
   public void setTableFilter(String tableFilter) {
     setIncludeTables(tableFilter);
@@ -592,10 +593,10 @@ public abstract class DBSystem extends AbstractStorageSystem {
       File bufferFile = CachingDBImporter.getCacheFile(environment);
       if (bufferFile.exists()) {
         if (!bufferFile.delete() && metaDataCache) {
-          logger.error("Deleting " + bufferFile + " failed");
+          logger.error("Deleting {} failed", bufferFile);
           metaDataCache = false;
         } else {
-          logger.info("Deleted meta data cache file: " + bufferFile);
+          logger.info("Deleted meta data cache file: {}", bufferFile);
         }
 
       }
@@ -613,8 +614,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     getDialect(); // make sure dialect is initialized
     database = getDbMetaData();
     if (lazy) {
-      logger.info(
-          "Fetching table details and ordering tables by dependency");
+      logger.info("Fetching table details and ordering tables by dependency");
     } else {
       logger.info("Ordering tables by dependency");
     }
@@ -830,8 +830,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
             // TODO v0.7.6 support uniqueness constraints on combination of columns
           }
         }
-        logger.debug(
-            "parsed attribute {}: {}", columnId, descriptor);
+        logger.debug("parsed attribute {}: {}", columnId, descriptor);
         complexType.addComponent(descriptor);
       } catch (Exception e) {
         throw new ConfigurationError(
