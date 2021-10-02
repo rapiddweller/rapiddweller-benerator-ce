@@ -135,8 +135,6 @@ public class StochasticGeneratorFactoryTest extends GeneratorTest {
       T n = wrapper.unwrap();
       assertNotNull("Generator not available: " + generator, n);
       if (min != null) {
-        if (n.doubleValue() < min.doubleValue()) // TODO remove
-          System.out.print("");
         assertTrue("Generated value (" + n + ") is smaller than min (" + min + ") using sequence '" + sequence + "'",
             n.doubleValue() >= min.doubleValue());
       }
