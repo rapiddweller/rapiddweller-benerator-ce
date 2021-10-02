@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -32,10 +32,8 @@ import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 
 /**
- * A generator proxy that forwards the output of another generator with a random number of repetitions.<br/>
- * <br/>
+ * A generator proxy that forwards the output of another generator with a random number of repetitions.<br/><br/>
  * Created: 18.08.2007 17:08:10
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  */
@@ -45,36 +43,17 @@ public class RepeatGeneratorProxy<E> extends CardinalGenerator<E, E> {
   private Integer totalReps;
   private E currentValue;
 
-  /**
-   * Instantiates a new Repeat generator proxy.
-   */
   public RepeatGeneratorProxy() {
     this(null, 0, 3);
   }
 
-  /**
-   * Instantiates a new Repeat generator proxy.
-   *
-   * @param source         the source
-   * @param minRepetitions the min repetitions
-   * @param maxRepetitions the max repetitions
-   */
   public RepeatGeneratorProxy(Generator<E> source, int minRepetitions, int maxRepetitions) {
     this(source, minRepetitions, maxRepetitions, 1, SequenceManager.RANDOM_SEQUENCE);
   }
 
-  /**
-   * Instantiates a new Repeat generator proxy.
-   *
-   * @param source                 the source
-   * @param minRepetitions         the min repetitions
-   * @param maxRepetitions         the max repetitions
-   * @param repetitionGranularity  the repetition granularity
-   * @param repetitionDistribution the repetition distribution
-   */
   public RepeatGeneratorProxy(Generator<E> source, int minRepetitions, int maxRepetitions,
                               int repetitionGranularity, Distribution repetitionDistribution) {
-    super(source, false, minRepetitions, maxRepetitions, repetitionGranularity, repetitionDistribution);
+    super(source, true, minRepetitions, maxRepetitions, repetitionGranularity, repetitionDistribution);
   }
 
   @Override
@@ -115,7 +94,6 @@ public class RepeatGeneratorProxy<E> extends CardinalGenerator<E, E> {
   @Override
   public void reset() {
     super.reset();
-    cardinalGenerator.reset();
     resetMembers();
   }
 
