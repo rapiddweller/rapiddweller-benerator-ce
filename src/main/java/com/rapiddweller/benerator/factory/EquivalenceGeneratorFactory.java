@@ -314,7 +314,7 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
   }
 
   protected void addSelection(Set<Character> ofChars, Set<Character> toChars) {
-    if (ofChars.size() == 0) {
+    if (ofChars.isEmpty()) {
       return;
     }
     Character[] array = CollectionUtil.toArray(ofChars);
@@ -343,14 +343,12 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
     return (required ? SequenceManager.STEP_SEQUENCE : null);
   }
 
-  @SuppressWarnings("SwitchStatementWithTooFewBranches")
   @Override
   public Distribution defaultDistribution(Uniqueness uniqueness) {
-    switch (uniqueness) {
-      case NONE:
-        return SequenceManager.RANDOM_SEQUENCE;
-      default:
-        return SequenceManager.STEP_SEQUENCE;
+    if (uniqueness == Uniqueness.NONE) {
+      return SequenceManager.RANDOM_SEQUENCE;
+    } else {
+      return SequenceManager.STEP_SEQUENCE;
     }
   }
 
@@ -369,7 +367,7 @@ public class EquivalenceGeneratorFactory extends GeneratorFactory {
     @SuppressWarnings({"rawtypes", "unchecked"})
     public ValueSet(T min, boolean minInclusive, T max, boolean maxInclusive, T granularity, Class<T> numberType) {
       this.set = new TreeSet<>();
-      this.numberRange = new Interval<T>(min, minInclusive, max, maxInclusive, new ComparableComparator());
+      this.numberRange = new Interval<>(min, minInclusive, max, maxInclusive, new ComparableComparator());
       this.granularity = granularity;
       this.numberType = numberType;
     }

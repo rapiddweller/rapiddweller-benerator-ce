@@ -512,7 +512,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
         createQuery(query, context, connection);
     ResultSetConverter converter =
         new ResultSetConverter(Object.class, simplify);
-    return new ConvertingDataSource<ResultSet, Object>(resultSetIterable,
+    return new ConvertingDataSource<>(resultSetIterable,
         converter);
   }
 
