@@ -155,7 +155,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       generator = createMultiplicityWrapper(part, generator, context);
       result = builderFromGenerator(generator, part, context);
     }
-    logger.debug("Created {}", result);
+    logger.debug("Created part {}", result);
     return result;
   }
 
@@ -163,7 +163,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     ComplexTypeDescriptor typeDescriptor = (ComplexTypeDescriptor) part.getTypeDescriptor();
     List<GenerationStep<Entity>> components =
         GenerationStepFactory.createMutatingGenerationSteps(typeDescriptor, true, Uniqueness.NONE, context);
-    return new PartModifier(part.getName(), components, typeDescriptor.getScope(), context);
+    return new PartModifier(part.getName(), components, typeDescriptor.getScope());
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
@@ -181,7 +181,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
     Generator<?> generator = DescriptorUtil.getGeneratorByName(typeDescriptor, context);
     if (generator == null) {
-      generator = SimpleTypeGeneratorFactory.createScriptGenerator(typeDescriptor);
+      generator = TypeGeneratorFactory.createScriptGenerator(typeDescriptor);
     }
     if (generator == null) {
       generator = SimpleTypeGeneratorFactory.createConstantGenerator(typeDescriptor, context);
@@ -247,9 +247,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
     // check multiplicity
     generator = ComponentBuilderFactory.createMultiplicityWrapper(descriptor, generator, context);
-    if (logger.isDebugEnabled()) {
-      logger.debug("Created " + generator);
-    }
+    logger.debug("Created  reference builder {}", generator);
 
     // check 'cyclic' config
     generator = DescriptorUtil.wrapWithProxy(generator, typeDescriptor);
@@ -303,7 +301,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
   static ComponentBuilder<?> createIdBuilder(IdDescriptor id, Uniqueness ownerUniqueness, BeneratorContext context) {
     Generator<?> generator = createSingleInstanceGenerator(id, Uniqueness.ORDERED, context);
     if (generator != null) {
-      logger.debug("Created {}", generator);
+      logger.debug("Created id builder {}", generator);
     }
     return builderFromGenerator(generator, id, context);
   }

@@ -40,7 +40,7 @@ import java.util.Map;
  */
 public class FileFormats {
 
-  private static final Map<String, FileFormat> INSTANCES = new HashMap<String, FileFormat>();
+  private static final Map<String, FileFormat> INSTANCES = new HashMap<>();
 
   private FileFormats() {
     // private constructor to prevent instantiation

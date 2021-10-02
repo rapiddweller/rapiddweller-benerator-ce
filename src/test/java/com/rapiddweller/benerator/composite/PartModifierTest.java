@@ -41,7 +41,7 @@ public class PartModifierTest {
     SequenceGenerator<String> makerGen = new SequenceGenerator<>(String.class, "BMW", "BMW");
     steps.add(new PlainEntityComponentBuilder("maker", makerGen, null));
     context = new DefaultBeneratorContext();
-    modifier = new PartModifier("cars", steps, null, context);
+    modifier = new PartModifier("cars", steps, null);
     modifier.init(context);
   }
 
@@ -85,6 +85,7 @@ public class PartModifierTest {
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   public void testPart_list() {
     Entity alice = new Entity("person", dp);
     Entity a3 = createCar("Audi");

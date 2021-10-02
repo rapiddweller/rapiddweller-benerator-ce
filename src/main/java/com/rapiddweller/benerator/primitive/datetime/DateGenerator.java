@@ -35,15 +35,13 @@ import com.rapiddweller.common.Period;
 import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.common.converter.DateString2DurationConverter;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * creates date values by a LongGenerator.
- * <br/>
- * Created: 07.06.2006 22:54:28
- *
- * @author Volker Bergmann
+ * creates date values by a LongGenerator.<br/>
+ * Created: 07.06.2006 22:54:28 @author Volker Bergmann
  * @since 0.1
  */
 public class DateGenerator extends NonNullGeneratorWrapper<Long, Date> {
@@ -58,45 +56,22 @@ public class DateGenerator extends NonNullGeneratorWrapper<Long, Date> {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Initializes the generator to create days within about the last 80 years with a one-day resolution
-   */
+  /** Initializes the generator to create days within about the last 80 years with a one-day resolution */
   public DateGenerator() {
     this(defaultStartDate(), currentDay(), Period.DAY.getMillis());
   }
 
-  /**
-   * Initializes the generator to create dates with a uniform distribution
-   *
-   * @param min         the min
-   * @param max         the max
-   * @param granularity the granularity
-   */
+  /** Initializes the generator to create dates with a uniform distribution */
   public DateGenerator(Date min, Date max, long granularity) {
     this(min, max, granularity, SequenceManager.RANDOM_SEQUENCE);
   }
 
-  /**
-   * Initializes the generator to create dates of a Sequence or WeightFunction
-   *
-   * @param min          the min
-   * @param max          the max
-   * @param granularity  the granularity
-   * @param distribution the distribution
-   */
+  /** Initializes the generator to create dates of a Sequence or WeightFunction */
   public DateGenerator(Date min, Date max, long granularity, Distribution distribution) {
     this(min, max, granularity, distribution, false);
   }
 
-  /**
-   * Initializes the generator to create dates of a Sequence or WeightFunction
-   *
-   * @param min          the min
-   * @param max          the max
-   * @param granularity  the granularity
-   * @param distribution the distribution
-   * @param unique       the unique
-   */
+  /** Initializes the generator to create dates of a Sequence or WeightFunction */
   public DateGenerator(Date min, Date max, long granularity, Distribution distribution, boolean unique) {
     super(null);
     this.distribution = distribution;
@@ -109,38 +84,22 @@ public class DateGenerator extends NonNullGeneratorWrapper<Long, Date> {
 
   // config properties -----------------------------------------------------------------------------------------------
 
-  /**
-   * Sets the earliest date to generate
-   *
-   * @param min the min
-   */
+  /** Sets the earliest date to generate */
   public void setMin(Date min) {
     this.min = min.getTime();
   }
 
-  /**
-   * Sets the latest date to generate
-   *
-   * @param max the max
-   */
+  /** Sets the latest date to generate */
   public void setMax(Date max) {
     this.max = max.getTime();
   }
 
-  /**
-   * Sets the date granularity in milliseconds
-   *
-   * @param granularity the granularity
-   */
+  /** Sets the date granularity in milliseconds */
   public void setGranularity(String granularity) {
     this.granularity = dateConverter.convert(granularity);
   }
 
-  /**
-   * Sets the distribution to use
-   *
-   * @param distribution the distribution
-   */
+  /** Sets the distribution to use */
   public void setDistribution(Distribution distribution) {
     this.distribution = distribution;
   }
@@ -159,9 +118,7 @@ public class DateGenerator extends NonNullGeneratorWrapper<Long, Date> {
     super.init(context);
   }
 
-  /**
-   * Generates a Date by creating a millisecond value from the source generator and wrapping it into a Date
-   */
+  /** Generates a Date by creating a millisecond value from the source generator and wrapping it into a Date */
   @Override
   public Date generate() {
     assertInitialized();
@@ -185,26 +142,22 @@ public class DateGenerator extends NonNullGeneratorWrapper<Long, Date> {
 
   // implementation --------------------------------------------------------------------------------------------------
 
-  /**
-   * Returns the default start date as 80 years ago
-   */
+  /** Returns the default start date as 80 years ago */
   private static Date defaultStartDate() {
     return new Date(currentDay().getTime() - 80L * 365 * Period.DAY.getMillis());
   }
 
-  /**
-   * Returns the current day as Date value rounded to midnight
-   */
+  /** Returns the current day as Date value rounded to midnight */
   private static Date currentDay() {
     GregorianCalendar calendar = new GregorianCalendar();
     calendar.set(
-        calendar.get(GregorianCalendar.YEAR),
-        calendar.get(GregorianCalendar.MONTH),
-        calendar.get(GregorianCalendar.DAY_OF_MONTH),
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH),
         0,
         0,
         0);
-    calendar.set(GregorianCalendar.MILLISECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
     return calendar.getTime();
   }
 

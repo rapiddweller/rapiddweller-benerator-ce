@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -225,7 +225,7 @@ public abstract class GeneratorFactory {
     if (locale == null) {
       locale = FactoryUtil.defaultLocale();
     }
-    return createRegexStringGenerator(pattern, minLength, maxLength, uniqueness);
+    return createRegexStringGenerator(pattern, locale, minLength, maxLength, uniqueness);
   }
 
   public abstract NonNullGenerator<String> createStringGenerator(Set<Character> chars,
@@ -243,9 +243,10 @@ public abstract class GeneratorFactory {
    *  @param uniqueness the uniqueness
    *  @return a generator of the desired characteristics
    *  @throws ConfigurationError if something is wrong configured */
-  public NonNullGenerator<String> createRegexStringGenerator(String pattern, int minLength, Integer maxLength,
-                                                             Uniqueness uniqueness) throws ConfigurationError {
-    NonNullGenerator<String> generator = RegexGeneratorFactory.create(pattern, minLength, maxLength, uniqueness, this);
+  public NonNullGenerator<String> createRegexStringGenerator(
+      String pattern, Locale locale, int minLength, Integer maxLength,
+      Uniqueness uniqueness) throws ConfigurationError {
+    NonNullGenerator<String> generator = RegexGeneratorFactory.create(pattern, locale, minLength, maxLength, uniqueness, this);
     StringLengthValidator validator = new StringLengthValidator(minLength, maxLength);
     return WrapperFactory.asNonNullGenerator(WrapperFactory.applyValidator(validator, generator));
   }
@@ -294,18 +295,11 @@ public abstract class GeneratorFactory {
 
   private static <T extends Number> NonNullGenerator<T> applyExclusiveBorderValidation(
     T min, Boolean minInclusive, T max, Boolean maxInclusive, NonNullGenerator<T> generator) {
-    if (minInclusive == null) {
-      minInclusive = true;
-    }
-    if (maxInclusive == null) {
-      maxInclusive = true;
-    }
-    if (!minInclusive || !maxInclusive) {
-      Class<T> generatedType = generator.getGeneratedType();
+    if ((minInclusive != null && !minInclusive) || (maxInclusive != null && !maxInclusive)) {
       if (min != null && max != null && min.doubleValue() == max.doubleValue()) {
         throw new ConfigurationError("min == max (" + min + ") and at a border value is excluded in ");
       }
-      generator = new ValidatingNonNullGeneratorProxy<T>(generator, new NumberRangeValidator<T>(
+      generator = new ValidatingNonNullGeneratorProxy<>(generator, new NumberRangeValidator<>(
           min, minInclusive, max, maxInclusive));
     }
     return generator;

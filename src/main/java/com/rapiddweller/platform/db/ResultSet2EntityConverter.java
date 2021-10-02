@@ -46,6 +46,8 @@ import java.sql.SQLException;
  */
 public class ResultSet2EntityConverter {
 
+  private static final String STRING_TYPE = "string";
+
   private ResultSet2EntityConverter() {
     // private constructor to prevent instantiation
   }
@@ -62,12 +64,12 @@ public class ResultSet2EntityConverter {
         if (component != null) {
           SimpleTypeDescriptor type = (SimpleTypeDescriptor) component.getTypeDescriptor();
           PrimitiveType primitiveType = type.getPrimitiveType();
-          typeName = (primitiveType != null ? primitiveType.getName() : "string");
+          typeName = (primitiveType != null ? primitiveType.getName() : STRING_TYPE);
         } else {
-          typeName = "string";
+          typeName = STRING_TYPE;
         }
       } else {
-        typeName = "string";
+        typeName = STRING_TYPE;
       }
       DataModel dataModel = (descriptor != null ? descriptor.getDataModel() : null);
       Object javaValue = javaValue(resultSet, columnIndex, typeName, dataModel);
@@ -84,7 +86,7 @@ public class ResultSet2EntityConverter {
       return resultSet.getDate(columnIndex);
     } else if ("timestamp".equals(primitiveType)) {
       return resultSet.getTimestamp(columnIndex);
-    } else if ("string".equals(primitiveType)) {
+    } else if (STRING_TYPE.equals(primitiveType)) {
       return resultSet.getString(columnIndex);
     }
     // try generic conversion
