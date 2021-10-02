@@ -30,10 +30,8 @@ import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
 
 /**
- * Converts a {@link Gender} enumeration value to a configurable String.<br/>
- * <br/>
+ * Converts a {@link Gender} enumeration value to a configurable String.<br/><br/>
  * Created at 11.03.2009 12:31:43
- *
  * @author Volker Bergmann
  * @since 0.5.8
  */
@@ -42,47 +40,31 @@ public class GenderConverter extends ThreadSafeConverter<Gender, String> {
   private String male;
   private String female;
 
-  /**
-   * Instantiates a new Gender converter.
-   */
   public GenderConverter() {
     this("m", "f");
   }
 
-  /**
-   * Instantiates a new Gender converter.
-   *
-   * @param male   the male
-   * @param female the female
-   */
   public GenderConverter(String male, String female) {
     super(Gender.class, String.class);
     this.male = male;
     this.female = female;
   }
 
-  /**
-   * Sets male.
-   *
-   * @param male the male
-   */
   public void setMale(String male) {
     this.male = male;
   }
 
-  /**
-   * Sets female.
-   *
-   * @param female the female
-   */
   public void setFemale(String female) {
     this.female = female;
   }
 
   @Override
   public String convert(Gender gender) throws ConversionException {
-    return (gender != null ? (Gender.MALE.equals(gender) ? male : female) :
-        null);
+    if (gender == null) {
+      return null;
+    } else {
+      return (Gender.MALE.equals(gender) ? male : female);
+    }
   }
 
 }
