@@ -617,7 +617,6 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
 
   @SuppressWarnings("static-method")
   private void parseUnique(Element child) {
-    // TODO v1.0 automatically support uniqueness
     logger.warn("<unique> is not supported. Please define own annotations or setup for uniqueness assurance");
   }
 
@@ -748,13 +747,11 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
 
   @SuppressWarnings("static-method")
   private void parseKeyRef(Element child) {
-    // TODO v1.0 implement parseKeyRef
     logger.warn("KeyRefs are not supported, yet. Ignoring keyRef: " + child.getAttribute("name"));
   }
 
   @SuppressWarnings("static-method")
   private void parseKey(Element child) {
-    // TODO v1.0 implement parseKey
     logger.warn("Keys are not supported, yet. Ignoring key: " + child.getAttribute("name"));
   }
 
@@ -899,7 +896,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
   @SuppressWarnings("static-method")
   private void parseImport(Element importElement) {
     logger.debug("parseImport()");
-    throw unsupportedElementType(importElement, null); // TODO v0.8 implement parseImport()
+    throw unsupportedElementType(importElement, null);
   }
 
   /** parses an XML Schema inclusion and adds its types to the {@link DataModel} */
@@ -920,7 +917,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
   @SuppressWarnings("static-method")
   private void parseGroup(Element group) {
     logger.debug("parseGroup()");
-    throw unsupportedElementType(group, null); // TODO v0.8 implement parseGroup()
+    throw unsupportedElementType(group, null);
   }
 
   private ComplexTypeDescriptor parseAttributeGroup(Element group) {
@@ -943,7 +940,6 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
       if (ATTRIBUTE.equals(elType)) {
         parseAttribute(child, type);
       } else if (ATTRIBUTE_GROUP.equals(elType)) {
-        // TODO v0.8 map as parent relationship (could be several ones)
         ComplexTypeDescriptor childGroup = parseAttributeGroup(child);
         for (InstanceDescriptor component : childGroup.getParts()) {
           type.addPart(component);
@@ -962,7 +958,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
   }
 
   private void parseSequence(Element sequence, ComplexTypeDescriptor owner) {
-    logger.debug("parseSequence()"); // TODO v0.8 evaluate minCount/maxCount for sequence
+    logger.debug("parseSequence()");
     parseComponentGroupChildren(sequence, owner);
   }
 
