@@ -226,17 +226,24 @@ public class StochasticGeneratorFactory extends GeneratorFactory {
     return new ConstantGenerator<>(null, generatedType);
   }
 
+  /** The resulting generator is an {@link AlternativeGenerator} with one alternative for each part count. */
   @SuppressWarnings("unchecked")
   @Override
   public NonNullGenerator<String> createCompositeStringGenerator(
       GeneratorProvider<?> partGeneratorProvider, int minParts, int maxParts, Uniqueness uniqueness) {
     AlternativeGenerator<String> result = new AlternativeGenerator<>(String.class);
     for (int partCount = minParts; partCount <= maxParts; partCount++) {
-      Generator<String>[] sources = new Generator[partCount];
-      for (int i = 0; i < partCount; i++) {
-        sources[i] = WrapperFactory.asStringGenerator(partGeneratorProvider.create());
+      if (partCount == 0) {
+        // for partCount == 0 an empty string is returned
+        result.addSource(new ConstantGenerator<>(""));
+      } else {
+        // for partCount >= 1 the partGeneratorProvider is called
+        Generator<String>[] sources = new Generator[partCount];
+        for (int i = 0; i < partCount; i++) {
+          sources[i] = WrapperFactory.asStringGenerator(partGeneratorProvider.create());
+        }
+        result.addSource(new CompositeStringGenerator(uniqueness.isUnique(), sources));
       }
-      result.addSource(new CompositeStringGenerator(uniqueness.isUnique(), sources));
     }
     return WrapperFactory.asNonNullGenerator(result);
   }
