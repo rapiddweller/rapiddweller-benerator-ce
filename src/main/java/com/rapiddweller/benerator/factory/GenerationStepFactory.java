@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -62,13 +63,17 @@ public class GenerationStepFactory {
   public static List<GenerationStep<Entity>> createMutatingGenerationSteps(
       ComplexTypeDescriptor descriptor, boolean iterationMode, Uniqueness ownerUniqueness, BeneratorContext context) {
     List<GenerationStep<Entity>> generationSteps = new ArrayList<>();
-    for (InstanceDescriptor part : descriptor.getDeclaredParts()) {
+    Collection<InstanceDescriptor> partsToGenerate
+        = (iterationMode ? descriptor.getDeclaredParts() : descriptor.getParts());
+    for (InstanceDescriptor part : partsToGenerate) {
       if (!(part instanceof ComponentDescriptor) ||
           part.getMode() != Mode.ignored && !ComplexTypeDescriptor.__SIMPLE_CONTENT.equals(part.getName())) {
         try {
-          GenerationStep<Entity> generationStep =
+          GenerationStep<Entity> step =
               (GenerationStep<Entity>) createGenerationStep(part, ownerUniqueness, iterationMode, context);
-          generationSteps.add(generationStep);
+          if (step != null) {
+            generationSteps.add(step);
+          }
         } catch (Exception e) {
           throw new ConfigurationError("Error creating component builder for " + part, e);
         }
