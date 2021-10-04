@@ -156,7 +156,7 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
     String selector = ExpressionUtil.evaluate(selectorEx, context);
     DataSource<Entity> iterable = source.queryEntities(tableName, selector, context);
     List<GenerationStep<Entity>> generationSteps =
-        GenerationStepFactory.createMutatingGenerationSteps(type, false, Uniqueness.NONE, context);
+        GenerationStepFactory.createMutatingGenerationSteps(type, true, Uniqueness.NONE, context);
     try (GenerationStepSupport<Entity> cavs = new GenerationStepSupport<>(tableName, generationSteps)) {
       cavs.init(context);
       DataIterator<Entity> iterator = iterable.iterator();

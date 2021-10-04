@@ -98,7 +98,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
 
     // iterate rows
     List<GenerationStep<Entity>> generationSteps =
-        GenerationStepFactory.createMutatingGenerationSteps(type, false, Uniqueness.NONE, context);
+        GenerationStepFactory.createMutatingGenerationSteps(type, true, Uniqueness.NONE, context);
     try (GenerationStepSupport<Entity> support = new GenerationStepSupport<>(tableName, generationSteps)) {
       support.init(context);
       try (DataIterator<Entity> iterator = ref.resolveReferences(parent.currentEntity(), source, context)) {
