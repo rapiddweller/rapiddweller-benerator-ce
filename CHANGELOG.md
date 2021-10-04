@@ -7,6 +7,8 @@
 ### Release Highlights
 
 - Fixed support for 'time' data type
+- Fixed regex based string generation for optional groups
+- Added missing fields to benerator.xsd
 
 ### Important Notes
 
