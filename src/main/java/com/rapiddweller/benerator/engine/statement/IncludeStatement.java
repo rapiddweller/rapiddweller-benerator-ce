@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
@@ -34,7 +35,6 @@ import com.rapiddweller.benerator.parser.DefaultEntryConverter;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
-import com.rapiddweller.platform.xml.XMLSchemaDescriptorProvider;
 import com.rapiddweller.script.Expression;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -92,7 +92,7 @@ public class IncludeStatement implements Statement {
 
   protected void includeXmlSchema(String uri, BeneratorContext context) {
     logger.debug("Including XML Schema: {}", uri);
-    new XMLSchemaDescriptorProvider(uri, context).close();
+    BeneratorFactory.getInstance().getXMLModule().createSchemaDescriptorProvider(uri, context);
   }
 
   protected void includeDescriptor(String uri, BeneratorContext context) throws IOException {
