@@ -861,6 +861,9 @@
     <xs:element name="part">
         <xs:complexType>
             <xs:attributeGroup ref="component-generator-attrs"/>
+            <xs:attribute name="minCount" type="xs:string"/>
+            <xs:attribute name="maxCount" type="xs:string"/>
+            <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attribute name="container">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
