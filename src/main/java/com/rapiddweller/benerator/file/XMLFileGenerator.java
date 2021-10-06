@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.file;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
@@ -41,11 +42,12 @@ import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.converter.MessageConverter;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.platform.xml.XMLEntityExporter;
-import com.rapiddweller.platform.xml.XMLSchemaDescriptorProvider;
+import com.rapiddweller.platform.xml.XMLModule;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,8 +57,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 /**
- * Generates XML files.<br/>
- * <br/>
+ * Generates XML files.<br/><br/>
  * @author Volker Bergmann
  */
 public class XMLFileGenerator extends UnsafeGenerator<File> {
@@ -86,7 +87,8 @@ public class XMLFileGenerator extends UnsafeGenerator<File> {
   public void init(GeneratorContext context) {
     BeneratorContext beneratorContext = (BeneratorContext) context;
     // parse schema
-    XMLSchemaDescriptorProvider xsdProvider = new XMLSchemaDescriptorProvider(schemaUri, beneratorContext);
+    XMLModule xmlModule = BeneratorFactory.getInstance().getXMLModule();
+    DescriptorProvider xsdProvider = xmlModule.createSchemaDescriptorProvider(schemaUri, beneratorContext);
     beneratorContext.getDataModel().addDescriptorProvider(xsdProvider);
     // set up file name generator
     this.fileNameGenerator = WrapperFactory.applyConverter(

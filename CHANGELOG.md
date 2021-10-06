@@ -2,6 +2,25 @@
 
 <!--lint disable no-duplicate-headings-->
 
+## 2.1.0
+
+### Release Highlights
+
+- Fixed support for 'time' data type
+- Fixed regex based string generation for optional groups
+- Added missing fields to benerator.xsd
+
+### Important Notes
+
+- 
+
+
+### Breaking Changes
+
+- 
+
+---
+
 ## 2.0.0
 
 ### Release Highlights
@@ -16,21 +35,21 @@
 - Add custom separator support for Benerator weighting files
 - Add new [Hash Converters](/doc/component_reference.md#rapiddweller-converters)
 - Add Benchmark Tool and [Performance Tuning](/doc/performance_tuning.md) section in Manual
-- Extend PersonGenerator with attribute age 
+- Extend PersonGenerator with attribute age
 - Update Graalvm to 21.1.0
 - Improved and extended Benerator Manual
 
 ### Important Notes
 
 - Redesigned the Distribution class hierarchy, introduced the AbstractDistribution
-  and DetachedSequence classes to compensate this for implementors. 
+  and DetachedSequence classes to compensate this for implementors.
 
 
 ### Breaking Changes
 
 - See the manual's
-[Migration Guide](/doc/migrating_benerator_projects.md#migration-from-11x-to-200) 
-what to do if you programmed custom Distributions.
+  [Migration Guide](/doc/migrating_benerator_projects.md#migration-from-11x-to-200)
+  what to do if you programmed custom Distributions.
 
 ---
 

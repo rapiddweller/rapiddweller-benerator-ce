@@ -307,6 +307,10 @@ public abstract class GeneratorTest extends ModelTest {
     checkDistribution(generator, iterations, true, tolerance, expectedSet);
   }
 
+  public static <T> void checkProducts(Generator<T> generator, int iterations, T... expectedProducts) {
+    checkDistribution(generator, iterations, false, 0, CollectionUtil.toSet(expectedProducts));
+  }
+
   public static <T> void checkProductSet(Generator<T> generator, int iterations, Set<T> expectedSet) {
     checkDistribution(generator, iterations, false, 0, expectedSet);
   }

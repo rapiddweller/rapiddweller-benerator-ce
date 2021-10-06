@@ -167,6 +167,7 @@ public class BeanDescriptorProvider extends DefaultDescriptorProvider {
         "char", Character.class,
 
         "date", java.util.Date.class,
+        "time", java.sql.Time.class,
         "timestamp", java.sql.Timestamp.class,
 
         "string", String.class,

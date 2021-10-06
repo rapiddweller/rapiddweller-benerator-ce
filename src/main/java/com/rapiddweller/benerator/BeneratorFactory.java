@@ -42,6 +42,7 @@ import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.version.VersionInfo;
+import com.rapiddweller.platform.xml.XMLModule;
 
 import java.util.Set;
 
@@ -120,4 +121,5 @@ public abstract class BeneratorFactory {
 
   public abstract RandomProvider getRandomProvider();
 
+  public abstract XMLModule getXMLModule();
 }

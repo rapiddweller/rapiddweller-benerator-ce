@@ -42,8 +42,7 @@ import java.util.Map;
  */
 public class DefaultDescriptorProvider implements DescriptorProvider {
 
-  private static final Logger logger =
-      LoggerFactory.getLogger(DefaultDescriptorProvider.class);
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
 
   protected final Map<String, TypeDescriptor> typeMap;
   private final boolean redefinable;

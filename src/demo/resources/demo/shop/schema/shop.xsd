@@ -3,7 +3,7 @@
 
 <xs:schema
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        xmlns:ben="https://www.benerator.de/schema/benerator-2.0.0.xsd"
+        xmlns:ben="https://www.benerator.de/schema/benerator-2.1.0.xsd"
         xmlns="http://databene.org/shop-0.7.0.xsd"
         targetNamespace="http://databene.org/shop-0.7.0.xsd"
         elementFormDefault="qualified">

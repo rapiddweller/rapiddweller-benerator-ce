@@ -44,6 +44,8 @@ import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.context.CaseInsensitiveContext;
 import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.format.text.DelocalizingConverter;
+import com.rapiddweller.platform.xml.DefaultXMLModule;
+import com.rapiddweller.platform.xml.XMLModule;
 
 import java.util.Set;
 
@@ -58,13 +60,15 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
   public static final String COMMUNITY_EDITION = "Community Edition";
 
   private final RandomProvider randomProvider;
+  private final XMLModule xmlModule;
 
   public DefaultBeneratorFactory() {
-    this(new DefaultRandomProvider());
+    this(new DefaultRandomProvider(), new DefaultXMLModule());
   }
 
-  public DefaultBeneratorFactory(RandomProvider randomProvider) {
+  public DefaultBeneratorFactory(RandomProvider randomProvider, XMLModule xmlModule) {
     this.randomProvider = randomProvider;
+    this.xmlModule = xmlModule;
   }
 
   @Override
@@ -146,6 +150,11 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
   @Override
   public Context createGenerationContext() {
     return new CaseInsensitiveContext(true);
+  }
+
+  @Override
+  public XMLModule getXMLModule() {
+    return xmlModule;
   }
 
 }

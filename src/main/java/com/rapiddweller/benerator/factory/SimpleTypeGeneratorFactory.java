@@ -65,8 +65,10 @@ import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.PrimitiveType;
 
 import javax.annotation.Nullable;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -333,6 +335,8 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
       return createCharacterGenerator(descriptor, uniqueness, context);
     } else if (Date.class == targetType) {
       return createDateGenerator(descriptor, uniqueness, context);
+    } else if (Time.class == targetType) {
+      return createTimeGenerator(descriptor, uniqueness, context);
     } else if (Timestamp.class == targetType) {
       return createTimestampGenerator(descriptor, uniqueness, context);
     } else if (byte[].class == targetType) {
@@ -386,6 +390,15 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     return context.getGeneratorFactory().createDateGenerator(min, max, granularity, distribution);
   }
 
+  private Generator<Date> createTimeGenerator(SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
+    Time min = parseTime(descriptor, MIN, null);
+    Time max = parseTime(descriptor, MAX, null);
+    long granularity = parseDateGranularity(descriptor);
+    Distribution distribution = FactoryUtil.getDistribution(
+        descriptor.getDistribution(), uniqueness, true, context);
+    return context.getGeneratorFactory().createDateGenerator(min, max, granularity, distribution);
+  }
+
   private static Generator<Character> createCharacterGenerator(
       SimpleTypeDescriptor descriptor, Uniqueness uniqueness, BeneratorContext context) {
     String pattern = descriptor.getPattern();
@@ -395,6 +408,21 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     Locale locale = descriptor.getLocale();
     GeneratorFactory generatorFactory = context.getGeneratorFactory();
     return generatorFactory.createCharacterGenerator(pattern, locale, uniqueness.isUnique());
+  }
+
+  private Time parseTime(SimpleTypeDescriptor descriptor, String detailName, Time defaultTime) {
+    String detail = (String) descriptor.getDeclaredDetailValue(detailName);
+    try {
+      if (detail != null) {
+        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        return new Time(timeFormat.parse(detail).getTime());
+      } else {
+        return defaultTime;
+      }
+    } catch (java.text.ParseException e) {
+      logger.error("Error parsing date " + detail, e);
+      return defaultTime;
+    }
   }
 
   private Date parseDate(SimpleTypeDescriptor descriptor, String detailName, Date defaultDate) {

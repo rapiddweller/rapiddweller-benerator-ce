@@ -1,12 +1,14 @@
 package com.rapiddweller.benerator.primitive;
 
+import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
+import com.rapiddweller.benerator.test.GeneratorTest;
 import org.junit.Test;
 
 import java.util.Locale;
 
 import static org.junit.Assert.*;
 
-public class RegexStringGeneratorTest {
+public class RegexStringGeneratorTest extends GeneratorTest {
     @Test
     public void testConstructor() {
         RegexStringGenerator actualRegexStringGenerator = new RegexStringGenerator();
@@ -111,5 +113,29 @@ public class RegexStringGeneratorTest {
         regexStringGenerator.setUnique(true);
         assertEquals("RegexStringGenerator[unique 'null']", regexStringGenerator.toString());
     }
+
+    @Test
+    public void testOptionalGroup() {
+        RegexStringGenerator gen = new RegexStringGenerator("A(B)?");
+        gen.init(new DefaultBeneratorContext());
+        checkProducts(gen, 100, "A", "AB");
+    }
+
+    @Test
+    public void testGroupCount_0_1() {
+        RegexStringGenerator gen = new RegexStringGenerator("A(B){0,1}");
+        gen.init(new DefaultBeneratorContext());
+        checkProducts(gen, 100, "A", "AB");
+    }
+
+    @Test
+    public void testGroupCount_1_3() {
+        RegexStringGenerator gen = new RegexStringGenerator("A(B){1,3}");
+        gen.init(new DefaultBeneratorContext());
+        checkProducts(gen, 100, "AB", "ABB", "ABBB");
+    }
+
+    // TODO add further tests
+
 }
 

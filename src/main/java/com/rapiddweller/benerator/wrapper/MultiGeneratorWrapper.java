@@ -35,8 +35,6 @@ import com.rapiddweller.benerator.util.AbstractGenerator;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ProgrammerError;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -52,8 +50,6 @@ import java.util.List;
  * @since 0.1
  */
 public abstract class MultiGeneratorWrapper<S, P> extends AbstractGenerator<P> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(MultiGeneratorWrapper.class);
 
   protected final Class<P> generatedType;
   protected final List<Generator<? extends S>> sources;
@@ -114,7 +110,7 @@ public abstract class MultiGeneratorWrapper<S, P> extends AbstractGenerator<P> {
   @Override
   public void init(GeneratorContext context) {
     assertNotInitialized();
-    if (sources.size() == 0) {
+    if (sources.isEmpty()) {
       throw new InvalidGeneratorSetupException("sources", "is empty");
     }
     makeAllGeneratorsAvailable();
@@ -173,7 +169,7 @@ public abstract class MultiGeneratorWrapper<S, P> extends AbstractGenerator<P> {
   @SuppressWarnings({"unchecked", "rawtypes"})
   protected ProductWrapper<S> generateFromRandomSource(ProductWrapper<S> wrapper) {
     assertInitialized();
-    if (availableSources.size() == 0) {
+    if (availableSources.isEmpty()) {
       return null;
     }
     ProductWrapper test;
@@ -183,8 +179,8 @@ public abstract class MultiGeneratorWrapper<S, P> extends AbstractGenerator<P> {
       if (test == null) {
         availableSources.remove(sourceIndex);
       }
-    } while (test == null && availableSources.size() > 0);
-    LOGGER.debug("generateFromRandomSource(): {}", test);
+    } while (test == null && !availableSources.isEmpty());
+    logger.debug("generateFromRandomSource(): {}", test);
     return test;
   }
 
@@ -205,7 +201,7 @@ public abstract class MultiGeneratorWrapper<S, P> extends AbstractGenerator<P> {
   @SuppressWarnings({"rawtypes", "unchecked"})
   protected ProductWrapper<S> generateFromAvailableSource(ProductWrapper<S> wrapper) {
     assertInitialized();
-    if (0 >= availableSources.size()) {
+    if (availableSources.isEmpty()) {
       return null;
     }
     ProductWrapper test;
@@ -214,7 +210,7 @@ public abstract class MultiGeneratorWrapper<S, P> extends AbstractGenerator<P> {
       if (test == null) {
         availableSources.remove(0);
       }
-    } while (test == null && 0 < availableSources.size());
+    } while (test == null && !availableSources.isEmpty());
     return test;
   }
 
