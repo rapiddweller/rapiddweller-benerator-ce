@@ -33,8 +33,11 @@ import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.script.Expression;
+import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.TaskExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.util.ArrayList;
@@ -48,10 +51,13 @@ import java.util.List;
  */
 public class GenerateOrIterateStatement extends AbstractStatement implements Closeable, PageListener {
 
+  protected Logger logger = LoggerFactory.getLogger(GenerateOrIterateStatement.class);
+
   // constant attributes -----------------------------------------------------------------------------------------------
 
   protected final Generator<Long> countGenerator;
   protected final Expression<Long> minCount;
+  protected final Expression<Integer> threads;
   protected final Expression<Long> pageSize;
   protected final Expression<PageListener> pageListenerEx;
   protected final boolean infoLog;
@@ -68,11 +74,12 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
   // constructor -------------------------------------------------------------------------------------------------------
 
   public GenerateOrIterateStatement(String productName, Generator<Long> countGenerator, Expression<Long> minCount,
-                                    Expression<Long> pageSize, Expression<PageListener> pageListenerEx,
+                                    Expression<Integer> threads, Expression<Long> pageSize, Expression<PageListener> pageListenerEx,
                                     Expression<ErrorHandler> errorHandler, boolean infoLog, boolean isSubCreator, BeneratorContext context) {
     super(errorHandler);
     this.countGenerator = countGenerator;
     this.minCount = minCount;
+    this.threads = threads;
     this.pageSize = pageSize;
     this.pageListenerEx = pageListenerEx;
     this.infoLog = infoLog;
@@ -110,6 +117,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
     if (!beInitialized(context)) {
       task.reset();
     }
+    checkThreads(context);
     executeTask(generateCount(childContext), minCount.evaluate(childContext), pageSize.evaluate(childContext),
         evaluatePageListeners(childContext), getErrorHandler(childContext));
     if (!isSubCreator) {
@@ -171,6 +179,14 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
                              List<PageListener> pageListeners, ErrorHandler errorHandler) {
     TaskExecutor.execute(task, childContext, reqExecutions, minExecutions,
         pageListeners, pageSizeValue, false, errorHandler, infoLog);
+  }
+
+  private void checkThreads(BeneratorContext context) {
+    int threadCount = ExpressionUtil.evaluate(this.threads, context);
+    if (threadCount > 1) {
+        logger.warn("Benerator CE does not support multithreaded generation or iteration: " +
+            "Ignoring threads='{}'.", threadCount);
+    }
   }
 
 }

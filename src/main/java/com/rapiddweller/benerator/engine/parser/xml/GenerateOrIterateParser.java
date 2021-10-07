@@ -117,6 +117,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_GENERATE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ITERATE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_VALUE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_VARIABLE;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
 import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStringAttribute;
 
 /**
@@ -139,7 +140,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
       ATT_SOURCE, ATT_SEGMENT, ATT_FORMAT, ATT_OFFSET, ATT_SEPARATOR, ATT_ENCODING, ATT_SELECTOR, ATT_SUB_SELECTOR,
       ATT_DATASET, ATT_NESTING, ATT_LOCALE, ATT_FILTER
   );
-
 
   private static final Set<String> CONSUMER_EXPECTING_ELEMENTS = CollectionUtil.toSet(EL_GENERATE, EL_ITERATE);
 
@@ -255,12 +255,13 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     // parse statement
     Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 0L, 1L, false, context);
     Expression<Long> pageSize = parsePageSize(element);
+    Expression<Integer> threads = parseIntAttribute("threads", element, 1);
     Expression<PageListener> pager = (Expression<PageListener>) DatabeneScriptParser.parseBeanSpec(
         element.getAttribute(ATT_PAGER));
     Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_NAME));
     Expression<Long> minCount = DescriptorUtil.getMinCount(descriptor, 0L);
     GenerateOrIterateStatement statement = createStatement(getTaskName(descriptor),
-        countGenerator, minCount, pageSize, pager, infoLog, nested, errorHandler, context);
+        countGenerator, minCount, threads, pageSize, pager, infoLog, nested, errorHandler, context);
 
     // parse task and sub statements
     GenerateAndConsumeTask task = parseTask(element, parentPath, statement, parsingContext, descriptor, infoLog);
@@ -269,10 +270,10 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
   }
 
   protected GenerateOrIterateStatement createStatement(String productName, Generator<Long> countGenerator,
-                                                       Expression<Long> minCount, Expression<Long> pageSize,
+                                                       Expression<Long> minCount, Expression<Integer> threads, Expression<Long> pageSize,
                                                        Expression<PageListener> pager, boolean infoLog, boolean nested,
                                                        Expression<ErrorHandler> errorHandler, BeneratorContext context) {
-    return new GenerateOrIterateStatement(productName, countGenerator, minCount, pageSize, pager,
+    return new GenerateOrIterateStatement(productName, countGenerator, minCount, threads, pageSize, pager,
         errorHandler, infoLog, nested, context);
   }
 
@@ -292,8 +293,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
         syntaxError("'source' missing in <iterate>", element);
       }
     }
-
-    checkThreads(element, parentPath);
 
     // get core date
     descriptor.setNullable(false);
@@ -405,23 +404,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     task.setConsumer(consumer);
 
     return task;
-  }
-
-  protected void checkThreads(Element element, Statement[] parentPath) {
-    String threads = DescriptorParserUtil.getAttribute(ATT_THREADS, element);
-    if (threads != null) {
-      boolean warn = false;
-      try {
-        int n = Integer.parseInt(threads);
-        warn = (n != 1);
-      } catch (NumberFormatException e) {
-        warn = true;
-      }
-      if (warn) {
-        logger.warn("Benerator CE does not support multithreaded generation or iteration: " +
-            "Ignoring threads='{}'.", threads);
-      }
-    }
   }
 
   protected String getTaskName(InstanceDescriptor descriptor) {
