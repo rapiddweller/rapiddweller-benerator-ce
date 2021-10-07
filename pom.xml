@@ -311,11 +311,23 @@
             <version>${database_postgresql.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!--  xml handling -->
+        <!--  xml support -->
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
             <version>${dependency_xml-apis.version}</version>
+        </dependency>
+        <!-- JAXB (for Java MessageDigest support, eg. MD5) -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.1</version>
+            <scope>runtime</scope>
         </dependency>
         <!-- annotations -->
         <dependency>
