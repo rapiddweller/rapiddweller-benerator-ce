@@ -32,7 +32,6 @@ public class Slf4jLog4jIntegrationTest {
   @Test
   public void testLog4j2() {
     LoggerContext context = (LoggerContext) LogManager.getContext();
-    System.out.println(context.getConfigLocation());
     Configuration configuration = context.getConfiguration();
     ConfigurationSource configSource = configuration.getConfigurationSource();
     assertNotNull(configSource);
