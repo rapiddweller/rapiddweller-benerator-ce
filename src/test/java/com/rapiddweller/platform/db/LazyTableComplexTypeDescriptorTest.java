@@ -1,5 +1,6 @@
 package com.rapiddweller.platform.db;
 
+import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.jdbacl.model.DBColumn;
 import com.rapiddweller.jdbacl.model.DBDataType;
 import com.rapiddweller.jdbacl.model.DBForeignKeyConstraint;
@@ -12,18 +13,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * The type Lazy table complex type descriptor test.
- */
+/** Tests the {@link LazyTableComplexTypeDescriptor}. */
 public class LazyTableComplexTypeDescriptorTest {
-  /**
-   * Test get parts.
-   */
+
   @Test
   public void testGetParts() {
     DBTable table = new DBTable("Name");
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(table,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     assertTrue(lazyTableComplexTypeDescriptor.getParts().isEmpty());
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
     DBTable dbTable = lazyTableComplexTypeDescriptor.table;
@@ -31,9 +28,6 @@ public class LazyTableComplexTypeDescriptorTest {
     assertEquals(0, dbTable.getColumnNames().length);
   }
 
-  /**
-   * Test get parts 2.
-   */
   @Test
   public void testGetParts2() {
     DBTable dbTable = new DBTable("TestTable");
@@ -43,19 +37,16 @@ public class LazyTableComplexTypeDescriptorTest {
     dbTable.addForeignKey(
         new DBForeignKeyConstraint("TestFK", true, owner, column.getName(), new DBTable("Name"), "Referee Column Name"));
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(dbTable,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     lazyTableComplexTypeDescriptor.getParts();
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
   }
 
-  /**
-   * Test get component.
-   */
   @Test
   public void testGetComponent() {
     DBTable table = new DBTable("Name");
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(table,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     assertNull(lazyTableComplexTypeDescriptor.getComponent("Name"));
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
     DBTable dbTable = lazyTableComplexTypeDescriptor.table;
@@ -63,9 +54,6 @@ public class LazyTableComplexTypeDescriptorTest {
     assertEquals(0, dbTable.getColumnNames().length);
   }
 
-  /**
-   * Test get component 2.
-   */
   @Test
   public void testGetComponent2() {
     DBTable dbTable = new DBTable("TestTable");
@@ -75,19 +63,16 @@ public class LazyTableComplexTypeDescriptorTest {
     dbTable.addForeignKey(
         new DBForeignKeyConstraint("TestFK", true, owner, column.getName(), new DBTable("Name"), "Referee Column Name"));
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(dbTable,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     lazyTableComplexTypeDescriptor.getComponent("TestTable");
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
   }
 
-  /**
-   * Test get component 3.
-   */
   @Test
   public void testGetComponent3() {
     DBTable table = new DBTable("Name");
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(table,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     lazyTableComplexTypeDescriptor.setParentName("Parent Name");
     assertNull(lazyTableComplexTypeDescriptor.getComponent("Name"));
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
@@ -98,14 +83,11 @@ public class LazyTableComplexTypeDescriptorTest {
     assertEquals(0, dbTable.getColumnNames().length);
   }
 
-  /**
-   * Test get components.
-   */
   @Test
   public void testGetComponents() {
     DBTable table = new DBTable("Name");
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(table,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     assertTrue(lazyTableComplexTypeDescriptor.getComponents().isEmpty());
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
     DBTable dbTable = lazyTableComplexTypeDescriptor.table;
@@ -113,9 +95,6 @@ public class LazyTableComplexTypeDescriptorTest {
     assertEquals(0, dbTable.getPKColumnNames().length);
   }
 
-  /**
-   * Test get components 2.
-   */
   @Test
   public void testGetComponents2() {
     DBTable dbTable = new DBTable("TestTable");
@@ -125,19 +104,16 @@ public class LazyTableComplexTypeDescriptorTest {
     dbTable.addForeignKey(
         new DBForeignKeyConstraint("TestFK", true, owner, column.getName(), new DBTable("Name"), "Referee Column Name"));
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(dbTable,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     lazyTableComplexTypeDescriptor.getComponents();
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
   }
 
-  /**
-   * Test get declared parts.
-   */
   @Test
   public void testGetDeclaredParts() {
     DBTable table = new DBTable("Name");
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(table,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     assertTrue(lazyTableComplexTypeDescriptor.getDeclaredParts().isEmpty());
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
     DBTable dbTable = lazyTableComplexTypeDescriptor.table;
@@ -145,9 +121,6 @@ public class LazyTableComplexTypeDescriptorTest {
     assertEquals(0, dbTable.getPKColumnNames().length);
   }
 
-  /**
-   * Test get declared parts 2.
-   */
   @Test
   public void testGetDeclaredParts2() {
     DBTable dbTable = new DBTable("TestTable");
@@ -157,19 +130,16 @@ public class LazyTableComplexTypeDescriptorTest {
     dbTable.addForeignKey(
         new DBForeignKeyConstraint("TestFK", true, owner, column.getName(), new DBTable("Name"), "Referee Column Name"));
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(dbTable,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     lazyTableComplexTypeDescriptor.getDeclaredParts();
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
   }
 
-  /**
-   * Test is declared component.
-   */
   @Test
   public void testIsDeclaredComponent() {
     DBTable table = new DBTable("Name");
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(table,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     assertFalse(lazyTableComplexTypeDescriptor.isDeclaredComponent("Component Name"));
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
     DBTable dbTable = lazyTableComplexTypeDescriptor.table;
@@ -177,9 +147,6 @@ public class LazyTableComplexTypeDescriptorTest {
     assertEquals(0, dbTable.getColumnNames().length);
   }
 
-  /**
-   * Test is declared component 2.
-   */
   @Test
   public void testIsDeclaredComponent2() {
     DBTable dbTable = new DBTable("TestTable");
@@ -189,19 +156,16 @@ public class LazyTableComplexTypeDescriptorTest {
     dbTable.addForeignKey(
         new DBForeignKeyConstraint("TestFK", true, owner, column.getName(), new DBTable("Name"), "Referee Column Name"));
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(dbTable,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     lazyTableComplexTypeDescriptor.isDeclaredComponent("Component Name");
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
   }
 
-  /**
-   * Test get id component names.
-   */
   @Test
   public void testGetIdComponentNames() {
     DBTable table = new DBTable("Name");
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(table,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     assertEquals(0, lazyTableComplexTypeDescriptor.getIdComponentNames().length);
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
     DBTable dbTable = lazyTableComplexTypeDescriptor.table;
@@ -209,9 +173,6 @@ public class LazyTableComplexTypeDescriptorTest {
     assertTrue(dbTable.isPKImported());
   }
 
-  /**
-   * Test get id component names 2.
-   */
   @Test
   public void testGetIdComponentNames2() {
     DBTable dbTable = new DBTable("TestTable");
@@ -221,19 +182,16 @@ public class LazyTableComplexTypeDescriptorTest {
     dbTable.addForeignKey(
         new DBForeignKeyConstraint("TestFK", true, owner, column.getName(), new DBTable("Name"), "Referee Column Name"));
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(dbTable,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     lazyTableComplexTypeDescriptor.getIdComponentNames();
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
   }
 
-  /**
-   * Test get reference components.
-   */
   @Test
   public void testGetReferenceComponents() {
     DBTable table = new DBTable("Name");
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(table,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     assertTrue(lazyTableComplexTypeDescriptor.getReferenceComponents().isEmpty());
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
     DBTable dbTable = lazyTableComplexTypeDescriptor.table;
@@ -241,9 +199,6 @@ public class LazyTableComplexTypeDescriptorTest {
     assertEquals(0, dbTable.getPKColumnNames().length);
   }
 
-  /**
-   * Test get reference components 2.
-   */
   @Test
   public void testGetReferenceComponents2() {
     DBTable dbTable = new DBTable("TestTable");
@@ -253,9 +208,10 @@ public class LazyTableComplexTypeDescriptorTest {
     dbTable.addForeignKey(
         new DBForeignKeyConstraint("TestFK", true, owner, column.getName(), new DBTable("Name"), "Referee Column Name"));
     LazyTableComplexTypeDescriptor lazyTableComplexTypeDescriptor = new LazyTableComplexTypeDescriptor(dbTable,
-        new DefaultDBSystem("42", "", new DataModel()));
+        new DefaultDBSystem("42", "", new DefaultBeneratorContext()));
     lazyTableComplexTypeDescriptor.getReferenceComponents();
     assertTrue(lazyTableComplexTypeDescriptor.loaded);
   }
+
 }
 

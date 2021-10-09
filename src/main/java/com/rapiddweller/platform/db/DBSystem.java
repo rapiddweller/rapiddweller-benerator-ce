@@ -27,6 +27,7 @@
 package com.rapiddweller.platform.db;
 
 import com.rapiddweller.benerator.Consumer;
+import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.benerator.storage.StorageSystemInserter;
 import com.rapiddweller.common.CollectionUtil;
@@ -138,8 +139,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   private boolean dynamicQuerySupported;
   private boolean connectedBefore;
 
-  public DBSystem(String id, String url, String driver, String user,
-                  String password, DataModel dataModel) {
+  protected DBSystem(String id, String url, String driver, String user, String password, DataModel dataModel) {
     this(id, dataModel);
     setUrl(url);
     setUser(user);
@@ -148,9 +148,17 @@ public abstract class DBSystem extends AbstractStorageSystem {
     checkOracleDriverVersion(driver);
   }
 
-  public DBSystem(String id, String environment, DataModel dataModel) {
-    this(id, dataModel);
+  protected DBSystem(String id, String environment, BeneratorContext context) {
+    this(id, context.getDataModel());
     setEnvironment(environment);
+    logger.debug("Reading environment data for '{}'", environment);
+    JDBCConnectData connectData = DBUtil.getConnectData(environment, context.getContextUri());
+    this.url = connectData.url;
+    this.driver = connectData.driver;
+    this.catalogName = connectData.catalog;
+    this.schemaName = connectData.schema;
+    this.user = connectData.user;
+    this.password = connectData.password;
   }
 
   private DBSystem(String id, DataModel dataModel) {
@@ -200,8 +208,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
         "binary", Blob.class,
         "binary", byte[].class
-
-
     );
   }
 
@@ -219,19 +225,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   }
 
   private void setEnvironment(String environment) {
-    if (StringUtil.isEmpty(environment)) {
-      this.environment = null;
-      return;
-    }
-    logger.debug("setting environment '{}'", environment);
-    JDBCConnectData connectData = DBUtil.getConnectData(environment);
-    this.environment = environment;
-    this.url = connectData.url;
-    this.driver = connectData.driver;
-    this.catalogName = connectData.catalog;
-    this.schemaName = connectData.schema;
-    this.user = connectData.user;
-    this.password = connectData.password;
+    this.environment = (StringUtil.isEmpty(environment) ? null : environment);
   }
 
   public String getDriver() {
@@ -557,20 +551,16 @@ public abstract class DBSystem extends AbstractStorageSystem {
   }
 
   public long nextSequenceValue(String sequenceName) {
-    return DBUtil
-        .queryLong(getDialect().renderFetchSequenceValue(sequenceName),
-            getConnection());
+    return DBUtil.queryLong(getDialect().renderFetchSequenceValue(sequenceName), getConnection());
   }
 
-  public void setSequenceValue(String sequenceName, long value)
-      throws SQLException {
+  public void setSequenceValue(String sequenceName, long value) throws SQLException {
     getDialect().setNextSequenceValue(sequenceName, value, getConnection());
   }
 
   protected Connection createConnection() {
     try {
-      Connection connection =
-          DBUtil.connect(url, driver, user, password, readOnly);
+      Connection connection = DBUtil.connect(url, driver, user, password, readOnly);
       if (!connectedBefore) {
         DBUtil.logMetaData(connection);
         connectedBefore = true;
@@ -578,8 +568,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
       connection.setAutoCommit(false);
       return connection;
     } catch (ConnectFailedException e) {
-      throw new RuntimeException(
-          "Connecting the database failed. URL: " + url, e);
+      throw new RuntimeException("Connecting the database failed. URL: " + url, e);
     } catch (SQLException e) {
       throw new ConfigurationError("Turning off auto-commit failed", e);
     }
@@ -629,14 +618,11 @@ public abstract class DBSystem extends AbstractStorageSystem {
       try {
         DatabaseMetaData metaData = getConnection().getMetaData();
         String productName = metaData.getDatabaseProductName();
-        VersionNumber productVersion = VersionNumber
-            .valueOf(metaData.getDatabaseMajorVersion() + "." +
-                metaData.getDatabaseMinorVersion());
-        dialect = DatabaseDialectManager
-            .getDialectForProduct(productName, productVersion);
+        VersionNumber productVersion
+            = VersionNumber.valueOf(metaData.getDatabaseMajorVersion() + "." + metaData.getDatabaseMinorVersion());
+        dialect = DatabaseDialectManager.getDialectForProduct(productName, productVersion);
       } catch (SQLException e) {
-        throw new ConfigurationError("Database meta data access failed",
-            e);
+        throw new ConfigurationError("Database meta data access failed", e);
       }
     }
     return dialect;
@@ -683,8 +669,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     try {
       importer = createJDBCImporter();
       if (metaDataCache) {
-        importer = new CachingDBImporter((JDBCDBImporter) importer,
-            getEnvironment());
+        importer = new CachingDBImporter((JDBCDBImporter) importer, getEnvironment());
       }
       database = importer.importDatabase();
     } catch (ConnectFailedException e) {
@@ -704,13 +689,11 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   private QueryDataSource createQuery(String query, Context context,
                                       Connection connection) {
-    return new QueryDataSource(connection, query, fetchSize,
-        (dynamicQuerySupported ? context : null));
+    return new QueryDataSource(connection, query, fetchSize, (dynamicQuerySupported ? context : null));
   }
 
   protected abstract PreparedStatement getStatement(
-      ComplexTypeDescriptor descriptor, boolean insert,
-      List<ColumnInfo> columnInfos);
+      ComplexTypeDescriptor descriptor, boolean insert, List<ColumnInfo> columnInfos);
 
   private void parseTable(DBTable table) {
     logger.debug("Parsing table {}", table);
@@ -726,52 +709,39 @@ public abstract class DBSystem extends AbstractStorageSystem {
     typeDescriptors.put(tableName, complexType);
   }
 
-  public ComplexTypeDescriptor mapTableToComplexTypeDescriptor(DBTable table,
-                                                               ComplexTypeDescriptor complexType) {
+  public ComplexTypeDescriptor mapTableToComplexTypeDescriptor(
+      DBTable table, ComplexTypeDescriptor complexType) {
     // process primary keys
     DBPrimaryKeyConstraint pkConstraint = table.getPrimaryKeyConstraint();
     if (pkConstraint != null) {
       String[] pkColumnNames = pkConstraint.getColumnNames();
-      if (pkColumnNames.length ==
-          1) { // TODO v0.7.6 support composite primary keys
+      if (pkColumnNames.length == 1) { // TODO v0.7.6 support composite primary keys
         String columnName = pkColumnNames[0];
         DBColumn column = table.getColumn(columnName);
         table.getColumn(columnName);
-        String abstractType = JdbcMetaTypeMapper
-            .abstractType(column.getType(),
-                acceptUnknownColumnTypes);
-        IdDescriptor idDescriptor =
-            new IdDescriptor(columnName, this, abstractType);
+        String abstractType = JdbcMetaTypeMapper.abstractType(column.getType(), acceptUnknownColumnTypes);
+        IdDescriptor idDescriptor = new IdDescriptor(columnName, this, abstractType);
         complexType.setComponent(idDescriptor);
       }
     }
 
     // process foreign keys
-    for (DBForeignKeyConstraint constraint : table
-        .getForeignKeyConstraints()) {
-      String[] foreignKeyColumnNames =
-          constraint.getForeignKeyColumnNames();
+    for (DBForeignKeyConstraint constraint : table.getForeignKeyConstraints()) {
+      String[] foreignKeyColumnNames = constraint.getForeignKeyColumnNames();
       if (foreignKeyColumnNames.length == 1) {
         String fkColumnName = foreignKeyColumnNames[0];
         DBTable targetTable = constraint.getRefereeTable();
-        DBColumn fkColumn =
-            constraint.getTable().getColumn(fkColumnName);
+        DBColumn fkColumn = constraint.getTable().getColumn(fkColumnName);
         DBDataType concreteType = fkColumn.getType();
-        String abstractType = JdbcMetaTypeMapper
-            .abstractType(concreteType, acceptUnknownColumnTypes);
+        String abstractType = JdbcMetaTypeMapper.abstractType(concreteType, acceptUnknownColumnTypes);
         ReferenceDescriptor descriptor = new ReferenceDescriptor(
-            fkColumnName,
-            this,
-            abstractType,
-            targetTable.getName(),
-            constraint.getRefereeColumnNames()[0]);
+            fkColumnName, this, abstractType, targetTable.getName(), constraint.getRefereeColumnNames()[0]);
         descriptor.getLocalType(false).setSource(id);
         descriptor.setMinCount(new ConstantExpression<>(1L));
         descriptor.setMaxCount(new ConstantExpression<>(1L));
         boolean nullable = fkColumn.isNullable();
         descriptor.setNullable(nullable);
-        complexType.setComponent(
-            descriptor); // overwrite possible id descriptor for foreign keys
+        complexType.setComponent(descriptor); // overwrite possible id descriptor for foreign keys
         if (logger.isDebugEnabled()) {
           logger.debug("Parsed reference {}.{}", table.getName(), descriptor);
         }
@@ -813,14 +783,12 @@ public abstract class DBSystem extends AbstractStorageSystem {
           }
         }
         //typeDescriptors.put(typeDescriptor.getName(), typeDescriptor);
-        PartDescriptor descriptor =
-            new PartDescriptor(columnName, this);
+        PartDescriptor descriptor = new PartDescriptor(columnName, this);
         descriptor.setLocalType(typeDescriptor);
         descriptor.setMinCount(new ConstantExpression<>(1L));
         descriptor.setMaxCount(new ConstantExpression<>(1L));
         descriptor.setNullable(column.getNotNullConstraint() == null);
-        List<DBUniqueConstraint> ukConstraints =
-            column.getUkConstraints();
+        List<DBUniqueConstraint> ukConstraints = column.getUkConstraints();
         for (DBUniqueConstraint constraint : ukConstraints) {
           if (constraint.getColumnNames().length == 1) {
             descriptor.setUnique(true);
@@ -833,8 +801,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
         logger.debug("parsed attribute {}: {}", columnId, descriptor);
         complexType.addComponent(descriptor);
       } catch (Exception e) {
-        throw new ConfigurationError(
-            "Error processing column " + column.getName() +
+        throw new ConfigurationError("Error processing column " + column.getName() +
                 " of table " + table.getName(), e);
       }
     }
@@ -849,35 +816,25 @@ public abstract class DBSystem extends AbstractStorageSystem {
     } else {
       table = getTable(tableName);
     }
-    List<String> pkColumnNames =
-        CollectionUtil.toList(table.getPKColumnNames());
-    ComplexTypeDescriptor typeDescriptor =
-        (ComplexTypeDescriptor) getTypeDescriptor(tableName);
-    Collection<ComponentDescriptor> componentDescriptors =
-        typeDescriptor.getComponents();
+    List<String> pkColumnNames = CollectionUtil.toList(table.getPKColumnNames());
+    ComplexTypeDescriptor typeDescriptor = (ComplexTypeDescriptor) getTypeDescriptor(tableName);
+    Collection<ComponentDescriptor> componentDescriptors = typeDescriptor.getComponents();
     List<ColumnInfo> pkInfos = new ArrayList<>(componentDescriptors.size());
-    List<ColumnInfo> normalInfos =
-        new ArrayList<>(componentDescriptors.size());
+    List<ColumnInfo> normalInfos = new ArrayList<>(componentDescriptors.size());
     ComplexTypeDescriptor entityDescriptor = entity.descriptor();
     for (ComponentDescriptor dbCompDescriptor : componentDescriptors) {
-      ComponentDescriptor enCompDescriptor =
-          entityDescriptor.getComponent(dbCompDescriptor.getName());
-      if (enCompDescriptor != null &&
-          enCompDescriptor.getMode() == Mode.ignored) {
+      ComponentDescriptor enCompDescriptor = entityDescriptor.getComponent(dbCompDescriptor.getName());
+      if (enCompDescriptor != null && enCompDescriptor.getMode() == Mode.ignored) {
         continue;
       }
       if (dbCompDescriptor.getMode() != Mode.ignored) {
         String name = dbCompDescriptor.getName();
-        SimpleTypeDescriptor type =
-            (SimpleTypeDescriptor) dbCompDescriptor
-                .getTypeDescriptor();
+        SimpleTypeDescriptor type = (SimpleTypeDescriptor) dbCompDescriptor.getTypeDescriptor();
         PrimitiveType primitiveType = type.getPrimitiveType();
         if (primitiveType == null) {
           if (!acceptUnknownColumnTypes) {
             throw new ConfigurationError(
-                "Column type of " + entityDescriptor.getName() +
-                    "." +
-                    dbCompDescriptor.getName() +
+                "Column type of " + entityDescriptor.getName() + "." + dbCompDescriptor.getName() +
                     " unknown: " + type.getName());
           } else if (entity.get(type.getName()) instanceof String) {
             primitiveType = PrimitiveType.STRING;
@@ -890,8 +847,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
         DBColumn column = table.getColumn(name);
         DBDataType columnType = column.getType();
         int sqlType = columnType.getJdbcType();
-        Class<?> javaType =
-            driverTypeMapper.concreteType(primitiveTypeName);
+        Class<?> javaType = driverTypeMapper.concreteType(primitiveTypeName);
         ColumnInfo info = new ColumnInfo(name, sqlType, javaType);
         if (pkColumnNames.contains(name)) {
           pkInfos.add(info);
@@ -917,8 +873,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     } else {
       table = findAnyTableOfName(tableName);
       if (table != null) {
-        logger.warn("Table '{}' not found " +
-            "in the expected catalog or schema." +
+        logger.warn("Table '{}' not found in the expected catalog or schema." +
             "I have taken it from catalog '{}' and schema '{}' instead. " +
             "You better make sure this is right and fix the configuration",
             tableName, table.getCatalog(), table.getSchema());
@@ -994,8 +949,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     List<ColumnInfo> writeColumnInfos = getWriteColumnInfos(entity, insert);
     try {
       String tableName = entity.type();
-      PreparedStatement statement =
-          getStatement(entity.descriptor(), insert, writeColumnInfos);
+      PreparedStatement statement = getStatement(entity.descriptor(), insert, writeColumnInfos);
       for (int i = 0; i < writeColumnInfos.size(); i++) {
         ColumnInfo info = writeColumnInfos.get(i);
         Object jdbcValue = entity.getComponent(info.name);
@@ -1007,20 +961,14 @@ public abstract class DBSystem extends AbstractStorageSystem {
         }
         try {
           boolean criticalOracleType =
-              (dialect instanceof OracleDialect &&
-                  (info.sqlType == Types.NCLOB ||
-                      info.sqlType == Types.OTHER));
-          if (jdbcValue != null ||
-              criticalOracleType) { // Oracle is not able to perform setNull() on NCLOBs and NVARCHAR2
-
+              (dialect instanceof OracleDialect && (info.sqlType == Types.NCLOB || info.sqlType == Types.OTHER));
+          if (jdbcValue != null || criticalOracleType) { // Oracle is not able to perform setNull() on NCLOBs and NVARCHAR2
             statement.setObject(i + 1, jdbcValue);
           } else {
             statement.setNull(i + 1, info.sqlType);
           }
         } catch (SQLException e) {
-          throw new RuntimeException(
-              "error setting column " + tableName + '.' +
-                  info.name, e);
+          throw new RuntimeException("error setting column " + tableName + '.' + info.name, e);
         }
       }
       if (batch) {
@@ -1028,9 +976,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
       } else {
         int rowCount = statement.executeUpdate();
         if (rowCount == 0) {
-          throw new RuntimeException(
-              "Update failed because, since there is no database entry with the PK of " +
-                  entity);
+          throw new RuntimeException("Update failed because, since there is no database entry with the PK of "
+              + entity);
         }
       }
     } catch (Exception e) {
