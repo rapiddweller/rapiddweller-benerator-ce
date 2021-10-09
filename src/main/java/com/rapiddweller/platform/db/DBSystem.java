@@ -152,13 +152,15 @@ public abstract class DBSystem extends AbstractStorageSystem {
     this(id, context.getDataModel());
     setEnvironment(environment);
     logger.debug("Reading environment data for '{}'", environment);
-    JDBCConnectData connectData = DBUtil.getConnectData(environment, context.getContextUri());
-    this.url = connectData.url;
-    this.driver = connectData.driver;
-    this.catalogName = connectData.catalog;
-    this.schemaName = connectData.schema;
-    this.user = connectData.user;
-    this.password = connectData.password;
+    if (this.environment != null) {
+      JDBCConnectData connectData = DBUtil.getConnectData(environment, context.getContextUri());
+      this.url = connectData.url;
+      this.driver = connectData.driver;
+      this.catalogName = connectData.catalog;
+      this.schemaName = connectData.schema;
+      this.user = connectData.user;
+      this.password = connectData.password;
+    }
   }
 
   private DBSystem(String id, DataModel dataModel) {
