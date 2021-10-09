@@ -125,7 +125,7 @@
         <_rd_common_version>1.1.4-jdk-11-SNAPSHOT</_rd_common_version>
         <_rd_contiperf_version>2.5.0-jdk-11</_rd_contiperf_version>
         <_rd_format_version>1.1.5-jdk-11-SNAPSHOT</_rd_format_version>
-        <_rd_jdbacl_version>1.1.11-jdk-11</_rd_jdbacl_version>
+        <_rd_jdbacl_version>1.1.12-jdk-11-SNAPSHOT</_rd_jdbacl_version>
         <_rd_script_version>1.1.4-jdk-11-SNAPSHOT</_rd_script_version>
         <database_derbyclient.version>10.15.2.0</database_derbyclient.version>
         <database_h2.version>1.4.200</database_h2.version>
