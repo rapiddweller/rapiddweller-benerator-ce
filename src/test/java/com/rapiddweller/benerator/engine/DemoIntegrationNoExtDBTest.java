@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.engine;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.FileUtil;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -203,6 +204,7 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
    *
    * @throws IOException the io exception
    */
+  @Ignore
   @Test
   public void DemoH2MultiSchema() throws IOException {
     context.setContextUri("/demo/db");

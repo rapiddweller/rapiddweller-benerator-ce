@@ -42,7 +42,7 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 public class AddressGenerator extends CompositeGenerator<Address>
     implements NonNullGenerator<Address> {
 
-  VarLengthStringGenerator localPhoneNumberGenerator;
+  private VarLengthStringGenerator localPhoneNumberGenerator;
   private String dataset;
   private CityGenerator cityGenerator;
   private StreetNameGenerator streetNameGenerator;

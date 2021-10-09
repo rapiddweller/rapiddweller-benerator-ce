@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -27,12 +27,15 @@
 package com.rapiddweller.platform.csv;
 
 import com.rapiddweller.benerator.test.GeneratorTest;
+import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ReaderLineIterator;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
+import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,28 +50,24 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the {@link CSVEntityExporter}.<br/>
- * <br/>
+ * Tests the {@link CSVEntityExporter}.<br/><br/>
  * Created at 14.03.2009 06:10:37
- *
  * @author Volker Bergmann
  * @since 0.5.8
  */
 public class CSVEntityExporterTest extends GeneratorTest {
 
   private static final File DEFAULT_FILE = new File("export.csv");
-
-  private final File customFile = new File("target" + File.separator + getClass().getSimpleName() + ".csv");
+  private static final File CUSTOM_FILE  = new File("target/CSVEntityExporterTest.csv");
 
   private ComplexTypeDescriptor descriptor;
   private Entity alice;
   private Entity bob;
 
-  /**
-   * Sets up.
-   */
   @Before
   public void setUp() {
+    FileUtil.deleteIfExists(CUSTOM_FILE);
+    FileUtil.deleteIfExists(DEFAULT_FILE);
     // create descriptor for 'Person' entities
     descriptor = createComplexType("Person", (ComplexTypeDescriptor) dataModel.getTypeDescriptor("entity"));
     descriptor.addComponent(createPart("name", dataModel.getTypeDescriptor("string")));
@@ -79,271 +78,167 @@ public class CSVEntityExporterTest extends GeneratorTest {
     bob = createEntity("Person", "name", "Bob", "age", 34, "notes", null);
   }
 
+  @After
+  public void cleanUp() {
+    FileUtil.deleteIfExists(DEFAULT_FILE);
+    FileUtil.deleteIfExists(CUSTOM_FILE);
+  }
+
   // tests -----------------------------------------------------------------------------------------------------------
 
-  /**
-   * Test empty file.
-   */
   @Test
   public void testEmptyFile() {
-    if (DEFAULT_FILE.exists()) {
-      DEFAULT_FILE.delete();
-    }
-    try {
-      CSVEntityExporter exporter = new CSVEntityExporter();
-      exporter.close();
-      assertTrue(DEFAULT_FILE.exists());
-      assertEquals(0, DEFAULT_FILE.length());
-    } finally {
-      DEFAULT_FILE.delete();
-    }
+    CSVEntityExporter exporter = new CSVEntityExporter();
+    exporter.close();
+    assertTrue(DEFAULT_FILE.exists());
+    assertEquals(0, DEFAULT_FILE.length());
   }
 
-  /**
-   * Tests a bug
-   */
   @Test
   public void testEmptyFileWithEndWithNewLine() {
-    if (DEFAULT_FILE.exists()) {
-      DEFAULT_FILE.delete();
-    }
-    try {
-      CSVEntityExporter exporter = new CSVEntityExporter();
-      exporter.setEndWithNewLine(true);
-      exporter.close();
-      assertTrue(DEFAULT_FILE.exists());
-      assertEquals("\r\n".length(), DEFAULT_FILE.length());
-    } finally {
-      DEFAULT_FILE.delete();
-    }
+    CSVEntityExporter exporter = new CSVEntityExporter();
+    exporter.setEndWithNewLine(true);
+    exporter.close();
+    assertTrue(DEFAULT_FILE.exists());
+    assertEquals("\r\n".length(), DEFAULT_FILE.length());
   }
 
-  /**
-   * Test explicit columns.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testExplicitColumns() throws Exception {
-    try {
-      CSVEntityExporter exporter = new CSVEntityExporter(customFile.getAbsolutePath(), "name");
-      cosumeAndClose(exporter);
-      assertEquals("name\r\nAlice\r\nBob", getContent(customFile));
-    } finally {
-      customFile.delete();
-    }
+    CSVEntityExporter exporter = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), "name");
+    consumeAliceBobAndClose(exporter);
+    assertEquals("name\r\nAlice\r\nBob", getContent(CUSTOM_FILE));
   }
 
-  /**
-   * Test end with new line.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testEndWithNewLine() throws Exception {
-    try {
-      CSVEntityExporter exporter = new CSVEntityExporter(customFile.getAbsolutePath(), "name");
-      exporter.setEndWithNewLine(true);
-      cosumeAndClose(exporter);
-      assertEquals("name\r\nAlice\r\nBob\r\n", getContent(customFile));
-    } finally {
-      customFile.delete();
-    }
+    CSVEntityExporter exporter = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), "name");
+    exporter.setEndWithNewLine(true);
+    consumeAliceBobAndClose(exporter);
+    assertEquals("name\r\nAlice\r\nBob\r\n", getContent(CUSTOM_FILE));
   }
 
-  /**
-   * Test headless.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testHeadless() throws Exception {
-    try {
-      CSVEntityExporter exporter = new CSVEntityExporter(customFile.getAbsolutePath(), "name");
-      exporter.setHeadless(true);
-      cosumeAndClose(exporter);
-      assertEquals("Alice\r\nBob", getContent(customFile));
-    } finally {
-      customFile.delete();
-    }
+    CSVEntityExporter exporter = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), "name");
+    exporter.setHeadless(true);
+    consumeAliceBobAndClose(exporter);
+    assertEquals("Alice\r\nBob", getContent(CUSTOM_FILE));
   }
 
-  /**
-   * Test append.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testAppend() throws Exception {
-    if (SystemInfo.isWindows()) { // TODO make this test work on Windows
-      System.out.println("Skipping testAppend()");
-      return;
-    }
-    try {
-      CSVEntityExporter exporter = new CSVEntityExporter(customFile.getAbsolutePath(), "name");
-      exporter.setAppend(true);
-      cosumeAndClose(exporter);
-      CSVEntityExporter exporter2 = new CSVEntityExporter(customFile.getAbsolutePath(), "name");
-      exporter2.setAppend(true);
-      cosumeAndClose(exporter2);
-      assertEquals("name\r\nAlice\r\nBob\r\nAlice\r\nBob", getContent(customFile));
-    } finally {
-      customFile.delete();
-    }
+    Assume.assumeFalse(SystemInfo.isWindows()); // TODO make this test work on Windows
+    CSVEntityExporter exporter = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), "name");
+    exporter.setAppend(true);
+    consumeAliceBobAndClose(exporter);
+    CSVEntityExporter exporter2 = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), "name");
+    exporter2.setAppend(true);
+    consumeAliceBobAndClose(exporter2);
+    assertEquals("name\r\nAlice\r\nBob\r\nAlice\r\nBob", getContent(CUSTOM_FILE));
   }
 
-  /**
-   * Test columns by descriptor.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testColumnsByDescriptor() throws Exception {
-    try {
-      CSVEntityExporter exporter = new CSVEntityExporter(customFile.getAbsolutePath(), descriptor);
-      cosumeAndClose(exporter);
-      assertEquals("name,age,notes\r\nAlice,23,\r\nBob,34,", getContent(customFile));
-    } finally {
-      customFile.delete();
-    }
+    CSVEntityExporter exporter = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), descriptor);
+    consumeAliceBobAndClose(exporter);
+    assertEquals("name,age,notes\r\nAlice,23,\r\nBob,34,", getContent(CUSTOM_FILE));
   }
 
-  /**
-   * Test columns by instance.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testColumnsByInstance() throws Exception {
-    try {
-      CSVEntityExporter exporter = new CSVEntityExporter();
-      cosumeAndClose(exporter);
-      assertEquals("name,age,notes\r\nAlice,23,\"\"\r\nBob,34,", getContent(DEFAULT_FILE));
-    } finally {
-      DEFAULT_FILE.delete();
-    }
+    CSVEntityExporter exporter = new CSVEntityExporter();
+    consumeAliceBobAndClose(exporter);
+    assertEquals("name,age,notes\r\nAlice,23,\"\"\r\nBob,34,", getContent(DEFAULT_FILE));
   }
 
-  /**
-   * Test empty and null default.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testEmptyAndNull_default() throws Exception {
-    try {
-      CSVEntityExporter exporter = new CSVEntityExporter();
-      cosumeAndClose(exporter);
-      assertEquals("name,age,notes\r\nAlice,23,\"\"\r\nBob,34,", getContent(DEFAULT_FILE));
-    } finally {
-      DEFAULT_FILE.delete();
-    }
+    CSVEntityExporter exporter = new CSVEntityExporter();
+    consumeAliceBobAndClose(exporter);
+    assertEquals("name,age,notes\r\nAlice,23,\"\"\r\nBob,34,", getContent(DEFAULT_FILE));
   }
 
-  /**
-   * Test empty and null quote empty.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testEmptyAndNull_quoteEmpty() throws Exception {
-    try {
-      CSVEntityExporter exporter = new CSVEntityExporter();
-      exporter.setQuoteEmpty(true);
-      cosumeAndClose(exporter);
-      assertEquals("name,age,notes\r\nAlice,23,\"\"\r\nBob,34,", getContent(DEFAULT_FILE));
-    } finally {
-      DEFAULT_FILE.delete();
-    }
+    CSVEntityExporter exporter = new CSVEntityExporter();
+    exporter.setQuoteEmpty(true);
+    consumeAliceBobAndClose(exporter);
+    assertEquals("name,age,notes\r\nAlice,23,\"\"\r\nBob,34,", getContent(DEFAULT_FILE));
   }
 
-  /**
-   * Test empty and null dont quote empty.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testEmptyAndNull_dontQuoteEmpty() throws Exception {
-    try {
-      CSVEntityExporter exporter = new CSVEntityExporter();
-      exporter.setQuoteEmpty(false);
-      cosumeAndClose(exporter);
-      assertEquals("name,age,notes\r\nAlice,23,\r\nBob,34,", getContent(DEFAULT_FILE));
-    } finally {
-      DEFAULT_FILE.delete();
-    }
+    CSVEntityExporter exporter = new CSVEntityExporter();
+    exporter.setQuoteEmpty(false);
+    consumeAliceBobAndClose(exporter);
+    assertEquals("name,age,notes\r\nAlice,23,\r\nBob,34,", getContent(DEFAULT_FILE));
   }
 
-  /**
-   * Test decimal format.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testDecimalFormat() throws Exception {
-    try {
-      CSVEntityExporter exporter = new CSVEntityExporter();
-      exporter.setDecimalPattern("0.00");
-      exporter.setDecimalSeparator('-');
-      Entity entity = createEntity("test", "value", 1.);
-      exporter.startProductConsumption(entity);
-      exporter.finishProductConsumption(entity);
-      exporter.close();
-      assertEquals("value\r\n1-00", getContent(DEFAULT_FILE));
-    } finally {
-      DEFAULT_FILE.delete();
-    }
+    CSVEntityExporter exporter = new CSVEntityExporter();
+    exporter.setDecimalPattern("0.00");
+    exporter.setDecimalSeparator('-');
+    Entity entity = createEntity("test", "value", 1.);
+    exporter.startProductConsumption(entity);
+    exporter.finishProductConsumption(entity);
+    exporter.close();
+    assertEquals("value\r\n1-00", getContent(DEFAULT_FILE));
   }
 
-  /**
-   * Test multi threaded.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testMultiThreaded() throws Exception {
-    try {
-      ComplexTypeDescriptor type = createComplexType("testtype");
-      SimpleTypeDescriptor stringType = dataModel.getPrimitiveTypeDescriptor(String.class);
-      type.addComponent(createPart("a", stringType));
-      type.addComponent(createPart("b", stringType));
-      type.addComponent(createPart("c", stringType));
-      final CSVEntityExporter exporter = new CSVEntityExporter(
-          DEFAULT_FILE.getAbsolutePath(), type);
-      final Entity entity = new Entity(type, "a", "0123456789", "b", "5555555555", "c", "9876543210");
-      ExecutorService service = Executors.newCachedThreadPool();
-      Runnable runner = () -> {
-        for (int i = 0; i < 500; i++) {
-          exporter.startProductConsumption(entity);
-        }
-        exporter.finishProductConsumption(entity);
-      };
-      for (int i = 0; i < 20; i++) {
-        service.execute(runner);
+    ComplexTypeDescriptor type = createComplexType("testtype");
+    SimpleTypeDescriptor stringType = dataModel.getPrimitiveTypeDescriptor(String.class);
+    type.addComponent(createPart("a", stringType));
+    type.addComponent(createPart("b", stringType));
+    type.addComponent(createPart("c", stringType));
+    final CSVEntityExporter exporter = new CSVEntityExporter(DEFAULT_FILE.getAbsolutePath(), type);
+    final Entity entity = new Entity(type, "a", "0123456789", "b", "5555555555", "c", "9876543210");
+    ExecutorService service = Executors.newCachedThreadPool();
+    Runnable runner = () -> {
+      for (int i = 0; i < 500; i++) {
+        exporter.startProductConsumption(entity);
       }
-      service.shutdown();
-      service.awaitTermination(2, TimeUnit.SECONDS);
-      exporter.close();
-      ReaderLineIterator iterator = new ReaderLineIterator(new FileReader(DEFAULT_FILE));
-      assertEquals("a,b,c", iterator.next());
-      String expectedContent = "0123456789,5555555555,9876543210";
-      while (iterator.hasNext()) {
-        String line = iterator.next();
-        assertEquals(expectedContent, line);
-      }
-      iterator.close();
-    } finally {
-      DEFAULT_FILE.delete();
+      exporter.finishProductConsumption(entity);
+    };
+    for (int i = 0; i < 20; i++) {
+      service.execute(runner);
     }
+    service.shutdown();
+    assertTrue(service.awaitTermination(2, TimeUnit.SECONDS));
+    exporter.close();
+    ReaderLineIterator iterator = new ReaderLineIterator(new FileReader(DEFAULT_FILE));
+    assertEquals("a,b,c", iterator.next());
+    String expectedContent = "0123456789,5555555555,9876543210";
+    while (iterator.hasNext()) {
+      String line = iterator.next();
+      assertEquals(expectedContent, line);
+    }
+    iterator.close();
+  }
+
+  @Test
+  public void testBinaryContent() throws IOException {
+    ComplexTypeDescriptor type = createComplexType("testtype");
+    SimpleTypeDescriptor stringType = (SimpleTypeDescriptor) dataModel.getTypeDescriptor("binary");
+    type.addComponent(createPart("value", stringType));
+    CSVEntityExporter exporter = new CSVEntityExporter();
+    Entity entity = createEntity("testtype", "value", new byte[] { 1, 2, 3, 4, 5 });
+    exporter.startProductConsumption(entity);
+    exporter.finishProductConsumption(entity);
+    exporter.close();
+    assertEquals("value\r\nAQIDBAU=", getContent(DEFAULT_FILE));
   }
 
   // helper methods --------------------------------------------------------------------------------------------------
 
-  private void cosumeAndClose(CSVEntityExporter exporter) {
+  private void consumeAliceBobAndClose(CSVEntityExporter exporter) {
     exporter.startProductConsumption(alice);
     exporter.finishProductConsumption(alice);
     exporter.startProductConsumption(bob);
-    exporter.finishProductConsumption(alice);
+    exporter.finishProductConsumption(bob);
     exporter.close();
   }
 

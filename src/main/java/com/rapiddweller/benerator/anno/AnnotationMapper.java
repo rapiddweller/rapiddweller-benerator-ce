@@ -209,7 +209,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
   private static void parseDatabase(Database annotation, BeneratorContext context) {
     DBSystem db;
     if (!StringUtil.isEmpty(annotation.environment())) {
-      db = new DefaultDBSystem(annotation.id(), annotation.environment(), context.getDataModel());
+      db = new DefaultDBSystem(annotation.id(), annotation.environment(), context);
     } else {
       db = new DefaultDBSystem(annotation.id(), annotation.url(), annotation.driver(),
           annotation.user(), annotation.password(), context.getDataModel());

@@ -239,7 +239,9 @@ public class PersonGenerator extends CompositeGenerator<Person>
   }
 
   private Converter<String, String> getFemaleFamilyNameConverter(String usedDataset) {
-    return femaleFamilyNameConverters.computeIfAbsent(usedDataset, k -> new FemaleFamilyNameConverter(datasetName));
+    synchronized (femaleFamilyNameConverters) {
+      return femaleFamilyNameConverters.computeIfAbsent(usedDataset, k -> new FemaleFamilyNameConverter(datasetName));
+    }
   }
 
   private void initMembersWithDataset(GeneratorContext context) {

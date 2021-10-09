@@ -26,6 +26,7 @@
 
 package com.rapiddweller.platform.db;
 
+import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.jdbacl.ColumnInfo;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -38,7 +39,6 @@ import java.util.List;
 /**
  * Default implementation of the {@link DBSystem} class.<br/><br/>
  * Created: 27.06.2007 23:04:19
- *
  * @author Volker Bergmann
  * @since 0.3
  */
@@ -46,28 +46,11 @@ public class DefaultDBSystem extends DBSystem {
 
   private final ConnectionHolder connectionHolder;
 
-  /**
-   * Instantiates a new Default db system.
-   *
-   * @param id          the id
-   * @param environment the environment
-   * @param dataModel   the data model
-   */
-  public DefaultDBSystem(String id, String environment, DataModel dataModel) {
-    super(id, environment, dataModel);
+  public DefaultDBSystem(String id, String environment, BeneratorContext context) {
+    super(id, environment, context);
     this.connectionHolder = new ConnectionHolder(this);
   }
 
-  /**
-   * Instantiates a new Default db system.
-   *
-   * @param id        the id
-   * @param url       the url
-   * @param driver    the driver
-   * @param user      the user
-   * @param password  the password
-   * @param dataModel the data model
-   */
   public DefaultDBSystem(String id, String url, String driver, String user,
                          String password, DataModel dataModel) {
     super(id, url, driver, user, password, dataModel);

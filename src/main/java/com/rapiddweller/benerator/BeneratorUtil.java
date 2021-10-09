@@ -34,6 +34,10 @@ import com.rapiddweller.common.ui.InfoPrinter;
 import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.profile.Profiling;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.impl.StaticLoggerBinder;
@@ -68,8 +72,9 @@ public class BeneratorUtil {
   public static void checkSystem(InfoPrinter printer) {
     // print general Benerator version and system information
     printVersionInfo(printer);
-    // Print Slf4j binding info
-    printer.printLines("Slf4j binding: " + StaticLoggerBinder.getSingleton().getLoggerFactoryClassStr());
+    // Check logging setup
+    checkSlf4jSetup();
+    checkLog4j2Setup();
     // Print heap info
     printer.printLines("Configured heap size limit: " + Runtime.getRuntime().maxMemory() / 1024 / 1024 + " MB");
     // Check script engine
@@ -91,6 +96,35 @@ public class BeneratorUtil {
     // Check profiling setting
     if (Profiling.isEnabled()) {
       CONFIG_LOGGER.warn("Profiling is active. This may lead to memory issues");
+    }
+  }
+
+  private static void checkSlf4jSetup() {
+    // first check slf4j setup
+    StaticLoggerBinder binder = StaticLoggerBinder.getSingleton();
+    if ("org.apache.logging.slf4j.Log4jLoggerFactory".equals(binder.getLoggerFactoryClassStr())) {
+      logConfig("Slf4j is configured to use Log4j");
+    } else {
+      System.err.println("The classpath is not configured properly for Slf4j. See http://www.slf4j.org/codes.html");
+    }
+  }
+
+  private static void checkLog4j2Setup() {
+    LoggerContext context = (LoggerContext) LogManager.getContext();
+    if (context != null) {
+      Configuration configuration = context.getConfiguration();
+      if (configuration != null) {
+        ConfigurationSource configSource = configuration.getConfigurationSource();
+        if (configSource != null) {
+          String configSourceLocation = configSource.getLocation();
+          if (configSourceLocation != null && configSourceLocation.endsWith("log4j2.xml")) {
+            logConfig("Log4j is configured properly");
+            return;
+          }
+        }
+      }
+      System.err.println("Log4j2 is not configured properly, " +
+          "probably because no log4j2.xml file has been found or it is invalid.");
     }
   }
 

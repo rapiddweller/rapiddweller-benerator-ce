@@ -84,9 +84,6 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
 
   // TODO v1.0 define parser extension mechanism and move DatabaseParser and DefineDatabaseStatement to DB package?
 
-  /**
-   * Instantiates a new Database parser.
-   */
   public DatabaseParser() {
     super(EL_DATABASE, REQUIRED_ATTRIBUTES, OPTIONAL_ATTRIBUTES,
         BeneratorRootStatement.class, IfStatement.class);
@@ -128,29 +125,6 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
     }
   }
 
-  /**
-   * Create database statement define database statement.
-   *
-   * @param id                       the id
-   * @param environment              the environment
-   * @param url                      the url
-   * @param driver                   the driver
-   * @param user                     the user
-   * @param password                 the password
-   * @param catalog                  the catalog
-   * @param schema                   the schema
-   * @param tableFilter              the table filter
-   * @param includeTables            the include tables
-   * @param excludeTables            the exclude tables
-   * @param metaCache                the meta cache
-   * @param batch                    the batch
-   * @param fetchSize                the fetch size
-   * @param readOnly                 the read only
-   * @param lazy                     the lazy
-   * @param acceptUnknownColumnTypes the accept unknown column types
-   * @param context                  the context
-   * @return the define database statement
-   */
   protected DefineDatabaseStatement createDatabaseStatement(
       Expression<String> id, Expression<String> environment,
       Expression<String> url, Expression<String> driver,
@@ -167,9 +141,6 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
         batch, fetchSize, readOnly, lazy, acceptUnknownColumnTypes, context.getResourceManager());
   }
 
-  /**
-   * The type Global accept unknown simple type expression.
-   */
   static class GlobalAcceptUnknownSimpleTypeExpression extends DynamicExpression<Boolean> {
     @Override
     public Boolean evaluate(Context context) {
