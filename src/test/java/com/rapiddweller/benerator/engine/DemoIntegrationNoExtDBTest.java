@@ -38,6 +38,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
+import static com.rapiddweller.benerator.main.Benerator.main;
+
 /**
  * Integration test for Benerator's Demo Files.<br/><br/>
  * <p>
@@ -210,6 +212,42 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
     context.setContextUri("/demo/db");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/db/h2.multischema.ben.xml");
     Assert.assertEquals("/demo/db", benCtx.getContextUri());
+  }
+
+  /**
+   * Demo env db
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoDbEnv() throws IOException {
+    String[] args = new String[1];
+    args[0] = "src/demo/resources/demo/db/dbenv.ben.xml";
+    main(args);
+  }
+
+  /**
+   * Demo env db conf
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void DemoDbEnvConf() throws IOException {
+    String[] args = new String[1];
+    args[0] = "src/demo/resources/demo/db/dbenvconf.ben.xml";
+    main(args);
+  }
+
+  /**
+   * Demo env db conf
+   *
+   * @throws IOException the io exception
+   */
+  @Test
+  public void PrioDbEnvConf() throws IOException {
+    String[] args = new String[1];
+    args[0] = "src/demo/resources/demo/db/priodbenvconf.ben.xml";
+    main(args);
   }
 
   /**

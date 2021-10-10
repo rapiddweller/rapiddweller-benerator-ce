@@ -2,12 +2,11 @@
 <setup>
 
     <import platforms="db"/>
-    <database id="database" environment="database"/>
+    <database id="database" environment="conf.db"/>
     <execute type="sql" target="database">
-        drop table if exists sample;
         create table sample (
         id int primary key
         );
     </execute>
-    <generate type="sample" count="1" consumer="database"/>
+    <generate type="SAMPLE" count="1" consumer="database"/>
 </setup>
