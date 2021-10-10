@@ -27,22 +27,14 @@
 package com.rapiddweller.model.data;
 
 /**
- * Describes a group of components of which only one is present in an Entity.<br/><br/>
+ * Describes a group of components of which only one is present in an {@link Entity}.<br/><br/>
  * Created at 08.05.2008 19:17:59
- *
  * @author Volker Bergmann
  * @since 0.5.4
  */
 public class AlternativeGroupDescriptor extends ComplexTypeDescriptor {
 
-  /**
-   * Instantiates a new Alternative group descriptor.
-   *
-   * @param name     the name
-   * @param provider the provider
-   */
-  public AlternativeGroupDescriptor(String name,
-                                    DescriptorProvider provider) {
+  public AlternativeGroupDescriptor(String name, DescriptorProvider provider) {
     super(name, provider);
   }
 

@@ -36,7 +36,6 @@ import java.util.List;
  * Describes an XML schema style type.
  * Instances of this type may have one of the supported type alternatives.<br/><br/>
  * Created: 28.02.2008 22:29:37
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
@@ -44,31 +43,15 @@ public class UnionSimpleTypeDescriptor extends SimpleTypeDescriptor {
 
   private final List<SimpleTypeDescriptor> alternatives;
 
-  /**
-   * Instantiates a new Union simple type descriptor.
-   *
-   * @param name     the name
-   * @param provider the provider
-   */
   public UnionSimpleTypeDescriptor(String name, DescriptorProvider provider) {
     super(name, provider, (String) null);
     this.alternatives = new ArrayList<>();
   }
 
-  /**
-   * Add alternative.
-   *
-   * @param alternative the alternative
-   */
   public void addAlternative(SimpleTypeDescriptor alternative) {
     this.alternatives.add(alternative);
   }
 
-  /**
-   * Gets alternatives.
-   *
-   * @return the alternatives
-   */
   public List<SimpleTypeDescriptor> getAlternatives() {
     return alternatives;
   }
@@ -77,8 +60,7 @@ public class UnionSimpleTypeDescriptor extends SimpleTypeDescriptor {
   public PrimitiveType getPrimitiveType() {
     TypeDescriptor firstType = alternatives.get(0);
     if (firstType == null) {
-      throw new ConfigurationError(
-          "Cannot determine primitive type of union: " + getName());
+      throw new ConfigurationError("Cannot determine primitive type of union: " + getName());
     }
     return ((SimpleTypeDescriptor) firstType).getPrimitiveType();
   }
