@@ -33,7 +33,6 @@ import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.script.Expression;
-import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.TaskExecutor;
 import org.slf4j.Logger;
@@ -117,7 +116,6 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
     if (!beInitialized(context)) {
       task.reset();
     }
-    checkThreads(context);
     executeTask(generateCount(childContext), minCount.evaluate(childContext), pageSize.evaluate(childContext),
         evaluatePageListeners(childContext), getErrorHandler(childContext));
     if (!isSubCreator) {
@@ -145,6 +143,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
 
   @Override
   public void pageStarting() {
+    getTask().pageStarting();
   }
 
   @Override
@@ -179,14 +178,6 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
                              List<PageListener> pageListeners, ErrorHandler errorHandler) {
     TaskExecutor.execute(task, childContext, reqExecutions, minExecutions,
         pageListeners, pageSizeValue, false, errorHandler, infoLog);
-  }
-
-  private void checkThreads(BeneratorContext context) {
-    int threadCount = ExpressionUtil.evaluate(this.threads, context);
-    if (threadCount > 1) {
-        logger.warn("Benerator CE does not support multithreaded generation or iteration: " +
-            "Ignoring threads='{}'.", threadCount);
-    }
   }
 
 }
