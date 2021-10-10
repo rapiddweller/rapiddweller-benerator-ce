@@ -36,6 +36,7 @@ import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.util.ExpressionBasedGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ConversionException;
@@ -78,6 +79,7 @@ import javax.validation.constraints.NotNull;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Set;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.COMPONENT_TYPES;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_VALUE;
@@ -503,6 +505,19 @@ public class DescriptorUtil {
       return new ArrayTypeDescriptor(name, parentType.getProvider(), (ArrayTypeDescriptor) parentType);
     } else {
       throw new UnsupportedOperationException("Cannot derive child type from " + parentType.getClass());
+    }
+  }
+
+  public static void applyValues(Set<String> values, SimpleTypeDescriptor descriptor) {
+    if (!CollectionUtil.isEmpty(values)) {
+      StringBuilder builder = new StringBuilder();
+      for (String value : values) {
+        if (builder.length() > 0) {
+          builder.append(',');
+        }
+        builder.append(value);
+      }
+      descriptor.setValues(builder.toString());
     }
   }
 

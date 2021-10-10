@@ -62,6 +62,8 @@ public class Benerator {
 
   public static final String BENERATOR_KEY = "benerator";
 
+  public static final String MAINTAINER = "rapiddweller";
+
   protected static final String[] CE_CLI_HELP = {
       "Usage benerator [options] [filename]",
       "",
