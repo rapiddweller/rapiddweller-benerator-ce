@@ -63,14 +63,12 @@ public class SimpleTypeDescriptor extends TypeDescriptor {
     this(name, provider, (String) null);
   }
 
-  public SimpleTypeDescriptor(String name, DescriptorProvider provider,
-                              SimpleTypeDescriptor parent) {
+  public SimpleTypeDescriptor(String name, DescriptorProvider provider, SimpleTypeDescriptor parent) {
     this(name, provider, parent != null ? parent.getName() : null);
     this.parent = parent;
   }
 
-  public SimpleTypeDescriptor(String name, DescriptorProvider provider,
-                              String parentName) {
+  public SimpleTypeDescriptor(String name, DescriptorProvider provider, String parentName) {
     super(name, provider, parentName);
     // number setup
     addConstraint(MIN, String.class, new MaxNumberStringOperation());
