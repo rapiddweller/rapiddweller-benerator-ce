@@ -31,6 +31,7 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.composite.AlternativeComponentBuilder;
 import com.rapiddweller.benerator.composite.ArrayElementBuilder;
+import com.rapiddweller.benerator.composite.AttributeProcessor;
 import com.rapiddweller.benerator.composite.ComponentBuilder;
 import com.rapiddweller.benerator.composite.ConditionalComponentBuilder;
 import com.rapiddweller.benerator.composite.GenerationStep;
@@ -52,6 +53,7 @@ import com.rapiddweller.benerator.wrapper.SingleSourceArrayGenerator;
 import com.rapiddweller.benerator.wrapper.SingleSourceCollectionGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SyntaxError;
 import com.rapiddweller.format.script.Script;
@@ -133,7 +135,6 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     Generator<?> generator = new ScriptGenerator(script);
     generator = DescriptorUtil.createConvertingGenerator(component.getTypeDescriptor(), generator, context);
     return builderFromGenerator(generator, component, context);
-
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
@@ -150,16 +151,28 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
   private static ComponentBuilder<?> createPartBuilder(
       ComponentDescriptor part, Uniqueness ownerUniqueness, boolean iterationMode, BeneratorContext context) {
-    ComponentBuilder<?> result = null;
-    if (iterationMode && part.getTypeDescriptor() instanceof ComplexTypeDescriptor) {
-      result = createPartModifier(part, context);
-    } else {
-      Generator<?> generator = createSingleInstanceGenerator(part, ownerUniqueness, context);
-      generator = createMultiplicityWrapper(part, generator, context);
-      result = builderFromGenerator(generator, part, context);
+    if (iterationMode) {
+      if (part.getTypeDescriptor() instanceof ComplexTypeDescriptor) {
+        return createPartModifier(part, context);
+      } else {
+        SimpleTypeDescriptor type = (SimpleTypeDescriptor) part.getTypeDescriptor();
+        boolean processing = (type != null && type.getConverter() != null && type.getSource() == null
+            && type.getGenerator() == null);
+        if (processing) {
+          return createAttributeProcessor(part, ownerUniqueness, context);
+        }
+      }
     }
-    logger.debug("Created part {}", result);
-    return result;
+    Generator<?> generator = createSingleInstanceGenerator(part, ownerUniqueness, context);
+    generator = createMultiplicityWrapper(part, generator, context);
+    return builderFromGenerator(generator, part, context);
+  }
+
+  private static ComponentBuilder<?> createAttributeProcessor(
+      ComponentDescriptor component, Uniqueness ownerUniqueness, BeneratorContext context) {
+    SimpleTypeDescriptor type = (SimpleTypeDescriptor) component.getTypeDescriptor();
+    Converter converter = DescriptorUtil.getConverter(type.getConverter(), context);
+    return new AttributeProcessor(component.getName(), converter, type.getScope());
   }
 
   private static PartModifier createPartModifier(ComponentDescriptor part, BeneratorContext context) {
