@@ -84,6 +84,8 @@ public class Benerator {
       fileIndex++;
     }
     String filename = (fileIndex < args.length ? args[fileIndex] : "benerator.xml");
+    // log separator in order to distinguish benerator runs in the log file
+    logger.info("----------------------------------------------------------------------");
     new Benerator().runFile(filename);
   }
 
