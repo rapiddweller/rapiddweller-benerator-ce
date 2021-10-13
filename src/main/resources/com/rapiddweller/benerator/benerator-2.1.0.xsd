@@ -406,7 +406,7 @@
             <xs:attribute name="key.attribute" type="xs:string"/>
             <xs:attribute name="key.serializer" type="xs:string"/>
             <xs:attribute name="acks" type="kafka-acks-type"/>
-            <xs:attribute name="buffer.memory" type="jms-format"/>
+            <xs:attribute name="buffer.memory" type="xs:int"/>
             <xs:attribute name="compression.type" type="kafka-compression-type"/>
             <xs:attribute name="retries" type="xs:nonNegativeInteger"/>
             <xs:attribute name="batch.size" type="xs:nonNegativeInteger"/>
