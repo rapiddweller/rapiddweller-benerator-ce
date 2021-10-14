@@ -43,38 +43,21 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the &lt;defaultComponents&gt; element.<br/><br/>
  * Created: 23.05.2011 09:37:37
- *
  * @author Volker Bergmann
  * @since 0.6.6
  */
 public class DefaultComponentIntegrationTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test standard integration.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testStandardIntegration() throws Exception {
     checkFile("com/rapiddweller/benerator/engine/defaultComponent-std.ben.xml");
   }
 
-  /**
-   * Test db integration.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testDbIntegration() throws Exception {
     checkFile("com/rapiddweller/benerator/engine/defaultComponent-db.ben.xml");
   }
 
-  /**
-   * Check file.
-   *
-   * @param uri the uri
-   * @throws IOException the io exception
-   */
   @SuppressWarnings("unchecked")
   public void checkFile(String uri) throws IOException {
     ConsumerMock consumer = new ConsumerMock(true);
