@@ -3,6 +3,7 @@
 package com.rapiddweller.benerator.main;
 
 import com.rapiddweller.benerator.BeneratorUtil;
+import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.IOUtil;
@@ -53,7 +54,9 @@ public class Benchmark {
       new Setup("anon-person-hash.ben.xml", false, V200, 1500000),
       new Setup("anon-person-random.ben.xml", false, V200, 1500000),
       new Setup("anon-person-constant.ben.xml", false, V200, 8000000),
-      // TODO 2.1.0 measure in/out performance
+      // TODO 2.1.0 measure in/out performance for files and databases
+      new Setup("db-out-smalltable.ben.xml", false, V200, 10000),
+      new Setup("db-out-bigtable.ben.xml", false, V200, 10000),
       new Setup("file-out-csv.ben.xml", false, V210, 1000000),
       new Setup("file-out-json.ben.xml", true, V210, 1000000),
       new Setup("file-out-dbunit.ben.xml", false, V210, 1000000),
@@ -90,17 +93,27 @@ public class Benchmark {
     // parse min duration (secs)
     int minDurationSecs = DEFAULT_MIN_DURATION_SECS;
     int minDurIndex = ArrayUtil.indexOf("--minSecs", args);
-    if (minDurIndex >= 0 && args.length > minDurIndex + 1)
+    if (minDurIndex >= 0 && args.length > minDurIndex + 1) {
       minDurationSecs = Integer.parseInt(args[minDurIndex + 1]);
+    }
 
-    // parse 'half cores' spec
+    // parse 'maxThreads' spec
     int maxThreads = 0;
     int maxThreadsIndex = ArrayUtil.indexOf("--maxThreads", args);
-    if (maxThreadsIndex >= 0 && args.length > maxThreadsIndex + 1)
+    if (maxThreadsIndex >= 0 && args.length > maxThreadsIndex + 1) {
       maxThreads = Integer.parseInt(args[maxThreadsIndex + 1]);
+    }
+
+    // parse environment
+    String[] environments = new String[0];
+    int envIndex = ArrayUtil.indexOf("--env", args);
+    if (envIndex >= 0 && args.length > envIndex + 1) {
+      environments = args[envIndex + 1].split(",");
+    }
 
     // run
-    new Benchmark(DEFAULT_SETUPS, mainClassName, minDurationSecs, maxThreads).run(printer);
+    Benchmark benchmark = new Benchmark(DEFAULT_SETUPS, mainClassName, environments, minDurationSecs, maxThreads);
+    benchmark.run(printer);
   }
 
 
@@ -109,15 +122,17 @@ public class Benchmark {
   private final Benerator benerator;
   private final VersionNumber versionNumber;
   private final Setup[] setups;
+  private final String[] environments;
   private final int minDurationSecs;
   private final int maxThreads;
 
 
   // constructor -----------------------------------------------------------------------------------------------------
 
-  public Benchmark(Setup[] setups, String mainClassName, int minDurationSecs, int maxThreads) {
+  public Benchmark(Setup[] setups, String mainClassName, String[] environments, int minDurationSecs, int maxThreads) {
     // apply configuration settings
     this.setups = setups;
+    this.environments = environments;
     this.benerator = (Benerator) BeanUtil.newInstance(mainClassName);
     this.versionNumber = benerator.getVersionNumber();
     this.minDurationSecs = minDurationSecs;
@@ -135,22 +150,45 @@ public class Benchmark {
   public void run(InfoPrinter printer) throws IOException {
     String[] title = createAndPrintTitle(printer);
     int[] threadCounts = chooseThreadCounts();
-    Object[][] table = createTable(threadCounts);
+    ArrayBuilder<Object[]> table = createTable(threadCounts);
     // perform tests
-    for (int iS = 0; iS < setups.length; iS++) {
-      Object[] tableRow = table[iS + 1];
+    int rowNum = 0;
+    for (Setup setup : setups) {
       printHorizontalLine(printer);
-      runSetup(setups[iS], threadCounts, tableRow, printer);
+      if (environments.length > 0) {
+        if (setup.isDbSetup()) {
+          for (String environment : environments) {
+            Object[] tableRow = newRow(threadCounts.length + 1, table);
+            runSetup(setup, environment, threadCounts, tableRow, printer);
+          }
+        } else {
+          logger.info("Skipping plain test since running in DB test mode");
+        }
+      } else {
+        if (setup.isDbSetup()) {
+          logger.info("Skipping DB test since no environment was specified");
+        } else {
+          Object[] tableRow = newRow(threadCounts.length + 1, table);
+          runSetup(setup, null, threadCounts, tableRow, printer);
+        }
+      }
     }
     printHorizontalLine(printer);
     // Pretty-print results in a text table
     printer.printLines("");
-    int cols = table[0].length;
+    Object[][] t = table.toArray();
+    int cols = t[0].length;
     Alignment[] alignments = new Alignment[cols];
     alignments[0] = Alignment.LEFT;
     for (int i = 1; i < cols; i++)
       alignments[i] = Alignment.RIGHT;
-    printer.printLines(TextUtil.formatLinedTable(title, table, alignments));
+    printer.printLines(TextUtil.formatLinedTable(title, t, alignments));
+  }
+
+  private Object[] newRow(int cellCount, ArrayBuilder<Object[]> table) {
+    Object[] tableRow = new Object[cellCount];
+    table.add(tableRow);
+    return tableRow;
   }
 
 
@@ -165,7 +203,7 @@ public class Benchmark {
         "Options:",
         "--ce              run on Benerator Community Edition (default on CE)",
         "--ee              run on Benerator Enterprise Edition (default on EE,",
-        "                  only available on Enterprice Edition)",
+        "--env x[,y]       runs only database tests on the environments listed",
         "--minSecs n       Choose generation count to have a test execution time",
         "                  of at least n seconds (default: 10)",
         "--maxThreads k    Use only up to k cores for testing",
@@ -183,17 +221,16 @@ public class Benchmark {
     }
   }
 
-  private Object[][] createTable(int[] threadCounts) {
+  private ArrayBuilder<Object[]> createTable(int[] threadCounts) {
     // create table
-    Object[][] table = new Object[setups.length + 1][];
+    ArrayBuilder<Object[]> table = new ArrayBuilder<Object[]>(Object[].class);
     // format table header
-    for (int row = 0; row <= setups.length; row++) {
-      table[row] = new Object[threadCounts.length + 1];
-    }
-    table[0][0] = "Benchmark";
+    Object[] header  = new Object[threadCounts.length + 1];
+    header[0] = "Benchmark";
     for (int i = 0; i < threadCounts.length; i++) {
-      table[0][i + 1] = threadCounts[i] + (threadCounts[i] > 1 ? " Threads" : " Thread");
+      header[i + 1] = threadCounts[i] + (threadCounts[i] > 1 ? " Threads" : " Thread");
     }
+    table.add(header);
     return table;
   }
 
@@ -234,14 +271,14 @@ public class Benchmark {
     return result;
   }
 
-  private void runSetup(Setup setup, int[] threadCounts, Object[] tableRow, InfoPrinter printer) throws IOException {
+  private void runSetup(Setup setup, String environment, int[] threadCounts, Object[] tableRow, InfoPrinter printer) throws IOException {
     printer.printLines("Running " + setup.fileName);
-    tableRow[0] = setup.fileName;
+    tableRow[0] = setup.fileName + (environment != null ? " @ " + environment : "");
     for (int iT = 0; iT < threadCounts.length; iT++) {
       if (versionNumber.compareTo(setup.requiredVersion) >= 0
           && (!setup.reqEE || !benerator.isCommunityEdition())) {
         int threads = threadCounts[iT];
-        Execution execution = runWithMinDuration(setup.fileName, minDurationSecs, setup.count, threads, benerator);
+        Execution execution = runWithMinDuration(setup.fileName, environment, minDurationSecs, setup.count, threads, benerator);
         double eps = (double) execution.count / execution.duration * 1000.;
         double meph = 3600. * eps / 1000000.;
         String message = execution.filename + " with " + threads + (threads > 1 ? " threads: " : " thread:  ");
@@ -255,11 +292,11 @@ public class Benchmark {
     }
   }
 
-  private static Execution runWithMinDuration(String fileName, long minDurationSecs, int countBase, int threads, Benerator benerator) throws IOException {
+  private static Execution runWithMinDuration(String fileName, String environment, long minDurationSecs, int countBase, int threads, Benerator benerator) throws IOException {
     int count = countBase;
     long minDurationMillis = minDurationSecs * 1000;
     do {
-      Execution execution = runTest(fileName, count, threads, benerator);
+      Execution execution = runTest(fileName, environment, count, threads, benerator);
       if (execution.duration >= minDurationMillis)
         return execution;
       double factor = (double) minDurationMillis / execution.duration;
@@ -272,9 +309,12 @@ public class Benchmark {
     } while (true);
   }
 
-  private static Execution runTest(String fileName, int count, int threads, Benerator benerator) throws IOException {
+  private static Execution runTest(String fileName, String environment, int count, int threads, Benerator benerator) throws IOException {
     logger.debug("Testing {} with count {} and {} thread(s)", fileName, count, threads);
     String xml = IOUtil.getContentOfURI("com/rapiddweller/benerator/benchmark/" + fileName);
+    if (environment != null) {
+      xml = xml.replace("{environment}", environment);
+    }
     xml = xml.replace("{count}", String.valueOf(count));
     xml = xml.replace("{threads}", String.valueOf(threads));
     String filename = "__benchmark.ben.xml";
@@ -298,6 +338,10 @@ public class Benchmark {
       this.reqEE = reqEE;
       this.requiredVersion = new VersionNumberParser().parse(requiredVersion);
       this.count = count;
+    }
+
+    public boolean isDbSetup() {
+      return fileName.startsWith("db-");
     }
   }
 
