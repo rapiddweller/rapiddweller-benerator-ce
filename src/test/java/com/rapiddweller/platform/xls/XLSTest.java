@@ -72,30 +72,30 @@ public abstract class XLSTest extends IteratorTestCase {
 
   static {
     XYZ_DESCRIPTOR = new ComplexTypeDescriptor("XYZ", p);
-    XYZ_DESCRIPTOR.addComponent(new PartDescriptor("ean", p, "string"));
-    XYZ_DESCRIPTOR.addComponent(new PartDescriptor("price", p, "big_decimal"));
-    XYZ_DESCRIPTOR.addComponent(new PartDescriptor("date", p, "date"));
-    XYZ_DESCRIPTOR.addComponent(new PartDescriptor("avail", p, "boolean"));
-    XYZ_DESCRIPTOR.addComponent(new PartDescriptor("updated", p, "timestamp"));
+    XYZ_DESCRIPTOR.setComponent(new PartDescriptor("ean", p, "string"));
+    XYZ_DESCRIPTOR.setComponent(new PartDescriptor("price", p, "big_decimal"));
+    XYZ_DESCRIPTOR.setComponent(new PartDescriptor("date", p, "date"));
+    XYZ_DESCRIPTOR.setComponent(new PartDescriptor("avail", p, "boolean"));
+    XYZ_DESCRIPTOR.setComponent(new PartDescriptor("updated", p, "timestamp"));
   }
 
   protected static final ComplexTypeDescriptor PRODUCT_DESCRIPTOR;
 
   static {
     PRODUCT_DESCRIPTOR = new ComplexTypeDescriptor("Product", p);
-    PRODUCT_DESCRIPTOR.addComponent(new PartDescriptor("ean", p, "string"));
-    PRODUCT_DESCRIPTOR.addComponent(new PartDescriptor("price", p, "big_decimal"));
-    PRODUCT_DESCRIPTOR.addComponent(new PartDescriptor("date", p, "date"));
-    PRODUCT_DESCRIPTOR.addComponent(new PartDescriptor("avail", p, "boolean"));
-    PRODUCT_DESCRIPTOR.addComponent(new PartDescriptor("updated", p, "timestamp"));
+    PRODUCT_DESCRIPTOR.setComponent(new PartDescriptor("ean", p, "string"));
+    PRODUCT_DESCRIPTOR.setComponent(new PartDescriptor("price", p, "big_decimal"));
+    PRODUCT_DESCRIPTOR.setComponent(new PartDescriptor("date", p, "date"));
+    PRODUCT_DESCRIPTOR.setComponent(new PartDescriptor("avail", p, "boolean"));
+    PRODUCT_DESCRIPTOR.setComponent(new PartDescriptor("updated", p, "timestamp"));
   }
 
   protected static final ComplexTypeDescriptor PERSON_DESCRIPTOR;
 
   static {
     PERSON_DESCRIPTOR = new ComplexTypeDescriptor("Person", p);
-    PERSON_DESCRIPTOR.addComponent(new PartDescriptor("name", p, "string"));
-    PERSON_DESCRIPTOR.addComponent(new PartDescriptor("age", p, "int"));
+    PERSON_DESCRIPTOR.setComponent(new PartDescriptor("name", p, "string"));
+    PERSON_DESCRIPTOR.setComponent(new PartDescriptor("age", p, "int"));
   }
 
   protected static final Entity PROD1 = new Entity(PRODUCT_DESCRIPTOR,

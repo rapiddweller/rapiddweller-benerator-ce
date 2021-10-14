@@ -275,7 +275,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
 
   @Override
   public void setDefaultComponentConfig(ComponentDescriptor component) {
-    defaultComponent.addComponent(component);
+    defaultComponent.setComponent(component);
   }
 
   @Override

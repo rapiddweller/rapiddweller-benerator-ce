@@ -61,7 +61,7 @@ public class SimpleTypeEntityGeneratorTest extends ModelTest {
   private ComplexTypeDescriptor createComplexType() {
     ComplexTypeDescriptor type = createComplexType(null);
     SimpleTypeDescriptor content = createSimpleType(null, "string");
-    type.addComponent(createPart(ComplexTypeDescriptor.__SIMPLE_CONTENT, content));
+    type.setComponent(createPart(ComplexTypeDescriptor.__SIMPLE_CONTENT, content));
     return type;
   }
 

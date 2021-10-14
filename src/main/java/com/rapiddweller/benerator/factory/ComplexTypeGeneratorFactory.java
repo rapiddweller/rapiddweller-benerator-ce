@@ -307,8 +307,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
                                                                BeneratorContext context, String sourceName, DataSourceProvider<Entity> factory) {
     Generator<Entity> generator =
         SourceFactory.createRawSourceGenerator(complexType.getNesting(), complexType.getDataset(), sourceName, factory, Entity.class, context);
-    generator = WrapperFactory.applyConverter(generator, new ComponentTypeConverter(complexType));
-    return generator;
+    return WrapperFactory.applyConverter(generator, new ComponentTypeConverter(complexType));
   }
 
 }

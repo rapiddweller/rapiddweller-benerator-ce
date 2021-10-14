@@ -70,9 +70,9 @@ public class CSVEntityExporterTest extends GeneratorTest {
     FileUtil.deleteIfExists(DEFAULT_FILE);
     // create descriptor for 'Person' entities
     descriptor = createComplexType("Person", (ComplexTypeDescriptor) dataModel.getTypeDescriptor("entity"));
-    descriptor.addComponent(createPart("name", dataModel.getTypeDescriptor("string")));
-    descriptor.addComponent(createPart("age", dataModel.getTypeDescriptor("int")));
-    descriptor.addComponent(createPart("notes", dataModel.getTypeDescriptor("string")));
+    descriptor.setComponent(createPart("name", dataModel.getTypeDescriptor("string")));
+    descriptor.setComponent(createPart("age", dataModel.getTypeDescriptor("int")));
+    descriptor.setComponent(createPart("notes", dataModel.getTypeDescriptor("string")));
     // create Person instances for testing
     alice = createEntity("Person", "name", "Alice", "age", 23, "notes", "");
     bob = createEntity("Person", "name", "Bob", "age", 34, "notes", null);
@@ -191,9 +191,9 @@ public class CSVEntityExporterTest extends GeneratorTest {
   public void testMultiThreaded() throws Exception {
     ComplexTypeDescriptor type = createComplexType("testtype");
     SimpleTypeDescriptor stringType = dataModel.getPrimitiveTypeDescriptor(String.class);
-    type.addComponent(createPart("a", stringType));
-    type.addComponent(createPart("b", stringType));
-    type.addComponent(createPart("c", stringType));
+    type.setComponent(createPart("a", stringType));
+    type.setComponent(createPart("b", stringType));
+    type.setComponent(createPart("c", stringType));
     final CSVEntityExporter exporter = new CSVEntityExporter(DEFAULT_FILE.getAbsolutePath(), type);
     final Entity entity = new Entity(type, "a", "0123456789", "b", "5555555555", "c", "9876543210");
     ExecutorService service = Executors.newCachedThreadPool();
@@ -223,7 +223,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
   public void testBinaryContent() throws IOException {
     ComplexTypeDescriptor type = createComplexType("testtype");
     SimpleTypeDescriptor stringType = (SimpleTypeDescriptor) dataModel.getTypeDescriptor("binary");
-    type.addComponent(createPart("value", stringType));
+    type.setComponent(createPart("value", stringType));
     CSVEntityExporter exporter = new CSVEntityExporter();
     Entity entity = createEntity("testtype", "value", new byte[] { 1, 2, 3, 4, 5 });
     exporter.startProductConsumption(entity);

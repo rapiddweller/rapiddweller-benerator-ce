@@ -62,7 +62,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     MemStore src = new MemStore("src", context.getDataModel());
     context.setGlobal("src", src);
     ComplexTypeDescriptor descriptor = createComplexType("product");
-    descriptor.addComponent(createId("id", "int"));
+    descriptor.setComponent(createId("id", "int"));
     for (int i = 3; i < 6; i++) {
       src.store(new Entity(descriptor, "id", i));
     }

@@ -232,7 +232,7 @@ public class BeanDescriptorProvider extends DefaultDescriptorProvider {
       pd.setMinCount(new ConstantExpression<>(0L));
       pd.setMaxCount(null);
     }
-    td.addComponent(pd);
+    td.setComponent(pd);
   }
 
 }

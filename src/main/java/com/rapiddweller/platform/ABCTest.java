@@ -50,12 +50,12 @@ public abstract class ABCTest extends ModelTest {
     SimpleTypeDescriptor stringType = dataModel.getPrimitiveTypeDescriptor(String.class);
     SimpleTypeDescriptor intType = dataModel.getPrimitiveTypeDescriptor(int.class);
     ComplexTypeDescriptor carType = createComplexType("Car");
-    carType.addComponent(createPart("name", stringType));
+    carType.setComponent(createPart("name", stringType));
     personType = createComplexType("Person");
-    personType.addComponent(createPart("name", stringType));
-    personType.addComponent(createPart("age", intType));
-    personType.addComponent(createPart("notes", stringType));
-    personType.addComponent(createPart("car", carType));
+    personType.setComponent(createPart("name", stringType));
+    personType.setComponent(createPart("age", intType));
+    personType.setComponent(createPart("notes", stringType));
+    personType.setComponent(createPart("car", carType));
     aliceEntity = createEntity("Person", "name", "Alice", "age", 23, "notes", "");
     bobEntity = createEntity("Person", "name", "Bob", "age", 34, "notes", null);
     carEntity = createEntity("Car", "maker", "Audi");

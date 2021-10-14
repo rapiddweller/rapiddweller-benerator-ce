@@ -184,7 +184,7 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
   // construction helper methods -------------------------------------------------------------------------------------
 
   public ComplexTypeDescriptor withComponent(ComponentDescriptor componentDescriptor) {
-    addComponent(componentDescriptor);
+    setComponent(componentDescriptor);
     return this;
   }
 

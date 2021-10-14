@@ -801,7 +801,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
           }
         }
         logger.debug("parsed attribute {}: {}", columnId, descriptor);
-        complexType.addComponent(descriptor);
+        complexType.setComponent(descriptor);
       } catch (Exception e) {
         throw new ConfigurationError("Error processing column " + column.getName() +
                 " of table " + table.getName(), e);

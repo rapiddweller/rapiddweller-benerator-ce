@@ -147,7 +147,7 @@ public class ModelParser {
         TypeDescriptor parentType = parentComponent.getTypeDescriptor();
         result.getLocalType(false).setParent(parentType);
       }
-      owner.addComponent(result);
+      owner.addComponent(result); // TODO ACI replacing this with setComponent() makes the DefaultComponentIntegrationTest fail
     }
     return result;
   }

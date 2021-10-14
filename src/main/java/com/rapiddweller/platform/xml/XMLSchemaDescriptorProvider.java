@@ -493,7 +493,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     TypeDescriptor base = dataModel.getTypeDescriptor(baseName);
     Assert.notNull(base, "base type");
     if (base instanceof SimpleTypeDescriptor) {
-      complexType.addComponent(new PartDescriptor(ComplexTypeDescriptor.__SIMPLE_CONTENT, this, baseName, null,
+      complexType.setComponent(new PartDescriptor(ComplexTypeDescriptor.__SIMPLE_CONTENT, this, baseName, null,
           new ConstantExpression<>(1L), new ConstantExpression<>(1L)));
     } else if (base instanceof ComplexTypeDescriptor) {
       complexType.setParentName(baseName);
@@ -606,12 +606,12 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     if ("false".equals(element.getAttribute("nillable"))) {
       descriptor.setNullable(false);
     }
-    owner.addComponent(descriptor);
+    owner.setComponent(descriptor);
   }
 
   private ComplexTypeDescriptor wrapSimpleTypeWithComplexType(SimpleTypeDescriptor simpleType) {
     ComplexTypeDescriptor complexType = new ComplexTypeDescriptor(simpleType.getName(), this);
-    complexType.addComponent(new PartDescriptor(ComplexTypeDescriptor.__SIMPLE_CONTENT, this, simpleType));
+    complexType.setComponent(new PartDescriptor(ComplexTypeDescriptor.__SIMPLE_CONTENT, this, simpleType));
     return complexType;
   }
 
@@ -629,7 +629,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     PartDescriptor descriptor;
     if (type instanceof SimpleTypeDescriptor) {
       ComplexTypeDescriptor complexType = new ComplexTypeDescriptor(refName, this);
-      complexType.addComponent(new PartDescriptor(ComplexTypeDescriptor.__SIMPLE_CONTENT, this, refName));
+      complexType.setComponent(new PartDescriptor(ComplexTypeDescriptor.__SIMPLE_CONTENT, this, refName));
       descriptor = new PartDescriptor(refName, this, complexType);
     } else {
       descriptor = new PartDescriptor(refName, this, type);
@@ -800,7 +800,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     if ("prohibited".equals(attributeElement.getAttribute("use"))) {
       descriptor.setMode(Mode.ignored);
     }
-    owner.addComponent(descriptor);
+    owner.setComponent(descriptor);
   }
 
   @SuppressWarnings("unchecked")
