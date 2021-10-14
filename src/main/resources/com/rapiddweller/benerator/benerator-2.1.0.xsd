@@ -801,7 +801,7 @@
             <xs:attribute name="maxCount" type="xs:string"/>
             <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attributeGroup ref="execution-attrs"/>
-            <xs:attribute name="threads" type="xs:int"/>
+            <xs:attribute name="threads" type="xs:string"/>
             <xs:attribute name="template" type="xs:string"/>
             <xs:attribute name="consumer" type="xs:string"/>
         </xs:complexType>
