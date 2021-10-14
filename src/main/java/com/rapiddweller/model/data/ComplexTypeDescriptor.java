@@ -26,6 +26,7 @@
 
 package com.rapiddweller.model.data;
 
+import com.rapiddweller.benerator.main.Benerator;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.StringUtil;
@@ -101,6 +102,13 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
   }
 
   public ComponentDescriptor getComponent(String name) {
+    if (Benerator.QUICK_N_DIRTY) { // TODO REMOVE
+      InstanceDescriptor pt = parts.someValueOfName(name);
+      if (pt != null) {
+        return (ComponentDescriptor) pt;
+      }
+    }
+
     for (InstanceDescriptor part : parts.values()) {
       if (StringUtil.equalsIgnoreCase(part.getName(), name) &&
           part instanceof ComponentDescriptor) {
@@ -108,12 +116,6 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
       }
     }
     if (getParent() != null) {
-    /* TODO is this a feasible shortcut of the above?
-    InstanceDescriptor part = parts.someValueOfName(name);
-    if (part instanceof ComponentDescriptor) {
-      return (ComponentDescriptor) part;
-    }
-     */
       return ((ComplexTypeDescriptor) getParent()).getComponent(name);
     }
     return null;

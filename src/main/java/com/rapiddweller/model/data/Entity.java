@@ -123,22 +123,24 @@ public class Entity implements Composite {
 
   @Override
   public void setComponent(String componentName, Object component) {
-    ComponentDescriptor componentDescriptor = null;
     if (descriptor != null) {
-      componentDescriptor = descriptor.getComponent(componentName);
-    }
-    if (componentDescriptor != null && componentDescriptor.getTypeDescriptor() instanceof SimpleTypeDescriptor) {
-      SimpleTypeDescriptor componentType = (SimpleTypeDescriptor) componentDescriptor.getTypeDescriptor();
-      PrimitiveType primitiveType = componentType.getPrimitiveType();
-      if (primitiveType == null) {
-        primitiveType = PrimitiveType.STRING;
+      ComponentDescriptor componentDescriptor = descriptor.getComponent(componentName);
+      String internalComponentName = componentName;
+      if (componentDescriptor != null && componentDescriptor.getTypeDescriptor() instanceof SimpleTypeDescriptor) {
+        SimpleTypeDescriptor componentType = (SimpleTypeDescriptor) componentDescriptor.getTypeDescriptor();
+        PrimitiveType primitiveType = componentType.getPrimitiveType();
+        if (primitiveType == null) {
+          primitiveType = PrimitiveType.STRING;
+        }
+        BeanDescriptorProvider beanProvider = descriptor.getDataModel().getBeanDescriptorProvider();
+        Class<?> javaType = beanProvider.concreteType(primitiveType.getName());
+        component = AnyConverter.convert(component, javaType);
+        internalComponentName = componentDescriptor.getName();
       }
-      BeanDescriptorProvider beanProvider = descriptor.getDataModel().getBeanDescriptorProvider();
-      Class<?> javaType = beanProvider.concreteType(primitiveType.getName());
-      component = AnyConverter.convert(component, javaType);
+      components.put(internalComponentName, component);
+    } else {
+      components.put(componentName, component);
     }
-    String internalComponentName = componentDescriptor != null ? componentDescriptor.getName() : componentName;
-    components.put(internalComponentName, component);
   }
 
   public void remove(String componentName) {

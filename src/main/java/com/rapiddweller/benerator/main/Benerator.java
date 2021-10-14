@@ -60,6 +60,8 @@ public class Benerator {
 
   private static final Logger logger = LoggerFactory.getLogger(Benerator.class);
 
+  public static boolean QUICK_N_DIRTY = "dirty".equals(System.getProperty("quick"));
+
   public static final String BENERATOR_KEY = "benerator";
 
   public static final String MAINTAINER = "rapiddweller";
