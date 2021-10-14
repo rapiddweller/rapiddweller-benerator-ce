@@ -203,6 +203,7 @@ public class Benchmark {
         "Options:",
         "--ce              run on Benerator Community Edition (default on CE)",
         "--ee              run on Benerator Enterprise Edition (default on EE,",
+        "                  only available on Enterprice Edition)",
         "--env x[,y]       runs only database tests on the environments listed",
         "--minSecs n       Choose generation count to have a test execution time",
         "                  of at least n seconds (default: 10)",
