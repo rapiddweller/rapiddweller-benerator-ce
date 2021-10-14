@@ -1,0 +1,36 @@
+<setup xmlns="https://www.benerator.de/schema/2.1.0">
+    <database id="db" environment="{environment}" />
+    <execute target="db">
+        create table "ben_benchmark" (
+        "c_0_id"        char(36),
+        "c_1_timestamp" timestamp,
+        "c_2_flag"      char,
+        "c_3_status"    varchar(10),
+        "c_4_code"      char(4),
+        "c_5_code"      char(8),
+        "c_6_code"      char(8),
+        "c_7_timestamp" timestamp,
+        "c_8_timestamp" timestamp,
+        "c_9_timestamp" timestamp,
+        primary key ("c_0_id")
+        );
+    </execute>
+
+    <generate type="data" count="{count}" threads="{threads}" pageSize="100000">
+        <id name="c_000_id"  type="string" generator="UUIDGenerator"/>
+        <attribute name="c_1_timestamp"  type="timestamp" />
+        <attribute name="c_2_flag"   type="string" pattern="[YN]"/>
+        <attribute name="c_3_status" type="string" values="'CREATED','ACCEPTED','REJECTED','COMPLETED'"/>
+        <attribute name="c_4_code"   type="string" pattern="[0-9]{4}"/>
+        <attribute name="c_5_code"   type="string" pattern="[0-9]{8}"/>
+        <attribute name="c_6_code"   type="string" pattern="[0-9]{8}"/>
+        <attribute name="c_7_timestamp"  type="timestamp" />
+        <attribute name="c_8_timestamp"  type="timestamp" />
+        <attribute name="c_9_timestamp"  type="timestamp" />
+    </generate>
+
+    <execute target="db">
+        drop table "ben_benchmark";
+    </execute>
+
+</setup>
