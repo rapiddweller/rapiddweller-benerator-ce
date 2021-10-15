@@ -2,16 +2,16 @@
     <database id="db" environment="{environment}" />
     <execute target="db">
         create table "ben_benchmark" (
-        "c_0_id"        char(36),
-        "c_1_timestamp" timestamp,
-        "c_2_flag"      char,
-        "c_3_status"    varchar(10),
-        "c_4_code"      char(4),
-        "c_5_code"      char(8),
-        "c_6_code"      char(8),
-        "c_7_timestamp" timestamp,
-        "c_8_timestamp" timestamp,
-        "c_9_timestamp" timestamp,
+        "c_0_id"        {char}(36),
+        "c_1_timestamp" {timestamp},
+        "c_2_flag"      {char},
+        "c_3_status"    {varchar}(10),
+        "c_4_code"      {char}(4),
+        "c_5_code"      {char}(8),
+        "c_6_code"      {char}(8),
+        "c_7_timestamp" {timestamp},
+        "c_8_timestamp" {timestamp},
+        "c_9_timestamp" {timestamp},
         primary key ("c_0_id")
         );
     </execute>
