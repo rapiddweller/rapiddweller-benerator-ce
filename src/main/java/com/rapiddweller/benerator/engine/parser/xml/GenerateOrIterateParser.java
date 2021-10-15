@@ -178,8 +178,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
   }
 
   private static InstanceDescriptor mapDescriptorElement(Element element, BeneratorContext context) {
-    // TODO v0.7.1 Make Descriptors an abstraction of the XML file content and convert XML -> Descriptors -> Statements
-
     // evaluate type
     String type = parseStringAttribute(element, ATT_TYPE, context, false);
     TypeDescriptor localType;
@@ -260,26 +258,37 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
         element.getAttribute(ATT_PAGER));
     Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_NAME));
     Expression<Long> minCount = DescriptorUtil.getMinCount(descriptor, 0L);
-    GenerateOrIterateStatement statement = createStatement(getTaskName(descriptor),
-        countGenerator, minCount, threads, pageSize, pager, infoLog, nested, errorHandler, context);
+    String productName = getTaskName(descriptor);
+    BeneratorContext childContext = context.createSubContext(productName);
+    GenerateOrIterateStatement statement = createStatement(
+        countGenerator, minCount, threads, pageSize, pager, infoLog, nested, errorHandler, context, childContext);
+
+    // TODO avoid double parsing of the InstanceDescriptor and remove the following...
+    TypeDescriptor type = descriptor.getTypeDescriptor();
+    if (type instanceof ComplexTypeDescriptor) {
+      ((ComplexTypeDescriptor) type).clear();
+    }
+    // TODO ...until this line
 
     // parse task and sub statements
-    GenerateAndConsumeTask task = parseTask(element, parentPath, statement, parsingContext, descriptor, infoLog);
+    Statement[] statementPath = parsingContext.createSubPath(parentPath, statement);
+
+    GenerateAndConsumeTask task = parseTask(element, statementPath, parsingContext, descriptor, infoLog, context, childContext);
     statement.setTask(task);
     return statement;
   }
 
-  protected GenerateOrIterateStatement createStatement(String productName, Generator<Long> countGenerator,
-                                                       Expression<Long> minCount, Expression<Integer> threads, Expression<Long> pageSize,
-                                                       Expression<PageListener> pager, boolean infoLog, boolean nested,
-                                                       Expression<ErrorHandler> errorHandler, BeneratorContext context) {
-    return new GenerateOrIterateStatement(productName, countGenerator, minCount, threads, pageSize, pager,
-        errorHandler, infoLog, nested, context);
+  protected GenerateOrIterateStatement createStatement(Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
+                                                       Expression<Long> pageSize, Expression<PageListener> pager, boolean infoLog, boolean nested,
+                                                       Expression<ErrorHandler> errorHandler, BeneratorContext context, BeneratorContext childContext) {
+    return new GenerateOrIterateStatement(countGenerator, minCount, threads, pageSize, pager,
+        errorHandler, infoLog, nested, context, childContext);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  private GenerateAndConsumeTask parseTask(Element element, Statement[] parentPath, GenerateOrIterateStatement statement,
-                                           BeneratorParseContext parseContext, InstanceDescriptor descriptor, boolean infoLog) {
+  private GenerateAndConsumeTask parseTask(
+      Element element, Statement[] statementPath, BeneratorParseContext parseContext,
+      InstanceDescriptor descriptor, boolean infoLog, BeneratorContext context, BeneratorContext childContext) {
     // log
     if (infoLog) {
       logger.debug("{}", descriptor);
@@ -297,8 +306,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     // get core date
     descriptor.setNullable(false);
     String taskName = getTaskName(descriptor);
-    BeneratorContext context = statement.getContext();
-    BeneratorContext childContext = statement.getChildContext();
     String productName = getNameOrType(element);
 
     // create base generator
@@ -320,20 +327,20 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 
       // first parse the component descriptor...
       String childName = XMLUtil.localName(child);
-      InstanceDescriptor componentDescriptor = null;
+      InstanceDescriptor instanceDescriptor = null;
       if (EL_VARIABLE.equals(childName)) {
-        componentDescriptor = parser.parseVariable(child, (VariableHolder) type);
+        instanceDescriptor = parser.parseVariable(child, (VariableHolder) type);
       } else if (COMPONENT_TYPES.contains(childName)) {
-        componentDescriptor = parser.parseComponentGeneration(child, (ComplexTypeDescriptor) type);
-        handledMembers.add(componentDescriptor.getName().toLowerCase());
+        instanceDescriptor = parser.parseComponentGeneration(child, (ComplexTypeDescriptor) type);
+        handledMembers.add(instanceDescriptor.getName().toLowerCase());
       } else if (EL_VALUE.equals(childName)) {
-        componentDescriptor = parser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, arrayIndex++);
+        instanceDescriptor = parser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, arrayIndex++);
       }
 
       // ...handle non-member/variable child elements
-      if (componentDescriptor != null) {
+      if (instanceDescriptor != null) {
         GenerationStep<?> componentGenerator = GenerationStepFactory.createGenerationStep(
-            componentDescriptor, Uniqueness.NONE, iterationMode, childContext);
+            instanceDescriptor, Uniqueness.NONE, iterationMode, childContext);
         if (componentGenerator != null) {
           statements.add(componentGenerator);
         }
@@ -341,8 +348,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
         // parse and set up consumer definition
         interceptor.generationComplete(base, iterationMode, statements);
         completionReported = true;
-        Statement[] subPath = parseContext.createSubPath(parentPath, statement);
-        Statement subStatement = parseContext.parseChildElement(child, subPath);
+        Statement subStatement = parseContext.parseChildElement(child, statementPath);
         statements.add(subStatement);
       }
     }

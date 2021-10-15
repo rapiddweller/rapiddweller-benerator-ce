@@ -26,10 +26,9 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.benerator.main.Benerator;
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.collection.ListBasedSet;
 import com.rapiddweller.common.collection.NamedValueList;
 
@@ -47,11 +46,11 @@ import java.util.Set;
  * @author Volker Bergmann
  * @since 0.5.0
  */
-public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHolder {
+public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHolder { // TODO don't implement VariableHolder
 
   public static final String __SIMPLE_CONTENT = "__SIMPLE_CONTENT";
 
-  private NamedValueList<InstanceDescriptor> parts;
+  private NamedValueList<InstanceDescriptor> parts; // TODO use only ComponentDescriptors
 
   // constructors ----------------------------------------------------------------------------------------------------
 
@@ -102,23 +101,7 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
   }
 
   public ComponentDescriptor getComponent(String name) {
-    if (Benerator.QUICK_N_DIRTY) { // TODO REMOVE
-      InstanceDescriptor pt = parts.someValueOfName(name);
-      if (pt != null) {
-        return (ComponentDescriptor) pt;
-      }
-    }
-
-    for (InstanceDescriptor part : parts.values()) {
-      if (StringUtil.equalsIgnoreCase(part.getName(), name) &&
-          part instanceof ComponentDescriptor) {
-        return (ComponentDescriptor) part;
-      }
-    }
-    if (getParent() != null) {
-      return ((ComplexTypeDescriptor) getParent()).getComponent(name);
-    }
-    return null;
+    return BeneratorFactory.getInstance().getComponent(name, parts, (ComplexTypeDescriptor) getParent());
   }
 
   public List<InstanceDescriptor> getParts() {
@@ -194,6 +177,10 @@ public class ComplexTypeDescriptor extends TypeDescriptor implements VariableHol
   protected void init() {
     super.init();
     this.parts = new NamedValueList<>(NamedValueList.INSENSITIVE);
+  }
+
+  public void clear() { // TODO remove
+    parts.clear();
   }
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------

@@ -40,10 +40,15 @@ import com.rapiddweller.benerator.primitive.VarLengthStringGenerator;
 import com.rapiddweller.benerator.util.DefaultRandomProvider;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.collection.NamedValueList;
 import com.rapiddweller.common.context.CaseInsensitiveContext;
 import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.format.text.DelocalizingConverter;
+import com.rapiddweller.model.data.ComplexTypeDescriptor;
+import com.rapiddweller.model.data.ComponentDescriptor;
+import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.platform.xml.DefaultXMLModule;
 import com.rapiddweller.platform.xml.XMLModule;
 
@@ -155,6 +160,23 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
   @Override
   public XMLModule getXMLModule() {
     return xmlModule;
+  }
+
+  @Override
+  public ComponentDescriptor getComponent(
+      String name, NamedValueList<InstanceDescriptor> parts, ComplexTypeDescriptor parent) {
+    // search through the components
+    for (InstanceDescriptor part : parts.values()) {
+      if (StringUtil.equalsIgnoreCase(part.getName(), name) &&
+          part instanceof ComponentDescriptor) {
+        return (ComponentDescriptor) part;
+      }
+    }
+    // if nothing was found, then query the parent descriptor
+    if (parent != null) {
+      return (parent.getComponent(name));
+    }
+    return null;
   }
 
 }
