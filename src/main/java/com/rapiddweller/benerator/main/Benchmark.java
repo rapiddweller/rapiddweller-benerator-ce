@@ -6,6 +6,8 @@ import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConnectFailedException;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.TextUtil;
 import com.rapiddweller.common.VMInfo;
@@ -15,16 +17,30 @@ import com.rapiddweller.common.ui.InfoPrinter;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.common.version.VersionNumberParser;
 import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.jdbacl.DBUtil;
+import com.rapiddweller.jdbacl.DatabaseDialect;
+import com.rapiddweller.jdbacl.DatabaseDialectManager;
+import com.rapiddweller.jdbacl.JDBCConnectData;
+import com.rapiddweller.script.PrimitiveType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -313,9 +329,7 @@ public class Benchmark {
   private static Execution runTest(String fileName, String environment, int count, int threads, Benerator benerator) throws IOException {
     logger.debug("Testing {} with count {} and {} thread(s)", fileName, count, threads);
     String xml = IOUtil.getContentOfURI("com/rapiddweller/benerator/benchmark/" + fileName);
-    if (environment != null) {
-      xml = xml.replace("{environment}", environment);
-    }
+    xml = applyEnvironment(environment, xml);
     xml = xml.replace("{count}", String.valueOf(count));
     xml = xml.replace("{threads}", String.valueOf(threads));
     String filename = "__benchmark.ben.xml";
@@ -326,6 +340,33 @@ public class Benchmark {
     FileUtil.deleteIfExists(new File(filename));
     FileUtil.deleteIfExists(new File("__benchmark.out"));
     return new Execution(fileName, count, threads, t1 - t0);
+  }
+
+  private static String applyEnvironment(String environment, String xml) {
+    if (environment != null) {
+      xml = xml.replace("{environment}", environment);
+      DatabaseDialect dialect = getDialect(environment);
+      Set<String> types = CollectionUtil.toSet(
+          "varchar", "char", "string", "date", "time", "timestamp", "binary", "boolean",
+          "byte", "short", "int", "long", "big_integer", "float", "double", "big_decimal");
+      for (String type : types) {
+        String specialType = dialect.getSpecialType(type);
+        xml = xml.replace('{' + type + '}', specialType);
+      }
+    }
+    return xml;
+  }
+
+  private static DatabaseDialect getDialect(String environment) {
+    try (Connection connection = DBUtil.connect(environment, ".", true)) {
+      DatabaseMetaData metaData = connection.getMetaData();
+      String databaseProductName = metaData.getDatabaseProductName();
+      VersionNumber databaseProductVersion = VersionNumber.valueOf(metaData.getDatabaseProductVersion());
+      logger.debug("Product: {} {}", databaseProductName, databaseProductVersion);
+      return DatabaseDialectManager.getDialectForProduct(databaseProductName, databaseProductVersion);
+    } catch (ConnectFailedException | SQLException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public static class Setup {
