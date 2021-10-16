@@ -57,7 +57,7 @@ public class Benchmark {
 
   private static final Setup[] DEFAULT_SETUPS = {
       new Setup("gen-string.ben.xml", false, V200, 100000),
-      new Setup("gen-big-entity.ben.xml", false, V200, 100000),
+//      new Setup("gen-big-entity.ben.xml", false, V200, 100000),
       new Setup("gen-person-showcase.ben.xml", false, V200, 80000),
       new Setup("anon-person-showcase.ben.xml", false, V200, 100000),
       new Setup("anon-person-regex.ben.xml", false, V200, 1500000),
@@ -89,7 +89,7 @@ public class Benchmark {
     boolean ee;
     if (ArrayUtil.indexOf("--ee", args) >= 0) {
       if (!isEEAvailable()) {
-        printer.printLines("Benerator Enterprice Edition is not avaliable on this installation");
+        printer.printLines("Benerator Enterprise Edition is not available on this installation");
         System.exit(-1);
       }
       ee = true;
@@ -213,7 +213,7 @@ public class Benchmark {
         "Options:",
         "--ce              run on Benerator Community Edition (default on CE)",
         "--ee              run on Benerator Enterprise Edition (default on EE,",
-        "                  only available on Enterprice Edition)",
+        "                  only available on Enterprise Edition)",
         "--env x[,y]       runs only database tests on the environments listed",
         "--minSecs n       Choose generation count to have a test execution time",
         "                  of at least n seconds (default: 10)",
