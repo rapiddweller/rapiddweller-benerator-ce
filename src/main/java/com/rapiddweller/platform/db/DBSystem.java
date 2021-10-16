@@ -121,6 +121,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   protected DatabaseDialect dialect;
   private String id;
   private String environment;
+  private String folder;
   private String url;
   private String user;
   private String password;
@@ -149,6 +150,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   protected DBSystem(String id, String environment, BeneratorContext context) {
     this(id, context.getDataModel());
     setEnvironment(environment);
+    this.folder = context.getContextUri();
     logger.debug("Reading environment data for '{}'", environment);
     if (this.environment != null) {
       JDBCConnectData connectData = DBUtil.getConnectData(environment, context.getContextUri());
@@ -682,7 +684,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   private JDBCDBImporter createJDBCImporter() {
     return JDBCMetaDataUtil
-        .getJDBCDBImporter(getConnection(), environment, user, catalogName, schemaName,
+        .getJDBCDBImporter(getConnection(), environment, folder, user, catalogName, schemaName,
             true, false, false, false, includeTables,
             excludeTables);
   }
