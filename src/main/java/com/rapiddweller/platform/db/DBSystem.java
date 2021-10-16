@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -107,10 +107,8 @@ import static com.rapiddweller.jdbacl.SQLUtil.renderQuery;
 public abstract class DBSystem extends AbstractStorageSystem {
 
   private static final int DEFAULT_FETCH_SIZE = 100;
-  private static final VersionNumber MIN_ORACLE_VERSION =
-      VersionNumber.valueOf("10.2.0.4");
-  private static final TypeDescriptor[] EMPTY_TYPE_DESCRIPTOR_ARRAY =
-      new TypeDescriptor[0];
+  private static final VersionNumber MIN_ORACLE_VERSION = VersionNumber.valueOf("10.2.0.4");
+  private static final TypeDescriptor[] EMPTY_TYPE_DESCRIPTOR_ARRAY = new TypeDescriptor[0];
 
   protected final Logger logger = LoggerFactory.getLogger(getClass());
   private final TypeMapper driverTypeMapper;
@@ -227,7 +225,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   }
 
   private void setEnvironment(String environment) {
-    this.environment = (StringUtil.isEmpty(environment) ? null : environment);
+    this.environment = StringUtil.emptyToNull(environment);
   }
 
   public String getDriver() {
@@ -684,7 +682,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   private JDBCDBImporter createJDBCImporter() {
     return JDBCMetaDataUtil
-        .getJDBCDBImporter(getConnection(), user, catalogName, schemaName,
+        .getJDBCDBImporter(getConnection(), environment, user, catalogName, schemaName,
             true, false, false, false, includeTables,
             excludeTables);
   }
