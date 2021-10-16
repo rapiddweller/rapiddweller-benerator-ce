@@ -2,7 +2,7 @@
     <database id="db" environment="{environment}" />
     <execute target="db">
         create table "ben_benchmark" (
-        "c_000_id"        {long},
+        "c_000_id"        {char}(36),
         "c_001_timestamp" {timestamp},
         "c_002_flag"      {char},
         "c_003_status"    {varchar}(10),
@@ -330,7 +330,7 @@
     </execute>
 
     <generate type="ben_benchmark" count="{count}" threads="{threads}" pageSize="100000" consumer="db">
-        <id name="c_000_id" type="long"/>
+        <id name="c_000_id" type="string" generator="UUIDGenerator"/>
         <!-- TODO id name="c_000_id" type="string" generator="UUIDGenerator"/-->
         <attribute name="c_001_timestamp"  type="timestamp" />
         <attribute name="c_002_flag"   type="string" pattern="[YN]"/>
