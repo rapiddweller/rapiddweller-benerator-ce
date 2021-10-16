@@ -20,25 +20,18 @@ import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.jdbacl.DatabaseDialectManager;
-import com.rapiddweller.jdbacl.JDBCConnectData;
-import com.rapiddweller.script.PrimitiveType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
@@ -64,6 +57,7 @@ public class Benchmark {
 
   private static final Setup[] DEFAULT_SETUPS = {
       new Setup("gen-string.ben.xml", false, V200, 100000),
+      new Setup("gen-big-entity.ben.xml", false, V200, 100000),
       new Setup("gen-person-showcase.ben.xml", false, V200, 80000),
       new Setup("anon-person-showcase.ben.xml", false, V200, 100000),
       new Setup("anon-person-regex.ben.xml", false, V200, 1500000),
