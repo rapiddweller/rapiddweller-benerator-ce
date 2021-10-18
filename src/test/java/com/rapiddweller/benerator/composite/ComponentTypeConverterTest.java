@@ -50,9 +50,9 @@ public class ComponentTypeConverterTest {
   public void testRecursively() {
     DescriptorProvider provider = new DefaultDescriptorProvider("p", new DataModel());
     ComplexTypeDescriptor childType = new ComplexTypeDescriptor("childType", provider);
-    childType.addComponent(new PartDescriptor("child", provider, "string"));
+    childType.setComponent(new PartDescriptor("child", provider, "string"));
     ComplexTypeDescriptor parentType = new ComplexTypeDescriptor("parentType", provider);
-    parentType.addComponent(new PartDescriptor("child", provider, childType));
+    parentType.setComponent(new PartDescriptor("child", provider, childType));
     ComponentTypeConverter converter = new ComponentTypeConverter(parentType);
     Entity child = new Entity(childType, "child", "childChildValue");
     Entity parent = new Entity(parentType, "child", child);

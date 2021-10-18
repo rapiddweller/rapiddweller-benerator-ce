@@ -136,13 +136,13 @@ public class AllSheetsXLSEntityIteratorTest extends XLSTest {
     DescriptorProvider dp = new DefaultDescriptorProvider("test", new DataModel());
     // Create descriptor
     final ComplexTypeDescriptor descriptor = new ComplexTypeDescriptor("Product", dp);
-    descriptor.addComponent(new PartDescriptor("ean", dp, "string"));
+    descriptor.setComponent(new PartDescriptor("ean", dp, "string"));
     SimpleTypeDescriptor priceTypeDescriptor = new SimpleTypeDescriptor("priceType", dp, "big_decimal");
     priceTypeDescriptor.setGranularity("0.01");
-    descriptor.addComponent(new PartDescriptor("price", dp, priceTypeDescriptor));
-    descriptor.addComponent(new PartDescriptor("date", dp, "date"));
-    descriptor.addComponent(new PartDescriptor("available", dp, "boolean"));
-    descriptor.addComponent(new PartDescriptor("updated", dp, "timestamp"));
+    descriptor.setComponent(new PartDescriptor("price", dp, priceTypeDescriptor));
+    descriptor.setComponent(new PartDescriptor("date", dp, "date"));
+    descriptor.setComponent(new PartDescriptor("available", dp, "boolean"));
+    descriptor.setComponent(new PartDescriptor("updated", dp, "timestamp"));
     context.getDataModel().addDescriptorProvider(dp);
 
     // test import

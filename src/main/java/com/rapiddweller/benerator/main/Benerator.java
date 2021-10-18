@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.main;
 import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.BeneratorError;
 import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.BeneratorMode;
 import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.BeneratorRootContext;
@@ -74,11 +75,15 @@ public class Benerator {
       "  -h,--help              Display help information",
   };
 
+  private static BeneratorMode mode = BeneratorMode.LENIENT;
+
+
   // main ------------------------------------------------------------------------------------------------------------
 
   public static void main(String[] args) throws IOException {
     VersionInfo.getInfo(BENERATOR_KEY).verifyDependencies();
     checkVersionAndHelpOpts(args, CE_CLI_HELP);
+    checkMode(args);
     int fileIndex = 0;
     while (fileIndex < args.length && args[fileIndex].startsWith("-")) {
       fileIndex++;
@@ -108,6 +113,13 @@ public class Benerator {
     return new VersionNumberParser().parse(VersionInfo.getInfo(BENERATOR_KEY).getVersion());
   }
 
+  public static boolean isStrict() {
+    return (mode == BeneratorMode.STRICT);
+  }
+
+  public static void setMode(BeneratorMode mode) {
+    Benerator.mode = mode;
+  }
 
   //  operational interface ------------------------------------------------------------------------------------------
 
@@ -167,6 +179,26 @@ public class Benerator {
     return ArrayUtil.contains("--help", args)
         || ArrayUtil.contains("-h", args)
         || ArrayUtil.contains("-help", args);
+  }
+
+  private static void checkMode(String[] args) {
+    String modeSpec = getParameter("mode", args);
+    if ("dirty".equals(System.getProperty("quick"))) {
+      mode = BeneratorMode.QUCIK_N_DIRTY; // if benerator was called with -Dquick=dirty, then set quick&dirty mode
+    } else if (modeSpec == null) {
+      mode = BeneratorMode.LENIENT;
+    } else {
+      mode = BeneratorMode.valueOf(modeSpec);
+    }
+  }
+
+  private static String getParameter(String name, String[] args) {
+    int index = ArrayUtil.indexOf(name, args);
+    if (index >= 0 && index < args.length - 1) {
+      return args[index + 1];
+    } else {
+      return null;
+    }
   }
 
 }

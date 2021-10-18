@@ -278,9 +278,7 @@ public class InstanceDescriptor extends FeatureDescriptor {
         COUNT_GRANULARITY.equals(detailName)) {
       FeatureDetail<Object> detail = getConfiguredDetail(detailName);
       if (detail == null) {
-        throw new UnsupportedOperationException(
-            getClass().getSimpleName() +
-                " does not support detail type: " + detailName);
+        throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support detail type: " + detailName);
       }
       if (detailValue instanceof Expression) {
         detail.setValue(new TypeConvertingExpression<>(

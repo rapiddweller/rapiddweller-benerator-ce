@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn">
+
+    <!-- appenders -->
+
     <Appenders>
         <RollingFile name="fileLogger" fileName="./benerator.log" filePattern="./benerator-%d{yyyy-MM-dd}.log">
             <PatternLayout>
@@ -14,88 +17,38 @@
             <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"/>
         </Console>
     </Appenders>
+
+    <!-- loggers -->
+
     <Loggers>
-        <!-- ================ -->
-        <!-- Limit categories -->
-        <!-- ================ -->
+        <!-- Special loggers -->
+        <Logger name="com.rapiddweller.JDBC" level="info"/>
+        <Logger name="com.rapiddweller.SQL" level="info"/>
+        <Logger name="com.rapiddweller.COMMENT" level="info"/>
+        <Logger name="com.rapiddweller.CONFIG" level="info"/>
+        <Logger name="com.rapiddweller.benerator.STATE" level="info"/>
 
-        <Logger name="com.rapiddweller.apache" level="warn" additivity="false">
-            <appender-ref ref="fileLogger" level="warn"/>
-        </Logger>
+        <!-- general loggers -->
+        <Logger name="com.rapiddweller.apache" level="warn"/>
+        <Logger name="com.rapiddweller.shop" level="info"/>
+        <Logger name="com.rapiddweller" level="info"/>
+        <Logger name="com.rapiddweller.platform.xml" level="info"/>
+        <Logger name="com.rapiddweller.platform.db.DBSystem" level="info"/>
+        <Logger name="com.rapiddweller.common.converter" level="info"/>
+        <Logger name="com.rapiddweller.platform.db" level="info"/>
+        <Logger name="com.rapiddweller.model" level="info"/>
+        <Logger name="com.rapiddweller.dataset" level="info"/>
+        <Logger name="com.rapiddweller.common" level="info"/>
+        <Logger name="com.rapiddweller.benerator" level="info"/>
+        <Logger name="com.rapiddweller.domain" level="info"/>
+        <Logger name="com.rapiddweller.jdbacl" level="info"/>
 
-        <Logger name="com.rapiddweller.JDBC" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
+        <!-- Root setup -->
 
-        <Logger name="com.rapiddweller.SQL" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <Logger name="com.rapiddweller.COMMENT" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <Logger name="com.rapiddweller.CONFIG" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <Logger name="com.rapiddweller.shop" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-
-        <Logger name="com.rapiddweller" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-
-        <Logger name="com.rapiddweller.platform.xml" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <Logger name="com.rapiddweller.platform.db.DBSystem" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <Logger name="com.rapiddweller.common.converter" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <Logger name="com.rapiddweller.platform.db" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <Logger name="com.rapiddweller.model" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <Logger name="com.rapiddweller.dataset" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <Logger name="com.rapiddweller.common" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <Logger name="com.rapiddweller.benerator.STATE" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <Logger name="com.rapiddweller.benerator" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <Logger name="com.rapiddweller.domain" level="info" additivity="false">
-            <appender-ref ref="fileLogger" level="info"/>
-        </Logger>
-
-        <!-- ======================= -->
-        <!-- Setup the Root category -->
-        <!-- ======================= -->
-
-        <Root level="info" additivity="false">
+        <Root level="info">
             <appender-ref ref="console"/>
             <appender-ref ref="fileLogger"/>
         </Root>
+
     </Loggers>
 </Configuration>

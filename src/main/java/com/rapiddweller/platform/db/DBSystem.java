@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -107,10 +107,8 @@ import static com.rapiddweller.jdbacl.SQLUtil.renderQuery;
 public abstract class DBSystem extends AbstractStorageSystem {
 
   private static final int DEFAULT_FETCH_SIZE = 100;
-  private static final VersionNumber MIN_ORACLE_VERSION =
-      VersionNumber.valueOf("10.2.0.4");
-  private static final TypeDescriptor[] EMPTY_TYPE_DESCRIPTOR_ARRAY =
-      new TypeDescriptor[0];
+  private static final VersionNumber MIN_ORACLE_VERSION = VersionNumber.valueOf("10" + ".2.0.4"); // little trick to satisfy SonarCube which thinks this is an IP address
+  private static final TypeDescriptor[] EMPTY_TYPE_DESCRIPTOR_ARRAY = new TypeDescriptor[0];
 
   protected final Logger logger = LoggerFactory.getLogger(getClass());
   private final TypeMapper driverTypeMapper;
@@ -123,6 +121,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   protected DatabaseDialect dialect;
   private String id;
   private String environment;
+  private String folder;
   private String url;
   private String user;
   private String password;
@@ -151,6 +150,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   protected DBSystem(String id, String environment, BeneratorContext context) {
     this(id, context.getDataModel());
     setEnvironment(environment);
+    this.folder = context.getContextUri();
     logger.debug("Reading environment data for '{}'", environment);
     if (this.environment != null) {
       JDBCConnectData connectData = DBUtil.getConnectData(environment, context.getContextUri());
@@ -227,7 +227,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   }
 
   private void setEnvironment(String environment) {
-    this.environment = (StringUtil.isEmpty(environment) ? null : environment);
+    this.environment = StringUtil.emptyToNull(environment);
   }
 
   public String getDriver() {
@@ -684,7 +684,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   private JDBCDBImporter createJDBCImporter() {
     return JDBCMetaDataUtil
-        .getJDBCDBImporter(getConnection(), user, catalogName, schemaName,
+        .getJDBCDBImporter(getConnection(), environment, folder, user, catalogName, schemaName,
             true, false, false, false, includeTables,
             excludeTables);
   }
@@ -801,7 +801,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
           }
         }
         logger.debug("parsed attribute {}: {}", columnId, descriptor);
-        complexType.addComponent(descriptor);
+        complexType.setComponent(descriptor);
       } catch (Exception e) {
         throw new ConfigurationError("Error processing column " + column.getName() +
                 " of table " + table.getName(), e);

@@ -44,113 +44,60 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
- * Parent class for XLS-related tests.<br/>
- * <br/>
+ * Parent class for XLS-related tests.<br/><br/>
  * Created at 18.07.2009 23:45:02
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public abstract class XLSTest extends IteratorTestCase {
 
-  /**
-   * The constant EAN1.
-   */
   protected static final String EAN1 = "1234567890123";
-  /**
-   * The constant PRICE1.
-   */
   protected static final BigDecimal PRICE1 = new BigDecimal("123.234");
-  /**
-   * The constant DATE1.
-   */
   protected static final Date DATE1 = TimeUtil.date(2009, 6, 18);
-  /**
-   * The constant AVAIL1.
-   */
   protected static final Boolean AVAIL1 = true;
-  /**
-   * The constant UPDATED1.
-   */
   protected static final Timestamp UPDATED1 = TimeUtil.timestamp(2009, 6, 18, 0, 27, 38, 0);
 
-  /**
-   * The constant EAN2.
-   */
   protected static final String EAN2 = "9876543210987";
-  /**
-   * The constant PRICE2.
-   */
   protected static final BigDecimal PRICE2 = new BigDecimal("1.95");
-  /**
-   * The constant DATE2.
-   */
   protected static final Date DATE2 = DATE1;
-  /**
-   * The constant AVAIL2.
-   */
   protected static final Boolean AVAIL2 = false;
-  /**
-   * The constant UPDATED2.
-   */
   protected static final Timestamp UPDATED2 = TimeUtil.timestamp(2009, 6, 18, 0, 27, 38, 0);
 
-  /**
-   * The constant PERSON1_NAME.
-   */
   protected static final String PERSON1_NAME = "Alice";
-  /**
-   * The constant PERSON1_AGE.
-   */
   protected static final int PERSON1_AGE = 23;
 
-  /**
-   * The constant XYZ_DESCRIPTOR.
-   */
   protected static final ComplexTypeDescriptor XYZ_DESCRIPTOR;
 
-  /**
-   * The constant p.
-   */
   protected static final DefaultDescriptorProvider p = new DefaultDescriptorProvider("Test", new DataModel());
 
   static {
     XYZ_DESCRIPTOR = new ComplexTypeDescriptor("XYZ", p);
-    XYZ_DESCRIPTOR.addComponent(new PartDescriptor("ean", p, "string"));
-    XYZ_DESCRIPTOR.addComponent(new PartDescriptor("price", p, "big_decimal"));
-    XYZ_DESCRIPTOR.addComponent(new PartDescriptor("date", p, "date"));
-    XYZ_DESCRIPTOR.addComponent(new PartDescriptor("avail", p, "boolean"));
-    XYZ_DESCRIPTOR.addComponent(new PartDescriptor("updated", p, "timestamp"));
+    XYZ_DESCRIPTOR.setComponent(new PartDescriptor("ean", p, "string"));
+    XYZ_DESCRIPTOR.setComponent(new PartDescriptor("price", p, "big_decimal"));
+    XYZ_DESCRIPTOR.setComponent(new PartDescriptor("date", p, "date"));
+    XYZ_DESCRIPTOR.setComponent(new PartDescriptor("avail", p, "boolean"));
+    XYZ_DESCRIPTOR.setComponent(new PartDescriptor("updated", p, "timestamp"));
   }
 
-  /**
-   * The constant PRODUCT_DESCRIPTOR.
-   */
   protected static final ComplexTypeDescriptor PRODUCT_DESCRIPTOR;
 
   static {
     PRODUCT_DESCRIPTOR = new ComplexTypeDescriptor("Product", p);
-    PRODUCT_DESCRIPTOR.addComponent(new PartDescriptor("ean", p, "string"));
-    PRODUCT_DESCRIPTOR.addComponent(new PartDescriptor("price", p, "big_decimal"));
-    PRODUCT_DESCRIPTOR.addComponent(new PartDescriptor("date", p, "date"));
-    PRODUCT_DESCRIPTOR.addComponent(new PartDescriptor("avail", p, "boolean"));
-    PRODUCT_DESCRIPTOR.addComponent(new PartDescriptor("updated", p, "timestamp"));
+    PRODUCT_DESCRIPTOR.setComponent(new PartDescriptor("ean", p, "string"));
+    PRODUCT_DESCRIPTOR.setComponent(new PartDescriptor("price", p, "big_decimal"));
+    PRODUCT_DESCRIPTOR.setComponent(new PartDescriptor("date", p, "date"));
+    PRODUCT_DESCRIPTOR.setComponent(new PartDescriptor("avail", p, "boolean"));
+    PRODUCT_DESCRIPTOR.setComponent(new PartDescriptor("updated", p, "timestamp"));
   }
 
-  /**
-   * The constant PERSON_DESCRIPTOR.
-   */
   protected static final ComplexTypeDescriptor PERSON_DESCRIPTOR;
 
   static {
     PERSON_DESCRIPTOR = new ComplexTypeDescriptor("Person", p);
-    PERSON_DESCRIPTOR.addComponent(new PartDescriptor("name", p, "string"));
-    PERSON_DESCRIPTOR.addComponent(new PartDescriptor("age", p, "int"));
+    PERSON_DESCRIPTOR.setComponent(new PartDescriptor("name", p, "string"));
+    PERSON_DESCRIPTOR.setComponent(new PartDescriptor("age", p, "int"));
   }
 
-  /**
-   * The constant PROD1.
-   */
   protected static final Entity PROD1 = new Entity(PRODUCT_DESCRIPTOR,
       "ean", EAN1,
       "price", PRICE1,
@@ -159,9 +106,6 @@ public abstract class XLSTest extends IteratorTestCase {
       "updated", UPDATED1
   );
 
-  /**
-   * The constant PROD2.
-   */
   protected static final Entity PROD2 = new Entity(PRODUCT_DESCRIPTOR,
       "ean", EAN2,
       "price", PRICE2,
@@ -170,17 +114,11 @@ public abstract class XLSTest extends IteratorTestCase {
       "updated", UPDATED2
   );
 
-  /**
-   * The constant PERSON1.
-   */
   protected static final Entity PERSON1 = new Entity(PERSON_DESCRIPTOR,
       "name", PERSON1_NAME,
       "age", PERSON1_AGE
   );
 
-  /**
-   * The constant XYZ11.
-   */
   protected static final Entity XYZ11 = new Entity(XYZ_DESCRIPTOR,
       "ean", EAN1,
       "price", PRICE1,
@@ -189,9 +127,6 @@ public abstract class XLSTest extends IteratorTestCase {
       "updated", UPDATED1
   );
 
-  /**
-   * The constant XYZ12.
-   */
   protected static final Entity XYZ12 = new Entity(XYZ_DESCRIPTOR,
       "ean", EAN2,
       "price", PRICE2,
@@ -200,20 +135,11 @@ public abstract class XLSTest extends IteratorTestCase {
       "updated", UPDATED2
   );
 
-  /**
-   * The constant XYZ21.
-   */
   protected static final Entity XYZ21 = new Entity(XYZ_DESCRIPTOR,
       "name", PERSON1_NAME,
       "age", PERSON1_AGE
   );
 
-  /**
-   * Assert xyz.
-   *
-   * @param expected the expected
-   * @param actual   the actual
-   */
   protected static void assertXYZ(Entity expected, Entity actual) {
     assertEquals("XYZ", actual.type());
     assertEquals(expected.getComponent("ean"), actual.getComponent("ean"));
@@ -224,12 +150,6 @@ public abstract class XLSTest extends IteratorTestCase {
         ((Date) actual.getComponent("updated")).getTime());
   }
 
-  /**
-   * Assert product.
-   *
-   * @param expected the expected
-   * @param actual   the actual
-   */
   protected static void assertProduct(Entity expected, Entity actual) {
     assertEquals("Product", actual.type());
     assertEquals(expected.getComponent("ean"), actual.getComponent("ean"));
@@ -240,23 +160,12 @@ public abstract class XLSTest extends IteratorTestCase {
         ((Date) actual.getComponent("updated")).getTime());
   }
 
-  /**
-   * Assert person.
-   *
-   * @param expected the expected
-   * @param actual   the actual
-   */
   protected static void assertPerson(Entity expected, Entity actual) {
     assertEquals("Person", actual.type());
     assertEquals(expected.get("name"), actual.get("name"));
     assertEquals(expected.get("age"), ((Number) actual.get("age")).intValue());
   }
 
-  /**
-   * Assert unavailable.
-   *
-   * @param iterator the iterator
-   */
   protected static void assertUnavailable(DataIterator<Entity> iterator) {
     assertNull(iterator.next(new DataContainer<>()));
   }

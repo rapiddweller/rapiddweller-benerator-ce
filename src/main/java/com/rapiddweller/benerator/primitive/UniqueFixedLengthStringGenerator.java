@@ -64,6 +64,17 @@ public class UniqueFixedLengthStringGenerator extends NonNullGeneratorWrapper<in
 
   // Generator interface ---------------------------------------------------------------------------------------------
 
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
+
   @Override
   public Class<String> getGeneratedType() {
     return String.class;

@@ -108,9 +108,9 @@ public class CSVEntityIteratorTest extends AbstractEntityIteratorTest {
 
   private ComplexTypeDescriptor createPersonDescriptor(ComplexTypeDescriptor countryDescriptor) {
     ComplexTypeDescriptor personDescriptor = createComplexType("Person");
-    personDescriptor.addComponent(createPart("name", "string"));
-    personDescriptor.addComponent(createPart("age", "int"));
-    personDescriptor.addComponent(createPart("country", countryDescriptor));
+    personDescriptor.setComponent(createPart("name", "string"));
+    personDescriptor.setComponent(createPart("age", "int"));
+    personDescriptor.setComponent(createPart("country", countryDescriptor));
     return personDescriptor;
   }
 
@@ -118,8 +118,8 @@ public class CSVEntityIteratorTest extends AbstractEntityIteratorTest {
 
   private ComplexTypeDescriptor createCountryDescriptor() {
     ComplexTypeDescriptor countryDescriptor = createComplexType("Country");
-    countryDescriptor.addComponent(createPart("isoCode", "string"));
-    countryDescriptor.addComponent(createPart("name", "string"));
+    countryDescriptor.setComponent(createPart("isoCode", "string"));
+    countryDescriptor.setComponent(createPart("name", "string"));
     return countryDescriptor;
   }
 

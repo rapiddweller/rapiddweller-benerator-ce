@@ -147,7 +147,7 @@ public class ModelParser {
         TypeDescriptor parentType = parentComponent.getTypeDescriptor();
         result.getLocalType(false).setParent(parentType);
       }
-      owner.addComponent(result);
+      owner.setComponent(result);
     }
     return result;
   }
@@ -212,7 +212,7 @@ public class ModelParser {
     String type = StringUtil.emptyToNull(varElement.getAttribute("type"));
     VariableDescriptor descriptor = new VariableDescriptor(varElement.getAttribute("name"), descriptorProvider, type);
     VariableDescriptor variable = mapInstanceDetails(varElement, false, descriptor);
-    owner.addVariable(variable);
+    //owner.addVariable(variable);
     return variable;
   }
 
@@ -332,7 +332,7 @@ public class ModelParser {
         TypeDescriptor parentType = parentComponent.getTypeDescriptor();
         result.getLocalType(false).setParent(parentType);
       }
-      owner.addComponent(result);
+      owner.setComponent(result);
     }
     return result;
   }
@@ -353,7 +353,7 @@ public class ModelParser {
         TypeDescriptor parentType = parentComponent.getTypeDescriptor();
         result.getLocalType(false).setParent(parentType);
       }
-      owner.addComponent(result);
+      owner.setComponent(result);
     }
     return mapInstanceDetails(element, false, result);
   }

@@ -80,7 +80,7 @@ public class LazyTableComplexTypeDescriptor extends ComplexTypeDescriptor {
   @Override
   public void addComponent(ComponentDescriptor component) {
     assureLoaded();
-    super.addComponent(component);
+    super.setComponent(component);
   }
 
   private void assureLoaded() {
@@ -150,7 +150,7 @@ public class LazyTableComplexTypeDescriptor extends ComplexTypeDescriptor {
   public ComplexTypeDescriptor withComponent(
       ComponentDescriptor componentDescriptor) {
     assureLoaded();
-    addComponent(componentDescriptor);
+    setComponent(componentDescriptor);
     return this;
   }
 
