@@ -41,6 +41,7 @@
         <Logger name="com.rapiddweller.common" level="info"/>
         <Logger name="com.rapiddweller.benerator" level="info"/>
         <Logger name="com.rapiddweller.domain" level="info"/>
+        <Logger name="com.rapiddweller.jdbacl" level="info"/>
 
         <!-- Root setup -->
 
