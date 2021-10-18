@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.GeneratorState;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
+import com.rapiddweller.benerator.main.Benerator;
 import com.rapiddweller.benerator.util.AbstractGenerator;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.common.BeanUtil;
@@ -82,8 +83,12 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
           "This may have a significant performance impact. In that case, " +
           "please make sure that " + getClass() + " overwrites isThreadSafe() " +
           "in a manner that works before init() is called");
-      logger.error("", error);
-      return false;
+      if (Benerator.isStrict()) {
+        throw error;
+      } else {
+        logger.error("", error);
+        return false;
+      }
     }
     return source.isThreadSafe();
   }
@@ -96,8 +101,12 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
           "This may have a significant performance impact. In that case, " +
           "please make sure that " + getClass() + " overwrites isParallelizable() " +
           "in a manner that works before init() is called");
-      logger.error("", error);
-      return false;
+      if (Benerator.isStrict()) {
+        throw error;
+      } else {
+        logger.error("", error);
+        return false;
+      }
     }
     return source.isParallelizable();
   }
