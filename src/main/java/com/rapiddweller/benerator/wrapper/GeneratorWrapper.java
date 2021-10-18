@@ -77,9 +77,13 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
   @Override
   public boolean isThreadSafe() {
     if (source == null) {
-      throw new ProgrammerError("The object has not been initialized yet. " +
-          "Please make sure that " + getClass() + " overwrites isThreadSafe() " +
-          "in a manner that works before initialization");
+      ProgrammerError error = new ProgrammerError("The object has not been initialized yet. " +
+          "In order to run safely, I will assume this is not thread safe. " +
+          "This may have a significant performance impact. In that case, " +
+          "please make sure that " + getClass() + " overwrites isThreadSafe() " +
+          "in a manner that works before init() is called");
+      logger.error("", error);
+      return false;
     }
     return source.isThreadSafe();
   }
@@ -87,9 +91,13 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
   @Override
   public boolean isParallelizable() {
     if (source == null) {
-      throw new ProgrammerError("The object has not been initialized yet. " +
-          "Please make sure that " + getClass() + " overwrites isParallelizable() " +
-          "in a manner that works before initialization");
+      ProgrammerError error = new ProgrammerError("The object has not been initialized yet. " +
+          "In order to run safely, I will assume this is not parallelizable. " +
+          "This may have a significant performance impact. In that case, " +
+          "please make sure that " + getClass() + " overwrites isParallelizable() " +
+          "in a manner that works before init() is called");
+      logger.error("", error);
+      return false;
     }
     return source.isParallelizable();
   }
