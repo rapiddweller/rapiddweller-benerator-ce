@@ -336,15 +336,15 @@
 
     <generate type="ben_benchmark" count="{count}" threads="{threads}" pageSize="100000" consumer="db">
         <id name="c_000_id" type="string" generator="UUIDGenerator"/>
-        <attribute name="c_001_timestamp"  type="timestamp" />
+        <attribute name="c_001_timestamp" type="timestamp" min="1970-01-02"/>
         <attribute name="c_002_flag"   type="string" pattern="[YN]"/>
         <attribute name="c_003_status" type="string" values="'CREATED','ACCEPTED','REJECTED','COMPLETED'"/>
         <attribute name="c_004_code"   type="string" pattern="[0-9]{4}"/>
         <attribute name="c_005_code"   type="string" pattern="[0-9]{8}"/>
         <attribute name="c_006_code"   type="string" pattern="[0-9]{8}"/>
-        <attribute name="c_007_timestamp"  type="timestamp" />
-        <attribute name="c_008_timestamp"  type="timestamp" />
-        <attribute name="c_009_timestamp"  type="timestamp" />
+        <attribute name="c_007_timestamp"  type="timestamp" min="1970-01-02" />
+        <attribute name="c_008_timestamp"  type="timestamp" min="1970-01-02" />
+        <attribute name="c_009_timestamp"  type="timestamp" min="1970-01-02" />
         <attribute name="c_010_code"   type="string" pattern="[0-9]{17}"/>
         <attribute name="c_011_code"   type="string" pattern="[0-9]{17}"/>
         <attribute name="c_012_code"   type="string" pattern="[0-9]{17}"/>
@@ -365,8 +365,8 @@
         <attribute name="c_027_flag"   type="string" constant="0"/>
         <attribute name="c_028_flag"   type="string" constant="0"/>
         <attribute name="c_029_date"   type="date"/>
-        <attribute name="c_030_timestamp"  type="timestamp" />
-        <attribute name="c_031_timestamp"  type="timestamp" />
+        <attribute name="c_030_timestamp"  type="timestamp" min="1970-01-02" />
+        <attribute name="c_031_timestamp"  type="timestamp" min="1970-01-02" />
         <attribute name="c_032_code"     type="string" constant="00"/>
         <attribute name="c_033_flag"     type="string" pattern="[YN]"/>
         <attribute name="c_034_address"  type="string" nullQuota="0.7" pattern="[A-Z]{6,12}"/>
@@ -406,9 +406,9 @@
         <attribute name="c_068_code"     type="string" pattern="[0-9]{4}"/>
         <attribute name="c_069_code"     type="int" nullQuota="1"/>
         <attribute name="c_070_date"     type="date"/>
-        <attribute name="c_071_timestamp" type="timestamp"/>
+        <attribute name="c_071_timestamp" type="timestamp" min="1970-01-02"/>
         <attribute name="c_072_code"     type="int" min="-12" max="12"/>
-        <attribute name="c_073_timestamp"  type="timestamp"/>
+        <attribute name="c_073_timestamp"  type="timestamp" min="1970-01-02"/>
         <attribute name="c_074_flag"     type="string" constant="O"/>
         <attribute name="c_075_flag"     type="string" nullQuota="1"/>
         <attribute name="c_076_flag"     type="string" nullQuota="1"/>
@@ -444,8 +444,8 @@
         <attribute name="c_106_code"     type="string" constant="NV"/>
         <attribute name="c_107_flag"     type="string" nullQuota="1"/>
         <attribute name="c_108_flag"     type="string" constant="NULL"/>
-        <attribute name="c_109_timestamp" type="timestamp"/>
-        <attribute name="c_110_timestamp" type="timestamp"/>
+        <attribute name="c_109_timestamp" type="timestamp" min="1970-01-02"/>
+        <attribute name="c_110_timestamp" type="timestamp" min="1970-01-02"/>
         <attribute name="c_111_flag"      type="string" nullQuota="0.3" constant="0"/>
         <attribute name="c_112_flag"      type="string" constant="0"/>
         <attribute name="c_113_flag"      type="string" nullQuota="1"/>
@@ -462,7 +462,7 @@
         <attribute name="c_124_code"      type="string" pattern="(YAHOO|HOTMAIL|GMAIL|MSN)\.COM"/>
         <attribute name="c_125_flag"      type="string" constant="0"/>
         <attribute name="c_126_code"      type="string" pattern="[A-Z]{4,5}"/>
-        <attribute name="c_127_timestamp" type="timestamp"/>
+        <attribute name="c_127_timestamp" type="timestamp" min="1970-01-02"/>
         <attribute name="c_128_flag"      type="string" nullQuota="1"/>
         <attribute name="c_129_flag"      type="string" nullQuota="1"/>
         <attribute name="c_130_address"   type="int" nullQuota="0.5" constant="840"/>
