@@ -2,6 +2,7 @@
 
 package com.rapiddweller.benerator.main;
 
+import com.rapiddweller.benerator.BeneratorMode;
 import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayUtil;
@@ -74,12 +75,14 @@ public class Benchmark {
       new Setup("file-out-xml.ben.xml", false, V210, 500000)
   };
 
-  private static final NumberFormat PF = new DecimalFormat("#,##0", DecimalFormatSymbols.getInstance(Locale.US));
+  public static final DecimalFormat FORMAT_1 = new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.US));
+  public static final DecimalFormat FORMAT_0 = new DecimalFormat("#,##0", DecimalFormatSymbols.getInstance(Locale.US));
 
 
   // main ------------------------------------------------------------------------------------------------------------
 
   public static void main(String[] args) throws IOException {
+    Benerator.setMode(BeneratorMode.STRICT);
     InfoPrinter printer = new ConsoleInfoPrinter();
     if (ArrayUtil.indexOf("--help", args) >= 0 || ArrayUtil.indexOf("-h", args) >= 0) {
       printHelp();
@@ -294,9 +297,9 @@ public class Benchmark {
         double meph = 3600. * eps / 1000000.;
         String message = execution.filename + " with " + threads + (threads > 1 ? " threads: " : " thread:  ");
         message += execution.count + " E / " + execution.duration + " ms ";
-        message += " -> " + PF.format(meph) + " ME/h";
+        message += " -> " + format(meph) + " ME/h";
         printer.printLines(message);
-        tableRow[iT + 1] = Math.floor(execution.entitiesPerHour());
+        tableRow[iT + 1] = format(execution.entitiesPerHour());
       } else {
         tableRow[iT + 1] = "N/A";
       }
@@ -361,6 +364,10 @@ public class Benchmark {
     } catch (ConnectFailedException | SQLException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private static String format(double number) {
+    return (number < 10 ? FORMAT_1 : FORMAT_0).format(number);
   }
 
   public static class Setup {
