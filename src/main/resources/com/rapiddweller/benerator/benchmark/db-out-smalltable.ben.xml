@@ -23,15 +23,15 @@
 
     <generate type="ben_benchmark" count="{count}" threads="{threads}" pageSize="100000" consumer="db">
         <id name="c_0_id" type="string" generator="UUIDGenerator"/>
-        <attribute name="c_1_timestamp"  type="timestamp" />
+        <attribute name="c_1_timestamp" type="timestamp" min="1970-01-02"/>
         <attribute name="c_2_flag"   type="string" pattern="[YN]"/>
         <attribute name="c_3_status" type="string" values="'CREATED','ACCEPTED','REJECTED','COMPLETED'"/>
         <attribute name="c_4_code"   type="string" pattern="[0-9]{4}"/>
         <attribute name="c_5_code"   type="string" pattern="[0-9]{8}"/>
         <attribute name="c_6_code"   type="string" pattern="[0-9]{8}"/>
-        <attribute name="c_7_timestamp"  type="timestamp" />
-        <attribute name="c_8_timestamp"  type="timestamp" />
-        <attribute name="c_9_timestamp"  type="timestamp" />
+        <attribute name="c_7_timestamp" type="timestamp" min="1970-01-02"/>
+        <attribute name="c_8_timestamp" type="timestamp" min="1970-01-02"/>
+        <attribute name="c_9_timestamp" type="timestamp" min="1970-01-02"/>
     </generate>
 
     <execute target="db">

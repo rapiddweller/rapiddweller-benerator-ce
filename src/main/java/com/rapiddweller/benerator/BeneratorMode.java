@@ -2,13 +2,43 @@
 
 package com.rapiddweller.benerator;
 
+import com.rapiddweller.common.ObjectNotFoundException;
+
+import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * TODO JavaDoc.<br/><br/>
+ * Enumerates Benerator execution modes.<br/><br/>
  * Created: 18.10.2021 19:40:36
- *
  * @author Volker Bergmann
- * @since TODO
+ * @since 2.1.0
  */
-public enum BeneratorMode {
-  STRICT, LENIENT, QUCIK_N_DIRTY
+public class BeneratorMode {
+
+  private static final Map<String, BeneratorMode> INSTANCES = new HashMap<>();
+
+  public static final BeneratorMode STRICT = new BeneratorMode("strict");
+  public static final BeneratorMode LENIENT = new BeneratorMode("lenient");
+  public static final BeneratorMode QUICK_AND_DIRTY = new BeneratorMode("quickndirty");
+
+  public static BeneratorMode ofCode(String code) {
+    BeneratorMode result = INSTANCES.get(code);
+    if (result == null) {
+      throw new ObjectNotFoundException("No BeneratorMode od code " + code);
+    }
+    return result;
+  }
+
+  private final String code;
+
+  private BeneratorMode(@NotNull String code) {
+    this.code = code;
+    INSTANCES.put(this.getCode(), this);
+  }
+
+  public String getCode() {
+    return code;
+  }
+
 }

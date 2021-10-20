@@ -4,11 +4,11 @@ package com.rapiddweller.benerator.main;
 
 import com.rapiddweller.benerator.BeneratorMode;
 import com.rapiddweller.benerator.BeneratorUtil;
+import com.rapiddweller.benerator.util.CliUtil;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConnectFailedException;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.TextUtil;
 import com.rapiddweller.common.VMInfo;
@@ -18,24 +18,21 @@ import com.rapiddweller.common.ui.InfoPrinter;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.common.version.VersionNumberParser;
 import com.rapiddweller.common.FileUtil;
-import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.DatabaseDialect;
-import com.rapiddweller.jdbacl.DatabaseDialectManager;
+import com.rapiddweller.jdbacl.EnvironmentUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+
+import static com.rapiddweller.jdbacl.EnvironmentUtil.getDialect;
 
 /**
  * Performs benchmark tests on Benerator.<br/><br/>
@@ -58,7 +55,7 @@ public class Benchmark {
 
   private static final Setup[] DEFAULT_SETUPS = {
       new Setup("gen-string.ben.xml", false, V200, 100000),
-//      new Setup("gen-big-entity.ben.xml", false, V200, 100000),
+      new Setup("gen-big-entity.ben.xml", false, V200, 100000),
       new Setup("gen-person-showcase.ben.xml", false, V200, 80000),
       new Setup("anon-person-showcase.ben.xml", false, V200, 100000),
       new Setup("anon-person-regex.ben.xml", false, V200, 1500000),
@@ -66,8 +63,8 @@ public class Benchmark {
       new Setup("anon-person-random.ben.xml", false, V200, 1500000),
       new Setup("anon-person-constant.ben.xml", false, V200, 8000000),
       // TODO 2.1.0 measure in/out performance for files and databases
-      new Setup("db-out-smalltable.ben.xml", false, V200, 10000),
-      new Setup("db-out-bigtable.ben.xml", false, V200, 10000),
+      new Setup("db-out-smalltable.ben.xml", false, V200, 500000),
+      new Setup("db-out-bigtable.ben.xml", false, V200, 5000),
       new Setup("file-out-csv.ben.xml", false, V210, 1000000),
       new Setup("file-out-json.ben.xml", true, V210, 1000000),
       new Setup("file-out-dbunit.ben.xml", false, V210, 1000000),
@@ -84,7 +81,7 @@ public class Benchmark {
   public static void main(String[] args) throws IOException {
     Benerator.setMode(BeneratorMode.STRICT);
     InfoPrinter printer = new ConsoleInfoPrinter();
-    if (ArrayUtil.indexOf("--help", args) >= 0 || ArrayUtil.indexOf("-h", args) >= 0) {
+    if (CliUtil.containsHelpFlag(args)) {
       printHelp();
       System.exit(0);
     }
@@ -124,8 +121,10 @@ public class Benchmark {
       environments = args[envIndex + 1].split(",");
     }
 
+    String mode = CliUtil.getParameter("--mode", args);
+
     // run
-    Benchmark benchmark = new Benchmark(DEFAULT_SETUPS, mainClassName, environments, minDurationSecs, maxThreads);
+    Benchmark benchmark = new Benchmark(DEFAULT_SETUPS, mainClassName, mode, environments, minDurationSecs, maxThreads);
     benchmark.run(printer);
   }
 
@@ -142,11 +141,14 @@ public class Benchmark {
 
   // constructor -----------------------------------------------------------------------------------------------------
 
-  public Benchmark(Setup[] setups, String mainClassName, String[] environments, int minDurationSecs, int maxThreads) {
+  public Benchmark(Setup[] setups, String mainClassName, String mode, String[] environments, int minDurationSecs, int maxThreads) {
     // apply configuration settings
     this.setups = setups;
     this.environments = environments;
     this.benerator = (Benerator) BeanUtil.newInstance(mainClassName);
+    if (mode != null) {
+      Benerator.setMode(BeneratorMode.ofCode(mode));
+    }
     this.versionNumber = benerator.getVersionNumber();
     this.minDurationSecs = minDurationSecs;
     int reportedCores = Runtime.getRuntime().availableProcessors();
@@ -222,6 +224,8 @@ public class Benchmark {
         "                  of at least n seconds (default: 10)",
         "--maxThreads k    Use only up to k cores for testing",
         "                  (default: slightly more than the number of cores)",
+        "--mode <spec>     activates Benerator mode strict, lenient or " +
+        "                  quickndirty (default: lenient)",
         "--help            print this help"
     );
   }
@@ -250,16 +254,31 @@ public class Benchmark {
 
   private String[] createAndPrintTitle(InfoPrinter printer) {
     printHorizontalLine(printer);
-    String[] title = {
+    ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
+    builder.addAll(new String[] {
         "Benchmark throughput of " + benerator.getVersion(),
+        "in " + Benerator.getMode().getCode() + " mode",
         "on a " + BeneratorUtil.getOsInfo(),
         "with " + BeneratorUtil.getCpuAndMemInfo(),
         "Java version " + VMInfo.getJavaVersion(),
         BeneratorUtil.getJVMInfo(),
         "Date/Time: " + ZonedDateTime.now(),
-        "",
-        "Numbers are reported in million entities generated per hour"
-    };
+    });
+    if (!ArrayUtil.isEmpty(environments)) {
+      if (environments.length == 1) {
+        builder.add("Database: " + EnvironmentUtil.getProductDescription(environments[0]));
+      } else {
+        builder.add("Databases:");
+        for (String environment : environments) {
+          builder.add("- " + EnvironmentUtil.getProductDescription(environment));
+        }
+      }
+    }
+    builder.addAll(new String[] {
+      "",
+      "Numbers are reported in million entities generated per hour"
+    });
+    String[] title = builder.toArray();
     printer.printLines(title);
     for (String line : title)
       logger.debug("{}", line);
@@ -352,18 +371,6 @@ public class Benchmark {
       }
     }
     return xml;
-  }
-
-  private static DatabaseDialect getDialect(String environment) {
-    try (Connection connection = DBUtil.connect(environment, ".", true)) {
-      DatabaseMetaData metaData = connection.getMetaData();
-      String databaseProductName = metaData.getDatabaseProductName();
-      VersionNumber databaseProductVersion = VersionNumber.valueOf(metaData.getDatabaseProductVersion());
-      logger.debug("Product: {} {}", databaseProductName, databaseProductVersion);
-      return DatabaseDialectManager.getDialectForProduct(databaseProductName, databaseProductVersion);
-    } catch (ConnectFailedException | SQLException e) {
-      throw new RuntimeException(e);
-    }
   }
 
   private static String format(double number) {

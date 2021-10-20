@@ -43,6 +43,7 @@ import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.collection.NamedValueList;
+import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.context.CaseInsensitiveContext;
 import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.format.text.DelocalizingConverter;
@@ -177,6 +178,11 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
       return (parent.getComponent(name));
     }
     return null;
+  }
+
+  @Override
+  public OrderedNameMap<Object> createComponentMap() {
+    return OrderedNameMap.createCaseInsensitiveMap();
   }
 
 }

@@ -42,6 +42,7 @@ import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.collection.NamedValueList;
+import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
@@ -129,4 +130,6 @@ public abstract class BeneratorFactory {
 
   public abstract ComponentDescriptor getComponent(
       String name, NamedValueList<InstanceDescriptor> parts, ComplexTypeDescriptor parent);
+
+  public abstract OrderedNameMap<Object> createComponentMap();
 }

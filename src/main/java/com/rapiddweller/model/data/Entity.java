@@ -26,6 +26,7 @@
 
 package com.rapiddweller.model.data;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Composite;
 import com.rapiddweller.common.CompositeFormatter;
@@ -69,7 +70,7 @@ public class Entity implements Composite {
   public Entity(ComplexTypeDescriptor descriptor,
                 Object... componentKeyValuePairs) {
     this.descriptor = descriptor;
-    this.components = OrderedNameMap.createCaseInsensitiveMap();
+    this.components = BeneratorFactory.getInstance().createComponentMap();
     for (int i = 0; i < componentKeyValuePairs.length; i += 2) {
       setComponent((String) componentKeyValuePairs[i],
           componentKeyValuePairs[i + 1]);
