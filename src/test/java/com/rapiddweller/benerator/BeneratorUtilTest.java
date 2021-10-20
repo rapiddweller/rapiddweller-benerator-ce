@@ -38,7 +38,7 @@ public class BeneratorUtilTest {
   @Test
   public void testPrintVersionInfo() {
     BufferedInfoPrinter p = new BufferedInfoPrinter();
-    BeneratorUtil.printVersionInfo(p);
+    BeneratorUtil.printVersionInfo(false, p);
     assertTrue(p.toString().startsWith("Benerator "));
   }
 
