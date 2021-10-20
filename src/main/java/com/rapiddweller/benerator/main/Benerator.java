@@ -36,7 +36,6 @@ import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.util.CliUtil;
-import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.LogCategoriesConstants;
@@ -88,11 +87,7 @@ public class Benerator {
     VersionInfo.getInfo(BENERATOR_KEY).verifyDependencies();
     checkVersionAndHelpOpts(args, CE_CLI_HELP);
     checkMode(args);
-    int fileIndex = 0;
-    while (fileIndex < args.length && args[fileIndex].startsWith("-")) {
-      fileIndex++;
-    }
-    String filename = (fileIndex < args.length ? args[fileIndex] : "benerator.xml");
+    String filename = (args.length > 0 ? args[args.length - 1] : "benerator.xml");
     // log separator in order to distinguish benerator runs in the log file
     logger.info("----------------------------------------------------------------------");
     new Benerator().runFile(filename);
