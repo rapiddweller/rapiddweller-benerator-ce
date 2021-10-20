@@ -27,42 +27,49 @@
 package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
+import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.common.collection.ObjectCounter;
+import com.rapiddweller.common.LocaleUtil;
 import org.junit.Test;
+
+import java.util.Locale;
 
 import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link GivenNameGenerator}.
  * Created: 09.06.2006 21:37:05
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class GivenNameGeneratorTest extends GeneratorClassTest {
 
-  /**
-   * Instantiates a new Given name generator test.
-   */
   public GivenNameGeneratorTest() {
     super(GivenNameGenerator.class);
   }
 
-  /**
-   * Test.
-   *
-   * @throws IllegalGeneratorStateException the illegal generator state exception
-   */
   @Test
-  public void test() throws IllegalGeneratorStateException {
-    ObjectCounter<String> counter = new ObjectCounter<>(10);
-    GivenNameGenerator generator = new GivenNameGenerator();
-    generator.init(context);
-    for (int i = 0; i < 10; i++) {
-      counter.count(generator.generate());
-    }
-    assertTrue(counter.objectSet().size() >= 3);
+  public void test_default_us() throws IllegalGeneratorStateException {
+    LocaleUtil.runInLocale(Locale.US,
+        () -> checkDiversity(new GivenNameGenerator(), 100, 20));
+  }
+
+  @Test
+  public void test_us() throws IllegalGeneratorStateException {
+    checkDiversity(new GivenNameGenerator("US", Gender.MALE), 100, 20);
+    checkDiversity(new GivenNameGenerator("US", Gender.FEMALE), 100, 20);
+  }
+
+  @Test
+  public void test_de() throws IllegalGeneratorStateException {
+    checkDiversity(new GivenNameGenerator("DE", Gender.MALE), 100, 20);
+    checkDiversity(new GivenNameGenerator("DE", Gender.FEMALE), 100, 20);
+  }
+
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void test_xy() throws IllegalGeneratorStateException {
+    checkDiversity(new GivenNameGenerator("XY", Gender.MALE), 100, 20);
+    checkDiversity(new GivenNameGenerator("XY", Gender.FEMALE), 100, 20);
   }
 
 }

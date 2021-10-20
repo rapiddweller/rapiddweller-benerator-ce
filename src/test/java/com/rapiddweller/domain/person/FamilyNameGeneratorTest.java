@@ -27,42 +27,49 @@
 package com.rapiddweller.domain.person;
 
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
+import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.common.collection.ObjectCounter;
+import com.rapiddweller.common.LocaleUtil;
 import org.junit.Test;
+
+import java.util.Locale;
 
 import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link FamilyNameGenerator}.<br/><br/>
  * Created: 09.06.2006 22:16:06
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class FamilyNameGeneratorTest extends GeneratorClassTest {
 
-  /**
-   * Instantiates a new Family name generator test.
-   */
   public FamilyNameGeneratorTest() {
     super(FamilyNameGenerator.class);
   }
 
-  /**
-   * Test.
-   *
-   * @throws IllegalGeneratorStateException the illegal generator state exception
-   */
   @Test
-  public void test() throws IllegalGeneratorStateException {
-    ObjectCounter<String> counter = new ObjectCounter<>(10);
-    FamilyNameGenerator generator = new FamilyNameGenerator();
-    generator.init(context);
-    for (int i = 0; i < 10; i++) {
-      counter.count(generator.generate());
-    }
-    assertTrue(counter.objectSet().size() >= 3);
+  public void test_default_us() throws IllegalGeneratorStateException {
+    LocaleUtil.runInLocale(Locale.US,
+        () -> checkDiversity(new FamilyNameGenerator(), 100, 20));
+  }
+
+  @Test
+  public void test_us() throws IllegalGeneratorStateException {
+    FamilyNameGenerator generator = new FamilyNameGenerator("US");
+    checkDiversity(generator, 100, 20);
+  }
+
+  @Test
+  public void test_de() throws IllegalGeneratorStateException {
+    FamilyNameGenerator generator = new FamilyNameGenerator("DE");
+    checkDiversity(generator, 1000, 100);
+  }
+
+  @Test(expected = InvalidGeneratorSetupException.class)
+  public void test_xy() throws IllegalGeneratorStateException {
+    FamilyNameGenerator generator = new FamilyNameGenerator("XY");
+    checkDiversity(generator, 1000, 100);
   }
 
 }
