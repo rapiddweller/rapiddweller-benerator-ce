@@ -34,6 +34,7 @@ import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.common.converter.ConverterManager;
+import com.rapiddweller.platform.memstore.MemStore;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,9 +51,6 @@ import static org.junit.Assert.assertNull;
  */
 public class DateTimeGeneratorIntegrationTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Sets converter manager.
-   */
   @Before
   public void setupConverterManager() {
     ConverterManager converterManager = ConverterManager.getInstance();
@@ -61,11 +59,8 @@ public class DateTimeGeneratorIntegrationTest extends AbstractBeneratorIntegrati
     converterManager.setContext(context);
   }
 
-  /**
-   * Test.
-   */
   @Test
-  public void test() {
+  public void test_step_distribution() {
     // create DateTimeGenerator from XML descriptor
     String beanId = "datetime_gen";
     String xml =
@@ -97,6 +92,30 @@ public class DateTimeGeneratorIntegrationTest extends AbstractBeneratorIntegrati
     assertEquals(TimeUtil.date(2008, 8, 3, 8, 0, 1, 0), generator.generate());
     assertEquals(TimeUtil.date(2008, 8, 5, 8, 0, 2, 0), generator.generate());
     assertNull(generator.generate());
+  }
+
+  /** Reproduces an initialization bug (2021-10-20) */
+  @Test
+  public void test_cumulated_distribution() {
+    String xml = "<setup>\n" +
+        "    <bean id='datetime_gen' class='DateTimeGenerator'>\n" +
+        "        <property name='minDate' value='2007-06-21'/>\n" +
+        "        <property name='maxDate' value='2007-09-21'/>\n" +
+        "        <property name='dateGranularity' value='0000-00-01'/>\n" +
+        "        <property name='dateDistribution' value='random'/>\n" +
+        "        <property name='minTime' value='09:00:00'/>\n" +
+        "        <property name='maxTime' value='17:00:00'/>\n" +
+        "        <property name='timeGranularity' value='00:00:01'/>\n" +
+        "        <property name='timeDistribution' value='cumulated'/>\n" +
+        "    </bean>\n" +
+        "    <memstore id='mem'/>\n" +
+        "    <generate type='test' count='100' consumer='mem'>\n" +
+        "        <attribute name='date' type='date' source='datetime_gen'/>\n" +
+        "    </generate>\n" +
+        "</setup>";
+    parseAndExecute(xml);
+    MemStore mem = (MemStore) context.get("mem");
+    assertEquals(100, mem.totalEntityCount());
   }
 
 }

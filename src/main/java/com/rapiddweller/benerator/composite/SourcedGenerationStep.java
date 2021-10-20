@@ -56,7 +56,9 @@ public abstract class SourcedGenerationStep<E> extends AbstractGenerationStep<E>
   @Override
   public void init(BeneratorContext context) {
     super.init(context);
-    source.init(context);
+    if (!source.wasInitialized()) {
+      source.init(context);
+    }
   }
 
   @Override

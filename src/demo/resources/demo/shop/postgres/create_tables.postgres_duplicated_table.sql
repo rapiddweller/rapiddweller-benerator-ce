@@ -24,7 +24,6 @@ CREATE TABLE schema2.db_product
     manufacturer varchar(30)   NOT NULL,
     notes        varchar(256) NULL,
     description  text NULL,
---  image        bytea            NULL, TODO support bytea type
     PRIMARY KEY (ean_code),
     CONSTRAINT db_product_category_fk FOREIGN KEY (category_id) REFERENCES schema2.db_category (id)
 );

@@ -176,7 +176,7 @@ public abstract class AbstractDatasetGenerator<E> extends GeneratorProxy<E> impl
       return new AtomicDatasetGenerator<>(generator, nesting, dataset.getName());
     }
     if (required) {
-      throw new InvalidGeneratorSetupException("Unable to create generator for atomic dataset: " + dataset.getName());
+      throw new InvalidGeneratorSetupException("Unable to create generator for atomic dataset '" + dataset.getName() + "'");
     } else {
       return null;
     }
