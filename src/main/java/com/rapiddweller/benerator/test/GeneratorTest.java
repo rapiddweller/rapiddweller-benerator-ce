@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.test;
 
 import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
@@ -598,5 +599,15 @@ public abstract class GeneratorTest extends ModelTest {
       assertEquals("Unexpected value for component '" + name + "':", expected, actual);
     }
   }
+
+  protected void checkDiversity(NonNullGenerator<String> generator, int genCount, int expMinDiversity) {
+    generator.init(context);
+    ObjectCounter<String> counter = new ObjectCounter<>(expMinDiversity);
+    for (int i = 0; i < genCount; i++) {
+      counter.count(generator.generate());
+    }
+    assertTrue(counter.objectSet().size() >= expMinDiversity);
+  }
+
 
 }
