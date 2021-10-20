@@ -130,6 +130,6 @@ public abstract class BeneratorFactory {
 
   public abstract ComponentDescriptor getComponent(
       String name, NamedValueList<InstanceDescriptor> parts, ComplexTypeDescriptor parent);
-2
+
   public abstract OrderedNameMap<Object> createComponentMap();
 }
