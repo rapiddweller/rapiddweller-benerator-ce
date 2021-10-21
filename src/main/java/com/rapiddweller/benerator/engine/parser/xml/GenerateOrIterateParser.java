@@ -260,7 +260,8 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     Expression<Long> minCount = DescriptorUtil.getMinCount(descriptor, 0L);
     String productName = getTaskName(descriptor);
     BeneratorContext childContext = context.createSubContext(productName);
-    GenerateOrIterateStatement statement = createStatement(
+    boolean iterate = ("iterate".equals(element.getNodeName()));
+    GenerateOrIterateStatement statement = createStatement(iterate, productName,
         countGenerator, minCount, threads, pageSize, pager, infoLog, nested, errorHandler, context, childContext);
 
     // TODO avoid double parsing of the InstanceDescriptor and remove the following...
@@ -278,10 +279,10 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return statement;
   }
 
-  protected GenerateOrIterateStatement createStatement(Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
+  protected GenerateOrIterateStatement createStatement(boolean iterate, String type, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
                                                        Expression<Long> pageSize, Expression<PageListener> pager, boolean infoLog, boolean nested,
                                                        Expression<ErrorHandler> errorHandler, BeneratorContext context, BeneratorContext childContext) {
-    return new GenerateOrIterateStatement(countGenerator, minCount, threads, pageSize, pager,
+    return new GenerateOrIterateStatement(iterate, type, countGenerator, minCount, threads, pageSize, pager,
         errorHandler, infoLog, nested, context, childContext);
   }
 

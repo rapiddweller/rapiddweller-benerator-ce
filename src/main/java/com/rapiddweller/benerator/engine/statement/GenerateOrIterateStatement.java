@@ -32,6 +32,7 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.contiperf.StopWatch;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.TaskExecutor;
@@ -59,6 +60,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
   protected final Expression<Integer> threads;
   protected final Expression<Long> pageSize;
   protected final Expression<PageListener> pageListenerEx;
+  protected final String sensor;
   protected final boolean infoLog;
   protected final boolean isSubCreator;
   protected final BeneratorContext context;
@@ -72,9 +74,10 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
 
   // constructor -------------------------------------------------------------------------------------------------------
 
-  public GenerateOrIterateStatement(
-      Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads, Expression<Long> pageSize,
-      Expression<PageListener> pageListenerEx, Expression<ErrorHandler> errorHandler, boolean infoLog, boolean isSubCreator,
+  public GenerateOrIterateStatement(boolean iterate, String productName,
+      Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
+      Expression<Long> pageSize, Expression<PageListener> pageListenerEx,
+      Expression<ErrorHandler> errorHandler, boolean infoLog, boolean isSubCreator,
       BeneratorContext context, BeneratorContext childContext) {
     super(errorHandler);
     this.countGenerator = countGenerator;
@@ -82,6 +85,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
     this.threads = threads;
     this.pageSize = pageSize;
     this.pageListenerEx = pageListenerEx;
+    this.sensor = (iterate ? "iterate" : "generate") + '.' + productName;
     this.infoLog = infoLog;
     this.isSubCreator = isSubCreator;
     this.context = context;
@@ -114,6 +118,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
 
   @Override
   public boolean execute(BeneratorContext context) {
+    StopWatch stopWatch = new StopWatch(sensor);
     if (!beInitialized(context)) {
       task.reset();
     }
@@ -122,6 +127,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
     if (!isSubCreator) {
       close();
     }
+    stopWatch.stop();
     return true;
   }
 
