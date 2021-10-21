@@ -86,17 +86,7 @@ public class Benerator {
   public static void main(String[] args) throws IOException {
     VersionInfo.getInfo(BENERATOR_KEY).verifyDependencies();
     BeneratorConfig config = parseCommandLine(args);
-    if (config.isHelp()) {
-      ConsoleInfoPrinter.printHelp(CE_CLI_HELP);
-      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
-    }
-    if (config.isVersion()) {
-      BeneratorUtil.printVersionInfo(false, new ConsoleInfoPrinter());
-      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
-    }
-    Benerator.setMode(config.getMode());
-    String filename = (args.length > 0 ? args[args.length - 1] : "benerator.xml");
-    new Benerator().runFile(filename);
+    run(config);
   }
 
   // info properties -------------------------------------------------------------------------------------------------
@@ -134,6 +124,19 @@ public class Benerator {
   }
 
   //  operational interface ------------------------------------------------------------------------------------------
+
+  public static void run(BeneratorConfig config) throws IOException {
+    if (config.isHelp()) {
+      ConsoleInfoPrinter.printHelp(CE_CLI_HELP);
+      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+    }
+    if (config.isVersion()) {
+      BeneratorUtil.printVersionInfo(false, new ConsoleInfoPrinter());
+      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+    }
+    Benerator.setMode(config.getMode());
+    new Benerator().runFile(config.getFile());
+  }
 
   public void runFile(String filename) throws IOException {
     // Run descriptor file
