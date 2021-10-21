@@ -88,8 +88,6 @@ public class Benerator {
     checkVersionAndHelpOpts(args, CE_CLI_HELP);
     checkMode(args);
     String filename = (args.length > 0 ? args[args.length - 1] : "benerator.xml");
-    // log separator in order to distinguish benerator runs in the log file
-    logger.info("----------------------------------------------------------------------");
     new Benerator().runFile(filename);
   }
 
@@ -133,6 +131,9 @@ public class Benerator {
   public void runFile(String filename) throws IOException {
     // Run descriptor file
     try {
+      // log separator in order to distinguish benerator runs in the log file
+      logger.info("-------------------------------------------------------------" +
+          "-----------------------------------------------------------");
       InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
       runFile(filename, printer);
       DBUtil.assertAllDbResourcesClosed(false);
@@ -177,7 +178,7 @@ public class Benerator {
   }
 
   private static void checkMode(String[] args) {
-    String modeSpec = CliUtil.getParameter("mode", args);
+    String modeSpec = CliUtil.getParameter("--mode", args);
     if (modeSpec == null) {
       mode = BeneratorMode.LENIENT;
     } else {
