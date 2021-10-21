@@ -31,8 +31,6 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.common.ArrayFormat;
-import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.Converter;
@@ -180,12 +178,6 @@ public abstract class GeneratorTest extends ModelTest {
       Collection<Entity> entities, String partName, double tolerance, Object... expectedValues) {
     ObjectCounter<Object> counter = countPartValues(entities, partName);
     assertEqualDistribution(counter, tolerance, expectedValues);
-  }
-
-  protected static <T> void assertEqualArrays(T expected, T actual) {
-    ArrayFormat format = new ArrayFormat();
-    assertTrue("Expected " + format.format(expected) + ", found: " + format.format(actual),
-        ArrayUtil.equals(expected, actual));
   }
 
   @SafeVarargs
