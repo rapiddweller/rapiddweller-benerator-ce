@@ -74,7 +74,7 @@ public class Benerator {
       "Options:",
       "  -v,--version           Display system and version information",
       "  -h,--help              Display help information",
-      "  --mode <spec>          activates Benerator mode strict, lenient or " +
+      "  --mode <spec>          activates Benerator mode strict, lenient or ",
       "                         turbo (default: lenient)",
   };
 
