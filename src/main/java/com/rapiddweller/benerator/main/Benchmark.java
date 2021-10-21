@@ -7,8 +7,10 @@ import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.util.CliUtil;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.TextUtil;
 import com.rapiddweller.common.VMInfo;
@@ -20,6 +22,8 @@ import com.rapiddweller.common.version.VersionNumberParser;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.jdbacl.EnvironmentUtil;
+import com.rapiddweller.stat.CounterRepository;
+import com.rapiddweller.stat.LatencyCounter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +32,10 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -62,9 +69,9 @@ public class Benchmark {
       new Setup("anon-person-hash.ben.xml", false, V200, 1500000),
       new Setup("anon-person-random.ben.xml", false, V200, 1500000),
       new Setup("anon-person-constant.ben.xml", false, V200, 8000000),
-      // TODO 2.1.0 measure in/out performance for files and databases
-      new Setup("db-out-smalltable.ben.xml", false, V200, 15000),
-      new Setup("db-out-bigtable.ben.xml", false, V200, 5000),
+      new Setup("db-smalltable.ben.xml", false, V200, 15000),
+      new Setup("db-bigtable.ben.xml", false, V200, 5000),
+      // TODO 2.1.0 measure in/out performance for files
       new Setup("file-out-csv.ben.xml", false, V210, 1000000),
       new Setup("file-out-json.ben.xml", true, V210, 1000000),
       new Setup("file-out-dbunit.ben.xml", false, V210, 1000000),
@@ -167,14 +174,12 @@ public class Benchmark {
     int[] threadCounts = chooseThreadCounts();
     ArrayBuilder<Object[]> table = createTable(threadCounts);
     // perform tests
-    int rowNum = 0;
     for (Setup setup : setups) {
       printHorizontalLine(printer);
       if (environments.length > 0) {
         if (setup.isDbSetup()) {
           for (String environment : environments) {
-            Object[] tableRow = newRow(threadCounts.length + 1, table);
-            runSetup(setup, environment, threadCounts, tableRow, printer);
+            runSetup(setup, environment, threadCounts, table, printer);
           }
         } else {
           logger.info("Skipping plain test since running in DB test mode");
@@ -183,8 +188,7 @@ public class Benchmark {
         if (setup.isDbSetup()) {
           logger.info("Skipping DB test since no environment was specified");
         } else {
-          Object[] tableRow = newRow(threadCounts.length + 1, table);
-          runSetup(setup, null, threadCounts, tableRow, printer);
+          runSetup(setup, null, threadCounts, table, printer);
         }
       }
     }
@@ -195,8 +199,9 @@ public class Benchmark {
     int cols = t[0].length;
     Alignment[] alignments = new Alignment[cols];
     alignments[0] = Alignment.LEFT;
-    for (int i = 1; i < cols; i++)
+    for (int i = 1; i < cols; i++) {
       alignments[i] = Alignment.RIGHT;
+    }
     printer.printLines(TextUtil.formatLinedTable(title, t, alignments));
   }
 
@@ -304,45 +309,80 @@ public class Benchmark {
     return result;
   }
 
-  private void runSetup(Setup setup, String environment, int[] threadCounts, Object[] tableRow, InfoPrinter printer) throws IOException {
+  private void runSetup(Setup setup, String environment, int[] threadCounts, ArrayBuilder<Object[]> table, InfoPrinter printer) throws IOException {
     printer.printLines("Running " + setup.fileName);
-    tableRow[0] = setup.fileName + (environment != null ? " @ " + environment : "");
+    Object[][] sensorRows = null;
     for (int iT = 0; iT < threadCounts.length; iT++) {
       if (versionNumber.compareTo(setup.requiredVersion) >= 0
           && (!setup.reqEE || !benerator.isCommunityEdition())) {
         int threads = threadCounts[iT];
-        Execution execution = runWithMinDuration(setup.fileName, environment, minDurationSecs, setup.count, threads, benerator);
-        double eps = (double) execution.count / execution.duration * 1000.;
-        double meph = 3600. * eps / 1000000.;
-        String message = execution.filename + " with " + threads + (threads > 1 ? " threads: " : " thread:  ");
-        message += execution.count + " E / " + execution.duration + " ms ";
-        message += " -> " + format(meph) + " ME/h";
-        printer.printLines(message);
-        tableRow[iT + 1] = format(execution.entitiesPerHour());
-      } else {
-        tableRow[iT + 1] = "N/A";
+        List<Execution> executions = runWithMinDuration(setup.fileName, environment, minDurationSecs, setup.count, threads, benerator);
+        if (sensorRows == null) {
+          sensorRows = new Object[executions.size()][];
+          for (int iS = 0; iS < executions.size(); iS++) {
+            sensorRows[iS] = newRow(threadCounts.length + 1, table);
+            sensorRows[iS][0] = rowHeader(setup, environment, executions, iS);
+          }
+        }
+        for (int iS = 0; iS < executions.size(); iS++) {
+          sensorRows[iS][iT + 1] = format(executions.get(iS).entitiesPerHour());
+          sensorRows[iS][0] = rowHeader(setup, environment, executions, iS);
+        }
+      } else { // version too low
+        if (sensorRows == null) {
+          sensorRows = new Object[1][];
+          sensorRows[0] = newRow(threadCounts.length + 1, table);
+          sensorRows[0][0] = rowHeader(setup, environment, null, 0);
+        }
+        sensorRows[0][iT + 1] = "N/A";
       }
     }
   }
 
-  private static Execution runWithMinDuration(String fileName, String environment, long minDurationSecs, int countBase, int threads, Benerator benerator) throws IOException {
-    int count = countBase;
+  private String rowHeader(Setup setup, String environment, List<Execution> executions, int iS) {
+    String label = setup.fileName;
+    if (executions != null && executions.size() > 1) {
+      label += " " + executions.get(iS).sensor;
+    }
+    if (environment != null) {
+      label += " @ " + environment;
+    }
+    return label;
+  }
+
+  private static List<Execution> runWithMinDuration(String fileName, String environment, long minDurationSecs, long countBase, int threads, Benerator benerator) throws IOException {
+    long count = countBase;
     long minDurationMillis = minDurationSecs * 1000;
     do {
-      Execution execution = runTest(fileName, environment, count, threads, benerator);
-      if (execution.duration >= minDurationMillis)
-        return execution;
-      double factor = (double) minDurationMillis / execution.duration;
+      List<Execution> executions = trySetting(fileName, environment, count, threads, benerator);
+      int actualMinDuration = minDuration(executions);
+      if (actualMinDuration >= minDurationMillis)
+        return executions;
+      double factor = (double) minDurationMillis / actualMinDuration;
       if (factor > 5) {
         factor = 5;
       } else {
         factor *= 1.1;
       }
-      count *= Math.ceil(factor);
+      count = (long) (factor * count + 500) / 1000 * 1000;
     } while (true);
   }
 
-  private static Execution runTest(String fileName, String environment, int count, int threads, Benerator benerator) throws IOException {
+  private static int minDuration(List<Execution> executions) {
+    if (CollectionUtil.isEmpty(executions)) {
+      throw new ConfigurationError("No sensors found");
+    }
+    int result = executions.get(0).duration;
+    for (int i = 1; i < executions.size(); i++) {
+      int tmp = executions.get(i).duration;
+      if (tmp < result) {
+        result = tmp;
+      }
+    }
+    return result;
+  }
+
+  private static List<Execution> trySetting(String fileName, String environment, long count, int threads, Benerator benerator) throws IOException {
     logger.debug("Testing {} with count {} and {} thread(s)", fileName, count, threads);
     String xml = IOUtil.getContentOfURI("com/rapiddweller/benerator/benchmark/" + fileName);
     xml = applyEnvironment(environment, xml);
@@ -350,12 +390,26 @@ public class Benchmark {
     xml = xml.replace("{threads}", String.valueOf(threads));
     String filename = "__benchmark.ben.xml";
     IOUtil.writeTextFile(filename, xml);
-    long t0 = System.currentTimeMillis();
+    CounterRepository repo = CounterRepository.getInstance();
+    repo.clear();
     benerator.runFile(filename);
-    long t1 = System.currentTimeMillis();
     FileUtil.deleteIfExists(new File(filename));
     FileUtil.deleteIfExists(new File("__benchmark.out"));
-    return new Execution(fileName, count, threads, t1 - t0);
+    List<Execution> result = new ArrayList<>();
+    Set<Map.Entry<String, LatencyCounter>> counters = repo.getCounters();
+    for (Map.Entry<String, LatencyCounter> counter : counters) {
+      String key = counter.getKey();
+      if (key.endsWith(".ben_benchmark")) {
+        LatencyCounter value = counter.getValue();
+        Assert.equals(1, (int) value.sampleCount());
+        long eps = count / value.totalLatency() * 1000;
+        logger.info("{}: {} entities / {} ms, throughput {} E/s - {} ME/h",
+            key, count, value.totalLatency(), eps, eps * 3600. / 1000000.);
+        String sensor = "[" + (key.startsWith("generate") ? "out" : "in") + "]";
+        result.add(new Execution(fileName, sensor, count, threads, (int) value.totalLatency()));
+      }
+    }
+    return result;
   }
 
   private static String applyEnvironment(String environment, String xml) {
@@ -397,12 +451,14 @@ public class Benchmark {
 
   public static class Execution {
     public final String filename;
-    public final int count;
+    public final String sensor;
+    public final long count;
     public final int threads;
-    public final long duration;
+    public final int duration;
 
-    public Execution(String filename, int count, int threads, long duration) {
+    public Execution(String filename, String sensor, long count, int threads, int duration) {
       this.filename = filename;
+      this.sensor = sensor;
       this.count = count;
       this.threads = threads;
       this.duration = duration;
