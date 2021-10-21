@@ -246,7 +246,7 @@ public class Benchmark {
 
   private ArrayBuilder<Object[]> createTable(int[] threadCounts) {
     // create table
-    ArrayBuilder<Object[]> table = new ArrayBuilder<Object[]>(Object[].class);
+    ArrayBuilder<Object[]> table = new ArrayBuilder<>(Object[].class);
     // format table header
     Object[] header  = new Object[threadCounts.length + 1];
     header[0] = "Benchmark";
@@ -312,11 +312,13 @@ public class Benchmark {
   private void runSetup(Setup setup, String environment, int[] threadCounts, ArrayBuilder<Object[]> table, InfoPrinter printer) throws IOException {
     printer.printLines("Running " + setup.fileName);
     Object[][] sensorRows = null;
+    long initialCount = setup.count;
     for (int iT = 0; iT < threadCounts.length; iT++) {
       if (versionNumber.compareTo(setup.requiredVersion) >= 0
           && (!setup.reqEE || !benerator.isCommunityEdition())) {
         int threads = threadCounts[iT];
-        List<Execution> executions = runWithMinDuration(setup.fileName, environment, minDurationSecs, setup.count, threads, benerator);
+        List<Execution> executions = runWithMinDuration(setup.fileName, environment, minDurationSecs, initialCount, threads, benerator);
+        initialCount = executions.get(0).count;
         if (sensorRows == null) {
           sensorRows = new Object[executions.size()][];
           for (int iS = 0; iS < executions.size(); iS++) {
@@ -350,7 +352,8 @@ public class Benchmark {
     return label;
   }
 
-  private static List<Execution> runWithMinDuration(String fileName, String environment, long minDurationSecs, long countBase, int threads, Benerator benerator) throws IOException {
+  private static List<Execution> runWithMinDuration(String fileName, String environment,
+        long minDurationSecs, long countBase, int threads, Benerator benerator) throws IOException {
     long count = countBase;
     long minDurationMillis = minDurationSecs * 1000;
     do {
@@ -405,7 +408,7 @@ public class Benchmark {
         long eps = count / value.totalLatency() * 1000;
         logger.info("{}: {} entities / {} ms, throughput {} E/s - {} ME/h",
             key, count, value.totalLatency(), eps, eps * 3600. / 1000000.);
-        String sensor = "[" + (key.startsWith("generate") ? "out" : "in") + "]";
+        String sensor = "[" + (key.startsWith("generate") ? "write" : "read") + "]";
         result.add(new Execution(fileName, sensor, count, threads, (int) value.totalLatency()));
       }
     }
