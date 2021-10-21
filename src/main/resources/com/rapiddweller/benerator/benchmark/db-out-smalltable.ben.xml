@@ -21,7 +21,7 @@
         commit;
     </execute>
 
-    <generate type="ben_benchmark" count="{count}" threads="{threads}" pageSize="100000" consumer="db">
+    <generate type="ben_benchmark" count="{count}" threads="{threads}" pageSize="10000" consumer="db">
         <id name="c_0_id" type="string" generator="UUIDGenerator"/>
         <attribute name="c_1_timestamp" type="timestamp" min="1970-01-02"/>
         <attribute name="c_2_flag"   type="string" pattern="[YN]"/>

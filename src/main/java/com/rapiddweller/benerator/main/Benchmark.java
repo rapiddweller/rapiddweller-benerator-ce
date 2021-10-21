@@ -63,7 +63,7 @@ public class Benchmark {
       new Setup("anon-person-random.ben.xml", false, V200, 1500000),
       new Setup("anon-person-constant.ben.xml", false, V200, 8000000),
       // TODO 2.1.0 measure in/out performance for files and databases
-      new Setup("db-out-smalltable.ben.xml", false, V200, 500000),
+      new Setup("db-out-smalltable.ben.xml", false, V200, 15000),
       new Setup("db-out-bigtable.ben.xml", false, V200, 5000),
       new Setup("file-out-csv.ben.xml", false, V210, 1000000),
       new Setup("file-out-json.ben.xml", true, V210, 1000000),
@@ -225,7 +225,7 @@ public class Benchmark {
         "--maxThreads k    Use only up to k cores for testing",
         "                  (default: slightly more than the number of cores)",
         "--mode <spec>     activates Benerator mode strict, lenient or " +
-        "                  quickndirty (default: lenient)",
+        "                  turbo (default: lenient)",
         "--help            print this help"
     );
   }

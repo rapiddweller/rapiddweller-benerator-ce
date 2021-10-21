@@ -75,7 +75,7 @@ public class Benerator {
       "  -v,--version           Display system and version information",
       "  -h,--help              Display help information",
       "  --mode <spec>          activates Benerator mode strict, lenient or " +
-      "                         quickndirty (default: lenient)",
+      "                         turbo (default: lenient)",
   };
 
   private static BeneratorMode mode = BeneratorMode.LENIENT;
@@ -116,8 +116,8 @@ public class Benerator {
     return (mode == BeneratorMode.STRICT);
   }
 
-  public static boolean isQuickAndDirty() {
-    return (mode == BeneratorMode.QUICK_AND_DIRTY);
+  public static boolean isTurbo() {
+    return (mode == BeneratorMode.TURBO);
   }
 
   public static BeneratorMode getMode() {
@@ -178,9 +178,7 @@ public class Benerator {
 
   private static void checkMode(String[] args) {
     String modeSpec = CliUtil.getParameter("mode", args);
-    if ("dirty".equals(System.getProperty("quick"))) {
-      mode = BeneratorMode.QUICK_AND_DIRTY; // if benerator was called with -Dquick=dirty, then set quick&dirty mode
-    } else if (modeSpec == null) {
+    if (modeSpec == null) {
       mode = BeneratorMode.LENIENT;
     } else {
       mode = BeneratorMode.ofCode(modeSpec);
