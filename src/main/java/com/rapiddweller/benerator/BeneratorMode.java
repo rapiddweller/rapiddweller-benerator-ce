@@ -22,7 +22,7 @@ public class BeneratorMode {
   public static final BeneratorMode LENIENT = new BeneratorMode("lenient");
   public static final BeneratorMode TURBO   = new BeneratorMode("turbo");
 
-  public static BeneratorMode ofCode(String code) {
+  public static BeneratorMode getInstance(String code) {
     BeneratorMode result = INSTANCES.get(code);
     if (result == null) {
       throw new ObjectNotFoundException("No BeneratorMode od code " + code);
@@ -38,6 +38,11 @@ public class BeneratorMode {
   }
 
   public String getCode() {
+    return code;
+  }
+
+  @Override
+  public String toString() {
     return code;
   }
 
