@@ -2,9 +2,7 @@
 
 package com.rapiddweller.benerator.main;
 
-import com.rapiddweller.benerator.BeneratorMode;
 import com.rapiddweller.benerator.BeneratorUtil;
-import com.rapiddweller.benerator.util.CliUtil;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Assert;
@@ -14,6 +12,7 @@ import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.TextUtil;
 import com.rapiddweller.common.VMInfo;
+import com.rapiddweller.common.cli.CommandLineParser;
 import com.rapiddweller.common.format.Alignment;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
 import com.rapiddweller.common.ui.InfoPrinter;
@@ -39,6 +38,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static com.rapiddweller.benerator.BeneratorUtil.EE_BENERATOR;
+import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
 import static com.rapiddweller.jdbacl.EnvironmentUtil.getDialect;
 
 /**
@@ -52,10 +53,6 @@ public class Benchmark {
   // constants -------------------------------------------------------------------------------------------------------
 
   private static final Logger logger = LoggerFactory.getLogger(Benchmark.class);
-
-  public static final int DEFAULT_MIN_DURATION_SECS = 10;
-
-  private static final String EE_BENERATOR = "com.rapiddweller.benerator_ee.main.EEBenerator";
 
   private static final String V200 = "2.0.0";
   private static final String V210 = "2.1.0";
@@ -86,84 +83,33 @@ public class Benchmark {
   // main ------------------------------------------------------------------------------------------------------------
 
   public static void main(String[] args) throws IOException {
-    Benerator.setMode(BeneratorMode.STRICT);
     InfoPrinter printer = new ConsoleInfoPrinter();
-    if (CliUtil.containsHelpFlag(args)) {
-      printHelp();
-      System.exit(0);
-    }
-    // parse edition
-    boolean ee;
-    if (ArrayUtil.indexOf("--ee", args) >= 0) {
-      if (!isEEAvailable()) {
-        printer.printLines("Benerator Enterprise Edition is not available on this installation");
-        System.exit(-1);
-      }
-      ee = true;
-    } else if (ArrayUtil.indexOf("--ce", args) >= 0) {
-      ee = false;
-    } else {
-      ee = isEEAvailable();
-    }
-    String mainClassName = (ee ? EE_BENERATOR : Benerator.class.getName());
-
-    // parse min duration (secs)
-    int minDurationSecs = DEFAULT_MIN_DURATION_SECS;
-    int minDurIndex = ArrayUtil.indexOf("--minSecs", args);
-    if (minDurIndex >= 0 && args.length > minDurIndex + 1) {
-      minDurationSecs = Integer.parseInt(args[minDurIndex + 1]);
-    }
-
-    // parse 'maxThreads' spec
-    int maxThreads = 0;
-    int maxThreadsIndex = ArrayUtil.indexOf("--maxThreads", args);
-    if (maxThreadsIndex >= 0 && args.length > maxThreadsIndex + 1) {
-      maxThreads = Integer.parseInt(args[maxThreadsIndex + 1]);
-    }
-
-    // parse environment
-    String[] environments = new String[0];
-    int envIndex = ArrayUtil.indexOf("--env", args);
-    if (envIndex >= 0 && args.length > envIndex + 1) {
-      environments = args[envIndex + 1].split(",");
-    }
-
-    String mode = CliUtil.getParameter("--mode", args);
-
-    // run
-    Benchmark benchmark = new Benchmark(DEFAULT_SETUPS, mainClassName, mode, environments, minDurationSecs, maxThreads);
+    BenchmarkConfig config = parseCommandLineConfig(args);
+    Benchmark benchmark = new Benchmark(DEFAULT_SETUPS, config);
     benchmark.run(printer);
   }
 
 
   // attributes ------------------------------------------------------------------------------------------------------
 
-  private final Benerator benerator;
-  private final VersionNumber versionNumber;
   private final Setup[] setups;
-  private final String[] environments;
-  private final int minDurationSecs;
-  private final int maxThreads;
+  private final BenchmarkConfig config;
+  private final Benerator benerator;
 
 
   // constructor -----------------------------------------------------------------------------------------------------
 
-  public Benchmark(Setup[] setups, String mainClassName, String mode, String[] environments, int minDurationSecs, int maxThreads) {
+  public Benchmark(Setup[] setups, BenchmarkConfig config) {
     // apply configuration settings
     this.setups = setups;
-    this.environments = environments;
+    this.config = config;
+    String mainClassName = (config.isEe() ? EE_BENERATOR : Benerator.class.getName());
     this.benerator = (Benerator) BeanUtil.newInstance(mainClassName);
-    if (mode != null) {
-      Benerator.setMode(BeneratorMode.ofCode(mode));
-    }
-    this.versionNumber = benerator.getVersionNumber();
-    this.minDurationSecs = minDurationSecs;
-    int reportedCores = Runtime.getRuntime().availableProcessors();
-    this.maxThreads = (maxThreads > 0 ? maxThreads : reportedCores * 3 / 2);
+    Benerator.setMode(config.getMode());
     // log configuration settings
     logger.debug("Main class {}", mainClassName);
-    logger.debug("Min. duration: {} s", minDurationSecs);
-    logger.debug("Max threads: {}", maxThreads);
+    logger.debug("Min. duration: {} s", config.getMinSecs());
+    logger.debug("Max threads: {}", config.getMaxThreads());
   }
 
 
@@ -176,14 +122,9 @@ public class Benchmark {
     // perform tests
     for (Setup setup : setups) {
       printHorizontalLine(printer);
+      String[] environments = config.getEnvironments();
       if (environments.length > 0) {
-        if (setup.isDbSetup()) {
-          for (String environment : environments) {
-            runSetup(setup, environment, threadCounts, table, printer);
-          }
-        } else {
-          logger.info("Skipping plain test since running in DB test mode");
-        }
+        runOnEnvironments(setup, environments, threadCounts, table, printer);
       } else {
         if (setup.isDbSetup()) {
           logger.info("Skipping DB test since no environment was specified");
@@ -203,6 +144,18 @@ public class Benchmark {
       alignments[i] = Alignment.RIGHT;
     }
     printer.printLines(TextUtil.formatLinedTable(title, t, alignments));
+  }
+
+  private void runOnEnvironments(
+      Setup setup, String[] environments, int[] threadCounts, ArrayBuilder<Object[]> table, InfoPrinter printer)
+      throws IOException {
+    if (setup.isDbSetup()) {
+      for (String environment : environments) {
+        runSetup(setup, environment, threadCounts, table, printer);
+      }
+    } else {
+      logger.info("Skipping plain test since running in DB test mode");
+    }
   }
 
   private Object[] newRow(int cellCount, ArrayBuilder<Object[]> table) {
@@ -235,15 +188,6 @@ public class Benchmark {
     );
   }
 
-  private static boolean isEEAvailable() {
-    try {
-      Class.forName(EE_BENERATOR);
-      return true;
-    } catch (ClassNotFoundException e) {
-      return false;
-    }
-  }
-
   private ArrayBuilder<Object[]> createTable(int[] threadCounts) {
     // create table
     ArrayBuilder<Object[]> table = new ArrayBuilder<>(Object[].class);
@@ -269,6 +213,7 @@ public class Benchmark {
         BeneratorUtil.getJVMInfo(),
         "Date/Time: " + ZonedDateTime.now(),
     });
+    String[] environments = config.getEnvironments();
     if (!ArrayUtil.isEmpty(environments)) {
       if (environments.length == 1) {
         builder.add("Database: " + EnvironmentUtil.getProductDescription(environments[0]));
@@ -295,6 +240,7 @@ public class Benchmark {
   }
 
   private int[] chooseThreadCounts() {
+    int maxThreads = config.getMaxThreads();
     if (benerator.isCommunityEdition() || maxThreads == 1) {
       return new int[] { 1 };
     }
@@ -314,31 +260,46 @@ public class Benchmark {
     Object[][] sensorRows = null;
     long initialCount = setup.count;
     for (int iT = 0; iT < threadCounts.length; iT++) {
-      if (versionNumber.compareTo(setup.requiredVersion) >= 0
-          && (!setup.reqEE || !benerator.isCommunityEdition())) {
+      if (versionAndEditionMatch(setup)) {
         int threads = threadCounts[iT];
-        List<Execution> executions = runWithMinDuration(setup.fileName, environment, minDurationSecs, initialCount, threads, benerator);
+        List<Execution> executions = runWithMinDuration(setup.fileName, environment, config.getMinSecs(), initialCount, threads, benerator);
         initialCount = executions.get(0).count;
         if (sensorRows == null) {
-          sensorRows = new Object[executions.size()][];
-          for (int iS = 0; iS < executions.size(); iS++) {
-            sensorRows[iS] = newRow(threadCounts.length + 1, table);
-            sensorRows[iS][0] = rowHeader(setup, environment, executions, iS);
-          }
+          sensorRows = createSensorRows(setup, environment, threadCounts, table, executions);
         }
         for (int iS = 0; iS < executions.size(); iS++) {
           sensorRows[iS][iT + 1] = format(executions.get(iS).entitiesPerHour());
           sensorRows[iS][0] = rowHeader(setup, environment, executions, iS);
         }
       } else { // version too low
-        if (sensorRows == null) {
-          sensorRows = new Object[1][];
-          sensorRows[0] = newRow(threadCounts.length + 1, table);
-          sensorRows[0][0] = rowHeader(setup, environment, null, 0);
-        }
-        sensorRows[0][iT + 1] = "N/A";
+        sensorRows = createNaRow(setup, environment, threadCounts, table, sensorRows, iT);
       }
     }
+  }
+
+  private boolean versionAndEditionMatch(Setup setup) {
+    VersionNumber versionNumber = benerator.getVersionNumber();
+    return versionNumber.compareTo(setup.requiredVersion) >= 0 && (!setup.reqEE || !benerator.isCommunityEdition());
+  }
+
+  private Object[][] createSensorRows(Setup setup, String environment, int[] threadCounts, ArrayBuilder<Object[]> table, List<Execution> executions) {
+    Object[][] sensorRows;
+    sensorRows = new Object[executions.size()][];
+    for (int iS = 0; iS < executions.size(); iS++) {
+      sensorRows[iS] = newRow(threadCounts.length + 1, table);
+      sensorRows[iS][0] = rowHeader(setup, environment, executions, iS);
+    }
+    return sensorRows;
+  }
+
+  private Object[][] createNaRow(Setup setup, String environment, int[] threadCounts, ArrayBuilder<Object[]> table, Object[][] sensorRows, int iT) {
+    if (sensorRows == null) {
+      sensorRows = new Object[1][];
+      sensorRows[0] = newRow(threadCounts.length + 1, table);
+      sensorRows[0][0] = rowHeader(setup, environment, null, 0);
+    }
+    sensorRows[0][iT + 1] = "N/A";
+    return sensorRows;
   }
 
   private String rowHeader(Setup setup, String environment, List<Execution> executions, int iS) {
@@ -433,6 +394,44 @@ public class Benchmark {
   private static String format(double number) {
     return (number < 10 ? FORMAT_1 : FORMAT_0).format(number);
   }
+
+  static BenchmarkConfig parseCommandLineConfig(String... args) {
+    CommandLineParser p = new CommandLineParser();
+    p.addFlag("ce", "--ce", null);
+    p.addFlag("ee", "--ee", null);
+    p.addOption("mode", "--mode", "-m");
+    p.addOption("minSecs", "--minSecs", null);
+    p.addOption("maxThreads", "--maxThreads", null);
+    p.addOption("environmentSpec", "--env", null);
+    BenchmarkConfig config = new BenchmarkConfig();
+    p.parse(config, args);
+
+    // check help and version requests
+    if (config.isHelp()) {
+      printHelp();
+      System.exit(0);
+    }
+    if (config.isVersion()) {
+      BeneratorUtil.printVersionInfo(false, new ConsoleInfoPrinter());
+      System.exit(0);
+    }
+
+    // check editions
+    if (config.isEe() && !isEEAvailable()) {
+      throw new ConfigurationError("Benerator Enterprise Edition is not available on this installation");
+    }
+    if (config.isCe() && config.isEe()) {
+      throw new ConfigurationError("The flags --ee and --ce exclude each other");
+    }
+
+    // maxThreads
+    int reportedCores = Runtime.getRuntime().availableProcessors();
+    if (config.getMaxThreads() == 0) {
+      config.setMaxThreads(reportedCores * 3 / 2);
+    }
+    return config;
+  }
+
 
   public static class Setup {
     public final String fileName;
