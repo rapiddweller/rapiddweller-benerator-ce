@@ -28,6 +28,8 @@ package com.rapiddweller.benerator.test;
 
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.BeneratorRootContext;
+import com.rapiddweller.common.ArrayFormat;
+import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -43,6 +45,8 @@ import com.rapiddweller.model.data.TypeDescriptor;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.junit.Before;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Abstract parent class for all tests which rely on a {@link DataModel}.<br/><br/>
@@ -142,6 +146,12 @@ public abstract class ModelTest {
     return "src/test/resources/"
         + this.getClass().getPackage().getName().replace('.', '/') + "/"
         + fileName;
+  }
+
+  protected static <T> void assertEqualArrays(T expected, T actual) {
+    ArrayFormat format = new ArrayFormat();
+    assertTrue("Expected " + format.format(expected) + ", found: " + format.format(actual),
+        ArrayUtil.equals(expected, actual));
   }
 
 }

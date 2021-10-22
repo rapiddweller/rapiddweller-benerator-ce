@@ -1,10 +1,10 @@
 <setup>
-    <bean id="out" class="CSVEntityExporter">
-        <property name="uri" value="__benchmark.out"/>
-        <property name="columns" value="col1, col2, col3, col4, col5, col6, col7, col8"/>
-    </bean>
+    <import platforms="xml"/>
 
-    <generate type="data" count="{count}" threads="{threads}" pageSize="100000" consumer="out">
+    <bean id="out" spec="new FixedWidthEntityExporter('__benchmark.out.fcw', 'col1[101], col2[101], col3[101], col4[101], col5[101], col6[101], col7[101], col8[101], col9[101], col10[101]')"/>
+
+    <generate type="ben_benchmark" count="{count}" threads="{threads}" pageSize="10000"
+              sensor="benchmark.write" consumer="out">
         <attribute name="col1"  constant="0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"/>
         <attribute name="col2"  constant="0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"/>
         <attribute name="col3"  constant="0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"/>
@@ -16,4 +16,9 @@
         <attribute name="col9"  constant="0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"/>
         <attribute name="col10"  constant="0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"/>
     </generate>
+
+    <bean id="in" spec="new FixedWidthEntitySource('__benchmark.out.fcw', 'col1[101], col2[101], col3[101], col4[101], col5[101], col6[101], col7[101], col8[101], col9[101], col10[101]')"/>
+
+    <iterate type="ben_benchmark" source="in" threads="{threads}" pageSize="10000" sensor="benchmark.read" consumer="NoConsumer"/>
+
 </setup>

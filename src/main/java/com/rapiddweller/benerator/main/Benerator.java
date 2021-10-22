@@ -35,11 +35,10 @@ import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
-import com.rapiddweller.benerator.util.CliUtil;
-import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.LogCategoriesConstants;
+import com.rapiddweller.common.cli.CommandLineParser;
 import com.rapiddweller.common.log.LoggingInfoPrinter;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
 import com.rapiddweller.common.ui.InfoPrinter;
@@ -75,8 +74,8 @@ public class Benerator {
       "Options:",
       "  -v,--version           Display system and version information",
       "  -h,--help              Display help information",
-      "  --mode <spec>          activates Benerator mode strict, lenient or " +
-      "                         quickndirty (default: lenient)",
+      "  --mode <spec>          activates Benerator mode strict, lenient or ",
+      "                         turbo (default: lenient)",
   };
 
   private static BeneratorMode mode = BeneratorMode.LENIENT;
@@ -86,18 +85,9 @@ public class Benerator {
 
   public static void main(String[] args) throws IOException {
     VersionInfo.getInfo(BENERATOR_KEY).verifyDependencies();
-    checkVersionAndHelpOpts(args, CE_CLI_HELP);
-    checkMode(args);
-    int fileIndex = 0;
-    while (fileIndex < args.length && args[fileIndex].startsWith("-")) {
-      fileIndex++;
-    }
-    String filename = (fileIndex < args.length ? args[fileIndex] : "benerator.xml");
-    // log separator in order to distinguish benerator runs in the log file
-    logger.info("----------------------------------------------------------------------");
-    new Benerator().runFile(filename);
+    BeneratorConfig config = parseCommandLine(args);
+    run(config);
   }
-
 
   // info properties -------------------------------------------------------------------------------------------------
 
@@ -121,8 +111,8 @@ public class Benerator {
     return (mode == BeneratorMode.STRICT);
   }
 
-  public static boolean isQuickAndDirty() {
-    return (mode == BeneratorMode.QUICK_AND_DIRTY);
+  public static boolean isTurbo() {
+    return (mode == BeneratorMode.TURBO);
   }
 
   public static BeneratorMode getMode() {
@@ -135,9 +125,25 @@ public class Benerator {
 
   //  operational interface ------------------------------------------------------------------------------------------
 
+  public static void run(BeneratorConfig config) throws IOException {
+    if (config.isHelp()) {
+      ConsoleInfoPrinter.printHelp(CE_CLI_HELP);
+      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+    }
+    if (config.isVersion()) {
+      BeneratorUtil.printVersionInfo(false, new ConsoleInfoPrinter());
+      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+    }
+    Benerator.setMode(config.getMode());
+    new Benerator().runFile(config.getFile());
+  }
+
   public void runFile(String filename) throws IOException {
     // Run descriptor file
     try {
+      // log separator in order to distinguish benerator runs in the log file
+      logger.info("-------------------------------------------------------------" +
+          "-----------------------------------------------------------");
       InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
       runFile(filename, printer);
       DBUtil.assertAllDbResourcesClosed(false);
@@ -168,28 +174,12 @@ public class Benerator {
 
   // helper methods --------------------------------------------------------------------------------------------------
 
-  protected static void checkVersionAndHelpOpts(String[] args, String[] help) {
-    // check for version flag
-    if (CliUtil.containsVersionFlag(args)) {
-      BeneratorUtil.printVersionInfo(false, new ConsoleInfoPrinter());
-      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
-    }
-    // check for help flag
-    if (CliUtil.containsHelpFlag(args)) {
-      ConsoleInfoPrinter.printHelp(help);
-      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
-    }
-  }
-
-  private static void checkMode(String[] args) {
-    String modeSpec = CliUtil.getParameter("mode", args);
-    if ("dirty".equals(System.getProperty("quick"))) {
-      mode = BeneratorMode.QUICK_AND_DIRTY; // if benerator was called with -Dquick=dirty, then set quick&dirty mode
-    } else if (modeSpec == null) {
-      mode = BeneratorMode.LENIENT;
-    } else {
-      mode = BeneratorMode.ofCode(modeSpec);
-    }
+  static BeneratorConfig parseCommandLine(String... args) {
+    BeneratorConfig result = new BeneratorConfig();
+    CommandLineParser p = new CommandLineParser();
+    p.addOption("mode", "--mode", "-m");
+    p.addArgument("file", false);
+    return p.parse(result, args);
   }
 
 }

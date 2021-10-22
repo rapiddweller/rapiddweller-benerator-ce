@@ -826,7 +826,7 @@
             </xs:sequence>
             <xs:attributeGroup ref="iterator-attrs"/>
             <xs:attributeGroup ref="execution-attrs"/>
-            <xs:attribute name="threads" type="xs:int"/>
+            <xs:attribute name="threads" type="xs:string"/>
             <xs:attribute name="template" type="xs:string"/>
             <xs:attribute name="consumer" type="xs:string"/>
         </xs:complexType>
@@ -999,6 +999,9 @@
         <xs:attribute name="distribution" type="xs:string"/>
         <xs:attribute name="cyclic" type="xs:string"/>
         <xs:attribute name="offset" type="xs:string"/>
+
+        <!-- sensor -->
+        <xs:attribute name="sensor" type="xs:string"/>
     </xs:attributeGroup>
 
     <xs:simpleType name="format-type">

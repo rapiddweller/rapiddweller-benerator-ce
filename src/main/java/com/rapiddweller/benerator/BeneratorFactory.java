@@ -76,6 +76,10 @@ public abstract class BeneratorFactory {
     return instance;
   }
 
+  public static void setInstance(BeneratorFactory instance) {
+    BeneratorFactory.instance = instance;
+  }
+
   public static synchronized String getSchemaPathForCurrentVersion() {
     if (xmlSchemaPath == null) {
       String version = VersionInfo.getInfo("benerator").getVersion();

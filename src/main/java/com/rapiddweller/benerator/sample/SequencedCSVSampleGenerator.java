@@ -100,7 +100,6 @@ public class SequencedCSVSampleGenerator<E> extends GeneratorProxy<E> {
 
   void addValue(E value) {
     ((SampleGenerator<E>) getSource()).addValue(value);
-    // do not set dirty flag, otherwise this value would be cleared
   }
 
   // Generator interface ---------------------------------------------------------------------------------------------

@@ -58,7 +58,7 @@ public class DbUnitUtil {
   public static void skipNonStartTags(XMLStreamReader reader) {
     // skip non-start-tags
     try {
-      while (reader.hasNext() && reader.next() != XMLStreamConstants.START_ELEMENT) {
+      while (reader != null && reader.hasNext() && reader.next() != XMLStreamConstants.START_ELEMENT) {
         // empty loop
         if (reader.getEventType() == XMLStreamConstants.START_ELEMENT) {
           System.out.println(reader.getLocalName());

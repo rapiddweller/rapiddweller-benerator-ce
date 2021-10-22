@@ -18,11 +18,11 @@ public class BeneratorMode {
 
   private static final Map<String, BeneratorMode> INSTANCES = new HashMap<>();
 
-  public static final BeneratorMode STRICT = new BeneratorMode("strict");
+  public static final BeneratorMode STRICT  = new BeneratorMode("strict");
   public static final BeneratorMode LENIENT = new BeneratorMode("lenient");
-  public static final BeneratorMode QUICK_AND_DIRTY = new BeneratorMode("quickndirty");
+  public static final BeneratorMode TURBO   = new BeneratorMode("turbo");
 
-  public static BeneratorMode ofCode(String code) {
+  public static BeneratorMode getInstance(String code) {
     BeneratorMode result = INSTANCES.get(code);
     if (result == null) {
       throw new ObjectNotFoundException("No BeneratorMode od code " + code);
@@ -38,6 +38,11 @@ public class BeneratorMode {
   }
 
   public String getCode() {
+    return code;
+  }
+
+  @Override
+  public String toString() {
     return code;
   }
 

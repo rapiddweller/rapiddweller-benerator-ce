@@ -42,7 +42,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link FixedWidthEntityExporter}.<br/><br/>
  * Created: 14.11.2009 10:04:46
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -50,11 +49,6 @@ public class FixedWidthEntityExporterTest extends ModelTest {
 
   private static final String ENCODING = Encodings.UTF_8;
 
-  /**
-   * Test format.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testFormat() throws Exception {
     File file = tempFile();
