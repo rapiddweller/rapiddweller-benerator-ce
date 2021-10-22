@@ -59,6 +59,7 @@ public class BeneratorUtil {
   private static final Logger CONFIG_LOGGER = LoggerFactory.getLogger(LogCategoriesConstants.CONFIG);
 
   public static final String EE_BENERATOR = "com.rapiddweller.benerator_ee.main.EEBenerator";
+  public static final String EE_BENERATOR_FACTORY = "com.rapiddweller.benerator_ee.EEBeneratorFactory";
 
   private BeneratorUtil() {
     // private constructor to prevent instantiation
