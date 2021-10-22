@@ -29,6 +29,7 @@ package com.rapiddweller.platform.fixedwidth;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.Escalator;
 import com.rapiddweller.common.LoggerEscalator;
 import com.rapiddweller.common.SystemInfo;
@@ -53,23 +54,15 @@ import java.text.ParseException;
 import java.util.Locale;
 
 /**
- * Reads Entities from a fixed-width file.<br/>
- * <br/>
+ * Reads Entities from a fixed-width file.<br/><br/>
  * Created at 07.11.2008 18:18:24
- *
  * @author Volker Bergmann
  * @since 0.5.6
  */
 public class FixedWidthEntitySource extends FileBasedEntitySource {
 
   private static final Escalator escalator = new LoggerEscalator();
-  /**
-   * The Source.
-   */
   protected DataSource<String[]> source;
-  /**
-   * The Converter.
-   */
   protected Converter<String[], Entity> converter;
   private Locale locale;
   private String encoding;
@@ -80,37 +73,19 @@ public class FixedWidthEntitySource extends FileBasedEntitySource {
   private final boolean initialized;
   private final Converter<String, String> preprocessor;
 
-  /**
-   * Instantiates a new Fixed width entity source.
-   */
   public FixedWidthEntitySource() {
     this(null, null, SystemInfo.getFileEncoding(), null);
   }
 
-  /**
-   * Instantiates a new Fixed width entity source.
-   *
-   * @param uri              the uri
-   * @param entityDescriptor the entity descriptor
-   * @param encoding         the encoding
-   * @param lineFilter       the line filter
-   * @param descriptors      the descriptors
-   */
+  public FixedWidthEntitySource(String uri, String columnFormatList) {
+    this(uri, null, new NoOpConverter<>(), Encodings.UTF_8, null, parseColumnFormatList(columnFormatList));
+  }
+
   public FixedWidthEntitySource(String uri, ComplexTypeDescriptor entityDescriptor,
                                 String encoding, String lineFilter, FixedWidthColumnDescriptor... descriptors) {
     this(uri, entityDescriptor, new NoOpConverter<>(), encoding, lineFilter, descriptors);
   }
 
-  /**
-   * Instantiates a new Fixed width entity source.
-   *
-   * @param uri              the uri
-   * @param entityDescriptor the entity descriptor
-   * @param preprocessor     the preprocessor
-   * @param encoding         the encoding
-   * @param lineFilter       the line filter
-   * @param descriptors      the descriptors
-   */
   public FixedWidthEntitySource(String uri, ComplexTypeDescriptor entityDescriptor,
                                 Converter<String, String> preprocessor, String encoding, String lineFilter,
                                 FixedWidthColumnDescriptor... descriptors) {
@@ -127,49 +102,22 @@ public class FixedWidthEntitySource extends FileBasedEntitySource {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets locale.
-   *
-   * @param locale the locale
-   */
   public void setLocale(Locale locale) {
     this.locale = locale;
   }
 
-  /**
-   * Sets encoding.
-   *
-   * @param encoding the encoding
-   */
   public void setEncoding(String encoding) {
     this.encoding = encoding;
   }
 
-  /**
-   * Gets entity.
-   *
-   * @return the entity
-   */
   public String getEntity() {
     return entityTypeName;
   }
 
-  /**
-   * Sets entity.
-   *
-   * @param entity the entity
-   */
   public void setEntity(String entity) {
     this.entityTypeName = entity;
   }
 
-  /**
-   * Sets properties.
-   *
-   * @param properties the properties
-   * @throws ParseException if something went wrong while parsing
-   * @deprecated use {@link #setColumns(String)}
-   */
   @Deprecated
   public void setProperties(String properties) throws ParseException {
     escalator.escalate("The property 'properties' of class " + getClass() + "' has been renamed to 'columns'. " +
@@ -177,12 +125,6 @@ public class FixedWidthEntitySource extends FileBasedEntitySource {
     setColumns(properties);
   }
 
-  /**
-   * Sets columns.
-   *
-   * @param columns the columns
-   * @throws ParseException the parse exception
-   */
   public void setColumns(String columns) throws ParseException {
     FixedWidthRowTypeDescriptor rowTypeDescriptor = FixedWidthUtil.parseBeanColumnsSpec(
         columns, entityTypeName, null, this.locale);
@@ -191,11 +133,6 @@ public class FixedWidthEntitySource extends FileBasedEntitySource {
 
   // Iterable interface ----------------------------------------------------------------------------------------------
 
-  /**
-   * Sets line filter.
-   *
-   * @param lineFilter the line filter
-   */
   public void setLineFilter(String lineFilter) {
     this.lineFilter = lineFilter;
   }
@@ -241,6 +178,14 @@ public class FixedWidthEntitySource extends FileBasedEntitySource {
     Array2EntityConverter a2eConverter = new Array2EntityConverter(entityDescriptor, featureNames, true);
     Converter<String[], String[]> aConv = new ArrayConverter<>(String.class, String.class, preprocessor);
     return new ConverterChain<>(aConv, a2eConverter);
+  }
+
+  private static FixedWidthColumnDescriptor[] parseColumnFormatList(String columnFormatList) {
+    try {
+      return FixedWidthUtil.parseBeanColumnsSpec(columnFormatList, "", "", Locale.getDefault()).getColumnDescriptors();
+    } catch (ParseException e) {
+      throw new RuntimeException(e);
+    }
   }
 
 }

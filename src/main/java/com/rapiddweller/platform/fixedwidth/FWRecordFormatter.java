@@ -44,7 +44,6 @@ import java.util.Locale;
 /**
  * Formats Entities' attributes as a fixed-width table.<br/><br/>
  * Created: 20.02.2014 14:03:25
- *
  * @author Volker Bergmann
  * @since 0.9.0
  */
@@ -52,13 +51,6 @@ public class FWRecordFormatter {
 
   private final Converter<Entity, String>[] converters;
 
-  /**
-   * Instantiates a new Fw record formatter.
-   *
-   * @param columnFormatList the column format list
-   * @param nullString       the null string
-   * @param locale           the locale
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public FWRecordFormatter(String columnFormatList, String nullString, Locale locale) {
     Assert.notNull(columnFormatList, "columnFormatList");
@@ -77,12 +69,6 @@ public class FWRecordFormatter {
     }
   }
 
-  /**
-   * Format.
-   *
-   * @param entity  the entity
-   * @param printer the printer
-   */
   public void format(Entity entity, PrintWriter printer) {
     for (Converter<Entity, String> converter : converters) {
       printer.print(converter.convert(entity));
