@@ -372,7 +372,7 @@ public class Benchmark {
     if (files != null) {
       for (File file : files) {
         if (file.getName().startsWith("__benchmark.out")) {
-          file.delete();
+          FileUtil.deleteIfExists(file);
         }
       }
     }
