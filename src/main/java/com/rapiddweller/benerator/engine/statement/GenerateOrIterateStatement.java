@@ -74,9 +74,10 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
 
   // constructor -------------------------------------------------------------------------------------------------------
 
-  public GenerateOrIterateStatement(boolean iterate, String productName,
+  public GenerateOrIterateStatement(
       Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
       Expression<Long> pageSize, Expression<PageListener> pageListenerEx,
+      String sensor,
       Expression<ErrorHandler> errorHandler, boolean infoLog, boolean isSubCreator,
       BeneratorContext context, BeneratorContext childContext) {
     super(errorHandler);
@@ -85,7 +86,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
     this.threads = threads;
     this.pageSize = pageSize;
     this.pageListenerEx = pageListenerEx;
-    this.sensor = (iterate ? "iterate" : "generate") + '.' + productName;
+    this.sensor = sensor;
     this.infoLog = infoLog;
     this.isSubCreator = isSubCreator;
     this.context = context;

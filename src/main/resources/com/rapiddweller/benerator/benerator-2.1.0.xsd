@@ -999,6 +999,9 @@
         <xs:attribute name="distribution" type="xs:string"/>
         <xs:attribute name="cyclic" type="xs:string"/>
         <xs:attribute name="offset" type="xs:string"/>
+
+        <!-- sensor -->
+        <xs:attribute name="sensor" type="xs:string"/>
     </xs:attributeGroup>
 
     <xs:simpleType name="format-type">

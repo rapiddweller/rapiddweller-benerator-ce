@@ -101,6 +101,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGER;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGESIZE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SEGMENT;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SELECTOR;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SENSOR;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SEPARATOR;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_STATS;
@@ -138,7 +139,8 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
       ATT_NAME, ATT_TYPE, ATT_CONTAINER, ATT_GENERATOR, ATT_VALIDATOR,
       ATT_CONVERTER, ATT_NULL_QUOTA, ATT_UNIQUE, ATT_DISTRIBUTION, ATT_CYCLIC,
       ATT_SOURCE, ATT_SEGMENT, ATT_FORMAT, ATT_OFFSET, ATT_SEPARATOR, ATT_ENCODING, ATT_SELECTOR, ATT_SUB_SELECTOR,
-      ATT_DATASET, ATT_NESTING, ATT_LOCALE, ATT_FILTER
+      ATT_DATASET, ATT_NESTING, ATT_LOCALE, ATT_FILTER,
+      ATT_SENSOR
   );
 
   private static final Set<String> CONSUMER_EXPECTING_ELEMENTS = CollectionUtil.toSet(EL_GENERATE, EL_ITERATE);
@@ -256,13 +258,17 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     Expression<Integer> threads = parseIntAttribute("threads", element, 1);
     Expression<PageListener> pager = (Expression<PageListener>) DatabeneScriptParser.parseBeanSpec(
         element.getAttribute(ATT_PAGER));
+    String sensor = element.getAttribute("sensor");
+    String productName = getTaskName(descriptor);
+    if (sensor == null) {
+      sensor = element.getNodeName() + '.' + productName;
+    }
+
     Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_NAME));
     Expression<Long> minCount = DescriptorUtil.getMinCount(descriptor, 0L);
-    String productName = getTaskName(descriptor);
     BeneratorContext childContext = context.createSubContext(productName);
-    boolean iterate = ("iterate".equals(element.getNodeName()));
-    GenerateOrIterateStatement statement = createStatement(iterate, productName,
-        countGenerator, minCount, threads, pageSize, pager, infoLog, nested, errorHandler, context, childContext);
+    GenerateOrIterateStatement statement = createStatement(
+        countGenerator, minCount, threads, pageSize, pager, sensor, infoLog, nested, errorHandler, context, childContext);
 
     // TODO avoid double parsing of the InstanceDescriptor and remove the following...
     TypeDescriptor type = descriptor.getTypeDescriptor();
@@ -279,10 +285,10 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return statement;
   }
 
-  protected GenerateOrIterateStatement createStatement(boolean iterate, String type, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
-                                                       Expression<Long> pageSize, Expression<PageListener> pager, boolean infoLog, boolean nested,
+  protected GenerateOrIterateStatement createStatement(Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
+                                                       Expression<Long> pageSize, Expression<PageListener> pager, String sensor, boolean infoLog, boolean nested,
                                                        Expression<ErrorHandler> errorHandler, BeneratorContext context, BeneratorContext childContext) {
-    return new GenerateOrIterateStatement(iterate, type, countGenerator, minCount, threads, pageSize, pager,
+    return new GenerateOrIterateStatement(countGenerator, minCount, threads, pageSize, pager, sensor,
         errorHandler, infoLog, nested, context, childContext);
   }
 

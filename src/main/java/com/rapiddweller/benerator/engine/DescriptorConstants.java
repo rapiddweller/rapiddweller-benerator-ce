@@ -157,6 +157,7 @@ public class DescriptorConstants {
   public static final String ATT_NESTING = "nesting";
   public static final String ATT_LOCALE = "locale";
   public static final String ATT_FILTER = "filter";
+  public static final String ATT_SENSOR = "sensor";
 
   public static final String ATT_CLASS = "class";
   public static final String ATT_SPEC = "spec";
@@ -173,7 +174,7 @@ public class DescriptorConstants {
   public static final String ATT_OUTPUT_URI = "outputUri";
 
   public static final Collection<String> CREATE_ENTITIES_EXT_SETUP = Collections.unmodifiableSet(
-      CollectionUtil.toSet(ATT_PAGESIZE, ATT_THREADS, ATT_CONSUMER, ATT_ON_ERROR));
+      CollectionUtil.toSet(ATT_PAGESIZE, ATT_THREADS, ATT_SENSOR, ATT_CONSUMER, ATT_ON_ERROR));
 
   public static final Collection<String> COMPONENT_TYPES = Collections.unmodifiableSet(
       CollectionUtil.toSet(EL_ATTRIBUTE, EL_ID, EL_REFERENCE, EL_PART));

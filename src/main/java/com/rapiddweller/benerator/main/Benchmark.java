@@ -2,7 +2,9 @@
 
 package com.rapiddweller.benerator.main;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.BeneratorUtil;
+import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Assert;
@@ -39,6 +41,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import static com.rapiddweller.benerator.BeneratorUtil.EE_BENERATOR;
+import static com.rapiddweller.benerator.BeneratorUtil.EE_BENERATOR_FACTORY;
 import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
 import static com.rapiddweller.jdbacl.EnvironmentUtil.getDialect;
 
@@ -68,11 +71,11 @@ public class Benchmark {
       new Setup("anon-person-constant.ben.xml", false, V200, 8000000),
       new Setup("db-smalltable.ben.xml", false, V200, 15000),
       new Setup("db-bigtable.ben.xml", false, V200, 5000),
-      // TODO 2.1.0 measure in/out performance for files
-      new Setup("file-out-csv.ben.xml", false, V210, 1000000),
-      new Setup("file-out-json.ben.xml", true, V210, 1000000),
-      new Setup("file-out-dbunit.ben.xml", false, V210, 1000000),
-      new Setup("file-out-fixedwidth.ben.xml", false, V210, 500000),
+      // TODO limit file generation to 1 GB file size
+      new Setup("file-csv.ben.xml", false, V210, 1000000),
+      new Setup("file-dbunit.ben.xml", false, V210, 1000000),
+      new Setup("file-json.ben.xml", true, V210, 10000),
+      new Setup("file-fixedwidth.ben.xml", false, V210, 500000),
       new Setup("file-out-xml.ben.xml", false, V210, 500000)
   };
 
@@ -103,7 +106,14 @@ public class Benchmark {
     // apply configuration settings
     this.setups = setups;
     this.config = config;
-    String mainClassName = (config.isEe() ? EE_BENERATOR : Benerator.class.getName());
+    String mainClassName;
+    if (config.isEe()) {
+      mainClassName = EE_BENERATOR;
+      BeneratorFactory.setInstance((BeneratorFactory) BeanUtil.newInstance(EE_BENERATOR_FACTORY));
+    } else {
+      mainClassName = Benerator.class.getName();
+      BeneratorFactory.setInstance(new DefaultBeneratorFactory());
+    }
     this.benerator = (Benerator) BeanUtil.newInstance(mainClassName);
     Benerator.setMode(config.getMode());
     // log configuration settings
@@ -271,7 +281,7 @@ public class Benchmark {
           sensorRows[iS][iT + 1] = format(executions.get(iS).entitiesPerHour());
           sensorRows[iS][0] = rowHeader(setup, environment, executions, iS);
         }
-      } else { // version too low
+      } else { // version too low or EE feature in CE
         sensorRows = createNaRow(setup, environment, threadCounts, table, sensorRows, iT);
       }
     }
@@ -363,13 +373,13 @@ public class Benchmark {
     Set<Map.Entry<String, LatencyCounter>> counters = repo.getCounters();
     for (Map.Entry<String, LatencyCounter> counter : counters) {
       String key = counter.getKey();
-      if (key.endsWith(".ben_benchmark")) {
+      if (key.startsWith("benchmark.")) {
         LatencyCounter value = counter.getValue();
         Assert.equals(1, (int) value.sampleCount());
-        long eps = count / value.totalLatency() * 1000;
-        logger.info("{}: {} entities / {} ms, throughput {} E/s - {} ME/h",
-            key, count, value.totalLatency(), eps, eps * 3600. / 1000000.);
-        String sensor = "[" + (key.startsWith("generate") ? "write" : "read") + "]";
+        long eps = count * 1000 / value.totalLatency();
+        logger.info("{}: {} entities / {} ms, throughput {} E/s - {} ME/h, {} thread{}",
+            key, count, value.totalLatency(), eps, eps * 3600. / 1000000., threads, (threads > 1 ? "s" : ""));
+        String sensor = "[" + (key.substring("benchmark.".length())) + "]";
         result.add(new Execution(fileName, sensor, count, threads, (int) value.totalLatency()));
       }
     }
@@ -422,6 +432,9 @@ public class Benchmark {
     }
     if (config.isCe() && config.isEe()) {
       throw new ConfigurationError("The flags --ee and --ce exclude each other");
+    }
+    if (config.isEe()) {
+      System.setProperty(BeneratorFactory.BENERATOR_FACTORY_PROPERTY, EE_BENERATOR);
     }
 
     // maxThreads
