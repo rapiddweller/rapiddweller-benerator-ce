@@ -38,18 +38,11 @@ import javax.xml.stream.XMLStreamConstants;
 /**
  * Parses a flat DbUnit dataset file.<br/><br/>
  * Created: 20.09.2011 07:53:15
- *
  * @author Volker Bergmann
  * @since 0.7.2
  */
 public class FlatDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
 
-  /**
-   * Instantiates a new Flat db unit entity iterator.
-   *
-   * @param uri     the uri
-   * @param context the context
-   */
   public FlatDbUnitEntityIterator(String uri, BeneratorContext context) {
     super(uri, context);
     DbUnitUtil.skipRootElement(reader);
@@ -60,7 +53,7 @@ public class FlatDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
   @Override
   public DataContainer<Entity> next(DataContainer<Entity> container) {
     DbUnitUtil.skipNonStartTags(reader);
-    if (reader.getEventType() == XMLStreamConstants.END_DOCUMENT) {
+    if (reader == null || reader.getEventType() == XMLStreamConstants.END_DOCUMENT) {
       return null;
     }
     // map element to entity
@@ -85,12 +78,6 @@ public class FlatDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
     return row;
   }
 
-  /**
-   * Map to entity entity.
-   *
-   * @param row the row
-   * @return the entity
-   */
   protected Entity mapToEntity(Row row) {
     String[] cells = row.getValues();
     ComplexTypeDescriptor descriptor = getType(row);
