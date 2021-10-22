@@ -88,26 +88,22 @@ public class FeatureDescriptor implements Named {
     return details.containsKey(name);
   }
 
-  public Object getDeclaredDetailValue(
-      String name) { // TODO v0.8 remove method? It does not differ from getDetailValue any more
+  public Object getDeclaredDetailValue(String name) { // TODO v0.8 remove method? It does not differ from getDetailValue any more
     return getConfiguredDetail(name).getValue();
   }
 
-  public Object getDetailValue(
-      String name) { // TODO v0.8 remove generic feature access?
+  public Object getDetailValue(String name) { // TODO v0.8 remove generic feature access?
     return this.getConfiguredDetail(name).getValue();
   }
 
   public void setDetailValue(String detailName, Object detailValue) {
-    if ("name"
-        .equals(detailName)) {
+    if ("name".equals(detailName)) {
       // name is stored redundantly for better performance
       this.name = (String) detailValue;
     }
     FeatureDetail<Object> detail = getConfiguredDetail(detailName);
     Class<Object> detailType = detail.getType();
-    if (detailValue != null &&
-        !detailType.isAssignableFrom(detailValue.getClass())) {
+    if (detailValue != null && !detailType.isAssignableFrom(detailValue.getClass())) {
       detailValue = AnyConverter.convert(detailValue, detailType);
     }
     detail.setValue(detailValue);
@@ -139,9 +135,7 @@ public class FeatureDescriptor implements Named {
     final FeatureDescriptor that = (FeatureDescriptor) o;
     for (FeatureDetail<?> detail : details.values()) {
       String detailName = detail.getName();
-      if (!NullSafeComparator
-          .equals(detail.getValue(),
-              that.getDetailValue(detailName))) {
+      if (!NullSafeComparator.equals(detail.getValue(), that.getDetailValue(detailName))) {
         return false;
       }
     }
@@ -170,8 +164,7 @@ public class FeatureDescriptor implements Named {
         }
         empty = false;
         builder.append(descriptor.getName()).append("=");
-        builder.append(ToStringConverter
-            .convert(descriptor.getValue(), "[null]"));
+        builder.append(ToStringConverter.convert(descriptor.getValue(), "[null]"));
       }
     }
     return builder.append("]");
@@ -190,23 +183,17 @@ public class FeatureDescriptor implements Named {
     addConfig(name, type, false);
   }
 
-  protected <T> void addConfig(String name, Class<T> type,
-                               boolean deprecated) {
+  protected <T> void addConfig(String name, Class<T> type, boolean deprecated) {
     addDetail(name, type, false, deprecated, null);
   }
 
-  protected <T> void addConstraint(String name, Class<T> type,
-                                   Operation<T, T> combinator) {
+  protected <T> void addConstraint(String name, Class<T> type, Operation<T, T> combinator) {
     addDetail(name, type, true, false, combinator);
   }
 
-  protected <T> void addDetail(String detailName, Class<T> detailType,
-                               boolean constraint,
-                               boolean deprecated,
-                               Operation<T, T> combinator) {
-    this.details.put(detailName,
-        new FeatureDetail<>(detailName, detailType, constraint,
-            combinator));
+  protected <T> void addDetail(String detailName, Class<T> detailType, boolean constraint,
+                               boolean deprecated, Operation<T, T> combinator) {
+    this.details.put(detailName, new FeatureDetail<>(detailName, detailType, constraint, combinator));
   }
 
   // generic property access -----------------------------------------------------------------------------------------
