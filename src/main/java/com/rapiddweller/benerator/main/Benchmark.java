@@ -368,7 +368,15 @@ public class Benchmark {
     repo.clear();
     benerator.runFile(filename);
     FileUtil.deleteIfExists(new File(filename));
-    FileUtil.deleteIfExists(new File("__benchmark.out"));
+    File[] files = new File(".").listFiles();
+    if (files != null) {
+      for (File file : files) {
+        if (file.getName().startsWith("__benchmark.out")) {
+          file.delete();
+        }
+      }
+    }
+    FileUtil.deleteIfExists(new File(filename));
     List<Execution> result = new ArrayList<>();
     Set<Map.Entry<String, LatencyCounter>> counters = repo.getCounters();
     for (Map.Entry<String, LatencyCounter> counter : counters) {
