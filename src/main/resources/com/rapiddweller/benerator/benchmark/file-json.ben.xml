@@ -1,5 +1,7 @@
 <setup>
-    <generate type="data" count="{count}" threads="{threads}" pageSize="100000" consumer="new JsonFileExporter('__benchmark.out')">
+
+    <generate type="ben_benchmark" count="{count}" threads="{threads}" pageSize="100000"
+              sensor="benchmark.write" consumer="new JsonFileExporter('__benchmark.out.json')">
         <attribute name="col1"  constant="0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"/>
         <attribute name="col2"  constant="0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"/>
         <attribute name="col3"  constant="0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"/>
@@ -11,4 +13,8 @@
         <attribute name="col9"  constant="0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"/>
         <attribute name="col10"  constant="0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"/>
     </generate>
+
+    <iterate type="ben_benchmark" source="__benchmark.out.json" threads="{threads}" pageSize="10000"
+             sensor="benchmark.read" consumer="NoConsumer"/>
+
 </setup>
