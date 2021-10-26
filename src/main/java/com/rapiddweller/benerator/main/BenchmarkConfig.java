@@ -17,10 +17,13 @@ public class BenchmarkConfig extends CommandLineConfig {
 
   private boolean ce;
   private boolean ee;
+  private boolean list;
   private BeneratorMode mode;
   private int minSecs;
   private int maxThreads;
   private String[] environments;
+  private String name;
+  private Benchmark.Setup[] setups;
 
   public BenchmarkConfig() {
     if (isEEAvailable()) {
@@ -34,6 +37,15 @@ public class BenchmarkConfig extends CommandLineConfig {
     this.minSecs = 10;
     this.maxThreads = 0;
     this.environments = new String[0];
+    this.setups = Benchmark.SETUPS;
+  }
+
+  public boolean isList() {
+    return list;
+  }
+
+  public void setList(boolean list) {
+    this.list = list;
   }
 
   public boolean isCe() {
@@ -42,9 +54,6 @@ public class BenchmarkConfig extends CommandLineConfig {
 
   public void setCe(boolean ce) {
     this.ce = ce;
-    if (ce) {
-      this.ee = false;
-    }
   }
 
   public boolean isEe() {
@@ -53,9 +62,6 @@ public class BenchmarkConfig extends CommandLineConfig {
 
   public void setEe(boolean ee) {
     this.ee = ee;
-    if (ee) {
-      this.ce = false;
-    }
   }
 
   public void setEnvironmentSpec(String environmentSpec) {
@@ -88,6 +94,19 @@ public class BenchmarkConfig extends CommandLineConfig {
 
   public void setMaxThreads(int maxThreads) {
     this.maxThreads = maxThreads;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+    this.setups = new Benchmark.Setup[] { Benchmark.getSetup(name) };
+  }
+
+  public Benchmark.Setup[] getSetups() {
+    return setups;
   }
 
 }
