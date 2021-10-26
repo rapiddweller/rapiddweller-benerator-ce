@@ -140,35 +140,28 @@ public class Benerator {
 
   public void runFile(String filename) throws IOException {
     // Run descriptor file
+    DescriptorRunner runner = null;
     try {
       // log separator in order to distinguish benerator runs in the log file
       logger.info("-------------------------------------------------------------" +
           "-----------------------------------------------------------");
       InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
-      runFile(filename, printer);
+      BeneratorMonitor.INSTANCE.reset();
+      MemorySensor memProfiler = MemorySensor.getInstance();
+      memProfiler.reset();
+      printer.printLines("Running file " + filename);
+      BeneratorUtil.checkSystem(printer);
+      BeneratorRootContext context = BeneratorFactory.getInstance().createRootContext(IOUtil.getParentUri(filename));
+      runner = new DescriptorRunner(filename, context);
+      runner.run();
+      BeneratorUtil.logConfig("Max. committed heap size: " + new KiloFormatter(1024).format(memProfiler.getMaxCommittedHeapSize()) + "B");
       DBUtil.assertAllDbResourcesClosed(false);
     } catch (BeneratorError e) {
       logger.error(e.getMessage(), e);
       System.exit(e.getCode());
-    }
-  }
-
-  public void runFile(String filename, InfoPrinter printer) throws IOException {
-    BeneratorMonitor.INSTANCE.reset();
-    MemorySensor memProfiler = MemorySensor.getInstance();
-    memProfiler.reset();
-    if (printer != null) {
-      printer.printLines("Running file " + filename);
-      BeneratorUtil.checkSystem(printer);
-    }
-    BeneratorRootContext context = BeneratorFactory.getInstance().createRootContext(IOUtil.getParentUri(filename));
-    DescriptorRunner runner = new DescriptorRunner(filename, context);
-    try {
-      runner.run();
     } finally {
       IOUtil.close(runner);
     }
-    BeneratorUtil.logConfig("Max. committed heap size: " + new KiloFormatter(1024).format(memProfiler.getMaxCommittedHeapSize()) + "B");
   }
 
 
