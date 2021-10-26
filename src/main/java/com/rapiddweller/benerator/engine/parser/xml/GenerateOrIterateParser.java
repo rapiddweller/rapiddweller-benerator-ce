@@ -67,8 +67,6 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.task.PageListener;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.w3c.dom.Element;
 
 import java.util.ArrayList;
@@ -128,8 +126,6 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStr
  * @since 0.6.0
  */
 public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
-
-  protected final Logger logger = LoggerFactory.getLogger(getClass());
 
   private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
       ATT_COUNT, ATT_MIN_COUNT, ATT_MAX_COUNT, ATT_COUNT_DISTRIBUTION,
@@ -253,6 +249,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     InstanceDescriptor descriptor = mapDescriptorElement(element, context);
 
     // parse statement
+    boolean iterate = ("iterate".equals(element.getNodeName()));
     Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 0L, 1L, false, context);
     Expression<Long> pageSize = parsePageSize(element);
     Expression<Integer> threads = parseIntAttribute("threads", element, 1);
@@ -267,7 +264,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_NAME));
     Expression<Long> minCount = DescriptorUtil.getMinCount(descriptor, 0L);
     BeneratorContext childContext = context.createSubContext(productName);
-    GenerateOrIterateStatement statement = createStatement(
+    GenerateOrIterateStatement statement = createStatement(iterate,
         countGenerator, minCount, threads, pageSize, pager, sensor, infoLog, nested, errorHandler, context, childContext);
 
     // TODO avoid double parsing of the InstanceDescriptor and remove the following...
@@ -285,10 +282,10 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return statement;
   }
 
-  protected GenerateOrIterateStatement createStatement(Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
+  protected GenerateOrIterateStatement createStatement(boolean iterate, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
                                                        Expression<Long> pageSize, Expression<PageListener> pager, String sensor, boolean infoLog, boolean nested,
                                                        Expression<ErrorHandler> errorHandler, BeneratorContext context, BeneratorContext childContext) {
-    return new GenerateOrIterateStatement(countGenerator, minCount, threads, pageSize, pager, sensor,
+    return new GenerateOrIterateStatement(iterate, countGenerator, minCount, threads, pageSize, pager, sensor,
         errorHandler, infoLog, nested, context, childContext);
   }
 
