@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -35,22 +35,13 @@ import java.io.IOException;
 /**
  * Proxy for a {@link Statement}.<br/><br/>
  * Created: 27.10.2009 16:06:04
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class StatementProxy implements Statement, Closeable {
 
-  /**
-   * The Real statement.
-   */
   protected Statement realStatement;
 
-  /**
-   * Instantiates a new Statement proxy.
-   *
-   * @param realStatement the real statement
-   */
   public StatementProxy(Statement realStatement) {
     this.realStatement = realStatement;
   }
@@ -60,14 +51,16 @@ public class StatementProxy implements Statement, Closeable {
     return realStatement.execute(context);
   }
 
-  /**
-   * Gets real statement.
-   *
-   * @param context the context
-   * @return the real statement
-   */
   public Statement getRealStatement(BeneratorContext context) {
     return realStatement;
+  }
+
+  public Statement getBaseStatement() {
+    Statement result = realStatement;
+    while (result instanceof StatementProxy) {
+      result = ((StatementProxy) result).realStatement;
+    }
+    return result;
   }
 
   @Override
