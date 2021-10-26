@@ -202,6 +202,7 @@ public class Benchmark {
     if (config.getMinSecs() == 0) { // unit test setup should run quickly
       count = 1;
     }
+    File envFile = prepareEnvFile(environment);
     String filename = prepareXml(fileName, environment, count, threading.threads);
     CounterRepository.getInstance().clear();
     BeneratorUtil.checkSystem(new LoggingInfoPrinter(getClass()));
@@ -216,7 +217,7 @@ public class Benchmark {
         }
       }
     }
-    deleteArtifacts(filename, generatedFiles);
+    deleteArtifacts(filename, envFile, generatedFiles);
     return evaluateSensors(fileName, count, threading.threads);
   }
 
@@ -410,6 +411,16 @@ public class Benchmark {
     return result;
   }
 
+  private File prepareEnvFile(String environment) throws IOException {
+    if ("h2".equals(environment) || "hsqlmem".equals(environment)) {
+      String envFileName = environment + ".env.properties";
+      IOUtil.copyFile("com/rapiddweller/benerator/benchmark/" + envFileName, envFileName);
+      return new File(envFileName);
+    } else {
+      return null;
+    }
+  }
+
   private String prepareXml(String fileName, String environment, long count, int threads) throws IOException {
     String xml = IOUtil.getContentOfURI("com/rapiddweller/benerator/benchmark/" + fileName);
     xml = applyEnvironment(environment, xml);
@@ -420,8 +431,11 @@ public class Benchmark {
     return filename;
   }
 
-  private static void deleteArtifacts(String benFile, File[] generatedFiles) {
+  private static void deleteArtifacts(String benFile, File envFile, File[] generatedFiles) {
     FileUtil.deleteIfExists(new File(benFile));
+    if (envFile != null) {
+      FileUtil.deleteIfExists(envFile);
+    }
     for (File generatedFile : generatedFiles) {
       FileUtil.deleteIfExists(generatedFile);
     }
@@ -441,8 +455,10 @@ public class Benchmark {
         Assert.equals(1, (int) value.sampleCount());
         long latency = (value.totalLatency() > 0 ? value.totalLatency() : 1);
         long eps = count * 1000 / latency;
-        logger.info("{}: {} entities / {} ms, throughput {} E/s - {} ME/h, {} thread{}",
-            key, count, value.totalLatency(), eps, format(eps * 3600. / 1000000.), threads, (threads > 1 ? "s" : ""));
+        if (logger.isInfoEnabled()) {
+          logger.info("{}: {} entities / {} ms, throughput {} E/s - {} ME/h, {} thread{}", key, count,
+              value.totalLatency(), eps, format(eps * 3600. / 1000000.), threads, (threads > 1 ? "s" : ""));
+        }
         String sensor = "[" + (key.substring("benchmark.".length())) + "]";
         result.add(new SensorResult(fileName, sensor, count, threads, (int) value.totalLatency()));
       }
