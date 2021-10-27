@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup xmlns="https://www.benerator.de/schema/2.1.0" defaultDataset="US">
+    <import domains="address"/>
+
+    <iterate source="persons.csv" type="data" consumer="ConsoleExporter">
+        <variable name="addr" generator="AddressGenerator"/>
+        <attribute name="familyName" converter="new CutLength(3)"/>
+        <attribute name="givenName" converter="Mask"/>
+        <attribute name="alias" converter="new Append('_demo')"/>
+        <attribute name="street" script="addr.street"/>
+        <attribute name="houseNumber" script="addr.houseNumber"/>
+        <attribute name="postalCode" script="addr.postalCode"/>
+        <attribute name="city" script="addr.city"/>
+        <attribute name="country" constant="US"/>
+        <attribute name="accountNo" converter="SHA256Hash"/>
+        <attribute name="ssn" converter="new MiddleMask(2,3)"/>
+        <attribute name="creditCardNo" converter="SHA1HashBase64"/>
+        <attribute name="secret1" converter="MD5Hash"/>
+        <attribute name="secret2" converter="MD5HashBase64"/>
+        <attribute name="secret3" converter="SHA1Hash"/>
+        <attribute name="secret4" converter="SHA1HashBase64"/>
+        <attribute name="secret5" converter="JavaHash"/>
+    </iterate>
+
+</setup>
