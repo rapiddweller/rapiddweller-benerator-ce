@@ -155,7 +155,7 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${database_h2.version}</version>
-            <scope>runtime</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.ibm.icu</groupId>
@@ -197,7 +197,7 @@
             <groupId>hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>${database_hsqldb.version}</version>
-            <scope>runtime</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- rapiddweller dependencies -->
