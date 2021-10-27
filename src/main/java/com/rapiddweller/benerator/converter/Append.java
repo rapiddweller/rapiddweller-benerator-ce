@@ -6,25 +6,24 @@ import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.converter.AbstractConverter;
 import com.rapiddweller.common.converter.ToStringConverter;
 
-import java.util.Arrays;
-
 /**
- * Overwrites each character of the source value with a mask character.<br/><br/>
- * Created: 12.10.2021 12:10:42
+ * {@link com.rapiddweller.common.Converter} implementation which creates a String representation
+ * of the object and appends a suffix.<br/><br/>
+ * Created: 27.10.2021 11:42:49
  * @author Volker Bergmann
  * @since 2.1.0
  */
-public class Mask extends AbstractConverter<Object, String> {
+public class Append extends AbstractConverter<Object, String> {
 
-  private char maskChar;
+  private String suffix;
 
-  public Mask() {
-    this('*');
+  public Append() {
+    this("_");
   }
 
-  public Mask(char maskChar) {
+  public Append(String suffix) {
     super(Object.class, String.class);
-    this.maskChar = maskChar;
+    this.suffix = suffix;
   }
 
   @Override
@@ -33,10 +32,7 @@ public class Mask extends AbstractConverter<Object, String> {
       return null;
     }
     String string = ToStringConverter.convert(sourceValue, null);
-    int length = string.length();
-    char[] chars = new char[string.length()];
-    Arrays.fill(chars, 0, length, maskChar);
-    return new String(chars);
+    return string + suffix;
   }
 
   @Override

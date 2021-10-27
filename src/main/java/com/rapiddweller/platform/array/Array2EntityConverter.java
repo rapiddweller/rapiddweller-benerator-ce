@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -43,31 +43,20 @@ import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.EntityGraphMutator;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
+import com.rapiddweller.script.PrimitiveType;
 
 /**
- * Converts an array of feature values to an entity.<br/>
- * <br/>
+ * Converts an array of feature values to an entity.<br/><br/>
  * Created: 26.08.2007 12:27:45
- *
  * @author Volker Bergmann
  */
 public class Array2EntityConverter extends ThreadSafeConverter<Object[], Entity> {
 
-  /**
-   * The Escalator.
-   */
   protected Escalator escalator = new LoggerEscalator();
   private final ComplexTypeDescriptor descriptor;
   private final String[] featureNames;
   private final Mutator[] entityMutators;
 
-  /**
-   * Instantiates a new Array 2 entity converter.
-   *
-   * @param descriptor   the descriptor
-   * @param featureNames the feature names
-   * @param stringSource the string source
-   */
   public Array2EntityConverter(ComplexTypeDescriptor descriptor, String[] featureNames, boolean stringSource) {
     super(Object[].class, Entity.class);
     this.descriptor = descriptor;
@@ -78,7 +67,6 @@ public class Array2EntityConverter extends ThreadSafeConverter<Object[], Entity>
     }
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
   private static Converter<?, ?> createConverter(String featureName, ComplexTypeDescriptor complexType, boolean stringSource) {
     if (complexType != null) {
       ComponentDescriptor component = complexType.getComponent(featureName);
@@ -87,16 +75,25 @@ public class Array2EntityConverter extends ThreadSafeConverter<Object[], Entity>
       if (component != null && component.getTypeDescriptor() != null) {
         TypeDescriptor componentType = component.getTypeDescriptor();
         if (componentType instanceof SimpleTypeDescriptor) {
-          Class<?> javaType = ((SimpleTypeDescriptor) componentType).getPrimitiveType().getJavaType();
-          if (stringSource) {
-            return ConverterManager.getInstance().createConverter(String.class, javaType);
-          } else {
-            return new AnyConverter(javaType);
-          }
+          PrimitiveType primitiveType = ((SimpleTypeDescriptor) componentType).getPrimitiveType();
+          return getConverterTo(primitiveType, stringSource);
         }
       }
     }
-    return new NoOpConverter();
+    return new NoOpConverter<>();
+  }
+
+  private static Converter<?,?> getConverterTo(PrimitiveType primitiveType, boolean stringSource) {
+    Class<?> javaType = (primitiveType != null ? primitiveType.getJavaType() : null);
+    if (javaType != null) {
+      if (stringSource) {
+        return ConverterManager.getInstance().createConverter(String.class, javaType);
+      } else {
+        return new AnyConverter<>(javaType);
+      }
+    } else { // primitive type is undefined
+      return new NoOpConverter<>();
+    }
   }
 
   private static ComplexTypeDescriptor getComplexType(String featureName, ComplexTypeDescriptor parentType) {
@@ -116,14 +113,6 @@ public class Array2EntityConverter extends ThreadSafeConverter<Object[], Entity>
     return complexType;
   }
 
-  /**
-   * Create feature mutator converting mutator.
-   *
-   * @param featureName  the feature name
-   * @param descriptor   the descriptor
-   * @param stringSource the string source
-   * @return the converting mutator
-   */
   @SuppressWarnings("rawtypes")
   protected ConvertingMutator createFeatureMutator(
       String featureName, ComplexTypeDescriptor descriptor, boolean stringSource) {

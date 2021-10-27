@@ -55,6 +55,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
 
   // constant attributes -----------------------------------------------------------------------------------------------
 
+  protected final boolean iterate;
   protected final Generator<Long> countGenerator;
   protected final Expression<Long> minCount;
   protected final Expression<Integer> threads;
@@ -75,12 +76,13 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
   // constructor -------------------------------------------------------------------------------------------------------
 
   public GenerateOrIterateStatement(
-      Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
+      boolean iterate, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
       Expression<Long> pageSize, Expression<PageListener> pageListenerEx,
       String sensor,
       Expression<ErrorHandler> errorHandler, boolean infoLog, boolean isSubCreator,
       BeneratorContext context, BeneratorContext childContext) {
     super(errorHandler);
+    this.iterate = iterate;
     this.countGenerator = countGenerator;
     this.minCount = minCount;
     this.threads = threads;
@@ -97,6 +99,11 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
 
 
   // properties --------------------------------------------------------------------------------------------------------
+
+
+  public boolean isIterate() {
+    return iterate;
+  }
 
   public void setTask(GenerateAndConsumeTask task) {
     this.task = task;

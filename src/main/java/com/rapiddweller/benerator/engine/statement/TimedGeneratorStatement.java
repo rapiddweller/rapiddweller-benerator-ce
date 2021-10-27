@@ -63,22 +63,29 @@ public class TimedGeneratorStatement extends StatementProxy {
   }
 
   @Override
+  public GenerateOrIterateStatement getBaseStatement() {
+    return (GenerateOrIterateStatement) super.getBaseStatement();
+  }
+
+  @Override
   public boolean execute(BeneratorContext context) {
+    // TODO merge this with sensor mechanism?
     long c0 = BeneratorMonitor.INSTANCE.getTotalGenerationCount();
     long t0 = System.currentTimeMillis();
     boolean result = super.execute(context);
     long dc = BeneratorMonitor.INSTANCE.getTotalGenerationCount() - c0;
     long dt = System.currentTimeMillis() - t0;
     if (logging) {
+      String op = (getBaseStatement().isIterate() ? "iterated" : "generated");
       if (dc == 0) {
-        logger.info("No data created for '{}' setup", name);
+        logger.info("No data {} for '{}' setup", op, name);
       } else if (dt > 0) {
         if (logger.isInfoEnabled()) {
-          logger.info("Created {} data sets from '{}' setup in {} ({}/s)",
-              dc, name, elapsedTimeFormatter.convert(dt), dc * 1000 / dt);
+          logger.info("{} {} data sets from '{}' setup in {} ({}/s)",
+              op, dc, name, elapsedTimeFormatter.convert(dt), dc * 1000 / dt);
         }
       } else {
-        logger.info("Created {} '{}' data set(s)", dc, name);
+        logger.info("{} {} '{}' data set(s)", op, dc, name);
       }
     }
     if (Profiling.isEnabled()) {

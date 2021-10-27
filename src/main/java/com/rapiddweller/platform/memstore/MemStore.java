@@ -90,8 +90,7 @@ public class MemStore extends AbstractStorageSystem {
 
   @Override
   public DataSource<Entity> queryEntities(String entityType, String selector, Context context) {
-    Map<?, Entity> idMap = getOrCreateIdMapForType(entityType);
-    DataSource<Entity> result = new DataSourceProxy<>(new DataSourceFromIterable<>(idMap.values(), Entity.class));
+    DataSource<Entity> result = new DataSourceFromIterable<>(entitiesByType.get(entityType), Entity.class);
     if (!StringUtil.isEmpty(selector)) {
       Expression<Boolean> filterEx = new ScriptExpression<>(ScriptUtil.parseScriptText(selector));
       result = new FilterExDataSource<>(result, filterEx, context);
@@ -150,6 +149,7 @@ public class MemStore extends AbstractStorageSystem {
 
   @Override
   public void flush() {
+    // nothing to do for here for a MemStore
   }
 
   @Override
