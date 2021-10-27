@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup xmlns="https://www.benerator.de/schema/2.1.0">
+
+    <memstore id="src"/>
+
+    <generate type="data" count="10" consumer="src">
+        <attribute name="append" constant="append"/>
+        <attribute name="mask" constant="mask"/>
+        <attribute name="cutLength" constant="cutLength"/>
+        <attribute name="javaHash" constant="javaHash"/>
+        <attribute name="md5hex" constant="md5hex"/>
+        <attribute name="md5base64" constant="md5base64"/>
+        <attribute name="sha1hex" constant="sha1hex"/>
+        <attribute name="sha1base64" constant="sha1base64"/>
+        <attribute name="sha256hex" constant="sha256hex"/>
+        <attribute name="sha256base64" constant="sha256base64"/>
+        <attribute name="middleMask" constant="middleMask"/>
+    </generate>
+
+    <memstore id="dst"/>
+
+    <iterate source="src" type="data" consumer="dst,ConsoleExporter">
+        <attribute name="append" converter="new Append('_suffix')"/>
+        <attribute name="cutLength" converter="new CutLength(3)"/>
+        <attribute name="mask" converter="Mask"/>
+        <attribute name="javaHash" converter="JavaHash"/>
+        <attribute name="md5hex" converter="MD5Hash"/>
+        <attribute name="md5base64" converter="MD5HashBase64"/>
+        <attribute name="sha1hex" converter="SHA1Hash"/>
+        <attribute name="sha1base64" converter="SHA1HashBase64"/>
+        <attribute name="sha256hex" converter="SHA256Hash"/>
+        <attribute name="sha256base64" converter="SHA1HashBase64"/>
+        <attribute name="middleMask" converter="new MiddleMask(2,3)"/>
+    </iterate>
+</setup>
