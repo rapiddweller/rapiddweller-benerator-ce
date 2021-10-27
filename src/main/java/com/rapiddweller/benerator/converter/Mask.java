@@ -4,6 +4,7 @@ package com.rapiddweller.benerator.converter;
 
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.converter.AbstractConverter;
+import com.rapiddweller.common.converter.ToStringConverter;
 
 import java.util.Arrays;
 
@@ -13,7 +14,7 @@ import java.util.Arrays;
  * @author Volker Bergmann
  * @since 2.1.0
  */
-public class Mask extends AbstractConverter<String, String> {
+public class Mask extends AbstractConverter<Object, String> {
 
   private char maskChar;
 
@@ -22,17 +23,18 @@ public class Mask extends AbstractConverter<String, String> {
   }
 
   public Mask(char maskChar) {
-    super(String.class, String.class);
+    super(Object.class, String.class);
     this.maskChar = maskChar;
   }
 
   @Override
-  public String convert(String sourceValue) throws ConversionException {
-    if (sourceValue == null || sourceValue.isEmpty()) {
-      return sourceValue;
+  public String convert(Object sourceValue) throws ConversionException {
+    if (sourceValue == null) {
+      return null;
     }
-    int length = sourceValue.length();
-    char[] chars = new char[sourceValue.length()];
+    String string = ToStringConverter.convert(sourceValue, null);
+    int length = string.length();
+    char[] chars = new char[string.length()];
     Arrays.fill(chars, 0, length, maskChar);
     return new String(chars);
   }

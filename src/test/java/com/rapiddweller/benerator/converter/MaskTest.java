@@ -43,4 +43,13 @@ public class MaskTest {
     assertNull(m.convert(null));
   }
 
+  @Test
+  public void test_non_string_source() {
+    Mask m = new Mask();
+    assertEquals("***", m.convert(123));
+    assertEquals("**", m.convert(-1));
+    assertEquals("****", m.convert(true));
+    assertEquals("*", m.convert('A'));
+  }
+
 }
