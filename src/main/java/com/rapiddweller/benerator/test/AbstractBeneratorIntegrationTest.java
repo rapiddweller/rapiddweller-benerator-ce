@@ -64,6 +64,8 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
 
   protected BeneratorContext parseAndExecuteFile(String filename) throws IOException {
     String xml = IOUtil.getContentOfURI(filename);
+    String contextUri = IOUtil.getParentUri(filename);
+    context.setContextUri(contextUri);
     return parseAndExecute(xml);
   }
 
