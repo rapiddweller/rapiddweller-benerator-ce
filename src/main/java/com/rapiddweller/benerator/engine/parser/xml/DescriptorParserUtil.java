@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.engine.expression.ScriptableExpression;
 import com.rapiddweller.benerator.engine.expression.TypedScriptExpression;
+import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.text.SplitStringConverter;
@@ -60,6 +61,25 @@ public class DescriptorParserUtil {
 
   public static String getElementText(Element element) {
     return XMLUtil.getText(element);
+  }
+
+  // mapping attributes to bean properties ---------------------------------------------------------------------------
+
+  public static <T> T mapXmlAttrsToBeanProperties(Element element, T bean) {
+    for (String attrName : XMLUtil.getAttributes(element).keySet()) {
+      Expression<String> expression = parseScriptableStringAttribute(attrName, element);
+      String propertyName = normalizeAttributeName(attrName);
+      BeanUtil.setPropertyValue(bean, propertyName, expression, true);
+    }
+    return bean;
+  }
+
+  public static String normalizeAttributeName(String attrName) {
+    String[] tokens = attrName.split("\\.");
+    StringBuilder builder = new StringBuilder(tokens[0]);
+    for (int i = 1; i < tokens.length; i++)
+      builder.append(StringUtil.capitalize(tokens[i]));
+    return builder.toString();
   }
 
   // creating expressions for data retrieval -------------------------------------------------------------------------

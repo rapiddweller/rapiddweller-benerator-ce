@@ -37,15 +37,18 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the {@link DescriptorParserUtil}.<br/><br/>
  * Created: 11.04.2011 13:10:30
- *
  * @author Volker Bergmann
  * @since 0.6.6
  */
 public class DescriptorParserUtilTest {
 
-  /**
-   * Test parse scriptable element text.
-   */
+  @Test
+  public void testNormalizeAttributeName() {
+    assertEquals("id", DescriptorParserUtil.normalizeAttributeName("id"));
+    assertEquals("pageSize", DescriptorParserUtil.normalizeAttributeName("page.size"));
+    assertEquals("enableAutoCommit", DescriptorParserUtil.normalizeAttributeName("enable.auto.commit"));
+  }
+
   @Test
   public void testParseScriptableElementText() {
     Element element = XMLUtil.parseStringAsElement("<text>'\\'Test\\''</text>");
