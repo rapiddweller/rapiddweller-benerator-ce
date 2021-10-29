@@ -32,6 +32,7 @@ import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManagerSupport;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
+import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.After;
@@ -63,8 +64,12 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
   }
 
   protected BeneratorContext parseAndExecuteFile(String filename) throws IOException {
+    Assert.notNull(filename, "file name");
     String xml = IOUtil.getContentOfURI(filename);
     String contextUri = IOUtil.getParentUri(filename);
+    if (contextUri.length() > 1 && contextUri.endsWith("/")) {
+      contextUri = contextUri.substring(0, contextUri.length() - 1);
+    }
     context.setContextUri(contextUri);
     return parseAndExecute(xml);
   }
