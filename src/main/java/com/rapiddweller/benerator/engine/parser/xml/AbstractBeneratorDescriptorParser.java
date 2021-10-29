@@ -57,8 +57,6 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public abstract class AbstractBeneratorDescriptorParser extends AbstractXMLElementParser<Statement> {
 
-  protected Logger logger = LoggerFactory.getLogger(AbstractBeneratorDescriptorParser.class);
-
   protected AbstractBeneratorDescriptorParser(String elementName,
                                            Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
     super(elementName, requiredAttributes, optionalAttributes, supportedParentTypes);
@@ -107,23 +105,6 @@ public abstract class AbstractBeneratorDescriptorParser extends AbstractXMLEleme
 
   protected static Expression<Long> parsePageSize(Element element) {
     return DescriptorParserUtil.parseLongAttribute(ATT_PAGESIZE, element, new DefaultPageSizeExpression());
-  }
-
-  protected static <T> T mapXmlAttrsToBeanProperties(Element element, T bean) {
-    for (String attrName : XMLUtil.getAttributes(element).keySet()) {
-      Expression<String> expression = parseScriptableStringAttribute(attrName, element);
-      String propertyName = normalizeAttributeName(attrName);
-      BeanUtil.setPropertyValue(bean, propertyName, expression, true);
-    }
-    return bean;
-  }
-
-  protected static String normalizeAttributeName(String attrName) {
-    String[] tokens = attrName.split("\\.");
-    StringBuilder builder = new StringBuilder(tokens[0]);
-    for (int i = 1; i < tokens.length; i++)
-      builder.append(StringUtil.capitalize(tokens[i]));
-    return builder.toString();
   }
 
 }
