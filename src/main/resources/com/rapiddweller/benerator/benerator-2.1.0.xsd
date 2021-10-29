@@ -367,28 +367,11 @@
             <xs:documentation xml:lang="en">Imports data from a Kafka queue.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
+            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="environment" type="xs:string" />
             <xs:attributeGroup ref="kafka-common-attrs"/>
+            <xs:attributeGroup ref="kafka-importer-attrs"/>
             <xs:attribute name="page.size" type="xs:int"/>
-            <xs:attribute name="key.deserializer" type="xs:string"/>
-            <xs:attribute name="group.id" type="xs:string"/>
-            <xs:attribute name="auto.offset.reset" type="kafka-auto-offset-reset-type"/>
-            <xs:attribute name="enable.auto.commit" type="xs:boolean"/>
-            <xs:attribute name="auto.commit.interval.ms" type="xs:nonNegativeInteger"/>
-            <xs:attribute name="allow.auto.create.topics" type="xs:boolean"/>
-            <xs:attribute name="check.crcs" type="xs:boolean"/>
-            <xs:attribute name="client.rack" type="xs:string"/>
-            <xs:attribute name="default.api.timeout.ms" type="xs:nonNegativeInteger"/>
-            <xs:attribute name="exclude.internal.topics" type="xs:boolean"/>
-            <xs:attribute name="fetch.max.bytes" type="xs:nonNegativeInteger"/>
-            <xs:attribute name="fetch.max.wait.ms" type="xs:nonNegativeInteger"/>
-            <xs:attribute name="fetch.min.bytes" type="xs:int"/>
-            <xs:attribute name="group.instance.id" type="xs:string"/>
-            <xs:attribute name="heartbeat.interval.ms" type="xs:int"/>
-            <xs:attribute name="isolation.level" type="kafka-isolation-level-type"/>
-            <xs:attribute name="max.partition.fetch.bytes" type="xs:nonNegativeInteger"/>
-            <xs:attribute name="max.poll.interval.ms" type="xs:positiveInteger"/>
-            <xs:attribute name="max.poll.records" type="xs:positiveInteger"/>
-            <xs:attribute name="partition.assignment.strategy" type="xs:string"/>
         </xs:complexType>
     </xs:element>
 
@@ -402,32 +385,17 @@
             <xs:documentation xml:lang="en">Exports data to a Kafka queue</xs:documentation>
         </xs:annotation>
         <xs:complexType>
+            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="environment" type="xs:string" />
             <xs:attributeGroup ref="kafka-common-attrs"/>
-            <xs:attribute name="key.attribute" type="xs:string"/>
-            <xs:attribute name="key.serializer" type="xs:string"/>
-            <xs:attribute name="acks" type="kafka-acks-type"/>
-            <xs:attribute name="buffer.memory" type="xs:int"/>
-            <xs:attribute name="compression.type" type="kafka-compression-type"/>
-            <xs:attribute name="retries" type="xs:nonNegativeInteger"/>
-            <xs:attribute name="batch.size" type="xs:nonNegativeInteger"/>
-            <xs:attribute name="delivery.timeout.ms" type="xs:nonNegativeInteger"/>
-            <xs:attribute name="enable.idempotence" type="xs:boolean"/>
-            <xs:attribute name="linger.ms" type="nonNegativeLong"/>
-            <xs:attribute name="max.block.ms" type="nonNegativeLong"/>
-            <xs:attribute name="max.in.flight.requests.per.connection" type="xs:positiveInteger"/>
-            <xs:attribute name="max.request.size" type="xs:nonNegativeInteger"/>
-            <xs:attribute name="metadata.max.idle.ms" type="nonNegativeLong"/>
-            <xs:attribute name="partitioner.class" type="xs:string"/>
-            <xs:attribute name="transaction.timeout.ms" type="xs:int"/>
-            <xs:attribute name="transactional.id" type="xs:string"/>
+            <xs:attributeGroup ref="kafka-exporter-attrs"/>
         </xs:complexType>
     </xs:element>
 
     <xs:attributeGroup name="kafka-common-attrs">
-        <xs:attribute name="id" type="xs:string"/>
-        <xs:attribute name="bootstrap.servers" type="xs:string" use="required"/>
-        <xs:attribute name="topic" type="xs:string" use="required"/>
-        <xs:attribute name="format" type="kafka-format" use="required"/>
+        <xs:attribute name="bootstrap.servers" type="xs:string"/>
+        <xs:attribute name="topic" type="xs:string"/>
+        <xs:attribute name="format" type="kafka-format"/>
         <xs:attribute name="encoding" type="xs:string"/>
         <xs:attribute name="client.dns.lookup" type="kafka-client-dns-lookup-type"/>
         <xs:attribute name="client.id" type="xs:string"/>
@@ -481,6 +449,49 @@
         <xs:attribute name="ssl.keystore.password" type="xs:string"/>
         <xs:attribute name="ssl.keystore.certificate.chain" type="xs:string"/>
         <xs:attribute name="ssl.trustmanager.algorithm" type="xs:string"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="kafka-importer-attrs">
+        <xs:attribute name="key.deserializer" type="xs:string"/>
+        <xs:attribute name="group.id" type="xs:string"/>
+        <xs:attribute name="auto.offset.reset" type="kafka-auto-offset-reset-type"/>
+        <xs:attribute name="enable.auto.commit" type="xs:boolean"/>
+        <xs:attribute name="auto.commit.interval.ms" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="allow.auto.create.topics" type="xs:boolean"/>
+        <xs:attribute name="check.crcs" type="xs:boolean"/>
+        <xs:attribute name="client.rack" type="xs:string"/>
+        <xs:attribute name="default.api.timeout.ms" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="exclude.internal.topics" type="xs:boolean"/>
+        <xs:attribute name="fetch.max.bytes" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="fetch.max.wait.ms" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="fetch.min.bytes" type="xs:int"/>
+        <xs:attribute name="group.instance.id" type="xs:string"/>
+        <xs:attribute name="heartbeat.interval.ms" type="xs:int"/>
+        <xs:attribute name="isolation.level" type="kafka-isolation-level-type"/>
+        <xs:attribute name="max.partition.fetch.bytes" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="max.poll.interval.ms" type="xs:positiveInteger"/>
+        <xs:attribute name="max.poll.records" type="xs:positiveInteger"/>
+        <xs:attribute name="partition.assignment.strategy" type="xs:string"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="kafka-exporter-attrs">
+        <xs:attribute name="key.attribute" type="xs:string"/>
+        <xs:attribute name="key.serializer" type="xs:string"/>
+        <xs:attribute name="acks" type="kafka-acks-type"/>
+        <xs:attribute name="buffer.memory" type="xs:int"/>
+        <xs:attribute name="compression.type" type="kafka-compression-type"/>
+        <xs:attribute name="retries" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="batch.size" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="delivery.timeout.ms" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="enable.idempotence" type="xs:boolean"/>
+        <xs:attribute name="linger.ms" type="nonNegativeLong"/>
+        <xs:attribute name="max.block.ms" type="nonNegativeLong"/>
+        <xs:attribute name="max.in.flight.requests.per.connection" type="xs:positiveInteger"/>
+        <xs:attribute name="max.request.size" type="xs:nonNegativeInteger"/>
+        <xs:attribute name="metadata.max.idle.ms" type="nonNegativeLong"/>
+        <xs:attribute name="partitioner.class" type="xs:string"/>
+        <xs:attribute name="transaction.timeout.ms" type="xs:int"/>
+        <xs:attribute name="transactional.id" type="xs:string"/>
     </xs:attributeGroup>
 
     <xs:simpleType name="kafka-format">
