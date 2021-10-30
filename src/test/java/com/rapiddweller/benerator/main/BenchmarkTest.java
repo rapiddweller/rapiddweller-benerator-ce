@@ -26,7 +26,7 @@ public class BenchmarkTest extends ModelTest {
   public void testEmpty() {
     BenchmarkConfig config = Benchmark.parseCommandLineConfig();
     assertEquals(BeneratorMode.STRICT, config.getMode());
-    assertEqualArrays(new String[0], config.getEnvironments());
+    assertEqualArrays(new String[0], config.getDbs());
   }
 
   @Test
@@ -38,7 +38,7 @@ public class BenchmarkTest extends ModelTest {
     assertEquals(BeneratorMode.TURBO, config.getMode());
     assertEquals(123, config.getMinSecs());
     assertEquals(17, config.getMaxThreads());
-    assertEqualArrays(new String[] { "h2", "hsqlmem" }, config.getEnvironments());
+    assertEqualArrays(new String[] { "h2", "hsqlmem" }, config.getDbs());
   }
 
   @Test
@@ -50,7 +50,7 @@ public class BenchmarkTest extends ModelTest {
     assertEquals(BeneratorMode.TURBO, config.getMode());
     assertEquals(123, config.getMinSecs());
     assertEquals(17, config.getMaxThreads());
-    assertEqualArrays(new String[] { "h2", "hsqlmem" }, config.getEnvironments());
+    assertEqualArrays(new String[] { "h2", "hsqlmem" }, config.getDbs());
     assertEquals("db-bigtable", config.getName());
   }
 
@@ -70,7 +70,7 @@ public class BenchmarkTest extends ModelTest {
 
   @Test
   public void testSetupCount() {
-    assertEquals(15, Benchmark.SETUPS.length);
+    assertEquals(17, Benchmark.SETUPS.length);
   }
 
   @Test
@@ -91,10 +91,10 @@ public class BenchmarkTest extends ModelTest {
 
   @Test
   public void testDatabaseSetups() throws IOException {
-    runSetup("db-smalltable", "h2");
-    runSetup("db-smalltable", "hsqlmem");
-    runSetup("db-bigtable", "h2");
-    runSetup("db-bigtable", "hsqlmem");
+    runSetup("db-smalltable", Benchmark.Environment.ofDb("h2"));
+    runSetup("db-smalltable", Benchmark.Environment.ofDb("hsqlmem"));
+    runSetup("db-bigtable", Benchmark.Environment.ofDb("h2"));
+    runSetup("db-bigtable", Benchmark.Environment.ofDb("hsqlmem"));
   }
 
   @Test
@@ -110,13 +110,16 @@ public class BenchmarkTest extends ModelTest {
     runSetup(setupName, null);
   }
 
-  private void runSetup(String setupName, String environment) throws IOException {
+  private void runSetup(String setupName, Benchmark.Environment environment) throws IOException {
     Benchmark.Setup setup = Benchmark.getSetup(setupName);
     assertNotNull(setup);
     BenchmarkConfig config = new BenchmarkConfig();
     config.setMinSecs(0);
-    Benchmark.Threading[] threadings = {new Benchmark.Threading(false, 1)};
+    Benchmark.Threading[] threadings = {
+        new Benchmark.Threading(false, 1)
+    };
     new Benchmark(config).runSetup(setup, environment, threadings);
   }
 
 }
+

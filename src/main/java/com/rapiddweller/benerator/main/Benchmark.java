@@ -75,13 +75,15 @@ public class Benchmark {
       new Setup("anon-person-hash", false, V200, 1500000, "Anonymization with hashes of the original values"),
       new Setup("anon-person-random", false, V200, 1500000, "Anonymization with random data"),
       new Setup("anon-person-constant", false, V200, 8000000, "Anonymization with constant data"),
-      new Setup("db-smalltable", false, V200, 15000, "Reading/writing small database tables (10 columns)"),
-      new Setup("db-bigtable", false, V200, 5000, "Reading/writing big database tables (323 columns)"),
       new Setup("file-csv", false, V210, 1000000, "Reading/writing CSV files"),
       new Setup("file-dbunit", false, V210, 1000000, "Reading/writing DbUnit files"),
       new Setup("file-json", true, V210, 15000, "Reading/writing JSON files"),
       new Setup("file-fixedwidth", false, V210, 500000, "Reading/writing fixed-width-files"),
-      new Setup("file-out-xml", false, V210, 500000, "Writing XML files")
+      new Setup("file-out-xml", false, V210, 500000, "Writing XML files"),
+      new Setup("db-smalltable", false, V200, 15000, "Reading/writing small database tables (10 columns)"),
+      new Setup("db-bigtable", false, V200, 5000, "Reading/writing big database tables (323 columns)"),
+      new Setup("kafka-small-entity", true, V200, 5000, "Sending/receiving small entities to/from Kafka"),
+      new Setup("kafka-big-entity", true, V200, 5000, "Sending/receiving big entities to/from Kafka (652 attributes)")
   };
 
   public static final DecimalFormat FORMAT_1 = new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.US));
@@ -117,11 +119,10 @@ public class Benchmark {
   // run methods -----------------------------------------------------------------------------------------------------
 
   public void run() throws IOException {
-    String[] title = createAndPrintTitle();
     Threading[] threadings = chooseThreadCounts();
     // perform tests
     for (Setup setup : config.getSetups()) {
-      String[] environments = config.getEnvironments();
+      Environment[] environments = config.getEnvironments();
       if (environments.length > 0) {
         runOnEnvironments(setup, environments, threadings);
       } else {
@@ -133,22 +134,30 @@ public class Benchmark {
       }
     }
     // Pretty-print results in a text table
+    String[] title = createAndPrintTitle();
     printResults(title, threadings);
   }
 
-  private void runOnEnvironments(
-      Setup setup, String[] environments, Threading[] threadings)
+  private void runOnEnvironments(Setup setup, Environment[] environments, Threading[] threadings)
       throws IOException {
-    if (setup.isDbSetup()) {
-      for (String environment : environments) {
+  if (setup.isDbSetup()) {
+    for (Environment environment : environments) {
+      if (environment.isDb()) {
         runSetup(setup, environment, threadings);
       }
-    } else {
-      logger.info("Skipping plain test since running in DB test mode");
+    }
+  } else if (setup.isKafkaSetup()) {
+    for (Environment environment : environments) {
+      if (environment.isKafka()) {
+        runSetup(setup, environment, threadings);
+      }
+    }
+  } else {
+      logger.info("Skipping plain test since running in environment test mode");
     }
   }
 
-  void runSetup(Setup setup, String environment, Threading[] threadings) throws IOException {
+  public void runSetup(Setup setup, Environment environment, Threading[] threadings) throws IOException {
     logger.info("------------------------------------------------------------" +
         "------------------------------------------------------------");
     logger.info("Running {}", setup.fileName);
@@ -172,7 +181,7 @@ public class Benchmark {
   }
 
   private List<SensorResult> runUntilMinDuration(
-      String fileName, String environment, long minDurationSecs, long countBase, Threading threading) throws IOException {
+      String fileName, Environment environment, long minDurationSecs, long countBase, Threading threading) throws IOException {
     long count = countBase;
     long minDurationMillis = minDurationSecs * 1000;
     do {
@@ -191,7 +200,7 @@ public class Benchmark {
     } while (true);
   }
 
-  private List<SensorResult> runFile(String fileName, String environment,
+  private List<SensorResult> runFile(String fileName, Environment environment,
       long count, Threading threading, AtomicLong maxFileSize) throws IOException {
     if (threading.ee) {
       BeneratorFactory.setInstance((BeneratorFactory) BeanUtil.newInstance(EE_BENERATOR_FACTORY));
@@ -235,6 +244,7 @@ public class Benchmark {
         "--ee              run on Benerator Enterprise Edition (default on EE,",
         "                  only available on Enterprise Edition)",
         "--env x[,y]       runs only database tests on the environments listed",
+        "--kafka x[,y]     runs only Kafka tests on the environments listed",
         "--minSecs n       Choose generation count to have a test execution time",
         "                  of at least n seconds (default: 10)",
         "--maxThreads k    Use only up to k cores for testing",
@@ -256,17 +266,16 @@ public class Benchmark {
 
   private Object[][] createTable(Threading[] threadings) {
     // create table
-    ArrayBuilder<Object[]> table1 = new ArrayBuilder<>(Object[].class);
+    ArrayBuilder<Object[]> table = new ArrayBuilder<>(Object[].class);
     // format table header
     Object[] header = createColumnHeaders(threadings);
-    table1.add(header);
-    ArrayBuilder<Object[]> table = table1;
+    table.add(header);
     for (Setup setup : SETUPS) {
       for (SetupApplication application : setup.applications) {
         Collection<String> sensors = application.getSensors();
         for (String sensor : sensors) {
           Object[] row = newRow(threadings.length + 1, table);
-          row[0] = rowHeader(setup, application.environment, sensor, sensors.size());
+          row[0] = rowHeader(setup, application.environment.name, sensor, sensors.size());
           List<SensorResult> results = application.sensorMeasurements.get(sensor);
           for (int i = 0; i < results.size(); i++) {
             SensorResult result = results.get(i);
@@ -315,14 +324,14 @@ public class Benchmark {
         BeneratorUtil.getJVMInfo(),
         "Date/Time: " + ZonedDateTime.now(),
     });
-    String[] environments = config.getEnvironments();
-    if (!ArrayUtil.isEmpty(environments)) {
-      if (environments.length == 1) {
-        builder.add("Database: " + EnvironmentUtil.getProductDescription(environments[0]));
+    String[] dbs = config.getDbs();
+    if (!ArrayUtil.isEmpty(dbs)) {
+      if (dbs.length == 1) {
+        builder.add("Database: " + EnvironmentUtil.getProductDescription(dbs[0]));
       } else {
         builder.add("Databases:");
-        for (String environment : environments) {
-          builder.add("- " + EnvironmentUtil.getProductDescription(environment));
+        for (String db : dbs) {
+          builder.add("- " + EnvironmentUtil.getProductDescription(db));
         }
       }
     }
@@ -411,17 +420,18 @@ public class Benchmark {
     return result;
   }
 
-  private File prepareEnvFile(String environment) throws IOException {
-    if ("h2".equals(environment) || "hsqlmem".equals(environment)) {
-      String envFileName = environment + ".env.properties";
-      IOUtil.copyFile("com/rapiddweller/benerator/benchmark/" + envFileName, envFileName);
-      return new File(envFileName);
-    } else {
-      return null;
+  private File prepareEnvFile(Environment environment) throws IOException {
+    if (environment != null && environment.isDb()) {
+      if ("h2".equals(environment.name) || "hsqlmem".equals(environment.name)) {
+        String envFileName = environment.name + ".env.properties";
+        IOUtil.copyFile("com/rapiddweller/benerator/benchmark/" + envFileName, envFileName);
+        return new File(envFileName);
+      }
     }
+    return null;
   }
 
-  private String prepareXml(String fileName, String environment, long count, int threads) throws IOException {
+  private String prepareXml(String fileName, Environment environment, long count, int threads) throws IOException {
     String xml = IOUtil.getContentOfURI("com/rapiddweller/benerator/benchmark/" + fileName);
     xml = applyEnvironment(environment, xml);
     xml = xml.replace("{count}", String.valueOf(count));
@@ -466,16 +476,18 @@ public class Benchmark {
     return result;
   }
 
-  private static String applyEnvironment(String environment, String xml) {
+  private static String applyEnvironment(Environment environment, String xml) {
     if (environment != null) {
-      xml = xml.replace("{environment}", environment);
-      DatabaseDialect dialect = getDialect(environment);
-      Set<String> types = CollectionUtil.toSet(
-          "varchar", "char", "string", "date", "time", "timestamp", "binary", "boolean",
-          "byte", "short", "int", "long", "big_integer", "float", "double", "big_decimal");
-      for (String type : types) {
-        String specialType = dialect.getSpecialType(type);
-        xml = xml.replace('{' + type + '}', specialType);
+      xml = xml.replace("{environment}", environment.name);
+      if (environment.isDb()) {
+        DatabaseDialect dialect = getDialect(environment.name);
+        Set<String> types = CollectionUtil.toSet(
+            "varchar", "char", "string", "date", "time", "timestamp", "binary", "boolean",
+            "byte", "short", "int", "long", "big_integer", "float", "double", "big_decimal");
+        for (String type : types) {
+          String specialType = dialect.getSpecialType(type);
+          xml = xml.replace('{' + type + '}', specialType);
+        }
       }
     }
     return xml;
@@ -493,7 +505,8 @@ public class Benchmark {
     p.addOption("mode", "--mode", "-m");
     p.addOption("minSecs", "--minSecs", null);
     p.addOption("maxThreads", "--maxThreads", null);
-    p.addOption("environmentSpec", "--env", null);
+    p.addOption("dbsSpec", "--env", null);
+    p.addOption("kafkasSpec", "--kafka", null);
     p.addArgument("name", false);
     BenchmarkConfig config = new BenchmarkConfig();
     p.parse(config, args);
@@ -542,6 +555,35 @@ public class Benchmark {
     throw new ObjectNotFoundException("Found no setup of name '" + setupName + "'");
   }
 
+  public static class Environment {
+    EnvironmentType type;
+    String name;
+    public Environment(EnvironmentType type, String name) {
+      this.type = type;
+      this.name = name;
+    }
+
+    public static Environment ofDb(String name) {
+      return new Environment(EnvironmentType.DB, name);
+    }
+
+    public static Environment ofKafka(String name) {
+      return new Environment(EnvironmentType.KAFKA, name);
+    }
+
+    public boolean isDb() {
+      return (type == EnvironmentType.DB);
+    }
+
+    public boolean isKafka() {
+      return (type == EnvironmentType.KAFKA);
+    }
+  }
+
+  enum EnvironmentType {
+    DB, KAFKA;
+  }
+
   public static class Setup {
     public final String name;
     public final String fileName;
@@ -564,13 +606,15 @@ public class Benchmark {
     public boolean isDbSetup() {
       return name.startsWith("db-");
     }
+
+    public boolean isKafkaSetup() { return name.startsWith("kafka-"); }
   }
 
   public static class SetupApplication {
-    final String environment;
-    public OrderedMap<String, List<SensorResult>> sensorMeasurements;
+    final Environment environment;
+    public final OrderedMap<String, List<SensorResult>> sensorMeasurements;
 
-    public SetupApplication(String environment) {
+    public SetupApplication(Environment environment) {
       this.environment = environment;
       this.sensorMeasurements = new OrderedMap<>();
     }
