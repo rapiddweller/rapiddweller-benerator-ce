@@ -136,7 +136,7 @@
         <database_mssqldb.version>9.4.0.jre11</database_mssqldb.version>
         <database_mysql-connector-java.version>8.0.27</database_mysql-connector-java.version>
         <database_oracle.version>21.3.0.0</database_oracle.version>
-        <database_postgresql.version>42.3.0</database_postgresql.version>
+        <database_postgresql.version>42.3.1</database_postgresql.version>
         <database_mariadb-java-client.version>2.7.4</database_mariadb-java-client.version>
         <dependency_antlr-runtime.version>3.5.2</dependency_antlr-runtime.version>
         <dependency_connector-api.version>1.5</dependency_connector-api.version>
