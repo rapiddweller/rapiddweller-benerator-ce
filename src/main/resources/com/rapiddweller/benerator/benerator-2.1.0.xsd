@@ -871,6 +871,12 @@
 
     <xs:element name="part">
         <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:choice>
+                <xs:element ref="attribute"/>
+                <xs:element ref="part"/>
+                </xs:choice>
+            </xs:sequence>
             <xs:attributeGroup ref="component-generator-attrs"/>
             <xs:attribute name="minCount" type="xs:string"/>
             <xs:attribute name="maxCount" type="xs:string"/>

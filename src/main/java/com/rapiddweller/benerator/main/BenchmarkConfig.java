@@ -21,7 +21,8 @@ public class BenchmarkConfig extends CommandLineConfig {
   private BeneratorMode mode;
   private int minSecs;
   private int maxThreads;
-  private String[] environments;
+  private String[] dbs;
+  private String[] kafkas;
   private String name;
   private Benchmark.Setup[] setups;
 
@@ -36,7 +37,8 @@ public class BenchmarkConfig extends CommandLineConfig {
     this.mode = BeneratorMode.STRICT;
     this.minSecs = 10;
     this.maxThreads = 0;
-    this.environments = new String[0];
+    this.dbs = new String[0];
+    this.kafkas = new String[0];
     this.setups = Benchmark.SETUPS;
   }
 
@@ -64,12 +66,31 @@ public class BenchmarkConfig extends CommandLineConfig {
     this.ee = ee;
   }
 
-  public void setEnvironmentSpec(String environmentSpec) {
-    this.environments = (environmentSpec != null ? environmentSpec.split(",") : new String[0]);
+  public void setDbsSpec(String dbsSpec) {
+    this.dbs = (dbsSpec != null ? dbsSpec.split(",") : new String[0]);
   }
 
-  public String[] getEnvironments() {
-    return environments;
+  public String[] getDbs() {
+    return dbs;
+  }
+
+  public void setKafkasSpec(String kafkaSpec) {
+    this.kafkas = (kafkaSpec != null ? kafkaSpec.split(",") : new String[0]);
+  }
+
+  public String[] getKafkas() {
+    return kafkas;
+  }
+
+  public Benchmark.Environment[] getEnvironments() {
+    Benchmark.Environment[] result = new Benchmark.Environment[dbs.length + kafkas.length];
+    for (int i = 0; i < dbs.length; i++) {
+      result[i] = new Benchmark.Environment(Benchmark.EnvironmentType.DB, dbs[i]);
+    }
+    for (int i = 0; i < kafkas.length; i++) {
+      result[dbs.length + i] = new Benchmark.Environment(Benchmark.EnvironmentType.KAFKA, kafkas[i]);
+    }
+    return result;
   }
 
   public BeneratorMode getMode() {
