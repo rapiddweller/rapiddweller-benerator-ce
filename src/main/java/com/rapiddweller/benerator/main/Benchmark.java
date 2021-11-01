@@ -82,8 +82,8 @@ public class Benchmark {
       new Setup("file-out-xml", false, V210, 500000, "Writing XML files"),
       new Setup("db-smalltable", false, V200, 15000, "Reading/writing small database tables (10 columns)"),
       new Setup("db-bigtable", false, V200, 5000, "Reading/writing big database tables (323 columns)"),
-      new Setup("kafka-small-entity", true, V200, 5000, "Sending/receiving small entities to/from Kafka"),
-      new Setup("kafka-big-entity", true, V200, 5000, "Sending/receiving big entities to/from Kafka (652 attributes)")
+      new Setup("kafka-small-entity", true, V200, 10000, "Sending/receiving small entities to/from Kafka"),
+      new Setup("kafka-big-entity", true, V200, 10000, "Sending/receiving big entities to/from Kafka (652 attributes)")
   };
 
   public static final DecimalFormat FORMAT_1 = new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.US));
@@ -392,6 +392,9 @@ public class Benchmark {
       factor *= 1.1;
     }
     count = (long) (factor * count + 500) / 1000 * 1000;
+    if (count == 0) {
+      count = 1000;
+    }
     return count;
   }
 
