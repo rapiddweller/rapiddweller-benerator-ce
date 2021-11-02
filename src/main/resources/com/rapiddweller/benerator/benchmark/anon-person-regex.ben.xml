@@ -3,7 +3,7 @@
 
     <memstore id='mem'/>
 
-    <generate type='person' count='1' consumer='mem'> <!--consumer="ConsoleExporter"-->
+    <generate type='person' count='1' sensor="preparation" consumer='mem'> <!--consumer="ConsoleExporter"-->
         <attribute name='streetAndNumber' constant='Main Street 1'/>
         <attribute name='zip'             constant='12345'/>
         <attribute name='city'            constant='Grandville'/>

@@ -3,6 +3,9 @@
 package com.rapiddweller.benerator.main;
 
 import com.rapiddweller.benerator.BeneratorMode;
+import com.rapiddweller.benerator.benchmark.BenchmarkConfig;
+import com.rapiddweller.benerator.benchmark.Environment;
+import com.rapiddweller.benerator.benchmark.BenchmarkDefinition;
 import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.common.ConfigurationError;
 import org.junit.Test;
@@ -44,14 +47,14 @@ public class BenchmarkTest extends ModelTest {
   @Test
   public void testFullWithFile() {
     BenchmarkConfig config = Benchmark.parseCommandLineConfig(
-        "--ce", "--mode", "turbo", "--minSecs", "123", "--maxThreads", "17", "--env", "h2,hsqlmem", "db-bigtable");
+        "--ce", "--mode", "turbo", "--minSecs", "123", "--maxThreads", "17", "--env", "h2,hsqlmem", "db-big-table");
     assertTrue(config.isCe());
     assertFalse(config.isEe());
     assertEquals(BeneratorMode.TURBO, config.getMode());
     assertEquals(123, config.getMinSecs());
     assertEquals(17, config.getMaxThreads());
     assertEqualArrays(new String[] { "h2", "hsqlmem" }, config.getDbs());
-    assertEquals("db-bigtable", config.getName());
+    assertEquals("db-big-table", config.getName());
   }
 
   @Test
@@ -70,7 +73,7 @@ public class BenchmarkTest extends ModelTest {
 
   @Test
   public void testSetupCount() {
-    assertEquals(17, Benchmark.SETUPS.length);
+    assertEquals(17, BenchmarkDefinition.getInstances().length);
   }
 
   @Test
@@ -91,10 +94,10 @@ public class BenchmarkTest extends ModelTest {
 
   @Test
   public void testDatabaseSetups() throws IOException {
-    runSetup("db-smalltable", Benchmark.Environment.ofDb("h2"));
-    runSetup("db-smalltable", Benchmark.Environment.ofDb("hsqlmem"));
-    runSetup("db-bigtable", Benchmark.Environment.ofDb("h2"));
-    runSetup("db-bigtable", Benchmark.Environment.ofDb("hsqlmem"));
+    runSetup("db-small-table", Environment.ofDb("h2"));
+    runSetup("db-small-table", Environment.ofDb("hsqlmem"));
+    runSetup("db-big-table", Environment.ofDb("h2"));
+    runSetup("db-big-table", Environment.ofDb("hsqlmem"));
   }
 
   @Test
@@ -110,15 +113,10 @@ public class BenchmarkTest extends ModelTest {
     runSetup(setupName, null);
   }
 
-  private void runSetup(String setupName, Benchmark.Environment environment) throws IOException {
-    Benchmark.Setup setup = Benchmark.getSetup(setupName);
+  private void runSetup(String setupName, Environment environment) throws IOException {
+    BenchmarkDefinition setup = BenchmarkDefinition.getInstance(setupName);
     assertNotNull(setup);
-    BenchmarkConfig config = new BenchmarkConfig();
-    config.setMinSecs(0);
-    Benchmark.Threading[] threadings = {
-        new Benchmark.Threading(false, 1)
-    };
-    new Benchmark(config).runSetup(setup, environment, threadings);
+    Benchmark.main(new String[] { "--ce", "--maxThreads", "1", "--minSecs", "0" });
   }
 
 }

@@ -25,22 +25,22 @@
     <iterate type="ben_benchmark" source="db" consumer="NoConsumer"/>
 
     <!-- generate and write data to the table, measuring it with sensor "benchmark.write" -->
-    <generate type="ben_benchmark" count="{count}" threads="{threads}" pageSize="10000"
+    <generate type="ben_benchmark" count="{writeCount}" threads="{threads}" pageSize="1000"
               sensor="benchmark.write" consumer="db">
         <id name="c_0_id" type="string" generator="UUIDGenerator"/>
         <attribute name="c_1_timestamp" type="timestamp" min="1970-01-02"/>
-        <attribute name="c_2_flag"   type="string" pattern="[YN]"/>
-        <attribute name="c_3_status" type="string" values="'CREATED','ACCEPTED','REJECTED','COMPLETED'"/>
-        <attribute name="c_4_code"   type="string" pattern="[0-9]{4}"/>
-        <attribute name="c_5_code"   type="string" pattern="[0-9]{8}"/>
-        <attribute name="c_6_code"   type="string" pattern="[0-9]{8}"/>
+        <attribute name="c_2_flag"      type="string"    pattern="[YN]"/>
+        <attribute name="c_3_status"    type="string"    values="'CREATED','ACCEPTED','REJECTED','COMPLETED'"/>
+        <attribute name="c_4_code"      type="string"    pattern="[0-9]{4}"/>
+        <attribute name="c_5_code"      type="string"    pattern="[0-9]{8}"/>
+        <attribute name="c_6_code"      type="string"    pattern="[0-9]{8}"/>
         <attribute name="c_7_timestamp" type="timestamp" min="1970-01-02"/>
         <attribute name="c_8_timestamp" type="timestamp" min="1970-01-02"/>
         <attribute name="c_9_timestamp" type="timestamp" min="1970-01-02"/>
     </generate>
 
     <!-- Reading back the generated data from table, measuring it with sensor "benchmark.read" -->
-    <iterate type="ben_benchmark" source="db" count="{count}" threads="{threads}" pageSize="10000"
+    <iterate type="ben_benchmark" source="db" count="{readCount}" cyclic="true" threads="{threads}" pageSize="1000"
              sensor="benchmark.read" consumer="NoConsumer"/>
 <!--
     <iterate type="ben_benchmark" source="db" count="{count}" threads="{threads}" pageSize="10000" consumer="db">
