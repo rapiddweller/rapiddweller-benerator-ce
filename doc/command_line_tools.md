@@ -119,8 +119,8 @@ This means for example that the `anon-person-constant.ben.xml` anonymizes
 The performance numbers above have been measured on a plain Macbook Air M1 of 2020.
 
 For a Benerator Enterprise Edition installation running on a machine with several cores, 
-the benchmark is executed for several characteristic threading settings in order to 
-find the sweet spot of threading settings. 
+the benchmark is executed for several characteristic executionMode settings in order to 
+find the sweet spot of executionMode settings. 
 
 A benchmark runs on the same system with Benerator Enterprise Edition yields 
 the following result:

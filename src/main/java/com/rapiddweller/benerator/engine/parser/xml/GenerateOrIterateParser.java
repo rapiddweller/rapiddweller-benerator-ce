@@ -41,7 +41,6 @@ import com.rapiddweller.benerator.engine.statement.ConversionStatement;
 import com.rapiddweller.benerator.engine.statement.GenerateAndConsumeTask;
 import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
 import com.rapiddweller.benerator.engine.statement.LazyStatement;
-import com.rapiddweller.benerator.engine.statement.TimedGeneratorStatement;
 import com.rapiddweller.benerator.engine.statement.ValidationStatement;
 import com.rapiddweller.benerator.factory.DescriptorUtil;
 import com.rapiddweller.benerator.factory.GenerationStepFactory;
@@ -147,17 +146,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     super("", null, OPTIONAL_ATTRIBUTES);
   }
 
-  private static List<String> createProfilerPath(Statement[] parentPath, Statement currentElement) {
-    List<String> path = new ArrayList<>(parentPath != null ? parentPath.length + 1 : 1);
-    if (parentPath != null) {
-      for (Statement statement : parentPath) {
-        path.add(statement.toString());
-      }
-    }
-    path.add(currentElement.toString());
-    return path;
-  }
-
   private static String getNameOrType(Element element) {
     String result = element.getAttribute(ATT_NAME);
     if (StringUtil.isEmpty(result)) {
@@ -237,9 +225,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
         return XMLUtil.formatShort(element);
       }
     };
-    Statement statement = new LazyStatement(expression);
-    statement = new TimedGeneratorStatement(getNameOrType(element), statement, createProfilerPath(parentPath, statement), !looped);
-    return statement;
+    return new LazyStatement(expression);
   }
 
   @SuppressWarnings("unchecked")
@@ -255,16 +241,16 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     Expression<Integer> threads = parseIntAttribute("threads", element, 1);
     Expression<PageListener> pager = (Expression<PageListener>) DatabeneScriptParser.parseBeanSpec(
         element.getAttribute(ATT_PAGER));
-    String sensor = element.getAttribute("sensor");
     String productName = getTaskName(descriptor);
-    if (sensor == null) {
+    String sensor = element.getAttribute("sensor");
+    if (StringUtil.isEmpty(sensor)) {
       sensor = element.getNodeName() + '.' + productName;
     }
 
     Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_NAME));
     Expression<Long> minCount = DescriptorUtil.getMinCount(descriptor, 0L);
     BeneratorContext childContext = context.createSubContext(productName);
-    GenerateOrIterateStatement statement = createStatement(iterate,
+    GenerateOrIterateStatement statement = createStatement(parentPath, iterate,
         countGenerator, minCount, threads, pageSize, pager, sensor, infoLog, nested, errorHandler, context, childContext);
 
     // TODO avoid double parsing of the InstanceDescriptor and remove the following...
@@ -282,10 +268,12 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     return statement;
   }
 
-  protected GenerateOrIterateStatement createStatement(boolean iterate, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
-                                                       Expression<Long> pageSize, Expression<PageListener> pager, String sensor, boolean infoLog, boolean nested,
-                                                       Expression<ErrorHandler> errorHandler, BeneratorContext context, BeneratorContext childContext) {
-    return new GenerateOrIterateStatement(iterate, countGenerator, minCount, threads, pageSize, pager, sensor,
+  protected GenerateOrIterateStatement createStatement(
+      Statement[] parentPath, boolean iterate, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
+      Expression<Long> pageSize, Expression<PageListener> pager, String sensor,
+      boolean infoLog, boolean nested,
+      Expression<ErrorHandler> errorHandler, BeneratorContext context, BeneratorContext childContext) {
+    return new GenerateOrIterateStatement(parentPath, iterate, countGenerator, minCount, threads, pageSize, pager, sensor,
         errorHandler, infoLog, nested, context, childContext);
   }
 
@@ -300,11 +288,8 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 
     // check preconditions
     boolean iterationMode = (EL_ITERATE.equals(element.getNodeName()));
-    if (iterationMode) {
-      // make sure the <iterate> has a 'source'
-      if (StringUtil.isEmpty(element.getAttribute(ATT_SOURCE))) {
-        syntaxError("'source' missing in <iterate>", element);
-      }
+    if (iterationMode && StringUtil.isEmpty(element.getAttribute(ATT_SOURCE))) { // make sure the <iterate> has a 'source'
+      syntaxError("'source' missing in <iterate>", element);
     }
 
     // get core date

@@ -32,32 +32,20 @@ import com.rapiddweller.script.Expression;
 
 /**
  * {@link Statement} implementation that evaluates an {@link Expression}
- * which returns a Task and executes the returned Task.<br/>
- * <br/>
+ * which returns a Task and executes the returned Task.<br/><br/>
  * Created: 27.10.2009 16:09:20
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class LazyStatement extends StatementProxy { // TODO v0.8 remove this class
+public class LazyStatement extends StatementProxy { // TODO can this be removed?
 
   private final Expression<Statement> statementExpression;
 
-  /**
-   * Instantiates a new Lazy statement.
-   *
-   * @param statementExpression the statement expression
-   */
   public LazyStatement(Expression<Statement> statementExpression) {
     super(null);
     this.statementExpression = statementExpression;
   }
 
-  /**
-   * Gets target expression.
-   *
-   * @return the target expression
-   */
   public Expression<Statement> getTargetExpression() {
     return statementExpression;
   }

@@ -1,9 +1,11 @@
 /* (c) Copyright 2021 by Volker Bergmann. All rights reserved. */
 
-package com.rapiddweller.benerator.main;
+package com.rapiddweller.benerator.benchmark;
 
 import com.rapiddweller.benerator.BeneratorMode;
 import com.rapiddweller.common.cli.CommandLineConfig;
+
+import java.util.TreeSet;
 
 import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
 
@@ -24,7 +26,8 @@ public class BenchmarkConfig extends CommandLineConfig {
   private String[] dbs;
   private String[] kafkas;
   private String name;
-  private Benchmark.Setup[] setups;
+  private BenchmarkDefinition[] setups;
+  private ExecutionMode[] threadings;
 
   public BenchmarkConfig() {
     if (isEEAvailable()) {
@@ -39,7 +42,7 @@ public class BenchmarkConfig extends CommandLineConfig {
     this.maxThreads = 0;
     this.dbs = new String[0];
     this.kafkas = new String[0];
-    this.setups = Benchmark.SETUPS;
+    this.setups = BenchmarkDefinition.getInstances();
   }
 
   public boolean isList() {
@@ -82,13 +85,13 @@ public class BenchmarkConfig extends CommandLineConfig {
     return kafkas;
   }
 
-  public Benchmark.Environment[] getEnvironments() {
-    Benchmark.Environment[] result = new Benchmark.Environment[dbs.length + kafkas.length];
+  public Environment[] getEnvironments() {
+    Environment[] result = new Environment[dbs.length + kafkas.length];
     for (int i = 0; i < dbs.length; i++) {
-      result[i] = new Benchmark.Environment(Benchmark.EnvironmentType.DB, dbs[i]);
+      result[i] = new Environment(EnvironmentType.DB, dbs[i]);
     }
     for (int i = 0; i < kafkas.length; i++) {
-      result[dbs.length + i] = new Benchmark.Environment(Benchmark.EnvironmentType.KAFKA, kafkas[i]);
+      result[dbs.length + i] = new Environment(EnvironmentType.KAFKA, kafkas[i]);
     }
     return result;
   }
@@ -123,11 +126,42 @@ public class BenchmarkConfig extends CommandLineConfig {
 
   public void setName(String name) {
     this.name = name;
-    this.setups = new Benchmark.Setup[] { Benchmark.getSetup(name) };
+    this.setups = new BenchmarkDefinition[] { BenchmarkDefinition.getInstance(name) };
   }
 
-  public Benchmark.Setup[] getSetups() {
+  public BenchmarkDefinition[] getSetups() {
     return setups;
+  }
+
+  public ExecutionMode[] getThreadings() {
+    return threadings;
+  }
+
+  public void prepareThreadings() {
+    if (!ee || (!ce && maxThreads == 1)) {
+      this.threadings = new ExecutionMode[] { new ExecutionMode(ee, 1) };
+    } else {
+      // determine thread counts for EE
+      TreeSet<Integer> set = new TreeSet<>();
+      for (int i = 1; i < maxThreads; i *= 2) {
+        set.add(i);
+      }
+      set.add(maxThreads);
+      // create result object
+      // add an element if a CE run is requested additionally to the EE runs
+      int ceRun = (ce ? 1 : 0);
+      ExecutionMode[] result = new ExecutionMode[set.size() + ceRun];
+      // insert the CE run first...
+      if (ceRun == 1) {
+        result[0] = new ExecutionMode(false, 1);
+      }
+      // ...and then the EE runs with creasing thread count
+      int i = ceRun;
+      for (int n : set) {
+        result[i++] = new ExecutionMode(true, n);
+      }
+      this.threadings = result;
+    }
   }
 
 }
