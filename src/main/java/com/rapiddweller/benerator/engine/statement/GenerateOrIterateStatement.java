@@ -28,12 +28,18 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.BeneratorMonitor;
+import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.time.ElapsedTimeFormatter;
 import com.rapiddweller.contiperf.StopWatch;
+import com.rapiddweller.profile.Profiler;
+import com.rapiddweller.profile.Profiling;
 import com.rapiddweller.script.Expression;
+import com.rapiddweller.stat.CounterRepository;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.TaskExecutor;
 import org.slf4j.Logger;
@@ -42,6 +48,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Creates a number of entities in multithreaded execution and a given page size.<br/><br/>
@@ -66,6 +73,8 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
   protected final boolean isSubCreator;
   protected final BeneratorContext context;
   protected final BeneratorContext childContext;
+  private final ElapsedTimeFormatter elapsedTimeFormatter;
+  private List<String> profilerPath;
 
 
   // mutable attributes ------------------------------------------------------------------------------------------------
@@ -76,9 +85,8 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
   // constructor -------------------------------------------------------------------------------------------------------
 
   public GenerateOrIterateStatement(
-      boolean iterate, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
-      Expression<Long> pageSize, Expression<PageListener> pageListenerEx,
-      String sensor,
+      Statement[] parentPath, boolean iterate, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
+      Expression<Long> pageSize, Expression<PageListener> pageListenerEx, String sensor,
       Expression<ErrorHandler> errorHandler, boolean infoLog, boolean isSubCreator,
       BeneratorContext context, BeneratorContext childContext) {
     super(errorHandler);
@@ -95,6 +103,8 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
     this.childContext = childContext;
     this.task = null;
     this.pageListener = null;
+    this.elapsedTimeFormatter = new ElapsedTimeFormatter(Locale.US, " ", false);
+    this.profilerPath = createProfilerPath(parentPath, this);
   }
 
 
@@ -126,16 +136,26 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
 
   @Override
   public boolean execute(BeneratorContext context) {
+    long c0 = BeneratorMonitor.INSTANCE.getTotalGenerationCount();
     StopWatch stopWatch = new StopWatch(sensor);
     if (!beInitialized(context)) {
       task.reset();
     }
-    executeTask(generateCount(childContext), minCount.evaluate(childContext), pageSize.evaluate(childContext),
+    Long requestedCount = generateCount(childContext);
+    executeTask(requestedCount, minCount.evaluate(childContext), pageSize.evaluate(childContext),
         evaluatePageListeners(childContext), getErrorHandler(childContext));
     if (!isSubCreator) {
       close();
     }
-    stopWatch.stop();
+    int dt = stopWatch.stop();
+    long dc = BeneratorMonitor.INSTANCE.getTotalGenerationCount() - c0;
+    CounterRepository.getInstance().getCounter(sensor).setSampleCount(dc);
+    if (Profiling.isEnabled()) {
+      Profiler.defaultInstance().addSample(profilerPath, dt);
+    }
+    if (!isSubCreator) {
+      logPerformance(dt, dc);
+    }
     return true;
   }
 
@@ -169,6 +189,17 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
 
   // internal helpers ------------------------------------------------------------------------------------------------
 
+  private static List<String> createProfilerPath(Statement[] parentPath, Statement currentElement) {
+    List<String> path = new ArrayList<>(parentPath != null ? parentPath.length + 1 : 1);
+    if (parentPath != null) {
+      for (Statement statement : parentPath) {
+        path.add(statement.toString());
+      }
+    }
+    path.add(currentElement.toString());
+    return path;
+  }
+
   protected List<PageListener> evaluatePageListeners(Context context) {
     List<PageListener> listeners = new ArrayList<>();
     if (pageListener != null) {
@@ -193,6 +224,20 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
                              List<PageListener> pageListeners, ErrorHandler errorHandler) {
     TaskExecutor.execute(task, childContext, reqExecutions, minExecutions,
         pageListeners, pageSizeValue, false, errorHandler, infoLog);
+  }
+
+  private void logPerformance(int dt, long dc) {
+    String op = (iterate ? "iterated" : "generated");
+    if (dc == 0) {
+      logger.info("No data {} for '{}' setup", op, sensor);
+    } else if (dt > 0) {
+      if (logger.isInfoEnabled()) {
+        logger.info("{} {} data sets from '{}' setup in {} ({}/s)",
+            op, dc, sensor, elapsedTimeFormatter.convert((long) dt), dc * 1000 / dt);
+      }
+    } else {
+      logger.info("{} {} '{}' data set(s)", op, dc, sensor);
+    }
   }
 
 }
