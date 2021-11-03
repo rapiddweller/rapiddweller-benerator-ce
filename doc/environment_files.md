@@ -1,11 +1,11 @@
 # Environment Files
 
-An environment file may define an arbitrary number of systems to connect from Benerator via a short reference. Currently, relational databases and Kafka cluster and topics are supported. An environment file has the suffix .env.properties. As an example, you may define the development environment as „dev.env.properties“.
+An environment file may define an arbitrary number of systems to connect from Benerator via a short reference. Currently, relational databases and Kafka clusters and topics are supported. An environment file has the suffix .env.properties. As an example, you may define the development environment as „dev.env.properties“.
 
 ## System Definition
 The settings for each system are listed in the environment file in the form:
 
-```<name>.<type><setting>=<value>```
+```<name>.<type>.<setting>=<value>```
 
 - `<name>` must be an identifier,
 
@@ -51,7 +51,7 @@ If it should be shared with other users of the same project,
 it is recommended to put it in a folder named 'conf' inside the project folder 
 (example location `myproject/conf/dev.env.properties`). 
 
-For private system and password configurations, you can put an environment files 
+For private system and password configurations, you can put an environment file 
 into the folder `rapiddweller` under your user home directory 
 (example location `~/rapiddweller/dev.env.properties` on a macos/Unix system 
 or `C:\Users\<your_user_name/rapiddweller/dev.env.properties>` on a Windows system).
