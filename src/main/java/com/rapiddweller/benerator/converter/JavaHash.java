@@ -4,6 +4,7 @@ package com.rapiddweller.benerator.converter;
 
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.ThreadAware;
 
 /**
@@ -38,7 +39,7 @@ public class JavaHash implements Converter<Object,String>, ThreadAware {
   public String convert(Object sourceValue) throws ConversionException {
     String sourceText = (sourceValue != null ? sourceValue.toString() : "");
     int hashCode = sourceText.hashCode();
-    return Integer.toHexString(hashCode);
+    return StringUtil.padLeft(Integer.toHexString(hashCode), 8, '0');
   }
 
 }
