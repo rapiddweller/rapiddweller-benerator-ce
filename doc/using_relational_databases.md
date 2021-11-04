@@ -61,33 +61,40 @@ explicitly.
 
 ## Using Database Repositories
 
-For frequently-used databases it is more convenient to use a central database configuration repository. The repository
-is located in a folder `rapiddweller` under your user home directory. You can define a database configuration with a
-name (e.g. 'mydb') by storing a correspondingly named properties file there assigning the suffix `.env.properties` 
-(e.g. `mydb.env.properties`, on Windows the file location would be `C:\Documents and Settings\<user_name>\mydb.env.properties`)
-. In the file you can configure the JDBC connection information with the keys `db_url`, `db_driver`, `db_user`, `db_password`
-and `db_url`.
+For frequently-used databases it is more convenient to use a central environment configuration repository 
+and have Benerator look up all the system connection details by a simple system name instead of having 
+to copy & paste JDBC settings again and again.
 
-As an example, a file `mydb.env.properties` would configure the environment `mydb` and would have a content like this
-for an HSQL database:
+This way, a database definition turns from
 
-```properties
-db_url=jdbc:hsqldb:mem:DbRelatedTest
-db_driver=org.hsqldb.jdbcDriver
-db_user=sa
-db_password=
-db_schema=public
+```xml
+<database id="db" url="jdbc:oracle:thin:@host:1521:SID" 
+          driver="oracle.jdbc.driver.OracleDriver" 
+          user="sam" password="sam123" 
+          catalog="CRM01" schema="CUSTS" readOnly="true"/>
 ```
 
-Having done so, you can connect a database more simply using the `<database>`'s `environment` attribute:
+to 
 
-`<database id="db" environment="mydb"/>`
+```xml
+<database id="db" environment="dev" system="crm"/>
+```
 
-If you define a `mydb.env.properties` file in the directory in which Benerator executes, this file will be used. If not,
-the configuration is taken from your database repository.
+where `environment` denotes the environment definition file and `crm` a system configuration within that file.
 
-If you add conflicting attributes in your `<database>` element (like another user and password), they override the
-configuration details in the database repository. This way you can have a central and convenient database lookup and can
+A global standard location for a system repository is located in a folder `rapiddweller` under 
+your user home directory (like `C:\Documents and Settings\<user_name>\` on Windows)
+
+You can as well define a project-specific environment repository in a sub directory `conf` under the project folder.
+
+For details, see [Environment Files](environment_files.md).
+
+
+### Overriding Environment Eettings
+
+When using a system definition in an environment file and specifying different attributes in the XML file, 
+(like another user and password), these override the configuration details in the database repository. 
+This way you can have a central and convenient database lookup and can
 access the database with different users in the same run. An example:
 
 ```xml
@@ -138,7 +145,6 @@ to delete the cache file manually in such cases!
 SQL code can be executed, e.g. from a file:
 
 ```xml
-
 <execute uri="drop-tables.sql" target="db" onError="warn"/>
 ```
 
@@ -150,17 +156,11 @@ You can inline SQL code as well:
 ```xml
 
 <execute target="db" onError="warn">
-
     CREATE TABLE db_role (
-
     id int NOT NULL,
-
     name varchar(16) NOT NULL,
-
     PRIMARY KEY (id)
-
     );
-
 </execute>
 ```
 
@@ -171,19 +171,12 @@ one after the other to the database. In some cases, you need different behavior,
 and/or called. In such cases, you can specify an alternative delimiter in an `<execute>` statement:
 
 ```xml
-
 <execute target="db" separator="/">
-
     declare output_var varchar(500);
-
     begin
-
     EXECUTE_PROC_A(output_var);
-
     EXECUTE_PROC_B(output_var);
-
     end;
-
 </execute>
 ```
 
@@ -203,9 +196,7 @@ the mode to 'ignored'
 ```xml
 
 <generate type="db_user" count="50000" consumer="db">
-
     <id mode="ignored"/>
-
 </generate>
 ```
 

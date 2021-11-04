@@ -97,7 +97,7 @@ e.g. for committing messages in groups of 10,000:
     page.size='10000'/>
 ```
 
-### Encryption and Authentication
+## Encryption and Authentication
 
 Ask your Kafka administrator on details how to configure secure access. 
 All settings you might need are available in the XML format, 

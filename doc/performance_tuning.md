@@ -238,7 +238,7 @@ Person[
     firstName       Ogszcy
     midName         Jacxmni
     lastName        Pnn
-    CardExp         12/27
+    CardExp         12/24
     Cardno          2390195664099922
 ]
 ```
@@ -250,6 +250,37 @@ In order to get an idea of the costs of different anonymization approaches,
 check the performance numbers in the 
 [Benchmark Tool Documentation](command_line_tools.md#benchmark-tool) or run it on
 your system to get an individual insight into your machine's capabilities.
+
+
+## Benerator Modes
+
+Benerator can run in different modes, which have different performance and strictness characteristics. 
+
+A mode ist activated by the command line argument `--mode`, eg.
+
+```shell
+benerator --mode turbo
+```
+
+### lenient
+
+The default mode, Benerator is running in. The full feature set is supported and some configuration issues 
+are handled automatically. This is best for users at the beginning of the learning curve.
+
+### strict
+Benerator stops on configurations which may have performance implications or may possibly be unintended, 
+assuring the full feature set can run with optimum performance. In many cases this will be faster than 
+lenient mode, but requires more knowledge about Benerator.
+
+### turbo
+Experimental feature: The fastest mode which in which Benerator can run, but this comes at a price: 
+It uses a restricted feature set: capitalization of variables is ignored and simple-type sub elements 
+may not occur multiple times. 
+This will work fine for most projects in most homogeneous environments, involving only databases 
+and plain file formats. 
+For strongly heterogeneous projects, especially involving XML this may produce unintended results. 
+Use this only when you are desperate for performance and have made sure everything works fine 
+in`strict` mode.
 
 
 ## Distributed Generation
