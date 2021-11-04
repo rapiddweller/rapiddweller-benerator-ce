@@ -46,8 +46,8 @@ public class DefaultDBSystem extends DBSystem {
 
   private final ConnectionHolder connectionHolder;
 
-  public DefaultDBSystem(String id, String environment, BeneratorContext context) {
-    super(id, environment, context);
+  public DefaultDBSystem(String id, String environment, String system, BeneratorContext context) {
+    super(id, environment, system, context);
     this.connectionHolder = new ConnectionHolder(this);
   }
 

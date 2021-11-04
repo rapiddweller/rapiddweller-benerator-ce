@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.GeneratorContext;
+import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.benerator.factory.DefaultsProvider;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
 import com.rapiddweller.model.data.ComponentDescriptor;
@@ -74,6 +75,8 @@ public interface BeneratorContext extends GeneratorContext, ScriptContext {
   DescriptorProvider getLocalDescriptorProvider();
 
   void addLocalType(TypeDescriptor type);
+
+  SystemRef getEnvironmentSystem(String environment, String system);
 
   ComponentDescriptor getDefaultComponentConfig(String name);
 

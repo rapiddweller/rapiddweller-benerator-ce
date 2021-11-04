@@ -220,9 +220,17 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
    * @throws IOException the io exception
    */
   @Test
-  public void DemoDbEnv() throws IOException {
+  public void DemoDbEnvOld() throws IOException {
     String[] args = new String[1];
-    args[0] = "src/demo/resources/demo/db/dbenv.ben.xml";
+    args[0] = "src/demo/resources/demo/db/dbenv-old.ben.xml";
+    main(args);
+  }
+
+  /** Tests the new environment file format introduced in Benerator 2.1 */
+  @Test
+  public void DemoDbEnvNew() throws IOException {
+    String[] args = new String[1];
+    args[0] = "src/demo/resources/demo/db/dbenv-new.ben.xml";
     main(args);
   }
 

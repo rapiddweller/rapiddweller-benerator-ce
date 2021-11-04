@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.benerator.factory.DefaultsProvider;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
 import com.rapiddweller.common.Context;
@@ -205,6 +206,11 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
   @Override
   public void importDefaults() {
     parent.importDefaults();
+  }
+
+  @Override
+  public SystemRef getEnvironmentSystem(String environment, String system) {
+    return parent.getEnvironmentSystem(environment, system);
   }
 
   @Override

@@ -7,12 +7,15 @@ import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
+import com.rapiddweller.benerator.environment.EnvironmentUtil;
+import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.benerator.main.Benerator;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.log.LoggingInfoPrinter;
 import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.stat.CounterRepository;
@@ -22,20 +25,16 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.rapiddweller.benerator.BeneratorUtil.EE_BENERATOR_FACTORY;
-import static com.rapiddweller.jdbacl.EnvironmentUtil.getDialect;
 
 /**
- * Runs all test configurations as defined in a {@link BenchmarkConfig}.<br/><br/>
+ * Runs all test configurations as defined in a {@link BenchmarkToolConfig}.<br/><br/>
  * Created: 02.11.2021 09:38:50
  * @author Volker Bergmann
  * @since 2.1.0
@@ -44,57 +43,55 @@ public class BenchmarkRunner {
 
   private static final Logger logger = LoggerFactory.getLogger(BenchmarkRunner.class);
 
-  public static final DecimalFormat FORMAT_1 = new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.US));
-  public static final DecimalFormat FORMAT_0 = new DecimalFormat("#,##0", DecimalFormatSymbols.getInstance(Locale.US));
   public static final long ONE_GIGABYTE = 1000000000L;
-  private static final Set<String> IN_PROCESS_DBS = CollectionUtil.toSet("h2", "hsqlmem");
+  public static final String TMP_FILENAME = "__benchmark.ben.xml";
 
   private BenchmarkRunner() {
     // private constructor to prevent instantiation of this utility class
   }
 
-  public static BenchmarkSummary runBenchmarks(BenchmarkConfig config) throws IOException {
-    BenchmarkSummary result = new BenchmarkSummary(config);
+  public static BenchmarkToolReport runBenchmarks(BenchmarkToolConfig config) throws IOException {
     // perform tests
+    BenchmarkToolReport result = new BenchmarkToolReport(config);
     Benerator.setMode(config.getMode());
-    for (BenchmarkDefinition benchmark : config.getSetups()) {
+    for (Benchmark benchmark : config.getBenchmarks()) {
       runBenchmark(benchmark, result);
     }
     return result.stop();
   }
 
-  private static void runBenchmark(BenchmarkDefinition benchmark, BenchmarkSummary summary) throws IOException {
+  private static void runBenchmark(Benchmark benchmark, BenchmarkToolReport report) throws IOException {
     if (benchmark.isDb()) {
-      Environment[] environments = summary.getEnvironments(EnvironmentType.DB);
-      if (environments.length > 0) {
-        runBenchmarkOnEnvironments(benchmark, environments, summary);
+      SystemRef[] dbs = report.getSystems("db");
+      if (dbs.length > 0) {
+        runBenchmarkOnEnvironments(benchmark, dbs, report);
       } else {
         logger.info("Skipping DB test since no database was specified");
       }
     } else if (benchmark.isKafka()) {
-      Environment[] environments = summary.getEnvironments(EnvironmentType.KAFKA);
-      if (environments.length > 0) {
-        runBenchmarkOnEnvironments(benchmark, environments, summary);
+      SystemRef[] kafkas = report.getSystems("kafka");
+      if (kafkas.length > 0) {
+        runBenchmarkOnEnvironments(benchmark, kafkas, report);
       } else {
         logger.info("Skipping Kafka test since no Kafka cluster was specified");
       }
-    } else if (summary.getEnvironments().length == 0) {
-      runBenchmarkOnEnvironment(benchmark, null, summary);
+    } else if (report.getSystems().length == 0) {
+      runBenchmarkOnEnvironment(benchmark, null, report);
     }
   }
 
-  private static void runBenchmarkOnEnvironments(BenchmarkDefinition benchmark, Environment[] environments,
-                                                 BenchmarkSummary summary) throws IOException {
+  private static void runBenchmarkOnEnvironments(Benchmark benchmark, SystemRef[] systems,
+                                                 BenchmarkToolReport summary) throws IOException {
     if (benchmark.isDb()) {
-      for (Environment environment : environments) {
-        if (environment.isDb()) {
-          runBenchmarkOnEnvironment(benchmark, environment, summary);
+      for (SystemRef system : systems) {
+        if (system.isDb()) {
+          runBenchmarkOnEnvironment(benchmark, system, summary);
         }
       }
     } else if (benchmark.isKafka()) {
-      for (Environment environment : environments) {
-        if (environment.isKafka()) {
-          runBenchmarkOnEnvironment(benchmark, environment, summary);
+      for (SystemRef system : systems) {
+        if (system.isKafka()) {
+          runBenchmarkOnEnvironment(benchmark, system, summary);
         }
       }
     } else {
@@ -102,7 +99,7 @@ public class BenchmarkRunner {
     }
   }
 
-  public static void runBenchmarkOnEnvironment(BenchmarkDefinition benchmark, Environment environment, BenchmarkSummary summary) throws IOException {
+  public static void runBenchmarkOnEnvironment(Benchmark benchmark, SystemRef environment, BenchmarkToolReport summary) throws IOException {
     logger.info("Running {}", benchmark.getFileName());
     BenchmarkResult benchmarkResult = new BenchmarkResult(benchmark, environment);
     summary.addResult(benchmarkResult);
@@ -110,7 +107,8 @@ public class BenchmarkRunner {
     ExecutionMode[] executionModes = summary.getExecutionModes();
     for (ExecutionMode executionMode : executionModes) {
       if (executionMode.isEe() || !benchmark.isReqEE()) {
-        List<SensorResult> results = runUntilMinDuration(benchmark.getFileName(), environment, summary.getMinSecs(), initialCount, executionMode);
+        String filePath = summary.getProjectFolder() + SystemInfo.getFileSeparator() + benchmark.getFileName();
+        List<SensorResult> results = runUntilMinDuration(filePath, environment, summary.getMinSecs(), initialCount, executionMode);
         for (SensorResult result : results) {
           benchmarkResult.addResult(result);
         }
@@ -120,17 +118,17 @@ public class BenchmarkRunner {
   }
 
   private static List<SensorResult> runUntilMinDuration(
-      String fileName, Environment environment, long minDurationSecs, long countBase, ExecutionMode executionMode) throws IOException {
+      String filePath, SystemRef system, long minDurationSecs, long countBase, ExecutionMode executionMode) throws IOException {
     if (minDurationSecs == 0) {
       // this indicates a unit test, so call it that each thread creates only one product
-      return runFile(fileName, environment, executionMode.getThreadCount(), executionMode, new AtomicLong());
+      return runFile(filePath, system, executionMode.getThreadCount(), executionMode, new AtomicLong());
     }
     // normal test execution
     long count = countBase;
     long minDurationMillis = minDurationSecs * 1000;
     do {
       AtomicLong maxFileSize = new AtomicLong(0);
-      List<SensorResult> measurements = runFile(fileName, environment, count, executionMode, maxFileSize);
+      List<SensorResult> measurements = runFile(filePath, system, count, executionMode, maxFileSize);
       int actualMinDuration = minDurationOf(measurements);
       if (actualMinDuration >= minDurationMillis) {
         return measurements;
@@ -147,24 +145,24 @@ public class BenchmarkRunner {
     } while (true);
   }
 
-  private static List<SensorResult> runFile(String fileName, Environment environment,
+  private static List<SensorResult> runFile(String filePath, SystemRef system,
       long count, ExecutionMode executionMode, AtomicLong maxFileSize) throws IOException {
     logger.info("------------------------------------------------------------" +
         "------------------------------------------------------------");
-    logger.info("Running {}", fileName);
+    logger.info("Running {}", filePath);
     if (executionMode.isEe()) {
       BeneratorFactory.setInstance((BeneratorFactory) BeanUtil.newInstance(EE_BENERATOR_FACTORY));
     } else {
       BeneratorFactory.setInstance(new DefaultBeneratorFactory());
     }
-    logger.debug("Testing {} with count {} and {} thread(s)", fileName, count, executionMode);
-    File envFile = prepareEnvFile(environment);
-    String filename = prepareXml(fileName, environment, count, executionMode.getThreadCount());
+    logger.debug("Testing {} with count {} and {} thread(s)", filePath, count, executionMode);
+    File envFile = prepareEnvFile(system);
+    String tmpFileName = prepareXml(filePath, system, count, executionMode.getThreadCount());
     CounterRepository.getInstance().clear();
     BeneratorUtil.checkSystem(new LoggingInfoPrinter(BenchmarkRunner.class));
-    BeneratorRootContext context = BeneratorFactory.getInstance().createRootContext(IOUtil.getParentUri(filename));
+    BeneratorRootContext context = BeneratorFactory.getInstance().createRootContext(IOUtil.getParentUri(tmpFileName));
     File[] generatedFiles;
-    try (DescriptorRunner runner = new DescriptorRunner(filename, context)) {
+    try (DescriptorRunner runner = new DescriptorRunner(tmpFileName, context)) {
       runner.run();
       generatedFiles = getGeneratedFiles();
       for (File generatedFile : generatedFiles) {
@@ -174,7 +172,7 @@ public class BenchmarkRunner {
         }
       }
     }
-    deleteArtifacts(filename, envFile, generatedFiles);
+    deleteArtifacts(tmpFileName, envFile, generatedFiles);
     return evaluateSensors(executionMode);
   }
 
@@ -216,34 +214,37 @@ public class BenchmarkRunner {
     return result;
   }
 
-  private static File prepareEnvFile(Environment environment) throws IOException {
-    if (environment != null && environment.isDb() && IN_PROCESS_DBS.contains(environment.getName())) {
-      String envFileName = environment.getName() + ".env.properties";
+  private static File prepareEnvFile(SystemRef system) throws IOException {
+    if (system != null && system.isDb() && "builtin".equals(system.getEnvironment().getName())) {
+      String envFileName = EnvironmentUtil.fileName(system.getEnvironment().getName());
       IOUtil.copyFile("com/rapiddweller/benerator/benchmark/" + envFileName, envFileName);
       return new File(envFileName);
     }
     return null;
   }
 
-  private static String prepareXml(String fileName, Environment environment, long count, int threads) throws IOException {
-    String xml = IOUtil.getContentOfURI("com/rapiddweller/benerator/benchmark/" + fileName);
-    xml = applyEnvironment(environment, xml);
+  private static String prepareXml(String filePath, SystemRef system, long count, int threads) throws IOException {
+    String xml = IOUtil.getContentOfURI(filePath);
     xml = xml.replace("{count}", String.valueOf(count));
-    if (environment != null && environment.isDb()) {
-      xml = xml.replace("{writeCount}", String.valueOf(count));
-      xml = xml.replace("{readCount}", String.valueOf(2 * count));
-    }
     xml = xml.replace("{threads}", String.valueOf(threads));
-    String filename = "__benchmark.ben.xml";
+    if (system != null) {
+      xml = applyEnvironment(system, xml);
+      if (system.isDb()) {
+        xml = xml.replace("{writeCount}", String.valueOf(count));
+        xml = xml.replace("{readCount}", String.valueOf(2 * count));
+      }
+    }
+    String filename = TMP_FILENAME;
     IOUtil.writeTextFile(filename, xml);
     return filename;
   }
 
-  private static String applyEnvironment(Environment environment, String xml) {
-    if (environment != null) {
-      xml = xml.replace("{environment}", environment.getName());
-      if (environment.isDb()) {
-        DatabaseDialect dialect = getDialect(environment.getName());
+  private static String applyEnvironment(SystemRef system, String xml) {
+    if (system != null) {
+      xml = xml.replace("{environment}", system.getEnvironment().getName());
+      xml = xml.replace("{system}", system.getName());
+      if (system.isDb()) {
+        DatabaseDialect dialect = EnvironmentUtil.getDbDialect(system);
         Set<String> types = CollectionUtil.toSet(
             "varchar", "char", "string", "date", "time", "timestamp", "binary", "boolean",
             "byte", "short", "int", "long", "big_integer", "float", "double", "big_decimal");
@@ -284,16 +285,13 @@ public class BenchmarkRunner {
         if (logger.isInfoEnabled()) {
           int threads = executionMode.getThreadCount();
           logger.info("{}: {} entities / {} ms, throughput {} E/s - {} ME/h, {} thread{}", key, countUsed,
-              latencyCount.totalLatency(), eps, format(eps * 3600. / 1000000.), threads, (threads > 1 ? "s" : ""));
+              latencyCount.totalLatency(), eps, PerformanceFormatter.format(eps * 3600. / 1000000.),
+              threads, (threads > 1 ? "s" : ""));
         }
         result.add(new SensorResult(sensor, countUsed, executionMode, (int) latencyCount.totalLatency()));
       }
     }
     return result;
-  }
-
-  private static String format(double number) {
-    return (number < 10 ? FORMAT_1 : FORMAT_0).format(number);
   }
 
 }

@@ -26,6 +26,9 @@
 
 package com.rapiddweller.benerator;
 
+import com.rapiddweller.benerator.environment.Environment;
+import com.rapiddweller.benerator.environment.EnvironmentUtil;
+import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.benerator.main.Benerator;
 import com.rapiddweller.common.LogCategoriesConstants;
 import com.rapiddweller.common.StringUtil;
@@ -47,6 +50,7 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.io.File;
 import java.lang.management.ManagementFactory;
+import java.util.Collection;
 
 /**
  * Provides general utility methods for Benerator.<br/><br/>
@@ -197,4 +201,32 @@ public class BeneratorUtil {
   public static String getOsInfo() {
     return SystemInfo.getOsName() + " " + SystemInfo.getOsVersion() + " " + SystemInfo.getOsArchitecture();
   }
+
+  public static void printEnvironments(InfoPrinter printer) {
+    Collection<Environment> environments = EnvironmentUtil.findEnvironments().values();
+    printer.printLines("Environments:");
+    for (Environment environment : environments) {
+      printer.printLines("- " + environment.getName());
+      for (SystemRef system : environment.getSystems()) {
+        printer.printLines("  # " + system.getName() + ": " + system.getType());
+      }
+    }
+  }
+
+  public static void printEnvDbs(InfoPrinter printer) {
+    printEnvSystems("Databases", "db", printer);
+  }
+
+  public static void printEnvKafkas(InfoPrinter printer) {
+    printEnvSystems("Kafkas", "kafka", printer);
+  }
+
+  private static void printEnvSystems(String label, String type, InfoPrinter printer) {
+    SystemRef[] systems = EnvironmentUtil.findSystems(type);
+    printer.printLines(label + ":");
+    for (SystemRef system : systems) {
+      printer.printLines("- " + system.getEnvironment().getName() + "#" + system.getName());
+    }
+  }
+
 }

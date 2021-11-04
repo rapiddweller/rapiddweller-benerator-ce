@@ -28,8 +28,11 @@ package com.rapiddweller.platform.db;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.benerator.storage.StorageSystemInserter;
+import com.rapiddweller.benerator.util.DeprecationLogger;
+import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.ConnectFailedException;
@@ -47,7 +50,6 @@ import com.rapiddweller.jdbacl.ColumnInfo;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.jdbacl.DatabaseDialectManager;
-import com.rapiddweller.jdbacl.JDBCConnectData;
 import com.rapiddweller.jdbacl.ResultSetConverter;
 import com.rapiddweller.jdbacl.dialect.OracleDialect;
 import com.rapiddweller.jdbacl.model.DBCatalog;
@@ -121,6 +123,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   protected DatabaseDialect dialect;
   private String id;
   private String environment;
+  private String system;
   private String folder;
   private String url;
   private String user;
@@ -147,19 +150,27 @@ public abstract class DBSystem extends AbstractStorageSystem {
     checkOracleDriverVersion(driver);
   }
 
-  protected DBSystem(String id, String environment, BeneratorContext context) {
+  protected DBSystem(String id, String environmentName, String systemName, BeneratorContext context) {
     this(id, context.getDataModel());
-    setEnvironment(environment);
+    setEnvironment(environmentName);
     this.folder = context.getContextUri();
-    logger.debug("Reading environment data for '{}'", environment);
+    logger.debug("Reading environment data for '{}'", environmentName);
     if (this.environment != null) {
-      JDBCConnectData connectData = DBUtil.getConnectData(environment, context.getContextUri());
-      this.url = connectData.url;
-      this.driver = connectData.driver;
-      this.catalogName = connectData.catalog;
-      this.schemaName = connectData.schema;
-      this.user = connectData.user;
-      this.password = connectData.password;
+      if (systemName == null) {
+        systemName = "db";
+        DeprecationLogger.warn("Observed a <Database> definition with an 'environment', but without 'system' setting. " +
+            "If you are using the old definition file format, please upgrade to " +
+            "the new environment definition file format introduced in Benerator 2.1.0 and specify a 'system' name. " +
+            "The old format is supported for backwards compatibility, but will be dropped in a future release");
+      }
+      SystemRef def = context.getEnvironmentSystem(environment, systemName);
+      if (!"db".equals(def.getType())) {
+        throw new ConfigurationError("Not a database definition: '" + systemName + "' " +
+            "in environment '" + environmentName + "'");
+      }
+      for (Map.Entry<String, String> entry : def.getProperties().entrySet()) {
+        BeanUtil.setPropertyValue(this, entry.getKey(), entry.getValue(), true, true);
+      }
     }
   }
 
@@ -228,6 +239,10 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   private void setEnvironment(String environment) {
     this.environment = StringUtil.emptyToNull(environment);
+  }
+
+  public String getSystem() {
+    return system;
   }
 
   public String getDriver() {
@@ -360,8 +375,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     if (typeDescriptors == null) {
       return EMPTY_TYPE_DESCRIPTOR_ARRAY;
     } else {
-      return CollectionUtil
-          .toArray(typeDescriptors.values(), TypeDescriptor.class);
+      return CollectionUtil.toArray(typeDescriptors.values(), TypeDescriptor.class);
     }
   }
 
@@ -407,7 +421,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
       ComplexTypeDescriptor descriptor =
           (ComplexTypeDescriptor) getTypeDescriptor(tableName);
       PreparedStatement query = getSelectByPKStatement(descriptor);
-      query.setObject(1, id); // TODO v0.7.6 support composite keys
+      query.setObject(1, id); // TODO support composite keys
       ResultSet resultSet = query.executeQuery();
       if (resultSet.next()) {
         return ResultSet2EntityConverter.convert(resultSet, descriptor);
@@ -601,7 +615,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
   public void parseMetaData() {
     this.tables = new HashMap<>();
     this.typeDescriptors = OrderedNameMap.createCaseIgnorantMap();
-    //this.tableColumnIndexes = new HashMap<String, Map<String, Integer>>();
     getDialect(); // make sure dialect is initialized
     database = getDbMetaData();
     if (lazy) {
@@ -609,8 +622,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
     } else {
       logger.info("Ordering tables by dependency");
     }
-    List<DBTable> tables = DBUtil.dependencyOrderedTables(database);
-    for (DBTable table : tables) {
+    List<DBTable> orderedTables = DBUtil.dependencyOrderedTables(database);
+    for (DBTable table : orderedTables) {
       parseTable(table);
     }
   }
@@ -630,10 +643,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
     return dialect;
   }
 
-  // java.lang.Object overrides ------------------------------------------------------------------
-
-  public String getSystem() {
-    return getDialect().getSystem();
+  public String getDbType() {
+    return getDialect().getDbType();
   }
 
   // private helpers ------------------------------------------------------------------------------
@@ -717,7 +728,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     DBPrimaryKeyConstraint pkConstraint = table.getPrimaryKeyConstraint();
     if (pkConstraint != null) {
       String[] pkColumnNames = pkConstraint.getColumnNames();
-      if (pkColumnNames.length == 1) { // TODO v0.7.6 support composite primary keys
+      if (pkColumnNames.length == 1) { // TODO support composite primary keys
         String columnName = pkColumnNames[0];
         DBColumn column = table.getColumn(columnName);
         table.getColumn(columnName);
@@ -748,7 +759,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
           logger.debug("Parsed reference {}.{}", table.getName(), descriptor);
         }
       } else {
-        // TODO v0.7.6 handle composite keys
+        // TODO handle composite keys
       }
     }
     // process normal columns
@@ -784,7 +795,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
                 decimalGranularity(column.getFractionDigits()));
           }
         }
-        //typeDescriptors.put(typeDescriptor.getName(), typeDescriptor);
         PartDescriptor descriptor = new PartDescriptor(columnName, this);
         descriptor.setLocalType(typeDescriptor);
         descriptor.setMinCount(new ConstantExpression<>(1L));
@@ -797,7 +807,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
           } else {
             logger.debug(
                 "Automated uniqueness assurance on multiple columns is not provided yet: {}", constraint);
-            // TODO v0.7.6 support uniqueness constraints on combination of columns
+            // TODO support uniqueness constraints on combination of columns
           }
         }
         logger.debug("parsed attribute {}: {}", columnId, descriptor);
@@ -920,7 +930,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     DBCatalog catalog = database.getCatalog(catalogName);
     DBSchema dbSchema;
     if (catalog == null) {
-      // logger.debug("no catalog set, try to get schema directly");
+      logger.debug("no catalog set, try to get schema directly");
       return database.getCatalog("benerator").getSchema(schemaName).getTable(tableName);
     } else {
       dbSchema = catalog.getSchema(schemaName);
@@ -935,7 +945,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     DBSchema dbSchema;
     DBCatalog catalog = database.getCatalog(catalogName);
     if (catalog == null) {
-      // logger.info("no catalog set, try to get schema directly");
+      logger.info("no catalog set, try to get schema directly");
       dbSchema = database.getSchema(schemaName);
     } else {
       dbSchema = catalog.getSchema(schemaName);

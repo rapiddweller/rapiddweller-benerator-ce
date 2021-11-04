@@ -219,7 +219,7 @@ public class DBSystemTest extends ABCTest {
     Consumer updater = db.updater();
     // update (1, Alice) to (1, Charly)
     assertEquals("DefaultDBSystem[sa@jdbc:hsqldb:mem:benerator]", db.toString());
-    assertEquals("hsql", db.getSystem());
+    assertEquals("hsql", db.getDbType());
     assertEquals(1, db.invalidationCount());
     assertEquals("ConvertingDataSource[QueryDataSource[SELECT \"ID\" FROM \"PUBLIC\".\"TEST\" where SELECT * FROM TEST] -> ResultSetConverter]", db.queryEntityIds("TEST", "SELECT * FROM TEST", null).toString());
     assertEquals(2, db.countEntities("TEST"));

@@ -67,15 +67,18 @@ public class Benerator {
   public static final String MAINTAINER = "rapiddweller";
 
   protected static final String[] CE_CLI_HELP = {
-      "Usage benerator [options] [filename]",
+      "Usage: benerator [options] [filename]",
       "",
       "  if [filename] is left out, it defaults to benerator.xml",
       "",
       "Options:",
-      "  -v,--version           Display system and version information",
-      "  -h,--help              Display help information",
-      "  --mode <spec>          activates Benerator mode strict, lenient or ",
-      "                         turbo (default: lenient)",
+      "  --version,-v           Display system and version information",
+      "  --help,-h              Display help information",
+      "  --listEnvs             List the available environments",
+      "  --listDbs              List databases defined in the available environments",
+      "  --listKafkas           List Kafka systems defined in the available environments",
+      "  --mode <spec>          activates Benerator mode strict, lenient or turbo ",
+      "                         (default: lenient)"
   };
 
   private static BeneratorMode mode = BeneratorMode.LENIENT;
@@ -134,33 +137,41 @@ public class Benerator {
       BeneratorUtil.printVersionInfo(false, new ConsoleInfoPrinter());
       System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
     }
+    if (config.isListEnvironments()) {
+      BeneratorUtil.printEnvironments(new ConsoleInfoPrinter());
+      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+    }
+    if (config.isListDbs()) {
+      BeneratorUtil.printEnvDbs(new ConsoleInfoPrinter());
+    }
+    if (config.isListKafkas()) {
+      BeneratorUtil.printEnvKafkas(new ConsoleInfoPrinter());
+    }
+    if (config.isListDbs() || config.isListKafkas()) {
+      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+    }
     Benerator.setMode(config.getMode());
     new Benerator().runFile(config.getFile());
   }
 
   public void runFile(String filename) throws IOException {
-    // Run descriptor file
-    DescriptorRunner runner = null;
-    try {
-      // log separator in order to distinguish benerator runs in the log file
-      logger.info("-------------------------------------------------------------" +
-          "-----------------------------------------------------------");
-      InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
-      BeneratorMonitor.INSTANCE.reset();
-      MemorySensor memProfiler = MemorySensor.getInstance();
-      memProfiler.reset();
-      printer.printLines("Running file " + filename);
-      BeneratorUtil.checkSystem(printer);
-      BeneratorRootContext context = BeneratorFactory.getInstance().createRootContext(IOUtil.getParentUri(filename));
-      runner = new DescriptorRunner(filename, context);
+    // log separator in order to distinguish benerator runs in the log file
+    logger.info("-------------------------------------------------------------" +
+        "-----------------------------------------------------------");
+    InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
+    BeneratorMonitor.INSTANCE.reset();
+    MemorySensor memProfiler = MemorySensor.getInstance();
+    memProfiler.reset();
+    printer.printLines("Running file " + filename);
+    BeneratorUtil.checkSystem(printer);
+    BeneratorRootContext context = BeneratorFactory.getInstance().createRootContext(IOUtil.getParentUri(filename));
+    try (DescriptorRunner runner = new DescriptorRunner(filename, context)) {
       runner.run();
       BeneratorUtil.logConfig("Max. committed heap size: " + new KiloFormatter(1024).format(memProfiler.getMaxCommittedHeapSize()) + "B");
       DBUtil.assertAllDbResourcesClosed(false);
     } catch (BeneratorError e) {
       logger.error(e.getMessage(), e);
       System.exit(e.getCode());
-    } finally {
-      IOUtil.close(runner);
     }
   }
 
@@ -170,6 +181,9 @@ public class Benerator {
   static BeneratorConfig parseCommandLine(String... args) {
     BeneratorConfig result = new BeneratorConfig();
     CommandLineParser p = new CommandLineParser();
+    p.addFlag("listEnvironments", "--listEnvs", null);
+    p.addFlag("listDbs", "--listDbs", null);
+    p.addFlag("listKafkas", "--listKafkas", null);
     p.addOption("mode", "--mode", "-m");
     p.addArgument("file", false);
     return p.parse(result, args);

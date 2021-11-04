@@ -56,6 +56,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_META_CAC
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PASSWORD;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_READ_ONLY;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SCHEMA;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SYSTEM;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TABLE_FILTER;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_URL;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_USER;
@@ -77,12 +78,12 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
   private static final Set<String> REQUIRED_ATTRIBUTES = CollectionUtil.toSet(ATT_ID);
 
   private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
-      ATT_ENVIRONMENT, ATT_URL, ATT_DRIVER, ATT_USER, ATT_PASSWORD, ATT_CATALOG, ATT_SCHEMA,
+      ATT_ENVIRONMENT, ATT_SYSTEM, ATT_URL, ATT_DRIVER, ATT_USER, ATT_PASSWORD, ATT_CATALOG, ATT_SCHEMA,
       ATT_TABLE_FILTER, ATT_INCL_TABLES, ATT_EXCL_TABLES, ATT_META_CACHE, ATT_BATCH, ATT_FETCH_SIZE,
       ATT_READ_ONLY, ATT_LAZY, ATT_ACC_UNK_COL_TYPES);
 
 
-  // TODO v1.0 define parser extension mechanism and move DatabaseParser and DefineDatabaseStatement to DB package?
+  // TODO define parser extension mechanism and move DatabaseParser and DefineDatabaseStatement to DB package?
 
   public DatabaseParser() {
     super(EL_DATABASE, REQUIRED_ATTRIBUTES, OPTIONAL_ATTRIBUTES,
@@ -99,6 +100,7 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
     try {
       Expression<String> id = parseAttribute(ATT_ID, element);
       Expression<String> environment = parseScriptableStringAttribute(ATT_ENVIRONMENT, element);
+      Expression<String> system = parseScriptableStringAttribute(ATT_SYSTEM, element);
       Expression<String> url = parseScriptableStringAttribute(ATT_URL, element);
       Expression<String> driver = parseScriptableStringAttribute(ATT_DRIVER, element);
       Expression<String> user = parseScriptableStringAttribute(ATT_USER, element);
@@ -116,7 +118,7 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
       Expression<Boolean> acceptUnknownColumnTypes = new FallbackExpression<>(
           parseBooleanExpressionAttribute(ATT_ACC_UNK_COL_TYPES, element),
           new GlobalAcceptUnknownSimpleTypeExpression());
-      return createDatabaseStatement(id, environment, url, driver, user,
+      return createDatabaseStatement(id, environment, system, url, driver, user,
           password, catalog, schema, tableFilter, includeTables,
           excludeTables, metaCache, batch, fetchSize, readOnly, lazy,
           acceptUnknownColumnTypes, context);
@@ -126,7 +128,7 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
   }
 
   protected DefineDatabaseStatement createDatabaseStatement(
-      Expression<String> id, Expression<String> environment,
+      Expression<String> id, Expression<String> environment, Expression<String> system,
       Expression<String> url, Expression<String> driver,
       Expression<String> user, Expression<String> password,
       Expression<String> catalog, Expression<String> schema,
@@ -136,7 +138,7 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
       Expression<Boolean> readOnly, Expression<Boolean> lazy,
       Expression<Boolean> acceptUnknownColumnTypes,
       BeneratorParseContext context) {
-    return new DefineDatabaseStatement(id, environment, url, driver, user, password, catalog, schema,
+    return new DefineDatabaseStatement(id, environment, system, url, driver, user, password, catalog, schema,
         metaCache, tableFilter, includeTables, excludeTables,
         batch, fetchSize, readOnly, lazy, acceptUnknownColumnTypes, context.getResourceManager());
   }

@@ -11,7 +11,8 @@ import java.util.TreeMap;
  * @since 2.1.0
  */
 public class SensorSummary {
-  TreeMap<ExecutionMode, SensorResult> sensorResults;
+
+  private TreeMap<ExecutionMode, SensorResult> sensorResults;
 
   public SensorSummary() {
     this.sensorResults = new TreeMap<>();

@@ -212,6 +212,7 @@
     <xs:element name="dbsanity">
         <xs:complexType>
             <xs:attribute name="environment" type="xs:string" use="required"/>
+            <xs:attribute name="system" type="xs:string" use="required"/>
             <xs:attribute name="appVersion" type="xs:string"/>
             <xs:attribute name="in" type="xs:string"/>
             <xs:attribute name="out" type="xs:string"/>
@@ -285,6 +286,7 @@
         <xs:complexType>
             <xs:attribute name="id" type="xs:string" use="required"/>
             <xs:attribute name="environment" type="xs:string"/>
+            <xs:attribute name="system" type="xs:string"/>
             <xs:attribute name="url" type="xs:string"/>
             <xs:attribute name="driver" type="xs:string"/>
             <xs:attribute name="user" type="xs:string"/>
@@ -369,6 +371,7 @@
         <xs:complexType>
             <xs:attribute name="id" type="xs:string"/>
             <xs:attribute name="environment" type="xs:string" />
+            <xs:attribute name="system" type="xs:string" />
             <xs:attributeGroup ref="kafka-common-attrs"/>
             <xs:attributeGroup ref="kafka-importer-attrs"/>
             <xs:attribute name="page.size" type="xs:int"/>
@@ -387,6 +390,7 @@
         <xs:complexType>
             <xs:attribute name="id" type="xs:string"/>
             <xs:attribute name="environment" type="xs:string" />
+            <xs:attribute name="system" type="xs:string" />
             <xs:attributeGroup ref="kafka-common-attrs"/>
             <xs:attributeGroup ref="kafka-exporter-attrs"/>
         </xs:complexType>

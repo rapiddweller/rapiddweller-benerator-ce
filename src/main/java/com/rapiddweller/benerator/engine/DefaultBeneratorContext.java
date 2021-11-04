@@ -28,6 +28,9 @@ package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
+import com.rapiddweller.benerator.environment.Environment;
+import com.rapiddweller.benerator.environment.EnvironmentUtil;
+import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.benerator.factory.DefaultsProvider;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
 import com.rapiddweller.benerator.factory.StochasticGeneratorFactory;
@@ -60,7 +63,9 @@ import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.TypeDescriptor;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
@@ -99,6 +104,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
   protected boolean defaultImports;
   protected boolean acceptUnknownSimpleTypes;
 
+  protected final Map<String, Environment> environments;
   protected ComplexTypeDescriptor defaultComponent;
   protected ExecutorService executorService;
 
@@ -140,9 +146,10 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
     this.executorService = createExecutorService();
     this.dataModel = new DataModel();
     this.localDescriptorProvider = new DefaultDescriptorProvider("ctx", dataModel);
+    this.environments = new HashMap<>();
     this.defaultComponent = new ComplexTypeDescriptor("benerator:defaultComponent", localDescriptorProvider);
     this.generatorFactory = createGeneratorFactory();
-    settings = new DefaultContext();
+    this.settings = new DefaultContext();
     this.contextStack = createContextStack(
         new DefaultContext(java.lang.System.getenv()),
         new DefaultContext(java.lang.System.getProperties()),
@@ -276,6 +283,14 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
   @Override
   public void setDefaultComponentConfig(ComponentDescriptor component) {
     defaultComponent.setComponent(component);
+  }
+
+  @Override
+  public SystemRef getEnvironmentSystem(String envName, String system) {
+    synchronized (environments) {
+      Environment env = environments.computeIfAbsent(envName, k -> EnvironmentUtil.parse(envName, contextUri));
+      return env.getSystem(system);
+    }
   }
 
   @Override
