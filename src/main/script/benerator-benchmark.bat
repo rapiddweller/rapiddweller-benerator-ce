@@ -7,11 +7,11 @@ if "%_USE_CLASSPATH%"=="no" goto runNoClasspath
 if not "%CLASSPATH%"=="" goto runWithClasspath
 
 :runNoClasspath
-"%_JAVACMD%" %BENERATOR_OPTS% -classpath "%LOCALCLASSPATH%" com.rapiddweller.benerator.main.Benchmark %*
+"%_JAVACMD%" %BENERATOR_OPTS% -classpath "%LOCALCLASSPATH%" com.rapiddweller.benerator.main.BenchmarkTool %*
 goto end
 
 :runWithClasspath
-"%_JAVACMD%" %BENERATOR_OPTS% -classpath "%CLASSPATH%;%LOCALCLASSPATH%" com.rapiddweller.benerator.main.Benchmark %*
+"%_JAVACMD%" %BENERATOR_OPTS% -classpath "%CLASSPATH%;%LOCALCLASSPATH%" com.rapiddweller.benerator.main.BenchmarkTool %*
 goto end
 
 :end

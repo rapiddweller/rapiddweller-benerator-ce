@@ -1,6 +1,6 @@
 <setup xmlns="https://www.benerator.de/schema/2.1.0" defaultDataset='US'>
 
-    <kafka-exporter id="kafka_exporter" environment="{environment}" topic="kafka-small-entity"/>
+    <kafka-exporter id="kafka_exporter" environment="{environment}" system="kafka_small_entity"/>
 
     <generate type='ben_benchmark' count="{count}" threads="{threads}" pageSize='1000'
               sensor="benchmark.write" consumer="kafka_exporter">
@@ -16,7 +16,7 @@
         <attribute name="att_010" constant="1234.56"/>
     </generate>
 
-    <kafka-importer id="kafka_importer" environment="{environment}" topic="kafka-small-entity" auto.offset.reset="earliest"/>
+    <kafka-importer id="kafka_importer" environment="{environment}" system="kafka_small_entity" auto.offset.reset="earliest"/>
 
     <iterate source="kafka_importer" type='ben_benchmark' count="{count}" threads="{threads}" pageSize='1000'
               sensor="benchmark.read" consumer="NoConsumer"/>

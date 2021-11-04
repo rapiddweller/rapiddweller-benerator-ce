@@ -134,6 +134,7 @@ public class DescriptorConstants {
   public static final String ATT_CATALOG = "catalog";
   public static final String ATT_SCHEMA = "schema";
   public static final String ATT_ENVIRONMENT = "environment";
+  public static final String ATT_SYSTEM = "system";
   public static final String ATT_TABLE_FILTER = "tableFilter";
   public static final String ATT_INCL_TABLES = "includeTables";
   public static final String ATT_EXCL_TABLES = "excludeTables";

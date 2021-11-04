@@ -39,6 +39,7 @@ import com.rapiddweller.benerator.factory.InstanceGeneratorFactory;
 import com.rapiddweller.benerator.factory.MeanDefaultsProvider;
 import com.rapiddweller.benerator.factory.SerialGeneratorFactory;
 import com.rapiddweller.benerator.factory.StochasticGeneratorFactory;
+import com.rapiddweller.benerator.util.DeprecationLogger;
 import com.rapiddweller.benerator.wrapper.LastFlagGenerator;
 import com.rapiddweller.benerator.wrapper.NShotGeneratorProxy;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
@@ -67,8 +68,7 @@ import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import com.rapiddweller.platform.java.Entity2JavaConverter;
 import com.rapiddweller.script.DatabeneScriptParser;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import com.rapiddweller.script.expression.ExpressionUtil;
 
 import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.AssertTrue;
@@ -101,8 +101,6 @@ import java.util.Set;
  */
 public class AnnotationMapper extends DefaultDescriptorProvider {
 
-  private static final Logger logger = LoggerFactory.getLogger(AnnotationMapper.class);
-
   private static final Set<String> STANDARD_METHODS;
 
   private static final Package BENERATOR_ANNO_PACKAGE = Unique.class.getPackage();
@@ -124,7 +122,6 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     }
   }
 
-  private final DataModel dataModel;
   private final PathResolver pathResolver;
 
   private final ArrayTypeGeneratorFactory arrayTypeGeneratorFactory;
@@ -209,7 +206,15 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
   private static void parseDatabase(Database annotation, BeneratorContext context) {
     DBSystem db;
     if (!StringUtil.isEmpty(annotation.environment())) {
-      db = new DefaultDBSystem(annotation.id(), annotation.environment(), context);
+      String system = annotation.system();
+      if (StringUtil.isEmpty(system)) {
+        system = "db";
+        DeprecationLogger.warn("Observed a @Database annotation with 'environment' but without 'system' setting. " +
+            "If you are using the old definition file format, please upgrade to " +
+            "the new environment definition file format introduced in Benerator 2.1.0 and specify a 'system' name. " +
+            "The old format is supported for backwards compatibility, but will be dropped in a future release");
+      }
+      db = new DefaultDBSystem(annotation.id(), annotation.environment(), system, context);
     } else {
       db = new DefaultDBSystem(annotation.id(), annotation.url(), annotation.driver(),
           annotation.user(), annotation.password(), context.getDataModel());
@@ -241,7 +246,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
         if (beanClass != Object.class) {
           throw new ConfigurationError("'type' and 'spec' exclude each other in a @Bean");
         }
-        return DatabeneScriptParser.parseBeanSpec(beanSpec).evaluate(context);
+        return ExpressionUtil.evaluate(DatabeneScriptParser.parseBeanSpec(beanSpec), context);
       } catch (ParseException e) {
         throw new ConfigurationError("Error parsing bean spec: " + beanSpec, e);
       }

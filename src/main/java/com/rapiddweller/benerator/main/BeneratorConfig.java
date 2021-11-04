@@ -13,12 +13,39 @@ import com.rapiddweller.common.cli.CommandLineConfig;
  */
 public class BeneratorConfig extends CommandLineConfig {
 
+  private boolean listEnvironments;
+  private boolean listDbs;
+  private boolean listKafkas;
   private BeneratorMode mode;
   private String file;
 
   public BeneratorConfig() {
     this.file = "benerator.xml";
     this.mode = BeneratorMode.LENIENT;
+  }
+
+  public boolean isListEnvironments() {
+    return listEnvironments;
+  }
+
+  public void setListEnvironments(boolean listEnvironments) {
+    this.listEnvironments = listEnvironments;
+  }
+
+  public boolean isListDbs() {
+    return listDbs;
+  }
+
+  public void setListDbs(boolean listDbs) {
+    this.listDbs = listDbs;
+  }
+
+  public boolean isListKafkas() {
+    return listKafkas;
+  }
+
+  public void setListKafkas(boolean listKafkas) {
+    this.listKafkas = listKafkas;
   }
 
   public BeneratorMode getMode() {

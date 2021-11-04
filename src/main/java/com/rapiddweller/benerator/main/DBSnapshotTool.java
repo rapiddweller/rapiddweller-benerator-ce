@@ -69,7 +69,7 @@ public class DBSnapshotTool {
   public static final String FORMAT = "format";
   public static final String DIALECT = "dialect";
 
-  // TODO v0.8 test with each database
+  // TODO test with each database
   private static final Logger logger = LoggerFactory.getLogger(DBSnapshotTool.class);
 
   public static String[] supportedFormats() {
@@ -153,9 +153,9 @@ public class DBSnapshotTool {
         exporter = new XLSEntityExporter(filename);
       } else if (SQL_FORMAT.equals(format)) {
         if (dialect == null) {
-          dialect = db.getDialect().getSystem();
+          dialect = db.getDialect().getDbType();
         }
-        exporter = new SQLEntityExporter(filename,dialect,lineSeparator,encoding);
+        exporter = new SQLEntityExporter(filename, dialect, lineSeparator, encoding);
       } else {
         throw new IllegalArgumentException("Unknown format: " + format);
       }

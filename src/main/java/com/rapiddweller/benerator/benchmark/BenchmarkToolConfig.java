@@ -3,6 +3,11 @@
 package com.rapiddweller.benerator.benchmark;
 
 import com.rapiddweller.benerator.BeneratorMode;
+import com.rapiddweller.benerator.environment.Environment;
+import com.rapiddweller.benerator.environment.SystemRef;
+import com.rapiddweller.benerator.environment.EnvironmentUtil;
+import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.cli.CommandLineConfig;
 
 import java.util.TreeSet;
@@ -15,21 +20,22 @@ import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
  * @author Volker Bergmann
  * @since 2.1.0
  */
-public class BenchmarkConfig extends CommandLineConfig {
+public class BenchmarkToolConfig extends CommandLineConfig {
 
+  private final String projectFolder;
   private boolean ce;
   private boolean ee;
   private boolean list;
   private BeneratorMode mode;
   private int minSecs;
   private int maxThreads;
-  private String[] dbs;
-  private String[] kafkas;
+  private SystemRef[] systems;
   private String name;
-  private BenchmarkDefinition[] setups;
+  private Benchmark[] benchmarks;
   private ExecutionMode[] threadings;
 
-  public BenchmarkConfig() {
+  public BenchmarkToolConfig(String projectFolder) {
+    this.projectFolder = projectFolder;
     if (isEEAvailable()) {
       this.ce = false;
       this.ee = true;
@@ -40,9 +46,12 @@ public class BenchmarkConfig extends CommandLineConfig {
     this.mode = BeneratorMode.STRICT;
     this.minSecs = 10;
     this.maxThreads = 0;
-    this.dbs = new String[0];
-    this.kafkas = new String[0];
-    this.setups = BenchmarkDefinition.getInstances();
+    this.systems = new SystemRef[0];
+    this.benchmarks = Benchmark.getInstances();
+  }
+
+  public String getProjectFolder() {
+    return projectFolder;
   }
 
   public boolean isList() {
@@ -69,31 +78,27 @@ public class BenchmarkConfig extends CommandLineConfig {
     this.ee = ee;
   }
 
-  public void setDbsSpec(String dbsSpec) {
-    this.dbs = (dbsSpec != null ? dbsSpec.split(",") : new String[0]);
-  }
-
-  public String[] getDbs() {
-    return dbs;
-  }
-
-  public void setKafkasSpec(String kafkaSpec) {
-    this.kafkas = (kafkaSpec != null ? kafkaSpec.split(",") : new String[0]);
-  }
-
-  public String[] getKafkas() {
-    return kafkas;
-  }
-
-  public Environment[] getEnvironments() {
-    Environment[] result = new Environment[dbs.length + kafkas.length];
-    for (int i = 0; i < dbs.length; i++) {
-      result[i] = new Environment(EnvironmentType.DB, dbs[i]);
+  public void setSystemsSpec(String systemsSpec) {
+    String[] tokens = systemsSpec.split(",");
+    ArrayBuilder<SystemRef> sysBuilder = new ArrayBuilder<>(SystemRef.class);
+    for (int i = 0; i < tokens.length; i++) {
+      String[] parts = StringUtil.splitOnFirstSeparator(tokens[i], '#');
+      String envName = parts[0];
+      Environment environment = EnvironmentUtil.parse(envName, projectFolder);
+      String sysSpec = parts[1];
+      if (sysSpec != null) {
+        sysBuilder.add(environment.getSystem(sysSpec));
+      } else {
+        for (SystemRef system : environment.getSystems()) {
+          sysBuilder.add(system);
+        }
+      }
     }
-    for (int i = 0; i < kafkas.length; i++) {
-      result[dbs.length + i] = new Environment(EnvironmentType.KAFKA, kafkas[i]);
-    }
-    return result;
+    this.systems = sysBuilder.toArray();
+  }
+
+  public SystemRef[] getSystems() {
+    return this.systems;
   }
 
   public BeneratorMode getMode() {
@@ -126,11 +131,11 @@ public class BenchmarkConfig extends CommandLineConfig {
 
   public void setName(String name) {
     this.name = name;
-    this.setups = new BenchmarkDefinition[] { BenchmarkDefinition.getInstance(name) };
+    this.benchmarks = new Benchmark[] { Benchmark.getInstance(name) };
   }
 
-  public BenchmarkDefinition[] getSetups() {
-    return setups;
+  public Benchmark[] getBenchmarks() {
+    return benchmarks;
   }
 
   public ExecutionMode[] getThreadings() {

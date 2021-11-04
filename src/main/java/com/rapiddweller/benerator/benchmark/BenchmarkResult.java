@@ -2,6 +2,7 @@
 
 package com.rapiddweller.benerator.benchmark;
 
+import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.common.OrderedMap;
 
 import java.util.Collection;
@@ -14,22 +15,22 @@ import java.util.Collection;
  */
 public class BenchmarkResult {
 
-  private final BenchmarkDefinition benchmark;
-  private final Environment environment;
+  private final Benchmark benchmark;
+  private final SystemRef system;
   private final OrderedMap<String, SensorSummary> sensorSummaries;
 
-  public BenchmarkResult(BenchmarkDefinition benchmark, Environment environment) {
+  public BenchmarkResult(Benchmark benchmark, SystemRef system) {
     this.benchmark = benchmark;
-    this.environment = environment;
+    this.system = system;
     this.sensorSummaries = new OrderedMap<>();
   }
 
-  public BenchmarkDefinition getBenchmark() {
+  public Benchmark getBenchmark() {
     return benchmark;
   }
 
-  public Environment getEnvironment() {
-    return environment;
+  public SystemRef getSystem() {
+    return system;
   }
 
   public Collection<String> getSensors() {

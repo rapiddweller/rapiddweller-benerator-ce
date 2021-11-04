@@ -49,6 +49,7 @@ public class DefineDatabaseStatement implements Statement {
 
   private final Expression<String> id;
   private final Expression<String> environment;
+  private final Expression<String> system;
   private final Expression<String> url;
   private final Expression<String> driver;
   private final Expression<String> user;
@@ -66,7 +67,7 @@ public class DefineDatabaseStatement implements Statement {
   private final Expression<Boolean> acceptUnknownColumnTypes;
   private final ResourceManager resourceManager;
 
-  public DefineDatabaseStatement(Expression<String> id, Expression<String> environment,
+  public DefineDatabaseStatement(Expression<String> id, Expression<String> environment, Expression<String> system,
                                  Expression<String> url, Expression<String> driver, Expression<String> user, Expression<String> password,
                                  Expression<String> catalog, Expression<String> schema, Expression<Boolean> metaCache,
                                  Expression<String> tableFilter, Expression<String> includeTables, Expression<String> excludeTables,
@@ -77,6 +78,7 @@ public class DefineDatabaseStatement implements Statement {
     }
     this.id = id;
     this.environment = environment;
+    this.system = system;
     this.url = url;
     this.driver = driver;
     this.user = user;
@@ -102,7 +104,7 @@ public class DefineDatabaseStatement implements Statement {
     String idValue = id.evaluate(context);
 
     // DB config is based on the (optional) environment setting
-    DBSystem db = accessDatabase(idValue, ExpressionUtil.evaluate(environment, context), context);
+    DBSystem db = accessDatabase(idValue, ExpressionUtil.evaluate(environment, context), ExpressionUtil.evaluate(system, context), context);
 
     // The user may override single or all settings from the environment configuration
     String urlValue = ExpressionUtil.evaluate(url, context);
@@ -149,8 +151,8 @@ public class DefineDatabaseStatement implements Statement {
     return true;
   }
 
-  protected DBSystem accessDatabase(String id, String environment, BeneratorContext context) {
-    return new DefaultDBSystem(id, environment, context);
+  protected DBSystem accessDatabase(String id, String environment, String system, BeneratorContext context) {
+    return new DefaultDBSystem(id, environment, system, context);
   }
 
 }

@@ -3,14 +3,16 @@
 package com.rapiddweller.benerator.main;
 
 import com.rapiddweller.benerator.BeneratorUtil;
-import com.rapiddweller.benerator.benchmark.BenchmarkConfig;
-import com.rapiddweller.benerator.benchmark.BenchmarkSummary;
+import com.rapiddweller.benerator.benchmark.BenchmarkToolConfig;
+import com.rapiddweller.benerator.benchmark.BenchmarkToolReport;
 import com.rapiddweller.benerator.benchmark.BenchmarkRunner;
+import com.rapiddweller.benerator.benchmark.PerformanceFormatter;
 import com.rapiddweller.benerator.benchmark.SensorResult;
-import com.rapiddweller.benerator.benchmark.BenchmarkDefinition;
+import com.rapiddweller.benerator.benchmark.Benchmark;
 import com.rapiddweller.benerator.benchmark.BenchmarkResult;
 import com.rapiddweller.benerator.benchmark.ExecutionMode;
 import com.rapiddweller.benerator.benchmark.SensorSummary;
+import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.HF;
@@ -18,16 +20,12 @@ import com.rapiddweller.common.TextUtil;
 import com.rapiddweller.common.cli.CommandLineParser;
 import com.rapiddweller.common.format.Alignment;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
-import com.rapiddweller.jdbacl.EnvironmentUtil;
+import com.rapiddweller.benerator.environment.EnvironmentUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
 
 import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
 
@@ -37,28 +35,27 @@ import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
  * @author Volker Bergmann
  * @since 2.0.0
  */
-public class Benchmark {
+public class BenchmarkTool {
 
   // constants -------------------------------------------------------------------------------------------------------
 
-  private static final Logger logger = LoggerFactory.getLogger(Benchmark.class);
+  private static final Logger logger = LoggerFactory.getLogger(BenchmarkTool.class);
 
-  public static final DecimalFormat FORMAT_1 = new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.US));
-  public static final DecimalFormat FORMAT_0 = new DecimalFormat("#,##0", DecimalFormatSymbols.getInstance(Locale.US));
+  private static final String PROJECT_FOLDER = "com/rapiddweller/benerator/benchmark";
 
 
   // main ------------------------------------------------------------------------------------------------------------
 
   public static void main(String[] args) throws IOException {
-    BenchmarkConfig config = parseCommandLineConfig(args);
-    BenchmarkSummary result = BenchmarkRunner.runBenchmarks(config);
+    BenchmarkToolConfig config = parseCommandLineConfig(args);
+    BenchmarkToolReport result = BenchmarkRunner.runBenchmarks(config);
     printResult(result);
   }
 
 
   // constructor -----------------------------------------------------------------------------------------------------
 
-  private Benchmark() {
+  private BenchmarkTool() {
     // private constructor to prevent instantiation of this utility class
   }
 
@@ -93,17 +90,17 @@ public class Benchmark {
     );
   }
 
-  private static void printResult(BenchmarkSummary result) {
+  private static void printResult(BenchmarkToolReport result) {
     String[] title = createAndPrintTitle(result);
     printResults(title, result);
   }
 
-  private static void printResults(String[] title, BenchmarkSummary result) {
+  private static void printResults(String[] title, BenchmarkToolReport result) {
     Object[][] table = createTable(result);
     printTable(title, table);
   }
 
-  private static Object[][] createTable(BenchmarkSummary result) {
+  private static Object[][] createTable(BenchmarkToolReport result) {
     // create table
     ArrayBuilder<Object[]> table = new ArrayBuilder<>(Object[].class);
     // format table header
@@ -119,7 +116,7 @@ public class Benchmark {
         int i = 1;
         for (ExecutionMode mode : executionModes) {
           SensorResult sensorResult = sensorSummary.getResult(mode);
-          row[i] = (sensorResult != null ? format(sensorResult.entitiesPerHour()) : "N/A");
+          row[i] = (sensorResult != null ? PerformanceFormatter.format(sensorResult.entitiesPerHour()) : "N/A");
           i++;
         }
       }
@@ -127,8 +124,9 @@ public class Benchmark {
     return table.toArray();
   }
 
-  private static String environmentName(BenchmarkResult application) {
-    return (application.getEnvironment() != null ? application.getEnvironment().getName() : null);
+  private static String environmentName(BenchmarkResult result) {
+    SystemRef system = result.getSystem();
+    return (system != null ? system.toString() : null);
   }
 
   private static Object[] createColumnHeaders(ExecutionMode[] threadings) {
@@ -157,7 +155,7 @@ public class Benchmark {
     System.out.println(TextUtil.formatLinedTable(title, cells, alignments, true));
   }
 
-  private static String[] createAndPrintTitle(BenchmarkSummary result) {
+  private static String[] createAndPrintTitle(BenchmarkToolReport result) {
     ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
     builder.addAll(new String[] {
         "Benchmark throughput of Benerator " + result.getVersionInfo().getVersion(),
@@ -169,14 +167,14 @@ public class Benchmark {
         "Started: " + result.getStartDateTime(),
         "Duration: " + HF.formatDurationSec(result.getDurationSecs()),
     });
-    List<String> dbs = result.getDbs();
-    if (!dbs.isEmpty()) {
-      if (dbs.size() == 1) {
-        builder.add("Database: " + EnvironmentUtil.getProductDescription(dbs.get(0)));
+    SystemRef[] dbs = result.getSystems("db");
+    if (dbs.length > 0) {
+      if (dbs.length == 1) {
+        builder.add("Database: " + EnvironmentUtil.getDbProductDescription(dbs[0]));
       } else {
         builder.add("Databases:");
-        for (String db : dbs) {
-          builder.add("- " + EnvironmentUtil.getProductDescription(db));
+        for (SystemRef system : dbs) {
+          builder.add("- " + EnvironmentUtil.getDbProductDescription(system));
         }
       }
     }
@@ -197,7 +195,7 @@ public class Benchmark {
     return tableRow;
   }
 
-  private static String rowHeader(BenchmarkDefinition benchmark, String environment, String sensor, int sensorCount) {
+  private static String rowHeader(Benchmark benchmark, String environment, String sensor, int sensorCount) {
     String label = benchmark.getName();
     if (sensorCount > 1) {
       label += " " + sensor;
@@ -208,7 +206,7 @@ public class Benchmark {
     return label;
   }
 
-  static BenchmarkConfig parseCommandLineConfig(String... args) {
+  static BenchmarkToolConfig parseCommandLineConfig(String... args) {
     CommandLineParser p = new CommandLineParser();
     p.addFlag("ce", "--ce", null);
     p.addFlag("ee", "--ee", null);
@@ -216,10 +214,9 @@ public class Benchmark {
     p.addOption("mode", "--mode", "-m");
     p.addOption("minSecs", "--minSecs", null);
     p.addOption("maxThreads", "--maxThreads", null);
-    p.addOption("dbsSpec", "--env", null);
-    p.addOption("kafkasSpec", "--kafka", null);
+    p.addOption("systemsSpec", "--env", null);
     p.addArgument("name", false);
-    BenchmarkConfig config = new BenchmarkConfig();
+    BenchmarkToolConfig config = new BenchmarkToolConfig(PROJECT_FOLDER);
     p.parse(config, args);
 
     // check help and version requests
@@ -254,13 +251,9 @@ public class Benchmark {
 
   private static void listTests() {
     System.out.println("Available Benchmark tests:");
-    for (BenchmarkDefinition setup : BenchmarkDefinition.getInstances()) {
+    for (Benchmark setup : Benchmark.getInstances()) {
       System.out.println(setup.getName() + ": " + setup.getDescription());
     }
-  }
-
-  private static String format(double number) {
-    return (number < 10 ? FORMAT_1 : FORMAT_0).format(number);
   }
 
 }
