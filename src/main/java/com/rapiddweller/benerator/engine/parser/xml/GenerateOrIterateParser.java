@@ -243,14 +243,11 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
         element.getAttribute(ATT_PAGER));
     String productName = getTaskName(descriptor);
     String sensor = element.getAttribute("sensor");
-    if (StringUtil.isEmpty(sensor)) {
-      sensor = element.getNodeName() + '.' + productName;
-    }
 
     Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_NAME));
     Expression<Long> minCount = DescriptorUtil.getMinCount(descriptor, 0L);
     BeneratorContext childContext = context.createSubContext(productName);
-    GenerateOrIterateStatement statement = createStatement(parentPath, iterate,
+    GenerateOrIterateStatement statement = createStatement(parentPath, iterate, productName,
         countGenerator, minCount, threads, pageSize, pager, sensor, infoLog, nested, errorHandler, context, childContext);
 
     // TODO avoid double parsing of the InstanceDescriptor and remove the following...
@@ -269,11 +266,11 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
   }
 
   protected GenerateOrIterateStatement createStatement(
-      Statement[] parentPath, boolean iterate, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
+      Statement[] parentPath, boolean iterate, String productName, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
       Expression<Long> pageSize, Expression<PageListener> pager, String sensor,
       boolean infoLog, boolean nested,
       Expression<ErrorHandler> errorHandler, BeneratorContext context, BeneratorContext childContext) {
-    return new GenerateOrIterateStatement(parentPath, iterate, countGenerator, minCount, threads, pageSize, pager, sensor,
+    return new GenerateOrIterateStatement(parentPath, iterate, productName, countGenerator, minCount, threads, pageSize, pager, sensor,
         errorHandler, infoLog, nested, context, childContext);
   }
 

@@ -14,8 +14,10 @@ import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.HF;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.log.LoggingInfoPrinter;
+import com.rapiddweller.common.time.ElapsedTimeFormatter;
 import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.stat.CounterRepository;
 import com.rapiddweller.stat.LatencyCounter;
@@ -51,6 +53,9 @@ public class BenchmarkRunner {
   }
 
   public static BenchmarkToolReport runBenchmarks(BenchmarkToolConfig config) throws IOException {
+    logger.info("Benchmark runner started, checking Benerator first...");
+    logSeparator();
+    BeneratorUtil.checkSystem(new LoggingInfoPrinter(BenchmarkRunner.class));
     // perform tests
     BenchmarkToolReport result = new BenchmarkToolReport(config);
     Benerator.setMode(config.getMode());
@@ -58,6 +63,7 @@ public class BenchmarkRunner {
       runBenchmark(benchmark, result);
     }
     FileUtil.deleteIfExists(new File(EnvironmentUtil.fileName("builtin")));
+    logSeparator();
     return result.stop();
   }
 
@@ -101,7 +107,6 @@ public class BenchmarkRunner {
   }
 
   public static void runBenchmarkOnEnvironment(Benchmark benchmark, SystemRef environment, BenchmarkToolReport summary) throws IOException {
-    logger.info("Running {}", benchmark.getFileName());
     BenchmarkResult benchmarkResult = new BenchmarkResult(benchmark, environment);
     summary.addResult(benchmarkResult);
     long initialCount = benchmark.getInitialCount();
@@ -148,25 +153,28 @@ public class BenchmarkRunner {
 
   private static List<SensorResult> runFile(String filePath, SystemRef system,
       long count, ExecutionMode executionMode, AtomicLong maxFileSize) throws IOException {
-    logger.info("------------------------------------------------------------" +
-        "------------------------------------------------------------");
-    logger.info("Running {}", filePath);
+    logSeparator();
+    int threadCount = executionMode.getThreadCount();
+    if (logger.isInfoEnabled()) {
+      logger.info("Running {} in {} for {} entities with {}",
+          filePath, (executionMode.isEe() ? "EE" : "CE"), HF.format(count), HF.pluralize(threadCount, "thread"));
+    }
     if (executionMode.isEe()) {
       BeneratorFactory.setInstance((BeneratorFactory) BeanUtil.newInstance(EE_BENERATOR_FACTORY));
     } else {
       BeneratorFactory.setInstance(new DefaultBeneratorFactory());
     }
-    logger.debug("Testing {} with count {} and {} thread(s)", filePath, count, executionMode);
     String tmpFileName = prepareXml(filePath, system, count, executionMode.getThreadCount());
     CounterRepository.getInstance().clear();
-    BeneratorUtil.checkSystem(new LoggingInfoPrinter(BenchmarkRunner.class));
     BeneratorRootContext context = BeneratorFactory.getInstance().createRootContext(IOUtil.getParentUri(tmpFileName));
     File[] generatedFiles;
     try (DescriptorRunner runner = new DescriptorRunner(tmpFileName, context)) {
       runner.run();
       generatedFiles = getGeneratedFiles();
       for (File generatedFile : generatedFiles) {
-        logger.info("Generated file {} has length {}", generatedFile, generatedFile.length());
+        if (logger.isInfoEnabled()) {
+          logger.info("Generated file {} is {} large", generatedFile, HF.formatByteSize(generatedFile.length()));
+        }
         if (generatedFile.length() > maxFileSize.get()) {
           maxFileSize.set(generatedFile.length());
         }
@@ -174,6 +182,11 @@ public class BenchmarkRunner {
     }
     deleteArtifacts(tmpFileName, generatedFiles);
     return evaluateSensors(executionMode);
+  }
+
+  private static void logSeparator() {
+    logger.info("------------------------------------------------------------" +
+        "------------------------------------------------------------");
   }
 
   // helper methods --------------------------------------------------------------------------------------------------
@@ -272,9 +285,12 @@ public class BenchmarkRunner {
         long eps = countUsed * 1000 / latency;
         if (logger.isInfoEnabled()) {
           int threads = executionMode.getThreadCount();
-          logger.info("{}: {} entities / {} ms, throughput {} E/s - {} ME/h, {} thread{}", key, countUsed,
-              latencyCount.totalLatency(), eps, PerformanceFormatter.format(eps * 3600. / 1000000.),
-              threads, (threads > 1 ? "s" : ""));
+          if (logger.isInfoEnabled()) {
+            logger.info("{}: {} entities / {} ms, throughput {} E/s - {} ME/h, {}", key, HF.format(countUsed),
+                ElapsedTimeFormatter.format(latencyCount.totalLatency()), HF.format(eps),
+                PerformanceFormatter.format(eps * 3600. / 1000000.),
+                HF.pluralize(threads, "thread"));
+          }
         }
         result.add(new SensorResult(sensor, countUsed, executionMode, (int) latencyCount.totalLatency()));
       }

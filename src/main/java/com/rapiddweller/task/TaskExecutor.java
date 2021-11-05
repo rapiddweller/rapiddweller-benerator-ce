@@ -28,6 +28,7 @@ package com.rapiddweller.task;
 
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.HF;
 import com.rapiddweller.contiperf.PerformanceTracker;
 import com.rapiddweller.platform.contiperf.PerfTrackingTaskProxy;
 import org.slf4j.LoggerFactory;
@@ -114,16 +115,13 @@ public class TaskExecutor {
   private static String executionInfo(Task task, Long minInvocations,
                                       Long maxInvocations, long pageSize) {
     String invocationInfo =
-        (maxInvocations == null ? "as long as available" :
-            (maxInvocations > 1 ? maxInvocations + " times" : ""));
+        (maxInvocations == null ? "as long as available" : HF.pluralize(maxInvocations, "time"));
     if (minInvocations != null && minInvocations > 0 &&
         (maxInvocations == null || maxInvocations > minInvocations)) {
-      invocationInfo +=
-          " requiring at least " + minInvocations + " generations";
+      invocationInfo += " requiring at least " + minInvocations + " generations";
     }
     if (invocationInfo.length() > 0) {
-      invocationInfo +=
-          " with page size " + pageSize + " in a single thread";
+      invocationInfo += " with page size " + HF.format(pageSize) + " in a single thread";
     }
     return "Running task " + task + " " + invocationInfo;
   }
