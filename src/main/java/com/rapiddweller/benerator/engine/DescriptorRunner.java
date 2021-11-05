@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.consumer.FileExporter;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.common.ExceptionUtil;
+import com.rapiddweller.common.HF;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.RoundedNumberFormat;
 import com.rapiddweller.common.converter.ConverterManager;
@@ -119,11 +120,12 @@ public class DescriptorRunner implements ResourceManager {
   public void execute(BeneratorRootStatement rootStatement) {
     try {
       startTime = System.currentTimeMillis();
+      long initialCount = BeneratorMonitor.INSTANCE.getTotalGenerationCount();
       // run AST
       rootStatement.execute(context);
       // calculate and print statistics
       long elapsedTime = java.lang.System.currentTimeMillis() - startTime;
-      printStats(elapsedTime);
+      printStats(initialCount, elapsedTime);
       if (Profiling.isEnabled()) {
         Profiler.defaultInstance().printSummary();
       }
@@ -168,10 +170,11 @@ public class DescriptorRunner implements ResourceManager {
 
   // private helpers -------------------------------------------------------------------------------------------------
 
-  private static void printStats(long elapsedTime) {
-    String message = "Created a total of " + BeneratorMonitor.INSTANCE.getTotalGenerationCount() + " entities";
+  private static void printStats(long initialCount, long elapsedTime) {
+    long newCount = BeneratorMonitor.INSTANCE.getTotalGenerationCount() - initialCount;
+    String message = "Processed a total of " + HF.format(newCount) + " entities";
     if (elapsedTime != 0) {
-      long throughput = BeneratorMonitor.INSTANCE.getTotalGenerationCount() * 3600000L / elapsedTime;
+      long throughput = newCount * 3600000L / elapsedTime;
       message += " in " + ElapsedTimeFormatter.format(elapsedTime) + " (~" + RoundedNumberFormat.format(throughput, 0) + " p.h.)";
     }
     LOGGER.info(message);

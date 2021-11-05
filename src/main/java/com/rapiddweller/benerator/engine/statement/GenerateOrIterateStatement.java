@@ -33,7 +33,9 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.HF;
 import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.time.ElapsedTimeFormatter;
 import com.rapiddweller.contiperf.StopWatch;
 import com.rapiddweller.profile.Profiler;
@@ -63,18 +65,20 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
   // constant attributes -----------------------------------------------------------------------------------------------
 
   protected final boolean iterate;
+  protected final String productName;
   protected final Generator<Long> countGenerator;
   protected final Expression<Long> minCount;
   protected final Expression<Integer> threads;
   protected final Expression<Long> pageSize;
   protected final Expression<PageListener> pageListenerEx;
+  protected final boolean customSensor;
   protected final String sensor;
   protected final boolean infoLog;
   protected final boolean isSubCreator;
   protected final BeneratorContext context;
   protected final BeneratorContext childContext;
   private final ElapsedTimeFormatter elapsedTimeFormatter;
-  private List<String> profilerPath;
+  private final List<String> profilerPath;
 
 
   // mutable attributes ------------------------------------------------------------------------------------------------
@@ -85,18 +89,25 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
   // constructor -------------------------------------------------------------------------------------------------------
 
   public GenerateOrIterateStatement(
-      Statement[] parentPath, boolean iterate, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
+      Statement[] parentPath, boolean iterate, String productName, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
       Expression<Long> pageSize, Expression<PageListener> pageListenerEx, String sensor,
       Expression<ErrorHandler> errorHandler, boolean infoLog, boolean isSubCreator,
       BeneratorContext context, BeneratorContext childContext) {
     super(errorHandler);
     this.iterate = iterate;
+    this.productName = productName;
     this.countGenerator = countGenerator;
     this.minCount = minCount;
     this.threads = threads;
     this.pageSize = pageSize;
     this.pageListenerEx = pageListenerEx;
-    this.sensor = sensor;
+    if (!StringUtil.isEmpty(sensor)) {
+      this.customSensor = true;
+      this.sensor = sensor;
+    } else {
+      this.customSensor = false;
+      this.sensor = (iterate ? "iterate" : "generate") + '.' + productName;
+    }
     this.infoLog = infoLog;
     this.isSubCreator = isSubCreator;
     this.context = context;
@@ -227,16 +238,21 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
   }
 
   private void logPerformance(int dt, long dc) {
-    String op = (iterate ? "iterated" : "generated");
+    String operation = (iterate ? "iterated" : "generated");
     if (dc == 0) {
-      logger.info("No data {} for '{}' setup", op, sensor);
+      logger.info("No data {} for '{}' setup", operation, sensor);
     } else if (dt > 0) {
       if (logger.isInfoEnabled()) {
-        logger.info("{} {} data sets from '{}' setup in {} ({}/s)",
-            op, dc, sensor, elapsedTimeFormatter.convert((long) dt), dc * 1000 / dt);
+        StringBuilder message = new StringBuilder(operation).append(" ").append(HF.pluralize(dc, productName));
+        if (customSensor) {
+          message.append(" [").append(sensor).append(']');
+        }
+        message.append(" in ").append(elapsedTimeFormatter.convert((long) dt));
+        message.append(" (").append(HF.format(dc * 1000 / dt)).append("/s)");
+        logger.info("{}", message);
       }
     } else {
-      logger.info("{} {} '{}' data set(s)", op, dc, sensor);
+      logger.info("{} {} '{}' data set(s)", operation, dc, sensor);
     }
   }
 
