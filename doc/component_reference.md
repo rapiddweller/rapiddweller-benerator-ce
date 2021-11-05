@@ -302,9 +302,9 @@ Benerator supports two different types of converter interfaces:
 
 * java.text.Format
 
-### rapiddweller Converters
+### Converters
 
-The following converter classes are located in the package **com.rapiddweller.common.converters** and are imported with the default imports:
+The following converter classes are imported by default:
 
 * **ByteArrayToBase64Converter**: Converts byte arrays to strings which are base-64-encoded
 
@@ -313,6 +313,14 @@ The following converter classes are located in the package **com.rapiddweller.co
 * **ToUpperCaseConverter**: Converts strings to uppercase
 
 * **LiteralParser**: Parses strings as numbers, strings, dates and times
+
+* **Mask**: Replaces each character of a string with an asterisk '*' or another configurable character.
+
+* **MiddleMask**: Replaces each character of a string with an asterisk '*' or another configurable character, leaving a configurable number of characters unmasked at the beginning and/or the end of the string.
+
+* **Append**: Appends a configurable suffix.
+
+* **CutLength**: Cuts the length of a string.
 
 * **MD5Hash**, **SHA1Hash**, **SHA256Hash**: Convert any data to a hexadecimal hash code
 

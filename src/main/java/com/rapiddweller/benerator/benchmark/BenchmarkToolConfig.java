@@ -7,9 +7,12 @@ import com.rapiddweller.benerator.environment.Environment;
 import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.benerator.environment.EnvironmentUtil;
 import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.cli.CommandLineConfig;
 
+import java.io.IOException;
 import java.util.TreeSet;
 
 import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
@@ -22,7 +25,6 @@ import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
  */
 public class BenchmarkToolConfig extends CommandLineConfig {
 
-  private final String projectFolder;
   private boolean ce;
   private boolean ee;
   private boolean list;
@@ -34,8 +36,7 @@ public class BenchmarkToolConfig extends CommandLineConfig {
   private Benchmark[] benchmarks;
   private ExecutionMode[] threadings;
 
-  public BenchmarkToolConfig(String projectFolder) {
-    this.projectFolder = projectFolder;
+  public BenchmarkToolConfig() {
     if (isEEAvailable()) {
       this.ce = false;
       this.ee = true;
@@ -48,10 +49,6 @@ public class BenchmarkToolConfig extends CommandLineConfig {
     this.maxThreads = 0;
     this.systems = new SystemRef[0];
     this.benchmarks = Benchmark.getInstances();
-  }
-
-  public String getProjectFolder() {
-    return projectFolder;
   }
 
   public boolean isList() {
@@ -81,10 +78,18 @@ public class BenchmarkToolConfig extends CommandLineConfig {
   public void setSystemsSpec(String systemsSpec) {
     String[] tokens = systemsSpec.split(",");
     ArrayBuilder<SystemRef> sysBuilder = new ArrayBuilder<>(SystemRef.class);
-    for (int i = 0; i < tokens.length; i++) {
-      String[] parts = StringUtil.splitOnFirstSeparator(tokens[i], '#');
+    for (String token : tokens) {
+      String[] parts = StringUtil.splitOnFirstSeparator(token, '#');
       String envName = parts[0];
-      Environment environment = EnvironmentUtil.parse(envName, projectFolder);
+      if ("builtin".equals(envName)) {
+        String envFileName = EnvironmentUtil.fileName(envName);
+        try {
+          IOUtil.copyFile(BenchmarkRunner.RESOURCE_FOLDER + "/" + envFileName, envFileName);
+        } catch (IOException e) {
+          throw new ConfigurationError("Error processing environment file " + envFileName, e);
+        }
+      }
+      Environment environment = EnvironmentUtil.parse(envName, ".");
       String sysSpec = parts[1];
       if (sysSpec != null) {
         sysBuilder.add(environment.getSystem(sysSpec));

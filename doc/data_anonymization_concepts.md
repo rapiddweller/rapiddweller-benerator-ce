@@ -1,22 +1,26 @@
 # Data Anonymization Concepts
 
-## The Basic Idea
+## Basic Concepts
 
 The approach for anonymizing (also obfuscating) production data is to `<iterate>` over existing data and
-overwrite data fields with privacy concerns making use of all the features you learned 
-in '[Data Generation Concepts](data_generation_concepts.md)'. 
+overwrite data fields with privacy concerns making use of all the features you learned
+in '[Data Generation Concepts](data_generation_concepts.md)'.
 
-If you need to assure multi-field-dependencies when overwriting, 
+### Prototype-based anonymization
+
+If you need to assure multi-field-dependencies in anonymization or just overwrite data with real-looking substitutes,  
 you can choose a prototype-based approach: import data from one source and merge it with
-prototypes that are generated or imported from another source.
+prototypes that are generated or imported from another source. Benerator comes with many predefined
+prototype generators for different domains, and you can easily set up custom prototype-based anonymization approaches.
 
-When importing data for functional and performance testing, you may need to add 
+When importing data for functional and performance testing, you may need to add
 a '[Data Postprocessing Stage](data_generation_concepts.md#data-postprocessing-stage)'.
 
-In the following example, customers are imported from a database table in a production database (prod_db), anonymized and exported to a test
-database (test_db). All attributes that are not overwritten, will be exported as is. Since customer names and birthdates need to be anonymized, a
-prototype generator ('[PersonGenerator](domains.md#persongenerator)') is used to generate prototypes (named person) whose attributes are used to overwrite production customer
-attributes:
+In the following example, customers are imported from a database table in a production database (prod_db),
+anonymized and exported to a test database (test_db). All attributes that are not overwritten, will be exported as is.
+Since customer names and birthdates need to be anonymized, a prototype generator
+('[PersonGenerator](domains.md#persongenerator)') is used to generate prototypes (named person)
+whose attributes are used to overwrite production customer attributes:
 
 ```xml
 <iterate source="prod_db" type="db_customer" consumer="test_db">
@@ -29,6 +33,69 @@ attributes:
 ```
 
 ![](assets/grafik14.png)
+
+### Data Masking
+
+The following ones are Converters useful for data masking, making the manipulation obvious:
+
+| Classes | Description | Example |
+| --- | --- | --- |
+| **Mask** | Replaces each character of a string with an asterisk '*' or another configurable character. | ***** |
+| **MiddleMask** | Replaces each character of a string with an asterisk '*' or another configurable character, leaving a configurable number of characters unmasked at the beginning and/or the end of the string. | 38***********329 |
+| **MD5Hash**, **SHA1Hash**, **SHA256Hash** | Convert any data to a hexadecimal hash code | D41D8CD98F00B204E9800998ECF8427E |
+| **MD5HashBase64**, **SHA1HashBase64**, **SHA256HashBase64** | Convert any data to a hash code in Base64 format | 1B2M2Y8AsgTpgAmY7PhCfg== |
+| **JavaHash**| Convert any data to a hexadecimal hash code. This implementation is faster than the hash converters above | 0027b8b2 |
+
+The following example shows you a mix of prototype usage and masking:
+
+Imagine having a set of personal data, like this:
+
+| given Name | family Name | alias | street | house Number | postal Code | city | accountNo | ssn | creditCardNo | secret1 | secret2 | secret3 | secret4 | secret5
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
+| Hannah    | Hopkins | hahop | Main Street | 3456 | 9876 | Central City | 1234567890 | 123456789 | 1234567890123456 | secret1 | secret2 | secret3 | secret4 | secret5
+| Bob       | Baker | bobo | Orchard Lane | 12 | 65395 | Countryside | 2345678901 | 234567890 | 2345678901234567 | secret1 | secret2 | secret3 | secret4 | secret5
+| Alice     | Anderson | alan | Shiny Street | 123 | 93748 | Gloryville | 3456789012 | 345678901 | 3456789012345678 | secret1 | secret2 | secret3 | secret4 | secret5
+
+
+
+Applying the Benerator setup
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<setup xmlns="https://www.benerator.de/schema/2.1.0" defaultDataset="US">
+    
+    <import domains="address"/>
+
+    <iterate source="persons.csv" type="data" consumer="ConsoleExporter">
+        <variable name="addr" generator="AddressGenerator"/>
+        <attribute name="familyName" converter="new CutLength(3)"/>
+        <attribute name="givenName" converter="Mask"/>
+        <attribute name="alias" converter="new Append('_demo')"/>
+        <attribute name="street" script="addr.street"/>
+        <attribute name="houseNumber" script="addr.houseNumber"/>
+        <attribute name="postalCode" script="addr.postalCode"/>
+        <attribute name="city" script="addr.city"/>
+        <attribute name="country" constant="US"/>
+        <attribute name="accountNo" converter="SHA256Hash"/>
+        <attribute name="ssn" converter="new MiddleMask(2,3)"/>
+        <attribute name="creditCardNo" converter="SHA1HashBase64"/>
+        <attribute name="secret1" converter="MD5Hash"/>
+        <attribute name="secret2" converter="MD5HashBase64"/>
+        <attribute name="secret3" converter="SHA1Hash"/>
+        <attribute name="secret4" converter="SHA1HashBase64"/>
+        <attribute name="secret5" converter="JavaHash"/>
+    </iterate>
+
+</setup>
+```
+
+Yields the following result:
+
+| given Name | family Name | alias | street | house Number | postal Code | city | country |accountNo | ssn | creditCardNo | secret1 | secret2 | secret3 | secret4 | secret5 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| ****** | Hop | hahop_demo | Williams Street | 24 | 11940 | EAST MORICHES  | US | C775E7B757EDE630CD0AA1113BD10266 1AB38829CA52A6422AB782862F268646 | 12****789 | 3u0qiOc9zKowqeb ilvYr4ji+St4= | E52D98C459819A11 775936D8DFBB7929 | 5Uz7NxT3bO3 UsniJ4fahdA== | 418EE516F1CB095C50FF 2F10A76192889C281F3A | OYLHmdHE864xkK 1OCSSFhcZRqUY= | 756e8785 |
+| ***    | Bak | bobo_demo  | Ridge Street    | 42 | 57373 | SAINT LAWRENCE | US | 4191597AA1B3449DEE4F86976B855E03 7C3AA38B72FCE597A3651FA9036962A2 | 23****890 | ZS88gHOnttsthvq qf56nTVcmEjM= | E52D98C459819A11 775936D8DFBB7929 | 5Uz7NxT3bO3 UsniJ4fahdA== | 418EE516F1CB095C50FF 2F10A76192889C281F3A | OYLHmdHE864xkK 1OCSSFhcZRqUY= | 756e8785 |
+| *****  | And | alan_demo  | Lincoln Street  | 47 | 88006 | LAS CRUCES     | US | 26CC49F1A2133F3784B937017F9CC86E 05B5413C7F91B0B6BD6375631B68371E | 34****901 | iiAREgvD0AkATPQ Qu7SmZYD1p0s= | E52D98C459819A11 775936D8DFBB7929 | 5Uz7NxT3bO3 UsniJ4fahdA== | 418EE516F1CB095C50FF 2F10A76192889C281F3A | OYLHmdHE864xkK 1OCSSFhcZRqUY= | 756e8785 |
 
 
 ## Import filtering
@@ -193,28 +260,3 @@ applied if the condition resolves to true:
     <attribute name="vat_no" condition="this.vat_no != null" pattern="DE[1-9][0-9]{8}" unique="true" />
 </iterate>
 ```
-
-## Data Converters
-
-Converters are useful for supporting using custom data types (e.g. a three-part phone number) and common conversions (
-e.g. formatting a date as string). Converters can be applied to entities as well as attributes by specifying a converter attribute:
-
-```xml
-<generate type="TRANSACTION" consumer="db">
-    <id name="ID" type="long" strategy="increment" param="1000" />
-    <attribute name="PRODUCT" source="{TRANSACTION.PRODUCT}" converter="CaseConverter"/>
-</generate>
-```
-
-For specifying Converters, you can
-
-- use the class name
-- refer a JavaBean in the Benerator context
-- provide a comma-separated Converter list in the two types above
-
-Benerator supports two types of converters:
-
-1. Classes that implement Benerator's service provider interface (SPI) com.rapiddweller.common.Converter
-2. Classes that extend the class java.text.Format
-
-If the class has a 'pattern' property, Benerator maps a descriptor's pattern attribute to the bean instance property.

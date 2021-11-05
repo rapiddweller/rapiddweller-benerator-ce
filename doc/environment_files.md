@@ -1,6 +1,9 @@
 # Environment Files
 
-An environment file may define an arbitrary number of systems to connect from Benerator via a short reference. Currently, relational databases and Kafka clusters and topics are supported. An environment file has the suffix .env.properties. As an example, you may define the development environment as „dev.env.properties“.
+An environment file may define an arbitrary number of systems to connect from Benerator via a short reference. 
+Currently, relational databases and Kafka clusters and topics are supported. 
+An environment file has the suffix `.env.properties`. 
+As an example, you may define the development environment as `dev.env.properties`.
 
 ## System Definition
 The settings for each system are listed in the environment file in the form:
@@ -11,7 +14,7 @@ The settings for each system are listed in the environment file in the form:
 
 - `<type>` must be`db` or `kafka`,
 
-- `<setting>` must be one of the settings supported by this system type. 
+- `<setting>` must be one of the settings supported by this system type. The name may contain '.' characters.
 
 Example:
 ```properties
@@ -21,27 +24,38 @@ crm.db.driver=org.h2.Driver
 
 ## Additional Settings
 Additional individual settings that depend on the environment may be declared. 
-It is recommended to avoid '.' characters in their names.
+Such settings must not have a '.' character in their name.
 
 Example:
 ```properties
 id_strategy=hilo
 ```
 
+## Comments
+
+Lines starting with a hash # are considered comments and should be used to structure and explain the file's content:
+
+```properties
+# this is a comment line
+```
+
 ## Full Environment File Example
 Complete environment file example: `dev.env.properties`
 
 ```properties
+# In the dev environment, the CRM system is located in a H2 databas
 crm.db.url=jdbc:h2:mem:benerator
 crm.db.driver=org.h2.Driver
 crm.db.schema=PUBLIC
 crm.db.user=sa
 crm.db.read.only=true
 
+# The procurement is a Kafka cluster on x.de
 procurement.kafka.bootstrap.servers=x.de:9092
 procurement.kafka.topic=orders
 procurement.kafka.format=json
 
+# Use hilo as default id generation strategy
 id_strategy=hilo
 ```
 
@@ -74,16 +88,33 @@ or
 <kafka-importer id=“orders“ environment=“dev“ system=“procurement“/>
 ```
 
-You may set up a Benerator task to run on different environments by making the environment 
-a variable (Defined in an <include>d properties file or as a <setting>) and reference it, 
-for example like
+## Planning for different environments
+
+You will likely set up your data generation or anonymization task on a development environment, 
+fine tune and test it and finally roll it out on a performance test, showcase or functional testing system. 
+Consider these different stages of the Benerator project.
+
+If you are planning and naming your environment definitions wisely, it is a trivial configuration 
+change to switch from one stage to another:
+
+1. Choose abstract names that describe the _roles_ of the systems, _not_ the names, eg. `crm`, `order`, `procurement` etc.
+
+2. Define an environment file for each stage, eg. `dev`, `functest`, `perftest` etc.
+
+3. In each environment files, assign each role identifier the physical system of that stage.
+
+4. Create a Benerator setup in which `stage` occurs as a variable, eg. as setting, environment property or setting in an included configuration properties file
+
+5. When declaring a system, use a script expression `{stage}` to reference the stage of a system
+
+Now switching the stage means just switching the `stage` flag:
 
 ```xml
 <setting name="stage" value="dev"/>
 ...
 <database id=“custs“ environment=“{stage}“ system=“crm“/>
 ...
-<kafka-importer id=“orders“ environment=“{stage}“ system=“procurement“/>
+<kafka-exporter id=“orders“ environment=“{stage}“ system=“procurement“/>
 ```
 
 ## Backwards Compatibility

@@ -690,15 +690,32 @@ Example
 
 In a script, the keyword **this** refers to the entity currently being generated/iterated.
 
-### "converter" post processing
 
-For more intelligent/dynamic conversions, you can inject a converter, e.g. for converting strings to upper case:
+## Converters
+
+Converters are useful for supporting using custom data types (e.g. a three-part phone number) and common conversions (
+e.g. formatting a date as string). Converters can be applied to entities as well as attributes by specifying a converter attribute:
 
 ```xml
-<iterate type="TX" source="tx.ent.csv">
-    <attribute name="PRODUCT" script="{this.PRODUCT}" converter="CaseConverter" />
-</iterate>
+<generate type="TRANSACTION" consumer="db">
+    <id name="ID" type="long" strategy="increment" param="1000" />
+    <attribute name="PRODUCT" source="{TRANSACTION.PRODUCT}" converter="CaseConverter"/>
+</generate>
 ```
+
+For specifying Converters, you can
+
+- use the class name
+- refer a JavaBean in the Benerator context
+- provide a comma-separated Converter list in the two types above
+
+Benerator supports two types of converters:
+
+1. Classes that implement Benerator's service provider interface (SPI) com.rapiddweller.common.Converter
+2. Classes that extend the class java.text.Format
+
+If the class has a 'pattern' property, Benerator maps a descriptor's pattern attribute to the bean instance property.
+
 
 ## Validators
 

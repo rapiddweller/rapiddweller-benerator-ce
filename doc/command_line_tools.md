@@ -114,7 +114,7 @@ In the header the system settings are reported, then each of the following rows
 displays the benchmark name and its performance, measured in a million entities 
 generated per hour. 
 This means for example that the `anon-person-constant.ben.xml` anonymizes 
-3,944 million = 3.944 billion data sets per hour running in a single thread.
+2,210 million = 2.210 billion data sets per hour running in a single thread.
 
 The performance numbers above have been measured on a plain Macbook Air M1 of 2020.
 
@@ -159,7 +159,16 @@ the Community Edition.
 
 For your performance optimization in Enterprise Edition, note that with additional 
 threads' comes additional performance, but after a certain level of concurrency 
-is reached, performance does not improve or even can deteriorate seriously.
+is reached, performance does not improve or even may deteriorate seriously. This 
+may have one or more out of several reasons: 
+
+- Coordination and synchronization overhead
+
+- More congestion of threads waiting at bottlenecks
+
+- Having serious work load on more threads than CPUs are available: The more threads between a CPU has to switch back and forth, the more time is lost on each context switch and you may end up spending more time switching than working.
+
+- With more threads comes higher throughput, but also higher storage needs. When critical buffer size limits are exceeded, a system's processing capacity may go down significantly though the overall CPU load looks relatively low. 
 
 The sweet spot where you have optimum performance with low concurrency usually 
 is where the number of threads equals the number of cores, or is only slightly larger. 
@@ -172,18 +181,31 @@ For a short summary, type ```benerator-benchmark --help```
 
 The general invocation format is
 
-```benerator-benchmark [options]```
+```shell
+benerator-benchmark [options] [name]
+```
+
+Name is an optional benchmark name. When specified, only this benchmark is executed. When left out, 
+all benchmarks applicable to the given configuration are called.
+
+Example: In order to only call the `gen-string` benchmark, type
+
+```shell
+benerator-benchmark [options] [name]
+```
 
 The command line options are as follows:
 
-
 | Option | Meaning | Default Setting |
 | --- | --- | --- |
-| --ce | Run on Benerator Community Edition (CE) | This is the default on CE |
-| --ee | Run on Benerator Enterprise Edition (EE) | This is the default on EE and only available on EE |
+| --ce | Run on Benerator Community Edition (CE) | `true` on CE |
+| --ee | Run on Benerator Enterprise Edition (EE) | `true` EE and only available there |
 | --minSecs n | Choose a workload to have the benchmark run at least n seconds | 10 |
-| --maxThreads k | Use only up to k cores for testing | a bit more than the number of reported cores |
-| --help | print this help |
+| --maxThreads k | Use only up to k cores for testing (only on EE) | a bit more than the number of reported cores |
+| --env &lt;spec&gt;  | Runs the tests applicable to the specified system(s). &lt;spec&gt; may be an environment name, a system (denoted by environment#system) or a comma-separated list of these (without whitespace) |
+| --mode m | activates Benerator mode `strict`, `lenient` or `turbo` | `lenient` |
+| --list   | lists the names of the predefined benchmarks |
+| --help   | print this help |
 
 A **--minSecs** settings of 30 requires the benchmark to run with a workload 
 that needs at least 30 seconds to process. It is advisable to choose times 
@@ -210,6 +232,65 @@ instead of 10 threads it would have taken by default.
 The reports above have been created using
 
 `benerator-benchmark --ce --minDurationSecs 30 --maxThreads 6`
+
+
+### Assessing Database Performance
+
+In order to assess database processing performance, you need to configure the relevant database(s) 
+in an environment repository, see [Environment Files](environment_files.md) for details. 
+
+For a quick start, the Benchmark Tool comes with two built-in databases `h2` and `hsqlmem` in an environment `bultin`. 
+This will run the database benchmarks on the built-in h2:
+```shell
+benerator-benchmark --builtin#h2
+```
+
+In order to test all systems defined in the environment `builtin`, specify just the environment name
+
+```shell
+benerator-benchmark --dev builtin
+```
+
+You can test your own databases in a similar manner by defining them in an environment file 
+(eg. `local.env.properties`) and providing it in the command line options as above. 
+
+You will notice that the database benchmark may run significantly longer than the simple tests. 
+This is caused by measuring two access types, 'read' and 'write' and requiring each of these 
+to run at least 'minSecs' seconds. For some databases, writing is significantly slower than 
+reading (up to a factor of 20), so that you need to write data for 10 minutes in order to read 
+data for 30 seconds. The database benchmarks alleviate that a bit, by performing two reads for 
+each write (effectively halving execution time), but still will take long time. 
+So please be patient.
+
+
+### Assessing Kafka Performance
+
+Testing Kafka performance is a bit tricky, so the Benchmark tool needs one dedicated topic per test. 
+You can reuse pre-existing topics, but they must be empty when starting the tests. 
+Otherwise, the benchmark may read pre-existing data leading to wrong performance metrics. 
+
+Currently, there are two Kafka benchmarks:
+
+| Name | required 'system' name | Description |
+| --- | --- | --- |
+| kafka-small-entity | kafka_small_entity | Reads and writes messages with small entities in JSON format |
+| kafka-big-entity  | kafka_big_entity   | Reads and writes messages with big entities in JSON format (several KBs) |
+
+A `dev` environment file might look like this, and you can use it to map the system names to topic names 
+which are actually available on your Kafka cluster (`dev.env.properties`):
+
+```properties
+kafka_small_entity.kafka.bootstrap.servers=localhost:9092
+# use the following line to specify a topic for the kafka-small-entity benchmark
+kafka_small_entity.kafka.topic=kafkaQueue1
+kafka_small_entity.kafka.format=json
+
+kafka_big_entity.kafka.bootstrap.servers=localhost:9092
+# use the following line to specify a topic for the kafka-big-entity benchmark
+kafka_big_entity.kafka.topic=kafkaQueue2
+kafka_big_entity.kafka.format=json
+```
+
 
 ## XML Creator
 

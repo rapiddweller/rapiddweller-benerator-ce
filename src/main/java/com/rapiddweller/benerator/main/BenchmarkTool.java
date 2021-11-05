@@ -37,12 +37,7 @@ import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
  */
 public class BenchmarkTool {
 
-  // constants -------------------------------------------------------------------------------------------------------
-
   private static final Logger logger = LoggerFactory.getLogger(BenchmarkTool.class);
-
-  private static final String PROJECT_FOLDER = "com/rapiddweller/benerator/benchmark";
-
 
   // main ------------------------------------------------------------------------------------------------------------
 
@@ -74,8 +69,11 @@ public class BenchmarkTool {
         "--ce              run on Benerator Community Edition (default on CE)",
         "--ee              run on Benerator Enterprise Edition (default on EE,",
         "                  only available on Enterprise Edition)",
-        "--env x[,y]       runs only database tests on the environments listed",
-        "--kafka x[,y]     runs only Kafka tests on the environments listed",
+        "--env <spec>      Runs the tests applicable to the specified system(s). ",
+        "                  <spec> may be an environment name, a system (denoted by",
+        "                  environment#system) or a comma-separated list of these",
+        "                  (without whitespace)",
+        "                  environment#system identifiers or a single env/system",
         "--minSecs n       Choose generation count to have a test execution time",
         "                  of at least n seconds (default: 10)",
         "--maxThreads k    Use only up to k cores for testing",
@@ -216,7 +214,7 @@ public class BenchmarkTool {
     p.addOption("maxThreads", "--maxThreads", null);
     p.addOption("systemsSpec", "--env", null);
     p.addArgument("name", false);
-    BenchmarkToolConfig config = new BenchmarkToolConfig(PROJECT_FOLDER);
+    BenchmarkToolConfig config = new BenchmarkToolConfig();
     p.parse(config, args);
 
     // check help and version requests

@@ -15,7 +15,6 @@ import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.log.LoggingInfoPrinter;
 import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.stat.CounterRepository;
@@ -43,6 +42,7 @@ public class BenchmarkRunner {
 
   private static final Logger logger = LoggerFactory.getLogger(BenchmarkRunner.class);
 
+  static final String RESOURCE_FOLDER = "com/rapiddweller/benerator/benchmark";
   public static final long ONE_GIGABYTE = 1000000000L;
   public static final String TMP_FILENAME = "__benchmark.ben.xml";
 
@@ -57,6 +57,7 @@ public class BenchmarkRunner {
     for (Benchmark benchmark : config.getBenchmarks()) {
       runBenchmark(benchmark, result);
     }
+    FileUtil.deleteIfExists(new File(EnvironmentUtil.fileName("builtin")));
     return result.stop();
   }
 
@@ -107,7 +108,7 @@ public class BenchmarkRunner {
     ExecutionMode[] executionModes = summary.getExecutionModes();
     for (ExecutionMode executionMode : executionModes) {
       if (executionMode.isEe() || !benchmark.isReqEE()) {
-        String filePath = summary.getProjectFolder() + SystemInfo.getFileSeparator() + benchmark.getFileName();
+        String filePath = benchmark.getFileName();
         List<SensorResult> results = runUntilMinDuration(filePath, environment, summary.getMinSecs(), initialCount, executionMode);
         for (SensorResult result : results) {
           benchmarkResult.addResult(result);
@@ -156,7 +157,6 @@ public class BenchmarkRunner {
       BeneratorFactory.setInstance(new DefaultBeneratorFactory());
     }
     logger.debug("Testing {} with count {} and {} thread(s)", filePath, count, executionMode);
-    File envFile = prepareEnvFile(system);
     String tmpFileName = prepareXml(filePath, system, count, executionMode.getThreadCount());
     CounterRepository.getInstance().clear();
     BeneratorUtil.checkSystem(new LoggingInfoPrinter(BenchmarkRunner.class));
@@ -172,7 +172,7 @@ public class BenchmarkRunner {
         }
       }
     }
-    deleteArtifacts(tmpFileName, envFile, generatedFiles);
+    deleteArtifacts(tmpFileName, generatedFiles);
     return evaluateSensors(executionMode);
   }
 
@@ -214,17 +214,8 @@ public class BenchmarkRunner {
     return result;
   }
 
-  private static File prepareEnvFile(SystemRef system) throws IOException {
-    if (system != null && system.isDb() && "builtin".equals(system.getEnvironment().getName())) {
-      String envFileName = EnvironmentUtil.fileName(system.getEnvironment().getName());
-      IOUtil.copyFile("com/rapiddweller/benerator/benchmark/" + envFileName, envFileName);
-      return new File(envFileName);
-    }
-    return null;
-  }
-
   private static String prepareXml(String filePath, SystemRef system, long count, int threads) throws IOException {
-    String xml = IOUtil.getContentOfURI(filePath);
+    String xml = IOUtil.getContentOfURI(RESOURCE_FOLDER + "/" + filePath);
     xml = xml.replace("{count}", String.valueOf(count));
     xml = xml.replace("{threads}", String.valueOf(threads));
     if (system != null) {
@@ -261,11 +252,8 @@ public class BenchmarkRunner {
     return new File(".").listFiles((dir, name) -> name.startsWith("__benchmark.out"));
   }
 
-  private static void deleteArtifacts(String benFile, File envFile, File[] generatedFiles) {
+  private static void deleteArtifacts(String benFile, File[] generatedFiles) {
     FileUtil.deleteIfExists(new File(benFile));
-    if (envFile != null) {
-      FileUtil.deleteIfExists(envFile);
-    }
     for (File generatedFile : generatedFiles) {
       FileUtil.deleteIfExists(generatedFile);
     }

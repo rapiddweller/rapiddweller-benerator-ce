@@ -50,10 +50,6 @@ public class BenchmarkToolReport {
     this.durationSecs = 0;
   }
 
-  public String getProjectFolder() {
-    return config.getProjectFolder();
-  }
-
   public VersionInfo getVersionInfo() {
     return version;
   }
