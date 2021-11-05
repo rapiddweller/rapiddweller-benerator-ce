@@ -43,6 +43,7 @@ public class BenchmarkRunner {
 
   private static final Logger logger = LoggerFactory.getLogger(BenchmarkRunner.class);
 
+  private static final String RESOURCE_FOLDER = "com/rapiddweller/benerator/benchmark";
   public static final long ONE_GIGABYTE = 1000000000L;
   public static final String TMP_FILENAME = "__benchmark.ben.xml";
 
@@ -107,7 +108,7 @@ public class BenchmarkRunner {
     ExecutionMode[] executionModes = summary.getExecutionModes();
     for (ExecutionMode executionMode : executionModes) {
       if (executionMode.isEe() || !benchmark.isReqEE()) {
-        String filePath = summary.getProjectFolder() + SystemInfo.getFileSeparator() + benchmark.getFileName();
+        String filePath = benchmark.getFileName();
         List<SensorResult> results = runUntilMinDuration(filePath, environment, summary.getMinSecs(), initialCount, executionMode);
         for (SensorResult result : results) {
           benchmarkResult.addResult(result);
@@ -224,7 +225,7 @@ public class BenchmarkRunner {
   }
 
   private static String prepareXml(String filePath, SystemRef system, long count, int threads) throws IOException {
-    String xml = IOUtil.getContentOfURI(filePath);
+    String xml = IOUtil.getContentOfURI(RESOURCE_FOLDER + "/" + filePath);
     xml = xml.replace("{count}", String.valueOf(count));
     xml = xml.replace("{threads}", String.valueOf(threads));
     if (system != null) {

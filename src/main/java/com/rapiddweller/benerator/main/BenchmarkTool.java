@@ -37,12 +37,7 @@ import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
  */
 public class BenchmarkTool {
 
-  // constants -------------------------------------------------------------------------------------------------------
-
   private static final Logger logger = LoggerFactory.getLogger(BenchmarkTool.class);
-
-  private static final String PROJECT_FOLDER = "com/rapiddweller/benerator/benchmark";
-
 
   // main ------------------------------------------------------------------------------------------------------------
 
@@ -219,7 +214,7 @@ public class BenchmarkTool {
     p.addOption("maxThreads", "--maxThreads", null);
     p.addOption("systemsSpec", "--env", null);
     p.addArgument("name", false);
-    BenchmarkToolConfig config = new BenchmarkToolConfig(PROJECT_FOLDER);
+    BenchmarkToolConfig config = new BenchmarkToolConfig();
     p.parse(config, args);
 
     // check help and version requests
