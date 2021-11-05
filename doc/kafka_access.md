@@ -4,7 +4,7 @@ Benerator can read from and write to Kafka queues.
 
 ## Basic configuration
 
-The basic configuration elements which need to be provided for any kind of Kafka connector are
+The basic configuration elements required for any kind of Kafka connector are
 
 | Name | Description |
 | --- | --- |
@@ -61,10 +61,44 @@ If you need to use another encoding like UTF-16, specify it as `encoding` parame
     format='json' encoding='UTF-16'/>
 ```
 
+### auto.offset.reset
+
+When connecting to a topic, a client declares which group it belongs to
+and the group is assigned a message offset, which is stored on the server. 
+When messages with a higher offset exist in the queue or are sent to it, 
+the Kafka server sends them to the client and increases the saved offset.
+
+The client declares its group using the setting `group.id`, which Benerator 
+sets to `default`, if not provided explicitly.
+
+When a client reconnects, the Kafka server remembers the client group's 
+offset and delivers the new messages.
+
+This is the good case. In some situations, this method has issues:
+
+- New client group
+
+- Topic was deleted and recreated
+
+- messages have been deleted
+
+- You name it
+
+Therefore, a client must declare an offset reset strategy (`auto.offset.reset`) 
+to be applied in such a case. The setting can have the following values
+
+- `earliest`: automatically reset the offset to the earliest offset
+
+- `latest`: automatically reset the offset to the latest offset
+
+- `none`: throw exception to the consumer if no previous offset is found for the consumer's group
+
+
 ### key.attribute
 
-In order to tell a Kafka exporter which data to use as key to the exported message, 
+In order to tell a Kafka exporter which data to use as key to the exported message,
 specify the attribute name as ```key.attribute```, for example using an order priority as key:
+
 ```xml
 <setup>
     <kafka-exporter id='exporter' bootstrap.servers='localhost:9094' key.attribute='priority' topic='kafka-demo' format='json'/>
@@ -75,6 +109,37 @@ specify the attribute name as ```key.attribute```, for example using an order pr
     </generate>
 </setup>
 ```
+
+### key.serializer and key.deserializer
+
+For de/serializing of message keys, Kafka provides different classes, 
+each defined in Kafka's package `org.apache.kafka.common.serialization`.
+For sending messages a serializer is used, for receiving messages a 
+deserializer.
+
+By default, Benerator uses Kafka's `StringSerializer` and `StringDeserializer`.
+
+If necessary, you can use other de/serializer classes, 
+specifying the `key.serializer` or `key.deserializer` setting with one of these:
+
+- org.apache.kafka.common.serialization.ByteArraySerializer or ByteArrayDeserializer
+
+- org.apache.kafka.common.serialization.BytesSerializer or BytesSerializer
+
+- org.apache.kafka.common.serialization.DoubleSerializer or DoubleDeserializer
+
+- org.apache.kafka.common.serialization.FloatSerializer or FloatDeserializer
+
+- org.apache.kafka.common.serialization.IntegerSerializer or IntegerDeserializer
+
+- org.apache.kafka.common.serialization.LongSerializer or LongDeserializer
+
+- org.apache.kafka.common.serialization.ShortSerializer or ShortDeserializer
+
+- org.apache.kafka.common.serialization.StringSerializer or StringDeserializer
+
+Alternatively, you can implement and provide your own de/serializer.
+
 
 ## Performance
 
@@ -96,6 +161,7 @@ e.g. for committing messages in groups of 10,000:
 <kafka-importer id='importer' bootstrap.servers='localhost:9094' topic='kafka-demo' format='json' 
     page.size='10000'/>
 ```
+
 
 ## Encryption and Authentication
 

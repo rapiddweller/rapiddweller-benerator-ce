@@ -90,7 +90,7 @@ You can as well define a project-specific environment repository in a sub direct
 For details, see [Environment Files](environment_files.md).
 
 
-### Overriding Environment Eettings
+### Overriding Environment Settings
 
 When using a system definition in an environment file and specifying different attributes in the XML file, 
 (like another user and password), these override the configuration details in the database repository. 
@@ -98,14 +98,32 @@ This way you can have a central and convenient database lookup and can
 access the database with different users in the same run. An example:
 
 ```xml
-
 <database id="db1" environment="mydb" user="user1" password="password1"/>
 ```
 
 ```xml
-
 <database id="db2" environment="mydb" user="user2" password="password2"/>
 ```
+
+## Iterating through database tables
+
+For importing or anonymizing data, you need to iterate through database tables. 
+This is configured easily by using the database id as `source`
+and the table name as `type`:
+
+```xml
+<database id="db" environment="dev" system="crm"/>
+<iterate source="db" type="customers" consumer="ConsoleExporter"/>
+```
+
+For iterating over a data sub set, specify a `selector` 
+which may take the content of a regular SQL 'where' clause: 
+
+```xml
+<database id="db" environment="dev" system="crm"/>
+<iterate source="db" type="customers" selector="level > 5 AND cust_type = 'PRIVATE'" consumer="ConsoleExporter"/>
+```
+
 
 ## Caching Database Metadata
 

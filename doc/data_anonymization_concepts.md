@@ -46,6 +46,57 @@ The following ones are Converters useful for data masking, making the manipulati
 | **MD5HashBase64**, **SHA1HashBase64**, **SHA256HashBase64** | Convert any data to a hash code in Base64 format | 1B2M2Y8AsgTpgAmY7PhCfg== |
 | **JavaHash**| Convert any data to a hexadecimal hash code. This implementation is faster than the hash converters above | 0027b8b2 |
 
+The following example shows you a mix of prototype usage and masking:
+
+Imagine having a set of personal data, like this:
+
+| given Name | family Name | alias | street | house Number | postal Code | city | accountNo | ssn | creditCardNo | secret1 | secret2 | secret3 | secret4 | secret5
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
+| Hannah    | Hopkins | hahop | Main Street | 3456 | 9876 | Central City | 1234567890 | 123456789 | 1234567890123456 | secret1 | secret2 | secret3 | secret4 | secret5
+| Bob       | Baker | bobo | Orchard Lane | 12 | 65395 | Countryside | 2345678901 | 234567890 | 2345678901234567 | secret1 | secret2 | secret3 | secret4 | secret5
+| Alice     | Anderson | alan | Shiny Street | 123 | 93748 | Gloryville | 3456789012 | 345678901 | 3456789012345678 | secret1 | secret2 | secret3 | secret4 | secret5
+
+
+
+Applying the Benerator setup
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<setup xmlns="https://www.benerator.de/schema/2.1.0" defaultDataset="US">
+    
+    <import domains="address"/>
+
+    <iterate source="persons.csv" type="data" consumer="ConsoleExporter">
+        <variable name="addr" generator="AddressGenerator"/>
+        <attribute name="familyName" converter="new CutLength(3)"/>
+        <attribute name="givenName" converter="Mask"/>
+        <attribute name="alias" converter="new Append('_demo')"/>
+        <attribute name="street" script="addr.street"/>
+        <attribute name="houseNumber" script="addr.houseNumber"/>
+        <attribute name="postalCode" script="addr.postalCode"/>
+        <attribute name="city" script="addr.city"/>
+        <attribute name="country" constant="US"/>
+        <attribute name="accountNo" converter="SHA256Hash"/>
+        <attribute name="ssn" converter="new MiddleMask(2,3)"/>
+        <attribute name="creditCardNo" converter="SHA1HashBase64"/>
+        <attribute name="secret1" converter="MD5Hash"/>
+        <attribute name="secret2" converter="MD5HashBase64"/>
+        <attribute name="secret3" converter="SHA1Hash"/>
+        <attribute name="secret4" converter="SHA1HashBase64"/>
+        <attribute name="secret5" converter="JavaHash"/>
+    </iterate>
+
+</setup>
+```
+
+Yields the following result:
+
+| given Name | family Name | alias | street | house Number | postal Code | city | country |accountNo | ssn | creditCardNo | secret1 | secret2 | secret3 | secret4 | secret5 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| ****** | Hop | hahop_demo | Williams Street | 24 | 11940 | EAST MORICHES  | US | C775E7B757EDE630CD0AA1113BD10266 1AB38829CA52A6422AB782862F268646 | 12****789 | 3u0qiOc9zKowqeb ilvYr4ji+St4= | E52D98C459819A11 775936D8DFBB7929 | 5Uz7NxT3bO3 UsniJ4fahdA== | 418EE516F1CB095C50FF 2F10A76192889C281F3A | OYLHmdHE864xkK 1OCSSFhcZRqUY= | 756e8785 |
+| ***    | Bak | bobo_demo  | Ridge Street    | 42 | 57373 | SAINT LAWRENCE | US | 4191597AA1B3449DEE4F86976B855E03 7C3AA38B72FCE597A3651FA9036962A2 | 23****890 | ZS88gHOnttsthvq qf56nTVcmEjM= | E52D98C459819A11 775936D8DFBB7929 | 5Uz7NxT3bO3 UsniJ4fahdA== | 418EE516F1CB095C50FF 2F10A76192889C281F3A | OYLHmdHE864xkK 1OCSSFhcZRqUY= | 756e8785 |
+| *****  | And | alan_demo  | Lincoln Street  | 47 | 88006 | LAS CRUCES     | US | 26CC49F1A2133F3784B937017F9CC86E 05B5413C7F91B0B6BD6375631B68371E | 34****901 | iiAREgvD0AkATPQ Qu7SmZYD1p0s= | E52D98C459819A11 775936D8DFBB7929 | 5Uz7NxT3bO3 UsniJ4fahdA== | 418EE516F1CB095C50FF 2F10A76192889C281F3A | OYLHmdHE864xkK 1OCSSFhcZRqUY= | 756e8785 |
+
 
 ## Import filtering
 
