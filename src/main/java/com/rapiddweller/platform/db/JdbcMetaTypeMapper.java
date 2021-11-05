@@ -77,7 +77,7 @@ public class JdbcMetaTypeMapper {
         Types.TINYINT, PrimitiveType.BYTE,
         Types.VARBINARY, PrimitiveType.BINARY,
         Types.VARCHAR, PrimitiveType.STRING,
-        Types.OTHER, PrimitiveType.STRING);
+        Types.OTHER, PrimitiveType.OBJECT);
   }
 
   private JdbcMetaTypeMapper() {
