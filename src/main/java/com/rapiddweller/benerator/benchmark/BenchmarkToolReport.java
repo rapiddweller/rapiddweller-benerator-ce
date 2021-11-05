@@ -5,7 +5,6 @@ package com.rapiddweller.benerator.benchmark;
 import com.rapiddweller.benerator.BeneratorMode;
 import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.environment.SystemRef;
-import com.rapiddweller.benerator.main.Benerator;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.VMInfo;
 import com.rapiddweller.common.version.VersionInfo;
@@ -39,7 +38,7 @@ public class BenchmarkToolReport {
     this.config = config;
     this.version = VersionInfo.getInfo("benerator");
     this.osInfo = BeneratorUtil.getOsInfo();
-    this.mode = Benerator.getMode();
+    this.mode = config.getMode();
     this.executionModes = config.getThreadings();
     this.cpuAndMemInfo = BeneratorUtil.getCpuAndMemInfo();
     this.javaVersion = VMInfo.getJavaVersion();
