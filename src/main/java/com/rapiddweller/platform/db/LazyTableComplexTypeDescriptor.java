@@ -39,32 +39,16 @@ import java.util.List;
 /**
  * Lazily initialized {@link ComplexTypeDescriptor} that reads its components from a database table.<br/><br/>
  * Created: 30.11.2010 19:23:33
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class LazyTableComplexTypeDescriptor extends ComplexTypeDescriptor {
 
-  /**
-   * The Table.
-   */
   public final DBTable table;
-  /**
-   * The Db.
-   */
-  public final DBSystem db;
-  /**
-   * The Loaded.
-   */
+  public final AbstractDBSystem db;
   boolean loaded;
 
-  /**
-   * Instantiates a new Lazy table complex type descriptor.
-   *
-   * @param table the table
-   * @param db    the db
-   */
-  public LazyTableComplexTypeDescriptor(DBTable table, DBSystem db) {
+  public LazyTableComplexTypeDescriptor(DBTable table, AbstractDBSystem db) {
     super(table.getName(), db);
     this.table = table;
     this.db = db;

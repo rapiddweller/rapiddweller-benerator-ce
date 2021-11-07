@@ -49,7 +49,7 @@ public class CachedSequenceGenerator extends AbstractSequenceGenerator {
     this(null, null);
   }
 
-  public CachedSequenceGenerator(String name, DBSystem database) {
+  public CachedSequenceGenerator(String name, AbstractDBSystem database) {
     super(name, database);
   }
 

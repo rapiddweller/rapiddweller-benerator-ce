@@ -29,42 +29,22 @@ package com.rapiddweller.platform.db;
 import com.rapiddweller.benerator.primitive.HiLoGenerator;
 
 /**
- * Generates {@link Long} values with a HiLo strategy using a database sequence for the Hi values.<br/>
- * <br/>
+ * Generates {@link Long} values with a HiLo strategy using a database sequence for the Hi values.<br/><br/>
  * Created at 06.07.2009 09:30:09
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class DBSeqHiLoGenerator extends HiLoGenerator {
 
-  /**
-   * Instantiates a new Db seq hi lo generator.
-   *
-   * @param name  the name
-   * @param maxLo the max lo
-   */
   public DBSeqHiLoGenerator(String name, int maxLo) {
 	this(name, maxLo, null);
   }
 
-  /**
-   * Instantiates a new Db seq hi lo generator.
-   *
-   * @param sequenceName the sequence name
-   * @param maxLo        the max lo
-   * @param source       the source
-   */
-  public DBSeqHiLoGenerator(String sequenceName, int maxLo, DBSystem source) {
+  public DBSeqHiLoGenerator(String sequenceName, int maxLo, AbstractDBSystem source) {
     super(new DBSequenceGenerator(sequenceName, source), maxLo);
   }
 
-  /**
-   * Sets database.
-   *
-   * @param source the source
-   */
-  public void setDatabase(DBSystem source) {
+  public void setDatabase(AbstractDBSystem source) {
     ((DBSequenceGenerator) hiGenerator).setDatabase(source);
   }
 

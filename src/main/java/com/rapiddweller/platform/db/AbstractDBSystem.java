@@ -106,7 +106,7 @@ import static com.rapiddweller.jdbacl.SQLUtil.renderQuery;
  * @author Volker Bergmann
  * @since 0.8.0
  */
-public abstract class DBSystem extends AbstractStorageSystem {
+public abstract class AbstractDBSystem extends AbstractStorageSystem {
 
   private static final int DEFAULT_FETCH_SIZE = 100;
   private static final VersionNumber MIN_ORACLE_VERSION = VersionNumber.valueOf("10" + ".2.0.4"); // little trick to satisfy SonarCube which thinks this is an IP address
@@ -141,7 +141,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   private boolean dynamicQuerySupported;
   private boolean connectedBefore;
 
-  protected DBSystem(String id, String url, String driver, String user, String password, DataModel dataModel) {
+  protected AbstractDBSystem(String id, String url, String driver, String user, String password, DataModel dataModel) {
     this(id, dataModel);
     setUrl(url);
     setUser(user);
@@ -150,7 +150,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     checkOracleDriverVersion(driver);
   }
 
-  protected DBSystem(String id, String environmentName, String systemName, BeneratorContext context) {
+  protected AbstractDBSystem(String id, String environmentName, String systemName, BeneratorContext context) {
     this(id, context.getDataModel());
     setEnvironment(environmentName);
     this.system = systemName;
@@ -175,7 +175,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
   }
 
-  private DBSystem(String id, DataModel dataModel) {
+  private AbstractDBSystem(String id, DataModel dataModel) {
     setId(id);
     setDataModel(dataModel);
     setSchema(null);
@@ -596,6 +596,8 @@ public abstract class DBSystem extends AbstractStorageSystem {
     tables = null;
     if (importer instanceof CachingDBImporter) {
       ((CachingDBImporter) importer).invalidate();
+    } else {
+      CachingDBImporter.deleteCacheFile(url, user, catalogName, schemaName);
     }
     invalidationCount.incrementAndGet();
   }
@@ -690,7 +692,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     // apply 'metaCache' setting
     if (metaCache) {
       if (importer instanceof JDBCDBImporter) { // newly created or 'metaCache' setting was changed (for example in unit test)
-        importer = new CachingDBImporter((JDBCDBImporter) importer);
+        importer = new CachingDBImporter(url, (JDBCDBImporter) importer);
       }
     } else {
       if (importer instanceof CachingDBImporter) { // 'metaCache' setting was changed (for example in unit test)

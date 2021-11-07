@@ -57,7 +57,7 @@ import com.rapiddweller.model.data.PartDescriptor;
 import com.rapiddweller.model.data.ReferenceDescriptor;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
@@ -113,22 +113,9 @@ public class ProjectBuilder implements Runnable {
   private final ProgressMonitor monitor;
   private final FolderLayout folderLayout;
   private final DataModel dataModel;
-  /**
-   * The Descriptors.
-   */
   protected TypeDescriptor[] descriptors;
-  /**
-   * The Db.
-   */
-  protected DBSystem db;
+  protected AbstractDBSystem db;
 
-  /**
-   * Instantiates a new Project builder.
-   *
-   * @param setup        the setup
-   * @param folderLayout the folder layout
-   * @param monitor      the monitor
-   */
   public ProjectBuilder(Setup setup, FolderLayout folderLayout, ProgressMonitor monitor) {
     this.setup = setup;
     this.errors = new ArrayList<>();
@@ -408,12 +395,6 @@ public class ProjectBuilder implements Runnable {
     }
   }
 
-  /**
-   * Resolve variables file.
-   *
-   * @param file the file
-   * @return the file
-   */
   public File resolveVariables(File file) {
     try {
       String content = IOUtil.getContentOfURI(file.getAbsolutePath());
@@ -437,12 +418,6 @@ public class ProjectBuilder implements Runnable {
     return replaceVariables(content);
   }
 
-  /**
-   * Create benerator xml.
-   *
-   * @throws IOException    the io exception
-   * @throws ParseException the parse exception
-   */
   public void createBeneratorXml() throws IOException, ParseException {
     File descriptorFile = new File(setup.getProjectFolder(), "benerator.xml");
     if (descriptorFile.exists()) { // not applicable for XML schema based generation
@@ -525,7 +500,7 @@ public class ProjectBuilder implements Runnable {
   }
 
   private void generateTables(Setup setup, LFNormalizingStringBuilder writer) {
-    DBSystem db = getDBSystem(setup);
+    AbstractDBSystem db = getDBSystem(setup);
     TypeDescriptor[] descriptors = db.getTypeDescriptors();
     for (TypeDescriptor descriptor : descriptors) {
       ComplexTypeDescriptor complexType = (ComplexTypeDescriptor) descriptor;
@@ -540,8 +515,8 @@ public class ProjectBuilder implements Runnable {
     }
   }
 
-  private DBSystem getDBSystem(Setup setup) {
-    DBSystem db = new DefaultDBSystem("db", setup.getDbUrl(), setup.getDbDriver(), setup.getDbUser(), setup.getDbPassword(), dataModel);
+  private AbstractDBSystem getDBSystem(Setup setup) {
+    AbstractDBSystem db = new DefaultDBSystem("db", setup.getDbUrl(), setup.getDbDriver(), setup.getDbUser(), setup.getDbPassword(), dataModel);
     if (setup.getDbSchema() != null) {
       db.setSchema(setup.getDbSchema());
     }

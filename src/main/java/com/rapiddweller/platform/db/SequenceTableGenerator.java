@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -59,7 +59,7 @@ public class SequenceTableGenerator<E extends Number>
   protected long increment;
   private String table;
   private String column;
-  private DBSystem database;
+  private AbstractDBSystem database;
   private String selector;
   private String query;
   private IncrementorStrategy incrementorStrategy;
@@ -69,11 +69,11 @@ public class SequenceTableGenerator<E extends Number>
     this(null, null, null);
   }
 
-  public SequenceTableGenerator(String table, String column, DBSystem db) {
+  public SequenceTableGenerator(String table, String column, AbstractDBSystem db) {
     this(table, column, db, null);
   }
 
-  public SequenceTableGenerator(String table, String column, DBSystem db,
+  public SequenceTableGenerator(String table, String column, AbstractDBSystem db,
                                 String selector) {
     this.table = table;
     this.column = column;
@@ -90,7 +90,7 @@ public class SequenceTableGenerator<E extends Number>
     this.column = column;
   }
 
-  public void setDatabase(DBSystem db) {
+  public void setDatabase(AbstractDBSystem db) {
     this.database = db;
   }
 
@@ -228,7 +228,7 @@ public class SequenceTableGenerator<E extends Number>
 
     private final PreparedStatement statement;
 
-    public PreparedStatementStrategy(String incrementorSql, DBSystem db) {
+    public PreparedStatementStrategy(String incrementorSql, AbstractDBSystem db) {
       try {
         statement = db.getConnection().prepareStatement(incrementorSql);
       } catch (SQLException e) {
@@ -262,7 +262,7 @@ public class SequenceTableGenerator<E extends Number>
     private final Statement statement;
     private final String sql;
 
-    public StatementStrategy(String sql, DBSystem db) {
+    public StatementStrategy(String sql, AbstractDBSystem db) {
       try {
         this.statement = db.getConnection().createStatement();
         this.sql = sql;

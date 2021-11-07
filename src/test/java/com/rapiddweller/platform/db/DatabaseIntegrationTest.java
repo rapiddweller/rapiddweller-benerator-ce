@@ -26,6 +26,7 @@
 
 package com.rapiddweller.platform.db;
 
+import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.primitive.datetime.CurrentDateTimeGenerator;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
@@ -34,9 +35,12 @@ import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import com.rapiddweller.model.data.Entity;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +57,9 @@ import static org.junit.Assert.assertTrue;
 @SuppressWarnings("CheckStyle")
 public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
+  private final String folder = getClass().getPackageName().replace('.', '/');
+
+  private String dbUrl;
   private DefaultDBSystem db;
   private ConsumerMock consumer;
 
@@ -61,7 +68,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     DBUtil.resetMonitors();
     consumer = new ConsumerMock(true);
     context.setGlobal("cons", consumer);
-    String dbUrl = HSQLUtil.getInMemoryURL(getClass().getSimpleName());
+    dbUrl = HSQLUtil.getInMemoryURL(getClass().getSimpleName());
     db = new DefaultDBSystem("db", dbUrl, HSQLUtil.DRIVER,
         HSQLUtil.DEFAULT_USER, HSQLUtil.DEFAULT_PASSWORD, context.getDataModel());
     db.setSchema("PUBLIC");
@@ -79,6 +86,11 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
             "   constraint referee_fk foreign key (referee_id) references referee (id))");
     context.setGlobal("db", db);
     context.getDataModel().addDescriptorProvider(db);
+  }
+
+  @After
+  public void shutDown() throws SQLException, ClassNotFoundException {
+    HSQLUtil.shutdown(dbUrl, HSQLUtil.DEFAULT_USER, HSQLUtil.DEFAULT_PASSWORD);
   }
 
 
@@ -192,6 +204,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testDbRef_constant_script() {
+    long c0 = BeneratorMonitor.INSTANCE.getTotalGenerationCount();
     context.setGlobal("rid", 2);
     parseAndExecute(
         "<generate type='referer' count='3' consumer='cons'>" +
@@ -203,6 +216,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
       assertEquals(2, product.get("referee_id"));
     }
     closeAndCheckCleanup();
+    assertTrue(BeneratorMonitor.INSTANCE.getTotalGenerationCount() - c0 >= 3);
   }
 
   @Test
@@ -613,7 +627,8 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   }
 
   @Test
-  public void testMetaDataCache_no_environment() {
+  public void testMetaDataCache_separated() {
+    long c0 = BeneratorMonitor.INSTANCE.getTotalGenerationCount();
     db.setMetaCache(true);
     try {
       parseAndExecute("<execute target='db'>drop table meta_test;</execute>");
@@ -624,6 +639,14 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
         "create table meta_test ( id int, text varchar(20), primary key (id));" +
         "</execute>");
     parseAndExecute("<generate type='meta_test' count='5' consumer='db'/>");
+    assertTrue(BeneratorMonitor.INSTANCE.getTotalGenerationCount() - c0 >= 5);
+  }
+
+  @Test
+  public void testMetaDataCache_in_file() throws IOException {
+    long c0 = BeneratorMonitor.INSTANCE.getTotalGenerationCount();
+    parseAndExecuteFile(folder + "/metaCache.ben.xml");
+    assertTrue(BeneratorMonitor.INSTANCE.getTotalGenerationCount() - c0 >= 5);
   }
 
 

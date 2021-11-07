@@ -33,7 +33,7 @@ import com.rapiddweller.benerator.engine.statement.TranscodingTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ErrorHandler;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
 
@@ -90,8 +90,8 @@ public class TranscodingTaskParser extends AbstractTranscodeParser {
    * @return the expression
    */
   @SuppressWarnings("unchecked")
-  protected Expression<DBSystem> parseDefaultSource(Element element) {
-    return (Expression<DBSystem>) parseScriptAttribute("defaultSource", element);
+  protected Expression<AbstractDBSystem> parseDefaultSource(Element element) {
+    return (Expression<AbstractDBSystem>) parseScriptAttribute("defaultSource", element);
   }
 
 }

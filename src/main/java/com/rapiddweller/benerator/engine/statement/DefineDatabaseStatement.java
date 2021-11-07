@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
@@ -104,7 +104,7 @@ public class DefineDatabaseStatement implements Statement {
     String idValue = id.evaluate(context);
 
     // DB config is based on the (optional) environment setting
-    DBSystem db = accessDatabase(idValue, ExpressionUtil.evaluate(environment, context), ExpressionUtil.evaluate(system, context), context);
+    AbstractDBSystem db = accessDatabase(idValue, ExpressionUtil.evaluate(environment, context), ExpressionUtil.evaluate(system, context), context);
 
     // The user may override single or all settings from the environment configuration
     String urlValue = ExpressionUtil.evaluate(url, context);
@@ -151,7 +151,7 @@ public class DefineDatabaseStatement implements Statement {
     return true;
   }
 
-  protected DBSystem accessDatabase(String id, String environment, String system, BeneratorContext context) {
+  protected AbstractDBSystem accessDatabase(String id, String environment, String system, BeneratorContext context) {
     return new DefaultDBSystem(id, environment, system, context);
   }
 

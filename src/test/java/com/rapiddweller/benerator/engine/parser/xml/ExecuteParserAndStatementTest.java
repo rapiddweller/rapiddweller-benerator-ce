@@ -32,7 +32,7 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.platform.db.DefaultDBSystem;
 import org.junit.Test;
 
@@ -81,7 +81,7 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
   @Test
   public void testEmptyResultSet() {
     String url = HSQLUtil.getInMemoryURL("benerator");
-    DBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
+    AbstractDBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
     BeneratorContext context = new DefaultBeneratorContext();
     context.setGlobal("db", db);
     try {
@@ -97,7 +97,7 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
   @Test
   public void testDbInvalidationDefault() {
     String url = HSQLUtil.getInMemoryURL("benerator");
-    DBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
+    AbstractDBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
     BeneratorContext context = new DefaultBeneratorContext();
     context.setGlobal("db", db);
     assertEquals(0, db.invalidationCount());
@@ -118,7 +118,7 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
   @Test
   public void testDbInvalidationOverride() {
     String url = HSQLUtil.getInMemoryURL("benerator");
-    DBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
+    AbstractDBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
     BeneratorContext context = new DefaultBeneratorContext();
     context.setGlobal("db", db);
     assertEquals(0, db.invalidationCount());
