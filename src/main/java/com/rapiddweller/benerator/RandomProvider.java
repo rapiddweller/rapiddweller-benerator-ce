@@ -13,16 +13,34 @@ import java.util.List;
  * @since 2.0.0
  */
 public interface RandomProvider {
-  long randomLong(long min, long maxInclusive);
+
+  /** Returns a random, uniformly distributed double value between 0.0 (inclusive) and 1.0 (exclusive). */
+  double randomDouble();
+
+  /** Returns a random, uniformly distributed long value between minInclusive and maxInclusive. */
+  long randomLong(long minInclusive, long maxInclusive);
+
+  /** Returns a random, uniformly distributed long value between 0 (inclusive) and maxExclusive. */
   long randomLong(long maxExclusive);
-  int randomInt(int min, int maxInclusive);
+
+  /** Returns a random, uniformly distributed int value between minInclusive and maxInclusive. */
+  int randomInt(int minInclusive, int maxInclusive);
+
+  /** Returns a random, uniformly distributed int value between 0 (inclusive) and maxExclusive. */
   int randomInt(int maxExclusive);
+
+  /** Returns a random, uniformly distributed int value to be used as index of the collection. */
   int randomIndex(Collection<?> collection);
+
+  /** Returns a random, uniformly distributed element of the array. */
   <T> T randomElement(T[] array);
+
+  /** Returns a random, uniformly distributed element of the list. */
   <T> T randomElement(List<T> list);
+
   float randomProbability();
   char randomDigit(int min);
   Date randomDate(Date min, Date max);
   Object randomFromWeightLiteral(String literal);
-  double randomDouble();
+
 }
