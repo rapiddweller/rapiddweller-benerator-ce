@@ -24,13 +24,20 @@ public class DefaultRandomProvider implements RandomProvider {
 
   private final Random random = new Random();
 
-  public long randomLong(long min, long maxInclusive) {
-    if (min > maxInclusive) {
-      throw new IllegalArgumentException("min (" + min + ") > max (" + maxInclusive + ")");
-    }
-    return min + randomLong(maxInclusive - min + 1);
+  /** Returns a random, uniformly distributed double value between 0.0 (inclusive) and 1.0 (exclusive). */
+  public double randomDouble() {
+    return random.nextDouble();
   }
 
+  /** Returns a random, uniformly distributed long value between minInclusive and maxInclusive. */
+  public long randomLong(long minInclusive, long maxInclusive) {
+    if (minInclusive > maxInclusive) {
+      throw new IllegalArgumentException("min (" + minInclusive + ") > max (" + maxInclusive + ")");
+    }
+    return minInclusive + randomLong(maxInclusive - minInclusive + 1);
+  }
+
+  /** Returns a random, uniformly distributed long value between 0 (inclusive) and maxExclusive. */
   public long randomLong(long maxExclusive) {
     Assert.notNegative(maxExclusive, "maxExclusive");
     long result = random.nextLong() % maxExclusive;
@@ -40,13 +47,15 @@ public class DefaultRandomProvider implements RandomProvider {
     return result;
   }
 
-  public int randomInt(int min, int maxInclusive) {
-    if (min > maxInclusive) {
-      throw new IllegalArgumentException("min (" + min + ") > max (" + maxInclusive + ")");
+  /** Returns a random, uniformly distributed int value between minInclusive and maxInclusive. */
+  public int randomInt(int minInclusive, int maxInclusive) {
+    if (minInclusive > maxInclusive) {
+      throw new IllegalArgumentException("min (" + minInclusive + ") > max (" + maxInclusive + ")");
     }
-    return min + randomInt(maxInclusive - min + 1);
+    return minInclusive + randomInt(maxInclusive - minInclusive + 1);
   }
 
+  /** Returns a random, uniformly distributed int value between 0 (inclusive) and maxExclusive. */
   public int randomInt(int maxExclusive) {
     Assert.notNegative(maxExclusive, "maxExclusive");
     int result = random.nextInt() % maxExclusive;
@@ -56,17 +65,7 @@ public class DefaultRandomProvider implements RandomProvider {
     return result;
   }
 
-  public double randomDouble() {
-    return random.nextDouble();
-  }
-
-  public <T> T randomElement(T... values) {
-    if (values.length == 0) {
-      throw new IllegalArgumentException("Cannot choose random value from an empty array");
-    }
-    return values[randomIndex(values)];
-  }
-
+  /** Returns a random, uniformly distributed int value to be used as index of the array. */
   public int randomIndex(Object[] values) {
     if (values.length == 0) {
       throw new IllegalArgumentException("Cannot create random index for an empty array");
@@ -74,15 +73,25 @@ public class DefaultRandomProvider implements RandomProvider {
     return randomInt(values.length);
   }
 
-  public <T> T randomElement(List<T> values) {
-    return values.get(randomIndex(values));
+  /** Returns a random, uniformly distributed element of the array. */
+  public <T> T randomElement(T... values) {
+    if (values.length == 0) {
+      throw new IllegalArgumentException("Cannot choose random value from an empty array");
+    }
+    return values[randomIndex(values)];
   }
 
+  /** Returns a random, uniformly distributed int value to be used as index of the collection. */
   public int randomIndex(Collection<?> values) {
-    if (values.size() == 0) {
+    if (values.isEmpty()) {
       throw new IllegalArgumentException("Cannot create random index for an empty array");
     }
     return randomInt(values.size());
+  }
+
+  /** Returns a random, uniformly distributed element of the list. */
+  public <T> T randomElement(List<T> values) {
+    return values.get(randomIndex(values));
   }
 
   public char randomDigit(int min) {

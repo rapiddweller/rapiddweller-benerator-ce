@@ -35,7 +35,7 @@ import com.rapiddweller.format.DataSource;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import org.junit.After;
 import org.junit.Test;
 
@@ -89,7 +89,7 @@ public class TranscodingIntegrationTest extends AbstractBeneratorIntegrationTest
       // run descriptor file
       runner = new DescriptorRunner(DESCRIPTOR1_FILE_NAME, context);
       runner.run();
-      DBSystem t = (DBSystem) context.get("t");
+      AbstractDBSystem t = (AbstractDBSystem) context.get("t");
       // check countries
       DataSource<Entity> iterable = t.queryEntities("COUNTRY", null, context);
       DataIterator<Entity> iterator = iterable.iterator();
@@ -123,7 +123,7 @@ public class TranscodingIntegrationTest extends AbstractBeneratorIntegrationTest
       // run descriptor file
       runner = new DescriptorRunner(DESCRIPTOR2_FILE_NAME, context);
       runner.run();
-      DBSystem t = (DBSystem) context.get("t");
+      AbstractDBSystem t = (AbstractDBSystem) context.get("t");
       // check countries
       DataSource<Entity> iterable = t.queryEntities("COUNTRY", null, context);
       DataIterator<Entity> iterator = iterable.iterator();
@@ -157,7 +157,7 @@ public class TranscodingIntegrationTest extends AbstractBeneratorIntegrationTest
       // run descriptor file
       runner = new DescriptorRunner(DESCRIPTOR3_FILE_NAME, context);
       runner.run();
-      DBSystem t = (DBSystem) context.get("t");
+      AbstractDBSystem t = (AbstractDBSystem) context.get("t");
       // check countries
       DataSource<Entity> iterable = t.queryEntities("COUNTRY", null, context);
       DataIterator<Entity> iterator = iterable.iterator();
@@ -189,7 +189,7 @@ public class TranscodingIntegrationTest extends AbstractBeneratorIntegrationTest
       // run descriptor file
       runner = new DescriptorRunner(DESCRIPTOR4_FILE_NAME, context);
       runner.run();
-      DBSystem t = (DBSystem) context.get("t");
+      AbstractDBSystem t = (AbstractDBSystem) context.get("t");
       // check countries
       DataSource<Entity> iterable = t.queryEntities("COUNTRY", null, context);
       DataIterator<Entity> iterator = iterable.iterator();
@@ -223,7 +223,7 @@ public class TranscodingIntegrationTest extends AbstractBeneratorIntegrationTest
       // run descriptor file
       runner = new DescriptorRunner(DESCRIPTOR5_FILE_NAME, context);
       runner.run();
-      DBSystem t = (DBSystem) context.get("t");
+      AbstractDBSystem t = (AbstractDBSystem) context.get("t");
 
       // check countries
       DataSource<Entity> iterable = t.queryEntities("COUNTRY", null, context);

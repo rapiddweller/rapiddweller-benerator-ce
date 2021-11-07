@@ -41,9 +41,9 @@ import com.rapiddweller.common.StringUtil;
 public abstract class AbstractSequenceGenerator extends ThreadSafeNonNullGenerator<Long> {
 
   protected String name;
-  protected DBSystem database;
+  protected AbstractDBSystem database;
 
-  protected AbstractSequenceGenerator(String name, DBSystem database) {
+  protected AbstractSequenceGenerator(String name, AbstractDBSystem database) {
     this.name = name;
     this.database = database;
   }
@@ -58,11 +58,11 @@ public abstract class AbstractSequenceGenerator extends ThreadSafeNonNullGenerat
     this.name = name;
   }
 
-  public DBSystem getDatabase() {
+  public AbstractDBSystem getDatabase() {
     return database;
   }
 
-  public void setDatabase(DBSystem database) {
+  public void setDatabase(AbstractDBSystem database) {
     this.database = database;
   }
 

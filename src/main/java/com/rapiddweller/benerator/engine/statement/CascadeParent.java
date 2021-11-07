@@ -32,7 +32,7 @@ import com.rapiddweller.jdbacl.identity.IdentityProvider;
 import com.rapiddweller.jdbacl.identity.KeyMapper;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 
 import java.util.List;
 
@@ -57,7 +57,7 @@ public interface CascadeParent extends Statement {
    * @param context the context
    * @return the source
    */
-  DBSystem getSource(BeneratorContext context);
+  AbstractDBSystem getSource(BeneratorContext context);
 
   /**
    * Gets target.
@@ -65,7 +65,7 @@ public interface CascadeParent extends Statement {
    * @param context the context
    * @return the target
    */
-  DBSystem getTarget(BeneratorContext context);
+  AbstractDBSystem getTarget(BeneratorContext context);
 
   /**
    * Current entity entity.
@@ -103,7 +103,7 @@ public interface CascadeParent extends Statement {
    * @param context the context
    * @return the type
    */
-  ComplexTypeDescriptor getType(DBSystem db, BeneratorContext context);
+  ComplexTypeDescriptor getType(AbstractDBSystem db, BeneratorContext context);
 
   /**
    * Gets sub statements.

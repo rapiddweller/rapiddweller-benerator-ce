@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.format.text.SplitStringConverter;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ConvertingExpression;
 import org.w3c.dom.Element;
@@ -54,13 +54,13 @@ public abstract class AbstractTranscodeParser extends AbstractBeneratorDescripto
   }
 
   @SuppressWarnings("unchecked")
-  protected Expression<DBSystem> parseTarget(Element element) {
-    return (Expression<DBSystem>) parseScriptAttribute("target", element);
+  protected Expression<AbstractDBSystem> parseTarget(Element element) {
+    return (Expression<AbstractDBSystem>) parseScriptAttribute("target", element);
   }
 
   @SuppressWarnings("unchecked")
-  protected Expression<DBSystem> parseSource(Element element) {
-    return (Expression<DBSystem>) parseScriptAttribute("source", element);
+  protected Expression<AbstractDBSystem> parseSource(Element element) {
+    return (Expression<AbstractDBSystem>) parseScriptAttribute("source", element);
   }
 
   protected Expression<String[]> parseIrrelevantColumns(Element element) {

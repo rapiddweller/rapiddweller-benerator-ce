@@ -63,7 +63,7 @@ import com.rapiddweller.model.data.Mode;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import com.rapiddweller.platform.java.Entity2JavaConverter;
@@ -204,7 +204,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
   }
 
   private static void parseDatabase(Database annotation, BeneratorContext context) {
-    DBSystem db;
+    AbstractDBSystem db;
     if (!StringUtil.isEmpty(annotation.environment())) {
       String system = annotation.system();
       if (StringUtil.isEmpty(system)) {

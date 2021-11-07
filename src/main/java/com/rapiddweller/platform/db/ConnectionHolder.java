@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -45,36 +45,20 @@ import java.util.Map;
 /**
  * Wraps a database connection and provides access functionality.<br/><br/>
  * Created: 07.01.2013 08:28:36
- *
  * @author Volker Bergmann
  * @since 0.8.0
  */
 public class ConnectionHolder implements Closeable {
 
-  private static final Logger JDBC_LOGGER =
-      LoggerFactory.getLogger(LogCategoriesConstants.JDBC);
-  /**
-   * The Insert statements.
-   */
+  private static final Logger JDBC_LOGGER = LoggerFactory.getLogger(LogCategoriesConstants.JDBC);
+
   public final Map<ComplexTypeDescriptor, PreparedStatement> insertStatements;
-  /**
-   * The Update statements.
-   */
   public final Map<ComplexTypeDescriptor, PreparedStatement> updateStatements;
-  /**
-   * The Select by pk statements.
-   */
-  public final Map<ComplexTypeDescriptor, PreparedStatement>
-      selectByPKStatements;
-  private final DBSystem db;
+  public final Map<ComplexTypeDescriptor, PreparedStatement> selectByPKStatements;
+  private final AbstractDBSystem db;
   private Connection connection;
 
-  /**
-   * Instantiates a new Connection holder.
-   *
-   * @param db the db
-   */
-  public ConnectionHolder(DBSystem db) {
+  public ConnectionHolder(AbstractDBSystem db) {
     this.insertStatements = new OrderedMap<>();
     this.updateStatements = new OrderedMap<>();
     this.selectByPKStatements = new OrderedMap<>();
@@ -82,11 +66,6 @@ public class ConnectionHolder implements Closeable {
     this.connection = null; // lazily initialized
   }
 
-  /**
-   * Gets connection.
-   *
-   * @return the connection
-   */
   public Connection getConnection() {
     if (connection == null) {
       this.connection = db.createConnection();
@@ -94,9 +73,6 @@ public class ConnectionHolder implements Closeable {
     return connection;
   }
 
-  /**
-   * Commit.
-   */
   public void commit() {
     try {
       flushStatements(insertStatements);
@@ -126,12 +102,6 @@ public class ConnectionHolder implements Closeable {
     }
   }
 
-  /**
-   * Gets select by pk statement.
-   *
-   * @param descriptor the descriptor
-   * @return the select by pk statement
-   */
   public PreparedStatement getSelectByPKStatement(
       ComplexTypeDescriptor descriptor) {
     try {
@@ -167,14 +137,6 @@ public class ConnectionHolder implements Closeable {
     return statement;
   }
 
-  /**
-   * Gets statement.
-   *
-   * @param descriptor  the descriptor
-   * @param insert      the insert
-   * @param columnInfos the column infos
-   * @return the statement
-   */
   public PreparedStatement getStatement(ComplexTypeDescriptor descriptor,
                                         boolean insert,
                                         List<ColumnInfo> columnInfos) {

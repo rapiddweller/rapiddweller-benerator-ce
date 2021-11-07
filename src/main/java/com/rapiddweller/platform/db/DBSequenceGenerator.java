@@ -30,37 +30,22 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
 
 /**
- * Generates {@link Long} values from a database sequence.<br/>
- * <br/>
+ * Generates {@link Long} values from a database sequence.<br/><br/>
  * Created at 07.07.2009 18:54:53
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class DBSequenceGenerator extends NonNullGeneratorProxy<Long> {
 
   private String name;
-  private DBSystem database;
+  private AbstractDBSystem database;
   private boolean cached;
 
-  /**
-   * Instantiates a new Db sequence generator.
-   *
-   * @param name   the name
-   * @param source the source
-   */
-  public DBSequenceGenerator(String name, DBSystem source) {
+  public DBSequenceGenerator(String name, AbstractDBSystem source) {
     this(name, source, false);
   }
 
-  /**
-   * Instantiates a new Db sequence generator.
-   *
-   * @param name     the name
-   * @param database the database
-   * @param cached   the cached
-   */
-  public DBSequenceGenerator(String name, DBSystem database, boolean cached) {
+  public DBSequenceGenerator(String name, AbstractDBSystem database, boolean cached) {
     super(Long.class);
     this.name = name;
     this.database = database;
@@ -69,56 +54,26 @@ public class DBSequenceGenerator extends NonNullGeneratorProxy<Long> {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets name.
-   *
-   * @return the name
-   */
   public String getName() {
     return name;
   }
 
-  /**
-   * Sets name.
-   *
-   * @param name the name
-   */
   public void setName(String name) {
     this.name = name;
   }
 
-  /**
-   * Gets database.
-   *
-   * @return the database
-   */
-  public DBSystem getDatabase() {
+  public AbstractDBSystem getDatabase() {
     return database;
   }
 
-  /**
-   * Sets database.
-   *
-   * @param database the database
-   */
-  public void setDatabase(DBSystem database) {
+  public void setDatabase(AbstractDBSystem database) {
     this.database = database;
   }
 
-  /**
-   * Is cached boolean.
-   *
-   * @return the boolean
-   */
   public boolean isCached() {
     return cached;
   }
 
-  /**
-   * Sets cached.
-   *
-   * @param cached the cached
-   */
   public void setCached(boolean cached) {
     this.cached = cached;
   }

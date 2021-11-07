@@ -49,18 +49,13 @@ import static com.rapiddweller.jdbacl.dialect.HSQLUtil.*;
 import static org.junit.Assert.*;
 
 /**
- * Tests {@link DefaultDBSystem}.<br/>
- * <br/>
+ * Tests {@link DefaultDBSystem}.<br/><br/>
  * Created at 26.12.2008 03:40:44
- *
  * @author Volker Bergmann
  * @since 0.5.6
  */
 public class DBSystemTest extends ABCTest {
 
-  /**
-   * Test read write.
-   */
   @Test
   public void testReadWrite() {
     db.setReadOnly(false);
@@ -74,9 +69,6 @@ public class DBSystemTest extends ABCTest {
     assertNotNull(db);
   }
 
-  /**
-   * Test read only.
-   */
   @Test
   public void testReadOnly() {
     db.setReadOnly(true);
@@ -104,10 +96,8 @@ public class DBSystemTest extends ABCTest {
     Connection connection = null;
     try {
       // test drop w/ readOnly in createStatement
-      Statement statement = null;
-
       connection = db.createConnection();
-      statement = connection.createStatement();
+      Statement statement = connection.createStatement();
 
       try {
         Objects.requireNonNull(statement).execute("drop table Test");
@@ -133,11 +123,6 @@ public class DBSystemTest extends ABCTest {
     }
   }
 
-  /**
-   * Test sequence.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testSequence() throws Exception {
     String seq = getClass().getSimpleName();
@@ -152,9 +137,6 @@ public class DBSystemTest extends ABCTest {
     }
   }
 
-  /**
-   * Test query entities.
-   */
   @Test
   public void testQueryEntities() {
     db.execute("insert into \"TEST\" (ID, NAME) values (1, 'Alice')");
@@ -176,9 +158,6 @@ public class DBSystemTest extends ABCTest {
     iterator2.close();
   }
 
-  /**
-   * Test inserter.
-   */
   @Test
   public void testInserter() {
     Consumer inserter = db.inserter();
@@ -191,9 +170,6 @@ public class DBSystemTest extends ABCTest {
         iterator.next(new DataContainer<>()).getData());
   }
 
-  /**
-   * Test inserter table.
-   */
   @Test
   public void testInserter_table() {
     Consumer inserter = db.inserter("TEST");
@@ -206,11 +182,6 @@ public class DBSystemTest extends ABCTest {
         iterator.next(new DataContainer<>()).getData());
   }
 
-  /**
-   * Test updater.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testUpdater() throws Exception {
 
@@ -229,7 +200,7 @@ public class DBSystemTest extends ABCTest {
     assertNull(db.getPassword());
     assertEquals(".*", db.getIncludeTables());
     assertNull(db.getExcludeTables());
-    assertFalse(db.isMetaDataCache());
+    assertFalse(db.isMetaCache());
     assertEquals(100, db.getFetchSize());
     assertTrue(db.isLazy());
     db.getTypeDescriptors();
@@ -252,9 +223,6 @@ public class DBSystemTest extends ABCTest {
     db.close();
   }
 
-  /**
-   * Test table exists.
-   */
   @Test
   public void testTableExists() {
     assertTrue(db.tableExists("TEST"));
@@ -267,11 +235,6 @@ public class DBSystemTest extends ABCTest {
 
   private DefaultDBSystem db;
 
-  /**
-   * Sets up.
-   *
-   * @throws Exception the exception
-   */
   @Before
   public void setUp() throws Exception {
     Connection connection = null;

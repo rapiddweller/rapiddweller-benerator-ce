@@ -45,7 +45,7 @@ import com.rapiddweller.jdbacl.model.DBTable;
 import com.rapiddweller.jdbacl.model.Database;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ReferenceDescriptor;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.w3c.dom.Document;
@@ -64,8 +64,8 @@ import java.util.Map.Entry;
  */
 public class TranscodingTaskStatement extends SequentialStatement {
 
-  final Expression<DBSystem> sourceEx;
-  final Expression<DBSystem> targetEx;
+  final Expression<AbstractDBSystem> sourceEx;
+  final Expression<AbstractDBSystem> targetEx;
   final Expression<String> identityEx;
   final Expression<Long> pageSizeEx;
   final Expression<ErrorHandler> errorHandlerExpression;
@@ -73,7 +73,7 @@ public class TranscodingTaskStatement extends SequentialStatement {
   KeyMapper mapper;
   final Map<String, Boolean> tableNkRequirements = OrderedNameMap.createCaseIgnorantMap();
 
-  public TranscodingTaskStatement(Expression<DBSystem> sourceEx, Expression<DBSystem> targetEx, Expression<String> identityEx,
+  public TranscodingTaskStatement(Expression<AbstractDBSystem> sourceEx, Expression<AbstractDBSystem> targetEx, Expression<String> identityEx,
                                   Expression<Long> pageSizeEx, Expression<ErrorHandler> errorHandlerExpression) {
     this.sourceEx = cache(sourceEx);
     this.targetEx = cache(targetEx);
@@ -83,11 +83,11 @@ public class TranscodingTaskStatement extends SequentialStatement {
     this.identityProvider = new IdentityProvider();
   }
 
-  public Expression<DBSystem> getSourceEx() {
+  public Expression<AbstractDBSystem> getSourceEx() {
     return sourceEx;
   }
 
-  public Expression<DBSystem> getTargetEx() {
+  public Expression<AbstractDBSystem> getTargetEx() {
     return targetEx;
   }
 
@@ -109,7 +109,7 @@ public class TranscodingTaskStatement extends SequentialStatement {
 
   @Override
   public boolean execute(BeneratorContext context) {
-    DBSystem target = getTarget(context);
+    AbstractDBSystem target = getTarget(context);
     Database database = target.getDbMetaData();
     mapper = new MemKeyMapper(null, null, target.getConnection(), target.getId(), identityProvider, database);
     checkPrecoditions(context);
@@ -118,7 +118,7 @@ public class TranscodingTaskStatement extends SequentialStatement {
   }
 
   private void checkPrecoditions(BeneratorContext context) {
-    DBSystem target = targetEx.evaluate(context);
+    AbstractDBSystem target = targetEx.evaluate(context);
     boolean identitiesRequired = collectPreconditions(subStatements, context);
     // check that each table for which an identity definition is required has one
     if (identitiesRequired) {
@@ -183,8 +183,8 @@ public class TranscodingTaskStatement extends SequentialStatement {
     }
   }
 
-  private DBSystem getTarget(BeneratorContext context) {
-    DBSystem target = ExpressionUtil.evaluate(targetEx, context);
+  private AbstractDBSystem getTarget(BeneratorContext context) {
+    AbstractDBSystem target = ExpressionUtil.evaluate(targetEx, context);
     if (target == null) {
       throw new ConfigurationError("No 'target' database defined in <transcodingTask>");
     }

@@ -51,6 +51,7 @@ import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.jdbacl.DatabaseDialectManager;
 import com.rapiddweller.jdbacl.ResultSetConverter;
+import com.rapiddweller.jdbacl.SQLUtil;
 import com.rapiddweller.jdbacl.dialect.OracleDialect;
 import com.rapiddweller.jdbacl.model.DBCatalog;
 import com.rapiddweller.jdbacl.model.DBColumn;
@@ -81,7 +82,6 @@ import com.rapiddweller.script.expression.ConstantExpression;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -106,7 +106,7 @@ import static com.rapiddweller.jdbacl.SQLUtil.renderQuery;
  * @author Volker Bergmann
  * @since 0.8.0
  */
-public abstract class DBSystem extends AbstractStorageSystem {
+public abstract class AbstractDBSystem extends AbstractStorageSystem {
 
   private static final int DEFAULT_FETCH_SIZE = 100;
   private static final VersionNumber MIN_ORACLE_VERSION = VersionNumber.valueOf("10" + ".2.0.4"); // little trick to satisfy SonarCube which thinks this is an IP address
@@ -133,7 +133,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   private String schemaName;
   private String includeTables;
   private String excludeTables;
-  private boolean metaDataCache;
+  private boolean metaCache;
   private boolean lazy;
   private boolean acceptUnknownColumnTypes;
   private int fetchSize;
@@ -141,7 +141,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
   private boolean dynamicQuerySupported;
   private boolean connectedBefore;
 
-  protected DBSystem(String id, String url, String driver, String user, String password, DataModel dataModel) {
+  protected AbstractDBSystem(String id, String url, String driver, String user, String password, DataModel dataModel) {
     this(id, dataModel);
     setUrl(url);
     setUser(user);
@@ -150,9 +150,10 @@ public abstract class DBSystem extends AbstractStorageSystem {
     checkOracleDriverVersion(driver);
   }
 
-  protected DBSystem(String id, String environmentName, String systemName, BeneratorContext context) {
+  protected AbstractDBSystem(String id, String environmentName, String systemName, BeneratorContext context) {
     this(id, context.getDataModel());
     setEnvironment(environmentName);
+    this.system = systemName;
     this.folder = context.getContextUri();
     logger.debug("Reading environment data for '{}'", environmentName);
     if (this.environment != null) {
@@ -174,14 +175,14 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
   }
 
-  private DBSystem(String id, DataModel dataModel) {
+  private AbstractDBSystem(String id, DataModel dataModel) {
     setId(id);
     setDataModel(dataModel);
     setSchema(null);
     setIncludeTables(".*");
     setExcludeTables(null);
     setFetchSize(DEFAULT_FETCH_SIZE);
-    setMetaDataCache(false);
+    setMetaCache(false);
     setBatch(false);
     setReadOnly(false);
     setLazy(true);
@@ -197,8 +198,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
     if (scale == 0) {
       return "1";
     }
-    return "0." + "0".repeat(Math.max(0, scale - 1)) +
-        1;
+    return "0." + "0".repeat(Math.max(0, scale - 1)) + 1;
   }
 
   private static TypeMapper driverTypeMapper() {
@@ -315,12 +315,12 @@ public abstract class DBSystem extends AbstractStorageSystem {
     this.excludeTables = excludeTables;
   }
 
-  public boolean isMetaDataCache() {
-    return metaDataCache;
+  public boolean isMetaCache() {
+    return metaCache;
   }
 
-  public void setMetaDataCache(boolean metaDataCache) {
-    this.metaDataCache = metaDataCache;
+  public void setMetaCache(boolean metaCache) {
+    this.metaCache = metaCache;
   }
 
   public boolean isBatch() {
@@ -409,9 +409,6 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   @Override
   public void close() {
-    if (database != null) {
-      CachingDBImporter.updateCacheFile(database);
-    }
     IOUtil.close(importer);
   }
 
@@ -560,6 +557,9 @@ public abstract class DBSystem extends AbstractStorageSystem {
   public Object execute(String sql) {
     try {
       DBUtil.executeUpdate(sql, getConnection());
+      if (SQLUtil.mutatesStructure(sql)) {
+        invalidate();
+      }
       return null;
     } catch (SQLException e) {
       throw new RuntimeException(e);
@@ -591,21 +591,15 @@ public abstract class DBSystem extends AbstractStorageSystem {
   }
 
   public void invalidate() {
+    database = null;
     typeDescriptors = null;
     tables = null;
-    invalidationCount.incrementAndGet();
-    if (environment != null) {
-      File bufferFile = CachingDBImporter.getCacheFile(environment);
-      if (bufferFile.exists()) {
-        if (!bufferFile.delete() && metaDataCache) {
-          logger.error("Deleting {} failed", bufferFile);
-          metaDataCache = false;
-        } else {
-          logger.info("Deleted meta data cache file: {}", bufferFile);
-        }
-
-      }
+    if (importer instanceof CachingDBImporter) {
+      ((CachingDBImporter) importer).invalidate();
+    } else {
+      CachingDBImporter.deleteCacheFile(url, user, catalogName, schemaName);
     }
+    invalidationCount.incrementAndGet();
   }
 
   public int invalidationCount() {
@@ -680,11 +674,7 @@ public abstract class DBSystem extends AbstractStorageSystem {
 
   private void fetchDbMetaData() {
     try {
-      importer = createJDBCImporter();
-      if (metaDataCache) {
-        importer = new CachingDBImporter((JDBCDBImporter) importer, getEnvironment());
-      }
-      database = importer.importDatabase();
+      database = haveImporter().importDatabase();
     } catch (ConnectFailedException e) {
       throw new ConfigurationError("Database not available. ", e);
     } catch (ImportFailedException e) {
@@ -693,15 +683,26 @@ public abstract class DBSystem extends AbstractStorageSystem {
     }
   }
 
-  private JDBCDBImporter createJDBCImporter() {
-    return JDBCMetaDataUtil
-        .getJDBCDBImporter(getConnection(), environment, folder, user, catalogName, schemaName,
-            true, false, false, false, includeTables,
-            excludeTables);
+  private DBMetaDataImporter haveImporter() {
+    if (importer == null) {
+      // create JDBC DB importer
+      importer = JDBCMetaDataUtil.createJDBCDBImporter(getConnection(), user,
+          catalogName, schemaName, includeTables, excludeTables);
+    }
+    // apply 'metaCache' setting
+    if (metaCache) {
+      if (importer instanceof JDBCDBImporter) { // newly created or 'metaCache' setting was changed (for example in unit test)
+        importer = new CachingDBImporter(url, (JDBCDBImporter) importer);
+      }
+    } else {
+      if (importer instanceof CachingDBImporter) { // 'metaCache' setting was changed (for example in unit test)
+        importer = ((CachingDBImporter) importer).getRealImporter();
+      }
+    }
+    return importer;
   }
 
-  private QueryDataSource createQuery(String query, Context context,
-                                      Connection connection) {
+  private QueryDataSource createQuery(String query, Context context, Connection connection) {
     return new QueryDataSource(connection, query, fetchSize, (dynamicQuerySupported ? context : null));
   }
 

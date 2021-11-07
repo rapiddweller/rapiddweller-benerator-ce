@@ -49,7 +49,7 @@ import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.ReferenceDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -88,7 +88,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
 
   @Override
   public boolean execute(BeneratorContext context) {
-    DBSystem source = getSource(context);
+    AbstractDBSystem source = getSource(context);
     getType(source, context);
     IdentityModel identity = parent.getIdentityProvider().getIdentity(type.getName(), false);
     String tableName = type.getName();
@@ -112,7 +112,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
   }
 
   @Override
-  public DBSystem getSource(BeneratorContext context) {
+  public AbstractDBSystem getSource(BeneratorContext context) {
     return parent.getSource(context);
   }
 
@@ -137,12 +137,12 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
   }
 
   @Override
-  public DBSystem getTarget(BeneratorContext context) {
+  public AbstractDBSystem getTarget(BeneratorContext context) {
     return parent.getTarget(context);
   }
 
   @Override
-  public ComplexTypeDescriptor getType(DBSystem db, BeneratorContext context) {
+  public ComplexTypeDescriptor getType(AbstractDBSystem db, BeneratorContext context) {
     if (type == null) {
       String parentType = parent.getType(db, context).getName();
       typeExpression.setTypeName(ref.getTargetTableName(parentType, db));
@@ -159,7 +159,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
     boolean mapNk = parent.needsNkMapping(sourceEntity.type());
     String nk = null;
     KeyMapper mapper = getKeyMapper();
-    DBSystem source = getSource(context);
+    AbstractDBSystem source = getSource(context);
     if (mapNk) {
       nk = mapper.getNaturalKey(source.getId(), identity, sourcePK);
     }
@@ -173,7 +173,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
     cascade(sourceEntity, context);
   }
 
-  private void transcodeForeignKeys(Entity entity, DBSystem source, Context context) {
+  private void transcodeForeignKeys(Entity entity, AbstractDBSystem source, Context context) {
     ComplexTypeDescriptor tableDescriptor = entity.descriptor();
     for (InstanceDescriptor component : tableDescriptor.getParts()) {
       if (component instanceof ReferenceDescriptor) {
@@ -235,7 +235,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
       this.columnNames = columnNames;
     }
 
-    public String getTargetTableName(String parentTable, DBSystem db) {
+    public String getTargetTableName(String parentTable, AbstractDBSystem db) {
       if (!parentTable.equals(refererTableName)) {
         return refererTableName;
       } else {
@@ -244,7 +244,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
       }
     }
 
-    public DataIterator<Entity> resolveReferences(Entity currentEntity, DBSystem db, BeneratorContext context) {
+    public DataIterator<Entity> resolveReferences(Entity currentEntity, AbstractDBSystem db, BeneratorContext context) {
       initIfNecessary(currentEntity.type(), db);
       DBTable parentTable = database.getTable(currentEntity.type());
       if (parentTable.equals(refereeTable)) {
@@ -257,7 +257,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
       }
     }
 
-    private void initIfNecessary(String parentTable, DBSystem db) {
+    private void initIfNecessary(String parentTable, AbstractDBSystem db) {
       if (this.database != null) {
         return;
       }
@@ -269,7 +269,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
     }
 
     DataIterator<Entity> resolveToManyReference(
-        Entity fromEntity, DBForeignKeyConstraint fk, DBSystem db, BeneratorContext context) {
+        Entity fromEntity, DBForeignKeyConstraint fk, AbstractDBSystem db, BeneratorContext context) {
       StringBuilder selector = new StringBuilder();
       String[] refererColumnNames = fk.getColumnNames();
       String[] refereeColumnNames = fk.getRefereeColumnNames();
@@ -284,7 +284,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
     }
 
     DataIterator<Entity> resolveToOneReference(
-        Entity fromEntity, DBForeignKeyConstraint fk, DBSystem db, BeneratorContext context) {
+        Entity fromEntity, DBForeignKeyConstraint fk, AbstractDBSystem db, BeneratorContext context) {
       StringBuilder selector = new StringBuilder();
       String[] refererColumnNames = fk.getColumnNames();
       String[] refereeColumnNames = fk.getRefereeColumnNames();

@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,19 +29,12 @@ package com.rapiddweller.platform.db;
 /**
  * Generator implementation which provides sequence values from a database.<br/><br/>
  * Created: 24.07.2011 06:40:20
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public class PlainSequenceGenerator extends AbstractSequenceGenerator {
 
-  /**
-   * Instantiates a new Plain sequence generator.
-   *
-   * @param name     the name
-   * @param database the database
-   */
-  public PlainSequenceGenerator(String name, DBSystem database) {
+  public PlainSequenceGenerator(String name, AbstractDBSystem database) {
     super(name, database);
   }
 

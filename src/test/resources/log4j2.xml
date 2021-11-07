@@ -24,7 +24,6 @@
         <Logger name="com.rapiddweller.shop" level="info"/>
         <Logger name="com.rapiddweller" level="info"/>
         <Logger name="com.rapiddweller.platform.xml" level="info"/>
-        <Logger name="com.rapiddweller.platform.db.DBSystem" level="info"/>
         <Logger name="com.rapiddweller.common.converter" level="info"/>
         <Logger name="com.rapiddweller.platform.db" level="info"/>
         <Logger name="com.rapiddweller.model" level="info"/>

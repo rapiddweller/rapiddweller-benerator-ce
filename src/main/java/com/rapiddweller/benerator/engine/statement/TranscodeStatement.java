@@ -47,7 +47,7 @@ import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.ReferenceDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.slf4j.LoggerFactory;
@@ -66,20 +66,20 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
   private static final Logger logger = LoggerFactory.getLogger(TranscodeStatement.class);
 
   final Expression<ComplexTypeDescriptor> typeExpression;
-  final Expression<DBSystem> sourceEx;
+  final Expression<AbstractDBSystem> sourceEx;
   final Expression<String> selectorEx;
-  final Expression<DBSystem> targetEx;
+  final Expression<AbstractDBSystem> targetEx;
   final Expression<Long> pageSizeEx;
   final Expression<ErrorHandler> errorHandlerEx;
   final TranscodingTaskStatement parent;
 
-  DBSystem source;
-  private DBSystem target;
+  AbstractDBSystem source;
+  private AbstractDBSystem target;
 
   private Entity currentEntity;
 
   public TranscodeStatement(MutatingTypeExpression typeExpression, TranscodingTaskStatement parent,
-                            Expression<DBSystem> sourceEx, Expression<String> selectorEx, Expression<DBSystem> targetEx,
+                            Expression<AbstractDBSystem> sourceEx, Expression<String> selectorEx, Expression<AbstractDBSystem> targetEx,
                             Expression<Long> pageSizeEx, Expression<ErrorHandler> errorHandlerEx) {
     this.typeExpression = cache(typeExpression);
     this.parent = parent;
@@ -93,7 +93,7 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
 
   @Override
   public boolean execute(BeneratorContext context) {
-    DBSystem target = targetEx.evaluate(context);
+    AbstractDBSystem target = targetEx.evaluate(context);
     Long pageSize = ExpressionUtil.evaluate(pageSizeEx, context);
     if (pageSize == null) {
       pageSize = 1L;
@@ -118,12 +118,12 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
   }
 
   @Override
-  public ComplexTypeDescriptor getType(DBSystem db, BeneratorContext context) {
+  public ComplexTypeDescriptor getType(AbstractDBSystem db, BeneratorContext context) {
     return typeExpression.evaluate(context);
   }
 
   @Override
-  public DBSystem getSource(BeneratorContext context) {
+  public AbstractDBSystem getSource(BeneratorContext context) {
     if (source == null) {
       source = sourceEx.evaluate(context);
     }
@@ -131,7 +131,7 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
   }
 
   @Override
-  public DBSystem getTarget(BeneratorContext context) {
+  public AbstractDBSystem getTarget(BeneratorContext context) {
     if (target == null) {
       target = targetEx.evaluate(context);
     }
@@ -145,7 +145,7 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
 
   // helper methods --------------------------------------------------------------------------------------------------
 
-  private void transcodeTable(DBSystem source, DBSystem target, long pageSize, BeneratorContext context) {
+  private void transcodeTable(AbstractDBSystem source, AbstractDBSystem target, long pageSize, BeneratorContext context) {
     KeyMapper mapper = getKeyMapper();
     ComplexTypeDescriptor type = typeExpression.evaluate(context);
     IdentityModel identity = getIdentityProvider().getIdentity(type.getName(), false);
@@ -195,7 +195,7 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
     this.currentEntity = null;
   }
 
-  private void transcodeForeignKeys(Entity entity, DBSystem source, Context context) {
+  private void transcodeForeignKeys(Entity entity, AbstractDBSystem source, Context context) {
     ComplexTypeDescriptor tableDescriptor = entity.descriptor();
     for (InstanceDescriptor component : tableDescriptor.getParts()) {
       if (component instanceof ReferenceDescriptor) {

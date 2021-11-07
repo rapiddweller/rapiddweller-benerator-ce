@@ -69,7 +69,7 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
     Statement statement = parse("<import platforms='db, xml' />");
     BeneratorContext context = new DefaultBeneratorContext();
     statement.execute(context);
-    context.forName("DBSystem");
+    context.forName("DefaultDBSystem");
     context.forName("XMLEntityExporter");
   }
 

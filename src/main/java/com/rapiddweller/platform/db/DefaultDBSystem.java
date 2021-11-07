@@ -37,12 +37,12 @@ import java.sql.PreparedStatement;
 import java.util.List;
 
 /**
- * Default implementation of the {@link DBSystem} class.<br/><br/>
+ * Default implementation of the {@link AbstractDBSystem} class.<br/><br/>
  * Created: 27.06.2007 23:04:19
  * @author Volker Bergmann
  * @since 0.3
  */
-public class DefaultDBSystem extends DBSystem {
+public class DefaultDBSystem extends AbstractDBSystem {
 
   private final ConnectionHolder connectionHolder;
 

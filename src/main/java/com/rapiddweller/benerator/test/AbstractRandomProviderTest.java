@@ -27,7 +27,6 @@
 package com.rapiddweller.benerator.test;
 
 import com.rapiddweller.benerator.RandomProvider;
-import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.common.collection.ObjectCounter;
 import org.junit.Test;
 
@@ -66,11 +65,24 @@ public abstract class AbstractRandomProviderTest extends GeneratorTest {
   }
 
   @Test
+  public void testRandomDouble() {
+    int n = 10000;
+    int lowerCount = 0;
+    for (int i = 0; i < n; i++) {
+      if (getRandom().randomDouble() < 0.5) {
+        lowerCount++;
+      }
+    }
+    // assert that about 50% of the generated values are less than 0.5
+    assertEquals(0.5, (double) lowerCount / n, 0.1);
+  }
+
+  @Test
   public void testRandomFromLiteral() {
     ObjectCounter<Object> counter = new ObjectCounter<>(2);
     int n = 3000;
     for (int i = 0; i < n; i++) {
-      counter.count(RandomUtil.randomFromWeightLiteral("'A'^2,'B'^1"));
+      counter.count(getRandom().randomFromWeightLiteral("'A'^2,'B'^1"));
     }
     assertEquals(2, counter.getCounts().size());
     assertEquals(n / 3. * 2., counter.getCount("A"), 100);
@@ -79,13 +91,13 @@ public abstract class AbstractRandomProviderTest extends GeneratorTest {
 
   @Test
   public void testRandomFromLiteral_empty() {
-    assertNull(RandomUtil.randomFromWeightLiteral(null));
-    assertNull(RandomUtil.randomFromWeightLiteral(""));
+    assertNull(getRandom().randomFromWeightLiteral(null));
+    assertNull(getRandom().randomFromWeightLiteral(""));
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testRandomFromLiteral_negativeWeight() {
-    RandomUtil.randomFromWeightLiteral("1^-1,2^-2");
+    getRandom().randomFromWeightLiteral("1^-1,2^-2");
   }
 
   // implementation --------------------------------------------------------------------------------------------------

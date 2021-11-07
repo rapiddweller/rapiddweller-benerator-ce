@@ -34,7 +34,7 @@ import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.xml.XMLUtil;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.FallbackExpression;
 import org.w3c.dom.Element;
@@ -80,9 +80,9 @@ public class TranscodeParser extends AbstractTranscodeParser {
   public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
     String table = getAttribute(ATT_TABLE, element);
     TranscodingTaskStatement parent = (TranscodingTaskStatement) ArrayUtil.lastElementOf(parentPath);
-    Expression<DBSystem> sourceEx = parseSource(element, parent);
+    Expression<AbstractDBSystem> sourceEx = parseSource(element, parent);
     Expression<String> selectorEx = parseSelector(element, parent);
-    Expression<DBSystem> targetEx = parseTarget(element, parent);
+    Expression<AbstractDBSystem> targetEx = parseTarget(element, parent);
     Expression<Long> pageSizeEx = parsePageSize(element, parent);
     Expression<ErrorHandler> errorHandlerEx = parseOnErrorAttribute(element, table);
     TranscodeStatement result = new TranscodeStatement(new MutatingTypeExpression(element, getRequiredAttribute("table", element)),
@@ -110,16 +110,16 @@ public class TranscodeParser extends AbstractTranscodeParser {
     return result;
   }
 
-  private Expression<DBSystem> parseSource(Element element, Statement parent) {
-    Expression<DBSystem> result = super.parseSource(element);
+  private Expression<AbstractDBSystem> parseSource(Element element, Statement parent) {
+    Expression<AbstractDBSystem> result = super.parseSource(element);
     if (parent instanceof TranscodingTaskStatement) {
       result = new FallbackExpression<>(result, ((TranscodingTaskStatement) parent).getSourceEx());
     }
     return result;
   }
 
-  private Expression<DBSystem> parseTarget(Element element, Statement parent) {
-    Expression<DBSystem> result = super.parseTarget(element);
+  private Expression<AbstractDBSystem> parseTarget(Element element, Statement parent) {
+    Expression<AbstractDBSystem> result = super.parseTarget(element);
     if (parent instanceof TranscodingTaskStatement) {
       result = new FallbackExpression<>(result, ((TranscodingTaskStatement) parent).getTargetEx());
     }

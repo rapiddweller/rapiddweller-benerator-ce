@@ -32,7 +32,7 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.platform.db.DefaultDBSystem;
 import org.junit.Test;
 
@@ -42,15 +42,11 @@ import static org.junit.Assert.assertEquals;
  * Tests the {@link EvaluateParser} with respect to the features used
  * in the &lt;execute&gt; element.<br/><br/>
  * Created: 30.10.2009 08:11:56
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test bean invocation.
-   */
   @Test
   public void testBeanInvocation() {
     Statement statement = parse("<execute>bean.invoke(2)</execute>");
@@ -61,9 +57,6 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals(2, bean.lastValue);
   }
 
-  /**
-   * Test simple type variable definition.
-   */
   @Test
   public void testSimpleTypeVariableDefinition() {
     Statement statement = parse("<execute>x = 3</execute>");
@@ -71,9 +64,6 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals(3, context.get("x"));
   }
 
-  /**
-   * Test simple type variable access.
-   */
   @Test
   public void testSimpleTypeVariableAccess() {
     context.setGlobal("x", 3);
@@ -82,22 +72,16 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals(5, context.get("x"));
   }
 
-  /**
-   * Test sql execution without target.
-   */
   @Test(expected = ConfigurationError.class)
   public void testSqlExecutionWithoutTarget() {
     Statement statement = parse("<execute type='sql'>create sequence seq</execute>");
     statement.execute(context);
   }
 
-  /**
-   * Test empty result set.
-   */
   @Test
   public void testEmptyResultSet() {
     String url = HSQLUtil.getInMemoryURL("benerator");
-    DBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
+    AbstractDBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
     BeneratorContext context = new DefaultBeneratorContext();
     context.setGlobal("db", db);
     try {
@@ -110,13 +94,10 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
     }
   }
 
-  /**
-   * Test db invalidation default.
-   */
   @Test
   public void testDbInvalidationDefault() {
     String url = HSQLUtil.getInMemoryURL("benerator");
-    DBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
+    AbstractDBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
     BeneratorContext context = new DefaultBeneratorContext();
     context.setGlobal("db", db);
     assertEquals(0, db.invalidationCount());
@@ -124,23 +105,20 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
       db.execute("create table epast_test (id int)");
       Statement statement = parse("<execute target='db'>select * from epast_test where 1 = 0</execute>");
       statement.execute(context);
-      assertEquals(0, db.invalidationCount());
+      assertEquals(1, db.invalidationCount());
       Statement statement2 = parse("<execute target='db'>create table BBB (id int)</execute>");
       statement2.execute(context);
-      assertEquals(1, db.invalidationCount());
+      assertEquals(2, db.invalidationCount());
     } finally {
       db.execute("drop table epast_test");
       db.close();
     }
   }
 
-  /**
-   * Test db invalidation override.
-   */
   @Test
   public void testDbInvalidationOverride() {
     String url = HSQLUtil.getInMemoryURL("benerator");
-    DBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
+    AbstractDBSystem db = new DefaultDBSystem("db", url, HSQLUtil.DRIVER, "sa", null, context.getDataModel());
     BeneratorContext context = new DefaultBeneratorContext();
     context.setGlobal("db", db);
     assertEquals(0, db.invalidationCount());
@@ -148,10 +126,10 @@ public class ExecuteParserAndStatementTest extends AbstractBeneratorIntegrationT
       db.execute("create table epast_test (id int)");
       Statement statement = parse("<execute target='db' invalidate='true'>select * from epast_test where 1 = 0</execute>");
       statement.execute(context);
-      assertEquals(1, db.invalidationCount());
+      assertEquals(2, db.invalidationCount());
       Statement statement2 = parse("<execute target='db' invalidate='false'>create table AAA (id int)</execute>");
       statement2.execute(context);
-      assertEquals(1, db.invalidationCount());
+      assertEquals(2, db.invalidationCount());
     } finally {
       db.execute("drop table epast_test");
       db.close();

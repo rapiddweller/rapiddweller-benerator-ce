@@ -46,7 +46,7 @@ import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.jdbacl.DBExecutionResult;
 import com.rapiddweller.jdbacl.DBUtil;
-import com.rapiddweller.platform.db.DBSystem;
+import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.task.TaskException;
@@ -213,7 +213,7 @@ public class EvaluateStatement extends AbstractStatement {
       typeValue = checkOs(uriValue, typeValue); // for shell scripts, check the OS
     }
     if (typeValue == null) {
-      if (targetObject instanceof DBSystem) {
+      if (targetObject instanceof AbstractDBSystem) {
         typeValue = "sql";
       } else if (targetObject instanceof StorageSystem) {
         typeValue = "execute";
@@ -287,8 +287,8 @@ public class EvaluateStatement extends AbstractStatement {
     if (targetObject == null) {
       throw new ConfigurationError("Please specify the 'target' database to execute the SQL script");
     }
-    Assert.instanceOf(targetObject, DBSystem.class, "target");
-    DBSystem db = (DBSystem) targetObject;
+    Assert.instanceOf(targetObject, AbstractDBSystem.class, "target");
+    AbstractDBSystem db = (AbstractDBSystem) targetObject;
     if (uri != null) {
       logger.info("Executing script {}", uri);
     } else if (text != null) {
