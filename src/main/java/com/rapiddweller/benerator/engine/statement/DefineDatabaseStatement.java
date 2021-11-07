@@ -133,7 +133,7 @@ public class DefineDatabaseStatement implements Statement {
     }
 
     // apply all other settings without further validation
-    db.setMetaDataCache(ExpressionUtil.evaluate(metaCache, context));
+    db.setMetaCache(ExpressionUtil.evaluate(metaCache, context));
     db.setTableFilter(ExpressionUtil.evaluate(tableFilter, context));
     db.setIncludeTables(ExpressionUtil.evaluate(includeTables, context));
     db.setExcludeTables(ExpressionUtil.evaluate(excludeTables, context));

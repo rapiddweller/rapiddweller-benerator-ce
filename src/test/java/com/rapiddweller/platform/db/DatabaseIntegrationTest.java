@@ -24,7 +24,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.rapiddweller.benerator.engine;
+package com.rapiddweller.platform.db;
 
 import com.rapiddweller.benerator.primitive.datetime.CurrentDateTimeGenerator;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
@@ -34,7 +34,6 @@ import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.platform.db.DefaultDBSystem;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,7 +47,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Integration test for Benerator's database support.<br/><br/>
  * Created: 24.05.2010 17:52:58
- *
  * @author Volker Bergmann
  * @since 0.6.2
  */
@@ -58,9 +56,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   private DefaultDBSystem db;
   private ConsumerMock consumer;
 
-  /**
-   * Sets up database.
-   */
   @Before
   public void setUpDatabase() {
     DBUtil.resetMonitors();
@@ -89,9 +84,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   // generation of database references -------------------------------------------------------------------------------
 
-  /**
-   * Test script resolution.
-   */
   @Test
   public void testScriptResolution() {
     context.setGlobal("tblName", "referee");
@@ -100,9 +92,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test default column value.
-   */
   @Test
   public void testDefaultColumnValue() {
     parseAndExecute("<generate type='referee' count='3' consumer='cons'/>");
@@ -114,9 +103,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test db ref default nullable.
-   */
   @Test
   public void testDbRef_default_nullable() {
     parseAndExecute("<generate type='referer' count='3' consumer='cons'/>");
@@ -128,10 +114,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-
-  /**
-   * Test db ref default not null default one to one.
-   */
   @Test
   public void testDbRef_default_not_null_defaultOneToOne() {
     context.setDefaultOneToOne(true);
@@ -148,9 +130,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test db ref default not null default many to one.
-   */
   @Test
   public void testDbRef_default_not_null_defaultManyToOne() {
     context.setDefaultOneToOne(false);
@@ -168,9 +147,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   }
 
 
-  /**
-   * Test db ref distribution.
-   */
   @Test
   public void testDbRef_distribution() {
     parseAndExecute(
@@ -186,9 +162,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test db ref values.
-   */
   @Test
   public void testDbRef_values() {
     parseAndExecute(
@@ -203,9 +176,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test db ref constant.
-   */
   @Test
   public void testDbRef_constant() {
     parseAndExecute(
@@ -220,9 +190,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test db ref constant script.
-   */
   @Test
   public void testDbRef_constant_script() {
     context.setGlobal("rid", 2);
@@ -238,9 +205,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test db ref attribute constant script.
-   */
   @Test
   public void testDbRef_attribute_constant_script() {
     context.setGlobal("rid", 2);
@@ -256,9 +220,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test db ref script.
-   */
   @Test
   public void testDbRef_script() {
     context.setGlobal("rid", 2);
@@ -274,9 +235,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test db ref explicit selector.
-   */
   @Test
   public void testDbRef_explicit_selector() {
     context.setGlobal("key", 2);
@@ -292,9 +250,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test db ref explicit sub selector.
-   */
   @Test
   public void testDbRef_explicit_subSelector() {
     context.setGlobal("key", 2);
@@ -312,9 +267,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test db ref entity selector.
-   */
   @Test
   public void testDbRef_entity_selector() {
     context.setGlobal("key", 2);
@@ -333,9 +285,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   // iteration through database entries ------------------------------------------------------------------------------
 
-  /**
-   * Test db iterate this.
-   */
   @Test
   public void testDb_iterate_this() {
     parseAndExecute(
@@ -353,9 +302,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   // date generation -------------------------------------------------------------------------------------------------
 
-  /**
-   * Test datetime resolution.
-   */
   @Test
   public void test_datetime_resolution() {
     parseAndExecute(
@@ -372,9 +318,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   // transaction control ---------------------------------------------------------------------------------------------
 
-  /**
-   * Test tx default.
-   */
   @Test
   public void testTx_default() {
     context.setDefaultOneToOne(false);
@@ -407,9 +350,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test tx sub page size 0.
-   */
   @Test
   public void testTx_subPageSize0() {
     context.setDefaultOneToOne(false);
@@ -438,9 +378,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test tx all page sizes 0.
-   */
   @Test
   public void testTx_allPageSizes0() {
     context.setDefaultOneToOne(false);
@@ -472,9 +409,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   // selector resolution ---------------------------------------------------------------------------------------------
 
-  /**
-   * Test static entity selector partial.
-   */
   @Test
   public void testStaticEntitySelector_partial() {
     parseAndExecute(
@@ -489,10 +423,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-
-  /**
-   * Test static entity selector complete.
-   */
   @Test
   public void testStaticEntitySelector_complete() {
     parseAndExecute(
@@ -507,9 +437,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test dynamic entity selector partial.
-   */
   @Test
   public void testDynamicEntitySelector_partial() {
     parseAndExecute(
@@ -526,9 +453,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test dynamic entity selector complete.
-   */
   @Test
   public void testDynamicEntitySelector_complete() {
     parseAndExecute(
@@ -545,9 +469,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test static array selector.
-   */
   @Test
   public void testStaticArraySelector() {
     parseAndExecute(
@@ -562,9 +483,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test dynamic array selector.
-   */
   @Test
   public void testDynamicArraySelector() {
     parseAndExecute(
@@ -580,9 +498,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test static value selector.
-   */
   @Test
   public void testStaticValueSelector() {
     parseAndExecute(
@@ -598,9 +513,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test dynamic value selector using context value.
-   */
   @Test
   public void testDynamicValueSelectorUsingContextValue() {
     context.setGlobal("key", 2);
@@ -617,9 +529,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test dynamic value selector using variable.
-   */
   @Test
   public void testDynamicValueSelectorUsingVariable() {
     parseAndExecute(
@@ -635,9 +544,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test dynamic value selector using attribute.
-   */
   @Test
   public void testDynamicValueSelectorUsingAttribute() {
     parseAndExecute(
@@ -653,9 +559,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test static value selector with empty result set.
-   */
   @Test
   public void testStaticValueSelectorWithEmptyResultSet() {
     parseAndExecute(
@@ -668,9 +571,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test static value selector with null result.
-   */
   @Test
   public void testStaticValueSelectorWithNullResult() {
     parseAndExecute(
@@ -685,11 +585,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test updater.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testUpdater() throws Exception {
     parseAndExecute(
@@ -709,9 +604,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  /**
-   * Test update on non existing pk.
-   */
   @Test(expected = RuntimeException.class)
   public void testUpdateOnNonExistingPK() {
     parseAndExecute(
@@ -720,14 +612,23 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
             "</iterate>");
   }
 
+  @Test
+  public void testMetaDataCache_no_environment() {
+    db.setMetaCache(true);
+    try {
+      parseAndExecute("<execute target='db'>drop table meta_test;</execute>");
+    } catch (Exception e) {
+      // this is expected
+    }
+    parseAndExecute("<execute target='db'>" +
+        "create table meta_test ( id int, text varchar(20), primary key (id));" +
+        "</execute>");
+    parseAndExecute("<generate type='meta_test' count='5' consumer='db'/>");
+  }
+
 
   // private helpers -------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets consumed entities.
-   *
-   * @return the consumed entities
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   protected List<Entity> getConsumedEntities() {
     return (List) consumer.getProducts();
