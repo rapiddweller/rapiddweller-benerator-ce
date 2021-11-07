@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.test;
 
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManagerSupport;
 import com.rapiddweller.benerator.engine.Statement;
@@ -40,6 +41,8 @@ import org.junit.Before;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Parent class for Benerator integration tests.<br/><br/>
@@ -63,15 +66,19 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
     System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, ",");
   }
 
-  protected BeneratorContext parseAndExecuteFile(String filename) throws IOException {
-    Assert.notNull(filename, "file name");
-    String xml = IOUtil.getContentOfURI(filename);
-    String contextUri = IOUtil.getParentUri(filename);
-    if (contextUri.length() > 1 && contextUri.endsWith("/")) {
-      contextUri = contextUri.substring(0, contextUri.length() - 1);
+  protected BeneratorContext parseAndExecuteFile(String filename) {
+    try {
+      Assert.notNull(filename, "file name");
+      String xml = IOUtil.getContentOfURI(filename);
+      String contextUri = IOUtil.getParentUri(filename);
+      if (contextUri.length() > 1 && contextUri.endsWith("/")) {
+        contextUri = contextUri.substring(0, contextUri.length() - 1);
+      }
+      context.setContextUri(contextUri);
+      return parseAndExecute(xml);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
-    context.setContextUri(contextUri);
-    return parseAndExecute(xml);
   }
 
   protected BeneratorContext parseAndExecuteRoot(String xml) {
@@ -91,6 +98,14 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
     Element element = XMLUtil.parseStringAsElement(xml);
     BeneratorParseContext parsingContext = BeneratorFactory.getInstance().createParseContext(resourceManager);
     return parsingContext.parseElement(element, null);
+  }
+
+  public void assertMinGenerations(int expectedGenerations, Runnable task) {
+    long c0 = BeneratorMonitor.INSTANCE.getTotalGenerationCount();
+    task.run();
+    long actualGenerations = BeneratorMonitor.INSTANCE.getTotalGenerationCount() - c0;
+    assertTrue("Expected a minimum of " + expectedGenerations + " generations, " +
+        "but had only " + actualGenerations, actualGenerations >= expectedGenerations);
   }
 
 }
