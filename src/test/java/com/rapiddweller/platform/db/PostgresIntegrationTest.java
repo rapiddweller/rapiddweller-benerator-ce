@@ -5,6 +5,7 @@ package com.rapiddweller.platform.db;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.ConfigUtil;
 import org.junit.Assume;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -17,7 +18,7 @@ public class PostgresIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   final String folder = getClass().getPackageName().replace('.', '/');
 
-  @Test
+  @Test @Ignore("So far there is no agreed way to set this up uniformly on CI and a local system")
   public void testSequence() {
     Assume.assumeTrue("Postgres testing is deactivated", ConfigUtil.isTestActive("postgres"));
     assertMinGenerations(100, () -> parseAndExecuteFile(folder + "/postgres-seq.ben.xml"));
