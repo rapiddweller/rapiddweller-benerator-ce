@@ -168,11 +168,11 @@ public class Benerator {
     try (DescriptorRunner runner = new DescriptorRunner(filename, context)) {
       runner.run();
       BeneratorUtil.logConfig("Max. committed heap size: " + new KiloFormatter(1024).format(memProfiler.getMaxCommittedHeapSize()) + "B");
-      DBUtil.assertAllDbResourcesClosed(false);
     } catch (BeneratorError e) {
       logger.error(e.getMessage(), e);
       System.exit(e.getCode());
     }
+    DBUtil.assertAllDbResourcesClosed(false);
   }
 
 
