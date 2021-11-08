@@ -41,30 +41,18 @@ import com.rapiddweller.model.data.Entity;
  */
 public class EntityTypeChanger extends ThreadSafeConverter<Entity, Entity> {
 
-  private final ComplexTypeDescriptor targetType;
+  private final ComplexTypeDescriptor targetEntityType;
 
-  /**
-   * Instantiates a new Entity type changer.
-   *
-   * @param targetType the target type
-   */
-  public EntityTypeChanger(ComplexTypeDescriptor targetType) {
+  public EntityTypeChanger(ComplexTypeDescriptor targetEntityType) {
     super(Entity.class, Entity.class);
-    this.targetType = targetType;
+    this.targetEntityType = targetEntityType;
   }
 
   @Override
   public Entity convert(Entity entity) throws ConversionException {
-    return changeType(entity, targetType);
+    return changeType(entity, targetEntityType);
   }
 
-  /**
-   * Change type entity.
-   *
-   * @param entity     the entity
-   * @param targetType the target type
-   * @return the entity
-   */
   public static Entity changeType(Entity entity, ComplexTypeDescriptor targetType) {
     Entity result = new Entity(targetType);
     result.setComponents(entity.getComponents());
