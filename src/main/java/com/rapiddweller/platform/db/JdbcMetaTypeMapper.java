@@ -56,7 +56,7 @@ public class JdbcMetaTypeMapper {
         Types.BOOLEAN, PrimitiveType.BOOLEAN,
         Types.CHAR, PrimitiveType.STRING,
         Types.CLOB, PrimitiveType.STRING,
-        Types.DATALINK, PrimitiveType.STRING, // TODO v1.0 test
+        Types.DATALINK, PrimitiveType.STRING, // TODO test
         Types.DATE, PrimitiveType.DATE,
         Types.DECIMAL, PrimitiveType.BIG_DECIMAL,
         // Types.DISTINCT is not supported
@@ -69,7 +69,7 @@ public class JdbcMetaTypeMapper {
         // Types.NULL is not supported
         Types.NUMERIC, PrimitiveType.DOUBLE,
         Types.REAL, PrimitiveType.DOUBLE,
-        Types.REF, PrimitiveType.STRING, // TODO v1.0 test
+        Types.REF, PrimitiveType.STRING, // TODO test
         Types.SMALLINT, PrimitiveType.SHORT,
         // Types.STRUCT is not supported
         Types.TIME, PrimitiveType.DATE,
