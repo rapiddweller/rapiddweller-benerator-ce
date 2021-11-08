@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.benerator.de/schema/2.1.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/2.1.0 http://benerator.de/schema/rapiddweller-benerator-ce-2.1.0.xsd">
+
+    <database id="db" environment="local" system="postgres"/>
+
+    <execute target="db">
+        DROP TABLE IF EXISTS test_table;
+    </execute>
+
+    <execute target="db">
+        CREATE TABLE test_table (
+            c_id serial PRIMARY KEY,
+            c_uuid uuid NOT NULL
+        );
+    </execute>
+
+    <generate type="test_table" consumer="db,ConsoleExporter" count="100">
+        <attribute name="c_uuid" script="{java.util.UUID.randomUUID()}"/>
+    </generate>
+
+    <iterate source="db" type="test_table" consumer="ConsoleExporter"/>
+
+</setup>

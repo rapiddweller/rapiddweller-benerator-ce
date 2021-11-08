@@ -24,4 +24,10 @@ public class PostgresIntegrationTest extends AbstractBeneratorIntegrationTest {
     assertMinGenerations(100, () -> parseAndExecuteFile(folder + "/postgres-seq.ben.xml"));
   }
 
+  @Test @Ignore("So far there is no agreed way to set this up uniformly on CI and a local system")
+  public void testUUID() {
+    Assume.assumeTrue("Postgres testing is deactivated", ConfigUtil.isTestActive("postgres"));
+    assertMinGenerations(100, () -> parseAndExecuteFile(folder + "/postgres-uuid.ben.xml"));
+  }
+
 }

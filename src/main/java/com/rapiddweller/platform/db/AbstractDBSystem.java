@@ -95,6 +95,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.rapiddweller.jdbacl.SQLUtil.createCatSchTabString;
@@ -390,8 +391,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   public void store(Entity entity) {
     if (readOnly) {
       throw new IllegalStateException(
-          "Tried to insert rows into table '" + entity.type() + "' " +
-              "though database '" + id + "' is read-only");
+          "Tried to insert rows into table '" + entity.type() + "' though database '" + id + "' is read-only");
     }
     logger.debug("Storing {}", entity);
     persistOrUpdate(entity, true);
@@ -777,11 +777,9 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
           continue;
         }
         DBDataType columnType = column.getType();
-        String type = JdbcMetaTypeMapper
-            .abstractType(columnType, acceptUnknownColumnTypes);
+        String type = JdbcMetaTypeMapper.abstractType(columnType, acceptUnknownColumnTypes);
         String defaultValue = column.getDefaultValue();
-        SimpleTypeDescriptor typeDescriptor =
-            new SimpleTypeDescriptor(columnId, this, type);
+        SimpleTypeDescriptor typeDescriptor = new SimpleTypeDescriptor(columnId, this, type);
         if (defaultValue != null) {
           typeDescriptor.setDetailValue("constant", defaultValue);
         }
@@ -835,34 +833,11 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     List<ColumnInfo> pkInfos = new ArrayList<>(componentDescriptors.size());
     List<ColumnInfo> normalInfos = new ArrayList<>(componentDescriptors.size());
     ComplexTypeDescriptor entityDescriptor = entity.descriptor();
-    for (ComponentDescriptor dbCompDescriptor : componentDescriptors) {
-      ComponentDescriptor enCompDescriptor = entityDescriptor.getComponent(dbCompDescriptor.getName());
-      if (enCompDescriptor != null && enCompDescriptor.getMode() == Mode.ignored) {
-        continue;
-      }
-      if (dbCompDescriptor.getMode() != Mode.ignored) {
-        String name = dbCompDescriptor.getName();
-        SimpleTypeDescriptor type = (SimpleTypeDescriptor) dbCompDescriptor.getTypeDescriptor();
-        PrimitiveType primitiveType = type.getPrimitiveType();
-        if (primitiveType == null) {
-          if (!acceptUnknownColumnTypes) {
-            throw new ConfigurationError(
-                "Column type of " + entityDescriptor.getName() + "." + dbCompDescriptor.getName() +
-                    " unknown: " + type.getName());
-          } else if (entity.get(type.getName()) instanceof String) {
-            primitiveType = PrimitiveType.STRING;
-          } else {
-            primitiveType = PrimitiveType.OBJECT;
-          }
-        }
-        String primitiveTypeName = primitiveType.getName();
-        // TODO Version 2.1.0 wrong entity information when table with same name exists in different schema and is part of context.
-        DBColumn column = table.getColumn(name);
-        DBDataType columnType = column.getType();
-        int sqlType = columnType.getJdbcType();
-        Class<?> javaType = driverTypeMapper.concreteType(primitiveTypeName);
-        ColumnInfo info = new ColumnInfo(name, sqlType, javaType);
-        if (pkColumnNames.contains(name)) {
+    for (ComponentDescriptor colDescriptor : componentDescriptors) {
+      String columnName = colDescriptor.getName();
+      if (!ignoreColumn(colDescriptor, entityDescriptor, columnName)) {
+        ColumnInfo info = getWriteColumnInfo(entity, entityDescriptor, table, colDescriptor);
+        if (pkColumnNames.contains(columnName)) {
           pkInfos.add(info);
         } else {
           normalInfos.add(info);
@@ -876,6 +851,44 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
       normalInfos.addAll(pkInfos);
       return normalInfos;
     }
+  }
+
+  private boolean ignoreColumn(ComponentDescriptor colDescriptor, ComplexTypeDescriptor entityDescriptor, String columnName) {
+    if (colDescriptor.getMode() == Mode.ignored) {
+      return true;
+    }
+    ComponentDescriptor attrDescriptor = entityDescriptor.getComponent(columnName);
+    return (attrDescriptor != null && attrDescriptor.getMode() == Mode.ignored);
+  }
+
+  private ColumnInfo getWriteColumnInfo(Entity entity, ComplexTypeDescriptor entityDescriptor,
+                                        DBTable table, ComponentDescriptor dbCompDescriptor) {
+    String name = dbCompDescriptor.getName();
+    DBColumn column = table.getColumn(name);
+    DBDataType columnType = column.getType();
+    Class<?> typeToWrite;
+    int sqlType = columnType.getJdbcType();
+    if ("UUID".equals(columnType.getName())) { // Special treatment for Postgres UUID types
+      typeToWrite = UUID.class;
+    } else {
+      SimpleTypeDescriptor type = (SimpleTypeDescriptor) dbCompDescriptor.getTypeDescriptor();
+      PrimitiveType primitiveType = type.getPrimitiveType();
+      if (primitiveType == null) {
+        if (!acceptUnknownColumnTypes) {
+          throw new ConfigurationError(
+              "Column type of " + entityDescriptor.getName() + "." + dbCompDescriptor.getName() +
+                  " unknown: " + type.getName());
+        } else if (entity.get(type.getName()) instanceof String) {
+          primitiveType = PrimitiveType.STRING;
+        } else {
+          primitiveType = PrimitiveType.OBJECT;
+        }
+      }
+      String primitiveTypeName = primitiveType.getName();
+      typeToWrite = driverTypeMapper.concreteType(primitiveTypeName);
+    }
+    // TODO Version 2.1.0 wrong entity information when table with same name exists in different schema and is part of context.
+    return new ColumnInfo(name, sqlType, typeToWrite);
   }
 
   public DBTable getTable(String tableName) {
@@ -966,9 +979,12 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
       for (int i = 0; i < writeColumnInfos.size(); i++) {
         ColumnInfo info = writeColumnInfos.get(i);
         Object jdbcValue = entity.getComponent(info.name);
+        if ("user_uuid".equals(info.name)) { // TODO REMOVE
+          System.out.print("");
+        }
         if (info.type != null) {
           jdbcValue = AnyConverter.convert(jdbcValue, info.type);
-          if (info.type == String.class && jdbcValue != null) {
+          if (info.type == String.class && jdbcValue != null) { // JSON type mapping for Postgres
             jdbcValue = jdbcValue.toString().replace("#{","{").replace("}#","}");
           }
         }
