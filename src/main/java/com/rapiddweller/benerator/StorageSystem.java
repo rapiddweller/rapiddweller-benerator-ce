@@ -39,81 +39,39 @@ import java.io.Flushable;
  * Abstract interface characterizing an Entity storage system.
  * An implementation of this interface must inherit the class {@link AbstractStorageSystem}
  * if it is needs to be forward compatible.<br/><br/>
- * <br/>
  * Created: 27.06.2007 23:02:21
- *
  * @author Volker Bergmann
  * @since 0.4.0
  */
 public interface StorageSystem extends DescriptorProvider, Closeable, Flushable {
 
-  /**
-   * Returns a name that identifies the database
-   */
+  /** Returns a name that identifies the database */
   @Override
   String getId();
 
-  /**
-   * Creates an iterator that provides all entities of given type.
-   *
-   * @param type     the type
-   * @param selector the selector
-   * @param context  the context
-   * @return the data source
-   */
+  /** Creates an iterator that provides all entities of given type. */
   DataSource<Entity> queryEntities(String type, String selector, Context context);
 
-  /**
-   * Queries for entity ids
-   *
-   * @param type     the type
-   * @param selector the selector
-   * @param context  the context
-   * @return the data source
-   */
+  /** Queries for entity ids */
   DataSource<?> queryEntityIds(String type, String selector, Context context);
 
-  /**
-   * Creates an Iterable for repetitive iteration through the results of the specified query.
-   *
-   * @param selector the selector
-   * @param simplify the simplify
-   * @param context  the context
-   * @return the data source
-   */
+  /** Creates an Iterable for repetitive iteration through the results of the specified query. */
   DataSource<?> query(String selector, boolean simplify, Context context);
 
-  /**
-   * Persists a new entity.
-   *
-   * @param entity the entity
-   */
+  /** Persists a new entity. */
   void store(Entity entity);
 
-  /**
-   * Updates an existing entity.
-   *
-   * @param entity the entity
-   */
+  /** Updates an existing entity. */
   void update(Entity entity);
 
-  /**
-   * Executes a command on the storage system
-   *
-   * @param command the command
-   * @return the object
-   */
+  /** Executes a command on the storage system. */
   Object execute(String command);
 
-  /**
-   * Assures that all data that has been {@link #store(Entity)}d, is send to the target system.
-   */
+  /** Assures that all data that has been {@link #store(Entity)}d, is send to the target system. */
   @Override
   void flush();
 
-  /**
-   * Closes the database.
-   */
+  /** Closes the database. */
   @Override
   void close();
 

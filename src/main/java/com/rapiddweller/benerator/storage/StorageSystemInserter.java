@@ -35,7 +35,6 @@ import com.rapiddweller.model.data.Entity;
 /**
  * {@link Consumer} implementation that inserts entities into database tables.<br/><br/>
  * Created: 02.08.2010 19:38:56
- *
  * @author Volker Bergmann
  * @since 0.6.3
  */
@@ -43,21 +42,10 @@ public class StorageSystemInserter extends StorageSystemConsumer {
 
   private final ComplexTypeDescriptor targetType;
 
-  /**
-   * Instantiates a new Storage system inserter.
-   *
-   * @param system the system
-   */
   public StorageSystemInserter(StorageSystem system) {
     this(system, null);
   }
 
-  /**
-   * Instantiates a new Storage system inserter.
-   *
-   * @param system     the system
-   * @param targetType the target type
-   */
   public StorageSystemInserter(StorageSystem system, ComplexTypeDescriptor targetType) {
     super(system);
     this.targetType = targetType;
