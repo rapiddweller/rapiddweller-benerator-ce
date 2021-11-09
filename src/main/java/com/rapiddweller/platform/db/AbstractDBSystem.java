@@ -115,12 +115,12 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   private static final TypeDescriptor[] EMPTY_TYPE_DESCRIPTOR_ARRAY = new TypeDescriptor[0];
 
   protected final Logger logger = LoggerFactory.getLogger(getClass());
-  protected static LoggerEscalator escalator;
+  protected static LoggerEscalator escalator = new LoggerEscalator();
   private final TypeMapper driverTypeMapper;
   private final AtomicInteger invalidationCount;
   protected boolean batch;
   protected boolean readOnly;
-  protected Database database;
+  protected volatile Database database;
   protected DBMetaDataImporter importer;
   protected Map<String, DBTable> tables;
   protected DatabaseDialect dialect;
@@ -179,7 +179,6 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   }
 
   private AbstractDBSystem(String id, DataModel dataModel) {
-    this.escalator = new LoggerEscalator();
     setId(id);
     setDataModel(dataModel);
     setSchema(null);
@@ -375,7 +374,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   @Override
   public TypeDescriptor[] getTypeDescriptors() {
     logger.debug("getTypeDescriptors()");
-    parseMetadataIfNecessary();
+    fetchMetadataIfNecessary();
     if (typeDescriptors == null) {
       return EMPTY_TYPE_DESCRIPTOR_ARRAY;
     } else {
@@ -386,7 +385,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   @Override
   public TypeDescriptor getTypeDescriptor(String tableName) {
     logger.debug("getTypeDescriptor({})", tableName);
-    parseMetadataIfNecessary();
+    fetchMetadataIfNecessary();
     return typeDescriptors.get(tableName);
   }
 
@@ -418,8 +417,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   public Entity queryEntityById(String tableName, Object id) {
     try {
       logger.debug("queryEntityById({}, {})", tableName, id);
-      ComplexTypeDescriptor descriptor =
-          (ComplexTypeDescriptor) getTypeDescriptor(tableName);
+      ComplexTypeDescriptor descriptor = (ComplexTypeDescriptor) getTypeDescriptor(tableName);
       PreparedStatement query = getSelectByPKStatement(descriptor);
       query.setObject(1, id); // TODO support composite keys
       ResultSet resultSet = query.executeQuery();
@@ -603,22 +601,6 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     return invalidationCount.get();
   }
 
-  public void parseMetaData() {
-    this.tables = new HashMap<>();
-    this.typeDescriptors = OrderedNameMap.createCaseIgnorantMap();
-    getDialect(); // make sure dialect is initialized
-    database = getDbMetaData();
-    if (lazy) {
-      logger.info("Fetching table details and ordering tables by dependency");
-    } else {
-      logger.info("Ordering tables by dependency");
-    }
-    List<DBTable> orderedTables = DBUtil.dependencyOrderedTables(database);
-    for (DBTable table : orderedTables) {
-      parseTable(table);
-    }
-  }
-
   public DatabaseDialect getDialect() {
     if (dialect == null) {
       try {
@@ -639,13 +621,6 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   }
 
   // private helpers ------------------------------------------------------------------------------
-
-  public Database getDbMetaData() {
-    if (database == null) {
-      fetchDbMetaData();
-    }
-    return database;
-  }
 
   @Override
   public String toString() {
@@ -669,18 +644,94 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     }
   }
 
-  private void fetchDbMetaData() {
+  private QueryDataSource createQuery(String query, Context context, Connection connection) {
+    return new QueryDataSource(connection, query, fetchSize, (dynamicQuerySupported ? context : null));
+  }
+
+  protected abstract PreparedStatement getStatement(
+      ComplexTypeDescriptor descriptor, boolean insert, List<ColumnInfo> columnInfos);
+
+  private void persistOrUpdate(Entity entity, boolean insert) {
+    fetchMetadataIfNecessary();
+    List<ColumnInfo> writeColumnInfos = getWriteColumnInfos(entity, insert);
     try {
-      database = haveImporter().importDatabase();
+      String tableName = entity.type();
+      PreparedStatement statement = getStatement(entity.descriptor(), insert, writeColumnInfos);
+      for (int i = 0; i < writeColumnInfos.size(); i++) {
+        ColumnInfo info = writeColumnInfos.get(i);
+        Object jdbcValue = entity.getComponent(info.name);
+        if (info.type != null) {
+          jdbcValue = AnyConverter.convert(jdbcValue, info.type);
+          if (info.type == String.class && jdbcValue != null) { // JSON type mapping for Postgres
+            jdbcValue = jdbcValue.toString().replace("#{","{").replace("}#","}");
+          }
+        }
+        try {
+          boolean criticalOracleType =
+              (dialect instanceof OracleDialect && (info.sqlType == Types.NCLOB || info.sqlType == Types.OTHER));
+          if (jdbcValue != null || criticalOracleType) { // Oracle is not able to perform setNull() on NCLOBs and NVARCHAR2
+            statement.setObject(i + 1, jdbcValue);
+          } else {
+            statement.setNull(i + 1, info.sqlType);
+          }
+        } catch (SQLException e) {
+          throw new RuntimeException("error setting column " + tableName + '.' + info.name, e);
+        }
+      }
+      if (batch) {
+        statement.addBatch();
+      } else {
+        int rowCount = statement.executeUpdate();
+        if (rowCount == 0) {
+          throw new RuntimeException("Update failed because, since there is no database entry with the PK of "
+              + entity);
+        }
+      }
+    } catch (Exception e) {
+      throw new RuntimeException("Error in persisting " + entity, e);
+    }
+  }
+
+
+  // meta data handling ----------------------------------------------------------------------------------------------
+
+  public Database getDbMetaData() {
+    return fetchMetadataIfNecessary();
+  }
+
+  protected Database fetchMetadataIfNecessary() {
+    if (this.database != null) {
+      return this.database;
+    } else {
+      return fetchMetaData();
+    }
+  }
+
+  public Database fetchMetaData() {
+    try {
+      getDialect(); // make sure dialect is initialized
+      this.database = haveMetaDataImporter().importDatabase();
+      if (lazy) {
+        logger.info("Fetching table details and ordering tables by dependency");
+      } else {
+        logger.info("Ordering tables by dependency");
+      }
+      this.tables = new HashMap<>();
+      this.typeDescriptors = OrderedNameMap.createCaseIgnorantMap();
+      List<DBTable> orderedTables = DBUtil.dependencyOrderedTables(database);
+      for (DBTable table : orderedTables) {
+        parseTable(table);
+      }
+      return this.database;
     } catch (ConnectFailedException e) {
-      throw new ConfigurationError("Database not available. ", e);
+      throw new RuntimeException("Database not available. ", e);
     } catch (ImportFailedException e) {
-      throw new ConfigurationError(
+      throw new RuntimeException(
           "Unexpected failure of database meta data import. ", e);
     }
   }
 
-  private DBMetaDataImporter haveImporter() {
+  private DBMetaDataImporter haveMetaDataImporter() {
     if (importer == null) {
       // create JDBC DB importer
       importer = JDBCMetaDataUtil.createJDBCDBImporter(getConnection(), user,
@@ -698,13 +749,6 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     }
     return importer;
   }
-
-  private QueryDataSource createQuery(String query, Context context, Connection connection) {
-    return new QueryDataSource(connection, query, fetchSize, (dynamicQuerySupported ? context : null));
-  }
-
-  protected abstract PreparedStatement getStatement(
-      ComplexTypeDescriptor descriptor, boolean insert, List<ColumnInfo> columnInfos);
 
   private void parseTable(DBTable table) {
     logger.debug("Parsing table {}", table);
@@ -810,7 +854,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
         complexType.setComponent(descriptor);
       } catch (Exception e) {
         throw new ConfigurationError("Error processing column " + column.getName() +
-                " of table " + table.getName(), e);
+            " of table " + table.getName(), e);
       }
     }
     return complexType;
@@ -889,7 +933,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   }
 
   public DBTable getTable(String tableName) {
-    parseMetadataIfNecessary();
+    fetchMetadataIfNecessary();
     DBTable table = findTableInConfiguredCatalogAndSchema(schemaName, tableName);
     if (table != null) {
       return table;
@@ -897,8 +941,8 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
       table = findAnyTableOfName(tableName);
       if (table != null) {
         logger.warn("Table '{}' not found in the expected catalog or schema." +
-            "I have taken it from catalog '{}' and schema '{}' instead. " +
-            "You better make sure this is right and fix the configuration",
+                "I have taken it from catalog '{}' and schema '{}' instead. " +
+                "You better make sure this is right and fix the configuration",
             tableName, table.getCatalog(), table.getSchema());
         return table;
       }
@@ -907,7 +951,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   }
 
   public DBTable getTable(String schemaName, String tableName) {
-    parseMetadataIfNecessary();
+    fetchMetadataIfNecessary();
     DBTable table = findTableInConfiguredCatalogAndSchema(schemaName, tableName);
     if (table != null) {
       return table;
@@ -915,9 +959,9 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
       table = findAnyTableOfName(tableName);
       if (table != null) {
         logger.info("Table '{}' not found " +
-            "in the expected catalog or schema." +
-            "I have taken it from catalog '{}' and schema '{}' instead. " +
-            "You better make sure this is right and fix the configuration",
+                "in the expected catalog or schema." +
+                "I have taken it from catalog '{}' and schema '{}' instead. " +
+                "You better make sure this is right and fix the configuration",
             tableName, table.getCatalog(), table.getSchema());
         return table;
       }
@@ -967,53 +1011,6 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
       return dbSchema.getTable(tableName);
     }
     return null;
-  }
-
-  private void persistOrUpdate(Entity entity, boolean insert) {
-    parseMetadataIfNecessary();
-    List<ColumnInfo> writeColumnInfos = getWriteColumnInfos(entity, insert);
-    try {
-      String tableName = entity.type();
-      PreparedStatement statement = getStatement(entity.descriptor(), insert, writeColumnInfos);
-      for (int i = 0; i < writeColumnInfos.size(); i++) {
-        ColumnInfo info = writeColumnInfos.get(i);
-        Object jdbcValue = entity.getComponent(info.name);
-        if (info.type != null) {
-          jdbcValue = AnyConverter.convert(jdbcValue, info.type);
-          if (info.type == String.class && jdbcValue != null) { // JSON type mapping for Postgres
-            jdbcValue = jdbcValue.toString().replace("#{","{").replace("}#","}");
-          }
-        }
-        try {
-          boolean criticalOracleType =
-              (dialect instanceof OracleDialect && (info.sqlType == Types.NCLOB || info.sqlType == Types.OTHER));
-          if (jdbcValue != null || criticalOracleType) { // Oracle is not able to perform setNull() on NCLOBs and NVARCHAR2
-            statement.setObject(i + 1, jdbcValue);
-          } else {
-            statement.setNull(i + 1, info.sqlType);
-          }
-        } catch (SQLException e) {
-          throw new RuntimeException("error setting column " + tableName + '.' + info.name, e);
-        }
-      }
-      if (batch) {
-        statement.addBatch();
-      } else {
-        int rowCount = statement.executeUpdate();
-        if (rowCount == 0) {
-          throw new RuntimeException("Update failed because, since there is no database entry with the PK of "
-              + entity);
-        }
-      }
-    } catch (Exception e) {
-      throw new RuntimeException("Error in persisting " + entity, e);
-    }
-  }
-
-  private void parseMetadataIfNecessary() {
-    if (typeDescriptors == null) {
-      parseMetaData();
-    }
   }
 
 }
