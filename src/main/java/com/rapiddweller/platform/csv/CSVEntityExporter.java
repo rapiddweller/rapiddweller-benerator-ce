@@ -33,6 +33,7 @@ import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.format.csv.CSVUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.Entity;
@@ -81,13 +82,10 @@ public class CSVEntityExporter extends TextFileExporter {
   }
 
   public CSVEntityExporter(String uri, String columnsSpec) {
-    this(uri, columnsSpec,
-        DefaultBeneratorContext.getDefaultCellSeparator(), null,
-        DEFAULT_LINE_SEPARATOR);
+    this(uri, columnsSpec, DefaultBeneratorContext.getDefaultCellSeparator(), null, DEFAULT_LINE_SEPARATOR);
   }
 
-  public CSVEntityExporter(String uri, String columnsSpec, char separator,
-                           String encoding, String lineSeparator) {
+  public CSVEntityExporter(String uri, String columnsSpec, char separator, String encoding, String lineSeparator) {
     super(uri, encoding, lineSeparator);
     if (columnsSpec != null) {
       setColumns(ArrayFormat.parse(columnsSpec, ",", String.class));
@@ -101,21 +99,18 @@ public class CSVEntityExporter extends TextFileExporter {
   }
 
   public CSVEntityExporter(String uri, ComplexTypeDescriptor descriptor) {
-    this(uri, descriptor, DefaultBeneratorContext.getDefaultCellSeparator(),
-        null, DEFAULT_LINE_SEPARATOR);
+    this(uri, descriptor, DefaultBeneratorContext.getDefaultCellSeparator(), null, DEFAULT_LINE_SEPARATOR);
   }
 
-  public CSVEntityExporter(String uri, ComplexTypeDescriptor descriptor,
-                           char separator, String encoding,
-                           String lineSeparator) {
+  public CSVEntityExporter(
+      String uri, ComplexTypeDescriptor descriptor, char separator, String encoding, String lineSeparator) {
     super(uri, encoding, lineSeparator);
-    Collection<ComponentDescriptor> componentDescriptors =
-        descriptor.getComponents();
-    List<String> componentNames =
-        BeanUtil.extractProperties(componentDescriptors, "name");
+    Collection<ComponentDescriptor> componentDescriptors = descriptor.getComponents();
+    List<String> componentNames = BeanUtil.extractProperties(componentDescriptors, "name");
     this.columns = CollectionUtil.toArray(componentNames, String.class);
     this.endWithNewLine = false;
     this.separator = separator;
+    this.quoteEmpty = true;
   }
 
 
@@ -181,12 +176,7 @@ public class CSVEntityExporter extends TextFileExporter {
       if (value == null) {
         out = getNullString();
       } else {
-        out = plainConverter.convert(value);
-        if (out.length() == 0 && quoteEmpty) {
-          out = "\"\"";
-        } else if (out.indexOf(separator) >= 0) {
-          out = '"' + out + '"';
-        }
+        out = CSVUtil.renderCell(plainConverter.convert(value), separator, quoteEmpty);
       }
       printer.print(out);
     }

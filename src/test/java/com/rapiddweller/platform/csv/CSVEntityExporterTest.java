@@ -63,6 +63,7 @@ public class CSVEntityExporterTest extends GeneratorTest {
   private ComplexTypeDescriptor descriptor;
   private Entity alice;
   private Entity bob;
+  private Entity charly;
 
   @Before
   public void setUp() {
@@ -74,8 +75,9 @@ public class CSVEntityExporterTest extends GeneratorTest {
     descriptor.setComponent(createPart("age", dataModel.getTypeDescriptor("int")));
     descriptor.setComponent(createPart("notes", dataModel.getTypeDescriptor("string")));
     // create Person instances for testing
-    alice = createEntity("Person", "name", "Alice", "age", 23, "notes", "");
+    alice = createEntity("Person", "name", "Alice", "age", 23, "notes", "\"None\"");
     bob = createEntity("Person", "name", "Bob", "age", 34, "notes", null);
+    charly = createEntity("Person", "name", "Charly", "age", 45, "notes", "");
   }
 
   @After
@@ -106,24 +108,24 @@ public class CSVEntityExporterTest extends GeneratorTest {
   @Test
   public void testExplicitColumns() throws Exception {
     CSVEntityExporter exporter = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), "name");
-    consumeAliceBobAndClose(exporter);
-    assertEquals("name\r\nAlice\r\nBob", getContent(CUSTOM_FILE));
+    consumeAliceBobCharlyAndClose(exporter);
+    assertEquals("name\r\nAlice\r\nBob\r\nCharly", getContent(CUSTOM_FILE));
   }
 
   @Test
   public void testEndWithNewLine() throws Exception {
     CSVEntityExporter exporter = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), "name");
     exporter.setEndWithNewLine(true);
-    consumeAliceBobAndClose(exporter);
-    assertEquals("name\r\nAlice\r\nBob\r\n", getContent(CUSTOM_FILE));
+    consumeAliceBobCharlyAndClose(exporter);
+    assertEquals("name\r\nAlice\r\nBob\r\nCharly\r\n", getContent(CUSTOM_FILE));
   }
 
   @Test
   public void testHeadless() throws Exception {
     CSVEntityExporter exporter = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), "name");
     exporter.setHeadless(true);
-    consumeAliceBobAndClose(exporter);
-    assertEquals("Alice\r\nBob", getContent(CUSTOM_FILE));
+    consumeAliceBobCharlyAndClose(exporter);
+    assertEquals("Alice\r\nBob\r\nCharly", getContent(CUSTOM_FILE));
   }
 
   @Test
@@ -131,48 +133,48 @@ public class CSVEntityExporterTest extends GeneratorTest {
     Assume.assumeFalse(SystemInfo.isWindows()); // TODO make this test work on Windows
     CSVEntityExporter exporter = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), "name");
     exporter.setAppend(true);
-    consumeAliceBobAndClose(exporter);
+    consumeAliceBobCharlyAndClose(exporter);
     CSVEntityExporter exporter2 = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), "name");
     exporter2.setAppend(true);
-    consumeAliceBobAndClose(exporter2);
-    assertEquals("name\r\nAlice\r\nBob\r\nAlice\r\nBob", getContent(CUSTOM_FILE));
+    consumeAliceBobCharlyAndClose(exporter2);
+    assertEquals("name\r\nAlice\r\nBob\r\nCharly\r\nAlice\r\nBob\r\nCharly", getContent(CUSTOM_FILE));
   }
 
   @Test
   public void testColumnsByDescriptor() throws Exception {
     CSVEntityExporter exporter = new CSVEntityExporter(CUSTOM_FILE.getAbsolutePath(), descriptor);
-    consumeAliceBobAndClose(exporter);
-    assertEquals("name,age,notes\r\nAlice,23,\r\nBob,34,", getContent(CUSTOM_FILE));
+    consumeAliceBobCharlyAndClose(exporter);
+    assertEquals("name,age,notes\r\nAlice,23,\"\"\"None\"\"\"\r\nBob,34,\r\nCharly,45,\"\"", getContent(CUSTOM_FILE));
   }
 
   @Test
   public void testColumnsByInstance() throws Exception {
     CSVEntityExporter exporter = new CSVEntityExporter();
-    consumeAliceBobAndClose(exporter);
-    assertEquals("name,age,notes\r\nAlice,23,\"\"\r\nBob,34,", getContent(DEFAULT_FILE));
+    consumeAliceBobCharlyAndClose(exporter);
+    assertEquals("name,age,notes\r\nAlice,23,\"\"\"None\"\"\"\r\nBob,34,\r\nCharly,45,\"\"", getContent(DEFAULT_FILE));
   }
 
   @Test
   public void testEmptyAndNull_default() throws Exception {
     CSVEntityExporter exporter = new CSVEntityExporter();
-    consumeAliceBobAndClose(exporter);
-    assertEquals("name,age,notes\r\nAlice,23,\"\"\r\nBob,34,", getContent(DEFAULT_FILE));
+    consumeAliceBobCharlyAndClose(exporter);
+    assertEquals("name,age,notes\r\nAlice,23,\"\"\"None\"\"\"\r\nBob,34,\r\nCharly,45,\"\"", getContent(DEFAULT_FILE));
   }
 
   @Test
   public void testEmptyAndNull_quoteEmpty() throws Exception {
     CSVEntityExporter exporter = new CSVEntityExporter();
     exporter.setQuoteEmpty(true);
-    consumeAliceBobAndClose(exporter);
-    assertEquals("name,age,notes\r\nAlice,23,\"\"\r\nBob,34,", getContent(DEFAULT_FILE));
+    consumeAliceBobCharlyAndClose(exporter);
+    assertEquals("name,age,notes\r\nAlice,23,\"\"\"None\"\"\"\r\nBob,34,\r\nCharly,45,\"\"", getContent(DEFAULT_FILE));
   }
 
   @Test
   public void testEmptyAndNull_dontQuoteEmpty() throws Exception {
     CSVEntityExporter exporter = new CSVEntityExporter();
     exporter.setQuoteEmpty(false);
-    consumeAliceBobAndClose(exporter);
-    assertEquals("name,age,notes\r\nAlice,23,\r\nBob,34,", getContent(DEFAULT_FILE));
+    consumeAliceBobCharlyAndClose(exporter);
+    assertEquals("name,age,notes\r\nAlice,23,\"\"\"None\"\"\"\r\nBob,34,\r\nCharly,45,", getContent(DEFAULT_FILE));
   }
 
   @Test
@@ -234,11 +236,13 @@ public class CSVEntityExporterTest extends GeneratorTest {
 
   // helper methods --------------------------------------------------------------------------------------------------
 
-  private void consumeAliceBobAndClose(CSVEntityExporter exporter) {
+  private void consumeAliceBobCharlyAndClose(CSVEntityExporter exporter) {
     exporter.startProductConsumption(alice);
     exporter.finishProductConsumption(alice);
     exporter.startProductConsumption(bob);
     exporter.finishProductConsumption(bob);
+    exporter.startProductConsumption(charly);
+    exporter.finishProductConsumption(charly);
     exporter.close();
   }
 
