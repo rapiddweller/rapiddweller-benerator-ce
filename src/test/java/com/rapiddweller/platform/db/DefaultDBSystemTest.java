@@ -54,7 +54,7 @@ import static org.junit.Assert.*;
  * @author Volker Bergmann
  * @since 0.5.6
  */
-public class DBSystemTest extends ABCTest {
+public class DefaultDBSystemTest extends ABCTest {
 
   @Test
   public void testReadWrite() {

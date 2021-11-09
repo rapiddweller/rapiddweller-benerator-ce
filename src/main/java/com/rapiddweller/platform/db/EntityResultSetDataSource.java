@@ -36,7 +36,6 @@ import java.sql.ResultSet;
 
 /**
  * Iterates a ResultSet, returning Entities.
- *
  * @author Volker Bergmann
  * @since 0.3.04
  */
@@ -45,14 +44,7 @@ public class EntityResultSetDataSource extends AbstractEntitySource {
   private final DataSource<ResultSet> source;
   private final ComplexTypeDescriptor entityDescriptor;
 
-  /**
-   * Instantiates a new Entity result set data source.
-   *
-   * @param source           the source
-   * @param entityDescriptor the entity descriptor
-   */
-  public EntityResultSetDataSource(DataSource<ResultSet> source,
-                                   ComplexTypeDescriptor entityDescriptor) {
+  public EntityResultSetDataSource(DataSource<ResultSet> source, ComplexTypeDescriptor entityDescriptor) {
     this.source = source;
     this.entityDescriptor = entityDescriptor;
   }

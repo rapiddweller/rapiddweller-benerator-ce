@@ -55,6 +55,7 @@ public class BenchmarkRunner {
   public static BenchmarkToolReport runBenchmarks(BenchmarkToolConfig config) throws IOException {
     logger.info("Benchmark runner started, checking Benerator first...");
     logSeparator();
+    Benerator.setMode(config.getMode()); // need to set this here for the following log output
     BeneratorUtil.checkSystem(new LoggingInfoPrinter(BenchmarkRunner.class));
     // perform tests
     BenchmarkToolReport result = new BenchmarkToolReport(config);

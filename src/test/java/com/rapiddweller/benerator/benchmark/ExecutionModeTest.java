@@ -10,11 +10,10 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * TODO JavaDoc.<br/><br/>
+ * Tests the {@link ExecutionMode} class.<br/><br/>
  * Created: 02.11.2021 16:15:39
- *
  * @author Volker Bergmann
- * @since TODO
+ * @since 2.1.0
  */
 public class ExecutionModeTest {
 
