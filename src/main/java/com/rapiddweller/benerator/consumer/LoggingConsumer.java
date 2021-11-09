@@ -31,10 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 /**
- * A {@link Consumer} that logs the entities that it receives at info level.<br/>
- * <br/>
+ * A {@link Consumer} that logs the entities that it receives at info level.<br/><br/>
  * Created: 26.08.2007 14:52:40
- *
  * @author Volker Bergmann
  * @since 0.4.0
  */
@@ -42,14 +40,39 @@ public class LoggingConsumer extends AbstractConsumer {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LoggingConsumer.class);
 
+  private static final long UNLIMITED = -1;
+
+  private final  long offset;
+  private final long maxLogs;
+  private long cursor;
+
+  public LoggingConsumer() {
+    this(0);
+  }
+
+  public LoggingConsumer(long offset) {
+    this(offset, UNLIMITED);
+  }
+
+  public LoggingConsumer(long offset, long maxLogs) {
+    this.offset = offset;
+    this.maxLogs = maxLogs;
+    this.cursor = 0;
+  }
+
   @Override
   public void startProductConsumption(Object object) {
-    LOGGER.info("startConsuming({})", object);
+    if (shouldLog()) {
+      LOGGER.info("startConsuming({})", object);
+    }
   }
 
   @Override
   public void finishProductConsumption(Object object) {
-    LOGGER.info("finishConsuming({})", object);
+    if (shouldLog()) {
+      LOGGER.info("finishConsuming({})", object);
+    }
+    cursor++;
   }
 
   @Override
@@ -60,6 +83,10 @@ public class LoggingConsumer extends AbstractConsumer {
   @Override
   public void close() {
     LOGGER.info("close()");
+  }
+
+  boolean shouldLog() {
+    return cursor >= offset && (maxLogs == UNLIMITED || cursor < offset + maxLogs);
   }
 
 }

@@ -39,6 +39,7 @@ import com.rapiddweller.common.ConnectFailedException;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ImportFailedException;
+import com.rapiddweller.common.LoggerEscalator;
 import com.rapiddweller.common.ObjectNotFoundException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.collection.OrderedNameMap;
@@ -114,6 +115,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   private static final TypeDescriptor[] EMPTY_TYPE_DESCRIPTOR_ARRAY = new TypeDescriptor[0];
 
   protected final Logger logger = LoggerFactory.getLogger(getClass());
+  protected static LoggerEscalator escalator;
   private final TypeMapper driverTypeMapper;
   private final AtomicInteger invalidationCount;
   protected boolean batch;
@@ -177,6 +179,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   }
 
   private AbstractDBSystem(String id, DataModel dataModel) {
+    this.escalator = new LoggerEscalator();
     setId(id);
     setDataModel(dataModel);
     setSchema(null);
@@ -432,38 +435,32 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
 
   @Override
   @SuppressWarnings({"null", "checkstyle:VariableDeclarationUsageDistance"})
-  public DataSource<Entity> queryEntities(String type, String selector,
-                                          Context context) {
+  public DataSource<Entity> queryEntities(String type, String selector, Context context) {
     logger.debug("queryEntities({})", type);
     Connection connection = getConnection();
     boolean script = false;
-    if (selector != null && selector.startsWith("{") &&
-        selector.endsWith("}")) {
+    if (selector != null && selector.startsWith("{") && selector.endsWith("}")) {
       selector = selector.substring(1, selector.length() - 1);
       script = true;
     }
     String sql;
     if (StringUtil.isEmpty(selector)) {
-      sql = "select * from " +
-          createCatSchTabString(catalogName, schemaName, type, getDialect());
+      sql = "select * from " + createCatSchTabString(catalogName, schemaName, type, getDialect());
     } else if (StringUtil.startsWithIgnoreCase(selector, "select") ||
         StringUtil.startsWithIgnoreCase(selector, "'select")) {
       sql = selector;
     } else if (selector.startsWith("ftl:") || !script) {
       sql = "select * from " +
-          createCatSchTabString(catalogName, schemaName, type,
-              getDialect()) + " WHERE " + selector;
+          createCatSchTabString(catalogName, schemaName, type, getDialect()) + " WHERE " + selector;
     } else {
       sql = "'select * from " +
-          createCatSchTabString(catalogName, schemaName, type,
-              getDialect()) + " WHERE ' + " + selector;
+          createCatSchTabString(catalogName, schemaName, type, getDialect()) + " WHERE ' + " + selector;
     }
     if (script) {
       sql = '{' + sql + '}';
     }
     DataSource<ResultSet> source = createQuery(sql, context, connection);
-    return new EntityResultSetDataSource(source,
-        (ComplexTypeDescriptor) getTypeDescriptor(type));
+    return new EntityResultSetDataSource(source, (ComplexTypeDescriptor) getTypeDescriptor(type));
   }
 
   public long countEntities(String tableName) {
@@ -944,7 +941,8 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     DBCatalog catalog = database.getCatalog(catalogName);
     DBSchema dbSchema;
     if (catalog == null) {
-      logger.debug("no catalog set, try to get schema directly");
+      escalator.escalate("No catalog set for database, trying to get schema directly", this,
+          "findTableInConfiguredCatalogAndSchema()");
       return database.getCatalog("benerator").getSchema(schemaName).getTable(tableName);
     } else {
       dbSchema = catalog.getSchema(schemaName);
@@ -959,7 +957,8 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     DBSchema dbSchema;
     DBCatalog catalog = database.getCatalog(catalogName);
     if (catalog == null) {
-      logger.info("no catalog set, try to get schema directly");
+      escalator.escalate("No catalog set for database, trying to get schema directly", this,
+          "findTableInConfiguredCatalogAndSchema()");
       dbSchema = database.getSchema(schemaName);
     } else {
       dbSchema = catalog.getSchema(schemaName);
@@ -979,9 +978,6 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
       for (int i = 0; i < writeColumnInfos.size(); i++) {
         ColumnInfo info = writeColumnInfos.get(i);
         Object jdbcValue = entity.getComponent(info.name);
-        if ("user_uuid".equals(info.name)) { // TODO REMOVE
-          System.out.print("");
-        }
         if (info.type != null) {
           jdbcValue = AnyConverter.convert(jdbcValue, info.type);
           if (info.type == String.class && jdbcValue != null) { // JSON type mapping for Postgres

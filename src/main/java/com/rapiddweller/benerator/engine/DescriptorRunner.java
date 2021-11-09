@@ -97,6 +97,7 @@ public class DescriptorRunner implements ResourceManager {
     runtime.addShutdownHook(hook);
     try {
       runWithoutShutdownHook();
+      LOGGER.info("Benerator finished successfully");
     } finally {
       runtime.removeShutdownHook(hook);
     }
