@@ -304,8 +304,7 @@ public class Entity implements Composite {
 
   @Override
   public String toString() {
-    return new CompositeFormatter(true, true)
-        .render(type() + '[', this, "]");
+    return new CompositeFormatter(true, true).render(type() + '[', this, "]");
   }
 
 }

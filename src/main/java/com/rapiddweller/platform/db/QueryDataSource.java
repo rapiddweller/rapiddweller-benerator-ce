@@ -59,8 +59,7 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> {
   private final Converter<String, ?> queryPreprocessor;
   private String renderedQuery;
 
-  public QueryDataSource(Connection connection, String query, int fetchSize,
-                         Context context) {
+  public QueryDataSource(Connection connection, String query, int fetchSize, Context context) {
     super(ResultSet.class);
     if (connection == null) {
       throw new IllegalStateException("'connection' is null");

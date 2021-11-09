@@ -37,8 +37,8 @@ import java.sql.SQLException;
 
 /**
  * Iterates a ResultSet returning Entity objects.
- *
- * @author Volker Bergmann |since 0.3.04
+ * @author Volker Bergmann
+ * @since 0.3.4
  */
 public class ResultSetEntityIterator implements DataIterator<Entity> {
 
@@ -46,14 +46,7 @@ public class ResultSetEntityIterator implements DataIterator<Entity> {
 
   private final ComplexTypeDescriptor descriptor;
 
-  /**
-   * Instantiates a new Result set entity iterator.
-   *
-   * @param source     the source
-   * @param descriptor the descriptor
-   */
-  public ResultSetEntityIterator(DataIterator<ResultSet> source,
-                                 ComplexTypeDescriptor descriptor) {
+  public ResultSetEntityIterator(DataIterator<ResultSet> source, ComplexTypeDescriptor descriptor) {
     this.source = source;
     this.descriptor = descriptor;
   }
@@ -71,8 +64,7 @@ public class ResultSetEntityIterator implements DataIterator<Entity> {
         return null;
       }
       ResultSet resultSet = feed.getData();
-      Entity result =
-          ResultSet2EntityConverter.convert(resultSet, descriptor);
+      Entity result = ResultSet2EntityConverter.convert(resultSet, descriptor);
       return container.setData(result);
     } catch (SQLException e) {
       throw new RuntimeException(e);
