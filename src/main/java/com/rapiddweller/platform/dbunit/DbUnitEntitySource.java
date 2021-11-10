@@ -36,26 +36,15 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 /**
- * Imports entities from a DbUnit XML file.<br/>
- * <br/>
+ * Imports entities from a DbUnit XML file.<br/><br/>
  * Created at 07.11.2008 18:07:54
- *
  * @author Volker Bergmann
  * @since 0.5.6
  */
 public class DbUnitEntitySource extends FileBasedEntitySource {
 
-  /**
-   * The Flat.
-   */
   Boolean flat;
 
-  /**
-   * Instantiates a new Db unit entity source.
-   *
-   * @param uri     the uri
-   * @param context the context
-   */
   public DbUnitEntitySource(String uri, BeneratorContext context) {
     super(uri, context);
   }
