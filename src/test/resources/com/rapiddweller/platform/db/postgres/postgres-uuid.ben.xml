@@ -6,20 +6,24 @@
     <database id="db" environment="local" system="postgres"/>
 
     <execute target="db">
-        DROP TABLE IF EXISTS test_table;
+        DROP TABLE IF EXISTS uuid_table;
     </execute>
 
     <execute target="db">
-        CREATE TABLE test_table (
+        CREATE TABLE uuid_table (
             c_id serial PRIMARY KEY,
             c_uuid uuid NOT NULL
         );
     </execute>
 
-    <generate type="test_table" consumer="db,ConsoleExporter" count="100">
+    <generate type="uuid_table" consumer="db,ConsoleExporter" count="100">
         <attribute name="c_uuid" script="{java.util.UUID.randomUUID()}"/>
     </generate>
 
-    <iterate source="db" type="test_table" consumer="ConsoleExporter"/>
+    <iterate source="db" type="uuid_table" consumer="ConsoleExporter"/>
+
+    <execute target="db">
+        DROP TABLE IF EXISTS uuid_table;
+    </execute>
 
 </setup>
