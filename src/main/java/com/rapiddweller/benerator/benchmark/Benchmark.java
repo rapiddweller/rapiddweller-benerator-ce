@@ -20,7 +20,7 @@ public class Benchmark {
   private static final String V210 = "2.1.0";
 
   static final Benchmark[] INSTANCES = {
-      new Benchmark("gen-string", false, V200, 120000, "Generation of big entities with random strings"),
+      new Benchmark("gen-string", false, V200, 10000, "Generation of big entities with random strings"),
       new Benchmark("gen-big-entity", false, V200, 100000, "Generation of big entities (323 attributes)"),
       new Benchmark("gen-person-showcase", false, V200, 80000, "Generation of real-looking person data"),
       new Benchmark("anon-person-showcase", false, V200, 100000, "Anonymization with real-looking person data"),

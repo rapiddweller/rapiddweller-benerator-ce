@@ -2,10 +2,15 @@
 
 package com.rapiddweller.benerator;
 
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.ConfigUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.VMInfo;
 import com.rapiddweller.common.ui.BufferedInfoPrinter;
+import com.rapiddweller.common.ui.InfoPrinter;
 import org.junit.Test;
+
+import java.io.File;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -61,6 +66,35 @@ public class BeneratorUtilTest {
   @Test
   public void testGetOsInfo() {
     assertTrue(BeneratorUtil.getOsInfo().startsWith(SystemInfo.getOsName()));
+  }
+
+  @Test
+  public void testPrintEnvironments() {
+    InfoPrinter printer = new BufferedInfoPrinter();
+    BeneratorUtil.printEnvironments(printer);
+    assertTrue(printer.toString().length() > 0);
+  }
+
+  @Test
+  public void testPrintEnvDbs() {
+    InfoPrinter printer = new BufferedInfoPrinter();
+    BeneratorUtil.printEnvDbs(printer);
+    assertTrue(printer.toString().length() > 0);
+  }
+
+  @Test
+  public void testPrintEnvKafkas() {
+    InfoPrinter printer = new BufferedInfoPrinter();
+    BeneratorUtil.printEnvKafkas(printer);
+    assertTrue(printer.toString().length() > 0);
+  }
+
+  @Test
+  public void testClearCaches() {
+    BeneratorUtil.clearCaches();
+    File cacheFolder = ConfigUtil.commonCacheFolder();
+    assertTrue(cacheFolder.isDirectory());
+    assertTrue(ArrayUtil.isEmpty(cacheFolder.list()));
   }
 
 }

@@ -126,13 +126,13 @@ public class EvaluateStatement extends AbstractStatement {
       String typeValue = evaluateType(context, uriValue, targetObject);
       String encoding = ExpressionUtil.evaluate(encodingEx, context);
       String text = ExpressionUtil.evaluate(textEx, context);
+      String shell = ExpressionUtil.evaluate(shellEx, context);
 
       // run
       Object result = null;
       if ("sql".equals(typeValue)) {
         result = evaluateAsSql(context, onErrorValue, uriValue, targetObject, encoding, text);
-      } else if (TYPE_SHELL.equals(typeValue)) {
-        String shell = ExpressionUtil.evaluate(shellEx, context);
+      } else if (TYPE_SHELL.equals(typeValue) || !StringUtil.isEmpty(shell)) {
         result = runShell(uriValue, text, shell, onErrorValue);
       } else if ("execute".equals(typeValue)) {
         result = ((StorageSystem) targetObject).execute(text);

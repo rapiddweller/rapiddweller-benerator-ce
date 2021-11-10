@@ -118,18 +118,30 @@ public class BenchmarkToolTest extends ModelTest {
     runBenchmark("file-out-xml");
   }
 
+  @Test
+  public void testRealBenchmarkRun() throws IOException {
+    runBenchmark("gen-string", null, 1);
+  }
+
+  // helper methods --------------------------------------------------------------------------------------------------
+
   private void runBenchmark(String benchmarkName) throws IOException {
-    runBenchmark(benchmarkName, null);
+    runBenchmark(benchmarkName, null, 0);
   }
 
   private void runBenchmark(String benchmarkName, String systemId) throws IOException {
+    runBenchmark(benchmarkName, systemId, 0);
+  }
+
+  private void runBenchmark(String benchmarkName, String systemId, int minSecs) throws IOException {
     Benchmark setup = Benchmark.getInstance(benchmarkName);
     assertNotNull(setup);
     ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
-    builder.addAll(new String[] { "--ce", "--maxThreads", "1", "--minSecs", "0" });
+    builder.addAll(new String[] { "--ce", "--maxThreads", "1", "--minSecs", String.valueOf(minSecs) });
     if (systemId != null) {
       builder.add("--env").add(systemId);
     }
+    builder.add(benchmarkName);
     BenchmarkTool.main(builder.toArray());
   }
 
