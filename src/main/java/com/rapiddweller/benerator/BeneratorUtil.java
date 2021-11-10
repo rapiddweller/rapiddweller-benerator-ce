@@ -30,6 +30,8 @@ import com.rapiddweller.benerator.environment.Environment;
 import com.rapiddweller.benerator.environment.EnvironmentUtil;
 import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.benerator.main.Benerator;
+import com.rapiddweller.common.ConfigUtil;
+import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.LogCategoriesConstants;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SystemInfo;
@@ -227,6 +229,11 @@ public class BeneratorUtil {
     for (SystemRef system : systems) {
       printer.printLines("- " + system.getEnvironment().getName() + "#" + system.getName());
     }
+  }
+
+  public static void clearCaches() {
+    CONFIG_LOGGER.info("Deleting caches");
+    FileUtil.deleteDirectory(ConfigUtil.commonCacheFolder());
   }
 
 }

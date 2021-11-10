@@ -16,6 +16,7 @@ public class BeneratorConfig extends CommandLineConfig {
   private boolean listEnvironments;
   private boolean listDbs;
   private boolean listKafkas;
+  private boolean clearCaches;
   private BeneratorMode mode;
   private String file;
 
@@ -46,6 +47,14 @@ public class BeneratorConfig extends CommandLineConfig {
 
   public void setListKafkas(boolean listKafkas) {
     this.listKafkas = listKafkas;
+  }
+
+  public boolean isClearCaches() {
+    return clearCaches;
+  }
+
+  public void setClearCaches(boolean clearCaches) {
+    this.clearCaches = clearCaches;
   }
 
   public BeneratorMode getMode() {
