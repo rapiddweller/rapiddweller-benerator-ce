@@ -2,6 +2,7 @@
 
 package com.rapiddweller.benerator;
 
+import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.ConfigUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.VMInfo;
@@ -12,7 +13,6 @@ import org.junit.Test;
 import java.io.File;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -94,7 +94,7 @@ public class BeneratorUtilTest {
     BeneratorUtil.clearCaches();
     File cacheFolder = ConfigUtil.commonCacheFolder();
     assertTrue(cacheFolder.isDirectory());
-    assertNull(cacheFolder.list());
+    assertTrue(ArrayUtil.isEmpty(cacheFolder.list()));
   }
 
 }
