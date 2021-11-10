@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.benerator.de/schema/2.1.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/2.1.0 http://benerator.de/schema/rapiddweller-benerator-ce-2.1.0.xsd">
+
+    <echo>preparing database table</echo>
+    <database id="db" environment="local" system="postgres"/>
+    <execute target="db">
+        DROP TABLE IF EXISTS bytea_table;
+
+        CREATE TABLE bytea_table (
+        c_bytea bytea
+        );
+    </execute>
+
+
+    <echo>Test Data import</echo>
+    <echo>GIVEN a list of fix data sets in the database</echo>
+    <execute target="db">
+        insert into bytea_table (c_bytea) values (null);
+        insert into bytea_table (c_bytea) values (E'\\x12345678');
+        insert into bytea_table (c_bytea) values ('Testdata');
+        insert into bytea_table (c_bytea) values ('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefhijklmnopqrstuvwxyz0123456789');
+        insert into bytea_table (c_bytea) values ('ÄÖÜäöüßÀéñçž$€¥£');
+    </execute>
+    <echo>WHEN iterating over them</echo>
+    <memstore id="mem_predef"/>
+    <iterate source="db" type="bytea_table" consumer="mem_predef,ConsoleExporter"/>
+    <echo>THEN the data shall be checked by the caller using 'memfix'</echo>
+
+
+    <echo>TEST Data export</echo>
+    <execute target="db">DELETE FROM bytea_table;</execute>
+    <echo>GIVEN a list of fix data sets in the 'mem_predef' memstore</echo>
+    <echo>WHEN inserting them into the database</echo>
+    <iterate source="mem_predef" type="bytea_table" consumer="db"/>
+    <echo>THEN the data shall be checked by the caller using 'mem_written'</echo>
+    <memstore id="mem_written"/>
+    <iterate source="db" type="bytea_table" consumer="mem_written,ConsoleExporter"/>
+
+
+    <echo>TEST Dynamic byte[] generation</echo>
+    <echo>GIVEN an empty database table</echo>
+    <execute target="db">DELETE FROM bytea_table;</execute>
+    <echo>WHEN generating and exporting data to it</echo>
+    <generate type="bytea_table" consumer="db,ConsoleExporter" count="100">
+        <attribute name="c_bytea" generator="com.rapiddweller.platform.db.postgres.ByteaGenerator"/>
+    </generate>
+    <echo>THEN the caller shall verify the results querying 'mem_byte_array'</echo>
+    <memstore id="mem_byte_array"/>
+    <iterate source="db" type="bytea_table" consumer="mem_byte_array"/>
+
+
+    <echo>Removing test artifacts</echo>
+    <execute target="db">
+        DROP TABLE bytea_table;
+    </execute>
+
+    <echo>Done -----------------------------------------------------------------</echo>
+
+</setup>

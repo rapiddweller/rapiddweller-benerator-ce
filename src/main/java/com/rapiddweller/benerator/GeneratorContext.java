@@ -44,6 +44,8 @@ public interface GeneratorContext extends Context, ClassProvider {
 
   // global properties -----------------------------------------------------------------------------------------------
 
+  boolean isDefaultSourceScripted();
+
   String getDefaultEncoding();
 
   String getDefaultLineSeparator();

@@ -251,6 +251,22 @@ public class DescriptorUtil {
     return unique;
   }
 
+  public static String getEncoding(TypeDescriptor type, BeneratorContext context) {
+    String encoding = type.getEncoding();
+    if (encoding == null) {
+      encoding = context.getDefaultEncoding();
+    }
+    return encoding;
+  }
+
+  public static boolean isSourceScripted(ComplexTypeDescriptor descriptor, BeneratorContext context) {
+    Boolean result = descriptor.isSourceScripted();
+    if (result == null) {
+      result = context.isDefaultSourceScripted();
+    }
+    return result;
+  }
+
   public static char getSeparator(TypeDescriptor descriptor, BeneratorContext context) {
     char separator = (context != null ? context.getDefaultSeparator() : ',');
     if (!StringUtil.isEmpty(descriptor.getSeparator())) {

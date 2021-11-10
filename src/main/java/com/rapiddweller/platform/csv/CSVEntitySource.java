@@ -149,8 +149,7 @@ public class CSVEntitySource extends FileBasedEntitySource implements Tabular {
   public DataIterator<Entity> iterator() {
     try {
       CSVEntityIterator iterator =
-          new CSVEntityIterator(resolveUri(), entityType,
-              preprocessor, separator, encoding);
+          new CSVEntityIterator(resolveUri(), entityType, preprocessor, separator, encoding);
       if (!expectingHeader) {
         iterator.setColumns(getColumnNames());
         iterator.setExpectingHeader(false);

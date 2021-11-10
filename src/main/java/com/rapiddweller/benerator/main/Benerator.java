@@ -77,6 +77,7 @@ public class Benerator {
       "  --listEnvs             List the available environments",
       "  --listDbs              List databases defined in the available environments",
       "  --listKafkas           List Kafka systems defined in the available environments",
+      "  --clearCaches          Clears all caches",
       "  --mode <spec>          activates Benerator mode strict, lenient or turbo ",
       "                         (default: lenient)"
   };
@@ -87,6 +88,8 @@ public class Benerator {
   // main ------------------------------------------------------------------------------------------------------------
 
   public static void main(String[] args) throws IOException {
+    String renderedArgs = CommandLineParser.formatArgs(args);
+    logger.info("benerator {}", renderedArgs);
     VersionInfo.getInfo(BENERATOR_KEY).verifyDependencies();
     BeneratorConfig config = parseCommandLine(args);
     run(config);
@@ -129,29 +132,35 @@ public class Benerator {
   //  operational interface ------------------------------------------------------------------------------------------
 
   public static void run(BeneratorConfig config) throws IOException {
+    boolean run = true;
     if (config.isHelp()) {
       ConsoleInfoPrinter.printHelp(CE_CLI_HELP);
-      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+      run = false;
     }
     if (config.isVersion()) {
       BeneratorUtil.printVersionInfo(false, new ConsoleInfoPrinter());
-      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+      run = false;
     }
     if (config.isListEnvironments()) {
       BeneratorUtil.printEnvironments(new ConsoleInfoPrinter());
-      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+      run = false;
     }
     if (config.isListDbs()) {
       BeneratorUtil.printEnvDbs(new ConsoleInfoPrinter());
+      run = false;
     }
     if (config.isListKafkas()) {
       BeneratorUtil.printEnvKafkas(new ConsoleInfoPrinter());
+      run = false;
     }
-    if (config.isListDbs() || config.isListKafkas()) {
-      System.exit(BeneratorConstants.EXIT_CODE_NORMAL);
+    if (config.isClearCaches()) {
+      BeneratorUtil.clearCaches();
+      run = false;
     }
-    Benerator.setMode(config.getMode());
-    new Benerator().runFile(config.getFile());
+    if (run) {
+      Benerator.setMode(config.getMode());
+      new Benerator().runFile(config.getFile());
+    }
   }
 
   public void runFile(String filename) throws IOException {
@@ -184,6 +193,7 @@ public class Benerator {
     p.addFlag("listEnvironments", "--listEnvs", null);
     p.addFlag("listDbs", "--listDbs", null);
     p.addFlag("listKafkas", "--listKafkas", null);
+    p.addFlag("clearCaches", "--clearCaches", null);
     p.addOption("mode", "--mode", "-m");
     p.addArgument("file", false);
     return p.parse(result, args);

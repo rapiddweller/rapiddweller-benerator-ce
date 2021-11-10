@@ -78,6 +78,7 @@ import com.rapiddweller.model.data.ReferenceDescriptor;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.TypeMapper;
+import com.rapiddweller.platform.db.postgres.JSONPGObject;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
 import org.slf4j.LoggerFactory;
@@ -662,9 +663,6 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
         Object jdbcValue = entity.getComponent(info.name);
         if (info.type != null) {
           jdbcValue = AnyConverter.convert(jdbcValue, info.type);
-          if (info.type == String.class && jdbcValue != null) { // JSON type mapping for Postgres
-            jdbcValue = jdbcValue.toString().replace("#{","{").replace("}#","}");
-          }
         }
         try {
           boolean criticalOracleType =
@@ -911,6 +909,8 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     int sqlType = columnType.getJdbcType();
     if ("UUID".equals(columnType.getName())) { // Special treatment for Postgres UUID types
       typeToWrite = UUID.class;
+    } else if ("JSON".equals(columnType.getName())) { // Special treatment for Postgres JSON type
+      typeToWrite = JSONPGObject.class;
     } else {
       SimpleTypeDescriptor type = (SimpleTypeDescriptor) dbCompDescriptor.getTypeDescriptor();
       PrimitiveType primitiveType = type.getPrimitiveType();

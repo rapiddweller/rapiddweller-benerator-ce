@@ -51,6 +51,7 @@ public class DescriptorConstants {
   public static final String ATT_DEFAULT_SEPARATOR = "defaultSeparator";
   public static final String ATT_DEFAULT_ONE_TO_ONE = "defaultOneToOne";
   public static final String ATT_DEFAULT_ERR_HANDLER = "defaultErrorHandler";
+  public static final String ATT_DEFAULT_SOURCE_SCRIPTED = "defaultSourceScripted";
   public static final String ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES = "acceptUnknownSimpleTypes";
   public static final String ATT_GENERATOR_FACTORY = "generatorFactory";
   public static final String ATT_DEFAULT_IMPORTS = "defaultImports";
@@ -99,6 +100,7 @@ public class DescriptorConstants {
   public static final String ATT_MESSAGE = "message";
   public static final String ATT_SELECTOR = "selector";
   public static final String ATT_SOURCE = "source";
+  public static final String ATT_SOURCE_SCRIPTED = "sourceScripted";
   public static final String ATT_SEGMENT = "segment";
   public static final String ATT_FORMAT = "format";
   public static final String ATT_OFFSET = "offset";

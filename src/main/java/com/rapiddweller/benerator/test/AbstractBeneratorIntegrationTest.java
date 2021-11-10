@@ -34,9 +34,11 @@ import com.rapiddweller.benerator.engine.ResourceManagerSupport;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.ConfigUtil;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.w3c.dom.Element;
 
@@ -64,6 +66,10 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
   public void tearDown() {
     this.resourceManager.close();
     System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, ",");
+  }
+
+  protected void assumePostgresEnabled() {
+    Assume.assumeTrue("Postgres testing is deactivated", ConfigUtil.isTestActive("postgres"));
   }
 
   protected BeneratorContext parseAndExecuteFile(String filename) {

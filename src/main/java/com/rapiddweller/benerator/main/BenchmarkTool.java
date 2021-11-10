@@ -42,6 +42,7 @@ public class BenchmarkTool {
   // main ------------------------------------------------------------------------------------------------------------
 
   public static void main(String[] args) throws IOException {
+    logger.info("benerator-benchmark {}", CommandLineParser.formatArgs(args));
     BenchmarkToolConfig config = parseCommandLineConfig(args);
     BenchmarkToolReport result = BenchmarkRunner.runBenchmarks(config);
     printResult(result);

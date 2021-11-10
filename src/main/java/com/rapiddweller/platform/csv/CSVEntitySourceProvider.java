@@ -36,7 +36,6 @@ import com.rapiddweller.model.data.EntitySource;
 /**
  * {@link EntitySource} implementation which creates {@link Iterable}s that iterate through CSV files.<br/><br/>
  * Created: 05.05.2010 14:52:01
- *
  * @author Volker Bergmann
  * @since 0.6.1
  */
@@ -47,8 +46,7 @@ public class CSVEntitySourceProvider implements DataSourceProvider<Entity> {
   private final char separator;
   private final String encoding;
 
-  public CSVEntitySourceProvider(ComplexTypeDescriptor entityType,
-                                 Converter<String, ?> converter,
+  public CSVEntitySourceProvider(ComplexTypeDescriptor entityType, Converter<String, ?> converter,
                                  char separator, String encoding) {
     this.entityType = entityType;
     this.converter = converter;
@@ -58,9 +56,7 @@ public class CSVEntitySourceProvider implements DataSourceProvider<Entity> {
 
   @Override
   public EntitySource create(String uri, BeneratorContext context) {
-    CSVEntitySource source =
-        new CSVEntitySource(uri, entityType, encoding, converter,
-            separator);
+    CSVEntitySource source = new CSVEntitySource(uri, entityType, encoding, converter, separator);
     source.setContext(context);
     return source;
   }

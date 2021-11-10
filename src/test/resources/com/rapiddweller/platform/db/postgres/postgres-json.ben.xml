@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="https://www.benerator.de/schema/2.1.0"
+       xsi:schemaLocation="https://www.benerator.de/schema/2.1.0 http://benerator.de/schema/rapiddweller-benerator-ce-2.1.0.xsd"
+        defaultSourceScripted="false">
+
+    <echo>preparing database table</echo>
+    <database id="db" environment="local" system="postgres"/>
+    <execute target="db">
+        DROP TABLE IF EXISTS json_table;
+
+        CREATE TABLE json_table (
+        c_json json
+        );
+    </execute>
+
+
+    <echo>Test Data import</echo>
+    <echo>GIVEN a list of fix data sets in the database</echo>
+    <execute target="db">
+        insert into json_table (c_json) values (null);
+        insert into json_table (c_json) values ('{"foo": {"bar": "baz"}}'::json);
+        insert into json_table (c_json) values ('{"sam": "ple"}'::json);
+        insert into json_table (c_json) values ('[1, 2, 3]'::json);
+    </execute>
+    <echo>WHEN iterating over them</echo>
+    <memstore id="mem_predef"/>
+    <iterate source="db" type="json_table" consumer="mem_predef,ConsoleExporter"/>
+    <echo>THEN the data shall be checked by the caller using 'memfix'</echo>
+
+
+    <echo>TEST Data export</echo>
+    <execute target="db">DELETE FROM json_table;</execute>
+    <echo>GIVEN a list of fix data sets in the 'mem_predef' memstore</echo>
+    <echo>WHEN inserting them into the database</echo>
+    <iterate source="mem_predef" type="json_table" consumer="db"/>
+    <echo>THEN the data shall be checked by the caller using 'mem_written'</echo>
+    <memstore id="mem_written"/>
+    <iterate source="db" type="json_table" consumer="mem_written,ConsoleExporter"/>
+
+
+    <echo>TEST Dynamic constant evaluation</echo>
+    <echo>GIVEN an empty database table</echo>
+    <execute target="db">DELETE FROM json_table;</execute>
+    <echo>WHEN generating and exporting data to it</echo>
+    <generate type="json_table" count="10" consumer="db,ConsoleExporter">
+        <attribute name="c_json" constant='{{"sam": "ple"}}'/>
+    </generate>
+    <echo>THEN the caller shall verify the results querying 'mem_const'</echo>
+    <memstore id="mem_const"/>
+    <iterate source="db" type="json_table" consumer="mem_const"/>
+
+
+    <echo>TEST Dynamic script evaluation</echo>
+    <echo>GIVEN an empty database table</echo>
+    <execute target="db">DELETE FROM json_table;</execute>
+    <echo>WHEN generating and exporting data to it</echo>
+    <generate type="json_table" count="10" consumer="db,ConsoleExporter">
+        <attribute name="c_json" script='com.rapiddweller.platform.db.postgres.JSONGenerator.SAMPLE'/>
+    </generate>
+    <echo>THEN the caller shall verify the results querying 'mem_script'</echo>
+    <memstore id="mem_script"/>
+    <iterate source="db" type="json_table" consumer="mem_script"/>
+
+
+    <echo>TEST Dynamic generation</echo>
+    <echo>GIVEN an empty database table</echo>
+    <execute target="db">DELETE FROM json_table;</execute>
+    <echo>WHEN generating and exporting data to it</echo>
+    <generate type="json_table" count="10" consumer="db,ConsoleExporter">
+        <attribute name="c_json" generator='com.rapiddweller.platform.db.postgres.JSONGenerator'/>
+    </generate>
+    <echo>THEN the caller shall verify the results querying 'mem_gen'</echo>
+    <memstore id="mem_gen"/>
+    <iterate source="db" type="json_table" consumer="mem_gen"/>
+
+
+    <echo>TEST Dynamic file import - old CSV format</echo>
+    <echo>GIVEN an empty database table</echo>
+    <execute target="db">DELETE FROM json_table;</execute>
+    <echo>WHEN importing data from file and exporting it to a table</echo>
+    <iterate source="json-old.csv" type="json_table" consumer="db,ConsoleExporter"/>
+    <echo>THEN the caller shall verify the results querying 'mem_csv_old'</echo>
+    <memstore id="mem_csv_old"/>
+    <iterate source="db" type="json_table" consumer="mem_csv_old"/>
+
+
+    <echo>TEST Dynamic file import - new CSV format</echo>
+    <echo>GIVEN an empty database table</echo>
+    <execute target="db">DELETE FROM json_table;</execute>
+    <echo>WHEN importing data from file and exporting it to a table</echo>
+    <iterate source="json-new.csv" sourceScripted="false" type="json_table" consumer="db,ConsoleExporter"/>
+    <echo>THEN the caller shall verify the results querying 'mem_csv_new'</echo>
+    <memstore id="mem_csv_new"/>
+    <iterate source="db" type="json_table" consumer="mem_csv_new"/>
+
+
+    <echo>Removing test artifacts</echo>
+    <execute target="db">DROP TABLE json_table;</execute>
+
+    <echo>Done -----------------------------------------------------------------</echo>
+
+</setup>

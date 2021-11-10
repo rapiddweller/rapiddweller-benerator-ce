@@ -88,6 +88,8 @@ public class ResultSet2EntityConverter {
       return resultSet.getTimestamp(columnIndex);
     } else if (STRING_TYPE.equals(primitiveType)) {
       return resultSet.getString(columnIndex);
+    } else if ("binary".equals(primitiveType)) {
+      return resultSet.getBytes(columnIndex);
     }
     // try generic conversion
     Object driverValue = resultSet.getObject(columnIndex);
