@@ -13,7 +13,7 @@ import org.junit.Test;
  */
 public class PostgresSequenceTest extends AbstractProstgresIntegrationTest {
 
-  @Test //@Ignore("So far there is no agreed way to set this up uniformly on CI and a local system")
+  @Test @Ignore("So far there is no agreed way to set this up uniformly on CI and a local system")
   public void testSequence() {
     assertMinGenerations(100, () -> parseAndExecuteFile(folder + "/postgres-seq.ben.xml"));
   }

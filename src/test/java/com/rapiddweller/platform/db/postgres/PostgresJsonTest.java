@@ -31,7 +31,7 @@ public class PostgresJsonTest extends AbstractProstgresIntegrationTest {
 
   // Tests -----------------------------------------------------------------------------------------------------------
 
-  @Test //@Ignore("So far there is no agreed way to set this up uniformly on CI and a local system")
+  @Test @Ignore("So far there is no agreed way to set this up uniformly on CI and a local system")
   public void testJson() {
     parseAndExecuteFile(folder + "/postgres-json.ben.xml");
     checkPredefinedEntities("mem_predef");
