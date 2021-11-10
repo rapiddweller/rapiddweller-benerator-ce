@@ -47,6 +47,7 @@
                     <xs:attribute name="defaultEncoding" type="xs:string"/>
                     <xs:attribute name="defaultLineSeparator" type="xs:string"/>
                     <xs:attribute name="defaultTimeZone" type="xs:string"/>
+                    <xs:attribute name="defaultSourceScripted" type="xs:boolean"/>
                     <xs:attribute name="defaultLocale" type="xs:string"/>
                     <xs:attribute name="defaultDataset" type="xs:string"/>
                     <xs:attribute name="defaultPageSize" type="xs:long"/>
@@ -294,6 +295,7 @@
             <xs:attribute name="catalog" type="xs:string"/>
             <xs:attribute name="schema" type="xs:string"/>
             <xs:attribute name="tableFilter" type="xs:string"/>
+            <xs:attribute name="quoteTableNames" type="xs:boolean"/>
             <xs:attribute name="includeTables" type="xs:string"/>
             <xs:attribute name="excludeTables" type="xs:string"/>
             <xs:attribute name="batch" type="xs:string"/>
@@ -985,6 +987,7 @@
 
     <xs:attributeGroup name="iterator-only-attrs">
         <xs:attribute name="source" type="xs:string"/>
+        <xs:attribute name="sourceScripted" type="xs:boolean"/>
         <xs:attribute name="separator" type="xs:string"/>
         <xs:attribute name="format" type="format-type"/>
         <xs:attribute name="rowBased" type="xs:string"/>

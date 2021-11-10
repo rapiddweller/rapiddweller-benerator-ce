@@ -54,6 +54,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_PAGE_SIZE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_SCRIPT;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_SEPARATOR;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_SOURCE_SCRIPTED;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_TIME_ZONE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_GENERATOR_FACTORY;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_MAX_COUNT;
@@ -80,6 +81,7 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
       ATT_DEFAULT_SEPARATOR,
       ATT_DEFAULT_ONE_TO_ONE,
       ATT_DEFAULT_ERR_HANDLER,
+      ATT_DEFAULT_SOURCE_SCRIPTED,
       ATT_MAX_COUNT,
       ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES,
       ATT_GENERATOR_FACTORY,

@@ -74,6 +74,11 @@ public abstract class AbstractBeneratorSubContext implements BeneratorSubContext
   }
 
   @Override
+  public boolean isDefaultSourceScripted() {
+    return parent.isDefaultSourceScripted();
+  }
+
+  @Override
   public String getDefaultEncoding() {
     return parent.getDefaultEncoding();
   }

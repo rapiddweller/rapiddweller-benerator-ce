@@ -123,7 +123,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       generator = createSourceGeneratorFromObject(descriptor, context, sourceObject);
     } else {
       String segment = descriptor.getSegment();
-      for (FileFormat format : FileFormats.all()) {
+      for (FileFormat format : FileFormats.all()) { // TODO support CSV, FCW, DbUnit and XLS with this mechanism
         if (format.matchesUri(sourceSpec)) {
           generator = createProtocolSourceGenerator(sourceSpec, format, descriptor, context);
           break;
@@ -249,13 +249,19 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     return createEntitySourceGenerator(complexType, context, url, fileProvider);
   }
 
+  private static Generator<Entity> createCSVSourceGenerator(
+      ComplexTypeDescriptor complexType, BeneratorContext context, String sourceName) {
+    String encoding = DescriptorUtil.getEncoding(complexType, context);
+    Converter<String, String> preprocessor = createSourcePreprocessor(complexType, context);
+    char separator = DescriptorUtil.getSeparator(complexType, context);
+    DataSourceProvider<Entity> fileProvider = new CSVEntitySourceProvider(complexType, preprocessor,
+        separator, encoding);
+    return createEntitySourceGenerator(complexType, context, sourceName, fileProvider);
+  }
+
   private static Generator<Entity> createFixedColumnWidthSourceGenerator(
       ComplexTypeDescriptor descriptor, BeneratorContext context, String sourceName) {
-    Generator<Entity> generator;
-    String encoding = descriptor.getEncoding();
-    if (encoding == null) {
-      encoding = context.getDefaultEncoding();
-    }
+    String encoding = DescriptorUtil.getEncoding(descriptor, context);
     String pattern = descriptor.getPattern();
     if (pattern == null) {
       throw new ConfigurationError("No pattern specified for FCW file import: " + sourceName);
@@ -264,35 +270,30 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       FixedWidthRowTypeDescriptor rowDescriptor = FixedWidthUtil.parseBeanColumnsSpec(
           pattern, descriptor.getName(), null, context.getDefaultLocale());
       FixedWidthColumnDescriptor[] ffcd = rowDescriptor.getColumnDescriptors();
-      Converter<String, String> scriptConverter = DescriptorUtil.createStringScriptConverter(context);
-      FixedWidthEntitySource iterable = new FixedWidthEntitySource(sourceName, descriptor, scriptConverter, encoding, null, ffcd);
+      Converter<String, String> preprocessor = createSourcePreprocessor(descriptor, context);
+      FixedWidthEntitySource iterable = new FixedWidthEntitySource(sourceName, descriptor, preprocessor, encoding, null, ffcd);
       iterable.setContext(context);
-      generator = new DataSourceGenerator<>(iterable);
-      return generator;
+      return new DataSourceGenerator<>(iterable);
     } catch (ParseException e) {
       throw new ConfigurationError("Error parsing fixed-width pattern: " + pattern, e);
     }
   }
 
-  private static Generator<Entity> createCSVSourceGenerator(
-      ComplexTypeDescriptor complexType, BeneratorContext context, String sourceName) {
-    String encoding = complexType.getEncoding();
-    if (encoding == null) {
-      encoding = context.getDefaultEncoding();
-    }
-    Converter<String, String> scriptConverter = DescriptorUtil.createStringScriptConverter(context);
-    char separator = DescriptorUtil.getSeparator(complexType, context);
-    DataSourceProvider<Entity> fileProvider = new CSVEntitySourceProvider(complexType, scriptConverter,
-        separator, encoding);
+  private static Generator<Entity> createXLSSourceGenerator(
+      ComplexTypeDescriptor complexType, BeneratorContext context, String sourceName, String segment) {
+    Converter<String, String> preprocessor = createSourcePreprocessor(complexType, context);
+    boolean formatted = isFormatted(complexType);
+    XLSEntitySourceProvider fileProvider = new XLSEntitySourceProvider(complexType, segment, formatted, preprocessor);
     return createEntitySourceGenerator(complexType, context, sourceName, fileProvider);
   }
 
-  private static Generator<Entity> createXLSSourceGenerator(
-      ComplexTypeDescriptor complexType, BeneratorContext context, String sourceName, String segment) {
-    ScriptConverterForStrings converter = new ScriptConverterForStrings(context);
-    boolean formatted = isFormatted(complexType);
-    XLSEntitySourceProvider fileProvider = new XLSEntitySourceProvider(complexType, segment, formatted, converter);
-    return createEntitySourceGenerator(complexType, context, sourceName, fileProvider);
+  private static Converter<String, String> createSourcePreprocessor(
+      ComplexTypeDescriptor complexType, BeneratorContext context) {
+    if (DescriptorUtil.isSourceScripted(complexType, context)) {
+      return DescriptorUtil.createStringScriptConverter(context);
+    } else {
+      return null;
+    }
   }
 
   private static Generator<Entity> createSimpleTypeEntityGenerator(ComplexTypeDescriptor complexType,
@@ -303,10 +304,11 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     return new SimpleTypeEntityGenerator(generator, complexType);
   }
 
-  private static Generator<Entity> createEntitySourceGenerator(ComplexTypeDescriptor complexType,
-                                                               BeneratorContext context, String sourceName, DataSourceProvider<Entity> factory) {
-    Generator<Entity> generator =
-        SourceFactory.createRawSourceGenerator(complexType.getNesting(), complexType.getDataset(), sourceName, factory, Entity.class, context);
+  private static Generator<Entity> createEntitySourceGenerator(
+      ComplexTypeDescriptor complexType, BeneratorContext context, String sourceName,
+      DataSourceProvider<Entity> factory) {
+    Generator<Entity> generator = SourceFactory.createRawSourceGenerator(
+        complexType.getNesting(), complexType.getDataset(), sourceName, factory, Entity.class, context);
     return WrapperFactory.applyConverter(generator, new ComponentTypeConverter(complexType));
   }
 

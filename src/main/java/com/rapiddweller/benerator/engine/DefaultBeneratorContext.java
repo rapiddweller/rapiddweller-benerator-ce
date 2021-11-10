@@ -94,6 +94,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
   private final ClassCache classCache;
   private final ContextStack contextStack;
 
+  protected boolean defaultSourceScripted;
   protected String defaultEncoding;
   protected String defaultDataset;
   protected long defaultPageSize;
@@ -134,6 +135,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
       throw new ConfigurationError("No context URI specified");
     }
     this.contextUri = contextUri;
+    this.defaultSourceScripted = true;
     this.defaultEncoding = SystemInfo.getFileEncoding();
     this.defaultDataset = LocaleUtil.getDefaultCountryCode();
     this.defaultPageSize = 1;
@@ -193,6 +195,14 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
   @Override
   public String getDefaultEncoding() {
     return defaultEncoding;
+  }
+
+  public boolean isDefaultSourceScripted() {
+    return defaultSourceScripted;
+  }
+
+  public void setDefaultSourceScripted(boolean defaultSourceScripted) {
+    this.defaultSourceScripted = defaultSourceScripted;
   }
 
   @Override

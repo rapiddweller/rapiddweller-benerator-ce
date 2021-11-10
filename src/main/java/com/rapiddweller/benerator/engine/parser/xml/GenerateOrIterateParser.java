@@ -101,6 +101,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SELECTOR
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SENSOR;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SEPARATOR;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE_SCRIPTED;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_STATS;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SUB_SELECTOR;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TEMPLATE;
@@ -133,7 +134,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
       ATT_TEMPLATE, ATT_CONSUMER,
       ATT_NAME, ATT_TYPE, ATT_CONTAINER, ATT_GENERATOR, ATT_VALIDATOR,
       ATT_CONVERTER, ATT_NULL_QUOTA, ATT_UNIQUE, ATT_DISTRIBUTION, ATT_CYCLIC,
-      ATT_SOURCE, ATT_SEGMENT, ATT_FORMAT, ATT_OFFSET, ATT_SEPARATOR, ATT_ENCODING, ATT_SELECTOR, ATT_SUB_SELECTOR,
+      ATT_SOURCE, ATT_SOURCE_SCRIPTED, ATT_SEGMENT, ATT_FORMAT, ATT_OFFSET, ATT_SEPARATOR, ATT_ENCODING, ATT_SELECTOR, ATT_SUB_SELECTOR,
       ATT_DATASET, ATT_NESTING, ATT_LOCALE, ATT_FILTER,
       ATT_SENSOR
   );
