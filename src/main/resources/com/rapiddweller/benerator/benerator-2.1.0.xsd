@@ -642,7 +642,8 @@
                 <xs:attribute name="encoding" type="xs:string"/>
                 <xs:attribute name="target" type="xs:string"/>
                 <xs:attribute name="separator" type="xs:string"/>
-                <xs:attribute name="type" type="data-type"/>
+                <xs:attribute name="type" type="xs:string"/>
+                <xs:attribute name="shell" type="xs:string"/>
                 <xs:attribute name="onError" type="errorhandler-type"/>
                 <xs:attribute name="optimize" type="xs:string"/>
             </xs:extension>

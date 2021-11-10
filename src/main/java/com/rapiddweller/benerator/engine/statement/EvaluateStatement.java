@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -71,7 +71,7 @@ public class EvaluateStatement extends AbstractStatement {
 
   private static final Logger logger = LoggerFactory.getLogger(EvaluateStatement.class);
 
-  private static final String SHELL = "shell";
+  private static final String TYPE_SHELL = "shell";
 
   private static final Map<String, String> extensionMap;
 
@@ -83,22 +83,23 @@ public class EvaluateStatement extends AbstractStatement {
     }
   }
 
-  protected boolean evaluate;
-  protected Expression<String> idEx;
-  protected Expression<String> textEx;
-  protected Expression<String> uriEx;
-  protected Expression<String> typeEx;
-  protected Expression<?> targetObjectEx;
-  protected Expression<Character> separatorEx;
-  protected Expression<String> onErrorEx;
-  protected Expression<String> encodingEx;
-  protected Expression<Boolean> optimizeEx;
-  protected Expression<Boolean> invalidateEx;
-  protected Expression<?> assertionEx;
+  protected final boolean evaluate;
+  protected final Expression<String> idEx;
+  protected final Expression<String> textEx;
+  protected final Expression<String> uriEx;
+  protected final Expression<String> typeEx;
+  protected final Expression<?> targetObjectEx;
+  protected final Expression<Character> separatorEx;
+  protected final Expression<String> onErrorEx;
+  protected final Expression<String> encodingEx;
+  protected final Expression<Boolean> optimizeEx;
+  protected final Expression<Boolean> invalidateEx;
+  protected final Expression<?> assertionEx;
+  protected final Expression<String> shellEx;
 
   public EvaluateStatement(
       boolean evaluate, Expression<String> idEx, Expression<String> textEx,
-     Expression<String> uriEx, Expression<String> typeEx, Expression<?> targetObjectEx,
+     Expression<String> uriEx, Expression<String> typeEx, Expression<?> targetObjectEx, Expression<String> shellEx,
      Expression<Character> separatorEx, Expression<String> onErrorEx, Expression<String> encodingEx,
      Expression<Boolean> optimizeEx, Expression<Boolean> invalidateEx, Expression<?> assertionEx) {
     this.evaluate = evaluate;
@@ -107,6 +108,7 @@ public class EvaluateStatement extends AbstractStatement {
     this.uriEx = uriEx;
     this.typeEx = typeEx;
     this.targetObjectEx = targetObjectEx;
+    this.shellEx = shellEx;
     this.separatorEx = separatorEx;
     this.onErrorEx = onErrorEx;
     this.encodingEx = encodingEx;
@@ -129,8 +131,9 @@ public class EvaluateStatement extends AbstractStatement {
       Object result = null;
       if ("sql".equals(typeValue)) {
         result = evaluateAsSql(context, onErrorValue, uriValue, targetObject, encoding, text);
-      } else if (SHELL.equals(typeValue)) {
-        result = runShell(uriValue, text, onErrorValue);
+      } else if (TYPE_SHELL.equals(typeValue)) {
+        String shell = ExpressionUtil.evaluate(shellEx, context);
+        result = runShell(uriValue, text, shell, onErrorValue);
       } else if ("execute".equals(typeValue)) {
         result = ((StorageSystem) targetObject).execute(text);
       } else {
@@ -228,13 +231,13 @@ public class EvaluateStatement extends AbstractStatement {
       if (!SystemInfo.isWindows()) {
         throw new ConfigurationError("Need Windows to run file: " + uriValue);
       } else {
-        typeValue = SHELL;
+        typeValue = TYPE_SHELL;
       }
     } else if ("unixshell".equals(typeValue)) {
       if (SystemInfo.isWindows()) {
         throw new ConfigurationError("Need Unix system to run file: " + uriValue);
       } else {
-        typeValue = SHELL;
+        typeValue = TYPE_SHELL;
       }
     }
     return typeValue;
@@ -266,13 +269,13 @@ public class EvaluateStatement extends AbstractStatement {
     }
   }
 
-  private Object runShell(String uri, String text, String onError) {
+  private Object runShell(String uri, String text, String shell, String onError) {
     ErrorHandler errorHandler = new ErrorHandler(getClass().getName(), Level.valueOf(onError));
     StringWriter writer = new StringWriter();
     if (text != null) {
-      ShellUtil.runShellCommands(new ReaderLineIterator(new StringReader(text)), writer, errorHandler);
+      ShellUtil.runShellCommands(new ReaderLineIterator(new StringReader(text)), shell, writer, errorHandler);
     } else if (uri != null) {
-      ShellUtil.runShellCommand(uri, writer, errorHandler);
+      ShellUtil.runShellCommand(uri, shell, writer, errorHandler);
     } else {
       throw new ConfigurationError("At least uri or text must be provided in <execute> and <evaluate>");
     }
