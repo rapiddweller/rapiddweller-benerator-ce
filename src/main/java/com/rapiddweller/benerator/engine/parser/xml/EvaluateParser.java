@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -47,6 +47,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_INVALIDA
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_OPTIMIZE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SEPARATOR;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SHELL;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TARGET;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_URI;
@@ -58,19 +59,15 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 /**
  * Parses an &lt;evaluate&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 01:01:02
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class EvaluateParser extends AbstractBeneratorDescriptorParser {
 
   private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
-      ATT_ID, ATT_URI, ATT_TYPE, ATT_TARGET, ATT_SEPARATOR, ATT_ON_ERROR, ATT_ENCODING,
+      ATT_ID, ATT_URI, ATT_TYPE, ATT_SHELL, ATT_TARGET, ATT_SEPARATOR, ATT_ON_ERROR, ATT_ENCODING,
       ATT_OPTIMIZE, ATT_INVALIDATE, ATT_ASSERT);
 
-  /**
-   * Instantiates a new Evaluate parser.
-   */
   public EvaluateParser() {
     super(null, null, OPTIONAL_ATTRIBUTES);
   }
@@ -96,13 +93,14 @@ public class EvaluateParser extends AbstractBeneratorDescriptorParser {
     Expression<String> uri = parseScriptableStringAttribute(ATT_URI, element);
     Expression<String> type = parseAttribute(ATT_TYPE, element);
     Expression<?> targetObject = new FeatureAccessExpression<>(element.getAttribute(ATT_TARGET));
+    Expression<String> shell = parseAttribute(ATT_SHELL, element);
     Expression<Character> separator = new ConvertingExpression<>(parseScriptableStringAttribute(ATT_SEPARATOR, element), new String2CharConverter());
     Expression<String> onError = parseScriptableStringAttribute(ATT_ON_ERROR, element);
     Expression<String> encoding = parseScriptableStringAttribute(ATT_ENCODING, element);
     Expression<Boolean> optimize = parseBooleanExpressionAttribute(ATT_OPTIMIZE, element, false);
     Expression<Boolean> invalidate = parseBooleanExpressionAttribute(ATT_INVALIDATE, element, null);
     Expression<?> assertion = new ScriptExpression<>(element.getAttribute(ATT_ASSERT));
-    return new EvaluateStatement(evaluate, id, text, uri, type, targetObject, separator, onError, encoding, optimize, invalidate, assertion);
+    return new EvaluateStatement(evaluate, id, text, uri, type, targetObject, shell, separator, onError, encoding, optimize, invalidate, assertion);
   }
 
 }

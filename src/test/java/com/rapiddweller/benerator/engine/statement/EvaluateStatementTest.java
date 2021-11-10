@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,129 +29,124 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Encodings;
-import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
+import org.junit.Assume;
 import org.junit.Test;
 
+import static com.rapiddweller.common.SystemInfo.isLinux;
+import static com.rapiddweller.common.SystemInfo.isMacOsx;
+import static com.rapiddweller.common.SystemInfo.isSolaris;
+import static com.rapiddweller.common.SystemInfo.isWindows;
 import static com.rapiddweller.script.expression.ExpressionUtil.constant;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Tests the {@link EvaluateStatement}.<br/><br/>
  * Created: 12.02.2010 13:18:42
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class EvaluateStatementTest extends AbstractStatementTest {
 
-  /**
-   * Test inline java script.
-   */
   @Test
   public void testInlineJavaScript() {
     EvaluateStatement stmt = new EvaluateStatement(
-        true,
-        constant("message"),
-        constant("'Hello World'"),
-        null,
-        null,
-        null,
-        null,
-        constant("fatal"),
-        constant(Encodings.UTF_8),
-        constant(false),
-        null,
-        null);
+        true, constant("message"), constant("'Hello World'"), null, null,
+        null, null, null, constant("fatal"), constant(Encodings.UTF_8),
+        constant(false), null, null);
     stmt.execute(context);
     assertEquals("Hello World", context.get("message"));
   }
 
-  /**
-   * Test uri mapping.
-   */
-
   @Test
   public void testUriMapping() {
     EvaluateStatement stmt = new EvaluateStatement(
-        true,
-        constant("message"),
-        null,
-        constant("/com/rapiddweller/benerator/engine/statement/HelloWorld.js"),
-        null,
-        null,
-        null,
-        constant("fatal"),
-        constant(Encodings.UTF_8),
-        constant(false),
-        null,
-        null);
+        true, constant("message"), null, constant("/com/rapiddweller/benerator/engine/statement/HelloWorld.js"),
+        null, null, null, null, constant("fatal"),
+        constant(Encodings.UTF_8), constant(false), null, null);
     stmt.execute(context);
     assertEquals(context.get("message"), "Hello World");
   }
 
-  /**
-   * Test shell.
-   */
   @Test
-  public void testShell() {
-    String cmd = "echo 42";
-    if (SystemInfo.isWindows()) {
-      cmd = "cmd.exe /C " + cmd;
-    }
-    EvaluateStatement stmt = new EvaluateStatement(
-        true,
-        constant("result"),
-        constant(cmd),
-        null,
-        constant("shell"),
-        null,
-        null,
-        constant("fatal"),
-        constant(Encodings.UTF_8),
-        constant(false),
-        null,
-        null);
-    stmt.execute(context);
-    assertEquals(42, context.get("result"));
+  public void testShell_macos() {
+    Assume.assumeTrue(isMacOsx());
+    checkEchoJavaHomeIx(null);
   }
 
-  /**
-   * Test storage system.
-   */
+  @Test
+  public void testShell_macos_default() {
+    Assume.assumeTrue(isMacOsx());
+    checkEchoJavaHomeIx(null);
+  }
+
+  @Test
+  public void testShell_macos_bsh() {
+    Assume.assumeTrue(isMacOsx());
+    checkEchoJavaHomeIx("bash");
+  }
+
+  @Test
+  public void testShell_solaris() {
+    Assume.assumeTrue(isSolaris());
+    checkEchoJavaHomeIx(null);
+  }
+
+  @Test
+  public void testShell_unix() {
+    Assume.assumeTrue(isLinux());
+    checkEchoJavaHomeIx(null);
+  }
+
+  @Test
+  public void testShell_windows() {
+    Assume.assumeTrue(isWindows());
+    checkEchoJavaHomeWin();
+  }
+
   @Test
   public void testStorageSystem() {
     StSys stSys = new StSys();
     Expression<StSys> stSysEx = ExpressionUtil.constant(stSys);
     EvaluateStatement stmt = new EvaluateStatement(
-        true,
-        constant("message"),
-        constant("HelloHi"),
-        null,
-        null,
-        stSysEx,
-        null,
-        constant("fatal"),
-        constant(Encodings.UTF_8),
-        constant(false),
-        null,
-        null);
+        true, constant("message"), constant("HelloHi"), null,
+        null, stSysEx, null, null, constant("fatal"),
+        constant(Encodings.UTF_8), constant(false), null, null);
     stmt.execute(context);
     assertEquals("HelloHi", stSys.execInfo);
   }
 
-  /**
-   * The type St sys.
-   */
+  private void checkEchoJavaHomeIx(String shell) {
+    String expectedResult = System.getenv("JAVA_HOME");
+    assertNotNull(expectedResult);
+    EvaluateStatement stmt = new EvaluateStatement(
+        true, constant("result"), constant("echo $JAVA_HOME"), null,
+        constant("shell"), null, constant(shell), null, constant("fatal"),
+        constant(Encodings.UTF_8), constant(false), null, null);
+    stmt.execute(context);
+    assertEquals(expectedResult, context.get("result"));
+
+  }
+
+  private void checkEchoJavaHomeWin() {
+    String expectedResult = System.getenv("JAVA_HOME");
+    assertNotNull(expectedResult);
+    EvaluateStatement stmt = new EvaluateStatement(
+        true, constant("result"), constant("echo %JAVA_HOME%"), null,
+        constant("shell"), null, null, null, constant("fatal"),
+        constant(Encodings.UTF_8), constant(false), null, null);
+    stmt.execute(context);
+    assertEquals(expectedResult, context.get("result"));
+  }
+
+
   public static class StSys extends AbstractStorageSystem {
 
-    /**
-     * The Exec info.
-     */
     protected String execInfo;
 
     @Override

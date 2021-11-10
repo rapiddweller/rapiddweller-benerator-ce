@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -126,6 +126,7 @@ public class DescriptorConstants {
   public static final String ATT_INVALIDATE = "invalidate";
   public static final String ATT_ENCODING = "encoding";
   public static final String ATT_TARGET = "target";
+  public static final String ATT_SHELL = "shell";
   public static final String ATT_URI = "uri";
   public static final String ATT_READ_ONLY = "readOnly";
   public static final String ATT_LAZY = "lazy";
