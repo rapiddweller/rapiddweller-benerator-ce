@@ -458,6 +458,7 @@
     </xs:attributeGroup>
 
     <xs:attributeGroup name="kafka-importer-attrs">
+        <xs:attribute name="idle.timeout.seconds" type="xs:string"/>
         <xs:attribute name="key.deserializer" type="xs:string"/>
         <xs:attribute name="group.id" type="xs:string"/>
         <xs:attribute name="auto.offset.reset" type="kafka-auto-offset-reset-type"/>
