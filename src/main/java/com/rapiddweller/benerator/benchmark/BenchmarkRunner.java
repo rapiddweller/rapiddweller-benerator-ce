@@ -287,7 +287,7 @@ public class BenchmarkRunner {
         if (logger.isInfoEnabled()) {
           int threads = executionMode.getThreadCount();
           if (logger.isInfoEnabled()) {
-            logger.info("{}: {} entities / {} ms, throughput {} E/s - {} ME/h, {}", key, HF.format(countUsed),
+            logger.info("{}: {} entities / {}, throughput {} E/s - {} ME/h, {}", key, HF.format(countUsed),
                 ElapsedTimeFormatter.format(latencyCount.totalLatency()), HF.format(eps),
                 PerformanceFormatter.format(eps * 3600. / 1000000.),
                 HF.pluralize(threads, "thread"));
