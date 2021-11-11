@@ -138,6 +138,7 @@ public class BeneratorUtil {
           String configSourceLocation = configSource.getLocation();
           if (configSourceLocation != null && configSourceLocation.endsWith("log4j2.xml")) {
             logConfig("Log4j is configured properly");
+            //logConfig("Log4j is configured to use " + configSourceLocation)
             return;
           }
         }
