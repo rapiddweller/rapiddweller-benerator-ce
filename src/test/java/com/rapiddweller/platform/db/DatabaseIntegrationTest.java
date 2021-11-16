@@ -39,7 +39,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -131,7 +130,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     context.setDefaultOneToOne(true);
     parseAndExecute(
         "<generate type='referer' consumer='cons'>" +
-            "  <reference name='referee_id' nullable='false' source='db' />" + // TODO v0.8 should source='db' be optional?
+            "  <reference name='referee_id' nullable='false' source='db' />" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
     assertEquals(2, products.size());
@@ -147,7 +146,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     context.setDefaultOneToOne(false);
     parseAndExecute(
         "<generate type='referer' count='3' consumer='cons'>" +
-            "  <reference name='referee_id' nullable='false' source='db' />" + // TODO v0.8 should source='db' be optional?
+            "  <reference name='referee_id' nullable='false' source='db' />" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
     assertEquals(3, products.size());
@@ -643,7 +642,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   }
 
   @Test
-  public void testMetaDataCache_in_file() throws IOException {
+  public void testMetaDataCache_in_file() {
     long c0 = BeneratorMonitor.INSTANCE.getTotalGenerationCount();
     parseAndExecuteFile(folder + "/metaCache.ben.xml");
     assertTrue(BeneratorMonitor.INSTANCE.getTotalGenerationCount() - c0 >= 5);

@@ -226,7 +226,6 @@ public class EvaluateStatement extends AbstractStatement {
   }
 
   private String checkOs(String uriValue, String typeValue) {
-    // TODO Support winshell and unixshell as altervatives?
     if ("winshell".equals(typeValue)) {
       if (!SystemInfo.isWindows()) {
         throw new ConfigurationError("Need Windows to run file: " + uriValue);

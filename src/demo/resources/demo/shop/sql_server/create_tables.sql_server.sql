@@ -42,7 +42,7 @@ CREATE TABLE db_role
 --
 CREATE TABLE db_user
 (
-    id       int         NOT NULL,-- TODO  identity (1, 1),
+    id       int         NOT NULL,
     name     varchar(30) NOT NULL,
     email    varchar(50) NOT NULL,
     password varchar(16) NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE db_customer
 --
 CREATE TABLE db_order
 (
-    id          int           NOT NULL,-- TODO  identity (1, 1),
+    id          int           NOT NULL,
     customer_id int           NOT NULL,
     total_price decimal(8, 2) NOT NULL,
     created_at  datetime      NOT NULL,
@@ -113,7 +113,7 @@ INDEX db_order_customer_fki on db_order (customer_id);
 --
 CREATE TABLE db_order_item
 (
-    id               int           NOT NULL,-- TODO  identity (1, 1),
+    id               int           NOT NULL,
     order_id         int           NOT NULL,
     number_of_items  int           NOT NULL default 1,
     product_ean_code varchar(13)   NOT NULL,
