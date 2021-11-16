@@ -27,7 +27,6 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
 import com.rapiddweller.benerator.environment.Environment;
 import com.rapiddweller.benerator.environment.EnvironmentUtil;
 import com.rapiddweller.benerator.environment.SystemRef;
@@ -51,7 +50,6 @@ import com.rapiddweller.common.bean.ClassCache;
 import com.rapiddweller.common.context.ContextStack;
 import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.common.context.SimpleContextStack;
-import com.rapiddweller.common.converter.ConverterManager;
 import com.rapiddweller.common.file.FileSuffixFilter;
 import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.format.script.ScriptUtil;
@@ -123,7 +121,6 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
     ScriptUtil.addFactory("py", new GraalPyScriptFactory());
     ScriptUtil.addFactory("ben", new BeneratorScriptFactory());
     ScriptUtil.setDefaultScriptEngine("ben");
-    ConverterManager.getInstance().registerConverterClass(String2DistributionConverter.class); // TODO is this required any longer?
   }
 
   public DefaultBeneratorContext() {

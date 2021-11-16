@@ -7,12 +7,9 @@ import com.rapiddweller.platform.memstore.MemStore;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 /**
  * Testing the JSON column type support of Postgres.<br/><br/>
@@ -39,8 +36,8 @@ public class PostgresJsonTest extends AbstractProstgresIntegrationTest {
     checkDynamicGeneration("mem_const");
     checkDynamicGeneration("mem_script");
     checkDynamicGeneration("mem_gen");
-    checkPredefinedEntities("mem_csv_old"); // TODO make #{}# unnecessary
-    checkPredefinedEntities("mem_csv_new"); // TODO make #{}# unnecessary
+    checkPredefinedEntities("mem_csv_old");
+    checkPredefinedEntities("mem_csv_new");
   }
 
   // private helpers -------------------------------------------------------------------------------------------------
