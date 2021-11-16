@@ -30,7 +30,6 @@ import com.rapiddweller.benerator.consumer.FileExporter;
 import com.rapiddweller.benerator.consumer.FormattingConsumer;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.xls.XLSUtil;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.Entity;
@@ -48,8 +47,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellStyle;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -127,37 +126,28 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
 
   @Override
   public void close() {
-    FileOutputStream out = null;
-    try {
-      if (workbook == null) {
-        workbook =
-            new HSSFWorkbook(); // if no data was added, create an empty Excel document
-      } else {
-        XLSUtil.autoSizeColumns(workbook);
+    if (workbook == null) {
+      workbook = new HSSFWorkbook(); // if no data was added, create an empty Excel document
+    } else {
+      XLSUtil.autoSizeColumns(workbook);
+    }
+
+    File directory = new File(uri);
+    // check if path exists, if not make sure it exists
+    if (directory.getParent() != null
+        && !directory.isDirectory()
+        && !directory.getParentFile().exists()) {
+      boolean result = directory.getParentFile().mkdirs();
+      if (!result) {
+        throw new ConfigurationError("filepath does not exists and can not be created ...");
       }
+    }
 
-      File directory = new File(uri);
-      // check if path exists, if not make sure it exists
-      if (directory.getParent() != null
-          && !directory.isDirectory()
-          && !directory.getParentFile().exists()) {
-        boolean result = directory.getParentFile().mkdirs();
-        if (!result) {
-          throw new ConfigurationError("filepath does not exists and can not be created ...");
-        }
-      }
-
-      // Write the output to a file
-      out = new FileOutputStream(uri);
-
-
+    // Write the output to a file
+    try (FileOutputStream out = new FileOutputStream(uri)) {
       workbook.write(out);
-    } catch (FileNotFoundException e) {
+    } catch (IOException e) {
       throw new ConfigurationError(e);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    } finally {
-      IOUtil.close(out);
     }
   }
 
@@ -188,23 +178,16 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
     int colnum = 0;
     for (Map.Entry<String, Object> component : getComponents(entity)) {
       String componentName = component.getKey();
-      headerRow.createCell(colnum)
-          .setCellValue(new HSSFRichTextString(componentName));
-      ComponentDescriptor cd =
-          entity.descriptor().getComponent(componentName);
+      headerRow.createCell(colnum).setCellValue(new HSSFRichTextString(componentName));
+      ComponentDescriptor cd = entity.descriptor().getComponent(componentName);
       PrimitiveType primitiveType;
       if (cd.getTypeDescriptor() instanceof SimpleTypeDescriptor) {
-        primitiveType = ((SimpleTypeDescriptor) cd.getTypeDescriptor())
-            .getPrimitiveType();
+        primitiveType = ((SimpleTypeDescriptor) cd.getTypeDescriptor()).getPrimitiveType();
       } else {
-        throw new UnsupportedOperationException(
-            "Can only export simple type attributes, " +
-                "failed to export " + entity.type() + '.' +
-                cd.getName());
+        throw new UnsupportedOperationException("Can only export simple type attributes, " +
+                "failed to export " + entity.type() + '.' + cd.getName());
       }
-      Class<?> javaType =
-          (primitiveType != null ? primitiveType.getJavaType() :
-              String.class);
+      Class<?> javaType = (primitiveType != null ? primitiveType.getJavaType() : String.class);
       String formatString = null;
       if (BeanUtil.isIntegralNumberType(javaType)) {
         formatString = getIntegralPattern();
