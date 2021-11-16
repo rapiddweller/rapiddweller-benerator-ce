@@ -74,12 +74,16 @@ public class BenchmarkTool {
         "                  of at least n seconds (default: 10)",
         "--maxThreads k    Use only up to k cores for testing",
         "                  (default: slightly more than the number of cores)",
-        "--mode <spec>     activates Benerator mode strict, lenient or " +
+        "--mode <spec>     activates Benerator mode strict, lenient or ",
         "                  turbo (default: lenient)",
+        "--csv <file>      Exports benchmark results to a CSV file of the specified name",
+        "--csvSep c        Uses c as separator character in the generated CSV file",
+        "--xls <file>      Exports benchmark results to an XLS file of the specified name",
+        "--txt <file>      Exports benchmark results to a text file of the specified name",
         "--help            print this help",
         "--list            lists the available benchmark tests",
-        "[name]            is an optional name of a benchmark test to execute." +
-        "                  By default, all tests that fit the other settings " +
+        "[name]            is an optional name of a benchmark test to execute.",
+        "                  By default, all tests that fit the other settings ",
         "                  are executed."
     );
   }
