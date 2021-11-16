@@ -59,7 +59,7 @@ public class BenchmarkTool {
     ConsoleInfoPrinter.printHelp(
         "Usage: benerator-benchmark [options] [name]",
         "",
-        "Example: benerator-benchmark --ce --minDurationSecs 30 --halfCores",
+        "Example: benerator-benchmark --ce --minDurationSecs 30",
         "",
         "Options:",
         "--ce              run on Benerator Community Edition (default on CE)",
