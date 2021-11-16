@@ -125,7 +125,7 @@ public class Setup implements ObservableBean {
     setDbUrl(DEFAULT_DB_URL);
     setDbSchema(DEFAULT_DB_SCHEMA);
     setDbSnapshot("dbunit");
-    this.dbDependencies = new MavenDependency[0]; // TODO v0.8 handle maven dependencies
+    this.dbDependencies = new MavenDependency[0]; // TODO handle maven dependencies
     if (archetype == null) {
       setArchetype(ArchetypeManager.getInstance().getDefaultArchetype());
     }

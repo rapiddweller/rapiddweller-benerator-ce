@@ -88,11 +88,11 @@ public class FeatureDescriptor implements Named {
     return details.containsKey(name);
   }
 
-  public Object getDeclaredDetailValue(String name) { // TODO v0.8 remove method? It does not differ from getDetailValue any more
+  public Object getDeclaredDetailValue(String name) { // TODO remove method? It does not differ from getDetailValue any more
     return getConfiguredDetail(name).getValue();
   }
 
-  public Object getDetailValue(String name) { // TODO v0.8 remove generic feature access?
+  public Object getDetailValue(String name) { // TODO remove generic feature access?
     return this.getConfiguredDetail(name).getValue();
   }
 

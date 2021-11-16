@@ -778,7 +778,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="template"> <!-- TODO v0.8 keep this? -->
+    <xs:element name="template"> <!-- TODO keep this? -->
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="comment" minOccurs="0"/>

@@ -57,7 +57,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuilderFactoryTest {
 
-  // TODO v0.7.1 define tests for all syntax paths
+  // TODO define tests for all syntax paths
 
   private static final String NAMES_CSV = "com/rapiddweller/benerator/factory/names.csv";
   private static final String EMPTY_WGT_CSV = "com/rapiddweller/benerator/factory/empty.csv";
