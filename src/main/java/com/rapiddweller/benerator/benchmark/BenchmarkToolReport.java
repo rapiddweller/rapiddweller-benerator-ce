@@ -39,7 +39,7 @@ public class BenchmarkToolReport {
     this.version = VersionInfo.getInfo("benerator");
     this.osInfo = BeneratorUtil.getOsInfo();
     this.mode = config.getMode();
-    this.executionModes = config.getThreadings();
+    this.executionModes = config.getExecutionModes();
     this.cpuAndMemInfo = BeneratorUtil.getCpuAndMemInfo();
     this.javaVersion = VMInfo.getJavaVersion();
     this.jvmInfo = BeneratorUtil.getJVMInfo();

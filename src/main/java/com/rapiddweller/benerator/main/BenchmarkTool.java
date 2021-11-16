@@ -6,26 +6,19 @@ import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.benchmark.BenchmarkToolConfig;
 import com.rapiddweller.benerator.benchmark.BenchmarkToolReport;
 import com.rapiddweller.benerator.benchmark.BenchmarkRunner;
-import com.rapiddweller.benerator.benchmark.PerformanceFormatter;
-import com.rapiddweller.benerator.benchmark.SensorResult;
+import com.rapiddweller.benerator.benchmark.CSVResultExporter;
 import com.rapiddweller.benerator.benchmark.Benchmark;
-import com.rapiddweller.benerator.benchmark.BenchmarkResult;
-import com.rapiddweller.benerator.benchmark.ExecutionMode;
-import com.rapiddweller.benerator.benchmark.SensorSummary;
-import com.rapiddweller.benerator.environment.SystemRef;
-import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.benerator.benchmark.TextTableResultExporter;
+import com.rapiddweller.benerator.benchmark.XLSBenchmarkExporter;
 import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.HF;
-import com.rapiddweller.common.TextUtil;
 import com.rapiddweller.common.cli.CommandLineParser;
-import com.rapiddweller.common.format.Alignment;
+import com.rapiddweller.common.file.FilePrintStream;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
-import com.rapiddweller.benerator.environment.EnvironmentUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 
 import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
 
@@ -42,10 +35,12 @@ public class BenchmarkTool {
   // main ------------------------------------------------------------------------------------------------------------
 
   public static void main(String[] args) throws IOException {
-    logger.info("benerator-benchmark {}", CommandLineParser.formatArgs(args));
+    if (logger.isInfoEnabled()) {
+      logger.info("benerator-benchmark {}", CommandLineParser.formatArgs(args));
+    }
     BenchmarkToolConfig config = parseCommandLineConfig(args);
     BenchmarkToolReport result = BenchmarkRunner.runBenchmarks(config);
-    printResult(result);
+    exportResult(config, result);
   }
 
 
@@ -79,130 +74,18 @@ public class BenchmarkTool {
         "                  of at least n seconds (default: 10)",
         "--maxThreads k    Use only up to k cores for testing",
         "                  (default: slightly more than the number of cores)",
-        "--mode <spec>     activates Benerator mode strict, lenient or " +
+        "--mode <spec>     activates Benerator mode strict, lenient or ",
         "                  turbo (default: lenient)",
+        "--csv <file>      Exports benchmark results to a CSV file of the specified name",
+        "--csvSep c        Uses c as separator character in the generated CSV file",
+        "--xls <file>      Exports benchmark results to an XLS file of the specified name",
+        "--txt <file>      Exports benchmark results to a text file of the specified name",
         "--help            print this help",
         "--list            lists the available benchmark tests",
-        "[name]            is an optional name of a benchmark test to execute." +
-        "                  By default, all tests that fit the other settings " +
+        "[name]            is an optional name of a benchmark test to execute.",
+        "                  By default, all tests that fit the other settings ",
         "                  are executed."
     );
-  }
-
-  private static void printResult(BenchmarkToolReport result) {
-    String[] title = createAndPrintTitle(result);
-    printResults(title, result);
-  }
-
-  private static void printResults(String[] title, BenchmarkToolReport result) {
-    Object[][] table = createTable(result);
-    printTable(title, table);
-  }
-
-  private static Object[][] createTable(BenchmarkToolReport result) {
-    // create table
-    ArrayBuilder<Object[]> table = new ArrayBuilder<>(Object[].class);
-    // format table header
-    ExecutionMode[] executionModes = result.getExecutionModes();
-    Object[] header = createColumnHeaders(executionModes);
-    table.add(header);
-    for (BenchmarkResult benchmarkResult : result.getResults()) {
-      Collection<String> sensors = benchmarkResult.getSensors();
-      for (String sensor : sensors) {
-        Object[] row = newRow(executionModes.length + 1, table);
-        row[0] = rowHeader(benchmarkResult.getBenchmark(), environmentName(benchmarkResult), sensor, sensors.size());
-        SensorSummary sensorSummary = benchmarkResult.getSensorSummary(sensor);
-        int i = 1;
-        for (ExecutionMode mode : executionModes) {
-          SensorResult sensorResult = sensorSummary.getResult(mode);
-          row[i] = (sensorResult != null ? PerformanceFormatter.format(sensorResult.entitiesPerHour()) : "N/A");
-          i++;
-        }
-      }
-    }
-    return table.toArray();
-  }
-
-  private static String environmentName(BenchmarkResult result) {
-    SystemRef system = result.getSystem();
-    return (system != null ? system.toString() : null);
-  }
-
-  private static Object[] createColumnHeaders(ExecutionMode[] threadings) {
-    Object[] header  = new Object[threadings.length + 1];
-    header[0] = "Benchmark";
-    for (int i = 0; i < threadings.length; i++) {
-      ExecutionMode executionMode = threadings[i];
-      if (!executionMode.isEe()) {
-        header[i + 1] = "CE";
-      } else if (executionMode.getThreadCount() > 1) {
-        header[i + 1] = "EE\n" + executionMode.getThreadCount() + " Threads";
-      } else {
-        header[i + 1] = "EE\n1 Thread";
-      }
-    }
-    return header;
-  }
-
-  private static void printTable(String[] title, Object[][] cells) {
-    int cols = cells[0].length;
-    Alignment[] alignments = new Alignment[cols];
-    alignments[0] = Alignment.LEFT;
-    for (int i = 1; i < cols; i++) {
-      alignments[i] = Alignment.RIGHT;
-    }
-    System.out.println(TextUtil.formatLinedTable(title, cells, alignments, true));
-  }
-
-  private static String[] createAndPrintTitle(BenchmarkToolReport result) {
-    ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
-    builder.addAll(new String[] {
-        "Benchmark throughput of Benerator " + result.getVersionInfo().getVersion(),
-        "in " + result.getMode().getCode() + " mode",
-        "on a " + result.getOsInfo(),
-        "with " + result.getCpuAndMemInfo(),
-        "Java version " + result.getJavaVersion(),
-        result.getJVMInfo(),
-        "Started: " + result.getStartDateTime(),
-        "Duration: " + HF.formatDurationSec(result.getDurationSecs()),
-    });
-    SystemRef[] dbs = result.getSystems("db");
-    if (dbs.length > 0) {
-      if (dbs.length == 1) {
-        builder.add("Database: " + EnvironmentUtil.getDbProductDescription(dbs[0]));
-      } else {
-        builder.add("Databases:");
-        for (SystemRef system : dbs) {
-          builder.add("- " + EnvironmentUtil.getDbProductDescription(system));
-        }
-      }
-    }
-    builder.addAll(new String[] {
-      "",
-      "Numbers are million entities generated per hour"
-    });
-    String[] title = builder.toArray();
-    for (String line : title) {
-      logger.debug("{}", line);
-    }
-    return title;
-  }
-
-  private static Object[] newRow(int cellCount, ArrayBuilder<Object[]> table) {
-    Object[] tableRow = new Object[cellCount];
-    table.add(tableRow);
-    return tableRow;
-  }
-
-  private static String rowHeader(Benchmark benchmark, String environment, String sensor, int sensorCount) {
-    String label = benchmark.getName();
-    if (sensorCount > 1) {
-      label += " " + sensor;
-    }
-    if (environment != null) {
-      label += " @ " + environment;
-    }
-    return label;
   }
 
   static BenchmarkToolConfig parseCommandLineConfig(String... args) {
@@ -210,10 +93,15 @@ public class BenchmarkTool {
     p.addFlag("ce", "--ce", null);
     p.addFlag("ee", "--ee", null);
     p.addFlag("list", "--list", null);
+    p.addFlag("uiResult", "--uiResult", null);
     p.addOption("mode", "--mode", "-m");
     p.addOption("minSecs", "--minSecs", null);
     p.addOption("maxThreads", "--maxThreads", null);
     p.addOption("systemsSpec", "--env", null);
+    p.addOption("csv", "--csv", null);
+    p.addOption("csvSep", "--csvSep", null);
+    p.addOption("xls", "--xls", null);
+    p.addOption("txt", "--txt", null);
     p.addArgument("name", false);
     BenchmarkToolConfig config = new BenchmarkToolConfig();
     p.parse(config, args);
@@ -244,7 +132,7 @@ public class BenchmarkTool {
       config.setMaxThreads(reportedCores * 3 / 2);
     }
 
-    config.prepareThreadings();
+    config.prepareExecutionModes();
     return config;
   }
 
@@ -252,6 +140,25 @@ public class BenchmarkTool {
     System.out.println("Available Benchmark tests:");
     for (Benchmark setup : Benchmark.getInstances()) {
       System.out.println(setup.getName() + ": " + setup.getDescription());
+    }
+  }
+
+  private static void exportResult(BenchmarkToolConfig config, BenchmarkToolReport result) throws IOException {
+    new TextTableResultExporter(System.out).export(result);
+    if (config.isUiResult()) {
+      CSVResultExporter.forUiResult().export(result);
+    }
+    if (config.getCsv() != null) {
+      CSVResultExporter.forFile(config.getCsv(), config.getCsvSep()).export(result);
+    }
+    if (config.getXls() != null) {
+      new XLSBenchmarkExporter(config.getXls()).export(result);
+    }
+    if (config.getTxt() != null) {
+      File file = new File(config.getTxt());
+      FilePrintStream printer = new FilePrintStream(file);
+      new TextTableResultExporter(printer).export(result);
+      printer.close();
     }
   }
 

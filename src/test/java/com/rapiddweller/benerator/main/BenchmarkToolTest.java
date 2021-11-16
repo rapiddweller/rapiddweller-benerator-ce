@@ -9,8 +9,11 @@ import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.benerator.test.ModelTest;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.FileUtil;
+import org.junit.AfterClass;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
@@ -27,6 +30,16 @@ import static org.junit.Assert.assertTrue;
 public class BenchmarkToolTest extends ModelTest {
 
   private static final String[] BUILTIN_DBS = new String[] { "builtin#h2", "builtin#hsqlmem" };
+
+  @AfterClass
+  public static void cleanUp() {
+    FileUtil.deleteIfExists(new File("benchmark.csv"));
+    FileUtil.deleteIfExists(new File("benchmark.xls"));
+    FileUtil.deleteIfExists(new File("benchmark.txt"));
+    FileUtil.deleteIfExists(new File("results/1_Performance.csv"));
+    FileUtil.deleteIfExists(new File("results/2_Info.csv"));
+    FileUtil.deleteDirectory(new File("results"));
+  }
 
   @Test
   public void testEmpty() {
@@ -122,6 +135,18 @@ public class BenchmarkToolTest extends ModelTest {
   public void testRealBenchmarkRun() throws IOException {
     runBenchmark("gen-string", null, 1);
   }
+
+  @Test
+  public void testExport() throws IOException {
+    BenchmarkTool.main(new String[] { "--minSecs", "0",
+            "--csv", "benchmark.csv", "--xls", "benchmark.xls", "--txt", "benchmark.txt", "--uiResult", "gen-string" });
+    assertTrue(new File("benchmark.csv").exists());
+    assertTrue(new File("benchmark.xls").exists());
+    assertTrue(new File("benchmark.txt").exists());
+    assertTrue(new File("results/1_Performance.csv").exists());
+    assertTrue(new File("results/2_Info.csv").exists());
+  }
+
 
   // helper methods --------------------------------------------------------------------------------------------------
 

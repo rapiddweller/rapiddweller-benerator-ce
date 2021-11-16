@@ -28,13 +28,18 @@ public class BenchmarkToolConfig extends CommandLineConfig {
   private boolean ce;
   private boolean ee;
   private boolean list;
+  private boolean uiResult;
   private BeneratorMode mode;
   private int minSecs;
   private int maxThreads;
   private SystemRef[] systems;
+  private String csv;
+  private char csvSep;
+  private String xls;
+  private String txt;
   private String name;
   private Benchmark[] benchmarks;
-  private ExecutionMode[] threadings;
+  private ExecutionMode[] executionModes;
 
   public BenchmarkToolConfig() {
     if (isEEAvailable()) {
@@ -44,10 +49,16 @@ public class BenchmarkToolConfig extends CommandLineConfig {
       this.ce = true;
       this.ee = false;
     }
+    this.list = false;
+    this.uiResult = false;
     this.mode = BeneratorMode.STRICT;
     this.minSecs = 10;
     this.maxThreads = 0;
     this.systems = new SystemRef[0];
+    this.csv = null;
+    this.csvSep = ',';
+    this.xls = null;
+    this.txt = null;
     this.benchmarks = Benchmark.getInstances();
   }
 
@@ -57,6 +68,14 @@ public class BenchmarkToolConfig extends CommandLineConfig {
 
   public void setList(boolean list) {
     this.list = list;
+  }
+
+  public boolean isUiResult() {
+    return uiResult;
+  }
+
+  public void setUiResult(boolean uiResult) {
+    this.uiResult = uiResult;
   }
 
   public boolean isCe() {
@@ -106,6 +125,38 @@ public class BenchmarkToolConfig extends CommandLineConfig {
     return this.systems;
   }
 
+  public String getCsv() {
+    return csv;
+  }
+
+  public void setCsv(String csv) {
+    this.csv = csv;
+  }
+
+  public char getCsvSep() {
+    return csvSep;
+  }
+
+  public void setCsvSep(char csvSep) {
+    this.csvSep = csvSep;
+  }
+
+  public String getXls() {
+    return xls;
+  }
+
+  public void setXls(String xls) {
+    this.xls = xls;
+  }
+
+  public String getTxt() {
+    return txt;
+  }
+
+  public void setTxt(String txt) {
+    this.txt = txt;
+  }
+
   public BeneratorMode getMode() {
     return mode;
   }
@@ -143,13 +194,13 @@ public class BenchmarkToolConfig extends CommandLineConfig {
     return benchmarks;
   }
 
-  public ExecutionMode[] getThreadings() {
-    return threadings;
+  public ExecutionMode[] getExecutionModes() {
+    return executionModes;
   }
 
-  public void prepareThreadings() {
+  public void prepareExecutionModes() {
     if (!ee || (!ce && maxThreads == 1)) {
-      this.threadings = new ExecutionMode[] { new ExecutionMode(ee, 1) };
+      this.executionModes = new ExecutionMode[] { new ExecutionMode(ee, 1) };
     } else {
       // determine thread counts for EE
       TreeSet<Integer> set = new TreeSet<>();
@@ -170,7 +221,7 @@ public class BenchmarkToolConfig extends CommandLineConfig {
       for (int n : set) {
         result[i++] = new ExecutionMode(true, n);
       }
-      this.threadings = result;
+      this.executionModes = result;
     }
   }
 
