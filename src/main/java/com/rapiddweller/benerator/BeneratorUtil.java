@@ -211,7 +211,7 @@ public class BeneratorUtil {
     for (Environment environment : environments) {
       printer.printLines("- " + environment.getName());
       for (SystemRef system : environment.getSystems()) {
-        printer.printLines("  # " + system.getName() + ": " + system.getType());
+        printer.printLines("  # " + system.getName() + ": " + system.getType() + " - " + describe(system));
       }
     }
   }
@@ -228,7 +228,43 @@ public class BeneratorUtil {
     SystemRef[] systems = EnvironmentUtil.findSystems(type);
     printer.printLines(label + ":");
     for (SystemRef system : systems) {
-      printer.printLines("- " + system.getEnvironment().getName() + "#" + system.getName());
+      printer.printLines("- " + system.getEnvironment().getName() + "#" + system.getName() + " - " + describe(system));
+    }
+  }
+
+  private static String describe(SystemRef system) {
+    if ("db".equals(system.getType())) {
+      return describeDb(system);
+    } else if ("kafka".equals(system.getType())) {
+      return describeKafka(system);
+    } else {
+      return "";
+    }
+  }
+
+  private static String describeDb(SystemRef db) {
+    StringBuilder result = new StringBuilder();
+    appendPropertyValueIfNotNull("url", db, result);
+    appendPropertyValueIfNotNull("user", db, result);
+    appendPropertyValueIfNotNull("catalog", db, result);
+    appendPropertyValueIfNotNull("schema", db, result);
+    return result.toString();
+  }
+
+  private static String describeKafka(SystemRef kafka) {
+    StringBuilder result = new StringBuilder();
+    appendPropertyValueIfNotNull("bootstrap.servers", kafka, result);
+    appendPropertyValueIfNotNull("topic", kafka, result);
+    return result.toString();
+  }
+
+  private static void appendPropertyValueIfNotNull(String propertyName, SystemRef system, StringBuilder builder) {
+    String value = system.getProperty(propertyName);
+    if (!StringUtil.isEmpty(value)) {
+      if (builder.length() > 0) {
+        builder.append(' ');
+      }
+      builder.append(value);
     }
   }
 

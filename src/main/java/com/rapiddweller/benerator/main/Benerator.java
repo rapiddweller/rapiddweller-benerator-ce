@@ -26,7 +26,6 @@
 
 package com.rapiddweller.benerator.main;
 
-import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.BeneratorError;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.BeneratorMode;
@@ -74,11 +73,10 @@ public class Benerator {
       "Options:",
       "  --version,-v           Display system and version information",
       "  --help,-h              Display help information",
-      "  --listEnvs             List the available environments",
-      "  --listDbs              List databases defined in the available environments",
-      "  --listKafkas           List Kafka systems defined in the available environments",
-      "  --clearCaches          Clears all caches",
-      "  --mode <spec>          activates Benerator mode strict, lenient or turbo ",
+      "  --list <type>          List the available environments or systems. ",
+      "                         <type> may be env, db or kafka.",
+      "  --clearCaches          Clear all caches",
+      "  --mode <spec>          Activate Benerator mode strict, lenient or turbo ",
       "                         (default: lenient)"
   };
 
@@ -141,16 +139,17 @@ public class Benerator {
       BeneratorUtil.printVersionInfo(false, new ConsoleInfoPrinter());
       run = false;
     }
-    if (config.isListEnvironments()) {
-      BeneratorUtil.printEnvironments(new ConsoleInfoPrinter());
-      run = false;
-    }
-    if (config.isListDbs()) {
-      BeneratorUtil.printEnvDbs(new ConsoleInfoPrinter());
-      run = false;
-    }
-    if (config.isListKafkas()) {
-      BeneratorUtil.printEnvKafkas(new ConsoleInfoPrinter());
+    if (config.getList() != null) {
+      String arg = config.getList();
+      if ("env".equals(arg)) {
+        BeneratorUtil.printEnvironments(new ConsoleInfoPrinter());
+      } else if ("db".equals(arg)) {
+        BeneratorUtil.printEnvDbs(new ConsoleInfoPrinter());
+      } else if ("kafka".equals(arg)) {
+        BeneratorUtil.printEnvKafkas(new ConsoleInfoPrinter());
+      } else {
+        throw new RuntimeException("Illegal list option: " + arg);
+      }
       run = false;
     }
     if (config.isClearCaches()) {
@@ -189,14 +188,17 @@ public class Benerator {
 
   static BeneratorConfig parseCommandLine(String... args) {
     BeneratorConfig result = new BeneratorConfig();
+    CommandLineParser p = createCommandLineParser();
+    return p.parse(result, args);
+  }
+
+  protected static CommandLineParser createCommandLineParser() {
     CommandLineParser p = new CommandLineParser();
-    p.addFlag("listEnvironments", "--listEnvs", null);
-    p.addFlag("listDbs", "--listDbs", null);
-    p.addFlag("listKafkas", "--listKafkas", null);
+    p.addOption("list", "--list", null);
     p.addFlag("clearCaches", "--clearCaches", null);
     p.addOption("mode", "--mode", "-m");
     p.addArgument("file", false);
-    return p.parse(result, args);
+    return p;
   }
 
 }

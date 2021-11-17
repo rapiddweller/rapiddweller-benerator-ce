@@ -13,40 +13,24 @@ import com.rapiddweller.common.cli.CommandLineConfig;
  */
 public class BeneratorConfig extends CommandLineConfig {
 
-  private boolean listEnvironments;
-  private boolean listDbs;
-  private boolean listKafkas;
   private boolean clearCaches;
   private BeneratorMode mode;
+  private String list;
   private String file;
 
   public BeneratorConfig() {
-    this.file = "benerator.xml";
+    this.clearCaches = false;
     this.mode = BeneratorMode.LENIENT;
+    this.list = null;
+    this.file = "benerator.xml";
   }
 
-  public boolean isListEnvironments() {
-    return listEnvironments;
+  public String getList() {
+    return list;
   }
 
-  public void setListEnvironments(boolean listEnvironments) {
-    this.listEnvironments = listEnvironments;
-  }
-
-  public boolean isListDbs() {
-    return listDbs;
-  }
-
-  public void setListDbs(boolean listDbs) {
-    this.listDbs = listDbs;
-  }
-
-  public boolean isListKafkas() {
-    return listKafkas;
-  }
-
-  public void setListKafkas(boolean listKafkas) {
-    this.listKafkas = listKafkas;
+  public void setList(String list) {
+    this.list = list;
   }
 
   public boolean isClearCaches() {
