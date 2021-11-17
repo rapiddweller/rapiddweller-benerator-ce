@@ -284,7 +284,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     } else {
       String targetTypeName = descriptor.getTargetType();
       generator = new DataSourceGenerator(sourceSystem.queryEntityIds(
-          targetTypeName, selectorToUse, context)); // TODO v0.7.2 query by targetComponent
+          targetTypeName, selectorToUse, context)); // TODO query by targetComponent
       if (selectorToUse == null && distribution == null) {
         // if no explicit distribution was specified, then choose a default
         if (context.isDefaultOneToOne()) {
