@@ -55,7 +55,10 @@ public class CSVResultExporter extends AbstractBenchmarkResultExporter {
     return new CSVWriter(new FileWriter(file), separator, false);
   }
 
-  private static void exportInfo(BenchmarkToolReport result, CSVWriter writer) throws IOException {
+  private void exportInfo(BenchmarkToolReport result, CSVWriter writer) throws IOException {
+    if (!performancePath.equals(infoPath)) {
+      writer.writeRow(new Object [] { "Execution Info" });
+    }
     for (String info : formatInfo(result)) {
       writer.writeRow(new Object [] { info });
     }
