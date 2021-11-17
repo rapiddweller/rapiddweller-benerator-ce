@@ -310,7 +310,7 @@ public class ArrayTypeGeneratorFactoryTest extends GeneratorTest {
   }
 
   /**
-   * TODO v0.8 implement array mutation
+   * TODO implement array mutation
    * public void testMutatingGeneration() {
    * Object[] MUTATED_ALICE = new Object[] { "Alice", 24 };
    * // define descriptor

@@ -53,7 +53,7 @@ public class Address {
   private PhoneNumber mobilePhone;
   private PhoneNumber fax;
 
-  // TODO v0.8 generate the following attributes
+  // TODO generate the following attributes
   private String organization;
   private String department;
   private String building;

@@ -52,7 +52,6 @@
     <echo>{ftl:encoding:${context.defaultEncoding} default pageSize:${context.defaultPageSize}}</echo>
     <echo>{ftl:JDBC URL: ${dbUrl}}</echo>
 
-    <!--  TODO use environment file -->
     <echo>define a database that will be referred by the id 'db' subsequently</echo>
     <database id="db" url="{dbUrl}" driver="{dbDriver}" schema="{dbSchema}"
               user="{dbUser}" password="{dbPassword}" batch="{dbBatch}"/>

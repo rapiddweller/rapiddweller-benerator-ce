@@ -64,6 +64,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -142,10 +143,10 @@ public class CreateProjectPanel extends JPanel {
     return pane;
   }
 
-  private Component createPropertiesPane() { // TODO v0.8 simplify using AlignedPropertyPane
+  private Component createPropertiesPane() {
     AlignedPane pane = AlignedPane.createVerticalPane(4);
     ImageIcon icon = createImageIcon("appIcon.gif", "RD");
-    JLabel beneratorIcon = new JLabel(icon, JLabel.CENTER);
+    JLabel beneratorIcon = new JLabel(icon, SwingConstants.CENTER);
     pane.add(beneratorIcon);
     JLabel empty = new JLabel("");
     TextArea marketing = new TextArea(i18n.getString("marketing"));

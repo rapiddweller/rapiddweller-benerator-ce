@@ -191,7 +191,7 @@ public class Country {
     this.countryLocale =
         new Locale(LocaleUtil.getLocale(defaultLanguage).getLanguage(),
             isoCode);
-    this.mobilePhoneCityRelated = "BR".equalsIgnoreCase(isoCode); // TODO v1.0 make configuration generic
+    this.mobilePhoneCityRelated = "BR".equalsIgnoreCase(isoCode); // TODO make configuration generic
     this.mobilePrefixGenerator = new RegexStringGenerator(mobileCodePattern);
     this.mobilePrefixGenerator.init(null);
     this.localNumberGenerator = BeneratorFactory.getInstance()
