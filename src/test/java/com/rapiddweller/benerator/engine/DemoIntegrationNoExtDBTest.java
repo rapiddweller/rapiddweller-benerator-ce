@@ -151,18 +151,11 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
   }
 
 
-  /**
-   * Demo files create dates.
-   */
   @Test
-  public void DemoFilesCreateDates() {
-    try {
-      context.setContextUri("/demo/file");
-      BeneratorContext benCtx = parseAndExecuteFile("/demo/file/create_dates.ben.xml");
-      Assert.assertEquals("/demo/file", benCtx.getContextUri());
-    } catch (Exception e) {
-      logger.info("Error executing Demo", e);
-    }
+  public void demoFilesCreateDates() {
+    context.setContextUri("/demo/file");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/file/create_dates.ben.xml");
+    Assert.assertEquals("/demo/file", benCtx.getContextUri());
   }
 
   /**
