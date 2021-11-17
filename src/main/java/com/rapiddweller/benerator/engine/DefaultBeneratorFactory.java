@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.distribution.Distribution;
@@ -36,9 +37,11 @@ import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
 import com.rapiddweller.benerator.factory.SimpleTypeGeneratorFactory;
+import com.rapiddweller.benerator.main.Benerator;
 import com.rapiddweller.benerator.primitive.DefaultVarLengthStringGenerator;
 import com.rapiddweller.benerator.primitive.VarLengthStringGenerator;
 import com.rapiddweller.benerator.util.DefaultRandomProvider;
+import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
@@ -48,6 +51,7 @@ import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.context.CaseInsensitiveContext;
 import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.common.converter.ConverterManager;
+import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.format.text.DelocalizingConverter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
@@ -83,6 +87,22 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
   @Override
   public String getEdition() {
     return COMMUNITY_EDITION;
+  }
+
+  public String[] getVersionInfo(boolean withMode) {
+    ArrayBuilder<String> builder = new ArrayBuilder<>(String.class);
+    getEditionInfo(builder);
+    if (withMode) {
+      builder.add("Mode:          " + Benerator.getMode().getCode());
+    }
+    builder.addAll(BeneratorUtil.getSystemInfo());
+    return builder.toArray();
+  }
+
+  protected void getEditionInfo(ArrayBuilder<String> builder) {
+    VersionInfo version = VersionInfo.getInfo("benerator");
+    builder.add("Benerator " + getEdition() + " " + version.getVersion() +
+        " build " + version.getBuildNumber());
   }
 
   @Override

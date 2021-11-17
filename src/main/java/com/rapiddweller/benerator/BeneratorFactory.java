@@ -102,6 +102,8 @@ public abstract class BeneratorFactory {
 
   public abstract String getEdition();
 
+  public abstract String[] getVersionInfo(boolean withMode);
+
   public abstract BeneratorRootContext createRootContext(String contextUri);
 
   public abstract BeneratorParseContext createParseContext(ResourceManager resourceManager);

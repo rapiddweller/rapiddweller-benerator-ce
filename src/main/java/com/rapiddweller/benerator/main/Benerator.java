@@ -136,7 +136,7 @@ public class Benerator {
       run = false;
     }
     if (config.isVersion()) {
-      BeneratorUtil.printVersionInfo(false, new ConsoleInfoPrinter());
+      ConsoleInfoPrinter.printHelp(BeneratorFactory.getInstance().getVersionInfo(false));
       run = false;
     }
     if (config.getList() != null) {

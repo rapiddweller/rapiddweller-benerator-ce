@@ -148,23 +148,11 @@ public class BeneratorUtil {
     }
   }
 
-  public static void printVersionInfo(boolean withMode, InfoPrinter printer) {
-    VersionInfo version = VersionInfo.getInfo("benerator");
-    String edition = BeneratorFactory.getInstance().getEdition();
-    printer.printLines(
-        "Benerator " + edition + " " + version.getVersion() + " build " + version.getBuildNumber()
-    );
-    if (withMode) {
-      printer.printLines(
-          "Mode:          " + Benerator.getMode().getCode()
-      );
-    }
-    printer.printLines(
-        "Java version:  " + VMInfo.getJavaVersion(),
+  public static String[] getSystemInfo() {
+    return new String[] {"Java version:  " + VMInfo.getJavaVersion(),
         "JVM product:   " + getJVMInfo(),
         "System:        " + getOsInfo(),
-        "CPU & RAM:     " + getCpuAndMemInfo()
-    );
+        "CPU & RAM:     " + getCpuAndMemInfo()};
   }
 
   public static String getJVMInfo() {
