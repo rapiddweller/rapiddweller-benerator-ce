@@ -80,8 +80,6 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
 
   // constants -------------------------------------------------------------------------------------------------------
 
-  public static final String CELL_SEPARATOR_SYSPROP = "cell.separator";
-  public static final char DEFAULT_CELL_SEPARATOR = ',';
   public static final String DEFAULT_CONTEXT_URI = ".";
 
 

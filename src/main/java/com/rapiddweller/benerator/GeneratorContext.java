@@ -42,6 +42,10 @@ import java.util.concurrent.ExecutorService;
  */
 public interface GeneratorContext extends Context, ClassProvider {
 
+  String CELL_SEPARATOR_SYSPROP = "cell.separator";
+  char DEFAULT_CELL_SEPARATOR = ',';
+
+
   // global properties -----------------------------------------------------------------------------------------------
 
   boolean isDefaultSourceScripted();

@@ -26,9 +26,11 @@
 
 package com.rapiddweller.benerator.engine;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.FileUtil;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -42,19 +44,23 @@ import static com.rapiddweller.benerator.main.Benerator.main;
 
 /**
  * Integration test for Benerator's Demo Files.<br/><br/>
- * <p>
  * Created at 30.12.2020
- *
- * @author Alexander Kell
+ * @author Alexander Kell, Volker Bergmann
  * @since 1.1.0
  */
 public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest {
   private static final Logger logger = LoggerFactory.getLogger(DemoIntegrationNoExtDBTest.class);
 
-  /**
-   * The Root.
-   */
   String ROOT = "src/demo/resources/";
+
+  public DemoIntegrationNoExtDBTest() {
+    super(new DefaultBeneratorFactory());
+  }
+
+  @BeforeClass
+  public static void setUp() {
+    BeneratorFactory.setInstance(new DefaultBeneratorFactory());
+  }
 
   private void parseAndExecute() throws IOException {
     for (File file : Objects.requireNonNull(new File(ROOT, context.getContextUri()).listFiles())) {

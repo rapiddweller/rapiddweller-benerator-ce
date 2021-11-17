@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.test;
 
 import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
@@ -56,16 +57,24 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
 
   protected ResourceManagerSupport resourceManager;
 
+  protected AbstractBeneratorIntegrationTest() {
+    this(BeneratorFactory.getInstance());
+  }
+
+  protected AbstractBeneratorIntegrationTest(BeneratorFactory factory) {
+    BeneratorFactory.setInstance(factory);
+  }
+
   @Before
   public void setUpEnvironment() {
-    System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, ",");
+    System.setProperty(GeneratorContext.CELL_SEPARATOR_SYSPROP, "" + GeneratorContext.DEFAULT_CELL_SEPARATOR);
     this.resourceManager = new ResourceManagerSupport();
   }
 
   @After
   public void tearDown() {
     this.resourceManager.close();
-    System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, ",");
+    System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, "" + GeneratorContext.DEFAULT_CELL_SEPARATOR);
   }
 
   protected void assumePostgresEnabled() {
