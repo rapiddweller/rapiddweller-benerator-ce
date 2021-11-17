@@ -47,13 +47,11 @@ import static com.rapiddweller.benerator.main.Benerator.main;
  */
 public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest {
 
-  public DemoIntegrationNoExtDBTest() {
-    super(new DefaultBeneratorFactory());
-  }
-
   @BeforeClass
   public static void setUp() {
     BeneratorFactory.setInstance(new DefaultBeneratorFactory());
+    ConverterManager.getInstance().reset();
+    ConverterManager.getInstance().registerConverterClass(String2DistributionConverter.class);
   }
 
   /**
@@ -130,7 +128,6 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
   @Test
   public void demoFilesCreateDates() {
     context.setContextUri("/demo/file");
-    ConverterManager.getInstance().registerConverterClass(String2DistributionConverter.class); // TODO REMOVE
     BeneratorContext benCtx = parseAndExecuteFile("/demo/file/create_dates.ben.xml");
     Assert.assertEquals("/demo/file", benCtx.getContextUri());
   }

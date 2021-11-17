@@ -56,14 +56,6 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
 
   protected ResourceManagerSupport resourceManager;
 
-  protected AbstractBeneratorIntegrationTest() {
-    this(BeneratorFactory.getInstance());
-  }
-
-  protected AbstractBeneratorIntegrationTest(BeneratorFactory factory) {
-    BeneratorFactory.setInstance(factory);
-  }
-
   @Before
   public void setUpEnvironment() {
     System.setProperty(GeneratorContext.CELL_SEPARATOR_SYSPROP, "" + GeneratorContext.DEFAULT_CELL_SEPARATOR);
