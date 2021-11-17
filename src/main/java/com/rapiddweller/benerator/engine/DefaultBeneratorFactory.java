@@ -32,6 +32,7 @@ import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.parser.DefaultGenerationInterceptor;
 import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
+import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
 import com.rapiddweller.benerator.factory.SimpleTypeGeneratorFactory;
@@ -46,6 +47,7 @@ import com.rapiddweller.common.collection.NamedValueList;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.context.CaseInsensitiveContext;
 import com.rapiddweller.common.context.ContextAware;
+import com.rapiddweller.common.converter.ConverterManager;
 import com.rapiddweller.format.text.DelocalizingConverter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
@@ -75,6 +77,7 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
   public DefaultBeneratorFactory(RandomProvider randomProvider, XMLModule xmlModule) {
     this.randomProvider = randomProvider;
     this.xmlModule = xmlModule;
+    ConverterManager.getInstance().registerConverterClass(String2DistributionConverter.class);
   }
 
   @Override

@@ -26,53 +26,39 @@
 
 package com.rapiddweller.benerator.engine;
 
+import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
-import com.rapiddweller.common.FileUtil;
+import com.rapiddweller.common.converter.ConverterManager;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 import static com.rapiddweller.benerator.main.Benerator.main;
 
 /**
  * Integration test for Benerator's Demo Files.<br/><br/>
- * <p>
  * Created at 30.12.2020
- *
- * @author Alexander Kell
+ * @author Alexander Kell, Volker Bergmann
  * @since 1.1.0
  */
 public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest {
-  private static final Logger logger = LoggerFactory.getLogger(DemoIntegrationNoExtDBTest.class);
 
-  /**
-   * The Root.
-   */
-  String ROOT = "src/demo/resources/";
-
-  private void parseAndExecute() throws IOException {
-    for (File file : Objects.requireNonNull(new File(ROOT, context.getContextUri()).listFiles())) {
-      String filename = file.getPath();
-      if (FileUtil.isXMLFile(filename)) {
-        logger.info(filename);
-        parseAndExecuteFile(filename);
-      }
-    }
+  @BeforeClass
+  public static void setUp() {
+    BeneratorFactory.setInstance(new DefaultBeneratorFactory());
+    ConverterManager.getInstance().reset();
+    ConverterManager.getInstance().registerConverterClass(String2DistributionConverter.class);
   }
 
   /**
    * Demo files postprocess.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoFilesPostprocess() throws IOException {
+  public void demoFilesPostprocess() throws IOException {
     context.setContextUri("/demo/file");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/file/postprocess-import.ben.xml");
     Assert.assertEquals("/demo/file", benCtx.getContextUri());
@@ -80,11 +66,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo files import fixed width.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoFilesImportFixedWidth() throws IOException {
+  public void demoFilesImportFixedWidth() {
     context.setContextUri("/demo/file");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/file/import_fixed_width.ben.xml");
     Assert.assertEquals("/demo/file", benCtx.getContextUri());
@@ -92,11 +76,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo files greeting csv.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoFilesGreetingCSV() throws IOException {
+  public void demoFilesGreetingCSV() {
     context.setContextUri("/demo/file");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/file/greetings_csv.ben.xml");
     Assert.assertEquals("/demo/file", benCtx.getContextUri());
@@ -104,11 +86,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo files csvio.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoFilesCSVIO() throws IOException {
+  public void demoFilesCSVIO() {
     context.setContextUri("/demo/file");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/file/csv_io.ben.xml");
     Assert.assertEquals("/demo/file", benCtx.getContextUri());
@@ -116,11 +96,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo files xml by script.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoFilesXMLByScript() throws IOException {
+  public void demoFilesXMLByScript() {
     context.setContextUri("/demo/file");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/file/create_xml_by_script.ben.xml");
     Assert.assertEquals("/demo/file", benCtx.getContextUri());
@@ -128,11 +106,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo files create xml.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoFilesCreateXML() throws IOException {
+  public void demoFilesCreateXML() {
     context.setContextUri("/demo/file");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/file/create_xml.ben.xml");
     Assert.assertEquals("/demo/file", benCtx.getContextUri());
@@ -140,38 +116,27 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo files create xlsl.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoFilesCreateXLSL() throws IOException {
+  public void demoFilesCreateXLSL() {
     context.setContextUri("/demo/file");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/file/create_xls.ben.xml");
     Assert.assertEquals("/demo/file", benCtx.getContextUri());
   }
 
 
-  /**
-   * Demo files create dates.
-   */
   @Test
-  public void DemoFilesCreateDates() {
-    try {
-      context.setContextUri("/demo/file");
-      BeneratorContext benCtx = parseAndExecuteFile("/demo/file/create_dates.ben.xml");
-      Assert.assertEquals("/demo/file", benCtx.getContextUri());
-    } catch (Exception e) {
-      logger.info("Error executing Demo", e);
-    }
+  public void demoFilesCreateDates() {
+    context.setContextUri("/demo/file");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/file/create_dates.ben.xml");
+    Assert.assertEquals("/demo/file", benCtx.getContextUri());
   }
 
   /**
    * Demo files create csv.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoFilesCreateCSV() throws IOException {
+  public void demoFilesCreateCSV() {
     context.setContextUri("/demo/file");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/file/create_csv.ben.xml");
     Assert.assertEquals("/demo/file", benCtx.getContextUri());
@@ -179,11 +144,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo files xls demo.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoFilesXLSDemo() throws IOException {
+  public void demoFilesXLSDemo() {
     context.setContextUri("/demo/file");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/file/xls-demo.ben.xml");
     Assert.assertEquals("/demo/file", benCtx.getContextUri());
@@ -191,11 +154,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo mass test.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoMassTest() throws IOException {
+  public void demoMassTest() {
     context.setContextUri("/demo/db");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/db/hsqlmem.masstest.ben.xml");
     Assert.assertEquals("/demo/db", benCtx.getContextUri());
@@ -203,12 +164,10 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo h 2 multi schema.
-   *
-   * @throws IOException the io exception
    */
   @Ignore
   @Test
-  public void DemoH2MultiSchema() throws IOException {
+  public void demoH2MultiSchema() {
     context.setContextUri("/demo/db");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/db/h2.multischema.ben.xml");
     Assert.assertEquals("/demo/db", benCtx.getContextUri());
@@ -216,11 +175,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo env db
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoDbEnvOld() throws IOException {
+  public void demoDbEnvOld() throws IOException {
     String[] args = new String[1];
     args[0] = "src/demo/resources/demo/db/dbenv-old.ben.xml";
     main(args);
@@ -228,7 +185,7 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /** Tests the new environment file format introduced in Benerator 2.1 */
   @Test
-  public void DemoDbEnvNew() throws IOException {
+  public void demoDbEnvNew() throws IOException {
     String[] args = new String[1];
     args[0] = "src/demo/resources/demo/db/dbenv-new.ben.xml";
     main(args);
@@ -236,11 +193,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo env db conf
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoDbEnvConf() throws IOException {
+  public void demoDbEnvConf() throws IOException {
     String[] args = new String[1];
     args[0] = "src/demo/resources/demo/db/dbenvconf.ben.xml";
     main(args);
@@ -248,11 +203,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo env db conf
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void PrioDbEnvConf() throws IOException {
+  public void prioDbEnvConf() throws IOException {
     String[] args = new String[1];
     args[0] = "src/demo/resources/demo/db/priodbenvconf.ben.xml";
     main(args);
@@ -260,11 +213,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo db composite key.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoDbCompositeKey() throws IOException {
+  public void demoDbCompositeKey() {
     context.setContextUri("/demo/db");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/db/compositekey.ben.xml");
     Assert.assertEquals("/demo/db", benCtx.getContextUri());
@@ -272,11 +223,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo script code.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoScriptCode() throws IOException {
+  public void demoScriptCode() {
     context.setContextUri("/demo/script");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/script/scriptcode.ben.xml");
     Assert.assertEquals("/demo/script", benCtx.getContextUri());
@@ -285,11 +234,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Demo script file.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoScriptFile() throws IOException {
+  public void demoScriptFile() {
     context.setContextUri("/demo/script");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/script/scriptfile.ben.xml");
     Assert.assertEquals("/demo/script", benCtx.getContextUri());
@@ -298,11 +245,9 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Shop script hsql mem.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void ShopScriptHSQLMem() throws IOException {
+  public void shopScriptHSQLMem() {
     context.setContextUri("/demo/shop");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-hsqlmem.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
@@ -310,15 +255,12 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
 
   /**
    * Shop script h 2 mem.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void ShopScriptH2Mem() throws IOException {
+  public void shopScriptH2Mem() {
     context.setContextUri("/demo/shop");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-h2.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
   }
-
 
 }
