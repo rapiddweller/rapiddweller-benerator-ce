@@ -2,19 +2,14 @@
 
 ## Benerator
 
-Benerator expects a descriptor file name as the only command line parameter, e.g. on Windows systems
-
-<div class="termy">
-```bash
-benerator test.ben.xml
-```
-</div>
-
-or, on Unix and Mac OS X systems,
+Benerator can be called with a Benerator file name as command line parameter, like
 
 ```bash
 benerator test.ben.xml
 ```
+
+If no file is specified, Benerator expects a file `benerator.xml` 
+in the current directory. 
 
 You can change default behavior by Java VM parameters, e.g.
 
@@ -33,6 +28,18 @@ or
 ```bash
 benerator myproject.ben.xml -Dbenerator.validate=false
 ```
+
+You can specify the following options on the command line:
+
+| Option | Description | Remarks |
+| --- | --- | --- |
+| --version,-v  | Display system and version information | |
+| --help,-h     | Display help information | |
+| --list <type> | List the available environments or systems. &lt;type&gt; may be `env`, `db` or `kafka`. | |
+| --clearCaches | Clear all caches | |
+| --mode <spec> | Activate Benerator mode `strict`, `lenient` or `turbo` | default is `lenient` |
+| --anonReport <pct> | Verify 'pct' percent of anonymized data and display an anonymization report. 'pct' is an integer, 100 for complete tracking | Enterprise Edition only |
+
 
 ## DB Snapshot Tool
 
