@@ -30,7 +30,6 @@ import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
-import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManagerSupport;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
@@ -74,7 +73,7 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
   @After
   public void tearDown() {
     this.resourceManager.close();
-    System.setProperty(DefaultBeneratorContext.CELL_SEPARATOR_SYSPROP, "" + GeneratorContext.DEFAULT_CELL_SEPARATOR);
+    System.setProperty(GeneratorContext.CELL_SEPARATOR_SYSPROP, "" + GeneratorContext.DEFAULT_CELL_SEPARATOR);
   }
 
   protected void assumePostgresEnabled() {
