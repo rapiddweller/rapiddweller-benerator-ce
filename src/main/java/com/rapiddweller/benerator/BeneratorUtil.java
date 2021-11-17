@@ -90,7 +90,7 @@ public class BeneratorUtil {
 
   public static void checkSystem(InfoPrinter printer) {
     // print general Benerator version and system information
-    printVersionInfo(true, printer);
+    printer.printLines(BeneratorFactory.getInstance().getVersionInfo(true));
     // Check logging setup
     checkSlf4jSetup();
     checkLog4j2Setup();
