@@ -147,7 +147,7 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
     try (FileOutputStream out = new FileOutputStream(uri)) {
       workbook.write(out);
     } catch (IOException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error writing XLS file", e);
     }
   }
 

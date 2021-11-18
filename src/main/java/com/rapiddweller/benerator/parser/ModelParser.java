@@ -32,7 +32,7 @@ import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ArrayElementDescriptor;

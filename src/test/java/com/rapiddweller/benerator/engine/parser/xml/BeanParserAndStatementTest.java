@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
-import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.common.exception.SyntaxError;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

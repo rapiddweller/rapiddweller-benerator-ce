@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.util;
 
 import com.rapiddweller.common.Context;
-import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.util.DataIteratorProxy;

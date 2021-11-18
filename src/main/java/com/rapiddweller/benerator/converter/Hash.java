@@ -43,7 +43,7 @@ public class Hash implements Converter<Object,String>, ThreadAware, Closeable {
     try {
       return MessageDigest.getInstance(type);
     } catch (NoSuchAlgorithmException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error creating message digest", e);
     }
   }
 

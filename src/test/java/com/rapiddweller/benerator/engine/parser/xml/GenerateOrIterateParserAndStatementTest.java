@@ -35,7 +35,7 @@ import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.benerator.test.PersonSource;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.converter.UnsafeConverter;
 import com.rapiddweller.common.validator.AbstractValidator;
 import com.rapiddweller.format.DataIterator;

@@ -31,10 +31,10 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.RandomProvider;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.AbstractGenerator;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ProgrammerError;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -188,7 +188,8 @@ public abstract class MultiGeneratorWrapper<S, P> extends AbstractGenerator<P> {
   protected ProductWrapper<String> generateFromSource(int index, ProductWrapper<S> wrapper) {
     assertInitialized();
     if (index < 0 || index > sources.size()) {
-      throw new ProgrammerError("illegal generator index: " + index + " in " + this);
+      throw BeneratorExceptionFactory.getInstance().programmerStateError(
+          "illegal generator index: " + index + " in " + this);
     }
     Generator<? extends S> source = sources.get(index);
     ProductWrapper test = source.generate((ProductWrapper) wrapper);

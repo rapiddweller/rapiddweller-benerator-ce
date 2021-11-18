@@ -35,6 +35,7 @@ import com.rapiddweller.benerator.engine.parser.DefaultGenerationInterceptor;
 import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
 import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
 import com.rapiddweller.benerator.factory.SimpleTypeGeneratorFactory;
 import com.rapiddweller.benerator.main.Benerator;
@@ -51,6 +52,7 @@ import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.context.CaseInsensitiveContext;
 import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.common.converter.ConverterManager;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.format.text.DelocalizingConverter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -208,5 +210,9 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
     return OrderedNameMap.createCaseInsensitiveMap();
   }
 
+  @Override
+  public ExceptionFactory createExceptionFactory() {
+    return new BeneratorExceptionFactory();
+  }
 
 }

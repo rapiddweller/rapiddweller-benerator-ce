@@ -79,7 +79,7 @@ public class EvaluateStatement extends AbstractStatement {
     try {
       extensionMap = IOUtil.readProperties("com/rapiddweller/benerator/engine/statement/fileTypes.properties");
     } catch (IOException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error reading extension type map", e);
     }
   }
 
@@ -144,7 +144,7 @@ public class EvaluateStatement extends AbstractStatement {
       exportResultWithId(result, context);
       return true;
     } catch (ConversionException | IOException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error executing statement", e);
     }
   }
 

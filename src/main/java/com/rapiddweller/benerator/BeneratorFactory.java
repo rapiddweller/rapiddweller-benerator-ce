@@ -43,6 +43,7 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.collection.NamedValueList;
 import com.rapiddweller.common.collection.OrderedNameMap;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
@@ -100,6 +101,8 @@ public abstract class BeneratorFactory {
     return xmlSchemaPath;
   }
 
+  public abstract ExceptionFactory createExceptionFactory();
+
   public abstract String getEdition();
 
   public abstract String[] getVersionInfo(boolean withMode);
@@ -138,4 +141,5 @@ public abstract class BeneratorFactory {
       String name, NamedValueList<InstanceDescriptor> parts, ComplexTypeDescriptor parent);
 
   public abstract OrderedNameMap<Object> createComponentMap();
+
 }

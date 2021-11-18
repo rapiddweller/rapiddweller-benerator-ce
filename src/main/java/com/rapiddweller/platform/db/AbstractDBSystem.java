@@ -35,7 +35,7 @@ import com.rapiddweller.benerator.util.DeprecationLogger;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.ConnectFailedException;
+import com.rapiddweller.common.exception.ConnectFailedException;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ImportFailedException;
@@ -632,15 +632,14 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     if (driver != null && driver.contains("oracle")) {
       try (Connection connection = createConnection()) {
         DatabaseMetaData metaData = connection.getMetaData();
-        VersionNumber driverVersion =
-            VersionNumber.valueOf(metaData.getDriverVersion());
+        VersionNumber driverVersion = VersionNumber.valueOf(metaData.getDriverVersion());
         if (driverVersion.compareTo(MIN_ORACLE_VERSION) < 0) {
           logger.warn(
               "Your Oracle driver has a bug in metadata support. Please update to 10.2.0.4 or newer. " +
                   "You can use that driver for accessing an Oracle 9 server as well.");
         }
       } catch (SQLException e) {
-        throw new ConfigurationError(e);
+        throw new ConfigurationError("Error getting database meta data", e);
       }
     }
   }

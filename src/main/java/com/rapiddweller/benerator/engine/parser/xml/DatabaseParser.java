@@ -123,7 +123,7 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
           excludeTables, metaCache, batch, fetchSize, readOnly, lazy,
           acceptUnknownColumnTypes, context);
     } catch (ConversionException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error parsing database element", e);
     }
   }
 

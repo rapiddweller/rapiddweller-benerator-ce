@@ -42,7 +42,7 @@ import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.NullSafeComparator;
-import com.rapiddweller.common.ParseException;
+import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.common.Validator;
@@ -388,11 +388,11 @@ public class DescriptorUtil {
 
   @Nullable
   public static <T extends Number> T getNumberDetail(SimpleTypeDescriptor descriptor, String detailName, Class<T> targetType) {
+    String detailValue = (String) descriptor.getDetailValue(detailName);
     try {
-      String detailValue = (String) descriptor.getDetailValue(detailName);
       return (detailValue != null ? new String2NumberConverter<>(targetType).convert(detailValue) : null);
     } catch (ConversionException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error converting '" + detailValue + "' to a number", e);
     }
   }
 

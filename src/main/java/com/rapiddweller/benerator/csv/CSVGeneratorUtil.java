@@ -86,7 +86,7 @@ public class CSVGeneratorUtil {
       }
       return samples;
     } catch (IOException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error parsing file " + filename, e);
     }
   }
 

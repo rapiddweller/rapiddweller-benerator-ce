@@ -54,6 +54,7 @@ import com.rapiddweller.common.converter.ConverterChain;
 import com.rapiddweller.common.converter.DateString2DurationConverter;
 import com.rapiddweller.common.converter.LiteralParser;
 import com.rapiddweller.common.converter.ToStringConverter;
+import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.format.util.DataFileUtil;
@@ -135,7 +136,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     try {
       Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
       return context.getGeneratorFactory().createFromWeightedLiteralList(valueSpec, targetType, distribution, uniqueness.isUnique());
-    } catch (com.rapiddweller.common.ParseException e) {
+    } catch (ParseException e) {
       throw new ConfigurationError("Error parsing samples: " + valueSpec, e);
     }
   }

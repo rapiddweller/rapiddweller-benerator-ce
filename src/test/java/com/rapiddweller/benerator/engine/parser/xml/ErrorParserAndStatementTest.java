@@ -36,15 +36,11 @@ import static org.junit.Assert.assertNull;
 /**
  * Tests the {@link ErrorParser} and the {@link ErrorStatement}.<br/><br/>
  * Created: 12.01.2011 08:58:34
- *
  * @author Volker Bergmann
  * @since o.6.4
  */
 public class ErrorParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test no info.
-   */
   @Test(expected = BeneratorError.class)
   public void testNoInfo() {
     ErrorStatement statement = (ErrorStatement) parse("<error/>");
@@ -53,9 +49,6 @@ public class ErrorParserAndStatementTest extends AbstractBeneratorIntegrationTes
     statement.execute(context);
   }
 
-  /**
-   * Test execute.
-   */
   @Test(expected = BeneratorError.class)
   public void testExecute() {
     ErrorStatement statement = (ErrorStatement) parse("<error>Something bad happened</error>");

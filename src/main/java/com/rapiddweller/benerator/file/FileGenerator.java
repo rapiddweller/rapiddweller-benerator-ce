@@ -100,7 +100,7 @@ public class FileGenerator extends NonNullSampleGenerator<File> {
       setValues(FileUtil.listFiles(baseFile, filter, recursive, files, folders));
       super.init(context);
     } catch (Exception e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error initializing " + getClass().getSimpleName(), e);
     }
   }
 

@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.environment.Environment;
 import com.rapiddweller.benerator.environment.EnvironmentUtil;
 import com.rapiddweller.benerator.environment.SystemRef;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.factory.DefaultsProvider;
 import com.rapiddweller.benerator.factory.GeneratorFactory;
 import com.rapiddweller.benerator.factory.StochasticGeneratorFactory;
@@ -127,7 +128,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
 
   public DefaultBeneratorContext(String contextUri) {
     if (contextUri == null) {
-      throw new ConfigurationError("No context URI specified");
+      throw BeneratorExceptionFactory.getInstance().programmerUndefinedValue("No context URI specified");
     }
     this.contextUri = contextUri;
     this.defaultSourceScripted = true;

@@ -38,7 +38,7 @@ import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.LocaleUtil;
-import com.rapiddweller.common.ParseException;
+import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.format.regex.RegexParser;
 import com.rapiddweller.format.script.Script;

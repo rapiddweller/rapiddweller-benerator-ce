@@ -56,10 +56,11 @@ public class ArchetypeManager {
   private static ArchetypeManager instance;
 
   static {
+    String host = ARCHETYPES_INDEX_URL.substring(0, ARCHETYPES_INDEX_URL.lastIndexOf('/'));
     try {
-      ARCHETYPE_FOLDER_URL = new URL(ARCHETYPES_INDEX_URL.substring(0, ARCHETYPES_INDEX_URL.lastIndexOf('/')));
+      ARCHETYPE_FOLDER_URL = new URL(host);
     } catch (MalformedURLException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Malformed URL: " + host, e);
     }
   }
 

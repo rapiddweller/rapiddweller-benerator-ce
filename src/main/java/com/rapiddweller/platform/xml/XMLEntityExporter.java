@@ -234,7 +234,7 @@ public class XMLEntityExporter extends AbstractConsumer implements FileExporter 
 
       handler.startDocument();
     } catch (TransformerConfigurationException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error in Transformer configuration", e);
     } catch (SAXException e) {
       throw new ConfigurationError("Error in initializing XML file", e);
     } catch (FileNotFoundException e) {

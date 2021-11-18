@@ -144,7 +144,7 @@ public class LocalSequenceGenerator extends NonNullGeneratorProxy<Long> {
           MAP.put(entry.getKey(), new IncrementalIdGenerator(Long.parseLong(entry.getValue())));
         }
       } catch (Exception e) {
-        throw new ConfigurationError(e);
+        throw new ConfigurationError("Error initializing LocalSequenceGenerator", e);
       }
     }
   }

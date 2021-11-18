@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DescriptorBasedGenerator;
 import com.rapiddweller.benerator.factory.ArrayTypeGeneratorFactory;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.factory.CoverageGeneratorFactory;
 import com.rapiddweller.benerator.factory.DescriptorUtil;
 import com.rapiddweller.benerator.factory.EquivalenceGeneratorFactory;
@@ -46,8 +47,7 @@ import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.ParseException;
-import com.rapiddweller.common.ProgrammerError;
+import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.common.context.ContextAware;
@@ -84,6 +84,7 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
@@ -198,6 +199,8 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
         testName = testMethod.getName();
       }
       return (Generator) new DescriptorBasedGenerator(filename, testName, context);
+    } catch (FileNotFoundException e) {
+      throw BeneratorExceptionFactory.getInstance().fileNotFound(filename, e);
     } catch (IOException e) {
       throw new RuntimeException("Error opening file " + filename, e);
     }
@@ -612,7 +615,8 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     }
     Class<?> generatedType = generator.getGeneratedType();
     if (generatedType != Object[].class && generatedType != Object.class) {
-      throw new ProgrammerError("Expected Generator<Object[]> or Generator<Object>, but found Generator<" +
+      throw BeneratorExceptionFactory.getInstance().programmerStateError(
+          "Expected Generator<Object[]> or Generator<Object>, but found Generator<" +
           generatedType.getClass().getSimpleName() + '>');
     }
 

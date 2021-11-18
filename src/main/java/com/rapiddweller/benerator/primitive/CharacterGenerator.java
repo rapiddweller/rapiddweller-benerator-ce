@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.sample.NonNullSampleGenerator;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
 import com.rapiddweller.common.LocaleUtil;
-import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.format.regex.RegexParser;
 
 import java.util.Collection;
@@ -40,58 +40,37 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * Generates Character values from a character set or a regular expression.<br/>
- * <br/>
+ * Generates Character values from a character set or a regular expression.<br/><br/>
  * Created: 09.06.2006 20:34:55
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
 
-  /**
-   * The regular exception
-   */
+  /** The regular exception */
   private String pattern;
 
-  /**
-   * The locale
-   */
   private Locale locale;
 
-  /**
-   * The set of characters to generate from
-   */
+  /** The set of characters to generate from */
   private Set<Character> values;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * initializes the generator to use letters of the fallback locale.
-   *
-   * @see com.rapiddweller.common.LocaleUtil#getFallbackLocale() com.rapiddweller.common.LocaleUtil#getFallbackLocale()
-   */
+  /** initializes the generator to use letters of the fallback locale.
+   *  @see com.rapiddweller.common.LocaleUtil#getFallbackLocale() com.rapiddweller.common.LocaleUtil#getFallbackLocale() */
   public CharacterGenerator() {
     this("\\w");
   }
 
-  /**
-   * initializes the generator to create character that match a regular expressions and the fallback locale.
-   *
-   * @param pattern the pattern
-   * @see com.rapiddweller.common.LocaleUtil#getFallbackLocale() com.rapiddweller.common.LocaleUtil#getFallbackLocale()
-   */
+  /** Initializes the generator to create character that match a regular expressions and the fallback locale.
+   *  @see com.rapiddweller.common.LocaleUtil#getFallbackLocale() com.rapiddweller.common.LocaleUtil#getFallbackLocale() */
   public CharacterGenerator(String pattern) {
     this(pattern, LocaleUtil.getFallbackLocale());
   }
 
-  /**
-   * initializes the generator to create character that match a regular expressions and a locale.
-   *
-   * @param pattern the pattern
-   * @param locale  the locale
-   * @see com.rapiddweller.common.LocaleUtil#getFallbackLocale() com.rapiddweller.common.LocaleUtil#getFallbackLocale()
-   */
+  /** initializes the generator to create character that match a regular expressions and a locale.
+   * @see com.rapiddweller.common.LocaleUtil#getFallbackLocale() com.rapiddweller.common.LocaleUtil#getFallbackLocale() */
   public CharacterGenerator(String pattern, Locale locale) {
     super(Character.class);
     this.pattern = pattern;
@@ -99,12 +78,8 @@ public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
     this.values = new HashSet<>();
   }
 
-  /**
-   * initializes the generator to create characters from a character collection.
-   *
-   * @param values the values
-   * @see com.rapiddweller.common.LocaleUtil#getFallbackLocale() com.rapiddweller.common.LocaleUtil#getFallbackLocale()
-   */
+  /** Initializes the generator to create characters from a character collection.
+   * @see com.rapiddweller.common.LocaleUtil#getFallbackLocale() com.rapiddweller.common.LocaleUtil#getFallbackLocale() */
   public CharacterGenerator(Collection<Character> values) {
     super(Character.class);
     this.pattern = null;
@@ -114,47 +89,27 @@ public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
 
   // config properties -----------------------------------------------------------------------------------------------
 
-  /**
-   * Returns the regular expression to match
-   *
-   * @return the pattern
-   */
+  /** Returns the regular expression to match */
   public String getPattern() {
     return pattern;
   }
 
-  /**
-   * Sets the regular expression to match
-   *
-   * @param pattern the pattern
-   */
+  /** Sets the regular expression to match */
   public void setPattern(String pattern) {
     this.pattern = pattern;
   }
 
-  /**
-   * Returns the {@link Locale} of which letters are taken
-   *
-   * @return the locale
-   */
+  /** Returns the {@link Locale} of which letters are taken */
   public Locale getLocale() {
     return locale;
   }
 
-  /**
-   * Sets the {@link Locale} of which letters are taken
-   *
-   * @param locale the locale
-   */
+  /** Sets the {@link Locale} of which letters are taken */
   public void setLocale(Locale locale) {
     this.locale = locale;
   }
 
-  /**
-   * Returns the available values
-   *
-   * @return the values
-   */
+  /** Returns the available values */
   public Set<Character> getValues() {
     return values;
   }
@@ -166,9 +121,7 @@ public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
     return Character.class;
   }
 
-  /**
-   * Initializes the generator's state.
-   */
+  /** Initializes the generator's state. */
   @Override
   public void init(GeneratorContext context) {
     assertNotInitialized();

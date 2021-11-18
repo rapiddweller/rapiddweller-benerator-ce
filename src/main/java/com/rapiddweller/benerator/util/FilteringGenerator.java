@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.util;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.script.Expression;
 
 /**

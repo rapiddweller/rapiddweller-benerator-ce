@@ -30,12 +30,13 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.GeneratorState;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.main.Benerator;
 import com.rapiddweller.benerator.util.AbstractGenerator;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.ProgrammerError;
+import com.rapiddweller.common.exception.ProgrammerError;
 
 /**
  * Abstract generator class that wraps another generator object (in a <i>source</i> property)
@@ -78,7 +79,8 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
   @Override
   public boolean isThreadSafe() {
     if (source == null) {
-      ProgrammerError error = new ProgrammerError("The object has not been initialized yet. " +
+      ProgrammerError error = BeneratorExceptionFactory.getInstance().programmerStateError(
+          "The object has not been initialized yet. " +
           "In order to run safely, I will assume this is not thread safe. " +
           "This may have a significant performance impact. In that case, " +
           "please make sure that " + getClass() + " overwrites isThreadSafe() " +
@@ -96,7 +98,8 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
   @Override
   public boolean isParallelizable() {
     if (source == null) {
-      ProgrammerError error = new ProgrammerError("The object has not been initialized yet. " +
+      ProgrammerError error = BeneratorExceptionFactory.getInstance().programmerStateError(
+          "The object has not been initialized yet. " +
           "In order to run safely, I will assume this is not parallelizable. " +
           "This may have a significant performance impact. In that case, " +
           "please make sure that " + getClass() + " overwrites isParallelizable() " +
