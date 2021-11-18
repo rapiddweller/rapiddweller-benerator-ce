@@ -154,7 +154,7 @@ public class ScriptedEntityExporter extends TextFileExporter {
         docWriter.setWriteHeader(false);
       }
     } catch (IOException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error writing header", e);
     }
   }
 
@@ -165,7 +165,7 @@ public class ScriptedEntityExporter extends TextFileExporter {
       Entity entity = (Entity) object;
       docWriter.writeElement(entity);
     } catch (IOException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error writing entity", e);
     }
   }
 

@@ -41,13 +41,6 @@ public class BeneratorUtilTest {
   }
 
   @Test
-  public void testPrintVersionInfo() {
-    BufferedInfoPrinter p = new BufferedInfoPrinter();
-    BeneratorUtil.printVersionInfo(false, p);
-    assertTrue(p.toString().startsWith("Benerator "));
-  }
-
-  @Test
   public void testGetJVMInfo() {
     assertTrue(BeneratorUtil.getJVMInfo().startsWith(VMInfo.getJavaVmName()));
   }

@@ -33,7 +33,7 @@ import com.rapiddweller.benerator.engine.statement.ImportStatement;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.common.exception.SyntaxError;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNull;

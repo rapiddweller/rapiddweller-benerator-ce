@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.script;
 
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.ParseException;
+import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptFactory;
 import com.rapiddweller.script.DatabeneScriptParser;
@@ -35,10 +35,8 @@ import com.rapiddweller.script.DatabeneScriptParser;
 import java.io.IOException;
 
 /**
- * {@link ScriptFactory} implementation for BeneratorScript.<br/>
- * <br/>
+ * {@link ScriptFactory} implementation for BeneratorScript.<br/><br/>
  * Created at 09.10.2009 06:46:51
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */

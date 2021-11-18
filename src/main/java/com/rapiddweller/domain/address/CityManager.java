@@ -27,6 +27,7 @@
 package com.rapiddweller.domain.address;
 
 import com.rapiddweller.common.*;
+import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.csv.BeanCSVWriter;
 import com.rapiddweller.format.csv.CSVLineIterator;

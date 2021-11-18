@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.engine;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.consumer.FileExporter;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ExceptionUtil;
 import com.rapiddweller.common.HF;
 import com.rapiddweller.common.IOUtil;
@@ -44,7 +45,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,7 +91,7 @@ public class DescriptorRunner implements ResourceManager {
     return context;
   }
 
-  public void run() throws IOException {
+  public void run() {
     Runtime runtime = Runtime.getRuntime();
     BeneratorShutdownHook hook = new BeneratorShutdownHook(this);
     runtime.addShutdownHook(hook);
@@ -103,15 +103,17 @@ public class DescriptorRunner implements ResourceManager {
     }
   }
 
-  public void runWithoutShutdownHook() throws IOException {
+  public void runWithoutShutdownHook() {
     execute(parseDescriptorFile());
   }
 
-  public BeneratorRootStatement parseDescriptorFile() throws IOException {
-    BeneratorFactory.getInstance();
+  public BeneratorRootStatement parseDescriptorFile() {
+    if (!IOUtil.isURIAvailable(uri)) {
+      throw BeneratorExceptionFactory.getInstance().beneratorFileNotFound(uri);
+    }
     Document document = XMLUtil.parse(uri);
     Element root = document.getDocumentElement();
-    BeneratorParseContext parsingContext = factory.createParseContext(resourceManager);
+    BeneratorParseContext parsingContext = this.factory.createParseContext(resourceManager);
     BeneratorRootStatement statement = (BeneratorRootStatement) parsingContext.parseElement(root, null);
     // prepare system
     generatedFiles = new ArrayList<>();

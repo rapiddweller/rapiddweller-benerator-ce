@@ -6,7 +6,7 @@ import com.rapiddweller.benerator.util.DeprecationLogger;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ConfigUtil;
 import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.ConnectFailedException;
+import com.rapiddweller.common.exception.ConnectFailedException;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.version.VersionNumber;

@@ -26,7 +26,6 @@
 
 package com.rapiddweller.benerator.main;
 
-import com.rapiddweller.benerator.BeneratorError;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.BeneratorMode;
 import com.rapiddweller.benerator.BeneratorUtil;
@@ -59,7 +58,7 @@ import java.io.IOException;
  */
 public class Benerator {
 
-  private static final Logger logger = LoggerFactory.getLogger(Benerator.class);
+  protected static final Logger logger = LoggerFactory.getLogger(Benerator.class);
 
   public static final String BENERATOR_KEY = "benerator";
 
@@ -136,7 +135,7 @@ public class Benerator {
       run = false;
     }
     if (config.isVersion()) {
-      BeneratorUtil.printVersionInfo(false, new ConsoleInfoPrinter());
+      ConsoleInfoPrinter.printHelp(BeneratorFactory.getInstance().getVersionInfo(false));
       run = false;
     }
     if (config.getList() != null) {
@@ -176,9 +175,6 @@ public class Benerator {
     try (DescriptorRunner runner = new DescriptorRunner(filename, context)) {
       runner.run();
       BeneratorUtil.logConfig("Max. committed heap size: " + new KiloFormatter(1024).format(memProfiler.getMaxCommittedHeapSize()) + "B");
-    } catch (BeneratorError e) {
-      logger.error(e.getMessage(), e);
-      System.exit(e.getCode());
     }
     DBUtil.assertAllDbResourcesClosed(false);
   }

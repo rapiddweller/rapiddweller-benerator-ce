@@ -36,27 +36,14 @@ import com.rapiddweller.script.expression.ExpressionUtil;
  * {@link Statement} implementation that raises a {@link BeneratorError}
  * and provides a result <code>code</code> for the operating system.<br/><br/>
  * Created: 12.01.2011 09:04:26
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class ErrorStatement implements Statement {
 
-  /**
-   * The Message ex.
-   */
   public final Expression<String> messageEx;
-  /**
-   * The Code ex.
-   */
   public final Expression<Integer> codeEx;
 
-  /**
-   * Instantiates a new Error statement.
-   *
-   * @param messageEx the message ex
-   * @param codeEx    the code ex
-   */
   public ErrorStatement(Expression<String> messageEx, Expression<Integer> codeEx) {
     this.messageEx = messageEx;
     this.codeEx = codeEx;
@@ -69,7 +56,7 @@ public class ErrorStatement implements Statement {
     if (code == null) {
       code = 0;
     }
-    throw new BeneratorError(message, code);
+    throw new BeneratorError(code, message);
   }
 
 }

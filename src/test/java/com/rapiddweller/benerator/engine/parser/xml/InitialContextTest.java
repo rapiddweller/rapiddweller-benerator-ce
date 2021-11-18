@@ -26,17 +26,13 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.factory.ConsumerMock;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SysUtil;
 import com.rapiddweller.model.data.Entity;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -66,17 +62,12 @@ public class InitialContextTest extends GeneratorTest {
     SysUtil.runWithSystemProperty("jndi.properties", "com/rapiddweller/benerator/engine/jndi.properties",
         () -> {
           ConsumerMock.lastInstance = null;
-          DescriptorRunner runner = new DescriptorRunner(DESCRIPTOR_XML, context);
-          try {
+          try (DescriptorRunner runner = new DescriptorRunner(DESCRIPTOR_XML, context)) {
             BeneratorRootContext context = (BeneratorRootContext) runner.getContext();
             context.setValidate(false);
             runner.run();
             assertNotNull("Consumer was not invoked", ConsumerMock.lastInstance.lastProduct);
             assertEquals("Alice", ((Entity) ConsumerMock.lastInstance.lastProduct).get("name"));
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          } finally {
-            IOUtil.close(runner);
           }
         });
   }

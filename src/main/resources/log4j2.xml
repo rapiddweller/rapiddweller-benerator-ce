@@ -47,7 +47,7 @@
         <!-- Root setup -->
 
         <Root level="info">
-            <appender-ref ref="console"/>
+            <!--appender-ref ref="console"/-->
             <appender-ref ref="fileLogger"/>
         </Root>
 

@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.ArrayUtil;
-import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.script.ScriptUtil;
@@ -44,7 +44,6 @@ import javax.xml.stream.XMLStreamException;
  * Reads the nested form of a DbUnit XML dataset file and provides its content as Entities
  * through the {@link DataIterator} interface.<br/><br/>
  * Created: 20.09.2011 07:55:49
- *
  * @author Volker Bergmann
  * @since 0.7.2
  */
@@ -52,12 +51,6 @@ public class NestedDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
 
   private Table currentTable;
 
-  /**
-   * Instantiates a new Nested db unit entity iterator.
-   *
-   * @param uri     the uri
-   * @param context the context
-   */
   public NestedDbUnitEntityIterator(String uri, BeneratorContext context) {
     super(uri, context);
     DbUnitUtil.skipRootElement(reader);
@@ -107,11 +100,6 @@ public class NestedDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
     return parseRow();
   }
 
-  /**
-   * Parse columns.
-   *
-   * @throws XMLStreamException the xml stream exception
-   */
   protected void parseColumns() throws XMLStreamException {
     String column;
     while ((column = parseColumn()) != null) {
@@ -169,27 +157,14 @@ public class NestedDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
   }
 
   private static class Table {
-    /**
-     * The Name.
-     */
     protected final String name;
     private String[] columnNames;
 
-    /**
-     * Instantiates a new Table.
-     *
-     * @param name the name
-     */
     public Table(String name) {
       this.name = name;
       this.columnNames = null;
     }
 
-    /**
-     * Add column.
-     *
-     * @param column the column
-     */
     public void addColumn(String column) {
       this.columnNames = ArrayUtil.append(column, this.columnNames);
     }
@@ -199,11 +174,6 @@ public class NestedDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
       return name + '[' + ArrayFormat.format(columnNames) + ']';
     }
 
-    /**
-     * Get column names string [ ].
-     *
-     * @return the string [ ]
-     */
     public String[] getColumnNames() {
       return columnNames;
     }

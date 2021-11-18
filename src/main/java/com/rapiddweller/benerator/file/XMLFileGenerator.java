@@ -38,7 +38,6 @@ import com.rapiddweller.benerator.util.UnsafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.converter.MessageConverter;
 import com.rapiddweller.common.xml.XMLUtil;
@@ -50,10 +49,8 @@ import com.rapiddweller.platform.xml.XMLEntityExporter;
 import com.rapiddweller.platform.xml.XMLModule;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 /**
@@ -134,7 +131,6 @@ public class XMLFileGenerator extends UnsafeGenerator<File> {
   }
 
   private void persistRootEntity(Entity entity, File file) {
-    //entity.setComponentValue("xmlns", "http://databene.org/shop-0.5.1.xsd");
     entity.setComponent("elementFormDefault", "unqualified");
     try (XMLEntityExporter exporter = new XMLEntityExporter(file.getAbsolutePath(), encoding)) {
       process(entity, exporter);
@@ -162,14 +158,8 @@ public class XMLFileGenerator extends UnsafeGenerator<File> {
   }
 
   private void persistRootObject(Object content, File file) {
-    PrintWriter printer = null;
-    try {
-      printer = XMLUtil.createXMLFile(file.getAbsolutePath(), encoding);
+    try (PrintWriter printer = XMLUtil.createXMLFile(file.getAbsolutePath(), encoding)) {
       printer.println("<" + root + ">" + content + "</" + root + ">");
-    } catch (FileNotFoundException | UnsupportedEncodingException e) {
-      throw new ConfigurationError(e);
-    } finally {
-      IOUtil.close(printer);
     }
   }
 

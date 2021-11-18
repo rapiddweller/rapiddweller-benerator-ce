@@ -26,7 +26,7 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.common.ParseException;
+import com.rapiddweller.common.exception.ParseException;
 import org.junit.Test;
 
 import java.io.File;
@@ -39,7 +39,6 @@ import static org.junit.Assert.*;
 /**
  * Tests the {@link CityManager}.<br/><br/>
  * Created: 11.02.2010 18:27:23
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -99,9 +98,6 @@ public class CityManagerTest {
         assertThrows(ParseException.class, () -> CityManager.createCityId(stringStringMap, 2));
     }
 
-    /**
-     * Test city helper constructor.
-     */
     @Test
     public void testCityHelperConstructor() {
         CityId cityId = new CityId("Name", "Name Extension");
@@ -114,9 +110,6 @@ public class CityManagerTest {
         assertEquals("Name", actualCityHelper.getName());
     }
 
-    /**
-     * Test city helper set postal code.
-     */
     @Test
     public void testCityHelperSetPostalCode() {
         CityId cityId = new CityId("Name", "Name Extension");
@@ -126,17 +119,11 @@ public class CityManagerTest {
         assertEquals("Postal Code", cityHelper.getPostalCode());
     }
 
-    /**
-     * Test generate german city.
-     */
     @Test
     public void testGenerateGermanCity() {
         assertNotNull(Country.GERMANY.generateCity());
     }
 
-    /**
-     * Test german area codes.
-     */
     @Test
     public void testGermanAreaCodes() {
         Pattern pattern = Pattern.compile("\\d{2,5}");
@@ -166,7 +153,5 @@ public class CityManagerTest {
         assertThrows(com.rapiddweller.common.ConfigurationError.class, () ->CityManager.readCities(Country.AFGHANISTAN, "/", map));
         assertThrows(com.rapiddweller.common.ConfigurationError.class, () ->CityManager.readCities(Country.AFGHANISTAN, null, map));
     }
-
-
 
 }

@@ -201,7 +201,7 @@ public class DbUnitEntityExporter extends AbstractConsumer {
 
       this.state = State.INITIALIZED;
     } catch (TransformerConfigurationException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error in transformer configuration", e);
     } catch (Exception e) {
       throw new ConfigurationError("Error in initializing XML file", e);
     }

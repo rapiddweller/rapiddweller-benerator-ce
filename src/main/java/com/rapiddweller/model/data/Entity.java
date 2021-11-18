@@ -27,12 +27,12 @@
 package com.rapiddweller.model.data;
 
 import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Composite;
 import com.rapiddweller.common.CompositeFormatter;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.NullSafeComparator;
-import com.rapiddweller.common.ProgrammerError;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.converter.AnyConverter;
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
@@ -197,7 +197,8 @@ public class Entity implements Composite {
     } else if (value instanceof List) {
       return copyList((List<Object>) value);
     } else {
-      throw new ProgrammerError("Don't know how to handle " + valueClass);
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported(
+          "Don't know how to handle type: " + valueClass);
     }
   }
 

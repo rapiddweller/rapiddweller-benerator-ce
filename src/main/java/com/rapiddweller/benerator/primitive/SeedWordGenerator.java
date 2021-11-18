@@ -40,10 +40,8 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * Generates words based on a word seed.<br/>
- * <br/>
+ * Generates words based on a word seed.<br/><br/>
  * Created at 11.07.2009 19:30:12
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -51,19 +49,10 @@ public class SeedWordGenerator extends NonNullGeneratorWrapper<Character[], Stri
 
   private static final int DEFAULT_DEPTH = 4;
 
-  /**
-   * Instantiates a new Seed word generator.
-   */
   public SeedWordGenerator() {
     this(null, DEFAULT_DEPTH);
   }
 
-  /**
-   * Instantiates a new Seed word generator.
-   *
-   * @param seed  the seed
-   * @param depth the depth
-   */
   public SeedWordGenerator(Iterator<String> seed, int depth) {
     super(createSource(seed, depth));
   }
@@ -113,7 +102,7 @@ public class SeedWordGenerator extends NonNullGeneratorWrapper<Character[], Stri
       Iterator<String> iterator = getNounIterator(Locale.getDefault());
       return (iterator != null ? iterator : getNounIterator(LocaleUtil.getFallbackLocale()));
     } catch (Exception e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error loading noun definition", e);
     }
   }
 
@@ -131,9 +120,6 @@ public class SeedWordGenerator extends NonNullGeneratorWrapper<Character[], Stri
     return words.iterator();
   }
 
-  /**
-   * Print state.
-   */
   public void printState() {
     System.out.println(getClass().getSimpleName());
     ((SeedGenerator<Character>) getSource()).printState("  ");

@@ -34,9 +34,8 @@ import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.ConversionException;
-import com.rapiddweller.common.ParseException;
+import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.SyntaxError;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.script.Assignment;
 import com.rapiddweller.script.BeanSpec;
@@ -148,7 +147,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
       Expression<?> bean = parseBeanExpression(element);
       return new BeanStatement(id, bean, context.getResourceManager());
     } catch (ConversionException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error parsing bean element", e);
     }
   }
 

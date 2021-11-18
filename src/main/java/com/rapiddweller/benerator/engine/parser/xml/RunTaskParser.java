@@ -91,7 +91,7 @@ public class RunTaskParser extends AbstractBeneratorDescriptorParser {
       return new RunTaskStatement(taskProvider, count, pageSize, pager, threads,
           stats, errorHandler, infoLog);
     } catch (ConversionException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error parsing run-task element", e);
     }
   }
 

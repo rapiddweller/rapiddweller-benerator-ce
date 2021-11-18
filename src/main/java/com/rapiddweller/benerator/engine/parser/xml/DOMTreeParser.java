@@ -50,7 +50,6 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 /**
  * Parses &lt;domtree&gt; elements in a Benerator descriptor file.<br/><br/>
  * Created: 16.01.2014 15:59:48
- *
  * @author Volker Bergmann
  * @since 0.9.0
  */
@@ -60,10 +59,6 @@ public class DOMTreeParser extends AbstractBeneratorDescriptorParser {
 
   private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(ATT_OUTPUT_URI, ATT_NAMESPACE_AWARE);
 
-
-  /**
-   * Instantiates a new Dom tree parser.
-   */
   public DOMTreeParser() {
     super(EL_DOMTREE, REQUIRED_ATTRIBUTES, OPTIONAL_ATTRIBUTES, BeneratorRootStatement.class, IfStatement.class);
   }
@@ -77,7 +72,7 @@ public class DOMTreeParser extends AbstractBeneratorDescriptorParser {
       Expression<Boolean> namespaceAware = parseBooleanExpressionAttribute(ATT_NAMESPACE_AWARE, element);
       return new DefineDOMTreeStatement(id, inputUri, outputUri, namespaceAware, context.getResourceManager());
     } catch (ConversionException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error parsing element", e);
     }
   }
 

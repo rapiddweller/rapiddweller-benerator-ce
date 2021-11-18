@@ -37,7 +37,7 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
-import com.rapiddweller.common.ParseException;
+import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.Expression;
@@ -56,15 +56,11 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_VALUE;
 /**
  * Parses a &lt;Property&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:58:53
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class SettingParser extends AbstractBeneratorDescriptorParser {
 
-  /**
-   * Instantiates a new Setting parser.
-   */
   public SettingParser() {
     super(DescriptorConstants.EL_SETTING, CollectionUtil.toSet(ATT_NAME),
         CollectionUtil.toSet(ATT_DEFAULT, ATT_VALUE, ATT_REF, ATT_SOURCE));
@@ -81,12 +77,6 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
     }
   }
 
-  /**
-   * Parse value expression.
-   *
-   * @param element the element
-   * @return the expression
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static Expression<?> parseValue(Element element) {
     if (element.hasAttribute(ATT_VALUE)) {
@@ -140,23 +130,13 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
   /**
    * Evaluates a 'source' expression to a Generator.<br/><br/>
    * Created: 26.10.2009 08:38:44
-   *
-   * @param <E> the type parameter
    * @author Volker Bergmann
    * @since 0.6.0
    */
   public static class SourceExpression<E> extends DynamicExpression<E> {
 
-    /**
-     * The Source.
-     */
     final Expression<Generator<E>> source;
 
-    /**
-     * Instantiates a new Source expression.
-     *
-     * @param source the source
-     */
     public SourceExpression(Expression<Generator<E>> source) {
       this.source = source;
     }

@@ -169,12 +169,8 @@ public class BeneratorRootStatement extends SequentialStatement {
         String uri = ((IncludeStatement) statement).getUri().evaluate(context);
         if (uri != null && uri.toLowerCase().endsWith(".xml")) {
           DescriptorRunner descriptorRunner = new DescriptorRunner(context.resolveRelativeUri(uri), context);
-          try {
-            BeneratorRootStatement rootStatement = descriptorRunner.parseDescriptorFile();
-            result = rootStatement.getGeneratorStatement(name, context);
-          } catch (IOException e) {
-            throw new ConfigurationError("error parsing file " + uri, e);
-          }
+          BeneratorRootStatement rootStatement = descriptorRunner.parseDescriptorFile();
+          result = rootStatement.getGeneratorStatement(name, context);
         }
       } else if (!(statement instanceof BeneratorRootStatement)) {
         statement.execute(context);

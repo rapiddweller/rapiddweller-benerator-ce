@@ -29,7 +29,6 @@ package com.rapiddweller.benerator;
 import com.rapiddweller.benerator.environment.Environment;
 import com.rapiddweller.benerator.environment.EnvironmentUtil;
 import com.rapiddweller.benerator.environment.SystemRef;
-import com.rapiddweller.benerator.main.Benerator;
 import com.rapiddweller.common.ConfigUtil;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.LogCategoriesConstants;
@@ -37,7 +36,6 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.VMInfo;
 import com.rapiddweller.common.ui.InfoPrinter;
-import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.profile.Profiling;
 import org.apache.logging.log4j.LogManager;
@@ -90,7 +88,7 @@ public class BeneratorUtil {
 
   public static void checkSystem(InfoPrinter printer) {
     // print general Benerator version and system information
-    printVersionInfo(true, printer);
+    printer.printLines(BeneratorFactory.getInstance().getVersionInfo(true));
     // Check logging setup
     checkSlf4jSetup();
     checkLog4j2Setup();
@@ -148,23 +146,11 @@ public class BeneratorUtil {
     }
   }
 
-  public static void printVersionInfo(boolean withMode, InfoPrinter printer) {
-    VersionInfo version = VersionInfo.getInfo("benerator");
-    String edition = BeneratorFactory.getInstance().getEdition();
-    printer.printLines(
-        "Benerator " + edition + " " + version.getVersion() + " build " + version.getBuildNumber()
-    );
-    if (withMode) {
-      printer.printLines(
-          "Mode:          " + Benerator.getMode().getCode()
-      );
-    }
-    printer.printLines(
-        "Java version:  " + VMInfo.getJavaVersion(),
+  public static String[] getSystemInfo() {
+    return new String[] {"Java version:  " + VMInfo.getJavaVersion(),
         "JVM product:   " + getJVMInfo(),
         "System:        " + getOsInfo(),
-        "CPU & RAM:     " + getCpuAndMemInfo()
-    );
+        "CPU & RAM:     " + getCpuAndMemInfo()};
   }
 
   public static String getJVMInfo() {

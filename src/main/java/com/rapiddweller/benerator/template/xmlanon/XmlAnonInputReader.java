@@ -31,7 +31,7 @@ import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.ParseException;
+import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.format.xls.XLSUtil;
 import org.apache.poi.ss.usermodel.Cell;

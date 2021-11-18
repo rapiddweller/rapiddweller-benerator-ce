@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
-import com.rapiddweller.common.SyntaxError;
+import com.rapiddweller.common.exception.SyntaxError;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -38,42 +38,29 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link SettingParser}.<br/><br/>
  * Created: 18.02.2010 22:46:46
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class SettingParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test value.
-   */
   @Test
   public void testValue() {
     parseAndExecute("<setting name='globalProp' value='XYZ' />");
     assertEquals("XYZ", context.get("globalProp"));
   }
 
-  /**
-   * Test escaped value.
-   */
   @Test
   public void testEscapedValue() {
     parseAndExecute("<setting name='globalProp' value=\"\\'\\t\\'\" />");
     assertEquals("'\t'", context.get("globalProp"));
   }
 
-  /**
-   * Test default undefined.
-   */
   @Test
   public void testDefault_undefined() {
     parseAndExecute("<setting name='globalProp' default='XYZ' />");
     assertEquals("XYZ", context.get("globalProp"));
   }
 
-  /**
-   * Test default predefined.
-   */
   @Test
   public void testDefault_predefined() {
     Statement statement = parse("<setting name='globalProp' default='XYZ' />");
@@ -82,9 +69,6 @@ public class SettingParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals("ZZZ", context.get("globalProp"));
   }
 
-  /**
-   * Test ref.
-   */
   @Test
   public void testRef() {
     context.setGlobal("setting", "cfg");
@@ -92,9 +76,6 @@ public class SettingParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals("cfg", context.get("globalProp"));
   }
 
-  /**
-   * Test source.
-   */
   @Test
   public void testSource() {
     context.setGlobal("myGen", new ConstantGenerator<>("myProd"));
@@ -102,9 +83,6 @@ public class SettingParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals("myProd", context.get("globalProp"));
   }
 
-  /**
-   * Test nested bean.
-   */
   @Test
   public void testNestedBean() {
     parseAndExecute(
@@ -114,9 +92,6 @@ public class SettingParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals(123, ((BeanMock) context.get("globalProp")).lastValue);
   }
 
-  /**
-   * Test nested bean array.
-   */
   @Test
   public void testNestedBeanArray() {
     parseAndExecute(
@@ -130,17 +105,11 @@ public class SettingParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals(2, ((BeanMock) beans[1]).lastValue);
   }
 
-  /**
-   * Test invalid.
-   */
   @Test(expected = SyntaxError.class)
   public void testInvalid() {
     parseAndExecute("<setting name='globalProp' xyz='XYZ' />");
   }
 
-  /**
-   * Test benerator property.
-   */
   @Test
   public void testBeneratorProperty() {
     assertTrue(context.getDefaultPageSize() != 123);

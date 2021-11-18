@@ -66,7 +66,7 @@ public class MemStoreParser extends AbstractBeneratorDescriptorParser {
       String id = getAttribute(ATT_ID, element);
       return new MemStoreStatement(id, context.getResourceManager());
     } catch (ConversionException e) {
-      throw new ConfigurationError(e);
+      throw new ConfigurationError("Error parsing memstore definition", e);
     }
   }
 

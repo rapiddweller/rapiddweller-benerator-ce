@@ -27,12 +27,12 @@
 package com.rapiddweller.platform.template;
 
 import com.rapiddweller.benerator.Consumer;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.ProgrammerError;
 import com.rapiddweller.common.accessor.FeatureAccessor;
 import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.common.context.DefaultContext;
@@ -56,7 +56,6 @@ import java.util.Stack;
  * Exports generated data using template files,
  * for example based on the FreeMarker Template Language.<br/><br/>
  * Created: 27.06.2014 16:50:44
- *
  * @author Volker Bergmann
  * @since 0.9.7
  */
@@ -80,9 +79,6 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Template file entity exporter.
-   */
   public TemplateFileEntityExporter() {
     this.recordType = DefaultTemplateRecord.class;
   }
@@ -101,51 +97,26 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
     } else if (previousObject instanceof List) {
       ((List<TemplateRecord>) previousObject).add(product);
     } else {
-      throw new ProgrammerError("Invalid assumption");
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Invalid assumption");
     }
   }
 
-  /**
-   * Gets uri.
-   *
-   * @return the uri
-   */
   public String getUri() {
     return uri;
   }
 
-  /**
-   * Sets uri.
-   *
-   * @param uri the uri
-   */
   public void setUri(String uri) {
     this.uri = uri;
   }
 
-  /**
-   * Gets encoding.
-   *
-   * @return the encoding
-   */
   public String getEncoding() {
     return encoding;
   }
 
-  /**
-   * Sets encoding.
-   *
-   * @param encoding the encoding
-   */
   public void setEncoding(String encoding) {
     this.encoding = encoding;
   }
 
-  /**
-   * Gets template uri.
-   *
-   * @return the template uri
-   */
   public String getTemplateUri() {
     return templateUri;
   }
@@ -153,29 +124,14 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
 
   // ContextAware interface implementation ---------------------------------------------------------------------------
 
-  /**
-   * Sets template uri.
-   *
-   * @param templateUri the template uri
-   */
   public void setTemplateUri(String templateUri) {
     this.templateUri = templateUri;
   }
 
-  /**
-   * Gets record type.
-   *
-   * @return the record type
-   */
   public Class<? extends TemplateRecord> getRecordType() {
     return recordType;
   }
 
-  /**
-   * Sets record type.
-   *
-   * @param recordType the record type
-   */
   public void setRecordType(Class<? extends TemplateRecord> recordType) {
     this.recordType = recordType;
   }

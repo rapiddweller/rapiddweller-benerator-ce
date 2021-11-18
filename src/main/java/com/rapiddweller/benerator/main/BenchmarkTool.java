@@ -2,7 +2,7 @@
 
 package com.rapiddweller.benerator.main;
 
-import com.rapiddweller.benerator.BeneratorUtil;
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.benchmark.BenchmarkToolConfig;
 import com.rapiddweller.benerator.benchmark.BenchmarkToolReport;
 import com.rapiddweller.benerator.benchmark.BenchmarkRunner;
@@ -112,7 +112,7 @@ public class BenchmarkTool {
       System.exit(0);
     }
     if (config.isVersion()) {
-      BeneratorUtil.printVersionInfo(false, new ConsoleInfoPrinter());
+      ConsoleInfoPrinter.printHelp(BeneratorFactory.getInstance().getVersionInfo(false));
       System.exit(0);
     }
 
