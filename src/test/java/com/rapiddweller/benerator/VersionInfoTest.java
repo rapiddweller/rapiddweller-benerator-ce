@@ -37,15 +37,11 @@ import static org.junit.Assert.assertFalse;
 /**
  * Tests the {@link VersionInfo} class.<br/><br/>
  * Created: 23.03.2011 11:34:32
- *
  * @author Volker Bergmann
  * @since 0.6.6
  */
 public class VersionInfoTest {
 
-  /**
-   * Test version.
-   */
   @Test
   public void testVersion() {
     VersionInfo version = getVersionInfo();
@@ -53,18 +49,12 @@ public class VersionInfoTest {
     System.out.println(version);
   }
 
-  /**
-   * Test verify dependencies.
-   */
   @Test
   public void testVerifyDependencies() {
     VersionInfo version = getVersionInfo();
     version.verifyDependencies();
   }
 
-  /**
-   * Test dependencies.
-   */
   @Test
   public void testDependencies() {
     VersionInfo version = getVersionInfo();
@@ -73,7 +63,6 @@ public class VersionInfoTest {
     checkDependency("jdbacl", dependencies);
     checkDependency("format", dependencies);
     checkDependency("script", dependencies);
-    checkDependency("contiperf", dependencies);
     checkDependency("common", dependencies);
   }
 
