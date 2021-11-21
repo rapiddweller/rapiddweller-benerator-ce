@@ -38,23 +38,16 @@ import static org.junit.Assert.assertEquals;
 /**
  * Parses an XML &lt;run-task&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 26.10.2009 07:07:40
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class RunTaskParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Sets up task mock.
-   */
   @Before
   public void setUpTaskMock() {
     TaskMock.count.set(0);
   }
 
-  /**
-   * Test single threaded.
-   */
   @Test
   public void testSingleThreaded() {
     String xml =
@@ -70,9 +63,6 @@ public class RunTaskParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals(5, TaskMock.count.get());
   }
 
-  /**
-   * Test multi threaded.
-   */
   @Test
   public void testMultiThreaded() {
     String xml =

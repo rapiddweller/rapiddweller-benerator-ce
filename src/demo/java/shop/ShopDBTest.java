@@ -45,8 +45,7 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Tests the shop demo on all supported database systems.<br/>
- * <br/>
+ * Tests the shop demo on all supported database systems.<br/><br/>
  * Created: 20.11.2007 13:24:13
  */
 public class ShopDBTest {
@@ -55,112 +54,84 @@ public class ShopDBTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ShopDBTest.class);
 
-  /**
-   * Test hsql in mem.
-   *
-   * @throws IOException          the io exception
-   * @throws InterruptedException the interrupted exception
-   */
-/*
-      public void testDB2() throws IOException, InterruptedException {
-          checkGeneration("db2");
-      }
-
-      public void testDerby() throws IOException, InterruptedException {
-          checkGeneration("derby");
-      }
-  */
   @Test
-  public void testHSQLInMem() throws IOException, InterruptedException {
+  public void testHSQLInMem() {
     checkGeneration("hsqlmem");
   }
 
-  /**
-   * Test firebird.
-   *
-   * @throws IOException          the io exception
-   * @throws InterruptedException the interrupted exception
-   */
   @Test
-  public void testFirebird() throws IOException, InterruptedException {
+  public void testFirebird() {
     checkGeneration("firebird");
   }
-    /*
-    public void testHSQL() throws IOException, InterruptedException {
+  
+  /* TODO what about the other databases?
+    public void testDB2() {
+        checkGeneration("db2");
+    }
+
+    public void testDerby() {
+        checkGeneration("derby");
+    }
+    
+    public void testHSQL() {
         checkGeneration("hsql");
     }
-    public void testSQLServer() throws IOException, InterruptedException {
+    public void testSQLServer() {
         checkGeneration("ms_sql_server");
     }
 
-    public void testMySQL() throws IOException, InterruptedException {
+    public void testMySQL() {
         checkGeneration("mysql");
     }
 
-    public void testOracle() throws IOException, InterruptedException {
+    public void testOracle() {
         checkGeneration("oracle");
     }
 
-    public void testPostgres() throws IOException, InterruptedException {
+    public void testPostgres() {
         checkGeneration("postgres");
     }
 */
   // private helpers -------------------------------------------------------------------------------------------------
 
-  private void checkGeneration(String database)
-      throws IOException, InterruptedException {
+  private void checkGeneration(String database) {
     //checkGeneration(database, true);
     checkGeneration(database, "test", false);
   }
 
-  private void checkGeneration(String database, String stage, boolean shell)
-      throws IOException, InterruptedException {
+  private void checkGeneration(String database, String stage, boolean shell) {
     if (shell) {
       runFromCommandLine(BENERATOR_FILE, database, "test");
     } else {
       runAsClass(BENERATOR_FILE, database, "test");
     }
     // connect to database
-    Map<String, String> dbCfg = IOUtil.readProperties(
-        "demo/shop/" + database + "/shop." + database + ".properties");
+    Map<String, String> dbCfg = IOUtil.readProperties("demo/shop/" + database + "/shop." + database + ".properties");
     DefaultBeneratorContext context = new DefaultBeneratorContext();
-    DBSystem db =
-        new DBSystem("db", dbCfg.get("dbUri"), dbCfg.get("dbDriver"),
-            dbCfg.get("dbUser"), dbCfg.get("dbPassword"),
-            context.getDataModel());
+    DBSystem db = new DBSystem("db", dbCfg.get("dbUri"), dbCfg.get("dbDriver"),
+            dbCfg.get("dbUser"), dbCfg.get("dbPassword"), context.getDataModel());
     // check generation results
-    Map<String, Object> genCfg =
-        IOUtil.readProperties("demo/shop/shop." + stage + ".properties",
+    Map<String, Object> genCfg = IOUtil.readProperties("demo/shop/shop." + stage + ".properties",
             new DefaultEntryConverter(context));
     int expectedProductCount = 6 + (Integer) genCfg.get("product_count");
     int expectedCustomerCount = 1 + (Integer) genCfg.get("customer_count");
     int expectedUserCount = 3 + expectedCustomerCount;
     int ordersPerCustomer = (Integer) genCfg.get("orders_per_customer");
-    int expectedOrderCount =
-        (expectedCustomerCount - 1) * ordersPerCustomer + 1;
+    int expectedOrderCount = (expectedCustomerCount - 1) * ordersPerCustomer + 1;
     int itemsPerOrder = (Integer) genCfg.get("items_per_order");
-    int expectedOrderItemCount =
-        (expectedOrderCount - 1) * itemsPerOrder + 1;
-    checkEntities("db_category", new CategoryValidator("db_category"), 28,
-        db);
-    checkEntities("db_product", new ProductValidator("db_product"),
-        expectedProductCount, db);
-    checkEntities("db_user", new UserValidator("db_user"),
-        expectedUserCount, db);
-    checkEntities("db_customer", new CustomerValidator("db_customer"),
-        expectedCustomerCount, db);
-    checkEntities("db_order", new OrderValidator("db_order"),
-        expectedOrderCount, db);
-    checkEntities("db_order_item", new OrderItemValidator("db_order_item"),
-        expectedOrderItemCount, db);
+    int expectedOrderItemCount = (expectedOrderCount - 1) * itemsPerOrder + 1;
+    checkEntities("db_category", new CategoryValidator("db_category"), 28, db);
+    checkEntities("db_product", new ProductValidator("db_product"), expectedProductCount, db);
+    checkEntities("db_user", new UserValidator("db_user"), expectedUserCount, db);
+    checkEntities("db_customer", new CustomerValidator("db_customer"), expectedCustomerCount, db);
+    checkEntities("db_order", new OrderValidator("db_order"), expectedOrderCount, db);
+    checkEntities("db_order_item", new OrderItemValidator("db_order_item"), expectedOrderItemCount, db);
   }
 
   private void checkEntities(String entityName, Validator<Entity> validator,
                              int expectedCount, DBSystem db) {
-    assertEquals("Wrong number of '" + entityName + "' instances.",
-        expectedCount, db.countEntities(entityName));
-    DataIterator<Entity> iterator =
-        db.queryEntities(entityName, null, null).iterator();
+    assertEquals("Wrong number of '" + entityName + "' instances.", expectedCount, db.countEntities(entityName));
+    DataIterator<Entity> iterator = db.queryEntities(entityName, null, null).iterator();
     DataContainer<Entity> container = new DataContainer<Entity>();
     while ((container = iterator.next(container)) != null) {
       Entity entity = container.getData();
@@ -168,18 +139,14 @@ public class ShopDBTest {
     }
   }
 
-  private void runAsClass(String file, String database, String stage)
-      throws IOException {
+  private void runAsClass(String file, String database, String stage) {
     System.setProperty("stage", stage);
     System.setProperty("database", database);
     Benerator.main(new String[] {file});
   }
 
-  private void runFromCommandLine(String file, String database, String stage)
-      throws IOException, InterruptedException {
-    String command =
-        "benerator -Ddatabase=" + database + " -Dstage=" + stage + " " +
-            file;
+  private void runFromCommandLine(String file, String database, String stage) {
+    String command = "benerator -Ddatabase=" + database + " -Dstage=" + stage + " " + file;
     if (logger.isDebugEnabled()) {
       logger.debug(command);
     }

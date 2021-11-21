@@ -119,7 +119,7 @@ public class ConsumerMock extends AbstractConsumer {
       }
     }
     if (random != null) {
-      ThreadUtil.sleep(minDelay + random.nextInt(delayDelta));
+      ThreadUtil.sleepIgnoringException(minDelay + random.nextInt(delayDelta));
     }
   }
 
