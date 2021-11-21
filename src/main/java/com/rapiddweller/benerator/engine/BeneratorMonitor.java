@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.jdbacl.DBUtil;
 
 import javax.management.MBeanServer;
@@ -50,7 +51,8 @@ public class BeneratorMonitor implements BeneratorMonitorMBean, Closeable {
       ObjectName name = new ObjectName("benerator:service=monitor");
       server.registerMBean(INSTANCE, name);
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed(
+          "Failed to initialize MBean server", e);
     }
   }
 

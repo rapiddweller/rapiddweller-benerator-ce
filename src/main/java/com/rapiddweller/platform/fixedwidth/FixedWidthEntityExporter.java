@@ -45,7 +45,7 @@ import java.util.Map;
  */
 public class FixedWidthEntityExporter extends TextFileExporter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(FixedWidthEntityExporter.class);
+  private static final Logger logger = LoggerFactory.getLogger(FixedWidthEntityExporter.class);
 
   private final Map<String, String> formats;
   private Map<String, FWRecordFormatter> formatters;
@@ -113,7 +113,7 @@ public class FixedWidthEntityExporter extends TextFileExporter {
 
   @Override
   protected void startConsumingImpl(Object object) {
-    LOGGER.debug("exporting {}", object);
+    logger.debug("exporting {}", object);
     if (!(object instanceof Entity)) {
       throw new IllegalArgumentException("Expected Entity");
     }

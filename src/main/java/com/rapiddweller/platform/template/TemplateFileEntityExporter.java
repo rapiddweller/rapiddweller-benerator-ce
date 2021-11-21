@@ -30,13 +30,13 @@ import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.accessor.FeatureAccessor;
 import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.common.converter.ToStringConverter;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.mutator.AnyMutator;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptException;
@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -61,8 +60,7 @@ import java.util.Stack;
  */
 public class TemplateFileEntityExporter implements Consumer, ContextAware {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(TemplateFileEntityExporter.class);
-
+  private static final Logger logger = LoggerFactory.getLogger(TemplateFileEntityExporter.class);
 
   // attributes ------------------------------------------------------------------------------------------------------
 
@@ -151,7 +149,8 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
     }
     Object object = wrapper.unwrap();
     if (!(object instanceof Entity)) {
-      throw new ConfigurationError(getClass() + " can only consume Entities, but was provided with a " + object.getClass());
+      throw ExceptionFactory.getInstance().configurationError(
+          getClass() + " can only consume Entities, but was provided with a " + object.getClass());
     }
     Entity product = (Entity) object;
     TemplateRecord productRecord = entityToRecord(product);
@@ -165,7 +164,8 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
   public void finishConsuming(ProductWrapper<?> wrapper) {
     Entity product = (Entity) wrapper.unwrap();
     if (stack.isEmpty()) {
-      throw new ConfigurationError("Trying to pop product from empty stack: '" + product + "'");
+      throw ExceptionFactory.getInstance().configurationError(
+          "Trying to pop product from empty stack: '" + product + "'");
     }
     stack.pop();
   }
@@ -173,7 +173,7 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
   @Override
   public void close() {
     if (root != null) {
-      LOGGER.debug("Writing file {}", uri);
+      logger.debug("Writing file {}", uri);
       try {
         Script template = ScriptUtil.readFile(templateUri);
         mapRootToContext();
@@ -186,12 +186,11 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
         }
         IOUtil.writeTextFile(uri, text, encoding);
       } catch (ScriptException e) {
-        throw new ConfigurationError("Error evaluating template " + templateUri, e);
-      } catch (IOException e) {
-        throw new RuntimeException("Error creating template-based output", e);
+        throw ExceptionFactory.getInstance().configurationError(
+            "Error evaluating template " + templateUri, e);
       }
     } else {
-      LOGGER.error("Unable to write file {}", uri);
+      logger.error("Unable to write file {}", uri);
     }
   }
 

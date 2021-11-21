@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.ErrorHandler;
@@ -194,7 +195,8 @@ public class TranscodingTaskStatement extends SequentialStatement {
   public boolean needsNkMapping(String tableName) {
     Boolean required = tableNkRequirements.get(tableName);
     if (required == null) {
-      throw new RuntimeException("Assertion failed: Not clear if an identity definition is necessary for table " + tableName);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument(
+          "Assertion failed: Not clear if an identity definition is necessary for table " + tableName);
     }
     return required;
   }

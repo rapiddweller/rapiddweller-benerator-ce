@@ -27,6 +27,7 @@
 package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -48,17 +49,19 @@ public abstract class AbstractDbUnitEntityIterator implements DataIterator<Entit
 
   protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-  protected BeneratorContext context;
+  protected final String uri;
+  protected final BeneratorContext context;
 
   protected XMLStreamReader reader;
 
   protected AbstractDbUnitEntityIterator(String uri, BeneratorContext context) {
     try {
+      this.uri = uri;
       this.context = context;
       XMLInputFactory factory = XMLInputFactory.newInstance();
-      reader = factory.createXMLStreamReader(IOUtil.getInputStreamForURI(uri));
+      this.reader = factory.createXMLStreamReader(IOUtil.getInputStreamForURI(uri));
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().fileCreationFailed("Failed to create XML file " + uri, e);
     }
   }
 

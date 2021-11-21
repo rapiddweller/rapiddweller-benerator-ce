@@ -26,6 +26,8 @@
 
 package com.rapiddweller.platform.dbunit;
 
+import com.rapiddweller.common.exception.ExceptionFactory;
+
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -51,7 +53,7 @@ public class DbUnitUtil {
         }
       }
     } catch (XMLStreamException e) {
-      throw new RuntimeException(e);
+      throw ExceptionFactory.getInstance().internalError("Error skipping root element", e);
     }
   }
 
@@ -65,7 +67,7 @@ public class DbUnitUtil {
         }
       }
     } catch (XMLStreamException e) {
-      throw new RuntimeException(e);
+      throw ExceptionFactory.getInstance().internalError("Error processing XML", e);
     }
   }
 

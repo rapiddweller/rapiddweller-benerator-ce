@@ -26,49 +26,35 @@
 
 package com.rapiddweller.task;
 
+import com.rapiddweller.common.exception.ExitCodes;
+import com.rapiddweller.common.OperationFailedException;
+
 /**
- * Signals failure in the execution of a Task.<br/>
- * <br/>
+ * Signals failure in the execution of a Task.<br/><br/>
  * Created: 20.11.2007 13:09:51
- *
  * @author Volker Bergmann
  * @since 0.3.02
  */
-public class TaskException extends RuntimeException {
+public class TaskException extends OperationFailedException {
 
-  private static final long serialVersionUID = 5922654543378249601L;
-
-  /**
-   * Instantiates a new Task exception.
-   */
+  /** @deprecated */
+  @Deprecated
   public TaskException() {
+    this((String) null);
   }
 
-  /**
-   * Instantiates a new Task exception.
-   *
-   * @param message the message
-   */
   public TaskException(String message) {
-    super(message);
+    this(message, null);
   }
 
-  /**
-   * Instantiates a new Task exception.
-   *
-   * @param message the message
-   * @param cause   the cause
-   */
   public TaskException(String message, Throwable cause) {
-    super(message, cause);
+    super(null, ExitCodes.MISCELLANEOUS_ERROR, message, cause);
   }
 
-  /**
-   * Instantiates a new Task exception.
-   *
-   * @param cause the cause
-   */
+  /** @deprecated */
+  @Deprecated
   public TaskException(Throwable cause) {
-    super(cause);
+    this(null, cause);
   }
+
 }

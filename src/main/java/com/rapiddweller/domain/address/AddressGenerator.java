@@ -76,7 +76,7 @@ public class AddressGenerator extends CompositeGenerator<Address>
     assertNotInitialized();
     try {
       initMembers(context);
-    } catch (RuntimeException e) {
+    } catch (Exception e) {
       logger.error("Error initializing members", e);
       Country fallBackCountry = Country.getFallback();
       if (!fallBackCountry.getIsoCode().equals(this.dataset)) {

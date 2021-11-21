@@ -26,44 +26,31 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.validator.bean.AbstractConstraintValidator;
 
 import javax.validation.ConstraintValidatorContext;
-import java.io.IOException;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
  * {@link Validator} that verifies postal codes.<br/><br/>
  * Created: 28.08.2010 15:27:35
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class PostalCodeValidator
     extends AbstractConstraintValidator<PostalCode, String> {
 
-  /**
-   * The Pattern.
-   */
   Pattern pattern;
 
-  /**
-   * Instantiates a new Postal code validator.
-   */
   public PostalCodeValidator() {
     this(Country.getDefault().getIsoCode());
   }
 
-  /**
-   * Instantiates a new Postal code validator.
-   *
-   * @param countryCode the country code
-   */
   public PostalCodeValidator(String countryCode) {
     setCountry(countryCode);
   }
@@ -79,10 +66,9 @@ public class PostalCodeValidator
           "/com/rapiddweller/domain/address/postalCodeFormat.properties",
           Encodings.UTF_8);
       pattern = Pattern.compile(formats.get(countryCode));
-    } catch (IOException e) {
-      throw new ConfigurationError(
-          "Error initializing " + getClass().getSimpleName() +
-              " with country code '" + countryCode + "'");
+    } catch (Exception e) {
+      throw ExceptionFactory.getInstance().configurationError(
+          "Error initializing " + getClass().getSimpleName() + " with country code '" + countryCode + "'");
     }
   }
 

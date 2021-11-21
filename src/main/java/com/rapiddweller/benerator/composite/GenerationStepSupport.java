@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.MessageHolder;
 import com.rapiddweller.common.Resettable;
@@ -49,8 +50,8 @@ import java.util.List;
  */
 public class GenerationStepSupport<E> implements ThreadAware, MessageHolder, Resettable, Closeable {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(GenerationStepSupport.class);
-  private static final Logger STATE_LOGGER = LoggerFactory.getLogger(BeneratorConstants.STATE_LOGGER);
+  private static final Logger logger = LoggerFactory.getLogger(GenerationStepSupport.class);
+  private static final Logger stateLogger = LoggerFactory.getLogger(BeneratorConstants.STATE_LOGGER);
 
   private final String instanceName;
   private final List<GenerationStep<E>> steps;
@@ -74,15 +75,15 @@ public class GenerationStepSupport<E> implements ThreadAware, MessageHolder, Res
       try {
         if (!step.execute(subContext)) {
           message = "generation step for '" + instanceName + "' is not available any longer: " + step;
-          STATE_LOGGER.debug(message);
+          stateLogger.debug(message);
           return false;
         }
       } catch (Exception e) {
-        throw new RuntimeException("Failure in generation of '" + instanceName + "', " +
-            "Failed step: " + step, e);
+        throw BeneratorExceptionFactory.getInstance().operationFailed(
+            "Failure in generation of '" + instanceName + "', Failed step: " + step, e);
       }
     }
-    LOGGER.debug("Generated {}", target);
+    logger.debug("Generated {}", target);
     subContext.close();
     return true;
   }

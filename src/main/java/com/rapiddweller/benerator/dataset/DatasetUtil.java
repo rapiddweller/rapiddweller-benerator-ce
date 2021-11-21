@@ -27,14 +27,13 @@
 package com.rapiddweller.benerator.dataset;
 
 import com.rapiddweller.common.ArrayBuilder;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.domain.address.Country;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
@@ -96,7 +95,7 @@ public class DatasetUtil {
       if (IOUtil.isURIAvailable(filename)) {
         builder.add(filename);
       } else {
-        throw new ConfigurationError("File not found: " + filename);
+        throw ExceptionFactory.getInstance().configurationError("File not found: " + filename);
       }
     } else {
       for (Dataset atomicSet : dataset.allAtomicSubSets()) {
@@ -160,8 +159,8 @@ public class DatasetUtil {
       }
       types.put(nesting, sets);
       return sets;
-    } catch (IOException e) {
-      throw new ConfigurationError("Setup for Dataset type failed: " + nesting, e);
+    } catch (Exception e) {
+      throw ExceptionFactory.getInstance().configurationError("Setup for Dataset type failed: " + nesting, e);
     }
   }
 

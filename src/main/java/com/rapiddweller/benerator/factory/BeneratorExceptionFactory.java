@@ -3,8 +3,9 @@
 package com.rapiddweller.benerator.factory;
 
 import com.rapiddweller.benerator.BeneratorFactory;
+import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.common.exception.ExceptionFactory;
-import com.rapiddweller.common.exception.FileResourceNotFoundException;
+import com.rapiddweller.common.file.FileResourceNotFoundException;
 
 /**
  * Extends {@link ExceptionFactory} with Benerator-specific factory methods.<br/><br/>
@@ -24,6 +25,10 @@ public class BeneratorExceptionFactory extends ExceptionFactory {
 
   public FileResourceNotFoundException beneratorFileNotFound(String uri) {
     return fileNotFound(uri, null);
+  }
+
+  public IllegalGeneratorStateException illegalGeneratorState(String message, Exception cause) {
+    return new IllegalGeneratorStateException(message, cause);
   }
 
 }

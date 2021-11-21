@@ -48,7 +48,7 @@ import java.util.List;
  */
 public class GeneratorUtil {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(GeneratorUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(GeneratorUtil.class);
 
   private GeneratorUtil() {
     // private constructor to prevent instantiation of this class
@@ -107,7 +107,7 @@ public class GeneratorUtil {
     while ((wrapper = generator.generate(wrapper)) != null) {
       count++;
       if (count > cacheSize) {
-        LOGGER.error("Data set of generator has reached the cache limit and will be reduced to its size " +
+        logger.error("Data set of generator has reached the cache limit and will be reduced to its size " +
             "of {} elements). If that is not acceptable then choose a distribution that does not cache data sets " +
             "or increase the cache size. Concerned generator: {}", cacheSize, generator);
         break;

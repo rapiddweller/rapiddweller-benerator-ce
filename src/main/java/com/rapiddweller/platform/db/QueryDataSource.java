@@ -50,7 +50,7 @@ import java.sql.ResultSet;
  */
 public class QueryDataSource extends AbstractDataSource<ResultSet> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(QueryDataSource.class);
+  private static final Logger logger = LoggerFactory.getLogger(QueryDataSource.class);
 
   private final Connection connection;
   private final String query;
@@ -75,7 +75,7 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> {
     } else {
       this.queryPreprocessor = new NoOpConverter<>();
     }
-    LOGGER.debug("Constructed QueryIterable: {}", query);
+    logger.debug("Constructed QueryIterable: {}", query);
   }
 
   public String getQuery() {

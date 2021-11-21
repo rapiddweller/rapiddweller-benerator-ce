@@ -28,6 +28,7 @@ package com.rapiddweller.platform.xml;
 
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
 import com.rapiddweller.benerator.consumer.FileExporter;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
@@ -54,13 +55,12 @@ import java.util.Map;
 /**
  * Writes Entities to an XML file.<br/><br/>
  * Created: 20.02.2008 15:39:23
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
 public class XMLEntityExporter extends AbstractConsumer implements FileExporter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(XMLEntityExporter.class);
+  private static final Logger logger = LoggerFactory.getLogger(XMLEntityExporter.class);
 
   // defaults --------------------------------------------------------------------------------------------------------
 
@@ -139,7 +139,7 @@ public class XMLEntityExporter extends AbstractConsumer implements FileExporter 
 
   @Override
   public void startProductConsumption(Object object) {
-    LOGGER.debug("startConsuming({})", object);
+    logger.debug("startConsuming({})", object);
     if (out == null) {
       initHandler();
     }
@@ -149,7 +149,7 @@ public class XMLEntityExporter extends AbstractConsumer implements FileExporter 
 
   @Override
   public void finishProductConsumption(Object object) {
-    LOGGER.debug("finishConsuming({})", object);
+    logger.debug("finishConsuming({})", object);
     Entity entity = (Entity) object;
     try {
       handler.endElement("", "", entity.type());
@@ -211,7 +211,7 @@ public class XMLEntityExporter extends AbstractConsumer implements FileExporter 
   }
 
   private void initHandler() {
-    LOGGER.debug("Initializing {}", uri);
+    logger.debug("Initializing {}", uri);
     // create file
     try {
       // create file and write header
@@ -234,11 +234,11 @@ public class XMLEntityExporter extends AbstractConsumer implements FileExporter 
 
       handler.startDocument();
     } catch (TransformerConfigurationException e) {
-      throw new ConfigurationError("Error in Transformer configuration", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error in Transformer configuration", e);
     } catch (SAXException e) {
-      throw new ConfigurationError("Error in initializing XML file", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error in initializing XML file", e);
     } catch (FileNotFoundException e) {
-      throw new RuntimeException("Error writing file " + uri, e);
+      throw BeneratorExceptionFactory.getInstance().fileCreationFailed("Error writing file " + uri, e);
     }
   }
 

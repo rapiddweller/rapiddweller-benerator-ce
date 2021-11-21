@@ -37,15 +37,13 @@ import java.io.IOException;
 
 /**
  * Script based entity exporter.
- * Three scripts may be combined for formatting header, generated document part(s) and footer<br/>
- * <br/>
+ * Three scripts may be combined for formatting header, generated document part(s) and footer<br/><br/>
  * Created: 01.09.2007 18:05:04
- *
  * @author Volker Bergmann
  */
 public class ScriptedEntityExporter extends TextFileExporter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ScriptedEntityExporter.class);
+  private static final Logger logger = LoggerFactory.getLogger(ScriptedEntityExporter.class);
 
   private String headerScript;
   private String partScript;
@@ -55,32 +53,14 @@ public class ScriptedEntityExporter extends TextFileExporter {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Scripted entity exporter.
-   */
   public ScriptedEntityExporter() {
     this(null, null);
   }
 
-  /**
-   * Instantiates a new Scripted entity exporter.
-   *
-   * @param uri        the uri
-   * @param partScript the part script
-   */
   public ScriptedEntityExporter(String uri, String partScript) {
     this(uri, null, null, partScript, null);
   }
 
-  /**
-   * Instantiates a new Scripted entity exporter.
-   *
-   * @param uri          the uri
-   * @param encoding     the encoding
-   * @param headerScript the header script
-   * @param partScript   the part script
-   * @param footerScript the footer script
-   */
   public ScriptedEntityExporter(String uri, String encoding, String headerScript, String partScript, String footerScript) {
     super(uri, encoding, null);
     this.headerScript = headerScript;
@@ -90,56 +70,26 @@ public class ScriptedEntityExporter extends TextFileExporter {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets header script.
-   *
-   * @return the header script
-   */
   public String getHeaderScript() {
     return headerScript;
   }
 
-  /**
-   * Sets header script.
-   *
-   * @param headerScript the header script
-   */
   public void setHeaderScript(String headerScript) {
     this.headerScript = headerScript;
   }
 
-  /**
-   * Gets part script.
-   *
-   * @return the part script
-   */
   public String getPartScript() {
     return partScript;
   }
 
-  /**
-   * Sets part script.
-   *
-   * @param partScript the part script
-   */
   public void setPartScript(String partScript) {
     this.partScript = partScript;
   }
 
-  /**
-   * Gets footer script.
-   *
-   * @return the footer script
-   */
   public String getFooterScript() {
     return footerScript;
   }
 
-  /**
-   * Sets footer script.
-   *
-   * @param footerScript the footer script
-   */
   public void setFooterScript(String footerScript) {
     this.footerScript = footerScript;
   }
@@ -161,7 +111,7 @@ public class ScriptedEntityExporter extends TextFileExporter {
   @Override
   protected void startConsumingImpl(Object object) {
     try {
-      LOGGER.debug("Exporting {}", object);
+      logger.debug("Exporting {}", object);
       Entity entity = (Entity) object;
       docWriter.writeElement(entity);
     } catch (IOException e) {

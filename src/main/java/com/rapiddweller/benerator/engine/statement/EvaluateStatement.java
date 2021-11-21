@@ -78,8 +78,8 @@ public class EvaluateStatement extends AbstractStatement {
   static {
     try {
       extensionMap = IOUtil.readProperties("com/rapiddweller/benerator/engine/statement/fileTypes.properties");
-    } catch (IOException e) {
-      throw new ConfigurationError("Error reading extension type map", e);
+    } catch (Exception e) {
+      throw new ConfigurationError("Failed to read extension type map", e);
     }
   }
 
@@ -143,7 +143,7 @@ public class EvaluateStatement extends AbstractStatement {
       evaluateAssertion(result, onErrorValue, context);
       exportResultWithId(result, context);
       return true;
-    } catch (ConversionException | IOException e) {
+    } catch (ConversionException e) {
       throw new ConfigurationError("Error executing statement", e);
     }
   }
@@ -189,7 +189,7 @@ public class EvaluateStatement extends AbstractStatement {
     return result;
   }
 
-  private Object evaluateAsScript(BeneratorContext context, String onErrorValue, String uriValue, String typeValue, String text) throws IOException {
+  private Object evaluateAsScript(BeneratorContext context, String onErrorValue, String uriValue, String typeValue, String text) {
     Object result;
     if (typeValue == null) {
       typeValue = context.getDefaultScript();

@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.primitive;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.Converter;
@@ -39,7 +40,6 @@ import java.util.Map;
 /**
  * Converter implementation that maps input values in a 'Map' style.<br/><br/>
  * Created: 24.10.2009 09:05:58
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -51,28 +51,14 @@ public class ValueMapper implements Converter {
   private Class<?> targetType;
   private Class<?> sourceType;
 
-  /**
-   * Instantiates a new Value mapper.
-   */
   public ValueMapper() {
     init(null, false);
   }
 
-  /**
-   * Instantiates a new Value mapper.
-   *
-   * @param mappingSpec the mapping spec
-   */
   public ValueMapper(String mappingSpec) {
     this(mappingSpec, false);
   }
 
-  /**
-   * Instantiates a new Value mapper.
-   *
-   * @param mappingSpec the mapping spec
-   * @param lenient     the lenient
-   */
   public ValueMapper(String mappingSpec, boolean lenient) {
     init(mappingSpec, lenient);
   }
@@ -83,11 +69,6 @@ public class ValueMapper implements Converter {
     this.lenient = lenient;
   }
 
-  /**
-   * Sets mappings.
-   *
-   * @param mappingSpec the mapping spec
-   */
   public void setMappings(String mappingSpec) {
     if (mappingSpec != null) {
       WeightedTransition[] tl = DatabeneScriptParser.parseTransitionList(mappingSpec);
@@ -146,7 +127,7 @@ public class ValueMapper implements Converter {
     try {
       return super.clone();
     } catch (CloneNotSupportedException e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().cloningFailed("Cloning failed for " + this, e);
     }
   }
 

@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.GeneratorState;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.UnsafeNonNullGenerator;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.DataContainer;
@@ -194,7 +195,7 @@ public class SequenceTableGenerator<E extends Number>
           .run(result.longValue(), (BeneratorContext) context,
               params);
     } catch (SQLException e) {
-      throw new RuntimeException(
+      throw BeneratorExceptionFactory.getInstance().queryFailed(
           "Error fetching value in " + getClass().getSimpleName(), e);
     } finally {
       DBUtil.close(resultSet);
@@ -232,7 +233,7 @@ public class SequenceTableGenerator<E extends Number>
       try {
         statement = db.getConnection().prepareStatement(incrementorSql);
       } catch (SQLException e) {
-        throw new RuntimeException(e);
+        throw BeneratorExceptionFactory.getInstance().operationFailed("Error preparing statement", e);
       }
     }
 
@@ -246,7 +247,7 @@ public class SequenceTableGenerator<E extends Number>
         }
         statement.executeUpdate();
       } catch (SQLException e) {
-        throw new RuntimeException(e);
+        throw BeneratorExceptionFactory.getInstance().operationFailed("Failed to run SQL", e);
       }
     }
 
@@ -267,7 +268,8 @@ public class SequenceTableGenerator<E extends Number>
         this.statement = db.getConnection().createStatement();
         this.sql = sql;
       } catch (SQLException e) {
-        throw new RuntimeException(e);
+        throw BeneratorExceptionFactory.getInstance().operationFailed(
+            "Statement creation failed: " + sql, e);
       }
     }
 
@@ -281,7 +283,8 @@ public class SequenceTableGenerator<E extends Number>
             .toString();
         statement.executeUpdate(cmd);
       } catch (SQLException e) {
-        throw new RuntimeException(e);
+        throw BeneratorExceptionFactory.getInstance().operationFailed(
+            "Statement execution failed: " + sql, e);
       }
     }
 

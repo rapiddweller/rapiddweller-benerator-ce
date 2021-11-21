@@ -29,7 +29,7 @@ package com.rapiddweller.model.data;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Mutator;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.UpdateFailedException;
+import com.rapiddweller.common.exception.MutationFailedException;
 
 /**
  * Builds and mutates graphs of entities.<br/><br/>
@@ -57,7 +57,7 @@ public class EntityGraphMutator implements Mutator {
 
   @Override
   public void setValue(Object target, Object value)
-      throws UpdateFailedException {
+      throws MutationFailedException {
     Entity entity = (Entity) target;
     setFeature(featureName, value, entity, descriptor);
   }

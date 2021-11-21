@@ -35,8 +35,6 @@ import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
@@ -51,65 +49,45 @@ import static org.junit.Assert.fail;
 /**
  * Tests the AddressGenerator.<br/><br/>
  * Created: 12.06.2007 06:45:41
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class AddressGeneratorTest extends GeneratorClassTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(AddressGeneratorTest.class);
-
-  /**
-   * Instantiates a new Address generator test.
-   */
   public AddressGeneratorTest() {
     super(AddressGenerator.class);
   }
 
   // tests -----------------------------------------------------------------------------------------------------------
 
-  /**
-   * Test germany.
-   */
   @Test
   public void testGermany() {
     check(Country.GERMANY, true);
   }
 
-  /**
-   * Test usa.
-   */
   @Test
   public void testUSA() {
     check(Country.US, true);
   }
 
-  /**
-   * Test brazil.
-   */
+
   @Test
   public void testBrazil() {
     check(Country.BRAZIL, true);
   }
 
-  /**
-   * Test switzerland.
-   */
   @Test
   public void testSwitzerland() {
     check(Country.SWITZERLAND, true);
   }
 
-  /**
-   * Test swiss locale.
-   */
   @Test
   public void testSwissLocale() {
     AddressGenerator generator = new AddressGenerator("CH");
     generator.init(context);
     for (int i = 0; i < 100; i++) {
       Address address = generator.generate();
-      LOGGER.debug("{}", address);
+      logger.debug("{}", address);
       Locale language = address.getCity().getLanguage();
       String languageCode = language.getLanguage();
       String street = address.getStreet();
@@ -132,21 +110,13 @@ public class AddressGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test singapore.
-   */
   @Test
   public void testSingapore() {
     check(Country.SINGAPORE, false);
   }
 
-  /**
-   * Test default descriptor mapping.
-   *
-   * @throws Exception the exception
-   */
   @Test
-  public void testDefaultDescriptorMapping() throws Exception {
+  public void testDefaultDescriptorMapping() {
     Country country = Country.getDefault();
     try {
       Country.setDefault(Country.GERMANY);
@@ -156,23 +126,13 @@ public class AddressGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test us descriptor mapping.
-   *
-   * @throws Exception the exception
-   */
   @Test
-  public void testUSDescriptorMapping() throws Exception {
+  public void testUSDescriptorMapping() {
     checkDescriptorMapping(Country.US);
   }
 
-  /**
-   * Test de descriptor mapping.
-   *
-   * @throws Exception the exception
-   */
   @Test
-  public void testDEDescriptorMapping() throws Exception {
+  public void testDEDescriptorMapping() {
     checkDescriptorMapping(Country.GERMANY);
   }
 
@@ -183,7 +143,7 @@ public class AddressGeneratorTest extends GeneratorClassTest {
     generator.init(context);
     for (int i = 0; i < 100; i++) {
       Address address = generator.generate();
-      LOGGER.debug("{}", address);
+      logger.debug("{}", address);
       assertNotNull(address);
       // check generated phone numbers
       String cityAreaCode = address.getCity().getAreaCode();
@@ -203,9 +163,6 @@ public class AddressGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test constructor.
-   */
   @Test
   public void testConstructor() {
     AddressGenerator actualAddressGenerator = new AddressGenerator("Dataset");
@@ -214,11 +171,6 @@ public class AddressGeneratorTest extends GeneratorClassTest {
     assertSame(expectedGeneratedType, actualAddressGenerator.getGeneratedType());
   }
 
-  /**
-   * Check descriptor mapping.
-   *
-   * @param country the country
-   */
   @SuppressWarnings("unchecked")
   public void checkDescriptorMapping(Country country) {
     String xml =

@@ -325,7 +325,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
         }
       }
     } catch (IOException e) {
-      throw new RuntimeException("Unexpected error", e);
+      throw BeneratorExceptionFactory.getInstance().internalError("Unexpected error", e);
     }
     return false;
   }

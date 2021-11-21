@@ -27,6 +27,7 @@
 package com.rapiddweller.domain.address;
 
 import com.rapiddweller.common.*;
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.csv.BeanCSVWriter;
@@ -47,7 +48,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class CityManager {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CityManager.class);
+  private static final Logger logger = LoggerFactory.getLogger(CityManager.class);
 
   private CityManager() {
     // private constructor to prevent instantiation
@@ -58,7 +59,7 @@ public class CityManager {
     if (IOUtil.isURIAvailable(filename)) {
       readCities(country, filename, new HashMap<>());
     } else {
-      LOGGER.warn("File not found: {}", filename);
+      logger.warn("File not found: {}", filename);
     }
   }
 
@@ -67,7 +68,7 @@ public class CityManager {
     try {
       int warnCount = parseCityFile(country, filename, defaults);
       if (warnCount > 0) {
-        LOGGER.warn("{} warnings", warnCount);
+        logger.warn("{} warnings", warnCount);
       }
     } catch (IOException | NullPointerException e) {
       throw new ConfigurationError(
@@ -78,7 +79,7 @@ public class CityManager {
   private static int parseCityFile(Country country, String filename,
                                    Map<String, String> defaults)
       throws IOException {
-    LOGGER.debug("Parsing city definitions in file {}", filename);
+    logger.debug("Parsing city definitions in file {}", filename);
     try (CSVLineIterator iterator = new CSVLineIterator(filename, ';', Encodings.UTF_8)) {
       DataContainer<String[]> container = new DataContainer<>();
       String[] header = iterator.next(container).getData();
@@ -88,8 +89,8 @@ public class CityManager {
         if (cells.length == 0) {
           continue;
         }
-        if (LOGGER.isDebugEnabled()) {
-          LOGGER.debug(ArrayFormat.format(";", cells));
+        if (logger.isDebugEnabled()) {
+          logger.debug(ArrayFormat.format(";", cells));
         }
         if (cells.length == 1) {
           continue;
@@ -98,7 +99,7 @@ public class CityManager {
         for (int i = 0; i < cells.length; i++) {
           instance.put(header[i], cells[i]);
         }
-        LOGGER.debug("{}", instance);
+        logger.debug("{}", instance);
 
         String stateId = instance.get("state.id");
         String stateName = instance.get("state.name");
@@ -152,7 +153,7 @@ public class CityManager {
       String areaCode = getValue(instance, "areaCode", defaults);
       if (StringUtil.isEmpty(areaCode)) {
         warnCount.incrementAndGet();
-        LOGGER.warn("Dropping city {} since no areaCode is provided", cityId);
+        logger.warn("Dropping city {} since no areaCode is provided", cityId);
         return;
       }
       city = new CityHelper(state, cityId, new String[] {postalCode}, areaCode);

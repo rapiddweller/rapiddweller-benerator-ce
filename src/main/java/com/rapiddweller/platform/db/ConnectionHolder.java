@@ -26,6 +26,7 @@
 
 package com.rapiddweller.platform.db;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.LogCategoriesConstants;
 import com.rapiddweller.common.OrderedMap;
 import com.rapiddweller.jdbacl.ColumnInfo;
@@ -50,7 +51,7 @@ import java.util.Map;
  */
 public class ConnectionHolder implements Closeable {
 
-  private static final Logger JDBC_LOGGER = LoggerFactory.getLogger(LogCategoriesConstants.JDBC);
+  private static final Logger jdbcLogger = LoggerFactory.getLogger(LogCategoriesConstants.JDBC);
 
   public final Map<ComplexTypeDescriptor, PreparedStatement> insertStatements;
   public final Map<ComplexTypeDescriptor, PreparedStatement> updateStatements;
@@ -77,10 +78,10 @@ public class ConnectionHolder implements Closeable {
     try {
       flushStatements(insertStatements);
       flushStatements(updateStatements);
-      JDBC_LOGGER.debug("Committing connection: {}", connection);
+      jdbcLogger.debug("Committing connection: {}", connection);
       getConnection().commit();
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().operationFailed("Commit failed", e);
     }
   }
 
@@ -95,15 +96,14 @@ public class ConnectionHolder implements Closeable {
         if (db.isBatch()) {
           statement.executeBatch();
         }
-        JDBC_LOGGER.debug("Closing statement: {}", statement);
+        jdbcLogger.debug("Closing statement: {}", statement);
         DBUtil.close(statement);
       }
       entry.setValue(null);
     }
   }
 
-  public PreparedStatement getSelectByPKStatement(
-      ComplexTypeDescriptor descriptor) {
+  public PreparedStatement getSelectByPKStatement(ComplexTypeDescriptor descriptor) {
     try {
       PreparedStatement statement = selectByPKStatements.get(descriptor);
       if (statement == null) {
@@ -113,7 +113,7 @@ public class ConnectionHolder implements Closeable {
       }
       return statement;
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().operationFailed("Error creating statement", e);
     }
   }
 
@@ -137,9 +137,8 @@ public class ConnectionHolder implements Closeable {
     return statement;
   }
 
-  public PreparedStatement getStatement(ComplexTypeDescriptor descriptor,
-                                        boolean insert,
-                                        List<ColumnInfo> columnInfos) {
+  public PreparedStatement getStatement(
+      ComplexTypeDescriptor descriptor, boolean insert, List<ColumnInfo> columnInfos) {
     try {
       PreparedStatement statement =
           (insert ? insertStatements.get(descriptor) :
@@ -151,7 +150,7 @@ public class ConnectionHolder implements Closeable {
       }
       return statement;
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().operationFailed("Failed to create statement", e);
     }
   }
 
@@ -170,7 +169,7 @@ public class ConnectionHolder implements Closeable {
         db.getDialect().update(table,
             db.getTable(tableName).getPKColumnNames(),
             columnInfos));
-    JDBC_LOGGER.debug("Creating prepared statement: {}", sql);
+    jdbcLogger.debug("Creating prepared statement: {}", sql);
     statement =
         DBUtil.prepareStatement(getConnection(), sql, db.isReadOnly());
     if (insert) {

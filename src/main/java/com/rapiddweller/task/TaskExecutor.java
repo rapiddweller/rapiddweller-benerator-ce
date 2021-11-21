@@ -45,7 +45,7 @@ import java.util.List;
  */
 public class TaskExecutor {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(TaskExecutor.class);
+  private static final Logger logger = LoggerFactory.getLogger(TaskExecutor.class);
 
   private final Task target;
   private final Context context;
@@ -102,12 +102,12 @@ public class TaskExecutor {
                                        Long maxInvocations, long pageSize,
                                        boolean infoLog) {
     if (infoLog) {
-      if (LOGGER.isInfoEnabled()) {
-        LOGGER.info(executionInfo(task, minInvocations, maxInvocations,
+      if (logger.isInfoEnabled()) {
+        logger.info(executionInfo(task, minInvocations, maxInvocations,
             pageSize));
       }
-    } else if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug(executionInfo(task, minInvocations, maxInvocations,
+    } else if (logger.isDebugEnabled()) {
+      logger.debug(executionInfo(task, minInvocations, maxInvocations,
           pageSize));
     }
   }
@@ -150,7 +150,7 @@ public class TaskExecutor {
     if (requestedInvocations != null) {
       queuedInvocations = requestedInvocations;
     }
-    LOGGER.debug("Starting task {}", getTaskName());
+    logger.debug("Starting task {}", getTaskName());
     int currentPageNo = 0;
     do {
       try {
@@ -170,7 +170,7 @@ public class TaskExecutor {
             "Error in execution of task " + getTaskName(), e);
       }
     } while (workPending(requestedInvocations, queuedInvocations));
-    LOGGER.debug("Finished task {}", getTaskName());
+    logger.debug("Finished task {}", getTaskName());
     return actualCount;
   }
 
@@ -212,8 +212,8 @@ public class TaskExecutor {
   }
 
   private void pageStarting(int currentPageNo) {
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("Starting page {} of {} with pageSize={}", currentPageNo + 1, getTaskName(), pageSize);
+    if (logger.isDebugEnabled()) {
+      logger.debug("Starting page {} of {} with pageSize={}", currentPageNo + 1, getTaskName(), pageSize);
     }
     if (pageListeners != null) {
       for (PageListener listener : pageListeners) {
@@ -223,7 +223,7 @@ public class TaskExecutor {
   }
 
   private void pageFinished(int currentPageNo, Context context) {
-    LOGGER.debug("Page {} of {} finished", currentPageNo + 1,
+    logger.debug("Page {} of {} finished", currentPageNo + 1,
         getTaskName());
     if (pageListeners != null) {
       for (PageListener listener : pageListeners) {

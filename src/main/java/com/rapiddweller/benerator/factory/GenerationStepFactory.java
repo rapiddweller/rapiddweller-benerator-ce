@@ -53,7 +53,7 @@ import java.util.List;
  */
 public class GenerationStepFactory {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(GenerationStepFactory.class);
+  private static final Logger logger = LoggerFactory.getLogger(GenerationStepFactory.class);
 
   private GenerationStepFactory() {
     // private constructor to prevent instantiation
@@ -86,7 +86,7 @@ public class GenerationStepFactory {
   public static GenerationStep<?> createGenerationStep(InstanceDescriptor descriptor, Uniqueness ownerUniqueness,
                                                        boolean iterationMode, BeneratorContext context) {
     if (descriptor.getMode() == Mode.ignored) {
-      LOGGER.debug("Ignoring {}", descriptor);
+      logger.debug("Ignoring {}", descriptor);
       return null;
     }
     if (descriptor instanceof ComponentDescriptor) {

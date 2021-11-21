@@ -32,6 +32,7 @@ import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.TimeUtil;
+import com.rapiddweller.common.exception.ServiceFailedException;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
 import com.rapiddweller.model.data.Entity;
@@ -617,7 +618,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     closeAndCheckCleanup();
   }
 
-  @Test(expected = RuntimeException.class)
+  @Test(expected = ServiceFailedException.class)
   public void testUpdateOnNonExistingPK() {
     parseAndExecute(
         "<iterate type='referee' source='db' selector='id=2' consumer='db.updater(), cons'>" +

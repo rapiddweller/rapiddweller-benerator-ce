@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.consumer;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SystemInfo;
@@ -37,10 +38,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Parent class for Exporters that export data to a text file.<br/>
- * <br/>
+ * Parent class for Exporters that export data to a text file.<br/><br/>
  * Created: 11.07.2008 09:50:46
- *
  * @author Volker Bergmann
  * @since 0.5.4
  */
@@ -50,57 +49,24 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
 
   // attributes ------------------------------------------------------------------------------------------------------
 
-  /**
-   * The Uri.
-   */
   protected String uri;
-  /**
-   * The Encoding.
-   */
   protected String encoding;
-  /**
-   * The Line separator.
-   */
   protected String lineSeparator;
-  /**
-   * The Append.
-   */
   protected boolean append;
-  /**
-   * The Was appended.
-   */
   protected boolean wasAppended;
 
-  /**
-   * The Printer.
-   */
   protected PrintWriter printer;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Text file exporter.
-   */
   public TextFileExporter() {
     this(null, null, null);
   }
 
-  /**
-   * Instantiates a new Text file exporter.
-   *
-   * @param uri the uri
-   */
   public TextFileExporter(String uri) {
     this(uri, null, null);
   }
 
-  /**
-   * Instantiates a new Text file exporter.
-   *
-   * @param uri           the uri
-   * @param encoding      the encoding
-   * @param lineSeparator the line separator
-   */
   public TextFileExporter(String uri, String encoding, String lineSeparator) {
     this.uri = (uri != null ? uri : "export.txt");
     this.encoding = (encoding != null ? encoding : SystemInfo.getFileEncoding());
@@ -110,32 +76,24 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
 
   // callback interface for child classes ----------------------------------------------------------------------------
 
-  /**
-   * This method is called after printer initialization and before writing the first data entry.
-   * Overwrite this method in child classes e.g. for writing a file header.
-   *
-   * @param data the first data item to write to the file
-   */
+  /** This method is called after printer initialization and before writing the first data entry.
+   *  Overwrite this method in child classes e.g. for writing a file header.
+   *  @param data the first data item to write to the file */
   protected void postInitPrinter(Object data) {
     // overwrite this in child classes, e.g. for writing a file header
   }
 
-  /**
-   * Writes the data to the output file.
-   * It uses the parent class settings for rendering the object.
-   * Overwrite this in a child class for custom output format.
-   *
-   * @param data the data object to output
-   */
+  /** Writes the data to the output file.
+   *  It uses the parent class settings for rendering the object.
+   *  Overwrite this in a child class for custom output format.
+   *  @param data the data object to output */
   protected void startConsumingImpl(Object data) {
     printer.print(plainConverter.convert(data));
     println();
   }
 
-  /**
-   * This method is called after writing the last data entry and before closing the underlying printer.
-   * Overwrite this method in child classes e.g. for writing a file footer.
-   */
+  /** This method is called after writing the last data entry and before closing the underlying printer.
+   *  Overwrite this method in child classes e.g. for writing a file footer.v*/
   protected void preClosePrinter() {
     // overwrite this in child classes, e.g. for writing a file footer
   }
@@ -147,65 +105,30 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
     return uri;
   }
 
-  /**
-   * Sets uri.
-   *
-   * @param uri the uri
-   */
   public void setUri(String uri) {
     this.uri = uri;
   }
 
-  /**
-   * Gets encoding.
-   *
-   * @return the encoding
-   */
   public String getEncoding() {
     return encoding;
   }
 
-  /**
-   * Sets encoding.
-   *
-   * @param encoding the encoding
-   */
   public void setEncoding(String encoding) {
     this.encoding = encoding;
   }
 
-  /**
-   * Gets line separator.
-   *
-   * @return the line separator
-   */
   public String getLineSeparator() {
     return lineSeparator;
   }
 
-  /**
-   * Sets line separator.
-   *
-   * @param lineSeparator the line separator
-   */
   public void setLineSeparator(String lineSeparator) {
     this.lineSeparator = lineSeparator;
   }
 
-  /**
-   * Is append boolean.
-   *
-   * @return the boolean
-   */
   public boolean isAppend() {
     return append;
   }
 
-  /**
-   * Sets append.
-   *
-   * @param append the append
-   */
   public void setAppend(boolean append) {
     this.append = append;
   }
@@ -220,7 +143,7 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
       }
       startConsumingImpl(data);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().fileAccessException("Failed to write " + data, e);
     }
   }
 
@@ -250,12 +173,6 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
 
   // private helpers -------------------------------------------------------------------------------------------------
 
-  /**
-   * Init printer.
-   *
-   * @param data the data
-   * @throws IOException the io exception
-   */
   protected void initPrinter(Object data) throws IOException {
     if (uri == null) {
       throw new ConfigurationError("Property 'uri' not set on bean " + getClass().getName());
@@ -278,9 +195,6 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
     postInitPrinter(data);
   }
 
-  /**
-   * Println.
-   */
   protected void println() {
     printer.print(lineSeparator);
   }

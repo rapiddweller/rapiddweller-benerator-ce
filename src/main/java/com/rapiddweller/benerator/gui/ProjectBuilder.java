@@ -363,7 +363,7 @@ public class ProjectBuilder implements Runnable {
       File copy = setup.projectFile(importFile.getName());
       try {
         IOUtil.copyFile(importFile.getAbsolutePath(), copy.getAbsolutePath());
-      } catch (IOException e) {
+      } catch (Exception e) {
         throw new I18NError("ErrorCopying", e, importFile.getAbsolutePath(), copy);
       }
     } else {
@@ -402,7 +402,7 @@ public class ProjectBuilder implements Runnable {
       file.delete();
       IOUtil.writeTextFile(file.getAbsolutePath(), content, getXMLEncoding());
       return file;
-    } catch (IOException e) {
+    } catch (Exception e) {
       throw new I18NError("ErrorCreatingFile", e, file);
     } finally {
       advanceMonitor();

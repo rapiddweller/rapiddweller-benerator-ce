@@ -68,7 +68,8 @@ import java.util.Map;
  */
 public class Country {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Country.class);
+  private static final Logger logger = LoggerFactory.getLogger(Country.class);
+
   private static final String COUNTRY_CSV = "/com/rapiddweller/domain/address/country.csv";
   private static final RandomProvider RANDOM = BeneratorFactory.getInstance().getRandomProvider();
   private static final String DEFAULT_PHONE_CODE = "[2-9][0-9][0-9]";
@@ -258,7 +259,7 @@ public class Country {
 
   private static void parseConfigFile() {
     try (CSVLineIterator iterator = new CSVLineIterator(COUNTRY_CSV, ',', true)) {
-      LOGGER.debug("Parsing country setup file {}", COUNTRY_CSV);
+      logger.debug("Parsing country setup file {}", COUNTRY_CSV);
       DataContainer<String[]> container = new DataContainer<>();
       while ((container = iterator.next(container)) != null) {
         String[] cells = container.getData();
@@ -269,7 +270,7 @@ public class Country {
         String name = cellValueOrDefault(cells, 4, null);
         int population = Integer.parseInt(cellValueOrDefault(cells, 5, "1000000"));
         Country country = new Country(isoCode, defaultLocale, population, phoneCode, mobilCodePattern, name);
-        LOGGER.debug("Parsed country {}", country);
+        logger.debug("Parsed country {}", country);
       }
     } catch (IOException e) {
       throw new ConfigurationError("Error processing Country definition file. ", e);
@@ -284,7 +285,7 @@ public class Country {
     this.states = new OrderedNameMap<>();
     String filename = "/com/rapiddweller/domain/address/state_" + isoCode + ".csv";
     if (!IOUtil.isURIAvailable(filename)) {
-      LOGGER.debug("No states defined for {}", this);
+      logger.debug("No states defined for {}", this);
       return;
     }
     ComplexTypeDescriptor stateDescriptor =

@@ -26,6 +26,7 @@
 
 package com.rapiddweller.platform.db;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
@@ -67,7 +68,7 @@ public class ResultSetEntityIterator implements DataIterator<Entity> {
       Entity result = ResultSet2EntityConverter.convert(resultSet, descriptor);
       return container.setData(result);
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().queryFailed("Result set access failed", e);
     }
   }
 

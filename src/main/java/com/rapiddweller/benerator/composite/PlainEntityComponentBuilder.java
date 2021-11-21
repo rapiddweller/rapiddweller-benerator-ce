@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.common.Mutator;
-import com.rapiddweller.common.UpdateFailedException;
+import com.rapiddweller.common.exception.MutationFailedException;
 import com.rapiddweller.model.data.Entity;
 
 /**
@@ -62,7 +62,7 @@ public class PlainEntityComponentBuilder extends AbstractComponentBuilder<Entity
     }
 
     @Override
-    public void setValue(Object target, Object value) throws UpdateFailedException {
+    public void setValue(Object target, Object value) throws MutationFailedException {
       ((Entity) target).setComponent(name, value);
     }
 

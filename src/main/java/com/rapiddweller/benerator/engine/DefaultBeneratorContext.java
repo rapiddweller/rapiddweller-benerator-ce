@@ -128,7 +128,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
 
   public DefaultBeneratorContext(String contextUri) {
     if (contextUri == null) {
-      throw BeneratorExceptionFactory.getInstance().programmerUndefinedValue("No context URI specified");
+      throw BeneratorExceptionFactory.getInstance().programmerConfig("No context URI specified", null);
     }
     this.contextUri = contextUri;
     this.defaultSourceScripted = true;

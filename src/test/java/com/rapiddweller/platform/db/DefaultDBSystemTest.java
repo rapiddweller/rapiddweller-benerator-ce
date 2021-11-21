@@ -56,6 +56,29 @@ import static org.junit.Assert.*;
  */
 public class DefaultDBSystemTest extends ABCTest {
 
+  private DefaultDBSystem db;
+
+  @Before
+  public void setUp() throws Exception {
+    Connection connection = null;
+    try {
+      db = new DefaultDBSystem("db", IN_MEMORY_URL_PREFIX + "benerator", DRIVER, DEFAULT_USER, DEFAULT_PASSWORD, new DataModel());
+      db.setSchema("PUBLIC");
+      db.getDialect();
+      connection = db.createConnection();
+      DBUtil.executeUpdate("drop table Test if exists", connection);
+      DBUtil.executeUpdate("create table Test ( "
+              + "ID   int,"
+              + "NAME varchar(30) not null,"
+              + "constraint T1_PK primary key (ID)"
+              + ");",
+          connection);
+      db.invalidate();
+    } finally {
+      DBUtil.close(connection);
+    }
+  }
+
   @Test
   public void testReadWrite() {
     db.setReadOnly(false);
@@ -229,35 +252,6 @@ public class DefaultDBSystemTest extends ABCTest {
     assertFalse(db.tableExists("TEST_______"));
     assertFalse(db.tableExists(""));
     assertFalse(db.tableExists(null));
-  }
-
-  // helpers ---------------------------------------------------------------------------------------------------------
-
-  private DefaultDBSystem db;
-
-  @Before
-  public void setUp() throws Exception {
-    Connection connection = null;
-    try {
-      db = new DefaultDBSystem("db", IN_MEMORY_URL_PREFIX + "benerator", DRIVER, DEFAULT_USER, DEFAULT_PASSWORD, new DataModel());
-      db.setSchema("PUBLIC");
-      db.getDialect();
-      connection = db.createConnection();
-      try {
-        DBUtil.executeUpdate("drop table Test", connection);
-      } catch (SQLException e) {
-        // ignore
-      }
-      DBUtil.executeUpdate("create table Test ( "
-              + "ID   int,"
-              + "NAME varchar(30) not null,"
-              + "constraint T1_PK primary key (ID)"
-              + ");",
-          connection);
-      db.invalidate();
-    } finally {
-      DBUtil.close(connection);
-    }
   }
 
 }

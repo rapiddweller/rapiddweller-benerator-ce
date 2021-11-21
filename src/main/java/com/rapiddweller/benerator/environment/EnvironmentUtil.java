@@ -5,17 +5,16 @@ package com.rapiddweller.benerator.environment;
 import com.rapiddweller.benerator.util.DeprecationLogger;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ConfigUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.exception.ConnectFailedException;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.jdbacl.DatabaseDialectManager;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -77,8 +76,12 @@ public class EnvironmentUtil {
       DatabaseMetaData metaData = connection.getMetaData();
       return metaData.getDatabaseProductName() + " "
           + VersionNumber.valueOf(metaData.getDatabaseProductVersion());
-    } catch (ConnectFailedException | SQLException e) {
-      throw new RuntimeException(e);
+    } catch (ConnectFailedException e) {
+      throw ExceptionFactory.getInstance().connectFailed(
+          "Failed to connect database " + system.getName(), e);
+    } catch (SQLException e) {
+      throw ExceptionFactory.getInstance().serviceFailed(
+          "Meta data retrieval failed for database " + system.getName(), e);
     }
   }
 
@@ -88,14 +91,18 @@ public class EnvironmentUtil {
       String databaseProductName = metaData.getDatabaseProductName();
       VersionNumber databaseProductVersion = VersionNumber.valueOf(metaData.getDatabaseProductVersion());
       return DatabaseDialectManager.getDialectForProduct(databaseProductName, databaseProductVersion);
-    } catch (ConnectFailedException | SQLException e) {
-      throw new RuntimeException(e);
+    } catch (ConnectFailedException e) {
+      throw ExceptionFactory.getInstance().connectFailed(
+          "Failed to connect database " + system.getName(), e);
+    } catch (SQLException e) {
+      throw ExceptionFactory.getInstance().serviceFailed(
+          "Meta data retrieval failed for database " + system.getName(), e);
     }
   }
 
   public static Connection connectDb(SystemRef system) throws ConnectFailedException {
     if (!system.isDb()) {
-      throw new ConfigurationError("Not a database: " + system.getName() +
+      throw ExceptionFactory.getInstance().configurationError("Not a database: " + system.getName() +
           " in environment " + system.getEnvironment().getName());
     }
     Map<String, String> pp = system.getProperties();
@@ -109,8 +116,8 @@ public class EnvironmentUtil {
     try {
       String filePath = ConfigUtil.configFilePathDefaultLocations(filename, projectFolder);
       return parseFile(envName, filePath);
-    } catch (IOException e) {
-      throw new ConfigurationError("Error parsing environment file " + filename, e);
+    } catch (Exception e) {
+      throw ExceptionFactory.getInstance().configurationError("Error parsing environment file " + filename, e);
     }
   }
 
@@ -124,8 +131,8 @@ public class EnvironmentUtil {
         // new style general environment definition
         return Environment.parse(envName, properties);
       }
-    } catch (IOException e) {
-      throw new ConfigurationError("Error parsing environment file " + filePath, e);
+    } catch (Exception e) {
+      throw ExceptionFactory.getInstance().configurationError("Error parsing environment file " + filePath, e);
     }
   }
 

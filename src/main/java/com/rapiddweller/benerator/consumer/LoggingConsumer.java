@@ -38,7 +38,7 @@ import org.slf4j.Logger;
  */
 public class LoggingConsumer extends AbstractConsumer {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(LoggingConsumer.class);
+  private static final Logger logger = LoggerFactory.getLogger(LoggingConsumer.class);
 
   private static final long UNLIMITED = -1;
 
@@ -63,26 +63,26 @@ public class LoggingConsumer extends AbstractConsumer {
   @Override
   public void startProductConsumption(Object object) {
     if (shouldLog()) {
-      LOGGER.info("startConsuming({})", object);
+      logger.info("startConsuming({})", object);
     }
   }
 
   @Override
   public void finishProductConsumption(Object object) {
     if (shouldLog()) {
-      LOGGER.info("finishConsuming({})", object);
+      logger.info("finishConsuming({})", object);
     }
     cursor++;
   }
 
   @Override
   public void flush() {
-    LOGGER.info("flush()");
+    logger.info("flush()");
   }
 
   @Override
   public void close() {
-    LOGGER.info("close()");
+    logger.info("close()");
   }
 
   boolean shouldLog() {

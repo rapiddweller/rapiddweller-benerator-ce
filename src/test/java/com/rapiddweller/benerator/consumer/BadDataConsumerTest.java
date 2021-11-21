@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.consumer;
 
 import com.rapiddweller.benerator.Consumer;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import org.junit.Test;
 
@@ -35,15 +36,11 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the {@link BadDataConsumer}.<br/><br/>
  * Created: 23.01.2011 08:15:24
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class BadDataConsumerTest {
 
-  /**
-   * Test.
-   */
   @Test
   public void test() {
     // the real consumer throws an exception on every second invocation
@@ -51,7 +48,7 @@ public class BadDataConsumerTest {
       @Override
       public void startProductConsumption(Object object) {
         if (((Integer) object) % 2 == 1) {
-          throw new RuntimeException();
+          throw BeneratorExceptionFactory.getInstance().illegalArgument("test exception");
         }
       }
     };

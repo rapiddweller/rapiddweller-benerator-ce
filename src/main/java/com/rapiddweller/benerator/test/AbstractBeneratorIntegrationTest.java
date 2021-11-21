@@ -73,18 +73,14 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
   }
 
   protected BeneratorContext parseAndExecuteFile(String filename) {
-    try {
-      Assert.notNull(filename, "file name");
-      String xml = IOUtil.getContentOfURI(filename);
-      String contextUri = IOUtil.getParentUri(filename);
-      if (contextUri.length() > 1 && contextUri.endsWith("/")) {
-        contextUri = contextUri.substring(0, contextUri.length() - 1);
-      }
-      context.setContextUri(contextUri);
-      return parseAndExecute(xml);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    Assert.notNull(filename, "file name");
+    String xml = IOUtil.getContentOfURI(filename);
+    String contextUri = IOUtil.getParentUri(filename);
+    if (contextUri.length() > 1 && contextUri.endsWith("/")) {
+      contextUri = contextUri.substring(0, contextUri.length() - 1);
     }
+    context.setContextUri(contextUri);
+    return parseAndExecute(xml);
   }
 
   protected BeneratorContext parseAndExecuteRoot(String xml) {

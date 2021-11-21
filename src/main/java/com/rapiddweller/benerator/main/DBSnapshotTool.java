@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.main;
 
 import com.rapiddweller.benerator.Consumer;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.NumberUtil;
@@ -168,7 +169,7 @@ public class DBSnapshotTool {
         if (monitor != null) {
           monitor.setNote(note);
           if (monitor.isCanceled()) {
-            throw new RuntimeException("Export cancelled");
+            throw BeneratorExceptionFactory.getInstance().operationCancelled("Export cancelled");
           }
         }
         logger.info(note);

@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayUtil;
 
 import java.lang.reflect.Array;
@@ -79,7 +80,8 @@ public class SimpleMultiSourceArrayGenerator<S> extends MultiGeneratorWrapper<S,
         }
         array[i] = productWrapper.unwrap();
       } catch (Exception e) {
-        throw new RuntimeException("Generation failed for generator #" + i + " of " + this, e);
+        throw BeneratorExceptionFactory.getInstance().operationFailed(
+            "Generation failed for generator #" + i + " of " + this, e);
       }
     }
     return wrapper.wrap(array);

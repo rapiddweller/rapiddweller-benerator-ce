@@ -54,7 +54,7 @@ public class GraalScript implements Script {
       org.graalvm.polyglot.Context
           .newBuilder("js", "python")
           .allowAllAccess(true).build();
-  private static final Logger LOGGER = LoggerFactory.getLogger(GraalScript.class);
+  private static final Logger logger = LoggerFactory.getLogger(GraalScript.class);
   private final String text;
   private final String language;
 
@@ -82,7 +82,7 @@ public class GraalScript implements Script {
         try {
           valueType = entry.getValue() != null ? entry.getValue().getClass() : null;
         } catch (NullPointerException e) {
-          LOGGER.error("Key {} produced NullPointerException, this should not happen!", entry.getKey());
+          logger.error("Key {} produced NullPointerException, this should not happen!", entry.getKey());
           continue;
         }
         if (valueType == null) {
@@ -90,19 +90,19 @@ public class GraalScript implements Script {
         }
         // check if Entity Object
         if (Entity.class.equals(valueType)) {
-          LOGGER.debug("Entity found : {}", entry.getKey());
+          logger.debug("Entity found : {}", entry.getKey());
           Map<String, Object> map = new Entity2MapConverter().convert((Entity) entry.getValue());
           // to access items of map in polyglotCtx it is nessesary to create an ProxyObject
           // TODO: might should create an Entity2ProxyObjectConverter in 2.1.0
           ProxyObject proxy = ProxyObject.fromMap(map);
           polyglotCtx.getBindings(this.language).putMember(entry.getKey(), proxy);
         } else {
-          LOGGER.debug("{} found : {}", valueType.getClass(), entry.getKey());
+          logger.debug("{} found : {}", valueType.getClass(), entry.getKey());
           polyglotCtx.getBindings(this.language).putMember(entry.getKey(), entry.getValue());
         }
       }
     } catch (NullPointerException e) {
-      LOGGER.error("Context {} was NULL, this should not happen!", context);
+      logger.error("Context {} was NULL, this should not happen!", context);
     }
   }
 

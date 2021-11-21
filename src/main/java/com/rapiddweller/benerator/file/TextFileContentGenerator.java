@@ -26,15 +26,13 @@
 
 package com.rapiddweller.benerator.file;
 
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.IOUtil;
-
-import java.io.IOException;
 
 /**
  * Provides file contents as {@link String}s.<br/><br/>
  * Created: 24.02.2010 07:31:05
- *
+ * @author Volker Bergmann
  * @since 0.6.0
  */
 public class TextFileContentGenerator extends FileContentGenerator<String> {
@@ -47,11 +45,12 @@ public class TextFileContentGenerator extends FileContentGenerator<String> {
   @Override
   public String generate() {
     assertInitialized();
+    String absolutePath = null;
     try {
-      String absolutePath = generateFromSource().unwrap().getAbsolutePath();
+      absolutePath = generateFromSource().unwrap().getAbsolutePath();
       return IOUtil.getContentOfURI(absolutePath);
-    } catch (IOException e) {
-      throw new IllegalGeneratorStateException(e);
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Error loading " + absolutePath, e);
     }
   }
 

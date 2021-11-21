@@ -34,11 +34,9 @@ import com.rapiddweller.benerator.engine.statement.SequentialStatement;
 import com.rapiddweller.benerator.engine.statement.StatementProxy;
 import com.rapiddweller.benerator.wrapper.NShotGeneratorProxy;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Visitor;
 import com.rapiddweller.script.DatabeneScriptParser;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
