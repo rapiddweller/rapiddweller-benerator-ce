@@ -29,6 +29,7 @@ package com.rapiddweller.platform.db;
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.environment.SystemRef;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.benerator.storage.StorageSystemInserter;
 import com.rapiddweller.benerator.util.DeprecationLogger;
@@ -428,7 +429,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
         return null;
       }
     } catch (SQLException e) {
-      throw new RuntimeException("Error querying " + tableName, e);
+      throw BeneratorExceptionFactory.getInstance().queryFailed("Error querying " + tableName, e);
     }
   }
 
@@ -558,7 +559,8 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
       }
       return null;
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().operationFailed(
+          "Failed to execute SQL: " + sql, e);
     }
   }
 
@@ -580,9 +582,9 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
       connection.setAutoCommit(false);
       return connection;
     } catch (ConnectFailedException e) {
-      throw new RuntimeException("Connecting the database failed. URL: " + url, e);
+      throw BeneratorExceptionFactory.getInstance().connectFailed("Connecting the database failed. URL: " + url, e);
     } catch (SQLException e) {
-      throw new ConfigurationError("Turning off auto-commit failed", e);
+      throw BeneratorExceptionFactory.getInstance().serviceFailed("Turning off auto-commit failed", e);
     }
   }
 
@@ -672,7 +674,8 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
             statement.setNull(i + 1, info.sqlType);
           }
         } catch (SQLException e) {
-          throw new RuntimeException("error setting column " + tableName + '.' + info.name, e);
+            throw BeneratorExceptionFactory.getInstance().illegalArgument(
+                "error setting column " + tableName + '.' + info.name, e);
         }
       }
       if (batch) {
@@ -680,12 +683,12 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
       } else {
         int rowCount = statement.executeUpdate();
         if (rowCount == 0) {
-          throw new RuntimeException("Update failed because, since there is no database entry with the PK of "
-              + entity);
+          throw BeneratorExceptionFactory.getInstance().illegalArgument(
+              "Update failed because, since there is no database entry with the PK of " + entity);
         }
       }
     } catch (Exception e) {
-      throw new RuntimeException("Error in persisting " + entity, e);
+      throw BeneratorExceptionFactory.getInstance().serviceFailed("Error in persisting " + entity, e);
     }
   }
 
@@ -721,9 +724,9 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
       }
       return this.database;
     } catch (ConnectFailedException e) {
-      throw new RuntimeException("Database not available. ", e);
+      throw BeneratorExceptionFactory.getInstance().connectFailed("Database not available. ", e);
     } catch (ImportFailedException e) {
-      throw new RuntimeException(
+      throw BeneratorExceptionFactory.getInstance().serviceFailed(
           "Unexpected failure of database meta data import. ", e);
     }
   }

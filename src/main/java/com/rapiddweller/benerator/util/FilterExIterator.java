@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.util;
 
 import com.rapiddweller.common.Context;
-import com.rapiddweller.common.exception.SyntaxError;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.util.DataIteratorProxy;
@@ -61,7 +61,7 @@ public class FilterExIterator<E> extends DataIteratorProxy<E> {
       context.set("_candidate", tmp.getData());
       Boolean evaluation = filterEx.evaluate(context);
       if (evaluation == null) {
-        throw new SyntaxError("No filter expression", null);
+        throw ExceptionFactory.getInstance().syntaxError("No filter expression", null);
       }
       if (evaluation) {
         return tmp;

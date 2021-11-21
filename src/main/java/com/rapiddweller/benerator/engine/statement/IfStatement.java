@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.common.exception.SyntaxError;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.script.Expression;
 
 import java.io.Closeable;
@@ -64,7 +64,7 @@ public class IfStatement extends ConditionStatement {
   public boolean execute(BeneratorContext context) {
     Boolean evaluation = condition.evaluate(context);
     if (evaluation == null) {
-      throw new SyntaxError("No condition defined in if statement", null);
+      throw ExceptionFactory.getInstance().syntaxError("No condition defined in if statement", null);
     } else if (evaluation) {
       return thenStatement.execute(context);
     } else if (elseStatement != null) {

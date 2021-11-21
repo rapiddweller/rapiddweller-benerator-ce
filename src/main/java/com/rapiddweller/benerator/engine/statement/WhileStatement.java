@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.common.exception.SyntaxError;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.script.Expression;
 
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class WhileStatement extends ConditionStatement {
     while (true) {
       Boolean evaluation = condition.evaluate(context);
       if (evaluation == null) {
-        throw new SyntaxError("No condition in while statement", null);
+        throw ExceptionFactory.getInstance().syntaxError("No condition in while statement", null);
       }
       if (!evaluation) {
         break;

@@ -27,6 +27,7 @@
 package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.model.data.Entity;
@@ -57,7 +58,7 @@ public class DbUnitEntitySource extends FileBasedEntitySource {
       DbUnitUtil.skipNonStartTags(reader);
       return !"table".equals(reader.getLocalName());
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().fileAccessException("Error processing uri", e);
     }
   }
 

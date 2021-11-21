@@ -26,16 +26,14 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.common.converter.UnsafeConverter;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.format.script.Script;
-import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.format.script.freemarker.FreeMarkerScriptFactory;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -79,8 +77,9 @@ public class AddressFormat {
                 return entry;
               }
             });
-      } catch (IOException e) {
-        throw new ConfigurationError("Error while processing AddressFormat configuration", e);
+      } catch (Exception e) {
+        throw ExceptionFactory.getInstance().configurationError(
+            "Error while processing AddressFormat configuration", e);
       }
     }
     return instances.get(country);
@@ -97,8 +96,9 @@ public class AddressFormat {
       StringWriter out = new StringWriter();
       script.execute(context, out);
       return out.toString();
-    } catch (IOException e) {
-      throw new ScriptException("Error during script processing", e);
+    } catch (Exception e) {
+      throw ExceptionFactory.getInstance().internalError(
+          "Error evaluating script '" + script + "'", e);
     }
   }
 

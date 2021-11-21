@@ -33,6 +33,7 @@ import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.LogCategoriesConstants;
@@ -48,8 +49,6 @@ import com.rapiddweller.format.text.KiloFormatter;
 import com.rapiddweller.jdbacl.DBUtil;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-
-import java.io.IOException;
 
 /**
  * Parses and executes a benerator setup file.<br/><br/>
@@ -84,7 +83,7 @@ public class Benerator {
 
   // main ------------------------------------------------------------------------------------------------------------
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     String renderedArgs = CommandLineParser.formatArgs(args);
     logger.info("benerator {}", renderedArgs);
     VersionInfo.getInfo(BENERATOR_KEY).verifyDependencies();
@@ -128,7 +127,7 @@ public class Benerator {
 
   //  operational interface ------------------------------------------------------------------------------------------
 
-  public static void run(BeneratorConfig config) throws IOException {
+  public static void run(BeneratorConfig config) {
     boolean run = true;
     if (config.isHelp()) {
       ConsoleInfoPrinter.printHelp(CE_CLI_HELP);
@@ -147,7 +146,7 @@ public class Benerator {
       } else if ("kafka".equals(arg)) {
         BeneratorUtil.printEnvKafkas(new ConsoleInfoPrinter());
       } else {
-        throw new RuntimeException("Illegal list option: " + arg);
+        throw BeneratorExceptionFactory.getInstance().illegalCommandLineOption("Illegal list option: " + arg);
       }
       run = false;
     }
@@ -161,7 +160,7 @@ public class Benerator {
     }
   }
 
-  public void runFile(String filename) throws IOException {
+  public void runFile(String filename) {
     // log separator in order to distinguish benerator runs in the log file
     logger.info("-------------------------------------------------------------" +
         "-----------------------------------------------------------");

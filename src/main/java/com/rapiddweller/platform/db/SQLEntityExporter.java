@@ -46,7 +46,7 @@ import java.util.Set;
  */
 public class SQLEntityExporter extends TextFileExporter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SQLEntityExporter.class);
+  private static final Logger logger = LoggerFactory.getLogger(SQLEntityExporter.class);
 
   // defaults --------------------------------------------------------------------------------------------------------
 
@@ -102,7 +102,7 @@ public class SQLEntityExporter extends TextFileExporter {
       throw new ConfigurationError(
           "'dialect' not set in " + getClass().getSimpleName());
     }
-    LOGGER.debug("exporting {}", object);
+    logger.debug("exporting {}", object);
     if (!(object instanceof Entity)) {
       throw new IllegalArgumentException("Expected Entity");
     }
@@ -149,7 +149,7 @@ public class SQLEntityExporter extends TextFileExporter {
     }
     builder.append(");");
     String sql = builder.toString();
-    LOGGER.debug("built SQL statement: {}", sql);
+    logger.debug("built SQL statement: {}", sql);
     return sql;
   }
 

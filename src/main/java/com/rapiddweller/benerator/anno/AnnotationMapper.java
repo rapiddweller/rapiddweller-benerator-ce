@@ -202,7 +202,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     } catch (FileNotFoundException e) {
       throw BeneratorExceptionFactory.getInstance().fileNotFound(filename, e);
     } catch (IOException e) {
-      throw new RuntimeException("Error opening file " + filename, e);
+      throw BeneratorExceptionFactory.getInstance().fileAccessException("Error opening file " + filename, e);
     }
   }
 

@@ -26,15 +26,12 @@
 
 package com.rapiddweller.benerator.file;
 
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.IOUtil;
-
-import java.io.IOException;
 
 /**
  * Provides file contents as byte arrays.<br/><br/>
  * Created: 24.02.2010 07:43:02
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -48,10 +45,12 @@ public class BinaryFileContentGenerator extends FileContentGenerator<byte[]> {
   @Override
   public byte[] generate() {
     assertInitialized();
+    String absolutePath = null;
     try {
-      return IOUtil.getBinaryContentOfUri(generateFromSource().unwrap().getAbsolutePath());
-    } catch (IOException e) {
-      throw new IllegalGeneratorStateException(e);
+      absolutePath = generateFromSource().unwrap().getAbsolutePath();
+      return IOUtil.getBinaryContentOfUri(absolutePath);
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Failed to load binary content of " + absolutePath, e);
     }
   }
 

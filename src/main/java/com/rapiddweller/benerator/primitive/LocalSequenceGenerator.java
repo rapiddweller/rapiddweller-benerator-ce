@@ -29,12 +29,11 @@ package com.rapiddweller.benerator.primitive;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.exception.ExceptionFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -129,8 +128,9 @@ public class LocalSequenceGenerator extends NonNullGeneratorProxy<Long> {
     }
     try {
       IOUtil.writeProperties(values, FILENAME);
-    } catch (IOException e) {
-      throw new RuntimeException("RuntimeException while persist() with following stacktrace : ", e);
+    } catch (Exception e) {
+      throw ExceptionFactory.getInstance().internalError(
+          "Failed to write properties to " + FILENAME, e);
     }
   }
 
@@ -144,7 +144,7 @@ public class LocalSequenceGenerator extends NonNullGeneratorProxy<Long> {
           MAP.put(entry.getKey(), new IncrementalIdGenerator(Long.parseLong(entry.getValue())));
         }
       } catch (Exception e) {
-        throw new ConfigurationError("Error initializing LocalSequenceGenerator", e);
+        throw ExceptionFactory.getInstance().configurationError("Error initializing LocalSequenceGenerator", e);
       }
     }
   }

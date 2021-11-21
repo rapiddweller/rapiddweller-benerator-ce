@@ -89,17 +89,13 @@ public class FactoryUtil {
 
   public static void setBeanProperty(Object bean, String detailName, Object detailValue, Context context) {
     if (detailValue != null && BeanUtil.hasProperty(bean.getClass(), detailName)) {
-      try {
-        PropertyDescriptor propertyDescriptor = BeanUtil.getPropertyDescriptor(bean.getClass(), detailName);
-        Class<?> propertyType = propertyDescriptor.getPropertyType();
-        Object propertyValue = detailValue;
-        if (detailValue instanceof String && StorageSystem.class.isAssignableFrom(propertyType)) {
-          propertyValue = context.get(propertyValue.toString());
-        }
-        BeanUtil.setPropertyValue(bean, detailName, propertyValue, false);
-      } catch (RuntimeException e) {
-        throw new RuntimeException("Error setting '" + detailName + "' of class " + bean.getClass().getName(), e);
+      PropertyDescriptor propertyDescriptor = BeanUtil.getPropertyDescriptor(bean.getClass(), detailName);
+      Class<?> propertyType = propertyDescriptor.getPropertyType();
+      Object propertyValue = detailValue;
+      if (detailValue instanceof String && StorageSystem.class.isAssignableFrom(propertyType)) {
+        propertyValue = context.get(propertyValue.toString());
       }
+      BeanUtil.setPropertyValue(bean, detailName, propertyValue, false);
     }
   }
 

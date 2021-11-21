@@ -49,11 +49,9 @@ import java.util.List;
  */
 public class CompositeEntityGenerator extends GeneratorProxy<Entity> implements MessageHolder {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CompositeEntityGenerator.class);
-  private static final Logger STATE_LOGGER = LoggerFactory.getLogger(BeneratorConstants.STATE_LOGGER);
+  private static final Logger stateLogger = LoggerFactory.getLogger(BeneratorConstants.STATE_LOGGER);
 
   private final String instanceName;
-  //private String message;
   private final GenerationStepSupport<Entity> support;
 
   public CompositeEntityGenerator(String instanceName, Generator<Entity> source,
@@ -78,7 +76,7 @@ public class CompositeEntityGenerator extends GeneratorProxy<Entity> implements 
     wrapper = getSource().generate(wrapper);
     boolean available = (wrapper != null);
     if (!available) {
-      STATE_LOGGER.debug("Source for entity '{}' is not available: {}", instanceName, getSource());
+      stateLogger.debug("Source for entity '{}' is not available: {}", instanceName, getSource());
     }
     Entity currentInstance = null;
     if (available) {
@@ -89,10 +87,9 @@ public class CompositeEntityGenerator extends GeneratorProxy<Entity> implements 
       available = support.apply(currentInstance, (BeneratorContext) context);
     }
     if (available) {
-      LOGGER.debug("Generated {}", currentInstance);
+      logger.debug("Generated {}", currentInstance);
       return wrapper.wrap(currentInstance);
     } else {
-      currentInstance = null;
       if (instanceName != null) {
         context.remove(instanceName);
       }
@@ -114,9 +111,6 @@ public class CompositeEntityGenerator extends GeneratorProxy<Entity> implements 
 
   @Override
   public String getMessage() {
-    //if (message != null) {
-    //  return message;
-    //}
     Generator<Entity> source = getSource();
     if (source instanceof MessageHolder && ((MessageHolder) source).getMessage() != null) {
       return ((MessageHolder) source).getMessage();

@@ -36,38 +36,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Mock implementation of the {@link Task} interface.<br/><br/>
  * Created: 26.10.2009 07:09:12
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class TaskMock extends AbstractTask implements ContextAware {
 
-  /**
-   * The constant count.
-   */
   public static volatile AtomicInteger count = new AtomicInteger();
-  /**
-   * The Int prop.
-   */
   public int intProp;
-  /**
-   * The Context.
-   */
   public Context context;
 
-  /**
-   * Instantiates a new Task mock.
-   */
   public TaskMock() {
     this(0, null);
   }
 
-  /**
-   * Instantiates a new Task mock.
-   *
-   * @param intProp the int prop
-   * @param context the context
-   */
   public TaskMock(int intProp, Context context) {
     this.intProp = intProp;
     this.context = context;
@@ -78,11 +59,6 @@ public class TaskMock extends AbstractTask implements ContextAware {
     this.context = context;
   }
 
-  /**
-   * Sets int prop.
-   *
-   * @param intProp the int prop
-   */
   public void setIntProp(int intProp) {
     this.intProp = intProp;
   }
@@ -106,7 +82,7 @@ public class TaskMock extends AbstractTask implements ContextAware {
     try {
       Thread.sleep(RandomUtil.randomLong(1, 10));
     } catch (InterruptedException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException(e); // TODO find appropriate reaction to interrupt
     }
     return TaskResult.EXECUTING;
   }

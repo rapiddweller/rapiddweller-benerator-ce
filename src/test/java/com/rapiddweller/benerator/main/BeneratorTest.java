@@ -3,9 +3,8 @@
 package com.rapiddweller.benerator.main;
 
 import com.rapiddweller.benerator.BeneratorMode;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.cli.IllegaCommandLineArgumentException;
-import com.rapiddweller.common.cli.IllegalCommandLineOptionException;
+import com.rapiddweller.common.cli.CLIIllegalArgumentException;
+import com.rapiddweller.common.cli.CLIIllegalOptionException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -57,12 +56,12 @@ public class BeneratorTest {
     checkExecution(BeneratorMode.TURBO, "my.ben.xml", "--mode", "turbo", "my.ben.xml");
   }
 
-  @Test(expected = IllegaCommandLineArgumentException.class)
+  @Test(expected = CLIIllegalArgumentException.class)
   public void testModeFlagTypo() {
     checkExecution(BeneratorMode.STRICT, "test.ben.xml", "mode", "strict", "test.ben.xml");
   }
 
-  @Test(expected = IllegalCommandLineOptionException.class)
+  @Test(expected = CLIIllegalOptionException.class)
   public void testIllegalMode() {
     checkExecution(BeneratorMode.STRICT, "test.ben.xml",  "--mode", "superduper", "test.ben.xml");
   }

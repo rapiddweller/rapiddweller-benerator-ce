@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.common.Mutator;
-import com.rapiddweller.common.UpdateFailedException;
+import com.rapiddweller.common.exception.MutationFailedException;
 
 /**
  * {@link ComponentBuilder} implementation which builds array elements.<br/><br/>
@@ -51,7 +51,7 @@ public class ArrayElementBuilder extends AbstractComponentBuilder<Object[]> {
     }
 
     @Override
-    public void setValue(Object target, Object value) throws UpdateFailedException {
+    public void setValue(Object target, Object value) throws MutationFailedException {
       ((Object[]) target)[index] = value;
     }
   }

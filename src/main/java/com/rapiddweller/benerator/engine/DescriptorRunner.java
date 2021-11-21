@@ -56,7 +56,7 @@ import java.util.List;
  */
 public class DescriptorRunner implements ResourceManager {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DescriptorRunner.class);
+  private static final Logger logger = LoggerFactory.getLogger(DescriptorRunner.class);
 
   // attributes ------------------------------------------------------------------------------------------------------
 
@@ -97,7 +97,7 @@ public class DescriptorRunner implements ResourceManager {
     runtime.addShutdownHook(hook);
     try {
       runWithoutShutdownHook();
-      LOGGER.info("Benerator finished successfully");
+      logger.info("Benerator finished successfully");
     } finally {
       runtime.removeShutdownHook(hook);
     }
@@ -135,13 +135,13 @@ public class DescriptorRunner implements ResourceManager {
       }
       List<String> generations = getGeneratedFiles();
       if (!generations.isEmpty()) {
-        LOGGER.info("Generated file(s): {}", generations);
+        logger.info("Generated file(s): {}", generations);
       }
     } catch (Throwable t) {
       if (ExceptionUtil.containsException(OutOfMemoryError.class, t) && Profiling.isEnabled()) {
-        LOGGER.error("OutOfMemoryError! This probably happened because you activated profiling", t);
+        logger.error("OutOfMemoryError! This probably happened because you activated profiling", t);
       } else {
-        LOGGER.error("Error in Benerator execution", t);
+        logger.error("Error in Benerator execution", t);
         throw t;
       }
     } finally {
@@ -181,7 +181,7 @@ public class DescriptorRunner implements ResourceManager {
       long throughput = newCount * 3600000L / elapsedTime;
       message += " in " + ElapsedTimeFormatter.format(elapsedTime) + " (~" + RoundedNumberFormat.format(throughput, 0) + " p.h.)";
     }
-    LOGGER.info(message);
+    logger.info(message);
   }
 
 

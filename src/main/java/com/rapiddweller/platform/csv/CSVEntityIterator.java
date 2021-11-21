@@ -26,6 +26,7 @@
 
 package com.rapiddweller.platform.csv;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.IOUtil;
@@ -182,8 +183,10 @@ public class CSVEntityIterator implements DataIterator<Entity>, Tabular {
       Array2EntityConverter a2eConverter = new Array2EntityConverter(entityDescriptor, columns, true);
       Converter<String[], Entity> converter = new ConverterChain<>(arrayConverter, a2eConverter);
       this.source = new ConvertingDataIterator<>(cellIterator, converter);
+    } catch (FileNotFoundException e) {
+      throw BeneratorExceptionFactory.getInstance().fileNotFound("Error in processing " + uri, e);
     } catch (IOException e) {
-      throw new RuntimeException("Error in processing " + uri, e);
+      throw BeneratorExceptionFactory.getInstance().fileAccessException("Error in processing " + uri, e);
     }
   }
 

@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.file;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
 
 import java.io.File;
@@ -130,7 +131,8 @@ public class FileNameGenerator extends NonNullGeneratorWrapper<File, String> {
     try {
       return file.getCanonicalPath();
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().internalError(
+          "Error calculating canonical path for " + file, e);
     }
   }
 

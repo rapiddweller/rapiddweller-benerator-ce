@@ -27,6 +27,7 @@
 package com.rapiddweller.platform.xml;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.Context;
@@ -62,7 +63,7 @@ import java.util.List;
  */
 public class DOMTree extends AbstractStorageSystem implements ContextAware {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DOMTree.class);
+  private static final Logger logger = LoggerFactory.getLogger(DOMTree.class);
 
   private String id;
   private String inputUri;
@@ -140,10 +141,10 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
   public DataSource<Entity> queryEntities(String type, String selector,
                                           Context context) {
     beInitialized();
-    LOGGER.debug("queryEntities({}, {}, context)", type, selector);
+    logger.debug("queryEntities({}, {}, context)", type, selector);
     try {
       NodeList nodes = XPathUtil.queryNodes(document, selector);
-      LOGGER.debug("queryEntities() found {} results", nodes.getLength());
+      logger.debug("queryEntities() found {} results", nodes.getLength());
       List<Entity> list = new ArrayList<>(nodes.getLength());
       for (int i = 0; i < nodes.getLength(); i++) {
         Element element = (Element) nodes.item(i);
@@ -153,14 +154,13 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
       }
       return new DataSourceFromIterable<>(list, Entity.class);
     } catch (XPathExpressionException e) {
-      throw new RuntimeException(
+      throw BeneratorExceptionFactory.getInstance().queryFailed(
           "Error querying " + (type != null ? type : "") + " elements with xpath: " + selector, e);
     }
   }
 
   @Override
-  public DataSource<?> queryEntityIds(String type, String selector,
-                                      Context context) {
+  public DataSource<?> queryEntityIds(String type, String selector, Context context) {
     throw new UnsupportedOperationException(getClass().getSimpleName() +
         " does not support queries for entity ids");
   }
@@ -169,10 +169,10 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
   public DataSource<?> query(String selector, boolean simplify,
                              Context context) {
     beInitialized();
-    LOGGER.debug("query({}, {}, context)", selector, simplify);
+    logger.debug("query({}, {}, context)", selector, simplify);
     try {
       NodeList nodes = XPathUtil.queryNodes(document, selector);
-      LOGGER.debug("query() found {} results", nodes.getLength());
+      logger.debug("query() found {} results", nodes.getLength());
       List<Object> list = new ArrayList<>(nodes.getLength());
       for (int i = 0; i < nodes.getLength(); i++) {
         Node node = nodes.item(i);
@@ -180,7 +180,8 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
       }
       return new DataSourceFromIterable<>(list, Object.class);
     } catch (XPathExpressionException e) {
-      throw new RuntimeException("Error querying items with xpath: " + selector, e);
+      throw BeneratorExceptionFactory.getInstance().syntaxError(
+          "Error querying items with xpath: " + selector, e);
     }
   }
 

@@ -200,7 +200,7 @@ public class PersonGenerator extends CompositeGenerator<Person>
 
     try {
       initMembersWithDataset(context);
-    } catch (RuntimeException e) {
+    } catch (Exception e) {
       Country fallBackCountry = Country.getFallback();
       if (!fallBackCountry.getIsoCode().equals(datasetName)) {
         logger.error("Error initializing " + getClass().getSimpleName(), e);

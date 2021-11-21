@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.main;
 import com.rapiddweller.benerator.BeneratorConstants;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.BeneratorRootContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.file.XMLFileGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ArrayUtil;
@@ -77,8 +78,8 @@ public class XmlCreator {
       for (long i = 0; i < fileCount; i++) {
         ProductWrapper<File> file = fileGenerator.generate(new ProductWrapper<>());
         if (file == null) {
-          throw new RuntimeException("Unable to create the expected number of files. " +
-              "Created " + i + " of " + fileCount + " files");
+          throw BeneratorExceptionFactory.getInstance().operationFailed(
+              "Unable to create the expected number of files. Created " + i + " of " + fileCount + " files", null);
         }
         logger.info("created file: {}", file);
       }

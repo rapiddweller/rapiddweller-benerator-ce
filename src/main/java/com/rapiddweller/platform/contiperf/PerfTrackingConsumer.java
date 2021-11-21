@@ -27,13 +27,14 @@
 package com.rapiddweller.platform.contiperf;
 
 import com.rapiddweller.benerator.Consumer;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.common.exception.ApplicationException;
 import com.rapiddweller.contiperf.Invoker;
 
 /**
  * {@link Consumer} implementation that calls a ContiPerf {@link PerfTrackingConsumer}.<br/><br/>
  * Created: 22.10.2009 16:17:14
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -44,28 +45,14 @@ public class PerfTrackingConsumer extends PerfTrackingWrapper implements Consume
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Perf tracking consumer.
-   */
   public PerfTrackingConsumer() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Perf tracking consumer.
-   *
-   * @param target the target
-   */
   public PerfTrackingConsumer(Consumer target) {
     this(target, "Unnamed");
   }
 
-  /**
-   * Instantiates a new Perf tracking consumer.
-   *
-   * @param target the target
-   * @param id     the id
-   */
   public PerfTrackingConsumer(Consumer target, String id) {
     this.id = id;
     this.target = target;
@@ -73,20 +60,10 @@ public class PerfTrackingConsumer extends PerfTrackingWrapper implements Consume
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets id.
-   *
-   * @param id the id
-   */
   public void setId(String id) {
     this.id = id;
   }
 
-  /**
-   * Sets target.
-   *
-   * @param target the target
-   */
   public void setTarget(Consumer target) {
     this.target = target;
   }
@@ -97,8 +74,10 @@ public class PerfTrackingConsumer extends PerfTrackingWrapper implements Consume
   public void startConsuming(ProductWrapper<?> wrapper) {
     try {
       getOrCreateTracker().invoke(new Object[] {wrapper});
+    } catch (ApplicationException e) {
+      throw e;
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().operationFailed("Error consuming " + wrapper, e);
     }
   }
 

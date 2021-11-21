@@ -26,7 +26,9 @@
 
 package com.rapiddweller.domain.address;
 
+import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.exception.ParseException;
+import com.rapiddweller.common.file.FileResourceNotFoundException;
 import org.junit.Test;
 
 import java.io.File;
@@ -150,8 +152,8 @@ public class CityManagerTest {
     @Test
     public void testyReadFromNullFile() {
         HashMap map = new HashMap();
-        assertThrows(com.rapiddweller.common.ConfigurationError.class, () ->CityManager.readCities(Country.AFGHANISTAN, "/", map));
-        assertThrows(com.rapiddweller.common.ConfigurationError.class, () ->CityManager.readCities(Country.AFGHANISTAN, null, map));
+        assertThrows(FileResourceNotFoundException.class, () ->CityManager.readCities(Country.AFGHANISTAN, "/", map));
+        assertThrows(ConfigurationError.class, () ->CityManager.readCities(Country.AFGHANISTAN, null, map));
     }
 
 }

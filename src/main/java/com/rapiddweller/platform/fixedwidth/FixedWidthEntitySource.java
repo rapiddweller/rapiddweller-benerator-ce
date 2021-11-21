@@ -27,6 +27,7 @@
 package com.rapiddweller.platform.fixedwidth;
 
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.Encodings;
@@ -184,7 +185,8 @@ public class FixedWidthEntitySource extends FileBasedEntitySource {
     try {
       return FixedWidthUtil.parseBeanColumnsSpec(columnFormatList, "", "", Locale.getDefault()).getColumnDescriptors();
     } catch (ParseException e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().internalError(
+          "Error parsing column format list " + columnFormatList, e);
     }
   }
 

@@ -43,7 +43,7 @@ import java.util.List;
  */
 public class ResourceManagerSupport implements ResourceManager {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ResourceManagerSupport.class);
+  private static final Logger logger = LoggerFactory.getLogger(ResourceManagerSupport.class);
 
   private final List<Closeable> resources = new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class ResourceManagerSupport implements ResourceManager {
 
   @Override
   public void close() {
-    LOGGER.debug("Closing resources: {}", this);
+    logger.debug("Closing resources: {}", this);
     for (int i = resources.size() - 1; i >= 0; i--) {
       IOUtil.close(resources.get(i));
     }

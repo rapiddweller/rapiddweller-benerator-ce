@@ -37,8 +37,6 @@ import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.script.WeightedSample;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -52,8 +50,6 @@ import java.util.List;
  * @since 0.5.0
  */
 public class WeightedDatasetCSVGenerator<E> extends AbstractDatasetGenerator<E> {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(WeightedDatasetCSVGenerator.class);
 
   protected String filenamePattern;
   protected final String encoding;
@@ -103,7 +99,7 @@ public class WeightedDatasetCSVGenerator<E> extends AbstractDatasetGenerator<E> 
   @Override
   protected WeightedGenerator<E> createGeneratorForAtomicDataset(Dataset dataset) {
     String filename = DatasetUtil.filenameOfDataset(dataset.getName(), filenamePattern);
-    LOGGER.debug("Creating weighted data set CSV generator for file {}", filename);
+    logger.debug("Creating weighted data set CSV generator for file {}", filename);
     if (IOUtil.isURIAvailable(filename)) {
       List<WeightedSample<E>> samples = CSVGeneratorUtil.parseFile(filename, separator, encoding, converter);
       AttachedWeightSampleGenerator<E> generator = new AttachedWeightSampleGenerator<>(generatedType);

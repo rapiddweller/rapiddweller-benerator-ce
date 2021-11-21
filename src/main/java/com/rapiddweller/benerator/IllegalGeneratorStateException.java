@@ -26,45 +26,30 @@
 
 package com.rapiddweller.benerator;
 
+import com.rapiddweller.common.exception.ApplicationException;
+import com.rapiddweller.common.exception.ExitCodes;
+
 /**
  * Indicates exceptional generator states that stem from inappropriate
- * generator setup or use.<br/>
- * <br/>
+ * generator setup or use.<br/><br/>
  * Created: 07.06.2006 22:13:57
- *
  * @author Volker Bergmann
  * @since 0.1
  */
-public class IllegalGeneratorStateException extends RuntimeException {
+public class IllegalGeneratorStateException extends ApplicationException {
 
-  private static final long serialVersionUID = -1403141408933329080L;
-
-  /**
-   * Instantiates a new Illegal generator state exception.
-   *
-   * @param message the message
-   */
   public IllegalGeneratorStateException(String message) {
-    super("Illegal Generator state: " + message);
+    this(message, null);
   }
 
-  /**
-   * Instantiates a new Illegal generator state exception.
-   *
-   * @param message the message
-   * @param cause   the cause
-   */
-  public IllegalGeneratorStateException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  /**
-   * Instantiates a new Illegal generator state exception.
-   *
-   * @param cause the cause
-   */
+  /** @deprecated */
+  @Deprecated
   public IllegalGeneratorStateException(Throwable cause) {
-    super("Illegal Generator state: ", cause);
+    this(null, cause);
+  }
+
+  public IllegalGeneratorStateException(String message, Throwable cause) {
+    super(null, ExitCodes.MISCELLANEOUS_ERROR, message, cause);
   }
 
 }

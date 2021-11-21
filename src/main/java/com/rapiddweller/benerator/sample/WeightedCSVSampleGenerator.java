@@ -33,8 +33,6 @@ import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.script.WeightedSample;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -50,7 +48,6 @@ import java.util.List;
  * </pre>
  * <br/>
  * Created: 11.06.2006 20:49:33
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @see AttachedWeightSampleGenerator
@@ -58,56 +55,29 @@ import java.util.List;
  */
 public class WeightedCSVSampleGenerator<E> extends GeneratorProxy<E> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(WeightedCSVSampleGenerator.class);
-
-  /**
-   * The URI to read the samples from
-   */
+  /** The URI to read the samples from */
   protected String uri;
 
-  /**
-   * The Separator.
-   */
+  /** The Separator. */
   private char separator;
 
   private String encoding;
 
-  /**
-   * The converter to create instances from the CSV cell strings
-   */
+  /** The converter to create instances from the CSV cell stringsc*/
   private final Converter<String, E> converter;
 
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Weighted csv sample generator.
-   *
-   * @param url the url
-   */
   public WeightedCSVSampleGenerator(String url) {
     this(url, SystemInfo.getFileEncoding(), ',');
   }
 
-  /**
-   * Instantiates a new Weighted csv sample generator.
-   *
-   * @param url      the url
-   * @param encoding the encoding
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public WeightedCSVSampleGenerator(String url, String encoding, char separator) {
     this((Class<E>) String.class, url, encoding, separator, new NoOpConverter());
   }
 
-  /**
-   * Instantiates a new Weighted csv sample generator.
-   *
-   * @param targetType the target type
-   * @param uri        the uri
-   * @param encoding   the encoding
-   * @param converter  the converter
-   */
   public WeightedCSVSampleGenerator(Class<E> targetType, String uri, String encoding, char separator, Converter<String, E> converter) {
     super(targetType);
     setSource(new AttachedWeightSampleGenerator<>(targetType));
@@ -122,56 +92,26 @@ public class WeightedCSVSampleGenerator<E> extends GeneratorProxy<E> {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets uri.
-   *
-   * @return the uri
-   */
   public String getUri() {
     return uri;
   }
 
-  /**
-   * Sets uri.
-   *
-   * @param uri the uri
-   */
   public void setUri(String uri) {
     this.uri = uri;
   }
 
-  /**
-   * Gets separator.
-   *
-   * @return the separator
-   */
   public char getSeparator() {
     return separator;
   }
 
-  /**
-   * Sets separator.
-   *
-   * @param separator the separator
-   */
   public void setSeparator(char separator) {
     this.separator = separator;
   }
 
-  /**
-   * Gets encoding.
-   *
-   * @return the encoding
-   */
   public String getEncoding() {
     return encoding;
   }
 
-  /**
-   * Sets encoding.
-   *
-   * @param encoding the encoding
-   */
   public void setEncoding(String encoding) {
     this.encoding = encoding;
   }
@@ -183,13 +123,13 @@ public class WeightedCSVSampleGenerator<E> extends GeneratorProxy<E> {
   public void init(GeneratorContext context) {
     List<WeightedSample<E>> samples = CSVGeneratorUtil.parseFile(uri, separator, encoding, converter);
     AttachedWeightSampleGenerator<E> awSource = (AttachedWeightSampleGenerator<E>) getSource();
-    if (samples.size() > 0) {
+    if (!samples.isEmpty()) {
       for (WeightedSample<E> sample : samples) {
         awSource.addSample(sample.getValue(), sample.getWeight());
       }
     } else {
       awSource.clear();
-      LOGGER.warn("CSV file is empty: {}", uri);
+      logger.warn("CSV file is empty: {}", uri);
     }
     super.init(context);
   }

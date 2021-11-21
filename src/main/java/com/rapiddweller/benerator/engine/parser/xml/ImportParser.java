@@ -123,7 +123,7 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
     try {
       // if there is a platform descriptor, then use it
       return (PlatformDescriptor) BeanUtil.newInstance(descriptorClassName);
-    } catch (RuntimeException e) {
+    } catch (Exception e) {
       if (ExceptionUtil.getRootCause(e) instanceof ClassNotFoundException) { // TODO test
         return new DefaultPlatformDescriptor(platformPackage);
       } else {

@@ -26,6 +26,7 @@
 
 package com.rapiddweller.platform.xls;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.FileUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -174,7 +175,8 @@ public class XLSEntityExporterTest extends XLSTest {
         assertEquals(CellType.NUMERIC, cell.getCellType());
         assertEquals(((Date) expectedContent).getTime() / 1000, cell.getDateCellValue().getTime() / 1000); // cut off milliseconds
       } else {
-        throw new RuntimeException("Type not supported: " + expectedContent.getClass());
+        throw BeneratorExceptionFactory.getInstance().programmerUnsupported(
+            "Type not supported: " + expectedContent.getClass());
       }
     }
   }

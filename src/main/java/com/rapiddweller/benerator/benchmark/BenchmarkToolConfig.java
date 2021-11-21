@@ -7,12 +7,10 @@ import com.rapiddweller.benerator.environment.Environment;
 import com.rapiddweller.benerator.environment.SystemRef;
 import com.rapiddweller.benerator.environment.EnvironmentUtil;
 import com.rapiddweller.common.ArrayBuilder;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.cli.CommandLineConfig;
 
-import java.io.IOException;
 import java.util.TreeSet;
 
 import static com.rapiddweller.benerator.BeneratorUtil.isEEAvailable;
@@ -102,11 +100,7 @@ public class BenchmarkToolConfig extends CommandLineConfig {
       String envName = parts[0];
       if ("builtin".equals(envName)) {
         String envFileName = EnvironmentUtil.fileName(envName);
-        try {
-          IOUtil.copyFile(BenchmarkRunner.RESOURCE_FOLDER + "/" + envFileName, envFileName);
-        } catch (IOException e) {
-          throw new ConfigurationError("Error processing environment file " + envFileName, e);
-        }
+        IOUtil.copyFile(BenchmarkRunner.RESOURCE_FOLDER + "/" + envFileName, envFileName);
       }
       Environment environment = EnvironmentUtil.parse(envName, ".");
       String sysSpec = parts[1];

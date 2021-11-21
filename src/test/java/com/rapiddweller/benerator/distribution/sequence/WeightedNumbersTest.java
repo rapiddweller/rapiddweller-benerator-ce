@@ -30,16 +30,11 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
-import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.collection.ObjectCounter;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.memstore.MemStore;
 import org.junit.Test;
-
-import java.util.Collection;
-import java.util.List;
 
 import static org.junit.Assert.fail;
 

@@ -60,7 +60,7 @@ import java.util.Collection;
  */
 public class BeneratorUtil {
 
-  private static final Logger CONFIG_LOGGER = LoggerFactory.getLogger(LogCategoriesConstants.CONFIG);
+  private static final Logger configLogger = LoggerFactory.getLogger(LogCategoriesConstants.CONFIG);
 
   public static final String EE_BENERATOR = "com.rapiddweller.benerator_ee.main.EEBenerator";
   public static final String EE_BENERATOR_FACTORY = "com.rapiddweller.benerator_ee.EEBeneratorFactory";
@@ -98,21 +98,21 @@ public class BeneratorUtil {
     try {
       Class.forName("javax.script.ScriptEngine");
     } catch (ClassNotFoundException e) {
-      CONFIG_LOGGER.error("You need to run benerator with Java 6 or greater!");
+      configLogger.error("You need to run benerator with Java 6 or greater!");
       if (SystemInfo.isMacOsx()) {
-        CONFIG_LOGGER.error("Please check the manual for Java setup on Mac OS X.");
+        configLogger.error("Please check the manual for Java setup on Mac OS X.");
       }
       System.exit(BeneratorConstants.EXIT_CODE_ERROR);
     }
     // Check Java version
     VersionNumber javaVersion = VersionNumber.valueOf(VMInfo.getJavaVersion());
     if (javaVersion.compareTo(VersionNumber.valueOf("1.6")) < 0) {
-      CONFIG_LOGGER.warn("benerator is written for and tested under Java 6 - " +
+      configLogger.warn("benerator is written for and tested under Java 6 - " +
           "you managed to set up JSR 223, but may face other problems.");
     }
     // Check profiling setting
     if (Profiling.isEnabled()) {
-      CONFIG_LOGGER.warn("Profiling is active. This may lead to memory issues");
+      configLogger.warn("Profiling is active. This may lead to memory issues");
     }
   }
 
@@ -158,7 +158,7 @@ public class BeneratorUtil {
   }
 
   public static void logConfig(String config) {
-    CONFIG_LOGGER.info(config);
+    configLogger.info(config);
   }
 
   public static String getCpuAndMemInfo() {
@@ -255,7 +255,7 @@ public class BeneratorUtil {
   }
 
   public static void clearCaches() {
-    CONFIG_LOGGER.info("Deleting caches");
+    configLogger.info("Deleting caches");
     FileUtil.deleteDirectory(ConfigUtil.commonCacheFolder());
   }
 

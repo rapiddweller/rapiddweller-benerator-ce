@@ -27,6 +27,7 @@
 package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.ArrayUtil;
@@ -87,7 +88,7 @@ public class NestedDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
       }
       return container.setData(result);
     } catch (XMLStreamException e) {
-      throw new RuntimeException(e);
+      throw BeneratorExceptionFactory.getInstance().fileAccessException("Error reading " + uri, e);
     }
   }
 

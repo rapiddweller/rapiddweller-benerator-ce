@@ -52,9 +52,7 @@ import java.util.Properties;
  */
 public class Archetype implements Serializable {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Archetype.class);
-
-  private static final long serialVersionUID = 2552120042802481049L;
+  private static final Logger logger = LoggerFactory.getLogger(Archetype.class);
 
   private final String id;
   private final URL url;
@@ -89,7 +87,7 @@ public class Archetype implements Serializable {
       }
       if (desc == null) { // if there is even no English name, choose an arbitrary one
         Collection<Object> values = descriptions.values();
-        if (values.size() > 0) {
+        if (!values.isEmpty()) {
           desc = values.iterator().next().toString();
         }
       }
@@ -135,7 +133,7 @@ public class Archetype implements Serializable {
     targetFolder = new File(targetFolder, layout.mapSubFolder(subFolder));
     boolean successfulCreated = targetFolder.mkdir();
     if (!successfulCreated) {
-      LOGGER.debug("Archetype Target Folder has not been created.");
+      logger.debug("Archetype Target Folder has not been created.");
     }
     if (IOUtil.listResources(srcUrl).length > 0) {
       IOUtil.copyDirectory(srcUrl, targetFolder, null);

@@ -30,27 +30,17 @@ import com.rapiddweller.benerator.util.ThreadSafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptUtil;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 
 /**
  * Creates {@link Object}s based on a Script.<br/><br/>
  * Created: 29.01.2008 17:19:24
- *
  * @author Volker Bergmann
  * @since 0.4.0
  */
 public class ScriptGenerator extends ThreadSafeGenerator<Object> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ScriptGenerator.class);
-
   private final Script script;
 
-  /**
-   * Instantiates a new Script generator.
-   *
-   * @param script the script
-   */
   public ScriptGenerator(Script script) {
     this.script = script;
   }
@@ -63,7 +53,7 @@ public class ScriptGenerator extends ThreadSafeGenerator<Object> {
   @Override
   public ProductWrapper<Object> generate(ProductWrapper<Object> wrapper) {
     Object result = ScriptUtil.execute(script, context);
-    LOGGER.debug("Generated: {}", result);
+    logger.debug("Generated: {}", result);
     return wrapper.wrap(result);
   }
 

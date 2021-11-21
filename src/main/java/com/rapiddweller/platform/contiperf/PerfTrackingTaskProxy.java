@@ -29,6 +29,8 @@ package com.rapiddweller.platform.contiperf;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.exception.ApplicationException;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.contiperf.PerformanceTracker;
 import com.rapiddweller.task.Task;
 import com.rapiddweller.task.TaskResult;
@@ -36,7 +38,6 @@ import com.rapiddweller.task.TaskResult;
 /**
  * Proxies a {@link Task} and tracks its execution times.<br/><br/>
  * Created: 25.02.2010 09:08:48
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -44,21 +45,10 @@ public class PerfTrackingTaskProxy extends PerfTrackingWrapper implements Task {
 
   private final Task realTask;
 
-  /**
-   * Instantiates a new Perf tracking task proxy.
-   *
-   * @param realTask the real task
-   */
   public PerfTrackingTaskProxy(Task realTask) {
     this(realTask, null);
   }
 
-  /**
-   * Instantiates a new Perf tracking task proxy.
-   *
-   * @param realTask the real task
-   * @param tracker  the tracker
-   */
   public PerfTrackingTaskProxy(Task realTask, PerformanceTracker tracker) {
     super(tracker);
     this.realTask = realTask;
@@ -68,8 +58,10 @@ public class PerfTrackingTaskProxy extends PerfTrackingWrapper implements Task {
   public TaskResult execute(Context context, ErrorHandler errorHandler) {
     try {
       return (TaskResult) getOrCreateTracker().invoke(new Object[] {context, errorHandler});
+    } catch (ApplicationException e) {
+      throw e;
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw ExceptionFactory.getInstance().operationFailed("Error executing task " + this, e);
     }
   }
 
