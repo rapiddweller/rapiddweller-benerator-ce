@@ -31,25 +31,15 @@ import com.rapiddweller.benerator.consumer.AbstractConsumer;
 import com.rapiddweller.common.ThreadAware;
 
 /**
- * Stores an Entity in the associated {@link StorageSystem}. It replaces the class SystemProcessor.<br/>
- * <br/>
+ * Stores an Entity in the associated {@link StorageSystem}. It replaces the class SystemProcessor.<br/><br/>
  * Created: 29.01.2008 09:35:07
- *
  * @author Volker Bergmann
  * @since 0.4.0
  */
 public abstract class StorageSystemConsumer extends AbstractConsumer implements ThreadAware {
 
-  /**
-   * The System.
-   */
   protected final StorageSystem system;
 
-  /**
-   * Instantiates a new Storage system consumer.
-   *
-   * @param system the system
-   */
   protected StorageSystemConsumer(StorageSystem system) {
     this.system = system;
   }
