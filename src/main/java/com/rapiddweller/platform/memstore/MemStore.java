@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.benerator.util.FilterExDataSource;
+import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.StringUtil;
@@ -44,7 +45,6 @@ import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.script.Expression;
-import org.bouncycastle.util.Arrays;
 
 import java.util.List;
 import java.util.Map;
@@ -172,7 +172,7 @@ public class MemStore extends AbstractStorageSystem {
 
   private EntityStore createEntityStore(ComplexTypeDescriptor type) {
     String[] idComponentNames = type.getIdComponentNames();
-    if (Arrays.isNullOrEmpty(idComponentNames)) {
+    if (ArrayUtil.isEmpty(idComponentNames)) {
       return new UnidentifiedEntityStore(type);
     } else {
       return new IdEntityStore(type);
