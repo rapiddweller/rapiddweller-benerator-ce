@@ -14,6 +14,8 @@
  */
 package com.rapiddweller.benerator.sensor;
 
+import com.rapiddweller.common.ThreadUtil;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
 
@@ -97,10 +99,13 @@ public class MemorySensor {
 			try {
 				while (!Thread.currentThread().isInterrupted()) {
 					measure();
-					Thread.sleep(interval);
+					ThreadUtil.sleepWithException(interval);
 				}
 			} catch (InterruptedException e) {
 				// makes the thread leave the loop and finish
+				if (Thread.interrupted()) {
+					Thread.currentThread().interrupt();
+				}
 			}
 		}
 		

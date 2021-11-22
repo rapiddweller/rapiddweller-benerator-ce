@@ -57,6 +57,9 @@ public class WaitStatement implements Statement {
     } catch (InterruptedException e) {
       if (Thread.interrupted()) {
         logger.info("Interrupted {}",  this);
+        if (Thread.interrupted()) {
+          Thread.currentThread().interrupt();
+        }
         return false;
       }
     }
