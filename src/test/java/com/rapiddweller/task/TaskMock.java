@@ -29,7 +29,9 @@ package com.rapiddweller.task;
 import com.rapiddweller.benerator.util.RandomUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.ThreadUtil;
 import com.rapiddweller.common.context.ContextAware;
+import com.rapiddweller.common.exception.ExceptionFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -80,9 +82,9 @@ public class TaskMock extends AbstractTask implements ContextAware {
     }
     count.incrementAndGet();
     try {
-      Thread.sleep(RandomUtil.randomLong(1, 10));
+      ThreadUtil.sleepWithException(RandomUtil.randomInt(1, 10));
     } catch (InterruptedException e) {
-      throw new RuntimeException(e); // TODO find appropriate reaction to interrupt
+      throw ExceptionFactory.getInstance().operationCancelled("Interrupted");
     }
     return TaskResult.EXECUTING;
   }

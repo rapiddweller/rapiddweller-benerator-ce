@@ -30,6 +30,8 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.common.ThreadUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Causes the thread to sleep for a certain number of milliseconds.<br/><br/>
@@ -38,6 +40,8 @@ import com.rapiddweller.common.ThreadUtil;
  * @since 0.6.0
  */
 public class WaitStatement implements Statement {
+
+  private static final Logger logger = LoggerFactory.getLogger(WaitStatement.class);
 
   private final NonNullGenerator<Long> durationGenerator;
   private boolean generatorInitialized = false;
@@ -48,7 +52,17 @@ public class WaitStatement implements Statement {
 
   @Override
   public boolean execute(BeneratorContext context) {
-    ThreadUtil.sleep(generateDuration(context));
+    try {
+      ThreadUtil.sleepWithException(generateDuration(context));
+    } catch (InterruptedException e) {
+      if (Thread.interrupted()) {
+        logger.info("Interrupted {}",  this);
+        if (Thread.interrupted()) {
+          Thread.currentThread().interrupt();
+        }
+        return false;
+      }
+    }
     return true;
   }
 

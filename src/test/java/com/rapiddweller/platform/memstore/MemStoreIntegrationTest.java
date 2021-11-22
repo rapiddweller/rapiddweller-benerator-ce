@@ -43,7 +43,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Integration test for the {@link MemStore} class.<br/><br/>
  * Created: 08.03.2011 16:06:12
- *
  * @author Volker Bergmann
  * @since 0.6.6
  */
@@ -203,7 +202,53 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     }
   }
 
-  /** Test integration. */
+  @Test
+  public void testInserter_with_type() {
+    MemStore mem = new MemStore("mem", dataModel);
+    context.set("mem", mem);
+    parseAndExecute(
+        "<generate type='user' count='5' consumer=\"mem.inserter('customer')\">" +
+            "	<id name='id' type='int'/>" +
+            "</generate>"
+    );
+    Collection<Entity> customers = mem.getEntities("customer");
+    assertEquals(5, customers.size());
+    int index = 1;
+    for (Entity customer : customers) {
+      assertNotNull(customer);
+      assertEquals(index, customer.get("id"));
+      index++;
+    }
+  }
+
+  @Test
+  public void testUpdater_with_type() {
+    MemStore mem = new MemStore("mem", dataModel);
+    context.set("mem", mem);
+    parseAndExecute(
+        "<setup>" +
+            "  <generate type='customer' count='5' consumer='mem'>" +
+            "    <id name='id' type='int'/>" +
+            "    <attribute name='value' type='int' distribution='increment'/>" +
+            "  </generate>" +
+            "  <generate type='none' count='5' consumer=\"mem.updater('customer')\">" +
+            "    <id name='id' type='int'/>" +
+            "    <attribute name='value' type='int' min='2' distribution='increment'/>" +
+            "  </generate>" +
+            "  <iterate source='mem' type='customer' consumer='ConsoleExporter'/>" +
+            "</setup>"
+    );
+    Collection<Entity> customers = mem.getEntities("customer");
+    assertEquals(5, customers.size());
+    int index = 1;
+    for (Entity customer : customers) {
+      assertNotNull(customer);
+      assertEquals(index, customer.get("id"));
+      index++;
+    }
+  }
+
+  /** Test integration with XML-based setup. */
   @Test
   public void testIntegration() {
     MemStore.ignoreClose = true;

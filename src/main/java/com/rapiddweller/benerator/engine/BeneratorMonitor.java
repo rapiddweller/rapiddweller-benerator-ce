@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
+import com.rapiddweller.common.ThreadUtil;
 import com.rapiddweller.jdbacl.DBUtil;
 
 import javax.management.MBeanServer;
@@ -135,11 +136,13 @@ public class BeneratorMonitor implements BeneratorMonitorMBean, Closeable {
       try {
         latestTimeStamp = System.nanoTime();
         while (active) {
-          Thread.sleep(500);
+          ThreadUtil.sleepWithException(500);
           update();
         }
       } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
+        if (Thread.interrupted()) {
+          Thread.currentThread().interrupt();
+        }
       }
     }
 

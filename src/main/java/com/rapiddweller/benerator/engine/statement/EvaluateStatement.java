@@ -53,7 +53,6 @@ import com.rapiddweller.task.TaskException;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.sql.Connection;
@@ -129,7 +128,7 @@ public class EvaluateStatement extends AbstractStatement {
       String shell = ExpressionUtil.evaluate(shellEx, context);
 
       // run
-      Object result = null;
+      Object result;
       if ("sql".equals(typeValue)) {
         result = evaluateAsSql(context, onErrorValue, uriValue, targetObject, encoding, text);
       } else if (TYPE_SHELL.equals(typeValue) || !StringUtil.isEmpty(shell)) {

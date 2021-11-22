@@ -528,8 +528,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   }
 
   public Consumer inserter(String tableName) {
-    return new StorageSystemInserter(this,
-        (ComplexTypeDescriptor) getTypeDescriptor(tableName));
+    return new StorageSystemInserter(this, (ComplexTypeDescriptor) getTypeDescriptor(tableName));
   }
 
   public abstract Connection getConnection();

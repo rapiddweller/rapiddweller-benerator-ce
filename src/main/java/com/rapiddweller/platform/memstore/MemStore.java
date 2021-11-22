@@ -26,12 +26,12 @@
 
 package com.rapiddweller.platform.memstore;
 
+import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.benerator.util.FilterExDataSource;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.Context;
-import com.rapiddweller.common.OrderedMap;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.ui.InfoPrinter;
@@ -44,8 +44,8 @@ import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.script.Expression;
+import org.bouncycastle.util.Arrays;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -61,14 +61,12 @@ public class MemStore extends AbstractStorageSystem {
 
   private final String id;
   private final OrderedNameMap<ComplexTypeDescriptor> types;
-  private final Map<String, Map<Object, Entity>> entitiesByIdByType;
-  private final Map<String, List<Entity>> entitiesByType;
+  private final Map<String, EntityStore> entitiesByType;
 
   public MemStore(String id, DataModel dataModel) {
     this.setDataModel(dataModel);
     this.types = OrderedNameMap.createCaseInsensitiveMap();
-    entitiesByIdByType = OrderedNameMap.createCaseInsensitiveMap();
-    entitiesByType = OrderedNameMap.createCaseInsensitiveMap();
+    this.entitiesByType = OrderedNameMap.createCaseInsensitiveMap();
     this.id = id;
   }
 
@@ -77,10 +75,27 @@ public class MemStore extends AbstractStorageSystem {
     return id;
   }
 
+  public Consumer inserter() {
+    return new MemStoreStorer(this);
+  }
+
+  public Consumer inserter(String typeName) {
+    return new MemStoreStorer(this, typeName);
+  }
+
+  @Override
+  public Consumer updater() {
+    return new MemStoreStorer(this);
+  }
+
+  public Consumer updater(String typeName) {
+    return new MemStoreStorer(this, typeName);
+  }
+
   public int totalEntityCount() {
     int result = 0;
-    for (List<Entity> list : entitiesByType.values())
-      result += list.size();
+    for (EntityStore entityStore : entitiesByType.values())
+      result += entityStore.size();
     return result;
   }
 
@@ -100,11 +115,14 @@ public class MemStore extends AbstractStorageSystem {
 
   @Override
   @SuppressWarnings({"rawtypes", "unchecked"})
-  public DataSource<?> queryEntityIds(String entityType, String selector, Context context) {
-    Map<?, Entity> idMap = getOrCreateIdMapForType(entityType);
+  public DataSource<?> queryEntityIds(String entityType, String filter, Context context) {
+    Map<Object, Entity> idMap = entitiesByType.get(entityType).idMap();
+    if (idMap == null) { // if the queried entityType has no id, then return null
+      return null;
+    }
     DataSource<?> result = new DataSourceProxy(new DataSourceFromIterable(idMap.keySet(), Object.class));
-    if (!StringUtil.isEmpty(selector)) {
-      Expression<Boolean> filterEx = new ScriptExpression<>(ScriptUtil.parseScriptText(selector));
+    if (!StringUtil.isEmpty(filter)) {
+      Expression<Boolean> filterEx = new ScriptExpression<>(ScriptUtil.parseScriptText(filter));
       result = new FilterExDataSource(result, filterEx, context);
     }
     return result;
@@ -118,16 +136,9 @@ public class MemStore extends AbstractStorageSystem {
   @Override
   public void store(Entity entity) {
     String entityType = entity.type();
-    // store entity by id
-    Map<Object, Entity> idMap = getOrCreateIdMapForType(entityType);
-    Object idComponentValues = entity.idComponentValues();
-    if (idComponentValues == null) {
-      idComponentValues = entity.getComponents().values();
-    }
-    idMap.put(idComponentValues, entity);
-    // store entity by type
-    List<Entity> entities = entitiesByType.computeIfAbsent(entityType, k -> new ArrayList<>());
-    entities.add(entity);
+    // store entity
+    EntityStore entityStore = entitiesByType.computeIfAbsent(entityType, k -> createEntityStore(entity.descriptor()));
+    entityStore.store(entity);
     // store entity descriptor
     types.computeIfAbsent(entityType, k -> new ComplexTypeDescriptor(entityType, this));
   }
@@ -155,12 +166,21 @@ public class MemStore extends AbstractStorageSystem {
   @Override
   public void close() {
     if (!ignoreClose) {
-      entitiesByIdByType.clear();
+      entitiesByType.clear();
+    }
+  }
+
+  private EntityStore createEntityStore(ComplexTypeDescriptor type) {
+    String[] idComponentNames = type.getIdComponentNames();
+    if (Arrays.isNullOrEmpty(idComponentNames)) {
+      return new UnidentifiedEntityStore(type);
+    } else {
+      return new IdEntityStore(type);
     }
   }
 
   public void printContent(InfoPrinter printer) {
-    for (Map.Entry<String, List<Entity>> typeEntry : entitiesByType.entrySet()) {
+    for (Map.Entry<String, EntityStore> typeEntry : entitiesByType.entrySet()) {
       printer.printLines(typeEntry.getKey() + ':');
       int index = 0;
       for (Entity entity : typeEntry.getValue()) {
@@ -169,12 +189,8 @@ public class MemStore extends AbstractStorageSystem {
     }
   }
 
-  private Map<Object, Entity> getOrCreateIdMapForType(String entityType) {
-    return entitiesByIdByType.computeIfAbsent(entityType, k -> new OrderedMap<>());
-  }
-
   public List<Entity> getEntities(String entityType) {
-    return entitiesByType.get(entityType);
+    return entitiesByType.get(entityType).entities();
   }
 
 }

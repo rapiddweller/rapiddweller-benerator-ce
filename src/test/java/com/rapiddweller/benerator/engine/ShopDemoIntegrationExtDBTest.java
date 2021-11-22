@@ -28,43 +28,21 @@ package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.ConfigUtil;
-import com.rapiddweller.common.FileUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
 
 import static com.rapiddweller.common.SystemInfo.isLinux;
 import static org.junit.Assume.assumeTrue;
 
 /**
  * Integration test for Benerator's Demo Files.<br/><br/>
- * <p>
  * Created at 30.12.2020
- *
  * @author Alexander Kell
  * @since 1.1.0
  */
 public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTest {
-
-  /**
-   * The Root.
-   */
-  String ROOT = "src/demo/resources/";
-
-  private void parseAndExecute() throws IOException {
-    for (File file : Objects.requireNonNull(new File(ROOT, context.getContextUri()).listFiles())) {
-      String filename = file.getPath();
-      if (FileUtil.isXMLFile(filename)) {
-        logger.info(filename);
-        parseAndExecuteFile(filename);
-      }
-    }
-  }
 
   @Before
   public void PrepareShopCtx() {
@@ -73,11 +51,9 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
 
   /**
    * Demo postgres multi schema.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoPostgresMultiSchema() throws IOException {
+  public void DemoPostgresMultiSchema() {
     assumeTestActive("postgres");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/postgres.multischema.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
@@ -85,11 +61,9 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
 
   /**
    * Demo postgres multi schema with table with same name and different columns and foreign key in different schema
-   *
-   * @throws IOException the io exception
    */
   @Test()
-  public void DemoPostgresMultiSchemaDuplicatedTableInBenCtx() throws IOException {
+  public void DemoPostgresMultiSchemaDuplicatedTableInBenCtx() {
     assumeTestActive("postgres");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/postgres.multischema_duplicated_table.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
@@ -97,11 +71,9 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
 
   /**
    * Demo Mssql Shop
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoMssqlShop() throws IOException {
+  public void DemoMssqlShop() {
     assumeTestActive("mssql");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-mssql.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
@@ -109,11 +81,9 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
 
   /**
    * Demo Mysql Shop
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoMysqlShop() throws IOException {
+  public void DemoMysqlShop() {
     assumeTestActive("mysql");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-mysql.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
@@ -122,11 +92,9 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
 
   /**
    * Demo postgres shop.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoPostgresShop() throws IOException {
+  public void DemoPostgresShop() {
     assumeTestActive("postgres");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-postgres.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
@@ -134,11 +102,9 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
 
   /**
    * Demo oracle shop.
-   *
-   * @throws IOException the io exception
    */
   @Test
-  public void DemoOracleShop() throws IOException {
+  public void DemoOracleShop() {
     assumeTestActive("oracle");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-oracle.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
@@ -146,12 +112,10 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
 
   /**
    * Debugging
-   *
-   * @throws IOException the io exception
    */
   @Ignore("for manual internal testing")
   @Test
-  public void PostgresDebugging() throws IOException {
+  public void PostgresDebugging() {
     assumeTrue(isLinux());
     context.setContextUri("/demo/WIP");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/WIP/benerator.xml");
