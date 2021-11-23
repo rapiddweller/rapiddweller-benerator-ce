@@ -37,7 +37,6 @@ import com.rapiddweller.script.expression.TypeConvertingExpression;
  * Describes generation of (several) entities of a type by uniqueness,
  * nullability and count characteristics.<br/><br/>
  * Created: 03.03.2008 07:55:45
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
@@ -132,10 +131,8 @@ public class InstanceDescriptor extends FeatureDescriptor {
   }
 
   public TypeDescriptor getLocalType() {
-    if (localType == null && parent != null &&
-        parent.getLocalType() != null) {
-      localType = getLocalType(
-          parent.getLocalType() instanceof ComplexTypeDescriptor);
+    if (localType == null && parent != null && parent.getLocalType() != null) {
+      localType = getLocalType(parent.getLocalType() instanceof ComplexTypeDescriptor);
     }
     return localType;
   }
@@ -152,11 +149,9 @@ public class InstanceDescriptor extends FeatureDescriptor {
       return localType;
     }
     if (complexType) {
-      localType =
-          new ComplexTypeDescriptor(getName(), provider, getType());
+      localType = new ComplexTypeDescriptor(getName(), provider, getType());
     } else {
-      localType =
-          new SimpleTypeDescriptor(getName(), provider, getType());
+      localType = new SimpleTypeDescriptor(getName(), provider, getType());
     }
     setType(null);
     return localType;
@@ -172,8 +167,11 @@ public class InstanceDescriptor extends FeatureDescriptor {
 
   public Uniqueness getUniqueness() {
     Boolean unique = isUnique();
-    return (unique != null ?
-        (unique ? Uniqueness.SIMPLE : Uniqueness.NONE) : null);
+    if (unique != null) {
+      return (unique ? Uniqueness.SIMPLE : Uniqueness.NONE);
+    } else {
+      return null;
+    }
   }
 
   public Boolean isNullable() {
@@ -274,24 +272,19 @@ public class InstanceDescriptor extends FeatureDescriptor {
   @Override
   public void setDetailValue(String detailName, Object detailValue) {
     if (COUNT.equals(detailName) || MIN_COUNT.equals(detailName) ||
-        MAX_COUNT.equals(detailName) ||
-        COUNT_GRANULARITY.equals(detailName)) {
+        MAX_COUNT.equals(detailName) || COUNT_GRANULARITY.equals(detailName)) {
       FeatureDetail<Object> detail = getConfiguredDetail(detailName);
       if (detail == null) {
         throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support detail type: " + detailName);
       }
       if (detailValue instanceof Expression) {
-        detail.setValue(new TypeConvertingExpression<>(
-            (Expression<?>) detailValue, Long.class));
+        detail.setValue(new TypeConvertingExpression<>((Expression<?>) detailValue, Long.class));
       } else if (detailValue == null) {
         detail.setValue(null);
       } else if (detailValue instanceof String) {
-        detail.setValue(new TypeConvertingExpression<>(
-            new ScriptExpression<>((String) detailValue),
-            Long.class));
+        detail.setValue(new TypeConvertingExpression<>(new ScriptExpression<>((String) detailValue), Long.class));
       } else {
-        detail.setValue(new TypeConvertingExpression<>(
-            new ConstantExpression<>(detailValue), Long.class));
+        detail.setValue(new TypeConvertingExpression<>(new ConstantExpression<>(detailValue), Long.class));
       }
     } else {
       super.setDetailValue(detailName, detailValue);
