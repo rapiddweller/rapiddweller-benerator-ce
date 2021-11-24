@@ -28,6 +28,7 @@ package com.rapiddweller.platform.csv;
 
 import com.rapiddweller.benerator.consumer.TextFileExporter;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.BeanUtil;
@@ -159,7 +160,7 @@ public class CSVEntityExporter extends TextFileExporter {
   protected void startConsumingImpl(Object object) {
     logger.debug("exporting {}", object);
     if (!(object instanceof Entity)) {
-      throw new IllegalArgumentException("Expecting entity");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Expecting entity");
     }
     Entity entity = (Entity) object;
     if (lfRequired) {

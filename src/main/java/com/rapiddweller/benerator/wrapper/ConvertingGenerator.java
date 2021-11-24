@@ -28,18 +28,16 @@ package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.Converter;
 
 /**
- * Reads products from a source Generator and applies a Converter to transform them into the target products.<br/>
- * <br/>
+ * Reads products from a source Generator and applies a Converter to transform them into the target products.<br/><br/>
  * Created: 12.06.2006 19:02:30
- *
  * @param <S> the type parameter
  * @param <T> the type parameter
  * @author Volker Bergmann
@@ -97,7 +95,7 @@ public class ConvertingGenerator<S, T> extends GeneratorWrapper<S, T> {
       }
       return wrapper.wrap((T) tmp);
     } catch (ConversionException e) {
-      throw new IllegalGeneratorStateException(e);
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Conversion error", e);
     }
   }
 

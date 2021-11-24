@@ -26,9 +26,9 @@
 
 package com.rapiddweller.platform.db;
 
+import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
-import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.DataSource;
@@ -61,12 +61,8 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> {
 
   public QueryDataSource(Connection connection, String query, int fetchSize, Context context) {
     super(ResultSet.class);
-    if (connection == null) {
-      throw new IllegalStateException("'connection' is null");
-    }
-    if (StringUtil.isEmpty(query)) {
-      throw new IllegalStateException("'query' is empty or null");
-    }
+    Assert.notNull(connection, "connection");
+    Assert.notEmpty(query, "'query' is empty or null");
     this.connection = connection;
     this.query = query;
     this.fetchSize = fetchSize;

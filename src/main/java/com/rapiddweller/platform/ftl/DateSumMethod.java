@@ -26,6 +26,7 @@
 
 package com.rapiddweller.platform.ftl;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.converter.LiteralParser;
 import freemarker.template.SimpleDate;
 import freemarker.template.TemplateMethodModelEx;
@@ -36,10 +37,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * FreeMarker method that sums Date, Time and millisecond values.<br/>
- * <br/>
+ * FreeMarker method that sums Date, Time and millisecond values.<br/><br/>
  * Created at 14.10.2008 17:39:28
- *
  * @author Volker Bergmann
  * @since 0.5.6
  */
@@ -57,7 +56,7 @@ public class DateSumMethod implements TemplateMethodModelEx {
       } else if (arg instanceof Number) {
         sum += ((Number) arg).longValue();
       } else if (arg != null) {
-        throw new IllegalArgumentException(
+        throw BeneratorExceptionFactory.getInstance().illegalArgument(
             "Not a supported date type: " + arg.getClass());
       }
     }

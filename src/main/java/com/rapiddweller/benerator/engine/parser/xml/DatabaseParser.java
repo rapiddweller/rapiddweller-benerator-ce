@@ -35,6 +35,7 @@ import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.script.expression.FallbackExpression;
@@ -123,7 +124,7 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
           excludeTables, metaCache, batch, fetchSize, readOnly, lazy,
           acceptUnknownColumnTypes, context);
     } catch (ConversionException e) {
-      throw new ConfigurationError("Error parsing database element", e);
+      throw ExceptionFactory.getInstance().configurationError("Error parsing <database>", e);
     }
   }
 

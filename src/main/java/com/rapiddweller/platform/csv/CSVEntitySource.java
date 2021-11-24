@@ -27,7 +27,6 @@
 package com.rapiddweller.platform.csv;
 
 import com.rapiddweller.common.ArrayUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SystemInfo;
@@ -39,11 +38,8 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.FileBasedEntitySource;
 
-import java.io.FileNotFoundException;
-
 /**
  * Imports {@link Entity} data from CSV files.<br/><br/>
- *
  * @author Volker Bergmann
  */
 public class CSVEntitySource extends FileBasedEntitySource implements Tabular {
@@ -147,17 +143,13 @@ public class CSVEntitySource extends FileBasedEntitySource implements Tabular {
 
   @Override
   public DataIterator<Entity> iterator() {
-    try {
-      CSVEntityIterator iterator =
-          new CSVEntityIterator(resolveUri(), entityType, preprocessor, separator, encoding);
-      if (!expectingHeader) {
-        iterator.setColumns(getColumnNames());
-        iterator.setExpectingHeader(false);
-      }
-      return iterator;
-    } catch (FileNotFoundException e) {
-      throw new ConfigurationError("Cannot create iterator. ", e);
+    CSVEntityIterator iterator =
+        new CSVEntityIterator(resolveUri(), entityType, preprocessor, separator, encoding);
+    if (!expectingHeader) {
+      iterator.setColumns(getColumnNames());
+      iterator.setExpectingHeader(false);
     }
+    return iterator;
   }
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------

@@ -27,7 +27,7 @@
 package com.rapiddweller.platform.db;
 
 import com.rapiddweller.benerator.consumer.TextFileExporter;
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.jdbacl.DatabaseDialectManager;
@@ -99,12 +99,12 @@ public class SQLEntityExporter extends TextFileExporter {
   @Override
   protected void startConsumingImpl(Object object) {
     if (dialect == null) {
-      throw new ConfigurationError(
+      throw BeneratorExceptionFactory.getInstance().configurationError(
           "'dialect' not set in " + getClass().getSimpleName());
     }
     logger.debug("exporting {}", object);
     if (!(object instanceof Entity)) {
-      throw new IllegalArgumentException("Expected Entity");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Expected Entity");
     }
     Entity entity = (Entity) object;
     String sql = createSQLInsert(entity);

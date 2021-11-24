@@ -100,7 +100,7 @@ public class ValueMapper implements Converter {
       if (lenient) {
         return sourceValue;
       } else {
-        throw new IllegalArgumentException("Cannot convert value: " + sourceValue);
+        throw BeneratorExceptionFactory.getInstance().illegalArgument("Cannot convert value: " + sourceValue);
       }
     } else {
       return mappings.get(sourceValue);

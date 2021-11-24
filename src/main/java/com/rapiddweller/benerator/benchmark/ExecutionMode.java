@@ -2,6 +2,7 @@
 
 package com.rapiddweller.benerator.benchmark;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.comparator.IntComparator;
 
 import java.util.Objects;
@@ -20,7 +21,7 @@ public class ExecutionMode implements Comparable<ExecutionMode> {
   public ExecutionMode(boolean ee, int threadCount) {
     this.ee = ee;
     if (!ee && threadCount > 1) {
-      throw new IllegalArgumentException("Cannot call CE concurrently");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Cannot call CE concurrently");
     }
     this.threadCount = threadCount;
   }

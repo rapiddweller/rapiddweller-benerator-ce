@@ -29,9 +29,9 @@ package com.rapiddweller.benerator.distribution.sequence;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.sample.AttachedWeightSampleGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.converter.NumberToNumberConverter;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.WeightedSample;
@@ -67,7 +67,7 @@ public class WeightedNumbers<E> extends Sequence {
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity,
                                                                       boolean unique) {
     if (unique) {
-      throw new ConfigurationError(getClass().getSimpleName() + " is not designed to generate unique values");
+      throw BeneratorExceptionFactory.getInstance().configurationError(getClass().getSimpleName() + " is not designed to generate unique values");
     }
     AttachedWeightSampleGenerator<T> generator = new AttachedWeightSampleGenerator<>(numberType);
     for (WeightedSample<?> sample : samples) {
@@ -86,7 +86,7 @@ public class WeightedNumbers<E> extends Sequence {
   @Override
   public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
     if (unique) {
-      throw new ConfigurationError(getClass().getSimpleName() + " is not designed to generate unique values");
+      throw BeneratorExceptionFactory.getInstance().configurationError(getClass().getSimpleName() + " is not designed to generate unique values");
     }
     return SequenceUtil.applySequenceDetached(this, source, false);
   }

@@ -28,8 +28,8 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.XMLElementParser;
@@ -118,7 +118,7 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
       } else if (isStandardXmlRootAttribute(attribute.getKey())) {
         iterator.remove();
       } else {
-        throw new ConfigurationError("Not a supported attribute in <" + EL_SETUP + ">: " + attribute.getKey());
+        throw BeneratorExceptionFactory.getInstance().configurationError("Not a supported attribute in <" + EL_SETUP + ">: " + attribute.getKey());
       }
     }
     // create root statement and configure its children

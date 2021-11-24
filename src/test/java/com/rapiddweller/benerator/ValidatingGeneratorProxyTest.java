@@ -37,15 +37,11 @@ import static org.junit.Assert.fail;
 /**
  * Tests the {@link ValidatingGeneratorProxy}.<br/><br/>
  * Created: 29.09.2006 17:01:59
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class ValidatingGeneratorProxyTest {
 
-  /**
-   * Test valid.
-   */
   @Test
   public void testValid() {
     Generator<?> generator = new ValidatingGeneratorProxy<>(
@@ -56,9 +52,6 @@ public class ValidatingGeneratorProxyTest {
     }
   }
 
-  /**
-   * Test invalid.
-   */
   @Test
   public void testInvalid() {
     Generator<?> generator = new ValidatingGeneratorProxy<>(
@@ -66,7 +59,7 @@ public class ValidatingGeneratorProxyTest {
         new MockValidator(false));
     try {
       GeneratorUtil.generateNullable(generator);
-      fail("Exception expercted");
+      fail("Exception expected");
     } catch (IllegalGeneratorStateException e) {
       // This is the expected behavior
     }
@@ -76,11 +69,6 @@ public class ValidatingGeneratorProxyTest {
 
     private final boolean result;
 
-    /**
-     * Instantiates a new Mock validator.
-     *
-     * @param result the result
-     */
     public MockValidator(boolean result) {
       this.result = result;
     }

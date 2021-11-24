@@ -26,6 +26,7 @@
 
 package com.rapiddweller.model.data;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Escalator;
 import com.rapiddweller.common.LoggerEscalator;
 import com.rapiddweller.common.NullSafeComparator;
@@ -33,10 +34,8 @@ import com.rapiddweller.common.Operation;
 import com.rapiddweller.common.operation.FirstArgSelector;
 
 /**
- * A FeatureDescriptor is composed og FeatureDetails, which have name, value and type.<br/>
- * <br/>
+ * A FeatureDescriptor is composed og FeatureDetails, which have name, value and type.<br/><br/>
  * Created: 03.08.2007 06:57:42
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  */
@@ -55,39 +54,15 @@ public class FeatureDetail<E> {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Feature detail.
-   *
-   * @param name       the name
-   * @param type       the type
-   * @param constraint the constraint
-   */
   public FeatureDetail(String name, Class<E> type, boolean constraint) {
     this(name, type, constraint, new FirstArgSelector<>());
   }
 
-  /**
-   * Instantiates a new Feature detail.
-   *
-   * @param name       the name
-   * @param type       the type
-   * @param constraint the constraint
-   * @param combinator the combinator
-   */
   public FeatureDetail(String name, Class<E> type, boolean constraint,
                        Operation<E, E> combinator) {
     this(name, type, constraint, combinator, false);
   }
 
-  /**
-   * Instantiates a new Feature detail.
-   *
-   * @param name       the name
-   * @param type       the type
-   * @param constraint the constraint
-   * @param combinator the combinator
-   * @param deprecated the deprecated
-   */
   public FeatureDetail(String name, Class<E> type, boolean constraint,
                        Operation<E, E> combinator, boolean deprecated) {
     this.name = name;
@@ -100,45 +75,25 @@ public class FeatureDetail<E> {
 
   // interface -------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets name.
-   *
-   * @return the name
-   */
   public String getName() {
     return name;
   }
 
-  /**
-   * Gets type.
-   *
-   * @return the type
-   */
   public Class<E> getType() {
     return type;
   }
 
-  /**
-   * Gets value.
-   *
-   * @return the value
-   */
   public E getValue() {
     return value;
   }
 
-  /**
-   * Sets value.
-   *
-   * @param value the value
-   */
   public void setValue(E value) {
     if (deprecated && value != null) {
       escalator.escalate("Feature '" + name + "' is deprecated",
           getClass(), value);
     }
     if (value != null && !(type.isAssignableFrom(value.getClass()))) {
-      throw new IllegalArgumentException(
+      throw BeneratorExceptionFactory.getInstance().illegalArgument(
           "Tried to assign a value of type '" +
               value.getClass().getName()
               + "'to detail '" + name + "' of type '" + type +
@@ -147,31 +102,15 @@ public class FeatureDetail<E> {
     this.value = value;
   }
 
-  /**
-   * Combine with e.
-   *
-   * @param otherValue the other value
-   * @return the e
-   */
   @SuppressWarnings("unchecked")
   public E combineWith(E otherValue) {
     return combinator.perform(this.value, otherValue);
   }
 
-  /**
-   * Is constraint boolean.
-   *
-   * @return the boolean
-   */
   public boolean isConstraint() {
     return constraint;
   }
 
-  /**
-   * Gets description.
-   *
-   * @return the description
-   */
   public String getDescription() {
     return name + '=' + value + " (" + type + ')';
   }
@@ -179,11 +118,6 @@ public class FeatureDetail<E> {
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------
 
-  /**
-   * Is deprecated boolean.
-   *
-   * @return the boolean
-   */
   public boolean isDeprecated() {
     return deprecated;
   }

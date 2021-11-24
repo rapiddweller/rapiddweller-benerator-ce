@@ -27,9 +27,9 @@
 package com.rapiddweller.benerator.consumer;
 
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -175,7 +175,7 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
 
   protected void initPrinter(Object data) throws IOException {
     if (uri == null) {
-      throw new ConfigurationError("Property 'uri' not set on bean " + getClass().getName());
+      throw ExceptionFactory.getInstance().configurationError("Property 'uri' not set on bean " + getClass().getName());
     }
     wasAppended = (append && IOUtil.isURIAvailable(uri));
 
@@ -187,7 +187,7 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
         && !directory.getParentFile().exists()) {
       boolean result = directory.getParentFile().mkdirs();
       if (!result) {
-        throw new ConfigurationError("filepath does not exists and can not be created ...");
+        throw ExceptionFactory.getInstance().configurationError("filepath does not exists and can not be created ...");
       }
     }
 

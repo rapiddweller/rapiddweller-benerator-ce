@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.dataset;
 
 import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.GeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.benerator.wrapper.WeightedGeneratorGenerator;
@@ -69,7 +70,7 @@ public class CompositeDatasetGenerator<E> extends GeneratorWrapper<Generator<E>,
   @SuppressWarnings("unchecked")
   public Class<E> getGeneratedType() {
     WeightedGeneratorGenerator<E> generatorGenerator = getSource();
-    if (generatorGenerator.getSources().size() > 0) {
+    if (!generatorGenerator.getSources().isEmpty()) {
       return (Class<E>) generatorGenerator.getSource(0).getGeneratedType();
     }
     return (Class<E>) Object.class;
@@ -153,13 +154,13 @@ public class CompositeDatasetGenerator<E> extends GeneratorWrapper<Generator<E>,
           // try each atomic data subset (this makes the first atomic subset the main one)
           createFallbackGeneratorFor(datasetInstance);
           if (fallbackGenerator == null) {
-              throw new IllegalArgumentException("Unable to find sub generator for data subset " +
+              throw BeneratorExceptionFactory.getInstance().illegalArgument("Unable to find sub generator for data subset " +
                   requestedDataset + " in " + this);
           }
         }
         return fallbackGenerator;
       } else {
-        throw new IllegalArgumentException(getClass() + " did not find a sub generator for dataset '" +
+        throw BeneratorExceptionFactory.getInstance().illegalArgument(getClass() + " did not find a sub generator for dataset '" +
             requestedDataset + "'");
       }
     } else {

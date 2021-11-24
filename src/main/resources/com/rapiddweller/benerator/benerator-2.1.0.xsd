@@ -55,7 +55,7 @@
                     <xs:attribute name="defaultOneToOne" type="xs:boolean"/>
                     <xs:attribute name="defaultErrorHandler" type="errorhandler-type"/>
                     <xs:attribute name="defaultImports" type="xs:boolean"/>
-                    <xs:attribute name="maxCount" type="xs:long"/>
+                    <xs:attribute name="maxCount" type="xs:string"/>
                     <xs:attribute name="generatorFactory" type="xs:string"/>
                     <xs:attribute name="acceptUnknownSimpleTypes" type="xs:string"/>
                 </xs:extension>
@@ -116,7 +116,7 @@
             <xs:attribute name="identity" type="xs:string"/>
             <xs:attribute name="defaultSource" type="xs:string"/>
             <xs:attribute name="target" type="xs:string"/>
-            <xs:attribute name="pageSize" type="xs:string"/>
+            <xs:attribute name="pageSize" type="scriptable-positive-int"/>
             <xs:attribute name="onError" type="errorhandler-type"/>
         </xs:complexType>
     </xs:element>
@@ -190,7 +190,8 @@
         <xs:complexType>
             <xs:simpleContent>
                 <xs:extension base="xs:string">
-                    <xs:attribute name="code" type="xs:string"/>
+                    <xs:attribute name="errorId" type="xs:string"/>
+                    <xs:attribute name="exitCode" type="xs:int"/>
                 </xs:extension>
             </xs:simpleContent>
         </xs:complexType>
@@ -298,12 +299,12 @@
             <xs:attribute name="quoteTableNames" type="xs:boolean"/>
             <xs:attribute name="includeTables" type="xs:string"/>
             <xs:attribute name="excludeTables" type="xs:string"/>
-            <xs:attribute name="batch" type="xs:string"/>
-            <xs:attribute name="fetchSize" type="xs:string"/>
-            <xs:attribute name="readOnly" type="xs:string"/>
-            <xs:attribute name="lazy" type="xs:string"/>
-            <xs:attribute name="metaCache" type="xs:string"/>
-            <xs:attribute name="acceptUnknownColumnTypes" type="xs:string"/>
+            <xs:attribute name="batch" type="scriptable-boolean"/>
+            <xs:attribute name="fetchSize" type="scriptable-positive-int"/>
+            <xs:attribute name="readOnly" type="xs:boolean"/>
+            <xs:attribute name="lazy" type="scriptable-boolean"/>
+            <xs:attribute name="metaCache" type="scriptable-boolean"/>
+            <xs:attribute name="acceptUnknownColumnTypes" type="scriptable-boolean"/>
         </xs:complexType>
     </xs:element>
 
@@ -502,49 +503,28 @@
     </xs:attributeGroup>
 
     <xs:simpleType name="kafka-format">
-        <xs:union>
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="json"/>
-                </xs:restriction>
-            </xs:simpleType>
-            <xs:simpleType>
-                <xs:restriction base="script-expression-type"/>
-            </xs:simpleType>
-        </xs:union>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="json"/>
+        </xs:restriction>
     </xs:simpleType>
 
     <xs:simpleType name="kafka-compression-type">
-        <xs:union>
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="gzip"/>
-                    <xs:enumeration value="snappy"/>
-                    <xs:enumeration value="lz4"/>
-                    <xs:enumeration value="zstd"/>
-                    <xs:enumeration value="uncompressed"/>
-                    <xs:enumeration value="producer"/>
-                </xs:restriction>
-            </xs:simpleType>
-            <xs:simpleType>
-                <xs:restriction base="script-expression-type"/>
-            </xs:simpleType>
-        </xs:union>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="gzip"/>
+            <xs:enumeration value="snappy"/>
+            <xs:enumeration value="lz4"/>
+            <xs:enumeration value="zstd"/>
+            <xs:enumeration value="uncompressed"/>
+            <xs:enumeration value="producer"/>
+        </xs:restriction>
     </xs:simpleType>
 
     <xs:simpleType name="kafka-client-dns-lookup-type">
-        <xs:union>
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="default"/>
-                    <xs:enumeration value="use_all_dns_ips"/>
-                    <xs:enumeration value="resolve_canonical_bootstrap_servers_only"/>
-                </xs:restriction>
-            </xs:simpleType>
-            <xs:simpleType>
-                <xs:restriction base="script-expression-type"/>
-            </xs:simpleType>
-        </xs:union>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="default"/>
+            <xs:enumeration value="use_all_dns_ips"/>
+            <xs:enumeration value="resolve_canonical_bootstrap_servers_only"/>
+        </xs:restriction>
     </xs:simpleType>
 
     <xs:simpleType name="kafka-recording-level-type">
@@ -622,8 +602,6 @@
             </xs:simpleType>
         </xs:union>
     </xs:simpleType>
-
-
 
 
     <!-- creates a DOM Tree -->
@@ -759,7 +737,7 @@
             <xs:complexContent>
                 <xs:extension base="bean-type">
                     <xs:attributeGroup ref="execution-attrs"/>
-                    <xs:attribute name="threads" type="xs:string"/>
+                    <xs:attribute name="threads" type="scriptable-positive-int"/>
                     <xs:attribute name="pager" type="xs:string"/>
                 </xs:extension>
             </xs:complexContent>
@@ -816,8 +794,8 @@
                 <xs:element ref="while" minOccurs="0"/>
             </xs:sequence>
             <xs:attributeGroup ref="generator-attrs"/>
-            <xs:attribute name="minCount" type="xs:string"/>
-            <xs:attribute name="maxCount" type="xs:string"/>
+            <xs:attribute name="minCount" type="scriptable-long"/>
+            <xs:attribute name="maxCount" type="scriptable-long"/>
             <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attributeGroup ref="execution-attrs"/>
             <xs:attribute name="threads" type="xs:string"/>
@@ -852,7 +830,7 @@
     </xs:element>
 
     <xs:attributeGroup name="execution-attrs">
-        <xs:attribute name="count" type="xs:string"/>
+        <xs:attribute name="count" type="count-type"/>
         <xs:attribute name="pageSize" type="xs:string"/>
         <xs:attribute name="stats" type="xs:string"/>
         <xs:attribute name="onError" type="errorhandler-type"/>
@@ -886,8 +864,8 @@
                 </xs:choice>
             </xs:sequence>
             <xs:attributeGroup ref="component-generator-attrs"/>
-            <xs:attribute name="minCount" type="xs:string"/>
-            <xs:attribute name="maxCount" type="xs:string"/>
+            <xs:attribute name="minCount" type="scriptable-long"/>
+            <xs:attribute name="maxCount" type="scriptable-long"/>
             <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attribute name="container">
                 <xs:simpleType>
@@ -1001,7 +979,7 @@
         <xs:attribute name="dataset" type="xs:string"/>
         <xs:attribute name="nesting" type="xs:string"/>
         <xs:attribute name="locale" type="xs:string"/>
-        <xs:attribute name="filter" type="xs:string">
+        <xs:attribute name="filter" type="script-expression-type">
             <xs:annotation>
                 <xs:appinfo>
                     <edition>EE</edition>
@@ -1020,15 +998,75 @@
 
         <!-- wrappers -->
         <xs:attribute name="converter" type="xs:string"/>
-        <xs:attribute name="nullQuota" type="xs:string"/>
+        <xs:attribute name="nullQuota" type="scriptable-double"/>
         <xs:attribute name="unique" type="xs:string"/>
         <xs:attribute name="distribution" type="xs:string"/>
-        <xs:attribute name="cyclic" type="xs:string"/>
+        <xs:attribute name="cyclic" type="scriptable-boolean"/>
         <xs:attribute name="offset" type="xs:string"/>
 
         <!-- sensor -->
         <xs:attribute name="sensor" type="xs:string"/>
     </xs:attributeGroup>
+
+    <xs:simpleType name="count-type">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="positiveLong"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="infinite"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="scriptable-positive-int">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:int"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="scriptable-long">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:long"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="scriptable-double">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:double"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="scriptable-boolean">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:boolean"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
 
     <xs:simpleType name="format-type">
         <xs:restriction base="xs:string">

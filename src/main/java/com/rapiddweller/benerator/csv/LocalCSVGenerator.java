@@ -26,8 +26,8 @@
 
 package com.rapiddweller.benerator.csv;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.sample.WeightedCSVSampleGenerator;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.common.converter.NoOpConverter;
@@ -37,10 +37,7 @@ import java.util.Locale;
 /**
  * Generates data from a localized csv file.
  * For different locales, different CSV versions may be provided by appending region suffixes,
- * similar to the JDK ResourceBundle handling.<br/>
- * <br/>
- * Created: 07.06.2007 17:21:24
- *
+ * similar to the JDK ResourceBundle handling.<br/><br/>
  * @param <E> the type parameter
  * @author Volker Bergmann
  */
@@ -52,42 +49,15 @@ public class LocalCSVGenerator<E> extends WeightedCSVSampleGenerator<E> {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Local csv generator.
-   *
-   * @param targetType the target type
-   * @param baseName   the base name
-   * @param suffix     the suffix
-   * @param encoding   the encoding
-   */
   public LocalCSVGenerator(Class<E> targetType, String baseName, String suffix, String encoding) {
     this(targetType, baseName, Locale.getDefault(), suffix, encoding);
   }
 
-  /**
-   * Instantiates a new Local csv generator.
-   *
-   * @param targetType the target type
-   * @param baseName   the base name
-   * @param locale     the locale
-   * @param suffix     the suffix
-   * @param encoding   the encoding
-   */
   @SuppressWarnings("unchecked")
   public LocalCSVGenerator(Class<E> targetType, String baseName, Locale locale, String suffix, String encoding) {
     this(targetType, baseName, locale, suffix, encoding, NoOpConverter.getInstance());
   }
 
-  /**
-   * Instantiates a new Local csv generator.
-   *
-   * @param targetType the target type
-   * @param baseName   the base name
-   * @param locale     the locale
-   * @param suffix     the suffix
-   * @param encoding   the encoding
-   * @param converter  the converter
-   */
   public LocalCSVGenerator(Class<E> targetType, String baseName, Locale locale, String suffix, String encoding,
                            Converter<String, E> converter) {
     super(targetType, availableUri(baseName, locale, suffix), encoding, ',', converter);
@@ -104,27 +74,17 @@ public class LocalCSVGenerator<E> extends WeightedCSVSampleGenerator<E> {
     }
     String uri = LocaleUtil.availableLocaleUrl(baseName, locale, suffix);
     if (uri == null) {
-      throw new ConfigurationError("No localization found for " + baseName + suffix + " on locale " + locale);
+      throw BeneratorExceptionFactory.getInstance().configurationError("No localization found for " + baseName + suffix + " on locale " + locale);
     }
     return uri;
   }
 
-  /**
-   * Gets locale.
-   *
-   * @return the locale
-   */
   public Locale getLocale() {
     return locale;
   }
 
   // private helpers -------------------------------------------------------------------------------------------------
 
-  /**
-   * Sets locale.
-   *
-   * @param locale the locale
-   */
   public void setLocale(Locale locale) {
     this.uri = availableUri(baseName, locale, suffix);
     this.locale = locale;
@@ -136,4 +96,5 @@ public class LocalCSVGenerator<E> extends WeightedCSVSampleGenerator<E> {
   public String toString() {
     return getClass().getSimpleName() + '[' + baseName + ',' + locale + ',' + suffix + ']';
   }
+
 }

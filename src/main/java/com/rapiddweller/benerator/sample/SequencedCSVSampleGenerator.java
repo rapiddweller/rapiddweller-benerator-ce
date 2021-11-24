@@ -27,7 +27,6 @@
 package com.rapiddweller.benerator.sample;
 
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.common.ConversionException;
@@ -36,8 +35,6 @@ import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.csv.CSVLineIterator;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,10 +117,6 @@ public class SequencedCSVSampleGenerator<E> extends GeneratorProxy<E> {
       }
       ((SampleGenerator<E>) getSource()).setValues(samples);
       super.init(context);
-    } catch (FileNotFoundException e) {
-      throw new InvalidGeneratorSetupException("uri", "not found: " + uri);
-    } catch (IOException e) {
-      throw new IllegalGeneratorStateException(e); // file access was interrupted, no fail-over
     } catch (ConversionException e) {
       throw new InvalidGeneratorSetupException("URI content not valid", e);
     }

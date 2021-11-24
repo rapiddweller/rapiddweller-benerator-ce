@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator;
 
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.exception.ExceptionFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -52,8 +52,9 @@ public class FileFormats {
 
   public static FileFormat ofName(String name) {
     FileFormat format = INSTANCES.get(name);
-    if (format == null)
-      throw new ConfigurationError("No protocol defined for '" + name + "'");
+    if (format == null) {
+      throw ExceptionFactory.getInstance().configurationError("No protocol defined for FileFormat '" + name + "'");
+    }
     return format;
   }
 

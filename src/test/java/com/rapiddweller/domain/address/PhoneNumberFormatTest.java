@@ -1,5 +1,6 @@
 package com.rapiddweller.domain.address;
 
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,18 +17,12 @@ import static org.junit.Assert.assertSame;
  */
 public class PhoneNumberFormatTest {
   // file deepcode ignore ApiMigration/test: testfile
-  /**
-   * The Thrown.
-   */
+
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  /**
-   * Test format.
-   */
   @Test
   public void testFormat() {
-
     PhoneNumberFormat phoneNumberFormat = new PhoneNumberFormat("Pattern");
     FieldPosition pos = new FieldPosition(1);
     PhoneNumber obj = new PhoneNumber();
@@ -35,9 +30,6 @@ public class PhoneNumberFormatTest {
     assertSame(stringBuffer, phoneNumberFormat.format(obj, stringBuffer, pos));
   }
 
-  /**
-   * Test format 2.
-   */
   @Test
   public void testFormat2() {
     PhoneNumberFormat phoneNumberFormat = new PhoneNumberFormat("");
@@ -47,19 +39,13 @@ public class PhoneNumberFormatTest {
     assertSame(stringBuffer, phoneNumberFormat.format(obj, stringBuffer, pos));
   }
 
-  /**
-   * Test parse object.
-   */
   @Test
   public void testParseObject() {
     PhoneNumberFormat phoneNumberFormat = new PhoneNumberFormat("Pattern");
-    thrown.expect(IllegalArgumentException.class);
+    thrown.expect(IllegalArgumentError.class);
     phoneNumberFormat.parseObject("Source", new ParsePosition(1));
   }
 
-  /**
-   * Test parse object 2.
-   */
   @Test
   public void testParseObject2() {
     PhoneNumberFormat phoneNumberFormat = new PhoneNumberFormat("");
@@ -69,9 +55,6 @@ public class PhoneNumberFormatTest {
     assertEquals("", ((PhoneNumber) phoneNumberFormat.parseObject("Source", new ParsePosition(1))).getLocalNumber());
   }
 
-  /**
-   * Test parse object 3.
-   */
   @Test
   public void testParseObject3() {
     PhoneNumberFormat phoneNumberFormat = new PhoneNumberFormat("");
@@ -80,5 +63,6 @@ public class PhoneNumberFormatTest {
     assertFalse(((PhoneNumber) phoneNumberFormat.parseObject("", new ParsePosition(1))).isMobile());
     assertEquals("", ((PhoneNumber) phoneNumberFormat.parseObject("", new ParsePosition(1))).getLocalNumber());
   }
+
 }
 

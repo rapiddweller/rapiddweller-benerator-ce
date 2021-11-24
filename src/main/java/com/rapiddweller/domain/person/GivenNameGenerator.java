@@ -29,6 +29,7 @@ package com.rapiddweller.domain.person;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.csv.WeightedDatasetCSVGenerator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.util.SharedGenerator;
 import com.rapiddweller.common.Encodings;
@@ -87,7 +88,7 @@ public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String>
     } else if (gender == Gender.MALE) {
       return baseName + "_male";
     } else {
-      throw new IllegalArgumentException("Gender: " + gender);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Gender: " + gender);
     }
   }
 

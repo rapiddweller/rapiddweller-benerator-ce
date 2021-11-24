@@ -28,6 +28,7 @@ package com.rapiddweller.domain.address;
 
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ArrayUtil;
@@ -67,7 +68,7 @@ public class City {
   public City(State state, String name, String addition, String[] postalCodes,
               String areaCode) {
     if (areaCode == null) {
-      throw new IllegalArgumentException("Area Code is null for " + name);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Area Code is null for " + name);
     }
     this.state = state;
     this.name = name;

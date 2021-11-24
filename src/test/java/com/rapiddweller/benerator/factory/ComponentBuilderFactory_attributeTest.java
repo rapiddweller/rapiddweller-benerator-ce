@@ -638,7 +638,7 @@ public class ComponentBuilderFactory_attributeTest extends AbstractComponentBuil
         GenerationSetup setup = new SimpleGenerationSetup();
         logger.debug("Test #" + (++testCount));
         if (featureDetails.length % 2 != 0)
-            throw new ConfigurationError("Illegal setup: need an even number of parameters (name/value pairs)");
+            throw ExceptionFactory.getInstance().configurationError("Illegal setup: need an even number of parameters (name/value pairs)");
         SimpleTypeDescriptor type = new SimpleTypeDescriptor(name, (String) null);
         PartDescriptor part = new PartDescriptor(name, type);
         for (int i = 0; i < featureDetails.length; i += 2)

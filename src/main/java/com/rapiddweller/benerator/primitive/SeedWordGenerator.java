@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.primitive;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.sample.SeedGenerator;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorWrapper;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.domain.lang.Noun;
 
@@ -102,7 +102,7 @@ public class SeedWordGenerator extends NonNullGeneratorWrapper<Character[], Stri
       Iterator<String> iterator = getNounIterator(Locale.getDefault());
       return (iterator != null ? iterator : getNounIterator(LocaleUtil.getFallbackLocale()));
     } catch (Exception e) {
-      throw new ConfigurationError("Error loading noun definition", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error loading noun definition", e);
     }
   }
 

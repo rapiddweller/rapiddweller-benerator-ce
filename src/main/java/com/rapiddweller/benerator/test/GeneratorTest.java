@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.test;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
@@ -454,7 +455,7 @@ public abstract class GeneratorTest extends ModelTest {
         if (partValue instanceof String) {
           counter.count(((String) partValue).length());
         } else {
-          throw new IllegalArgumentException("Expected String, found " + partValue.getClass());
+          throw BeneratorExceptionFactory.getInstance().illegalArgument("Expected String, found " + partValue.getClass());
         }
       }
     }

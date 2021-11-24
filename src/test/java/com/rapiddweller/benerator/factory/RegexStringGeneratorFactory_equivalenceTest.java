@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.factory;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import com.rapiddweller.model.data.Uniqueness;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -39,7 +40,6 @@ import java.util.Locale;
 /**
  * Tests the {@link RegexGeneratorFactory} with the {@link EquivalenceGeneratorFactory}.<br/><br/>
  * Created: 07.07.2011 13:39:12
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
@@ -47,18 +47,12 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
 
   private static Locale realLocale;
 
-  /**
-   * Sets up fallback locale.
-   */
   @BeforeClass
   public static void setUpFallbackLocale() {
     realLocale = Locale.getDefault();
     Locale.setDefault(LocaleUtil.getFallbackLocale());
   }
 
-  /**
-   * Restore real locale.
-   */
   @AfterClass
   public static void restoreRealLocale() {
     Locale.setDefault(realLocale);
@@ -67,25 +61,16 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
 
   // tests -----------------------------------------------------------------------------------------------------------
 
-  /**
-   * Test null pattern.
-   */
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentError.class)
   public void testNullPattern() {
     createGenerator(null, 0, null);
   }
 
-  /**
-   * Test empty pattern.
-   */
   @Test
   public void testEmptyPattern() {
     expectSequence("", "");
   }
 
-  /**
-   * Test constant.
-   */
   @Test
   public void testConstant() {
     expectSequence("a", "a");
@@ -93,9 +78,6 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     expectSequence("abc@xyz\\.com", "abc@xyz.com");
   }
 
-  /**
-   * Test escape characters.
-   */
   @Test
   public void testEscapeCharacters() {
     expectSequence("\\-\\+\\*\\.\\?\\,\\&\\^\\$\\\\\\|", "-+*.?,&^$\\|");
@@ -104,17 +86,11 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     expectSequence("\\{\\}", "{}");
   }
 
-  /**
-   * Test start end characters.
-   */
   @Test
   public void testStartEndCharacters() {
     expectSequence("^ABC$", "ABC");
   }
 
-  /**
-   * Test cardinalities.
-   */
   @Test
   public void testCardinalities() {
     expectSequence("a", "a");
@@ -127,10 +103,6 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     expectSequence("a{1,6}", "a", "aa", "aaa", "aaaaa", "aaaaaa");
   }
 
-
-  /**
-   * Test ranges.
-   */
   @Test
   public void testRanges() {
     expectSequence("[a-e]", "a", "c", "e");
@@ -142,18 +114,12 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     expectSet("[0-9]{2}", "00", "55", "99");
   }
 
-  /**
-   * Test predefined classes.
-   */
   @Test
   public void testPredefinedClasses() {
     expectSequence("\\d", "0", "5", "9");
     expectSequence("\\w", "A", "N", "Z", "a", "n", "z", "0", "5", "9", "_");
   }
 
-  /**
-   * Test combinations.
-   */
   @Test
   public void testCombinations() {
     expectSequence("[\\d^0-2]", "3", "6", "9");
@@ -165,9 +131,6 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     expectSet("[F-H][aio]{2}", "Faa", "Fii", "Foo", "Gaa", "Gii", "Goo", "Haa", "Hii", "Hoo");
   }
 
-  /**
-   * Test choices.
-   */
   @Test
   public void testChoices() {
     expectSet("a|b|c|d|e", "a", "b", "c", "d", "e");
@@ -175,9 +138,6 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     expectSet("a{1,2}|b{2,3}", "a", "aa", "bb", "bbb");
   }
 
-  /**
-   * Test groups.
-   */
   @Test
   public void testGroups() {
     expectSet("(abc){1,3}", "abc", "abcabc", "abcabcabc");
@@ -186,9 +146,6 @@ public class RegexStringGeneratorFactory_equivalenceTest extends GeneratorTest {
     expectSet("x(a[01]{2}){1,2}x", "xa00x", "xa11x", "xa00a00x", "xa11a00x", "xa00a11x", "xa11a11x");
   }
 
-  /**
-   * Test grouped choices.
-   */
   @Test
   public void testGroupedChoices() {
     expectSet("(a|b|c){1,2}", "a", "b", "c", "aa", "ab", "ac", "ba", "bb", "bc", "ca", "cb", "cc");

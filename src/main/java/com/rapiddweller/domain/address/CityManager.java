@@ -26,9 +26,9 @@
 
 package com.rapiddweller.domain.address;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.*;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.exception.ParseException;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.csv.BeanCSVWriter;
 import com.rapiddweller.format.csv.CSVLineIterator;
@@ -70,15 +70,13 @@ public class CityManager {
       if (warnCount > 0) {
         logger.warn("{} warnings", warnCount);
       }
-    } catch (IOException | NullPointerException e) {
-      throw new ConfigurationError(
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed(
           "Error reading cities file: " + filename, e);
     }
   }
 
-  private static int parseCityFile(Country country, String filename,
-                                   Map<String, String> defaults)
-      throws IOException {
+  private static int parseCityFile(Country country, String filename, Map<String, String> defaults) {
     logger.debug("Parsing city definitions in file {}", filename);
     try (CSVLineIterator iterator = new CSVLineIterator(filename, ';', Encodings.UTF_8)) {
       DataContainer<String[]> container = new DataContainer<>();
@@ -120,7 +118,6 @@ public class CityManager {
       if (stateName != null) {
         state.setName(StringUtil.normalizeName(stateName));
       }
-      //logger.debug(state.getId() + "," + state.getName());
       country.addState(state);
     }
     return state;
@@ -137,8 +134,8 @@ public class CityManager {
       String cityNameExtension = instance.get("nameExtension");
       cityId = new CityId(cityName, cityNameExtension);
     } else {
-      throw new ParseException("Unable to parse city",
-          instance.toString(), lineNumber, 1);
+      throw ExceptionFactory.getInstance().syntaxErrorForText(
+          instance.toString(), "Unable to parse city", lineNumber, 1);
     }
     return cityId;
   }

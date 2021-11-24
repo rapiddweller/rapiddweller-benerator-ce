@@ -89,12 +89,12 @@ public class DBSnapshotTool {
 
     String dbUrl = System.getProperty(DB_URL);
     if (StringUtil.isEmpty(dbUrl)) {
-      throw new IllegalArgumentException("No database URL specified. " +
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("No database URL specified. " +
           "Please provide the JDBC URL as an environment property like '-DdbUrl=jdbc:...'");
     }
     String dbDriver = System.getProperty(DB_DRIVER);
     if (StringUtil.isEmpty(dbDriver)) {
-      throw new IllegalArgumentException("No database driver specified. " +
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("No database driver specified. " +
           "Please provide the JDBC driver class name as an environment property like '-DdbDriver=...'");
     }
     String dbUser = System.getProperty(DB_USER);
@@ -158,7 +158,7 @@ public class DBSnapshotTool {
         }
         exporter = new SQLEntityExporter(filename, dialect, lineSeparator, encoding);
       } else {
-        throw new IllegalArgumentException("Unknown format: " + format);
+        throw BeneratorExceptionFactory.getInstance().illegalArgument("Unknown format: " + format);
       }
 
       // export data

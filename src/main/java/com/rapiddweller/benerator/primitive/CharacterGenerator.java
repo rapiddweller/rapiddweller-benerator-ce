@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.primitive;
 
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.sample.NonNullSampleGenerator;
 import com.rapiddweller.benerator.wrapper.NonNullGeneratorProxy;
 import com.rapiddweller.common.LocaleUtil;
@@ -132,7 +132,7 @@ public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
       setSource(new NonNullSampleGenerator<>(Character.class, values));
       super.init(context);
     } catch (SyntaxError e) {
-      throw new IllegalGeneratorStateException(e);
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Found syntax error", e);
     }
   }
 

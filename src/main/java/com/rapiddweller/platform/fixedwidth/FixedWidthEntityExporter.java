@@ -27,8 +27,8 @@
 package com.rapiddweller.platform.fixedwidth;
 
 import com.rapiddweller.benerator.consumer.TextFileExporter;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayFormat;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.model.data.Entity;
@@ -107,7 +107,7 @@ public class FixedWidthEntityExporter extends TextFileExporter {
   @Override
   protected void postInitPrinter(Object object) {
     if (this.formats.isEmpty()) {
-      throw new ConfigurationError("No format(s) set on " + getClass().getName());
+      throw BeneratorExceptionFactory.getInstance().configurationError("No format(s) set on " + getClass().getName());
     }
   }
 
@@ -115,7 +115,7 @@ public class FixedWidthEntityExporter extends TextFileExporter {
   protected void startConsumingImpl(Object object) {
     logger.debug("exporting {}", object);
     if (!(object instanceof Entity)) {
-      throw new IllegalArgumentException("Expected Entity");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Expected Entity");
     }
     Entity entity = (Entity) object;
     getFormatter(entity.type()).format(entity, printer);
@@ -133,7 +133,7 @@ public class FixedWidthEntityExporter extends TextFileExporter {
       formatter = formatters.get("*");
     }
     if (formatter == null) {
-      throw new ConfigurationError("No format defined for type " + type);
+      throw BeneratorExceptionFactory.getInstance().configurationError("No format defined for type " + type);
     }
     return formatter;
   }

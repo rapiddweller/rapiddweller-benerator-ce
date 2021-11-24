@@ -26,7 +26,7 @@
 
 package com.rapiddweller.benerator.util;
 
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Validator;
 
@@ -72,7 +72,7 @@ public abstract class ValidatingGenerator<P> extends AbstractGenerator<P> {
       valid = validator.valid(product);
       count++;
       if (count >= ERROR_THRESHOLD) {
-        throw new IllegalGeneratorStateException("Aborting generation, because of " + ERROR_THRESHOLD
+        throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Aborting generation, because of " + ERROR_THRESHOLD
             + " consecutive invalid generations. Validator is: " + validator +
             ". Last attempt was: " + product);
       }

@@ -30,9 +30,9 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.parser.ModelParser;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import org.w3c.dom.Element;
@@ -78,7 +78,7 @@ public class DefaultComponentParser extends AbstractBeneratorDescriptorParser {
           ComponentDescriptor component = parser.parseSimpleTypeComponent(child, null, null);
           context.setDefaultComponentConfig(component);
         } else {
-          throw new ConfigurationError("Unexpected element: " + childType);
+          throw BeneratorExceptionFactory.getInstance().configurationError("Unexpected element: " + childType);
         }
       }
       return true;

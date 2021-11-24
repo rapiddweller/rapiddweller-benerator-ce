@@ -2,8 +2,8 @@
 
 package com.rapiddweller.benerator.environment;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Named;
 
 import java.util.Collection;
@@ -27,7 +27,7 @@ public class Environment implements Named {
       String name = nameEntry.getKey();
       Map<String, Map<String, String>> typesMap = CollectionUtil.stripOffPrefixes(nameEntry.getValue());
       if (typesMap.size() > 1) {
-        throw new ConfigurationError("Invalid environment definition: There are different system types " +
+        throw BeneratorExceptionFactory.getInstance().configurationError("Invalid environment definition: There are different system types " +
             typesMap.keySet() + "assigned to the same system name '" + name + "' in '" + envName + "' environment");
       }
       Map.Entry<String, Map<String, String>> typeEntry = typesMap.entrySet().iterator().next();

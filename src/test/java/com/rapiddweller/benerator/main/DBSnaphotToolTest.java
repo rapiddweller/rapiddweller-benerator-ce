@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.main;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.jdbacl.dialect.HSQLUtil;
@@ -89,14 +90,14 @@ public class DBSnaphotToolTest {
 
   // tests -----------------------------------------------------------------------------------------------------------
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentError.class)
   public void testMissingUrl() {
     System.setProperty(DBSnapshotTool.DB_URL, "");
     System.setProperty(DBSnapshotTool.DB_DRIVER, HSQLUtil.DRIVER);
     DBSnapshotTool.main(new String[0]);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentError.class)
   public void testMissingDriver() {
     System.setProperty(DBSnapshotTool.DB_URL, HSQLUtil.IN_MEMORY_URL_PREFIX + "benerator");
     System.setProperty(DBSnapshotTool.DB_DRIVER, "");

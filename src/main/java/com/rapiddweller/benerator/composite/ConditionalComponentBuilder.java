@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.script.Expression;
 
@@ -51,10 +52,10 @@ public class ConditionalComponentBuilder<E> extends ComponentBuilderProxy<E> {
   public boolean execute(BeneratorContext context) {
     Object conditionResult = condition.evaluate(context);
     if (conditionResult == null) {
-      throw new IllegalArgumentException("Condition resolves to null: " + condition);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Condition resolves to null: " + condition);
     }
     if (!(conditionResult instanceof Boolean)) {
-      throw new IllegalArgumentException("Condition does not resolve to a boolean value: " + condition);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Condition does not resolve to a boolean value: " + condition);
     }
     if ((boolean) conditionResult) {
       return source.execute(context);

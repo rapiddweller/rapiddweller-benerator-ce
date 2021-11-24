@@ -31,9 +31,9 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.Sequence;
 import com.rapiddweller.benerator.distribution.SequenceManager;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.RepeatGeneratorProxy;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.common.ConfigurationError;
 
 /**
  * Distribution that repeats consecutive elements or numbers.<br/><br/>
@@ -48,7 +48,7 @@ public class RepeatSequence extends Sequence {
   private final int repetitionGranularity;
   private final Distribution repetitionDistribution;
 
-  private static Distribution stepSequence = new StepSequence();
+  private static final Distribution stepSequence = new StepSequence();
 
   public RepeatSequence() {
     this(0, 3);
@@ -73,11 +73,11 @@ public class RepeatSequence extends Sequence {
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(
       Class<T> numberType, T min, T max, T granularity, boolean unique) {
     if (minRepetitions > maxRepetitions) {
-      throw new ConfigurationError("minRepetitions (" + minRepetitions + ") > " +
+      throw BeneratorExceptionFactory.getInstance().configurationError("minRepetitions (" + minRepetitions + ") > " +
           "maxRepetitions (" + maxRepetitions + ")");
     }
     if (unique && (minRepetitions > 0 || maxRepetitions > 0)) {
-      throw new ConfigurationError("Uniqueness can't be assured for minRepetitions=" + minRepetitions
+      throw BeneratorExceptionFactory.getInstance().configurationError("Uniqueness can't be assured for minRepetitions=" + minRepetitions
           + " and maxRepetitions=" + maxRepetitions);
     }
     Generator<T> source = stepSequence.createNumberGenerator(numberType, min, max, granularity, unique);

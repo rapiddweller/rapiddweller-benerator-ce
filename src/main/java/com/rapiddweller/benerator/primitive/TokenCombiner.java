@@ -34,15 +34,12 @@ import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.wrapper.CompositeStringGenerator;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.validator.BlacklistValidator;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.csv.CSVLineIterator;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,9 +55,9 @@ public class TokenCombiner extends GeneratorProxy<String> implements NonNullGene
 
   protected String uri;
   private boolean unique;
-  protected char separator = ',';
-  protected String encoding = Encodings.UTF_8;
-  protected boolean excludeSeed = false;
+  protected char separator;
+  protected String encoding;
+  protected boolean excludeSeed;
 
   protected final Set<String> seed = new HashSet<>();
 
@@ -153,8 +150,6 @@ public class TokenCombiner extends GeneratorProxy<String> implements NonNullGene
         }
         setSources(sources);
         super.init(context);
-      } catch (IOException e) {
-        throw new ConfigurationError("Error initializing " + getClass().getSimpleName() + " from URI " + uri, e);
       }
     }
   }

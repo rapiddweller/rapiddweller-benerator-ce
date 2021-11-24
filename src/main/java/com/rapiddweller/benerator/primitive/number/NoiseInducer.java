@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.primitive.number;
 
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.GeneratingConverter;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Converter;
@@ -40,7 +40,6 @@ import com.rapiddweller.script.math.ArithmeticEngine;
  * {@link Converter} implementation that transforms numbers
  * inducing relative or absolute numerical noise based on a {@link Distribution}.<br/><br/>
  * Created: 06.10.2010 17:14:46
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
@@ -55,20 +54,10 @@ public class NoiseInducer extends GeneratingConverter<Number, Number, Number> {
   private Class<? extends Number> numberType;
   private ArithmeticEngine arithmetic;
 
-  /**
-   * Instantiates a new Noise inducer.
-   */
   public NoiseInducer() {
     this(-0.1, 0.1, 0.001);
   }
 
-  /**
-   * Instantiates a new Noise inducer.
-   *
-   * @param minNoise         the min noise
-   * @param maxNoise         the max noise
-   * @param noiseGranularity the noise granularity
-   */
   public NoiseInducer(double minNoise, double maxNoise, double noiseGranularity) {
     super(Number.class, Number.class, null);
     this.minNoise = minNoise;
@@ -80,92 +69,42 @@ public class NoiseInducer extends GeneratingConverter<Number, Number, Number> {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets min noise.
-   *
-   * @return the min noise
-   */
   public double getMinNoise() {
     return minNoise;
   }
 
-  /**
-   * Sets min noise.
-   *
-   * @param minNoise the min noise
-   */
   public void setMinNoise(double minNoise) {
     this.minNoise = minNoise;
   }
 
-  /**
-   * Gets max noise.
-   *
-   * @return the max noise
-   */
   public double getMaxNoise() {
     return maxNoise;
   }
 
-  /**
-   * Sets max noise.
-   *
-   * @param maxNoise the max noise
-   */
   public void setMaxNoise(double maxNoise) {
     this.maxNoise = maxNoise;
   }
 
-  /**
-   * Gets noise granularity.
-   *
-   * @return the noise granularity
-   */
   public double getNoiseGranularity() {
     return noiseGranularity;
   }
 
-  /**
-   * Sets noise granularity.
-   *
-   * @param noiseGranularity the noise granularity
-   */
   public void setNoiseGranularity(double noiseGranularity) {
     this.noiseGranularity = noiseGranularity;
   }
 
-  /**
-   * Gets noise distribution.
-   *
-   * @return the noise distribution
-   */
   public Distribution getNoiseDistribution() {
     return noiseDistribution;
   }
 
-  /**
-   * Sets noise distribution.
-   *
-   * @param noiseDistribution the noise distribution
-   */
   public void setNoiseDistribution(Distribution noiseDistribution) {
     this.noiseDistribution = noiseDistribution;
   }
 
-  /**
-   * Is relative boolean.
-   *
-   * @return the boolean
-   */
   public boolean isRelative() {
     return relative;
   }
 
-  /**
-   * Sets relative.
-   *
-   * @param relative the relative
-   */
   public void setRelative(boolean relative) {
     this.relative = relative;
   }
@@ -182,7 +121,7 @@ public class NoiseInducer extends GeneratingConverter<Number, Number, Number> {
     }
     ProductWrapper<Number> wrapper = generate();
     if (wrapper == null) {
-      throw new IllegalGeneratorStateException("Noise generator unavailable: " + generator);
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Noise generator unavailable: " + generator);
     }
     Number delta = wrapper.unwrap();
     Number result;
@@ -194,14 +133,6 @@ public class NoiseInducer extends GeneratingConverter<Number, Number, Number> {
     return result;
   }
 
-  /**
-   * Convert number.
-   *
-   * @param sourceValue the source value
-   * @param minValue    the min value
-   * @param maxValue    the max value
-   * @return the number
-   */
   public Number convert(Number sourceValue, Number minValue, Number maxValue) {
     if (sourceValue == null) {
       return null;

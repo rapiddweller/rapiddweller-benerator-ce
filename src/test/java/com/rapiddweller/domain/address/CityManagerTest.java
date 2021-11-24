@@ -27,6 +27,7 @@
 package com.rapiddweller.domain.address;
 
 import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.exception.ComponentInitializationFailure;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.file.FileResourceNotFoundException;
 import org.junit.Test;
@@ -152,8 +153,8 @@ public class CityManagerTest {
     @Test
     public void testyReadFromNullFile() {
         HashMap map = new HashMap();
-        assertThrows(FileResourceNotFoundException.class, () ->CityManager.readCities(Country.AFGHANISTAN, "/", map));
-        assertThrows(ConfigurationError.class, () ->CityManager.readCities(Country.AFGHANISTAN, null, map));
+        assertThrows(ComponentInitializationFailure.class, () -> CityManager.readCities(Country.AFGHANISTAN, "/", map));
+        assertThrows(ComponentInitializationFailure.class, () -> CityManager.readCities(Country.AFGHANISTAN, null, map));
     }
 
 }

@@ -37,6 +37,7 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.script.DatabeneScriptParser;
@@ -93,7 +94,8 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
       }
       switch (subExpressions.length) {
         case 0:
-          throw new ConfigurationError("No valid property spec: " + XMLUtil.formatShort(element));
+          throw ExceptionFactory.getInstance().configurationError(
+              "No valid property spec: " + XMLUtil.formatShort(element));
         case 1:
           return subExpressions[0];
         default:
@@ -112,7 +114,8 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
     try {
       return new SourceExpression(DatabeneScriptParser.parseBeanSpec(source));
     } catch (ParseException e) {
-      throw new ConfigurationError("Error parsing property source expression: " + source, e);
+      throw ExceptionFactory.getInstance().configurationError(
+          "Error parsing property source expression: " + source, e);
     }
   }
 
@@ -123,7 +126,8 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
       Expression<Boolean> condition = new IsNullExpression(new ContextReference(propertyName));
       return new IfStatement(condition, setterStatement);
     } catch (ParseException e) {
-      throw new ConfigurationError("Error parsing property default value expression: " + defaultValue, e);
+      throw ExceptionFactory.getInstance().configurationError(
+          "Error parsing property default value expression: " + defaultValue, e);
     }
   }
 
@@ -146,11 +150,10 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
       Generator<E> generator = source.evaluate(context);
       ProductWrapper<E> wrapper = generator.generate(new ProductWrapper<>());
       if (wrapper == null) {
-        throw new ConfigurationError("Generator not available: " + generator);
+        throw ExceptionFactory.getInstance().configurationError("Generator not available: " + generator);
       }
       return wrapper.unwrap();
     }
-
   }
 
 }

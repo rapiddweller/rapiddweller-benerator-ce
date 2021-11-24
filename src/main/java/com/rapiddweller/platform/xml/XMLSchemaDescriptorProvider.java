@@ -34,11 +34,11 @@ import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.benerator.engine.parser.xml.IncludeParser;
 import com.rapiddweller.benerator.engine.statement.BeanStatement;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.parser.ModelParser;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
@@ -247,7 +247,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
         parseStructure(document);
         parseDetails(document);
       } catch (IOException e) {
-        throw new ConfigurationError("Error parsing schemaUri: " + schemaUri, e);
+        throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing schemaUri: " + schemaUri, e);
       }
     }
   }
@@ -304,7 +304,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
           } else if (parent instanceof ComplexTypeDescriptor) {
             addTypeDescriptor(new ComplexTypeDescriptor(type.getName(), this, type.getParentName()));
           } else if (parent == null) {
-            throw new ConfigurationError("parentType " + type.getParentName() + " not found for " + type.getName());
+            throw BeneratorExceptionFactory.getInstance().configurationError("parentType " + type.getParentName() + " not found for " + type.getName());
           } else {
             unresolved = true;
           }
@@ -361,8 +361,8 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
           IOUtil.close(beanStatement);
         }
       } else {
-        throw new UnsupportedOperationException("Document annotation type not supported: "
-            + child.getNodeName());
+        throw BeneratorExceptionFactory.getInstance().syntaxError("Document annotation type not supported: "
+            + child.getNodeName(), null);
       }
     }
   }
@@ -371,7 +371,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     String name = (parentName != null ? parentName : complexTypeElement.getAttribute(NAME));
     logger.debug("parseComplexType({})", name);
     if (name == null) {
-      throw new ConfigurationError("unnamed complex type");
+      throw BeneratorExceptionFactory.getInstance().configurationError("unnamed complex type");
     }
     ComplexTypeDescriptor descriptor = new ComplexTypeDescriptor(name, this);
     if (annotationBefore != null) {
@@ -418,7 +418,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     Element appInfo = annotation.getAppInfo();
     Element[] infos = XMLUtil.getChildElements(appInfo);
     if (infos.length > 1) {
-      throw new ConfigurationError("Cannot handle more than one appinfo in a complex type");
+      throw BeneratorExceptionFactory.getInstance().configurationError("Cannot handle more than one appinfo in a complex type");
     }
     Element info = infos[0];
 
@@ -478,7 +478,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     TypeDescriptor base = dataModel.getTypeDescriptor(baseName);
     Assert.notNull(base, "base type");
     if (!(base instanceof ComplexTypeDescriptor)) {
-      throw new ConfigurationError("Expected ComplexTypeDescriptor for " + baseName + ", found: " +
+      throw BeneratorExceptionFactory.getInstance().configurationError("Expected ComplexTypeDescriptor for " + baseName + ", found: " +
           base.getClass().getSimpleName());
     }
     complexType.setParent(base);
@@ -498,7 +498,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     } else if (base instanceof ComplexTypeDescriptor) {
       complexType.setParentName(baseName);
     } else {
-      throw new UnsupportedOperationException("not a supported type: " + base.getClass());
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("not a supported type: " + base.getClass());
     }
     parseAttributes(extension, complexType);
   }
@@ -623,7 +623,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
   private PartDescriptor parseElementRef(Element element) {
     String refName = element.getAttribute(REF);
     if (StringUtil.isEmpty(refName)) {
-      throw new ConfigurationError("no ref specified in element");
+      throw BeneratorExceptionFactory.getInstance().configurationError("no ref specified in element");
     }
     TypeDescriptor type = dataModel.getTypeDescriptor(refName);
     PartDescriptor descriptor;
@@ -669,7 +669,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
           descriptor = (T) parser.parseComplexType(info, (ComplexTypeDescriptor) typeDescriptor);
         }
       } else {
-        throw new UnsupportedOperationException("Unsupported element (" + childName + ") " +
+        throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Unsupported element (" + childName + ") " +
             "or descriptor type: " + descriptor.getClass().getName());
       }
     }
@@ -694,10 +694,10 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
       } else if (type instanceof ComplexTypeDescriptor) {
         return new ComplexTypeDescriptor(name, this, typeName);
       } else {
-        throw new UnsupportedOperationException("Unsupported descriptor: " + type);
+        throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Unsupported descriptor: " + type);
       }
     } else {
-      throw new UnsupportedOperationException("Unsupported type: " + typeName);
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Unsupported type: " + typeName);
     }
   }
 
@@ -706,7 +706,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     String typeName = element.getAttribute("type");
     TypeDescriptor type = getType(typeName);
     if (type == null) {
-      throw new ConfigurationError("Undefined type: " + typeName);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Undefined type: " + typeName);
     }
     PartDescriptor refDesc;
     if (type instanceof SimpleTypeDescriptor) {
@@ -760,7 +760,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     String name = attributeElement.getAttribute(NAME);
     logger.debug("parseAttribute({})", name);
     if (StringUtil.isEmpty(name)) {
-      throw new ConfigurationError("Unnamed attribute");
+      throw BeneratorExceptionFactory.getInstance().configurationError("Unnamed attribute");
     }
     Element[] children = XMLUtil.getChildElements(attributeElement);
     String use = attributeElement.getAttribute("use");
@@ -811,7 +811,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     }
     Element[] infos = XMLUtil.getChildElements(appInfo);
     if (infos.length > 1) {
-      throw new ConfigurationError("Cannot handle more than one appinfo in a simple type");
+      throw BeneratorExceptionFactory.getInstance().configurationError("Cannot handle more than one appinfo in a simple type");
     }
     if (infos.length == 0) {
       return descriptor;
@@ -855,7 +855,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     if (appInfo != null) {
       Element[] infos = XMLUtil.getChildElements(appInfo);
       if (infos.length > 1) {
-        throw new ConfigurationError("Cannot handle more than one appinfo in a simple type");
+        throw BeneratorExceptionFactory.getInstance().configurationError("Cannot handle more than one appinfo in a simple type");
       }
       parser.parseSimpleType(infos[0], descriptor);
     }
@@ -927,7 +927,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     if (refName != null) {
       ComplexTypeDescriptor refdType = (ComplexTypeDescriptor) getType(refName);
       if (refdType == null) {
-        throw new ConfigurationError("referenced attributeGroup not found: " + refName);
+        throw BeneratorExceptionFactory.getInstance().configurationError("referenced attributeGroup not found: " + refName);
       }
       return refdType;
     }

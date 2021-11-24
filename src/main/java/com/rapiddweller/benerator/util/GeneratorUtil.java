@@ -29,8 +29,8 @@ package com.rapiddweller.benerator.util;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.engine.BeneratorOpts;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.GeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.IOUtil;
@@ -73,7 +73,7 @@ public class GeneratorUtil {
   public static <T> T generateNullable(Generator<T> generator) {
     ProductWrapper<T> wrapper = generator.generate(GeneratorUtil.getWrapper());
     if (wrapper == null) {
-      throw new IllegalGeneratorStateException("Generator unavailable in generateNullable(): " + generator);
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Generator unavailable in generateNullable(): " + generator);
     }
     return wrapper.unwrap();
   }
@@ -90,7 +90,7 @@ public class GeneratorUtil {
     }
     T result = wrapper.unwrap();
     if (result == null) {
-      throw new IllegalGeneratorStateException("Generated null value in generateNonNull(): " + generator);
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Generated null value in generateNonNull(): " + generator);
     }
     return result;
   }

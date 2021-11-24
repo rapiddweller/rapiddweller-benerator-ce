@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.main;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.template.TemplateInputReader;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.context.DefaultContext;
@@ -37,7 +37,6 @@ import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.freemarker.FreeMarkerScriptFactory;
 
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,18 +44,11 @@ import java.util.List;
 /**
  * Anonymizes XML files homogeneously based on generator and XPath definitions in an Excel sheet.<br/><br/>
  * Created: 27.02.2014 10:04:58
- *
  * @author Volker Bergmann
  * @since 0.9.0
  */
 public class TemplateRunner {
 
-  /**
-   * The entry point of application.
-   *
-   * @param args the input arguments
-   * @throws Exception the exception
-   */
   public static void main(String[] args) throws Exception {
     // extract possible VM params from argument list
     List<String> params = processCmdLineArgs(args);
@@ -104,10 +96,10 @@ public class TemplateRunner {
         "The class " + TemplateRunner.class.getName(),
         "creates and runs Benerator descriptor files from custom templates. It has the following parameters:",
         "<config_file> <config_parser_class> <template_file> [<generated_file>]",
-        "	config_file:         Path of an individual data file to provide configuration",
-        "	config_parser_class: Fully qualified name of a Java class which is able to parse the config_file",
-        "	template file:       File path of a FreeMarker template to generate a Benerator descriptor file",
-        "	generated_file:      File path of the generated Benerator descriptor file"
+        "  config_file:         Path of an individual data file to provide configuration",
+        "  config_parser_class: Fully qualified name of a Java class which is able to parse the config_file",
+        "  template file:       File path of a FreeMarker template to generate a Benerator descriptor file",
+        "  generated_file:      File path of the generated Benerator descriptor file"
     );
     System.exit(-1);
   }
@@ -118,11 +110,11 @@ public class TemplateRunner {
       Writer out = new FileWriter(targetUri);
       script.execute(context, out);
     } catch (Exception e) {
-      throw new ConfigurationError("Error generating descriptor file " + targetUri, e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error generating descriptor file " + targetUri, e);
     }
   }
 
-  private static void runDescriptor(String descriptorUri) throws IOException {
+  private static void runDescriptor(String descriptorUri) {
     Benerator.main(new String[] {descriptorUri});
   }
 

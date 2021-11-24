@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.DefineDOMTreeStatement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
@@ -72,7 +72,7 @@ public class DOMTreeParser extends AbstractBeneratorDescriptorParser {
       Expression<Boolean> namespaceAware = parseBooleanExpressionAttribute(ATT_NAMESPACE_AWARE, element);
       return new DefineDOMTreeStatement(id, inputUri, outputUri, namespaceAware, context.getResourceManager());
     } catch (ConversionException e) {
-      throw new ConfigurationError("Error parsing element", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing element", e);
     }
   }
 

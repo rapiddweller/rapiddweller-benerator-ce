@@ -27,8 +27,8 @@
 package com.rapiddweller.benerator.archetype;
 
 import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +69,7 @@ public class Archetype implements Serializable {
       iconUrl = new URL(infoUrl + "/icon.gif");
       this.description = resolveDescription(id, infoUrl);
     } catch (Exception e) {
-      throw new ConfigurationError("Error reading archetype info from " + url, e);
+      throw ExceptionFactory.getInstance().configurationError("Error reading archetype info from " + url, e);
     }
   }
 
@@ -144,7 +144,7 @@ public class Archetype implements Serializable {
     String xmlSchemaPath = BeneratorFactory.getSchemaPathForCurrentVersion();
     URL schemaUrl = getClass().getClassLoader().getResource(xmlSchemaPath);
     if (schemaUrl == null) {
-      throw new FileNotFoundException("File not found: " + xmlSchemaPath);
+      throw ExceptionFactory.getInstance().fileNotFound("File not found: " + xmlSchemaPath, null);
     }
     try (InputStream in = schemaUrl.openStream()) {
       File file = new File(targetFolder, xmlSchemaPath.substring(xmlSchemaPath.lastIndexOf('/')));

@@ -26,7 +26,7 @@
 
 package com.rapiddweller.platform.xls;
 
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -73,7 +73,7 @@ public class XLSEntitySource extends FileBasedEntitySource {
             preprocessor, entityType, formatted);
       }
     } catch (Exception e) {
-      throw new ConfigurationError("Cannot create iterator. ", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Cannot create iterator. ", e);
     }
   }
 

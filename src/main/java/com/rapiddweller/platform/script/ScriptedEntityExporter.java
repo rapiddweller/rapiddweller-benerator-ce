@@ -27,7 +27,7 @@
 package com.rapiddweller.platform.script;
 
 import com.rapiddweller.benerator.consumer.TextFileExporter;
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.format.script.ScriptedDocumentWriter;
 import com.rapiddweller.model.data.Entity;
 import org.slf4j.LoggerFactory;
@@ -104,7 +104,7 @@ public class ScriptedEntityExporter extends TextFileExporter {
         docWriter.setWriteHeader(false);
       }
     } catch (IOException e) {
-      throw new ConfigurationError("Error writing header", e);
+      throw ExceptionFactory.getInstance().configurationError("Error writing header", e);
     }
   }
 
@@ -115,7 +115,7 @@ public class ScriptedEntityExporter extends TextFileExporter {
       Entity entity = (Entity) object;
       docWriter.writeElement(entity);
     } catch (IOException e) {
-      throw new ConfigurationError("Error writing entity", e);
+      throw ExceptionFactory.getInstance().configurationError("Error writing entity", e);
     }
   }
 

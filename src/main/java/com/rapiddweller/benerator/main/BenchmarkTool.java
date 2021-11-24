@@ -10,7 +10,7 @@ import com.rapiddweller.benerator.benchmark.CSVResultExporter;
 import com.rapiddweller.benerator.benchmark.Benchmark;
 import com.rapiddweller.benerator.benchmark.TextTableResultExporter;
 import com.rapiddweller.benerator.benchmark.XLSBenchmarkExporter;
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.cli.CommandLineParser;
 import com.rapiddweller.common.file.FilePrintStream;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
@@ -123,7 +123,7 @@ public class BenchmarkTool {
 
     // check editions
     if (config.isEe() && !isEEAvailable()) {
-      throw new ConfigurationError("Benerator Enterprise Edition is not available on this installation");
+      throw BeneratorExceptionFactory.getInstance().configurationError("Benerator Enterprise Edition is not available on this installation");
     }
 
     // maxThreads

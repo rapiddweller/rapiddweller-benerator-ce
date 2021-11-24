@@ -29,7 +29,6 @@ package com.rapiddweller.benerator.factory;
 import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.composite.Variable;
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
@@ -75,7 +74,7 @@ public class GenerationStepFactory {
             generationSteps.add(step);
           }
         } catch (Exception e) {
-          throw new ConfigurationError("Error creating component builder for " + part, e);
+          throw BeneratorExceptionFactory.getInstance().configurationError("Error creating component builder for " + part, e);
         }
       }
     }
@@ -98,7 +97,7 @@ public class GenerationStepFactory {
     } else if (descriptor instanceof ArrayElementDescriptor) {
       return ComponentBuilderFactory.createComponentBuilder((ArrayElementDescriptor) descriptor, ownerUniqueness, iterationMode, context);
     } else {
-      throw new UnsupportedOperationException("Not a supported generator compnent type: " + descriptor.getClass());
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Not a supported generator compnent type: " + descriptor.getClass());
     }
   }
 }

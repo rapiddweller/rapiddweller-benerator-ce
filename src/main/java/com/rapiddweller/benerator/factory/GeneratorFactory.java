@@ -290,7 +290,7 @@ public abstract class GeneratorFactory {
     T min, Boolean minInclusive, T max, Boolean maxInclusive, NonNullGenerator<T> generator) {
     if ((minInclusive != null && !minInclusive) || (maxInclusive != null && !maxInclusive)) {
       if (min != null && max != null && min.doubleValue() == max.doubleValue()) {
-        throw new ConfigurationError("min == max (" + min + ") and at a border value is excluded in ");
+        throw BeneratorExceptionFactory.getInstance().configurationError("min == max (" + min + ") and at a border value is excluded in ");
       }
       generator = new ValidatingNonNullGeneratorProxy<>(generator, new NumberRangeValidator<>(
           min, minInclusive, max, maxInclusive));

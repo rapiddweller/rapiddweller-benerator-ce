@@ -52,10 +52,8 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.benerator.wrapper.SingleSourceArrayGenerator;
 import com.rapiddweller.benerator.wrapper.SingleSourceCollectionGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.model.data.AlternativeGroupDescriptor;
@@ -116,7 +114,8 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     } else if (descriptor instanceof IdDescriptor) {
       result = createIdBuilder((IdDescriptor) descriptor, ownerUniqueness, context);
     } else {
-      throw new ConfigurationError("Not a supported element: " + descriptor.getClass());
+      throw BeneratorExceptionFactory.getInstance().configurationError(
+          "Not a supported element: " + descriptor.getClass());
     }
     result = wrapWithCondition(descriptor, result);
     return result;
@@ -209,7 +208,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       if (typeDescriptor.getSource() != null) {
         generator = createRefBuilderFromSource(descriptor, distribution, context);
       } else {
-        throw new ConfigurationError("No source or explicit configuration for ref " + descriptor);
+        throw BeneratorExceptionFactory.getInstance().configurationError("No source or explicit configuration for ref " + descriptor);
       }
     }
 
@@ -249,14 +248,14 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     String targetTypeName = descriptor.getTargetType();
     ComplexTypeDescriptor targetType = (ComplexTypeDescriptor) context.getDataModel().getTypeDescriptor(targetTypeName);
     if (targetType == null) {
-      throw new ConfigurationError("Type not defined: " + targetTypeName);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Type not defined: " + targetTypeName);
     }
 
     // check source
     SimpleTypeDescriptor typeDescriptor = (SimpleTypeDescriptor) descriptor.getTypeDescriptor();
     String sourceName = typeDescriptor.getSource();
     if (sourceName == null) {
-      throw new ConfigurationError("'source' is not set for " + descriptor);
+      throw BeneratorExceptionFactory.getInstance().configurationError("'source' is not set for " + descriptor);
     }
 
     // analyse source object
@@ -264,7 +263,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
     if (sourceObject instanceof StorageSystem) {
       return createRefBuilderForStorageSystem(descriptor, (StorageSystem) sourceObject, distribution, context);
     } else {
-      throw new ConfigurationError("Not a supported source type: " + sourceName);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Not a supported source type: " + sourceName);
     }
   }
 
@@ -409,7 +408,7 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
       case "set":
         return new SingleSourceCollectionGenerator(generator, HashSet.class, countGenerator);
       default:
-        throw new SyntaxError("Not a supported container", container);
+        throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(container, "Not a supported container");
     }
   }
 

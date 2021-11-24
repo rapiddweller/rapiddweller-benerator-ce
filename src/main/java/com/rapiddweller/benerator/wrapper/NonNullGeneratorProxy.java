@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 
 /**
  * {@link GeneratorProxy} implementation which implements the {@link NonNullGenerator} interface and
@@ -57,7 +58,7 @@ public abstract class NonNullGeneratorProxy<E> extends GeneratorProxy<E> impleme
   @Override
   public void setSource(Generator<E> source) {
     if (!(source instanceof NonNullGenerator)) {
-      throw new IllegalArgumentException("Not a NonNullGenerator: " + source);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Not a NonNullGenerator: " + source);
     }
     super.setSource(source);
   }

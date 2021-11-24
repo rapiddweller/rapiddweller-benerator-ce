@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.sample;
 
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.UnsafeNonNullGenerator;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
@@ -35,10 +36,8 @@ import com.rapiddweller.common.CollectionUtil;
 import java.util.List;
 
 /**
- * Generates value sequences derived from seed sequences.<br/>
- * <br/>
+ * Generates value sequences derived from seed sequences.<br/><br/>
  * Created at 12.07.2009 09:04:43
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -49,12 +48,6 @@ public class SeedGenerator<E> extends UnsafeNonNullGenerator<E[]> {
   private final Class<E[]> targetType;
   private final SeedManager<E> atomProvider;
 
-  /**
-   * Instantiates a new Seed generator.
-   *
-   * @param atomType the atom type
-   * @param depth    the depth
-   */
   @SuppressWarnings("unchecked")
   public SeedGenerator(Class<E> atomType, int depth) {
     if (depth <= 0) {
@@ -70,10 +63,10 @@ public class SeedGenerator<E> extends UnsafeNonNullGenerator<E[]> {
     do {
       int preSize = predecessors.size();
       if (preSize < 1) {
-        throw new IllegalArgumentException("Predecessor list is empty");
+        throw BeneratorExceptionFactory.getInstance().illegalArgument("Predecessor list is empty");
       }
       if (predecessors.get(0) != null) {
-        throw new IllegalArgumentException("Predecessor list must start with null");
+        throw BeneratorExceptionFactory.getInstance().illegalArgument("Predecessor list must start with null");
       }
       SeedManager<E> generator = atomProvider;
       for (int i = Math.max(0, preSize - getDepth() + 1); i < preSize; i++) {
@@ -84,20 +77,10 @@ public class SeedGenerator<E> extends UnsafeNonNullGenerator<E[]> {
     return result;
   }
 
-  /**
-   * Gets depth.
-   *
-   * @return the depth
-   */
   public int getDepth() {
     return atomProvider.getDepth();
   }
 
-  /**
-   * Add sample.
-   *
-   * @param sequence the sequence
-   */
   @SafeVarargs
   public final void addSample(E... sequence) {
     E[] atoms = wrapWithNulls(sequence);
@@ -134,18 +117,10 @@ public class SeedGenerator<E> extends UnsafeNonNullGenerator<E[]> {
     return CollectionUtil.extractArray(tmp, atomType, 1, tmp.size() - 1);
   }
 
-  /**
-   * Print state.
-   */
   public void printState() {
     printState("");
   }
 
-  /**
-   * Print state.
-   *
-   * @param indent the indent
-   */
   public void printState(String indent) {
     System.out.println(this);
     atomProvider.printState(indent + "+ ");

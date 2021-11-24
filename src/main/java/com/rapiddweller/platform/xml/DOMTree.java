@@ -161,7 +161,7 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
 
   @Override
   public DataSource<?> queryEntityIds(String type, String selector, Context context) {
-    throw new UnsupportedOperationException(getClass().getSimpleName() +
+    throw BeneratorExceptionFactory.getInstance().programmerUnsupported(getClass().getSimpleName() +
         " does not support queries for entity ids");
   }
 
@@ -187,7 +187,7 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
 
   @Override
   public void store(Entity entity) {
-    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support storing entities");
+    throw BeneratorExceptionFactory.getInstance().programmerUnsupported(getClass().getSimpleName() + " does not support storing entities");
   }
 
   @Override
@@ -197,7 +197,7 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
       XMLPlatformUtil.mapEntityToElement(entity,
           ((XmlEntity) entity).getSourceElement());
     } else {
-      throw new UnsupportedOperationException(getClass().getSimpleName() +
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported(getClass().getSimpleName() +
           " cannot update entities from other sources");
     }
   }

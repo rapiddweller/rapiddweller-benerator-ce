@@ -30,11 +30,11 @@ import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.sample.NonNullSampleGenerator;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.ThreadAware;
 import com.rapiddweller.common.converter.CaseConverter;
 import com.rapiddweller.common.converter.ConverterChain;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.domain.net.DomainGenerator;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -103,7 +103,7 @@ public class EMailAddressBuilder implements ThreadAware {
       case '1':
         return given.charAt(0) + family + '@' + domain;
       default:
-        throw new ConfigurationError("Invalid join strategy: " + join);
+        throw ExceptionFactory.getInstance().configurationError("Invalid join strategy: " + join);
     }
   }
 

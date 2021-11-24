@@ -28,13 +28,13 @@ package com.rapiddweller.benerator.dataset;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.WeightedGenerator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
 /**
  * {@link DatasetBasedGenerator} implementation which bases on an atomic dataset.<br/><br/>
  * Created: 09.03.2011 10:54:28
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.6
@@ -45,25 +45,10 @@ public class AtomicDatasetGenerator<E> extends GeneratorProxy<E> implements Weig
   private final String dataset;
   private final double weight;
 
-  /**
-   * Instantiates a new Atomic dataset generator.
-   *
-   * @param source  the source
-   * @param nesting the nesting
-   * @param dataset the dataset
-   */
   public AtomicDatasetGenerator(WeightedGenerator<E> source, String nesting, String dataset) {
     this(source, nesting, dataset, source.getWeight());
   }
 
-  /**
-   * Instantiates a new Atomic dataset generator.
-   *
-   * @param source  the source
-   * @param nesting the nesting
-   * @param dataset the dataset
-   * @param weight  the weight
-   */
   public AtomicDatasetGenerator(Generator<E> source, String nesting, String dataset, double weight) {
     super(source);
     this.nesting = nesting;
@@ -94,7 +79,7 @@ public class AtomicDatasetGenerator<E> extends GeneratorProxy<E> implements Weig
   @Override
   public E generateForDataset(String requestedDataset) {
     if (!dataset.equals(requestedDataset)) {
-      throw new IllegalArgumentException("Requested dataset " + requestedDataset + ", but supporting only dataset " + this.dataset);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Requested dataset " + requestedDataset + ", but supporting only dataset " + this.dataset);
     }
     ProductWrapper<E> wrapper = generate(getResultWrapper());
     if (wrapper == null) {

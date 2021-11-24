@@ -26,7 +26,7 @@
 
 package com.rapiddweller.platform.xml;
 
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.DescriptorProvider;
@@ -43,22 +43,16 @@ import java.util.Map;
 /**
  * Provides utility methods for Benerator's XML platform.<br/><br/>
  * Created: 15.01.2014 11:03:25
- *
  * @author Volker Bergmann
  * @since 0.9.0
  */
 public class XMLPlatformUtil {
 
+  /** private constructor to prevent instantiation of this utility class */
   private XMLPlatformUtil() {
+    // private constructor to prevent instantiation of this utility class
   }
 
-  /**
-   * Convert element 2 entity entity.
-   *
-   * @param element  the element
-   * @param provider the provider
-   * @return the entity
-   */
   public static Entity convertElement2Entity(Element element, DescriptorProvider provider) {
 
     // Determine data type
@@ -67,8 +61,9 @@ public class XMLPlatformUtil {
     if (typeDescriptor == null) {
       typeDescriptor = new ComplexTypeDescriptor(typeName, provider);
     } else if (!(typeDescriptor instanceof ComplexTypeDescriptor)) {
-      throw new ConfigurationError("Expected ComplexTypeDescriptor for type " + typeName +
-          ", but found " + typeDescriptor.getClass().getSimpleName());
+      throw BeneratorExceptionFactory.getInstance().configurationError(
+          "Expected ComplexTypeDescriptor for type " + typeName + ", but found "
+              + typeDescriptor.getClass().getSimpleName());
     }
 
     // create entity
@@ -103,25 +98,12 @@ public class XMLPlatformUtil {
     return entity;
   }
 
-  /**
-   * Map entity to element.
-   *
-   * @param source the source
-   * @param target the target
-   */
   public static void mapEntityToElement(Entity source, Element target) {
     for (Map.Entry<String, Object> component : source.getComponents().entrySet()) {
       mapComponent(component.getKey(), component.getValue(), target);
     }
   }
 
-  /**
-   * Map component.
-   *
-   * @param componentName  the component name
-   * @param componentValue the component value
-   * @param target         the target
-   */
   public static void mapComponent(String componentName, Object componentValue, Element target) {
     if (componentValue instanceof Entity) {
       return; // ignore sub entities
@@ -150,22 +132,10 @@ public class XMLPlatformUtil {
     }
   }
 
-  /**
-   * Convert to string string.
-   *
-   * @param value the value
-   * @return the string
-   */
   public static String convertToString(Object value) {
     return ToStringConverter.convert(value, null);
   }
 
-  /**
-   * Normalize name string.
-   *
-   * @param name the name
-   * @return the string
-   */
   public static String normalizeName(String name) {
     return name.replace('-', '_').replace('.', '_');
   }

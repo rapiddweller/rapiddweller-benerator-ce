@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.dataset;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Named;
 
 import java.util.ArrayList;
@@ -53,10 +54,10 @@ public class Dataset implements Named {
 
   Dataset(String type, String name) {
     if (type == null) {
-      throw new IllegalArgumentException("type is null");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("type is null");
     }
     if (name == null) {
-      throw new IllegalArgumentException("name is null");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("name is null");
     }
     this.id = type + ':' + name;
     this.type = type;

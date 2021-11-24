@@ -27,9 +27,9 @@
 package com.rapiddweller.benerator.distribution;
 
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.distribution.function.ConstantFunction;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 
 import java.util.Arrays;
@@ -93,7 +93,7 @@ public class WeightedDoubleGenerator extends AbstractNonNullNumberGenerator<Doub
         probSum[i] = sum;
       }
       if (sum <= 0) {
-        throw new IllegalGeneratorStateException(
+        throw BeneratorExceptionFactory.getInstance().illegalGeneratorState(
             "Invalid WeightFunction: Sum is not positive for " + function);
       }
       for (int i = 0; i < sampleCount; i++) {

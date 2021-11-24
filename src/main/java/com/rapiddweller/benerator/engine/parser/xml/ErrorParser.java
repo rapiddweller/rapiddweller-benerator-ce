@@ -33,32 +33,31 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.StringExpression;
 import org.w3c.dom.Element;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_EXIT_CODE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ID;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ERROR;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableElementText;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
 /**
  * Parses Benerator's &lt;error&gt; descriptor XML element and maps it to an {@link ErrorStatement}.<br/><br/>
  * Created: 12.01.2011 09:03:58
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class ErrorParser extends AbstractBeneratorDescriptorParser {
 
-  /**
-   * Instantiates a new Error parser.
-   */
   public ErrorParser() {
-    super(EL_ERROR, null, CollectionUtil.toSet(ATT_TYPE));
+    super(EL_ERROR, null, CollectionUtil.toSet(ATT_ID, ATT_EXIT_CODE));
   }
 
   @Override
   public ErrorStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-    Expression<String> messageEx = new StringExpression(parseScriptableElementText(element, true));
-    Expression<Integer> codeEx = parseIntAttribute(ATT_TYPE, element);
-    return new ErrorStatement(messageEx, codeEx);
+    String errorId = DescriptorParserUtil.getAttribute("id", element);
+    String message = DescriptorParserUtil.getElementText(element);
+    Integer exitCode = parseIntAttribute(ATT_EXIT_CODE, element).evaluate(null);
+    return new ErrorStatement(errorId, exitCode, message);
   }
 
 }

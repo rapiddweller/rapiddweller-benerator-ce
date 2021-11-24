@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.converter.MessageConverter;
@@ -77,7 +78,7 @@ public class WrapperFactory {
     } else if (BigInteger.class.equals(numberType)) {
       return new AsBigIntegerGeneratorWrapper(source);
     } else {
-      throw new UnsupportedOperationException("Not a supported number type: " + numberType);
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Not a supported number type: " + numberType);
     }
   }
 

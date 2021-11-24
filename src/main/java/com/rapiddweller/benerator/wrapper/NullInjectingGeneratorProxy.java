@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.wrapper;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.RandomProvider;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 
 /**
  * {@link GeneratorProxy} implementation which injects a given quota of null values in the
@@ -48,7 +49,7 @@ public class NullInjectingGeneratorProxy<E> extends GeneratorProxy<E> {
   public NullInjectingGeneratorProxy(Generator<E> source, double nullQuota) {
     super(source);
     if (nullQuota < 0 || nullQuota > 1) {
-      throw new IllegalArgumentException("Illegal null quota: " + nullQuota);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Illegal null quota: " + nullQuota);
     }
     this.nullQuota = nullQuota;
     random = BeneratorFactory.getInstance().getRandomProvider();

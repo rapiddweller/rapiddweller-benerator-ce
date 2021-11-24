@@ -28,8 +28,8 @@ package com.rapiddweller.benerator.file;
 
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.sample.NonNullSampleGenerator;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.IOUtil;
@@ -100,7 +100,7 @@ public class FileGenerator extends NonNullSampleGenerator<File> {
       setValues(FileUtil.listFiles(baseFile, filter, recursive, files, folders));
       super.init(context);
     } catch (Exception e) {
-      throw new ConfigurationError("Error initializing " + getClass().getSimpleName(), e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error initializing " + getClass().getSimpleName(), e);
     }
   }
 

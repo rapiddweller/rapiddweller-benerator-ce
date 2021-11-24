@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.composite.GenerationStepSupport;
 import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.factory.GenerationStepFactory;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.format.DataContainer;
@@ -213,7 +213,7 @@ public class TranscodeStatement extends SequentialStatement implements CascadePa
 
           boolean needsNkMapping = parent.needsNkMapping(refereeTableName);
           if (sourceIdentity instanceof NoIdentity && needsNkMapping) {
-            throw new ConfigurationError("No identity defined for table " + refereeTableName);
+            throw BeneratorExceptionFactory.getInstance().configurationError("No identity defined for table " + refereeTableName);
           }
           KeyMapper mapper = parent.getKeyMapper();
           Object targetRef;

@@ -26,8 +26,8 @@
 
 package com.rapiddweller.platform.db;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.jdbacl.model.DBDataType;
 import com.rapiddweller.script.PrimitiveType;
 
@@ -98,9 +98,8 @@ public class JdbcMetaTypeMapper {
           || lcName.endsWith("varchar2") || lcName.endsWith("clob")) {
         return PrimitiveType.STRING.getName();
       } else if (!acceptUnknown) {
-        throw new ConfigurationError(
-            "Platform specific SQL type (" + jdbcType +
-                ") not mapped: " + columnType.getName());
+        throw BeneratorExceptionFactory.getInstance().configurationError(
+            "Platform specific SQL type (" + jdbcType + ") not mapped: " + columnType.getName());
       } else {
         return null;
       }

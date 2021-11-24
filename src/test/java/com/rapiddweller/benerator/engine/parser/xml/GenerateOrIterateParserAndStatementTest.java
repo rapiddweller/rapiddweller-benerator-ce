@@ -30,11 +30,13 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
 import com.rapiddweller.benerator.primitive.IncrementGenerator;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.benerator.test.PersonSource;
 import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.converter.UnsafeConverter;
 import com.rapiddweller.common.validator.AbstractValidator;
@@ -65,7 +67,7 @@ import static org.junit.Assert.assertTrue;
 @SuppressWarnings("CheckStyle")
 public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
-  @Test(expected = SyntaxError.class)
+  @Test(expected = IllegalArgumentError.class)
   public void testIllegalNullable() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
     Statement statement = parse(

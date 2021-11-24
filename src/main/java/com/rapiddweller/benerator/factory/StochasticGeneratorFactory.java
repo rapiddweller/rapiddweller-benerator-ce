@@ -46,7 +46,6 @@ import com.rapiddweller.benerator.wrapper.IteratingGenerator;
 import com.rapiddweller.benerator.wrapper.SimpleMultiSourceArrayGenerator;
 import com.rapiddweller.benerator.wrapper.UniqueMultiSourceArrayGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.converter.ConverterManager;
 import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.common.iterator.ArrayIterable;
@@ -108,8 +107,8 @@ public class StochasticGeneratorFactory extends GeneratorFactory {
       AttachedWeightSampleGenerator<T> generator = new AttachedWeightSampleGenerator<>(targetType);
       for (WeightedSample<T> sample : samples) {
         if (sample.getValue() == null) {
-          throw new ConfigurationError("null is not supported in values='...', drop it from the list and " +
-              "use a nullQuota instead");
+          throw BeneratorExceptionFactory.getInstance().configurationError(
+              "null is not supported in values='...', drop it from the list and use a nullQuota instead");
         }
         generator.addSample(sample.getValue(), sample.getWeight());
       }

@@ -33,8 +33,8 @@ import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.RunTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.script.DatabeneScriptParser;
@@ -91,7 +91,7 @@ public class RunTaskParser extends AbstractBeneratorDescriptorParser {
       return new RunTaskStatement(taskProvider, count, pageSize, pager, threads,
           stats, errorHandler, infoLog);
     } catch (ConversionException e) {
-      throw new ConfigurationError("Error parsing run-task element", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing run-task element", e);
     }
   }
 

@@ -31,8 +31,8 @@ import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.BeanStatement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.StringUtil;
@@ -62,7 +62,8 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_PROPERTY;
  */
 public class BeanParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Logger logger = LoggerFactory.getLogger(BeanParser.class);
+  // Named staticLogger to avoid name clash with logger from parent class
+  private static final Logger staticLogger = LoggerFactory.getLogger(BeanParser.class);
 
   public BeanParser() {
     // only allowed in non-loop statements in order to avoid leaks
@@ -80,10 +81,10 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
       try {
         instantiation = DatabeneScriptParser.parseBeanSpec(beanSpec);
       } catch (ParseException e) {
-        throw new ConfigurationError("Error parsing bean spec: " + beanSpec, e);
+        throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing bean spec: " + beanSpec, e);
       }
     } else if (!StringUtil.isEmpty(beanClass)) {
-      logger.debug("Instantiating bean of class {} (id={})", beanClass, id);
+      staticLogger.debug("Instantiating bean of class {} (id={})", beanClass, id);
       instantiation = new DefaultConstruction(beanClass);
     } else {
       syntaxError("bean definition is missing 'class' or 'spec' attribute", element);
@@ -106,13 +107,13 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
         instantiation = ExpressionUtil.constant(spec.getBean());
         ref = spec.isReference();
       } catch (ParseException e) {
-        throw new ConfigurationError("Error parsing bean spec: " + beanSpecString, e);
+        throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing bean spec: " + beanSpecString, e);
       }
     } else if (!StringUtil.isEmpty(beanClass)) {
-      logger.debug("Instantiating bean of class {} (id={})", beanClass, id);
+      staticLogger.debug("Instantiating bean of class {} (id={})", beanClass, id);
       instantiation = new DefaultConstruction<>(beanClass);
     } else {
-      throw new ConfigurationError("Syntax error in definition of bean " + id);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Syntax error in definition of bean " + id);
     }
     Element[] propertyElements = XMLUtil.getChildElements(element);
     for (Element propertyElement : propertyElements) {
@@ -147,7 +148,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
       Expression<?> bean = parseBeanExpression(element);
       return new BeanStatement(id, bean, context.getResourceManager());
     } catch (ConversionException e) {
-      throw new ConfigurationError("Error parsing bean element", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing bean element", e);
     }
   }
 

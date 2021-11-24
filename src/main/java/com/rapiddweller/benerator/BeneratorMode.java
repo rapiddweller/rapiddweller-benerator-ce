@@ -2,7 +2,7 @@
 
 package com.rapiddweller.benerator;
 
-import com.rapiddweller.common.ObjectNotFoundException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class BeneratorMode {
   public static BeneratorMode getInstance(String code) {
     BeneratorMode result = INSTANCES.get(code);
     if (result == null) {
-      throw new ObjectNotFoundException("No BeneratorMode od code " + code);
+      throw BeneratorExceptionFactory.getInstance().objectNotFound("No BeneratorMode od code " + code);
     }
     return result;
   }

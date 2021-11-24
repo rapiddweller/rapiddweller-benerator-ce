@@ -28,6 +28,7 @@ package com.rapiddweller.platform.memstore;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.benerator.util.FilterExDataSource;
 import com.rapiddweller.common.ArrayUtil;
@@ -130,7 +131,7 @@ public class MemStore extends AbstractStorageSystem {
 
   @Override
   public DataSource<?> query(String selector, boolean simplify, Context context) {
-    throw new UnsupportedOperationException(getClass() + " does not support query(String, Context)");
+    throw BeneratorExceptionFactory.getInstance().programmerUnsupported(getClass() + " does not support query(String, Context)");
   }
 
   @Override

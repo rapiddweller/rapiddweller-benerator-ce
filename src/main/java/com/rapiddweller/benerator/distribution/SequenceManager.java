@@ -35,7 +35,7 @@ import com.rapiddweller.benerator.distribution.sequence.RandomWalkSequence;
 import com.rapiddweller.benerator.distribution.sequence.ShuffleSequence;
 import com.rapiddweller.benerator.distribution.sequence.StepSequence;
 import com.rapiddweller.benerator.distribution.sequence.WedgeSequence;
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.domain.math.FibonacciSequence;
 import com.rapiddweller.domain.math.PadovanSequence;
 
@@ -76,7 +76,7 @@ public class SequenceManager {
   public static synchronized Sequence getRegisteredSequence(String name, boolean required) {
     Sequence sequence = instances.get(name);
     if (sequence == null && required) {
-      throw new ConfigurationError("Sequence not registered: " + name);
+      throw ExceptionFactory.getInstance().configurationError("Sequence not registered: " + name);
     }
     return sequence;
   }

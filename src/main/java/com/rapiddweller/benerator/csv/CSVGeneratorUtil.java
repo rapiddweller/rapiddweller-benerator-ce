@@ -27,13 +27,11 @@
 package com.rapiddweller.benerator.csv;
 
 import com.rapiddweller.benerator.dataset.DatasetUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.csv.CSVLineIterator;
 import com.rapiddweller.script.WeightedSample;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,8 +83,6 @@ public class CSVGeneratorUtil {
         samples.add(sample);
       }
       return samples;
-    } catch (IOException e) {
-      throw new ConfigurationError("Error parsing file " + filename, e);
     }
   }
 

@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ArrayFormat;
 
@@ -76,7 +77,7 @@ public class SequenceTestGenerator<E> implements Generator<E> {
   @Override
   public void init(GeneratorContext context) {
     if (sequence == null) {
-      throw new IllegalArgumentException("sequence is null");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("sequence is null");
     }
   }
 

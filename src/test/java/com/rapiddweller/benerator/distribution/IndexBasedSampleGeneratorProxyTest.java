@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.distribution;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import org.junit.Test;
@@ -85,7 +86,7 @@ public class IndexBasedSampleGeneratorProxyTest extends GeneratorTest {
 
     @Override
     public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
-      throw new UnsupportedOperationException("not implemented");
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("not implemented");
     }
 
     @Override

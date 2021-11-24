@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.platform.xml.DOMTree;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
@@ -57,7 +57,7 @@ public class DefineDOMTreeStatement implements Statement {
   public DefineDOMTreeStatement(Expression<String> id, Expression<String> inputUri,
                                 Expression<String> outputUri, Expression<Boolean> namespaceAware, ResourceManager resourceManager) {
     if (id == null) {
-      throw new ConfigurationError("No DOMTree id defined");
+      throw BeneratorExceptionFactory.getInstance().configurationError("No DOMTree id defined");
     }
     this.id = id;
     this.inputUri = inputUri;

@@ -31,6 +31,7 @@ import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.test.GeneratorTest;
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import org.junit.Test;
 
 import java.util.Map;
@@ -42,7 +43,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link ExponentialDensityIntegral}.<br/><br/>
  * Created: 12.03.2010 15:50:44
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -51,17 +51,11 @@ public class ExponentialDensityIntegralTest extends GeneratorTest {
   private final ExponentialDensityIntegral fcn = new ExponentialDensityIntegral(0.5);
   private final BeneratorContext context = new DefaultBeneratorContext();
 
-  /**
-   * Test create double generator unique.
-   */
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentError.class)
   public void testCreateDoubleGenerator_unique() {
     fcn.createNumberGenerator(Double.class, 1., 4., 0.5, true);
   }
 
-  /**
-   * Test create double generator not unique.
-   */
   @Test
   public void testCreateDoubleGenerator_notUnique() {
     Generator<Double> generator = fcn.createNumberGenerator(Double.class, 1., 2., 0.5, false);
@@ -77,19 +71,13 @@ public class ExponentialDensityIntegralTest extends GeneratorTest {
     }
   }
 
-  /**
-   * Test apply unique.
-   */
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentError.class)
   public void testApply_unique() {
     Generator<String> source = new SequenceTestGenerator<>("A", "B");
     source.init(new DefaultBeneratorContext());
     fcn.applyTo(source, true);
   }
 
-  /**
-   * Test apply not unique.
-   */
   @Test
   public void testApply_notUnique() {
     Generator<String> source = new SequenceTestGenerator<>("A", "B");

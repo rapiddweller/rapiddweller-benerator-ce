@@ -26,6 +26,8 @@
 
 package com.rapiddweller.domain.address;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
+
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParseException;
@@ -49,7 +51,6 @@ import java.text.ParsePosition;
  *   <tr><td>0al</td><td>012345678</td></tr>
  *   <tr><td>00c(a)l</td><td>0049(1234)5678</td></tr>
  * </table>
- *
  * @author Volker Bergmann
  * @since 0.3.05
  */
@@ -59,18 +60,12 @@ public class PhoneNumberFormat extends Format {
 
   private final String pattern;
 
-  /**
-   * Instantiates a new Phone number format.
-   *
-   * @param pattern the pattern
-   */
   public PhoneNumberFormat(String pattern) {
     this.pattern = pattern;
   }
 
   @Override
-  public StringBuffer format(Object obj, StringBuffer toAppendTo,
-                             FieldPosition pos) {
+  public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
     PhoneNumber number = (PhoneNumber) obj;
     for (int i = 0; i < pattern.length(); i++) {
       char c = pattern.charAt(i);
@@ -108,10 +103,8 @@ public class PhoneNumberFormat extends Format {
           break;
         default:
           if (source.charAt(pos.getIndex()) != c) {
-            throw new IllegalArgumentException(
-                "Pattern '" + pattern +
-                    "' is not matched by String: " +
-                    source);
+            throw BeneratorExceptionFactory.getInstance().illegalArgument(
+                "Pattern '" + pattern + "' is not matched by String: " + source);
           }
           pos.setIndex(pos.getIndex() + 1);
       }
@@ -124,13 +117,14 @@ public class PhoneNumberFormat extends Format {
     try {
       return super.parseObject(source);
     } catch (IllegalArgumentException e) {
-      throw new ParseException(e.getMessage(), -1);
+      throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(
+          source, "Failed to parse text as file number", -1, -1, e);
     }
   }
 
   private String parseDigits(String source, ParsePosition pos) {
     if (pos.getIndex() >= source.length()) {
-      throw new IllegalArgumentException(
+      throw BeneratorExceptionFactory.getInstance().illegalArgument(
           "Text cannot be parsed unambiguously as phone number with pattern: " +
               pattern);
     }
@@ -145,4 +139,5 @@ public class PhoneNumberFormat extends Format {
     pos.setIndex(end);
     return source.substring(start, end);
   }
+
 }

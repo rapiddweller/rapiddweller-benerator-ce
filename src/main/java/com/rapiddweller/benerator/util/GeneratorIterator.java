@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.util;
 
 import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 
 import java.io.Closeable;
@@ -70,7 +71,7 @@ public class GeneratorIterator<E> implements Iterator<E>, Closeable {
 
   @Override
   public void remove() {
-    throw new UnsupportedOperationException("removal is not supported by " + getClass());
+    throw BeneratorExceptionFactory.getInstance().illegalOperation("removal is not supported by " + getClass());
   }
 
   @Override

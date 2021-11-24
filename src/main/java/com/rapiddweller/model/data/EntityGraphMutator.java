@@ -26,15 +26,14 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Mutator;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.exception.MutationFailedException;
+import com.rapiddweller.common.exception.MutationFailed;
 
 /**
  * Builds and mutates graphs of entities.<br/><br/>
  * Created: 16.11.2011 18:14:46
- *
  * @author Volker Bergmann
  * @since 0.7.2
  */
@@ -43,12 +42,6 @@ public class EntityGraphMutator implements Mutator {
   private final String featureName;
   private final ComplexTypeDescriptor descriptor;
 
-  /**
-   * Instantiates a new Entity graph mutator.
-   *
-   * @param featureName the feature name
-   * @param descriptor  the descriptor
-   */
   public EntityGraphMutator(String featureName,
                             ComplexTypeDescriptor descriptor) {
     this.featureName = featureName;
@@ -57,7 +50,7 @@ public class EntityGraphMutator implements Mutator {
 
   @Override
   public void setValue(Object target, Object value)
-      throws MutationFailedException {
+      throws MutationFailed {
     Entity entity = (Entity) target;
     setFeature(featureName, value, entity, descriptor);
   }
@@ -70,9 +63,8 @@ public class EntityGraphMutator implements Mutator {
       ComponentDescriptor subComponent =
           descriptor.getComponent(subPaths[0]);
       if (subComponent == null) {
-        throw new ConfigurationError(
-            "Component '" + subPaths[0] + "' not found in type " +
-                descriptor.getName());
+        throw BeneratorExceptionFactory.getInstance().configurationError(
+            "Component '" + subPaths[0] + "' not found in type " + descriptor.getName());
       }
       ComplexTypeDescriptor subType =
           (ComplexTypeDescriptor) subComponent.getTypeDescriptor();

@@ -1,5 +1,6 @@
 package com.rapiddweller.platform.ftl;
 
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import freemarker.template.SimpleDate;
 import freemarker.template.TemplateModel;
 import org.junit.Rule;
@@ -14,15 +15,10 @@ import static org.junit.Assert.assertEquals;
  * The type Date sum method test.
  */
 public class DateSumMethodTest {
-  /**
-   * The Thrown.
-   */
+
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  /**
-   * Test exec.
-   */
   @Test
   public void testExec() {
     DateSumMethod dateSumMethod = new DateSumMethod();
@@ -32,32 +28,23 @@ public class DateSumMethodTest {
     assertEquals(2, actualDateType);
   }
 
-  /**
-   * Test exec 2.
-   */
   @Test
   public void testExec2() {
     ArrayList<Object> objectList = new ArrayList<>();
     objectList.add("e");
-    thrown.expect(IllegalArgumentException.class);
+    thrown.expect(IllegalArgumentError.class);
     (new DateSumMethod()).exec(objectList);
   }
 
-  /**
-   * Test exec 3.
-   */
   @Test
   public void testExec3() {
     ArrayList<Object> objectList = new ArrayList<>();
     objectList.add(null);
     objectList.add("e");
-    thrown.expect(IllegalArgumentException.class);
+    thrown.expect(IllegalArgumentError.class);
     (new DateSumMethod()).exec(objectList);
   }
 
-  /**
-   * Test exec 4.
-   */
   @Test
   public void testExec4() {
     ArrayList<Object> objectList = new ArrayList<>();
@@ -67,5 +54,6 @@ public class DateSumMethodTest {
     assertEquals("1970-01-01", actualExecResult.toString());
     assertEquals(2, actualDateType);
   }
+
 }
 

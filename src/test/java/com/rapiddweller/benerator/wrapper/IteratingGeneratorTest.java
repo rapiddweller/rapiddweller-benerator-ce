@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.common.HeavyweightIterator;
 import com.rapiddweller.common.IOUtil;
@@ -36,21 +37,17 @@ import com.rapiddweller.common.iterator.TypedIterableProxy;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the {@link IteratingGenerator}.<br/>
- * <br/>
+ * Tests the {@link IteratingGenerator}.<br/><br/>
  * Created: 01.09.2007 17:22:03
- *
  * @author Volker Bergmann
  */
 public class IteratingGeneratorTest extends GeneratorTest {
 
-  /**
-   * Test default behaviour.
-   */
   @Test
   public void testDefaultBehaviour() {
     HeavyweightIterableAdapter<Integer> iterable = new HeavyweightIterableAdapter<>(Arrays.asList(1, 2));
@@ -60,9 +57,6 @@ public class IteratingGeneratorTest extends GeneratorTest {
     expectGeneratedSequence(gen, 1, 2).withCeasedAvailability();
   }
 
-  /**
-   * Test empty iterator.
-   */
   @Test
   public void testEmptyIterator() {
     EmptyIterable emptySource = new EmptyIterable();
@@ -73,14 +67,8 @@ public class IteratingGeneratorTest extends GeneratorTest {
     IOUtil.close(generator);
   }
 
-  /**
-   * The type Empty iterable.
-   */
   public static class EmptyIterable implements TypedIterable<Integer> {
 
-    /**
-     * The Latest instance.
-     */
     public EmptyIterator latestInstance;
 
     @Override
@@ -96,14 +84,8 @@ public class IteratingGeneratorTest extends GeneratorTest {
 
   }
 
-  /**
-   * The type Empty iterator.
-   */
   public static class EmptyIterator implements HeavyweightIterator<Integer> {
 
-    /**
-     * The Closed.
-     */
     public boolean closed = false;
 
     @Override
@@ -113,12 +95,12 @@ public class IteratingGeneratorTest extends GeneratorTest {
 
     @Override
     public Integer next() {
-      throw new IllegalStateException();
+      throw new NoSuchElementException();
     }
 
     @Override
     public void remove() {
-      throw new UnsupportedOperationException("EmptyIterator.remove() is not supported");
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("EmptyIterator.remove() is not supported");
     }
 
     @Override

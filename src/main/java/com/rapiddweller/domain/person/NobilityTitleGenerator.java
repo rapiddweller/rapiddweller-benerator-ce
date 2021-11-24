@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.csv.LocalCSVGenerator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Encodings;
@@ -48,8 +49,7 @@ import java.util.Locale;
  */
 public class NobilityTitleGenerator extends GeneratorProxy<String> {
 
-  private final static String BASE_NAME =
-      "/com/rapiddweller/domain/person/nobTitle_";
+  private final static String BASE_NAME = "/com/rapiddweller/domain/person/nobTitle_";
 
   private Gender gender;
   private Locale locale;
@@ -81,7 +81,7 @@ public class NobilityTitleGenerator extends GeneratorProxy<String> {
     } else if (gender == Gender.MALE) {
       return BASE_NAME + "male";
     } else {
-      throw new IllegalArgumentException("Gender: " + gender);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Gender: " + gender);
     }
   }
 
