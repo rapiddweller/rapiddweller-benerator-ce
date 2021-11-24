@@ -44,7 +44,6 @@ import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.array.Array2EntityConverter;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,9 +73,9 @@ public class CSVEntityIterator implements DataIterator<Entity>, Tabular {
 
   public CSVEntityIterator(String uri, ComplexTypeDescriptor descriptor,
                            Converter<String, ?> preprocessor, char separator,
-                           String encoding) throws FileNotFoundException {
+                           String encoding) {
     if (!IOUtil.isURIAvailable(uri)) {
-      throw new FileNotFoundException("URI not found: " + uri);
+      throw BeneratorExceptionFactory.getInstance().fileNotFound(uri, null);
     }
     this.uri = uri;
     this.preprocessor = preprocessor;
@@ -170,24 +169,18 @@ public class CSVEntityIterator implements DataIterator<Entity>, Tabular {
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   private void init() {
-    try {
-      DataIterator<String[]> cellIterator;
-      cellIterator = new CSVLineIterator(uri, separator, true, encoding);
-      if (!rowBased) {
-        cellIterator = new OrthogonalArrayIterator<>(cellIterator);
-      }
-      if (expectingHeader) {
-        setColumns(cellIterator.next(new DataContainer<>()).getData());
-      }
-      Converter<String[], Object[]> arrayConverter = new ArrayConverter(String.class, Object.class, preprocessor);
-      Array2EntityConverter a2eConverter = new Array2EntityConverter(entityDescriptor, columns, true);
-      Converter<String[], Entity> converter = new ConverterChain<>(arrayConverter, a2eConverter);
-      this.source = new ConvertingDataIterator<>(cellIterator, converter);
-    } catch (FileNotFoundException e) {
-      throw BeneratorExceptionFactory.getInstance().fileNotFound("Error in processing " + uri, e);
-    } catch (IOException e) {
-      throw BeneratorExceptionFactory.getInstance().fileAccessException("Error in processing " + uri, e);
+    DataIterator<String[]> cellIterator;
+    cellIterator = new CSVLineIterator(uri, separator, true, encoding);
+    if (!rowBased) {
+      cellIterator = new OrthogonalArrayIterator<>(cellIterator);
     }
+    if (expectingHeader) {
+      setColumns(cellIterator.next(new DataContainer<>()).getData());
+    }
+    Converter<String[], Object[]> arrayConverter = new ArrayConverter(String.class, Object.class, preprocessor);
+    Array2EntityConverter a2eConverter = new Array2EntityConverter(entityDescriptor, columns, true);
+    Converter<String[], Entity> converter = new ConverterChain<>(arrayConverter, a2eConverter);
+    this.source = new ConvertingDataIterator<>(cellIterator, converter);
   }
 
 }

@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.platform.memstore.MemStore;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -50,7 +50,7 @@ public class MemStoreStatement implements Statement {
 
   public MemStoreStatement(String id, ResourceManager resourceManager) {
     if (id == null) {
-      throw new ConfigurationError("No store id defined");
+      throw BeneratorExceptionFactory.getInstance().configurationError("No store id defined");
     }
     this.id = id;
     this.resourceManager = resourceManager;

@@ -32,7 +32,6 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.primitive.ValueMapper;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.common.Validator;
@@ -92,7 +91,7 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
       generator = createHeuristicGenerator(descriptor, instanceName, uniqueness, context);
     }
     if (generator == null) { // by now, we must have created a generator
-      throw new ConfigurationError("Failed to create root generator for descriptor: " + descriptor);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Failed to create root generator for descriptor: " + descriptor);
     }
     return generator;
   }

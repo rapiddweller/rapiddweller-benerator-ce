@@ -32,6 +32,7 @@ import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
 import com.rapiddweller.benerator.engine.statement.SequentialStatement;
 import com.rapiddweller.benerator.engine.statement.StatementProxy;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.NShotGeneratorProxy;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Visitor;
@@ -44,7 +45,6 @@ import java.util.Map.Entry;
 /**
  * The root {@link Statement} for executing descriptor file based data generation.<br/><br/>
  * Created: 24.10.2009 11:08:46
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -52,11 +52,6 @@ public class BeneratorRootStatement extends SequentialStatement {
 
   private final Map<String, String> attributes;
 
-  /**
-   * Instantiates a new Benerator root statement.
-   *
-   * @param attributes the attributes
-   */
   public BeneratorRootStatement(Map<String, String> attributes) {
     this.attributes = new HashMap<>(attributes);
   }
@@ -71,13 +66,6 @@ public class BeneratorRootStatement extends SequentialStatement {
     return true;
   }
 
-  /**
-   * Gets generator.
-   *
-   * @param name    the name
-   * @param context the context
-   * @return the generator
-   */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public Generator<?> getGenerator(String name, BeneratorContext context) {
     GenerateOrIterateStatement statement = getGeneratorStatement(name, context);
@@ -85,28 +73,16 @@ public class BeneratorRootStatement extends SequentialStatement {
     return new NShotGeneratorProxy(generator, statement.generateCount(context));
   }
 
-  /**
-   * Gets generator statement.
-   *
-   * @param name    the name
-   * @param context the context
-   * @return the generator statement
-   */
   public GenerateOrIterateStatement getGeneratorStatement(String name, BeneratorContext context) {
     BeneratorVisitor visitor = new BeneratorVisitor(name, context);
     accept(visitor);
     GenerateOrIterateStatement statement = visitor.getResult();
     if (statement == null) {
-      throw new IllegalArgumentException("Generator not found: " + name);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Generator not found: " + name);
     }
     return statement;
   }
 
-  /**
-   * Map attributes to.
-   *
-   * @param context the context
-   */
   protected void mapAttributesTo(BeneratorContext context) {
     for (Entry<String, String> attribute : attributes.entrySet()) {
       String key = attribute.getKey();
@@ -121,31 +97,17 @@ public class BeneratorRootStatement extends SequentialStatement {
     }
   }
 
-  /**
-   * The type Benerator visitor.
-   */
   static class BeneratorVisitor implements Visitor<Statement> {
 
     private final String name;
     private final BeneratorContext context;
     private GenerateOrIterateStatement result;
 
-    /**
-     * Instantiates a new Benerator visitor.
-     *
-     * @param name    the name
-     * @param context the context
-     */
     public BeneratorVisitor(String name, BeneratorContext context) {
       this.name = name;
       this.context = context;
     }
 
-    /**
-     * Gets result.
-     *
-     * @return the result
-     */
     public GenerateOrIterateStatement getResult() {
       return result;
     }

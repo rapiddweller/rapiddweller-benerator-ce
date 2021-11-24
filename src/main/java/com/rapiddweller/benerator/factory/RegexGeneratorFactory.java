@@ -35,7 +35,6 @@ import com.rapiddweller.benerator.wrapper.ConcatenatingGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.CharSet;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.format.regex.Choice;
 import com.rapiddweller.format.regex.Factor;
 import com.rapiddweller.format.regex.Group;
@@ -69,7 +68,7 @@ public class RegexGeneratorFactory {
   public static NonNullGenerator<String> create(String pattern, Locale locale, int minLength, Integer maxLength,
                                                 Uniqueness uniqueness, GeneratorFactory factory) {
     if (pattern == null) {
-      throw new IllegalArgumentException("Not a regular expression: null");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Not a regular expression: null");
     }
     RegexPart regex = new RegexParser(locale).parseRegex(pattern);
     return createFromObject(regex, minLength, maxLength, uniqueness, factory);
@@ -117,7 +116,7 @@ public class RegexGeneratorFactory {
     } else if (object == null) {
       return WrapperFactory.asNonNullGenerator(new ConstantGenerator<>(null, String.class));
     } else {
-      throw new UnsupportedOperationException("Unsupported regex part type: " + object.getClass().getName());
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Unsupported regex part type: " + object.getClass().getName());
     }
   }
 
@@ -151,7 +150,7 @@ public class RegexGeneratorFactory {
       if (remainingLength != null) {
         remainingLength -= part.minLength();
         if (remainingLength < 0) {
-          throw new ConfigurationError("Remaining length is negative: " + remainingLength);
+          throw BeneratorExceptionFactory.getInstance().configurationError("Remaining length is negative: " + remainingLength);
         }
       }
     }

@@ -37,7 +37,6 @@ import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.util.FilteringGenerator;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.format.script.ScriptConverterForObjects;
@@ -96,7 +95,7 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
           }
           return generator;
         } catch (Exception e) {
-          throw new UnsupportedOperationException("Unknown source type: " + sourceName);
+          throw BeneratorExceptionFactory.getInstance().illegalArgument("Unknown source type: " + sourceName);
         }
       }
     }
@@ -198,7 +197,7 @@ public class ArrayTypeGeneratorFactory extends TypeGeneratorFactory<ArrayTypeDes
     } else if (sourceObject instanceof Generator) {
       generator = (Generator<Object[]>) sourceObject;
     } else {
-      throw new ConfigurationError("Source type not supported: " + sourceObject.getClass());
+      throw BeneratorExceptionFactory.getInstance().configurationError("Source type not supported: " + sourceObject.getClass());
     }
     return generator;
   }

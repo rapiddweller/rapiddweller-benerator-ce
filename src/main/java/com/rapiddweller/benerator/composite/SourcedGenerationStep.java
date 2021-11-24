@@ -27,8 +27,8 @@
 package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 
 /**
  * Abstract implementation of the {@link GenerationStep} interface which manages a source Generator
@@ -83,7 +83,8 @@ public abstract class SourcedGenerationStep<E> extends AbstractGenerationStep<E>
 
   protected void assertInitialized() {
     if (!source.wasInitialized()) {
-      throw new IllegalGeneratorStateException("Generation step was not initialized: " + this);
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState(
+          "Generation step was not initialized: " + this);
     }
   }
 

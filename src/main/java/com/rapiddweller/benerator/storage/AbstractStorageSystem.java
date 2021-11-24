@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.storage;
 
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.StorageSystem;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.model.data.DataModel;
 
 /**
@@ -61,7 +62,7 @@ public abstract class AbstractStorageSystem implements StorageSystem {
 
   @Override
   public Object execute(String command) {
-    throw new UnsupportedOperationException("execute() not supported by " + this);
+    throw BeneratorExceptionFactory.getInstance().programmerUnsupported("execute() not supported by " + this);
   }
 
   public Consumer updater() {

@@ -26,14 +26,14 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import com.rapiddweller.benerator.BeneratorError;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.script.Expression;
-import com.rapiddweller.script.expression.ExpressionUtil;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
+import com.rapiddweller.common.exception.ExitCodes;
 
 /**
- * {@link Statement} implementation that raises a {@link BeneratorError}
+ * {@link Statement} implementation that raises an
+ * {@link com.rapiddweller.common.OperationFailed} exception
  * and provides a result <code>code</code> for the operating system.<br/><br/>
  * Created: 12.01.2011 09:04:26
  * @author Volker Bergmann
@@ -41,22 +41,19 @@ import com.rapiddweller.script.expression.ExpressionUtil;
  */
 public class ErrorStatement implements Statement {
 
-  public final Expression<String> messageEx;
-  public final Expression<Integer> codeEx;
+  public final String id;
+  public final String message;
+  public final int exitCode;
 
-  public ErrorStatement(Expression<String> messageEx, Expression<Integer> codeEx) {
-    this.messageEx = messageEx;
-    this.codeEx = codeEx;
+  public ErrorStatement(String id, Integer exitCode, String message) {
+    this.id = id;
+    this.message = message;
+    this.exitCode = (exitCode != null ? exitCode : ExitCodes.MISCELLANEOUS_ERROR);
   }
 
   @Override
   public boolean execute(BeneratorContext context) {
-    String message = ExpressionUtil.evaluate(messageEx, context);
-    Integer code = ExpressionUtil.evaluate(codeEx, context);
-    if (code == null) {
-      code = 0;
-    }
-    throw new BeneratorError(code, message);
+    throw BeneratorExceptionFactory.getInstance().operationFailed(id, exitCode, message, null);
   }
 
 }

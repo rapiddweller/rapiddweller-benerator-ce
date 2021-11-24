@@ -27,6 +27,7 @@
 package com.rapiddweller.platform.dbunit;
 
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.IOUtil;
@@ -118,7 +119,7 @@ public class DbUnitEntityExporter extends AbstractConsumer {
   @Override
   public void startProductConsumption(Object object) {
     if (!(object instanceof Entity)) {
-      throw new IllegalArgumentException("Expected entity");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Expected entity");
     }
     Entity entity = (Entity) object;
     try {
@@ -138,7 +139,7 @@ public class DbUnitEntityExporter extends AbstractConsumer {
       handler.startElement("", "", entity.type(), atts);
       handler.endElement("", "", entity.type());
     } catch (SAXException e) {
-      throw new ConfigurationError("Error in processing element: " + entity, e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error in processing element: " + entity, e);
     }
   }
 
@@ -161,7 +162,7 @@ public class DbUnitEntityExporter extends AbstractConsumer {
         handler.endDocument();
         handler = null;
       } catch (SAXException e) {
-        throw new ConfigurationError("Error closing XML file.", e);
+        throw BeneratorExceptionFactory.getInstance().configurationError("Error closing XML file.", e);
       } finally {
         IOUtil.close(out);
         out = null;
@@ -201,9 +202,9 @@ public class DbUnitEntityExporter extends AbstractConsumer {
 
       this.state = State.INITIALIZED;
     } catch (TransformerConfigurationException e) {
-      throw new ConfigurationError("Error in transformer configuration", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error in transformer configuration", e);
     } catch (Exception e) {
-      throw new ConfigurationError("Error in initializing XML file", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error in initializing XML file", e);
     }
   }
 

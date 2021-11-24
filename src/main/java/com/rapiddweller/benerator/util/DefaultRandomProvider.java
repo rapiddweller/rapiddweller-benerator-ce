@@ -3,6 +3,7 @@
 package com.rapiddweller.benerator.util;
 
 import com.rapiddweller.benerator.RandomProvider;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.script.DatabeneScriptParser;
@@ -32,7 +33,7 @@ public class DefaultRandomProvider implements RandomProvider {
   /** Returns a random, uniformly distributed long value between minInclusive and maxInclusive. */
   public long randomLong(long minInclusive, long maxInclusive) {
     if (minInclusive > maxInclusive) {
-      throw new IllegalArgumentException("min (" + minInclusive + ") > max (" + maxInclusive + ")");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("min (" + minInclusive + ") > max (" + maxInclusive + ")");
     }
     return minInclusive + randomLong(maxInclusive - minInclusive + 1);
   }
@@ -50,7 +51,7 @@ public class DefaultRandomProvider implements RandomProvider {
   /** Returns a random, uniformly distributed int value between minInclusive and maxInclusive. */
   public int randomInt(int minInclusive, int maxInclusive) {
     if (minInclusive > maxInclusive) {
-      throw new IllegalArgumentException("min (" + minInclusive + ") > max (" + maxInclusive + ")");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("min (" + minInclusive + ") > max (" + maxInclusive + ")");
     }
     return minInclusive + randomInt(maxInclusive - minInclusive + 1);
   }
@@ -68,7 +69,7 @@ public class DefaultRandomProvider implements RandomProvider {
   /** Returns a random, uniformly distributed int value to be used as index of the array. */
   public int randomIndex(Object[] values) {
     if (values.length == 0) {
-      throw new IllegalArgumentException("Cannot create random index for an empty array");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Cannot create random index for an empty array");
     }
     return randomInt(values.length);
   }
@@ -76,7 +77,7 @@ public class DefaultRandomProvider implements RandomProvider {
   /** Returns a random, uniformly distributed element of the array. */
   public <T> T randomElement(T... values) {
     if (values.length == 0) {
-      throw new IllegalArgumentException("Cannot choose random value from an empty array");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Cannot choose random value from an empty array");
     }
     return values[randomIndex(values)];
   }
@@ -84,7 +85,7 @@ public class DefaultRandomProvider implements RandomProvider {
   /** Returns a random, uniformly distributed int value to be used as index of the collection. */
   public int randomIndex(Collection<?> values) {
     if (values.isEmpty()) {
-      throw new IllegalArgumentException("Cannot create random index for an empty array");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Cannot create random index for an empty array");
     }
     return randomInt(values.size());
   }
@@ -122,7 +123,7 @@ public class DefaultRandomProvider implements RandomProvider {
     for (int i = 0; i < sampleCount; i++) {
       double weight = samples[i].getWeight();
       if (weight < 0) {
-        throw new IllegalArgumentException("Negative weight in literal: " + literal);
+        throw BeneratorExceptionFactory.getInstance().illegalArgument("Negative weight in literal: " + literal);
       }
       sum += weight;
       probSum[i] = (float) sum;

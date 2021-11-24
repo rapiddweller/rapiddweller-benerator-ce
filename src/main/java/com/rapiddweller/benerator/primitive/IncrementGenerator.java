@@ -26,8 +26,8 @@
 
 package com.rapiddweller.benerator.primitive;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
-import com.rapiddweller.common.ConfigurationError;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -94,7 +94,8 @@ public class IncrementGenerator extends ThreadSafeNonNullGenerator<Long> {
 
   public void setIncrement(long increment) {
     if (increment < 1) {
-      throw new ConfigurationError("increment must be a positive number, but was " + increment);
+      throw BeneratorExceptionFactory.getInstance().configurationError(
+          "increment must be a positive number, but was " + increment);
     }
     this.increment = increment;
   }

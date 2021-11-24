@@ -14,6 +14,7 @@
  */
 package com.rapiddweller.benerator.sensor;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.contiperf.clock.SystemClock;
 
 import java.io.PrintWriter;
@@ -66,8 +67,9 @@ public final class LatencyCounter {
     // interface -------------------------------------------------------------------------------------------------------
 
     public void start() {
-    	if (running)
-    		throw new IllegalStateException(this + " has already been started");
+    	if (running) {
+          throw BeneratorExceptionFactory.getInstance().illegalAccess(this + " has already been started");
+        }
     	this.startTime = System.currentTimeMillis();
     	this.running = true;
     }
@@ -85,8 +87,10 @@ public final class LatencyCounter {
     }
 
     public void stop() {
-    	if (!running)
-    		throw new IllegalStateException("Stopping " + this + " which is not running");
+    	if (!running) {
+          throw BeneratorExceptionFactory.getInstance().programmerStateError(
+              "Stopping " + this + " which is not running");
+        }
     	this.running = false;
     	this.endTime = System.currentTimeMillis();
     }
@@ -149,8 +153,10 @@ public final class LatencyCounter {
     }
     
     public double throughput() {
-    	if (startTime == -1 || endTime == -1)
-    		throw new IllegalArgumentException("Invalid setup: Use start() and stop() to indicate test start and end!");
+    	if (startTime == -1 || endTime == -1) {
+          throw BeneratorExceptionFactory.getInstance().illegalArgument(
+              "Invalid setup: Use start() and stop() to indicate test start and end!");
+        }
     	return 1000. * sampleCount / duration();
     }
 

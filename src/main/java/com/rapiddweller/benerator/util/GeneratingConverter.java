@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.util;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
@@ -79,7 +80,7 @@ public abstract class GeneratingConverter<S, G, T> extends ThreadSafeConverter<S
 
   protected void initialize(S sourceValue) {
     if (context == null) {
-      throw new IllegalStateException("Context has not been injected in " + this);
+      throw BeneratorExceptionFactory.getInstance().programmerStateError("Context has not been injected in " + this);
     }
     generator.init(context);
   }

@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.distribution;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import org.junit.Test;
 
 import java.util.Map;
@@ -39,7 +40,6 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the {@link CumulativeDistributionFunction}.<br/><br/>
  * Created: 12.03.2010 15:06:33
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -47,17 +47,11 @@ public class InverseProbabilityIntegralTest extends GeneratorTest {
 
   private final Fcn fcn = new Fcn();
 
-  /**
-   * Test create double generator unique.
-   */
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentError.class)
   public void testCreateDoubleGenerator_unique() {
     fcn.createNumberGenerator(Double.class, 1., 4., 0.5, true);
   }
 
-  /**
-   * Test create double generator not unique.
-   */
   @Test
   public void testCreateDoubleGenerator_notUnique() {
     Generator<Double> generator = fcn.createNumberGenerator(Double.class, 1., 4., 0.5, false);
@@ -70,19 +64,13 @@ public class InverseProbabilityIntegralTest extends GeneratorTest {
     }
   }
 
-  /**
-   * Test apply unique.
-   */
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentError.class)
   public void testApply_unique() {
     Generator<String> source = new SequenceTestGenerator<>("A", "B");
     source.init(context);
     fcn.applyTo(source, true);
   }
 
-  /**
-   * Test apply not unique.
-   */
   @Test
   public void testApply_notUnique() {
     Generator<String> source = new SequenceTestGenerator<>("A", "B");
@@ -96,9 +84,6 @@ public class InverseProbabilityIntegralTest extends GeneratorTest {
     assertEquals(0.5, counts.get("B").doubleValue() / n, 0.05);
   }
 
-  /**
-   * The type Fcn.
-   */
   static class Fcn extends CumulativeDistributionFunction {
 
     @Override

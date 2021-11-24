@@ -121,6 +121,7 @@ public class DescriptorConstants {
 
   public static final String ATT_ASSERT = "assert";
   public static final String ATT_TYPE = "type";
+  public static final String ATT_EXIT_CODE = "exitCode";
   public static final String ATT_CONTAINER = "container";
   public static final String ATT_OPTIMIZE = "optimize";
   public static final String ATT_INVALIDATE = "invalidate";

@@ -26,11 +26,13 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import com.rapiddweller.benerator.BeneratorError;
 import com.rapiddweller.benerator.engine.statement.ErrorStatement;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
+import com.rapiddweller.common.OperationFailed;
+import com.rapiddweller.common.exception.ExitCodes;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
@@ -41,18 +43,32 @@ import static org.junit.Assert.assertNull;
  */
 public class ErrorParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
-  @Test(expected = BeneratorError.class)
+  @Test
   public void testNoInfo() {
     ErrorStatement statement = (ErrorStatement) parse("<error/>");
-    assertNull(statement.messageEx.evaluate(context));
-    assertNull(statement.codeEx.evaluate(context));
-    statement.execute(context);
+    assertNull(statement.id);
+    assertEquals(ExitCodes.MISCELLANEOUS_ERROR, statement.exitCode);
+    assertNull(statement.message);
+    try {
+      statement.execute(context);
+    } catch (OperationFailed e) {
+      assertNull(e.getErrorId());
+      assertEquals(ExitCodes.MISCELLANEOUS_ERROR, e.getExitCode());
+      assertNull(e.getMessage());
+    }
   }
 
-  @Test(expected = BeneratorError.class)
+  @Test
   public void testExecute() {
-    ErrorStatement statement = (ErrorStatement) parse("<error>Something bad happened</error>");
-    statement.execute(context);
+    ErrorStatement statement = (ErrorStatement) parse(
+        "<error id='XXX-1234' exitCode='5'>Something bad happened</error>");
+    try {
+      statement.execute(context);
+    } catch (OperationFailed e) {
+      assertEquals("XXX-1234", e.getErrorId());
+      assertEquals(5, e.getExitCode());
+      assertEquals("Something bad happened", e.getMessage());
+    }
   }
 
 }

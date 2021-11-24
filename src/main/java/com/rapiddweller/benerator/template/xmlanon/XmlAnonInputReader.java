@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.template.xmlanon;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.template.TemplateInputReader;
 import com.rapiddweller.common.Assert;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.exception.ParseException;
@@ -78,16 +78,16 @@ public class XmlAnonInputReader implements TemplateInputReader {
           break;
         } else {
           if (StringUtil.isEmpty(header)) {
-            throw new ConfigurationError("Filename missing in column header #" + i + " of Excel document " + xlsUri);
+            throw BeneratorExceptionFactory.getInstance().configurationError("Filename missing in column header #" + i + " of Excel document " + xlsUri);
           }
           files.add(header);
         }
       }
       if (varnameColumnIndex == -1) {
-        throw new ConfigurationError("No 'varname' header defined in Excel document " + xlsUri);
+        throw BeneratorExceptionFactory.getInstance().configurationError("No 'varname' header defined in Excel document " + xlsUri);
       }
-      if (files.size() == 0) {
-        throw new ConfigurationError("No files specified in Excel document " + xlsUri);
+      if (files.isEmpty()) {
+        throw BeneratorExceptionFactory.getInstance().configurationError("No files specified in Excel document " + xlsUri);
       }
 
       // parse anonymization rows
@@ -99,7 +99,7 @@ public class XmlAnonInputReader implements TemplateInputReader {
         }
         Cell varnameCell = row.getCell(varnameColumnIndex);
         if (varnameCell == null || StringUtil.isEmpty(varnameCell.getStringCellValue())) {
-          throw new ConfigurationError("'varname' cell empty in table row #" + (rownum + 1));
+          throw BeneratorExceptionFactory.getInstance().configurationError("'varname' cell empty in table row #" + (rownum + 1));
         }
         Anonymization anon = new Anonymization(varnameCell.getStringCellValue());
         // parse locators
@@ -133,7 +133,7 @@ public class XmlAnonInputReader implements TemplateInputReader {
   private static void verifyXMLFileSettings(AnonymizationSetup setup) {
     for (String file : setup.getFiles()) {
       if (StringUtil.isEmpty(System.getProperty(file))) {
-        throw new ConfigurationError("No concrete file specified for file variable " + file);
+        throw BeneratorExceptionFactory.getInstance().configurationError("No concrete file specified for file variable " + file);
       }
     }
   }

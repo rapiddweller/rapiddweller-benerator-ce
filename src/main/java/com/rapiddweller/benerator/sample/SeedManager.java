@@ -26,8 +26,8 @@
 
 package com.rapiddweller.benerator.sample;
 
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
@@ -90,7 +90,7 @@ public class SeedManager<E> {
 
   public void init() {
     if (initialized) {
-      throw new IllegalGeneratorStateException("Already initialized: " + this);
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Already initialized: " + this);
     }
     if (getWeight() == 0) {
       throw new InvalidGeneratorSetupException(getClass().getSimpleName() + " is empty");

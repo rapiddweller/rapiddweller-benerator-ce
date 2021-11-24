@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.primitive;
 
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -33,15 +34,11 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the {@link ValueMapper}.<br/><br/>
  * Created: 24.10.2009 09:14:20
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class ValueMapperTest {
 
-  /**
-   * Test normal mapping.
-   */
   @Test
   public void testNormalMapping() {
     ValueMapper mapper = new ValueMapper("1->2,4->3");
@@ -50,9 +47,6 @@ public class ValueMapperTest {
     assertEquals(3, mapper.convert(4));
   }
 
-  /**
-   * Test can convert strict.
-   */
   @Test
   public void testCanConvert_Strict() {
     ValueMapper mapper = new ValueMapper("1->2,4->3");
@@ -60,18 +54,12 @@ public class ValueMapperTest {
     assertEquals(2, mapper.convert(1));
   }
 
-  /**
-   * Test convert strict.
-   */
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentError.class)
   public void testConvert_Strict() {
     ValueMapper mapper = new ValueMapper("1->2,4->3");
     mapper.convert(2);
   }
 
-  /**
-   * Test lenient mapping.
-   */
   @Test
   public void testLenientMapping() {
     ValueMapper mapper = new ValueMapper("1->2,4->3", true);
@@ -80,9 +68,6 @@ public class ValueMapperTest {
     assertEquals(2, mapper.convert(2));
   }
 
-  /**
-   * Test lenient wo mapping.
-   */
   @Test
   public void testLenientWOMapping() {
     ValueMapper mapper = new ValueMapper(null, true);

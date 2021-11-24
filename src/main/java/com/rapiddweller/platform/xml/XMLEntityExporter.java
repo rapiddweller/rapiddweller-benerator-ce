@@ -29,7 +29,6 @@ package com.rapiddweller.platform.xml;
 import com.rapiddweller.benerator.consumer.AbstractConsumer;
 import com.rapiddweller.benerator.consumer.FileExporter;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SystemInfo;
@@ -154,7 +153,7 @@ public class XMLEntityExporter extends AbstractConsumer implements FileExporter 
     try {
       handler.endElement("", "", entity.type());
     } catch (SAXException e) {
-      throw new ConfigurationError("Error in processing element: " + entity, e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error in processing element: " + entity, e);
     }
   }
 
@@ -174,7 +173,7 @@ public class XMLEntityExporter extends AbstractConsumer implements FileExporter 
           handler = null;
         }
       } catch (SAXException e) {
-        throw new ConfigurationError("Error closing XML file.", e);
+        throw BeneratorExceptionFactory.getInstance().configurationError("Error closing XML file.", e);
       } finally {
         IOUtil.close(out);
       }
@@ -206,7 +205,8 @@ public class XMLEntityExporter extends AbstractConsumer implements FileExporter 
         renderSimpleType(content);
       }
     } catch (SAXException e) {
-      throw new ConfigurationError("Error in processing element: " + entity, e);
+      throw BeneratorExceptionFactory.getInstance().configurationError(
+          "Error in processing element: " + entity, e);
     }
   }
 

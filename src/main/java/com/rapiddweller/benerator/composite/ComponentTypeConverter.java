@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.composite;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.factory.DescriptorUtil;
 import com.rapiddweller.common.ArrayBuilder;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.converter.AbstractConverter;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -90,7 +90,7 @@ public class ComponentTypeConverter extends AbstractConverter<Entity, Entity> {
           }
           components.put(componentName, builder.toArray());
         } else {
-          throw new ConfigurationError("Expected complex data type for '" + componentName + "' but got " + componentValue.getClass());
+          throw BeneratorExceptionFactory.getInstance().configurationError("Expected complex data type for '" + componentName + "' but got " + componentValue.getClass());
         }
       }
     }

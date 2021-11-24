@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.util;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.sample.SequenceGenerator;
+import com.rapiddweller.common.exception.IllegalOperationError;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
@@ -72,7 +73,7 @@ public class GeneratorIteratorTest {
     try {
       iter.remove();
       fail("Expected UnsupportedOperationException");
-    } catch (UnsupportedOperationException e) {
+    } catch (IllegalOperationError e) {
       // this is expected
     }
     iter.close();

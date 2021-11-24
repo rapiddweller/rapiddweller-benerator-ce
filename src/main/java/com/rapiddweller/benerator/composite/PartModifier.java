@@ -3,6 +3,7 @@
 package com.rapiddweller.benerator.composite;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.model.data.Entity;
@@ -94,7 +95,8 @@ public class PartModifier extends AbstractGenerationStep<Entity> implements Comp
     } else if (part instanceof Collection) {
       return ((Collection<Entity>) part).iterator();
     } else {
-      throw new UnsupportedOperationException("Don't know how to modify " + part.getClass());
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported(
+          "Don't know how to modify " + part.getClass());
     }
   }
 

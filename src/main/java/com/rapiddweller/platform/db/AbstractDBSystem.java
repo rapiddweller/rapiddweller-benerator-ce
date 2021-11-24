@@ -35,13 +35,11 @@ import com.rapiddweller.benerator.storage.StorageSystemInserter;
 import com.rapiddweller.benerator.util.DeprecationLogger;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.exception.ConnectFailedException;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ImportFailedException;
 import com.rapiddweller.common.LoggerEscalator;
-import com.rapiddweller.common.ObjectNotFoundException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.converter.AnyConverter;
@@ -171,8 +169,8 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
       }
       SystemRef def = context.getEnvironmentSystem(environment, systemName);
       if (!"db".equals(def.getType())) {
-        throw new ConfigurationError("Not a database definition: '" + systemName + "' " +
-            "in environment '" + environmentName + "'");
+        throw BeneratorExceptionFactory.getInstance().configurationError(
+            "Not a database definition: '" + systemName + "' in environment '" + environmentName + "'");
       }
       for (Map.Entry<String, String> entry : def.getProperties().entrySet()) {
         BeanUtil.setPropertyValue(this, entry.getKey(), entry.getValue(), true, true);
@@ -394,7 +392,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   @Override
   public void store(Entity entity) {
     if (readOnly) {
-      throw new IllegalStateException(
+      throw BeneratorExceptionFactory.getInstance().illegalAccess(
           "Tried to insert rows into table '" + entity.type() + "' though database '" + id + "' is read-only");
     }
     logger.debug("Storing {}", entity);
@@ -404,7 +402,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   @Override
   public void update(Entity entity) {
     if (readOnly) {
-      throw new IllegalStateException(
+      throw BeneratorExceptionFactory.getInstance().illegalAccess(
           "Tried to update table '" + entity.type() + "' though database '" + id + "' is read-only");
     }
     logger.debug("Updating {}", entity);
@@ -488,7 +486,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     DBTable table = getTable(tableName);
     String[] pkColumnNames = table.getPKColumnNames();
     if (pkColumnNames.length == 0) {
-      throw new ConfigurationError(
+      throw BeneratorExceptionFactory.getInstance().configurationError(
           "Cannot create reference to table " + tableName +
               " since it does not define a primary key");
     }
@@ -612,7 +610,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
             = VersionNumber.valueOf(metaData.getDatabaseMajorVersion() + "." + metaData.getDatabaseMinorVersion());
         dialect = DatabaseDialectManager.getDialectForProduct(productName, productVersion);
       } catch (SQLException e) {
-        throw new ConfigurationError("Database meta data access failed", e);
+        throw BeneratorExceptionFactory.getInstance().configurationError("Database meta data access failed", e);
       }
     }
     return dialect;
@@ -640,7 +638,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
                   "You can use that driver for accessing an Oracle 9 server as well.");
         }
       } catch (SQLException e) {
-        throw new ConfigurationError("Error getting database meta data", e);
+        throw BeneratorExceptionFactory.getInstance().configurationError("Error getting database meta data", e);
       }
     }
   }
@@ -852,8 +850,8 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
         logger.debug("parsed attribute {}: {}", columnId, descriptor);
         complexType.setComponent(descriptor);
       } catch (Exception e) {
-        throw new ConfigurationError("Error processing column " + column.getName() +
-            " of table " + table.getName(), e);
+        throw BeneratorExceptionFactory.getInstance().configurationError(
+            "Error processing column " + column.getName() + " of table " + table.getName(), e);
       }
     }
     return complexType;
@@ -917,7 +915,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
       PrimitiveType primitiveType = type.getPrimitiveType();
       if (primitiveType == null) {
         if (!acceptUnknownColumnTypes) {
-          throw new ConfigurationError(
+          throw BeneratorExceptionFactory.getInstance().configurationError(
               "Column type of " + entityDescriptor.getName() + "." + dbCompDescriptor.getName() +
                   " unknown: " + type.getName());
         } else if (entity.get(type.getName()) instanceof String) {
@@ -948,7 +946,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
         return table;
       }
     }
-    throw new ObjectNotFoundException("Table " + tableName);
+    throw BeneratorExceptionFactory.getInstance().objectNotFound("Table " + tableName);
   }
 
   public DBTable getTable(String schemaName, String tableName) {
@@ -967,7 +965,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
         return table;
       }
     }
-    throw new ObjectNotFoundException("Table " + tableName);
+    throw BeneratorExceptionFactory.getInstance().objectNotFound("Table " + tableName);
   }
 
   private DBTable findAnyTableOfName(String tableName) {

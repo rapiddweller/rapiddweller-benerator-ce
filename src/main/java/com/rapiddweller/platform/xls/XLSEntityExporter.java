@@ -28,8 +28,8 @@ package com.rapiddweller.platform.xls;
 
 import com.rapiddweller.benerator.consumer.FileExporter;
 import com.rapiddweller.benerator.consumer.FormattingConsumer;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.format.xls.XLSUtil;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.Entity;
@@ -111,7 +111,7 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
   public void startProductConsumption(Object object) {
     logger.debug("exporting {}", object);
     if (!(object instanceof Entity)) {
-      throw new IllegalArgumentException("Expecting Entity");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Expecting Entity");
     }
     Entity entity = (Entity) object;
     HSSFSheet sheet = getOrCreateSheet(entity);
@@ -139,7 +139,7 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
         && !directory.getParentFile().exists()) {
       boolean result = directory.getParentFile().mkdirs();
       if (!result) {
-        throw new ConfigurationError("filepath does not exists and can not be created ...");
+        throw BeneratorExceptionFactory.getInstance().configurationError("filepath does not exists and can not be created ...");
       }
     }
 
@@ -147,7 +147,7 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
     try (FileOutputStream out = new FileOutputStream(uri)) {
       workbook.write(out);
     } catch (IOException e) {
-      throw new ConfigurationError("Error writing XLS file", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error writing XLS file", e);
     }
   }
 
@@ -184,8 +184,8 @@ public class XLSEntityExporter extends FormattingConsumer implements FileExporte
       if (cd.getTypeDescriptor() instanceof SimpleTypeDescriptor) {
         primitiveType = ((SimpleTypeDescriptor) cd.getTypeDescriptor()).getPrimitiveType();
       } else {
-        throw new UnsupportedOperationException("Can only export simple type attributes, " +
-                "failed to export " + entity.type() + '.' + cd.getName());
+        throw BeneratorExceptionFactory.getInstance().illegalOperation("Can only export simple type attributes, " +
+            "failed to export " + entity.type() + '.' + cd.getName());
       }
       Class<?> javaType = (primitiveType != null ? primitiveType.getJavaType() : String.class);
       String formatString = null;

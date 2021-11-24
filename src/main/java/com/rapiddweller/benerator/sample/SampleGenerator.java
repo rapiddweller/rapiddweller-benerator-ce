@@ -33,9 +33,9 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 
 import java.util.ArrayList;
@@ -134,8 +134,8 @@ public class SampleGenerator<E> extends AbstractSampleGenerator<E> {
   @Override
   public <T extends E> void addValue(T value) {
     if (unique && this.contains(value)) {
-      throw new ConfigurationError("Trying to add a duplicate value (" + value + ") " +
-          "to unique generator: " + this);
+      throw BeneratorExceptionFactory.getInstance().configurationError(
+          "Trying to add a duplicate value (" + value + ") to unique generator: " + this);
     }
     samples.add(value);
   }
@@ -147,7 +147,7 @@ public class SampleGenerator<E> extends AbstractSampleGenerator<E> {
   @Override
   public void init(GeneratorContext context) {
     assertNotInitialized();
-    if (samples.size() == 0) {
+    if (samples.isEmpty()) {
       throw new InvalidGeneratorSetupException("No samples defined in " + this);
     } else {
       indexGenerator = distribution.createNumberGenerator(Integer.class, 0, samples.size() - 1, 1, unique);
@@ -160,7 +160,7 @@ public class SampleGenerator<E> extends AbstractSampleGenerator<E> {
   public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
     assertInitialized();
     Integer index;
-    if (samples.size() > 0 && (index = indexGenerator.generate()) != null) {
+    if (!samples.isEmpty() && (index = indexGenerator.generate()) != null) {
       return wrapper.wrap(samples.get(index));
     } else {
       return null;

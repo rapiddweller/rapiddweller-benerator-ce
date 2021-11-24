@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.distribution.sequence;
 
 import com.rapiddweller.benerator.GeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 import com.rapiddweller.common.NumberUtil;
 
@@ -59,7 +60,7 @@ public class BitReverseNaturalNumberGenerator extends ThreadSafeNonNullGenerator
 
   public void setMax(Long max) {
     if (max < 0) {
-      throw new IllegalArgumentException("No negative min supported, was: " + max);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("No negative min supported, was: " + max);
     }
     this.max = max;
   }

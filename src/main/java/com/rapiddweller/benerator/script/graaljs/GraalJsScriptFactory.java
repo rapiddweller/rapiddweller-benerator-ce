@@ -15,6 +15,7 @@
 
 package com.rapiddweller.benerator.script.graaljs;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.script.GraalScript;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.script.Script;
@@ -57,7 +58,8 @@ public class GraalJsScriptFactory implements ScriptFactory {
 
   private static Script parseText(String text, Engine generalEngine) {
     if (!generalEngine.getLanguages().containsKey(LANGUAGE)) {
-      throw new IllegalStateException(String.format("A language with id '%s' is not installed", LANGUAGE));
+      throw BeneratorExceptionFactory.getInstance().configurationError(
+          String.format("A language with id '%s' is not installed", LANGUAGE));
     } else {
       return new GraalScript(text, generalEngine, LANGUAGE);
     }

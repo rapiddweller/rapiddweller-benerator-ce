@@ -28,9 +28,9 @@ package com.rapiddweller.benerator.distribution;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.sample.IndividualWeightSampleGenerator;
 import com.rapiddweller.benerator.util.GeneratorUtil;
-import com.rapiddweller.common.ConfigurationError;
 
 /**
  * Distribution type that provides an individual weight for each object.<br/><br/>
@@ -46,7 +46,7 @@ public abstract class IndividualWeight<E> extends AbstractDistribution implement
   @Override
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(
       Class<T> numberType, T min, T max, T granularity, boolean unique) {
-    throw new UnsupportedOperationException("createGenerator() is not supported by " + getClass());
+    throw BeneratorExceptionFactory.getInstance().programmerUnsupported("createNumberGenerator() is not supported by " + getClass());
   }
 
   @Override
@@ -58,7 +58,8 @@ public abstract class IndividualWeight<E> extends AbstractDistribution implement
   @SuppressWarnings("unchecked")
   public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
     if (unique) {
-      throw new ConfigurationError("Uniqueness is not supported by " + getClass());
+      throw BeneratorExceptionFactory.getInstance().configurationError(
+          "Uniqueness is not supported by " + getClass());
     }
     return new IndividualWeightSampleGenerator<>(source.getGeneratedType(), (IndividualWeight<T>) this,
         GeneratorUtil.allProducts(source));

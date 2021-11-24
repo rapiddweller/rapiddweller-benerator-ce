@@ -37,7 +37,6 @@ import com.rapiddweller.benerator.util.ExpressionBasedGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.Converter;
@@ -146,7 +145,7 @@ public class DescriptorUtil {
       }
       return generator;
     } catch (ParseException e) {
-      throw new ConfigurationError("Error in generator spec", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error in generator spec", e);
     }
   }
 
@@ -168,7 +167,7 @@ public class DescriptorUtil {
         } else if (bean instanceof ConstraintValidator) {
           validator = new BeanConstraintValidator((ConstraintValidator) bean);
         } else {
-          throw new ConfigurationError("Unknown validator type: " + BeanUtil.simpleClassName(bean));
+          throw BeneratorExceptionFactory.getInstance().configurationError("Unknown validator type: " + BeanUtil.simpleClassName(bean));
         }
 
         // compose one or more validators
@@ -185,7 +184,7 @@ public class DescriptorUtil {
       result = BeneratorFactory.getInstance().configureValidator(result, context);
       return result;
     } catch (ParseException e) {
-      throw new ConfigurationError("Invalid validator definition", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Invalid validator definition", e);
     }
   }
 
@@ -206,7 +205,7 @@ public class DescriptorUtil {
         } else if (bean instanceof Converter) {
           converter = (Converter) bean;
         } else {
-          throw new ConfigurationError(bean + " is not an instance of " + Converter.class);
+          throw BeneratorExceptionFactory.getInstance().configurationError(bean + " is not an instance of " + Converter.class);
         }
         converter = BeneratorFactory.getInstance().configureConverter(converter, context);
 
@@ -220,7 +219,7 @@ public class DescriptorUtil {
       }
       return result;
     } catch (ParseException e) {
-      throw new ConfigurationError("Error parsing converter spec: " + converterSpec, e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing converter spec: " + converterSpec, e);
     }
   }
 
@@ -271,7 +270,7 @@ public class DescriptorUtil {
     char separator = (context != null ? context.getDefaultSeparator() : ',');
     if (!StringUtil.isEmpty(descriptor.getSeparator())) {
       if (descriptor.getSeparator().length() > 1) {
-        throw new ConfigurationError("A CSV separator must be one character, but was: " + descriptor.getSeparator());
+        throw BeneratorExceptionFactory.getInstance().configurationError("A CSV separator must be one character, but was: " + descriptor.getSeparator());
       }
       separator = descriptor.getSeparator().charAt(0);
     }
@@ -392,7 +391,7 @@ public class DescriptorUtil {
     try {
       return (detailValue != null ? new String2NumberConverter<>(targetType).convert(detailValue) : null);
     } catch (ConversionException e) {
-      throw new ConfigurationError("Error converting '" + detailValue + "' to a number", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error converting '" + detailValue + "' to a number", e);
     }
   }
 
@@ -520,7 +519,7 @@ public class DescriptorUtil {
     } else if (parentType instanceof ArrayTypeDescriptor) {
       return new ArrayTypeDescriptor(name, parentType.getProvider(), (ArrayTypeDescriptor) parentType);
     } else {
-      throw new UnsupportedOperationException("Cannot derive child type from " + parentType.getClass());
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Cannot derive child type from " + parentType.getClass());
     }
   }
 

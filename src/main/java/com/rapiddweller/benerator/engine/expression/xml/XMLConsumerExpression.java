@@ -34,6 +34,7 @@ import com.rapiddweller.benerator.consumer.NonClosingConsumerProxy;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.parser.xml.BeanParser;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.storage.StorageSystemInserter;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Context;
@@ -56,7 +57,6 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStr
 /**
  * Parses a {@link Consumer} specification in an XML element in a descriptor file.<br/><br/>
  * Created at 24.07.2009 07:21:16
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -68,13 +68,6 @@ public class XMLConsumerExpression extends DynamicExpression<Consumer> {
   private final boolean consumersExpected;
   private final ResourceManager resourceManager;
 
-  /**
-   * Instantiates a new Xml consumer expression.
-   *
-   * @param entityElement     the entity element
-   * @param consumersExpected the consumers expected
-   * @param resourceManager   the resource manager
-   */
   public XMLConsumerExpression(Element entityElement, boolean consumersExpected, ResourceManager resourceManager) {
     this.entityElement = entityElement;
     this.consumersExpected = consumersExpected;
@@ -91,8 +84,10 @@ public class XMLConsumerExpression extends DynamicExpression<Consumer> {
     if (entityElement.hasAttribute(ATT_CONSUMER)) {
       String consumerSpec = parseStringAttribute(entityElement, ATT_CONSUMER, context);
       BeanSpec[] beanSpecs = DatabeneScriptParser.resolveBeanSpecList(consumerSpec, beneratorContext);
-      for (BeanSpec beanSpec : beanSpecs) {
-        addConsumer(beanSpec, beneratorContext, consumerChain);
+      if (beanSpecs != null) {
+        for (BeanSpec beanSpec : beanSpecs) {
+          addConsumer(beanSpec, beneratorContext, consumerChain);
+        }
       }
     }
 
@@ -106,8 +101,8 @@ public class XMLConsumerExpression extends DynamicExpression<Consumer> {
       } else if (consumerElement.hasAttribute(ATT_CLASS) || consumerElement.hasAttribute(ATT_SPEC)) {
         beanSpec = BeanParser.resolveBeanExpression(consumerElement, beneratorContext);
       } else {
-        throw new UnsupportedOperationException(
-            "Can't handle " + XMLUtil.formatShort(consumerElement));
+        throw BeneratorExceptionFactory.getInstance().syntaxError(
+            "Can't handle " + XMLUtil.formatShort(consumerElement), null);
       }
       addConsumer(beanSpec, beneratorContext, consumerChain);
     }
@@ -122,13 +117,6 @@ public class XMLConsumerExpression extends DynamicExpression<Consumer> {
     return (consumerChain.componentCount() == 1 ? consumerChain.getComponent(0) : consumerChain);
   }
 
-  /**
-   * Add consumer.
-   *
-   * @param beanSpec the bean spec
-   * @param context  the context
-   * @param chain    the chain
-   */
   public static void addConsumer(BeanSpec beanSpec, BeneratorContext context, ConsumerChain chain) {
     Consumer consumer;
     Object bean = beanSpec.getBean();
@@ -138,7 +126,8 @@ public class XMLConsumerExpression extends DynamicExpression<Consumer> {
     } else if (bean instanceof StorageSystem) {
       consumer = new StorageSystemInserter((StorageSystem) bean);
     } else {
-      throw new UnsupportedOperationException("Consumer type not supported: " + BeanUtil.simpleClassName(bean));
+      throw BeneratorExceptionFactory.getInstance().illegalArgument(
+          "Consumer type not supported: " + BeanUtil.simpleClassName(bean));
     }
     consumer = BeneratorFactory.getInstance().configureConsumer(consumer, context);
     if (beanSpec.isReference()) {

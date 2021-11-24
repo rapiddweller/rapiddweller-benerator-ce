@@ -28,9 +28,9 @@ package com.rapiddweller.benerator.test;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ParseUtil;
-import junit.framework.AssertionFailedError;
 import org.junit.Test;
 
 /**
@@ -100,8 +100,8 @@ public abstract class GeneratorClassTest extends GeneratorTest {
     if (s.startsWith(className) && s.length() >= className.length() + 2
         && s.charAt(className.length()) == '@'
         && ParseUtil.isHex(s.substring(className.length() + 1))) {
-      throw new AssertionFailedError("The toString() method of class " + generator.getClass() +
-          " is not customized");
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported(
+          "The toString() method of class " + generator.getClass() + " is not customized");
     }
   }
 

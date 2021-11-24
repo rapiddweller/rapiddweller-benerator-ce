@@ -26,6 +26,7 @@
 
 package com.rapiddweller.region;
 
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import com.rapiddweller.domain.address.PhoneNumber;
 import com.rapiddweller.domain.address.PhoneNumberFormat;
 import org.junit.Test;
@@ -37,15 +38,11 @@ import static org.junit.Assert.fail;
 
 /**
  * Tests the {@link PhoneNumberFormat}.<br/><br/>
- *
  * @author Volker Bergmann
  * @since 0.4.0
  */
 public class PhoneNumberFormatTest {
 
-  /**
-   * Test format.
-   */
   @Test
   public void testFormat() {
     PhoneNumber number = new PhoneNumber("49", "1234", "5678");
@@ -53,37 +50,26 @@ public class PhoneNumberFormatTest {
         "4912345678", new PhoneNumberFormat("cal").format(number));
   }
 
-  /**
-   * Test parsing with invalid pattern.
-   */
   @Test
-  public void testParsingWithInvalidPattern() {
+  public void testParsingWithInvalidPattern() throws ParseException {
     try {
       new PhoneNumberFormat("cal").parseObject("4912345678");
-      fail("ParseException expected");
-    } catch (ParseException e) {
+      fail("IllegalArgumentError expected");
+    } catch (IllegalArgumentError e) {
       // this is the desired behavior
     }
   }
 
-  /**
-   * Test parsing invalid number.
-   */
   @Test
-  public void testParsingInvalidNumber() {
+  public void testParsingInvalidNumber() throws ParseException {
     try {
       new PhoneNumberFormat("+c-a-l").parseObject("49(1234)5678");
-      fail("ParseException expected");
-    } catch (ParseException e) {
+      fail("IllegalArgumentError expected");
+    } catch (IllegalArgumentError e) {
       // this is the desired behavior
     }
   }
 
-  /**
-   * Test bijective numbers.
-   *
-   * @throws ParseException the parse exception
-   */
   @Test
   public void testBijectiveNumbers() throws ParseException {
     PhoneNumber n = new PhoneNumber("49", "1234", "5678");

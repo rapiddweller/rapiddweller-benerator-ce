@@ -28,11 +28,10 @@ package com.rapiddweller.benerator.parser;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
@@ -68,7 +67,6 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.resolveS
 /**
  * Parses databene model files.<br/><br/>
  * Created: 04.03.2008 16:43:09
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
@@ -91,7 +89,7 @@ public class ModelParser {
     } else if (SIMPLE_TYPE_COMPONENTS.contains(elementName)) {
       return parseSimpleTypeComponent(element, owner, null);
     } else {
-      throw new ConfigurationError("Expected one of these element names: " +
+      throw BeneratorExceptionFactory.getInstance().configurationError("Expected one of these element names: " +
           EL_ATTRIBUTE + ", " + EL_ID + ", " + EL_REFERENCE + ", or " + EL_PART + ". Found: " + elementName);
     }
   }
@@ -106,7 +104,7 @@ public class ModelParser {
     } else if (EL_REFERENCE.equals(name)) {
       return parseReference(element, owner, component);
     } else {
-      throw new ConfigurationError("Expected one of these element names: " +
+      throw BeneratorExceptionFactory.getInstance().configurationError("Expected one of these element names: " +
           EL_ATTRIBUTE + ", " + EL_ID + " or " + EL_REFERENCE + ". Found: " + name);
     }
   }
@@ -126,7 +124,7 @@ public class ModelParser {
     if ("variable".equals(childName)) {
       parseVariable(element, descriptor);
     } else {
-      throw new UnsupportedOperationException("element type not supported here: " + childName);
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("element type not supported here: " + childName);
     }
   }
 
@@ -250,7 +248,8 @@ public class ModelParser {
         try {
           descriptor.setDetailValue(detailName, detailString);
         } catch (IllegalArgumentException e) {
-          throw new SyntaxError("Error parsing '" + detailName + "'", e, String.valueOf(detailString), -1, -1);
+          throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(
+              detailString, "Error parsing '" + detailName + "'");
         }
       } else {
         if (localType == null) {
@@ -311,7 +310,7 @@ public class ModelParser {
       message = "Expected one of these element names: '" + ArrayFormat.format(expectedNames) + "', " +
           "found: " + elementName;
     }
-    throw new IllegalArgumentException(message);
+    throw BeneratorExceptionFactory.getInstance().illegalArgument(message);
   }
 
   private IdDescriptor parseId(Element element, ComplexTypeDescriptor owner, ComponentDescriptor descriptor) {

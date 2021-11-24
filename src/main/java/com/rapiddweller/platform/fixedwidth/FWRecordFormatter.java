@@ -26,8 +26,8 @@
 
 package com.rapiddweller.platform.fixedwidth;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Assert;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.converter.AccessingConverter;
 import com.rapiddweller.common.converter.ConverterChain;
@@ -65,7 +65,7 @@ public class FWRecordFormatter {
         this.converters[i] = chain;
       }
     } catch (ParseException e) {
-      throw new ConfigurationError("Invalid column definition: " + columnFormatList, e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Invalid column definition: " + columnFormatList, e);
     }
   }
 

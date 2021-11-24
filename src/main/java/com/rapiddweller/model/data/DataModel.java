@@ -26,7 +26,7 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import com.rapiddweller.script.PrimitiveType;
 import org.slf4j.LoggerFactory;
@@ -158,7 +158,7 @@ public class DataModel {
     } else if (type instanceof ArrayTypeDescriptor) {
       validate((ArrayTypeDescriptor) type);
     } else {
-      throw new UnsupportedOperationException(
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported(
           "Descriptor type not supported: " + type.getClass());
     }
   }
@@ -166,9 +166,8 @@ public class DataModel {
   private void validate(SimpleTypeDescriptor desc) {
     PrimitiveType primitiveType = desc.getPrimitiveType();
     if (primitiveType == null && !acceptUnknownPrimitives) {
-      throw new ConfigurationError(
-          "No primitive type defined for simple type: " +
-              desc.getName());
+      throw BeneratorExceptionFactory.getInstance().configurationError(
+          "No primitive type defined for simple type: " + desc.getName());
     }
   }
 
@@ -176,7 +175,7 @@ public class DataModel {
     for (ComponentDescriptor component : desc.getComponents()) {
       TypeDescriptor type = component.getTypeDescriptor();
       if (type == null) {
-        throw new ConfigurationError(
+        throw BeneratorExceptionFactory.getInstance().configurationError(
             "Type of component is not defined: " + desc.getName());
       } else if (!(type instanceof ComplexTypeDescriptor)) {
         validate(type);

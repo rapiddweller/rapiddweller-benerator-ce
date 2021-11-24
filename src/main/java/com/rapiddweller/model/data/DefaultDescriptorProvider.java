@@ -26,8 +26,8 @@
 
 package com.rapiddweller.model.data;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.slf4j.LoggerFactory;
@@ -65,7 +65,7 @@ public class DefaultDescriptorProvider implements DescriptorProvider {
 
   public void addTypeDescriptor(TypeDescriptor descriptor) {
     if (!redefinable && typeMap.get(descriptor.getName()) != null) {
-      throw new ConfigurationError(
+      throw BeneratorExceptionFactory.getInstance().configurationError(
           "Type has already been defined: " + descriptor.getName());
     }
     typeMap.put(descriptor.getName(), descriptor);

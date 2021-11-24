@@ -27,9 +27,9 @@
 package com.rapiddweller.benerator.gui;
 
 import com.rapiddweller.benerator.archetype.FolderLayout;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.main.DBSnapshotTool;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.FileUtil;
@@ -88,7 +88,6 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_SETUP;
 /**
  * Creates benerator project archetypes.<br/>
  * Created at 30.11.2008 17:59:18
- *
  * @author Volker Bergmann
  * @since 0.5.6
  */
@@ -189,32 +188,37 @@ public class ProjectBuilder implements Runnable {
     }
   }
 
-  private static void copyToProject(File srcFile, File projectFolder) throws IOException {
+  private static void copyToProject(File srcFile, File projectFolder) {
     File dstFile = new File(projectFolder, srcFile.getName());
     FileUtil.copy(srcFile, dstFile, true);
   }
 
-  private static void processComment(DefaultHTMLTokenizer tokenizer, Setup setup,
-                                     LFNormalizingStringBuilder writer) throws IOException, ParseException {
-    String startText = tokenizer.text();
-    int nextToken = tokenizer.nextToken();
-    if (nextToken == HTMLTokenizer.END_TAG) {
-      writer.append(startText).append(tokenizer.text());
-      return;
-    }
-    if (nextToken != HTMLTokenizer.TEXT) {
-      throw new ParseException("Text expected in comment", -1);
-    }
-    String commentText = tokenizer.text().trim();
-    if ((COMMENT_DROP_TABLES.equals(commentText) && setup.getDropScriptFile() == null)
-        || (COMMENT_CREATE_TABLES.equals(commentText) && setup.getCreateScriptFile() == null)
-        || (COMMENT_SNAPSHOT.equals(commentText) && setup.getDbSnapshot() == null)) {
-      while (tokenizer.nextToken() != HTMLTokenizer.END_TAG) {
-        // skip all elements until comment end
+  private static void processComment(DefaultHTMLTokenizer tokenizer, Setup setup, LFNormalizingStringBuilder writer) {
+    try {
+      String startText = tokenizer.text();
+      int nextToken = tokenizer.nextToken();
+      if (nextToken == HTMLTokenizer.END_TAG) {
+        writer.append(startText).append(tokenizer.text());
+        return;
       }
-    } else {
-      // write comment start and content
-      writer.append(startText).append(tokenizer.text());
+      if (nextToken != HTMLTokenizer.TEXT) {
+        throw BeneratorExceptionFactory.getInstance().syntaxError("Text expected in comment", null);
+      }
+      String commentText = tokenizer.text().trim();
+      if ((COMMENT_DROP_TABLES.equals(commentText) && setup.getDropScriptFile() == null)
+          || (COMMENT_CREATE_TABLES.equals(commentText) && setup.getCreateScriptFile() == null)
+          || (COMMENT_SNAPSHOT.equals(commentText) && setup.getDbSnapshot() == null)) {
+        while (tokenizer.nextToken() != HTMLTokenizer.END_TAG) {
+          // skip all elements until comment end
+        }
+      } else {
+        // write comment start and content
+        writer.append(startText).append(tokenizer.text());
+      }
+    } catch (IOException e) {
+      throw BeneratorExceptionFactory.getInstance().internalError("Error processing comment", e);
+    } catch (ParseException e) {
+      throw BeneratorExceptionFactory.getInstance().syntaxError("Syntax error in comment", e);
     }
   }
 
@@ -307,10 +311,15 @@ public class ProjectBuilder implements Runnable {
     haveSubFolder("src/test/resources" + pkgFolder);
   }
 
-  private void applyArchetype(Setup setup, ProgressMonitor monitor) throws IOException {
-    // create project files
-    monitor.setNote("Creating files...");
-    setup.getArchetype().copyFilesTo(setup.getProjectFolder(), folderLayout);
+  private void applyArchetype(Setup setup, ProgressMonitor monitor) {
+    try {
+      // create project files
+      monitor.setNote("Creating files...");
+      setup.getArchetype().copyFilesTo(setup.getProjectFolder(), folderLayout);
+    } catch (IOException e) {
+      throw BeneratorExceptionFactory.getInstance().internalError(
+          "Error applying archetype " + setup.getArchetype().getId(), e);
+    }
   }
 
   private void createEclipseProject() {
@@ -418,30 +427,36 @@ public class ProjectBuilder implements Runnable {
     return replaceVariables(content);
   }
 
-  public void createBeneratorXml() throws IOException, ParseException {
-    File descriptorFile = new File(setup.getProjectFolder(), "benerator.xml");
-    if (descriptorFile.exists()) { // not applicable for XML schema based generation
-      BufferedReader reader = IOUtil.getReaderForURI(descriptorFile.getAbsolutePath());
-      DefaultHTMLTokenizer tokenizer = new DefaultHTMLTokenizer(reader);
-      String lineSeparator = setup.getLineSeparator();
-      if (StringUtil.isEmpty(lineSeparator)) {
-        lineSeparator = SystemInfo.getLineSeparator();
+  public void createBeneratorXml() {
+    try {
+      File descriptorFile = new File(setup.getProjectFolder(), "benerator.xml");
+      if (descriptorFile.exists()) { // not applicable for XML schema based generation
+        BufferedReader reader = IOUtil.getReaderForURI(descriptorFile.getAbsolutePath());
+        DefaultHTMLTokenizer tokenizer = new DefaultHTMLTokenizer(reader);
+        String lineSeparator = setup.getLineSeparator();
+        if (StringUtil.isEmpty(lineSeparator)) {
+          lineSeparator = SystemInfo.getLineSeparator();
+        }
+        LFNormalizingStringBuilder writer = new LFNormalizingStringBuilder(lineSeparator);
+        while (tokenizer.nextToken() != HTMLTokenizer.END) {
+          processToken(setup, tokenizer, writer);
+        }
+        String xml = writer.toString();
+        xml = resolveVariables(xml);
+        IOUtil.writeTextFile(descriptorFile.getAbsolutePath(), xml, "UTF-8");
       }
-      LFNormalizingStringBuilder writer = new LFNormalizingStringBuilder(lineSeparator);
-      while (tokenizer.nextToken() != HTMLTokenizer.END) {
-        processToken(setup, tokenizer, writer);
-      }
-      String xml = writer.toString();
-      xml = resolveVariables(xml);
-      IOUtil.writeTextFile(descriptorFile.getAbsolutePath(), xml, "UTF-8");
+      monitor.advance();
+    } catch (IOException e) {
+      throw BeneratorExceptionFactory.getInstance().internalError(
+          "Error creating benerator XML file ", e);
+    } catch (ParseException e) {
+      throw BeneratorExceptionFactory.getInstance().internalError(
+          "Error parsing archetype XML in " + setup.getArchetype().getId(), e);
     }
-    monitor.advance();
   }
 
   private void processToken(Setup setup,
-                            DefaultHTMLTokenizer tokenizer, LFNormalizingStringBuilder writer)
-      throws IOException, ParseException {
-
+                            DefaultHTMLTokenizer tokenizer, LFNormalizingStringBuilder writer) {
     switch (tokenizer.tokenType()) {
       case HTMLTokenizer.START_TAG: {
         String nodeName = tokenizer.name();
@@ -573,7 +588,7 @@ public class ProjectBuilder implements Runnable {
     } else if (component instanceof IdDescriptor) {
       elementName = EL_ID;
     } else {
-      throw new UnsupportedOperationException("Component descriptor type not supported: " +
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Component descriptor type not supported: " +
           component.getClass().getSimpleName());
     }
 
@@ -610,7 +625,7 @@ public class ProjectBuilder implements Runnable {
     while ((varStart = text.indexOf("${", varStart)) >= 0) {
       int varEnd = text.indexOf("}", varStart);
       if (varEnd < 0) {
-        throw new ConfigurationError("'${' without '}'");
+        throw BeneratorExceptionFactory.getInstance().configurationError("'${' without '}'");
       }
       String template = text.substring(varStart, varEnd + 1);
       String path = template.substring(2, template.length() - 1).trim();

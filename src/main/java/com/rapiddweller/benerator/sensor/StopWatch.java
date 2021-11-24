@@ -14,6 +14,7 @@
  */
 package com.rapiddweller.benerator.sensor;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.stat.CounterRepository;
 import com.rapiddweller.stat.LatencyCounter;
 
@@ -67,7 +68,8 @@ public class StopWatch {
 
 	public int stop() {
 		if (startTime == -1)
-			throw new IllegalStateException("Called stop() on StopWatch '" + name + "' which has already been stopped");
+			throw BeneratorExceptionFactory.getInstance().illegalOperation(
+					"Called stop() on StopWatch '" + name + "' which has already been stopped");
 		int latency = (int) ((System.nanoTime() - startTime) / 1000000L);
 		startTime = -1;
 		CounterRepository.getInstance().addSample(name, latency);

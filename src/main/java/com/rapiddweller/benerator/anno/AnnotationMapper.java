@@ -46,7 +46,7 @@ import com.rapiddweller.benerator.wrapper.NShotGeneratorProxy;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.TimeUtil;
@@ -247,16 +247,16 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     if (!StringUtil.isEmpty(beanSpec)) {
       try {
         if (beanClass != Object.class) {
-          throw new ConfigurationError("'type' and 'spec' exclude each other in a @Bean");
+          throw ExceptionFactory.getInstance().configurationError("'type' and 'spec' exclude each other in a @Bean");
         }
         return ExpressionUtil.evaluate(DatabeneScriptParser.parseBeanSpec(beanSpec), context);
       } catch (ParseException e) {
-        throw new ConfigurationError("Error parsing bean spec: " + beanSpec, e);
+        throw ExceptionFactory.getInstance().configurationError("Error parsing bean spec: " + beanSpec, e);
       }
     } else if (beanClass != Object.class) {
       return BeanUtil.newInstance(beanClass);
     } else {
-      throw new ConfigurationError("@Bean is missing 'type' or 'spec' attribute");
+      throw ExceptionFactory.getInstance().configurationError("@Bean is missing 'type' or 'spec' attribute");
     }
   }
 
@@ -270,7 +270,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
   private static Object resolveProperty(Property property, Object bean, BeneratorContext context) {
     if (!StringUtil.isEmpty(property.value())) {
       if (!StringUtil.isEmpty(property.ref())) {
-        throw new ConfigurationError("'value' and 'ref' exclude each other in a @Property");
+        throw ExceptionFactory.getInstance().configurationError("'value' and 'ref' exclude each other in a @Property");
       }
       Object value = ScriptUtil.evaluate(property.value(), context);
       if (value instanceof String) {
@@ -280,7 +280,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     } else if (!StringUtil.isEmpty(property.ref())) {
       return context.get(property.ref());
     } else {
-      throw new ConfigurationError("@Property is missing 'value' or 'ref' attribute");
+      throw ExceptionFactory.getInstance().configurationError("@Property is missing 'value' or 'ref' attribute");
     }
   }
 
@@ -310,7 +310,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
       case globalDefault:
         break;
       default:
-        throw new UnsupportedOperationException("Not a supported Format: " + source.format());
+        throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(source.format().toString(), "Not a supported Format");
     }
   }
 
@@ -336,7 +336,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
   private static void mapMinDateAnnotation(MinDate annotation, InstanceDescriptor instanceDescriptor) {
     TypeDescriptor localType = instanceDescriptor.getLocalType();
     if (!(localType instanceof SimpleTypeDescriptor)) {
-      throw new ConfigurationError("@MinDate can only be applied to Date types");
+      throw ExceptionFactory.getInstance().configurationError("@MinDate can only be applied to Date types");
     }
     ((SimpleTypeDescriptor) localType).setMin(annotation.value());
   }
@@ -344,7 +344,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
   private static void mapMaxDateAnnotation(MaxDate annotation, InstanceDescriptor instanceDescriptor) {
     TypeDescriptor localType = instanceDescriptor.getLocalType();
     if (!(localType instanceof SimpleTypeDescriptor)) {
-      throw new ConfigurationError("@MaxDate can only be applied to Date types");
+      throw ExceptionFactory.getInstance().configurationError("@MaxDate can only be applied to Date types");
     }
     ((SimpleTypeDescriptor) localType).setMax(annotation.value());
   }
@@ -688,7 +688,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
         mapAnyValueTypeAnnotation(annotation, instanceDescriptor);
       }
     } catch (Exception e) {
-      throw new ConfigurationError("Error mapping annotation settings", e);
+      throw ExceptionFactory.getInstance().configurationError("Error mapping annotation settings", e);
     }
   }
 
@@ -731,7 +731,7 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
     } else if (baseTypeDescriptor instanceof ComplexTypeDescriptor) {
       typeDescriptor = new ComplexTypeDescriptor(type.getName(), this, (ComplexTypeDescriptor) baseTypeDescriptor);
     } else {
-      throw new ConfigurationError("Cannot handle descriptor: " + baseTypeDescriptor);
+      throw ExceptionFactory.getInstance().configurationError("Cannot handle descriptor: " + baseTypeDescriptor);
     }
     return typeDescriptor;
   }

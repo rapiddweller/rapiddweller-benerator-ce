@@ -31,7 +31,6 @@ import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.ArrayUtil;
-import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.script.ScriptUtil;
@@ -74,7 +73,8 @@ public class NestedDbUnitEntityIterator extends AbstractDbUnitEntityIterator {
       } else if ("row".equals(elementName) || "column".equals(elementName)) {
         row = parseRow();
       } else {
-        throw new SyntaxError("Not an allowed element", "<" + elementName + ">");
+        throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(
+            "<" + elementName + ">", "Not an allowed element");
       }
       if (row == null) {
         return null;

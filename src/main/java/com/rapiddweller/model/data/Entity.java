@@ -31,7 +31,6 @@ import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Composite;
 import com.rapiddweller.common.CompositeFormatter;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.NullSafeComparator;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.converter.AnyConverter;
@@ -155,7 +154,7 @@ public class Entity implements Composite {
   public Object idComponentValues() {
     ComplexTypeDescriptor entityDescriptor = descriptor;
     if (entityDescriptor == null) {
-      throw new ConfigurationError("Unknown type: " + this);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Unknown type: " + this);
     }
     String[] idComponentNames = entityDescriptor.getIdComponentNames();
     if (idComponentNames.length == 1) {

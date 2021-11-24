@@ -31,8 +31,8 @@ import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.parser.DefaultEntryConverter;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
 import com.rapiddweller.script.Expression;
@@ -77,11 +77,11 @@ public class IncludeStatement implements Statement {
       } else if (lcUri.endsWith(".xsd")) {
         includeXmlSchema(uri, context);
       } else {
-        throw new ConfigurationError("Not a supported import file type: " + uri);
+        throw BeneratorExceptionFactory.getInstance().configurationError("Not a supported import file type: " + uri);
       }
       return true;
     } catch (IOException e) {
-      throw new ConfigurationError("Error processing " + uri, e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error processing " + uri, e);
     }
   }
 
@@ -95,14 +95,14 @@ public class IncludeStatement implements Statement {
     BeneratorFactory.getInstance().getXMLModule().createSchemaDescriptorProvider(uri, context);
   }
 
-  protected void includeDescriptor(String uri, BeneratorContext context) throws IOException {
+  protected void includeDescriptor(String uri, BeneratorContext context) {
     logger.debug("Including Benerator descriptor file: {}", uri);
     try (DescriptorRunner runner = new DescriptorRunner(uri, context.createSubContext(uri))) {
       runner.runWithoutShutdownHook();
     }
   }
 
-  public static void includePropertiesFile(String uri, BeneratorContext context) throws IOException {
+  public static void includePropertiesFile(String uri, BeneratorContext context) {
     ScriptConverterForStrings preprocessor = new ScriptConverterForStrings(context);
     DefaultEntryConverter converter = new DefaultEntryConverter(preprocessor, context, true);
     IOUtil.readProperties(uri, converter);

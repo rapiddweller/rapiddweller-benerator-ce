@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.distribution.cumulative;
 
 import com.rapiddweller.benerator.distribution.CumulativeDistributionFunction;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 
 /**
  * Inverse of the integral of the probability density f(x) = a e^{-ax} (x {@literal >} 0),
@@ -34,7 +35,6 @@ import com.rapiddweller.benerator.distribution.CumulativeDistributionFunction;
  * See <a href="http://www.stat.wisc.edu/~larget/math496/random2.html">Random
  * Number Generation from Non-uniform Distributions</a>.<br/><br/>
  * Created: 12.03.2010 15:41:21
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -42,14 +42,9 @@ public class ExponentialDensityIntegral extends CumulativeDistributionFunction {
 
   private final double a;
 
-  /**
-   * Instantiates a new Exponential density integral.
-   *
-   * @param a the a
-   */
   public ExponentialDensityIntegral(double a) {
     if (a <= 0) {
-      throw new IllegalArgumentException("a must be greater than zero, but is " + a);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("a must be greater than zero, but is " + a);
     }
     this.a = a;
   }

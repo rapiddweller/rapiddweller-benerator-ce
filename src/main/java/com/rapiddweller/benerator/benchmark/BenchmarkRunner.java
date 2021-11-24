@@ -9,10 +9,10 @@ import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.environment.EnvironmentUtil;
 import com.rapiddweller.benerator.environment.SystemRef;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.main.Benerator;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.HF;
 import com.rapiddweller.common.IOUtil;
@@ -107,7 +107,7 @@ public class BenchmarkRunner {
     }
   }
 
-  public static void runBenchmarkOnEnvironment(Benchmark benchmark, SystemRef environment, BenchmarkToolReport summary) throws IOException {
+  public static void runBenchmarkOnEnvironment(Benchmark benchmark, SystemRef environment, BenchmarkToolReport summary) {
     BenchmarkResult benchmarkResult = new BenchmarkResult(benchmark, environment);
     summary.addResult(benchmarkResult);
     long initialCount = benchmark.getInitialCount();
@@ -125,7 +125,7 @@ public class BenchmarkRunner {
   }
 
   private static List<SensorResult> runUntilMinDuration(
-      String filePath, SystemRef system, long minDurationSecs, long countBase, ExecutionMode executionMode) throws IOException {
+      String filePath, SystemRef system, long minDurationSecs, long countBase, ExecutionMode executionMode) {
     if (minDurationSecs == 0) {
       // this indicates a unit test, so call it that each thread creates only one product
       return runFile(filePath, system, executionMode.getThreadCount(), executionMode, new AtomicLong());
@@ -153,7 +153,7 @@ public class BenchmarkRunner {
   }
 
   private static List<SensorResult> runFile(String filePath, SystemRef system,
-      long count, ExecutionMode executionMode, AtomicLong maxFileSize) throws IOException {
+      long count, ExecutionMode executionMode, AtomicLong maxFileSize) {
     logSeparator();
     int threadCount = executionMode.getThreadCount();
     if (logger.isInfoEnabled()) {
@@ -194,7 +194,7 @@ public class BenchmarkRunner {
 
   private static int minDurationOf(List<SensorResult> sensorResults) {
     if (CollectionUtil.isEmpty(sensorResults)) {
-      throw new ConfigurationError("No sensors found");
+      throw BeneratorExceptionFactory.getInstance().configurationError("No sensors found");
     }
     int result = sensorResults.get(0).getDuration();
     for (int i = 1; i < sensorResults.size(); i++) {
@@ -228,7 +228,7 @@ public class BenchmarkRunner {
     return result;
   }
 
-  private static String prepareXml(String filePath, SystemRef system, long count, int threads) throws IOException {
+  private static String prepareXml(String filePath, SystemRef system, long count, int threads) {
     String xml = IOUtil.getContentOfURI(RESOURCE_FOLDER + "/" + filePath);
     xml = xml.replace("{count}", String.valueOf(count));
     xml = xml.replace("{threads}", String.valueOf(threads));

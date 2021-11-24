@@ -27,9 +27,9 @@
 package com.rapiddweller.platform.xls;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
@@ -182,7 +182,7 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
       try (Workbook workbook = WorkbookFactory.create(stream)) {
         Sheet sheet = workbook.getSheet(sheetName);
         if (sheet == null) {
-          throw new ConfigurationError("Sheet '" + sheetName + "' not found in file " + uri);
+          throw BeneratorExceptionFactory.getInstance().configurationError("Sheet '" + sheetName + "' not found in file " + uri);
         }
         return sheet;
       }
@@ -293,7 +293,8 @@ public class SingleSheetXLSEntityIterator implements DataIterator<Entity> {
       }
     }
     // tab not found
-    throw new ConfigurationError("Tab '" + tabName + "' not found" + (uri != null ? " in " + uri : ""));
+    throw BeneratorExceptionFactory.getInstance().configurationError(
+        "Tab '" + tabName + "' not found" + (uri != null ? " in " + uri : ""));
   }
 
 

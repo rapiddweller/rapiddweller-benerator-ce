@@ -35,7 +35,6 @@ import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.primitive.ScriptGenerator;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.common.exception.ParseException;
@@ -144,7 +143,7 @@ public class FactoryUtil {
       if (contextObject instanceof Distribution) {
         return (Distribution) contextObject;
       } else {
-        throw new ConfigurationError("Not a distribution: " + spec + "=" + contextObject);
+        throw BeneratorExceptionFactory.getInstance().configurationError("Not a distribution: " + spec + "=" + contextObject);
       }
     }
 
@@ -159,7 +158,7 @@ public class FactoryUtil {
       Expression beanEx = DatabeneScriptParser.parseBeanSpec(spec);
       return (Distribution) beanEx.evaluate(context);
     } catch (ParseException e) {
-      throw new ConfigurationError("Error parsing distribution spec: " + spec);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing distribution spec: " + spec);
     }
   }
 
@@ -182,7 +181,7 @@ public class FactoryUtil {
       try {
         chars = new RegexParser(locale).parseSingleChar(pattern).getCharSet().getSet();
       } catch (ParseException e) {
-        throw new ConfigurationError("Invalid regular expression.", e);
+        throw BeneratorExceptionFactory.getInstance().configurationError("Invalid regular expression.", e);
       }
     } else {
       chars = LocaleUtil.letters(locale);

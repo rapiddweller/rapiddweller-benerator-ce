@@ -30,6 +30,7 @@ import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ReaderLineIterator;
+import com.rapiddweller.common.exception.ExceptionFactory;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -39,7 +40,6 @@ import java.util.Objects;
 /**
  * Looks up and manages Benerator archetypes.<br/><br/>
  * Created at 18.02.2009 07:35:52
- *
  * @author Volker Bergmann
  * @since 0.5.9
  */
@@ -60,7 +60,8 @@ public class ArchetypeManager {
     try {
       ARCHETYPE_FOLDER_URL = new URL(host);
     } catch (MalformedURLException e) {
-      throw new ConfigurationError("Malformed URL: " + host, e);
+      throw ExceptionFactory.getInstance().componentInitializationFailed(
+          "Unable to read archetype definitions", e);
     }
   }
 
@@ -79,7 +80,7 @@ public class ArchetypeManager {
       }
       this.archetypes = builder.toArray();
     } catch (IOException e) {
-      throw new ConfigurationError("Error parsing archetype definitions", e);
+      throw ExceptionFactory.getInstance().configurationError("Error parsing archetype definitions", e);
     }
   }
 

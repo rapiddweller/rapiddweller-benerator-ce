@@ -29,15 +29,14 @@ package com.rapiddweller.benerator.file;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.factory.MetaGeneratorFactory;
 import com.rapiddweller.benerator.primitive.IncrementGenerator;
 import com.rapiddweller.benerator.util.UnsafeGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.converter.MessageConverter;
 import com.rapiddweller.common.xml.XMLUtil;
@@ -49,7 +48,6 @@ import com.rapiddweller.platform.xml.XMLEntityExporter;
 import com.rapiddweller.platform.xml.XMLModule;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Locale;
 
@@ -92,17 +90,13 @@ public class XMLFileGenerator extends UnsafeGenerator<File> {
         new IncrementGenerator(),
         new MessageConverter(filenamePattern, Locale.US));
     // parse properties files
-    try {
-      for (String propertiesFile : propertiesFiles) {
-        IncludeStatement.includePropertiesFile(propertiesFile, beneratorContext);
-      }
-    } catch (IOException e) {
-      throw new InvalidGeneratorSetupException(e);
+    for (String propertiesFile : propertiesFiles) {
+      IncludeStatement.includePropertiesFile(propertiesFile, beneratorContext);
     }
     // set up content generator
     TypeDescriptor rootDescriptor = beneratorContext.getDataModel().getTypeDescriptor(root);
     if (rootDescriptor == null) {
-      throw new ConfigurationError("Type '" + root + "' not found in schema: " + schemaUri);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Type '" + root + "' not found in schema: " + schemaUri);
     }
     contentGenerator = MetaGeneratorFactory.createTypeGenerator(
         rootDescriptor, root, false, Uniqueness.NONE, beneratorContext);

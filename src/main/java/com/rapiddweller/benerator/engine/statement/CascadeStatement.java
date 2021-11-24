@@ -29,12 +29,11 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.composite.GenerationStepSupport;
 import com.rapiddweller.benerator.composite.GenerationStep;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.factory.GenerationStepFactory;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.ArrayFormat;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
-import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.jdbacl.identity.IdentityModel;
@@ -191,7 +190,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
 
           boolean needsNkMapping = parent.needsNkMapping(refereeTableName);
           if (sourceIdentity instanceof NoIdentity && needsNkMapping) {
-            throw new ConfigurationError("No identity defined for table " + refereeTableName);
+            throw BeneratorExceptionFactory.getInstance().configurationError("No identity defined for table " + refereeTableName);
           }
           KeyMapper mapper = parent.getKeyMapper();
           Object targetRef;
@@ -252,7 +251,7 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
       } else if (parentTable.equals(refererTable)) {
         return resolveToOneReference(currentEntity, fk, db, context);
       } else {
-        throw new ConfigurationError("Table '" + parentTable + "' does not relate to the foreign key " +
+        throw BeneratorExceptionFactory.getInstance().configurationError("Table '" + parentTable + "' does not relate to the foreign key " +
             refererTableName + '(' + ArrayFormat.format(columnNames) + ')');
       }
     }
@@ -306,32 +305,32 @@ public class CascadeStatement extends SequentialStatement implements CascadePare
         // parse table name
         int token = tokenizer.nextToken();
         if (token != TT_WORD) {
-          throw new SyntaxError(REF_SYNTAX_MESSAGE, refSpec);
+          throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(refSpec, REF_SYNTAX_MESSAGE);
         }
         // this must be at this position!
         String tableName = tokenizer.sval;
 
         // parse column names
         if ((tokenizer.nextToken()) != '(') {
-          throw new SyntaxError(REF_SYNTAX_MESSAGE, refSpec);
+          throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(refSpec, REF_SYNTAX_MESSAGE);
         }
         ArrayBuilder<String> columnNames = new ArrayBuilder<>(String.class);
         do {
           if ((tokenizer.nextToken()) != TT_WORD) {
-            throw new SyntaxError(REF_SYNTAX_MESSAGE, refSpec);
+            throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(refSpec, REF_SYNTAX_MESSAGE);
           }
           columnNames.add(tokenizer.sval);
           token = tokenizer.nextToken();
           if (token != ',' && token != ')') {
-            throw new SyntaxError(REF_SYNTAX_MESSAGE, refSpec);
+            throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(refSpec, REF_SYNTAX_MESSAGE);
           }
         } while (token == ',');
         if (token != ')') {
-          throw new SyntaxError("reference definition must end with ')'", refSpec);
+          throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(refSpec, "reference definition must end with ')'");
         }
         return new Reference(tableName, columnNames.toArray());
       } catch (IOException e) {
-        throw new SyntaxError(REF_SYNTAX_MESSAGE, refSpec);
+        throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(refSpec, REF_SYNTAX_MESSAGE);
       }
     }
 

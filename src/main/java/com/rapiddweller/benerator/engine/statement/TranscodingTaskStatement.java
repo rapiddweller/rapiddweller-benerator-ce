@@ -30,10 +30,10 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.collection.OrderedNameMap;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.jdbacl.identity.IdentityModel;
 import com.rapiddweller.jdbacl.identity.IdentityProvider;
@@ -131,7 +131,7 @@ public class TranscodingTaskStatement extends SequentialStatement {
       IdentityModel identity = identityProvider.getIdentity(tableName, false);
       if (identity == null) {
         if (required != null && required) {
-          throw new ConfigurationError("For transcoding, an identity definition of table '" + tableName + "' is required");
+          throw ExceptionFactory.getInstance().configurationError("For transcoding, an identity definition of table '" + tableName + "' is required");
         } else {
           DBTable table = target.getDbMetaData().getTable(tableName);
           identity = new NoIdentity(table.getName());
@@ -169,7 +169,7 @@ public class TranscodingTaskStatement extends SequentialStatement {
       // check identity definition
       String identityUri = ExpressionUtil.evaluate(identityEx, context);
       if (identityUri == null) {
-        throw new ConfigurationError("No 'identity' definition file defined");
+        throw ExceptionFactory.getInstance().configurationError("No 'identity' definition file defined");
       }
       String idFile = context.resolveRelativeUri(identityUri);
       IdentityParser parser = new IdentityParser();
@@ -180,14 +180,14 @@ public class TranscodingTaskStatement extends SequentialStatement {
         parser.parse(child, parentPath, parseContext);
       }
     } catch (Exception e) {
-      throw new ConfigurationError("Error setting up transcoding task", e);
+      throw ExceptionFactory.getInstance().configurationError("Error setting up transcoding task", e);
     }
   }
 
   private AbstractDBSystem getTarget(BeneratorContext context) {
     AbstractDBSystem target = ExpressionUtil.evaluate(targetEx, context);
     if (target == null) {
-      throw new ConfigurationError("No 'target' database defined in <transcodingTask>");
+      throw ExceptionFactory.getInstance().configurationError("No 'target' database defined in <transcodingTask>");
     }
     return target;
   }

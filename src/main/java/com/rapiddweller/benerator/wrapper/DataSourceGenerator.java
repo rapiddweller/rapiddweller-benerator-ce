@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -28,8 +28,8 @@ package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.AbstractGenerator;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ThreadAware;
@@ -41,7 +41,6 @@ import com.rapiddweller.format.util.ThreadLocalDataContainer;
 /**
  * {@link Generator} implementation which reads and forwards data from a {@link DataSource}.<br/><br/>
  * Created: 24.07.2011 08:58:09
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.7.0
@@ -54,18 +53,10 @@ public class DataSourceGenerator<E> extends AbstractGenerator<E> {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Data source generator.
-   */
   public DataSourceGenerator() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Data source generator.
-   *
-   * @param source the source
-   */
   public DataSourceGenerator(DataSource<E> source) {
     this.source = source;
     this.iterator = null;
@@ -73,23 +64,13 @@ public class DataSourceGenerator<E> extends AbstractGenerator<E> {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets source.
-   *
-   * @return the source
-   */
   public DataSource<E> getSource() {
     return source;
   }
 
-  /**
-   * Sets source.
-   *
-   * @param source the source
-   */
   public void setSource(DataSource<E> source) {
     if (this.source != null) {
-      throw new IllegalGeneratorStateException("Mutating an initialized generator");
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Mutating an initialized generator");
     }
     this.source = source;
   }
@@ -133,7 +114,7 @@ public class DataSourceGenerator<E> extends AbstractGenerator<E> {
       }
       return wrapper.wrap(tmp.getData());
     } catch (Exception e) {
-      throw new IllegalGeneratorStateException("Generation failed: ", e);
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Generation failed: ", e);
     }
   }
 

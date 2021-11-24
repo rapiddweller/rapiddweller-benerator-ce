@@ -30,10 +30,10 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.SkipGeneratorProxy;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.MathUtil;
 import com.rapiddweller.common.NumberUtil;
 import com.rapiddweller.common.converter.NumberToNumberConverter;
@@ -128,7 +128,7 @@ public class RandomWalkSequence extends Sequence {
   private <T> Generator<T> applySkipGenerator(Generator<T> source, boolean unique) {
     int minStepI = toInteger(minStep);
     if (unique && minStepI <= 0) {
-      throw new ConfigurationError("Cannot generate unique values when minStep=" + minStep);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Cannot generate unique values when minStep=" + minStep);
     }
     return new SkipGeneratorProxy<>(source, minStepI, toInteger(maxStep));
   }

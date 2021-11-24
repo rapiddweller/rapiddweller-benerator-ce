@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.primitive;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.NonNullGenerator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.AbstractNonNullGenerator;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -36,7 +37,6 @@ import org.slf4j.Logger;
 /**
  * Combines the output of a 'slow' generator (e.g. a remote hiGenerator)
  * with quickly generated numbers in a range: value = hi * maxLo + local.
- *
  * @author Volker Bergmann
  * @since 0.3.04
  */
@@ -44,48 +44,25 @@ public class HiLoGenerator extends AbstractNonNullGenerator<Long> {
 
   private static final Logger logger = LoggerFactory.getLogger(HiLoGenerator.class);
 
-  /**
-   * The constant DEFAULT_MAX_LO.
-   */
   protected static final int DEFAULT_MAX_LO = 100;
 
-  /**
-   * The Max lo.
-   */
   protected int maxLo;
 
   private int lo;
   private Long hi;
 
-  /**
-   * The Hi generator.
-   */
   protected NonNullGenerator<Long> hiGenerator;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Hi lo generator.
-   */
   public HiLoGenerator() {
     this(new IncrementGenerator(), DEFAULT_MAX_LO);
   }
 
-  /**
-   * Instantiates a new Hi lo generator.
-   *
-   * @param maxLo the max lo
-   */
   public HiLoGenerator(int maxLo) {
     this(new IncrementGenerator(), DEFAULT_MAX_LO);
   }
 
-  /**
-   * Instantiates a new Hi lo generator.
-   *
-   * @param hiGenerator the hi generator
-   * @param maxLo       the max lo
-   */
   public HiLoGenerator(NonNullGenerator<Long> hiGenerator, int maxLo) {
     this.hiGenerator = hiGenerator;
     setMaxLo(maxLo);
@@ -94,32 +71,17 @@ public class HiLoGenerator extends AbstractNonNullGenerator<Long> {
 
   // properties ------------------------------------------------------------------------------------
 
-  /**
-   * Sets hi generator.
-   *
-   * @param hiGenerator the hi generator
-   */
   public void setHiGenerator(NonNullGenerator<Long> hiGenerator) {
     this.hiGenerator = hiGenerator;
   }
 
-  /**
-   * Gets max lo.
-   *
-   * @return the maxLo
-   */
   public int getMaxLo() {
     return maxLo;
   }
 
-  /**
-   * Sets max lo.
-   *
-   * @param maxLo the maxLo to set
-   */
   public void setMaxLo(int maxLo) {
     if (maxLo <= 0) {
-      throw new IllegalArgumentException("maxLo must be greater than 0, was: " + maxLo);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("maxLo must be greater than 0, was: " + maxLo);
     }
     this.maxLo = maxLo;
   }

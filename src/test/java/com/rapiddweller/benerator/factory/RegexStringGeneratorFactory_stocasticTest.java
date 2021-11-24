@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.factory;
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.test.GeneratorTest;
 import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import com.rapiddweller.model.data.Uniqueness;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -47,10 +48,8 @@ import static org.junit.Assert.fail;
 
 /**
  * Tests the behavior of the {@link RegexGeneratorFactory}
- * when using the {@link StochasticGeneratorFactory}.<br/>
- * <br/>
+ * when using the {@link StochasticGeneratorFactory}.<br/><br/>
  * Created: 20.08.2006 09:21:19
- *
  * @author Volker Bergmann
  * @since 0.1
  */
@@ -60,42 +59,27 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
 
   private static Locale realLocale;
 
-  /**
-   * Sets up fallback locale.
-   */
   @BeforeClass
   public static void setUpFallbackLocale() {
     realLocale = Locale.getDefault();
     Locale.setDefault(LocaleUtil.getFallbackLocale());
   }
 
-  /**
-   * Restore real locale.
-   */
   @AfterClass
   public static void restoreRealLocale() {
     Locale.setDefault(realLocale);
   }
 
-  /**
-   * Test null pattern.
-   */
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentError.class)
   public void testNullPattern() {
     checkRegexGeneration(null);
   }
 
-  /**
-   * Test empty pattern.
-   */
   @Test
   public void testEmptyPattern() {
     checkRegexGeneration("");
   }
 
-  /**
-   * Test constant.
-   */
   @Test
   public void testConstant() {
     assertEquals("a", create("a").generate());
@@ -103,9 +87,6 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     assertEquals("abc@xyz.com", create("abc@xyz\\.com", 16, Uniqueness.NONE).generate());
   }
 
-  /**
-   * Test escape characters.
-   */
   @Test
   public void testEscapeCharacters() {
     assertEquals("-+*.?,&^$\\|", create("\\-\\+\\*\\.\\?\\,\\&\\^\\$\\\\\\|").generate());
@@ -114,17 +95,11 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     assertEquals("{}", create("\\{\\}").generate());
   }
 
-  /**
-   * Test start end characters.
-   */
   @Test
   public void testStartEndCharacters() {
     assertEquals("ABC", create("^ABC$").generate());
   }
 
-  /**
-   * Test cardinalities.
-   */
   @Test
   public void testCardinalities() {
     checkRegexGeneration("a");
@@ -137,9 +112,6 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     checkRegexGeneration("a{3,5}");
   }
 
-  /**
-   * Test ranges.
-   */
   @Test
   public void testRanges() {
     checkRegexGeneration("[a-c]");
@@ -147,9 +119,6 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
 
   }
 
-  /**
-   * Test predefined classes.
-   */
   @Test
   public void testPredefinedClasses() {
     checkRegexGeneration("\\d");
@@ -157,9 +126,6 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     checkRegexGeneration("\\w");
   }
 
-  /**
-   * Test combinations.
-   */
   @Test
   public void testCombinations() {
     checkRegexGeneration("[^\\w]");
@@ -174,18 +140,12 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     checkRegexGeneration("[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}");
   }
 
-  /**
-   * Test groups.
-   */
   @Test
   public void testGroups() {
     checkRegexGeneration("(abc){1,3}");
     checkRegexGeneration("(a+b?c*){1,3}");
   }
 
-  /**
-   * Test alternatives.
-   */
   @Test
   public void testAlternatives() {
     checkRegexGeneration("(a|b|c){1,3}");
@@ -194,9 +154,6 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     checkRegexGeneration(ipAddressPattern);
   }
 
-  /**
-   * Test unique char sets.
-   */
   @Test
   public void testUniqueCharSets() {
     expectUniquelyGeneratedSet(create("[a]{1,2}", 30, Uniqueness.SIMPLE),
@@ -212,9 +169,6 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     expectUniqueProducts(create("[0-9]{5}", 0, Uniqueness.SIMPLE), 1000).withContinuedAvailability();
   }
 
-  /**
-   * Test unique groups.
-   */
   @Test
   public void testUniqueGroups() {
     expectUniquelyGeneratedSet(create("x(ab){1,2}x", 30, Uniqueness.SIMPLE), "xabx", "xababx").withCeasedAvailability();
@@ -227,9 +181,6 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     ).withCeasedAvailability();
   }
 
-  /**
-   * Test unique alternatives.
-   */
   @Test
   public void testUniqueAlternatives() {
     expectUniquelyGeneratedSet(create("x(a|b)x", 30, Uniqueness.SIMPLE), "xax", "xbx").withCeasedAvailability();
@@ -240,9 +191,6 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
         "x0x", "x1x", "x00x", "x01x", "x10x", "x11x", "xbx").withCeasedAvailability();
   }
 
-  /**
-   * Test alternatives bug of adgadg.
-   */
   @Test
   public void testAlternativesBugOfAdgadg() {
     // Tests a bug posted by adgadg at 2009-07-18, see http://databene.org/phpBB3/viewtopic.php?f=3&t=110
@@ -278,15 +226,6 @@ public class RegexStringGeneratorFactory_stocasticTest extends GeneratorTest {
     checkRegexGeneration(generator, regex, 0, 255, true);
   }
 
-  /**
-   * Check regex generation.
-   *
-   * @param generator the generator
-   * @param regex     the regex
-   * @param minLength the min length
-   * @param maxLength the max length
-   * @param nullable  the nullable
-   */
   public static void checkRegexGeneration(NonNullGenerator<String> generator, String regex, int minLength, Integer maxLength, boolean nullable) {
     String message = "Generation failed for: '" + regex + "': ";
     for (int i = 0; i < 20; i++) {

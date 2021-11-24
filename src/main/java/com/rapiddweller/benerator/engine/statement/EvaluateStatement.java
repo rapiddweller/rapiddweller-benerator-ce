@@ -28,9 +28,9 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.ErrorHandler;
@@ -42,6 +42,7 @@ import com.rapiddweller.common.ShellUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.converter.LiteralParser;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.jdbacl.DBExecutionResult;
@@ -49,7 +50,6 @@ import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
-import com.rapiddweller.task.TaskException;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -78,7 +78,7 @@ public class EvaluateStatement extends AbstractStatement {
     try {
       extensionMap = IOUtil.readProperties("com/rapiddweller/benerator/engine/statement/fileTypes.properties");
     } catch (Exception e) {
-      throw new ConfigurationError("Failed to read extension type map", e);
+      throw ExceptionFactory.getInstance().configurationError("Failed to read extension type map", e);
     }
   }
 
@@ -143,7 +143,7 @@ public class EvaluateStatement extends AbstractStatement {
       exportResultWithId(result, context);
       return true;
     } catch (ConversionException e) {
-      throw new ConfigurationError("Error executing statement", e);
+      throw ExceptionFactory.getInstance().configurationError("Error executing statement", e);
     }
   }
 
@@ -227,13 +227,13 @@ public class EvaluateStatement extends AbstractStatement {
   private String checkOs(String uriValue, String typeValue) {
     if ("winshell".equals(typeValue)) {
       if (!SystemInfo.isWindows()) {
-        throw new ConfigurationError("Need Windows to run file: " + uriValue);
+        throw ExceptionFactory.getInstance().configurationError("Need Windows to run file: " + uriValue);
       } else {
         typeValue = TYPE_SHELL;
       }
     } else if ("unixshell".equals(typeValue)) {
       if (SystemInfo.isWindows()) {
-        throw new ConfigurationError("Need Unix system to run file: " + uriValue);
+        throw ExceptionFactory.getInstance().configurationError("Need Unix system to run file: " + uriValue);
       } else {
         typeValue = TYPE_SHELL;
       }
@@ -275,7 +275,7 @@ public class EvaluateStatement extends AbstractStatement {
     } else if (uri != null) {
       ShellUtil.runShellCommand(uri, shell, writer, errorHandler);
     } else {
-      throw new ConfigurationError("At least uri or text must be provided in <execute> and <evaluate>");
+      throw ExceptionFactory.getInstance().configurationError("At least uri or text must be provided in <execute> and <evaluate>");
     }
     String output = writer.toString();
     System.out.println(output);
@@ -286,7 +286,7 @@ public class EvaluateStatement extends AbstractStatement {
       String uri, Object targetObject, String onError, String encoding, String text,
       char separator, boolean optimize, Boolean invalidate) {
     if (targetObject == null) {
-      throw new ConfigurationError("Please specify the 'target' database to execute the SQL script");
+      throw ExceptionFactory.getInstance().configurationError("Please specify the 'target' database to execute the SQL script");
     }
     Assert.instanceOf(targetObject, AbstractDBSystem.class, "target");
     AbstractDBSystem db = (AbstractDBSystem) targetObject;
@@ -295,7 +295,7 @@ public class EvaluateStatement extends AbstractStatement {
     } else if (text != null) {
       logger.info("Executing inline script");
     } else {
-      throw new TaskException("No uri or content");
+      throw BeneratorExceptionFactory.getInstance().syntaxError("No uri or content", null);
     }
     Connection connection = null;
     DBExecutionResult result = null;

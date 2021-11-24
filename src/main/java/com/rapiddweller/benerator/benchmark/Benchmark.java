@@ -2,7 +2,7 @@
 
 package com.rapiddweller.benerator.benchmark;
 
-import com.rapiddweller.common.ObjectNotFoundException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.common.version.VersionNumberParser;
 
@@ -49,7 +49,7 @@ public class Benchmark {
         return setup;
       }
     }
-    throw new ObjectNotFoundException("Found no setup of name '" + setupName + "'");
+    throw BeneratorExceptionFactory.getInstance().objectNotFound("Found no setup of name '" + setupName + "'");
   }
 
   // instance members ------------------------------------------------------------------------------------------------

@@ -32,72 +32,35 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Indicates invalid setup of a Generator.<br/>
- * <br/>
+ * Indicates invalid setup of a Generator.<br/><br/>
  * Created: 21.12.2006 08:04:49
  */
 public class InvalidGeneratorSetupException extends ConfigurationError {
-
-  private static final long serialVersionUID = 7613352958748575041L;
 
   private final List<PropertyMessage> propertyMessages;
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Invalid generator setup exception.
-   *
-   * @param propertyName    the property name
-   * @param propertyMessage the property message
-   */
   public InvalidGeneratorSetupException(String propertyName, String propertyMessage) {
     this(new PropertyMessage(propertyName, propertyMessage));
   }
 
-  /**
-   * Instantiates a new Invalid generator setup exception.
-   *
-   * @param propertyMessages the property messages
-   */
   public InvalidGeneratorSetupException(PropertyMessage... propertyMessages) {
     this(null, null, propertyMessages);
   }
 
-  /**
-   * Instantiates a new Invalid generator setup exception.
-   *
-   * @param textMessage the text message
-   */
   public InvalidGeneratorSetupException(String textMessage) {
     this(textMessage, (Throwable) null);
   }
 
-  /**
-   * Instantiates a new Invalid generator setup exception.
-   *
-   * @param cause the cause
-   */
   public InvalidGeneratorSetupException(Throwable cause) {
     this(null, cause);
   }
 
-  /**
-   * Instantiates a new Invalid generator setup exception.
-   *
-   * @param textMessage the text message
-   * @param cause       the cause
-   */
   public InvalidGeneratorSetupException(String textMessage, Throwable cause) {
     this(textMessage, cause, new PropertyMessage[0]);
   }
 
-  /**
-   * Instantiates a new Invalid generator setup exception.
-   *
-   * @param textMessage      the text message
-   * @param cause            the cause
-   * @param propertyMessages the property messages
-   */
   public InvalidGeneratorSetupException(String textMessage, Throwable cause, PropertyMessage... propertyMessages) {
     super(formatMessage(textMessage, propertyMessages), cause);
     this.propertyMessages = Arrays.asList(propertyMessages);
@@ -105,11 +68,6 @@ public class InvalidGeneratorSetupException extends ConfigurationError {
 
   // interface -------------------------------------------------------------------------------------------------------
 
-  /**
-   * Get property messages property message [ ].
-   *
-   * @return the property message [ ]
-   */
   public PropertyMessage[] getPropertyMessages() {
     PropertyMessage[] array = new PropertyMessage[propertyMessages.size()];
     return propertyMessages.toArray(array);

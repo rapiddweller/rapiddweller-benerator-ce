@@ -32,9 +32,9 @@ import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.util.UnsafeNonNullGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.common.ConfigurationError;
-import com.rapiddweller.common.exception.ParseException;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.WeightedTransition;
 
@@ -84,7 +84,7 @@ public class StateGenerator<E> extends UnsafeNonNullGenerator<E> {
         addTransition((E) t.getFrom(), (E) t.getTo(), t.getWeight());
       }
     } catch (ParseException e) {
-      throw new ConfigurationError("Error parsing state machine specification: " + transitionSpec, e);
+      throw ExceptionFactory.getInstance().configurationError("Error parsing state machine specification: " + transitionSpec, e);
     }
   }
 

@@ -78,7 +78,7 @@ public class TaskMock extends AbstractTask implements ContextAware {
   @Override
   public TaskResult execute(Context context, ErrorHandler errorHandler) {
     if (this.context == null) {
-      throw new IllegalStateException("Context has not been injected");
+      throw ExceptionFactory.getInstance().programmerStateError("Context has not been injected");
     }
     count.incrementAndGet();
     try {

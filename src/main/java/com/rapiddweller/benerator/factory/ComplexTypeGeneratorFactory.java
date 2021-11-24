@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.factory;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.TypedEntitySource;
@@ -41,10 +42,9 @@ import com.rapiddweller.benerator.engine.TypedEntitySourceAdapter;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.EntityPartSource;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.exception.SyntaxError;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.fixedwidth.FixedWidthColumnDescriptor;
 import com.rapiddweller.format.fixedwidth.FixedWidthRowTypeDescriptor;
@@ -148,14 +148,16 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
               }
             }
           } catch (Exception e) {
-            throw new UnsupportedOperationException("Error resolving source: " + sourceSpec, e);
+            throw BeneratorExceptionFactory.getInstance().internalError(
+                "Error resolving source: " + sourceSpec, e);
           }
         }
       }
     }
 
     if (generator == null) {
-      throw new SyntaxError("Unable to resolve source", "source='" + sourceSpec + "'");
+      throw BeneratorFactory.getInstance().createExceptionFactory().syntaxErrorForText(
+          "source='" + sourceSpec + "'", "Unable to resolve source");
     }
     if (generator.getGeneratedType() != Entity.class) {
       generator = new SimpleTypeEntityGenerator(generator, descriptor);
@@ -233,11 +235,13 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     } else if (sourceObject instanceof DataSource) {
       DataSource dataSource = (DataSource) sourceObject;
       if (!Entity.class.isAssignableFrom(dataSource.getType())) {
-        throw new UnsupportedOperationException("Not a supported data type to iterate: " + dataSource.getType());
+        throw BeneratorExceptionFactory.getInstance().illegalArgument(
+            "Not a supported data type to iterate: " + dataSource.getType());
       }
       generator = new DataSourceGenerator<>(dataSource);
     } else {
-      throw new UnsupportedOperationException("Source type not supported: " + sourceObject.getClass());
+      throw BeneratorExceptionFactory.getInstance().illegalArgument(
+          "Source type not supported: " + sourceObject.getClass());
     }
     return generator;
   }
@@ -263,7 +267,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
     String encoding = DescriptorUtil.getEncoding(descriptor, context);
     String pattern = descriptor.getPattern();
     if (pattern == null) {
-      throw new ConfigurationError("No pattern specified for FCW file import: " + sourceName);
+      throw ExceptionFactory.getInstance().configurationError("No pattern specified for FCW file import: " + sourceName);
     }
     try {
       FixedWidthRowTypeDescriptor rowDescriptor = FixedWidthUtil.parseBeanColumnsSpec(
@@ -274,7 +278,7 @@ public class ComplexTypeGeneratorFactory extends TypeGeneratorFactory<ComplexTyp
       iterable.setContext(context);
       return new DataSourceGenerator<>(iterable);
     } catch (ParseException e) {
-      throw new ConfigurationError("Error parsing fixed-width pattern: " + pattern, e);
+      throw ExceptionFactory.getInstance().configurationError("Error parsing fixed-width pattern: " + pattern, e);
     }
   }
 

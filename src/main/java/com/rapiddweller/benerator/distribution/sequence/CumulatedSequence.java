@@ -28,9 +28,9 @@ package com.rapiddweller.benerator.distribution.sequence;
 
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.NumberUtil;
 
 import java.math.BigInteger;
@@ -49,7 +49,7 @@ public class CumulatedSequence extends DetachedSequence {
   @Override
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(Class<T> numberType, T min, T max, T granularity, boolean unique) {
     if (unique) {
-      throw new ConfigurationError(getClass().getSimpleName() + " does not support uniqueness");
+      throw BeneratorExceptionFactory.getInstance().configurationError(getClass().getSimpleName() + " does not support uniqueness");
     }
     NonNullGenerator<? extends Number> base;
     if (BeanUtil.isIntegralNumberType(numberType)) {

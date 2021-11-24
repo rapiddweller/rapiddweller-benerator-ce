@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.distribution;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.NonNullGenerator;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.sample.SampleGenerator;
@@ -57,7 +58,7 @@ public abstract class CumulativeDistributionFunction extends AbstractDistributio
   public <T extends Number> NonNullGenerator<T> createNumberGenerator(
       Class<T> numberType, T min, T max, T granularity, boolean unique) {
     if (unique) {
-      throw new IllegalArgumentException(this + " cannot generate unique values");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument(this + " cannot generate unique values");
     }
     return new IPINumberGenerator<>(this, numberType, min, max, granularity);
   }
@@ -70,7 +71,7 @@ public abstract class CumulativeDistributionFunction extends AbstractDistributio
   @Override
   public <T> Generator<T> applyTo(Generator<T> source, boolean unique) {
     if (unique) {
-      throw new IllegalArgumentException(this + " is not designed to generate unique values");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument(this + " is not designed to generate unique values");
     }
     List<T> allProducts = GeneratorUtil.allProducts(source);
     if (allProducts.size() == 1) {
@@ -102,15 +103,6 @@ public abstract class CumulativeDistributionFunction extends AbstractDistributio
     private double maxD;
     private final double granularityD;
 
-    /**
-     * Instantiates a new Ipi number generator.
-     *
-     * @param fcn         the fcn
-     * @param targetType  the target type
-     * @param min         the min
-     * @param max         the max
-     * @param granularity the granularity
-     */
     public IPINumberGenerator(CumulativeDistributionFunction fcn, Class<E> targetType, E min, E max, E granularity) {
       super(targetType, min, max, granularity);
       this.fcn = fcn;

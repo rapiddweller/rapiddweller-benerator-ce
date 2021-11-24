@@ -82,7 +82,8 @@ public class MetaGeneratorFactory {
     } else if (type instanceof ArrayTypeDescriptor) {
       return arrayTypeGeneratorFactory;
     } else {
-      throw new UnsupportedOperationException("Descriptor type not supported: " + type.getClass());
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported(
+          "Descriptor type not supported: " + type.getClass());
     }
   }
 

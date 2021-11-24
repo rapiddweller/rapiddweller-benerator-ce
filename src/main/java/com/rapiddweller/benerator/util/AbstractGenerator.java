@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.GeneratorState;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
 import org.slf4j.LoggerFactory;
@@ -80,19 +81,21 @@ public abstract class AbstractGenerator<E> implements Generator<E> {
   protected final void assertNotInitialized() {
     if (state != GeneratorState.CREATED) {
       if (state == GeneratorState.RUNNING) {
-        throw new IllegalGeneratorStateException("Trying to initialize generator a 2nd time: " + this);
+        throw BeneratorExceptionFactory.getInstance().illegalGeneratorState(
+            "Trying to initialize generator a 2nd time: " + this);
       } else {
-        throw new IllegalGeneratorStateException("Trying to initialize generator in '" + state + "' state: " + this);
+        throw BeneratorExceptionFactory.getInstance().illegalGeneratorState(
+            "Trying to initialize generator in '" + state + "' state: " + this);
       }
     }
   }
 
   protected final void assertInitialized() {
     if (state == GeneratorState.CREATED) {
-      throw new IllegalGeneratorStateException("Generator has not been initialized: " + this);
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Generator has not been initialized: " + this);
     }
     if (state == GeneratorState.CLOSED) {
-      throw new IllegalGeneratorStateException("Generator has already been closed: " + this);
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Generator has already been closed: " + this);
     }
   }
 

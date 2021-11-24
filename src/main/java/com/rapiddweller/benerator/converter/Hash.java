@@ -3,9 +3,9 @@
 package com.rapiddweller.benerator.converter;
 
 import com.rapiddweller.common.ConversionException;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.ThreadAware;
+import com.rapiddweller.common.exception.ExceptionFactory;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.Closeable;
@@ -39,11 +39,11 @@ public class Hash implements Converter<Object,String>, ThreadAware, Closeable {
 
   public static MessageDigest getMessageDigest(String type) {
     if (type == null)
-      throw new ConfigurationError("No hash type specified");
+      throw ExceptionFactory.getInstance().illegalArgument("No hash type specified");
     try {
       return MessageDigest.getInstance(type);
     } catch (NoSuchAlgorithmException e) {
-      throw new ConfigurationError("Error creating message digest", e);
+      throw ExceptionFactory.getInstance().configurationError("Error creating message digest", e);
     }
   }
 
@@ -81,7 +81,7 @@ public class Hash implements Converter<Object,String>, ThreadAware, Closeable {
     switch (format) {
       case hex:    return DatatypeConverter.printHexBinary(digest);
       case base64: return DatatypeConverter.printBase64Binary(digest);
-      default:     throw new ConversionException("Unsupported format: " + format);
+      default:     throw ExceptionFactory.getInstance().illegalArgument("Not a supported format: " + format);
     }
   }
 

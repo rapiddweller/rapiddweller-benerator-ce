@@ -26,7 +26,7 @@
 
 package com.rapiddweller.model.data;
 
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.script.PrimitiveType;
 
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class UnionSimpleTypeDescriptor extends SimpleTypeDescriptor {
   public PrimitiveType getPrimitiveType() {
     TypeDescriptor firstType = alternatives.get(0);
     if (firstType == null) {
-      throw new ConfigurationError("Cannot determine primitive type of union: " + getName());
+      throw ExceptionFactory.getInstance().configurationError("Cannot determine primitive type of union: " + getName());
     }
     return ((SimpleTypeDescriptor) firstType).getPrimitiveType();
   }

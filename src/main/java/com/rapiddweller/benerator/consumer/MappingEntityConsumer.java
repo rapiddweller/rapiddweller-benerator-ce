@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator.consumer;
 
 import com.rapiddweller.benerator.Consumer;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.model.data.ComponentNameMapper;
 import com.rapiddweller.model.data.Entity;
@@ -36,7 +37,6 @@ import java.util.Stack;
 /**
  * Proxy to a {@link Consumer} which maps attribute names of the entities.<br/><br/>
  * Created: 22.02.2010 19:42:16
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -45,30 +45,16 @@ public class MappingEntityConsumer extends ConsumerProxy {
   private final ComponentNameMapper mapper;
   private final Stack<Entity> stack;
 
-  /**
-   * Instantiates a new Mapping entity consumer.
-   */
   public MappingEntityConsumer() {
     this(null, null);
   }
 
-  /**
-   * Instantiates a new Mapping entity consumer.
-   *
-   * @param target      the target
-   * @param mappingSpec the mapping spec
-   */
   public MappingEntityConsumer(Consumer target, String mappingSpec) {
     super(target);
     this.mapper = new ComponentNameMapper(mappingSpec);
     stack = new Stack<>();
   }
 
-  /**
-   * Sets mappings.
-   *
-   * @param mappingSpec the mapping spec
-   */
   public void setMappings(String mappingSpec) {
     this.mapper.setMappings(mappingSpec);
   }
@@ -78,7 +64,7 @@ public class MappingEntityConsumer extends ConsumerProxy {
   public void startConsuming(ProductWrapper<?> wrapper) {
     Object object = wrapper.unwrap();
     if (!(object instanceof Entity)) {
-      throw new IllegalArgumentException("Expected Entity");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Expected Entity");
     }
     Entity entity = (Entity) object;
     Entity output = mapper.convert(entity);

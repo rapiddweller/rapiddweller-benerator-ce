@@ -27,6 +27,7 @@
 package com.rapiddweller.model.data;
 
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.operation.AndOperation;
 import com.rapiddweller.common.operation.OrOperation;
 import com.rapiddweller.script.Expression;
@@ -275,7 +276,8 @@ public class InstanceDescriptor extends FeatureDescriptor {
         MAX_COUNT.equals(detailName) || COUNT_GRANULARITY.equals(detailName)) {
       FeatureDetail<Object> detail = getConfiguredDetail(detailName);
       if (detail == null) {
-        throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support detail type: " + detailName);
+        throw BeneratorExceptionFactory.getInstance().programmerUnsupported(
+            getClass().getSimpleName() + " does not support detail type: " + detailName);
       }
       if (detailValue instanceof Expression) {
         detail.setValue(new TypeConvertingExpression<>((Expression<?>) detailValue, Long.class));

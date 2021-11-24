@@ -30,11 +30,11 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.model.data.Uniqueness;
 
@@ -44,49 +44,24 @@ import java.util.Date;
 /**
  * Generates dates with a granularity of days, months or years.<br/><br/>
  * Created: 12.10.2010 20:57:18
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class DayGenerator extends ThreadSafeNonNullGenerator<Date> {
 
-  /**
-   * The Min.
-   */
   protected Date min;
-  /**
-   * The Max.
-   */
   protected Date max;
-  /**
-   * The Distribution.
-   */
   protected Distribution distribution;
-  /**
-   * The Unique.
-   */
   protected boolean unique;
 
-  /**
-   * The Year granularity.
-   */
   protected int yearGranularity;
-  /**
-   * The Month granularity.
-   */
   protected int monthGranularity;
-  /**
-   * The Day granularity.
-   */
   protected int dayGranularity;
 
   private Calendar minCalendar;
   private Generator<Integer> multiplierGenerator;
   private final WrapperProvider<Integer> intWrapper = new WrapperProvider<>();
 
-  /**
-   * Instantiates a new Day generator.
-   */
   public DayGenerator() {
     this(TimeUtil.date(TimeUtil.currentYear() - 5, 0, 1),
         TimeUtil.today(),
@@ -94,14 +69,6 @@ public class DayGenerator extends ThreadSafeNonNullGenerator<Date> {
         false);
   }
 
-  /**
-   * Instantiates a new Day generator.
-   *
-   * @param min          the min
-   * @param max          the max
-   * @param distribution the distribution
-   * @param unique       the unique
-   */
   public DayGenerator(Date min, Date max, Distribution distribution, boolean unique) {
     this.min = min;
     this.max = max;
@@ -112,53 +79,28 @@ public class DayGenerator extends ThreadSafeNonNullGenerator<Date> {
     this.dayGranularity = 1;
   }
 
-  /**
-   * Sets min.
-   *
-   * @param min the min
-   */
   public void setMin(Date min) {
     this.min = min;
   }
 
-  /**
-   * Sets max.
-   *
-   * @param max the max
-   */
   public void setMax(Date max) {
     this.max = max;
   }
 
-  /**
-   * Sets granularity.
-   *
-   * @param granularitySpec the granularity spec
-   */
   public void setGranularity(String granularitySpec) {
     String[] tokens = granularitySpec.split("-");
     if (tokens.length != 3) {
-      throw new ConfigurationError("Illegal date granularity spec: " + granularitySpec);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Illegal date granularity spec: " + granularitySpec);
     }
     this.yearGranularity = Integer.parseInt(tokens[0]);
     this.monthGranularity = Integer.parseInt(tokens[1]);
     this.dayGranularity = Integer.parseInt(tokens[2]);
   }
 
-  /**
-   * Sets distribution.
-   *
-   * @param distribution the distribution
-   */
   public void setDistribution(Distribution distribution) {
     this.distribution = distribution;
   }
 
-  /**
-   * Sets unique.
-   *
-   * @param unique the unique
-   */
   public void setUnique(boolean unique) {
     this.unique = unique;
   }

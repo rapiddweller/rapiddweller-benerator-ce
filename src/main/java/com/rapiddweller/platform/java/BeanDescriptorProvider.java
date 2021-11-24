@@ -26,8 +26,8 @@
 
 package com.rapiddweller.platform.java;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.DataModel;
 import com.rapiddweller.model.data.DefaultDescriptorProvider;
@@ -46,34 +46,22 @@ import java.math.BigInteger;
 /**
  * Provides EntityDescriptors for JavaBean classes
  * Created: 27.06.2007 23:04:19
- *
  * @author Volker Bergmann
  */
 public class BeanDescriptorProvider extends DefaultDescriptorProvider {
 
-  /**
-   * The constant NAMESPACE.
-   */
   public static final String NAMESPACE = "bean";
 
   private TypeMapper mapper;
 
-  /**
-   * Instantiates a new Bean descriptor provider.
-   */
   public BeanDescriptorProvider() {
     this(new DataModel());
   }
 
-  /**
-   * Instantiates a new Bean descriptor provider.
-   *
-   * @param dataModel the data model
-   */
   public BeanDescriptorProvider(DataModel dataModel) {
     super(NAMESPACE, dataModel, false);
     if (dataModel == null) {
-      throw new IllegalArgumentException("DataModel is null");
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("DataModel is null");
     }
     initMapper();
   }
@@ -93,8 +81,6 @@ public class BeanDescriptorProvider extends DefaultDescriptorProvider {
   }
 
   /**
-   * Abstract type string.
-   *
    * @param concreteType the concrete type
    * @return the abstract type that corresponds to the specified concrete type
    * @see TypeMapper#abstractType(Class) TypeMapper#abstractType(Class)
@@ -108,8 +94,6 @@ public class BeanDescriptorProvider extends DefaultDescriptorProvider {
   }
 
   /**
-   * Concrete type class.
-   *
    * @param primitiveType the primitive type
    * @return the abstract type that corresponds to the specified primitive type
    * @see TypeMapper#concreteType(java.lang.String) TypeMapper#concreteType(java.lang.String)
@@ -122,13 +106,10 @@ public class BeanDescriptorProvider extends DefaultDescriptorProvider {
       }
       return result;
     } catch (ClassNotFoundException e) {
-      throw new ConfigurationError("No class mapping found for '" + primitiveType + "'", e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("No class mapping found for '" + primitiveType + "'", e);
     }
   }
 
-  /**
-   * Clear.
-   */
   public void clear() {
     typeMap.clear();
     initMapper();

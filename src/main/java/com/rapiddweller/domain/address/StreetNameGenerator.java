@@ -32,9 +32,9 @@ import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.csv.WeightedDatasetCSVGenerator;
 import com.rapiddweller.benerator.dataset.DatasetBasedGenerator;
 import com.rapiddweller.benerator.dataset.DatasetUtil;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.StringUtil;
 
@@ -121,7 +121,7 @@ public class StreetNameGenerator extends GeneratorProxy<String>
     } catch (Exception e) {
       // if the call fails, try another option
       if (datasetOptions.isEmpty()) {
-        throw new ConfigurationError(getClass().getSimpleName() +
+        throw BeneratorExceptionFactory.getInstance().configurationError(getClass().getSimpleName() +
             " could not be initialized");
       }
       String nextOption = datasetOptions.peek();

@@ -28,8 +28,8 @@ package com.rapiddweller.benerator.distribution.sequence;
 
 import com.rapiddweller.benerator.NonNullGenerator;
 import com.rapiddweller.benerator.distribution.Sequence;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.converter.NumberToNumberConverter;
 import com.rapiddweller.script.DatabeneScriptParser;
@@ -64,7 +64,7 @@ public class LiteralSequence extends DetachedSequence {
     }
     WeightedSample<?>[] samples = DatabeneScriptParser.parseWeightedLiteralList(spec);
     if (samples == null)
-      throw new ConfigurationError("No samples provided in '" + spec + "'");
+      throw BeneratorExceptionFactory.getInstance().configurationError("No samples provided in '" + spec + "'");
     Number[] result = new Number[samples.length];
     for (int i = 0; i < samples.length; i++) {
       result[i] = (Number) samples[i].getValue();

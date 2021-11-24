@@ -27,8 +27,8 @@
 package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 
 /**
  * Wraps another Generator of same product type.<br/><br/>
@@ -63,7 +63,8 @@ public abstract class GeneratorProxy<E> extends GeneratorWrapper<E, E> {
     } else if (generatedType != null) {
       return generatedType;
     } else {
-      throw new IllegalGeneratorStateException("Generator not initialized correctly: " + this);
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState(
+          "Generator not initialized correctly: " + this);
     }
   }
 

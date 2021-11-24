@@ -221,17 +221,17 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
 
     @Override
     public Object execute(String command) {
-      throw new UnsupportedOperationException("query() not implemented");
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("query() not implemented");
     }
 
     @Override
     public DataSource<?> query(String selector, boolean simplify, Context context) {
-      throw new UnsupportedOperationException("query() not implemented");
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("query() not implemented");
     }
 
     @Override
     public DataSource<Entity> queryEntities(String type, String selector, Context context) {
-      throw new UnsupportedOperationException("queryEntities() not implemented");
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("queryEntities() not implemented");
     }
 
     @Override
@@ -243,12 +243,12 @@ public class ReferenceComponentBuilderFactoryTest extends GeneratorTest {
 
     @Override
     public void store(Entity entity) {
-      throw new UnsupportedOperationException("store() not implemented");
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("store() not implemented");
     }
 
     @Override
     public void update(Entity entity) {
-      throw new UnsupportedOperationException("StorageSystem.update() is not implemented");
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("StorageSystem.update() is not implemented");
     }
   }
 

@@ -34,6 +34,7 @@ import com.rapiddweller.benerator.csv.WeightedDatasetCSVGenerator;
 import com.rapiddweller.benerator.dataset.AbstractDatasetGenerator;
 import com.rapiddweller.benerator.dataset.Dataset;
 import com.rapiddweller.benerator.dataset.DatasetUtil;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.primitive.RegexStringGenerator;
 import com.rapiddweller.benerator.primitive.TokenCombiner;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
@@ -44,7 +45,6 @@ import com.rapiddweller.benerator.wrapper.MessageGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.Assert;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.bean.PropertyAccessConverter;
 import com.rapiddweller.domain.address.CityGenerator;
@@ -158,7 +158,7 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
     String isoCode = dataset.getName();
     Country country = Country.getInstance(isoCode, false);
     if (country == null) {
-      throw new ConfigurationError("Unknown country code: " + isoCode);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Unknown country code: " + isoCode);
     }
     return new CountryCompanyNameGenerator(country);
   }
@@ -320,9 +320,8 @@ public class CompanyNameGenerator extends AbstractDatasetGenerator<CompanyName>
           sectorGenerator.init(context);
         } catch (Exception e) {
           if ("US".equals(datasetName)) {
-            throw new ConfigurationError(
-                "Failed to initialize SectorGenerator with US dataset",
-                e);
+            throw BeneratorExceptionFactory.getInstance().configurationError(
+                "Failed to initialize SectorGenerator with US dataset", e);
           }
           logger.info("Cannot create sector generator: {}. Falling back to US", e.getMessage());
           initSectorGenerator("US");

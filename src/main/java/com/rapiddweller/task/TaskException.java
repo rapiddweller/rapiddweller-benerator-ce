@@ -27,7 +27,7 @@
 package com.rapiddweller.task;
 
 import com.rapiddweller.common.exception.ExitCodes;
-import com.rapiddweller.common.OperationFailedException;
+import com.rapiddweller.common.OperationFailed;
 
 /**
  * Signals failure in the execution of a Task.<br/><br/>
@@ -35,7 +35,7 @@ import com.rapiddweller.common.OperationFailedException;
  * @author Volker Bergmann
  * @since 0.3.02
  */
-public class TaskException extends OperationFailedException {
+public class TaskException extends OperationFailed {
 
   /** @deprecated */
   @Deprecated

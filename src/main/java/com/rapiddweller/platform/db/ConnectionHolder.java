@@ -123,7 +123,7 @@ public class ConnectionHolder implements Closeable {
     String tableName = descriptor.getName();
     DBTable table = db.getTable(tableName.toUpperCase());
     if (table == null) {
-      throw new IllegalArgumentException("Table not found: " + tableName);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Table not found: " + tableName);
     }
     StringBuilder builder =
         new StringBuilder("select * from ").append(tableName)
@@ -162,7 +162,7 @@ public class ConnectionHolder implements Closeable {
     String tableName = descriptor.getName();
     DBTable table = db.getTable(tableName.toUpperCase());
     if (table == null) {
-      throw new IllegalArgumentException("Table not found: " + tableName);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Table not found: " + tableName);
     }
     String sql = (insert ?
         db.getDialect().insert(table, columnInfos) :

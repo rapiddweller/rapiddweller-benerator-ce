@@ -26,9 +26,9 @@
 
 package com.rapiddweller.benerator.primitive.number;
 
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.GeneratingConverter;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Converter;
@@ -182,7 +182,7 @@ public class NoiseInducer extends GeneratingConverter<Number, Number, Number> {
     }
     ProductWrapper<Number> wrapper = generate();
     if (wrapper == null) {
-      throw new IllegalGeneratorStateException("Noise generator unavailable: " + generator);
+      BeneratorExceptionFactory.getInstance().illegalGeneratorState("Noise generator unavailable: " + generator);
     }
     Number delta = wrapper.unwrap();
     Number result;

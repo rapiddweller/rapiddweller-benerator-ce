@@ -43,7 +43,6 @@ import com.rapiddweller.benerator.wrapper.AsByteGeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ByteArrayGenerator;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.accessor.GraphAccessor;
@@ -137,7 +136,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
       Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
       return context.getGeneratorFactory().createFromWeightedLiteralList(valueSpec, targetType, distribution, uniqueness.isUnique());
     } catch (ParseException e) {
-      throw new ConfigurationError("Error parsing samples: " + valueSpec, e);
+      throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing samples: " + valueSpec, e);
     }
   }
 
@@ -207,7 +206,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
         DataSource dataSource = (DataSource) sourceObject;
         generator = new DataSourceGenerator(dataSource);
       } else {
-        throw new UnsupportedOperationException("Not a supported source: " + sourceObject);
+        throw BeneratorExceptionFactory.getInstance().illegalArgument("Not a supported source: " + sourceObject);
       }
     } else if (DataFileUtil.isCsvDocument(source)) {
       return createSimpleTypeCSVSourceGenerator(descriptor, source, uniqueness, context);
@@ -250,7 +249,8 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     } else if (sourceObject instanceof Generator) {
       generator = (Generator<?>) sourceObject;
     } else {
-      throw new UnsupportedOperationException("Source type not supported: " + sourceObject.getClass());
+      throw BeneratorExceptionFactory.getInstance().illegalArgument(
+          "Source type not supported: " + sourceObject.getClass());
     }
     if (sourceSpec.isReference()) {
       generator = WrapperFactory.preventClosing(generator);
@@ -351,7 +351,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
   protected Class<?> getGeneratedType(SimpleTypeDescriptor descriptor) {
     PrimitiveType primitiveType = descriptor.getPrimitiveType();
     if (primitiveType == null) {
-      throw new ConfigurationError("No type configured for " + descriptor.getName());
+      throw BeneratorExceptionFactory.getInstance().configurationError("No type configured for " + descriptor.getName());
     }
     return primitiveType.getJavaType();
   }

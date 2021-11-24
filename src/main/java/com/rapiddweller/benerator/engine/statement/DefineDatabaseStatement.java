@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.engine.statement;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.common.ConfigurationError;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.script.Expression;
@@ -74,7 +74,7 @@ public class DefineDatabaseStatement implements Statement {
                                  Expression<Boolean> batch, Expression<Integer> fetchSize, Expression<Boolean> readOnly, Expression<Boolean> lazy,
                                  Expression<Boolean> acceptUnknownColumnTypes, ResourceManager resourceManager) {
     if (id == null) {
-      throw new ConfigurationError("No database id defined");
+      throw BeneratorExceptionFactory.getInstance().configurationError("No database id defined");
     }
     this.id = id;
     this.environment = environment;

@@ -27,8 +27,8 @@
 package com.rapiddweller.benerator.wrapper;
 
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.AbstractGenerator;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.TypedIterable;
@@ -37,10 +37,8 @@ import java.io.Closeable;
 import java.util.Iterator;
 
 /**
- * Iterates over Iterators that are provided by an {@link Iterable}.<br/>
- * <br/>
+ * Iterates over Iterators that are provided by an {@link Iterable}.<br/><br/>
  * Created: 16.08.2007 07:09:57
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  */
@@ -51,18 +49,10 @@ public class IteratingGenerator<E> extends AbstractGenerator<E> {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Iterating generator.
-   */
   public IteratingGenerator() {
     this(null);
   }
 
-  /**
-   * Instantiates a new Iterating generator.
-   *
-   * @param iterable the iterable
-   */
   public IteratingGenerator(TypedIterable<E> iterable) {
     this.iterable = iterable;
     this.iterator = null;
@@ -70,23 +60,13 @@ public class IteratingGenerator<E> extends AbstractGenerator<E> {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets iterable.
-   *
-   * @return the iterable
-   */
   public TypedIterable<E> getIterable() {
     return iterable;
   }
 
-  /**
-   * Sets iterable.
-   *
-   * @param iterable the iterable
-   */
   public void setIterable(TypedIterable<E> iterable) {
     if (this.iterable != null) {
-      throw new IllegalGeneratorStateException("Mutating an initialized generator");
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Mutating an initialized generator");
     }
     this.iterable = iterable;
   }
@@ -137,7 +117,7 @@ public class IteratingGenerator<E> extends AbstractGenerator<E> {
       }
       return wrapper.wrap(result);
     } catch (Exception e) {
-      throw new IllegalGeneratorStateException("Generation failed: ", e);
+      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Generation failed: ", e);
     }
   }
 
@@ -164,10 +144,8 @@ public class IteratingGenerator<E> extends AbstractGenerator<E> {
   }
 
   private void closeIterator() {
-    if (iterator != null) {
-      if (iterator instanceof Closeable) {
-        IOUtil.close((Closeable) iterator);
-      }
+    if (iterator instanceof Closeable) {
+      IOUtil.close((Closeable) iterator);
     }
   }
 

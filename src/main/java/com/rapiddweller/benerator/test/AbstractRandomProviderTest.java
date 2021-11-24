@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.test;
 
 import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.common.collection.ObjectCounter;
+import com.rapiddweller.common.exception.IllegalArgumentError;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -95,7 +96,7 @@ public abstract class AbstractRandomProviderTest extends GeneratorTest {
     assertNull(getRandom().randomFromWeightLiteral(""));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentError.class)
   public void testRandomFromLiteral_negativeWeight() {
     getRandom().randomFromWeightLiteral("1^-1,2^-2");
   }

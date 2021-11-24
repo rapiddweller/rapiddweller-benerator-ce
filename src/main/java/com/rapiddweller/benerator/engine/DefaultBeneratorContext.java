@@ -39,7 +39,6 @@ import com.rapiddweller.benerator.script.graaljs.GraalJsScriptFactory;
 import com.rapiddweller.benerator.script.graalpy.GraalPyScriptFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.IOUtil;
@@ -371,7 +370,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
       return DEFAULT_CELL_SEPARATOR;
     }
     if (tmp.length() != 1) {
-      throw new ConfigurationError("Cell separator has illegal length: '" + tmp + "'");
+      throw BeneratorExceptionFactory.getInstance().configurationError("Cell separator has illegal length: '" + tmp + "'");
     }
     return tmp.charAt(0);
   }

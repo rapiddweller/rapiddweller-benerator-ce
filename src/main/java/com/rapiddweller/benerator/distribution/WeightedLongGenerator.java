@@ -27,9 +27,9 @@
 package com.rapiddweller.benerator.distribution;
 
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.distribution.function.ConstantFunction;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.primitive.number.AbstractNonNullNumberGenerator;
 
 import java.util.Arrays;
@@ -80,7 +80,7 @@ public class WeightedLongGenerator extends AbstractNonNullNumberGenerator<Long> 
 
   public void setDistribution(Distribution distribution) {
     if (!(distribution instanceof WeightFunction)) {
-      throw new IllegalArgumentException("Function expected, found: " + distribution);
+      throw BeneratorExceptionFactory.getInstance().illegalArgument("Function expected, found: " + distribution);
     }
     this.function = (WeightFunction) distribution;
   }
@@ -137,7 +137,7 @@ public class WeightedLongGenerator extends AbstractNonNullNumberGenerator<Long> 
           probSum[i] = (i + 1) * avgProp;
         }
       } else if (sum < 0) {
-        throw new IllegalGeneratorStateException(
+        BeneratorExceptionFactory.getInstance().illegalGeneratorState(
             "Invalid WeightFunction: Sum is negative (" + sum + ") for " + function);
       }
       for (int i = 0; i < sampleCount; i++) {

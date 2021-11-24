@@ -26,6 +26,7 @@
 
 package com.rapiddweller.model.data;
 
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Named;
 import com.rapiddweller.common.NullSafeComparator;
@@ -173,7 +174,7 @@ public class FeatureDescriptor implements Named {
   protected Class<?> getDetailType(String detailName) {
     FeatureDetail<?> detail = details.get(detailName);
     if (detail == null) {
-      throw new UnsupportedOperationException(
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported(
           "Feature detail not supported: " + detailName);
     }
     return detail.getType();
@@ -201,7 +202,7 @@ public class FeatureDescriptor implements Named {
   @SuppressWarnings("unchecked")
   public <T> FeatureDetail<T> getConfiguredDetail(String name) {
     if (!supportsDetail(name)) {
-      throw new UnsupportedOperationException("Feature detail '" + name +
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Feature detail '" + name +
           "' not supported in feature type: " + getClass().getName());
     }
     return (FeatureDetail<T>) details.get(name);

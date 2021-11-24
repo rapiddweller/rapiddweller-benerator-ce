@@ -30,12 +30,12 @@ import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.primitive.RegexStringGenerator;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.LocaleUtil;
@@ -51,7 +51,6 @@ import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -272,8 +271,8 @@ public class Country {
         Country country = new Country(isoCode, defaultLocale, population, phoneCode, mobilCodePattern, name);
         logger.debug("Parsed country {}", country);
       }
-    } catch (IOException e) {
-      throw new ConfigurationError("Error processing Country definition file. ", e);
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed("Error processing Country definition file. ", e);
     }
   }
 
