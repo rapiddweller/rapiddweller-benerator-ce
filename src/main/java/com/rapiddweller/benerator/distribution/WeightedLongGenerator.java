@@ -137,7 +137,7 @@ public class WeightedLongGenerator extends AbstractNonNullNumberGenerator<Long> 
           probSum[i] = (i + 1) * avgProp;
         }
       } else if (sum < 0) {
-        BeneratorExceptionFactory.getInstance().illegalGeneratorState(
+        throw BeneratorExceptionFactory.getInstance().illegalGeneratorState(
             "Invalid WeightFunction: Sum is negative (" + sum + ") for " + function);
       }
       for (int i = 0; i < sampleCount; i++) {

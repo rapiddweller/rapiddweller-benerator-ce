@@ -93,7 +93,7 @@ public class WeightedDoubleGenerator extends AbstractNonNullNumberGenerator<Doub
         probSum[i] = sum;
       }
       if (sum <= 0) {
-        BeneratorExceptionFactory.getInstance().illegalGeneratorState(
+        throw BeneratorExceptionFactory.getInstance().illegalGeneratorState(
             "Invalid WeightFunction: Sum is not positive for " + function);
       }
       for (int i = 0; i < sampleCount; i++) {
