@@ -5,6 +5,7 @@ package com.rapiddweller.benerator.main;
 import com.rapiddweller.benerator.BeneratorMode;
 import com.rapiddweller.common.cli.CLIIllegalArgumentException;
 import com.rapiddweller.common.cli.CLIIllegalOptionException;
+import com.rapiddweller.common.cli.CLIIllegalOptionValueException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -61,7 +62,7 @@ public class BeneratorTest {
     checkExecution(BeneratorMode.STRICT, "test.ben.xml", "mode", "strict", "test.ben.xml");
   }
 
-  @Test(expected = CLIIllegalOptionException.class)
+  @Test(expected = CLIIllegalOptionValueException.class)
   public void testIllegalMode() {
     checkExecution(BeneratorMode.STRICT, "test.ben.xml",  "--mode", "superduper", "test.ben.xml");
   }
