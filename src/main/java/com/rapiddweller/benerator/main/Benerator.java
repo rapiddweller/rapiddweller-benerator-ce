@@ -146,7 +146,7 @@ public class Benerator {
       } else if ("kafka".equals(arg)) {
         BeneratorUtil.printEnvKafkas(new ConsoleInfoPrinter());
       } else {
-        throw BeneratorExceptionFactory.getInstance().illegalCommandLineOption("Illegal list option: " + arg);
+        throw BeneratorExceptionFactory.getInstance().illegalCommandLineOption(arg);
       }
       run = false;
     }
