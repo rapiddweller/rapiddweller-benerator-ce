@@ -135,7 +135,7 @@ public class CityManager {
       cityId = new CityId(cityName, cityNameExtension);
     } else {
       throw ExceptionFactory.getInstance().syntaxErrorForText(
-          instance.toString(), "Unable to parse city", lineNumber, 1);
+          "Unable to parse city", instance.toString(), lineNumber, 1);
     }
     return cityId;
   }

@@ -34,6 +34,7 @@ import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.xml.XMLUtil;
@@ -87,7 +88,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
       staticLogger.debug("Instantiating bean of class {} (id={})", beanClass, id);
       instantiation = new DefaultConstruction(beanClass);
     } else {
-      syntaxError("bean definition is missing 'class' or 'spec' attribute", element);
+      throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("bean definition is missing 'class' or 'spec' attribute", element);
     }
     Element[] propertyElements = XMLUtil.getChildElements(element, false, EL_PROPERTY);
     Assignment[] propertyInitializers = mapPropertyDefinitions(propertyElements);
@@ -118,8 +119,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
     Element[] propertyElements = XMLUtil.getChildElements(element);
     for (Element propertyElement : propertyElements) {
       if (!EL_PROPERTY.equals(propertyElement.getNodeName())) {
-        syntaxError("not a supported bean child element: <" + propertyElement.getNodeName() + ">",
-            propertyElement);
+        throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("not a supported bean child element", propertyElement);
       }
     }
     Assignment[] propertyInitializers = mapPropertyDefinitions(propertyElements);

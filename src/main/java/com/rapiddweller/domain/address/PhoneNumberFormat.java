@@ -118,7 +118,7 @@ public class PhoneNumberFormat extends Format {
       return super.parseObject(source);
     } catch (IllegalArgumentException e) {
       throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(
-          source, "Failed to parse text as file number", -1, -1, e);
+          "Failed to parse text as file number", e, source, -1, -1);
     }
   }
 

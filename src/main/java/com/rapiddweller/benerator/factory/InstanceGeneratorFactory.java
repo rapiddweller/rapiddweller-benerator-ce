@@ -96,7 +96,7 @@ public class InstanceGeneratorFactory {
       if (descriptor instanceof IdDescriptor) {
         generator = new IncrementGenerator(1);
       } else {
-        throw BeneratorExceptionFactory.getInstance().syntaxError(
+        throw BeneratorExceptionFactory.getInstance().syntaxErrorForNothing(
             "Type of " + instanceName + " is not defined", null);
       }
     }

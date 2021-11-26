@@ -32,15 +32,10 @@ import com.rapiddweller.benerator.engine.expression.context.DefaultPageSizeExpre
 import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
 import com.rapiddweller.benerator.engine.statement.RunTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
-import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ErrorHandler;
-import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AbstractXMLElementParser;
 import com.rapiddweller.format.xml.ParseContext;
 import com.rapiddweller.script.Expression;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.w3c.dom.Element;
 
 import java.util.Set;
@@ -57,8 +52,8 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public abstract class AbstractBeneratorDescriptorParser extends AbstractXMLElementParser<Statement> {
 
-  protected AbstractBeneratorDescriptorParser(String elementName,
-                                           Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
+  protected AbstractBeneratorDescriptorParser(String elementName, Set<String> requiredAttributes,
+        Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
     super(elementName, requiredAttributes, optionalAttributes, supportedParentTypes);
   }
 

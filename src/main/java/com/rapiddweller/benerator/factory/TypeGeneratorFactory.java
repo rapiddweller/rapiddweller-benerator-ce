@@ -96,8 +96,7 @@ public abstract class TypeGeneratorFactory<E extends TypeDescriptor> {
     return generator;
   }
 
-  protected Generator<?> createExplicitGenerator(
-      E type, Uniqueness uniqueness, BeneratorContext context) {
+  protected Generator<?> createExplicitGenerator(E type, Uniqueness uniqueness, BeneratorContext context) {
     Generator<?> generator = DescriptorUtil.getGeneratorByName(type, context);
     if (generator == null) {
       generator = createSourceGenerator(type, uniqueness, context);

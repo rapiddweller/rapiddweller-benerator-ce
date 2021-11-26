@@ -31,6 +31,7 @@ import com.rapiddweller.common.ThreadUtil;
 import com.rapiddweller.jdbacl.DBUtil;
 
 import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import java.io.Closeable;
 import java.lang.management.ManagementFactory;
@@ -43,17 +44,26 @@ import java.lang.management.ManagementFactory;
  */
 public class BeneratorMonitor implements BeneratorMonitorMBean, Closeable {
 
+  public static final String COMPONENT_NAME = "BeneratorMonitor";
+  public static final ObjectName OBJECT_NAME;
+
+  static {
+    try {
+      OBJECT_NAME = new ObjectName("benerator:service=monitor");
+    } catch (MalformedObjectNameException e) {
+      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed(COMPONENT_NAME, e);
+    }
+  }
+
   public static final BeneratorMonitor INSTANCE;
 
   static {
     try {
       MBeanServer server = ManagementFactory.getPlatformMBeanServer();
       INSTANCE = new BeneratorMonitor();
-      ObjectName name = new ObjectName("benerator:service=monitor");
-      server.registerMBean(INSTANCE, name);
+      server.registerMBean(INSTANCE, OBJECT_NAME);
     } catch (Exception e) {
-      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed(
-          "Failed to initialize MBean server", e);
+      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed(COMPONENT_NAME, e);
     }
   }
 

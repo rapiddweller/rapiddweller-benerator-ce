@@ -52,6 +52,7 @@ import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -287,7 +288,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     // check preconditions
     boolean iterationMode = (EL_ITERATE.equals(element.getNodeName()));
     if (iterationMode && StringUtil.isEmpty(element.getAttribute(ATT_SOURCE))) { // make sure the <iterate> has a 'source'
-      syntaxError("'source' missing in <iterate>", element);
+      throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("'source' missing in <iterate>", element);
     }
 
     // get core date
@@ -348,7 +349,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     if (!iterationMode) {
       // on <generate>, add missing members defined in parent descriptors
       if (!StringUtil.isEmpty(element.getAttribute(ATT_SOURCE))) {
-        syntaxError("'source' not allowed in <generate>", element);
+        throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("'source' not allowed in <generate>", element);
       }
       TypeDescriptor pType = type.getParent();
       if (pType instanceof ComplexTypeDescriptor) {

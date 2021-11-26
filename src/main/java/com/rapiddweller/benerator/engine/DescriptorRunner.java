@@ -29,7 +29,6 @@ package com.rapiddweller.benerator.engine;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.consumer.FileExporter;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
-import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.sensor.Profiler;
 import com.rapiddweller.benerator.sensor.Profiling;
 import com.rapiddweller.common.ExceptionUtil;
@@ -60,7 +59,7 @@ public class DescriptorRunner implements ResourceManager {
 
   // attributes ------------------------------------------------------------------------------------------------------
 
-  private final String uri;
+  protected final String uri;
 
   private final BeneratorContext context;
 
@@ -108,9 +107,6 @@ public class DescriptorRunner implements ResourceManager {
   }
 
   public BeneratorRootStatement parseDescriptorFile() {
-    if (!IOUtil.isURIAvailable(uri)) {
-      throw BeneratorExceptionFactory.getInstance().beneratorFileNotFound(uri);
-    }
     Document document = XMLUtil.parse(uri);
     Element root = document.getDocumentElement();
     BeneratorParseContext parsingContext = this.factory.createParseContext(resourceManager);

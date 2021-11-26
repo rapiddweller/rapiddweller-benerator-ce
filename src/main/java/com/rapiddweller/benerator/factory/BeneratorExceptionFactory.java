@@ -4,6 +4,7 @@ package com.rapiddweller.benerator.factory;
 
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
+import com.rapiddweller.common.exception.ComponentInitializationFailure;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.file.FileResourceNotFoundException;
 import com.rapiddweller.task.Task;
@@ -39,6 +40,10 @@ public class BeneratorExceptionFactory extends ExceptionFactory {
 
   public TaskUnavailableException taskUnavailable(Task task, Long requiredInvocations, long actualInvocations) {
     return new TaskUnavailableException(task, requiredInvocations, actualInvocations);
+  }
+
+  public ComponentInitializationFailure componentInitializationFailed(String errorId, String componentName, Throwable cause) {
+    return new ComponentInitializationFailure(errorId, componentName, cause);
   }
 
 }

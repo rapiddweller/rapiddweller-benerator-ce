@@ -166,8 +166,7 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
   }
 
   @Override
-  public DataSource<?> query(String selector, boolean simplify,
-                             Context context) {
+  public DataSource<?> query(String selector, boolean simplify, Context context) {
     beInitialized();
     logger.debug("query({}, {}, context)", selector, simplify);
     try {
@@ -180,8 +179,8 @@ public class DOMTree extends AbstractStorageSystem implements ContextAware {
       }
       return new DataSourceFromIterable<>(list, Object.class);
     } catch (XPathExpressionException e) {
-      throw BeneratorExceptionFactory.getInstance().syntaxError(
-          "Error querying items with xpath: " + selector, e);
+      throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(
+          "Error querying items with xpath", e, selector, -1, -1);
     }
   }
 

@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.SequentialStatement;
 import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
@@ -48,18 +49,13 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 /**
  * Parses an &lt;if&gt; element.<br/><br/>
  * Created: 19.02.2010 09:07:51
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class IfParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Set<String> STRICT_CHILDREN = CollectionUtil.toSet(
-      EL_THEN, EL_ELSE, EL_COMMENT);
+  private static final Set<String> STRICT_CHILDREN = CollectionUtil.toSet(EL_THEN, EL_ELSE, EL_COMMENT);
 
-  /**
-   * Instantiates a new If parser.
-   */
   public IfParser() {
     super(EL_IF, CollectionUtil.toSet(ATT_TEST), null);
   }
@@ -69,12 +65,12 @@ public class IfParser extends AbstractBeneratorDescriptorParser {
     Expression<Boolean> condition = parseBooleanExpressionAttribute(ATT_TEST, ifElement);
     Element[] thenElements = XMLUtil.getChildElements(ifElement, false, "then");
     if (thenElements.length > 1) {
-      syntaxError("Multiple <then> elements", ifElement);
+      throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("Multiple <then> elements", ifElement);
     }
     Element thenElement = (thenElements.length == 1 ? thenElements[0] : null);
     Element[] elseElements = XMLUtil.getChildElements(ifElement, false, "else");
     if (elseElements.length > 1) {
-      syntaxError("Multiple <else> elements", ifElement);
+      throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("Multiple <else> elements", ifElement);
     }
     Element elseElement = (elseElements.length == 1 ? elseElements[0] : null);
     List<Statement> thenStatements = null;
@@ -84,7 +80,7 @@ public class IfParser extends AbstractBeneratorDescriptorParser {
     if (elseElement != null) {
       // if there is an 'else' element, there must be an 'if' element too
       if (thenElement == null) {
-        syntaxError("'else' without 'then'", elseElement);
+        throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("'else' without 'then'", elseElement);
       }
       thenStatements = context.parseChildElementsOf(thenElement, ifPath);
       elseStatements = context.parseChildElementsOf(elseElement, ifPath);
@@ -101,7 +97,7 @@ public class IfParser extends AbstractBeneratorDescriptorParser {
   private static void assertThenElseChildren(Element ifElement) {
     for (Element child : XMLUtil.getChildElements(ifElement)) {
       if (!STRICT_CHILDREN.contains(child.getNodeName())) {
-        syntaxError("Illegal child element: ", child);
+        throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("Illegal child element", child);
       }
     }
   }
