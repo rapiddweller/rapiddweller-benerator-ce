@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            targetNamespace="https://www.benerator.de/schema/2.1.0"
            xmlns="https://www.benerator.de/schema/2.1.0"
@@ -8,26 +6,619 @@
 
     <xs:annotation>
         <xs:documentation>The Benerator schema describes the generation setup for Benerator.</xs:documentation>
-        <xs:appinfo/>
     </xs:annotation>
 
-    <xs:simpleType name="script-expression-type">
+    <xs:element name="setup">
+        <xs:annotation>
+            <xs:documentation>Root element of Benerator files</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="block-statement">
+                    <xs:attribute name="maxCount" type="xs:long"/>
+                    <xs:attribute name="defaultScript" type="xs:string"/>
+                    <xs:attribute name="defaultNull" type="xs:boolean" default="true"/>
+                    <xs:attribute name="defaultEncoding" type="xs:string"/>
+                    <xs:attribute name="defaultLineSeparator" type="xs:string"/>
+                    <xs:attribute name="defaultTimeZone" type="xs:string"/>
+                    <xs:attribute name="defaultSourceScripted" type="xs:boolean" default="false"/>
+                    <xs:attribute name="defaultLocale" type="xs:string"/>
+                    <xs:attribute name="defaultDataset" type="xs:string"/>
+                    <xs:attribute name="defaultPageSize" type="xs:long" default="1"/>
+                    <xs:attribute name="defaultSeparator" type="xs:string" default=","/>
+                    <xs:attribute name="defaultOneToOne" type="xs:boolean" default="false"/>
+                    <xs:attribute name="defaultErrorHandler" type="errorhandler-type" default="fatal"/>
+                    <xs:attribute name="defaultImports" type="xs:boolean" default="true"/>
+                    <xs:attribute name="generatorFactory" type="xs:string"/>
+                    <xs:attribute name="acceptUnknownSimpleTypes" type="xs:boolean" default="false"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="block-statement">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="comment" minOccurs="0"/>
+            <xs:element ref="import" minOccurs="0"/>
+            <xs:element ref="echo" minOccurs="0"/>
+            <xs:element ref="beep" minOccurs="0"/>
+            <xs:element ref="setting" minOccurs="0"/>
+            <xs:element ref="include" minOccurs="0"/>
+            <xs:element ref="bean" minOccurs="0"/>
+            <xs:element ref="memstore" minOccurs="0"/>
+            <xs:element ref="run-task" minOccurs="0"/>
+            <xs:element ref="execute" minOccurs="0"/>
+            <xs:element ref="evaluate" minOccurs="0"/>
+            <xs:element ref="error" minOccurs="0"/>
+            <xs:element ref="if" minOccurs="0"/>
+            <xs:element ref="while" minOccurs="0"/>
+            <xs:element ref="wait" minOccurs="0"/>
+            <xs:element ref="domtree" minOccurs="0"/>
+            <xs:element ref="template" minOccurs="0"/>
+            <xs:element ref="generate" minOccurs="0"/>
+            <xs:element ref="iterate" minOccurs="0"/>
+            <xs:element ref="anon-check" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="defaultComponents" minOccurs="0"/>
+            <xs:element ref="database" minOccurs="0"/>
+            <xs:element ref="transcodingTask" minOccurs="0"/>
+            <xs:element ref="dbsanity" minOccurs="0"/>
+            <xs:element ref="jms-destination" minOccurs="0"/>
+            <xs:element ref="kafka-importer" minOccurs="0"/>
+            <xs:element ref="kafka-exporter" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:element name="comment" type="xs:string"/>
+
+
+    <xs:element name="import">
+        <xs:annotation>
+            <xs:documentation>Imports classes, domains, platforms or defaults</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="class" type="xs:string"/>
+            <xs:attribute name="domains" type="xs:string"/>
+            <xs:attribute name="platforms" type="xs:string"/>
+            <xs:attribute name="defaults" type="xs:boolean"/>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="echo">
+        <xs:annotation><xs:documentation>Prints a message to the console</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="message" type="xs:string"/>
+                    <xs:attribute name="type" type="echo-type-type" default="speech"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="echo-type-type">
         <xs:restriction base="xs:string">
-            <xs:pattern value="\{.*\}"/>
+            <xs:enumeration value="console"/>
+            <xs:enumeration value="speech"/>
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="errorhandler-type">
+
+    <xs:element name="beep">
+        <xs:annotation><xs:documentation>Emit a beep</xs:documentation></xs:annotation>
+    </xs:element>
+
+
+    <xs:element name="include">
+        <xs:annotation><xs:documentation>Includes a properties file</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="uri" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="setting"> <!-- TODO unify with property -->
+        <xs:annotation><xs:documentation>Defines a global property value</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="bean" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="idref" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string"/>
+            <xs:attribute name="value" type="xs:string"/>
+            <xs:attribute name="default" type="xs:string"/>
+            <xs:attribute name="ref" type="xs:string"/>
+            <xs:attribute name="source" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="bean">
+        <xs:annotation>
+            <xs:documentation>
+                Instantiates a JavaBean of the given class.
+                If the 'id' is set, the bean is put into the context with that name.
+                If the JavaBean itself has a property named 'id',
+                this one is set to the value specified here.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="bean-type">
+                    <xs:attribute name="id" type="xs:string" use="required"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="bean-type">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="class" type="xs:string"/>
+        <xs:attribute name="spec" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:element name="property">
+        <xs:annotation>
+            <xs:documentation>
+                Sets a JavaBean's property to the value specified as 'value' attribute
+                or to the object stored in the setting 'ref'.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="bean" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="idref" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string"/>
+            <xs:attribute name="value" type="xs:string"/>
+            <xs:attribute name="default" type="xs:string"/>
+            <xs:attribute name="ref" type="xs:string"/>
+            <xs:attribute name="source" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="idref">
+        <xs:annotation><xs:documentation>
+            References a JavaBean (of the 'id' specified by the 'bean' attribute)
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="bean" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="memstore">
+        <xs:annotation><xs:documentation>In-memory storage system</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="run-task">
+        <xs:annotation><xs:documentation>
+            Instantiates and executes a JavaBean that implements the Task interface.
+            Properties are handled like in the &lt;bean&gt; tag.
+            The task is executed 'count' times in a number of 'threads' parallel threads.
+            Invocations are executed in groups of size 'pageSize'
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="bean-type">
+                    <xs:attributeGroup ref="execution-attrs"/>
+                    <xs:attribute name="pager" type="xs:string"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="execute" type="execute-type">
+        <xs:annotation><xs:documentation>Executes a script, e.g. SQL</xs:documentation></xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="execute-type">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="uri" type="xs:string"/>
+                <xs:attribute name="encoding" type="xs:string"/>
+                <xs:attribute name="target" type="xs:string"/>
+                <xs:attribute name="separator" type="xs:string"/>
+                <xs:attribute name="type" type="xs:string"/>
+                <xs:attribute name="shell" type="xs:string"/>
+                <xs:attribute name="onError" type="errorhandler-type"/>
+                <xs:attribute name="optimize" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:element name="evaluate">
+        <xs:annotation><xs:documentation>evaluates a script, e.g. SQL</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="execute-type">
+                    <xs:attribute name="id" type="xs:string"/>
+                    <xs:attribute name="assert" type="xs:string"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="error">
+        <xs:annotation><xs:documentation>
+            Finishes Benerator execution with an error message and, if specified, an error code.
+            The 'exitCode' is returned to the calling process as process exit code.
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="errorId" type="xs:string"/>
+                    <xs:attribute name="exitCode" type="xs:int"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="if">
+        <xs:annotation><xs:documentation>Evaluates the 'test' expression.
+            If it returns true, then the &lt;them&gt; element is executed,
+            otherwise the &lt;else&gt; element.</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="block-statement">
+                    <xs:sequence>
+                        <xs:element ref="then" minOccurs="0" maxOccurs="1"/>
+                        <xs:element ref="else" minOccurs="0" maxOccurs="1"/>
+                    </xs:sequence>
+                    <xs:attribute name="test" type="xs:string"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="then" type="block-statement"/>
+
+    <xs:element name="else" type="block-statement"/>
+
+    <xs:element name="while">
+        <xs:annotation><xs:documentation>
+            Runs the contained elements in a loop as long as the 'test' expression resolves to true.
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="block-statement">
+                    <xs:attribute name="test" type="xs:string"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="wait">
+        <xs:annotation>
+            <xs:documentation>
+                Waits for either a fixed 'duration' or a random one with the distribution characteristics
+                specified by 'min', 'max', granularity' and 'distribution'.
+                Time is measured in milliseconds.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="duration" type="xs:string"/>
+            <xs:attribute name="min" type="xs:string"/>
+            <xs:attribute name="max" type="xs:string"/>
+            <xs:attribute name="granularity" type="xs:string"/>
+            <xs:attribute name="distribution" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="domtree">
+        <xs:annotation><xs:documentation>Creates a DOM Tree</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="inputUri" type="xs:string" use="required"/>
+            <xs:attribute name="outputUri" type="xs:string"/>
+            <xs:attribute name="namespaceAware" type="scriptable-boolean"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="template">
+        <!-- TODO keep this? If yes then document it! -->
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="comment" minOccurs="0"/>
+                <xs:element ref="id" minOccurs="0"/>
+                <xs:element ref="compositeId" minOccurs="0"/>
+                <xs:element ref="attribute" minOccurs="0"/>
+                <xs:element ref="reference" minOccurs="0"/>
+                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="variable" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string"/>
+            <xs:attribute name="type" type="data-type"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- start of elements related to <generate> and <iterate> - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <xs:element name="generate">
+        <xs:annotation><xs:documentation>
+            Generates entities. <!-- TODO complete doc -->
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="comment" minOccurs="0"/>
+                <xs:element ref="value" minOccurs="0"/>
+                <xs:element ref="id" minOccurs="0"/>
+                <xs:element ref="compositeId" minOccurs="0"/>
+                <xs:element ref="attribute" minOccurs="0"/>
+                <xs:element ref="reference" minOccurs="0"/>
+                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="variable" minOccurs="0"/>
+                <xs:element ref="consumer" minOccurs="0"/>
+                <xs:element ref="generate" minOccurs="0"/>
+                <xs:element ref="iterate" minOccurs="0"/>
+                <xs:element ref="execute" minOccurs="0"/>
+                <xs:element ref="wait" minOccurs="0"/>
+                <xs:element ref="if" minOccurs="0"/>
+                <xs:element ref="while" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="generator-attrs"/>
+            <xs:attribute name="minCount" type="scriptable-long"/>
+            <xs:attribute name="maxCount" type="scriptable-long"/>
+            <xs:attribute name="countDistribution" type="xs:string"/>
+            <xs:attributeGroup ref="execution-attrs"/>
+            <xs:attribute name="template" type="xs:string"/>
+            <xs:attribute name="consumer" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="iterate">
+        <xs:annotation><xs:documentation>
+            Iterates entities from a 'source'.
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="echo" minOccurs="0"/>
+                <xs:element ref="if" minOccurs="0"/>
+                <xs:element ref="comment" minOccurs="0"/>
+                <xs:element ref="id" minOccurs="0"/>
+                <xs:element ref="attribute" minOccurs="0"/>
+                <xs:element ref="reference" minOccurs="0"/>
+                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="variable" minOccurs="0"/>
+                <xs:element ref="consumer" minOccurs="0"/>
+                <xs:element ref="generate" minOccurs="0"/>
+                <xs:element ref="iterate" minOccurs="0"/>
+                <xs:element ref="execute" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="iterator-attrs"/>
+            <xs:attribute name="threads" type="xs:string"/>
+            <xs:attribute name="template" type="xs:string"/>
+            <xs:attribute name="consumer" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:attributeGroup name="execution-attrs">
+        <xs:attribute name="count" type="count-type"/>
+        <xs:attribute name="threads" type="scriptable-positive-int"/>
+        <xs:attribute name="pageSize" type="xs:string"/>
+        <xs:attribute name="stats" type="xs:string"/>
+        <xs:attribute name="onError" type="errorhandler-type"/>
+    </xs:attributeGroup>
+
+    <xs:element name="variable">
+        <xs:annotation><xs:documentation>
+            Defines a variable that is recreated by a generator on each entity creation
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="component-generator-attrs"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="value"> <!-- TODO what's this? -->
+        <xs:complexType>
+            <xs:attributeGroup ref="component-generator-attrs"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="attribute">
+        <xs:annotation><xs:documentation>
+            Defines a simple-type component of an entity.
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="component-generator-attrs"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="part">
+        <xs:annotation><xs:documentation>
+            Defines a complex-type component of an entity (sub entity).
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:choice>
+                <xs:element ref="attribute"/>
+                <xs:element ref="part"/>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attributeGroup ref="component-generator-attrs"/>
+            <xs:attribute name="minCount" type="scriptable-long"/>
+            <xs:attribute name="maxCount" type="scriptable-long"/>
+            <xs:attribute name="countDistribution" type="xs:string"/>
+            <xs:attribute name="container">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="list"/>
+                        <xs:enumeration value="set"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="id">
+        <xs:annotation><xs:documentation>
+            Defines a simple-type component of an entity which is a unique key.
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="component-generator-attrs"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="compositeId">
+        <xs:annotation><xs:documentation>
+            Defines a combination of simple-type components of an entity which forms a unique key.
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="compositeReference" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="reference">
+        <xs:annotation><xs:documentation>
+            Defines a simple-type component of an entity which refers the unique key of another entity.
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:attributeGroup ref="reference-generator-attrs"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="compositeReference">
+        <xs:annotation><xs:documentation>
+            Defines a combination of simple-type components of an entity
+            which refer to a composite unique key of another entity.
+        </xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="compositeReference" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:attributeGroup name="reference-generator-attrs">
+        <xs:attributeGroup ref="component-generator-attrs"/>
+        <xs:attribute name="targetType" type="xs:string"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="component-generator-attrs">
+        <xs:attributeGroup ref="simple-type-generator-attrs"/>
+        <xs:attributeGroup ref="iterator-only-attrs"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="simple-type-generator-attrs">
+        <xs:attributeGroup ref="generator-attrs"/>
+
+        <xs:attribute name="condition" type="xs:string"/>
+        <xs:attribute name="uniqueKey" type="xs:string"/>
+
+        <xs:attribute name="nullable" type="xs:string"/>
+        <xs:attribute name="mode" type="xs:string"/>
+
+        <!-- boolean generator setup -->
+        <xs:attribute name="trueQuota" type="xs:string"/>
+
+        <!-- number generator setup -->
+        <xs:attribute name="min" type="xs:string"/>
+        <xs:attribute name="minInclusive" type="xs:string"/>
+        <xs:attribute name="max" type="xs:string"/>
+        <xs:attribute name="maxInclusive" type="xs:string"/>
+        <xs:attribute name="granularity" type="xs:string"/>
+
+        <!-- String generator setup -->
+        <xs:attribute name="pattern" type="xs:string"/>
+        <xs:attribute name="script" type="xs:string"/>
+        <xs:attribute name="minLength" type="xs:string"/>
+        <xs:attribute name="maxLength" type="xs:string"/>
+
+        <!-- Sample-based generator setup -->
+        <xs:attribute name="constant" type="xs:string"/>
+        <xs:attribute name="values" type="xs:string"/>
+
+        <xs:attribute name="map" type="xs:string"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="generator-attrs">
+        <xs:attributeGroup ref="common-creator-attrs"/>
+        <xs:attribute name="generator" type="xs:string"/>
+        <xs:attribute name="validator" type="xs:string"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="iterator-attrs">
+        <xs:attributeGroup ref="common-creator-attrs"/>
+        <xs:attributeGroup ref="iterator-only-attrs"/>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="iterator-only-attrs">
+        <xs:attribute name="source" type="xs:string" use="required"/>
+        <xs:attribute name="sourceScripted" type="xs:boolean"/>
+        <xs:attribute name="separator" type="xs:string"/>
+        <xs:attribute name="format" type="format-type"/>
+        <xs:attribute name="rowBased" type="xs:boolean"/>
+        <xs:attribute name="emptyMarker" type="xs:string"/>
+        <xs:attribute name="encoding" type="xs:string"/>
+        <xs:attribute name="segment" type="xs:string"/>
+        <xs:attribute name="selector" type="xs:string"/>
+        <xs:attribute name="subSelector" type="xs:string"/>
+        <xs:attribute name="dataset" type="xs:string"/>
+        <xs:attribute name="nesting" type="xs:string"/>
+        <xs:attribute name="locale" type="xs:string"/>
+        <xs:attribute name="filter" type="script-expression-type">
+            <xs:annotation>
+                <xs:documentation xml:lang="en">Filters data import with a script expression.</xs:documentation>
+                <xs:appinfo>
+                    <edition>EE</edition>
+                    <since>2.0.0</since>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="common-creator-attrs">
+        <!-- elementary definitions -->
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="type" type="data-type"/>
+        <xs:attribute name="scope" type="xs:string"/>
+
+        <!-- wrappers -->
+        <xs:attribute name="converter" type="xs:string"/>
+        <xs:attribute name="nullQuota" type="scriptable-double"/>
+        <xs:attribute name="unique" type="xs:string"/>
+        <xs:attribute name="distribution" type="xs:string"/>
+        <xs:attribute name="cyclic" type="scriptable-boolean"/>
+        <xs:attribute name="offset" type="xs:string"/>
+
+        <!-- sensor -->
+        <xs:attribute name="sensor" type="xs:string"/>
+    </xs:attributeGroup>
+
+    <xs:simpleType name="format-type">
+        <xs:annotation>
+            <xs:documentation>
+                Flag to apply to a data source, indicating whether imported data
+                shall be imported as formatted string (formatted) or as raw data objects (raw).
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="formatted"/>
+            <xs:enumeration value="raw"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="count-type">
         <xs:union>
             <xs:simpleType>
+                <xs:restriction base="positiveLong"/>
+            </xs:simpleType>
+            <xs:simpleType>
                 <xs:restriction base="xs:string">
-                    <xs:enumeration value="fatal"/>
-                    <xs:enumeration value="error"/>
-                    <xs:enumeration value="warn"/>
-                    <xs:enumeration value="info"/>
-                    <xs:enumeration value="debug"/>
-                    <xs:enumeration value="trace"/>
-                    <xs:enumeration value="ignore"/>
+                    <xs:enumeration value="infinite"/>
                 </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>
@@ -36,79 +627,83 @@
         </xs:union>
     </xs:simpleType>
 
-
-    <!-- The document root. -->
-    <xs:element name="setup">
+    <!-- Declares a JavaBean to be used as consumer, either by referencing an object from the context (ref)
+         or by instantiating a JavaBean like with the &lt;bean&gt; tag. -->
+    <xs:element name="consumer">
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="block-statement">
-                    <xs:attribute name="defaultScript" type="xs:string"/>
-                    <xs:attribute name="defaultNull" type="xs:boolean"/>
-                    <xs:attribute name="defaultEncoding" type="xs:string"/>
-                    <xs:attribute name="defaultLineSeparator" type="xs:string"/>
-                    <xs:attribute name="defaultTimeZone" type="xs:string"/>
-                    <xs:attribute name="defaultSourceScripted" type="xs:boolean"/>
-                    <xs:attribute name="defaultLocale" type="xs:string"/>
-                    <xs:attribute name="defaultDataset" type="xs:string"/>
-                    <xs:attribute name="defaultPageSize" type="xs:long"/>
-                    <xs:attribute name="defaultSeparator" type="xs:string"/>
-                    <xs:attribute name="defaultOneToOne" type="xs:boolean"/>
-                    <xs:attribute name="defaultErrorHandler" type="errorhandler-type"/>
-                    <xs:attribute name="defaultImports" type="xs:boolean"/>
-                    <xs:attribute name="maxCount" type="xs:string"/>
-                    <xs:attribute name="generatorFactory" type="xs:string"/>
-                    <xs:attribute name="acceptUnknownSimpleTypes" type="xs:string"/>
+                <xs:extension base="bean-type">
+                    <xs:attribute name="ref" type="xs:string"/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="block-statement">
-        <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="import" minOccurs="0"/>
-            <xs:element ref="template" minOccurs="0"/>
-            <xs:element ref="comment" minOccurs="0"/>
-            <xs:element ref="include" minOccurs="0"/>
-            <xs:element ref="setting" minOccurs="0"/>
-            <xs:element ref="database" minOccurs="0"/>
-            <xs:element ref="memstore" minOccurs="0"/>
-            <xs:element ref="jms-destination" minOccurs="0"/>
-            <xs:element ref="kafka-importer" minOccurs="0"/>
-            <xs:element ref="kafka-exporter" minOccurs="0"/>
-            <xs:element ref="domtree" minOccurs="0"/>
-            <xs:element ref="bean" minOccurs="0"/>
-            <xs:element ref="defaultComponents" minOccurs="0"/>
-            <xs:element ref="generate" minOccurs="0"/>
-            <xs:element ref="iterate" minOccurs="0"/>
-            <xs:element ref="run-task" minOccurs="0"/>
-            <xs:element ref="execute" minOccurs="0"/>
-            <xs:element ref="evaluate" minOccurs="0"/>
-            <xs:element ref="echo" minOccurs="0"/>
-            <xs:element ref="error" minOccurs="0"/>
-            <xs:element ref="if" minOccurs="0"/>
-            <xs:element ref="while" minOccurs="0"/>
-            <xs:element ref="wait" minOccurs="0"/>
-            <xs:element ref="beep" minOccurs="0"/>
-            <xs:element ref="dbsanity" minOccurs="0"/>
-            <xs:element ref="anon-check" minOccurs="0" maxOccurs="1"/>
-        </xs:sequence>
-    </xs:complexType>
+    <!-- end of elements related to <generate> and <iterate> - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 
-    <xs:element name="comment" type="xs:string"/>
-
-    <!-- Imports classes. -->
-    <xs:element name="import">
+    <xs:element name="defaultComponents">
+        <xs:annotation><xs:documentation>
+            Defines default generation configurations for field names that occur in different data types.
+            Popular examples: 'createdAt', 'createdBy'.
+        </xs:documentation></xs:annotation>
         <xs:complexType>
-            <xs:attribute name="class" type="xs:string"/>
-            <xs:attribute name="domains" type="xs:string"/>
-            <xs:attribute name="platforms" type="xs:string"/>
-            <xs:attribute name="defaults" type="xs:string"/>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="id" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <!-- Transcoding features. -->
+    <xs:element name="anon-check">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">Attributes for which to verify anonymization.</xs:documentation>
+            <xs:appinfo>
+                <edition>EE</edition>
+                <since>2.0.0</since>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string"/>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- connects to a database -->
+    <xs:element name="database">
+        <xs:annotation><xs:documentation>Relational database</xs:documentation></xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="environment" type="xs:string"/>
+            <xs:attribute name="system" type="xs:string"/>
+            <xs:attribute name="url" type="xs:string"/>
+            <xs:attribute name="driver" type="xs:string"/>
+            <xs:attribute name="user" type="xs:string"/>
+            <xs:attribute name="password" type="xs:string"/>
+            <xs:attribute name="catalog" type="xs:string"/>
+            <xs:attribute name="schema" type="xs:string"/>
+            <xs:attribute name="tableFilter" type="xs:string"/>
+            <xs:attribute name="quoteTableNames" type="xs:boolean"/>
+            <xs:attribute name="includeTables" type="xs:string"/>
+            <xs:attribute name="excludeTables" type="xs:string"/>
+            <xs:attribute name="batch" type="scriptable-boolean"/>
+            <xs:attribute name="fetchSize" type="scriptable-positive-int"/>
+            <xs:attribute name="readOnly" type="xs:boolean"/>
+            <xs:attribute name="lazy" type="scriptable-boolean"/>
+            <xs:attribute name="metaCache" type="scriptable-boolean"/>
+            <xs:attribute name="acceptUnknownColumnTypes" type="scriptable-boolean"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Transcoding features -->
     <xs:element name="transcodingTask">
+        <xs:annotation><xs:documentation>
+            Transcodes rows from one database to another
+        </xs:documentation></xs:annotation>
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="transcode" minOccurs="0" maxOccurs="unbounded"/>
@@ -138,80 +733,10 @@
         </xs:complexType>
     </xs:element>
 
-    <!-- Includes a properties file. -->
-    <xs:element name="include">
-        <xs:complexType>
-            <xs:attribute name="uri" type="xs:string" use="required"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="while">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="block-statement">
-                    <xs:attribute name="test" type="xs:string"/>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="if">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="block-statement">
-                    <xs:sequence>
-                        <xs:element ref="then" minOccurs="0" maxOccurs="1"/>
-                        <xs:element ref="else" minOccurs="0" maxOccurs="1"/>
-                    </xs:sequence>
-                    <xs:attribute name="test" type="xs:string"/>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="then" type="block-statement"/>
-
-    <xs:element name="else" type="block-statement"/>
-
-    <!-- Outputs a message to the console. -->
-    <xs:element name="echo">
-        <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:string">
-                    <xs:attribute name="message" type="xs:string"/>
-                    <xs:attribute name="type" type="xs:string"/>
-                </xs:extension>
-            </xs:simpleContent>
-        </xs:complexType>
-    </xs:element>
-
-    <!-- Outputs a message to the console. -->
-    <xs:element name="error">
-        <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:string">
-                    <xs:attribute name="errorId" type="xs:string"/>
-                    <xs:attribute name="exitCode" type="xs:int"/>
-                </xs:extension>
-            </xs:simpleContent>
-        </xs:complexType>
-    </xs:element>
-
-    <!-- Waits for a configurable number of milliseconds. -->
-    <xs:element name="wait">
-        <xs:complexType>
-            <xs:attribute name="duration" type="xs:string"/>
-            <xs:attribute name="min" type="xs:string"/>
-            <xs:attribute name="max" type="xs:string"/>
-            <xs:attribute name="granularity" type="xs:string"/>
-            <xs:attribute name="distribution" type="xs:string"/>
-        </xs:complexType>
-    </xs:element>
-
-    <!-- Emit a beep. -->
-    <xs:element name="beep"/>
-
     <xs:element name="dbsanity">
+        <xs:annotation><xs:documentation>
+            Call DB Sanity for verification of data in a relational database
+        </xs:documentation></xs:annotation>
         <xs:complexType>
             <xs:attribute name="environment" type="xs:string" use="required"/>
             <xs:attribute name="system" type="xs:string" use="required"/>
@@ -255,67 +780,14 @@
         </xs:union>
     </xs:simpleType>
 
-    <!-- Instantiates a JavaBean of the given class.
-         If the 'id' is set, the bean is put into the context with that name.
-         If the JavaBean itself has a property named 'id', this one is set to the value specified here. -->
-    <xs:element name="bean">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="bean-type">
-                    <xs:attribute name="id" type="xs:string" use="required"/>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:complexType name="bean-type">
-        <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute name="class" type="xs:string"/>
-        <xs:attribute name="spec" type="xs:string"/>
-    </xs:complexType>
-
-    <xs:element name="memstore">
-        <xs:complexType>
-            <xs:attribute name="id" type="xs:string" use="required"/>
-        </xs:complexType>
-    </xs:element>
-
-    <!-- connects to a database -->
-    <xs:element name="database">
-        <xs:complexType>
-            <xs:attribute name="id" type="xs:string" use="required"/>
-            <xs:attribute name="environment" type="xs:string"/>
-            <xs:attribute name="system" type="xs:string"/>
-            <xs:attribute name="url" type="xs:string"/>
-            <xs:attribute name="driver" type="xs:string"/>
-            <xs:attribute name="user" type="xs:string"/>
-            <xs:attribute name="password" type="xs:string"/>
-            <xs:attribute name="catalog" type="xs:string"/>
-            <xs:attribute name="schema" type="xs:string"/>
-            <xs:attribute name="tableFilter" type="xs:string"/>
-            <xs:attribute name="quoteTableNames" type="xs:boolean"/>
-            <xs:attribute name="includeTables" type="xs:string"/>
-            <xs:attribute name="excludeTables" type="xs:string"/>
-            <xs:attribute name="batch" type="scriptable-boolean"/>
-            <xs:attribute name="fetchSize" type="scriptable-positive-int"/>
-            <xs:attribute name="readOnly" type="xs:boolean"/>
-            <xs:attribute name="lazy" type="scriptable-boolean"/>
-            <xs:attribute name="metaCache" type="scriptable-boolean"/>
-            <xs:attribute name="acceptUnknownColumnTypes" type="scriptable-boolean"/>
-        </xs:complexType>
-    </xs:element>
-
     <!-- connects to a JMS destination -->
     <xs:element name="jms-destination">
         <xs:annotation>
+            <xs:documentation xml:lang="en">A JMS queue or topic to read data from or write data to.</xs:documentation>
             <xs:appinfo>
                 <edition>EE</edition>
                 <since>2.0.0</since>
             </xs:appinfo>
-            <xs:documentation xml:lang="en">Defines a JMS queue or topic to read data from or write data to.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:attribute name="id" type="xs:string"/>
@@ -362,14 +834,16 @@
         </xs:union>
     </xs:simpleType>
 
+    <!-- Kafka-related elements - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
     <!-- imports from a Kafka topic -->
     <xs:element name="kafka-importer">
         <xs:annotation>
+            <xs:documentation xml:lang="en">Importer for entity data from a Kafka queue.</xs:documentation>
             <xs:appinfo>
                 <edition>EE</edition>
                 <since>2.0.0</since>
             </xs:appinfo>
-            <xs:documentation xml:lang="en">Imports data from a Kafka queue.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:attribute name="id" type="xs:string"/>
@@ -384,11 +858,11 @@
     <!-- exports to a Kafka topic -->
     <xs:element name="kafka-exporter">
         <xs:annotation>
+            <xs:documentation xml:lang="en">Exporter for entity data to a Kafka queue</xs:documentation>
             <xs:appinfo>
                 <edition>EE</edition>
                 <since>2.0.0</since>
             </xs:appinfo>
-            <xs:documentation xml:lang="en">Exports data to a Kafka queue</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:attribute name="id" type="xs:string"/>
@@ -603,33 +1077,16 @@
         </xs:union>
     </xs:simpleType>
 
+    <!-- end of Kafka-related elements - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-    <!-- creates a DOM Tree -->
-    <xs:element name="domtree">
-        <xs:complexType>
-            <xs:attribute name="id" type="xs:string" use="required"/>
-            <xs:attribute name="inputUri" type="xs:string" use="required"/>
-            <xs:attribute name="outputUri" type="xs:string"/>
-            <xs:attribute name="namespaceAware" type="xs:string"/>
-        </xs:complexType>
-    </xs:element>
 
-    <xs:complexType name="execute-type">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute name="uri" type="xs:string"/>
-                <xs:attribute name="encoding" type="xs:string"/>
-                <xs:attribute name="target" type="xs:string"/>
-                <xs:attribute name="separator" type="xs:string"/>
-                <xs:attribute name="type" type="xs:string"/>
-                <xs:attribute name="shell" type="xs:string"/>
-                <xs:attribute name="onError" type="errorhandler-type"/>
-                <xs:attribute name="optimize" type="xs:string"/>
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-
+    <!-- start of common data types  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <xs:simpleType name="data-type">
+        <xs:annotation>
+            <xs:documentation>
+                One of Benerator's predefined simple data types.
+            </xs:documentation>
+        </xs:annotation>
         <xs:union>
             <xs:simpleType>
                 <xs:restriction base="xs:string">
@@ -661,373 +1118,16 @@
         </xs:union>
     </xs:simpleType>
 
-
-    <!-- executes a script, e.g. SQL -->
-    <xs:element name="execute" type="execute-type"/>
-
-    <!-- evaluates a script, e.g. SQL -->
-    <xs:element name="evaluate">
-        <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="execute-type">
-                    <xs:attribute name="id" type="xs:string"/>
-                    <xs:attribute name="assert" type="xs:string"/>
-                </xs:extension>
-            </xs:simpleContent>
-        </xs:complexType>
-    </xs:element>
-
-    <!-- Declares a JavaBean to be used as consumer, either by referencing an object from the context (ref)
-         or by instantiating a JavaBean like with the &lt;bean&gt; tag. -->
-    <xs:element name="consumer">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="bean-type">
-                    <xs:attribute name="ref" type="xs:string"/>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="setting"> <!-- TODO unify with property -->
-        <xs:complexType>
-            <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="bean" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="idref" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-            <xs:attribute name="name" type="xs:string"/>
-            <xs:attribute name="value" type="xs:string"/>
-            <xs:attribute name="default" type="xs:string"/>
-            <xs:attribute name="ref" type="xs:string"/>
-            <xs:attribute name="source" type="xs:string"/>
-        </xs:complexType>
-    </xs:element>
-
-    <!-- Sets a JavaBean's property to the simple property specified as 'value' attribute
-         or to the object stored in the context with the 'ref'. -->
-    <xs:element name="property">
-        <xs:complexType>
-            <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="bean" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="idref" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-            <xs:attribute name="name" type="xs:string"/>
-            <xs:attribute name="value" type="xs:string"/>
-            <xs:attribute name="default" type="xs:string"/>
-            <xs:attribute name="ref" type="xs:string"/>
-            <xs:attribute name="source" type="xs:string"/>
-        </xs:complexType>
-    </xs:element>
-
-    <!-- Represents a reference to a JavaBean (of the name specified by the 'bean' attribute) from the context. -->
-    <xs:element name="idref">
-        <xs:complexType>
-            <xs:attribute name="bean" type="xs:string"/>
-        </xs:complexType>
-    </xs:element>
-
-    <!-- Instantiates and executes a JavaBean that implements the Task interface.
-         Properties are handled like in the &lt;bean&gt; tag.
-         The task is executed 'count' times in a number of 'threads' parallel threads.
-         Invocations are executed in groups of size 'pageSize'. -->
-    <xs:element name="run-task">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="bean-type">
-                    <xs:attributeGroup ref="execution-attrs"/>
-                    <xs:attribute name="threads" type="scriptable-positive-int"/>
-                    <xs:attribute name="pager" type="xs:string"/>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="defaultComponents">
-        <xs:complexType>
-            <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="id" minOccurs="0" maxOccurs="1"/>
-                <xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="template"> <!-- TODO keep this? -->
-        <xs:complexType>
-            <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="comment" minOccurs="0"/>
-                <xs:element ref="id" minOccurs="0"/>
-                <xs:element ref="compositeId" minOccurs="0"/>
-                <xs:element ref="attribute" minOccurs="0"/>
-                <xs:element ref="reference" minOccurs="0"/>
-                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="variable" minOccurs="0"/>
-            </xs:sequence>
-            <xs:attribute name="name" type="xs:string"/>
-            <xs:attribute name="type" type="data-type"/>
-        </xs:complexType>
-    </xs:element>
-
-    <!-- Creates entities. If a 'count' is provided the corresponding number of entities is created.
-         If no count is provided, entities are created as long as each involved generator is available. -->
-    <xs:element name="generate">
-        <xs:complexType>
-            <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="comment" minOccurs="0"/>
-                <xs:element ref="value" minOccurs="0"/>
-                <xs:element ref="id" minOccurs="0"/>
-                <xs:element ref="compositeId" minOccurs="0"/>
-                <xs:element ref="attribute" minOccurs="0"/>
-                <xs:element ref="reference" minOccurs="0"/>
-                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="variable" minOccurs="0"/>
-                <xs:element ref="consumer" minOccurs="0"/>
-                <xs:element ref="generate" minOccurs="0"/>
-                <xs:element ref="iterate" minOccurs="0"/>
-                <xs:element ref="execute" minOccurs="0"/>
-                <xs:element ref="wait" minOccurs="0"/>
-                <xs:element ref="if" minOccurs="0"/>
-                <xs:element ref="while" minOccurs="0"/>
-            </xs:sequence>
-            <xs:attributeGroup ref="generator-attrs"/>
-            <xs:attribute name="minCount" type="scriptable-long"/>
-            <xs:attribute name="maxCount" type="scriptable-long"/>
-            <xs:attribute name="countDistribution" type="xs:string"/>
-            <xs:attributeGroup ref="execution-attrs"/>
-            <xs:attribute name="threads" type="xs:string"/>
-            <xs:attribute name="template" type="xs:string"/>
-            <xs:attribute name="consumer" type="xs:string"/>
-        </xs:complexType>
-    </xs:element>
-
-    <!-- Updates entities. -->
-    <xs:element name="iterate">
-        <xs:complexType>
-            <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="echo" minOccurs="0"/>
-                <xs:element ref="if" minOccurs="0"/>
-                <xs:element ref="comment" minOccurs="0"/>
-                <xs:element ref="id" minOccurs="0"/>
-                <xs:element ref="attribute" minOccurs="0"/>
-                <xs:element ref="reference" minOccurs="0"/>
-                <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="variable" minOccurs="0"/>
-                <xs:element ref="consumer" minOccurs="0"/>
-                <xs:element ref="generate" minOccurs="0"/>
-                <xs:element ref="iterate" minOccurs="0"/>
-                <xs:element ref="execute" minOccurs="0"/>
-            </xs:sequence>
-            <xs:attributeGroup ref="iterator-attrs"/>
-            <xs:attributeGroup ref="execution-attrs"/>
-            <xs:attribute name="threads" type="xs:string"/>
-            <xs:attribute name="template" type="xs:string"/>
-            <xs:attribute name="consumer" type="xs:string"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:attributeGroup name="execution-attrs">
-        <xs:attribute name="count" type="count-type"/>
-        <xs:attribute name="pageSize" type="xs:string"/>
-        <xs:attribute name="stats" type="xs:string"/>
-        <xs:attribute name="onError" type="errorhandler-type"/>
-    </xs:attributeGroup>
-
-    <!-- Defines a variable that is recreated by a generator on each entity creation -->
-    <xs:element name="variable">
-        <xs:complexType>
-            <xs:attributeGroup ref="component-generator-attrs"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="value">
-        <xs:complexType>
-            <xs:attributeGroup ref="component-generator-attrs"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="attribute">
-        <xs:complexType>
-            <xs:attributeGroup ref="component-generator-attrs"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="part">
-        <xs:complexType>
-            <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                <xs:choice>
-                <xs:element ref="attribute"/>
-                <xs:element ref="part"/>
-                </xs:choice>
-            </xs:sequence>
-            <xs:attributeGroup ref="component-generator-attrs"/>
-            <xs:attribute name="minCount" type="scriptable-long"/>
-            <xs:attribute name="maxCount" type="scriptable-long"/>
-            <xs:attribute name="countDistribution" type="xs:string"/>
-            <xs:attribute name="container">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="list"/>
-                        <xs:enumeration value="set"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
-        </xs:complexType>
-    </xs:element>
-
-    <!-- Defines an ID generator. -->
-    <xs:element name="id">
-        <xs:complexType>
-            <xs:attributeGroup ref="component-generator-attrs"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="compositeId">
-        <xs:complexType>
-            <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="compositeReference" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="reference">
-        <xs:complexType>
-            <xs:attributeGroup ref="reference-generator-attrs"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="compositeReference">
-        <xs:complexType>
-            <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="compositeReference" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:attributeGroup name="reference-generator-attrs">
-        <xs:attributeGroup ref="component-generator-attrs"/>
-        <xs:attribute name="targetType" type="xs:string"/>
-    </xs:attributeGroup>
-
-    <xs:attributeGroup name="component-generator-attrs">
-        <xs:attributeGroup ref="simple-type-generator-attrs"/>
-        <xs:attributeGroup ref="iterator-only-attrs"/>
-    </xs:attributeGroup>
-
-    <xs:attributeGroup name="simple-type-generator-attrs">
-        <xs:attributeGroup ref="generator-attrs"/>
-
-        <xs:attribute name="condition" type="xs:string"/>
-        <xs:attribute name="uniqueKey" type="xs:string"/>
-
-        <xs:attribute name="nullable" type="xs:string"/>
-        <xs:attribute name="mode" type="xs:string"/>
-
-        <!-- boolean generator setup -->
-        <xs:attribute name="trueQuota" type="xs:string"/>
-
-        <!-- number generator setup -->
-        <xs:attribute name="min" type="xs:string"/>
-        <xs:attribute name="minInclusive" type="xs:string"/>
-        <xs:attribute name="max" type="xs:string"/>
-        <xs:attribute name="maxInclusive" type="xs:string"/>
-        <xs:attribute name="granularity" type="xs:string"/>
-
-        <!-- String generator setup -->
-        <xs:attribute name="pattern" type="xs:string"/>
-        <xs:attribute name="script" type="xs:string"/>
-        <xs:attribute name="minLength" type="xs:string"/>
-        <xs:attribute name="maxLength" type="xs:string"/>
-
-        <!-- Sample-based generator setup -->
-        <xs:attribute name="constant" type="xs:string"/>
-        <xs:attribute name="values" type="xs:string"/>
-
-        <xs:attribute name="map" type="xs:string"/>
-
-    </xs:attributeGroup>
-
-    <xs:attributeGroup name="generator-attrs">
-        <xs:attributeGroup ref="common-creator-attrs"/>
-        <xs:attribute name="generator" type="xs:string"/>
-        <xs:attribute name="validator" type="xs:string"/>
-    </xs:attributeGroup>
-
-    <xs:attributeGroup name="iterator-attrs">
-        <xs:attributeGroup ref="common-creator-attrs"/>
-        <xs:attributeGroup ref="iterator-only-attrs"/>
-    </xs:attributeGroup>
-
-    <xs:attributeGroup name="iterator-only-attrs">
-        <xs:attribute name="source" type="xs:string"/>
-        <xs:attribute name="sourceScripted" type="xs:boolean"/>
-        <xs:attribute name="separator" type="xs:string"/>
-        <xs:attribute name="format" type="format-type"/>
-        <xs:attribute name="rowBased" type="xs:string"/>
-        <xs:attribute name="emptyMarker" type="xs:string"/>
-        <xs:attribute name="encoding" type="xs:string"/>
-        <xs:attribute name="segment" type="xs:string"/>
-        <xs:attribute name="selector" type="xs:string"/>
-        <xs:attribute name="subSelector" type="xs:string"/>
-        <xs:attribute name="dataset" type="xs:string"/>
-        <xs:attribute name="nesting" type="xs:string"/>
-        <xs:attribute name="locale" type="xs:string"/>
-        <xs:attribute name="filter" type="script-expression-type">
-            <xs:annotation>
-                <xs:appinfo>
-                    <edition>EE</edition>
-                    <since>2.0.0</since>
-                </xs:appinfo>
-                <xs:documentation xml:lang="en">Filters data import with a script expression.</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-    </xs:attributeGroup>
-
-    <xs:attributeGroup name="common-creator-attrs">
-        <!-- elementary definitions -->
-        <xs:attribute name="name" type="xs:string"/>
-        <xs:attribute name="type" type="data-type"/>
-        <xs:attribute name="scope" type="xs:string"/>
-
-        <!-- wrappers -->
-        <xs:attribute name="converter" type="xs:string"/>
-        <xs:attribute name="nullQuota" type="scriptable-double"/>
-        <xs:attribute name="unique" type="xs:string"/>
-        <xs:attribute name="distribution" type="xs:string"/>
-        <xs:attribute name="cyclic" type="scriptable-boolean"/>
-        <xs:attribute name="offset" type="xs:string"/>
-
-        <!-- sensor -->
-        <xs:attribute name="sensor" type="xs:string"/>
-    </xs:attributeGroup>
-
-    <xs:simpleType name="count-type">
-        <xs:union>
-            <xs:simpleType>
-                <xs:restriction base="positiveLong"/>
-            </xs:simpleType>
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="infinite"/>
-                </xs:restriction>
-            </xs:simpleType>
-            <xs:simpleType>
-                <xs:restriction base="script-expression-type"/>
-            </xs:simpleType>
-        </xs:union>
-    </xs:simpleType>
-
     <xs:simpleType name="scriptable-positive-int">
+        <xs:annotation>
+            <xs:documentation>
+                Value (like '12345') or script expression (like 'prototype.count')
+                which resolves to an integer greater or equal to 1.
+            </xs:documentation>
+        </xs:annotation>
         <xs:union>
             <xs:simpleType>
-                <xs:restriction base="xs:int"/>
+                <xs:restriction base="xs:positiveInteger"/>
             </xs:simpleType>
             <xs:simpleType>
                 <xs:restriction base="script-expression-type"/>
@@ -1036,6 +1136,11 @@
     </xs:simpleType>
 
     <xs:simpleType name="scriptable-long">
+        <xs:annotation>
+            <xs:documentation>
+                long value (like '12345') or script expression (like 'prototype.count') which resolves to a long.
+            </xs:documentation>
+        </xs:annotation>
         <xs:union>
             <xs:simpleType>
                 <xs:restriction base="xs:long"/>
@@ -1047,6 +1152,11 @@
     </xs:simpleType>
 
     <xs:simpleType name="scriptable-double">
+        <xs:annotation>
+            <xs:documentation>
+                double value (like '3.141') or script expression (like 'Math.PI') which resolves to a double.
+            </xs:documentation>
+        </xs:annotation>
         <xs:union>
             <xs:simpleType>
                 <xs:restriction base="xs:double"/>
@@ -1058,6 +1168,9 @@
     </xs:simpleType>
 
     <xs:simpleType name="scriptable-boolean">
+        <xs:annotation>
+            <xs:documentation>boolean value or script expression which resolves to a boolean.</xs:documentation>
+        </xs:annotation>
         <xs:union>
             <xs:simpleType>
                 <xs:restriction base="xs:boolean"/>
@@ -1068,38 +1181,55 @@
         </xs:union>
     </xs:simpleType>
 
-    <xs:simpleType name="format-type">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="formatted"/>
-            <xs:enumeration value="raw"/>
-        </xs:restriction>
-    </xs:simpleType>
-
     <xs:simpleType name="nonNegativeLong">
+        <xs:annotation><xs:documentation>64-bit long value greater or equals to 0.</xs:documentation></xs:annotation>
         <xs:restriction base="xs:long">
             <xs:minInclusive value="0"/>
         </xs:restriction>
     </xs:simpleType>
 
     <xs:simpleType name="positiveLong">
+        <xs:annotation><xs:documentation>64-bit long value greater or equals to 1.</xs:documentation></xs:annotation>
         <xs:restriction base="xs:long">
             <xs:minInclusive value="1"/>
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:element name="anon-check">
+    <xs:simpleType name="script-expression-type">
         <xs:annotation>
-            <xs:appinfo>
-                <edition>EE</edition>
-                <since>2.0.0</since>
-            </xs:appinfo>
-            <xs:documentation xml:lang="en">Columns for which to verify anonymization.</xs:documentation>
+            <xs:documentation>
+                Script expression in the form '{header:text}' of which an optional 'header' identifies the script lange
+                to use for the evaluation of 'text'. If no header is used (like 'text'), the text is evaluated in the
+                default script language.
+            </xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:string"/>
-            </xs:simpleContent>
-        </xs:complexType>
-    </xs:element>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\{.*\}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="errorhandler-type">
+        <xs:annotation><xs:documentation>
+            A handler to call when an error occurs in the related element.
+            Each instance logs the error message with a log level corresponding to the name.
+            The 'fatal' error-handler cancels execution additionally.
+        </xs:documentation></xs:annotation>
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="fatal"/>
+                    <xs:enumeration value="error"/>
+                    <xs:enumeration value="warn"/>
+                    <xs:enumeration value="info"/>
+                    <xs:enumeration value="debug"/>
+                    <xs:enumeration value="trace"/>
+                    <xs:enumeration value="ignore"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
 
 </xs:schema>
