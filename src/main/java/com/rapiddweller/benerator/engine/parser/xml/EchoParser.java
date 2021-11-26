@@ -42,15 +42,11 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 /**
  * Parses an &lt;echo&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:30:29
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class EchoParser extends AbstractBeneratorDescriptorParser {
 
-  /**
-   * Instantiates a new Echo parser.
-   */
   public EchoParser() {
     super(EL_ECHO, null, CollectionUtil.toSet(ATT_MESSAGE, ATT_TYPE));
   }

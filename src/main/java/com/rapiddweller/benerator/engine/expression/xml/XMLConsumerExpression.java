@@ -101,8 +101,8 @@ public class XMLConsumerExpression extends DynamicExpression<Consumer> {
       } else if (consumerElement.hasAttribute(ATT_CLASS) || consumerElement.hasAttribute(ATT_SPEC)) {
         beanSpec = BeanParser.resolveBeanExpression(consumerElement, beneratorContext);
       } else {
-        throw BeneratorExceptionFactory.getInstance().syntaxError(
-            "Can't handle " + XMLUtil.formatShort(consumerElement), null);
+        throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlElement(
+            "Can't handle this", consumerElement);
       }
       addConsumer(beanSpec, beneratorContext, consumerChain);
     }

@@ -43,6 +43,7 @@ import com.rapiddweller.common.Context;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.context.ContextAware;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.AlternativeGroupDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -361,8 +362,8 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
           IOUtil.close(beanStatement);
         }
       } else {
-        throw BeneratorExceptionFactory.getInstance().syntaxError("Document annotation type not supported: "
-            + child.getNodeName(), null);
+        throw ExceptionFactory.getInstance().syntaxErrorForXmlElement(
+            "Document annotation type not supported", child);
       }
     }
   }

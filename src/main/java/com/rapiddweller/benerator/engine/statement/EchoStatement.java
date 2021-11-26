@@ -33,10 +33,8 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 
 /**
- * Prints out a message to the console.<br/>
- * <br/>
+ * Prints out a message to the console.<br/><br/>
  * Created at 22.07.2009 07:13:28
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -45,22 +43,11 @@ public class EchoStatement implements Statement {
   private final Expression<String> messageEx;
   private final Expression<String> typeEx;
 
-  /**
-   * Instantiates a new Echo statement.
-   *
-   * @param messageEx the message ex
-   * @param typeEx    the type ex
-   */
   public EchoStatement(Expression<String> messageEx, Expression<String> typeEx) {
     this.messageEx = messageEx;
     this.typeEx = typeEx;
   }
 
-  /**
-   * Gets expression.
-   *
-   * @return the expression
-   */
   public Expression<?> getExpression() {
     return messageEx;
   }

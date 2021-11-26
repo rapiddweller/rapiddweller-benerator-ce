@@ -83,7 +83,11 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
   public DefaultBeneratorFactory(RandomProvider randomProvider, XMLModule xmlModule) {
     this.randomProvider = randomProvider;
     this.xmlModule = xmlModule;
-    ConverterManager.getInstance().registerConverterClass(String2DistributionConverter.class);
+    try {
+      ConverterManager.getInstance().registerConverterClass(String2DistributionConverter.class);
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed("rd-lib-common", e);
+    }
   }
 
   @Override

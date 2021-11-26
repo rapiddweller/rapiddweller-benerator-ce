@@ -65,8 +65,7 @@ public class City {
   private int population;
   private final WrapperProvider<String> swp = new WrapperProvider<>();
 
-  public City(State state, String name, String addition, String[] postalCodes,
-              String areaCode) {
+  public City(State state, String name, String addition, String[] postalCodes, String areaCode) {
     if (areaCode == null) {
       throw BeneratorExceptionFactory.getInstance().illegalArgument("Area Code is null for " + name);
     }

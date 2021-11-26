@@ -63,7 +63,6 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_SETUP;
 /**
  * {@link XMLElementParser} implementation for parsing a Benerator descriptor file's root XML element.<br/><br/>
  * Created: 14.12.2010 19:48:00
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
@@ -99,9 +98,6 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
     OPTIONAL_ATTRIBUTES.addAll(XML_ATTRIBUTES);
   }
 
-  /**
-   * Instantiates a new Setup parser.
-   */
   public SetupParser() {
     super(EL_SETUP, null, OPTIONAL_ATTRIBUTES);
   }

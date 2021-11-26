@@ -69,6 +69,8 @@ public class Country {
 
   private static final Logger logger = LoggerFactory.getLogger(Country.class);
 
+  public static final String COMPONENT_NAME = "Country";
+
   private static final String COUNTRY_CSV = "/com/rapiddweller/domain/address/country.csv";
   private static final RandomProvider RANDOM = BeneratorFactory.getInstance().getRandomProvider();
   private static final String DEFAULT_PHONE_CODE = "[2-9][0-9][0-9]";
@@ -272,7 +274,7 @@ public class Country {
         logger.debug("Parsed country {}", country);
       }
     } catch (Exception e) {
-      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed("Error processing Country definition file. ", e);
+      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed(COMPONENT_NAME, e);
     }
   }
 
