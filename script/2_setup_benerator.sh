@@ -15,14 +15,21 @@ echo "###################################################################"
 cd "$PWD" || exit
 mvn versions:set -DnewVersion="$ARTIFACT_VERSION"
 mvn clean install assembly:single -Dmaven.test.skip=true -Dmaven.javadoc.skip=true
-rm -rd ~/"$BENERATOR_NAME"
+rm -rdf ~/"$BENERATOR_NAME"
 tar -xvzf target/"$BENERATOR_NAME"-dist.tar.gz -C ~
 export BENERATOR_HOME=~/"$BENERATOR_NAME"
 export PATH=$PATH:~/"$BENERATOR_NAME"/bin
-chmod -R 777 ~/"$BENERATOR_NAME"/bin/
+chmod -R 777 $BENERATOR_HOME/bin/
 
 echo "###################################################################"
 echo "following version has been installed ..."
 echo "###################################################################"
 
 benerator --version
+
+echo "######################################################################"
+echo "to persist env variable in your bash / shell profile you need to write"
+echo "them into your .profile or .zshrc"
+echo "echo export BENERATOR_HOME=~/'$BENERATOR_NAME' > ~/.profile"
+echo "echo export PATH=$PATH:~/'$BENERATOR_NAME'/bin > ~/.profile"
+echo "######################################################################"
