@@ -32,10 +32,10 @@ import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.XMLElementParser;
 import com.rapiddweller.script.DatabeneScriptParser;
 import org.w3c.dom.Attr;
@@ -44,10 +44,8 @@ import org.w3c.dom.NamedNodeMap;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES;
@@ -65,6 +63,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_SOURCE_SCRIPTED;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_TIME_ZONE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_GENERATOR_FACTORY;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_GRANULARITY;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_MAX_COUNT;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_SETUP;
 
@@ -120,19 +119,20 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
     NamedNodeMap attrMap = element.getAttributes();
     // remove standard XML root attributes and verify that the remaining ones are legal
     Map<String, String> map = new HashMap<>(attrMap.getLength());
-    BeneratorContext test = new DefaultBeneratorContext(); // test object to verify correctness of setup
-    for (int i = 0; i < attrMap.getLength(); i++) {
-      Attr attr = (Attr) attrMap.item(i);
-      if (BENERATOR_PROPERTIES.contains(attr.getName())) {
-        try {
-          map(attr, test);
-          map.put(attr.getName(), attr.getValue());
-        } catch (Exception e) {
-          throw BeneratorExceptionFactory.getInstance().illegalXmlAttributeValue(null, e, attr);
+    try (BeneratorContext test = new DefaultBeneratorContext()) { // test object to verify correctness of setup
+      for (int i = 0; i < attrMap.getLength(); i++) {
+        Attr attr = (Attr) attrMap.item(i);
+        if (BENERATOR_PROPERTIES.contains(attr.getName())) {
+          try {
+            map(attr, test);
+            map.put(attr.getName(), attr.getValue());
+          } catch (Exception e) {
+            throw BeneratorExceptionFactory.getInstance().illegalXmlAttributeValue(null, e, attr);
+          }
+        } else if (!isStandardXmlRootAttribute(attr.getName())) {
+          throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlAttribute(
+              "Illegal attribute", element.getAttributeNode(attr.getName()));
         }
-      } else if (!isStandardXmlRootAttribute(attr.getName())) {
-        throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlAttribute(
-            "Illegal attribute", element.getAttributeNode(attr.getName()));
       }
     }
     // create root statement and configure its children
@@ -144,14 +144,16 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
     return rootStatement;
   }
 
-  /** Checks if a configuratzion setting can be applied to a BeneratorContext */
+  /** Checks if a configuration setting can be applied to a BeneratorContext */
   private void map(Attr attr, BeneratorContext test) {
     String name = attr.getName();
-    Object value = attr.getValue();
-    if ("generatorFactory".equals(name)) {
-      value = DatabeneScriptParser.parseBeanSpec(attr.getValue()).evaluate(test);
+    String valueString = attr.getValue();
+    Object valueObject = valueString;
+    if (ATT_GENERATOR_FACTORY.equals(name)) {
+      Assert.isFalse(StringUtil.isEmpty(valueString), ATT_GENERATOR_FACTORY + " is empty");
+      valueObject = DatabeneScriptParser.parseBeanSpec(valueString).evaluate(test);
     }
-    BeanUtil.setPropertyValue(test, name, value, true, true);
+    BeanUtil.setPropertyValue(test, name, valueObject, true, true);
   }
 
   private static boolean isStandardXmlRootAttribute(String key) {
