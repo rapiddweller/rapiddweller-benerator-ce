@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.engine;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
+import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.converter.ConverterManager;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -251,6 +252,19 @@ public class DemoIntegrationNoExtDBTest extends AbstractBeneratorIntegrationTest
     context.setContextUri("/demo/shop");
     BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-hsqlmem.ben.xml");
     Assert.assertEquals("/demo/shop", benCtx.getContextUri());
+  }
+
+
+  /**
+   * Shop script hsql mem AdvancedSQLEntityExporter.
+   */
+  @Test
+  public void shopScriptHSQLMemAdvSQLEntityExporter() {
+    context.setContextUri("/demo/shop");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-hsqlmem-adv-sql-exporter.ben.xml");
+    Assert.assertEquals("/demo/shop", benCtx.getContextUri());
+    Assert.assertNotNull(IOUtil.getContentOfURI("target/out.sql"));
+    Assert.assertNotNull(IOUtil.getContentOfURI("target/out2.sql"));
   }
 
   /**
