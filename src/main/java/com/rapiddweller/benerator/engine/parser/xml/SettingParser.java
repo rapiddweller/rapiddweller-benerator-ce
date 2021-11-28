@@ -68,7 +68,8 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
   }
 
   @Override
-  public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public Statement doParse(
+      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     String propertyName = element.getAttribute(ATT_NAME);
     if (element.hasAttribute(ATT_DEFAULT)) {
       return parseDefault(propertyName, element.getAttribute(ATT_DEFAULT));

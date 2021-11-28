@@ -57,7 +57,8 @@ public class DefaultComponentParser extends AbstractBeneratorDescriptorParser {
   }
 
   @Override
-  public XMLDefaultComponentsStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public XMLDefaultComponentsStatement doParse(
+      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     return new XMLDefaultComponentsStatement(element);
   }
 

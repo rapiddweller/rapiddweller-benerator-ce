@@ -29,16 +29,12 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ErrorStatement;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.script.Expression;
-import com.rapiddweller.script.expression.StringExpression;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_EXIT_CODE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ID;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ERROR;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableElementText;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
 /**
  * Parses Benerator's &lt;error&gt; descriptor XML element and maps it to an {@link ErrorStatement}.<br/><br/>
@@ -53,7 +49,7 @@ public class ErrorParser extends AbstractBeneratorDescriptorParser {
   }
 
   @Override
-  public ErrorStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public ErrorStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     String errorId = DescriptorParserUtil.getAttribute("id", element);
     String message = DescriptorParserUtil.getElementText(element);
     Integer exitCode = parseIntAttribute(ATT_EXIT_CODE, element).evaluate(null);

@@ -26,15 +26,23 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
+import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
+import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.XMLElementParser;
+import com.rapiddweller.script.DatabeneScriptParser;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -103,26 +111,47 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
   }
 
   @Override
-  public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
-    Map<String, String> attributes = XMLUtil.getAttributes(element);
+  public boolean supports(Element element, Element[] parentXmlPath, Statement[] parentComponentPath) {
+    return (supportsElementName(element.getNodeName()) && ArrayUtil.isEmpty(parentXmlPath));
+  }
+
+  @Override
+  public Statement doParse(Element element, Element[] parentXmlPath, Statement[] parentPath, BeneratorParseContext context) {
+    NamedNodeMap attrMap = element.getAttributes();
     // remove standard XML root attributes and verify that the remaining ones are legal
-    Iterator<Entry<String, String>> iterator = attributes.entrySet().iterator();
-    while (iterator.hasNext()) {
-      Entry<String, String> attribute = iterator.next();
-      if (BENERATOR_PROPERTIES.contains(attribute.getKey())) {
-        attribute.setValue(StringUtil.unescape(attribute.getValue()));
-      } else if (isStandardXmlRootAttribute(attribute.getKey())) {
-        iterator.remove();
-      } else {
-        throw BeneratorExceptionFactory.getInstance().configurationError("Not a supported attribute in <" + EL_SETUP + ">: " + attribute.getKey());
+    Map<String, String> map = new HashMap<>(attrMap.getLength());
+    BeneratorContext test = new DefaultBeneratorContext(); // test object to verify correctness of setup
+    for (int i = 0; i < attrMap.getLength(); i++) {
+      Attr attr = (Attr) attrMap.item(i);
+      if (BENERATOR_PROPERTIES.contains(attr.getName())) {
+        try {
+          map(attr, test);
+          map.put(attr.getName(), attr.getValue());
+        } catch (Exception e) {
+          throw BeneratorExceptionFactory.getInstance().illegalXmlAttributeValue(null, e, attr);
+        }
+      } else if (!isStandardXmlRootAttribute(attr.getName())) {
+        throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlAttribute(
+            "Illegal attribute", element.getAttributeNode(attr.getName()));
       }
     }
     // create root statement and configure its children
-    BeneratorRootStatement rootStatement = new BeneratorRootStatement(attributes);
-    Statement[] currentPath = context.createSubPath(parentPath, rootStatement);
-    List<Statement> subStatements = context.parseChildElementsOf(element, currentPath);
+    BeneratorRootStatement rootStatement = new BeneratorRootStatement(map);
+    Statement[] currentComponentPath = new Statement[] { rootStatement };
+    Element[] currentXmlPath = new Element[] { element };
+    List<Statement> subStatements = context.parseChildElementsOf(element, currentXmlPath, currentComponentPath);
     rootStatement.setSubStatements(subStatements);
     return rootStatement;
+  }
+
+  /** Checks if a configuratzion setting can be applied to a BeneratorContext */
+  private void map(Attr attr, BeneratorContext test) {
+    String name = attr.getName();
+    Object value = attr.getValue();
+    if ("generatorFactory".equals(name)) {
+      value = DatabeneScriptParser.parseBeanSpec(attr.getValue()).evaluate(test);
+    }
+    BeanUtil.setPropertyValue(test, name, value, true, true);
   }
 
   private static boolean isStandardXmlRootAttribute(String key) {

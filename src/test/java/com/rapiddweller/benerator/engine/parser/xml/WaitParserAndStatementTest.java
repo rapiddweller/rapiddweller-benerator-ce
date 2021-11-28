@@ -38,33 +38,26 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests {@link WaitParser} and {@link WaitStatement}.<br/><br/>
  * Created: 21.02.2010 08:04:48
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class WaitParserAndStatementTest {
 
-  /**
-   * Test constant duration.
-   */
   @Test
   public void testConstantDuration() {
     Element element = XMLUtil.parseStringAsElement("<wait duration='12'/>");
     BeneratorContext context = new DefaultBeneratorContext();
-    WaitStatement statement = (WaitStatement) new WaitParser().parse(element, null, null);
+    WaitStatement statement = (WaitStatement) new WaitParser().parse(element, null, null, null);
     assertEquals(12, statement.generateDuration(context));
     statement.execute(context);
   }
 
-  /**
-   * Test distributed duration.
-   */
   @Test
   public void testDistributedDuration() {
     Element element = XMLUtil.parseStringAsElement(
         "<wait min='11' max='25' granularity='2' distribution='step'/>");
     BeneratorContext context = new DefaultBeneratorContext();
-    WaitStatement statement = (WaitStatement) new WaitParser().parse(element, null, null);
+    WaitStatement statement = (WaitStatement) new WaitParser().parse(element, null, null, null);
     for (int i = 0; i < 5; i++) {
       assertEquals(11 + i * 2, statement.generateDuration(context));
     }

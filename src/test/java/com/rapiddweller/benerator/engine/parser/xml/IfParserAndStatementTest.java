@@ -98,13 +98,13 @@ public class IfParserAndStatementTest extends AbstractBeneratorIntegrationTest {
   @Test(expected = SyntaxError.class)
   public void testTwoThens() {
     Element element = XMLUtil.parseStringAsElement("<if test='2==3'><then/><then/></if>");
-    new IfParser().parse(element, null, null);
+    new IfParser().parse(element, null, null, null);
   }
 
   @Test(expected = SyntaxError.class)
   public void testTwoElses() {
     Element element = XMLUtil.parseStringAsElement("<if test='2==3'><then/><else/><else/></if>");
-    new IfParser().parse(element, null, null);
+    new IfParser().parse(element, null, null, null);
   }
 
 }

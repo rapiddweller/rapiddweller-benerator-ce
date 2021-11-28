@@ -35,21 +35,18 @@ import org.w3c.dom.Element;
 /**
  * Parses a &lt;comment&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:27:00
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class CommentParser extends AbstractBeneratorDescriptorParser {
 
-  /**
-   * Instantiates a new Comment parser.
-   */
   public CommentParser() {
     super(DescriptorConstants.EL_COMMENT, null, null);
   }
 
   @Override
-  public CommentStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public CommentStatement doParse(
+      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     return new CommentStatement(XMLUtil.getText(element).trim());
   }
 

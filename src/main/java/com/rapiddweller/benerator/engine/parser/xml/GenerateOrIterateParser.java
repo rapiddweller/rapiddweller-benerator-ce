@@ -205,13 +205,17 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
   }
 
   @Override
-  public boolean supports(Element element, Statement[] parentPath) {
-    String name = element.getNodeName();
-    return EL_GENERATE.equals(name) || EL_ITERATE.equals(name);
+  public boolean supportsElementName(String elementName) {
+    return (EL_GENERATE.equals(elementName) || EL_ITERATE.equals(elementName));
   }
 
   @Override
-  public Statement doParse(final Element element, final Statement[] parentPath,
+  public boolean supports(Element element, Element[] parentXmlPath, Statement[] parentPath) {
+    return supportsElementName(element.getNodeName());
+  }
+
+  @Override
+  public Statement doParse(final Element element, Element[] parentXmlPath, final Statement[] parentPath,
                            final BeneratorParseContext pContext) {
     final boolean looped = AbstractBeneratorDescriptorParser.containsLoop(parentPath);
     final boolean nested = AbstractBeneratorDescriptorParser.containsGeneratorStatement(parentPath);
@@ -219,7 +223,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
       @Override
       public Statement evaluate(Context context) {
         return parseGenerate(
-            element, parentPath, pContext, (BeneratorContext) context, !looped, nested);
+            element, parentXmlPath, parentPath, pContext, (BeneratorContext) context, !looped, nested);
       }
 
       @Override
@@ -231,7 +235,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
   }
 
   @SuppressWarnings("unchecked")
-  public GenerateOrIterateStatement parseGenerate(Element element, Statement[] parentPath,
+  public GenerateOrIterateStatement parseGenerate(Element element, Element[] parentXmlPath, Statement[] parentPath,
                                                   BeneratorParseContext parsingContext, BeneratorContext context, boolean infoLog, boolean nested) {
     // parse descriptor
     InstanceDescriptor descriptor = mapDescriptorElement(element, context);
@@ -262,7 +266,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
     // parse task and sub statements
     Statement[] statementPath = parsingContext.createSubPath(parentPath, statement);
 
-    GenerateAndConsumeTask task = parseTask(element, statementPath, parsingContext, descriptor, infoLog, context, childContext);
+    GenerateAndConsumeTask task = parseTask(element, parentXmlPath, statementPath, parsingContext, descriptor, infoLog, context, childContext);
     statement.setTask(task);
     return statement;
   }
@@ -278,7 +282,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   private GenerateAndConsumeTask parseTask(
-      Element element, Statement[] statementPath, BeneratorParseContext parseContext,
+      Element element, Element[] parentXmlPath, Statement[] statementPath, BeneratorParseContext parseContext,
       InstanceDescriptor descriptor, boolean infoLog, BeneratorContext context, BeneratorContext childContext) {
     // log
     if (infoLog) {
@@ -336,7 +340,7 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
         // parse and set up consumer definition
         interceptor.generationComplete(base, iterationMode, statements);
         completionReported = true;
-        Statement subStatement = parseContext.parseChildElement(child, statementPath);
+        Statement subStatement = parseContext.parseChildElement(child, parentXmlPath, statementPath);
         statements.add(subStatement);
       }
     }

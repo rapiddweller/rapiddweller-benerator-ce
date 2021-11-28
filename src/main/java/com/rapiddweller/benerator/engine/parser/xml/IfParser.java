@@ -61,7 +61,7 @@ public class IfParser extends AbstractBeneratorDescriptorParser {
   }
 
   @Override
-  public Statement doParse(Element ifElement, Statement[] parentPath, BeneratorParseContext context) {
+  public Statement doParse(Element ifElement, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     Expression<Boolean> condition = parseBooleanExpressionAttribute(ATT_TEST, ifElement);
     Element[] thenElements = XMLUtil.getChildElements(ifElement, false, "then");
     if (thenElements.length > 1) {
@@ -73,21 +73,21 @@ public class IfParser extends AbstractBeneratorDescriptorParser {
       throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("Multiple <else> elements", ifElement);
     }
     Element elseElement = (elseElements.length == 1 ? elseElements[0] : null);
-    List<Statement> thenStatements = null;
+    List<Statement> thenStatements;
     List<Statement> elseStatements = null;
     IfStatement ifStatement = new IfStatement(condition);
-    Statement[] ifPath = context.createSubPath(parentPath, ifStatement);
+    Statement[] ifPath = context.createSubPath(parentComponentPath, ifStatement);
     if (elseElement != null) {
       // if there is an 'else' element, there must be an 'if' element too
       if (thenElement == null) {
         throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("'else' without 'then'", elseElement);
       }
-      thenStatements = context.parseChildElementsOf(thenElement, ifPath);
-      elseStatements = context.parseChildElementsOf(elseElement, ifPath);
+      thenStatements = context.parseChildElementsOf(thenElement, parentXmlPath, ifPath);
+      elseStatements = context.parseChildElementsOf(elseElement, parentXmlPath, ifPath);
       // check that no elements conflict with 'then' and 'else'
       assertThenElseChildren(ifElement);
     } else {
-      thenStatements = context.parseChildElementsOf(Objects.requireNonNullElse(thenElement, ifElement), ifPath);
+      thenStatements = context.parseChildElementsOf(Objects.requireNonNullElse(thenElement, ifElement), parentXmlPath, ifPath);
     }
     ifStatement.setThenStatement(new SequentialStatement(thenStatements));
     ifStatement.setElseStatement(new SequentialStatement(elseStatements));

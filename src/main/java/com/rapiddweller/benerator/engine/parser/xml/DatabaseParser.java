@@ -32,7 +32,6 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.DefineDatabaseStatement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.exception.ExceptionFactory;
@@ -70,7 +69,6 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 /**
  * Parses a &lt;database&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:40:56
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -92,7 +90,8 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
   }
 
   @Override
-  public DefineDatabaseStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public DefineDatabaseStatement doParse(
+      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     // check preconditions
     assertAtLeastOneAttributeIsSet(element, ATT_ENVIRONMENT, ATT_DRIVER);
     assertAtLeastOneAttributeIsSet(element, ATT_ENVIRONMENT, ATT_URL);

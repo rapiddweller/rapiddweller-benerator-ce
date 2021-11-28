@@ -48,8 +48,8 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public abstract class AbstractTranscodeParser extends AbstractBeneratorDescriptorParser {
 
-  protected AbstractTranscodeParser(String elementName,
-                                 Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
+  protected AbstractTranscodeParser(
+      String elementName, Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
     super(elementName, requiredAttributes, optionalAttributes, supportedParentTypes);
   }
 

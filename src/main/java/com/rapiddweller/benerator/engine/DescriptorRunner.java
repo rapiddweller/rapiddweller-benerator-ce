@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.engine;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.consumer.FileExporter;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.sensor.Profiler;
 import com.rapiddweller.benerator.sensor.Profiling;
 import com.rapiddweller.common.ExceptionUtil;
@@ -36,6 +37,7 @@ import com.rapiddweller.common.HF;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.RoundedNumberFormat;
 import com.rapiddweller.common.converter.ConverterManager;
+import com.rapiddweller.common.file.FileResourceNotFoundException;
 import com.rapiddweller.common.time.ElapsedTimeFormatter;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.slf4j.LoggerFactory;
@@ -107,10 +109,15 @@ public class DescriptorRunner implements ResourceManager {
   }
 
   public BeneratorRootStatement parseDescriptorFile() {
-    Document document = XMLUtil.parse(uri);
+    Document document;
+    try {
+      document = XMLUtil.parse(uri);
+    } catch (FileResourceNotFoundException e) {
+      throw BeneratorExceptionFactory.getInstance().beneratorFileNotFound(uri);
+    }
     Element root = document.getDocumentElement();
     BeneratorParseContext parsingContext = this.factory.createParseContext(resourceManager);
-    BeneratorRootStatement statement = (BeneratorRootStatement) parsingContext.parseElement(root, null);
+    BeneratorRootStatement statement = (BeneratorRootStatement) parsingContext.parseElement(root, null,null);
     // prepare system
     generatedFiles = new ArrayList<>();
     context.setContextUri(IOUtil.getParentUri(uri));

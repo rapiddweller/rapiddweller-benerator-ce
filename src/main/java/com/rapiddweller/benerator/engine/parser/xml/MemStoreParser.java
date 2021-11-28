@@ -56,7 +56,7 @@ public class MemStoreParser extends AbstractBeneratorDescriptorParser {
   }
 
   @Override
-  public MemStoreStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public MemStoreStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     checkAttributeSupport(XMLUtil.getAttributes(element));
     try {
       String id = getAttribute(ATT_ID, element);

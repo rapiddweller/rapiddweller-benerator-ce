@@ -175,9 +175,10 @@ public class TranscodingTaskStatement extends SequentialStatement {
       IdentityParser parser = new IdentityParser();
       IdentityParseContext parseContext = new IdentityParseContext(identityProvider);
       Document idXml = XMLUtil.parse(IOUtil.getInputStreamForURI(idFile));
-      Object[] parentPath = new Object[0];
+      Element[] parentXmlPath = new Element[0];
+      Object[] parentComponentPath = new Object[0];
       for (Element child : XMLUtil.getChildElements(idXml.getDocumentElement())) {
-        parser.parse(child, parentPath, parseContext);
+        parser.parse(child, parentXmlPath, parentComponentPath, parseContext);
       }
     } catch (Exception e) {
       throw ExceptionFactory.getInstance().configurationError("Error setting up transcoding task", e);

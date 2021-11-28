@@ -57,18 +57,13 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 /**
  * Parses a &lt;transcode&gt; element.<br/><br/>
  * Created: 08.09.2010 16:13:13
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class TranscodeParser extends AbstractTranscodeParser {
 
-  private static final Set<String> MEMBER_ELEMENTS = CollectionUtil.toSet(
-      EL_ID, EL_ATTRIBUTE, EL_REFERENCE);
+  private static final Set<String> MEMBER_ELEMENTS = CollectionUtil.toSet(EL_ID, EL_ATTRIBUTE, EL_REFERENCE);
 
-  /**
-   * Instantiates a new Transcode parser.
-   */
   public TranscodeParser() {
     super(EL_TRANSCODE,
         CollectionUtil.toSet(ATT_TABLE),
@@ -77,9 +72,10 @@ public class TranscodeParser extends AbstractTranscodeParser {
   }
 
   @Override
-  public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public Statement doParse(
+      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     String table = getAttribute(ATT_TABLE, element);
-    TranscodingTaskStatement parent = (TranscodingTaskStatement) ArrayUtil.lastElementOf(parentPath);
+    TranscodingTaskStatement parent = (TranscodingTaskStatement) ArrayUtil.lastElementOf(parentComponentPath);
     Expression<AbstractDBSystem> sourceEx = parseSource(element, parent);
     Expression<String> selectorEx = parseSelector(element, parent);
     Expression<AbstractDBSystem> targetEx = parseTarget(element, parent);
@@ -87,11 +83,12 @@ public class TranscodeParser extends AbstractTranscodeParser {
     Expression<ErrorHandler> errorHandlerEx = parseOnErrorAttribute(element, table);
     TranscodeStatement result = new TranscodeStatement(new MutatingTypeExpression(element, getRequiredAttribute("table", element)),
         parent, sourceEx, selectorEx, targetEx, pageSizeEx, errorHandlerEx);
-    Statement[] currentPath = context.createSubPath(parentPath, result);
+    Element[] currentXmlPath = ArrayUtil.append(element, parentXmlPath);
+    Statement[] currentPath = context.createSubPath(parentComponentPath, result);
     for (Element child : XMLUtil.getChildElements(element)) {
       String childName = child.getNodeName();
       if (!MEMBER_ELEMENTS.contains(childName)) {
-        result.addSubStatement(context.parseChildElement(child, currentPath));
+        result.addSubStatement(context.parseChildElement(child, currentXmlPath, currentPath));
       }
       // The 'component' child elements (id, attribute, reference) are handled by the MutatingTypeExpression
     }
