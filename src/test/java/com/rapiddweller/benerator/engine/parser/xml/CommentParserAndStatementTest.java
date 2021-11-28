@@ -37,19 +37,16 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the {@link CommentParser} and the {@link CommentStatement}.<br/><br/>
  * Created: 19.02.2010 12:54:43
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class CommentParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test value.
-   */
   @Test
   public void testValue() {
     Element element = XMLUtil.parseStringAsElement("<comment>Hello</comment>");
-    CommentStatement statement = (CommentStatement) new CommentParser().parse(element, null, null);
+    CommentStatement statement = (CommentStatement) new CommentParser().parse(
+        element, null, null, null);
     statement.execute(context);
     assertEquals("Hello", statement.getComment());
   }

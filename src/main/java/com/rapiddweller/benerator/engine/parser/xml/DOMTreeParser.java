@@ -64,7 +64,8 @@ public class DOMTreeParser extends AbstractBeneratorDescriptorParser {
   }
 
   @Override
-  public DefineDOMTreeStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public DefineDOMTreeStatement doParse(
+      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     try {
       Expression<String> id = parseAttribute(ATT_ID, element);
       Expression<String> inputUri = parseScriptableStringAttribute(ATT_INPUT_URI, element);

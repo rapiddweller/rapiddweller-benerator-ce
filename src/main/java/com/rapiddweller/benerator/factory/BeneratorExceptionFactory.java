@@ -9,6 +9,7 @@ import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.file.FileResourceNotFoundException;
 import com.rapiddweller.task.Task;
 import com.rapiddweller.task.TaskUnavailableException;
+import org.w3c.dom.Attr;
 
 /**
  * Extends {@link ExceptionFactory} with Benerator-specific factory methods.<br/><br/>

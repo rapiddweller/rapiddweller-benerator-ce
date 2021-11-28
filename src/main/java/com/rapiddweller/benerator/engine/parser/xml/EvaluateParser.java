@@ -73,14 +73,18 @@ public class EvaluateParser extends AbstractBeneratorDescriptorParser {
   }
 
   @Override
-  public boolean supports(Element element, Statement[] parentPath) {
-    String name = element.getNodeName();
-    return DescriptorConstants.EL_EVALUATE.equals(name)
-        || DescriptorConstants.EL_EXECUTE.equals(name);
+  public boolean supportsElementName(String elementName) {
+    return DescriptorConstants.EL_EVALUATE.equals(elementName)
+        || DescriptorConstants.EL_EXECUTE.equals(elementName);
   }
 
   @Override
-  public EvaluateStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public boolean supports(Element element, Element[] parentXmlPath, Statement[] parentComponentPath) {
+    return supportsElementName(element.getNodeName());
+  }
+
+  @Override
+  public EvaluateStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentPath, BeneratorParseContext context) {
     boolean evaluate = DescriptorConstants.EL_EVALUATE.equals(element.getNodeName());
     if (evaluate) {
       assertAtLeastOneAttributeIsSet(element, ATT_ID, ATT_ASSERT);

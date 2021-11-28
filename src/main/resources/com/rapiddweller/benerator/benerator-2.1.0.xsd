@@ -15,7 +15,7 @@
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="block-statement">
-                    <xs:attribute name="maxCount" type="xs:long"/>
+                    <xs:attribute name="maxCount" type="nonNegativeLong"/>
                     <xs:attribute name="defaultScript" type="xs:string"/>
                     <xs:attribute name="defaultNull" type="xs:boolean" default="true"/>
                     <xs:attribute name="defaultEncoding" type="xs:string"/>

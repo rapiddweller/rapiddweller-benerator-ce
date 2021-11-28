@@ -86,10 +86,10 @@ public class BeneratorRootStatement extends SequentialStatement {
   protected void mapAttributesTo(BeneratorContext context) {
     for (Entry<String, String> attribute : attributes.entrySet()) {
       String key = attribute.getKey();
-      String value = attribute.getValue();
+      Object value = attribute.getValue();
       Object result;
       if ("generatorFactory".equals(key)) {
-        result = DatabeneScriptParser.parseBeanSpec(value).evaluate(context);
+        result = DatabeneScriptParser.parseBeanSpec(value.toString()).evaluate(context);
       } else {
         result = value;
       }

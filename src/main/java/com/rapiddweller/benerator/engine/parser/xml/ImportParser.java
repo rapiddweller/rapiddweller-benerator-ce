@@ -51,7 +51,6 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_IMPORT;
 /**
  * Parses an &lt;import&gt; element in a Benerator descriptor file.<br/><br/>
  * Created: 25.10.2009 00:53:06
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -60,15 +59,13 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
   private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
       ATT_CLASS, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS);
 
-  /**
-   * Instantiates a new Import parser.
-   */
   public ImportParser() {
     super(EL_IMPORT, null, OPTIONAL_ATTRIBUTES);
   }
 
   @Override
-  public ImportStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public ImportStatement doParse(
+      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     // check syntax
     assertAtLeastOneAttributeIsSet(element, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS, ATT_CLASS);
 

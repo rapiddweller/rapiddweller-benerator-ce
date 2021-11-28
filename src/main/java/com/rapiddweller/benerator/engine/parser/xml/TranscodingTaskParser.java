@@ -31,6 +31,7 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.TranscodingTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
+import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.platform.db.AbstractDBSystem;
@@ -49,15 +50,11 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 /**
  * Parses Benerator's &lt;transcode&gt; XML descriptor element.<br/><br/>
  * Created: 10.09.2010 18:14:53
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class TranscodingTaskParser extends AbstractTranscodeParser {
 
-  /**
-   * Instantiates a new Transcoding task parser.
-   */
   public TranscodingTaskParser() {
     super(EL_TRANSCODING_TASK,
         CollectionUtil.toSet(ATT_TARGET),
@@ -66,7 +63,7 @@ public class TranscodingTaskParser extends AbstractTranscodeParser {
   }
 
   @Override
-  public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext parsingContext) {
+  public Statement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext parsingContext) {
     Expression<ErrorHandler> errorHandlerExpression = parseOnErrorAttribute(element, "transcodingTask");
     TranscodingTaskStatement statement = new TranscodingTaskStatement(
         parseDefaultSource(element),
@@ -74,8 +71,9 @@ public class TranscodingTaskParser extends AbstractTranscodeParser {
         parseIdentity(element),
         parsePageSize(element),
         errorHandlerExpression);
-    Statement[] subPath = parsingContext.createSubPath(parentPath, statement);
-    statement.setSubStatements(parsingContext.parseChildElementsOf(element, subPath));
+    Element[] subXmlPath = ArrayUtil.append(element, parentXmlPath);
+    Statement[] subComponentPath = parsingContext.createSubPath(parentComponentPath, statement);
+    statement.setSubStatements(parsingContext.parseChildElementsOf(element, subXmlPath, subComponentPath));
     return statement;
   }
 

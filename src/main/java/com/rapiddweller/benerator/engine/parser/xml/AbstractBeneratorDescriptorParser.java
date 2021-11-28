@@ -88,11 +88,11 @@ public abstract class AbstractBeneratorDescriptorParser extends AbstractXMLEleme
   }
 
   @Override
-  public final Statement doParse(Element element, Statement[] parentPath, ParseContext<Statement> context) {
-    return doParse(element, parentPath, (BeneratorParseContext) context);
+  public final Statement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath, ParseContext<Statement> context) {
+    return doParse(element, parentXmlPath, parentComponentPath, (BeneratorParseContext) context);
   }
 
-  public abstract Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context);
+  public abstract Statement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context);
 
   protected static Expression<ErrorHandler> parseOnErrorAttribute(Element element, String id) {
     return new ErrorHandlerExpression(id, parseScriptableStringAttribute(ATT_ON_ERROR, element));

@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
+import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
@@ -44,38 +45,29 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 /**
  * Parses a 'while' element.<br/><br/>
  * Created: 19.02.2010 09:18:47
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class WhileParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Set<String> LEGAL_PARENTS = CollectionUtil.toSet(
-      EL_SETUP, EL_IF, EL_WHILE);
+  private static final Set<String> LEGAL_PARENTS = CollectionUtil.toSet(EL_SETUP, EL_IF, EL_WHILE);
 
-  /**
-   * Instantiates a new While parser.
-   */
   public WhileParser() {
     super(EL_WHILE, CollectionUtil.toSet(ATT_TEST), null);
   }
 
-  /**
-   * Supports boolean.
-   *
-   * @param elementName the element name
-   * @param parentName  the parent name
-   * @return the boolean
-   */
   public boolean supports(String elementName, String parentName) {
     return (EL_WHILE.equals(elementName) && LEGAL_PARENTS.contains(parentName));
   }
 
   @Override
-  public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public Statement doParse(
+      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     Expression<Boolean> condition = parseBooleanExpressionAttribute(ATT_TEST, element);
     WhileStatement whileStatement = new WhileStatement(condition);
-    List<Statement> subStatements = context.parseChildElementsOf(element, context.createSubPath(parentPath, whileStatement));
+    List<Statement> subStatements = context.parseChildElementsOf(element,
+        ArrayUtil.append(element, parentXmlPath),
+        context.createSubPath(parentComponentPath, whileStatement));
     whileStatement.setSubStatements(subStatements);
     return whileStatement;
   }

@@ -38,6 +38,7 @@ import com.rapiddweller.benerator.script.BeneratorScriptFactory;
 import com.rapiddweller.benerator.script.graaljs.GraalJsScriptFactory;
 import com.rapiddweller.benerator.script.graalpy.GraalPyScriptFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
+import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ErrorHandler;
@@ -335,6 +336,9 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
 
   @Override
   public void setMaxCount(Long maxCount) {
+    if (maxCount != null) {
+      Assert.notNegative(maxCount, "maxCount");
+    }
     this.maxCount = maxCount;
   }
 

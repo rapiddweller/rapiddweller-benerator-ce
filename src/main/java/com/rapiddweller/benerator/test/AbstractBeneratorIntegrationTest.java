@@ -42,8 +42,6 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.w3c.dom.Element;
 
-import java.io.IOException;
-
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -99,7 +97,7 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
   public Statement parse(String xml) {
     Element element = XMLUtil.parseStringAsElement(xml);
     BeneratorParseContext parsingContext = BeneratorFactory.getInstance().createParseContext(resourceManager);
-    return parsingContext.parseElement(element, null);
+    return parsingContext.parseElement(element, null, null);
   }
 
   public void assertMinGenerations(int expectedGenerations, Runnable task) {

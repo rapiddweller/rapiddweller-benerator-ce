@@ -142,7 +142,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
   }
 
   @Override
-  public BeanStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public BeanStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentPath, BeneratorParseContext context) {
     try {
       String id = element.getAttribute(ATT_ID);
       Expression<?> bean = parseBeanExpression(element);

@@ -47,7 +47,6 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE
 /**
  * Parses &lt;cascade ref="..."&gt; descriptors.<br/><br/>
  * Created: 18.04.2011 08:27:48
- *
  * @author Volker Bergmann
  * @since 0.6.6
  */
@@ -56,25 +55,22 @@ public class CascadeParser extends AbstractBeneratorDescriptorParser {
   private static final Set<String> MEMBER_ELEMENTS = CollectionUtil.toSet(
       EL_ID, EL_ATTRIBUTE, EL_REFERENCE);
 
-  /**
-   * Instantiates a new Cascade parser.
-   */
   public CascadeParser() {
     super(EL_CASCADE, CollectionUtil.toSet(ATT_REF), null,
         TranscodeStatement.class, CascadeStatement.class);
   }
 
   @Override
-  public Statement doParse(Element element, Statement[] parentPath,
-                           BeneratorParseContext context) {
-    CascadeParent parent = (CascadeParent) ArrayUtil.lastElementOf(parentPath);
+  public Statement doParse(
+      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
+    CascadeParent parent = (CascadeParent) ArrayUtil.lastElementOf(parentComponentPath);
     String ref = getRequiredAttribute("ref", element);
     CascadeStatement result = new CascadeStatement(ref, new MutatingTypeExpression(element, null), parent);
-    Statement[] currentPath = context.createSubPath(parentPath, result);
+    Statement[] currentPath = context.createSubPath(parentComponentPath, result);
     for (Element child : XMLUtil.getChildElements(element)) {
       String childName = child.getNodeName();
       if (!MEMBER_ELEMENTS.contains(childName)) {
-        result.addSubStatement(context.parseChildElement(child, currentPath));
+        result.addSubStatement(context.parseChildElement(child, parentXmlPath, currentPath));
       }
       // The 'component' child elements (id, attribute, reference) are handled by the MutatingTypeExpression
     }

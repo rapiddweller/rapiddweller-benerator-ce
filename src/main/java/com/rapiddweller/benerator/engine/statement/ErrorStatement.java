@@ -53,7 +53,7 @@ public class ErrorStatement implements Statement {
 
   @Override
   public boolean execute(BeneratorContext context) {
-    throw BeneratorExceptionFactory.getInstance().operationFailed(id, exitCode, message, null);
+    throw BeneratorExceptionFactory.getInstance().operationFailed(message, null, id, exitCode);
   }
 
 }

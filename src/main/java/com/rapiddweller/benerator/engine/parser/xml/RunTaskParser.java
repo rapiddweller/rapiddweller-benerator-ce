@@ -78,7 +78,8 @@ public class RunTaskParser extends AbstractBeneratorDescriptorParser {
 
   @Override
   @SuppressWarnings("unchecked")
-  public RunTaskStatement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public RunTaskStatement doParse(
+      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     try {
       Expression<Task> taskProvider = (Expression<Task>) BeanParser.parseBeanExpression(element);
       Expression<Long> count = parseLongAttribute(ATT_COUNT, element, 1);
@@ -87,7 +88,7 @@ public class RunTaskParser extends AbstractBeneratorDescriptorParser {
       Expression<PageListener> pager = parsePager(element);
       Expression<Boolean> stats = parseBooleanExpressionAttribute(ATT_STATS, element, false);
       Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_ID));
-      boolean infoLog = containsLoop(parentPath);
+      boolean infoLog = containsLoop(parentComponentPath);
       return new RunTaskStatement(taskProvider, count, pageSize, pager, threads,
           stats, errorHandler, infoLog);
     } catch (ConversionException e) {

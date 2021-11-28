@@ -52,21 +52,18 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 /**
  * Parses a 'wait' element.<br/><br/>
  * Created: 21.02.2010 08:07:59
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class WaitParser extends AbstractBeneratorDescriptorParser {
 
-  /**
-   * Instantiates a new Wait parser.
-   */
   public WaitParser() {
     super(EL_WAIT, null, CollectionUtil.toSet(ATT_DURATION, ATT_MIN, ATT_MAX, ATT_GRANULARITY, ATT_DISTRIBUTION));
   }
 
   @Override
-  public Statement doParse(Element element, Statement[] parentPath, BeneratorParseContext context) {
+  public Statement doParse(
+      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
 
     // check attribute combinations
     assertAtLeastOneAttributeIsSet(element, ATT_DURATION, ATT_MIN, ATT_MAX);
