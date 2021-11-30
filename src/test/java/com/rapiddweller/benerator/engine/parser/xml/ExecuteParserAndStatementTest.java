@@ -39,7 +39,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests the {@link EvaluateParser} with respect to the features used
+ * Tests the {@link AbstractEvaluateOrExecuteParser} with respect to the features used
  * in the &lt;execute&gt; element.<br/><br/>
  * Created: 30.10.2009 08:11:56
  * @author Volker Bergmann

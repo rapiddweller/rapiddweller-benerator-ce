@@ -34,11 +34,10 @@ import com.rapiddweller.benerator.engine.statement.RunTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.format.xml.AbstractXMLElementParser;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.ParseContext;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
-
-import java.util.Set;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGESIZE;
@@ -52,9 +51,9 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public abstract class AbstractBeneratorDescriptorParser extends AbstractXMLElementParser<Statement> {
 
-  protected AbstractBeneratorDescriptorParser(String elementName, Set<String> requiredAttributes,
-        Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
-    super(elementName, requiredAttributes, optionalAttributes, supportedParentTypes);
+  protected AbstractBeneratorDescriptorParser(
+      String elementName, AttrInfoSupport attrSupport, Class<?>... supportedParentTypes) {
+    super(elementName, attrSupport, supportedParentTypes);
   }
 
   public static boolean containsLoop(Statement[] parentPath) {

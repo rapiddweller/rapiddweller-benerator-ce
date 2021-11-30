@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.context.DefaultPageSizeExpression;
@@ -34,27 +35,16 @@ import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.RunTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.Task;
 import org.w3c.dom.Element;
 
-import java.util.Set;
-
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CLASS;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_COUNT;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ID;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGER;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGESIZE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SPEC;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_STATS;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_THREADS;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_RUN_TASK;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseLongAttribute;
@@ -67,12 +57,23 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class RunTaskParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Set<String> OPTIONAL_ATTRIBUTES =
-      CollectionUtil.toSet(ATT_ID, ATT_CLASS, ATT_SPEC, ATT_COUNT, ATT_PAGESIZE, ATT_THREADS, ATT_PAGER, ATT_STATS, ATT_ON_ERROR);
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_RUN_TASK_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_CLASS, false, BeneratorErrorIds.SYN_RUN_TASK_CLASS);
+    ATTR_INFO.add(ATT_SPEC, false, BeneratorErrorIds.SYN_RUN_TASK_SPEC);
+    ATTR_INFO.add(ATT_COUNT, false, BeneratorErrorIds.SYN_RUN_TASK_COUNT);
+    ATTR_INFO.add(ATT_PAGESIZE, false, BeneratorErrorIds.SYN_RUN_TASK_PAGE_SIZE);
+    ATTR_INFO.add(ATT_THREADS, false, BeneratorErrorIds.SYN_RUN_TASK_THREADS);
+    ATTR_INFO.add(ATT_PAGER, false, BeneratorErrorIds.SYN_RUN_TASK_PAGER);
+    ATTR_INFO.add(ATT_STATS, false, BeneratorErrorIds.SYN_RUN_TASK_STATS);
+    ATTR_INFO.add(ATT_ON_ERROR, false, BeneratorErrorIds.SYN_RUN_TASK_ON_ERROR);
+  }
+
   private static final DefaultPageSizeExpression DEFAULT_PAGE_SIZE = new DefaultPageSizeExpression();
 
   public RunTaskParser() {
-    super(EL_RUN_TASK, null, OPTIONAL_ATTRIBUTES,
+    super(EL_RUN_TASK, ATTR_INFO,
         BeneratorRootStatement.class, IfStatement.class, WhileStatement.class, GenerateOrIterateStatement.class);
   }
 

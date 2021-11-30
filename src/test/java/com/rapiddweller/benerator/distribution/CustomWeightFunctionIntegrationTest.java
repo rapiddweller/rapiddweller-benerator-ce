@@ -40,24 +40,17 @@ import static org.junit.Assert.fail;
 /**
  * Tests the definition of custom weight functions.<br/><br/>
  * Created: 09.07.2010 07:23:54
- *
  * @author Volker Bergmann
  * @since 0.6.3
  */
 public class CustomWeightFunctionIntegrationTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * The Xml.
-   */
   final String xml =
       "<generate type='entity' count='1000' consumer='cons'>" +
           "	<attribute name='c' values=\"'a', 'b', 'c'\" " +
           "distribution='new " + StandardWeightingFunction.class.getName() + "(50,30,20)' />" +
           "</generate>";
 
-  /**
-   * Test.
-   */
   @SuppressWarnings("unchecked")
   @Test
   public void test() {

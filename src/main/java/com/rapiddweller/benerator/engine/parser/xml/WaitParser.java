@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.Statement;
@@ -34,19 +35,14 @@ import com.rapiddweller.benerator.factory.FactoryUtil;
 import com.rapiddweller.benerator.primitive.DynamicLongGenerator;
 import com.rapiddweller.benerator.util.ExpressionBasedGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
-import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.w3c.dom.Element;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DISTRIBUTION;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DURATION;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_GRANULARITY;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_MAX;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_MIN;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_WAIT;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getAttribute;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getAttributeAsString;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseLongAttribute;
 
 /**
@@ -57,8 +53,18 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class WaitParser extends AbstractBeneratorDescriptorParser {
 
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_WAIT_ILLEGAL_ATTRIBUTE);
+    ATTR_INFO.add(ATT_DURATION, false, BeneratorErrorIds.SYN_WAIT_DURATION);
+    ATTR_INFO.add(ATT_MIN, false, BeneratorErrorIds.SYN_WAIT_MIN);
+    ATTR_INFO.add(ATT_MAX, false, BeneratorErrorIds.SYN_WAIT_MAX);
+    ATTR_INFO.add(ATT_GRANULARITY, false, BeneratorErrorIds.SYN_WAIT_GRANULARITY);
+    ATTR_INFO.add(ATT_DISTRIBUTION, false, BeneratorErrorIds.SYN_WAIT_DISTRIBUTION);
+  }
+
   public WaitParser() {
-    super(EL_WAIT, null, CollectionUtil.toSet(ATT_DURATION, ATT_MIN, ATT_MAX, ATT_GRANULARITY, ATT_DISTRIBUTION));
+    super(EL_WAIT, ATTR_INFO);
   }
 
   @Override
@@ -81,7 +87,7 @@ public class WaitParser extends AbstractBeneratorDescriptorParser {
     Expression<Long> min = parseLongAttribute(ATT_MIN, element, null);
     Expression<Long> max = parseLongAttribute(ATT_MAX, element, null);
     Expression<Long> granularity = parseLongAttribute(ATT_GRANULARITY, element, null);
-    String distSpec = getAttribute(ATT_DISTRIBUTION, element);
+    String distSpec = DescriptorParserUtil.getAttributeAsString(ATT_DISTRIBUTION, element);
     Expression<Distribution> distribution
         = FactoryUtil.getDistributionExpression(distSpec, Uniqueness.NONE, false);
     Generator<Long> durationGenerator = new DynamicLongGenerator(min, max, granularity,

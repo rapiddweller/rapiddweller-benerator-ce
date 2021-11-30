@@ -26,24 +26,23 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.DefineDOMTreeStatement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
-
-import java.util.Set;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ID;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_INPUT_URI;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAMESPACE_AWARE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_OUTPUT_URI;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_DOMTREE;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getConstantStringAttributeAsExpression;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
@@ -55,19 +54,24 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class DOMTreeParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Set<String> REQUIRED_ATTRIBUTES = CollectionUtil.toSet(ATT_ID, ATT_INPUT_URI);
-
-  private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(ATT_OUTPUT_URI, ATT_NAMESPACE_AWARE);
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_BEAN_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_ID, true, BeneratorErrorIds.SYN_BEAN_ID);
+    ATTR_INFO.add(ATT_INPUT_URI, true, BeneratorErrorIds.SYN_BEAN_ID);
+    ATTR_INFO.add(ATT_OUTPUT_URI, false, BeneratorErrorIds.SYN_BEAN_CLASS);
+    ATTR_INFO.add(ATT_NAMESPACE_AWARE, false, BeneratorErrorIds.SYN_BEAN_SPEC);
+  }
 
   public DOMTreeParser() {
-    super(EL_DOMTREE, REQUIRED_ATTRIBUTES, OPTIONAL_ATTRIBUTES, BeneratorRootStatement.class, IfStatement.class);
+    super(EL_DOMTREE, ATTR_INFO, BeneratorRootStatement.class, IfStatement.class);
   }
 
   @Override
   public DefineDOMTreeStatement doParse(
       Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     try {
-      Expression<String> id = parseAttribute(ATT_ID, element);
+      Expression<String> id = DescriptorParserUtil.getConstantStringAttributeAsExpression(ATT_ID, element);
       Expression<String> inputUri = parseScriptableStringAttribute(ATT_INPUT_URI, element);
       Expression<String> outputUri = parseScriptableStringAttribute(ATT_OUTPUT_URI, element);
       Expression<Boolean> namespaceAware = parseBooleanExpressionAttribute(ATT_NAMESPACE_AWARE, element);

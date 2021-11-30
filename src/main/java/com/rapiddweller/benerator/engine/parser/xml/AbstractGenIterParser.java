@@ -54,6 +54,7 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
@@ -75,77 +76,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CONSUMER;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CONTAINER;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CONVERTER;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_COUNT;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_COUNT_DISTRIBUTION;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CYCLIC;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DATASET;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DISTRIBUTION;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ENCODING;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_FILTER;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_FORMAT;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_GENERATOR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_LOCALE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_MAX_COUNT;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_MIN_COUNT;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAME;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NESTING;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NULL_QUOTA;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_OFFSET;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGER;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGESIZE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SEGMENT;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SELECTOR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SENSOR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SEPARATOR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE_SCRIPTED;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_STATS;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SUB_SELECTOR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TEMPLATE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_THREADS;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_UNIQUE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_VALIDATOR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.COMPONENT_TYPES;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.CREATE_ENTITIES_EXT_SETUP;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_CONSUMER;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_GENERATE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ITERATE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_VALUE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_VARIABLE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
 import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStringAttribute;
 
 /**
- * Parses a &lt;generate&gt; or &lt;update&gt; element in a Benerator descriptor file.<br/><br/>
+ * Parses a &lt;generate&gt; or &lt;update&gt; element in a Benerator descriptor XML file.<br/><br/>
  * Created: 25.10.2009 01:05:18
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
-
-  private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
-      ATT_COUNT, ATT_MIN_COUNT, ATT_MAX_COUNT, ATT_COUNT_DISTRIBUTION,
-      ATT_THREADS,
-      ATT_PAGESIZE, ATT_STATS, ATT_ON_ERROR,
-      ATT_TEMPLATE, ATT_CONSUMER,
-      ATT_NAME, ATT_TYPE, ATT_CONTAINER, ATT_GENERATOR, ATT_VALIDATOR,
-      ATT_CONVERTER, ATT_NULL_QUOTA, ATT_UNIQUE, ATT_DISTRIBUTION, ATT_CYCLIC,
-      ATT_SOURCE, ATT_SOURCE_SCRIPTED, ATT_SEGMENT, ATT_FORMAT, ATT_OFFSET, ATT_SEPARATOR, ATT_ENCODING, ATT_SELECTOR, ATT_SUB_SELECTOR,
-      ATT_DATASET, ATT_NESTING, ATT_LOCALE, ATT_FILTER,
-      ATT_SENSOR
-  );
+public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorParser {
 
   private static final Set<String> CONSUMER_EXPECTING_ELEMENTS = CollectionUtil.toSet(EL_GENERATE, EL_ITERATE);
 
   // DescriptorParser interface --------------------------------------------------------------------------------------
 
-  public GenerateOrIterateParser() {
-    super("", null, OPTIONAL_ATTRIBUTES);
+  protected AbstractGenIterParser(String elementName, AttrInfoSupport attrSupport) {
+    super(elementName, attrSupport);
   }
 
   private static String getNameOrType(Element element) {
@@ -202,16 +150,6 @@ public class GenerateOrIterateParser extends AbstractBeneratorDescriptorParser {
 
     DescriptorUtil.parseComponentConfig(element, instance.getLocalType(), context);
     return instance;
-  }
-
-  @Override
-  public boolean supportsElementName(String elementName) {
-    return (EL_GENERATE.equals(elementName) || EL_ITERATE.equals(elementName));
-  }
-
-  @Override
-  public boolean supports(Element element, Element[] parentXmlPath, Statement[] parentPath) {
-    return supportsElementName(element.getNodeName());
   }
 
   @Override

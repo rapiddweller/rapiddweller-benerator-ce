@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<setup xmlns="https://www.benerator.de/schema/2.1.0">
+
+    <database id="db" url="jdbc:postgresql://localhost:54321/postgres" driver="org.postgresql.Driver"
+    schema="public" user="volker"/>
+
+    <execute target="db">create table xxx ( id int );</execute>
+
+</setup>

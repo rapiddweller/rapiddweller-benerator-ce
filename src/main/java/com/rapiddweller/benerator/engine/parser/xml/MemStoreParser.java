@@ -26,22 +26,23 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.MemStoreStatement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import org.w3c.dom.Element;
 
 import java.util.Map;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ID;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_MEMSTORE;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getAttributeAsString;
 
 /**
  * Parses a &lt;memstore%gt; statement.<br/><br/>
@@ -51,15 +52,21 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class MemStoreParser extends AbstractBeneratorDescriptorParser {
 
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_MEMSTORE_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_ID, true, BeneratorErrorIds.SYN_MEMSTORE_ID);
+  }
+
   public MemStoreParser() {
-    super(EL_MEMSTORE, CollectionUtil.toSet(ATT_ID), null, BeneratorRootStatement.class, IfStatement.class);
+    super(EL_MEMSTORE, ATTR_INFO, BeneratorRootStatement.class, IfStatement.class);
   }
 
   @Override
   public MemStoreStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     checkAttributeSupport(XMLUtil.getAttributes(element));
     try {
-      String id = getAttribute(ATT_ID, element);
+      String id = DescriptorParserUtil.getAttributeAsString(ATT_ID, element);
       return new MemStoreStatement(id, context.getResourceManager());
     } catch (ConversionException e) {
       throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing memstore definition", e);

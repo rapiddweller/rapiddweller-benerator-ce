@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
@@ -34,12 +35,11 @@ import com.rapiddweller.benerator.engine.expression.context.ContextReference;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.SetSettingStatement;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.common.CollectionUtil;
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.CompositeExpression;
@@ -48,11 +48,7 @@ import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.script.expression.IsNullExpression;
 import org.w3c.dom.Element;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_NAME;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_REF;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_VALUE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**
  * Parses a &lt;Property&gt; element in a Benerator descriptor file.<br/><br/>
@@ -62,9 +58,18 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_VALUE;
  */
 public class SettingParser extends AbstractBeneratorDescriptorParser {
 
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_SETTING_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_NAME, true, BeneratorErrorIds.SYN_SETTING_NAME);
+    ATTR_INFO.add(ATT_DEFAULT, false, BeneratorErrorIds.SYN_SETTING_DEFAULT);
+    ATTR_INFO.add(ATT_VALUE, false, BeneratorErrorIds.SYN_SETTING_VALUE);
+    ATTR_INFO.add(ATT_REF, false, BeneratorErrorIds.SYN_SETTING_REF);
+    ATTR_INFO.add(ATT_SOURCE, false, BeneratorErrorIds.SYN_SETTING_SOURCE);
+  }
+
   public SettingParser() {
-    super(DescriptorConstants.EL_SETTING, CollectionUtil.toSet(ATT_NAME),
-        CollectionUtil.toSet(ATT_DEFAULT, ATT_VALUE, ATT_REF, ATT_SOURCE));
+    super(DescriptorConstants.EL_SETTING, ATTR_INFO);
   }
 
   @Override
@@ -95,8 +100,8 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
       }
       switch (subExpressions.length) {
         case 0:
-          throw ExceptionFactory.getInstance().configurationError(
-              "No valid property spec: " + XMLUtil.formatShort(element));
+          throw ExceptionFactory.getInstance().syntaxErrorForXmlElement(
+              "Not a valid property spec", element);
         case 1:
           return subExpressions[0];
         default:

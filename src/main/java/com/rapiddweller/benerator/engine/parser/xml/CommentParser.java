@@ -26,10 +26,12 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.CommentStatement;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import org.w3c.dom.Element;
 
 /**
@@ -40,8 +42,10 @@ import org.w3c.dom.Element;
  */
 public class CommentParser extends AbstractBeneratorDescriptorParser {
 
+  private static final AttrInfoSupport ATTR_SUPPORT = new AttrInfoSupport(BeneratorErrorIds.SYN_COMMENT);
+
   public CommentParser() {
-    super(DescriptorConstants.EL_COMMENT, null, null);
+    super(DescriptorConstants.EL_COMMENT, ATTR_SUPPORT);
   }
 
   @Override

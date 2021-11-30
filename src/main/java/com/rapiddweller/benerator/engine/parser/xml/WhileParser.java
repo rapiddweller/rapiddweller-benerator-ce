@@ -26,10 +26,12 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
 
@@ -52,8 +54,14 @@ public class WhileParser extends AbstractBeneratorDescriptorParser {
 
   private static final Set<String> LEGAL_PARENTS = CollectionUtil.toSet(EL_SETUP, EL_IF, EL_WHILE);
 
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_WHILE_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_TEST, true, BeneratorErrorIds.SYN_WHILE_TEST);
+  }
+
   public WhileParser() {
-    super(EL_WHILE, CollectionUtil.toSet(ATT_TEST), null);
+    super(EL_WHILE, ATTR_INFO);
   }
 
   public boolean supports(String elementName, String parentName) {

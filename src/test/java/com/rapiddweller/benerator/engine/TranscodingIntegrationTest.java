@@ -49,7 +49,6 @@ import static org.junit.Assert.assertNull;
 /**
  * Integration test for Benerator's transcoding feature.<br/><br/>
  * Created: 12.01.2011 17:06:25
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
@@ -62,12 +61,6 @@ public class TranscodingIntegrationTest extends AbstractBeneratorIntegrationTest
   private static final String DESCRIPTOR4_FILE_NAME = PARENT_FOLDER + "/transcode_partially_to_non_empty_target.ben.xml";
   private static final String DESCRIPTOR5_FILE_NAME = PARENT_FOLDER + "/transcode_partially_with_cascade.ben.xml";
 
-  /**
-   * Clear db.
-   *
-   * @throws ConnectFailedException the connect failed exception
-   * @throws SQLException           the sql exception
-   */
   @After
   public void clearDB() throws ConnectFailedException, SQLException {
     dropTables(HSQLUtil.connectInMemoryDB("s"));
@@ -77,11 +70,6 @@ public class TranscodingIntegrationTest extends AbstractBeneratorIntegrationTest
 
   // tests -----------------------------------------------------------------------------------------------------------
 
-  /**
-   * Test empty target.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testEmptyTarget() throws Exception {
     DescriptorRunner runner = null;
@@ -111,11 +99,6 @@ public class TranscodingIntegrationTest extends AbstractBeneratorIntegrationTest
     }
   }
 
-  /**
-   * Test target with countries.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testTargetWithCountries() throws Exception {
     DescriptorRunner runner = null;
@@ -145,11 +128,6 @@ public class TranscodingIntegrationTest extends AbstractBeneratorIntegrationTest
     }
   }
 
-  /**
-   * Test partial transcode.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testPartialTranscode() throws Exception {
     DescriptorRunner runner = null;
@@ -177,11 +155,6 @@ public class TranscodingIntegrationTest extends AbstractBeneratorIntegrationTest
     }
   }
 
-  /**
-   * Test partial transcode to non empty target.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testPartialTranscodeToNonEmptyTarget() throws Exception {
     DescriptorRunner runner = null;
@@ -211,11 +184,6 @@ public class TranscodingIntegrationTest extends AbstractBeneratorIntegrationTest
     }
   }
 
-  /**
-   * Test partial transcode with cascade.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testPartialTranscodeWithCascade() throws Exception {
     DescriptorRunner runner = null;

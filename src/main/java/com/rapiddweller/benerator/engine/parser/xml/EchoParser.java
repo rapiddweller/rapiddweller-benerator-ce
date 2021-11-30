@@ -26,16 +26,15 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.EchoStatement;
-import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_MESSAGE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TYPE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ECHO;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableElementText;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
@@ -47,8 +46,15 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class EchoParser extends AbstractBeneratorDescriptorParser {
 
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_BEAN_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_MESSAGE, false, BeneratorErrorIds.SYN_BEAN_CLASS);
+    ATTR_INFO.add(ATT_TYPE, false, BeneratorErrorIds.SYN_BEAN_SPEC);
+  }
+
   public EchoParser() {
-    super(EL_ECHO, null, CollectionUtil.toSet(ATT_MESSAGE, ATT_TYPE));
+    super(EL_ECHO, ATTR_INFO);
   }
 
   @Override

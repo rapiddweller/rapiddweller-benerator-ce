@@ -26,27 +26,23 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.DefaultPlatformDescriptor;
 import com.rapiddweller.benerator.PlatformDescriptor;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ImportStatement;
 import com.rapiddweller.common.ArrayBuilder;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ExceptionUtil;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.XMLElementParser;
 import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CLASS;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULTS;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DOMAINS;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PLATFORMS;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_IMPORT;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**
  * Parses an &lt;import&gt; element in a Benerator descriptor file.<br/><br/>
@@ -56,11 +52,17 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_IMPORT;
  */
 public class ImportParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
-      ATT_CLASS, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS);
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_IMPORT_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_CLASS, false, BeneratorErrorIds.SYN_IMPORT_CLASS);
+    ATTR_INFO.add(ATT_DEFAULTS, false, BeneratorErrorIds.SYN_IMPORT_DEFAULTS);
+    ATTR_INFO.add(ATT_DOMAINS, false, BeneratorErrorIds.SYN_IMPORT_DOMAINS);
+    ATTR_INFO.add(ATT_PLATFORMS, false, BeneratorErrorIds.SYN_IMPORT_PLATFORMS);
+  }
 
   public ImportParser() {
-    super(EL_IMPORT, null, OPTIONAL_ATTRIBUTES);
+    super(EL_IMPORT, ATTR_INFO);
   }
 
   @Override

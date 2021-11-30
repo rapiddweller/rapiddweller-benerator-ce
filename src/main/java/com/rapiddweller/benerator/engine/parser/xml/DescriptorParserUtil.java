@@ -29,7 +29,9 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.engine.expression.ScriptableExpression;
 import com.rapiddweller.benerator.engine.expression.TypedScriptExpression;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.BeanUtil;
+import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.text.SplitStringConverter;
@@ -51,16 +53,6 @@ public class DescriptorParserUtil {
 
   private DescriptorParserUtil() {
     // private constructor to prevent instantiation
-  }
-
-  // direct data retrieval -------------------------------------------------------------------------------------------
-
-  public static String getAttribute(String name, Element element) {
-    return (element.hasAttribute(name) ? element.getAttribute(name) : null);
-  }
-
-  public static String getElementText(Element element) {
-    return XMLUtil.getText(element);
   }
 
   // mapping attributes to bean properties ---------------------------------------------------------------------------
@@ -92,24 +84,8 @@ public class DescriptorParserUtil {
     return result;
   }
 
-  public static Expression<String> parseScriptableStringAttribute(String name, Element element) {
-    return parseScriptableStringAttribute(name, element, true);
-  }
-
-  public static Expression<String> parseScriptableStringAttribute(String name, Element element, boolean unescape) {
-    String attribute = getAttribute(name, element);
-    if (attribute == null) {
-      return null;
-    }
-    Expression<String> result = new StringExpression(new ScriptableExpression(attribute, null));
-    if (unescape) {
-      result = new UnescapeExpression(result);
-    }
-    return result;
-  }
-
   public static Expression<String[]> parseScriptableStringArrayAttribute(String name, Element element) {
-    String attribute = getAttribute(name, element);
+    String attribute = getAttributeAsString(name, element);
     if (attribute == null) {
       return null;
     }
@@ -119,7 +95,7 @@ public class DescriptorParserUtil {
   }
 
   public static Expression<Integer> parseIntAttribute(String name, Element element) {
-    return new TypedScriptExpression<>(getAttribute(name, element), Integer.class);
+    return new TypedScriptExpression<>(getAttributeAsString(name, element), Integer.class);
   }
 
   public static Expression<Integer> parseIntAttribute(String name, Element element, int defaultValue) {
@@ -127,7 +103,7 @@ public class DescriptorParserUtil {
   }
 
   public static Expression<Integer> parseIntAttribute(String name, Element element, Expression<Integer> defaultValue) {
-    String attribute = getAttribute(name, element);
+    String attribute = getAttributeAsString(name, element);
     if (StringUtil.isEmpty(attribute)) {
       return defaultValue;
     } else {
@@ -140,7 +116,7 @@ public class DescriptorParserUtil {
   }
 
   public static Expression<Long> parseLongAttribute(String name, Element element, Expression<Long> defaultValue) {
-    String attribute = getAttribute(name, element);
+    String attribute = getAttributeAsString(name, element);
     if (StringUtil.isEmpty(attribute)) {
       return defaultValue;
     } else {
@@ -153,7 +129,7 @@ public class DescriptorParserUtil {
   }
 
   public static Expression<Boolean> parseBooleanExpressionAttribute(String name, Element element, Boolean defaultValue) {
-    String attribute = getAttribute(name, element);
+    String attribute = getAttributeAsString(name, element);
     if (StringUtil.isEmpty(attribute)) {
       return new ConstantExpression<>(defaultValue);
     } else {
@@ -161,18 +137,73 @@ public class DescriptorParserUtil {
     }
   }
 
-  public static ConstantExpression<String> parseAttribute(String name, Element element) {
-    String attribute = getAttribute(name, element);
-    return (attribute != null ? new ConstantExpression<>(attribute) : null);
-  }
-
   public static Expression<?> parseScriptAttribute(String name, Element element) {
-    String rawAttribute = getAttribute(name, element);
+    String rawAttribute = getAttributeAsString(name, element);
     if (StringUtil.isEmpty(rawAttribute)) {
       return null;
     } else {
       return new ScriptExpression<>(rawAttribute);
     }
+  }
+
+  // scriptable strings ----------------------------------------------------------------------------------------------
+
+  public static Expression<String> parseScriptableString(Element element, String attrName, String synJmsDestinationFormat) {
+    try {
+      return parseScriptableStringAttribute(attrName, element);
+    } catch (ConversionException e) {
+      throw BeneratorExceptionFactory.getInstance().illegalXmlAttributeValue(null, null,
+          synJmsDestinationFormat, element.getAttributeNode(attrName));
+    }
+  }
+
+  public static Expression<String> parseScriptableStringAttribute(String name, Element element) {
+    return parseScriptableStringAttribute(name, element, true);
+  }
+
+  public static Expression<String> parseScriptableStringAttribute(String name, Element element, boolean unescape) {
+    String attribute = getAttributeAsString(name, element);
+    if (attribute == null) {
+      return null;
+    }
+    Expression<String> result = new StringExpression(new ScriptableExpression(attribute, null));
+    if (unescape) {
+      result = new UnescapeExpression(result);
+    }
+    return result;
+  }
+
+  // Attribute value as Expression<String> ---------------------------------------------------------------------------
+
+  public static ConstantExpression<String> getConstantStringAttributeAsExpression(String name, Element element) {
+    return getConstantStringAttributeAsExpression(name, element, false, null);
+  }
+
+  public static ConstantExpression<String> getConstantStringAttributeAsExpression(
+      String name, Element element, boolean required, String errorId) {
+    return new ConstantExpression<>(getAttributeAsString(name, element, required, errorId));
+  }
+
+  // direct data retrieval -------------------------------------------------------------------------------------------
+
+  public static String getAttributeAsString(String name, Element element) {
+    return getAttributeAsString(name, element, false, null);
+  }
+
+  public static String getAttributeAsString(String name, Element element, boolean required, String errorId) {
+    String attribute = element.getAttribute(name);
+    if (StringUtil.isEmpty(attribute)) {
+      if (required) {
+        throw BeneratorExceptionFactory.getInstance().missingXmlAttribute(null, errorId, name, element);
+      } else {
+        return null;
+      }
+    }
+    return attribute;
+  }
+
+  public static String getElementText(Element element) {
+    return XMLUtil.getText(element);
   }
 
 }

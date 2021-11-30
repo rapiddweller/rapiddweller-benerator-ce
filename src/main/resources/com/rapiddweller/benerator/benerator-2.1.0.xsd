@@ -91,7 +91,7 @@
             <xs:simpleContent>
                 <xs:extension base="xs:string">
                     <xs:attribute name="message" type="xs:string"/>
-                    <xs:attribute name="type" type="echo-type-type" default="speech"/>
+                    <xs:attribute name="type" type="echo-type-type" default="console"/>
                 </xs:extension>
             </xs:simpleContent>
         </xs:complexType>
@@ -111,7 +111,7 @@
 
 
     <xs:element name="include">
-        <xs:annotation><xs:documentation>Includes a properties file</xs:documentation></xs:annotation>
+        <xs:annotation><xs:documentation>Include a properties file</xs:documentation></xs:annotation>
         <xs:complexType>
             <xs:attribute name="uri" type="xs:string" use="required"/>
         </xs:complexType>
@@ -119,7 +119,7 @@
 
 
     <xs:element name="setting"> <!-- TODO unify with property -->
-        <xs:annotation><xs:documentation>Defines a global property value</xs:documentation></xs:annotation>
+        <xs:annotation><xs:documentation>Global property value</xs:documentation></xs:annotation>
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
@@ -230,6 +230,7 @@
                 <xs:attribute name="shell" type="xs:string"/>
                 <xs:attribute name="onError" type="errorhandler-type"/>
                 <xs:attribute name="optimize" type="xs:string"/>
+                <xs:attribute name="INVALIDATE" type="xs:boolean"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -393,7 +394,10 @@
                 <xs:element ref="execute" minOccurs="0"/>
             </xs:sequence>
             <xs:attributeGroup ref="iterator-attrs"/>
-            <xs:attribute name="threads" type="xs:string"/>
+            <xs:attribute name="minCount" type="scriptable-long"/>
+            <xs:attribute name="maxCount" type="scriptable-long"/>
+            <xs:attribute name="countDistribution" type="xs:string"/>
+            <xs:attributeGroup ref="execution-attrs"/>
             <xs:attribute name="template" type="xs:string"/>
             <xs:attribute name="consumer" type="xs:string"/>
         </xs:complexType>
@@ -547,7 +551,6 @@
     <xs:attributeGroup name="generator-attrs">
         <xs:attributeGroup ref="common-creator-attrs"/>
         <xs:attribute name="generator" type="xs:string"/>
-        <xs:attribute name="validator" type="xs:string"/>
     </xs:attributeGroup>
 
     <xs:attributeGroup name="iterator-attrs">
@@ -556,7 +559,7 @@
     </xs:attributeGroup>
 
     <xs:attributeGroup name="iterator-only-attrs">
-        <xs:attribute name="source" type="xs:string" use="required"/>
+        <xs:attribute name="source" type="xs:string"/>
         <xs:attribute name="sourceScripted" type="xs:boolean"/>
         <xs:attribute name="separator" type="xs:string"/>
         <xs:attribute name="format" type="format-type"/>
@@ -593,6 +596,7 @@
         <xs:attribute name="distribution" type="xs:string"/>
         <xs:attribute name="cyclic" type="scriptable-boolean"/>
         <xs:attribute name="offset" type="xs:string"/>
+        <xs:attribute name="validator" type="xs:string"/>
 
         <!-- sensor -->
         <xs:attribute name="sensor" type="xs:string"/>
@@ -725,11 +729,22 @@
                 <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element ref="part" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element ref="variable" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="cascade" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
             <xs:attribute name="source" type="xs:string"/>
             <xs:attribute name="selector" type="xs:string"/>
             <xs:attribute name="target" type="xs:string"/>
             <xs:attribute name="pageSize" type="xs:string"/>
+            <xs:attribute name="onError" type="errorhandler-type"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="cascade">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cascade" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="ref" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
 

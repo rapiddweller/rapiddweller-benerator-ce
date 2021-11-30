@@ -27,14 +27,13 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.format.text.SplitStringConverter;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ConvertingExpression;
 import org.w3c.dom.Element;
 
-import java.util.Set;
-
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getConstantStringAttributeAsExpression;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptAttribute;
 
 /**
@@ -49,8 +48,8 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
 public abstract class AbstractTranscodeParser extends AbstractBeneratorDescriptorParser {
 
   protected AbstractTranscodeParser(
-      String elementName, Set<String> requiredAttributes, Set<String> optionalAttributes, Class<?>... supportedParentTypes) {
-    super(elementName, requiredAttributes, optionalAttributes, supportedParentTypes);
+      String elementName, AttrInfoSupport infoSupport, Class<?>... supportedParentTypes) {
+    super(elementName, infoSupport, supportedParentTypes);
   }
 
   @SuppressWarnings("unchecked")
@@ -65,7 +64,7 @@ public abstract class AbstractTranscodeParser extends AbstractBeneratorDescripto
 
   protected Expression<String[]> parseIrrelevantColumns(Element element) {
     return new ConvertingExpression<>(
-        parseAttribute("irrelevantColumns", element), new SplitStringConverter(','));
+        DescriptorParserUtil.getConstantStringAttributeAsExpression("irrelevantColumns", element), new SplitStringConverter(','));
   }
 
 }

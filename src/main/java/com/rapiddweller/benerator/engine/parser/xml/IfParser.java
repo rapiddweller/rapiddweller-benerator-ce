@@ -26,12 +26,14 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.SequentialStatement;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
 
@@ -39,11 +41,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TEST;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_COMMENT;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ELSE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_IF;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_THEN;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
 
 /**
@@ -54,10 +52,16 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class IfParser extends AbstractBeneratorDescriptorParser {
 
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_IF_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_TEST, true, BeneratorErrorIds.SYN_IF_TEST);
+  }
+
   private static final Set<String> STRICT_CHILDREN = CollectionUtil.toSet(EL_THEN, EL_ELSE, EL_COMMENT);
 
   public IfParser() {
-    super(EL_IF, CollectionUtil.toSet(ATT_TEST), null);
+    super(EL_IF, ATTR_INFO);
   }
 
   @Override

@@ -26,10 +26,12 @@
 
 package com.rapiddweller.benerator.main;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.BeneratorMode;
 import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
+import com.rapiddweller.benerator.engine.BeneratorResult;
 import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
@@ -37,7 +39,11 @@ import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.LogCategoriesConstants;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.cli.CommandLineParser;
+import com.rapiddweller.common.converter.ConverterManager;
+import com.rapiddweller.common.exception.ApplicationException;
+import com.rapiddweller.common.exception.ExitCodes;
 import com.rapiddweller.common.log.LoggingInfoPrinter;
 import com.rapiddweller.common.ui.ConsoleInfoPrinter;
 import com.rapiddweller.common.ui.InfoPrinter;
@@ -45,10 +51,20 @@ import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.common.version.VersionNumberParser;
 import com.rapiddweller.contiperf.sensor.MemorySensor;
+import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.text.KiloFormatter;
 import com.rapiddweller.jdbacl.DBUtil;
+import com.rapiddweller.jdbacl.DatabaseDialectManager;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+
+import javax.management.MBeanInfo;
+import javax.management.MBeanServer;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.lang.management.ManagementFactory;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Parses and executes a benerator setup file.<br/><br/>
@@ -84,11 +100,12 @@ public class Benerator {
   // main ------------------------------------------------------------------------------------------------------------
 
   public static void main(String[] args) {
-    String renderedArgs = CommandLineParser.formatArgs(args);
-    logger.info("benerator {}", renderedArgs);
     VersionInfo.getInfo(BENERATOR_KEY).verifyDependencies();
-    BeneratorConfig config = parseCommandLine(args);
-    run(config);
+    BeneratorResult result = runWithArgs(args);
+    if (!StringUtil.isEmpty(result.getErrOut())) {
+      System.err.println(result.getErrOut());
+    }
+    System.exit(result.getExitCode());
   }
 
   // info properties -------------------------------------------------------------------------------------------------
@@ -127,6 +144,19 @@ public class Benerator {
 
   //  operational interface ------------------------------------------------------------------------------------------
 
+  public static BeneratorResult runWithArgs(String... args) {
+    String renderedArgs = CommandLineParser.formatArgs(args);
+    logger.info("benerator {}", renderedArgs);
+    BeneratorConfig config = null;
+    try {
+      config = parseCommandLine(args);
+      run(config);
+      return new BeneratorResult(ExitCodes.OK, null);
+    } catch (Exception e) {
+      return handleException(e, config);
+    }
+  }
+
   public static void run(BeneratorConfig config) {
     boolean run = true;
     if (config.isHelp()) {
@@ -155,8 +185,49 @@ public class Benerator {
       run = false;
     }
     if (run) {
+      checkComponents();
       Benerator.setMode(config.getMode());
       new Benerator().runFile(config.getFile());
+    }
+  }
+
+  private static void checkComponents() {
+    // check setup of ConverterManager
+    try {
+      ConverterManager.getInstance();
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed(
+          "ConverterManager", e, BeneratorErrorIds.COMP_INIT_FAILED_CONVERTER);
+    }
+    // check setup of DelocalizingConverter
+    try {
+      BeneratorFactory.getInstance().createDelocalizingConverter();
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed(
+          "DelocalizingConverter", e, BeneratorErrorIds.COMP_INIT_FAILED_CONVERTER);
+    }
+    // check setup of rd-lib-script
+    try {
+      Assert.notNull(ScriptUtil.getDefaultScriptEngine(), "Default script engine");
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed(
+          "rd-lib-script", e, BeneratorErrorIds.COMP_INIT_FAILED_SCRIPT);
+    }
+    // check setup of rd-lib-jdbacl
+    try {
+      DatabaseDialectManager.init();
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed(
+          "rd-lib-jdbacl", e, BeneratorErrorIds.COMP_INIT_FAILED_JDBACL);
+    }
+    // check setup of BeneratorMonitor
+    try {
+      MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+      MBeanInfo info = server.getMBeanInfo(BeneratorMonitor.OBJECT_NAME);
+      Assert.notNull(info, "MBean info");
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().componentInitializationFailed(
+          "BeneratorMonitor", e, BeneratorErrorIds.COMP_INIT_FAILED_BEN_MONITOR);
     }
   }
 
@@ -192,8 +263,33 @@ public class Benerator {
     p.addOption("list", "--list", null);
     p.addFlag("clearCaches", "--clearCaches", null);
     p.addOption("mode", "--mode", "-m");
+    p.addFlag("exception", "--exception", null);
     p.addArgument("file", false);
     return p;
+  }
+
+  private static BeneratorResult handleException(Exception e, BeneratorConfig config) {
+    // print exception stack trace if this is configured
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(buffer);
+    if (config != null && config.isException()) {
+      e.printStackTrace(out);
+    }
+    // process exception
+    int exitCode;
+    if (e instanceof ApplicationException) {
+      ApplicationException appEx = (ApplicationException) e;
+      out.println(appEx);
+      exitCode = appEx.getExitCode();
+    } else {
+      out.println("Error: " + e.getMessage());
+      exitCode = ExitCodes.MISCELLANEOUS_ERROR;
+    }
+    try {
+      return new BeneratorResult(exitCode, buffer.toString(StandardCharsets.UTF_8.name()));
+    } catch (UnsupportedEncodingException ex) {
+      throw BeneratorExceptionFactory.getInstance().programmerConfig("Error reading ByteArrayOutputStream", e);
+    }
   }
 
 }

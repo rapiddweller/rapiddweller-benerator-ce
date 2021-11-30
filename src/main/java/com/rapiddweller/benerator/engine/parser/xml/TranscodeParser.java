@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.MutatingTypeExpression;
 import com.rapiddweller.benerator.engine.statement.TranscodeStatement;
@@ -34,6 +35,7 @@ import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.FallbackExpression;
@@ -41,17 +43,8 @@ import org.w3c.dom.Element;
 
 import java.util.Set;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGESIZE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SELECTOR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_SOURCE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TABLE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TARGET;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ATTRIBUTE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ID;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_TRANSCODE;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getAttribute;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getAttributeAsString;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
 /**
@@ -64,17 +57,25 @@ public class TranscodeParser extends AbstractTranscodeParser {
 
   private static final Set<String> MEMBER_ELEMENTS = CollectionUtil.toSet(EL_ID, EL_ATTRIBUTE, EL_REFERENCE);
 
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_TRANSCODE_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_TABLE, true, BeneratorErrorIds.SYN_TRANSCODE_SOURCE);
+    ATTR_INFO.add(ATT_SOURCE, false, BeneratorErrorIds.SYN_TRANSCODE_SOURCE);
+    ATTR_INFO.add(ATT_SELECTOR, false, BeneratorErrorIds.SYN_TRANSCODE_SELECTOR);
+    ATTR_INFO.add(ATT_TARGET, false, BeneratorErrorIds.SYN_TRANSCODE_TARGET);
+    ATTR_INFO.add(ATT_PAGESIZE, false, BeneratorErrorIds.SYN_TRANSCODE_PAGE_SIZE);
+    ATTR_INFO.add(ATT_ON_ERROR, false, BeneratorErrorIds.SYN_TRANSCODE_ON_ERROR);
+  }
+
   public TranscodeParser() {
-    super(EL_TRANSCODE,
-        CollectionUtil.toSet(ATT_TABLE),
-        CollectionUtil.toSet(ATT_SOURCE, ATT_SELECTOR, ATT_TARGET, ATT_PAGESIZE, ATT_ON_ERROR),
-        TranscodingTaskStatement.class);
+    super(EL_TRANSCODE, ATTR_INFO, TranscodingTaskStatement.class);
   }
 
   @Override
   public Statement doParse(
       Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
-    String table = getAttribute(ATT_TABLE, element);
+    String table = DescriptorParserUtil.getAttributeAsString(ATT_TABLE, element);
     TranscodingTaskStatement parent = (TranscodingTaskStatement) ArrayUtil.lastElementOf(parentComponentPath);
     Expression<AbstractDBSystem> sourceEx = parseSource(element, parent);
     Expression<String> selectorEx = parseSelector(element, parent);
