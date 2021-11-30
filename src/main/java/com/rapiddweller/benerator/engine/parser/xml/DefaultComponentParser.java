@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
@@ -34,6 +35,7 @@ import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.parser.ModelParser;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import org.w3c.dom.Element;
 
@@ -51,9 +53,13 @@ public class DefaultComponentParser extends AbstractBeneratorDescriptorParser {
 
   static final Collection<String> COMPONENT_TYPES = CollectionUtil.toSet("attribute", "part", "id", "reference");
 
+  private final static AttrInfoSupport ATTR_SUPPORT;
+  static {
+    ATTR_SUPPORT = new AttrInfoSupport(BeneratorErrorIds.SYN_DEFAULT_COMPONENTS);
+  }
+
   public DefaultComponentParser() {
-    super(EL_DEFAULT_COMPONENTS, null, null,
-        BeneratorRootStatement.class, IfStatement.class);
+    super(EL_DEFAULT_COMPONENTS, ATTR_SUPPORT, BeneratorRootStatement.class, IfStatement.class);
   }
 
   @Override

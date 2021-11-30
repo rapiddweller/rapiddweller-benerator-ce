@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.CascadeParent;
 import com.rapiddweller.benerator.engine.statement.CascadeStatement;
@@ -34,15 +35,12 @@ import com.rapiddweller.benerator.engine.statement.TranscodeStatement;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import org.w3c.dom.Element;
 
 import java.util.Set;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_REF;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ATTRIBUTE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_CASCADE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ID;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**
  * Parses &lt;cascade ref="..."&gt; descriptors.<br/><br/>
@@ -52,12 +50,16 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_REFERENCE
  */
 public class CascadeParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Set<String> MEMBER_ELEMENTS = CollectionUtil.toSet(
-      EL_ID, EL_ATTRIBUTE, EL_REFERENCE);
+  private static final Set<String> MEMBER_ELEMENTS = CollectionUtil.toSet(EL_ID, EL_ATTRIBUTE, EL_REFERENCE);
+
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_CASCADE_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_REF, true, BeneratorErrorIds.SYN_CASCADE_REF);
+  }
 
   public CascadeParser() {
-    super(EL_CASCADE, CollectionUtil.toSet(ATT_REF), null,
-        TranscodeStatement.class, CascadeStatement.class);
+    super(EL_CASCADE, ATTR_INFO, TranscodeStatement.class, CascadeStatement.class);
   }
 
   @Override

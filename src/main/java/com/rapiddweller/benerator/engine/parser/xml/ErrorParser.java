@@ -26,14 +26,13 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ErrorStatement;
-import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import org.w3c.dom.Element;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_EXIT_CODE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ID;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ERROR;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
 
 /**
@@ -44,13 +43,20 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class ErrorParser extends AbstractBeneratorDescriptorParser {
 
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_ERROR_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_ID, false, BeneratorErrorIds.SYN_ERROR_ID);
+    ATTR_INFO.add(ATT_EXIT_CODE, false, BeneratorErrorIds.SYN_ERROR_EXIT_CODE);
+  }
+
   public ErrorParser() {
-    super(EL_ERROR, null, CollectionUtil.toSet(ATT_ID, ATT_EXIT_CODE));
+    super(EL_ERROR, ATTR_INFO);
   }
 
   @Override
   public ErrorStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
-    String errorId = DescriptorParserUtil.getAttribute("id", element);
+    String errorId = DescriptorParserUtil.getAttributeAsString("id", element);
     String message = DescriptorParserUtil.getElementText(element);
     Integer exitCode = parseIntAttribute(ATT_EXIT_CODE, element).evaluate(null);
     return new ErrorStatement(errorId, exitCode, message);

@@ -26,18 +26,19 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.BeanStatement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.script.Assignment;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
@@ -66,10 +67,17 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
   // Named staticLogger to avoid name clash with logger from parent class
   private static final Logger staticLogger = LoggerFactory.getLogger(BeanParser.class);
 
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_BEAN_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_ID, true, BeneratorErrorIds.SYN_BEAN_ID);
+    ATTR_INFO.add(ATT_CLASS, false, BeneratorErrorIds.SYN_BEAN_CLASS);
+    ATTR_INFO.add(ATT_SPEC, false, BeneratorErrorIds.SYN_BEAN_SPEC);
+  }
+
   public BeanParser() {
     // only allowed in non-loop statements in order to avoid leaks
-    super(EL_BEAN, CollectionUtil.toSet(ATT_ID), CollectionUtil.toSet(ATT_CLASS, ATT_SPEC),
-        BeneratorRootStatement.class, IfStatement.class);
+    super(EL_BEAN, ATTR_INFO, BeneratorRootStatement.class, IfStatement.class);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})

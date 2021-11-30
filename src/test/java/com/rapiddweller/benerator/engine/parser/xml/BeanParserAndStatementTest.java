@@ -75,17 +75,6 @@ public class BeanParserAndStatementTest extends AbstractBeneratorIntegrationTest
     assertEquals("xxx", bean.getText());
   }
 
-  @Test
-  public void testEmptyStringProperty() {
-    String xml =
-        "<bean id='id' class='" + BeanMock.class.getName() + "'>" +
-            "	<property name='text' value='' />" +
-            "</bean>";
-    BeneratorContext context = parseAndExecute(xml);
-    BeanMock bean = (BeanMock) context.get("id");
-    assertEquals("", bean.getText());
-  }
-
   @Test(expected = SyntaxError.class)
   public void testNoId() {
     parse("<bean class='" + BeanMock.class.getName() + "'/>");

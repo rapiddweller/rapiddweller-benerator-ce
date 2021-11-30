@@ -30,14 +30,12 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.SequenceTestGenerator;
 import com.rapiddweller.benerator.engine.BeneratorMonitor;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
 import com.rapiddweller.benerator.primitive.IncrementGenerator;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.benerator.test.PersonSource;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.exception.IllegalArgumentError;
-import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.converter.UnsafeConverter;
 import com.rapiddweller.common.validator.AbstractValidator;
 import com.rapiddweller.format.DataIterator;
@@ -59,7 +57,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the {@link GenerateOrIterateParser}.<br/><br/>
+ * Tests the {@link AbstractGenIterParser}.<br/><br/>
  * Created: 10.11.2009 15:08:46
  * @author Volker Bergmann
  * @since 0.6.0

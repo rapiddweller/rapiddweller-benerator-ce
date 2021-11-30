@@ -26,24 +26,20 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.TranscodingTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
 import com.rapiddweller.common.ArrayUtil;
-import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_SOURCE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_IDENTITY;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGESIZE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TARGET;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_TRANSCODING_TASK;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptAttribute;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
 
@@ -55,11 +51,18 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class TranscodingTaskParser extends AbstractTranscodeParser {
 
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_TRANSCODING_TASK_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_TARGET, true, BeneratorErrorIds.SYN_TRANSCODING_TASK_TARGET);
+    ATTR_INFO.add(ATT_IDENTITY, false, BeneratorErrorIds.SYN_TRANSCODING_TASK_IDENTITY);
+    ATTR_INFO.add(ATT_DEFAULT_SOURCE, false, BeneratorErrorIds.SYN_TRANSCODING_TASK_DEFAULT_SOURCE);
+    ATTR_INFO.add(ATT_PAGESIZE, false, BeneratorErrorIds.SYN_TRANSCODING_TASK_PAGE_SIZE);
+    ATTR_INFO.add(ATT_ON_ERROR, false, BeneratorErrorIds.SYN_TRANSCODING_TASK_ON_ERROR);
+  }
+
   public TranscodingTaskParser() {
-    super(EL_TRANSCODING_TASK,
-        CollectionUtil.toSet(ATT_TARGET),
-        CollectionUtil.toSet(ATT_IDENTITY, ATT_DEFAULT_SOURCE, ATT_PAGESIZE, ATT_ON_ERROR),
-        BeneratorRootStatement.class, IfStatement.class, WhileStatement.class);
+    super(EL_TRANSCODING_TASK, ATTR_INFO, BeneratorRootStatement.class, IfStatement.class, WhileStatement.class);
   }
 
   @Override
@@ -81,12 +84,6 @@ public class TranscodingTaskParser extends AbstractTranscodeParser {
     return parseScriptableStringAttribute("identity", element);
   }
 
-  /**
-   * Parse default source expression.
-   *
-   * @param element the element
-   * @return the expression
-   */
   @SuppressWarnings("unchecked")
   protected Expression<AbstractDBSystem> parseDefaultSource(Element element) {
     return (Expression<AbstractDBSystem>) parseScriptAttribute("defaultSource", element);

@@ -35,22 +35,10 @@ import java.util.List;
 /**
  * Descriptor interface to provide informations about Benerator platforms.<br/><br/>
  * Created: 07.12.2011 18:27:53
- *
  * @author Volker Bergmann
  * @since 0.7.4
  */
 public interface PlatformDescriptor {
-  /**
-   * Gets parsers.
-   *
-   * @return the parsers
-   */
   List<XMLElementParser<Statement>> getParsers();
-
-  /**
-   * Init.
-   *
-   * @param context the context
-   */
   void init(BeneratorContext context);
 }

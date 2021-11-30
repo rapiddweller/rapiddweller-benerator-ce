@@ -11,12 +11,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * The type Default platform descriptor test.
+ * Tests the {@link DefaultPlatformDescriptor}.<br/><br/>
+ * @author Volker Bergmann
  */
 public class DefaultPlatformDescriptorTest {
-  /**
-   * Test constructor.
-   */
   @Test
   public void testConstructor() {
     List<XMLElementParser<Statement>> parsers = (new DefaultPlatformDescriptor("java.text")).getParsers();
@@ -24,9 +22,6 @@ public class DefaultPlatformDescriptorTest {
     assertTrue(parsers.isEmpty());
   }
 
-  /**
-   * Test add parser.
-   */
   @Test
   public void testAddParser() {
     DefaultPlatformDescriptor defaultPlatformDescriptor = new DefaultPlatformDescriptor("java.text");

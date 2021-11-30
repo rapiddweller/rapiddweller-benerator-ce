@@ -3,6 +3,7 @@
 package com.rapiddweller.benerator.main;
 
 import com.rapiddweller.benerator.BeneratorMode;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.cli.CommandLineConfig;
 
 /**
@@ -17,12 +18,14 @@ public class BeneratorConfig extends CommandLineConfig {
   private BeneratorMode mode;
   private String list;
   private String file;
+  private boolean exception;
 
   public BeneratorConfig() {
     this.clearCaches = false;
     this.mode = BeneratorMode.LENIENT;
     this.list = null;
     this.file = "benerator.xml";
+    this.exception = false;
   }
 
   public String getList() {
@@ -30,8 +33,13 @@ public class BeneratorConfig extends CommandLineConfig {
   }
 
   public void setList(String list) {
-    this.list = list;
+    if (!"db".equals(list) && !"kafka".equals(list)) {
+      throw BeneratorExceptionFactory.getInstance().illegalCommandLineOptionValue("--list", list);
+    } else {
+      this.list = list;
+    }
   }
+
 
   public boolean isClearCaches() {
     return clearCaches;
@@ -47,6 +55,14 @@ public class BeneratorConfig extends CommandLineConfig {
 
   public void setMode(BeneratorMode mode) {
     this.mode = mode;
+  }
+
+  public boolean isException() {
+    return exception;
+  }
+
+  public void setException(boolean exception) {
+    this.exception = exception;
   }
 
   public String getFile() {

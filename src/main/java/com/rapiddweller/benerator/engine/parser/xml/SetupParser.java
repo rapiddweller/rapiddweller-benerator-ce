@@ -36,6 +36,8 @@ import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.exception.SyntaxError;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.XMLElementParser;
 import com.rapiddweller.script.DatabeneScriptParser;
 import org.w3c.dom.Attr;
@@ -43,29 +45,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_DATASET;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_ENCODING;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_ERR_HANDLER;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_IMPORTS;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_LINE_SEPARATOR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_LOCALE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_NULL;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_ONE_TO_ONE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_PAGE_SIZE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_SCRIPT;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_SEPARATOR;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_SOURCE_SCRIPTED;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_DEFAULT_TIME_ZONE;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_GENERATOR_FACTORY;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_GRANULARITY;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_MAX_COUNT;
-import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_SETUP;
+import static com.rapiddweller.benerator.BeneratorErrorIds.*;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**
  * {@link XMLElementParser} implementation for parsing a Benerator descriptor file's root XML element.<br/><br/>
@@ -75,38 +60,30 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_SETUP;
  */
 public class SetupParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Set<String> BENERATOR_PROPERTIES = CollectionUtil.toSet(
-      ATT_DEFAULT_SCRIPT,
-      ATT_DEFAULT_NULL,
-      ATT_DEFAULT_ENCODING,
-      ATT_DEFAULT_LINE_SEPARATOR,
-      ATT_DEFAULT_TIME_ZONE,
-      ATT_DEFAULT_LOCALE,
-      ATT_DEFAULT_DATASET,
-      ATT_DEFAULT_PAGE_SIZE,
-      ATT_DEFAULT_SEPARATOR,
-      ATT_DEFAULT_ONE_TO_ONE,
-      ATT_DEFAULT_ERR_HANDLER,
-      ATT_DEFAULT_SOURCE_SCRIPTED,
-      ATT_MAX_COUNT,
-      ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES,
-      ATT_GENERATOR_FACTORY,
-      ATT_DEFAULT_IMPORTS
-  );
-
-  private static final Set<String> XML_ATTRIBUTES = CollectionUtil.toSet(
-      "xmlns", "xmlns:xsi", "xsi:schemaLocation"
-  );
-
-  private static final Set<String> OPTIONAL_ATTRIBUTES;
+  protected final static AttrInfoSupport ATTR_CONSTR;
 
   static {
-    OPTIONAL_ATTRIBUTES = new HashSet<>(BENERATOR_PROPERTIES);
-    OPTIONAL_ATTRIBUTES.addAll(XML_ATTRIBUTES);
+    ATTR_CONSTR = new AttrInfoSupport(SYN_SETUP_ILLEGAL_ATTRIBUTE);
+    ATTR_CONSTR.add(ATT_MAX_COUNT, false, SYN_SETUP_MAX_COUNT);
+    ATTR_CONSTR.add(ATT_DEFAULT_SCRIPT, false, SYN_SETUP_DEF_SCRIPT);
+    ATTR_CONSTR.add(ATT_DEFAULT_NULL, false, SYN_SETUP_DEF_NULL);
+    ATTR_CONSTR.add(ATT_DEFAULT_ENCODING, false, SYN_SETUP_DEF_ENCODING);
+    ATTR_CONSTR.add(ATT_DEFAULT_LINE_SEPARATOR, false, SYN_SETUP_DEF_LINE_SEPARATOR);
+    ATTR_CONSTR.add(ATT_DEFAULT_TIME_ZONE, false, SYN_SETUP_DEF_TIME_ZONE);
+    ATTR_CONSTR.add(ATT_DEFAULT_LOCALE, false, SYN_SETUP_DEF_LOCALE);
+    ATTR_CONSTR.add(ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET);
+    ATTR_CONSTR.add(ATT_DEFAULT_PAGE_SIZE, false, SYN_SETUP_DEF_PAGE_SIZE);
+    ATTR_CONSTR.add(ATT_DEFAULT_SEPARATOR, false, SYN_SETUP_DEF_SEPARATOR);
+    ATTR_CONSTR.add(ATT_DEFAULT_ONE_TO_ONE, false, SYN_SETUP_DEF_ONE_TO_ONE);
+    ATTR_CONSTR.add(ATT_DEFAULT_ERR_HANDLER, false, SYN_SETUP_DEF_ERR_HANDLER);
+    ATTR_CONSTR.add(ATT_DEFAULT_IMPORTS, false, SYN_SETUP_DEF_IMPORTS);
+    ATTR_CONSTR.add(ATT_DEFAULT_SOURCE_SCRIPTED, false, SYN_SETUP_DEF_SOURCE_SCRIPTED);
+    ATTR_CONSTR.add(ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES, false, SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES);
+    ATTR_CONSTR.add(ATT_GENERATOR_FACTORY, false, SYN_SETUP_GENERATOR_FACTORY);
   }
 
   public SetupParser() {
-    super(EL_SETUP, null, OPTIONAL_ATTRIBUTES);
+    super(EL_SETUP, ATTR_CONSTR);
   }
 
   @Override
@@ -122,16 +99,16 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
     try (BeneratorContext test = new DefaultBeneratorContext()) { // test object to verify correctness of setup
       for (int i = 0; i < attrMap.getLength(); i++) {
         Attr attr = (Attr) attrMap.item(i);
-        if (BENERATOR_PROPERTIES.contains(attr.getName())) {
+        if (ATTR_CONSTR.get(attr.getName()) != null) {
           try {
             map(attr, test);
             map.put(attr.getName(), attr.getValue());
           } catch (Exception e) {
-            throw BeneratorExceptionFactory.getInstance().illegalXmlAttributeValue(null, e, attr);
+            throw illegalAttributeValue(attr);
           }
         } else if (!isStandardXmlRootAttribute(attr.getName())) {
-          throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlAttribute(
-              "Illegal attribute", element.getAttributeNode(attr.getName()));
+          throw BeneratorExceptionFactory.getInstance().illegalXmlAttributeName(
+              null, null, attrSupport.getErrorIdForIllegalAttribute(), attr, attrSupport);
         }
       }
     }
@@ -156,8 +133,9 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
     BeanUtil.setPropertyValue(test, name, valueObject, true, true);
   }
 
-  private static boolean isStandardXmlRootAttribute(String key) {
-    return XML_ATTRIBUTES.contains(key) || key.contains(":");
+  private SyntaxError illegalAttributeValue(Attr attr) {
+    String errorId = attrSupport.getErrorId(attr.getName());
+    return BeneratorExceptionFactory.getInstance().illegalXmlAttributeValue(null, null, errorId, attr);
   }
 
 }

@@ -26,18 +26,17 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.ScriptableExpression;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
-import com.rapiddweller.common.CollectionUtil;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.StringExpression;
 import org.w3c.dom.Element;
-
-import java.util.Set;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_URI;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_INCLUDE;
@@ -50,11 +49,14 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_INCLUDE;
  */
 public class IncludeParser extends AbstractBeneratorDescriptorParser {
 
-  static final Set<String> REQUIRED_ATTRIBUTES = CollectionUtil.toSet(ATT_URI);
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_INCLUDE_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_URI, true, BeneratorErrorIds.SYN_INCLUDE_URI);
+  }
 
   public IncludeParser() {
-    super(EL_INCLUDE, REQUIRED_ATTRIBUTES, null,
-        BeneratorRootStatement.class, IfStatement.class);
+    super(EL_INCLUDE, ATTR_INFO, BeneratorRootStatement.class, IfStatement.class);
   }
 
   @Override

@@ -103,6 +103,8 @@ public class DescriptorConstants {
   public static final String ATT_SOURCE_SCRIPTED = "sourceScripted";
   public static final String ATT_SEGMENT = "segment";
   public static final String ATT_FORMAT = "format";
+  public static final String ATT_ROW_BASED = "rowBased";
+  public static final String ATT_EMPTY_MARKER = "emptyMarker";
   public static final String ATT_OFFSET = "offset";
   public static final String ATT_REF = "ref";
   public static final String ATT_VALUE = "value";
@@ -121,6 +123,7 @@ public class DescriptorConstants {
 
   public static final String ATT_ASSERT = "assert";
   public static final String ATT_TYPE = "type";
+  public static final String ATT_SCOPE = "scope";
   public static final String ATT_EXIT_CODE = "exitCode";
   public static final String ATT_CONTAINER = "container";
   public static final String ATT_OPTIMIZE = "optimize";

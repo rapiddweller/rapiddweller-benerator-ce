@@ -26,21 +26,20 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.DefineDatabaseStatement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
-import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.exception.ExceptionFactory;
+import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.script.expression.FallbackExpression;
 import org.w3c.dom.Element;
-
-import java.util.Set;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ACC_UNK_COL_TYPES;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_BATCH;
@@ -61,7 +60,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TABLE_FI
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_URL;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_USER;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_DATABASE;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseAttribute;
+import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getConstantStringAttributeAsExpression;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
@@ -74,19 +73,33 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class DatabaseParser extends AbstractBeneratorDescriptorParser {
 
-  private static final Set<String> REQUIRED_ATTRIBUTES = CollectionUtil.toSet(ATT_ID);
-
-  private static final Set<String> OPTIONAL_ATTRIBUTES = CollectionUtil.toSet(
-      ATT_ENVIRONMENT, ATT_SYSTEM, ATT_URL, ATT_DRIVER, ATT_USER, ATT_PASSWORD, ATT_CATALOG, ATT_SCHEMA,
-      ATT_TABLE_FILTER, ATT_INCL_TABLES, ATT_EXCL_TABLES, ATT_META_CACHE, ATT_BATCH, ATT_FETCH_SIZE,
-      ATT_READ_ONLY, ATT_LAZY, ATT_ACC_UNK_COL_TYPES);
-
+  private static final AttrInfoSupport ATTR_INFO;
+  static {
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_DATABASE_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_ID, true, BeneratorErrorIds.SYN_DATABASE_ID);
+    ATTR_INFO.add(ATT_ENVIRONMENT, false, BeneratorErrorIds.SYN_DATABASE_ENVIRONMENT);
+    ATTR_INFO.add(ATT_SYSTEM, false, BeneratorErrorIds.SYN_DATABASE_SYSTEM);
+    ATTR_INFO.add(ATT_URL, false, BeneratorErrorIds.SYN_DATABASE_URL);
+    ATTR_INFO.add(ATT_DRIVER, false, BeneratorErrorIds.SYN_DATABASE_DRIVER);
+    ATTR_INFO.add(ATT_USER, false, BeneratorErrorIds.SYN_DATABASE_USER);
+    ATTR_INFO.add(ATT_PASSWORD, false, BeneratorErrorIds.SYN_DATABASE_PASSWORD);
+    ATTR_INFO.add(ATT_CATALOG, false, BeneratorErrorIds.SYN_DATABASE_CATALOG);
+    ATTR_INFO.add(ATT_SCHEMA, false, BeneratorErrorIds.SYN_DATABASE_SCHEMA);
+    ATTR_INFO.add(ATT_TABLE_FILTER, false, BeneratorErrorIds.SYN_DATABASE_TABLE_FILTER);
+    ATTR_INFO.add(ATT_INCL_TABLES, false, BeneratorErrorIds.SYN_DATABASE_INCLUDE_TABLES);
+    ATTR_INFO.add(ATT_EXCL_TABLES, false, BeneratorErrorIds.SYN_DATABASE_EXCLUDE_TABLES);
+    ATTR_INFO.add(ATT_META_CACHE, false, BeneratorErrorIds.SYN_DATABASE_META_CACHE);
+    ATTR_INFO.add(ATT_BATCH, false, BeneratorErrorIds.SYN_DATABASE_BATCH);
+    ATTR_INFO.add(ATT_FETCH_SIZE, false, BeneratorErrorIds.SYN_DATABASE_FETCH_SIZE);
+    ATTR_INFO.add(ATT_READ_ONLY, false, BeneratorErrorIds.SYN_DATABASE_READ_ONLY);
+    ATTR_INFO.add(ATT_LAZY, false, BeneratorErrorIds.SYN_DATABASE_LAZY);
+    ATTR_INFO.add(ATT_ACC_UNK_COL_TYPES, false, BeneratorErrorIds.SYN_DATABASE_ACCEPT_UNK_COL_TYPES);
+  }
 
   // TODO define parser extension mechanism and move DatabaseParser and DefineDatabaseStatement to DB package?
 
   public DatabaseParser() {
-    super(EL_DATABASE, REQUIRED_ATTRIBUTES, OPTIONAL_ATTRIBUTES,
-        BeneratorRootStatement.class, IfStatement.class);
+    super(EL_DATABASE, ATTR_INFO, BeneratorRootStatement.class, IfStatement.class);
   }
 
   @Override
@@ -98,7 +111,7 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
 
     // parse
     try {
-      Expression<String> id = parseAttribute(ATT_ID, element);
+      Expression<String> id = DescriptorParserUtil.getConstantStringAttributeAsExpression(ATT_ID, element);
       Expression<String> environment = parseScriptableStringAttribute(ATT_ENVIRONMENT, element);
       Expression<String> system = parseScriptableStringAttribute(ATT_SYSTEM, element);
       Expression<String> url = parseScriptableStringAttribute(ATT_URL, element);

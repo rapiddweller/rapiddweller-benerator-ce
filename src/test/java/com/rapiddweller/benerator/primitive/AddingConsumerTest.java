@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -40,7 +40,6 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the {@link AddingConsumer}.<br/><br/>
  * Created: 04.04.2010 08:03:25
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -49,18 +48,12 @@ public class AddingConsumerTest extends GeneratorTest {
   private Entity ALICE;
   private Entity METHUSALEM;
 
-  /**
-   * Sets up persons.
-   */
   @Before
   public void setUpPersons() {
     ALICE = createEntity("Person", "age", 23L); // long age
     METHUSALEM = createEntity("Person", "age", 1024.); // double age
   }
 
-  /**
-   * Test java invocation.
-   */
   @Test
   public void testJavaInvocation() {
     AddingConsumer consumer = new AddingConsumer();
@@ -75,14 +68,8 @@ public class AddingConsumerTest extends GeneratorTest {
     } finally {
       IOUtil.close(consumer);
     }
-
   }
 
-  /**
-   * Test benerator invocation.
-   *
-   * @throws IOException the io exception
-   */
   @Test
   public void testBeneratorInvocation() throws IOException {
     DescriptorRunner runner = new DescriptorRunner("com/rapiddweller/benerator/primitive/AddingConsumerTest.ben.xml", context);
