@@ -498,8 +498,8 @@ restricted. A variable may
 * use a Generator that creates Maps or JavaBean objects. Their map values or bean properties can be queried from a script the same way as for an
   entity
 
-* execute a SQL query (e.g. name="c_customer" source="db" selector="select id, name from customer where rating = 0") of which column values may be
-  accessed by a script (e.g. script="{c_customer[0]}" for the id).
+* execute a SQL query (e.g. `name="c_customer" source="db" selector="select id, name from customer where rating = 0"`) of which column values may be
+  accessed by a script (e.g. `script="{c_customer[0]}"` for the id).
 
 ## Combining components and variables
 
@@ -511,14 +511,14 @@ sub-generate is called, so it does not make sense to define an `<attribute>`, `<
 
 In most cases, Files are referred by URIs. A URI may be
 
-* a simple local (data.csv) or
+* a simple local (`data.csv`) or
 
-* an absolute filename (C:\datagen\data.csv) or a
+* an absolute filename (`C:\datagen\data.csv`) or a
 
-* a URL ([http://my.com/datagen/data.csv](http://my.com/datagen/data.csv)).
+* a URL (`http://my.com/datagen/data.csv`).
 
-For FTP access, use RFC1738 for encoding user name, password and file format, e.g. ftp://user:
-password@server/dir/file;type=i
+For FTP access, use RFC1738 for encoding username, password and file format, e.g. `ftp://user:
+password@server/dir/file;type=i`
 
 ## Protocols
 
@@ -531,8 +531,10 @@ Relative URIs are resolved in a HTML hypertext manner: A relative URL is interpr
 descriptor file. If file lookup fails, Benerator searches the file relative to the current directory. If that fails, Benerator tries to retrieve
 the file from the Java classpath.
 
-Benerator recognizes absolute paths under Windows (e.g. C:\test) and Unix (/test or ~/test). When in doubt, mark the URL as file URL: file:///C:/test
-or file:///test.
+Benerator recognizes absolute paths under Windows (e.g. `C:\test`) and Unix (`/tes`t or `~/test`). 
+
+When in doubt, mark the URL as file URL: `file:///C:/test`
+or `file:///test`.
 
 ## Importing Entities
 
@@ -550,7 +552,7 @@ used to store the entities. File exporters (for CSV and fixed column width files
 ## Custom Importers
 
 New import formats can be supported by implementing the EntitySource interface with a JavaBean implementation, instantiating it as bean and referring
-it by its id with a 'source' attribute, e.g.
+it by its id with a `source` attribute, e.g.
 
 ```xml
 <setup>
@@ -630,7 +632,7 @@ cycle:
 
 ## Exporting Data to Files
 
-You will need to reuse some of the generated data for setting up (load) test clients. 
+You will need to reuse some generated data for setting up (load) test clients. 
 You can export data by simply defining an appropriate consumer:
 
 ```xml
@@ -657,7 +659,7 @@ When importing data or using helper variables, you may need to overwrite importe
 
 You could also combine the approaches
 
-### overwriting post processing
+### overwriting post-processing
 
 ```xml
 <iterate type="TX" source="tx.ent.csv" >
@@ -665,7 +667,7 @@ You could also combine the approaches
 </iterate>
 ```
 
-### "script" post processing
+### "script" post-processing
 
 ```xml
 <iterate type="TX" source="tx.ent.csv">
@@ -673,7 +675,7 @@ You could also combine the approaches
 </iterate>
 ```
 
-### "map" post processing
+### "map" post-processing
 
 For mapping imported (or generated) values, you can use a convenient literal syntax, listing mappings in a comma-separated list of assignments in the
 form original_value ->` mapped_value. Values need to be literals here too, so don't forget the quotes around strings and characters! This is a
@@ -688,7 +690,7 @@ Example
 </iterate>
 ```
 
-In a script, the keyword **this** refers to the entity currently being generated/iterated.
+In a script, the keyword `this` refers to the entity currently being generated/iterated.
 
 
 ## Converters
@@ -714,7 +716,7 @@ Benerator supports two types of converters:
 1. Classes that implement Benerator's service provider interface (SPI) com.rapiddweller.common.Converter
 2. Classes that extend the class java.text.Format
 
-If the class has a 'pattern' property, Benerator maps a descriptor's pattern attribute to the bean instance property.
+If the class has a `pattern` property, Benerator maps a descriptor's pattern attribute to the bean instance property.
 
 
 ## Validators
@@ -735,8 +737,8 @@ For specifying Validators, you can
 
 ## Creating random Entities
 
-Entities can be generated without any input files - Benerator provides a rich set of Generator implementations. When using `<generate>` without a '
-source' attribute, the registered systems (e.g. the database are requested for metadata). From the metadata, attributes are generated that match the
+Entities can be generated without any input files - Benerator provides a rich set of Generator implementations. When using `<generate>` without a 
+`source` attribute, the registered systems (e.g. the database are requested for metadata). From the metadata, attributes are generated that match the
 metadata (e.g. database) constraints, as column length, referenced entities and more. By default, associations are treated as one-to-one associations.
 
 With Benerator's many useful defaults, you have a minimum effort on initial configuration:
@@ -745,17 +747,17 @@ With Benerator's many useful defaults, you have a minimum effort on initial conf
 
 Id generation defaults to an increment strategy and for all other columns useful defaults are chosen.
 
-Entities are generated as long as each attribute generator is available and limited by the number specified in the '
-count' attribute. The 'pageSize' defines the number of creations after which a flush() is applied to all consumers (for a database system this is
+Entities are generated as long as each attribute generator is available and limited by the number specified in the 
+`count` attribute. The `pageSize` defines the number of creations after which a flush() is applied to all consumers (for a database system this is
 mapped to a commit).
 
 ## Entity Count
 
 There are different ways of determining or limiting the number of generated entities:
 
-* the count attribute specifies a fixed number of instances to create
+* the `count` attribute specifies a fixed number of instances to create
 
-* the minCount, maxCount and countDistribution attributes let Benerator choose an instance count with the specified characteristics.
+* the `minCount`, `maxCount` and `countDistribution` attributes let Benerator choose an instance count with the specified characteristics.
 
 * availability of the component generators
 
@@ -842,11 +844,11 @@ defaultComponent config exists, Benerator falls back to a useful standard settin
 
 You can define global settings in the descriptor file:
 
-```<setting name="my_name" value="Volker" />```
+`<setting name="my_name" value="Volker" />`
 
 or import several of them from a properties file:
 
-```<include uri="my.properties" />```
+`<include uri="my.properties" />`
 
 
 ## Querying Information from a System
@@ -878,12 +880,12 @@ so take care, which distribution to apply, see '[Distribution Concepts](distribu
 
 You can use script expressions in your selectors, e.g.
 
-selector="{ftl:select ean_code from db_product where country='${country}'}"
+`selector="{ftl:select ean_code from db_product where country='${country}'}"`
 
 The script is resolved immediately before the first generation and then reused. If you need dynamic queries, that are re-evaluated, you can specify
 them with double brackets:
 
-selector="{{ftl:select ean_code from db_product where country='${shop.country}'}}"
+`selector="{{ftl:select ean_code from db_product where country='${shop.country}'}}"`
 
 Example:
 
@@ -948,7 +950,7 @@ If you need to dynamically calculate data at runtime, use a script attribute, e.
 
 `<attribute name="message" script="'Hi, ' + user_name + '!'" />`
 
-In the 'script' attribute, curly braces are not necessary.
+In the `script` attribute, curly braces are not necessary.
 
 Using scripts you can access
 - environment variables, e.g. JAVA_HOME
@@ -959,7 +961,7 @@ Using scripts you can access
 - entities generated in outer `<generate>` elements
 - helper variables in the `<generate>` element, e.g. person.familyName
 - predefined or custom FreeMarker methods (when using FreeMarker as script language)
-- Static Java methods and attributes, e.g. System.getProperty('user.home')
+- Static Java methods and attributes, e.g. `System.getProperty('user.home')`
 - instance methods and attributes on objects in the context, e.g. db.system
 
 Variable names used in scripting may not contain points - a point always implies resolution of a local feature of an object, e.g. person.familyName
@@ -982,11 +984,11 @@ dependencies to each other:
 
 ### onError
 
-Several descriptor elements support an onError attribute. It determines an error severity and how Benerator should behave in case of errors.
+Several descriptor elements support an `onError` attribute. It determines an error severity and how Benerator should behave in case of errors.
 
-The default severity is 'fatal', which causes Benerator to stop execution.
+The default severity is `fatal`, which causes Benerator to stop execution.
 
-Other available severities are ignore, trace, debug, info, warn, error, which mainly influence the log level in which errors are reported, but do not
+Other available severities are `ignore`, `trace`, `debug`, `info`, `warn`, `error`, which mainly influence the log level in which errors are reported, but do not
 stop execution.
 
 ```xml
@@ -998,8 +1000,8 @@ stop execution.
 ### BadDataConsumer
 
 For errors that are raised by a consumer, you have the alternative option to catch them and write the data which has caused the error to an
-alternative consumer. For example, you can write the problematic data to a CSV file named '
-errordata.csv' and postprocess it:
+alternative consumer. For example, you can write the problematic data to a CSV file named `
+errordata.csv` and post process it:
 
 ```xml
 <generate type="product" count="1000" consumer="**new BadDataConsumer(new CSVExporter('errors.csv'),** **db.inserter())">

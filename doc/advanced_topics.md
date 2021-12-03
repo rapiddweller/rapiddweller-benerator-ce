@@ -80,6 +80,61 @@ The following alternative works as well and imports all classes of the com.my pa
 <bean id="special" class="com.my.SpecialGenerator"/>
 ```
 
+### Step-by-step instruction: Importing Custom Java classes (JAR)
+
+Precondition: Verified local benerator installation (cp. [Installation](installation.md)). 
+
+In this example, two jars from maven central are used for demo purposes: 
+
+1. Download following jars locally
+   - https://repo1.maven.org/maven2/org/apache/commons/commons-text/1.9/commons-text-1.9.jar
+   - https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar
+
+2. Move the jars into the `lib\` folder of your benerator installation
+   e.g. ( e.g. `C:\Program Files\Development\rapiddweller-benerator-ce\lib\`). Avoid creating 
+   any subfolder(s) in the `lib\` directory and place the jar file(s) in the lib folders root level. 
+
+3. Given the custom libraries are provided in your ben lib folder, or you added them to the classpath
+    of your Java Virtual Machine (JVM), the following benerator script shows you the available 
+    instantiation options:
+
+```xml
+<setup>
+
+    <!-- Use direct reference (OPTION A) -->
+    <generate type="optionA" consumer="ConsoleExporter" count="5">
+        <attribute name="column" 
+                   type="string" 
+                   script="org.apache.commons.text.WordUtils.swapCase('A: benerator is a GREAT universal data tool')" />
+    </generate>
+
+    <!-- Import multiple classes from custom jar (OPTION B) -->
+    <import class="org.apache.commons.text.WordUtils"/>
+    
+    <!-- Import multiple classes from custom jar with wildcard (OPTION C) -->
+     <import class="org.apache.commons.text.*"/> 
+
+    <!-- Use OPTION B/C in BENERATION -->
+    <generate type="optionBC" consumer="ConsoleExporter" count="5">
+        <attribute name="column" type="string" script="WordUtils.swapCase('B/C: benerator is a GREAT universal data tool')"/>
+    </generate>
+
+    <!-- Instantiate single class as bean (OPTION D) -->
+    <bean id="customUtil" class="org.apache.commons.text.WordUtils">
+        <!-- Allows to define properties for your constructor as below if required -->
+        <!--  <property name="myProperty" value="12345"/> -->
+    </bean>
+
+    <!-- Use OPTION D in BENERATION -->
+    <generate consumer="ConsoleExporter" count="5" type="optionB">
+        <attribute name="column" type="string" script="customUtil.swapCase('D: benerator is a GREAT universal data tool')"/>
+    </generate>
+
+</setup>
+```
+
+### Domain imports
+
 Domains can be imported as well. For the built-in Benerator domains, only the domain name is necessary, for custom domains, the fully qualified name
     of the domain's top-level package. For a built-in domain:
 
@@ -405,10 +460,10 @@ Then you can get the address generator from Benerator by calling:
 
 ```java
 BeneratorContext context = new BeneratorContext();
-Generator`<?>` generator = new DescriptorBasedGenerator("benerator.xml", "address", context);
+Generator<?> generator = new DescriptorBasedGenerator("benerator.xml", "address", context);
 generator.init(context);
 ProductWrapper wrapper = new ProductWrapper();
-for (int i = 0; i `< 10; i++)
+for (int i = 0; i < 10; i++)
     System.out.println(generator.generate(wrapper));
 generator.close();
 ```

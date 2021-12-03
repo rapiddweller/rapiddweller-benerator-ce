@@ -28,9 +28,10 @@ use_directory_urls: false
 theme:
   name: material
   logo: assets/rd.png
-  favicon: assets/rd.png
+  favicon: assets/favicon-32x32.png
   language: en
   font:
+    text: Roboto
     code: Roboto Mono
   palette:
     accent: teal

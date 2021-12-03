@@ -42,7 +42,8 @@ for specific needs is easy.
 XML-Schema, on the other hand, allows for an extraordinarily wide range of features. Benerator's XML support is limited to features that are useful
 for generating XML data structures (no mixed content) and does not yet support all variants possible with XML schema. The elements `<unique>`, `<key>`
 and `<keyRef>` cannot be handled automatically, but require manual configuration. The following features are not yet implemented: `<group>`
-, `<import>`, `<all>` and `<sequence>` with `minCount != 1` or `maxCount != 1`\. If you need support for some of these, please contact us.
+, `<import>`, `<all>` and `<sequence>` with `minCount != 1` or `maxCount != 1`. 
+If you need support for some of these, please **[contact us](mailto:team@rapiddweller.com)**.
 
 ## Building Blocks
 

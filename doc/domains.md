@@ -135,6 +135,10 @@ The Person class has the following properties:
 | United Kingdom | GB | most common 20 given (unweighted), most common 25 family names (unweighted) |
 | USA | US | most common 600 given names and most common 1000 family names both with absolute weight |
 
+Your use-cases are more sophisticated and require additional countries, cities or valid addresses down to 
+street level and number, check our [Benerator Editions](https://www.benerator.de/) or feel 
+free to contact us for assistance: **[team@rapiddweller.com](mailto:team@rapiddweller.com)**.
+
 ## Address domain
 
 * **AddressGenerator**: Generates addresses that match simple validity checks: The City exists, the ZIP code matches and the phone number area codes
