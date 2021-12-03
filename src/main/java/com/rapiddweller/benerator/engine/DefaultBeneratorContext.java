@@ -496,6 +496,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
     // import standard platforms
     importPackage("com.rapiddweller.platform.fixedwidth");
     importPackage("com.rapiddweller.platform.csv");
+    importPackage("com.rapiddweller.platform.result");
     importPackage("com.rapiddweller.platform.dbunit");
     importPackage("com.rapiddweller.platform.xls");
     importPackage("com.rapiddweller.platform.template");
