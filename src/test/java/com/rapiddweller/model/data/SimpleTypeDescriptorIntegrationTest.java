@@ -22,6 +22,7 @@ public class SimpleTypeDescriptorIntegrationTest extends AbstractBeneratorIntegr
   public void testAllDetails() {
     // GIVEN a generation setup
     String xml = "<setup>\n" +
+        "  <import platforms='memstore'/>\n" +
         "  <memstore id='mem'/>\n" +
         "  <generate type='data' count='20000' consumer='mem'>\n" +
         "    <attribute name='bool' type='boolean' trueQuota='0.7'/>\n" +

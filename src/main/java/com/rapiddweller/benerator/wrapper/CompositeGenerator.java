@@ -41,27 +41,15 @@ import java.util.List;
  * {@link Generator} implementation that makes use of other {@link ContextAware}
  * objects by which its threading support is influenced.<br/><br/>
  * Created: 20.03.2010 11:19:11
- *
- * @param <E> the type parameter
+ * @param <E> the generated type
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public abstract class CompositeGenerator<E> extends AbstractGenerator<E> {
 
-  /**
-   * The Generated type.
-   */
   protected final Class<E> generatedType;
-  /**
-   * The Components.
-   */
   protected final List<ThreadAware> components;
 
-  /**
-   * Instantiates a new Composite generator.
-   *
-   * @param generatedType the generated type
-   */
   protected CompositeGenerator(Class<E> generatedType) {
     this.generatedType = generatedType;
     this.components = new ArrayList<>();
@@ -70,38 +58,16 @@ public abstract class CompositeGenerator<E> extends AbstractGenerator<E> {
 
   // component registration ------------------------------------------------------------------------------------------
 
-  /**
-   * Register component t.
-   *
-   * @param <T>       the type parameter
-   * @param <U>       the type parameter
-   * @param component the component
-   * @return the t
-   */
   protected <T extends Generator<U>, U> T registerComponent(T component) {
     components.add(component);
     return component;
   }
 
-  /**
-   * Register component t.
-   *
-   * @param <T>       the type parameter
-   * @param <U>       the type parameter
-   * @param <V>       the type parameter
-   * @param component the component
-   * @return the t
-   */
   protected <T extends Converter<U, V>, U, V> T registerComponent(T component) {
     components.add(component);
     return component;
   }
 
-  /**
-   * Register components.
-   *
-   * @param components the components
-   */
   protected void registerComponents(ThreadAware[] components) {
     this.components.addAll(Arrays.asList(components));
   }

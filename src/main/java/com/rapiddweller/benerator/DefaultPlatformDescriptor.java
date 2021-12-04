@@ -26,52 +26,43 @@
 
 package com.rapiddweller.benerator;
 
-import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.format.xml.XMLElementParser;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.rapiddweller.benerator.engine.parser.xml.XMLStatementParser;
 
 /**
  * Default implementation of the {@link PlatformDescriptor} interface.<br/><br/>
  * Created: 07.12.2011 18:58:25
- *
  * @author Volker Bergmann
  * @since 0.7.4
  */
 public class DefaultPlatformDescriptor implements PlatformDescriptor {
 
   private final String rootPackage;
-  private final List<XMLElementParser<Statement>> parsers;
 
-  /**
-   * Instantiates a new Default platform descriptor.
-   *
-   * @param rootPackage the root package
-   */
+  public DefaultPlatformDescriptor() {
+    this(null);
+  }
+
   public DefaultPlatformDescriptor(String rootPackage) {
     this.rootPackage = rootPackage;
-    this.parsers = new ArrayList<>();
   }
 
   @Override
-  public List<XMLElementParser<Statement>> getParsers() {
-    return parsers;
-  }
-
-  /**
-   * Add parser.
-   *
-   * @param parser the parser
-   */
-  public void addParser(XMLElementParser<Statement> parser) {
-    parsers.add(parser);
+  public String[] getPackagesToImport() {
+    if (rootPackage == null) {
+      return new String[0];
+    } else {
+      return new String[] { rootPackage };
+    }
   }
 
   @Override
-  public void init(BeneratorContext context) {
-    context.importPackage(rootPackage);
+  public String[] getClassesToImport() {
+    return new String[0];
+  }
+
+  @Override
+  public XMLStatementParser[] getParsers() {
+    return new XMLStatementParser[0];
   }
 
 }

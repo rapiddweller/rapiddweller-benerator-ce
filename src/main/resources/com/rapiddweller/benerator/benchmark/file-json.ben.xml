@@ -1,4 +1,5 @@
 <setup>
+    <import platforms='json'/>
 
     <generate type="ben_benchmark" count="{count}" threads="{threads}" pageSize="100000"
               sensor="benchmark.write" consumer="new JsonFileExporter('__benchmark.out.json')">

@@ -1,9 +1,6 @@
 <setup xmlns="https://www.benerator.de/schema/2.1.0" defaultDataset='US'>
 
-    <setting name="environment" value="local"/>
-    <setting name="system" value="kafka1"/>
-    <setting name="count" value="1000"/>
-    <setting name="threads" value="10"/>
+    <import platforms='kafka'/>
 
     <!-- On a freshly created empty topic, a consumer needs to have something to consume,
      otherwise the offset is not updated -->

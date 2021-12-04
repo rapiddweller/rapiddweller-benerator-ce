@@ -33,10 +33,8 @@ import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.script.Expression;
 
 /**
- * {@link Script} implementation for BeneratorScript.<br/>
- * <br/>
+ * {@link Script} implementation for BeneratorScript.<br/><br/>
  * Created at 09.10.2009 06:48:01
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -45,12 +43,6 @@ public class BeneratorScript extends AbstractScript {
   private final Expression<?> expression;
   private final String text;
 
-  /**
-   * Instantiates a new Benerator script.
-   *
-   * @param expression the expression
-   * @param text       the text
-   */
   public BeneratorScript(Expression<?> expression, String text) {
     this.expression = expression;
     this.text = text;
@@ -72,4 +64,5 @@ public class BeneratorScript extends AbstractScript {
   public String toString() {
     return text;
   }
+
 }

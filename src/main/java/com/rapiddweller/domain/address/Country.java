@@ -163,6 +163,11 @@ public class Country {
   public static final Country VIETNAM = getInstance("VN");
   public static final Country NEW_ZEALAND = getInstance("NZ");
   public static final Country AUSTRALIA = getInstance("AU");
+  public static final Country SRI_LANKA = getInstance("LK");
+  public static final Country PHILIPPINES = getInstance("PH");
+  public static final Country MOROCCO = getInstance("MA");
+  public static final Country PANAMA = getInstance("PA");
+  public static final Country OMAN = getInstance("OM");
 
   private static Country defaultCountry;
 

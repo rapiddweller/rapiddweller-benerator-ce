@@ -26,39 +26,28 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
+import com.rapiddweller.benerator.DomainDescriptor;
 import com.rapiddweller.benerator.PlatformDescriptor;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 
-import java.util.List;
-
 /**
- * Imports classes by package, class, domain and platform definition(s).<br/>
- * <br/>
+ * Imports classes by package, class, domain and platform definition(s).<br/><br/>
  * Created at 22.07.2009 08:19:54
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class ImportStatement implements Statement {
 
   private final boolean defaultImports;
-  private final String[] classImports;
-  private final String[] domainImports;
-  private final List<PlatformDescriptor> platformImports;
+  private final String classImport;
+  private final DomainDescriptor[] domainImports;
+  private final PlatformDescriptor[] platformImports;
 
-  /**
-   * Instantiates a new Import statement.
-   *
-   * @param defaultImports  the default imports
-   * @param classImports    the class imports
-   * @param domainImports   the domain imports
-   * @param platformImports the platform imports
-   */
-  public ImportStatement(boolean defaultImports, String[] classImports, String[] domainImports,
-                         List<PlatformDescriptor> platformImports) {
+  public ImportStatement(boolean defaultImports, String classImport,
+                         DomainDescriptor[] domainImports, PlatformDescriptor[] platformImports) {
     this.defaultImports = defaultImports;
-    this.classImports = classImports;
+    this.classImport = classImport;
     this.domainImports = domainImports;
     this.platformImports = platformImports;
   }
@@ -69,14 +58,12 @@ public class ImportStatement implements Statement {
       context.importDefaults();
     }
 
-    if (classImports != null) {
-      for (String classImport : classImports) {
-        context.importClass(classImport);
-      }
+    if (classImport != null) {
+      context.importClass(classImport);
     }
 
     if (domainImports != null) {
-      for (String domainImport : domainImports) {
+      for (DomainDescriptor domainImport : domainImports) {
         importDomain(domainImport, context);
       }
     }
@@ -89,28 +76,17 @@ public class ImportStatement implements Statement {
     return true;
   }
 
-  /**
-   * Import domain.
-   *
-   * @param domain  the domain
-   * @param context the context
-   */
-  public void importDomain(String domain, BeneratorContext context) {
-    if (domain.indexOf('.') < 0) {
-      context.importPackage("com.rapiddweller.domain." + domain);
-    } else {
-      context.importPackage(domain);
-    }
+  public void importDomain(DomainDescriptor domain, BeneratorContext context) {
+    context.importPackage(domain.getPackage());
   }
 
-  /**
-   * Import platform.
-   *
-   * @param platformDescriptor the platform descriptor
-   * @param context            the context
-   */
   public void importPlatform(PlatformDescriptor platformDescriptor, BeneratorContext context) {
-    platformDescriptor.init(context);
+    for (String pkg : platformDescriptor.getPackagesToImport()) {
+      context.importPackage(pkg);
+    }
+    for (String cls : platformDescriptor.getClassesToImport()) {
+      context.importClass(cls);
+    }
   }
 
 }

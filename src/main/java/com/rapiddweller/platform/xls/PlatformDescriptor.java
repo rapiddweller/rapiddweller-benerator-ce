@@ -31,7 +31,6 @@ import com.rapiddweller.benerator.DefaultPlatformDescriptor;
 /**
  * XLS platform descriptor.<br/><br/>
  * Created: 24.01.2013 17:41:59
- *
  * @author Volker Bergmann
  * @since 0.8.0
  */
@@ -40,49 +39,25 @@ public class PlatformDescriptor extends DefaultPlatformDescriptor {
   private static boolean formattedByDefault = false;
   private static String collectionReferencePrefix = "tab:";
 
-  /**
-   * Instantiates a new Platform descriptor.
-   */
-  public PlatformDescriptor() {
-    super(PlatformDescriptor.class.getName());
-  }
-
-  /**
-   * Is formatted by default boolean.
-   *
-   * @return the boolean
-   */
   public static boolean isFormattedByDefault() {
     return formattedByDefault;
   }
 
-  /**
-   * Sets formatted by default.
-   *
-   * @param formattedByDefault the formatted by default
-   */
   public static void setFormattedByDefault(boolean formattedByDefault) {
     PlatformDescriptor.formattedByDefault = formattedByDefault;
   }
 
-  /**
-   * Gets collection reference prefix.
-   *
-   * @return the collection reference prefix
-   */
   public static String getCollectionReferencePrefix() {
     return collectionReferencePrefix;
   }
 
-  /**
-   * Sets collection reference prefix.
-   *
-   * @param collectionReferencePrefix the collection reference prefix
-   */
-  public static void setCollectionReferencePrefix(
-      String collectionReferencePrefix) {
-    PlatformDescriptor.collectionReferencePrefix =
-        collectionReferencePrefix;
+  public static void setCollectionReferencePrefix(String collectionReferencePrefix) {
+    PlatformDescriptor.collectionReferencePrefix = collectionReferencePrefix;
+  }
+
+  @Override
+  public String[] getPackagesToImport() {
+    return new String[] { getClass().getPackageName() };
   }
 
 }

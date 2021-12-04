@@ -29,6 +29,8 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.format.xml.ParseContext;
+import com.rapiddweller.platform.db.DatabaseParser;
+import com.rapiddweller.platform.memstore.MemStoreParser;
 
 /**
  * {@link ParseContext} implementation for Benerator. It defines parsers for all the descriptor XML elements.<br/><br/>
@@ -47,7 +49,6 @@ public class BeneratorParseContext extends ParseContext<Statement> {
     factory.addParser(new BeepParser());
     factory.addParser(new CascadeParser());
     factory.addParser(new CommentParser());
-    factory.addParser(new DatabaseParser());
     factory.addParser(new DefaultComponentParser());
     factory.addParser(new DOMTreeParser());
     factory.addParser(new EchoParser());
@@ -62,11 +63,14 @@ public class BeneratorParseContext extends ParseContext<Statement> {
     factory.addParser(new SettingParser());
     factory.addParser(new RunTaskParser());
     factory.addParser(new SetupParser());
-    factory.addParser(new MemStoreParser());
     factory.addParser(new TranscodeParser());
     factory.addParser(new TranscodingTaskParser());
     factory.addParser(new WaitParser());
     factory.addParser(new WhileParser());
+    // TODO the following parsers remain for backward compatibility,
+    //  but should cause a warning if the import is missing
+    factory.addParser(new DatabaseParser());
+    factory.addParser(new MemStoreParser());
   }
 
   public ResourceManager getResourceManager() {

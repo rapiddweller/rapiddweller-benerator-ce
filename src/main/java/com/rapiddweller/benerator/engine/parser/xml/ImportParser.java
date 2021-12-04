@@ -27,20 +27,18 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.DefaultPlatformDescriptor;
+import com.rapiddweller.benerator.DomainDescriptor;
 import com.rapiddweller.benerator.PlatformDescriptor;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ImportStatement;
-import com.rapiddweller.common.ArrayBuilder;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ExceptionUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.XMLElementParser;
 import org.w3c.dom.Element;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
@@ -70,65 +68,154 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
       Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     // check syntax
     assertAtLeastOneAttributeIsSet(element, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS, ATT_CLASS);
-
-    // prepare parsing
-    ArrayBuilder<String> classImports = new ArrayBuilder<>(String.class);
-    ArrayBuilder<String> domainImports = new ArrayBuilder<>(String.class);
-
     // defaults import
-    boolean defaults = ("true".equals(element.getAttribute("defaults")));
-
-    // check class import
-    String attribute = element.getAttribute("class");
-    if (!StringUtil.isEmpty(attribute)) {
-      classImports.add(attribute);
-    }
-
-    // (multiple) domain import
-    attribute = element.getAttribute("domains");
-    if (!StringUtil.isEmpty(attribute)) {
-      domainImports.addAll(StringUtil.trimAll(StringUtil.tokenize(attribute, ',')));
-    }
-
-    // (multiple) platform import
-    attribute = element.getAttribute("platforms");
-
-    List<PlatformDescriptor> platformImports = null;
-    if (!StringUtil.isEmpty(attribute)) {
-      platformImports = importPlatforms(StringUtil.trimAll(attribute.split(",")), context);
-    }
-
-    return new ImportStatement(defaults, classImports.toArray(), domainImports.toArray(), platformImports);
+    boolean defaults = parseDefaults(element);
+    String classImport = parseClass(element);
+    DomainDescriptor[] domainImports = parseDomains(element);
+    PlatformDescriptor[] platformImports = parsePlatforms(element, context);
+    return new ImportStatement(defaults, classImport, domainImports, platformImports);
   }
 
-  private static List<PlatformDescriptor> importPlatforms(String[] platformNames, BeneratorParseContext context) {
-    List<PlatformDescriptor> platforms = new ArrayList<>(platformNames.length);
-    for (String platformName : platformNames) {
-      PlatformDescriptor platformDescriptor = createPlatformDescriptor(platformName);
-      List<XMLElementParser<Statement>> parsers = platformDescriptor.getParsers();
-      if (parsers != null) {
-        for (XMLElementParser<Statement> parser : parsers) {
-          context.addParser(parser);
-        }
+  // non-public helpers ----------------------------------------------------------------------------------------------
+
+  protected boolean parseDefaults(Element element) {
+    return ("true".equals(element.getAttribute("defaults")));
+  }
+
+  protected String parseClass(Element element) {
+    String attribute = element.getAttribute(ATT_CLASS);
+    if (StringUtil.isEmpty(attribute)) {
+      return null;
+    } else {
+      return attribute.trim();
+    }
+  }
+
+  protected DomainDescriptor[] parseDomains(Element element) {
+    String attribute = element.getAttribute(ATT_DOMAINS);
+    if (StringUtil.isEmpty(attribute)) {
+      return new DomainDescriptor[0];
+    } else {
+      String[] domainSpecs = StringUtil.trimAll(attribute.split(","));
+      return importDomains(domainSpecs);
+    }
+  }
+
+  private DomainDescriptor[] importDomains(String[] domainSpecs) {
+    DomainDescriptor[] result = new DomainDescriptor[domainSpecs.length];
+    for (int i = 0; i < domainSpecs.length; i++) {
+      String domainSpec = domainSpecs[i];
+      result[i] = findDescriptorForDomain(domainSpec);
+    }
+    return result;
+  }
+
+  private DomainDescriptor findDescriptorForDomain(String domainSpec) {
+    String[] pkgs = domainPkgCandidates(domainSpec);
+    for (String pkg : pkgs) {
+      DomainDescriptor result = findDomainDescriptorForPackage(pkg);
+      if (result != null) {
+        return result;
       }
-      platforms.add(platformDescriptor);
+    }
+    throw BeneratorExceptionFactory.getInstance().illegalArgument(
+        "Domain not found: " + domainSpec, null, BeneratorErrorIds.SYN_IMPORT_DOMAINS);
+  }
+
+  private DomainDescriptor findDomainDescriptorForPackage(String pkg) {
+    if (!BeanUtil.getClasses(pkg).isEmpty()) {
+      // if the package exists, then create a DomainDescriptor...
+      return new DomainDescriptor(pkg);
+    } else {
+      // ...otherwise return null
+      return null;
+    }
+  }
+
+  protected PlatformDescriptor[] parsePlatforms(Element element, BeneratorParseContext context) {
+    String attribute = element.getAttribute(ATT_PLATFORMS);
+    if (StringUtil.isEmpty(attribute)) {
+      return new PlatformDescriptor[0];
+    } else {
+      return importPlatforms(StringUtil.trimAll(attribute.split(",")), context);
+    }
+  }
+
+  private PlatformDescriptor[] importPlatforms(String[] platformNames, BeneratorParseContext context) {
+    PlatformDescriptor[] platforms = new PlatformDescriptor[platformNames.length];
+    for (int i = 0; i < platforms.length; i++) {
+      String platformName = platformNames[i];
+      PlatformDescriptor platformDescriptor = findDescriptorForPlatform(platformName);
+      // the imported parsers must be registered in the phase of parsing
+      // in order to be available for parsing subsequent elements
+      registerParsers(platformDescriptor, context);
+      platforms[i] = platformDescriptor;
     }
     return platforms;
   }
 
-  private static PlatformDescriptor createPlatformDescriptor(String platformName) {
-    String platformPackage = (platformName.indexOf('.') < 0 ? "com.rapiddweller.platform." + platformName : platformName);
-    String descriptorClassName = platformPackage + ".PlatformDescriptor";
+  private PlatformDescriptor findDescriptorForPlatform(String platformName) {
+    String[] pkgs = platformPkgCandidates(platformName);
+    for (String pkg : pkgs) {
+      PlatformDescriptor result = findDescriptorForPackage(pkg);
+      if (result != null) {
+        return result;
+      }
+    }
+    throw BeneratorExceptionFactory.getInstance().illegalArgument(
+        "Platform not found: " + platformName, null, BeneratorErrorIds.SYN_IMPORT_PLATFORMS);
+  }
+
+  private PlatformDescriptor findDescriptorForPackage(String pkg) {
+    String descriptorClassName = pkg + ".PlatformDescriptor";
     try {
-      // if there is a platform descriptor, then use it
+      // if there is a platform descriptor, then use it...
       return (PlatformDescriptor) BeanUtil.newInstance(descriptorClassName);
     } catch (Exception e) {
-      if (ExceptionUtil.getRootCause(e) instanceof ClassNotFoundException) { // TODO test
-        return new DefaultPlatformDescriptor(platformPackage);
+      // ...otherwise check if there exists a package of this name
+      if (ExceptionUtil.getRootCause(e) instanceof ClassNotFoundException) {
+        return checkForPackageWithoutDescriptor(pkg);
       } else {
         throw e;
       }
     }
   }
 
+  private DefaultPlatformDescriptor checkForPackageWithoutDescriptor(String pkg) {
+    if (!BeanUtil.getClasses(pkg).isEmpty()) {
+      // if the package exists, then create a DefaultPlatformDescriptor...
+      return new DefaultPlatformDescriptor(pkg);
+    } else {
+      // ...otherwise don't return a descriptor
+      return null;
+    }
+  }
+
+  protected String[] platformPkgCandidates(String platformName) {
+    if (platformName.indexOf('.') < 0) {
+      return new String[] { "com.rapiddweller.platform." + platformName };
+    } else {
+      return new String[] { platformName };
+    }
+  }
+
+  protected String[] domainPkgCandidates(String platformName) {
+    if (platformName.indexOf('.') < 0) {
+      return new String[] { "com.rapiddweller.domain." + platformName };
+    } else {
+      return new String[] { platformName };
+    }
+  }
+
+  private static void registerParsers(PlatformDescriptor platformDescriptor, BeneratorParseContext context) {
+    XMLStatementParser[] parsers = platformDescriptor.getParsers();
+    if (parsers != null) {
+      for (XMLStatementParser parser : parsers) {
+        context.addParser(parser);
+        BeneratorFactory.getInstance().addCustomParser(parser);
+      }
+    }
+  }
+
 }
+

@@ -28,6 +28,7 @@ package com.rapiddweller.benerator;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.engine.parser.xml.XMLStatementParser;
 import com.rapiddweller.format.xml.XMLElementParser;
 
 import java.util.List;
@@ -39,6 +40,7 @@ import java.util.List;
  * @since 0.7.4
  */
 public interface PlatformDescriptor {
-  List<XMLElementParser<Statement>> getParsers();
-  void init(BeneratorContext context);
+  XMLStatementParser[] getParsers();
+  String[] getPackagesToImport();
+  String[] getClassesToImport();
 }

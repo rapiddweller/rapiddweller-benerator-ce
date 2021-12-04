@@ -33,6 +33,8 @@ import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ParseUtil;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Provides methods for testing generators and standard tests
  * that act on generically created generator instances.<br/><br/>
@@ -52,12 +54,14 @@ public abstract class GeneratorClassTest extends GeneratorTest {
   // test methods that apply for all Generators ----------------------------------------------------------------------
 
   @Test
-  public void testDefaultConstructor() throws Throwable {
+  public void testDefaultConstructor() throws NoSuchMethodException, InvocationTargetException,
+      InstantiationException, IllegalAccessException {
     generatorClass.getDeclaredConstructor().newInstance();
   }
 
   @Test
-  public void testToString() throws Throwable {
+  public void testToString() throws NoSuchMethodException, InvocationTargetException,
+      InstantiationException, IllegalAccessException {
     Generator<?> generator = generatorClass.getDeclaredConstructor().newInstance();
     assertCustomToStringMethod(generator);
     try {
@@ -77,7 +81,7 @@ public abstract class GeneratorClassTest extends GeneratorTest {
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Test
-  public void testDefaultGenerationIfValid() throws Throwable {
+  public void testDefaultGenerationIfValid() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
     try (Generator<?> generator = generatorClass.getDeclaredConstructor().newInstance()) {
       boolean valid = true;
       try {

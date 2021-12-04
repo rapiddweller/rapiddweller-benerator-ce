@@ -33,6 +33,7 @@ import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
+import com.rapiddweller.benerator.engine.parser.xml.XMLStatementParser;
 import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
 import com.rapiddweller.benerator.factory.SimpleTypeGeneratorFactory;
 import com.rapiddweller.benerator.primitive.VarLengthStringGenerator;
@@ -106,6 +107,8 @@ public abstract class BeneratorFactory {
   public abstract String getEdition();
 
   public abstract String[] getVersionInfo(boolean withMode);
+
+  public abstract void addCustomParser(XMLStatementParser parser);
 
   public abstract BeneratorRootContext createRootContext(String contextUri);
 

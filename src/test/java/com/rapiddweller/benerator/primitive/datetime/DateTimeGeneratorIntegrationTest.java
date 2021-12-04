@@ -98,6 +98,7 @@ public class DateTimeGeneratorIntegrationTest extends AbstractBeneratorIntegrati
   @Test
   public void test_cumulated_distribution() {
     String xml = "<setup>\n" +
+        "    <import platforms='memstore'/>\n" +
         "    <bean id='datetime_gen' class='DateTimeGenerator'>\n" +
         "        <property name='minDate' value='2007-06-21'/>\n" +
         "        <property name='maxDate' value='2007-09-21'/>\n" +

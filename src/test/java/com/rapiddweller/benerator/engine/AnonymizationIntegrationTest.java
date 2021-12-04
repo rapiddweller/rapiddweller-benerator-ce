@@ -35,6 +35,7 @@ public class AnonymizationIntegrationTest extends AbstractBeneratorIntegrationTe
   public void testCopy() {
     String xml =
         "<setup>" +
+            "  <import platforms='memstore'/>\n" +
             "  <memstore id='out'/>" +
             "  <iterate source='mem' type='person' consumer='out'/>" +
             "</setup>";
@@ -49,6 +50,7 @@ public class AnonymizationIntegrationTest extends AbstractBeneratorIntegrationTe
   public void testMask() {
     String xml =
         "<setup>" +
+            "  <import platforms='memstore'/>\n" +
             "  <memstore id='out'/>" +
             "  <iterate source='mem' type='person' consumer='out'>" +
             "    <attribute name='name' converter='new MiddleMask(0,2)'/>" +
@@ -65,6 +67,7 @@ public class AnonymizationIntegrationTest extends AbstractBeneratorIntegrationTe
   public void testConstant() {
     String xml =
         "<setup>" +
+            "  <import platforms='memstore'/>\n" +
             "  <memstore id='out'/>" +
             "  <iterate source='mem' type='person' consumer='out'>" +
             "    <attribute name='name' constant='xxx'/>" +

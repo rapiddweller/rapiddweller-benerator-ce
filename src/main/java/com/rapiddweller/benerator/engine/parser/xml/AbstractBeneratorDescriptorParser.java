@@ -49,7 +49,7 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public abstract class AbstractBeneratorDescriptorParser extends AbstractXMLElementParser<Statement> {
+public abstract class AbstractBeneratorDescriptorParser extends XMLStatementParser {
 
   protected AbstractBeneratorDescriptorParser(
       String elementName, AttrInfoSupport attrSupport, Class<?>... supportedParentTypes) {
