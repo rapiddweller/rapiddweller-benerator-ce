@@ -57,7 +57,8 @@ at:
 
 [https://github.com/rapiddweller/rapiddweller-benerator-ce/](https://github.com/rapiddweller/rapiddweller-benerator-ce/issues)
 
-If problems remain unsolved after reading this book, do not hesitate to contact us for help. rapiddweller-benerator-ce is and remains open-source and
+If problems remain unsolved after reading this doc, do not hesitate to contact us for help. 
+rapiddweller-benerator-ce is and remains open-source and
 is provided for free.
 
 If you are interested in additional support, and our premium features, we encourage you to check the

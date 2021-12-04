@@ -136,86 +136,114 @@ Sequences reflect the idea of a mathematical sequence. They primarily focus in n
 well. Most sequences have a default instance which can be used by their literal, e.g. `distribution="random"` uses the 'random' literal for the
 distribution defined in the class RandomSequence.
 
+#### RandomSequence
+
 | Class | RandomSequence |
 | --- | --- |
 | Description | Creates uniformly distributed random values |
 | Default Instance | random |
 
+#### CumulatedSequence
 | Class | CumulatedSequence |
 | --- | --- |
 | Description | Creates random values with a bell-shape probability distribution |
 | Default Instance | cumulated |
 
+#### StepSequence
 | Class | StepSequence |
 | --- | --- |
 | Description | Depending on the settings of property 'delta', it starts with the min or max value of the specified range. With each further invocation, the 'increment' value is added. If addition makes the current value exceed the specified number range, the Sequence becomes unavailable. So the numbers provided are unique. Example: increment = -2, range=1..7: 7, 5, 3, 1 |
 | Default Instances | increment: Uses delta = 1 to create incremental values, e.g. 1, 2, 3,... |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | delta | The difference between the next value and the previous one | 1 |
 
+#### RandomWalkSequence
 | Class | RandomWalkSequence |
 | --- | --- |
 | Description | Starting with an → **initial** value, a random value between → **minStep** and → **
 maxStep** is added on each subsequent invocation |
 | Default Instance | randomWalk |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | minStep | The maximum delta between the next and the previous value | -1 |
 | maxStep | The maximum delta between the next and the previous value | 1 |
 | initial | If no initial value was configured explicitly, number generation starts with the min, max or medium value of the specified range – depending on the settings of minStep and maxStep | null |
 
+#### ShuffleSequence
 | Class | ShuffleSequence |
 | --- | --- |
 | Description | Can be used to iterate quickly through a large number range with avoiding duplicate values. It starts from an offset of 0 and iterates the number range with a fix increment. After the range is covered, it increases the offset by one and reiterates the range. When the offset reaches the same value as the increment, it is set back to 0 again. For an increment of 3 in a range 1..7, the generated numbers would be 1, 4, 7, 2, 5, 3, 6, 1, 4, ... |
 | Default Instance | shuffle |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | increment | See the class description | 2 |
 
+#### WedgeSequence
 | Class | WedgeSequence |
 | --- | --- |
 | Description | Starting with first the lowest, then the highest available number, this alternatively provides increasing small numbers and decreasing large numbers until they converge in the middle and the Sequence becomes unavailable. So this generation is unique. For a number range 1..7, the generated numbers would be: 1, 7, 2, 6, 3, 5, 4. |
 | Default Instance | wedge |
 
+#### BitReverseSequence
 | Class | BitReverseSequence |
 | --- | --- |
 | Description | Creates numbers by continually increasing an internal counter and providing its value in bit-reversed order. This stops when each available number has been generated once, thus providing unique number generation. This comes close to a unique random distribution. |
 | Default Instance | bitreverse |
 
+#### ExpandSequence
 | Class | ExpandSequence |
 | --- | --- |
 | Description | Distributes numbers or data of unlimited volume in a unique or non-unique manner, by starting with a limited lower range and continuously expanding data region as data is generated. This comes close to a unique random distribution and can be used to iterate over very huge amounts of data. |
 | Default Instance | expand |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | cacheSize | The maximum number of elements to keep in RAM at the same time | 100 |
 | bucketSize | The size of 'buckets' over which to distribute the iterated data. The smaller the number, the more buckets are used and the more erratic the generated data looks. | 10 |
 | duplicationQuota | The probability by which a data element will be reused in a later call | 0 |
 
+#### HeadSequence
 | Class | HeadSequence |
 | --- | --- |
 | Description | When applied to a data source or generator, only the first few elements are provided. The number of elements is defined by the **
 size** property. |
 | Default Instance | head |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | size | The size of the buffer | 1 |
 
+#### LiteralSequence
 | Class | LiteralSequence |
 | --- | --- |
 | Description | Defines a number sequence using a comma-separated list literal. |
 | Default Instance | – |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | spec | A comma-separated list with all values in the order in which they shall be provided ,e.g. '2,3,5,7,11' | – |
 
+#### WeightedNumbers
 | Class | WeightedNumbers |
 | --- | --- |
 | Description | Creates numbers based on a weighted-number literal , e.g. '1^70, 3^30' for generating 70% '1' values and 30% '3' values. This is a convenient and simple approach for controlling parent-child cardinalities in nested data generation. |
 | Default Instance | – |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | spec | A weighted-number literal. It lists weighted values in a comma-separated list. Each weighted value is specified by the numeric value followed by a circumflex (^) and the weight value, for example '1^70,3^30' | – |
 
+#### FibonacciSequence
 | Class | FibonacciSequence |
 | --- | --- |
 | Description | Generates numbers based on the Fibonacci Sequence |
 | Default Instance | fibonacci |
 
+#### PadovanSequence
 | Class | PadovanSequence |
 | --- | --- |
 | Description | Generates numbers based on the Padovan Sequence |
@@ -280,7 +308,7 @@ Example:
 ```xml
 <import class="com.rapiddweller.benerator.distribution.function.*"/>
     ...
-<attribute name="rating" type="int" min="1", max="3" distribution="new DiscreteFunction(1, 2, 1)"/>
+<attribute name="rating" type="int" min="1" max="3" distribution="new DiscreteFunction(1, 2, 1)"/>
 ```
 
 ### CumulativeDistributionFunction
@@ -463,7 +491,9 @@ A Consumer consumes generated data and usually is used for exporting or persisti
 | Import | default |
 | Class Description | Prints entities in the console |
 | Constructors | Default constructorConstructor with 'limit' argument (see below) |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | limit | The maximum number of entries per type to print out | unlimited |
 | nullString | Text to represent _null_ values | "" |
 | datePattern | The pattern to render date values | "yyyy-MM-dd" |
@@ -479,7 +509,9 @@ A Consumer consumes generated data and usually is used for exporting or persisti
 | --- | --- |
 | Import | `<import platforms="java"/>` |
 | Class Description | Maps entity components to method parameters and invokes a method on a Java object with these parameters. |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | target | The Java object on which to invoke the method |  |
 | methodName | The name of the Java method to invoke |  |
 
@@ -496,7 +528,9 @@ Usage example:
 | --- | --- |
 | Import | `<import platforms="dbunit"/>` |
 | Class Description | Exports entities to a file in DbUnit XML format. |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | uri | The URI of the file to create | "data.dbunit.xml" |
 | encoding | The character encoding to use for the file | The system default |
 
@@ -506,7 +540,9 @@ Usage example:
 | --- | --- |
 | Import | `<import platforms="xml"/>` |
 | Class Description | Exports entities to an XML file |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | uri | The URI of the file to create | "export.xml" |
 | encoding | The character encoding to use for the file | The system default |
 
@@ -523,7 +559,9 @@ Usage example:
 | --- | --- |
 | Import | `<import platforms="script"/>` |
 | Class Description | Exports entities to a file in custom format, rendered using a script language, e.g. FreeMarker. Three different script expressions may be applied for header (headerScript property), entity (partScript) and footer (footerScript). |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | uri | The URI of the file to create |  |
 | encoding | The character encoding to use for the file | The system default |
 | headerScript | Script to format an eventual header line |  |
@@ -545,7 +583,9 @@ Usage example:
 | --- | --- |
 | Import | `<import platforms="fixedwidth"/>` |
 | Class Description | Exports entities to a fixed column width file. |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | uri | The URI of the file to create | "export.fcw" |
 | columns | A comma-separated list of column format specifications |  |
 | encoding | The character encoding to use for the file | System default |
@@ -594,7 +634,9 @@ Helmut Schmidt 10226.14
 | --- | --- |
 | Import | `<import platforms="xls"/>` |
 | Class Description | Exports entities to Excel XLS files. For using this exporter you need to add the Apache POI library to the Benerator's lib directory. |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | uri | The URI of the file to create | "export.xls" |
 | nullString | Text to represent _null_ values | "" |
 
@@ -604,7 +646,10 @@ Helmut Schmidt 10226.14
 | --- | --- |
 | Import | `<import platforms="csv"/>` |
 | Class Description | Exports entities to a CSV file |
+
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | uri | The URI of the file to create | "export.csv" |
 | columns | A comma-separated list of column names |  |
 | headless | Flag to leave out column headers | false |
@@ -630,7 +675,9 @@ Helmut Schmidt 10226.14
 | --- | --- |
 | Import | `<import platforms="db"/>` |
 | Class Description | Exports entities as 'INSERT' commands to a SQL file |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | uri | The URI of the file to create | "export.sql" |
 | encoding | The character encoding to use for the file | System default |
 | lineSeparator | The line separator to use in the generated file | System default |
@@ -653,7 +700,9 @@ Benerator provides the following implementations of the EntitySource interface:
 | --- | --- |
 | Import | `<import platforms="dbunit"/>` |
 | Class Description | Imports entities from a DbUnit XML file |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | uri | The URI of the file to read | "export.sql" |
 
 ### CSVEntitySource
@@ -662,7 +711,9 @@ Benerator provides the following implementations of the EntitySource interface:
 | --- | --- |
 | Import | `<import platforms="csv"/>` |
 | Class Description | Imports entities from a CSV file |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | uri | The URI of the file to read | "export.sql" |
 | encoding | The character encoding used in the file | System default |
 | separator | The line separator used in the file | "," |
@@ -674,7 +725,9 @@ Benerator provides the following implementations of the EntitySource interface:
 | --- | --- |
 | Import | `<import platforms="fixedwidth"/>` |
 | Class Description | Imports entities from a fixed column width file |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | uri | The URI of the file to read | "export.sql" |
 | encoding | The character encoding of the file | System default |
 | columns | The columns specification (See the FixedWidthEntityExporter for documentation) |  |
@@ -685,7 +738,9 @@ Benerator provides the following implementations of the EntitySource interface:
 | --- | --- |
 | Import | `<import platforms="xls"/>` |
 | Class Description | Imports entities from an Excel(TM) document |
+
 | Property | Property Description | Default Value |
+| --- | --- | --- |
 | uri | The URI of the file to read |  |
 
 ## Benerator Utility Classes
@@ -696,7 +751,9 @@ Benerator provides the following implementations of the EntitySource interface:
 | --- | --- |
 | Import | `<import class="com.rapiddweller.benerator.util.RandomUtil"/>` |
 | Class Description | Provides basic random functions |
+
 | Method | Method Description |
+| --- | --- |
 | randomLong(min, max) | Returns a random long between min (inclusively) and max (inclusively) |
 | randomInt(min, max) | Returns a random int between min (inclusively) and max (inclusively) |
 | randomElement(value1, value2, ...) | Returns a random element of the ones listed as parameters |
@@ -719,7 +776,9 @@ other supported script languages.
 | --- | --- |
 | Import | `<import class="com.rapiddweller.common.TimeUtil"/>` |
 | Class Description | Provides time and date related utility methods |
+
 | Method | Method Description |
+| --- | --- |
 | currentYear() | returns the current year as integer value |
 | today() | returns the current day as date object |
 | yesterday() | returns the previous date as date object |
@@ -749,7 +808,9 @@ other supported script languages.
 | --- | --- |
 | Import | `<import class="com.rapiddweller.common.Period"/>` |
 | Class Description | Provides constants for some time periods |
+
 | Invocation | Description |
+| --- | --- |
 | Period.SECOND.millis | The number of milliseconds in a second |
 | Period.MINUTE.millis | The number of milliseconds in a minute |
 | Period.HOUR.millis | The number of milliseconds in an hour |
@@ -762,7 +823,9 @@ other supported script languages.
 | --- | --- |
 | Import | `<import class="com.rapiddweller.common.IOUtil"/>` |
 | Class Description | Provides I/O related utility methods |
+
 | Method | Method Description |
+| --- | --- |
 | isURIAvailable(uri) | Tells if the file specified by the given URI exists |
 | getContentOfURI(uri) | Provides the content of the specified file as string |
 | getBinaryContentOfUri(uri) | Provides the content of the specified file as byte array |
@@ -777,6 +840,8 @@ other supported script languages.
 | --- | --- |
 | Import | `<import class="com.rapiddweller.common.CharUtil"/>` |
 | Class Description | Provides character related utility methods |
+
 | Method | Method Description |
+| --- | --- |
 | ordinal(character) | Returns a character's ordinal as integer |
 | character(ordinal) | Returns the character that corresponds to the given ordinal |
