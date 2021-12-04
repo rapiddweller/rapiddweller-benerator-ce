@@ -1,4 +1,5 @@
 <setup defaultDataset='US'>
+    <import platforms='memstore'/>
     <import domains='address,person,finance'/>
 
     <memstore id='mem'/>

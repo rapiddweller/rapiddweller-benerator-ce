@@ -54,7 +54,7 @@
             <xs:element ref="while" minOccurs="0"/>
             <xs:element ref="wait" minOccurs="0"/>
             <xs:element ref="domtree" minOccurs="0"/>
-            <xs:element ref="template" minOccurs="0"/>
+            <!--xs:element ref="template" minOccurs="0"/-->
             <xs:element ref="generate" minOccurs="0"/>
             <xs:element ref="iterate" minOccurs="0"/>
             <xs:element ref="anon-check" minOccurs="0" maxOccurs="1"/>
@@ -323,8 +323,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="template">
-        <!-- TODO keep this? If yes then document it! -->
+    <!--xs:element name="template">
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="comment" minOccurs="0"/>
@@ -338,7 +337,7 @@
             <xs:attribute name="name" type="xs:string"/>
             <xs:attribute name="type" type="data-type"/>
         </xs:complexType>
-    </xs:element>
+    </xs:element-->
 
     <!-- start of elements related to <generate> and <iterate> - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -369,7 +368,6 @@
             <xs:attribute name="maxCount" type="scriptable-long"/>
             <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attributeGroup ref="execution-attrs"/>
-            <xs:attribute name="template" type="xs:string"/>
             <xs:attribute name="consumer" type="xs:string"/>
         </xs:complexType>
     </xs:element>
@@ -398,7 +396,6 @@
             <xs:attribute name="maxCount" type="scriptable-long"/>
             <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attributeGroup ref="execution-attrs"/>
-            <xs:attribute name="template" type="xs:string"/>
             <xs:attribute name="consumer" type="xs:string"/>
         </xs:complexType>
     </xs:element>

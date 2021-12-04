@@ -7,7 +7,7 @@
 
     <comment>setting default values</comment>
     <setting name="transaction_count" default="100"/>
-    <import platforms="mem"/>
+    <import platforms="memstore"/>
     <import domains="person, address, net, organization,finance,product,br,us"/>
 
     <memstore id="store"/>

@@ -24,13 +24,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.rapiddweller.benerator.engine.parser.xml;
+package com.rapiddweller.platform.db;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.benerator.engine.statement.DefineDatabaseStatement;
+import com.rapiddweller.benerator.engine.parser.xml.AbstractBeneratorDescriptorParser;
+import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
+import com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ConversionException;
@@ -60,7 +62,6 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TABLE_FI
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_URL;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_USER;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_DATABASE;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getConstantStringAttributeAsExpression;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
@@ -95,8 +96,6 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
     ATTR_INFO.add(ATT_LAZY, false, BeneratorErrorIds.SYN_DATABASE_LAZY);
     ATTR_INFO.add(ATT_ACC_UNK_COL_TYPES, false, BeneratorErrorIds.SYN_DATABASE_ACCEPT_UNK_COL_TYPES);
   }
-
-  // TODO define parser extension mechanism and move DatabaseParser and DefineDatabaseStatement to DB package?
 
   public DatabaseParser() {
     super(EL_DATABASE, ATTR_INFO, BeneratorRootStatement.class, IfStatement.class);

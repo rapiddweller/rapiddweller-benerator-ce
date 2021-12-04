@@ -1,4 +1,7 @@
 <setup>
+
+    <import platforms="db"/>
+
     <defaultComponents>
         <attribute name="created_at" generator="CurrentDateTimeGenerator"/>
         <attribute name="created_by" constant="Bob"/>

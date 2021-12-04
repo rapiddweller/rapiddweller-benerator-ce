@@ -35,6 +35,7 @@ import com.rapiddweller.benerator.engine.parser.DefaultGenerationInterceptor;
 import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
 import com.rapiddweller.benerator.engine.parser.String2DistributionConverter;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
+import com.rapiddweller.benerator.engine.parser.xml.XMLStatementParser;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.factory.ComplexTypeGeneratorFactory;
 import com.rapiddweller.benerator.factory.SimpleTypeGeneratorFactory;
@@ -61,6 +62,8 @@ import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.platform.xml.DefaultXMLModule;
 import com.rapiddweller.platform.xml.XMLModule;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -75,6 +78,7 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
 
   private final RandomProvider randomProvider;
   private final XMLModule xmlModule;
+  private List<XMLStatementParser> customParsers;
 
   public DefaultBeneratorFactory() {
     this(new DefaultRandomProvider(), new DefaultXMLModule());
@@ -83,6 +87,7 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
   public DefaultBeneratorFactory(RandomProvider randomProvider, XMLModule xmlModule) {
     this.randomProvider = randomProvider;
     this.xmlModule = xmlModule;
+    this.customParsers = new ArrayList<>();
     try {
       ConverterManager.getInstance().registerConverterClass(String2DistributionConverter.class);
     } catch (Exception e) {
@@ -121,9 +126,17 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
     return new DefaultGenerationInterceptor();
   }
 
+  public void addCustomParser(XMLStatementParser parser) {
+    this.customParsers.add(parser);
+  }
+
   @Override
   public BeneratorParseContext createParseContext(ResourceManager resourceManager) {
-    return new BeneratorParseContext(resourceManager);
+    BeneratorParseContext result = new BeneratorParseContext(resourceManager);
+    for (XMLStatementParser parser : this.customParsers) {
+      result.addParser(parser);
+    }
+    return result;
   }
 
   @Override

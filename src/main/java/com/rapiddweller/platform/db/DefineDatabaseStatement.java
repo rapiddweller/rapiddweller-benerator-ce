@@ -24,14 +24,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.rapiddweller.benerator.engine.statement;
+package com.rapiddweller.platform.db;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.platform.db.AbstractDBSystem;
-import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.slf4j.LoggerFactory;

@@ -24,13 +24,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.rapiddweller.benerator.engine.parser.xml;
+package com.rapiddweller.platform.memstore;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.engine.parser.xml.AbstractBeneratorDescriptorParser;
+import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
+import com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
-import com.rapiddweller.benerator.engine.statement.MemStoreStatement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.StringUtil;

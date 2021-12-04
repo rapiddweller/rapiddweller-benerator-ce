@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
@@ -34,9 +35,13 @@ import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.exception.SyntaxError;
+import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.Test;
+import org.w3c.dom.Element;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 
 /**
  * Tests {@link ImportParser} and {@link ImportStatement}.<br/><br/>
@@ -47,7 +52,7 @@ import static org.junit.Assert.assertNull;
 public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   @Test(expected = ConfigurationError.class)
-  public void testNoImport() {
+  public void test_no_import_but_class_ref() {
     BeneratorContext context = new DefaultBeneratorContext();
     try {
       context.forName("IncrementGenerator");
@@ -56,21 +61,56 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
     }
   }
 
+  @Test(expected = SyntaxError.class)
+  public void testImport_without_attributes() {
+    parse("<import/>");
+  }
+
+  @Test(expected = SyntaxError.class)
+  public void testImport_platform_not_found() {
+    Statement statement = parse("<import package='not_a_platform'/>");
+    BeneratorContext context = new DefaultBeneratorContext();
+    statement.execute(context);
+  }
+
   @Test
   public void testDefaults() {
     Statement statement = parse("<import defaults='true' />");
     BeneratorContext context = new DefaultBeneratorContext();
     statement.execute(context);
-    context.forName("IncrementGenerator");
+    assertNotNull(context.forName("IncrementGenerator"));
   }
 
   @Test
-  public void testPlatforms() {
-    Statement statement = parse("<import platforms='db, xml' />");
+  public void testImport_platform_without_descriptor() {
+    Statement statement = parse("<import platforms='test_no_desc'/>");
     BeneratorContext context = new DefaultBeneratorContext();
     statement.execute(context);
-    context.forName("DefaultDBSystem");
-    context.forName("XMLEntityExporter");
+    assertNotNull(context.forName("TNDSimpleBean"));
+  }
+
+  @Test
+  public void testImport_platform_with_descriptor() {
+    Statement statement = parse("<import platforms='test_with_desc'/>");
+    BeneratorContext context = new DefaultBeneratorContext();
+    statement.execute(context);
+    assertThrows(ConfigurationError.class, () -> context.forName("RootBean"));
+    assertNotNull(context.forName("ImpPkgSimpleBean"));
+    assertNotNull(context.forName("ImpClassSimpleBean"));
+    BeneratorParseContext pc = BeneratorFactory.getInstance().createParseContext(null);
+    Element element = XMLUtil.parseStringAsElement("<twd text='hello'/>");
+    Statement stmt = pc.parseElement(element, new Element[0], new Statement[0]);
+    stmt.execute(context);
+    assertEquals("hello", context.get("twd_text"));
+  }
+
+  @Test
+  public void testMultiPlatforms() {
+    Statement statement = parse("<import platforms='db, xml'/>");
+    BeneratorContext context = new DefaultBeneratorContext();
+    statement.execute(context);
+    assertNotNull(context.forName("DefaultDBSystem"));
+    assertNotNull(context.forName("XMLEntityExporter"));
   }
 
   @Test
@@ -78,8 +118,8 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
     Statement statement = parse("<import domains='person, address' />");
     BeneratorContext context = new DefaultBeneratorContext();
     statement.execute(context);
-    context.forName("PersonGenerator");
-    context.forName("AddressGenerator");
+    assertNotNull(context.forName("PersonGenerator"));
+    assertNotNull(context.forName("AddressGenerator"));
   }
 
   @Test(expected = SyntaxError.class)

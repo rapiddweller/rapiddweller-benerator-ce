@@ -254,6 +254,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     MemStore.ignoreClose = true;
     parseAndExecute(
         "<setup>" +
+            "	<import platforms='memstore'/>" +
             "	<memstore id='store'/>" +
             "	<generate type='product' count='100' consumer='store'>" +
             "		<id name='id' type='int' />" +

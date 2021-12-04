@@ -81,6 +81,7 @@ public class WeightedNumbersTest extends AbstractBeneratorIntegrationTest {
   public void test_xml_attrib() {
     int N = 5000;
     String xml = "<setup>\n"
+        + "  <import platforms='memstore'/>\n"
         + "  <memstore id='mem'/>\n"
         + "  <generate type='x' count='" + N + "' consumer='mem'>\n"
         + "    <id name='id' type='int'/>\n"
@@ -100,6 +101,7 @@ public class WeightedNumbersTest extends AbstractBeneratorIntegrationTest {
   public void test_xml_parts() {
     int N = 5000;
     String xml = "<setup>\n"
+        + "  <import platforms='memstore'/>\n"
         + "  <memstore id='mem'/>\n"
         + "  <generate type='x' count='" + N + "' consumer='mem'>\n"
         + "    <id name='id' type='int'/>\n"
