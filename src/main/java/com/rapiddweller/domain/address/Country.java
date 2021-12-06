@@ -272,10 +272,10 @@ public class Country {
         String isoCode = cells[0];
         String defaultLocale = cellValueOrDefault(cells, 1, "en");
         String phoneCode = cellValueOrDefault(cells, 2, null);
-        String mobilCodePattern = cellValueOrDefault(cells, 3, DEFAULT_MOBILE_PHONE_PATTERN);
+        String mobileCodePattern = cellValueOrDefault(cells, 3, DEFAULT_MOBILE_PHONE_PATTERN);
         String name = cellValueOrDefault(cells, 4, null);
         int population = Integer.parseInt(cellValueOrDefault(cells, 5, "1000000"));
-        Country country = new Country(isoCode, defaultLocale, population, phoneCode, mobilCodePattern, name);
+        Country country = new Country(isoCode, defaultLocale, population, phoneCode, mobileCodePattern, name);
         logger.debug("Parsed country {}", country);
       }
     } catch (Exception e) {
