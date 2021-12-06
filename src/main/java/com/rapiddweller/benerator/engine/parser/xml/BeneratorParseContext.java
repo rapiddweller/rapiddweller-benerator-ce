@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,8 +29,6 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.format.xml.ParseContext;
-import com.rapiddweller.platform.db.DatabaseParser;
-import com.rapiddweller.platform.memstore.MemStoreParser;
 
 /**
  * {@link ParseContext} implementation for Benerator. It defines parsers for all the descriptor XML elements.<br/><br/>
@@ -67,10 +65,6 @@ public class BeneratorParseContext extends ParseContext<Statement> {
     factory.addParser(new TranscodingTaskParser());
     factory.addParser(new WaitParser());
     factory.addParser(new WhileParser());
-    // TODO the following parsers remain for backward compatibility,
-    //  but should cause a warning if the import is missing
-    factory.addParser(new DatabaseParser());
-    factory.addParser(new MemStoreParser());
   }
 
   public ResourceManager getResourceManager() {

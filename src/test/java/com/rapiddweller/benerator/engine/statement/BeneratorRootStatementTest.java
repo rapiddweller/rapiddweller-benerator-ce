@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
+import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.benerator.factory.EquivalenceGeneratorFactory;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.util.GeneratorUtil;
@@ -58,7 +59,7 @@ public class BeneratorRootStatementTest extends AbstractBeneratorIntegrationTest
   public void testGeneratorFactoryConfig() {
     Map<String, String> attributes = CollectionUtil.buildMap(
         "generatorFactory", EquivalenceGeneratorFactory.class.getName());
-    BeneratorRootStatement root = new BeneratorRootStatement(attributes);
+    BeneratorRootStatement root = new BeneratorRootStatement(attributes, new BeneratorParseContext(null));
     try {
       root.execute(context);
       assertEquals(EquivalenceGeneratorFactory.class, context.getGeneratorFactory().getClass());

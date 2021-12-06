@@ -34,7 +34,6 @@ import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.format.xml.AttrInfoSupport;
@@ -47,7 +46,6 @@ import org.w3c.dom.NamedNodeMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.rapiddweller.benerator.BeneratorErrorIds.*;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
@@ -60,7 +58,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  */
 public class SetupParser extends AbstractBeneratorDescriptorParser {
 
-  protected final static AttrInfoSupport ATTR_CONSTR;
+  protected static final AttrInfoSupport ATTR_CONSTR;
 
   static {
     ATTR_CONSTR = new AttrInfoSupport(SYN_SETUP_ILLEGAL_ATTRIBUTE);
@@ -113,7 +111,7 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
       }
     }
     // create root statement and configure its children
-    BeneratorRootStatement rootStatement = new BeneratorRootStatement(map);
+    BeneratorRootStatement rootStatement = new BeneratorRootStatement(map, context);
     Statement[] currentComponentPath = new Statement[] { rootStatement };
     Element[] currentXmlPath = new Element[] { element };
     List<Statement> subStatements = context.parseChildElementsOf(element, currentXmlPath, currentComponentPath);

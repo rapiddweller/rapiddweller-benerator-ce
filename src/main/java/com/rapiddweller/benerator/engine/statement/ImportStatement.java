@@ -26,10 +26,13 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.DomainDescriptor;
 import com.rapiddweller.benerator.PlatformDescriptor;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.Importer;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 
 /**
  * Imports classes by package, class, domain and platform definition(s).<br/><br/>
@@ -43,19 +46,22 @@ public class ImportStatement implements Statement {
   private final String classImport;
   private final DomainDescriptor[] domainImports;
   private final PlatformDescriptor[] platformImports;
+  private final BeneratorParseContext parseContext;
 
   public ImportStatement(boolean defaultImports, String classImport,
-                         DomainDescriptor[] domainImports, PlatformDescriptor[] platformImports) {
+                         DomainDescriptor[] domainImports, PlatformDescriptor[] platformImports,
+                         BeneratorParseContext parseContext) {
     this.defaultImports = defaultImports;
     this.classImport = classImport;
     this.domainImports = domainImports;
     this.platformImports = platformImports;
+    this.parseContext = parseContext;
   }
 
   @Override
   public boolean execute(BeneratorContext context) {
     if (defaultImports) {
-      context.importDefaults();
+      BeneratorFactory.getInstance().importDefaults(context, parseContext);
     }
 
     if (classImport != null) {
@@ -70,7 +76,7 @@ public class ImportStatement implements Statement {
 
     if (platformImports != null) {
       for (PlatformDescriptor platformImport : platformImports) {
-        importPlatform(platformImport, context);
+        Importer.importPlatform(platformImport, context);
       }
     }
     return true;
@@ -78,15 +84,6 @@ public class ImportStatement implements Statement {
 
   public void importDomain(DomainDescriptor domain, BeneratorContext context) {
     context.importPackage(domain.getPackage());
-  }
-
-  public void importPlatform(PlatformDescriptor platformDescriptor, BeneratorContext context) {
-    for (String pkg : platformDescriptor.getPackagesToImport()) {
-      context.importPackage(pkg);
-    }
-    for (String cls : platformDescriptor.getClassesToImport()) {
-      context.importClass(cls);
-    }
   }
 
 }

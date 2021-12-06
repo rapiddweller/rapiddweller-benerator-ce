@@ -27,6 +27,10 @@
 package com.rapiddweller.benerator;
 
 import com.rapiddweller.benerator.engine.parser.xml.XMLStatementParser;
+import com.rapiddweller.common.CollectionUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Default implementation of the {@link PlatformDescriptor} interface.<br/><br/>
@@ -36,23 +40,29 @@ import com.rapiddweller.benerator.engine.parser.xml.XMLStatementParser;
  */
 public class DefaultPlatformDescriptor implements PlatformDescriptor {
 
-  private final String rootPackage;
+  private final String name;
+  private final List<String> packages;
 
-  public DefaultPlatformDescriptor() {
-    this(null);
+  public DefaultPlatformDescriptor(String name, String rootPackage) {
+    this.name = name;
+    this.packages = new ArrayList<>();
+    if (rootPackage != null) {
+      addPackage(rootPackage);
+    }
   }
 
-  public DefaultPlatformDescriptor(String rootPackage) {
-    this.rootPackage = rootPackage;
+  @Override
+  public String getName() {
+    return name;
+  }
+
+  protected void addPackage(String rootPackage) {
+    this.packages.add(rootPackage);
   }
 
   @Override
   public String[] getPackagesToImport() {
-    if (rootPackage == null) {
-      return new String[0];
-    } else {
-      return new String[] { rootPackage };
-    }
+    return CollectionUtil.toArray(packages, String.class);
   }
 
   @Override
@@ -63,6 +73,11 @@ public class DefaultPlatformDescriptor implements PlatformDescriptor {
   @Override
   public XMLStatementParser[] getParsers() {
     return new XMLStatementParser[0];
+  }
+
+  @Override
+  public String toString() {
+    return name;
   }
 
 }

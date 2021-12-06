@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -144,5 +144,11 @@ public abstract class BeneratorFactory {
       String name, NamedValueList<InstanceDescriptor> parts, ComplexTypeDescriptor parent);
 
   public abstract OrderedNameMap<Object> createComponentMap();
+
+  public abstract void importDefaults(BeneratorContext context, BeneratorParseContext parseContext);
+
+  public abstract String[] platformPkgCandidates(String platformName);
+
+  public abstract String[] domainPkgCandidates(String platformName);
 
 }

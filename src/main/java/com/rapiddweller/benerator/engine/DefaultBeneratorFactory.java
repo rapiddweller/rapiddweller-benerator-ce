@@ -232,4 +232,46 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
     return new BeneratorExceptionFactory();
   }
 
+  @Override
+  public void importDefaults(BeneratorContext context, BeneratorParseContext parseContext) {
+    // import frequently used Benerator packages
+    context.importPackage("com.rapiddweller.benerator.consumer");
+    context.importPackage("com.rapiddweller.benerator.converter");
+    context.importPackage("com.rapiddweller.benerator.primitive");
+    context.importPackage("com.rapiddweller.benerator.primitive.datetime");
+    context.importPackage("com.rapiddweller.benerator.distribution.sequence");
+    context.importPackage("com.rapiddweller.benerator.distribution.function");
+    context.importPackage("com.rapiddweller.benerator.distribution.cumulative");
+    context.importPackage("com.rapiddweller.benerator.sample");
+    // import ConsoleExporter and LoggingConsumer
+    context.importPackage("com.rapiddweller.model.consumer");
+    // import format, converters and validators from common
+    context.importPackage("com.rapiddweller.common.converter");
+    context.importPackage("com.rapiddweller.common.format");
+    context.importPackage("com.rapiddweller.common.validator");
+
+    String[] defaultPlatforms = new String[] {
+        "csv", "db", "dbunit", "fixedwidth", "memstore", "result", "template", "xls", "xml"
+    };
+    Importer.importPlatforms(defaultPlatforms, true, parseContext, context);
+  }
+
+  @Override
+  public String[] platformPkgCandidates(String platformName) {
+    if (platformName.indexOf('.') < 0) {
+      return new String[] { "com.rapiddweller.platform." + platformName };
+    } else {
+      return new String[] { platformName };
+    }
+  }
+
+  @Override
+  public String[] domainPkgCandidates(String platformName) {
+    if (platformName.indexOf('.') < 0) {
+      return new String[] { "com.rapiddweller.domain." + platformName };
+    } else {
+      return new String[] { platformName };
+    }
+  }
+
 }
