@@ -140,13 +140,6 @@ public class DescriptorRunner implements ResourceManager {
       if (!generations.isEmpty()) {
         logger.info("Generated file(s): {}", generations);
       }
-    } catch (Throwable t) {
-      if (ExceptionUtil.containsException(OutOfMemoryError.class, t) && Profiling.isEnabled()) {
-        logger.error("OutOfMemoryError! This probably happened because you activated profiling", t);
-      } else {
-        logger.error("Error in Benerator execution", t);
-        throw t;
-      }
     } finally {
       context.close();
     }

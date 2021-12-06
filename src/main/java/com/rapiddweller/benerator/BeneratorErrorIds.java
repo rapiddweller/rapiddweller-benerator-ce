@@ -39,6 +39,8 @@ public class BeneratorErrorIds {
   public static final String COMP_INIT_FAILED_COUNTRY = "BEN-0055";
   public static final String COMP_INIT_FAILED_BEN_MONITOR = "BEN-0056";
 
+  public static final String OUT_OF_MEMORY = "BEN-0099";
+
   // BEN-0100...0199 Benerator file syntax errors (in benerator.xml or *.ben.xml) ====================================
 
   public static final String SYN_EMPTY_BEN_FILE = "BEN-0100";
@@ -212,12 +214,10 @@ public class BeneratorErrorIds {
   // Syntax Errors regarding <anon-check> ----------------------------------------------------------------------------
 
   public static final String SYN_ANON_CHECK = "BEN-0363";
-  // TODO
 
   // Syntax Errors regarding <defaultComponents> ---------------------------------------------------------------------
 
   public static final String SYN_DEFAULT_COMPONENTS = "BEN-0366";
-  // TODO
 
   // Syntax Errors regarding <wait> ----------------------------------------------------------------------------------
 

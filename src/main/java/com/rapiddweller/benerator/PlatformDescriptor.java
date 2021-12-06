@@ -26,12 +26,7 @@
 
 package com.rapiddweller.benerator;
 
-import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.parser.xml.XMLStatementParser;
-import com.rapiddweller.format.xml.XMLElementParser;
-
-import java.util.List;
 
 /**
  * Descriptor interface to provide informations about Benerator platforms.<br/><br/>

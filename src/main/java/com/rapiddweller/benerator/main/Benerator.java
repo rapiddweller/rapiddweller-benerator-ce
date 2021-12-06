@@ -36,7 +36,9 @@ import com.rapiddweller.benerator.engine.BeneratorRootContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorFactory;
 import com.rapiddweller.benerator.engine.DescriptorRunner;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
+import com.rapiddweller.benerator.sensor.Profiling;
 import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.ExceptionUtil;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.LogCategoriesConstants;
 import com.rapiddweller.common.StringUtil;
@@ -152,7 +154,7 @@ public class Benerator {
       config = parseCommandLine(args);
       run(config);
       return new BeneratorResult(ExitCodes.OK, null);
-    } catch (Exception e) {
+    } catch (Throwable e) {
       return handleException(e, config);
     }
   }
@@ -268,7 +270,8 @@ public class Benerator {
     return p;
   }
 
-  private static BeneratorResult handleException(Exception e, BeneratorConfig config) {
+  private static BeneratorResult handleException(Throwable e, BeneratorConfig config) {
+    logger.error("Error in Benerator execution", e);
     // print exception stack trace if this is configured
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     PrintStream out = new PrintStream(buffer);
@@ -277,7 +280,11 @@ public class Benerator {
     }
     // process exception
     int exitCode;
-    if (e instanceof ApplicationException) {
+    if (ExceptionUtil.containsException(OutOfMemoryError.class, e) && Profiling.isEnabled()) {
+      exitCode = ExitCodes.MISCELLANEOUS_ERROR;
+      ApplicationException appEx = BeneratorExceptionFactory.getInstance().outOfMemory(e);
+      out.println(appEx);
+    } else if (e instanceof ApplicationException) {
       ApplicationException appEx = (ApplicationException) e;
       out.println(appEx);
       exitCode = appEx.getExitCode();
