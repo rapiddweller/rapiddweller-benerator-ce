@@ -12,7 +12,7 @@ public class DefaultPlatformDescriptorTest {
 
   @Test
   public void testConstructor() {
-    DefaultPlatformDescriptor desc = new DefaultPlatformDescriptor("java.text");
+    DefaultPlatformDescriptor desc = new DefaultPlatformDescriptor("text", "java.text");
     assertEquals(0, desc.getParsers().length);
     assertEquals(0, desc.getClassesToImport().length);
     assertEquals(1, desc.getPackagesToImport().length);

@@ -478,28 +478,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
 
   @Override
   public void importDefaults() {
-    // import frequently used Benerator packages
-    importPackage("com.rapiddweller.benerator.consumer");
-    importPackage("com.rapiddweller.benerator.converter");
-    importPackage("com.rapiddweller.benerator.primitive");
-    importPackage("com.rapiddweller.benerator.primitive.datetime");
-    importPackage("com.rapiddweller.benerator.distribution.sequence");
-    importPackage("com.rapiddweller.benerator.distribution.function");
-    importPackage("com.rapiddweller.benerator.distribution.cumulative");
-    importPackage("com.rapiddweller.benerator.sample");
-    // import ConsoleExporter and LoggingConsumer
-    importPackage("com.rapiddweller.model.consumer");
-    // import format, converters and validators from common
-    importPackage("com.rapiddweller.common.converter");
-    importPackage("com.rapiddweller.common.format");
-    importPackage("com.rapiddweller.common.validator");
-    // import standard platforms
-    importPackage("com.rapiddweller.platform.fixedwidth");
-    importPackage("com.rapiddweller.platform.csv");
-    importPackage("com.rapiddweller.platform.result");
-    importPackage("com.rapiddweller.platform.dbunit");
-    importPackage("com.rapiddweller.platform.xls");
-    importPackage("com.rapiddweller.platform.template");
+    BeneratorFactory.getInstance().importDefaults(this, null);
   }
 
 

@@ -26,7 +26,9 @@
 
 package com.rapiddweller.benerator.engine;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
+import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.benerator.engine.statement.GenerateAndConsumeTask;
 import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
@@ -51,16 +53,18 @@ import java.util.Map.Entry;
 public class BeneratorRootStatement extends SequentialStatement {
 
   private final Map<String, String> attributes;
+  private final BeneratorParseContext parseContext;
 
-  public BeneratorRootStatement(Map<String, String> attributes) {
+  public BeneratorRootStatement(Map<String, String> attributes, BeneratorParseContext parseContext) {
     this.attributes = new HashMap<>(attributes);
+    this.parseContext = parseContext;
   }
 
   @Override
   public boolean execute(BeneratorContext context) {
     mapAttributesTo(context);
     if (context.isDefaultImports()) {
-      context.importDefaults();
+      BeneratorFactory.getInstance().importDefaults(context, parseContext);
     }
     super.execute(context);
     return true;
