@@ -16,7 +16,7 @@ import com.rapiddweller.platform.test_with_desc.sub2.ImpClassSimpleBean;
 public class PlatformDescriptor extends DefaultPlatformDescriptor {
 
   public PlatformDescriptor() {
-    super(PlatformDescriptor.class.getPackageName());
+    super("test", PlatformDescriptor.class.getPackageName());
   }
 
   @Override

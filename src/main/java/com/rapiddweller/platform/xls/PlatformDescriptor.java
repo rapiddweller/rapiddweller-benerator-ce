@@ -55,9 +55,8 @@ public class PlatformDescriptor extends DefaultPlatformDescriptor {
     PlatformDescriptor.collectionReferencePrefix = collectionReferencePrefix;
   }
 
-  @Override
-  public String[] getPackagesToImport() {
-    return new String[] { getClass().getPackageName() };
+  public PlatformDescriptor() {
+    super("xls", PlatformDescriptor.class.getPackageName());
   }
 
 }

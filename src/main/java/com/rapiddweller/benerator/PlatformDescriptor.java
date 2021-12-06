@@ -27,6 +27,7 @@
 package com.rapiddweller.benerator;
 
 import com.rapiddweller.benerator.engine.parser.xml.XMLStatementParser;
+import com.rapiddweller.common.Named;
 
 /**
  * Descriptor interface to provide informations about Benerator platforms.<br/><br/>
@@ -34,7 +35,7 @@ import com.rapiddweller.benerator.engine.parser.xml.XMLStatementParser;
  * @author Volker Bergmann
  * @since 0.7.4
  */
-public interface PlatformDescriptor {
+public interface PlatformDescriptor extends Named {
   XMLStatementParser[] getParsers();
   String[] getPackagesToImport();
   String[] getClassesToImport();

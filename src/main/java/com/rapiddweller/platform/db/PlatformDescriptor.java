@@ -14,7 +14,7 @@ import com.rapiddweller.benerator.engine.parser.xml.XMLStatementParser;
 public class PlatformDescriptor extends DefaultPlatformDescriptor {
 
   public PlatformDescriptor() {
-    super(PlatformDescriptor.class.getPackageName());
+    super("db", PlatformDescriptor.class.getPackageName());
   }
 
   @Override
