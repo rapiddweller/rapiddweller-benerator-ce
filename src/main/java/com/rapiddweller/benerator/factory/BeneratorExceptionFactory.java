@@ -11,9 +11,11 @@ import com.rapiddweller.common.cli.CLIIllegalArgumentException;
 import com.rapiddweller.common.cli.CLIIllegalOptionException;
 import com.rapiddweller.common.cli.CLIIllegalOptionValueException;
 import com.rapiddweller.common.cli.CLIMissingOptionValueException;
+import com.rapiddweller.common.exception.ApplicationException;
 import com.rapiddweller.common.exception.ComponentInitializationFailure;
 import com.rapiddweller.common.exception.ConnectFailedException;
 import com.rapiddweller.common.exception.ExceptionFactory;
+import com.rapiddweller.common.exception.ExitCodes;
 import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.file.FileResourceNotFoundException;
 import com.rapiddweller.format.xml.XMLElementParserFactory;
@@ -133,6 +135,11 @@ public class BeneratorExceptionFactory extends ExceptionFactory {
   @Override
   public ConnectFailedException connectFailed(String message, Throwable cause) {
     return new ConnectFailedException(message, cause, BeneratorErrorIds.DB_CONNECT_FAILED);
+  }
+
+  @Override
+  public ApplicationException outOfMemory(Throwable e) {
+    return new ApplicationException(BeneratorErrorIds.OUT_OF_MEMORY, ExitCodes.MISCELLANEOUS_ERROR, "Out of memory", e);
   }
 
 }
