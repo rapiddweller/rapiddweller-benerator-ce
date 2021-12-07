@@ -26,11 +26,13 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
+import com.rapiddweller.benerator.factory.DescriptorUtil;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.BeanUtil;
@@ -110,8 +112,12 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
         }
       }
     }
+    Boolean defaultImports = parseOptionalBoolean(ATT_DEFAULT_IMPORTS, element);
+    if (defaultImports == null || defaultImports) {
+      BeneratorFactory.getInstance().importDefaultParsers(context);
+    }
     // create root statement and configure its children
-    BeneratorRootStatement rootStatement = new BeneratorRootStatement(map, context);
+    BeneratorRootStatement rootStatement = new BeneratorRootStatement(map);
     Statement[] currentComponentPath = new Statement[] { rootStatement };
     Element[] currentXmlPath = new Element[] { element };
     List<Statement> subStatements = context.parseChildElementsOf(element, currentXmlPath, currentComponentPath);

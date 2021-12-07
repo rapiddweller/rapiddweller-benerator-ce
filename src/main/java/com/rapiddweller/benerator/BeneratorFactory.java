@@ -145,7 +145,9 @@ public abstract class BeneratorFactory {
 
   public abstract OrderedNameMap<Object> createComponentMap();
 
-  public abstract void importDefaults(BeneratorContext context, BeneratorParseContext parseContext);
+  public abstract void importDefaultParsers(BeneratorParseContext parseContext);
+
+  public abstract void importDefaultClasses(BeneratorContext context);
 
   public abstract String[] platformPkgCandidates(String platformName);
 

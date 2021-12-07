@@ -478,7 +478,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
 
   @Override
   public void importDefaults() {
-    BeneratorFactory.getInstance().importDefaults(this, null);
+    BeneratorFactory.getInstance().importDefaultClasses(this);
   }
 
 

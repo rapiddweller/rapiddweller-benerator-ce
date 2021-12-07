@@ -59,7 +59,7 @@ public class BeneratorRootStatementTest extends AbstractBeneratorIntegrationTest
   public void testGeneratorFactoryConfig() {
     Map<String, String> attributes = CollectionUtil.buildMap(
         "generatorFactory", EquivalenceGeneratorFactory.class.getName());
-    BeneratorRootStatement root = new BeneratorRootStatement(attributes, new BeneratorParseContext(null));
+    BeneratorRootStatement root = new BeneratorRootStatement(attributes);
     try {
       root.execute(context);
       assertEquals(EquivalenceGeneratorFactory.class, context.getGeneratorFactory().getClass());

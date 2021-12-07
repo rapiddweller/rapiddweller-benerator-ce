@@ -61,15 +61,18 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
 
   @Override
   public ImportStatement doParse(
-      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
+      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext parseContext) {
     // check syntax
     assertAtLeastOneAttributeIsSet(element, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS, ATT_CLASS);
     // defaults import
     boolean defaults = parseDefaults(element);
     String classImport = parseClass(element);
     DomainDescriptor[] domainImports = parseDomains(element);
-    PlatformDescriptor[] platformImports = parsePlatforms(element, context);
-    return new ImportStatement(defaults, classImport, domainImports, platformImports, context);
+    PlatformDescriptor[] platformImports = parsePlatforms(element);
+    for (PlatformDescriptor descriptor : platformImports) {
+      Importer.importPlatformParsers(descriptor, parseContext);
+    }
+    return new ImportStatement(defaults, classImport, domainImports, platformImports);
   }
 
   // non-public helpers ----------------------------------------------------------------------------------------------
@@ -97,12 +100,12 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
     }
   }
 
-  public static PlatformDescriptor[] parsePlatforms(Element element, BeneratorParseContext context) {
+  public static PlatformDescriptor[] parsePlatforms(Element element) {
     String attribute = element.getAttribute(ATT_PLATFORMS);
     if (StringUtil.isEmpty(attribute)) {
       return new PlatformDescriptor[0];
     } else {
-      return Importer.findPlatforms(StringUtil.trimAll(attribute.split(",")), true, context);
+      return Importer.findPlatforms(StringUtil.trimAll(attribute.split(",")), true);
     }
   }
 
