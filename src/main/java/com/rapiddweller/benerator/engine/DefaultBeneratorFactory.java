@@ -78,7 +78,7 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
 
   private final RandomProvider randomProvider;
   private final XMLModule xmlModule;
-  private List<XMLStatementParser> customParsers;
+  private final List<XMLStatementParser> customParsers;
 
   public DefaultBeneratorFactory() {
     this(new DefaultRandomProvider(), new DefaultXMLModule());
@@ -234,7 +234,7 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
 
   @Override
   public void importDefaultParsers(BeneratorParseContext parseContext) {
-    Importer.importPlatformParsers(defaultPlatformNames(), true, parseContext);
+    Importer.importPlatformParsers(defaultCEPlatformNames(), true, parseContext);
   }
 
   @Override
@@ -254,13 +254,13 @@ public class DefaultBeneratorFactory extends BeneratorFactory {
     context.importPackage("com.rapiddweller.common.converter");
     context.importPackage("com.rapiddweller.common.format");
     context.importPackage("com.rapiddweller.common.validator");
-    Importer.importPlatformClasses(defaultPlatformNames(), true, context);
+    // Import platform classes
+    Importer.importPlatformClasses(defaultCEPlatformNames(), true, context);
   }
 
-  protected String[] defaultPlatformNames() {
-    return new String[] {
-        "csv", "db", "dbunit", "fixedwidth", "memstore", "result", "template", "xls", "xml"
-    };
+  private String[] defaultCEPlatformNames() {
+    return new String[] { "csv", "db", "dbunit", "fixedwidth",
+        "memstore", "result", "template", "xls", "xml" };
   }
 
   @Override
