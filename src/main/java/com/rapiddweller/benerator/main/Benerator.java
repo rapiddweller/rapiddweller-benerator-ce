@@ -77,6 +77,10 @@ public class Benerator {
 
   protected static final Logger logger = LoggerFactory.getLogger(Benerator.class);
 
+  static {
+    BeneratorExceptionFactory.getInstance();
+  }
+
   public static final String BENERATOR_KEY = "benerator";
 
   public static final String MAINTAINER = "rapiddweller";

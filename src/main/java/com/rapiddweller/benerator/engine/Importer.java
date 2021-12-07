@@ -27,6 +27,63 @@ public class Importer {
     // private constructor to prevent instantiation of this utility class
   }
 
+  // platform parsers --------------------------------------------------------------------------------------------------
+
+  public static void importPlatformParsers(String[] platformNames, boolean required,
+                                           BeneratorParseContext parseContext) {
+    PlatformDescriptor[] descriptors = findPlatforms(platformNames, required);
+    for (PlatformDescriptor descriptor : descriptors) {
+      importPlatformParsers(descriptor, parseContext);
+    }
+  }
+
+  public static void importPlatformParsers(PlatformDescriptor descriptor, BeneratorParseContext parseContext) {
+    if (parseContext != null) {
+      // the imported parsers must be registered in the phase of parsing
+      // in order to be available for parsing subsequent elements
+      registerParsers(descriptor, parseContext);
+    }
+  }
+
+  private static void registerParsers(PlatformDescriptor platformDescriptor, BeneratorParseContext parseContext) {
+    XMLStatementParser[] parsers = platformDescriptor.getParsers();
+    if (parsers != null) {
+      for (XMLStatementParser parser : parsers) {
+        parseContext.addParser(parser);
+        BeneratorFactory.getInstance().addCustomParser(parser);
+      }
+    }
+  }
+
+  // platform classes --------------------------------------------------------------------------------------------------
+
+  public static void importPlatformClasses(String[] platformNames, boolean required, BeneratorContext context) {
+    PlatformDescriptor[] descriptors = findPlatforms(platformNames, required);
+    for (PlatformDescriptor descriptor : descriptors) {
+      importPlatformClasses(descriptor, context);
+    }
+  }
+
+  public static void importPlatformClasses(PlatformDescriptor descriptor, BeneratorContext context) {
+    for (String pkg : descriptor.getPackagesToImport()) {
+      context.importPackage(pkg);
+    }
+    for (String cls : descriptor.getClassesToImport()) {
+      context.importClass(cls);
+    }
+  }
+
+  // platform lookup ---------------------------------------------------------------------------------------------------
+
+  public static PlatformDescriptor[] findPlatforms(String[] platformNames, boolean required) {
+    PlatformDescriptor[] platforms = new PlatformDescriptor[platformNames.length];
+    for (int i = 0; i < platforms.length; i++) {
+      String platformName = platformNames[i];
+      platforms[i] = findDescriptorForPlatform(platformName, required);
+    }
+    return platforms;
+  }
+
   private static PlatformDescriptor findDescriptorForPlatform(String platformName, boolean required) {
     String[] pkgs = BeneratorFactory.getInstance().platformPkgCandidates(platformName);
     for (String pkg : pkgs) {
@@ -68,24 +125,7 @@ public class Importer {
     }
   }
 
-  private static void registerParsers(PlatformDescriptor platformDescriptor, BeneratorParseContext parseContext) {
-    XMLStatementParser[] parsers = platformDescriptor.getParsers();
-    if (parsers != null) {
-      for (XMLStatementParser parser : parsers) {
-        parseContext.addParser(parser);
-        BeneratorFactory.getInstance().addCustomParser(parser);
-      }
-    }
-  }
-
-  public static void importPlatform(PlatformDescriptor platformDescriptor, BeneratorContext context) {
-    for (String pkg : platformDescriptor.getPackagesToImport()) {
-      context.importPackage(pkg);
-    }
-    for (String cls : platformDescriptor.getClassesToImport()) {
-      context.importClass(cls);
-    }
-  }
+  // domains -----------------------------------------------------------------------------------------------------------
 
   public static DomainDescriptor[] findDomains(String[] domainSpecs) {
     DomainDescriptor[] result = new DomainDescriptor[domainSpecs.length];
@@ -116,37 +156,6 @@ public class Importer {
       // ...otherwise return null
       return null;
     }
-  }
-
-  public static void importPlatforms(
-      String[] platformNames, boolean required, BeneratorParseContext parseContext, BeneratorContext context) {
-    PlatformDescriptor[] descriptors = findPlatforms(platformNames, required, parseContext);
-    for (PlatformDescriptor descriptor : descriptors) {
-      for (String pkg : descriptor.getPackagesToImport()) {
-        context.importPackage(pkg);
-      }
-      for (String cls : descriptor.getClassesToImport()) {
-        context.importClass(cls);
-      }
-    }
-  }
-
-  public static PlatformDescriptor[] findPlatforms(String[] platformNames, boolean required,
-                                                   BeneratorParseContext parseContext) {
-    PlatformDescriptor[] platforms = new PlatformDescriptor[platformNames.length];
-    for (int i = 0; i < platforms.length; i++) {
-      String platformName = platformNames[i];
-      PlatformDescriptor platformDescriptor = findDescriptorForPlatform(platformName, required);
-      if (platformDescriptor != null) {
-        if (parseContext != null) {
-          // the imported parsers must be registered in the phase of parsing
-          // in order to be available for parsing subsequent elements
-          registerParsers(platformDescriptor, parseContext);
-        }
-        platforms[i] = platformDescriptor;
-      }
-    }
-    return platforms;
   }
 
 }

@@ -91,15 +91,20 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
 
   @Test
   public void testImport_platform_with_descriptor() {
-    Statement statement = parse("<import platforms='test_with_desc'/>");
+    // parse import
+    BeneratorParseContext pc = BeneratorFactory.getInstance().createParseContext(resourceManager);
+    Element importElement = XMLUtil.parseStringAsElement("<import platforms='test_with_desc'/>");
+    Statement statement = pc.parseElement(importElement, null, null);
+    // execute import
     BeneratorContext context = new DefaultBeneratorContext();
     statement.execute(context);
+    // verify class imports
     assertThrows(ConfigurationError.class, () -> context.forName("RootBean"));
     assertNotNull(context.forName("ImpPkgSimpleBean"));
     assertNotNull(context.forName("ImpClassSimpleBean"));
-    BeneratorParseContext pc = BeneratorFactory.getInstance().createParseContext(null);
+    // verify parser import
     Element element = XMLUtil.parseStringAsElement("<twd text='hello'/>");
-    Statement stmt = pc.parseElement(element, new Element[0], new Statement[0]);
+    Statement stmt = pc.parseElement(element, null, null);
     stmt.execute(context);
     assertEquals("hello", context.get("twd_text"));
   }

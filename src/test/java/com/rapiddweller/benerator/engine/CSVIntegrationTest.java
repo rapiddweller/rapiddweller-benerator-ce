@@ -37,17 +37,11 @@ import static org.junit.Assert.assertEquals;
 /**
  * Integration test for Benerator's CSV functionality.<br/><br/>
  * Created: 03.02.2011 18:15:34
- *
  * @author Volker Bergmann
  * @since 0.6.5
  */
 public class CSVIntegrationTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test headless.
-   *
-   * @throws IOException the io exception
-   */
   @Test
   public void testHeadless() throws IOException {
     context.setContextUri("/com/rapiddweller/benerator/engine/csv");

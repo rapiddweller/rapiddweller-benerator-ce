@@ -32,7 +32,6 @@ import com.rapiddweller.benerator.PlatformDescriptor;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Importer;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 
 /**
  * Imports classes by package, class, domain and platform definition(s).<br/><br/>
@@ -46,22 +45,19 @@ public class ImportStatement implements Statement {
   private final String classImport;
   private final DomainDescriptor[] domainImports;
   private final PlatformDescriptor[] platformImports;
-  private final BeneratorParseContext parseContext;
 
   public ImportStatement(boolean defaultImports, String classImport,
-                         DomainDescriptor[] domainImports, PlatformDescriptor[] platformImports,
-                         BeneratorParseContext parseContext) {
+                         DomainDescriptor[] domainImports, PlatformDescriptor[] platformImports) {
     this.defaultImports = defaultImports;
     this.classImport = classImport;
     this.domainImports = domainImports;
     this.platformImports = platformImports;
-    this.parseContext = parseContext;
   }
 
   @Override
   public boolean execute(BeneratorContext context) {
     if (defaultImports) {
-      BeneratorFactory.getInstance().importDefaults(context, parseContext);
+      BeneratorFactory.getInstance().importDefaultClasses(context);
     }
 
     if (classImport != null) {
@@ -76,7 +72,7 @@ public class ImportStatement implements Statement {
 
     if (platformImports != null) {
       for (PlatformDescriptor platformImport : platformImports) {
-        Importer.importPlatform(platformImport, context);
+        Importer.importPlatformClasses(platformImport, context);
       }
     }
     return true;
