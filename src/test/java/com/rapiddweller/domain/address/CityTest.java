@@ -26,7 +26,6 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.common.exception.IllegalArgumentError;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -67,12 +66,6 @@ public class CityTest {
     assertEquals(0, actualCity.getPostalCodes().length);
     assertNull(actualCity.getCountry());
     assertEquals("Name", actualCity.getName());
-  }
-
-  @Test
-  public void testConstructor3() {
-    thrown.expect(IllegalArgumentError.class);
-    new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, null);
   }
 
   @Test

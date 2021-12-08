@@ -1,7 +1,6 @@
 package com.rapiddweller.platform.result;
 
 import com.rapiddweller.benerator.consumer.TextFileExporter;
-import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -9,10 +8,7 @@ import com.rapiddweller.model.data.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 /**
@@ -43,6 +39,7 @@ public class Result extends TextFileExporter {
 
   // Callback methods for parent class functionality -----------------------------------------------------------------
   public Result() {
+    // Empty public default constructor
   }
 
   // properties ------------------------------------------------------------------------------------------------------
@@ -58,15 +55,11 @@ public class Result extends TextFileExporter {
 
   @Override
   public void startConsumingImpl(Object data) {
-    try {
-      Entity entity = (Entity) data;
-      if ((csvWriter == null)) {
-        initPrinter(data);
-      }
-      startCSVFile(entity);
-    } catch (IOException e) {
-      throw BeneratorExceptionFactory.getInstance().operationFailed("Failed to consume " + data, e);
+    Entity entity = (Entity) data;
+    if ((csvWriter == null)) {
+      initPrinter(data);
     }
+    startCSVFile(entity);
   }
 
   // private helpers -------------------------------------------------------------------------------------------------
@@ -117,14 +110,14 @@ public class Result extends TextFileExporter {
   }
 
   @Override
-  public void initPrinter(Object data) throws FileNotFoundException, UnsupportedEncodingException {
+  public void initPrinter(Object data) {
     if (data != null) {
       Entity entity = (Entity) data;
       ComplexTypeDescriptor descriptor = entity.descriptor();
       Set<String> map = ((Entity) data).getComponents().keySet();
       columns = map.toArray(new String[0]);
       String entityName = descriptor.getName().replace('.', '_');
-      logger.debug("Name of Entity/Table : " + entityName);
+      logger.debug("Name of Entity/Table : {}", entityName);
 
       String baseFolderCSV = "results/";
       String csvUri = baseFolderCSV + entityName + ".csv";
@@ -158,11 +151,7 @@ public class Result extends TextFileExporter {
   public void close() {
     try {
       if (csvWriter == null) {
-        try {
-          initPrinter(null);
-        } catch (IOException e) {
-          logger.error("Error initializing empty file", e);
-        }
+        initPrinter(null);
       }
       preClosePrinter(csvWriter);
     } finally {

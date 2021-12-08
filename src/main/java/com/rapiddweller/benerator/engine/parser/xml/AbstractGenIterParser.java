@@ -90,71 +90,16 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
 
   private static final Set<String> CONSUMER_EXPECTING_ELEMENTS = CollectionUtil.toSet(EL_GENERATE, EL_ITERATE);
 
-  // DescriptorParser interface --------------------------------------------------------------------------------------
-
   protected AbstractGenIterParser(String elementName, AttrInfoSupport attrSupport) {
     super(elementName, attrSupport);
   }
 
-  private static String getNameOrType(Element element) {
-    String result = element.getAttribute(ATT_NAME);
-    if (StringUtil.isEmpty(result)) {
-      result = element.getAttribute(ATT_TYPE);
-    }
-    if (StringUtil.isEmpty(result)) {
-      result = "anonymous";
-    }
-    return result;
-  }
-
-  // private helpers -------------------------------------------------------------------------------------------------
-
-  private static Expression<Consumer> parseConsumers(Element entityElement, boolean consumersExpected, ResourceManager resourceManager) {
-    return new CachedExpression<>(new XMLConsumerExpression(entityElement, consumersExpected, resourceManager));
-  }
-
-  private static InstanceDescriptor mapDescriptorElement(Element element, BeneratorContext context) {
-    // evaluate type
-    String type = parseStringAttribute(element, ATT_TYPE, context, false);
-    TypeDescriptor localType;
-    DescriptorProvider localDescriptorProvider = context.getLocalDescriptorProvider();
-    if (PrimitiveType.ARRAY.getName().equals(type)
-        || XMLUtil.getChildElements(element, false, EL_VALUE).length > 0) {
-      localType = new ArrayTypeDescriptor(element.getAttribute(ATT_NAME), localDescriptorProvider);
-    } else {
-      TypeDescriptor parentType = context.getDataModel().getTypeDescriptor(type);
-      if (parentType != null) {
-        type = parentType.getName(); // take over capitalization of the parent
-        localType = new ComplexTypeDescriptor(parentType.getName(), localDescriptorProvider, (ComplexTypeDescriptor) parentType);
-      } else {
-        localType = new ComplexTypeDescriptor(type, localDescriptorProvider, "entity");
-      }
-    }
-
-    // assemble instance descriptor
-    InstanceDescriptor instance = new InstanceDescriptor(type, localDescriptorProvider, type);
-    instance.setLocalType(localType);
-
-    // map element attributes
-    for (Map.Entry<String, String> attribute : XMLUtil.getAttributes(element).entrySet()) {
-      String attributeName = attribute.getKey();
-      if (!CREATE_ENTITIES_EXT_SETUP.contains(attributeName)) {
-        Object attributeValue = attribute.getValue();
-        if (instance.supportsDetail(attributeName)) {
-          instance.setDetailValue(attributeName, attributeValue);
-        } else {
-          localType.setDetailValue(attributeName, attributeValue);
-        }
-      }
-    }
-
-    DescriptorUtil.parseComponentConfig(element, instance.getLocalType(), context);
-    return instance;
-  }
+  // DescriptorParser interface --------------------------------------------------------------------------------------
 
   @Override
   public Statement doParse(final Element element, Element[] parentXmlPath, final Statement[] parentPath,
                            final BeneratorParseContext pContext) {
+    attrSupport.validate(element);
     final boolean looped = AbstractBeneratorDescriptorParser.containsLoop(parentPath);
     final boolean nested = AbstractBeneratorDescriptorParser.containsGeneratorStatement(parentPath);
     Expression<Statement> expression = new DynamicExpression<>() {
@@ -207,6 +152,62 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     GenerateAndConsumeTask task = parseTask(element, parentXmlPath, statementPath, parsingContext, descriptor, infoLog, context, childContext);
     statement.setTask(task);
     return statement;
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private static String getNameOrType(Element element) {
+    String result = element.getAttribute(ATT_NAME);
+    if (StringUtil.isEmpty(result)) {
+      result = element.getAttribute(ATT_TYPE);
+    }
+    if (StringUtil.isEmpty(result)) {
+      result = "anonymous";
+    }
+    return result;
+  }
+
+  private static Expression<Consumer> parseConsumers(Element entityElement, boolean consumersExpected, ResourceManager resourceManager) {
+    return new CachedExpression<>(new XMLConsumerExpression(entityElement, consumersExpected, resourceManager));
+  }
+
+  private static InstanceDescriptor mapDescriptorElement(Element element, BeneratorContext context) {
+    // evaluate type
+    String type = parseStringAttribute(element, ATT_TYPE, context, false);
+    TypeDescriptor localType;
+    DescriptorProvider localDescriptorProvider = context.getLocalDescriptorProvider();
+    if (PrimitiveType.ARRAY.getName().equals(type)
+        || XMLUtil.getChildElements(element, false, EL_VALUE).length > 0) {
+      localType = new ArrayTypeDescriptor(element.getAttribute(ATT_NAME), localDescriptorProvider);
+    } else {
+      TypeDescriptor parentType = context.getDataModel().getTypeDescriptor(type);
+      if (parentType != null) {
+        type = parentType.getName(); // take over capitalization of the parent
+        localType = new ComplexTypeDescriptor(parentType.getName(), localDescriptorProvider, (ComplexTypeDescriptor) parentType);
+      } else {
+        localType = new ComplexTypeDescriptor(type, localDescriptorProvider, "entity");
+      }
+    }
+
+    // assemble instance descriptor
+    InstanceDescriptor instance = new InstanceDescriptor(type, localDescriptorProvider, type);
+    instance.setLocalType(localType);
+
+    // map element attributes
+    for (Map.Entry<String, String> attribute : XMLUtil.getAttributes(element).entrySet()) {
+      String attributeName = attribute.getKey();
+      if (!CREATE_ENTITIES_EXT_SETUP.contains(attributeName)) {
+        Object attributeValue = attribute.getValue();
+        if (instance.supportsDetail(attributeName)) {
+          instance.setDetailValue(attributeName, attributeValue);
+        } else {
+          localType.setDetailValue(attributeName, attributeValue);
+        }
+      }
+    }
+
+    DescriptorUtil.parseComponentConfig(element, instance.getLocalType(), context);
+    return instance;
   }
 
   protected GenerateOrIterateStatement createStatement(
