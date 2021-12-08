@@ -26,15 +26,11 @@
 
 package com.rapiddweller.benerator.consumer;
 
-import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.exception.ExceptionFactory;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
@@ -44,8 +40,6 @@ import java.io.PrintWriter;
  * @since 0.5.4
  */
 public class TextFileExporter extends FormattingConsumer implements FileExporter {
-
-  private static final Logger LOG = LoggerFactory.getLogger(TextFileExporter.class);
 
   // attributes ------------------------------------------------------------------------------------------------------
 
@@ -137,14 +131,10 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
 
   @Override
   public final synchronized void startProductConsumption(Object data) {
-    try {
-      if (printer == null) {
-        initPrinter(data);
-      }
-      startConsumingImpl(data);
-    } catch (IOException e) {
-      throw BeneratorExceptionFactory.getInstance().fileAccessException("Failed to write " + data, e);
+    if (printer == null) {
+      initPrinter(data);
     }
+    startConsumingImpl(data);
   }
 
   @Override
@@ -158,11 +148,7 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
   public void close() {
     try {
       if (printer == null) {
-        try {
-          initPrinter(null);
-        } catch (IOException e) {
-          LOG.error("Error initializing empty file", e);
-        }
+        initPrinter(null);
       }
       preClosePrinter();
     } finally {
@@ -173,7 +159,7 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
 
   // private helpers -------------------------------------------------------------------------------------------------
 
-  protected void initPrinter(Object data) throws IOException {
+  protected void initPrinter(Object data) {
     if (uri == null) {
       throw ExceptionFactory.getInstance().configurationError("Property 'uri' not set on bean " + getClass().getName());
     }
@@ -187,7 +173,7 @@ public class TextFileExporter extends FormattingConsumer implements FileExporter
         && !directory.getParentFile().exists()) {
       boolean result = directory.getParentFile().mkdirs();
       if (!result) {
-        throw ExceptionFactory.getInstance().configurationError("filepath does not exists and can not be created ...");
+        throw ExceptionFactory.getInstance().configurationError("filepath does not exist and can not be created ...");
       }
     }
 
