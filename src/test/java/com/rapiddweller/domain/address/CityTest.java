@@ -70,12 +70,6 @@ public class CityTest {
   }
 
   @Test
-  public void testConstructor3() {
-    thrown.expect(IllegalArgumentError.class);
-    new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, null);
-  }
-
-  @Test
   public void testSetNameExtension() {
     City city = new City(new State(), "Name", "Addition", new String[] {"foo", "foo", "foo"}, "Area Code");
     city.setNameExtension("Name Extension");
