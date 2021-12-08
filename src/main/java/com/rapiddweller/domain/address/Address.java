@@ -43,6 +43,7 @@ public class Address {
 
   private String street;
   private String houseNumber;
+  private String street2;
   private String postalCode;
   private City city;
   private State state;
@@ -70,6 +71,7 @@ public class Address {
                  PhoneNumber mobilePhone, PhoneNumber fax) {
     this.street = street;
     this.houseNumber = houseNumber;
+    this.street2 = null;
     this.postalCode = postalCode;
     this.city = city;
     this.state = state;
@@ -102,6 +104,14 @@ public class Address {
 
   public void setHouseNumber(String houseNumber) {
     this.houseNumber = houseNumber;
+  }
+
+  public String getStreet2() {
+    return street2;
+  }
+
+  public void setStreet2(String street2) {
+    this.street2 = street2;
   }
 
   /** @deprecated Property 'zipCode' is deprecated and replaced with 'postalCode' */
