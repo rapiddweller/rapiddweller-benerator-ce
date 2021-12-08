@@ -36,12 +36,15 @@ import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.ConfigUtil;
 import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.exception.ExitCodes;
+import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
 import org.w3c.dom.Element;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -106,6 +109,14 @@ public abstract class AbstractBeneratorIntegrationTest extends GeneratorTest {
     long actualGenerations = BeneratorMonitor.INSTANCE.getTotalGenerationCount() - c0;
     assertTrue("Expected a minimum of " + expectedGenerations + " generations, " +
         "but had only " + actualGenerations, actualGenerations >= expectedGenerations);
+  }
+
+  protected void assertSyntaxError(Exception e, String expErrorId, String expMessage) {
+    assertTrue(e instanceof SyntaxError);
+    SyntaxError s = (SyntaxError) e;
+    assertEquals(expErrorId, s.getErrorId());
+    assertEquals(expMessage, s.getMessage());
+    assertEquals(ExitCodes.SYNTAX_ERROR, s.getExitCode());
   }
 
 }
