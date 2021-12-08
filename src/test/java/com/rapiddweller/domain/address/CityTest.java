@@ -26,7 +26,6 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.common.exception.IllegalArgumentError;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
