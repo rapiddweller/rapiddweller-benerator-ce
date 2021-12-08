@@ -18,6 +18,7 @@ public class IterateParser extends AbstractGenIterParser {
   private static final AttrInfoSupport ATTR_INFO;
   static {
     ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_ITERATE_ILLEGAL_ATTR);
+    ATTR_INFO.add(ATT_SOURCE, true, BeneratorErrorIds.SYN_ITERATE_SOURCE);
     ATTR_INFO.add(ATT_COUNT, false, BeneratorErrorIds.SYN_ITERATE_COUNT);
     ATTR_INFO.add(ATT_MIN_COUNT, false, BeneratorErrorIds.SYN_ITERATE_MIN_COUNT);
     ATTR_INFO.add(ATT_MAX_COUNT, false, BeneratorErrorIds.SYN_ITERATE_MAX_COUNT);
@@ -39,7 +40,6 @@ public class IterateParser extends AbstractGenIterParser {
     ATTR_INFO.add(ATT_CYCLIC, false, BeneratorErrorIds.SYN_ITERATE_CYCLIC);
     ATTR_INFO.add(ATT_OFFSET, false, BeneratorErrorIds.SYN_ITERATE_OFFSET);
     ATTR_INFO.add(ATT_SENSOR, false, BeneratorErrorIds.SYN_ITERATE_SENSOR);
-    ATTR_INFO.add(ATT_SOURCE, false, BeneratorErrorIds.SYN_ITERATE_SOURCE);
     ATTR_INFO.add(ATT_SOURCE_SCRIPTED, false, BeneratorErrorIds.SYN_ITERATE_SOURCE_SCRIPTED);
     ATTR_INFO.add(ATT_SEGMENT, false, BeneratorErrorIds.SYN_ITERATE_SEGMENT);
     ATTR_INFO.add(ATT_FORMAT, false, BeneratorErrorIds.SYN_ITERATE_FORMAT);
