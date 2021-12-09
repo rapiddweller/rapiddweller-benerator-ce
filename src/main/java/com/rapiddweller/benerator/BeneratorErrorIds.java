@@ -108,7 +108,9 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <echo> ----------------------------------------------------------------------------------
 
-  public static final String SYN_ECHO = "BEN-233";
+  public static final String SYN_ECHO         = "BEN-0233";
+  public static final String SYN_ECHO_TYPE    = "BEN-0234";
+  public static final String SYN_ECHO_MESSAGE = "BEN-0235";
 
   // Syntax Errors regarding <beep> ----------------------------------------------------------------------------------
 
@@ -126,11 +128,11 @@ public class BeneratorErrorIds {
   // Syntax Errors regarding <setting> -------------------------------------------------------------------------------
 
   public static final String SYN_SETTING_ILLEGAL_ATTR = "BEN-0250";
-  public static final String SYN_SETTING_NAME         = "BEN-0250";
-  public static final String SYN_SETTING_VALUE        = "BEN-0251";
-  public static final String SYN_SETTING_DEFAULT      = "BEN-0252";
-  public static final String SYN_SETTING_REF          = "BEN-0253";
-  public static final String SYN_SETTING_SOURCE       = "BEN-0254";
+  public static final String SYN_SETTING_NAME         = "BEN-0251";
+  public static final String SYN_SETTING_VALUE        = "BEN-0252";
+  public static final String SYN_SETTING_DEFAULT      = "BEN-0253";
+  public static final String SYN_SETTING_REF          = "BEN-0254";
+  public static final String SYN_SETTING_SOURCE       = "BEN-0255";
 
   // Syntax Errors regarding <include> -------------------------------------------------------------------------------
 
@@ -143,14 +145,20 @@ public class BeneratorErrorIds {
 
   public static final String SYN_BEAN_ILLEGAL_ATTR = "BEN-0270";
   public static final String SYN_BEAN_ID           = "BEN-0271";
-  public static final String SYN_BEAN_PROP         = "BEN-0272";
-  public static final String SYN_BEAN_CLASS        = "BEN-0273";
-  public static final String SYN_BEAN_SPEC         = "BEN-0274";
+  public static final String SYN_BEAN_CLASS        = "BEN-0272";
+  public static final String SYN_BEAN_SPEC         = "BEN-0273";
+  public static final String SYN_BEAN_MUST_HAVE_CLASS_OR_SPEC = "BEN-0274";
+  public static final String SYN_BEAN_PROP_ELEMENT = "BEN-0275";
+  public static final String SYN_BEAN_PROP_NAME    = "BEN-0276";
+  public static final String SYN_BEAN_PROP_VALUE   = "BEN-0277";
+  public static final String SYN_BEAN_PROP_DEFAULT = "BEN-0278";
+  public static final String SYN_BEAN_PROP_REF     = "BEN-0279";
+  public static final String SYN_BEAN_PROP_SOURCE  = "BEN-0280";
 
   // Syntax Errors regarding <memstore> ------------------------------------------------------------------------------
 
-  public static final String SYN_MEMSTORE_ILLEGAL_ATTR = "BEN-0280";
-  public static final String SYN_MEMSTORE_ID           = "BEN-0281";
+  public static final String SYN_MEMSTORE_ILLEGAL_ATTR = "BEN-0285";
+  public static final String SYN_MEMSTORE_ID           = "BEN-0286";
 
   // Syntax Errors regarding <run-task> ------------------------------------------------------------------------------
 
@@ -231,9 +239,9 @@ public class BeneratorErrorIds {
   // Syntax Errors regarding <domtree> -------------------------------------------------------------------------------
 
   public static final String SYN_DOMTREE_ID         = "BEN-0380";
-  public static final String SYN_DOMTREE_INPUT_URI  = "BEN-0380";
-  public static final String SYN_DOMTREE_OUTPUT_URI = "BEN-0380";
-  public static final String SYN_DOMTREE_NS_AWARE   = "BEN-0380";
+  public static final String SYN_DOMTREE_INPUT_URI  = "BEN-0381";
+  public static final String SYN_DOMTREE_OUTPUT_URI = "BEN-0382";
+  public static final String SYN_DOMTREE_NS_AWARE   = "BEN-0383";
 
   // Syntax Errors regarding <template> ------------------------------------------------------------------------------
 
@@ -371,10 +379,10 @@ public class BeneratorErrorIds {
   public static final String SYN_JMS_DEST_ILLEGAL_ATTR = "BEN-0600";
   public static final String SYN_JMS_DEST_ID           = "BEN-0601";
   public static final String SYN_JMS_DEST_FACTORY      = "BEN-0602";
-  public static final String SYN_JMS_DEST_URL          = "BEN-0602";
-  public static final String SYN_JMS_DEST_NAME         = "BEN-0603";
-  public static final String SYN_JMS_DEST_TYPE         = "BEN-0604";
-  public static final String SYN_JMS_DEST_FORMAT       = "BEN-0605";
+  public static final String SYN_JMS_DEST_URL          = "BEN-0603";
+  public static final String SYN_JMS_DEST_NAME         = "BEN-0604";
+  public static final String SYN_JMS_DEST_TYPE         = "BEN-0605";
+  public static final String SYN_JMS_DEST_FORMAT       = "BEN-0606";
 
   // BEN-0700...0899 Kafka issues ====================================================================================
 

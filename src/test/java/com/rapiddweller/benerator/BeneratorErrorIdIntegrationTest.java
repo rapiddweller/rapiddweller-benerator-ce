@@ -1,10 +1,11 @@
 /* (c) Copyright 2021 by Volker Bergmann. All rights reserved. */
 
-package com.rapiddweller.benerator.main;
+package com.rapiddweller.benerator;
 
 import com.rapiddweller.benerator.engine.BeneratorResult;
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
+import com.rapiddweller.benerator.main.Benerator;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.converter.ConverterManager;
