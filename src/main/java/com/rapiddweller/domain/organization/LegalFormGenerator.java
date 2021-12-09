@@ -39,7 +39,7 @@ import com.rapiddweller.domain.address.Country;
  */
 public class LegalFormGenerator extends WeightedDatasetCSVGenerator<String> {
 
-  private static final String PATH_PATTERN = "/com/rapiddweller/domain/organization/legalForm_{0}.csv";
+  private static final String PATH_PATTERN = LegalFormGenerator.class.getPackageName().replace(".", "/") + "/legalForm_{0}.csv";
 
   public LegalFormGenerator() {
     this(Country.getDefault().getIsoCode());
