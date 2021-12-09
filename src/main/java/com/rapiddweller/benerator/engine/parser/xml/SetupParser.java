@@ -27,20 +27,24 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
-import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.engine.parser.string.ErrorHandlerParser;
+import com.rapiddweller.benerator.engine.parser.string.IdParser;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.benerator.factory.DescriptorUtil;
 import com.rapiddweller.common.ArrayUtil;
-import com.rapiddweller.common.Assert;
-import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.exception.SyntaxError;
+import com.rapiddweller.common.parser.BooleanParser;
+import com.rapiddweller.common.parser.CharacterParser;
+import com.rapiddweller.common.parser.EncodingParser;
+import com.rapiddweller.common.parser.NonNegativeLongParser;
+import com.rapiddweller.common.parser.PositiveIntegerParser;
+import com.rapiddweller.common.parser.RegexBasedStringParser;
 import com.rapiddweller.format.xml.AttrInfoSupport;
+import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.format.xml.XMLElementParser;
-import com.rapiddweller.script.DatabeneScriptParser;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -60,30 +64,64 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  */
 public class SetupParser extends AbstractBeneratorDescriptorParser {
 
-  protected static final AttrInfoSupport ATTR_CONSTR;
+  protected static final AttributeInfo<Long> COUNT = new AttributeInfo<>(
+      ATT_MAX_COUNT, false, SYN_SETUP_MAX_COUNT, null, new NonNegativeLongParser());
+
+  protected static final AttributeInfo<String> DEFAULT_SCRIPT = new AttributeInfo<>(
+      ATT_DEFAULT_SCRIPT, false, SYN_SETUP_DEF_SCRIPT, "ben", new IdParser());
+
+  protected static final AttributeInfo<Boolean> DEFAULT_NULL = new AttributeInfo<>(
+      ATT_DEFAULT_NULL, false, SYN_SETUP_DEF_NULL, "false", new BooleanParser());
+
+    protected static final AttributeInfo<String> DEFAULT_ENCODING = new AttributeInfo<>(
+      ATT_DEFAULT_ENCODING, false, SYN_SETUP_DEF_ENCODING, null, new EncodingParser());
+
+  protected static final AttributeInfo<String> DEFAULT_LINE_SEPARATOR = new AttributeInfo<>(
+    ATT_DEFAULT_LINE_SEPARATOR, false, SYN_SETUP_DEF_LINE_SEPARATOR, SystemInfo.LF,
+      new RegexBasedStringParser("line separator", "(\\r)?\\n"));
+
+  protected static final AttributeInfo<String> DEFAULT_LOCALE = new AttributeInfo<>(
+    ATT_DEFAULT_LOCALE, false, SYN_SETUP_DEF_LOCALE, null, new IdParser());
+
+  protected static final AttributeInfo<String> DEFAULT_DATASET = new AttributeInfo<>(
+    ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET, null, new IdParser());
+
+  protected static final AttributeInfo<Integer> DEFAULT_PAGE_SIZE = new AttributeInfo<>(
+    ATT_DEFAULT_PAGE_SIZE, false, SYN_SETUP_DEF_PAGE_SIZE, "1", new PositiveIntegerParser());
+
+  protected static final AttributeInfo<Character> DEFAULT_SEPARATOR = new AttributeInfo<>(
+      ATT_DEFAULT_SEPARATOR, false, SYN_SETUP_DEF_SEPARATOR, null, new CharacterParser());
+
+  protected static final AttributeInfo<Boolean> DEFAULT_ONE_TO_ONE = new AttributeInfo<>(
+      ATT_DEFAULT_ONE_TO_ONE, false, SYN_SETUP_DEF_ONE_TO_ONE, null, new BooleanParser());
+
+  protected static final AttributeInfo<ErrorHandler> DEFAULT_ERR_HANDLER = new AttributeInfo<>(
+      ATT_DEFAULT_ERR_HANDLER, false, SYN_SETUP_DEF_ERR_HANDLER, "fatal", new ErrorHandlerParser());
+
+  protected static final AttributeInfo<Boolean> DEFAULT_IMPORTS = new AttributeInfo<>(
+      ATT_DEFAULT_IMPORTS, false, SYN_SETUP_DEF_IMPORTS, null, new BooleanParser());
+
+  protected static final AttributeInfo<Boolean> DEFAULT_SOURCE_SCRIPTED = new AttributeInfo<>(
+      ATT_DEFAULT_SOURCE_SCRIPTED, false, SYN_SETUP_DEF_SOURCE_SCRIPTED, null, new BooleanParser());
+
+  protected static final AttributeInfo<Boolean> ACCEPT_UNKNOWN_SIMPLE_TYPES = new AttributeInfo<>(
+      ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES, false, SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES, null, new BooleanParser());
+
+  protected static final AttributeInfo<String> GENERATOR_FACTORY = new AttributeInfo<>(
+      ATT_GENERATOR_FACTORY, false, SYN_SETUP_GENERATOR_FACTORY, null, null);
+
+  protected static final AttrInfoSupport ATTR_SUPPORT;
 
   static {
-    ATTR_CONSTR = new AttrInfoSupport(SYN_SETUP_ILLEGAL_ATTRIBUTE);
-    ATTR_CONSTR.add(ATT_MAX_COUNT, false, SYN_SETUP_MAX_COUNT);
-    ATTR_CONSTR.add(ATT_DEFAULT_SCRIPT, false, SYN_SETUP_DEF_SCRIPT);
-    ATTR_CONSTR.add(ATT_DEFAULT_NULL, false, SYN_SETUP_DEF_NULL);
-    ATTR_CONSTR.add(ATT_DEFAULT_ENCODING, false, SYN_SETUP_DEF_ENCODING);
-    ATTR_CONSTR.add(ATT_DEFAULT_LINE_SEPARATOR, false, SYN_SETUP_DEF_LINE_SEPARATOR);
-    ATTR_CONSTR.add(ATT_DEFAULT_TIME_ZONE, false, SYN_SETUP_DEF_TIME_ZONE);
-    ATTR_CONSTR.add(ATT_DEFAULT_LOCALE, false, SYN_SETUP_DEF_LOCALE);
-    ATTR_CONSTR.add(ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET);
-    ATTR_CONSTR.add(ATT_DEFAULT_PAGE_SIZE, false, SYN_SETUP_DEF_PAGE_SIZE);
-    ATTR_CONSTR.add(ATT_DEFAULT_SEPARATOR, false, SYN_SETUP_DEF_SEPARATOR);
-    ATTR_CONSTR.add(ATT_DEFAULT_ONE_TO_ONE, false, SYN_SETUP_DEF_ONE_TO_ONE);
-    ATTR_CONSTR.add(ATT_DEFAULT_ERR_HANDLER, false, SYN_SETUP_DEF_ERR_HANDLER);
-    ATTR_CONSTR.add(ATT_DEFAULT_IMPORTS, false, SYN_SETUP_DEF_IMPORTS);
-    ATTR_CONSTR.add(ATT_DEFAULT_SOURCE_SCRIPTED, false, SYN_SETUP_DEF_SOURCE_SCRIPTED);
-    ATTR_CONSTR.add(ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES, false, SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES);
-    ATTR_CONSTR.add(ATT_GENERATOR_FACTORY, false, SYN_SETUP_GENERATOR_FACTORY);
+    ATTR_SUPPORT = new AttrInfoSupport(SYN_SETUP_ILLEGAL_ATTRIBUTE,
+        COUNT, DEFAULT_SCRIPT, DEFAULT_NULL, DEFAULT_ENCODING, DEFAULT_LINE_SEPARATOR,
+        DEFAULT_LOCALE, DEFAULT_DATASET, DEFAULT_PAGE_SIZE, DEFAULT_SEPARATOR, DEFAULT_ONE_TO_ONE,
+        DEFAULT_ERR_HANDLER, DEFAULT_IMPORTS, DEFAULT_SOURCE_SCRIPTED, ACCEPT_UNKNOWN_SIMPLE_TYPES,
+        GENERATOR_FACTORY);
   }
 
   public SetupParser() {
-    super(EL_SETUP, ATTR_CONSTR);
+    super(EL_SETUP, ATTR_SUPPORT);
   }
 
   @Override
@@ -93,23 +131,21 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
 
   @Override
   public Statement doParse(Element element, Element[] parentXmlPath, Statement[] parentPath, BeneratorParseContext context) {
+    attrSupport.validate(element);
     NamedNodeMap attrMap = element.getAttributes();
     // remove standard XML root attributes and verify that the remaining ones are legal
     Map<String, String> map = new HashMap<>(attrMap.getLength());
-    try (BeneratorContext test = new DefaultBeneratorContext()) { // test object to verify correctness of setup
-      for (int i = 0; i < attrMap.getLength(); i++) {
-        Attr attr = (Attr) attrMap.item(i);
-        if (ATTR_CONSTR.get(attr.getName()) != null) {
-          try {
-            map(attr, test);
-            map.put(attr.getName(), attr.getValue());
-          } catch (Exception e) {
-            throw illegalAttributeValue(attr);
-          }
-        } else if (!isStandardXmlRootAttribute(attr.getName())) {
-          throw BeneratorExceptionFactory.getInstance().illegalXmlAttributeName(
-              null, null, attrSupport.getErrorIdForIllegalAttribute(), attr, attrSupport);
+    for (int i = 0; i < attrMap.getLength(); i++) {
+      Attr attr = (Attr) attrMap.item(i);
+      if (ATTR_SUPPORT.hasAttribute(attr.getName())) {
+        try {
+          map.put(attr.getName(), attr.getValue());
+        } catch (Exception e) {
+          throw illegalAttributeValue(attr);
         }
+      } else if (!isStandardXmlRootAttribute(attr.getName())) {
+        throw BeneratorExceptionFactory.getInstance().illegalXmlAttributeName(
+            null, null, attrSupport.getErrorIdForIllegalAttribute(), attr, attrSupport);
       }
     }
     Boolean defaultImports = parseOptionalBoolean(ATT_DEFAULT_IMPORTS, element);
@@ -123,18 +159,6 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
     List<Statement> subStatements = context.parseChildElementsOf(element, currentXmlPath, currentComponentPath);
     rootStatement.setSubStatements(subStatements);
     return rootStatement;
-  }
-
-  /** Checks if a configuration setting can be applied to a BeneratorContext */
-  private void map(Attr attr, BeneratorContext test) {
-    String name = attr.getName();
-    String valueString = attr.getValue();
-    Object valueObject = valueString;
-    if (ATT_GENERATOR_FACTORY.equals(name)) {
-      Assert.isFalse(StringUtil.isEmpty(valueString), ATT_GENERATOR_FACTORY + " is empty");
-      valueObject = DatabeneScriptParser.parseBeanSpec(valueString).evaluate(test);
-    }
-    BeanUtil.setPropertyValue(test, name, valueObject, true, true);
   }
 
   private SyntaxError illegalAttributeValue(Attr attr) {
