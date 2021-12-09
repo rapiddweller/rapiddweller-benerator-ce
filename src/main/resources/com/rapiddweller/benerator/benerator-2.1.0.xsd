@@ -20,7 +20,6 @@
                     <xs:attribute name="defaultNull" type="xs:boolean" default="true"/>
                     <xs:attribute name="defaultEncoding" type="xs:string"/>
                     <xs:attribute name="defaultLineSeparator" type="xs:string"/>
-                    <xs:attribute name="defaultTimeZone" type="xs:string"/>
                     <xs:attribute name="defaultSourceScripted" type="xs:boolean" default="false"/>
                     <xs:attribute name="defaultLocale" type="xs:string"/>
                     <xs:attribute name="defaultDataset" type="xs:string"/>
