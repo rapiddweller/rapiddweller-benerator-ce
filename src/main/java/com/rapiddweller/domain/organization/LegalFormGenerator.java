@@ -29,24 +29,22 @@ package com.rapiddweller.domain.organization;
 import com.rapiddweller.benerator.csv.WeightedDatasetCSVGenerator;
 import com.rapiddweller.benerator.dataset.DatasetUtil;
 import com.rapiddweller.common.Encodings;
+import com.rapiddweller.domain.address.Country;
 
 /**
  * Generates the abbreviated strings for legal forms of organizations.<br/><br/>
  * Created: 24.08.2011 00:41:07
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public class LegalFormGenerator extends WeightedDatasetCSVGenerator<String> {
 
-  private static final String PATH_PATTERN =
-      "/com/rapiddweller/domain/organization/legalForm_{0}.csv";
+  private static final String PATH_PATTERN = "/com/rapiddweller/domain/organization/legalForm_{0}.csv";
 
-  /**
-   * Instantiates a new Legal form generator.
-   *
-   * @param dataset the dataset
-   */
+  public LegalFormGenerator() {
+    this(Country.getDefault().getIsoCode());
+  }
+
   public LegalFormGenerator(String dataset) {
     super(String.class, PATH_PATTERN, dataset, DatasetUtil.REGION_NESTING,
         true, Encodings.UTF_8);
