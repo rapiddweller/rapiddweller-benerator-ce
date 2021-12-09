@@ -63,7 +63,7 @@ import static org.junit.Assert.assertTrue;
  * @since 0.6.0
  */
 @SuppressWarnings("CheckStyle")
-public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIntegrationTest {
+public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test(expected = IllegalArgumentError.class)
   public void testIllegalNullable() {
@@ -315,7 +315,7 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     Statement statement = parse(
         "<generate name='pName' type='outer' count='3' consumer='cons'>" +
             "    <attribute name='n' type='int' distribution='step' />" +
-            "    <generate type='inner' count='pName.n' consumer='cons'/>" +
+            "    <generate type='inner' count='{pName.n}' consumer='cons'/>" +
             "</generate>");
     ConsumerMock consumer = new ConsumerMock(true, 1);
     context.setGlobal("cons", consumer);
@@ -371,20 +371,6 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
     assertEquals(2, bean.lastValue);
   }
 
-  /** Tests iterating an {@link EntitySource} */
-  @Test
-  public void testIterate() {
-    Statement statement = parse("<iterate type='Person' source='personSource' consumer='cons' />");
-    PersonSource source = new PersonSource();
-    source.setContext(context);
-    context.setGlobal("personSource", source);
-    ConsumerMock consumer = new ConsumerMock(true);
-    context.setGlobal("cons", consumer);
-    statement.execute(context);
-    assertEquals(2, consumer.getProducts().size());
-    assertEquals(source.createPersons(), consumer.getProducts());
-  }
-
   /** Tests pure {@link Entity} generation */
   @Test
   public void testGenerate() {
@@ -397,68 +383,11 @@ public class GenerateOrIterateParserAndStatementTest extends AbstractBeneratorIn
   }
 
   @Test
-  public void testDBUpdate() {
-    // create DB
-    DefaultDBSystem db = new DefaultDBSystem("db", HSQLUtil.getInMemoryURL("benetest"),
-        HSQLUtil.DRIVER, HSQLUtil.DEFAULT_USER, HSQLUtil.DEFAULT_PASSWORD, context.getDataModel());
-    db.getDialect();
-    try {
-      // prepare DB
-      db.execute(
-          "create table GOIPAST (" +
-              "   ID int," +
-              "   N  int," +
-              "   primary key (ID)" +
-              ")");
-      db.execute("insert into GOIPAST (id, n) values (1, 3)");
-      db.execute("insert into GOIPAST (id, n) values (2, 4)");
-      // parse and run statement
-      Statement statement = parse(
-          "<iterate type='GOIPAST' source='db' consumer='db.updater()'>" +
-              "   <attribute name='n' constant='2' />" +
-              "</iterate>"
-      );
-      context.setGlobal("db", db);
-      statement.execute(context);
-      DataSource<?> check = db.query("select N from GOIPAST", true, context);
-      DataIterator<?> iterator = check.iterator();
-      DataIteratorTestCase.expectNextElements(iterator, 2, 2).withNoNext();
-      iterator.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw e;
-    } finally {
-      // clean up
-      db.execute("drop table GOIPAST");
-      db.close();
-    }
-  }
-
-  @Test
   public void testGenerateWithOffset() {
     Statement statement = parse(
         "<generate name='array' count='3' consumer='cons'>" +
             "    <value type='int' distribution='step' offset='2'/>" +
             "</generate>");
-    ConsumerMock consumer = new ConsumerMock(true, 1);
-    context.setGlobal("cons", consumer);
-    statement.execute(context);
-    assertEquals(3, consumer.startConsumingCount.get());
-    assertArrayEquals(new Object[] {3}, (Object[]) consumer.getProducts().get(0));
-    assertArrayEquals(new Object[] {4}, (Object[]) consumer.getProducts().get(1));
-    assertArrayEquals(new Object[] {5}, (Object[]) consumer.getProducts().get(2));
-  }
-
-  @Test
-  public void testIterateWithOffset() {
-    Generator<Integer[]> source = new SequenceTestGenerator<>(
-        new Integer[] {1},
-        new Integer[] {2},
-        new Integer[] {3},
-        new Integer[] {4},
-        new Integer[] {5});
-    context.setGlobal("source", source);
-    Statement statement = parse("<iterate source='source' offset='2' type='array' count='3' consumer='cons' />");
     ConsumerMock consumer = new ConsumerMock(true, 1);
     context.setGlobal("cons", consumer);
     statement.execute(context);

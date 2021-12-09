@@ -29,11 +29,10 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.ErrorHandlerExpression;
 import com.rapiddweller.benerator.engine.expression.context.DefaultPageSizeExpression;
-import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
+import com.rapiddweller.benerator.engine.statement.GenIterStatement;
 import com.rapiddweller.benerator.engine.statement.RunTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
 import com.rapiddweller.common.ErrorHandler;
-import com.rapiddweller.format.xml.AbstractXMLElementParser;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.ParseContext;
 import com.rapiddweller.script.Expression;
@@ -70,7 +69,7 @@ public abstract class AbstractBeneratorDescriptorParser extends XMLStatementPars
 
   public static boolean isLoop(Statement statement) {
     return (statement instanceof RunTaskStatement)
-        || (statement instanceof GenerateOrIterateStatement)
+        || (statement instanceof GenIterStatement)
         || (statement instanceof WhileStatement);
   }
 
@@ -79,7 +78,7 @@ public abstract class AbstractBeneratorDescriptorParser extends XMLStatementPars
       return false;
     }
     for (Statement statement : parentPath) {
-      if (statement instanceof GenerateOrIterateStatement) {
+      if (statement instanceof GenIterStatement) {
         return true;
       }
     }

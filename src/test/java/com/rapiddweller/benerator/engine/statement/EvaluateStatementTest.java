@@ -26,13 +26,19 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
+import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
+import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.storage.AbstractStorageSystem;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Encodings;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.Level;
+import com.rapiddweller.common.OperationFailed;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.script.Expression;
+import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.junit.Assume;
 import org.junit.Test;
@@ -120,6 +126,18 @@ public class EvaluateStatementTest extends AbstractStatementTest {
     stmt.execute(context);
     assertEquals("HelloHi", stSys.execInfo);
   }
+
+  @Test(expected = OperationFailed.class)
+  public void testAssertFailed() {
+    DefaultBeneratorContext context = new DefaultBeneratorContext();
+    EvaluateStatement s = new EvaluateStatement(true, null, new ConstantExpression<String>("1"),
+        null, null, null, null,
+        null, new ConstantExpression<>("fatal"),
+        null, null, null, new ScriptExpression<>("result == 2"));
+    s.execute(context);
+  }
+
+  // private helpers ---------------------------------------------------------------------------------------------------
 
   private void checkEchoJavaHomeIx(String shell) {
     String expectedResult = System.getenv("JAVA_HOME");

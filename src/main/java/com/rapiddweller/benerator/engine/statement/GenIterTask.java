@@ -60,7 +60,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created: 01.02.2008 14:39:11
  * @author Volker Bergmann
  */
-public class GenerateAndConsumeTask implements Task, PageListener, ResourceManager, MessageHolder {
+public class GenIterTask implements Task, PageListener, ResourceManager, MessageHolder {
 
   // attributes --------------------------------------------------------------------------------------------------------
 
@@ -79,7 +79,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
 
   // constructor -------------------------------------------------------------------------------------------------------
 
-  public GenerateAndConsumeTask(String taskName, String productName) {
+  public GenIterTask(String taskName, String productName) {
     this.taskName = taskName;
     this.productName = productName;
     this.resourceManager = new ResourceManagerSupport();
@@ -260,7 +260,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     if (consumer == null)
       return false;
     if (consumer instanceof ConsumerChain)
-      return (((ConsumerChain) consumer).getComponents().size() > 0);
+      return (!((ConsumerChain) consumer).getComponents().isEmpty());
     return true;
   }
 
@@ -285,7 +285,7 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
     int lastSubGenIndex = statements.size() - 1;
     for (int i = statements.size() - 1; i >= 0; i--) {
       Statement statement = statements.get(i);
-      if (statement instanceof GenerateOrIterateStatement) {
+      if (statement instanceof GenIterStatement) {
         lastSubGenIndex = i;
         break;
       }
@@ -313,8 +313,8 @@ public class GenerateAndConsumeTask implements Task, PageListener, ResourceManag
         if (scope == null || productName.equals(scope)) {
           scopeds.add(holder);
         }
-      } else if (statement instanceof GenerateOrIterateStatement) {
-        GenerateOrIterateStatement subGenerate = (GenerateOrIterateStatement) statement;
+      } else if (statement instanceof GenIterStatement) {
+        GenIterStatement subGenerate = (GenIterStatement) statement;
         checkScopes(subGenerate.getTask().statements, subGenerate.getChildContext());
       }
     }
