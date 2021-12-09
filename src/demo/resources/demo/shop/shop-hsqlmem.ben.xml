@@ -130,11 +130,11 @@
     <comment>create order items</comment>
     <generate type="db_order_item"
               count="{customer_count * orders_per_customer * items_per_order}" consumer="db">
-        <variable name="product" source="db" selector="select ean_code, price from &quot;db_product&quot;"
+        <variable name="product" source="db" selector='select ean_code, price from "db_product"'
                   distribution="cumulated"/>
         <id name="id" generator="idGen"/>
         <attribute name="number_of_items" min="1" max="27" distribution="cumulated"/>
-        <reference name="order_id" source="db" selector="select id from &quot;db_order&quot; where id &gt; 1"
+        <reference name="order_id" source="db" selector='select id from "db_order" where id &gt; 1'
                    cyclic="true"/>
         <reference name="product_ean_code" script="product[0]"/>
         <attribute name="total_price" script="product[1] * db_order_item.number_of_items"/>
@@ -143,33 +143,13 @@
     <comment>Update order data, calculating the total sum of each order</comment>
     <iterate source="db" type="db_order" consumer="db.updater()">
         <attribute name="total_price" source="db"
-                   selector="{{ftl:select sum(total_price) from &quot;db_order_item&quot; where order_id = ${db_order.id}}}"
+                   selector='{{ftl:select sum(total_price) from "db_order_item" where order_id = ${db_order.id}}}'
                    cyclic="true"/>
     </iterate>
 
     <echo>Check if enough data has been generated</echo>
-    <iterate type="db_order" source="db" consumer="ConsoleExporter">
-        <attribute name="counter" type="int" generator="IncrementGenerator"/>
-    </iterate>
-    <if test="db_order.counter != 301">
-        <error>{ftl: ${db_order.counter} items}</error>
-    </if>
-    <iterate type="db_order_item" source="db" consumer="ConsoleExporter">
-        <attribute name="counter" type="int" generator="IncrementGenerator"/>
-    </iterate>
-    <if test="db_order_item.counter != 1501">
-        <error>{ftl: ${db_order_item.counter} items}</error>
-    </if>
-    <iterate type="db_user" source="db" consumer="ConsoleExporter">
-        <attribute name="counter" type="int" generator="IncrementGenerator"/>
-    </iterate>
-    <if test="db_user.counter != 104">
-        <error>{ftl: ${db_user.counter} items}</error>
-    </if>
-    <iterate type="db_product" source="db" consumer="ConsoleExporter">
-        <attribute name="counter" type="int" generator="IncrementGenerator"/>
-    </iterate>
-    <if test="db_product.counter != 57">
-        <error>{ftl: ${db_product.counter} items}</error>
-    </if>
+    <evaluate assert="result == 301" target="db">select count(*) from "db_order"</evaluate>
+    <evaluate assert="result == 1501" target="db">select count(*) from "db_order_item"</evaluate>
+    <evaluate assert="result == 104" target="db">select count(*) from "db_user"</evaluate>
+    <evaluate assert="result == 57" target="db">select count(*) from "db_product"</evaluate>
 </setup>
