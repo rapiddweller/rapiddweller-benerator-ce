@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -51,6 +51,7 @@ public class CommentParser extends AbstractBeneratorDescriptorParser {
   @Override
   public CommentStatement doParse(
       Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
+    attrSupport.validate(element);
     return new CommentStatement(XMLUtil.getText(element).trim());
   }
 
