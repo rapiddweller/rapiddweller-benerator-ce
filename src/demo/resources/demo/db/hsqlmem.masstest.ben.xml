@@ -54,11 +54,6 @@
         <reference name="role_fk" source="db" targetType="DB_ROLE" distribution="random"/>
     </generate>
 
-    <iterate type="DB_USER" source="db" consumer="NoConsumer">
-        <attribute name="counter" type="int" generator="IncrementGenerator"/>
-    </iterate>
-    <if test="DB_USER.counter &#60; 100000">
-        <error>{ftl: ${DB_USER.counter} items instead of 100000}</error>
-    </if>
+    <evaluate assert="result == 100000" target="db">select count(*) from "DB_USER"</evaluate>
 
 </setup>

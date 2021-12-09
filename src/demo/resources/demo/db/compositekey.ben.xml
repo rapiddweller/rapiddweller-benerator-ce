@@ -50,23 +50,15 @@
         <reference name="TRACK_ID" type="int" source="db" targetType="TRACK" unique="True"/>
     </generate>
 
-    <iterate type="playlist" source="db" consumer="ConsoleExporter">
-        <attribute name="counter" type="int" generator="IncrementGenerator"/>
-    </iterate>
-    <if test="playlist.counter != 20">
-        <error>{ftl: ${playlist.counter} items instead of 20}</error>
-    </if>
-    <iterate type="TRACK" source="db" consumer="ConsoleExporter">
-        <attribute name="counter" type="int" generator="IncrementGenerator"/>
-    </iterate>
-    <if test="TRACK.counter != 20">
-        <error>{ftl: ${TRACK.counter} items instead of 20}</error>
-    </if>
-    <iterate type="PLAYLIST_TRACK" source="db" consumer="ConsoleExporter">
-        <attribute name="counter" type="int" generator="IncrementGenerator"/>
-    </iterate>
-    <if test="PLAYLIST_TRACK.counter != 20">
-        <error>{ftl: ${PLAYLIST_TRACK.counter instead of 20} items}</error>
-    </if>
+    <echo>Printing generated data</echo>
+    <iterate type="playlist" source="db" consumer="ConsoleExporter"/>
+    <iterate type="TRACK" source="db" consumer="ConsoleExporter"/>
+    <iterate type="PLAYLIST_TRACK" source="db" consumer="ConsoleExporter"/>
+
+    <echo>Verifying generated data</echo>
+    <evaluate assert="result == 20" target="db">select count(*) from "playlist"</evaluate>
+    <evaluate assert="result == 20" target="db">select count(*) from "TRACK"</evaluate>
+    <evaluate assert="result == 20" target="db">select count(*) from "PLAYLIST_TRACK"</evaluate>
+
 
 </setup>
