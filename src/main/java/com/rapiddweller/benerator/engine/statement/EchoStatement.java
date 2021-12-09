@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.SpeechUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
@@ -41,27 +42,38 @@ import com.rapiddweller.script.expression.ExpressionUtil;
 public class EchoStatement implements Statement {
 
   private final Expression<String> messageEx;
-  private final Expression<String> typeEx;
+  private final Expression<EchoType> typeEx;
 
-  public EchoStatement(Expression<String> messageEx, Expression<String> typeEx) {
+  public EchoStatement(Expression<String> messageEx, Expression<EchoType> typeEx) {
     this.messageEx = messageEx;
     this.typeEx = typeEx;
   }
 
-  public Expression<?> getExpression() {
+  public Expression<String> getExpression() {
     return messageEx;
   }
 
   @Override
   public boolean execute(BeneratorContext context) {
     String message = ExpressionUtil.evaluate(messageEx, context);
-    String type = ExpressionUtil.evaluate(typeEx, context);
-    if ("speech".equals(type) && SpeechUtil.speechSupported()) {
-      SpeechUtil.say(message);
+    EchoType type = ExpressionUtil.evaluate(typeEx, context);
+    if (type == EchoType.speech) {
+      if (SpeechUtil.speechSupported()) {
+        SpeechUtil.say(message);
+      } else {
+        consoleOut(message);
+      }
+    } else if (type == EchoType.console) {
+      consoleOut(message);
     } else {
-      System.out.println(message);
+      // this is not supposed to happen since syntax has been checked while parsing
+      throw BeneratorExceptionFactory.getInstance().internalError("Illegal echo type", null);
     }
     return true;
+  }
+
+  private void consoleOut(String message) {
+    System.out.println(message);
   }
 
 }
