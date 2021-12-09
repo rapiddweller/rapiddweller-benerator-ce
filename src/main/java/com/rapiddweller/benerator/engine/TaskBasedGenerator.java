@@ -28,24 +28,24 @@ package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.GeneratorContext;
-import com.rapiddweller.benerator.engine.statement.GenerateAndConsumeTask;
+import com.rapiddweller.benerator.engine.statement.GenIterTask;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ErrorHandler;
 
 /**
- * Wraps a {@link GenerateAndConsumeTask} with a {@link Generator} interface.<br/><br/>
+ * Wraps a {@link GenIterTask} with a {@link Generator} interface.<br/><br/>
  * Created: 01.09.2011 15:33:34
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public class TaskBasedGenerator implements Generator<Object> {
 
-  private final GenerateAndConsumeTask task;
+  private final GenIterTask task;
   private GeneratorContext context;
   private final ErrorHandler errorHandler;
   private boolean initialized;
 
-  public TaskBasedGenerator(GenerateAndConsumeTask task) {
+  public TaskBasedGenerator(GenIterTask task) {
     this.task = task;
     this.errorHandler = ErrorHandler.getDefault();
   }
