@@ -40,15 +40,11 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link LegalFormGenerator}.<br/><br/>
  * Created: 24.08.2011 00:45:53
- *
  * @author Volker Bergmann
  * @since 0.7.0
  */
 public class LegalFormGeneratorTest extends GeneratorTest {
 
-  /**
-   * Test de.
-   */
   @Test
   public void testDE() {
     LegalFormGenerator generator = new LegalFormGenerator("DE");
@@ -59,13 +55,6 @@ public class LegalFormGeneratorTest extends GeneratorTest {
     close(generator);
   }
 
-  /**
-   * Generated set set.
-   *
-   * @param generator the generator
-   * @param n         the n
-   * @return the set
-   */
   protected static Set<String> generatedSet(LegalFormGenerator generator, int n) {
     Set<String> result = new HashSet<>();
     ProductWrapper<String> wrapper = new ProductWrapper<>();

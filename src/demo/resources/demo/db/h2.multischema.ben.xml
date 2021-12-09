@@ -45,22 +45,14 @@
         <reference name="manufacturer_id" source="schema3" targetType="db_manufacturer"/>
     </generate>
 
-    <iterate name="CAT_TRANS" type="db_Category" source="schema1" consumer="ConsoleExporter">
-        <attribute name="counter" type="int" generator="IncrementGenerator"/>
-    </iterate>
-    <if test="CAT_TRANS.counter != 10">
-        <error>{ftl: ${CAT_TRANS.counter} items}</error>
-    </if>
-    <iterate name="PROD_TRANS" type="db_product" source="schema1" consumer="ConsoleExporter">
-        <attribute name="counter" type="int" generator="IncrementGenerator"/>
-    </iterate>
-    <if test="PROD_TRANS.counter != 100">
-        <error>{ftl: ${PROD_TRANS.counter} items}</error>
-    </if>
-    <iterate name="MAN_TRANS" type="db_manufacturer" source="schema3" consumer="ConsoleExporter">
-        <attribute name="counter" type="int" generator="IncrementGenerator"/>
-    </iterate>
-    <if test="MAN_TRANS.counter != 100">
-        <error>{ftl: ${MAN_TRANS.counter} items}</error>
-    </if>
+    <echo>Printing all generated data</echo>
+    <iterate name="CAT_TRANS" type="db_Category" source="schema1" consumer="ConsoleExporter"/>
+    <iterate name="PROD_TRANS" type="db_product" source="schema1" consumer="ConsoleExporter"/>
+    <iterate name="MAN_TRANS" type="db_manufacturer" source="schema3" consumer="ConsoleExporter"/>
+
+    <echo>Verifying generated data</echo>
+    <evaluate assert="result == 10" target="schema1">select count(*) from "schema1"."db_Category"</evaluate>
+    <evaluate assert="result == 100" target="schema1">select count(*) from "schema1"."db_product"</evaluate>
+    <evaluate assert="result == 100" target="schema3">select count(*) from "schema3"."db_manufacturer"</evaluate>
+
 </setup>
