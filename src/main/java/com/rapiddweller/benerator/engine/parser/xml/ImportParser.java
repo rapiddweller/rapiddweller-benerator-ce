@@ -55,19 +55,19 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
   public static final String IMPORT_CLASS_REGEX = "([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*(\\.\\*)?";
 
   private static final AttributeInfo<String> CLASS = new AttributeInfo<>(
-    ATT_CLASS, false, BeneratorErrorIds.SYN_IMPORT_CLASS, null,
-      new RegexBasedStringParser("class import", IMPORT_CLASS_REGEX));
+    ATT_CLASS, false, BeneratorErrorIds.SYN_IMPORT_CLASS, new RegexBasedStringParser("class import", IMPORT_CLASS_REGEX), null
+  );
 
   private static final AttributeInfo<Boolean> DEFAULTS = new AttributeInfo<>(
-    ATT_DEFAULTS, false, BeneratorErrorIds.SYN_IMPORT_DEFAULTS, "false", new BooleanParser());
+    ATT_DEFAULTS, false, BeneratorErrorIds.SYN_IMPORT_DEFAULTS, new BooleanParser(), "false");
 
   private static final AttributeInfo<String[]> DOMAINS = new AttributeInfo<>(
-    ATT_DOMAINS, false, BeneratorErrorIds.SYN_IMPORT_DOMAINS, null,
-      new ListParser<>(new FullyQualifiedNameParser()));
+    ATT_DOMAINS, false, BeneratorErrorIds.SYN_IMPORT_DOMAINS, new ListParser<>(new FullyQualifiedNameParser()), null
+  );
 
   private static final AttributeInfo<String[]> PLATFORMS = new AttributeInfo<>(
-    ATT_PLATFORMS, false, BeneratorErrorIds.SYN_IMPORT_PLATFORMS, null,
-      new ListParser<>(new FullyQualifiedNameParser()));
+    ATT_PLATFORMS, false, BeneratorErrorIds.SYN_IMPORT_PLATFORMS, new ListParser<>(new FullyQualifiedNameParser()), null
+  );
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_IMPORT_ILLEGAL_ATTR,
       CLASS, DEFAULTS, DOMAINS, PLATFORMS);

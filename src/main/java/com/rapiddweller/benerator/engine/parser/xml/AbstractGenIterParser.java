@@ -94,10 +94,10 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
 
   protected static final AttributeInfo<Expression<Integer>> THREADS = new AttributeInfo<>(
       ATT_THREADS, false, BeneratorErrorIds.SYN_GENERATE_THREADS,
-      "1", new ScriptableParser<>(new PositiveIntegerParser()));
+      new ScriptableParser<>(new PositiveIntegerParser()), "1");
 
   protected static final AttributeInfo<Expression<Boolean>> STATS = new AttributeInfo<>(
-      ATT_STATS, false, BeneratorErrorIds.SYN_GENERATE_STATS, "false", new ScriptableParser<>(new BooleanParser()));
+      ATT_STATS, false, BeneratorErrorIds.SYN_GENERATE_STATS, new ScriptableParser<>(new BooleanParser()), "false");
 
   protected static final AttributeInfo<String> SENSOR = new AttributeInfo<>(
       ATT_SENSOR, false, BeneratorErrorIds.SYN_GENERATE_SENSOR, null, null);

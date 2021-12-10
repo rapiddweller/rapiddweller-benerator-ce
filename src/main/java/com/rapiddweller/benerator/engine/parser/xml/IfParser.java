@@ -52,7 +52,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 public class IfParser extends AbstractBeneratorDescriptorParser {
 
   private static final AttributeInfo<Expression<Boolean>> TEST = new AttributeInfo<>(
-      ATT_TEST, true, BeneratorErrorIds.SYN_IF_TEST, null, new ScriptParser<>(Boolean.class));
+      ATT_TEST, true, BeneratorErrorIds.SYN_IF_TEST, new ScriptParser<>(Boolean.class), null);
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_IF_ILLEGAL_ATTR, TEST);
 

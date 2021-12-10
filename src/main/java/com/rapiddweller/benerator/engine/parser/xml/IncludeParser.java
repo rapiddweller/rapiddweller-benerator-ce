@@ -52,7 +52,7 @@ public class IncludeParser extends AbstractBeneratorDescriptorParser {
   // format definition -----------------------------------------------------------------------------------------------
 
   private static final AttributeInfo<Expression<String>> URI = new AttributeInfo<>(
-      ATT_URI, true, BeneratorErrorIds.SYN_INCLUDE_URI, null, new ScriptableParser<>(new UriParser()));
+      ATT_URI, true, BeneratorErrorIds.SYN_INCLUDE_URI, new ScriptableParser<>(new UriParser()), null);
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(
       BeneratorErrorIds.SYN_INCLUDE_ILLEGAL_ATTR, URI);

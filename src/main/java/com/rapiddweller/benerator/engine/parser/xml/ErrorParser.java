@@ -28,7 +28,6 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.benerator.engine.parser.string.IdParser;
 import com.rapiddweller.benerator.engine.statement.ErrorStatement;
 import com.rapiddweller.common.parser.NonNegativeIntegerParser;
 import com.rapiddweller.format.xml.AttrInfoSupport;
@@ -50,7 +49,7 @@ public class ErrorParser extends AbstractBeneratorDescriptorParser {
       ATT_ID, false, BeneratorErrorIds.SYN_ERROR_ID, null, null);
 
   private static final AttributeInfo<Integer> EXIT_CODE = new AttributeInfo<>(
-      ATT_EXIT_CODE, false, BeneratorErrorIds.SYN_ERROR_EXIT_CODE, null, new NonNegativeIntegerParser());
+      ATT_EXIT_CODE, false, BeneratorErrorIds.SYN_ERROR_EXIT_CODE, new NonNegativeIntegerParser(), null);
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(
       BeneratorErrorIds.SYN_ERROR_ILLEGAL_ATTR, ID, EXIT_CODE);

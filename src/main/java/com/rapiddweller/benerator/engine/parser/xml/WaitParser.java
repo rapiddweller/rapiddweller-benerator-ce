@@ -58,16 +58,16 @@ public class WaitParser extends AbstractBeneratorDescriptorParser {
   // format definitions ----------------------------------------------------------------------------------------------
 
   private static final AttributeInfo<Expression<Long>> DURATION = new AttributeInfo<>(
-    ATT_DURATION, false, BeneratorErrorIds.SYN_WAIT_DURATION, null, new ScriptableParser<>(new NonNegativeLongParser()));
+    ATT_DURATION, false, BeneratorErrorIds.SYN_WAIT_DURATION, new ScriptableParser<>(new NonNegativeLongParser()), null);
 
   private static final AttributeInfo<Expression<Long>> MIN = new AttributeInfo<>(
-    ATT_MIN, false, BeneratorErrorIds.SYN_WAIT_MIN, null, new ScriptableParser<>(new NonNegativeLongParser()));
+    ATT_MIN, false, BeneratorErrorIds.SYN_WAIT_MIN, new ScriptableParser<>(new NonNegativeLongParser()), null);
 
   private static final AttributeInfo<Expression<Long>> MAX = new AttributeInfo<>(
-    ATT_MAX, false, BeneratorErrorIds.SYN_WAIT_MAX, null, new ScriptableParser<>(new NonNegativeLongParser()));
+    ATT_MAX, false, BeneratorErrorIds.SYN_WAIT_MAX, new ScriptableParser<>(new NonNegativeLongParser()), null);
 
   private static final AttributeInfo<Expression<Long>> GRANULARITY = new AttributeInfo<>(
-    ATT_GRANULARITY, false, BeneratorErrorIds.SYN_WAIT_GRANULARITY, null, new ScriptableParser<>(new NonNegativeLongParser()));
+    ATT_GRANULARITY, false, BeneratorErrorIds.SYN_WAIT_GRANULARITY, new ScriptableParser<>(new NonNegativeLongParser()), null);
 
   private static final AttributeInfo<String> DISTRIBUTION = new AttributeInfo<>(
     ATT_DISTRIBUTION, false, BeneratorErrorIds.SYN_WAIT_DISTRIBUTION, null, null);

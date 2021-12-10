@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.benerator.engine.parser.string.ErrorHandlerParser;
+import com.rapiddweller.benerator.engine.parser.string.GlobalErrorHandlerParser;
 import com.rapiddweller.benerator.engine.parser.string.IdParser;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayUtil;
@@ -65,47 +65,47 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 public class SetupParser extends AbstractBeneratorDescriptorParser {
 
   protected static final AttributeInfo<Long> COUNT = new AttributeInfo<>(
-      ATT_MAX_COUNT, false, SYN_SETUP_MAX_COUNT, null, new NonNegativeLongParser());
+      ATT_MAX_COUNT, false, SYN_SETUP_MAX_COUNT, new NonNegativeLongParser(), null);
 
   protected static final AttributeInfo<String> DEFAULT_SCRIPT = new AttributeInfo<>(
-      ATT_DEFAULT_SCRIPT, false, SYN_SETUP_DEF_SCRIPT, "ben", new IdParser());
+      ATT_DEFAULT_SCRIPT, false, SYN_SETUP_DEF_SCRIPT, new IdParser(), "ben");
 
   protected static final AttributeInfo<Boolean> DEFAULT_NULL = new AttributeInfo<>(
-      ATT_DEFAULT_NULL, false, SYN_SETUP_DEF_NULL, "false", new BooleanParser());
+      ATT_DEFAULT_NULL, false, SYN_SETUP_DEF_NULL, new BooleanParser(), "false");
 
     protected static final AttributeInfo<String> DEFAULT_ENCODING = new AttributeInfo<>(
-      ATT_DEFAULT_ENCODING, false, SYN_SETUP_DEF_ENCODING, null, new EncodingParser());
+      ATT_DEFAULT_ENCODING, false, SYN_SETUP_DEF_ENCODING, new EncodingParser(), null);
 
   protected static final AttributeInfo<String> DEFAULT_LINE_SEPARATOR = new AttributeInfo<>(
-    ATT_DEFAULT_LINE_SEPARATOR, false, SYN_SETUP_DEF_LINE_SEPARATOR, SystemInfo.LF,
-      new RegexBasedStringParser("line separator", "(\\r)?\\n"));
+    ATT_DEFAULT_LINE_SEPARATOR, false, SYN_SETUP_DEF_LINE_SEPARATOR, new RegexBasedStringParser("line separator", "(\\r)?\\n"), SystemInfo.LF
+  );
 
   protected static final AttributeInfo<String> DEFAULT_LOCALE = new AttributeInfo<>(
-    ATT_DEFAULT_LOCALE, false, SYN_SETUP_DEF_LOCALE, null, new IdParser());
+    ATT_DEFAULT_LOCALE, false, SYN_SETUP_DEF_LOCALE, new IdParser(), null);
 
   protected static final AttributeInfo<String> DEFAULT_DATASET = new AttributeInfo<>(
-    ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET, null, new IdParser());
+    ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET, new IdParser(), null);
 
   protected static final AttributeInfo<Integer> DEFAULT_PAGE_SIZE = new AttributeInfo<>(
-    ATT_DEFAULT_PAGE_SIZE, false, SYN_SETUP_DEF_PAGE_SIZE, "1", new PositiveIntegerParser());
+    ATT_DEFAULT_PAGE_SIZE, false, SYN_SETUP_DEF_PAGE_SIZE, new PositiveIntegerParser(), "1");
 
   protected static final AttributeInfo<Character> DEFAULT_SEPARATOR = new AttributeInfo<>(
-      ATT_DEFAULT_SEPARATOR, false, SYN_SETUP_DEF_SEPARATOR, null, new CharacterParser());
+      ATT_DEFAULT_SEPARATOR, false, SYN_SETUP_DEF_SEPARATOR, new CharacterParser(), null);
 
   protected static final AttributeInfo<Boolean> DEFAULT_ONE_TO_ONE = new AttributeInfo<>(
-      ATT_DEFAULT_ONE_TO_ONE, false, SYN_SETUP_DEF_ONE_TO_ONE, null, new BooleanParser());
+      ATT_DEFAULT_ONE_TO_ONE, false, SYN_SETUP_DEF_ONE_TO_ONE, new BooleanParser(), null);
 
   protected static final AttributeInfo<ErrorHandler> DEFAULT_ERR_HANDLER = new AttributeInfo<>(
-      ATT_DEFAULT_ERR_HANDLER, false, SYN_SETUP_DEF_ERR_HANDLER, "fatal", new ErrorHandlerParser());
+      ATT_DEFAULT_ERR_HANDLER, false, SYN_SETUP_DEF_ERR_HANDLER, new GlobalErrorHandlerParser(), "fatal");
 
   protected static final AttributeInfo<Boolean> DEFAULT_IMPORTS = new AttributeInfo<>(
-      ATT_DEFAULT_IMPORTS, false, SYN_SETUP_DEF_IMPORTS, null, new BooleanParser());
+      ATT_DEFAULT_IMPORTS, false, SYN_SETUP_DEF_IMPORTS, new BooleanParser(), null);
 
   protected static final AttributeInfo<Boolean> DEFAULT_SOURCE_SCRIPTED = new AttributeInfo<>(
-      ATT_DEFAULT_SOURCE_SCRIPTED, false, SYN_SETUP_DEF_SOURCE_SCRIPTED, null, new BooleanParser());
+      ATT_DEFAULT_SOURCE_SCRIPTED, false, SYN_SETUP_DEF_SOURCE_SCRIPTED, new BooleanParser(), null);
 
   protected static final AttributeInfo<Boolean> ACCEPT_UNKNOWN_SIMPLE_TYPES = new AttributeInfo<>(
-      ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES, false, SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES, null, new BooleanParser());
+      ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES, false, SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES, new BooleanParser(), null);
 
   protected static final AttributeInfo<String> GENERATOR_FACTORY = new AttributeInfo<>(
       ATT_GENERATOR_FACTORY, false, SYN_SETUP_GENERATOR_FACTORY, null, null);
