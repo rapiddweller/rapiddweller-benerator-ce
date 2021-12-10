@@ -34,7 +34,6 @@ import org.junit.Test;
 import org.w3c.dom.Element;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 /**
  * Tests the {@link IfParser}.<br/><br/>
@@ -52,20 +51,22 @@ public class IfParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testPlainFalse() {
-    parseAndExecute("<if test='2==3'><setting name='executed' value='OK'/></if>");
-    assertNull(context.getGlobal("executed"));
+    executeAndCheckGlobal("<if test='2==3'><setting name='executed' value='OK'/></if>", null);
   }
 
   @Test
   public void testThenTrue() {
-    parseAndExecute("<if test='1==1'><then><setting name='executed' value='OK'/></then></if>");
-    assertEquals("OK", context.getGlobal("executed"));
+    executeAndCheckGlobal("<if test='1==1'><then><setting name='executed' value='OK'/></then></if>", "OK");
   }
 
   @Test
   public void testThenFalse() {
-    parseAndExecute("<if test='2==3'><then><setting name='executed' value='OK'/></then></if>");
-    assertNull(context.getGlobal("executed"));
+    executeAndCheckGlobal("<if test='2==3'><then><setting name='executed' value='OK'/></then></if>", null);
+  }
+
+  private void executeAndCheckGlobal(String xml, String expectedGlobal) {
+    parseAndExecute(xml);
+    assertEquals(expectedGlobal, context.getGlobal("executed"));
   }
 
   @Test
@@ -97,13 +98,26 @@ public class IfParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   @Test(expected = SyntaxError.class)
   public void testTwoThens() {
-    Element element = XMLUtil.parseStringAsElement("<if test='2==3'><then/><then/></if>");
-    new IfParser().parse(element, null, null, null);
+    assertSyntaxError("<if test='2==3'><then/><then/></if>");
   }
 
   @Test(expected = SyntaxError.class)
   public void testTwoElses() {
-    Element element = XMLUtil.parseStringAsElement("<if test='2==3'><then/><else/><else/></if>");
+    assertSyntaxError("<if test='2==3'><then/><else/><else/></if>");
+  }
+
+  @Test(expected = SyntaxError.class)
+  public void testThenAfterElse() {
+    assertSyntaxError("<if test='2==3'><else/><then/><else/></if>");
+  }
+
+  @Test(expected = SyntaxError.class)
+  public void testBeepBeforeThen() {
+    assertSyntaxError("<if test='2==3'><beep/><then><setting name='executed' value='OK'/></then></if>");
+  }
+
+  public void assertSyntaxError(String xml) {
+    Element element = XMLUtil.parseStringAsElement(xml);
     new IfParser().parse(element, null, null, null);
   }
 

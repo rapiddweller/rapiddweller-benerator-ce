@@ -31,7 +31,9 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.parser.string.ScriptParser;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.SequentialStatement;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.exception.ExceptionFactory;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
@@ -62,8 +64,8 @@ public class IfParser extends AbstractBeneratorDescriptorParser {
   public Statement doParse(Element ifElement, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
     // validate XML
     attrSupport.validate(ifElement);
-    assertOnlyTheseChildNames(ifElement, EL_THEN, EL_ELSE, EL_COMMENT);
-    Element thenElement = getUniqueChild(ifElement, "then", true);
+    validateChildren(ifElement);
+    Element thenElement = getUniqueChild(ifElement, "then", false);
     Element elseElement = getUniqueChild(ifElement, "else", false);
     if (elseElement != null && thenElement == null) {
       throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("'else' without 'then'", elseElement);
@@ -74,6 +76,38 @@ public class IfParser extends AbstractBeneratorDescriptorParser {
     // parse children
     parseChildren(ifElement, parentXmlPath, parentComponentPath, context, thenElement, elseElement, ifStatement);
     return ifStatement;
+  }
+
+  private void validateChildren(Element ifElement) {
+    // set plain to true if there is no <then> or <else> statement
+    int thenCount = XMLUtil.getChildElements(ifElement, false, "then").length;
+    int elseCount = XMLUtil.getChildElements(ifElement, false, "else").length;
+    boolean plain = (thenCount + elseCount == 0);
+    // check names and order of child elements
+    boolean thenUsed = false;
+    boolean elseUsed = false;
+    for (Element child : XMLUtil.getChildElements(ifElement)) {
+      String childName = child.getNodeName();
+      if (EL_THEN.equals(childName)) {
+        if (thenUsed) {
+          throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlElement(
+              "Multiple <then> elements", null, BeneratorErrorIds.SYN_IF_THEN, ifElement);
+        }
+        thenUsed = true;
+      } else if (EL_ELSE.equals(childName)) {
+        if (!thenUsed) {
+          throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlElement(
+              "<else> without <then>", null, BeneratorErrorIds.SYN_IF_ELSE_WO_THEN, ifElement);
+        } else if (elseUsed) {
+          throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlElement(
+              "Multiple <else> elements", null, BeneratorErrorIds.SYN_IF_ELSE, ifElement);
+        }
+        elseUsed = true;
+      } else if (!plain && !EL_COMMENT.equals(childName)) {
+        throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlElement(
+            "Illegal child element of <if>", null, BeneratorErrorIds.SYN_IF_ILLEGAL_CHILD, ifElement);
+      }
+    }
   }
 
   private static void parseChildren(Element ifElement, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context,
