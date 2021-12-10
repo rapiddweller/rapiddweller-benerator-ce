@@ -209,10 +209,12 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <if> ------------------------------------------------------------------------------------
 
-  public static final String SYN_IF_ILLEGAL_ATTR = "BEN-0350";
-  public static final String SYN_IF_TEST         = "BEN-0351";
-  public static final String SYN_IF_THEN         = "BEN-0352";
-  public static final String SYN_IF_ELSE         = "BEN-0353";
+  public static final String SYN_IF_ILLEGAL_ATTR  = "BEN-0350";
+  public static final String SYN_IF_ILLEGAL_CHILD = "BEN-0351";
+  public static final String SYN_IF_TEST          = "BEN-0352";
+  public static final String SYN_IF_THEN          = "BEN-0353";
+  public static final String SYN_IF_ELSE          = "BEN-0354";
+  public static final String SYN_IF_ELSE_WO_THEN  = "BEN-0355";
 
   // Syntax Errors regarding <while> ---------------------------------------------------------------------------------
 
@@ -235,7 +237,7 @@ public class BeneratorErrorIds {
   public static final String SYN_WAIT_MAX               = "BEN-0373";
   public static final String SYN_WAIT_GRANULARITY       = "BEN-0374";
   public static final String SYN_WAIT_DISTRIBUTION      = "BEN-0375";
-
+  public static final String SYN_WAIT_MUTUALLY_EXCLUDED = "BEN-0376";
   // Syntax Errors regarding <domtree> -------------------------------------------------------------------------------
 
   public static final String SYN_DOMTREE_ID         = "BEN-0380";
