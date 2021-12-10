@@ -31,9 +31,11 @@ import com.rapiddweller.benerator.DomainDescriptor;
 import com.rapiddweller.benerator.PlatformDescriptor;
 import com.rapiddweller.benerator.engine.Importer;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.engine.parser.string.ListParser;
 import com.rapiddweller.benerator.engine.statement.ImportStatement;
-import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.parser.BooleanParser;
+import com.rapiddweller.common.parser.FullyQualifiedNameParser;
+import com.rapiddweller.common.parser.RegexBasedStringParser;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.AttributeInfo;
 import org.w3c.dom.Element;
@@ -48,38 +50,45 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  */
 public class ImportParser extends AbstractBeneratorDescriptorParser {
 
+  // format spec -----------------------------------------------------------------------------------------------------
+
+  public static final String IMPORT_CLASS_REGEX = "([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*(\\.\\*)?";
+
   private static final AttributeInfo<String> CLASS = new AttributeInfo<>(
-    ATT_CLASS, false, BeneratorErrorIds.SYN_IMPORT_CLASS, null, null);
+    ATT_CLASS, false, BeneratorErrorIds.SYN_IMPORT_CLASS, null,
+      new RegexBasedStringParser("class import", IMPORT_CLASS_REGEX));
 
   private static final AttributeInfo<Boolean> DEFAULTS = new AttributeInfo<>(
     ATT_DEFAULTS, false, BeneratorErrorIds.SYN_IMPORT_DEFAULTS, "false", new BooleanParser());
 
-  private static final AttributeInfo<String> DOMAINS = new AttributeInfo<>(
-    ATT_DOMAINS, false, BeneratorErrorIds.SYN_IMPORT_DOMAINS, null, null);
+  private static final AttributeInfo<String[]> DOMAINS = new AttributeInfo<>(
+    ATT_DOMAINS, false, BeneratorErrorIds.SYN_IMPORT_DOMAINS, null,
+      new ListParser<>(new FullyQualifiedNameParser()));
 
-  private static final AttributeInfo<String> PLATFORMS = new AttributeInfo<>(
-    ATT_PLATFORMS, false, BeneratorErrorIds.SYN_IMPORT_PLATFORMS, null, null);
+  private static final AttributeInfo<String[]> PLATFORMS = new AttributeInfo<>(
+    ATT_PLATFORMS, false, BeneratorErrorIds.SYN_IMPORT_PLATFORMS, null,
+      new ListParser<>(new FullyQualifiedNameParser()));
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_IMPORT_ILLEGAL_ATTR,
       CLASS, DEFAULTS, DOMAINS, PLATFORMS);
+
+  // constructor & interface -----------------------------------------------------------------------------------------
 
   public ImportParser() {
     super(EL_IMPORT, ATTR_INFO);
   }
 
   @Override
-  public ImportStatement doParse(
-      Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext parseContext) {
+  public ImportStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath,
+                                 BeneratorParseContext parseContext) {
     // check syntax
-    attrSupport.validate(element);
     assertAtLeastOneAttributeIsSet(element, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS, ATT_CLASS);
+    // parse attributes
     boolean defaults = DEFAULTS.parse(element);
     String classImport = parseClass(element);
     DomainDescriptor[] domainImports = parseDomains(element);
     PlatformDescriptor[] platformImports = parsePlatforms(element);
-    for (PlatformDescriptor descriptor : platformImports) {
-      Importer.importPlatformParsers(descriptor, parseContext);
-    }
+    importPlatformParsers(parseContext, platformImports);
     return new ImportStatement(defaults, classImport, domainImports, platformImports);
   }
 
@@ -94,21 +103,18 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
   }
 
   protected DomainDescriptor[] parseDomains(Element element) {
-    String attribute = DOMAINS.parse(element);
-    if (StringUtil.isEmpty(attribute)) {
-      return new DomainDescriptor[0];
-    } else {
-      String[] domainSpecs = StringUtil.trimAll(attribute.split(","));
-      return Importer.findDomains(domainSpecs);
-    }
+    String[] domainSpecs = DOMAINS.parse(element);
+    return Importer.findDomains(domainSpecs);
   }
 
   public static PlatformDescriptor[] parsePlatforms(Element element) {
-    String attribute = PLATFORMS.parse(element);
-    if (StringUtil.isEmpty(attribute)) {
-      return new PlatformDescriptor[0];
-    } else {
-      return Importer.findPlatforms(StringUtil.trimAll(attribute.split(",")), true);
+    String[] platformSpecs = PLATFORMS.parse(element);
+    return Importer.findPlatforms(platformSpecs, true);
+  }
+
+  protected void importPlatformParsers(BeneratorParseContext parseContext, PlatformDescriptor[] platformImports) {
+    for (PlatformDescriptor descriptor : platformImports) {
+      Importer.importPlatformParsers(descriptor, parseContext);
     }
   }
 
