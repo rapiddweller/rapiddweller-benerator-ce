@@ -104,12 +104,20 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
 
   protected DomainDescriptor[] parseDomains(Element element) {
     String[] domainSpecs = DOMAINS.parse(element);
-    return Importer.findDomains(domainSpecs);
+    if (domainSpecs != null) {
+      return Importer.findDomains(domainSpecs);
+    } else {
+      return new DomainDescriptor[0];
+    }
   }
 
   public static PlatformDescriptor[] parsePlatforms(Element element) {
     String[] platformSpecs = PLATFORMS.parse(element);
-    return Importer.findPlatforms(platformSpecs, true);
+    if (platformSpecs != null) {
+      return Importer.findPlatforms(platformSpecs, true);
+    } else {
+      return new PlatformDescriptor[0];
+    }
   }
 
   protected void importPlatformParsers(BeneratorParseContext parseContext, PlatformDescriptor[] platformImports) {
