@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Volker Bergmann
  * @since 2.1.0
  */
-public class ErrorHandlerParser extends TypedParser<ErrorHandler> {
+public class GlobalErrorHandlerParser extends TypedParser<ErrorHandler> {
 
   private static final Map<String, ErrorHandler> handlers = new HashMap<>();
 
@@ -33,7 +33,7 @@ public class ErrorHandlerParser extends TypedParser<ErrorHandler> {
     handlers.put(level.name(), handler);
   }
 
-  public ErrorHandlerParser() {
+  public GlobalErrorHandlerParser() {
     super("error handler specification", ErrorHandler.class);
   }
 
