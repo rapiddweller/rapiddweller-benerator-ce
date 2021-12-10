@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -96,7 +96,7 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
       Element[] childElements = XMLUtil.getChildElements(element);
       Expression[] subExpressions = new Expression[childElements.length];
       for (int j = 0; j < childElements.length; j++) {
-        subExpressions[j] = BeanParser.parseBeanExpression(childElements[j]);
+        subExpressions[j] = BeanParser.parseBeanExpression(childElements[j], false);
       }
       switch (subExpressions.length) {
         case 0:
