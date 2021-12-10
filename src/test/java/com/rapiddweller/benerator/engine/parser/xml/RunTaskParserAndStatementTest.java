@@ -26,8 +26,13 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.engine.BeneratorRootContext;
+import com.rapiddweller.benerator.engine.BeneratorRootStatement;
+import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.statement.RunTaskStatement;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
+import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.Level;
 import com.rapiddweller.task.PageListenerMock;
 import com.rapiddweller.task.TaskMock;
 import org.junit.Before;
@@ -76,6 +81,39 @@ public class RunTaskParserAndStatementTest extends AbstractBeneratorIntegrationT
     assertEquals(new PageListenerMock(1), statement.getPager().evaluate(context));
     statement.execute(context);
     assertEquals(5, TaskMock.count.get());
+  }
+
+  @Test
+  public void testPagesizeFallback() {
+    String xml =
+        "<setup defaultPageSize='123'>" +
+            "<run-task class='com.rapiddweller.task.TaskMock' count='5' stats='true' " +
+            "      pager='new com.rapiddweller.task.PageListenerMock(1)'>" +
+            "  <property name='intProp' value='42' />" +
+            "</run-task>" +
+            "</setup>";
+    BeneratorRootContext context = new DefaultBeneratorContext();
+    BeneratorRootStatement root = (BeneratorRootStatement) parse(xml);
+    root.execute(context);
+    RunTaskStatement statement = (RunTaskStatement) root.getSubStatements().get(0);
+    long pageSize = statement.getPageSize().evaluate(context);
+    assertEquals(123, pageSize);
+  }
+
+  @Test
+  public void testErrorHandlerFallback() {
+    String xml =
+        "<setup defaultErrorHandler='trace'>" +
+            "<run-task class='com.rapiddweller.task.TaskMock' count='5'>" +
+            "  <property name='intProp' value='42' />" +
+            "</run-task>" +
+            "</setup>";
+    BeneratorRootContext context = new DefaultBeneratorContext();
+    BeneratorRootStatement root = (BeneratorRootStatement) parse(xml);
+    root.execute(context);
+    RunTaskStatement statement = (RunTaskStatement) root.getSubStatements().get(0);
+    ErrorHandler errorHandler = statement.getErrorHandler(context);
+    assertEquals(Level.trace, errorHandler.getLevel());
   }
 
 }
