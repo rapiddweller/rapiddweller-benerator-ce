@@ -41,57 +41,20 @@ import java.util.List;
 /**
  * {@link Statement} that executes a {@link Task} supporting paging and multithreading.<br/><br/>
  * Created: 27.10.2009 20:29:47
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class RunTaskStatement extends AbstractStatement implements Closeable {
 
-  /**
-   * The Task provider.
-   */
   protected final Expression<? extends Task> taskProvider;
-  /**
-   * The Task.
-   */
   protected Task task;
-  /**
-   * The Count.
-   */
   protected final Expression<Long> count;
-  /**
-   * The Page size.
-   */
   protected final Expression<Long> pageSize;
-  /**
-   * The Threads.
-   */
   protected final Expression<Integer> threads;
-  /**
-   * The Page listener.
-   */
   protected final Expression<PageListener> pageListener;
-  /**
-   * The Stats.
-   */
   protected final Expression<Boolean> stats;
-  /**
-   * The Info log.
-   */
   protected final boolean infoLog;
 
-  /**
-   * Instantiates a new Run task statement.
-   *
-   * @param taskProvider the task provider
-   * @param count        the count
-   * @param pageSize     the page size
-   * @param pageListener the page listener
-   * @param threads      the threads
-   * @param stats        the stats
-   * @param errorHandler the error handler
-   * @param infoLog      the info log
-   */
   public RunTaskStatement(Expression<? extends Task> taskProvider,
                           Expression<Long> count, Expression<Long> pageSize,
                           Expression<PageListener> pageListener, Expression<Integer> threads,
@@ -107,38 +70,18 @@ public class RunTaskStatement extends AbstractStatement implements Closeable {
     this.infoLog = infoLog;
   }
 
-  /**
-   * Gets count.
-   *
-   * @return the count
-   */
   public Expression<Long> getCount() {
     return count;
   }
 
-  /**
-   * Gets page size.
-   *
-   * @return the page size
-   */
   public Expression<Long> getPageSize() {
     return pageSize;
   }
 
-  /**
-   * Gets threads.
-   *
-   * @return the threads
-   */
   public Expression<Integer> getThreads() {
     return threads;
   }
 
-  /**
-   * Gets pager.
-   *
-   * @return the pager
-   */
   public Expression<PageListener> getPager() {
     return pageListener;
   }
@@ -158,12 +101,6 @@ public class RunTaskStatement extends AbstractStatement implements Closeable {
     return true;
   }
 
-  /**
-   * Gets task.
-   *
-   * @param context the context
-   * @return the task
-   */
   public synchronized Task getTask(BeneratorContext context) {
     if (task == null) {
       task = taskProvider.evaluate(context);
