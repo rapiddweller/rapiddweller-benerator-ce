@@ -28,21 +28,18 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.engine.parser.string.ScriptParser;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.SequentialStatement;
-import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.exception.ExceptionFactory;
-import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AttrInfoSupport;
+import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
 
 /**
  * Parses an &lt;if&gt; element.<br/><br/>
@@ -52,13 +49,10 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class IfParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttrInfoSupport ATTR_INFO;
-  static {
-    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_IF_ILLEGAL_ATTR);
-    ATTR_INFO.add(ATT_TEST, true, BeneratorErrorIds.SYN_IF_TEST);
-  }
+  private static final AttributeInfo<Expression<Boolean>> TEST = new AttributeInfo<>(
+      ATT_TEST, true, BeneratorErrorIds.SYN_IF_TEST, null, new ScriptParser<>(Boolean.class));
 
-  private static final Set<String> STRICT_CHILDREN = CollectionUtil.toSet(EL_THEN, EL_ELSE, EL_COMMENT);
+  private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_IF_ILLEGAL_ATTR, TEST);
 
   public IfParser() {
     super(EL_IF, ATTR_INFO);
@@ -66,43 +60,38 @@ public class IfParser extends AbstractBeneratorDescriptorParser {
 
   @Override
   public Statement doParse(Element ifElement, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
-    Expression<Boolean> condition = parseBooleanExpressionAttribute(ATT_TEST, ifElement);
-    Element[] thenElements = XMLUtil.getChildElements(ifElement, false, "then");
-    if (thenElements.length > 1) {
-      throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("Multiple <then> elements", ifElement);
+    // validate XML
+    attrSupport.validate(ifElement);
+    assertOnlyTheseChildNames(ifElement, EL_THEN, EL_ELSE, EL_COMMENT);
+    Element thenElement = getUniqueChild(ifElement, "then", true);
+    Element elseElement = getUniqueChild(ifElement, "else", false);
+    if (elseElement != null && thenElement == null) {
+      throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("'else' without 'then'", elseElement);
     }
-    Element thenElement = (thenElements.length == 1 ? thenElements[0] : null);
-    Element[] elseElements = XMLUtil.getChildElements(ifElement, false, "else");
-    if (elseElements.length > 1) {
-      throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("Multiple <else> elements", ifElement);
-    }
-    Element elseElement = (elseElements.length == 1 ? elseElements[0] : null);
-    List<Statement> thenStatements;
-    List<Statement> elseStatements = null;
+    // parse content
+    Expression<Boolean> condition = TEST.parse(ifElement);
     IfStatement ifStatement = new IfStatement(condition);
-    Statement[] ifPath = context.createSubPath(parentComponentPath, ifStatement);
-    if (elseElement != null) {
-      // if there is an 'else' element, there must be an 'if' element too
-      if (thenElement == null) {
-        throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("'else' without 'then'", elseElement);
-      }
-      thenStatements = context.parseChildElementsOf(thenElement, parentXmlPath, ifPath);
-      elseStatements = context.parseChildElementsOf(elseElement, parentXmlPath, ifPath);
-      // check that no elements conflict with 'then' and 'else'
-      assertThenElseChildren(ifElement);
-    } else {
-      thenStatements = context.parseChildElementsOf(Objects.requireNonNullElse(thenElement, ifElement), parentXmlPath, ifPath);
-    }
-    ifStatement.setThenStatement(new SequentialStatement(thenStatements));
-    ifStatement.setElseStatement(new SequentialStatement(elseStatements));
+    // parse children
+    parseChildren(ifElement, parentXmlPath, parentComponentPath, context, thenElement, elseElement, ifStatement);
     return ifStatement;
   }
 
-  private static void assertThenElseChildren(Element ifElement) {
-    for (Element child : XMLUtil.getChildElements(ifElement)) {
-      if (!STRICT_CHILDREN.contains(child.getNodeName())) {
-        throw ExceptionFactory.getInstance().syntaxErrorForXmlElement("Illegal child element", child);
-      }
+  private static void parseChildren(Element ifElement, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context,
+                         Element thenElement, Element elseElement, IfStatement ifStatement) {
+    Statement[] ifPath = context.createSubPath(parentComponentPath, ifStatement);
+    if (thenElement != null) {
+      // parse <if><then>...commands...</then></if>
+      List<Statement> thenStatements = context.parseChildElementsOf(thenElement, parentXmlPath, ifPath);
+      ifStatement.setThenStatement(new SequentialStatement(thenStatements));
+    } else {
+      // parse <if>...commands...</if>
+      List<Statement> thenStatements = context.parseChildElementsOf(ifElement, parentXmlPath, ifPath);
+      ifStatement.setThenStatement(new SequentialStatement(thenStatements));
+    }
+    if (elseElement != null) {
+      // parse <if><then></then><else>...commands...</else></if>
+      List<Statement> elseStatements = context.parseChildElementsOf(elseElement, parentXmlPath, ifPath);
+      ifStatement.setElseStatement(new SequentialStatement(elseStatements));
     }
   }
 
