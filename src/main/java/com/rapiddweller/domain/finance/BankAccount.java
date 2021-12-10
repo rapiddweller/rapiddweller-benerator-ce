@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,7 +29,6 @@ package com.rapiddweller.domain.finance;
 /**
  * Represents a bank account.<br/><br/>
  * Created at 23.06.2008 11:08:18
- *
  * @author Volker Bergmann
  * @since 0.5.4
  */
@@ -39,60 +38,28 @@ public class BankAccount {
   private final String accountNumber;
   private final String iban;
 
-  /**
-   * Instantiates a new Bank account.
-   *
-   * @param bank          the bank
-   * @param accountNumber the account number
-   * @param iban          the iban
-   */
   public BankAccount(Bank bank, String accountNumber, String iban) {
     this.bank = bank;
     this.accountNumber = accountNumber;
     this.iban = iban;
   }
 
-  /**
-   * Gets bank code.
-   *
-   * @return the bank code
-   */
   public String getBankCode() {
     return bank.getBankCode();
   }
 
-  /**
-   * Gets bank name.
-   *
-   * @return the bank name
-   */
   public String getBankName() {
     return bank.getName();
   }
 
-  /**
-   * Gets account number.
-   *
-   * @return the account number
-   */
   public String getAccountNumber() {
     return accountNumber;
   }
 
-  /**
-   * Gets bic.
-   *
-   * @return the bic
-   */
   public String getBic() {
     return bank.getBic();
   }
 
-  /**
-   * Gets iban.
-   *
-   * @return the iban
-   */
   public String getIban() {
     return iban;
   }
