@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -28,14 +28,14 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
-import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.benerator.engine.expression.ScriptableExpression;
+import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
+import com.rapiddweller.benerator.engine.parser.string.UriParser;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
 import com.rapiddweller.format.xml.AttrInfoSupport;
+import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
-import com.rapiddweller.script.expression.StringExpression;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_URI;
@@ -49,11 +49,13 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_INCLUDE;
  */
 public class IncludeParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttrInfoSupport ATTR_INFO;
-  static {
-    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_INCLUDE_ILLEGAL_ATTR);
-    ATTR_INFO.add(ATT_URI, true, BeneratorErrorIds.SYN_INCLUDE_URI);
-  }
+  // format definition -----------------------------------------------------------------------------------------------
+
+  private static final AttributeInfo<Expression<String>> URI = new AttributeInfo<>(
+      ATT_URI, true, BeneratorErrorIds.SYN_INCLUDE_URI, null, new ScriptableParser<>(new UriParser()));
+
+  private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(
+      BeneratorErrorIds.SYN_INCLUDE_ILLEGAL_ATTR, URI);
 
   public IncludeParser() {
     super(EL_INCLUDE, ATTR_INFO, BeneratorRootStatement.class, IfStatement.class);
@@ -62,13 +64,7 @@ public class IncludeParser extends AbstractBeneratorDescriptorParser {
   @Override
   public IncludeStatement doParse(
       Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
-    String uriAttr = element.getAttribute(DescriptorConstants.ATT_URI);
-    Expression<String> uriEx = new StringExpression(new ScriptableExpression(uriAttr, null));
-    return createStatement(uriEx);
-  }
-
-  protected IncludeStatement createStatement(Expression<String> uriEx) {
-    return new IncludeStatement(uriEx);
+    return new IncludeStatement(URI.parse(element));
   }
 
 }
