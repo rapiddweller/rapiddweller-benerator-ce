@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -30,19 +30,21 @@ import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
 import com.rapiddweller.benerator.engine.statement.WaitStatement;
 import com.rapiddweller.benerator.factory.FactoryUtil;
 import com.rapiddweller.benerator.primitive.DynamicLongGenerator;
 import com.rapiddweller.benerator.util.ExpressionBasedGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
+import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.format.xml.AttrInfoSupport;
+import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getAttributeAsString;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseLongAttribute;
 
 /**
@@ -53,15 +55,28 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class WaitParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttrInfoSupport ATTR_INFO;
-  static {
-    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_WAIT_ILLEGAL_ATTRIBUTE);
-    ATTR_INFO.add(ATT_DURATION, false, BeneratorErrorIds.SYN_WAIT_DURATION);
-    ATTR_INFO.add(ATT_MIN, false, BeneratorErrorIds.SYN_WAIT_MIN);
-    ATTR_INFO.add(ATT_MAX, false, BeneratorErrorIds.SYN_WAIT_MAX);
-    ATTR_INFO.add(ATT_GRANULARITY, false, BeneratorErrorIds.SYN_WAIT_GRANULARITY);
-    ATTR_INFO.add(ATT_DISTRIBUTION, false, BeneratorErrorIds.SYN_WAIT_DISTRIBUTION);
-  }
+  // format definitions ----------------------------------------------------------------------------------------------
+
+  private static final AttributeInfo<Expression<Long>> DURATION = new AttributeInfo<>(
+    ATT_DURATION, false, BeneratorErrorIds.SYN_WAIT_DURATION, null, new ScriptableParser<>(new NonNegativeLongParser()));
+
+  private static final AttributeInfo<Expression<Long>> MIN = new AttributeInfo<>(
+    ATT_MIN, false, BeneratorErrorIds.SYN_WAIT_MIN, null, new ScriptableParser<>(new NonNegativeLongParser()));
+
+  private static final AttributeInfo<Expression<Long>> MAX = new AttributeInfo<>(
+    ATT_MAX, false, BeneratorErrorIds.SYN_WAIT_MAX, null, new ScriptableParser<>(new NonNegativeLongParser()));
+
+  private static final AttributeInfo<Expression<Long>> GRANULARITY = new AttributeInfo<>(
+    ATT_GRANULARITY, false, BeneratorErrorIds.SYN_WAIT_GRANULARITY, null, new ScriptableParser<>(new NonNegativeLongParser()));
+
+  private static final AttributeInfo<String> DISTRIBUTION = new AttributeInfo<>(
+    ATT_DISTRIBUTION, false, BeneratorErrorIds.SYN_WAIT_DISTRIBUTION, null, null);
+
+  private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_WAIT_ILLEGAL_ATTRIBUTE,
+      DURATION, MIN, MAX, GRANULARITY, DISTRIBUTION);
+
+
+  // constructor & interface -----------------------------------------------------------------------------------------
 
   public WaitParser() {
     super(EL_WAIT, ATTR_INFO);
@@ -70,26 +85,37 @@ public class WaitParser extends AbstractBeneratorDescriptorParser {
   @Override
   public Statement doParse(
       Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
+    attrSupport.validate(element);
 
     // check attribute combinations
     assertAtLeastOneAttributeIsSet(element, ATT_DURATION, ATT_MIN, ATT_MAX);
-    excludeAttributes(element, ATT_DURATION, ATT_MIN);
-    excludeAttributes(element, ATT_DURATION, ATT_MAX);
+    mutuallyExcludeAttrGroups(element, BeneratorErrorIds.SYN_WAIT_MUTUALLY_EXCLUDED, new String[] { ATT_DURATION },
+        new String[] { ATT_MIN, ATT_MAX, ATT_GRANULARITY, ATT_DISTRIBUTION }
+    );
 
-    // check for constant value
-    Expression<Long> duration = parseLongAttribute(ATT_DURATION, element, null);
+    // check for fix or random 'duration'
+    Expression<Long> duration = DURATION.parse(element);
     if (duration != null) {
-      ExpressionBasedGenerator<Long> base = new ExpressionBasedGenerator<>(duration, Long.class);
-      return new WaitStatement(WrapperFactory.asNonNullGenerator(base));
+      return durationBasedStatement(duration);
+    } else {
+      return distributionBasedStatement(element);
     }
+  }
 
+  // helper methods --------------------------------------------------------------------------------------------------
+
+  private WaitStatement durationBasedStatement(Expression<Long> duration) {
+    ExpressionBasedGenerator<Long> base = new ExpressionBasedGenerator<>(duration, Long.class);
+    return new WaitStatement(WrapperFactory.asNonNullGenerator(base));
+  }
+
+  private WaitStatement distributionBasedStatement(Element element) {
     // check for distribution
-    Expression<Long> min = parseLongAttribute(ATT_MIN, element, null);
-    Expression<Long> max = parseLongAttribute(ATT_MAX, element, null);
-    Expression<Long> granularity = parseLongAttribute(ATT_GRANULARITY, element, null);
-    String distSpec = DescriptorParserUtil.getAttributeAsString(ATT_DISTRIBUTION, element);
-    Expression<Distribution> distribution
-        = FactoryUtil.getDistributionExpression(distSpec, Uniqueness.NONE, false);
+    Expression<Long> min = MIN.parse(element);
+    Expression<Long> max = MAX.parse(element);
+    Expression<Long> granularity = GRANULARITY.parse(element);
+    String distSpec = DISTRIBUTION.parse(element);
+    Expression<Distribution> distribution = FactoryUtil.getDistributionExpression(distSpec, Uniqueness.NONE, false);
     Generator<Long> durationGenerator = new DynamicLongGenerator(min, max, granularity,
         distribution, ExpressionUtil.constant(false));
     return new WaitStatement(WrapperFactory.asNonNullGenerator(durationGenerator));
