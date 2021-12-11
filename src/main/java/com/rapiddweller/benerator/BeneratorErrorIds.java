@@ -90,17 +90,16 @@ public class BeneratorErrorIds {
   public static final String SYN_SETUP_DEF_NULL                = "BEN-0203";
   public static final String SYN_SETUP_DEF_ENCODING            = "BEN-0204";
   public static final String SYN_SETUP_DEF_LINE_SEPARATOR      = "BEN-0205";
-  public static final String SYN_SETUP_DEF_TIME_ZONE           = "BEN-0206";
-  public static final String SYN_SETUP_DEF_LOCALE              = "BEN-0207";
-  public static final String SYN_SETUP_DEF_DATASET             = "BEN-0208";
-  public static final String SYN_SETUP_DEF_PAGE_SIZE           = "BEN-0209";
-  public static final String SYN_SETUP_DEF_SEPARATOR           = "BEN-0210";
-  public static final String SYN_SETUP_DEF_ONE_TO_ONE          = "BEN-0211";
-  public static final String SYN_SETUP_DEF_ERR_HANDLER         = "BEN-0212";
-  public static final String SYN_SETUP_DEF_IMPORTS             = "BEN-0213";
-  public static final String SYN_SETUP_DEF_SOURCE_SCRIPTED     = "BEN-0214";
-  public static final String SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES = "BEN-0215";
-  public static final String SYN_SETUP_GENERATOR_FACTORY       = "BEN-0216";
+  public static final String SYN_SETUP_DEF_LOCALE              = "BEN-0206";
+  public static final String SYN_SETUP_DEF_DATASET             = "BEN-0207";
+  public static final String SYN_SETUP_DEF_PAGE_SIZE           = "BEN-0208";
+  public static final String SYN_SETUP_DEF_SEPARATOR           = "BEN-0209";
+  public static final String SYN_SETUP_DEF_ONE_TO_ONE          = "BEN-0210";
+  public static final String SYN_SETUP_DEF_ERR_HANDLER         = "BEN-0211";
+  public static final String SYN_SETUP_DEF_IMPORTS             = "BEN-0212";
+  public static final String SYN_SETUP_DEF_SOURCE_SCRIPTED     = "BEN-0213";
+  public static final String SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES = "BEN-0214";
+  public static final String SYN_SETUP_GENERATOR_FACTORY       = "BEN-0215";
 
   // Syntax Errors regarding <comment> -------------------------------------------------------------------------------
 
