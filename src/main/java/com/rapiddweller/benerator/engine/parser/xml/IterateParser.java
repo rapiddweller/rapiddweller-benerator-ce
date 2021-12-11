@@ -3,8 +3,11 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
+import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
 import com.rapiddweller.format.xml.AttrInfoSupport;
+import com.rapiddweller.format.xml.AttributeInfo;
 
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_ITERATE_NAME;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**
@@ -15,9 +18,12 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  */
 public class IterateParser extends AbstractGenIterParser {
 
+  private static final AttributeInfo<String> NAME = new NameAttribute(SYN_ITERATE_NAME, false, false);
+
+
   private static final AttrInfoSupport ATTR_INFO;
   static {
-    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_ITERATE_ILLEGAL_ATTR);
+    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_ITERATE_ILLEGAL_ATTR, NAME);
     ATTR_INFO.add(ATT_SOURCE, true, BeneratorErrorIds.SYN_ITERATE_SOURCE);
     ATTR_INFO.add(ATT_COUNT, false, BeneratorErrorIds.SYN_ITERATE_COUNT);
     ATTR_INFO.add(ATT_MIN_COUNT, false, BeneratorErrorIds.SYN_ITERATE_MIN_COUNT);
@@ -29,7 +35,6 @@ public class IterateParser extends AbstractGenIterParser {
     ATTR_INFO.add(ATT_ON_ERROR, false, BeneratorErrorIds.SYN_ITERATE_ON_ERROR);
     ATTR_INFO.add(ATT_TEMPLATE, false, BeneratorErrorIds.SYN_ITERATE_TEMPLATE);
     ATTR_INFO.add(ATT_CONSUMER, false, BeneratorErrorIds.SYN_ITERATE_CONSUMER);
-    ATTR_INFO.add(ATT_NAME, false, BeneratorErrorIds.SYN_ITERATE_NAME);
     ATTR_INFO.add(ATT_TYPE, false, BeneratorErrorIds.SYN_ITERATE_TYPE);
     ATTR_INFO.add(ATT_SCOPE, false, BeneratorErrorIds.SYN_ITERATE_SCOPE);
     ATTR_INFO.add(ATT_VALIDATOR, false, BeneratorErrorIds.SYN_ITERATE_VALIDATOR);

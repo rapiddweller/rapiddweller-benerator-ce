@@ -86,7 +86,8 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
       ATT_ID, false, BeneratorErrorIds.SYN_BEAN_ID, new IdParser(), null);
 
   private static final AttributeInfo<String> CLASS = new AttributeInfo<>(
-      ATT_CLASS, false, BeneratorErrorIds.SYN_BEAN_CLASS, new FullyQualifiedClassNameParser(), null
+      ATT_CLASS, false, BeneratorErrorIds.SYN_BEAN_CLASS,
+      new FullyQualifiedClassNameParser(false), null
   );
 
   private static final AttributeInfo<String> SPEC = new AttributeInfo<>(

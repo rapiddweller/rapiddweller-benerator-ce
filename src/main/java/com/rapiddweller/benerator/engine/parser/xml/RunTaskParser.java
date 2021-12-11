@@ -63,7 +63,8 @@ public class RunTaskParser extends AbstractBeneratorDescriptorParser {
   // format spec -----------------------------------------------------------------------------------------------------
 
   private static final AttributeInfo<String> CLASS = new AttributeInfo<>(
-      ATT_CLASS, false, BeneratorErrorIds.SYN_RUN_TASK_CLASS, new FullyQualifiedClassNameParser(), null);
+      ATT_CLASS, false, BeneratorErrorIds.SYN_RUN_TASK_CLASS,
+      new FullyQualifiedClassNameParser(false), null);
 
   private static final AttributeInfo<String> SPEC = new AttributeInfo<>(
       ATT_SPEC, false, BeneratorErrorIds.SYN_RUN_TASK_SPEC, null, null);

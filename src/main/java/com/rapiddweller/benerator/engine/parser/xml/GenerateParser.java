@@ -4,6 +4,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.parser.attr.ErrorHandlerAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.PageSizeAttribute;
 import com.rapiddweller.benerator.engine.parser.string.IdParser;
 import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
@@ -14,6 +15,7 @@ import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
 
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_NAME;
 import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_ON_ERROR;
 import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_PAGE_SIZE;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
@@ -25,6 +27,8 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  * @since 2.1.0
  */
 public class GenerateParser extends AbstractGenIterParser {
+
+  private static final AttributeInfo<String> NAME = new NameAttribute(SYN_GENERATE_NAME, false, false);
 
   private static final AttributeInfo<Expression<Long>> COUNT = new AttributeInfo<>(
       ATT_COUNT, false, BeneratorErrorIds.SYN_GENERATE_COUNT, new ScriptableParser<>(new NonNegativeLongParser()), null
@@ -48,9 +52,6 @@ public class GenerateParser extends AbstractGenIterParser {
 
   private static final AttributeInfo<String> CONSUMER = new AttributeInfo<>(
       ATT_CONSUMER, false, BeneratorErrorIds.SYN_GENERATE_CONSUMER, null, null);
-
-  private static final AttributeInfo<String> NAME = new AttributeInfo<>(
-      ATT_NAME, false, BeneratorErrorIds.SYN_GENERATE_NAME, new IdParser(), null);
 
   private static final AttributeInfo<String> TYPE = new AttributeInfo<>(
       ATT_TYPE, false, BeneratorErrorIds.SYN_GENERATE_TYPE, new IdParser(), null);

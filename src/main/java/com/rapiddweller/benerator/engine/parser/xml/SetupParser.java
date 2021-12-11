@@ -33,15 +33,21 @@ import com.rapiddweller.benerator.engine.parser.string.GlobalErrorHandlerParser;
 import com.rapiddweller.benerator.engine.parser.string.IdParser;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayUtil;
+import com.rapiddweller.common.Assert;
+import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.exception.SyntaxError;
+import com.rapiddweller.common.parser.AbstractParser;
 import com.rapiddweller.common.parser.BooleanParser;
 import com.rapiddweller.common.parser.CharacterParser;
 import com.rapiddweller.common.parser.EncodingParser;
+import com.rapiddweller.common.parser.FullyQualifiedClassNameParser;
 import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.common.parser.PositiveIntegerParser;
 import com.rapiddweller.common.parser.RegexBasedStringParser;
+import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.format.xml.XMLElementParser;
@@ -51,6 +57,7 @@ import org.w3c.dom.NamedNodeMap;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.rapiddweller.benerator.BeneratorErrorIds.*;
@@ -64,51 +71,56 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  */
 public class SetupParser extends AbstractBeneratorDescriptorParser {
 
+  public static final String FALSE = "false";
+
   protected static final AttributeInfo<Long> COUNT = new AttributeInfo<>(
-      ATT_MAX_COUNT, false, SYN_SETUP_MAX_COUNT, new NonNegativeLongParser(), null);
+      ATT_MAX_COUNT, false, SYN_SETUP_MAX_COUNT, new NonNegativeLongParser());
 
   protected static final AttributeInfo<String> DEFAULT_SCRIPT = new AttributeInfo<>(
-      ATT_DEFAULT_SCRIPT, false, SYN_SETUP_DEF_SCRIPT, new IdParser(), "ben");
+      ATT_DEFAULT_SCRIPT, false, SYN_SETUP_DEF_SCRIPT, new DefaultScriptParser(), "ben");
 
   protected static final AttributeInfo<Boolean> DEFAULT_NULL = new AttributeInfo<>(
-      ATT_DEFAULT_NULL, false, SYN_SETUP_DEF_NULL, new BooleanParser(), "false");
+      ATT_DEFAULT_NULL, false, SYN_SETUP_DEF_NULL, new BooleanParser(), FALSE);
 
     protected static final AttributeInfo<String> DEFAULT_ENCODING = new AttributeInfo<>(
-      ATT_DEFAULT_ENCODING, false, SYN_SETUP_DEF_ENCODING, new EncodingParser(), null);
+      ATT_DEFAULT_ENCODING, false, SYN_SETUP_DEF_ENCODING, new EncodingParser(), Encodings.UTF_8);
 
   protected static final AttributeInfo<String> DEFAULT_LINE_SEPARATOR = new AttributeInfo<>(
-    ATT_DEFAULT_LINE_SEPARATOR, false, SYN_SETUP_DEF_LINE_SEPARATOR, new RegexBasedStringParser("line separator", "(\\r)?\\n"), SystemInfo.LF
-  );
+    ATT_DEFAULT_LINE_SEPARATOR, false, SYN_SETUP_DEF_LINE_SEPARATOR,
+      new RegexBasedStringParser("line separator", "(\\r)?\\n"), SystemInfo.LF);
 
   protected static final AttributeInfo<String> DEFAULT_LOCALE = new AttributeInfo<>(
-    ATT_DEFAULT_LOCALE, false, SYN_SETUP_DEF_LOCALE, new IdParser(), null);
+    ATT_DEFAULT_LOCALE, false, SYN_SETUP_DEF_LOCALE, new IdParser(), Locale.getDefault().toString());
 
   protected static final AttributeInfo<String> DEFAULT_DATASET = new AttributeInfo<>(
-    ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET, new IdParser(), null);
+    ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET, new IdParser(),
+      LocaleUtil.getDefaultCountryCode());
 
   protected static final AttributeInfo<Integer> DEFAULT_PAGE_SIZE = new AttributeInfo<>(
     ATT_DEFAULT_PAGE_SIZE, false, SYN_SETUP_DEF_PAGE_SIZE, new PositiveIntegerParser(), "1");
 
   protected static final AttributeInfo<Character> DEFAULT_SEPARATOR = new AttributeInfo<>(
-      ATT_DEFAULT_SEPARATOR, false, SYN_SETUP_DEF_SEPARATOR, new CharacterParser(), null);
+      ATT_DEFAULT_SEPARATOR, false, SYN_SETUP_DEF_SEPARATOR, new CharacterParser(), ",");
 
   protected static final AttributeInfo<Boolean> DEFAULT_ONE_TO_ONE = new AttributeInfo<>(
-      ATT_DEFAULT_ONE_TO_ONE, false, SYN_SETUP_DEF_ONE_TO_ONE, new BooleanParser(), null);
+      ATT_DEFAULT_ONE_TO_ONE, false, SYN_SETUP_DEF_ONE_TO_ONE, new BooleanParser(), FALSE);
 
   protected static final AttributeInfo<ErrorHandler> DEFAULT_ERR_HANDLER = new AttributeInfo<>(
       ATT_DEFAULT_ERR_HANDLER, false, SYN_SETUP_DEF_ERR_HANDLER, new GlobalErrorHandlerParser(), "fatal");
 
   protected static final AttributeInfo<Boolean> DEFAULT_IMPORTS = new AttributeInfo<>(
-      ATT_DEFAULT_IMPORTS, false, SYN_SETUP_DEF_IMPORTS, new BooleanParser(), null);
+      ATT_DEFAULT_IMPORTS, false, SYN_SETUP_DEF_IMPORTS, new BooleanParser(), "true");
 
   protected static final AttributeInfo<Boolean> DEFAULT_SOURCE_SCRIPTED = new AttributeInfo<>(
-      ATT_DEFAULT_SOURCE_SCRIPTED, false, SYN_SETUP_DEF_SOURCE_SCRIPTED, new BooleanParser(), null);
+      ATT_DEFAULT_SOURCE_SCRIPTED, false, SYN_SETUP_DEF_SOURCE_SCRIPTED, new BooleanParser(), FALSE);
 
   protected static final AttributeInfo<Boolean> ACCEPT_UNKNOWN_SIMPLE_TYPES = new AttributeInfo<>(
-      ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES, false, SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES, new BooleanParser(), null);
+      ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES, false, SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES,
+      new BooleanParser(), FALSE);
 
   protected static final AttributeInfo<String> GENERATOR_FACTORY = new AttributeInfo<>(
-      ATT_GENERATOR_FACTORY, false, SYN_SETUP_GENERATOR_FACTORY, null, null);
+      ATT_GENERATOR_FACTORY, false, SYN_SETUP_GENERATOR_FACTORY,
+      new FullyQualifiedClassNameParser(true));
 
   protected static final AttrInfoSupport ATTR_SUPPORT;
 
@@ -166,4 +178,16 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
     return BeneratorExceptionFactory.getInstance().illegalXmlAttributeValue(null, null, errorId, attr);
   }
 
+  static class DefaultScriptParser extends AbstractParser<String> {
+
+    protected DefaultScriptParser() {
+      super("script engine id");
+    }
+
+    @Override
+    protected String parseImpl(String spec) {
+      Assert.isTrue(ScriptUtil.supportsEngine(spec), "Unknown script engine: " + spec);
+      return spec;
+    }
+  }
 }
