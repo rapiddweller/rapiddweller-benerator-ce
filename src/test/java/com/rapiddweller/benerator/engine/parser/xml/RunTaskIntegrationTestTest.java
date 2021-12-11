@@ -46,7 +46,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class RunTaskParserAndStatementTest extends AbstractBeneratorIntegrationTest {
+public class RunTaskIntegrationTestTest extends AbstractBeneratorIntegrationTest {
 
   @Before
   public void setUpTaskMock() {
@@ -102,18 +102,21 @@ public class RunTaskParserAndStatementTest extends AbstractBeneratorIntegrationT
 
   @Test
   public void testErrorHandlerFallback() {
-    String xml =
-        "<setup defaultErrorHandler='trace'>" +
-            "<run-task class='com.rapiddweller.task.TaskMock' count='5'>" +
-            "  <property name='intProp' value='42' />" +
-            "</run-task>" +
-            "</setup>";
-    BeneratorRootContext context = new DefaultBeneratorContext();
-    BeneratorRootStatement root = (BeneratorRootStatement) parse(xml);
-    root.execute(context);
-    RunTaskStatement statement = (RunTaskStatement) root.getSubStatements().get(0);
-    ErrorHandler errorHandler = statement.getErrorHandler(context);
-    assertEquals(Level.trace, errorHandler.getLevel());
+    try {
+      String xml =
+          "<setup defaultErrorHandler='trace'>" +
+              "<run-task class='com.rapiddweller.task.TaskMock' count='5'>" +
+              "  <property name='intProp' value='42' />" +
+              "</run-task>" +
+              "</setup>";
+      BeneratorRootContext context = new DefaultBeneratorContext();
+      BeneratorRootStatement root = (BeneratorRootStatement) parse(xml);
+      root.execute(context);
+      RunTaskStatement statement = (RunTaskStatement) root.getSubStatements().get(0);
+      ErrorHandler errorHandler = statement.getErrorHandler(context);
+      assertEquals(Level.trace, errorHandler.getLevel());
+    } finally {
+      ErrorHandler.setDefaultLevel(Level.fatal);
+    }
   }
-
 }
