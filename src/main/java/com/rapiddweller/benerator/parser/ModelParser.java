@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.parser;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
@@ -135,7 +136,8 @@ public class ModelParser {
       result = new PartDescriptor(descriptor.getName(), descriptorProvider, descriptor.getType());
     } else {
       String typeName = StringUtil.emptyToNull(element.getAttribute("type"));
-      result = new PartDescriptor(element.getAttribute("name"), descriptorProvider, typeName);
+      String name = getName(element, BeneratorErrorIds.SYN_ATTR_NAME);
+      result = new PartDescriptor(name, descriptorProvider, typeName);
     }
     mapInstanceDetails(element, false, result);
     applyDefaultCounts(result);
@@ -146,6 +148,15 @@ public class ModelParser {
         result.getLocalType(false).setParent(parentType);
       }
       owner.setComponent(result);
+    }
+    return result;
+  }
+
+  private String getName(Element element, String errorId) {
+    String result = StringUtil.emptyToNull(element.getAttribute("name"));
+    if (result == null) {
+      throw BeneratorExceptionFactory.getInstance().missingXmlAttribute(
+          null, errorId, "name", element);
     }
     return result;
   }
@@ -207,6 +218,7 @@ public class ModelParser {
 
   public InstanceDescriptor parseVariable(Element varElement, VariableHolder owner) {
     assertElementName(varElement, "variable");
+    getName(varElement, BeneratorErrorIds.SYN_VAR_NAME);
     String type = StringUtil.emptyToNull(varElement.getAttribute("type"));
     VariableDescriptor descriptor = new VariableDescriptor(varElement.getAttribute("name"), descriptorProvider, type);
     VariableDescriptor variable = mapInstanceDetails(varElement, false, descriptor);
@@ -315,6 +327,7 @@ public class ModelParser {
 
   private IdDescriptor parseId(Element element, ComplexTypeDescriptor owner, ComponentDescriptor descriptor) {
     assertElementName(element, "id");
+    String nameAttr = getName(element, BeneratorErrorIds.SYN_ID_NAME);
     IdDescriptor result;
     IdDescriptor resultTmp;
     if (descriptor instanceof IdDescriptor) {
@@ -322,7 +335,7 @@ public class ModelParser {
     } else if (descriptor != null) {
       resultTmp = new IdDescriptor(descriptor.getName(), descriptorProvider, descriptor.getType());
     } else {
-      resultTmp = new IdDescriptor(element.getAttribute("name"), descriptorProvider, element.getAttribute("type"));
+      resultTmp = new IdDescriptor(nameAttr, descriptorProvider, element.getAttribute("type"));
     }
     result = mapInstanceDetails(element, false, resultTmp);
     if (owner != null) {
@@ -338,13 +351,14 @@ public class ModelParser {
 
   private ReferenceDescriptor parseReference(Element element, ComplexTypeDescriptor owner, ComponentDescriptor component) {
     assertElementName(element, "reference");
+    String nameAttr = getName(element, BeneratorErrorIds.SYN_REF_NAME);
     ReferenceDescriptor result;
     if (component instanceof ReferenceDescriptor) {
       result = (ReferenceDescriptor) component;
     } else if (component != null) {
       result = new ReferenceDescriptor(component.getName(), descriptorProvider, component.getType());
     } else {
-      result = new ReferenceDescriptor(element.getAttribute("name"), descriptorProvider, StringUtil.emptyToNull(element.getAttribute("type")));
+      result = new ReferenceDescriptor(nameAttr, descriptorProvider, StringUtil.emptyToNull(element.getAttribute("type")));
     }
     if (owner != null) {
       ComponentDescriptor parentComponent = owner.getComponent(result.getName());

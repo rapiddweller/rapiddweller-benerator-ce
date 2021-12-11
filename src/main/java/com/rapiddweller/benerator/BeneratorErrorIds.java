@@ -314,188 +314,209 @@ public class BeneratorErrorIds {
   public static final String SYN_ITERATE_TEMPLATE        = "BEN-0484";
   public static final String SYN_ITERATE_CONSUMER        = "BEN-0485";
 
+  // Syntax Errors regarding <variable> -----------------------------------------------------------------------------
+
+  public static final String SYN_VAR_ILLEGAL_ATTR  = "BEN-0500";
+  public static final String SYN_VAR_NAME          = "BEN-0501";
+
+  // Syntax Errors regarding <attribute> -----------------------------------------------------------------------------
+
+  public static final String SYN_ATTR_ILLEGAL_ATTR = "BEN-0550";
+  public static final String SYN_ATTR_NAME         = "BEN-0551";
+
+  // Syntax Errors regarding <id> ------------------------------------------------------------------------------------
+
+  public static final String SYN_ID_ILLEGAL_ATTR   = "BEN-0600";
+  public static final String SYN_ID_NAME           = "BEN-0601";
+
+  // Syntax Errors regarding <reference> ------------------------------------------------------------------------------------
+
+  public static final String SYN_REF_ILLEGAL_ATTR  = "BEN-0650";
+  public static final String SYN_REF_NAME          = "BEN-0651";
+
+
   // BEN-0500...0599 relational database issues ======================================================================
 
   // Syntax Errors regarding <database> ------------------------------------------------------------------------------
 
-  public static final String SYN_DATABASE_ILLEGAL_ATTR         = "BEN-0500";
-  public static final String SYN_DATABASE_ID                   = "BEN-0501";
-  public static final String SYN_DATABASE_ENVIRONMENT          = "BEN-0502";
-  public static final String SYN_DATABASE_SYSTEM               = "BEN-0503";
-  public static final String SYN_DATABASE_URL                  = "BEN-0504";
-  public static final String SYN_DATABASE_DRIVER               = "BEN-0505";
-  public static final String SYN_DATABASE_USER                 = "BEN-0506";
-  public static final String SYN_DATABASE_PASSWORD             = "BEN-0507";
-  public static final String SYN_DATABASE_CATALOG              = "BEN-0508";
-  public static final String SYN_DATABASE_SCHEMA               = "BEN-0509";
-  public static final String SYN_DATABASE_TABLE_FILTER         = "BEN-0510";
-  public static final String SYN_DATABASE_QUOTE_TABLE_NAMES    = "BEN-0511";
-  public static final String SYN_DATABASE_INCLUDE_TABLES       = "BEN-0512";
-  public static final String SYN_DATABASE_EXCLUDE_TABLES       = "BEN-0513";
-  public static final String SYN_DATABASE_BATCH                = "BEN-0514";
-  public static final String SYN_DATABASE_FETCH_SIZE           = "BEN-0515";
-  public static final String SYN_DATABASE_READ_ONLY            = "BEN-0516";
-  public static final String SYN_DATABASE_LAZY                 = "BEN-0517";
-  public static final String SYN_DATABASE_META_CACHE           = "BEN-0518";
-  public static final String SYN_DATABASE_ACCEPT_UNK_COL_TYPES = "BEN-0519";
+  public static final String SYN_DATABASE_ILLEGAL_ATTR         = "BEN-1000";
+  public static final String SYN_DATABASE_ID                   = "BEN-1001";
+  public static final String SYN_DATABASE_ENVIRONMENT          = "BEN-1002";
+  public static final String SYN_DATABASE_SYSTEM               = "BEN-1003";
+  public static final String SYN_DATABASE_URL                  = "BEN-1004";
+  public static final String SYN_DATABASE_DRIVER               = "BEN-1005";
+  public static final String SYN_DATABASE_USER                 = "BEN-1006";
+  public static final String SYN_DATABASE_PASSWORD             = "BEN-1007";
+  public static final String SYN_DATABASE_CATALOG              = "BEN-1008";
+  public static final String SYN_DATABASE_SCHEMA               = "BEN-1009";
+  public static final String SYN_DATABASE_TABLE_FILTER         = "BEN-1010";
+  public static final String SYN_DATABASE_QUOTE_TABLE_NAMES    = "BEN-1011";
+  public static final String SYN_DATABASE_INCLUDE_TABLES       = "BEN-1012";
+  public static final String SYN_DATABASE_EXCLUDE_TABLES       = "BEN-1013";
+  public static final String SYN_DATABASE_BATCH                = "BEN-1014";
+  public static final String SYN_DATABASE_FETCH_SIZE           = "BEN-1015";
+  public static final String SYN_DATABASE_READ_ONLY            = "BEN-1016";
+  public static final String SYN_DATABASE_LAZY                 = "BEN-1017";
+  public static final String SYN_DATABASE_META_CACHE           = "BEN-1018";
+  public static final String SYN_DATABASE_ACCEPT_UNK_COL_TYPES = "BEN-1019";
 
-  public static final String DB_CONNECT_FAILED                 = "BEN-0520";
+  public static final String DB_CONNECT_FAILED                 = "BEN-1100";
 
   // Syntax Errors regarding <transcodingTask> -----------------------------------------------------------------------
 
-  public static final String SYN_TRANSCODING_TASK_ILLEGAL_ATTR   = "BEN-0530";
-  public static final String SYN_TRANSCODING_TASK_IDENTITY       = "BEN-0531";
-  public static final String SYN_TRANSCODING_TASK_DEFAULT_SOURCE = "BEN-0532";
-  public static final String SYN_TRANSCODING_TASK_TARGET         = "BEN-0533";
-  public static final String SYN_TRANSCODING_TASK_PAGE_SIZE      = "BEN-0534";
-  public static final String SYN_TRANSCODING_TASK_ON_ERROR       = "BEN-0535";
+  public static final String SYN_TRANSCODING_TASK_ILLEGAL_ATTR   = "BEN-1200";
+  public static final String SYN_TRANSCODING_TASK_IDENTITY       = "BEN-1201";
+  public static final String SYN_TRANSCODING_TASK_DEFAULT_SOURCE = "BEN-1202";
+  public static final String SYN_TRANSCODING_TASK_TARGET         = "BEN-1203";
+  public static final String SYN_TRANSCODING_TASK_PAGE_SIZE      = "BEN-1204";
+  public static final String SYN_TRANSCODING_TASK_ON_ERROR       = "BEN-1205";
 
-  public static final String SYN_TRANSCODE_ILLEGAL_ATTR = "BEN-0540";
-  public static final String SYN_TRANSCODE_SOURCE       = "BEN-0541";
-  public static final String SYN_TRANSCODE_SELECTOR     = "BEN-0542";
-  public static final String SYN_TRANSCODE_TARGET       = "BEN-0543";
-  public static final String SYN_TRANSCODE_PAGE_SIZE    = "BEN-0544";
-  public static final String SYN_TRANSCODE_ON_ERROR     = "BEN-0545";
+  public static final String SYN_TRANSCODE_ILLEGAL_ATTR = "BEN-1210";
+  public static final String SYN_TRANSCODE_SOURCE       = "BEN-1211";
+  public static final String SYN_TRANSCODE_SELECTOR     = "BEN-1212";
+  public static final String SYN_TRANSCODE_TARGET       = "BEN-1213";
+  public static final String SYN_TRANSCODE_PAGE_SIZE    = "BEN-1214";
+  public static final String SYN_TRANSCODE_ON_ERROR     = "BEN-1215";
 
-  public static final String SYN_CASCADE_ILLEGAL_ATTR   = "BEN-0550";
-  public static final String SYN_CASCADE_REF            = "BEN-0551";
+  public static final String SYN_CASCADE_ILLEGAL_ATTR   = "BEN-1220";
+  public static final String SYN_CASCADE_REF            = "BEN-1221";
 
   // Syntax Errors regarding <dbsanity> ------------------------------------------------------------------------------
 
-  public static final String SYN_DBSANITY_ENVIRONMENT = "BEN-0580";
-  public static final String SYN_DBSANITY_SYSTEM      = "BEN-0581";
-  public static final String SYN_DBSANITY_APP_VERSION = "BEN-0582";
-  public static final String SYN_DBSANITY_IN          = "BEN-0583";
-  public static final String SYN_DBSANITY_OUT         = "BEN-0584";
-  public static final String SYN_DBSANITY_TABLES      = "BEN-0585";
-  public static final String SYN_DBSANITY_SKIN        = "BEN-0586";
-  public static final String SYN_DBSANITY_LOCALE      = "BEN-0587";
-  public static final String SYN_DBSANITY_MODE        = "BEN-0588";
-  public static final String SYN_DBSANITY_ON_ERROR    = "BEN-0589";
+  public static final String SYN_DBSANITY_ENVIRONMENT = "BEN-1300";
+  public static final String SYN_DBSANITY_SYSTEM      = "BEN-1301";
+  public static final String SYN_DBSANITY_APP_VERSION = "BEN-1302";
+  public static final String SYN_DBSANITY_IN          = "BEN-1303";
+  public static final String SYN_DBSANITY_OUT         = "BEN-1304";
+  public static final String SYN_DBSANITY_TABLES      = "BEN-1305";
+  public static final String SYN_DBSANITY_SKIN        = "BEN-1306";
+  public static final String SYN_DBSANITY_LOCALE      = "BEN-1307";
+  public static final String SYN_DBSANITY_MODE        = "BEN-1308";
+  public static final String SYN_DBSANITY_ON_ERROR    = "BEN-1309";
 
   // BEN-0600...0699 JMS issues ======================================================================================
 
   // Syntax Errors regarding <jms-destination> -----------------------------------------------------------------------
 
-  public static final String SYN_JMS_DEST_ILLEGAL_ATTR = "BEN-0600";
-  public static final String SYN_JMS_DEST_ID           = "BEN-0601";
-  public static final String SYN_JMS_DEST_FACTORY      = "BEN-0602";
-  public static final String SYN_JMS_DEST_URL          = "BEN-0603";
-  public static final String SYN_JMS_DEST_NAME         = "BEN-0604";
-  public static final String SYN_JMS_DEST_TYPE         = "BEN-0605";
-  public static final String SYN_JMS_DEST_FORMAT       = "BEN-0606";
+  public static final String SYN_JMS_DEST_ILLEGAL_ATTR = "BEN-1500";
+  public static final String SYN_JMS_DEST_ID           = "BEN-1501";
+  public static final String SYN_JMS_DEST_FACTORY      = "BEN-1502";
+  public static final String SYN_JMS_DEST_URL          = "BEN-1503";
+  public static final String SYN_JMS_DEST_NAME         = "BEN-1504";
+  public static final String SYN_JMS_DEST_TYPE         = "BEN-1505";
+  public static final String SYN_JMS_DEST_FORMAT       = "BEN-1506";
 
   // BEN-0700...0899 Kafka issues ====================================================================================
 
   // Syntax Errors in common attributes of <kafka-importer> and <kafka-exporter> -------------------------------------
 
-  public static final String SYN_KK = "BEN-0700";
-  public static final String SYN_KK_ID = "BEN-0701";
-  public static final String SYN_KK_ENVIRONMENT = "BEN-0702";
-  public static final String SYN_KK_SYSTEM = "BEN-0703";
-  public static final String SYN_KK_PAGE_SIZE = "BEN-0704";
-  public static final String SYN_KK_BOOTSTRAP_SERVERS = "BEN-0705";
-  public static final String SYN_KK_TOPIC = "BEN-0706";
-  public static final String SYN_KK_FORMAT = "BEN-0707";
-  public static final String SYN_KK_ENCODING = "BEN-0708";
-  public static final String SYN_KK_CLIENT_DNS_LOOKUP = "BEN-0709";
-  public static final String SYN_KK_CLIENT_ID = "BEN-0710";
-  public static final String SYN_KK_CONNECTIONS_MAX_IDLE_MS = "BEN-0711";
-  public static final String SYN_KK_SOCKET_CONNECTION_SETUP_TIMEOUT_MAX_MS = "BEN-0712";
-  public static final String SYN_KK_SOCKET_CONNECTION_SETUP_TIMEOUT_MS = "BEN-0713";
-  public static final String SYN_KK_INTERCEPTOR_CLASSES = "BEN-0714";
-  public static final String SYN_KK_METADATA_MAX_AGE_MS = "BEN-0715";
-  public static final String SYN_KK_METRIC_REPORTERS = "BEN-0716";
-  public static final String SYN_KK_METRICS_NUM_SAMPLES = "BEN-0717";
-  public static final String SYN_KK_METRICS_RECORDING_LEVEL = "BEN-0718";
-  public static final String SYN_KK_METRICS_SAMPLE_WINDOW_MS = "BEN-0719";
-  public static final String SYN_KK_RECEIVE_BUFFER_BYTES = "BEN-0720";
-  public static final String SYN_KK_RECONNECT_BACKOFF_MAX_MS = "BEN-0721";
-  public static final String SYN_KK_RECONNECT_BACKOFF_MS = "BEN-0722";
-  public static final String SYN_KK_REQUEST_TIMEOUT_MS = "BEN-0723";
-  public static final String SYN_KK_RETRY_BACKOFF_MS = "BEN-0724";
-  public static final String SYN_KK_SEND_BUFFER_BYTES = "BEN-0725";
-  public static final String SYN_KK_SECURITY_PROTOCOL = "BEN-0726";
-  public static final String SYN_KK_SECURITY_PROVIDERS = "BEN-0727";
-  public static final String SYN_KK_SASL_MECHANISM = "BEN-0728";
-  public static final String SYN_KK_SASL_CLIENT_CALLBACK_HANDLER_CLASS = "BEN-0729";
-  public static final String SYN_KK_SASL_JAAS_CONFIG = "BEN-0730";
-  public static final String SYN_KK_SASL_KERBEROS_SERVICE_NAME = "BEN-0731";
-  public static final String SYN_KK_SASL_KERBEROS_TICKET_RENEW_JITTER = "BEN-0732";
-  public static final String SYN_KK_SASL_KERBEROS_KINIT_CMD = "BEN-0733";
-  public static final String SYN_KK_SASL_KERBEROS_MIN_TIME_BEFORE_RELOGIN = "BEN-0734";
-  public static final String SYN_KK_SASL_KERBEROS_TICKET_RENEW_WINDOW_FACTOR = "BEN-0735";
-  public static final String SYN_KK_SASL_LOGIN_CALLBACK_HANDLER_CLASS = "BEN-0736";
-  public static final String SYN_KK_SASL_LOGIN_CLASS = "BEN-0737";
-  public static final String SYN_KK_SASL_LOGIN_REFRESH_BUFFER_SECONDS = "BEN-0738";
-  public static final String SYN_KK_SASL_LOGIN_REFRESH_MIN_PERIOD_SECONDS = "BEN-0739";
-  public static final String SYN_KK_SASL_LOGIN_REFRESH_WINDOW_FACTOR = "BEN-0740";
-  public static final String SYN_KK_SASL_LOGIN_REFRESH_WINDOW_JITTER = "BEN-0741";
-  public static final String SYN_KK_SSL_ENGINE_FACTORY_CLASS = "BEN-0742";
-  public static final String SYN_KK_SSL_ENABLED_PROTOCOLS = "BEN-0743";
-  public static final String SYN_KK_SSL_PROTOCOL = "BEN-0744";
-  public static final String SYN_KK_SSL_PROVIDER = "BEN-0745";
-  public static final String SYN_KK_SSL_SECURE_RANDOM_IMPLEMENTATION = "BEN-0746";
-  public static final String SYN_KK_SSL_CIPHER_SUITES = "BEN-0747";
-  public static final String SYN_KK_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM = "BEN-0748";
-  public static final String SYN_KK_SSL_TRUSTSTORE_LOCATION = "BEN-0749";
-  public static final String SYN_KK_SSL_TRUSTSTORE_PASSWORD = "BEN-0750";
-  public static final String SYN_KK_SSL_TRUSTSTORE_TYPE = "BEN-0751";
-  public static final String SYN_KK_SSL_TRUSTSTORE_CERTIFICATES = "BEN-0752";
-  public static final String SYN_KK_SSL_KEY_PASSWORD = "BEN-0753";
-  public static final String SYN_KK_SSL_KEYMANAGER_ALGORITHM = "BEN-0754";
-  public static final String SYN_KK_SSL_KEYSTORE_LOCATION = "BEN-0755";
-  public static final String SYN_KK_SSL_KEYSTORE_TYPE = "BEN-0756";
-  public static final String SYN_KK_SSL_KEYSTORE_KEY = "BEN-0757";
-  public static final String SYN_KK_SSL_KEYSTORE_PASSWORD = "BEN-0758";
-  public static final String SYN_KK_SSL_KEYSTORE_CERTIFICATE_CHAIN = "BEN-0759";
-  public static final String SYN_KK_SSL_TRUSTMANAGER_ALGORITHM = "BEN-0760";
+  public static final String SYN_KK                          = "BEN-2000";
+  public static final String SYN_KK_ID                       = "BEN-2001";
+  public static final String SYN_KK_ENVIRONMENT              = "BEN-2002";
+  public static final String SYN_KK_SYSTEM                   = "BEN-2003";
+  public static final String SYN_KK_PAGE_SIZE                = "BEN-2004";
+  public static final String SYN_KK_BOOTSTRAP_SERVERS        = "BEN-2005";
+  public static final String SYN_KK_TOPIC                    = "BEN-2006";
+  public static final String SYN_KK_FORMAT                   = "BEN-2007";
+  public static final String SYN_KK_ENCODING                 = "BEN-2008";
+  public static final String SYN_KK_CLIENT_DNS_LOOKUP        = "BEN-2009";
+  public static final String SYN_KK_CLIENT_ID                = "BEN-2010";
+  public static final String SYN_KK_CONNECTIONS_MAX_IDLE_MS  = "BEN-2011";
+  public static final String SYN_KK_SOCKET_CONNECTION_SETUP_TIMEOUT_MAX_MS = "BEN-2012";
+  public static final String SYN_KK_SOCKET_CONNECTION_SETUP_TIMEOUT_MS = "BEN-2013";
+  public static final String SYN_KK_INTERCEPTOR_CLASSES      = "BEN-2014";
+  public static final String SYN_KK_METADATA_MAX_AGE_MS      = "BEN-2015";
+  public static final String SYN_KK_METRIC_REPORTERS         = "BEN-2016";
+  public static final String SYN_KK_METRICS_NUM_SAMPLES      = "BEN-2017";
+  public static final String SYN_KK_METRICS_RECORDING_LEVEL  = "BEN-2018";
+  public static final String SYN_KK_METRICS_SAMPLE_WINDOW_MS = "BEN-2019";
+  public static final String SYN_KK_RECEIVE_BUFFER_BYTES     = "BEN-2020";
+  public static final String SYN_KK_RECONNECT_BACKOFF_MAX_MS = "BEN-2021";
+  public static final String SYN_KK_RECONNECT_BACKOFF_MS     = "BEN-2022";
+  public static final String SYN_KK_REQUEST_TIMEOUT_MS       = "BEN-2023";
+  public static final String SYN_KK_RETRY_BACKOFF_MS         = "BEN-2024";
+  public static final String SYN_KK_SEND_BUFFER_BYTES        = "BEN-2025";
+  public static final String SYN_KK_SECURITY_PROTOCOL        = "BEN-2026";
+  public static final String SYN_KK_SECURITY_PROVIDERS       = "BEN-2027";
+  public static final String SYN_KK_SASL_MECHANISM           = "BEN-2028";
+  public static final String SYN_KK_SASL_CLIENT_CALLBACK_HANDLER_CLASS = "BEN-2029";
+  public static final String SYN_KK_SASL_JAAS_CONFIG         = "BEN-2030";
+  public static final String SYN_KK_SASL_KERBEROS_SERVICE_NAME = "BEN-2031";
+  public static final String SYN_KK_SASL_KERBEROS_TICKET_RENEW_JITTER = "BEN-2032";
+  public static final String SYN_KK_SASL_KERBEROS_KINIT_CMD  = "BEN-2033";
+  public static final String SYN_KK_SASL_KERBEROS_MIN_TIME_BEFORE_RELOGIN = "BEN-2034";
+  public static final String SYN_KK_SASL_KERBEROS_TICKET_RENEW_WINDOW_FACTOR = "BEN-2035";
+  public static final String SYN_KK_SASL_LOGIN_CALLBACK_HANDLER_CLASS = "BEN-2036";
+  public static final String SYN_KK_SASL_LOGIN_CLASS         = "BEN-2037";
+  public static final String SYN_KK_SASL_LOGIN_REFRESH_BUFFER_SECONDS = "BEN-2038";
+  public static final String SYN_KK_SASL_LOGIN_REFRESH_MIN_PERIOD_SECONDS = "BEN-2039";
+  public static final String SYN_KK_SASL_LOGIN_REFRESH_WINDOW_FACTOR = "BEN-2040";
+  public static final String SYN_KK_SASL_LOGIN_REFRESH_WINDOW_JITTER = "BEN-2041";
+  public static final String SYN_KK_SSL_ENGINE_FACTORY_CLASS = "BEN-2042";
+  public static final String SYN_KK_SSL_ENABLED_PROTOCOLS    = "BEN-2043";
+  public static final String SYN_KK_SSL_PROTOCOL             = "BEN-2044";
+  public static final String SYN_KK_SSL_PROVIDER             = "BEN-2045";
+  public static final String SYN_KK_SSL_SECURE_RANDOM_IMPLEMENTATION = "BEN-2046";
+  public static final String SYN_KK_SSL_CIPHER_SUITES        = "BEN-2047";
+  public static final String SYN_KK_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM = "BEN-2048";
+  public static final String SYN_KK_SSL_TRUSTSTORE_LOCATION  = "BEN-2049";
+  public static final String SYN_KK_SSL_TRUSTSTORE_PASSWORD  = "BEN-2050";
+  public static final String SYN_KK_SSL_TRUSTSTORE_TYPE      = "BEN-2051";
+  public static final String SYN_KK_SSL_TRUSTSTORE_CERTIFICATES = "BEN-2052";
+  public static final String SYN_KK_SSL_KEY_PASSWORD         = "BEN-2053";
+  public static final String SYN_KK_SSL_KEYMANAGER_ALGORITHM = "BEN-2054";
+  public static final String SYN_KK_SSL_KEYSTORE_LOCATION    = "BEN-2055";
+  public static final String SYN_KK_SSL_KEYSTORE_TYPE        = "BEN-2056";
+  public static final String SYN_KK_SSL_KEYSTORE_KEY         = "BEN-2057";
+  public static final String SYN_KK_SSL_KEYSTORE_PASSWORD    = "BEN-2058";
+  public static final String SYN_KK_SSL_KEYSTORE_CERTIFICATE_CHAIN = "BEN-2059";
+  public static final String SYN_KK_SSL_TRUSTMANAGER_ALGORITHM = "BEN-2060";
 
   // Syntax Errors regarding <kafka-importer> ------------------------------------------------------------------------
 
-  public static final String SYN_KKIMP_ILLEGAL_ATTR = "BEN-0770";
-  public static final String SYN_KKIMP_IDLE_TIMEOUT_SECONDS = "BEN-0771";
-  public static final String SYN_KKIMP_KEY_DESERIALIZER = "BEN-0772";
-  public static final String SYN_KKIMP_GROUP_ID = "BEN-0773";
-  public static final String SYN_KKIMP_AUTO_OFFSET_RESET = "BEN-0774";
-  public static final String SYN_KKIMP_ENABLE_AUTO_COMMIT = "BEN-0775";
-  public static final String SYN_KKIMP_AUTO_COMMIT_INTERVAL_MS = "BEN-0776";
-  public static final String SYN_KKIMP_ALLOW_AUTO_CREATE_TOPICS = "BEN-0777";
-  public static final String SYN_KKIMP_CHECK_CRCS = "BEN-0778";
-  public static final String SYN_KKIMP_CLIENT_RACK = "BEN-0779";
-  public static final String SYN_KKIMP_DEFAULT_API_TIMEOUT_MS = "BEN-0780";
-  public static final String SYN_KKIMP_EXCLUDE_INTERNAL_TOPICS = "BEN-0781";
-  public static final String SYN_KKIMP_FETCH_MAX_BYTES = "BEN-0782";
-  public static final String SYN_KKIMP_FETCH_MAX_WAIT_MS = "BEN-0783";
-  public static final String SYN_KKIMP_FETCH_MIN_BYTES = "BEN-0784";
-  public static final String SYN_KKIMP_GROUP_INSTANCE_ID = "BEN-0785";
-  public static final String SYN_KKIMP_HEARTBEAT_INTERVAL_MS = "BEN-0786";
-  public static final String SYN_KKIMP_ISOLATION_LEVEL = "BEN-0787";
-  public static final String SYN_KKIMP_MAX_PARTITION_FETCH_BYTES = "BEN-0788";
-  public static final String SYN_KKIMP_MAX_POLL_INTERVAL_MS = "BEN-0789";
-  public static final String SYN_KKIMP_MAX_POLL_RECORDS = "BEN-0790";
-  public static final String SYN_KKIMP_PARTITION_ASSIGNMENT_STRATEGY = "BEN-0791";
+  public static final String SYN_KKIMP_ILLEGAL_ATTR              = "BEN-2070";
+  public static final String SYN_KKIMP_IDLE_TIMEOUT_SECONDS      = "BEN-2071";
+  public static final String SYN_KKIMP_KEY_DESERIALIZER          = "BEN-2072";
+  public static final String SYN_KKIMP_GROUP_ID                  = "BEN-2073";
+  public static final String SYN_KKIMP_AUTO_OFFSET_RESET         = "BEN-2074";
+  public static final String SYN_KKIMP_ENABLE_AUTO_COMMIT        = "BEN-2075";
+  public static final String SYN_KKIMP_AUTO_COMMIT_INTERVAL_MS   = "BEN-2076";
+  public static final String SYN_KKIMP_ALLOW_AUTO_CREATE_TOPICS  = "BEN-2077";
+  public static final String SYN_KKIMP_CHECK_CRCS                = "BEN-2078";
+  public static final String SYN_KKIMP_CLIENT_RACK               = "BEN-2079";
+  public static final String SYN_KKIMP_DEFAULT_API_TIMEOUT_MS    = "BEN-2080";
+  public static final String SYN_KKIMP_EXCLUDE_INTERNAL_TOPICS   = "BEN-2081";
+  public static final String SYN_KKIMP_FETCH_MAX_BYTES           = "BEN-2082";
+  public static final String SYN_KKIMP_FETCH_MAX_WAIT_MS         = "BEN-2083";
+  public static final String SYN_KKIMP_FETCH_MIN_BYTES           = "BEN-2084";
+  public static final String SYN_KKIMP_GROUP_INSTANCE_ID         = "BEN-2085";
+  public static final String SYN_KKIMP_HEARTBEAT_INTERVAL_MS     = "BEN-2086";
+  public static final String SYN_KKIMP_ISOLATION_LEVEL           = "BEN-2087";
+  public static final String SYN_KKIMP_MAX_PARTITION_FETCH_BYTES = "BEN-2088";
+  public static final String SYN_KKIMP_MAX_POLL_INTERVAL_MS      = "BEN-2089";
+  public static final String SYN_KKIMP_MAX_POLL_RECORDS          = "BEN-2090";
+  public static final String SYN_KKIMP_PARTITION_ASSIGNMENT_STRATEGY = "BEN-2091";
   
   // Syntax Errors regarding <kafka-exporter> -------------------------------------------------------------------------------
 
-  public static final String SYN_KKEXP_ILLEGAL_ATTR          = "BEN-0800";
-  public static final String SYN_KKEXP_KEY_ATTRIBUTE         = "BEN-0801";
-  public static final String SYN_KKEXP_KEY_SERIALIZER        = "BEN-0802";
-  public static final String SYN_KKEXP_ACKS                  = "BEN-0803";
-  public static final String SYN_KKEXP_BUFFER_MEMORY         = "BEN-0804";
-  public static final String SYN_KKEXP_COMPRESSION_TYPE      = "BEN-0805";
-  public static final String SYN_KKEXP_RETRIES               = "BEN-0806";
+  public static final String SYN_KKEXP_ILLEGAL_ATTR          = "BEN-2100";
+  public static final String SYN_KKEXP_KEY_ATTRIBUTE         = "BEN-2101";
+  public static final String SYN_KKEXP_KEY_SERIALIZER        = "BEN-2102";
+  public static final String SYN_KKEXP_ACKS                  = "BEN-2103";
+  public static final String SYN_KKEXP_BUFFER_MEMORY         = "BEN-2104";
+  public static final String SYN_KKEXP_COMPRESSION_TYPE      = "BEN-2105";
+  public static final String SYN_KKEXP_RETRIES               = "BEN-2106";
   public static final String SYN_KKEXP_BATCH_SIZE            = "BEN-8097";
-  public static final String SYN_KKEXP_DELIVERY_TIMEOUT_MS   = "BEN-0808";
-  public static final String SYN_KKEXP_ENABLE_IDEMPOTENCE    = "BEN-0809";
-  public static final String SYN_KKEXP_LINGER_MS             = "BEN-0810";
-  public static final String SYN_KKEXP_MAX_BLOCK_MS          = "BEN-0811";
-  public static final String SYN_KKEXP_MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION = "BEN-0812";
-  public static final String SYN_KKEXP_MAX_REQUEST_SIZE       = "BEN-0813";
-  public static final String SYN_KKEXP_METADATA_MAX_IDLE_MS   = "BEN-0814";
-  public static final String SYN_KKEXP_PARTITIONER_CLASS      = "BEN-0815";
-  public static final String SYN_KKEXP_TRANSACTION_TIMEOUT_MS = "BEN-0816";
-  public static final String SYN_KKEXP_TRANSACTIONAL_ID       = "BEN-0817";
+  public static final String SYN_KKEXP_DELIVERY_TIMEOUT_MS   = "BEN-2108";
+  public static final String SYN_KKEXP_ENABLE_IDEMPOTENCE    = "BEN-2109";
+  public static final String SYN_KKEXP_LINGER_MS             = "BEN-2110";
+  public static final String SYN_KKEXP_MAX_BLOCK_MS          = "BEN-2111";
+  public static final String SYN_KKEXP_MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION = "BEN-2112";
+  public static final String SYN_KKEXP_MAX_REQUEST_SIZE       = "BEN-2113";
+  public static final String SYN_KKEXP_METADATA_MAX_IDLE_MS   = "BEN-2114";
+  public static final String SYN_KKEXP_PARTITIONER_CLASS      = "BEN-2115";
+  public static final String SYN_KKEXP_TRANSACTION_TIMEOUT_MS = "BEN-2116";
+  public static final String SYN_KKEXP_TRANSACTIONAL_ID       = "BEN-2117";
 
   // constructor -----------------------------------------------------------------------------------------------------
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sx="http://www.w3.org/2001/XMLSchema"
            targetNamespace="https://www.benerator.de/schema/2.1.0"
            xmlns="https://www.benerator.de/schema/2.1.0"
            elementFormDefault="qualified">
@@ -362,6 +362,7 @@
                 <xs:element ref="if" minOccurs="0"/>
                 <xs:element ref="while" minOccurs="0"/>
             </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="optional"/>
             <xs:attributeGroup ref="generator-attrs"/>
             <xs:attribute name="minCount" type="scriptable-long"/>
             <xs:attribute name="maxCount" type="scriptable-long"/>
@@ -412,12 +413,14 @@
             Defines a variable that is recreated by a generator on each entity creation
         </xs:documentation></xs:annotation>
         <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
             <xs:attributeGroup ref="component-generator-attrs"/>
         </xs:complexType>
     </xs:element>
 
     <xs:element name="value"> <!-- TODO what's this? -->
         <xs:complexType>
+            <xs:attribute name="name" type="xs:string"/>
             <xs:attributeGroup ref="component-generator-attrs"/>
         </xs:complexType>
     </xs:element>
@@ -427,6 +430,7 @@
             Defines a simple-type component of an entity.
         </xs:documentation></xs:annotation>
         <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
             <xs:attributeGroup ref="component-generator-attrs"/>
         </xs:complexType>
     </xs:element>
@@ -462,6 +466,7 @@
             Defines a simple-type component of an entity which is a unique key.
         </xs:documentation></xs:annotation>
         <xs:complexType>
+            <xs:attribute name="name" use="required"/>
             <xs:attributeGroup ref="component-generator-attrs"/>
         </xs:complexType>
     </xs:element>
@@ -484,6 +489,7 @@
             Defines a simple-type component of an entity which refers the unique key of another entity.
         </xs:documentation></xs:annotation>
         <xs:complexType>
+            <sx:attribute name="name" type="xs:string" use="required"/>
             <xs:attributeGroup ref="reference-generator-attrs"/>
         </xs:complexType>
     </xs:element>
@@ -581,7 +587,6 @@
 
     <xs:attributeGroup name="common-creator-attrs">
         <!-- elementary definitions -->
-        <xs:attribute name="name" type="xs:string"/>
         <xs:attribute name="type" type="data-type"/>
         <xs:attribute name="scope" type="xs:string"/>
 
