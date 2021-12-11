@@ -295,11 +295,85 @@ public class BeneratorErrorIdIntegrationTest {
         ExitCodes.SYNTAX_ERROR, result);
   }
 
+  // <variable> tests ------------------------------------------------------------------------------------------------
+
+  /* TODO implement error mapping
+  @Test
+  public void test_0500_syn_var_ill_attr() {
+    BeneratorResult result = runFile("0500_var_ill_attr.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_VAR_ILLEGAL_ATTR, "Illegal attribute for <variable>: ill_attr",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+  */
+
+  @Test
+  public void test_0501_syn_var_wo_name() {
+    BeneratorResult result = runFile("0501_var_wo_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_VAR_NAME,
+        "Attribute is missing: 'name' in <variable>",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  // <attribute> tests -----------------------------------------------------------------------------------------------
+
+  /* TODO implement error mapping
+  @Test
+  public void test_0550_attr_ill_attr() {
+    BeneratorResult result = runFile("0550_attr_ill_attr.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ILLEGAL_ATTR, "Illegal attribute for <attribute>: ill_attr",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+  */
+
+  @Test
+  public void test_0551_attr_wo_name() {
+    BeneratorResult result = runFile("0551_attr_wo_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_NAME,
+        "Attribute is missing: 'name' in <attribute>",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  // <id> tests ------------------------------------------------------------------------------------------------------
+
+  /* TODO implement error mapping
+  @Test
+  public void test_0600_id_ill_attr() {
+    BeneratorResult result = runFile("0600_id_ill_attr.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ID_ILLEGAL_ATTR, "Illegal attribute for <id>: ill_attr",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+  */
+
+  @Test
+  public void test_0601_id_wo_name() {
+    BeneratorResult result = runFile("0601_id_wo_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ID_NAME, "Attribute is missing: 'name' in <id>",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  // <reference> tests -----------------------------------------------------------------------------------------------
+
+  /* TODO implement error mapping
+  @Test
+  public void test_0650_ref_ill_attr() {
+    BeneratorResult result = runFile("0650_ref_ill_attr.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_ILLEGAL_ATTR, "Illegal attribute for <reference>: ill_attr",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+  */
+
+  @Test
+  public void test_0651_id_wo_name() {
+    BeneratorResult result = runFile("0651_ref_wo_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_NAME, "Attribute is missing: 'name' in <reference>",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
   // database tests --------------------------------------------------------------------------------------------------
 
   @Test
-  public void test_0520_syn_db_not_available() {
-    BeneratorResult result = runFile("0520_syn_db_not_available.ben.xml");
+  public void test_1100_db_connect_failed() {
+    BeneratorResult result = runFile("1100_db_connect_failed.ben.xml");
     assertResult(BeneratorErrorIds.DB_CONNECT_FAILED,
         "Connecting the database failed. URL: jdbc:postgresql://localhost:54321/postgres",
         ExitCodes.MISCELLANEOUS_ERROR, result);
