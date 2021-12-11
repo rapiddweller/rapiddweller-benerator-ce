@@ -35,25 +35,17 @@ import java.util.Locale;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Tests the {@link DepartmentNameGenerator}.<br/>
- * <br/>
+ * Tests the {@link DepartmentNameGenerator}.<br/><br/>
  * Created: 14.10.2009 10:44:23
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class DepartmentNameGeneratorTest extends GeneratorClassTest {
 
-  /**
-   * Instantiates a new Department name generator test.
-   */
   public DepartmentNameGeneratorTest() {
     super(DepartmentNameGenerator.class);
   }
 
-  /**
-   * Test locales.
-   */
   @Test
   public void testLocales() {
     Runnable runner = () -> {

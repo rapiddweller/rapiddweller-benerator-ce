@@ -28,9 +28,15 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
 import com.rapiddweller.benerator.engine.statement.EchoStatement;
+import com.rapiddweller.benerator.engine.statement.EchoType;
+import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.Validator;
+import com.rapiddweller.common.parser.EnumParser;
 import com.rapiddweller.format.xml.AttrInfoSupport;
+import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
 
@@ -46,12 +52,15 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class EchoParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttrInfoSupport ATTR_INFO;
-  static {
-    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_BEAN_ILLEGAL_ATTR);
-    ATTR_INFO.add(ATT_MESSAGE, false, BeneratorErrorIds.SYN_BEAN_CLASS);
-    ATTR_INFO.add(ATT_TYPE, false, BeneratorErrorIds.SYN_BEAN_SPEC);
-  }
+  private static final AttributeInfo<String> MESSAGE = new AttributeInfo<>(
+      ATT_MESSAGE, false, BeneratorErrorIds.SYN_ECHO_MESSAGE, null, null);
+
+  private static final AttributeInfo<Expression<EchoType>> TYPE = new AttributeInfo<>(
+      ATT_TYPE, false, BeneratorErrorIds.SYN_ECHO_TYPE,
+      new ScriptableParser<>(new EnumParser<>(EchoType.class)), "console");
+
+  private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(
+      BeneratorErrorIds.SYN_ECHO, new EchoValidator(), MESSAGE, TYPE);
 
   public EchoParser() {
     super(EL_ECHO, ATTR_INFO);
@@ -60,14 +69,38 @@ public class EchoParser extends AbstractBeneratorDescriptorParser {
   @Override
   public EchoStatement doParse(
       Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
+    attrSupport.validate(element);
+    Expression<String> messageEx = parseMessage(element);
+    Expression<EchoType> typeEx = TYPE.parse(element);
+    return new EchoStatement(messageEx, typeEx);
+  }
+
+  private Expression<String> parseMessage(Element element) {
     Expression<String> messageEx;
     if (!StringUtil.isEmpty(element.getAttribute(ATT_MESSAGE))) {
       messageEx = parseScriptableStringAttribute(ATT_MESSAGE, element);
     } else {
       messageEx = parseScriptableElementText(element, true);
     }
-    Expression<String> typeEx = parseScriptableStringAttribute("type", element);
-    return new EchoStatement(messageEx, typeEx);
+    return messageEx;
+  }
+
+  static class EchoValidator implements Validator<Element> {
+    @Override
+    public boolean valid(Element element) {
+      boolean hasMsgText = !StringUtil.isEmpty(element.getTextContent());
+      boolean hasMsgAttr = MESSAGE.isDefinedIn(element);
+      if (hasMsgText && hasMsgAttr) {
+        throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlElement(
+            "<echo> must contain either a message attribute or a text content, not both",
+            null, BeneratorErrorIds.SYN_ECHO_MESSAGE, element);
+      } else if (!hasMsgText && !hasMsgAttr) {
+        throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlElement(
+            "<echo> must contain either a message attribute or a text content, but none of them is specified",
+            null, BeneratorErrorIds.SYN_ECHO, element);
+      }
+      return true;
+    }
   }
 
 }

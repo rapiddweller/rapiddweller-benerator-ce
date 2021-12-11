@@ -38,30 +38,20 @@ import java.util.Locale;
  * Creates random department names based on a {@link Locale}-specific CSV file.
  * If not CSV file is found for the requested Locale, the generator falls back
  * to English.<br/><br/>
- * <p>
  * Created at 11.07.2009 18:43:55
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class DepartmentNameGenerator extends WeightedCSVSampleGenerator<String>
     implements NonNullGenerator<String> {
 
-  private static final String FILENAME_PREFIX =
-      "/com/rapiddweller/domain/organization/department";
+  private static final String FILENAME_PREFIX = DepartmentNameGenerator.class.getPackageName().replace(".", "/")
+      + "/department";
 
-  /**
-   * Instantiates a new Department name generator.
-   */
   public DepartmentNameGenerator() {
     this(Locale.getDefault());
   }
 
-  /**
-   * Instantiates a new Department name generator.
-   *
-   * @param locale the locale
-   */
   public DepartmentNameGenerator(Locale locale) {
     super(uriForLocale(locale), Encodings.UTF_8, ',');
   }
@@ -74,11 +64,6 @@ public class DepartmentNameGenerator extends WeightedCSVSampleGenerator<String>
 
   // Generator interface implementation ------------------------------------------------------------------------------
 
-  /**
-   * Sets locale.
-   *
-   * @param locale the locale
-   */
   public void setLocale(Locale locale) {
     setUri(uriForLocale(locale));
   }

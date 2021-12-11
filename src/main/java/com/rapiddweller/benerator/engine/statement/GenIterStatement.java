@@ -58,9 +58,9 @@ import java.util.Locale;
  * @since 1.0
  * @author Volker Bergmann
  */
-public class GenerateOrIterateStatement extends AbstractStatement implements Closeable, PageListener {
+public class GenIterStatement extends AbstractStatement implements Closeable, PageListener {
 
-  protected Logger logger = LoggerFactory.getLogger(GenerateOrIterateStatement.class);
+  protected Logger logger = LoggerFactory.getLogger(GenIterStatement.class);
 
   // constant attributes -----------------------------------------------------------------------------------------------
 
@@ -71,6 +71,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
   protected final Expression<Integer> threads;
   protected final Expression<Long> pageSize;
   protected final Expression<PageListener> pageListenerEx;
+  protected final Expression<Boolean> stats;
   protected final boolean customSensor;
   protected final String sensor;
   protected final boolean infoLog;
@@ -83,14 +84,14 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
 
   // mutable attributes ------------------------------------------------------------------------------------------------
 
-  protected GenerateAndConsumeTask task;
+  protected GenIterTask task;
   protected PageListener pageListener;
 
   // constructor -------------------------------------------------------------------------------------------------------
 
-  public GenerateOrIterateStatement(
+  public GenIterStatement(
       Statement[] parentPath, boolean iterate, String productName, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
-      Expression<Long> pageSize, Expression<PageListener> pageListenerEx, String sensor,
+      Expression<Long> pageSize, Expression<PageListener> pageListenerEx, Expression<Boolean> stats, String sensor,
       Expression<ErrorHandler> errorHandler, boolean infoLog, boolean isSubCreator,
       BeneratorContext context, BeneratorContext childContext) {
     super(errorHandler);
@@ -101,6 +102,7 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
     this.threads = threads;
     this.pageSize = pageSize;
     this.pageListenerEx = pageListenerEx;
+    this.stats = stats;
     if (!StringUtil.isEmpty(sensor)) {
       this.customSensor = true;
       this.sensor = sensor;
@@ -126,11 +128,11 @@ public class GenerateOrIterateStatement extends AbstractStatement implements Clo
     return iterate;
   }
 
-  public void setTask(GenerateAndConsumeTask task) {
+  public void setTask(GenIterTask task) {
     this.task = task;
   }
 
-  public GenerateAndConsumeTask getTask() {
+  public GenIterTask getTask() {
     return task;
   }
 

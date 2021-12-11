@@ -33,7 +33,6 @@ import com.rapiddweller.script.expression.DynamicExpression;
 /**
  * Evaluates to the default page size of the {@link BeneratorContext}.<br/><br/>
  * Created: 26.10.2009 06:57:20
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */

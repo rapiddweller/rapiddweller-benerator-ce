@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -32,6 +32,7 @@ import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.ScriptableExpression;
 import com.rapiddweller.benerator.engine.expression.context.ContextReference;
+import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.SetSettingStatement;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
@@ -40,6 +41,7 @@ import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AttrInfoSupport;
+import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.CompositeExpression;
@@ -58,15 +60,24 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  */
 public class SettingParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttrInfoSupport ATTR_INFO;
-  static {
-    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_SETTING_ILLEGAL_ATTR);
-    ATTR_INFO.add(ATT_NAME, true, BeneratorErrorIds.SYN_SETTING_NAME);
-    ATTR_INFO.add(ATT_DEFAULT, false, BeneratorErrorIds.SYN_SETTING_DEFAULT);
-    ATTR_INFO.add(ATT_VALUE, false, BeneratorErrorIds.SYN_SETTING_VALUE);
-    ATTR_INFO.add(ATT_REF, false, BeneratorErrorIds.SYN_SETTING_REF);
-    ATTR_INFO.add(ATT_SOURCE, false, BeneratorErrorIds.SYN_SETTING_SOURCE);
-  }
+  // TODO merge this with Bean property parsing
+
+  public static final NameAttribute NAME = new NameAttribute(BeneratorErrorIds.SYN_SETTING_NAME, true, true);
+
+  public static final AttributeInfo<String> DEFAULT = new AttributeInfo<>(
+      ATT_DEFAULT,false, BeneratorErrorIds.SYN_SETTING_DEFAULT, null, null);
+
+  public static final AttributeInfo<String> VALUE = new AttributeInfo<>(
+      ATT_VALUE, false, BeneratorErrorIds.SYN_SETTING_VALUE, null, null);
+
+  public static final AttributeInfo<String> REF = new AttributeInfo<>(
+      ATT_REF, false, BeneratorErrorIds.SYN_SETTING_REF, null, null);
+
+  public static final AttributeInfo<String> SOURCE = new AttributeInfo<>(
+      ATT_SOURCE, false, BeneratorErrorIds.SYN_SETTING_SOURCE, null, null);
+
+  private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(
+      BeneratorErrorIds.SYN_SETTING_ILLEGAL_ATTR, NAME, VALUE, DEFAULT, REF, SOURCE);
 
   public SettingParser() {
     super(DescriptorConstants.EL_SETTING, ATTR_INFO);
@@ -96,7 +107,7 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
       Element[] childElements = XMLUtil.getChildElements(element);
       Expression[] subExpressions = new Expression[childElements.length];
       for (int j = 0; j < childElements.length; j++) {
-        subExpressions[j] = BeanParser.parseBeanExpression(childElements[j]);
+        subExpressions[j] = BeanParser.parseBeanExpression(childElements[j], false);
       }
       switch (subExpressions.length) {
         case 0:

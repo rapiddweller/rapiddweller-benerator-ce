@@ -29,7 +29,9 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ErrorStatement;
+import com.rapiddweller.common.parser.NonNegativeIntegerParser;
 import com.rapiddweller.format.xml.AttrInfoSupport;
+import com.rapiddweller.format.xml.AttributeInfo;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
@@ -43,12 +45,14 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class ErrorParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttrInfoSupport ATTR_INFO;
-  static {
-    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_ERROR_ILLEGAL_ATTR);
-    ATTR_INFO.add(ATT_ID, false, BeneratorErrorIds.SYN_ERROR_ID);
-    ATTR_INFO.add(ATT_EXIT_CODE, false, BeneratorErrorIds.SYN_ERROR_EXIT_CODE);
-  }
+  private static final AttributeInfo<String> ID = new AttributeInfo<>(
+      ATT_ID, false, BeneratorErrorIds.SYN_ERROR_ID, null, null);
+
+  private static final AttributeInfo<Integer> EXIT_CODE = new AttributeInfo<>(
+      ATT_EXIT_CODE, false, BeneratorErrorIds.SYN_ERROR_EXIT_CODE, new NonNegativeIntegerParser(), null);
+
+  private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(
+      BeneratorErrorIds.SYN_ERROR_ILLEGAL_ATTR, ID, EXIT_CODE);
 
   public ErrorParser() {
     super(EL_ERROR, ATTR_INFO);
@@ -56,9 +60,10 @@ public class ErrorParser extends AbstractBeneratorDescriptorParser {
 
   @Override
   public ErrorStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
-    String errorId = DescriptorParserUtil.getAttributeAsString("id", element);
+    attrSupport.validate(element);
+    String errorId = ID.parse(element);
+    Integer exitCode = EXIT_CODE.parse(element);
     String message = DescriptorParserUtil.getElementText(element);
-    Integer exitCode = parseIntAttribute(ATT_EXIT_CODE, element).evaluate(null);
     return new ErrorStatement(errorId, exitCode, message);
   }
 

@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.consumer.ListConsumer;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.CurrentProductGeneration;
-import com.rapiddweller.benerator.engine.statement.GenerateAndConsumeTask;
+import com.rapiddweller.benerator.engine.statement.GenIterTask;
 import com.rapiddweller.benerator.wrapper.IteratingGenerator;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.TypedIterable;
@@ -49,14 +49,14 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests the {@link GenerateAndConsumeTask}.<br/>
+ * Tests the {@link GenIterTask}.<br/>
  * <br/>
  * Created at 25.07.2009 12:42:25
  *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class GenerateAndConsumeTaskTest extends AbstractTaskTest {
+public class GenIterTaskTest extends AbstractTaskTest {
 
   /**
    * The Alice.
@@ -86,7 +86,7 @@ public class GenerateAndConsumeTaskTest extends AbstractTaskTest {
     // setup
     final ListConsumer consumer = new ListConsumer();
     Expression<Consumer> consumerExpr = new ConstantExpression<>(consumer);
-    GenerateAndConsumeTask task = new GenerateAndConsumeTask("tn", "tn");
+    GenIterTask task = new GenIterTask("tn", "tn");
     Generator<Entity> source = new IteratingGenerator<>(new AB());
     task.addStatement(new CurrentProductGeneration("in", source));
     task.setConsumer(consumerExpr);

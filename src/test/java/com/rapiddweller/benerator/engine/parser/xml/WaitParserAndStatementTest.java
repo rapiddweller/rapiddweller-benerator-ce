@@ -29,6 +29,8 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.engine.statement.WaitStatement;
+import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
+import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.Test;
 import org.w3c.dom.Element;
@@ -41,7 +43,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class WaitParserAndStatementTest {
+public class WaitParserAndStatementTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testConstantDuration() {
@@ -62,6 +64,31 @@ public class WaitParserAndStatementTest {
       assertEquals(11 + i * 2, statement.generateDuration(context));
     }
     statement.execute(context);
+  }
+
+  @Test(expected = SyntaxError.class)
+  public void testMutualExclusionFull() {
+    parse("<wait duration='1000' min='11' max='25' granularity='2' distribution='step'/>");
+  }
+
+  @Test(expected = SyntaxError.class)
+  public void testMutualExclusionMin() {
+    parse("<wait duration='1000' min='11'/>");
+  }
+
+  @Test(expected = SyntaxError.class)
+  public void testMutualExclusionMax() {
+    parse("<wait duration='1000' max='11'/>");
+  }
+
+  @Test(expected = SyntaxError.class)
+  public void testMutualExclusionDistribution() {
+    parse("<wait duration='1000' distribution='random'/>");
+  }
+
+  @Test(expected = SyntaxError.class)
+  public void testMutualExclusionGranularity() {
+    parse("<wait duration='1000' granularity='1000'/>");
   }
 
 }

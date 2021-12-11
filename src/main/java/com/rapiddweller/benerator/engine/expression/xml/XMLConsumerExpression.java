@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -99,7 +99,7 @@ public class XMLConsumerExpression extends DynamicExpression<Consumer> {
         String ref = parseStringAttribute(consumerElement, ATT_REF, context);
         beanSpec = BeanSpec.createReference(beneratorContext.get(ref));
       } else if (consumerElement.hasAttribute(ATT_CLASS) || consumerElement.hasAttribute(ATT_SPEC)) {
-        beanSpec = BeanParser.resolveBeanExpression(consumerElement, beneratorContext);
+        beanSpec = BeanParser.resolveLocalBeanExpression(consumerElement, beneratorContext);
       } else {
         throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlElement(
             "Can't handle this", consumerElement);

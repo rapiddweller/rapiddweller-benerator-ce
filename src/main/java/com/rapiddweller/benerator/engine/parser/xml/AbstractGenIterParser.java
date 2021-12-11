@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.Generator;
@@ -37,9 +38,10 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.CachedExpression;
 import com.rapiddweller.benerator.engine.expression.xml.XMLConsumerExpression;
 import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
+import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
 import com.rapiddweller.benerator.engine.statement.ConversionStatement;
-import com.rapiddweller.benerator.engine.statement.GenerateAndConsumeTask;
-import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
+import com.rapiddweller.benerator.engine.statement.GenIterStatement;
+import com.rapiddweller.benerator.engine.statement.GenIterTask;
 import com.rapiddweller.benerator.engine.statement.LazyStatement;
 import com.rapiddweller.benerator.engine.statement.ValidationStatement;
 import com.rapiddweller.benerator.factory.DescriptorUtil;
@@ -53,8 +55,11 @@ import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.exception.ExceptionFactory;
+import com.rapiddweller.common.parser.BooleanParser;
+import com.rapiddweller.common.parser.PositiveIntegerParser;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AttrInfoSupport;
+import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
@@ -77,7 +82,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
 import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStringAttribute;
 
 /**
@@ -87,6 +91,17 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStr
  * @since 0.6.0
  */
 public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorParser {
+
+  protected static final AttributeInfo<Expression<Integer>> THREADS = new AttributeInfo<>(
+      ATT_THREADS, false, BeneratorErrorIds.SYN_GENERATE_THREADS,
+      new ScriptableParser<>(new PositiveIntegerParser()), "1");
+
+  protected static final AttributeInfo<Expression<Boolean>> STATS = new AttributeInfo<>(
+      ATT_STATS, false, BeneratorErrorIds.SYN_GENERATE_STATS, new ScriptableParser<>(new BooleanParser()), "false");
+
+  protected static final AttributeInfo<String> SENSOR = new AttributeInfo<>(
+      ATT_SENSOR, false, BeneratorErrorIds.SYN_GENERATE_SENSOR, null, null);
+
 
   private static final Set<String> CONSUMER_EXPECTING_ELEMENTS = CollectionUtil.toSet(EL_GENERATE, EL_ITERATE);
 
@@ -118,8 +133,8 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
   }
 
   @SuppressWarnings("unchecked")
-  public GenerateOrIterateStatement parseGenerate(Element element, Element[] parentXmlPath, Statement[] parentPath,
-                                                  BeneratorParseContext parsingContext, BeneratorContext context, boolean infoLog, boolean nested) {
+  public GenIterStatement parseGenerate(Element element, Element[] parentXmlPath, Statement[] parentPath,
+                                        BeneratorParseContext parsingContext, BeneratorContext context, boolean infoLog, boolean nested) {
     // parse descriptor
     InstanceDescriptor descriptor = mapDescriptorElement(element, context);
 
@@ -127,17 +142,18 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     boolean iterate = ("iterate".equals(element.getNodeName()));
     Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 0L, 1L, false, context);
     Expression<Long> pageSize = parsePageSize(element);
-    Expression<Integer> threads = parseIntAttribute("threads", element, 1);
+    Expression<Integer> threads = THREADS.parse(element);
     Expression<PageListener> pager = (Expression<PageListener>) DatabeneScriptParser.parseBeanSpec(
         element.getAttribute(ATT_PAGER));
     String productName = getTaskName(descriptor);
-    String sensor = element.getAttribute("sensor");
+    Expression<Boolean> stats = STATS.parse(element);
+    String sensor = SENSOR.parse(element);
 
     Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_NAME));
     Expression<Long> minCount = DescriptorUtil.getMinCount(descriptor, 0L);
     BeneratorContext childContext = context.createSubContext(productName);
-    GenerateOrIterateStatement statement = createStatement(parentPath, iterate, productName,
-        countGenerator, minCount, threads, pageSize, pager, sensor, infoLog, nested, errorHandler, context, childContext);
+    GenIterStatement statement = createStatement(parentPath, iterate, productName,
+        countGenerator, minCount, threads, pageSize, pager, stats, sensor, infoLog, nested, errorHandler, context, childContext);
 
     // TODO avoid double parsing of the InstanceDescriptor and remove the following...
     TypeDescriptor type = descriptor.getTypeDescriptor();
@@ -149,7 +165,7 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     // parse task and sub statements
     Statement[] statementPath = parsingContext.createSubPath(parentPath, statement);
 
-    GenerateAndConsumeTask task = parseTask(element, parentXmlPath, statementPath, parsingContext, descriptor, infoLog, context, childContext);
+    GenIterTask task = parseTask(element, parentXmlPath, statementPath, parsingContext, descriptor, infoLog, context, childContext);
     statement.setTask(task);
     return statement;
   }
@@ -210,17 +226,17 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     return instance;
   }
 
-  protected GenerateOrIterateStatement createStatement(
+  protected GenIterStatement createStatement(
       Statement[] parentPath, boolean iterate, String productName, Generator<Long> countGenerator, Expression<Long> minCount, Expression<Integer> threads,
-      Expression<Long> pageSize, Expression<PageListener> pager, String sensor,
+      Expression<Long> pageSize, Expression<PageListener> pager, Expression<Boolean> stats, String sensor,
       boolean infoLog, boolean nested,
       Expression<ErrorHandler> errorHandler, BeneratorContext context, BeneratorContext childContext) {
-    return new GenerateOrIterateStatement(parentPath, iterate, productName, countGenerator, minCount, threads, pageSize, pager, sensor,
+    return new GenIterStatement(parentPath, iterate, productName, countGenerator, minCount, threads, pageSize, pager, stats, sensor,
         errorHandler, infoLog, nested, context, childContext);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  private GenerateAndConsumeTask parseTask(
+  private GenIterTask parseTask(
       Element element, Element[] parentXmlPath, Statement[] statementPath, BeneratorParseContext parseContext,
       InstanceDescriptor descriptor, boolean infoLog, BeneratorContext context, BeneratorContext childContext) {
     // log
@@ -320,7 +336,7 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     }
 
     // create task
-    GenerateAndConsumeTask task = createTask(taskName, productName);
+    GenIterTask task = createTask(taskName, productName);
     task.setStatements(statements);
 
     // parse converter
@@ -351,8 +367,8 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     return taskName;
   }
 
-  protected GenerateAndConsumeTask createTask(String taskName, String productName) {
-    return new GenerateAndConsumeTask(taskName, productName);
+  protected GenIterTask createTask(String taskName, String productName) {
+    return new GenIterTask(taskName, productName);
   }
 
 }

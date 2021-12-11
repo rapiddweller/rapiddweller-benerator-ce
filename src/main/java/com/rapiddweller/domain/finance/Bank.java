@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,42 +29,25 @@ package com.rapiddweller.domain.finance;
 /**
  * Represents a bank.<br/><br/>
  * Created at 24.06.2008 08:31:56
- *
  * @author Volker Bergmann
  * @since 0.5.4
  */
 public class Bank {
 
-  /**
-   * The Bank Identification Number
-   */
+  /** The Bank Identification Number */
   private final String bin;
 
-  /**
-   * The name of the bank
-   */
+  /** The name of the bank */
   private final String name;
 
-  /**
-   * The national bank code
-   */
+  /**  The national bank code */
   private final String bankCode;
 
-  /**
-   * The international Bank Identifier Code
-   */
+  /** The international Bank Identifier Code */
   private final String bic;
 
   // Constructor -----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Bank.
-   *
-   * @param name     the name
-   * @param bankCode the bank code
-   * @param bic      the bic
-   * @param bin      the bin
-   */
   public Bank(String name, String bankCode, String bic, String bin) {
     this.name = name;
     this.bankCode = bankCode;
@@ -74,38 +57,18 @@ public class Bank {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets name.
-   *
-   * @return the name of the bank
-   */
   public String getName() {
     return name;
   }
 
-  /**
-   * Gets bank code.
-   *
-   * @return the national bank code
-   */
   public String getBankCode() {
     return bankCode;
   }
 
-  /**
-   * Gets bic.
-   *
-   * @return the international Bank Identifier Code
-   */
   public String getBic() {
     return bic;
   }
 
-  /**
-   * Gets bin.
-   *
-   * @return the Bank Identification Number
-   */
   public String getBin() {
     return bin;
   }

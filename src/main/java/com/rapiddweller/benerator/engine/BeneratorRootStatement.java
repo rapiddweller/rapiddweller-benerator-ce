@@ -27,8 +27,8 @@
 package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.Generator;
-import com.rapiddweller.benerator.engine.statement.GenerateAndConsumeTask;
-import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
+import com.rapiddweller.benerator.engine.statement.GenIterStatement;
+import com.rapiddweller.benerator.engine.statement.GenIterTask;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
 import com.rapiddweller.benerator.engine.statement.SequentialStatement;
 import com.rapiddweller.benerator.engine.statement.StatementProxy;
@@ -68,15 +68,15 @@ public class BeneratorRootStatement extends SequentialStatement {
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   public Generator<?> getGenerator(String name, BeneratorContext context) {
-    GenerateOrIterateStatement statement = getGeneratorStatement(name, context);
+    GenIterStatement statement = getGeneratorStatement(name, context);
     Generator<?> generator = new TaskBasedGenerator(statement.getTask());
     return new NShotGeneratorProxy(generator, statement.generateCount(context));
   }
 
-  public GenerateOrIterateStatement getGeneratorStatement(String name, BeneratorContext context) {
+  public GenIterStatement getGeneratorStatement(String name, BeneratorContext context) {
     BeneratorVisitor visitor = new BeneratorVisitor(name, context);
     accept(visitor);
-    GenerateOrIterateStatement statement = visitor.getResult();
+    GenIterStatement statement = visitor.getResult();
     if (statement == null) {
       throw BeneratorExceptionFactory.getInstance().illegalArgument("Generator not found: " + name);
     }
@@ -101,14 +101,14 @@ public class BeneratorRootStatement extends SequentialStatement {
 
     private final String name;
     private final BeneratorContext context;
-    private GenerateOrIterateStatement result;
+    private GenIterStatement result;
 
     public BeneratorVisitor(String name, BeneratorContext context) {
       this.name = name;
       this.context = context;
     }
 
-    public GenerateOrIterateStatement getResult() {
+    public GenIterStatement getResult() {
       return result;
     }
 
@@ -117,9 +117,9 @@ public class BeneratorRootStatement extends SequentialStatement {
       if (result != null) {
         return;
       }
-      if (statement instanceof GenerateOrIterateStatement) {
-        GenerateOrIterateStatement generatorStatement = (GenerateOrIterateStatement) statement;
-        GenerateAndConsumeTask target = generatorStatement.getTask();
+      if (statement instanceof GenIterStatement) {
+        GenIterStatement generatorStatement = (GenIterStatement) statement;
+        GenIterTask target = generatorStatement.getTask();
         if (name.equals(target.getTaskName())) {
           result = generatorStatement;
         }

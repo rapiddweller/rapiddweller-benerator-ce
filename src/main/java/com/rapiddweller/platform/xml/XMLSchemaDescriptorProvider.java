@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -353,7 +353,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
         IncludeStatement statement = (IncludeStatement) new IncludeParser().parse(child, null, null, new BeneratorParseContext(this));
         statement.execute(context);
       } else if ("bean".equals(childName)) {
-        Expression<?> constructionExpression = BeanParser.parseBeanExpression(child);
+        Expression<?> constructionExpression = BeanParser.parseBeanExpression(child, true);
         String id = child.getAttribute("id");
         BeanStatement beanStatement = new BeanStatement(id, constructionExpression, this);
         try {
@@ -650,7 +650,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     for (Element info : infos) {
       String childName = XMLUtil.localName(info);
       if ("bean".equals(childName)) {
-        BeanParser.parseBeanExpression(info);
+        BeanParser.parseBeanExpression(info, true);
       } else if ("variable".equals(childName)) {
         parser.parseVariable(info, (ComplexTypeDescriptor) descriptor);
       } else if (ATTRIBUTE.equals(childName)) {

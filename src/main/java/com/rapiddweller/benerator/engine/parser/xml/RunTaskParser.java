@@ -29,25 +29,28 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.benerator.engine.expression.context.DefaultPageSizeExpression;
-import com.rapiddweller.benerator.engine.statement.GenerateOrIterateStatement;
+import com.rapiddweller.benerator.engine.parser.attr.ErrorHandlerAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.PageSizeAttribute;
+import com.rapiddweller.benerator.engine.parser.string.BeanSpecParser;
+import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
+import com.rapiddweller.benerator.engine.statement.GenIterStatement;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.RunTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.parser.BooleanParser;
+import com.rapiddweller.common.parser.FullyQualifiedClassNameParser;
+import com.rapiddweller.common.parser.NonNegativeIntegerParser;
+import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.script.DatabeneScriptParser;
+import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.Task;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseIntAttribute;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseLongAttribute;
 
 /**
  * Parses a run-task descriptor.<br/><br/>
@@ -57,50 +60,68 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class RunTaskParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttrInfoSupport ATTR_INFO;
-  static {
-    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_RUN_TASK_ILLEGAL_ATTR);
-    ATTR_INFO.add(ATT_CLASS, false, BeneratorErrorIds.SYN_RUN_TASK_CLASS);
-    ATTR_INFO.add(ATT_SPEC, false, BeneratorErrorIds.SYN_RUN_TASK_SPEC);
-    ATTR_INFO.add(ATT_COUNT, false, BeneratorErrorIds.SYN_RUN_TASK_COUNT);
-    ATTR_INFO.add(ATT_PAGESIZE, false, BeneratorErrorIds.SYN_RUN_TASK_PAGE_SIZE);
-    ATTR_INFO.add(ATT_THREADS, false, BeneratorErrorIds.SYN_RUN_TASK_THREADS);
-    ATTR_INFO.add(ATT_PAGER, false, BeneratorErrorIds.SYN_RUN_TASK_PAGER);
-    ATTR_INFO.add(ATT_STATS, false, BeneratorErrorIds.SYN_RUN_TASK_STATS);
-    ATTR_INFO.add(ATT_ON_ERROR, false, BeneratorErrorIds.SYN_RUN_TASK_ON_ERROR);
-  }
+  // format spec -----------------------------------------------------------------------------------------------------
 
-  private static final DefaultPageSizeExpression DEFAULT_PAGE_SIZE = new DefaultPageSizeExpression();
+  private static final AttributeInfo<String> CLASS = new AttributeInfo<>(
+      ATT_CLASS, false, BeneratorErrorIds.SYN_RUN_TASK_CLASS,
+      new FullyQualifiedClassNameParser(false), null);
+
+  private static final AttributeInfo<String> SPEC = new AttributeInfo<>(
+      ATT_SPEC, false, BeneratorErrorIds.SYN_RUN_TASK_SPEC, null, null);
+
+  private static final AttributeInfo<Expression<Long>> COUNT = new AttributeInfo<>(
+      ATT_COUNT, false, BeneratorErrorIds.SYN_RUN_TASK_COUNT,
+      new ScriptableParser<>(new NonNegativeLongParser()), null);
+
+  private static final AttributeInfo<Expression<Long>> PAGESIZE =
+      new PageSizeAttribute(BeneratorErrorIds.SYN_RUN_TASK_PAGE_SIZE);
+
+  private static final AttributeInfo<Expression> PAGER = new AttributeInfo<>(
+      ATT_PAGER, false, BeneratorErrorIds.SYN_RUN_TASK_PAGER, new BeanSpecParser(), null);
+
+  private static final AttributeInfo<Expression<Integer>> THREADS = new AttributeInfo<>(
+      ATT_THREADS, false, BeneratorErrorIds.SYN_RUN_TASK_THREADS,
+      new ScriptableParser<>(new NonNegativeIntegerParser()), "1"
+  );
+
+  private static final AttributeInfo<Expression<Boolean>> STATS = new AttributeInfo<>(
+      ATT_STATS, false, BeneratorErrorIds.SYN_RUN_TASK_STATS,
+      new ScriptableParser<>(new BooleanParser()), "false"
+  );
+
+  private static final AttributeInfo<Expression<ErrorHandler>> ON_ERROR =
+      new ErrorHandlerAttribute(BeneratorErrorIds.SYN_RUN_TASK_ON_ERROR);
+
+  private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(
+      BeneratorErrorIds.SYN_RUN_TASK_ILLEGAL_ATTR, CLASS, SPEC, COUNT, PAGESIZE, PAGER, THREADS, STATS, ON_ERROR);
+
+  // constructor & interface -----------------------------------------------------------------------------------------
 
   public RunTaskParser() {
     super(EL_RUN_TASK, ATTR_INFO,
-        BeneratorRootStatement.class, IfStatement.class, WhileStatement.class, GenerateOrIterateStatement.class);
+        BeneratorRootStatement.class, IfStatement.class, WhileStatement.class, GenIterStatement.class);
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public RunTaskStatement doParse(
       Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
+    attrSupport.validate(element);
     try {
-      Expression<Task> taskProvider = (Expression<Task>) BeanParser.parseBeanExpression(element);
-      Expression<Long> count = parseLongAttribute(ATT_COUNT, element, 1);
-      Expression<Long> pageSize = parseLongAttribute(ATT_PAGESIZE, element, DEFAULT_PAGE_SIZE);
-      Expression<Integer> threads = parseIntAttribute(ATT_THREADS, element, 1);
-      Expression<PageListener> pager = parsePager(element);
-      Expression<Boolean> stats = parseBooleanExpressionAttribute(ATT_STATS, element, false);
-      Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_ID));
+      Expression<Task> taskProvider = (Expression<Task>) BeanParser.parseBeanExpression(element, false);
+      Expression<Long> count = COUNT.parse(element);
+      Expression<Long> pageSize = PAGESIZE.parse(element);
+      Expression<Integer> threads = THREADS.parse(element);
+      Expression<PageListener> pager = (Expression<PageListener>) PAGER.parse(element);
+      Expression<Boolean> stats = STATS.parse(element);
+      Expression<ErrorHandler> errorHandler = ON_ERROR.parse(element);
       boolean infoLog = containsLoop(parentComponentPath);
       return new RunTaskStatement(taskProvider, count, pageSize, pager, threads,
           stats, errorHandler, infoLog);
-    } catch (ConversionException e) {
-      throw BeneratorExceptionFactory.getInstance().configurationError("Error parsing run-task element", e);
+    } catch (Exception e) {
+      throw BeneratorExceptionFactory.getInstance().configurationError(
+          "Error parsing run-task element", e);
     }
-  }
-
-  @SuppressWarnings("unchecked")
-  private static Expression<PageListener> parsePager(Element element) {
-    String pagerSpec = element.getAttribute(ATT_PAGER);
-    return (Expression<PageListener>) DatabeneScriptParser.parseBeanSpec(pagerSpec);
   }
 
 }

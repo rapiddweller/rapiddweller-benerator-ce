@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -58,10 +58,10 @@ public abstract class GeneratorProxy<E> extends GeneratorWrapper<E, E> {
 
   @Override
   public Class<E> getGeneratedType() {
-    if (getSource() != null) {
-      return getSource().getGeneratedType();
-    } else if (generatedType != null) {
+    if (generatedType != null) {
       return generatedType;
+    } else if (getSource() != null) {
+      return getSource().getGeneratedType();
     } else {
       throw BeneratorExceptionFactory.getInstance().illegalGeneratorState(
           "Generator not initialized correctly: " + this);
