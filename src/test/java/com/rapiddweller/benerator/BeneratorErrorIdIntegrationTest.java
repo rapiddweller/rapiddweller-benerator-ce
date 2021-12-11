@@ -3,7 +3,6 @@
 package com.rapiddweller.benerator;
 
 import com.rapiddweller.benerator.engine.BeneratorResult;
-import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.main.Benerator;
 import com.rapiddweller.common.Encodings;
@@ -97,6 +96,7 @@ public class BeneratorErrorIdIntegrationTest {
     }
   }
 
+  /*
   @Test
   public void test_init_2_Delocalizing_failed() {
     // TODO implement test
@@ -121,6 +121,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_init_6_BeneratorMonitor_failed() {
     // TODO implement test
   }
+*/
 
   // Benerator file syntax errors ------------------------------------------------------------------------------------
 
@@ -179,6 +180,118 @@ public class BeneratorErrorIdIntegrationTest {
     BeneratorResult result = runFile("0201_syn_setup_maxCount_negative.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_MAX_COUNT,
         "Illegal attribute value for setup.maxCount: -1",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0202_syn_setup_defaultScript() {
+    BeneratorResult result = runFile("0202_syn_setup_defaultScript_none.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_SCRIPT,
+        "Illegal attribute value for setup.defaultScript: none",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0203_syn_setup_defaultNull() {
+    BeneratorResult result = runFile("0203_syn_setup_defaultNull_none.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_NULL,
+        "Illegal attribute value for setup.defaultNull: none",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0204_syn_setup_defaultEncoding() {
+    BeneratorResult result = runFile("0204_syn_setup_defaultEncoding_none.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_ENCODING,
+        "Illegal attribute value for setup.defaultEncoding: none",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0205_syn_setup_defaultLineSeparator() {
+    BeneratorResult result = runFile("0205_syn_setup_defLineSep_none.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_LINE_SEPARATOR,
+        "Illegal attribute value for setup.defaultLineSeparator: none",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0206_syn_setup_defaultLocale() {
+    BeneratorResult result = runFile("0206_syn_setup_defLocale.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_LOCALE,
+        "Illegal attribute value for setup.defaultLocale: $%/+-.",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0207_syn_setup_defaultDataset() {
+    BeneratorResult result = runFile("0207_syn_setup_defDataset.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_DATASET,
+        "Illegal attribute value for setup.defaultDataset: $%/+-.",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0208_syn_setup_defaultPageSize() {
+    BeneratorResult result = runFile("0208_syn_setup_defPageSize.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_PAGE_SIZE,
+        "Illegal attribute value for setup.defaultPageSize: -5",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0209_syn_setup_defaultSeparator() {
+    BeneratorResult result = runFile("0209_syn_setup_defSeparator.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_SEPARATOR,
+        "Illegal attribute value for setup.defaultSeparator: none",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0210_syn_setup_defaultOneToOne() {
+    BeneratorResult result = runFile("0210_syn_setup_defOneToOne.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_ONE_TO_ONE,
+        "Illegal attribute value for setup.defaultOneToOne: none",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0211_syn_setup_defaultErrorHandler() {
+    BeneratorResult result = runFile("0211_syn_setup_defErrorHandler.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_ERR_HANDLER,
+        "Illegal attribute value for setup.defaultErrorHandler: none",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0212_syn_setup_defaultImports() {
+    BeneratorResult result = runFile("0212_syn_setup_defImports.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_IMPORTS,
+        "Illegal attribute value for setup.defaultImports: none",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0213_syn_setup_defaultSourceScripted() {
+    BeneratorResult result = runFile("0213_syn_setup_defSourceScripted.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_DEF_SOURCE_SCRIPTED,
+        "Illegal attribute value for setup.defaultSourceScripted: none",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0213_syn_setup_defaultAcceptUnkTypes() {
+    BeneratorResult result = runFile("0214_syn_setup_acceptUnkSimpleTypes.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES,
+        "Illegal attribute value for setup.acceptUnknownSimpleTypes: none",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0213_syn_setup_defaultGenFact() {
+    BeneratorResult result = runFile("0215_syn_setup_genFact.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETUP_GENERATOR_FACTORY,
+        "Illegal attribute value for setup.generatorFactory: none",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
