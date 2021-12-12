@@ -60,7 +60,7 @@ public class EchoParser extends AbstractBeneratorDescriptorParser {
       new ScriptableParser<>(new EnumParser<>(EchoType.class)), "console");
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(
-      BeneratorErrorIds.SYN_ECHO, new EchoValidator(), MESSAGE, TYPE);
+      BeneratorErrorIds.SYN_ECHO_ILL_ATTR, new EchoValidator(), MESSAGE, TYPE);
 
   public EchoParser() {
     super(EL_ECHO, ATTR_INFO);

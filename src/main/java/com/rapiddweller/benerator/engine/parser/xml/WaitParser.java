@@ -45,7 +45,6 @@ import com.rapiddweller.script.expression.ExpressionUtil;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseLongAttribute;
 
 /**
  * Parses a 'wait' element.<br/><br/>
@@ -88,7 +87,7 @@ public class WaitParser extends AbstractBeneratorDescriptorParser {
     attrSupport.validate(element);
 
     // check attribute combinations
-    assertAtLeastOneAttributeIsSet(element, ATT_DURATION, ATT_MIN, ATT_MAX);
+    assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_WAIT, ATT_DURATION, ATT_MIN, ATT_MAX);
     mutuallyExcludeAttrGroups(element, BeneratorErrorIds.SYN_WAIT_MUTUALLY_EXCLUDED, new String[] { ATT_DURATION },
         new String[] { ATT_MIN, ATT_MAX, ATT_GRANULARITY, ATT_DISTRIBUTION }
     );

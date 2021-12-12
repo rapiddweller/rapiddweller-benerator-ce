@@ -52,7 +52,6 @@ public class BeepParser extends AbstractBeneratorDescriptorParser {
 
   @Override
   public BeepStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
-    attrSupport.validate(element);
     return new BeepStatement();
   }
 

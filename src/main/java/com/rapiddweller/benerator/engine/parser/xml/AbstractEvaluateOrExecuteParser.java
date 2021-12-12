@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
@@ -71,7 +72,8 @@ public abstract class AbstractEvaluateOrExecuteParser extends AbstractBeneratorD
   public EvaluateStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentPath, BeneratorParseContext context) {
     boolean evaluate = DescriptorConstants.EL_EVALUATE.equals(element.getNodeName());
     if (evaluate) {
-      assertAtLeastOneAttributeIsSet(element, ATT_ID, ATT_ASSERT);
+      String errorId = (EL_EVALUATE.equals(elementName) ? BeneratorErrorIds.SYN_EVALUATE : BeneratorErrorIds.SYN_EXECUTE);
+      assertAtLeastOneAttributeIsSet(element, errorId, ATT_ID, ATT_ASSERT);
     } else {
       assertAttributeIsNotSet(element, ATT_ID);
       assertAttributeIsNotSet(element, ATT_ASSERT);

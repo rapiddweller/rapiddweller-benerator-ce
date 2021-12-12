@@ -213,7 +213,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
   static class BeanElementValidator implements Validator<Element> {
     @Override
     public boolean valid(Element element) {
-      assertAtLeastOneAttributeIsSet(element, ATT_CLASS, ATT_SPEC);
+      assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_BEAN, ATT_CLASS, ATT_SPEC);
       mutuallyExcludeAttributes(element, ATT_CLASS, ATT_SPEC);
       return true;
     }
@@ -222,7 +222,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
   static class BeanPropertyValidator implements Validator<Element> {
     @Override
     public boolean valid(Element element) {
-      assertAtLeastOneAttributeIsSet(element, ATT_VALUE, ATT_REF, ATT_DEFAULT, ATT_SOURCE);
+      assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_BEAN, ATT_VALUE, ATT_REF, ATT_DEFAULT, ATT_SOURCE);
       mutuallyExcludeAttributes(element, ATT_VALUE, ATT_REF, ATT_DEFAULT, ATT_SOURCE);
       return true;
     }

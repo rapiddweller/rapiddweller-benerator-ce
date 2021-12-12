@@ -30,14 +30,23 @@ import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.engine.parser.attr.IdAttribute;
+import com.rapiddweller.benerator.engine.parser.string.IdParser;
 import com.rapiddweller.benerator.engine.parser.xml.AbstractBeneratorDescriptorParser;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
 import com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
+import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.ConversionException;
+import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.exception.ExceptionFactory;
+import com.rapiddweller.common.parser.AbstractParser;
+import com.rapiddweller.common.parser.BooleanParser;
+import com.rapiddweller.common.parser.FullyQualifiedClassNameParser;
+import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.format.xml.AttrInfoSupport;
+import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.script.expression.FallbackExpression;
@@ -74,28 +83,62 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class DatabaseParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttrInfoSupport ATTR_INFO;
-  static {
-    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_DATABASE_ILLEGAL_ATTR);
-    ATTR_INFO.add(ATT_ID, true, BeneratorErrorIds.SYN_DATABASE_ID);
-    ATTR_INFO.add(ATT_ENVIRONMENT, false, BeneratorErrorIds.SYN_DATABASE_ENVIRONMENT);
-    ATTR_INFO.add(ATT_SYSTEM, false, BeneratorErrorIds.SYN_DATABASE_SYSTEM);
-    ATTR_INFO.add(ATT_URL, false, BeneratorErrorIds.SYN_DATABASE_URL);
-    ATTR_INFO.add(ATT_DRIVER, false, BeneratorErrorIds.SYN_DATABASE_DRIVER);
-    ATTR_INFO.add(ATT_USER, false, BeneratorErrorIds.SYN_DATABASE_USER);
-    ATTR_INFO.add(ATT_PASSWORD, false, BeneratorErrorIds.SYN_DATABASE_PASSWORD);
-    ATTR_INFO.add(ATT_CATALOG, false, BeneratorErrorIds.SYN_DATABASE_CATALOG);
-    ATTR_INFO.add(ATT_SCHEMA, false, BeneratorErrorIds.SYN_DATABASE_SCHEMA);
-    ATTR_INFO.add(ATT_TABLE_FILTER, false, BeneratorErrorIds.SYN_DATABASE_TABLE_FILTER);
-    ATTR_INFO.add(ATT_INCL_TABLES, false, BeneratorErrorIds.SYN_DATABASE_INCLUDE_TABLES);
-    ATTR_INFO.add(ATT_EXCL_TABLES, false, BeneratorErrorIds.SYN_DATABASE_EXCLUDE_TABLES);
-    ATTR_INFO.add(ATT_META_CACHE, false, BeneratorErrorIds.SYN_DATABASE_META_CACHE);
-    ATTR_INFO.add(ATT_BATCH, false, BeneratorErrorIds.SYN_DATABASE_BATCH);
-    ATTR_INFO.add(ATT_FETCH_SIZE, false, BeneratorErrorIds.SYN_DATABASE_FETCH_SIZE);
-    ATTR_INFO.add(ATT_READ_ONLY, false, BeneratorErrorIds.SYN_DATABASE_READ_ONLY);
-    ATTR_INFO.add(ATT_LAZY, false, BeneratorErrorIds.SYN_DATABASE_LAZY);
-    ATTR_INFO.add(ATT_ACC_UNK_COL_TYPES, false, BeneratorErrorIds.SYN_DATABASE_ACCEPT_UNK_COL_TYPES);
-  }
+  public static final AttributeInfo<String> ID = new IdAttribute(BeneratorErrorIds.SYN_DB_ID, true);
+  public static final AttributeInfo<String> ENVIRONMENT = new AttributeInfo<>(
+      ATT_ENVIRONMENT, false, BeneratorErrorIds.SYN_DB_ENVIRONMENT, new IdParser());
+
+  public static final AttributeInfo<String> SYSTEM = new AttributeInfo<>(
+      ATT_SYSTEM, false, BeneratorErrorIds.SYN_DB_SYSTEM, new IdParser());
+
+  public static final AttributeInfo<String> URL = new AttributeInfo<>(
+    ATT_URL, false, BeneratorErrorIds.SYN_DB_URL, new JdbcUrlParser());
+
+  public static final AttributeInfo<String> DRIVER = new AttributeInfo<>(
+    ATT_DRIVER, false, BeneratorErrorIds.SYN_DB_DRIVER,
+      new FullyQualifiedClassNameParser(false));
+
+  public static final AttributeInfo<String> USER = new AttributeInfo<>(
+    ATT_USER, false, BeneratorErrorIds.SYN_DB_USER, new IdParser());
+
+  public static final AttributeInfo<String> PASSWORD = new AttributeInfo<>(
+    ATT_PASSWORD, false, BeneratorErrorIds.SYN_DB_PASSWORD, null);
+
+  public static final AttributeInfo<String> CATALOG = new AttributeInfo<>(
+    ATT_CATALOG, false, BeneratorErrorIds.SYN_DB_CATALOG, new IdParser());
+
+  public static final AttributeInfo<String> SCHEMA = new AttributeInfo<>(
+    ATT_SCHEMA, false, BeneratorErrorIds.SYN_DB_SCHEMA, new IdParser());
+
+  public static final AttributeInfo<String> TABLE_FILTER = new AttributeInfo<>(
+  ATT_TABLE_FILTER, false, BeneratorErrorIds.SYN_DB_TABLE_FILTER, null);
+
+  public static final AttributeInfo<String> INCL_TABLES = new AttributeInfo<>(
+  ATT_INCL_TABLES, false, BeneratorErrorIds.SYN_DB_INCLUDE_TABLES, null);
+
+  public static final AttributeInfo<String> EXCL_TABLES = new AttributeInfo<>(
+  ATT_EXCL_TABLES, false, BeneratorErrorIds.SYN_DB_EXCLUDE_TABLES, null);
+
+  public static final AttributeInfo<Boolean> META_CACHE = new AttributeInfo<>(
+  ATT_META_CACHE, false, BeneratorErrorIds.SYN_DB_META_CACHE, new BooleanParser(), "false");
+
+  public static final AttributeInfo<Boolean> BATCH = new AttributeInfo<>(
+  ATT_BATCH, false, BeneratorErrorIds.SYN_DB_BATCH, new BooleanParser(), "false");
+
+  public static final AttributeInfo<Long> FETCH_SIZE = new AttributeInfo<>(
+  ATT_FETCH_SIZE, false, BeneratorErrorIds.SYN_DB_FETCH_SIZE, new NonNegativeLongParser(), "1");
+
+  public static final AttributeInfo<Boolean> READ_ONLY = new AttributeInfo<>(
+  ATT_READ_ONLY, false, BeneratorErrorIds.SYN_DB_READ_ONLY, new BooleanParser(), "false");
+
+  public static final AttributeInfo<Boolean> LAZY = new AttributeInfo<>(
+  ATT_LAZY, false, BeneratorErrorIds.SYN_DB_LAZY, new BooleanParser());
+
+  public static final AttributeInfo<Boolean> ACC_UNK_COL_TYPES = new AttributeInfo<>(
+  ATT_ACC_UNK_COL_TYPES, false, BeneratorErrorIds.SYN_DB_ACCEPT_UNK_COL_TYPES, new BooleanParser());
+
+  private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_DB_ILLEGAL_ATTR,
+      new DatabaseValidator(), ID, ENVIRONMENT, SYSTEM, URL, DRIVER, USER, PASSWORD, CATALOG, SCHEMA,
+      TABLE_FILTER, INCL_TABLES, EXCL_TABLES, META_CACHE, BATCH, FETCH_SIZE, READ_ONLY, LAZY, ACC_UNK_COL_TYPES);
 
   public DatabaseParser() {
     super(EL_DATABASE, ATTR_INFO, BeneratorRootStatement.class, IfStatement.class);
@@ -104,10 +147,6 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
   @Override
   public DefineDatabaseStatement doParse(
       Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
-    // check preconditions
-    assertAtLeastOneAttributeIsSet(element, ATT_ENVIRONMENT, ATT_DRIVER);
-    assertAtLeastOneAttributeIsSet(element, ATT_ENVIRONMENT, ATT_URL);
-
     // parse
     try {
       Expression<String> id = DescriptorParserUtil.getConstantStringAttributeAsExpression(ATT_ID, element);
@@ -162,4 +201,38 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
     }
   }
 
+  static class DatabaseValidator implements Validator<Element> {
+
+    @Override
+    public boolean valid(Element element) {
+      assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_DB_NO_URL_AND_ENV_GROUP,
+          ATT_ENVIRONMENT, ATT_URL);
+      mutuallyExcludeAttrGroups(element, BeneratorErrorIds.SYN_DB_URL_AND_ENV_GROUP,
+          new String[] { ATT_ENVIRONMENT, ATT_SYSTEM },
+          new String[] { ATT_URL, ATT_DRIVER });
+      assertGroupComplete(element, BeneratorErrorIds.SYN_DB_URL_GROUP_INCOMPLETE, ATT_URL, ATT_DRIVER);
+      // TODO For backwards compatibility, it is allowed to leave out ATT_SYSTEM.
+      // When dropping that, then enable the following check
+      // assertGroupComplete(element, BeneratorErrorIds.SYN_DB_ENV_GROUP_INCOMPLETE, ATT_ENVIRONMENT, ATT_SYSTEM)
+      if (SYSTEM.parse(element) != null && ENVIRONMENT.parse(element) == null) {
+        throw ExceptionFactory.getInstance().syntaxErrorForXmlElement(
+            "if <database> has the attribute 'system' then it must have 'environment' too", null,
+            BeneratorErrorIds.SYN_DB_ENV_GROUP_INCOMPLETE, element);
+      }
+      return true;
+    }
+  }
+
+  static class JdbcUrlParser extends AbstractParser<String> {
+
+    protected JdbcUrlParser() {
+      super("JDBC URL");
+    }
+
+    @Override
+    protected String parseImpl(String spec) {
+      Assert.isTrue(spec.startsWith("jdbc:"), "JDBC URLs are expected to start with 'jdbc:'");
+      return spec;
+    }
+  }
 }

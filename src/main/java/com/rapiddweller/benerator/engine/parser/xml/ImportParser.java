@@ -82,7 +82,7 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
   public ImportStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath,
                                  BeneratorParseContext parseContext) {
     // check syntax
-    assertAtLeastOneAttributeIsSet(element, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS, ATT_CLASS);
+    assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_IMPORT, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS, ATT_CLASS);
     // parse attributes
     boolean defaults = DEFAULTS.parse(element);
     String classImport = parseClass(element);
