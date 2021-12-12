@@ -172,14 +172,14 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0201_syn_setup_maxCount_alpha() {
     BeneratorResult result = runFile("0201_syn_setup_maxCount_alpha.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_MAX_COUNT,
-        "Illegal attribute value for setup.maxCount: few", ExitCodes.SYNTAX_ERROR, result);
+        "Illegal attribute value for setup.maxCount: 'few'", ExitCodes.SYNTAX_ERROR, result);
   }
 
   @Test
   public void test_0201_syn_setup_maxCount_negative() {
     BeneratorResult result = runFile("0201_syn_setup_maxCount_negative.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_MAX_COUNT,
-        "Illegal attribute value for setup.maxCount: -1",
+        "Illegal attribute value for setup.maxCount: '-1'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -187,7 +187,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0202_syn_setup_defaultScript() {
     BeneratorResult result = runFile("0202_syn_setup_defaultScript_none.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_SCRIPT,
-        "Illegal attribute value for setup.defaultScript: none",
+        "Illegal attribute value for setup.defaultScript: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -195,7 +195,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0203_syn_setup_defaultNull() {
     BeneratorResult result = runFile("0203_syn_setup_defaultNull_none.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_NULL,
-        "Illegal attribute value for setup.defaultNull: none",
+        "Illegal attribute value for setup.defaultNull: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -203,7 +203,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0204_syn_setup_defaultEncoding() {
     BeneratorResult result = runFile("0204_syn_setup_defaultEncoding_none.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_ENCODING,
-        "Illegal attribute value for setup.defaultEncoding: none",
+        "Illegal attribute value for setup.defaultEncoding: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -211,7 +211,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0205_syn_setup_defaultLineSeparator() {
     BeneratorResult result = runFile("0205_syn_setup_defLineSep_none.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_LINE_SEPARATOR,
-        "Illegal attribute value for setup.defaultLineSeparator: none",
+        "Illegal attribute value for setup.defaultLineSeparator: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -219,7 +219,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0206_syn_setup_defaultLocale() {
     BeneratorResult result = runFile("0206_syn_setup_defLocale.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_LOCALE,
-        "Illegal attribute value for setup.defaultLocale: $%/+-.",
+        "Illegal attribute value for setup.defaultLocale: '$%/+-.'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -227,7 +227,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0207_syn_setup_defaultDataset() {
     BeneratorResult result = runFile("0207_syn_setup_defDataset.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_DATASET,
-        "Illegal attribute value for setup.defaultDataset: $%/+-.",
+        "Illegal attribute value for setup.defaultDataset: '$%/+-.'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -235,7 +235,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0208_syn_setup_defaultPageSize() {
     BeneratorResult result = runFile("0208_syn_setup_defPageSize.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_PAGE_SIZE,
-        "Illegal attribute value for setup.defaultPageSize: -5",
+        "Illegal attribute value for setup.defaultPageSize: '-5'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -243,7 +243,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0209_syn_setup_defaultSeparator() {
     BeneratorResult result = runFile("0209_syn_setup_defSeparator.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_SEPARATOR,
-        "Illegal attribute value for setup.defaultSeparator: none",
+        "Illegal attribute value for setup.defaultSeparator: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -251,7 +251,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0210_syn_setup_defaultOneToOne() {
     BeneratorResult result = runFile("0210_syn_setup_defOneToOne.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_ONE_TO_ONE,
-        "Illegal attribute value for setup.defaultOneToOne: none",
+        "Illegal attribute value for setup.defaultOneToOne: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -259,7 +259,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0211_syn_setup_defaultErrorHandler() {
     BeneratorResult result = runFile("0211_syn_setup_defErrorHandler.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_ERR_HANDLER,
-        "Illegal attribute value for setup.defaultErrorHandler: none",
+        "Illegal attribute value for setup.defaultErrorHandler: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -267,7 +267,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0212_syn_setup_defaultImports() {
     BeneratorResult result = runFile("0212_syn_setup_defImports.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_IMPORTS,
-        "Illegal attribute value for setup.defaultImports: none",
+        "Illegal attribute value for setup.defaultImports: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -275,7 +275,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0213_syn_setup_defaultSourceScripted() {
     BeneratorResult result = runFile("0213_syn_setup_defSourceScripted.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_DEF_SOURCE_SCRIPTED,
-        "Illegal attribute value for setup.defaultSourceScripted: none",
+        "Illegal attribute value for setup.defaultSourceScripted: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -283,7 +283,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0213_syn_setup_defaultAcceptUnkTypes() {
     BeneratorResult result = runFile("0214_syn_setup_acceptUnkSimpleTypes.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES,
-        "Illegal attribute value for setup.acceptUnknownSimpleTypes: none",
+        "Illegal attribute value for setup.acceptUnknownSimpleTypes: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -291,7 +291,25 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0213_syn_setup_defaultGenFact() {
     BeneratorResult result = runFile("0215_syn_setup_genFact.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETUP_GENERATOR_FACTORY,
-        "Illegal attribute value for setup.generatorFactory: none",
+        "Illegal attribute value for setup.generatorFactory: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  // <echo> tests ----------------------------------------------------------------------------------------------------
+
+  @Test
+  public void test_0234_syn_echo_ill_attr() {
+    BeneratorResult result = runFile("0234_echo_ill_attr.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ECHO_ILL_ATTR,
+        "Illegal XML attribute: echo.ill_attr",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0235_syn_echo_tyoe() {
+    BeneratorResult result = runFile("0235_echo_type.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ECHO_TYPE,
+        "Illegal attribute value for echo.type: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -372,11 +390,140 @@ public class BeneratorErrorIdIntegrationTest {
   // database tests --------------------------------------------------------------------------------------------------
 
   @Test
-  public void test_1100_db_connect_failed() {
-    BeneratorResult result = runFile("1100_db_connect_failed.ben.xml");
-    assertResult(BeneratorErrorIds.DB_CONNECT_FAILED,
-        "Connecting the database failed. URL: jdbc:postgresql://localhost:54321/postgres",
-        ExitCodes.MISCELLANEOUS_ERROR, result);
+  public void test_1001_syn_db_ill_attr() {
+    BeneratorResult result = runFile("1001_syn_db_ill_attr.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_ILLEGAL_ATTR,
+        "Illegal XML attribute: database.ill_attr",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1002_syn_db_no_id() {
+    BeneratorResult result = runFile("1002_syn_db_wo_id.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_ID,
+        "Attribute is missing: 'id' in <database>",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1003_syn_db_ill_env() {
+    BeneratorResult result = runFile("1003_syn_db_ill_env.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_ENVIRONMENT,
+        "Illegal attribute value for database.environment: '!§$%/'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1004_syn_db_ill_system() {
+    BeneratorResult result = runFile("1004_syn_db_ill_system.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_SYSTEM,
+        "Illegal attribute value for database.system: '!§$%/'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1005_syn_db_ill_url() {
+    BeneratorResult result = runFile("1005_syn_db_ill_url.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_URL,
+        "Illegal attribute value for database.url: '%$/+-'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1006_syn_db_ill_driver() {
+    BeneratorResult result = runFile("1006_syn_db_ill_driver.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_DRIVER,
+        "Illegal attribute value for database.driver: '%$/+-'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1015_syn_db_ill_batch() {
+    BeneratorResult result = runFile("1015_syn_db_ill_batch.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_BATCH,
+        "Illegal attribute value for database.batch: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1016_syn_db_ill_fetchSize() {
+    BeneratorResult result = runFile("1016_syn_db_ill_fetchSize.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_FETCH_SIZE,
+        "Illegal attribute value for database.fetchSize: '-1'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1017_syn_db_ill_readOnly() {
+    BeneratorResult result = runFile("1017_syn_db_ill_readOnly.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_READ_ONLY,
+        "Illegal attribute value for database.readOnly: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1018_syn_db_ill_lazy() {
+    BeneratorResult result = runFile("1018_syn_db_ill_lazy.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_LAZY,
+        "Illegal attribute value for database.lazy: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1019_syn_db_ill_metaCache() {
+    BeneratorResult result = runFile("1019_syn_db_ill_metaCache.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_META_CACHE,
+        "Illegal attribute value for database.metaCache: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1020_syn_db_ill_acc_unk_col_types() {
+    BeneratorResult result = runFile("1020_syn_db_ill_acc_unk_col_types.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_ACCEPT_UNK_COL_TYPES,
+        "Illegal attribute value for database.acceptUnknownColumnTypes: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1021_syn_db_url_group_incomplete() {
+    BeneratorResult result = runFile("1021_syn_db_url_group_incomplete.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_URL_GROUP_INCOMPLETE,
+        "if <database> has the attribute 'url' then it must have 'driver' too",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  /** This is disabled for backwards compatibility. If that is dropped, then enable this test
+  @Test
+  public void test_1022_syn_db_env_wo_system() {
+    BeneratorResult result = runFile("1022_syn_db_env_wo_system.ben.xml");
+     assertResult(BeneratorErrorIds.SYN_DB_ENV_GROUP_INCOMPLETE,
+     "if <database> has the attribute 'environment' then it must have 'system' too",
+     ExitCodes.SYNTAX_ERROR, result);
+  }*/
+
+  @Test
+  public void test_1022_db_url_and_env_group() {
+    BeneratorResult result = runFile("1022_syn_db_url_and_env_group.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_URL_AND_ENV_GROUP,
+        "<database>'s attributes 'environment' and 'driver' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1023_syn_db_no_url_or_env_group() {
+    BeneratorResult result = runFile("1023_syn_db_no_url_or_env_group.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_NO_URL_AND_ENV_GROUP,
+        "At least one of these attributes must be set: environment, url",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_1024_syn_db_system_wo_env() {
+    BeneratorResult result = runFile("1024_syn_db_system_wo_env.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB_NO_URL_AND_ENV_GROUP,
+        "At least one of these attributes must be set: environment, url",
+        ExitCodes.SYNTAX_ERROR, result);
   }
 
   // helper methods --------------------------------------------------------------------------------------------------
