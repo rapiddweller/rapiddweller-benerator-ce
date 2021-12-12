@@ -7,7 +7,7 @@
         <attribute name="created_by" constant="Bob"/>
     </defaultComponents>
 
-    <database id="db" environment="hsqlmem"/>
+    <database id="db" environment="local" system="hsqlmem"/>
 
     <execute target="db">
         create table the_table (

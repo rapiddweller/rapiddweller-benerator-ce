@@ -1,7 +1,7 @@
 <setup>
     <import platforms="db"/>
 
-    <database id="db" environment="hsqlmem"/>
+    <database id="db" environment="local" system="hsqlmem"/>
 
     <execute target="db" onError="ignore">
         drop table TT ( id1 int, id2 int, value int );
