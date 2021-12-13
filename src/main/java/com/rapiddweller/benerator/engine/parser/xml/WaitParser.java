@@ -37,6 +37,7 @@ import com.rapiddweller.benerator.primitive.DynamicLongGenerator;
 import com.rapiddweller.benerator.util.ExpressionBasedGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.parser.NonNegativeLongParser;
+import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.model.data.Uniqueness;
@@ -87,8 +88,8 @@ public class WaitParser extends AbstractBeneratorDescriptorParser {
     attrSupport.validate(element);
 
     // check attribute combinations
-    assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_WAIT, ATT_DURATION, ATT_MIN, ATT_MAX);
-    mutuallyExcludeAttrGroups(element, BeneratorErrorIds.SYN_WAIT_MUTUALLY_EXCLUDED, new String[] { ATT_DURATION },
+    XMLAssert.assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_WAIT, ATT_DURATION, ATT_MIN, ATT_MAX);
+    XMLAssert.mutuallyExcludeAttrGroups(element, BeneratorErrorIds.SYN_WAIT_MUTUALLY_EXCLUDED, new String[] { ATT_DURATION },
         new String[] { ATT_MIN, ATT_MAX, ATT_GRANULARITY, ATT_DISTRIBUTION }
     );
 

@@ -120,11 +120,10 @@ public class BeneratorErrorIds {
 
   public static final String SYN_IMPORT              = "BEN-0240";
   public static final String SYN_IMPORT_ILLEGAL_ATTR = "BEN-0241";
-  public static final String SYN_IMPORT_NO_ATTR      = "BEN-0242";
-  public static final String SYN_IMPORT_CLASS        = "BEN-0243";
-  public static final String SYN_IMPORT_DOMAINS      = "BEN-0244";
-  public static final String SYN_IMPORT_PLATFORMS    = "BEN-0245";
-  public static final String SYN_IMPORT_DEFAULTS     = "BEN-0246";
+  public static final String SYN_IMPORT_CLASS        = "BEN-0242";
+  public static final String SYN_IMPORT_DOMAINS      = "BEN-0243";
+  public static final String SYN_IMPORT_PLATFORMS    = "BEN-0244";
+  public static final String SYN_IMPORT_DEFAULTS     = "BEN-0245";
 
   // Syntax Errors regarding <setting> -------------------------------------------------------------------------------
 
@@ -321,23 +320,27 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <variable> -----------------------------------------------------------------------------
 
-  public static final String SYN_VAR_ILLEGAL_ATTR  = "BEN-0500";
-  public static final String SYN_VAR_NAME          = "BEN-0501";
+  public static final String SYN_VAR               = "BEN-0500";
+  public static final String SYN_VAR_ILLEGAL_ATTR  = "BEN-0501";
+  public static final String SYN_VAR_NAME          = "BEN-0502";
 
   // Syntax Errors regarding <attribute> -----------------------------------------------------------------------------
 
-  public static final String SYN_ATTR_ILLEGAL_ATTR = "BEN-0550";
-  public static final String SYN_ATTR_NAME         = "BEN-0551";
+  public static final String SYN_ATTR              = "BEN-0550";
+  public static final String SYN_ATTR_ILLEGAL_ATTR = "BEN-0551";
+  public static final String SYN_ATTR_NAME         = "BEN-0552";
 
   // Syntax Errors regarding <id> ------------------------------------------------------------------------------------
 
-  public static final String SYN_ID_ILLEGAL_ATTR   = "BEN-0600";
-  public static final String SYN_ID_NAME           = "BEN-0601";
+  public static final String SYN_ID                = "BEN-0600";
+  public static final String SYN_ID_ILLEGAL_ATTR   = "BEN-0601";
+  public static final String SYN_ID_NAME           = "BEN-0602";
 
   // Syntax Errors regarding <reference> ------------------------------------------------------------------------------------
 
-  public static final String SYN_REF_ILLEGAL_ATTR  = "BEN-0650";
-  public static final String SYN_REF_NAME          = "BEN-0651";
+  public static final String SYN_REF               = "BEN-0650";
+  public static final String SYN_REF_ILLEGAL_ATTR  = "BEN-0651";
+  public static final String SYN_REF_NAME          = "BEN-0652";
 
 
   // BEN-0500...0599 relational database issues ======================================================================

@@ -73,6 +73,10 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_TABLE_FI
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_URL;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_USER;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_DATABASE;
+import static com.rapiddweller.common.xml.XMLAssert.assertAtLeastOneAttributeIsSet;
+import static com.rapiddweller.common.xml.XMLAssert.assertGroupComplete;
+import static com.rapiddweller.common.xml.XMLAssert.assertNoTextContent;
+import static com.rapiddweller.common.xml.XMLAssert.mutuallyExcludeAttrGroups;
 
 /**
  * Parses a &lt;database&gt; element in a Benerator descriptor file.<br/><br/>
@@ -215,12 +219,13 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
 
     @Override
     public boolean valid(Element element) {
+      assertNoTextContent(element, BeneratorErrorIds.SYN_DB);
       assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_DB_NO_URL_AND_ENV_GROUP,
           ATT_ENVIRONMENT, ATT_URL);
       mutuallyExcludeAttrGroups(element, BeneratorErrorIds.SYN_DB_URL_AND_ENV_GROUP,
           new String[] { ATT_ENVIRONMENT, ATT_SYSTEM },
           new String[] { ATT_URL, ATT_DRIVER });
-      assertGroupComplete(element, BeneratorErrorIds.SYN_DB_URL_GROUP_INCOMPLETE, ATT_URL, ATT_DRIVER);
+      assertGroupComplete(BeneratorErrorIds.SYN_DB_URL_GROUP_INCOMPLETE, element, ATT_URL, ATT_DRIVER);
       // TODO For backwards compatibility, it is allowed to leave out ATT_SYSTEM.
       // When dropping that, then enable the following check
       // assertGroupComplete(element, BeneratorErrorIds.SYN_DB_ENV_GROUP_INCOMPLETE, ATT_ENVIRONMENT, ATT_SYSTEM)

@@ -299,7 +299,7 @@ public class BeneratorErrorIdIntegrationTest {
 
   @Test
   public void test_0234_syn_echo_ill_attr() {
-    BeneratorResult result = runFile("0234_echo_ill_attr.ben.xml");
+    BeneratorResult result = runFile("0234_syn_echo_ill_attr.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ECHO_ILL_ATTR,
         "Illegal XML attribute: echo.ill_attr",
         ExitCodes.SYNTAX_ERROR, result);
@@ -307,26 +307,92 @@ public class BeneratorErrorIdIntegrationTest {
 
   @Test
   public void test_0235_syn_echo_tyoe() {
-    BeneratorResult result = runFile("0235_echo_type.ben.xml");
+    BeneratorResult result = runFile("0235_syn_echo_type.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ECHO_TYPE,
         "Illegal attribute value for echo.type: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
+  @Test
+  public void test_0238_beep_with_content() {
+    BeneratorResult result = runFile("0238_syn_beep_with_content.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_BEEP,
+        "Element <beep> has illegal text content: 'text'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  // <import> tests --------------------------------------------------------------------------------------------------
+
+  @Test
+  public void test_0240_syn_import_with_content() {
+    BeneratorResult result = runFile("0240_syn_import_with_content.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_IMPORT,
+        "Element <import> has illegal text content: 'text'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0241_syn_import_ill_attr() {
+    BeneratorResult result = runFile("0241_syn_import_ill_attr.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_IMPORT_ILLEGAL_ATTR,
+        "Illegal XML attribute: import.ill_attr",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0242_syn_import_class() {
+    BeneratorResult result = runFile("0242_syn_import_class.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_IMPORT_CLASS,
+        "Illegal attribute value for import.class: '-928'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0243_syn_import_domains() {
+    BeneratorResult result = runFile("0243_syn_import_domains.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_IMPORT_DOMAINS,
+        "Illegal attribute value for import.domains: '%/+-.'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0244_syn_import_platforms() {
+    BeneratorResult result = runFile("0244_syn_import_platforms.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_IMPORT_PLATFORMS,
+        "Illegal attribute value for import.platforms: '%/+-.'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0245_syn_import_defaults() {
+    BeneratorResult result = runFile("0245_syn_import_defaults.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_IMPORT_DEFAULTS,
+        "Illegal attribute value for import.defaults: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
   // <variable> tests ------------------------------------------------------------------------------------------------
+
+  @Test
+  public void test_0500_syn_var_with_content() {
+    BeneratorResult result = runFile("0500_syn_var_with_content.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_VAR,
+        "Element <variable> has illegal text content: 'text'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
 
   /* TODO implement error mapping
   @Test
-  public void test_0500_syn_var_ill_attr() {
-    BeneratorResult result = runFile("0500_var_ill_attr.ben.xml");
+  public void test_0501_syn_var_ill_attr() {
+    BeneratorResult result = runFile("0501_syn_var_ill_attr.ben.xml");
     assertResult(BeneratorErrorIds.SYN_VAR_ILLEGAL_ATTR, "Illegal attribute for <variable>: ill_attr",
         ExitCodes.SYNTAX_ERROR, result);
   }
   */
 
   @Test
-  public void test_0501_syn_var_wo_name() {
-    BeneratorResult result = runFile("0501_var_wo_name.ben.xml");
+  public void test_0502_syn_var_wo_name() {
+    BeneratorResult result = runFile("0502_syn_var_wo_name.ben.xml");
     assertResult(BeneratorErrorIds.SYN_VAR_NAME,
         "Attribute is missing: 'name' in <variable>",
         ExitCodes.SYNTAX_ERROR, result);
@@ -334,18 +400,26 @@ public class BeneratorErrorIdIntegrationTest {
 
   // <attribute> tests -----------------------------------------------------------------------------------------------
 
+  @Test
+  public void test_0550_syn_attr_with_content() {
+    BeneratorResult result = runFile("0550_syn_attr_with_content.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR,
+        "Element <attribute> has illegal text content: 'text'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
   /* TODO implement error mapping
   @Test
-  public void test_0550_attr_ill_attr() {
-    BeneratorResult result = runFile("0550_attr_ill_attr.ben.xml");
+  public void test_0551_attr_ill_attr() {
+    BeneratorResult result = runFile("0551_syn_attr_ill_attr.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_ILLEGAL_ATTR, "Illegal attribute for <attribute>: ill_attr",
         ExitCodes.SYNTAX_ERROR, result);
   }
   */
 
   @Test
-  public void test_0551_attr_wo_name() {
-    BeneratorResult result = runFile("0551_attr_wo_name.ben.xml");
+  public void test_0552_attr_wo_name() {
+    BeneratorResult result = runFile("0552_syn_attr_wo_name.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_NAME,
         "Attribute is missing: 'name' in <attribute>",
         ExitCodes.SYNTAX_ERROR, result);
@@ -353,41 +427,64 @@ public class BeneratorErrorIdIntegrationTest {
 
   // <id> tests ------------------------------------------------------------------------------------------------------
 
+  @Test
+  public void test_0600_syn_id_with_content() {
+    BeneratorResult result = runFile("0600_syn_id_with_content.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ID,
+        "Element <id> has illegal text content: 'text'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
   /* TODO implement error mapping
   @Test
-  public void test_0600_id_ill_attr() {
-    BeneratorResult result = runFile("0600_id_ill_attr.ben.xml");
+  public void test_0601_id_ill_attr() {
+    BeneratorResult result = runFile("0601_syn_id_ill_attr.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ID_ILLEGAL_ATTR, "Illegal attribute for <id>: ill_attr",
         ExitCodes.SYNTAX_ERROR, result);
   }
   */
 
   @Test
-  public void test_0601_id_wo_name() {
-    BeneratorResult result = runFile("0601_id_wo_name.ben.xml");
+  public void test_0602_id_wo_name() {
+    BeneratorResult result = runFile("0602_syn_id_wo_name.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ID_NAME, "Attribute is missing: 'name' in <id>",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
   // <reference> tests -----------------------------------------------------------------------------------------------
 
+  @Test
+  public void test_0650_syn_ref_with_content() {
+    BeneratorResult result = runFile("0650_syn_ref_with_content.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF,
+        "Element <reference> has illegal text content: 'text'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
   /* TODO implement error mapping
   @Test
-  public void test_0650_ref_ill_attr() {
-    BeneratorResult result = runFile("0650_ref_ill_attr.ben.xml");
+  public void test_0651_ref_ill_attr() {
+    BeneratorResult result = runFile("0651_syn_ref_ill_attr.ben.xml");
     assertResult(BeneratorErrorIds.SYN_REF_ILLEGAL_ATTR, "Illegal attribute for <reference>: ill_attr",
         ExitCodes.SYNTAX_ERROR, result);
   }
   */
 
   @Test
-  public void test_0651_id_wo_name() {
-    BeneratorResult result = runFile("0651_ref_wo_name.ben.xml");
+  public void test_0652_id_wo_name() {
+    BeneratorResult result = runFile("0652_syn_ref_wo_name.ben.xml");
     assertResult(BeneratorErrorIds.SYN_REF_NAME, "Attribute is missing: 'name' in <reference>",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
   // database tests --------------------------------------------------------------------------------------------------
+
+  @Test
+  public void test_1000_syn_db_with_content() {
+    BeneratorResult result = runFile("1000_syn_db_with_content.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_DB, "Element <database> has illegal text content: 'oracle'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
 
   @Test
   public void test_1001_syn_db_ill_attr() {

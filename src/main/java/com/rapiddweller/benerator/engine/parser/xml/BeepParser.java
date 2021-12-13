@@ -43,7 +43,8 @@ import org.w3c.dom.Element;
  */
 public class BeepParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttrInfoSupport ATTR_SUPPORT = new AttrInfoSupport(BeneratorErrorIds.SYN_BEEP);
+  private static final AttrInfoSupport ATTR_SUPPORT = new AttrInfoSupport(BeneratorErrorIds.SYN_BEEP,
+      new NoContentValidator(BeneratorErrorIds.SYN_BEEP));
 
   public BeepParser() {
     super("beep", ATTR_SUPPORT,

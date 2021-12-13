@@ -33,9 +33,11 @@ import com.rapiddweller.benerator.engine.Importer;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.parser.string.ListParser;
 import com.rapiddweller.benerator.engine.statement.ImportStatement;
+import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.parser.BooleanParser;
 import com.rapiddweller.common.parser.FullyQualifiedNameParser;
 import com.rapiddweller.common.parser.RegexBasedStringParser;
+import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.AttributeInfo;
 import org.w3c.dom.Element;
@@ -70,7 +72,7 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
   );
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_IMPORT_ILLEGAL_ATTR,
-      CLASS, DEFAULTS, DOMAINS, PLATFORMS);
+      new ImportValidator(), CLASS, DEFAULTS, DOMAINS, PLATFORMS);
 
   // constructor & interface -----------------------------------------------------------------------------------------
 
@@ -81,9 +83,6 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
   @Override
   public ImportStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath,
                                  BeneratorParseContext parseContext) {
-    // check syntax
-    assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_IMPORT, ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS, ATT_CLASS);
-    // parse attributes
     boolean defaults = DEFAULTS.parse(element);
     String classImport = parseClass(element);
     DomainDescriptor[] domainImports = parseDomains(element);
@@ -126,5 +125,14 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
     }
   }
 
+  static class ImportValidator implements Validator<Element> {
+    @Override
+    public boolean valid(Element element) {
+      XMLAssert.assertNoTextContent(element, BeneratorErrorIds.SYN_IMPORT);
+      XMLAssert.assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_IMPORT,
+          ATT_DEFAULTS, ATT_DOMAINS, ATT_PLATFORMS, ATT_CLASS);
+      return true;
+    }
+  }
 }
 

@@ -34,6 +34,7 @@ import com.rapiddweller.common.ArrayFormat;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.converter.ToStringConverter;
+import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ArrayElementDescriptor;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
@@ -137,6 +138,7 @@ public class ModelParser {
     } else {
       String typeName = StringUtil.emptyToNull(element.getAttribute("type"));
       String name = getName(element, BeneratorErrorIds.SYN_ATTR_NAME);
+      XMLAssert.assertNoTextContent(element, BeneratorErrorIds.SYN_ATTR);
       result = new PartDescriptor(name, descriptorProvider, typeName);
     }
     mapInstanceDetails(element, false, result);
@@ -219,6 +221,7 @@ public class ModelParser {
   public InstanceDescriptor parseVariable(Element varElement, VariableHolder owner) {
     assertElementName(varElement, "variable");
     getName(varElement, BeneratorErrorIds.SYN_VAR_NAME);
+    XMLAssert.assertNoTextContent(varElement, BeneratorErrorIds.SYN_VAR);
     String type = StringUtil.emptyToNull(varElement.getAttribute("type"));
     VariableDescriptor descriptor = new VariableDescriptor(varElement.getAttribute("name"), descriptorProvider, type);
     VariableDescriptor variable = mapInstanceDetails(varElement, false, descriptor);
@@ -328,6 +331,7 @@ public class ModelParser {
   private IdDescriptor parseId(Element element, ComplexTypeDescriptor owner, ComponentDescriptor descriptor) {
     assertElementName(element, "id");
     String nameAttr = getName(element, BeneratorErrorIds.SYN_ID_NAME);
+    XMLAssert.assertNoTextContent(element, BeneratorErrorIds.SYN_ID);
     IdDescriptor result;
     IdDescriptor resultTmp;
     if (descriptor instanceof IdDescriptor) {
@@ -352,6 +356,7 @@ public class ModelParser {
   private ReferenceDescriptor parseReference(Element element, ComplexTypeDescriptor owner, ComponentDescriptor component) {
     assertElementName(element, "reference");
     String nameAttr = getName(element, BeneratorErrorIds.SYN_REF_NAME);
+    XMLAssert.assertNoTextContent(element, BeneratorErrorIds.SYN_REF);
     ReferenceDescriptor result;
     if (component instanceof ReferenceDescriptor) {
       result = (ReferenceDescriptor) component;
