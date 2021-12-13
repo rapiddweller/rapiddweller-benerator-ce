@@ -26,6 +26,7 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
@@ -34,6 +35,7 @@ import com.rapiddweller.benerator.engine.statement.ImportStatement;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.IOUtil;
+import com.rapiddweller.common.exception.ApplicationException;
 import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.xml.XMLUtil;
 import org.junit.Test;
@@ -42,6 +44,7 @@ import org.w3c.dom.Element;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.fail;
 
 /**
  * Tests {@link ImportParser} and {@link ImportStatement}.<br/><br/>
@@ -83,10 +86,12 @@ public class ImportParserAndStatementTest extends AbstractBeneratorIntegrationTe
 
   @Test
   public void testImport_platform_without_descriptor() {
-    Statement statement = parse("<import platforms='test_no_desc'/>");
-    BeneratorContext context = new DefaultBeneratorContext();
-    statement.execute(context);
-    assertNotNull(context.forName("TNDSimpleBean"));
+    try {
+      parse("<import platforms='test_no_desc'/>");
+      fail("Exception expected");
+    } catch (ApplicationException e) {
+      assertEquals(BeneratorErrorIds.SYN_IMPORT_PLATFORMS, e.getErrorId());
+    }
   }
 
   @Test

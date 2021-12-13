@@ -108,20 +108,10 @@ public class Importer {
     } catch (Exception e) {
       // ...otherwise check if there exists a package of this name
       if (ExceptionUtil.getRootCause(e) instanceof ClassNotFoundException) {
-        return checkForPackageWithoutDescriptor(pkg);
+        return null;
       } else {
         throw e;
       }
-    }
-  }
-
-  private static DefaultPlatformDescriptor checkForPackageWithoutDescriptor(String pkg) {
-    if (!BeanUtil.getClasses(pkg).isEmpty()) {
-      // if the package exists, then create a DefaultPlatformDescriptor...
-      return new DefaultPlatformDescriptor(StringUtil.suffix(pkg, '.'), pkg);
-    } else {
-      // ...otherwise don't return a descriptor
-      return null;
     }
   }
 
