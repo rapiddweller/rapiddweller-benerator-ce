@@ -4,7 +4,7 @@ package com.rapiddweller.benerator.engine.parser.string;
 
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.Level;
-import com.rapiddweller.common.parser.TypedParser;
+import com.rapiddweller.common.parser.AbstractTypedParser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Volker Bergmann
  * @since 2.1.0
  */
-public class GlobalErrorHandlerParser extends TypedParser<ErrorHandler> {
+public class GlobalErrorHandlerParser extends AbstractTypedParser<ErrorHandler> {
 
   private static final Map<String, ErrorHandler> handlers = new HashMap<>();
 

@@ -46,7 +46,7 @@ import com.rapiddweller.common.parser.BooleanParser;
 import com.rapiddweller.common.parser.FullyQualifiedClassNameParser;
 import com.rapiddweller.common.parser.NonNegativeIntegerParser;
 import com.rapiddweller.common.parser.StringParser;
-import com.rapiddweller.common.parser.TypedParser;
+import com.rapiddweller.common.parser.AbstractTypedParser;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
@@ -238,7 +238,7 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
     }
   }
 
-  static class JdbcUrlParser extends TypedParser<String> {
+  static class JdbcUrlParser extends AbstractTypedParser<String> {
 
     protected JdbcUrlParser() {
       super("JDBC URL", String.class);

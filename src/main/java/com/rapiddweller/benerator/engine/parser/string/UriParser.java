@@ -3,7 +3,7 @@
 package com.rapiddweller.benerator.engine.parser.string;
 
 import com.rapiddweller.common.Assert;
-import com.rapiddweller.common.parser.TypedParser;
+import com.rapiddweller.common.parser.AbstractTypedParser;
 
 /**
  * Parses URIs in Strings.<br/><br/>
@@ -11,7 +11,7 @@ import com.rapiddweller.common.parser.TypedParser;
  * @author Volker Bergmann
  * @since 2.1.0
  */
-public class UriParser extends TypedParser<String> {
+public class UriParser extends AbstractTypedParser<String> {
 
   public UriParser() {
     super("URI", String.class);
