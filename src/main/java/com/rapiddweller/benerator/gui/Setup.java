@@ -41,6 +41,7 @@ import com.rapiddweller.jdbacl.JDBCDriverInfo;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Locale;
 
@@ -50,7 +51,7 @@ import java.util.Locale;
  * @author Volker Bergmann
  * @since 0.5.6
  */
-public class Setup implements ObservableBean {
+public class Setup implements ObservableBean, Serializable {
 
   private static final String DEFAULT_PROJECT_NAME = "myproject";
   private static final String DEFAULT_GROUP_ID = "com.my";

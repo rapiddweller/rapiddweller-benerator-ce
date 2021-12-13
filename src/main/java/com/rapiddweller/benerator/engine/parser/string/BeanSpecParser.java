@@ -2,8 +2,7 @@
 
 package com.rapiddweller.benerator.engine.parser.string;
 
-import com.rapiddweller.common.parser.TypedParser;
-import com.rapiddweller.script.BeanSpec;
+import com.rapiddweller.common.parser.AbstractTypedParser;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.Expression;
 
@@ -13,7 +12,7 @@ import com.rapiddweller.script.Expression;
  * @author Volker Bergmann
  * @since 2.1.0
  */
-public class BeanSpecParser extends TypedParser<Expression> {
+public class BeanSpecParser extends AbstractTypedParser<Expression> {
 
   public BeanSpecParser() {
     super("bean spec", Expression.class);

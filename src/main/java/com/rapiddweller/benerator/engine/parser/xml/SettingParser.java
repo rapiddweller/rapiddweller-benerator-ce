@@ -33,12 +33,15 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.ScriptableExpression;
 import com.rapiddweller.benerator.engine.expression.context.ContextReference;
 import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
+import com.rapiddweller.benerator.engine.parser.string.ContextReferenceParser;
+import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.SetSettingStatement;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.exception.ExceptionFactory;
-import com.rapiddweller.common.exception.ParseException;
+import com.rapiddweller.common.parser.AbstractParser;
+import com.rapiddweller.common.parser.StringParser;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.AttributeInfo;
@@ -64,17 +67,19 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
 
   public static final NameAttribute NAME = new NameAttribute(BeneratorErrorIds.SYN_SETTING_NAME, true, true);
 
-  public static final AttributeInfo<String> DEFAULT = new AttributeInfo<>(
-      ATT_DEFAULT,false, BeneratorErrorIds.SYN_SETTING_DEFAULT, null, null);
+  public static final AttributeInfo<Expression<String>> DEFAULT = new AttributeInfo<>(
+      ATT_DEFAULT,false, BeneratorErrorIds.SYN_SETTING_DEFAULT,
+      new ScriptableParser<>(new StringParser()));
 
-  public static final AttributeInfo<String> VALUE = new AttributeInfo<>(
-      ATT_VALUE, false, BeneratorErrorIds.SYN_SETTING_VALUE, null, null);
+  public static final AttributeInfo<Expression<String>> VALUE = new AttributeInfo<>(
+      ATT_VALUE, false, BeneratorErrorIds.SYN_SETTING_VALUE,
+      new ScriptableParser<>(new StringParser()));
 
-  public static final AttributeInfo<String> REF = new AttributeInfo<>(
-      ATT_REF, false, BeneratorErrorIds.SYN_SETTING_REF, null, null);
+  public static final AttributeInfo<ContextReference> REF = new AttributeInfo<>(
+      ATT_REF, false, BeneratorErrorIds.SYN_SETTING_REF, new ContextReferenceParser());
 
-  public static final AttributeInfo<String> SOURCE = new AttributeInfo<>(
-      ATT_SOURCE, false, BeneratorErrorIds.SYN_SETTING_SOURCE, null, null);
+  public static final AttributeInfo<Expression<Object>> SOURCE = new AttributeInfo<>(
+      ATT_SOURCE, false, BeneratorErrorIds.SYN_SETTING_SOURCE, new SourceParser());
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(
       BeneratorErrorIds.SYN_SETTING_ILLEGAL_ATTR, NAME, VALUE, DEFAULT, REF, SOURCE);
@@ -86,65 +91,72 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
   @Override
   public Statement doParse(
       Element element, Element[] parentXmlPath, Statement[] parentComponentPath, BeneratorParseContext context) {
-    String propertyName = element.getAttribute(ATT_NAME);
+    String propertyName = NAME.parse(element);
     if (element.hasAttribute(ATT_DEFAULT)) {
       return parseDefault(propertyName, element.getAttribute(ATT_DEFAULT));
     } else {
-      Expression<?> valueEx = parseValue(element);
+      Expression<?> valueEx = parseValueRefSourceOrChildren(element);
       return new SetSettingStatement(propertyName, valueEx);
     }
   }
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  public static Expression<?> parseValue(Element element) {
+  public static Expression<?> parseValueRefSourceOrChildren(Element element) {
     if (element.hasAttribute(ATT_VALUE)) {
-      return DescriptorParserUtil.parseScriptableStringAttribute(ATT_VALUE, element);
+      return VALUE.parse(element);
     } else if (element.hasAttribute(ATT_REF)) {
-      return new ContextReference(element.getAttribute(ATT_REF));
+      return REF.parse(element);
     } else if (element.hasAttribute(ATT_SOURCE)) {
-      return parseSource(element.getAttribute(ATT_SOURCE));
-    } else { // map child elements to a collection or array
-      Element[] childElements = XMLUtil.getChildElements(element);
-      Expression[] subExpressions = new Expression[childElements.length];
-      for (int j = 0; j < childElements.length; j++) {
-        subExpressions[j] = BeanParser.parseBeanExpression(childElements[j], false);
-      }
-      switch (subExpressions.length) {
-        case 0:
-          throw ExceptionFactory.getInstance().syntaxErrorForXmlElement(
-              "Not a valid property spec", element);
-        case 1:
-          return subExpressions[0];
-        default:
-          return new CompositeExpression<Object, Object>(subExpressions) {
-            @Override
-            public Object[] evaluate(Context context) {
-              return ExpressionUtil.evaluateAll(terms, context);
-            }
-          };
-      }
+      return SOURCE.parse(element);
+    } else {
+      return parseChildElements(element);
+    }
+  }
+
+  /** Maps child elements to a collection or array */
+  private static Expression<?> parseChildElements(Element element) {
+    Element[] childElements = XMLUtil.getChildElements(element);
+    Expression[] subExpressions = new Expression[childElements.length];
+    for (int j = 0; j < childElements.length; j++) {
+      subExpressions[j] = BeanParser.parseBeanExpression(childElements[j], false);
+    }
+    switch (subExpressions.length) {
+      case 0:
+        throw ExceptionFactory.getInstance().syntaxErrorForXmlElement(
+            "Not a valid property spec", element);
+      case 1:
+        return subExpressions[0];
+      default:
+        return new CompositeExpression<Object, Object>(subExpressions) {
+          @Override
+          public Object[] evaluate(Context context) {
+            return ExpressionUtil.evaluateAll(terms, context);
+          }
+        };
     }
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  private static Expression<?> parseSource(String source) {
-    try {
-      return new SourceExpression(DatabeneScriptParser.parseBeanSpec(source));
-    } catch (ParseException e) {
-      throw ExceptionFactory.getInstance().configurationError(
-          "Error parsing property source expression: " + source, e);
-    }
-  }
-
   private static Statement parseDefault(String propertyName, String defaultValue) {
     try {
       ScriptableExpression valueExpression = new ScriptableExpression(defaultValue, null);
       SetSettingStatement setterStatement = new SetSettingStatement(propertyName, valueExpression);
       Expression<Boolean> condition = new IsNullExpression(new ContextReference(propertyName));
       return new IfStatement(condition, setterStatement);
-    } catch (ParseException e) {
+    } catch (Exception e) {
       throw ExceptionFactory.getInstance().configurationError(
           "Error parsing property default value expression: " + defaultValue, e);
+    }
+  }
+
+  private static class SourceParser extends AbstractParser<Expression<Object>> {
+
+    protected SourceParser() {
+      super("source");
+    }
+
+    @Override
+    protected Expression<Object> parseImpl(String spec) {
+      return new SourceExpression(DatabeneScriptParser.parseBeanSpec(spec));
     }
   }
 
@@ -154,7 +166,7 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
    * @author Volker Bergmann
    * @since 0.6.0
    */
-  public static class SourceExpression<E> extends DynamicExpression<E> {
+  private static class SourceExpression<E> extends DynamicExpression<E> {
 
     final Expression<Generator<E>> source;
 

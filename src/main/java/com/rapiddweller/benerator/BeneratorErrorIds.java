@@ -127,12 +127,13 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <setting> -------------------------------------------------------------------------------
 
-  public static final String SYN_SETTING_ILLEGAL_ATTR = "BEN-0250";
-  public static final String SYN_SETTING_NAME         = "BEN-0251";
-  public static final String SYN_SETTING_VALUE        = "BEN-0252";
-  public static final String SYN_SETTING_DEFAULT      = "BEN-0253";
-  public static final String SYN_SETTING_REF          = "BEN-0254";
-  public static final String SYN_SETTING_SOURCE       = "BEN-0255";
+  public static final String SYN_SETTING              = "BEN-0250";
+  public static final String SYN_SETTING_ILLEGAL_ATTR = "BEN-0251";
+  public static final String SYN_SETTING_NAME         = "BEN-0252";
+  public static final String SYN_SETTING_VALUE        = "BEN-0253";
+  public static final String SYN_SETTING_DEFAULT      = "BEN-0254";
+  public static final String SYN_SETTING_REF          = "BEN-0255";
+  public static final String SYN_SETTING_SOURCE       = "BEN-0256";
 
   // Syntax Errors regarding <include> -------------------------------------------------------------------------------
 
