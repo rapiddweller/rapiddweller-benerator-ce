@@ -107,18 +107,19 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <echo> ----------------------------------------------------------------------------------
 
-  public static final String SYN_ECHO         = "BEN-0233";
-  public static final String SYN_ECHO_TYPE    = "BEN-0234";
-  public static final String SYN_ECHO_MESSAGE = "BEN-0235";
+  public static final String SYN_ECHO          = "BEN-0233";
+  public static final String SYN_ECHO_ILL_ATTR = "BEN-0234";
+  public static final String SYN_ECHO_TYPE     = "BEN-0235";
+  public static final String SYN_ECHO_MESSAGE  = "BEN-0236";
 
   // Syntax Errors regarding <beep> ----------------------------------------------------------------------------------
 
-  public static final String SYN_BEEP = "BEN-0236";
+  public static final String SYN_BEEP = "BEN-0238";
 
   // Syntax Errors regarding <import> --------------------------------------------------------------------------------
 
-  public static final String SYN_IMPORT_ILLEGAL_ATTR = "BEN-0240";
-  public static final String SYN_IMPORT_NO_ATTR      = "BEN-0241";
+  public static final String SYN_IMPORT              = "BEN-0240";
+  public static final String SYN_IMPORT_ILLEGAL_ATTR = "BEN-0241";
   public static final String SYN_IMPORT_CLASS        = "BEN-0242";
   public static final String SYN_IMPORT_DOMAINS      = "BEN-0243";
   public static final String SYN_IMPORT_PLATFORMS    = "BEN-0244";
@@ -142,17 +143,18 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <bean> ----------------------------------------------------------------------------------
 
-  public static final String SYN_BEAN_ILLEGAL_ATTR = "BEN-0270";
-  public static final String SYN_BEAN_ID           = "BEN-0271";
-  public static final String SYN_BEAN_CLASS        = "BEN-0272";
-  public static final String SYN_BEAN_SPEC         = "BEN-0273";
-  public static final String SYN_BEAN_MUST_HAVE_CLASS_OR_SPEC = "BEN-0274";
-  public static final String SYN_BEAN_PROP_ELEMENT = "BEN-0275";
-  public static final String SYN_BEAN_PROP_NAME    = "BEN-0276";
-  public static final String SYN_BEAN_PROP_VALUE   = "BEN-0277";
-  public static final String SYN_BEAN_PROP_DEFAULT = "BEN-0278";
-  public static final String SYN_BEAN_PROP_REF     = "BEN-0279";
-  public static final String SYN_BEAN_PROP_SOURCE  = "BEN-0280";
+  public static final String SYN_BEAN              = "BEN-0270";
+  public static final String SYN_BEAN_ILLEGAL_ATTR = "BEN-0271";
+  public static final String SYN_BEAN_ID           = "BEN-0272";
+  public static final String SYN_BEAN_CLASS        = "BEN-0273";
+  public static final String SYN_BEAN_SPEC         = "BEN-0274";
+  public static final String SYN_BEAN_MUST_HAVE_CLASS_OR_SPEC = "BEN-0275";
+  public static final String SYN_BEAN_PROP_ELEMENT = "BEN-0276";
+  public static final String SYN_BEAN_PROP_NAME    = "BEN-0277";
+  public static final String SYN_BEAN_PROP_VALUE   = "BEN-0278";
+  public static final String SYN_BEAN_PROP_DEFAULT = "BEN-0279";
+  public static final String SYN_BEAN_PROP_REF     = "BEN-0280";
+  public static final String SYN_BEAN_PROP_SOURCE  = "BEN-0281";
 
   // Syntax Errors regarding <memstore> ------------------------------------------------------------------------------
 
@@ -173,16 +175,17 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <execute> -------------------------------------------------------------------------------
 
-  public static final String SYN_EXECUTE_ILLEGAL_ATTR  = "BEN-0300";
-  public static final String SYN_EXECUTE_URI           = "BEN-0301";
-  public static final String SYN_EXECUTE_ENCODING      = "BEN-0302";
-  public static final String SYN_EXECUTE_TARGET        = "BEN-0303";
-  public static final String SYN_EXECUTE_SEPARATOR     = "BEN-0304";
-  public static final String SYN_EXECUTE_TYPE          = "BEN-0305";
-  public static final String SYN_EXECUTE_SHELL         = "BEN-0306";
-  public static final String SYN_EXECUTE_ON_ERROR      = "BEN-0307";
-  public static final String SYN_EXECUTE_OPTIMIZE      = "BEN-0308";
-  public static final String SYN_EXECUTE_INVALIDATE    = "BEN-0309";
+  public static final String SYN_EXECUTE               = "BEN-0300";
+  public static final String SYN_EXECUTE_ILLEGAL_ATTR  = "BEN-0301";
+  public static final String SYN_EXECUTE_URI           = "BEN-0302";
+  public static final String SYN_EXECUTE_ENCODING      = "BEN-0303";
+  public static final String SYN_EXECUTE_TARGET        = "BEN-0304";
+  public static final String SYN_EXECUTE_SEPARATOR     = "BEN-0305";
+  public static final String SYN_EXECUTE_TYPE          = "BEN-0306";
+  public static final String SYN_EXECUTE_SHELL         = "BEN-0307";
+  public static final String SYN_EXECUTE_ON_ERROR      = "BEN-0308";
+  public static final String SYN_EXECUTE_OPTIMIZE      = "BEN-0309";
+  public static final String SYN_EXECUTE_INVALIDATE    = "BEN-0310";
 
   // Syntax Errors regarding <evaluate> ------------------------------------------------------------------------------
 
@@ -230,13 +233,14 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <wait> ----------------------------------------------------------------------------------
 
-  public static final String SYN_WAIT_ILLEGAL_ATTRIBUTE = "BEN-0370";
-  public static final String SYN_WAIT_DURATION          = "BEN-0371";
-  public static final String SYN_WAIT_MIN               = "BEN-0372";
-  public static final String SYN_WAIT_MAX               = "BEN-0373";
-  public static final String SYN_WAIT_GRANULARITY       = "BEN-0374";
-  public static final String SYN_WAIT_DISTRIBUTION      = "BEN-0375";
-  public static final String SYN_WAIT_MUTUALLY_EXCLUDED = "BEN-0376";
+  public static final String SYN_WAIT                   = "BEN-0370";
+  public static final String SYN_WAIT_ILLEGAL_ATTRIBUTE = "BEN-0371";
+  public static final String SYN_WAIT_DURATION          = "BEN-0372";
+  public static final String SYN_WAIT_MIN               = "BEN-0373";
+  public static final String SYN_WAIT_MAX               = "BEN-0374";
+  public static final String SYN_WAIT_GRANULARITY       = "BEN-0375";
+  public static final String SYN_WAIT_DISTRIBUTION      = "BEN-0376";
+  public static final String SYN_WAIT_MUTUALLY_EXCLUDED = "BEN-0377";
   // Syntax Errors regarding <domtree> -------------------------------------------------------------------------------
 
   public static final String SYN_DOMTREE_ID         = "BEN-0380";
@@ -316,49 +320,60 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <variable> -----------------------------------------------------------------------------
 
-  public static final String SYN_VAR_ILLEGAL_ATTR  = "BEN-0500";
-  public static final String SYN_VAR_NAME          = "BEN-0501";
+  public static final String SYN_VAR               = "BEN-0500";
+  public static final String SYN_VAR_ILLEGAL_ATTR  = "BEN-0501";
+  public static final String SYN_VAR_NAME          = "BEN-0502";
 
   // Syntax Errors regarding <attribute> -----------------------------------------------------------------------------
 
-  public static final String SYN_ATTR_ILLEGAL_ATTR = "BEN-0550";
-  public static final String SYN_ATTR_NAME         = "BEN-0551";
+  public static final String SYN_ATTR              = "BEN-0550";
+  public static final String SYN_ATTR_ILLEGAL_ATTR = "BEN-0551";
+  public static final String SYN_ATTR_NAME         = "BEN-0552";
 
   // Syntax Errors regarding <id> ------------------------------------------------------------------------------------
 
-  public static final String SYN_ID_ILLEGAL_ATTR   = "BEN-0600";
-  public static final String SYN_ID_NAME           = "BEN-0601";
+  public static final String SYN_ID                = "BEN-0600";
+  public static final String SYN_ID_ILLEGAL_ATTR   = "BEN-0601";
+  public static final String SYN_ID_NAME           = "BEN-0602";
 
   // Syntax Errors regarding <reference> ------------------------------------------------------------------------------------
 
-  public static final String SYN_REF_ILLEGAL_ATTR  = "BEN-0650";
-  public static final String SYN_REF_NAME          = "BEN-0651";
+  public static final String SYN_REF               = "BEN-0650";
+  public static final String SYN_REF_ILLEGAL_ATTR  = "BEN-0651";
+  public static final String SYN_REF_NAME          = "BEN-0652";
 
 
   // BEN-0500...0599 relational database issues ======================================================================
 
   // Syntax Errors regarding <database> ------------------------------------------------------------------------------
 
-  public static final String SYN_DATABASE_ILLEGAL_ATTR         = "BEN-1000";
-  public static final String SYN_DATABASE_ID                   = "BEN-1001";
-  public static final String SYN_DATABASE_ENVIRONMENT          = "BEN-1002";
-  public static final String SYN_DATABASE_SYSTEM               = "BEN-1003";
-  public static final String SYN_DATABASE_URL                  = "BEN-1004";
-  public static final String SYN_DATABASE_DRIVER               = "BEN-1005";
-  public static final String SYN_DATABASE_USER                 = "BEN-1006";
-  public static final String SYN_DATABASE_PASSWORD             = "BEN-1007";
-  public static final String SYN_DATABASE_CATALOG              = "BEN-1008";
-  public static final String SYN_DATABASE_SCHEMA               = "BEN-1009";
-  public static final String SYN_DATABASE_TABLE_FILTER         = "BEN-1010";
-  public static final String SYN_DATABASE_QUOTE_TABLE_NAMES    = "BEN-1011";
-  public static final String SYN_DATABASE_INCLUDE_TABLES       = "BEN-1012";
-  public static final String SYN_DATABASE_EXCLUDE_TABLES       = "BEN-1013";
-  public static final String SYN_DATABASE_BATCH                = "BEN-1014";
-  public static final String SYN_DATABASE_FETCH_SIZE           = "BEN-1015";
-  public static final String SYN_DATABASE_READ_ONLY            = "BEN-1016";
-  public static final String SYN_DATABASE_LAZY                 = "BEN-1017";
-  public static final String SYN_DATABASE_META_CACHE           = "BEN-1018";
-  public static final String SYN_DATABASE_ACCEPT_UNK_COL_TYPES = "BEN-1019";
+  public static final String SYN_DB                      = "BEN-1000";
+  public static final String SYN_DB_ILLEGAL_ATTR         = "BEN-1001";
+  public static final String SYN_DB_ID                   = "BEN-1002";
+  public static final String SYN_DB_ENVIRONMENT          = "BEN-1003";
+  public static final String SYN_DB_SYSTEM               = "BEN-1004";
+  public static final String SYN_DB_URL                  = "BEN-1005";
+  public static final String SYN_DB_DRIVER               = "BEN-1006";
+  public static final String SYN_DB_USER                 = "BEN-1007";
+  public static final String SYN_DB_PASSWORD             = "BEN-1008";
+  public static final String SYN_DB_CATALOG              = "BEN-1009";
+  public static final String SYN_DB_SCHEMA               = "BEN-1010";
+  public static final String SYN_DB_TABLE_FILTER         = "BEN-1011";
+  public static final String SYN_DB_QUOTE_TABLE_NAMES    = "BEN-1012";
+  public static final String SYN_DB_INCLUDE_TABLES       = "BEN-1013";
+  public static final String SYN_DB_EXCLUDE_TABLES       = "BEN-1014";
+  public static final String SYN_DB_BATCH                = "BEN-1015";
+  public static final String SYN_DB_FETCH_SIZE           = "BEN-1016";
+  public static final String SYN_DB_READ_ONLY            = "BEN-1017";
+  public static final String SYN_DB_LAZY                 = "BEN-1018";
+  public static final String SYN_DB_META_CACHE           = "BEN-1019";
+  public static final String SYN_DB_ACCEPT_UNK_COL_TYPES = "BEN-1020";
+
+  public static final String SYN_DB_URL_GROUP_INCOMPLETE = "BEN-1021";
+  public static final String SYN_DB_ENV_GROUP_INCOMPLETE = "BEN-1022";
+  public static final String SYN_DB_URL_AND_ENV_GROUP    = "BEN-1023";
+  public static final String SYN_DB_NO_URL_AND_ENV_GROUP = "BEN-1024";
+
 
   public static final String DB_CONNECT_FAILED                 = "BEN-1100";
 
@@ -380,19 +395,6 @@ public class BeneratorErrorIds {
 
   public static final String SYN_CASCADE_ILLEGAL_ATTR   = "BEN-1220";
   public static final String SYN_CASCADE_REF            = "BEN-1221";
-
-  // Syntax Errors regarding <dbsanity> ------------------------------------------------------------------------------
-
-  public static final String SYN_DBSANITY_ENVIRONMENT = "BEN-1300";
-  public static final String SYN_DBSANITY_SYSTEM      = "BEN-1301";
-  public static final String SYN_DBSANITY_APP_VERSION = "BEN-1302";
-  public static final String SYN_DBSANITY_IN          = "BEN-1303";
-  public static final String SYN_DBSANITY_OUT         = "BEN-1304";
-  public static final String SYN_DBSANITY_TABLES      = "BEN-1305";
-  public static final String SYN_DBSANITY_SKIN        = "BEN-1306";
-  public static final String SYN_DBSANITY_LOCALE      = "BEN-1307";
-  public static final String SYN_DBSANITY_MODE        = "BEN-1308";
-  public static final String SYN_DBSANITY_ON_ERROR    = "BEN-1309";
 
   // BEN-0600...0699 JMS issues ======================================================================================
 

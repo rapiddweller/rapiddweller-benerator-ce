@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<setup xmlns="https://www.benerator.de/schema/2.1.0">
+    <import defaults="true">text</import>
+</setup>

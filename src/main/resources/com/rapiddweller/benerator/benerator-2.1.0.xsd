@@ -60,7 +60,6 @@
             <xs:element ref="defaultComponents" minOccurs="0"/>
             <xs:element ref="database" minOccurs="0"/>
             <xs:element ref="transcodingTask" minOccurs="0"/>
-            <xs:element ref="dbsanity" minOccurs="0"/>
             <xs:element ref="jms-destination" minOccurs="0"/>
             <xs:element ref="kafka-importer" minOccurs="0"/>
             <xs:element ref="kafka-exporter" minOccurs="0"/>
@@ -678,6 +677,8 @@
         </xs:complexType>
     </xs:element>
 
+    <!-- Database - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
     <!-- connects to a database -->
     <xs:element name="database">
         <xs:annotation><xs:documentation>Relational database</xs:documentation></xs:annotation>
@@ -749,52 +750,8 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="dbsanity">
-        <xs:annotation><xs:documentation>
-            Call DB Sanity for verification of data in a relational database
-        </xs:documentation></xs:annotation>
-        <xs:complexType>
-            <xs:attribute name="environment" type="xs:string" use="required"/>
-            <xs:attribute name="system" type="xs:string" use="required"/>
-            <xs:attribute name="appVersion" type="xs:string"/>
-            <xs:attribute name="in" type="xs:string"/>
-            <xs:attribute name="out" type="xs:string"/>
-            <xs:attribute name="tables" type="xs:NMTOKENS"/>
-            <xs:attribute name="skin" type="dbsanity-skin"/>
-            <xs:attribute name="locale" type="xs:string"/>
-            <xs:attribute name="mode" type="dbsanity-mode"/>
-            <xs:attribute name="onError" type="errorhandler-type"/>
-        </xs:complexType>
-    </xs:element>
 
-    <xs:simpleType name="dbsanity-skin">
-        <xs:union>
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="online"/>
-                    <xs:enumeration value="offline"/>
-                </xs:restriction>
-            </xs:simpleType>
-            <xs:simpleType>
-                <xs:restriction base="script-expression-type"/>
-            </xs:simpleType>
-        </xs:union>
-    </xs:simpleType>
-
-    <xs:simpleType name="dbsanity-mode">
-        <xs:union>
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="default"/>
-                    <xs:enumeration value="silent"/>
-                    <xs:enumeration value="verbose"/>
-                </xs:restriction>
-            </xs:simpleType>
-            <xs:simpleType>
-                <xs:restriction base="script-expression-type"/>
-            </xs:simpleType>
-        </xs:union>
-    </xs:simpleType>
+    <!-- JMS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
     <!-- connects to a JMS destination -->
     <xs:element name="jms-destination">

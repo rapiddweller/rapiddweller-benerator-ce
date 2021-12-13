@@ -39,6 +39,7 @@ import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.parser.FullyQualifiedClassNameParser;
+import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.AttributeInfo;
@@ -213,8 +214,8 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
   static class BeanElementValidator implements Validator<Element> {
     @Override
     public boolean valid(Element element) {
-      assertAtLeastOneAttributeIsSet(element, ATT_CLASS, ATT_SPEC);
-      mutuallyExcludeAttributes(element, ATT_CLASS, ATT_SPEC);
+      XMLAssert.assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_BEAN, ATT_CLASS, ATT_SPEC);
+      XMLAssert.mutuallyExcludeAttributes(element, ATT_CLASS, ATT_SPEC);
       return true;
     }
   }
@@ -222,8 +223,8 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
   static class BeanPropertyValidator implements Validator<Element> {
     @Override
     public boolean valid(Element element) {
-      assertAtLeastOneAttributeIsSet(element, ATT_VALUE, ATT_REF, ATT_DEFAULT, ATT_SOURCE);
-      mutuallyExcludeAttributes(element, ATT_VALUE, ATT_REF, ATT_DEFAULT, ATT_SOURCE);
+      XMLAssert.assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_BEAN, ATT_VALUE, ATT_REF, ATT_DEFAULT, ATT_SOURCE);
+      XMLAssert.mutuallyExcludeAttributes(element, ATT_VALUE, ATT_REF, ATT_DEFAULT, ATT_SOURCE);
       return true;
     }
   }

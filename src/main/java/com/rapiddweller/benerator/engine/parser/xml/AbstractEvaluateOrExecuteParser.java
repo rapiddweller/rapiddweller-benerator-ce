@@ -26,11 +26,13 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.engine.statement.EvaluateStatement;
 import com.rapiddweller.common.converter.String2CharConverter;
+import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ConvertingExpression;
@@ -39,7 +41,6 @@ import com.rapiddweller.script.expression.StringExpression;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.getConstantStringAttributeAsExpression;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseBooleanExpressionAttribute;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableElementText;
 import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.parseScriptableStringAttribute;
@@ -71,10 +72,11 @@ public abstract class AbstractEvaluateOrExecuteParser extends AbstractBeneratorD
   public EvaluateStatement doParse(Element element, Element[] parentXmlPath, Statement[] parentPath, BeneratorParseContext context) {
     boolean evaluate = DescriptorConstants.EL_EVALUATE.equals(element.getNodeName());
     if (evaluate) {
-      assertAtLeastOneAttributeIsSet(element, ATT_ID, ATT_ASSERT);
+      String errorId = (EL_EVALUATE.equals(elementName) ? BeneratorErrorIds.SYN_EVALUATE : BeneratorErrorIds.SYN_EXECUTE);
+      XMLAssert.assertAtLeastOneAttributeIsSet(element, errorId, ATT_ID, ATT_ASSERT);
     } else {
-      assertAttributeIsNotSet(element, ATT_ID);
-      assertAttributeIsNotSet(element, ATT_ASSERT);
+      XMLAssert.assertAttributeIsNotSet(element, ATT_ID);
+      XMLAssert.assertAttributeIsNotSet(element, ATT_ASSERT);
     }
     Expression<String> id = DescriptorParserUtil.getConstantStringAttributeAsExpression(ATT_ID, element);
     Expression<String> text = new StringExpression(parseScriptableElementText(element, false));

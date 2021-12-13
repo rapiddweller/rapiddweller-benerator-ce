@@ -13,7 +13,7 @@ import com.rapiddweller.common.parser.RegexBasedStringParser;
 public class IdParser extends RegexBasedStringParser {
 
   public IdParser() {
-    super("id value", "[A-Za-z_][A-Za-z0-9_]*");
+    super("id", "[A-Za-z_][A-Za-z0-9_]*");
   }
 
 }

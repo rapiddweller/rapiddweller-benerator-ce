@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -30,9 +30,7 @@ import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.Entity;
-import org.junit.Test;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -46,20 +44,10 @@ import static org.junit.Assert.assertTrue;
  * @author Volker Bergmann
  * @since 0.6.6
  */
-public class DefaultComponentIntegrationTest extends AbstractBeneratorIntegrationTest {
-
-  @Test
-  public void testStandardIntegration() throws Exception {
-    checkFile("com/rapiddweller/benerator/engine/defaultComponent-std.ben.xml");
-  }
-
-  @Test
-  public void testDbIntegration() throws Exception {
-    checkFile("com/rapiddweller/benerator/engine/defaultComponent-db.ben.xml");
-  }
+public abstract class AbstractDefaultComponentIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @SuppressWarnings("unchecked")
-  public void checkFile(String uri) throws IOException {
+  protected void checkFile(String uri) {
     ConsumerMock consumer = new ConsumerMock(true);
     context.setGlobal("cons", consumer);
     DescriptorRunner runner = new DescriptorRunner(uri, context);
