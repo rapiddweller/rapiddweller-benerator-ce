@@ -4,7 +4,6 @@ package com.rapiddweller.benerator.engine;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.BeneratorFactory;
-import com.rapiddweller.benerator.DefaultPlatformDescriptor;
 import com.rapiddweller.benerator.DomainDescriptor;
 import com.rapiddweller.benerator.PlatformDescriptor;
 import com.rapiddweller.benerator.engine.parser.xml.BeneratorParseContext;
@@ -12,7 +11,8 @@ import com.rapiddweller.benerator.engine.parser.xml.XMLStatementParser;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.ExceptionUtil;
-import com.rapiddweller.common.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Helper class for importing Benerator components.<br/><br/>
@@ -21,6 +21,8 @@ import com.rapiddweller.common.StringUtil;
  * @since 2.1.0
  */
 public class Importer {
+
+  private static final Logger logger = LoggerFactory.getLogger(Importer.class);
 
   /** private constructor to prevent instantiation of this utility class. */
   private Importer() {
@@ -59,8 +61,15 @@ public class Importer {
 
   public static void importPlatformClasses(String[] platformNames, boolean required, BeneratorContext context) {
     PlatformDescriptor[] descriptors = findPlatforms(platformNames, required);
-    for (PlatformDescriptor descriptor : descriptors) {
-      importPlatformClasses(descriptor, context);
+    for (int i = 0; i < platformNames.length; i++) {
+      PlatformDescriptor descriptor = descriptors[i];
+      String platformName = platformNames[i];
+      if (descriptor == null) {
+        logger.info("Platform '{}' is not installed", platformName);
+      } else {
+        logger.info("Importing platform '{}'", platformName);
+        importPlatformClasses(descriptor, context);
+      }
     }
   }
 
