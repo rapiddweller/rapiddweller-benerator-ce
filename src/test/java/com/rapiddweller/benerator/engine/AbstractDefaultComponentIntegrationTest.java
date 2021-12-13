@@ -30,7 +30,6 @@ import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.Entity;
-import org.junit.Test;
 
 import java.util.Date;
 import java.util.List;
@@ -45,20 +44,10 @@ import static org.junit.Assert.assertTrue;
  * @author Volker Bergmann
  * @since 0.6.6
  */
-public class DefaultComponentIntegrationTest extends AbstractBeneratorIntegrationTest {
-
-  @Test
-  public void testStandardIntegration() {
-    checkFile("com/rapiddweller/benerator/engine/defaultComponent-std.ben.xml");
-  }
-
-  @Test
-  public void testDbIntegration() {
-    checkFile("com/rapiddweller/benerator/engine/defaultComponent-db.ben.xml");
-  }
+public abstract class AbstractDefaultComponentIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @SuppressWarnings("unchecked")
-  public void checkFile(String uri) {
+  protected void checkFile(String uri) {
     ConsumerMock consumer = new ConsumerMock(true);
     context.setGlobal("cons", consumer);
     DescriptorRunner runner = new DescriptorRunner(uri, context);
