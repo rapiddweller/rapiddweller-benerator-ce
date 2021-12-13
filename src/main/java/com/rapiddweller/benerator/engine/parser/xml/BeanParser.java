@@ -207,7 +207,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
 
   private static Assignment parseProperty(Element propertyElement) {
     String propertyName = PROP_NAME.parse(propertyElement);
-    Expression<?> value = SettingParser.parseValue(propertyElement);
+    Expression<?> value = SettingParser.parseValueRefSourceOrChildren(propertyElement);
     return new Assignment(propertyName, value);
   }
 

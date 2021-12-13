@@ -371,6 +371,24 @@ public class BeneratorErrorIdIntegrationTest {
         ExitCodes.SYNTAX_ERROR, result);
   }
 
+  // <setting> tests -------------------------------------------------------------------------------------------------
+
+  @Test
+  public void test_0251_syn_setting_ill_attr() {
+    BeneratorResult result = runFile("0251_syn_setting_ill_attr.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETTING_ILLEGAL_ATTR,
+        "Illegal XML attribute: setting.ill_attr",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0252_syn_setting_wo_name() {
+    BeneratorResult result = runFile("0252_syn_setting_wo_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_SETTING_NAME,
+        "Attribute 'name' is missing in <setting>",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
   // <variable> tests ------------------------------------------------------------------------------------------------
 
   @Test
@@ -394,7 +412,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0502_syn_var_wo_name() {
     BeneratorResult result = runFile("0502_syn_var_wo_name.ben.xml");
     assertResult(BeneratorErrorIds.SYN_VAR_NAME,
-        "Attribute is missing: 'name' in <variable>",
+        "Attribute 'name' is missing in <variable>",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -421,7 +439,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0552_attr_wo_name() {
     BeneratorResult result = runFile("0552_syn_attr_wo_name.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_NAME,
-        "Attribute is missing: 'name' in <attribute>",
+        "Attribute 'name' is missing in <attribute>",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -447,7 +465,7 @@ public class BeneratorErrorIdIntegrationTest {
   @Test
   public void test_0602_id_wo_name() {
     BeneratorResult result = runFile("0602_syn_id_wo_name.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_ID_NAME, "Attribute is missing: 'name' in <id>",
+    assertResult(BeneratorErrorIds.SYN_ID_NAME, "Attribute 'name' is missing in <id>",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -473,7 +491,7 @@ public class BeneratorErrorIdIntegrationTest {
   @Test
   public void test_0652_id_wo_name() {
     BeneratorResult result = runFile("0652_syn_ref_wo_name.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_REF_NAME, "Attribute is missing: 'name' in <reference>",
+    assertResult(BeneratorErrorIds.SYN_REF_NAME, "Attribute 'name' is missing in <reference>",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -498,7 +516,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_1002_syn_db_no_id() {
     BeneratorResult result = runFile("1002_syn_db_wo_id.ben.xml");
     assertResult(BeneratorErrorIds.SYN_DB_ID,
-        "Attribute is missing: 'id' in <database>",
+        "Attribute 'id' is missing in <database>",
         ExitCodes.SYNTAX_ERROR, result);
   }
 

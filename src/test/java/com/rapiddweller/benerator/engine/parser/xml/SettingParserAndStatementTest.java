@@ -33,7 +33,7 @@ import com.rapiddweller.common.exception.SyntaxError;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Tests the {@link SettingParser}.<br/><br/>
@@ -112,7 +112,7 @@ public class SettingParserAndStatementTest extends AbstractBeneratorIntegrationT
 
   @Test
   public void testBeneratorProperty() {
-    assertTrue(context.getDefaultPageSize() != 123);
+    assertNotEquals(123, context.getDefaultPageSize());
     parseAndExecute("<setting name='context.defaultPageSize' value='123' />");
     assertEquals(123, context.getDefaultPageSize());
   }
