@@ -292,7 +292,7 @@ Example:
 ```xml
 <import class="com.rapiddweller.benerator.distribution.function.*"/>
     ...
-<attribute name="category" type="char" values="A,B,C" distribution="new ExponentialFunction(0.5)"/>
+<attribute name="category" type="string" values="A,B,C" distribution="new ExponentialFunction(0.5)"/>
 ```
 
 #### DiscreteFunction

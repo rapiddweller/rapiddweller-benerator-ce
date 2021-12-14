@@ -48,6 +48,7 @@ import com.rapiddweller.benerator.factory.DescriptorUtil;
 import com.rapiddweller.benerator.factory.GenerationStepFactory;
 import com.rapiddweller.benerator.factory.MetaGeneratorFactory;
 import com.rapiddweller.benerator.parser.ModelParser;
+import com.rapiddweller.benerator.parser.xml.PartParser;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
@@ -58,8 +59,8 @@ import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.parser.BooleanParser;
 import com.rapiddweller.common.parser.PositiveIntegerParser;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
@@ -92,14 +93,14 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStr
  */
 public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorParser {
 
-  protected static final AttributeInfo<Expression<Integer>> THREADS = new AttributeInfo<>(
+  protected static final AttrInfo<Expression<Integer>> THREADS = new AttrInfo<>(
       ATT_THREADS, false, BeneratorErrorIds.SYN_GENERATE_THREADS,
       new ScriptableParser<>(new PositiveIntegerParser()), "1");
 
-  protected static final AttributeInfo<Expression<Boolean>> STATS = new AttributeInfo<>(
+  protected static final AttrInfo<Expression<Boolean>> STATS = new AttrInfo<>(
       ATT_STATS, false, BeneratorErrorIds.SYN_GENERATE_STATS, new ScriptableParser<>(new BooleanParser()), "false");
 
-  protected static final AttributeInfo<String> SENSOR = new AttributeInfo<>(
+  protected static final AttrInfo<String> SENSOR = new AttrInfo<>(
       ATT_SENSOR, false, BeneratorErrorIds.SYN_GENERATE_SENSOR, null, null);
 
 
@@ -265,7 +266,7 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
 
     // handle sub elements
     boolean completionReported = false; // checks if the interceptor.generationComplete() has been called
-    ModelParser parser = new ModelParser(childContext);
+    ModelParser modelParser = new ModelParser(childContext, true);
     TypeDescriptor type = descriptor.getTypeDescriptor();
     int arrayIndex = 0;
     Element[] childElements = XMLUtil.getChildElements(element);
@@ -276,12 +277,13 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
       String childName = XMLUtil.localName(child);
       InstanceDescriptor instanceDescriptor = null;
       if (EL_VARIABLE.equals(childName)) {
-        instanceDescriptor = parser.parseVariable(child, (VariableHolder) type);
+        instanceDescriptor = modelParser.parseVariable(child, (VariableHolder) type);
       } else if (COMPONENT_TYPES.contains(childName)) {
-        instanceDescriptor = parser.parseComponentGeneration(child, (ComplexTypeDescriptor) type);
+        PartParser partParser = new PartParser(modelParser, true);
+        instanceDescriptor = partParser.parseComponentGeneration(child, (ComplexTypeDescriptor) type);
         handledMembers.add(instanceDescriptor.getName().toLowerCase());
       } else if (EL_VALUE.equals(childName)) {
-        instanceDescriptor = parser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, arrayIndex++);
+        instanceDescriptor = modelParser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, arrayIndex++);
       }
 
       // ...handle non-member/variable child elements

@@ -445,6 +445,7 @@
                 <xs:element ref="part"/>
                 </xs:choice>
             </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required"/>
             <xs:attributeGroup ref="component-generator-attrs"/>
             <xs:attribute name="minCount" type="scriptable-long"/>
             <xs:attribute name="maxCount" type="scriptable-long"/>

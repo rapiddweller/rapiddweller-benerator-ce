@@ -47,8 +47,8 @@ import com.rapiddweller.common.parser.FullyQualifiedClassNameParser;
 import com.rapiddweller.common.parser.NonNegativeIntegerParser;
 import com.rapiddweller.common.parser.StringParser;
 import com.rapiddweller.common.parser.AbstractTypedParser;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.script.expression.FallbackExpression;
@@ -88,66 +88,66 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
 
   private static final String FALSE = "false";
 
-  public static final AttributeInfo<String> ID = new IdAttribute(BeneratorErrorIds.SYN_DB_ID, true);
+  public static final AttrInfo<String> ID = new IdAttribute(BeneratorErrorIds.SYN_DB_ID, true);
 
-  public static final AttributeInfo<Expression<String>> ENVIRONMENT = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> ENVIRONMENT = new AttrInfo<>(
       ATT_ENVIRONMENT, false, BeneratorErrorIds.SYN_DB_ENVIRONMENT, new ScriptableParser<>(new IdParser()));
 
-  public static final AttributeInfo<Expression<String>> SYSTEM = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> SYSTEM = new AttrInfo<>(
       ATT_SYSTEM, false, BeneratorErrorIds.SYN_DB_SYSTEM, new ScriptableParser<>(new IdParser()));
 
-  public static final AttributeInfo<Expression<String>> URL = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> URL = new AttrInfo<>(
     ATT_URL, false, BeneratorErrorIds.SYN_DB_URL, new ScriptableParser<>(new JdbcUrlParser()));
 
-  public static final AttributeInfo<Expression<String>> DRIVER = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> DRIVER = new AttrInfo<>(
     ATT_DRIVER, false, BeneratorErrorIds.SYN_DB_DRIVER,
       new ScriptableParser<>(new FullyQualifiedClassNameParser(false)));
 
-  public static final AttributeInfo<Expression<String>> USER = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> USER = new AttrInfo<>(
     ATT_USER, false, BeneratorErrorIds.SYN_DB_USER, new ScriptableParser<>(new IdParser()));
 
-  public static final AttributeInfo<Expression<String>> PASSWORD = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> PASSWORD = new AttrInfo<>(
     ATT_PASSWORD, false, BeneratorErrorIds.SYN_DB_PASSWORD, new ScriptableParser<>(new StringParser()));
 
-  public static final AttributeInfo<Expression<String>> CATALOG = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> CATALOG = new AttrInfo<>(
     ATT_CATALOG, false, BeneratorErrorIds.SYN_DB_CATALOG, new ScriptableParser<>(new IdParser()));
 
-  public static final AttributeInfo<Expression<String>> SCHEMA = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> SCHEMA = new AttrInfo<>(
     ATT_SCHEMA, false, BeneratorErrorIds.SYN_DB_SCHEMA, new ScriptableParser<>(new IdParser()));
 
-  public static final AttributeInfo<Expression<String>> TABLE_FILTER = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> TABLE_FILTER = new AttrInfo<>(
     ATT_TABLE_FILTER, false, BeneratorErrorIds.SYN_DB_TABLE_FILTER,
       new ScriptableParser<>(new StringParser()));
 
-  public static final AttributeInfo<Expression<String>> INCL_TABLES = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> INCL_TABLES = new AttrInfo<>(
     ATT_INCL_TABLES, false, BeneratorErrorIds.SYN_DB_INCLUDE_TABLES,
       new ScriptableParser<>(new StringParser()));
 
-  public static final AttributeInfo<Expression<String>> EXCL_TABLES = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> EXCL_TABLES = new AttrInfo<>(
     ATT_EXCL_TABLES, false, BeneratorErrorIds.SYN_DB_EXCLUDE_TABLES,
       new ScriptableParser<>(new StringParser()));
 
-  public static final AttributeInfo<Expression<Boolean>> META_CACHE = new AttributeInfo<>(
+  public static final AttrInfo<Expression<Boolean>> META_CACHE = new AttrInfo<>(
     ATT_META_CACHE, false, BeneratorErrorIds.SYN_DB_META_CACHE,
       new ScriptableParser<>(new BooleanParser()), FALSE);
 
-  public static final AttributeInfo<Expression<Boolean>> BATCH = new AttributeInfo<>(
+  public static final AttrInfo<Expression<Boolean>> BATCH = new AttrInfo<>(
   ATT_BATCH, false, BeneratorErrorIds.SYN_DB_BATCH,
       new ScriptableParser<>(new BooleanParser()), FALSE);
 
-  public static final AttributeInfo<Expression<Integer>> FETCH_SIZE = new AttributeInfo<>(
+  public static final AttrInfo<Expression<Integer>> FETCH_SIZE = new AttrInfo<>(
   ATT_FETCH_SIZE, false, BeneratorErrorIds.SYN_DB_FETCH_SIZE,
       new ScriptableParser<>(new NonNegativeIntegerParser()), "100");
 
-  public static final AttributeInfo<Expression<Boolean>> READ_ONLY = new AttributeInfo<>(
+  public static final AttrInfo<Expression<Boolean>> READ_ONLY = new AttrInfo<>(
   ATT_READ_ONLY, false, BeneratorErrorIds.SYN_DB_READ_ONLY,
       new ScriptableParser<>(new BooleanParser()), FALSE);
 
-  public static final AttributeInfo<Expression<Boolean>> LAZY = new AttributeInfo<>(
+  public static final AttrInfo<Expression<Boolean>> LAZY = new AttrInfo<>(
   ATT_LAZY, false, BeneratorErrorIds.SYN_DB_LAZY,
       new ScriptableParser<>(new BooleanParser()), "true");
 
-  public static final AttributeInfo<Expression<Boolean>> ACC_UNK_COL_TYPES = new AttributeInfo<>(
+  public static final AttrInfo<Expression<Boolean>> ACC_UNK_COL_TYPES = new AttrInfo<>(
   ATT_ACC_UNK_COL_TYPES, false, BeneratorErrorIds.SYN_DB_ACCEPT_UNK_COL_TYPES,
       new ScriptableParser<>(new BooleanParser()));
 

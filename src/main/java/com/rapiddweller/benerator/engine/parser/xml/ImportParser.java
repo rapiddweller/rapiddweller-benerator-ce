@@ -38,8 +38,8 @@ import com.rapiddweller.common.parser.BooleanParser;
 import com.rapiddweller.common.parser.FullyQualifiedNameParser;
 import com.rapiddweller.common.parser.RegexBasedStringParser;
 import com.rapiddweller.common.xml.XMLAssert;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
@@ -56,18 +56,18 @@ public class ImportParser extends AbstractBeneratorDescriptorParser {
 
   public static final String IMPORT_CLASS_REGEX = "([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*(\\.\\*)?";
 
-  private static final AttributeInfo<String> CLASS = new AttributeInfo<>(
+  private static final AttrInfo<String> CLASS = new AttrInfo<>(
     ATT_CLASS, false, BeneratorErrorIds.SYN_IMPORT_CLASS, new RegexBasedStringParser("class import", IMPORT_CLASS_REGEX), null
   );
 
-  private static final AttributeInfo<Boolean> DEFAULTS = new AttributeInfo<>(
+  private static final AttrInfo<Boolean> DEFAULTS = new AttrInfo<>(
     ATT_DEFAULTS, false, BeneratorErrorIds.SYN_IMPORT_DEFAULTS, new BooleanParser(), "false");
 
-  private static final AttributeInfo<String[]> DOMAINS = new AttributeInfo<>(
+  private static final AttrInfo<String[]> DOMAINS = new AttrInfo<>(
     ATT_DOMAINS, false, BeneratorErrorIds.SYN_IMPORT_DOMAINS, new ListParser<>(new FullyQualifiedNameParser()), null
   );
 
-  private static final AttributeInfo<String[]> PLATFORMS = new AttributeInfo<>(
+  private static final AttrInfo<String[]> PLATFORMS = new AttrInfo<>(
     ATT_PLATFORMS, false, BeneratorErrorIds.SYN_IMPORT_PLATFORMS, new ListParser<>(new FullyQualifiedNameParser()), null
   );
 

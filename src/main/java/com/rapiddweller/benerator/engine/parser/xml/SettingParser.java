@@ -43,8 +43,8 @@ import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.parser.AbstractParser;
 import com.rapiddweller.common.parser.StringParser;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.CompositeExpression;
@@ -67,18 +67,18 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
 
   public static final NameAttribute NAME = new NameAttribute(BeneratorErrorIds.SYN_SETTING_NAME, true, true);
 
-  public static final AttributeInfo<Expression<String>> DEFAULT = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> DEFAULT = new AttrInfo<>(
       ATT_DEFAULT,false, BeneratorErrorIds.SYN_SETTING_DEFAULT,
       new ScriptableParser<>(new StringParser()));
 
-  public static final AttributeInfo<Expression<String>> VALUE = new AttributeInfo<>(
+  public static final AttrInfo<Expression<String>> VALUE = new AttrInfo<>(
       ATT_VALUE, false, BeneratorErrorIds.SYN_SETTING_VALUE,
       new ScriptableParser<>(new StringParser()));
 
-  public static final AttributeInfo<ContextReference> REF = new AttributeInfo<>(
+  public static final AttrInfo<ContextReference> REF = new AttrInfo<>(
       ATT_REF, false, BeneratorErrorIds.SYN_SETTING_REF, new ContextReferenceParser());
 
-  public static final AttributeInfo<Expression<Object>> SOURCE = new AttributeInfo<>(
+  public static final AttrInfo<Expression<Object>> SOURCE = new AttrInfo<>(
       ATT_SOURCE, false, BeneratorErrorIds.SYN_SETTING_SOURCE, new SourceParser());
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(

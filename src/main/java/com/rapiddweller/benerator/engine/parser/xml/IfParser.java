@@ -34,8 +34,8 @@ import com.rapiddweller.benerator.engine.statement.SequentialStatement;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
 
@@ -51,7 +51,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  */
 public class IfParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttributeInfo<Expression<Boolean>> TEST = new AttributeInfo<>(
+  private static final AttrInfo<Expression<Boolean>> TEST = new AttrInfo<>(
       ATT_TEST, true, BeneratorErrorIds.SYN_IF_TEST, new ScriptParser<>(Boolean.class), null);
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_IF_ILLEGAL_ATTR, TEST);

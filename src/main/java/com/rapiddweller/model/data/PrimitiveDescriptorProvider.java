@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -29,39 +29,23 @@ package com.rapiddweller.model.data;
 import com.rapiddweller.script.PrimitiveType;
 
 /**
- * Provides benerator's built-in type descriptors.<br/><br/>
+ * Provides Benerator's built-in type descriptors.<br/><br/>
  * Created: 05.03.2008 13:57:13
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
 public class PrimitiveDescriptorProvider extends DefaultDescriptorProvider {
 
-  /**
-   * The constant NAMESPACE.
-   */
   public static final String NAMESPACE = "ben";
 
-  /**
-   * Instantiates a new Primitive descriptor provider.
-   *
-   * @param dataModel the data model
-   */
   public PrimitiveDescriptorProvider(DataModel dataModel) {
     super(NAMESPACE, dataModel);
     for (PrimitiveType type : PrimitiveType.getInstances()) {
-      addTypeDescriptor(new SimpleTypeDescriptor(type.getName(), this,
-          type.getName()));
+      addTypeDescriptor(new SimpleTypeDescriptor(type.getName(), this, type.getName()));
     }
     addTypeDescriptor(new ComplexTypeDescriptor("entity", this));
   }
 
-  /**
-   * Gets primitive type descriptor.
-   *
-   * @param javaType the java type
-   * @return the primitive type descriptor
-   */
   public SimpleTypeDescriptor getPrimitiveTypeDescriptor(Class<?> javaType) {
     PrimitiveType type = PrimitiveType.findByJavaType(javaType);
     if (type != null) {

@@ -56,8 +56,7 @@ public class DataModel {
     new BeanDescriptorProvider(this);
   }
 
-  private static TypeDescriptor searchCaseInsensitive(
-      DescriptorProvider provider, String name) {
+  private static TypeDescriptor searchCaseInsensitive(DescriptorProvider provider, String name) {
     for (TypeDescriptor type : provider.getTypeDescriptors()) {
       if (type.getName().equals(name)) {
         return type;
@@ -112,8 +111,7 @@ public class DataModel {
       DescriptorProvider provider = providers.get(namespace);
       if (provider != null) {
         // first, search case-sensitive
-        TypeDescriptor typeDescriptor =
-            provider.getTypeDescriptor(name);
+        TypeDescriptor typeDescriptor = provider.getTypeDescriptor(name);
         if (typeDescriptor != null) {
           return typeDescriptor;
         } else {
@@ -194,14 +192,12 @@ public class DataModel {
 
   public SimpleTypeDescriptor getPrimitiveTypeDescriptor(Class<?> javaType) {
     PrimitiveDescriptorProvider primitiveProvider =
-        (PrimitiveDescriptorProvider) providers
-            .get(PrimitiveDescriptorProvider.NAMESPACE);
+        (PrimitiveDescriptorProvider) providers.get(PrimitiveDescriptorProvider.NAMESPACE);
     return primitiveProvider.getPrimitiveTypeDescriptor(javaType);
   }
 
   public BeanDescriptorProvider getBeanDescriptorProvider() {
-    return (BeanDescriptorProvider) providers
-        .get(BeanDescriptorProvider.NAMESPACE);
+    return (BeanDescriptorProvider) providers.get(BeanDescriptorProvider.NAMESPACE);
   }
 
 }

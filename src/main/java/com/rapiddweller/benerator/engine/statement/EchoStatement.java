@@ -32,6 +32,8 @@ import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.SpeechUtil;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Prints out a message to the console.<br/><br/>
@@ -40,6 +42,8 @@ import com.rapiddweller.script.expression.ExpressionUtil;
  * @since 0.6.0
  */
 public class EchoStatement implements Statement {
+
+  private static final Logger logger = LoggerFactory.getLogger(EchoStatement.class);
 
   private final Expression<String> messageEx;
   private final Expression<EchoType> typeEx;
@@ -73,6 +77,7 @@ public class EchoStatement implements Statement {
   }
 
   private void consoleOut(String message) {
+    logger.debug(message);
     System.out.println(message);
   }
 

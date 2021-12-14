@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <setup xmlns="https://www.benerator.de/schema/2.1.0">
     <generate count="1">
-        <attribute name="x">text</attribute>
+        <attribute name="x" type="string">text</attribute>
     </generate>
 </setup>

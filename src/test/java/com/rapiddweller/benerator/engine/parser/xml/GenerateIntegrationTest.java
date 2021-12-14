@@ -37,6 +37,7 @@ import com.rapiddweller.benerator.test.PersonSource;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.exception.IllegalArgumentError;
 import com.rapiddweller.common.converter.UnsafeConverter;
+import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.validator.AbstractValidator;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.DataSource;
@@ -65,7 +66,7 @@ import static org.junit.Assert.assertTrue;
 @SuppressWarnings("CheckStyle")
 public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
 
-  @Test(expected = IllegalArgumentError.class)
+  @Test(expected = SyntaxError.class)
   public void testIllegalNullable() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
     Statement statement = parse(

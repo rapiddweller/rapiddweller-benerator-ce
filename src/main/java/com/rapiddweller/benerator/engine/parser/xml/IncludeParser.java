@@ -33,8 +33,8 @@ import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
 import com.rapiddweller.benerator.engine.parser.string.UriParser;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
 
@@ -51,7 +51,7 @@ public class IncludeParser extends AbstractBeneratorDescriptorParser {
 
   // format definition -----------------------------------------------------------------------------------------------
 
-  private static final AttributeInfo<Expression<String>> URI = new AttributeInfo<>(
+  private static final AttrInfo<Expression<String>> URI = new AttrInfo<>(
       ATT_URI, true, BeneratorErrorIds.SYN_INCLUDE_URI, new ScriptableParser<>(new UriParser()), null);
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(

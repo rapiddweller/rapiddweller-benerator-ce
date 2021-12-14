@@ -30,8 +30,8 @@ import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.statement.ErrorStatement;
 import com.rapiddweller.common.parser.NonNegativeIntegerParser;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
@@ -45,10 +45,10 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class ErrorParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttributeInfo<String> ID = new AttributeInfo<>(
+  private static final AttrInfo<String> ID = new AttrInfo<>(
       ATT_ID, false, BeneratorErrorIds.SYN_ERROR_ID, null, null);
 
-  private static final AttributeInfo<Integer> EXIT_CODE = new AttributeInfo<>(
+  private static final AttrInfo<Integer> EXIT_CODE = new AttrInfo<>(
       ATT_EXIT_CODE, false, BeneratorErrorIds.SYN_ERROR_EXIT_CODE, new NonNegativeIntegerParser(), null);
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(
