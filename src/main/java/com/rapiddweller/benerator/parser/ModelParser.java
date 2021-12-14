@@ -73,7 +73,7 @@ public class ModelParser {
 
   public ModelParser(BeneratorContext context, boolean nameRequired) {
     this.context = context;
-    this.attributeParser = new AttributeParser(context);
+    this.attributeParser = new AttributeParser(context, nameRequired);
     this.partParser = new PartParser(this, nameRequired);
     this.variableParser = new VariableParser(context);
     this.idParser = new IdParser(context);

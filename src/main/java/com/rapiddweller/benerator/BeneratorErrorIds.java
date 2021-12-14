@@ -321,15 +321,63 @@ public class BeneratorErrorIds {
 
   // Syntax Errors regarding <variable> -----------------------------------------------------------------------------
 
-  public static final String SYN_VAR               = "BEN-0500";
-  public static final String SYN_VAR_ILLEGAL_ATTR  = "BEN-0501";
-  public static final String SYN_VAR_NAME          = "BEN-0502";
+  public static final String SYN_VAR                = "BEN-0500";
+  public static final String SYN_VAR_ILLEGAL_ATTR   = "BEN-0501";
+  public static final String SYN_VAR_NAME           = "BEN-0502";
 
   // Syntax Errors regarding <attribute> -----------------------------------------------------------------------------
 
-  public static final String SYN_ATTR              = "BEN-0550";
-  public static final String SYN_ATTR_ILLEGAL_ATTR = "BEN-0551";
-  public static final String SYN_ATTR_NAME         = "BEN-0552";
+  public static final String SYN_ATTR               = "BEN-0550";
+  public static final String SYN_ATTR_ILLEGAL_ATTR  = "BEN-0551";
+  public static final String SYN_ATTR_NAME          = "BEN-0552";
+  public static final String SYN_ATTR_TYPE          = "BEN-0553";
+
+  public static final String SYN_ATTR_ROOT_INFO     = "BEN-0554";
+  public static final String SYN_ATTR_MODE          = "BEN-0555";
+  public static final String SYN_ATTR_SCOPE         = "BEN-0556";
+  public static final String SYN_ATTR_OFFSET        = "BEN-0557";
+  public static final String SYN_ATTR_CONDITION     = "BEN-0558";
+  public static final String SYN_ATTR_FILTER        = "BEN-0559";
+  public static final String SYN_ATTR_UNIQUE        = "BEN-0560";
+  public static final String SYN_ATTR_UNIQUE_KEY    = "BEN-0561";
+
+  public static final String SYN_ATTR_CONSTANT      = "BEN-0562";
+  public static final String SYN_ATTR_VALUES        = "BEN-0563";
+  public static final String SYN_ATTR_PATTERN       = "BEN-0564";
+  public static final String SYN_ATTR_SCRIPT        = "BEN-0565";
+  public static final String SYN_ATTR_GENERATOR     = "BEN-0566";
+  public static final String SYN_ATTR_MIN_LENGTH    = "BEN-0567";
+  public static final String SYN_ATTR_MAX_LENGTH    = "BEN-0568";
+  public static final String SYN_ATTR_NULL_QUOTA    = "BEN-0569";
+
+  public static final String SYN_ATTR_SOURCE        = "BEN-0570";
+  public static final String SYN_ATTR_ENCODING      = "BEN-0571";
+  public static final String SYN_ATTR_SEGMENT       = "BEN-0572";
+  public static final String SYN_ATTR_SEPARATOR     = "BEN-0573";
+  public static final String SYN_ATTR_SELECTOR      = "BEN-0574";
+  public static final String SYN_ATTR_SUB_SELECTOR  = "BEN-0575";
+  public static final String SYN_ATTR_ROW_BASED     = "BEN-0576";
+  public static final String SYN_ATTR_FORMAT        = "BEN-0577";
+  public static final String SYN_ATTR_EMPTY_MARKER  = "BEN-0578";
+
+  public static final String SYN_ATTR_NULLABLE      = "BEN-0579";
+  public static final String SYN_ATTR_TRUE_QUOTA    = "BEN-0580";
+
+  public static final String SYN_ATTR_MIN           = "BEN-0581";
+  public static final String SYN_ATTR_MIN_INCLUSIVE = "BEN-0582";
+  public static final String SYN_ATTR_MAX           = "BEN-0583";
+  public static final String SYN_ATTR_MAX_INCLUSIVE = "BEN-0584";
+  public static final String SYN_ATTR_GRANULARITY   = "BEN-0585";
+  public static final String SYN_ATTR_DISTRIBUTION  = "BEN-0586";
+
+  public static final String SYN_ATTR_DATASET       = "BEN-0587";
+  public static final String SYN_ATTR_NESTING       = "BEN-0588";
+  public static final String SYN_ATTR_LOCALE        = "BEN-0589";
+
+  public static final String SYN_ATTR_CONVERTER     = "BEN-0590";
+  public static final String SYN_ATTR_VALIDATOR     = "BEN-0591";
+  public static final String SYN_ATTR_CYCLIC        = "BEN-0592";
+  public static final String SYN_ATTR_MAP           = "BEN-0593";
 
   // Syntax Errors regarding <id> ------------------------------------------------------------------------------------
 

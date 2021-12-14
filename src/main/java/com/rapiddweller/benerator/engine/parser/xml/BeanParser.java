@@ -41,8 +41,8 @@ import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.common.parser.FullyQualifiedClassNameParser;
 import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Assignment;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
@@ -79,19 +79,19 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
   private static final Logger staticLogger = LoggerFactory.getLogger(BeanParser.class);
 
   /** 'id' attribute info for &lt;bean&gt; elements */
-  private static final AttributeInfo<String> ID_REQ = new AttributeInfo<>(
+  private static final AttrInfo<String> ID_REQ = new AttrInfo<>(
       ATT_ID, true, BeneratorErrorIds.SYN_BEAN_ID, new IdParser(), null);
 
   /** 'id' attribute info for &lt;consumer&gt; and &lt;runtask&gt; elements and others */
-  private static final AttributeInfo<String> ID_OPT = new AttributeInfo<>(
+  private static final AttrInfo<String> ID_OPT = new AttrInfo<>(
       ATT_ID, false, BeneratorErrorIds.SYN_BEAN_ID, new IdParser(), null);
 
-  private static final AttributeInfo<String> CLASS = new AttributeInfo<>(
+  private static final AttrInfo<String> CLASS = new AttrInfo<>(
       ATT_CLASS, false, BeneratorErrorIds.SYN_BEAN_CLASS,
       new FullyQualifiedClassNameParser(false), null
   );
 
-  private static final AttributeInfo<String> SPEC = new AttributeInfo<>(
+  private static final AttrInfo<String> SPEC = new AttrInfo<>(
       ATT_SPEC, false, BeneratorErrorIds.SYN_BEAN_SPEC, null, null);
 
   private static final AttrInfoSupport BEAN_ATTR_INFO = new AttrInfoSupport(
@@ -99,19 +99,19 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
 
   // <property> format spec ------------------------------------------------------------------------------------------
 
-  private static final AttributeInfo<String> PROP_NAME = new AttributeInfo<>(
+  private static final AttrInfo<String> PROP_NAME = new AttrInfo<>(
       ATT_NAME, true, BeneratorErrorIds.SYN_BEAN_PROP_NAME, new IdParser(), null);
 
-  private static final AttributeInfo<String> PROP_VALUE = new AttributeInfo<>(
+  private static final AttrInfo<String> PROP_VALUE = new AttrInfo<>(
       ATT_VALUE, false, BeneratorErrorIds.SYN_BEAN_PROP_VALUE, null, null);
 
-  private static final AttributeInfo<String> PROP_DEFAULT = new AttributeInfo<>(
+  private static final AttrInfo<String> PROP_DEFAULT = new AttrInfo<>(
       ATT_DEFAULT, false, BeneratorErrorIds.SYN_BEAN_PROP_DEFAULT, null, null);
 
-  private static final AttributeInfo<String> PROP_REF = new AttributeInfo<>(
+  private static final AttrInfo<String> PROP_REF = new AttrInfo<>(
       ATT_REF, false, BeneratorErrorIds.SYN_BEAN_PROP_REF, null, null);
 
-  private static final AttributeInfo<String> PROP_SOURCE = new AttributeInfo<>(
+  private static final AttrInfo<String> PROP_SOURCE = new AttrInfo<>(
       ATT_SOURCE, false, BeneratorErrorIds.SYN_BEAN_PROP_SOURCE, null, null);
 
   private static final AttrInfoSupport PROP_ATTR_INFO = new AttrInfoSupport(

@@ -189,7 +189,7 @@
         <attribute name="c_185_flag"  type="int" constant="32"/>
         <attribute name="c_186_flag"  type="double" constant="0.2"/>
         <attribute name="c_187_flag"  type="double" constant="0.14"/>
-        <attribute name="c_188_flag"  type="char" constant="1"/>
+        <attribute name="c_188_flag"  type="string" constant="1"/>
         <attribute name="c_189_code"  type="string" pattern="ABCDEF(1|2)_(0[1-9]1[0-3])"/>
         <attribute name="c_190_flag"  type="int" constant="71"/>
         <attribute name="c_191_flag"  type="int" constant="14"/>

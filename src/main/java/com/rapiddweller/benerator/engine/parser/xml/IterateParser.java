@@ -5,7 +5,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
+import com.rapiddweller.format.xml.AttrInfo;
 
 import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_ITERATE_NAME;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
@@ -18,7 +18,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  */
 public class IterateParser extends AbstractGenIterParser {
 
-  private static final AttributeInfo<String> NAME = new NameAttribute(SYN_ITERATE_NAME, false, false);
+  private static final AttrInfo<String> NAME = new NameAttribute(SYN_ITERATE_NAME, false, false);
 
 
   private static final AttrInfoSupport ATTR_INFO;

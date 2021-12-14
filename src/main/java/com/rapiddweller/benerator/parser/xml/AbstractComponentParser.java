@@ -30,6 +30,8 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.resolveS
  */
 public abstract class AbstractComponentParser {
 
+  public static final String ENTITY = "entity";
+
   protected final BeneratorContext context;
   protected final DescriptorProvider descriptorProvider;
 
@@ -38,8 +40,7 @@ public abstract class AbstractComponentParser {
     this.descriptorProvider = context.getLocalDescriptorProvider();
   }
 
-  protected  <T extends InstanceDescriptor> T mapInstanceDetails(
-      Element element, boolean complexType, T descriptor) {
+  protected <T extends InstanceDescriptor> T mapInstanceDetails(Element element, boolean complexType, T descriptor) {
     TypeDescriptor localType = descriptor.getLocalType();
     Map<String, String> attributes = XMLUtil.getAttributes(element);
     for (Map.Entry<String, String> entry : attributes.entrySet()) {
@@ -69,17 +70,17 @@ public abstract class AbstractComponentParser {
               if (source != null) {
                 if (source instanceof Generator) {
                   if (((Generator<?>) source).getGeneratedType() == Entity.class) {
-                    partType = "entity";
+                    partType = ENTITY;
                   }
                 } else if (source instanceof EntitySource) {
-                  partType = "entity";
+                  partType = ENTITY;
                 }
               } else {
                 String lcSourceSpec = sourceSpec.toLowerCase();
                 if (lcSourceSpec.endsWith(".ent.csv")
                     || lcSourceSpec.endsWith(".ent.fcw")
                     || lcSourceSpec.endsWith(".dbunit.xml")) {
-                  partType = "entity";
+                  partType = ENTITY;
                 }
               }
             }

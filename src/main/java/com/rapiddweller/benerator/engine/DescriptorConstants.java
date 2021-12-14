@@ -148,15 +148,26 @@ public class DescriptorConstants {
   public static final String ATT_TEST = "test";
   public static final String ATT_DURATION = "duration";
   public static final String ATT_MIN = "min";
+  public static final String ATT_MIN_INCLUSIVE = "minInclusive";
   public static final String ATT_MAX = "max";
+  public static final String ATT_MAX_INCLUSIVE = "maxInclusive";
   public static final String ATT_GRANULARITY = "granularity";
   public static final String ATT_DISTRIBUTION = "distribution";
   public static final String ATT_STATS = "stats";
+
   public static final String ATT_TEMPLATE = "template";
+  public static final String ATT_CONSTANT = "constant";
+  public static final String ATT_VALUES = "values";
+  public static final String ATT_PATTERN = "pattern";
+  public static final String ATT_SCRIPT = "script";
   public static final String ATT_GENERATOR = "generator";
+
   public static final String ATT_VALIDATOR = "validator";
   public static final String ATT_CONVERTER = "converter";
   public static final String ATT_NULL_QUOTA = "nullQuota";
+  public static final String ATT_TRUE_QUOTA = "trueQuota";
+  public static final String ATT_MODE = "mode";
+  public static final String ATT_NULLABLE = "nullable";
   public static final String ATT_UNIQUE = "unique";
   public static final String ATT_CYCLIC = "cyclic";
   public static final String ATT_SEPARATOR = "separator";
@@ -165,6 +176,12 @@ public class DescriptorConstants {
   public static final String ATT_NESTING = "nesting";
   public static final String ATT_LOCALE = "locale";
   public static final String ATT_FILTER = "filter";
+  public static final String ATT_MIN_LENGTH = "minLength";
+  public static final String ATT_MAX_LENGTH = "maxLength";
+  public static final String ATT_UNIQUE_KEY = "uniqueKey";
+  public static final String ATT_CONDITION = "condition";
+  public static final String ATT_MAP = "map";
+
   public static final String ATT_SENSOR = "sensor";
 
   public static final String ATT_CLASS = "class";

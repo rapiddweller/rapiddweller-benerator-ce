@@ -38,8 +38,8 @@ import com.rapiddweller.benerator.util.ExpressionBasedGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.common.xml.XMLAssert;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
@@ -57,19 +57,19 @@ public class WaitParser extends AbstractBeneratorDescriptorParser {
 
   // format definitions ----------------------------------------------------------------------------------------------
 
-  private static final AttributeInfo<Expression<Long>> DURATION = new AttributeInfo<>(
+  private static final AttrInfo<Expression<Long>> DURATION = new AttrInfo<>(
     ATT_DURATION, false, BeneratorErrorIds.SYN_WAIT_DURATION, new ScriptableParser<>(new NonNegativeLongParser()), null);
 
-  private static final AttributeInfo<Expression<Long>> MIN = new AttributeInfo<>(
+  private static final AttrInfo<Expression<Long>> MIN = new AttrInfo<>(
     ATT_MIN, false, BeneratorErrorIds.SYN_WAIT_MIN, new ScriptableParser<>(new NonNegativeLongParser()), null);
 
-  private static final AttributeInfo<Expression<Long>> MAX = new AttributeInfo<>(
+  private static final AttrInfo<Expression<Long>> MAX = new AttrInfo<>(
     ATT_MAX, false, BeneratorErrorIds.SYN_WAIT_MAX, new ScriptableParser<>(new NonNegativeLongParser()), null);
 
-  private static final AttributeInfo<Expression<Long>> GRANULARITY = new AttributeInfo<>(
+  private static final AttrInfo<Expression<Long>> GRANULARITY = new AttrInfo<>(
     ATT_GRANULARITY, false, BeneratorErrorIds.SYN_WAIT_GRANULARITY, new ScriptableParser<>(new NonNegativeLongParser()), null);
 
-  private static final AttributeInfo<String> DISTRIBUTION = new AttributeInfo<>(
+  private static final AttrInfo<String> DISTRIBUTION = new AttrInfo<>(
     ATT_DISTRIBUTION, false, BeneratorErrorIds.SYN_WAIT_DISTRIBUTION, null, null);
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_WAIT_ILLEGAL_ATTRIBUTE,

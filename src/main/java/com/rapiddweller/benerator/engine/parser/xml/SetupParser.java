@@ -48,8 +48,8 @@ import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.common.parser.PositiveIntegerParser;
 import com.rapiddweller.common.parser.RegexBasedStringParser;
 import com.rapiddweller.format.script.ScriptUtil;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.format.xml.XMLElementParser;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
@@ -73,52 +73,52 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
 
   public static final String FALSE = "false";
 
-  protected static final AttributeInfo<Long> COUNT = new AttributeInfo<>(
+  protected static final AttrInfo<Long> COUNT = new AttrInfo<>(
       ATT_MAX_COUNT, false, SYN_SETUP_MAX_COUNT, new NonNegativeLongParser());
 
-  protected static final AttributeInfo<String> DEFAULT_SCRIPT = new AttributeInfo<>(
+  protected static final AttrInfo<String> DEFAULT_SCRIPT = new AttrInfo<>(
       ATT_DEFAULT_SCRIPT, false, SYN_SETUP_DEF_SCRIPT, new DefaultScriptParser(), "ben");
 
-  protected static final AttributeInfo<Boolean> DEFAULT_NULL = new AttributeInfo<>(
+  protected static final AttrInfo<Boolean> DEFAULT_NULL = new AttrInfo<>(
       ATT_DEFAULT_NULL, false, SYN_SETUP_DEF_NULL, new BooleanParser(), FALSE);
 
-    protected static final AttributeInfo<String> DEFAULT_ENCODING = new AttributeInfo<>(
+    protected static final AttrInfo<String> DEFAULT_ENCODING = new AttrInfo<>(
       ATT_DEFAULT_ENCODING, false, SYN_SETUP_DEF_ENCODING, new EncodingParser(), Encodings.UTF_8);
 
-  protected static final AttributeInfo<String> DEFAULT_LINE_SEPARATOR = new AttributeInfo<>(
+  protected static final AttrInfo<String> DEFAULT_LINE_SEPARATOR = new AttrInfo<>(
     ATT_DEFAULT_LINE_SEPARATOR, false, SYN_SETUP_DEF_LINE_SEPARATOR,
       new RegexBasedStringParser("line separator", "(\\r)?\\n"), SystemInfo.LF);
 
-  protected static final AttributeInfo<String> DEFAULT_LOCALE = new AttributeInfo<>(
+  protected static final AttrInfo<String> DEFAULT_LOCALE = new AttrInfo<>(
     ATT_DEFAULT_LOCALE, false, SYN_SETUP_DEF_LOCALE, new IdParser(), Locale.getDefault().toString());
 
-  protected static final AttributeInfo<String> DEFAULT_DATASET = new AttributeInfo<>(
+  protected static final AttrInfo<String> DEFAULT_DATASET = new AttrInfo<>(
     ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET, new IdParser(),
       LocaleUtil.getDefaultCountryCode());
 
-  protected static final AttributeInfo<Integer> DEFAULT_PAGE_SIZE = new AttributeInfo<>(
+  protected static final AttrInfo<Integer> DEFAULT_PAGE_SIZE = new AttrInfo<>(
     ATT_DEFAULT_PAGE_SIZE, false, SYN_SETUP_DEF_PAGE_SIZE, new PositiveIntegerParser(), "1");
 
-  protected static final AttributeInfo<Character> DEFAULT_SEPARATOR = new AttributeInfo<>(
+  protected static final AttrInfo<Character> DEFAULT_SEPARATOR = new AttrInfo<>(
       ATT_DEFAULT_SEPARATOR, false, SYN_SETUP_DEF_SEPARATOR, new CharacterParser(), ",");
 
-  protected static final AttributeInfo<Boolean> DEFAULT_ONE_TO_ONE = new AttributeInfo<>(
+  protected static final AttrInfo<Boolean> DEFAULT_ONE_TO_ONE = new AttrInfo<>(
       ATT_DEFAULT_ONE_TO_ONE, false, SYN_SETUP_DEF_ONE_TO_ONE, new BooleanParser(), FALSE);
 
-  protected static final AttributeInfo<ErrorHandler> DEFAULT_ERR_HANDLER = new AttributeInfo<>(
+  protected static final AttrInfo<ErrorHandler> DEFAULT_ERR_HANDLER = new AttrInfo<>(
       ATT_DEFAULT_ERR_HANDLER, false, SYN_SETUP_DEF_ERR_HANDLER, new GlobalErrorHandlerParser(), "fatal");
 
-  protected static final AttributeInfo<Boolean> DEFAULT_IMPORTS = new AttributeInfo<>(
+  protected static final AttrInfo<Boolean> DEFAULT_IMPORTS = new AttrInfo<>(
       ATT_DEFAULT_IMPORTS, false, SYN_SETUP_DEF_IMPORTS, new BooleanParser(), "true");
 
-  protected static final AttributeInfo<Boolean> DEFAULT_SOURCE_SCRIPTED = new AttributeInfo<>(
+  protected static final AttrInfo<Boolean> DEFAULT_SOURCE_SCRIPTED = new AttrInfo<>(
       ATT_DEFAULT_SOURCE_SCRIPTED, false, SYN_SETUP_DEF_SOURCE_SCRIPTED, new BooleanParser(), FALSE);
 
-  protected static final AttributeInfo<Boolean> ACCEPT_UNKNOWN_SIMPLE_TYPES = new AttributeInfo<>(
+  protected static final AttrInfo<Boolean> ACCEPT_UNKNOWN_SIMPLE_TYPES = new AttrInfo<>(
       ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES, false, SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES,
       new BooleanParser(), FALSE);
 
-  protected static final AttributeInfo<String> GENERATOR_FACTORY = new AttributeInfo<>(
+  protected static final AttrInfo<String> GENERATOR_FACTORY = new AttrInfo<>(
       ATT_GENERATOR_FACTORY, false, SYN_SETUP_GENERATOR_FACTORY,
       new FullyQualifiedClassNameParser(true));
 

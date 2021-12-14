@@ -43,8 +43,8 @@ import com.rapiddweller.common.parser.BooleanParser;
 import com.rapiddweller.common.parser.FullyQualifiedClassNameParser;
 import com.rapiddweller.common.parser.NonNegativeIntegerParser;
 import com.rapiddweller.common.parser.NonNegativeLongParser;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.Task;
@@ -62,34 +62,34 @@ public class RunTaskParser extends AbstractBeneratorDescriptorParser {
 
   // format spec -----------------------------------------------------------------------------------------------------
 
-  private static final AttributeInfo<String> CLASS = new AttributeInfo<>(
+  private static final AttrInfo<String> CLASS = new AttrInfo<>(
       ATT_CLASS, false, BeneratorErrorIds.SYN_RUN_TASK_CLASS,
       new FullyQualifiedClassNameParser(false), null);
 
-  private static final AttributeInfo<String> SPEC = new AttributeInfo<>(
+  private static final AttrInfo<String> SPEC = new AttrInfo<>(
       ATT_SPEC, false, BeneratorErrorIds.SYN_RUN_TASK_SPEC, null, null);
 
-  private static final AttributeInfo<Expression<Long>> COUNT = new AttributeInfo<>(
+  private static final AttrInfo<Expression<Long>> COUNT = new AttrInfo<>(
       ATT_COUNT, false, BeneratorErrorIds.SYN_RUN_TASK_COUNT,
       new ScriptableParser<>(new NonNegativeLongParser()), null);
 
-  private static final AttributeInfo<Expression<Long>> PAGESIZE =
+  private static final AttrInfo<Expression<Long>> PAGESIZE =
       new PageSizeAttribute(BeneratorErrorIds.SYN_RUN_TASK_PAGE_SIZE);
 
-  private static final AttributeInfo<Expression> PAGER = new AttributeInfo<>(
+  private static final AttrInfo<Expression> PAGER = new AttrInfo<>(
       ATT_PAGER, false, BeneratorErrorIds.SYN_RUN_TASK_PAGER, new BeanSpecParser(), null);
 
-  private static final AttributeInfo<Expression<Integer>> THREADS = new AttributeInfo<>(
+  private static final AttrInfo<Expression<Integer>> THREADS = new AttrInfo<>(
       ATT_THREADS, false, BeneratorErrorIds.SYN_RUN_TASK_THREADS,
       new ScriptableParser<>(new NonNegativeIntegerParser()), "1"
   );
 
-  private static final AttributeInfo<Expression<Boolean>> STATS = new AttributeInfo<>(
+  private static final AttrInfo<Expression<Boolean>> STATS = new AttrInfo<>(
       ATT_STATS, false, BeneratorErrorIds.SYN_RUN_TASK_STATS,
       new ScriptableParser<>(new BooleanParser()), "false"
   );
 
-  private static final AttributeInfo<Expression<ErrorHandler>> ON_ERROR =
+  private static final AttrInfo<Expression<ErrorHandler>> ON_ERROR =
       new ErrorHandlerAttribute(BeneratorErrorIds.SYN_RUN_TASK_ON_ERROR);
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(

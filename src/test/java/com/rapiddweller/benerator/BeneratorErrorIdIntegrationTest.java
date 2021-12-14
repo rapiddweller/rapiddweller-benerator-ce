@@ -416,6 +416,14 @@ public class BeneratorErrorIdIntegrationTest {
         ExitCodes.SYNTAX_ERROR, result);
   }
 
+  @Test
+  public void test_0502_syn_var_no_count() {
+    BeneratorResult result = runFile("0502_syn_var_wo_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_VAR_NAME,
+        "Attribute 'name' is missing in <variable>",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
   // <attribute> tests -----------------------------------------------------------------------------------------------
 
   @Test
@@ -426,20 +434,173 @@ public class BeneratorErrorIdIntegrationTest {
         ExitCodes.SYNTAX_ERROR, result);
   }
 
-  /* TODO implement error mapping
   @Test
   public void test_0551_attr_ill_attr() {
     BeneratorResult result = runFile("0551_syn_attr_ill_attr.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_ATTR_ILLEGAL_ATTR, "Illegal attribute for <attribute>: ill_attr",
+    assertResult(BeneratorErrorIds.SYN_ATTR_ILLEGAL_ATTR,
+        "Illegal XML attribute: attribute.ill_attr",
         ExitCodes.SYNTAX_ERROR, result);
   }
-  */
 
   @Test
   public void test_0552_attr_wo_name() {
     BeneratorResult result = runFile("0552_syn_attr_wo_name.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_NAME,
         "Attribute 'name' is missing in <attribute>",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0553_attr_ill_type() {
+    BeneratorResult result = runFile("0553_syn_attr_ill_type.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_TYPE,
+        "Illegal attribute value for attribute.type: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  /* TODO
+  @Test
+  public void test_0554_syn_no_base_info() {
+    BeneratorResult result = runFile("0554_syn_no_root_info.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "At least one of these attributes must be set: type, constant, values, pattern, script, generator, nullQuota",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+  */
+
+  /* TODO
+  @Test
+  public void test_0570_attr_ill_source() {
+    BeneratorResult result = runFile("0570_syn_attr_ill_source.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_SOURCE,
+        "Illegal attribute value for attribute.source: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+  */
+
+  @Test
+  public void test_0571_syn_attr_encoding_wo_source() {
+    BeneratorResult result = runFile("0571_syn_attr_encoding_wo_source.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ENCODING,
+        "Element <attribute>'s attribute 'encoding' is only permitted in combination with a 'source' attribute",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0571_syn_attr_ill_encoding() {
+    BeneratorResult result = runFile("0571_syn_attr_ill_encoding.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ENCODING,
+        "Illegal attribute value for attribute.encoding: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  /* TODO
+  @Test
+  public void test_0572_syn_attr_ill_segment() {
+    BeneratorResult result = runFile("0572_syn_attr_ill_segment.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_SEGMENT,
+        "Illegal attribute value for attribute.segment: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+  */
+
+  @Test
+  public void test_0572_syn_attr_segment_wo_source() {
+    BeneratorResult result = runFile("0572_syn_attr_segment_wo_source.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_SEGMENT,
+        "Element <attribute>'s attribute 'segment' is only permitted in combination with a 'source' attribute",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0573_syn_attr_ill_separator() {
+    BeneratorResult result = runFile("0573_syn_attr_ill_separator.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_SEPARATOR,
+        "Illegal attribute value for attribute.separator: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0573_syn_attr_separator_wo_source() {
+    BeneratorResult result = runFile("0573_syn_attr_separator_wo_source.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_SEPARATOR,
+        "Element <attribute>'s attribute 'separator' is only permitted in combination with a 'source' attribute",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  /* TODO
+  @Test
+  public void test_0574_syn_attr_ill_selector() {
+    BeneratorResult result = runFile("0574_syn_attr_ill_selector.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_SELECTOR,
+        "Illegal attribute value for attribute.selector: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+   */
+
+  @Test
+  public void test_0574_syn_attr_selector_wo_source() {
+    BeneratorResult result = runFile("0574_syn_attr_selector_wo_source.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_SELECTOR,
+        "Element <attribute>'s attribute 'selector' is only permitted in combination with a 'source' attribute",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  /* TODO
+  @Test
+  public void test_0575_syn_attr_ill_sub_selector() {
+    BeneratorResult result = runFile("0575_syn_attr_ill_sub_selector.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_SUB_SELECTOR,
+        "Illegal attribute value for attribute.subSelector: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+  */
+
+  @Test
+  public void test_0575_syn_attr_sub_selector_wo_source() {
+    BeneratorResult result = runFile("0575_syn_attr_sub_selector_wo_source.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_SUB_SELECTOR,
+        "Element <attribute>'s attribute 'subSelector' is only permitted in combination with a 'source' attribute",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0576_syn_attr_ill_row_based() {
+    BeneratorResult result = runFile("0576_syn_attr_ill_row_based.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROW_BASED,
+        "Illegal attribute value for attribute.rowBased: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0576_syn_attr_row_based_wo_source() {
+    BeneratorResult result = runFile("0576_syn_attr_row_based_wo_source.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROW_BASED,
+        "Element <attribute>'s attribute 'rowBased' is only permitted in combination with a 'source' attribute",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0577_syn_attr_format_wo_source() {
+    BeneratorResult result = runFile("0577_syn_attr_format_wo_source.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_FORMAT,
+        "Element <attribute>'s attribute 'format' is only permitted in combination with a 'source' attribute",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0577_syn_attr_ill_format() {
+    BeneratorResult result = runFile("0577_syn_attr_ill_format.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_FORMAT,
+        "Illegal attribute value for attribute.format: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0578_syn_attr_empty_marker_wo_source() {
+    BeneratorResult result = runFile("0578_syn_attr_empty_marker_wo_source.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_EMPTY_MARKER,
+        "Element <attribute>'s attribute 'emptyMarker' is only permitted in combination with a 'source' attribute",
         ExitCodes.SYNTAX_ERROR, result);
   }
 

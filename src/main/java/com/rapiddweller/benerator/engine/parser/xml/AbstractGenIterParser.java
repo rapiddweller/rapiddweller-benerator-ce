@@ -59,8 +59,8 @@ import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.parser.BooleanParser;
 import com.rapiddweller.common.parser.PositiveIntegerParser;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
@@ -93,14 +93,14 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStr
  */
 public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorParser {
 
-  protected static final AttributeInfo<Expression<Integer>> THREADS = new AttributeInfo<>(
+  protected static final AttrInfo<Expression<Integer>> THREADS = new AttrInfo<>(
       ATT_THREADS, false, BeneratorErrorIds.SYN_GENERATE_THREADS,
       new ScriptableParser<>(new PositiveIntegerParser()), "1");
 
-  protected static final AttributeInfo<Expression<Boolean>> STATS = new AttributeInfo<>(
+  protected static final AttrInfo<Expression<Boolean>> STATS = new AttrInfo<>(
       ATT_STATS, false, BeneratorErrorIds.SYN_GENERATE_STATS, new ScriptableParser<>(new BooleanParser()), "false");
 
-  protected static final AttributeInfo<String> SENSOR = new AttributeInfo<>(
+  protected static final AttrInfo<String> SENSOR = new AttrInfo<>(
       ATT_SENSOR, false, BeneratorErrorIds.SYN_GENERATE_SENSOR, null, null);
 
 

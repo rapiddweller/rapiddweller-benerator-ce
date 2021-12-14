@@ -35,8 +35,8 @@ import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.parser.EnumParser;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.format.xml.AttributeInfo;
 import com.rapiddweller.script.Expression;
 import org.w3c.dom.Element;
 
@@ -52,10 +52,10 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class EchoParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttributeInfo<String> MESSAGE = new AttributeInfo<>(
+  private static final AttrInfo<String> MESSAGE = new AttrInfo<>(
       ATT_MESSAGE, false, BeneratorErrorIds.SYN_ECHO_MESSAGE, null, null);
 
-  private static final AttributeInfo<Expression<EchoType>> TYPE = new AttributeInfo<>(
+  private static final AttrInfo<Expression<EchoType>> TYPE = new AttrInfo<>(
       ATT_TYPE, false, BeneratorErrorIds.SYN_ECHO_TYPE,
       new ScriptableParser<>(new EnumParser<>(EchoType.class)), "console");
 
