@@ -396,17 +396,16 @@ public class DescriptorUtil {
   }
 
   public static void parseComponentConfig(Element element, TypeDescriptor type, BeneratorContext context) {
-    // parse child elements
-    ModelParser parser = new ModelParser(context);
+    ModelParser modelParser = new ModelParser(context, true);
     int valueCount = 0;
     for (Element child : XMLUtil.getChildElements(element)) {
       String childType = XMLUtil.localName(child);
       if (EL_VARIABLE.equals(childType)) {
-        parser.parseVariable(child, (VariableHolder) type);
+        modelParser.parseVariable(child, (VariableHolder) type);
       } else if (COMPONENT_TYPES.contains(childType)) {
-        parser.parseComponentGeneration(child, (ComplexTypeDescriptor) type);
+        modelParser.getPartParser().parseComponentGeneration(child, (ComplexTypeDescriptor) type);
       } else if (EL_VALUE.equals(childType)) {
-        parser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, valueCount++);
+        modelParser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, valueCount++);
       }
     }
   }

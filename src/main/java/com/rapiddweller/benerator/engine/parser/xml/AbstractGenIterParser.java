@@ -48,6 +48,7 @@ import com.rapiddweller.benerator.factory.DescriptorUtil;
 import com.rapiddweller.benerator.factory.GenerationStepFactory;
 import com.rapiddweller.benerator.factory.MetaGeneratorFactory;
 import com.rapiddweller.benerator.parser.ModelParser;
+import com.rapiddweller.benerator.parser.xml.PartParser;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
@@ -265,7 +266,7 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
 
     // handle sub elements
     boolean completionReported = false; // checks if the interceptor.generationComplete() has been called
-    ModelParser parser = new ModelParser(childContext);
+    ModelParser modelParser = new ModelParser(childContext, true);
     TypeDescriptor type = descriptor.getTypeDescriptor();
     int arrayIndex = 0;
     Element[] childElements = XMLUtil.getChildElements(element);
@@ -276,12 +277,13 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
       String childName = XMLUtil.localName(child);
       InstanceDescriptor instanceDescriptor = null;
       if (EL_VARIABLE.equals(childName)) {
-        instanceDescriptor = parser.parseVariable(child, (VariableHolder) type);
+        instanceDescriptor = modelParser.parseVariable(child, (VariableHolder) type);
       } else if (COMPONENT_TYPES.contains(childName)) {
-        instanceDescriptor = parser.parseComponentGeneration(child, (ComplexTypeDescriptor) type);
+        PartParser partParser = new PartParser(modelParser, true);
+        instanceDescriptor = partParser.parseComponentGeneration(child, (ComplexTypeDescriptor) type);
         handledMembers.add(instanceDescriptor.getName().toLowerCase());
       } else if (EL_VALUE.equals(childName)) {
-        instanceDescriptor = parser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, arrayIndex++);
+        instanceDescriptor = modelParser.parseSimpleTypeArrayElement(child, (ArrayTypeDescriptor) type, arrayIndex++);
       }
 
       // ...handle non-member/variable child elements

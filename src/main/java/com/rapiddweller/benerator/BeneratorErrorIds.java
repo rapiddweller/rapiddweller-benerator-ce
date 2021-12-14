@@ -337,11 +337,17 @@ public class BeneratorErrorIds {
   public static final String SYN_ID_ILLEGAL_ATTR   = "BEN-0601";
   public static final String SYN_ID_NAME           = "BEN-0602";
 
-  // Syntax Errors regarding <reference> ------------------------------------------------------------------------------------
+  // Syntax Errors regarding <reference> -----------------------------------------------------------------------------
 
   public static final String SYN_REF               = "BEN-0650";
   public static final String SYN_REF_ILLEGAL_ATTR  = "BEN-0651";
   public static final String SYN_REF_NAME          = "BEN-0652";
+
+  // Syntax Errors regarding <part> ----------------------------------------------------------------------------------
+
+  public static final String SYN_PART              = "BEN-0800";
+  public static final String SYN_PART_ILLEGAL_ATTR = "BEN-0701";
+  public static final String SYN_PART_NAME         = "BEN-0702";
 
 
   // BEN-0500...0599 relational database issues ======================================================================
@@ -521,10 +527,16 @@ public class BeneratorErrorIds {
   public static final String SYN_KKEXP_TRANSACTION_TIMEOUT_MS = "BEN-2116";
   public static final String SYN_KKEXP_TRANSACTIONAL_ID       = "BEN-2117";
 
-  // constructor -----------------------------------------------------------------------------------------------------
+  // Syntax Errors regarding the 'xml' platform ----------------------------------------------------------------------
 
+  public static final String SYN_XML_SIMPLE_NAME = "BEN-2300";
+  public static final String SYN_XML_SIMPLE_TYPE = "BEN-2301";
+
+  // end of constants list -------------------------------------------------------------------------------------------
+
+  /** Private constructor to prevent instantiation of this utility class. */
   private BeneratorErrorIds() {
-    // private constructor to prevent instantiation of this utility CLASS
+    // private constructor to prevent instantiation of this utility class
   }
 
 }

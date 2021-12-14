@@ -47,7 +47,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link XMLSchemaDescriptorProvider}.<br/><br/>
  * Created: 26.02.2008 21:05:23
- *
  * @author Volker Bergmann
  * @since 0.5.0
  */
@@ -60,9 +59,6 @@ public class XMLSchemaDescriptorProviderTest {
   private static final String ANNOTATION_TEST_FILE = BASE + "annotation-test.xsd";
   private static final String CHOICE_TEST_FILE = BASE + "choice-test.xsd";
 
-  /**
-   * Test simple type element.
-   */
   @Test
   public void testSimpleTypeElement() {
     BeneratorContext context = new DefaultBeneratorContext(IOUtil.getParentUri(SIMPLE_ELEMENT_TEST_FILE));
@@ -81,9 +77,6 @@ public class XMLSchemaDescriptorProviderTest {
     }
   }
 
-  /**
-   * Test nesting.
-   */
   @Test
   public void testNesting() {
     BeneratorContext context = new DefaultBeneratorContext(IOUtil.getParentUri(NESTING_TEST_FILE));
@@ -111,9 +104,6 @@ public class XMLSchemaDescriptorProviderTest {
     }
   }
 
-  /**
-   * Test annotations.
-   */
   @Test
   public void testAnnotations() {
     BeneratorContext context = new DefaultBeneratorContext(IOUtil.getParentUri(ANNOTATION_TEST_FILE));
@@ -151,9 +141,6 @@ public class XMLSchemaDescriptorProviderTest {
     }
   }
 
-  /**
-   * Test choice.
-   */
   @Test
   public void testChoice() {
     BeneratorContext context = new DefaultBeneratorContext(IOUtil.getParentUri(CHOICE_TEST_FILE));

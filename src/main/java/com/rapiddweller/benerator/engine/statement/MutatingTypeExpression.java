@@ -37,7 +37,6 @@ import org.w3c.dom.Element;
 /**
  * {@link Expression} which changes an {@link Entity}'s type.<br/><br/>
  * Created: 18.04.2011 14:48:57
- *
  * @author Volker Bergmann
  * @since 0.6.6
  */
@@ -46,22 +45,11 @@ public class MutatingTypeExpression implements Expression<ComplexTypeDescriptor>
   private final Element element;
   private String typeName;
 
-  /**
-   * Instantiates a new Mutating type expression.
-   *
-   * @param element  the element
-   * @param typeName the type name
-   */
   public MutatingTypeExpression(Element element, String typeName) {
     this.element = element;
     this.typeName = typeName;
   }
 
-  /**
-   * Sets type name.
-   *
-   * @param typeName the type name
-   */
   public void setTypeName(String typeName) {
     this.typeName = typeName;
   }

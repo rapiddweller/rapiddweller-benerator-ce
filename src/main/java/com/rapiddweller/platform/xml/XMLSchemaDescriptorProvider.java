@@ -125,7 +125,9 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
   private BeneratorContext context;
   private String schemaUri;
 
-  private final ModelParser parser;
+  private final ModelParser modelParser;
+  private final ComplexTypeParser complexTypeParser;
+  private final SimpleTypeParser simpleTypeParser;
   private Map<String, String> namespaces;
   private final ResourceManager resourceManager = new ResourceManagerSupport();
 
@@ -136,7 +138,9 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     super(schemaUri, context.getDataModel(), true);
     new XMLNativeTypeDescriptorProvider(SCHEMA_NAMESPACE, dataModel);
     this.namespaces = new HashMap<>();
-    parser = new ModelParser(context);
+    modelParser = new ModelParser(context, false);
+    complexTypeParser = new ComplexTypeParser(modelParser);
+    simpleTypeParser = new SimpleTypeParser(context);
     setContext(context);
     setSchemaUri(schemaUri);
   }
@@ -423,7 +427,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     }
     Element info = infos[0];
 
-    parser.parseComplexTypeChild(info, descriptor);
+    complexTypeParser.parseComplexTypeChild(info, descriptor);
     return descriptor;
   }
 
@@ -652,22 +656,22 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
       if ("bean".equals(childName)) {
         BeanParser.parseBeanExpression(info, true);
       } else if ("variable".equals(childName)) {
-        parser.parseVariable(info, (ComplexTypeDescriptor) descriptor);
+        modelParser.parseVariable(info, (ComplexTypeDescriptor) descriptor);
       } else if (ATTRIBUTE.equals(childName)) {
-        descriptor = (T) parser.parseAttribute(info, null, (PartDescriptor) descriptor);
+        descriptor = (T) modelParser.parseAttribute(info, null, (PartDescriptor) descriptor);
       } else if ("part".equals(childName)) {
-        descriptor = (T) parser.parsePart(info, null, (PartDescriptor) descriptor);
+        descriptor = (T) modelParser.parsePart(info, null, (PartDescriptor) descriptor);
       } else if (descriptor instanceof ComplexTypeDescriptor) {
-        descriptor = (T) parser.parseComplexType(info, (ComplexTypeDescriptor) descriptor);
+        descriptor = (T) complexTypeParser.parse(info, (ComplexTypeDescriptor) descriptor);
       } else if (descriptor instanceof SimpleTypeDescriptor) {
-        descriptor = (T) parser.parseSimpleType(info, (SimpleTypeDescriptor) descriptor);
+        descriptor = (T) simpleTypeParser.parse(info, (SimpleTypeDescriptor) descriptor);
       } else if ("type".equals(childName)) {
         TypeDescriptor typeDescriptor =
             (descriptor instanceof InstanceDescriptor ? ((InstanceDescriptor) descriptor).getTypeDescriptor() : (TypeDescriptor) descriptor);
         if (typeDescriptor instanceof SimpleTypeDescriptor) {
-          descriptor = (T) parser.parseSimpleType(info, (SimpleTypeDescriptor) typeDescriptor);
+          descriptor = (T) simpleTypeParser.parse(info, (SimpleTypeDescriptor) typeDescriptor);
         } else {
-          descriptor = (T) parser.parseComplexType(info, (ComplexTypeDescriptor) typeDescriptor);
+          descriptor = (T) complexTypeParser.parse(info, (ComplexTypeDescriptor) typeDescriptor);
         }
       } else {
         throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Unsupported element (" + childName + ") " +
@@ -818,7 +822,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
       return descriptor;
     }
     Element info = infos[0];
-    return (T) parser.parseSimpleTypeComponent(info, null, descriptor);
+    return (T) modelParser.parseSimpleTypeComponent(info, null, descriptor);
   }
 
   private SimpleTypeDescriptor parseSimpleType(String name, Element simpleType) {
@@ -858,7 +862,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
       if (infos.length > 1) {
         throw BeneratorExceptionFactory.getInstance().configurationError("Cannot handle more than one appinfo in a simple type");
       }
-      parser.parseSimpleType(infos[0], descriptor);
+      simpleTypeParser.parse(infos[0], descriptor);
     }
     return descriptor;
   }

@@ -495,6 +495,24 @@ public class BeneratorErrorIdIntegrationTest {
         ExitCodes.SYNTAX_ERROR, result);
   }
 
+  // <part> tests ----------------------------------------------------------------------------------------------------
+
+  /* TODO implement error mapping
+  @Test
+  public void test_0701_part_ill_attr() {
+    BeneratorResult result = runFile("0701_syn_part_ill_attr.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_PART_ILLEGAL_ATTR, "Illegal attribute for <part>: ill_attr",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+  */
+
+  @Test
+  public void test_0702_part_wo_name() {
+    BeneratorResult result = runFile("0702_syn_part_wo_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_PART_NAME, "Attribute 'name' is missing in <part>",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
   // database tests --------------------------------------------------------------------------------------------------
 
   @Test
