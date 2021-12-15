@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.engine.expression;
 
 import com.rapiddweller.common.Context;
-import com.rapiddweller.common.converter.LiteralParser;
+import com.rapiddweller.common.converter.LiteralParserConverter;
 import com.rapiddweller.script.expression.UnaryExpression;
 
 /**
@@ -35,7 +35,7 @@ import com.rapiddweller.script.expression.UnaryExpression;
  * (like {settings.base}) it evaluates the script and parses its result.<br/><br/>
  * Created at 23.07.2009 14:34:42
  * @author Volker Bergmann
- * @see LiteralParser
+ * @see LiteralParserConverter
  * @since 0.6.0
  */
 public class ScriptableLiteral extends UnaryExpression<Object> {
@@ -48,7 +48,7 @@ public class ScriptableLiteral extends UnaryExpression<Object> {
   public Object evaluate(Context context) {
     Object feed = term.evaluate(context);
     if (feed instanceof String) {
-      return LiteralParser.parse((String) feed);
+      return LiteralParserConverter.parse((String) feed);
     } else {
       return feed;
     }

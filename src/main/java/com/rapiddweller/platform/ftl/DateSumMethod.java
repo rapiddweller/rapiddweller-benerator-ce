@@ -27,7 +27,7 @@
 package com.rapiddweller.platform.ftl;
 
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.common.converter.LiteralParser;
+import com.rapiddweller.common.converter.LiteralParserConverter;
 import freemarker.template.SimpleDate;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModel;
@@ -48,7 +48,7 @@ public class DateSumMethod implements TemplateMethodModelEx {
   public TemplateModel exec(List args) {
     long sum = 0;
     for (Object arg : args) {
-      arg = LiteralParser.parse((String) arg);
+      arg = LiteralParserConverter.parse((String) arg);
       if (arg instanceof Date) {
         sum += ((Date) arg).getTime();
       } else if (arg instanceof Timestamp) {

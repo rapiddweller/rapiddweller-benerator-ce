@@ -31,7 +31,7 @@ import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.collection.MapEntry;
 import com.rapiddweller.common.converter.AbstractConverter;
-import com.rapiddweller.common.converter.LiteralParser;
+import com.rapiddweller.common.converter.LiteralParserConverter;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.common.mutator.AnyMutator;
 
@@ -49,7 +49,7 @@ public class DefaultEntryConverter extends AbstractConverter<Map.Entry, Map.Entr
 
   private final BeneratorContext context;
   private final Converter<?, ?> preprocessor;
-  private final LiteralParser stringParser;
+  private final LiteralParserConverter stringParser;
   private final boolean putEntriesToContext;
 
   public DefaultEntryConverter(BeneratorContext context) {
@@ -61,7 +61,7 @@ public class DefaultEntryConverter extends AbstractConverter<Map.Entry, Map.Entr
     this.preprocessor = preprocessor;
     this.context = context;
     this.putEntriesToContext = putEntriesToContext;
-    this.stringParser = new LiteralParser();
+    this.stringParser = new LiteralParserConverter();
   }
 
   @Override

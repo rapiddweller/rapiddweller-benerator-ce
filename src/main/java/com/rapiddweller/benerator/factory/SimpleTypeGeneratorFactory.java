@@ -51,7 +51,7 @@ import com.rapiddweller.common.converter.ArrayElementExtractor;
 import com.rapiddweller.common.converter.ConditionalConverter;
 import com.rapiddweller.common.converter.ConverterChain;
 import com.rapiddweller.common.converter.DateString2DurationConverter;
-import com.rapiddweller.common.converter.LiteralParser;
+import com.rapiddweller.common.converter.LiteralParserConverter;
 import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.format.DataSource;
@@ -160,7 +160,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     if ("".equals(constant)) {
       generator = new ConstantGenerator<>("");
     } else if (constant != null) {
-      Object value = LiteralParser.parse(constant);
+      Object value = LiteralParserConverter.parse(constant);
       PrimitiveType primitiveType = descriptor.getPrimitiveType();
       if (primitiveType != null) {
         value = AnyConverter.convert(value, primitiveType.getJavaType());
