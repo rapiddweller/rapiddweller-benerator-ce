@@ -107,7 +107,7 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
     ATT_USER, false, BeneratorErrorIds.SYN_DB_USER, new ScriptableParser<>(new IdParser()));
 
   public static final AttrInfo<Expression<String>> PASSWORD = new AttrInfo<>(
-    ATT_PASSWORD, false, BeneratorErrorIds.SYN_DB_PASSWORD, new ScriptableParser<>(new StringParser()));
+    ATT_PASSWORD, false, BeneratorErrorIds.SYN_DB_PASSWORD, new ScriptableParser<>(new StringParser("db password")));
 
   public static final AttrInfo<Expression<String>> CATALOG = new AttrInfo<>(
     ATT_CATALOG, false, BeneratorErrorIds.SYN_DB_CATALOG, new ScriptableParser<>(new IdParser()));
@@ -117,15 +117,15 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
 
   public static final AttrInfo<Expression<String>> TABLE_FILTER = new AttrInfo<>(
     ATT_TABLE_FILTER, false, BeneratorErrorIds.SYN_DB_TABLE_FILTER,
-      new ScriptableParser<>(new StringParser()));
+      new ScriptableParser<>(new StringParser("tableFilter expression")));
 
   public static final AttrInfo<Expression<String>> INCL_TABLES = new AttrInfo<>(
     ATT_INCL_TABLES, false, BeneratorErrorIds.SYN_DB_INCLUDE_TABLES,
-      new ScriptableParser<>(new StringParser()));
+      new ScriptableParser<>(new StringParser("includeTables expression")));
 
   public static final AttrInfo<Expression<String>> EXCL_TABLES = new AttrInfo<>(
     ATT_EXCL_TABLES, false, BeneratorErrorIds.SYN_DB_EXCLUDE_TABLES,
-      new ScriptableParser<>(new StringParser()));
+      new ScriptableParser<>(new StringParser("excludeTables expression")));
 
   public static final AttrInfo<Expression<Boolean>> META_CACHE = new AttrInfo<>(
     ATT_META_CACHE, false, BeneratorErrorIds.SYN_DB_META_CACHE,
