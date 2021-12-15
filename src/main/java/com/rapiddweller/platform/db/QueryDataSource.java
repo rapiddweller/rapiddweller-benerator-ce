@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -86,8 +86,7 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> {
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + '[' +
-        (renderedQuery != null ? renderedQuery : query) + ']';
+    return getClass().getSimpleName() + '[' + (renderedQuery != null ? renderedQuery : query) + ']';
   }
 
 }
