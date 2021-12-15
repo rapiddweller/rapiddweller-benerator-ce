@@ -33,6 +33,7 @@ import org.w3c.dom.Element;
 import static com.rapiddweller.benerator.BeneratorErrorIds.*;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import static com.rapiddweller.common.xml.XMLAssert.allowOnlyInContextOf;
+import static com.rapiddweller.common.xml.XMLAssert.mutuallyExcludeAttributes;
 
 /**
  * Parses &lt;attribute&gt; elements.<br/><br/>
@@ -198,6 +199,11 @@ public class AttributeParser extends AbstractComponentParser {
     }
 
     private void checkSourceRelatedElements(Element element) {
+      // mutually exclude the root generator attributes
+      mutuallyExcludeAttributes(SYN_ATTR_ROOT_INFO, element,
+          ATT_CONSTANT, ATT_VALUES, ATT_PATTERN, ATT_SCRIPT, ATT_GENERATOR);
+      mutuallyExcludeAttributes(SYN_ATTR_ROOT_INFO, element, ATT_CONSTANT, ATT_MIN_LENGTH);
+      mutuallyExcludeAttributes(SYN_ATTR_ROOT_INFO, element, ATT_CONSTANT, ATT_MAX_LENGTH);
       // min/maxInclude only make sense with their min/max reference value
       allowOnlyInContextOf(ATT_MIN, SYN_ATTR_MIN_INCLUSIVE, element, ATT_MIN_INCLUSIVE);
       allowOnlyInContextOf(ATT_MAX, SYN_ATTR_MAX_INCLUSIVE, element, ATT_MAX_INCLUSIVE);

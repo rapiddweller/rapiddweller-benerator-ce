@@ -469,7 +469,103 @@ public class BeneratorErrorIdIntegrationTest {
   */
 
   @Test
-  public void test_0567_attr_ill_minLength() {
+  public void test_0554_syn_attr_constant_generator() {
+    BeneratorResult result = runFile("test_0554_syn_attr_constant_generator.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "The attributes 'constant' and 'generator' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0554_syn_constant_maxLength() {
+    BeneratorResult result = runFile("test_0554_syn_constant_maxLength.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "The attributes 'constant' and 'maxLength' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0554_syn_constant_minLength() {
+    BeneratorResult result = runFile("test_0554_syn_constant_minLength.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "The attributes 'constant' and 'minLength' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0554_syn_constant_pattern() {
+    BeneratorResult result = runFile("test_0554_syn_constant_pattern.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "The attributes 'constant' and 'pattern' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0554_syn_constant_script() {
+    BeneratorResult result = runFile("test_0554_syn_constant_script.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "The attributes 'constant' and 'script' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0554_syn_constant_values() {
+    BeneratorResult result = runFile("test_0554_syn_constant_values.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "The attributes 'constant' and 'values' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0554_syn_pattern_generator() {
+    BeneratorResult result = runFile("test_0554_syn_pattern_generator.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "The attributes 'pattern' and 'generator' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0554_syn_pattern_script() {
+    BeneratorResult result = runFile("test_0554_syn_pattern_script.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "The attributes 'pattern' and 'script' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0554_syn_script_generator() {
+    BeneratorResult result = runFile("test_0554_syn_script_generator.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "The attributes 'script' and 'generator' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0554_syn_values_generator() {
+    BeneratorResult result = runFile("test_0554_syn_values_generator.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "The attributes 'values' and 'generator' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0554_syn_values_pattern() {
+    BeneratorResult result = runFile("test_0554_syn_values_pattern.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "The attributes 'values' and 'pattern' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0554_syn_values_script() {
+    BeneratorResult result = runFile("test_0554_syn_values_script.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_ROOT_INFO,
+        "The attributes 'values' and 'script' mutually exclude each other",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0567_syn_attr_ill_minLength() {
     BeneratorResult result = runFile("test_0567_syn_attr_ill_minLength.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_MIN_LENGTH,
         "Illegal attribute value for attribute.minLength: '-3'",
@@ -477,7 +573,7 @@ public class BeneratorErrorIdIntegrationTest {
   }
 
   @Test
-  public void test_0568_attr_ill_maxLength() {
+  public void test_0568_syn_attr_ill_maxLength() {
     BeneratorResult result = runFile("test_0568_syn_attr_ill_maxLength.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_MAX_LENGTH,
         "Illegal attribute value for attribute.maxLength: '-3'",
@@ -497,7 +593,7 @@ public class BeneratorErrorIdIntegrationTest {
   public void test_0570_attr_ill_source() {
     BeneratorResult result = runFile("test_0570_syn_attr_ill_source.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_SOURCE,
-        "Illegal attribute value for attribute.source: 'none'",
+        "Illegal attribute value for attribute.source: 'nonexistent.csv'",
         ExitCodes.SYNTAX_ERROR, result);
   }
   */
