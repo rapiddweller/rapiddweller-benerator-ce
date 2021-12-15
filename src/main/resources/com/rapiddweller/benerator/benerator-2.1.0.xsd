@@ -525,23 +525,47 @@
         <xs:attribute name="uniqueKey" type="xs:string"/>
 
         <xs:attribute name="nullable" type="xs:string"/>
-        <xs:attribute name="mode" type="xs:string"/>
+        <xs:attribute name="mode" type="mode-type" default="normal"/>
 
         <!-- boolean generator setup -->
         <xs:attribute name="trueQuota" type="xs:string"/>
 
         <!-- number generator setup -->
-        <xs:attribute name="min" type="xs:string"/>
-        <xs:attribute name="minInclusive" type="xs:string"/>
-        <xs:attribute name="max" type="xs:string"/>
-        <xs:attribute name="maxInclusive" type="xs:string"/>
+        <xs:attribute name="min" type="min-max-type">
+            <xs:annotation>
+                <xs:documentation xml:lang="en">
+                    A number or datetime value specifying the lower bound of an allowed value range.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="minInclusive" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation xml:lang="en">
+                    Specifies if the 'min' value is included in the allowed value range.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="max" type="min-max-type">
+            <xs:annotation>
+                <xs:documentation xml:lang="en">
+                    A number or datetime value specifying the upper bound of an allowed value range.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="maxInclusive" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation xml:lang="en">
+                    Specifies if the 'max' value is included in the allowed value range.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
         <xs:attribute name="granularity" type="xs:string"/>
 
         <!-- String generator setup -->
         <xs:attribute name="pattern" type="xs:string"/>
         <xs:attribute name="script" type="xs:string"/>
-        <xs:attribute name="minLength" type="xs:string"/>
-        <xs:attribute name="maxLength" type="xs:string"/>
+        <xs:attribute name="minLength" type="scriptable-non-negative-int"/>
+        <xs:attribute name="maxLength" type="scriptable-non-negative-int"/>
 
         <!-- Sample-based generator setup -->
         <xs:attribute name="constant" type="xs:string"/>
@@ -1092,10 +1116,27 @@
         </xs:union>
     </xs:simpleType>
 
+    <xs:simpleType name="scriptable-non-negative-int">
+        <xs:annotation>
+            <xs:documentation>
+                Value (like '12345') or script expression (like '{prototype.count}')
+                which resolves to an integer greater or equal to 0.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:nonNegativeInteger"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
     <xs:simpleType name="scriptable-positive-int">
         <xs:annotation>
             <xs:documentation>
-                Value (like '12345') or script expression (like 'prototype.count')
+                Value (like '12345') or script expression (like '{prototype.count}')
                 which resolves to an integer greater or equal to 1.
             </xs:documentation>
         </xs:annotation>
@@ -1109,10 +1150,28 @@
         </xs:union>
     </xs:simpleType>
 
+    <xs:simpleType name="min-max-type">
+        <xs:annotation>
+            <xs:documentation>
+                Value (like '12345') or script expression (like '{prototype.count}')
+                which resolves to value that can specify a bound of a value range,
+                eg. integer, double or date.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:string"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="script-expression-type"/>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
     <xs:simpleType name="scriptable-long">
         <xs:annotation>
             <xs:documentation>
-                long value (like '12345') or script expression (like 'prototype.count') which resolves to a long.
+                long value (like '12345') or script expression (like '{prototype.count}') which resolves to a long.
             </xs:documentation>
         </xs:annotation>
         <xs:union>
@@ -1128,7 +1187,7 @@
     <xs:simpleType name="scriptable-double">
         <xs:annotation>
             <xs:documentation>
-                double value (like '3.141') or script expression (like 'Math.PI') which resolves to a double.
+                double value (like '3.141') or script expression (like '{Math.PI}') which resolves to a double.
             </xs:documentation>
         </xs:annotation>
         <xs:union>
@@ -1179,6 +1238,18 @@
         </xs:annotation>
         <xs:restriction base="xs:string">
             <xs:pattern value="\{.*\}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="mode-type">
+        <xs:annotation>
+            <xs:documentation>
+                When set to 'ignored', the related attribute, id or reference is not processed
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="ignored"/>
         </xs:restriction>
     </xs:simpleType>
 
