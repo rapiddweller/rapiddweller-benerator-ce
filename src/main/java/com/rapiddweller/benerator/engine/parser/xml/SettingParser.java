@@ -34,6 +34,7 @@ import com.rapiddweller.benerator.engine.expression.ScriptableExpression;
 import com.rapiddweller.benerator.engine.expression.context.ContextReference;
 import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
 import com.rapiddweller.benerator.engine.parser.string.ContextReferenceParser;
+import com.rapiddweller.benerator.engine.parser.string.ScriptableObjectParser;
 import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.SetSettingStatement;
@@ -69,11 +70,11 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
 
   public static final AttrInfo<Expression<String>> DEFAULT = new AttrInfo<>(
       ATT_DEFAULT,false, BeneratorErrorIds.SYN_SETTING_DEFAULT,
-      new ScriptableParser<>(new StringParser()));
+      new ScriptableParser<>(new StringParser("setting value")));
 
-  public static final AttrInfo<Expression<String>> VALUE = new AttrInfo<>(
+  public static final AttrInfo<Expression<Object>> VALUE = new AttrInfo<>(
       ATT_VALUE, false, BeneratorErrorIds.SYN_SETTING_VALUE,
-      new ScriptableParser<>(new StringParser()));
+      new ScriptableObjectParser("legal setting value"));
 
   public static final AttrInfo<ContextReference> REF = new AttrInfo<>(
       ATT_REF, false, BeneratorErrorIds.SYN_SETTING_REF, new ContextReferenceParser());

@@ -29,11 +29,15 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
+import com.rapiddweller.common.TimeUtil;
 import com.rapiddweller.common.exception.SyntaxError;
 import org.junit.Test;
 
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link SettingParser}.<br/><br/>
@@ -41,7 +45,7 @@ import static org.junit.Assert.assertNotEquals;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class SettingParserAndStatementTest extends AbstractBeneratorIntegrationTest {
+public class SettingIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testValue() {
@@ -53,6 +57,16 @@ public class SettingParserAndStatementTest extends AbstractBeneratorIntegrationT
   public void testEscapedValue() {
     parseAndExecute("<setting name='globalProp' value=\"\\'\\t\\'\" />");
     assertEquals("'\t'", context.get("globalProp"));
+  }
+
+  @Test
+  public void testDateValue() {
+    parseAndExecute("<setting name='globalProp' value='{new java.util.Date()}' />");
+    Object prop = context.get("globalProp");
+    assertTrue(prop instanceof Date);
+    long expected = TimeUtil.millisSinceOwnEpoch((Date) prop);
+    long actual = TimeUtil.millisSinceOwnEpoch((Date) prop);
+    assertEquals(expected, actual, 2000.);
   }
 
   @Test

@@ -11,7 +11,11 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ConstantExpression;
 
 /**
- * Parses a string which can be a script or a constant and converts it into an Expression.<br/><br/>
+ * Parses a string which can be a script or a constant and converts it into an Expression.
+ * The {@link #parse(String)} method will always return an Object of the {@link #base}
+ * parser's result type.
+ * For an implementation that allows a script to resolve other data types, see the class
+ * {@link ScriptableObjectParser}<br/><br/>
  * Created: 08.12.2021 18:34:07
  * @author Volker Bergmann
  * @since 2.1.0

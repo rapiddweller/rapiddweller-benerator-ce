@@ -447,12 +447,12 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     } else if (StringUtil.startsWithIgnoreCase(selector, "select") ||
         StringUtil.startsWithIgnoreCase(selector, "'select")) {
       sql = selector;
-    } else if (selector.startsWith("ftl:") || !script) {
-      sql = "select * from " +
-          createCatSchTabString(catalogName, schemaName, type, getDialect()) + " WHERE " + selector;
+    } else if (selector.startsWith("ftl:")) { // TODO support script languages generically
+      sql = "ftl:select * from " + createCatSchTabString(catalogName, schemaName, type, getDialect()) + " WHERE " + selector.substring(4);
+    } else if (!script) {
+      sql = "select * from " + createCatSchTabString(catalogName, schemaName, type, getDialect()) + " WHERE " + selector;
     } else {
-      sql = "'select * from " +
-          createCatSchTabString(catalogName, schemaName, type, getDialect()) + " WHERE ' + " + selector;
+      sql = "'select * from " + createCatSchTabString(catalogName, schemaName, type, getDialect()) + " WHERE ' + " + selector;
     }
     if (script) {
       sql = '{' + sql + '}';

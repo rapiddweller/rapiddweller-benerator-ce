@@ -1,0 +1,102 @@
+<setup defaultDataset="US" defaultLocale="en" defaultPageSize="100" defaultSeparator="|">
+
+  <import domains="person,organization"/>
+  <import class="com.rapiddweller.common.TimeUtil"/>
+  <setting name="customer_count" value="10"/>
+
+  <!-- prepare source system - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <echo>Preparing source</echo>
+  <database id="source" environment="environment" system="source"/>
+  <execute target="source">
+    CREATE SCHEMA "source";
+    CREATE TABLE "source"."data"
+    (
+    id              SERIAL  NOT NULL,
+    no              VARCHAR NOT NULL,
+    name            VARCHAR,
+    company         VARCHAR,
+    date            DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (id)
+    );
+  </execute>
+  <generate type="data" count="{customer_count}" consumer="source">
+    <attribute name="no" generator="IncrementGenerator" />
+    <attribute name="name" generator="PersonGenerator" />
+    <attribute name="company" generator="CompanyNameGenerator" />
+    <attribute name="date" generator="DateTimeGenerator" />
+  </generate>
+
+  <echo>Initial data:</echo>
+  <iterate type="data" source="source" consumer="ConsoleExporter"/>
+  <echo/>
+
+
+  <!-- prepare config system - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <echo>Preparing config</echo>
+  <database id="config" environment="environment" system="config"/>
+  <execute target="config">
+    CREATE SCHEMA "config";
+    CREATE TABLE "config"."watermark"
+    (
+    id              SERIAL  NOT NULL,
+    key             VARCHAR NOT NULL,
+    value           DATETIME,
+    PRIMARY KEY (id),
+    UNIQUE (id)
+    );
+    insert into "config"."watermark" (key, value) values ('last_processed_datetime', timestamp'2020-01-01 00:00:00');
+  </execute>
+  <echo/>
+
+
+  <!-- prepare target system - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <echo>Creating target</echo>
+  <database id="target" environment="environment" system="target"/>
+  <execute target="target">
+    CREATE SCHEMA "target";
+    CREATE TABLE "target"."data"
+    (
+    id              SERIAL  NOT NULL,
+    no              VARCHAR NOT NULL,
+    name            VARCHAR,
+    company         VARCHAR,
+    date            DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE (id)
+    );
+  </execute>
+  <echo/>
+
+
+  <!-- Read watermark - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <echo>Reading watermark</echo>
+  <evaluate id="from_ts" target="config">select value from "config"."watermark" where key = 'last_processed_datetime'</evaluate>
+  <setting name="from"  value="{TimeUtil.formatTimestamp(from_ts, 'yyyy-MM-dd HH:mm:ss.SSSSSS')}"/>
+  <setting name="until" value="{TimeUtil.formatCurrentTimestamp('yyyy-MM-dd HH:mm:ss.SSSSSS')}"/>
+  <echo/>
+
+
+  <!-- Anonymize data since the watermark timestamp - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <echo>{ftl:Anonymizing data between ${from} and ${until} from source into target}</echo>
+  <iterate type="data" source="source" selector="{ftl:date BETWEEN timestamp'${from}' AND timestamp'${until}'}"
+           consumer="Result,target,ConsoleExporter">
+    <attribute name="name" generator="PersonGenerator"/>
+    <attribute name="company" generator="CompanyNameGenerator"/>
+  </iterate>
+  <echo/>
+
+
+  <!-- Update watermark - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <echo>{ftl:Updating watermark to ${until}}</echo>
+  <execute target="config" type="SQL">{ftl:
+    UPDATE config.process SET value = ${until} where key = 'last_processed_datetime'
+  }</execute>
+
+</setup>

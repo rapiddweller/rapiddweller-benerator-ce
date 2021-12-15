@@ -28,6 +28,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.engine.statement.EchoStatement;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
+import com.rapiddweller.common.SystemInfo;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -38,7 +39,7 @@ import static org.junit.Assert.assertEquals;
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class EchoParserTest extends AbstractBeneratorIntegrationTest {
+public class EchoIntegrationTest extends AbstractBeneratorIntegrationTest {
 
   @Test
   public void testSimpleMessageAttribute() {
@@ -62,6 +63,32 @@ public class EchoParserTest extends AbstractBeneratorIntegrationTest {
   public void testEscapedElementText() {
     EchoStatement statement = (EchoStatement) parse("<echo>\\'Test\\'</echo>");
     assertEquals("'Test'", statement.getExpression().evaluate(context));
+  }
+
+  @Test
+  public void testScriptedMessageAttribute() {
+    EchoStatement statement = (EchoStatement) parse("<echo message='{ftl:Hello ${name}}'/>");
+    context.set("name", "Volker");
+    assertEquals("Hello Volker", statement.getExpression().evaluate(context));
+  }
+
+  @Test
+  public void testScriptedMessageElementText() {
+    EchoStatement statement = (EchoStatement) parse("<echo>{ftl:Hello ${name}}</echo>");
+    context.set("name", "Volker");
+    assertEquals("Hello Volker", statement.getExpression().evaluate(context));
+  }
+
+  @Test
+  public void testLeafElement() {
+    EchoStatement statement = (EchoStatement) parse("<echo/>");
+    assertEquals("", statement.getExpression().evaluate(context));
+  }
+
+  @Test
+  public void testEmptyElement() {
+    EchoStatement statement = (EchoStatement) parse("<echo></echo>");
+    assertEquals("", statement.getExpression().evaluate(context));
   }
 
 }
