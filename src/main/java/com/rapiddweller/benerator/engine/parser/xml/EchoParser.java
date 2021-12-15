@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -35,9 +35,11 @@ import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.parser.EnumParser;
+import com.rapiddweller.common.parser.StringParser;
 import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.script.Expression;
+import com.rapiddweller.script.expression.ConstantExpression;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
@@ -52,8 +54,11 @@ import static com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil.
  */
 public class EchoParser extends AbstractBeneratorDescriptorParser {
 
-  private static final AttrInfo<String> MESSAGE = new AttrInfo<>(
-      ATT_MESSAGE, false, BeneratorErrorIds.SYN_ECHO_MESSAGE, null, null);
+  private static final ScriptableParser<String> MESSAGE_PARSER =
+      new ScriptableParser<>(new StringParser("message text"));
+
+  private static final AttrInfo<Expression<String>> MESSAGE = new AttrInfo<>(
+      ATT_MESSAGE, false, BeneratorErrorIds.SYN_ECHO_MESSAGE, MESSAGE_PARSER);
 
   private static final AttrInfo<Expression<EchoType>> TYPE = new AttrInfo<>(
       ATT_TYPE, false, BeneratorErrorIds.SYN_ECHO_TYPE,
@@ -78,13 +83,16 @@ public class EchoParser extends AbstractBeneratorDescriptorParser {
   private Expression<String> parseMessage(Element element) {
     Expression<String> messageEx;
     if (!StringUtil.isEmpty(element.getAttribute(ATT_MESSAGE))) {
-      messageEx = parseScriptableStringAttribute(ATT_MESSAGE, element);
-    } else {
-      messageEx = parseScriptableElementText(element, true);
+      messageEx = MESSAGE.parse(element);
+    } else if (!StringUtil.isEmpty(element.getTextContent())) {
+      messageEx = MESSAGE_PARSER.parse(element.getTextContent());
+    } else { // Print a line feed for empty echo statements
+      messageEx = new ConstantExpression<>("");
     }
     return messageEx;
   }
 
+  /** Verifies that exactly one message is defined: Either in the 'message' attribute or in the element text. */
   static class EchoValidator implements Validator<Element> {
     @Override
     public boolean valid(Element element) {
@@ -94,10 +102,6 @@ public class EchoParser extends AbstractBeneratorDescriptorParser {
         throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlElement(
             "<echo> must contain either a message attribute or a text content, not both",
             null, BeneratorErrorIds.SYN_ECHO_MESSAGE, element);
-      } else if (!hasMsgText && !hasMsgAttr) {
-        throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlElement(
-            "<echo> must contain either a message attribute or a text content, but none of them is specified",
-            null, BeneratorErrorIds.SYN_ECHO, element);
       }
       return true;
     }
