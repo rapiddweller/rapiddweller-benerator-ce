@@ -468,6 +468,30 @@ public class BeneratorErrorIdIntegrationTest {
   }
   */
 
+  @Test
+  public void test_0567_attr_ill_minLength() {
+    BeneratorResult result = runFile("test_0567_syn_attr_ill_minLength.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MIN_LENGTH,
+        "Illegal attribute value for attribute.minLength: '-3'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0568_attr_ill_maxLength() {
+    BeneratorResult result = runFile("test_0568_syn_attr_ill_maxLength.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MAX_LENGTH,
+        "Illegal attribute value for attribute.maxLength: '-3'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0568_syn_attr_maxLength_vs_minLength() {
+    BeneratorResult result = runFile("test_0568_syn_attr_maxLength_vs_minLength.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MAX_LENGTH,
+        "minLength (5) is greater than maxLength (3)",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
   /* TODO
   @Test
   public void test_0570_attr_ill_source() {
@@ -601,6 +625,86 @@ public class BeneratorErrorIdIntegrationTest {
     BeneratorResult result = runFile("0578_syn_attr_empty_marker_wo_source.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_EMPTY_MARKER,
         "Element <attribute>'s attribute 'emptyMarker' is only permitted in combination with a 'source' attribute",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0581_syn_attr_ill_min() {
+    BeneratorResult result = runFile("test_0581_syn_attr_ill_min.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MIN,
+        "Illegal attribute value for attribute.min: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0582_syn_attr_ill_minInclusive() {
+    BeneratorResult result = runFile("test_0582_syn_attr_ill_minInclusive.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MIN_INCLUSIVE,
+        "Illegal attribute value for attribute.minInclusive: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0582_syn_attr_minInclusive_wo_min() {
+    BeneratorResult result = runFile("test_0582_syn_attr_minInclusive_wo_min.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MIN_INCLUSIVE,
+        "Element <attribute>'s attribute 'minInclusive' is only permitted in combination with a 'min' attribute",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0583_syn_attr_ill_max() {
+    BeneratorResult result = runFile("test_0583_syn_attr_ill_max.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MAX,
+        "Illegal attribute value for attribute.max: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0583_syn_attr_max_vs_min() {
+    BeneratorResult result = runFile("test_0583_syn_attr_max_vs_min.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MAX,
+        "min (5) is greater than max (3)",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0583_syn_attr_max_vs_minInclusive() {
+    BeneratorResult result = runFile("test_0583_syn_attr_max_vs_minInclusive.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MIN_INCLUSIVE,
+        "min equals max (3), but min is not inclusive",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0584_syn_attr_ill_maxInclusive() {
+    BeneratorResult result = runFile("test_0584_syn_attr_ill_maxInclusive.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MAX_INCLUSIVE,
+        "Illegal attribute value for attribute.maxInclusive: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0584_syn_attr_maxInclusive_vs_min() {
+    BeneratorResult result = runFile("test_0584_syn_attr_maxInclusive_vs_min.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MAX_INCLUSIVE,
+        "min equals max (3), but max is not inclusive",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0584_syn_attr_maxInclusive_vs_minInclusive() {
+    BeneratorResult result = runFile("test_0584_syn_attr_maxInclusive_vs_minInclusive.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MAX_INCLUSIVE,
+        "min equals max (3), but max is not inclusive",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0584_syn_attr_maxInclusive_wo_max() {
+    BeneratorResult result = runFile("test_0584_syn_attr_maxInclusive_wo_max.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MAX_INCLUSIVE,
+        "Element <attribute>'s attribute 'maxInclusive' is only permitted in combination with a 'max' attribute",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
