@@ -82,13 +82,13 @@ public class EchoIntegrationTest extends AbstractBeneratorIntegrationTest {
   @Test
   public void testLeafElement() {
     EchoStatement statement = (EchoStatement) parse("<echo/>");
-    assertEquals(SystemInfo.LF, statement.getExpression().evaluate(context));
+    assertEquals("", statement.getExpression().evaluate(context));
   }
 
   @Test
   public void testEmptyElement() {
     EchoStatement statement = (EchoStatement) parse("<echo></echo>");
-    assertEquals(SystemInfo.LF, statement.getExpression().evaluate(context));
+    assertEquals("", statement.getExpression().evaluate(context));
   }
 
 }
