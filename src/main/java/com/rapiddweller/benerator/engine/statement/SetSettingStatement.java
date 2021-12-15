@@ -33,10 +33,8 @@ import com.rapiddweller.script.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 
 /**
- * Sets a global Benerator property.<br/>
- * <br/>
+ * Sets a global Benerator property.<br/><br/>
  * Created at 23.07.2009 14:50:08
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -45,12 +43,6 @@ public class SetSettingStatement implements Statement {
   private final String propertyName;
   private final Expression<?> valueExpression;
 
-  /**
-   * Instantiates a new Set setting statement.
-   *
-   * @param propertyName    the property name
-   * @param valueExpression the value expression
-   */
   public SetSettingStatement(String propertyName, Expression<?> valueExpression) {
     this.propertyName = propertyName;
     this.valueExpression = valueExpression;
