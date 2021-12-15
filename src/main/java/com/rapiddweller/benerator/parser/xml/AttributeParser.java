@@ -154,6 +154,10 @@ public class AttributeParser extends AbstractComponentParser {
         boolean maxInclusive = MAX_INCLUSIVE.parse(element);
         Comparable min = minEx.evaluate(null);
         Comparable max = maxEx.evaluate(null);
+        if (min instanceof Number && max instanceof Number) {
+          min = ((Number) min).doubleValue();
+          max = ((Number) max).doubleValue();
+        }
         int comparison = min.compareTo(max);
         if (comparison > 0) {
           throw BeneratorExceptionFactory.getInstance().syntaxErrorForXmlElement(
