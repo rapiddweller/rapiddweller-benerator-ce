@@ -61,7 +61,7 @@ public class FilterExIterator<E> extends DataIteratorProxy<E> {
       context.set("_candidate", tmp.getData());
       Boolean evaluation = filterEx.evaluate(context);
       if (evaluation == null) {
-        throw ExceptionFactory.getInstance().syntaxErrorForNothing("No filter expression", null);
+        throw ExceptionFactory.getInstance().missingInfo("No filter expression");
       }
       if (evaluation) {
         return tmp;

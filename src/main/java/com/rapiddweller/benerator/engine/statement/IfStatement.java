@@ -64,7 +64,7 @@ public class IfStatement extends ConditionStatement {
   public boolean execute(BeneratorContext context) {
     Boolean evaluation = condition.evaluate(context);
     if (evaluation == null) {
-      throw ExceptionFactory.getInstance().syntaxErrorForNothing("No condition defined in if statement", null);
+      throw ExceptionFactory.getInstance().missingInfo("No condition defined in if statement");
     } else if (evaluation) {
       return thenStatement.execute(context);
     } else if (elseStatement != null) {

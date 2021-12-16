@@ -295,7 +295,7 @@ public class EvaluateStatement extends AbstractStatement {
     } else if (text != null) {
       logger.info("Executing inline script");
     } else {
-      throw BeneratorExceptionFactory.getInstance().syntaxErrorForNothing("No uri or content", null);
+      throw BeneratorExceptionFactory.getInstance().missingInfo("No uri or content");
     }
     Connection connection = null;
     DBExecutionResult result = null;
