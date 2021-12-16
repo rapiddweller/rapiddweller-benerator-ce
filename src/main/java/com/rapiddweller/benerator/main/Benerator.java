@@ -110,6 +110,7 @@ public class Benerator {
     BeneratorResult result = runWithArgs(args);
     if (!StringUtil.isEmpty(result.getErrOut())) {
       System.err.println(result.getErrOut());
+      logger.error(result.getErrOut());
     }
     System.exit(result.getExitCode());
   }

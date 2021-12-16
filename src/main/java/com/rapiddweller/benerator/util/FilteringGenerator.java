@@ -57,7 +57,7 @@ public class FilteringGenerator<E> extends GeneratorProxy<E> {
       context.set("_candidate", candidate);
       Boolean evaluation = filter.evaluate(context);
       if (evaluation == null) {
-        throw ExceptionFactory.getInstance().syntaxErrorForNothing("filter expression is null", null);
+        throw ExceptionFactory.getInstance().missingInfo("filter expression is null");
       }
       if (evaluation) {
         return wrapper.wrap(candidate);

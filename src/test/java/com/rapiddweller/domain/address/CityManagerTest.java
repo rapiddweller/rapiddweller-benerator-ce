@@ -57,51 +57,6 @@ public class CityManagerTest {
     }
 
     @Test
-    public void testCreateCityId() {
-        assertThrows(ParseException.class, () -> CityManager.createCityId(new HashMap<String, String>(1), 2));
-    }
-
-    @Test
-    public void testCreateCityId2() {
-        HashMap hashMap = new HashMap();
-        hashMap.put((String) "nameExtension", "foo");
-        hashMap.put((String) "city", "foo");
-        hashMap.put((String) "name", "foo");
-        hashMap.put((String) "municipality", "foo");
-        CityId actualCreateCityIdResult = CityManager.createCityId(hashMap, 1);
-        assertEquals("foo", actualCreateCityIdResult.getName());
-        assertNull(actualCreateCityIdResult.getNameExtension());
-    }
-
-    @Test
-    public void testCreateCityId3() {
-        HashMap hashMap = new HashMap();
-        hashMap.put((String) "nameExtension", "foo");
-        hashMap.put((String) "city", "foo");
-        hashMap.put((String) "name", "foo");
-        CityId actualCreateCityIdResult = CityManager.createCityId(hashMap, 1);
-        assertEquals("foo", actualCreateCityIdResult.getName());
-        assertNull(actualCreateCityIdResult.getNameExtension());
-    }
-
-    @Test
-    public void testCreateCityId4() {
-        HashMap hashMap = new HashMap();
-        hashMap.put((String) "nameExtension", "foo");
-        hashMap.put((String) "name", "foo");
-        CityId actualCreateCityIdResult = CityManager.createCityId(hashMap, 1);
-        assertEquals("foo", actualCreateCityIdResult.getName());
-        assertEquals("foo", actualCreateCityIdResult.getNameExtension());
-    }
-
-    @Test
-    public void testCreateCityId5() {
-        HashMap<String, String> stringStringMap = new HashMap<String, String>(1);
-        stringStringMap.put("municipality", "");
-        assertThrows(ParseException.class, () -> CityManager.createCityId(stringStringMap, 2));
-    }
-
-    @Test
     public void testCityHelperConstructor() {
         CityId cityId = new CityId("Name", "Name Extension");
         CityManager.CityHelper actualCityHelper = new CityManager.CityHelper(new State(), cityId,

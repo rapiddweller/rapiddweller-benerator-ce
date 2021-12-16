@@ -111,7 +111,7 @@ public class DescriptorRunner implements ResourceManager {
   public BeneratorRootStatement parseDescriptorFile() {
     Document document;
     try {
-      document = XMLUtil.parse(uri);
+      document = XMLUtil.parseWithLocators(uri);
     } catch (FileResourceNotFoundException e) {
       throw BeneratorExceptionFactory.getInstance().beneratorFileNotFound(uri);
     }

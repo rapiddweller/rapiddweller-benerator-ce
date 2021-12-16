@@ -202,7 +202,7 @@ public class ProjectBuilder implements Runnable {
         return;
       }
       if (nextToken != HTMLTokenizer.TEXT) {
-        throw BeneratorExceptionFactory.getInstance().syntaxErrorForNothing("Text expected in comment", null);
+        throw BeneratorExceptionFactory.getInstance().missingInfo("Text expected in comment");
       }
       String commentText = tokenizer.text().trim();
       if ((COMMENT_DROP_TABLES.equals(commentText) && setup.getDropScriptFile() == null)
@@ -215,10 +215,8 @@ public class ProjectBuilder implements Runnable {
         // write comment start and content
         writer.append(startText).append(tokenizer.text());
       }
-    } catch (IOException e) {
+    } catch (IOException | ParseException e) {
       throw BeneratorExceptionFactory.getInstance().internalError("Error processing comment", e);
-    } catch (ParseException e) {
-      throw BeneratorExceptionFactory.getInstance().syntaxErrorForNothing("Syntax error in comment", e);
     }
   }
 

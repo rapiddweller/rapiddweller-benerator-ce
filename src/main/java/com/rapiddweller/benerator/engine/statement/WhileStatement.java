@@ -63,7 +63,7 @@ public class WhileStatement extends ConditionStatement {
     while (true) {
       Boolean evaluation = condition.evaluate(context);
       if (evaluation == null) {
-        throw ExceptionFactory.getInstance().syntaxErrorForNothing("No condition in while statement", null);
+        throw ExceptionFactory.getInstance().missingInfo("No condition in while statement");
       }
       if (!evaluation) {
         break;

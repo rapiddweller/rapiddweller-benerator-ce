@@ -41,7 +41,7 @@ import com.rapiddweller.common.ReaderLineIterator;
 import com.rapiddweller.common.ShellUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SystemInfo;
-import com.rapiddweller.common.converter.LiteralParser;
+import com.rapiddweller.common.converter.LiteralParserConverter;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptUtil;
@@ -159,7 +159,7 @@ public class EvaluateStatement extends AbstractStatement {
   private void evaluateAssertion(Object result, String onErrorValue, BeneratorContext context) {
     Object assertionValue = ExpressionUtil.evaluate(assertionEx, context);
     if (assertionValue instanceof String) {
-      assertionValue = LiteralParser.parse((String) assertionValue);
+      assertionValue = LiteralParserConverter.parse((String) assertionValue);
     }
     if (assertionValue != null && !(assertionValue instanceof String && ((String) assertionValue).length() == 0)) {
       if (assertionValue instanceof Boolean) {
@@ -279,7 +279,7 @@ public class EvaluateStatement extends AbstractStatement {
     }
     String output = writer.toString();
     System.out.println(output);
-    return LiteralParser.parse(output);
+    return LiteralParserConverter.parse(output);
   }
 
   private DBExecutionResult runSql(
@@ -295,7 +295,7 @@ public class EvaluateStatement extends AbstractStatement {
     } else if (text != null) {
       logger.info("Executing inline script");
     } else {
-      throw BeneratorExceptionFactory.getInstance().syntaxErrorForNothing("No uri or content", null);
+      throw BeneratorExceptionFactory.getInstance().missingInfo("No uri or content");
     }
     Connection connection = null;
     DBExecutionResult result = null;

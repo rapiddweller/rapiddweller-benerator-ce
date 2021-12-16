@@ -93,22 +93,22 @@ public class BeneratorExceptionFactory extends ExceptionFactory {
   }
 
   @Override
-  public SyntaxError syntaxErrorForUri(String message, Throwable cause, String uri, int line, int column) {
+  public SyntaxError syntaxErrorForXmlDocument(String message, Throwable cause, String uri, int line, int column) {
     if (cause != null) {
-      if (message.startsWith("Premature end of file")  && line == -1 && column == -1) {
+      if (message.contains("Premature end of file")  && line == -1 && column == -1) {
         if (BeneratorUtil.isDescriptorFilePath(uri)) {
-          return SyntaxError.forUri("Empty Benerator file", uri, BeneratorErrorIds.SYN_EMPTY_BEN_FILE);
+          return SyntaxError.forXmlDocument("Empty Benerator file", uri, BeneratorErrorIds.SYN_EMPTY_BEN_FILE);
         } else {
-          return SyntaxError.forUri("Empty XML file", uri, BeneratorErrorIds.SYN_EMPTY_XML_FILE);
+          return SyntaxError.forXmlDocument("Empty XML file", uri, BeneratorErrorIds.SYN_EMPTY_XML_FILE);
         }
-      } else if (message.startsWith("Content is not allowed in prolog")) {
-        return SyntaxError.forUri("File does not start with <?xml...?> or a tag", uri,
+      } else if (message.contains("Content is not allowed in prolog")) {
+        return SyntaxError.forXmlDocument("File does not start with <?xml...?> or a tag", uri,
             BeneratorErrorIds.SYN_NO_XML_FILE);
       }
       message = StringUtil.removeSuffixIfPresent(".", message);
-      return SyntaxError.forUri(message, uri, null);
+      return SyntaxError.forXmlDocument(message, uri, null);
     }
-    return SyntaxError.forUri("Syntax error", uri, null);
+    return SyntaxError.forXmlDocument("Syntax error", uri, null);
   }
 
   @Override

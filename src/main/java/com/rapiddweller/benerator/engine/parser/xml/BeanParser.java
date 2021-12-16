@@ -215,7 +215,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
     @Override
     public boolean valid(Element element) {
       XMLAssert.assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_BEAN, ATT_CLASS, ATT_SPEC);
-      XMLAssert.mutuallyExcludeAttributes(element, ATT_CLASS, ATT_SPEC);
+      XMLAssert.mutuallyExcludeAttributes(BeneratorErrorIds.SYN_BEAN, element, ATT_CLASS, ATT_SPEC);
       return true;
     }
   }
@@ -224,7 +224,7 @@ public class BeanParser extends AbstractBeneratorDescriptorParser {
     @Override
     public boolean valid(Element element) {
       XMLAssert.assertAtLeastOneAttributeIsSet(element, BeneratorErrorIds.SYN_BEAN, ATT_VALUE, ATT_REF, ATT_DEFAULT, ATT_SOURCE);
-      XMLAssert.mutuallyExcludeAttributes(element, ATT_VALUE, ATT_REF, ATT_DEFAULT, ATT_SOURCE);
+      XMLAssert.mutuallyExcludeAttributes(BeneratorErrorIds.SYN_BEAN_PROP_ELEMENT, element, ATT_VALUE, ATT_REF, ATT_DEFAULT, ATT_SOURCE);
       return true;
     }
   }
