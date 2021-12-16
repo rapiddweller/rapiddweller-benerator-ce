@@ -74,9 +74,13 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     db.setSchema("PUBLIC");
     db.execute("drop table referer if exists");
     db.execute("drop table referee if exists");
-    db.execute("create table referee (id int, n int default 1 not null, primary key (id))");
-    db.execute("insert into referee (id, n) values (2, 2)");
-    db.execute("insert into referee (id, n) values (3, 3)");
+    db.execute("create table referee (" +
+        "id int, " +
+        "name varchar(20) not null, " +
+        "n int default 1 not null, " +
+        "primary key (id))");
+    db.execute("insert into referee (id, name, n) values (2, 'Alice', 2)");
+    db.execute("insert into referee (id, name, n) values (3, 'Bob', 3)");
     db.execute(
         "create table referer ( " +
             "   id int," +
