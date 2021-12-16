@@ -1159,6 +1159,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:union>
+            <!-- TODO restrict types to long, double, decimal, date, datetime and time -->
             <xs:simpleType>
                 <xs:restriction base="xs:string"/>
             </xs:simpleType>
