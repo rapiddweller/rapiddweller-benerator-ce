@@ -102,20 +102,16 @@ public class DataSourceGenerator<E> extends AbstractGenerator<E> {
 
   @Override
   public ProductWrapper<E> generate(ProductWrapper<E> wrapper) {
-    try {
-      assertInitialized();
-      if (iterator == null) {
-        iterator = source.iterator(); // iterator initialized lazily to reflect context state at invocation
-      }
-      DataContainer<E> tmp = iterator.next(container.get());
-      if (tmp == null) {
-        IOUtil.close(iterator);
-        return null;
-      }
-      return wrapper.wrap(tmp.getData());
-    } catch (Exception e) {
-      throw BeneratorExceptionFactory.getInstance().illegalGeneratorState("Generation failed: ", e);
+    assertInitialized();
+    if (iterator == null) {
+      iterator = source.iterator(); // iterator initialized lazily to reflect context state at invocation
     }
+    DataContainer<E> tmp = iterator.next(container.get());
+    if (tmp == null) {
+      IOUtil.close(iterator);
+      return null;
+    }
+    return wrapper.wrap(tmp.getData());
   }
 
   @Override

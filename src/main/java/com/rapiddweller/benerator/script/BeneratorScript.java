@@ -27,9 +27,10 @@
 package com.rapiddweller.benerator.script;
 
 import com.rapiddweller.common.Context;
+import com.rapiddweller.common.exception.ExceptionFactory;
+import com.rapiddweller.common.exception.ScriptException;
 import com.rapiddweller.format.script.AbstractScript;
 import com.rapiddweller.format.script.Script;
-import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.common.Expression;
 
 /**
@@ -56,7 +57,7 @@ public class BeneratorScript extends AbstractScript {
     try {
       return expression.evaluate(context);
     } catch (Exception e) {
-      throw new ScriptException("Error in script: " + text, e);
+      throw ExceptionFactory.getInstance().scriptEvaluationFailed(text, e);
     }
   }
 

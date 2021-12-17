@@ -28,8 +28,8 @@ package com.rapiddweller.benerator.script;
 
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Context;
+import com.rapiddweller.common.exception.ScriptException;
 import com.rapiddweller.format.script.Script;
-import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.map.Entity2MapConverter;
 import org.slf4j.LoggerFactory;

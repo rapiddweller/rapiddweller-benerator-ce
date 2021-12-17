@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<setup xmlns="https://www.benerator.de/schema/2.1.0">
+    <memstore id="mem"/>
+    <generate type="data" count="1" consumer="mem">
+        <attribute name="name" constant="Alice"/>
+    </generate>
+    <iterate source="mem" type="data" selector="none"/>
+</setup>

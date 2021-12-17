@@ -49,7 +49,7 @@ public class IllegalGeneratorStateException extends ApplicationException {
   }
 
   public IllegalGeneratorStateException(String message, Throwable cause) {
-    super(null, ExitCodes.MISCELLANEOUS_ERROR, message, cause);
+    super(message, cause, null, ExitCodes.MISCELLANEOUS_ERROR);
   }
 
 }

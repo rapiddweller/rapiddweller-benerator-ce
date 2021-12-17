@@ -6,6 +6,7 @@ import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
+import com.rapiddweller.common.ObjectNotFoundException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.cli.CLIIllegalArgumentException;
 import com.rapiddweller.common.cli.CLIIllegalOptionException;
@@ -16,6 +17,8 @@ import com.rapiddweller.common.exception.ComponentInitializationFailure;
 import com.rapiddweller.common.exception.ConnectFailedException;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.exception.ExitCodes;
+import com.rapiddweller.common.exception.QueryFailed;
+import com.rapiddweller.common.exception.ScriptException;
 import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.file.FileResourceNotFoundException;
 import com.rapiddweller.format.xml.XMLElementParserFactory;
@@ -23,6 +26,8 @@ import com.rapiddweller.task.Task;
 import com.rapiddweller.task.TaskUnavailableException;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+
+import java.io.FileNotFoundException;
 
 /**
  * Extends {@link ExceptionFactory} with Benerator-specific factory methods.<br/><br/>
@@ -44,8 +49,26 @@ public class BeneratorExceptionFactory extends ExceptionFactory {
   }
 
   public FileResourceNotFoundException beneratorFileNotFound(String uri) {
-      return new FileResourceNotFoundException(BeneratorErrorIds.BEN_FILE_NOT_FOUND,
-          "Benerator file not found: " + uri);
+    return new FileResourceNotFoundException(BeneratorErrorIds.BEN_FILE_NOT_FOUND,
+        "Benerator file not found: " + uri);
+  }
+
+  @Override
+  public FileResourceNotFoundException fileNotFound(String uri, FileNotFoundException cause) {
+    uri = StringUtil.lastToken(uri, '/');
+    return new FileResourceNotFoundException("File not found: '" + uri + "'.", cause, BeneratorErrorIds.FILE_REF_NOT_FOUND);
+  }
+
+  @Override
+  public ObjectNotFoundException sheetNotFound(String uri, String sheetName) {
+    uri = StringUtil.lastToken(uri, '/');
+    String message = "Segment not found: '" + sheetName + "'";
+    if (!StringUtil.isEmpty(uri)) {
+      message += " in '" + uri + "'";
+    } else {
+      message += ".";
+    }
+    return new ObjectNotFoundException(message, null, BeneratorErrorIds.SEGMENT_NOT_FOUND, ExitCodes.FILE_NOT_FOUND);
   }
 
   public IllegalGeneratorStateException illegalGeneratorState(String message) {
@@ -139,7 +162,17 @@ public class BeneratorExceptionFactory extends ExceptionFactory {
 
   @Override
   public ApplicationException outOfMemory(Throwable e) {
-    return new ApplicationException(BeneratorErrorIds.OUT_OF_MEMORY, ExitCodes.MISCELLANEOUS_ERROR, "Out of memory", e);
+    return new ApplicationException("Out of memory", e, BeneratorErrorIds.OUT_OF_MEMORY, ExitCodes.MISCELLANEOUS_ERROR);
+  }
+
+  @Override
+  public QueryFailed queryFailed(String message, Throwable cause) {
+    return new QueryFailed(message, cause, BeneratorErrorIds.DB_QUERY_FAILED);
+  }
+
+  @Override
+  public ScriptException scriptEvaluationFailed(String scriptText, Throwable cause) {
+    return new ScriptException(cause.getMessage(), cause, BeneratorErrorIds.SCRIPT_FAILED, scriptText);
   }
 
 }
