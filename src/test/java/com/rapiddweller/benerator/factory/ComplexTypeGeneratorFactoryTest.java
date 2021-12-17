@@ -84,6 +84,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
   public void testSimpleCSVImport() {
     ComplexTypeDescriptor type = createComplexType("person");
     type.setSource(PERSON_CSV);
+    type.setSourceScripted(true);
     Generator<Entity> generator = createGenerator(type);
     context.set("ottos_age", 39);
     generator.init(context);
@@ -95,6 +96,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
     context.set("filepath", PERSON_CSV);
     ComplexTypeDescriptor type = createComplexType("person");
     type.setSource("{filepath}");
+    type.setSourceScripted(true);
     Generator<Entity> generator = createGenerator(type);
     context.set("ottos_age", 39);
     generator.init(context);
@@ -115,6 +117,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
   public void testCyclicCSVImport() {
     ComplexTypeDescriptor type = createComplexType("person");
     type.setSource(PERSON_CSV);
+    type.setSourceScripted(true);
     type.setCyclic(true);
     Generator<Entity> generator = createGenerator(type);
     context.set("ottos_age", 39);
@@ -126,6 +129,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
   public void testWeightedCSVImport() {
     ComplexTypeDescriptor type = createComplexType("person");
     type.setSource(PERSON_CSV);
+    type.setSourceScripted(true);
     type.setDetailValue("distribution", "weighted[age]");
     Generator<Entity> generator = createGenerator(type);
     context.set("ottos_age", "39");
@@ -143,6 +147,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
   public void testSequencedCSVImport() {
     ComplexTypeDescriptor type = createComplexType("person");
     type.setSource(PERSON_CSV);
+    type.setSourceScripted(true);
     type.setDistribution("new StepSequence(-1)");
     Generator<Entity> generator = createGenerator(type);
     context.set("ottos_age", 39);
@@ -154,6 +159,7 @@ public class ComplexTypeGeneratorFactoryTest extends GeneratorTest {
   public void testUniqueCSVImport() {
     ComplexTypeDescriptor type = createComplexType("person");
     type.setSource(PERSON_CSV);
+    type.setSourceScripted(true);
     InstanceDescriptor instance = createInstance("person", type);
     instance.setUnique(true);
     Generator<Entity> generator = createGenerator(instance);

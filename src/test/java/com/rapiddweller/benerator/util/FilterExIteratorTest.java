@@ -32,7 +32,7 @@ import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.util.DataIteratorFromJavaIterator;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.DynamicExpression;
 import org.junit.Test;
 

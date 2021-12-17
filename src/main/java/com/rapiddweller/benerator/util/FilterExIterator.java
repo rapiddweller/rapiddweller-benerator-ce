@@ -31,7 +31,7 @@ import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.util.DataIteratorProxy;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 import java.util.Iterator;
 

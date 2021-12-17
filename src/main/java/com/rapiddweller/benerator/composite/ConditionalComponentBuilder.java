@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.composite;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Assert;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 /**
  * {@link ComponentBuilder} which executes only if a condition expression evaluates to 'true'.<br/><br/>

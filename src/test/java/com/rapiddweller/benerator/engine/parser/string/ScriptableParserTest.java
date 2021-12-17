@@ -5,7 +5,7 @@ package com.rapiddweller.benerator.engine.parser.string;
 import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.parser.Parser;
 import com.rapiddweller.common.parser.PositiveIntegerParser;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ConstantExpression;
 import org.junit.Test;
 

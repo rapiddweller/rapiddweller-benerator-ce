@@ -4,7 +4,7 @@ package com.rapiddweller.benerator.engine.parser.string;
 
 import com.rapiddweller.common.parser.AbstractTypedParser;
 import com.rapiddweller.script.DatabeneScriptParser;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 /**
  * Parses a bean specification.<br/><br/>

@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.util;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.test.GeneratorTest;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.junit.Test;
 

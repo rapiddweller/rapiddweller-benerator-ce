@@ -36,10 +36,8 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests the {@link CSVEntityIterator}.<br/>
- * <br/>
+ * Tests the {@link CSVEntityIterator}.<br/><br/>
  * Created: 07.04.2008 12:30:17
- *
  * @author Volker Bergmann
  * @since 0.5.1
  */
@@ -50,11 +48,6 @@ public class CSVEntityIteratorTest extends AbstractEntityIteratorTest {
 
   // test methods ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Test with header.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testWithHeader() throws Exception {
     ComplexTypeDescriptor countryDescriptor = createCountryDescriptor();
@@ -66,11 +59,6 @@ public class CSVEntityIteratorTest extends AbstractEntityIteratorTest {
     assertUnavailable(iterator);
   }
 
-  /**
-   * Test without header.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testWithoutHeader() throws Exception {
     ComplexTypeDescriptor countryDescriptor = createCountryDescriptor();
@@ -84,11 +72,6 @@ public class CSVEntityIteratorTest extends AbstractEntityIteratorTest {
     assertUnavailable(iterator);
   }
 
-  /**
-   * Test graph.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testGraph() throws Exception {
     ComplexTypeDescriptor countryDescriptor = createCountryDescriptor();

@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.GeneratorContext;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.distribution.SequenceManager;
 import com.rapiddweller.benerator.wrapper.GeneratorProxy;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 
 /**

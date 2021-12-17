@@ -34,7 +34,7 @@ import com.rapiddweller.benerator.engine.statement.EvaluateStatement;
 import com.rapiddweller.common.converter.String2CharConverter;
 import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ConvertingExpression;
 import com.rapiddweller.script.expression.FeatureAccessExpression;
 import com.rapiddweller.script.expression.StringExpression;

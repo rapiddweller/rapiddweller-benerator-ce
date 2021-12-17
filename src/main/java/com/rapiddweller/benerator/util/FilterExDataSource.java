@@ -30,7 +30,7 @@ import com.rapiddweller.common.Context;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.util.DataSourceProxy;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 import java.util.Iterator;
 

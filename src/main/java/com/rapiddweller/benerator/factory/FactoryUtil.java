@@ -46,7 +46,7 @@ import com.rapiddweller.model.data.FeatureDescriptor;
 import com.rapiddweller.model.data.FeatureDetail;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.DatabeneScriptParser;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.WeightedSample;
 import com.rapiddweller.script.expression.DynamicExpression;
 

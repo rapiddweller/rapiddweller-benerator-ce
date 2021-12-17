@@ -43,6 +43,7 @@ import com.rapiddweller.benerator.wrapper.AsByteGeneratorWrapper;
 import com.rapiddweller.benerator.wrapper.ByteArrayGenerator;
 import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
+import com.rapiddweller.common.ConversionException;
 import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.accessor.GraphAccessor;
@@ -52,6 +53,7 @@ import com.rapiddweller.common.converter.ConditionalConverter;
 import com.rapiddweller.common.converter.ConverterChain;
 import com.rapiddweller.common.converter.DateString2DurationConverter;
 import com.rapiddweller.common.converter.LiteralParserConverter;
+import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.common.converter.ToStringConverter;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.format.DataSource;
@@ -273,22 +275,23 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
 
     String dataset = descriptor.getDataset();
     String nesting = descriptor.getNesting();
+    Converter<String, Object> scriptProcessor = createScriptProcessor(descriptor, context);
     if (dataset != null && nesting != null) {
       if (uniqueness.isUnique()) {
         generator = new SequencedDatasetCSVGenerator(sourceUri, separator, dataset, nesting,
-            distribution, encoding, new ScriptConverterForStrings(context));
+            distribution, encoding, scriptProcessor);
       } else {
         generator = new WeightedDatasetCSVGenerator(Object.class, sourceUri, separator, dataset, nesting, false,
-            encoding, new ScriptConverterForStrings(context));
+            encoding, scriptProcessor);
       }
     } else if (sourceName.toLowerCase().endsWith(".wgt.csv") || distribution instanceof IndividualWeight) {
       generator = new WeightedCSVSampleGenerator(
-          Object.class, sourceUri, encoding, separator, new ScriptConverterForStrings(context));
+          Object.class, sourceUri, encoding, separator, scriptProcessor);
     } else {
       Generator<String[]> src = SourceFactory.createCSVGenerator(sourceUri, separator, encoding, true, rowBased);
       Converter<String[], Object> converterChain = new ConverterChain<>(
           new ArrayElementExtractor<>(String.class, 0),
-          new ScriptConverterForStrings(context));
+          scriptProcessor);
       generator = WrapperFactory.applyConverter(src, converterChain);
       if (distribution != null) {
         generator = distribution.applyTo(generator, uniqueness.isUnique());
@@ -306,7 +309,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     Converter<Object[], Object> converterChain = new ConverterChain<>(
         new ArrayElementExtractor<>(Object.class, 0),
         new ConditionalConverter(String.class::isInstance,
-            new ScriptConverterForStrings(context)));
+            createScriptProcessor(descriptor, context)));
     generator = WrapperFactory.applyConverter(src, converterChain);
     if (distribution != null) {
       generator = distribution.applyTo(generator, uniqueness.isUnique());
@@ -314,6 +317,37 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     return generator;
   }
 
+  private static Converter<String, Object> createScriptProcessor(SimpleTypeDescriptor descriptor,
+                                                                 BeneratorContext context) {
+    boolean sourceScripted;
+    if (descriptor.isSourceScripted() != null) {
+      sourceScripted = descriptor.isSourceScripted();
+    } else {
+      sourceScripted = context.isDefaultSourceScripted();
+    }
+    return new SourceScriptConverter(sourceScripted, context);
+  }
+
+  static class SourceScriptConverter extends ThreadSafeConverter<String, Object> {
+
+    private final boolean sourceScripted;
+    private final BeneratorContext context;
+
+    public SourceScriptConverter(boolean sourceScripted, BeneratorContext context) {
+      super(String.class, Object.class);
+      this.sourceScripted = sourceScripted;
+      this.context = context;
+    }
+
+    @Override
+    public Object convert(String sourceValue) throws ConversionException {
+      if (sourceScripted) {
+        return ScriptConverterForStrings.convert(sourceValue, context);
+      } else {
+        return sourceValue;
+      }
+    }
+  }
 
   @SuppressWarnings("unchecked")
   private Generator<?> createTypeGenerator(

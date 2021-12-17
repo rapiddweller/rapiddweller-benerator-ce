@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.format.text.SplitStringConverter;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.platform.db.AbstractDBSystem;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ConvertingExpression;
 import org.w3c.dom.Element;
 

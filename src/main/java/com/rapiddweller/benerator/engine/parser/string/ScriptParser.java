@@ -4,7 +4,7 @@ package com.rapiddweller.benerator.engine.parser.string;
 
 import com.rapiddweller.benerator.engine.expression.TypedScriptExpression;
 import com.rapiddweller.common.parser.AbstractParser;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 /**
  * Parses scripts.<br/><br/>

@@ -67,7 +67,7 @@ import com.rapiddweller.model.data.ReferenceDescriptor;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 

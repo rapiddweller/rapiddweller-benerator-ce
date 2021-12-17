@@ -5,7 +5,7 @@ package com.rapiddweller.benerator.engine.parser.attr;
 import com.rapiddweller.benerator.engine.expression.context.DefaultPageSizeExpression;
 import com.rapiddweller.benerator.engine.parser.string.PageSizeParser;
 import com.rapiddweller.format.xml.AttrInfo;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_PAGESIZE;
 

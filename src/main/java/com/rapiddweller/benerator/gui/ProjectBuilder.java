@@ -59,7 +59,7 @@ import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.platform.db.DefaultDBSystem;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 
 import java.io.BufferedReader;

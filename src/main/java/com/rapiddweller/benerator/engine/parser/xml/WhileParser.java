@@ -32,7 +32,7 @@ import com.rapiddweller.benerator.engine.statement.WhileStatement;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import org.w3c.dom.Element;
 
 import java.util.List;

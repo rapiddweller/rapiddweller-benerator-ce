@@ -40,7 +40,7 @@ import com.rapiddweller.common.time.ElapsedTimeFormatter;
 import com.rapiddweller.contiperf.StopWatch;
 import com.rapiddweller.profile.Profiler;
 import com.rapiddweller.profile.Profiling;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.stat.CounterRepository;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.TaskExecutor;

@@ -49,7 +49,7 @@ import com.rapiddweller.common.parser.StringParser;
 import com.rapiddweller.common.parser.AbstractTypedParser;
 import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.script.expression.FallbackExpression;
 import org.w3c.dom.Element;

@@ -27,7 +27,7 @@ import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.PartDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.BeneratorErrorIds.*;

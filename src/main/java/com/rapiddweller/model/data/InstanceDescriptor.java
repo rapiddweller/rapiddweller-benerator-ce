@@ -30,7 +30,7 @@ import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.operation.AndOperation;
 import com.rapiddweller.common.operation.OrOperation;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.TypeConvertingExpression;
 

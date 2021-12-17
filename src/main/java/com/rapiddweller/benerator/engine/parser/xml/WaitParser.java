@@ -41,7 +41,7 @@ import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.model.data.Uniqueness;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.w3c.dom.Element;
 

@@ -27,6 +27,14 @@ public class Mask extends AbstractConverter<Object, String> {
     this.maskChar = maskChar;
   }
 
+  public char getMaskChar() {
+    return maskChar;
+  }
+
+  public void setMaskChar(char maskChar) {
+    this.maskChar = maskChar;
+  }
+
   @Override
   public String convert(Object sourceValue) throws ConversionException {
     if (sourceValue == null) {

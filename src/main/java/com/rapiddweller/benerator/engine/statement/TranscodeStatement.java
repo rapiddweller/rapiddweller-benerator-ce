@@ -48,7 +48,7 @@ import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.ReferenceDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.platform.db.AbstractDBSystem;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;

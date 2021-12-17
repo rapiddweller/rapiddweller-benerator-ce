@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.common.xml.XMLUtil;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
