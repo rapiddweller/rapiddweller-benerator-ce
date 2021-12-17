@@ -63,8 +63,7 @@ public class TaskExecutor {
     this.errorHandler = errorHandler;
     if (stats) {
       target = new PerfTrackingTaskProxy(target);
-      this.tracker =
-          ((PerfTrackingTaskProxy) target).getOrCreateTracker();
+      this.tracker = ((PerfTrackingTaskProxy) target).getOrCreateTracker();
     }
     this.target = new StateTrackingTaskProxy<>(target);
     this.pageListeners = pageListeners;
@@ -72,19 +71,14 @@ public class TaskExecutor {
     this.infoLog = infoLog;
   }
 
-  public static void execute(Task task, Context context,
-                             Long requestedInvocations, Long minInvocations,
-                             List<PageListener> pageListeners, long pageSize,
-                             boolean stats,
+  public static void execute(Task task, Context context, Long requestedInvocations, Long minInvocations,
+                             List<PageListener> pageListeners, long pageSize, boolean stats,
                              ErrorHandler errorHandler, boolean infoLog) {
-    TaskExecutor runner = new TaskExecutor(task, pageListeners,
-        pageSize, stats, context, errorHandler, infoLog);
+    TaskExecutor runner = new TaskExecutor(task, pageListeners, pageSize, stats, context, errorHandler, infoLog);
     runner.run(requestedInvocations, minInvocations);
   }
 
-  private static long runWithoutPage(Task target, Long invocationCount,
-                                     Context context,
-                                     ErrorHandler errorHandler) {
+  private static long runWithoutPage(Task target, Long invocationCount, Context context, ErrorHandler errorHandler) {
     long actualCount = 0;
     for (int i = 0; invocationCount == null || i < invocationCount; i++) {
       TaskResult stepResult = target.execute(context, errorHandler);
@@ -98,17 +92,14 @@ public class TaskExecutor {
     return actualCount;
   }
 
-  private static void logExecutionInfo(Task task, Long minInvocations,
-                                       Long maxInvocations, long pageSize,
+  private static void logExecutionInfo(Task task, Long minInvocations, Long maxInvocations, long pageSize,
                                        boolean infoLog) {
     if (infoLog) {
       if (logger.isInfoEnabled()) {
-        logger.info(executionInfo(task, minInvocations, maxInvocations,
-            pageSize));
+        logger.info(executionInfo(task, minInvocations, maxInvocations, pageSize));
       }
     } else if (logger.isDebugEnabled()) {
-      logger.debug(executionInfo(task, minInvocations, maxInvocations,
-          pageSize));
+      logger.debug(executionInfo(task, minInvocations, maxInvocations, pageSize));
     }
   }
 
@@ -116,8 +107,7 @@ public class TaskExecutor {
                                       Long maxInvocations, long pageSize) {
     String invocationInfo =
         (maxInvocations == null ? "as long as available" : HF.pluralize(maxInvocations, "time"));
-    if (minInvocations != null && minInvocations > 0 &&
-        (maxInvocations == null || maxInvocations > minInvocations)) {
+    if (minInvocations != null && minInvocations > 0 && (maxInvocations == null || maxInvocations > minInvocations)) {
       invocationInfo += " requiring at least " + minInvocations + " generations";
     }
     if (invocationInfo.length() > 0) {
@@ -133,8 +123,7 @@ public class TaskExecutor {
     long countValue = run(requestedInvocations);
     // afterwards verify execution count
     if (minInvocations != null && countValue < minInvocations) {
-      throw new TaskUnavailableException(target, minInvocations,
-          countValue);
+      throw new TaskUnavailableException(target, minInvocations, countValue);
     }
     if (tracker != null) {
       tracker.getCounters()[0].printSummary(new PrintWriter(System.out), 90, 95);
