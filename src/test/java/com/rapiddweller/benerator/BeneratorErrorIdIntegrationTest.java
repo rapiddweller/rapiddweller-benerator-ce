@@ -398,15 +398,13 @@ public class BeneratorErrorIdIntegrationTest {
         ExitCodes.SYNTAX_ERROR, result);
   }
 
-  /* TODO
   @Test
   public void test_0253_syn_setting_value_exp() {
     BeneratorResult result = runFile("test_0253_syn_setting_value_exp.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETTING_VALUE,
-        "Illegal value. File test_0253_syn_setting_value_exp.ben.xml, line 3",
+        "Error resolving expression 'not_existent'. File test_0253_syn_setting_value_exp.ben.xml, line 4",
         ExitCodes.SYNTAX_ERROR, result);
   }
-   */
 
   // <variable> tests ------------------------------------------------------------------------------------------------
 
