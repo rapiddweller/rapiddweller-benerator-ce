@@ -45,6 +45,7 @@ import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.collection.NamedValueList;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.common.exception.ExceptionFactory;
+import com.rapiddweller.common.exception.ScriptException;
 import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;

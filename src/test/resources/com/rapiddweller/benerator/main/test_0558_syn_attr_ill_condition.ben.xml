@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<setup xmlns="https://www.benerator.de/schema/2.1.0">
+    <generate count="1">
+        <attribute name="name" constant="Alice" condition="none"/>
+    </generate>
+</setup>

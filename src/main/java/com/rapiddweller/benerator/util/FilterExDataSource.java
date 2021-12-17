@@ -37,7 +37,6 @@ import java.util.Iterator;
 /**
  * {@link Iterable} proxy which creates {@link Iterator}s that filter their output with a (boolean) filter expression.<br/><br/>
  * Created: 08.03.2011 11:47:20
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @see FilterExIterator
@@ -48,13 +47,6 @@ public class FilterExDataSource<E> extends DataSourceProxy<E> {
   private final Expression<Boolean> filterEx;
   private final Context context;
 
-  /**
-   * Instantiates a new Filter ex data source.
-   *
-   * @param source   the source
-   * @param filterEx the filter ex
-   * @param context  the context
-   */
   public FilterExDataSource(DataSource<E> source, Expression<Boolean> filterEx, Context context) {
     super(source);
     this.filterEx = filterEx;

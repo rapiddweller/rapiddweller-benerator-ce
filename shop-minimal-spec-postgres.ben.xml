@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<setup xmlns="https://www.benerator.de/schema/2.1.0"
+        defaultDataset="US" defaultLocale="en_US">
+
+    <comment>
+        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        ! Demonstration file for populating the shop database. !
+        ! !
+        ! You can choose a database and a stage like this: !
+        ! -Dstage=development -Ddatabase=oracle !
+        ! !
+        ! These database types are provided: !
+        ! oracle, db2, sql_server, mysql, postgres, hsql, !
+        ! hsqlmem, firebird, derby, h2 !
+        ! !
+        ! ...and these stage configurations: !
+        ! development, perftest !
+        ! !
+        ! Set up your database connection in the file !
+        ! &lt;database&gt;/shop.&lt;database&gt;.properties !
+        ! !
+        ! You may want to try different generation quantities in !
+        ! shop.&lt;stage&gt;.properties !
+        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    </comment>
+
+    <import domains="person,net,product"/>
+    <import platforms="db"/>
+
+    <comment>setting default values</comment>
+    <setting name="stage" default="development"/>
+    <setting name="database" default="postgres"/>
+
+    <comment>import stage and database specific properties</comment>
+    <include
+            uri="{ftl:${database}/shop.${database}.properties}"/> <!-- ftl: is the prefix used for scripting with FreeMarker Template Language -->
+    <include uri="{ftl:shop.${stage}.properties}"/>
+
+    <comment>log the settings to the console</comment>
+    <echo>Starting generation for</echo>
+    <echo>{ftl: ${product_count + 6} products}</echo>
+    <echo>{ftl: ${customer_count + 1} customers}</echo>
+    <echo>{ftl: ${orders_per_customer} orders per customer}</echo>
+    <echo>{ftl: ${items_per_order} items per order}</echo>
+    <echo>{ftl:encoding:${context.defaultEncoding} default pageSize:${context.defaultPageSize}}</echo>
+    <echo>{ftl:JDBC URL: ${dbUrl}}</echo>
+
+    <comment>define a database that will be referred by the id 'db' subsequently</comment>
+    <database id="db" environment="local" system="postgres"/>
+
+    <comment>drop the current tables/sequences if they exist and recreate them</comment>
+    <execute uri="{ftl:${database}/drop_tables.${database}.sql}" target="db" onError="fatal"/>
+    <execute uri="{ftl:${database}/create_tables.${database}.sql}" target="db"/>
+
+    <bean id="idGen" spec="new IncrementGenerator(1000)"/>
+
+    <comment>create customers</comment>
+    <generate type="db_role" count="10" consumer="db"/>
+    <generate type="db_user" count="100" consumer="db"/>
+    <generate type="db_customer" count="10" consumer="db"/>
+
+    <comment>create orders for random customers and random products</comment>
+    <generate type="db_order" count="{customer_count * orders_per_customer}" consumer="db"/>
+
+    <echo>Check if enough data has been generated</echo>
+<!--    <iterate type="db_order" source="db" consumer="ConsoleExporter">-->
+<!--        <attribute name="counter" type="int" generator="IncrementGenerator"/>-->
+<!--    </iterate>-->
+<!--    <if test="db_order.counter != 301">-->
+<!--        <error>{ftl: ${db_order.counter} items}</error>-->
+<!--    </if>-->
+<!--    <iterate type="db_order_item" source="db" consumer="ConsoleExporter">-->
+<!--        <attribute name="counter" type="int" generator="IncrementGenerator"/>-->
+<!--    </iterate>-->
+<!--    <if test="db_order_item.counter != 1501">-->
+<!--        <error>{ftl: ${db_order_item.counter} items}</error>-->
+<!--    </if>-->
+<!--    <iterate type="db_user" source="db" consumer="ConsoleExporter">-->
+<!--        <attribute name="counter" type="int" generator="IncrementGenerator"/>-->
+<!--    </iterate>-->
+<!--    <if test="db_user.counter != 104">-->
+<!--        <error>{ftl: ${db_user.counter} items}</error>-->
+<!--    </if>-->
+<!--    <iterate type="db_product" source="db" consumer="ConsoleExporter">-->
+<!--        <attribute name="counter" type="int" generator="IncrementGenerator"/>-->
+<!--    </iterate>-->
+<!--    <if test="db_product.counter != 57">-->
+<!--        <error>{ftl: ${db_product.counter} items}</error>-->
+<!--    </if>-->
+</setup>

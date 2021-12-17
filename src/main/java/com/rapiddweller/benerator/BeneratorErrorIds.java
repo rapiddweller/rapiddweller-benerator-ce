@@ -67,6 +67,9 @@ public class BeneratorErrorIds {
   /** Generic error code for an illegal value in a legal XML attribute in a legal XML element of a Benerator file. */
   public static final String SYN_ILLEGAL_ATTRIBUTE_VALUE = "BEN-0108";
 
+  public static final String SCRIPT_FAILED = "BEN-0110";
+  public static final String SEGMENT_NOT_FOUND = "BEN-0111";
+
 
   // BEN-0130...0149 file issues =====================================================================================
 
@@ -430,7 +433,8 @@ public class BeneratorErrorIds {
   public static final String SYN_DB_NO_URL_AND_ENV_GROUP = "BEN-1024";
 
 
-  public static final String DB_CONNECT_FAILED                 = "BEN-1100";
+  public static final String DB_CONNECT_FAILED = "BEN-1100";
+  public static final String DB_QUERY_FAILED   = "BEN-1101";
 
   // Syntax Errors regarding <transcodingTask> -----------------------------------------------------------------------
 

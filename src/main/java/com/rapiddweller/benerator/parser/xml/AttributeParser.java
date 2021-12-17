@@ -19,6 +19,7 @@ import com.rapiddweller.common.parser.DoubleParser;
 import com.rapiddweller.common.parser.EncodingParser;
 import com.rapiddweller.common.parser.LongParser;
 import com.rapiddweller.common.parser.NonNegativeIntegerParser;
+import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.common.parser.ValuesParser;
 import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.format.xml.AttrInfo;
@@ -50,7 +51,7 @@ public class AttributeParser extends AbstractComponentParser {
 
   public static final AttrInfo<String> MODE = new AttrInfo<>(ATT_MODE, false, SYN_ATTR_MODE, new ValuesParser("mode", "normal", "ignored"), "normal");
   public static final AttrInfo<String> SCOPE = new AttrInfo<>(ATT_SCOPE, false, SYN_ATTR_SCOPE, null);
-  public static final AttrInfo<Expression<Long>> OFFSET = new AttrInfo<>(ATT_OFFSET, false, SYN_ATTR_OFFSET, new ScriptableParser<>(new LongParser()));
+  public static final AttrInfo<Expression<Long>> OFFSET = new AttrInfo<>(ATT_OFFSET, false, SYN_ATTR_OFFSET, new ScriptableParser<>(new NonNegativeLongParser()));
   public static final AttrInfo<Expression<Boolean>> CONDITION = new AttrInfo<>(ATT_CONDITION, false, SYN_ATTR_CONDITION, new ScriptParser<>(Boolean.class));
   public static final AttrInfo<Expression<Boolean>> FILTER = new AttrInfo<>(ATT_FILTER, false, SYN_ATTR_FILTER, new ScriptParser<>(Boolean.class));
   public static final AttrInfo<Boolean> UNIQUE = new AttrInfo<>(ATT_UNIQUE, false, SYN_ATTR_UNIQUE, new BooleanParser(), "false");

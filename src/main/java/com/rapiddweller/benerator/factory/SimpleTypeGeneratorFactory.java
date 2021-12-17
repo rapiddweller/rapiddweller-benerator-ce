@@ -305,7 +305,9 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
     // TODO define common mechanism for file sources CSV, XLS, ... and entity, array, simple type
     Generator<?> generator;
     Distribution distribution = FactoryUtil.getDistribution(descriptor.getDistribution(), uniqueness, false, context);
-    Generator<Object[]> src = SourceFactory.createXLSLineGenerator(sourceName);
+    String sourceUri = context.resolveRelativeUri(sourceName);
+    boolean formatted = isFormatted(descriptor);
+    Generator<Object[]> src = SourceFactory.createXLSLineGenerator(sourceUri, descriptor.getSegment(), formatted);
     Converter<Object[], Object> converterChain = new ConverterChain<>(
         new ArrayElementExtractor<>(Object.class, 0),
         new ConditionalConverter(String.class::isInstance,

@@ -164,6 +164,30 @@ public class BeneratorErrorIdIntegrationTest {
         ExitCodes.SYNTAX_ERROR, result);
   }
 
+  @Test
+  public void test_0111_syn_attr_ill_segment() {
+    BeneratorResult result = runFile("test_0111_syn_attr_ill_segment.ben.xml");
+    assertResult(BeneratorErrorIds.SEGMENT_NOT_FOUND,
+        "Segment not found: 'none' in 'data.xls'",
+        ExitCodes.FILE_NOT_FOUND, result);
+  }
+
+  // file not found --------------------------------------------------------------------------------------------------
+
+  @Test
+  public void test_0130_file_not_found_csv() {
+    BeneratorResult result = runFile("test_0130_file_not_found_csv.ben.xml");
+    assertResult(BeneratorErrorIds.FILE_REF_NOT_FOUND, "File not found: 'nonexistent.csv'.",
+        ExitCodes.FILE_NOT_FOUND, result);
+  }
+
+  @Test
+  public void test_0130_file_not_found_xls() {
+    BeneratorResult result = runFile("test_0130_file_not_found_xls.ben.xml");
+    assertResult(BeneratorErrorIds.FILE_REF_NOT_FOUND, "File not found: 'nonexistent.xls'.",
+        ExitCodes.FILE_NOT_FOUND, result);
+  }
+
   // <setup> tests ---------------------------------------------------------------------------------------------------
 
   @Test
@@ -380,6 +404,9 @@ public class BeneratorErrorIdIntegrationTest {
         ExitCodes.SYNTAX_ERROR, result);
   }
 
+  // <iterate> tests -------------------------------------------------------------------------------------------------
+
+
   // <setting> tests -------------------------------------------------------------------------------------------------
 
   @Test
@@ -403,6 +430,16 @@ public class BeneratorErrorIdIntegrationTest {
     BeneratorResult result = runFile("test_0253_syn_setting_value_exp.ben.xml");
     assertResult(BeneratorErrorIds.SYN_SETTING_VALUE,
         "Error resolving expression 'not_existent'. File test_0253_syn_setting_value_exp.ben.xml, line 4",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  // <iterate> tests -------------------------------------------------------------------------------------------------
+
+  @Test
+  public void test_0469_syn_iter_ill_selector() {
+    BeneratorResult result = runFile("test_0469_syn_iter_ill_selector.ben.xml");
+    assertResult(BeneratorErrorIds.SCRIPT_FAILED, // TODO should be SYN_ITERATE_SELECTOR
+        "Unable to resolve 'none'. Script text: 'none'",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -582,6 +619,55 @@ public class BeneratorErrorIdIntegrationTest {
   }
 
   @Test
+  public void test_0555_syn_attr_ill_mode() {
+    BeneratorResult result = runFile("test_0555_syn_attr_ill_mode.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_MODE,
+        "Illegal attribute value for attribute.mode: 'none'. " +
+            "File test_0555_syn_attr_ill_mode.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0556_syn_attr_ill_scope() {
+    // TODO implement
+  }
+
+  @Test
+  public void test_0557_syn_attr_ill_offset() {
+    BeneratorResult result = runFile("test_0557_syn_attr_ill_offset.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_OFFSET,
+        "Illegal attribute value for attribute.offset: '-1'. " +
+            "File test_0557_syn_attr_ill_offset.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0558_syn_attr_ill_condition() {
+    BeneratorResult result = runFile("test_0558_syn_attr_ill_condition.ben.xml");
+    assertResult(BeneratorErrorIds.SCRIPT_FAILED, // TODO should be SYN_ATTR_CONDITION
+        "Unable to resolve 'none'. Script text: 'none'", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0559_syn_attr_ill_filter() {
+    BeneratorResult result = runFile("test_0559_syn_attr_ill_filter.ben.xml");
+    assertResult(BeneratorErrorIds.SCRIPT_FAILED, // TODO should be SYN_ATTR_FILTER
+        "Unable to resolve 'none'. Script text: 'none'",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0560_syn_attr_ill_unique() {
+    BeneratorResult result = runFile("test_0560_syn_attr_ill_unique.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_UNIQUE,
+        "Illegal attribute value for attribute.unique: 'none'. " +
+            "File test_0560_syn_attr_ill_unique.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0561_syn_attr_ill_uniqueKey() {
+    // TODO implement
+  }
+
+  @Test
   public void test_0567_syn_attr_ill_minLength() {
     BeneratorResult result = runFile("test_0567_syn_attr_ill_minLength.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_MIN_LENGTH,
@@ -605,15 +691,14 @@ public class BeneratorErrorIdIntegrationTest {
             "File test_0568_syn_attr_maxLength_vs_minLength.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
   }
 
-  /* TODO
   @Test
-  public void test_0570_attr_ill_source() {
-    BeneratorResult result = runFile("test_0570_syn_attr_ill_source.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_ATTR_SOURCE,
-        "Illegal attribute value for attribute.source: 'nonexistent.csv'",
-        ExitCodes.SYNTAX_ERROR, result);
+  public void test_0569_syn_attr_ill_nullQuota() {
+    BeneratorResult result = runFile("test_0569_syn_attr_ill_nullQuota.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_NULL_QUOTA,
+        "Illegal attribute value for attribute.nullQuota: '2'. " +
+            "File test_0569_syn_attr_ill_nullQuota.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
   }
-  */
+
 
   @Test
   public void test_0571_syn_attr_encoding_wo_source() {
@@ -631,16 +716,6 @@ public class BeneratorErrorIdIntegrationTest {
         "Illegal attribute value for attribute.encoding: 'none'. " +
             "File test_0571_syn_attr_ill_encoding.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
   }
-
-  /* TODO
-  @Test
-  public void test_0572_syn_attr_ill_segment() {
-    BeneratorResult result = runFile("test_0572_syn_attr_ill_segment.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_ATTR_SEGMENT,
-        "Illegal attribute value for attribute.segment: 'none'",
-        ExitCodes.SYNTAX_ERROR, result);
-  }
-  */
 
   @Test
   public void test_0572_syn_attr_segment_wo_source() {
@@ -666,15 +741,13 @@ public class BeneratorErrorIdIntegrationTest {
             "File test_0573_syn_attr_separator_wo_source.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
   }
 
-  /* TODO
   @Test
   public void test_0574_syn_attr_ill_selector() {
     BeneratorResult result = runFile("test_0574_syn_attr_ill_selector.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_ATTR_SELECTOR,
-        "Illegal attribute value for attribute.selector: 'none'",
-        ExitCodes.SYNTAX_ERROR, result);
+    assertResult(BeneratorErrorIds.DB_QUERY_FAILED, // TODO should be SYN_ILL_SELECTOR
+        "Error in database query: 'none': Unexpected token: NONE in statement [none]",
+        ExitCodes.INTERNAL_SOFTWARE_ERROR, result);
   }
-   */
 
   @Test
   public void test_0574_syn_attr_selector_wo_source() {
@@ -685,15 +758,13 @@ public class BeneratorErrorIdIntegrationTest {
         ExitCodes.SYNTAX_ERROR, result);
   }
 
-  /* TODO
   @Test
   public void test_0575_syn_attr_ill_sub_selector() {
     BeneratorResult result = runFile("test_0575_syn_attr_ill_sub_selector.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_ATTR_SUB_SELECTOR,
-        "Illegal attribute value for attribute.subSelector: 'none'",
-        ExitCodes.SYNTAX_ERROR, result);
+    assertResult(BeneratorErrorIds.DB_QUERY_FAILED, // TODO should be SYN_ATTR_SUB_SELECTOR
+        "Error in database query: 'none': Unexpected token: NONE in statement [none]",
+        ExitCodes.INTERNAL_SOFTWARE_ERROR, result);
   }
-  */
 
   @Test
   public void test_0575_syn_attr_sub_selector_wo_source() {
@@ -1088,7 +1159,7 @@ public class BeneratorErrorIdIntegrationTest {
     } else {
       assertNull(errOut);
     }
-    assertEquals(expectedExitCode, result.getExitCode());
+    assertEquals("Wrong exit code", expectedExitCode, result.getExitCode());
   }
 
 }

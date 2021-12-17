@@ -81,8 +81,8 @@ public class SourceFactory {
   /** Creates a generator that creates lines from a XLS file as {@link Object} arrays.
    *  @param uri the uri of the XLS file
    *  @return a generator of the desired characteristics */
-  public static Generator<Object[]> createXLSLineGenerator(String uri) {
-    return new DataSourceGenerator<>(new XLSLineSource(uri));
+  public static Generator<Object[]> createXLSLineGenerator(String uri, String sheetName, boolean formatted) {
+    return new DataSourceGenerator<>(new XLSLineSource(uri, sheetName, formatted));
   }
 
   /** Creates a generator that iterates through the lines of a text file.
