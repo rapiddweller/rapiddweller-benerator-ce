@@ -30,7 +30,7 @@ import com.rapiddweller.common.Context;
 import com.rapiddweller.format.script.AbstractScript;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptException;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 /**
  * {@link Script} implementation for BeneratorScript.<br/><br/>

@@ -33,7 +33,7 @@ import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.context.ContextAware;
 import com.rapiddweller.model.data.DescriptorProvider;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.BeanConstruction;
 import com.rapiddweller.task.Task;
 

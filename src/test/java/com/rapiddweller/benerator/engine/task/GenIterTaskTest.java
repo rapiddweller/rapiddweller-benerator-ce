@@ -36,7 +36,7 @@ import com.rapiddweller.benerator.wrapper.IteratingGenerator;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.TypedIterable;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.task.Task;
 import com.rapiddweller.task.test.AbstractTaskTest;

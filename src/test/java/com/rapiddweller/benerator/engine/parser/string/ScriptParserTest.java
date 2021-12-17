@@ -7,7 +7,7 @@ import com.rapiddweller.common.context.DefaultContext;
 import com.rapiddweller.common.parser.Parser;
 import com.rapiddweller.format.script.ScriptException;
 import com.rapiddweller.format.script.ScriptUtil;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

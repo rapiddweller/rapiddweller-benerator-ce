@@ -36,7 +36,7 @@ import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.platform.db.AbstractDBSystem;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;

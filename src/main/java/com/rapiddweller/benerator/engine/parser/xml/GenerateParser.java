@@ -13,7 +13,7 @@ import com.rapiddweller.common.parser.DoubleParser;
 import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_NAME;
 import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_ON_ERROR;

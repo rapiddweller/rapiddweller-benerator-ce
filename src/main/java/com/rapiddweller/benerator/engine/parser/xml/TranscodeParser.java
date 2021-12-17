@@ -37,7 +37,7 @@ import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.platform.db.AbstractDBSystem;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.FallbackExpression;
 import org.w3c.dom.Element;
 

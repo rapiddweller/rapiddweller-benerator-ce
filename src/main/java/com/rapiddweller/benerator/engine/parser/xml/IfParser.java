@@ -36,7 +36,7 @@ import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import org.w3c.dom.Element;
 
 import java.util.List;

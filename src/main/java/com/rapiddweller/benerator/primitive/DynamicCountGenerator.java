@@ -29,7 +29,7 @@ package com.rapiddweller.benerator.primitive;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 /**
  * Behaves similar to the {@link DynamicLongGenerator},

@@ -54,7 +54,7 @@ import com.rapiddweller.platform.csv.CSVArraySourceProvider;
 import com.rapiddweller.platform.xls.XLSArraySourceProvider;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 /**
  * Creates array {@link Generator}s.<br/><br/>

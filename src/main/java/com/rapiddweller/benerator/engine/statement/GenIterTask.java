@@ -44,7 +44,7 @@ import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.MessageHolder;
 import com.rapiddweller.common.Resettable;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.Task;

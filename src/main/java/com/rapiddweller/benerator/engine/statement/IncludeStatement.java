@@ -35,7 +35,7 @@ import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.parser.DefaultEntryConverter;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 

@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.util;
 
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 /**
  * Evaluates an {@link Expression} on each call to {@link ExpressionBasedGenerator#generate(ProductWrapper)}

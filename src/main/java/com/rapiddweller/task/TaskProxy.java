@@ -51,8 +51,7 @@ public abstract class TaskProxy<E extends Task> extends AbstractTask implements 
 
   public void setRealTask(E realTask) {
     this.realTask = realTask;
-    setTaskName(realTask != null ? realTask.getClass().getSimpleName() :
-        "undefined");
+    setTaskName(realTask != null ? realTask.getClass().getSimpleName() : "undefined");
   }
 
   @Override
@@ -77,8 +76,7 @@ public abstract class TaskProxy<E extends Task> extends AbstractTask implements 
 
   @Override
   public String getMessage() {
-    return (realTask instanceof MessageHolder ?
-        ((MessageHolder) realTask).getMessage() : null);
+    return (realTask instanceof MessageHolder ? ((MessageHolder) realTask).getMessage() : null);
   }
 
   @Override

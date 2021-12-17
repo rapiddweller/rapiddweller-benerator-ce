@@ -32,7 +32,6 @@ import com.rapiddweller.common.StringUtil;
 /**
  * Exception which indicates that a required Task is unavailable.<br/><br/>
  * Created: 20.10.2009 10:07:05
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -44,13 +43,6 @@ public class TaskUnavailableException extends TaskException {
   private final long requiredCount;
   private final long actualCount;
 
-  /**
-   * Instantiates a new Task unavailable exception.
-   *
-   * @param task          the task
-   * @param requiredCount the required count
-   * @param actualCount   the actual count
-   */
   public TaskUnavailableException(Task task, long requiredCount,
                                   long actualCount) {
     super(renderMessage(task, requiredCount, actualCount));
@@ -77,29 +69,14 @@ public class TaskUnavailableException extends TaskException {
     return builder.toString();
   }
 
-  /**
-   * Gets required count.
-   *
-   * @return the required count
-   */
   public long getRequiredCount() {
     return requiredCount;
   }
 
-  /**
-   * Gets actual count.
-   *
-   * @return the actual count
-   */
   public long getActualCount() {
     return actualCount;
   }
 
-  /**
-   * Gets task.
-   *
-   * @return the task
-   */
   public Task getTask() {
     return task;
   }

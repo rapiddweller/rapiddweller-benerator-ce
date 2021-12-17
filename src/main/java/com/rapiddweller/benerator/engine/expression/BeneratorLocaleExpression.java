@@ -28,7 +28,7 @@ package com.rapiddweller.benerator.engine.expression;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.common.Context;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 
 import java.util.Locale;

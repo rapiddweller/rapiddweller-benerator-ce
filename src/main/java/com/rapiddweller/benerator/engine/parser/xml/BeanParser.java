@@ -46,7 +46,7 @@ import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.script.Assignment;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.BeanConstruction;
 import com.rapiddweller.script.expression.DefaultConstruction;
 import com.rapiddweller.script.expression.ExpressionUtil;

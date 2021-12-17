@@ -35,7 +35,7 @@ import com.rapiddweller.benerator.engine.statement.WhileStatement;
 import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.ParseContext;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_ON_ERROR;

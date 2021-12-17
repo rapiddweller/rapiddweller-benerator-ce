@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.factory.DescriptorUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import org.w3c.dom.Element;
 
 /**

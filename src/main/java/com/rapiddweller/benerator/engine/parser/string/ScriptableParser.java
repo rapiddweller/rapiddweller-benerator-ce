@@ -7,7 +7,7 @@ import com.rapiddweller.common.parser.AbstractParser;
 import com.rapiddweller.common.parser.Parser;
 import com.rapiddweller.common.parser.TypedParser;
 import com.rapiddweller.format.script.ScriptUtil;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ConstantExpression;
 
 /**

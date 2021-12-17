@@ -47,7 +47,7 @@ import com.rapiddweller.jdbacl.model.Database;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ReferenceDescriptor;
 import com.rapiddweller.platform.db.AbstractDBSystem;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

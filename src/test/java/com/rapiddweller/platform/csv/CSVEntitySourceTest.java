@@ -39,7 +39,6 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the {@link CSVEntitySource}.<br/><br/>
  * Created: 26.08.2007 12:45:17
- *
  * @author Volker Bergmann
  */
 public class CSVEntitySourceTest extends AbstractEntityIteratorTest {
@@ -49,9 +48,6 @@ public class CSVEntitySourceTest extends AbstractEntityIteratorTest {
 
   // test methods ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Test single run.
-   */
   @Test
   public void testSingleRun() {
     CSVEntitySource source = new CSVEntitySource(PERSON_URI, createPersonDescriptor(), Encodings.UTF_8);
@@ -59,9 +55,6 @@ public class CSVEntitySourceTest extends AbstractEntityIteratorTest {
     checkIteration(source.iterator(), "name", "age", false);
   }
 
-  /**
-   * Test reset.
-   */
   @Test
   public void testReset() {
     CSVEntitySource source = new CSVEntitySource(PERSON_URI, createPersonDescriptor(), Encodings.UTF_8);
@@ -70,9 +63,6 @@ public class CSVEntitySourceTest extends AbstractEntityIteratorTest {
     checkIteration(source.iterator(), "name", "age", false);
   }
 
-  /**
-   * Test without headers.
-   */
   @Test
   public void testWithoutHeaders() {
     CSVEntitySource source = new CSVEntitySource(PERSON_URI_WO_HEADERS, createPersonDescriptor(), Encodings.UTF_8);

@@ -7,7 +7,7 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.parser.AbstractParser;
 import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.common.parser.Parser;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 /**
  * Parses a page size.<br/><br/>

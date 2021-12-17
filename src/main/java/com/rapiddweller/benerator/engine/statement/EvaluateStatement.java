@@ -48,7 +48,7 @@ import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.jdbacl.DBExecutionResult;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.platform.db.AbstractDBSystem;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;

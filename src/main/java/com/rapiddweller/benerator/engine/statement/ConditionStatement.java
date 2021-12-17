@@ -27,7 +27,7 @@
 package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 
 import java.io.Closeable;
 

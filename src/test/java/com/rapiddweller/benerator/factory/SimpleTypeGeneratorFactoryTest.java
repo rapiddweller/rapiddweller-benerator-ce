@@ -48,10 +48,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
- * Tests the {@link SimpleTypeGeneratorFactory}.<br/>
- * <br/>
+ * Tests the {@link SimpleTypeGeneratorFactory}.<br/><br/>
  * Created at 29.04.2008 20:13:40
- *
  * @author Volker Bergmann
  * @since 0.5.2
  */
@@ -62,18 +60,12 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
   private static final String SCRIPTED_NAMES_CSV = "com/rapiddweller/benerator/factory/scripted_names.csv";
   private static final String SCRIPTED_NAMES_WGT_CSV = "com/rapiddweller/benerator/factory/scripted_names.wgt.csv";
 
-  /**
-   * Sets up benenerator script.
-   */
   @BeforeClass
   public static void setUpBeneneratorScript() {
     ScriptUtil.addFactory("ben", new BeneratorScriptFactory());
     ScriptUtil.setDefaultScriptEngine("ben");
   }
 
-  /**
-   * Sets up converter manager.
-   */
   @Before
   public void setUpConverterManager() {
     ConverterManager.getInstance().reset();
@@ -82,9 +74,6 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
 
   // 'value' attribute tests -----------------------------------------------------------------------------------------
 
-  /**
-   * Test values.
-   */
   @Test
   public void testValues() {
     SimpleTypeDescriptor type = createSimpleType("string");
@@ -93,9 +82,6 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
     expectGeneratedSet(generator, 100, "A", "B", "C").withContinuedAvailability();
   }
 
-  /**
-   * Test unique values.
-   */
   @Test
   public void testUniqueValues() {
     SimpleTypeDescriptor type = createSimpleType("string");
@@ -104,18 +90,12 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
     expectUniquelyGeneratedSet(generator, "A", "B", "C").withCeasedAvailability();
   }
 
-  /**
-   * Test create sample generator without values.
-   */
   @Test
   public void testCreateSampleGeneratorWithoutValues() {
     Generator<?> generator = SimpleTypeGeneratorFactory.createValuesGenerator(createSimpleType("test"), Uniqueness.NONE, null);
     assertNull(generator);
   }
 
-  /**
-   * Test create sample generator unweighted.
-   */
   @Test
   public void testCreateSampleGeneratorUnweighted() {
     BeneratorContext context = new DefaultBeneratorContext();
@@ -129,9 +109,6 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
     expectRelativeWeights(generator, 1000, "a", 1, "b,c", 1);
   }
 
-  /**
-   * Test create sample generator weighted.
-   */
   @Test
   public void testCreateSampleGeneratorWeighted() {
     BeneratorContext context = new DefaultBeneratorContext();
@@ -143,9 +120,6 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
 
   // CSV tests -------------------------------------------------------------------------------------------------------
 
-  /**
-   * Test simple csv import.
-   */
   @Test
   public void testSimpleCSVImport() {
     SimpleTypeDescriptor type = createSimpleType("givenName");
@@ -154,9 +128,6 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
     expectGeneratedSequence(generator, "Alice", "Otto").withCeasedAvailability();
   }
 
-  /**
-   * Test simple csv import with offset.
-   */
   @Test
   public void testSimpleCSVImportWithOffset() {
     SimpleTypeDescriptor type = createSimpleType("givenNameWithOffset");
@@ -166,9 +137,6 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
     expectGeneratedSequence(generator, "Otto").withCeasedAvailability();
   }
 
-  /**
-   * Test tab separated csv import.
-   */
   @Test
   public void testTabSeparatedCSVImport() {
     SimpleTypeDescriptor type = createSimpleType("name");
@@ -178,25 +146,21 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
     expectGeneratedSequence(generator, "Alice", "Bob", "Charly").withCeasedAvailability();
   }
 
-  /**
-   * Test scripted csv import.
-   */
   @Test
   public void testScriptedCSVImport() {
     SimpleTypeDescriptor type = createSimpleType("name");
     type.setSource(SCRIPTED_NAMES_CSV);
+    type.setSourceScripted(true);
     context.set("some_user", "the_user");
     Generator<String> generator = createAndInitGenerator(type, Uniqueness.NONE, context);
     expectGeneratedSequence(generator, "Alice", "the_user", "Otto").withCeasedAvailability();
   }
 
-  /**
-   * Test scripted wgt csv import.
-   */
   @Test
   public void testScriptedWgtCSVImport() {
     SimpleTypeDescriptor type = createSimpleType("name");
     type.setSource(SCRIPTED_NAMES_WGT_CSV); // contains an entry with {some_user},1 - all others have weight 0
+    type.setSourceScripted(true);
     context.set("some_user", "the_user"); // {some_user} is assigned the value 'the_user'
     Generator<String> generator = createAndInitGenerator(type, Uniqueness.NONE, context);
     expectGeneratedSet(generator, 100, "the_user")
@@ -206,9 +170,20 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
     assertEquals(300, counts.get("the_user").intValue());
   }
 
-  /**
-   * Test weighted csv import.
-   */
+  @Test
+  public void testUnscriptedWgtCSVImport() {
+    SimpleTypeDescriptor type = createSimpleType("name");
+    type.setSource(SCRIPTED_NAMES_WGT_CSV); // contains an entry with {some_user},1 - all others have weight 0
+    type.setSourceScripted(false);
+    context.set("some_user", "the_user"); // {some_user} is assigned the value 'the_user'
+    Generator<String> generator = createAndInitGenerator(type, Uniqueness.NONE, context);
+    expectGeneratedSet(generator, 100, "{some_user}")
+        .withContinuedAvailability(); // {some_user} has been replaced with 'the_user', all other weight are 0
+    Map<String, AtomicInteger> counts = countProducts(generator, 300);
+    assertEquals(1, counts.size());
+    assertEquals(300, counts.get("{some_user}").intValue());
+  }
+
   @Test
   public void testWeightedCSVImport() {
     SimpleTypeDescriptor type = createSimpleType("givenName");
@@ -224,9 +199,6 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
     assertEquals(n * 24. / (24. + 89.), counter.getCount("Alice"), n / 20);
   }
 
-  /**
-   * Test sequenced csv import.
-   */
   @Test
   public void testSequencedCSVImport() {
     SimpleTypeDescriptor type = createSimpleType("givenName");
@@ -236,9 +208,6 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
     expectGeneratedSequence(generator, "Otto", "Alice").withCeasedAvailability();
   }
 
-  /**
-   * Test unique csv import.
-   */
   @Test
   public void testUniqueCSVImport() {
     SimpleTypeDescriptor type = createSimpleType("givenName");
@@ -253,9 +222,6 @@ public class SimpleTypeGeneratorFactoryTest extends GeneratorTest {
     assertUnavailable(generator);
   }
 
-  /**
-   * Test cyclic csv import.
-   */
   @Test
   public void testCyclicCSVImport() {
     SimpleTypeDescriptor type = createSimpleType("givenName");

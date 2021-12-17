@@ -45,7 +45,7 @@ import com.rapiddweller.common.parser.NonNegativeIntegerParser;
 import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.task.PageListener;
 import com.rapiddweller.task.Task;
 import org.w3c.dom.Element;

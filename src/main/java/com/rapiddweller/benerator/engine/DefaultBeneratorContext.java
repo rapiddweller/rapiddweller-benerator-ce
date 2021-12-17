@@ -131,7 +131,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
       throw BeneratorExceptionFactory.getInstance().programmerConfig("No context URI specified", null);
     }
     this.contextUri = contextUri;
-    this.defaultSourceScripted = true;
+    this.defaultSourceScripted = false;
     this.defaultEncoding = SystemInfo.getFileEncoding();
     this.defaultDataset = LocaleUtil.getDefaultCountryCode();
     this.defaultPageSize = 1;

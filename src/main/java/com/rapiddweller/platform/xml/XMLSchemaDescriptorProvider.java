@@ -58,7 +58,7 @@ import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.UnionSimpleTypeDescriptor;
 import com.rapiddweller.model.data.UnresolvedTypeDescriptor;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
 import org.slf4j.LoggerFactory;

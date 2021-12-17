@@ -65,7 +65,7 @@ import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.model.data.VariableHolder;
 import com.rapiddweller.script.BeanSpec;
 import com.rapiddweller.script.DatabeneScriptParser;
-import com.rapiddweller.script.Expression;
+import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.ExpressionUtil;
