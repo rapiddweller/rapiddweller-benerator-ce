@@ -7,7 +7,7 @@ Download Benerator from:
 [https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/](https://github.com/rapiddweller/rapiddweller-benerator-ce/releases/)
 
 You should download the most recent version of the rapiddweller-benerator-dist archive from the download page, e.g.
-_rapiddweller-benerator-ce-1.3.0-jdk-11-dist.zip_ .
+_rapiddweller-benerator-ce-2.0.0-jdk-11-dist.zip_ .
 
 ## Unzip Benerator
 
@@ -77,10 +77,11 @@ On any OS, open a console window (shell,cmd or powershell) and type ...
 ```shell
 $ benerator -–version
 
-Benerator 2.0.0-jdk-11 build 1
-Java version 11.0.9
-JVM OpenJDK 64-Bit Server VM 11.0.9+11 (AdoptOpenJDK)
-OS Linux 5.9.16-050916-generic (amd64)
+Benerator Community Edition 2.1.0-jdk-11
+Java version:  11.0.11
+JVM product:   OpenJDK 64-Bit Server VM 11.0.11+9 (AdoptOpenJDK)
+System:        Mac OS X 10.16 x86_64
+CPU & RAM:     8 cores and 8 GB RAM, max 2 GB of RAM for this process
 ```
 </div>
 

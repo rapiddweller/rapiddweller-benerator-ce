@@ -1,7 +1,7 @@
 # Component Reference
 
-Benerator has lots of predefined generators which are available implicitly from the descriptor. Most of them only need to be created explicitly when
-using the Benerator API programmatically.
+Benerator has lots of predefined generators which are available implicitly from the descriptor. Most of them only need
+to be created explicitly when using the Benerator API programmatically.
 
 ## Generators
 
@@ -32,12 +32,13 @@ See **'[Using Relational Databases](using_relational_databases.md)'**.
 
 * **IncrementGenerator**: Generates numbers starting with one and incrementing the number on each subsequent call
 
-* **StringGenerator**: Generates strings based on character set, prefix, suffix and length characteristics. This is the typical component for
-  generating code numbers. Properties: charSet (regular expression for a character class), locale, unique, ordered, prefix, minInitial, suffix,
-  minLength, maxLength, lengthGranularity, lengthDistribution
+* **StringGenerator**: Generates strings based on character set, prefix, suffix and length characteristics. This is the
+  typical component for generating code numbers. Properties: charSet (regular expression for a character class), locale,
+  unique, ordered, prefix, minInitial, suffix, minLength, maxLength, lengthGranularity, lengthDistribution
 
-* **RegexStringGenerator**: Generates strings that match a given regular expression. This is the typical component for generating strings that are
-  composed of different sub patterns. Properties: pattern (regular expression), unique, ordered, locale, minLength, maxLength
+* **RegexStringGenerator**: Generates strings that match a given regular expression. This is the typical component for
+  generating strings that are composed of different sub patterns. Properties: pattern (regular expression), unique,
+  ordered, locale, minLength, maxLength
 
 * **MessageGenerator**: Composes strings using a MessageFormat
 
@@ -51,8 +52,8 @@ See **'[Using Relational Databases](using_relational_databases.md)'**.
 
 * **CurrentMilliTimeGenerator**: Generates long values that denote the number of milliseconds since 1970-01-01 00:00:00
 
-* **CurrentNanoTimeGenerator**: Generates long values that denote a number of milliseconds since an arbitrary point in time (possible even in the
-  future, so values may be negative)
+* **CurrentNanoTimeGenerator**: Generates long values that denote a number of milliseconds since an arbitrary point in
+  time (possible even in the future, so values may be negative)
 
 * **CurrentTimeGenerator**: Generates java.util.Date objects that represent the current time of the day
 
@@ -62,20 +63,21 @@ See **'[Using Relational Databases](using_relational_databases.md)'**.
 
 * **DayGenerator**: Generates date values that represent „day“ dates – dates at midnight
 
-* **DateTimeGenerator**: Generates date values with date and time configurable independentlyIts properties are: minDate, maxDate, dateGranularity,
-  dateDistribution, minTime, maxTime, timeGranularity, timeDistribution. For a 9-to-5 datetime on odd days in August 2010, configure
+* **DateTimeGenerator**: Generates date values with date and time configurable independentlyIts properties are: minDate,
+  maxDate, dateGranularity, dateDistribution, minTime, maxTime, timeGranularity, timeDistribution. For a 9-to-5 datetime
+  on odd days in August 2010, configure
 
 ```xml
 
 <bean id="dtGen" class="DateTimeGenerator">
-  <property name='minDate' value='2010-08-01'/>
-  <property name='maxDate' value='2010-08-31'/>
-  <property name='dateGranularity' value='00-00-02'/>
-  <property name='dateDistribution' value='random'/>
-  <property name='minTime' value='08:00:00'/>
-  <property name='maxTime' value='17:00:00'/>
-  <property name='timeGranularity' value='00:00:01'/>
-  <property name='timeDistribution' value='random'/>
+    <property name='minDate' value='2010-08-01'/>
+    <property name='maxDate' value='2010-08-31'/>
+    <property name='dateGranularity' value='00-00-02'/>
+    <property name='dateDistribution' value='random'/>
+    <property name='minTime' value='08:00:00'/>
+    <property name='maxTime' value='17:00:00'/>
+    <property name='timeGranularity' value='00:00:01'/>
+    <property name='timeDistribution' value='random'/>
 </bean>
 ```
 
@@ -103,27 +105,30 @@ See **'[Using Relational Databases](using_relational_databases.md)'**.
 
 ## Distributions
 
-A Distribution describes stochastic properties for distributing the data that Benerator generates. You can use the predefined distributions or
-implement and introduce custom implementations. The most important types of distribution are _Sequence_, _WeightFunction_ and _
+A Distribution describes stochastic properties for distributing the data that Benerator generates. You can use the
+predefined distributions or implement and introduce custom implementations. The most important types of distribution
+are _Sequence_, _WeightFunction_ and _
 CumulativeDistributionFunction_.
 
-A Distribution implements a common concept for generating numbers or taking values from a data source and providing them in a rearranged order or
-distribution with similar semantics as the number generation feature.
+A Distribution implements a common concept for generating numbers or taking values from a data source and providing them
+in a rearranged order or distribution with similar semantics as the number generation feature.
 
-As an example, a 'Skip2' sequence might generate numbers with an increment of 2: 1, 3, 5, 7,… When it is used to redistribute given data item1, item2,
-item3, item4,... , it would provide the values item1, item3, ...
+As an example, a 'Skip2' sequence might generate numbers with an increment of 2: 1, 3, 5, 7,… When it is used to
+redistribute given data item1, item2, item3, item4,... , it would provide the values item1, item3, ...
 
-While most Distribution components implement number generation as well data rearrangement, they are not required to support both concepts.
+While most Distribution components implement number generation as well data rearrangement, they are not required to
+support both concepts.
 
 All Distributions listed below are included in the default imports.
 
 ### Memory consumption
 
-Distributions that are based on number generation may adopt data redistribution by simply loading all available data into a long list in RAM and then
-using their number generation feature to determine indices of the data to provide. If the data amount is large, you may get memory problems. In order
-to provide an easy start, Benerator reduces the default size of these lists to 100,000 elements, prints out an error message if the number is
-exceeded, but simply continues to work with the reduced amount of data. You can allow Benerator to use a larger cache by adding a benerator.cacheSize
-to your **BENERATOR_OPTS**, e.g. 
+Distributions that are based on number generation may adopt data redistribution by simply loading all available data
+into a long list in RAM and then using their number generation feature to determine indices of the data to provide. If
+the data amount is large, you may get memory problems. In order to provide an easy start, Benerator reduces the default
+size of these lists to 100,000 elements, prints out an error message if the number is exceeded, but simply continues to
+work with the reduced amount of data. You can allow Benerator to use a larger cache by adding a benerator.cacheSize to
+your **BENERATOR_OPTS**, e.g.
 
 `-Dbenerator.cacheSize=2000000`
 
@@ -132,9 +137,9 @@ If this makes you run into an OutOfMemoryError, check the '
 
 ### Sequences
 
-Sequences reflect the idea of a mathematical sequence. They primarily focus in number generation, but they can be applied for data redistribution as
-well. Most sequences have a default instance which can be used by their literal, e.g. `distribution="random"` uses the 'random' literal for the
-distribution defined in the class RandomSequence.
+Sequences reflect the idea of a mathematical sequence. They primarily focus in number generation, but they can be
+applied for data redistribution as well. Most sequences have a default instance which can be used by their literal,
+e.g. `distribution="random"` uses the 'random' literal for the distribution defined in the class RandomSequence.
 
 #### RandomSequence
 
@@ -144,12 +149,14 @@ distribution defined in the class RandomSequence.
 | Default Instance | random |
 
 #### CumulatedSequence
+
 | Class | CumulatedSequence |
 | --- | --- |
 | Description | Creates random values with a bell-shape probability distribution |
 | Default Instance | cumulated |
 
 #### StepSequence
+
 | Class | StepSequence |
 | --- | --- |
 | Description | Depending on the settings of property 'delta', it starts with the min or max value of the specified range. With each further invocation, the 'increment' value is added. If addition makes the current value exceed the specified number range, the Sequence becomes unavailable. So the numbers provided are unique. Example: increment = -2, range=1..7: 7, 5, 3, 1 |
@@ -160,6 +167,7 @@ distribution defined in the class RandomSequence.
 | delta | The difference between the next value and the previous one | 1 |
 
 #### RandomWalkSequence
+
 | Class | RandomWalkSequence |
 | --- | --- |
 | Description | Starting with an → **initial** value, a random value between → **minStep** and → **
@@ -173,6 +181,7 @@ maxStep** is added on each subsequent invocation |
 | initial | If no initial value was configured explicitly, number generation starts with the min, max or medium value of the specified range – depending on the settings of minStep and maxStep | null |
 
 #### ShuffleSequence
+
 | Class | ShuffleSequence |
 | --- | --- |
 | Description | Can be used to iterate quickly through a large number range with avoiding duplicate values. It starts from an offset of 0 and iterates the number range with a fix increment. After the range is covered, it increases the offset by one and reiterates the range. When the offset reaches the same value as the increment, it is set back to 0 again. For an increment of 3 in a range 1..7, the generated numbers would be 1, 4, 7, 2, 5, 3, 6, 1, 4, ... |
@@ -183,18 +192,21 @@ maxStep** is added on each subsequent invocation |
 | increment | See the class description | 2 |
 
 #### WedgeSequence
+
 | Class | WedgeSequence |
 | --- | --- |
 | Description | Starting with first the lowest, then the highest available number, this alternatively provides increasing small numbers and decreasing large numbers until they converge in the middle and the Sequence becomes unavailable. So this generation is unique. For a number range 1..7, the generated numbers would be: 1, 7, 2, 6, 3, 5, 4. |
 | Default Instance | wedge |
 
 #### BitReverseSequence
+
 | Class | BitReverseSequence |
 | --- | --- |
 | Description | Creates numbers by continually increasing an internal counter and providing its value in bit-reversed order. This stops when each available number has been generated once, thus providing unique number generation. This comes close to a unique random distribution. |
 | Default Instance | bitreverse |
 
 #### ExpandSequence
+
 | Class | ExpandSequence |
 | --- | --- |
 | Description | Distributes numbers or data of unlimited volume in a unique or non-unique manner, by starting with a limited lower range and continuously expanding data region as data is generated. This comes close to a unique random distribution and can be used to iterate over very huge amounts of data. |
@@ -207,6 +219,7 @@ maxStep** is added on each subsequent invocation |
 | duplicationQuota | The probability by which a data element will be reused in a later call | 0 |
 
 #### HeadSequence
+
 | Class | HeadSequence |
 | --- | --- |
 | Description | When applied to a data source or generator, only the first few elements are provided. The number of elements is defined by the **
@@ -218,6 +231,7 @@ size** property. |
 | size | The size of the buffer | 1 |
 
 #### LiteralSequence
+
 | Class | LiteralSequence |
 | --- | --- |
 | Description | Defines a number sequence using a comma-separated list literal. |
@@ -228,6 +242,7 @@ size** property. |
 | spec | A comma-separated list with all values in the order in which they shall be provided ,e.g. '2,3,5,7,11' | – |
 
 #### WeightedNumbers
+
 | Class | WeightedNumbers |
 | --- | --- |
 | Description | Creates numbers based on a weighted-number literal , e.g. '1^70, 3^30' for generating 70% '1' values and 30% '3' values. This is a convenient and simple approach for controlling parent-child cardinalities in nested data generation. |
@@ -238,29 +253,28 @@ size** property. |
 | spec | A weighted-number literal. It lists weighted values in a comma-separated list. Each weighted value is specified by the numeric value followed by a circumflex (^) and the weight value, for example '1^70,3^30' | – |
 
 #### FibonacciSequence
+
 | Class | FibonacciSequence |
 | --- | --- |
 | Description | Generates numbers based on the Fibonacci Sequence |
 | Default Instance | fibonacci |
 
 #### PadovanSequence
+
 | Class | PadovanSequence |
 | --- | --- |
 | Description | Generates numbers based on the Padovan Sequence |
 | Default Instance | padovan |
 
-
 ### Weight Functions
 
-Weight functions are another special case of Distributions. 
-They are based on a function which is supposed to allow continuous value generation, 
-but since Benerator needs to perform a numerical integration for deriving random values, 
-a granularity must be applied. This way, the generated value set is quantized. 
-Another drawback of the approach is that fine-grained generation is memory-consuming and slow.
+Weight functions are another special case of Distributions. They are based on a function which is supposed to allow
+continuous value generation, but since Benerator needs to perform a numerical integration for deriving random values, a
+granularity must be applied. This way, the generated value set is quantized. Another drawback of the approach is that
+fine-grained generation is memory-consuming and slow.
 
-Thus, it is recommended to avoid weight functions if possible and choose a similar 
-Sequence or CumulativeDistributionFunction instead.
-
+Thus, it is recommended to avoid weight functions if possible and choose a similar Sequence or
+CumulativeDistributionFunction instead.
 
 #### GaussianFunction
 
@@ -273,8 +287,9 @@ Parameters: `average [, deviation]`
 Example:
 
 ```xml
+
 <import class="com.rapiddweller.benerator.distribution.function.*"/>
-    ...
+        ...
 <attribute name="price" type="big_decimal" min="0.1" max="99.90" granularity="0.1"
            distribution="new GaussianFunction(50,20)"/>
 ```
@@ -290,8 +305,9 @@ Parameters: `[scale,] frequency`
 Example:
 
 ```xml
+
 <import class="com.rapiddweller.benerator.distribution.function.*"/>
-    ...
+        ...
 <attribute name="category" type="string" values="A,B,C" distribution="new ExponentialFunction(0.5)"/>
 ```
 
@@ -306,21 +322,21 @@ Parameters: `weight1 [, weight2 [, weight3 ...]]`
 Example:
 
 ```xml
+
 <import class="com.rapiddweller.benerator.distribution.function.*"/>
-    ...
+        ...
 <attribute name="rating" type="int" min="1" max="3" distribution="new DiscreteFunction(1, 2, 1)"/>
 ```
 
 ### CumulativeDistributionFunction
 
-The CumulativeDistributionFunction is another special case of a Distribution, which allows for continuous value generation as opposed to Sequence and
-WeightFunction.
+The CumulativeDistributionFunction is another special case of a Distribution, which allows for continuous value
+generation as opposed to Sequence and WeightFunction.
 
 ### ExponentialDensityIntegral
 
-Inverse of the integral of the probability density f(x) = a e^{-ax} (x >` 0), which resolves to F^{-1}(x) = - log(1 - x)
-/ a.
-
+Inverse of the integral of the probability density `f(x) = a e^{-ax} (x > 0)`, which resolves to 
+`F^{-1}(x) = - log(1 - x) / a`.
 
 ## Converters
 
@@ -330,7 +346,30 @@ Benerator supports two different types of converter interfaces:
 
 * java.text.Format
 
-### Converters
+### Converter Setup
+
+Instantiation of converters follows the same principles as other objects handled by benerator. They can be instantiated
+either as beans (see NoiseInducer example below) or inline. 
+
+An inline instantiation of the Mask converter below:
+
+```xml
+<iterate count="5" source="db" consumer="ConsoleExporter">
+    <attribute name="column" type="string" converter="Mask"/>
+</iterate>
+```
+
+Configuration for inline usage of converters 
+(cp. `new Mask{maskChar = '$' }`) to set converter properties 
+with curly brackets notation looks like:
+
+```xml
+<iterate count="5" source="db" consumer="ConsoleExporter">
+    <attribute name="column" type="string" converter="new Mask{maskChar='$'}"/>
+</iterate>
+```
+
+### Default Converters
 
 The following converter classes are imported by default:
 
@@ -342,9 +381,11 @@ The following converter classes are imported by default:
 
 * **LiteralParser**: Parses strings as numbers, strings, dates and times
 
-* **Mask**: Replaces each character of a string with an asterisk '*' or another configurable character.
+* **Mask**: Replaces each character of a string with an asterisk '*' or another configurable character (
+  property : `maskChar`).
 
-* **MiddleMask**: Replaces each character of a string with an asterisk '*' or another configurable character, leaving a configurable number of characters unmasked at the beginning and/or the end of the string.
+* **MiddleMask**: Replaces each character of a string with an asterisk '*' or another configurable character, leaving a
+  configurable number of characters unmasked at the beginning and/or the end of the string.
 
 * **Append**: Appends a configurable suffix.
 
@@ -354,16 +395,18 @@ The following converter classes are imported by default:
 
 * **MD5HashBase64**, **SHA1HashBase64**, **SHA256HashBase64**: Convert any data to a hash code in Base64 format
 
-* **JavaHash**: Convert any data to a hexadecimal hash code. This implementation is faster than the hash converters above
+* **JavaHash**: Convert any data to a hexadecimal hash code. This implementation is faster than the hash converters
+  above
 
 * **MessageConverter**: Converts an object, wrapping it with a message string, using a java.text.MessageFormat
 
-* **PropertyResourceBundleConverter**: Uses a Java PropertyResourceBundle to translate keywords to translations in a given Java Locale
+* **PropertyResourceBundleConverter**: Uses a Java PropertyResourceBundle to translate keywords to translations in a
+  given Java Locale
 
 * **ToStringConverter**: Converts arbitrary objects to strings
 
-* **UniqueStringConverter**: Assures uniqueness for all processed Strings by appending unique numbers to recurring instances (attention: limited to a
-  few 100.000 elements)
+* **UniqueStringConverter**: Assures uniqueness for all processed Strings by appending unique numbers to recurring
+  instances (attention: limited to a few 100.000 elements)
 
 * **URLEncodeConverter**: Applies a URL encoding to strings
 
@@ -373,43 +416,48 @@ The following converter classes are imported by default:
 
 * **RegexReplacer**: Uses a regular expression to replace parts of the processed strings
 
-* **SubstringExtractor**: Extracts substrings from strings. It has the properties '**from**' and '**to**'. If '**to**'
-  is not set, it extracts from '**from**' until the end. If '**to**' or '**from**' is negative, it denotes a backwards position count, making e.g. -1
-  the last character position.
+* **SubstringExtractor**: Extracts substrings from strings. It has the properties `from` and `to`. If `to`
+  is not set, it extracts from `from` until the end. If `to` or `from` is negative, it denotes a backwards
+  position count, making e.g. -1 the last character position. 
 
-* **EscapingConverter**: Escapes strings in Java style, like "A\tB"
+* **EscapingConverter**: Escapes strings in Java style, like `A\tB`
 
 * **Number2CharConverter**: Converts a number to a character of the corresponding ASCII code
 
 * **Char2StringConverter**: Converts a character to a string of length 1
 
-* **EscapingConverter**: Escapes control codes in a string in C and Java style, e.g. with \r, \n, \t
+* **EscapingConverter**: Escapes control codes in a string in C and Java style, e.g. with `\r`, `\n`, `\t`
 
-* **Number2CharConverter**: Converts a number to a character with the corresponding ASCII code, e.g. 65 → 'A'
+* **Number2CharConverter**: Converts a number to a character with the corresponding ASCII code, e.g. `65` → `A`
 
 The package **com.rapiddweller.text** provides the following converters:
 
 * **DelocalizingConverter**: Converts strings with non-ASCII letters to ASCII strings, e.g. Müller → Mueller, Sœr → Soer
 
-* **NameNormalizer**: Normalizes a string by trimming it, normalizing inner white space and formatting each word to start with an uppercase character
-  and continue with lowercase characters
+* **NameNormalizer**: Normalizes a string by trimming it, normalizing inner white space and formatting each word to
+  start with an uppercase character and continue with lowercase characters
 
 * **NormalizeSpaceConverter**: Trims a string and normalizes inner white space to one space character
 
 * **ToHexConverter**: Renders characters, strings snd integral numbers in hexadecimal representation
 
-In the package **com.rapiddweller.benerator.primitive.number** there are two converters that can be used to quantize numerical values:
+In the package **com.rapiddweller.benerator.primitive.number** there are two converters that can be used to quantize
+numerical values:
 
-* **FloatingPointQuantizer**, **IntegralQuantizer, NumberQuantizer**: Quantize numbers to be a **min** value plus an integral multiple of a **
+* **FloatingPointQuantizer**, **IntegralQuantizer, NumberQuantizer**: Quantize numbers to be a **min** value plus an
+  integral multiple of a **
   granularity**
 
-* **NoiseInducer**: Adds numerical noise to numbers. The noise characteristics can be configured with the properties minNoise, maxNoise,
-  noiseGranularity and noiseDistribution. When setting the boolean property relative to true, noise is relative, where maxCount=1 corresponds to 100%
-  noise-to-signal ratio. If relative=false, the absolute value of the noise is added or subtracted. Example:
+* **NoiseInducer**: Adds numerical noise to numbers. The noise characteristics can be configured with the
+  properties `minNoise`, `maxNoise`,
+  `noiseGranularity` and `noiseDistribution`. When setting the boolean property relative to true, noise is relative,
+  where `maxCount=1` corresponds to 100% noise-to-signal ratio. If `relative=false`, the absolute value of the noise is
+  added or subtracted. Example:
 
 NoiseInducer example:
 
 ```xml
+
 <bean id="inducer" class="com.rapiddweller.benerator.primitive.number.NoiseInducer">
     <property name="minNoise" value="-0.2"/>
     <property name="maxNoise" value="0.2"/>
@@ -417,8 +465,9 @@ NoiseInducer example:
     <property name="noiseDistribution" value="cumulated"/>
     <property name="relative" value="true"/>
 </bean>
+
 <generate count="5" consumer="ConsoleExporter">
-    <attribute name="x" type="int" constant="100" converter="inducer"/>
+<attribute name="x" type="int" constant="100" converter="inducer"/>
 </generate>
 ```
 
@@ -458,7 +507,8 @@ For the validators from the domains see **'[Domains](domains.md)'**.
 
 * **UniqueValidator**: Requires data to be unique (attention: limited to some 100.000 elements)
 
-* **UnluckyNumberValidator**: Checks if a String contains an 'unlucky' number like 13 in western cultures or 4 in east-asian cultures
+* **UnluckyNumberValidator**: Checks if a String contains an 'unlucky' number like 13 in western cultures or 4 in
+  east-asian cultures
 
 * **DayOfWeekValidator**: Accepts only Dates of certain (configurable) weekdays
 
@@ -468,8 +518,9 @@ For the validators from the domains see **'[Domains](domains.md)'**.
 
 ### Tasks
 
-* **FileJoiner**: Joins several files (**sources**) into a **destination** file, optionally **append**ing the joint data to an existing destination
-  file, or overwriting it. If **deleteSources** is set to true, the sources are deleted afterwards.
+* **FileJoiner**: Joins several files (**sources**) into a **destination** file, optionally **append**ing the joint data
+  to an existing destination file, or overwriting it. If **deleteSources** is set to true, the sources are deleted
+  afterwards.
 
 * **FileDeleter**: Deletes a number of **files**.
 
@@ -518,8 +569,9 @@ A Consumer consumes generated data and usually is used for exporting or persisti
 Usage example:
 
 ```xml
-<bean id="service" spec="..." />
-<bean id="invoker" spec="new JavaInvoker(ejb, 'enrolCustomer')" />
+
+<bean id="service" spec="..."/>
+<bean id="invoker" spec="new JavaInvoker(ejb, 'enrolCustomer')"/>
 ```
 
 ### DbUnitEntityExporter
@@ -647,7 +699,6 @@ Helmut Schmidt 10226.14
 | Import | `<import platforms="csv"/>` |
 | Class Description | Exports entities to a CSV file |
 
-
 | Property | Property Description | Default Value |
 | --- | --- | --- |
 | uri | The URI of the file to create | "export.csv" |
@@ -766,9 +817,10 @@ Benerator provides the following implementations of the EntitySource interface:
 
 ## rapiddweller Commons Library
 
-The library rd-lib-common derived from Databene Commons from Volker Bergmann is a general-purpose utility collection which also provides some features useful for data generation and manipulation.
-Its converters and validators are liste above, but there are some general utility classes too. They can be invoked directly using rapiddwellerScript or
-other supported script languages.
+The library rd-lib-common derived from Databene Commons from Volker Bergmann is a general-purpose utility collection
+which also provides some features useful for data generation and manipulation. Its converters and validators are liste
+above, but there are some general utility classes too. They can be invoked directly using rapiddwellerScript or other
+supported script languages.
 
 ### TimeUtil
 

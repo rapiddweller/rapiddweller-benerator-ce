@@ -1,7 +1,7 @@
 # Project information
 docs_dir: doc
 site_name: rapiddweller Benerator
-site_url: https://www.benerator.de/ce/doc
+site_url: https://docs.benerator.de
 site_author: rapiddweller GmbH & Volker Bergmann
 copyright: Copyright &copy; 2006 - 2021 rapiddweller GmbH & Volker Bergmann
 site_description: >-
@@ -15,13 +15,15 @@ repo_url: https://github.com/rapiddweller/rapiddweller-benerator-ce
 edit_uri: ""
 
 extra_css:
-  - stylesheets/extra.css
-  - stylesheets/termynal.css
+  - css/extra.css
+  - css/termynal.css
 
 extra_javascript:
   - https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js
   - js/termynal.js
   - js/custom.js
+  - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
+  - js/tablesort.js
 
 use_directory_urls: false
 
@@ -34,7 +36,8 @@ theme:
     text: Roboto
     code: Roboto Mono
   palette:
-    accent: teal
+    scheme: rapiddweller
+    accent: amber
 
 plugins:
   - with-pdf:
@@ -60,6 +63,9 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_div_format ''
   - pymdownx.tabbed
+  - pymdownx.snippets
+  - tables
+  - abbr
 
 # Page tree
 nav:

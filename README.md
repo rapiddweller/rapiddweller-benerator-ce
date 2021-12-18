@@ -102,10 +102,10 @@ To get started please find some demo scripts in the folder
 
 There are various sources to get you started or extend your benerator knowledge:
 
-- Read our docs on our [Benerator Manual site](https://www.benerator.de/ce/doc/) or
+- Read our docs on our [Benerator Manual site](https://docs.benerator.de/) or
   create your own mkdocs with python `mkdocs build`. Keep in mind that you might need to install certain mkdocs dependencies first.
 
-- Consider the [Maven Site Docs](https://www.benerator.de/ce/doc/mvn-site/) or create your own docs using maven `mvn site:site`. The generated docs
+- Consider the [Maven Site Docs](https://docs.benerator.de/mvn-site/) or create your own docs using maven `mvn site:site`. The generated docs
   include Javadoc, Test Reports and more.
 
 - Download the [Benerator Manual](https://www.benerator.de/ce/rapiddweller-benerator-ce-manual.pdf)
