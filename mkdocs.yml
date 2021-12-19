@@ -25,8 +25,6 @@ extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
   - js/tablesort.js
 
-use_directory_urls: false
-
 theme:
   name: material
   logo: assets/rd.png
@@ -38,8 +36,19 @@ theme:
   palette:
     scheme: rapiddweller
     accent: amber
+  features:
+    - search.suggest
+    - search.highlight
+    - search.share
+    - navigation.instant
+    - navigation.tracking
+    - navigation.expand
+    - navigation.top
+
+use_directory_urls: false
 
 plugins:
+  - search
   - with-pdf:
       author: rapiddweller GmbH & Volker Bergmann
       copyright: Copyright &copy; 2006 - 2021 rapiddweller GmbH & Volker Bergmann
@@ -47,7 +56,6 @@ plugins:
       cover_title: rapiddweller-benerator-ce
       cover_subtitle: manual
       output_path: rapiddweller-benerator-ce-manual.pdf
-  - search
 
 markdown_extensions:
   - markdown.extensions.codehilite:
@@ -61,8 +69,9 @@ markdown_extensions:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_div_format ''
-  - pymdownx.tabbed
+          format: !!python/name:pymdownx.superfences.fence_div_format
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.snippets
   - tables
   - abbr
