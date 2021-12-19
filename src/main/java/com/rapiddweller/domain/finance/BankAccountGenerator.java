@@ -38,13 +38,15 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.domain.address.Country;
 
 /**
- * Generates German {@link BankAccount}s with low validity requirements.<br/><br/>
+ * Generates German {@link BankAccount}s with low validity requirements.
+ * Account numbers are a random combination of 10 digits, IBAN generation uses the European standard:
+ * &lt;iban&gt; ::= &lt;country code&gt; '0' &lt;check digit&gt; &lt;bic&gt; &lt;padded zeros&gt;
+ * &gt;account number&lt;<br/><br/>
  * Created at 24.06.2008 08:36:32
  * @author Volker Bergmann
  * @since 0.5.4
  */
-public class BankAccountGenerator extends CompositeGenerator<BankAccount>
-    implements NonNullGenerator<BankAccount> {
+public class BankAccountGenerator extends CompositeGenerator<BankAccount> implements NonNullGenerator<BankAccount> {
 
   private final String countryCode;
   private final BankGenerator bankGenerator;
