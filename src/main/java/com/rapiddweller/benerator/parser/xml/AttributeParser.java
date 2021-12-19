@@ -10,6 +10,7 @@ import com.rapiddweller.benerator.engine.parser.string.IdParser;
 import com.rapiddweller.benerator.engine.parser.string.MinMaxParser;
 import com.rapiddweller.benerator.engine.parser.string.ScriptParser;
 import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
+import com.rapiddweller.benerator.engine.parser.string.WeightedLiteralListParser;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.HF;
 import com.rapiddweller.common.Validator;
@@ -17,7 +18,6 @@ import com.rapiddweller.common.parser.BooleanParser;
 import com.rapiddweller.common.parser.CharacterParser;
 import com.rapiddweller.common.parser.DoubleParser;
 import com.rapiddweller.common.parser.EncodingParser;
-import com.rapiddweller.common.parser.LongParser;
 import com.rapiddweller.common.parser.NonNegativeIntegerParser;
 import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.common.parser.ValuesParser;
@@ -29,6 +29,7 @@ import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.PartDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.common.Expression;
+import com.rapiddweller.script.WeightedSample;
 import org.w3c.dom.Element;
 
 import static com.rapiddweller.benerator.BeneratorErrorIds.*;
@@ -58,7 +59,7 @@ public class AttributeParser extends AbstractComponentParser {
   public static final AttrInfo<String> UNIQUE_KEY = new AttrInfo<>(ATT_UNIQUE_KEY, false, SYN_ATTR_UNIQUE_KEY, null); // TODO what's this?
 
   public static final AttrInfo<String> CONSTANT = new AttrInfo<>(ATT_CONSTANT, false, SYN_ATTR_CONSTANT, null);
-  public static final AttrInfo<String> VALUES = new AttrInfo<>(ATT_VALUES, false, SYN_ATTR_VALUES, null);
+  public static final AttrInfo<WeightedSample<?>[]> VALUES = new AttrInfo<>(ATT_VALUES, false, SYN_ATTR_VALUES, new WeightedLiteralListParser());
   public static final AttrInfo<String> PATTERN = new AttrInfo<>(ATT_PATTERN, false, SYN_ATTR_PATTERN, null);
   public static final AttrInfo<String> SCRIPT = new AttrInfo<>(ATT_SCRIPT, false, SYN_ATTR_SCRIPT, null);
   public static final AttrInfo<String> GENERATOR = new AttrInfo<>(ATT_GENERATOR, false, SYN_ATTR_GENERATOR, null);
