@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -37,34 +37,43 @@ import com.rapiddweller.benerator.util.GeneratorUtil;
 import com.rapiddweller.benerator.wrapper.WeighingGeneratorWrapper;
 
 /**
- * Generates a random country.<br/>
- * <br/>
+ * Generates {@link Country} objects in random order.<br/><br/>
  * Created: 11.06.2006 08:15:51
- *
  * @author Volker Bergmann
+ * @since 0.1
  */
-public class CountryGenerator extends AbstractDatasetGenerator<Country>
-    implements NonNullGenerator<Country> {
+public class CountryGenerator extends AbstractDatasetGenerator<Country> implements NonNullGenerator<Country> {
 
   private static final String REGION = "/com/rapiddweller/dataset/region";
 
-  // Constructors ----------------------------------------------------------------------------------------------------
+  // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Country generator.
-   */
   public CountryGenerator() {
     this("world");
   }
 
-  /**
-   * Instantiates a new Country generator.
-   *
-   * @param datasetName the dataset name
-   */
   public CountryGenerator(String datasetName) {
     super(Country.class, REGION, datasetName, true);
   }
+
+  // interface -------------------------------------------------------------------------------------------------------
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
+
+  @Override
+  public Country generate() {
+    return GeneratorUtil.generateNonNull(this);
+  }
+
+  // non-public helpers ----------------------------------------------------------------------------------------------
 
   @Override
   protected boolean isAtomic(Dataset dataset) {
@@ -73,8 +82,7 @@ public class CountryGenerator extends AbstractDatasetGenerator<Country>
   }
 
   @Override
-  protected WeightedGenerator<Country> createGeneratorForAtomicDataset(
-      Dataset dataset) {
+  protected WeightedGenerator<Country> createGeneratorForAtomicDataset(Dataset dataset) {
     WeightedDatasetGenerator<Country> result;
     Country country = Country.getInstance(dataset.getName(), false);
     result = createGeneratorForCountry(country);
@@ -82,27 +90,11 @@ public class CountryGenerator extends AbstractDatasetGenerator<Country>
     return result;
   }
 
-  /**
-   * Create generator for country weighted dataset generator.
-   *
-   * @param country the country
-   * @return the weighted dataset generator
-   */
-  protected WeightedDatasetGenerator<Country> createGeneratorForCountry(
-      Country country) {
-    ConstantGenerator<Country> coreGenerator =
-        new ConstantGenerator<>(country);
-    WeightedGenerator<Country> generator =
-        new WeighingGeneratorWrapper<>(coreGenerator,
-            country.getPopulation());
+  protected WeightedDatasetGenerator<Country> createGeneratorForCountry(Country country) {
+    ConstantGenerator<Country> coreGenerator = new ConstantGenerator<>(country);
+    WeightedGenerator<Country> generator = new WeighingGeneratorWrapper<>(coreGenerator, country.getPopulation());
     totalWeight += generator.getWeight();
-    return new AtomicDatasetGenerator<>(generator, nesting,
-        country.getIsoCode());
-  }
-
-  @Override
-  public Country generate() {
-    return GeneratorUtil.generateNonNull(this);
+    return new AtomicDatasetGenerator<>(generator, nesting, country.getIsoCode());
   }
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------
