@@ -14,6 +14,9 @@ import com.rapiddweller.common.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Helper class for importing Benerator components.<br/><br/>
  * Created: 06.12.2021 19:50:06
@@ -60,16 +63,27 @@ public class Importer {
   // platform classes --------------------------------------------------------------------------------------------------
 
   public static void importPlatformClasses(String[] platformNames, boolean required, BeneratorContext context) {
+    List<String> importedPlatforms = new ArrayList<>();
+    List<String> absentPlatforms = new ArrayList<>();
     PlatformDescriptor[] descriptors = findPlatforms(platformNames, required);
     for (int i = 0; i < platformNames.length; i++) {
       PlatformDescriptor descriptor = descriptors[i];
       String platformName = platformNames[i];
       if (descriptor == null) {
-        logger.info("Platform '{}' is not installed", platformName);
+        absentPlatforms.add(platformName);
       } else {
-        logger.info("Importing platform '{}'", platformName);
         importPlatformClasses(descriptor, context);
+        importedPlatforms.add(platformName);
       }
+    }
+    // log platform import results
+    String imports = importedPlatforms.toString();
+    imports = imports.substring(1, imports.length() - 1);
+    logger.info("Imported platforms: {}", imports);
+    if (!absentPlatforms.isEmpty()) {
+      String absences = absentPlatforms.toString();
+      absences = absences.substring(1, absences.length() - 1);
+      logger.info("Absent platforms: {}", absentPlatforms);
     }
   }
 
