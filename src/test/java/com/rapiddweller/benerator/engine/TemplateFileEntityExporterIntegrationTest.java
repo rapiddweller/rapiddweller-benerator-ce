@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -35,19 +35,13 @@ import org.junit.Test;
 /**
  * Tests the {@link TemplateFileEntityExporter}.<br/><br/>
  * Created: 27.06.2014 17:42:34
- *
  * @author Volker Bergmann
  * @since 0.9.7
  */
 public class TemplateFileEntityExporterIntegrationTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test countries.
-   *
-   * @throws Exception the exception
-   */
   @Test
-  public void testCountries() throws Exception {
+  public void testCountries() {
     String uri = "target/" + getClass().getName() + ".txt";
     String templateUri = "com/rapiddweller/benerator/engine/template/countries.ftl";
     BeneratorContext context = parseAndExecute(
@@ -69,32 +63,24 @@ public class TemplateFileEntityExporterIntegrationTest extends AbstractBenerator
     System.out.println(content);
   }
 
-  /**
-   * Test iftdgn 1.
-   *
-   * @throws Exception the exception
-   */
   @Test
-  public void testIFTDGN1() throws Exception {
+  public void testIFTDGN1() {
     BeneratorContext context = parseAndExecuteFile("com/rapiddweller/benerator/engine/template/IFTDGN1.ben.xml");
     closeCon(context);
     String content = IOUtil.getContentOfURI("target/IFTDGN1.edi");
     System.out.println(content);
   }
 
-  /**
-   * Test iftdgn 2.
-   *
-   * @throws Exception the exception
-   */
   @Test
-  public void testIFTDGN2() throws Exception {
+  public void testIFTDGN2() {
     BeneratorContext context = parseAndExecuteFile("com/rapiddweller/benerator/engine/template/IFTDGN2.ben.xml");
     closeCon(context);
     IOUtil.close(context);
     String content = IOUtil.getContentOfURI("target/IFTDGN2.edi");
     System.out.println(content);
   }
+
+  // helpers ---------------------------------------------------------------------------------------------------------
 
   private static void closeCon(BeneratorContext context) {
     Consumer con = (Consumer) context.get("con");

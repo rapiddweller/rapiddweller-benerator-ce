@@ -41,15 +41,11 @@ import static org.junit.Assert.assertEquals;
 /**
  * Testing XLS imports.<br/><br/>
  * Created: 24.01.2013 15:46:57
- *
  * @author Volker Bergmann
  * @since 0.8.0
  */
 public class XLSIntegrationTest extends AbstractBeneratorIntegrationTest {
 
-  /**
-   * Test default.
-   */
   @SuppressWarnings("unchecked")
   @Test
   public void testDefault() {
@@ -61,9 +57,6 @@ public class XLSIntegrationTest extends AbstractBeneratorIntegrationTest {
     assertPersonValues("Alice", 123L, TimeUtil.date(2008, 11, 31), TimeUtil.date(2008, 11, 31, 13, 45, 0, 0), products.get(0));
   }
 
-  /**
-   * Test formatted.
-   */
   @SuppressWarnings("unchecked")
   @Test
   public void testFormatted() {
@@ -76,9 +69,6 @@ public class XLSIntegrationTest extends AbstractBeneratorIntegrationTest {
     assertPersonValues("Alice", "123", "2008-Dec-31", "13:45", products.get(0));
   }
 
-  /**
-   * Test sheet.
-   */
   @SuppressWarnings("unchecked")
   @Test
   public void testSheet() {
