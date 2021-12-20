@@ -668,6 +668,14 @@ public class BeneratorErrorIdIntegrationTest {
   }
 
   @Test
+  public void test_0563_syn_attr_ill_values() {
+    BeneratorResult result = runFile("test_0563_syn_attr_ill_values.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_VALUES,
+        "Illegal attribute value for attribute.values: 'Alice,Bob,Charly'. " +
+            "File test_0563_syn_attr_ill_values.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
   public void test_0567_syn_attr_ill_minLength() {
     BeneratorResult result = runFile("test_0567_syn_attr_ill_minLength.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_MIN_LENGTH,

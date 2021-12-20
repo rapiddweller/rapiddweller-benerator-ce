@@ -449,6 +449,7 @@
             <xs:attributeGroup ref="component-generator-attrs"/>
             <xs:attribute name="minCount" type="scriptable-long"/>
             <xs:attribute name="maxCount" type="scriptable-long"/>
+            <xs:attribute name="countGranularity" type="positiveLong"/>
             <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attribute name="container">
                 <xs:simpleType>
@@ -538,6 +539,7 @@
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+
         <xs:attribute name="minInclusive" type="xs:boolean">
             <xs:annotation>
                 <xs:documentation xml:lang="en">
@@ -545,6 +547,7 @@
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+
         <xs:attribute name="max" type="min-max-type">
             <xs:annotation>
                 <xs:documentation xml:lang="en">
@@ -552,6 +555,7 @@
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+
         <xs:attribute name="maxInclusive" type="xs:boolean">
             <xs:annotation>
                 <xs:documentation xml:lang="en">
@@ -647,7 +651,7 @@
             </xs:simpleType>
             <xs:simpleType>
                 <xs:restriction base="xs:string">
-                    <xs:enumeration value="infinite"/>
+                    <xs:enumeration value="unbounded"/>
                 </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>
@@ -1159,9 +1163,20 @@
             </xs:documentation>
         </xs:annotation>
         <xs:union>
-            <!-- TODO restrict types to long, double, decimal, date, datetime and time -->
             <xs:simpleType>
-                <xs:restriction base="xs:string"/>
+                <xs:restriction base="xs:long"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="xs:double"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="xs:date"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="xs:time"/>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="xs:dateTime"/>
             </xs:simpleType>
             <xs:simpleType>
                 <xs:restriction base="script-expression-type"/>

@@ -31,6 +31,8 @@ import com.rapiddweller.benerator.test.ConsumerMock;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.model.data.Entity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -46,8 +48,10 @@ import static org.junit.Assert.assertTrue;
  */
 public abstract class AbstractDefaultComponentIntegrationTest extends AbstractBeneratorIntegrationTest {
 
+  private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
   @SuppressWarnings("unchecked")
-  protected void checkFile(String uri) {
+  protected void checkFile(String uri) throws ParseException {
     ConsumerMock consumer = new ConsumerMock(true);
     context.setGlobal("cons", consumer);
     DescriptorRunner runner = new DescriptorRunner(uri, context);
@@ -60,10 +64,14 @@ public abstract class AbstractDefaultComponentIntegrationTest extends AbstractBe
         String createdBy = (String) product.get("created_by");
         assertEquals("Bob", createdBy);
         // check created_at
-        Date creationDate = (Date) product.get("created_at");
+        Object created_at = product.get("created_at");
+        if (created_at instanceof String) {
+          created_at = DATE_TIME_FORMAT.parse((String) created_at);
+        }
+        Date creationDate = (Date) created_at;
         assertNotNull(creationDate);
-        long productMillies = creationDate.getTime();
-        assertTrue(Math.abs(productMillies - currentMillies) < 3000);
+        long productMillis = creationDate.getTime();
+        assertTrue(Math.abs(productMillis - currentMillies) < 3000);
       }
     } finally {
       IOUtil.close(runner);

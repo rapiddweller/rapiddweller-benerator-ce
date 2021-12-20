@@ -1,4 +1,4 @@
-givenName,familyName,alias,street,houseNumber,postalCode,city,accountNo,ssn,creditCardNo,secret1,secret2,secret3,secret4,secret5
-Hannah,Hopkins,hahop,Main Street,3456,9876,Central City,1234567890,123456789,1234567890123456,secret1,secret2,secret3,secret4,secret5
-Bob,Baker,bobo,Orchard Lane,12,65395,Countryside,2345678901,234567890,2345678901234567,secret1,secret2,secret3,secret4,secret5
-Alice,Anderson,alan,Shiny Street,123,93748,Gloryville,3456789012,345678901,3456789012345678,secret1,secret2,secret3,secret4,secret5
+givenName,familyName,alias,street,houseNumber,postalCode,city,accountNo,ssn,code,creditCardNo,secret1,secret2,secret3,secret4,secret5
+Hannah,Hopkins,hahop,Main Street,3456,9876,Central City,1234567890,123456789,01234567,1234567890123456,secret1,secret2,secret3,secret4,secret5
+Bob,Baker,bobo,Orchard Lane,12,65395,Countryside,2345678901,234567890,01234567,2345678901234567,secret1,secret2,secret3,secret4,secret5
+Alice,Anderson,alan,Shiny Street,123,93748,Gloryville,3456789012,345678901,01234567,3456789012345678,secret1,secret2,secret3,secret4,secret5

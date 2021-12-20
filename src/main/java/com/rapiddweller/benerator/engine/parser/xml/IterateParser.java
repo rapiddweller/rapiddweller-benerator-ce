@@ -3,11 +3,22 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
-import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.ConsumerAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.EncodingAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.ErrorHandlerAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.NullQuotaAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.PageSizeAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.SourceFormattedAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.SourceScriptedAttribute;
+import com.rapiddweller.benerator.engine.parser.string.ScriptParser;
+import com.rapiddweller.common.Expression;
+import com.rapiddweller.common.parser.BooleanParser;
+import com.rapiddweller.common.parser.CharacterParser;
+import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.AttrInfo;
 
-import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_ITERATE_NAME;
+import static com.rapiddweller.benerator.BeneratorErrorIds.*;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**
@@ -18,51 +29,58 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  */
 public class IterateParser extends AbstractGenIterParser {
 
-  private static final AttrInfo<String> NAME = new NameAttribute(SYN_ITERATE_NAME, false, false);
+  protected static final AttrInfo<String> SOURCE = new AttrInfo<>(ATT_SOURCE, true, BeneratorErrorIds.SYN_ITERATE_SOURCE, null);
 
+  private static final PageSizeAttribute PAGESIZE = new PageSizeAttribute(SYN_ITERATE_PAGE_SIZE);
+  private static final ErrorHandlerAttribute ON_ERROR = new ErrorHandlerAttribute(SYN_ITERATE_ON_ERROR);
+  private static final AttrInfo<String> TEMPLATE = new AttrInfo<>(ATT_TEMPLATE, false, SYN_ITERATE_TEMPLATE, null, null);
+  private static final ConsumerAttribute CONSUMER = new ConsumerAttribute(SYN_ITERATE_CONSUMER);
+  private static final AttrInfo<String> SCOPE = new AttrInfo<>(ATT_SCOPE, false, BeneratorErrorIds.SYN_ITERATE_SCOPE, null);
 
-  private static final AttrInfoSupport ATTR_INFO;
-  static {
-    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_ITERATE_ILLEGAL_ATTR, NAME);
-    ATTR_INFO.add(ATT_SOURCE, true, BeneratorErrorIds.SYN_ITERATE_SOURCE);
-    ATTR_INFO.add(ATT_COUNT, false, BeneratorErrorIds.SYN_ITERATE_COUNT);
-    ATTR_INFO.add(ATT_MIN_COUNT, false, BeneratorErrorIds.SYN_ITERATE_MIN_COUNT);
-    ATTR_INFO.add(ATT_MAX_COUNT, false, BeneratorErrorIds.SYN_ITERATE_MAX_COUNT);
-    ATTR_INFO.add(ATT_COUNT_DISTRIBUTION, false, BeneratorErrorIds.SYN_ITERATE_COUNT_DIST);
-    ATTR_INFO.add(ATT_THREADS, false, BeneratorErrorIds.SYN_ITERATE_THREADS);
-    ATTR_INFO.add(ATT_PAGESIZE, false, BeneratorErrorIds.SYN_ITERATE_PAGE_SIZE);
-    ATTR_INFO.add(ATT_STATS, false, BeneratorErrorIds.SYN_ITERATE_STATS);
-    ATTR_INFO.add(ATT_ON_ERROR, false, BeneratorErrorIds.SYN_ITERATE_ON_ERROR);
-    ATTR_INFO.add(ATT_TEMPLATE, false, BeneratorErrorIds.SYN_ITERATE_TEMPLATE);
-    ATTR_INFO.add(ATT_CONSUMER, false, BeneratorErrorIds.SYN_ITERATE_CONSUMER);
-    ATTR_INFO.add(ATT_TYPE, false, BeneratorErrorIds.SYN_ITERATE_TYPE);
-    ATTR_INFO.add(ATT_SCOPE, false, BeneratorErrorIds.SYN_ITERATE_SCOPE);
-    ATTR_INFO.add(ATT_VALIDATOR, false, BeneratorErrorIds.SYN_ITERATE_VALIDATOR);
-    ATTR_INFO.add(ATT_CONVERTER, false, BeneratorErrorIds.SYN_ITERATE_CONVERTER);
-    ATTR_INFO.add(ATT_NULL_QUOTA, false, BeneratorErrorIds.SYN_ITERATE_NULL_QUOTA);
-    ATTR_INFO.add(ATT_UNIQUE, false, BeneratorErrorIds.SYN_ITERATE_UNIQUE);
-    ATTR_INFO.add(ATT_DISTRIBUTION, false, BeneratorErrorIds.SYN_ITERATE_DISTRIBUTION);
-    ATTR_INFO.add(ATT_CYCLIC, false, BeneratorErrorIds.SYN_ITERATE_CYCLIC);
-    ATTR_INFO.add(ATT_OFFSET, false, BeneratorErrorIds.SYN_ITERATE_OFFSET);
-    ATTR_INFO.add(ATT_SENSOR, false, BeneratorErrorIds.SYN_ITERATE_SENSOR);
-    ATTR_INFO.add(ATT_SOURCE_SCRIPTED, false, BeneratorErrorIds.SYN_ITERATE_SOURCE_SCRIPTED);
-    ATTR_INFO.add(ATT_SEGMENT, false, BeneratorErrorIds.SYN_ITERATE_SEGMENT);
-    ATTR_INFO.add(ATT_FORMAT, false, BeneratorErrorIds.SYN_ITERATE_FORMAT);
-    ATTR_INFO.add(ATT_ROW_BASED, false, BeneratorErrorIds.SYN_ITERATE_ROW_BASED);
-    ATTR_INFO.add(ATT_EMPTY_MARKER, false, BeneratorErrorIds.SYN_ITERATE_EMPTY_MARKER);
-    ATTR_INFO.add(ATT_FORMAT, false, BeneratorErrorIds.SYN_ITERATE_FORMAT);
-    ATTR_INFO.add(ATT_SEPARATOR, false, BeneratorErrorIds.SYN_ITERATE_SEPARATOR);
-    ATTR_INFO.add(ATT_ENCODING, false, BeneratorErrorIds.SYN_ITERATE_ENCODING);
-    ATTR_INFO.add(ATT_SELECTOR, false, BeneratorErrorIds.SYN_ITERATE_SELECTOR);
-    ATTR_INFO.add(ATT_SUB_SELECTOR, false, BeneratorErrorIds.SYN_ITERATE_SUB_SELECTOR);
-    ATTR_INFO.add(ATT_DATASET, false, BeneratorErrorIds.SYN_ITERATE_DATASET);
-    ATTR_INFO.add(ATT_NESTING, false, BeneratorErrorIds.SYN_ITERATE_NESTING);
-    ATTR_INFO.add(ATT_LOCALE, false, BeneratorErrorIds.SYN_ITERATE_LOCALE);
-    ATTR_INFO.add(ATT_FILTER, false, BeneratorErrorIds.SYN_ITERATE_FILTER);
-  }
+  private static final AttrInfo<String> VALIDATOR = new AttrInfo<>(ATT_VALIDATOR, false, BeneratorErrorIds.SYN_ITERATE_VALIDATOR, null);
+  private static final AttrInfo<String> CONVERTER = new AttrInfo<>(ATT_CONVERTER, false, BeneratorErrorIds.SYN_ITERATE_CONVERTER, null);
+  private static final NullQuotaAttribute NULL_QUOTA = new NullQuotaAttribute(SYN_ITERATE_NULL_QUOTA);
+  private static final AttrInfo<Boolean> UNIQUE = new AttrInfo<>(ATT_UNIQUE, false, SYN_ITERATE_UNIQUE, new BooleanParser(), "false");
+  private static final AttrInfo<String> DISTRIBUTION = new AttrInfo<>(ATT_DISTRIBUTION, false, SYN_ITERATE_DISTRIBUTION, null, null);
+  private static final AttrInfo<Boolean> CYCLIC = new AttrInfo<>(ATT_CYCLIC, false, SYN_ITERATE_CYCLIC, new BooleanParser(), "false");
+  private static final AttrInfo<Long> OFFSET = new AttrInfo<>(ATT_OFFSET, false, SYN_ITERATE_OFFSET, new NonNegativeLongParser(), "0");
+
+  protected static final AttrInfo<String> DATASET = new AttrInfo<>(ATT_DATASET, false, BeneratorErrorIds.SYN_ITERATE_DATASET, null);
+  protected static final AttrInfo<String> NESTING = new AttrInfo<>(ATT_NESTING, false, BeneratorErrorIds.SYN_ITERATE_NESTING, null);
+  protected static final AttrInfo<String> LOCALE  = new AttrInfo<>(ATT_LOCALE, false, BeneratorErrorIds.SYN_ITERATE_LOCALE, null);
+  protected static final EncodingAttribute ENCODING = new EncodingAttribute(SYN_ITERATE_ENCODING);
+  protected static final AttrInfo<Character> SEPARATOR = new AttrInfo<>(ATT_SEPARATOR, false, BeneratorErrorIds.SYN_ITERATE_SEPARATOR, new CharacterParser());
+  protected static final SourceFormattedAttribute FORMAT = new SourceFormattedAttribute(SYN_ITERATE_FORMAT);
+  protected static final SourceScriptedAttribute SOURCE_SCRIPTED = new SourceScriptedAttribute(SYN_ITERATE_SOURCE_SCRIPTED);
+
+  protected static final AttrInfo<String> SEGMENT = new AttrInfo<>(ATT_SEGMENT, false, BeneratorErrorIds.SYN_ITERATE_SEGMENT, null);
+  protected static final AttrInfo<Boolean> ROW_BASED = new AttrInfo<>(ATT_ROW_BASED, false, BeneratorErrorIds.SYN_ITERATE_ROW_BASED, new BooleanParser());
+  protected static final AttrInfo<String> EMPTY_MARKER = new AttrInfo<>(ATT_EMPTY_MARKER, false, BeneratorErrorIds.SYN_ITERATE_EMPTY_MARKER, null);
+  protected static final AttrInfo<String> SELECTOR = new AttrInfo<>(ATT_SELECTOR, false, BeneratorErrorIds.SYN_ITERATE_SELECTOR, null);
+  protected static final AttrInfo<String> SUB_SELECTOR = new AttrInfo<>(ATT_SUB_SELECTOR, false, BeneratorErrorIds.SYN_ITERATE_SUB_SELECTOR, null);
+  protected static final AttrInfo<Expression<Boolean>> FILTER = new AttrInfo<>(ATT_FILTER, false, SYN_ITERATE_FILTER, new ScriptParser<>(Boolean.class));
 
   public IterateParser() {
-    super(EL_ITERATE, ATTR_INFO);
+    super(EL_ITERATE, null);
+    this.nameAttr.setErrorId(SYN_ITERATE_NAME);
+    this.typeAttr.setErrorId(SYN_ITERATE_TYPE);
+
+    this.countAttr.setErrorId(SYN_ITERATE_COUNT);
+    this.minCountAttr.setErrorId(SYN_ITERATE_MIN_COUNT);
+    this.maxCountAttr.setErrorId(SYN_ITERATE_MAX_COUNT);
+    this.countGranularityAttr.setErrorId(SYN_ITERATE_COUNT_GRANULARITY);
+    this.countDistributionAttr.setErrorId(SYN_ITERATE_COUNT_DIST);
+
+    this.threadsAttr.setErrorId(SYN_ITERATE_THREADS);
+    this.statsAttr.setErrorId(SYN_ITERATE_STATS);
+    this.sensorAttr.setErrorId(SYN_ITERATE_SENSOR);
+
+    this.attrSupport = new AttrInfoSupport(BeneratorErrorIds.SYN_ITERATE_ILLEGAL_ATTR,
+        nameAttr, typeAttr, SOURCE, countAttr, minCountAttr, maxCountAttr, countGranularityAttr, countDistributionAttr,
+        threadsAttr, PAGESIZE, ON_ERROR, statsAttr, TEMPLATE, CONSUMER, SCOPE,
+        VALIDATOR, CONVERTER, NULL_QUOTA, UNIQUE, DISTRIBUTION, CYCLIC, OFFSET, sensorAttr,
+        DATASET, NESTING, LOCALE, ENCODING, SEPARATOR, FORMAT, SOURCE_SCRIPTED,
+        SEGMENT, ROW_BASED, EMPTY_MARKER, SELECTOR, SUB_SELECTOR, FILTER);
   }
 
 }

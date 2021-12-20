@@ -14,6 +14,7 @@
         <attribute name="country" constant="US"/>
         <attribute name="accountNo" converter="SHA256Hash"/>
         <attribute name="ssn" converter="new MiddleMask(2,3)"/>
+        <attribute name="code" converter="new SubstringExtractor(-4, 0)"/>
         <attribute name="creditCardNo" converter="SHA1HashBase64"/>
         <attribute name="secret1" converter="MD5Hash"/>
         <attribute name="secret2" converter="MD5HashBase64"/>

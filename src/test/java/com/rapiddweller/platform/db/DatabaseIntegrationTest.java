@@ -134,7 +134,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testDbRef_default_not_null_defaultOneToOne() {
     context.setDefaultOneToOne(true);
     parseAndExecute(
-        "<generate type='referer' consumer='cons'>" +
+        "<generate type='referer' count='unbounded' consumer='cons'>" +
             "  <reference name='referee_id' nullable='false' source='db' />" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
@@ -257,7 +257,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testDbRef_explicit_selector() {
     context.setGlobal("key", 2);
     parseAndExecute(
-        "<generate type='referer' consumer='cons'>" +
+        "<generate type='referer' count='unbounded' consumer='cons'>" +
             "  <reference name='referee_id' source='db' " +
             "     selector=\"{ftl:select id from referee where id=${key}}\" " +
             "     nullable='false'/>" +
@@ -289,7 +289,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testDbRef_entity_selector() {
     context.setGlobal("key", 2);
     parseAndExecute(
-        "<generate type='referer' consumer='cons'>" +
+        "<generate type='referer' count='unbounded' consumer='cons'>" +
             "  <reference name='referee_id' source='db' " +
             "     selector='{ftl:id=${key}}' " +
             "     nullable='false'/>" +

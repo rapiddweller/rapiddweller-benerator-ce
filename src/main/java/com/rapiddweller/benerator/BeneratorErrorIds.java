@@ -274,14 +274,15 @@ public class BeneratorErrorIds {
   public static final String SYN_GENERATE_VALIDATOR    = "BEN-0412";
   public static final String SYN_GENERATE_MIN_COUNT    = "BEN-0413";
   public static final String SYN_GENERATE_MAX_COUNT    = "BEN-0414";
-  public static final String SYN_GENERATE_COUNT_DISTRIBUTION = "BEN-0415";
-  public static final String SYN_GENERATE_COUNT        = "BEN-0416";
-  public static final String SYN_GENERATE_THREADS      = "BEN-0417";
-  public static final String SYN_GENERATE_PAGE_SIZE    = "BEN-0418";
-  public static final String SYN_GENERATE_STATS        = "BEN-0419";
-  public static final String SYN_GENERATE_ON_ERROR     = "BEN-0420";
-  public static final String SYN_GENERATE_TEMPLATE     = "BEN-0421";
-  public static final String SYN_GENERATE_CONSUMER     = "BEN-0422";
+  public static final String SYN_GENERATE_COUNT_GRANULARITY = "BEN-0415";
+  public static final String SYN_GENERATE_COUNT_DIST   = "BEN-0416";
+  public static final String SYN_GENERATE_COUNT        = "BEN-0417";
+  public static final String SYN_GENERATE_THREADS      = "BEN-0418";
+  public static final String SYN_GENERATE_PAGE_SIZE    = "BEN-0419";
+  public static final String SYN_GENERATE_STATS        = "BEN-0420";
+  public static final String SYN_GENERATE_ON_ERROR     = "BEN-0421";
+  public static final String SYN_GENERATE_TEMPLATE     = "BEN-0422";
+  public static final String SYN_GENERATE_CONSUMER     = "BEN-0423";
 
   // Syntax Errors regarding <iterate> -------------------------------------------------------------------------------
 
@@ -313,14 +314,15 @@ public class BeneratorErrorIds {
   public static final String SYN_ITERATE_VALIDATOR       = "BEN-0475";
   public static final String SYN_ITERATE_MIN_COUNT       = "BEN-0476";
   public static final String SYN_ITERATE_MAX_COUNT       = "BEN-0477";
-  public static final String SYN_ITERATE_COUNT_DIST      = "BEN-0478";
-  public static final String SYN_ITERATE_COUNT           = "BEN-0479";
-  public static final String SYN_ITERATE_THREADS         = "BEN-0480";
-  public static final String SYN_ITERATE_PAGE_SIZE       = "BEN-0481";
-  public static final String SYN_ITERATE_STATS           = "BEN-0482";
-  public static final String SYN_ITERATE_ON_ERROR        = "BEN-0483";
-  public static final String SYN_ITERATE_TEMPLATE        = "BEN-0484";
-  public static final String SYN_ITERATE_CONSUMER        = "BEN-0485";
+  public static final String SYN_ITERATE_COUNT_GRANULARITY = "BEN-0478";
+  public static final String SYN_ITERATE_COUNT_DIST      = "BEN-0479";
+  public static final String SYN_ITERATE_COUNT           = "BEN-0480";
+  public static final String SYN_ITERATE_THREADS         = "BEN-0481";
+  public static final String SYN_ITERATE_PAGE_SIZE       = "BEN-0482";
+  public static final String SYN_ITERATE_STATS           = "BEN-0483";
+  public static final String SYN_ITERATE_ON_ERROR        = "BEN-0484";
+  public static final String SYN_ITERATE_TEMPLATE        = "BEN-0485";
+  public static final String SYN_ITERATE_CONSUMER        = "BEN-0486";
 
   // Syntax Errors regarding <variable> -----------------------------------------------------------------------------
 
@@ -381,6 +383,8 @@ public class BeneratorErrorIds {
   public static final String SYN_ATTR_VALIDATOR     = "BEN-0591";
   public static final String SYN_ATTR_CYCLIC        = "BEN-0592";
   public static final String SYN_ATTR_MAP           = "BEN-0593";
+
+  public static final String SYN_ATTR_SOURCE_SCRIPTED = "BEN-0594";
 
   // Syntax Errors regarding <id> ------------------------------------------------------------------------------------
 

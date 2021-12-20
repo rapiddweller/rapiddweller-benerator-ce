@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -31,6 +31,7 @@ import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.parser.string.GlobalErrorHandlerParser;
 import com.rapiddweller.benerator.engine.parser.string.IdParser;
+import com.rapiddweller.benerator.engine.parser.string.PlainEncodingParser;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Assert;
@@ -42,7 +43,6 @@ import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.parser.AbstractParser;
 import com.rapiddweller.common.parser.BooleanParser;
 import com.rapiddweller.common.parser.CharacterParser;
-import com.rapiddweller.common.parser.EncodingParser;
 import com.rapiddweller.common.parser.FullyQualifiedClassNameParser;
 import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.common.parser.PositiveIntegerParser;
@@ -83,7 +83,7 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
       ATT_DEFAULT_NULL, false, SYN_SETUP_DEF_NULL, new BooleanParser(), FALSE);
 
     protected static final AttrInfo<String> DEFAULT_ENCODING = new AttrInfo<>(
-      ATT_DEFAULT_ENCODING, false, SYN_SETUP_DEF_ENCODING, new EncodingParser(), Encodings.UTF_8);
+      ATT_DEFAULT_ENCODING, false, SYN_SETUP_DEF_ENCODING, new PlainEncodingParser(), Encodings.UTF_8);
 
   protected static final AttrInfo<String> DEFAULT_LINE_SEPARATOR = new AttrInfo<>(
     ATT_DEFAULT_LINE_SEPARATOR, false, SYN_SETUP_DEF_LINE_SEPARATOR,

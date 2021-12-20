@@ -139,10 +139,10 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
     MemStore.ignoreClose = false;
     context.setDefaultOneToOne(true);
     parseAndExecute(
-        "<generate type='order' consumer='cons'>" +
+        "<generate type='order' count='unbounded' consumer='cons'>" +
             "	<variable name='p' source='src' type='product'/>" +
-            "	<id name='id' type='int' />" +
-            "	<attribute name='prod_id' type='int' script='p.id' />" +
+            "	<id name='id' type='int'/>" +
+            "	<attribute name='prod_id' type='int' script='p.id'/>" +
             "</generate>"
     );
     List<Entity> orders = (List<Entity>) consumer.getProducts();
@@ -162,7 +162,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testPart() {
     MemStore.ignoreClose = false;
     parseAndExecute(
-        "<generate type='order' consumer='cons'>" +
+        "<generate type='order' count='unbounded' consumer='cons'>" +
             "	<id name='id' type='int' />" +
             "	<part name='product' type='product' source='src' count='1'/>" +
             "</generate>"
@@ -185,7 +185,7 @@ public class MemStoreIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testReference() {
     MemStore.ignoreClose = false;
     parseAndExecute(
-        "<generate type='order' consumer='cons'>" +
+        "<generate type='order' count='unbounded' consumer='cons'>" +
             "	<id name='id' type='int' />" +
             "	<reference name='product_id' type='int' source='src' targetType='product' selector='_candidate!=5' unique='true'/>" +
             "</generate>"

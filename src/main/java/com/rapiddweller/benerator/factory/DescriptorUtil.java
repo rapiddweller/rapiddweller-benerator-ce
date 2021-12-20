@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.distribution.Distribution;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.expression.GlobalMaxCountExpression;
 import com.rapiddweller.benerator.parser.ModelParser;
 import com.rapiddweller.benerator.primitive.DynamicCountGenerator;
 import com.rapiddweller.benerator.sample.ConstantGenerator;
@@ -355,8 +356,9 @@ public class DescriptorUtil {
   }
 
   @NotNull
-  public static Generator<Long> createDynamicCountGenerator(final InstanceDescriptor descriptor,
-                                                            Long defaultMin, Long defaultMax, boolean resetToMin, BeneratorContext context) {
+  public static Generator<Long> createDynamicCountGenerator(
+      final InstanceDescriptor descriptor, Long defaultMin, Long defaultMax, boolean resetToMin,
+      BeneratorContext context) {
     Expression<Long> count = DescriptorUtil.getCount(descriptor);
     if (count != null) {
       if (count.isConstant()) {
@@ -383,6 +385,77 @@ public class DescriptorUtil {
       return new DynamicCountGenerator(minCount, maxCount, countGranularity, countDistribution,
           ExpressionUtil.constant(false), resetToMin);
     }
+  }
+
+  @NotNull
+  public static Generator<Long> createDynamicCountGenerator(
+      Expression<Long> count, Expression<Long> minCount, Expression<Long> maxCount,
+      Expression<Long> countGranularity, Expression<String> countDistributionEx,
+      Long defaultMin, Long defaultMax, boolean isComponent, boolean resetToMin, BeneratorContext context) {
+    if (count != null) {
+      if (count.isConstant()) {
+        return new ConstantGenerator<>(count.evaluate(context));
+      } else {
+        return new ExpressionBasedGenerator<>(count, Long.class);
+      }
+    } else {
+      minCount = getMinCount(count, minCount, defaultMin);
+      maxCount = getMaxCount(count, maxCount, defaultMax, isComponent);
+      if (minCount.isConstant() && maxCount.isConstant()) {
+        // if minCount and maxCount are constants of the same value,
+        // then create a generator for a constant value
+        Long minCountValue = minCount.evaluate(context);
+        Long maxCountValue = maxCount.evaluate(context);
+        if (NullSafeComparator.equals(minCountValue, maxCountValue)) {
+          return new ConstantGenerator<>(minCountValue);
+        }
+      }
+      if (countDistributionEx == null) {
+        countDistributionEx = new ConstantExpression<>("random");
+      }
+      // if no simplification was found above, then create a fully featured distributed count generator
+      final Expression<Distribution> countDistribution = FactoryUtil.getDistributionExpression(
+          countDistributionEx.evaluate(context), Uniqueness.NONE, true);
+      return new DynamicCountGenerator(minCount, maxCount, countGranularity, countDistribution,
+          ExpressionUtil.constant(false), resetToMin);
+    }
+  }
+
+  public static Expression<Long> getMinCount(Expression<Long> count, Expression<Long> minCount, Long defaultMin) {
+    Expression<Long> result = null;
+    if (count != null) {
+      result = count;
+    } else if (minCount != null) {
+      result = minCount;
+    } else if (defaultMin != null) {
+      result = new ConstantExpression<>(defaultMin);
+    } else {
+      return new ConstantExpression<>(null);
+    }
+    Expression<Long> globalMaxCount = getGlobalMaxCount();
+    if (!ExpressionUtil.isNull(globalMaxCount)) {
+      result = new MinExpression<>(result, globalMaxCount);
+    }
+    return result;
+  }
+
+  public static Expression<Long> getMaxCount(Expression<Long> count, Expression<Long> maxCount,
+                                             Long defaultMax, boolean isComponent) {
+    Expression<Long> result;
+    if (count != null) {
+      result = count;
+    } else if (maxCount != null) {
+      result = maxCount;
+    } else if (isComponent && defaultMax != null) {
+      result = new ConstantExpression<>(defaultMax);
+    } else {
+      return getGlobalMaxCount();
+    }
+    Expression<Long> globalMaxCount = getGlobalMaxCount();
+    if (!ExpressionUtil.isNull(globalMaxCount)) {
+      result = new MinExpression<>(result, globalMaxCount);
+    }
+    return result;
   }
 
   @Nullable
@@ -532,23 +605,6 @@ public class DescriptorUtil {
         builder.append(value);
       }
       descriptor.setValues(builder.toString());
-    }
-  }
-
-  static class GlobalMaxCountExpression implements Expression<Long> {
-    @Override
-    public boolean isConstant() {
-      return true;
-    }
-
-    @Override
-    public Long evaluate(Context context) {
-      return ((BeneratorContext) context).getMaxCount();
-    }
-
-    @Override
-    public String toString() {
-      return getClass().getSimpleName();
     }
   }
 

@@ -76,6 +76,26 @@ public class GenerateIntegrationTest extends AbstractBeneratorIntegrationTest {
     statement.execute(context);
   }
 
+  @Test(expected = SyntaxError.class)
+  public void test_no_count() {
+    BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
+    Statement statement = parse(
+        "<generate type='dummy' consumer='NoConsumer'>" +
+            "   <attribute name='x' values='1,2,3'/>" +
+            "</generate>");
+    statement.execute(context);
+  }
+
+  @Test
+  public void test_unbounded_count() {
+    BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);
+    Statement statement = parse(
+        "<generate type='dummy' count='unbounded' consumer='NoConsumer'>" +
+            "   <attribute name='x' generator=\"new OneShotGenerator('1')\"/>" +
+            "</generate>");
+    statement.execute(context);
+  }
+
   @Test
   public void testPaging() {
     BeneratorMonitor.INSTANCE.setTotalGenerationCount(0);

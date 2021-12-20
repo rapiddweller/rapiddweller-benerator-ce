@@ -5,6 +5,8 @@ package com.rapiddweller.platform.db;
 import com.rapiddweller.benerator.engine.AbstractDefaultComponentIntegrationTest;
 import org.junit.Test;
 
+import java.text.ParseException;
+
 /**
  * Tests the &lt;defaultComponents&gt; configuration wth a &lt;database&gt;.<br/><br/>
  * Created: 13.12.2021 10:56:35
@@ -14,7 +16,7 @@ import org.junit.Test;
 public class DBDefaultComponentIntegrationTest extends AbstractDefaultComponentIntegrationTest {
 
   @Test
-  public void testDbIntegration() {
+  public void testDbIntegration() throws ParseException {
     checkFile("com/rapiddweller/platform/db/defaultComponent-db.ben.xml");
   }
 
