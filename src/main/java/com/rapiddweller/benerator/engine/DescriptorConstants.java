@@ -119,6 +119,7 @@ public class DescriptorConstants {
   public static final String ATT_COUNT = "count";
   public static final String ATT_MIN_COUNT = "minCount";
   public static final String ATT_MAX_COUNT = "maxCount";
+  public static final String ATT_COUNT_GRANULARITY = "countGranularity";
   public static final String ATT_COUNT_DISTRIBUTION = "countDistribution";
 
   public static final String ATT_ASSERT = "assert";
