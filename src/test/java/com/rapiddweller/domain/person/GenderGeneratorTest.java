@@ -32,27 +32,17 @@ import com.rapiddweller.benerator.test.GeneratorClassTest;
 import org.junit.Test;
 
 /**
- * Tests the {@link GenderGenerator}.<br/>
- * <br/>
+ * Tests the {@link GenderGenerator}.<br/><br/>
  * Created: 09.06.2006 21:47:53
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class GenderGeneratorTest extends GeneratorClassTest {
 
-  /**
-   * Instantiates a new Gender generator test.
-   */
   public GenderGeneratorTest() {
     super(GenderGenerator.class);
   }
 
-  /**
-   * Test default settings.
-   *
-   * @throws IllegalGeneratorStateException the illegal generator state exception
-   */
   @Test
   public void testDefaultSettings() throws IllegalGeneratorStateException {
     Generator<Gender> generator = new GenderGenerator();
@@ -60,16 +50,11 @@ public class GenderGeneratorTest extends GeneratorClassTest {
     expectRelativeWeights(generator, 1000, Gender.FEMALE, 0.5, Gender.MALE, 0.5);
   }
 
-  /**
-   * Test female quota.
-   *
-   * @throws IllegalGeneratorStateException the illegal generator state exception
-   */
   @Test
   public void testFemaleQuota() throws IllegalGeneratorStateException {
     Generator<Gender> generator = new GenderGenerator(0.3);
     generator.init(context);
-    expectRelativeWeights(generator, 1000, Gender.FEMALE, 0.3, Gender.MALE, 0.7);
+    expectRelativeWeights(generator, 5000, Gender.FEMALE, 0.3, Gender.MALE, 0.7);
   }
 
 }

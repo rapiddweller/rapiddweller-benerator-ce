@@ -37,11 +37,15 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.CachedExpression;
 import com.rapiddweller.benerator.engine.expression.xml.XMLConsumerExpression;
 import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
+import com.rapiddweller.benerator.engine.parser.attr.ConsumerAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.CountAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.CountDistributionAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.CountGranularityAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.ErrorHandlerAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.MinMaxCountAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.NullQuotaAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.PageSizeAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.ScriptableBooleanAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.ThreadsAttribute;
 import com.rapiddweller.benerator.engine.parser.string.IdParser;
@@ -62,6 +66,8 @@ import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.exception.ExceptionFactory;
+import com.rapiddweller.common.parser.BooleanParser;
+import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
@@ -87,6 +93,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_CONVERTER;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_CYCLIC;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_DISTRIBUTION;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_NULL_QUOTA;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_OFFSET;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_UNIQUE;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_VALIDATOR;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStringAttribute;
 
@@ -112,6 +125,20 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
   protected final ThreadsAttribute threadsAttr = new ThreadsAttribute(null);
   protected final ScriptableBooleanAttribute statsAttr = new ScriptableBooleanAttribute(ATT_STATS, false, null, false);
   protected final AttrInfo<String> sensorAttr = new AttrInfo<>(ATT_SENSOR, false, null, null, null);
+
+  protected final PageSizeAttribute pagesizeAttr = new PageSizeAttribute(null);
+  protected final ErrorHandlerAttribute onErrorAttr = new ErrorHandlerAttribute(null);
+  protected final AttrInfo<String> templateAttr = new AttrInfo<>(ATT_TEMPLATE, false, null, null, null);
+  protected final ConsumerAttribute consumerAttr = new ConsumerAttribute(null);
+  protected final AttrInfo<String> scopeAttr = new AttrInfo<>(ATT_SCOPE, false, null, null, null);
+
+  protected final AttrInfo<String> validatorAttr = new AttrInfo<>(ATT_VALIDATOR, false, SYN_GENERATE_VALIDATOR, null, null);
+  protected final AttrInfo<String> converterAttr = new AttrInfo<>(ATT_CONVERTER, false, SYN_GENERATE_CONVERTER, null, null);
+  protected final NullQuotaAttribute nullQuotaAttr = new NullQuotaAttribute(SYN_GENERATE_NULL_QUOTA);
+  protected final AttrInfo<Boolean> uniqueAttr = new AttrInfo<>(ATT_UNIQUE, false, SYN_GENERATE_UNIQUE, new BooleanParser(), "false");
+  protected final AttrInfo<String> distributionAttr = new AttrInfo<>(ATT_DISTRIBUTION, false, SYN_GENERATE_DISTRIBUTION, null, null);
+  protected final AttrInfo<Boolean> cyclicAttr = new AttrInfo<>(ATT_CYCLIC, false, SYN_GENERATE_CYCLIC, new BooleanParser(), "false");
+  protected final AttrInfo<Long> offsetAttr = new AttrInfo<>(ATT_OFFSET, false, SYN_GENERATE_OFFSET, new NonNegativeLongParser(), "0");
 
   protected AbstractGenIterParser(String elementName, AttrInfoSupport attrSupport) {
     super(elementName, attrSupport);

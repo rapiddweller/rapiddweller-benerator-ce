@@ -27,12 +27,11 @@
 package com.rapiddweller.domain.address;
 
 import com.rapiddweller.common.NullSafeComparator;
+import com.rapiddweller.common.StringUtil;
 
 /**
- * Represents a phone number.<br/>
- * <br/>
+ * Represents a phone number.<br/><br/>
  * Created: 13.06.2006 07:19:26
- *
  * @author Volker Bergmann
  * @since 0.1
  */
@@ -46,33 +45,19 @@ public class PhoneNumber {
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Phone number.
-   */
   public PhoneNumber() {
     this("", "", "");
   }
 
-  /**
-   * Instantiates a new Phone number.
-   *
-   * @param countryCode the country code
-   * @param cityCode    the city code
-   * @param localNumber the local number
-   */
+  public PhoneNumber(String phoneNumber) {
+    this(coc(phoneNumber), cic(phoneNumber), loc(phoneNumber));
+  }
+
   public PhoneNumber(String countryCode, String cityCode,
                      String localNumber) {
     this(countryCode, cityCode, localNumber, false);
   }
 
-  /**
-   * Instantiates a new Phone number.
-   *
-   * @param countryCode the country code
-   * @param cityCode    the city code
-   * @param localNumber the local number
-   * @param mobile      the mobile
-   */
   public PhoneNumber(String countryCode, String cityCode, String localNumber,
                      boolean mobile) {
     this.countryCode = countryCode;
@@ -83,76 +68,56 @@ public class PhoneNumber {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  /**
-   * Gets country code.
-   *
-   * @return the country code
-   */
   public String getCountryCode() {
     return countryCode;
   }
 
-  /**
-   * Sets country code.
-   *
-   * @param countryCode the country code
-   */
   public void setCountryCode(String countryCode) {
     this.countryCode = countryCode;
   }
 
-  /**
-   * Gets area code.
-   *
-   * @return the area code
-   */
   public String getAreaCode() {
     return areaCode;
   }
 
-  /**
-   * Sets area code.
-   *
-   * @param cityCode the city code
-   */
   public void setAreaCode(String cityCode) {
     this.areaCode = cityCode;
   }
 
-  /**
-   * Gets local number.
-   *
-   * @return the local number
-   */
   public String getLocalNumber() {
     return localNumber;
   }
 
-  /**
-   * Sets local number.
-   *
-   * @param localNumber the local number
-   */
   public void setLocalNumber(String localNumber) {
     this.localNumber = localNumber;
   }
 
-  /**
-   * Is mobile boolean.
-   *
-   * @return the boolean
-   */
   public boolean isMobile() {
     return mobile;
   }
 
-  /**
-   * Sets mobile.
-   *
-   * @param mobile the mobile
-   */
   public void setMobile(boolean mobile) {
     this.mobile = mobile;
+  }
+
+  private static String coc(String phoneNumber) {
+    return StringUtil.split(phoneNumber, ' ')[0];
+  }
+
+  private static String cic(String phoneNumber) {
+    return StringUtil.split(phoneNumber, ' ')[1];
+  }
+
+  private static String loc(String phoneNumber) {
+    StringBuilder result = new StringBuilder();
+    String[] tokens = StringUtil.split(phoneNumber, ' ');
+    for (int i = 2; i < tokens.length; i++) {
+      if (i > 2) {
+        result.append(' ');
+      }
+      result.append(tokens[i]);
+    }
+    return result.toString();
   }
 
   // java.lang.Object overrides --------------------------------------------------------------------------------------
@@ -180,10 +145,7 @@ public class PhoneNumber {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     final PhoneNumber that = (PhoneNumber) obj;
