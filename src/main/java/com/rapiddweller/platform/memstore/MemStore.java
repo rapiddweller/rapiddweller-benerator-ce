@@ -47,6 +47,7 @@ import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.common.Expression;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -191,7 +192,8 @@ public class MemStore extends AbstractStorageSystem {
   }
 
   public List<Entity> getEntities(String entityType) {
-    return entitiesByType.get(entityType).entities();
+    EntityStore entityStore = entitiesByType.get(entityType);
+    return (entityStore != null ? entityStore.entities() : new ArrayList<>());
   }
 
 }
