@@ -449,6 +449,7 @@
             <xs:attributeGroup ref="component-generator-attrs"/>
             <xs:attribute name="minCount" type="scriptable-long"/>
             <xs:attribute name="maxCount" type="scriptable-long"/>
+            <xs:attribute name="countGranularity" type="positiveLong"/>
             <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attribute name="container">
                 <xs:simpleType>
@@ -650,7 +651,7 @@
             </xs:simpleType>
             <xs:simpleType>
                 <xs:restriction base="xs:string">
-                    <xs:enumeration value="infinite"/>
+                    <xs:enumeration value="unbounded"/>
                 </xs:restriction>
             </xs:simpleType>
             <xs:simpleType>
