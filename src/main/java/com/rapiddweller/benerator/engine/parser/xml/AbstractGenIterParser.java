@@ -38,7 +38,6 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.CachedExpression;
 import com.rapiddweller.benerator.engine.expression.xml.XMLConsumerExpression;
 import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
-import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
 import com.rapiddweller.benerator.engine.statement.ConversionStatement;
 import com.rapiddweller.benerator.engine.statement.GenIterStatement;
 import com.rapiddweller.benerator.engine.statement.GenIterTask;
@@ -56,10 +55,7 @@ import com.rapiddweller.common.ErrorHandler;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.exception.ExceptionFactory;
-import com.rapiddweller.common.parser.BooleanParser;
-import com.rapiddweller.common.parser.PositiveIntegerParser;
 import com.rapiddweller.common.xml.XMLUtil;
-import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -72,6 +68,7 @@ import com.rapiddweller.model.data.VariableHolder;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.PrimitiveType;
+import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.task.PageListener;
 import org.w3c.dom.Element;
@@ -92,17 +89,6 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStr
  * @since 0.6.0
  */
 public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorParser {
-
-  protected static final AttrInfo<Expression<Integer>> THREADS = new AttrInfo<>(
-      ATT_THREADS, false, BeneratorErrorIds.SYN_GENERATE_THREADS,
-      new ScriptableParser<>(new PositiveIntegerParser()), "1");
-
-  protected static final AttrInfo<Expression<Boolean>> STATS = new AttrInfo<>(
-      ATT_STATS, false, BeneratorErrorIds.SYN_GENERATE_STATS, new ScriptableParser<>(new BooleanParser()), "false");
-
-  protected static final AttrInfo<String> SENSOR = new AttrInfo<>(
-      ATT_SENSOR, false, BeneratorErrorIds.SYN_GENERATE_SENSOR, null, null);
-
 
   private static final Set<String> CONSUMER_EXPECTING_ELEMENTS = CollectionUtil.toSet(EL_GENERATE, EL_ITERATE);
 
@@ -136,42 +122,73 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
   @SuppressWarnings("unchecked")
   public GenIterStatement parseGenerate(Element element, Element[] parentXmlPath, Statement[] parentPath,
                                         BeneratorParseContext parsingContext, BeneratorContext context, boolean infoLog, boolean nested) {
-    // parse descriptor
-    InstanceDescriptor descriptor = mapDescriptorElement(element, context);
-
     // parse statement
     boolean iterate = ("iterate".equals(element.getNodeName()));
-    Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 0L, 1L, false, context);
+
+    //Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 0L, 1L, false, context);
+
+    Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(
+        getCount(element), getMinCount(element), getMaxCount(element), getCountGranularity(element),
+        getCountDistribution(element), 0L, 1L, false, false, context);
+
     Expression<Long> pageSize = parsePageSize(element);
-    Expression<Integer> threads = THREADS.parse(element);
+    Expression<Integer> threads = parseThreadsAttr(element);
     Expression<PageListener> pager = (Expression<PageListener>) DatabeneScriptParser.parseBeanSpec(
         element.getAttribute(ATT_PAGER));
-    String productName = getTaskName(descriptor);
-    Expression<Boolean> stats = STATS.parse(element);
-    String sensor = SENSOR.parse(element);
+    String productName = getTaskName(element);
+    Expression<Boolean> stats = parseStats(element);
+    String sensor = parseSensor(element);
 
     Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_NAME));
-    Expression<Long> minCount = DescriptorUtil.getMinCount(descriptor, 0L);
+    Expression<Long> minCount = parseMinCount(element);
+    if (minCount == null) {
+      minCount = new ConstantExpression<>(0L);
+    }
     BeneratorContext childContext = context.createSubContext(productName);
     GenIterStatement statement = createStatement(parentPath, iterate, productName,
         countGenerator, minCount, threads, pageSize, pager, stats, sensor, infoLog, nested, errorHandler, context, childContext);
 
-    // TODO avoid double parsing of the InstanceDescriptor and remove the following...
-    TypeDescriptor type = descriptor.getTypeDescriptor();
-    if (type instanceof ComplexTypeDescriptor) {
-      ((ComplexTypeDescriptor) type).clear();
-    }
-    // TODO ...until this line
-
     // parse task and sub statements
     Statement[] statementPath = parsingContext.createSubPath(parentPath, statement);
-
+    InstanceDescriptor descriptor = mapDescriptorElement(element, context);
     GenIterTask task = parseTask(element, parentXmlPath, statementPath, parsingContext, descriptor, infoLog, context, childContext);
     statement.setTask(task);
     return statement;
   }
 
+  // helper methods to be implemented by child classes ---------------------------------------------------------------
+
+  protected abstract Expression<Long> parseMinCount(Element element);
+
+  protected abstract Expression<String> getCountDistribution(Element element);
+
+  protected abstract Expression<Long> getCountGranularity(Element element);
+
+  protected abstract Expression<Long> getMaxCount(Element element);
+
+  protected abstract Expression<Long> getMinCount(Element element);
+
+  protected abstract Expression<Long> getCount(Element element);
+
+  protected abstract String parseSensor(Element element);
+
+  protected abstract Expression<Boolean> parseStats(Element element);
+
+  protected abstract Expression<Integer> parseThreadsAttr(Element element);
+
   // private helpers -------------------------------------------------------------------------------------------------
+
+  protected String getTaskName(Element element) {
+    String taskName = parseName(element);
+    if (taskName == null) {
+      taskName = parseType(element);
+    }
+    return taskName;
+  }
+
+  protected abstract String parseType(Element element);
+
+  protected abstract String parseName(Element element);
 
   private static String getNameOrType(Element element) {
     String result = element.getAttribute(ATT_NAME);
