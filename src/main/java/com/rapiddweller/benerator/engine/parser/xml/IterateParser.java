@@ -3,18 +3,13 @@
 package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
-import com.rapiddweller.benerator.engine.parser.attr.ConsumerAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.EncodingAttribute;
-import com.rapiddweller.benerator.engine.parser.attr.ErrorHandlerAttribute;
-import com.rapiddweller.benerator.engine.parser.attr.NullQuotaAttribute;
-import com.rapiddweller.benerator.engine.parser.attr.PageSizeAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.SourceFormattedAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.SourceScriptedAttribute;
 import com.rapiddweller.benerator.engine.parser.string.ScriptParser;
 import com.rapiddweller.common.Expression;
 import com.rapiddweller.common.parser.BooleanParser;
 import com.rapiddweller.common.parser.CharacterParser;
-import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.AttrInfo;
 
@@ -30,20 +25,6 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 public class IterateParser extends AbstractGenIterParser {
 
   protected static final AttrInfo<String> SOURCE = new AttrInfo<>(ATT_SOURCE, true, BeneratorErrorIds.SYN_ITERATE_SOURCE, null);
-
-  private static final PageSizeAttribute PAGESIZE = new PageSizeAttribute(SYN_ITERATE_PAGE_SIZE);
-  private static final ErrorHandlerAttribute ON_ERROR = new ErrorHandlerAttribute(SYN_ITERATE_ON_ERROR);
-  private static final AttrInfo<String> TEMPLATE = new AttrInfo<>(ATT_TEMPLATE, false, SYN_ITERATE_TEMPLATE, null, null);
-  private static final ConsumerAttribute CONSUMER = new ConsumerAttribute(SYN_ITERATE_CONSUMER);
-  private static final AttrInfo<String> SCOPE = new AttrInfo<>(ATT_SCOPE, false, BeneratorErrorIds.SYN_ITERATE_SCOPE, null);
-
-  private static final AttrInfo<String> VALIDATOR = new AttrInfo<>(ATT_VALIDATOR, false, BeneratorErrorIds.SYN_ITERATE_VALIDATOR, null);
-  private static final AttrInfo<String> CONVERTER = new AttrInfo<>(ATT_CONVERTER, false, BeneratorErrorIds.SYN_ITERATE_CONVERTER, null);
-  private static final NullQuotaAttribute NULL_QUOTA = new NullQuotaAttribute(SYN_ITERATE_NULL_QUOTA);
-  private static final AttrInfo<Boolean> UNIQUE = new AttrInfo<>(ATT_UNIQUE, false, SYN_ITERATE_UNIQUE, new BooleanParser(), "false");
-  private static final AttrInfo<String> DISTRIBUTION = new AttrInfo<>(ATT_DISTRIBUTION, false, SYN_ITERATE_DISTRIBUTION, null, null);
-  private static final AttrInfo<Boolean> CYCLIC = new AttrInfo<>(ATT_CYCLIC, false, SYN_ITERATE_CYCLIC, new BooleanParser(), "false");
-  private static final AttrInfo<Long> OFFSET = new AttrInfo<>(ATT_OFFSET, false, SYN_ITERATE_OFFSET, new NonNegativeLongParser(), "0");
 
   protected static final AttrInfo<String> DATASET = new AttrInfo<>(ATT_DATASET, false, BeneratorErrorIds.SYN_ITERATE_DATASET, null);
   protected static final AttrInfo<String> NESTING = new AttrInfo<>(ATT_NESTING, false, BeneratorErrorIds.SYN_ITERATE_NESTING, null);
@@ -75,10 +56,25 @@ public class IterateParser extends AbstractGenIterParser {
     this.statsAttr.setErrorId(SYN_ITERATE_STATS);
     this.sensorAttr.setErrorId(SYN_ITERATE_SENSOR);
 
+    this.pagesizeAttr.setErrorId(SYN_ITERATE_PAGE_SIZE);
+    this.onErrorAttr.setErrorId(SYN_ITERATE_ON_ERROR);
+    this.templateAttr.setErrorId(SYN_ITERATE_TEMPLATE);
+    this.consumerAttr.setErrorId(SYN_ITERATE_CONSUMER);
+    this.scopeAttr.setErrorId(SYN_ITERATE_SCOPE);
+
+    this.validatorAttr.setErrorId(SYN_ITERATE_VALIDATOR);
+    this.converterAttr.setErrorId(SYN_ITERATE_CONVERTER);
+    this.nullQuotaAttr.setErrorId(SYN_ITERATE_NULL_QUOTA);
+    this.uniqueAttr.setErrorId(SYN_ITERATE_UNIQUE);
+    this.distributionAttr.setErrorId(SYN_ITERATE_DISTRIBUTION);
+    this.cyclicAttr.setErrorId(SYN_ITERATE_CYCLIC);
+    this.offsetAttr.setErrorId(SYN_ITERATE_OFFSET);
+
     this.attrSupport = new AttrInfoSupport(BeneratorErrorIds.SYN_ITERATE_ILLEGAL_ATTR,
-        nameAttr, typeAttr, SOURCE, countAttr, minCountAttr, maxCountAttr, countGranularityAttr, countDistributionAttr,
-        threadsAttr, PAGESIZE, ON_ERROR, statsAttr, TEMPLATE, CONSUMER, SCOPE,
-        VALIDATOR, CONVERTER, NULL_QUOTA, UNIQUE, DISTRIBUTION, CYCLIC, OFFSET, sensorAttr,
+        nameAttr, typeAttr, SOURCE,
+        countAttr, minCountAttr, maxCountAttr, countGranularityAttr, countDistributionAttr,
+        threadsAttr, pagesizeAttr, onErrorAttr, statsAttr, templateAttr, consumerAttr, scopeAttr,
+        validatorAttr, converterAttr, nullQuotaAttr, uniqueAttr, distributionAttr, cyclicAttr, offsetAttr, sensorAttr,
         DATASET, NESTING, LOCALE, ENCODING, SEPARATOR, FORMAT, SOURCE_SCRIPTED,
         SEGMENT, ROW_BASED, EMPTY_MARKER, SELECTOR, SUB_SELECTOR, FILTER);
   }

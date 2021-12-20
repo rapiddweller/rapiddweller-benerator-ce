@@ -2,14 +2,8 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import com.rapiddweller.benerator.engine.parser.attr.ConsumerAttribute;
-import com.rapiddweller.benerator.engine.parser.attr.ErrorHandlerAttribute;
-import com.rapiddweller.benerator.engine.parser.attr.NullQuotaAttribute;
-import com.rapiddweller.benerator.engine.parser.attr.PageSizeAttribute;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.Validator;
-import com.rapiddweller.common.parser.BooleanParser;
-import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import org.w3c.dom.Element;
@@ -26,20 +20,6 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 public class GenerateParser extends AbstractGenIterParser {
 
   private static final AttrInfo<String> GENERATOR = new AttrInfo<>(ATT_GENERATOR, false, SYN_GENERATE_GENERATOR, null, null);
-
-  private static final PageSizeAttribute PAGESIZE = new PageSizeAttribute(SYN_GENERATE_PAGE_SIZE);
-  private static final ErrorHandlerAttribute ON_ERROR = new ErrorHandlerAttribute(SYN_GENERATE_ON_ERROR);
-  private static final AttrInfo<String> TEMPLATE = new AttrInfo<>(ATT_TEMPLATE, false, SYN_GENERATE_TEMPLATE, null, null);
-  private static final ConsumerAttribute CONSUMER = new ConsumerAttribute(SYN_GENERATE_CONSUMER);
-  private static final AttrInfo<String> SCOPE = new AttrInfo<>(ATT_SCOPE, false, SYN_GENERATE_SCOPE, null, null);
-
-  private static final AttrInfo<String> VALIDATOR = new AttrInfo<>(ATT_VALIDATOR, false, SYN_GENERATE_VALIDATOR, null, null);
-  private static final AttrInfo<String> CONVERTER = new AttrInfo<>(ATT_CONVERTER, false, SYN_GENERATE_CONVERTER, null, null);
-  private static final NullQuotaAttribute NULL_QUOTA = new NullQuotaAttribute(SYN_GENERATE_NULL_QUOTA);
-  private static final AttrInfo<Boolean> UNIQUE = new AttrInfo<>(ATT_UNIQUE, false, SYN_GENERATE_UNIQUE, new BooleanParser(), "false");
-  private static final AttrInfo<String> DISTRIBUTION = new AttrInfo<>(ATT_DISTRIBUTION, false, SYN_GENERATE_DISTRIBUTION, null, null);
-  private static final AttrInfo<Boolean> CYCLIC = new AttrInfo<>(ATT_CYCLIC, false, SYN_GENERATE_CYCLIC, new BooleanParser(), "false");
-  private static final AttrInfo<Long> OFFSET = new AttrInfo<>(ATT_OFFSET, false, SYN_GENERATE_OFFSET, new NonNegativeLongParser(), "0");
 
   // TODO support dataset, nesting and locale for generator?
 
@@ -58,12 +38,26 @@ public class GenerateParser extends AbstractGenIterParser {
     this.statsAttr.setErrorId(SYN_GENERATE_STATS);
     this.sensorAttr.setErrorId(SYN_GENERATE_SENSOR);
 
+    this.pagesizeAttr.setErrorId(SYN_GENERATE_PAGE_SIZE);
+    this.onErrorAttr.setErrorId(SYN_GENERATE_ON_ERROR);
+    this.templateAttr.setErrorId(SYN_GENERATE_TEMPLATE);
+    this.consumerAttr.setErrorId(SYN_GENERATE_CONSUMER);
+    this.scopeAttr.setErrorId(SYN_GENERATE_SCOPE);
+
+    this.validatorAttr.setErrorId(SYN_GENERATE_VALIDATOR);
+    this.converterAttr.setErrorId(SYN_GENERATE_CONVERTER);
+    this.nullQuotaAttr.setErrorId(SYN_GENERATE_NULL_QUOTA);
+    this.uniqueAttr.setErrorId(SYN_GENERATE_UNIQUE);
+    this.distributionAttr.setErrorId(SYN_GENERATE_DISTRIBUTION);
+    this.cyclicAttr.setErrorId(SYN_GENERATE_CYCLIC);
+    this.offsetAttr.setErrorId(SYN_GENERATE_OFFSET);
+
     this.attrSupport = new AttrInfoSupport(SYN_GENERATE_ILLEGAL_ATTR, new GenerateValidator(),
         nameAttr, typeAttr, GENERATOR,
         countAttr, minCountAttr, maxCountAttr, countGranularityAttr, countDistributionAttr,
-        threadsAttr, PAGESIZE, statsAttr, ON_ERROR, TEMPLATE, CONSUMER, SCOPE,
-        VALIDATOR, CONVERTER, NULL_QUOTA, UNIQUE, DISTRIBUTION,
-        CYCLIC, OFFSET, sensorAttr);
+        threadsAttr, pagesizeAttr, statsAttr, onErrorAttr, templateAttr, consumerAttr, scopeAttr,
+        validatorAttr, converterAttr, nullQuotaAttr, uniqueAttr, distributionAttr,
+        cyclicAttr, offsetAttr, sensorAttr);
   }
 
   class GenerateValidator implements Validator<Element> {
