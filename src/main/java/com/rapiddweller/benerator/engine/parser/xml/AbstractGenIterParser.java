@@ -26,7 +26,6 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Consumer;
 import com.rapiddweller.benerator.Generator;
@@ -38,6 +37,14 @@ import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.CachedExpression;
 import com.rapiddweller.benerator.engine.expression.xml.XMLConsumerExpression;
 import com.rapiddweller.benerator.engine.parser.GenerationInterceptor;
+import com.rapiddweller.benerator.engine.parser.attr.CountAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.CountDistributionAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.CountGranularityAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.MinMaxCountAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.ScriptableBooleanAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.ThreadsAttribute;
+import com.rapiddweller.benerator.engine.parser.string.IdParser;
 import com.rapiddweller.benerator.engine.statement.ConversionStatement;
 import com.rapiddweller.benerator.engine.statement.GenIterStatement;
 import com.rapiddweller.benerator.engine.statement.GenIterTask;
@@ -56,6 +63,7 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.xml.XMLUtil;
+import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -91,6 +99,19 @@ import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStr
 public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorParser {
 
   private static final Set<String> CONSUMER_EXPECTING_ELEMENTS = CollectionUtil.toSet(EL_GENERATE, EL_ITERATE);
+
+  protected final AttrInfo<String> nameAttr = new NameAttribute(null, false, false);
+  protected final AttrInfo<String> typeAttr = new AttrInfo<>(ATT_TYPE, false, null, new IdParser(), null);
+
+  protected final CountAttribute countAttr = new CountAttribute(null, false);
+  protected final MinMaxCountAttribute minCountAttr = new MinMaxCountAttribute(ATT_MIN_COUNT, null);
+  protected final MinMaxCountAttribute maxCountAttr = new MinMaxCountAttribute(ATT_MAX_COUNT, null);
+  protected final CountGranularityAttribute countGranularityAttr = new CountGranularityAttribute(null);
+  protected final CountDistributionAttribute countDistributionAttr = new CountDistributionAttribute(null);
+
+  protected final ThreadsAttribute threadsAttr = new ThreadsAttribute(null);
+  protected final ScriptableBooleanAttribute statsAttr = new ScriptableBooleanAttribute(ATT_STATS, false, null, false);
+  protected final AttrInfo<String> sensorAttr = new AttrInfo<>(ATT_SENSOR, false, null, null, null);
 
   protected AbstractGenIterParser(String elementName, AttrInfoSupport attrSupport) {
     super(elementName, attrSupport);
@@ -128,19 +149,19 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     //Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 0L, 1L, false, context);
 
     Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(
-        getCount(element), getMinCount(element), getMaxCount(element), getCountGranularity(element),
-        getCountDistribution(element), 0L, 1L, false, false, context);
+        countAttr.parse(element), minCountAttr.parse(element), maxCountAttr.parse(element),
+        countGranularityAttr.parse(element), countDistributionAttr.parse(element), 0L, 1L, false, false, context);
 
     Expression<Long> pageSize = parsePageSize(element);
-    Expression<Integer> threads = parseThreadsAttr(element);
+    Expression<Integer> threads = threadsAttr.parse(element);
     Expression<PageListener> pager = (Expression<PageListener>) DatabeneScriptParser.parseBeanSpec(
         element.getAttribute(ATT_PAGER));
     String productName = getTaskName(element);
-    Expression<Boolean> stats = parseStats(element);
-    String sensor = parseSensor(element);
+    Expression<Boolean> stats = statsAttr.parse(element);
+    String sensor = sensorAttr.parse(element);
 
     Expression<ErrorHandler> errorHandler = parseOnErrorAttribute(element, element.getAttribute(ATT_NAME));
-    Expression<Long> minCount = parseMinCount(element);
+    Expression<Long> minCount = minCountAttr.parse(element);
     if (minCount == null) {
       minCount = new ConstantExpression<>(0L);
     }
@@ -156,42 +177,18 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     return statement;
   }
 
-  // helper methods to be implemented by child classes ---------------------------------------------------------------
-
-  protected abstract Expression<Long> parseMinCount(Element element);
-
-  protected abstract Expression<String> getCountDistribution(Element element);
-
-  protected abstract Expression<Long> getCountGranularity(Element element);
-
-  protected abstract Expression<Long> getMaxCount(Element element);
-
-  protected abstract Expression<Long> getMinCount(Element element);
-
-  protected abstract Expression<Long> getCount(Element element);
-
-  protected abstract String parseSensor(Element element);
-
-  protected abstract Expression<Boolean> parseStats(Element element);
-
-  protected abstract Expression<Integer> parseThreadsAttr(Element element);
-
   // private helpers -------------------------------------------------------------------------------------------------
 
   protected String getTaskName(Element element) {
-    String taskName = parseName(element);
+    String taskName = nameAttr.parse(element);
     if (taskName == null) {
-      taskName = parseType(element);
+      taskName = typeAttr.parse(element);
     }
     return taskName;
   }
 
-  protected abstract String parseType(Element element);
-
-  protected abstract String parseName(Element element);
-
   private static String getNameOrType(Element element) {
-    String result = element.getAttribute(ATT_NAME);
+    String result = element.getAttribute(ATT_NAME); // TODO
     if (StringUtil.isEmpty(result)) {
       result = element.getAttribute(ATT_TYPE);
     }
@@ -207,7 +204,7 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
 
   private static InstanceDescriptor mapDescriptorElement(Element element, BeneratorContext context) {
     // evaluate type
-    String type = parseStringAttribute(element, ATT_TYPE, context, false);
+    String type = parseStringAttribute(element, ATT_TYPE, context, false); // TODO
     TypeDescriptor localType;
     DescriptorProvider localDescriptorProvider = context.getLocalDescriptorProvider();
     if (PrimitiveType.ARRAY.getName().equals(type)
