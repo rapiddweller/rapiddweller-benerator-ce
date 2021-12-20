@@ -4,8 +4,11 @@ package com.rapiddweller.benerator.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.parser.attr.EncodingAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.SimpleTypeAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.SourceFormattedAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.SourceScriptedAttribute;
 import com.rapiddweller.benerator.engine.parser.string.IdParser;
 import com.rapiddweller.benerator.engine.parser.string.MinMaxParser;
 import com.rapiddweller.benerator.engine.parser.string.ScriptParser;
@@ -17,7 +20,6 @@ import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.parser.BooleanParser;
 import com.rapiddweller.common.parser.CharacterParser;
 import com.rapiddweller.common.parser.DoubleParser;
-import com.rapiddweller.common.parser.EncodingParser;
 import com.rapiddweller.common.parser.NonNegativeIntegerParser;
 import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.common.parser.ValuesParser;
@@ -68,13 +70,14 @@ public class AttributeParser extends AbstractComponentParser {
   public static final AttrInfo<Expression<Double>> NULL_QUOTA = new AttrInfo<>(ATT_NULL_QUOTA, false, SYN_ATTR_NULL_QUOTA, new ScriptableParser<>(new DoubleParser(0., 1.)));
 
   public static final AttrInfo<String> SOURCE = new AttrInfo<>(ATT_SOURCE, false, SYN_ATTR_SOURCE, null);
-  public static final AttrInfo<String> ENCODING = new AttrInfo<>(ATT_ENCODING, false, SYN_ATTR_ENCODING, new EncodingParser());
+  public static final SourceScriptedAttribute SOURCE_SCRIPTED = new SourceScriptedAttribute(SYN_ATTR_SOURCE_SCRIPTED);
+  public static final EncodingAttribute ENCODING = new EncodingAttribute(SYN_ATTR_ENCODING);
   public static final AttrInfo<String> SEGMENT = new AttrInfo<>(ATT_SEGMENT, false, SYN_ATTR_SEGMENT, null);
   public static final AttrInfo<Character> SEPARATOR = new AttrInfo<>(ATT_SEPARATOR, false, SYN_ATTR_SEPARATOR, new CharacterParser());
   public static final AttrInfo<String> SELECTOR = new AttrInfo<>(ATT_SELECTOR, false, SYN_ATTR_SELECTOR, null);
   public static final AttrInfo<String> SUB_SELECTOR = new AttrInfo<>(ATT_SUB_SELECTOR, false, SYN_ATTR_SUB_SELECTOR, null);
   public static final AttrInfo<Boolean> ROW_BASED = new AttrInfo<>(ATT_ROW_BASED, false, SYN_ATTR_ROW_BASED, new BooleanParser());
-  public static final AttrInfo<String> FORMAT = new AttrInfo<>(ATT_FORMAT, false, SYN_ATTR_FORMAT, new ValuesParser("formatted", "raw"));
+  public static final SourceFormattedAttribute FORMAT = new SourceFormattedAttribute(SYN_ATTR_FORMAT);
   public static final AttrInfo<String> EMPTY_MARKER = new AttrInfo<>(ATT_EMPTY_MARKER, false, SYN_ATTR_EMPTY_MARKER, null);
 
   public static final AttrInfo<Boolean> NULLABLE = new AttrInfo<>(ATT_NULLABLE, false, SYN_ATTR_NULLABLE, new BooleanParser(), "false");
@@ -102,7 +105,7 @@ public class AttributeParser extends AbstractComponentParser {
       name, TYPE,
       MODE, SCOPE, OFFSET, CONDITION, FILTER, UNIQUE, UNIQUE_KEY,
       CONSTANT, VALUES, PATTERN, SCRIPT, GENERATOR, MIN_LENGTH, MAX_LENGTH, NULL_QUOTA,
-      SOURCE, ENCODING, SEGMENT, SEPARATOR, SELECTOR, SUB_SELECTOR, ROW_BASED, FORMAT, EMPTY_MARKER,
+      SOURCE, SOURCE_SCRIPTED, ENCODING, SEGMENT, SEPARATOR, SELECTOR, SUB_SELECTOR, ROW_BASED, FORMAT, EMPTY_MARKER,
       NULLABLE, TRUE_QUOTA,
       MIN, MIN_INCLUSIVE, MAX, MAX_INCLUSIVE, GRANULARITY, DISTRIBUTION,
       DATASET, NESTING, LOCALE,
