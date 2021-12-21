@@ -45,30 +45,32 @@ public class BeneratorErrorIds {
 
   public static final String SYN_EMPTY_BEN_FILE = "BEN-0100";
   public static final String SYN_BEN_FILE_NO_XML = "BEN-0101";
-  public static final String SYN_ILLEGAL_ROOT = "BEN-0102";
+
+  public static final String SYN_ILLEGAL_ROOT = "BEN-0110";
 
   /** Generic error code for an illegal XML element in a Benerator file
    *  (as fallback for elements for which no custom error id has been specified). */
-  public static final String SYN_ILLEGAL_ELEMENT = "BEN-0103";
+  public static final String SYN_ILLEGAL_ELEMENT = "BEN-0111";
 
   /** Generic error code for a legal XML element in a Benerator file that is placed in an inappropriate location
    *  (as fallback for elements for which no custom error id has been specified). */
-  public static final String SYN_MISPLACED_ELEMENT = "BEN-0104";
+  public static final String SYN_MISPLACED_ELEMENT = "BEN-0112";
 
   /** Generic error code for an illegal XML attribute in a legal XML element of a Benerator file. */
-  public static final String SYN_ILLEGAL_ATTRIBUTE = "BEN-0105";
+  public static final String SYN_ILLEGAL_ATTRIBUTE = "BEN-0113";
 
   /** Generic error code for a missing but required XML attribute in a Benerator file. */
-  public static final String SYN_MISSING_ATTRIBUTE = "BEN-0106";
+  public static final String SYN_MISSING_ATTRIBUTE = "BEN-0114";
 
   /** Generic error code for an illegal combination of XML attributes in a legal XML element of a Benerator file. */
-  public static final String SYN_ILLEGAL_ATTRIBUTE_COMBO = "BEN-0107";
+  public static final String SYN_ILLEGAL_ATTRIBUTE_COMBO = "BEN-0115";
 
   /** Generic error code for an illegal value in a legal XML attribute in a legal XML element of a Benerator file. */
-  public static final String SYN_ILLEGAL_ATTRIBUTE_VALUE = "BEN-0108";
+  public static final String SYN_ILLEGAL_ATTRIBUTE_VALUE = "BEN-0116";
 
-  public static final String SCRIPT_FAILED = "BEN-0110";
-  public static final String SEGMENT_NOT_FOUND = "BEN-0111";
+
+  public static final String SCRIPT_FAILED = "BEN-0120";
+  public static final String SEGMENT_NOT_FOUND = "BEN-0121";
 
 
   // BEN-0130...0149 file issues =====================================================================================
@@ -80,8 +82,11 @@ public class BeneratorErrorIds {
 
   // BEN-0150...0200 Reserved for file syntax errors =================================================================
 
-  public static final String SYN_EMPTY_XML_FILE = "BEN-0150";
-  public static final String SYN_NO_XML_FILE = "BEN-0151";
+  public static final String SYN_INVALID_XML_FILE = "BEN-0150";
+  public static final String SYN_EMPTY_XML_FILE = "BEN-0151";
+  public static final String SYN_NO_XML_FILE = "BEN-0152";
+  public static final String SYN_MISSING_XML_END_TAG = "BEN-0153";
+  public static final String SYN_ILLEGAL_XML_END_TAG = "BEN-0154";
 
   // BEN-0200...0499 Syntax Errors ===================================================================================
 

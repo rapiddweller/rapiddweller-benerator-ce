@@ -51,6 +51,7 @@ import com.rapiddweller.common.converter.ConverterChain;
 import com.rapiddweller.common.converter.FormatFormatConverter;
 import com.rapiddweller.common.converter.String2NumberConverter;
 import com.rapiddweller.common.converter.ToStringConverter;
+import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.validator.AndValidator;
 import com.rapiddweller.common.validator.bean.BeanConstraintValidator;
 import com.rapiddweller.common.xml.XMLUtil;
@@ -130,9 +131,9 @@ public class DescriptorUtil {
   }
 
   public static Generator<?> getGeneratorByName(TypeDescriptor descriptor, BeneratorContext context) {
+    String generatorSpec = descriptor.getGenerator();
     try {
       Generator<?> generator = null;
-      String generatorSpec = descriptor.getGenerator();
       if (generatorSpec != null) {
         if (generatorSpec.startsWith("{") && generatorSpec.endsWith("}")) {
           generatorSpec = generatorSpec.substring(1, generatorSpec.length() - 1);
@@ -145,8 +146,9 @@ public class DescriptorUtil {
         }
       }
       return generator;
-    } catch (ParseException e) {
-      throw BeneratorExceptionFactory.getInstance().configurationError("Error in generator spec", e);
+    } catch (SyntaxError e) {
+      throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(
+          "Error in generator spec", e, generatorSpec);
     }
   }
 
