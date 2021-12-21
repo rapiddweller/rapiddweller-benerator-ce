@@ -593,14 +593,22 @@ public abstract class GeneratorTest extends ModelTest {
     }
   }
 
-  protected void checkDiversity(NonNullGenerator<String> generator, int genCount, int expMinDiversity) {
+  protected ObjectCounter<String> checkDiversity(NonNullGenerator<String> generator, int genCount, int expMinDiversity) {
     generator.init(context);
     ObjectCounter<String> counter = new ObjectCounter<>(expMinDiversity);
     for (int i = 0; i < genCount; i++) {
       counter.count(generator.generate());
     }
-    assertTrue(counter.objectSet().size() >= expMinDiversity);
+    int diversity = counter.objectSet().size();
+    assertTrue("Expected at least " + expMinDiversity + " different products, but had only " + diversity,
+        diversity >= expMinDiversity);
+    return counter;
   }
 
+  protected static <T> void assertContains(ObjectCounter<T> samples, T... values) {
+    for (T value : values) {
+      assertTrue(samples.getCount(value) > 0);
+    }
+  }
 
 }
