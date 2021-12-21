@@ -141,6 +141,10 @@ public class Benerator {
     return (mode == BeneratorMode.TURBO);
   }
 
+  public static boolean isLenient() {
+    return (mode == BeneratorMode.LENIENT);
+  }
+
   public static BeneratorMode getMode() {
     return mode;
   }
