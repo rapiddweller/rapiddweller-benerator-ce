@@ -49,26 +49,17 @@ public class NobilityTitleGeneratorTest extends GeneratorTest {
   private static final Set<String> GERMAN_TITLES = CollectionUtil.toSet("Baron", "Graf", "Prinz", "König");
   private static final Set<String> ENGLISH_TITLES = CollectionUtil.toSet("Baron", "Count", "Prince", "King");
 
-  /**
-   * Test locale.
-   */
   @Test
   public void testLocale() {
     checkLocale(Locale.GERMANY, 0.1, GERMAN_TITLES);
     checkLocale(Locale.ENGLISH, 0.1, ENGLISH_TITLES);
   }
 
-  /**
-   * Test nobility quota zero.
-   */
   @Test
   public void testNobilityQuotaZero() {
     checkLocale(Locale.GERMANY, 0., GERMAN_TITLES);
   }
 
-  /**
-   * Test nobility quota one.
-   */
   @Test
   public void testNobilityQuotaOne() {
     checkLocale(Locale.GERMANY, 1., GERMAN_TITLES);

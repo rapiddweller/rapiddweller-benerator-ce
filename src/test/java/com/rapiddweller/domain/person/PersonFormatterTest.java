@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -36,24 +36,17 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the {@link PersonFormatter}.<br/><br/>
  * Created: 22.02.2010 13:50:13
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class PersonFormatterTest {
 
-  /**
-   * Test western.
-   */
   @Test
   public void testWestern() {
     check("Herr Urs Züggeli", new Locale("de", "CH", "ZU"), "Herr", "Urs", "Züggeli");
     check("Herr Urs Züggeli", new Locale("de"), "Herr", "Urs", "Züggeli");
   }
 
-  /**
-   * Test eastern.
-   */
   @Test
   public void testEastern() {
     check("Lee Bruce", Locales.CHINESE, null, "Bruce", "Lee");

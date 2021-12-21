@@ -31,18 +31,13 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the {@link TINGenerator}.<br/>
- * <br/>
+ * Tests the {@link TINGenerator}.<br/><br/>
  * Created at 27.08.2008 00:23:07
- *
  * @author Volker Bergmann
  * @since 0.5.5
  */
 public class TINGeneratorTest {
 
-  /**
-   * Test.
-   */
   @Test
   public void test() {
     TINGenerator generator = new TINGenerator();

@@ -44,10 +44,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the {@link PersonGenerator}.<br/>
- * <br/>
+ * Tests the {@link PersonGenerator}.<br/><br/>
  * Created: 09.06.2006 22:14:08
- *
  * @author Volker Bergmann
  * @since 0.1
  */
@@ -55,16 +53,10 @@ public class PersonGeneratorTest extends GeneratorClassTest {
 
   private static final Logger logger = LoggerFactory.getLogger(PersonGeneratorTest.class);
 
-  /**
-   * Instantiates a new Person generator test.
-   */
   public PersonGeneratorTest() {
     super(PersonGenerator.class);
   }
 
-  /**
-   * Test germany.
-   */
   @Test
   public void testGermany() {
     PersonGenerator generator = new PersonGenerator(Country.GERMANY.getIsoCode(), Locale.GERMANY);
@@ -75,9 +67,6 @@ public class PersonGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test switzerland.
-   */
   @Test
   public void testSwitzerland() {
     PersonGenerator generator = new PersonGenerator(Country.SWITZERLAND.getIsoCode(), Locale.GERMAN);
@@ -88,9 +77,6 @@ public class PersonGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test female quota.
-   */
   @Test
   public void testFemaleQuota() {
     PersonGenerator generator = new PersonGenerator();
@@ -109,9 +95,6 @@ public class PersonGeneratorTest extends GeneratorClassTest {
     assertTrue(femCount < 200);
   }
 
-  /**
-   * Test russia.
-   */
   @Test
   public void testRussia() {
     PersonGenerator generator = new PersonGenerator(Country.RUSSIA.getIsoCode(), new Locale("ru"));
@@ -123,9 +106,6 @@ public class PersonGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test poland.
-   */
   @Test
   public void testPoland() {
     PersonGenerator generator = new PersonGenerator(Country.POLAND.getIsoCode(), new Locale("pl"));
@@ -137,9 +117,6 @@ public class PersonGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test china.
-   */
   @Test
   public void testChina() {
     PersonGenerator generator = new PersonGenerator(Country.CHINA.getIsoCode(), Locale.CHINESE);
@@ -151,9 +128,6 @@ public class PersonGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test generate for dataset de.
-   */
   @Test
   public void testGenerateForDataset_DE() {
     PersonGenerator generator = new PersonGenerator("dach");
@@ -165,9 +139,6 @@ public class PersonGeneratorTest extends GeneratorClassTest {
     }
   }
 
-  /**
-   * Test generate for dataset fallback li to de.
-   */
   @Test
   public void testGenerateForDataset_fallback_LI_to_DE() {
     PersonGenerator generator = new PersonGenerator("dach");
@@ -176,9 +147,6 @@ public class PersonGeneratorTest extends GeneratorClassTest {
     generator.generateForDataset("LI");
   }
 
-  /**
-   * Test generate for dataset fallback for invalid set.
-   */
   @Test
   public void testGenerateForDataset_fallbackForInvalidSet() {
     PersonGenerator generator = new PersonGenerator("dach");
@@ -186,9 +154,6 @@ public class PersonGeneratorTest extends GeneratorClassTest {
     generator.generateForDataset("US");
   }
 
-  /**
-   * Test generate for dataset fallback for illegal set.
-   */
   @Test
   public void testGenerateForDataset_fallbackForIllegalSet() {
     PersonGenerator generator = new PersonGenerator("dach");
@@ -196,9 +161,6 @@ public class PersonGeneratorTest extends GeneratorClassTest {
     generator.generateForDataset("xx");
   }
 
-  /**
-   * Test min max age years.
-   */
   @Test
   public void testMinMaxAgeYears() {
     PersonGenerator generator = new PersonGenerator();

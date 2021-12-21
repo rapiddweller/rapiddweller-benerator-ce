@@ -38,24 +38,15 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link BirthDateGenerator}.<br/><br/>
  * Created: 09.06.2006 22:14:08
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class BirthDateGeneratorTest extends GeneratorClassTest {
 
-  /**
-   * Instantiates a new Birth date generator test.
-   */
   public BirthDateGeneratorTest() {
     super(BirthDateGenerator.class);
   }
 
-  /**
-   * Test.
-   *
-   * @throws IllegalGeneratorStateException the illegal generator state exception
-   */
   @Test
   public void test() throws IllegalGeneratorStateException {
     Date now = TimeUtil.today();

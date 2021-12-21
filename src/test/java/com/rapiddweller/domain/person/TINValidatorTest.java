@@ -32,18 +32,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests the {@link TINValidator}.<br/>
- * <br/>
+ * Tests the {@link TINValidator}.<br/><br/>
  * Created at 27.08.2008 00:14:42
- *
  * @author Volker Bergmann
  * @since 0.5.5
  */
 public class TINValidatorTest {
 
-  /**
-   * Test.
-   */
   @Test
   public void test() {
     TINValidator validator = new TINValidator();
