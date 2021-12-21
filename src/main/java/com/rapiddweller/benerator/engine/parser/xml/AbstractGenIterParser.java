@@ -101,7 +101,6 @@ import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_OFFSET;
 import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_UNIQUE;
 import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_VALIDATOR;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
-import static com.rapiddweller.benerator.parser.xml.XmlDescriptorParser.parseStringAttribute;
 
 /**
  * Parses a &lt;generate&gt; or &lt;update&gt; element in a Benerator descriptor XML file.<br/><br/>
@@ -214,10 +213,10 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     return taskName;
   }
 
-  private static String getNameOrType(Element element) {
-    String result = element.getAttribute(ATT_NAME); // TODO
+  private String getNameOrType(Element element) {
+    String result = nameAttr.parse(element);
     if (StringUtil.isEmpty(result)) {
-      result = element.getAttribute(ATT_TYPE);
+      result = typeAttr.parse(element);
     }
     if (StringUtil.isEmpty(result)) {
       result = "anonymous";
@@ -229,14 +228,14 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     return new CachedExpression<>(new XMLConsumerExpression(entityElement, consumersExpected, resourceManager));
   }
 
-  private static InstanceDescriptor mapDescriptorElement(Element element, BeneratorContext context) {
+  private InstanceDescriptor mapDescriptorElement(Element element, BeneratorContext context) {
     // evaluate type
-    String type = parseStringAttribute(element, ATT_TYPE, context, false); // TODO
+    String type = typeAttr.parse(element);
     TypeDescriptor localType;
     DescriptorProvider localDescriptorProvider = context.getLocalDescriptorProvider();
     if (PrimitiveType.ARRAY.getName().equals(type)
         || XMLUtil.getChildElements(element, false, EL_VALUE).length > 0) {
-      localType = new ArrayTypeDescriptor(element.getAttribute(ATT_NAME), localDescriptorProvider);
+      localType = new ArrayTypeDescriptor(nameAttr.parse(element), localDescriptorProvider);
     } else {
       TypeDescriptor parentType = context.getDataModel().getTypeDescriptor(type);
       if (parentType != null) {
@@ -383,13 +382,13 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     task.setStatements(statements);
 
     // parse converter
-    Converter converter = DescriptorUtil.getConverter(element.getAttribute(ATT_CONVERTER), context);
+    Converter converter = DescriptorUtil.getConverter(converterAttr.parse(element), context);
     if (converter != null) {
       task.addStatement(new ConversionStatement(BeneratorFactory.getInstance().configureConverter(converter, context)));
     }
 
     // parse validator
-    Validator validator = DescriptorUtil.getValidator(element.getAttribute(ATT_VALIDATOR), context);
+    Validator validator = DescriptorUtil.getValidator(validatorAttr.parse(element), context);
     if (validator != null) {
       task.addStatement(new ValidationStatement(BeneratorFactory.getInstance().configureValidator(validator, context)));
     }
