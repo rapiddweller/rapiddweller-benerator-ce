@@ -31,49 +31,37 @@ import com.rapiddweller.benerator.primitive.HiLoGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 
 /**
- * * Creates Unique keys efficiently by connecting a database, retrieving a (unique) sequence value
- * and building sub keys of it.<br/>
- * <br/>
+ * Creates Unique keys efficiently by connecting a database, retrieving a (unique) sequence value
+ * and building sub keys of it.<br/><br/>
  * Created at 06.07.2009 07:57:08
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
 public class QueryHiLoGenerator extends HiLoGenerator {
 
-  /**
-   * The constant DEFAULT_MAX_LO.
-   */
   protected static final int DEFAULT_MAX_LO = 100;
 
-  /**
-   * Instantiates a new Query hi lo generator.
-   *
-   * @param selector the selector
-   * @param source   the source
-   */
   public QueryHiLoGenerator(String selector, StorageSystem source) {
     this(selector, source, DEFAULT_MAX_LO);
   }
 
-  /**
-   * Instantiates a new Query hi lo generator.
-   *
-   * @param selector the selector
-   * @param source   the source
-   * @param maxLo    the max lo
-   */
-  public QueryHiLoGenerator(String selector, StorageSystem source,
-                            int maxLo) {
-    super(WrapperFactory
-            .asNonNullGenerator(new QueryLongGenerator(selector, source)),
-        maxLo);
+  public QueryHiLoGenerator(String selector, StorageSystem source, int maxLo) {
+    super(WrapperFactory.asNonNullGenerator(new QueryLongGenerator(selector, source)), maxLo);
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return false;
   }
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + '[' + hiGenerator + ',' + maxLo +
-        ']';
+    return getClass().getSimpleName() + '[' + hiGenerator + ',' + maxLo + ']';
   }
 
 }

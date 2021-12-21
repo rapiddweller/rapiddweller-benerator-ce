@@ -38,6 +38,7 @@ import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.jdbacl.DBUtil;
+import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.jdbacl.SQLUtil;
 
 import java.io.Closeable;
@@ -112,28 +113,25 @@ public class SequenceTableGenerator<E extends Number>
   }
 
   @Override
-  public void init(GeneratorContext context)
-      throws InvalidGeneratorSetupException {
+  public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
     // check preconditions
     assertNotInitialized();
     if (database == null) {
       throw new InvalidGeneratorSetupException("db is null");
     }
     // initialize
-
     query = SQLUtil.renderQuery(database.getCatalog(), database.getSchema(),
         table, column, selector, database.getDialect());
-
     incrementorStrategy = createIncrementor();
     super.init(context);
   }
 
   private IncrementorStrategy createIncrementor() {
-    String incrementorSql = "update " + table + " set " + column + " = ?";
+    DatabaseDialect dialect = database.getDialect();
+    String renderedTableName = (dialect.quoteTableNames ? '"' + table + '"' : table);
+    String incrementorSql = "update " + renderedTableName + " set " + column + " = ?";
     if (selector != null) {
-      incrementorSql = ScriptUtil
-          .combineScriptableParts(incrementorSql, " where ",
-              selector);
+      incrementorSql = ScriptUtil.combineScriptableParts(incrementorSql, " where ", selector);
     }
     if (selector == null || !ScriptUtil.isScript(selector)) {
       return new PreparedStatementStrategy(incrementorSql, database);
@@ -176,11 +174,8 @@ public class SequenceTableGenerator<E extends Number>
     E result = null;
     try {
       if (parameterizedAccessorStatement == null) {
-        String queryText = String.valueOf(
-            ScriptUtil.parseUnspecificText(query)
-                .evaluate(context));
-        parameterizedAccessorStatement =
-            database.getConnection().prepareStatement(queryText);
+        String queryText = String.valueOf(ScriptUtil.parseUnspecificText(query).evaluate(context));
+        parameterizedAccessorStatement = database.getConnection().prepareStatement(queryText);
       }
       for (int i = 0; i < params.length; i++) {
         parameterizedAccessorStatement.setObject(i + 1, params[i]);
@@ -191,9 +186,7 @@ public class SequenceTableGenerator<E extends Number>
         return null;
       }
       result = (E) resultSet.getObject(1);
-      incrementorStrategy
-          .run(result.longValue(), (BeneratorContext) context,
-              params);
+      incrementorStrategy.run(result.longValue(), (BeneratorContext) context, params);
     } catch (SQLException e) {
       throw BeneratorExceptionFactory.getInstance().queryFailed(
           "Error fetching value in " + getClass().getSimpleName(), e);
@@ -233,7 +226,8 @@ public class SequenceTableGenerator<E extends Number>
       try {
         statement = db.getConnection().prepareStatement(incrementorSql);
       } catch (SQLException e) {
-        throw BeneratorExceptionFactory.getInstance().operationFailed("Error preparing statement", e);
+        throw BeneratorExceptionFactory.getInstance().operationFailed(
+            "Error preparing statement: " + e.getMessage(), e);
       }
     }
 

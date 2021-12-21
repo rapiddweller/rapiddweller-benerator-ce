@@ -45,7 +45,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link SQLEntityExporter}.<br/><br/>
  * Created: 18.02.2010 15:24:05
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -54,9 +53,6 @@ public class SQLEntityExporterTest extends ModelTest {
   private static final String FILENAME = "target" + File.separator
       + SQLEntityExporterTest.class.getSimpleName() + ".sql";
 
-  /**
-   * Test without dialect.
-   */
   @Test(expected = ConfigurationError.class)
   public void testWithoutDialect() {
     try (SQLEntityExporter exporter = new SQLEntityExporter(FILENAME)) {
@@ -67,11 +63,6 @@ public class SQLEntityExporterTest extends ModelTest {
     }
   }
 
-  /**
-   * Test normal.
-   *
-   * @throws Exception the exception
-   */
   @Test
   public void testNormal() throws Exception {
     try {

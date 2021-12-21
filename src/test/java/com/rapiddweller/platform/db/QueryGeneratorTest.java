@@ -43,20 +43,13 @@ import static org.junit.Assert.assertSame;
 /**
  * Tests the {@link QueryGenerator}.<br/><br/>
  * Created: 09.08.2010 13:05:02
- *
  * @author Volker Bergmann
  * @since 0.6.4
  */
 public class QueryGeneratorTest extends GeneratorTest {
 
-  /**
-   * The Db.
-   */
   static DefaultDBSystem db;
 
-  /**
-   * Sets db.
-   */
   @BeforeClass
   public static void setupDB() {
     db = new DefaultDBSystem("db", HSQLUtil.getInMemoryURL(QueryGeneratorTest.class.getSimpleName()), HSQLUtil.DRIVER, "sa", null, new DataModel());
@@ -64,26 +57,17 @@ public class QueryGeneratorTest extends GeneratorTest {
     db.execute("insert into TT (id, value) values (1, 1000)");
   }
 
-  /**
-   * Sets table.
-   */
   @Before
   public void setupTable() {
     db.execute("update TT set value = 1000 where id = 1");
   }
 
-  /**
-   * Close db.
-   */
   @AfterClass
   public static void closeDB() {
     db.execute("drop table TT");
     IOUtil.close(db);
   }
 
-  /**
-   * Test constructor.
-   */
   @Test
   public void testConstructor() {
     QueryGenerator<Object> actualQueryGenerator = new QueryGenerator<>();
@@ -93,9 +77,6 @@ public class QueryGeneratorTest extends GeneratorTest {
     assertNull(actualQueryGenerator.getSource());
   }
 
-  /**
-   * Test simple.
-   */
   @Test
   public void testSimple() {
     QueryGenerator<Integer> generator = null;

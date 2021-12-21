@@ -39,7 +39,6 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Tests the {@link DBSequenceGenerator}.<br/><br/>
  * Created: 11.11.2009 18:50:58
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -48,11 +47,6 @@ public class DBSequenceGeneratorTest extends GeneratorTest {
   private DefaultDBSystem db;
   private final String seq = getClass().getSimpleName();
 
-  /**
-   * Sets up db.
-   *
-   * @throws SQLException the sql exception
-   */
   @Before
   public void setUpDB() throws SQLException {
     db = new DefaultDBSystem("db",
@@ -62,27 +56,16 @@ public class DBSequenceGeneratorTest extends GeneratorTest {
     db.createSequence(seq);
   }
 
-  /**
-   * Test uncached.
-   */
   @Test
   public void testUncached() {
     check(false);
   }
 
-  /**
-   * Test cached.
-   */
   @Test
   public void testCached() {
     check(true);
   }
 
-  /**
-   * Check.
-   *
-   * @param cached the cached
-   */
   protected void check(boolean cached) {
     long first = db.nextSequenceValue(seq);
     try {

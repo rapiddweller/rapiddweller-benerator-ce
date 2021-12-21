@@ -32,10 +32,8 @@ import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.converter.ConverterManager;
 
 /**
- * Generates {@link Long} values based on a database query.<br/>
- * <br/>
+ * Generates {@link Long} values based on a database query.<br/><br/>
  * Created at 06.07.2009 07:58:45
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
@@ -44,19 +42,10 @@ public class QueryLongGenerator extends QueryGenerator<Long> {
   @SuppressWarnings("rawtypes")
   private Converter converter;
 
-  /**
-   * Instantiates a new Query long generator.
-   */
   public QueryLongGenerator() {
     this(null, null);
   }
 
-  /**
-   * Instantiates a new Query long generator.
-   *
-   * @param selector the selector
-   * @param source   the source
-   */
   public QueryLongGenerator(String selector, StorageSystem source) {
     super(selector, source, true);
   }
