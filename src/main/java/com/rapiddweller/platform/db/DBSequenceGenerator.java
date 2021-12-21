@@ -81,6 +81,16 @@ public class DBSequenceGenerator extends NonNullGeneratorProxy<Long> {
   // Generator interface implementation ------------------------------------------------------------------------------
 
   @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
+
+  @Override
   public synchronized void init(GeneratorContext context) {
     setSource(cached ?
         new CachedSequenceGenerator(name, database) :

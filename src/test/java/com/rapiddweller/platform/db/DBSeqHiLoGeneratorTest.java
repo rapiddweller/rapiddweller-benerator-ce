@@ -44,7 +44,6 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Tests the DBSeqHiLoGenerator.<br/><br/>
  * Created: 27.01.2008 10:47:39
- *
  * @author Volker Bergmann
  * @since 0.4.0
  */
@@ -55,11 +54,6 @@ public class DBSeqHiLoGeneratorTest extends GeneratorTest {
 
   private DefaultDBSystem db;
 
-  /**
-   * Sets up database.
-   *
-   * @throws Exception the exception
-   */
   @Before
   public void setUpDatabase() throws Exception {
     String url = HSQLUtil.getInMemoryURL("beneratortest");
@@ -68,9 +62,6 @@ public class DBSeqHiLoGeneratorTest extends GeneratorTest {
     db.createSequence(SEQUENCE_NAME);
   }
 
-  /**
-   * Tear down.
-   */
   @After
   public void tearDown() {
     dropSequence();
@@ -78,9 +69,6 @@ public class DBSeqHiLoGeneratorTest extends GeneratorTest {
 
   // test methods ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Test max lo 2.
-   */
   @Test
   public void testMaxLo2() {
     DBSeqHiLoGenerator generator = new DBSeqHiLoGenerator(SEQUENCE_NAME, 2, db);
@@ -89,9 +77,6 @@ public class DBSeqHiLoGeneratorTest extends GeneratorTest {
     generator.close();
   }
 
-  /**
-   * Test max lo 100.
-   */
   @Test
   public void testMaxLo100() {
     DBSeqHiLoGenerator generator = new DBSeqHiLoGenerator(SEQUENCE_NAME, 100, db);
@@ -114,9 +99,6 @@ public class DBSeqHiLoGeneratorTest extends GeneratorTest {
     }
   }
 
-  /**
-   * Test constructor.
-   */
   @Test
   public void testConstructor() {
     DBSeqHiLoGenerator actualDbSeqHiLoGenerator = new DBSeqHiLoGenerator("Name", 3);
@@ -124,9 +106,6 @@ public class DBSeqHiLoGeneratorTest extends GeneratorTest {
     assertEquals(3, actualDbSeqHiLoGenerator.getMaxLo());
   }
 
-  /**
-   * Test constructor 2.
-   */
   @Test
   public void testConstructor2() {
     DBSeqHiLoGenerator actualDbSeqHiLoGenerator = new DBSeqHiLoGenerator("log4jUl", 3);

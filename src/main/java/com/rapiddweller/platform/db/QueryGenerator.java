@@ -34,10 +34,8 @@ import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.common.StringUtil;
 
 /**
- * Generates values based on a database query.<br/>
- * <br/>
+ * Generates values based on a database query.<br/><br/>
  * Created at 06.07.2009 08:02:21
- *
  * @param <E> the type parameter
  * @author Volker Bergmann
  * @since 0.6.0
@@ -49,52 +47,39 @@ public class QueryGenerator<E> extends GeneratorProxy<E> {
   private String selector;
   private final boolean simplifying;
 
-  /**
-   * Instantiates a new Query generator.
-   */
   public QueryGenerator() {
     this(null, null, true);
   }
 
-  /**
-   * Instantiates a new Query generator.
-   *
-   * @param selector    the selector
-   * @param target      the target
-   * @param simplifying the simplifying
-   */
   @SuppressWarnings("unchecked")
-  public QueryGenerator(String selector, StorageSystem target,
-                        boolean simplifying) {
+  public QueryGenerator(String selector, StorageSystem target, boolean simplifying) {
     super((Class<E>) Object.class);
     this.target = target;
     this.selector = selector;
     this.simplifying = simplifying;
   }
 
-  /**
-   * Sets target.
-   *
-   * @param storage the storage
-   */
   public void setTarget(StorageSystem storage) {
     this.target = storage;
   }
 
-  /**
-   * Sets selector.
-   *
-   * @param selector the selector
-   */
   public void setSelector(String selector) {
     this.selector = selector;
   }
 
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return false;
+  }
+
   @SuppressWarnings("unchecked")
   @Override
-  public void init(GeneratorContext context)
-      throws InvalidGeneratorSetupException {
-
+  public void init(GeneratorContext context) throws InvalidGeneratorSetupException {
     // check preconditions
     assertNotInitialized();
     if (target == null) {
@@ -103,10 +88,8 @@ public class QueryGenerator<E> extends GeneratorProxy<E> {
     if (StringUtil.isEmpty(selector)) {
       throw new InvalidGeneratorSetupException("no query defined");
     }
-
     // initialize
-    setSource(new DataSourceGenerator(
-        target.query(selector, simplifying, context)));
+    setSource(new DataSourceGenerator(target.query(selector, simplifying, context)));
     super.init(context);
   }
 

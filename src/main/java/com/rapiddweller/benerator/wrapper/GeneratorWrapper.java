@@ -85,7 +85,7 @@ public abstract class GeneratorWrapper<S, P> extends AbstractGenerator<P> {
           "This may have a significant performance impact. In that case, " +
           "please make sure that " + getClass() + " overwrites isThreadSafe() " +
           "in a manner that works before init() is called");
-      if (Benerator.isStrict()) {
+      if (!Benerator.isLenient()) {
         throw error;
       } else {
         logger.error("", error);

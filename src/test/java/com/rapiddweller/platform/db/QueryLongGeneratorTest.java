@@ -6,12 +6,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
- * The type Query long generator test.
+ * Tests the {@link QueryLongGenerator}.
  */
 public class QueryLongGeneratorTest {
-  /**
-   * Test constructor.
-   */
   @Test
   public void testConstructor() {
     QueryLongGenerator actualQueryLongGenerator = new QueryLongGenerator();

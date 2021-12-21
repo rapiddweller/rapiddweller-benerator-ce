@@ -6,6 +6,7 @@ import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.BeneratorUtil;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
+import com.rapiddweller.common.ExceptionUtil;
 import com.rapiddweller.common.ObjectNotFoundException;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.cli.CLIIllegalArgumentException;
@@ -26,6 +27,7 @@ import com.rapiddweller.task.Task;
 import com.rapiddweller.task.TaskUnavailableException;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXParseException;
 
 import java.io.FileNotFoundException;
 
@@ -116,22 +118,41 @@ public class BeneratorExceptionFactory extends ExceptionFactory {
   }
 
   @Override
-  public SyntaxError syntaxErrorForXmlDocument(String message, Throwable cause, String uri, int line, int column) {
+  public SyntaxError syntaxErrorForXmlDocument(String message, Throwable cause, String uri) {
     if (cause != null) {
-      if (message.contains("Premature end of file")  && line == -1 && column == -1) {
-        if (BeneratorUtil.isDescriptorFilePath(uri)) {
-          return SyntaxError.forXmlDocument("Empty Benerator file", uri, BeneratorErrorIds.SYN_EMPTY_BEN_FILE);
-        } else {
-          return SyntaxError.forXmlDocument("Empty XML file", uri, BeneratorErrorIds.SYN_EMPTY_XML_FILE);
-        }
-      } else if (message.contains("Content is not allowed in prolog")) {
-        return SyntaxError.forXmlDocument("File does not start with <?xml...?> or a tag", uri,
-            BeneratorErrorIds.SYN_NO_XML_FILE);
+      Throwable root = ExceptionUtil.getRootCause(cause);
+      if (root instanceof SAXParseException) {
+        return handleSaxException(uri, cause, (SAXParseException) root);
+      } else {
+        return SyntaxError.forXmlDocument(message, uri, null);
       }
-      message = StringUtil.removeSuffixIfPresent(".", message);
-      return SyntaxError.forXmlDocument(message, uri, null);
     }
     return SyntaxError.forXmlDocument("Syntax error", uri, null);
+  }
+
+  private static SyntaxError handleSaxException(String uri, Throwable e, SAXParseException root) {
+    String message = root.getMessage();
+    int line = root.getLineNumber();
+    int column = root.getColumnNumber();
+    boolean isBeneratorFile = BeneratorUtil.isDescriptorFilePath(uri);
+    if (message.contains("Premature end of file")  && line == -1 && column == -1) {
+      if (isBeneratorFile) {
+        return SyntaxError.forXmlDocument("Empty Benerator file", e, BeneratorErrorIds.SYN_EMPTY_BEN_FILE, uri, -1, -1);
+      } else {
+        return SyntaxError.forXmlDocument("Empty XML file", e, BeneratorErrorIds.SYN_EMPTY_XML_FILE, uri, -1, -1);
+      }
+    } else if (message.contains("Content is not allowed in prolog")) {
+      if (isBeneratorFile) {
+        return SyntaxError.forXmlDocument("Benerator file does not start with <?xml...?> or <setup>", e, BeneratorErrorIds.SYN_BEN_FILE_NO_XML, uri, 1, 1);
+      } else {
+        return SyntaxError.forXmlDocument("File does not start with <?xml...?> or a tag", e, BeneratorErrorIds.SYN_NO_XML_FILE, uri, 1, 1);
+      }
+    } else if (message.contains("XML document structures must start and end within the same entity")
+        || message.contains("must be terminated by the matching end-tag")) {
+      return SyntaxError.forXmlDocument(message, e, BeneratorErrorIds.SYN_ILLEGAL_XML_END_TAG, uri, line, column);
+    } else {
+      return SyntaxError.forXmlDocument(message, e, BeneratorErrorIds.SYN_INVALID_XML_FILE, uri, line, column);
+    }
   }
 
   @Override

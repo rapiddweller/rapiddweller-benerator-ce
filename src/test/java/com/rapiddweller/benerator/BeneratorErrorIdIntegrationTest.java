@@ -135,8 +135,9 @@ public class BeneratorErrorIdIntegrationTest {
   @Test
   public void test_0101_syn_ben_file_no_xml() {
     BeneratorResult result = runFile("test_0101_syn_ben_file_no_xml.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_NO_XML_FILE,
-        "File does not start with <?xml...?> or a tag. File test_0101_syn_ben_file_no_xml.ben.xml",
+    assertResult(BeneratorErrorIds.SYN_BEN_FILE_NO_XML,
+        "Benerator file does not start with <?xml...?> or <setup>. " +
+            "File test_0101_syn_ben_file_no_xml.ben.xml, line 1",
         ExitCodes.SYNTAX_ERROR, result);
   }
 
@@ -186,6 +187,33 @@ public class BeneratorErrorIdIntegrationTest {
     BeneratorResult result = runFile("test_0130_file_not_found_xls.ben.xml");
     assertResult(BeneratorErrorIds.FILE_REF_NOT_FOUND, "File not found: 'nonexistent.xls'.",
         ExitCodes.FILE_NOT_FOUND, result);
+  }
+
+  @Test
+  public void test_0153_syn_missing_setup_end() {
+    BeneratorResult result = runFile("test_0153_syn_missing_setup_end.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ILLEGAL_XML_END_TAG,
+        "XML document structures must start and end within the same entity. " +
+            "File test_0153_syn_missing_setup_end.ben.xml, line 2",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0154_syn_illegal_end_tag() {
+    BeneratorResult result = runFile("test_0154_syn_illegal_end_tag.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ILLEGAL_XML_END_TAG,
+        "The element type \"echo\" must be terminated by the matching end-tag \"</echo>\". " +
+            "File test_0154_syn_illegal_end_tag.ben.xml, line 2",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0154_syn_setup_end_mismatch() {
+    BeneratorResult result = runFile("test_0154_syn_setup_end_mismatch.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ILLEGAL_XML_END_TAG,
+        "The element type \"setup\" must be terminated by the matching end-tag \"</setup>\". " +
+            "File test_0154_syn_setup_end_mismatch.ben.xml, line 2",
+        ExitCodes.SYNTAX_ERROR, result);
   }
 
   // <setup> tests ---------------------------------------------------------------------------------------------------

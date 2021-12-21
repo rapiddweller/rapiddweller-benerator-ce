@@ -85,11 +85,8 @@ public class ConnectionHolder implements Closeable {
     }
   }
 
-  private void flushStatements(
-      Map<ComplexTypeDescriptor, PreparedStatement> statements)
-      throws SQLException {
-    for (Map.Entry<ComplexTypeDescriptor, PreparedStatement> entry : statements
-        .entrySet()) {
+  private void flushStatements(Map<ComplexTypeDescriptor, PreparedStatement> statements) throws SQLException {
+    for (Map.Entry<ComplexTypeDescriptor, PreparedStatement> entry : statements.entrySet()) {
       PreparedStatement statement = entry.getValue();
       if (statement != null) {
         // need to finish old statement
@@ -117,22 +114,18 @@ public class ConnectionHolder implements Closeable {
     }
   }
 
-  private PreparedStatement createSelectByPKStatement(
-      ComplexTypeDescriptor descriptor) throws SQLException {
+  private PreparedStatement createSelectByPKStatement(ComplexTypeDescriptor descriptor) throws SQLException {
     PreparedStatement statement;
     String tableName = descriptor.getName();
     DBTable table = db.getTable(tableName.toUpperCase());
     if (table == null) {
       throw BeneratorExceptionFactory.getInstance().illegalArgument("Table not found: " + tableName);
     }
-    StringBuilder builder =
-        new StringBuilder("select * from ").append(tableName)
-            .append(" where");
+    StringBuilder builder = new StringBuilder("select * from ").append(tableName).append(" where");
     for (String idColumnName : descriptor.getIdComponentNames()) {
       builder.append(' ').append(idColumnName).append("=?");
     }
-    statement = DBUtil.prepareStatement(getConnection(), builder.toString(),
-        db.isReadOnly());
+    statement = DBUtil.prepareStatement(getConnection(), builder.toString(), db.isReadOnly());
     selectByPKStatements.put(descriptor, statement);
     return statement;
   }
@@ -141,8 +134,7 @@ public class ConnectionHolder implements Closeable {
       ComplexTypeDescriptor descriptor, boolean insert, List<ColumnInfo> columnInfos) {
     try {
       PreparedStatement statement =
-          (insert ? insertStatements.get(descriptor) :
-              updateStatements.get(descriptor));
+          (insert ? insertStatements.get(descriptor) : updateStatements.get(descriptor));
       if (statement == null) {
         statement = createStatement(descriptor, insert, columnInfos);
       } else {
@@ -154,10 +146,8 @@ public class ConnectionHolder implements Closeable {
     }
   }
 
-  private PreparedStatement createStatement(ComplexTypeDescriptor descriptor,
-                                            boolean insert,
-                                            List<ColumnInfo> columnInfos)
-      throws SQLException {
+  private PreparedStatement createStatement(
+      ComplexTypeDescriptor descriptor, boolean insert, List<ColumnInfo> columnInfos) throws SQLException {
     PreparedStatement statement;
     String tableName = descriptor.getName();
     DBTable table = db.getTable(tableName.toUpperCase());
@@ -170,8 +160,7 @@ public class ConnectionHolder implements Closeable {
             db.getTable(tableName).getPKColumnNames(),
             columnInfos));
     jdbcLogger.debug("Creating prepared statement: {}", sql);
-    statement =
-        DBUtil.prepareStatement(getConnection(), sql, db.isReadOnly());
+    statement = DBUtil.prepareStatement(getConnection(), sql, db.isReadOnly());
     if (insert) {
       insertStatements.put(descriptor, statement);
     } else {
