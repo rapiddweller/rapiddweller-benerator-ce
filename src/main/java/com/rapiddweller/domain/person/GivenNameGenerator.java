@@ -61,7 +61,7 @@ public class GivenNameGenerator extends WeightedDatasetCSVGenerator<String> impl
   // constructors ----------------------------------------------------------------------------------------------------
 
   public GivenNameGenerator() {
-    this(Locale.getDefault().getCountry(), Gender.MALE);
+    this(Country.getDefault().getIsoCode(), Gender.MALE);
   }
 
   public GivenNameGenerator(String datasetName, Gender gender) {

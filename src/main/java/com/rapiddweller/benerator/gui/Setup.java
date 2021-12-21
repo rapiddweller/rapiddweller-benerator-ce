@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -30,12 +30,12 @@ import com.rapiddweller.benerator.archetype.Archetype;
 import com.rapiddweller.benerator.archetype.ArchetypeManager;
 import com.rapiddweller.benerator.main.DBSnapshotTool;
 import com.rapiddweller.common.FileUtil;
-import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.common.NullSafeComparator;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.bean.ObservableBean;
 import com.rapiddweller.common.ui.I18NError;
+import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.jdbacl.JDBCDriverInfo;
 
 import java.beans.PropertyChangeListener;
@@ -110,7 +110,7 @@ public class Setup implements ObservableBean, Serializable {
     setEncoding(SystemInfo.getFileEncoding());
     setLineSeparator(SystemInfo.getLineSeparator());
     setLocale(Locale.getDefault().toString());
-    setDataset(LocaleUtil.getDefaultCountryCode());
+    setDataset(Country.getDefault().getIsoCode());
 
     setJdbcDriverType(JDBCDriverInfo.getInstance("H2"));
     setDbDriver(DEFAULT_DB_DRIVER);

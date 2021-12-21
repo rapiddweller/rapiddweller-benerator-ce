@@ -37,7 +37,6 @@ import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.ErrorHandler;
-import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.exception.SyntaxError;
 import com.rapiddweller.common.parser.AbstractParser;
@@ -47,6 +46,7 @@ import com.rapiddweller.common.parser.FullyQualifiedClassNameParser;
 import com.rapiddweller.common.parser.NonNegativeLongParser;
 import com.rapiddweller.common.parser.PositiveIntegerParser;
 import com.rapiddweller.common.parser.RegexBasedStringParser;
+import com.rapiddweller.domain.address.Country;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
@@ -93,8 +93,7 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
     ATT_DEFAULT_LOCALE, false, SYN_SETUP_DEF_LOCALE, new IdParser(), Locale.getDefault().toString());
 
   protected static final AttrInfo<String> DEFAULT_DATASET = new AttrInfo<>(
-    ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET, new IdParser(),
-      LocaleUtil.getDefaultCountryCode());
+    ATT_DEFAULT_DATASET, false, SYN_SETUP_DEF_DATASET, new IdParser(), Country.getDefault().getIsoCode());
 
   protected static final AttrInfo<Integer> DEFAULT_PAGE_SIZE = new AttrInfo<>(
     ATT_DEFAULT_PAGE_SIZE, false, SYN_SETUP_DEF_PAGE_SIZE, new PositiveIntegerParser(), "1");
@@ -115,12 +114,10 @@ public class SetupParser extends AbstractBeneratorDescriptorParser {
       ATT_DEFAULT_SOURCE_SCRIPTED, false, SYN_SETUP_DEF_SOURCE_SCRIPTED, new BooleanParser(), FALSE);
 
   protected static final AttrInfo<Boolean> ACCEPT_UNKNOWN_SIMPLE_TYPES = new AttrInfo<>(
-      ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES, false, SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES,
-      new BooleanParser(), FALSE);
+      ATT_ACCEPT_UNKNOWN_SIMPLE_TYPES, false, SYN_SETUP_ACCEPT_UNK_SIMPLE_TYPES, new BooleanParser(), FALSE);
 
   protected static final AttrInfo<String> GENERATOR_FACTORY = new AttrInfo<>(
-      ATT_GENERATOR_FACTORY, false, SYN_SETUP_GENERATOR_FACTORY,
-      new FullyQualifiedClassNameParser(true));
+      ATT_GENERATOR_FACTORY, false, SYN_SETUP_GENERATOR_FACTORY, new FullyQualifiedClassNameParser(true));
 
   protected static final AttrInfoSupport ATTR_SUPPORT;
 
