@@ -31,7 +31,7 @@ import com.rapiddweller.benerator.RandomProvider;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.ReaderLineIterator;
 import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.ui.ConsoleInfoPrinter;
+import com.rapiddweller.common.ui.ConsolePrinter;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -114,6 +114,6 @@ public class LineShuffler {
   }
 
   private static void printHelp() {
-    ConsoleInfoPrinter.printHelp("Parameters: inFile outFile [buffer size]");
+    ConsolePrinter.printStandard("Parameters: inFile outFile [buffer size]");
   }
 }
