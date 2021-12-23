@@ -29,13 +29,10 @@ package com.rapiddweller.domain.address;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.RandomProvider;
-import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.primitive.RegexStringGenerator;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.common.Assert;
-import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.LocaleUtil;
@@ -44,7 +41,6 @@ import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.csv.CSVBeanPersistor;
 import com.rapiddweller.format.csv.CSVLineIterator;
-import com.rapiddweller.model.data.Entity;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -206,15 +202,6 @@ public class Country {
     this.population = population;
     importStates();
     instances.put(isoCode, this);
-  }
-
-  private static void mapProperty(String propertyName, Entity source,
-                                  State target, boolean required) {
-    String propertyValue = String.valueOf(source.get(propertyName));
-    if (required) {
-      Assert.notNull(propertyValue, propertyName);
-    }
-    BeanUtil.setPropertyValue(target, propertyName, propertyValue);
   }
 
   public static Collection<Country> getInstances() {

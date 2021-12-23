@@ -68,7 +68,7 @@ public final class LatencyCounter {
 
     public void start() {
     	if (running) {
-          throw BeneratorExceptionFactory.getInstance().illegalAccess(this + " has already been started");
+          throw BeneratorExceptionFactory.getInstance().illegalOperation(this + " has already been started");
         }
     	this.startTime = System.currentTimeMillis();
     	this.running = true;
@@ -104,10 +104,11 @@ public final class LatencyCounter {
     }
 
     public long getLatencyCount(long latency) {
-        if (latency < latencyCounts.length)
-            return latencyCounts[(int) latency];
-        else
-            return 0;
+        if (latency < latencyCounts.length) {
+			return latencyCounts[(int) latency];
+		} else {
+			return 0;
+		}
     }
 
     public long totalLatency() {
@@ -154,8 +155,8 @@ public final class LatencyCounter {
     
     public double throughput() {
     	if (startTime == -1 || endTime == -1) {
-          throw BeneratorExceptionFactory.getInstance().illegalArgument(
-              "Invalid setup: Use start() and stop() to indicate test start and end!");
+          throw BeneratorExceptionFactory.getInstance().illegalOperation(
+              "Invalid call: Use start() and stop() to indicate test start and end!");
         }
     	return 1000. * sampleCount / duration();
     }

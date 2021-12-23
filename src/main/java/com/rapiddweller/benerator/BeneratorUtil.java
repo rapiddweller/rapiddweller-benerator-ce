@@ -35,7 +35,8 @@ import com.rapiddweller.common.LogCategoriesConstants;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.VMInfo;
-import com.rapiddweller.common.ui.InfoPrinter;
+import com.rapiddweller.common.ui.ConsolePrinter;
+import com.rapiddweller.common.ui.TextPrinter;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.profile.Profiling;
 import org.apache.logging.log4j.LogManager;
@@ -50,7 +51,7 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.io.File;
 import java.lang.management.ManagementFactory;
-import java.util.Collection;
+import java.util.Map;
 
 /**
  * Provides general utility methods for Benerator.<br/><br/>
@@ -83,17 +84,19 @@ public class BeneratorUtil {
       return false;
     }
     String lcName = filePath.toLowerCase();
-    return ("benerator.xml".equals(filePath) || lcName.replace(File.separatorChar, '/').endsWith("/benerator.xml") || lcName.endsWith(".ben.xml"));
+    return ("benerator.xml".equals(lcName)
+        || lcName.replace(File.separatorChar, '/').endsWith("/benerator.xml")
+        || lcName.endsWith(".ben.xml"));
   }
 
-  public static void checkSystem(InfoPrinter printer) {
+  public static void checkSystem(TextPrinter printer) {
     // print general Benerator version and system information
-    printer.printLines(BeneratorFactory.getInstance().getVersionInfo(true));
+    printer.printStd(BeneratorFactory.getInstance().getVersionInfo(true));
     // Check logging setup
     checkSlf4jSetup();
     checkLog4j2Setup();
     // Print heap info
-    printer.printLines("Configured heap size limit: " + Runtime.getRuntime().maxMemory() / 1024 / 1024 + " MB");
+    printer.printStd("Configured heap size limit: " + Runtime.getRuntime().maxMemory() / 1024 / 1024 + " MB");
     // Check script engine
     try {
       Class.forName("javax.script.ScriptEngine");
@@ -106,9 +109,9 @@ public class BeneratorUtil {
     }
     // Check Java version
     VersionNumber javaVersion = VersionNumber.valueOf(VMInfo.getJavaVersion());
-    if (javaVersion.compareTo(VersionNumber.valueOf("1.6")) < 0) {
-      configLogger.warn("benerator is written for and tested under Java 6 - " +
-          "you managed to set up JSR 223, but may face other problems.");
+    if (javaVersion.compareTo(VersionNumber.valueOf("11.0")) < 0) {
+      configLogger.warn("Benerator is written for and tested with Java 11. " +
+          "If you are facing issues, please run Benerator with a Java VM of version 11 or newer.");
     }
     // Check profiling setting
     if (Profiling.isEnabled()) {
@@ -122,7 +125,8 @@ public class BeneratorUtil {
     if ("org.apache.logging.slf4j.Log4jLoggerFactory".equals(binder.getLoggerFactoryClassStr())) {
       logConfig("Slf4j is configured to use Log4j");
     } else {
-      System.err.println("The classpath is not configured properly for Slf4j. See http://www.slf4j.org/codes.html");
+      ConsolePrinter.printError("The classpath is not configured properly for Slf4j. " +
+          "See http://www.slf4j.org/codes.html");
     }
   }
 
@@ -141,7 +145,7 @@ public class BeneratorUtil {
           }
         }
       }
-      System.err.println("Log4j2 is not configured properly, " +
+      ConsolePrinter.printError("Log4j2 is not configured properly, " +
           "probably because no log4j2.xml file has been found or it is invalid.");
     }
   }
@@ -191,30 +195,52 @@ public class BeneratorUtil {
     return SystemInfo.getOsName() + " " + SystemInfo.getOsVersion() + " " + SystemInfo.getOsArchitecture();
   }
 
-  public static void printEnvironments(InfoPrinter printer) {
-    Collection<Environment> environments = EnvironmentUtil.findEnvironments().values();
-    printer.printLines("Environments:");
-    for (Environment environment : environments) {
-      printer.printLines("- " + environment.getName());
-      for (SystemRef system : environment.getSystems()) {
-        printer.printLines("  # " + system.getName() + ": " + system.getType() + " - " + describe(system));
-      }
-    }
+  public static void printEnvironments() {
+    ConsolePrinter.printStandard(formatEnvironmentList());
   }
 
-  public static void printEnvDbs(InfoPrinter printer) {
+  public static String formatEnvironmentList() {
+    return formatEnvironmentList(".");
+  }
+
+  public static String formatEnvironmentList(String projectRoot) {
+    StringBuilder result = new StringBuilder();
+    Map<String, Environment> environments = EnvironmentUtil.findEnvironments(projectRoot);
+    if (environments.size() > 0) {
+      result.append("Environments:").append(SystemInfo.LF);
+      for (Environment environment : environments.values()) {
+        result.append("- ").append(environment.getName()).append(SystemInfo.LF);
+        for (SystemRef system : environment.getSystems()) {
+          result.append("  # ").append(system.getName()).append(": ").append(system.getType()).append(" - ").append(describe(system))
+              .append(SystemInfo.LF);
+        }
+      }
+    } else {
+      result.append("No Environments defined").append(SystemInfo.LF);
+    }
+    return result.toString();
+  }
+
+  public static void printEnvDbs(TextPrinter printer) {
     printEnvSystems("Databases", "db", printer);
   }
 
-  public static void printEnvKafkas(InfoPrinter printer) {
+  public static void printEnvKafkas(TextPrinter printer) {
     printEnvSystems("Kafkas", "kafka", printer);
   }
 
-  private static void printEnvSystems(String label, String type, InfoPrinter printer) {
+  public static void clearCaches() {
+    configLogger.info("Deleting caches");
+    FileUtil.deleteDirectory(ConfigUtil.commonCacheFolder());
+  }
+
+  // private helpers -------------------------------------------------------------------------------------------------
+
+  private static void printEnvSystems(String label, String type, TextPrinter printer) {
     SystemRef[] systems = EnvironmentUtil.findSystems(type);
-    printer.printLines(label + ":");
+    printer.printStd(label + ":");
     for (SystemRef system : systems) {
-      printer.printLines("- " + system.getEnvironment().getName() + "#" + system.getName() + " - " + describe(system));
+      printer.printStd("- " + system.getEnvironment().getName() + "#" + system.getName() + " - " + describe(system));
     }
   }
 
@@ -224,7 +250,7 @@ public class BeneratorUtil {
     } else if ("kafka".equals(system.getType())) {
       return describeKafka(system);
     } else {
-      return "";
+      return "<not understood>: " + system.getType();
     }
   }
 
@@ -252,11 +278,6 @@ public class BeneratorUtil {
       }
       builder.append(value);
     }
-  }
-
-  public static void clearCaches() {
-    configLogger.info("Deleting caches");
-    FileUtil.deleteDirectory(ConfigUtil.commonCacheFolder());
   }
 
 }

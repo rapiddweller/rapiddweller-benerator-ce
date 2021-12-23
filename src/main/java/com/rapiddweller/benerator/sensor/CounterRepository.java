@@ -14,6 +14,9 @@
  */
 package com.rapiddweller.benerator.sensor;
 
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.ui.ConsolePrinter;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -34,7 +37,6 @@ public class CounterRepository {
 	private final Map<String, LatencyCounter> counters;
 
 
-
 	// construction and singleton management ---------------------------------------------------------------------------
 	
 	private static final CounterRepository INSTANCE = new CounterRepository();
@@ -46,7 +48,6 @@ public class CounterRepository {
 	public static CounterRepository getInstance() {
 		return INSTANCE;
 	}
-
 
 
 	// CounterRepository interface -------------------------------------------------------------------------------------
@@ -69,21 +70,24 @@ public class CounterRepository {
 	}
 
 	public void printSummary() {
+		ConsolePrinter.printStandard(formatSummary());
+	}
+
+	public String formatSummary() {
 		DecimalFormat df = new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.US));
 		List<String[]> list = new ArrayList<>(counters.size());
 		List<LatencyCounter> sortedCounters = new ArrayList<>(counters.values());
 		sortedCounters.sort((c1, c2) -> -Long
-				.compare(c1.totalLatency(), c2.totalLatency()));
+			.compare(c1.totalLatency(), c2.totalLatency()));
 		for (LatencyCounter counter : sortedCounters) {
 			list.add(new String[] {
-					counter.getName() + ":", 
-					counter.totalLatency() + " ms total,", 
-					counter.sampleCount() + " inv,", 
-					df.format(counter.averageLatency()) + " ms/inv (avg.)" });
+				counter.getName() + ":",
+				counter.totalLatency() + " ms total,",
+				counter.sampleCount() + " inv,",
+				df.format(counter.averageLatency()) + " ms/inv (avg.)" });
 		}
-		printSummaryTable(list);
+		return formatSummaryTable(list);
 	}
-
 
 
 	// helper methods --------------------------------------------------------------------------------------------------
@@ -104,7 +108,8 @@ public class CounterRepository {
 		return counter;
 	}
 
-	private static void printSummaryTable(List<String[]> list) {
+	private static String formatSummaryTable(List<String[]> list) {
+		StringBuilder result = new StringBuilder();
 		// determine column widths
 		int[] widths = new int[4];
 		for (int col = 0; col < 4; col++) {
@@ -118,22 +123,22 @@ public class CounterRepository {
 			for (int col = 0; col < 4; col++) {
 				String text = strings[col];
 				if (col > 0) {
-					pad(widths[col] - text.length());
-					System.out.print(text);
+					pad(widths[col] - text.length(), result);
+					result.append(text);
 				} else {
-					System.out.print(text);
-					pad(widths[col] - text.length());
+					result.append(text);
+					pad(widths[col] - text.length(), result);
 				}
 				if (col < 3)
-					System.out.print(' ');
+					result.append(' ');
 			}
-			System.out.println();
+			result.append(SystemInfo.LF);
 		}
+		return result.toString();
 	}
 
-	private static void pad(int count) {
-		for (int i = 0; i < count; i++)
-			System.out.print(' ');
+	private static void pad(int count, StringBuilder out) {
+		out.append(" ".repeat(Math.max(0, count)));
 	}
 
 }
