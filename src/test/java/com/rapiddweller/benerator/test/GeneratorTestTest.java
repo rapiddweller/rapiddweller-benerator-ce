@@ -6,7 +6,7 @@ import com.rapiddweller.benerator.distribution.sequence.RandomLongGenerator;
 import com.rapiddweller.benerator.sample.SequenceGenerator;
 import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.SystemInfo;
-import com.rapiddweller.common.ui.BufferedInfoPrinter;
+import com.rapiddweller.common.ui.BufferedTextPrinter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -21,7 +21,7 @@ public class GeneratorTestTest extends GeneratorTest {
 
   @Test
   public void testPrintProducts() {
-    BufferedInfoPrinter printer = new BufferedInfoPrinter();
+    BufferedTextPrinter printer = new BufferedTextPrinter();
     SequenceGenerator<Integer> generator = new SequenceGenerator<>(Integer.class, 1, 2, 3, 4);
     printProducts(generator, 4, printer);
     String expected = "1" + SystemInfo.getLineSeparator() + "2" + SystemInfo.getLineSeparator() + "3" + SystemInfo.getLineSeparator() + "4" + SystemInfo.getLineSeparator();

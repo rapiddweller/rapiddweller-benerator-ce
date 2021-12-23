@@ -16,7 +16,7 @@ import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.HF;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.log.LoggingInfoPrinter;
+import com.rapiddweller.common.log.LoggingPrinter;
 import com.rapiddweller.common.time.ElapsedTimeFormatter;
 import com.rapiddweller.jdbacl.DatabaseDialect;
 import com.rapiddweller.stat.CounterRepository;
@@ -56,7 +56,7 @@ public class BenchmarkRunner {
     logger.info("Benchmark runner started, checking Benerator first...");
     logSeparator();
     Benerator.setMode(config.getMode()); // need to set this here for the following log output
-    BeneratorUtil.checkSystem(new LoggingInfoPrinter(BenchmarkRunner.class));
+    BeneratorUtil.checkSystem(new LoggingPrinter(BenchmarkRunner.class));
     // perform tests
     BenchmarkToolReport result = new BenchmarkToolReport(config);
     Benerator.setMode(config.getMode());
@@ -88,8 +88,7 @@ public class BenchmarkRunner {
     }
   }
 
-  private static void runBenchmarkOnEnvironments(Benchmark benchmark, SystemRef[] systems,
-                                                 BenchmarkToolReport summary) throws IOException {
+  private static void runBenchmarkOnEnvironments(Benchmark benchmark, SystemRef[] systems, BenchmarkToolReport summary) {
     if (benchmark.isDb()) {
       for (SystemRef system : systems) {
         if (system.isDb()) {
