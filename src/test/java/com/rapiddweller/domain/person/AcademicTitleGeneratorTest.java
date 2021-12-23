@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -39,20 +39,13 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the {@link AcademicTitleGenerator}.<br/><br/>
  * Created: 17.03.2013 18:47:40
- *
  * @author Volker Bergmann
  * @since 0.8.2
  */
 public class AcademicTitleGeneratorTest {
 
-  /**
-   * The German titles.
-   */
   final Set<String> GERMAN_TITLES = CollectionUtil.toSet("Dr.", "Prof. Dr.");
 
-  /**
-   * Test.
-   */
   @Test
   public void test() {
     AcademicTitleGenerator gen = new AcademicTitleGenerator(Locale.GERMANY);

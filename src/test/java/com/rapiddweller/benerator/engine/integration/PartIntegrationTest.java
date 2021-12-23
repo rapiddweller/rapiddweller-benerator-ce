@@ -4,7 +4,7 @@ package com.rapiddweller.benerator.engine.integration;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
-import com.rapiddweller.common.ui.ConsoleInfoPrinter;
+import com.rapiddweller.common.ui.ConsolePrinter;
 import com.rapiddweller.model.data.Entity;
 import com.rapiddweller.platform.memstore.MemStore;
 import org.junit.Test;
@@ -55,7 +55,7 @@ public class PartIntegrationTest extends AbstractBeneratorIntegrationTest {
     BeneratorContext context = parseAndExecute(xml);
     // THEN all counts (0, 1, 2) must have roughly the same frequency
     MemStore mem = (MemStore) context.get("mem");
-    mem.printContent(new ConsoleInfoPrinter());
+    mem.printContent(new ConsolePrinter());
     Collection<Entity> persons = mem.getEntities("person");
     assertEqualCardinalityDistribution(persons, "children", 0.1, 0, 1, 2);
   }

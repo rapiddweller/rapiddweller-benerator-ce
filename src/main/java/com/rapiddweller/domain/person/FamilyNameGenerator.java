@@ -52,7 +52,7 @@ public class FamilyNameGenerator extends WeightedDatasetCSVGenerator<String>
   private static final Map<String, Generator<String>> defaultInstances = new HashMap<>();
 
   public FamilyNameGenerator() {
-    this(Locale.getDefault().getCountry());
+    this(Country.getDefault().getIsoCode());
   }
 
   // Constructors ----------------------------------------------------------------------------------------------------

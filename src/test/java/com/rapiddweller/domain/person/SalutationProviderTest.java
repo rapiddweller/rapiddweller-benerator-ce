@@ -35,15 +35,11 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the {@link SalutationProvider}.<br/><br/>
  * Created: 09.06.2006 22:14:08
- *
  * @author Volker Bergmann
  * @since 0.1
  */
 public class SalutationProviderTest {
 
-  /**
-   * Test western locales.
-   */
   @Test
   public void testWesternLocales() {
     check(Locale.GERMAN, "Frau", "Herr");
@@ -51,18 +47,12 @@ public class SalutationProviderTest {
     check(Locale.ENGLISH, "Mrs.", "Mr.");
   }
 
-  /**
-   * Test cyrillic locales.
-   */
   @Test
   public void testCyrillicLocales() {
     check(new Locale("ru"), "Госпожа", "Господин");
     check(new Locale("cs"), "Paní", "Pan");
   }
 
-  /**
-   * Test fallback.
-   */
   @Test
   public void testFallback() {
     check(new Locale("xx"), "Mrs.", "Mr.");

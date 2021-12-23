@@ -47,6 +47,29 @@ public class CountryTest {
     assertEquals(Country.US, Country.getInstance("US"));
     assertEquals(Country.UNITED_KINGDOM, Country.getInstance("GB"));
     assertNotNull(Country.getInstance("SO"));
+    assertNotNull(Country.GREAT_BRITAIN);
+    assertNotNull(Country.SAN_MARINO);
+    assertNotNull(Country.BOSNIA_AND_HERZEGOVINA);
+    assertNotNull(Country.CZECH_REPUBLIC);
+    assertNotNull(Country.UNITED_ARAB_EMIRATES);
+    assertNotNull(Country.QATAR);
+    assertNotNull(Country.SAUDI_ARABIA);
+    assertNotNull(Country.SOUTH_AFRICA);
+    assertNotNull(Country.KOREA_PR);
+    assertNotNull(Country.KOREA_R);
+    assertNotNull(Country.NEW_ZEALAND);
+    assertNotNull(Country.SRI_LANKA);
+  }
+
+  @Test
+  public void testGeneralProperties() {
+    for (Country country : Country.getInstances()) {
+      assertNotNull(country.getDefaultLanguageLocale());
+      assertNotNull(country.getIsoCode());
+      assertNotNull(country.getDisplayName());
+      assertNotNull(country.getName());
+      assertNotNull(country.getLocalName());
+    }
   }
 
   @Test

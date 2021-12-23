@@ -29,25 +29,18 @@ package com.rapiddweller.domain.address;
 import com.rapiddweller.benerator.BeneratorFactory;
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.RandomProvider;
-import com.rapiddweller.benerator.engine.DefaultBeneratorContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.primitive.RegexStringGenerator;
 import com.rapiddweller.benerator.util.WrapperProvider;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
-import com.rapiddweller.common.Assert;
-import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Encodings;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.LocaleUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.collection.OrderedNameMap;
 import com.rapiddweller.format.DataContainer;
-import com.rapiddweller.format.DataIterator;
+import com.rapiddweller.format.csv.CSVBeanPersistor;
 import com.rapiddweller.format.csv.CSVLineIterator;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.Entity;
-import com.rapiddweller.platform.csv.CSVEntitySource;
-import com.rapiddweller.platform.java.BeanDescriptorProvider;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -211,15 +204,6 @@ public class Country {
     instances.put(isoCode, this);
   }
 
-  private static void mapProperty(String propertyName, Entity source,
-                                  State target, boolean required) {
-    String propertyValue = String.valueOf(source.get(propertyName));
-    if (required) {
-      Assert.notNull(propertyValue, propertyName);
-    }
-    BeanUtil.setPropertyValue(target, propertyName, propertyValue);
-  }
-
   public static Collection<Country> getInstances() {
     return instances.values();
   }
@@ -294,21 +278,10 @@ public class Country {
       logger.debug("No states defined for {}", this);
       return;
     }
-    ComplexTypeDescriptor stateDescriptor =
-        (ComplexTypeDescriptor) new BeanDescriptorProvider().getTypeDescriptor(State.class.getName());
-    CSVEntitySource source = new CSVEntitySource(filename, stateDescriptor, Encodings.UTF_8);
-    source.setContext(new DefaultBeneratorContext());
-    try (DataIterator<Entity> iterator = source.iterator()) {
-      DataContainer<Entity> container = new DataContainer<>();
-      while ((container = iterator.next(container)) != null) {
-        Entity entity = container.getData();
-        State state = new State();
-        mapProperty("id", entity, state, true);
-        mapProperty("name", entity, state, true);
-        mapProperty("defaultLanguage", entity, state, false);
-        state.setCountry(this);
-        addState(state);
-      }
+    List<State> statesToAdd = CSVBeanPersistor.loadAsList(filename, State.class, ',', Encodings.UTF_8);
+    for (State state : statesToAdd) {
+      state.setCountry(this);
+      this.addState(state);
     }
   }
 

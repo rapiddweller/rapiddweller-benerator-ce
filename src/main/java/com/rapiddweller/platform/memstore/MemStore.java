@@ -36,7 +36,7 @@ import com.rapiddweller.common.CollectionUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.collection.OrderedNameMap;
-import com.rapiddweller.common.ui.InfoPrinter;
+import com.rapiddweller.common.ui.TextPrinter;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.format.util.DataSourceFromIterable;
@@ -181,12 +181,12 @@ public class MemStore extends AbstractStorageSystem {
     }
   }
 
-  public void printContent(InfoPrinter printer) {
+  public void printContent(TextPrinter printer) {
     for (Map.Entry<String, EntityStore> typeEntry : entitiesByType.entrySet()) {
-      printer.printLines(typeEntry.getKey() + ':');
+      printer.printStd(typeEntry.getKey() + ':');
       int index = 0;
       for (Entity entity : typeEntry.getValue()) {
-        printer.printLines(index++ + ": " + entity);
+        printer.printStd(index++ + ": " + entity);
       }
     }
   }

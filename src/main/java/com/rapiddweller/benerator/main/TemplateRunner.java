@@ -32,7 +32,7 @@ import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.context.DefaultContext;
-import com.rapiddweller.common.ui.ConsoleInfoPrinter;
+import com.rapiddweller.common.ui.ConsolePrinter;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.freemarker.FreeMarkerScriptFactory;
 
@@ -92,7 +92,7 @@ public class TemplateRunner {
 
   @SuppressWarnings("checkstyle:FileTabCharacter")
   private static void printHelpAndExit() {
-    ConsoleInfoPrinter.printHelp(
+    ConsolePrinter.printStandard(
         "The class " + TemplateRunner.class.getName(),
         "creates and runs Benerator descriptor files from custom templates. It has the following parameters:",
         "<config_file> <config_parser_class> <template_file> [<generated_file>]",

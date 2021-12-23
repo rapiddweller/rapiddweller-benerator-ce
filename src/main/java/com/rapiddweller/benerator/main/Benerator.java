@@ -46,9 +46,9 @@ import com.rapiddweller.common.cli.CommandLineParser;
 import com.rapiddweller.common.converter.ConverterManager;
 import com.rapiddweller.common.exception.ApplicationException;
 import com.rapiddweller.common.exception.ExitCodes;
-import com.rapiddweller.common.log.LoggingInfoPrinter;
-import com.rapiddweller.common.ui.ConsoleInfoPrinter;
-import com.rapiddweller.common.ui.InfoPrinter;
+import com.rapiddweller.common.log.LoggingPrinter;
+import com.rapiddweller.common.ui.ConsolePrinter;
+import com.rapiddweller.common.ui.TextPrinter;
 import com.rapiddweller.common.version.VersionInfo;
 import com.rapiddweller.common.version.VersionNumber;
 import com.rapiddweller.common.version.VersionNumberParser;
@@ -171,21 +171,21 @@ public class Benerator {
   public static void run(BeneratorConfig config) {
     boolean run = true;
     if (config.isHelp()) {
-      ConsoleInfoPrinter.printHelp(CE_CLI_HELP);
+      ConsolePrinter.printStandard(CE_CLI_HELP);
       run = false;
     }
     if (config.isVersion()) {
-      ConsoleInfoPrinter.printHelp(BeneratorFactory.getInstance().getVersionInfo(false));
+      ConsolePrinter.printStandard(BeneratorFactory.getInstance().getVersionInfo(false));
       run = false;
     }
     if (config.getList() != null) {
       String arg = config.getList();
       if ("env".equals(arg)) {
-        BeneratorUtil.printEnvironments(new ConsoleInfoPrinter());
+        ConsolePrinter.printStandard(BeneratorUtil.formatEnvironmentList());
       } else if ("db".equals(arg)) {
-        BeneratorUtil.printEnvDbs(new ConsoleInfoPrinter());
+        BeneratorUtil.printEnvDbs(new ConsolePrinter());
       } else if ("kafka".equals(arg)) {
-        BeneratorUtil.printEnvKafkas(new ConsoleInfoPrinter());
+        BeneratorUtil.printEnvKafkas(new ConsolePrinter());
       } else {
         throw BeneratorExceptionFactory.getInstance().illegalCommandLineOption(arg);
       }
@@ -246,11 +246,11 @@ public class Benerator {
     // log separator in order to distinguish benerator runs in the log file
     logger.info("-------------------------------------------------------------" +
         "-----------------------------------------------------------");
-    InfoPrinter printer = new LoggingInfoPrinter(LogCategoriesConstants.CONFIG);
+    TextPrinter printer = new LoggingPrinter(LogCategoriesConstants.CONFIG);
     BeneratorMonitor.INSTANCE.reset();
     MemorySensor memProfiler = MemorySensor.getInstance();
     memProfiler.reset();
-    printer.printLines("Running file " + filename);
+    printer.printStd("Running file " + filename);
     BeneratorUtil.checkSystem(printer);
     BeneratorRootContext context = BeneratorFactory.getInstance().createRootContext(IOUtil.getParentUri(filename));
     try (DescriptorRunner runner = new DescriptorRunner(filename, context)) {

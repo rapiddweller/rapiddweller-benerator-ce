@@ -29,12 +29,9 @@ package com.rapiddweller.domain.person;
 import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.test.GeneratorClassTest;
-import com.rapiddweller.common.LocaleUtil;
+import com.rapiddweller.common.collection.ObjectCounter;
+import com.rapiddweller.domain.address.Country;
 import org.junit.Test;
-
-import java.util.Locale;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link FamilyNameGenerator}.<br/><br/>
@@ -50,8 +47,14 @@ public class FamilyNameGeneratorTest extends GeneratorClassTest {
 
   @Test
   public void test_default_us() throws IllegalGeneratorStateException {
-    LocaleUtil.runInLocale(Locale.US,
-        () -> checkDiversity(new FamilyNameGenerator(), 100, 20));
+    Country defaultCountry = Country.getDefault();
+    try {
+      Country.setDefault(Country.US);
+      ObjectCounter<String> samples = checkDiversity(new FamilyNameGenerator(), 5000, 20);
+      assertContains(samples, "Smith", "Johnson");
+    } finally {
+      Country.setDefault(defaultCountry);
+    }
   }
 
   @Test

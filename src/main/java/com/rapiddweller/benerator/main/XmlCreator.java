@@ -34,7 +34,7 @@ import com.rapiddweller.benerator.file.XMLFileGenerator;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.ArrayUtil;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.ui.ConsoleInfoPrinter;
+import com.rapiddweller.common.ui.ConsolePrinter;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -101,7 +101,7 @@ public class XmlCreator {
   }
 
   private static void printHelp() {
-    ConsoleInfoPrinter.printHelp(
+    ConsolePrinter.printStandard(
         "Invalid parameters",
         "parameters: schemaUri root fileNamePattern [count [propertiesFilenames]]"
     );

@@ -36,7 +36,6 @@ import static org.junit.Assert.assertNotNull;
 /**
  * A EMailGeneratorTest.<br/><br/>
  * Created at 20.04.2008 08:16:28
- *
  * @author Volker Bergmann
  * @since 0.5.2
  */
@@ -44,24 +43,15 @@ public class EMailAddressGeneratorTest extends GeneratorClassTest {
 
   private static final Logger logger = LoggerFactory.getLogger(EMailAddressGeneratorTest.class);
 
-  /**
-   * Instantiates a new E mail address generator test.
-   */
   public EMailAddressGeneratorTest() {
     super(EMailAddressGenerator.class);
   }
 
-  /**
-   * Test de.
-   */
   @Test
   public void testDE() {
     check("DE");
   }
 
-  /**
-   * Test us.
-   */
   @Test
   public void testUS() {
     check("US");

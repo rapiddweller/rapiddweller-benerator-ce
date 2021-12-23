@@ -133,7 +133,7 @@ public class DefaultBeneratorContext implements BeneratorRootContext {
     this.contextUri = contextUri;
     this.defaultSourceScripted = false;
     this.defaultEncoding = SystemInfo.getFileEncoding();
-    this.defaultDataset = LocaleUtil.getDefaultCountryCode();
+    this.defaultDataset = Country.getDefault().getIsoCode();
     this.defaultPageSize = 1;
     this.defaultNull = true;
     this.maxCount = null;

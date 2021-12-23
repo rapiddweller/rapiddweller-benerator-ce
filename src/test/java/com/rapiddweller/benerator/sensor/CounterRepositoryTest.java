@@ -14,9 +14,12 @@
  */
 package com.rapiddweller.benerator.sensor;
 
+import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.ui.ConsolePrinter;
 import org.junit.After;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -37,18 +40,27 @@ public class CounterRepositoryTest {
 	public void tearDown() {
 		repository.clear();
 	}
-	
+
 	@Test
 	public void testLifeCyle() {
 		assertNull("Counter should not be defined yet", repository.getCounter(NAME));
 		repository.addSample(NAME, 100);
 		LatencyCounter counter = repository.getCounter(NAME);
 		assertNotNull("Counter should have been defined after calling addSample()", counter);
-        assertSame(
-                "repository is expected to return the same counter instance on subsequent calls to getCounter()",
-                counter, repository.getCounter(NAME));
+		assertSame(
+			"repository is expected to return the same counter instance on subsequent calls to getCounter()",
+			counter, repository.getCounter(NAME));
 		repository.clear();
 		assertNull("After calling clear(), the repository should have no counters", repository.getCounter(NAME));
 	}
-	
+
+	@Test
+	public void testFormatSummary() {
+		repository.addSample(NAME, 100);
+		String summary = repository.formatSummary();
+		ConsolePrinter.printStandard(summary);
+		String expectedSummary = "CounterRepositoryTest: 100 ms total, 1 inv, 100.0 ms/inv (avg.)" + SystemInfo.LF;
+		assertEquals(expectedSummary, summary);
+	}
+
 }

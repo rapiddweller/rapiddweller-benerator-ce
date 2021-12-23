@@ -41,8 +41,8 @@ import com.rapiddweller.common.Resettable;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.common.collection.ObjectCounter;
 import com.rapiddweller.common.converter.ToStringConverter;
-import com.rapiddweller.common.ui.ConsoleInfoPrinter;
-import com.rapiddweller.common.ui.InfoPrinter;
+import com.rapiddweller.common.ui.ConsolePrinter;
+import com.rapiddweller.common.ui.TextPrinter;
 import com.rapiddweller.common.validator.UniqueValidator;
 import com.rapiddweller.model.data.Entity;
 
@@ -88,19 +88,19 @@ public abstract class GeneratorTest extends ModelTest {
   }
 
   public void printProducts(Generator<?> generator, int n) {
-    printProducts(generator, n, new ConsoleInfoPrinter());
+    printProducts(generator, n, new ConsolePrinter());
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  public void printProducts(Generator<?> generator, int n, InfoPrinter printer) {
+  public void printProducts(Generator<?> generator, int n, TextPrinter printer) {
     ProductWrapper wrapper = new ProductWrapper();
     for (int i = 0; i < n; i++) {
       ProductWrapper<?> tmp = generator.generate(wrapper);
       if (tmp == null) {
-        printer.printLines("<>");
+        printer.printStd("<>");
         return;
       } else {
-        printer.printLines(formatter.convert(tmp.unwrap()));
+        printer.printStd(formatter.convert(tmp.unwrap()));
       }
     }
   }
@@ -593,14 +593,22 @@ public abstract class GeneratorTest extends ModelTest {
     }
   }
 
-  protected void checkDiversity(NonNullGenerator<String> generator, int genCount, int expMinDiversity) {
+  protected ObjectCounter<String> checkDiversity(NonNullGenerator<String> generator, int genCount, int expMinDiversity) {
     generator.init(context);
     ObjectCounter<String> counter = new ObjectCounter<>(expMinDiversity);
     for (int i = 0; i < genCount; i++) {
       counter.count(generator.generate());
     }
-    assertTrue(counter.objectSet().size() >= expMinDiversity);
+    int diversity = counter.objectSet().size();
+    assertTrue("Expected at least " + expMinDiversity + " different products, but had only " + diversity,
+        diversity >= expMinDiversity);
+    return counter;
   }
 
+  protected static <T> void assertContains(ObjectCounter<T> samples, T... values) {
+    for (T value : values) {
+      assertTrue(samples.getCount(value) > 0);
+    }
+  }
 
 }

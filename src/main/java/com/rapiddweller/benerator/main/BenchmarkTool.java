@@ -13,7 +13,7 @@ import com.rapiddweller.benerator.benchmark.XLSBenchmarkExporter;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.cli.CommandLineParser;
 import com.rapiddweller.common.file.FilePrintStream;
-import com.rapiddweller.common.ui.ConsoleInfoPrinter;
+import com.rapiddweller.common.ui.ConsolePrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +56,7 @@ public class BenchmarkTool {
   // private helpers -------------------------------------------------------------------------------------------------
 
   private static void printHelp() {
-    ConsoleInfoPrinter.printHelp(
+    ConsolePrinter.printStandard(
         "Usage: benerator-benchmark [options] [name]",
         "",
         "Example: benerator-benchmark --ce --minDurationSecs 30",
@@ -112,7 +112,7 @@ public class BenchmarkTool {
       System.exit(0);
     }
     if (config.isVersion()) {
-      ConsoleInfoPrinter.printHelp(BeneratorFactory.getInstance().getVersionInfo(false));
+      ConsolePrinter.printStandard(BeneratorFactory.getInstance().getVersionInfo(false));
       System.exit(0);
     }
 
