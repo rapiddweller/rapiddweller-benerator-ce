@@ -427,7 +427,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
     }
     Element info = infos[0];
 
-    complexTypeParser.parseComplexTypeChild(info, descriptor);
+    complexTypeParser.parseComplexTypeChild(info);
     return descriptor;
   }
 
@@ -656,7 +656,7 @@ public class XMLSchemaDescriptorProvider extends DefaultDescriptorProvider imple
       if ("bean".equals(childName)) {
         BeanParser.parseBeanExpression(info, true);
       } else if ("variable".equals(childName)) {
-        modelParser.parseVariable(info, (ComplexTypeDescriptor) descriptor);
+        modelParser.parseVariable(info);
       } else if (ATTRIBUTE.equals(childName)) {
         descriptor = (T) modelParser.parseAttribute(info, null, (PartDescriptor) descriptor);
       } else if ("part".equals(childName)) {

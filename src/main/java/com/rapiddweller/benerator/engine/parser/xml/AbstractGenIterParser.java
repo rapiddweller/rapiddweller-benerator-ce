@@ -315,7 +315,7 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
       String childName = XMLUtil.localName(child);
       InstanceDescriptor instanceDescriptor = null;
       if (EL_VARIABLE.equals(childName)) {
-        instanceDescriptor = modelParser.parseVariable(child, (VariableHolder) type);
+        instanceDescriptor = modelParser.parseVariable(child);
       } else if (COMPONENT_TYPES.contains(childName)) {
         PartParser partParser = new PartParser(modelParser, true);
         instanceDescriptor = partParser.parseComponentGeneration(child, (ComplexTypeDescriptor) type);
