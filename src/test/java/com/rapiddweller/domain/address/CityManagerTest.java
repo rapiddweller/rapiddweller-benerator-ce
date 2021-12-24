@@ -26,14 +26,9 @@
 
 package com.rapiddweller.domain.address;
 
-import com.rapiddweller.common.ConfigurationError;
 import com.rapiddweller.common.exception.ComponentInitializationFailure;
-import com.rapiddweller.common.exception.ParseException;
-import com.rapiddweller.common.file.FileResourceNotFoundException;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -89,27 +84,6 @@ public class CityManagerTest {
             String areaCode = city.getAreaCode();
             assertTrue("Illegal area code: " + areaCode, pattern.matcher(areaCode).matches());
         }
-    }
-
-    @Test
-    public void testCreateCityReadFromFile() throws IOException {
-        CityManager.persistCities(Country.UNITED_KINGDOM, "target/test_city.csv");
-        HashMap map = new HashMap();
-        map.put("state.country.isoCode", "state.country.isoCode");
-        map.put("state.id", "state.id");
-        map.put("name", "name");
-        map.put("nameExtension", "nameExtension");
-        map.put("areaCode", "areaCode");
-        map.put("language", "language");
-        CityManager.readCities(Country.AFGHANISTAN, "target/test_city.csv", map);
-        assertTrue(new File("target/test_city.csv").exists());
-    }
-
-    @Test
-    public void testyReadFromNullFile() {
-        HashMap map = new HashMap();
-        assertThrows(ComponentInitializationFailure.class, () -> CityManager.readCities(Country.AFGHANISTAN, "/", map));
-        assertThrows(ComponentInitializationFailure.class, () -> CityManager.readCities(Country.AFGHANISTAN, null, map));
     }
 
 }
