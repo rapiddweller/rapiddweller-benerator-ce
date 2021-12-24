@@ -32,7 +32,6 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.csv.CSVLineIterator;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
@@ -59,8 +58,7 @@ public class Noun {
     this.language = language;
   }
 
-  public static Collection<Noun> getInstances(Locale locale)
-      throws IOException {
+  public static Collection<Noun> getInstances(Locale locale) {
     Language language = Language.getInstance(locale);
     Set<Noun> nouns = new HashSet<>(500);
     String url = LocaleUtil.availableLocaleUrl("/com/rapiddweller/domain/lang/noun", locale, ".csv");
@@ -97,15 +95,13 @@ public class Noun {
   public String toString() {
     StringBuilder builder = new StringBuilder();
     if (singular != null) {
-      builder.append(language.definiteArticle(gender, false)).append(' ')
-          .append(singular);
+      builder.append(language.definiteArticle(gender, false)).append(' ').append(singular);
       if (plural != null) {
         builder.append(", ");
       }
     }
     if (plural != null) {
-      builder.append(language.definiteArticle(gender, true)).append(' ')
-          .append(plural);
+      builder.append(language.definiteArticle(gender, true)).append(' ').append(plural);
     }
     return builder.toString();
   }
@@ -122,10 +118,7 @@ public class Noun {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     Noun that = (Noun) obj;

@@ -60,10 +60,9 @@ public class ScriptParserTest {
 
   @Test
   public void testIllegal() {
-    Expression<Integer> parse = p.parse("3 * x");
-    assertThrows(ScriptException.class, () -> {
-      parse.evaluate(new DefaultContext());
-    });
+    Expression<Integer> expression = p.parse("3 * x");
+    DefaultContext context = new DefaultContext();
+    assertThrows(ScriptException.class, () -> expression.evaluate(context));
   }
 
   @Test

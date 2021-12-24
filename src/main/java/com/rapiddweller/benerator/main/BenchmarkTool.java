@@ -137,9 +137,9 @@ public class BenchmarkTool {
   }
 
   private static void listTests() {
-    System.out.println("Available Benchmark tests:");
+    ConsolePrinter.printStandard("Available Benchmark tests:");
     for (Benchmark setup : Benchmark.getInstances()) {
-      System.out.println(setup.getName() + ": " + setup.getDescription());
+      ConsolePrinter.printStandard(setup.getName() + ": " + setup.getDescription());
     }
   }
 

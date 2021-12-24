@@ -84,8 +84,6 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -186,25 +184,19 @@ public class AnnotationMapper extends DefaultDescriptorProvider {
   @SuppressWarnings({"unchecked", "rawtypes"})
   private static Generator<Object[]> createDescriptorBasedGenerator(Descriptor annotation, MethodDescriptor testMethod, BeneratorContext context) {
     String filename = null;
-    try {
-      if (annotation.file().length() > 0) {
-        filename = annotation.file();
-      } else {
-        filename = testMethod.getDeclaringClass().getName().replace('.', File.separatorChar) + ".ben.xml";
-      }
-      String testName;
-      if (annotation.name().length() > 0) {
-        testName = annotation.name();
-      } else {
-        testName = testMethod.getName();
-      }
-      return (Generator) new DescriptorBasedGenerator(filename, testName, context);
-    } catch (FileNotFoundException e) {
-      throw BeneratorExceptionFactory.getInstance().fileNotFound(filename, e);
-    } catch (IOException e) {
-      throw BeneratorExceptionFactory.getInstance().fileAccessException("Error opening file " + filename, e);
+    if (annotation.file().length() > 0) {
+      filename = annotation.file();
+    } else {
+      filename = testMethod.getDeclaringClass().getName().replace('.', File.separatorChar) + ".ben.xml";
     }
-  }
+    String testName;
+    if (annotation.name().length() > 0) {
+      testName = annotation.name();
+    } else {
+      testName = testMethod.getName();
+    }
+    return (Generator) new DescriptorBasedGenerator(filename, testName, context);
+}
 
   private static void parseDatabase(Database annotation, BeneratorContext context) {
     AbstractDBSystem db;

@@ -22,6 +22,11 @@ package com.rapiddweller.benerator.sensor;
  */
 public class Profiling {
 
+	/** private constructor to prevent instantiation of this utility class. */
+	private Profiling() {
+		// private constructor to prevent instantiation of this utility class
+	}
+
 	public static boolean isEnabled() {
 		String config = System.getProperty("profile");
 		return (config != null && !"false".equals(config));

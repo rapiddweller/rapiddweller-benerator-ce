@@ -83,7 +83,7 @@ public class Importer {
     if (!absentPlatforms.isEmpty()) {
       String absences = absentPlatforms.toString();
       absences = absences.substring(1, absences.length() - 1);
-      logger.info("Absent platforms: {}", absentPlatforms);
+      logger.info("Absent platforms: {}", absences);
     }
   }
 

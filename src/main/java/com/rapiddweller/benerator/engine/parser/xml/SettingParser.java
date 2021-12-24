@@ -114,11 +114,12 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
   }
 
   /** Maps child elements to a collection or array */
-  private static Expression<?> parseChildElements(Element element) {
+  @SuppressWarnings("unchecked")
+  private static Expression<Object> parseChildElements(Element element) {
     Element[] childElements = XMLUtil.getChildElements(element);
-    Expression[] subExpressions = new Expression[childElements.length];
+    Expression<Object>[] subExpressions = new Expression[childElements.length];
     for (int j = 0; j < childElements.length; j++) {
-      subExpressions[j] = BeanParser.parseBeanExpression(childElements[j], false);
+      subExpressions[j] = (Expression<Object>) BeanParser.parseBeanExpression(childElements[j], false);
     }
     switch (subExpressions.length) {
       case 0:
@@ -127,7 +128,7 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
       case 1:
         return subExpressions[0];
       default:
-        return new CompositeExpression<Object, Object>(subExpressions) {
+        return new CompositeExpression<>(subExpressions) {
           @Override
           public Object[] evaluate(Context context) {
             return ExpressionUtil.evaluateAll(terms, context);
@@ -136,7 +137,6 @@ public class SettingParser extends AbstractBeneratorDescriptorParser {
     }
   }
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
   private static Statement parseDefault(String propertyName, String defaultValue) {
     try {
       ScriptableExpression valueExpression = new ScriptableExpression(defaultValue, null);

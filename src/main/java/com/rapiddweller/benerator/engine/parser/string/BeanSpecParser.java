@@ -2,7 +2,8 @@
 
 package com.rapiddweller.benerator.engine.parser.string;
 
-import com.rapiddweller.common.parser.AbstractTypedParser;
+import com.rapiddweller.common.parser.AbstractParser;
+
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.common.Expression;
 
@@ -12,13 +13,13 @@ import com.rapiddweller.common.Expression;
  * @author Volker Bergmann
  * @since 2.1.0
  */
-public class BeanSpecParser extends AbstractTypedParser<Expression> {
+public class BeanSpecParser extends AbstractParser<Expression<?>> {
 
   public BeanSpecParser() {
-    super("bean spec", Expression.class);
+    super("bean spec");
   }
 
-  @Override
+  @Override @SuppressWarnings("unchecked")
   protected Expression<Object> parseImpl(String spec) {
     return (Expression<Object>) DatabeneScriptParser.parseBeanSpec(spec);
   }

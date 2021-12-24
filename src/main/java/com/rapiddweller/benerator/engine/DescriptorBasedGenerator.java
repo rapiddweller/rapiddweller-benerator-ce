@@ -31,8 +31,6 @@ import com.rapiddweller.benerator.wrapper.GeneratorProxy;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.converter.ConverterManager;
 
-import java.io.IOException;
-
 /**
  * Provides easy programmatic access to generators defined in an XML descriptor file.<br/><br/>
  * Created: 23.02.2010 12:06:44
@@ -44,7 +42,7 @@ public class DescriptorBasedGenerator extends GeneratorProxy<Object> {
   private final DescriptorRunner descriptorRunner;
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  public DescriptorBasedGenerator(String uri, String generatorName, BeneratorContext context) throws IOException {
+  public DescriptorBasedGenerator(String uri, String generatorName, BeneratorContext context) {
     super(Object.class);
     ConverterManager.getInstance().setContext(context);
     descriptorRunner = new DescriptorRunner(uri, context);

@@ -172,8 +172,6 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     // parse statement
     boolean iterate = ("iterate".equals(element.getNodeName()));
 
-    //Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 0L, 1L, false, context);
-
     Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(
         countAttr.parse(element), minCountAttr.parse(element), maxCountAttr.parse(element),
         countGranularityAttr.parse(element), countDistributionAttr.parse(element), 0L, 1L, false, false, context);

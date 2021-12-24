@@ -14,12 +14,13 @@
  */
 package com.rapiddweller.benerator.sensor;
 
+import com.rapiddweller.common.ui.ConsolePrinter;
+
 import java.util.List;
 
 /**
  * Organizes {@link Profile}s in a tree structure.<br/><br/>
  * Created: 19.05.2011 09:01:32
- *
  * @author Volker Bergmann
  * @since 2.0.0
  */
@@ -54,7 +55,7 @@ public class Profiler {
     }
 
     private void printRecursively(Profile profile, String indent) {
-        System.out.println(indent + profile.toString());
+        ConsolePrinter.printStandard(indent + profile.toString());
         for (Profile subProfile : profile.getSubProfiles())
             printRecursively(subProfile, indent + "  ");
     }

@@ -40,7 +40,7 @@ public class PartParser extends AbstractComponentParser {
 
   public PartDescriptor parse(Element element, ComplexTypeDescriptor owner, ComponentDescriptor descriptor) {
     XMLAssert.assertElementName("part", element, BeneratorErrorIds.SYN_PART_NAME);
-    String name = nameAttr.parse(element);
+    nameAttr.parse(element);
     PartDescriptor result;
     if (descriptor instanceof PartDescriptor) {
       result = (PartDescriptor) descriptor;
@@ -74,7 +74,6 @@ public class PartParser extends AbstractComponentParser {
     }
     for (Element childElement : XMLUtil.getChildElements(element)) {
       parseComponentGeneration(childElement, (ComplexTypeDescriptor) result.getLocalType(true));
-      // TODO the result is not processed, this will stop part evaluation at a depth of 2
     }
     return result;
   }

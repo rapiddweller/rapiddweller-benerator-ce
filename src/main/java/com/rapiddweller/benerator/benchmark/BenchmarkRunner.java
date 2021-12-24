@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +51,7 @@ public class BenchmarkRunner {
     // private constructor to prevent instantiation of this utility class
   }
 
-  public static BenchmarkToolReport runBenchmarks(BenchmarkToolConfig config) throws IOException {
+  public static BenchmarkToolReport runBenchmarks(BenchmarkToolConfig config) {
     logger.info("Benchmark runner started, checking Benerator first...");
     logSeparator();
     Benerator.setMode(config.getMode()); // need to set this here for the following log output
@@ -68,7 +67,7 @@ public class BenchmarkRunner {
     return result.stop();
   }
 
-  private static void runBenchmark(Benchmark benchmark, BenchmarkToolReport report) throws IOException {
+  private static void runBenchmark(Benchmark benchmark, BenchmarkToolReport report) {
     if (benchmark.isDb()) {
       SystemRef[] dbs = report.getSystems("db");
       if (dbs.length > 0) {
