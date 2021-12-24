@@ -12,24 +12,22 @@ import com.rapiddweller.common.parser.AbstractParser;
  * @author Volker Bergmann
  * @since 2.1.0
  */
-public class MinMaxParser extends AbstractParser<Comparable> {
+public class MinMaxParser<T> extends AbstractParser<Comparable<T>> {
 
   public MinMaxParser(String description) {
     super(description);
   }
 
   @Override
-  protected Comparable parseImpl(String spec) {
+  protected Comparable<T> parseImpl(String spec) {
     Object result = LiteralParserConverter.parse(spec);
     if (!(result instanceof Comparable)) {
-      throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(
-          "Not a comparable type", spec);
+      throw BeneratorExceptionFactory.getInstance().syntaxErrorForText("Not a comparable type", spec);
     }
     if (result instanceof String) {
-      throw BeneratorExceptionFactory.getInstance().syntaxErrorForText(
-          "Not a valid " + getDescription(), spec);
+      throw BeneratorExceptionFactory.getInstance().syntaxErrorForText("Not a valid " + getDescription(), spec);
     }
-    return (Comparable) result;
+    return (Comparable<T>) result;
   }
 
 }

@@ -109,7 +109,7 @@ public class Benerator {
     VersionInfo.getInfo(BENERATOR_KEY).verifyDependencies();
     BeneratorResult result = runWithArgs(args);
     if (!StringUtil.isEmpty(result.getErrOut())) {
-      System.err.println(result.getErrOut());
+      ConsolePrinter.printError(result.getErrOut());
       logger.error(result.getErrOut());
     }
     System.exit(result.getExitCode());
@@ -163,7 +163,7 @@ public class Benerator {
       config = parseCommandLine(args);
       run(config);
       return new BeneratorResult(ExitCodes.OK, null);
-    } catch (Throwable e) {
+    } catch (Exception e) {
       return handleException(e, config);
     }
   }

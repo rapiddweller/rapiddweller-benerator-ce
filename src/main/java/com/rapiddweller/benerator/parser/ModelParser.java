@@ -116,8 +116,8 @@ public class ModelParser {
     return partParser.parse(element, owner, descriptor);
   }
 
-  public InstanceDescriptor parseVariable(Element varElement, VariableHolder owner) {
-    return variableParser.parse(varElement, owner);
+  public InstanceDescriptor parseVariable(Element varElement) {
+    return variableParser.parse(varElement);
   }
 
   private IdDescriptor parseId(Element element, ComplexTypeDescriptor owner, ComponentDescriptor descriptor) {

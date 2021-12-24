@@ -39,8 +39,6 @@ import com.rapiddweller.common.Expression;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import java.io.IOException;
-
 /**
  * Executes an &lt;include/&gt; from an XML descriptor file.<br/><br/>
  * Created at 23.07.2009 07:18:54
@@ -69,23 +67,19 @@ public class IncludeStatement implements Statement {
   public boolean execute(BeneratorContext context) {
     String uri = context.resolveRelativeUri(uriEx.evaluate(context));
     String lcUri = uri.toLowerCase();
-    try {
-      if (lcUri.endsWith(".properties")) {
-        includeProperties(uri, context);
-      } else if (BeneratorUtil.isDescriptorFilePath(uri)) {
-        includeDescriptor(uri, context);
-      } else if (lcUri.endsWith(".xsd")) {
-        includeXmlSchema(uri, context);
-      } else {
-        throw BeneratorExceptionFactory.getInstance().configurationError("Not a supported import file type: " + uri);
-      }
-      return true;
-    } catch (IOException e) {
-      throw BeneratorExceptionFactory.getInstance().configurationError("Error processing " + uri, e);
+    if (lcUri.endsWith(".properties")) {
+      includeProperties(uri, context);
+    } else if (BeneratorUtil.isDescriptorFilePath(uri)) {
+      includeDescriptor(uri, context);
+    } else if (lcUri.endsWith(".xsd")) {
+      includeXmlSchema(uri, context);
+    } else {
+      throw BeneratorExceptionFactory.getInstance().configurationError("Not a supported import file type: " + uri);
     }
+    return true;
   }
 
-  protected void includeProperties(String uri, BeneratorContext context) throws IOException {
+  protected void includeProperties(String uri, BeneratorContext context) {
     logger.debug("Including properties file: {}", uri);
     includePropertiesFile(uri, context);
   }

@@ -53,7 +53,7 @@ public class DefaultComponentParser extends AbstractBeneratorDescriptorParser {
 
   static final Collection<String> COMPONENT_TYPES = CollectionUtil.toSet("attribute", "part", "id", "reference");
 
-  private final static AttrInfoSupport ATTR_SUPPORT;
+  private static final AttrInfoSupport ATTR_SUPPORT;
   static {
     ATTR_SUPPORT = new AttrInfoSupport(BeneratorErrorIds.SYN_DEFAULT_COMPONENTS);
   }

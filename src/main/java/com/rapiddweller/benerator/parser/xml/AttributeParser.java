@@ -152,6 +152,7 @@ public class AttributeParser extends AbstractComponentParser {
       return true;
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private void checkMinMax(Element element) {
       Expression<Comparable> minEx = MIN.parse(element);
       Expression<Comparable> maxEx = MAX.parse(element);
@@ -183,7 +184,7 @@ public class AttributeParser extends AbstractComponentParser {
       }
     }
 
-    private String format(Comparable value) {
+    private String format(Object value) {
       if (value instanceof Number) {
         return HF.format(((Number) value).doubleValue());
       } else {

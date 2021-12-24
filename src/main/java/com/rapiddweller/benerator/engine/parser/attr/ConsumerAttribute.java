@@ -2,8 +2,6 @@
 
 package com.rapiddweller.benerator.engine.parser.attr;
 
-import com.rapiddweller.benerator.BeneratorErrorIds;
-import com.rapiddweller.common.parser.Parser;
 import com.rapiddweller.format.xml.AttrInfo;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_CONSUMER;

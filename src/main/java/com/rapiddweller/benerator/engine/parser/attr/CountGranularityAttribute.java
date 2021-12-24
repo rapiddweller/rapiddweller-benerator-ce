@@ -4,7 +4,6 @@ package com.rapiddweller.benerator.engine.parser.attr;
 
 import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
 import com.rapiddweller.common.Expression;
-import com.rapiddweller.common.parser.Parser;
 import com.rapiddweller.common.parser.PositiveLongParser;
 import com.rapiddweller.format.xml.AttrInfo;
 

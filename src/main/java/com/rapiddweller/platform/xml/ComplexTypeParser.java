@@ -3,11 +3,9 @@
 package com.rapiddweller.platform.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
-import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.parser.ModelParser;
-import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import org.w3c.dom.Element;
@@ -39,15 +37,15 @@ public class ComplexTypeParser extends AbstractXMLComponentParser {
     descriptor = new ComplexTypeDescriptor(descriptor.getName(), descriptorProvider, descriptor);
     mapTypeDetails(ctElement, descriptor);
     for (Element child : XMLUtil.getChildElements(ctElement)) {
-      parseComplexTypeChild(child, descriptor);
+      parseComplexTypeChild(child);
     }
     return descriptor;
   }
 
-  public void parseComplexTypeChild(Element element, ComplexTypeDescriptor descriptor) {
+  public void parseComplexTypeChild(Element element) {
     String childName = XMLUtil.localName(element);
     if ("variable".equals(childName)) {
-      modelParser.parseVariable(element, descriptor);
+      modelParser.parseVariable(element);
     } else {
       throw BeneratorExceptionFactory.getInstance().programmerUnsupported("element type not supported here: " + childName);
     }

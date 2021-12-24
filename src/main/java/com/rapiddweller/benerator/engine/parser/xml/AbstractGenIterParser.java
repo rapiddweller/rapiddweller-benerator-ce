@@ -172,8 +172,6 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
     // parse statement
     boolean iterate = ("iterate".equals(element.getNodeName()));
 
-    //Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(descriptor, 0L, 1L, false, context);
-
     Generator<Long> countGenerator = DescriptorUtil.createDynamicCountGenerator(
         countAttr.parse(element), minCountAttr.parse(element), maxCountAttr.parse(element),
         countGranularityAttr.parse(element), countDistributionAttr.parse(element), 0L, 1L, false, false, context);
@@ -317,7 +315,7 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
       String childName = XMLUtil.localName(child);
       InstanceDescriptor instanceDescriptor = null;
       if (EL_VARIABLE.equals(childName)) {
-        instanceDescriptor = modelParser.parseVariable(child, (VariableHolder) type);
+        instanceDescriptor = modelParser.parseVariable(child);
       } else if (COMPONENT_TYPES.contains(childName)) {
         PartParser partParser = new PartParser(modelParser, true);
         instanceDescriptor = partParser.parseComponentGeneration(child, (ComplexTypeDescriptor) type);

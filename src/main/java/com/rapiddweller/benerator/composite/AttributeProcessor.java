@@ -57,25 +57,24 @@ public class AttributeProcessor extends AbstractGenerationStep<Entity> implement
     }
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(BeneratorContext context) {
     ProductWrapper<?> wrapper = context.getCurrentProduct();
     if (wrapper != null) {
       Entity entity = (Entity) wrapper.unwrap();
       Object attribute = entity.getComponent(attributeName);
-      if (attribute == null) {
-        // nothing to do
-      } else if (attribute instanceof List) {
-        List list = (List) attribute;
+      if (attribute instanceof List) {
+        List<Object> list = (List<Object>) attribute;
         for (int i = 0; i < list.size(); i++) {
           list.set(i, applyToValue(list.get(i)));
         }
-      } else if (attribute.getClass().isArray()) {
+      } else if (attribute != null && attribute.getClass().isArray()) {
         int length = Array.getLength(attribute);
         for (int i = 0; i < length; i++) {
           Array.set(attribute, i, applyToValue(Array.get(attribute, i)));
         }
-      } else {
+      } else if (attribute != null) {
         entity.setComponent(attributeName, applyToValue(attribute));
       }
     }

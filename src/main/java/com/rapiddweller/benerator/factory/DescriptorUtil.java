@@ -476,7 +476,7 @@ public class DescriptorUtil {
     for (Element child : XMLUtil.getChildElements(element)) {
       String childType = XMLUtil.localName(child);
       if (EL_VARIABLE.equals(childType)) {
-        modelParser.parseVariable(child, (VariableHolder) type);
+        modelParser.parseVariable(child);
       } else if (COMPONENT_TYPES.contains(childType)) {
         modelParser.getPartParser().parseComponentGeneration(child, (ComplexTypeDescriptor) type);
       } else if (EL_VALUE.equals(childType)) {

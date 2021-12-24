@@ -43,6 +43,7 @@ import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.SystemInfo;
 import com.rapiddweller.common.converter.LiteralParserConverter;
 import com.rapiddweller.common.exception.ExceptionFactory;
+import com.rapiddweller.common.ui.ConsolePrinter;
 import com.rapiddweller.format.script.Script;
 import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.jdbacl.DBExecutionResult;
@@ -278,12 +279,11 @@ public class EvaluateStatement extends AbstractStatement {
       throw ExceptionFactory.getInstance().configurationError("At least uri or text must be provided in <execute> and <evaluate>");
     }
     String output = writer.toString();
-    System.out.println(output);
+    ConsolePrinter.printStandard(output);
     return LiteralParserConverter.parse(output);
   }
 
-  private DBExecutionResult runSql(
-      String uri, Object targetObject, String onError, String encoding, String text,
+  private DBExecutionResult runSql(String uri, Object targetObject, String onError, String encoding, String text,
       char separator, boolean optimize, Boolean invalidate) {
     if (targetObject == null) {
       throw ExceptionFactory.getInstance().configurationError("Please specify the 'target' database to execute the SQL script");

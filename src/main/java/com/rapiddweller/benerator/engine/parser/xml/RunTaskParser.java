@@ -76,8 +76,8 @@ public class RunTaskParser extends AbstractBeneratorDescriptorParser {
   private static final AttrInfo<Expression<Long>> PAGESIZE =
       new PageSizeAttribute(BeneratorErrorIds.SYN_RUN_TASK_PAGE_SIZE);
 
-  private static final AttrInfo<Expression> PAGER = new AttrInfo<>(
-      ATT_PAGER, false, BeneratorErrorIds.SYN_RUN_TASK_PAGER, new BeanSpecParser(), null);
+  private static final AttrInfo<Expression<?>> PAGER = new AttrInfo<>(
+      ATT_PAGER, false, BeneratorErrorIds.SYN_RUN_TASK_PAGER, new BeanSpecParser());
 
   private static final AttrInfo<Expression<Integer>> THREADS = new AttrInfo<>(
       ATT_THREADS, false, BeneratorErrorIds.SYN_RUN_TASK_THREADS,

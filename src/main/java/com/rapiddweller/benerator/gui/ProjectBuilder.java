@@ -61,6 +61,8 @@ import com.rapiddweller.platform.db.AbstractDBSystem;
 import com.rapiddweller.platform.db.DefaultDBSystem;
 import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -92,6 +94,8 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_SETUP;
  * @since 0.5.6
  */
 public class ProjectBuilder implements Runnable {
+
+  private static final Logger logger = LoggerFactory.getLogger(ProjectBuilder.class);
 
   private static final String TAB = "    ";
   private static final String DBUNIT_SNAPSHOT_FILENAME = "base.dbunit.xml";
@@ -224,8 +228,8 @@ public class ProjectBuilder implements Runnable {
     return "nullable".equals(name) && (value == null || ((Boolean) value));
   }
 
-  private static void appendEndElement(String nodeName, LFNormalizingStringBuilder writer) {
-    writer.append("</").append(nodeName).append(">");
+  private static void appendEndElement(LFNormalizingStringBuilder writer) {
+    writer.append("</").append(com.rapiddweller.benerator.engine.DescriptorConstants.EL_GENERATE).append(">");
   }
 
   private static void format(FeatureDetail<?> detail, Map<String, String> attributes) {
@@ -261,14 +265,7 @@ public class ProjectBuilder implements Runnable {
       copyImportFiles();
 
       // create db snapshot project.dbunit.xml
-      Exception exception = null;
-      if (setup.isDatabaseProject() && !"none".equals(setup.getDbSnapshot()) && !setup.isShopProject()) {
-        try {
-          createDbSnapshot();
-        } catch (Exception e) {
-          exception = e;
-        }
-      }
+      Exception exception = createSnapshotIfNecessary();
 
       // create project.ben.xml (including imports)
       createBeneratorXml();
@@ -289,6 +286,18 @@ public class ProjectBuilder implements Runnable {
         monitor.setProgress(monitor.getMaximum());
       }
     }
+  }
+
+  private Exception createSnapshotIfNecessary() {
+    Exception exception = null;
+    if (setup.isDatabaseProject() && !"none".equals(setup.getDbSnapshot()) && !setup.isShopProject()) {
+      try {
+        createDbSnapshot();
+      } catch (Exception e) {
+        exception = e;
+      }
+    }
+    return exception;
   }
 
   private void parseDatabaseMetaData() {
@@ -406,7 +415,9 @@ public class ProjectBuilder implements Runnable {
     try {
       String content = IOUtil.getContentOfURI(file.getAbsolutePath());
       content = resolveVariables(content);
-      file.delete();
+      if (!file.delete()) {
+        logger.error("Deletion failed for file {}", file);
+      }
       IOUtil.writeTextFile(file.getAbsolutePath(), content, getXMLEncoding());
       return file;
     } catch (Exception e) {
@@ -453,8 +464,7 @@ public class ProjectBuilder implements Runnable {
     }
   }
 
-  private void processToken(Setup setup,
-                            DefaultHTMLTokenizer tokenizer, LFNormalizingStringBuilder writer) {
+  private void processToken(Setup setup, DefaultHTMLTokenizer tokenizer, LFNormalizingStringBuilder writer) {
     switch (tokenizer.tokenType()) {
       case HTMLTokenizer.START_TAG: {
         String nodeName = tokenizer.name();
@@ -472,36 +482,9 @@ public class ProjectBuilder implements Runnable {
         if (EL_DATABASE.equals(nodeName) && setup.isDatabaseProject()) {
           appendElement(nodeName, defineDbAttributes(setup, tokenizer), writer, true);
         } else if (EL_EXECUTE.equals(nodeName)) {
-          Map<String, String> attributes = tokenizer.attributes();
-          String uri = attributes.get("uri");
-          if ("{drop_tables.sql}".equals(uri)) {
-            if (setup.getDropScriptFile() != null) {
-              File dropScriptFile = setup.getDropScriptFile();
-              copyToProject(dropScriptFile, setup.getProjectFolder());
-              attributes.put("uri", dropScriptFile.getName());
-              appendElement(nodeName, attributes, writer, false);
-            }
-          } else if ("{create_tables.sql}".equals(uri)) {
-            if (setup.getCreateScriptFile() != null) {
-              File createScriptFile = setup.getCreateScriptFile();
-              copyToProject(createScriptFile, setup.getProjectFolder());
-              attributes.put("uri", createScriptFile.getName());
-              appendElement(nodeName, attributes, writer, false);
-            }
-          } else {
-            writer.append(tokenizer.text());
-          }
+          processExecute(setup, tokenizer, writer, nodeName);
         } else if (EL_GENERATE.equals(nodeName)) {
-          Map<String, String> attributes = tokenizer.attributes();
-          if (DBUNIT_SNAPSHOT_FILENAME.equals(attributes.get(ATT_SOURCE))) {
-            if (setup.getDbSnapshot() != null) {
-              appendElement(nodeName, attributes, writer, false);
-            }
-          } else if ("tables".equals(attributes.get(ATT_TYPE))) {
-            generateTables(setup, writer);
-          } else {
-            writer.append(tokenizer.text());
-          }
+          processGenerate(setup, tokenizer, writer, nodeName);
         } else {
           writer.append(tokenizer.text());
         }
@@ -512,32 +495,67 @@ public class ProjectBuilder implements Runnable {
     }
   }
 
+  private void processExecute(Setup setup, DefaultHTMLTokenizer tokenizer, LFNormalizingStringBuilder writer, String nodeName) {
+    Map<String, String> attributes = tokenizer.attributes();
+    String uri = attributes.get("uri");
+    if ("{drop_tables.sql}".equals(uri)) {
+      if (setup.getDropScriptFile() != null) {
+        File dropScriptFile = setup.getDropScriptFile();
+        copyToProject(dropScriptFile, setup.getProjectFolder());
+        attributes.put("uri", dropScriptFile.getName());
+        appendElement(nodeName, attributes, writer, false);
+      }
+    } else if ("{create_tables.sql}".equals(uri)) {
+      if (setup.getCreateScriptFile() != null) {
+        File createScriptFile = setup.getCreateScriptFile();
+        copyToProject(createScriptFile, setup.getProjectFolder());
+        attributes.put("uri", createScriptFile.getName());
+        appendElement(nodeName, attributes, writer, false);
+      }
+    } else {
+      writer.append(tokenizer.text());
+    }
+  }
+
+  private void processGenerate(Setup setup, DefaultHTMLTokenizer tokenizer, LFNormalizingStringBuilder writer, String nodeName) {
+    Map<String, String> attributes = tokenizer.attributes();
+    if (DBUNIT_SNAPSHOT_FILENAME.equals(attributes.get(ATT_SOURCE))) {
+      if (setup.getDbSnapshot() != null) {
+        appendElement(nodeName, attributes, writer, false);
+      }
+    } else if ("tables".equals(attributes.get(ATT_TYPE))) {
+      generateTables(setup, writer);
+    } else {
+      writer.append(tokenizer.text());
+    }
+  }
+
   private void generateTables(Setup setup, LFNormalizingStringBuilder writer) {
-    AbstractDBSystem db = getDBSystem(setup);
-    TypeDescriptor[] descriptors = db.getTypeDescriptors();
-    for (TypeDescriptor descriptor : descriptors) {
+    AbstractDBSystem database = getDBSystem(setup);
+    TypeDescriptor[] descs = database.getTypeDescriptors();
+    for (TypeDescriptor descriptor : descs) {
       ComplexTypeDescriptor complexType = (ComplexTypeDescriptor) descriptor;
       final String name = complexType.getName();
-      InstanceDescriptor iDesc = new InstanceDescriptor(name, db, complexType);
+      InstanceDescriptor iDesc = new InstanceDescriptor(name, database, complexType);
       if (setup.getDbSnapshot() != null) {
         iDesc.setCount(ExpressionUtil.constant(0L));
       } else {
-        iDesc.setCount(ExpressionUtil.constant(db.countEntities(name)));
+        iDesc.setCount(ExpressionUtil.constant(database.countEntities(name)));
       }
       generateTable(iDesc, writer);
     }
   }
 
   private AbstractDBSystem getDBSystem(Setup setup) {
-    AbstractDBSystem db = new DefaultDBSystem("db", setup.getDbUrl(), setup.getDbDriver(), setup.getDbUser(), setup.getDbPassword(), dataModel);
+    AbstractDBSystem database = new DefaultDBSystem("db", setup.getDbUrl(), setup.getDbDriver(), setup.getDbUser(), setup.getDbPassword(), dataModel);
     if (setup.getDbSchema() != null) {
-      db.setSchema(setup.getDbSchema());
+      database.setSchema(setup.getDbSchema());
     }
     if (setup.getDbCatalog() != null) {
-      db.setCatalog(setup.getDbCatalog());
+      database.setCatalog(setup.getDbCatalog());
     }
-    dataModel.addDescriptorProvider(db);
-    return db;
+    dataModel.addDescriptorProvider(database);
+    return database;
   }
 
   @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
@@ -561,7 +579,7 @@ public class ProjectBuilder implements Runnable {
       addAttribute(cd, writer);
     }
     writer.append(TAB);
-    appendEndElement(EL_GENERATE, writer);
+    appendEndElement(writer);
     writer.append("\n\n").append(TAB);
   }
 
@@ -577,19 +595,7 @@ public class ProjectBuilder implements Runnable {
     if (nullable) {
       component.setNullable(null);
     }
-
-    String elementName;
-    if (component instanceof PartDescriptor) {
-      elementName = EL_ATTRIBUTE;
-    } else if (component instanceof ReferenceDescriptor) {
-      elementName = EL_REFERENCE;
-    } else if (component instanceof IdDescriptor) {
-      elementName = EL_ID;
-    } else {
-      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Component descriptor type not supported: " +
-          component.getClass().getSimpleName());
-    }
-
+    String elementName = getElementName(component);
     Map<String, String> attributes = new OrderedMap<>();
     attributes.put(ATT_NAME, component.getName());
     SimpleTypeDescriptor type = (SimpleTypeDescriptor) (component.getType() != null ?
@@ -613,6 +619,21 @@ public class ProjectBuilder implements Runnable {
     }
     writer.append(" /-->");
     writer.append('\n');
+  }
+
+  private String getElementName(ComponentDescriptor component) {
+    String elementName;
+    if (component instanceof PartDescriptor) {
+      elementName = EL_ATTRIBUTE;
+    } else if (component instanceof ReferenceDescriptor) {
+      elementName = EL_REFERENCE;
+    } else if (component instanceof IdDescriptor) {
+      elementName = EL_ID;
+    } else {
+      throw BeneratorExceptionFactory.getInstance().programmerUnsupported("Component descriptor type not supported: " +
+          component.getClass().getSimpleName());
+    }
+    return elementName;
   }
 
   private String replaceVariables(String text) {

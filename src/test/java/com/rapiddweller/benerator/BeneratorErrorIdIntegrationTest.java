@@ -10,11 +10,13 @@ import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.converter.ConverterManager;
 import com.rapiddweller.common.exception.ExitCodes;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -1136,14 +1138,13 @@ public class BeneratorErrorIdIntegrationTest {
             "File test_1021_syn_db_url_group_incomplete.ben.xml, line 3", ExitCodes.SYNTAX_ERROR, result);
   }
 
-  /** This is disabled for backwards compatibility. If that is dropped, then enable this test
-  @Test
+  @Test @Ignore("This is disabled for backwards compatibility. If that is dropped, then enable this test")
   public void test_1022_syn_db_env_wo_system() {
     BeneratorResult result = runFile("1022_syn_db_env_wo_system.ben.xml");
      assertResult(BeneratorErrorIds.SYN_DB_ENV_GROUP_INCOMPLETE,
      "if <database> has the attribute 'environment' then it must have 'system' too",
      ExitCodes.SYNTAX_ERROR, result);
-  }*/
+  }
 
   @Test
   public void test_1022_db_url_and_env_group() {
@@ -1186,6 +1187,7 @@ public class BeneratorErrorIdIntegrationTest {
       errOut = errOut.trim();
     }
     if (expectedErrOut != null) {
+      assertNotNull(errOut);
       if (expectedErrOut.endsWith("*")) {
         String errMsg = "Expected: '" + expectedErrOut + "'\nActual:  '" + errOut + "'";
         assertTrue(errMsg, errOut.startsWith(expectedErrOut.substring(0, expectedErrOut.length() - 1)));

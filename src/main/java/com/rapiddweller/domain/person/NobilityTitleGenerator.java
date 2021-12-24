@@ -49,7 +49,7 @@ import java.util.Locale;
  */
 public class NobilityTitleGenerator extends GeneratorProxy<String> {
 
-  private final static String BASE_NAME = "/com/rapiddweller/domain/person/nobTitle_";
+  private static final String BASE_NAME = "/com/rapiddweller/domain/person/nobTitle_";
 
   private Gender gender;
   private Locale locale;

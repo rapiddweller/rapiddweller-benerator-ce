@@ -7,13 +7,8 @@ import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.xml.XMLAssert;
-import com.rapiddweller.model.data.ComplexTypeDescriptor;
-import com.rapiddweller.model.data.ComponentDescriptor;
 import com.rapiddweller.model.data.InstanceDescriptor;
-import com.rapiddweller.model.data.PartDescriptor;
-import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.VariableDescriptor;
-import com.rapiddweller.model.data.VariableHolder;
 import org.w3c.dom.Element;
 
 /**
@@ -30,15 +25,13 @@ public class VariableParser extends AbstractComponentParser {
     super(context);
   }
 
-  public InstanceDescriptor parse(Element varElement, VariableHolder owner) {
+  public InstanceDescriptor parse(Element varElement) {
     XMLAssert.assertElementName("variable", varElement, BeneratorErrorIds.SYN_VAR_NAME);
-    String name = NAME.parse(varElement);
+    NAME.parse(varElement);
     XMLAssert.assertNoTextContent(varElement, BeneratorErrorIds.SYN_VAR);
     String type = StringUtil.emptyToNull(varElement.getAttribute("type"));
     VariableDescriptor descriptor = new VariableDescriptor(varElement.getAttribute("name"), descriptorProvider, type);
-    VariableDescriptor variable = mapInstanceDetails(varElement, false, descriptor);
-    //owner.addVariable(variable);
-    return variable;
+    return mapInstanceDetails(varElement, false, descriptor);
   }
 
 
