@@ -7,7 +7,7 @@ to be created explicitly when using the Benerator API programmatically.
 
 ### Domain Generators
 
-For domain-specific generators (e.g. person, address, finance), see **'[Domains](domains.md)'**.
+For domain-specific generators (e.g. person, address, finance), see **[Domains](domains.md)**.
 
 ### Common Id Generators
 
@@ -24,11 +24,11 @@ Benerator contains the following common predefined and platform-independent gene
 
 ### Database-related Generators
 
-See **'[Using Relational Databases](using_relational_databases.md)'**.
+See **[Using Relational Databases](using_relational_databases.md)**.
 
 ### simple type generators
 
-* **CharacterGenerator**:
+* **CharacterGenerator**: Generates random characters.
 
 * **IncrementGenerator**: Generates numbers starting with one and incrementing the number on each subsequent call
 
@@ -132,14 +132,14 @@ your **BENERATOR_OPTS**, e.g.
 
 `-Dbenerator.cacheSize=2000000`
 
-If this makes you run into an OutOfMemoryError, check the '
-[Troubleshooting](troubleshooting.md)' section on how to allocate a larger Java heap in Benerator.
+If this makes you run into an OutOfMemoryError, check the 
+[Troubleshooting](troubleshooting.md) section on how to allocate a larger Java heap in Benerator.
 
 ### Sequences
 
 Sequences reflect the idea of a mathematical sequence. They primarily focus in number generation, but they can be
 applied for data redistribution as well. Most sequences have a default instance which can be used by their literal,
-e.g. `distribution="random"` uses the 'random' literal for the distribution defined in the class RandomSequence.
+e.g. `distribution="random"` uses the `random` literal for the distribution defined in the class RandomSequence.
 
 #### RandomSequence
 
@@ -493,7 +493,7 @@ Beware that the java.text.Format classes are not thread-safe!
 
 ### Domain Validators
 
-For the validators from the domains see **'[Domains](domains.md)'**.
+For the validators from the domains see **[Domains](domains.md)**.
 
 ### Common validators
 

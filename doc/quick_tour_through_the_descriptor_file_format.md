@@ -225,7 +225,7 @@ which iterates through all Persons defined in a CSV-file called 'persons.csv'.
 
       By default, iteration goes once from beginning to the end. Consider using the parameter `cyclic="true"` for iterating
       repeatedly and check this manual for applying distributions or filter the data to iterate through. Learn more in
-      '[Relational Databases->Determining attribute values](using_relational_databases.md#determining-attribute-values-by-a-database-query)'
+      [Relational Databases->Determining attribute values](using_relational_databases.md#determining-attribute-values-by-a-database-query)
 
 ### "offset"
 
@@ -237,7 +237,7 @@ source, e.g.
 <iterate type="Person" source="persons.csv" offset="10"/>
 ```
 
-leaves out the first ten entries of the persons.csv file.
+leaves out the first ten entries of the `persons.csv` file.
 
 ## `<echo>`
 
@@ -249,12 +249,12 @@ console to inform the user what is happening, e.g.
 <echo>Running...</echo>
 ```
 
-For Mac OS X users there is a nice extra feature: When using **type='speech'**, Benerator uses Mac OS X's speech
+For Mac OS X users there is a nice extra feature: When using **`type='speech'`**, Benerator uses Mac OS X's speech
 facility to speak the text. When executed on other operating systems, the text is only printed to the console:
 
 ```xml
 
-<echo type='speech'>Generation Finished</echo>
+<echo type="speech">Generation Finished</echo>
 ```
 
 ## `<beep/>`
@@ -285,8 +285,10 @@ The `<execute>` element serves to execute different kinds of code. One option is
 
 The program output is printed to the console.
 
-Note that some windows shell commands are only available in the command-line interpreter. In order to invoke them, you
-need to call cmd /C, e.g.
+!!! note
+
+      Note that some windows shell commands are only available in the command-line interpreter. In order to invoke them, you
+      need to call cmd /C, e.g.
 
 ```xml
 
@@ -321,8 +323,10 @@ You can make Benerator signal an error with a message and code:
 <error code="-3">An error has occured</error>
 ```
 
-If Benerator is not configured to do otherwise, it prints out the error message, cancels execution, finishes the process
-and returns the exit code to the operating system. If no exit code is specified, Benerator uses -1.
+!!! note
+
+      If Benerator is not configured to do otherwise, it prints out the error message, cancels execution, finishes the process
+      and returns the exit code to the operating system. If no exit code is specified, Benerator uses -1.
 
 ## `<if>`
 
@@ -408,8 +412,8 @@ For explicitly choosing or initializing an id generator, use the generator attri
 
 for using an IncrementalIdGenerator, that starts with the value 100.
 
-See '[Common ID Generators](component_reference.md#common-id-generators)' for a complete ID generator reference and
-'[Using Relational Databases](using_relational_databases.md)' for database-related id generators.
+See [Common ID Generators](component_reference.md#common-id-generators) for a complete ID generator reference and
+[Using Relational Databases](using_relational_databases.md) for database-related id generators.
 
 Instead of using a generator, you can as well use other `<attribute>`-like features, e.g. scripts:
 

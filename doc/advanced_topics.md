@@ -21,13 +21,17 @@ or 'ref' attribute of another element's setup.
 So the example above creates an instance of a DBSystem JavaBean class, setting its properties to values for connecting a database. The object is
 retrievable by the context with the id 'db'.
 
-Note: The class DBSystem implements the interface 'System' which provides (among other features) meta information about the entities (tables)
-contained in the database.
+!!! note
+
+        The class DBSystem implements the interface 'System' which provides (among other features) meta information about the entities (tables)
+        contained in the database.
 
 You can create references to other objects declared before by a 'ref'-attribute in the bean declaration. The following example shows this for a task
 setup, but this can be applied to beans and consumers as well.
 
-Note: You may implement the System interface for connecting to other system types like SAP or Siebel systems.
+!!! note
+
+    You may implement the System interface for connecting to other system types like SAP or Siebel systems.
 
 JavaBeans may refer each other (see `proxy.target`) and may have collection or attribute properties (see `log_csv.components`) as shown in the following
 example:
@@ -249,8 +253,10 @@ Afterwards you can query the generated products for referencing them in generate
 </generate>
 ```
 
-**Note** that you can **only** query for entities – if you need only an attribute of an entity, you must first use a variable to get the entity and then a
-script to get the required attribute.
+!!! warning
+
+    Note that you can **only** query for entities – if you need only an attribute of an entity, you must first use a variable to get the entity and then a
+    script to get the required attribute.
 
 You can use a distribution:
 
@@ -259,7 +265,9 @@ You can use a distribution:
 A simple form of query is supported by a `selector` element. Its content must be a script expression that serves as a filter. The expression is
 consecutively evaluated on each element (as candidate) and has to return `true` if the candidate is accepted, otherwise `false`. 
 
-**IMPORTANT**: The script only can access each candidate by using the keyword **_candidate**.
+!!! danger
+
+    **IMPORTANT**: The script can only access each candidate by using the keyword **_candidate**.
 
 As an example, here is a query which only returns products whose name starts with '**A**':
 

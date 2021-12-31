@@ -48,7 +48,7 @@ For importing data, a ```<kafka-importer>``` is used:
 
 Benerator supports all configuration properties of Kafka 2.8.
 For an in-depth explanation of these, please have a look at the 
-'[Kafka Documentation](https://kafka.apache.org/documentation/)'.
+[Kafka Documentation](https://kafka.apache.org/documentation/).
 
 ### encoding
 

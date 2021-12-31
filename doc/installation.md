@@ -101,11 +101,11 @@ If you want to start development or use the maven project to build Benerator by 
 on Linux or Mac OS X you can also try the quickstart by using the helper scripts. 
 Checkout the project from [https://github.com/rapiddweller/rapiddweller-benerator-ce/](https://github.com/rapiddweller/rapiddweller-benerator-ce/).
 
-!!! note
+!!! warning
 
     Following instructions only work on Linux or Mac OS X. Scripts are not supported on Windows.
 
-!!! note
+!!! tip
 
     It might be required to run the scripts with `sudo`.
 

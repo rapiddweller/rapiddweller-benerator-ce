@@ -3,12 +3,12 @@
 ## ID Generation
 
 For generating unique data for dataset identifiers like primary keys in a database, 
-see '[Common ID Generators](component_reference.md#common-id-generators)' for a complete ID generator reference and
-'[Using Relational Databases](using_relational_databases.md)' for database-related id generators.
+see [Common ID Generators](component_reference.md#common-id-generators) for a complete ID generator reference and
+[Using Relational Databases](using_relational_databases.md) for database-related id generators.
 
 ## Unique Number Generation
 
-Most → Sequences are able to generate unique numbers. Just apply a unique="true" to the number configuration:
+Most → Sequences are able to generate unique numbers. Just apply a `unique="true"` to the number configuration:
 
 ```xml
 <attribute name="n" type="int" min="3" max="99" unique="true" />
@@ -29,7 +29,7 @@ that match a regular expression. For example, for generating unique phone number
 <attribute name="phone" type="string" pattern="[1-9][0-9]{2}\-[0-9]{4}\-[0-9]{5}" unique="true" />
 ```
 
-For an introduction to regular expressions, read about '[Regular Expressions](regular_expression_support.md)'.
+For an introduction to regular expressions, read about [Regular Expressions](regular_expression_support.md).
 
 ### Making Strings unique
 
@@ -51,19 +51,24 @@ This is exactly, what the UniqueStringConverter does:
 </generate>
 ```
 
-Note: The `UniqueStringConverter` keeps all used strings in memory, so when generating some billion strings, you might get memory problems.
+!!! warning
+    
+    The `UniqueStringConverter` keeps all used strings in memory, so when generating some billion strings, you might get memory problems.
+
 
 ## Removing Duplicate Values
 
-If you need a more individual generation algorithm of which you do not know (or care) how to make it unique, you can append a `UniqueValidator` to
-filter out duplicate values.
+If you need a more individual generation algorithm of which you do not know (or care) how to make it unique, 
+you can append a `UniqueValidator` to filter out duplicate values.
 
 ```xml
 
 <attribute name="code" pattern="[A-Z]{6,12}" validator="UniqueValidator"/>
 ```
 
-Note: The `UniqueValidator` keeps all used strings in memory, so when generating some billion strings, you might get memory problems.
+!!! warning
+
+    The `UniqueValidator` keeps all used strings in memory, so when generating some billion strings, you might get memory problems.
 
 ## Unique iteration through a source
 
@@ -157,13 +162,12 @@ You can use the prototype approach for getting unique composite keys: A variable
 </generate>
 ```
 
-The most frequent application of this approach is the generation of unique database references using a prototype query. 
-See '[Prototype Queries](using_relational_databases.md#prototype-queries)'
+The most frequent application of this approach is the generation of unique database references using a [Prototype Query](using_relational_databases.md#prototype-queries).
 
 ## Achieving local uniqueness
 
 Sometimes values need to have uniqueness of an identity component of a 'child' entity only in the context of another 
-(`parent`) item.
+('parent') item.
 
 One simple solution is of course to have it globally unique.
 
