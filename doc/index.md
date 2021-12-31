@@ -37,17 +37,19 @@ Stay GDPR compliant with your data and protect the privacy of your customers.
 anonymize sensitive data for BI, test, development or training purposes
 Combine data from various sources (subsetting) and keep the data integrity
 
-###Migrate data
+### Migrate data
 Migrate and transform your data in multisystem landscapes.
 Reuse your testing data models to migrate production environments.
 Keep your data consistent and reliable in a microsystem architecture
 
 
-###requirements
+### Requirements
 
 **rapiddweller Benerator** is built for Java 11.
 
-If you need support for Java 8 or earlier, please consider using the versions `<= 1.0.1`.
+!!! note
+
+    If you need support for Java 8 or earlier, please consider using the versions `<= 1.0.1`.
 
 ## Preface of this manual
 

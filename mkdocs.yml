@@ -19,7 +19,7 @@ extra_css:
   - css/termynal.css
 
 extra_javascript:
-  - https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js
+  - https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js
   - js/termynal.js
   - js/custom.js
   - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
