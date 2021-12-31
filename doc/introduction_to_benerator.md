@@ -85,11 +85,17 @@ MacBook Air (2020) with standard equipment and Azul Java Virtual Machine
 | anon-person-random.ben.xml   |   576 |   838 | 1,514 | 1,736 |
 | anon-person-constant.ben.xml | 2,210 | 2,745 | 2,646 | 2,162 |
 
-The numbers are million entities generated/anonymized per hour.
+!!! note
+
+    The numbers are million entities generated/anonymized per hour.
+
 Compared to CE 1.1.2's generation engine,
-CE 2.0.0 is 1.5-2 times faster 
-and EE 2.0.0 with 4 threads is roughly 4 times faster 
-and scales further with the number of CPUs on your machine.
+
+CE 2.0.0 is **1.5-2 times faster** 
+
+and EE 2.0.0 with 4 threads is roughly **4 times faster** 
+
+and **scales further** with the number of CPUs on your machine.
 
 
 ### Benerator Community Edition (CE)
@@ -100,10 +106,38 @@ It is the most powerful open-source data generator and is competitive with all c
 products.
 
 However, it has two historic limitations:
+
 - No neat graphical user interface
 - Only single-threaded generation and anonymization
 
-Though, Benerator Community Edition still has an impressive performance. 
+Though, Benerator Community Edition still has an impressive performance.
+
+### Benerator Professional & Full Edition
+
+The rapiddweller Benerator Professional & Full Editions aim at providing an easy and effortless 
+start for using Benerator and to benerate realistic data in simple as well as complex scenarios. This includes:
+
+- Benerator UI
+- Ready-to-use templates
+- Demos
+- Best practices from countless benerator projects 
+- A powerful RESTful / JSON API
+- Container support for Docker / Kubernetes
+- And much more.
+
+#### Benerator UI
+
+Benerator UI is an integrated graphical development environment with 
+
+- Editing support by context-sensitive auto-completion
+- Code snippets for many use-cases
+- Templates for projects and files
+- Project management and project collaboration 
+- Task management
+- Data preview
+- Log analysis and guidance on errors
+- And much more.
+
 
 ### Benerator Enterprise Edition (EE)
 
@@ -123,3 +157,7 @@ Improvements against the Community Edition are
 - JMS support: ActiveMQ, RabbitMQ and more
 - Kafka support
 - Industry modules: Logistics, Insurance, Finance, ...
+
+!!! note
+
+    Learn more about all editions and its features on **[www.benerator.de](https://www.benerator.de)**.
