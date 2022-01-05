@@ -95,7 +95,7 @@ public class AddressFormat {
       context.set("address", address);
       StringWriter out = new StringWriter();
       script.execute(context, out);
-      return out.toString();
+      return out.toString().trim();
     } catch (Exception e) {
       throw ExceptionFactory.getInstance().internalError(
           "Error evaluating script '" + script + "'", e);
