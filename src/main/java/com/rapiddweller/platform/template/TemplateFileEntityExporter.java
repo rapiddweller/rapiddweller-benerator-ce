@@ -181,14 +181,13 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
         mapRootToContext();
         Context subContext = new DefaultContext(context);
         String text = ToStringConverter.convert(template.evaluate(subContext), "");
-        String path = uri.replace('/', File.separatorChar);
-        File folder = new File(path).getParentFile();
+        String targetUri = context.resolveRelativeUri(uri);
+        String targetPath = targetUri.replace('/', File.separatorChar);
+        File folder = new File(targetPath).getParentFile();
         if (folder != null) {
           folder.mkdirs();
         }
-        String targetUri = context.resolveRelativeUri(uri);
-        FileUtil.ensureDirectoryExists((new File(targetUri)).getParentFile());
-        IOUtil.writeTextFile(targetUri, text, encoding);
+        IOUtil.writeTextFile(targetPath, text, encoding);
       } catch (ScriptException e) {
         throw ExceptionFactory.getInstance().configurationError(
             "Error evaluating template " + templateUri, e);
