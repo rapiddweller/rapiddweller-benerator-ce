@@ -3,7 +3,7 @@
 
     <bean id="con" class="TemplateFileEntityExporter">
         <property name="uri" value="target/IFTDGN1.edi"/>
-        <property name="templateUri" value="com/rapiddweller/benerator/engine/template/IFTDGN.ftl"/>
+        <property name="templateUri" value="IFTDGN.ftl"/>
         <property name="recordType" value="com.rapiddweller.platform.edi.EdiTemplateRecord"/>
     </bean>
 

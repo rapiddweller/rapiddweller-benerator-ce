@@ -24,9 +24,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.rapiddweller.benerator.engine;
+package com.rapiddweller.benerator.engine.template;
 
 import com.rapiddweller.benerator.Consumer;
+import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.platform.template.TemplateFileEntityExporter;
@@ -39,6 +40,8 @@ import org.junit.Test;
  * @since 0.9.7
  */
 public class TemplateFileEntityExporterIntegrationTest extends AbstractBeneratorIntegrationTest {
+
+  private final String RESOURCE_PATH = getClass().getPackageName().replace('.', '/') + "/target/";
 
   @Test
   public void testCountries() {
@@ -67,7 +70,7 @@ public class TemplateFileEntityExporterIntegrationTest extends AbstractBenerator
   public void testIFTDGN1() {
     BeneratorContext context = parseAndExecuteFile("com/rapiddweller/benerator/engine/template/IFTDGN1.ben.xml");
     closeCon(context);
-    String content = IOUtil.getContentOfURI("target/IFTDGN1.edi");
+    String content = IOUtil.getContentOfURI(RESOURCE_PATH + "IFTDGN1.edi");
     System.out.println(content);
   }
 
@@ -76,7 +79,7 @@ public class TemplateFileEntityExporterIntegrationTest extends AbstractBenerator
     BeneratorContext context = parseAndExecuteFile("com/rapiddweller/benerator/engine/template/IFTDGN2.ben.xml");
     closeCon(context);
     IOUtil.close(context);
-    String content = IOUtil.getContentOfURI("target/IFTDGN2.edi");
+    String content = IOUtil.getContentOfURI(RESOURCE_PATH + "IFTDGN2.edi");
     System.out.println(content);
   }
 

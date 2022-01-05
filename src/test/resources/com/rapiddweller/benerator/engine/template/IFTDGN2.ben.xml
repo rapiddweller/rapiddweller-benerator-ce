@@ -3,12 +3,12 @@
 
     <bean id="con" class="TemplateFileEntityExporter">
         <property name="uri" value="target/IFTDGN2.edi"/>
-        <property name="templateUri" value="com/rapiddweller/benerator/engine/template/IFTDGN.ftl"/>
+        <property name="templateUri" value="IFTDGN.ftl"/>
         <property name="recordType" value="com.rapiddweller.platform.edi.EdiTemplateRecord"/>
     </bean>
 
     <generate type="iftdgns" count="1" consumer="con">
-        <variable name="vessel" source="com/rapiddweller/benerator/engine/template/vessel.ent.csv"/>
+        <variable name="vessel" source="vessel.ent.csv"/>
         <attribute name="message_ref_no_E_0062_1_01" constant="M130821145902B"/>
         <attribute name="message_function_code_E_1225_2_03" type="string" nullQuota="1"/>
         <attribute name="response_type_code_E_4343_2_04" constant="9"/>

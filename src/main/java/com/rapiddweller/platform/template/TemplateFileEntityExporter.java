@@ -27,10 +27,12 @@
 package com.rapiddweller.platform.template;
 
 import com.rapiddweller.benerator.Consumer;
+import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.wrapper.ProductWrapper;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Context;
+import com.rapiddweller.common.FileUtil;
 import com.rapiddweller.common.IOUtil;
 import com.rapiddweller.common.accessor.FeatureAccessor;
 import com.rapiddweller.common.context.ContextAware;
@@ -72,7 +74,7 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
   private TemplateRecord root;
   private Stack<TemplateRecord> stack;
 
-  private Context context;
+  private BeneratorContext context;
 
 
   // constructors ----------------------------------------------------------------------------------------------------
@@ -139,7 +141,7 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
 
   @Override
   public void setContext(Context context) {
-    this.context = context;
+    this.context = (BeneratorContext) context;
   }
 
   @Override
@@ -175,16 +177,17 @@ public class TemplateFileEntityExporter implements Consumer, ContextAware {
     if (root != null) {
       logger.debug("Writing file {}", uri);
       try {
-        Script template = ScriptUtil.readFile(templateUri);
+        Script template = ScriptUtil.readFile(context.resolveRelativeUri(templateUri));
         mapRootToContext();
         Context subContext = new DefaultContext(context);
         String text = ToStringConverter.convert(template.evaluate(subContext), "");
-        String path = uri.replace('/', File.separatorChar);
-        File folder = new File(path).getParentFile();
+        String targetUri = context.resolveRelativeUri(uri);
+        String targetPath = targetUri.replace('/', File.separatorChar);
+        File folder = new File(targetPath).getParentFile();
         if (folder != null) {
           folder.mkdirs();
         }
-        IOUtil.writeTextFile(uri, text, encoding);
+        IOUtil.writeTextFile(targetPath, text, encoding);
       } catch (ScriptException e) {
         throw ExceptionFactory.getInstance().configurationError(
             "Error evaluating template " + templateUri, e);
