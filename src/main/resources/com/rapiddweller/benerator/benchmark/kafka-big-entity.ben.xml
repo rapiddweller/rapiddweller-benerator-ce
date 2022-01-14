@@ -26,23 +26,23 @@
         <attribute name="att_003" constant="A"/>
         <attribute name="att_004" constant="11"/>
         <attribute name="att_005" constant="ABCD"/>
-        <attribute name="att_006" nullQuota="1"/>
-        <attribute name="att_007" nullQuota="1"/>
-        <attribute name="att_008" nullQuota="1"/>
+        <attribute name="att_006" constant="1234.56"/>
+        <attribute name="att_007" constant="1234.56"/>
+        <attribute name="att_008" constant="1234.56"/>
         <attribute name="att_009" constant="1234.56"/>
         <attribute name="att_010" constant="1234.56"/>
         <attribute name="att_011" constant="0"/>
-        <attribute name="att_012" nullQuota="1"/>
-        <attribute name="att_013" nullQuota="1"/>
-        <attribute name="att_014" nullQuota="1"/>
-        <attribute name="att_015" nullQuota="1"/>
-        <attribute name="att_016" nullQuota="1"/>
-        <attribute name="att_017" nullQuota="1"/>
-        <attribute name="att_018" nullQuota="1"/>
-        <attribute name="att_019" nullQuota="1"/>
+        <attribute name="att_012" constant="1234.56"/>
+        <attribute name="att_013" constant="1234.56"/>
+        <attribute name="att_014" constant="1234.56"/>
+        <attribute name="att_015" constant="1234.56"/>
+        <attribute name="att_016" constant="1234.56"/>
+        <attribute name="att_017" constant="1234.56"/>
+        <attribute name="att_018" constant="1234.56"/>
+        <attribute name="att_019" constant="1234.56"/>
         <attribute name="att_020" constant="AB"/>
         <attribute name="att_021" constant="AB"/>
-        <attribute name="att_022" nullQuota="1"/>
+        <attribute name="att_022" constant="1234.56"/>
         <attribute name="att_023" constant="1234.56"/>
         <attribute name="att_024" constant="12345678"/>
         <attribute name="att_025" constant="00"/>
@@ -67,12 +67,12 @@
         <attribute name="att_044" constant="FIREFOX"/>
         <attribute name="att_045" constant="7.0"/>
         <attribute name="att_046" constant="10"/>
-        <attribute name="att_047" nullQuota="1"/>
-        <attribute name="att_048" nullQuota="1"/>
+        <attribute name="att_047" constant="1234.56"/>
+        <attribute name="att_048" constant="1234.56"/>
         <attribute name="att_049" constant="1234"/>
         <attribute name="att_050" constant="12"/>
         <attribute name="att_051" constant="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr"/>
-        <attribute name="att_052" nullQuota="1"/>
+        <attribute name="att_052" constant="1234.56"/>
         <attribute name="att_053" constant="123"/>
         <attribute name="att_054" constant="M"/>
         <attribute name="att_055" constant="L"/>
@@ -84,8 +84,8 @@
         <attribute name="att_061" constant="1"/>
         <attribute name="att_062" constant="3"/>
         <attribute name="att_063" constant="Y"/>
-        <attribute name="att_064" nullQuota="1"/>
-        <attribute name="att_065" nullQuota="1"/>
+        <attribute name="att_064" constant="1234.56"/>
+        <attribute name="att_065" constant="1234.56"/>
         <attribute name="att_066" constant="1"/>
         <attribute name="att_067" constant="0"/>
         <attribute name="att_068" constant="abcdefghijklmnop" nullQuota="0.7"/>
@@ -125,23 +125,23 @@
         <attribute name="att_102" constant="20210101000539652"/>
         <attribute name="att_103" constant="1234567890"/>
         <attribute name="att_104" constant="1"/>
-        <attribute name="att_105" nullQuota="1"/>
+        <attribute name="att_105" constant="1234.56"/>
         <attribute name="att_106" constant="ACCEPT"/>
         <attribute name="att_107" constant="O"/>
         <attribute name="att_108" constant="1"/>
-        <attribute name="att_109" nullQuota="1"/>
+        <attribute name="att_109" constant="1234.56"/>
         <attribute name="att_110" constant="A"/>
         <attribute name="att_111" constant="2021-01-01T01:02:03.456Z"/>
         <attribute name="att_112" constant="abcdefghij"/>
         <attribute name="att_113" constant="0"/>
-        <attribute name="att_114" nullQuota="1"/>
+        <attribute name="att_114" constant="1234.56"/>
         <attribute name="att_115" constant="87"/>
-        <attribute name="att_116" nullQuota="1"/>
+        <attribute name="att_116" constant="1234.56"/>
         <attribute name="att_117" constant="240"/>
         <attribute name="att_118" constant="abcdefghij"/>
-        <attribute name="att_119" nullQuota="1"/>
-        <attribute name="att_120" nullQuota="1"/>
-        <attribute name="att_121" nullQuota="1"/>
+        <attribute name="att_119" constant="1234.56"/>
+        <attribute name="att_120" constant="1234.56"/>
+        <attribute name="att_121" constant="1234.56"/>
         <attribute name="att_122" constant="ABC"/>
         <attribute name="att_123" constant="Y"/>
         <attribute name="att_124" constant="123"/>
@@ -153,75 +153,75 @@
         <attribute name="att_130" constant="AB"/>
         <attribute name="att_131" constant="abcdefghij"/>
         <attribute name="att_132" constant="YY"/>
-        <attribute name="att_133" nullQuota="1"/>
-        <attribute name="att_134" nullQuota="1"/>
-        <attribute name="att_135" nullQuota="1"/>
-        <attribute name="att_136" nullQuota="1"/>
-        <attribute name="att_137" nullQuota="1"/>
-        <attribute name="att_138" nullQuota="1"/>
+        <attribute name="att_133" constant="1234.56"/>
+        <attribute name="att_134" constant="1234.56"/>
+        <attribute name="att_135" constant="1234.56"/>
+        <attribute name="att_136" constant="1234.56"/>
+        <attribute name="att_137" constant="1234.56"/>
+        <attribute name="att_138" constant="1234.56"/>
         <attribute name="att_139" constant="abcdefghijklmnop"/>
-        <attribute name="att_140" nullQuota="1"/>
+        <attribute name="att_140" constant="1234.56"/>
         <attribute name="att_141" constant="20210102"/>
         <attribute name="att_142" constant="abcdefghij"/>
         <attribute name="att_143" constant="Y"/>
         <attribute name="att_144" constant="1"/>
         <attribute name="att_145" constant="abcdefghij"/>
         <attribute name="att_146" constant="N"/>
-        <attribute name="att_147" nullQuota="1"/>
-        <attribute name="att_148" nullQuota="1"/>
-        <attribute name="att_149" nullQuota="1"/>
-        <attribute name="att_150" nullQuota="1"/>
+        <attribute name="att_147" constant="1234.56"/>
+        <attribute name="att_148" constant="1234.56"/>
+        <attribute name="att_149" constant="1234.56"/>
+        <attribute name="att_150" constant="1234.56"/>
         <attribute name="att_151" constant="OK"/>
         <attribute name="att_152" constant="M"/>
         <attribute name="att_153" constant="abcdefghijklmnopqrstuvwxyz" nullQuota="0.7"/>
         <attribute name="att_154" constant="1.00"/>
-        <attribute name="att_155" nullQuota="1"/>
-        <attribute name="att_156" nullQuota="1"/>
-        <attribute name="att_157" nullQuota="1"/>
-        <attribute name="att_158" nullQuota="1"/>
-        <attribute name="att_159" nullQuota="1"/>
-        <attribute name="att_160" nullQuota="1"/>
-        <attribute name="att_161" nullQuota="1"/>
-        <attribute name="att_162" nullQuota="1"/>
+        <attribute name="att_155" constant="1234.56"/>
+        <attribute name="att_156" constant="1234.56"/>
+        <attribute name="att_157" constant="1234.56"/>
+        <attribute name="att_158" constant="1234.56"/>
+        <attribute name="att_159" constant="1234.56"/>
+        <attribute name="att_160" constant="1234.56"/>
+        <attribute name="att_161" constant="1234.56"/>
+        <attribute name="att_162" constant="1234.56"/>
         <attribute name="att_163" constant="None"/>
-        <attribute name="att_164" nullQuota="1"/>
-        <attribute name="att_165" nullQuota="1"/>
+        <attribute name="att_164" constant="1234.56"/>
+        <attribute name="att_165" constant="1234.56"/>
         <attribute name="att_166" constant="NY"/>
         <attribute name="att_167" constant="826"/>
         <attribute name="att_168" constant="abcdefghij"/>
         <attribute name="att_169" constant="AB"/>
         <attribute name="att_170" constant="12"/>
-        <attribute name="att_171" nullQuota="1"/>
+        <attribute name="att_171" constant="1234.56"/>
         <attribute name="att_172" constant="1"/>
-        <attribute name="att_173" nullQuota="1"/>
-        <attribute name="att_174" nullQuota="1"/>
-        <attribute name="att_175" nullQuota="1"/>
-        <attribute name="att_176" nullQuota="1"/>
-        <attribute name="att_177" nullQuota="1"/>
-        <attribute name="att_178" nullQuota="1"/>
-        <attribute name="att_179" nullQuota="1"/>
+        <attribute name="att_173" constant="1234.56"/>
+        <attribute name="att_174" constant="1234.56"/>
+        <attribute name="att_175" constant="1234.56"/>
+        <attribute name="att_176" constant="1234.56"/>
+        <attribute name="att_177" constant="1234.56"/>
+        <attribute name="att_178" constant="1234.56"/>
+        <attribute name="att_179" constant="1234.56"/>
         <attribute name="att_180" constant="abcdefghijklmnop" nullQuota="0.7"/>
         <attribute name="att_181" constant="abcdefghijklmnop"/>
         <attribute name="att_182" constant="AB"/>
-        <attribute name="att_183" nullQuota="1"/>
-        <attribute name="att_184" nullQuota="1"/>
-        <attribute name="att_185" nullQuota="1"/>
-        <attribute name="att_186" nullQuota="1"/>
-        <attribute name="att_187" nullQuota="1"/>
-        <attribute name="att_188" nullQuota="1"/>
-        <attribute name="att_189" nullQuota="1"/>
+        <attribute name="att_183" constant="1234.56"/>
+        <attribute name="att_184" constant="1234.56"/>
+        <attribute name="att_185" constant="1234.56"/>
+        <attribute name="att_186" constant="1234.56"/>
+        <attribute name="att_187" constant="1234.56"/>
+        <attribute name="att_188" constant="1234.56"/>
+        <attribute name="att_189" constant="1234.56"/>
         <attribute name="att_190" constant="123"/>
         <attribute name="att_191" constant="012345"/>
         <attribute name="att_192" constant="012345678901"/>
         <attribute name="att_193" constant="1234"/>
         <attribute name="att_194" constant="12345"/>
-        <attribute name="att_195" nullQuota="1"/>
-        <attribute name="att_196" nullQuota="1"/>
-        <attribute name="att_197" nullQuota="1"/>
-        <attribute name="att_198" nullQuota="1"/>
-        <attribute name="att_199" nullQuota="1"/>
-        <attribute name="att_200" nullQuota="1"/>
-        <attribute name="att_201" nullQuota="1"/>
+        <attribute name="att_195" constant="1234.56"/>
+        <attribute name="att_196" constant="1234.56"/>
+        <attribute name="att_197" constant="1234.56"/>
+        <attribute name="att_198" constant="1234.56"/>
+        <attribute name="att_199" constant="1234.56"/>
+        <attribute name="att_200" constant="1234.56"/>
+        <attribute name="att_201" constant="1234.56"/>
         <attribute name="att_202" constant="12"/>
         <attribute name="att_203" constant="P"/>
         <attribute name="att_204" constant="0"/>
@@ -231,16 +231,16 @@
             <attribute name="att_207" constant="5"/>
             <attribute name="att_208" constant="1"/>
         </part>
-        <attribute name="att_209" nullQuota="1"/>
+        <attribute name="att_209" constant="1234.56"/>
         <attribute name="att_210" constant=""/>
         <attribute name="att_211" constant=""/>
         <attribute name="att_212" constant="0"/>
-        <attribute name="att_213" nullQuota="1"/>
+        <attribute name="att_213" constant="1234.56"/>
         <attribute name="att_214" constant="12345"/>
         <attribute name="att_215" constant="20210102"/>
         <attribute name="att_216" constant="123456"/>
         <attribute name="att_217" constant="0"/>
-        <attribute name="att_218" nullQuota="1"/>
+        <attribute name="att_218" constant="1234.56"/>
         <attribute name="att_219" constant="12345678"/>
         <attribute name="att_220" constant="123"/>
         <attribute name="att_221" constant="abcdefghijklmnop"/>
@@ -272,9 +272,9 @@
         <attribute name="att_247" constant="abcdefghijklmnop"/>
         <attribute name="att_248" constant="abcdefghij"/>
         <attribute name="att_249" constant="abcdefghij"/>
-        <attribute name="att_250" nullQuota="1"/>
-        <attribute name="att_251" nullQuota="1"/>
-        <attribute name="att_252" nullQuota="1"/>
+        <attribute name="att_250" constant="1234.56"/>
+        <attribute name="att_251" constant="1234.56"/>
+        <attribute name="att_252" constant="1234.56"/>
         <attribute name="att_253" constant="AB"/>
         <attribute name="att_254" constant="abcdefghi"/>
         <attribute name="att_255" constant="abcdefghij"/>
@@ -294,9 +294,9 @@
         <attribute name="att_269" constant="0"/>
         <attribute name="att_270" constant="2"/>
         <attribute name="att_271" constant="1"/>
-        <attribute name="att_272" nullQuota="1"/>
+        <attribute name="att_272" constant="1234.56"/>
         <attribute name="att_273" constant="N"/>
-        <attribute name="att_274" nullQuota="1"/>
+        <attribute name="att_274" constant="1234.56"/>
         <attribute name="att_275" constant="0123"/>
         <attribute name="att_276" constant="5"/>
         <attribute name="att_277" constant="abcdefghij"/>
@@ -309,7 +309,7 @@
         <attribute name="att_284" constant="0"/>
         <attribute name="att_285" constant="N"/>
         <attribute name="att_286" constant="abc"/>
-        <attribute name="att_287" nullQuota="1"/>
+        <attribute name="att_287" constant="1234.56"/>
         <attribute name="att_288" constant="abcdefghij"/>
         <attribute name="att_289" constant="abcdefghij"/>
         <attribute name="att_290" constant="abcdefghij"/>
@@ -319,7 +319,7 @@
         <attribute name="att_294" constant="30"/>
         <attribute name="att_295" constant="abcdefghijklmnopqrstuvwxyzabcdef"/>
         <attribute name="att_296" constant="abcdefghij"/>
-        <attribute name="att_297" nullQuota="1"/>
+        <attribute name="att_297" constant="1234.56"/>
         <attribute name="att_298" constant="A"/>
         <attribute name="att_299" constant="A"/>
         <attribute name="att_300" constant="A"/>
@@ -344,7 +344,7 @@
         <attribute name="att_319" constant="AB"/>
         <attribute name="att_320" constant="SHIPSTR100000000"/>
         <attribute name="att_321" constant="63821"/>
-        <attribute name="att_322" nullQuota="1"/>
+        <attribute name="att_322" constant="1234.56"/>
         <attribute name="att_323" constant="20210102000111111"/>
         <attribute name="att_324" constant="ABC"/>
         <attribute name="att_325" constant="012345"/>
@@ -363,19 +363,19 @@
         <attribute name="att_336" constant="AB"/>
         <attribute name="att_337" constant="abcdefghij"/>
         <attribute name="att_338" constant="abcdefghij"/>
-        <attribute name="att_339" nullQuota="1"/>
-        <attribute name="att_340" nullQuota="1"/>
-        <attribute name="att_341" nullQuota="1"/>
+        <attribute name="att_339" constant="1234.56"/>
+        <attribute name="att_340" constant="1234.56"/>
+        <attribute name="att_341" constant="1234.56"/>
         <attribute name="att_342" constant="abcdefghijklmnop"/>
         <attribute name="att_343" constant="12345"/>
         <attribute name="att_344" constant="abcdefghijklmnop"/>
         <attribute name="att_345" constant="abcdefghijklmnop"/>
         <attribute name="att_346" constant="20210102000111111"/>
-        <attribute name="att_347" nullQuota="1"/>
-        <attribute name="att_348" nullQuota="1"/>
-        <attribute name="att_359" nullQuota="1"/>
-        <attribute name="att_350" nullQuota="1"/>
-        <attribute name="att_351" nullQuota="1"/>
+        <attribute name="att_347" constant="1234.56"/>
+        <attribute name="att_348" constant="1234.56"/>
+        <attribute name="att_359" constant="1234.56"/>
+        <attribute name="att_350" constant="1234.56"/>
+        <attribute name="att_351" constant="1234.56"/>
         <attribute name="att_352" constant="4"/>
         <attribute name="att_353" constant="abcdefghijklmnopqrstuvwxyz"/>
         <attribute name="att_354" constant="1234.56"/>
@@ -448,8 +448,8 @@
         <attribute name="att_421" constant="0"/>
         <attribute name="att_422" constant="123"/>
         <attribute name="att_423" constant="Abcdef"/>
-        <attribute name="att_424" nullQuota="1"/>
-        <attribute name="att_425" nullQuota="1"/>
+        <attribute name="att_424" constant="1234.56"/>
+        <attribute name="att_425" constant="1234.56"/>
         <attribute name="att_426" constant="123"/>
         <attribute name="att_427" constant="1234"/>
         <attribute name="att_428" constant="abcdefghij"/>
@@ -465,13 +465,13 @@
         <attribute name="att_438" constant="12.345"/>
         <attribute name="att_439" constant="-12.3456"/>
         <attribute name="att_440" constant="12345"/>
-        <attribute name="att_441" nullQuota="1"/>
+        <attribute name="att_441" constant="1234.56"/>
         <attribute name="att_442" constant="12345"/>
         <attribute name="att_443" constant="abcdefghijklmop"/>
         <attribute name="att_444" constant="abcdefghijklmop"/>
         <attribute name="att_445" constant="abc"/>
         <attribute name="att_446" constant="0.0"/>
-        <attribute name="att_447" nullQuota="1"/>
+        <attribute name="att_447" constant="1234.56"/>
         <attribute name="att_448" constant="abcdefghijklmop"/>
         <attribute name="att_449" constant="al"/>
         <attribute name="att_450" constant="0"/>
@@ -495,8 +495,8 @@
         <attribute name="att_468" constant="1"/>
         <attribute name="att_469" constant="0"/>
         <attribute name="att_470" constant="0"/>
-        <attribute name="att_471" nullQuota="1"/>
-        <attribute name="att_472" nullQuota="1"/>
+        <attribute name="att_471" constant="1234.56"/>
+        <attribute name="att_472" constant="1234.56"/>
         <attribute name="att_473" constant="5"/>
         <attribute name="att_474" constant="123"/>
         <attribute name="att_475" constant="12"/>
@@ -600,19 +600,19 @@
         <attribute name="att_573" constant="1"/>
         <attribute name="att_574" constant="22"/>
         <attribute name="att_575" constant="22"/>
-        <attribute name="att_576" nullQuota="1"/>
-        <attribute name="att_577" nullQuota="1"/>
+        <attribute name="att_576" constant="1234.56"/>
+        <attribute name="att_577" constant="1234.56"/>
         <attribute name="att_578" constant="JA-JP"/>
-        <attribute name="att_579" nullQuota="1"/>
-        <attribute name="att_580" nullQuota="1"/>
-        <attribute name="att_581" nullQuota="1"/>
-        <attribute name="att_582" nullQuota="1"/>
-        <attribute name="att_583" nullQuota="1"/>
-        <attribute name="att_584" nullQuota="1"/>
-        <attribute name="att_585" nullQuota="1"/>
+        <attribute name="att_579" constant="1234.56"/>
+        <attribute name="att_580" constant="1234.56"/>
+        <attribute name="att_581" constant="1234.56"/>
+        <attribute name="att_582" constant="1234.56"/>
+        <attribute name="att_583" constant="1234.56"/>
+        <attribute name="att_584" constant="1234.56"/>
+        <attribute name="att_585" constant="1234.56"/>
         <attribute name="att_586" constant="30"/>
-        <attribute name="att_587" nullQuota="1"/>
-        <attribute name="att_588" nullQuota="1"/>
+        <attribute name="att_587" constant="1234.56"/>
+        <attribute name="att_588" constant="1234.56"/>
         <attribute name="att_589" constant="abcdefghijklmnop"/>
         <attribute name="att_590" constant="low"/>
         <attribute name="att_591" constant="1"/>
@@ -664,7 +664,7 @@
             <attribute name="att_632" constant="abcdefghijklmnop@abcdefghijklmnop.com"/>
             <attribute name="att_633" constant="abcdefghijklmnop"/>
             <attribute name="att_634" constant="abcdefghijklmnop" nullQuota="0.7"/>
-            <attribute name="att_635" nullQuota="1"/>
+            <attribute name="att_635" constant="1234.56"/>
             <attribute name="att_636" constant="abcdefghijklmnopqrstuvwxyz"/>
             <attribute name="att_637" constant="AB"/>
             <attribute name="att_638" constant="123"/>
@@ -678,7 +678,7 @@
             <attribute name="att_646" constant="Y"/>
             <attribute name="att_647" constant="N"/>
             <attribute name="att_648" constant="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"/>
-            <attribute name="att_649" nullQuota="1"/>
+            <attribute name="att_649" constant="1234.56"/>
         </part>
         <part name="pt_6">
             <attribute name="att_650" constant="Abcde"/>
