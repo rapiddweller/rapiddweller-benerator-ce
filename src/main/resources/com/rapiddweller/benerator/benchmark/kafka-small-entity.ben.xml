@@ -26,9 +26,9 @@
         <attribute name="att_003" constant="A"/>
         <attribute name="att_004" constant="11"/>
         <attribute name="att_005" constant="ABCD"/>
-        <attribute name="att_006" nullQuota="1"/>
-        <attribute name="att_007" nullQuota="1"/>
-        <attribute name="att_008" nullQuota="1"/>
+        <attribute name="att_006" constant="1321313"/>
+        <attribute name="att_007" constant="1321313"/>
+        <attribute name="att_008" constant="1321313"/>
         <attribute name="att_009" constant="1234.56"/>
         <attribute name="att_010" constant="1234.56"/>
     </generate>
