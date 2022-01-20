@@ -13,7 +13,7 @@
          then reset to iterate all from the beginning. If we try to reset to the end,
          we won't receive any data. -->
     <kafka-importer id="prep_in" environment="{environment}" system="{system}"
-                    idle.timeout.seconds="3" auto.offset.reset="earliest" enable.auto.commit='false'
+                    idle.timeout.seconds="3" auto.offset.reset="earliest" enable.auto.commit='true'
                     group.id="benchmark"/>
     <iterate source="prep_in" type="data" consumer="ConsoleExporter"/>
 
@@ -36,7 +36,7 @@
 
     <!-- Re-read the data which was sent previously -->
     <kafka-importer id="kafka_importer" environment="{environment}" system="{system}"
-                    page.size="1000" auto.offset.reset="none" enable.auto.commit='false' group.id="benchmark"/>
+                    page.size="1000" auto.offset.reset="none" enable.auto.commit='true' group.id="benchmark"/>
 
     <iterate source="kafka_importer" type='ben_benchmark' count="{count}" threads="{threads}" pageSize='1000'
              sensor="benchmark.read" consumer="NoConsumer"/>
