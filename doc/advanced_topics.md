@@ -180,6 +180,7 @@ to help you with this task. Instantiate it as `<bean>`, specifying the field nam
 finally query its 'sum' property value with a script expression:
 
 ```xml
+
 <bean id="adder" spec="new AddingConsumer('_txn_amount_', 'long')"/>
 
 <generate type="deb_transactions" count="100" consumer="ConsoleExporter, adder">
@@ -191,38 +192,42 @@ finally query its 'sum' property value with a script expression:
 </generate>
 ```
 
-## Querying information from a system
+## Querying data from a system to variables
 
-Arbitrary information may be queried from a system by a `selector` attribute, which is system-dependent. For a database SQL is used:
+Querying is discussed in **[Data Generation Concepts](data_generation_concepts.md##querying-information-from-a-system)**.
 
-```xml
-<generate type="db_order" count="30" pageSize="100" consumer="db">
-    <attribute name="customer_id" source="db" selector="select id from db_customer" cyclic="true"/>
-</generate>
-```
+Benerator supports to store multiple values in **[Variables](data_generation_concepts.md#variables)** at runtime 
+that can be accessed array-like to use the data for multiple attributes i.e. fulfill multi-field constraints. 
 
-You can use script expressions in your selectors, e.g.
-
-`selector="{ftl:select ean_code from db_product where country='${country}'}"`
-
-The script is resolved immediately before the first generation and then reused. If you need dynamic queries, that are re-evaluated, you can specify
-them with double brackets:
-
-`selector="{{ftl:select ean_code from db_product where country='${shop.country}'}}"`
-
-Example:
+Given a variable named `productInfo` 
+and a selector that queries 3 values (e.g. `select ean_code,product_name,product_no from ...` ) from a product database  
+the values are accessed by `productInfo[0]`, `productInfo[1]`, `productInfo[2]` using the `script` element. 
 
 ```xml
+
 <generate type="shop" count="10">
     <attribute name="country" values="DE,AT,CH"/>
     <generate type="product" count="100" consumer="db">
+
+        <variable name="productInfo"
+                  source="db"
+                  selector="{ftl: select ean_code,product_name,product_no from db_product where country='${shop.country}'}}" 
+                  cyclic="true"  
+        />
+                
         <attribute name="ean_code" 
-                   source="db" 
-                   selector="{{ftl:select ean_code from db_product where country='${shop.country}'}}"
-                   />
+                   script="productInfo[0]"/>                
+        <attribute name="product_name" 
+                   script="productInfo[1]"/>                
+        <attribute name="product_no" 
+                   script="productInfo[2]"/>
     </generate>
 </generate>
 ```
+
+!!! warning
+
+    Set **cyclic="true"** if not enough products for the given country value are available in your dataset.
 
 ## The MemStore
 
@@ -255,8 +260,8 @@ Afterwards you can query the generated products for referencing them in generate
 
 !!! warning
 
-    Note that you can **only** query for entities – if you need only an attribute of an entity, you must first use a variable to get the entity and then a
-    script to get the required attribute.
+    Note that you can **only** query for entities – if you need a single attribute of an entity, 
+    you must first use a variable to get the entity and afterwards retrieve the required attribute by script.
 
 You can use a distribution:
 

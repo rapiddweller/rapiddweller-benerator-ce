@@ -953,10 +953,9 @@ SQL is used:
 </generate>
 ```
 
-Using cyclic="true", the result set will be re-iterated from the beginning when it has reached the end.
+Using `cyclic="true"`, the result set will be re-iterated from the beginning when it has reached the end.
 
-You may apply a distribution as well. The result set of a selector might be quite large, so take care, which
-distribution to apply, see [Distribution Concepts](distribution.md):
+You may apply a distribution as well:
 
 ```xml
 
@@ -967,6 +966,11 @@ distribution to apply, see [Distribution Concepts](distribution.md):
     <consumer ref="db"/>
 </generate>
 ```
+
+!!! warning
+
+    The result set of a selector might be quite large, so take care, which
+    distribution to apply, see [Distribution Concepts](distribution.md).
 
 You can use script expressions in your selectors, e.g.
 
@@ -989,6 +993,9 @@ Example:
     </generate>
 </generate>
 ```
+
+Also see the information about
+**[Querying to Variables in Advanced Topics](advanced_topics.md#querying-data-from-a-system-to-variables)**.
 
 ## Attribute Metadata Reference
 
@@ -1046,7 +1053,9 @@ If you need to dynamically calculate data at runtime, use a `script` attribute, 
 
 `<attribute name="message" script="'Hi, ' + user_name + '!'" />`
 
-!!! note In the `script` attribute, curly braces are not necessary.
+!!! note 
+
+    In the `script` attribute, curly braces are not necessary.
 
 Using scripts you can access
 
@@ -1061,8 +1070,10 @@ Using scripts you can access
 - Static Java methods and attributes, e.g. `System.getProperty('user.home')`
 - instance methods and attributes on objects in the context, e.g. `db.system`
 
-Variable names used in scripting may not contain points - a point always implies resolution of a local feature of an
-object, e.g. person.familyName resolves the familyName attribute/property/key of a person.
+!!! warning
+
+    Variable names used in scripting may **not** contain points. A point always implies resolution of a local 
+    feature of an object, e.g. person.familyName resolves the familyName attribute/property/key of a person.
 
 ### this
 
@@ -1105,10 +1116,12 @@ errordata.csv` and post process it:
 ```xml
 
 <generate type="product" count="1000"
-          consumer="**new BadDataConsumer(new CSVExporter('errors.csv'),** **db.inserter())">
+          consumer="new BadDataConsumer(new CSVExporter('errors.csv'), db.inserter())">
     <!-- component setup here -->
 </generate>
 ```
 
-Note that this cannot work properly with a database that uses batch processing (
-see [Using Databases](using_relational_databases.md)).
+!!! danger
+    
+    Note that this cannot work properly with a database that uses batch processing. 
+    See [Using Databases](using_relational_databases.md).
