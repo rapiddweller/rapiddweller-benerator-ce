@@ -31,10 +31,10 @@ import com.rapiddweller.model.data.Entity;
 /**
  * Common interface for classes which encode entities<br/><br/>
  * Created: 17.08.2021 10:41:53
- *
  * @author Volker Bergmann
  * @since 2.0.0
  */
 public interface EntityEncoder {
-  String encodeEntity(Entity entity);
+  String encodeEntityAsString(Entity entity);
+  byte[] encodeEntityAsBytes(Entity entity);
 }
