@@ -39,5 +39,7 @@ import java.util.List;
  */
 public interface EntityDecoder {
   Entity decodeEntity(String code);
+  Entity decodeEntity(byte[] code);
   List<Entity> decodeList(String code, ComplexTypeDescriptor descriptor);
+  List<Entity> decodeList(byte[] code, ComplexTypeDescriptor descriptor);
 }
