@@ -111,6 +111,27 @@ public class ShopDemoIntegrationExtDBTest extends AbstractBeneratorIntegrationTe
   }
 
   /**
+   * Demo mongodb shop.
+   */
+  @Test
+  public void DemoMongoDBShop() {
+    assumeTestActive("postgres");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-mongodb.ben.xml");
+    Assert.assertEquals("/demo/shop", benCtx.getContextUri());
+  }
+
+  /**
+   * Demo postgres and mongodb shop.
+   */
+  @Test
+  public void DemoPostgresMongoDBShop() {
+    assumeTestActive("postgres");
+    BeneratorContext benCtx = parseAndExecuteFile("/demo/shop/shop-postgres-mongodb.ben.xml");
+    Assert.assertEquals("/demo/shop", benCtx.getContextUri());
+  }
+
+
+  /**
    * Debugging
    */
   @Ignore("for manual internal testing")
