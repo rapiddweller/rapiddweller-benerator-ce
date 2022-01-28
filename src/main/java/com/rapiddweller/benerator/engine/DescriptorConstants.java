@@ -69,6 +69,7 @@ public class DescriptorConstants {
   public static final String EL_DEFAULT_COMPONENTS = "defaultComponents";
   public static final String EL_EVALUATE = "evaluate";
   public static final String EL_EXECUTE = "execute";
+  public static final String EL_STORAGE_SYSTEM = "storage-system";
   public static final String EL_DATABASE = "database";
   public static final String EL_MEMSTORE = "memstore";
   public static final String EL_DOMTREE = "domtree";

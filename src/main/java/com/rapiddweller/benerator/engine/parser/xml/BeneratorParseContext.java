@@ -29,6 +29,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.engine.ResourceManager;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.format.xml.ParseContext;
+import com.rapiddweller.platform.db.DatabaseParser;
 
 /**
  * {@link ParseContext} implementation for Benerator. It defines parsers for all the descriptor XML elements.<br/><br/>
@@ -47,6 +48,8 @@ public class BeneratorParseContext extends ParseContext<Statement> {
     factory.addParser(new BeepParser());
     factory.addParser(new CascadeParser());
     factory.addParser(new CommentParser());
+    factory.addParser(new StorageSystemParser());
+    factory.addParser(new DatabaseParser());
     factory.addParser(new DefaultComponentParser());
     factory.addParser(new DOMTreeParser());
     factory.addParser(new EchoParser());

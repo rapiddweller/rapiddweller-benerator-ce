@@ -614,6 +614,11 @@ public class BeneratorErrorIds {
   public static final String SYN_KKEXP_TRANSACTION_TIMEOUT_MS = "BEN-2216";
   public static final String SYN_KKEXP_TRANSACTIONAL_ID       = "BEN-2217";
 
+  // Syntax Errors regarding <systemStorage> ------------------------------------------------------------------------------
+
+  public static final String SYN_SYSTEM_STORAGE_ATTR         = "BEN-2200";
+  public static final String SYN_SYSTEM_STORAGE_ID           = "BEN-2201";
+
   // Syntax Errors regarding the 'xml' platform ----------------------------------------------------------------------
 
   public static final String SYN_XML_SIMPLE_NAME = "BEN-2300";
