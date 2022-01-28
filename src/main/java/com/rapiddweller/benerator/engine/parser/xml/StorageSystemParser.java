@@ -14,6 +14,7 @@ import com.rapiddweller.common.parser.StringParser;
 import com.rapiddweller.format.xml.AttrInfo;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.platform.nosql.CustomStorageSystem;
+import com.rapiddweller.platform.nosql.mongo.MongoDBSystem;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.w3c.dom.Element;
@@ -35,7 +36,9 @@ public class StorageSystemParser extends AbstractBeneratorDescriptorParser {
     private static final ScriptableParser<String> PARAMETER_PARSER =
             new ScriptableParser<>(new StringParser("parameter"));
 
-    private final Map<String, Class<? extends CustomStorageSystem>> storageSystemClasses = Map.of();
+    private final Map<String, Class<? extends CustomStorageSystem>> storageSystemClasses = Map.of(
+            "mongodb", MongoDBSystem.class
+    );
 
     private static final AttrInfo<String> ID_ATT_INFO = new AttrInfo<>(
             ATT_ID, true, BeneratorErrorIds.SYN_SYSTEM_STORAGE_ID, new IdParser(), null);
