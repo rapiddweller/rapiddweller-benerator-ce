@@ -3,7 +3,7 @@ docs_dir: doc
 site_name: rapiddweller Benerator
 site_url: https://docs.benerator.de
 site_author: rapiddweller GmbH & Volker Bergmann
-copyright: Copyright &copy; 2006 - 2021 rapiddweller GmbH & Volker Bergmann
+copyright: Copyright &copy; 2006 - 2022 rapiddweller GmbH & Volker Bergmann
 site_description: >-
   This document is supposed to become a complete summary of everything you need to know of Benerator usage,
   use it efficiently and extend it as you need. This reference is under construction and will update from time to time.
