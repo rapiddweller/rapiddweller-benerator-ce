@@ -541,6 +541,7 @@ public class BeneratorErrorIds {
   public static final String SYN_KK_SSL_KEYSTORE_PASSWORD    = "BEN-2058";
   public static final String SYN_KK_SSL_KEYSTORE_CERTIFICATE_CHAIN = "BEN-2059";
   public static final String SYN_KK_SSL_TRUSTMANAGER_ALGORITHM = "BEN-2060";
+  public static final String SYN_KK_SCHEMA_URL                = "BEN-2061";
 
   // Syntax Errors regarding <kafka-importer> ------------------------------------------------------------------------
 
@@ -570,7 +571,7 @@ public class BeneratorErrorIds {
   // Syntax Errors regarding <kafka-exporter> -------------------------------------------------------------------------------
 
   public static final String SYN_KKEXP_ILLEGAL_ATTR          = "BEN-2100";
-  public static final String SYN_KKEXP_KEY_ATTRIBUTE         = "BEN-2101";
+  public static final String SYN_KK_KEYEXP_ATTRIBUTE         = "BEN-2101";
   public static final String SYN_KKEXP_KEY_SERIALIZER        = "BEN-2102";
   public static final String SYN_KKEXP_ACKS                  = "BEN-2103";
   public static final String SYN_KKEXP_BUFFER_MEMORY         = "BEN-2104";
