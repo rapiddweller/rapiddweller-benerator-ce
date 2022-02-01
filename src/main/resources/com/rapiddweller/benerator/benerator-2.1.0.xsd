@@ -939,6 +939,14 @@
         <xs:attribute name="ssl.keystore.password" type="xs:string"/>
         <xs:attribute name="ssl.keystore.certificate.chain" type="xs:string"/>
         <xs:attribute name="ssl.trustmanager.algorithm" type="xs:string"/>
+        <xs:attribute name="schema.url" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>The URL by which a schema definition of the message protocol (eg. AVRO schema) can be retrieved</xs:documentation>
+                <xs:appinfo>
+                    <since>3.0.0</since>
+                </xs:appinfo>
+            </xs:annotation>
+        </xs:attribute>
     </xs:attributeGroup>
 
     <xs:attributeGroup name="kafka-importer-attrs">
