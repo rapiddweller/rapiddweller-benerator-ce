@@ -154,8 +154,7 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Nullable
-  protected static Generator<?> createConstantGenerator(
-      SimpleTypeDescriptor descriptor, BeneratorContext context) {
+  protected static Generator<?> createConstantGenerator(SimpleTypeDescriptor descriptor, BeneratorContext context) {
     Generator<?> generator = null;
     // check for constant
     String constant = descriptor.getConstant();

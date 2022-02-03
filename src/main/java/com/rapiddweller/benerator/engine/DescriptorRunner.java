@@ -109,6 +109,9 @@ public class DescriptorRunner implements ResourceManager {
   }
 
   public BeneratorRootStatement parseDescriptorFile() {
+    if (logger.isDebugEnabled()) {
+      logger.debug("Running descriptor file {}\n{}", uri, IOUtil.getContentOfURI(uri));
+    }
     Document document;
     try {
       document = XMLUtil.parseWithLocators(uri);

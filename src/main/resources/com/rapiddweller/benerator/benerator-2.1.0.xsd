@@ -996,6 +996,9 @@
     <xs:simpleType name="kafka-format">
         <xs:restriction base="xs:string">
             <xs:enumeration value="json"/>
+            <xs:enumeration value="avro">
+                <xs:annotation><xs:appinfo><since>3.0.0</since></xs:appinfo></xs:annotation>
+            </xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
 
