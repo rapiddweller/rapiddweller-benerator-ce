@@ -1,56 +1,56 @@
-id,name
-NH,New Hampshire
-NY,New York
-PR,Puerto Rico
-VI,Virgin Islands
-MA,Massachusetts
-RI,Rhode Island
-ME,Maine
-VT,Vermont
-CT,Connecticut
-NJ,New Jersey
-PA,Pennsylvania
-DE,Delaware
-DC,District Of Columbia
-VA,Virginia
-MD,Maryland
-WV,West Virginia
-NC,North Carolina
-SC,South Carolina
-GA,Georgia
-FL,Florida
-AL,Alabama
-TN,Tennessee
-MS,Mississippi
-KY,Kentucky
-OH,Ohio
-IN,Indiana
-MI,Michigan
-IA,Iowa
-WI,Wisconsin
-MN,Minnesota
-SD,South Dakota
-ND,North Dakota
-MT,Montana
-IL,Illinois
-MO,Missouri
-KS,Kansas
-NE,Nebraska
-LA,Louisiana
-AR,Arkansas
-OK,Oklahoma
-TX,Texas
-CO,Colorado
-WY,Wyoming
-ID,Idaho
-UT,Utah
-AZ,Arizona
-NM,New Mexico
-NV,Nevada
-CA,California
-HI,Hawaii
-AS,American Samoa
-GU,Guam
-OR,Oregon
-WA,Washington
-AK,Alaska
+id,name,population
+NH,New Hampshire,1377529
+NY,New York,20201249
+PR,Puerto Rico,3285874
+VI,Virgin Islands,87146
+MA,Massachusetts,7029917
+RI,Rhode Island,1097379
+ME,Maine,1362359
+VT,Vermont,643077
+CT,Connecticut,3605944
+NJ,New Jersey,9288994
+PA,Pennsylvania,13002700
+DE,Delaware,989948
+DC,District Of Columbia,689545
+VA,Virginia,8631393
+MD,Maryland,6177224
+WV,West Virginia,1793716
+NC,North Carolina,10439388
+SC,South Carolina,5118425
+GA,Georgia,10711908
+FL,Florida,21538187
+AL,Alabama,5024279
+TN,Tennessee,6910840
+MS,Mississippi,2961279
+KY,Kentucky,4505836
+OH,Ohio,11799448
+IN,Indiana,6785528
+MI,Michigan,10077331
+IA,Iowa,3190369
+WI,Wisconsin,5893718
+MN,Minnesota,5706494
+SD,South Dakota,886667
+ND,North Dakota,779094
+MT,Montana,1084225
+IL,Illinois,12812508
+MO,Missouri,6154913
+KS,Kansas,2937880
+NE,Nebraska,1961504
+LA,Louisiana,4657757
+AR,Arkansas,3011524
+OK,Oklahoma,3959353
+TX,Texas,29145505
+CO,Colorado,5773714
+WY,Wyoming,576851
+ID,Idaho,1839106
+UT,Utah,3271616
+AZ,Arizona,7151502
+NM,New Mexico,2117522
+NV,Nevada,3104614
+CA,California,39538223
+HI,Hawaii,1455271
+AS,American Samoa,49710
+GU,Guam,153836
+OR,Oregon,4237256
+WA,Washington,7705281
+AK,Alaska,733391
