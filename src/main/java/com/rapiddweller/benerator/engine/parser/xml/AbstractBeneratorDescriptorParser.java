@@ -33,6 +33,7 @@ import com.rapiddweller.benerator.engine.statement.GenIterStatement;
 import com.rapiddweller.benerator.engine.statement.RunTaskStatement;
 import com.rapiddweller.benerator.engine.statement.WhileStatement;
 import com.rapiddweller.common.ErrorHandler;
+import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.format.xml.ParseContext;
 import com.rapiddweller.common.Expression;
@@ -87,6 +88,9 @@ public abstract class AbstractBeneratorDescriptorParser extends XMLStatementPars
 
   @Override
   public final Statement doParse(Element element, Element[] parentXmlPath, Statement[] parentComponentPath, ParseContext<Statement> context) {
+    if (logger.isDebugEnabled()) {
+      logger.debug("Parsing\n{}", XMLUtil.format(element));
+    }
     return doParse(element, parentXmlPath, parentComponentPath, (BeneratorParseContext) context);
   }
 
