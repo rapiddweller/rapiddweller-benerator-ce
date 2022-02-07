@@ -327,8 +327,8 @@ generateWithParams(...)** method:
 
 ## Handling of common Columns
 
-In many databases, you encounter common columns like auditing information 'created_by', 'created_at', 'updated_by', '
-updated_at' or optimistic locking columns.
+In many databases, you encounter common columns like auditing information `created_by`, `created_at`, `updated_by`, `
+updated_at` or optimistic locking columns.
 
 See [Default Attribute Settings](data_generation_concepts.md#default-attribute-settings) for instructions on how to
 define common default generation settings for these.
@@ -617,6 +617,8 @@ If you have duplicated the database and want to anonymize the copy by updating t
 </iterate>
 ```
 
+### Overwrite output table name with inserter
+
 If you want to read data from one table, anonymize it and write it to a different table in the same database, you can
 use a special inserter:
 
@@ -628,6 +630,15 @@ use a special inserter:
 
 </iterate>
 ```
+
+!!! note
+
+    db.inserter() is the only way to overwrite the target table name for the consumer. 
+    Otherwise, Benerator will always take the type as name and assumes both source and target 
+    table have the same name. 
+
+    Using db.inserter() might also be helpful for creating staging tables 
+    from multiple sources and persisting these in e.g. H2 databases. 
 
 ## Controlling Transactions
 
