@@ -62,6 +62,7 @@ public class DescriptorConstants {
   public static final String EL_WHILE = "while";
   public static final String EL_BEAN = "bean";
   public static final String EL_PROPERTY = "property";
+  public static final String EL_PRE_PARSE_GENERATE = "pre-parse-generate";
   public static final String EL_GENERATE = "generate";
   public static final String EL_ITERATE = "iterate";
   public static final String EL_CONSUMER = "consumer";

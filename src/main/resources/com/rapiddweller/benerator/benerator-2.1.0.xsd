@@ -54,6 +54,7 @@
             <xs:element ref="wait" minOccurs="0"/>
             <xs:element ref="domtree" minOccurs="0"/>
             <!--xs:element ref="template" minOccurs="0"/-->
+            <xs:element ref="pre-parse-generate" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="generate" minOccurs="0"/>
             <xs:element ref="iterate" minOccurs="0"/>
             <xs:element ref="anon-check" minOccurs="0" maxOccurs="1"/>
@@ -365,6 +366,17 @@
         </xs:complexType>
     </xs:element-->
 
+    <xs:element name="pre-parse-generate">
+        <xs:annotation>
+            <xs:documentation>
+                Marker for pre parsing generate tags to type descriptors and distribute them to custom storage systems.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="target" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
     <!-- start of elements related to <generate> and <iterate> - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
     <xs:element name="generate">
@@ -482,6 +494,7 @@
                     <xs:element ref="id" minOccurs="0"/>
                     <xs:element ref="attribute"/>
                     <xs:element ref="part"/>
+                    <xs:element ref="reference"/>
                 </xs:choice>
             </xs:sequence>
             <xs:attribute name="name" type="xs:string" use="required"/>
@@ -1340,10 +1353,10 @@
 
     <xs:simpleType name="positiveLong">
         <xs:annotation>
-            <xs:documentation>64-bit long value greater or equals to 1.</xs:documentation>
+            <xs:documentation>64-bit long value greater or equals to 0.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:long">
-            <xs:minInclusive value="1"/>
+            <xs:minInclusive value="0"/>
         </xs:restriction>
     </xs:simpleType>
 

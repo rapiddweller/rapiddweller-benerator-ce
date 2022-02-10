@@ -74,13 +74,11 @@ import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.model.data.ArrayTypeDescriptor;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
-import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.common.Expression;
-import com.rapiddweller.script.PrimitiveType;
 import com.rapiddweller.script.expression.ConstantExpression;
 import com.rapiddweller.script.expression.DynamicExpression;
 import com.rapiddweller.task.PageListener;
@@ -89,7 +87,6 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_GENERATE_CONVERTER;
@@ -137,6 +134,8 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
   protected final AttrInfo<String> distributionAttr = new AttrInfo<>(ATT_DISTRIBUTION, false, SYN_GENERATE_DISTRIBUTION, null, null);
   protected final AttrInfo<Boolean> cyclicAttr = new AttrInfo<>(ATT_CYCLIC, false, SYN_GENERATE_CYCLIC, new BooleanParser(), "false");
   protected final AttrInfo<Long> offsetAttr = new AttrInfo<>(ATT_OFFSET, false, SYN_GENERATE_OFFSET, new NonNegativeLongParser(), "0");
+
+  protected final ElementToIntanceDesciptorParser elementToIntanceDesciptorParser = new ElementToIntanceDesciptorParser();
 
   protected AbstractGenIterParser(String elementName, AttrInfoSupport attrSupport) {
     super(elementName, attrSupport);
@@ -194,7 +193,7 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
 
     // parse task and sub statements
     Statement[] statementPath = parsingContext.createSubPath(parentPath, statement);
-    InstanceDescriptor descriptor = mapDescriptorElement(element, context);
+    InstanceDescriptor descriptor = elementToIntanceDesciptorParser.toInstanceDescriptor(element, context);
     GenIterTask task = parseTask(element, parentXmlPath, statementPath, parsingContext, descriptor, infoLog, context, childContext);
     statement.setTask(task);
     return statement;
@@ -223,45 +222,6 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
 
   private static Expression<Consumer> parseConsumers(Element entityElement, boolean consumersExpected, ResourceManager resourceManager) {
     return new CachedExpression<>(new XMLConsumerExpression(entityElement, consumersExpected, resourceManager));
-  }
-
-  private InstanceDescriptor mapDescriptorElement(Element element, BeneratorContext context) {
-    // evaluate type
-    String type = typeAttr.parse(element);
-    TypeDescriptor localType;
-    DescriptorProvider localDescriptorProvider = context.getLocalDescriptorProvider();
-    if (PrimitiveType.ARRAY.getName().equals(type)
-        || XMLUtil.getChildElements(element, false, EL_VALUE).length > 0) {
-      localType = new ArrayTypeDescriptor(nameAttr.parse(element), localDescriptorProvider);
-    } else {
-      TypeDescriptor parentType = context.getDataModel().getTypeDescriptor(type);
-      if (parentType != null) {
-        type = parentType.getName(); // take over capitalization of the parent
-        localType = new ComplexTypeDescriptor(parentType.getName(), localDescriptorProvider, (ComplexTypeDescriptor) parentType);
-      } else {
-        localType = new ComplexTypeDescriptor(type, localDescriptorProvider, "entity");
-      }
-    }
-
-    // assemble instance descriptor
-    InstanceDescriptor instance = new InstanceDescriptor(type, localDescriptorProvider, type);
-    instance.setLocalType(localType);
-
-    // map element attributes
-    for (Map.Entry<String, String> attribute : XMLUtil.getAttributes(element).entrySet()) {
-      String attributeName = attribute.getKey();
-      if (!CREATE_ENTITIES_EXT_SETUP.contains(attributeName)) {
-        Object attributeValue = attribute.getValue();
-        if (instance.supportsDetail(attributeName)) {
-          instance.setDetailValue(attributeName, attributeValue);
-        } else {
-          localType.setDetailValue(attributeName, attributeValue);
-        }
-      }
-    }
-
-    DescriptorUtil.parseComponentConfig(element, instance.getLocalType(), context);
-    return instance;
   }
 
   protected GenIterStatement createStatement(

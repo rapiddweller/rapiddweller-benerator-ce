@@ -262,6 +262,11 @@ public class BeneratorErrorIds {
   public static final String SYN_TEMPLATE_NAME = "BEN-0390";
   public static final String SYN_TEMPLATE_TYPE = "BEN-0391";
 
+  // Syntax Errors regarding <pre-parse-generate> ------------------------------------------------------------------------------
+
+  public static final String SYN_PRE_PARSE_GENERATE_ATTR = "BEN-0392";
+  public static final String SYN_PRE_PARSE_GENERATE_TARGET = "BEN-0393";
+
   // Syntax Errors regarding <generate> ------------------------------------------------------------------------------
 
   public static final String SYN_GENERATE_ILLEGAL_ATTR = "BEN-0400";
