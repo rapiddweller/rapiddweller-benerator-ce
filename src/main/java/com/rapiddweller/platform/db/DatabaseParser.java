@@ -30,6 +30,7 @@ import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
+import com.rapiddweller.benerator.engine.parser.attr.CommonAttrs;
 import com.rapiddweller.benerator.engine.parser.attr.IdAttribute;
 import com.rapiddweller.benerator.engine.parser.string.IdParser;
 import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
@@ -89,12 +90,8 @@ public class DatabaseParser extends AbstractBeneratorDescriptorParser {
   private static final String FALSE = "false";
 
   public static final AttrInfo<String> ID = new IdAttribute(BeneratorErrorIds.SYN_DB_ID, true);
-
-  public static final AttrInfo<Expression<String>> ENVIRONMENT = new AttrInfo<>(
-      ATT_ENVIRONMENT, false, BeneratorErrorIds.SYN_DB_ENVIRONMENT, new ScriptableParser<>(new IdParser()));
-
-  public static final AttrInfo<Expression<String>> SYSTEM = new AttrInfo<>(
-      ATT_SYSTEM, false, BeneratorErrorIds.SYN_DB_SYSTEM, new ScriptableParser<>(new IdParser()));
+  public static final AttrInfo<Expression<String>> ENVIRONMENT = CommonAttrs.environment(BeneratorErrorIds.SYN_DB_ENVIRONMENT, false);
+  public static final AttrInfo<Expression<String>> SYSTEM = CommonAttrs.system(BeneratorErrorIds.SYN_DB_SYSTEM, false);
 
   public static final AttrInfo<Expression<String>> URL = new AttrInfo<>(
     ATT_URL, false, BeneratorErrorIds.SYN_DB_URL, new ScriptableParser<>(new JdbcUrlParser()));
