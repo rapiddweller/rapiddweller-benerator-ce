@@ -43,6 +43,11 @@ public class BinaryFileContentGenerator extends FileContentGenerator<byte[]> {
   }
 
   @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
   public byte[] generate() {
     assertInitialized();
     String absolutePath = null;

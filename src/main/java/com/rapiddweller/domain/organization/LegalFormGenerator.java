@@ -50,4 +50,9 @@ public class LegalFormGenerator extends WeightedDatasetCSVGenerator<String> {
         true, Encodings.UTF_8);
   }
 
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
 }

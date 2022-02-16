@@ -31,29 +31,22 @@ import com.rapiddweller.benerator.util.ThreadSafeNonNullGenerator;
 /**
  * Generates landline or mobile phone numbers in a given {@link Country}.<br/><br/>
  * Created: 16.10.2009 05:33:57
- *
  * @author Volker Bergmann
  * @since 0.6.0
  */
-public class PhoneNumberGenerator
-    extends ThreadSafeNonNullGenerator<PhoneNumber> {
+public class PhoneNumberGenerator extends ThreadSafeNonNullGenerator<PhoneNumber> {
 
   private Country country;
 
-  /**
-   * Instantiates a new Phone number generator.
-   *
-   * @param country the country
-   */
   public PhoneNumberGenerator(Country country) {
     this.country = country;
   }
 
-  /**
-   * Sets country.
-   *
-   * @param country the country
-   */
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
   public void setCountry(Country country) {
     this.country = country;
   }
