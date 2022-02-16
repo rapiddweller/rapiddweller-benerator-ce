@@ -36,17 +36,16 @@ import java.lang.reflect.Array;
 /**
  * Assembles the output of a source generator into an array of random length.<br/> <br/>
  * Created: 26.08.2006 09:37:55
- * @param <S> the type parameter
- * @param <P> the type parameter
  * @author Volker Bergmann
  * @since 0.1
+ * @param <S> the source type
+ * @param <P> the generated type
  */
 public class SingleSourceArrayGenerator<S, P> extends CardinalGenerator<S, P> implements NonNullGenerator<P> {
 
   private final Class<S> componentType;
   private final Class<P> generatedType;
 
-  /** Instantiates a new Single source array generator. */
   @SuppressWarnings("unchecked")
   public SingleSourceArrayGenerator(Generator<S> source, Class<S> componentType,
                                     int minLength, int maxLength, Distribution lengthDistribution) {
@@ -55,7 +54,6 @@ public class SingleSourceArrayGenerator<S, P> extends CardinalGenerator<S, P> im
     this.generatedType = ArrayUtil.arrayType(componentType);
   }
 
-  /** Instantiates a new Single source array generator. */
   @SuppressWarnings("unchecked")
   public SingleSourceArrayGenerator(Generator<S> source, Class<S> componentType,
                                     NonNullGenerator<Integer> lengthGenerator) {
