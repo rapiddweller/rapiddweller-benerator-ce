@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -55,8 +55,7 @@ import java.sql.Statement;
  * @author Volker Bergmann
  * @since 0.6.4
  */
-public class SequenceTableGenerator<E extends Number>
-    extends UnsafeNonNullGenerator<E> {
+public class SequenceTableGenerator<E extends Number> extends UnsafeNonNullGenerator<E> {
 
   protected long increment;
   private String table;
