@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -32,7 +32,6 @@ import com.rapiddweller.benerator.distribution.SequenceManager;
 
 /**
  * Creates arrays of random length filled with random bytes.
- *
  * @author Volker Bergmann
  * @since 0.3.04
  */
@@ -40,32 +39,14 @@ public class ByteArrayGenerator extends SingleSourceArrayGenerator<Byte, byte[]>
 
   // constructors ----------------------------------------------------------------------------------------------------
 
-  /**
-   * Instantiates a new Byte array generator.
-   */
   public ByteArrayGenerator() {
     this(null, 0, 30);
   }
 
-  /**
-   * Instantiates a new Byte array generator.
-   *
-   * @param source    the source
-   * @param minLength the min length
-   * @param maxLength the max length
-   */
   public ByteArrayGenerator(Generator<Byte> source, int minLength, int maxLength) {
     this(source, minLength, maxLength, SequenceManager.RANDOM_SEQUENCE);
   }
 
-  /**
-   * Instantiates a new Byte array generator.
-   *
-   * @param source       the source
-   * @param minLength    the min length
-   * @param maxLength    the max length
-   * @param distribution the distribution
-   */
   public ByteArrayGenerator(Generator<Byte> source, int minLength, int maxLength, Distribution distribution) {
     super(source, byte.class, minLength, maxLength, distribution);
   }

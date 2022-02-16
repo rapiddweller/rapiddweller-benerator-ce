@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -69,8 +69,12 @@ public class NobilityTitleGenerator extends GeneratorProxy<String> {
 
   // properties ------------------------------------------------------------------------------------------------------
 
-  private static LocalCSVGenerator<String> createCSVGenerator(Gender gender,
-                                                              Locale locale) {
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  private static LocalCSVGenerator<String> createCSVGenerator(Gender gender, Locale locale) {
     return new LocalCSVGenerator<>(String.class, baseName(gender), locale,
         ".csv", Encodings.UTF_8);
   }

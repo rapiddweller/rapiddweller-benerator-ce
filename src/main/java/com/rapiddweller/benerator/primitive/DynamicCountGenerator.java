@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -43,23 +43,10 @@ public class DynamicCountGenerator extends DynamicLongGenerator {
 
   private boolean resetToMin;
 
-  /**
-   * Instantiates a new Dynamic count generator.
-   */
   public DynamicCountGenerator() {
     super();
   }
 
-  /**
-   * Instantiates a new Dynamic count generator.
-   *
-   * @param min          the min
-   * @param max          the max
-   * @param granularity  the granularity
-   * @param distribution the distribution
-   * @param unique       the unique
-   * @param resetToMin   the reset to min
-   */
   public DynamicCountGenerator(Expression<Long> min, Expression<Long> max, Expression<Long> granularity,
                                Expression<? extends Distribution> distribution, Expression<Boolean> unique, boolean resetToMin) {
     super(min, max, granularity, distribution, unique);

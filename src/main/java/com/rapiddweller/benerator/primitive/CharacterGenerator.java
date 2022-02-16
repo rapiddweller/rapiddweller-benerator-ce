@@ -87,6 +87,11 @@ public class CharacterGenerator extends NonNullGeneratorProxy<Character> {
     this.values = new HashSet<>(values);
   }
 
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
   // config properties -----------------------------------------------------------------------------------------------
 
   /** Returns the regular expression to match */

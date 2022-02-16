@@ -43,8 +43,7 @@ import java.util.Map;
  * @author Volker Bergmann
  * @since 0.1
  */
-public class FamilyNameGenerator extends WeightedDatasetCSVGenerator<String>
-    implements NonNullGenerator<String> {
+public class FamilyNameGenerator extends WeightedDatasetCSVGenerator<String> implements NonNullGenerator<String> {
 
   // default instance management -------------------------------------------------------------------------------------
 
@@ -73,6 +72,11 @@ public class FamilyNameGenerator extends WeightedDatasetCSVGenerator<String>
   public static Generator<String> sharedInstance(String datasetName) {
     return defaultInstances.computeIfAbsent(
         datasetName, k -> new SharedGenerator<>(new FamilyNameGenerator(datasetName)));
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
   }
 
   @Override

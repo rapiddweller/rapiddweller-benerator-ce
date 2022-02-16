@@ -43,6 +43,11 @@ public class TextFileContentGenerator extends FileContentGenerator<String> {
   }
 
   @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
   public String generate() {
     assertInitialized();
     String absolutePath = null;
