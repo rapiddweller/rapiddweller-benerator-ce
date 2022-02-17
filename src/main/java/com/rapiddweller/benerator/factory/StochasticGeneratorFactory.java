@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -41,14 +41,15 @@ import com.rapiddweller.benerator.sample.OneShotGenerator;
 import com.rapiddweller.benerator.sample.SampleGenerator;
 import com.rapiddweller.benerator.wrapper.AlternativeGenerator;
 import com.rapiddweller.benerator.wrapper.CompositeStringGenerator;
+import com.rapiddweller.benerator.wrapper.DataSourceGenerator;
 import com.rapiddweller.benerator.wrapper.GeneratorChain;
-import com.rapiddweller.benerator.wrapper.IteratingGenerator;
 import com.rapiddweller.benerator.wrapper.SimpleMultiSourceArrayGenerator;
 import com.rapiddweller.benerator.wrapper.UniqueMultiSourceArrayGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
+import com.rapiddweller.common.Converter;
 import com.rapiddweller.common.converter.ConverterManager;
 import com.rapiddweller.common.converter.ToStringConverter;
-import com.rapiddweller.common.iterator.ArrayIterable;
+import com.rapiddweller.format.array.ArrayDataSource;
 import com.rapiddweller.model.data.Uniqueness;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.script.WeightedSample;
@@ -120,13 +121,12 @@ public class StochasticGeneratorFactory extends GeneratorFactory {
         String value = ToStringConverter.convert(rawValue, null);
         values[i] = value;
       }
-      IteratingGenerator<String> source = new IteratingGenerator<>(
-          new ArrayIterable<>(values, String.class));
+      DataSourceGenerator<String> source = new DataSourceGenerator<>(new ArrayDataSource<>(values, String.class));
       if (distribution == null) {
         distribution = SequenceManager.RANDOM_SEQUENCE;
       }
-      Generator<T> gen = WrapperFactory.applyConverter(source, ConverterManager.getInstance().createConverter(
-          String.class, targetType));
+      Converter<String, T> converter = ConverterManager.getInstance().createConverter(String.class, targetType);
+      Generator<T> gen = WrapperFactory.applyConverter(source, converter);
       return distribution.applyTo(gen, unique);
     }
   }
@@ -165,7 +165,11 @@ public class StochasticGeneratorFactory extends GeneratorFactory {
       if (nullable == null) {
         nullable = defaultsProvider.defaultNullable();
       }
-      nullQuota = (nullable ? (defaultsProvider.defaultNullQuota() != 1 ? defaultsProvider.defaultNullQuota() : 0) : 0);
+      if (nullable) {
+        nullQuota = (defaultsProvider.defaultNullQuota() != 1 ? defaultsProvider.defaultNullQuota() : 0);
+      } else {
+        nullQuota = 0.;
+      }
     }
     return WrapperFactory.injectNulls(source, nullQuota);
   }

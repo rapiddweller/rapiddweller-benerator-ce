@@ -706,6 +706,105 @@ public class BeneratorErrorIdIntegrationTest {
   }
 
   @Test
+  public void test_0566_syn_attr_generator_equals_parent_type() {
+    BeneratorResult result = runFile("test_0566_syn_attr_generator_equals_parent_type.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
+        "The value of attribute.generator must not be the same as the type 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0566_syn_attr_generator_equals_parent_type.ben.xml, " +
+            "line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0566_syn_attr_generator_equals_parent_name() {
+    BeneratorResult result = runFile("test_0566_syn_attr_generator_equals_parent_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
+        "The value of attribute.generator must not be the same as the name 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0566_syn_attr_generator_equals_parent_name.ben.xml, " +
+            "line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0566_syn_attr_generator_equals_grandparent_type() {
+    BeneratorResult result = runFile("test_0566_syn_attr_generator_equals_grandparent_type.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
+        "The value of attribute.generator must not be the same as the type 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0566_syn_attr_generator_equals_grandparent_type.ben.xml, " +
+            "line 4", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0566_syn_id_generator_equals_parent_type() {
+    BeneratorResult result = runFile("test_0566_syn_id_generator_equals_parent_type.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
+        "The value of id.generator must not be the same as the type 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0566_syn_id_generator_equals_parent_type.ben.xml, " +
+            "line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0566_syn_id_generator_equals_parent_name() {
+    BeneratorResult result = runFile("test_0566_syn_id_generator_equals_parent_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
+        "The value of id.generator must not be the same as the name 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0566_syn_id_generator_equals_parent_name.ben.xml, " +
+            "line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0566_syn_part_generator_equals_parent_type() {
+    BeneratorResult result = runFile("test_0566_syn_part_generator_equals_parent_type.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
+        "The value of part.generator must not be the same as the type 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0566_syn_part_generator_equals_parent_type.ben.xml, " +
+            "line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0566_syn_part_generator_equals_parent_name() {
+    BeneratorResult result = runFile("test_0566_syn_part_generator_equals_parent_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
+        "The value of part.generator must not be the same as the name 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0566_syn_part_generator_equals_parent_name.ben.xml, " +
+            "line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0566_syn_ref_generator_equals_parent_type() {
+    BeneratorResult result = runFile("test_0566_syn_ref_generator_equals_parent_type.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
+        "The value of reference.generator must not be the same as the type 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0566_syn_ref_generator_equals_parent_type.ben.xml, " +
+            "line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0566_syn_ref_generator_equals_parent_name() {
+    BeneratorResult result = runFile("test_0566_syn_ref_generator_equals_parent_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
+        "The value of reference.generator must not be the same as the name 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0566_syn_ref_generator_equals_parent_name.ben.xml, " +
+            "line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0566_syn_var_generator_equals_parent_type() {
+    BeneratorResult result = runFile("test_0566_syn_var_generator_equals_parent_type.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
+        "The value of variable.generator must not be the same as the type 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0566_syn_var_generator_equals_parent_type.ben.xml, " +
+            "line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0566_syn_var_generator_equals_parent_name() {
+    BeneratorResult result = runFile("test_0566_syn_var_generator_equals_parent_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
+        "The value of variable.generator must not be the same as the name 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0566_syn_var_generator_equals_parent_name.ben.xml, " +
+            "line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
   public void test_0567_syn_attr_ill_minLength() {
     BeneratorResult result = runFile("test_0567_syn_attr_ill_minLength.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_MIN_LENGTH,

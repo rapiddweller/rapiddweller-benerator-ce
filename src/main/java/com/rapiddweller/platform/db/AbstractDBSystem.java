@@ -487,14 +487,11 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     String[] pkColumnNames = table.getPKColumnNames();
     if (pkColumnNames.length == 0) {
       throw BeneratorExceptionFactory.getInstance().configurationError(
-          "Cannot create reference to table " + tableName +
-              " since it does not define a primary key");
+          "Cannot create reference to table " + tableName + " since it does not define a primary key");
     }
 
     // construct selector
-    String query =
-        renderQuery(catalogName, schemaName, tableName, pkColumnNames,
-            dialect);
+    String query = renderQuery(catalogName, schemaName, tableName, pkColumnNames, dialect);
     if (selector != null) {
       if (script) {
         query = "{'" + query + " where ' + " + selector + "}";
@@ -507,16 +504,12 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
 
   @Override
   @SuppressWarnings({"unchecked", "rawtypes"})
-  public DataSource<?> query(String query, boolean simplify,
-                             Context context) {
+  public DataSource<?> query(String query, boolean simplify, Context context) {
     logger.debug("query({})", query);
     Connection connection = getConnection();
-    QueryDataSource resultSetIterable =
-        createQuery(query, context, connection);
-    ResultSetConverter converter =
-        new ResultSetConverter(Object.class, simplify);
-    return new ConvertingDataSource<>(resultSetIterable,
-        converter);
+    QueryDataSource resultSetIterable = createQuery(query, context, connection);
+    ResultSetConverter converter = new ResultSetConverter(Object.class, simplify);
+    return new ConvertingDataSource<>(resultSetIterable, converter);
   }
 
   // database-specific interface -------------------------------------------------------------------------------------

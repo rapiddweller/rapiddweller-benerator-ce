@@ -5,6 +5,7 @@ package com.rapiddweller.benerator.parser.xml;
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
+import com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil;
 import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
 import com.rapiddweller.model.data.ComponentDescriptor;
@@ -30,6 +31,7 @@ public class IdParser extends AbstractComponentParser {
     XMLAssert.assertElementName("id", element, BeneratorErrorIds.SYN_ID_NAME);
     String nameAttr = NAME.parse(element);
     XMLAssert.assertNoTextContent(element, BeneratorErrorIds.SYN_ID);
+    DescriptorParserUtil.validateGeneratorAttribute(element, BeneratorErrorIds.SYN_ATTR_GENERATOR);
     IdDescriptor result;
     IdDescriptor resultTmp;
     if (descriptor instanceof IdDescriptor) {

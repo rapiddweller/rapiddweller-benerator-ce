@@ -5,6 +5,7 @@ package com.rapiddweller.benerator.parser.xml;
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
+import com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil;
 import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.model.data.ComplexTypeDescriptor;
@@ -31,6 +32,7 @@ public class ReferenceParser extends AbstractComponentParser {
     XMLAssert.assertElementName("reference", element, BeneratorErrorIds.SYN_REF_NAME);
     String nameAttr = NAME.parse(element);
     XMLAssert.assertNoTextContent(element, BeneratorErrorIds.SYN_REF);
+    DescriptorParserUtil.validateGeneratorAttribute(element, BeneratorErrorIds.SYN_ATTR_GENERATOR);
     ReferenceDescriptor result;
     if (component instanceof ReferenceDescriptor) {
       result = (ReferenceDescriptor) component;

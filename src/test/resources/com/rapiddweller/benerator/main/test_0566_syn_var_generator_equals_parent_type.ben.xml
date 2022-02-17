@@ -1,0 +1,5 @@
+<setup defaultDataset="US" defaultLocale="en" xmlns="https://www.benerator.de/schema/2.1.0">
+    <generate type="UUIDGenerator" count="1">
+        <variable name="x" generator="UUIDGenerator"/>
+    </generate>
+</setup>

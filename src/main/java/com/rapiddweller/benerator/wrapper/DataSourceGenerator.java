@@ -32,7 +32,7 @@ import com.rapiddweller.benerator.InvalidGeneratorSetupException;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.util.AbstractGenerator;
 import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.ThreadAware;
+import com.rapiddweller.common.ThreadUtil;
 import com.rapiddweller.format.DataContainer;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.DataSource;
@@ -84,7 +84,7 @@ public class DataSourceGenerator<E> extends AbstractGenerator<E> {
 
   @Override
   public boolean isThreadSafe() {
-    return (source instanceof ThreadAware && ((ThreadAware) source).isThreadSafe());
+    return ThreadUtil.isThreadSafe(source);
   }
 
   @Override
