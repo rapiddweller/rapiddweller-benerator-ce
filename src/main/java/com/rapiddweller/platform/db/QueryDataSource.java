@@ -29,6 +29,7 @@ package com.rapiddweller.platform.db;
 import com.rapiddweller.common.Assert;
 import com.rapiddweller.common.Context;
 import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.ThreadAware;
 import com.rapiddweller.common.converter.NoOpConverter;
 import com.rapiddweller.format.DataIterator;
 import com.rapiddweller.format.DataSource;
@@ -48,7 +49,7 @@ import java.sql.ResultSet;
  * @author Volker Bergmann
  * @since 0.7.0
  */
-public class QueryDataSource extends AbstractDataSource<ResultSet> {
+public class QueryDataSource extends AbstractDataSource<ResultSet> implements ThreadAware {
 
   private static final Logger logger = LoggerFactory.getLogger(QueryDataSource.class);
 
@@ -72,6 +73,16 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> {
       this.queryPreprocessor = new NoOpConverter<>();
     }
     logger.debug("Constructed QueryIterable: {}", query);
+  }
+
+  @Override
+  public boolean isThreadSafe() {
+    return true;
+  }
+
+  @Override
+  public boolean isParallelizable() {
+    return false;
   }
 
   public String getQuery() {
