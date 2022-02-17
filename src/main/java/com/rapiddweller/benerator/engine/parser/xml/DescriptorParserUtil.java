@@ -41,7 +41,11 @@ import com.rapiddweller.script.expression.ConvertingExpression;
 import com.rapiddweller.script.expression.StringExpression;
 import com.rapiddweller.script.expression.TypeConvertingExpression;
 import com.rapiddweller.script.expression.UnescapeExpression;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_GENERATE;
+import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_ITERATE;
 
 /**
  * Provides utility methods for XML descriptor parsing.<br/><br/>
@@ -53,6 +57,39 @@ public class DescriptorParserUtil {
 
   private DescriptorParserUtil() {
     // private constructor to prevent instantiation
+  }
+
+  public static void validateGeneratorAttribute(Element part, String errorId) {
+    checkGeneratorVsOuterAttrs(part, "type", errorId);
+    checkGeneratorVsOuterAttrs(part, "name", errorId);
+  }
+
+  private static void checkGeneratorVsOuterAttrs(Element part, String parentAttr, String errorId) {
+    Attr generatorAttr = part.getAttributeNode("generator");
+    if (generatorAttr != null) {
+      Element outer = part;
+      while (outer.getParentNode() instanceof Element) {
+        outer = (Element) outer.getParentNode();
+        String nodeName = outer.getNodeName();
+        if (!EL_GENERATE.equals(nodeName) && !EL_ITERATE.equals(nodeName)) {
+          break;
+        }
+        checkGeneratorVsOuterAttr(part, outer, parentAttr, errorId);
+      }
+    }
+  }
+
+  private static void checkGeneratorVsOuterAttr(Element part, Element outer, String parentAttr, String errorId) {
+    Attr generatorAttr = part.getAttributeNode("generator");
+    if (generatorAttr != null) {
+      String generatorSpec = generatorAttr.getValue();
+      if (generatorSpec.equals(outer.getAttribute(parentAttr))) {
+        throw BeneratorExceptionFactory.getInstance().illegalXmlAttributeValue(
+            "The value of " + part.getNodeName() + ".generator must not be the same as the " +
+                parentAttr + " '" + generatorSpec + "' " + "of the surrounding <" + outer.getNodeName() +
+                "> element", null, errorId, generatorAttr);
+      }
+    }
   }
 
   // mapping attributes to bean properties ---------------------------------------------------------------------------

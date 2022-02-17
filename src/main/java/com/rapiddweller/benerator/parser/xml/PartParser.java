@@ -4,6 +4,7 @@ package com.rapiddweller.benerator.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
+import com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.benerator.parser.ModelParser;
 import com.rapiddweller.common.StringUtil;
@@ -41,6 +42,7 @@ public class PartParser extends AbstractComponentParser {
   public PartDescriptor parse(Element element, ComplexTypeDescriptor owner, ComponentDescriptor descriptor) {
     XMLAssert.assertElementName("part", element, BeneratorErrorIds.SYN_PART_NAME);
     nameAttr.parse(element);
+    DescriptorParserUtil.validateGeneratorAttribute(element, BeneratorErrorIds.SYN_ATTR_GENERATOR);
     PartDescriptor result;
     if (descriptor instanceof PartDescriptor) {
       result = (PartDescriptor) descriptor;

@@ -14,6 +14,7 @@ import com.rapiddweller.benerator.engine.parser.string.MinMaxParser;
 import com.rapiddweller.benerator.engine.parser.string.ScriptParser;
 import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
 import com.rapiddweller.benerator.engine.parser.string.WeightedLiteralListParser;
+import com.rapiddweller.benerator.engine.parser.xml.DescriptorParserUtil;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
 import com.rapiddweller.common.HF;
 import com.rapiddweller.common.Validator;
@@ -149,6 +150,7 @@ public class AttributeParser extends AbstractComponentParser {
       checkSourceRelatedElements(element);
       checkMinMax(element);
       checkLengths(element);
+      DescriptorParserUtil.validateGeneratorAttribute(element, BeneratorErrorIds.SYN_ATTR_GENERATOR);
       return true;
     }
 
