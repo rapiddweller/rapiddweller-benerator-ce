@@ -26,7 +26,6 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
-import com.rapiddweller.benerator.engine.statement.EvaluateStatement;
 import com.rapiddweller.benerator.test.AbstractBeneratorIntegrationTest;
 import org.junit.Test;
 
