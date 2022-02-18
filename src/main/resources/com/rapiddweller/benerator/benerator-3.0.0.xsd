@@ -368,6 +368,7 @@
             <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attributeGroup ref="execution-attrs"/>
             <xs:attribute name="consumer" type="xs:string"/>
+            <xs:attribute name="sensor" type="xs:string"/>
         </xs:complexType>
     </xs:element>
 
@@ -396,6 +397,7 @@
             <xs:attribute name="countDistribution" type="xs:string"/>
             <xs:attributeGroup ref="execution-attrs"/>
             <xs:attribute name="consumer" type="xs:string"/>
+            <xs:attribute name="sensor" type="xs:string"/>
         </xs:complexType>
     </xs:element>
 
@@ -627,8 +629,6 @@
         <xs:attribute name="offset" type="xs:string"/>
         <xs:attribute name="validator" type="xs:string"/>
 
-        <!-- sensor -->
-        <xs:attribute name="sensor" type="xs:string"/>
     </xs:attributeGroup>
 
     <xs:simpleType name="format-type">
