@@ -569,6 +569,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
         DBUtil.logMetaData(connection);
         connectedBefore = true;
       }
+      connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
       connection.setAutoCommit(false);
       return connection;
     } catch (ConnectFailedException e) {
