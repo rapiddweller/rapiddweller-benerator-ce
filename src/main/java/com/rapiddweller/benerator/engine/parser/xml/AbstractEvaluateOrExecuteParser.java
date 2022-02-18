@@ -75,8 +75,8 @@ public abstract class AbstractEvaluateOrExecuteParser extends AbstractBeneratorD
       String errorId = (EL_EVALUATE.equals(elementName) ? BeneratorErrorIds.SYN_EVALUATE : BeneratorErrorIds.SYN_EXECUTE);
       XMLAssert.assertAtLeastOneAttributeIsSet(element, errorId, ATT_ID, ATT_ASSERT);
     } else {
-      XMLAssert.assertAttributeIsNotSet(element, ATT_ID);
-      XMLAssert.assertAttributeIsNotSet(element, ATT_ASSERT);
+      XMLAssert.assertAttributeIsNotSet(ATT_ID, element, BeneratorErrorIds.SYN_EXECUTE_ILLEGAL_ATTR);
+      XMLAssert.assertAttributeIsNotSet(ATT_ASSERT, element, BeneratorErrorIds.SYN_EXECUTE_ILLEGAL_ATTR);
     }
     Expression<String> id = DescriptorParserUtil.getConstantStringAttributeAsExpression(ATT_ID, element);
     Expression<String> text = new StringExpression(parseScriptableElementText(element, false));
