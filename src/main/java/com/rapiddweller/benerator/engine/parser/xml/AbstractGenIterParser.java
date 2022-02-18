@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2021 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -78,7 +78,6 @@ import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.InstanceDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
 import com.rapiddweller.model.data.Uniqueness;
-import com.rapiddweller.model.data.VariableHolder;
 import com.rapiddweller.script.DatabeneScriptParser;
 import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.PrimitiveType;

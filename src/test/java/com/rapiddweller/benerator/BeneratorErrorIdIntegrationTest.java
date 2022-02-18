@@ -769,24 +769,6 @@ public class BeneratorErrorIdIntegrationTest {
   }
 
   @Test
-  public void test_0566_syn_ref_generator_equals_parent_type() {
-    BeneratorResult result = runFile("test_0566_syn_ref_generator_equals_parent_type.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
-        "The value of reference.generator must not be the same as the type 'UUIDGenerator' " +
-            "of the surrounding <generate> element. File test_0566_syn_ref_generator_equals_parent_type.ben.xml, " +
-            "line 3", ExitCodes.SYNTAX_ERROR, result);
-  }
-
-  @Test
-  public void test_0566_syn_ref_generator_equals_parent_name() {
-    BeneratorResult result = runFile("test_0566_syn_ref_generator_equals_parent_name.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
-        "The value of reference.generator must not be the same as the name 'UUIDGenerator' " +
-            "of the surrounding <generate> element. File test_0566_syn_ref_generator_equals_parent_name.ben.xml, " +
-            "line 3", ExitCodes.SYNTAX_ERROR, result);
-  }
-
-  @Test
   public void test_0566_syn_var_generator_equals_parent_type() {
     BeneratorResult result = runFile("test_0566_syn_var_generator_equals_parent_type.ben.xml");
     assertResult(BeneratorErrorIds.SYN_ATTR_GENERATOR,
@@ -1082,22 +1064,136 @@ public class BeneratorErrorIdIntegrationTest {
         ExitCodes.SYNTAX_ERROR, result);
   }
 
-  /* TODO implement error mapping
   @Test
   public void test_0651_ref_ill_attr() {
     BeneratorResult result = runFile("test_0651_syn_ref_ill_attr.ben.xml");
-    assertResult(BeneratorErrorIds.SYN_REF_ILLEGAL_ATTR, "Illegal attribute for <reference>: ill_attr",
-        ExitCodes.SYNTAX_ERROR, result);
+    assertResult(BeneratorErrorIds.SYN_REF_ILLEGAL_ATTR, "Illegal XML attribute: " +
+            "reference.ill_attr. File test_0651_syn_ref_ill_attr.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
   }
-  */
 
   @Test
-  public void test_0652_id_wo_name() {
+  public void test_0652_syn_ref_wo_name() {
     BeneratorResult result = runFile("test_0652_syn_ref_wo_name.ben.xml");
     assertResult(BeneratorErrorIds.SYN_REF_NAME,
         "Attribute 'name' is missing in <reference>. File test_0652_syn_ref_wo_name.ben.xml, line 4",
         ExitCodes.SYNTAX_ERROR, result);
   }
+
+  @Test
+  public void test_0652_syn_ref_ill_name() {
+    BeneratorResult result = runFile("test_0652_syn_ref_ill_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_NAME,
+        "Illegal attribute value for reference.name: '123'. File test_0652_syn_ref_ill_name.ben.xml, line 4",
+        ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0653_syn_ref_base_def() {
+    BeneratorResult result = runFile("test_0653_syn_ref_base_def.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_BASE_DEF,
+        "At least one of these attributes must be set: generator, script, source, constant, values. " +
+            "File test_0653_syn_ref_base_def.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0654_syn_ref_ext_def() {
+    BeneratorResult result = runFile("test_0654_syn_ref_ext_def.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_EXT_DEF,
+        "At least one of these attributes must be set: targetType, selector, subSelector. " +
+            "File test_0654_syn_ref_ext_def.ben.xml, line 15", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0654_syn_ref_subSel_and_sel() {
+    BeneratorResult result = runFile("test_0654_syn_ref_subSel_and_sel.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_EXT_DEF,
+        "The attributes 'selector' and 'subSelector' mutually exclude each other. " +
+            "File test_0654_syn_ref_subSel_and_sel.ben.xml, line 5", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0656_syn_ref_ill_type() {
+    BeneratorResult result = runFile("test_0656_syn_ref_ill_type.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_TYPE,
+        "Illegal attribute value for reference.type: '-123'. " +
+            "File test_0656_syn_ref_ill_type.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0657_syn_ref_ill_mode() {
+    BeneratorResult result = runFile("test_0657_syn_ref_ill_mode.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_MODE,
+        "Illegal attribute value for reference.mode: 'none'. " +
+            "File test_0657_syn_ref_ill_mode.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0658_syn_ref_ill_nullQuota() {
+    BeneratorResult result = runFile("test_0658_syn_ref_ill_nullQuota.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_NULL_QUOTA,
+        "Illegal attribute value for reference.nullQuota: '2.'. " +
+            "File test_0658_syn_ref_ill_nullQuota.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0659_syn_ref_ill_nullable() {
+    BeneratorResult result = runFile("test_0659_syn_ref_ill_nullable.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_NULLABLE,
+        "Illegal attribute value for reference.nullable: 'xyz'. " +
+            "File test_0659_syn_ref_ill_nullable.ben.xml, line 4", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0660_syn_ref_generator_equals_parent_type() {
+    BeneratorResult result = runFile("test_0660_syn_ref_generator_equals_parent_type.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_GENERATOR,
+        "The value of reference.generator must not be the same as the type 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0660_syn_ref_generator_equals_parent_type.ben.xml, " +
+            "line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0660_syn_ref_ill_generator() {
+    BeneratorResult result = runFile("test_0660_syn_ref_ill_generator.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_GENERATOR,
+        "Illegal attribute value for reference.generator: '$$$'. " +
+            "File test_0660_syn_ref_ill_generator.ben.xml, line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0660_syn_ref_generator_equals_parent_name() {
+    BeneratorResult result = runFile("test_0660_syn_ref_generator_equals_parent_name.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_GENERATOR,
+        "The value of reference.generator must not be the same as the name 'UUIDGenerator' " +
+            "of the surrounding <generate> element. File test_0660_syn_ref_generator_equals_parent_name.ben.xml, " +
+            "line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0669_syn_ref_ill_offset() {
+    BeneratorResult result = runFile("test_0669_syn_ref_ill_offset.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_OFFSET,
+        "Illegal attribute value for reference.offset: '-5'. " +
+            "File test_0669_syn_ref_ill_offset.ben.xml, line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0670_syn_ref_ill_unique() {
+    BeneratorResult result = runFile("test_0670_syn_ref_ill_unique.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_UNIQUE,
+        "Illegal attribute value for reference.unique: '42'. " +
+            "File test_0670_syn_ref_ill_unique.ben.xml, line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+  @Test
+  public void test_0671_syn_ref_ill_cyclic() {
+    BeneratorResult result = runFile("test_0671_syn_ref_ill_cyclic.ben.xml");
+    assertResult(BeneratorErrorIds.SYN_REF_CYCLIC,
+        "Illegal attribute value for reference.cyclic: '42'. " +
+            "File test_0671_syn_ref_ill_cyclic.ben.xml, line 3", ExitCodes.SYNTAX_ERROR, result);
+  }
+
+
 
   // <part> tests ----------------------------------------------------------------------------------------------------
 

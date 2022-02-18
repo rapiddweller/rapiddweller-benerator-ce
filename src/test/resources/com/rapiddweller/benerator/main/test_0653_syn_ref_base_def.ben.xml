@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <setup xmlns="https://www.benerator.de/schema/3.0.0">
     <generate count="1">
-        <reference name="x">text</reference>
+        <reference name="ref"/>
     </generate>
 </setup>

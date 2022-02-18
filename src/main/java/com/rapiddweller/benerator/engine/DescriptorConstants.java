@@ -98,6 +98,7 @@ public class DescriptorConstants {
   public static final String ATT_URL = "url";
   public static final String ATT_ID = EL_ID;
   public static final String ATT_MESSAGE = "message";
+  public static final String ATT_TARGET_TYPE = "targetType";
   public static final String ATT_SELECTOR = "selector";
   public static final String ATT_SOURCE = "source";
   public static final String ATT_SOURCE_SCRIPTED = "sourceScripted";

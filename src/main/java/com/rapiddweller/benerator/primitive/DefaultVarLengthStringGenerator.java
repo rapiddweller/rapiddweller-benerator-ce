@@ -140,9 +140,6 @@ public class DefaultVarLengthStringGenerator extends LengthGenerator<Character, 
 
   @Override
   public String generateWithLength(int length) {
-    if (length > 1000) {
-      length = 1000;
-    }
     StringBuilder builder = new StringBuilder();
     for (int i = 0; i < length; i++) {
       builder.append(generateFromSource().unwrap());
