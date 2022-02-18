@@ -470,14 +470,12 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   }
 
   @Override
-  public DataSource<?> queryEntityIds(String tableName, String selector,
-                                      Context context) {
+  public DataSource<?> queryEntityIds(String tableName, String selector, Context context) {
     logger.debug("queryEntityIds({}, {})", tableName, selector);
 
     // check for script
     boolean script = false;
-    if (selector != null && selector.startsWith("{") &&
-        selector.endsWith("}")) {
+    if (selector != null && selector.startsWith("{") && selector.endsWith("}")) {
       selector = selector.substring(1, selector.length() - 1);
       script = true;
     }
@@ -816,7 +814,10 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
           typeDescriptor.setDetailValue("constant", defaultValue);
         }
         if (column.getSize() != null) {
-          typeDescriptor.setMaxLength(column.getSize());
+          Integer size = column.getSize();
+          if (size < 2147483647) {
+            typeDescriptor.setMaxLength(size);
+          }
         }
         if (column.getFractionDigits() != null) {
           if ("timestamp".equals(type)) {
