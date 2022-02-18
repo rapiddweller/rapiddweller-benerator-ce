@@ -402,6 +402,28 @@ public class BeneratorErrorIds {
   public static final String SYN_REF               = "BEN-0650";
   public static final String SYN_REF_ILLEGAL_ATTR  = "BEN-0651";
   public static final String SYN_REF_NAME          = "BEN-0652";
+  public static final String SYN_REF_BASE_DEF      = "BEN-0653";
+  public static final String SYN_REF_EXT_DEF       = "BEN-0654";
+  public static final String SYN_REF_TARGET_TYPE   = "BEN-0655";
+  public static final String SYN_REF_TYPE          = "BEN-0656";
+  public static final String SYN_REF_MODE          = "BEN-0657";
+  public static final String SYN_REF_NULL_QUOTA    = "BEN-0658";
+  public static final String SYN_REF_NULLABLE      = "BEN-0659";
+  public static final String SYN_REF_GENERATOR     = "BEN-0660";
+  public static final String SYN_REF_SCRIPT        = "BEN-0661";
+  public static final String SYN_REF_CONSTANT      = "BEN-0662";
+  public static final String SYN_REF_VALUES        = "BEN-0663";
+  public static final String SYN_REF_SOURCE        = "BEN-0664";
+  public static final String SYN_REF_SELECTOR      = "BEN-0665";
+  public static final String SYN_REF_SUB_SELECTOR  = "BEN-0666";
+  public static final String SYN_REF_SCOPE         = "BEN-0667";
+  public static final String SYN_REF_FILTER        = "BEN-0668";
+  public static final String SYN_REF_OFFSET        = "BEN-0669";
+  public static final String SYN_REF_UNIQUE        = "BEN-0670";
+  public static final String SYN_REF_CYCLIC        = "BEN-0671";
+  public static final String SYN_REF_DISTRIBUTION  = "BEN-0672";
+  public static final String SYN_REF_VALIDATOR     = "BEN-0673";
+  public static final String SYN_REF_CONVERTER     = "BEN-0674";
 
   // Syntax Errors regarding <part> ----------------------------------------------------------------------------------
 

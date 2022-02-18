@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -40,7 +40,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -73,14 +72,14 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
         HSQLUtil.DEFAULT_USER, HSQLUtil.DEFAULT_PASSWORD, context.getDataModel());
     db.setSchema("PUBLIC");
     db.execute("drop table referer if exists");
-    db.execute("drop table referee if exists");
+    db.execute("drop table REFEREE if exists");
     db.execute("create table referee (" +
         "id int, " +
         "name varchar(20) not null, " +
         "n int default 1 not null, " +
         "primary key (id))");
-    db.execute("insert into referee (id, name, n) values (2, 'Alice', 2)");
-    db.execute("insert into referee (id, name, n) values (3, 'Bob', 3)");
+    db.execute("insert into REFEREE (id, name, n) values (2, 'Alice', 2)");
+    db.execute("insert into REFEREE (id, name, n) values (3, 'Bob', 3)");
     db.execute(
         "create table referer ( " +
             "   id int," +
@@ -93,7 +92,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   }
 
   @After
-  public void shutDown() throws SQLException, ClassNotFoundException {
+  public void shutDown() {
     HSQLUtil.shutdown(dbUrl, HSQLUtil.DEFAULT_USER, HSQLUtil.DEFAULT_PASSWORD);
   }
 
@@ -135,7 +134,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     context.setDefaultOneToOne(true);
     parseAndExecute(
         "<generate type='referer' count='unbounded' consumer='cons'>" +
-            "  <reference name='referee_id' nullable='false' source='db' />" +
+            "  <reference name='referee_id' nullable='false' source='db' targetType='REFEREE'/>" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
     assertEquals(2, products.size());
@@ -151,7 +150,7 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     context.setDefaultOneToOne(false);
     parseAndExecute(
         "<generate type='referer' count='3' consumer='cons'>" +
-            "  <reference name='referee_id' nullable='false' source='db' />" +
+            "  <reference name='referee_id' nullable='false' source='db' targetType='REFEREE'/>" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
     assertEquals(3, products.size());
@@ -167,7 +166,8 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
   public void testDbRef_distribution() {
     parseAndExecute(
         "<generate type='referer' count='3' consumer='cons'>" +
-            "  <reference name='referee_id' targetType='REFEREE' source='db' distribution='new com.rapiddweller.benerator.distribution.function.ExponentialFunction(-0.5)' />" +
+            "  <reference name='referee_id' targetType='REFEREE' source='db' " +
+            "    distribution='new com.rapiddweller.benerator.distribution.function.ExponentialFunction(-0.5)' />" +
             "</generate>");
     List<Entity> products = getConsumedEntities();
     assertEquals(3, products.size());
@@ -652,7 +652,6 @@ public class DatabaseIntegrationTest extends AbstractBeneratorIntegrationTest {
     parseAndExecuteFile(folder + "/metaCache.ben.xml");
     assertTrue(BeneratorMonitor.INSTANCE.getTotalGenerationCount() - c0 >= 5);
   }
-
 
   // private helpers -------------------------------------------------------------------------------------------------
 

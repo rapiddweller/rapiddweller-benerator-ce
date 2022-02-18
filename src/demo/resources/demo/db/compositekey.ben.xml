@@ -46,8 +46,8 @@
     </generate>
 
     <generate type="PLAYLIST_TRACK" count="20" consumer="db">
-        <reference name="PLAYLIST_ID" type="int" source="db" targetType="playlist" unique="True"/>
-        <reference name="TRACK_ID" type="int" source="db" targetType="TRACK" unique="True"/>
+        <reference name="PLAYLIST_ID" type="int" source="db" targetType="playlist" unique="true"/>
+        <reference name="TRACK_ID" type="int" source="db" targetType="TRACK" unique="true"/>
     </generate>
 
     <echo>Printing generated data</echo>

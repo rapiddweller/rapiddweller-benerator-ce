@@ -22,6 +22,7 @@ public class NullQuotaAttribute extends AttrInfo<Expression<Double>> {
   }
 
   private static Parser<Expression<Double>> createParser() {
-    return new ScriptableParser<>(new DoubleParser());
+    return new ScriptableParser<>(new DoubleParser(0., 1.));
   }
+
 }

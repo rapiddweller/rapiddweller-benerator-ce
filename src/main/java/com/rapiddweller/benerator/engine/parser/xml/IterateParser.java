@@ -4,6 +4,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.parser.attr.EncodingAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.SourceAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.SourceFormattedAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.SourceScriptedAttribute;
 import com.rapiddweller.benerator.engine.parser.string.ScriptParser;
@@ -24,7 +25,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  */
 public class IterateParser extends AbstractGenIterParser {
 
-  protected static final AttrInfo<String> SOURCE = new AttrInfo<>(ATT_SOURCE, true, BeneratorErrorIds.SYN_ITERATE_SOURCE, null);
+  protected static final AttrInfo<String> SOURCE = new SourceAttribute(BeneratorErrorIds.SYN_ITERATE_SOURCE, true);
 
   protected static final AttrInfo<String> DATASET = new AttrInfo<>(ATT_DATASET, false, BeneratorErrorIds.SYN_ITERATE_DATASET, null);
   protected static final AttrInfo<String> NESTING = new AttrInfo<>(ATT_NESTING, false, BeneratorErrorIds.SYN_ITERATE_NESTING, null);

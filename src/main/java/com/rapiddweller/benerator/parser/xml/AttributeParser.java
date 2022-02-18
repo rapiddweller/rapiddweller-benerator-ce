@@ -4,11 +4,29 @@ package com.rapiddweller.benerator.parser.xml;
 
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.parser.attr.ConstantAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.ConverterAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.CyclicAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.DistributionAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.EncodingAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.FilterAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.GeneratorAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.ModeAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.NameAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.NullQuotaAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.NullableAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.OffsetAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.ScopeAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.ScriptAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.SelectorAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.SimpleTypeAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.SourceAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.SourceFormattedAttribute;
 import com.rapiddweller.benerator.engine.parser.attr.SourceScriptedAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.SubSelectorAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.UniqueAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.ValidatorAttribute;
+import com.rapiddweller.benerator.engine.parser.attr.ValuesAttribute;
 import com.rapiddweller.benerator.engine.parser.string.IdParser;
 import com.rapiddweller.benerator.engine.parser.string.MinMaxParser;
 import com.rapiddweller.benerator.engine.parser.string.ScriptParser;
@@ -53,35 +71,36 @@ public class AttributeParser extends AbstractComponentParser {
   // root attributes
   public static final SimpleTypeAttribute TYPE = new SimpleTypeAttribute(SYN_ATTR_TYPE);
 
-  public static final AttrInfo<String> MODE = new AttrInfo<>(ATT_MODE, false, SYN_ATTR_MODE, new ValuesParser("mode", "normal", "ignored"), "normal");
-  public static final AttrInfo<String> SCOPE = new AttrInfo<>(ATT_SCOPE, false, SYN_ATTR_SCOPE, null);
-  public static final AttrInfo<Expression<Long>> OFFSET = new AttrInfo<>(ATT_OFFSET, false, SYN_ATTR_OFFSET, new ScriptableParser<>(new NonNegativeLongParser()));
-  public static final AttrInfo<Expression<Boolean>> CONDITION = new AttrInfo<>(ATT_CONDITION, false, SYN_ATTR_CONDITION, new ScriptParser<>(Boolean.class));
-  public static final AttrInfo<Expression<Boolean>> FILTER = new AttrInfo<>(ATT_FILTER, false, SYN_ATTR_FILTER, new ScriptParser<>(Boolean.class));
-  public static final AttrInfo<Boolean> UNIQUE = new AttrInfo<>(ATT_UNIQUE, false, SYN_ATTR_UNIQUE, new BooleanParser(), "false");
+  public static final AttrInfo<String> MODE = new ModeAttribute(SYN_ATTR_MODE);
+  public static final AttrInfo<String> SCOPE = new ScopeAttribute(SYN_ATTR_SCOPE);
+  public static final AttrInfo<Expression<Long>> OFFSET = new OffsetAttribute(SYN_ATTR_OFFSET);
+  public static final AttrInfo<Expression<Boolean>> FILTER = new FilterAttribute(SYN_ATTR_FILTER);
+  public static final AttrInfo<Boolean> UNIQUE = new UniqueAttribute(SYN_ATTR_UNIQUE);
   public static final AttrInfo<String> UNIQUE_KEY = new AttrInfo<>(ATT_UNIQUE_KEY, false, SYN_ATTR_UNIQUE_KEY, null); // TODO what's this?
 
-  public static final AttrInfo<String> CONSTANT = new AttrInfo<>(ATT_CONSTANT, false, SYN_ATTR_CONSTANT, null);
-  public static final AttrInfo<WeightedSample<?>[]> VALUES = new AttrInfo<>(ATT_VALUES, false, SYN_ATTR_VALUES, new WeightedLiteralListParser());
+  public static final AttrInfo<String> CONSTANT = new ConstantAttribute(SYN_ATTR_CONSTANT);
+  public static final AttrInfo<WeightedSample<?>[]> VALUES = new ValuesAttribute(SYN_ATTR_VALUES);
+  public static final AttrInfo<String> SCRIPT = new ScriptAttribute(SYN_ATTR_SCRIPT);
+  public static final AttrInfo<Expression<?>> GENERATOR = new GeneratorAttribute(SYN_ATTR_GENERATOR);
+
   public static final AttrInfo<String> PATTERN = new AttrInfo<>(ATT_PATTERN, false, SYN_ATTR_PATTERN, null);
-  public static final AttrInfo<String> SCRIPT = new AttrInfo<>(ATT_SCRIPT, false, SYN_ATTR_SCRIPT, null);
-  public static final AttrInfo<String> GENERATOR = new AttrInfo<>(ATT_GENERATOR, false, SYN_ATTR_GENERATOR, null);
   public static final AttrInfo<Integer> MIN_LENGTH = new AttrInfo<>(ATT_MIN_LENGTH, false, SYN_ATTR_MIN_LENGTH, new NonNegativeIntegerParser());
   public static final AttrInfo<Integer> MAX_LENGTH = new AttrInfo<>(ATT_MAX_LENGTH, false, SYN_ATTR_MAX_LENGTH, new NonNegativeIntegerParser());
-  public static final AttrInfo<Expression<Double>> NULL_QUOTA = new AttrInfo<>(ATT_NULL_QUOTA, false, SYN_ATTR_NULL_QUOTA, new ScriptableParser<>(new DoubleParser(0., 1.)));
+  public static final AttrInfo<Expression<Double>> NULL_QUOTA = new NullQuotaAttribute(SYN_ATTR_NULL_QUOTA);
 
-  public static final AttrInfo<String> SOURCE = new AttrInfo<>(ATT_SOURCE, false, SYN_ATTR_SOURCE, null);
-  public static final SourceScriptedAttribute SOURCE_SCRIPTED = new SourceScriptedAttribute(SYN_ATTR_SOURCE_SCRIPTED);
-  public static final EncodingAttribute ENCODING = new EncodingAttribute(SYN_ATTR_ENCODING);
+  public static final AttrInfo<String> SOURCE = new SourceAttribute(SYN_ATTR_SOURCE, false);
+  public static final AttrInfo<Expression<Boolean>> SOURCE_SCRIPTED = new SourceScriptedAttribute(SYN_ATTR_SOURCE_SCRIPTED);
+  public static final AttrInfo<Expression<String>> ENCODING = new EncodingAttribute(SYN_ATTR_ENCODING);
   public static final AttrInfo<String> SEGMENT = new AttrInfo<>(ATT_SEGMENT, false, SYN_ATTR_SEGMENT, null);
   public static final AttrInfo<Character> SEPARATOR = new AttrInfo<>(ATT_SEPARATOR, false, SYN_ATTR_SEPARATOR, new CharacterParser());
-  public static final AttrInfo<String> SELECTOR = new AttrInfo<>(ATT_SELECTOR, false, SYN_ATTR_SELECTOR, null);
-  public static final AttrInfo<String> SUB_SELECTOR = new AttrInfo<>(ATT_SUB_SELECTOR, false, SYN_ATTR_SUB_SELECTOR, null);
+  public static final AttrInfo<Expression<Boolean>> CONDITION = new AttrInfo<>(ATT_CONDITION, false, SYN_ATTR_CONDITION, new ScriptParser<>(Boolean.class));
+  public static final AttrInfo<String> SELECTOR = new SelectorAttribute(SYN_ATTR_SELECTOR);
+  public static final AttrInfo<String> SUB_SELECTOR = new SubSelectorAttribute(SYN_ATTR_SUB_SELECTOR);
   public static final AttrInfo<Boolean> ROW_BASED = new AttrInfo<>(ATT_ROW_BASED, false, SYN_ATTR_ROW_BASED, new BooleanParser());
-  public static final SourceFormattedAttribute FORMAT = new SourceFormattedAttribute(SYN_ATTR_FORMAT);
+  public static final AttrInfo<String> FORMAT = new SourceFormattedAttribute(SYN_ATTR_FORMAT);
   public static final AttrInfo<String> EMPTY_MARKER = new AttrInfo<>(ATT_EMPTY_MARKER, false, SYN_ATTR_EMPTY_MARKER, null);
 
-  public static final AttrInfo<Boolean> NULLABLE = new AttrInfo<>(ATT_NULLABLE, false, SYN_ATTR_NULLABLE, new BooleanParser(), "false");
+  public static final AttrInfo<Boolean> NULLABLE = new NullableAttribute(SYN_ATTR_NULLABLE);
   public static final AttrInfo<Double> TRUE_QUOTA = new AttrInfo<>(ATT_TRUE_QUOTA, false, SYN_ATTR_TRUE_QUOTA, new DoubleParser(0., 1.));
 
   public static final AttrInfo<Expression<Comparable>> MIN = new AttrInfo<>(ATT_MIN, false, SYN_ATTR_MIN, new ScriptableParser<>(new MinMaxParser("min"), Comparable.class));
@@ -89,16 +108,16 @@ public class AttributeParser extends AbstractComponentParser {
   public static final AttrInfo<Expression<Comparable>> MAX = new AttrInfo<>(ATT_MAX, false, SYN_ATTR_MAX,new ScriptableParser<>(new MinMaxParser("max"), Comparable.class));
   public static final AttrInfo<Boolean> MAX_INCLUSIVE = new AttrInfo<>(ATT_MAX_INCLUSIVE, false, SYN_ATTR_MAX_INCLUSIVE, new BooleanParser(), "true");
   public static final AttrInfo<Expression<Double>> GRANULARITY = new AttrInfo<>(ATT_GRANULARITY, false, SYN_ATTR_GRANULARITY, new ScriptableParser<>(new DoubleParser(0., null)));
-  public static final AttrInfo<String> DISTRIBUTION = new AttrInfo<>(ATT_DISTRIBUTION, false, SYN_ATTR_DISTRIBUTION, null);
+  public static final AttrInfo<String> DISTRIBUTION = new DistributionAttribute(SYN_ATTR_DISTRIBUTION);
 
   public static final AttrInfo<Boolean> DATASET = new AttrInfo<>(ATT_DATASET, false, SYN_ATTR_DATASET, null);
   public static final AttrInfo<String> NESTING = new AttrInfo<>(ATT_NESTING, false, SYN_ATTR_NESTING, null);
   public static final AttrInfo<String> LOCALE = new AttrInfo<>(ATT_LOCALE, false, SYN_ATTR_LOCALE, new IdParser());
 
   // postprocessor attributes
-  public static final AttrInfo<String> CONVERTER = new AttrInfo<>(ATT_CONVERTER, false, SYN_ATTR_CONVERTER, null);
-  public static final AttrInfo<String> VALIDATOR = new AttrInfo<>(ATT_VALIDATOR, false, SYN_ATTR_VALIDATOR, null);
-  public static final AttrInfo<Boolean> CYCLIC = new AttrInfo<>(ATT_CYCLIC, false, SYN_ATTR_CYCLIC, new BooleanParser());
+  public static final AttrInfo<String> CONVERTER = new ConverterAttribute(SYN_ATTR_CONVERTER);
+  public static final AttrInfo<String> VALIDATOR = new ValidatorAttribute(SYN_ATTR_VALIDATOR);
+  public static final AttrInfo<Boolean> CYCLIC = new CyclicAttribute(SYN_ATTR_CYCLIC);
   public static final AttrInfo<String> MAP = new AttrInfo<>(ATT_MAP, false, SYN_ATTR_MAP, null);
 
   private final AttrInfoSupport attrSupport = new AttrInfoSupport(SYN_ATTR_ILLEGAL_ATTR,
