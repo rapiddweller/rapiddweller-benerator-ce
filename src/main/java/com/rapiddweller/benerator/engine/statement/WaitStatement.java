@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2006-2020 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
+ * (c) Copyright 2006-2022 by rapiddweller GmbH & Volker Bergmann. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, is permitted under the terms of the
@@ -67,9 +67,11 @@ public class WaitStatement implements Statement {
   }
 
   public int generateDuration(BeneratorContext context) {
-    if (!generatorInitialized) {
-      durationGenerator.init(context);
-      generatorInitialized = true;
+    synchronized (this) {
+      if (!generatorInitialized) {
+        durationGenerator.init(context);
+        generatorInitialized = true;
+      }
     }
     return durationGenerator.generate().intValue();
   }
