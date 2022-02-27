@@ -39,7 +39,6 @@ import com.rapiddweller.jdbacl.QueryDataIterator;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 
 /**
@@ -53,18 +52,17 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> implements Th
 
   private static final Logger logger = LoggerFactory.getLogger(QueryDataSource.class);
 
-  private final Connection connection;
-  private final String query;
-  private final int fetchSize;
+  protected final ConnectionProvider connectionProvider;
+  protected final String query;
+  protected final int fetchSize;
 
-  private final Converter<String, ?> queryPreprocessor;
-  private String renderedQuery;
+  protected final Converter<String, ?> queryPreprocessor;
 
-  public QueryDataSource(Connection connection, String query, int fetchSize, Context context) {
+  public QueryDataSource(ConnectionProvider connectionProvider, String query, int fetchSize, Context context) {
     super(ResultSet.class);
-    Assert.notNull(connection, "connection");
+    Assert.notNull(connectionProvider, "connectionProvider");
     Assert.notEmpty(query, "'query' is empty or null");
-    this.connection = connection;
+    this.connectionProvider = connectionProvider;
     this.query = query;
     this.fetchSize = fetchSize;
     if (context != null) {
@@ -91,13 +89,13 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> implements Th
 
   @Override
   public DataIterator<ResultSet> iterator() {
-    renderedQuery = queryPreprocessor.convert(query).toString();
-    return new QueryDataIterator(renderedQuery, connection, fetchSize);
+    String renderedQuery = queryPreprocessor.convert(query).toString();
+    return new QueryDataIterator(renderedQuery, connectionProvider.getConnection(), fetchSize);
   }
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + '[' + (renderedQuery != null ? renderedQuery : query) + ']';
+    return getClass().getSimpleName() + '{' + query + '}';
   }
 
 }
