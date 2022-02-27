@@ -108,7 +108,7 @@ import static com.rapiddweller.jdbacl.SQLUtil.renderQuery;
  * @author Volker Bergmann
  * @since 0.8.0
  */
-public abstract class AbstractDBSystem extends AbstractStorageSystem {
+public abstract class AbstractDBSystem extends AbstractStorageSystem implements ConnectionProvider {
 
   private static final int DEFAULT_FETCH_SIZE = 100;
   private static final VersionNumber MIN_ORACLE_VERSION = VersionNumber.valueOf("10" + ".2.0.4"); // little trick to satisfy SonarCube which thinks this is an IP address
@@ -435,7 +435,6 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   @SuppressWarnings({"null", "checkstyle:VariableDeclarationUsageDistance"})
   public DataSource<Entity> queryEntities(String type, String selector, Context context) {
     logger.debug("queryEntities({})", type);
-    Connection connection = getConnection();
     boolean script = false;
     if (selector != null && selector.startsWith("{") && selector.endsWith("}")) {
       selector = selector.substring(1, selector.length() - 1);
@@ -457,7 +456,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     if (script) {
       sql = '{' + sql + '}';
     }
-    DataSource<ResultSet> source = createQuery(sql, context, connection);
+    DataSource<ResultSet> source = createQuery(sql, context);
     return new EntityResultSetDataSource(source, (ComplexTypeDescriptor) getTypeDescriptor(type));
   }
 
@@ -504,8 +503,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   @SuppressWarnings({"unchecked", "rawtypes"})
   public DataSource<?> query(String query, boolean simplify, Context context) {
     logger.debug("query({})", query);
-    Connection connection = getConnection();
-    QueryDataSource resultSetIterable = createQuery(query, context, connection);
+    DataSource<ResultSet> resultSetIterable = createQuery(query, context);
     ResultSetConverter converter = new ResultSetConverter(Object.class, simplify);
     return new ConvertingDataSource<>(resultSetIterable, converter);
   }
@@ -519,8 +517,6 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
   public Consumer inserter(String tableName) {
     return new StorageSystemInserter(this, (ComplexTypeDescriptor) getTypeDescriptor(tableName));
   }
-
-  public abstract Connection getConnection();
 
   protected abstract PreparedStatement getSelectByPKStatement(
       ComplexTypeDescriptor descriptor);
@@ -635,8 +631,8 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     }
   }
 
-  private QueryDataSource createQuery(String query, Context context, Connection connection) {
-    return new QueryDataSource(connection, query, fetchSize, (dynamicQuerySupported ? context : null));
+  protected DataSource<ResultSet> createQuery(String query, Context context) {
+    return new QueryDataSource(this, query, fetchSize, (dynamicQuerySupported ? context : null));
   }
 
   protected abstract PreparedStatement getStatement(
@@ -1006,5 +1002,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem {
     }
     return null;
   }
+
+  public abstract void commit();
 
 }
