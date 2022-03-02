@@ -40,6 +40,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@link DataSource} implementation which is able to resolve script expressions, performs a query and
@@ -58,6 +60,8 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> implements Th
 
   protected final Converter<String, ?> queryPreprocessor;
 
+  private List<DataIterator<ResultSet>> iterators;
+
   public QueryDataSource(ConnectionProvider connectionProvider, String query, int fetchSize, Context context) {
     super(ResultSet.class);
     Assert.notNull(connectionProvider, "connectionProvider");
@@ -70,6 +74,7 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> implements Th
     } else {
       this.queryPreprocessor = new NoOpConverter<>();
     }
+    this.iterators = new ArrayList<>();
     logger.debug("Constructed QueryIterable: {}", query);
   }
 
@@ -94,8 +99,19 @@ public class QueryDataSource extends AbstractDataSource<ResultSet> implements Th
   }
 
   @Override
+  public void close() {
+    synchronized (this) {
+      super.close();
+      for (DataIterator<ResultSet> iterator : iterators) {
+        iterator.close();
+      }
+      this.iterators.clear();
+    }
+  }
+
+  @Override
   public String toString() {
-    return getClass().getSimpleName() + '{' + query + '}';
+    return getClass().getSimpleName() + '[' + query + ']';
   }
 
 }
