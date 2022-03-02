@@ -518,8 +518,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
     return new StorageSystemInserter(this, (ComplexTypeDescriptor) getTypeDescriptor(tableName));
   }
 
-  protected abstract PreparedStatement getSelectByPKStatement(
-      ComplexTypeDescriptor descriptor);
+  protected abstract PreparedStatement getSelectByPKStatement(ComplexTypeDescriptor descriptor);
 
   public boolean tableExists(String tableName) {
     logger.debug("tableExists({})", tableName);
@@ -543,8 +542,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
       }
       return null;
     } catch (SQLException e) {
-      throw BeneratorExceptionFactory.getInstance().operationFailed(
-          "Failed to execute SQL: " + sql, e);
+      throw BeneratorExceptionFactory.getInstance().operationFailed("Failed to execute SQL: " + sql, e);
     }
   }
 
@@ -621,8 +619,7 @@ public abstract class AbstractDBSystem extends AbstractStorageSystem implements 
         DatabaseMetaData metaData = connection.getMetaData();
         VersionNumber driverVersion = VersionNumber.valueOf(metaData.getDriverVersion());
         if (driverVersion.compareTo(MIN_ORACLE_VERSION) < 0) {
-          logger.warn(
-              "Your Oracle driver has a bug in metadata support. Please update to 10.2.0.4 or newer. " +
+          logger.warn("Your Oracle driver has a bug in metadata support. Please update to 10.2.0.4 or newer. " +
                   "You can use that driver for accessing an Oracle 9 server as well.");
         }
       } catch (SQLException e) {
