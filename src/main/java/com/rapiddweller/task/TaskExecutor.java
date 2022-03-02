@@ -92,8 +92,8 @@ public class TaskExecutor {
     return actualCount;
   }
 
-  private static void logExecutionInfo(Task task, Long minInvocations, Long maxInvocations, long pageSize,
-                                       boolean infoLog) {
+  private static void logExecutionInfo(
+      Task task, Long minInvocations, Long maxInvocations, long pageSize, boolean infoLog) {
     if (infoLog) {
       if (logger.isInfoEnabled()) {
         logger.info(executionInfo(task, minInvocations, maxInvocations, pageSize));
@@ -103,8 +103,7 @@ public class TaskExecutor {
     }
   }
 
-  private static String executionInfo(Task task, Long minInvocations,
-                                      Long maxInvocations, long pageSize) {
+  private static String executionInfo(Task task, Long minInvocations, Long maxInvocations, long pageSize) {
     String invocationInfo =
         (maxInvocations == null ? "as long as available" : HF.pluralize(maxInvocations, "time"));
     if (minInvocations != null && minInvocations > 0 && (maxInvocations == null || maxInvocations > minInvocations)) {
@@ -117,8 +116,7 @@ public class TaskExecutor {
   }
 
   private void run(Long requestedInvocations, Long minInvocations) {
-    logExecutionInfo(target, requestedInvocations, minInvocations, pageSize,
-        infoLog);
+    logExecutionInfo(target, requestedInvocations, minInvocations, pageSize, infoLog);
     // first run without verification
     long countValue = run(requestedInvocations);
     // afterwards verify execution count
@@ -146,12 +144,11 @@ public class TaskExecutor {
         if (pageSize > 0) {
           pageStarting(currentPageNo);
         }
-        long currentPageSize = currentPageSize(requestedInvocations,
-            queuedInvocations);
+        long currentPageSize = currentPageSize(requestedInvocations, queuedInvocations);
         queuedInvocations -= currentPageSize;
         actualCount += runPage(currentPageSize, (pageSize > 0));
         if (pageSize > 0) {
-          pageFinished(currentPageNo, context);
+          pageFinished(currentPageNo);
         }
         currentPageNo++;
       } catch (Exception e) {
@@ -163,14 +160,11 @@ public class TaskExecutor {
     return actualCount;
   }
 
-  protected long currentPageSize(Long requestedInvocations,
-                                 long queuedInvocations) {
+  protected long currentPageSize(Long requestedInvocations, long queuedInvocations) {
     if (pageSize > 0) {
-      return (requestedInvocations == null ? pageSize :
-          Math.min(pageSize, queuedInvocations));
+      return (requestedInvocations == null ? pageSize : Math.min(pageSize, queuedInvocations));
     } else {
-      return (requestedInvocations == null ? 1 :
-          Math.min(requestedInvocations, queuedInvocations));
+      return (requestedInvocations == null ? 1 : Math.min(requestedInvocations, queuedInvocations));
     }
   }
 
@@ -180,8 +174,7 @@ public class TaskExecutor {
 
   private long runPage(Long invocationCount, boolean finishPage) {
     try {
-      return runWithoutPage(target, invocationCount, context,
-          errorHandler);
+      return runWithoutPage(target, invocationCount, context, errorHandler);
     } finally {
       if (finishPage) {
         target.pageFinished();
@@ -189,8 +182,7 @@ public class TaskExecutor {
     }
   }
 
-  private boolean workPending(Long maxInvocationCount,
-                              long queuedInvocations) {
+  private boolean workPending(Long maxInvocationCount, long queuedInvocations) {
     if (!((StateTrackingTaskProxy<? extends Task>) target).isAvailable()) {
       return false;
     }
@@ -211,9 +203,8 @@ public class TaskExecutor {
     }
   }
 
-  private void pageFinished(int currentPageNo, Context context) {
-    logger.debug("Page {} of {} finished", currentPageNo + 1,
-        getTaskName());
+  private void pageFinished(int currentPageNo) {
+    logger.debug("Page {} of {} finished", currentPageNo + 1, getTaskName());
     if (pageListeners != null) {
       for (PageListener listener : pageListeners) {
         listener.pageFinished();

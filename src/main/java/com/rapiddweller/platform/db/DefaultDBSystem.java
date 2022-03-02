@@ -57,10 +57,15 @@ public class DefaultDBSystem extends AbstractDBSystem {
     this.connectionHolder = new ConnectionHolder(this);
   }
 
+  public void commit() {
+    logger.debug("commit()");
+    connectionHolder.commit();
+  }
+
   @Override
   public void flush() {
     logger.debug("flush()");
-    connectionHolder.commit();
+    commit();
   }
 
   @Override

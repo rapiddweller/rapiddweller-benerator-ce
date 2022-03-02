@@ -179,16 +179,7 @@ public class Benerator {
       run = false;
     }
     if (config.getList() != null) {
-      String arg = config.getList();
-      if ("env".equals(arg)) {
-        ConsolePrinter.printStandard(BeneratorUtil.formatEnvironmentList());
-      } else if ("db".equals(arg)) {
-        BeneratorUtil.printEnvDbs(new ConsolePrinter());
-      } else if ("kafka".equals(arg)) {
-        BeneratorUtil.printEnvKafkas(new ConsolePrinter());
-      } else {
-        throw BeneratorExceptionFactory.getInstance().illegalCommandLineOption(arg);
-      }
+      printSystemList(config);
       run = false;
     }
     if (config.isClearCaches()) {
@@ -199,6 +190,19 @@ public class Benerator {
       checkComponents();
       Benerator.setMode(config.getMode());
       new Benerator().runFile(config.getFile());
+    }
+  }
+
+  private static void printSystemList(BeneratorConfig config) {
+    String arg = config.getList();
+    if ("env".equals(arg)) {
+      ConsolePrinter.printStandard(BeneratorUtil.formatEnvironmentList());
+    } else if ("db".equals(arg)) {
+      BeneratorUtil.printEnvDbs(new ConsolePrinter());
+    } else if ("kafka".equals(arg)) {
+      BeneratorUtil.printEnvKafkas(new ConsolePrinter());
+    } else {
+      throw BeneratorExceptionFactory.getInstance().illegalCommandLineOption(arg);
     }
   }
 

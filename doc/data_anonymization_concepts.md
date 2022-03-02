@@ -122,7 +122,7 @@ An example for iterating through orders only of high priority:
 For compliance checking, Enterprise Edition provides an anonymization Tracker.
 It is activated on the command line by calling 
 
-```benerator --anonreport```
+```benerator --anonReport 100```
 
 and creates a report listing each field name and which percentage of its occurrences 
 were changed in anonymization. The report is exported to a tab-separated CSV file named 
@@ -202,7 +202,7 @@ anonymized data. In order to do so, you specify the percentage of data samples
 to be checked as command line argument on the Benerator call, for example a 
 sample size of 10% of all data would be checked when specifying
 
-```benerator --anonreport 10```
+```benerator --anonReport 10```
 
 Then your report may look like this (when combined with field reduction):
 

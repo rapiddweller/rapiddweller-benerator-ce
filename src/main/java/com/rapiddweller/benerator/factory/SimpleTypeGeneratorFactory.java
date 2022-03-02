@@ -55,6 +55,7 @@ import com.rapiddweller.common.converter.DateString2DurationConverter;
 import com.rapiddweller.common.converter.LiteralParserConverter;
 import com.rapiddweller.common.converter.ThreadSafeConverter;
 import com.rapiddweller.common.converter.ToStringConverter;
+import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.exception.ParseException;
 import com.rapiddweller.format.DataSource;
 import com.rapiddweller.format.script.ScriptConverterForStrings;
@@ -198,8 +199,11 @@ public class SimpleTypeGeneratorFactory extends TypeGeneratorFactory<SimpleTypeD
         if (!StringUtil.isEmpty(subSelector)) {
           generator = new DataSourceGenerator(((StorageSystem) sourceObject).query(subSelector, true, context));
           generator = WrapperFactory.applyHeadCycler(generator);
-        } else {
+        } else if (selector != null){
           generator = new DataSourceGenerator(((StorageSystem) sourceObject).query(selector, true, context));
+        } else {
+          throw ExceptionFactory.getInstance().configurationError(
+              "Referring to a simple-typed value without specifying a 'selector' or 'subSelector'");
         }
       } else if (sourceObject instanceof Generator) {
         generator = (Generator<?>) sourceObject;
