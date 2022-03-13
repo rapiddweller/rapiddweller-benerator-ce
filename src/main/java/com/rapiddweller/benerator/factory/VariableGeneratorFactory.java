@@ -28,9 +28,13 @@ package com.rapiddweller.benerator.factory;
 
 import com.rapiddweller.benerator.Generator;
 import com.rapiddweller.benerator.engine.BeneratorContext;
+import com.rapiddweller.benerator.engine.expression.ScriptExpression;
+import com.rapiddweller.benerator.wrapper.ConditionalGenerator;
 import com.rapiddweller.benerator.wrapper.WrapperFactory;
 import com.rapiddweller.common.BeanUtil;
 import com.rapiddweller.common.Converter;
+import com.rapiddweller.common.Expression;
+import com.rapiddweller.common.StringUtil;
 import com.rapiddweller.common.Validator;
 import com.rapiddweller.model.data.SimpleTypeDescriptor;
 import com.rapiddweller.model.data.TypeDescriptor;
@@ -73,8 +77,25 @@ public class VariableGeneratorFactory {
       generator = InstanceGeneratorFactory.createSingleInstanceGenerator(descriptor, Uniqueness.NONE, context);
     }
 
-    return context.getGeneratorFactory().applyNullSettings(generator, descriptor.isNullable(), descriptor.getNullQuota());
+    generator = context.getGeneratorFactory().applyNullSettings(generator, descriptor.isNullable(), descriptor.getNullQuota());
+    generator = wrapWithCondition(descriptor, generator);
+    return generator;
   }
+
+  static Generator<?> wrapWithCondition(VariableDescriptor descriptor, Generator<?> generator) {
+    TypeDescriptor typeDescriptor = descriptor.getTypeDescriptor();
+    if (generator == null || typeDescriptor == null) {
+      return generator;
+    }
+    String conditionText = typeDescriptor.getCondition();
+    if (!StringUtil.isEmpty(conditionText)) {
+      Expression<Boolean> condition = new ScriptExpression<>(conditionText);
+      return new ConditionalGenerator(generator, condition);
+    } else {
+      return generator;
+    }
+  }
+
 
   static Generator<?> wrapWithPostprocessors(Generator<?> generator, TypeDescriptor descriptor, BeneratorContext context) {
     generator = createConvertingGenerator(descriptor, generator, context);
