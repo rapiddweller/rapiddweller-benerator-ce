@@ -333,11 +333,8 @@ public class ComponentBuilderFactory extends InstanceGeneratorFactory {
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   static ComponentBuilder<?> wrapWithCondition(ComponentDescriptor descriptor, ComponentBuilder<?> builder) {
-    if (builder == null) {
-      return null;
-    }
     TypeDescriptor typeDescriptor = descriptor.getTypeDescriptor();
-    if (typeDescriptor == null) {
+    if (builder == null || typeDescriptor == null) {
       return builder;
     }
     String conditionText = typeDescriptor.getCondition();
