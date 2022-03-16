@@ -9,6 +9,7 @@ import com.rapiddweller.benerator.IllegalGeneratorStateException;
 import com.rapiddweller.common.ExceptionUtil;
 import com.rapiddweller.common.ObjectNotFoundException;
 import com.rapiddweller.common.StringUtil;
+import com.rapiddweller.common.TextFileLocation;
 import com.rapiddweller.common.cli.CLIIllegalArgumentException;
 import com.rapiddweller.common.cli.CLIIllegalOptionException;
 import com.rapiddweller.common.cli.CLIIllegalOptionValueException;
@@ -193,7 +194,12 @@ public class BeneratorExceptionFactory extends ExceptionFactory {
 
   @Override
   public ScriptException scriptEvaluationFailed(String scriptText, Throwable cause) {
-    return new ScriptException(cause.getMessage(), cause, BeneratorErrorIds.SCRIPT_FAILED, scriptText);
+    return scriptEvaluationFailed(cause.getMessage(), cause, scriptText, null);
+  }
+
+  public ScriptException scriptEvaluationFailed(
+          String message, Throwable cause, String scriptText,TextFileLocation location) {
+    return new ScriptException(message, cause, BeneratorErrorIds.SCRIPT_FAILED, scriptText, location);
   }
 
 }

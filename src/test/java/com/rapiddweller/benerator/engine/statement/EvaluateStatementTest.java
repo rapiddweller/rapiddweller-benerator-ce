@@ -62,7 +62,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
     EvaluateStatement stmt = new EvaluateStatement(
         true, constant("message"), constant("'Hello World'"), null, null,
         null, null, null, constant("fatal"), constant(Encodings.UTF_8),
-        constant(false), null, null);
+        constant(false), null, null, null);
     stmt.execute(context);
     assertEquals("Hello World", context.get("message"));
   }
@@ -72,7 +72,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
     EvaluateStatement stmt = new EvaluateStatement(
         true, constant("message"), null, constant("/com/rapiddweller/benerator/engine/statement/HelloWorld.js"),
         null, null, null, null, constant("fatal"),
-        constant(Encodings.UTF_8), constant(false), null, null);
+        constant(Encodings.UTF_8), constant(false), null, null, null);
     stmt.execute(context);
     assertEquals(context.get("message"), "Hello World");
   }
@@ -120,7 +120,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
     EvaluateStatement stmt = new EvaluateStatement(
         true, constant("message"), constant("HelloHi"), null,
         null, stSysEx, null, null, constant("fatal"),
-        constant(Encodings.UTF_8), constant(false), null, null);
+        constant(Encodings.UTF_8), constant(false), null, null, null);
     stmt.execute(context);
     assertEquals("HelloHi", stSys.execInfo);
   }
@@ -131,7 +131,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
     EvaluateStatement s = new EvaluateStatement(true, null, new ConstantExpression<String>("1"),
         null, null, null, null,
         null, new ConstantExpression<>("fatal"),
-        null, null, null, new ScriptExpression<>("result == 2"));
+        null, null, null, new ScriptExpression<>("result == 2"), null);
     s.execute(context);
   }
 
@@ -143,7 +143,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
     EvaluateStatement stmt = new EvaluateStatement(
         true, constant("result"), constant("echo $JAVA_HOME"), null,
         constant("shell"), null, constant(shell), null, constant("fatal"),
-        constant(Encodings.UTF_8), constant(false), null, null);
+        constant(Encodings.UTF_8), constant(false), null, null, null);
     stmt.execute(context);
     assertEquals(expectedResult, context.get("result"));
 
@@ -155,7 +155,7 @@ public class EvaluateStatementTest extends AbstractStatementTest {
     EvaluateStatement stmt = new EvaluateStatement(
         true, constant("result"), constant("echo %JAVA_HOME%"), null,
         constant("shell"), null, null, null, constant("fatal"),
-        constant(Encodings.UTF_8), constant(false), null, null);
+        constant(Encodings.UTF_8), constant(false), null, null, null);
     stmt.execute(context);
     assertEquals(expectedResult, context.get("result"));
   }
@@ -181,14 +181,12 @@ public class EvaluateStatementTest extends AbstractStatementTest {
     }
 
     @Override
-    public DataSource<Entity> queryEntities(String type,
-                                            String selector, Context context) {
+    public DataSource<Entity> queryEntities(String type, String selector, Context context) {
       return null;
     }
 
     @Override
-    public DataSource<?> queryEntityIds(String entityName,
-                                        String selector, Context context) {
+    public DataSource<?> queryEntityIds(String entityName, String selector, Context context) {
       return null;
     }
 

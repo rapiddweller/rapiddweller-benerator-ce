@@ -26,21 +26,11 @@
 
 package com.rapiddweller.benerator.engine.statement;
 
+import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.StorageSystem;
 import com.rapiddweller.benerator.engine.BeneratorContext;
 import com.rapiddweller.benerator.factory.BeneratorExceptionFactory;
-import com.rapiddweller.common.Assert;
-import com.rapiddweller.common.BeanUtil;
-import com.rapiddweller.common.Context;
-import com.rapiddweller.common.ConversionException;
-import com.rapiddweller.common.ErrorHandler;
-import com.rapiddweller.common.IOUtil;
-import com.rapiddweller.common.Level;
-import com.rapiddweller.common.LogCategoriesConstants;
-import com.rapiddweller.common.ReaderLineIterator;
-import com.rapiddweller.common.ShellUtil;
-import com.rapiddweller.common.StringUtil;
-import com.rapiddweller.common.SystemInfo;
+import com.rapiddweller.common.*;
 import com.rapiddweller.common.converter.LiteralParserConverter;
 import com.rapiddweller.common.exception.ExceptionFactory;
 import com.rapiddweller.common.ui.ConsolePrinter;
@@ -49,7 +39,6 @@ import com.rapiddweller.format.script.ScriptUtil;
 import com.rapiddweller.jdbacl.DBExecutionResult;
 import com.rapiddweller.jdbacl.DBUtil;
 import com.rapiddweller.platform.db.AbstractDBSystem;
-import com.rapiddweller.common.Expression;
 import com.rapiddweller.script.expression.ExpressionUtil;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -96,12 +85,14 @@ public class EvaluateStatement extends AbstractStatement {
   protected final Expression<Boolean> invalidateEx;
   protected final Expression<?> assertionEx;
   protected final Expression<String> shellEx;
+  protected final TextFileLocation location;
 
   public EvaluateStatement(
       boolean evaluate, Expression<String> idEx, Expression<String> textEx,
-     Expression<String> uriEx, Expression<String> typeEx, Expression<?> targetObjectEx, Expression<String> shellEx,
-     Expression<Character> separatorEx, Expression<String> onErrorEx, Expression<String> encodingEx,
-     Expression<Boolean> optimizeEx, Expression<Boolean> invalidateEx, Expression<?> assertionEx) {
+      Expression<String> uriEx, Expression<String> typeEx, Expression<?> targetObjectEx, Expression<String> shellEx,
+      Expression<Character> separatorEx, Expression<String> onErrorEx, Expression<String> encodingEx,
+      Expression<Boolean> optimizeEx, Expression<Boolean> invalidateEx, Expression<?> assertionEx,
+      TextFileLocation location) {
     this.evaluate = evaluate;
     this.idEx = idEx;
     this.textEx = textEx;
@@ -115,6 +106,7 @@ public class EvaluateStatement extends AbstractStatement {
     this.optimizeEx = optimizeEx;
     this.invalidateEx = invalidateEx;
     this.assertionEx = assertionEx;
+    this.location = location;
   }
 
   @Override
@@ -257,14 +249,24 @@ public class EvaluateStatement extends AbstractStatement {
   }
 
   private Object runScript(String text, String type, String onError, Context context) {
-    ErrorHandler errorHandler = new ErrorHandler(getClass().getName(),
-        Level.valueOf(onError));
+    ErrorHandler errorHandler = new ErrorHandler(getClass().getName(), Level.valueOf(onError));
+    boolean evaluating = false;
     try {
       Script script = ScriptUtil.parseScriptText(text, type);
+      evaluating = true;
       return script.evaluate(context);
     } catch (Exception e) {
-      errorHandler.handleError("Error in script evaluation", e);
-      return null;
+      if (evaluating) {
+        RuntimeException e2 = BeneratorExceptionFactory.getInstance().scriptEvaluationFailed(
+                "Error evaluating script", e, text, location);
+        errorHandler.handleError(e2.getMessage(), e2);
+        return null;
+      } else {
+        RuntimeException e2 = BeneratorExceptionFactory.getInstance().syntaxErrorForText(
+                "Error parsing script", e, BeneratorErrorIds.SYN_EVALUATE, location);
+        errorHandler.handleError(e2.getMessage(), e2);
+        return null;
+      }
     }
   }
 
@@ -315,10 +317,11 @@ public class EvaluateStatement extends AbstractStatement {
         try {
           connection.rollback();
         } catch (SQLException e) {
-          // ignore this 2nd exception, we have other problems now (sqle)
+          // ignore this 2nd exception, we have other problems now (-> sqle)
         }
       }
-      errorHandler.handleError("Error in SQL script execution", sqle);
+      Throwable cause = ExceptionUtil.getRootCause(sqle);
+      errorHandler.handleError("Error in SQL script execution", cause);
     }
     return result;
   }

@@ -31,6 +31,7 @@ import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.benerator.engine.Statement;
 import com.rapiddweller.benerator.engine.expression.ScriptExpression;
 import com.rapiddweller.benerator.engine.statement.EvaluateStatement;
+import com.rapiddweller.common.TextFileLocation;
 import com.rapiddweller.common.converter.String2CharConverter;
 import com.rapiddweller.common.xml.XMLAssert;
 import com.rapiddweller.format.xml.AttrInfoSupport;
@@ -90,7 +91,9 @@ public abstract class AbstractEvaluateOrExecuteParser extends AbstractBeneratorD
     Expression<Boolean> optimize = parseBooleanExpressionAttribute(ATT_OPTIMIZE, element, false);
     Expression<Boolean> invalidate = parseBooleanExpressionAttribute(ATT_INVALIDATE, element, null);
     Expression<?> assertion = new ScriptExpression<>(element.getAttribute(ATT_ASSERT));
-    return new EvaluateStatement(evaluate, id, text, uri, type, targetObject, shell, separator, onError, encoding, optimize, invalidate, assertion);
+    TextFileLocation location = TextFileLocation.of(element);
+    return new EvaluateStatement(evaluate, id, text, uri, type, targetObject, shell, separator, onError, encoding,
+            optimize, invalidate, assertion, location);
   }
 
 }
