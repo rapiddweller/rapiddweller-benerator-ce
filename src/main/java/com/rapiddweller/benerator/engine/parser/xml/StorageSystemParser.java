@@ -78,7 +78,7 @@ public class StorageSystemParser extends AbstractBeneratorDescriptorParser {
                 throw classNotSuperclass(className);
             }
         } catch (ClassNotFoundException e) {
-            throw notClassNotFoundException(className, id);
+            throw classNotFoundException(className, id);
         }
     }
 
@@ -86,11 +86,11 @@ public class StorageSystemParser extends AbstractBeneratorDescriptorParser {
         if (storageSystemClasses.containsKey(className)) {
             return storageSystemClasses.get(className);
         } else {
-            throw notClassNotFoundException(className, id);
+            throw classNotFoundException(className, id);
         }
     }
 
-    private static ParseException notClassNotFoundException(String className, String id) {
+    private static ParseException classNotFoundException(String className, String id) {
         throw EXCEPTION_FACTORY.parsingError(format("Cannot find class %s for storage system %s.", className, id));
     }
 

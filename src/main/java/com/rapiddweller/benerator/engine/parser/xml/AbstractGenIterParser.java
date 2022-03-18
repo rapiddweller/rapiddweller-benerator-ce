@@ -135,7 +135,7 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
   protected final AttrInfo<Boolean> cyclicAttr = new AttrInfo<>(ATT_CYCLIC, false, SYN_GENERATE_CYCLIC, new BooleanParser(), "false");
   protected final AttrInfo<Long> offsetAttr = new AttrInfo<>(ATT_OFFSET, false, SYN_GENERATE_OFFSET, new NonNegativeLongParser(), "0");
 
-  protected final ElementToIntanceDesciptorParser elementToIntanceDesciptorParser = new ElementToIntanceDesciptorParser();
+  protected final ElementToInstanceDesciptorParser elementToInstanceDesciptorParser = new ElementToInstanceDesciptorParser();
 
   protected AbstractGenIterParser(String elementName, AttrInfoSupport attrSupport) {
     super(elementName, attrSupport);
@@ -193,7 +193,7 @@ public abstract class AbstractGenIterParser extends AbstractBeneratorDescriptorP
 
     // parse task and sub statements
     Statement[] statementPath = parsingContext.createSubPath(parentPath, statement);
-    InstanceDescriptor descriptor = elementToIntanceDesciptorParser.toInstanceDescriptor(element, context);
+    InstanceDescriptor descriptor = elementToInstanceDesciptorParser.parse(element, context);
     GenIterTask task = parseTask(element, parentXmlPath, statementPath, parsingContext, descriptor, infoLog, context, childContext);
     statement.setTask(task);
     return statement;

@@ -1,7 +1,7 @@
 package com.rapiddweller.benerator.engine.statement;
 
 import com.rapiddweller.benerator.engine.BeneratorContext;
-import com.rapiddweller.benerator.engine.parser.xml.ElementToIntanceDesciptorParser;
+import com.rapiddweller.benerator.engine.parser.xml.ElementToInstanceDesciptorParser;
 import com.rapiddweller.common.xml.XMLUtil;
 import com.rapiddweller.model.data.DescriptorProvider;
 import com.rapiddweller.model.data.FeatureDescriptor;
@@ -22,7 +22,7 @@ public class PreParseGenerateStatement extends AbstractStatement {
 
     protected Logger logger = LoggerFactory.getLogger(PreParseGenerateStatement.class);
 
-    private final ElementToIntanceDesciptorParser elementToIntanceDesciptorParser = new ElementToIntanceDesciptorParser();
+    private final ElementToInstanceDesciptorParser elementToInstanceDesciptorParser = new ElementToInstanceDesciptorParser();
 
     private final Element element;
     private final String target;
@@ -65,7 +65,7 @@ public class PreParseGenerateStatement extends AbstractStatement {
             if (currentNode.getNodeName().equals("generate")) {
                 typeDescriptors.addAll(parseGeneratesToTypeDescriptors(currentNode, context));
                 if (generatesForTarget(currentNode)) {
-                    typeDescriptors.add(elementToIntanceDesciptorParser.toInstanceDescriptor((Element) currentNode, context).getTypeDescriptor());
+                    typeDescriptors.add(elementToInstanceDesciptorParser.parse((Element) currentNode, context).getTypeDescriptor());
                 }
             }
         }

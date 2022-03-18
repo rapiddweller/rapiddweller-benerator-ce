@@ -14,12 +14,12 @@ import java.util.Map;
 
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
-public class ElementToIntanceDesciptorParser {
+public class ElementToInstanceDesciptorParser {
 
     private static final AttrInfo<String> nameAttr = new NameAttribute(null, false, false);
     private static final AttrInfo<String> typeAttr = new AttrInfo<>(ATT_TYPE, false, null, new IdParser(), null);
 
-    public InstanceDescriptor toInstanceDescriptor(Element element, BeneratorContext context) {
+    public InstanceDescriptor parse(Element element, BeneratorContext context) {
         InstanceDescriptor instance = assembleInstanceDescriptor(context, element);
         mapElementAttributes(element, instance);
         DescriptorUtil.parseComponentConfig(element, instance.getLocalType(), context);
