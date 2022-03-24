@@ -375,6 +375,8 @@ The following converter classes are imported by default:
 
 * **ByteArrayToBase64Converter**: Converts byte arrays to strings which are base-64-encoded
 
+* **ByteArray2StringConverter**: Converts byte arrays to strings
+
 * **ToLowerCaseConverter**: Converts strings to lowercase
 
 * **ToUpperCaseConverter**: Converts strings to uppercase
@@ -415,6 +417,8 @@ The following converter classes are imported by default:
 * **PrintfConverter**: formats objects using a pattern in printf format
 
 * **RegexReplacer**: Uses a regular expression to replace parts of the processed strings
+
+* **String2ByteArrayConverter**: Converts Strings to ByteArrays. Might be useful for writing JSON to raw data types (BLOB, BYTEA).
 
 * **SubstringExtractor**: Extracts substrings from strings. It has the properties `from` and `to`. If `to`
   is not set, it extracts from `from` until the end. If `to` or `from` is negative, it denotes a backwards
