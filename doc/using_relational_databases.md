@@ -565,14 +565,14 @@ file `users.csv`:
 
 ```xml
 
-<iterate source="db" type="db_user" consumer="new CSVEntityConsumer('users.csv')"/>
+<iterate source="db" type="db_user" consumer="new CSVEntityExporter('users.csv')"/>
 ```
 
 You can as well select a subset to iterate:
 
 ```xml
 
-<iterate source="db" type="db_user" selector="active = 1" consumer="new CSVEntityConsumer('users.csv')"/>
+<iterate source="db" type="db_user" selector="active = 1" consumer="new CSVEntityExporter('users.csv')"/>
 ```
 
 ## Updating Database Entries
