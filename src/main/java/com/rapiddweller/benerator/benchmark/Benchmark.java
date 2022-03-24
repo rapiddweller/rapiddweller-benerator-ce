@@ -35,8 +35,9 @@ public class Benchmark {
       new Benchmark("file-out-xml", false, V210, 500000, "Writing XML files"),
       new Benchmark("db-small-table", false, V200, 15000, "Reading/writing small database tables (10 columns)"),
       new Benchmark("db-big-table", false, V200, 2000, "Reading/writing big database tables (323 columns)"),
-      new Benchmark("kafka-small-entity", true, V200, 10000, "Sending/receiving small entities to/from Kafka"),
-      new Benchmark("kafka-big-entity", true, V200, 10000, "Sending/receiving big entities to/from Kafka (652 attributes)")
+      new Benchmark("kafka-json-small-entity", true, V200, 10000, "Sending/receiving small entities in JSON to/from Kafka"),
+      new Benchmark("kafka-json-big-entity", true, V200, 10000, "Sending/receiving big entities in JSON to/from Kafka (652 attributes)"),
+      // TODO new Benchmark("kafka-avro-big-entity", true, V200, 10000, "Sending/receiving big entities in AVRO to/from Kafka (652 attributes)")
   };
 
   public static Benchmark[] getInstances() {
