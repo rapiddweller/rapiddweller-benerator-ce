@@ -2,9 +2,22 @@
 
 package com.rapiddweller.benerator.engine.parser.xml;
 
-import com.rapiddweller.benerator.BeneratorErrorIds;
+import com.rapiddweller.benerator.engine.DescriptorConstants;
 import com.rapiddweller.format.xml.AttrInfoSupport;
 
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_ASSERT;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_ENCODING;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_ID;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_ILLEGAL_ATTR;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_INVALIDATE;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_ON_ERROR;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_OPTIMIZE;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_SEPARATOR;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_SHELL;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_TARGET;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_TEXT;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_TYPE;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_EVALUATE_URI;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
 
 /**
@@ -15,24 +28,26 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.*;
  */
 public class EvaluateParser extends AbstractEvaluateOrExecuteParser {
 
-  private static final AttrInfoSupport ATTR_INFO;
-  static {
-    ATTR_INFO = new AttrInfoSupport(BeneratorErrorIds.SYN_EVALUATE);
-    ATTR_INFO.add(ATT_ID, false, BeneratorErrorIds.SYN_EVALUATE_ID);
-    ATTR_INFO.add(ATT_URI, false, BeneratorErrorIds.SYN_EVALUATE_URI);
-    ATTR_INFO.add(ATT_TYPE, false, BeneratorErrorIds.SYN_EVALUATE_TYPE);
-    ATTR_INFO.add(ATT_SHELL, false, BeneratorErrorIds.SYN_EVALUATE_SHELL);
-    ATTR_INFO.add(ATT_TARGET, false, BeneratorErrorIds.SYN_EVALUATE_TARGET);
-    ATTR_INFO.add(ATT_SEPARATOR, false, BeneratorErrorIds.SYN_EVALUATE_SEPARATOR);
-    ATTR_INFO.add(ATT_ON_ERROR, false, BeneratorErrorIds.SYN_EVALUATE_ON_ERROR);
-    ATTR_INFO.add(ATT_ENCODING, false, BeneratorErrorIds.SYN_EVALUATE_ENCODING);
-    ATTR_INFO.add(ATT_OPTIMIZE, false, BeneratorErrorIds.SYN_EVALUATE_OPTIMIZE);
-    ATTR_INFO.add(ATT_INVALIDATE, false, BeneratorErrorIds.SYN_EVALUATE_INVALIDATE);
-    ATTR_INFO.add(ATT_ASSERT, false, BeneratorErrorIds.SYN_EVALUATE_ASSERT);
+  public EvaluateParser() {
+    super(EL_EVALUATE, null);
+    this.id.setErrorId(SYN_EVALUATE_ID);
+    this.uri.setErrorId(SYN_EVALUATE_URI);
+    this.type.setErrorId(SYN_EVALUATE_TYPE);
+    this.shell.setErrorId(SYN_EVALUATE_SHELL);
+    this.target.setErrorId(SYN_EVALUATE_TARGET);
+    this.separator.setErrorId(SYN_EVALUATE_SEPARATOR);
+    this.onError.setErrorId(SYN_EVALUATE_ON_ERROR);
+    this.encoding.setErrorId(SYN_EVALUATE_ENCODING);
+    this.optimize.setErrorId(SYN_EVALUATE_OPTIMIZE);
+    this.invalidate.setErrorId(SYN_EVALUATE_INVALIDATE);
+    this.assertAttr.setErrorId(SYN_EVALUATE_ASSERT);
+    this.attrSupport = new AttrInfoSupport(SYN_EVALUATE_ILLEGAL_ATTR, new ElementValidator(SYN_EVALUATE_TEXT),
+        id, uri, type, shell, target, separator, onError, encoding, optimize, invalidate, assertAttr);
   }
 
-  public EvaluateParser() {
-    super(EL_EVALUATE, ATTR_INFO);
+  @Override
+  public boolean supportsElementName(String elementName) {
+    return DescriptorConstants.EL_EVALUATE.equals(elementName);
   }
 
 }

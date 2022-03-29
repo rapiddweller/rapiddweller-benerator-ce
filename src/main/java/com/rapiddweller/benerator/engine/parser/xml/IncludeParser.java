@@ -29,8 +29,7 @@ package com.rapiddweller.benerator.engine.parser.xml;
 import com.rapiddweller.benerator.BeneratorErrorIds;
 import com.rapiddweller.benerator.engine.BeneratorRootStatement;
 import com.rapiddweller.benerator.engine.Statement;
-import com.rapiddweller.benerator.engine.parser.string.ScriptableParser;
-import com.rapiddweller.benerator.engine.parser.string.UriParser;
+import com.rapiddweller.benerator.engine.parser.attr.UriAttribute;
 import com.rapiddweller.benerator.engine.statement.IfStatement;
 import com.rapiddweller.benerator.engine.statement.IncludeStatement;
 import com.rapiddweller.format.xml.AttrInfo;
@@ -38,7 +37,7 @@ import com.rapiddweller.format.xml.AttrInfoSupport;
 import com.rapiddweller.common.Expression;
 import org.w3c.dom.Element;
 
-import static com.rapiddweller.benerator.engine.DescriptorConstants.ATT_URI;
+import static com.rapiddweller.benerator.BeneratorErrorIds.SYN_INCLUDE_URI;
 import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_INCLUDE;
 
 /**
@@ -49,10 +48,7 @@ import static com.rapiddweller.benerator.engine.DescriptorConstants.EL_INCLUDE;
  */
 public class IncludeParser extends AbstractBeneratorDescriptorParser {
 
-  // format definition -----------------------------------------------------------------------------------------------
-
-  private static final AttrInfo<Expression<String>> URI = new AttrInfo<>(
-      ATT_URI, true, BeneratorErrorIds.SYN_INCLUDE_URI, new ScriptableParser<>(new UriParser()), null);
+  private static final AttrInfo<Expression<String>> URI = new UriAttribute(SYN_INCLUDE_URI, true);
 
   private static final AttrInfoSupport ATTR_INFO = new AttrInfoSupport(
       BeneratorErrorIds.SYN_INCLUDE_ILLEGAL_ATTR, URI);

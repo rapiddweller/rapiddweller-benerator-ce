@@ -15,6 +15,6 @@
         <attribute name="total" script="adder.sum"/>
     </generate>
 
-    <evaluate assert="result=5050">adder.sum</evaluate>
+    <evaluate assert="result==5050">adder.sum</evaluate>
 
 </setup>
